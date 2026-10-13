@@ -65,6 +65,12 @@ filename fix](examples/factory-filename-fix/README.md).
 
 ## Get started
 
+Memory search automatically applies ACT-R ranking: relevance plus recency,
+frequency and memory associations. No upvote or prompt instruction is required.
+To opt out, use **Account & Settings → Preferences → Automatic Memory Ranking
+(ACT-R)**, then restart your AI client. `PRISM_ACTR_ENABLED=false` also disables
+it. This ranking is separate from the neural graph's stored importance filter.
+
 ```bash
 npm install -g prism-mcp-server
 prism connect
@@ -143,11 +149,4 @@ model instead. Prism's local workers stay available over MCP in every case.
 |---|---|---|
 | Claude Code | `env.CLAUDE_CODE_SUBAGENT_MODEL = "sonnet"` in `~/.claude/settings.json` | Subagents stay **enabled**, pinned to an economy model. Fan-out is discouraged by policy text, not by config |
 | Gemini CLI | `experimental.enableAgents = false` in `~/.gemini/settings.json` | Subagents **off**. Gemini exposes one boolean, so that is all there is to set |
-| Codex | `features.multi_agent = false` in `$CODEX_HOME/config.toml` (default `~/.codex`), plus a bounded fallback: 2 threads, depth 1, cheap subagent model, 900s cap | Subagents **off**, with a bounded profile underneath so a deliberate re-enable lands somewhere sane |
-
-Two things worth knowing:
-
-- **`experimental` is Gemini's namespace, not ours.** Prism is not enabling
-  anything experimental — it writes `false` to a flag Gemini already defines at
-  that path. Writing anywhere else would have no effect.
-- **That namespace is by definition temporary.** If Ge
+| Codex | `features.multi_agent = false` in `$CODEX_HOME/config.toml` (default `~/.codex`), plus a bounded fallback: 2 threads, depth 1, cheap subagent model, 900s cap | Sub

@@ -36,8 +36,8 @@ watch in sync from PCs, tablets and phones. When one of them buffers or steps aw
   visible in fullscreen.
 - **No accounts.** Guests pick a name. The same name on a phone and a TV is the same person. The host
   manages everything else from a local-only admin page.
-- **Works on phones.** Plays inline on iPhone, with its own controls. In fullscreen, the phone turns
-  upright with the chat under the video, and sideways without it.
+- **Works on phones.** Plays inline on iPhone, with its own controls. In fullscreen, hold it
+  upright for the chat under the video, or sideways for a bigger picture.
 - **Looks after itself.** Starts at boot, takes a daily database backup, and deletes prepared copies
   nobody has watched for a while.
 
@@ -53,7 +53,7 @@ watch in sync from PCs, tablets and phones. When one of them buffers or steps aw
     <td align="center"><sub><b>Picker.</b> A video that already has a room says so.</sub></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/welcome.png" alt="The first visit to a room link: You're joining Movie night. What should we call you?" /></td>
+    <td><img src="docs/screenshots/welcome.png" alt="The first visit to a room link: what the app is, You're joining Movie night, and What should we call you?" /></td>
     <td><img src="docs/screenshots/admin.png" alt="The admin page: the guest link, three libraries, files we can't use grouped by reason, prepare jobs, language defaults and cache clean-up." /></td>
   </tr>
   <tr>

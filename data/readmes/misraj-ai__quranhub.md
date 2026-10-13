@@ -35,10 +35,11 @@ Quran Hub API is a powerful, feature-rich REST API developed by **Misraj AI** th
 <td>
 
 **Content Coverage**
-- 📚 **+433** Total Editions  
+- 📚 **+434** Total Editions  
 - 📝 **+345** Text Editions  
-- 🔊 **+88** Audio Editions  
-- 📊 **+354,346** Audio Files  
+- 🔊 **+89** Audio Editions  
+- 📊 **+509,196** Audio Files  
+- 🎧 **+77,425** Word-by-Word Audio Clips (×2 bitrates)  
 - 🧠 **+77,433** Quranic Words Analyzed  
 - 🏷️ **+2,468** Unique Morphological Tags  
 - 🌿 **+1,805** Arabic Roots  
@@ -54,6 +55,7 @@ Quran Hub API is a powerful, feature-rich REST API developed by **Misraj AI** th
 - 🎤 **+45** Surah Recitations
 - 📤 **+13** Quran Scripts
 - 📿 **+43** Verse-by-Verse
+- 🎧 **1** Word-by-Word Audio
 - 🗣️ **+8** Narrations
 
 </td>
@@ -161,6 +163,7 @@ Access audio recitations and reciter information.
 | `get_distinct_audio_editions` | List unique audio reciters | - |
 | `get_all_narrator_identifiers` | Get all reciter identifiers | - |
 | `get_audio_editions_by_narrator` | Audio by specific reciter | `"quran-warsh"` |
+| `get_word_audio` | Per-word pronunciation audio (word-by-word edition) | `"1:1:2"` or `"1:1"` |
 
 ### 📖 Special Features
 Advanced features for studying and understanding the Quran.

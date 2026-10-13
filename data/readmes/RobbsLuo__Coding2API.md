@@ -1,5 +1,5 @@
 # Coding2API
-把 **CodeBuddy**、**TRAE SOLO**、**OpenCode Zen**、**Kilo Gateway**、**Qoder**、**CodeArts** 六个上游渠道封装为 OpenAI 兼容 API，提供公共凭证池、统一模型名与调度、按人用量统计。
+把 **CodeBuddy**（国内站 + 国际版）、**TRAE SOLO**、**OpenCode Zen**、**Kilo Gateway**、**Qoder**、**CodeArts** 七个上游渠道封装为 OpenAI 兼容 API，提供公共凭证池、统一模型名与调度、按人用量统计。
 
 > [!WARNING]
 > 逆向接口，仅供学习研究，未做安全审计；公网部署需反向代理 + 鉴权 + IP 白名单。
@@ -15,7 +15,7 @@
 - **脱敏统计**：不存对话内容；明细 90 天、小时汇总永久；按人/渠道/模型可视化；另按 OpenRouter 刊例价估算**成本**（人民币为主，Q70）
 - **管理台安全加固**：登录限流、CSRF 校验、请求体上限、Host 白名单
 
-六个渠道的接入方式与注意事项见下文「[渠道](#渠道)」；协议层实现（私有信封、签名、门禁伪装等）见 [`TECHNICAL.md`](TECHNICAL.md) §3.14–§3.17。
+七个渠道的接入方式与注意事项见下文「[渠道](#渠道)」；协议层实现（私有信封、签名、门禁伪装等）见 [`TECHNICAL.md`](TECHNICAL.md) §3.14–§3.17。
 
 ## 快速开始
 ### 前置要求
@@ -84,7 +84,7 @@ docker compose exec coding2api python scripts/create_user.py admin --role admin
 
 ```bash
 docker compose pull
-# 或指定版本：docker pull ghcr.io/robbsluo/coding2api:v0.4.1
+# 或指定版本：docker pull ghcr.io/robbsluo/coding2api:v0.4.2
 ```
 
 推送新版本：打 tag `v*` 推到 main 即触发 publish workflow（见 `.github/workflows/publish.yml`），同时打 `<tag>` 与 `:latest` 到 GHCR。也可在 Actions 页面手动触发（填版本号）。
@@ -103,7 +103,7 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 `模型@渠道` 强制指定上游（如 `glm-5.2@trae`、`mimo-v2.5-free@zen`），不写则自动选健康渠道。
 
-**模型名三字段**：六条渠道（CodeBuddy / TRAE / Zen / Kilo / Qoder / CodeArts）每个模型统一为三个字段——
+**模型名三字段**：七条渠道（CodeBuddy / CodeBuddy 国际版 / TRAE / Zen / Kilo / Qoder / CodeArts）每个模型统一为三个字段——
 
 1. **原代号**（`raw_id`）：渠道请求时真正发的 key，**永不改动**。各渠道内部代号互不相同（Qoder `kmodel_latest` = TRAE `kimi-k3-1`），也可能带命名空间前缀（Kilo 的 `kilo-auto/free`、`stealth/space-bunny-alpha`）。
 2. **归一键**：剥掉免费档标记（`-free` / 路径段 `free`）与命名空间前缀，再 slug 化——`kilo-auto`、`longcat-2.5-preview`。模型列表按它判断**哪个是同一个模型**并合并，故 Zen 的免费档能与 TRAE 的付费档并成一条。
@@ -114,9 +114,9 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 几点要知道：**流式带 usage 帧**——收尾时在 finish chunk 之后、`data: [DONE]` 之前补一帧 `choices: []` 的 usage（OpenAI 标准形态），只从流里读用量的客户端（如 pi-ai / DSH）据此显示 tok/s、上下文占用率与会话 token 统计；上游没上报时不补（不发 0 占位），非流式出口的 `usage` 同理，未上报字段一律为 `null`。**思考 token 需客户端带 `reasoning_effort`**——CodeBuddy 渠道在客户端**未给**时补 `medium`（上游缺此字段会把整段思考以「可见推演」写进正文，思考与正文混成一块）；显式给的值（如 `low`）原样透传、不被覆盖，可据此压低思考量。
 
 ## 渠道
-六个上游渠道的接入方式与各自注意事项（协议层实现细节见 [`TECHNICAL.md`](TECHNICAL.md) §3.14–§3.17）。
+七个上游渠道的接入方式与各自注意事项（协议层实现细节见 [`TECHNICAL.md`](TECHNICAL.md) §3.14–§3.17）。
 
-> CodeBuddy / TRAE / Qoder / CodeArts 需填凭证；**`OpenCode Zen` 与 `Kilo Gateway` 是无凭证的免费层渠道**——池里是一条虚拟占位行（让调度 / 冷却 / 统计照常工作），额度列显示「免费层（无额度接口）」，健康度恒为「无探测」（免费层无额度接口，探也没用；区别于付费渠道探测失败的「未探测」），管理台不提供「探测」按钮（未知 ≠ 耗尽）。虚拟行**删除后重启会复活**，也可在「凭证管理 → 登录渠道账号」点「添加 OpenCode Zen」/「添加 Kilo Gateway」补回；永久停用请用「暂停」（见「暂停单个凭证」），暂停也会让它暂时从模型列表消失。
+> CodeBuddy（含国际版）/ TRAE / Qoder / CodeArts 需填凭证；**`OpenCode Zen` 与 `Kilo Gateway` 是无凭证的免费层渠道**——池里是一条虚拟占位行（让调度 / 冷却 / 统计照常工作），额度列显示「免费层（无额度接口）」，健康度恒为「无探测」（免费层无额度接口，探也没用；区别于付费渠道探测失败的「未探测」），管理台不提供「探测」按钮（未知 ≠ 耗尽）。虚拟行**删除后重启会复活**，也可在「凭证管理 → 登录渠道账号」点「添加 OpenCode Zen」/「添加 Kilo Gateway」补回；永久停用请用「暂停」（见「暂停单个凭证」），暂停也会让它暂时从模型列表消失。
 
 ### OpenCode Zen 免费层（第三个渠道 `zen`）
 `zen` 渠道接的是 [opencode.ai/zen](https://opencode.ai) 的**免费模型**，无需账号或登录。上游清单混着付费模型且不带免费标记，本服务按 `-free` 后缀收窄候选、再逐个探活，**只把匿名真正可用的免费模型**放进 `GET /v1/models`（每次动态拉取并探活，判活缓存 30 分钟，不维护静态白名单；免费模型显式标 **x0**）；用 `模型@zen` 强制指定，或由调度器自动路由。上游清单不提供模型名（`owned_by` 恒为 `opencode`），故展示名由模型 id 派生（`longcat-2.5-preview-free` → `LongCat 2.5 Preview`）。`-free` 后缀只是上游的可用性命名约定，不是模型名的一部分，展示与归一时都去掉（见上文「模型名三字段」）。
@@ -148,6 +148,19 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 **签名 / 累计全文 SSE / 节流与并发**：上游要求华为云 `SDK-HMAC-SHA256`（AK/SK + `X-Security-Token`），白名单 `CODEARTS_ALLOWED_ENDPOINTS` 必须含 snap 引擎、STS、福利网关与门户四个主机，改 `CODEARTS_API_ENDPOINT` 时同步调整。流式 `text` 是**累计全文（替换语义）**而非增量，本服务在解析层还原为增量事件，对客户端透明。默认 `CODEARTS_CHAT_MIN_INTERVAL=5`（独立节流器）；上游硬限**每账号并发会话数 3**，故配在途上限 `CODEARTS_MAX_CONCURRENCY` 与滑动窗口 `CODEARTS_REQUEST_WINDOW_SECONDS` 两项（口径见配置表），把突发也挡在 `400 TM.00001041` 之前。均可在「任务与配置」热更。
 
+### CodeBuddy 国际版（第七个渠道 `codebuddy_intl`，真实账号）
+`codebuddy_intl` 接的是 CodeBuddy 的国际站 [www.codebuddy.ai](https://www.codebuddy.ai)，**与国内站同协议**（同一套 `/v2/chat/completions`、`/v3/config`、`/v2/plugin/auth/*`、`/v2/billing/*` 路径，同一个 Keycloak realm），但**是两套独立账号体系**：各自注册、各自计费，故作为**独立渠道**存在——管理台「登录渠道账号」点「登录 CodeBuddy 国际版」即可，登录链路与国内版完全一致（设备码，Token 不经过浏览器）。
+
+**为什么不是「改一个环境变量切站点」**：`CODEBUDDY_API_ENDPOINT` 是进程级单值，切过去会让所有存量国内站凭证立刻打到国际站（额度错配 / 403）。两个站点可以同时持有凭证，各走各的端点、节流器与登录流程。
+
+**白名单刻意互不含**：`CODEBUDDY_INTL_ALLOWED_ENDPOINTS` 默认只有 `https://www.codebuddy.ai`，**不含**国内站主机。两站 Token 由不同网关签发，跨站发送即凭证泄露，因此把国内站地址填进 `CODEBUDDY_INTL_API_ENDPOINT` 会在**启动时**直接报错，而不是悄悄发出去。
+
+**能力差异**：聊天、模型列表、额度探测、token 刷新、**活跃上报**全部启用（与国内站同一套已验证路径）；**每日签到、成长中心未启用**——签到是**渠道侧就没有这个活动**（`checkin-activity-status` 回 `active: false`，且活动名 / 起止时间 / 主题全为空；国内站同接口有「Buddy加油站」与起止时间，是渠道级缺席而非账号级未开启）；成长中心则**无法验证**（国际站把整个 `/v2/activity/*` 前缀挂在网关认证插件后，连不存在的子路径也返回 401 而非 404），而它含抽奖 / 连登兑换 / 盲盒等**不可逆**动作，在未验证的端点上盲跑会真实消耗账号权益。管理台的「签到」「成长中心」按钮对该渠道不显示，成长中心任务也不会反复重试。活跃上报的端点 `/v2/report` 与成长中心**不是同一路径**，实测国际站可用，因此照常启用。
+
+**同名模型不再带渠道后缀**：`hy4-preview` / `deepseek-v4.1-flash` / `hy3` / `kimi-k3` 等两站共有的模型，`/v1/models` 里是**一条**、同时挂两个渠道，请求任一都能落到两站；不再出现 `hy4-preview-codebuddy_intl` 这类后缀条目。`-x` / `-sg` 这类**真实存在的不同上游模型**仍各占一条。
+
+**节流**：`CODEBUDDY_INTL_CHAT_MIN_INTERVAL` 默认 5s，**独立节流器**，与国内站互不排队（共用会让两站请求排进同一条队列互相空等），可在「任务与配置」热更。
+
 ### 按渠道出站代理（可选）
 `PROVIDER_PROXIES` 给每个渠道单独指定出站代理，适合「某渠道需经代理才能访问」的场景：
 
@@ -155,7 +168,7 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 PROVIDER_PROXIES="codebuddy=http://127.0.0.1:7890;qoder=socks5://127.0.0.1:1080"
 ```
 
-格式 `渠道=代理URL;渠道2=代理URL2`，渠道取 `codebuddy/trae/zen/kilo/qoder/codearts`，协议支持 `http/https/socks5/socks5h`（SOCKS 由 `httpx[socks]` 提供），留空 = 全部直连（默认，行为不变）。作用于该渠道**全部出站请求**（聊天流、额度/模型拉取、后台任务（签到/成长/刷新/活跃上报）与 OAuth 登录）。**启动期项**：代理作用于连接池，改后需重启后端，不做热更（与上游端点同类）。**严格解析**：未知渠道 / 非法协议 / 缺 `=` 一律启动失败——代理常带合规/隐私意图，「以为走了代理其实直连」比启动报错更糟。环境变量 `HTTP_PROXY` 等一律**不采信**（`trust_env=False`，防部署环境全局代理意外劫持带 Token 的上游请求），只有这里显式配置才生效。
+格式 `渠道=代理URL;渠道2=代理URL2`，渠道取 `codebuddy/codebuddy_intl/trae/zen/kilo/qoder/codearts`，协议支持 `http/https/socks5/socks5h`（SOCKS 由 `httpx[socks]` 提供），留空 = 全部直连（默认，行为不变）。作用于该渠道**全部出站请求**（聊天流、额度/模型拉取、后台任务（签到/成长/刷新/活跃上报）与 OAuth 登录）。**启动期项**：代理作用于连接池，改后需重启后端，不做热更（与上游端点同类）。**严格解析**：未知渠道 / 非法协议 / 缺 `=` 一律启动失败——代理常带合规/隐私意图，「以为走了代理其实直连」比启动报错更糟。环境变量 `HTTP_PROXY` 等一律**不采信**（`trust_env=False`，防部署环境全局代理意外劫持带 Token 的上游请求），只有这里显式配置才生效。
 
 ### Responses API（Codex CLI）
 `POST /v1/responses` 提供 Responses 子集，供 [Codex CLI](https://github.com/openai/codex) 这类只走 Responses 的客户端接入。与 `/v1/chat/completions` 共用同一套选号 / 冷却 / 轮换 / 统计与会话粘性，只换入站映射与出口翻译（实现与取舍见 [TECHNICAL.md §3.7](TECHNICAL.md)）：
@@ -213,7 +226,7 @@ curl http://127.0.0.1:8000/v1/user/balance -H "Authorization: Bearer sk-你的ke
 {
   "status": "ok",
   "service": "coding2api",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "credentials": {"total": 5, "ready": 4, "cooling": 1, "paused": 0, "disabled": 0}
 }
 ```
@@ -289,7 +302,7 @@ Playground 与 `GET /v1/models` 走 **stale-while-revalidate**：有缓存立刻
 **成长中心**仅 CodeBuddy 有（动作清单见上文「特性」）。Buddy 旅行 1–4 小时回来一次，故周期默认 60 分钟（`GROWTH_INTERVAL_MINUTES`），回来就领、不压到第二天。抽奖 / 连登兑换 / 开 Buddy 盲盒 / 消耗补登卡属**不可逆动作**，`GROWTH_IRREVERSIBLE_ACTIONS=false` 可全部跳过（仍领旅行礼物与任务奖励）。凭证列表「成长中心」列显示每个账号最近一轮结果，行内菜单可手动执行一次。
 
 ### 活跃上报（可选，默认关闭）
-CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端对话事件，账号长期只被本网关自动调用（无真实客户端对话）时会断连登。`ACTIVITY_REPORT_ENABLED=true` 时，后台任务在每天 `ACTIVITY_REPORT_HOUR`（默认 10 点）所在整点窗口为每个账号补发**一条** `chat_request_send` 事件续上连登——与积分、调度无关，上报失败不影响聊天请求。凭证行内菜单也可手动补报一次（不受该开关影响）。
+CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端对话事件，账号长期只被本网关自动调用（无真实客户端对话）时会断连登。`ACTIVITY_REPORT_ENABLED=true` 时，后台任务在每天 `ACTIVITY_REPORT_HOUR`（默认 10 点）所在整点窗口为每个账号补发**一条** `chat_request_send` 事件续上连登——与积分、调度无关，上报失败不影响聊天请求。凭证行内菜单也可手动补报一次（不受该开关影响）。适用于 CodeBuddy 与 CodeBuddy 国际版（国际站的 `/v2/report` 与成长中心的 `/v2/activity/*` 不是同一路径，实测可用）。
 
 > ⚠️ **风险与限制**：官方活动条款禁止用模拟器 / 脚本篡改活动数据，处罚为**取消资格并追回已发礼品**。默认关闭，开启前请自行评估账号风险。事件名与请求形状依赖上游实现，**上游改版即失效**，不承诺任何收益——故它只是验证与运维手段，不作为可靠性功能，也不承担「依赖产品内真实使用」的任务。实测（2026-09-21）：缺少 `userId` 时上游返回 HTTP 200 `{"code":0}` 却**静默丢弃**（连登不变）；OAuth 凭证的 `user_id`/`account_uid` 可能为空，此时回落取 bearer JWT 的 `sub`，仍缺失则跳过（不编造）。
 
@@ -313,7 +326,7 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `OPENROUTER_MODELS_URL` | `https://openrouter.ai/api/v1/models` | 能力分来源地址（匿名可读、无需 key）；改后需重启 |
 | `GROWTH_INTERVAL_MINUTES` | `60` | 成长中心（仅 CodeBuddy）一轮领取的周期；下限 5 分钟 |
 | `GROWTH_IRREVERSIBLE_ACTIONS` | `true` | 是否允许成长中心的不可逆动作：抽奖、连登兑换、开 Buddy 盲盒、消耗补登卡。`false` 时仍领取旅行礼物与任务奖励 |
-| `ACTIVITY_REPORT_ENABLED` | `false` | 活跃上报（仅 CodeBuddy）：每天为账号补发一条对话事件续连登。**默认关闭**——官方条款禁止脚本篡改活动数据（处罚为取消资格并追回礼品），上游改版即失效，不作为可靠性功能（见上文「活跃上报」） |
+| `ACTIVITY_REPORT_ENABLED` | `false` | 活跃上报（CodeBuddy 与 CodeBuddy 国际版）：每天为账号补发一条对话事件续连登。**默认关闭**——官方条款禁止脚本篡改活动数据（处罚为取消资格并追回礼品），上游改版即失效，不作为可靠性功能（见上文「活跃上报」） |
 | `ACTIVITY_REPORT_HOUR` | `10` | 活跃上报的本地（北京）时间整点窗口；仅在 `ACTIVITY_REPORT_ENABLED=true` 时生效 |
 | `ALERT_ENABLED` | `true` | 运维告警开关：后台周期评估四类风险（池耗尽 / 任务连续失败 / token 临近到期 / 上游错误率骤升），命中落 `alert_events` 供管理台「运维告警」页回看。关闭后不评估、不落库、不推送 |
 | `ALERT_WEBHOOK_URL` | 空 | 告警 Webhook 地址：命中时 POST JSON，多个用逗号分隔（≤16 个，仅 `http(s)`），全部成功才算投递成功；留空 = 只在管理台留站内记录、不外推 |
@@ -330,9 +343,12 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `CONVERSATION_STICKY_SECONDS` | `3600` | 会话粘性 TTL：优先按请求体显式会话标识（`conversation_id`/`conversationId`/`prompt_cache_key`，metadata 或顶层），无则回落消息前缀指纹，多轮请求固定用同一凭证（手动 pin 的凭证优先，粘性让位）；带 `user_id` 时不派生前缀兜底键（避免并行对话误钉同一号）；凭证出错仍会轮换，成功后重新粘定；`≤0` 关闭 |
 | `MODEL_BLOCKLIST` | `custom_model_*,*sub*agent*,summary,browser_use_*,file_search_agent,default,hunyuan-image-*,hy4-preview-x,qwen3.8-flash,glyph-cluster` | 模型列表黑名单（fnmatch，仅影响列表展示，直连指定不受影响）；按**归一后的对外写法**匹配（原代号、其归一键、展示名、展示名归一键四种任一命中即滤），故可照列表里看到的 `kimi-k3` / `Kimi K3` 或老口径的原代号写。默认值按上游实测清单补入内部/不可用模型（`default` 零内容、`hunyuan-image-*` 400 11103、`hy4-preview-x` 400 11102、Qoder `qfmodel` 400、kilo `stealth/glyph-cluster` 408），刻意不含 `*-volc` 与 `aquila`/`sagitta`/`seed-code-pro-0430`/`hy4-preview`/`qwen3.8-max`（实测可正常 chat）（见 TECHNICAL.md §3.5） |
 | `ALLOWED_HOSTS` | 空 | Host 白名单，防 DNS rebinding |
+| `ALLOW_TEST_HOST` | `false` | 额外放行 FastAPI TestClient 的默认 Host `testserver`。**仅测试用**，生产保持 `false`：单标签主机名可能被本地 DNS 搜索域解析到本服务，默认放行等于给 DNS rebinding 留免校验入口。测试由 `tests/conftest.py` 的 autouse 夹具置 true |
 | `TRUST_PROXY` | `false` | 是否采信 `X-Forwarded-For` 判定来源 IP（白名单、登录限流与审计共用同一解析）。默认关闭——该头客户端可写；仅「本服务前恰好一层受信反代」时开启，取 XFF 最后一个条目。详见上文「API Key 的渠道绑定、模型白名单、来源 IP 与到期时间」 |
 | `CODEBUDDY_API_ENDPOINT` | `https://copilot.tencent.com` | CodeBuddy 上游地址；改动时必须同时把它加入 `CODEBUDDY_ALLOWED_ENDPOINTS` |
 | `CODEBUDDY_ALLOWED_ENDPOINTS` | 官方两站（见 compose） | 上游端点白名单，真实 Token 只发往白名单内地址 |
+| `CODEBUDDY_INTL_API_ENDPOINT` | `https://www.codebuddy.ai` | CodeBuddy 国际版（独立渠道 `codebuddy_intl`）上游地址；改动时必须同时把它加入 `CODEBUDDY_INTL_ALLOWED_ENDPOINTS` |
+| `CODEBUDDY_INTL_ALLOWED_ENDPOINTS` | `https://www.codebuddy.ai` | 国际版端点白名单，**刻意不含**国内站主机：两站 Token 由不同网关签发，跨站发送即凭证泄露（填国内站地址进 `CODEBUDDY_INTL_API_ENDPOINT` 会启动失败） |
 | `ZEN_API_ENDPOINT` | `https://opencode.ai` | OpenCode Zen 上游地址；改动时必须同时把它加入 `ZEN_ALLOWED_ENDPOINTS`（Zen 不带真实 Token，白名单仅防误配） |
 | `ZEN_ALLOWED_ENDPOINTS` | `https://opencode.ai` | Zen 端点白名单 |
 | `ZEN_OPENCODE_VERSION` | `1.18.0` | 门禁伪装用的 `opencode/<version>` UA 版本；上游阈值上移时改这里（低于阈值会被 426 拒绝） |
@@ -345,6 +361,7 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `CODEARTS_ALLOWED_ENDPOINTS` | snap 引擎 + STS + 福利网关 + 门户（见 compose） | CodeArts 端点白名单，AK/SK 签名请求只发往白名单内地址 |
 | `PROVIDER_PROXIES` | `""` | **按渠道出站代理**（启动期项，改后需重启）：格式、协议、作用范围与严格解析见上文「按渠道出站代理」；留空 = 全部直连，`trust_env=False` 不受环境代理影响 |
 | `CODEBUDDY_CHAT_MIN_INTERVAL` | `5` | CB/TRAE 聊天节流器的最小间隔（秒）：按凭证分桶、**桶内允许并发**（同渠道同模型并发不排队、立即发出），只在同凭证「上一请求已结束、紧接着又来一个」的顺序连发时补足间隔；`0` 关闭 |
+| `CODEBUDDY_INTL_CHAT_MIN_INTERVAL` | `5` | CB 国际版聊天最小间隔（秒），**独立**于国内站的节流器（两站是不同账号体系与不同网关，共用会让请求互相空等）；`0` 关闭 |
 | `ZEN_CHAT_MIN_INTERVAL` | `0` | Zen 聊天最小间隔（秒），独立于 CB/TRAE 的节流器，默认关闭。zen 是匿名免费层、无账号级频率风控；若与 CB/TRAE 共享会排在它们之后空等满 5s（并发/连发时每个请求 +5s），故不共享 |
 | `KILO_CHAT_MIN_INTERVAL` | `0` | Kilo 聊天最小间隔（秒），独立于 zen / CB/TRAE 的节流器，默认关闭。同为匿名免费层，与 zen 各自独立、互不排队 |
 | `QODER_CHAT_MIN_INTERVAL` | `5` | Qoder 聊天最小间隔（秒），独立节流器（真实账号渠道，上游有账号级频率风控）；`0` 关闭 |
@@ -370,7 +387,7 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 ### 管理台热更（「任务与配置」页）
 上表中带「可热更」语义的 38 项可不改 `.env`、不重启，直接在管理台「任务与配置」页修改：
 
-`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`CONTEXT_COMPRESS_ENABLED`、`CONTEXT_COMPRESS_RESERVE_TOKENS`、`CONTEXT_COMPRESS_MIN_KEEP_MESSAGES`、`CONTEXT_COMPRESS_SAFETY_RATIO`、`MODEL_FALLBACK_GROUPS`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`REFRESH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`MODEL_CATALOG_MINUTES`、`OPENROUTER_CATALOG_MINUTES`、`OPENROUTER_MODELS_URL`、`USD_CNY_RATE`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`、`ALERT_ENABLED`、`ALERT_WEBHOOK_URL`、`ALERT_INTERVAL_MINUTES`、`ALERT_SILENCE_MINUTES`、`ALERT_POOL_READY_MIN`、`ALERT_TASK_FAILURES`、`ALERT_TOKEN_EXPIRY_HOURS`、`ALERT_ERROR_RATE_THRESHOLD`、`ALERT_ERROR_RATE_MIN_REQUESTS`、`ALERT_ERROR_RATE_WINDOW_MINUTES`。
+`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`CONTEXT_COMPRESS_ENABLED`、`CONTEXT_COMPRESS_RESERVE_TOKENS`、`CONTEXT_COMPRESS_MIN_KEEP_MESSAGES`、`CONTEXT_COMPRESS_SAFETY_RATIO`、`MODEL_FALLBACK_GROUPS`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`REFRESH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`MODEL_CATALOG_MINUTES`、`OPENROUTER_CATALOG_MINUTES`、`OPENROUTER_MODELS_URL`、`USD_CNY_RATE`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`CODEBUDDY_INTL_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`、`ALERT_ENABLED`、`ALERT_WEBHOOK_URL`、`ALERT_INTERVAL_MINUTES`、`ALERT_SILENCE_MINUTES`、`ALERT_POOL_READY_MIN`、`ALERT_TASK_FAILURES`、`ALERT_TOKEN_EXPIRY_HOURS`、`ALERT_ERROR_RATE_THRESHOLD`、`ALERT_ERROR_RATE_MIN_REQUESTS`、`ALERT_ERROR_RATE_WINDOW_MINUTES`。
 
 要点：**优先级 `DB 覆盖值 > .env`**——改过后 .env 对该项不再生效，页面标「DB 覆盖」，点「恢复默认」删掉覆盖行才回落 .env，日志记录改动者。值存 `runtime_settings` 表（纯 key/value），新增可热更项无需迁移；白名单外的 key、非法类型 / 越界值写入前即拒，读取时坏行跳过并记警告。启动期项（`APP_SECRET` / `PORT` / `DATA_DIR` / `USERS_FILE` / 上游端点白名单）**不在**白名单：它们决定进程如何启动，运行期改只会让内存与磁盘静默分叉。接口 `GET /api/settings` 读快照、`PUT /api/settings` 写（admin + CSRF），body `{"values": {key: value}}`，传 `null` 恢复默认。该页同时展示**后台任务运行态**：9 类任务的周期、上次执行时间与最近结果；页面按 tab 组织，每个任务一个 tab，无任务归属的配置（默认模型、黑名单、到期窗口、节流等）按后端下发的网关卡组各占一个 tab。**tab 为紧凑单行**（`text-xs`，放不下横向滚动、不折行）；长任务名用简称：正式名「渠道模型列表刷新」显示「渠道模型刷新」、「模型目录刷新（OpenRouter）」显示「模型目录刷新」，卡片标题、告警与接口字段仍用完整名。运行态是**进程内**的（`GET /api/tasks`，admin，页面每 30 秒刷新）：只显示「本次启动以来跑过没有」，**重启归零**，不落库、不留历史；未到点或未开启的轮次不算执行——否则签到会显示成「刚刚跑过」，而当天一次都没签。
 
@@ -461,13 +478,15 @@ pnpm build
 | [`diagrams/coding2api-credential-lifecycle.html`](diagrams/coding2api-credential-lifecycle.html) | 凭证调度状态机（浏览器打开） |
 
 ## 状态
-M0–M3 及后续迭代全部完成，`main` 分支可运行，当前版本 v0.4.1。后续批次（B1–B11）已按批准计划落地：
+M0–M3 及后续迭代全部完成，`main` 分支可运行，当前版本 v0.4.2。后续批次（B1–B11）已按批准计划落地：
 
 **B1 请求质量**：错误分类细分 + 模型级冷却、出站指纹清洗（11128 内容风控）、截断续写、会话粘性键、模型元数据/黑名单。**B2 协议出口**：`/v1/responses`（Codex CLI 子集）；Anthropic `/v1/messages`（Claude Code，含 `count_tokens`，见 P0-1）。**B3 运维**：凭证暂停语义、运行时配置热更、token 到期展示、积分变动流水、池健康 `/healthz` + 多 Key 出口/IP 绑定。**B4 任务可视化**：后台任务运行态并入「任务与配置」页；模型黑名单热更延迟修复。
 
 **B5 账号体系**：用户从 `users.txt` 迁入 SQLite、三角色 RBAC、会话吊销（epoch）、一次性令牌激活 + 首登强制改密、用户管理页、审计日志页、硬删降为 CLI。**B6 新渠道**：接入 **Qoder**（COSY 私有协议 + 设备码登录 + 签到/额度）与 **CodeArts**（华为云 SDK-HMAC 签名 + DPoP 刷新 + 累计全文 SSE + 福利领取）；`KNOWN_PROVIDERS` 扩到六个，展示排序、渠道绑定、前端图标与文档同步。**B7 竞品能力补齐（P0）**：Anthropic `/v1/messages` 出口（Claude Code）、上下文压缩（按模型目录输入上限裁剪过长对话）、API Key 模型白名单 + 到期时间（对比与迁移分档见本地存档 `docs/competitor-comparison.md`，该目录已 gitignore、克隆仓库不含此文件）。
 
 **B8 智能路由（P1）**：跨渠道 fallback 兼容组（`MODEL_FALLBACK_GROUPS`，主渠道全不可用时按组顺序回退、仅在未出帧前切换）。**B9 运维告警（P1）**：后台周期评估四类风险（凭证池耗尽 / 后台任务连续失败 / token 临近到期 / 上游错误率骤升），命中落 `alert_events` 并在管理台「运维告警」页回看，可选推送 webhook（`ALERT_WEBHOOK_URL`），同一告警在静默窗内只报一次。**B10 按渠道代理（P1）**：`PROVIDER_PROXIES` 为每个渠道单独指定出站代理（HTTP/SOCKS5），作用于该渠道全部出站请求（聊天 / 额度 / 模型 / 后台任务 / OAuth 登录）；留空直连，默认行为不变。**B11 安全审查加固**：全项目 code review + 安全扫描后的修复批次——热更 float 拒绝 NaN/±inf、字符串类长度上限、告警 webhook 限 `http(s)`；INVALID 跳过的上游不再占满换号预算（跨渠道 fallback 恢复）；SSE 单行/单帧与非 2xx 错误体有界；对外错误文案不再回流上游正文；三个出站协议补齐入站数值/JSON 校验；`/api/stats/events` 凭证昵称仅 admin/operator 可见；续写中途断开的用量记账；OAuth 弹窗 scheme 校验 + `opener` 置空；CSP 补 `object-src`/`base-uri`/`form-action`。
+
+**B12 二轮审查加固**（全项目 review + 安全扫描第二轮）：流式路径首帧后不再换号（H1，避免同一请求内两套回复）；OpenAI 出口补齐 `presence_penalty`/`frequency_penalty`/`seed`/`n`/`logit_bias` 数值边界（`1e999` 溢出为 `inf` 会被重新序列化成非法 JSON 透传上游）；上下文压缩预算改增量估算（超长对话由分钟级降到亚秒级）；TRAE 回调登录按**发起人会话**绑定 pending（单槽全局态会被两个管理员的并发登录互相覆盖）；凭证整份覆写加**凭证级编辑锁**（refresh 与账号切换交错会互相覆盖）；SQLite 写事务显式 `BEGIN IMMEDIATE`（deferred 下读改写会丢更新）；非流式聚合加事件数上限（上游死循环输出会无界增长到 OOM）；明细清理整轮移出事件循环；`growth_events` 纳入保留期回收；凭证昵称在列表出口按 operator 过滤；`/index.html` 不再发 immutable 缓存头（旧入口会加载上一版 bundle）；`testserver` 移出生产 Host 白名单（改由 `ALLOW_TEST_HOST` 显式开启）；CSP 收紧到 `default-src 'self'` + `script-src 'self'`（主题初始化改为独立文件）+ `Referrer-Policy`；API Key `last_used_at` 写库节流到分钟级；CodeBuddy `domain` 凭证校验为合法主机名；Anthropic `input_tokens` 未知时不再伪造 0 命中；`/v1/responses` 的 `store` 只接受布尔；SSE 心跳任务 `cancel()` 后 `await` 收尾。
 
 规划与实测收窄的完整记录见 `PROPOSAL.md`（Q1–Q74）与 `TECHNICAL.md`（§3.1–§3.23、§6.1–§6.4）。
 

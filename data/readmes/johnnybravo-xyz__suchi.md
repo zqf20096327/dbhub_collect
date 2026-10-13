@@ -52,54 +52,44 @@ for freelancers and smaller teams.
   mailbox, and the [Suchi Companion](https://github.com/johnnybravo-xyz/suchi-companion)
   app for iOS and Android, which can queue and keep scans while offline.
 - **Find it and follow up.** OCR and full-text search, a calendar of dates
-  linked to the text they came from, and archive questions answered with links
-  to the source documents.
+  linked to the text they came from, and document questions answered with links
+  to the documents used.
 
 > [!NOTE]
-> Suchi is early (v0.2.0). Back up the data
+> Suchi is early (v0.2.1). Back up the data
 > directory, test a restore before relying on it, and read the
 > [database compatibility policy](docs/release-process.mdx#stable-v1-database-compatibility)
 > before upgrading.
 
-## How it is built
-
-Suchi combines SQLite, content-addressed storage, a Svelte interface, and an
-integration-friendly HTTP API. Original and derived bytes are stored
-immutably under their SHA-256 digest, so identical files share one object and
-retried uploads do not create copies. The content store is not encryption or an
-access-control boundary; SQLite metadata and the API decide who can see each
-document.
-
-- Static, `CGO_ENABLED=0` Go binary with multi-user ACLs and scoped tokens.
-- Reproducible size and startup measurements live under
-  [`hack/bench/latest-published/`](hack/bench/latest-published/).
-- [Container images](https://github.com/johnnybravo-xyz/suchi/pkgs/container/suchi) ·
-  [Releases](https://github.com/johnnybravo-xyz/suchi/releases) ·
-  [Actions](https://github.com/johnnybravo-xyz/suchi/actions)
-
 ## Capabilities
 
-- PDF and image OCR, thumbnails, barcodes, encrypted PDFs, and ZUGFeRD invoices.
-- EPUB, Office, OpenDocument, RTF, CSV, DjVu, HEIC/HEIF, EML, and Outlook MSG.
-- Full-text search, Johnny.Decimal filing, revision notes, typed custom fields,
-  named exact-document links, saved views, and folder layouts.
-- Import-introduced filing systems with permanent codes, direct membership plus
-  document ACLs, and `SYS.AC.documentID` addresses using existing global IDs.
-  Unprefixed archives keep their existing UI and paths until first prefixed Apply.
-- Browser uploads, watched folders, IMAP intake, portable import/export, and
-  versioned documents.
-- Automations, human approval workflows, selective rescans, and optional
-  OpenAI-compatible classification, grounded archive research, and source-backed
-  date intelligence with Calendar. High-confidence suggestions apply by default;
-  review-first mode sends inferred changes to Approvals instead.
-- Groups, object ACLs, OIDC, share links, audit events, backups, and restore
-  tooling.
-- Svelte SPA, [Suchi Companion](https://github.com/johnnybravo-xyz/suchi-companion)
-  for Android/iOS, a documented scoped HTTP API, and MCP over stdio or HTTP.
+Suchi combines SQLite, content-addressed storage, a Svelte interface, and a
+scoped HTTP API in one static Go binary. Original and derived bytes are stored
+immutably by SHA-256; SQLite metadata and the API—not the content store—enforce
+access.
 
-The [feature comparison](docs/comparison.mdx) and
-[architecture](docs/architecture.mdx) describe the detailed scope and
-tradeoffs.
+- OCR, thumbnails, barcodes, encrypted PDFs, ZUGFeRD invoices, and common image,
+  ebook, Office, OpenDocument, mail, archive, and text formats.
+- Full-text search, numbered filing, version notes, typed custom fields, named
+  exact-document links, saved Views, and folder layouts.
+- Filing systems with permanent codes, direct membership plus document ACLs,
+  and `SYS.AC.documentID` addresses using installation-wide document IDs.
+- Browser, watched-folder, IMAP, and mobile intake; takeout exports, supported
+  third-party imports, document versions, backups, and restore tooling.
+- Automations, approvals, selective rescans, optional model classification, Ask
+  your documents, and suggested dates. Model use is optional and hosted egress
+  requires acknowledgement.
+- Groups, object ACLs, OIDC, scoped tokens, Network-only and Public share links,
+  audit events, MCP, and the Android/iOS Suchi Companion.
+
+Reproducible binary-size and startup measurements live under
+[`hack/bench/latest-published/`](hack/bench/latest-published/). See the
+[feature comparison](docs/comparison.mdx) and
+[architecture](docs/architecture.mdx) for scope and tradeoffs.
+
+[Container images](https://github.com/johnnybravo-xyz/suchi/pkgs/container/suchi) ·
+[Releases](https://github.com/johnnybravo-xyz/suchi/releases) ·
+[Actions](https://github.com/johnnybravo-xyz/suchi/actions)
 
 ## Quick Start
 
@@ -111,7 +101,7 @@ docker run -d --name suchi --restart unless-stopped \
   -p 127.0.0.1:8000:8000 \
   -e PUBLIC_URL=http://127.0.0.1:8000 \
   -v suchi-data:/data \
-  ghcr.io/johnnybravo-xyz/suchi:v0.2.0
+  ghcr.io/johnnybravo-xyz/suchi:v0.2.1
 docker logs suchi 2>&1 | grep token_minted
 ```
 
@@ -128,15 +118,15 @@ configuration > Filing tree**. This is the only required archive setup step;
 the reminder remains until a preset, imported tree, or explicit Blank choice is
 saved.
 
-This quick start is bound to loopback and pins the v0.2.0 image. A production
+This quick start is bound to loopback and pins the v0.2.1 image. A production
 server, including one reached by the mobile app, must use HTTPS and pin the
 selected release by its published image digest.
 
 ## Images
 
-- `v0.2.0` / `latest`: Alpine. Supports all listed formats and indexes scanned
+- `v0.2.1` / `latest`: Alpine. Supports all listed formats and indexes scanned
   PDFs with Tesseract.
-- `v0.2.0-full` / `latest-full`: Debian. Adds OCRmyPDF so downloaded scanned
+- `v0.2.1-full` / `latest-full`: Debian. Adds OCRmyPDF so downloaded scanned
   PDFs can retain a searchable text layer.
 
 Both images include anydoc, DjVu, HEIC/HEIF, and Outlook MSG support. The full

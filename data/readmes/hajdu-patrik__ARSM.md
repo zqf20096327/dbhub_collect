@@ -75,7 +75,7 @@ Then update placeholder values in `appsettings.Local.json`, especially:
 
 - `JwtSettings.Secret`
 - `ConnectionStrings.AutoServiceDb`
-- `DemoData.MechanicPassword`
+- `Bootstrap.Admin.*` (optional: creates the first admin on an empty database; the API seeds no data, so a fresh database has no accounts, customers, vehicles or catalog rows)
 - `CompanyProfile.*` (name, address, postal code, city, tax number, phone, email)
 
 `CompanyProfile` is the workshop identity printed on the quote PDF letterhead. The API refuses to
@@ -127,6 +127,34 @@ Cloudflare R2 additionally needs `ObjectStorage:DisablePayloadSigning` and
 SigV4 implementation or the CRC32 checksum that AWSSDK.S3 v4 sends by default, and uploads fail
 without them. RustFS (like MinIO before it) keeps both `false`.
 
+## Temporary Public Test Link
+
+A Cloudflare quick tunnel makes an instance running on your own machine reachable from the internet for a short test, without a Cloudflare account. It is for temporary testing only, never for production.
+
+### Requirements
+
+The development stack started by the AppHost cannot be shared this way: the dev WebUI calls the API at its local `VITE_API_URL` (a `localhost` address), which a remote browser cannot reach. Share a setup where the built WebUI and the API answer on one origin:
+
+- a reverse proxy serves the production build of the WebUI and forwards `/api` to the ApiService, and the tunnel points at that proxy;
+- the WebUI is built with `VITE_API_URL` and `VITE_SITE_URL` set to the tunnel URL; the build pins that origin in the Content-Security-Policy `connect-src`, so every new tunnel URL needs a rebuild;
+- the API lists the tunnel URL in `Cors:AllowedOrigins` (cookie-bearing mutations from any other `Origin` are rejected) and trusts the proxy through `ForwardedHeaders:KnownProxies` or `ForwardedHeaders:KnownNetworks`, so it sees the original `https` scheme that the `__Host-` session cookies need.
+
+### Steps
+
+1. Install `cloudflared` from [Cloudflare's downloads page](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/).
+2. Start the tunnel: `cloudflared tunnel --url http://localhost:<proxy port>`. It prints a random `https://<name>.trycloudflare.com` URL.
+3. Set that URL in `Cors:AllowedOrigins` and restart the API, then rebuild and restart the WebUI with the URL as described above.
+4. Accounts: on an empty database the first admin can be created from the `Bootstrap:Admin` configuration (`Email`, `Password`, `FirstName`, `LastName`, `Specialization`, `Expertise` array; optional `MiddleName`, `PhoneNumber`; environment form `Bootstrap__Admin__*`). It runs only while no admin exists, never touches existing accounts, and the `Bootstrap__Admin__Password` setting should be removed once the admin exists. Further users are registered in the app by the admin; share each user's credentials privately.
+
+### Limits
+
+| Limit | Detail |
+| ----- | ------ |
+| Changing URL | The quick-tunnel URL is random and changes on every `cloudflared` restart (then repeat step 3). |
+| Availability | The link works only while your machine, Docker and `cloudflared` are running. |
+| Access | Anyone who has the link can reach the app's sign-in page. |
+| Stopping | Stop `cloudflared` and the link stops working. |
+
 ## Useful Commands
 
 | Task | Command |
@@ -162,7 +190,7 @@ python scripts/run-local-test-suite.py http sql
 Suite targets:
 
 - `playwright`: runs the WebUI Playwright E2E suite (`PORT=5173` default).
-- `http`: runs `tests/API/_setup` first (test-account provisioning), then all `tests/API/**/*.http` suites through HTTPYAC.
+- `http`: runs `tests/API/_setup` first (test-account and fixture provisioning), then all `tests/API/**/*.http` suites through HTTPYAC.
 - `sql`: runs all `tests/Database/**/*.sql` files against the running PostgreSQL container with the read-only SQL user.
 
 Before full-suite runs, start Aspire in another terminal:
@@ -191,6 +219,7 @@ Then inspect `tests/.artifacts/test-suite-summary.json` and act in the matching 
 - WebUI local env values belong in `app/AutoService.WebUI/.env.development` (template: `app/AutoService.WebUI/.env.development.template`).
 - API test runtime values belong in `tests/.env` (template: `tests/.env.example`).
   - `ARSM_TEST_WEBUI_ORIGIN` must match a configured `Cors:AllowedOrigins` value because cookie-auth unsafe HTTP tests send an `Origin` header.
+  - `ARSM_TEST_ADMIN_EMAIL` / `ARSM_TEST_ADMIN_PASSWORD` are the first admin from `Bootstrap:Admin`; `ARSM_TEST_CUSTOMER_EMAIL` is the fixture customer that `tests/API/_setup/ensure-test-fixtures.http` creates, together with its vehicles, a catalog part and labor type and an anchor quote, on an empty database.
 - Playwright runtime secrets and the read-only SQL connection string belong in `.secrets` at repository root (gitignored; template: `.secrets.example`); local E2E runs also set non-secret `PORT=5173` for Vite serve mode.
 - MCP local runtime configs are `.claude/.mcp.json` and `.vscode/mcp.json` (both gitignored), created from `.claude/.mcp.template.json` and `.vscode/mcp.template.json`.
 - The MCP read-only PostgreSQL URI belongs in `.env` at repository root (gitignored; template: `.env.example`); the tracked MCP templates reference it as `${env:ARSM_MCP_POSTGRES_CONNECTION_STRING}`, while the local gitignored MCP configs hold the resolved URI.

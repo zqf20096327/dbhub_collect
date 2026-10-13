@@ -15,7 +15,7 @@ Spooled is a high-performance, multi-tenant job queue system designed for reliab
 - **High Performance**: Built on Rust + Tokio + PostgreSQL with Redis-backed caching
 - **Optimized gRPC**: HTTP/2 keepalive, TCP optimizations, connection pooling, and streaming
 - **Multi-Tenant**: explicit per-organization scoping on every query
-- **Observable**: Prometheus metrics, Grafana dashboards, optional OpenTelemetry export (`--features otel`)
+- **Observable**: operator-level Prometheus metrics and Grafana dashboards for self-hosters, optional OpenTelemetry export (`--features otel`). There is no tenant-facing Prometheus endpoint or alerting feature
 - **Reliable**: At-least-once processing with leases + retries (use idempotency keys for exactly-once effects)
 - **Real-Time**: WebSocket + SSE for live job/queue updates
 - **Secure**: Bcrypt API keys with Redis caching, JWT auth, HMAC webhook verification
@@ -99,22 +99,25 @@ Portainer details (Git stacks, ephemeral checkouts, recreate): [docs/guides/prod
 | `GRPC_TLS_KEY_PATH` | ❌ | (Compose sets `/run/secrets/grpc-key.pem`) | Path to TLS private key (PEM); production Compose mounts the generated volume read-only |
 | `METRICS_PORT` | ❌ | `9090` | Prometheus metrics port |
 | `METRICS_TOKEN` | ❌ | - | If set, requires `Authorization: Bearer <token>` for `/metrics` |
-| `TRUSTED_CLIENT_IP_HEADER` | ❌ | - | Edge header carrying the real client IP. Unset falls back to `CF-Connecting-IP`, then `X-Real-IP` |
+| `TRUSTED_CLIENT_IP_HEADER` | ❌ | - | Edge header carrying the real client IP, believed from any caller once set. Unset: `CF-Connecting-IP`, then `X-Real-IP`, believed **only** when the TCP peer is a loopback/private/link-local address (a proxy of yours on the same host or network); any other caller is keyed on its own address. Production warns at boot while unset |
 | `TRUSTED_PROXY_HOPS` | ❌ | `0` | Entries **your own** proxies append to `X-Forwarded-For`, counted from the right. `0` = never consult that header |
 | `OUTGOING_WEBHOOK_MAX_ATTEMPTS` | ❌ | `5` | Delivery attempts per outgoing webhook event |
-| `OUTGOING_WEBHOOK_MAX_CONCURRENT_DELIVERIES` | ❌ | `64` | Process-wide ceiling on webhook deliveries in flight |
+| `OUTGOING_WEBHOOK_MAX_CONCURRENT_DELIVERIES` | ❌ | `64` | Webhook delivery senders and request slots, process-wide; also sizes the bounded delivery queue (16 per sender, drops are counted) |
+| `TURNSTILE_SECRET_KEY` | ❌ | - | Cloudflare Turnstile secret. When set, `POST /auth/email/start` requires a valid `turnstile_token` (`400 CAPTCHA_FAILED` otherwise). Leave unset until the site and the dashboard both send the token |
+| `FRONTEND_URL` | ❌ | `https://spooled.cloud` | Website base URL Stripe Checkout returns to (`<FRONTEND_URL>/account/billing?checkout=success\|cancel`) |
 | `EMAIL_PROVIDER` | ✅ in production | `console` | `resend`/`sendgrid`/`postmark`/`smtp`. The backend refuses to start with `console` when `RUST_ENV=production` (login codes would only be logged) |
 | `RATE_LIMIT_FAIL_CLOSED` | ❌ | `false` | `true` rejects requests while Redis cannot answer instead of letting them through |
 | `CORS_ALLOWED_ORIGINS` | ❌ | spooled.cloud origins | Comma-separated allowed origins; blank keeps the default list |
 | `EXTERNAL_URL` | ❌ | - | Public base URL of the API |
 | `ENABLE_HSTS` | ❌ | `false` | Send `Strict-Transport-Security` (only behind HTTPS) |
 | `DATABASE_DIRECT_URL` | ❌ | - | Direct (non-PgBouncer) Postgres URL; migrations run over it when set |
+| `DATABASE_LIST_STATEMENT_TIMEOUT_MS` | ❌ | `5000` | Statement timeout of `GET /jobs` and `GET /jobs/dlq` in milliseconds; a list it stops answers `400 QUERY_TIMEOUT`. `0` is refused (Postgres would read it as no timeout) |
 | `WORKER_LEASE_DURATION_SECS` | ❌ | `30` | Default job lease for a REST claim that sends none |
 | `GRPC_DEFAULT_LEASE_DURATION_SECS` | ❌ | `300` | Lease for gRPC claims and renewals that send none (`0` = 300, at most 3600, must be greater than `WORKER_HEARTBEAT_INTERVAL_SECS`); reported by gRPC `Register` |
 
 A blank value counts as unset, so compose `${NAME:-}` forwarding is safe. `docker-compose.prod.yml` forwards all of the above.
 
-The leftmost `X-Forwarded-For` entry is whatever the caller sent, so it is never trusted for rate limiting: set `TRUSTED_CLIENT_IP_HEADER` or `TRUSTED_PROXY_HOPS` if you terminate behind a proxy that sets neither `CF-Connecting-IP` nor `X-Real-IP`. Details in [docs/guides/operations.md](docs/guides/operations.md).
+The leftmost `X-Forwarded-For` entry is whatever the caller sent, so it is never trusted for rate limiting: set `TRUSTED_CLIENT_IP_HEADER` or `TRUSTED_PROXY_HOPS` if you terminate behind a proxy that sets neither `CF-Connecting-IP` nor `X-Real-IP`. `CF-Connecting-IP` and `X-Real-IP` are likewise believed only from a private TCP peer unless `TRUSTED_CLIENT_IP_HEADER` names the header, so a proxy that reaches the backend from a public address must set it. An IPv6 client is rate-limited per /64. Details in [docs/guides/operations.md](docs/guides/operations.md).
 
 ### Plan Limits via Environment Variables (Self-Hosted)
 
@@ -202,7 +205,8 @@ cargo test
 |--------|----------|-------------|
 | `GET` | `/health` | Health check |
 | `POST` | `/api/v1/jobs` | Create a job (enforces plan limits) |
-| `GET` | `/api/v1/jobs` | List jobs |
+| `GET` | `/api/v1/jobs` | List jobs (filters: `status` list, `q`, `job_type`, `created_after`, `created_before`; `X-Has-More` header) |
+| `GET` | `/api/v1/jobs/{id}/history` | A job's recorded lifecycle events |
 | `POST` | `/api/v1/jobs/bulk` | Bulk enqueue jobs (enforces plan limits) |
 | `POST` | `/api/v1/jobs/claim` | Claim (lease) jobs for worker processing |
 | `POST` | `/api/v1/jobs/{id}/complete` | Mark a job completed (worker ack) |
@@ -243,6 +247,7 @@ cargo test
 | `GET` | `/api/v1/outgoing-webhooks/{id}/deliveries` | Get delivery history |
 | `POST` | `/api/v1/outgoing-webhooks/{id}/retry/{delivery_id}` | Retry failed delivery |
 | `POST` | `/api/v1/webhooks/{org_id}/custom` | Incoming webhook (ingestion → creates jobs) |
+| `GET` | `/api/v1/webhooks/deliveries` | Inbound webhook log (accepted requests, newest first) |
 
 #### Real-Time
 
@@ -259,14 +264,15 @@ cargo test
 |--------|----------|-------------|
 | `POST` | `/api/v1/auth/login` | Exchange API key for JWT |
 | `POST` | `/api/v1/auth/refresh` | Refresh JWT token |
-| `POST` | `/api/v1/auth/email/start` | Start email-based login |
-| `POST` | `/api/v1/auth/email/verify` | Verify email login code |
+| `POST` | `/api/v1/auth/email/start` | Start email-based login (3/min and 10/hour per client IP; optional `turnstile_token`) |
+| `POST` | `/api/v1/auth/email/verify` | Verify email login code (429 with `Retry-After` when throttled) |
 
 #### Billing
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/api/v1/billing/status` | Get billing status |
+| `GET` | `/api/v1/billing/status` | Get billing status (unrestricted API key) |
+| `POST` | `/api/v1/billing/checkout` | Create a Stripe Checkout session for `starter` or `pro`, bound to the organization (unrestricted API key) |
 | `POST` | `/api/v1/billing/portal` | Create Stripe customer portal session |
 
 #### Admin API (requires `X-Admin-Key` header)
@@ -366,9 +372,11 @@ curl -X POST http://localhost:8080/api/v1/outgoing-webhooks \
     "name": "Slack Alerts",
     "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
     "events": ["job.failed", "queue.paused"],
-    "secret": "your-hmac-secret"
+    "format": "slack"
   }'
 ```
+
+`format` is `json` (the default: the signed event envelope), `slack`, `discord` or `teams`; a chat format sends one short message so the chat service's incoming-webhook URL works as it is. Events: `job.created`, `job.started`, `job.completed`, `job.failed`, `job.cancelled`, `job.deadlettered`, `job.retried`, `queue.paused`, `queue.resumed`, `worker.registered`, `worker.deregistered`, `schedule.triggered`, `workflow.completed` and `workflow.failed` (the two workflow events are announced at most once, see [docs/guides/webhooks.md](docs/guides/webhooks.md)).
 
 Deliveries retry with exponential backoff (`OUTGOING_WEBHOOK_MAX_ATTEMPTS`, default 5). After 20 consecutive failed deliveries the webhook is disabled automatically (`enabled: false`, `last_status: "auto_disabled"`) and receives no further events until you re-enable it with `PUT /api/v1/outgoing-webhooks/{id}` and `{"enabled": true}`. See [docs/guides/webhooks.md](docs/guides/webhooks.md).
 
@@ -553,6 +561,8 @@ SET custom_limits = '{"max_active_jobs": 10000, "max_jobs_per_day": 1000000}'::j
 WHERE id = 'org-id';
 ```
 
+Prefer `PATCH /api/v1/admin/organizations/{id}`, which validates the object. The resource caps are `max_jobs_per_day`, `max_active_jobs`, `max_queues`, `max_workers`, `max_api_keys`, `max_schedules`, `max_workflows` and `max_webhooks`: a whole number, or `null` / `-1` for unlimited. The settings are `max_payload_size_bytes`, `rate_limit_requests_per_second`, `rate_limit_burst`, `job_retention_days` and `history_retention_days`: a whole number, or `null` for the plan default (retention is 0-36500 days). Unknown keys and any other value are a `400 VALIDATION_ERROR`. A value written directly in SQL that does not fit is ignored (the plan default applies).
+
 ## 🚀 Production Deployment
 
 ### Docker Compose (Recommended for Single Server)
@@ -639,7 +649,7 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317 ./target/release/spooled-backend
 - **Authentication**: API keys (bcrypt hashed) or JWT tokens
 - **Least privilege**: queue-scoped keys are enforced across REST, realtime, and gRPC operations; active streams revalidate current key state
 - **Multi-tenancy**: explicit per-organization scoping on every query
-- **Rate Limiting**: Per-key limits with Redis (fails closed when configured)
+- **Rate Limiting**: Per-organization token bucket by plan, plus an optional per-key limit in requests per minute, with Redis (fails closed when configured). Rejected requests get `429` with `Retry-After` (seconds); authenticated responses carry `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` (Unix time) and `X-RateLimit-Scope`
 - **Webhooks**: HMAC-SHA256 signature verification
 - **Input Validation**: All inputs sanitized and size-limited
 - **SSRF Protection**: Webhook URLs validated in production

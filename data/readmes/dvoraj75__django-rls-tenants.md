@@ -34,6 +34,10 @@ returns zero rows, never leaked data.
   `STRICT_MODE` raises `NoTenantContextError` on unscoped `TenantQuerySet` evaluation.
 - **Automatic query scoping** -- `RLSProtectedModel` adds the tenant FK, the RLS policy,
   and a tenant-scoped manager.
+- **Index-friendly by design** -- the manager's `WHERE tenant_id = X` is what reaches the
+  planner; the policy alone is a post-scan filter. Composite `(tenant, ...)` indexes,
+  partial indexes, joins and the v1.3.0 InitPlan form, with measured `EXPLAIN` plans.
+  [Performance guide →](https://dvoraj75.github.io/django-rls-tenants/guides/performance/)
 - **Tenant-aware Django admin** -- `RLSTenantModelAdmin` scopes changelists, forms, and
   related dropdowns to the current tenant, with a tenant switcher for cross-tenant
   admins.
@@ -82,6 +86,9 @@ python manage.py check_rls   # verify policies are in place
 ```
 
 **[Full tutorial and documentation →](https://dvoraj75.github.io/django-rls-tenants/)**
+Something not working? Start with the
+[Troubleshooting page](https://dvoraj75.github.io/django-rls-tenants/troubleshooting/)
+(symptom / cause / fix).
 
 > **Want to see it in action first?** Check out the
 > [example project](example/) -- `cd example && docker compose up`,
@@ -111,7 +118,7 @@ Are you using `django-rls-tenants` in production? We'd love to hear about it.
 |------------|---------|
 | Python     | >= 3.11 |
 | Django     | >= 4.2  |
-| PostgreSQL | >= 15   |
+| PostgreSQL | >= 15 (CI runs the suite on 15, 16 and 17) |
 
 ## Contributing
 

@@ -57,16 +57,20 @@ docker compose run --rm init node dist/cli.js init --mind alpha --docker --publi
 
 (Naming a command replaces the one in `docker-compose.yml`, so that line repeats `--docker` and `--public-db-host`. Leave them out and `init` prints the clone-only stdio config instead.)
 
-The built-in passwords are for your own machine only. If anything other than you will reach this machine, set `POSTGRES_PASSWORD` and `APP_PASSWORD` (in your environment, or in a `.env` file next to `docker-compose.yml`) before the first `docker compose up -d db`; changing them later takes manual steps. Use letters and digits only, because they are placed inside web addresses. To change the cooling wait, set `IDENTITY_COOLING_HOURS` the same way (default 24, 0 for solo use). Compose passes it to both the service and the daemon.
+The built-in passwords are for your own machine only. If anything other than you will reach this machine, set `POSTGRES_PASSWORD`, `VERB_PASSWORD`, `DAEMON_PASSWORD` and `IMPORT_PASSWORD` (and `APP_PASSWORD`, only if you are upgrading a deployment that already has a `sanctum_app` login; in your environment, or in a `.env` file next to `docker-compose.yml`) before the first `docker compose up -d db`; changing them later takes manual steps. Use letters and digits only, because they are placed inside web addresses. To change the cooling wait, set `IDENTITY_COOLING_HOURS` the same way (default 24, 0 for solo use). Compose passes it to both the service and the daemon.
 
-If the output shows `<app-password>` where a password should be, substitute the value of `APP_PASSWORD` (default `sanctum_app_local`).
+Each service connects as its own database login (a "lane"), and the database works out who is acting from the login, so a stolen daemon address cannot be used to decide what your mind notices. `init` creates the four lane logins and prints four addresses: `verb` (the service, `mind`), `daemon`, `operator` and `import` (the `tools` service). Compose gives `mind`, `daemon` and `tools` theirs from `VERB_PASSWORD`, `DAEMON_PASSWORD` and `IMPORT_PASSWORD` (defaults `sanctum_verb_local`, `sanctum_daemon_local`, `sanctum_import_local`). The operator lane is for someone who runs `extractor` and `grant` without holding the admin address; under Docker those commands run through the `init` service with the admin address, so nothing needs it, and `init` prints its address once (set `OPERATOR_PASSWORD` to choose its password). The old shared `sanctum_app` login still works and logs one warning at start.
+
+If the output shows `<lane-password>` or `<app-password>` where a password should be, substitute the value of the matching variable (`VERB_PASSWORD` default `sanctum_verb_local`, `APP_PASSWORD` default `sanctum_app_local`, and so on).
+
+Updating an install that is already running (including one from before the lanes, migration 0026): see [Updating](#updating) below and [UPGRADING.md](UPGRADING.md).
 
 ### 2. Connect it to an app
 
 The app that will talk to your mind (the "MCP client") needs one of the configs that `init` printed. sanctum-mind speaks standard MCP, so any client that supports it works; nothing here is specific to one vendor.
 
 - **HTTP**: for an app that can connect to a web address. Use the HTTP config. It points at `http://localhost:8002/mcp` and carries the key. With HTTP, each mind holds only its own key. This is the safer option when several minds share a service.
-- **stdio**: for an app that launches the service itself (Claude Desktop and Claude Code are two such apps; any MCP client that starts a local command works the same way), so no web server is needed. The config contains the `sanctum_app` database address and the key. That address is a credential for every mind in the database, so use stdio only where every mind on that machine is trusted alike. To launch from a clone, the config runs `node /absolute/path/to/sanctum-mind/dist/cli.js stdio`. That file exists after `npm run build`, so this path needs Node.js 22+ on your computer. Whether a given app also accepts the HTTP config is the app's call; check its documentation.
+- **stdio**: for an app that launches the service itself (Claude Desktop and Claude Code are two such apps; any MCP client that starts a local command works the same way), so no web server is needed. The config contains the `sanctum_verb` database address and the key. That address is a credential for every mind in the database (it keeps a client from posing as the daemon, the operator or an import, but not from posing as any mind), so use stdio only where every mind on that machine is trusted alike. To launch from a clone, the config runs `node /absolute/path/to/sanctum-mind/dist/cli.js stdio`. That file exists after `npm run build`, so this path needs Node.js 22+ on your computer. Whether a given app also accepts the HTTP config is the app's call; check its documentation.
 - **stdio (Docker)**: for an app that launches a local command, when you only have Docker. The config runs `docker exec -i` into the running `sanctum-mind` container and starts the stdio server there. The container already holds the database address, so no database credential goes into your app's settings; only the mind's key does, and it is handed to `docker` through the environment, not typed on the command line where other users could see it in `ps`. The mind container must be running (`docker compose up -d mind`), and `docker` must be on the path of the app that launches it. The container has the fixed name `sanctum-mind`; if you run two copies of this project on one machine the names collide, so rename one in `docker-compose.yml` and run `init` with `--container <that name>`.
 - **If you used Docker, use the HTTP config or the stdio (Docker) config; the host-path stdio config is for a clone.** `init` run through Docker does not print the host-path one, because its path would point inside the container, not at your machine.
 
@@ -79,7 +83,7 @@ The three shapes look like this (`init` fills in the real values for you):
 ```
 
 ```json
-{"mcpServers":{"sanctum-mind":{"command":"node","args":["/absolute/path/to/sanctum-mind/dist/cli.js","stdio"],"env":{"DATABASE_URL":"<sanctum_app URL>","SANCTUM_BEARER":"<key>"}}}}
+{"mcpServers":{"sanctum-mind":{"command":"node","args":["/absolute/path/to/sanctum-mind/dist/cli.js","stdio"],"env":{"DATABASE_URL":"<sanctum_verb URL>","SANCTUM_BEARER":"<key>"}}}}
 ```
 
 ```json
@@ -102,6 +106,19 @@ An `{"ok":true,...}` answer with identity, vows, state and health sections means
 
 Then open a conversation with your mind and ask it to call `mind_orient`. After that, a good first step is to have it write down who it is. Ask it to call `mind_identity` with `affirm` to add a first core. That takes effect immediately. Then ask it to `mind_observe` the moment (it needs a charge tag), and in a new session ask it to `mind_orient` and `mind_search` for what it wrote. If it finds it, memory is working.
 
+## Updating
+
+Releases are tagged on GitHub and published to npm as [`sanctum-mind`](https://www.npmjs.com/package/sanctum-mind). The Docker image builds from the repository, so under Docker `git pull` is the fetch step; an npm install fetches with `npm update -g sanctum-mind`. Read the release's entry in [CHANGELOG.md](CHANGELOG.md), back up the database, then, under Docker:
+
+```bash
+git pull
+docker compose build
+docker compose run --rm init node dist/cli.js upgrade   # migrations, lane roles, and what still needs you; --dry-run changes nothing
+docker compose up -d
+```
+
+`upgrade` needs a superuser address. It exits 0 when nothing detectable is left and 3 while steps that need you remain (it prints them again on every run until they are done; a finished install says "nothing to do"). From an npm install: `npm update -g sanctum-mind`, then `DATABASE_URL=<admin> sanctum-mind upgrade` and `DATABASE_URL=<admin> sanctum-mind init --mind alpha` (the lane logins), then restart the services. From a clone: `git pull && npm ci && npm run build`, then the same two commands as `npm start -- upgrade` and `npm start -- init --mind alpha`. Coming from 0.1.0 under Docker, also run `docker compose run --rm init` once between `upgrade` and `up -d`: 0.2.0's services log in as lanes, and `init` creates those logins. `http`, `stdio`, `daemon` and the commands that write refuse to run on a database that is behind or newer than the build, and say what to do. `sanctum-mind version`, `mind_health` and `GET /health` say which version you are on. [UPGRADING.md](UPGRADING.md) has the details, the exit codes and the per-release manual steps.
+
 ## Day to day
 
 Your mind picks these up on its own. These are the ones it will reach for most, by what they do.
@@ -123,13 +140,13 @@ Your mind picks these up on its own. These are the ones it will reach for most, 
 - **See a read of recent texture**: `mind_weather`. No AI call. It summarises recent charge, vividness and grip, and says how much you are carrying (`attention_load`: how many things, how many pinned, the heaviest weight).
 - **See what you're carrying, pin what matters**: `mind_attend` (list, pin, release). The list is your open loops, active threads, open tasks, live desires, identity changes still cooling, proposals and repairs waiting, and charges you are sitting with, each with a weight from 0 to 1 worked out by plain arithmetic (how recent, how charged, what kind of thing, whether you pinned it). Pin something to keep it in view; pinning changes nothing about it, and only you can pin or release. Anything you pinned is always in the set, however crowded it is, and the list also shows every pin you hold (`pins`, each with a `pin_id`) and marks the ones that hold nothing any more (`stale`: the thing was resolved, archived or rewritten, or is no longer something you are carrying); release those with `release` and their `pin_id`. A rewrite with many dependants cannot take over the list: repairs show as at most three items, and `attention_load.repairs_not_shown` counts the rest (`repairs_pending` is the total). `mind_orient` shows the top seven (and `stale_pins`, how many pins hold nothing); the extractor looks first at what you have pinned or are attending to.
 - **Decide what the extractor noticed**: `mind_notice` (list, accept, reject). Only shown when the operator has enabled the extractor at stage propose. Accepting makes the memory, as you; rejecting or letting it lapse removes only the proposal. When something you relied on is rewritten or retired, the mind is asked whether what depended on it still holds; you answer keep, rethink or retire (`mind_notice accept` with `decision`). These repair questions are shown whenever one is waiting, whether or not the extractor is on, and `mind_orient` counts them under `repairs`.
-- **Check the service**: `mind_health` reports database status, row counts, the last daemon run, and the extractor's state (whether it is enabled, its stage, whether it is paused, how many proposals wait, the model version, and how the last extractor run went).
+- **Check the service**: `mind_health` reports database status, the package version and schema, row counts, the last daemon run, and the extractor's state (whether it is enabled, its stage, whether it is paused, how many proposals wait, the model version, and how the last extractor run went).
 
 For the full list, the exact fields and the error shapes, see [CONTRACTS.md](CONTRACTS.md).
 
 ## If something goes wrong
 
-These are admin commands, run by you in a terminal, not by your mind. Suspend, restore, rotate (`init`), grants, `extractor` and purge need the admin database address in `DATABASE_URL`. `export-mind` and `import-mind` need the `sanctum_app` address and refuse the admin one. `sinks requeue` works with either. Outside Docker, run them as `npm start -- <command>`. Under Docker, run the admin ones through the init service: `docker compose run --rm init node dist/cli.js <command> ...` (for example `docker compose run --rm init node dist/cli.js suspend-access --mind alpha`). Export, import, `embed-backfill` and `sinks requeue` run through the `tools` service instead, which has the `sanctum_app` address and your `./exchange` folder mounted at `/exchange` inside the container: `docker compose run --rm tools node dist/cli.js <command> ...`. Always write and read files under `/exchange`; anywhere else inside the container disappears when the command ends.
+These are admin commands, run by you in a terminal, not by your mind. Suspend, restore, rotate (`init`), grants, `extractor` and purge need the admin database address in `DATABASE_URL`. `export-mind` and `import-mind` need the `sanctum_import` address (the legacy `sanctum_app` one works with a warning) and refuse the admin one. `extractor` (including `repair-backfill`) and `grant` take the admin address, or the `sanctum_operator` one: that login can switch the extractor, change grants and report, and holds no other extra power (it cannot write identity). `sinks requeue` needs the `sanctum_import` address. A command started on the wrong lane stops with a message naming the lane it needs. Outside Docker, run them as `npm start -- <command>`. Under Docker, run the admin ones through the init service: `docker compose run --rm init node dist/cli.js <command> ...` (for example `docker compose run --rm init node dist/cli.js suspend-access --mind alpha`). Export, import, `embed-backfill` and `sinks requeue` run through the `tools` service instead, which has the `sanctum_import` address and your `./exchange` folder mounted at `/exchange` inside the container: `docker compose run --rm tools node dist/cli.js <command> ...`. Always write and read files under `/exchange`; anywhere else inside the container disappears when the command ends.
 
 - **A key might be exposed.** Do these three in order:
   1. `suspend-access --mind alpha`: the key stops working at once and the grants it gave stop applying. Nothing is deleted. While suspended, the mind cannot act at all, including withdrawing a cooling change.
@@ -178,44 +195,56 @@ Read [DESIGN.md](DESIGN.md) for the why and [CONTRACTS.md](CONTRACTS.md) for the
 
 ### Without Docker
 
+From npm, with Node.js 22+ and a Postgres with pgvector:
+
+```bash
+ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm install -g sanctum-mind   # skip onnxruntime's optional CUDA download (see Embeddings)
+createdb -U postgres sanctum_mind       # or: psql -U postgres -c 'create database sanctum_mind'
+SANCTUM_LANE_PASSWORD_VERB='choose-a-verb-password' \
+DATABASE_URL='postgresql://postgres@localhost:5432/sanctum_mind' sanctum-mind init --mind alpha
+DATABASE_URL='postgresql://sanctum_verb:choose-a-verb-password@localhost:5432/sanctum_mind' EMBEDDER=none sanctum-mind http
+```
+
+From a clone, the same steps run from the source:
+
 ```bash
 ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm ci   # skip onnxruntime's optional CUDA download (see Embeddings)
 createdb -U postgres sanctum_mind       # or: psql -U postgres -c 'create database sanctum_mind'
-SANCTUM_APP_PASSWORD='choose-a-password' \
+SANCTUM_LANE_PASSWORD_VERB='choose-a-verb-password' \
 DATABASE_URL='postgresql://postgres@localhost:5432/sanctum_mind' npx tsx src/cli.ts init --mind alpha
-DATABASE_URL='postgresql://sanctum_app:choose-a-password@localhost:5432/sanctum_mind' EMBEDDER=none npm run dev:http
+DATABASE_URL='postgresql://sanctum_verb:choose-a-verb-password@localhost:5432/sanctum_mind' EMBEDDER=none npm run dev:http
 ```
 
 `EMBEDDER=none` skips the embedding model, so a first try needs no download (search falls back to full text; see Embeddings). Leave it out for the default local model, which downloads about 130 MB on first use.
 
-Prefer `SANCTUM_APP_PASSWORD` to `--app-password`: command-line arguments are visible to other users of the machine in `ps`. Without either, a password is generated on first setup and printed once, on its own line.
+Prefer `SANCTUM_LANE_PASSWORD_VERB`, `_DAEMON`, `_OPERATOR`, `_IMPORT` and `SANCTUM_APP_PASSWORD` to `--lane-password-<lane>` and `--app-password`: command-line arguments are visible to other users of the machine in `ps`. A login with no password supplied gets one generated on first setup, printed once in its address.
 
-`sanctum_app` is a login shared by the whole Postgres cluster, not by one database. If it already has a login (another sanctum-mind database in this cluster set it up), `init` leaves its password alone and prints the URL with `<app-password>` in place of it. Supplying a different password then fails with an explanation and changes nothing, because it would lock the other deployments out. Pass `--force` only when you mean to change the password for all of them.
+The lane logins (`sanctum_verb`, `sanctum_daemon`, `sanctum_operator`, `sanctum_import`) and `sanctum_app` are logins shared by the whole Postgres cluster, not by one database. If one already has a login (another sanctum-mind database in this cluster set it up), `init` leaves its password alone and prints the URL with `<lane-password>` (or `<app-password>`) in place of it. Supplying a different password then fails with an explanation and changes nothing, because it would lock the other deployments out. Pass `--force` only when you mean to change the password for all of them. `init --rotate-lanes` deliberately issues new passwords for the four lane logins (shown once; restart the services with the new addresses).
 
-`DATABASE_URL` for `init` is an admin connection: it creates the `sanctum_app` login, which is what the service runs as. `init` runs the migrations, sets that login's password (generated and shown once, unless you pass `--app-password`), creates the mind with a fresh 32-byte bearer key (only its hash is stored; the key is shown once), and prints the service `DATABASE_URL`, the key, and the client configs. Add `--write-env` to also save them to `./.env` (never overwrites an existing file), `--json` for machine-readable output, `--port` / `--http-url` if the service is not on `http://localhost:8002`. With `--json`, take `mind.bearer` and `mcp`. Under Docker, the printed database host is `localhost:5432` (`--public-db-host`); services inside compose reach it as `db:5432`. Compose passes `--docker`, which prints the HTTP and stdio (Docker) configs and omits the host-path stdio one (`--json` then has `mcp.http` and `mcp.stdio_docker`; without it, `mcp.stdio` and `mcp.http`); `--container <name>` changes the container the stdio (Docker) config names (default `sanctum-mind`, the `container_name` of the mind service). `stdio` exits at once with a clear error when `SANCTUM_BEARER` is unset.
+`DATABASE_URL` for `init` is an admin connection: it creates the four lane logins, which are what the services run as (`sanctum_verb` for `http` and `stdio`, `sanctum_daemon` for `daemon`, `sanctum_import` for `export-mind`, `import-mind`, `embed-backfill` and `sinks requeue`, `sanctum_operator` for `extractor` and `grant` without the admin address), and keeps the legacy `sanctum_app` login only if it already has one (a fresh install gets none; `--legacy-login` adds it). `init` runs the migrations, sets each login's password (generated and shown once, unless you supply one), creates the mind with a fresh 32-byte bearer key (only its hash is stored; the key is shown once), and prints the four lane `DATABASE_URL`s, the legacy one (labelled as such), the key, and the client configs, whose stdio form carries the verb address. Add `--write-env` to also save the verb address and the rest to `./.env` (never overwrites an existing file), `--json` for machine-readable output, `--port` / `--http-url` if the service is not on `http://localhost:8002`. With `--json`, take `mind.bearer`, `mcp` and `lanes` (`{verb, daemon, operator, import}`, each an address). Under Docker, the printed database host is `localhost:5432` (`--public-db-host`); services inside compose reach it as `db:5432`. Compose passes `--docker`, which prints the HTTP and stdio (Docker) configs and omits the host-path stdio one (`--json` then has `mcp.http` and `mcp.stdio_docker`; without it, `mcp.stdio` and `mcp.http`); `--container <name>` changes the container the stdio (Docker) config names (default `sanctum-mind`, the `container_name` of the mind service). `stdio` exits at once with a clear error when `SANCTUM_BEARER` is unset.
 
 Inside the clone, without a build, the stdio config can use the source instead:
 
 ```json
-{"mcpServers":{"sanctum-mind":{"command":"npx","args":["tsx","/absolute/path/to/sanctum-mind/src/cli.ts","stdio"],"env":{"DATABASE_URL":"<sanctum_app URL>","SANCTUM_BEARER":"<key>"}}}}
+{"mcpServers":{"sanctum-mind":{"command":"npx","args":["tsx","/absolute/path/to/sanctum-mind/src/cli.ts","stdio"],"env":{"DATABASE_URL":"<sanctum_verb URL>","SANCTUM_BEARER":"<key>"}}}}
 ```
 
-`init` prints the first form with the real path of the checkout it runs from (the second when run through `tsx`). The package is not published to npm yet, so there is no `npx sanctum-mind`.
+`init` prints the first form with the real path of the checkout it runs from (the second when run through `tsx`). From an npm install it prints the installed path. `npx sanctum-mind stdio` works as the command as well, with the same `env`, but it resolves the package on each start; a global install (`npm install -g sanctum-mind`) with the printed path is the faster form.
 
 ### Database and roles
 
-`init` does all of this for you. By hand: run migrations as a role that can create extensions and roles (`DATABASE_URL=... npm run db:migrate`). The first migration creates a `sanctum_app` role with the grants the service needs and no login; give it one as the admin with `alter role sanctum_app login password '...'`. The service refuses to start as a superuser or a `BYPASSRLS` role, because either would see every mind's rows.
+`init` does all of this for you. By hand: run migrations as a role that can create extensions and roles (`DATABASE_URL=... npm run db:migrate`). The first migration creates a `sanctum_app` role with the grants the service needs and no login. Migration 0026 creates four lane roles, `sanctum_verb`, `sanctum_daemon`, `sanctum_operator` and `sanctum_import`, each a member of `sanctum_app` (so it has the same table grants and sees the same rows under row level security) and without a login (`sanctum_operator` also holds insert and update on `extractor_state` and `grants`, which `sanctum_app` does not); give each one as the admin with `alter role sanctum_verb login password '...'` (and so on). A login is on a lane when it is a lane role or a direct member of exactly one of them (a login in two, or in none, is on no lane). The database function `sanctum_actor()` reads the login (`session_user`) and answers `verb`, `daemon`, `operator` or `import`; the guards on noticings, pins, repair work and the extractor's switch ask it instead of trusting a setting the client can type. For `sanctum_app` itself and for the admin connection it still answers the setting, as before. Migration 0026 revokes temporary-table rights from PUBLIC on the database; other roles sharing this database that need temp tables must be granted TEMP directly. The service refuses to start as a superuser or a `BYPASSRLS` role, because either would see every mind's rows.
 
 Migrations are applied once each and their checksums recorded; an applied migration file is never edited.
 
-Upgrade note for belief repair: from migration 0025 on, every rewrite or retirement records a row of repair work when it happens. Rewrites and retirements made before that have none, and neither do nodes brought in by an import, so the daemon will not ask about what depended on them. Run `extractor repair-backfill` once after upgrading to 0025: rewrites made between the last pre-0025 run and the upgrade are otherwise never looked at, and so are older ones (admin URL; `--since` limits it to nodes changed on or after a date, `--dry-run` only counts):
+Belief repair keeps a row of repair work for every rewrite or retirement made from migration 0025 on. Rewrites and retirements made before that have none, and neither do nodes brought in by an import, so the daemon will not ask about what depended on them. `sanctum-mind upgrade` checks every mind for missing repair work and adds it, on every run (see [UPGRADING.md](UPGRADING.md)); `extractor repair-backfill` is the same thing by hand, for one mind (admin URL; `--since` limits it to nodes changed on or after a date, `--dry-run` only counts):
 
 ```sh
 npm start -- extractor repair-backfill --mind alpha --since 2026-01-01 --dry-run
 npm start -- extractor repair-backfill --mind alpha --since 2026-01-01
 ```
 
-It adds work for each rewritten or retired node that has none yet, oldest first, and prints how many. Nothing is proposed by the command itself: the daemon works through the new rows at `EXTRACTOR_REPAIR_BUDGET` questions per tick. Running it again adds nothing. Upgrading a database that predates the one-open-declaration-per-core index needs any core with two open declarations to have one withdrawn first, or that migration stops and says so.
+It adds work for each rewritten or retired node that has none yet, oldest first, and prints how many. Nothing is proposed by the command itself: the daemon works through the new rows at `EXTRACTOR_REPAIR_BUDGET` questions per tick. Running it again adds nothing.
 
 ### Keys for several minds (admin path)
 
@@ -254,7 +283,7 @@ Both are admin commands (`minds.disabled_at`); `restore-access` reverses `suspen
 
 ### Running the service
 
-`init`, `migrate` and `seed-keys` need an admin `DATABASE_URL`. `http` and `stdio` need the `sanctum_app` one.
+`init`, `migrate`, `upgrade` and `seed-keys` need an admin `DATABASE_URL`. `http` and `stdio` need the `sanctum_verb` one, `daemon` the `sanctum_daemon` one; both refuse to start on another lane's address, and the legacy `sanctum_app` address works with one warning.
 
 ```bash
 # HTTP + MCP Streamable HTTP on $HOST:$PORT (default 127.0.0.1:8002)
@@ -271,7 +300,7 @@ HTTP surface:
 
 | Route | Auth | Returns |
 | --- | --- | --- |
-| `GET /health` | none | verb count and database reachability |
+| `GET /health` | none | verb count, database reachability, package version and last applied migration (`schema`) |
 | `GET /verbs` | bearer | verb names |
 | `POST /verbs/<name>` | bearer | the verb's `Result`; status 200 or the error code's status |
 | `POST /mcp` | bearer | MCP Streamable HTTP, stateless |
@@ -323,12 +352,12 @@ npm start -- grant revoke --from alpha --to beta --scope steward
 ### Portability
 
 ```sh
-npm start -- export-mind --mind alpha --out alpha.json          # sanctum_app URL, not admin; ledger, graph, projections; no vectors
-npm start -- import-mind alpha.json --mind alpha --dry-run        # sanctum_app URL, not admin; into a fresh database or a fresh mind
+npm start -- export-mind --mind alpha --out alpha.json          # sanctum_import URL, not admin; ledger, graph, projections; no vectors
+npm start -- import-mind alpha.json --mind alpha --dry-run        # sanctum_import URL, not admin; into a fresh database or a fresh mind
 DATABASE_URL=<admin> npm start -- purge-mind --mind alpha --confirm alpha   # the only deletion path
 ```
 
-Under Docker there is no Node on the host, so use the `tools` service (profile `tools`, `sanctum_app` address, `./exchange` mounted at `/exchange`). Create the folder first: `mkdir -p exchange`. On Linux the container writes as uid 1000, so if your own user id is not 1000 (check with `id -u`), run `sudo chown 1000:1000 exchange` too. Docker Desktop on Mac and Windows handles this itself. Export refuses to overwrite an existing file. The exported file is private (mode 0600) and owned by uid 1000, so on Linux with another user id read it back with `sudo`, or with `docker compose run --rm tools cat /exchange/alpha.json`. A file saved by a different host user, with those private permissions, cannot be imported until you `chmod` it so uid 1000 can read it (for example `chmod 644`, or `sudo chown 1000:1000` it):
+Under Docker there is no Node on the host, so use the `tools` service (profile `tools`, `sanctum_import` address, `./exchange` mounted at `/exchange`). Create the folder first: `mkdir -p exchange`. On Linux the container writes as uid 1000, so if your own user id is not 1000 (check with `id -u`), run `sudo chown 1000:1000 exchange` too. Docker Desktop on Mac and Windows handles this itself. Export refuses to overwrite an existing file. The exported file is private (mode 0600) and owned by uid 1000, so on Linux with another user id read it back with `sudo`, or with `docker compose run --rm tools cat /exchange/alpha.json`. A file saved by a different host user, with those private permissions, cannot be imported until you `chmod` it so uid 1000 can read it (for example `chmod 644`, or `sudo chown 1000:1000` it):
 
 ```sh
 docker compose run --rm tools node dist/cli.js export-mind --mind alpha --out /exchange/alpha.json
@@ -434,7 +463,7 @@ Without an embedder, retrieval degrades to full text search: search still works 
 
 | Variable | Default | What it does |
 | --- | --- | --- |
-| `DATABASE_URL` | none | Admin URL for `init`, `migrate`, `seed-keys`, grants, suspend/restore, purge. The `sanctum_app` URL for `http`, `stdio`, `daemon` and the rest. |
+| `DATABASE_URL` | none | Admin URL for `init`, `migrate`, `upgrade`, `seed-keys`, grants, suspend/restore, purge. The lane URL for the rest: `sanctum_verb` for `http` and `stdio`, `sanctum_daemon` for `daemon`, `sanctum_import` for `export-mind`, `import-mind`, `embed-backfill` and `sinks requeue`, `sanctum_operator` for `extractor` and `grant` without the admin URL. The legacy `sanctum_app` URL works and warns. |
 | `PORT` | 8002 | HTTP listen port |
 | `HOST` | 127.0.0.1 | HTTP listen address (Docker sets 0.0.0.0 inside the container) |
 | `MAX_CONNECTIONS` | 256 | HTTP connection cap |
@@ -455,7 +484,10 @@ Without an embedder, retrieval degrades to full text search: search still works 
 | `DAEMON_*` | see `src/daemon/config.ts` | Daemon thresholds |
 | `DAEMON_TICK_BUDGET_MS` | 0 | Most milliseconds one daemon tick spends across minds before the rest wait for the next tick (which starts after the last mind processed). Checked between minds, so one slow mind can run past it. 0 means no limit. `daemon --once` has no rotation and always defers the same tail: do not combine them. |
 | `POSTGRES_PASSWORD` | `sanctum_local` | Compose only: admin password for the bundled database |
-| `APP_PASSWORD` | `sanctum_app_local` | Compose only: the `sanctum_app` password |
+| `VERB_PASSWORD`, `DAEMON_PASSWORD`, `IMPORT_PASSWORD` | `sanctum_verb_local`, `sanctum_daemon_local`, `sanctum_import_local` | Compose only: the passwords of the `sanctum_verb`, `sanctum_daemon` and `sanctum_import` logins that `mind`, `daemon` and `tools` connect with |
+| `OPERATOR_PASSWORD` | generated by `init` | Compose only: the `sanctum_operator` password, for an operator who runs `extractor` and `grant` without the admin address |
+| `SANCTUM_LANE_PASSWORD_VERB`, `_DAEMON`, `_OPERATOR`, `_IMPORT` | generated by `init` | `init` only: the lane login passwords (or `--lane-password-<lane>`) |
+| `APP_PASSWORD` | `sanctum_app_local` | Compose only, for upgrades: the password of an existing legacy `sanctum_app` login (a fresh install has none) |
 | `MIND` | `alpha` | Compose only: which mind `init` creates |
 
 ### Develop

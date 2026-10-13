@@ -1,4 +1,8 @@
 <p align="center">
+  <img src="assets/banner-dither.png" alt="ROOT: sources, knowledge graph, cited answers and MCP tools in one workspace" width="100%">
+</p>
+
+<p align="center">
   <a href="https://pypi.org/project/root-kg/"><img src="https://img.shields.io/pypi/v/root-kg?style=flat-square&color=blue" alt="PyPI"></a>
   <img src="https://img.shields.io/badge/python-3.11+-blue?style=flat-square&logo=python&logoColor=white" alt="Python 3.11+">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT License">

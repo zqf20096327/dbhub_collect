@@ -330,11 +330,17 @@ Configure pg-status using the following environment variables:
   it finishes. Must be greater than `0`.
 - `pg_status__query_timeout_ms` — Hard deadline, in milliseconds, for one poll
   iteration (connect, send, and read). When an iteration times out, its
-  connection is closed and the host's failure counter is incremented.
-  Default: `1000`. Must be greater than `0`; may exceed `sleep_ms`.
+  connection is closed and the host's failure counter is incremented. DNS
+  resolution time is not counted. Default: `1000`. Must be greater than `0`;
+  may exceed `sleep_ms`.
 - `pg_status__conn_max_age_ms` — Maximum age, in milliseconds, of a reused
   PostgreSQL connection. Older connections are closed after the current
   iteration and reopened for the next one. Default: `300000` (5 minutes).
+- `pg_status__poll_error_log_interval_ms` — Minimum interval, in
+  milliseconds, between `error` records about continuing PostgreSQL poll
+  failures of the same host; failures in between are logged at `debug`. The
+  first failure after a successful poll is always logged at `error`. `0` logs
+  every failure at `error`. Default: `60000` (1 minute).
 - `pg_status__sync_max_lag_ms` — Maximum time lag, in milliseconds, for a
   replica to be considered time-synchronous. Default: `1000`.
 - `pg_status__sync_max_lag_bytes` — Maximum WAL lag, in bytes, for a replica
@@ -392,11 +398,11 @@ not add its own certificate store or TLS configuration format:
 
 Available installation options:
 
-- [Debian package](https://github.com/krylosov-aa/pg-status/releases/download/2.3.0/pg-status_2.3.0_amd64.deb)
+- [Debian package](https://github.com/krylosov-aa/pg-status/releases/download/2.3.2/pg-status_2.3.2_amd64.deb)
 - [Docker Hub image](https://hub.docker.com/r/krylosovaa/pg-status)
 - [Docker build configurations](docker)
-- [Statically linked binary](https://github.com/krylosov-aa/pg-status/releases/download/2.3.0/pg-status_2.3.0_linux_amd64_static.tar.gz)
-- [Dynamically linked binary](https://github.com/krylosov-aa/pg-status/releases/download/2.3.0/pg-status_2.3.0_linux_amd64_shared.tar.gz)
+- [Statically linked binary](https://github.com/krylosov-aa/pg-status/releases/download/2.3.2/pg-status_2.3.2_linux_amd64_static.tar.gz)
+- [Dynamically linked binary](https://github.com/krylosov-aa/pg-status/releases/download/2.3.2/pg-status_2.3.2_linux_amd64_shared.tar.gz)
 
 For more information, see the [installation guide](docs/installation.md).
 
@@ -480,7 +486,8 @@ closed and the host's failure counter is incremented.
 
 Waiting for a slow or unresponsive host's socket does not block updates for
 the other hosts. DNS resolution during connection setup can still block
-inside libpq and delay the monitoring loop, including deadline handling.
+inside libpq and delay checks of all hosts, but it does not count toward their
+deadlines: a slow DNS response alone does not fail a check.
 
 ### Byte lag
 
@@ -601,8 +608,15 @@ while preserving valid JSON. Host names, states, and lag values remain in
 
 The default `info` level reports startup, shutdown, role changes, availability
 changes, and transitions across the global `pg_status__sync_max_lag_*`
-thresholds. PostgreSQL operation failures are logged at `error`. Detailed polling
-progress and replica-to-master fallback decisions are available at `debug`.
+thresholds. For each host, the first PostgreSQL poll failure is logged at
+`error`; continuing failures are logged at `error` at most once per
+`pg_status__poll_error_log_interval_ms` (1 minute by default), with the
+current operation and error. This limit also covers timeouts and
+invalid results, even when the failure reason changes. Intermediate failures
+are available at `debug`. A fully successful poll resets the limit and logs
+recovery at `info` through the host's availability transition. Polling frequency
+is unaffected. Detailed polling progress and replica-to-master fallback
+decisions are also available at `debug`.
 
 pg-status never logs PostgreSQL passwords or complete connection strings. Log
 collection, storage, and rotation are delegated to the process supervisor,

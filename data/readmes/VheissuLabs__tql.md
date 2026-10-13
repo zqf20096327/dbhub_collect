@@ -41,6 +41,10 @@ as happily as a Postgres server behind an SSH tunnel.
 | **PostgreSQL** | built in |
 | **SQLite** | built in, any `.sqlite`, `.sqlite3` or `.db` file |
 | **SQL Server** | built in, nothing else to install ([below](#sql-server)) |
+| **DuckDB** | built in, any `.duckdb` file, schemas and all |
+| **libSQL** and **Turso** | built in, a `libsql://` URL and its auth token ([below](#libsql-and-turso)) |
+| **ClickHouse** | built in, browse and query ([below](#clickhouse)) |
+| **Redis** and **Valkey** | built in, a key browser of their own ([below](#redis-and-valkey)) |
 
 A hosted database that speaks the MySQL or PostgreSQL protocol connects the same
 way, with a connection string or the connection form, over [TLS](#tls) and, if
@@ -67,9 +71,50 @@ A connection is encrypted by default without checking the server's certificate,
 which is what a local or self-signed SQL Server needs; `ssl_mode` `verify-ca` or
 `verify-full` checks it, and `disable` turns encryption off.
 
+### libSQL and Turso
+
+A libSQL connection is a URL and an auth token: `tql open
+"libsql://shop-you.turso.io?authToken=…"`, or the connection form's **URL** and
+**Auth token**. tql speaks Turso's HTTP API, so a self-hosted `sqld` works too
+(`http://127.0.0.1:8080`). Everything SQLite does works here, editing included.
+
+### Redis and Valkey
+
+A Redis or Valkey connection opens a key browser in place of the table list:
+`tql open redis://:password@host:6379/0`, `rediss://` for TLS, or the
+connection form. Keys are read with `SCAN` in the background, never `KEYS`, and
+folded into namespaces on `:`; `/` narrows them with a pattern such as `user:*`,
+and `b` switches database.
+
+Every type shows as itself: a string as text (JSON pretty-printed, binary as
+hex), a hash as fields and values, a list, set or sorted set as rows, and a
+stream as entries. `e` edits a value, a field, an item, a member or a score,
+`N` adds one, and `d` marks one for removal; on the key list, `N` makes a key,
+`d` deletes one, `T` sets its TTL and `R` renames it. Edits wait for `:w`, which
+sends them all in one transaction, so either every one happens or none does. A
+list item that moved since tql read it is not removed by mistake.
+
+On Redis 7.4 and Valkey 9, a hash shows each field's TTL, and `T` on a field
+sets or clears it. `:log` shows the server's recent slow commands, from
+Valkey's command log or Redis's slow log.
+
+`s` opens a command pane for anything else (`HGETALL user:1`, `ZRANGE leaders 0
+9 WITHSCORES`); `ctrl+r` runs the line. On a read-only connection it runs only
+commands the server says only read, and it never runs one that waits forever,
+such as `BLPOP` or `SUBSCRIBE`.
+
+### ClickHouse
+
+ClickHouse connects over its HTTP interface, port 8123, or 8443 with an
+`ssl_mode` set (`clickhouses://` in a connection string). Databases switch with
+`b`, and every type shows as itself: arrays, maps and tuples as JSON, and big
+integers and decimals exactly. Tables are read only in tql: ClickHouse changes
+rows with background mutations, which do not fit editing a cell and writing it
+with `:w`. The SQL editor runs whatever the connection allows.
+
 ## Installing
 
-One file, no runtime to install. The binary has all four database drivers
+One file, no runtime to install. The binary has every database driver
 built in, and on Linux it is statically linked, so it runs on any distribution.
 On first run it creates `~/.config/tql/` and migrates its own store, so there is
 nothing to set up.
@@ -238,7 +283,7 @@ than saving a second.
 
 | Argument or flag | What it does |
 | --- | --- |
-| `<path-or-dsn>` | a SQLite file, or a `mysql://`, `pgsql://`, `postgres://`, `sqlsrv://` or `mssql://` string; `mysql+ssh://` and the others with `+ssh` go through an SSH server first |
+| `<path-or-dsn>` | a SQLite or DuckDB file, or a `mysql://`, `pgsql://`, `postgres://`, `sqlsrv://`, `mssql://`, `libsql://`, `clickhouse://`, `redis://` or `valkey://` string (`clickhouses://`, `rediss://` and `valkeys://` for TLS); `mysql+ssh://` and the others with `+ssh` go through an SSH server first |
 | `--name=<name>` | what to call it in the connection list; on one already saved, a rename |
 | `--tag=<tag>` | what it *is*: `production`, `staging`, `dev` or `local`, which decides the color it wears; see [Tags and read only](#tags-and-read-only) |
 | `--peek` | open it without saving it |
@@ -253,6 +298,10 @@ password has a `$`, `!` or backtick in it.
 to save), so `tql export` on its own is a four-question wizard, and
 `tql export prod orders --sql=./orders.sql` is a script. See
 [Exporting](#exporting).
+
+Inside tql, `:open`, `:update`, `:export` (this table) and `:export database`
+(every table) do the same from the command line or the ctrl+k palette, and `:v`
+says which version you have. See [docs/keys.md](docs/keys.md).
 
 `tql list` shows those. tql runs its store's migrations for itself, so there is
 no command for them. A debug build from a source checkout also shows
@@ -293,7 +342,8 @@ about each one.
 | `sql_always` | `false` | keep the SQL editor on screen instead of only after `s` |
 | `sql_height` | `0` | rows it takes, 0 picks a third of the frame |
 | `sql_editor` | `"simple"` | how the SQL editor takes keys: `"simple"` or `"vim"`, see [the SQL editor](docs/keys.md#the-sql-editor) |
-| `sql_complete` | `true` | offer tables, columns and keywords as you type in the SQL editor; `tab` takes one |
+| `sql_complete` | `true` | offer tables, columns and keywords as you type in the SQL editor; `tab` or `↵` takes one |
+| `sql_keyword_case` | `"match"` | the case completion writes keywords in: `"match"` follows how you type (`sel` gives `select`, `SEL` gives `SELECT`), or always `"upper"` or `"lower"` |
 | `row_style` | `"marker"` | how the current row is shown: `marker`, `dim-others`, `bold`, `inverse`, `underline` |
 | `top_margin` | `0` | blank rows above the frame |
 | `bottom_margin` | `0` | blank rows below the frame |
@@ -619,6 +669,13 @@ also drops the current filter, sort and any pending edits, since none of them
 mean anything in another database.
 
 A SQLite connection is one file, so `b` says as much and does nothing.
+
+On Postgres and SQL Server, the table list shows every schema, not only your
+default one. Each schema is a header you fold with `↵`, `h` and `l`; yours comes
+first and open, the rest folded, and tql remembers what you fold. A table
+outside your default schema is called `schema.table` everywhere: in the grid,
+the palette, `tql tables`, `tql describe`, `tql export` and the MCP tools, and
+completion offers it that way. `/` searches every schema at once.
 
 ## Databases behind SSH
 
@@ -1146,7 +1203,7 @@ Adding and editing happen in a modal over the list, never by dropping out to a
 prompt sequence. `↑↓` picks a field, `↵` edits it with a real cursor (arrows,
 home, end, backspace, delete, paste), `ctrl+s` saves and `esc` cancels. Nothing
 is written until you save. The driver is cycled with `← →`, through all
-four.
+eight.
 
 ## Adding a row
 

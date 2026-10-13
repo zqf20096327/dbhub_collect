@@ -31,49 +31,65 @@ It is designed as an independent, standalone embedded storage engine and caching
 
 ## Performance
 
-Benchmarked on bare metal (**AMD Ryzen Threadripper 9970X 32-Core / 64-Thread Processor @ 5.48 GHz, 128 GB DDR5 RAM**, 15,000,000 keys across 48 concurrent worker threads with 128 clients, and 5,000,000 iterations of each range scan, via [`crud-bench`](https://github.com/surrealdb/crud-bench); SurrealMX figures are the best of three runs):
+Benchmarked on bare metal (**AMD Ryzen Threadripper 9970X 32-Core / 64-Thread Processor @ 5.48 GHz, 128 GB DDR5 RAM**, 15,000,000 keys across 48 concurrent worker threads with 128 clients, and 5,000,000 iterations of each range scan, via [`crud-bench`](https://github.com/surrealdb/crud-bench); each figure is the best of three runs of that benchmark):
 
-| Engine | Point&nbsp;Read&nbsp;(OPS) | &nbsp;&nbsp;&nbsp;Create&nbsp;(OPS) | Update&nbsp;(OPS) | &nbsp;&nbsp;&nbsp;Delete&nbsp;(OPS) | &nbsp;&nbsp;&nbsp;Scan&nbsp;(OPS) |
+| Engine | Point&nbsp;Read&nbsp;(OPS) | Create&nbsp;(OPS) | Update&nbsp;(OPS) | Delete&nbsp;(OPS) | Scan&nbsp;(OPS) |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| **SurrealMX** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**22,921,015** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**2,037,150** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**1,704,945** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**2,496,510** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**17,498,761** |
-| LMDB<br><sup>(In-Memory)</sup> | 1,196,173 | 224,909 | 243,045 | 176,188 | 1,186,447 |
-| RocksDB<br><sup>(In-Memory)</sup> | 750,476 | 627,071 | 599,129 | 681,996 | 839,268 |
+| **SurrealMX** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**21,506,711** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**1,887,149** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**1,595,009** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**1,814,037** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**18,031,692** |
+| LMDB<br><sup>(In-Memory)</sup> | 1,226,897 | 232,805 | 241,431 | 177,198 | 1,188,365 |
+| RocksDB<br><sup>(In-Memory)</sup> | 759,060 | 616,649 | 572,246 | 705,773 | 836,666 |
 
-- **Point Reads**: Over **22,900,000 OPS** sustained (654ms for 15,000,000 lookups) using zero-copy borrowed slice inspection (`db.with_value`): over **19× faster** than LMDB and **30× faster** than RocksDB.
-- **Writes & Creates**: Over **2,030,000 OPS** (7.36s for 15,000,000 creates) via the concurrent ART index and lock-free circular commit ring buffer: **3.2× faster** than RocksDB and **9.1× faster** than LMDB.
-- **Updates**: Over **1,700,000 OPS** (8.80s for 15,000,000 updates): **2.8× faster** than RocksDB and **7.0× faster** than LMDB.
-- **Deletes**: Over **2,490,000 OPS** (6.01s for 15,000,000 deletions) via optimized inline tombstone collapse and pointer-identity unlinking: **3.7× faster** than RocksDB and **14× faster** than LMDB.
-- **Range Scans**: Over **17,400,000 OPS** (286ms for 5,000,000 `select(*) limit(100)` scans) using lock-free version reads and zero-allocation cursor traversal (`scan_with` / `keys_for_each`): **20× faster** than RocksDB and **14× faster** than LMDB.
+- **Point Reads**: **21.51M OPS** sustained using zero-copy borrowed slice inspection (`db.with_value`): **17.5× faster** than LMDB and **28.3× faster** than RocksDB.
+- **Writes & Creates**: **1.89M OPS** via the concurrent ART index and lock-free circular commit ring buffer: **8.11× faster** than LMDB and **3.06× faster** than RocksDB.
+- **Updates**: **1.60M OPS**: **6.61× faster** than LMDB and **2.79× faster** than RocksDB.
+- **Deletes**: **1.81M OPS** via optimized inline tombstone collapse and pointer-identity unlinking: **10.2× faster** than LMDB and **2.57× faster** than RocksDB.
+- **Range Scans**: **18.03M OPS** on `select(*) limit(100)` scans using lock-free version reads and zero-allocation cursor traversal (`scan_with` / `keys_for_each`): **15.2× faster** than LMDB and **21.6× faster** than RocksDB. See [Scan Profile](#scan-profile) for other kinds of range scan.
+
+### Scan Profile
+
+Range scans over the same dataset, as scans per second: limit and skip scans, and counts over the full key range.
+
+| Engine | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Limit&nbsp;(OPS) | Keys,&nbsp;Limit&nbsp;(OPS) | Skip&nbsp;+&nbsp;Limit&nbsp;(OPS) | Keys,&nbsp;Skip&nbsp;+&nbsp;Limit&nbsp;(OPS) | Full&nbsp;Count&nbsp;(OPS) |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| **SurrealMX** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**18,031,692** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**15,524,603** | 232,121 | 253,039 | 17.3 |
+| LMDB<br><sup>(In-Memory)</sup> | 1,188,365 | 1,192,034 | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**552,885** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**554,451** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**24.2** |
+| RocksDB<br><sup>(In-Memory)</sup> | 836,666 | 837,377 | 47,671 | 47,816 | 5 |
+
+- **Limit**: `select(*) limit(100)` returns the first 100 key-value pairs of the range. **Keys, Limit** (`select(id) limit(100)`) returns only the keys.
+- **Skip + Limit**: `select(*) start(5000) limit(100)` walks and discards 5,000 entries before returning 100. **Keys, Skip + Limit** returns only the keys.
+- **Full Count**: `count()` visits every key in the range.
 
 ### Memory Profile
 
+Resting and peak memory are the lowest and highest process memory sampled across the whole benchmark run.
+
 | Engine | Resting&nbsp;Memory | Peak&nbsp;Memory |
 | :--- | ---: | ---: |
-| **SurrealMX** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**16.0 GiB** | 31.5 GiB |
-| LMDB<br><sup>(In-Memory)</sup> | 19.9 GiB | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**20.3 GiB** |
-| RocksDB<br><sup>(In-Memory)</sup> | 19.3 GiB | 95.3 GiB |
+| **SurrealMX** | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**15.9 GiB** | 32.0 GiB |
+| LMDB<br><sup>(In-Memory)</sup> | 19.8 GiB | <img width="16" align="absmiddle" src="/img/rocket.png" alt="🚀">&nbsp;**20.1 GiB** |
+| RocksDB<br><sup>(In-Memory)</sup> | 26.3 GiB | 96.1 GiB |
 
-- **In-Memory Dataset**: True in-memory database holding all 15,000,000 documents resident at **16.0 GiB** resting memory (~1.1KB per full multi-version document).
-- **Concurrent Scaling**: Peak memory expands dynamically under high-throughput 48-worker commits before settling back to resting baseline.
+- **In-Memory Dataset**: True in-memory database holding all 15,000,000 documents resident at **15.9 GiB** resting memory (~1.1KB per full multi-version document).
+- **Concurrent Scaling**: Peak memory rises under high-throughput 48-worker updates, each of which adds a version to a key's chain.
 
 ---
 
 ## Features
 
-- In-memory database
+- In-memory database with optional durability
 - Multi-version concurrency control (MVCC)
-- Lock-free circular commit ring buffer with $O(1)$ atomic slot claiming
-- Sharded active reader registry eliminating atomic cache-line contention across multi-core CPUs
+- Lock-free reads, point lookups, and active reader registry eliminating atomic cache-line contention across multi-core CPUs
+- Fine-grained per-key version locks for concurrent commit merges with a circular commit ring buffer
 - Rich transaction support with rollbacks and stackable savepoints
 - Direct auto-committing point operations (`db.get`, `db.set`, `db.del`, `db.put`, `db.exists`)
 - True zero-allocation range scanning (`scan_with`, `scan_into`, `keys_for_each`, `keys_into`)
-- Multiple concurrent readers and writers without global locks
-- Support for serializable and snapshot-isolated transactions
-- Atomicity, Consistency, Isolation, and optional Durability from ACID
+- Multiple concurrent readers and writers without global table locks
+- Strict serializability for update transactions and Snapshot Isolation for read-only transactions
+- Atomicity, Consistency, Isolation, and optional Durability (ACID)
 - Deterministic Simulation Tested (DST) against an in-memory linearizable model oracle across 25,000,000 operations with zero divergences
-- Optional persistence with configurable modes:
+- Optional persistence with configurable modes (defaults to in-memory only):
   - High-throughput Group Commit flusher for synchronous append-only logging
-  - Asynchronous background logging and periodic full-datastore snapshots
+  - Asynchronous background logging with queue depth/memory backpressure and periodic point-in-time snapshots
   - Configurable fsync modes and fast LZ4 snapshot file compression
 
 ## Quick Start
@@ -168,11 +184,11 @@ fn main() {
 
 ## Persistence Modes
 
-SurrealMX supports optional persistence with two modes:
+SurrealMX defaults to a purely in-memory engine (`AolMode::Never`, `SnapshotMode::Never`). Optional durability is enabled by providing [`PersistenceOptions`] to [`Database::new_with_persistence`].
 
-### Full persistence (AOL + Snapshots) - Default
+### Full persistence (AOL + Snapshots)
 
-Provides maximum durability by logging every change to an append-only log and taking periodic snapshots.
+Provides durability by logging every change to an append-only log (AOL) and taking periodic point-in-time snapshots.
 
 ```rust
 use surrealmx::{Database, DatabaseOptions, PersistenceOptions, AolMode, SnapshotMode};
@@ -343,20 +359,32 @@ Different persistence configurations provide different durability guarantees:
 | Sync AOL + Interval fsync | ✅ | ⚠️ (since last fsync) | Fast |
 | Sync AOL + Every fsync | ✅ | ✅ | Slow |
 
+### Crash recovery
+
+Each committed transaction is written to the AOL as a single checksummed frame, so a crash part-way through a write never leaves a transaction half-applied: after a restart a transaction is either fully present or absent.
+
+When a database is opened, an incomplete frame at the end of the AOL is discarded and cut from the file before any new commit is appended, so commits made after a recovery are not lost behind the damage. Damage which is followed by intact data is not treated as a torn tail: opening fails with a `Corrupted` persistence error instead of silently dropping the commits that came after it.
+
+When a database using `AolMode::AsynchronousAfterCommit` is dropped, commits still queued for the AOL are written before it shuts down.
+
+AOL files written by earlier releases are still read. The first time this release opens one, it marks the end of the old records, and everything it appends from then on is framed. Earlier releases refuse to open an AOL which holds framed transactions.
+
 Choose the configuration that best balances your durability requirements against performance needs.
 
 ## Isolation Levels
 
-SurrealMX supports two isolation levels to balance between performance and consistency guarantees:
+SurrealMX provides two complementary isolation guarantees based on transaction intent:
+- **Update Transactions (`db.transaction(true)`)**: Execute with **Strict Serializable** guarantees. All reads (via `get`, `getm`, `scan`, etc.) and writes are tracked. At commit time, the transaction is conflict-checked against all concurrent commits occurring during its lifetime, preventing write-write conflicts (`KeyWriteConflict`), read-write anti-dependencies (`KeyReadConflict`), and write skew.
+- **Read-Only Transactions (`db.transaction(false)`)**: Execute with **Snapshot Isolation**. They observe a completely consistent, linearizable point-in-time cut of the database pinned at transaction creation without taking read locks.
 
-### Snapshot Isolation (Default)
+### Read-Only Transactions (Snapshot Isolation)
 
-Provides excellent performance with strong consistency guarantees. Transactions see a consistent snapshot of the database as it existed when the transaction began.
+Read-only transactions see a consistent snapshot of the database as it existed when the transaction began, with zero locking overhead.
 
 - **Read consistency**: All reads within a transaction see the same consistent view
-- **Write isolation**: Changes from other transactions are not visible until they commit
-- **No dirty reads**: Never see uncommitted changes from other transactions
-- **No non-repeatable reads**: Reading the same key multiple times returns the same value
+- **No dirty reads**: Never observe uncommitted changes from other transactions
+- **No non-repeatable reads**: Reading the same key multiple times returns the exact same value
+- **Wait-free lookups**: Lock-free reads via sharded reader registration slots
 
 ```rust
 use surrealmx::Database;
@@ -364,7 +392,7 @@ use surrealmx::Database;
 fn main() {
     let db = Database::new();
     
-    // Snapshot isolation (default behavior)
+    // Start an update transaction and a read-only transaction
     let mut tx1 = db.transaction(true);
     let mut tx2 = db.transaction(false); // Start tx2 before tx1 commits
     
@@ -377,14 +405,14 @@ fn main() {
 }
 ```
 
-### Serializable Snapshot Isolation
+### Update Transactions (Strict Serializability)
 
-Provides the strongest consistency guarantee by detecting read-write conflicts and aborting transactions that would violate serializability.
+Update transactions provide strict serializability by detecting read-write conflicts and aborting transactions that would violate serializability.
 
-- **All Snapshot Isolation guarantees**: Plus additional conflict detection
-- **Read-write conflict detection**: Prevents phantom reads and write skew
-- **Serializable execution**: Equivalent to running transactions one at a time
-- **Higher abort rate**: More transactions may need to retry due to conflicts
+- **All Snapshot Isolation guarantees**: Plus full read-write conflict detection
+- **Anti-dependency conflict detection**: Prevents phantom reads, dirty writes, and write skew
+- **Serializable execution**: Equivalent to a strictly serial ordering of committing transactions
+- **Safe retries**: Aborted transactions return [`Error::KeyReadConflict`] or [`Error::KeyWriteConflict`] and can be safely retried
 
 ```rust
 use surrealmx::{Database, Error};

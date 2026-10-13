@@ -185,6 +185,10 @@ total execution time (the query quietly eating your database) with a `share`
 column for each query's slice of total time. Add `--by-calls` to rank by call
 count instead — a cheap query run a million times can outweigh an expensive one
 run twice. Transaction-control and session-`SET` noise is filtered out.
+An enabled extension whose statistics could not be read is reported as unavailable,
+not as an empty workload. The MCP `top_queries` response preserves `enabled` and
+adds `available` to distinguish those states; a successful empty workload has
+`enabled: true`, `available: true`, and an empty `queries` array.
 
 ```
 $ pgbot queries "$DATABASE_URL"
@@ -463,6 +467,7 @@ one SSH connection serves the whole run. Raise `--timeout` if the link is slow.
 | `PGBOT_CONFIG` | Path to `.pgbot.toml` (otherwise discovered from cwd upward, then `$XDG_CONFIG_HOME`). |
 | `OPENAI_API_KEY` / `OPENROUTER_API_KEY` | Enables `ask` / `explain` via OpenAI or OpenRouter. Keys are never accepted as flags. |
 | `REQUESTY_API_KEY` | Enables `ask` / `explain` via [Requesty](https://docs.requesty.ai) with `PGBOT_AI_PROVIDER=requesty` (never auto-detected). |
+| `OPPER_API_KEY` | Enables `ask` / `explain` via [Opper](https://docs.opper.ai) with `PGBOT_AI_PROVIDER=opper` (never auto-detected). |
 | `GEMINI_API_KEY` / `GOOGLE_API_KEY` | Enables `ask` / `explain` via Google Gemini. |
 | `ANTHROPIC_API_KEY` | Enables `ask` / `explain` via Anthropic. |
 | `XAI_API_KEY` / `GROK_API_KEY` | Enables `ask` / `explain` via xAI. |
@@ -623,7 +628,8 @@ on stdio, so an AI agent can call pgbot as a read-only tool. It exposes
 - `schema_of` — a table's columns/indexes/constraints + row estimate, **no data**
 - `compare_to_baseline` — the `diff`, with its interval-honesty and reset caveats
 - `why` — the causal chains from stored history (symptom ← mechanism ←
-  antecedent), computed offline from the local store
+  antecedent), computed offline from the local store; at least four stored snapshots
+  are needed to produce the three interval observations required for a sustained change
 - `explain_finding` — pgbot's catalogue page for a finding, so the agent explains
   a recommendation in pgbot's words instead of inventing them
 
@@ -715,11 +721,15 @@ not require confirmation.
 | Bedrock Mantle | `AWS_BEARER_TOKEN_BEDROCK`, or `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | `openai.gpt-5.6-terra` | Responses (GPT) / Messages (Claude) |
 
 The OpenAI provider also supports compatible services such as OpenRouter,
-Requesty, Groq, Together, DeepSeek, Mistral, Ollama, vLLM, and LM Studio.
+Requesty, Opper, Groq, Together, DeepSeek, Mistral, Ollama, vLLM, and LM Studio.
 `PGBOT_AI_PROVIDER=requesty` with `REQUESTY_API_KEY` points it at
 `https://router.requesty.ai/v1`; set `PGBOT_AI_MODEL` to any Requesty model id
 (for example `openai/gpt-4o-mini`), and `PGBOT_AI_BASE_URL` to
 `https://router.eu.requesty.ai/v1` to keep requests in the EU.
+`PGBOT_AI_PROVIDER=opper` with `OPPER_API_KEY` points it at
+`https://api.opper.ai/v3/compat`, an EU-hosted gateway. The default
+`gpt-5.6-terra` works there as is; set `PGBOT_AI_MODEL` to any Opper model id
+(for example `claude-sonnet-4-6`).
 
 ```
 export OPENAI_API_KEY=…

@@ -29,14 +29,20 @@ The desktop app is built with Tauri 2 and includes an embedded Python FastAPI si
 
 ### ⬇️ Download Windows Installers
 
-- [Download Windows Installer (v0.1.3)](https://github.com/trungvinh2102/QurioDB/releases/download/v0.1.3/QurioDB_0.1.3_x64_en-US.msi)
-- [Download Windows Setup (v0.1.3)](https://github.com/trungvinh2102/QurioDB/releases/download/v0.1.3/QurioDB_0.1.3_x64-setup.exe)
+- [Download Windows Installer (v0.1.5)](https://github.com/trungvinh2102/QurioDB/releases/download/v0.1.5/QurioDB_0.1.5_x64_en-US.msi)
+- [Download Windows Setup (v0.1.5)](https://github.com/trungvinh2102/QurioDB/releases/download/v0.1.5/QurioDB_0.1.5_x64-setup.exe)
 
 ### 🐧 Download Linux Installers
-- [Download Linux Package (v0.1.3)](https://github.com/trungvinh2102/QurioDB/releases/download/v0.1.3/QurioDB_0.1.3_amd64.deb)
-- [Download Linux AppImage (v0.1.3)](https://github.com/trungvinh2102/QurioDB/releases/download/v0.1.3/QurioDB_0.1.3_amd64.AppImage)
+- [Download Linux Package (v0.1.5)](https://github.com/trungvinh2102/QurioDB/releases/download/v0.1.5/QurioDB_0.1.5_amd64.deb)
+- [Download Linux AppImage (v0.1.5)](https://github.com/trungvinh2102/QurioDB/releases/download/v0.1.5/QurioDB_0.1.5_amd64.AppImage)
 
 This link points to the current stable release. To download the latest official version, visit the [Releases Page](https://github.com/trungvinh2102/QurioDB/releases).
+
+### macOS CI Packages
+
+The `Release desktop` workflow builds native macOS packages for Apple Silicon and Intel: `.dmg` installers and `.app.tar.gz` archives. To preflight macOS, run the workflow manually with the tracked version and `platform: macos`; download the `macos-aarch64-release-assets` and `macos-x64-release-assets` artifacts. Version tags build every platform and publish the packages together after all builds pass.
+
+Developer ID signing and notarization are not configured for macOS packages yet. See [Tauri's macOS signing guide](https://v2.tauri.app/distribute/sign/macos/) for distribution requirements.
 
 ### 🔨 Build from Source
 
@@ -298,4 +304,4 @@ Internal Development - Nguyễn Trung Vĩnh.
 
 ---
 
-QurioDB - v0.1.3
+QurioDB - v0.1.5

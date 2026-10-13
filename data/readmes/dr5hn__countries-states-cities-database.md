@@ -19,9 +19,9 @@ Total Sub Regions : 22 <br>
 Total Countries : 250 <br>
 Total States/Regions/Municipalities : 5,299 <br>
 Total Cities/Towns/Districts : 153,765 <br>
-Total Postcodes : 844248 (125 countries) <br>
+Total Postcodes : 846973 (125 countries) <br>
 Total Timezones : 427 (100% IANA coverage) <br>
-Last Updated On: October 11, 2026
+Last Updated On: October 12, 2026
 
 ---
 
@@ -144,7 +144,7 @@ Smaller reference files (countries, states, counties, schema) live in the repo. 
 
 ## What's in the data
 
-- **250** countries · **5,329** states / regions · **10,635** counties · **153,513** cities · **840k+** postcodes across 125 countries
+- **250** countries · **5,329** states / regions · **12,306** counties · **153,513** cities · **840k+** postcodes across 125 countries
 - **19 languages** of country and state names plus native script
 - **100% IANA timezone coverage** for cities
 - **Validated foreign keys** on every contribution
@@ -209,6 +209,12 @@ Licensed under the [Open Database License (ODbL v1.0)](LICENSE). Commercial use,
 Data by Countries States Cities Database
 https://github.com/dr5hn/countries-states-cities-database | ODbL v1.0
 ```
+
+Some records also carry names or points copied from open sources that ask for credit: [GeoNames](https://www.geonames.org/)
+([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)), © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright)
+(ODbL 1.0) and [Wikidata](https://www.wikidata.org/wiki/Wikidata:Licensing) (CC0). Points are selected per record and
+rounded to eight decimals; the per-record source ledgers are in [.github/fixes-docs/ledgers/](.github/fixes-docs/ledgers/).
+Keep these credits when you redistribute the data.
 
 ---
 

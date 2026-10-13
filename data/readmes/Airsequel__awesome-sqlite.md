@@ -59,22 +59,24 @@ Check out [sqlite.org/famous](https://www.sqlite.org/famous.html) for a more com
 - [badger](https://github.com/nikitazigman/badger) - Low-level SQLite file format visualizer.
 - [db-to-sqlite](https://github.com/simonw/db-to-sqlite) - CLI tool for exporting databases to SQLite.
 - [git-sqlite](https://github.com/cannadayr/git-sqlite) - Custom diff & merge driver that lets you version SQLite databases with Git.
+- [GizmoSQL](https://github.com/gizmodata/gizmosql) - Arrow Flight SQL server with TLS/auth that can run on top of SQLite (or DuckDB), exposing JDBC/ADBC access via Docker or binary.
 - [gmail-to-sqlite](https://github.com/marcboeker/gmail-to-sqlite) - Sync your Gmail messages into a local SQLite database for analysis.
 - [haiku.rag](https://github.com/ggozad/haiku.rag) - Retrieval-Augmented Generation library/CLI & server built on SQLite with hybrid vector+FTS search, file-system monitoring and Python client.
-- [plainjob](https://github.com/justplainstuff/plainjob) - Job scheduling library for SQLite.
-- [sqlite-page-explorer](https://github.com/QuadrupleA/sqlite-page-explorer) - GUI that lets you inspect a database page-by-page as SQLite stores and reads it.
+- [JDbrowser](https://github.com/Jkeyuk/JDbrowser) - Terminal TUI SQLite database browser written in Rust.
+- [Letos](https://letos.org/) - Free, open-source, cross-platform GUI for creating, editing, and browsing SQLite databases (formerly SQLiteStudio).
+- [LiveStore](https://livestore.dev/) - Local-first state-management framework with a reactive embedded SQLite database and Git-style real-time syncing.
 - [omni_sqlite](https://docs.omnigres.org/omni_sqlite/sqlite/) - Omnigres extension that embeds full SQLite databases as a first-class data type inside PostgreSQL.
-- [pglite-fusion](https://github.com/frectonz/pglite-fusion) - Embed SQLite databases in your PostgreSQL table.
 - [PgFreshCache](https://github.com/PgOutput2Json/PgFreshCache) - Read-only caching layer that mirrors selected PostgreSQL tables into a local SQLite database via logical replication.
+- [pglite-fusion](https://github.com/frectonz/pglite-fusion) - Embed SQLite databases in your PostgreSQL table.
+- [plainjob](https://github.com/justplainstuff/plainjob) - Job scheduling library for SQLite.
 - [RecordLite](https://github.com/fsaintjacques/recordlite) - Declarative tool/library that manages SQLite tables and views for semi-structured (JSON / Protobuf) records.
+- [sqlit](https://github.com/Maxteabag/sqlit) - User-friendly Python TUI for SQL databases, supporting SQLite, SQL Server, MySQL, PostgreSQL, Turso, and more.
 - [SQLite Hub](https://github.com/oliverjessner/sqlite-hub) - Database management for SQLite as a web app.
 - [SQLite Rsync](https://sqlite.org/rsync.html) - Rsync for SQLite databases.
-- [sqlite-wasm-webrtc](https://github.com/adhamsalama/sqlite-wasm-webrtc) - Peer-to-peer collaborative database editing & sharing in the browser.
+- [sqlite-page-explorer](https://github.com/QuadrupleA/sqlite-page-explorer) - GUI that lets you inspect a database page-by-page as SQLite stores and reads it.
 - [sqlite-wasm-http](https://github.com/mmomtchev/sqlite-wasm-http) - Experimental HTTP VFS driver that lets SQLite WASM access databases over HTTP.
-- [JDbrowser](https://github.com/Jkeyuk/JDbrowser) - Terminal TUI SQLite database browser written in Rust.
-- [sqlit](https://github.com/Maxteabag/sqlit) - User-friendly Python TUI for SQL databases, supporting SQLite, SQL Server, MySQL, PostgreSQL, Turso, and more.
-- [GizmoSQL](https://github.com/gizmodata/gizmosql) - Arrow Flight SQL server with TLS/auth that can run on top of SQLite (or DuckDB), exposing JDBC/ADBC access via Docker or binary.
-- [LiveStore](https://livestore.dev/) - Local-first state-management framework with a reactive embedded SQLite database and Git-style real-time syncing.
+- [sqlite-wasm-webrtc](https://github.com/adhamsalama/sqlite-wasm-webrtc) - Peer-to-peer collaborative database editing & sharing in the browser.
+- [sqlitefeed](https://github.com/yeet-src/sqlitefeed) - `tail -f` for SQLite that live-streams every statement, bound value, and per-step latency from any process using libsqlite3, without modifying the traced apps.
 
 
 ## Extensions
@@ -126,6 +128,7 @@ Check out [sqlite.org/famous](https://www.sqlite.org/famous.html) for a more com
 - 2026-07-14 - [SQLite Is All You Need](https://www.dbpro.app/blog/sqlite-is-all-you-need)
 - 2026-07-11 - [Prefer STRICT tables in SQLite](https://evanhahn.com/prefer-strict-tables-in-sqlite/)
 - 2026-07-04 - [Avoiding SQLite Database Locks in Production](https://www.bendangelo.me/2026/07/04/avoiding-sqlite-database-locks-in-production/)
+- 2026-06-25 - [Hunting a 16-year-old SQLite bug with TLA+: is dqlite affected?](https://ubuntu.com/blog/hunting-a-16-year-old-sqlite-bug-with-tla-is-dqlite-affected)
 - 2026-06-07 - [SQLite: improving performance with pre-sort](https://andersmurphy.com/2026/06/07/sqlite-improving-performance-with-pre-sort.html)
 - 2026-06-05 - [The perils of UUID primary keys in SQLite](https://andersmurphy.com/2026/06/05/the-perils-of-uuid-primary-keys-in-sqlite.html)
 - 2026-06-03 - [Creative coding in SQLite](https://ediblemonad.dev/coding4fun/2026-06-03-creative-coding-in-sqlite.html)

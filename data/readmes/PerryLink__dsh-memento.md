@@ -48,40 +48,11 @@ A typed `ctx.memory` seam, a write-approval gate no model path can bypass, and a
 
 *The same run, animated.*
 
-## Maintenance status: 🧊 FROZEN
-
-> **Frozen on 2026-10-05. No new features.** This package still works, and it is not retired — but it no longer receives feature work. Only a genuine breakage will be fixed.
-
-Maintainers treat this capability as one where **better-adopted alternatives now exist**, so effort has moved elsewhere. The comparison below was measured on 2026-10-05 and is recorded so nobody has to redo it.
-
-| | package | weekly downloads |
-|---|---|---|
-| **this package** | `dsh-memento` | 1,202 |
-| better-adopted alternative | [`@openviking/dsh-memory-plugin`](https://github.com/volcengine/OpenViking) | **10,160** |
-| another alternative | `dsh-prime-memory` | 6,157 |
-| another alternative | `@a9i5k4/dsh-auto-memory` | 4,781 |
-
-**Why the alternative leads.** `@openviking/dsh-memory-plugin` provides a memory and context bundle published by the volcengine organisation.
-
-**Compatibility caveat.** its declared dsh peers cap below 0.2.0, so the 0.2.x compatibility guard SKIPS it on a 0.2.1-alpha.1 host unless you add an exemption
-
-**What this package still does that the alternatives do not.** this package's differentiator is that recall is bounded, layered and approval-gated, with recoverable citations into the session log; the field is crowded and several rivals are far better adopted
-
-👉 **For new work, prefer any of the above — but check the compatibility guard first.** Existing installs keep working unchanged; nothing is being removed.
-
-*Full evidence, including the host-version compatibility matrix: `dsh-plugin-supersession-review-20261005.md`.*
-
-## Comparison
-
-![Measured comparison chart for dsh-memento](https://raw.githubusercontent.com/PerryLink/dsh-memento/main/docs/assets/dsh-memento-evidence.png)
-
-measured 2026-10-05 · from the README's FROZEN maintenance table (npm weekly downloads)
-
 ## Compatibility
 
 | Surface | Status |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.2.1-alpha.1` (adapted 2026-10-04): the `0.1.7` line replaced the whole settings registration surface (`installSettingsSection` / `SettingsProvider.installSection` / `SettingsNamespace` / `SettingsScope`) with live Config forms, so both halves follow the new contract — a form's namespace is the profile entry id (`memento`), its editable fields are the `.volatile()` ones, and an accepted edit is committed into the running plugin instead of remounting it. The browser half reads that form through `ctx.configForms.get(entryId)` (the `ctx.settingsScope` service is gone). Both halves keep their `installSection` / `settingsScope` branches for the `0.1.2-rc.1`, `0.1.5-alpha.1` and `0.1.6-0` lines the peer range still advertises, and the new `>=0.1.7-0 <0.2.0` clause is what makes the target host itself installable (the old range excluded it by semver's prerelease rule). Still no plugin event-registration surface — `KNOWN_SESSION_EVENT_TYPES` does not carry `memory/*`, and `Session.append`'s third argument only carries a `SurfaceIntent` for surface-eligible types, so the audit gate stays adaptive and skips as before (it says so once per process and in `/memory audit`). Type evidence comes from three faces: the local checkout's built types, the pinned published line in `node_modules`, and the browser half under a DOM lib. |
+| Harness | DeepSeek Harness `dsh-v0.2.1-alpha.2` (adapted 2026-10-12; `0.2.1-alpha.1` since 2026-10-04): the `0.1.7` line replaced the whole settings registration surface (`installSettingsSection` / `SettingsProvider.installSection` / `SettingsNamespace` / `SettingsScope`) with live Config forms, so both halves follow the new contract — a form's namespace is the profile entry id (`memento`), its editable fields are the `.volatile()` ones, and an accepted edit is committed into the running plugin instead of remounting it. The browser half reads that form through `ctx.configForms.get(entryId)` (the `ctx.settingsScope` service is gone). Both halves keep their `installSection` / `settingsScope` branches for the `0.1.2-rc.1`, `0.1.5-alpha.1` and `0.1.6-0` lines the peer range still advertises, and the new `>=0.1.7-0 <0.2.0` clause is what makes the target host itself installable (the old range excluded it by semver's prerelease rule). Still no plugin event-registration surface — `KNOWN_SESSION_EVENT_TYPES` does not carry `memory/*`, and `Session.append`'s third argument only carries a `SurfaceIntent` for surface-eligible types, so the audit gate stays adaptive and skips as before (it says so once per process and in `/memory audit`). Type evidence comes from three faces: the local checkout's built types, the pinned published line in `node_modules`, and the browser half under a DOM lib. **Re-verified against `0.2.1-alpha.2`:** every plugin-facing seam this package touches is byte-identical between the two tags (`packages/settings/settings/src/**`, `packages/client/ui-settings/src/**`, `packages/client/ui-slots/src/**`, `packages/client/modules/src/**`, `packages/interaction/user-approval/**`, `vendor/loader/src/**`, `vendor/schemastery/src/**`, `packages/boot/app-boot/src/config-schema/**`), the session format is still v4 with no v4→v5 migration, and `KNOWN_SESSION_EVENT_TYPES` gained only one first-party type — so the adaptive audit gate stays closed and **no code change was needed**. What moved is the pinned dev/test line (`0.2.1-alpha.2`, plus its `pnpm-workspace.yaml` release-age allowlist entries) and the compatibility baseline; `npm test` (201 cases, including the real-Loader composition suite), `typecheck:ci`, coverage, artifact, conformance and five-language gates all pass against it. alpha.2 does add a `plugin:<name>/*`-namespaced `appendPluginRecord` writer, but the host's own `packages/core/session/README.md` forbids out-of-repo callers and the mandatory `plugin:` prefix cannot express `memory/*`, so this package does not adopt it. |
 | Node | `^22.19.0 || >=24.0.0` |
 | Platforms | Windows / macOS / Linux (pure host; no native code, no network) |
 | Model | Any |
@@ -316,10 +287,11 @@ Static evidence: `dsh-plugin-doctor` K10–K13 report `pass` for every check on 
 ## Contributors
 
 - [@Niuniu-Sir](https://github.com/Niuniu-Sir) — the boot-crash report in [issue #1](https://github.com/PerryLink/dsh-memento/issues/1) that led to the `~/.dsh` fallback shipped in 0.3.1.
+- [@alex-debap](https://github.com/alex-debap) — present from the 0.1.0 conception stage onward: the seam-not-warehouse thesis, insisting the approval gate be structurally unbypassable, and an audit trail rebuildable from the approval pair plus the plugin audit table. Named the bounded, layered recall model, argued for local-first, zero-credential storage, and took the protocol rehearsal public with an adapter registry and conformance suite.
 
 ## PerryLink DSH Plugin Family
 
-This project is one of the **33 actively maintained** DeepSeek Harness plugins from [PerryLink](https://github.com/PerryLink) — the roster is **42**, of which **6** are frozen and **3** retired; every one keeps its row below, with the reason in the Status column. If this one helps you, the others likely will too:
+This project is one of the **34 actively maintained** DeepSeek Harness plugins from [PerryLink](https://github.com/PerryLink) — the roster is **42**, of which **5** are frozen and **3** retired; every one keeps its row below, with the reason in the Status column. If this one helps you, the others likely will too:
 
 | Plugin | One-liner | Status |
 |---|---|---|
@@ -347,7 +319,7 @@ This project is one of the **33 actively maintained** DeepSeek Harness plugins f
 | **[dsh-lsp-actions](https://github.com/PerryLink/dsh-lsp-actions)** | LSP diagnostics, formatting, completion, code actions and rename over language servers | |
 | **[dsh-mask](https://github.com/PerryLink/dsh-mask)** | PII masking middleware: anonymize at the model boundary, restore at the display layer | |
 | **[dsh-mcp-panel](https://github.com/PerryLink/dsh-mcp-panel)** | Read-only MCP runtime panel: /mcp command + Settings tab with status, tools and errors | |
-| **[dsh-memento](https://github.com/PerryLink/dsh-memento)** | Approval-gated cross-session memory: ctx.memory seam + SQLite + memory tool | 🧊 FROZEN — see the repo README |
+| **[dsh-memento](https://github.com/PerryLink/dsh-memento)** | Approval-gated cross-session memory: ctx.memory seam + SQLite + memory tool | |
 | **[dsh-observe](https://github.com/PerryLink/dsh-observe)** | OpenTelemetry and Langfuse observability exporter for DeepSeek Harness. | |
 | **[dsh-output-styles](https://github.com/PerryLink/dsh-output-styles)** | Claude Code outputStyles-equivalent runtime style switching | |
 | **[dsh-permission-rules](https://github.com/PerryLink/dsh-permission-rules)** | Claude Code-style declarative allow/deny/ask permission rules with audit | |

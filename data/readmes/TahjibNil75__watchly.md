@@ -1,0 +1,559 @@
+<div align="center">
+
+<img src="doc/images/logo.svg" alt="Watchly logo" width="72" height="72">
+
+# Watchly
+
+**Self-hosted uptime monitoring for teams. Know your site is down before your users do.**
+
+[![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+[Demo](#demo) · [Features](#features) · [AWS infrastructure](#aws-infrastructure-monitoring) · [Docker](#docker-monitoring) · [Alert channels](#alert-channels) · [Screenshots](#screenshots) · [Quick start](#quick-start) · [Email alerts](#set-up-email-alerts-smtp) · [Configuration](#configuration) · [Docs](#documentation)
+
+<br>
+
+<a id="demo"></a>
+<a href="doc/video/watchly-demo.mp4">
+  <img src="doc/video/watchly-demo-preview.webp" alt="A 40-second Watchly demo: sign in, the overview, a website's uptime history, an outage alert, the AWS infrastructure map, Docker containers and the alert channels" width="900">
+</a>
+
+<sub>40-second tour. <a href="doc/video/watchly-demo.mp4">Watch it in full quality (MP4)</a>.</sub>
+
+</div>
+
+---
+
+## About
+
+Watchly watches your websites, servers, databases and DNS records, the AWS
+infrastructure they run on, and the Docker containers on your own servers,
+around the clock and tells the right people the
+moment something breaks. Organize what you monitor into projects (a project
+watches websites, AWS infrastructure or Docker hosts), invite your team with the right
+roles, and get alerts by email, Slack, Telegram, WhatsApp or webhook, plus a
+monthly uptime report you can trust.
+
+It runs on your own infrastructure with a single `docker compose up`.
+
+## Features
+
+- **HTTP(S) monitoring**: poll any URL on its own interval, with retries before declaring it down; expect a status code, require (or forbid) text in the page, and send your own headers, such as a token for a page behind a login
+- **Ping monitoring**: ICMP checks for hosts, including packet-loss alerts
+- **DNS monitoring**: query several public resolvers at once and alert when records change or drift from what you expect
+- **Database monitoring**: give a PostgreSQL, MySQL/MariaDB, Redis/Valkey or MongoDB endpoint, `host:port`, and nothing else; Watchly goes as far as the server's first answer without logging in, so it tells a database that is up from one that is starting up, out of connections, or hidden behind a proxy with nothing behind it
+- **AWS infrastructure monitoring**: EC2 servers, Auto Scaling groups, Application and Network Load Balancers and RDS databases, found in your VPCs and kept in sync with AWS; see [AWS infrastructure monitoring](#aws-infrastructure-monitoring)
+- **Docker monitoring**: containers on your own servers, reported by a tiny [agent](https://github.com/TahjibNil75/watchly-docker-agent) that only makes outbound requests: crashes, restart loops, OOM kills, failing healthchecks, CPU and memory, and hosts that go quiet; see [`doc/docker.md`](doc/docker.md)
+- **Early warnings**: SSL certificates and domain registrations about to expire, changed nameservers, slow responses and packet loss, not just "down"
+- **Security headers**: each website's HSTS, CSP, X-Frame-Options, X-Content-Type-Options and Referrer-Policy, graded A to F; Permissions-Policy and the Cross-Origin policies are listed alongside
+- **CDN detection**: whether a site is served through Cloudflare, CloudFront, Fastly, Akamai, Vercel, Netlify and others, with the evidence (headers, DNS aliases) and whether a cache answered
+- **Network details**: for each check, where the time went (DNS, connect, TLS, first byte), the redirect chain, response size and headers; for each certificate, its cipher, HTTP/2 support and chain
+- **Server details**: the address a site answers on, its network (ASN and owner), reverse DNS and HTTP/2 and HTTP/3 support
+- **Response-time history**: median, 95th and 99th percentile and slowest response per range, and for HTTP sites a chart of where the time goes (DNS, connect, TLS, first byte) kept after the raw checks are purged
+- **Maintenance windows**: start one from a site's page for a deployment ("Start maintenance for 30 min" / "End now") or schedule one ahead; no checks or alerts until it ends
+- **Alerts where your team works**: email (any SMTP provider), Slack, Telegram, WhatsApp and generic webhooks
+- **Projects and recipients**: each project's members hear about all of its sites, and each site can add its own recipients
+- **Monthly uptime reports**: uptime, downtime and incidents per project, delivered automatically
+- **Team management**: invite by email, account requests to approve or reject, role-based access (Admin, DevOps, Project Manager, Developer, Viewer), suspension, and invite-only mode
+- **Account security**: JWT sessions with refresh tokens, login lockout and password reset by email
+
+## AWS infrastructure monitoring
+
+Run Watchly on an EC2 instance inside your VPC and it can watch what your
+websites run on, not only the URLs in front of them. It is off until you set
+`INFRA_AWS_ENABLED=true`.
+
+<p align="center">
+  <img src="doc/images/infra-architecture.svg" alt="Watchly on an EC2 instance inside a VPC probes load balancers, Auto Scaling groups, EC2 servers and RDS databases, reads their state from the AWS APIs and alerts your team" width="900">
+</p>
+
+| Resource | What Watchly checks |
+| -------- | ------------------- |
+| **EC2 server**, in a public or private subnet | `ping`, a TCP port and an HTTP path, at its private IP or, for a public server, its public IP; and from CloudWatch, CPU, a burstable instance's CPU credits, its EBS volumes' burst balance and IOPS against what they are provisioned with, and, with the CloudWatch agent, disk space |
+| **Load balancer**, ALB or NLB, internal or internet-facing | its listener or `/health`, and the load balancer's own verdict on every target, with AWS's reason code |
+| **Auto Scaling group** | the same probes on every instance in service, read from AWS at each run so instances replaced by scaling never raise false alarms, plus the group's health and capacity against its desired count |
+| **RDS database**, Aurora included | its port from inside the VPC, its status in RDS, and CloudWatch CPU, free storage and when it will run out ("full in about 9 days", storage autoscaling counted in), memory, connections against `max_connections`, IOPS, burst balance, CPU credits and replica lag against thresholds. Watchly never logs in, so it needs no database credentials |
+
+- **Found, not typed**: pick a VPC and Watchly lists its resources and suggests
+  checks for each; addresses and states stay in sync with AWS, and a resource
+  AWS no longer has is flagged instead of reported as down.
+- **One alert per resource**: a server that loses power fails its ping, its port
+  and its health check at once. That is one outage, listing every failing check.
+- **One alert per VPC**: if Watchly loses its route into a VPC, you get a single
+  "VPC unreachable" alert instead of one per resource.
+- **A network map** of each VPC: subnets, load balancers to target groups to
+  instances, and the paths Watchly probes, coloured by health.
+- **Why is this down?**: a step-by-step dry run (resolve, policy, connect, TLS,
+  response) that tells a timeout from a refused connection and, for admins,
+  names the security group missing the rule.
+- **Several AWS accounts** per project, using Watchly's own instance role, an IAM
+  user's access key (stored encrypted) or a role to assume, so one project can
+  span production and staging.
+- **Deployments**: with CodeDeploy read access, Watchly announces an account's
+  deployments and puts the resources they deploy to in maintenance while they run.
+- **Capacity before it runs out**: CPU credits, EBS burst balance, IOPS, disks,
+  connections and storage are warned about while the resource is still up. An
+  account can also watch its Elastic IPs: those attached to nothing, which AWS
+  bills by the hour, and the Elastic IP quota nearly used.
+- **Maintenance windows, recipients and notification settings** work as they do
+  for websites.
+
+Everything is read-only: Watchly's IAM role can describe resources and read
+CloudWatch metrics, and cannot change anything.
+
+### Set it up
+
+1. **Run Watchly on an EC2 instance in the VPC** (a public subnet with an
+   Elastic IP is typical), with the IAM role below attached and
+   [IMDSv2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html)
+   required. Allow inbound `443` only from known addresses, and never expose `8000` or `5432`.
+2. **Turn it on** in `.env`, then `docker compose up -d`:
+
+   ```dotenv
+   INFRA_AWS_ENABLED=true
+   AWS_REGION=ap-southeast-1   # default region; blank reads it from the instance
+   ```
+
+3. **Create an infrastructure project**: *Projects → New project →
+   Infrastructure*, with at least one AWS account (the instance role, an access
+   key, or a role to assume).
+4. **Add resources**: *Infrastructure → Add*, pick the VPC, tick the discovered
+   resources and accept or edit the suggested checks. *Test connection* shows
+   what a check would see before you save.
+5. **Open the targets' security groups to Watchly's**: the listener ports for
+   load balancers, the service port (or `22`) for servers, the database port for
+   databases, and ICMP echo for ping checks.
+
+The role needs only these read-only permissions:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "Discover",
+    "Effect": "Allow",
+    "Action": [
+      "ec2:DescribeVpcs", "ec2:DescribeSubnets", "ec2:DescribeRouteTables",
+      "ec2:DescribeInstances", "ec2:DescribeInstanceStatus",
+      "ec2:DescribeNetworkInterfaces", "ec2:DescribeSecurityGroups",
+      "elasticloadbalancing:DescribeLoadBalancers", "elasticloadbalancing:DescribeListeners",
+      "elasticloadbalancing:DescribeTargetGroups", "elasticloadbalancing:DescribeTargetHealth",
+      "elasticloadbalancing:DescribeTags",
+      "autoscaling:DescribeAutoScalingGroups", "autoscaling:DescribeScalingActivities",
+      "rds:DescribeDBInstances", "cloudwatch:GetMetricData",
+      "ec2:DescribeVolumes", "ec2:DescribeInstanceTypes",
+      "rds:DescribeDBParameters", "cloudwatch:ListMetrics",
+      "elasticloadbalancing:DescribeLoadBalancerAttributes",
+      "wafv2:GetWebACLForResource", "wafv2:GetLoggingConfiguration"
+    ],
+    "Resource": "*"
+  }]
+}
+```
+
+`cloudwatch:GetMetricData` is the only call AWS bills for: a server or database
+metrics check reads 5 to 10 metrics a run, roughly US$0.45 to US$0.90 a month
+per resource at one check every five minutes. To follow deployments, also allow
+`codedeploy:ListDeployments`, `codedeploy:BatchGetDeployments` and
+`codedeploy:GetDeploymentGroup`; to watch Elastic IPs, `ec2:DescribeAddresses`,
+`servicequotas:GetServiceQuota` and `servicequotas:GetAWSDefaultServiceQuota`.
+The last three in the policy let an ALB's page grade the AWS WAF in front of it
+and the ALB's own TLS and header settings.
+After adding an account, **Test** in the app tries every permission and says
+which are missing.
+
+> [!IMPORTANT]
+> **Watchly can now reach your private network, so it guards what it will
+> connect to.** Website checks may only reach public addresses
+> (`WEBSITE_PRIVATE_TARGETS=block`, the default), instance metadata, loopback and
+> Watchly's own addresses are refused for every check, and infrastructure probes
+> reach only the ranges of their resource's VPC. A website check that points at a
+> private address, such as a LAN host, fails with `blocked_address` after
+> upgrading; set `WEBSITE_PRIVATE_TARGETS=allow` only for a LAN install, never on EC2.
+
+The full design, with every endpoint, check type and alert, is in
+[`doc/infraapi.md`](doc/infraapi.md); the code layout is in
+[`app/monitoring/infra/aws/README.md`](app/monitoring/infra/aws/README.md).
+
+## Docker monitoring
+
+Watchly can watch the containers on your own servers, wherever they run. A small
+[agent](https://github.com/TahjibNil75/watchly-docker-agent) sits next to Docker
+and **only makes outbound HTTPS requests** to Watchly, so the server needs no
+open port, VPN or SSH access. It is on by default (`DOCKER_ENABLED=true`).
+
+- **Alerts as it happens**: the agent reports every 30 seconds and again about
+  2 seconds after a Docker event, so a crash, an OOM kill or a failing
+  healthcheck doesn't wait for the next heartbeat.
+- **What alerts**: a container down (with how it stopped: exit code, OOM kill or
+  `docker stop`) and back up, unhealthy, out of memory, in a restart loop or
+  running hot on CPU or memory, and a host whose agent goes quiet. A host that
+  goes offline is **one** alert, not one per container, and a redeploy stays
+  quiet thanks to a short grace period.
+- **History**: per-container CPU, memory, network and disk charts for the last
+  day, 7, 30 and 90 days, and a feed of Docker's events next to Watchly's
+  decisions.
+- **Configured in Watchly**: the check interval and the containers to skip
+  (`watchly.ignore=true` or a name pattern) are set in the app and come back on
+  every push, so nothing is edited on the server.
+
+### Set it up
+
+1. **Create a Docker project**: *Projects → New project → Docker*.
+2. **Add a host**: *Docker → Add host*. Watchly shows the host's token once, with
+   a ready-to-paste command.
+3. **Run the agent on the server**:
+
+   ```sh
+   docker run -d --name watchly-agent --restart unless-stopped \
+     -e WATCHLY_URL=https://watchly.example.com \
+     -e WATCHLY_TOKEN=wdk_… \
+     --group-add "$(stat -c %g /var/run/docker.sock)" \
+     -v /var/run/docker.sock:/var/run/docker.sock:ro \
+     --read-only --cap-drop ALL --security-opt no-new-privileges:true \
+     --cpus 0.1 --memory 64m \
+     ghcr.io/tahjibnil75/watchly-docker-agent:latest
+   ```
+
+> [!NOTE]
+> Mounting the Docker socket gives full control of Docker, even with `:ro`. The
+> agent only ever sends `GET` requests, and sends no environment variables,
+> commands, mounts or logs. Each host has its own token, stored only as a hash.
+> See [Security](doc/docker.md#security) to run it behind a socket proxy.
+
+The full guide, with every alert, the settings and retention, is in
+[`doc/docker.md`](doc/docker.md).
+
+## Alert channels
+
+Each project alerts by any mix of email, Slack, Telegram and WhatsApp, and a
+site can add recipients of its own, like a client's inbox or a separate Slack
+channel. A webhook, if you set one, receives every alert from every project.
+
+<table>
+  <tr>
+    <td align="center" width="150">
+      <img src="doc/images/channels/email.svg" width="48" height="48" alt="Email"><br>
+      <a href="#set-up-email-alerts-smtp"><b>Email</b></a><br>
+      <sub>Any SMTP provider</sub>
+    </td>
+    <td align="center" width="150">
+      <img src="doc/images/channels/slack.svg" width="48" height="48" alt="Slack"><br>
+      <a href="app/monitoring/websites/README.md#slack"><b>Slack</b></a><br>
+      <sub>A bot per project, one thread per outage</sub>
+    </td>
+    <td align="center" width="150">
+      <img src="doc/images/channels/telegram.svg" width="48" height="48" alt="Telegram"><br>
+      <a href="app/monitoring/websites/README.md#telegram"><b>Telegram</b></a><br>
+      <sub>A bot per project, follow-ups as replies</sub>
+    </td>
+    <td align="center" width="150">
+      <img src="doc/images/channels/whatsapp.svg" width="48" height="48" alt="WhatsApp"><br>
+      <a href="app/monitoring/websites/README.md#whatsapp"><b>WhatsApp</b></a><br>
+      <sub>Meta's WhatsApp Cloud API</sub>
+    </td>
+    <td align="center" width="150">
+      <img src="doc/images/channels/webhook.svg" width="48" height="48" alt="Webhook"><br>
+      <a href="#configuration"><b>Webhook</b></a><br>
+      <sub>JSON for every alert, to one URL</sub>
+    </td>
+  </tr>
+</table>
+
+Down and recovery alerts, reminders while a site stays down, warnings (SSL
+and domain expiry, nameserver changes, slow responses, packet loss, DNS changes),
+the [AWS infrastructure](#aws-infrastructure-monitoring) alerts (a resource down,
+still down, degraded or recovered, and a VPC unreachable or reachable again), the
+[Docker](#docker-monitoring) alerts (a container down, unhealthy, out of memory,
+restarting or running hot, and a host offline) and the monthly report all use these channels, and each kind can be switched off per
+channel under **Notifications**. Set Slack, Telegram and WhatsApp up on each project in the
+web app; their `.env` settings are only a fallback for projects without their
+own.
+
+## Screenshots
+
+<p align="center">
+  <img src="doc/images/landing.png" alt="Watchly landing page with the mascot, the live status readouts and the alert channels" width="900">
+  <br><em>The landing page</em>
+</p>
+
+<p align="center">
+  <img src="doc/images/overview.png" alt="The Overview page: websites, infrastructure and Docker totals, with everything that needs a look" width="900">
+  <br><em>Overview: websites, AWS infrastructure and Docker in one place, with what needs a look</em>
+</p>
+
+<p align="center">
+  <img src="doc/images/site-history.png" alt="A website's page with its last 60 checks, uptime, response time, SSL certificate and the response-time history" width="900">
+  <br><em>A website's page: last checks, uptime, response-time history with the 95th percentile</em>
+</p>
+
+<p align="center">
+  <img src="doc/images/site-cards.png" alt="The Server, CDN and security headers cards, with maintenance, configuration and alerting settings below" width="900">
+  <br><em>Server, CDN and security headers side by side, with maintenance, configuration and alerting underneath</em>
+</p>
+
+<p align="center">
+  <img src="doc/images/infra-map.png" alt="The AWS infrastructure map: VPCs with their subnets, load balancers, Auto Scaling groups, EC2 servers and RDS databases, and the paths between them" width="900">
+  <br><em>AWS infrastructure, mapped VPC by VPC: hover a resource to trace its path from the internet</em>
+</p>
+
+<p align="center">
+  <img src="doc/images/docker.png" alt="The Docker page: container totals, one card per host and every container's state, resource use and restarts" width="900">
+  <br><em>Docker: each host's containers, their health, restarts and resource use</em>
+</p>
+
+<p align="center">
+  <img src="doc/images/features.png" alt="Website, server and DNS checks, and the alerting features" width="900">
+  <br><em>Website, server and DNS checks, with alerts by email, Slack, Telegram, WhatsApp and webhook</em>
+</p>
+
+<p align="center">
+  <img src="doc/images/login.png" alt="Watchly sign-in page" width="900">
+  <br><em>Sign-in page</em>
+</p>
+
+## Quick start
+
+**Prerequisite:** [Docker](https://docs.docker.com/get-docker/) with Compose v2.24 or newer.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/TahjibNil75/watchly.git
+cd watchly
+```
+
+### 2. Create your `.env`
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and set at least:
+
+- **`SECRET_KEY`**: signs login tokens. Generate one with `openssl rand -hex 32`.
+- **`SMTP_*`**: your mail server, so Watchly can send alerts, invitations and
+  password resets. See [Set up email alerts (SMTP)](#set-up-email-alerts-smtp).
+
+### 3. Start Watchly
+
+```bash
+docker compose up -d --build
+```
+
+Database migrations run automatically every time the API starts.
+
+| Service | URL | Description |
+| ------- | --- | ----------- |
+| Web app | http://localhost:8080 | The Watchly dashboard |
+| API     | http://localhost:8000/docs | Interactive API docs |
+| Database | `localhost:5432` | PostgreSQL |
+
+### 4. Create the admin account
+
+Open **http://localhost:8080** and sign up.
+
+> [!IMPORTANT]
+> **The first user to sign up becomes the Admin.** Watchly doesn't create a
+> default admin account. On a fresh install, the first account registered is
+> given the `Admin` role, and every account after that joins as a `Viewer`.
+>
+> Until that first account exists, **anyone who can reach the app can claim
+> admin**. Sign up yourself right after the first start, before exposing the
+> instance to anyone else.
+
+After signing in as admin you can create projects, add sites to monitor and
+invite your team. Signup closes as soon as the admin exists: everyone else
+joins only by an invitation from an Admin or DevOps user. People without one
+can request an account from the sign-in page, for an Admin or DevOps user to
+approve or reject.
+
+## Set up email alerts (SMTP)
+
+Watchly sends every email through an SMTP server you configure in `.env`: down
+and recovery alerts, SSL and slow-response warnings, monthly reports,
+invitations and password resets. **If `SMTP_HOST` is empty, no email is sent.**
+
+```dotenv
+# --- Alerting ---
+ALERTS_ENABLED=true
+ALERT_EMAIL_ENABLED=true
+# Comma-separated; added to every alert on top of each project's own recipients
+ALERT_DEFAULT_EMAILS=devs@example.com
+# Public URL of your Watchly dashboard, used for links in emails and invitations
+ALERT_DASHBOARD_URL=https://watchly.example.com
+
+# --- SMTP ---
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USERNAME=your-smtp-username
+SMTP_PASSWORD=your-smtp-password
+SMTP_USE_TLS=true
+SMTP_USE_SSL=false
+SMTP_FROM_EMAIL=alerts@yourdomain.com
+SMTP_FROM_NAME=Watchly Alerts
+```
+
+Any SMTP provider works. Common settings:
+
+| Provider | `SMTP_HOST` | `SMTP_PORT` | Notes |
+| -------- | ----------- | ----------- | ----- |
+| AWS SES  | `email-smtp.<region>.amazonaws.com` | `587` | Use SES SMTP credentials |
+| Resend   | `smtp.resend.com` | `587` | Username `resend`, password is your API key |
+| Mailgun  | `smtp.mailgun.org` | `587` | |
+| Gmail    | `smtp.gmail.com` | `587` | Requires an [app password](https://support.google.com/accounts/answer/185833) |
+
+- Use `SMTP_USE_TLS=true` for port **587** (STARTTLS), or `SMTP_USE_SSL=true` for port **465**.
+- `SMTP_FROM_EMAIL` must be on a domain verified with your provider, or messages may be rejected.
+- Under Docker Compose, `ALERT_DASHBOARD_URL` defaults to `http://localhost:8080`. Set it to your public URL in production.
+
+After editing `.env`, apply the change with `docker compose up -d`. A plain
+`restart` doesn't reload `.env`.
+
+<details>
+<summary><b>Testing emails locally with Mailpit</b></summary>
+
+[Mailpit](https://mailpit.axllent.org/) catches every email and shows it in a
+web inbox, so you can see alerts without a real mail provider.
+
+```bash
+docker run -d --name watchly-mailpit -p 8025:8025 -p 1025:1025 axllent/mailpit
+```
+
+```dotenv
+SMTP_HOST=host.docker.internal
+SMTP_PORT=1025
+SMTP_USE_TLS=false
+```
+
+Run `docker compose up -d`, trigger an alert, then open http://localhost:8025.
+If the API runs directly on your machine instead of in Docker, use
+`SMTP_HOST=localhost`.
+
+</details>
+
+## Configuration
+
+All settings live in `.env`. [`.env.example`](.env.example) documents every
+option. The most important ones:
+
+| Variable | Default | Description |
+| -------- | ------- | ----------- |
+| `SECRET_KEY` | `dev-secret-change-me` | JWT signing key. **Always change it.** |
+| `WEB_PORT` / `API_PORT` | `8080` / `8000` | Ports published by Docker Compose |
+| `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` | `postgres` / `postgres` / `watchly` | Database credentials |
+| `DEFAULT_CHECK_INTERVAL_SECONDS` | `300` | Default time between checks for a new site |
+| `ALERT_DEFAULT_EMAILS` | | Addresses that receive every alert |
+| `SLACK_WEBHOOK_URL` / `ALERT_WEBHOOK_URL` | | Optional Slack and webhook channels |
+| `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` | | Optional Telegram fallback for projects without their own bot |
+| `WHATSAPP_ACCESS_TOKEN` / `WHATSAPP_PHONE_NUMBER_ID` / `WHATSAPP_RECIPIENTS` | | Optional WhatsApp fallback for projects without their own sender |
+| `WHATSAPP_TEMPLATE_NAME` | `watchly_alert` | Approved WhatsApp template alerts are sent as |
+| `SSL_EXPIRY_ALERT_DAYS` | `14,7` | Days before certificate expiry to warn |
+| `DOMAIN_EXPIRY_ALERT_DAYS` | `14,7` | Days before domain registration expiry to warn |
+| `ALERT_LOGO_URL` | the logo on GitHub | Public HTTPS logo Slack and Telegram show on alerts; blank turns it off (email always embeds it) |
+| `DNS_RESOLVERS` | Cloudflare, Google, Quad9, OpenDNS | Resolvers queried by DNS checks |
+| `INFRA_AWS_ENABLED` | `false` | Turns on [AWS infrastructure monitoring](#aws-infrastructure-monitoring) |
+| `DOCKER_ENABLED` | `true` | Docker projects and the [agent's ingest endpoint](doc/docker.md) |
+| `DOCKER_DOWN_GRACE_SECONDS` / `DOCKER_OFFLINE_AFTER_SECONDS` | `60` / `120` | How long a container may be stopped, and a host's agent quiet, before alerting |
+| `AWS_REGION` | the instance's own region | Default region for AWS accounts without one of their own |
+| `AWS_SYNC_INTERVAL_SECONDS` | `300` | How often AWS resources' addresses and states are read again |
+| `WEBSITE_PRIVATE_TARGETS` | `block` | `allow` lets website checks reach private addresses; for LAN installs only, never on EC2 |
+| `MONTHLY_REPORTS_ENABLED` | `true` | Send the monthly uptime report |
+| `LOG_LEVEL` / `LOG_DIR` | `INFO` / `logs` | Log verbosity, and the folder for the per-module log files (see [Logs](#logs)) |
+
+## Logs
+
+The API writes one log file per part of the backend, plus the console output
+that `docker compose logs` shows. Under Docker Compose they appear in `./logs`
+on the host (or in `LOG_DIR` when running the API directly):
+
+| File | What is in it |
+| ---- | ------------- |
+| `errors.log` | Every error from anywhere, with tracebacks: **start here** when something breaks |
+| `access.log` | One line per HTTP request: method, path, status, time taken, client |
+| `auth.log` | Sign-in, sign-up, lockouts, token refresh |
+| `user.log` | Role changes, suspensions, password and email changes |
+| `invitations.log` / `account_requests.log` | Invitations and account requests |
+| `monitoring.log` | The scheduler and check/alert orchestration |
+| `monitoring_websites.log` | The checks themselves (HTTP, ping, DNS, SSL, CDN, domain) |
+| `monitoring_alerts.log` | Email, Slack, Telegram, WhatsApp and webhook delivery |
+| `monitoring_notifications.log` | Notification rules and monthly reports |
+| `core.log` / `db.log` / `main.log` / `server.log` | Mail and rate limits, database, startup, uvicorn |
+
+Each line has a UTC time, level and the request id, which is also returned to
+the client as the `X-Request-ID` header, so one failing request can be followed
+across files with `grep <id> logs/*.log`. Only the last
+`LOG_RETENTION_HOURS` (6) of each file are kept; older lines are deleted at
+startup and every few minutes after. Passwords, tokens and query
+strings are never logged. Set `LOG_LEVEL=DEBUG` for more detail.
+
+## Useful commands
+
+```bash
+docker compose logs -f api          # follow the API and scheduler logs
+docker compose up -d --build api    # rebuild after changing backend code
+docker compose down                 # stop everything
+docker compose down -v              # stop and delete the database
+```
+
+## Upgrading
+
+Check the [changelog](CHANGELOG.md) for what changed, then:
+
+```bash
+docker compose exec db pg_dump -U postgres watchly > watchly-backup.sql   # back up first
+git pull                          # or check out a release: git checkout v1.0.0
+docker compose up -d --build
+```
+
+The API migrates the database on start, so there is nothing else to run.
+
+## Development
+
+To run the API and UI with hot reload (Python 3.14 and Node.js 20.19+):
+
+```bash
+# Database only
+docker compose up -d db
+
+# API
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+alembic upgrade head
+uvicorn app.main:app --reload        # http://127.0.0.1:8000/docs
+
+# Web UI, in a second terminal
+cd frontend && npm install && npm run dev   # http://localhost:5173
+```
+
+See [`doc/local-setup.md`](doc/local-setup.md) for a full walkthrough and troubleshooting.
+
+## Documentation
+
+| Document | Contents |
+| -------- | -------- |
+| [`doc/quick-start.md`](doc/quick-start.md) | Quick start: install, first project and site, inviting your team, what to know |
+| [`doc/local-setup.md`](doc/local-setup.md) | Running Watchly locally from scratch, step by step |
+| [`doc/reference.md`](doc/reference.md) | Technical reference: auth, roles, monitoring, alerting, scheduler, migrations |
+| [`doc/hld.md`](doc/hld.md) | High-level design: architecture, data model, key flows |
+| [`doc/apis.md`](doc/apis.md) | Every API endpoint with a short description |
+| [`doc/infraapi.md`](doc/infraapi.md) | AWS infrastructure monitoring: concepts, IAM setup, accounts, checks, alerts and its API |
+| [`doc/docker.md`](doc/docker.md) | Docker monitoring: the agent, connecting a host, what alerts, settings and its API |
+| [`frontend/README.md`](frontend/README.md) | The web UI |
+| [`CHANGELOG.md`](CHANGELOG.md) | What changed in each release |
+
+## Contributing
+
+Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) for setting
+up, making a change and opening a pull request. For bugs and feature requests,
+[open an issue](https://github.com/TahjibNil75/watchly/issues/new/choose). Please
+report security problems privately, as [SECURITY.md](SECURITY.md) describes.
+Everyone taking part is expected to follow the [code of conduct](CODE_OF_CONDUCT.md).
+
+## License
+
+Watchly is released under the [MIT License](LICENSE).

@@ -276,7 +276,7 @@ Download from [**GitHub Releases**](https://github.com/DBDiff/DBDiff/releases/la
 | macOS Apple Silicon | `dbdiff-darwin-arm64` |
 | macOS Intel | `dbdiff-darwin-x64` |
 | Windows x64 | `dbdiff-win32-x64.exe` |
-| Windows arm64 | `dbdiff-win32-arm64.exe` |
+| Windows 11 on Arm | `dbdiff-win32-arm64.exe` (the x64 build, run by Windows' built-in x64 emulation) |
 
 After downloading, make it executable (Linux/macOS) and optionally move it to your `PATH`:
 
@@ -555,6 +555,8 @@ Pass `--format=native` to `migration:new` to override the auto-detected format.
   --server1-url='postgres://user:pass@db.xxxx.supabase.co:5432/postgres' \
   --server2-url='postgres://user:pass@db.yyyy.supabase.co:5432/postgres'
 ```
+
+Each URL's own `sslmode` and `options` apply to that server's connection, as they do for psql and pg_dump — `?sslmode=require&options=-c%20default_transaction_read_only%3Don` keeps a session on the source read-only, for example.
 
 If your password contains special characters, use `dbdiff url:encode` (see [`url:encode`](#urlencode--password-encoder) in the Command-Line API section):
 

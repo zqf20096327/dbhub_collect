@@ -1,0 +1,183 @@
+# webhook-inbox
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+![Java 21](https://img.shields.io/badge/Java-21-blue.svg)
+[![verify](https://github.com/KarelDuranSocarras/webhook-inbox/actions/workflows/verify.yml/badge.svg)](https://github.com/KarelDuranSocarras/webhook-inbox/actions/workflows/verify.yml)
+[![Release](https://img.shields.io/github/v/release/KarelDuranSocarras/webhook-inbox)](https://github.com/KarelDuranSocarras/webhook-inbox/releases/latest)
+
+A self-hosted, RequestBin-style webhook inspector.
+Create an inbox, point any webhook at its ingest URL, and inspect the captured requests — no account, no third-party service.
+
+## Demo
+
+![Demo](./docs/demo.gif)
+
+## Requirements
+
+- **Docker** (for the PostgreSQL container and for integration tests).
+- **Java 21** — only needed if you want to run or build the app from source.
+
+## Quick start (Docker)
+
+Everything (app + PostgreSQL) with a single command, using the published image:
+
+```bash
+docker compose pull && docker compose up -d --no-build
+```
+
+Then open <http://localhost:8080>. The app image is published to GHCR as
+`ghcr.io/karelduransocarras/webhook-inbox` (tags `edge`, `main-<sha>`, and
+`vX.Y.Z` / `latest` for releases).
+
+To build the image from source instead of pulling it:
+
+```bash
+docker compose up --build
+```
+
+Copy `.env.example` to `.env` to override defaults (ports, `APP_*` settings).
+
+## Quick start (development)
+
+1. Start PostgreSQL:
+
+   ```bash
+   docker compose up -d postgres
+   ```
+
+2. Run the app with the `dev` profile (points at `localhost:5433`):
+
+   ```bash
+   ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+   ```
+
+3. Open <http://localhost:8080> — it redirects to the inbox list.
+   Interactive API docs are at <http://localhost:8080/swagger-ui.html>.
+
+## Usage with curl
+
+Create an inbox:
+
+```bash
+curl -s -X POST http://localhost:8080/api/inboxes \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"my first inbox"}'
+```
+
+The response contains a `token`. Use it to send a webhook:
+
+```bash
+curl -s -X POST http://localhost:8080/in/<token>/orders \
+  -H 'Content-Type: application/json' \
+  -d '{"event":"order.created","id":42}'
+```
+
+List the captured requests for that inbox:
+
+```bash
+curl -s "http://localhost:8080/api/inboxes/<token>/requests"
+```
+
+Filter by method or by path substring (optional):
+
+```bash
+curl -s "http://localhost:8080/api/inboxes/<token>/requests?method=POST&q=orders"
+```
+
+The ingest URL is derived from the incoming request by default. To force a
+different public base URL (for example behind a proxy), set
+`WEBHOOK_INBOX_BASE_URL`.
+
+## Environment variables
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `DB_URL` | `jdbc:postgresql://localhost:5433/webhookinbox` | JDBC URL. **`dev` profile only.** |
+| `DB_USER` | `webhookinbox` | Database user. **`dev` profile only.** |
+| `DB_PASSWORD` | `webhookinbox` | Database password. **`dev` profile only.** |
+| `APP_MAX_BODY_BYTES` | `1048576` | Maximum accepted webhook body size (bytes); larger bodies return `413`. |
+| `APP_RETENTION_DAYS` | `7` | Captured requests older than this many days are deleted by the retention job. |
+| `APP_RETENTION_ENABLED` | `true` | Whether the scheduled retention job runs. |
+| `APP_RETENTION_CRON` | `0 0 * * * *` | Cron expression for the retention job (hourly by default). |
+| `APP_RATE_LIMIT_ENABLED` | `true` | Enable ingestion rate limiting. |
+| `APP_RATE_LIMIT_RPM` | `100` | Ingestion requests per minute per inbox; excess requests return `429 Retry-After: 60`. |
+
+## Screenshots
+
+Seed demo data with Webhook Inbox itself, open the pages, and capture each view
+into `docs/screenshots/` (the GIF in `docs/demo.gif` was produced from them):
+
+![Inbox list](./docs/screenshots/inboxes.png)
+![Inbox detail](./docs/screenshots/inbox.png)
+![Request detail](./docs/screenshots/request.png)
+
+## Tech stack
+
+| Area | Choice |
+| --- | --- |
+| Language | Java 21 |
+| Framework | Spring Boot 4.1.1 (Spring Framework 7) |
+| Persistence | Spring Data JPA / Hibernate ORM 7.4, PostgreSQL 16 (JSONB for headers) |
+| Migrations | Flyway 12 |
+| Web UI | Thymeleaf 3.1 + htmx 2.0.4 (vendored, no CDN) |
+| API docs | springdoc-openapi 3.1 (Swagger UI) |
+| Testing | JUnit 6, AssertJ, Mockito, Testcontainers 2.0 |
+| Build | Maven (wrapper) |
+
+## Architecture
+
+```text
+        Browser / webhook sender
+                  │
+                  ▼
+        ┌───────────────────────┐
+        │   Spring MVC (web)    │
+        │  ├─ UI   (Thymeleaf)  │
+        │  ├─ REST (/api/**)    │
+        │  └─ Ingest (/in/**)   │
+        └───────────┬───────────┘
+                    ▼
+        ┌───────────────────────┐
+        │  Application services │
+        └───────────┬───────────┘
+                    ▼
+        ┌───────────────────────┐
+        │ Spring Data JPA       │
+        │        │              │
+        │        ▼              │
+        │   PostgreSQL 16       │
+        └───────────────────────┘
+                    ▲
+             Flyway migrations
+```
+
+## Releases and image tags
+
+| Ref | Image tags | Meaning |
+| --- | --- | --- |
+| `main` branch | `edge` + `main-<sha8>` | Latest stable, always releaseable. |
+| `vX.Y.Z` tag | `vX.Y.Z` + `latest` | Published releases; `latest` always points to the newest tagged release. |
+| `development` branch | `dev-<sha8>` | Work in progress. |
+
+`main` = stable/releaseable · `development` = work in progress.
+Features go through a PR into `development`; once stable, `development` goes
+through a PR into `main`. Release tags are placed on the `main` merge commit.
+See [`CHANGELOG.md`](./CHANGELOG.md) for the version history.
+
+## Roadmap
+
+- [x] Core domain, persistence, REST API and webhook ingestion
+- [x] Web UI (Thymeleaf + htmx)
+- [x] Integration tests (API + ingestion, Testcontainers)
+- [x] Docs and OpenAPI annotations
+- [x] Ingestion rate limiting (Bucket4j), scheduled retention, validate `inbox.active`
+- [x] Dockerfile, full `docker compose up` (app + DB), CI/CD and GHCR images
+- [x] `v0.1.0` release, public demo and launch
+
+## Contributing
+
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+
+## License
+
+[MIT](./LICENSE)

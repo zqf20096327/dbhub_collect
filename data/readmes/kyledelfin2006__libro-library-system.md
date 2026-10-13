@@ -39,6 +39,8 @@ Main Developer: **Aldrin Kyle Delfin**
 
 * [Architecture Overview](https://github.com/kyledelfin2006/library-api-system#architecture-overview)
 * [Layered Design](https://github.com/kyledelfin2006/library-api-system#layered-design)
+* [Current Authentication and Authorization Flow](https://github.com/kyledelfin2006/library-api-system#current-authentication-and-authorization-flow)
+* [Current Persistence Model](https://github.com/kyledelfin2006/library-api-system#current-persistence-model)
 * [File Structure](https://github.com/kyledelfin2006/library-api-system#file-structure)
 * [Core Design Patterns](https://github.com/kyledelfin2006/library-api-system#core-design-patterns)
 * [Key Features](https://github.com/kyledelfin2006/library-api-system#key-features)
@@ -50,21 +52,28 @@ Main Developer: **Aldrin Kyle Delfin**
 * [Data Management](https://github.com/kyledelfin2006/library-api-system#data-management)
 * [Testing](https://github.com/kyledelfin2006/library-api-system#testing)
 * [Documentation](#documentation)
-* [Development Problems Solved](#development-problems-solved)
+* [Problems I Solved](#problems-i-solved)
 * [Upcoming Improvements](https://github.com/kyledelfin2006/library-api-system#upcoming-improvements)
 * [License](https://github.com/kyledelfin2006/library-api-system#license)
 
 ## Documentation
 
-This README is the project's main portfolio entry point. The development reflection is the featured supporting document; the other references explain the system's context, decisions, API contract, contributor practices, and remaining work.
+This README remains the project's main portfolio entry point. Supporting documents are grouped by audience so readers can choose a project overview or implementation reference.
 
-1. [Development Problems Solved](docs/development-problems-solved.md) is the portfolio reflection: it explains major problems, their impact, the fixes, and how the results were verified.
-2. [Institutional Context](docs/institutional-context.md) describes the ASU-CCS academic model and existing MIS assumptions behind the user domain.
-3. [Domain Decisions](docs/domain-decisions.md) explains why a `Book` represents one physical copy and what that means for future loan features.
-4. [API Documentation Guideline](docs/api-documentation-guideline.md) sets the standard for accurate OpenAPI and Swagger documentation without unnecessary annotation boilerplate.
-5. [Implementation Plan: Remaining Quality Improvements](docs/implementation-plan-quality-improvements.md) tracks the remaining OpenAPI maintainability work.
-6. [Agent and Contributor Guide](AGENTS.md) records the architecture, layer contracts, coding rules, testing expectations, and definition of done. It stays at the repository root so coding agents can discover it automatically.
-7. [Development TODO](internal-docs/TODO.md) tracks completed user-domain work and remaining authorization, loan, testing, and documentation tasks. It is a working roadmap, not part of the public API contract.
+### For recruiters and project reviewers
+
+1. The Architecture Overview and Request Lifecycle sections below explain the current system with component, security, persistence, and startup diagrams.
+2. [Development Problems Solved](docs/development-problems-solved.md) explains major engineering challenges, decisions, and verification.
+3. [Institutional Context](docs/institutional-context.md) describes the ASU-CCS academic model and existing MIS assumptions behind the user domain.
+4. [Domain Decisions](docs/domain-decisions.md) explains why a Book represents one physical copy and what that means for future loan features.
+
+### For agents, AI, and contributors
+
+1. [Agent and Contributor Guide](AGENTS.md) records current facts, source-of-truth rules, do's and don'ts, and the contribution workflow.
+2. [Current System Engineering Reference](guiding-docs/engineering-reference.md) contains the detailed repository map, layer contracts, endpoint inventory, configuration, and test strategy.
+3. [Development Roadmap](guiding-docs/TODO.md) tracks current implementation status and remaining work.
+4. [Security Roles and JWT Guide](guiding-docs/security-roles-and-jwt-guide.md) defines the target role policy and planned JWT/loan design; those features are not implemented yet.
+5. [API Documentation Guideline](docs/api-documentation-guideline.md) sets the standard for accurate OpenAPI and Swagger documentation without unnecessary annotation boilerplate.
 
 ## Architecture Overview
 
@@ -91,7 +100,7 @@ flowchart LR
         User -.-> Shared
     end
     ORM -->|JDBC| DB[("PostgreSQL 18")]
-    Flyway["Flyway migrations<br/>V1 books · V2 users"] -->|startup schema changes| DB
+    Flyway["Flyway migrations<br/>V1 books · V2 users · V3 librarian role"] -->|startup schema changes| DB
     Compose["Docker Compose<br/>starts app after database is healthy"] -.-> App
     Compose -.-> DB
 
@@ -102,6 +111,53 @@ flowchart LR
 ```
 
 The authentication branch is separate from user account operations. For a protected request, Spring Security asks `LibroUserDetailsService` to load the account by university ID; that service reads the same `UserRepository` used by `UserService`, then returns Spring Security's user details with the stored password hash and mapped role. Signup is permitted without authentication; the remaining routes require authentication. Controllers do not access the repository directly.
+
+### Current Authentication and Authorization Flow
+
+This is the live HTTP Basic flow. The client sends its university ID and password with every protected request. Spring Security loads the account and role, checks the password with BCrypt, then applies the route's role rule. Basic credentials are Base64-encoded, not encrypted; use HTTPS outside local development.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Security as Spring Security
+    participant UserLookup as LibroUserDetailsService
+    participant Users as UserRepository
+    participant DB as PostgreSQL
+    participant Encoder as BCrypt PasswordEncoder
+    participant API as Protected endpoint
+
+    Client->>Security: HTTP request with Basic credentials
+    Security->>UserLookup: Load account by university ID
+    UserLookup->>Users: findByUniversityId
+    Users->>DB: Read account, hash, and role
+    DB-->>Users: User record
+    Users-->>UserLookup: Stored account details
+    UserLookup-->>Security: UserDetails with hash and authority
+    Security->>Encoder: Verify submitted password against hash
+    Encoder-->>Security: Match or reject
+    alt credentials are valid and route allows the role
+        Security->>API: Continue with authenticated principal
+        API-->>Client: Endpoint response
+    else invalid credentials or denied role
+        Security-->>Client: Authentication or authorization error
+    end
+```
+
+Account access is checked against the authenticated user's university ID and role. `ADMINISTRATOR` is the library-assistant role, and `LIBRARIAN` is the library's librarian. Loans remain future work.
+
+| Current rule | Allowed access |
+| --- | --- |
+| Public signup | POST /app/users/signup |
+| Read books | STUDENT, FACULTY, ADMINISTRATOR, LIBRARIAN |
+| Add, update, or delete books | ADMINISTRATOR, LIBRARIAN |
+| Create school faculty and library assistant accounts | LIBRARIAN |
+| List/read student and faculty profiles | ADMINISTRATOR, LIBRARIAN |
+| List/read library assistant profiles | LIBRARIAN |
+| Update student/faculty profiles and passwords | Owner, ADMINISTRATOR, LIBRARIAN |
+| Update library assistant profiles and passwords | Owner, LIBRARIAN |
+| Delete own student/faculty account | Owner |
+| Delete student/faculty accounts | ADMINISTRATOR, LIBRARIAN |
+| Delete library assistant accounts | LIBRARIAN |
 
 ### Layered Design
 
@@ -130,6 +186,32 @@ flowchart TD
 
 Both user flows converge on `UserRepository`: `UserService` uses it for signup, profile, and password operations; `LibroUserDetailsService` uses it only to load the account Spring Security authenticates. The authentication lookup does not route through `UserAPI` or `UserService`.
 
+### Current Persistence Model
+
+The current schema stores books and users as separate domains. A Book row is one physical copy. There is no loan table or user-to-book relationship yet; the future loan design must identify the borrower from the authenticated principal and allow only one active loan per copy. See [Domain Decisions](docs/domain-decisions.md) for the reasoning.
+
+```mermaid
+erDiagram
+    BOOK {
+        BIGINT id PK
+        VARCHAR title
+        VARCHAR author
+        VARCHAR genre
+        DECIMAL price
+        TIMESTAMP created_at
+    }
+    USER {
+        BIGINT id PK
+        VARCHAR university_id UK
+        VARCHAR password_hash
+        VARCHAR user_role
+        VARCHAR email UK
+        VARCHAR user_course
+        VARCHAR major
+        TIMESTAMP created_at
+    }
+```
+
 ## File Structure
 
 ```text
@@ -140,8 +222,9 @@ docs/
   development-problems-solved.md
   domain-decisions.md
   institutional-context.md
-  implementation-plan-quality-improvements.md
-internal-docs/
+guiding-docs/
+  engineering-reference.md
+  security-roles-and-jwt-guide.md
   TODO.md
 
 src/main/java/app/
@@ -204,6 +287,7 @@ src/main/resources/
     migration/
       V1__create_books_table.sql
       V2__create_users_table.sql
+      V3__add_librarian_role.sql
 
 src/test/java/
   unit/
@@ -320,12 +404,25 @@ public ResponseEntity<ApiResponse<BookResponseDTO>> addBook(@Valid @RequestBody 
 
 ### Startup flow
 
-1. Compose waits until PostgreSQL passes `pg_isready`.
-2. Spring Boot starts `app.LibraryApplication`.
-3. The Spring Boot Flyway starter runs pending migrations before JPA initializes.
-4. Hibernate validates the migrated schema with `ddl-auto=validate`.
-5. `SecurityConfig` permits `POST /app/users/signup`, applies role rules to book and account operations, and retains HTTP Basic authentication and CSRF protection.
-6. The API becomes ready at `http://localhost:8080`.
+```mermaid
+sequenceDiagram
+    participant Compose as Docker Compose
+    participant DB as PostgreSQL
+    participant App as Spring Boot
+    participant Flyway
+    participant JPA as Hibernate / JPA
+    Compose->>DB: Start database
+    Compose->>DB: Wait for pg_isready health check
+    Compose->>App: Start application after DB is healthy
+    App->>Flyway: Discover pending migrations
+    Flyway->>DB: Apply versioned SQL migrations
+    App->>JPA: Initialize entity mappings
+    JPA->>DB: Validate schema with ddl-auto=validate
+    JPA-->>App: Schema matches mappings
+    App-->>Compose: API ready on port 8080
+```
+
+Flyway owns schema creation and updates; Hibernate validates the resulting schema instead of changing it. The filter chain exposes public signup, retains HTTP Basic and CSRF protection, and enforces the current route rules.
 
 ## Code Highlights
 
@@ -351,6 +448,21 @@ Separate request types make the OpenAPI schema match each contract:
 
 Both service operations update a managed entity inside a transaction; Hibernate dirty checking persists the change.
 ### Centralized API errors
+
+Request validation and business-rule validation converge on the shared exception handler. This keeps error responses consistent while preserving endpoint-specific status codes.
+
+```mermaid
+flowchart LR
+    JSON["JSON request"] --> DTO["Request DTO"]
+    DTO --> DTOCheck{"DTO constraints pass?"}
+    DTOCheck -->|no| Advice["GlobalExceptionHandler"]
+    DTOCheck -->|yes| Service["Service business rules"]
+    Service --> EntityCheck{"Resulting entity valid?"}
+    EntityCheck -->|no| Advice
+    EntityCheck -->|yes| Repository["Repository"]
+    Repository --> Response["Response DTO"]
+    Advice --> Error["ErrorResponse with fieldErrors"]
+```
 
 ```java
 @ExceptionHandler(BookNotFoundException.class)
@@ -398,20 +510,21 @@ public LibraryStatisticsDTO getLibraryStatistics() {
 | `GET` | `/app/books/stats/average-price` | Returns the average price of all books | `GET /app/books/stats/average-price` | `{"success":true,"message":"Average Price of Collection: ","data":20.50,"timestamp":172...}` |
 | `GET` | `/app/books/stats/count` | Returns the total number of books | `GET /app/books/stats/count` | `{"success":true,"message":"Book Collection Count","data":6,"timestamp":172...}` |
 
-| `GET` | `/app/users` | Lists users with pagination | `GET /app/users?page=0&size=12` | Spring `Page<UserResponseDTO>` |
-| `GET` | `/app/users/{universityId}` | Gets one user by university ID | `GET /app/users/2025-4321` | `UserResponseDTO` |
+| `GET` | `/app/users` | Lists student/faculty accounts for administrators; librarians also see library assistants | `GET /app/users?page=0&size=12` | Spring `Page<UserResponseDTO>` |
+| `GET` | `/app/users/{universityId}` | Gets own profile or a profile visible to the caller's staff role | `GET /app/users/2025-4321` | `UserResponseDTO` |
 | `POST` | `/app/users/signup` | Creates a user account | `POST /app/users/signup` with `UserCreateRequestDTO` | `ApiResponse<UserResponseDTO>`, HTTP 201 |
-| `POST` | `/app/users/faculty` | Administrator creates a faculty account | `POST /app/users/faculty` with `UserCreateRequestDTO` | `ApiResponse<UserResponseDTO>`, HTTP 201 |
+| `POST` | `/app/users/faculty` | Librarian creates a faculty account | `POST /app/users/faculty` with `UserCreateRequestDTO` | `ApiResponse<UserResponseDTO>`, HTTP 201 |
 | `PATCH` | `/app/users/{universityId}` | Updates supplied profile fields | `PATCH /app/users/2025-4321` with `UserCreateUpdateDTO` | `ApiResponse<UserResponseDTO>` |
 | `PUT` | `/app/users/{universityId}` | Replaces profile fields | `PUT /app/users/2025-4321` with `UserReplaceRequest` | `ApiResponse<UserResponseDTO>` |
-| `PUT` | `/app/users/{universityId}/password` | Changes password after current-password verification | `PUT /app/users/2025-4321/password` with `ChangePasswordDTO` | `ApiResponse<Void>` |
-| `DELETE` | `/app/users/{universityId}` | Administrator deletes a student or faculty account | `DELETE /app/users/2025-4321` | `ApiResponse<Void>` |
+| `PUT` | `/app/users/{universityId}/password` | Changes own password or resets a permitted account's password as staff | `PUT /app/users/2025-4321/password` with `ChangePasswordDTO` | `ApiResponse<Void>` |
+| `DELETE` | `/app/users/{universityId}` | Owner deletes a student/faculty account; administrator deletes student/faculty; librarian also deletes library assistants | `DELETE /app/users/2025-4321` | `ApiResponse<Void>` |
+| `POST` | `/app/users/administrators` | Librarian creates a library assistant account | `POST /app/users/administrators` with `UserCreateRequestDTO` | `ApiResponse<UserResponseDTO>`, HTTP 201 |
 
 `/app/books/query` combines supplied filters with AND. Text matching is case-insensitive literal substring matching; `minPrice` and `maxPrice` are inclusive and either may be used alone. Without filters, it returns all books as a page. Pages start at 0, default to size 12 and `id` ascending, and are capped at size 100. Sort with `sort=property,direction` using `id`, `title`, `author`, `genre`, or `price`; invalid ranges, decimals, or sort fields return HTTP 400. Existing list routes retain their response shapes.
 
 ### User API
 
-User routes are available under `/app/users` for signup, paginated listing, lookup by university ID, profile PATCH/PUT, password changes, and deletion. Signup is public and always creates a student, regardless of a supplied role value. Only administrators can create faculty accounts or delete student/faculty accounts. Students can read and search books; faculty and administrators can also add, update, and delete books. HTTP Basic authentication uses a university ID and password. Flyway V2 seeds one bootstrap administrator as `0000-0000`; set `LIBRO_ADMIN_PASSWORD_HASH` to a BCrypt hash before startup and protect that configuration. The seeded account uses `admin@library.local`. Loan routes are not implemented.
+User routes are available under `/app/users` for signup, staff directories, profile lookup and updates, password changes, account creation, and role-scoped deletion. STUDENT means a student patron; FACULTY means school faculty using the library as patrons; ADMINISTRATOR means a library assistant (for example, fellow faculty, student assistants, or volunteers); LIBRARIAN means the library's librarian. Signup is public and always creates a student. Only the librarian creates faculty and library assistant accounts. Students and faculty can delete their own accounts; library assistants can manage/delete student and faculty accounts; librarians can also manage/delete library assistant accounts. Neither staff role manages another librarian account. All roles can read books; administrators and librarians can add, update, and delete books. See [the role permissions table](guiding-docs/security-roles-and-jwt-guide.md#role-policy) for allowed, denied, and future loan permissions. HTTP Basic authentication uses a university ID and password. Flyway V2 historically seeds the bootstrap administrator as `0000-0000`; V3 adds LIBRARIAN to the schema. The application does not seed a librarian. Set `LIBRO_ADMIN_PASSWORD_HASH` to a BCrypt hash before startup and protect it. Loan routes and history are not implemented.
 
 ## Setup & Installation
 
@@ -430,7 +543,7 @@ Docker is the preferred way to run the project because it brings up both Postgre
     POSTGRES_PASSWORD=change_me
     LIBRO_ADMIN_PASSWORD_HASH=<BCrypt hash for a password you choose>
     ```
-    Replace the hash placeholder before starting the app. Flyway V2 seeds the administrator as university ID `0000-0000`; only the BCrypt hash is stored in the database. Keep `.env` private.
+    Replace the hash placeholder before starting the app. Flyway V2 seeds the administrator as university ID `0000-0000`; no librarian is seeded. Only BCrypt hashes are stored in the database. Keep `.env` private. Librarian-only routes require an existing librarian account; initial librarian provisioning is deferred.
 2. Build the application jar:
     ```bash
     mvn clean package
@@ -584,17 +697,25 @@ Validation failures retain the `error`, `details`, `timestamp`, and `statusCode`
 }
 ```
 
-## Development Problems Solved
+## Problems I Solved
 
-The detailed, interview-ready account of the development problems I identified and solved is in [Development Problems Solved](docs/development-problems-solved.md). It consolidates the former gap and Docker/Flyway problem documents into one reflective reference.
+I worked through problems at several boundaries of the system and fixed them where they originated:
+
+- **Database startup and schema drift:** aligned the PostgreSQL schema with the Java entity model, made Flyway the schema authority, and kept Hibernate validation enabled.
+- **Unreliable container startup:** added PostgreSQL health checks and made the application wait for the database to become ready.
+- **Create, replace, and partial-update validation:** separated PUT's full-replacement rules from PATCH's optional-field behavior, with service-level validation as a second boundary.
+- **Fragile aggregate results:** replaced positional query results with typed projections for collection statistics and genre counts.
+- **Unbounded filtered results:** added a paginated query that combines text and price filters while validating sort fields.
+- **Account and credential safety:** normalized institutional IDs and emails, enforced account rules, stored BCrypt hashes, and kept password data out of response DTOs.
+
+The [Development Problems Solved](docs/development-problems-solved.md) write-up gives the symptoms, reasoning, fixes, and verification details for these problems. It also distinguishes unit/MVC evidence from PostgreSQL integration checks that still require Docker.
 
 ## Upcoming Improvements
 
 - Inspect the generated OpenAPI document and Swagger UI with the application and database running; verify parameter defaults, request/response schemas, statuses, errors, and examples against the implementation.
-- Decide whether local HTTP Basic accounts are sufficient for deployment or whether Libro must integrate with institutional SSO.
+- Replace HTTP Basic with the planned short-lived JWT Bearer flow, or choose institutional SSO before deployment.
 - Add focused security tests for student, faculty, and administrator access decisions.
 - Revisit CSRF handling and document the HTTP Basic scheme and CSRF requirements in OpenAPI before external use.
-- Decide whether HTTP Basic remains appropriate or institutional SSO is required before deployment.
 - Implement the loan domain with active-loan constraints and overdue/history queries, using the authenticated identity for borrower operations; document its API when routes are added.
 - Run `mvn -Pintegration verify` on a Docker-enabled machine to execute the PostgreSQL integration tests; add them to CI when a CI workflow is introduced.
 - Benchmark case-insensitive substring searches as the catalog grows; add database search indexes only if measurements justify them.

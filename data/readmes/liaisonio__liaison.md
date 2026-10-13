@@ -46,9 +46,9 @@ English | [简体中文](./README_zh.md) | [日本語](./README_ja.md) | [한국
 Download the self-contained Docker bundle, extract it, and run the installer (Docker 20.10+ with Compose is required):
 
 ```bash
-wget https://github.com/liaisonio/liaison/releases/download/v1.15.3/liaison-1.15.3-linux-amd64.tar.gz
-tar -xzf liaison-1.15.3-linux-amd64.tar.gz
-cd liaison-1.15.3-linux-amd64
+wget https://github.com/liaisonio/liaison/releases/download/v1.15.4/liaison-1.15.4-linux-amd64.tar.gz
+tar -xzf liaison-1.15.4-linux-amd64.tar.gz
+cd liaison-1.15.4-linux-amd64
 ./install.sh
 ```
 
@@ -112,17 +112,25 @@ Keep internal AI tools reachable without exposing the private network.
 
 Browse schemas, run SQL, and ask the session Agent to query and explain results, with approval where required.
 
+![Using MySQL through Liaison](docs/assets/readme/web-mysql-dark.png)
+
 ### Web MongoDB
 
 Explore collections and ask the session Agent to run approved queries and explain documents, without a local client.
+
+![Using MongoDB through Liaison](docs/assets/readme/web-mongodb-dark.png)
 
 ### Web VNC
 
 Open a private VNC desktop in a managed browser session.
 
+![A VNC desktop opened in Liaison](docs/assets/readme/web-vnc-dark.png)
+
 ### Web RDP
 
 Connect to an RDP desktop from the same access workflow.
+
+![An RDP desktop opened in Liaison](docs/assets/readme/web-rdp-dark-v2.png)
 
 ## Documentation
 

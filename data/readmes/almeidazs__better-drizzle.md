@@ -161,7 +161,7 @@ const page = await client.users.paginate({
 
 `page.pagination` carries `total`, `pageCount`, `hasNext`, and `hasPrevious`. Use `cursor()` instead for feed-style navigation and you get `nextCursor` and `previousCursor` computed for you.
 
-`orderBy` accepts a field map or an array. Specify `{ direction, nulls }` when NULL placement matters: `orderBy: { lastSeenAt: { direction: 'desc', nulls: 'last' } }`. Starting in **0.4.0 (unreleased)**, it also sorts by relations in the same statement: a `one` relation takes the related table's fields (`orderBy: { author: { name: 'asc' } }`), and a `many` or `.through()` relation takes its row count (`orderBy: { posts: { _count: 'desc' } }`). Relation sorts cannot be combined with cursor pagination.
+`orderBy` accepts a field map or an array. Specify `{ direction, nulls }` when NULL placement matters: `orderBy: { lastSeenAt: { direction: 'desc', nulls: 'last' } }`. It also sorts by relations in the same statement: a `one` relation takes the related table's fields (`orderBy: { author: { name: 'asc' } }`), and a `many` or `.through()` relation takes its row count (`orderBy: { posts: { _count: 'desc' } }`). Relation sorts cannot be combined with cursor pagination.
 
 ## Not-found, handled honestly
 
@@ -226,7 +226,7 @@ const rows = await db
 	.where(client.users.$where({ age: { gte: 18 }, posts: { some: { published: true } } }));
 ```
 
-`$where()` compiles the same typed `where` as `findMany` into a Drizzle `SQL` condition (`undefined` when empty), for joins, subqueries, and hand-written queries. It is pure compilation: plugin filters such as soft-delete visibility are not applied.
+`$where()` compiles the same typed `where` as `findMany` into a Drizzle `SQL` condition (`undefined` when empty), for joins, subqueries, and hand-written queries. Plugin scopes are ANDed in: soft-delete visibility always, and the tenant filter on a [tenant](https://better-drizzle.com/docs/plugins/tenant)-scoped client.
 
 ## Row locks with guardrails
 
@@ -275,6 +275,8 @@ const client = better(db, {
 
 That gets you runtime guardrails, automatic timestamps, soft deletes with `restore()`, and Zod schemas generated from your tables at `client.users.$zod`. Plugins can add their own typed operation args, so `client.users.findMany({ deleted: 'only' })` type-checks.
 
+`better-drizzle/uuid` fills UUIDv7 ids on create and makes them optional in create types; `buuid()` stores them as 16 bytes on MySQL and SQLite. See [UUIDs](https://better-drizzle.com/docs/plugins/uuid).
+
 Pair `better-drizzle/eslint` with the runtime rules to catch the statically-checkable subset in your editor.
 
 `better-drizzle/ata` (experimental) validates the same operations against compiled JSON Schema, as a faster alternative to the Zod plugin. See [ata](https://better-drizzle.com/docs/plugins/ata).
@@ -293,6 +295,20 @@ const client = better(db, {
 });
 
 const user = await client.users.findUnique({ where: { id }, cache: true });
+```
+
+> `better-drizzle/tenant` is experimental in `0.4.x`.
+
+`better-drizzle/tenant` isolates tenants that share tables. `client.$tenant({ organizationId })` returns a client whose reads, relation loads, relation filters, `_count`, relation sorts, writes, upserts, and `connect` lookups only see that tenant; creates stamp the tenant column, and scoped models throw `TENANT_REQUIRED` without a tenant. Raw SQL on scoped clients is denied unless opted in, and PostgreSQL row-level security settings can run per transaction. See [tenant](https://better-drizzle.com/docs/plugins/tenant).
+
+```ts
+import { tenant } from 'better-drizzle/tenant';
+
+const client = better(db, { plugins: [tenant({ columns: 'organizationId', global: ['plans'] })] });
+
+const scoped = client.$tenant({ organizationId: session.orgId });
+
+const projects = await scoped.projects.findMany({ include: { tasks: true } });
 ```
 
 ## Performance

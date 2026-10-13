@@ -94,6 +94,18 @@ const anitaFromDb = await users.findOne({ _id: anitaId });
 const usersFromDb = await users.find({ age: { $lt: 40 } }).toArray();
 ```
 
+## Schema migrations
+
+By default, Pongo creates a collection's table on the first operation on that collection. To create the tables in a deployment step instead, register your collections and call `migrate()`:
+
+```ts
+pongoDb.collection<User>('users');
+
+await pongoDb.schema.migrate();
+```
+
+Run the application with `schema: { autoMigration: 'EnsureMigrated' }`. With `EnsureMigrated`, Pongo only checks the migration history and throws `PendingMigrationsError` when a migration is missing. With `None`, Pongo neither checks nor migrates. See the [schema migration guide](./src/docs/schema-migrations.md) for SQL previews, dry runs, transactions, and upgrading from `collection.schema.migrate()`.
+
 ## How does it work?
 
 **Pongo treats PostgreSQL as a Document Database benefiting from JSONB support.** Unlike the plain text storage of the traditional JSON type, JSONB stores JSON data in a binary format. This simple change brings significant advantages in terms of performance and storage efficiency.
