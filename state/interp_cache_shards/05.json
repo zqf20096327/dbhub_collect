@@ -9052,5 +9052,69 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6e29c1868998": {
+  "identity": {
+   "one_liner": "容器内托管环境，仪表盘/CLI/API 管理运行时、数据库与域名",
+   "review": "Infinite OS 提供一个可运行 Docker/Podman 的『host-in-a-box』托管环境，启动后可从仪表盘、CLI 或 REST API 安装 PHP、Node.js 等运行时、数据库、域名与应用。面向开发者、homelab 用户和代理工作者，每个项目对应一个容器；支持 Web 终端、文件管理、定时任务与自动 TLS。当前为 beta 阶段，许可证为 EPL 2.0。",
+   "highlights": [
+    "提供仪表盘、CLI 与 REST API 三种管理入口，可按需安装运行时、数据库、域名与应用",
+    "支持内置 Web 终端、文件管理器、定时任务与每路由速率/带宽/连接限制",
+    "同一基础镜像按项目需求填充服务，容器文件系统保存状态，重启后环境保留"
+   ],
+   "use_cases": [
+    "开发者为单个项目运行独立托管环境，无需编写 Dockerfile",
+    "在容器内运行 AI 编码代理，提供完整文件、运行时与 CLI 工作区",
+    "homelab 或小型服务器上以低内存开销并排运行多个项目环境"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "A Laravel project, for example, might have nginx, PHP, MariaDB, workers, cron jobs, and a coding agent inside the same Infinite OS container. Another project would get another container.",
+     "lines": [
+      42
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该容器托管环境按需安装并管理数据库等服务，为项目运行提供服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Eclipse Public License (EPL) 2.0",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A hosting environment in a container.** Think cPanel-style shared hosting, rebuilt so each project gets its own lightweight host. No Dockerfile, no rebuilds: start the container, then add runtimes, databases, domains, files, and applications from the dashboard, CLI, or API. ／ Infinite OS is different. The container is the hosting environment: a generic host you fill in after it starts, with PHP, Node.js, Bun, Python, Ruby, Java, databases, applications, and other services. ／ Infinite OS is built for developers, vibe coders, homelabbers, students, and agencies who want to run applications without turning infrastructure into a project. Use the dashboard and barely touch the terminal, or script everything through the CLI and REST API.",
+   "evidence_lines": [
+    3,
+    24,
+    30
+   ]
+  },
+  "fn": "goinfinite/os",
+  "sha": "6e29c1868998",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

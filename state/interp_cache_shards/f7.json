@@ -9461,5 +9461,73 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "05bd870072c9": {
+  "identity": {
+   "one_liner": "自托管 webhook 检查器，创建 inbox 捕获并查看请求",
+   "review": "一个用 Java 21 与 Spring Boot 构建的 RequestBin 风格 webhook 检查器：创建 inbox 后把 webhook 指向其 ingest URL，即可捕获并按方法、路径过滤查看请求。面向需要调试 webhook 的开发者，自托管无需账号。数据存于 PostgreSQL 16（JSONB 存 headers），支持 Docker Compose 一键部署、GHCR 镜像、Swagger UI、速率限制与按天保留清理任务。",
+   "highlights": [
+    "提供自托管 inbox 与 ingest URL，捕获 webhook 请求并可按 method/path 过滤查看",
+    "使用 PostgreSQL 16 存储，JSONB 保存 headers，Flyway 管理迁移，包含保留清理与速率限制配置",
+    "发布 GHCR 镜像，支持 docker compose 一键运行及 Swagger UI API 文档"
+   ],
+   "use_cases": [
+    "调试第三方服务发送的 webhook 回调内容",
+    "自托管环境下临时接收并检查 HTTP 请求负载",
+    "开发/测试阶段模拟 webhook 接收端点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Docker** (for the PostgreSQL container and for integration tests). ／ Everything (app + PostgreSQL) with a single command, using the published image: ／ 1. Start PostgreSQL:",
+     "lines": [
+      17,
+      22,
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用以 PostgreSQL 16 存储捕获的请求数据，属使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Create an inbox, point any webhook at its ingest URL, and inspect the captured requests — no account, no third-party service. ／ Everything (app + PostgreSQL) with a single command, using the published image: ／ |Persistence|Spring Data JPA / Hibernate ORM 7.4, PostgreSQL 16 (JSONB for headers)|",
+   "evidence_lines": [
+    9,
+    22,
+    120
+   ]
+  },
+  "fn": "KarelDuranSocarras/webhook-inbox",
+  "sha": "05bd870072c9",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

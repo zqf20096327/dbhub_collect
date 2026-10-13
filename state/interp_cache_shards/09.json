@@ -9579,5 +9579,162 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f08ca143a872": {
+  "identity": {
+   "one_liner": "Go 语言 database/sql 的 MySQL 驱动，纯 Go 实现",
+   "review": "这是 Go 语言 database/sql 包的 MySQL 驱动，实现 database/sql/driver 接口，供 Go 开发者连接 MySQL/MariaDB 服务器。纯 Go 实现、无 C 绑定，支持 TCP/IPv4/IPv6 与 Unix socket 连接、连接池、prepared 语句、LOAD DATA LOCAL INFILE 文件白名单、zlib/zstd 压缩，通过 DSN 配置连接参数。维护者支持 MySQL 8.0+ 与 MariaDB 10.11+，TiDB 由 PingCAP 支持。",
+   "highlights": [
+    "纯 Go 实现 database/sql/driver 接口，支持 TCP/IPv4/IPv6 与 Unix domain socket 连接",
+    "支持 prepared 语句、LOAD DATA LOCAL INFILE 文件白名单、zlib 与可选 zstd 压缩",
+    "通过 DSN 提供连接参数配置，包括 charset、collation、TLS 相关与超时设置"
+   ],
+   "use_cases": [
+    "Go 应用连接 MySQL/MariaDB 数据库",
+    "需要通过 database/sql API 执行查询与写入的场景",
+    "需要压缩连接或 prepared 语句参数插值的客户端场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# Go-MySQL-Driver ／ A MySQL-Driver for Go's database/sql package",
+     "lines": [
+      1,
+      5
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* MySQL (8.0+) and MariaDB (10.11+) are supported by maintainers. ／ The driver implements a pluggable authentication system that supports various authentication methods used by MySQL and MariaDB servers. The built-in authentication plugins include:",
+     "lines": [
+      28,
+      572
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "* TiDB is supported by PingCAP.",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MySQL/MariaDB 数据库提供 Go 语言驱动，属数据库生态的连接组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A MySQL-Driver for Go's database/sql package ／ * MySQL (8.0+) and MariaDB (10.11+) are supported by maintainers. ／ * TiDB is supported by PingCAP.",
+   "evidence_lines": [
+    5,
+    28,
+    29
+   ]
+  },
+  "fn": "go-sql-driver/mysql",
+  "sha": "f08ca143a872",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dae870fc7176": {
+  "identity": {
+   "one_liner": "本地优先个人知识库 CLI，基于 Postgres+pgvector 混合检索",
+   "review": "一个本地运行的 CLI 知识库工具，把笔记、转录、Slack、Gmail 等文档存入 Postgres + pgvector，提供 FTS+向量混合检索、GraphRAG 实体图与 LLM 增强，并通过内置 MCP 服务器供 AI agent 查询。面向需要本地知识管理并让 agent 检索个人语料的用户，可选 Ollama 实现全本地运行。",
+   "highlights": [
+    "提供 hybrid FTS + pgvector 混合检索与 GraphRAG 实体图谱",
+    "内置 MCP 服务器，供任意 AI agent 通过 MCP 或 CLI 查询语料",
+    "支持 Ollama 本地嵌入与 LLM 增强，可选 minimal/standard/full 三种安装档位"
+   ],
+   "use_cases": [
+    "个人文档、转录、邮件的本地知识库管理与检索",
+    "为 AI 编码 agent 提供可查询的个人语料上下文",
+    "通过 brain ui 在浏览器中浏览与编辑笔记"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat.  ／ Install the CLI, then run the offline demo — a throwaway Postgres seeded with a synthetic *Larkspur* compliance corpus. No Ollama, no personal data, no model downloads: ／ Full install — the `brain` CLI plus the runtime (Postgres, and optionally Ollama / graph / wiki):",
+     "lines": [
+      12,
+      46,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确将文档存储于 Postgres + pgvector，通过 setup 启动 Postgres 容器，是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat. You get the same corpus through the CLI, a local web UI, or a rendered wiki. ／ Full install — the `brain` CLI plus the runtime (Postgres, and optionally Ollama / graph / wiki): ／ The installer pipx-installs `brain` from the `v0.2.1` tag, then runs `brain setup` to provision `$BRAIN_HOME`, start the Postgres container, and (optionally) install the wiki + Claude Code skill. Choose how much to stand up with `--profile`:",
+   "evidence_lines": [
+    12,
+    74,
+    80
+   ]
+  },
+  "fn": "mshtawythug/second-brain",
+  "sha": "dae870fc7176",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

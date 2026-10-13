@@ -7829,5 +7829,152 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3de19ad4af3a": {
+  "identity": {
+   "one_liner": "SQLite 加密扩展，基于 VFS 实现多种加密算法",
+   "review": "这是一个为 SQLite 提供加密能力的扩展，从 wxSQLite3 的加密组件独立而来，基于 SQLite 的 VFS 特性实现，支持 SQLite 3.32.0 及以上版本，支持多种加密方案并提供 C 和 SQL 接口。适合需要在应用层为 SQLite 数据库文件加密的开发者使用。",
+   "highlights": [
+    "基于 SQLite VFS 特性实现加密，支持 SQLite 3.32.0 及以上版本",
+    "支持多种加密方案（cipher schemes）",
+    "提供 C 和 SQL 接口"
+   ],
+   "use_cases": [
+    "需要为 SQLite 数据库文件进行静态加密的应用开发",
+    "从 wxSQLite3 加密扩展迁移到独立加密扩展的场景"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The project **SQLite3 Multiple Ciphers** implements an encryption extension for SQLite with support for multiple ciphers. In the past the encryption extension was bundled with the project wxSQLite3, which provides a thin SQLite3 database wrapper for wxWidgets. ／ In the course of time several developers had asked for a stand-alone version of the _wxSQLite3 encryption extension_. Originally it was planned to undertake the separation process already in 2019, but due to personal matters it had to be postponed for several  ／ In late February 2020 work started on a new implementation of a SQLite encryption extension that will be able to support SQLite 3.32.0 and later. The new approach is based on SQLite's VFS feature. This approach has its pros and cons. On the one hand, the code ",
+     "lines": [
+      3,
+      5,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 SQLite 数据库提供加密能力的扩展组件，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The project **SQLite3 Multiple Ciphers** implements an encryption extension for SQLite with support for multiple ciphers. In the past the encryption extension was bundled with the project wxSQLite3, which provides a thin SQLite3 database wrapper for wxWidgets. ／ In late February 2020 work started on a new implementation of a SQLite encryption extension that will be able to support SQLite 3.32.0 and later. The new approach is based on SQLite's VFS feature. This approach has its pros and cons. On the one hand, the code is less closely coupled with SQLite itself; on the other hand, access to SQLite's internal data structures is more complex.",
+   "evidence_lines": [
+    3,
+    7
+   ]
+  },
+  "fn": "utelle/SQLite3MultipleCiphers",
+  "sha": "3de19ad4af3a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "986f8f0ed218": {
+  "identity": {
+   "one_liner": "天气数据自动化 ETL 管道，加载到 TiDB Cloud (MySQL)",
+   "review": "该项目每小时从天气 API 抓取数据，用 Python 和 Pandas 做解析、类型修正与清洗，经 SQLAlchemy/PyMySQL 写入 TiDB Cloud (MySQL 兼容)，并通过 GitHub Actions 定时运行，凭据存于仓库 Secrets。适用于需要定时采集外部 API 数据并存入 MySQL 系数据库的开发者，运行方式为 clone 后 pip 安装依赖并配置 .env。",
+   "highlights": [
+    "通过 GitHub Actions cron 每小时自动运行，运行日志可见于 Actions",
+    "使用 Pandas 解析 JSON、修正数据类型并拆分日期时间字段",
+    "提取、转换、加载各阶段包含数据校验与重复检查"
+   ],
+   "use_cases": [
+    "定时采集天气等外部 API 数据存入 TiDB Cloud/MySQL",
+    "带数据质量校验的无人值守 ETL 流程",
+    "基于 GitHub Secrets 的安全凭据管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* **Cloud database integration:** securely loads into a cloud-hosted TiDB (MySQL) instance. ／ * **Database:** TiDB Cloud (MySQL-compatible)",
+     "lines": [
+      19,
+      46
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "* **Cloud database integration:** securely loads into a cloud-hosted TiDB (MySQL) instance. ／ * **Database:** TiDB Cloud (MySQL-compatible)",
+     "lines": [
+      19,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该管道将 TiDB Cloud (MySQL) 作为数据加载目标库，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "An automated end-to-end ETL pipeline that extracts live weather data from an API, validates and cleans it with Python & Pandas, and loads it into a TiDB Cloud (MySQL) database. The pipeline runs automatically every hour using GitHub Actions, with a focus on **data accuracy, data quality, and reliable automated runs**. ／ * **Cloud database integration:** securely loads into a cloud-hosted TiDB (MySQL) instance. ／ * **Database:** TiDB Cloud (MySQL-compatible)",
+   "evidence_lines": [
+    3,
+    19,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "rohittinker/live-weather-project",
+  "sha": "986f8f0ed218",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

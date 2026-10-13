@@ -9164,5 +9164,419 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9b49c35d3e68": {
+  "identity": {
+   "one_liner": "Agent 优先的开源 AEO/GEO 运营平台，自托管，用 SQLite 存储",
+   "review": "Canonry 是一个面向 SEO/AEO 从业者的自托管平台，通过 CLI、MCP、API 与 Web UI 跟踪品牌在 AI 答案引擎中的可见度，并结合搜索、爬虫与流量数据生成证据和行动建议。它单租户运行，数据存于 SQLite，AI 可见度检查需用户自备各家模型 API 密钥。",
+   "highlights": [
+    "提供 CLI、REST API、MCP 适配器和 Web UI 多种接口，支持代理（agent）读取证据并下发命令",
+    "支持接入 Google Search Console、Google Analytics 4、Cloudflare、WordPress 等数据源与发布渠道",
+    "自托管、单租户运行，使用 SQLite 存储数据，AI 提供商密钥由用户自备（BYOK）"
+   ],
+   "use_cases": [
+    "跟踪品牌在 ChatGPT、Gemini、Perplexity 等答案引擎中的提及与引用趋势",
+    "结合搜索、流量与站点审计数据分析可见度变化并生成改进任务",
+    "通过 CLI/API 将测量与发布（WordPress、索引提交）纳入代理自动化工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Self-hosted, using SQLite, with your own (BYOK) provider keys.** The web UI and your agent see the same evidence.",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明自托管时使用 SQLite 存储数据，SQLite 仅为其数据存储依赖，非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted, using SQLite, with your own (BYOK) provider keys.** The web UI and your agent see the same evidence. ／ Canonry is an **agent-first (CLI, MCP, API), open-source AEO operating platform with a comprehensive web UI.** Track AI visibility over time, investigate changes across search and traffic, and measure progress after you or your agent acts. ／ The CLI and REST API are the primary interfaces. They expose measurements, diagnoses, actions, evidence exports, and schedules.",
+   "evidence_lines": [
+    8,
+    6,
+    178
+   ]
+  },
+  "fn": "Canonry/canonry",
+  "sha": "9b49c35d3e68",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "96ee7d2e85a8": {
+  "identity": {
+   "one_liner": "异步 Rust 库，在消息队列、数据库、HTTP 等系统间路由数据",
+   "review": "一个可嵌入服务的异步 Rust 数据路由库，通过统一的 receive_batch/send_batch 接口在 Kafka、NATS、MQTT、PostgreSQL、ClickHouse 等系统间搬运数据，支持 CDC、重试、去重等中间件，并提供 Python、Node.js 绑定及零代码 CLI 应用，面向需要在服务中集成多系统数据流转的开发者；它不是独立守护进程，需嵌入用户代码运行。",
+   "highlights": [
+    "提供统一 receive_batch/send_batch 接口，连接消息代理、SQL/NoSQL 数据库、HTTP、对象存储等多种端点",
+    "支持 Postgres 逻辑复制（pgoutput）与 MongoDB change streams 的 CDC 流式读取",
+    "内置重试、死信队列、去重、限流中间件，提供 Rust/Python/Node.js 多语言绑定"
+   ],
+   "use_cases": [
+    "保持向量索引与 Postgres 源数据同步（CDC → embeddings → Qdrant）",
+    "基于 Postgres 与 Kafka 实现事务性 outbox",
+    "将数据库或消息代理数据以批量方式写入数仓、对象存储或文件"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |A RAG or semantic-search index drifts from its Postgres source|Keep a vector index in sync with Postgres: CDC → embeddings → Qdrant| ／ |A service must update its database and publish an event atomically|Transactional outbox with Postgres and Kafka| ／ |**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CD ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      27,
+      37,
+      38,
+      90,
+      91
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      27,
+      91
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      27,
+      91
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**ClickHouse** bulk insert and resumable reads|`clickhouse` endpoint · `clickhouse`|ClickHouse|",
+     "lines": [
+      27,
+      93
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库与消息系统间的数据搬运、CDC、ETL 提供连接与路由能力，是为数据库生态服务的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object storage, files, and in-memory channels. Every endpoint sits behind the same batch-shaped `receive_batch` / `send_batch` traits, so any source can feed any sink. ／ |**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CDC tutorial · MongoDB| ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+   "evidence_lines": [
+    27,
+    90,
+    91
+   ]
+  },
+  "fn": "marcomq/mq-bridge",
+  "sha": "96ee7d2e85a8",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6a0d5ea9e3f1": {
+  "identity": {
+   "one_liner": "跨平台独立动漫播放与聚合器，观看数据存本地 SQLite",
+   "review": "Tatap 是一个多平台动漫播放与聚合应用，支持 Web、Windows、Linux 和 Android，通过 HLS 流媒体播放内容，并提供印尼语字幕和可选的 AI 翻译集成。它不托管视频，仅聚合公开源。观看历史和书签存储在本地 SQLite 数据库 (anime.db) 中，无需账号。安装方式为各平台提供预构建的二进制文件或从源码运行。适合希望使用本地播放器观看动漫，并通过集成的 TLS 反规避模块绕过 ISP DNS 拦截的用户。",
+   "highlights": [
+    "支持 Android、Windows、Linux、Web 多平台运行",
+    "观看历史与书签保存在本地 SQLite（anime.db）",
+    "内置 TLS desync 的 DPI-Bypass 模块"
+   ],
+   "use_cases": [
+    "本地播放与聚合公开动漫流媒体内容",
+    "Android TV 遥控器操作观看",
+    "生成或配置 AI 印尼语字幕"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Privasi Lokal: Riwayat tontonan dan bookmark tersimpan di SQLite lokal (`anime.db`).",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明观看历史与书签使用本地 SQLite 存储，数据库仅为应用本地数据存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pemutar anime mandiri multi-platform (Android, Windows, Linux, Web) yang ringan, bebas iklan, tanpa registrasi akun, dan menjaga privasi data di penyimpanan lokal. ／ - Privasi Lokal: Riwayat tontonan dan bookmark tersimpan di SQLite lokal (`anime.db`). ／ - Aplikasi bertindak sebagai agregator konten publik dan tidak menyimpan video pada server tersendiri.",
+   "evidence_lines": [
+    3,
+    22,
+    117
+   ]
+  },
+  "fn": "asfaraguest/tatap",
+  "sha": "6a0d5ea9e3f1",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ccfde6acd44": {
+  "identity": {
+   "one_liner": "开源自托管的任务/提醒/笔记应用，Flutter 客户端 + Node.js/MySQL 后端",
+   "review": "AllisWell 是一个可自托管的生产力应用，提供任务、项目、笔记、紧急提醒（静音模式下可响铃）以及与 Google/Apple 日历的双向同步；客户端用 Flutter 覆盖六大平台，后端为 Node.js/MySQL，并提供 MCP 连接器供 Claude/ChatGPT 调用。适合想自己掌管数据的个人用户，采用 PolyForm Noncommercial 许可，商用受限。",
+   "highlights": [
+    "提供任务、项目、笔记管理与双向 Google/Apple 日历同步",
+    "提供远程 MCP 服务器（24 个工具）供 Claude/ChatGPT 访问，OAuth 2.1 + PKCE",
+    "支持 docker compose 一键自托管，文件可存储于自有 R2/S3 桶"
+   ],
+   "use_cases": [
+    "个人跨设备任务与提醒管理（离线优先）",
+    "自托管场景下保存自有数据的生产力工具",
+    "通过 MCP 在 AI 助手中查询和管理日程任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "One app for iOS, Android, Web, macOS, Windows &amp; Linux. Your data in your own MySQL.** ／ |`apps/api`|Fastify backend — JavaScript only, MySQL via knex|",
+     "lines": [
+      8,
+      305
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "│ REST + WebSocket (Socket.IO) · offline-first local SQLite replica",
+     "lines": [
+      296
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL 存储数据、SQLite 做本地副本的终端应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial，个人使用免费",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One app for iOS, Android, Web, macOS, Windows &amp; Linux. Your data in your own MySQL.** ／ |🐳 **Self-host**|Live now|One `docker compose up` — guide below.|",
+   "evidence_lines": [
+    8,
+    38
+   ]
+  },
+  "fn": "mahirozdin/alliswell",
+  "sha": "5ccfde6acd44",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5d41bf9c03aa": {
+  "identity": {
+   "one_liner": "面向 AI 代理的可移植治理型记忆库，基于 SQLite，事实只失效不删除",
+   "review": "这是一个为 AI 代理提供长期记忆的 TypeScript 库/MCP 服务器，以 SQLite 为默认存储，提供事实溯源、时间有效性、审计式删除（只失效不物理删除）和带 JSON Schema 的可移植导出格式，内置一致性测试套件与 LongMemEval 等基准跑分。适合需要在本地无服务器、无 API key 条件下运行代理记忆的 AI 应用开发者，要求后端实现其 MemoryStore 接口并通过一致性测试。",
+   "highlights": [
+    "提供带溯源标记（UserInput/AIInferred 等）与 validAt/getNodeAsOf 时间轴查询的记忆存储，事实只被失效 retract，不物理删除",
+    "提供 exportPortable/importPortable 版本化 JSON 导出格式及 conformance 测试套件，MemoryStore 接口下内置 SqliteMemoryStore 与 InMemoryStore",
+    "提供 MCP 导出（al-buddy-memory/mcp），嵌入与重排在本地设备上运行，无需 API key"
+   ],
+   "use_cases": [
+    "为 AI 代理构建可本地运行、可审计、带事实溯源的长期记忆",
+    "跨运行时/框架迁移代理记忆数据（基于统一 JSON 导出格式）",
+    "作为 MCP 服务器为支持 MCP 的客户端共享同一份本地记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti sel ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.",
+     "lines": [
+      22,
+      52
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Postgres.** `PostgresMemoryStore` (pgvector 0.8 or newer) sits behind the same",
+     "lines": [
+      152
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite 作为自身记忆数据的存储后端，是使用数据库的 AI 代理应用/库，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti self-hosts (graph DB + LLM key required)| ／ - `MemoryStore`: a storage-agnostic interface; `SqliteMemoryStore` and `InMemoryStore` ship, with a **conformance suite** any backend can run against itself. ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.",
+   "evidence_lines": [
+    22,
+    51,
+    52
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "flytomoon/al-buddy-memory",
+  "sha": "5d41bf9c03aa",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

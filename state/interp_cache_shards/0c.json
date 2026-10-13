@@ -10343,5 +10343,242 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ec80485ffb23": {
+  "identity": {
+   "one_liner": "Python 脚本，将荷兰 BAG 地址 XML 数据转换为 SQLite 数据库",
+   "review": "该工具用单个 Python 脚本解析 Kadaster 发布的荷兰地址与建筑数据库（BAG）的复杂 XML 格式，生成结构化的 SQLite 文件数据库，补充省市信息并把 RD 坐标转为经纬度；还可将结果导出为 CSV。需要 Python 3.11+，可选 pyproj 以获得更精确坐标。适合需要离线使用荷兰地址数据的开发者和数据使用者。",
+   "highlights": [
+    "提供 import_bag.py 将 BAG XML 解析为 SQLite 数据库，并提供 export_to_csv.py 导出多种 CSV 格式",
+    "支持将 Rijksdriehoekscoördinaten 坐标转换为 ETRS89 或 WGS84 经纬度，并提供坐标校验脚本",
+    "无需数据库服务器，仅依赖 Python，pyproj 为可选推荐包"
+   ],
+   "use_cases": [
+    "需要将荷兰 BAG 地址数据导入 SQLite 或自有地址数据库的场景",
+    "需要荷兰地址的经纬度坐标（ETRS89/WGS84）及 GeoJSON 轮廓数据的地理处理",
+    "生成按邮政编码分组的地址统计 CSV 数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "en Gebouwen) into a user-friendly, file-based, blazingly fast SQLite database by running a single Python script. ／ Another oneliner script will convert this SQLite database to CSV in 15 seconds. ／ This Python utility parses the BAG database and converts it into a clean, easy to read & use SQLite database.",
+     "lines": [
+      8,
+      11,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目将外部数据源（BAG XML）转换生成 SQLite 数据库，属于为数据库生态提供数据导入/转换的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "en Gebouwen) into a user-friendly, file-based, blazingly fast SQLite database by running a single Python script. ／ This Python utility parses the BAG database and converts it into a clean, easy to read & use SQLite database. ／    python import_bag.py",
+   "evidence_lines": [
+    8,
+    28,
+    94
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "digitaldutch/BAG_parser",
+  "sha": "ec80485ffb23",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "93c0592c9f44": {
+  "identity": {
+   "one_liner": "AI 智能体的持久化记忆引擎，支持 MCP 协议",
+   "review": "为自主 AI 智能体提供长期记忆系统的 Python 库兼 MCP 服务器，将 Obsidian Markdown 笔记与 PostgreSQL+pgvector 或零配置 SQLite WAL 结合，实现情景/语义/程序/工作记忆四象限架构、HippoRAG 2 PPR 检索、混合 RRF 搜索与睡眠巩固机制。面向使用 Claude Desktop、Cursor、CrewAI、LangChain 等的智能体开发者，需 Python 3.9+，可选轻量单机或 Docker 生产部署。",
+   "highlights": [
+    "提供 MCP stdio JSON-RPC 服务器（13 个工具），可接入 Claude Desktop、Cursor、Windsurf 等 LLM 客户端",
+    "支持 PostgreSQL + pgvector（HNSW）与零配置 SQLite WAL 两种存储后端，PostgreSQL 离线时自动回退 SQLite",
+    "实现四象限认知记忆架构、HippoRAG 2 个性化 PageRank 检索、三阶段睡眠巩固与 Ebbinghaus 时间衰减"
+   ],
+   "use_cases": [
+    "为 Claude Desktop、Cursor 等 IDE 中的智能体挂载持久化长期记忆",
+    "多智能体集群共享全局策略与程序性记忆（shared_db），同时隔离私有数据库",
+    "基于 Obsidian 库的人工可读记忆审计与可视化编辑"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Gomaa equips AI agents (Hermes, OpenClaw, Claude Desktop, Cursor, Windsurf, CrewAI, LangChain) with permanent, human-like and transhuman long-term memory. It unites human-readable **Obsidian Markdown Vaults** with high-speed **PostgreSQL + pgvector (HNSW)** or ／ ### 🌟 Option 2: Full Production Fleet Deployment (PostgreSQL + pgvector) ／ Spin up PostgreSQL 16 with `pgvector`, pre-configured memory databases, and the Gomaa MCP server in 5 seconds:",
+     "lines": [
+      12,
+      77,
+      83
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Gomaa equips AI agents (Hermes, OpenClaw, Claude Desktop, Cursor, Windsurf, CrewAI, LangChain) with permanent, human-like and transhuman long-term memory. It unites human-readable **Obsidian Markdown Vaults** with high-speed **PostgreSQL + pgvector (HNSW)** or ／ ### ⚡ Option 1: Lightweight Standalone Mode (Zero-Config SQLite WAL) ／ |**🔄 Zero-Config SQLite Light Mode**|Automatic fallback to local SQLite WAL when PostgreSQL is offline|5-second setup with 100% feature parity for standalone developer workstations|",
+     "lines": [
+      12,
+      36,
+      125
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为为 AI 智能体提供记忆服务的引擎/工具，PostgreSQL 与 SQLite 是其可配置的存储后端而非其所属的应用产品",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Gomaa equips AI agents (Hermes, OpenClaw, Claude Desktop, Cursor, Windsurf, CrewAI, LangChain) with permanent, human-like and transhuman long-term memory. It unites human-readable **Obsidian Markdown Vaults** with high-speed **PostgreSQL + pgvector (HNSW)** or zero-config **SQLite WAL**, powering a **4-Quadrant Cognitive Architecture** (Episodic, Semantic, Procedural, Working Memory), **HippoRAG 2 Personalized PageRank (PPR)** associative retrieval, **3-Phase Biological Sleep Consolidation** (SWS + REM + Synaptic Homeostasis), **ACT-R Base-Level Activation**, hybrid Reciprocal Rank Fusion (RRF) search, Ebbinghaus temporal decay, cross-agent fleet sharing, and asynchronous Google Drive cloud synchronization. ／ ### ⚡ Option 1: Lightweight Standalone Mode (Zero-Config SQLite WAL) ／ ### 🌟 Option 2: Full Production Fleet Deployment (PostgreSQL + pgvector)",
+   "evidence_lines": [
+    12,
+    36,
+    77
+   ]
+  },
+  "fn": "M4F-S/gomaa",
+  "sha": "93c0592c9f44",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "90b77fa36c4b": {
+  "identity": {
+   "one_liner": "基于 Java/Spring Boot/Angular 的 SaaS 全栈脚手架，使用 PostgreSQL 存储",
+   "review": "这是一个用于构建 SaaS 应用的全栈脚手架项目，后端为 Java 21 + Spring Boot，前端为 Angular 22，数据存储在 PostgreSQL 17（此前版本曾使用 MSSQL）。面向需要快速搭建含 JWT 认证、客户 CRUD、Docker 部署的 Java 全栈应用的开发者，数据库 schema 由 Flyway 迁移管理。",
+   "highlights": [
+    "提供基于 Spring Boot 与 Angular 的全栈 SaaS 起始代码，通过 Docker Compose 一条命令启动完整栈",
+    "使用 Flyway 管理数据库 schema 迁移，后端启动时自动执行",
+    "内置无状态 JWT 认证（access + refresh token 轮换）与客户记录 CRUD 接口"
+   ],
+   "use_cases": [
+    "以 PostgreSQL 为数据库的 Java 全栈应用起步开发",
+    "需要 Docker 容器化部署的 SaaS 项目原型搭建",
+    "学习 Spring Boot + Angular + Flyway 的集成架构"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ A **production-ready fullstack boilerplate** for building SaaS applications — Java 21 + Spring Boot 3.4.1 backend, Angular 22 frontend, PostgreSQL database, fully containerized with Docker Compose. Clone, configure, and ship. ／ > 🚀 **Latest Update:** The database has been migrated to **PostgreSQL 17** (Previously **MSSQL 2022**). To celebrate, use code <code> POSTGRES17 </code> for **€50 off** the PRO version — valid until **December 31, 2026**. ／ |**Database**|PostgreSQL|17| ／ 1. Start the PostgreSQL container and wait for the healthcheck to pass",
+     "lines": [
+      7,
+      12,
+      14,
+      138,
+      187
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "> 🚀 **Latest Update:** The database has been migrated to **PostgreSQL 17** (Previously **MSSQL 2022**). To celebrate, use code <code> POSTGRES17 </code> for **€50 off** the PRO version — valid until **December 31, 2026**.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用 PostgreSQL 存储数据的应用脚手架，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "社区版 MIT，另有商业许可的 PRO 版本（双许可）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A **production-ready fullstack boilerplate** for building SaaS applications — Java 21 + Spring Boot 3.4.1 backend, Angular 22 frontend, PostgreSQL database, fully containerized with Docker Compose. Clone, configure, and ship. ／ |**Database**|PostgreSQL|17| ／ Schema is managed by **Flyway** — migrations run automatically on every backend startup.",
+   "evidence_lines": [
+    12,
+    138,
+    243
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "zukovlabs/enterprise-java-saas-starter-kit",
+  "sha": "90b77fa36c4b",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

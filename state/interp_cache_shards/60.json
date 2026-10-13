@@ -9316,5 +9316,81 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ba265f52a0d": {
+  "identity": {
+   "one_liner": "零配置开发服务器，以 WASM 方式运行 PGlite/SQLite 支持 Zero Sync",
+   "review": "oreZ 是一个开发环境服务器，通过 `bunx orez` 一条命令启动 PGlite（WASM Postgres）、bedrock-sqlite（WASM SQLite）与 zero-cache，供使用 Rocicorp Zero 同步框架的前端开发者本地开发使用。提供 postgres 代理端口、管理面板、生命周期钩子与编程 API；Node 运行模式仅限开发用途，pglite 后端查询经互斥锁串行化。",
+   "highlights": [
+    "提供 pglite 与 postgres 双后端，后者通过 embedded-postgres 运行真实 Postgres 逻辑复制路径",
+    "内置管理面板，提供 zero-cache 日志流、HTTP 请求检查与重置控制",
+    "支持 onDbReady/onHealthy 生命周期钩子与程序化 API（startZeroLite）"
+   ],
+   "use_cases": [
+    "无需安装 Postgres/SQLite 本地依赖即可本地开发调试 Zero Sync 应用",
+    "在 Cloudflare Workers 等受限主机上运行 SQLite 原生的 Lime Sync 数据服务",
+    "通过 pg_dump/pg_restore 恢复生产数据到开发环境"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "oreZ makes Zero work on PGlite (Postgres in WASM) and bedrock-sqlite (SQLite in WASM), bundled together so local development is as simple as `bun install && bunx orez`. ／ - **`pglite`** (default) — Postgres compiled to WASM. Zero native deps, works everywhere, but single-session: every query serializes through one mutex over one WASM thread, and logical replication is emulated (change-tracking triggers + a change-log table + a  ／ - **`postgres`** — real Postgres via the optional `embedded-postgres` package (per-platform server binaries shipped as npm optional deps, no Docker/brew). zero-cache connects directly and runs its production logical-replication path: no proxy, no mutex, no CDC emulation, real `statement_timeout`. Multi-process, multi-connection.",
+     "lines": [
+      14,
+      101,
+      102
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "oreZ makes Zero work on PGlite (Postgres in WASM) and bedrock-sqlite (SQLite in WASM), bundled together so local development is as simple as `bun install && bunx orez`. ／ Lime Sync is the separate SQLite-native Zero engine. The current preview ships",
+     "lines": [
+      14,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "orez 为 Zero Sync 开发提供数据库运行、代理与复制支持，是服务于数据库开发流程的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "oreZ makes Zero work on PGlite (Postgres in WASM) and bedrock-sqlite (SQLite in WASM), bundled together so local development is as simple as `bun install && bunx orez`. ／ - **`pglite`** (default) — Postgres compiled to WASM. Zero native deps, works everywhere, but single-session: every query serializes through one mutex over one WASM thread, and logical replication is emulated (change-tracking triggers + a change-log table + a fake replication protocol).",
+   "evidence_lines": [
+    14,
+    101
+   ]
+  },
+  "fn": "natew/orez",
+  "sha": "7ba265f52a0d",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

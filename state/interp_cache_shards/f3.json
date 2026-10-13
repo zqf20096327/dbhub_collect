@@ -8986,5 +8986,232 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3376b7ba18fe": {
+  "identity": {
+   "one_liner": "Rust/egui 编写的 PostgreSQL/MySQL/SQLite 桌面 GUI 数据库客户端",
+   "review": "Tabletist 是一个用 Rust 与 egui 实现的桌面数据库客户端，支持连接 PostgreSQL、MySQL 和 SQLite，提供保存的连接管理、SSH 隧道、TLS、只读会话、数据表格编辑、SQL 编辑器与自动补全等能力，运行于 Linux、macOS 与 Windows。适合开发者和运维人员在桌面端浏览和编辑数据库数据，生产连接默认只读，编辑保存以事务提交并检测并发修改。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 直连，含 TLS 与 SSH 隧道（密码、密钥或 agent）",
+    "提供只读/读写会话区分，生产连接默认只读，编辑以单事务保存并检测并发冲突",
+    "SQL 编辑器支持语句执行、行数限制、超时、取消、格式化与关键字/表/列补全"
+   ],
+   "use_cases": [
+    "在桌面端浏览、查询和编辑 PostgreSQL/MySQL/SQLite 数据",
+    "通过 SSH 隧道安全管理远程数据库连接",
+    "在生产环境以只读方式安全查看数据并审查待执行的 SQL"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ **SQLite**. Written in Rust with egui; runs on",
+     "lines": [
+      11,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是直接连接并操作 PostgreSQL/MySQL/SQLite 的数据库客户端工具，为数据库使用提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, native database client for **PostgreSQL**, **MySQL** and ／ **SQLite**. Written in Rust with egui; runs on ／ - **Arch Linux / Omarchy:** the AUR packages (`tabletist-bin` and",
+   "evidence_lines": [
+    13,
+    14,
+    86
+   ]
+  },
+  "fn": "igor-alexandrov/tabletist",
+  "sha": "3376b7ba18fe",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "33619e064a3f": {
+  "identity": {
+   "one_liner": "MMA/UFC 赛事数据的抓取器与 SQLite 数据库",
+   "review": "该项目抓取 UFC Stats、Sherdog、PFL、Oktagon、BestFightOdds 等来源的格斗赛事数据，解析后构建一个 SQLite 数据库（canon.db），通过 GitHub Actions 每日自动更新并以 release 发布。提供事件、比赛、回合统计、选手、赔率等数据表，并附带基于 sql.js 的静态查询网站。面向需要 MMA 统计数据的分析使用者，可用作其他项目的数据层。",
+   "highlights": [
+    "抓取并解析 UFC Stats、Sherdog、PFL、Oktagon、BestFightOdds 等来源数据，写入 SQLite 数据库",
+    "通过 GitHub Actions 每日自动更新并以 release 发布 canon.db",
+    "包含静态网站（sql.js）支持选手搜索、回合统计查看和 SQL 查询"
+   ],
+   "use_cases": [
+    "作为 MMA 统计分析项目的数据层",
+    "下载 canon.db 后直接用 SQL 查询赛事、选手、回合数据",
+    "通过内置静态网站浏览和检索格斗数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A SQLite database of MMA events, fights and round-by-round stats (UFC, PRIDE and more),",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库自身构建并发布一个 SQLite 数据库产品，SQLite 是其数据载体而非服务对象工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A SQLite database of MMA events, fights and round-by-round stats (UFC, PRIDE and more), ／ A GitHub Action runs daily. It fetches any new events from UFC Stats, reloads the ／ `site/` is a static page that loads the whole database into the browser with",
+   "evidence_lines": [
+    3,
+    86,
+    95
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Jadevit/fight-canon-db",
+  "sha": "33619e064a3f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f23b6d0bda5c": {
+  "identity": {
+   "one_liner": "Discord 番茄钟/习惯追踪机器人，通过 better-sqlite3 使用 SQLite 存储数据",
+   "review": "Pomo 是一个 Discord 机器人，提供番茄钟专注会话、花园养成、习惯打卡、连胜和排行榜等功能，并配有 Next.js 网站仪表盘和 Electron 桌面应用。面向 Discord 学习社群用户。机器人和网站共享同一个 SQLite 数据库文件，安装需 Node.js 20+ 和 Discord 应用配置。",
+   "highlights": [
+    "提供番茄钟、语音频道、团队专注会话等斜杠命令",
+    "机器人和网站通过共享同一个 SQLite 数据库文件协同工作",
+    "内置 10 种语言的国际化支持"
+   ],
+   "use_cases": [
+    "Discord 服务器内的学习/专注打卡社群",
+    "个人习惯追踪与连胜记录",
+    "通过网页仪表盘查看专注与花园数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`apps/bot`|The Discord bot (discord.js 14, CommonJS, SQLite via better-sqlite3)| ／ The bot and the website share one SQLite database file.",
+     "lines": [
+      15,
+      20
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明机器人与网站使用 SQLite 数据库文件存储自身数据，是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`apps/bot`|The Discord bot (discord.js 14, CommonJS, SQLite via better-sqlite3)| ／ The bot and the website share one SQLite database file.",
+   "evidence_lines": [
+    15,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "TunarJamalov/pomo",
+  "sha": "f23b6d0bda5c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

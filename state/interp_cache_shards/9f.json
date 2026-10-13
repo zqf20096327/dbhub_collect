@@ -10282,5 +10282,279 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9500959bb9a3": {
+  "identity": {
+   "one_liner": "读取本机 LINE 聊天记录并生成摘要的 MCP server",
+   "review": "该项目是一个运行在 Windows 上的 MCP server，通过读取 LINE 进程内存提取密钥、以只读方式解密本机 LINE 数据库（wxSQLite3/aes128cbc），向 Claude Code 提供查询聊天历史与未读消息的工具，用于生成指定聊天室和时间范围的摘要。面向使用 Claude Code 的 LINE 桌面版用户；限制包括仅支持 Windows、需 LINE 桌面版运行中、权限通过 settings. 允许清单控制，且明确声明不能证明云端消息已全部同步。",
+   "highlights": [
+    "提供 4 个 MCP 工具（历史查询、未读查询等），返回带分页 envelope 的结果，支持 cursor 分页与 byte 额度上限",
+    "通过 Windows API 读取 LINE 进程内存提取密钥，以只读模式解密本机 LINE 数据库（wxSQLite3/aes128cbc / SQLite3MultipleCiphers）",
+    "内置权限控制：聊天室 ID 允许清单、联系人查询独立开关、每会话消息数与字节数预算限制"
+   ],
+   "use_cases": [
+    "总结指定 LINE 聊天室在指定时间范围与指定时区的对话摘要",
+    "整理允许清单内聊天室的近期未读消息重点",
+    "配合 Claude Code skill 以自然语言查询本机 LINE 聊天记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "歷史分頁按時間與唯一訊息 ID 排序，在資料庫不變時可穩定遍歷。首次呼叫的 rowid 上界可減少一般新增資料混入，但 SQLite 刪除後可能重用 rowid，修改／刪除也會影響分頁；因此 `consistency: \"live_keyset_scan\"`、`database_changes_may_affect_pagination: true`、`coverage: \"local_rows_only\"` 不代表完整快照、完全排除新訊息或同步完成。工具的時間字串以 `+08:00` 顯示，摘要應換算成使用者指定",
+     "lines": [
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目读取并解密 LINE 桌面版的本地 SQLite 数据库以生成摘要，数据库本身是外部应用（LINE）的数据存储而非项目为数据库生态提供的服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "用 Claude Code 讀取本機 LINE 電腦版已儲存的聊天記錄，整理指定聊天室與時間範圍的摘要。適用於 Windows；不是完整聊天備份，也不能證明 LINE 雲端訊息已全部同步。 ／                                 MCP 工具結果 ／ - 對本機資料庫的讀取權限，以及可用的 SQLite3MultipleCiphers 引擎。",
+   "evidence_lines": [
+    3,
+    10,
+    24
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yung13yubabie/line-summary",
+  "sha": "9500959bb9a3",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "edfa920e8016": {
+  "identity": {
+   "one_liner": "FastAPI 项目模板，集成 PostgreSQL、认证与可观测性栈",
+   "review": "这是一个 FastAPI API 项目模板，提供用户认证（JWT、Google Auth）、CRUD 示例、Alembic 迁移与 Docker 部署配置，并通过 Grafana/Prometheus/Tempo/Loki/Alloy 提供可观测性栈。适合需要快速启动带认证和监控的 FastAPI 项目的开发者使用，需 Python 3.14+ 并通过 docker-compose 启动数据库。",
+   "highlights": [
+    "提供 JWT 与 Google Auth 的用户认证及 CRUD 示例端点",
+    "使用 Alembic 管理 PostgreSQL 数据库迁移",
+    "内置 Grafana/Prometheus/Tempo/Loki/Alloy 的 OpenTelemetry 可观测性栈"
+   ],
+   "use_cases": [
+    "快速搭建带用户认证的 FastAPI 后端 API 项目",
+    "需要数据库迁移与 Docker 化部署的项目模板",
+    "为 FastAPI 应用配置链路追踪、指标与日志监控"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This template provides a robust starting point for building APIs with FastAPI. It includes user authentication, CRUD operations, JWT token-based authentication, and PostgreSQL integration. The setup is streamlined with Docker and includes comprehensive documen ／ - :elephant: PostgreSQL database integration",
+     "lines": [
+      3,
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该模板使用 PostgreSQL 存储应用数据，是为构建 API 应用的项目模板而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This template provides a robust starting point for building APIs with FastAPI. It includes user authentication, CRUD operations, JWT token-based authentication, and PostgreSQL integration. The setup is streamlined with Docker and includes comprehensive documentation and testing tools. ／ - :elephant: PostgreSQL database integration ／ docker compose -f \"compose.yaml\" up -d --build adminer db",
+   "evidence_lines": [
+    3,
+    15,
+    100
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ezeparziale/fastapi-api-template",
+  "sha": "edfa920e8016",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a53e1880b20c": {
+  "identity": {
+   "one_liner": "公版圣经文本开放数据集，提供 JSON 与 SQLite 格式",
+   "review": "该仓库提供 22 种语言、33 个公版圣经译本的机器可读文本，每种版本含整本 JSON、分卷 JSON 和带索引的 SQLite 文件，并附 OSIS 编码的统一 schema 与元数据。面向需要圣经文本数据的研究者、开发者和应用构建者，数据由脚本周期性重新生成，不含仍在版权保护期内的现代译本。",
+   "highlights": [
+    "提供 33 个版本、22 种语言的公版圣经文本，含整本 JSON、分卷 JSON 与 SQLite 三种格式",
+    "使用 OSIS 书卷编码的统一 schema，附 TypeScript 类型与 SQLite DDL 说明",
+    "文本为公版或带自由再分发许可，数据周期性重新生成"
+   ],
+   "use_cases": [
+    "为圣经阅读、检索类应用提供数据源",
+    "对经文文本进行文本分析或语言学研究",
+    "通过 SQLite 或 JSON 快速集成到脚本与应用中"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **`<slug>.sqlite`** — SQLite database, indexed for fast queries ／ ### SQLite (CLI) ／ curl -L -o kjv.sqlite \\",
+     "lines": [
+      11,
+      41,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库以多种格式分发数据文件，SQLite 是其提供的数据载体格式之一，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "数据为公版或自由再分发许可，代码为 MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **`<slug>.sqlite`** — SQLite database, indexed for fast queries ／ See SCHEMA.md for the full spec, including TypeScript types and SQLite DDL. ／ *Data generated on 2026-05-12. This repository is regenerated periodically.*",
+   "evidence_lines": [
+    11,
+    96,
+    120
+   ]
+  },
+  "fn": "midvash/bible-data",
+  "sha": "a53e1880b20c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eb0a33f6148c": {
+  "identity": {
+   "one_liner": "本地运行的B2B销售线索采集工具，用Google Maps搜索加WhatsApp营销",
+   "review": "prospecteezy 是一个在本机运行的 B2B 线索采集与触达工具：通过 Serper.dev 检索 Google Maps 商家、抓取其网站邮箱，并支持连接 WhatsApp 验证号码和发送营销活动。数据（线索库、WhatsApp 会话）存储在本地 SQLite 数据库文件中，全部保存在 data/ 目录。面向做销售拓展的个人或小团队使用，需安装 Bun，AI 助手为可选功能。",
+   "highlights": [
+    "通过 Serper.dev 检索 Google Maps 商家线索并抓取其网站上的邮箱",
+    "连接 WhatsApp 进行号码验证、会话管理和带发送限制的营销活动",
+    "数据以 SQLite 文件形式本地存储，支持 CSV 导出和整目录备份"
+   ],
+   "use_cases": [
+    "按城市和行业批量采集本地商家线索及联系方式",
+    "对带 WhatsApp 的潜在客户发送限速营销消息",
+    "离线本地管理线索库并导出 CSV"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Backend em `src/` (Bun + SQLite): `agent/` (parser e jobs), `ingest/` (Serper e crawler), `db/`, `settings/` (segredos cifrados), `ai/` (AI SDK v7) e `whatsapp/` (Baileys, com README próprio).",
+     "lines": [
+      166
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明后端使用 Bun + SQLite 存储业务数据，SQLite 只是其存储依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Backend em `src/` (Bun + SQLite): `agent/` (parser e jobs), `ingest/` (Serper e crawler), `db/`, `settings/` (segredos cifrados), `ai/` (AI SDK v7) e `whatsapp/` (Baileys, com README próprio).",
+   "evidence_lines": [
+    166
+   ]
+  },
+  "fn": "gutomec/prospecteezy",
+  "sha": "eb0a33f6148c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9310,5 +9310,85 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "40c5fc4d6f49": {
+  "identity": {
+   "one_liner": "Home Assistant 集成，经 asyncpg 将状态与事件写入 TimescaleDB",
+   "review": "Scribe 是一个 Home Assistant 自定义集成（HACS 安装），通过 asyncpg 异步批量 COPY 把 HA 的状态与事件记录到 TimescaleDB，自动创建 hypertable 并配置分块、压缩与保留策略，附带实体/设备/区域上下文和仪表盘卡片。面向使用 Home Assistant 并希望以 TimescaleDB 长期存储历史数据的用户；要求 TimescaleDB 扩展，纯 PostgreSQL 不支持其分块压缩功能。",
+   "highlights": [
+    "通过 asyncpg 与批量 COPY 异步写入，提供数据库不可用时的内存缓冲与恢复写入",
+    "自动创建 hypertable 并支持 chunk 时间间隔、压缩阈值与保留策略配置",
+    "可同步实体、设备、区域、用户与集成上下文表，并提供统计传感器与查询服务"
+   ],
+   "use_cases": [
+    "为 Home Assistant 提供长期历史数据存储，替代仅保留数周的默认 recorder",
+    "在仪表盘上以图表展示自定义历史查询结果（Scribe Card）",
+    "按域/实体/事件类型过滤记录，并对旧数据执行压缩与保留删除"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "postgresql://scribe:password@192.168.1.10:5432/scribe ／ db_url: \"postgresql://scribe:password@192.168.1.10:5432/scribe\" ／ You need a running TimescaleDB instance. I recommend PostgreSQL 17 or 18.",
+     "lines": [
+      34,
+      41,
+      54
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Home Assistant's recorder keeps a few weeks of history in SQLite and slows down as it grows. Scribe writes the same states and events to **TimescaleDB**, where years stay fast and take a fraction of the space.",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该集成使用 TimescaleDB/PostgreSQL 存储 Home Assistant 的历史数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Home Assistant's recorder keeps a few weeks of history in SQLite and slows down as it grows. Scribe writes the same states and events to **TimescaleDB**, where years stay fast and take a fraction of the space. ／ **1. A TimescaleDB database.** The extension is required — see *Setting up TimescaleDB* below. ／ You need a running TimescaleDB instance. I recommend PostgreSQL 17 or 18.",
+   "evidence_lines": [
+    11,
+    21,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "jonathan-gtd/scribe",
+  "sha": "40c5fc4d6f49",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

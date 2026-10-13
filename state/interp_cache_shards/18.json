@@ -8253,5 +8253,71 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c25a9dfd0688": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件，基于本地 SQLite 提供审批门控记忆",
+   "review": "dsh-memento 是 DeepSeek Harness 的一个插件，提供类型化的 ctx.memory 服务、memory 工具和注入系统提示的冻结快照，实现跨会话记忆。所有写操作经审批门控并留审计记录，数据存于本地只读/受控 SQLite 数据库。面向使用 DeepSeek Harness 的开发者和 agent 用户，运行需 Node 22.19+/24，声明维护状态自 2026-10-05 起为 FROZEN。",
+   "highlights": [
+    "提供类型化 ctx.memory 服务与 memory 工具，每次会话注入冻结快照",
+    "所有写路径经审批门控，生成可重建的审计记录（approval/asked + approval/decided + 插件审计表）",
+    "按 user/agent 双轨与 global/workspace 双层组织记忆，带硬字符预算，支持可选向量召回"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 中的 agent 提供受控的跨会话记忆",
+    "需要对模型写入行为进行审批与审计留痕的场景",
+    "本地离线环境下的 agent 记忆存储（零网络、本地 SQLite）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected int ／ - **Data**: local SQLite database (`0600`), zero network, zero credentials.",
+     "lines": [
+      54,
+      199
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存储于本地 SQLite 数据库（$DSH_HOME/dsh-memento/memory.db），SQLite 仅作为其存储后端被使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "Apache-2.0（属于 40+ 插件家族，全部 Apache-2.0）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected into the system prompt. ／ dsh plugin --profile web add github:PerryLink/dsh-memento",
+   "evidence_lines": [
+    54,
+    66
+   ]
+  },
+  "fn": "PerryLink/dsh-memento",
+  "sha": "c25a9dfd0688",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

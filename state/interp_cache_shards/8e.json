@@ -7448,5 +7448,226 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e05a4330259f": {
+  "identity": {
+   "one_liner": "CloudDM：面向团队的Web数据库管理与SQL审计平台",
+   "review": "CloudDM 是一个开源的数据库管理工具，通过统一 Web 控制台为团队提供数据查询、对象管理、访问控制、SQL 审计和数据库 CI/CD 功能，支持工单审批与 SSO 登录。适合需要集中管控多条数据源权限和 SQL 变更流程的团队；提供 Docker、安装包和 Kubernetes 部署方式，可单机或集群运行。",
+   "highlights": [
+    "提供统一 Web 控制台，覆盖数据查询、数据库对象管理与多环境/集群数据源管理",
+    "实现基于 RBAC 的访问控制、SQL 审计规则（内置 54 条规则）与数据脱敏",
+    "支持基于 Git Push、Web Hook、HttpCall 触发的数据库 CI/CD 工作流"
+   ],
+   "use_cases": [
+    "团队集中管理多种数据库实例的查询与对象维护",
+    "SQL 上线前的审计、风险拦截与数据脱敏",
+    "数据库变更的工单审批与 CI/CD 流程化"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- SAP Hana, StarRocks, Doris, SelectDB, ClickHouse, PolarDB, TiDB, Greenplum",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- SAP Hana, StarRocks, Doris, SelectDB, ClickHouse, PolarDB, TiDB, Greenplum",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "- SAP Hana, StarRocks, Doris, SelectDB, ClickHouse, PolarDB, TiDB, Greenplum",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "- Hologres, DM (Dameng), GaussDB, AnalyticDB MySQL, MaxCompute, Redis, MongoDB",
+     "lines": [
+      38
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "- Hologres, DM (Dameng), GaussDB, AnalyticDB MySQL, MaxCompute, Redis, MongoDB",
+     "lines": [
+      38
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL",
+    "Oracle",
+    "MariaDB",
+    "PostgreSQL",
+    "SQL Server",
+    "OceanBase",
+    "ClickHouse",
+    "TiDB",
+    "PolarDB",
+    "Dameng",
+    "GaussDB"
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是连接和管理多种数据库的 Web 管理平台，属为数据库生态服务的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " - MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase ／ - Supports **audit rules**, **security policies**, and **data masking** ／ - Provides three ways to trigger CI/CD workflows: **Git Push**, **Web Hook**, and **HttpCall**",
+   "evidence_lines": [
+    36,
+    62,
+    57
+   ]
+  },
+  "fn": "ClouGence/open-cdm",
+  "sha": "e05a4330259f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5111b04be922": {
+  "identity": {
+   "one_liner": "本地多AI代理协作聊天室，统一会话并带跨会话记忆",
+   "review": "MADRE 是一个运行在 127.0.0.1 的本地应用，通过 npx 启动，把 Codex、Claude Code、Gemini CLI、OpenCode 等已有 CLI 代理放进同一会话，并维护可跨会话检索的项目记忆（附 3D 记忆地图）。默认只读，写入需分级密钥授权。面向想在本地同时使用多个 AI 编码代理的个人开发者，要求 Node 22.5+ 且无云端依赖。",
+   "highlights": [
+    "提供统一会话，支持 @codex/@claude/@madre 等多代理轮流应答并引用前文",
+    "提供跨会话项目记忆索引，按决策/事实/偏好/问题类型蒸馏笔记并带引用回填",
+    "提供 #0 至 #4 分级权限模式，写入操作需本地密钥确认并支持撤销"
+   ],
+   "use_cases": [
+    "在本地让多个 AI 编码代理围绕同一项目协作讨论",
+    "长期项目中跨会话检索此前的设计决策与上下文",
+    "需要写入权限分级控制与操作可撤销的代理工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Preguntas *«¿por qué elegimos Postgres?»* tres semanas después y el proyecto contesta, aunque esa decisión la tomara otro agente en otra sesión.",
+     "lines": [
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为多代理协作终端应用，数据库仅用于自身记忆存储，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Codex, Claude Code, Gemini CLI y OpenCode trabajando sobre tus proyectos, ／ **No hay nube.** MADRE no tiene servidor, ni cuenta, ni backend. Corre en `127.0.0.1` y se muere cuando cierras la terminal. ／ Necesitas **Node 22.5** o superior y al menos una de estas CLIs con sesión iniciada: Codex, Claude Code, Gemini CLI u OpenCode.",
+   "evidence_lines": [
+    11,
+    120,
+    132
+   ]
+  },
+  "fn": "jossuealcacao-exe/madre",
+  "sha": "5111b04be922",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

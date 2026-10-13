@@ -9983,5 +9983,221 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1f6fc38e1087": {
+  "identity": {
+   "one_liner": "本地优先的轻量 agent 内核，工具受限、可回滚、全程可审计",
+   "review": "这是一个面向开发者的本地 agent 内核，提供有界工具循环、可预览/回滚的文件编辑与哈希链回执，运行记录存储在本地 SQLite 中。支持通过 Ollama 或 Chat Completions 兼容 API 接入模型，提供 CLI 与本地 Web 控制台，可作为 Python 库嵌入。模型服务与 MCP 能力均为显式配置，默认不启用可选模块。",
+   "highlights": [
+    "提供受限工具集（列表/读取/搜索/写入/编辑文件）与事务回滚、哈希校验的撤销机制",
+    "使用本地 SQLite 记录会话、历史、审计与链式执行回执",
+    "支持 CLI、本地 Web 控制台与 Python 嵌入三种使用方式，可接入 Ollama 或兼容 API"
+   ],
+   "use_cases": [
+    "在本地受限工作区内执行需审批的文件读写与编辑任务",
+    "需要可审计运行记录与可回滚编辑的 agent 定制与嵌入开发",
+    "基于 Ollama 等本地模型服务构建带边界控制的工具调用流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One model/tool loop, one bounded workspace, and a local SQLite record of what ／ |Local state|SQLite sessions, history, audit, change snapshots, chained execution receipts| ／ |Optional memory|Scoped SQLite facts/entities; candidates require human approval before retrieval|",
+     "lines": [
+      15,
+      115,
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储会话、历史、审计与快照，属于使用数据库存数据的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "One model/tool loop, one bounded workspace, and a local SQLite record of what ／ |Local state|SQLite sessions, history, audit, change snapshots, chained execution receipts| ／     Runtime --> State[\"SQLite: history + audit + receipts\"]",
+   "evidence_lines": [
+    15,
+    115,
+    154
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "MuzeAnisichael/minimal-local-agent",
+  "sha": "1f6fc38e1087",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "efdfeb4d9a67": {
+  "identity": {
+   "one_liner": "离线个人财务应用，单二进制内置 Go+React 与 SQLite",
+   "review": "LocalFinance 是面向印度银行与信用卡场景的本地个人财务应用，可导入解析银行对账单（PDF/CSV/Excel），提取交易、账单周期与 UPI 等信息并生成仪表盘。它以单个可执行文件分发，前端 React 打包进 Go 二进制，数据存储于本地 SQLite 文件，通过内嵌 Goose 自动执行 schema 迁移。无云同步，适用于希望数据完全保留在本机的个人用户。",
+   "highlights": [
+    "以单二进制分发，内嵌 React 前端与纯 Go SQLite 引擎（zero CGO）",
+    "支持 PDF（含密码保护）、CSV、Excel 银行对账单解析与自动去重",
+    "通过内嵌 Goose 在启动时自动执行数据库 schema 迁移"
+   ],
+   "use_cases": [
+    "导入印度各银行对账单并记录个人/信用卡交易",
+    "本地离线管理多账户多年份财务数据",
+    "分析信用卡账单周期、还款日与奖励积分"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ - Idempotent SQLite upserts (`ON CONFLICT`) safely update balances while **strictly preserving** your custom category overrides, notes, and tags.",
+     "lines": [
+      12,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用内嵌 SQLite 存储本地财务数据，SQLite 是其自身数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ in one application. It uses the existing `~/.localfinance/local_finance.db`; ／ - **100% Offline & Private**: Zero cloud sync, zero telemetry, no SMS scraping, and no third-party account aggregators. All your financial data stays strictly on your local machine in an open SQLite database file (`local_finance.db` or `~/.localfinance/local_finance.db`).",
+   "evidence_lines": [
+    12,
+    17,
+    39
+   ]
+  },
+  "fn": "usmslm102/local-finance",
+  "sha": "efdfeb4d9a67",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7e94a09d60a9": {
+  "identity": {
+   "one_liner": "本地优先的学术论文 PDF 阅读器，含结构抽取、引用式问答与翻译",
+   "review": "这是一个运行在本机的学术论文 PDF 阅读与翻译应用：提供结构抽取、逐段对照阅读、整篇翻译、公式 LaTeX 重建、笔记高亮和文献库，问答与翻译通过用户自配的模型端点完成。适合需要精读英文论文并做中译的研究者。数据（含 profile）存于 SQLite，API key 写入系统凭据存储而非数据库；需 Python 3.12 与 Node 20+，从源码安装运行。",
+   "highlights": [
+    "提供引用段落的 Copilot 问答与逐段对照翻译，翻译结果按论文内容哈希缓存",
+    "支持从 PDF 提取的公式文本重建 LaTeX 并用本地 KaTeX 排版",
+    "支持配置 MinerU 解析后端与多类模型服务 profile，API key 存入操作系统凭据存储"
+   ],
+   "use_cases": [
+    "本地精读学术论文并生成引用出处的问答",
+    "整篇论文逐段翻译并维护术语表",
+    "管理个人论文库、笔记与高亮"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "UI. A profile is a row in SQLite and now carries a **kind** — chat (`llm`), parser (`parser`), or ／ |Notes, highlights, profiles, tasks|`<data dir>/db.sqlite3`|",
+     "lines": [
+      114,
+      197
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 SQLite 存储模型服务 profile 等数据（L114、L197），数据库仅为其内部存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Academic Paper Copilot is a local-first reader for academic PDFs. It keeps the paper you are ／ UI. A profile is a row in SQLite and now carries a **kind** — chat (`llm`), parser (`parser`), or ／ **Requirements.** Python **3.12** (the extraction library's supported range — the backend is",
+   "evidence_lines": [
+    14,
+    114,
+    153
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Marastraluster/Academic-Paper-Copilot",
+  "sha": "7e94a09d60a9",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

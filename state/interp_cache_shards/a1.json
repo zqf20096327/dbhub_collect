@@ -9357,5 +9357,71 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "05215252f6cf": {
+  "identity": {
+   "one_liner": "SQLite FTS5 的 ICU 分词器扩展，用 Zig 实现",
+   "review": "该项目为 SQLite 的 FTS5 全文检索模块提供基于 ICU 的自定义分词器扩展，支持通用多语言规则及日/中/泰/韩/阿/俄/希伯来/希腊等地区化分词器，经 `zig build` 编译为动态库后通过 `.load` 加载。面向需要在 SQLite 全文索引中做多语言分词与文本规范化的开发者；要求 Zig 0.16+、SQLite 与 ICU 开发库。",
+   "highlights": [
+    "提供通用 icu 及 icu_ja/icu_zh 等 8 个地区化 FTS5 分词器，同时导出 FTS5 API v1 与 v2 入口",
+    "基于 ICU 实现分词边界迭代与文本音译规范化，通过 .load 作为 SQLite 扩展加载使用",
+    "以 Zig 实现，提供 podman 容器化构建与多发行版测试脚本"
+   ],
+   "use_cases": [
+    "为 SQLite FTS5 全文检索添加中日韩泰等多语言分词能力",
+    "在旧版 SQLite（仅支持 API v1）上加载 ICU 分词扩展",
+    "在 CI 中跨多个 Linux 发行版容器化构建并测试 SQLite 扩展"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# FTS5 ICU Tokenizer for SQLite (Zig 0.16.0 & 0.17.0 Edition) ／ This project provides custom FTS5 tokenizers for SQLite implemented in **Zig 0.16.0** (with verified forward compatibility for **Zig 0.17.0**) using the International Components for Unicode (ICU) library to provide robust word segmentation and text normalizati",
+     "lines": [
+      1,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 SQLite FTS5 提供扩展模块（分词器动态库），属于服务数据库自身功能的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# FTS5 ICU Tokenizer for SQLite (Zig 0.16.0 & 0.17.0 Edition) ／ This project provides custom FTS5 tokenizers for SQLite implemented in **Zig 0.16.0** (with verified forward compatibility for **Zig 0.17.0**) using the International Components for Unicode (ICU) library to provide robust word segmentation and text normalization across multiple languages. ／ zig build",
+   "evidence_lines": [
+    1,
+    5,
+    79
+   ]
+  },
+  "fn": "cwt/fts5-icu-tokenizer",
+  "sha": "05215252f6cf",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

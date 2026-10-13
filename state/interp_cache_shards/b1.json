@@ -9776,5 +9776,72 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5d6dc400b917": {
+  "identity": {
+   "one_liner": "本地离线运行的AI助手，含语音/视觉/分层记忆",
+   "review": "ELI 是一个完全在本机运行的本地优先 AI 助手，支持语音、视觉、桌面控制与跨会话记忆，默认离线并在 socket 层强制断网，可加载任意本地 GGUF 模型并自动适配硬件。面向希望数据不出本机、无网络环境或不愿订阅云服务的个人用户；记忆层使用 SQLite 加 FAISS 向量索引与知识图谱。",
+   "highlights": [
+    "分层记忆包含 SQLite 存储、FAISS 向量索引与知识图谱（L40）",
+    "在 socket 层 fail-closed 的网络守卫实现默认离线（L48-L49）",
+    "支持加载任意本地 GGUF 模型并自动适配硬件（L19-L20、L132-L133）"
+   ],
+   "use_cases": [
+    "需要数据完全留在本机的个人 AI 助手场景",
+    "弱网或无网络环境下使用语音/视觉助手",
+    "通过语音或文本控制桌面应用与自动化任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "layered memory (SQLite + a FAISS vector index + a knowledge graph), local voice and vision, and its",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其记忆层使用 SQLite 存数据（L40），属使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Under that simple surface it's a **local cognitive runtime**, not a chatbot bolted onto someone ／ layered memory (SQLite + a FAISS vector index + a knowledge graph), local voice and vision, and its",
+   "evidence_lines": [
+    38,
+    40
+   ]
+  },
+  "fn": "ShadowESC95/ELI_v2.0",
+  "sha": "5d6dc400b917",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

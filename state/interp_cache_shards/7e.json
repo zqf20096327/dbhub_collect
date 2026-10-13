@@ -10572,5 +10572,71 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c56445fa4cd0": {
+  "identity": {
+   "one_liner": "《Transport Fever 3》第二屏实时仪表盘，mod 导出数据+本机程序存 SQLite 并供浏览器展示",
+   "review": "由一个 Lua 游戏模组和一个本机配套程序组成：模组每隔几秒把游戏状态快照写入 Lua 文件，配套程序的 collector.py 将历史数据存入本地 SQLite 数据库，server.py 在浏览器中提供仪表盘页面，还可选通过文件通道反向控制游戏。面向 Transport Fever 3 玩家，全部在本机运行，仅依赖 Python 标准库。",
+   "highlights": [
+    "提供资金、线路、载具、车站、城镇、产业等实时状态与历史曲线展示",
+    "支持通过本地文件通道从仪表盘控制游戏速度、镜头、载具与停靠点配置",
+    "collector 与 server 仅依赖 Python 标准库，本地运行不上传数据"
+   ],
+   "use_cases": [
+    "在第二台显示器上实时监控 Transport Fever 3 公司运营状态",
+    "游戏保持全屏时从仪表盘管理载具与停靠点配置",
+    "查看线路/载具历史曲线并排查模组数据链路问题"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Pytho ／ (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.",
+     "lines": [
+      36,
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该仪表盘应用本地存储历史数据的内嵌数据库，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python standard library only — the Windows release zip ships a bundled Python, Linux uses the system Python (3.10+); nothing to install.| ／ - 由两部分组成：mod.io 上的模组（导出数据）+ 一个配套程序（Windows，自带 Python，解压即用）。",
+   "evidence_lines": [
+    36,
+    21
+   ]
+  },
+  "fn": "M1r077/tf3-dashboard",
+  "sha": "c56445fa4cd0",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

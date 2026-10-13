@@ -9838,5 +9838,93 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "980c0b127fe7": {
+  "identity": {
+   "one_liner": "自托管的 agent 优先工作管理平台，数据存于单个 SQLite 文件",
+   "review": "weave 是一个可自行托管的连接表格工作管理平台，提供表、双向关系、公式、汇总、工作流状态和每行 markdown 文档，数据存于单个 SQLite 文件（Node 内置 node:sqlite）。面向人类用户和 AI agent 双类使用者，内置 MCP 服务器、REST API 与 CLI 三套等价接口，通过 git clone 后以 Node 进程运行，无需容器或外部数据库。",
+   "highlights": [
+    "内置 MCP 服务器（65 个工具），任意 stdio MCP 客户端可挂载，另有 REST API 与 CLI",
+    "数据模型含双向关系、查找、汇总、公式、工作流状态、自动化与每实体 markdown 文档",
+    "零运行时依赖，工作区为单个 SQLite 文件（WAL、行级写入），支持 FTS5 全文搜索与撤销操作"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 AI agent 提供可操作的结构化工作数据存储",
+    "替代 Airtable/ClickUp 等的本地自托管表格与文档管理",
+    "离线环境下的本地优先项目与知识库管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "documents. One SQLite file. Zero dependencies. No build step. MIT. ／ weave stores structured work (tables, rows, relations, documents) in one SQLite ／ - **Local-first** — your workspace is one SQLite file next to your project.",
+     "lines": [
+      9,
+      28,
+      57
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres| ／ |Baserow|MIT (core; paid tiers separate)|Docker Compose + Postgres|A full Airtable-shaped product, cloud or self-hosted| ／ |Teable|AGPL-3.0 (core)|Docker + Postgres|Postgres-native scale with an Airtable UI|",
+     "lines": [
+      161,
+      162,
+      164
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres|",
+     "lines": [
+      161
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "weave 使用 SQLite 文件存储自身工作数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "weave stores structured work (tables, rows, relations, documents) in one SQLite ／ weave is a **work platform you run yourself**: spaces hold tables, tables hold ／ |Interfaces|Web UI (vanilla JS, no build step) · REST API · CLI (`bin/weave.js`) · MCP server (`weave mcp`).|",
+   "evidence_lines": [
+    28,
+    41,
+    183
+   ]
+  },
+  "fn": "grunion-ai/weave",
+  "sha": "980c0b127fe7",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

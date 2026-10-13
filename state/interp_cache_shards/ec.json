@@ -8764,5 +8764,68 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8925cf39ffbb": {
+  "identity": {
+   "one_liner": "PostgreSQL 主从状态监测 sidecar，提供 HTTP API 查询主机角色与延迟",
+   "review": "pg-status 是一个以后台轮询方式监测 PostgreSQL 主从拓扑的 sidecar 服务，可在内存中维护各主机存活状态、主从角色、复制延迟（时间/字节/LSN），并暴露 /master、/replica、/hosts 等 HTTP 端点，支持按延迟阈值、LSN 新鲜度和机房/地域偏好选择副本。适合在主从读写分离场景中由应用程序调用以选取读取节点，也可作为独立服务部署。",
+   "highlights": [
+    "提供 /master、/replica、/sync_by_*、/hosts、/status 等 HTTP 端点，返回主机存活、角色与复制延迟信息",
+    "支持 lag_ms、lag_bytes、min_lsn 参数过滤副本，实现 read-your-writes 一致性读取",
+    "支持按 dc/geo 本地性偏好选择副本，未匹配时回退返回主机名"
+   ],
+   "use_cases": [
+    "主从读写分离应用中动态选取可用的只读副本",
+    "通过 min_lsn 参数实现写后读一致性",
+    "独立部署为共享的状态监测服务，供多个应用实例查询"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "your PostgreSQL hosts: whether they are alive, which host is the master, which",
+     "lines": [
+      4
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该服务专为监测 PostgreSQL 主机状态而构建，为数据库运维提供服务而非使用数据库存储自身数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An extremely lightweight and fast sidecar service that reports the status of ／ It polls database hosts in the background at a configurable interval and ／ exposes an HTTP API for retrieving hosts that meet specific conditions.",
+   "evidence_lines": [
+    3,
+    13,
+    14
+   ]
+  },
+  "fn": "krylosov-aa/pg-status",
+  "sha": "8925cf39ffbb",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

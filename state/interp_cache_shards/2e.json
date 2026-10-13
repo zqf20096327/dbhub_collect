@@ -9880,5 +9880,152 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d07f57f59ab8": {
+  "identity": {
+   "one_liner": "本地 LLM 驱动的个性化新闻聚合摘要引擎",
+   "review": "News Llama 从 RSS、Reddit 和网页搜索聚合内容，用本地 LLM 生成个性化每日新闻摘要，输出 HTML/JSON/RSS。面向个人用户，提供多用户 Web 界面、FastAPI JSON API 和 SwiftUI macOS 客户端；Web 模式仅支持 SQLite，不支持 PostgreSQL，LLM 需另行部署。",
+   "highlights": [
+    "五级渐进式 AI 来源发现，含 subreddit 智能匹配与降级回退",
+    "摘要前预过滤文章，README 称可减少约 90% 的 LLM 处理时间",
+    "内置 FastAPI 多用户 Web 应用、APScheduler 定时任务与 macOS 原生客户端"
+   ],
+   "use_cases": [
+    "个人每日新闻/资讯摘要自动生成",
+    "基于兴趣的多用户 newsletter 定时推送",
+    "本地部署的隐私优先内容聚合"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **SQLite only**: Web mode uses SQLite; no PostgreSQL support (sufficient for single-server deployment).",
+     "lines": [
+      450
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built with **FastAPI**, **SQLAlchemy**, **SQLite** (WAL mode), **Alembic** migrations, and **APScheduler** for background jobs.",
+     "lines": [
+      281
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 SQLite 存储用户、兴趣与 newsletter 数据，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Built with **FastAPI**, **SQLAlchemy**, **SQLite** (WAL mode), **Alembic** migrations, and **APScheduler** for background jobs. ／ - **Database**: 8 tables with optimized indexes — core (users, user_interests, newsletters) + discovery system (tier1_sources, source_blacklist, discovered_sources, source_health, source_contributions)",
+   "evidence_lines": [
+    281,
+    284
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "slb350/news-llama",
+  "sha": "d07f57f59ab8",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7f4ad73c0a61": {
+  "identity": {
+   "one_liner": "自托管 AI 代理沟通与项目协作中枢，通过 MCP 连接代理",
+   "review": "Relay 是一个自托管的工作区，人类与外部 AI 代理共享项目上下文，包含对话、看板、问题跟踪和 GitHub 集成。代理如 Devin、Codex、Claude Code 通过 MCP 接口读取线程、提交回复。面向使用 AI 编码代理的开发团队，支持离线本地模式和服务器同步，数据存储使用 PostgreSQL。",
+   "highlights": [
+    "提供 MCP 服务器端点，将项目、对话、消息、附件和问题暴露为外部代理可调用的工具",
+    "支持 GitHub 集成：App/token/gh CLI 三种接入方式，问题、PR 与提交镜像进项目",
+    "提供离线本地模式（基于 IndexedDB）与服务器同步，支持消息队列与断网容错"
+   ],
+   "use_cases": [
+    "开发团队在一个工作区内管理项目对话、看板与 GitHub 活动",
+    "让外部 AI 编码代理通过 MCP 读取上下文并提交工作结果",
+    "通过入站 webhook 收集产品用户反馈与 CI 告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Search** - `Ctrl/Cmd+K` across projects, issues, channels, threads, messages, and mirrored GitHub items, backed by Postgres FTS; PR results deep-link into the in-app PR view. ／ Browser ──▶ relay (Go + Gin) ──▶ PostgreSQL (sqlc + goose)",
+     "lines": [
+      63,
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 架构图显示 relay 应用以 PostgreSQL 作为自身数据存储，而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Open-source agent communication & project hub. ／ - **MCP server** - streamable-HTTP endpoint exposing projects, conversations, messages, attachments, and issues as tools for external agents. Agents get the full GitHub write surface too — create issues/PRs, comment, review, merge, watch CI (`github_create_issue` … `github_rerun`). `get_attachment` returns a token-authenticated `download_url` agents can curl straight to disk, plus a real image content block for inline viewing — no brittle presigned URLs.",
+   "evidence_lines": [
+    5,
+    60
+   ]
+  },
+  "fn": "Dvorinka/relay",
+  "sha": "7f4ad73c0a61",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9332,5 +9332,73 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8c79d0f146a3": {
+  "identity": {
+   "one_liner": "自托管的 Jellyfin/Emby 媒体服务器仪表盘，用 PostgreSQL 记录播放历史与统计",
+   "review": "JellyGlance 是一个面向自托管用户的媒体服务器仪表盘应用：连接 Jellyfin 或 Emby 获取会话与播放数据，将历史记录写入自己的 PostgreSQL 数据库，提供实时会话、统计回顾、媒体库、下载日历、请求管理和备份导出功能。通过 Docker Compose 或 docker run 部署，需与 PostgreSQL 容器同网运行；支持 OIDC 登录和多种 *arr 应用集成。",
+   "highlights": [
+    "连接 Jellyfin 或 Emby 服务器，记录播放历史并生成统计与年度回顾",
+    "提供备份导出与恢复功能，备份存储为普通文件夹中的 JSON 文件",
+    "以单个 Docker 容器运行，依赖 PostgreSQL 存储，支持 Docker Compose、docker run、Proxmox LXC 与 Unraid 部署"
+   ],
+   "use_cases": [
+    "自托管 Jellyfin/Emby 服务器时集中查看实时会话与观看统计",
+    "统一管理 Jellyseerr/Overseerr 请求、*arr 应用日历与下载客户端队列",
+    "对播放历史进行备份导出与恢复"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "JellyGlance connects to your Jellyfin or Emby server and keeps its own PostgreSQL history of what's played, by whom and on what. On top of that it gives you a home dashboard, statistics and recaps, and links to the request, download and \\*arr apps you already  ／ image: postgres:16-alpine ／ |`POSTGRES_IP`||PostgreSQL host|",
+     "lines": [
+      59,
+      158,
+      214
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用连接媒体服务器并把数据存储在自己的 PostgreSQL 数据库中，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "JellyGlance connects to your Jellyfin or Emby server and keeps its own PostgreSQL history of what's played, by whom and on what. On top of that it gives you a home dashboard, statistics and recaps, and links to the request, download and \\*arr apps you already run, so you can see and manage your server without a pile of browser tabs. ／ It runs as a single Docker container next to PostgreSQL. It's free, with no ads, subscriptions or paid tiers. Try the read-only **live demo** first if you like (its source is in JellyGlance/Demo). ／     image: postgres:16-alpine",
+   "evidence_lines": [
+    59,
+    61,
+    158
+   ]
+  },
+  "fn": "JellyGlance/Server",
+  "sha": "8c79d0f146a3",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

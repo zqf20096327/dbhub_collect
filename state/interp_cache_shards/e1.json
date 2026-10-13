@@ -8767,5 +8767,128 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "42cc46f6059c": {
+  "identity": {
+   "one_liner": "Oasis SDK EVM ParaTime 的 Web3 网关，索引进 PostgreSQL",
+   "review": "为 Oasis SDK 的 EVM ParaTime 模块（如 Emerald/Sapphire）提供 Web3 网关服务，将区块链数据索引进 PostgreSQL 存储并通过 RPC 暴露。面向运行 Oasis ParaTime Client Node 的运维者，提供二进制运行、Docker 本地测试、truncate-db 重建索引等操作方式。",
+   "highlights": [
+    "连接 Emerald/Sapphire ParaTime Client Node 并提供 Web3/EVM 网关服务",
+    "使用 PostgreSQL 存储索引状态，支持通过环境变量配置数据库",
+    "提供 truncate-db 子命令清空数据库状态以触发完全重建索引"
+   ],
+   "use_cases": [
+    "为 Emerald/Sapphire ParaTime 运行 Web3 RPC 网关",
+    "索引 ParaTime 区块数据供查询",
+    "本地 Docker 环境开发与测试网关"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL (at least version 13.3). ／ DATABASE__PASSWORD: <postgresql_password> ／ **Warning: this will wipe all existing state in the Postgres DB and can",
+     "lines": [
+      14,
+      95,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其依赖 PostgreSQL 存储索引数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- PostgreSQL (at least version 13.3). ／ DATABASE__PASSWORD: <postgresql_password> ／ Web3 Gateway for Oasis-SDK Paratime EVM module.",
+   "evidence_lines": [
+    14,
+    95,
+    7
+   ]
+  },
+  "fn": "oasisprotocol/oasis-web3-gateway",
+  "sha": "42cc46f6059c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a78908b5a7ef": {
+  "identity": {
+   "one_liner": "单用户桌面版算法交易平台，内置本地服务器与加密凭据",
+   "review": "OpenAlgo Desktop 是 OpenAlgo web 的单用户桌面版，覆盖 Windows、macOS、Linux 和树莓派，无需部署服务器或 Python，通过本地 REST API 和 WebSocket 提供与 web 版相同的接口，凭据加密存于系统 keychain。面向需要在本地运行算法交易的股票交易者，限制是必须有图形桌面、仅应用开启期间执行交易且同时只能运行一个实例。",
+   "highlights": [
+    "提供与 OpenAlgo web 相同的 REST API（/api/v1）和市场数据 WebSocket（ws://127.0.0.1:8765）",
+    "支持 OpenAlgo Python SDK、TradingView、Amibroker、Charting、Excel 与 MCP 客户端直接连接",
+    "凭据加密保存于操作系统 keychain，无需 .env 配置文件"
+   ],
+   "use_cases": [
+    "在个人桌面或树莓派上运行算法交易策略",
+    "将 TradingView、Amibroker 等现有工具接入本地交易 API",
+    "通过经纪商 API key/secret 连接经纪账户进行自动化下单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是使用数据库的桌面交易应用，README 未提供面向数据库生态的工具或适配功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OpenAlgo on your own computer. Install, sign in, connect your broker, trade.** ／ OpenAlgo Desktop is a single-user desktop version of ／ macOS, Linux and Raspberry Pi, with the same screens, the same API and the same",
+   "evidence_lines": [
+    8,
+    10,
+    12
+   ]
+  },
+  "fn": "marketcalls/openalgo-desktop",
+  "sha": "a78908b5a7ef",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8500,5 +8500,76 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f62831c3bb14": {
+  "identity": {
+   "one_liner": "PostgreSQL 数据库内可观测性诊断工具，单二进制只读检查并输出健康报告",
+   "review": "pgbot 是一个用 Go 编写的单二进制诊断工具，通过只读角色读取 PostgreSQL 自身的统计视图，生成 findings-first 健康报告并对比基线变化，面向数据库使用者、运维以及需要结构化 JSON/MCP 数据的 AI agent。它不部署服务、不写入数据库，AI 层（ask/explain）为可选且不生成 findings。",
+   "highlights": [
+    "单静态二进制，以 pg_monitor 只读角色连接，读取 Postgres 统计视图并生成健康报告",
+    "本地基线存储，可报告两次运行之间的变化，diff/why 命令支持离线回归分析",
+    "提供 -- 版本化契约及 MCP 服务（pgbot mcp），供 AI agent 与 CI 脚本消费"
+   ],
+   "use_cases": [
+    "对不拥有的数据库做快速只读健康体检与故障分诊",
+    "在 CI 中用 --fail-on 阈值对 schema/查询做质量门禁",
+    "为 AI agent 提供确定性的 Postgres 结构化诊断数据"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "In-database observability for PostgreSQL. ／ One static binary connects read-only, reads Postgres's own statistics views, ／ PostgreSQL 14–18",
+     "lines": [
+      3,
+      4,
+      13
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确其为读取 PostgreSQL 统计视图并生成健康报告的诊断工具，属为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " In-database observability for PostgreSQL. ／  One static binary connects read-only, reads Postgres's own statistics views, ／ |**Built for agents**|`--json` is a versioned, PII-free contract; `pgbot mcp` exposes the same findings over the Model Context Protocol, with a skill and a Claude Code plugin on top.|",
+   "evidence_lines": [
+    3,
+    4,
+    100
+   ]
+  },
+  "fn": "pgrundev/pgbot",
+  "sha": "f62831c3bb14",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

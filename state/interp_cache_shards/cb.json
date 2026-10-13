@@ -9546,5 +9546,140 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ebf80d81cfd5": {
+  "identity": {
+   "one_liner": "SQLite 扩展，为其添加 Cypher 查询的图数据库能力",
+   "review": "这是一个以扩展形式加载到 SQLite 的组件，用户可在 SQLite 中直接存储并使用 Cypher 查询图数据，还内置 PageRank、Louvain、Dijkstra 等图算法，提供 Python、Rust 和 SQL 多种接口。项目通过 openCypher TCK 验证，覆盖约 98.5% 场景；适合需要在无服务器单文件库上做图建模与查询的开发者。",
+   "highlights": [
+    "支持 Cypher 查询子句：MATCH、CREATE、MERGE、SET、DELETE、WITH、UNWIND、RETURN",
+    "内置图算法：PageRank、Louvain、Dijkstra、BFS/DFS、连通分量等",
+    "提供 Python、Rust 和原生 SQL 接口，无需服务器即可运行"
+   ],
+   "use_cases": [
+    "在 SQLite 单文件库中建模并查询关系型图数据",
+    "对本地数据执行 PageRank、社区发现等图分析",
+    "构建知识图谱并进行 Cypher 查询"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "An SQLite extension that adds graph database capabilities using the Cypher query language. ／ - **Zero configuration** — Works with any SQLite database, no server required",
+     "lines": [
+      5,
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以 SQLite 扩展形式为数据库添加图能力，是服务数据库生态的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An SQLite extension that adds graph database capabilities using the Cypher query language. ／ - **Zero configuration** — Works with any SQLite database, no server required",
+   "evidence_lines": [
+    5,
+    30
+   ]
+  },
+  "fn": "colliery-io/graphqlite",
+  "sha": "ebf80d81cfd5",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6f83648781d2": {
+  "identity": {
+   "one_liner": "Go 编写的 9Router LLM 路由代理网关，单二进制含内嵌仪表盘",
+   "review": "该项目用单个 Go 二进制实现 9Router 的 LLM 请求代理网关，为 Claude Code、Cursor、Cline 等 CLI 工具提供统一接入 40+ AI 供应商的入口，支持 OpenAI/Anthropic/Gemini 等兼容 API、组合路由（fallback、round-robin、sticky 等）与 token 压缩。数据持久化到 SQLite（WAL），并可与上游 Node.js 版 9Router 共享同一 data.sqlite 数据目录，README 说明了多进程写入限制和不执行破坏性迁移等约束。",
+   "highlights": [
+    "单二进制运行，内嵌 Svelte 仪表盘，提供 providers、API keys、combos、用量统计等管理界面",
+    "SQLite WAL 持久化，可与上游 9Router 共享同一数据文件",
+    "支持 OpenAI Chat、Claude Messages、Gemini、Ollama 兼容等多种 API 格式与多策略组合路由"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Cline 等 CLI 工具提供统一的 LLM API 网关入口",
+    "在多个 AI 供应商/账号间做 fallback、轮询等路由策略",
+    "与 Node.js 版 9Router 共享数据目录，替换其运行时"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Already using upstream 9Router?** Point 9router-go at the same data dir — it opens the **same `DATA_DIR/db/data.sqlite`**. Your providers, connections, combos, API keys, and usage history carry over as-is. No import step, no migration. See Sharing a databa ／ - 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation ／ |macOS / Linux|`~/.9router/db/data.sqlite`|",
+     "lines": [
+      69,
+      142,
+      152
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 作为自身配置与用量数据的持久化存储，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation ／ |macOS / Linux|`~/.9router/db/data.sqlite`|",
+   "evidence_lines": [
+    142,
+    152
+   ]
+  },
+  "fn": "luqman-v1/9router-go",
+  "sha": "6f83648781d2",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

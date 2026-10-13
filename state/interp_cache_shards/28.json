@@ -9230,5 +9230,225 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ff63885ac4b": {
+  "identity": {
+   "one_liner": "Gemini 网页端反代为 OpenAI 兼容 API 的自托管 Go 单二进制代理",
+   "review": "该项目把 gemini.google.com 网页协议逆向反代成 /v1/chat/completions 等 OpenAI 兼容接口，无需 Google API Key。面向想用 OpenAI 客户端/SDK 调用 Gemini 网页能力的自托管用户，提供 Cookie 池自动续期、代理池限流、TLS 指纹模拟、中文管理面板及 MCP web_search 工具；默认用 SQLite 存元数据，可通过 SQL_DSN 切换 MySQL/PostgreSQL。",
+   "highlights": [
+    "提供 OpenAI 兼容的 /v1/chat/completions、/v1/models、/v1/responses 及 /v1/videos 接口",
+    "内置 Cookie 池（LRU 轮转、自动续期保活）与代理池（运行时增删、失败熔断）",
+    "同一进程在 /mcp 暴露 web_search MCP 工具，含中文管理面板与 SQLite/MySQL/PostgreSQL 持久化"
+   ],
+   "use_cases": [
+    "让仅支持 OpenAI 兼容接口的客户端（Cherry Studio、Cursor、dify、newapi 等）调用 Gemini 网页模型",
+    "通过 MCP 客户端（Claude Desktop/Claude Code）使用 Gemini 联网搜索工具",
+    "自托管多账号、多出口 IP 的 Gemini 网页访问网关并做请求元数据统计"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 想用 MySQL / PostgreSQL，设 `SQL_DSN` 环境变量即可（不设就是 SQLite，无需改动）：",
+     "lines": [
+      54,
+      72
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 想用 MySQL / PostgreSQL，设 `SQL_DSN` 环境变量即可（不设就是 SQLite，无需改动）：",
+     "lines": [
+      54,
+      72
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 把 Google Gemini 网页端反代成 OpenAI 兼容 API。**单二进制**，**零账号**（匿名可跑），**Chrome 146 真指纹**，**SQLite 持久化**，自带**中文管理面板**。",
+     "lines": [
+      54,
+      16
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明默认 SQLite 持久化请求明细与统计，并可通过 SQL_DSN 使用 MySQL/PostgreSQL，数据库为其存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Gemini web → OpenAI-compatible API.** A self-hosted proxy that turns the free gemini.google.com web app into `/v1/chat/completions` — **no Google API key, no paid quota**. Single Go binary, real Chrome TLS fingerprint, cookie pool with automatic renewal, proxy pool, built-in admin dashboard, SQLite / MySQL / PostgreSQL. Image, music, canvas and video generation (`/v1/videos`) included. ／ - SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 除了 OpenAI 接口，同一个进程、同一个端口还挂了一个 **MCP server**，在 `/mcp` 上，",
+   "evidence_lines": [
+    3,
+    54,
+    173
+   ]
+  },
+  "fn": "zexadev/gemini-web2api-go",
+  "sha": "4ff63885ac4b",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "afc5e396a972": {
+  "identity": {
+   "one_liner": "跨平台 Electron 桌面客户端，统一接入 Meshtastic/MeshCore/Reticulum 网状网络",
+   "review": "一个面向 macOS/Linux/Windows 的 Electron 桌面应用，通过 BLE、USB 串口、Wi-Fi/TCP 和 MQTT 连接三种射频网状网络协议栈，并用本地 SQLite 数据库持久化消息历史与网格日志，提供路由诊断、节点地图、MECP 紧急通信和 TAK 集成，面向网状网络用户与应急通信志愿者。",
+   "highlights": [
+    "在单一界面支持 Meshtastic、MeshCore、Reticulum 三种协议栈，可通过协议切换器切换",
+    "使用本地 SQLite 数据库实现消息历史与网格日志的持久化存储",
+    "提供 MQTT 网关上下行、路由诊断、节点地图及 MECP/TAK 应急通信支持"
+   ],
+   "use_cases": [
+    "桌面端收发与存档 Meshtastic/MeshCore/Reticulum 网状网络消息",
+    "网格网络的路由诊断、节点状态查看与健康度分析",
+    "应急通信（EMCOMM）场景下的 MECP 消息编排与 TAK 集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow re ／ - **True message persistence:** Local SQLite storage for reliable long-term history, without lost chats or broken logs.",
+     "lines": [
+      32,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是一个桌面客户端应用，用本地 SQLite 存储自身消息历史，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Cross-platform **Electron** desktop client for **Meshtastic**, **MeshCore**, and **Reticulum (LXMF)** on **macOS**, **Linux**, and **Windows** — **BLE**, **USB serial**, **Wi-Fi/TCP**, **MQTT**, local **SQLite** history, **routing diagnostics**, **16-language UI**, plus a Ratspeak-compatible Reticulum sidecar (**Games**, **encrypted paper**, **LXST voice**, Nomad, RRC, Remote). EMCOMM support via MECP & TAK. ／ With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow regardless of protocol or hardware.",
+   "evidence_lines": [
+    3,
+    32
+   ]
+  },
+  "fn": "Colorado-Mesh/mesh-client",
+  "sha": "afc5e396a972",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5cfda243c86a": {
+  "identity": {
+   "one_liner": ".NET 纯托管 Raft 共识库，存储与传输可替换",
+   "review": "这是一个面向 .NET 平台的 Raft 共识算法实现库，提供领导者选举、日志复制、快照压缩、成员变更等核心能力，并允许使用者自定义日志存储、状态机和传输层。适用于需要在 .NET 应用中构建分布式复制或高可用机制的开发者，通过 NuGet 安装，支持 NativeAOT。",
+   "highlights": [
+    "提供完整的 Raft 共识实现，包含 pre-vote、快照压缩、joint-consensus 成员变更与领导权转移",
+    "IRaftStorage 与 IRaftTransport 抽象支持替换，内置内存/文件（WAL）存储与 NNG/nanomsg 传输",
+    "通过 Rust harness 与 tikv/raft-rs 进行行为一致性对比验证"
+   ],
+   "use_cases": [
+    "在 .NET 分布式系统中实现多副本数据一致性与领导者选举",
+    "基于自定义存储与传输构建复制状态机",
+    "作为学习或验证 Raft 协议行为的基础组件"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "`Raft` is a customizable **core consensus module** — modeled on tikv/raft-rs — with **bring-your-own log, state machine, and transport**. The deterministic state machine (`RaftCore`) is wrapped by an asynchronous `RaftNode` that owns timers, transport, and sto ／ - raft-rs behavioral parity — a Rust harness wrapping tikv/raft-rs produces golden traces that the .NET implementation must reproduce.",
+     "lines": [
+      7,
+      76
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 将其定位为通用 Raft 共识库，未声明为某个数据库生态服务或使用数据库存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A pure-managed, **NativeAOT-ready** implementation of the **Raft consensus algorithm** for modern .NET. No native dependency. ／ `Raft` is a customizable **core consensus module** — modeled on tikv/raft-rs — with **bring-your-own log, state machine, and transport**. The deterministic state machine (`RaftCore`) is wrapped by an asynchronous `RaftNode` that owns timers, transport, and storage, so you get a working replica out of the box and can swap any piece. ／ - **Replaceable everything**: the `IRaftStorage` and `IRaftTransport` abstractions ship with an in-memory + file (WAL) store and an in-memory + NanoMsg (NNG/nanomsg) transport.",
+   "evidence_lines": [
+    5,
+    7,
+    15
+   ]
+  },
+  "fn": "marcschier/raft-cs",
+  "sha": "5cfda243c86a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

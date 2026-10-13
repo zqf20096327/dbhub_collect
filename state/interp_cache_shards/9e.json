@@ -9374,5 +9374,73 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22a66d4a8377": {
+  "identity": {
+   "one_liner": "OpenCode 会话共享分层记忆插件，基于 Bun 与 SQLite 管理摘要记忆",
+   "review": "一个 OpenCode 插件（npm 包），为多个独立会话提供共享的分层次记忆：保留原始记录、生成摘要并在配置范围内发布，使用 SQLite 持久化并支持快照隔离、租约与后台压缩任务。面向使用 OpenCode 2.0.x 的开发者，通过命令面板或斜杠命令配置；仅支持 OpenCode 2.0.x 主机版本，后台摘要调用可能产生模型费用。",
+   "highlights": [
+    "在配置范围内跨独立 OpenCode 会话共享已完成、失败与中断轮次的摘要（L5）",
+    "使用 SQLite 本地保留原始记录，提供快照隔离、租约与栅栏机制（L325、L459）",
+    "提供状态栏与状态对话框，展示保留记录、摘要、任务队列与失败原因（L56-L69、L106）"
+   ],
+   "use_cases": [
+    "为多个并行 OpenCode 会话提供共享的项目级记忆",
+    "对会话历史进行后台摘要压缩并支持失败重试与恢复",
+    "按确认的管理命令执行记忆数据的保留与部分退役"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite transactions, write-ahead logging (WAL), durable jobs, leases, and fencing. ／ SQLite stores all retained original records locally.",
+     "lines": [
+      325,
+      459
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明插件使用 SQLite 本地存储保留的原始记录，属于使用数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OptChat uses Bun to manage memory across OpenCode sessions. ／ **Tests use Bun 1.4.2 and OpenCode 2.0.26. The adapter supports OpenCode 2.0.x and rejects other host versions.**",
+   "evidence_lines": [
+    3,
+    7
+   ]
+  },
+  "fn": "ahlner/opencode-optchat",
+  "sha": "22a66d4a8377",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

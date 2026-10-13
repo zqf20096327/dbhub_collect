@@ -7453,5 +7453,152 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "954145121085": {
+  "identity": {
+   "one_liner": "本地优先桌面 AI 多智能体工作区，用 SQLite 存应用状态",
+   "review": "KIN 是一个本地优先的桌面工作区应用，提供 AI 对话、项目组织和多智能体协作流程，包含多渠道编排、分层记忆、模型网关（含 Ollama）和 MCP 工具调用。面向需要本地运行多智能体工作流的开发者。应用状态存储在本地 SQLite，需从源码构建，README 声明处于活跃开发中且部分工作流未经验证。",
+   "highlights": [
+    "提供多智能体组织架构：项目隔离边界、@Boss 编排器、渠道协作与递归任务委派",
+    "提供四层作用域记忆结构与可插拔 RunnerAdapter 执行引擎规范",
+    "包含模型网关（支持 Ollama 与多家提供商）、工具网关、MCP stdio 客户端与桌面集成路径"
+   ],
+   "use_cases": [
+    "在本地桌面环境组织 AI 对话与项目工作流",
+    "构建多智能体协作与任务编排的工作区",
+    "通过 Ollama 或配置的模型提供商进行本地推理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "KIN is a local-first, desktop-oriented workspace for AI chats, projects, and agent workflows. The repository contains a TypeScript core service, a React interface, a Tauri/Rust desktop shell, and SQLite-backed application state. ／ Application state is stored locally in SQLite and project files use the local filesystem. Hosted model requests send prompts and selected context to that provider. Browser navigation contacts the requested websites. MCP tools receive the arguments passed to th",
+     "lines": [
+      3,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用状态存储于本地 SQLite，KIN 是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "KIN is a local-first, desktop-oriented workspace for AI chats, projects, and agent workflows. The repository contains a TypeScript core service, a React interface, a Tauri/Rust desktop shell, and SQLite-backed application state. ／ Application state is stored locally in SQLite and project files use the local filesystem. Hosted model requests send prompts and selected context to that provider. Browser navigation contacts the requested websites. MCP tools receive the arguments passed to them. Local storage does not imply that all application activity is offline.",
+   "evidence_lines": [
+    3,
+    65
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "abhayzangir1/KIN",
+  "sha": "954145121085",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6ed0d4a8493b": {
+  "identity": {
+   "one_liner": "全栈项目管理与工单跟踪应用，基于 Next.js/Express/MySQL 实现。",
+   "review": "TaskBoard 是一个全栈项目管理和问题跟踪系统，提供注册登录、项目/冲刺/团队管理、看板工单、附件上传和 AI 辅助流程。前端 Next.js，后端 Express，通过 mysql2 连接池将工单与附件元数据存入 MySQL，二进制附件可存本地或 Cloudflare R2。适合需要轻量工单流程的团队自部署使用。",
+   "highlights": [
+    "支持 JWT 认证与 admin/developer/member 三级角色访问控制",
+    "支持看板式工单跟踪、冲刺与团队管理、附件版本与评论",
+    "通过 Gemini/Groq/LangGraph 提供 AI 辅助工单分析流程"
+   ],
+   "use_cases": [
+    "团队内部项目与工单跟踪",
+    "带角色权限的项目协作管理",
+    "基于 MySQL 自部署的项目管理系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Database|MySQL, `mysql2` connection pool| ／ - Ticket data and attachment metadata live in MySQL, while binary attachment content is stored either locally or in Cloudflare R2. ／ 6. MySQL stores structured application data. Attachment bytes are stored locally in development or in Cloudflare R2 for deployment.",
+     "lines": [
+      35,
+      46,
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用使用 MySQL 存储业务数据，本身不提供数据库服务能力。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Database|MySQL, `mysql2` connection pool| ／ 6. MySQL stores structured application data. Attachment bytes are stored locally in development or in Cloudflare R2 for deployment. ／ The application uses MySQL with foreign keys and indexes across the main workflow tables.",
+   "evidence_lines": [
+    35,
+    68,
+    122
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sagar-varshney/TaskBoard-Project-Management",
+  "sha": "6ed0d4a8493b",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

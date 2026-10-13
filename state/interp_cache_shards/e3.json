@@ -8971,5 +8971,140 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92e291f04481": {
+  "identity": {
+   "one_liner": "AI 编码代理的持久记忆系统，单二进制 + SQLite/FTS5 存储，经 MCP/HTTP/CLI/TUI 读写",
+   "review": "Engram 是一个为 AI 编码代理提供会话后持久记忆的 Go 单二进制工具，用本地 SQLite + FTS5 存储并全文检索记忆，通过 MCP stdio、HTTP API、CLI 和 TUI 暴露能力，为 Claude Code、Cursor 等 14 类 MCP 兼容代理提供 setup 命令；支持 Git Sync 导出与可选的云复制，数据默认保留在本地 ~/.engram 目录。",
+   "highlights": [
+    "单 Go 二进制，内置 SQLite + FTS5 全文检索，无 Node.js/Python/Docker 依赖",
+    "通过 MCP stdio、HTTP API、CLI 和 TUI 四种接口提供记忆的保存、搜索、时间线等工具",
+    "支持按项目隔离记忆，提供 Git Sync 导出和可选的 Engram Cloud 复制"
+   ],
+   "use_cases": [
+    "为 AI 编码代理保存项目决策、约定和历史，供后续会话检索",
+    "多代理（Claude Code、Cursor 等）共享同一份项目记忆",
+    "通过 TUI 浏览和搜索代理已记录的记忆内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite + FTS5 (~/.engram/engram.db) ／ A **Go binary** with SQLite + FTS5 full-text search, exposed through CLI, HTTP API, MCP, and an interactive TUI. It works with any MCP-compatible agent, including Claude Code, OpenCode, Gemini CLI, Codex, VS Code (Copilot), Antigravity, Cursor, and Windsurf. N ／ Engram keeps memory local by default. The local SQLite database is authoritative; Git Sync exports portable compressed chunks for sharing across machines, and Engram Cloud is optional, project-scoped replication/shared access with browser visibility.",
+     "lines": [
+      62,
+      67,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内置存储引擎用于保存记忆数据，README 未提供面向数据库生态的服务能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite + FTS5 (~/.engram/engram.db) ／ A **Go binary** with SQLite + FTS5 full-text search, exposed through CLI, HTTP API, MCP, and an interactive TUI. It works with any MCP-compatible agent, including Claude Code, OpenCode, Gemini CLI, Codex, VS Code (Copilot), Antigravity, Cursor, and Windsurf. No Node.js, Python, or Docker is required: one binary, one SQLite file. ／ Engram keeps memory local by default. The local SQLite database is authoritative; Git Sync exports portable compressed chunks for sharing across machines, and Engram Cloud is optional, project-scoped replication/shared access with browser visibility.",
+   "evidence_lines": [
+    62,
+    67,
+    79
+   ]
+  },
+  "fn": "Gentleman-Programming/engram",
+  "sha": "92e291f04481",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "77f98db2f95b": {
+  "identity": {
+   "one_liner": "社会超市家庭申请排名后台系统，PHP+MariaDB 无框架实现",
+   "review": "一个面向志愿者的后台 Web 应用，对社会超市的申请家庭按评估表逐项打分并生成排名，决定购物卡的发放与月度积分。采用原生 PHP 与 MariaDB，无框架，通过预处理语句与事务读写数据。适合小型公益机构管理申请流程；项目含单元测试、冒烟测试与安全加固，非表单页面仍混合查询与逻辑，且仅提供演示数据。",
+   "highlights": [
+    "提供申请表单自动评分、排名展示及评分规则可配置（存于 RegolePunteggio 表并可批量重算）",
+    "实现购物卡的分配、收回、管理与历史记录，以及排名导出功能",
+    "使用预处理语句、表单令牌、登录锁定与输出转义等安全机制，并附 PHPUnit 单元测试与冒烟测试"
+   ],
+   "use_cases": [
+    "公益社会超市对申请家庭的资格评分与排名管理",
+    "基于评估表的月度积分购物卡发放与跟踪",
+    "以 Docker Compose 快速搭建带演示数据的本地环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "PHP 8.5 on Apache, MariaDB 11, plain HTML/CSS/JavaScript. Docker Compose for",
+     "lines": [
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个用 MariaDB 存储申请、评分与购物卡数据的后台应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Back-office web application for the volunteer who manages the ranking of the ／ PHP 8.5 on Apache, MariaDB 11, plain HTML/CSS/JavaScript. Docker Compose for ／ |`db/`|`01-schema.sql` (tables, views, configuration) and `02-demo-data.sql`|",
+   "evidence_lines": [
+    3,
+    23,
+    54
+   ]
+  },
+  "fn": "CieriS/social-supermarket_il-sole",
+  "sha": "77f98db2f95b",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

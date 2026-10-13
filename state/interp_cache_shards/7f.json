@@ -8317,5 +8317,223 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "643c05092d1f": {
+  "identity": {
+   "one_liner": "漫画/轻小说阅读平台，monorepo 全栈应用",
+   "review": "Taiyō 是一个正在重写中的漫画、条漫、轻小说阅读平台，当前仓库包含 Hono 后端 API、处理章节上传的 BullMQ worker、Storybook 组件库和 TanStack Start 前端骨架（浏览/阅读页尚未构建）。通过 Kysely 类型化查询构建器操作 PostgreSQL 18 主库，并用 Meilisearch 做搜索、Dragonfly 做缓存、S3 兼容存储存图片，面向自托管部署的漫画站读者与管理者。",
+   "highlights": [
+    "支持 manga、manhwa、manhua、轻小说多种内容格式",
+    "通过 Kysely 类型化 SQL 构建器访问 PostgreSQL，含迁移与种子脚本",
+    "集成测试在 Docker 中针对真实 Postgres/S3/Meilisearch/Dragonfly 运行"
+   ],
+   "use_cases": [
+    "自托管漫画/轻小说阅读站点",
+    "汉化组作品上传与章节后台处理流程",
+    "基于 Better Auth 的多用户书库、历史与关注管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Kysely (typed SQL query builder) on PostgreSQL ／ - PostgreSQL 18 — primary database ／ - Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.",
+     "lines": [
+      42,
+      65,
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 是该平台的主数据库，平台自身是使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch. The repo currently ships the backend (Hono API), a BullMQ worker that processes uploaded chapters, a Storybook component playground, and a TanStack Start web app with a landing page, auth forms and legal pages. ／ - Kysely (typed SQL query builder) on PostgreSQL ／ - PostgreSQL 18 — primary database",
+   "evidence_lines": [
+    5,
+    42,
+    65
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "taiyomoe/taiyo",
+  "sha": "643c05092d1f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8f57863dc47f": {
+  "identity": {
+   "one_liner": "AI代理跨会话记忆工具，数据存于本地SQLite，经MCP或JavaScript暴露",
+   "review": "Cairn Memory 是一个开源的 AI 代理记忆工具，提供保存、检查、更正和遗忘记忆的 MCP 工具，每条记忆附带 Source Receipt 溯源文本。数据存储在用户自己的 SQLite 文件中，适合使用 Claude Code、Codex 等 AI 客户端并需要跨会话保留上下文的开发者。当前为开发者预览版，默认抽取尚有失败情况，语义召回需自备 OpenAI 密钥。",
+   "highlights": [
+    "提供 remember/recall/inspect/correct/forget 五个 MCP 记忆工具",
+    "记忆存于用户本地 SQLite 文件，本地使用无需账号",
+    "每条记忆附带可检查的 Source Receipt 溯源文本"
+   ],
+   "use_cases": [
+    "为 AI 会话保存和更正跨会话偏好与项目决策",
+    "通过 MCP 将本地记忆层接入 Claude Code 或 Codex",
+    "基于 JavaScript 或 MCP 构建自有记忆集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ - **Local preview:** your SQLite database, ／ - Memory, receipts and organization persist in your selected SQLite database.",
+     "lines": [
+      74,
+      123,
+      198
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库使用 SQLite 存储自身记忆数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ npx @cairn-ink/memory setup ／ |`remember_memory`|Explicitly save one memory and its receipt|",
+   "evidence_lines": [
+    74,
+    108,
+    184
+   ]
+  },
+  "fn": "Cairn-ink/cairn-memory",
+  "sha": "8f57863dc47f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "015fa6d4c66c": {
+  "identity": {
+   "one_liner": "Go 单二进制协作看板应用，内置 SQLite 存储与 Datastar 服务端渲染",
+   "review": "这是一个多人实时协作的看板应用，整个服务编译为一个静态 Go 二进制，数据存于单个 SQLite 文件，通过 CQRS 命令模式和服务器推送流同步各端界面。面向需要自托管轻量看板的团队，README 还提供了与 PLANKA 的对比基准数据；但缺少卡片成员、搜索、过滤器、REST API 等功能。",
+   "highlights": [
+    "单静态 Go 二进制 + 单 SQLite 文件，所有写入经单一 goroutine 批量提交",
+    "服务器推送流 + Brotli 压缩，多人实时同步且无乐观更新",
+    "内置备份命令（kanban backup）可在运行时生成一致性副本"
+   ],
+   "use_cases": [
+    "小团队自托管的多人协作看板",
+    "需要极简部署（单二进制+单文件数据库）的任务管理场景",
+    "SQLite 高并发单写架构的参考案例研究"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "It is one static Go binary (13.5 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It is a case study by zwei und eins, compared with PLANKA Community (React, Redux, Sails.j ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this ",
+     "lines": [
+      7,
+      23
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It is one static Go binary (13.5 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It is a case study by zwei und eins, compared with PLANKA Community (React, Redux, Sails.j ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this ",
+     "lines": [
+      7,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 SQLite 存储看板数据的完整应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，部分内嵌组件为 Beer-Ware",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It is one static Go binary (13.5 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It is a case study by zwei und eins, compared with PLANKA Community (React, Redux, Sails.js, PostgreSQL, WebSockets). ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this card move since the page was drawn\" run inside the command, in microseconds, with no lock held across the network. This follows Anders Murphy's findings on SQLite and contention. The writer prepares each statement once on its connection and keeps it, since the driver would parse every statement again on every call. Reads use their own pool. SQLite runs with `synchronous=FULL`, so it is as durable as PostgreSQL's defaults. ／ `deploy/` has a sandboxed systemd unit, a backup timer (every six hours, fourteen days kept), a Caddy snippet and an install script:",
+   "evidence_lines": [
+    7,
+    23,
+    53
+   ]
+  },
+  "fn": "zweiundeins/kanban",
+  "sha": "015fa6d4c66c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

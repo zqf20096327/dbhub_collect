@@ -9235,5 +9235,85 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d66baf94f84": {
+  "identity": {
+   "one_liner": "校园通知聚合桌面应用，本地 SQLite 存储，支持增量抓取与事件通知",
+   "review": "一个面向吉林大学学生的 Windows 桌面应用（Tauri + React + FastAPI），从多个官方院系网站抓取通知，做去重、过滤、搜索，并通过 Windows 原生通知推送。本地数据存于 SQLite，仓库还包含 Cloud 部署的 PostgreSQL 配置与 Alembic 迁移，但生产云链路尚未验证。通过 source-adapter 架构可扩展其他来源。目前未声明开源许可证，不允许再分发或衍生作品。",
+   "highlights": [
+    "内置多来源适配器，增量抓取并通过内容哈希去重与更新检测",
+    "本地 SQLite 存储，支持搜索、分类过滤、已读状态与收藏",
+    "Cloud Feed 同步与本地回退机制，按重要性/截止时间/静默时段发送 Windows 原生通知"
+   ],
+   "use_cases": [
+    "学生集中跟踪大学与院系官网通知，避免逐个网站查看",
+    "通过 source-adapter 架构接入其他校园或公共机构通知源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Local data: SQLite",
+     "lines": [
+      61
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Cloud deployment support: PostgreSQL configuration and Alembic migrations ／ PostgreSQL support is included for Cloud deployment, but a production Cloud deployment is not represented as verified by this release.",
+     "lines": [
+      62,
+      64
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储本地数据、用 PostgreSQL 做云部署的通知聚合应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "尚未声明项目级开源许可证，源码可用但不授予再分发或衍生权利",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> A Windows desktop app that aggregates, deduplicates, filters, and delivers notices from official campus sources. ／ - Local data: SQLite ／ - `backend/` — FastAPI application, crawler, SQLite models, and pytest suite",
+   "evidence_lines": [
+    5,
+    61,
+    139
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "xuejh-x/jlu-notice-monitor",
+  "sha": "6d66baf94f84",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

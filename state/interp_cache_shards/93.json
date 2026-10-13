@@ -8910,5 +8910,256 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a1675f28d81": {
+  "identity": {
+   "one_liner": "自托管的编码代理证据存储，记录并关联模型调用与代码变更",
+   "review": "Sediment 是一个可自托管的开源证据存储系统，记录编码代理的模型调用、代码改动、开发者决策与检查结果并建立关联，用于对比模型表现、复用会话上下文和导出训练数据。面向使用 AI 编码代理的团队，通过 PyPI 安装 CLI 并在本地启动 server，需依赖 libpq 等库。",
+   "highlights": [
+    "记录模型调用、代码变更、开发者决策和检查结果并相互关联",
+    "提供报告命令对比模型的决策保留率、CI 通过率等指标",
+    "支持导出样本用于微调、偏好训练和强化学习"
+   ],
+   "use_cases": [
+    "对比不同模型在代理任务上的产出质量",
+    "为代理复用历史会话证据作为上下文",
+    "构建微调与强化学习训练数据集"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "`sediment server` needs host libraries: `libpq` and `openssl@3` with Homebrew,",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "tool",
+   "eco_why": "为编码代理生态提供证据记录与观测服务，数据库（libpq/PostgreSQL）仅是其服务端依赖。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Sediment is an open-source, self-hosted evidence store for coding agents. ／ whether it passed CI. Sediment records model calls, code changes, developer ／ `sediment server` needs host libraries: `libpq` and `openssl@3` with Homebrew,",
+   "evidence_lines": [
+    14,
+    17,
+    49
+   ]
+  },
+  "fn": "sediment-ai/sediment",
+  "sha": "7a1675f28d81",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "affc02451b95": {
+  "identity": {
+   "one_liner": "Flask 双服务微服务示例栈，含 Redis 缓存、PostgreSQL 持久化与 K8s 自动扩缩容",
+   "review": "该项目是一个容器化微服务栈：两个 Flask 服务经 Nginx 对外，Redis 负责计数与缓存，PostgreSQL 由内部 History API 独占访问，可运行于 Docker Compose 或 Kubernetes，并带 HPA 自动扩缩容、NetworkPolicies 边界与部署到 kind 集群的 CI。适合作为学习微服务架构拆分、服务间通信与 Kubernetes 部署的开发者参考；单副本 Postgres 卷限制其水平扩展。",
+   "highlights": [
+    "提供 Docker Compose 与 Kubernetes 两种部署方式，Web API 支持 HPA 从 3 副本扩至 6 副本",
+    "使用 NetworkPolicies 强制服务边界：仅 Web pods 可访问 History API，仅 History pods 可访问 Postgres",
+    "CI 在每次推送时将栈部署到 kind 集群并运行端到端检查，镜像经测试通过后发布至 GHCR"
+   ],
+   "use_cases": [
+    "学习微服务拆分、服务间 HTTP 通信与数据库所有权隔离",
+    "演示 Kubernetes 自动扩缩容、NetworkPolicies 与非 root 容器配置",
+    "本地或集群环境演示 Redis cache-aside 缓存与故障降级行为"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**History API**|Flask|Internal service. Owns PostgreSQL exclusively; records and serves visit history on behalf of the Web API| ／ |**Database**|PostgreSQL|Provides persistent relational data storage, accessed only by the History API|",
+     "lines": [
+      23,
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储访问历史的应用栈，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**History API**|Flask|Internal service. Owns PostgreSQL exclusively; records and serves visit history on behalf of the Web API| ／ |**Database**|PostgreSQL|Provides persistent relational data storage, accessed only by the History API| ／ * **Containerised:** Fully isolated services deployed using Docker Compose or Kubernetes.",
+   "evidence_lines": [
+    23,
+    26,
+    40
+   ]
+  },
+  "fn": "Furkan5E/Scalable-Microservices-Stack",
+  "sha": "affc02451b95",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7dbe9c6d41b4": {
+  "identity": {
+   "one_liner": "项目管理工具，提供看板、自动化、实时协作与 MCP 接口",
+   "review": "Kanera 是一个自托管可用的项目管理系统，提供看板、表格、日历等多种视图，支持自定义字段、自动化、实时协作、REST API 与 MCP 服务器接入 AI 代理。技术栈为 Angular、Fastify、PostgreSQL、Drizzle ORM 和 Valkey，适合需要任务协作并让 AI 代理参与工作流的团队使用。",
+   "highlights": [
+    "提供看板、表格、日历、Portfolio 等多种视图及工作区共享列表、标签与自定义字段",
+    "提供 REST API、CLI、TypeScript SDK 与 MCP 服务器，用于接入 AI 代理和外部集成",
+    "支持触发式自动化、实时协作和导出 Excel 报表"
+   ],
+   "use_cases": [
+    "团队跨项目/客户管理任务与工作流",
+    "将 AI 编码代理的工作接入看板并跟踪其进度",
+    "自托管部署的私有化项目协作平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Kanera is a pnpm monorepo built with Angular 22, Fastify 5, Socket.IO 4, PostgreSQL 18, Drizzle ORM, and Valkey. ／ The example environment uses PostgreSQL on `localhost:5433` and Valkey on `localhost:6379`. Replace `JWT_SECRET` and `MEDIA_SIGNING_SECRET` with unique random values before exposing the application outside your machine. See `.env.full.example` for optional set",
+     "lines": [
+      194,
+      220
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Kanera 是使用 PostgreSQL 18 与 Valkey 存数据的项目管理应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Automate and integrate.** Handle repetitive updates with trigger-based automations, post card activity into Slack, Discord, Telegram, or Zulip, and connect other tools through the REST API, webhooks, and MCP server. ／ |**MCP server**|Claude, ChatGPT, Codex, GitHub Copilot, Cursor, Gemini CLI, OpenCode, and other MCP clients, connected with OAuth|`https://mcp.kanera.app/mcp` · MCP setup guides|",
+   "evidence_lines": [
+    24,
+    81
+   ]
+  },
+  "fn": "happendev/Kanera",
+  "sha": "7dbe9c6d41b4",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7998778b05d3": {
+  "identity": {
+   "one_liner": "基于 Godot 客户端与 Flask + SQLite 服务端的 2.5D 动作 RPG 游戏",
+   "review": "这是一个用 Godot 4.6 与 GDScript 开发的俯视角 2.5D 多人动作 RPG，玩家通过桌面浏览器游玩，包含四种职业、元素怪物变体、宠物、钓鱼烹饪与玩家交易经济。服务端用 Flask 和 SQLite 实现账户服务与权威存档，经济采用复式记账（gold_ledger）并通过 8500+ 自动化检查保障一致性，适合动作 RPG 玩家与游戏开发者参考。",
+   "highlights": [
+    "提供支持实时多人、服务器权威经济与账户服务的完整 2.5D 动作 RPG",
+    "存档由 Flask 服务端持有权威数据，客户端不拥有存档",
+    "包含自建 API 安全审计（20 项发现、19 项已修复）与 8500+ 自动化检查"
+   ],
+   "use_cases": [
+    "游玩支持多人在线的 2.5D 动作 RPG",
+    "参考 Godot 客户端与 Flask/SQLite 服务端分离的存档架构",
+    "参考游戏经济系统的复式记账与一致性测试实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明该项目是一个使用 SQLite 存储数据的游戏应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A top-down 2.5D action RPG built in Godot 4.6 with GDScript, backed by a Flask account service. Four playable classes, six enemy families in forty-three elemental variants, collectable combat pets, fishing and cooking, player-to-player trading over a taxed economy, other players drawn live wherever you are and fighting the same monsters, and a complete run from town to final boss. ／ `CharacterData` holds a `SaveStorage` and never asks which implementation it has. That seam is what let the game move from a local file to the Flask service without touching the twenty-nine places that call `save_data()`. The server is the authority now — it owns level, XP, the derived stat maxima and every loot roll — so the anti-tamper passes that existed to defend a local file against a text editor are skipped rather than run against data they can no longer say anything useful about. Writes are still debounced: saving on every stat change was firing about twenty times a second in normal play.",
+   "evidence_lines": [
+    3,
+    57
+   ]
+  },
+  "fn": "Tunacanman2EZ/Elusion_RPG",
+  "sha": "7998778b05d3",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

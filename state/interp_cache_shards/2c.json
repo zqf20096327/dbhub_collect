@@ -9841,5 +9841,145 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7de1ee568707": {
+  "identity": {
+   "one_liner": "电商数据湖仓分析平台展示站，含Spark/Delta/dbt/Airflow管道",
+   "review": "这是一个电商湖仓分析平台的作品展示网站，浏览器打开 index.html 即可运行，也可部署到 GitHub Pages。它演示 Bronze/Silver/Gold 分层数据管道、质量检查、仪表盘、RFM 客户分层以及带 TF-IDF RAG 检索的 AI 分析代理，底层涉及 Spark、Delta Lake、dbt、Airflow 和 PostgreSQL，适合作为个人数据分析项目展示。",
+   "highlights": [
+    "提供 Bronze/Silver/Gold 分层管道与数据质量检查的浏览器内演示",
+    "包含 RAG 检索的 AI 分析代理、RFM 客户分层和可筛选仪表盘",
+    "支持 Docker 部署与 CSV 导出"
+   ],
+   "use_cases": [
+    "电商订单数据的湖仓分析演示",
+    "数据工程管道（Spark/Delta/dbt/Airflow）学习展示",
+    "AI 分析代理与产品标签化的功能演示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Showcase site for an end-to-end lakehouse (Spark, Delta Lake, dbt, Airflow, PostgreSQL, Power BI / Looker) with an agentic AI analyst, RAG and CNN product tagging, shipped with Docker.",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 PostgreSQL 等组件存储/分析电商数据的端到端平台作品，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Showcase site for an end-to-end lakehouse (Spark, Delta Lake, dbt, Airflow, PostgreSQL, Power BI / Looker) with an agentic AI analyst, RAG and CNN product tagging, shipped with Docker. ／ Working in-browser demo: generated order data, Bronze/Silver/Gold pipeline with quality checks, filterable dashboard, RFM customer segments, agent with TF-IDF RAG retrieval and SQL, convolution vision lab, CSV export, light/dark theme, responsive layout.",
+   "evidence_lines": [
+    6,
+    15
+   ]
+  },
+  "fn": "Nikhil-creat/retailiq",
+  "sha": "7de1ee568707",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed990fc3d766": {
+  "identity": {
+   "one_liner": "GaussDB 专用 DBeaver 客户端回归测试仓库，含 GUI 夹具与 JDBC 驱动校验",
+   "review": "该仓库为 DBeaver 对 GaussDB 的客户端适配提供回归测试：包含包界面、调试事务、E2E、mTLS、权限与 GB18030 编码等场景的可重复夹具和运行脚本。面向维护 DBeaver GaussDB 适配或 GaussDB 客户端测试的工程师，通过专用测试库、私有连接文件与环境变量运行，依赖版本匹配的供应商 JDBC jar，不接管已有 schema。",
+   "highlights": [
+    "提供包界面、调试事务、调试 E2E、mTLS、权限与 GB18030 编码等场景的回归夹具与运行脚本",
+    "夹具使用固定 schema、RESTRICT 清理与事务回滚，拒绝接管或级联删除已有对象",
+    "通过能力矩阵探针核对实际 JDBC 驱动版本、兼容模式与服务端调试协议签名"
+   ],
+   "use_cases": [
+    "DBeaver GaussDB 适配代码修改后的真库回归验证",
+    "GaussDB 客户端调试器、事务、TLS 与权限边界的可重复测试",
+    "搭建隔离专用测试库场景的验收与结果审计"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB / DBeaver 客户端回归测试 ／ export GAUSSDB_PACKAGE_URL=jdbc:gaussdb://test-host:port/test_database",
+     "lines": [
+      1,
+      26
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "`GAUSSDB_HISTORY_DRIVER_CLASS`；`org.postgresql.Driver` 自动使用 `jdbc:postgresql:`，",
+     "lines": [
+      167
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为 DBeaver 对 GaussDB 的适配提供测试夹具与运行器，属于为数据库客户端生态服务的测试工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# GaussDB / DBeaver 客户端回归测试 ／ - 本仓库：测试范围、执行入口、结果审计与环境说明。",
+   "evidence_lines": [
+    1,
+    7
+   ]
+  },
+  "fn": "jarrenL/gaussdb-dbeaver-tests",
+  "sha": "ed990fc3d766",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

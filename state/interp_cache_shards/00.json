@@ -8385,5 +8385,205 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f9072c0f22cd": {
+  "identity": {
+   "one_liner": "Java 流式 API ORM 框架，以 JQL 类型安全地编写 SQL 持久层",
+   "review": "Brief 是一个 Java ORM 持久化框架，通过 JQL 流式 API 让开发者以类型安全的 Java 代码组合 SQL 查询，支持独立运行与增强现有 MyBatis 两种模式。面向使用 Spring Boot 或纯 JDBC 的 Java 开发者，提供多表 join、SQL 函数注解、分表、字段加密与脱敏等能力，依赖 JDK 8+，采用 Server Side Public License 许可。",
+   "highlights": [
+    "提供 JQL 流式 API，以强类型 Java 代码组合 SELECT/INSERT/UPDATE/DELETE",
+    "以注解方式表达 50+ MySQL 函数及 JSON 函数集合",
+    "支持多方言：MySQL、H2、Oracle、SQL Server、ClickHouse、SQLite、PostgreSQL"
+   ],
+   "use_cases": [
+    "Java 应用的持久层开发，替代手写 SQL 字符串与 XML 映射",
+    "在既有 MyBatis 项目中引入 JQL 查询能力",
+    "需要对字段进行加密、脱敏或按策略分表的数据访问场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **SQL functions as annotations** — 50+ MySQL functions (`LEFT`, `CONCAT`, `IFNULL`, `CASE WHEN`, `DATE_FORMAT`, `GROUP_CONCAT`, …) plus a full JSON function set (`JSON_EXTRACT`, `JSON_UNQUOTE`, `JSON_CONTAINS`, `JSON_OBJECT`, …) expressed as field-level anno ／ - **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL. ／ Brief ships a dedicated set of annotations for MySQL JSON functions, so you can query and construct JSON documents entirely from annotations — no raw SQL needed. String-literal arguments (paths, candidates) must include their own quotes, consistent with every ",
+     "lines": [
+      33,
+      43,
+      205
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为多方言适配的 ORM 持久化框架，是为数据库生态服务的开发组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Server Side Public License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Brief is a lightweight ORM framework built around a single idea: **writing SQL should feel like writing Java**. ／ Brief is not a wrapper over MyBatis or JPA. It is an independent persistence engine that ships in **two modes**: ／ - **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+   "evidence_lines": [
+    13,
+    24,
+    43
+   ]
+  },
+  "fn": "javaoffers/briefest",
+  "sha": "f9072c0f22cd",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "006e4e412ba4": {
+  "identity": {
+   "one_liner": "面向 MySQL/PostgreSQL/Oracle/Redis 的 MCP 数据库查询与会话服务器",
+   "review": "这是一个 MCP 服务器，供 AI 客户端通过标准化工具连接并查询多种数据库。它以持久连接和 SQL 会话连续性为核心机制，提供查询、写入、事务控制、schema 检查、慢查询与锁分析等工具；写入需交互式审批，Redis 仅支持读取类操作，Oracle 分析能力有部分限制。",
+   "highlights": [
+    "提供持久连接与 sessionId 会话机制，支持跨调用保持事务、变量与临时表状态",
+    "提供 list_schemas、describe_table、find_long_running_queries、find_blocking_sessions 等检查与分析工具",
+    "SQL 写入与非空事务提交需交互式 Accept/Decline/Cancel 审批，支持 readonly 与 dangerMode 配置"
+   ],
+   "use_cases": [
+    "让 MCP 客户端/AI 代理以受控方式查询和检查 MySQL、PostgreSQL、Oracle 数据库",
+    "需要会话级事务控制与写入审批的数据库运维排查场景",
+    "通过 redis_get/redis_hgetall/redis_scan 读取 Redis 键数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "An MCP server for MySQL, PostgreSQL, Oracle, and Redis with explicit persistent connections and SQL session continuity. ／ |MySQL|✓|✓|✓|✓|",
+     "lines": [
+      5,
+      33
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "An MCP server for MySQL, PostgreSQL, Oracle, and Redis with explicit persistent connections and SQL session continuity. ／ |PostgreSQL|✓|✓|✓|—|",
+     "lines": [
+      5,
+      34
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "An MCP server for MySQL, PostgreSQL, Oracle, and Redis with explicit persistent connections and SQL session continuity. ／ |Oracle|✓|✓|—|—|",
+     "lines": [
+      5,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供面向多数据库的连接、查询与检查工具集，是为数据库生态服务的 MCP 组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An MCP server for MySQL, PostgreSQL, Oracle, and Redis with explicit persistent connections and SQL session continuity. ／ ## Supported Databases ／ |Tool|Purpose|",
+   "evidence_lines": [
+    5,
+    29,
+    42
+   ]
+  },
+  "fn": "jadchene/mcp-database",
+  "sha": "006e4e412ba4",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

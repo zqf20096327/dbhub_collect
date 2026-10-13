@@ -9438,5 +9438,80 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a44a431c267d": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的购物系统，使用 TiDB Cloud 存储",
+   "review": "这是一个用 Spring Boot 2.7 实现的完整购物系统，包含买家前台（商品浏览、搜索、购买意向提交）和卖家后台（商品、分类、库存管理）。公网部署于 Render，数据存储使用 TiDB Cloud（MySQL 协议兼容），图片以 BLOB 形式直接存入 TiDB；本地开发可选使用 MySQL 8.0，两者数据互不同步。适合作为课程演示或在线体验项目。",
+   "highlights": [
+    "买家前台与卖家后台双端功能，含商品、分类、库存与购买意向管理",
+    "部署在 Render 免费容器，通过 Docker 多阶段构建自动构建发布",
+    "公网数据存储于 TiDB Cloud，Redis 缓存可选且不可用时自动降级直查数据库"
+   ],
+   "use_cases": [
+    "零部署的在线购物系统演示与课程项目展示",
+    "Spring Boot + TiDB Cloud 公网部署的学习参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|数据库|**TiDB Cloud Starter**（MySQL 协议兼容，东京区，免费持久化云库）| ／ - **Redis 不参与公网部署**：`app.redis-enabled=false` 完全短路，商品读写直查 TiDB ／ - **运行时上传的图片/媒体**：字节直接存 TiDB（`stored_images` 表 LONGBLOB），通过 `/images/{id}` 接口读取，容器休眠/重新部署后不丢失；旧的 `/uploads/` 文件链接继续兼容",
+     "lines": [
+      21,
+      36,
+      39
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "1. **环境**：Java 17+、Maven 3.6+、MySQL 8.0（Redis 可选） ／ > 注意：本地实例连接的是**本地 MySQL**，与公网的 TiDB 是两个独立数据库，数据互不同步。",
+     "lines": [
+      65,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用数据库存储数据的购物系统应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于 Spring Boot 的完整购物系统，支持商品展示、分类筛选、购买意向提交、卖家后台管理等功能。本项目已部署到公网，**无需任何本地环境，打开网页即可使用**。 ／ |数据库|**TiDB Cloud Starter**（MySQL 协议兼容，东京区，免费持久化云库）|",
+   "evidence_lines": [
+    3,
+    21
+   ]
+  },
+  "fn": "IfYouSeeMeVme50/shopping-system-public-deploy",
+  "sha": "a44a431c267d",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

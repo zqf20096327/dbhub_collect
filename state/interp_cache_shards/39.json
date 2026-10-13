@@ -8677,5 +8677,207 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fa6e7daec9df": {
+  "identity": {
+   "one_liner": "本地优先的个人邮件与聊天归档工具，基于 SQLite 和 DuckDB",
+   "review": "msgvault 是一个本地优先的开源归档工具，将邮件、聊天、日历、会议记录和联系人同步或导入到自有硬件上，提供关键词/语义搜索、SQL 查询、人物身份关联、Web/TUI 界面及 MCP 接口。面向希望长期保管个人通讯记录并做离线检索和分析的个人用户。项目处于 Alpha 阶段，API 与存储格式可能变动。",
+   "highlights": [
+    "支持同步/导入邮件、聊天、日历、会议与联系人并合并同一人的多身份",
+    "提供浏览器、终端 TUI、CLI、HTTP API 和 MCP 多种访问方式，支持 SQL 查询与导出",
+    "支持去重、备份和远程删除时保留本地归档"
+   ],
+   "use_cases": [
+    "个人长期归档自有邮箱与聊天记录并离线检索",
+    "跨来源关联同一联系人的多个地址与账号",
+    "在自己的服务器上部署私有消息历史库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`libsqlite3-dev` for the `sqlite3.h` header used by the default `sqlite_vec`",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "msgvault 使用 SQLite 和 DuckDB 存储和分析其归档数据，是消费数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "msgvault is a local-first, open-source archive for email, chat, meetings, ／ > **Alpha software.** APIs, storage format, and CLI flags may change. Back up ／ - **Use your own tools.** Query with SQL, export messages and attachments, or",
+   "evidence_lines": [
+    16,
+    21,
+    38
+   ]
+  },
+  "fn": "kenn-io/msgvault",
+  "sha": "fa6e7daec9df",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "34a59431d5e0": {
+  "identity": {
+   "one_liner": "自托管期权与股票交易日志平台，记录持仓全流程并做绩效分析",
+   "review": "Tradr 是一个可自托管的期权与股票交易日志平台，记录每笔成交、费用与备注，提供仓位管理、交易计算器、账本、绩效分析和期权定价工具，支持 CSV 导入历史数据。面向手动记录交易的个人交易者，通过 Docker Compose 一键部署，使用 PostgreSQL 存储数据；当前处于 1.0 前阶段，HTTP API 尚不稳定，且不执行任何下单操作。",
+   "highlights": [
+    "记录仓位全流程：起草、加仓、部分平仓，按笔滚动汇总成交、费用与已实现盈亏",
+    "提供交易计算器（仓位规模、R:R、风险金额）与 Black-Scholes 定价及 Greeks",
+    "支持 CSV 列映射导入多年历史数据，API 启动时自动执行仅向前的迁移"
+   ],
+   "use_cases": [
+    "个人交易者自托管记录和分析期权与股票交易历史",
+    "对接多个券商账户进行账本记录与对账",
+    "交易前用计算器评估仓位规模与风险收益比"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "TLS, against your own Postgres, or on a different port, see the ／ |`POSTGRES_PASSWORD`|Database password. Compose builds the API's `DATABASE_URL` from the `POSTGRES_*` values — do not set `DATABASE_URL` yourself.|",
+     "lines": [
+      47,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该平台使用 PostgreSQL 作为自身存储（Compose 由 POSTGRES_* 变量构建 DATABASE_URL），而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，另有托管版提供免费与 Pro 付费计划",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tradr is a self-hostable journal for options and equities traders. It records the whole ／ Requires Docker with Compose v2 and `openssl`. About two minutes. ／ |`POSTGRES_PASSWORD`|Database password. Compose builds the API's `DATABASE_URL` from the `POSTGRES_*` values — do not set `DATABASE_URL` yourself.|",
+   "evidence_lines": [
+    12,
+    33,
+    91
+   ]
+  },
+  "fn": "madmatt112/tradr",
+  "sha": "34a59431d5e0",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e6ae5d41f7a": {
+  "identity": {
+   "one_liner": "Vault-blind 的 Sesame 账户服务 API 与门户，自托管",
+   "review": "Sesame 的 Go 后端，提供账户注册、会话、桌面配对、下载与支持元数据等 REST 端点，并附账户门户和管理门户。设计上不接受任何保险库（vault）数据，密码用 Argon2id 哈希。数据存 PostgreSQL，通过 Compose 编排，自带迁移与健康检查端点。适合需要自托管 Sesame 配套账户服务的用户与运维者。",
+   "highlights": [
+    "提供只读元数据端点与账户/管理门户，端点不接受 vault 密码、TOTP 种子或加密保险库内容",
+    "通过 Docker Compose 一键启动 PostgreSQL、API、账户门户、管理门户与本地邮件捕获服务",
+    "独立迁移作业（cmd/migrate）在 API 启动前应用数据库 schema，内置 /livez 与 /readyz 健康探针"
+   ],
+   "use_cases": [
+    "自托管 Sesame 服务器的桌面配对与账户服务部署",
+    "搭建带邀请/注册模式控制的账户门户与管理后台",
+    "本地开发环境中测试账户流程（含 Mailpit 邮件捕获）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`npm run compose:up` starts PostgreSQL, applies migrations, and runs the API, ／ The Compose stack runs the `migrate` job after PostgreSQL is healthy and ／ Encrypted PostgreSQL backups should be taken at least daily and retained with a",
+     "lines": [
+      38,
+      119,
+      138
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储账户与元数据的应用服务，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`npm run compose:up` starts PostgreSQL, applies migrations, and runs the API, ／ The Compose stack runs the `migrate` job after PostgreSQL is healthy and ／ This is a vault-blind account service. It publishes product, release, and",
+   "evidence_lines": [
+    38,
+    119,
+    3
+   ]
+  },
+  "fn": "usesesame/sesame-server",
+  "sha": "5e6ae5d41f7a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

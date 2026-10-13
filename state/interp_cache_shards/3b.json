@@ -9172,5 +9172,170 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "58918a1f6582": {
+  "identity": {
+   "one_liner": "基于数据库表的 Django 任务队列后端，无需独立 broker",
+   "review": "django-ox 是 Django Tasks 框架的数据库后端，将任务队列存入现有数据库表，通过 SKIP LOCKED/原子 UPDATE 认领任务，reaper 回收死亡 worker 的任务，支持事务性入队、重试退回与定时调度，面向已使用 Django 并希望少维护一个 broker 的团队。可选 oxpull 应用提供去重、批次、限流等协调功能，但要求 Django 6.0+。",
+   "highlights": [
+    "任务队列为数据库表，任务在 worker 死亡后由 reaper 返回队列",
+    "支持事务性入队，任务与应用数据同事务提交或回滚",
+    "提供 worker CLI、健康检查命令、指标接口与队列管理界面"
+   ],
+   "use_cases": [
+    "为 Django 应用添加后台任务而不再运行 Redis/RabbitMQ 等 broker",
+    "需要任务与业务数据在事务中一致提交/回滚的场景",
+    "需要失败重试、指数退避和周期调度的任务队列"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ it (PostgreSQL, MySQL 8+) and an atomic compare-and-set UPDATE elsewhere",
+     "lines": [
+      41,
+      55,
+      92
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ it (PostgreSQL, MySQL 8+) and an atomic compare-and-set UPDATE elsewhere",
+     "lines": [
+      41,
+      55,
+      92
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ (including SQLite), and a reaper returns tasks whose worker died to the queue.",
+     "lines": [
+      41,
+      55,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Django Tasks 框架的任务队列后端组件运行在数据库之上，为数据库生态提供服务而非仅消费数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSD 3-Clause",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stop running Redis to send an email. django-ox runs Django's Tasks framework in your existing database, where a dead worker doesn't mean lost tasks. Run a worker process, not a separate broker. ／ Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks retry with exponential backoff by default, with every attempt's traceback kept. ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence.",
+   "evidence_lines": [
+    10,
+    41,
+    55
+   ]
+  },
+  "fn": "oxpull/django-ox",
+  "sha": "58918a1f6582",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7d9be8ec86c1": {
+  "identity": {
+   "one_liner": "面向AI编程代理的MCP工具服务器，二进制集成40个工具",
+   "review": "该仓库是一个MCP（Model Context Protocol）工具服务器，将文件编辑、编码处理、SSH/SFTP、进程管理、MySQL/Redis查询、静态二进制分析、DAP调试等40个工具打包为单个二进制，供Claude Code、Cursor、Codex等AI编程代理通过MCP调用。通过core等配置档案按需暴露工具schema以控制上下文体积，适合需要为AI代理扩展系统能力的开发者使用。",
+   "highlights": [
+    "单个二进制打包40个工具，通过 profile 按需暴露，core 配置仅暴露11个schema以减小上下文",
+    "提供支持 MySQL/MariaDB 的 SQL 查询工具与 Redis 命令工具",
+    "包含编码感知的文件工具、DAP 调试器及 x86/x64 PE/ELF 静态分析与反编译能力"
+   ],
+   "use_cases": [
+    "为AI编程代理补充文件编辑、编码保留、远程SSH等系统能力",
+    "让AI代理直接执行MySQL/Redis查询与网络诊断",
+    "逆向工程场景下的二进制反汇编、反编译与调试"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+     "lines": [
+      80
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+     "lines": [
+      80
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README提供的MySQL查询工具为操作数据库服务的组件，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP (Model Context Protocol) tool server for AI coding agents. ／ - **Too many separate tools**: Making the agent find, install, and configure Redis CLI, MySQL client, SSH client, etc. is tedious and error-prone. agent-tool bundles 40 tools into one binary and exposes them on demand through compact profiles. ／ |**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+   "evidence_lines": [
+    9,
+    17,
+    80
+   ]
+  },
+  "fn": "knewstimek/agent-tool",
+  "sha": "7d9be8ec86c1",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

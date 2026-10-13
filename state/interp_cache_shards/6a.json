@@ -9127,5 +9127,308 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2868d49edfa7": {
+  "identity": {
+   "one_liner": "git 背书的 AI Agent 调试经验库，MCP 检索失败教训",
+   "review": "MisakaNet 是一个面向 AI 编码代理的故障教训知识库，每条教训是仓库中的 Markdown 文件，通过 BM25（Python 标准库实现）检索，经 MCP 服务器（7 个工具）、WebMCP、llms.txt 及 A2A 接口供代理搜索与提交经验；支持 DeepSeek Harness、Claude Code、Codex/Cursor 等 MCP 客户端，无需向量数据库或嵌入模型，需 Python ≥ 3.10。",
+   "highlights": [
+    "提供 MCP 服务器（7 个工具）、WebMCP、llms.txt、A2A agent-card 等代理原生接口",
+    "教训以 Markdown 文件存储于 git 仓库，用标准库 BM25 关键词检索，无向量数据库依赖",
+    "教训带 E0–E4 证据分级，通过 intake 流程将检索失败记录为新教训"
+   ],
+   "use_cases": [
+    "AI 编码代理在调试时搜索已验证的故障修复经验",
+    "团队/个人将调试经验以可审计的 git 仓库形式沉淀与复用",
+    "通过公开 MCP 端点匿名检索教训（无需账号与令牌）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Windows, SQLite on an NTFS mount, a GitHub 401 after a token rotation, FANUC error codes. The fix usually",
+     "lines": [
+      217
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目服务于 AI 代理调试而非某个数据库生态，README 未表明其为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> Agent-native interfaces: MCP server (7 tools), WebMCP (browser ／ **Git-backed failure memory for AI coding agents.** An error shows up → the agent searches the lessons → ／ |❌ A vector database or RAG system|✅ BM25 keyword search — **stdlib only**, no third-party packages, but a **Python ≥ 3.10 interpreter is still required**|",
+   "evidence_lines": [
+    11,
+    107,
+    128
+   ]
+  },
+  "fn": "Ikalus1988/MisakaNet",
+  "sha": "2868d49edfa7",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2b4e39fd9dd3": {
+  "identity": {
+   "one_liner": "Go 六边形架构示例项目，演示端口-适配器分层",
+   "review": "这是一个用 Go 编写的六边形架构演示项目，核心业务为用户与视频管理，通过 Gin 提供 REST API、GraphQL 接口，仓储层实现了 SQLite 和 PostgreSQL 两种适配器，开发者可克隆并运行该项目学习六边形架构的依赖倒置与分层结构。",
+   "highlights": [
+    "提供 REST API（Gin）与 GraphQL（含 Playground）两种接入方式",
+    "仓储层支持 SQLite 与 PostgreSQL 适配器",
+    "演示端口/适配器与依赖倒置的项目结构"
+   ],
+   "use_cases": [
+    "学习六边形架构在 Go 项目中的组织方式",
+    "作为端口-适配器模式的项目模板参考",
+    "演示同一核心逻辑对接不同数据库适配器"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- [x] PostgreSQL",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- [x] SQLite ／ go run ./cmd/main.go -dbtype=sqlite -dsn=app.db",
+     "lines": [
+      26,
+      58
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite/PostgreSQL 存数据的演示应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository serves as a demonstration of the principles of Hexagonal Architecture in a Go project. ／ - [x] SQLite ／ - [x] PostgreSQL",
+   "evidence_lines": [
+    6,
+    26,
+    27
+   ]
+  },
+  "fn": "yinebebt/hexagonal-architecture",
+  "sha": "2b4e39fd9dd3",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "30e1747ab74b": {
+  "identity": {
+   "one_liner": "自托管Web分析工具，从服务器访问日志解析访客与AI爬虫流量",
+   "review": "Skald 读取服务器自身的访问日志（含 Vercel、Netlify、Cloudflare Worker 等来源），将请求分为人、AI 助手、搜索引擎、爬虫和自有流量五组，识别 ChatGPT、Claude、Perplexity 等 AI 助手与爬虫并二次核验计数。适合自建网站的站长与运维人员。使用 Python 编写，数据以 SQLite 文件存储，提供 Docker 镜像部署，无 cookie、无第三方脚本。许可证为 Elastic License 2.0，非完全开源许可。",
+   "highlights": [
+    "读取服务器访问日志并将每个请求归入五组流量分类，支持识别 AI 助手爬虫并按用途细分",
+    "独立的二次审计解析器复核每个数字，不一致的当日数据不予展示",
+    "支持 Vercel、Netlify 日志导出、Cloudflare Worker、CloudFront 和 Fastly 日志等多种日志来源"
+   ],
+   "use_cases": [
+    "统计分析脚本类工具无法覆盖的 AI 助手与爬虫访问流量",
+    "自托管网站的无 cookie 访问分析",
+    "通过 robots 规则与 llms.txt 管理各 AI 爬虫对站点的抓取行为"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      484
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Which road fits your site** (a form plugin, Next.js on Vercel, a Postgres backend, no code,",
+     "lines": [
+      378
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明示数据存储于 history.sqlite 等 SQLite 文件，数据库仅作为其自身数据存储被使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0，非 OSI 开源许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hosted web analytics that reads your server's own access log, so you see the people, ／  Python 3.11+",
+   "evidence_lines": [
+    8,
+    12
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "30e1747ab74b",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "05b0dce6cbbd": {
+  "identity": {
+   "one_liner": "GaussDB 507 O 模式的 Tortoise ORM 异步后端适配包",
+   "review": "这是一个独立适配项目，为 GaussDB Kernel 507 的 Oracle 兼容模式提供 Tortoise ORM 异步数据库后端，通过配套 gaussdb 驱动与 libpq 支持集中式和分布式部署。面向需要在 Python 异步应用或 FastAPI 服务中接入 GaussDB 的开发者。包未发布到 PyPI，需源码安装并自备驱动 wheel 与 libpq，适配范围仅限 507 O 模式。",
+   "highlights": [
+    "通过 engine=tortoise_gaussdb 接入 Tortoise ORM，支持连接池、参数化查询、CRUD、事务与保存点、迁移前进与回退",
+    "分布式建表支持按表配置 HASH 或 REPLICATION 分布策略，M2M 中间表可显式配置分布",
+    "提供连接预检，读取数据库版本与实际兼容模式（A/ORA），并提供迁移 plan/sqlmigrate/migrate 专用入口"
+   ],
+   "use_cases": [
+    "在 Python 异步应用或 FastAPI 服务中通过 Tortoise ORM 访问 GaussDB 507 O 模式",
+    "对集中式与分布式 GaussDB 实例执行建表、迁移与 CRUD 操作",
+    "离线 wheelhouse 交付环境中的集成验证与回归测试"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB Tortoise ORM 适配 ／ 本项目为 **GaussDB Kernel 507 的 O（Oracle）兼容模式**提供 Tortoise ORM 异步数据库后端，通过配套 `gaussdb` 驱动、连接池和 GaussDB libpq 接入**集中式与分布式**数据库。适合需要在 Python 异步应用或 FastAPI 服务中使用 GaussDB 的开发者。 ／ 本项目是**独立适配项目**，Python 包名为 `tortoise-gaussdb`，当前声明版本为 `0.2.0`；源码托管于 GitHub，尚未发布到 PyPI，也未作为华为云或 Tortoise ORM 官方组件发布。适配范围仅限 507 O 模式，不包含其他兼容模式。示例用于集成验证，完整 88 组验收仍在进行。",
+     "lines": [
+      1,
+      7,
+      9
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "`sqlmigrate` 的名称以生成的迁移为准。Tortoise 1.1.8 的原生 `tortoise migrate` 会选择 PostgreSQL editor/recorder，不是本后端支持的执行入口。",
+     "lines": [
+      116
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "本项目为 **GaussDB Kernel 507 的 O（Oracle）兼容模式**提供 Tortoise ORM 异步数据库后端，通过配套 `gaussdb` 驱动、连接池和 GaussDB libpq 接入**集中式与分布式**数据库。适合需要在 Python 异步应用或 FastAPI 服务中使用 GaussDB 的开发者。",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 GaussDB 提供 ORM 后端适配组件，属于为数据库生态服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，上游依赖各自遵循其许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "本项目为 **GaussDB Kernel 507 的 O（Oracle）兼容模式**提供 Tortoise ORM 异步数据库后端，通过配套 `gaussdb` 驱动、连接池和 GaussDB libpq 接入**集中式与分布式**数据库。适合需要在 Python 异步应用或 FastAPI 服务中使用 GaussDB 的开发者。 ／ 本项目是**独立适配项目**，Python 包名为 `tortoise-gaussdb`，当前声明版本为 `0.2.0`；源码托管于 GitHub，尚未发布到 PyPI，也未作为华为云或 Tortoise ORM 官方组件发布。适配范围仅限 507 O 模式，不包含其他兼容模式。示例用于集成验证，完整 88 组验收仍在进行。 ／       tortoise_gaussdb：客户端、执行器、建表与迁移适配",
+   "evidence_lines": [
+    7,
+    9,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "pypi"
+   ]
+  },
+  "fn": "jarrenL/gaussdb-tortoise-orm",
+  "sha": "05b0dce6cbbd",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

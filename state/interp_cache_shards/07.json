@@ -9286,5 +9286,154 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "deeabec3a786": {
+  "identity": {
+   "one_liner": "UNEP/GRID-Geneva 开发的自然资源地理空间数据在线管理平台",
+   "review": "MapX 是一个用于管理自然资源相关地理空间数据的在线平台，面向联合国环境规划署及其合作伙伴、多边环境协定秘书处、NGO 与学术界等用户，覆盖化学品管理、减灾、生物多样性规划等应用领域。技术栈基于 Docker Compose 编排，包含 Node.js 的 app/api 服务、R/Shiny 组件、GeoServer 等，数据库使用 PostgreSQL/PostGIS，仓库内容主要是开发与 CI/CD 流程文档。",
+   "highlights": [
+    "提供基于 Docker Compose 的开发环境，通过 docker compose 拉取并运行完整服务栈",
+    "使用 GitHub Actions 实现推送、手动、每周定时的 CI/CD 构建流程",
+    "内置基于 sdk 的端到端测试工具，并包含国家边界示例数据集 mx_countries"
+   ],
+   "use_cases": [
+    "环境决策相关的地理空间数据管理与可视化",
+    "减灾、土地利用规划、生物多样性规划等领域的空间数据共享",
+    "基于该代码库进行本地开发与二次部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL passwords update ／ Procedure to follow if PostgreSQL passwords need to be updated for security reason (or any other reasons).",
+     "lines": [
+      329,
+      331
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述 MapX 是使用数据库存数据的地理空间数据管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MapX is an online platform for managing geospatial data on natural resources, developed by UNEP/GRID-Geneva - a data centre resulting from the partnership between ／ Postgis: `OperationalError: could not access file \"$libdir/postgis-X.X` _Solution:_ run `docker compose exec pg update-postgis.sh` ／ A sample dataset of countries boundaries ( polygons ) is included in this code repo, and will add a table named `mx_countries` in the database. The main purpose of this layer is croping dataset during exportation.",
+   "evidence_lines": [
+    5,
+    178,
+    285
+   ]
+  },
+  "fn": "unep-grid/mapx",
+  "sha": "deeabec3a786",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7edc21c36d56": {
+  "identity": {
+   "one_liner": "自托管 AI agent 运行时，基于 Claude Agent SDK 构建",
+   "review": "Nerve 是一个自托管的 AI agent 运行时，支持个人助理与自主工作两种模式，提供持久记忆（SQLite 支撑的热记忆与语义搜索双层）、定时任务、技能自演化，并通过 Web UI、Telegram、Slack 及 cron 通道交互。面向希望在本地运行长期 agent 的个人用户与团队，需 Python/Node 环境，基于 Claude Agent SDK 与相应模型服务。",
+   "highlights": [
+    "提供双层持久记忆：MEMORY.md 热记忆加基于 memU 的 SQLite 持久化语义搜索",
+    "支持 Web UI、Telegram、Slack、cron 多通道，共享同一 agent 引擎",
+    "提供 plan 审批、人工确认等 human-in-the-loop 机制"
+   ],
+   "use_cases": [
+    "自托管个人助理：同步邮件、管理收件箱、记录偏好",
+    "部署自治 worker：监控 CI、审查 PR、按计划执行任务",
+    "定时执行 AI 会话任务（简报、清理、报告等）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only. ／ Markdown files backed by SQLite FTS5 full-text search.",
+     "lines": [
+      171,
+      184
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "curl -fsSL https://raw.githubusercontent.com/ClickHouse/nerve/main/install.sh | bash ／ git clone https://github.com/ClickHouse/nerve.git && cd nerve",
+     "lines": [
+      20,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示其使用 SQLite 作为记忆与任务的存储后端，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Nerve is a self-hosted runtime for AI agents, built around the Claude Agent SDK. It gives agents everything they need to be useful long-term: persistent memory, scheduled execution, task management, learnable skills, and channels to reach you through — web UI, Telegram, Slack, or autonomous cron jobs. ／ Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only. ／ Markdown files backed by SQLite FTS5 full-text search.",
+   "evidence_lines": [
+    13,
+    171,
+    184
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "ClickHouse/nerve",
+  "sha": "7edc21c36d56",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

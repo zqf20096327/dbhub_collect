@@ -8095,5 +8095,120 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bc62d037cbbc": {
+  "identity": {
+   "one_liner": "即时通讯服务端（旧版存档，已迁移至 OkIM）",
+   "review": "这是一个即时通讯系统的服务端仓库，基于 Spring Boot 3、Netty、gRPC、RocketMQ、MySQL、MongoDB、Elasticsearch 等组件实现消息服务。README 声明该仓库为旧版架构存档，不再更新，项目已重构为聚合仓库 OkIM 继续开源，需前往新仓库获取最新代码。",
+   "highlights": [
+    "README 声明项目为旧版架构存档，不再更新",
+    "新版本 OkIM 以聚合仓库形式包含微服务、Flutter SDK/客户端、管理后台与 AI 助手"
+   ],
+   "use_cases": [
+    "查阅旧版即时通讯服务端架构代码",
+    "前往新仓库 OkIM 获取最新代码"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明其为即时通讯应用服务端，主题标签显示使用 MySQL 等数据库存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# xzll-im-server（旧版存档） ／ > ⚠️ **此仓库为旧版架构存档，不再更新。** 项目已重构为聚合仓库并以 OkIM 之名恢复开源：**598572/OkIM** —— Spring Cloud 微服务 + Flutter SDK/客户端 + 管理后台 + AI 助手，配套新书全十二章代码。请前往新仓库获取最新代码。",
+   "evidence_lines": [
+    1,
+    3
+   ]
+  },
+  "fn": "598572/xzll-im-server",
+  "sha": "bc62d037cbbc",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "50efd88e75fc": {
+  "identity": {
+   "one_liner": "带长期记忆与心智机制的 QQ 聊天机器人框架，数据存于单个 SQLite 文件",
+   "review": "LuckyTri 是一个 Node.js 编写的 QQ 陪伴型聊天机器人框架，通过 OneBot 11 反向 WebSocket 或 QQ 官方机器人接入消息，内置记忆、关系、作息、日记等心智模块，并提供 Web 管理台（studio-web）用于查看记录、配置模型与撤销变化。数据（数据库、记忆、备份）保存在本机单个 SQLite 文件及 data/ 目录中；真实回复需自备模型服务与 API Key。适合想在 QQ 群/私聊中运行一个带连续记忆角色的个人用户。",
+   "highlights": [
+    "支持 OneBot 11 与 QQ 官方机器人两种接入方式，运行中可切换",
+    "使用单个 SQLite 文件存储数据库、记忆与聊天记录，支持自动备份、SHA-256 完整性清单与迁移前快照",
+    "提供插件机制，每个插件运行在受限进程中，启用时需同意权限"
+   ],
+   "use_cases": [
+    "在 QQ 群聊/私聊中运行一个带长期记忆的陪伴型聊天机器人",
+    "通过 Web 管理台查看对话记录、模型用量并测试模型配置",
+    "以模拟模式与回放测试机器人行为而不发送真实 QQ 消息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份|",
+     "lines": [
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 文件存储自身数据（数据库、记忆、聊天记录），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份| ／ 该目录下 `.env` 保存环境配置，`data/friend.db` 保存数据库、记忆、关系、聊天和界面配置，`data/knowledge/` 保存资料，`data/plugins/` 保存插件与插件数据，`data/launcher.log` 保存后台日志，`data/backups/` 保存备份。运行 `luckytri paths` 查看实际路径。npm 更新、卸载与重装都不删除这些文件；启动不依赖当前工作目录。 ／   QQ[\"QQ<br/>OneBot 11 或官方机器人\"] --> Ch[\"通道<br/>channels/\"]",
+   "evidence_lines": [
+    67,
+    175,
+    55
+   ]
+  },
+  "fn": "TodayYueC/LuckyTri",
+  "sha": "50efd88e75fc",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9397,5 +9397,92 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b6f5ced13116": {
+  "identity": {
+   "one_liner": "面向 SNTI 的培训评估与质量分析 Web 门户，PHP 实现",
+   "review": "这是一个为 SNTI（Tata Steel）构建的培训评估与反馈分析门户，提供学员评分提交、管理员 KPI 仪表盘、CSV 报表导出和 RBAC 权限控制。技术上基于 PHP 8.2，通过 db.php 解析 MYSQL_URL/DATABASE_URL 连接云端 MySQL，并在远程库不可达时回退到内嵌 SQLite；支持 XAMPP 或 Docker 部署，首次访问时自动建表。",
+   "highlights": [
+    "提供学员五维评分、管理员 KPI 仪表盘与 CSV 报表导出功能",
+    "db.php 支持 MYSQL_URL/DATABASE_URL 解析，远程 MySQL 不可达时回退 SQLite",
+    "实现 RBAC、CSRF 令牌、PDO 预处理语句、Bcrypt 密码哈希等安全机制"
+   ],
+   "use_cases": [
+    "企业培训机构收集学员对课程与师资的反馈",
+    "管理员查看实时满意度统计并导出审计报表",
+    "本地 XAMPP 或 Docker 环境部署的 PHP Web 应用示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* **Resilient Multi-Driver Bootstrapping:** `db.php` natively parses `MYSQL_URL` and `DATABASE_URL` with TLS certificate auto-negotiation. If remote MySQL is temporarily unreachable, it seamlessly falls back to embedded SQLite without throwing HTTP 500 crashes ／ * XAMPP (PHP 8.2+ and MySQL/MariaDB) **OR** Docker ／ 3. **Start Apache & MySQL:**",
+     "lines": [
+      45,
+      110,
+      125
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **Resilient Multi-Driver Bootstrapping:** `db.php` natively parses `MYSQL_URL` and `DATABASE_URL` with TLS certificate auto-negotiation. If remote MySQL is temporarily unreachable, it seamlessly falls back to embedded SQLite without throwing HTTP 500 crashes ／ docker run -p 8080:80 -e DB_DRIVER=sqlite snti-feedback-portal",
+     "lines": [
+      45,
+      142
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* XAMPP (PHP 8.2+ and MySQL/MariaDB) **OR** Docker",
+     "lines": [
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 MySQL/SQLite 存储数据的培训反馈门户应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A production-ready, full-stack institutional web portal designed for Shavak Nanavati Technical Institute (SNTI, Tata Steel).** ／ * **Resilient Multi-Driver Bootstrapping:** `db.php` natively parses `MYSQL_URL` and `DATABASE_URL` with TLS certificate auto-negotiation. If remote MySQL is temporarily unreachable, it seamlessly falls back to embedded SQLite without throwing HTTP 500 crashes. ／ docker run -p 8080:80 -e DB_DRIVER=sqlite snti-feedback-portal",
+   "evidence_lines": [
+    12,
+    45,
+    142
+   ]
+  },
+  "fn": "0ANSHKUMARSINGH4/Feedback-Portal",
+  "sha": "b6f5ced13116",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

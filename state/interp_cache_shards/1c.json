@@ -9740,5 +9740,274 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f6a36be11d71": {
+  "identity": {
+   "one_liner": "Rust 编写的 Postgres 逻辑复制引擎，可嵌入或独立运行",
+   "review": "该项目实现 Postgres 逻辑复制：按 publication 选表，先做初始全量同步，再通过 CDC 持续将变更以有序事件写入内置或自定义目的地。支持 PostgreSQL 14-18，要求源库 wal_level=logical。可嵌入 Rust 应用或以独立二进制/容器运行，目的地含 BigQuery（稳定）及 ClickHouse、Snowflake 等（私测）。适合需要将 Postgres 数据变更流入其他存储的开发与数据团队。",
+   "highlights": [
+    "支持初始全量同步加 CDC 持续复制，可捕获 insert/update/delete/truncate 并按序投递",
+    "可嵌入 Rust 应用作为库使用，或以独立二进制/容器镜像运行",
+    "持久化检查点与表状态，支持重启恢复和 at-least-once 投递"
+   ],
+   "use_cases": [
+    "将 Postgres 表数据实时复制到 BigQuery、ClickHouse 等分析型目的地",
+    "在 Rust 应用中嵌入 CDC 复制能力而无需引入 Kafka/Debezium 等中间件",
+    "基于 Postgres publication 构建自定义数据管道"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "High-performance Postgres replication, written in Rust. ／ Supabase ETL supports PostgreSQL 14 through 18. PostgreSQL 15 or newer is",
+     "lines": [
+      7,
+      143
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|`clickhouse`|ClickHouse|Private alpha| ／ ClickHouse is the fastest way to start locally: `cargo x init` runs it, and",
+     "lines": [
+      125,
+      134
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 提供复制/ETL 能力的引擎工具，服务于数据库间数据流动而非仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Supabase ETL is a high-performance Postgres replication engine written in Rust. ／ changes to a built-in or custom destination. ／ Supabase ETL supports PostgreSQL 14 through 18. PostgreSQL 15 or newer is",
+   "evidence_lines": [
+    33,
+    36,
+    143
+   ]
+  },
+  "fn": "supabase/etl",
+  "sha": "f6a36be11d71",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b036ee2d779d": {
+  "identity": {
+   "one_liner": "为人类与 AI Agent 交接任务提供持久化上下文与记忆管理的工具",
+   "review": "PowerContext 将任务相关的决策、约束、进度与经验存为 Memory、Handoff、Experience 等条目，使人和 Agent 可在新会话中接续工作。它通过 uv 安装 CLI/Server，提供 Python 客户端、HTTP API、MCP 与 Core SDK 接入，并为 Codex、Claude Code 等 Agent 提供引导式配置插件。依赖 seekdb 作为存储，支持本地或远程部署。",
+   "highlights": [
+    "提供 Memory、Handoff、Experience、Skill 四类上下文条目并保留来源与历史版本",
+    "支持通过 Python 客户端、HTTP API、MCP 和 Core SDK 四种接口接入应用",
+    "为 Codex、Claude Code 等 Agent 框架提供 setup/doctor 引导配置命令"
+   ],
+   "use_cases": [
+    "Agent 任务的跨会话交接与状态延续",
+    "多 Agent 协作中共享任务上下文",
+    "长期记忆的显式保存与检索（Basic memory 模式无需模型 API）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README L53 表明其通过安装 seekdb 依赖获取存储，属于使用数据库存储上下文数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0 单许可",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "If seekdb needs installing, it asks once and installs the dependency in the background. Follow the printed ／ Applications can use PowerContext through the async Python client, HTTP API, MCP, or the in-process Core SDK. See the interface reference to choose an entry point. ／ uv tool install --force \"powercontext[cli,server]==1.3.0\"",
+   "evidence_lines": [
+    53,
+    108,
+    39
+   ]
+  },
+  "fn": "oceanbase/powercontext",
+  "sha": "b036ee2d779d",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "70dd53c795e4": {
+  "identity": {
+   "one_liner": "Postgres 到 Iceberg 的 CDC 引擎，经逻辑复制写 S3 Parquet",
+   "review": "Streambed 是一个 CDC 数据管道工具：订阅 Postgres 的逻辑复制流，把 WAL 变更解码后以 Parquet 写入 S3 并提交 Iceberg 元数据，内置基于 DuckDB 的查询服务器以 Postgres 线协议对外提供查询，还支持快照时间旅行、回填、快照过期与文件压缩等维护命令。面向希望把分析查询从生产库卸载到湖仓的 Postgres 使用者，要求 Postgres 16+，SQLite/DuckDB 可作 DuckLake 目录存储。",
+   "highlights": [
+    "通过 Postgres 逻辑复制订阅 WAL，解码后周期性刷新为 Parquet 文件写入 S3 并提交 Iceberg 元数据",
+    "内置查询服务器以 Postgres 线协议暴露湖仓表，可用 psql 直连，并基于 DuckLake 快照支持 AT 语法的时间旅行查询",
+    "提供 resync 回填、snapshots 查看、cleanup 清理、maintenance 快照过期与小文件压缩等命令"
+   ],
+   "use_cases": [
+    "把生产 Postgres 库的分析查询卸载到 S3 上的 Iceberg 湖仓",
+    "用 psql 等现有 Postgres 客户端查询湖仓中的表数据",
+    "对湖仓表做历史快照查询与快照过期、小文件压缩等维护"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres-to-Iceberg CDC engine. Offload analytical queries from your production database without changing your application. ／ streambed streams WAL changes via logical replication, writes Parquet files to S3, and commits Iceberg metadata. Query the result with any Iceberg-compatible engine -- or use the built-in query server, which speaks the Postgres wire protocol so you can connect ／ Streambed connects to Postgres as a logical replication subscriber. It decodes WAL messages (inserts, updates, deletes), buffers rows per table, and periodically flushes them as Parquet files to S3 with Iceberg metadata commits. Updates and deletes use copy-on-write merging against existing Parquet data.",
+     "lines": [
+      7,
+      9,
+      89
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite catalogs remain supported with `--ducklake-catalog-store=sqlite`.",
+     "lines": [
+      64
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其为 Postgres-to-Iceberg CDC 引擎，通过逻辑复制读取 Postgres 并写入 S3/Iceberg，是为数据库生态服务的同步工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres-to-Iceberg CDC engine. Offload analytical queries from your production database without changing your application. ／ streambed streams WAL changes via logical replication, writes Parquet files to S3, and commits Iceberg metadata. Query the result with any Iceberg-compatible engine -- or use the built-in query server, which speaks the Postgres wire protocol so you can connect with `psql`. ／ |`streambed sync`|Main daemon. Streams WAL, writes Iceberg, optionally serves queries.|",
+   "evidence_lines": [
+    7,
+    9,
+    121
+   ]
+  },
+  "fn": "viggy28/streambed",
+  "sha": "70dd53c795e4",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0e529bd6e1e9": {
+  "identity": {
+   "one_liner": "为 AI 编程代理提供跨会话持久记忆的 MCP 服务器",
+   "review": "这是一个 MCP 服务器，为 Claude Code、Cursor、Codex 等AI 编程工具提供跨会话持久记忆、知识图谱和本地模型工具路由，附带本地 token 节省计量仪表。开发者通过 npm 安装并用 prism connect 一次配置多个主机；核心机制包括 ACT-R 记忆排序和 2B–27B 本地模型分级路由。基础功能本地免费，云同步、高级模型档位和团队功能需付费订阅。",
+   "highlights": [
+    "提供跨会话持久记忆，含交接摘要、TODO 与可配置上下文深度",
+    "支持通过 Ollama 本地模型（2B–27B）进行离线工具路由",
+    "提供 prism savings 命令，输出本地服务 token 量及各模型分解"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor、Codex 等代理配置长期会话记忆",
+    "在不依赖云端 API 的环境下运行 AI 工具路由",
+    "审计 AI 编码工作流中本地推理与云端调用的 token 用量"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未声明使用任何数据库存储记忆数据，其服务对象是 AI 编码代理而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0；基础版免费，云同步与高级功能需付费订阅",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Prism Coder is an MCP server that gives Claude, Cursor, and other AI tools long-term memory that survives across sessions. It ships with the open-weight `prism-coder` model fleet (2B–27B) for fast, offline tool-routing — no cloud required. And it keeps score: every call served locally is metered, so `prism savings` shows the token volume that never reached your cloud model — measured honestly, in tokens. ／ npm install -g prism-mcp-server ／ prism connect",
+   "evidence_lines": [
+    12,
+    71,
+    72
+   ]
+  },
+  "fn": "dcostenco/prism-coder",
+  "sha": "0e529bd6e1e9",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

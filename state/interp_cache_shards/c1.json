@@ -9186,5 +9186,201 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a0c9c635ffb2": {
+  "identity": {
+   "one_liner": "跨数据库同步关系型数据库对象并做版本控制的 CLI 工具",
+   "review": "sync-db 是一个基于 Knex 的 CLI 与编程接口工具，用于在多个数据库连接间同步 SQL 对象并管理迁移，提供 migrate-latest、rollback、synchronize、prune 等命令，支持 SQL 及 TypeScript 迁移文件。适合需要在多个数据库间保持 schema 对象一致的开发团队；注意 setup/teardown 未必在单事务内执行，需显式传入事务实例。",
+   "highlights": [
+    "提供 CLI 与编程 API 两种使用方式（L38、L175）",
+    "支持多数据库连接配置，将 db 对象同步到所有配置的数据库（L239）",
+    "迁移文件支持 SQL、JavaScript、TypeScript，底层基于 Knex（L34、L218）"
+   ],
+   "use_cases": [
+    "在多个数据库间同步表、存储过程等数据库对象",
+    "对数据库对象迁移做版本控制与回滚",
+    "在测试场景中使用事务显式执行 setup/teardown 同步"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Node PostgreSQL TypeScript Sample - includes programmatic usage",
+     "lines": [
+      259
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "For instance - if your project uses MSSQL, you will need to do: ／ $ yarn add mssql ／ 1. Node MSSQL TypeScript Sample - includes programmatic usage",
+     "lines": [
+      28,
+      31,
+      258
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为数据库对象同步与迁移服务，属于数据库生态工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Command line utility to synchronize and version control relational database objects across databases. ／ This utility uses Knex under the hood so these are the supported drivers. ／ Note: The `connections` key expects an array, so you can also provide multiple databases and `sync-db` ensures your configured db objects are synced across all these databases.",
+   "evidence_lines": [
+    3,
+    34,
+    239
+   ]
+  },
+  "fn": "leapfrogtechnology/sync-db",
+  "sha": "a0c9c635ffb2",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3713b0687c2e": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 AI 记忆与身份持久化服务，以 MCP 工具提供",
+   "review": "sanctum-mind 为 AI 构造体（如通过 Claude Desktop 等 MCP 客户端接入的会话）提供跨会话的持久记忆、身份、任务与关系存储。它以 Docker 运行，数据写入 Postgres 16 并用 pgvector 支持语义检索；写入采用仅追加的 ledger（事件溯源）模式，身份核心与誓言修改有默认 24 小时冷却期。运营者负责创建 mind、发放密钥与管理数据库。",
+   "highlights": [
+    "以 MCP 标准协议（Streamable HTTP 与 stdio）对外提供记忆读写工具",
+    "所有写入为仅追加 ledger，当前状态由事件重建，支持 mind_export/import 迁移",
+    "基于 pgvector 提供语义搜索，可选嵌入模型，关闭后退化为关键词检索"
+   ],
+   "use_cases": [
+    "为 MCP 客户端 AI 会话提供跨会话的记忆与身份延续",
+    "在同一服务上运行多个隔离的 mind 实例并管理其访问密钥",
+    "需要可审计、不可篡改记忆日志的本地部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Persistent memory and identity for AI minds, served as MCP tools on Postgres. ／ docker compose up -d db # Postgres 16 + pgvector, with a healthcheck",
+     "lines": [
+      3,
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明服务拥有并运行在一个 Postgres 之上，用其存储 mind 数据，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Persistent memory and identity for AI minds, served as MCP tools on Postgres. ／ docker compose up -d db                 # Postgres 16 + pgvector, with a healthcheck ／ docker compose up -d mind               # the service on http://127.0.0.1:8002 (published to loopback only)",
+   "evidence_lines": [
+    3,
+    41,
+    43
+   ]
+  },
+  "fn": "lkmconstructs/sanctum-mind",
+  "sha": "3713b0687c2e",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "312b25d6e4ea": {
+  "identity": {
+   "one_liner": "基于AppSheet和Google Sheets的Android游戏兼容性数据库应用",
+   "review": "GWBHub 是一个游戏发现与兼容性信息应用，用 Google Sheets 存储两个数据表（PC游戏在Android上运行、Android移植游戏），通过 AppSheet 提供浏览界面，并借助 Google Apps Script 自动维护首页最新条目和日期。面向想在 Android 设备上运行 PC 游戏或移植游戏的用户；应用链接尚未提供，兼容性信息因设备而异。",
+   "highlights": [
+    "提供两个独立的游戏数据库：PC Games On Android 与 Ports On Android",
+    "使用 Google Sheets 作为数据存储，Google Apps Script 实现自动化更新",
+    "统一首页展示两个数据库各自的最新四条条目"
+   ],
+   "use_cases": [
+    "查找可在 Android 设备上通过模拟器运行的 PC 游戏及其兼容性信息",
+    "浏览已移植到 Android 的游戏条目",
+    "按设备提交兼容性问题的反馈记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明该应用以 Google Sheets 存储自身游戏数据，候选清单中无目标数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GWBHub is a game discovery and compatibility database designed to help users explore PC games playable on Android devices and games that have been ported to Android. ／ The application is built with AppSheet and uses Google Sheets to organize game information across two dedicated databases. ／ * **Spreadsheet-backed data** — Maintain game information using Google Sheets.",
+   "evidence_lines": [
+    5,
+    7,
+    32
+   ]
+  },
+  "fn": "GWBHandhelds/GWBHub",
+  "sha": "312b25d6e4ea",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10060,5 +10060,79 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "140bdf2bfc3f": {
+  "identity": {
+   "one_liner": "持久化多设备 AI agent 网络，以 SQLite 做检查点存储",
+   "review": "该项目构建持久化 AI 代理网络：每台设备运行 dpi-backend 服务，将代理的对话历史、队列、任务检查点与应用状态提交到 SQLite，断线或重启后可从检查点恢复运行；提供 web hub、终端 TUI 和 curl 三种客户端通过带 bearer token 的 v1 API 访问。适合需要长时间运行、可恢复代理工作流的开发者，前置依赖 Node 24 与 OpenRouter API key。",
+   "highlights": [
+    "每台设备运行 dpi-backend，代理会话检查点持久化到 SQLite，重启后从检查点恢复",
+    "提供 web UI、dpi-tui 与 curl 三种客户端，通过 URL 与 bearer token 调用 v1 HTTP/SSE API",
+    "支持后台上下文压缩、共享 App State 原子路径更新和带阶段检查点的 durable jobs"
+   ],
+   "use_cases": [
+    "跨多台自有设备托管并远程驱动持久化 AI 代理",
+    "进程中断后需要恢复执行状态的长时代理任务",
+    "含人工审批环节的自动化工作流（如事件响应、发布检查）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Three clients (web UI, dpi-tui, curl) reach durable agents on four devices; the clients disconnect and every device keeps checkpointing its run to SQLite ／ Pi Durable, from the team behind the Pi coding agent, persists ongoing work, conversations and application state through failures, through clients and through change itself. This repo puts it to work. Every device runs a small server, `dpi-backend`, that owns  ／ Pi persists history only and loses its run state on exit; Durable Pi commits history, queues, app state and task checkpoints to SQLite",
+     "lines": [
+      8,
+      10,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储代理历史、队列、会话数据库与设备注册表，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Pi Durable, from the team behind the Pi coding agent, persists ongoing work, conversations and application state through failures, through clients and through change itself. This repo puts it to work. Every device runs a small server, `dpi-backend`, that owns its agents, their SQLite databases and their tools. Clients connect with a **URL and a bearer token**: a web hub that watches every device at once, `dpi-tui` in the terminal, or one `curl` that sends work and waits for the answer. **The agent lives on the device, not in the client.** Close the browser, quit the terminal or restart the machine mid-tool, and the run picks up from its last checkpoint. ／ |**`dpi-backend`**|every device, port 4780; a launchd or systemd service on remote machines|the harnesses, `~/.dpi/backend/catalog.sqlite`, one `sessions/<id>/agent.sqlite` per session, the device's shared App State, the bearer token in `~/.dpi/backend.env`| ／ |**hub** (`apps/dpi-playground`)|your laptop, `127.0.0.1:4781`|the device registry and tokens in `~/.dpi/network.sqlite`, a token-injecting REST proxy, one multiplexed SSE stream per browser tab, the Vue client|",
+   "evidence_lines": [
+    10,
+    86,
+    87
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "disler/durable-pi",
+  "sha": "140bdf2bfc3f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

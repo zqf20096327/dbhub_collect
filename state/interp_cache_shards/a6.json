@@ -9313,5 +9313,71 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "764416c07720": {
+  "identity": {
+   "one_liner": "自托管个人理财应用，以余额断言+对账（delta=0）为核心机制",
+   "review": "Balance 是一个面向开发者的自托管个人理财应用，基于 Supabase（Postgres）后端，提供 TypeScript CLI（@dreamxist/bal-cli）和 React 仪表盘。核心是余额断言与对账模式：实际持仓须等于登记交易之和。支持个人与公司（SpA）双实体记账、订阅/分期债务、Apple Pay 快捷记账。使用方需自行部署 Supabase 后端并导入 Balance schema。状态为 Beta。",
+   "highlights": [
+    "余额断言引擎：持仓与累计交易对比，delta 必须为 0",
+    "CLI 支持记录支出、收入、转账、债务还款及 SpA 发票命令",
+    "所有表启用 Postgres RLS，CLI 使用短效 JWT 访问"
+   ],
+   "use_cases": [
+    "自托管管理个人财务并端到端审计资金记录",
+    "个人与公司（SpA）双实体分离记账与对账",
+    "通过 iOS Shortcut 从 Apple Pay 消费自动登记交易"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Strict isolation.** Postgres RLS on every table. CLI uses short-lived JWTs minted from API keys, never `service_role`. ／ |Database|Supabase Postgres + RLS + PL/pgSQL functions|",
+     "lines": [
+      27,
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用构建于 Supabase/Postgres 之上并以其存数据，属使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Balance is a personal-finance app for developers who want full control over their money model. It is built on top of Supabase, ships a TypeScript CLI, and uses the **Balance Assertion with Reconciliation** pattern at its core: your real positions (cash in accounts, cards, investments, debts) must always equal the sum of your registered transactions. Delta = 0 or you find out fast. ／ |Database|Supabase Postgres + RLS + PL/pgSQL functions| ／ Balance is designed to run on your own Supabase project. Step-by-step instructions, including migrations, edge functions, secrets, and cron setup, live in SETUP.md.",
+   "evidence_lines": [
+    5,
+    41,
+    101
+   ]
+  },
+  "fn": "dreamxist/balance",
+  "sha": "764416c07720",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

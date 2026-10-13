@@ -8960,5 +8960,209 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ac28383e7b3": {
+  "identity": {
+   "one_liner": "基于 JDBC 的数据库子集抽取与关系数据浏览工具",
+   "review": "Jailer 是一款 Java 编写的桌面工具，从生产库中抽取满足引用完整性的小型数据子集（导出 SQL/JSON/YAML/XML/DbUnit），并提供沿外键双向浏览数据的关系浏览器与 SQL 控制台。依托 JDBC 原则上支持任意 DBMS，并针对 PostgreSQL、MySQL、Oracle 等提供专门支持。适合需要测试数据采样、生产问题本地排查的开发与测试人员。近年版本加入基于大模型 API 的子集与 SQL 辅助功能。",
+   "highlights": [
+    "抽取引用完整的数据子集，导出为拓扑排序 SQL、JSON、YAML、XML 或 DbUnit 记录",
+    "数据浏览器沿外键或自定义关系双向导航，含代码补全 SQL 控制台、图表与透视表",
+    "通过 JDBC 原则上支持任意 DBMS，对 PostgreSQL/Oracle/MySQL 等提供专门支持功能"
+   ],
+   "use_cases": [
+    "为开发和测试环境生成小规模、引用一致的生产数据样本",
+    "按外键关系浏览和排查生产数据库中的问题数据",
+    "通过删除并归档废弃数据而不破坏完整性来整理数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Works with any database that has a JDBC driver, with dedicated support for PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, SQLite and more. ／ - PostgreSQL",
+     "lines": [
+      18,
+      46
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Works with any database that has a JDBC driver, with dedicated support for PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, SQLite and more. ／ - MySQL",
+     "lines": [
+      18,
+      48
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Works with any database that has a JDBC driver, with dedicated support for PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, SQLite and more. ／ - Oracle",
+     "lines": [
+      18,
+      47
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Works with any database that has a JDBC driver, with dedicated support for PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, SQLite and more. ／ - SQLite",
+     "lines": [
+      18,
+      52
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Works with any database that has a JDBC driver, with dedicated support for PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, SQLite and more. ／ - Microsoft SQL Server",
+     "lines": [
+      18,
+      50
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Works with any database that has a JDBC driver, with dedicated support for PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, SQLite and more. ／ - MariaDB",
+     "lines": [
+      18,
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为面向关系数据库的数据子集抽取与浏览工具，为数据库生态服务而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Free and open source tools for relational data: create referentially intact subsets of production databases, and browse your data along its relationships.** ／  - **Subsetter**: Extracts small, consistent and referentially intact slices of your database ／ Works with any database that has a JDBC driver, with dedicated support for PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, Db2, SQLite and more.",
+   "evidence_lines": [
+    3,
+    10,
+    18
+   ]
+  },
+  "fn": "Wisser/Jailer",
+  "sha": "2ac28383e7b3",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75b0f033a382": {
+  "identity": {
+   "one_liner": "Go 编写的开源业务平台，以 DSL+YAML 配置运行于 SQLite/PostgreSQL 之上",
+   "review": "OneBase 是一个用 Go 编写的低代码业务/记账平台，元数据用 YAML 描述、业务逻辑用内置 DSL 编写，数据存储在 SQLite 文件或 PostgreSQL 中，并提供启动器、表单设计器、报表、REST API 和 MCP 服务器。面向从事记账/ERP 类任务（如销售/库存/会计/CRM）的开发人员和用户。配置可以存放在 Git 中，也可以存放在数据库本身中。",
+   "highlights": [
+    "以单个 Go 二进制文件运行，配置使用 YAML 元数据和内置 DSL，存储于 SQLite 或 PostgreSQL (支持)",
+    "提供记账功能：累计/信息登记、双重输入的会计科目表 (accounting registers)、FIFO 批次核销",
+    "包含 MCP 服务器 (onebase mcp)、AI 助手以及用于 AI 驱动配置的 AGENTS.md 生成"
+   ],
+   "use_cases": [
+    "基于 Git 的 YAML/DSL 配置，构建销售/仓库、会计、CRM 或任务管理应用程序",
+    "带有角色、记录级访问控制和 SSO 的文档/登记记账工作流",
+    "在活跃数据库上使用 MCP 工具和 AI 助手运行 AI 代理驱动的配置开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ PostgreSQL, запуск, конфигуратор, остановка: ／ |Информационная база|SQLite-файл или PostgreSQL|Прикладные и служебные таблицы; при `config_source: database` — также `_onebase_config`| ／ та же конфигурация работает и на SQLite, и на PostgreSQL. Где физически лежит",
+     "lines": [
+      5,
+      22,
+      48,
+      202,
+      205
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ onebase dev --project ./склад --sqlite ./склад.db --open ／ |Информационная база|SQLite-файл или PostgreSQL|Прикладные и служебные таблицы; при `config_source: database` — также `_onebase_config`|",
+     "lines": [
+      5,
+      22,
+      126,
+      202
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 SQLite/PostgreSQL 描述为该平台自身数据和信息库的物理存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ Одна «информационная база» = конфигурация (справочники, документы, регистры, ／ |Информационная база|SQLite-файл или PostgreSQL|Прикладные и служебные таблицы; при `config_source: database` — также `_onebase_config`|",
+   "evidence_lines": [
+    5,
+    21,
+    202
+   ]
+  },
+  "fn": "ivanarama/onebase",
+  "sha": "75b0f033a382",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

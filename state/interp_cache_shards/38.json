@@ -9952,5 +9952,199 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd1f26cd29dc": {
+  "identity": {
+   "one_liner": "基于 Claude 的持续数字实体助手，含长期记忆与上下文管理机制",
+   "review": "MIRA 是一个持续性 AI 对话实体：通过异步会话分段折叠、第一人称记忆合成、记忆衰减公式与主动上下文压缩实现长期记忆，并用文本化的行为反馈循环调整系统提示。使用 PostgreSQL 持久化历史与信号数据，面向想运行个人长期 AI 助手的用户，需自托管部署并保持单一会话线程。",
+   "highlights": [
+    "提供分段折叠生成第一人称摘要与滚动续写简报的上下文压缩机制",
+    "支持基于使用天数、访问频率与显式引用的记忆衰减公式",
+    "包含 Subcortical 检索预处理与 Peanut Gallery 元认知观察两个辅助系统",
+    "工具从文件系统自动发现注册，可按需临时启用或固定"
+   ],
+   "use_cases": [
+    "需要长期连续记忆的个人 AI 助手场景",
+    "希望模型基于历史对话持续调整行为画像的用户",
+    "需要加密协作文档（domaindoc）与提醒、邮件等配套工具的个人工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section i ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider re ／ 8. Service verification (PostgreSQL, Valkey, Vault running and accessible)",
+     "lines": [
+      40,
+      83,
+      133
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明对话信号与历史数据存储在 PostgreSQL 中（L40、L83、L133），数据库仅为其持久化后端",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section involved. These signals accumulate in Postgres. ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider request by one rolling continuation brief, while the recent turns and the original PostgreSQL history remain intact.",
+   "evidence_lines": [
+    40,
+    83
+   ]
+  },
+  "fn": "taylorsatula/mira",
+  "sha": "dd1f26cd29dc",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "25914bb1e4cd": {
+  "identity": {
+   "one_liner": "一次性密文分享API，AES-256-GCM加密后经邮件发送一次性链接",
+   "review": "SecretDrop 是一个面向开发者的机密信息分享 Web 应用：用户将 API key 等文本用 AES-256-GCM 加密，系统通过邮件向接收者发送一次性链接，链接被打开或过期后记录从数据库永久删除。它基于 Go 后端和前端构建，支持 Google/GitHub/Apple OAuth 登录，需配置 Resend、Stripe 等第三方服务密钥才能运行。",
+   "highlights": [
+    "文本经 AES-256-GCM 加密，密钥仅存于 URL 片段、不入库，记录在打开或过期后从数据库永久删除",
+    "提供 API 文档界面（/docs，Scalar UI），支持 Bearer JWT 与 HTTP Basic 两种认证方式",
+    "集成 Google、GitHub、Apple OAuth 登录，带 CSRF state cookie 保护"
+   ],
+   "use_cases": [
+    "团队间通过一次性链接安全传递 API 密钥、口令等敏感文本",
+    "需要阅后即焚、过期自动清理的临时机密分享",
+    "作为参考学习 Go 后端 OAuth 认证与前端集成部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用数据库存取机密记录的终端 Web 应用/API 服务，而非为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Secure, one-time secret sharing API for developers. ／ Instead of pasting API keys in Slack, share them through SecretDrop: text is ／ - **One-time use:** record is permanently deleted from DB after reveal",
+   "evidence_lines": [
+    9,
+    11,
+    91
+   ]
+  },
+  "fn": "bilustek/secretdrop",
+  "sha": "25914bb1e4cd",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f20127fcc821": {
+  "identity": {
+   "one_liner": "朱雀AI文本检测API的第三方桌面客户端，含文本比较工具",
+   "review": "基于腾讯朱雀检测 API 的第三方 PyQt6 桌面客户端（非官方），提供 AIGC 文本逐段检测、置信度展示、文本差异比较与结果导出功能，历史记录与配置以 SQLite 存于本机。面向中文写作者/编辑等需要 AI 检测的用户，需自备 EdgeOne Makers API Key，仅支持 Windows 打包使用，Key 为明文本地存储。",
+   "highlights": [
+    "调用朱雀 AIGC 检测接口，提供整篇置信度与逐段人工/AI 判定及底色标注",
+    "内置文本比较引擎（分层预对齐 + LCS 锚点分治），支持双栏同步滚动与带色复制",
+    "历史记录与配置使用 SQLite 本地存储，具备损坏检测、备份与自愈重建"
+   ],
+   "use_cases": [
+    "检测中文文本的 AI 生成占比并逐段标注",
+    "对比改写文与原文的差异并导出 Markdown/HTML 报告",
+    "本地保存检测历史记录与配置（数据不上传）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 历史记录与配置采用 SQLite 存储，具备损坏自动检测、备份与自愈重建机制；",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为调用朱雀检测 API 的桌面客户端，SQLite 仅用于存储自身历史记录与配置",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0（继承主工程）",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **项目说明**：本项目为基于朱雀检测 API 构建的第三方桌面客户端，**非腾讯官方出品**。 ／  - 历史记录与配置采用 SQLite 存储，具备损坏自动检测、备份与自愈重建机制； ／ 不需要注册或登录，解压即用：历史记录与 API Key 只保存在程序自己所在目录的",
+   "evidence_lines": [
+    4,
+    27,
+    30
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "pipabcc/zqapi",
+  "sha": "f20127fcc821",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

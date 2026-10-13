@@ -8880,5 +8880,140 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c573d0165e91": {
+  "identity": {
+   "one_liner": "AI 代理会话记忆压缩系统，捕获并用 AI 压缩上下文供后续会话注入",
+   "review": "该仓库为 Claude Code 等 AI 编码代理提供跨会话的持久记忆：通过生命周期钩子捕获工具使用观察，经 AI 压缩生成语义摘要，存入 SQLite（FTS5 全文检索）与 Chroma 向量库，并通过 4 个 MCP 搜索工具按需回注上下文。面向使用 Claude Code、OpenCode、Codex 等代理的开发者，需 Node.js 20+ 与 Bun 运行环境。",
+   "highlights": [
+    "通过 5 个生命周期钩子自动捕获会话观察并生成语义摘要",
+    "使用 SQLite 存储 sessions/observations/summaries，配合 FTS5 与 Chroma 向量库实现混合检索",
+    "提供 4 个 MCP 搜索工具，采用三层工作流（search/timeline/get_observations）以降低 token 消耗"
+   ],
+   "use_cases": [
+    "为 Claude Code 会话提供跨会话上下文延续",
+    "以自然语言检索历史项目操作记录",
+    "在 OpenClaw 网关上作为持久记忆插件运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Database** - SQLite schema & FTS5 search ／ 4. **SQLite Database** - Stores sessions, observations, summaries ／ - **SQLite 3**: For persistent storage (bundled)",
+     "lines": [
+      221,
+      237,
+      283
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内置持久化存储使用（bundled），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "4. **SQLite Database** - Stores sessions, observations, summaries ／ - **SQLite 3**: For persistent storage (bundled)",
+   "evidence_lines": [
+    237,
+    283
+   ]
+  },
+  "fn": "thedotmack/claude-mem",
+  "sha": "c573d0165e91",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fb5f1a423b6f": {
+  "identity": {
+   "one_liner": "面向记忆系统与 Agent 工作流的 benchmark 编排平台",
+   "review": "memory_bench_platform 是一个测试底座，通过统一的 Skill 插件体系编排 benchmark（LoCoMo、LongMemEval 等）、Agent（OpenClaw 等）与 memory backend（OpenViking），负责计划生成、执行、资源采样、结果归档与 HTML 报告。面向需要评测记忆系统和 Agent 链路的开发者。它不评测数据库本身，且尚未接入数据库相关的执行器。",
+   "highlights": [
+    "通过目录型 Skill 插件接入 benchmark、Agent 和 memory backend，统一执行入口与结果结构",
+    "提供 run 归档、资源采样（CPU/内存/IO）、分析 JSON 与 HTML 报告的结果闭环",
+    "支持平台原生 workflow 和外部 runner 结果导入两种执行路径"
+   ],
+   "use_cases": [
+    "对记忆系统（memory backend）运行统一的能力与写入/检索诊断评测",
+    "以同一入口跑多个 benchmark 并对比 Agent 链路的执行结果",
+    "在正式评测前通过 smoke gate 验证链路可用性"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "mention",
+     "quote": "cd /path/to/openGauss-MemoryWorkload/memory_bench_platform",
+     "lines": [
+      462
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该平台面向记忆系统和 Agent 工作流评测，README 未说明其为数据库生态服务，openGauss 仅出现在路径示例中",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`memory_bench_platform` 是一个面向记忆系统和 Agent 工作流的 benchmark 测试底座。它的核心目标不是重新实现每个 benchmark 或 Agent，而是提供统一的编排、Skill 装载、执行归档、资源采样、结果分析和 HTML 报告能力，让 LoCoMo、LongMemEval、OpenClaw、OpenViking 等不同对象可以用同一套测试入口接入和复用。 ／ - 特性下沉到 Skill：benchmark、agent、memory backend 的差异通过目录型 Skill 描述和脚本实现。 ／ - `skills/benchmarks/`：Benchmark Skill，例如 `locomo`、`longmemeval`、`ovtest-health`。",
+   "evidence_lines": [
+    3,
+    27,
+    71
+   ]
+  },
+  "fn": "opengauss-mirror/openGauss-MemoryWorkload",
+  "sha": "fb5f1a423b6f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

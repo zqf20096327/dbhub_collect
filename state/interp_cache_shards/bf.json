@@ -9889,5 +9889,70 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "063a223ba8ec": {
+  "identity": {
+   "one_liner": "MG 汽车自托管仪表盘，读取 SAIC iSmart API 并存数据于 PostgreSQL",
+   "review": "GarageStack 是面向 SAIC 产 MG 电动车（如 MG4、ZS EV）车主的自托管 Web 应用，通过登录 SAIC iSmart API 获取车辆遥测，提供实时仪表盘、行程地图与日志、能耗统计、远程控制和定时空调等功能。行程、充电站与地理编码结果缓存存储于 PostgreSQL，整栈打包为单个 Docker 镜像运行。仅兼容使用 MG iSmart 应用的车型，不支持经典英产 MG。",
+   "highlights": [
+    "通过 SAIC iSmart API 读取车辆遥测，实现实时仪表盘、远程命令和定时空调调度",
+    "行程自动入库并在地图上绘制，支持热力图、限速着色、CSV 导出及充电站/加油站/测速点叠加层",
+    "全部服务打包为单个 Docker 镜像，支持 MQTT discovery 接入 Home Assistant 及 OpenID Connect 单点登录"
+   ],
+   "use_cases": [
+    "MG 电动车主自托管监控车辆状态、电池与胎压",
+    "记录并导出商务/通勤/私人行程用于报税",
+    "集成 Home Assistant 与 homelab 仪表盘"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A single Docker image that bundles every service -- nginx, the .NET API + worker, PostgreSQL, Mosquitto, and the SAIC gateway. No Compose file or external database needed. Ideal for Unraid and similar NAS environments where running multiple containers is incon ／ > `POSTGRES_PASSWORD` is omitted -- a strong random password is auto-generated on first start and saved to `/data/.postgres_password`. Pass `-e POSTGRES_PASSWORD=yourpassword` explicitly if you need a known value (e.g. to connect with an external DB tool).",
+     "lines": [
+      144,
+      155
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储行程与缓存数据的车辆监控应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GarageStack is a free, open-source web app for **modern MG cars**, the ones built by SAIC Motor such as the MG4, MG5, ZS EV and HS PHEV. It signs in to the SAIC iSmart API, the same backend the official MG iSmart app uses, and turns what your car reports into something worth opening: ／ - **Trip history** -- Browse past journeys on an interactive map, each drawn on the roads it took and coloured by speed or by the speed limit, with a heatmap of the roads you drive most. Each trip is saved to the database a few minutes after the car parks. After upgrading from a version that did not save trips, the existing history is saved in the background on the Worker's first start.",
+   "evidence_lines": [
+    11,
+    43
+   ]
+  },
+  "fn": "joszz/GarageStack",
+  "sha": "063a223ba8ec",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

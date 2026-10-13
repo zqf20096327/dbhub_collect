@@ -10053,5 +10053,72 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ac757f37b496": {
+  "identity": {
+   "one_liner": "自托管一起看视频应用，服务器同步房间状态并用 WebSocket 对齐播放",
+   "review": "PauseTogether 是一个自托管的一起看视频应用：在一台机器上托管本地视频库，亲友通过 Tailscale 访问，服务器持有房间状态并对每个播放器做速度微调实现同步。使用 Go + SQLite + ffmpeg，SvelteKit 前端，Docker 部署，无账号系统，访问控制完全依赖 Tailscale，媒体文件需按 Plex 命名规则组织。",
+   "highlights": [
+    "服务器持有房间状态，通过速度微调同步各播放器，有人缓冲时全房间暂停",
+    "读取本地媒体文件夹并按 Plex 命名规则识别电影与剧集，视频不转码直接播放",
+    "内置每房间聊天、字幕转 WebVTT、开机自启与每日数据库备份"
+   ],
+   "use_cases": [
+    "亲友在不同地点通过 Tailscale 私有网络同步观看同一部影片",
+    "在本地视频库上运行无账号的观影房间，无需开放路由器端口",
+    "管理按 Plex 命名规则组织的电影、剧集和其他视频集合"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "M[(Media folder<br/>read-only)] --> A[PauseTogether<br/>Go + SQLite + ffmpeg] ／ **Stack:** Go standard library, SQLite (modernc.org/sqlite),",
+     "lines": [
+      59,
+      322
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其用 SQLite 存储应用数据（数据库、缓存、备份目录），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    M[(Media folder<br/>read-only)] --> A[PauseTogether<br/>Go + SQLite + ffmpeg] ／ - One Go binary with the SvelteKit app built in, running in Docker. ／ |`DATA_DIR`|Folder for the database, cache and backups. Must exist.|`~/.local/share/pausetogether`|",
+   "evidence_lines": [
+    59,
+    63,
+    94
+   ]
+  },
+  "fn": "erkanvatan/pause-together",
+  "sha": "ac757f37b496",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

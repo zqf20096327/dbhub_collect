@@ -11418,5 +11418,133 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "70eaed89b758": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的本地文档知识库插件，提供混合检索与引用校验",
+   "review": "dsh-library 是面向 DeepSeek Harness 的 DSH 插件，将本地 md/txt 文档构建为可检索知识库：分块、哈希/外部/Ollama 嵌入，提供 library_add/remove/list、语义+关键词混合 search、引用校验与诊断等工具。索引存储在宿主的存储域（JSON 或 SQLite）。适合在 DSH 环境中使用 agent 管理本地文档问答的开发者。",
+   "highlights": [
+    "提供 library_search 混合语义+关键词检索，含 MMR 多样性重排、lost-in-the-middle 规避与结果注入",
+    "提供 library_cite_check 对答案中 [n] 引用做模糊匹配+语义相似度校验",
+    "提供 library_diagnose 输出分块直方图、近重复对、自检索探测等诊断"
+   ],
+   "use_cases": [
+    "在 DeepSeek Harness agent 中导入本地 md/txt 文档并基于文档回答问题",
+    "校验 agent 回答中的引用标记是否真实来自检索结果",
+    "诊断知识库索引质量（重复分块、中间惩罚等）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Storage|Any storage-domain backend (JSON or SQLite); the index lives in the host's storage domain|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为 DeepSeek Harness/agent 生态提供文档知识库工具组件，SQLite 仅作为可选存储后端之一被提及，自身不依赖单一数据库服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local document knowledge base for DeepSeek Harness.** ／ DSH plugin ／ `dsh-library` turns local md/txt documents into a queryable knowledge base with a quality pipeline your agent can trust:",
+   "evidence_lines": [
+    7,
+    12,
+    54
+   ]
+  },
+  "fn": "PerryLink/dsh-library",
+  "sha": "70eaed89b758",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d6f527a92e1f": {
+  "identity": {
+   "one_liner": "TiDB Region 副本搬迁科普小游戏，浏览器单文件运行",
+   "review": "这是一个科普性质的网页小游戏，玩家扮演 PD 调度器，通过拖拽 Region 副本在 TiKV 节点间搬迁，体验扩容均衡与机房容灾场景。面向 TiDB 初学者或科普受众，单文件 HTML 无后端无数据库，浏览器直接打开即可玩，含两关目标与评分机制。",
+   "highlights": [
+    "单文件 HTML/CSS/JS 实现，浏览器打开即运行，无后端和构建工具",
+    "提供扩容均衡与机房断电两关，并附参考答案演示棋盘",
+    "支持桌面点击/拖拽与键盘操作，页面自适应手机端"
+   ],
+   "use_cases": [
+    "TiDB Region、Raft 副本与多数派概念的科普教学",
+    "数据库入门培训或社区活动的互动演示",
+    "对分布式存储调度感兴趣者的休闲学习工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "TiDB 科普小游戏：扮演 PD（Placement Driver），把 4 个 Region（R1–R4）的三份投票副本，在 3 个机房（A/B/C）、6 台 TiKV 之间搬家。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仅以 TiDB 概念为科普题材，README 明言无后端无数据库，不使用 TiDB 存数据也不为其提供工具能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "0BSD（BSD Zero Clause）",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TiDB 科普小游戏：扮演 PD（Placement Driver），把 4 个 Region（R1–R4）的三份投票副本，在 3 个机房（A/B/C）、6 台 TiKV 之间搬家。 ／ 单文件 HTML/CSS/JS，无后端、无数据库、无构建工具。",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "jielun132/region-moving-game",
+  "sha": "d6f527a92e1f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

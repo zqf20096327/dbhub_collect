@@ -9431,5 +9431,269 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2c88c6dab28a": {
+  "identity": {
+   "one_liner": "基于 MyBatis 的 ORM 框架，提供流式 DSL 与跨数据库兼容",
+   "review": "Xbatis 是构建在 MyBatis 之上的 Java ORM 框架，面向 Java 开发者，提供 QueryChain/InsertChain 等流式 DSL、单 Mapper 模式、逻辑删除、多租户、乐观锁注解与代码生成等能力，支持 Spring Boot 和 Solon 集成；README 本体是一份供 AI 助手使用的框架知识库文档，需通过 Maven 引入 starter 使用。",
+   "highlights": [
+    "提供 QueryChain/InsertChain/UpdateChain/DeleteChain 流式 DSL 与单 Mapper 模式",
+    "内置逻辑删除、多租户、乐观锁、动态数据源路由等注解与模块",
+    "包含实体/mapper/service 代码生成与按数据库自定义分页处理器"
+   ],
+   "use_cases": [
+    "Java 项目中以 ORM 方式替代手写 SQL 进行增删改查",
+    "需要多租户、逻辑删除、乐观锁等通用数据访问模式的应用",
+    "Spring Boot 或 Solon 项目的数据访问层集成"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|✅|✅|",
+     "lines": [
+      442
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "url: jdbc:mysql://localhost:3306/dbName ／ |MySQL|✅|✅|",
+     "lines": [
+      63,
+      438
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|✅|❌|",
+     "lines": [
+      440
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|✅|✅|",
+     "lines": [
+      444
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- Customize via `XbatisGlobalConfig.setPagingProcessor` for Oracle, SQL Server, etc.",
+     "lines": [
+      720
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB|✅|✅|",
+     "lines": [
+      439
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "|openGauss|✅|✅|",
+     "lines": [
+      445
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为基于 MyBatis 的 ORM 框架，为应用访问数据库提供通用数据访问层，属数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Positioning**: Xbatis is built on MyBatis and delivers a highly ORM-like database experience, emphasizing \"less SQL, ／  fluent DSL, cross-database compatibility\". ／ |Code generation|`cn.xbatis.codegen`|`GeneratorConfig` and sub modules|One-stop generation for entities, mapper, service skeletons, etc.|",
+   "evidence_lines": [
+    14,
+    15,
+    45
+   ]
+  },
+  "fn": "xbatis/xbatis",
+  "sha": "2c88c6dab28a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7012282e8cf8": {
+  "identity": {
+   "one_liner": "自托管项目管理应用，单容器+单文件存储",
+   "review": "Galley 是一个自托管的项目管理与文案审批协作系统，面向网页设计师、工作室负责人等人群，提供任务、日历、供应商、文件管理和客户审批链接。基于 Next.js 构建，使用 SQLite（WAL 模式，FTS5 搜索）存储数据，通过 Docker Compose 单容器部署，数据集中于一个卷便于备份；不支持 Postgres 等外部数据库。",
+   "highlights": [
+    "提供免账号客户审批链接、协作编辑与版本 diff",
+    "集成任务看板、日历、供应商目录与文件管理",
+    "单容器部署，SQLite WAL 模式存储，内置备份功能"
+   ],
+   "use_cases": [
+    "网页设计工作室的客户文案审批与签收流程",
+    "小型团队或个人的项目任务与文件集中管理",
+    "自托管场景下需要低维护单文件存储的项目协作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ - **SQLite** through Drizzle, in WAL mode, with FTS5 for search",
+     "lines": [
+      11,
+      238
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "One process, one SQLite file, one uploads folder. No Postgres, no Redis, no object store, no worker container, because a tool for a handful of people should not need a fleet.",
+     "lines": [
+      235
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用自身使用 SQLite 存储数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT licence",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " SQLite ／  Self-hosted, one container, one file to back up.",
+   "evidence_lines": [
+    11,
+    6
+   ]
+  },
+  "fn": "kevincardwell/galley",
+  "sha": "7012282e8cf8",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8d82211f18f8": {
+  "identity": {
+   "one_liner": "Go 编写的 RAG 系统，用 SQLite-vec 存向量并检索",
+   "review": "该项目是一个用 Go 实现的检索增强生成（RAG）服务，提供自适应分块、语义检索和 REST API，可对接任意 OpenAI 兼容的 embedding/LLM 服务，向量存储使用 SQLite-vec。适合需要在本地部署文档问答与语义检索能力的开发者，通过源码构建或 Docker 运行。",
+   "highlights": [
+    "支持结构化、定长、语义等多种分块策略及父子层级组织",
+    "提供纯检索 /search 与完整 RAG /query 两类 REST 端点",
+    "使用 SQLite-vec 作为向量存储，并支持任意 OpenAI 兼容的 embedding 服务"
+   ],
+   "use_cases": [
+    "本地文档问答与语义检索服务",
+    "将检索能力通过 REST API 集成到外部 LLM 流水线",
+    "基于元数据过滤和相似度阈值的定制化检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite-vec Integration**: High-performance vector storage ／ │ │ │ System │ │ (SQLite-vec) │ ／ - **`core/vector_db.go`**: SQLite-vec integration",
+     "lines": [
+      32,
+      45,
+      202
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite-vec 存储向量数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **SQLite-vec Integration**: High-performance vector storage ／ │                 │    │     System       │    │  (SQLite-vec)   │ ／ - **`core/vector_db.go`**: SQLite-vec integration",
+   "evidence_lines": [
+    32,
+    45,
+    202
+   ]
+  },
+  "fn": "aruntemme/go-rag",
+  "sha": "8d82211f18f8",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

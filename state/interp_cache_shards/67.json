@@ -9486,5 +9486,155 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6afb1db19bbf": {
+  "identity": {
+   "one_liner": "Malloy 分析引擎：一次建模，经 MCP/REST 服务 AI 代理与应用",
+   "review": "Publisher 是 Malloy 语义模型的开源服务引擎，将数据模型、查询、物化、访问控制打包为一个服务器，通过 MCP 和 REST 接口提供给 AI 代理、应用和 BI 工具使用。适合以代理驱动方式建模和分析数据的数据团队；内置 DuckDB 读取本地文件，也可通过连接接入仓库，服务无鉴权需自行加网关。",
+   "highlights": [
+    "提供 MCP 与 REST 双接口，代理经 get_context/execute_query 等工具查询模型",
+    "内置 DuckDB，读取 CSV、Parquet、JSON、Excel；支持经连接接入 BigQuery、Snowflake、Postgres 等",
+    "支持 #persist/#preaggregate 物化、access_filter 访问控制，并随附 Malloy 技能与控制台 UI"
+   ],
+   "use_cases": [
+    "为 AI 代理提供受治理的语义层查询入口",
+    "用 Malloy 声明报表与无构建 HTML 数据应用",
+    "对接数仓统一建模并向 BI 工具提供 API"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Run anywhere** — DuckDB built in for CSV, Parquet, JSON, and Excel; BigQuery, Snowflake, Postgres, ／ connection — BigQuery, Snowflake, Postgres, Databricks, MotherDuck, and more — ／ Postgres, MySQL, Trino, Databricks, MotherDuck, and DuckLake — docs/connections.md.",
+     "lines": [
+      51,
+      103,
+      231
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Postgres, MySQL, Trino, Databricks, MotherDuck, and DuckLake — docs/connections.md.",
+     "lines": [
+      231
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库之上的建模与查询分析服务的引擎组件，非最终数据应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One data model, served over MCP and REST to AI agents, applications, and BI tools. ／ - **Run anywhere** — DuckDB built in for CSV, Parquet, JSON, and Excel; BigQuery, Snowflake, Postgres, ／ connection — BigQuery, Snowflake, Postgres, Databricks, MotherDuck, and more —",
+   "evidence_lines": [
+    6,
+    51,
+    103
+   ]
+  },
+  "fn": "malloydata/publisher",
+  "sha": "6afb1db19bbf",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "298ecad504ba": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理工作记录与开发记忆系统，基于 SQLite 与本地嵌入",
+   "review": "MAMA 是一个运行在本机的 AI 代理工具：连接 Telegram/Slack/Notion/日历等工作来源，把消息、文件与日程存为不可覆盖的原始记录，并维护带证据链的工作历史与修正指引，通过消息软件答复与发送报告。同时为 Claude Code 等提供跨会话的开发决策记忆（MCP server/插件）。数据全部存于本地 SQLite，不运行托管服务；依赖已登录的 claude 或 codex CLI。",
+   "highlights": [
+    "以本地 SQLite 保存原始记录、工作历史、指引与本地搜索索引，记录不可覆盖并保留变更原因",
+    "提供 MCP server 与 Claude Code 插件，为编码代理提供跨会话的决策与检查点记忆",
+    "支持接入 Chatwork、Slack、Discord、Trello、Notion、Google 系列服务、Obsidian 等来源"
+   ],
+   "use_cases": [
+    "使用 Claude Code/Codex 等代理时保留跨会话的开发决策记录",
+    "通过 Telegram/Discord/Slack 追问工作进展并接收定时报告",
+    "在本地保存工作来源的完整历史用于回溯与检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The record SQLite on your machine: originals · work history · guidance · reports · run logs · local search index",
+     "lines": [
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "MAMA 使用 SQLite 作为本地记录存储，本身不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The record         SQLite on your machine: originals · work history · guidance · reports · run logs · local search index ／ MAMA runs no hosted service. The record stays on your machine. Only the content a run needs ／ MCP server `{\"mcpServers\":{\"mama\":{\"command\":\"npx\",\"args\":[\"@jungjaehoon/mama-server\"]}}}`.",
+   "evidence_lines": [
+    93,
+    20,
+    85
+   ]
+  },
+  "fn": "jungjaehoon-lifegamez/MAMA",
+  "sha": "298ecad504ba",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

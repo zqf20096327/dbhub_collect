@@ -9521,5 +9521,72 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f2f96bcf950": {
+  "identity": {
+   "one_liner": "AI 驱动的全栈应用引擎，将自然语言描述转为 SQLite 数据库设计",
+   "review": "nocodo 用 AI 模型理解用户的自然语言描述，生成数据存储设计并构建为 SQLite 数据库，由确定性 Rust 代码执行 SQL 迁移。面向无技术背景的个人用户，通过 GUI 或 CLI 使用。目前仅支持存储层，不支持导入、规则与报表，仅限 SQLite。",
+   "highlights": [
+    "通过问答将自然语言描述转为关系型 SQLite 数据库设计",
+    "变更前先在数据副本上试运行并自动备份",
+    "AI 仅生成设计规格，SQL 由确定性代码生成与执行"
+   ],
+   "use_cases": [
+    "个人记账、家庭财务等小型数据的本地记录",
+    "非开发者用自然语言搭建自己的数据存储",
+    "通过迁移和备份目录追踪数据结构变更历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "2. **Designs the storage** for your data as a proper relational SQLite database, not a pile of loose notes. ／ 4. **Backs up your data, then applies the change** to `data.sqlite`. ／ - SQLite only.",
+     "lines": [
+      16,
+      18,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明数据存储在 SQLite 文件中，SQLite 是其数据层而非被服务的对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An opinionated, agent-enabled, full-stack application engine. Say what you want to build (business automation, personal finance, project management and so on) and get ready-to-use software. Built with Rust, SQLite and SolidJS. ／ 2. **Designs the storage** for your data as a proper relational SQLite database, not a pile of loose notes. ／ - SQLite only.",
+   "evidence_lines": [
+    3,
+    16,
+    82
+   ]
+  },
+  "fn": "brainless/nocodo",
+  "sha": "4f2f96bcf950",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

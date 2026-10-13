@@ -8256,5 +8256,285 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8b80ca585ffa": {
+  "identity": {
+   "one_liner": "纯 Go 自包含 Web 服务器，内置 Lua/Teal/Markdown 渲染与多数据库后端支持",
+   "review": "Algernon 是一个用 Go 编写的单文件 Web 服务器，面向使用 Lua 或 Teal 编写页面与处理器的开发者。它支持 HTTP/2、QUIC、多种模板与样式语言的即时渲染，数据后端可选 Redis、BoltDB、PostgreSQL、SQLite、MariaDB/MySQL 等，无 Redis 时回退到内置 Bolt 数据库。",
+   "highlights": [
+    "单二进制内含 Lua 解释器，支持以 Lua/Teal 脚本作为 HTTP 处理器",
+    "数据后端可选 Bolt、Redis、Valkey、PostgreSQL、SQLite、MariaDB/MySQL",
+    "支持 Markdown、Pongo2、Amber、JSX/TSX 等多种文件格式的即时渲染与自动刷新"
+   ],
+   "use_cases": [
+    "本地 Markdown 或网页的即时预览与开发",
+    "使用 Lua 编写后端逻辑的轻量 Web 应用托管",
+    "在无外部依赖的单二进制环境中运行带数据库后端的小型站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Written in Go. Uses Bolt (built-in), MySQL, PostgreSQL, SQLite or Valkey/Redis (recommended) for the database backend, permissions2 for handling users and permissions, gopher-lua for interpreting and running Lua, optional Teal for type-safe Lua scripting, http ／ * When using PostgreSQL, the HSTORE key/value type is used (available in PostgreSQL version 9.1 or later).",
+     "lines": [
+      54,
+      121
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Written in Go. Uses Bolt (built-in), MySQL, PostgreSQL, SQLite or Valkey/Redis (recommended) for the database backend, permissions2 for handling users and permissions, gopher-lua for interpreting and running Lua, optional Teal for type-safe Lua scripting, http",
+     "lines": [
+      54
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Written in Go. Uses Bolt (built-in), MySQL, PostgreSQL, SQLite or Valkey/Redis (recommended) for the database backend, permissions2 for handling users and permissions, gopher-lua for interpreting and running Lua, optional Teal for type-safe Lua scripting, http",
+     "lines": [
+      54
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "The idea is that web pages can be written in Markdown, Pongo2, Amber, HTML or JSX (+React or HyperApp), depending on the need, and styled with CSS, Sass(SCSS) or GCSS, while data can be provided by a Lua or Teal script that talks to Redis, BoltDB, PostgreSQL, ",
+     "lines": [
+      172
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该 Web 服务器将列出的数据库作为自身的数据后端使用，而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Web server with built-in support for HTTP/2, HTTP/3 (QUIC), Lua, Teal, Markdown, Pongo2, HyperApp, Amber, Sass(SCSS), GCSS, JSX, TypeScript, Ollama (LLMs), BoltDB (built-in, stores the database in a file, like SQLite), Redis, Valkey, PostgreSQL, SQLite, MariaDB, MySQL, MSSQL, IPv6, npm-less React 19, rate limiting, graceful shutdown, plugins, users and permissions. ／ Written in Go. Uses Bolt (built-in), MySQL, PostgreSQL, SQLite or Valkey/Redis (recommended) for the database backend, permissions2 for handling users and permissions, gopher-lua for interpreting and running Lua, optional Teal for type-safe Lua scripting, http2 for serving HTTP/2, quic-go for serving QUIC, gomarkdown/markdown for Markdown rendering, amber for Amber templates, Pongo2 for Pongo2 templates, Sass(SCSS) and GCSS for CSS preprocessing. logrus is used for logging, esbuild for bundling and converting JSX/TSX to JavaScript, tollbooth for rate limiting and pie for plugins.",
+   "evidence_lines": [
+    9,
+    54
+   ]
+  },
+  "fn": "xyproto/algernon",
+  "sha": "8b80ca585ffa",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7297409b9f7c": {
+  "identity": {
+   "one_liner": "DSH 插件：对话自动沉淀为知识卡，SQLite+Markdown 存储",
+   "review": "这是一个面向 DeepSeek Harness（DSH）以及 Claude Code、Codex CLI、Cursor 等 AI Agent 宿主的记忆插件，通过 MCP 与 hooks 把会话内容自动沉淀为知识卡，提供检索、知识图谱、审核中心和回收中心，数据以 SQLite 持久化并落为纯 Markdown 目录，新卡默认需人工审核后才入主库，供需要在多会话间保留项目记忆的开发者使用。",
+   "highlights": [
+    "提供对话自动沉淀与 memory_recall 检索工具，支持 MCP 挂载到多种 Agent 宿主",
+    "提供知识卡审核中心与回收站，未审核内容与主库物理隔离，写入路径强制经过审核守卫并记录审计日志",
+    "SQLite 持久存储配合纯 Markdown 目录，支持多库隔离配置、CLI 命令（recall/capture/sweep）与独立 Web 界面"
+   ],
+   "use_cases": [
+    "为 AI Agent 跨会话保留项目决策与结论记忆",
+    "多个 Agent（DSH/Claude Code/Codex/Cursor）共享同一套经过审核的知识库",
+    "通过独立 Web 界面进行知识卡管理与知识图谱浏览"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 全自研、零第三方记忆框架、不改 DSH 源码、一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其以 SQLite 持久存储自身知识卡数据，是为 AI Agent 服务的记忆应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 全自研、零第三方记忆框架、不改 DSH 源码、一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。 ／ 装完即用：会话里说「recall 一下数据库选型」→ 自动检索记忆；会话结束 → 自动沉淀进统一 `~/.dsh/memory-vault`（新卡 `pending` 待审核）。 ／ > `cards`（**主库 / 正常区**）物理上**只存 approved**；`quarantine`（**隔离区 / 异常区**）存 `pending` / `rejected` / `deleted`。",
+   "evidence_lines": [
+    16,
+    64,
+    227
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "EternalNight996/memory-eternal",
+  "sha": "7297409b9f7c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b531f143d9ee": {
+  "identity": {
+   "one_liner": "自托管网关，将保存的 SQL 查询转为带类型参数的版本化 REST 接口",
+   "review": "QueryAPIGate 是一个自托管服务，把保存的 SQL 查询发布为版本化 REST 端点，支持注入安全的类型化参数、作用域 API 密钥、角色控制、行级 JWT 绑定、运行历史、SSE 事件和管理控制台。面向需要将既有 SQL 以受管 API 形式暴露给应用或团队的工程与数据团队，支持 PostgreSQL、MySQL、SQLite、DuckDB、ClickHouse 等 Tier 1 数据库，H2/通用 JDBC/ MongoDB 为实验性支持。",
+   "highlights": [
+    "将保存的 SQL 查询发布为版本化 REST 端点，输出 JSON、NDJSON、XML、YAML、CSV、TSV、Excel、Parquet 等格式",
+    "提供 API 密钥哈希存储、连接密码静态加密、作用域密钥、角色模板、IP 白名单与审计日志",
+    "通过 DuckDB 支持查询本地磁盘、S3、GCS、R2 或 Web 上的 Parquet/CSV/JSON 文件并发布为 API",
+    "内置管理控制台，含 schema 浏览器、指标面板、缓存管理与告警"
+   ],
+   "use_cases": [
+    "把报表、BI 看板或应用中的既有 SQL 查询转换为受管控的 REST API",
+    "为团队提供带密钥作用域、速率限制与审计的数据库只读查询网关",
+    "通过 DuckDB 将 S3/GCS/本地文件数据以 API 形式发布"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and ／ Connections screen with All/Active/Inactive/Deleted tabs, listing ClickHouse, MySQL, PostgreSQL and SQLite connections with their status, each connection",
+     "lines": [
+      151,
+      55
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and ／ Connections screen with All/Active/Inactive/Deleted tabs, listing ClickHouse, MySQL, PostgreSQL and SQLite connections with their status, each connection",
+     "lines": [
+      151,
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and ／ Connections screen with All/Active/Inactive/Deleted tabs, listing ClickHouse, MySQL, PostgreSQL and SQLite connections with their status, each connection",
+     "lines": [
+      151,
+      55
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and ／ Connections screen with All/Active/Inactive/Deleted tabs, listing ClickHouse, MySQL, PostgreSQL and SQLite connections with their status, each connection",
+     "lines": [
+      151,
+      55
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "covered by the compatibility promise. **Experimental** - H2, generic JDBC (Oracle, SQL Server, DB2, Snowflake and",
+     "lines": [
+      152
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "covered by the compatibility promise. **Experimental** - H2, generic JDBC (Oracle, SQL Server, DB2, Snowflake and",
+     "lines": [
+      152
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为连接多个数据库并将 SQL 查询暴露为 API 服务的网关组件，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "FSL-1.1-MIT",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**QueryAPIGate** is a self-hosted service that runs SQL against your databases - and against Parquet, CSV and JSON files ／ **Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and ／ covered by the compatibility promise. **Experimental** - H2, generic JDBC (Oracle, SQL Server, DB2, Snowflake and",
+   "evidence_lines": [
+    22,
+    151,
+    152
+   ]
+  },
+  "fn": "AnanthaRajuC/QueryAPIGate",
+  "sha": "b531f143d9ee",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

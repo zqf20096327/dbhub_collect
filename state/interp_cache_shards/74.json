@@ -8905,5 +8905,309 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2d0dfe9ae7b7": {
+  "identity": {
+   "one_liner": "text-to-SQL 访问控制库：按调用者权限过滤 schema，仅暴露可读表",
+   "review": "schemagate 是一个 Python 库和 MCP 服务器，在 LLM 看到 schema 之前按调用者身份和授权过滤表清单，使无权限表不出现在 prompt 中，并可基于行级安全意识裁剪表。提供 CLI、本地 Studio 页面与可选的问答功能，声称减少 prompt token。面向构建 text-to-SQL/SQL 代理的开发者和数据团队，通过 pip 或 docker 安装，依赖 SQLAlchemy。",
+   "highlights": [
+    "按调用者 principal/role 过滤 schema，被限制的表不进入 prompt",
+    "选择器离线运行（BM25 加 hashed embedder），不调用模型",
+    "提供 CLI、本地 Studio 页面、MCP server，支持连接 PostgreSQL、Oracle、MySQL、SQL Server、SQLite"
+   ],
+   "use_cases": [
+    "为 LangChain/MCP/SQL 代理提供身份感知的 schema 选择",
+    "在行级安全之外避免模型生成对不可读表的有效 SQL 导致的静默失败",
+    "裁剪大型 schema 以减少 text-to-SQL 每次调用的 prompt token 消耗"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank ／ --url \"postgresql+psycopg://user:pw@host/db\" --answer --provider <provider> --model <model-id> ／ schemagate select \"revenue by month\" --url postgresql://localhost/app --principal okta:jdoe --role finance ／ pip install 'schemagate[postgres]'     'schemagate[oracle]'",
+     "lines": [
+      13,
+      60,
+      76,
+      166
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank ／ pip install 'schemagate[mssql]' 'schemagate[mysql]' ／ 1. **Connect.** Paste a URL — `postgres://…`, `postgresql://…`, `mysql://…`,",
+     "lines": [
+      13,
+      167,
+      206
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank ／ pip install 'schemagate[postgres]' 'schemagate[oracle]' ／ `oracle://…` and a JDBC string all work, as does the wallet form for an",
+     "lines": [
+      13,
+      166,
+      207
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank ／ pip install 'schemagate[mssql]' 'schemagate[mysql]' ／ `[mssql]`, or `schemagate[all]` for the lot:",
+     "lines": [
+      13,
+      167,
+      218
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|MySQL / MariaDB|certified live on MySQL 8.4.11, 10/10, **in CI on every push** against a service container, plus the GRANT reader suite: all three privilege levels, the role graph, and the role-only blind spot MySQL cannot report. MariaDB has not been run|",
+     "lines": [
+      893
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为连接数据库的 SQL 代理提供访问控制与 schema 过滤服务，本身不存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite. ／ pip install 'schemagate[postgres]'     'schemagate[oracle]' ／ pip install 'schemagate[mssql]'        'schemagate[mysql]'",
+   "evidence_lines": [
+    13,
+    166,
+    167
+   ]
+  },
+  "fn": "ashishsinha1602/schemagate",
+  "sha": "2d0dfe9ae7b7",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "49908d5e8b73": {
+  "identity": {
+   "one_liner": "按项目声明 PHP 版本的本地开发环境，集成 Apache/nginx 与 MySQL/MariaDB",
+   "review": "HyPHP 是面向 Windows 和 macOS 的 PHP 本地开发环境，每个项目通过 hyphp.yaml 声明所用 PHP 版本，支持多版本同时运行、本地 HTTPS、.test 域名和 FastCGI worker 池。它按需下载 Apache、nginx、MySQL、MariaDB、Mailpit 等组件并统一编排，MySQL 与 MariaDB 同端口二选一运行。提供 CLI 命令与 -- 输出，适合本地 PHP 开发者和脚本/AI 代理调用。",
+   "highlights": [
+    "多个 PHP 版本通过 FastCGI 同时运行，版本在项目 hyphp.yaml 中声明",
+    "MySQL 或 MariaDB 同端口切换运行，各自独立数据目录，切换失败自动回滚",
+    "CLI 支持查看服务状态、日志和修改 php.ini，所有命令提供 -- 输出与退出码"
+   ],
+   "use_cases": [
+    "在无 Docker 的本机同时开发多个使用不同 PHP 版本的项目",
+    "本地需要 Apache/nginx + MySQL/MariaDB + HTTPS 域名的 PHP 调试环境",
+    "用脚本或 AI 代理通过 CLI 自动化管理本地 PHP 服务"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "HyPHP — PHP environment declared per project. The app window runs Apache, PHP 7.4, 8.3 and 8.4, MySQL and Mailpit ／ - **MySQL or MariaDB** — one active at a time on the same port, each with its own data ／ `hyphp logs mysql -f`, `hyphp ini 8.3 max_input_vars 5000`… Every command runs in the ／ |MySQL Community|GPL-2.0|dev.mysql.com|",
+     "lines": [
+      1,
+      45,
+      50,
+      100
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MySQL or MariaDB** — one active at a time on the same port, each with its own data ／ - **macOS 15+ on Apple Silicon**, from version 4.0.0. PHP, Apache, nginx, MySQL, MariaDB, ／ |MariaDB Server|GPL-2.0|mariadb.org|",
+     "lines": [
+      45,
+      58,
+      101
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目编排并运行 MySQL/MariaDB 服务实例（下载、启动、日志、数据目录管理），为开发环境提供数据库服务支撑",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **MySQL or MariaDB** — one active at a time on the same port, each with its own data ／ HyPHP does not redistribute these binaries: it downloads them on demand, verifies the ／ - **CLI for the terminal and AI agents** — `hyphp status`, `hyphp start all`,",
+   "evidence_lines": [
+    45,
+    105,
+    49
+   ]
+  },
+  "fn": "arismarioneves/hyphp",
+  "sha": "49908d5e8b73",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2f55c4c699b1": {
+  "identity": {
+   "one_liner": "基于状态的 schema 与代码部署工具集，覆盖四大数据库引擎",
+   "review": "SchemaSmith 提供 SchemaTongs/SchemaQuench/DataTongs/SchemaShears 四个 CLI 工具，用于将数据库提取为 schema 包并把期望状态部署到目标服务器，包含数据提取、补丁包生成、checkpoint/续传与 WhatIf 预览。面向需要对 SQL Server、PostgreSQL、MySQL、MariaDB 做 schema 部署自动化的数据库团队与 DevOps 流程，支持 GitHub Action 集成与 Docker 运行；许可证为 SSCL v2.0，限制再分发与托管服务使用。",
+   "highlights": [
+    "提供数据库提取（SchemaTongs）、schema 包部署（SchemaQuench）、数据提取与 MERGE 脚本生成（DataTongs）、对象级补丁包（SchemaShears）四个工具",
+    "对四种引擎生成版本对应 SQL，最低支持版本下限自动强制检查，支持 checkpoint/resume 与 WhatIf 分析",
+    "提供 GitHub Action、Docker 镜像与 Windows/Linux/macOS 自包含单文件可执行程序"
+   ],
+   "use_cases": [
+    "将数据库期望状态以元数据定义并部署到多平台目标服务器",
+    "在 CI/CD 流程中通过 GitHub Action 执行 PR WhatIf 与合并部署",
+    "从现有数据库提取 schema 与数据生成可复用的部署包"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target serve ／ - **SchemaQuench** — Deploys schema packages to SQL Server, PostgreSQL, MySQL, and MariaDB. 9 execution slots, conditional deployment via `ShouldApplyExpression`, secondary-server fan-out, FK-aware data delivery, checkpoint/resume, WhatIf analysis, indexed vie ／ |PostgreSQL|12|",
+     "lines": [
+      15,
+      24,
+      47
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target serve ／ - **SchemaQuench** — Deploys schema packages to SQL Server, PostgreSQL, MySQL, and MariaDB. 9 execution slots, conditional deployment via `ShouldApplyExpression`, secondary-server fan-out, FK-aware data delivery, checkpoint/resume, WhatIf analysis, indexed vie ／ |MySQL|5.7|",
+     "lines": [
+      15,
+      24,
+      48
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target serve ／ > **SchemaSmith v2.7.2 released.** SQL Server fixes: a template deployed to several databases now deploys every script to each of them, CDC is no longer turned off on a table that leaves `EnableCDC` out (a breaking change — see the notes), and deploys to datab ／ |SQL Server|2008 (major version 10)|",
+     "lines": [
+      15,
+      5,
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target serve ／ - **SchemaQuench** — Deploys schema packages to SQL Server, PostgreSQL, MySQL, and MariaDB. 9 execution slots, conditional deployment via `ShouldApplyExpression`, secondary-server fan-out, FK-aware data delivery, checkpoint/resume, WhatIf analysis, indexed vie ／ |MariaDB|10.2|",
+     "lines": [
+      15,
+      24,
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为多种数据库提供 schema 管理与部署功能的工具集，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "SSCL v2.0，非 OSI 常见开源许可；允许自由管理自有数据库，禁止独立再分发、捆绑或托管服务",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target server to match. Same toolset, same package format, four engines — no migration scripts to author or order. ／ - **SchemaQuench** — Deploys schema packages to SQL Server, PostgreSQL, MySQL, and MariaDB. 9 execution slots, conditional deployment via `ShouldApplyExpression`, secondary-server fan-out, FK-aware data delivery, checkpoint/resume, WhatIf analysis, indexed views (SQL Server), materialized views (PostgreSQL), and a token system that reaches every script. ／ ### Supported database versions",
+   "evidence_lines": [
+    15,
+    24,
+    40
+   ]
+  },
+  "fn": "Schema-Smith/SchemaSmith",
+  "sha": "2f55c4c699b1",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

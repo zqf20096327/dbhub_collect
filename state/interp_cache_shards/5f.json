@@ -9143,5 +9143,216 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "04f0436a8ac6": {
+  "identity": {
+   "one_liner": "基础设施编排SDK与平台，用代码声明后端资源并本地运行、云端部署",
+   "review": "Encore 提供开源基础设施 SDK，开发者在代码中声明数据库、Pub/Sub、对象存储、缓存等资源，通过 encore run 在本地启动真实基础设施并部署到自己的 AWS/GCP 账号。面向 TypeScript/Go 后端开发者与 AI 编码代理，附带本地仪表盘、分布式追踪和可选托管平台；目前自动化供给仅支持 AWS 与 GCP。",
+   "highlights": [
+    "SDK 允许在代码中声明数据库、Pub/Sub、对象存储、缓存、定时任务和密钥，本地以真实 Postgres 等运行",
+    "提供 TypeScript 与 Go 语言 SDK，Python 与 Rust 在路线图中",
+    "内置本地开发仪表盘，提供服务、API、追踪、数据库的实时查看"
+   ],
+   "use_cases": [
+    "本地开发时以真实基础设施语义运行并验证后端应用",
+    "将后端应用部署到自有 AWS 或 GCP 账号并自动供给资源",
+    "为 AI 编码代理生成规则文件并配置 MCP 服务器用于内省应用"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|SQL Database|Postgres|RDS|Cloud SQL| ／ 1. **Local:** `encore run` starts the whole system locally: real Postgres, real Pub/Sub semantics, type-safe service-to-service calls, plus a local dashboard with distributed tracing. Infrastructure namespaces let multiple branches or agents work in parallel w",
+     "lines": [
+      36,
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库等资源提供供给、编排与开发工作流组件，服务后端应用的开发与部署。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Mozilla Public License 2.0，另含可选托管平台",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- An open source **infrastructure SDK**: Define databases, Pub/Sub, object storage, caches, cron jobs, and secrets directly in your code. Run `encore run` to start your application locally with real infrastructure and built-in distributed tracing. ／ |SQL Database|Postgres|RDS|Cloud SQL| ／ - **Cloud providers:** Encore's fully-automated provisioning currently supports AWS and GCP. Azure is on the roadmap. Self-hosting via `encore build docker` works on any provider.",
+   "evidence_lines": [
+    18,
+    36,
+    97
+   ]
+  },
+  "fn": "encoredev/encore",
+  "sha": "04f0436a8ac6",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fcf2f39848a2": {
+  "identity": {
+   "one_liner": "面向 Local by Flywheel WordPress 数据库的只读 MCP 服务器",
+   "review": "一个 MCP 服务器，让 Claude、Cursor 等 AI 助手以只读方式查询 Local by Flywheel 本地 WordPress 站点的 MySQL 数据库。它通过进程扫描和配置解析自动检测活跃站点的 MySQL 实例，自动选择 socket 或端口连接，提供 mysql_query（仅 SELECT/SHOW/DESCRIBE/EXPLAIN）、mysql_schema、mysql_current_site、mysql_list_sites 等工具，支持多站点按环境变量或工作目录选择。需要 Node.js 24+ 和 Local by Flywheel 运行环境，仅支持只读操作。",
+   "highlights": [
+    "自动检测 Local by Flywheel 活跃站点的 MySQL 实例，支持 socket 与 TCP 端口连接",
+    "提供只读 SQL 查询、INFORMATION_SCHEMA 结构检查、多站点列举与选择工具",
+    "支持站点 ID、站点名称、工作目录、进程检测、文件系统回退五种站点选择优先级"
+   ],
+   "use_cases": [
+    "AI 辅助调试 WordPress 插件（如 LearnDash、WooCommerce）自定义表结构与查询",
+    "本地开发中让 AI 助手直接读取站点真实 schema 与数据以生成准确 SQL",
+    "多站点本地环境下按目录或环境变量自动连接对应站点数据库"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "When using the original mcp-server-mysql with Local by Flywheel, developers face several challenges: ／ This MCP server **automatically detects** your active Local by Flywheel MySQL instance by:",
+     "lines": [
+      70,
+      78
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL"
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为访问 Local by Flywheel MySQL 数据库提供服务连接能力的 MCP 服务器，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Model Context Protocol (MCP) server that gives AI assistants like Claude and Cursor direct, read-only access to your Local by Flywheel WordPress database. No more guessing table structures. No more writing SQL queries blind. Your AI can now understand your actual data. ／ When using the original mcp-server-mysql with Local by Flywheel, developers face several challenges: ／ This MCP server **automatically detects** your active Local by Flywheel MySQL instance by:",
+   "evidence_lines": [
+    5,
+    70,
+    78
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "verygoodplugins/mcp-local-wp",
+  "sha": "fcf2f39848a2",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ad2f18402044": {
+  "identity": {
+   "one_liner": "本地优先项目管理桌面应用，数据存于单个 SQLite 文件",
+   "review": "Fjord 是一个本地优先的项目管理桌面应用（Tauri 构建），提供看板、任务、markdown 笔记、文件附件与全文搜索，所有数据保存在本机单个 SQLite 数据库中，无账号无云端。面向偏好键盘操作的个人开发者，附带 CLI 和 MCP 服务器供 AI 代理操作，支持 Git/GitHub/Azure DevOps 集成，可运行于 Linux、Windows 和 macOS。",
+   "highlights": [
+    "提供看板、任务、子任务、markdown 笔记（[[链接]]与反向链接）和内容寻址的文件附件",
+    "数据存储在本机单个 SQLite 数据库，提供 CLI 并通过 fjord mcp 暴露 25 个 MCP 工具给 AI 客户端",
+    "支持 Git/GitHub/Azure DevOps 集成：从任务创建分支、查看 PR 与 CI 状态、Azure Boards 导入"
+   ],
+   "use_cases": [
+    "个人开发者在本地管理项目看板、任务与笔记，无需云端账号",
+    "通过 MCP 让 AI 代理在同一项目数据上创建、编辑、移动任务",
+    "将任务与 Git 分支、GitHub PR 关联并在合并后自动移动任务状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Fjord keeps your projects, kanban boards, files and notes in a single SQLite database on your own",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其项目和任务数据保存在本机单个 SQLite 数据库中，SQLite 是其存储后端而非被服务的对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Fjord keeps your projects, kanban boards, files and notes in a single SQLite database on your own ／ machine. No account, no cloud, no telemetry. It's a lightweight native desktop app (Tauri), a scriptable ／ CLI, and an MCP server — so you and your AI assistant can work in",
+   "evidence_lines": [
+    16,
+    17,
+    18
+   ]
+  },
+  "fn": "jhtjernsmo/fjord",
+  "sha": "ad2f18402044",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9191,5 +9191,156 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "43adc55cadea": {
+  "identity": {
+   "one_liner": "基于SQLite的本地AI代理长期记忆核心，提供来源可溯召回",
+   "review": "Scope Recall v3 是一个本地长期记忆核心，以 SQLite 为唯一事实存储、向量索引为可重建伴随物，为 Hermes、Codex、Claude Code、WorkBuddy、dsh 等 AI 代理宿主提供共享记忆、证据化召回和记忆检视/更正/删除工具，通过 pip 安装并提供安装计划与卸载保留数据的 CLI。PostgreSQL/pgvector 不在 v3 分发范围内。",
+   "highlights": [
+    "以 SQLite 为事实权威，向量索引可重建，提供 Hermes/Codex 等宿主适配器与 MCP 服务器",
+    "提供记忆的检视、更正、删除工具及有界多跳证据路径 trace",
+    "提供 plan-install/apply-install/doctor/plan-uninstall 等维护 CLI，卸载默认保留核心数据"
+   ],
+   "use_cases": [
+    "为多个 AI 代理宿主提供共享的本地长期记忆",
+    "需要来源可溯、可更正可删除的代理记忆治理",
+    "从 2.0 版本记忆库向 3.x 做一次性离线迁移"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP s ／ migration procedure for a 2.0.1 memory database. SQLite remains the only fact ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before openin",
+     "lines": [
+      3,
+      20,
+      103
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra enables the tested LanceDB companion path. PostgreSQL/pgvector is outside this v3 distribution; an explicit configuration error directs ope",
+     "lines": [
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite 作为自身事实数据存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP server (the MCP tools need the optional `codex` extra; dsh runs the hooks through a plugin). The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ The package is `hermes-scope-recall` on PyPI. Install it into the same isolated Python ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before opening Core. After that binding is verified, an omitted runtime-config argument checks only `<data_directory>/runtime-config.json`; a missing file stays basic plus an explicit capability gap. The file is never generated or discovered from the current directory, parent directories, or credential locations. Optional host wiring must report a capability gap instead of creating or repairing a database.",
+   "evidence_lines": [
+    3,
+    52,
+    103
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "43adc55cadea",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8d2e3dc96e4e": {
+  "identity": {
+   "one_liner": "黑客松导师巡检与评审应用，基于 Postgres 与 Vercel 部署",
+   "review": "用于管理通宵黑客松的导师巡检（check-in）与早晨评审打分的应用，导师用手机记录巡查、求助请求和最终评分，组织者通过 /admin 看板实时查看。本地使用内嵌 PGlite，部署需 Postgres（如 Vercel + Neon），提供 CSV 导入导出、备份恢复和可配置的评分规则。",
+   "highlights": [
+    "提供导师巡检流程：多轮 check-in、团队锁定、帮助请求路由、top-two 提名",
+    "提供组织者看板：实时状态、入围排序、评审打分与裁判归一化分数",
+    "事件配置集中于 event.config.js，支持预设模板、CSV/XLSX 导入与备份恢复"
+   ],
+   "use_cases": [
+    "通宵黑客松的导师巡检与求助分派",
+    "决赛评审打分与入围名单管理",
+    "活动数据的导入导出与备份恢复"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Locally it runs on an embedded Postgres (PGlite) in `.pglite/`, so there's nothing else to install. Delete that folder to start over. Open `/admin` → Setup → **Load practice data** to try it with dummy teams, then open `/` on your phone. ／ Mentor Desk is static pages plus one serverless function, and needs Postgres. ／ 2. Add a Postgres database: Vercel → Storage → Neon (or any Postgres) so `DATABASE_URL` is set. ／ **Anywhere else:** any Node 18+ host works. `api/rpc.js` is a standard `(req, res)` handler and `public/` is static; `dev.mjs` shows how to wire them together with plain `node:http`. Set `DATABASE_URL` to any Postgres.",
+     "lines": [
+      95,
+      114,
+      118,
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 Postgres 存储活动数据，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Locally it runs on an embedded Postgres (PGlite) in `.pglite/`, so there's nothing else to install. Delete that folder to start over. Open `/admin` → Setup → **Load practice data** to try it with dummy teams, then open `/` on your phone. ／ Mentor Desk is static pages plus one serverless function, and needs Postgres.",
+   "evidence_lines": [
+    95,
+    114
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "jasimcm/mentor-desk",
+  "sha": "8d2e3dc96e4e",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

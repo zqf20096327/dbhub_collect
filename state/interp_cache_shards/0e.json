@@ -9606,5 +9606,172 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6947ed527749": {
+  "identity": {
+   "one_liner": "终端数据库工作台，含 AI 代理护栏与 MCP 服务器",
+   "review": "Dexo 是一个键盘驱动的终端数据库客户端，用 Rust 编写，支持 PostgreSQL、MySQL、MariaDB、SQLite（DuckDB 为插件），提供 TUI 工作台、命令行和 MCP 服务器。面向需要在终端管理数据库并让 AI 代理受限访问的开发者/运维者；关键机制包括写操作确认、只读连接在服务端生效、代理每次写入需审批，本地优先无遥测。",
+   "highlights": [
+    "提供终端 UI、命令行和 MCP 服务器三种使用方式，支持 SQL 编辑、结果网格、EXPLAIN 树形展示和 schema diff",
+    "实现 AI 代理护栏：只读 profile、allowlist、限时写权限和逐次写入审批",
+    "支持 TLS、SSH 隧道、代理、密码管理器接入，本地优先且无遥测"
+   ],
+   "use_cases": [
+    "在终端中浏览、编辑、导入导出数据库数据并执行备份恢复",
+    "为 AI 编码代理配置受限的数据库读写访问",
+    "对比数据库 schema、预览 DDL、测试索引（配合 Postgres hypopg）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Dexo is a keyboard-driven workbench for PostgreSQL, MySQL, MariaDB and SQLite, with DuckDB as a plugin: a terminal UI, a command line and an MCP server for AI agents. A `DELETE` without `WHERE` on production waits for you to type the connection's name, a read- ／ - **Query plans**: EXPLAIN drawn as a tree; on Postgres with hypopg, try an index before building it. ／ dexo postgres://user@localhost:5432/shop # open a database from its URL, without saving it",
+     "lines": [
+      14,
+      25,
+      113
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Dexo is a keyboard-driven workbench for PostgreSQL, MySQL, MariaDB and SQLite, with DuckDB as a plugin: a terminal UI, a command line and an MCP server for AI agents. A `DELETE` without `WHERE` on production waits for you to type the connection's name, a read- ／ |MySQL|8.0.42, 8.4.5, 9.3.0|",
+     "lines": [
+      14,
+      142
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Dexo is a keyboard-driven workbench for PostgreSQL, MySQL, MariaDB and SQLite, with DuckDB as a plugin: a terminal UI, a command line and an MCP server for AI agents. A `DELETE` without `WHERE` on production waits for you to type the connection's name, a read- ／ |SQLite|3.53.2, built in|",
+     "lines": [
+      14,
+      144
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Dexo is a keyboard-driven workbench for PostgreSQL, MySQL, MariaDB and SQLite, with DuckDB as a plugin: a terminal UI, a command line and an MCP server for AI agents. A `DELETE` without `WHERE` on production waits for you to type the connection's name, a read- ／ |MariaDB|10.11, 11.4|",
+     "lines": [
+      14,
+      143
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为支持多种数据库的终端工作台/客户端工具，为数据库生态提供服务而非使用某库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dexo is a keyboard-driven workbench for PostgreSQL, MySQL, MariaDB and SQLite, with DuckDB as a plugin: a terminal UI, a command line and an MCP server for AI agents. A `DELETE` without `WHERE` on production waits for you to type the connection's name, a read-only connection is read-only on the server too, and an agent writes only with the access you give it, each write waiting for your approval. Everything stays on your machine. ／ - **AI agents**: an MCP server with read-only profiles, allowlists, timed write access per connection and approval for each write. ／ |PostgreSQL|14.18, 16.9, 17.5|",
+   "evidence_lines": [
+    14,
+    27,
+    141
+   ]
+  },
+  "fn": "KingDasWinx/Dexo",
+  "sha": "6947ed527749",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "88d124cf225f": {
+  "identity": {
+   "one_liner": "Windows 本地 Mihomo/Clash Verge Rev 进程与代理流量台账应用",
+   "review": "一个 Windows 托盘应用，通过 Mihomo 的本地命名管道每秒读取连接快照，将进程、目标、规则与代理链的上下行流量写入本地 SQLite，生成分钟级事实及小时/日/周/月汇总，并在 127.0.0.1 提供仪表盘。面向使用 Clash Verge Rev 的 Windows x64 用户，仅统计经过 Mihomo 的流量，界面当前为中文。",
+   "highlights": [
+    "通过 Mihomo 命名管道读取连接快照，按进程/目标/规则/代理链归因流量计数",
+    "将分钟级事实与小时/日/周/月汇总持久写入本地 SQLite",
+    "内置仪表盘默认应用维度，可切换代理节点、主机与路由视图"
+   ],
+   "use_cases": [
+    "查看哪个应用经哪个代理节点上传下载了多少流量",
+    "过滤直连流量，聚焦代理链路用量",
+    "本地长期留存流量历史，无遥测与云端账户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It runs quietly in the Windows system tray, reads the connections already handled by Clash Verge Rev's Mihomo core, and stores a permanent local SQLite ledger. No external controller port, cloud account, or separate database is required. ／ 3. Minute facts and connection sessions are written to SQLite; hour/day/week/month rollups are updated alongside them.",
+     "lines": [
+      14,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用用 SQLite 存储自身流量台账数据，SQLite 为其内嵌存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，衍生自 zhf883680/clash-traffic-monitor，独立修改附额外版权声明",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It runs quietly in the Windows system tray, reads the connections already handled by Clash Verge Rev's Mihomo core, and stores a permanent local SQLite ledger. No external controller port, cloud account, or separate database is required. ／ 1. The collector reads Mihomo connection snapshots once per second through the local named pipe. ／ 3. Minute facts and connection sessions are written to SQLite; hour/day/week/month rollups are updated alongside them.",
+   "evidence_lines": [
+    14,
+    63,
+    65
+   ]
+  },
+  "fn": "severin-ye/mihomo-traffic-ledger",
+  "sha": "88d124cf225f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

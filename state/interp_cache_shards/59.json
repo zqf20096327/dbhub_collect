@@ -8064,5 +8064,145 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "793a482fb05b": {
+  "identity": {
+   "one_liner": "面向 AI agent 的后端即服务平台，一条命令供给 Postgres 数据库等全套后端",
+   "review": "Run402 是一个开源的 agent 后端基础设施：agent 通过 CLI、TypeScript SDK 或 MCP 服务器即可开通 Postgres 数据库、REST API、用户认证、文件存储与 serverless 函数，并用 x402/MPP 微支付自行付费。面向 AI agent 与编码 agent 开发者，限制是数据表需在 manifest 中声明后方可经 REST 访问。",
+   "highlights": [
+    "提供 CLI、类型化 TypeScript SDK 与 MCP 服务器三种接口，均可开通 Postgres 数据库、认证、存储与函数部署",
+    "通过 x402（Base 上的 USDC）或 MPP（含 Bitcoin Lightning）实现 agent 自主付费",
+    "提供 staged deploy 工作流，支持 --check/--plan/--require-plan 的本地校验与网关审查部署"
+   ],
+   "use_cases": [
+    "AI agent 自主开通与管理其后端资源（数据库、存储、函数、站点托管）",
+    "通过 MCP 将 run402 操作接入 Claude Desktop、Cursor 等 MCP 宿主",
+    "用 TypeScript SDK 编写程序化后端部署与支付工作流"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres, auth, storage, serverless functions and staged deploys &mdash; ／ One call to run402 gives an agent a full Postgres database, REST API, user auth, content-addressed file storage, static site hosting, serverless functions, and image generation, paid with x402 (USDC on Base) or MPP (pathUSD on Tempo, or sats over Bitcoin Light ／ That's a real Postgres database + a deployed static site, paid for autonomously with testnet USDC.",
+     "lines": [
+      5,
+      21,
+      56
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 agent 提供开通与运维 Postgres 数据库的基础设施层，而非仅将 Postgres 用作应用存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "多许可：agent 接口 MIT，run402-core 运行时 Apache-2.0，Cloud 控制面专有（open-core 结构）",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Run402 is open-source backend infrastructure for AI agents and coding agents** — a backend-as-a-service addressed to a machine rather than to a person. An autonomous agent provisions a Postgres database, user auth, file storage, serverless functions and site hosting, ships them through one staged deploy workflow, and pays for the usage itself. Comparable in surface to Supabase, Firebase or Vercel; different in that there is no dashboard you have to sign into to get started (the console exists for people; the agent never needs it) and no human-issued API key to copy. ／ One call to run402 gives an agent a full Postgres database, REST API, user auth, content-addressed file storage, static site hosting, serverless functions, and image generation, paid with x402 (USDC on Base) or MPP (pathUSD on Tempo, or sats over Bitcoin Lightning) — or card-funded allowance. The prototype tier is free on testnet. ／ **Use the CLI by default** to provision, deploy, inspect and recover. Use the typed, opinionated SDK when writing programmatic TypeScript/JavaScript workflows; shell scripts and CI can keep using CLI. MCP serves MCP-native hosts, and direct HTTP supports deliberate lower-level integrations.",
+   "evidence_lines": [
+    17,
+    21,
+    27
+   ]
+  },
+  "fn": "kychee-com/run402",
+  "sha": "793a482fb05b",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b055b64750e1": {
+  "identity": {
+   "one_liner": "一个基于 Nuxt + tRPC + Drizzle ORM + PostgreSQL 的实时社区发帖应用。",
+   "review": "Esposter 是一个 pnpm monorepo 的社交发帖应用，前端用 Nuxt/Vue/Pinia/Phaser，后端通过 tRPC 提供 API，数据存于 PostgreSQL 并用 Drizzle ORM 定义 schema 与迁移，另含 Azure Serverless 后端与 Claude Code 插件市场。适合使用者运行部署或作为全栈参考项目；发布的包 API 可能随时变更，无常弃期。",
+   "highlights": [
+    "使用 Drizzle ORM 管理 PostgreSQL schema 与迁移（L251）",
+    "支持实时功能与 Azure Functions serverless 后端（L242）",
+    "作为 Claude Code 插件市场提供多个插件（L273）"
+   ],
+   "use_cases": [
+    "部署一个实时社区发帖站点",
+    "作为 Nuxt + tRPC + Drizzle 全栈 monorepo 参考",
+    "安装使用其发布的 Claude Code 插件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "3. Install PostgreSQL + PgAdmin. ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+     "lines": [
+      158,
+      251
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用以 PostgreSQL 为数据库存数据（本地开发需安装 PostgreSQL，db-schema 以 PostgreSQL 为 source of truth）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Esposter is a pnpm workspaces monorepo. See monorepo tooling for workspace script orchestration and publishing boundaries. ／ |`apps/web`|Main Nuxt web application — frontend, server routes, tRPC API|—| ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+   "evidence_lines": [
+    200,
+    244,
+    251
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Esposter/Esposter",
+  "sha": "b055b64750e1",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

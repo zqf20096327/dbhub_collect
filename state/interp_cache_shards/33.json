@@ -7988,5 +7988,143 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "536a9e732fd2": {
+  "identity": {
+   "one_liner": "面向智能体编码的自治后端平台，经 MCP 管理 PostgreSQL",
+   "review": "Backenly 是一个后端平台：用户通过编码智能体（Claude Code、Cursor 等）经 MCP 服务器描述需求，平台派生数据模型、生成 REST 端点、写入 RLS 策略，并通过 MAPE-K 循环监控与修复运行中的后端。数据存储于 PostgreSQL，经 PostgREST 提供查询；支持云端与 Docker/Compose 自托管（npm 安装），变更经带审计与回滚的 executeAction 内核。",
+   "highlights": [
+    "提供 MCP 服务器，暴露 20 个工具供编码智能体读取状态、执行迁移与管理数据库",
+    "所有变更经 executeAction 内核执行，支持 dry-run、审计与回滚",
+    "支持自托管部署，每个项目使用独立 PostgreSQL schema，隔离由 grants 与 RLS 实现"
+   ],
+   "use_cases": [
+    "使用 Claude Code/Cursor 等智能体搭建后端 API 与数据库",
+    "需要带 RLS 多租户隔离的 PostgreSQL 数据层",
+    "自托管后端平台并要求变更可审计、可回滚"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The autonomous backend platform for agentic coding. PostgreSQL, REST APIs, auth, ／ never locked in: direct Postgres connection strings and full `pg_dump` exports ／ Your coding agent drives Backenly over MCP. The Brain plans the change, executeAction governs and verifies it, and it lands in PostgreSQL. A closed MAPE-K autonomy loop watches the running backend and repairs it back through the Brain.",
+     "lines": [
+      7,
+      45,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明平台以 PostgreSQL 存储数据并提供 pg_dump 导出，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The autonomous backend platform for agentic coding. PostgreSQL, REST APIs, auth, ／  Your coding agent drives Backenly over MCP. The Brain plans the change, executeAction governs and verifies it, and it lands in PostgreSQL. A closed MAPE-K autonomy loop watches the running backend and repairs it back through the Brain. ／ - **PostgREST data plane.** Tables are served through PostgREST, so the query",
+   "evidence_lines": [
+    7,
+    50,
+    62
+   ]
+  },
+  "fn": "backenly/backenly",
+  "sha": "536a9e732fd2",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "543c17a7ba6f": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 PostgreSQL 的图书馆管理 REST API",
+   "review": "Libro 是一个用 Java/Spring Boot 实现的图书馆管理系统，通过 REST API 提供图书的增删改查、搜索、分页、排序、类型统计以及用户账户与档案管理路由。它使用 PostgreSQL 18 存储数据，借助 Flyway 做数据库迁移，通过 Docker Compose 容器化部署，并包含 Spring Security 的 HTTP Basic 认证和 OpenAPI/Swagger 文档。借阅（Loan）相关 HTTP API 尚未实现。适合作为课程/作品集项目或学校图书馆场景的参考实现。",
+   "highlights": [
+    "提供图书 CRUD、搜索、分页、排序、范围过滤与类型统计的 REST API",
+    "使用 Flyway 进行版本化数据库迁移，Docker Compose 容器化运行",
+    "集成 Spring Security（HTTP Basic + CSRF）并通过 Springdoc 暴露 OpenAPI/Swagger 文档"
+   ],
+   "use_cases": [
+    "学校/图书馆的图书与用户账户管理原型",
+    "学习 Spring Boot 分层架构、JPA、安全与测试实践的参考项目",
+    "基于 Docker Compose 的容器化 REST API 部署示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ Libro is a Spring Boot REST API and Library Management System. It manages books with CRUD operations, search, pagination, sorting, range filtering, genre analytics, and statistics. It also exposes user account and profile routes for creation, listing, lookup,  ／ |Database|PostgreSQL 18|",
+     "lines": [
+      7,
+      10,
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 PostgreSQL 存储图书与用户数据，本身是面向图书馆管理的业务应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Libro is a Spring Boot REST API and Library Management System. It manages books with CRUD operations, search, pagination, sorting, range filtering, genre analytics, and statistics. It also exposes user account and profile routes for creation, listing, lookup, profile updates, password changes, and deletion. Loan HTTP APIs are not implemented. The prototype uses DTO-driven validation, centralized exception handling, and a Docker-first workflow backed by PostgreSQL 18 with Flyway database migrations. ／ |Database|PostgreSQL 18|",
+   "evidence_lines": [
+    10,
+    26
+   ]
+  },
+  "fn": "kyledelfin2006/libro-library-system",
+  "sha": "543c17a7ba6f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9469,5 +9469,143 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e560f07a4d23": {
+  "identity": {
+   "one_liner": "自托管私有服务访问网关，通过出站连接器与浏览器工作区代理应用、LLM 和 AI 代理",
+   "review": "Liaison 是一个自托管的安全访问网关，用户通过出站连接器在浏览器中访问内网 SSH、RDP/VNC、多种 SQL/NoSQL 数据库及本地 LLM 服务。它面向需要访问私有服务的团队与个人，核心机制是无需开放入站端口的出站连接器，并提供 API 密钥管控、会话审计与 Casbin 权限管理。数据库访问（如 Web MySQL）通过浏览器工作区实现，而非原生监听器。",
+   "highlights": [
+    "提供 WebMySQL、WebPostgreSQL、WebMongoDB 等浏览器内数据库工作区，支持浏览 schema 与运行 SQL",
+    "通过 outbound-only 连接器接入私有设备，无需在其上开放入站端口",
+    "内置 AI 代理可在用户权限范围内查询数据库、起草命令，并在需要时请求审批"
+   ],
+   "use_cases": [
+    "在不暴露内网端口的情况下远程访问私有 SSH、远程桌面与 Web 应用",
+    "通过浏览器工作区管理和查询内网多种数据库",
+    "为本地或内部 LLM 提供带配额与密钥管控的认证 API 共享"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "### Web MySQL ／ Using MySQL through Liaison",
+     "lines": [
+      102,
+      106
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其用于访问私有服务与数据库，数据库工作区是为访问数据库服务的组件，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Self-hosted access to private apps, LLMs, and AI agents.** ／ - 🔐 **Application access** — Access TCP, HTTP, HTTPS, WebSocket, and SSH services with per-access controls. ／  SQL databases WebMySQL&nbsp;&nbsp; WebMariaDB&nbsp;&nbsp; WebPostgreSQL&nbsp;&nbsp; WebSQLServer&nbsp;&nbsp; WebOracle&nbsp;&nbsp; WebClickHouse",
+   "evidence_lines": [
+    3,
+    32,
+    60
+   ]
+  },
+  "fn": "liaisonio/liaison",
+  "sha": "e560f07a4d23",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2fdb8877e82e": {
+  "identity": {
+   "one_liner": "DSH 酒馆存储插件，把聊天与变量历史交 SQLite 管理",
+   "review": "面向 DSH Tavern 的服务端存储与执行插件，将聊天、会话事件和 MVU 变量历史改为 SQLite 增量存档，支持按需读取历史楼层、物理尾部回退与原档只读分叉继续游玩，提供 Windows 与 Linux 一键安装脚本。适用于使用 DSH 酒馆并需要接管存档存储的用户；V1/V2 不可共装，且需匹配指定上游版本。",
+   "highlights": [
+    "聊天头字段与消息楼层分开存储，SQLite 增量更新，会话事件由事务与 WAL 管理",
+    "支持按窗口、楼层、检查点范围的历史按需读取，以及正文与变量的同事务提交回滚",
+    "原档保持只读，用户可生成新分叉在 SQLite 中继续；提供一键安装与兜底卸载"
+   ],
+   "use_cases": [
+    "DSH Tavern 用户将聊天存档从原格式接管到 SQLite 增量存档",
+    "需要对剧情回退时正文、变量与运行状态一起回退到一致状态",
+    "保留原档只读，在新分叉中继续对话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。** ／ 这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。|",
+     "lines": [
+      3,
+      5,
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该插件是酒馆应用的功能扩展，使用 SQLite 存储聊天与变量数据，而非为数据库生态服务的独立工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "基于 DSH Tavern 适配的独立修改版，沿用 GNU AGPL v3",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。** ／ 这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。|",
+   "evidence_lines": [
+    3,
+    5,
+    14
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "2fdb8877e82e",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

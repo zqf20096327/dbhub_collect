@@ -9789,5 +9789,169 @@
   "generated_at": "2026-10-12",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "84a8ef89bda9": {
+  "identity": {
+   "one_liner": "面向 AI 编程工具的 CloudBase 后端集成层：Plugin + Skills + MCP 操作数据库、函数与部署",
+   "review": "该仓库为 AI IDE（Cursor、Claude Code 等）提供腾讯云 CloudBase 后端的接入工具集：通过 Plugin 安装 MCP Server 与 Agent Skills，使 AI 可在对话中登录环境、操作数据库（PostgreSQL 与文档数据库）、编写部署云函数、管理托管与日志。面向使用 CloudBase 的 Web 与小程序开发者；需自备 CloudBase 环境并自行确认敏感操作。",
+   "highlights": [
+    "提供 MCP Server，可在 AI 对话中登录、查询修改数据、管理函数托管与读取日志",
+    "提供 Agent Skills，覆盖 Web、小程序、数据库、认证、函数等场景",
+    "支持 PostgreSQL 与文档数据库的数据建模、CRUD、权限与安全规则操作"
+   ],
+   "use_cases": [
+    "在 AI IDE 中通过对话完成 CloudBase 后端的数据库建模与 CRUD 开发",
+    "通过 MCP 部署云函数、静态托管并查看日志",
+    "在小程序/Web 项目中由 AI 代理配置认证、存储与权限规则"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database**: PostgreSQL and document DB, data models, CRUD, permissions and security rules",
+     "lines": [
+      166
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Tools / Skills: MySQL provisioning is retired from the tool surface; every skill package ships a `LICENSE.md` next to `SKILL.md`; a new MCP reference skill documents the remote endpoints, the plugin flags and the tool schemas",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 CloudBase 后端（含数据库操作）提供 MCP 接入能力的工具/组件，而非以数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The CloudBase integration layer for AI coding tools: Plugin installs the stack, Skills steer how code is written, MCP operates databases, functions, storage, and deploys from chat. ／ This repository ships the npm package `@cloudbase/cloudbase-mcp`, Skills, and AI plugins. ／ - **Database**: PostgreSQL and document DB, data models, CRUD, permissions and security rules",
+   "evidence_lines": [
+    7,
+    54,
+    166
+   ]
+  },
+  "fn": "TencentCloudBase/CloudBase-AI-Toolkit",
+  "sha": "84a8ef89bda9",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f63af9ad06a2": {
+  "identity": {
+   "one_liner": "开源 F1 赛车数据集，提供 CSV/JSON/SQL 多格式发布",
+   "review": "F1DB 是一个包含 1950 年至今 Formula 1 全量赛事数据的开源数据库项目，提供车手、车队、引擎、轮胎、赛道、赛季与比赛等多维度数据。使用者可通过 CSV、JSON、Smile 或 SQL dump 导入 MySQL/PostgreSQL/SQLite 进行查询，也可直接使用 SQLite 数据库文件。适用于需要查询或展示 F1 历史数据的开发者与数据分析师；项目以数据发布为主，不含查询服务或管理界面。",
+   "highlights": [
+    "提供 CSV、JSON、Smile 及 MySQL/PostgreSQL/SQLite 的 .sql dump 多种发布格式",
+    "提供包含全部数据的 SQLite 数据库工件，可直接查询",
+    "提供 JSON Schema 校验与 Circuit SVG 图形资产",
+    "按 CalVer 方案在每场比赛后发布新版本"
+   ],
+   "use_cases": [
+    "导入 MySQL/PostgreSQL/SQLite 后用 SQL 查询 F1 历史数据",
+    "为网站、移动应用或 API 提供数据来源",
+    "基于 JSON/CSV 进行数据分析与可视化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      39,
+      74
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      39,
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ - SQLite database ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      39,
+      41,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用这些数据库承载 F1 数据的开放数据集，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "CC BY",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+   "evidence_lines": [
+    39,
+    74
+   ]
+  },
+  "fn": "f1db/f1db",
+  "sha": "f63af9ad06a2",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

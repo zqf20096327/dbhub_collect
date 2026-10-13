@@ -9181,5 +9181,238 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "91033b441d05": {
+  "identity": {
+   "one_liner": "数据库集群管理 Web UI，围绕 Keeper/Patroni 提供部署、HA 操作与监控",
+   "review": "Ivory 是一个自托管的数据库集群管理 Web UI，面向 DBA、SRE 和后端开发者。它通过 Keeper 通用管理层（PostgreSQL 对应 Patroni）提供集群部署、switchover/failover 等 HA 操作、复制延迟监控、SQL 查询控制台、SSH 容器控制与 VM 指标查看，以单个 Docker 容器运行，无主机端 agent；v2 起采用可插拔 Keeper 架构，支持 PostgreSQL、Redis、ClickHouse、MongoDB、etcd、ZooKeeper 等（多数处 BETA 阶段）。",
+   "highlights": [
+    "通过 Keeper 层支持集群部署、switchover/failover/reinit 等 HA 操作",
+    "提供集群健康、复制延迟监控、SQL 查询控制台与 VM 指标/日志查看",
+    "支持 Basic/LDAP/OIDC 认证与 MCP server 接入 AI agent"
+   ],
+   "use_cases": [
+    "高可用集群的日常运维与故障切换操作",
+    "从浏览器或手机查看集群健康与 VM 指标",
+    "通过查询控制台与维护工具进行数据库诊断"
+   ],
+   "cat": "高可用"
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Open-source web UI for high-availability database clusters — PostgreSQL & Patroni, etcd, Redis, ClickHouse, MongoDB and ZooKeeper.** ／ implementation for PostgreSQL, and the one Ivory was originally built around. ／ |Patroni|Postgres|STABLE|The Keeper Ivory was originally built around|",
+     "lines": [
+      7,
+      22,
+      109
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Open-source web UI for high-availability database clusters — PostgreSQL & Patroni, etcd, Redis, ClickHouse, MongoDB and ZooKeeper.** ／ |ClickHouse|ClickHouse|BETA|A popular analytics database and a natural next step for Ivory's plugin set|",
+     "lines": [
+      7,
+      113
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库集群管理服务的工具，README 声明支持 PostgreSQL 等库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Ivory is a self-hosted, open-source database cluster management tool that puts control in your pocket.** ／ ## Supported databases and keepers ／ |Patroni|Postgres|STABLE|The Keeper Ivory was originally built around|",
+   "evidence_lines": [
+    14,
+    105,
+    109
+   ]
+  },
+  "fn": "veegres/ivory",
+  "sha": "91033b441d05",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f1ff6c1c7b82": {
+  "identity": {
+   "one_liner": "自托管 AI 品牌可见度追踪工具，单 Go 二进制，SQLite 存储，内置 MCP 服务器",
+   "review": "该仓库是一个自托管的 AI 可见度追踪应用（AEO/GEO/LLMO），用于测量 ChatGPT、Claude、Perplexity、Gemini 等引擎对品牌的提及与引用情况，面向品牌/市场运营人员。它以单个 Go 二进制运行，首次启动时自动创建并迁移自己的 SQLite 数据库，指标由存储行文本搜索派生而非模型判定，并内置 MCP 服务器供 AI 助手读取数据。当前为 pre-release，11 个引擎提供者中 6 个已实现。",
+   "highlights": [
+    "提供对七家 AI 引擎的可见度、声量份额、引用来源分类等指标追踪，答案全文可查",
+    "内置 MCP 服务器（stdio 及流式 HTTP），提供 14 个只读工具供 AI 客户端查询",
+    "单二进制运行，自建并迁移自身 SQLite 数据库，支持 JSON/CSV 导出与定时调度"
+   ],
+   "use_cases": [
+    "品牌方追踪自身与竞品在 AI 搜索引擎回答中的提及率与引用情况",
+    "通过 MCP 让 Claude 等 AI 客户端以自然语言查询可见度数据",
+    "在自有基础设施上保存全部提示、答案与指标，用于审计与重新计算"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One binary.** No Docker, no Node, no Postgres. It creates and migrates its ／ |**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**|",
+     "lines": [
+      50,
+      159
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "own SQLite database on first start and serves the dashboard at ／ SQLite file you own. Nothing leaves the box except the calls to the engines ／ |**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**|",
+     "lines": [
+      51,
+      129,
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用首次启动时创建并迁移自己的 SQLite 数据库存储全部数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **One binary.** No Docker, no Node, no Postgres. It creates and migrates its ／  SQLite file you own. Nothing leaves the box except the calls to the engines ／ |**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**|",
+   "evidence_lines": [
+    50,
+    129,
+    159
+   ]
+  },
+  "fn": "limelit-co/open",
+  "sha": "f1ff6c1c7b82",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4fae4489c114": {
+  "identity": {
+   "one_liner": "自托管饮食记录与营养管理应用，Go API + Nuxt 前端",
+   "review": "Mecalo 是一个自托管的饮食与营养记录应用，支持按餐次记录、食品检索、自定义食品/食谱、基于日本人膳食摄入标准的目标量计算以及 CSV/JSON 导入导出。面向需要本地部署、注重隐私的个人用户，后端为 Go，默认使用 SQLite 存储文件路径，也可通过 postgresql:// 连接串切换到 CockroachDB。",
+   "highlights": [
+    "支持本地账号与 OIDC 登录，按用户隔离数据",
+    "支持 CSV/JSON 导出与 JSON 导入",
+    "默认以 SQLite 文件存储，可通过 MECALO_DATABASE_URL 使用 CockroachDB 连接串"
+   ],
+   "use_cases": [
+    "自托管个人饮食与卡路里记录",
+    "基于日本食品标准成分表的营养摄入分析",
+    "离线可用的饮食记录 PWA"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`MECALO_DATABASE_URL`|`data/mecalo.db`|SQLiteのファイルパス, または `postgresql://` で始まる CockroachDB の接続文字列|",
+     "lines": [
+      52
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`MECALO_DATABASE_URL`|`data/mecalo.db`|SQLiteのファイルパス, または `postgresql://` で始まる CockroachDB の接続文字列|",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用数据库存储数据的饮食记录应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "セルフホスト型の食事記録・栄養管理アプリケーション. ／ |`backend/`|Go APIサーバ/管理コマンド| ／ |`MECALO_DATABASE_URL`|`data/mecalo.db`|SQLiteのファイルパス, または `postgresql://` で始まる CockroachDB の接続文字列|",
+   "evidence_lines": [
+    16,
+    33,
+    52
+   ]
+  },
+  "fn": "chan-mai/Mecalo",
+  "sha": "4fae4489c114",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

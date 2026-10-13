@@ -8131,5 +8131,183 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2595d7cf1211": {
+  "identity": {
+   "one_liner": "Rust 编写的原生跨平台数据库客户端，内置 MCP 服务器供 AI 代理安全访问",
+   "review": "Tabular 是一个用 Rust 构建的原生桌面 SQL 与 NoSQL 数据库客户端，支持 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、Redis、MongoDB 等多种数据库，提供 SQL 编辑器、可视化执行计划、备份向导、schema 同步与用户权限管理等功能，面向开发者、数据工程师和 DBA。其特色是内置 MCP 服务器与代理访问级别控制，供 Claude Code、Cursor 等 AI 编码工具在受控权限下查看 schema 和执行查询。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、Microsoft SQL Server (TDS)、Redis、MongoDB 多种数据库连接",
+    "内置 MCP 服务器，提供 29 个工具供 AI 代理读取 schema、执行查询并接受审批与审计",
+    "提供可视化 EXPLAIN 执行计划图、备份/恢复向导、双向 schema 同步与迁移脚本生成"
+   ],
+   "use_cases": [
+    "开发者或 DBA 在单一桌面客户端中查询、编辑和管理多种数据库",
+    "让 Claude Code、Cursor 等 MCP 客户端在只读或审批模式下安全访问生产数据库",
+    "对数据库连接进行权限管理、会话监控与死锁排查"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multi-Database Support**: PostgreSQL, MySQL / MariaDB, SQLite, Microsoft SQL Server (TDS), Redis, MongoDB ／ - Supports PostgreSQL (`EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)`), MySQL (`EXPLAIN FORMAT=JSON`), and Microsoft SQL Server ShowPlan. ／ - Native wrappers for `pg_dump`, `pg_restore`, `mysqldump`, and `sqlite3_backup`.",
+     "lines": [
+      60,
+      141,
+      155
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Multi-Database Support**: PostgreSQL, MySQL / MariaDB, SQLite, Microsoft SQL Server (TDS), Redis, MongoDB ／ - Supports PostgreSQL (`EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)`), MySQL (`EXPLAIN FORMAT=JSON`), and Microsoft SQL Server ShowPlan.",
+     "lines": [
+      60,
+      141
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multi-Database Support**: PostgreSQL, MySQL / MariaDB, SQLite, Microsoft SQL Server (TDS), Redis, MongoDB ／ - Native wrappers for `pg_dump`, `pg_restore`, `mysqldump`, and `sqlite3_backup`.",
+     "lines": [
+      60,
+      155
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Multi-Database Support**: PostgreSQL, MySQL / MariaDB, SQLite, Microsoft SQL Server (TDS), Redis, MongoDB ／ - Supports PostgreSQL (`EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)`), MySQL (`EXPLAIN FORMAT=JSON`), and Microsoft SQL Server ShowPlan.",
+     "lines": [
+      60,
+      141
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Multi-Database Support**: PostgreSQL, MySQL / MariaDB, SQLite, Microsoft SQL Server (TDS), Redis, MongoDB",
+     "lines": [
+      60
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为连接和管理多种数据库提供服务的客户端工具，而非以某数据库为存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tabular is a lightweight, native database client built with the `eframe`/`egui` stack. It focuses on instant startup, responsive UI, safe concurrency, and a distraction‑free workflow for developers, data engineers, and DBAs. Unlike web/electron apps, Tabular ships as a single native binary with a small memory footprint while still offering rich features like autocomplete, multiple drivers, query history, export tools, and self‑update. ／ - **Multi-Database Support**: PostgreSQL, MySQL / MariaDB, SQLite, Microsoft SQL Server (TDS), Redis, MongoDB ／ - **MCP Server for AI Agents (`tabular mcp`)**: Built-in Model Context Protocol server so Claude Code, Cursor, Codex and other agent harnesses can list connections, describe schemas (relevance-ranked), run read-only queries, get EXPLAIN plans and lint SQL. Credentials never leave Tabular, every connection is read-only for agents until you raise its access level, risky writes wait for your approval, and every agent call is audited. See docs/MCP.md.",
+   "evidence_lines": [
+    56,
+    60,
+    77
+   ]
+  },
+  "fn": "cmjcode/tabular",
+  "sha": "2595d7cf1211",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4e298672829d": {
+  "identity": {
+   "one_liner": "基于 Spring Boot + React 的病理实验室管理系统（LIMS）",
+   "review": "这是一个全栈病理实验室管理系统，提供患者管理、检验预约、样本追踪、结果录入与 PDF 报告生成、管理后台等功能。面向病理实验室、检验技师、医生、患者和管理人员。后端采用 Spring Boot 3.5 与 Spring Data JPA，数据存于 PostgreSQL，使用 Flyway 做数据库版本控制，JWT 做认证；安装需自备 PostgreSQL 12+、Java 21 和 Node.js，通过 Maven 与 npm 分别启动前后端。",
+   "highlights": [
+    "提供患者门户、样本全生命周期追踪、检验结果录入与 PDF 报告生成",
+    "使用 JWT 认证与角色访问控制（ADMIN、LAB_TECH、DOCTOR、PATIENT）",
+    "通过 Flyway 实现 PostgreSQL 数据库版本迁移，支持 Docker 多阶段构建"
+   ],
+   "use_cases": [
+    "病理实验室的检验预约、样本采集与结果报告流程管理",
+    "患者在线预约检验、查看与下载电子报告",
+    "实验室管理层的用户、财务与业务统计管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database**: PostgreSQL (primary) + Spring Data JPA (Hibernate ORM) ／ - PostgreSQL 12 or later ／ 1. **Install PostgreSQL and create a database:**",
+     "lines": [
+      121,
+      171,
+      182
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明系统以 PostgreSQL 作为主数据库存储业务数据，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A comprehensive full-stack application for managing pathology laboratory operations, including patient management, test bookings, sample tracking, test results, payment processing, and administrative dashboards. ／ - **Database**: PostgreSQL (primary) + Spring Data JPA (Hibernate ORM) ／ - PostgreSQL 12 or later",
+   "evidence_lines": [
+    3,
+    121,
+    171
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mohammadumar-dev/pathlab",
+  "sha": "4e298672829d",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

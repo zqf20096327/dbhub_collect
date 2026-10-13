@@ -8490,5 +8490,217 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cc715d2b2540": {
+  "identity": {
+   "one_liner": "将 PostgreSQL 表或查询结果导出为 Parquet 文件的 CLI 工具",
+   "review": "pg2parquet 是一个命令行工具，用于把 PostgreSQL 的表或 SQL 查询结果导出为 Parquet 文件，支持 interval、b、数组、枚举、范围、复合类型及 pgvector 等较特殊的 Postgres 类型，并提供多种类型序列化选项。面向需要把 Postgres 数据转为 Parquet 格式的数据工程师。通过 Cargo、Nix、AUR、二进制或源码安装。",
+   "highlights": [
+    "支持将表或任意 SQL 查询结果导出为 Parquet 文件",
+    "支持 /b、数组、枚举、范围、复合类型、pgvector 等 Postgres 类型并提供序列化选项",
+    "支持通过 $PGPASSWORD/$PGUSER/$DATABASE_URL 环境变量配置连接"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 数据导出为 Parquet 供 Spark/DuckDB 等分析工具处理",
+    "批量导出指定表数据用于归档或数据管道",
+    "导出含 pgvector 等特殊类型的数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL -> Parquet ／ Simple tool for exporting PostgreSQL tables into parquet, with support for more esoteric Postgres features than just `int` and `text`.",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其功能是导出 PostgreSQL 表数据为 Parquet，为数据库数据流转服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Simple tool for exporting PostgreSQL tables into parquet, with support for more esoteric Postgres features than just `int` and `text`. ／ pg2parquet export --host localhost.for.example --dbname my_database --output-file output.parquet -t the_table_to_export",
+   "evidence_lines": [
+    3,
+    45
+   ]
+  },
+  "fn": "exyi/pg2parquet",
+  "sha": "cc715d2b2540",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "92a4ebe5b5d5": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL RLS 的 Django 多租户隔离库",
+   "review": "这是一个 Django 第三方库，通过 PostgreSQL 的 Row-Level Security 在数据库层强制租户隔离，覆盖 ORM、原生 SQL 和 dbshell 查询。面向使用 Django 构建多租户应用、需要数据库级数据隔离的开发者。要求 PostgreSQL >= 15 和 Django >= 4.2，且连接角色不能是超级用户或带 BYPASSRLS 的角色。",
+   "highlights": [
+    "通过 PostgreSQL RLS 策略在数据库层过滤租户数据，缺失租户上下文时返回零行",
+    "RLSProtectedModel 自动添加租户外键、RLS 策略和租户作用域管理器，含租户感知的 Django admin 与 Celery 集成",
+    "单库单 schema 架构，无需按租户建 schema 或做连接路由"
+   ],
+   "use_cases": [
+    "Django SaaS 应用的多租户数据隔离",
+    "要求原生 SQL 和数据迁移也受租户过滤保护的场景",
+    "通过 Celery 异步任务传递租户上下文的后台作业"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Database-enforced multitenancy for Django using PostgreSQL ／ pushes enforcement to PostgreSQL itself using Row-Level Security. Every query — ／ |PostgreSQL|>= 15 (CI runs the suite on 15, 16 and 17)|",
+     "lines": [
+      11,
+      20,
+      117
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Django 库为 PostgreSQL 提供 RLS 多租户能力，是为数据库生态服务的组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Database-enforced multitenancy for Django using PostgreSQL ／ - **Database-enforced isolation** -- RLS policies protect tenant tables across ORM ／ pip install django-rls-tenants ／ |PostgreSQL|>= 15 (CI runs the suite on 15, 16 and 17)|",
+   "evidence_lines": [
+    11,
+    28,
+    60,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "dvoraj75/django-rls-tenants",
+  "sha": "92a4ebe5b5d5",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8c082f72341e": {
+  "identity": {
+   "one_liner": "面向汽修车间的预约与维修进度调度管理应用",
+   "review": "ARSM 是一个供汽车维修车间使用的预约与运营管理应用：机械师可认领工单、跟踪维修进度，管理员可管理预约、报价与月度经营报表，报价支持导出 PDF。技术栈为 ASP.NET Core Web API + EF Core + React 19，通过 .NET Aspire AppHost 编排 PostgreSQL 与 RustFS 容器本地运行，首次部署需在配置中创建初始管理员账户。",
+   "highlights": [
+    "提供预约接收、工单认领与实时状态更新的响应式仪表盘",
+    "包含含增值税的配件与工时价格目录及车辆报价单 PDF 导出",
+    "按年月生成公司经营结果报表，并提供机械师/管理员角色区分"
+   ],
+   "use_cases": [
+    "汽修车间日常预约排程与工单进度跟踪",
+    "维修报价单生成与 PDF 交付客户",
+    "车间月度/年度经营数据汇总查看"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |Database|PostgreSQL| ／ - `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + RustFS + ApiService + WebUI)",
+     "lines": [
+      8,
+      36,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据库层为 PostgreSQL，应用用其存储业务数据，自身不服务于数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ARSM is a workshop scheduling and operations app for auto service teams. It helps mechanics and admins organize appointments, claim work, and track repair progress in one responsive dashboard. ／ |Database|PostgreSQL| ／ - `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + RustFS + ApiService + WebUI)",
+   "evidence_lines": [
+    12,
+    36,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "hajdu-patrik/ARSM",
+  "sha": "8c082f72341e",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

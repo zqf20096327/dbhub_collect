@@ -10030,5 +10030,189 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6728d175931f": {
+  "identity": {
+   "one_liner": "自托管任务管理应用，用 PostgreSQL 存任务并提供 MCP/REST 接口",
+   "review": "Conatus 是一个受 Todoist 启发的自托管任务管理系统，支持项目、子任务、循环任务、提醒、看板/日历视图与协作评论，任务数据存于 PostgreSQL，附件存 S3 兼容存储，通过 Docker Compose 部署。面向希望在自有服务器上管理任务的用户，AI 代理可通过 MCP 服务器操作任务，脚本可调用 REST API 与 webhook。许可证为 AGPL-3.0。",
+   "highlights": [
+    "提供 REST API、webhook 和 MCP 服务器，AI 代理可读取、创建、重排和完成任务",
+    "支持从 Todoist 通过 API token 或备份文件导入数据",
+    "自带每日数据库备份与 Docker Compose 部署流程"
+   ],
+   "use_cases": [
+    "自托管个人或团队任务与项目管理",
+    "让 AI 代理通过 MCP 自动化任务操作",
+    "从 Todoist 迁移任务数据到自有服务器"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Conatus is a self-hosted task manager inspired by Todoist. It runs on your own server with Docker Compose, with tasks in PostgreSQL and files in S3 storage you control. AI agents can read, create, reschedule and complete your tasks through the MCP server, and  ／ Docker Compose pulls the Conatus application, operations, PostgreSQL and Silo images. Silo stores attachments and is a maintained fork of MinIO. Open http://localhost:4399 and sign in with the administrator credentials from `.env`, then remove `CONATUS_ADMIN_U",
+     "lines": [
+      14,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Conatus 是用 PostgreSQL 存任务数据、S3 存文件的任务管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later，单一许可证",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Conatus is a self-hosted task manager inspired by Todoist. It runs on your own server with Docker Compose, with tasks in PostgreSQL and files in S3 storage you control. AI agents can read, create, reschedule and complete your tasks through the MCP server, and your own scripts can use the REST API and webhooks. Conatus is free and open source under the AGPL. ／ Docker Compose pulls the Conatus application, operations, PostgreSQL and Silo images. Silo stores attachments and is a maintained fork of MinIO. Open http://localhost:4399 and sign in with the administrator credentials from `.env`, then remove `CONATUS_ADMIN_USERNAME` and `CONATUS_ADMIN_PASSWORD` from `.env`.",
+   "evidence_lines": [
+    14,
+    60
+   ]
+  },
+  "fn": "nojusmorkunas/conatus",
+  "sha": "6728d175931f",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24c09fc3c76e": {
+  "identity": {
+   "one_liner": "支持 MySQL、GaussDB、Oracle、DM8 的多数据库 MCP 服务器",
+   "review": "every-db-mcp 是一个 MCP 服务器，通过统一接口让 AI 助手对 MySQL、GaussDB、Oracle、DM8 执行查询、数据操作和表结构查看。通过 db-config. 或环境变量配置多个连接，按连接粒度控制 INSERT/UPDATE/DELETE/DDL 权限，并提供连接池、自动 LIMIT 和 SQL 类型检查。适合需要在 Claude、Codex 等 MCP 客户端中安全访问多种数据库的研发人员。",
+   "highlights": [
+    "支持 MySQL、GaussDB、Oracle、DM8 四种数据库，提供 db_query、db_execute、db_get_table_structure 等 MCP 工具",
+    "按数据库连接配置 INSERT/UPDATE/DELETE/DDL 权限，写入操作默认关闭",
+    "提供自动 LIMIT 保护、SQL 类型检查和连接池管理"
+   ],
+   "use_cases": [
+    "在 MCP 客户端中用自然语言查询和操作多种数据库",
+    "研发环境中查看表结构和排查数据",
+    "通过只读权限配置进行受控的数据库访问"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# every-db-mcp — MySQL、GaussDB、Oracle、DM8 多数据库 MCP 服务器 ／ **every-db-mcp** 是一个多数据库 Model Context Protocol (MCP) 服务器，支持 MySQL、GaussDB、Oracle 和达梦 (DM8) 四种数据库。它提供了统一的接口来执行查询、数据操作和结构查看，让 AI 助手能够安全地与多种数据库进行交互。 ／ - 🗄️ **多数据库支持**: MySQL、GaussDB、Oracle、达梦 (DM8)",
+     "lines": [
+      1,
+      11,
+      15
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "# every-db-mcp — MySQL、GaussDB、Oracle、DM8 多数据库 MCP 服务器 ／ **every-db-mcp** 是一个多数据库 Model Context Protocol (MCP) 服务器，支持 MySQL、GaussDB、Oracle 和达梦 (DM8) 四种数据库。它提供了统一的接口来执行查询、数据操作和结构查看，让 AI 助手能够安全地与多种数据库进行交互。 ／ - 🗄️ **多数据库支持**: MySQL、GaussDB、Oracle、达梦 (DM8)",
+     "lines": [
+      1,
+      11,
+      15
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "# every-db-mcp — MySQL、GaussDB、Oracle、DM8 多数据库 MCP 服务器 ／ **every-db-mcp** 是一个多数据库 Model Context Protocol (MCP) 服务器，支持 MySQL、GaussDB、Oracle 和达梦 (DM8) 四种数据库。它提供了统一的接口来执行查询、数据操作和结构查看，让 AI 助手能够安全地与多种数据库进行交互。 ／ - 🗄️ **多数据库支持**: MySQL、GaussDB、Oracle、达梦 (DM8)",
+     "lines": [
+      1,
+      11,
+      15
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "- py-opengauss - GaussDB Python 驱动",
+     "lines": [
+      353
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# every-db-mcp — MySQL、GaussDB、Oracle、DM8 多数据库 MCP 服务器 ／ **every-db-mcp** 是一个多数据库 Model Context Protocol (MCP) 服务器，支持 MySQL、GaussDB、Oracle 和达梦 (DM8) 四种数据库。它提供了统一的接口来执行查询、数据操作和结构查看，让 AI 助手能够安全地与多种数据库进行交互。 ／ - 🗄️ **多数据库支持**: MySQL、GaussDB、Oracle、达梦 (DM8)",
+     "lines": [
+      1,
+      11,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为多种数据库提供 MCP 访问中间层，是为数据库生态服务的工具而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "Oracle",
+    "Dameng",
+    "openGauss",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**every-db-mcp** 是一个多数据库 Model Context Protocol (MCP) 服务器，支持 MySQL、GaussDB、Oracle 和达梦 (DM8) 四种数据库。它提供了统一的接口来执行查询、数据操作和结构查看，让 AI 助手能够安全地与多种数据库进行交互。 ／ - 🗄️ **多数据库支持**: MySQL、GaussDB、Oracle、达梦 (DM8) ／ - 🔒 **权限控制**: 细粒度的读写权限管理，支持按数据库配置 INSERT/UPDATE/DELETE/DDL 权限",
+   "evidence_lines": [
+    11,
+    15,
+    16
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "vmayfuture/every-db-mcp",
+  "sha": "24c09fc3c76e",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

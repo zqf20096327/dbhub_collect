@@ -9366,5 +9366,368 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d10da16b75e8": {
+  "identity": {
+   "one_liner": "开源桌面 SQL 工作台，内置3种驱动并以插件扩展多数据库",
+   "review": "Tabularis 是一款跨平台桌面 SQL 客户端，内置 PostgreSQL、MySQL/MariaDB、SQLite 驱动，其余数据库经 JSON-RPC 插件接入，覆盖 ClickHouse、SQL Server、达梦等约 21 个官方插件。提供 SQL 编辑器、SQL 笔记本、ER 图、可视化 EXPLAIN、数据网格编辑，并内置 MCP 服务器供 Claude/Cursor 等 AI 代理读取 schema 和执行查询。面向需要图形化操作多种数据库的开发者与 DBA。",
+   "highlights": [
+    "内置 PostgreSQL、MySQL/MariaDB、SQLite 驱动，其余数据库通过 JSON-RPC over stdio 插件扩展",
+    "提供 SQL 笔记本、ER 图、可视化 EXPLAIN 计划图与数据网格内联编辑",
+    "内置 MCP 服务器与 AI text-to-SQL 辅助（支持 Ollama 本地模型）"
+   ],
+   "use_cases": [
+    "开发者/DBA 在桌面端连接、浏览和编辑多种数据库",
+    "用 SQL+Markdown 笔记本做数据分析并导出 HTML/CSV/JSON",
+    "通过 MCP 让 AI 代理在本地工作台内查询数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      201,
+      258
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      201,
+      258
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      201,
+      258
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      201,
+      258
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|DM / Dameng|tabularis-dameng-plugin|Oracle|tabularis-oracle-plugin|",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Elasticsearch|tabularis-elasticsearch-plugin|SQL Server|tabularis-sqlserver-plugin|",
+     "lines": [
+      93
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Tabularis is an open-source desktop SQL workspace with 3 built-in database drivers and 21 shipped plugins, including DuckDB, ClickHouse, Redis and Firestore. Its built-in MCP server lets Claude, Cursor and Devin (formerly Windsurf) read your schema and run que ／ |ClickHouse|tabularis-clickhouse-plugin|LibSQL / Turso|tabularis-libsql-plugin|",
+     "lines": [
+      6,
+      87
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|Scoped|Amazon Redshift, CockroachDB, TiDB|",
+     "lines": [
+      103
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|DM / Dameng|tabularis-dameng-plugin|Oracle|tabularis-oracle-plugin|",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为连接多种数据库的桌面 SQL 工作台（GUI 客户端），是为数据库生态服务的工具而非以某库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tabularis is an open-source desktop SQL workspace with 3 built-in database drivers and 21 shipped plugins, including DuckDB, ClickHouse, Redis and Firestore. Its built-in MCP server lets Claude, Cursor and Devin (formerly Windsurf) read your schema and run queries in the same app you already use. ／ PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage on the website: ／ |ClickHouse|tabularis-clickhouse-plugin|LibSQL / Turso|tabularis-libsql-plugin|",
+   "evidence_lines": [
+    6,
+    81,
+    87
+   ]
+  },
+  "fn": "TabularisDB/tabularis",
+  "sha": "d10da16b75e8",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7a263844d31c": {
+  "identity": {
+   "one_liner": "图+向量+时序MVCC的分布式数据库，兼容Neo4j Bolt/Cypher与Qdrant gRPC",
+   "review": "NornicDB 是一个用 Go 编写的图数据库，在同一执行路径中提供图遍历、向量检索（HNSW）和基于 MVCC 的历史读取，通过 Bolt/Cypher、REST、GraphQL 和 gRPC 接口访问，并与 Neo4j 和 Qdrant 客户端工作流兼容。它面向知识系统、Agent 记忆和 Graph-RAG 工作负载，可通过 Homebrew、Docker 或二进制文件部署，并支持 Metal/CUDA/Vulkan 等硬件加速。",
+   "highlights": [
+    "提供 Bolt/Cypher、REST、GraphQL 与 gRPC 多协议访问，兼容 Neo4j 客户端与 Qdrant 风格工作流",
+    "实现存储层快照隔离与 MVCC 历史读取，支持 as-of 查询",
+    "提供向量检索、混合检索（向量+图扩展）及 Metal/CUDA/Vulkan 硬件加速路径"
+   ],
+   "use_cases": [
+    "Graph-RAG 与语义检索管线",
+    "AI 代理记忆系统",
+    "需要历史快照读取的知识图谱存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明它是图+向量数据库引擎本身，为应用与 AI 代理提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "NornicDB is a graph database for workloads that need graph traversal, vector retrieval, and historical truth in the same system. It speaks Neo4j's language through Bolt and Cypher, exposes REST, GraphQL, and gRPC interfaces, and can preserve Qdrant-style client workflows where that helps migration. ／ - **Neo4j-compatible by default**: Bolt + Cypher support for existing drivers and applications. ／ - **Hardware-accelerated execution**: Metal/CUDA/Vulkan pathways for high-throughput graph + semantic workloads.",
+   "evidence_lines": [
+    50,
+    58,
+    62
+   ]
+  },
+  "fn": "orneryd/NornicDB",
+  "sha": "7a263844d31c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b8873e23a10d": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 红队模式插件，智能体编排渗透测试指挥台",
+   "review": "一个运行在 DSH（DeepSeek Harness）之上的插件，将主会话编排为信息收集、漏洞发现、漏洞利用、内网渗透等多个执行角色，用于授权渗透测试；所有发现写入本机 SQLite 事实库并在 Web 界面可视化。包含 56 个 redteam_* 工具与随包技能，不包含漏洞利用代码。面向已获授权的攻防演练与红队测试人员。",
+   "highlights": [
+    "通过 dsh plugin 安装，一个靶标名称即可拉起多角色智能体团队执行测试流程",
+    "全部发现数据落在本机 SQLite 事实库（22 张表），无遥测与云端同步",
+    "提供 9 页签常驻控制台与按攻击链编排的可复现报告"
+   ],
+   "use_cases": [
+    "已授权的攻防演练与红蓝对抗",
+    "企业内部安全自检",
+    "渗透测试教学研究"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。",
+     "lines": [
+      5,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身测试发现数据，是为渗透测试流程服务的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README L117 提及，见 LICENSE）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > ⚠️ **仅限已获授权的攻防演练 / 渗透测试使用。** 本仓库是智能体编排与事实库的工程实现， ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。",
+   "evidence_lines": [
+    5,
+    7,
+    28
+   ]
+  },
+  "fn": "Jueze-2019/dsh-redteam-mode",
+  "sha": "b8873e23a10d",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e1121ba50563": {
+  "identity": {
+   "one_liner": "SQLite 软件与资源精选清单",
+   "review": "这是一个收录 SQLite 相关软件、服务与文章的 awesome 精选清单，包含应用案例、工具、扩展、网站、可扩展方案及大量技术文章和教程链接，面向希望查找 SQLite 周边资源的开发者和使用者。清单本身不提供安装包，仅为外链目录。",
+   "highlights": [
+    "收录 SQLite 相关的应用、工具、扩展、网站分类目录",
+    "包含可扩展 SQLite 方案（云存储后端、Raft 复制等）条目",
+    "整理数十篇 SQLite 技术文章与教程链接"
+   ],
+   "use_cases": [
+    "查找 SQLite 周边工具与扩展",
+    "了解基于 SQLite 构建的应用案例",
+    "检索 SQLite 性能、备份、迁移等主题文章"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- omni_sqlite - Omnigres extension that embeds full SQLite databases as a first-class data type inside PostgreSQL. ／ - PgFreshCache - Read-only caching layer that mirrors selected PostgreSQL tables into a local SQLite database via logical replication. ／ - pglite-fusion - Embed SQLite databases in your PostgreSQL table.",
+     "lines": [
+      45,
+      46,
+      47
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- sqlit - User-friendly Python TUI for SQL databases, supporting SQLite, SQL Server, MySQL, PostgreSQL, Turso, and more.",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# SQLite",
+     "lines": [
+      1
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- sqlit - User-friendly Python TUI for SQL databases, supporting SQLite, SQL Server, MySQL, PostgreSQL, Turso, and more.",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "清单为 SQLite 生态收录工具、扩展与资源目录，服务于该数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# SQLite ／ ## Tools ／ ## Extensions",
+   "evidence_lines": [
+    1,
+    34,
+    58
+   ]
+  },
+  "fn": "Airsequel/awesome-sqlite",
+  "sha": "e1121ba50563",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

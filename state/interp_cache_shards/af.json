@@ -10354,5 +10354,177 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d9f53cbb31b2": {
+  "identity": {
+   "one_liner": "数据库结构/数据差异比较工具，自动生成上下行迁移 SQL",
+   "review": "DBDiff 对比两个 MySQL、PostgreSQL 或 SQLite 数据库的 schema 与数据，生成可应用和可回滚的迁移脚本，兼容 Flyway、Liquibase 等工具并内置迁移执行器。适合需要在团队中做数据库版本控制的开发与运维人员；支持通过 --driver 切换数据库，MySQL 变体走协议兼容且未经核心团队测试。",
+   "highlights": [
+    "比较两个数据库并自动生成包含 schema 与数据的 up/down SQL 迁移",
+    "通过 --driver 支持 MySQL、PostgreSQL、SQLite，并提供 --supabase 快捷方式",
+    "内置迁移执行器（migration:up/down/status/validate/repair/baseline），可与 Flyway、Liquibase 配合使用"
+   ],
+   "use_cases": [
+    "数据库 schema 与数据的版本控制与变更审查",
+    "开发、测试与生产环境间的结构同步",
+    "生成可回滚的迁移脚本供 CI/CD 流程应用"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ### PostgreSQL",
+     "lines": [
+      9,
+      21,
+      44
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ### MySQL",
+     "lines": [
+      9,
+      21,
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ### SQLite",
+     "lines": [
+      9,
+      21,
+      154
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "compat",
+     "quote": "|MariaDB 10.x / 11.x|MySQL wire protocol; minor DDL dialect differences|",
+     "lines": [
+      200
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "compat",
+     "quote": "|TiDB|MySQL-compatible; default port 4000|",
+     "lines": [
+      205
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为数据库对比与迁移生成工具，直接适配多种数据库并生成迁移脚本",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ## Supported Databases",
+   "evidence_lines": [
+    9,
+    21,
+    36
+   ]
+  },
+  "fn": "DBDiff/DBDiff",
+  "sha": "d9f53cbb31b2",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a3d7a99a873": {
+  "identity": {
+   "one_liner": "基于 WPF + OWIN + SQLite 的单机物业收费与台账管理桌面系统",
+   "review": "该系统面向中小型住宅小区与商住项目，提供物业收费、欠费台账、设备台账、应急与人员组织等业务功能，采用 WPF 客户端加本地 OWIN 后端服务架构，数据存储在本机 SQLite 数据库并由后端独占访问，仅绑定 127.0.0.1 端口，适合内网或离线环境使用，通过 Inno Setup 打包为 Windows 单文件安装包部署。",
+   "highlights": [
+    "提供财务收费、设备台账、应急处置、人员组织、纠纷调解等模块，支持 Excel 批量导入与报表导出（Excel/PDF）",
+    "后端以 OWIN 自承载并仅绑定 127.0.0.1:5210，SQLite 数据库由后端独占访问，业务数据保存在本机",
+    "包含审计日志、软删除留痕、备份与恢复机制，附数据库 ER 设计文档与 181 例单元测试脚本"
+   ],
+   "use_cases": [
+    "中小型住宅小区或商住项目的物业收费与欠费台账管理",
+    "内网或离线环境下需要数据保存在本机的物业台账记录场景",
+    "设备保养/年检周期与到期提醒的业务登记管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库|SQLite（System.Data.SQLite + Dapper），数据库由后端独占访问，前端不直接连库| ／ |数据库|System.Data.SQLite 1.0.118、Dapper 2.1.35|",
+     "lines": [
+      46,
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 SQLite 存储自身业务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License，但品牌标识（名称、徽记、字标）不随 MIT 授权",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向中小型住宅小区与商住项目的**单机部署**物业收费与台账管理桌面系统：WPF 客户端 + 本地后端服务，业务数据全部保存在本机，不依赖外部服务器与互联网，适合内网或离线环境。 ／ |数据库|SQLite（System.Data.SQLite + Dapper），数据库由后端独占访问，前端不直接连库| ／ 脚本会依次完成：解析 `ISCC.exe` → 编译 Release → 生成向导品牌图 → 编译安装包 → 校验打包完整性并输出 SHA256 与文件清单。安装包默认按 **per-machine** 安装到 `C:\\Program Files\\PropertyManagement`，运行数据落在 `C:\\ProgramData\\PropertyManagement`，卸载时默认**保留数据**（可选一并删除并二次确认）。",
+   "evidence_lines": [
+    5,
+    46,
+    92
+   ]
+  },
+  "fn": "liuma3995-dot/anyi-property-management",
+  "sha": "4a3d7a99a873",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

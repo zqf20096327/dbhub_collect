@@ -9119,5 +9119,209 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2dcfe38ab823": {
+  "identity": {
+   "one_liner": "自托管 AI 代理工作台，含任务、工具、审批与知识管理",
+   "review": "Manor AI 是一个可自托管的 AI 代理工作空间，围绕 workspace 组织人员、代理、文档、任务、工具与审批规则，提供 FastAPI 后端、Celery worker、React 前端和 MCP 集成。面向小型企业和精简团队，采用 BYOK 模型密钥模式，数据服务栈包含 PostgreSQL 16+pgvector、Redis 和 MinIO，许可证为 Sustainable Use License，非传统开源许可。",
+   "highlights": [
+    "提供代理运行时：工具调用循环、技能绑定、任务执行与审批门控",
+    "知识库基于 PostgreSQL 与 pgvector 做文档索引检索，MinIO 存对象",
+    "通过 Docker Compose 一键部署，内置演示账号与 RBAC、审计日志"
+   ],
+   "use_cases": [
+    "小团队在自有基础设施内运行受治理约束的 AI 代理自动化",
+    "需要人工审批敏感操作的人机协同工作流",
+    "基于自有文档构建带检索的知识型代理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Knowledge|Uploaded documents and extracted text indexed for workspace retrieval with PostgreSQL and pgvector.| ／ |Data services|PostgreSQL 16 with pgvector, Redis, MinIO, and optional JuiceFS-backed entity storage.|",
+     "lines": [
+      88,
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据服务栈包含 PostgreSQL 16 与 pgvector，该库存放工作区与知识数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Sustainable Use License 1.0（source-available，非 OSI 开源许可）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Data services|PostgreSQL 16 with pgvector, Redis, MinIO, and optional JuiceFS-backed entity storage.| ／ |AI workspace|Chat, goals, tasks, documents, knowledge, reports, agents, and settings in one self-hosted UI.| ／ Sustainable Use License 1.0 -- Copyright (c) 2026 Manor AI.",
+   "evidence_lines": [
+    143,
+    97,
+    202
+   ]
+  },
+  "fn": "manor-os/manor-ai",
+  "sha": "2dcfe38ab823",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f44d8b832c84": {
+  "identity": {
+   "one_liner": "Claude Code 会话历史语义搜索工具，索引 JSONL 到 SQLite 并以向量+FTS5 检索",
+   "review": "该工具将 Claude Code 的 JSONL 会话记录解析为分块，存入项目内 .claude/sessions.db（SQLite），用 Ollama 的 bge-m3 生成向量嵌入，检索时余弦相似度匹配，Ollama 不可用时回退 FTS5 BM25；另提供基于 LLM 的 distill 事实抽取层与检索质量评测脚本。面向在单机上使用 Claude Code 的个人开发者，定位是单机单项目、非团队共享。",
+   "highlights": [
+    "提供 mine/search/embed/distill 等子命令，将 JSONL 会话分块写入 SQLite 并支持向量与 BM25 双模式检索",
+    "通过 Claude Code Stop 钩子在会话结束时自动索引，并在会话开始时注入相关历史上下文",
+    "提供 make eval 基于 LoCoMo 基准输出 Recall@k/MRR/延迟等检索质量指标"
+   ],
+   "use_cases": [
+    "回溯项目中跨多次会话的历史讨论与决策记录",
+    "在无向量嵌入环境下用 FTS5 BM25 关键词检索会话内容",
+    "定期以 distill 抽取持久化事实并按来源回溯原始文本"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "transcripts into a per-project SQLite store; retrieves via bge-m3 embeddings",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为对 Claude Code 会话历史做语义索引与检索的 CLI 工具，SQLite 仅作为其内嵌存储引擎",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Per-project semantic search over Claude Code session history. Indexes JSONL ／ `session-indexer` is per-project and append-only (`.claude/sessions.db` lives ／ session-indexer mine    <jsonl-path> --db .claude/sessions.db",
+   "evidence_lines": [
+    6,
+    38,
+    71
+   ]
+  },
+  "fn": "valpere/session-indexer",
+  "sha": "f44d8b832c84",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5490834db39a": {
+  "identity": {
+   "one_liner": "AI 代理动作验证屏障库，嵌入 ACID B-Tree 存储引擎记录 trace",
+   "review": "Joltrin 是一个 Go 库，在 AI 代理动作提交前，用服务器实际记录的 trace 和固定前置条件独立校验其意图，不采信代理自身的断言；同一调用内完成校验与落盘。通过 MCP server 或 Kubernetes admission webhook 接入，支持自定义 runbook。面向构建代理系统的工程师和需要持久化应用状态的团队。",
+   "highlights": [
+    "提供 MCP server 与 A2A 接入，把动作校验与提交合并为一次调用",
+    "内置 ACID B-Tree 嵌入式存储引擎，提供崩溃可恢复的代理记忆与向量搜索",
+    "提供 sop-k8s-gate 校验性 admission webhook，对 Kubernetes 操作施加相同前置检查"
+   ],
+   "use_cases": [
+    "阻止 AI 代理在备份未验证前执行生产数据库删除等破坏性操作",
+    "为代理系统提供可恢复的持久记忆与状态存储",
+    "通过 Kubernetes admission 控制器强制集群操作遵守 runbook 步骤"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The verifier sits on an embedded, ACID-compliant B-Tree storage engine, so the trace and the agent's state share one transaction boundary. The same library gives you crash-safe agent memory that another worker can resume, vector search stored next to structure",
+     "lines": [
+      135
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身嵌入 B-Tree 存储引擎保存 trace 与状态，仅提及团队为保状态耐用而运行 Postgres 等组件，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Joltrin (formerly SOP) is an open-source Go library that checks an AI agent's action against the recorded trace before the action commits. The agent proposes. A separate verifier decides, using fixed preconditions and the steps the server has actually recorded. It does not use the agent's claims, its prompt context, its self-evaluation, or its confidence. ／ The verifier sits on an embedded, ACID-compliant B-Tree storage engine, so the trace and the agent's state share one transaction boundary. The same library gives you crash-safe agent memory that another worker can resume, vector search stored next to structured data, Reed-Solomon erasure coding, and swarm task coordination. It is for engineers building agent systems or local-first apps, and for teams running Redis, a queue, and Postgres only to keep one application's state durable. Benchmarks, with their limits, are in docs/BENCHMARKS.md. The long version is in docs/WHY_JOLTRIN.md and docs/SOP_ARCHITECTURE_WHITEPAPER.md. ／ ## Connect it to an MCP agent",
+   "evidence_lines": [
+    15,
+    135,
+    70
+   ]
+  },
+  "fn": "SharedCode/joltrin",
+  "sha": "5490834db39a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

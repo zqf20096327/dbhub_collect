@@ -10289,5 +10289,71 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3c6386e36263": {
+  "identity": {
+   "one_liner": "ZCode 桌面客户端的 token 用量悬浮状态栏，只读本地 SQLite",
+   "review": "为 ZCode 桌面客户端（Electron）提供实时 token 用量状态栏，通过注入 app.asar 挂载，读取本地 ~/.zcode/cli/db/db.sqlite 的用量表并事件驱动刷新，另含 CLI 与 MCP 查询入口；仅限 Windows/macOS 桌面版或自建 web 版，ZCode 升级后需重新安装。",
+   "highlights": [
+    "只读读取本地 SQLite 用量数据，完全离线运行",
+    "提供 CLI（zusage.py）与 MCP in-chat 查询（token_usage scope）",
+    "支持通过 SSH/docker exec/kubectl 查询远程主机的会话数据库"
+   ],
+   "use_cases": [
+    "在 ZCode 桌面客户端实时查看当前会话 token 用量与上下文占比",
+    "自托管 ZCode web 部署时通过 nginx 注入 + 只读 sidecar 展示用量",
+    "通过 MCP 或 CLI 按天/会话/工作区聚合查询用量明细"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A floating status bar for the ZCode desktop client (Electron app) that shows real-time token usage of the current conversation window. It only reads the local SQLite database — never touches the network. ／ - **SSH remote sessions (v9)**: when the desktop client is connected to a remote zcode-server, session data lives in the remote machine's `~/.zcode/cli/db/db.sqlite`. Add a `remote` section to `config.json` and the bar **automatically switches to querying the  ／ Reads `~/.zcode/cli/db/db.sqlite` (`model_usage` / `turn_usage` / `tool_usage` — one row per model request), strictly read-only, never online. Numbers refresh event-driven when a request completes; when idle there are zero extra processes and zero polling.",
+     "lines": [
+      5,
+      72,
+      122
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它读取 SQLite 数据库为 ZCode 客户端提供用量监控服务，自身不是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A floating status bar for the ZCode desktop client (Electron app) that shows real-time token usage of the current conversation window. It only reads the local SQLite database — never touches the network. ／ Reads `~/.zcode/cli/db/db.sqlite` (`model_usage` / `turn_usage` / `tool_usage` — one row per model request), strictly read-only, never online. Numbers refresh event-driven when a request completes; when idle there are zero extra processes and zero polling.",
+   "evidence_lines": [
+    5,
+    122
+   ]
+  },
+  "fn": "xhwxt/zcode-token-usage-statusbar",
+  "sha": "3c6386e36263",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9351,5 +9351,191 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "95b00a20a453": {
+  "identity": {
+   "one_liner": "数据库技术博客文章与学习课程汇总仓库",
+   "review": "该仓库是作者digoal的博客文集，包含PostgreSQL、PolarDB、Greenplum等数据库的学习视频、系列课程文章、源码入门笔记及社区建设思考，按应用开发、监控、备份等三十余类归类，供DBA、架构师、开发者阅读学习，主要内容为markdown文档而非可运行软件。",
+   "highlights": [
+    "提供PostgreSQL、PolarDB、Greenplum等数据库的系列课程与学习视频",
+    "包含DuckDB、pgvector、Milvus等数据库源码入门系列文章",
+    "文章按应用开发、监控、备份恢复、高可用等分类归档"
+   ],
+   "use_cases": [
+    "DBA与开发者查阅PostgreSQL管理、优化、迁移等实践文章",
+    "阅读数据库内核源码入门学习笔记",
+    "获取数据库选型与社区建设相关思考文档"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "### 一、PostgreSQL, Greenplum 学习视频 ／ - PostgreSQL 9.3 数据库管理与优化 4天 ／ - PostgreSQL 9.3 数据库管理与优化 5天",
+     "lines": [
+      3,
+      6,
+      7
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "5、《2020-PostgreSQL+MySQL 联合解决方案课程 - 适合架构师与业务开发者》 ／ 10、《数据库选型思考(PostgreSQL,MySQL,Oracle)》",
+     "lines": [
+      15,
+      56
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "9、《2019-Oracle迁移到PostgreSQL - 适合DBA与业务开发者》 ／ 12、《2018-阿里云POLARDB for Oracle|RDS for PPAS 讲解视频》 ／ 1、《Oracle DBA 增值+转型 PostgreSQL 学习方法、路径》",
+     "lines": [
+      19,
+      22,
+      47
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "##### 202609/20260911_02.md 《9.12 TiDB 杭州站 AI Agent 圆桌讨论》",
+     "lines": [
+      126
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "21、《2025-OceanBase 源码入门学习24篇 汇总》",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "mention",
+     "quote": "12、《2018-阿里云POLARDB for Oracle|RDS for PPAS 讲解视频》 ／ 14、《2023-PostgreSQL|PolarDB 学习实验手册》 ／ 15、《2024-开源PolarDB|PostgreSQL 应用开发者&DBA 公开课》",
+     "lines": [
+      22,
+      24,
+      25
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库为博客文章与课程资料的汇总，不提供面向数据库生态的软件功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### 五、已归类文档(大部分文章未归类, 请看第六部分 ... ...) ／ ### 六、所有文档如下 ／ ### 一、PostgreSQL, Greenplum 学习视频",
+   "evidence_lines": [
+    100,
+    116,
+    3
+   ]
+  },
+  "fn": "digoal/blog",
+  "sha": "95b00a20a453",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "65423fa70a2d": {
+  "identity": {
+   "one_liner": "自托管图床/图库应用，用 MySQL+Redis 存储并支持标签、搜索与 API",
+   "review": "Photoly 是一个自托管的图片/视频托管与管理应用，用户可上传媒体文件，用标签、图库、文件夹分类，并基于 Exif 信息（GPS、相机型号等）搜索与地图展示，还提供 REST API 与分享链接/二维码。后端为 Python Flask + MySQL + Redis，前端 Vue3，通过 Docker Compose 部署，适合需要自建图床的用户。",
+   "highlights": [
+    "支持上传图片/视频，按标签、图库、文件夹分类，并基于多条件搜索",
+    "自动记录照片 Exif 信息（GPS、相机型号、镜头、ISO 等）并展示照片位置地图",
+    "提供 REST API、分享链接与二维码分享，支持 Swagger/OpenAPI 文档"
+   ],
+   "use_cases": [
+    "自托管个人或团队的图片/视频托管与媒体库管理",
+    "基于 Exif/地图浏览与检索照片",
+    "通过 REST API 将图片托管能力嵌入其他应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "DB: MySQL + Redis ／ The backend waits for MySQL and Redis, initializes missing tables/settings/admin once, then serves Flask with Gunicorn. Repeated startup preserves existing records and does not reset passwords. MySQL uses the Compose `mysql_data` named volume; media stays in `",
+     "lines": [
+      21,
+      38
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The local suite uses SQLite and fakeredis. Install ExifTool first (`brew install exiftool` on macOS, `apt install libimage-exiftool-perl` on Debian). For real MySQL/Redis and HTTP/Gunicorn acceptance tests, run from the repository root:",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 MySQL 与 Redis 存储数据的图床应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is a picture host application. There are demands for the self-host and reliable picture-host applications. Photoly provides a solution just right for that. Using Photoly, you can manage your pictures and photos with easy clicks, and categorize them using tags, galleries, and namespaces. We are also sure that the search functionality could make it easier to see the photos you are interested in. Moreover, Photoly provides API for you to access our functionalities for embedding in other applications. ／ DB: MySQL + Redis ／ The backend waits for MySQL and Redis, initializes missing tables/settings/admin once, then serves Flask with Gunicorn. Repeated startup preserves existing records and does not reset passwords. MySQL uses the Compose `mysql_data` named volume; media stays in `./upload_data`. This Compose does not mount or reset the old `database/mysql-data` directory. The frontend API calls are unchanged.",
+   "evidence_lines": [
+    4,
+    21,
+    38
+   ]
+  },
+  "fn": "WiscWebGroup/photoly",
+  "sha": "65423fa70a2d",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

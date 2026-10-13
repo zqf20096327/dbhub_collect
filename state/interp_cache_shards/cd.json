@@ -9053,5 +9053,73 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "41e01849d573": {
+  "identity": {
+   "one_liner": "Home Assistant 上的持久化 AI 代理应用，用 Pi Durable/SQLite 记录任务与状态",
+   "review": "Hearth Pi 是一个面向 Home Assistant OS 的实验性社区 AI 附加应用（App），提供受权限约束的灯/开关读取与操作提议，所有输入、任务检查点、会话记录通过 Pi Durable 写入 SQLite（synchronous=FULL），动作默认禁用并需人工逐条批准。适合想在本地智能家居环境中试验带人工审核的 AI 代理的用户；定位为技术预览，非生产推荐。",
+   "highlights": [
+    "通过 Pi Durable 将输入、任务检查点、转录与文档持久化到 SQLite（synchronous=FULL），可重连到已提交状态",
+    "Home 模式下实体读取范围受限、动作默认关闭并默认要求人工批准（Ask），支持 Read-only 与显式确认的 Full access",
+    "支持多种模型提供方：offline 演示、OpenAI API、ChatGPT 订阅 OAuth，以及实验性的本地 OpenAI 兼容服务器和 Anthropic 登录"
+   ],
+   "use_cases": [
+    "在 Home Assistant OS 上以人工审核方式让 AI 代理控制灯光/开关等实体",
+    "需要持久化任务与对话记录、重启后可恢复已提交状态的 AI 助手场景",
+    "使用本地模型（Ollama、llama.cpp 等）运行的私有化 AI 聊天与家庭查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state.",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目用 SQLite 作为持久化存储（写入输入、检查点、转录等），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state. ／ Requires **Home Assistant OS**, an administrator account and an **amd64 or aarch64** host. Use an authorized test installation with a backup; this is an experimental third-party App, not HACS or a Devices & services integration (only the optional Hearth Assist voice link adds a HACS integration). ／ 2. In **Settings → Apps → Install app** (App store), find **Hearth Pi** and select **Install**. The current preview builds on your HA host, so the initial installation can take several minutes. No Git clone, Node installation, SSH or Docker commands are needed for Home mode.",
+   "evidence_lines": [
+    15,
+    43,
+    48
+   ]
+  },
+  "fn": "cosmyo/ha-pi-durable",
+  "sha": "41e01849d573",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

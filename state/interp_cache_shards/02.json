@@ -9207,5 +9207,138 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cebed0b1b335": {
+  "identity": {
+   "one_liner": "配置驱动的多智能体编排中间件，用于构建对话式 AI 代理",
+   "review": "EDDI 是基于 Java/Quarkus 的对话式 AI 编排中间件，通过 JSON 配置定义代理行为，提供多智能体路由、群组讨论、持久记忆、RAG、MCP/A2A 协议支持，并内置密钥保管与合规基础设施。面向需要在生产环境治理 AI 代理的平台运维与开发团队；默认以 Docker 部署，依赖 MongoDB 或 PostgreSQL 存储，带 Manager 管理界面与 Chat UI。",
+   "highlights": [
+    "提供配置驱动的多智能体编排，包含 7 种群组讨论风格、投票与嵌套分组机制",
+    "支持 MCP、A2A、OpenAI Chat Completions API、Slack、OpenAPI、OAuth 2.0 协议接入",
+    "内置信封加密密钥保管库、HMAC-SHA256 审计账本及 GDPR/HIPAA/EU AI Act 合规基础设施"
+   ],
+   "use_cases": [
+    "通过 Docker Compose 一键部署企业级对话式 AI 代理平台",
+    "将部署于 Slack 频道并运行多智能体群组讨论",
+    "通过 Manager 仪表盘以表单向导方式创建与管理代理"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "bash install.sh --db=postgres --with-auth # PostgreSQL + Keycloak ／ bash install.sh --full # Everything enabled (PostgreSQL + auth + monitoring) ／ Available compose overlays: `docker-compose.auth.yml` (Keycloak), `docker-compose.monitoring.yml` (Prometheus+Grafana), `docker-compose.nats.yml` (NATS JetStream), `docker-compose.ollama.yml` (local LLM; add `docker-compose.ollama-nvidia.yml` on top for NVIDIA",
+     "lines": [
+      47,
+      48,
+      109
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|**Enterprise Cloud**|Azure OpenAI · Amazon Bedrock · Oracle GenAI · Google Vertex AI|",
+     "lines": [
+      216
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "EDDI 通过安装脚本和 compose 文件选择 PostgreSQL 或 MongoDB 作为自身持久化存储，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**E.D.D.I** (Enhanced Dialog Driven Interface) is a production-grade, **config-driven multi-agent orchestration middleware** for conversational AI. It coordinates users, AI agents, and business systems through **intelligent routing, persistent memory, and API orchestration** — without writing code. ／ bash install.sh --db=postgres --with-auth  # PostgreSQL + Keycloak ／ Available compose overlays: `docker-compose.auth.yml` (Keycloak), `docker-compose.monitoring.yml` (Prometheus+Grafana), `docker-compose.nats.yml` (NATS JetStream), `docker-compose.ollama.yml` (local LLM; add `docker-compose.ollama-nvidia.yml` on top for NVIDIA GPU access), `docker-compose.chroma.yml` (vector store), `docker-compose.mcp-sidecar.yml` (reach a stdio-only MCP server through a bridge sidecar — read the MCP Client guide first), `docker-compose.local.yml` (build from source). `docker-compose.postgres-only.yml` is a complete standalone stack rather than an overlay — use it on its own, not with `-f docker-compose.yml`; so is `docker-compose.openwebui.yml`, a runnable Open WebUI demo of the OpenAI-compatible API.",
+   "evidence_lines": [
+    11,
+    47,
+    109
+   ]
+  },
+  "fn": "labsai/EDDI",
+  "sha": "cebed0b1b335",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e0dff751538c": {
+  "identity": {
+   "one_liner": "印尼行政区划多边形边界数据集，含质心坐标",
+   "review": "提供印尼各省/市县/区/村各级行政区划的边界多边形与经纬度质心坐标数据，依据 Kepmendagri No 300.2.2-2430/2025 标准，配套 SQL 数据（标签含 mysql/sql）。适合需要印尼行政区划地理数据的开发者或数据使用者。README 注明部分村/镇数据不完整，多边形经简化处理。",
+   "highlights": [
+    "提供印尼省级至村级（prov/kab/kota/kec/kel/desa）行政区划边界多边形数据",
+    "提供各区域多边形质心的经纬度坐标",
+    "数据依据 Kepmendagri No 300.2.2-2430 Tahun 2025 标准组织"
+   ],
+   "use_cases": [
+    "需要印尼行政区划边界多边形做地理可视化的项目",
+    "基于行政区划坐标的地理数据查询/统计",
+    "补充行政区划代码库（如配套 cahyadsn/wilayah）的地理信息"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 提供以 SQL 形式分发的数据集本身，属使用数据库存储数据的应用/数据资产，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri No 300.2.2-2430 Tahun 2025 ／ * Koordinat latitude longitude diperhitungkan dari koordinat centroid dari polygon wilayah tersebut ／ * Data kode wilayah adminsitrasi pemerintahan Indonesia : https://github.com/cahyadsn/wilayah",
+   "evidence_lines": [
+    2,
+    55,
+    59
+   ]
+  },
+  "fn": "cahyadsn/wilayah_boundaries",
+  "sha": "e0dff751538c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

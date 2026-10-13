@@ -10101,5 +10101,151 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c628718c391a": {
+  "identity": {
+   "one_liner": "自托管开源个人代理，每个代理运行在独立 Docker Linux 桌面中",
+   "review": "Xiryn 是一个在本地运行的开源个人代理系统：每个代理获得独立的 Docker Linux 桌面（含 Chromium），支持多代理协作，通过 Telegram 远程控制，数据以单个 SQLite 文件存储在本机，凭据保存于 AES-256-GCM 加密保险库。面向想在自有机器上运行 AI 代理的用户，需 Node 20.9+、Docker 及至少一个模型提供商的 API key。",
+   "highlights": [
+    "每个代理拥有独立沙箱化 Docker Linux 桌面，含 shell 与 Chromium，可实时查看与接管",
+    "会话、记忆、设置存储于本机单个 SQLite 文件，凭据经 AES-256-GCM 加密、密钥由操作系统保管",
+    "支持 OpenAI、Anthropic、Ollama 等多家模型提供商及 OpenAI 兼容端点，并支持 Telegram 远程控制与多代理 squad 协作"
+   ],
+   "use_cases": [
+    "在本地运行后台代理执行网页研究、表单填写、编码调试等任务",
+    "通过 Telegram 在手机上远程控制代理并接收完成通知",
+    "在代理执行登录或支付时人工接管屏幕并审批操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**🔒 Private by design.** No account, no sign-up. Conversations, memory, settings and keys live in a single SQLite file on your disk; logins and cards, if you choose to save them, live in an encrypted vault whose key your operating system holds — and agents nev",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明应用自身使用 SQLite 文件存储会话、记忆与设置，属使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Xiryn is the same idea as an open-source personal agent you run yourself.** Clone it, add your API keys, and you have a team of agents that each own a Linux desktop in Docker — working in the background while you keep using your laptop — remember what matters, browse and research the web, write and run code, and hand work to one another. Nothing is stored anywhere but your computer, and you can message them from your phone. ／ **🔒 Private by design.** No account, no sign-up. Conversations, memory, settings and keys live in a single SQLite file on your disk; logins and cards, if you choose to save them, live in an encrypted vault whose key your operating system holds — and agents never see them. Even the agents' machines run on your computer. The only things that leave it are the calls you configure (your model provider, plus Firecrawl or Telegram if you turn them on). Run a local model through Ollama and not even your prompts leave. ／ 1. Installs what's missing — **Git**, **Node.js**, and **Docker** (Docker Desktop through `winget` on Windows or Homebrew on macOS; Docker Engine through `get.docker.com` on Linux).",
+   "evidence_lines": [
+    27,
+    45,
+    151
+   ]
+  },
+  "fn": "SouravBeraAkaSpeed/xiryn",
+  "sha": "c628718c391a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "72bcb942acd9": {
+  "identity": {
+   "one_liner": ".NET 后台任务库，支持多存储提供者与重试/死信",
+   "review": "NexJob 是面向 .NET 8+ 的后台作业调度库，提供重试、死信队列、截止时间、崩溃恢复和内置仪表盘，通过存储提供者包适配 PostgreSQL、SQL Server、Redis、MongoDB 及内存存储，并支持 Kafka、RabbitMQ 等消息源触发。适合需要在 .NET 应用中运行可靠后台任务的开发者，MIT 许可，通过 NuGet 安装。",
+   "highlights": [
+    "提供重试、死信队列、截止时间与心跳崩溃恢复机制",
+    "通过独立 NuGet 包适配 PostgreSQL、SQL Server、Redis、MongoDB 存储提供者",
+    "内置 ASP.NET Core 仪表盘，支持集群状态查看、暂停/重入队等运行时控制"
+   ],
+   "use_cases": [
+    "在 .NET 应用中执行需要重试与幂等保障的后台作业",
+    "多节点部署下用共享数据库保证任务不丢失、只执行一次",
+    "从 Kafka、RabbitMQ、AWS SQS 等消息源触发任务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|`NexJob.Postgres`|Production ready|",
+     "lines": [
+      81
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`NexJob.SqlServer`|Production ready|",
+     "lines": [
+      82
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是使用数据库作为存储后端的作业调度组件，为 .NET 生态服务而非数据库本体",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|PostgreSQL|`NexJob.Postgres`|Production ready| ／ |SQL Server|`NexJob.SqlServer`|Production ready| ／ PostgreSQL · SQL Server · Redis · MongoDB · in-memory.",
+   "evidence_lines": [
+    81,
+    82,
+    5
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "oluciano/NexJob",
+  "sha": "72bcb942acd9",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

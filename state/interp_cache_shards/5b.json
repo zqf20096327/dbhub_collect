@@ -8275,5 +8275,78 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "47a39de7ff1c": {
+  "identity": {
+   "one_liner": "自托管文件浏览与媒体流播放平台，聚合多种云存储",
+   "review": "Zee-Index 是一个自托管的文件浏览器与媒体流播放平台，将 Google Drive、Dropbox、S3/R2、WebDAV 与本地存储聚合在统一界面下，提供视频播放、分享链接、2FA、API 密钥和管理面板。使用 Next.js 16 + React 19 构建，通过 Prisma ORM 以 PostgreSQL 16 存储数据，Redis 用于缓存与限流，支持 Docker Compose 部署。",
+   "highlights": [
+    "将 Google Drive、Dropbox、S3/R2、WebDAV 和本地文件系统聚合到统一虚拟根目录（L41-L42）",
+    "提供基于角色的访问控制、TOTP 2FA、JWT 签名分享链接和 API 密钥（L71-L78）",
+    "内置 VidStack 视频播放器、字幕、图库、PDF/Office/电子书预览（L54-L63）"
+   ],
+   "use_cases": [
+    "自托管聚合浏览与流式播放多个云盘/对象存储中的媒体文件",
+    "需要分享链接、权限控制和访问审计的团队文件分发",
+    "需要管理员分析面板与告警的自部署文件站"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Prisma + PostgreSQL 16 ORM with versioned migrations ／ |`POSTGRES_USER`|PostgreSQL username|`postgres`| ／ |`POSTGRES_PASSWORD`|PostgreSQL password|`postgres`|",
+     "lines": [
+      103,
+      255,
+      256
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用通过 Prisma ORM 使用 PostgreSQL 16 存储自身数据，PostgreSQL 是其内部依赖而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Self-hosted file explorer and media streaming platform. ／  Prisma + PostgreSQL 16 ORM with versioned migrations ／  Infrastructure Docker + Caddy Containerization, auto-HTTPS proxy",
+   "evidence_lines": [
+    7,
+    103,
+    105
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ifauzeee/Zee-Index",
+  "sha": "47a39de7ff1c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

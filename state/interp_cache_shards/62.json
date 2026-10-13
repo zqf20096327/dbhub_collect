@@ -8999,5 +8999,196 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e975bbfc65cd": {
+  "identity": {
+   "one_liner": "自托管数据决策智能体：自然语言问数、分析、判定与行动",
+   "review": "Trove 是一个可自托管的数据决策智能体，用自然语言查询数据库并生成带 SQL 证据的 Markdown 答案；核心机制是一份人工确认的语义模型（semantics.yml）划定可答边界，查询经确定性护栏编译与校验，另支持定时阈值判定、行动提案与效果验收。面向业务方提问者与数据管理员，需 LLM API 凭证，系统对业务库保持只读。",
+   "highlights": [
+    "提供语义层建模：datasets/metrics/relationships 声明后编译为 SQL，模型外提问拒绝",
+    "支持八种数据源：SQLite、PostgreSQL、MySQL、Doris、ClickHouse、DuckDB、Snowflake、BigQuery",
+    "内置 MCP server、REST API、CLI 与管理台；只读执行含 AST 防火墙、EXPLAIN 代价护栏与字段级脱敏"
+   ],
+   "use_cases": [
+    "业务人员用自然语言查询已建模的数据库并获得带证据的答案",
+    "数据团队为指标定义阈值判定规则并定时告警",
+    "自托管部署下通过管理台审批语义模型变更与知识沉淀"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |一份能登录、能管理的完整部署|Docker Compose(前端 + 后端 + PostgreSQL)|15 分钟|Docker| ／ 1. **连接** —— 一个数据库 URL:`--datasource postgres://user:pass@host:5432/db`。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力|",
+     "lines": [
+      13,
+      147,
+      162,
+      201
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "服务端部署下,同一流程在管理端完成(数据源注册 → KB init → 草稿审批)。逐步指南(MySQL / Doris / PostgreSQL / ClickHouse / DuckDB,以及云仓 Snowflake / BigQuery,含管理台与本地 REPL 两条路径):接入数据源。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。 ／ -- MySQL(按库授权,固定来源 IP):CREATE USER 'trove_ro'@'10.0.0.5' IDENTIFIED BY '...'; GRANT SELECT ON app.* TO 'trove_ro'@'10.0.0.5';",
+     "lines": [
+      166,
+      201,
+      204,
+      232
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。 ／ **需要向量数据库吗?** 不需要。内置 SQLite FTS5 即可开箱检索;PostgreSQL 下同一实例同时承载 pg_bm25 + pgvector 混合检索;情景记忆在配置了 embedder 时用向量,未配置则优雅回退词法匹配。",
+     "lines": [
+      201,
+      204,
+      299
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "服务端部署下,同一流程在管理端完成(数据源注册 → KB init → 草稿审批)。逐步指南(MySQL / Doris / PostgreSQL / ClickHouse / DuckDB,以及云仓 Snowflake / BigQuery,含管理台与本地 REPL 两条路径):接入数据源。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+     "lines": [
+      166,
+      201,
+      204
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明为数据决策智能体，通过数据库 URL 连接外部数据源做问数与分析，不声明依赖某库存自身数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp",
+     "rag",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0（描述提及）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "1. **连接** —— 一个数据库 URL:`--datasource postgres://user:pass@host:5432/db`。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ |**只读防火墙**|SQL 过 AST 解析后判定:非查询语句、任何 DML/DDL、`SELECT INTO OUTFILE`、危险函数、元数据表一律拒绝,不靠关键字黑名单|",
+   "evidence_lines": [
+    162,
+    201,
+    220
+   ]
+  },
+  "fn": "Nivane/trove",
+  "sha": "e975bbfc65cd",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "54e5576b806c": {
+  "identity": {
+   "one_liner": "自托管加密邮件客户端，IMAP 同步+SQLCipher 加密存储+FTS5 全文搜索",
+   "review": "Stork 是一个自托管 Web 邮件客户端，从任意 IMAP 服务器同步邮件，用 SQLCipher 做 AES-256 静态加密存储于 SQLite，并提供 FTS5 全文搜索、线程视图和 SMTP 发信。提供 Mirror/Connector 两种模式和 BIP39 恢复密钥，以单容器 Docker 部署，适合想在自己硬件上保留邮件副本的个人或小团队用户。",
+   "highlights": [
+    "通过 SQLCipher 实现 AES-256 静态加密，容器启动时处于锁定状态",
+    "从任意 IMAP 服务器同步邮件，FTS5 全文搜索，支持标签组织与多身份统一收件箱",
+    "单容器 docker run 部署，兼容 Docker Compose 与 rootless Podman"
+   ],
+   "use_cases": [
+    "将 Gmail/Fastmail/Mailcow 等邮箱的邮件同步为本地加密存档",
+    "通过浏览器在任意设备访问自托管邮件界面",
+    "以 Connector 模式让自建硬件持有邮件唯一副本"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|**Local storage**|✅ SQLite|✅ mbox/maildir|✅ MySQL/PostgreSQL|✅ EML files + Tantivy|✅ (full server)|",
+     "lines": [
+      164
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|**Local storage**|✅ SQLite|✅ mbox/maildir|✅ MySQL/PostgreSQL|✅ EML files + Tantivy|✅ (full server)|",
+     "lines": [
+      164
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Local storage**|✅ SQLite|✅ mbox/maildir|✅ MySQL/PostgreSQL|✅ EML files + Tantivy|✅ (full server)| ／ Node.js 22+ · Hono · SQLite/SQLCipher · FTS5 · ImapFlow · Nodemailer · React · Tailwind CSS · Vite",
+     "lines": [
+      164,
+      231
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Stork 使用 SQLite/SQLCipher 存储邮件数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted email client with encrypted local storage, IMAP sync, and full-text search.** ／ - **Encryption at rest** — AES-256 via SQLCipher. Container boots locked; your password unlocks it. ／ |**Local storage**|✅ SQLite|✅ mbox/maildir|✅ MySQL/PostgreSQL|✅ EML files + Tantivy|✅ (full server)|",
+   "evidence_lines": [
+    10,
+    22,
+    164
+   ]
+  },
+  "fn": "paperkite-hq/stork",
+  "sha": "54e5576b806c",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9953,5 +9953,150 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d62a2d417ebf": {
+  "identity": {
+   "one_liner": "轻量自托管 OIDC 身份认证服务，提供 SSO、MFA 与 RBAC",
+   "review": "Burrow 是一个面向小型团队的自托管 OpenID Connect 身份提供者，用 Go 和 React 实现，集中管理账户、共享 SSO 和应用访问授权。它支持密码登录与强制/可选 TOTP MFA、用户组与角色权限管理，生产环境用 PostgreSQL、开发测试用 SQLite，支持 Docker Compose 或单二进制部署；不含上游身份联邦与 Refresh Token。",
+   "highlights": [
+    "通过 OIDC Authorization Code（默认强制 PKCE S256）为 Web/SPA 应用提供共享 SSO",
+    "提供用户、分组、自定义角色、权限及变更审计管理，支持 TOTP MFA",
+    "单二进制内嵌 UI 部署，生产用 PostgreSQL，开发测试用 SQLite，无需 Redis 或消息队列"
+   ],
+   "use_cases": [
+    "为多个内部 Web/SPA 应用集中提供 OIDC 单点登录",
+    "小型团队自托管账户与权限管理（RBAC）",
+    "为 Grafana、Nightingale、Harbor 等应用配置 SSO 登录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "as one binary, or run with PostgreSQL through Docker Compose. ／ - **Simple deployment:** one binary with an embedded UI; PostgreSQL in production and SQLite for development and tests, without Redis or a queue. ／ independent master-key and administrator-password values, and set the PostgreSQL",
+     "lines": [
+      15,
+      27,
+      64
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Simple deployment:** one binary with an embedded UI; PostgreSQL in production and SQLite for development and tests, without Redis or a queue.",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其生产环境使用 PostgreSQL、开发测试使用 SQLite 作为存储数据的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A lightweight OpenID Connect identity provider for small teams and self-hosted ／ - **Simple deployment:** one binary with an embedded UI; PostgreSQL in production and SQLite for development and tests, without Redis or a queue. ／ as one binary, or run with PostgreSQL through Docker Compose.",
+   "evidence_lines": [
+    12,
+    27,
+    15
+   ]
+  },
+  "fn": "ArkGravity/burrow",
+  "sha": "d62a2d417ebf",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4381b6b23f91": {
+  "identity": {
+   "one_liner": "基于纯 JDBC 和 fluent-sql-4j DSL 的 Spring Boot Repository 模式开发库",
+   "review": "这是一个 Java 开发库，供 Spring Boot 开发者以 Repository 模式编写类型安全的声明式查询，替代 ORM。它通过 Spring Boot 自动配置、@EnableFluentRepositories 扫描、动态方法名查询推导和 Spring 事务集成工作，依赖底层 JDBC，库会自动检测数据库方言；不支持关系映射与一级缓存，@GeneratedValue(SEQUENCE) 尚在计划中。",
+   "highlights": [
+    "提供 Spring Boot 自动配置与 @EnableFluentRepositories 仓库 Bean 扫描",
+    "支持 Spring Data 风格的方法名动态查询推导与 @Transactional 事务集成",
+    "支持多数据源仓库分组与 fluent-sql-4j DSL 自定义查询片段"
+   ],
+   "use_cases": [
+    "Spring Boot 项目中以 Repository 模式实现数据访问层",
+    "需要直接控制 SQL 而不引入 ORM 的 Java 应用",
+    "多数据源场景下按仓库组绑定不同 DataSource"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "url: jdbc:mysql://localhost:3306/myapp ／ driver-class-name: com.mysql.cj.jdbc.Driver",
+     "lines": [
+      101,
+      104
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为 Spring Boot 数据访问开发库，示例以 MySQL 作为 JDBC 数据源，属为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A lightweight Spring Boot library for the **Repository Pattern** with pure JDBC and the fluent-sql-4j DSL. ／ ✅ **Spring Boot Auto-Configuration** — Zero boilerplate; `@EnableFluentRepositories` scans and creates repository beans ／ ✅ **Dynamic Query Derivation** — Spring Data–style method-name queries (`findByName`, `findByAgeGreaterThan`, …) ／ The library auto-detects the database dialect, scans for `CrudRepository` interfaces, creates beans, and binds connections to Spring transactions automatically.",
+   "evidence_lines": [
+    15,
+    22,
+    29,
+    116
+   ]
+  },
+  "fn": "auspis/fluent-repo-4j",
+  "sha": "4381b6b23f91",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

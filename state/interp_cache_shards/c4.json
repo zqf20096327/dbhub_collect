@@ -10189,5 +10189,73 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c5b80d8eff82": {
+  "identity": {
+   "one_liner": "异步多智能体对话框架，内置 SQLite 持久化与代理间移交机制",
+   "review": "面向开发者的多智能体对话应用框架，提供 WhatsApp、Telegram、Webhook 和 CLI 渠道连接器，支持 Gemini、Claude、OpenAI、Grok 及 Ollama 本地模型，通过 SQLiteSessionStore 基于 Python 标准库 sqlite3 实现会话持久化，并提供 HMAC webhook 安全校验与回合失败回滚机制。",
+   "highlights": [
+    "基于 Python 标准 sqlite3 实现零额外依赖的会话持久化",
+    "支持多 LLM 提供商（Gemini、OpenAI、Claude、Grok、Ollama）单参数切换",
+    "提供每会话并发锁与回合失败回滚机制"
+   ],
+   "use_cases": [
+    "构建 WhatsApp/Telegram 客服对话机器人",
+    "开发多智能体协作与自动任务移交的对话服务",
+    "离线本地运行 LLM 对话助手"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "#### Persistent SQLite Storage (`SQLiteSessionStore`) ／ Built on Python's standard `sqlite3` library with zero additional external packages. Safely manages Windows file locks and atomic transactions:",
+     "lines": [
+      252,
+      254
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该框架使用 sqlite3 库存储会话数据，属于使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "#### Persistent SQLite Storage (`SQLiteSessionStore`) ／ Built on Python's standard `sqlite3` library with zero additional external packages. Safely manages Windows file locks and atomic transactions: ／ ChatFlow provides native, zero-dependency persistence to ensure conversations and active specialist agents survive server restarts, worker redeployments, and crashes.",
+   "evidence_lines": [
+    252,
+    254,
+    238
+   ]
+  },
+  "fn": "GustavoBaranda/chatflow-agent",
+  "sha": "c5b80d8eff82",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

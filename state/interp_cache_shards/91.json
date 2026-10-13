@@ -9609,5 +9609,293 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ef216e30e923": {
+  "identity": {
+   "one_liner": "开源引擎，将持续内容流转为可搜索与监控服务",
+   "review": "Quivr V2 提供持久化摄入、混合检索（词法+向量）、变更订阅与关键词/语义告警，核心用 Go 编写并以单个二进制提供 api、worker、migrate 命令。它把格式、模型和业务规则做成插件，面向需要持续追踪主题内容的开发者与运维人员。README 标注处于评估阶段（API v0，不建议生产使用），本地运行依赖 Docker Compose 及 PostgreSQL、S3、Weaviate、Temporal 等组件。",
+   "highlights": [
+    "支持词法、语义与混合搜索，每次命中从规范存储重建并重新鉴权",
+    "提供持久化、幂等的摄入管道，写入携带幂等键并生成不可变版本",
+    "支持已保存查询与订阅，可将新可检索版本转为 Matches 并通过 webhook 投递"
+   ],
+   "use_cases": [
+    "持续追踪新闻、文章等内容流的主题监控与告警",
+    "构建支持关键词与语义混合检索的内容搜索服务",
+    "需要变更订阅与 webhook 投递的内容管道场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rebuildable indexes.** PostgreSQL and S3 hold the canonical data; the search index ／ api -->|commit receipt + intent| pg[(PostgreSQL<br/>catalog, receipts, changes)] ／ |Transactional catalog|PostgreSQL 17|",
+     "lines": [
+      25,
+      37,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 17 作为其事务目录并持有规范数据，属使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**An open-source engine that turns continuous content streams into search and monitoring.** ／ - **Rebuildable indexes.** PostgreSQL and S3 hold the canonical data; the search index ／ |Transactional catalog|PostgreSQL 17|",
+   "evidence_lines": [
+    5,
+    25,
+    46
+   ]
+  },
+  "fn": "The-Vibe-Company/quivr",
+  "sha": "ef216e30e923",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f4a11a65918a": {
+  "identity": {
+   "one_liner": "SQL Server 存储引擎内部结构可视化工具",
+   "review": "Internals Viewer 用于可视化查看 SQL Server 存储引擎的内部结构，支持连接在线数据库、打开离线/脱机数据库的数据文件，以及不经还原直接读取 .bak 备份；提供查询全链路追踪、火焰图、列存储时间线等视图。面向需要排查存储与执行细节的数据库运维与开发人员，运行需 sysadmin 权限，仅支持 Windows 平台。",
+   "highlights": [
+    "可视化查看 SQL Server 存储引擎内部页面与索引结构",
+    "支持全链路查询追踪，生成调用树与火焰图，展示每调用与计划运算符的内存分配",
+    "可连接在线数据库、打开脱机/脱管数据库文件，或直接读取 .bak 备份而无需还原"
+   ],
+   "use_cases": [
+    "排查 SQL Server 页面、行组、列存储分配等存储引擎内部问题",
+    "分析查询执行：记录调用树、火焰图、各线程的行组读取与消除事件",
+    "在不还原备份的情况下读取 .bak 文件内容"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Internals Viewer is a visualisation tool for viewing the internals of the SQL Server Storage Engine. ／ - Tested on SQL Server 2019 - 2025 ／ #### SQL Server",
+     "lines": [
+      3,
+      58,
+      81
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为查看 SQL Server 存储引擎内部结构而构建，服务于数据库管理与诊断场景，不是以数据库作存储的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Internals Viewer is a visualisation tool for viewing the internals of the SQL Server Storage Engine. ／ Internals Viewer can connect to a live database, open the data files of a detached or offline database, or open a full database backup (.bak) without restoring it. ／ #### SQL Server",
+   "evidence_lines": [
+    3,
+    79,
+    81
+   ]
+  },
+  "fn": "danny-sg/internals-viewer",
+  "sha": "f4a11a65918a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1a6863098d59": {
+  "identity": {
+   "one_liner": "自托管的 Stripe 实时电视大屏看板，用 MySQL 存数据",
+   "review": "一个把 Stripe 账户数据展示为办公室电视大屏的开源应用：实时显示 MRR/ARR、收入、客户活动流，并配合音效、语音播报和庆祝动画。面向 SaaS 创始人团队，支持 Docker 自托管或在线托管，内部使用 Next.js 构建、Drizzle ORM 访问 MySQL 数据库存储订阅、付款和客户数据。",
+   "highlights": [
+    "通过 Stripe webhook 与 Events API 同步订阅、付款、客户等实时数据，并将每次 MRR 变动记录为账本",
+    "支持多 Stripe 账户、多语言语音播报与音效、自定义主题，可运行于浏览器或树莓派",
+    "提供 Docker 一键自托管脚本，也可使用官方在线托管版本"
+   ],
+   "use_cases": [
+    "在办公室电视或树莓派大屏上实时展示团队 SaaS 收入指标",
+    "为每个 Stripe 事件配置声音、语音与庆祝效果的团队激励场景",
+    "自托管部署以只读密钥接入 Stripe 数据的可视化看板"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "SaaS Monitor is a Next.js app and a MySQL database. With Docker, on a server or a Raspberry Pi ／ App --> DB[(MySQL<br/>subscriptions · MRR ledger · payments · customers)] ／ pnpm db:up # MySQL + stripe-mock",
+     "lines": [
+      101,
+      123,
+      152
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它是使用 MySQL 存储订阅、付款、客户数据的 Next.js 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SaaS Monitor is a Next.js app and a MySQL database. With Docker, on a server or a Raspberry Pi ／   App --> DB[(MySQL<br/>subscriptions · MRR ledger · payments · customers)] ／ pnpm db:up               # MySQL + stripe-mock",
+   "evidence_lines": [
+    101,
+    123,
+    152
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Synapsr/SaaS-Monitor",
+  "sha": "1a6863098d59",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "df0b602d7cc9": {
+  "identity": {
+   "one_liner": "Rust 原生多模型向量数据库，支持向量/关系/图混合检索",
+   "review": "ChironDB 是一个用 Rust 编写的自托管多模型数据库，将关系 SQL 表、稠密/稀疏向量检索和属性图覆盖层整合在单一二进制中，通过 ChironQL、HTTP、gRPC、MCP 及 pgvector 兼容的 PostgreSQL wire 提供访问，面向 AI/RAG 应用开发者。项目处于 0.1.0-beta 阶段，README 明确声明不可用于生产，且 GaussesDB（旧名）相关接口仅保留兼容别名。",
+   "highlights": [
+    "在单一 Rust 引擎中实现关系 SQL 表、稠密向量检索、BM25 稀疏检索与属性图覆盖层",
+    "提供 ChironQL、HTTP REST、gRPC、只读 MCP 工具及 pgvector 兼容的 PostgreSQL wire 多种访问接口",
+    "包含召回率目标、漂移监控与审计记录等检索质量监测能力"
+   ],
+   "use_cases": [
+    "为 RAG/AI 应用存储 embedding 并执行稠密、稀疏或混合检索",
+    "在自托管基础设施上以单二进制运行向量与关系数据的一体化查询",
+    "需要带过滤条件向量检索与有界图遍历的上下文存储场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "preview. Use the documented SQL subset through ChironQL or native PostgreSQL wire. ／ PostgreSQL wire surface for vector queries. ／ |ChironWire / PostgreSQL subset|`127.0.0.1:7403`|Compatibility boundary|",
+     "lines": [
+      48,
+      58,
+      195
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "mention",
+     "quote": "## Coming from GaussDB ／ ChironDB is the public name of the project previously called GaussDB. The beta ／ `gaussdb.v1.GaussDb` gRPC service. `CHIRONDB_*` environment variables take",
+     "lines": [
+      212,
+      214,
+      216
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是数据库引擎本体（存储/检索引擎），而非使用其他数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ChironDB is a self-hosted multi-model database with an implemented native ／ A single LS-VEC engine manages dense retrieval. The beta also includes a ／ ChironDB complements PostgreSQL/pgvector for vector retrieval. Its legacy",
+   "evidence_lines": [
+    17,
+    30,
+    76
+   ]
+  },
+  "fn": "Gaussian-id/ChironDB",
+  "sha": "df0b602d7cc9",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

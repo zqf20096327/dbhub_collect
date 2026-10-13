@@ -8466,5 +8466,212 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ee859454eca0": {
+  "identity": {
+   "one_liner": "基于 .NET + PostgreSQL 的文档驱动业务应用开源平台",
+   "review": "NGB Platform 是一个用 .NET 构建、以 PostgreSQL 作为数据存储的开源平台，面向文档驱动的业务应用与行业垂直解决方案，内置目录/文档模型、核算与登记表引擎、审计历史、报表及元数据驱动 UI，通过 NuGet 和 npm 包分发，适合工程师、产品团队和实施团队在其上搭建业务系统。",
+   "highlights": [
+    "提供元数据驱动的目录、文档与生命周期管理模型",
+    "包含核算引擎、业务/参考登记表和追加式审计历史",
+    "通过 NGB.PostgreSql 模块实现 PostgreSQL 读写与数据库迁移，使用 Evolve 做模式版本管理"
+   ],
+   "use_cases": [
+    "构建财务与运营类、支持核算记账的 SaaS 或内部业务系统",
+    "搭建行业垂直 ERP 风格解决方案与后台工作流应用",
+    "多个行业解决方案共享同一平台核心的业务产品矩阵"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open-source .NET + PostgreSQL platform for document-driven business applications. ／ - PostgreSQL as the system of record. ／ - **Database:** PostgreSQL",
+     "lines": [
+      7,
+      137,
+      250
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 作为系统记录库（system of record），平台本身是使用数据库的业务应用平台。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Open-source .NET + PostgreSQL platform for document-driven business applications. ／ - PostgreSQL as the system of record. ／ - **Database:** PostgreSQL",
+   "evidence_lines": [
+    7,
+    137,
+    250
+   ]
+  },
+  "fn": "ngbplatform/NGB",
+  "sha": "ee859454eca0",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "42644968d10e": {
+  "identity": {
+   "one_liner": "Linux 实用脚本集合，含基于 mysqldump 的 MySQL 备份脚本",
+   "review": "一组面向 Linux 系统的自定义 bash/python 脚本集合，包含数据库备份（通过 mysqldump 备份 MySQL）、文件备份到 Mega.nz 云盘、VSCode 配置备份、TeamSpeak 服务器安装与日志处理、PDF 合并、dotfiles、Prometheus 配置文件及 Flutter 发布自动化等。适合需要在 Linux 环境下复用此类运维脚本的系统管理员或个人用户使用。",
+   "highlights": [
+    "提供基于 mysqldump 的 MySQL 数据库备份脚本 db_backup",
+    "提供 backup_to_mega 脚本，将文件备份到 Mega.nz 云盘",
+    "包含 TeamSpeak3 服务器安装、日志处理脚本及 Prometheus 配置/服务文件"
+   ],
+   "use_cases": [
+    "在 Linux 上定时备份 MySQL 数据库",
+    "将本地文件备份到 Mega.nz 云端",
+    "自动化安装 TeamSpeak3 服务器及配套组件"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Script for backing up MySQL databases via mysqldump",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库提供 mysqldump 备份脚本，为 MySQL 数据库提供备份工具能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Utilities for backing up files on Linux systems. Written in bash. ／  - Script for backing up MySQL databases via mysqldump",
+   "evidence_lines": [
+    13,
+    18
+   ]
+  },
+  "fn": "Loupeznik/utils",
+  "sha": "42644968d10e",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "15ece21bdacc": {
+  "identity": {
+   "one_liner": "自托管笔记本，AI 代理经 MCP 写入 Markdown 笔记并问答",
+   "review": "LockIn 是一个可自托管的笔记本应用：Claude Code、Codex、Cursor 等 MCP 客户端可将笔记保存进来，用户按主题归档，并在浏览器、本地模型或自有 API key 下向模型提问，答案带页码引用。面向在 AI 会话中学习、需要留存笔记的用户。数据存于捆绑的 Postgres 17，通过 Prisma 做迁移，AGPL-3.0 许可，需 Docker Compose 部署。",
+   "highlights": [
+    "提供 MCP 服务器（/api/mcp，Streamable HTTP），支持保存、搜索、读取笔记等工具，代理无法删除内容",
+    "Ask 功能支持浏览器内 WebGPU 模型、本地 OpenAI 兼容服务器及 Anthropic/OpenAI/Gemini/OpenRouter 自有 key，答案引用笔记页码",
+    "自带 OAuth 2.1 服务器（PKCE、动态注册），每个代理有独立令牌，仅存哈希，60 请求/分钟限速"
+   ],
+   "use_cases": [
+    "让 AI 编码代理把学习笔记留存到个人知识库",
+    "对自有笔记进行带引用的模型问答",
+    "自托管管理按主题组织的笔记、任务与复习计划"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`db`|Postgres 17. Data in the `db` volume.| ／ |`POSTGRES_PASSWORD`|Password for the bundled Postgres.|",
+     "lines": [
+      31,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明捆绑 Postgres 17 存储数据，LockIn 本身是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`db`|Postgres 17. Data in the `db` volume.| ／ The open-source notebook your AI tools write to. ／ LockIn runs an MCP server at `/api/mcp` (Streamable HTTP). In LockIn, open **Settings → Connect your agents**, create a token named after the agent, and copy the setup it shows. For Claude Code:",
+   "evidence_lines": [
+    31,
+    3,
+    65
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Sky-walkerX/LockIn",
+  "sha": "15ece21bdacc",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

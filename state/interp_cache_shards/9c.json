@@ -9247,5 +9247,143 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "00fc80553f07": {
+  "identity": {
+   "one_liner": "自主代理身份基础设施，签发可验证凭证并实现委托链管理",
+   "review": "ZeroID 是面向自主 AI 代理的身份管理系统，提供代理注册、OAuth 2.1 令牌签发、基于 RFC 8693 的代理间委托（含权限逐级收窄）、DPoP 证明令牌、CIBA 后通道审批与实时级联吊销。面向需要为代理建立可审计独立身份的安全与合规团队，基于 WIMSE/SPIFFE URI 标识代理，支持 Docker Compose 部署，文档未见人类 IAM 场景支持。",
+   "highlights": [
+    "提供 RFC 8693 令牌交换实现代理间 on-behalf-of 委托，每跳自动收窄 scope 并追踪委托深度",
+    "支持 OAuth 2.1 多种授权流程、RFC 9449 DPoP 发送方约束令牌与 RFC 7591 动态客户端注册",
+    "提供 CIBA 后通道审批、RFC 9396 富授权请求及凭证实时级联吊销"
+   ],
+   "use_cases": [
+    "为多代理工作流中的每个代理签发独立可验证身份与短时凭证",
+    "需要记录代理委托链并支持上游凭证吊销时级联失效的场景",
+    "代理调用工具或 MCP 服务时由人通过后通道审批授权"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up -d # starts Postgres + ZeroID ／ docker compose up -d postgres",
+     "lines": [
+      170,
+      181
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为为代理身份场景服务的凭证签发与委托基础设施组件，使用 Postgres 作为部署中的存储依赖",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ZeroID is identity infrastructure for autonomous agents: a system that issues cryptographically verifiable credentials, enforces delegated authority through chains of agents, and revokes access in real time. Built on OAuth 2.1, WIMSE/SPIFFE, and RFC 8693, it implements the industry's emerging standards for agent identity before they become requirements. ／ - **Agent Identity Registry** — Register agents, MCP servers, services, and applications as first-class entities. Classify by role (`orchestrator`, `autonomous`, `tool_agent`), enrich with metadata (`framework`, `version`, `publisher`, `capabilities`), assign trust levels, and manage the full lifecycle: register → activate → deactivate → de-provision.",
+   "evidence_lines": [
+    41,
+    80
+   ]
+  },
+  "fn": "highflame-ai/zeroid",
+  "sha": "00fc80553f07",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "27c5e22b6c02": {
+  "identity": {
+   "one_liner": "面向 AI 代理的 MCP 代码搜索服务器，用 SQLite 存索引",
+   "review": "这是一个 MCP 服务器，用 tree-sitter 解析源码生成 AST，把符号、函数体、调用关系和元数据写入 SQLite 索引，通过 32 个（1C 构建为 34 个）MCP 工具向 AI 代理提供代码搜索、调用图查询、文件读取等能力，单一二进制无依赖，支持 HTTP 与 stdio 两种接入方式。主要面向使用 Claude Code、Cursor 等客户端的开发者，尤其针对 1C:Предприятие 配置库（Конфигуратор XML 与 EDT .mdo 两种导出格式）提供专门的元数据分析工具。运行时需后台 daemon 维护索引，服务器仅读索引。",
+   "highlights": [
+    "提供 32 个 MCP 工具：函数/类全文搜索、调用图（callers/callees/find_path）、文件读取与 grep",
+    "以 tree-sitter 支持 14 种语言的完整语法解析，另支持 50+ 文本格式全文索引",
+    "提供 bsl-indexer 构建，解析 1C:Предприятие 配置导出（Конфигуратор XML 与 1C:EDT .mdo）含元数据、表单、角色权限与数据关系图"
+   ],
+   "use_cases": [
+    "为 AI 编码代理（Claude Code、Cursor、VS Code 等 MCP 客户端）提供大代码库的快速符号与调用关系查询",
+    "1C:Предприятие 大型配置库（数万至十万级文件）的代码导航与影响分析",
+    "通过 code-index-guard 钩子约束代理经索引读取代码以降低 token 消耗"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый",
+     "lines": [
+      11,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内部索引存储被使用，项目本身是为 AI 代理服务的代码搜索工具而非数据库生态组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ Работает с Claude Code, Cursor, VS Code, LibreChat — с любым клиентом MCP. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый",
+   "evidence_lines": [
+    11,
+    119,
+    149
+   ]
+  },
+  "fn": "Regsorm/code-index-mcp",
+  "sha": "27c5e22b6c02",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

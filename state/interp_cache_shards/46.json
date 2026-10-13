@@ -8927,5 +8927,279 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "abdf4c649220": {
+  "identity": {
+   "one_liner": "Emacs 交互式数据库客户端，支持多后端 SQL 查询与行编辑",
+   "review": "Clutch 是一个在 Emacs 内运行的开源数据库客户端，提供可编辑的 SQL 查询缓冲区、结果网格浏览、行级变更暂存与预览执行，支持元数据补全和 CSV/TSV 导出。面向使用 Emacs 的数据库开发者与运维人员；原生集成 MySQL、PostgreSQL、SQLite、MongoDB、Redis 等，其他数据库（Oracle、SQL Server、ClickHouse 等）需通过 JDBC 并依赖 Java 17+ 运行时。",
+   "highlights": [
+    "提供查询缓冲区、交互式结果网格与暂存式行编辑（插入/更新/删除需预览确认）",
+    "支持 MySQL、PostgreSQL、SQLite、MongoDB、Redis 原生后端，及经 JDBC 代理访问 Oracle、SQL Server、ClickHouse 等",
+    "支持服务端 WHERE/ORDER BY、结果导出为 CSV/TSV/Org 表格及 Org-Babel 集成"
+   ],
+   "use_cases": [
+    "在 Emacs 中查询和浏览多种数据库",
+    "对 SQL 查询结果进行受控的行级编辑",
+    "通过 JDBC 连接 Oracle、SQL Server、ClickHouse 等数据库执行查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |PostgreSQL native|Non-null unique keys, then `ctid` for ordinary heap tables|",
+     "lines": [
+      7,
+      39,
+      58
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |MySQL native|Non-null unique keys; no physical row-locator fallback|",
+     "lines": [
+      7,
+      39,
+      57
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle JDBC|Non-null unique keys, then `ROWID` for confirmed base tables|",
+     "lines": [
+      7,
+      61
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ The shortest path uses SQLite, which requires only Emacs 29.1+—no protocol package or Java runtime. ／ ### 2. Open a SQLite database",
+     "lines": [
+      7,
+      13,
+      23
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      7,
+      74
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior|",
+     "lines": [
+      7,
+      78
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11| ／ MariaDB 10.11 has been live-validated through the native `mysql` backend, including TLS with `mysql_native_password`; other MariaDB versions are expected to be broadly compatible but are not yet part of the regular test matrix. MySQL 5.6 has no native JSON col",
+     "lines": [
+      70,
+      122
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Clutch 是为连接和操作多种数据库服务的客户端工具，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Query and browse databases—and stage SQL row edits—without leaving Emacs. ／ Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracle, SQL Server, DB2, Snowflake, Redshift, ClickHouse, DuckDB, and other databases. ／ ## Backend Support",
+   "evidence_lines": [
+    5,
+    7,
+    66
+   ]
+  },
+  "fn": "LuciusChen/clutch",
+  "sha": "abdf4c649220",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "57efef89b5f7": {
+  "identity": {
+   "one_liner": "自托管实时后端平台，内置数据库、实时查询、认证与文件存储",
+   "review": "Concile 是一个可自托管的实时后端，提供内置 SQLite（可切换 PostgreSQL）、实时查询、认证、文件存储、定时任务和仪表盘，开发者用 TypeScript 编写函数即可实现数据变更驱动的界面自动更新。面向希望快速搭建应用后端的前端/全栈开发者，目前处于 pre-1.0 阶段，分布式层与搜索功能尚未完成。",
+   "highlights": [
+    "内置嵌入式 SQLite 数据库，可通过单一切换到 PostgreSQL",
+    "提供实时响应式查询，数据写入后相关查询自动重运行并推送到客户端",
+    "包含文件存储（磁盘/S3/R2）、认证、定时调度、工作流及实时仪表盘"
+   ],
+   "use_cases": [
+    "需要多端实时同步数据的自托管应用后端",
+    "以 TypeScript 全栈方式开发、不搭独立 API 服务的应用",
+    "从 Convex 项目迁移到自托管环境的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* 🗄️ **A database built right in.** We use an embedded SQLite database by default so there is zero config. When you need to grow, switch to Postgres with a single flag. You keep the same code and run zero migrations.",
+     "lines": [
+      84
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* 🗄️ **A database built right in.** We use an embedded SQLite database by default so there is zero config. When you need to grow, switch to Postgres with a single flag. You keep the same code and run zero migrations.",
+     "lines": [
+      84
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用内置 SQLite/PostgreSQL 存储数据的应用后端，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-Apache-2.0，每个发布版本两年后自动转为 Apache 2.0",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* 🗄️ **A database built right in.** We use an embedded SQLite database by default so there is zero config. When you need to grow, switch to Postgres with a single flag. You keep the same code and run zero migrations. ／ Concile is the open source backend that updates your data automatically. You don't have to wire up servers, glue together APIs, or ask your users to hit refresh.",
+   "evidence_lines": [
+    84,
+    11
+   ]
+  },
+  "fn": "concile-dev/concile",
+  "sha": "57efef89b5f7",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ef77b9efb779": {
+  "identity": {
+   "one_liner": "开源 AI 应用构建器：提示词生成全栈 Next.js 应用并托管",
+   "review": "该仓库是 Totalum AI 应用构建器的前端界面，用户输入提示词后由 Totalum API 的 AI 代理生成 Next.js 全栈应用，并提供预览、代码编辑器、数据库浏览、部署、域名、GitHub 同步等功能，托管与数据库由 Totalum API 提供。面向独立开发者、SaaS 公司与无代码团队，MIT 许可，自身不带鉴权，部署前需自行添加认证层。",
+   "highlights": [
+    "提供提示词到 Next.js 全栈应用的生成、实时预览与一键部署",
+    "包含 Monaco 代码编辑器、可视化编辑器、数据库浏览/SQL 执行/备份恢复功能",
+    "支持多租户项目隔离、GitHub 双向同步、版本历史与自定义域名管理"
+   ],
+   "use_cases": [
+    "个人开发者自托管搭建 AI 应用生成平台",
+    "SaaS 公司在其产品内嵌入白标 AI 应用构建能力",
+    "代理/无代码团队以自有品牌交付客户应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Database (for your own users/billing)**: Supabase, Postgres, PlanetScale, MongoDB, anything.",
+     "lines": [
+      184
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是一个调用 Totalum API 的应用界面，托管与数据库均由该 API 提供，自身不为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **The hard part is done by the Totalum API.** Totalum runs the AI agent that writes the code, and hosts every generated app with its database, file storage, SSL, CDN, deploys and custom domains. One API key gives you all of it. ／ - **This repo is the product on top.** It is the user interface: the prompt box, the live preview, the code editor, the visual editor, the database browser, the logs, the version history and everything else you see in the demo. ／ - 🗄️ **Database.** Every app gets its own SQL database, with a dev and a live copy. Browse and edit rows, run SQL or ask in plain words, read the schema and migrations, take backups and restore them, all from **More → Database**.",
+   "evidence_lines": [
+    29,
+    30,
+    51
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "totalumlabs/ai-app-builder-open",
+  "sha": "ef77b9efb779",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

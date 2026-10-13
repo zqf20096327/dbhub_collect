@@ -8071,5 +8071,72 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "16ea1552bc26": {
+  "identity": {
+   "one_liner": "AI Agent 对话平台，含可嵌入运行时 SDK 与审计轨迹",
+   "review": "一个自托管的 AI Agent 对话产品，提供流式对话、工具调用、子 Agent 委派、定时任务和只读审计轨迹，核心 Agent 循环拆分在独立 SDK red-bean-qing-tuan 中，后端用 Fastify 并通过 pg 直接写 SQL 做持久化。适合想把 Agent 运行时嵌入自己宿主、并保留可追溯运行记录的开发者。安装依赖 Node.js ≥24.9、pnpm 与 Docker，通过 make init 一键初始化。",
+   "highlights": [
+    "支持 SSE 流式对话、工具调用与子 Agent 委派，工具按 Agent 逐个授权",
+    "提供基于只追加事实日志的运行审计轨迹视图，按请求统计 token 与耗时",
+    "运行时 SDK 通过 runtime.lock 锁定 commit，由 make verify 强制校验版本"
+   ],
+   "use_cases": [
+    "搭建带人工确认（interrupt 屏障）的 Agent 对话与工具执行环境",
+    "需要 cron 定时任务与完整运行历史追溯的 Agent 运维场景",
+    "将 Agent 循环 SDK 嵌入 CLI 等其他宿主程序"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **`backend/`** —— Fastify、直接写 SQL 的 `pg`、启动时一次性完成装配的 composition root，以及",
+     "lines": [
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 backend 通过 pg 直接写 SQL 做持久化，PostgreSQL 是其存储数据库而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**一个 AI Agent 对话平台。** 支持流式对话、工具调用、子 Agent 委派、定时任务，并为每次运行留下完整审计轨迹。 ／ - **本仓库** —— 产品侧。负责会话、持久化、认证、HTTP/SSE 接口、定时任务和设计系统。 ／ - **`backend/`** —— Fastify、直接写 SQL 的 `pg`、启动时一次性完成装配的 composition root，以及",
+   "evidence_lines": [
+    3,
+    25,
+    65
+   ]
+  },
+  "fn": "MalganisWu/red-bean-nian-gao",
+  "sha": "16ea1552bc26",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

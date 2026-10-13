@@ -10447,5 +10447,72 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cee9d091f6d5": {
+  "identity": {
+   "one_liner": "TeamSpeak 网页客户端与协议网关，Rust 网关桥接浏览器与 TS 服务器",
+   "review": "WebTS 是一个独立第三方的自托管 TeamSpeak 网页客户端与协议网关，用户通过邮箱登录并导入 TS 身份后在浏览器加入频道，支持 Opus 语音、本地 AI 降噪、频道管理与加密私信。面向想用浏览器接入 TeamSpeak 的个人与站长，需自备 TS 服务器与 HTTPS 域名，TS6 与移动语音仍为实验支持。",
+   "highlights": [
+    "提供浏览器端 TeamSpeak 频道接入，继承目标服务器原有权限",
+    "实现 Opus 双向语音与本地 GTCRN/RNNoise AI 降噪",
+    "包含邮箱账号体系、多身份管理与可选端到端好友私信"
+   ],
+   "use_cases": [
+    "在浏览器中接入已有 TeamSpeak 服务器进行语音与频道管理",
+    "自托管部署带账号与权限体系的 TeamSpeak 网页入口",
+    "为 TeamSpeak 语音提供本地降噪与加密私信功能扩展"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文|",
+     "lines": [
+      107
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明使用 SQLite 通过 rusqlite 存储账号、身份密文与会话，WebTS 是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WebTS 是独立开源的 **TeamSpeak 网页客户端与协议网关**。成员通过邮箱登录、创建或导入 TeamSpeak 身份，在浏览器里加入已有频道；网站以该身份连接目标服务器，继承它原有的权限。部署者掌握自己的账号数据库、密钥、邮件服务和默认服务器配置。 ／ |网关|**Rust · Tokio · Axum**|单进程 HTTP / WebSocket、会话与 TS 连接| ／ |持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文|",
+   "evidence_lines": [
+    15,
+    106,
+    107
+   ]
+  },
+  "fn": "PTPHAP/WebTS",
+  "sha": "cee9d091f6d5",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

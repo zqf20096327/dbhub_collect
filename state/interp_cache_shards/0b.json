@@ -7959,5 +7959,151 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22e00cba267d": {
+  "identity": {
+   "one_liner": "基于规则监控、RAG 与本地生成式 AI 的 IoT 故障诊断系统",
+   "review": "该项目通过 MQTT 读取传感器遥测数据，用规则引擎检测故障并存储到 SQLite，再结合 RAG 检索工程知识，由本地 LLM 生成诊断解释与检查建议，并提供 Web 监控仪表盘。面向 IoT 设备运维与故障排查场景，核心机制是确定性规则与 RAG 知识检索的组合。",
+   "highlights": [
+    "提供基于规则的实时故障检测",
+    "使用 SQLite 存储遥测数据",
+    "结合 RAG 与本地生成式 AI 生成诊断解释"
+   ],
+   "use_cases": [
+    "IoT 设备异常状态监控",
+    "传感器故障原因分析",
+    "基于本地 LLM 的离线诊断"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite telemetry storage",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为该诊断系统的遥测存储组件，系统本身是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A knowledge-driven IoT fault diagnosis system that combines real-time sensor telemetry, MQTT communication, rule-based fault monitoring, Retrieval-Augmented Generation (RAG), and a local Generative AI model to support IoT device diagnosis. ／ - SQLite telemetry storage ／ - Web-based monitoring dashboard",
+   "evidence_lines": [
+    5,
+    17,
+    18
+   ]
+  },
+  "fn": "IoTSec-AI/knowledge-driven-iot-fault-diagnosis",
+  "sha": "22e00cba267d",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "99eaf200d72a": {
+  "identity": {
+   "one_liner": "自托管 RSS/Atom 订阅源生成器，用 CSS/XPath 选择器提取网页内容",
+   "review": "RSS Workshop 是一个自托管的 RSS/Atom 订阅源生成器，用于为不提供订阅源的网站生成订阅源。用户可通过可视化编辑器或 CSS/XPath 选择器定义抓取规则，用 Chromium 渲染 JavaScript 页面，支持文章过滤与全文输出，数据存储于 SQLite 或 PostgreSQL。它面向希望自托管的个人或 homelab 用户，通过 Docker 或独立 Linux 可执行文件部署，提供单管理员 Web 界面。",
+   "highlights": [
+    "提供可视化选择器编辑器，支持 CSS 与 XPath 并排编辑及实时匹配高亮",
+    "通过沙箱化 Chromium（或外接 FlareSolverr）渲染 JavaScript 页面",
+    "支持故事包含/排除过滤、过滤器库复用、OPML 导出、Prometheus 指标与备份恢复"
+   ],
+   "use_cases": [
+    "为不提供 RSS 的网站生成可订阅的 RSS/Atom 订阅源",
+    "homelab / 自托管环境中替代托管型 RSS 生成服务",
+    "需要订阅源诊断（每次刷新的失败原因、状态、耗时）与 Prometheus 告警的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite or PostgreSQL, Docker or a standalone Linux executable ／ |**With PostgreSQL**|`compose.postgres.yaml` adds a database service. See PostgreSQL setup; switching databases does not migrate existing data.|",
+     "lines": [
+      18,
+      110
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The default Docker installation includes Chromium for JavaScript pages, SQLite, a single-admin interface, and dark mode. Data stays in local folders on your host. ／ - SQLite or PostgreSQL, Docker or a standalone Linux executable ／ Open localhost:8080 and sign in. Use `sudo docker` if your account requires it. SQLite data lives in `./data/rss.db`, and Compose pulls `ghcr.io/ldogg123/rss-workshop:latest`, the current stable image with Chromium.",
+     "lines": [
+      5,
+      18,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 SQLite 或 PostgreSQL 作为自身的数据存储（L18、L110），属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可，依赖保留各自许可证",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RSS Workshop is a self-hosted RSS and Atom feed generator for websites that don’t provide feeds. Build feeds visually or with CSS/XPath selectors, render JavaScript sites with Chromium, filter stories, and publish persistent RSS/Atom URLs. ／ - SQLite or PostgreSQL, Docker or a standalone Linux executable ／ |**With PostgreSQL**|`compose.postgres.yaml` adds a database service. See PostgreSQL setup; switching databases does not migrate existing data.|",
+   "evidence_lines": [
+    3,
+    18,
+    110
+   ]
+  },
+  "fn": "Ldogg123/rss-workshop",
+  "sha": "99eaf200d72a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

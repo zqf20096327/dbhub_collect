@@ -10236,5 +10236,273 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d4d17d33df9": {
+  "identity": {
+   "one_liner": "基于自定义 SQLite VFS 的浏览器端持久化 SQLite WASM 库",
+   "review": "AbsurderSQL 是一个用 Rust 编写、编译为 WASM 的 SQLite 库，通过自定义 VFS 将数据库 I/O 映射为 4KiB 块存储到 IndexedDB 或 OPFS，实现浏览器中的持久化 SQL 存储。面向需要在浏览器端使用 SQL 的前端开发者，提供 npm/crates 包、导出为标准 .db 文件、多标签协调与可选 Prometheus 遥测；也可在 Native 和 React Native 环境运行。",
+   "highlights": [
+    "自定义 SQLite VFS 将 I/O 映射为 4KiB 块写入 IndexedDB/OPFS，实现浏览器持久化",
+    "提供 exportToFile/import 将数据库导出为标准 SQLite 文件，可用 sqlite3 CLI 打开",
+    "支持三种模式（Browser WASM/Native/Mobile）与可选 Prometheus/OpenTelemetry 遥测"
+   ],
+   "use_cases": [
+    "浏览器端需要持久化 SQLite 存储的 Web/PWA 应用",
+    "将浏览器内数据导出为标准 .db 文件用于备份或迁移",
+    "React Native 移动端内嵌 SQLite/SQLCipher（经 UniFFI 绑定）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Rust + WASM + SQLite + IndexedDB/OPFS ／ **AbsurderSQL gives SQLite persistent browser storage and portable files.** ／ A custom SQLite VFS maps database I/O onto 4 KiB blocks rather than serializing",
+     "lines": [
+      3,
+      13,
+      52
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目实现自定义 SQLite VFS 与 WASM 绑定，是为 SQLite 在浏览器/移动端运行服务的库组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A custom SQLite VFS maps database I/O onto 4 KiB blocks rather than serializing ／ AbsurderSQL runs in **three modes** - Browser (WASM), Native (Rust CLI/Server), and Mobile (React Native): ／ **WASM Bridge**: Uses `sqlite-wasm-rs` and a shared statement owner to finalize",
+   "evidence_lines": [
+    52,
+    116,
+    143
+   ]
+  },
+  "fn": "npiesco/absurder-sql",
+  "sha": "4d4d17d33df9",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f90253a218b9": {
+  "identity": {
+   "one_liner": "本地分析 Claude Code/Codex 等 AI 编码代理会话日志的 CLI 工具",
+   "review": "Decant 读取本机 Claude Code、Codex、Gemini CLI、OpenCode 的会话日志，将令牌消耗、成本、上下文使用、文件与工具调用等统计写入本地 SQLite 归档并提供全文检索，通过 CLI 或本地 Web UI 查看。面向使用 AI 编码代理、需要审计与分析会话记录的开发者；运行时不发起外呼，归档为未加密 SQLite 文件（权限 0600）。",
+   "highlights": [
+    "支持读取 Claude Code、Codex、Gemini CLI、OpenCode 四类会话日志并持续监听变更",
+    "将转录写入带全文索引的本地 SQLite 归档，支持消息、工具调用与全文检索",
+    "提供 CLI 命令、本地 OpenAPI 3.1 API 及 Markdown/JSON/报告/轨迹导出"
+   ],
+   "use_cases": [
+    "分析 AI 编码代理的令牌消耗与成本分布",
+    "检索和审计代理读取过的文件、工具调用与完整转录",
+    "导出会话报告与重放脚本用于回溯"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "messages into an **unencrypted** SQLite archive at `~/.decant/decant.db`, with a ／ - One SQLite archive for Claude Code, Codex, Gemini CLI, and OpenCode sessions.",
+     "lines": [
+      19,
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "工具使用 SQLite 作为自身数据归档的存储介质，而非为数据库生态服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "npm",
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "messages into an **unencrypted** SQLite archive at `~/.decant/decant.db`, with a ／ This starts the local UI at <http://127.0.0.1:3000>, indexes the Claude Code, ／ - One SQLite archive for Claude Code, Codex, Gemini CLI, and OpenCode sessions.",
+   "evidence_lines": [
+    19,
+    43,
+    48
+   ]
+  },
+  "fn": "dosu-ai/decant",
+  "sha": "f90253a218b9",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "507ec6190556": {
+  "identity": {
+   "one_liner": ".NET 企业后端服务基础框架，含数据访问与事件编排组件",
+   "review": "CoreEx 是一组可独立引用的 .NET NuGet 包集合，用于构建企业后端服务，提供语义异常到 HTTP 响应映射、领域事件发布订阅与事务性 outbox、验证框架、混合缓存等能力，并通过 IDatabase 抽象衔接 ADO.NET、Entity Framework Core 与 Azure Cosmos DB。面向构建业务服务的 .NET 开发团队，需按包按需引入。",
+   "highlights": [
+    "提供 IDatabase/DatabaseCommand ADO.NET 抽象，附带 SQL Server 与 PostgreSQL 实现（含 OpenTelemetry 指标）及 EF Core 集成层",
+    "内置事件发布订阅、两阶段队列发布、事务性 outbox 与 Azure Service Bus 集成",
+    "内置 AI 辅助支持，提供技能与专家代理按框架约定指导开发"
+   ],
+   "use_cases": [
+    "构建需要统一错误响应与验证的企业级 Web API 服务",
+    "实现领域事件驱动的最终一致性架构（事务性 outbox）",
+    "在 SQL Server、PostgreSQL 或 Cosmos DB 上进行类型化数据访问"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🗄️ **Database & ORM** — `IDatabase` / `DatabaseCommand` ADO.NET abstraction with multi-result-set support, transactional outbox relay infrastructure, SQL Server and PostgreSQL implementations with OpenTelemetry metrics, and an Entity Framework Core integrati ／ - 🧪 **Testing Toolkit** — `CoreEx.UnitTesting` provides fluent expectations, event/outbox assertions (SQL Server, PostgreSQL, Cosmos, Azure Service Bus), JSON/YAML seeds, and Aspire E2E lifecycle helpers with real cross-domain hosts and a WireMock host for thi ／ `CoreEx.Database.Postgres` &nbsp; NuGet version | Provides the PostgreSQL (Npgsql) implementation of `IDatabase`: `PostgresDatabase`, `PostgresUnitOfWork`, outbox relay, Postgres-specific parameter extensions, and OpenTelemetry metrics for outbox operations. |",
+     "lines": [
+      77,
+      90,
+      127
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- 🗄️ **Database & ORM** — `IDatabase` / `DatabaseCommand` ADO.NET abstraction with multi-result-set support, transactional outbox relay infrastructure, SQL Server and PostgreSQL implementations with OpenTelemetry metrics, and an Entity Framework Core integrati ／ - 🧪 **Testing Toolkit** — `CoreEx.UnitTesting` provides fluent expectations, event/outbox assertions (SQL Server, PostgreSQL, Cosmos, Azure Service Bus), JSON/YAML seeds, and Aspire E2E lifecycle helpers with real cross-domain hosts and a WireMock host for thi ／ `CoreEx.Database.SqlServer` &nbsp; NuGet version | Provides the SQL Server (`Microsoft.Data.SqlClient`) implementation of `IDatabase`: `SqlServerDatabase`, `SqlServerUnitOfWork`, session-context stamping, outbox relay, SQL Server-specific parameter extensions,",
+     "lines": [
+      77,
+      90,
+      128
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为框架库为使用 PostgreSQL/SQL Server/Cosmos DB 的后端服务提供数据访问与事件编排组件，不是使用数据库存储数据的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🗄️ **Database & ORM** — `IDatabase` / `DatabaseCommand` ADO.NET abstraction with multi-result-set support, transactional outbox relay infrastructure, SQL Server and PostgreSQL implementations with OpenTelemetry metrics, and an Entity Framework Core integration layer with typed CRUD operations and `ValueConverter` bridges. ／ The solution is composed of focused, independently consumable packages — `CoreEx` provides the shared runtime primitives, and each additional package (`CoreEx.AspNetCore`, `CoreEx.Events`, `CoreEx.Database`, `CoreEx.Validation`, etc.) adds a specific capability layer. Teams adopt only what they need.",
+   "evidence_lines": [
+    77,
+    15
+   ]
+  },
+  "fn": "Avanade/CoreEx",
+  "sha": "507ec6190556",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "45a2cebc3e77": {
+  "identity": {
+   "one_liner": "本地求职联系人查找工具，Chrome扩展+FastAPI后端，发现并验证招聘经理邮箱并用本地LLM起草跟进",
+   "review": "Hunterly 是一个求职外联工具，由 Chrome 侧边栏扩展和本地后端组成：读取当前浏览的 LinkedIn 档案，按约30种命名模式生成候选邮箱并通过公司邮件服务器（SMTP 端口25）验证，用本地 Ollama 模型起草外联信，由用户自行从 Gmail 发送，并提供第4/9天跟进、退信处理和勿扰名单跟踪。数据存储在本机 .hunterly 目录的 hunterly.db 中。适合正在投递、希望手动控制外联节奏的求职者，需自备端口25可达环境或 hunter.io 备用。",
+   "highlights": [
+    "提供 Chrome 侧边栏扩展，读取当前 LinkedIn 档案并一键保存（每日上限30次，仅读取打开的页面）",
+    "实现邮箱猜测与 SMTP 邮件服务器验证（端口25），并可选用 hunter.io API 作为备用验证渠道",
+    "支持通过本地 Ollama 模型生成外联草稿，以及 Gmail API 创建草稿（不自动发送）"
+   ],
+   "use_cases": [
+    "求职者寻找目标公司招聘经理的工作邮箱并手动发送自荐邮件",
+    "管理外联跟进流程：阶段、第4/9天跟进、退信切换地址、勿扰名单",
+    "在本地离线环境下运行（数据存于本机，仅监听 127.0.0.1）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "后端将用户数据存储于本机 hunterly.db（L147），数据库仅作为应用自身的数据存储，README 未出现任何候选库适配声明。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可（L9、L170）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Data stays in `hunterly.db` inside your `.hunterly` data folder, on your own computer. The web app only answers on 127.0.0.1, forms carry a per-install token, and the extension API accepts JSON from the extension only. ／ Layout: `backend/src/hunterly/` — `app.py` (pages + API), `services.py` (rules), `finder/` (names, patterns, domains, SMTP check, verifier), `drafts.py` (Ollama + template), `gmail.py`, `verifier_worker.py` (VM service). `extension/` — MV3 side panel. ／ uv run hunterly serve            # http://127.0.0.1:8765",
+   "evidence_lines": [
+    147,
+    157,
+    64
+   ]
+  },
+  "fn": "Rishurajgautam24/hunterly",
+  "sha": "45a2cebc3e77",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

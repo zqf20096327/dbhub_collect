@@ -10142,5 +10142,133 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a47b80469ebe": {
+  "identity": {
+   "one_liner": "AI 记忆与上下文引擎，提供记忆提取、用户画像与混合搜索 API",
+   "review": "Supermemory 是面向 AI 应用的记忆与上下文引擎，从对话中提取事实、维护用户画像、处理矛盾与遗忘，并提供记忆、RAG、连接器与多模态文件处理 API。供 AI 工具使用者（经插件/MCP）与 AI 应用开发者（经 npm/pypi SDK）使用，支持单二进制本地运行或 Docker 自托管，可用 Ollama 离线运行，数据存储于本地目录或 Docker 卷。",
+   "highlights": [
+    "提供 Memory API：记忆提取、用户画像、混合搜索（RAG+Memory）与文档上传处理",
+    "提供 MCP 服务器及 Claude Code、Cursor、OpenCode 等工具的插件集成",
+    "支持本地单二进制运行与 Docker 部署，可用 Ollama 离线运行"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 AI 编码工具添加跨会话持久记忆",
+    "为 AI Agent/应用通过单一 API 集成记忆、RAG 与用户画像",
+    "自托管本地记忆服务，配合 Ollama 离线处理私有数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明底层使用何种数据库存数据，主题标签含 postgres 但正文未见存储实现证据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " State-of-the-art memory and context engine for AI. ／ npm install supermemory    # or: pip install supermemory ／ First boot sets up the embedded Supermemory graph engine, local embeddings, and your credentials, then prints an API key. The full Memory API — documents, memories, user profiles, hybrid search — runs against `http://localhost:6767`.",
+   "evidence_lines": [
+    3,
+    150,
+    242
+   ]
+  },
+  "fn": "supermemoryai/supermemory",
+  "sha": "a47b80469ebe",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5055c616be9a": {
+  "identity": {
+   "one_liner": "基于 Rust+PostgreSQL 的多租户任务队列与调度服务",
+   "review": "一个用 Rust 编写的分布式任务队列与 webhook 投递服务，提供 REST 与 gRPC 双协议 API，支持 cron 定时、DAG 工作流、死信队列、租户配额和 Prometheus/Grafana 监控。数据存储依赖 PostgreSQL，可选 Redis 做缓存与发布订阅。适合需要自托管任务调度与异步作业分发的开发与运维团队部署使用。",
+   "highlights": [
+    "提供 REST 与 gRPC API，支持 WebSocket/SSE 实时任务状态更新",
+    "支持 cron 定时任务、DAG 依赖工作流与死信队列重试",
+    "内置 Prometheus 指标与 Grafana 面板，多租户限额可通过环境变量覆盖"
+   ],
+   "use_cases": [
+    "分布式系统中异步任务与作业调度的自托管部署",
+    "向外部端点可靠投递 webhook 并跟踪状态",
+    "按租户/套餐维度管理作业配额与限流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **High Performance**: Built on Rust + Tokio + PostgreSQL with Redis-backed caching ／ |`DATABASE_URL`|✅|-|PostgreSQL connection string| ／ - PostgreSQL 16+ (or use Docker)",
+     "lines": [
+      15,
+      69,
+      160
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它以 PostgreSQL 为必需的存储后端、Redis 做缓存，属于使用数据库的应用而非为数据库服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Job queue + worker coordination service built with Rust** ／ |`DATABASE_URL`|✅|-|PostgreSQL connection string| ／ - PostgreSQL 16+ (or use Docker)",
+   "evidence_lines": [
+    7,
+    69,
+    160
+   ]
+  },
+  "fn": "Spooled-Cloud/spooled-backend",
+  "sha": "5055c616be9a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

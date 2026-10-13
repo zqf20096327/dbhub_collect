@@ -8139,5 +8139,153 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d02b78d786f9": {
+  "identity": {
+   "one_liner": "自托管 API 优先的 AI 呼叫中心，FreeSWITCH+语音模型实时应答",
+   "review": "这是一个用 Go 编写的单二进制 AI 呼叫中心应用：来电由 FreeSWITCH 接入后交给语音模型（OpenAI Realtime/Qwen 等） speech-to-speech 应答，必要时经 mod_callcenter 队列转人工坐席；提供 REST+SSE API 与 OpenAPI 规范、Chrome 坐席扩展，FreeSWITCH 的目录与队列配置从 PostgreSQL 数据库读取。面向需要自托管、可嵌入式呼叫中心的团队。",
+   "highlights": [
+    "单 Go 二进制内置 REST API、SSE 事件流与 Web 界面，依赖 PostgreSQL 与 FreeSWITCH",
+    "支持 qwen/doubao/openai/gemini/gateway 等实时语音 provider，按部署启动时选定",
+    "FreeSWITCH 目录与 mod_callcenter 队列经 Lua 从数据库读取，加坐席/队列即数据库变更"
+   ],
+   "use_cases": [
+    "自托管呼叫中心，AI 坐席自动应答来电并按流程转人工队列",
+    "通过 REST+SSE API 与 OpenAPI 规范将呼叫能力嵌入自有产品",
+    "中英双语客服场景，含坐席桌面、主管看板与队列视图"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "inside it — plus PostgreSQL and FreeSWITCH. ／ make dev-up # PostgreSQL in Docker",
+     "lines": [
+      13,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 PostgreSQL 存储呼叫记录、坐席与队列等自身数据（FreeSWITCH 目录也从该数据库读取），属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "inside it — plus PostgreSQL and FreeSWITCH. ／ **Hands over to people properly.** Transfers go into `mod_callcenter` queues, ／ FreeSWITCH reads its directory and its `mod_callcenter` queues *from the",
+   "evidence_lines": [
+    13,
+    53,
+    90
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "rasonyang/ai-native-callcenter",
+  "sha": "d02b78d786f9",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "471241d41987": {
+  "identity": {
+   "one_liner": "Arweave 永久网络之上的 permaweb 模块化网关节点",
+   "review": "AR.IO 网关节点，用于在 Arweave 永久存储网络之上提供 permaweb 数据的索引与访问服务，支持 ANS-104 捆绑包的解包与索引、CDB64 根交易索引、webhook 事件推送及 Envoy 代理部署。面向希望运行网关、索引 permaweb 数据或搭建捆绑器侧车服务的节点运营者和开发者，通过环境变量与 Docker Compose 配置运行。",
+   "highlights": [
+    "支持 ANS-104 捆绑数据的解包、索引与过滤器配置",
+    "内置三个预构建 CDB64 索引，将数据项 ID 解析到包含它的 L1 Arweave 交易",
+    "提供 webhook 发射功能，在交易或数据项被索引且匹配过滤器时通知指定服务器"
+   ],
+   "use_cases": [
+    "部署独立的 permaweb 网关以服务 Arweave 数据",
+    "以捆绑器侧车方式接收并打包数据项上传",
+    "通过 index-swarm 在多个网关间共享索引数据带"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "### Initialize the SQLite DB",
+     "lines": [
+      18
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "pipeline, ClickHouse, ArNS resolution, the observer/cranker, and common",
+     "lines": [
+      48
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "该网关使用 SQLite 存储自身数据（yarn db:migrate 初始化数据库），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Initialize the SQLite DB ／ docker build . -t ar-io-core:latest ／ You can run the ar.io gateway as a standalone docker container:",
+   "evidence_lines": [
+    18,
+    74,
+    71
+   ]
+  },
+  "fn": "ar-io/ar-io-node",
+  "sha": "471241d41987",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

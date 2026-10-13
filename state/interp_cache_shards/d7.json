@@ -10286,5 +10286,77 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2b5b3df60c19": {
+  "identity": {
+   "one_liner": "捕获鼠标高亮文本并存入本地 SQLite 的 Linux 采集工具",
+   "review": "该工具监控 X11/Wayland 的鼠标选中文本，自动记录到本地 SQLite 数据库并附带会话名与来源应用信息，提供 CLI、tkinter GUI 和系统托盘三种前端，支持搜索、标签、以及 Markdown/CSV/JSON 导出。面向在 Linux 上频繁划选文本的研究者和写作者；仅支持 Linux，Wayland 下部分功能受限。",
+   "highlights": [
+    "捕获 X11 PRIMARY 选区并即时写入本地 SQLite，记录来源应用与窗口（X11/Wayland）",
+    "提供 CLI、tkinter GUI、系统托盘三种前端，共享同一采集引擎",
+    "支持会话分组、标签、实时搜索，以及 Markdown/CSV/JSON 导出"
+   ],
+   "use_cases": [
+    "研究者/写作者持续采集阅读中划选的文本片段并留存检索",
+    "按会话整理摘录并导出为 Markdown 笔记或 CSV/JSON 数据",
+    "排除密码管理器等敏感应用以避免误采集"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "to a local SQLite database, tagged with a session name and which app the text ／ - **SQLite storage** — every capture is stored locally at `~/.local/share/highlight_scraper/captures.db` ／ |`db_path`|`~/.local/share/highlight_scraper/captures.db`|SQLite database location|",
+     "lines": [
+      4,
+      15,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该工具使用 SQLite 存储捕获数据，而非为 SQLite 生态提供工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Watches text you highlight with your mouse — no Ctrl+C needed — and logs it ／ - **SQLite storage** — every capture is stored locally at `~/.local/share/highlight_scraper/captures.db` ／ - **Three front ends** — CLI, tkinter GUI, system tray icon — all running on the same engine",
+   "evidence_lines": [
+    3,
+    15,
+    23
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "BleedingCodes/highlight-scraper",
+  "sha": "2b5b3df60c19",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

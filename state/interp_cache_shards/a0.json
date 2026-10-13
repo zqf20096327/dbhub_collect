@@ -8654,5 +8654,210 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d2104dc4a177": {
+  "identity": {
+   "one_liner": "SQLite 源码 amalgam 的 Zig build.zig 构建脚本",
+   "review": "该仓库提供 Zig 的 build.zig 脚本，将 SQLite 官方源码 amalgam 编译为静态链接的 sqlite3 库与 sqlite3 shell 可执行文件，开发者可通过 zig fetch 添加依赖并在自己的构建脚本中引用库或 shell 构件，脚本本身采用 MIT 许可，SQLite 本体为公有领域。",
+   "highlights": [
+    "将 SQLite 源码 amalgam 构建为静态链接的 sqlite3 库与 shell 可执行文件",
+    "支持通过 zig fetch --save 作为 Zig 包依赖引入",
+    "构建脚本采用 MIT 许可"
+   ],
+   "use_cases": [
+    "在 Zig 项目中以依赖方式集成 SQLite 库",
+    "自定义 target 与 optimize 配置构建 SQLite",
+    "构建 sqlite3 shell 命令行可执行文件"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "This build script takes the SQLite source code amalgam and exposes a statically ／ linked `sqlite3` library and the `sqlite3` shell executable. ／ zig fetch --save git+https://github.com/allyourcodebase/sqlite3",
+     "lines": [
+      1,
+      2,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为构建和分发 SQLite 本体库提供服务，属于数据库生态的构建工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "构建脚本 MIT 许可，SQLite 本体为公有领域",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This build script takes the SQLite source code amalgam and exposes a statically ／ linked `sqlite3` library and the `sqlite3` shell executable. ／ This build script is licensed under the MIT License.",
+   "evidence_lines": [
+    1,
+    2,
+    21
+   ]
+  },
+  "fn": "allyourcodebase/sqlite3",
+  "sha": "d2104dc4a177",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fb748dfe65c6": {
+  "identity": {
+   "one_liner": "BloodHound CE 的内存图引擎，以 DAWGS 驱动形式加速图查询",
+   "review": "BloodTrail 为 BloodHound CE 提供一个替代图驱动：在内存中维护与 PostgreSQL 逐写同步的图副本，路径与 Cypher 查询由内存引擎应答，无法保证与 PostgreSQL 一致的结果则回退到 PostgreSQL。面向运行大型 Active Directory 环境下 BloodHound 部署的管理员，通过安装脚本替换 Docker 镜像，要求 BloodHound v9.6.0 以上。",
+   "highlights": [
+    "以 DAWGS 驱动接入 BloodHound，不修改其 ingest、analysis、API 和 UI",
+    "内存副本与 PostgreSQL 逐写同步，无法精确应答的查询委托回 PostgreSQL",
+    "支持快照落盘与启动时依据 PostgreSQL 写计数校验后复用，缩短重启时间"
+   ],
+   "use_cases": [
+    "大型 AD 环境下加速 BloodHound 的攻击路径与预置图查询",
+    "在普通硬件上运行大规模图查询以降低内存配置需求",
+    "从 Neo4j 后端迁移到 PostgreSQL 后端的 BloodHound 部署切换"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "served from an in-memory replica that is kept in sync with PostgreSQL write by write. ／ Anything the engine cannot answer exactly as PostgreSQL would is delegated to PostgreSQL, ／ bag and a few indexes PostgreSQL does not have. Edge properties stay in PostgreSQL and",
+     "lines": [
+      10,
+      11,
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 BloodHound 的 DAWGS 图驱动组件，通过替换镜像服务于该数据库应用的查询路径",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "An in-memory graph engine underneath BloodHound CE, ／ - **A driver, not a fork.** BloodTrail is a DAWGS driver named `bloodtrail`, selected by ／ - **An in-memory replica.** The driver keeps the graph in compact arrays (dense node ids,",
+   "evidence_lines": [
+    3,
+    63,
+    68
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "MihhailSokolov/BloodTrail",
+  "sha": "fb748dfe65c6",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f761299eeebe": {
+  "identity": {
+   "one_liner": "WinUI 3 桌面应用脚手架模板，经 dotnet new 生成含 SQLite 数据层的应用外壳",
+   "review": "该仓库是 WinUI 3 桌面应用的项目模板（dotnet new 模板 + 示例应用），生成包含 MVVM、托盘、Velopack 自动更新、多语言、诊断页和发布流水线的应用外壳；数据层默认提供 SQLite 与类型化 HTTP 客户端，且两者都可在脚手架时移除。面向需要完整应用骨架的 Windows 桌面开发团队。",
+   "highlights": [
+    "通过 dotnet new 安装模板并生成完整 WinUI 3 应用外壳",
+    "提供 SQLite 数据层，可在脚手架时选择移除",
+    "包含 4 种更新方式 × 2 种分发方式（portable/MSIX）的组合矩阵"
+   ],
+   "use_cases": [
+    "为 Windows 桌面应用快速生成带设置/托盘/更新的项目骨架",
+    "以 SQLite 作为本地数据层的桌面应用开发",
+    "生成可提交 Microsoft Store 的 MSIX 打包应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite data layer and typed HTTP client (each droppable at scaffold time)",
+     "lines": [
+      80
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "该模板生成的应用使用 SQLite 存数据，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Production-ready **WinUI 3 starter template** for Windows desktop apps: a real app shell with updates, settings, diagnostics, and release automation already wired up. ／ - SQLite data layer and typed HTTP client (each droppable at scaffold time) ／ This repo is both a full sample app and the source of the project template. It demonstrates a working desktop app model that you can customize rather than build from a bare shell.",
+   "evidence_lines": [
+    9,
+    80,
+    198
+   ]
+  },
+  "fn": "Fettah010/winui-3-easy-template",
+  "sha": "f761299eeebe",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

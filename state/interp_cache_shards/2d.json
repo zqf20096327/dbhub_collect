@@ -8107,5 +8107,75 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2645668d1745": {
+  "identity": {
+   "one_liner": "自托管邮件同步服务，将 IMAP 邮箱同步入 PostgreSQL 并经 MCP 提供给 AI 代理",
+   "review": "MailFathom 是一个自托管邮件服务：把 IMAP 账户同步到用户自有的 PostgreSQL 数据库，建立索引后通过 Model Context Protocol 以 21 个工具的形式供 AI 代理读取、检索、标记、起草和发送邮件。读取只针对本地副本，写入权限按账户和凭证逐项授予且默认关闭。面向希望让 AI 代理安全访问自己邮箱的自托管用户，使用 .NET 构建，支持 Docker Compose、Kubernetes、Helm、systemd 等部署形态。",
+   "highlights": [
+    "将 IMAP 邮箱同步到用户自有的 PostgreSQL 并建立词汇与嵌入相似度检索索引",
+    "通过 MCP 提供 21 个工具，覆盖读信、标记、起草、发送与联系人管理",
+    "权限按工具逐项授予，发送默认关闭，凭证以引用形式存放于配置之外"
+   ],
+   "use_cases": [
+    "让 AI 代理通过 MCP 搜索、引用并回答本地邮件副本中的问题",
+    "在邮件服务器不可用时离线读取本地同步副本",
+    "受控地让代理执行标记、起草或发送邮件等写操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "MailFathom synchronizes your IMAP accounts into a PostgreSQL database you run, indexes that copy, and serves it to AI agents as tools over the Model Context Protocol. Reading answers from your copy rather than from a mail server, and it never marks anything re",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用用户自有的 PostgreSQL 存储同步的邮件数据，属于依赖数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MailFathom synchronizes your IMAP accounts into a PostgreSQL database you run, indexes that copy, and serves it to AI agents as tools over the Model Context Protocol. Reading answers from your copy rather than from a mail server, and it never marks anything read there. Writing — marking, drafting, sending — is a separate act each account and each credential has to be given, and every one of them is off until you turn it on. ／ **Docker Compose is the recommended first installation.** It is the only shape that provisions PostgreSQL for you, and its defaults publish both ports on loopback, so nothing is reachable from another machine until you decide it should be. ／ |**Reading your mail**|`list_accounts`, `list_emails`, `search_emails` — ranked lexically, and by embedding similarity once you configure a model — `get_email_content` for up to ten messages in full, and `ask_mail`, which answers a question from your mail and cites every message it drew on|",
+   "evidence_lines": [
+    12,
+    20,
+    60
+   ]
+  },
+  "fn": "fathomise/MailFathom",
+  "sha": "2645668d1745",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

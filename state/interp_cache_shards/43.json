@@ -9223,5 +9223,77 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d736f5d70beb": {
+  "identity": {
+   "one_liner": "Ruby 内存事实库，存储属性记录并提供 Lisp 式谓词查询",
+   "review": "一个 Ruby gem，将事实（关联数组）保存在内存中，支持插入、删除、S 表达式查询、ACID 事务以及导出/导入持久化。它是一个数据库引擎/开发库，而非服务端数据库——数据在进程退出时消失，除非显式导出，且基础类不是线程安全的。面向需要在 Ruby 应用程序中处理事实集合的开发人员。",
+   "highlights": [
+    "提供 Lisp 风格 S-expression 查询语言，支持聚合、子查询和自定义术语",
+    "通过 copy-on-write journaling 实现 ACID 事务",
+    "支持通过导出/导入进行持久化，并配备 ToJSON/ToXML/ToYAML 输出装饰器"
+   ],
+   "use_cases": [
+    "在 Ruby 程序中管理内存中的事实/记录集合",
+    "基于谓词规则查询和转换记录",
+    "嵌入式事实存储的快照持久化"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite (fixed-column tables on disk) and ／ forbidden by `Factbase::Light`. This differs from SQLite's",
+     "lines": [
+      242,
+      280
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "WAL and PostgreSQL's",
+     "lines": [
+      281
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它本身就是一个数据库引擎/开发库，而非使用外部数据库的应用程序。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This Ruby gem manages an in-memory database of facts. ／ The entire database is a single flat Ruby ／ Transactions are ACID and implemented via lazy copy-on-write journaling.",
+   "evidence_lines": [
+    19,
+    238,
+    274
+   ]
+  },
+  "fn": "yegor256/factbase",
+  "sha": "d736f5d70beb",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

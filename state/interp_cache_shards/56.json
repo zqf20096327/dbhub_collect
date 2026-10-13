@@ -8208,5 +8208,84 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d7b79aa96d8b": {
+  "identity": {
+   "one_liner": "自托管文档与数据库应用，AI 代理编辑以可审阅的修订形式落地",
+   "review": "Stuga 是一个自托管的文档与数据库协作应用，供个人或团队使用。它通过 MCP 接入 Claude Code、Codex 等代理，代理的修改默认以修订形式等待人工逐条接受或拒绝。技术上是单个 Node.js 进程配合 Postgres（pgvector、pg_search），每个数据库为独立 SQLite 文件，支持 Docker 或 Mac 安装。",
+   "highlights": [
+    "代理编辑默认以修订形式等待人工接受或拒绝，并记录代理、模型与每次变更",
+    "通过 MCP 连接代理，提供作用域登录、API 密钥限制与完整审计日志",
+    "支持关键词（BM25）与语义（pgvector）搜索，权限检查在 SQL 语句内完成"
+   ],
+   "use_cases": [
+    "团队希望引入 AI 代理编辑文档但保留人工审核控制",
+    "自托管知识库，替代 Notion 并支持 Notion/Obsidian 导入",
+    "通过 MCP 让代理读写带权限约束的文档和 SQL 数据库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres and Node.js (docs/install/macos.md). ／ - **Docker** on x86-64 or arm64, such as a Linux server or a NAS: `install.sh` starts Postgres ／ A node is one Node.js process and Postgres with pgvector and pg_search; people open it in a browser.",
+     "lines": [
+      79,
+      80,
+      87
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Databases with SQL.** Typed tables beside your documents, each database its own SQLite file,",
+     "lines": [
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是使用 Postgres 与 SQLite 存储数据的文档/数据库协作应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only，integrations/ 目录为 MIT",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted documents and databases where edits from Claude Code, Codex or any MCP client arrive as ／ - **Databases with SQL.** Typed tables beside your documents, each database its own SQLite file, ／ A node is one Node.js process and Postgres with pgvector and pg_search; people open it in a browser.",
+   "evidence_lines": [
+    5,
+    38,
+    87
+   ]
+  },
+  "fn": "stuga-dev/stuga",
+  "sha": "d7b79aa96d8b",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

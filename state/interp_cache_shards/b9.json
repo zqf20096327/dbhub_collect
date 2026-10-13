@@ -8992,5 +8992,86 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e4c887c187a": {
+  "identity": {
+   "one_liner": "GaussDB 的 Laravel Eloquent ORM 适配层，经 PDO_ODBC 官方驱动连接",
+   "review": "为 GaussDB Kernel 507 提供 Laravel 12 Eloquent 适配层的 PHP Composer 包，支持模型 CRUD、事务、Schema 操作与 Migration，通过官方 Unicode ODBC 驱动访问集中式 A 模式和分布式 ORA 模式。适合需要在 Laravel 应用中接入 GaussDB 的 PHP 开发者；包未发布 Packagist，需从源码安装，分布式外键等场景有明确兼容边界。",
+   "highlights": [
+    "通过 Laravel 数据库连接扩展机制注册 gaussdb 驱动，覆盖 CRUD、事务保存点、Schema 操作与 Artisan Migration",
+    "支持集中式 A 模式与分布式 ORA 模式，分布式建表可生成 DISTRIBUTE BY HASH",
+    "提供离线回归测试与真实数据库契约/迁移测试脚本"
+   ],
+   "use_cases": [
+    "在现有 Laravel 12 应用中接入 GaussDB 数据库",
+    "对 Eloquent 模型、查询构造器与 Migration 进行 GaussDB 兼容性验证",
+    "分布式 ORA 模式下的建表与迁移流程验证"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB Laravel Eloquent ORM 适配 ／ 本项目为 GaussDB Kernel 507 提供 Laravel 12 Eloquent 数据库适配层，让模型、查询构造器和 Migration 通过 PHP PDO_ODBC 与**官方 GaussDB Unicode ODBC 驱动**访问集中式 A 模式和分布式 ORA 模式数据库。适合需要在现有 Laravel 应用中接入 GaussDB 的 PHP 开发者。",
+     "lines": [
+      1,
+      7
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "在应用的私有环境配置中设置连接参数及 `DB_CONNECTION=gaussdb`。集中式使用 `GAUSS_MODE=A`、空分布键；分布式使用 `GAUSS_MODE=ORA`，并将 `GAUSS_DISTRIBUTION_KEY` 设为建表使用的列，例如 `id`。**分布式数据库的兼容模式以实际 `pg_database.datcompatibility` 为准**；本轮公有云实例要求 `ORA`，不能简单套用集中式的 `A`。",
+     "lines": [
+      49
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "1. PHP **8.2+**、Composer、`pdo`、`pdo_odbc`；运行离线回归还需 `pdo_sqlite`。本包依赖 Laravel/Illuminate 12.x，版本以 composer.json 为准。",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "本项目是为 GaussDB 提供ORM适配能力的数据库生态组件，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目为 GaussDB Kernel 507 提供 Laravel 12 Eloquent 数据库适配层，让模型、查询构造器和 Migration 通过 PHP PDO_ODBC 与**官方 GaussDB Unicode ODBC 驱动**访问集中式 A 模式和分布式 ORA 模式数据库。适合需要在现有 Laravel 应用中接入 GaussDB 的 PHP 开发者。 ／ 适配层通过 Laravel 的数据库连接扩展机制注册 `gaussdb` 驱动，不修改 `vendor/laravel`。已覆盖模型 CRUD、自增主键回填、条件查询、分页、聚合、Join、关系预加载、事务与保存点、Schema 操作和 Artisan Migration。`upsert()` 使用 `MERGE INTO`；`insertOrIgnore()` 与 `insertOrIgnoreUsing()` 通过逐行插入及保存点处理唯一键冲突。分布式建表可按配置的列生成 `DISTRIBUTE BY HASH`。",
+   "evidence_lines": [
+    7,
+    22
+   ]
+  },
+  "fn": "jarrenL/GaussDB-Laravel-Eloquent-ORM",
+  "sha": "0e4c887c187a",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

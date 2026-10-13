@@ -10286,5 +10286,72 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ab6860cf74c0": {
+  "identity": {
+   "one_liner": "Scala 3 Web 框架，从 case class 派生 Postgres 表与 CRUD 路由",
+   "review": "Eezo 是一个 Scala 3 Web 框架，开发者声明 case class 数据模型后，框架自动派生对应的 Postgres 表、HTML 表单和 7 个 CRUD 路由，并基于虚拟线程以 direct style 运行，支持 schema 变更检测并生成 SQL 迁移文件。面向使用 Scala 3 的 Web 开发者，需要 JDK 25+ 与 sbt，通过 sbt 插件安装，可部署到 Fly.io。",
+   "highlights": [
+    "从 case class 自动派生 Postgres 表、类型安全查询 API 和 7 个 CRUD 路由",
+    "检测模型 schema 变更并生成指纹化的 SQL 迁移，提供 status/sync/freeze/migrate 命令",
+    "基于虚拟线程运行，服务端渲染 UI 并通过 websocket 下发 DOM diff 补丁"
+   ],
+   "use_cases": [
+    "用 Scala 3 快速搭建以数据模型为中心的 CRUD Web 应用",
+    "需要模型变更自动同步数据库 schema 并生成迁移的项目",
+    "在 Fly.io 上以单命令部署的服务端渲染应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres, its HTML form, and CRUD routes that serve it. ／ A case class automatically derives its Postgres table and a type-safe query API. ／ served in a browser over rows in Postgres, with no need for a controller, repository or template",
+     "lines": [
+      20,
+      29,
+      33
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供数据库层组件 eezo-db（连接池、sql 插值器、Table、schema 迁移），为 Postgres 应用开发提供框架服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Declare your data model, and eezo derives the rest from that one declaration: its table in ／ |`eezo-db`|the database layer: the pool, the `sql` interpolator, transactions, `Table`, schema commands and migrations, `DbApp`| ／ that derives `Table` beside `Form` and `Resource` gets its seven routes backed by Postgres, and",
+   "evidence_lines": [
+    19,
+    83,
+    145
+   ]
+  },
+  "fn": "Eezo-framework/eezo",
+  "sha": "ab6860cf74c0",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

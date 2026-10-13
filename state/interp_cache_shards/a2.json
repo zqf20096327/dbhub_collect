@@ -9278,5 +9278,147 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e62f46fcc2e5": {
+  "identity": {
+   "one_liner": "自托管个人笔记仓库，基于 PostgreSQL/pgvector 存储",
+   "review": "Rote 是一个可自托管的个人笔记与文章记录应用，提供 Open API、Markdown 文章、iOS 客户端，并内置可选的 AI Memory 功能（基于 pgvector 的语义搜索与索引）。面向想自主掌控数据的个人用户，通过 Docker 或 Dokploy 一键部署，默认使用 pgvector/pgvector:pg17 镜像。AI 功能默认关闭，需管理员在后台配置聊天与嵌入模型后启用。",
+   "highlights": [
+    "提供 Open API，支持自托管部署（Docker/Dokploy），数据可自由导出",
+    "可选 Memory 功能：基于 pgvector 的语义搜索、相关笔记关联与流式 AI 对话",
+    "支持 OpenAI 兼容的多种聊天/嵌入服务提供商，AI 权限按角色或用户控制"
+   ],
+   "use_cases": [
+    "个人自托管笔记/短文记录与知识管理",
+    "通过 Open API 或浏览器扩展、Raycast 等第三方工具快速记录内容",
+    "在自有笔记数据上开启 AI 语义检索与对话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Admin-Controlled AI**: AI and public semantic discovery are disabled by default. New instances default vector storage and automatic indexing to on; confirming the first enabled AI configuration prepares pgvector and starts background indexing. Existing exp ／ > Rote now uses `pgvector/pgvector:pg17-trixie` by default. It behaves like PostgreSQL 17 and additionally supports the optional AI vector extension. Plain `postgres:17` is only a temporary compatibility path and may not be supported by future Rote versions. ／ 4. Optional: if your image tag includes Memory support, open `Admin -> AI Settings` to configure chat and embedding providers. Vector storage and automatic indexing default to on; confirming the first enabled AI configuration prepares pgvector and indexes exis",
+     "lines": [
+      29,
+      40,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Rote 是使用 PostgreSQL/pgvector 存储笔记数据的自托管应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Self-Hosted Deployment**: One-click deployment using Docker or Dokploy ／ > Rote now uses `pgvector/pgvector:pg17-trixie` by default. It behaves like PostgreSQL 17 and additionally supports the optional AI vector extension. Plain `postgres:17` is only a temporary compatibility path and may not be supported by future Rote versions. ／ Memory is optional and disabled by default. It is available in the `develop` image and will be available in stable images after the next release that includes Memory. Administrators can enable it from `Admin -> AI Settings` after configuring chat and embedding providers. Rote supports OpenAI-compatible providers, including OpenAI, OpenRouter, Ollama / LM Studio, DeepSeek, SiliconFlow, DashScope / Qwen, Zhipu GLM, Moonshot / Kimi, Volcengine Ark, Tencent Hunyuan, Baidu Qianfan, and custom OpenAI-compatible endpoints.",
+   "evidence_lines": [
+    25,
+    40,
+    86
+   ]
+  },
+  "fn": "Rabithua/Rote",
+  "sha": "e62f46fcc2e5",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "76d22b154580": {
+  "identity": {
+   "one_liner": "Stop Place 注册站后端，基于 Spring Boot 与 PostgreSQL/PostGIS",
+   "review": "Tiamat 是挪威全国使用的停靠点注册系统后端，提供 NeTEx 数据导入导出、GraphQL 查询与变更接口、实体版本历史与差异比较、ID 映射表等功能，需配合 PostgreSQL/PostGIS 数据库运行，面向公共交通数据管理与维护人员。",
+   "highlights": [
+    "提供 NeTEx 格式数据的导入与导出，支持异步导出到 Google Cloud Storage",
+    "提供 GraphQL API，支持查询与变更操作，并保留实体版本历史与差异对比工具",
+    "使用 Hazelcast 内存网格支持 Kubernetes 或 AWS Fargate 上的多实例运行"
+   ],
+   "use_cases": [
+    "公共交通停靠点数据的集中注册与管理",
+    "NeTEx 标准格式数据的批量导入导出",
+    "停靠点变更历史的审计与版本比较"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Run with external properties file and PostgreSQL. ／ - Run with external properties file and PostgreSQL for low ／ Local development needs a PostgreSQL database with the PostGIS extension running, and Tiamat's Spring Boot",
+     "lines": [
+      96,
+      109,
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明本地运行与部署均需 PostgreSQL/PostGIS 数据库存数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Local development needs a PostgreSQL database with the PostGIS extension running, and Tiamat's Spring Boot ／ Start a PostgreSQL 17 instance with the PostGIS extension, matching the settings in ／ docker run --name tiamat-postgis -e POSTGRES_USER=tiamat -e POSTGRES_PASSWORD=tiamat -p 37432:5432 -d postgis/postgis:17-master",
+   "evidence_lines": [
+    117,
+    127,
+    132
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "entur/tiamat",
+  "sha": "76d22b154580",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
