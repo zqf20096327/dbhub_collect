@@ -22,7 +22,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-Open http://localhost:3000 and create an account. The first start builds the image, waits for Postgres and applies the database migrations before the app starts.
+Open http://localhost:3000 and create an account. The port answers only on the machine itself; for a server, see HTTPS below. The first start pulls the released images, waits for Postgres and applies the database migrations before the app starts. Images are published for amd64 and arm64; where there's none for your version, Compose builds from the checkout instead.
 
 What runs:
 
@@ -32,6 +32,7 @@ What runs:
 | `migrate` | Applies migrations (`prisma migrate deploy`) and exits. |
 | `app` | LockIn on port 3000. Note images and PDFs are stored in the `uploads` volume. |
 | `ingest` | Optional. PDF and web-page text extraction plus server-side embeddings. |
+| `caddy` | Optional. HTTPS in front of the app, see below. |
 
 To add text extraction and server-side embeddings, set `INGEST_SECRET` (any long random string) and `INGEST_URL=http://ingest:8080` in `.env`, then:
 
@@ -39,13 +40,34 @@ To add text extraction and server-side embeddings, set `INGEST_SECRET` (any long
 docker compose --profile ingest up -d
 ```
 
-The ingest image carries its embedding model, so it's about 1 GB. Without it, keyword search works, and the browser does embeddings itself.
+The ingest image carries its embedding model, so it's about 1 GB. Without it, keyword search works, and the browser does embeddings itself. It reads two documents at a time and stops one that takes over 140 seconds; a third waits 20 seconds for a slot and is then told the service is busy. `PARSE_CONCURRENCY` in `.env` raises the first number, on a machine with a core and a few hundred MB to spare per document.
 
-To update, pull and rebuild. Migrations run on start:
+To update, pull the new release. The compose file names the version it goes with, so the images always match the checkout. Migrations run on start:
 
 ```bash
-git pull && docker compose up -d --build
+git pull && docker compose pull && docker compose up -d
 ```
+
+To run the code in your checkout instead of a release, build it: `docker compose up -d --build`.
+
+`docker compose ps` shows whether the app is healthy; the same check is at `/api/health` (200 when the app can reach its database) for an uptime monitor.
+
+### Backups
+
+Everything lives in two volumes: `db` (Postgres) and `uploads` (note images and PDFs). Back up both, and take a backup before updating.
+
+```bash
+# back up
+docker compose exec -T db pg_dump -U lockin -Fc lockin > lockin.dump
+docker compose cp app:/data/uploads ./uploads-backup
+
+# restore, into a stack that is up
+docker compose exec -T db pg_restore -U lockin -d lockin --clean --if-exists < lockin.dump
+docker compose cp ./uploads-backup/. app:/data/uploads
+docker compose exec -u root app chown -R lockin /data/uploads   # copied files arrive owned by the host user
+```
+
+Keep `AUTH_SECRET` with the backups. A restored copy with a different secret signs everyone out.
 
 Settings in `.env`:
 
@@ -54,11 +76,71 @@ Settings in `.env`:
 | `AUTH_SECRET` | Required. Signs sessions and upload links. |
 | `PUBLIC_URL` | The address people open LockIn at. Default `http://localhost:3000`. |
 | `LOCKIN_PORT` | Host port. Default `3000`. |
+| `LOCKIN_BIND` | Which of the machine's addresses that port listens on. Default `127.0.0.1`: the machine itself, which is you or a proxy running on it. |
+| `LOCKIN_VERSION` | The release to run, such as `1.0.0`. Default: the release your checkout is. |
 | `POSTGRES_PASSWORD` | Password for the bundled Postgres. |
+| `SIGNUP` | `open` (the default) lets anyone who can reach the address make an account. `closed` stops new accounts once the first one exists. |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Optional. "Continue with Google" appears only when both are set. |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` | Optional. Outgoing email, see Accounts below. |
+| `STORAGE_QUOTA_MB` | Megabytes of images and PDFs each account may store. Default `1024`; `0` for no ceiling. |
+| `RATE_LIMITS` | `off` drops the limits below. Default `on`. |
+| `TRUSTED_PROXY_HOPS` | How many reverse proxies stand in front of LockIn. Default `1`; `0` when visitors reach the port directly. |
 | `INGEST_URL`, `INGEST_SECRET` | Optional. See above. |
 
-Put a reverse proxy (Caddy, nginx, Traefik) in front for HTTPS, and set `PUBLIC_URL` to the public address.
+### HTTPS
+
+On a machine the internet can reach, LockIn needs HTTPS: without it sessions and agent tokens cross the network in the clear, and browsers won't run a local model. The `https` profile adds Caddy, which gets a certificate from Let's Encrypt and renews it. Point your domain at the machine, open ports 80 and 443, and set in `.env`:
+
+```bash
+PUBLIC_URL=https://notes.example.com   # no trailing slash
+```
+
+```bash
+docker compose --profile https up -d
+```
+
+The proxy's settings are in `Caddyfile`: a year of `Strict-Transport-Security`, and a 60 MB cap on a request's body.
+
+With a proxy of your own on the machine (nginx, Traefik) leave the profile off, set `PUBLIC_URL`, point the proxy at `127.0.0.1:3000` and have it send `Strict-Transport-Security`. That's the one security header LockIn leaves out, since only the proxy knows the site is served over HTTPS; the rest (a content security policy, no framing by other sites, no content sniffing) it sends itself.
+
+Port 3000 isn't open to the network, so the proxy can't be gone around. To use LockIn from other machines without a proxy, on a home network say, set `LOCKIN_BIND=0.0.0.0` and `TRUSTED_PROXY_HOPS=0`. Docker publishes that port past most host firewalls, and everything, passwords and agent tokens included, then travels unencrypted.
+
+### Accounts
+
+Anyone who can open the address can sign up, unless you set `SIGNUP=closed`: make your own account first, then close it.
+
+With `SMTP_HOST` set, LockIn sends two emails. A new account gets a link to confirm its address and can't sign in until it's opened, and "Forgot password" sends a link that sets a new one. The links are built from `PUBLIC_URL`, so set it to the address people really use. Without SMTP there's no email: accounts sign in straight away, and you reset a forgotten password yourself:
+
+```bash
+scripts/set-password.sh someone@example.com
+```
+
+Changing or resetting a password signs that account out everywhere. Settings has "Change password" and "Delete account", which removes the notebook, its files and every agent's access.
+
+"Continue with Google" makes a new account, or opens the existing one with that address if the address was confirmed. It won't attach to an account made with a password whose address was never confirmed, so nobody can claim an address ahead of its owner.
+
+### Limits
+
+LockIn counts a few things so one caller can't wear the instance out, and answers `429` with `Retry-After` past the limit:
+
+| | Limit |
+|---|---|
+| Sign-in tries | 10 in ten minutes for one address from one network |
+| Sign-ups | 10 an hour from one network |
+| Reset and confirmation emails | 10 and 20 an hour from one network, and one a minute per account |
+| Uploads | 60 a minute per account, within `STORAGE_QUOTA_MB` |
+| Document extraction | 30 an hour per account |
+| Agents (MCP) | 60 requests a minute per token |
+
+Limits per network go by the visitor's address, which LockIn only knows from the `X-Forwarded-For` header its proxy sets. That's another reason to run it behind one. With a CDN in front of the proxy as well, set `TRUSTED_PROXY_HOPS=2` and have the proxy keep the CDN's header (`Caddyfile` says how), or everyone behind the CDN is counted as one visitor. With no proxy at all, `TRUSTED_PROXY_HOPS=0`: a visitor who reaches LockIn directly writes that header themselves, so it isn't believed and those limits count all visitors together.
+
+A request's fields are capped too (a note's body at a million characters, a title at 300). The request body itself is not: let the proxy cap it, at 60 MB or more so PDF uploads still fit (the `https` profile does; `client_max_body_size` in nginx).
+
+### How big a notebook can get
+
+Search by meaning scores a question against every passage of the account's notebook, inside Postgres. Measured on a laptop with the bundled database: 12 ms for an ordinary notebook (a few hundred passages), 0.1 s for 300 notes and three textbooks (3,900 passages), 0.65 s for 2,000 notes and twenty textbooks (26,000 passages). It grows in a straight line with one account's passages and doesn't depend on how many accounts there are. Past that size the stored vectors want pgvector, which isn't used yet.
+
+A subject's page sends all of its notes at once: fine for hundreds of notes in a subject, slow in the thousands (2,000 notes is about 10 MB). Split a subject that large.
 
 ## Connect your agents (MCP)
 
@@ -109,7 +191,7 @@ OLLAMA_ORIGINS=https://your-lockin ollama serve
 
 Running both on localhost needs no configuration.
 
-When your notes outgrow one prompt, Ask stops trimming and starts searching: notes are chunked and embedded (by the ingest service, or in the browser), and a question gets an outline of the subject plus the passages that score as relevant.
+When your notes outgrow one prompt, Ask stops trimming and starts searching: notes are chunked and embedded (by the ingest service, or in the browser), and a question gets an outline of the subject plus the passages that score as relevant. Embedding in the browser downloads the model once from Hugging Face (about 130 MB, then cached); the code that runs it is served by LockIn itself.
 
 Every note and saved resource has a page number in the notebook. The model sees each one labelled with its page and cites it like `[p. 12]`; in the reply that's a link to the note. Under each answer, **From your notebook** lists the passages it used and the pages it cited. A citation of a passage opens the note scrolled to it, with the passage marked.
 
@@ -134,7 +216,7 @@ NEXTAUTH_SECRET=
 NEXTAUTH_URL=     # e.g. http://localhost:3000
 ```
 
-Optional: `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`, `INGEST_URL` / `INGEST_SECRET`, and `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` to store uploads in Supabase Storage instead of `./storage`.
+Optional: `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`, `SIGNUP` and `SMTP_*` (Accounts, above), `INGEST_URL` / `INGEST_SECRET`, and `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` to store uploads in Supabase Storage instead of `./storage`.
 
 `DIRECT_URL` must not be a copy of `DATABASE_URL` on Supabase: pgbouncer in transaction mode can't run DDL, and migrations hang instead of failing.
 
@@ -146,7 +228,7 @@ The Prisma client is generated into `app/generated/prisma/` (not committed) by `
 
 ### Data model
 
-`User ──< Subject ──< Milestone ──< Task ──< Subtask`, with `Subject ──< Resource`, `User ──< ApiToken`, `User ──< OAuthGrant ──< OAuthToken` (apps that signed in) and the chat and embedding tables beside them.
+`User ──< Subject ──< Milestone ──< Task ──< Subtask`, with `Subject ──< Resource`, `User ──< ApiToken`, `User ──< OAuthGrant ──< OAuthToken` (apps that signed in), `User ──< EmailToken` (confirmation and reset links) and the chat and embedding tables beside them.
 
 A note is stored as a `Milestone` row (its title and `notes` markdown), and a subject's Plan tasks can hang off it. The Inbox is a `Subject` with `isInbox`. `Milestone.source` records who wrote a note ("web", or an agent's name), and `witnessedAt` records when the user signed off on an agent's note.
 

@@ -95,16 +95,17 @@ cp .env.example .env
 # 3. 同步配置到 backend/.env
 cp .env backend/.env
 
-# 4. 构建并启动（生产模式）
+# 4. 创建用户数据目录
+mkdir -p userdata
+
+# 5. 构建并启动（生产模式）
+#    后端启动时自动执行数据库迁移，无需手动 alembic upgrade head
 docker compose -f docker-compose.prod.yml build
 docker compose -f docker-compose.prod.yml up -d
 
-# 5. 初始化数据库（首次部署）
-docker exec health-steward-backend alembic upgrade head
-
 # 6. 访问
 # WebUI: http://localhost:5173
-# API 文档: http://localhost:8000/docs
+# API 文档: http://localhost:18000/docs
 ```
 
 ### 开发者部署（开发版，改代码即时生效）
@@ -112,17 +113,15 @@ docker exec health-steward-backend alembic upgrade head
 开发版热重载 + HMR，改后端 Python 自动重载，改前端 TSX 即时更新：
 
 ```bash
-# 1-3. 同上（克隆、配置 .env、cp 到 backend/.env）
+# 1-3. 同上（克隆、配置 .env、cp 到 backend/.env、mkdir userdata）
 
 # 4. 一键启动（开发模式）
+#    后端启动时自动执行数据库迁移，无需手动 alembic upgrade head
 docker compose up -d
 
-# 5. 初始化数据库（首次部署）
-docker exec health-steward-backend alembic upgrade head
-
-# 6. 访问
+# 5. 访问
 # WebUI: http://localhost:5173
-# API 文档: http://localhost:8000/docs
+# API 文档: http://localhost:18000/docs
 ```
 
 > 两种模式共享数据库和用户数据，可随时切换。详见[部署指南](DEPLOYMENT.md)。

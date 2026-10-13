@@ -81,7 +81,7 @@ See the [architecture overview](docs/architecture/index.md) and the [load balanc
 
 Croupier is not a fork. It is a control-plane business layer, and everything underneath is built on open-source components (versions as pinned in `go.mod` / `web/package.json`):
 
-- Server: Go 1.26, [Gin](https://github.com/gin-gonic/gin) for HTTP, [GORM](https://gorm.io) as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), [Casbin](https://casbin.org) for authorization decisions, goose for numbered migrations
+- Server: Go 1.27, [Gin](https://github.com/gin-gonic/gin) for HTTP, [GORM](https://gorm.io) as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), [Casbin](https://casbin.org) for authorization decisions, goose for numbered migrations
 - Transport: the TCP session for Agent↔Server and SDK↔Agent is implemented on the Go standard library `net` + `crypto/tls` (length-prefix framing, protobuf envelope). gRPC is not used; the rationale is in [transport-no-grpc.md](docs/architecture/transport-no-grpc.md)
 - Observability: [OpenTelemetry](https://opentelemetry.io) Go SDK with OTLP HTTP exporter
 - Console: built on [Umi Max](https://umijs.org) and [Ant Design](https://ant.design) / ProComponents; JSON Schema forms are driven by [RJSF](https://rjsf.github.io/react-jsonschema-form/), and the editor is [Monaco](https://microsoft.github.io/monaco-editor/)
@@ -149,6 +149,7 @@ Croupier does not adopt a SaaS multi-tenant abstraction. The standard business s
 | SDKs             | `sdks/`               | Multi-language SDKs (go, js, python, java, csharp, cpp)         |
 | Dashboard        | `web/`                | Web console (React + Ant Design)                                |
 | Examples / Tools | `examples/`, `tools/` | Examples and helper tools                                       |
+| Mobile          | `mobile/`             | Flutter mobile app (Android/iOS)                              |
 | Docs             | `docs/`               | Architecture, guides, API, and SDK documentation                |
 
 ## One-Line Agent Install
@@ -198,6 +199,8 @@ Optional components (six-language SDK examples / analytics pipeline) are started
 [docker-compose.quickstart.yml](docker/docker-compose.quickstart.yml)
 and the [Docker deployment guide](docs/operations/deploy-docker.md).
 
+The source-build stack (`docker/docker-compose.yml`, used for local development) also runs a `capture-agent` service by default for CDC capture: it registers against `server:19090` and subscribes to the local postgres logical replication stream. Disable it with `CAPTURE_AGENT_REPLICAS=0 docker compose up -d capture-agent`; prerequisites (`wal_level=logical`, a pre-created publication) and the verification steps are in the [Docker deployment guide](docs/operations/deploy-docker.md).
+
 ## Quick Start
 
 1. Clone the repository
@@ -209,8 +212,8 @@ cd croupier
 
 2. Install the toolchain
 
-- Go 1.26.6+
-- Node.js 22+ / pnpm
+- Go 1.27.2+
+- Node.js 24+ / pnpm
 - `buf`
 - `protoc`
 

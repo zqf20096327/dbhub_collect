@@ -8,7 +8,7 @@
 
 **Your own AI agent that lives on your server and answers you in Telegram.**
 
-[![Version](https://img.shields.io/github/package-json/v/smixs/pi-durable-telegram?color=brightgreen)](https://github.com/smixs/pi-durable-telegram/releases)
+[![npm](https://img.shields.io/npm/v/pi-durable-telegram?color=brightgreen)](https://www.npmjs.com/package/pi-durable-telegram)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![built on pi-durable](https://img.shields.io/badge/built%20on-pi--durable-4A97BE)](https://github.com/earendil-works/pi/tree/main/packages/durable)
 [![pi package](https://img.shields.io/badge/pi-package-E0873A)](https://pi.dev/packages)
@@ -33,6 +33,9 @@ curl -fsSL https://raw.githubusercontent.com/smixs/pi-durable-telegram/main/inst
 
 It asks a few questions and your bot answers you in Telegram. Run it again to update.
 
+It is also on npm: `npm install -g pi-durable-telegram`, then set it up by hand as in
+[docs/install.md](docs/install.md#manual-install).
+
 <details>
 <summary>What the script does, step by step</summary>
 
@@ -44,6 +47,7 @@ The script first tells you what it is going to do and asks if it may continue. T
    it gives you. Then send your new bot any message, so the script learns who you are.
 4. **Starts the agent** and waits until the bot answers you.
 
+Already use pi? `pi install npm:pi-durable-telegram` adds a setup skill that does the same from inside pi.
 More in [docs/install.md](docs/install.md).
 
 </details>

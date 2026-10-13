@@ -24,7 +24,7 @@
 </picture>
 
 > [!NOTE]
-> The user interface is in English and German (*Settings › General › Language*; English by default). Code, commits and
+> The user interface is in English and German (*Settings › Appearance › Language*; English by default). Code, commits and
 > this README are in English; the design notes in `docs/` are German.
 
 ## Why
@@ -172,6 +172,10 @@ changes, and a new build is picked up automatically:
 - **Code generation**: the grid's filters as a LINQ `Where`, rows as C# objects or `HasData` seed data – and, DB-first,
   the entity class and its `IEntityTypeConfiguration` for a table the model does not know yet (or the property and
   configuration line for a new column), in the style of your project.
+- **App statements**: attach to your app while it runs (debugging in Visual Studio, `dotnet run`) – no code change – and
+  see every statement it sends through EF Core, grouped by origin (LINQ, lazy loading, raw SQL, `SaveChanges` …), the
+  most frequent and most expensive ones, and N+1 patterns. Look a statement up in V$SQL of the app's connection with its
+  plan, or open it in the SQL editor. Local apps of your own user only, EF Core 7 or later for the origin.
 
 ## Getting started
 
@@ -184,14 +188,33 @@ changes, and a new build is picked up automatically:
 
 **Install**
 
-1. Download `FerretSharp-x.y.z-win-x64.zip` from the [latest release](https://github.com/JuliusFo/FerretSharp/releases/latest).
-2. Unzip it anywhere and start `FerretSharp.exe` – no installer, no admin rights.
+1. Download `FerretSharp-win-Setup.exe` from the [latest release](https://github.com/JuliusFo/FerretSharp/releases/latest)
+   and run it – it installs FerretSharp for your user (no admin rights) with shortcuts on the desktop and in the start
+   menu. The installer is not signed, so Windows SmartScreen warns once: *More info › Run anyway*.
+2. From then on FerretSharp checks for a new version at start and every 4 hours while it runs (*Settings › Updates*:
+   hourly, daily, only at start, or off) and shows it in the status bar; *Download* fetches it, *Restart now* installs it. Nothing is downloaded or installed without your
+   click.
 
-Settings and workspaces live in `%APPDATA%\FerretSharp`; passwords are stored in the Windows Credential Manager, never in
-files.
+Without installing: `FerretSharp-win-Portable.zip` – unzip anywhere and start `FerretSharp.exe`; it updates itself the
+same way.
+
+Coming from the zip of 3.28 or older: run `FerretSharp-win-Setup.exe` once and delete the old folder by hand. Settings,
+connections and workspaces stay where they are.
+
+**Bring your connections along:** *Connections › Import…* finds DBeaver and SQL Developer on your computer (or takes a
+file: DBeaver's `data-sources.json` or project export `.dbp`, SQL Developer's export, another FerretSharp's export or
+`connections.json`). A preview shows each connection with its environment – guessed from the name where the source has
+none, and read-only until you pick one –, the user and whether you have it already. Passwords are never imported; you
+enter them on the first connect. *⋯ › Export…* (or *Export group…* on a group) passes connections on, without passwords.
+
+Settings and workspaces live in `%APPDATA%\FerretSharp` (uninstalling keeps them); passwords are stored in the Windows
+Credential Manager, never in files. Logs and the SQL history never hold values of production connections; the workspace
+files keep what you work on – SQL text, filter and variable values – like an open document. One FerretSharp runs per data folder: starting it again brings the open window to
+the front.
 
 > [!IMPORTANT]
-> FerretSharp guards against accidental writes in many places, but the only real guarantee is on the database side:
+> FerretSharp guards against accidental writes in many places, but the only real guarantee is on the database side – a
+> read-only transaction stops neither DDL nor a function with an autonomous transaction that a SELECT calls:
 > **for production, use a database user with SELECT grants only.**
 
 ## Keyboard shortcuts

@@ -432,7 +432,7 @@ Durations are given with a unit, e.g. `30s`, `5m` or `1m30s`. Booleans are given
 - `field_ids <string>`: fields ids that are assigned to the fields in Parquet file schema. By default, no field ids are assigned. Pass `auto` to let pg_parquet generate field ids. You can pass a json string to explicitly pass the field ids,
 - `row_group_size <int64>`: the number of rows in each row group while writing Parquet files. The default row group size is `122880`,
 - `row_group_size_bytes <int64>`: the total byte size of rows in each row group while writing Parquet files. The default row group size bytes is `row_group_size * 1024`,
-- `compression <string>`: the compression format to use while writing Parquet files. The supported compression formats are `uncompressed`, `snappy`, `gzip`, `brotli`, `lz4`, `lz4raw` and `zstd`. The default compression format is `snappy`. If not specified, the compression format is determined by the file extension,
+- `compression <string>`: the compression format to use while writing Parquet files. The supported compression formats are `uncompressed`, `snappy`, `gzip`, `brotli`, `lz4`, `lz4_raw` and `zstd`. `lz4` is the compression format that the Parquet format deprecated, so prefer `lz4_raw` unless a reader needs the deprecated one. The default compression format is `snappy`. If not specified, the compression format is determined by the file extension,
 - `compression_level <int>`: the compression level to use while writing Parquet files. The supported compression levels are only supported for `gzip`, `zstd` and `brotli` compression formats. The default compression level is `6` for `gzip (0-10)`, `1` for `zstd (1-22)` and `1` for `brotli (0-11)`,
 - `parquet_version <string>`: writer version of the Parquet file. By default, it is set to `v1` to be more interoperable with common query engines. (some are not able to read v2 files) You can set it to `v2` to unlock some of the new encodings,
 - `bloom_filter <string>`: the columns that a bloom filter is written for. By default, no bloom filters are written. Pass `all` to write one for every column, or a json string like `'{"id": true}'` to write one only for the given columns. A bloom filter lets a reader skip a row group that cannot contain a value, which speeds up equality filters on high cardinality columns at the cost of a larger file,
@@ -444,7 +444,7 @@ Durations are given with a unit, e.g. `30s`, `5m` or `1m30s`. Booleans are given
 
 `pg_parquet` supports the following options in the `COPY FROM` command:
 - `format parquet`: you need to specify this option to read or write Parquet files which does not end with `.parquet[.<compression>]` extension,
-- `match_by <string>`: method to match Parquet file fields to PostgreSQL table columns. The available methods are `position` and `name`. The default method is `position`. You can set it to `name` to match the columns by their name rather than by their position in the schema (default). Match by `name` is useful when field order differs between the Parquet file and the table, but their names match.
+- `match_by <string>`: method to match Parquet file fields to PostgreSQL table columns. The available methods are `position` and `name`. The default method is `position`. You can set it to `name` to match the columns by their name rather than by their position in the schema (default). Match by `name` is useful when field order differs between the Parquet file and the table, but their names match. It also matches the fields of the composite type columns by name.
 
 ## Configuration
 There is currently only one GUC parameter to enable/disable the `pg_parquet`:
@@ -489,15 +489,21 @@ There is currently only one GUC parameter to enable/disable the `pg_parquet`:
 >    * `numeric(9 < P <= 18, S)` is represented as `INT64` with `DECIMAL` logical type
 >    * `numeric(18 < P <= 38, S)` is represented as `FIXED_LEN_BYTE_ARRAY(9-16)` with `DECIMAL` logical type
 >    * `numeric(38 < P, S)` is represented as `BYTE_ARRAY` with `STRING` logical type
->    * `numeric` is allowed by Postgres. (precision and scale not specified). These are represented by a default precision (38) and scale (9) instead of writing them as string. You get runtime error if your table tries to read or write a numeric value which is not allowed by the default precision and scale (29 integral digits before decimal point, 9 digits after decimal point).
+>    * `numeric` is allowed by Postgres. (precision and scale not specified). These are represented by a default precision (38) and scale (9) instead of writing them as string. You get runtime error if your table tries to write a numeric value which is not allowed by the default precision and scale (29 integral digits before decimal point, 9 digits after decimal point). Reading into such a column keeps all the digits of the file's value, be it a decimal or a string, since Postgres stores an unbounded numeric at any precision and scale.
 > - (2) The `date` type is represented according to `Unix epoch` when writing to Parquet files. It is converted back according to `PostgreSQL epoch` when reading from Parquet files.
 > - (3) The `timestamptz` and `timetz` types are adjusted to `UTC` when writing to Parquet files. They are converted back with `UTC` timezone when reading from Parquet files.
 > - (4) The `geometry` type is represented as `BYTE_ARRAY` encoded as `WKB`, specified by [geoparquet spec](https://geoparquet.org/releases/v1.1.0/), when `postgis` extension is created. Otherwise, it is represented as `BYTE_ARRAY` with `STRING` logical type.
 > - (5) `crunchy_map` is dependent on functionality provided by [Crunchy Bridge](https://www.crunchydata.com/products/crunchy-bridge). The `crunchy_map` type is represented as `GROUP` with `MAP` logical type when `crunchy_map` extension is created. Otherwise, it is represented as `BYTE_ARRAY` with `STRING` logical type.
 > - (6) The `oid8` type only exists on PostgreSQL 19 and later. It is written as an unsigned `INT64`, so its whole range round-trips.
 
+> [!NOTE]
+> `infinity` and `-infinity` values of the `date`, `timestamp` and `timestamptz` types are written as the limits of the underlying `INT32`/`INT64`, which is how `COPY FROM` reads them back. A temporal value in the Parquet file that `PostgreSQL` cannot represent is rejected with an out of range error.
+
 > [!WARNING]
 > Any type that does not have a corresponding Parquet type will be represented, as a fallback mechanism, as `BYTE_ARRAY` with `STRING` logical type. e.g. `enum`
+
+> [!NOTE]
+> `COPY FROM` does not need an exact type match: a file's column is cast to the table's column type whenever `PostgreSQL` has a cast between them. That is what makes the files of the other writers readable, e.g. the `TIME_MILLIS`, `FIXED_LEN_BYTE_ARRAY` or wider than `DECIMAL(38)` columns of `Spark`, and the dictionary encoded (`pandas` categorical), view or null typed columns that the `Arrow` based writers record in their schema. An `INT96` timestamp column, which `Hive`, `Impala` and `Spark` write, records no resolution of its own, so it is read as microseconds, which is the resolution `PostgreSQL` stores and covers its whole timestamp range.
 
 ## Postgres Support Matrix
 `pg_parquet` supports the following PostgreSQL versions:

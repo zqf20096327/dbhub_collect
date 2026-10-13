@@ -103,9 +103,19 @@ Na aba **Leads**, clique em **Nova busca** e escreva um pedido como:
 
 Sem IA, o pedido é lido por regras: use **"em"** antes da cidade e informe a sigla do estado (`Feira de Santana-BA`). O sistema mostra o progresso e preenche a tabela. Os e-mails são procurados nos sites das empresas logo em seguida e podem levar alguns minutos.
 
-Na tabela você pode filtrar, ordenar, abrir a ficha de cada lead e selecionar vários para **Validar WhatsApp**, **Enriquecer e-mails**, **Enviar mensagem**, exportar em CSV ou excluir.
+**Não há limite de quantidade.** A coleta segue até atingir o número pedido ou até o Google Maps não ter mais empresas para aquela combinação de nicho e cidade. É normal vir menos do que o pedido: o sistema traz só o que existe, sem inventar e sem repetir. Para ampliar, varie o termo (sinônimos e especialidades) ou a cidade.
 
-Cada página de resultados consome créditos do Serper. Acompanhe o saldo no painel do Serper.
+**Histórico de buscas.** O painel **Buscas**, na aba Leads, lista todas as buscas feitas, com a quantidade de leads e o status (**Em andamento**, **Disponível** ou **Esgotada**). Em cada uma você pode:
+
+- **Ver leads**: filtra a tabela só com os leads daquela busca;
+- **Buscar mais**: continua a busca de onde parou;
+- **Outra cidade**: repete o nicho em outra região.
+
+**Tags.** Você pode dar tags a uma busca (todos os leads que ela trouxer recebem as tags) ou selecionar leads na tabela e usar **Tags** para adicionar ou remover em lote. Depois, filtre a tabela por uma ou mais tags. As tags aparecem também na ficha do lead, na exportação CSV e na lista de leads da aba WhatsApp.
+
+Na tabela você pode filtrar, ordenar, abrir a ficha de cada lead e selecionar vários para **Validar WhatsApp**, **Enriquecer e-mails**, **Tags**, **Enviar mensagem**, exportar em CSV ou excluir.
+
+Cada página de resultados (10 empresas) consome 1 crédito do Serper, e você só paga pelas páginas realmente buscadas. Acompanhe o saldo no painel do Serper.
 
 ---
 
@@ -122,7 +132,7 @@ Com um provedor ativo, o botão **Assistente** abre um chat onde você pode pedi
 - "Pesquise mais sobre o lead #38 e proponha um enriquecimento"
 - "Redija uma mensagem para o lead #38"
 
-**Toda ação pede a sua aprovação antes de acontecer**: buscas que gastam créditos do Serper (com a estimativa de créditos), leitura de sites, gravação de dados num lead e envio de mensagens. Consultas à sua própria base de leads não precisam de aprovação.
+**Toda ação pede a sua aprovação antes de acontecer**: buscas que gastam créditos do Serper (com a estimativa de créditos), leitura de sites, gravação de dados num lead e envio de mensagens. Consultas à sua própria base de leads não precisam de aprovação. Depois de cada coleta, o assistente informa o resultado real (quantas empresas novas vieram e quantos créditos foram gastos) e, se o Google Maps tiver menos do que o pedido, sugere variações de termo e de cidade.
 
 Para desligar a IA, escolha **Usar modo clássico** no mesmo bloco. Se o provedor falhar (chave inválida, falta de crédito), o assistente mostra o erro e oferece repetir o pedido no modo clássico.
 

@@ -17,8 +17,8 @@ Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri N
 | 15      | Jambi                     |     9/ 9  |  2/2  | 144/144  |  171/171  | 1414/1414  |
 | 16      | Sumatera Selatan          |    13/13  |  4/4  | 241/241  |  403/403  | 2856/2856  |
 | 17      | Bengkulu                  |     9/ 9  |  1/1  | 129/129  |  172/172  | 1341/1341  |
-| 18      | Lampung                   |    13/13  |  2/2  | 229/229  |  205/205  | 2435/2446* |
-| 19      | Kepulauan Bangka Belitung |     6/ 6  |  1/1  |  47/ 47  |   82/ 84* |  309/ 309  |
+| 18      | Lampung                   |    13/13  |  2/2  | 229/229  |  205/205  | 2446/2446  |
+| 19      | Kepulauan Bangka Belitung |     6/ 6  |  1/1  |  47/ 47  |   84/ 84  |  309/ 309  |
 | 21      | Kepulauan Riau            |     5/ 5  |  2/2  |  80/ 80  |  144/144  |  275/ 275  |
 | 31      | DKI Jakarta               |     1/ 1  |  5/5  |  44/ 44  |  267/267  |     -      |
 | 32      | Jawa Barat                |    18/18  |  9/9  | 627/627  |  646/646  | 5311/5311  |
@@ -27,7 +27,7 @@ Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri N
 | 35      | Jawa Timur                |    29/29  |  9/9  | 666/666  |  773/773 | 7721/7721  |
 | 36      | Banten                    |     4/ 4  |  4/4  | 155/155  |  314/314  | 1238/1238  |
 | 51      | Bali                      |     8/ 8  |  1/1  |  57/ 57  |   80/ 80  |  636/ 636  |
-| 52      | Nusa Tenggara Barat       |     8/ 8  |  2/2  | 117/117  |  145/145  | 1005/1021* |
+| 52      | Nusa Tenggara Barat       |     8/ 8  |  2/2  | 117/117  |  145/145  | 1021/1021  |
 | 53      | Nusa Tenggara Timur       |    21/21  |  1/1  | 315/315  |  304/305* | 3048/3137* |
 | 61      | Kalimantan Barat          |    12/12  |  2/2  | 174/174  |   99/ 99  | 2031/2046* |
 | 62      | Kalimantan Tengah         |    13/13  |  1/1  | 136/136  |  139/139  | 1432/1432  |
@@ -48,7 +48,7 @@ Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri N
 | 94      | Papua Tengah              |     8/ 8  |   -   | 131/131  |   36/ 36  | 1154/1172* |
 | 95      | Papua Pegunungan          |     8/ 8  |   -   | 252/252  |   10/ 10  | 2583/2617* |
 | 96      | Papua Barat Daya          |     5/ 5  |  1/1  | 132/132  |   74/ 74  |  939/ 939  |
-|         | KEKURANGAN                |      -    |   -   |    -     |    (6)    |  (202)     |
+|         | KEKURANGAN                |      -    |   -   |    -     |    (4)    |  (175)     |
 
 ## NOTE
 * )* data belum lengkap https://github.com/cahyadsn/wilayah_boundaries/blob/main/notes.md
@@ -65,6 +65,9 @@ Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri N
 * verifikasi dan validasi data kode wilayah
 
 ## CHANGE LOG
+* [2026-10-13 08:58:00] tambah data boundaries desa2 di kabupaten Lombok Tengah dan Sumbawa Barat, prov. Nusa Tenggara Barat
+* [2026-10-13 08:14:00] tambah data boundaries kelurahan2 di kabupaten Bangka Barat, prov. Kepulauan Bangka Belitung
+* [2026-10-13 08:05:00] tambah data boundaries desa2 di kabupaten Pesawaran dan Tulang Bawang Barat, prov. Lampung
 * [2026-10-12 16:04:00] tambah data boundaries desa/kel di kabupaten Banyuasin dan kota Prabumulih, prov. Sumatera Selatan
 * [2026-10-12 08:18:00] tambah data boundaries desa2 di kabupaten Musi Banyuasin, prov. Sumatera Selatan
 * [2026-10-09 07:28:00] tambah data boundaries desa2 di kabupaten Muara Enim, prov. Sumatera Selatan

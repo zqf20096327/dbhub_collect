@@ -46,8 +46,8 @@ The statistics, trip log, maintenance list and light theme are in the [screensho
 - **Live dashboard** -- Real-time vehicle telemetry displayed as configurable cards. Cards are automatically shown or hidden based on your vehicle type (HEV, PHEV, BEV) and can be reordered or toggled individually in the dashboard's edit mode.
 - **Trip history** -- Browse past journeys on an interactive map, each drawn on the roads it took and coloured by speed or by the speed limit, with a heatmap of the roads you drive most. Each trip is saved to the database a few minutes after the car parks. After upgrading from a version that did not save trips, the existing history is saved in the background on the Worker's first start.
 - **Trip log** -- Mark each trip as business, commute or private (commutes between your home and work are marked automatically), add notes, and export a month or a year as a spreadsheet with the addresses and odometer readings a tax trip log (such as the Dutch *rittenregistratie*) asks for. See [Trip log](#trip-log).
-- **Energy statistics** -- Track daily energy consumption, efficiency (Wh/km on a plug-in car, L/100 km on a hybrid), fuel use, electric share, average driving speed, and more over a configurable time window.
-- **Remote commands** -- Trigger climate pre-conditioning (normal climate, fan only or front defrost), lock or unlock the car, and activate the horn and lights remotely from the dashboard. Each command reports whether the car carried it out, and if it refused, the reason the MG servers gave.
+- **Energy statistics** -- Track daily energy consumption, efficiency (Wh/km on a plug-in car, L/100 km on a hybrid), fuel use, electric share, average driving speed, and more, for any period from a week to several years.
+- **Remote commands** -- Trigger climate pre-conditioning (normal climate, fan only or front defrost), lock or unlock the car, open the boot, and activate the horn and lights remotely from the dashboard. On a plug-in car also start or stop charging, lock or unlock the charging cable, switch battery heating on or off, set the charging and battery heating schedules, and set the charge current limit and, where the car takes one, the charge target. Opening the boot and unlocking the cable ask for a second tap. Each command reports whether the car carried it out, and if it refused, the reason the MG servers gave.
 - **Climate schedules** -- Switch climate on at a set time on chosen weekdays, or once. A schedule sets the temperature or mode, seat heating and the rear defroster, and can skip mild days by the car's outside temperature. Schedules run on the server, so no browser needs to be open, and each run sends a push notification saying whether the car started climate.
 - **Push notifications** -- Browser and in-app alerts for key events: engine started, low tyre pressure, low EV battery, low fuel, a weak 12V battery, car left unlocked, doors or windows left open, a charge that stopped early, a climate schedule that ran, the messages the official MG app receives, and data that stopped arriving because the MG sign-in failed or the car went quiet.
 - **Homepage widget** -- A read-only API endpoint for the [gethomepage.dev](https://gethomepage.dev) Custom API widget, exposing key vehicle stats at a glance.
@@ -80,11 +80,11 @@ Cards are shown or hidden automatically based on vehicle type (HEV / PHEV / BEV)
 | Charging | Charging indicator | PHEV, BEV |
 | Odometer | Total distance driven | All |
 | 12V Battery | Auxiliary battery voltage | All |
-| Doors | Lock status and door states | All |
+| Doors | Lock status and door states; lock, unlock and open the boot | All |
 | Windows | Window and sunroof states | All |
 | Sunroof | Sunroof open/closed | All (off by default) |
 | Climate | Temperature, seat heating, defroster | All |
-| HV Battery | State of charge, voltage, current, power (kWh too, with `HV_BATTERY_CAPACITY_KWH` set); on a plug-in car also the charge target and charge current limit | All |
+| HV Battery | State of charge, voltage, current, power (kWh too, with `HV_BATTERY_CAPACITY_KWH` set); on a plug-in car also the charge current limit and the charge target, both settable | All |
 | Find My Car | Horn + lights to locate the car | All |
 | Lights | Main beam, low beam, sidelights | All |
 | Daily Distance | Distance driven today | All |
@@ -95,14 +95,14 @@ Cards are shown or hidden automatically based on vehicle type (HEV / PHEV / BEV)
 | Top Speed | Highest speed recorded in the most recent completed trip | All |
 | Active Trip | Distance covered in the current trip | All |
 | Charge Time | Estimated minutes remaining to charge limit | PHEV, BEV |
-| Charging Session | OBC power, cable lock, charging type, last start and end | PHEV, BEV |
-| Battery Heating | Pre-heating status and schedule | PHEV, BEV |
+| Charging Session | OBC power, cable lock, charging type, last start and end; start or stop charging, lock or unlock the cable, set the charging schedule | PHEV, BEV |
+| Battery Heating | Pre-heating status and schedule; switch it on or off, set the schedule | PHEV, BEV |
 | Maintenance | The most urgent state of your maintenance items, linking to the Maintenance page | All |
 | Climate Schedule | When a climate schedule starts climate next | All (off by default) |
 
 ### Statistics insights
 
-The Statistics view shows insight cards and charts for a configurable period (7, 30, or 90 days). Cards are draggable and individually toggleable.
+The Statistics view shows insight cards and charts for a period of its own: the last 7, 30 or 90 days, this or last month, this or last year, or custom dates. Charts show a point per day up to about three months, per week up to a year, and per month beyond that. A period longer than a month also gets a table of trips, distance and energy per month. Cards are draggable and individually toggleable.
 
 | Insight | Description |
 | ------- | ----------- |
@@ -381,7 +381,7 @@ Note: "keys left in the car" is not currently supported because the SAIC MQTT ga
 **Trip log** in the sidebar lists the saved trips for a month or a whole year. For each trip it shows the date and times, the addresses it left from and arrived at, and the odometer at either end.
 
 - **Purpose.** Mark a trip as business, commute or private. Choosing the same purpose again clears it. When trips in the period have no purpose yet, one button gives them all the same one; trips that already have a purpose keep it.
-- **Home and work.** Set your home and work places once (**Home and work** at the top, or click a trip's start or end address to use it), and every trip between home and a work place is marked as a commute: the trips already in the log, and each new one as soon as it is saved. A trip counts as ending at a place when it ends within its radius (250 m unless you change it), so parking down the street or in the office garage still counts. Trips you classified yourself, or deliberately left unclassified, are never changed; an automatic commute shows "Automatic", and choosing another purpose overrides it. Moving or removing a place updates the automatic ones. Business and private stay yours to choose. The places are kept per car in GarageStack's own database.
+- **Home and work.** Set your home and work places once (**Home and work** at the top, or click a trip's start or end address to use it). A car has one home and can have several work places. Every trip between home and a work place is marked as a commute: the trips already in the log, and each new one as soon as it is saved. A trip counts as ending at a place when it ends within its radius (250 m unless you change it), so parking down the street or in the office garage still counts. Trips you classified yourself, or deliberately left unclassified, are never changed; an automatic commute shows "Automatic", and choosing another purpose overrides it. Moving or removing a place updates the automatic ones. Business and private stay yours to choose. The places are kept per car in GarageStack's own database.
 - **Notes.** Record anything a trip log should say, such as who you visited or why you took another route. Notes save when you leave the field.
 - **Totals.** The distance per purpose for the period is shown at the top.
 - **Distance.** A trip counts for the distance on its odometer when the car reported a reading at both ends. Otherwise it counts for the distance along its GPS fixes, which is a little short because the fixes cut corners.

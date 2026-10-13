@@ -1,187 +1,75 @@
 # agent-memory-store
 
 [![npm version](https://img.shields.io/npm/v/agent-memory-store.svg)](https://www.npmjs.com/package/agent-memory-store)
-[![npm downloads](https://img.shields.io/npm/dm/agent-memory-store.svg)](https://www.npmjs.com/package/agent-memory-store)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D22.5-green.svg)](https://nodejs.org)
+[![CI](https://github.com/vbfs/agent-memory-store/actions/workflows/ci.yml/badge.svg)](https://github.com/vbfs/agent-memory-store/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D22.16-green.svg)](https://nodejs.org)
 
-> 92.1% Recall@5 on LongMemEval — without any LLM calls. Persistent, searchable memory for multi-agent AI systems, powered by SQLite and local embeddings. Zero configuration. Zero external services.
-
-<details>
-<summary><strong>Competitive retrieval quality — no LLM overhead</strong></summary>
-
-| System | Recall@5 | LLM Required |
-| --- | --- | --- |
-| MemPalace hybrid+LLM | 100.0% | Haiku |
-| MemPalace raw | 96.6% | None |
-| Mastra (GPT-4o-mini) | 94.87% | Yes |
-| **agent-memory-store (hybrid)** | **92.1%** | **None** |
-| Hindsight (Gemini) | 91.4% | Yes |
-| Stella (dense baseline) | ~85% | None |
-
-Outperforms LLM-assisted Hindsight. Within 4.7 points of Mastra — with no API calls. Full benchmark details [below](#longmemeval-benchmark).
-
-</details>
-
----
-
-## Table of Contents
-
-- [Why this exists](#why-this-exists)
-- [How agents use memory](#how-agents-use-memory)
-- [Features](#features)
-- [Quick start in 60 seconds](#quick-start-in-60-seconds)
-- [Configuration](#configuration)
-- [Teach your agent to use memory](#teach-your-agent-to-use-memory)
-- [Tools](#tools)
-- [Architecture](#architecture)
-- [Performance](#performance)
-- [LongMemEval Benchmark](#longmemeval-benchmark)
-- [Documentation](#documentation)
-- [Development](#development)
-- [License](#license)
-
----
-
-## Why this exists
-
-Every time you start a new session with Claude Code, Cursor, or any MCP-compatible agent, it starts from zero. It doesn't know your project uses Fastify instead of Express. It doesn't know you decided on JWT two weeks ago. It doesn't know the staging deploy is on ECS.
-
-`agent-memory-store` gives agents a shared, searchable memory that survives across sessions. Agents write what they learn, search what they need, and build on each other's work — just like a team with good documentation, except it happens automatically.
-
-`agent-memory-store` is that shared memory. Agents write what they learn, search what they need, and build on each other's work — across sessions, across agents, without any orchestration overhead.
-
----
-
-Agents read and write **chunks** through MCP tools. Search combines **BM25 ranking** (via SQLite FTS5) with **semantic vector similarity** (via local embeddings), merged through Reciprocal Rank Fusion for best-of-both-worlds retrieval.
-
-```
-                 ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-                 │   Agent A   │   │   Agent B   │   │   Agent C   │
-                 └──────┬──────┘   └──────┬──────┘   └──────┬──────┘
-                        │                 │                  │
-                        └────────────────┬──────────────────┘
-                                         │  MCP tools
-                              ┌──────────▼──────────┐
-                              │  agent-memory-store  │
-                              │  hybrid search       │
-                              │  BM25 + semantic     │
-                              └──────────┬──────────┘
-                                         │
-                              ┌──────────▼──────────┐
-                              │  .agent-memory-store/ │
-                              │  └── store.db         │
-                              └───────────────────────┘
-```
-
----
-
-## How agents use memory
-
-Every agent action follows the same loop:
-
-```
-  ┌──────────────────────────────────────────────────────────────────┐
-  │                      AGENT MEMORY LOOP                           │
-  │                                                                  │
-  │  ┌──────────┐   search_context    ┌──────────────────────────┐  │
-  │  │  New     │  ────────────────►  │  Memory store (store.db) │  │
-  │  │  task    │  ◄────────────────  │  prior decisions/outputs │  │
-  │  └──────────┘   prior context     └──────────────────────────┘  │
-  │       │                                                          │
-  │       ▼                                                          │
-  │  ┌──────────┐                                                    │
-  │  │   Act    │  (generate, decide, build)                         │
-  │  └──────────┘                                                    │
-  │       │                                                          │
-  │       ▼                                                          │
-  │  ┌──────────┐   write_context     ┌──────────────────────────┐  │
-  │  │  Result  │  ────────────────►  │  Memory store (store.db) │  │
-  │  │          │                     │  persisted for future    │  │
-  │  └──────────┘                     └──────────────────────────┘  │
-  └──────────────────────────────────────────────────────────────────┘
-
-  Multi-agent handoff:
-
-  Agent A ──write_context──► store.db ◄──search_context──  Agent B
-          ──set_state──────► store.db ◄──get_state───────
-          ── HANDOFF message (lightweight pointer) ──────►
-```
-
----
-
-## Features
-
-- **Zero-install usage** via `npx`
-- **Hybrid search** — BM25 full-text (FTS5) + semantic vector similarity + Reciprocal Rank Fusion
-- **SQLite-backed** — single `store.db` file, WAL mode, native performance
-- **Local embeddings** — 384-dim vectors via `all-MiniLM-L6-v2`, no API keys needed
-- **Tag and agent filtering** — find chunks by who wrote them or what they cover
-- **TTL-based expiry** — chunks auto-delete after a configurable number of days
-- **Session state** — key/value store for pipeline progress, flags, and counters
-- **Pagination support** — `list_context` supports limit/offset for large stores
-- **MCP-native** — works with Claude Code, opencode, Cursor, and any MCP-compatible client
-- **Zero external database dependencies** — uses Node.js built-in SQLite (`node:sqlite`)
-- **Automatic migration** — upgrades legacy filesystem stores to SQLite on first run
-
-## Requirements
-
-- Node.js >= 22.5 (required for native `node:sqlite` with FTS5 support)
-
----
-
-## Quick start in 60 seconds
-
-No installation. No account. No API key. One command:
+**Shared, persistent memory for a team of AI agents, over MCP.** One SQLite file
+per project, hybrid search (keyword + local multilingual embeddings), safe for
+many agent processes at once. No API keys, no external services, no LLM calls.
 
 ```bash
-npx agent-memory-store
-```
-
-By default, memory is stored in `.agent-memory-store/store.db` inside the directory where the server starts — so each project gets its own isolated store automatically.
-
-The first run downloads the embedding model (~23MB) once and caches it at `~/.cache/huggingface/`. Every subsequent start is instant.
-
-To use a custom path:
-
-```bash
-AGENT_STORE_PATH=/your/project/.agent-memory-store npx agent-memory-store
+claude mcp add agent-memory -s project -- npx -y agent-memory-store
 ```
 
 ---
 
-## Configuration
+## Why
+
+Agents start every session from zero, and agents working in parallel don't
+know what the others decided. `agent-memory-store` gives them one place to
+**search before acting** and **write what others will need** — decisions with
+their rationale, outputs and where they live, discoveries — plus a small
+versioned key/value **state** for coordination (phase, owner, run id).
+
+What makes it suitable for a team:
+
+- **Multilingual retrieval** — a question in Portuguese finds a memory written in
+  English and vice versa; exact identifiers (`PAG-4821`, `orders.v1`, paths)
+  still match by keyword.
+- **Many agents, one file** — WAL, busy timeouts and compare-and-set versions;
+  tested with concurrent processes, no lost writes.
+- **Update, don't duplicate** — write with an `id` to update in place; every
+  write reports likely duplicates.
+- **Safe by default** — natural-language queries can't break search,
+  expired memories disappear immediately, credentials are refused on write.
+- **Measured, not claimed** — every number below comes from scripts in
+  `benchmarks/` that run the same code as the server.
+
+## Quick start
+
+Requires **Node.js ≥ 22.16**. The first start downloads the embedding model
+(~310 MB) to `~/.cache/agent-memory-store/models`; until it is ready,
+search runs in keyword mode.
 
 ### Claude Code
 
-Add to your project's `claude.mcp.json` (or `~/.claude/claude.mcp.json` for global):
+```bash
+# shared by everyone who opens this repo (writes .mcp.json)
+claude mcp add agent-memory -s project -- npx -y agent-memory-store
+```
+
+or in `.mcp.json`:
 
 ```json
 {
   "mcpServers": {
-    "agent-memory-store": {
+    "agent-memory": {
       "command": "npx",
-      "args": ["-y", "agent-memory-store"]
+      "args": ["-y", "agent-memory-store"],
+      "env": { "AGENT_MEMORY_AGENT": "backend-agent" }
     }
   }
 }
 ```
 
-Or using the Claude Code CLI:
-
-```bash
-claude mcp add agent-memory-store --command "npx" --args "-y agent-memory-store"
-```
-
-### opencode
-
-Add to your `opencode.json`:
+### opencode (`opencode.json`)
 
 ```json
 {
-  "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "agent-memory-store": {
+    "agent-memory": {
       "type": "local",
       "command": ["npx", "-y", "agent-memory-store"],
       "enabled": true
@@ -190,366 +78,185 @@ Add to your `opencode.json`:
 }
 ```
 
-### Cursor / VS Code (MCP extension)
-
-Add to your MCP settings file:
-
-```json
-{
-  "servers": {
-    "agent-memory-store": {
-      "command": "npx",
-      "args": ["-y", "agent-memory-store"]
-    }
-  }
-}
-```
-
-### Custom storage path
-
-If you need to store memory outside the project directory, set `AGENT_STORE_PATH` in the environment block.
-
-**Claude Code:**
+### Cursor / VS Code / other MCP clients
 
 ```json
 {
   "mcpServers": {
-    "agent-memory-store": {
-      "command": "npx",
-      "args": ["-y", "agent-memory-store"],
-      "env": {
-        "AGENT_STORE_PATH": "/absolute/path/to/.agent-memory-store"
-      }
-    }
+    "agent-memory": { "command": "npx", "args": ["-y", "agent-memory-store"] }
   }
 }
 ```
 
-**opencode:**
+The store lives in `.agent-memory-store/store.db` under the directory the
+client starts the server from — one store per project. Add
+`.agent-memory-store/` to `.gitignore`. To share one store across repositories,
+set `AGENT_STORE_PATH` to an absolute path.
 
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "mcp": {
-    "agent-memory-store": {
-      "type": "local",
-      "command": ["npx", "-y", "agent-memory-store"],
-      "enabled": true,
-      "environment": {
-        "AGENT_STORE_PATH": "/absolute/path/to/.agent-memory-store"
-      }
-    }
-  }
-}
-```
+### Teach your agents
 
-### Environment variables
-
-| Variable | Default | Description |
-| --- | --- | --- |
-| `AGENT_STORE_PATH` | `./.agent-memory-store` | Custom path to the storage directory. Omit to use project default. |
-
----
-
-## Teach your agent to use memory
-
-Add this to your agent's system prompt (or `CLAUDE.md` / `AGENTS.md`):
+The server sends a short usage protocol to the client automatically (MCP
+server instructions). For multi-agent pipelines, add
+[`skills/SKILL.md`](./skills/SKILL.md) as a skill or paste this into
+`CLAUDE.md` / `AGENTS.md`:
 
 ```markdown
 ## Memory
-
-You have persistent memory via agent-memory-store MCP tools.
-
-**Before acting on any task:**
-
-1. `search_context` with 2–3 queries related to the task. Check for prior decisions, conventions, and relevant outputs.
-2. `get_state("project_tags")` to load the tag vocabulary. If empty, this is a new project — ask the user about stack, conventions, and structure, then persist them with `write_context` and `set_state`.
-
-**After completing work:**
-
-1. `write_context` to persist decisions (with rationale), outputs (with file paths), and discoveries (with impact).
-2. Use short, lowercase tags consistent with the vocabulary: `auth`, `config`, `decision`, `output`, `discovery`.
-3. Set `importance: "critical"` for decisions other agents depend on, `"high"` for outputs, `"medium"` for background context.
-
-**Before every write:**
-
-1. `search_context` for the same topic first. If a chunk exists, `delete_context` it, then write the updated version. One chunk per topic.
-
-**Rules:**
-
-- Never guess a fact that might be in memory — search first, it costs <10ms.
-- Never store secrets — write references to where they live, not the values.
-- `set_state` is for mutable values (current phase, counters). `write_context` is for searchable knowledge (decisions, outputs). Don't mix them.
-- Use `search_mode: "semantic"` when exact terms don't match (e.g., searching "autenticação" when the chunk says "auth").
+- Before a task: `search_context` for prior decisions, conventions and outputs (any language).
+- After a decision, output or discovery others need: `write_context` with a specific topic,
+  the content with its rationale, and 1–4 lowercase tags.
+- Always pass your role as `agent` (e.g. `backend-agent`) on writes, same id every session.
+- To change a memory, pass its `id` to `write_context`. Merge reported duplicates.
+- Shared mutable values (phase, owner, run id): `get_state` / `set_state` with `expected_version`.
+- Never store secrets — store where they live.
 ```
-
-Copy, paste, done. This is enough for any agent to use memory effectively.
-
-> **Advanced agent workflows:** The [`skills/SKILL.MD`](./skills/SKILL.MD) file is a comprehensive governance skill covering cold-start bootstrap, multi-agent pipeline handoffs, tag vocabulary management, deduplication workflows, performance budgets, and when to use each search mode. See the [full documentation](./docs/DOCUMENTATION.md) for a detailed walkthrough of all patterns.
-
----
 
 ## Tools
 
-| Tool | When to use |
+| Tool | Purpose |
 | --- | --- |
-| `search_context` | **Start of every task** — retrieve relevant prior knowledge before acting |
-| `write_context` | After decisions, discoveries, or outputs that other agents will need |
-| `read_context` | Read a specific chunk by ID |
-| `list_context` | Inventory the memory store (metadata only, no body) |
-| `delete_context` | Remove outdated or incorrect chunks |
-| `get_state` | Read a pipeline variable (progress, flags, counters) |
-| `set_state` | Write a pipeline variable |
+| `search_context` | Hybrid search. Filters: `tags`, `agent`, `since`/`until`. Returns snippets with score, similarity, version. |
+| `write_context` | Create, or update in place with `id`. Optional `expected_version` (compare-and-set), `ttl_days`, `importance`. Reports likely duplicates. |
+| `read_context` | Full text of one memory. |
+| `list_context` | Newest first, metadata only, with total and paging. |
+| `delete_context` | Delete one memory. |
+| `get_state` / `set_state` | Versioned JSON values for coordination; `expected_version: 0` = claim if unset. |
 
-### `search_context`
+Full parameters, response formats and behavior: [docs/DOCUMENTATION.md](./docs/DOCUMENTATION.md).
 
-```
-query        string    Search query. Use specific, canonical terms.
-tags         string[]  (optional) Narrow to chunks matching any of these tags.
-agent        string    (optional) Narrow to chunks written by a specific agent.
-top_k        number    (optional) Max results to return. Range: 1–20. Default: 6.
-min_score    number    (optional) Minimum relevance score. Default: 0.1.
-search_mode  string    (optional) "hybrid" (default), "bm25", or "semantic".
-```
-
-**Search modes:**
-
-| Mode | How it works | Best for |
-| --- | --- | --- |
-| `hybrid` | BM25 + semantic similarity merged via Reciprocal Rank Fusion | General use (default) |
-| `bm25` | FTS5 keyword matching only | Exact term lookups, canonical tags |
-| `semantic` | Vector cosine similarity only | Finding conceptually related chunks |
-
-**Response format:**
+## How it works
 
 ```
-### [score: 0.85] Auth service — JWT decision
-**id:** `a1b2c3d4e5` | **agent:** pm-agent | **tags:** auth, decision | **importance:** critical | **updated:** 2025-06-01T14:00:00.000Z
-
-[chunk content in markdown]
-
----
-
-### [score: 0.71] ...
+ agent A ─┐                      ┌─ FTS5 BM25 (topic 3× · tags 2× · content)  ─┐
+ agent B ─┼─ MCP stdio servers ──┤                                              ├─ score fusion ─ results
+ agent C ─┘   (one per agent)    └─ local embeddings → in-memory vector index ─┘
+                    │
+                    └── .agent-memory-store/store.db  (SQLite, WAL, shared)
 ```
 
-### `write_context`
+- **Keyword**: SQLite FTS5, accent-insensitive (`decisao` = `Decisão`); every
+  query term is quoted, so punctuation and operators can't cause syntax errors.
+- **Semantic**: `Snowflake/snowflake-arctic-embed-m-v2.0` (multilingual, ONNX 8-bit, CPU) and exact cosine search over
+  an in-memory index that each process keeps in sync with the file.
+- **Fusion**: weighted sum of per-query normalized scores, 70% semantic /
+  30% keyword — chosen on held-out queries, see [Results](#results).
+  Importance and recency only break near-ties.
 
-```
-topic       string    Short, specific title. ("Auth — JWT decision", not "decision")
-content     string    Chunk body in markdown. Include rationale, not just conclusions.
-agent       string    (optional) Agent ID writing this chunk.
-tags        string[]  (optional) Canonical tags for future retrieval.
-importance  string    (optional) low | medium | high | critical. Default: medium.
-ttl_days    number    (optional) Auto-expiry in days. Omit for permanent storage.
-```
+## Results
 
-Embeddings are computed asynchronously after the chunk is saved. The chunk is immediately searchable via BM25; semantic search results may lag by ~200ms.
+One command, one process, ~30 s, < 1 GB RAM:
 
-### `read_context`
-
-```
-id    string    Chunk ID (10-char hex string from write_context or list_context).
+```bash
+npm run bench
 ```
 
-Returns the full chunk including header metadata and body content.
+Measured on an Apple M2 (8 GB), Node 25.6. Raw outputs:
+[`benchmarks/results/`](./benchmarks/results). Every benchmark runs the same
+`MemoryStore` code as the MCP server; quality numbers are identical across
+runs, and the metric code is unit-tested against hand-computed values.
 
-### `list_context`
+### Quality — bilingual agent memory (golden set)
 
-```
-agent   string    (optional) Filter by agent ID.
-tags    string[]  (optional) Filter by tags.
-limit   number    (optional) Max results. Range: 1–500. Default: 100.
-offset  number    (optional) Results to skip for pagination. Default: 0.
-```
+150 hand-written memories from a fictional product team (55% PT-BR, 45% EN),
+120 queries: 35 cross-lingual, 35 paraphrases, 15 exact identifiers, 12
+knowledge updates, 10 filtered, 13 multi-memory
+([`benchmarks/golden/dataset.json`](./benchmarks/golden/dataset.json)).
+Synthetic and small: a regression test for the intended use, not a leaderboard.
 
-Returns metadata only (no body). Use for store inventory and curation.
+| Model (`AGENT_MEMORY_MODEL`) | Hit@1 | Recall@5 | MRR | Search p50 | Write p50 | RAM / process |
+| --- | --- | --- | --- | --- | --- | --- |
+| `none` (keyword only) | 50.8% | 70.0% | 0.587 | 0.7 ms | 0.1 ms | 64 MB |
+| `minilm-l6-en` (0.0.x model) | 55.0% | 70.0% | 0.610 | 2.6 ms | 3.2 ms | 271 MB |
+| `granite-97m-multilingual` | 66.7% | 88.3% | 0.770 | 4.5 ms | 5.8 ms | 453 MB |
+| **`arctic-embed-m-v2` (default)** | **74.2%** | **95.8%** | **0.836** | **8.6 ms** | **13.9 ms** | **628 MB** |
+| `embeddinggemma-300m` | 74.2% | 96.7% | 0.841 | 57.9 ms | 94.1 ms | 1372 MB |
 
-### `delete_context`
+Hybrid mode. Search and write latency with 2,000 memories in an on-disk store
+(write includes embedding and the duplicate check; reads are < 0.1 ms).
+On Linux x64 (GitHub Actions) the default model scores 75.0% / 96.7% / 0.843
+(int8 kernels differ slightly between ARM and x86), searches in 12.8 ms and
+uses about **1.3 GB RAM per process** — plan memory accordingly, or use
+`granite-97m-multilingual` / `none` on small Linux machines.
 
-```
-id    string    Chunk ID to permanently delete.
-```
+### LongMemEval-S (ICLR 2025), keyword engine
 
-### `get_state` / `set_state`
+Official retrieval protocol: session granularity, user turns only, abstention
+and no-evidence questions excluded (**n = 419** of 500, cleaned release),
+metrics from the official `eval_utils.py`.
 
-```
-key    string   State variable name.
-value  any      (set_state only) Any JSON-serializable value.
-```
-
-`get_state` returns `null` (not an error) for keys that don't exist yet.
-
----
-
-## Architecture
-
-```
-src/
-  index.js        MCP server — tool registration and transport
-  store.js        Public API — searchChunks, writeChunk, readChunk, etc.
-  db.js           SQLite layer — node:sqlite with FTS5, WAL mode
-  search.js       Hybrid search — FTS5 BM25 + vector similarity + RRF
-  embeddings.js   Local embeddings — @huggingface/transformers (all-MiniLM-L6-v2)
-  bm25.js         Pure JS BM25 — reference implementation (not on hot path)
-  migrate.js      Filesystem → SQLite migration (automatic, one-time)
-```
-
-### Storage format
-
-All data lives in a single SQLite database at `.agent-memory-store/store.db`:
-
-- **chunks table** — id, topic, agent, tags (JSON), importance, content, embedding (BLOB), timestamps, expiry
-- **chunks_fts** — FTS5 virtual table synced via triggers for full-text search
-- **state table** — key/value pairs for pipeline variables
-
-WAL mode is enabled for concurrent read performance. No manual flush needed.
-
-### How hybrid search works
-
-1. **BM25 (FTS5)** — SQLite's native full-text search ranks chunks by term frequency and inverse document frequency. Fast, deterministic, great for exact keyword matches.
-
-2. **Semantic similarity** — Query and chunks are embedded into 384-dimensional vectors using `all-MiniLM-L6-v2` (runs locally via ONNX Runtime). Cosine similarity finds conceptually related chunks even when exact terms don't match.
-
-3. **Reciprocal Rank Fusion** — Both ranked lists are merged using RRF with weights (BM25: 0.4, semantic: 0.6). Documents appearing in both lists get boosted. The fusion formula is: `score = 0.4 / (60 + rank_bm25) + 0.6 / (60 + rank_semantic)`.
-
-The embedding model (~23MB) is downloaded automatically on first use and cached in `~/.cache/huggingface/`. If the model fails to load, the system falls back to BM25-only search transparently.
-
----
-
-## Performance
-
-Benchmarked on Apple Silicon (Node v25, darwin arm64, BM25 mode):
-
-| Operation | 1K chunks | 10K chunks | 50K chunks | 100K chunks | 250K chunks |
+| Mode | R_any@5 | R_all@5 | R_any@10 | R_all@10 | NDCG@10 |
 | --- | --- | --- | --- | --- | --- |
-| **write** | 0.17 ms | 0.19 ms | 0.23 ms | 0.21 ms | 0.25 ms |
-| **read** | 0.01 ms | 0.05 ms | 0.21 ms | 0.22 ms | 0.85 ms |
-| **search (BM25)** | ~5 ms† | ~10 ms† | ~60 ms† | ~110 ms† | ~390 ms† |
-| **list** | 0.2 ms | 0.3 ms | 0.3 ms | 0.3 ms | 1.1 ms |
-| **state get/set** | 0.03 ms | 0.03 ms | 0.07 ms | 0.05 ms | 0.03 ms |
+| keyword (BM25) | 95.5% | 84.2% | 96.4% | 89.3% | 0.882 |
 
-† Search times from isolated run (no model loading interference). During warmup, first queries may be slower.
+LongMemEval indexes raw chat logs, not curated memories, and embedding its
+~16K long sessions takes about an hour and several GB of RAM on a laptop, so
+the hybrid run is optional: `npm run bench:longmemeval` (`--sample 100` for a
+stratified subset). The keyword run takes seconds:
+`node benchmarks/longmemeval.js --model none`.
 
-**Key insights:**
+### How the defaults were chosen
 
-- **write is stable at ~0.2 ms/op** — FTS5 triggers and embedding backfill are non-blocking; inserts stay constant
-- **read is a single index lookup** — sub-millisecond up to 50K chunks, still <1 ms at 250K
-- **search scales linearly with FTS5 corpus** — for typical agent memory usage (≤25K chunks), search stays under 30 ms
-- **list is O(1) in practice** — pagination caps results at 100 rows by default, so list time stays flat regardless of corpus size
-- **state ops are O(1)** — key/value store backed by a B-tree primary key, constant at all scales
+- **Model** — `arctic-embed-m-v2` matches the best quality (EmbeddingGemma)
+  within 0.005 MRR at 7× lower latency and half the RAM, is Apache-2.0, and
+  separates near-duplicates well enough for the write-time duplicate warning.
+  The 0.0.x model (`all-MiniLM-L6-v2`, English-only) fails cross-lingual
+  queries: Recall@5 70.0% vs 95.8%.
+- **Fusion** — equal-weight reciprocal rank fusion (0.0.x) scored *below*
+  semantic-only search on the golden set, because keyword hits dilute
+  cross-lingual and paraphrase queries. A grid over method × weight was run on
+  the odd-numbered queries only; the chosen setting (convex combination, 0.7
+  semantic) was then confirmed on the even half (`npm run bench:tune-fusion`).
+  It keeps keyword strength for exact identifiers.
+- **Duplicate warning** — the similarity threshold per model is set for a ~5%
+  false-positive rate on the golden set's superseded/superseding pairs.
 
----
+## Upgrading from 0.0.x
 
-## LongMemEval Benchmark
+Existing stores migrate automatically on first start (content, tags,
+timestamps and state are kept; vectors are recomputed in the background).
+Tool names are unchanged; new optional parameters only. Fixed along the way:
 
-`agent-memory-store` is benchmarked against the **LongMemEval** dataset (ICLR 2025), a standard for evaluating long-term memory in AI systems. The benchmark measures retrieval quality (Recall@5, Recall@10, NDCG@10) on 500 real conversation scenarios.
+- searches containing `? ' . - / ,` or `AND/OR/NOT` failed with FTS5 syntax errors;
+- `min_score` was ignored; expired memories were returned until restart;
+- updating meant delete + write; `INSERT OR REPLACE` left orphan index rows;
+- concurrent processes could fail with `SQLITE_BUSY`;
+- the previously published "92.1% Recall@5" came from a copy of the search
+  code that differed from production, a non-standard recall metric and a
+  competitor table mixing different metrics; it is replaced by the
+  reproducible results above.
 
-> **Context**: `agent-memory-store` is designed for _agent-curated memory_ — agents decide what to store, writing structured chunks with topic, tags, and importance. LongMemEval instead dumps raw conversation turns verbatim, which is outside this system's intended use case. Despite that mismatch, the retrieval engine achieves 92.1% Recall@5 — validating the underlying BM25 + semantic search infrastructure. In real agent usage, where chunks are pre-filtered and structured by the agent before writing, retrieval quality would be higher still.
+## Configuration
 
-### Results (500 questions)
-
-| Mode | Recall@5 | Recall@10 | NDCG@10 | Questions |
-| --- | --- | --- | --- | --- |
-| **hybrid** | 92.1% | 96.9% | 0.885 | 479 |
-| **bm25** | 92.0% | 95.9% | 0.901 | 479 |
-| **semantic** | 86.1% | 92.5% | 0.821 | 479 |
-
-### Performance by Question Type
-
-Breakdown of hybrid mode across the 5 LongMemEval categories:
-
-| Category | Count | Recall@5 | Recall@10 | NDCG@10 |
-| --- | --- | --- | --- | --- |
-| **single-session-assistant** | 56 | 96.4% | 98.2% | **0.970** |
-| **knowledge-update** | 72 | 95.8% | 98.6% | 0.927 |
-| **single-session-user** | 64 | 95.3% | 98.4% | 0.863 |
-| **single-session-preference** | 30 | 93.3% | 96.7% | 0.784 |
-| **multi-session** | 125 | 91.2% | 95.9% | 0.898 |
-| **temporal-reasoning** | 132 | 87.4% | 95.7% | 0.847 |
-
-### Competitive Positioning
-
-Compared against published memory systems on LongMemEval Recall@5:
-
-| System | Recall@5 | LLM Required |
+| Variable | Default | |
 | --- | --- | --- |
-| **MemPalace hybrid+LLM** | 100.0% | Haiku |
-| **MemPalace raw** | 96.6% | None |
-| Mastra (GPT-4o-mini) | 94.87% | Yes |
-| **agent-memory-store (hybrid)** | **92.1%** | **None** |
-| Hindsight (Gemini) | 91.4% | Yes |
-| Stella (dense baseline) | ~85% | None |
-| Contriever (dense baseline) | ~78% | None |
-| BM25 (sparse baseline) | ~70% | None |
+| `AGENT_STORE_PATH` | `./.agent-memory-store` | Store directory. |
+| `AGENT_MEMORY_AGENT` | `global` | Default agent id recorded on writes from this process. |
+| `AGENT_MEMORY_MODEL` | `arctic-embed-m-v2` | Or `granite-97m-multilingual` (lighter), `embeddinggemma-300m`, `minilm-l6-en`, `none` (keyword only, ~64 MB RAM). All agents sharing a store must use the same model. |
+| `AGENT_MEMORY_CACHE` | `~/.cache/agent-memory-store/models` | Model cache. |
 
-**Key insight**: `agent-memory-store` achieves competitive retrieval quality **without any external LLM calls**, sitting between MemPalace raw and production systems like Mastra — all while using only local embeddings.
+## Limits
 
-### Run the Benchmark
-
-Test on a subset (quick validation):
-
-```bash
-node benchmarks/longmemeval_bench.js --limit 50
-```
-
-Full benchmark (500 questions, ~6 minutes with warm embedding cache):
-
-```bash
-npm run bench:longmemeval
-# or
-node benchmarks/longmemeval_bench.js
-```
-
-**Options:**
-
-- `--limit N` — Run only first N questions (default: all 500)
-- `--mode MODE` — Test specific mode: `hybrid`, `bm25`, `semantic`, or `all` (default: all)
-- `--granularity GRAN` — Chunk strategy: `session` (default), `turn`, or `hybrid`
-- `--top-k K` — Retrieval cutoff (default: 10)
-
-Results are saved to `benchmarks/.cache/longmemeval_results.json` for analysis.
-
----
-
-## Documentation
-
-Full reference documentation is available at [`docs/DOCUMENTATION.md`](./docs/DOCUMENTATION.md):
-
-- Complete tool reference with all parameters and return formats
-- Search mode guide with examples and the RRF fusion formula
-- SKILL.MD walkthrough — bootstrap protocol, handoff patterns, deduplication
-- Multi-agent coordination patterns with code examples
-- Architecture deep dive (each source file's role)
-- Performance budgets and scaling guidance
-- Anti-patterns and the quick-reference decision tree
-
----
+- Each agent process loads its own model copy (~630 MB on macOS ARM, ~1.3 GB
+  on Linux x64 with the default). With
+  many agents on a small machine, use `granite-97m-multilingual` (~450 MB) or
+  `none` (~64 MB, keyword only).
+- Exact vector search is linear: fine up to ~100K memories per store.
+- Only the first ~2000 characters of a memory are embedded; keyword search
+  covers all of it. Prefer focused memories.
+- Secret detection is pattern-based, not a DLP system. There is no access
+  control: whoever can read `store.db` can read every memory.
 
 ## Development
 
 ```bash
-git clone https://github.com/vbfs/agent-memory-store
-cd agent-memory-store
 npm install
-npm start
+npm test                    # unit, end-to-end over stdio, multi-process — no model download
+AMS_MODEL_TESTS=1 npm test  # + end-to-end with the real model
+npm run bench               # quality + speed, ~30 s
+npm run bench:longmemeval   # optional, heavy (see above)
 ```
 
-Run tests:
-
-```bash
-npm test
-```
-
-Run benchmark:
-
-```bash
-node benchmark.js
-```
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
-
----
+See [CONTRIBUTING.md](./CONTRIBUTING.md). Programmatic use (`import { MemoryStore } from "agent-memory-store"`) is documented in [docs/DOCUMENTATION.md](./docs/DOCUMENTATION.md#8-programmatic-use).
 
 ## License
 

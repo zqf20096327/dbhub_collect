@@ -87,6 +87,8 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
 
 ## What works today
 
+- [Run Quivr on one machine](https://docs.quivr.thevibecompany.co/run-quivr/single-machine) from release images with one Compose file, CPU embeddings, persistent storage and an optional demo interface.
+
 - [Run the vector index on a dedicated host](https://docs.quivr.thevibecompany.co/run-quivr/dedicated-vector-host) with authenticated HTTPS, a persistent data disk, and an idempotent Azure CLI provisioning example.
 
 - [Reset and reload an installation](https://docs.quivr.thevibecompany.co/run-quivr/reset-and-reload) from private JSON declarations, with a preview and idempotent public API replay.
@@ -263,7 +265,10 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   Live and bulk workers group ready document commits within each receipt batch,
   up to sixteen distinct Records per organization. Segments-only ingestion providers
   can publish new content and keyword readiness together; vectors remain a
-  separate step. The change feed keeps synchronous, gap-free commit ordering.
+  separate step. The bridge initially keeps legacy journal mode. Explicit parallel activation removes
+  organization-wide acceptance locks, with stable per-Record feed order and a safe
+  publication horizon; concurrent Records need not follow exact commit order
+  ([rollout](docs-site/run-quivr/upgrade-quivr.mdx#enable-parallel-imports)).
 
   JSON logs link caller request IDs, trace/span IDs, Receipts, Records and Versions.
   Opt-in OpenTelemetry exports traces and metrics to an OTLP collector, carrying

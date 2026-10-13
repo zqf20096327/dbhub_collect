@@ -10,6 +10,8 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+**中文** | [English](README_EN.md)
+
 </div>
 
 ## 功能
@@ -31,10 +33,10 @@
 | --- | --- |
 | Windows 10/11（x64 / ARM64） | `NexTerm_x.y.z_<架构>-setup.exe`，运行安装器。 |
 | macOS（Apple Silicon / Intel） | `NexTerm_x.y.z_<架构>.dmg`，打开后拖入「应用程序」。 |
-| Linux 桌面（amd64 / arm64） | `NexTerm-desktop_x.y.z_linux_<架构>.deb`，`apt install ./<包名>.deb` 安装（自动装 GTK4 与 WebKitGTK 6.0 依赖）。 |
-| Linux 服务器 | `NexTerm-server_x.y.z_linux_<架构>.tar.gz`，提供完整浏览器界面，安装见包内 README。 |
-| Android（构建预览） | 从 [GitHub Actions](https://github.com/Hello-CTF/NexTerm/actions/workflows/ci.yml) 的 `mobile-android` 产物获取 `nexterm.apk`，尚未纳入 Releases。 |
-| iOS / iPadOS（构建预览） | 配置 Apple Distribution 签名后，CI 产出 `nexterm.ipa`，可用 Transporter 上传 TestFlight。 |
+| Linux 桌面（amd64 / arm64） | `NexTerm-desktop_x.y.z_linux_<架构>.deb`，`apt install ./<包名>.deb` 安装。 |
+| Linux 服务器 | `NexTerm-server_x.y.z_linux_<架构>.tar.gz`。 |
+| Android | `NexTerm_x.y.z_android.apk`，arm64 设备直接安装。 |
+| iOS / iPadOS | `NexTerm_x.y.z_ios.ipa`（ad-hoc 签名）。 |
 | 懒猫微服 | 在应用中心安装 NexTerm。 |
 
 macOS 首次打开提示无法验证开发者时，在「系统设置 → 隐私与安全性」中点「仍要打开」；提示应用已损坏则在终端执行 `xattr -dr com.apple.quarantine /Applications/NexTerm.app`。
@@ -71,6 +73,13 @@ go build ./...   # 编译全部 Go 包
 ```bash
 task check   # gofmt + go vet + go test ./... + go mod verify + pnpm typecheck + pnpm lint
 ```
+
+## 贡献与提交规范
+
+- 分支从 `master` 最新提交切出，完成后经 PR 合回 `master`；PR 标题与提交消息用 Conventional Commits（`feat` / `fix` / `docs` / `refactor` / `test` / `ci` / `build` / `perf` / `chore`）。
+- PR 描述写清三要素：解决什么问题、改了什么、怎么验证的；用户可感知的变化与行为变化要具名声明。
+- 提交前本地门禁全绿（`task check`，完整清单见 [AGENTS.md](AGENTS.md) 的质量命令）；CI 在 PR 上运行同一套检查。
+- 开发约定、评审规则与多 agent 协作约定见 [AGENTS.md](AGENTS.md)。
 
 ## License
 

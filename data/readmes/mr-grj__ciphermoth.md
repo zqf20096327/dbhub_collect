@@ -72,7 +72,7 @@ That's all in **[CONTRIBUTING.md](./CONTRIBUTING.md)**.
 - cryptographically secure password generator (not the `Math.random()` kind) with a strength indicator on every entry
 - import from Chrome, Bitwarden, KeePass, Proton Pass, and friends via CSV, or restore an encrypted CipherMoth backup
 - encrypted backup export, a CLI (`ciphermoth`) for the terminal, and auto-lock plus clipboard-clearing (for the small things that matter ^^)
-- notices new releases and can update itself, opt-in and signature-verified (Sigstore / cosign)
+- notices new releases and can update itself, opt-in and signature-verified (Sigstore / cosign), with a verified database snapshot and automatic rollback if anything goes wrong
 
 ## Who it's for (and who it isn't)
 
@@ -103,12 +103,12 @@ How it works:
 - **not encrypted yet:** each entry's **name, username and description**, plus its type, favorite flag, timestamps and
   attachment sizes. Someone with the database can see which entries you have and the usernames on them, just not the
   passwords. Encrypting those too is planned;
-- when you unlock, the server derives the key and keeps it in memory for a **session**; your browser only gets a
-  random session token (kept in `sessionStorage` for that tab), never the key. The server ends the session after the
-  inactivity timeout from Settings, when you log out, when the master password changes, and when it restarts (closing
-  a tab without logging out leaves its session until the timeout), and never stores or logs the key or the token. Until v1.6.0 a v1.4.x CLI or browser tab can still ask for
-  the key the old way (it needs the master password); `CIPHERMOTH_LEGACY_KEY_AUTH=false` turns that off. While you're
-  using the vault, the server does see your passwords: run it on a machine you trust;
+- when you unlock, the server derives the key and keeps it in memory for a **session**; your browser and the CLI only
+  get a random session token (the browser keeps it in `sessionStorage` for that tab), never the key, and no route
+  hands the key out or accepts it back. The server ends the session after the inactivity timeout from Settings, when
+  you log out, when the master password changes, and when it restarts (closing a tab without logging out leaves its
+  session until the timeout), and never stores or logs the key or the token. While you're using the vault, the
+  server process does handle the key and your passwords in plaintext: run it on a machine you trust;
 - a strict Content-Security-Policy restricts the web UI to connecting to its own API (and GitHub's release address
   for the update check);
 - backups are AES-256 encrypted ZIPs locked with your master password, but the ZIP format derives that key with
@@ -142,6 +142,7 @@ To report a vulnerability, see [SECURITY.md](./SECURITY.md).
 ## Docs
 
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - hacking on CipherMoth, self-hosting on a server, configuration, and updates
+- **[docs/UPDATING.md](./docs/UPDATING.md)** - updating by hand or with one click, what the updater guarantees, and manual recovery
 - **[docs/CLI.md](./docs/CLI.md)** - the `ciphermoth` command-line reference. A plain Docker install already has it: `install.sh` leaves a `cip` script in your CipherMoth folder, so `./cip password list` just works (no Python, no clone)
 - **[SECURITY.md](./SECURITY.md)** - reporting a vulnerability
 - **[testdata/golden](./testdata/golden/README.md)** - which older versions' vaults and backups open in this release, proven by tests against vaults those versions created

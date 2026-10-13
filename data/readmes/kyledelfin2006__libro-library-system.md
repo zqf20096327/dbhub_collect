@@ -9,13 +9,22 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
 
-Libro is a Spring Boot REST API and Library Management System. It manages books with CRUD operations, search, pagination, sorting, range filtering, genre analytics, and statistics. It also exposes user account and profile routes for creation, listing, lookup, profile updates, password changes, and deletion. Loan HTTP APIs are not implemented. The prototype uses DTO-driven validation, centralized exception handling, and a Docker-first workflow backed by PostgreSQL 18 with Flyway database migrations.
+Libro is a library management system built with Spring Boot. It helps manage a library's book collection and user accounts.
 
-The institutional context behind the user domain is documented in [Institutional Context](docs/institutional-context.md), including its ASU-CCS setting and alignment with existing MIS identity conventions.
+### ✨ Features
 
-The current domain decision is documented in [Domain Decisions](docs/domain-decisions.md): each `Book` represents one physical borrowable copy, so one copy can be assigned to only one active borrower at a time. Separate copies of the same title are separate records.
+- 📚 **Books:** create, view, replace, partially update, and delete physical-copy records.
+- 🔎 **Search:** find books by title, author, genre, or exact price; combine filters, sort, paginate, and filter by price or budget.
+- 📊 **Insights:** view book counts, total and average value, the most expensive book, and genre counts.
+- 👥 **Accounts:** sign up, browse permitted listings, look up profiles, update details, change passwords, and delete accounts. Staff access follows role permissions.
+- 🛠️ **Built for development:** Docker, PostgreSQL 18, Flyway migrations, request validation, and consistent error responses.
+- 🩺 **Health check:** check API and database reachability.
 
-The API exposes generated OpenAPI documentation through Springdoc. Swagger UI is available at `/swagger-ui.html` and the machine-readable specification is available at `/v3/api-docs` when the application is running; both require HTTP Basic authentication under the current catch-all security rule. `POST /app/users/signup` is the only unauthenticated route. Other routes require a university ID and password. CSRF protection remains enabled, so unsafe requests also need a valid CSRF token. See the [API Documentation Guideline](docs/api-documentation-guideline.md) for the project standard.
+Loan HTTP APIs are not implemented yet. Each `Book` is one physical copy; separate copies of a title have separate records. See [Domain Decisions](docs/domain-decisions.md).
+
+### 🔐 API access
+
+Explore the generated API docs in [Swagger UI](http://localhost:8080/swagger-ui.html) or [`/v3/api-docs`](http://localhost:8080/v3/api-docs). HTTP Basic authentication is required except for `POST /app/users/signup`; write requests also require a CSRF token. See [Institutional Context](docs/institutional-context.md) and the [API Documentation Guideline](docs/api-documentation-guideline.md).
 
 Main Developer: **Aldrin Kyle Delfin**
 
@@ -60,7 +69,7 @@ Main Developer: **Aldrin Kyle Delfin**
 
 This README remains the project's main portfolio entry point. Supporting documents are grouped by audience so readers can choose a project overview or implementation reference.
 
-### For recruiters and project reviewers
+**For technical and peer review**
 
 1. The Architecture Overview and Request Lifecycle sections below explain the current system with component, security, persistence, and startup diagrams.
 2. [Development Problems Solved](docs/development-problems-solved.md) explains major engineering challenges, decisions, and verification.

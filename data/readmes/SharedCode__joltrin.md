@@ -23,14 +23,14 @@ Joltrin (formerly SOP) is an open-source Go library that checks an AI agent's ac
 **What Joltrin does.** The agent emits intent. Joltrin checks the intent against the trace and the runbook's rules, outside the agent's context window. The check and the commit are one call, so a step is recorded only if it passed. A step whose required state is missing is refused. A claim that something happened is not evidence that it happened.
 
 <p align="center">
-  <a href="https://youtu.be/F0jYkBHJluI">
-    <img src="docs/assets/joltrin-demo.gif" alt="Joltrin demo. Click to watch the video." width="760" />
+  <a href="https://youtu.be/WZbz868nTi4">
+    <img src="https://img.youtube.com/vi/WZbz868nTi4/maxresdefault.jpg" alt="Joltrin demo video. Click to watch it on YouTube." width="760" />
   </a>
 </p>
 
 <table align="center">
   <tr>
-    <td align="center"><a href="https://www.youtube.com/watch?v=F0jYkBHJluI"><img src="https://img.youtube.com/vi/F0jYkBHJluI/hqdefault.jpg" alt="Joltrin full demo on YouTube" width="360" /></a><br /><sub>Full demo</sub></td>
+    <td align="center"><a href="https://www.youtube.com/watch?v=WZbz868nTi4"><img src="https://img.youtube.com/vi/WZbz868nTi4/hqdefault.jpg" alt="Joltrin full demo on YouTube" width="360" /></a><br /><sub>Full demo</sub></td>
     <td align="center"><a href="https://www.youtube.com/shorts/oS1bfq_ZDkg"><img src="https://img.youtube.com/vi/oS1bfq_ZDkg/hqdefault.jpg" alt="Joltrin short on YouTube" width="200" /></a><br /><sub>Short</sub></td>
   </tr>
 </table>
@@ -67,7 +67,7 @@ go run github.com/sharedcode/joltrin/v5/examples/agent_team@latest       # Jira,
 go run github.com/sharedcode/joltrin/v5/examples/quickstart@latest       # the embedded B-Tree that holds the state
 ```
 
-No clone needed, only Go 1.26.8 or newer. The first run downloads the modules and compiles, which took about 10 seconds on a MacBook Air, and later runs are quick. To read the code, or to run `./scripts/demo.sh --memory`, clone the repo.
+No clone needed, only Go 1.26.9 or newer. An older Go downloads 1.26.9 on its own. The first run downloads the modules and compiles, which took about 10 seconds on a MacBook Air, and later runs are quick. To read the code, or to run `./scripts/demo.sh --memory`, clone the repo.
 
 Or skip the install. These run in your browser with no backend:
 
@@ -75,6 +75,7 @@ Or skip the install. These run in your browser with no backend:
 | :--- | :--- |
 | [Agent barrier](https://joltrinhq.com/agents/) | Try to drop a database before the backup is validated and watch the barrier refuse. It runs the real checks, compiled to WebAssembly. |
 | [Technical demo](https://joltrinhq.com/) | Run ACID transactions, vector search, and an agent checkpoint resume on the WASM build of the engine. |
+| [Joltrin Arena, B-tree challenge](https://joltrinhq.com/btree/) | Guess, then run four short scenarios on the real in-memory B-tree compiled to WebAssembly. Numbers are measured on your device, and the page states what they do not show. |
 | [Arena](https://joltrinhq.com/arena/) | Crash storage nodes and spike load in a cluster simulation. It illustrates the concepts, it is not a live cluster. |
 
 ## Connect it to an MCP agent
@@ -111,11 +112,13 @@ go install github.com/sharedcode/joltrin/v5/cmd/sop-mcp-server@latest
 "$(go env GOPATH)/bin/sop-mcp-server" setup --apply
 ```
 
-The first `go install` downloads the Go modules, which took about 15 seconds on a MacBook Air. If your Go is older than 1.26.8, Go also downloads that toolchain once, about 240 MB.
+The first `go install` downloads the Go modules, which took about 15 seconds on a MacBook Air. If your Go is older than 1.26.9, Go also downloads that toolchain once, about 240 MB.
 
 </details>
 
 `setup --apply` registers the server using the binary's full path, which avoids the "Executable not found" failure you get when a folder is not on the `PATH` your agent starts with. It can be run again, for example after an upgrade. Run `setup` without `--apply` to see the commands first.
+
+To see the barrier before you connect an agent, run `sop-mcp-server demo`. It needs no agent and finishes at once. If the binary is not on your `PATH`, use the full path you installed it to, such as `$HOME/.joltrin/bin/sop-mcp-server demo`.
 
 Then tell your agent: "Use the joltrin tools to run `drop_prod_db` on workflow `db-maintenance` with trace id `t1`." The server refuses until `take_backup` and `validate_backup` have run in that trace, whatever the agent claims. A recorded run with real agents, and what it does not prove, is in [docs/AGENT_BARRIER_TESTS.md](docs/AGENT_BARRIER_TESTS.md). The same check also gates an A2A agent, described in [docs/AGENT_PROTOCOLS.md](docs/AGENT_PROTOCOLS.md).
 

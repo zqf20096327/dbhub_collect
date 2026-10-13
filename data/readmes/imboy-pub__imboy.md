@@ -10,11 +10,17 @@ IMBoy 是可私有部署的即时通讯平台。本仓库包含 Erlang/OTP 后�
 
 ## 能做什么
 
-- 单聊、群聊、频道、朋友圈和消息推送
+一期交付（`phase1_delivery` profile）能力面：
+
+- 单聊、群聊与消息推送（Core IM：联系人、历史/离线/多端同步、附件与消息治理）
+- 企业组织/部门/成员/工作区与 RBAC；人工客服坐席与访客 Widget；OA 对接（internal API / SSO / Webhook）
+- 频道底座（组织内部 General 群与公告频道）
+- 朋友圈与附近的人（一期范围；发布、互动、定位及隐私控制须按交付矩阵验收）
 - HTTP API 与 WebSocket 长连接
-- 可选端到端加密（E2EE）
 - PostgreSQL 持久化与 Garage S3 附件直传
 - Docker Compose 单节点生产部署（Helm/Kubernetes 为实验性，未经生产集群验证）
+
+完整版（full-selected）另含频道发现/邀请/付费频道、E2EE 端到端加密、RTC、Bot、AI 助手等域；一期交付 profile 下这些域经交付锁与 fail-closed 门禁关闭，旧缓存或远端配置不能重新打开。分期边界、白名单与交付锁清单见[打包契约](./docs/product/packaging-contract.md)，交付包内容见[交付包清单](./docs/product/delivery-package-manifest.md)。
 
 ## 系统架构
 
@@ -175,8 +181,7 @@ docker compose -f docker-compose.demo.yml up -d
 # 30 秒后访问 http://127.0.0.1:9800/api/v1/init
 ```
 
-最小两服务环境（PostgreSQL + 后端），零配置，适合产品评估和现场演示。
-详细演示流程见 [5 分钟 Demo 脚本](./docs/business/demo-runbook.md)。
+该示例用于本地产品评估。启动前核对配置模板、端口和健康检查，详见[部署指南](./deploy/README.md)。实际能力以部署 profile 为准；一期不启用 E2EE、AI 或 RTC。
 
 ## 继续阅读
 
@@ -184,7 +189,6 @@ docker compose -f docker-compose.demo.yml up -d
 - [核心业务概念](./docs/concepts/README.md)（账号 / 组织与工作区 / 消息 / E2EE / 智能体 / 客服 / 企业业务）
 - [术语表](./docs/glossary.md)（三端统一的正式名称与易混裁定）
 - [E2EE 协议规范](./docs/reference/e2ee-protocol-specification.md)
-- [E2EE 安全简报（企业决策者）](./docs/business/e2ee-security-brief.md)
 - [后端架构](./docs/architecture/overview.md)
 - [REST API 目录](./docs/reference/rest-api-v1-catalog.md)
 - [WebSocket 协议](./docs/reference/ws-protocol-contract.md)

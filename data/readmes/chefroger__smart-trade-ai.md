@@ -188,8 +188,10 @@ python server.py
 **前置条件**：Python >= 3.11 · Git · LLM API Key（推荐 DeepSeek；也兼容 OpenAI / Anthropic 等）
 
 ```bash
-# 1. 安装 Hermes Agent（AI 引擎）
-git clone --branch main https://github.com/NousResearch/hermes-agent.git ~/.hermes/hermes-agent
+# 1. 安装 Hermes Agent（AI 引擎）—— 必须用固定 tag，不要用 main：
+#    main 每天都在前进；且从 v0.21.6 起上游把核心依赖标成了 Python 3.14+，
+#    在 3.11–3.13 上装 main 会一条依赖都不装（Hermes 起不来）。
+git clone --branch v2026.9.24 https://github.com/NousResearch/hermes-agent.git ~/.hermes/hermes-agent
 cd ~/.hermes/hermes-agent && pip install -e "."
 
 # 2. 配置 LLM

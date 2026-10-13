@@ -50,6 +50,8 @@ Listing MCPs, searching tools, and paging through the catalog never starts a dow
 
 Each agent connects to MMG instead of carrying dozens of independent MCP definitions. The gateway centrally manages services, credentials, permissions, health, and runtime state. The same catalog can be safely assigned to different users and tokens.
 
+For Web integrations with large catalogs, use [capability summary pages and exact definitions](wiki/reference/catalog-api.md). Approval tests support a bounded summary response; legacy full-list responses have explicit size limits. Agent service summaries include a bounded tool-name preview; enumerate `gateway_search_tools` for the full catalog. Exact calls use indexed routes and reuse schema validators.
+
 ### Agent proposals with human approval
 
 The recommended migration path is not to rebuild every MCP by hand. Give a trusted administrator token permission to submit MCP proposals, then ask an agent to:
@@ -177,7 +179,7 @@ Browser translation can send visible page text to the configured translation pro
 ## Administration overview
 
 - stdio, Streamable HTTP, legacy SSE, and REST-to-MCP transports;
-- generic JSON, Codex TOML, Claude, and DSH Cordis/registry import;
+- generic JSON, Codex TOML, Claude, and DSH Cordis/registry import; exports use common `mcpServers` connection fields with a versioned MMG `config` extension for lossless re-import ([format](wiki/reference/catalog-api.md#service-configuration-export));
 - independent user, token, anonymous-scope, and MCP assignment controls;
 - `lazy`, `eager`, and `disabled` lifecycle modes;
 - shared, per-user, and per-session runtime isolation;
@@ -213,7 +215,7 @@ docker compose up --build -d
 
 The default bind address is local-only. For remote or production use, place MMG behind an HTTPS reverse proxy and set `PUBLIC_URL` and `COOKIE_SECURE=true` correctly. MMG is currently designed as a single gateway runtime; do not share one downstream process scheduler across multiple workers or replicas.
 
-Read [Configuration](wiki/operations/configuration.md), [Deployment and upgrades](wiki/operations/deployment-and-upgrades.md), and [Backup and migration](wiki/operations/backup-and-migration.md).
+Read [Database deployment, migration, and backup](wiki/database-deployment.md), [Configuration](wiki/operations/configuration.md), [Deployment and upgrades](wiki/operations/deployment-and-upgrades.md), and [Backup and migration](wiki/operations/backup-and-migration.md).
 
 ## Upgrades
 
@@ -248,7 +250,7 @@ Contributor guidance is in [Contributing](wiki/development/contributing.md); tra
 - [Installation](wiki/getting-started/installation.md) and [Quick start](wiki/getting-started/quick-start.md)
 - [Client connections](wiki/guides/connect-clients.md) and [MCP migration](wiki/guides/migrate-mcps.md)
 - [Progressive discovery](wiki/concepts/progressive-discovery.md) and [Runtime lifecycle](wiki/concepts/runtime-and-lifecycle.md)
-- [Configuration](wiki/operations/configuration.md), [Deployment](wiki/operations/deployment-and-upgrades.md), and [Troubleshooting](wiki/troubleshooting/common-issues.md)
+- [Database deployment](wiki/database-deployment.md), [Configuration](wiki/operations/configuration.md), [Deployment](wiki/operations/deployment-and-upgrades.md), and [Troubleshooting](wiki/troubleshooting/common-issues.md)
 - [CLI reference](wiki/reference/cli.md) and [Gateway tool reference](wiki/reference/gateway-tools.md)
 - [Agent instructions](AGENTS.md)
 - [简体中文 README](README.zh-CN.md)
@@ -262,3 +264,5 @@ An `outcome_unknown` result means a request may already have reached its destina
 ## License
 
 Copyright 2026 eraycc. Licensed under the [Apache License 2.0](LICENSE).
+
+Large catalogs support progressive `gateway_search_tools` with `names_only: true` (no Schema reads). Query exact names again without that flag before calling. Follow `next_cursor` without changing query arguments. Native tool/resource/prompt/template listings and `gateway_list_resources` paginate; complete MCP JSON-RPC envelopes are budgeted at 1 MiB including text and structured duplication. An individually oversized complete contract returns `catalog_entry_too_large`, never a truncated Schema.

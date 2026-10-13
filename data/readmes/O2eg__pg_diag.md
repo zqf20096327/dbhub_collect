@@ -1,0 +1,1845 @@
+# pg-diag
+
+`pg-diag` is a PostgreSQL diagnostic report utility for PostgreSQL 10-18.
+
+Based on [pg_perfbench](https://github.com/TantorLabs/pg_perfbench).
+
+It collects PostgreSQL catalog/statistics data, optional host data locally or over
+SSH, repeated snapshots for rate/delta charts, and by default writes three outputs:
+
+- `report.json` - machine-readable diagnostic artifact for other systems or renderers.
+- `report.html` - browser report rendered from the JSON artifact.
+- `report.log` - timestamped collection progress, item outcomes, and skip reasons.
+
+The report layout, taxonomy, presentation rules, SQL queries, host scripts,
+trusted Python sources, metrics, and sampler-provider registrations are
+declarative files under `src/pg_diag/content/`. The installed command uses this bundled
+content pack by default. The engine validates and executes only its
+generic contracts; bundled item and host-probe implementations are not embedded
+in core dispatch, validation, or metric rendering.
+
+## Documentation
+
+- [PostgreSQL access best practices](https://github.com/O2eg/pg_diag/blob/main/docs/access-best-practices.md) - secure
+  connection patterns, least-privilege accounts, SSH and TLS boundaries,
+  pooler caveats, and Patroni/HAProxy topologies.
+- [Maximizing report coverage](https://github.com/O2eg/pg_diag/blob/main/docs/server-configuration.md) - which
+  extensions and statistics/logging parameters to enable on the server so the
+  report carries the maximum amount of evidence, with restart/reload notes.
+- [Content pack overview](https://github.com/O2eg/pg_diag/blob/main/src/pg_diag/content/README.md) - bundled report structure, SQL
+  catalogs, host scripts, trusted Python sources, metrics, collection modes,
+  and validation.
+- [Extending the report](https://github.com/O2eg/pg_diag/blob/main/src/pg_diag/content/EXTENDING.md) - examples for adding SQL table
+  items, snapshot charts, top-N charts, delta tables, host shell items, trusted
+  Python items, and OS sampler charts.
+- [Item development specification](https://github.com/O2eg/pg_diag/blob/main/src/pg_diag/content/ITEM_DEVELOPMENT_SPEC.md) - normative
+  contracts for values, units, timestamps, tables, charts, and diagnostics.
+- [Tests](https://github.com/O2eg/pg_diag/blob/main/tests/README.md) - test layout, unit and integration test commands,
+  and guidance for adding or correcting tests.
+
+Both the wheel and source distribution include all repository Markdown documentation.
+After installation, the README, audit prompts (`diag_promt.md`, `security_promt.md`),
+guides, and test/debug-tool documentation are under `share/doc/pg-diag/` in the
+installation's data directory, preserving their repository paths. Locate that
+directory with:
+
+```bash
+python -c 'import sysconfig; print(sysconfig.get_path("data") + "/share/doc/pg-diag")'
+```
+
+Content-pack documentation and item instructions remain inside `pg_diag/content/`;
+the diagnostic graph specification is in `pg_diag/render/graph/`.
+
+## Quick Navigation
+
+- [Credentials and security](#credentials-and-security)
+- [Quick start](#quick-start)
+- [Report consumers and automation](#report-consumers-and-automation)
+- [Embed Markdown audit summaries](#embed-markdown-audit-summaries)
+- [Inspect and validate content](#inspect-and-validate-content)
+- [Report and collection modes](#report-and-collection-modes)
+- [Connection topologies](#connection-topologies)
+- [Run one-shot reports](#run-one-shot-reports)
+- [Run repeated snapshots](#run-repeated-snapshots)
+- [Select report items](#select-report-items)
+- [Collect server logs](#collect-server-logs)
+- [Analyze log files without a database](#analyze-log-files-without-a-database)
+- [Collection timing and metric evaluation](#collection-timing-and-metric-evaluation)
+- [Output files and exit status](#output-files-and-exit-status)
+
+## Features
+
+- PostgreSQL version-aware SQL variants for PostgreSQL 10-18.
+- One-shot, repeated snapshots, and log-file (`logs`) report modes.
+- Local, SSH remote, and remote DB-only collection modes.
+- Read-only SQL execution.
+- OS sections and OS charts from the collector host or an SSH target.
+- Table, plain text, and chart report items.
+- Table filtering, sorting, pagination, and compact value formatting.
+- Chart zoom, drag-pan, reset, legends with vertical scrolling after six rows,
+  consistent axis/tooltip unit scaling, SVG/PNG/CSV export, and fixed color
+  palettes.
+- Source and metadata dialogs for report items.
+- Error diagnostics embedded directly into failed report items.
+- Self-contained HTML for human review and structured JSON for LLM, ETL, and
+  other automation workflows.
+
+## Installation
+
+### Install from PyPI
+
+Install a published release from PyPI in an isolated environment:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+
+python -m pip install --upgrade pip
+python -m pip install pg-diag
+```
+
+The distribution name is `pg-diag`, the import package is `pg_diag`, and the
+installed command is `pg-diag`. The wheel includes the bundled content
+pack and the JavaScript/CSS assets required for self-contained HTML reports.
+
+Upgrade an existing installation with:
+
+```bash
+python -m pip install --upgrade pg-diag
+```
+
+### Install from Source
+
+Install from the project directory:
+
+```bash
+cd pg_diag
+
+python3 -m venv .venv
+. .venv/bin/activate
+
+python -m pip install --upgrade pip
+python -m pip install -e .
+```
+
+For development and tests:
+
+```bash
+# Activate the environment used during installation, if applicable.
+. .venv/bin/activate
+
+python -m pip install -e ".[dev]"
+```
+
+Optional test extras are split out:
+
+```bash
+python -m pip install -e ".[docker]"
+python -m pip install -e ".[browser]"
+```
+
+Check the installed command:
+
+```bash
+pg-diag --version
+pg-diag --help
+```
+
+You can also run the CLI without installing the console script:
+
+```bash
+python -m pg_diag.cli --help
+```
+
+## Runtime Requirements
+
+Python runtime:
+
+- Python 3.10 or newer.
+- Python packages from `pyproject.toml`: `asyncpg`, `AsyncSSH`, and `PyYAML`.
+
+Compatibility matrix:
+
+| Collector Python | PostgreSQL 10 | PostgreSQL 11 | PostgreSQL 12 | PostgreSQL 13 | PostgreSQL 14 | PostgreSQL 15 | PostgreSQL 16 | PostgreSQL 17 | PostgreSQL 18 | Status |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| 3.10 | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Minimum supported Python; full unit and Docker integration matrix |
+| 3.11 | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Supported |
+| 3.12 | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Supported; primary development runtime |
+
+Python 3.9 and older are outside the compatibility contract. The PostgreSQL
+version is detected from the server, independently of the collector's Python
+minor version.
+
+PostgreSQL target:
+
+- PostgreSQL 10-18.
+- A login role that can connect to the diagnosed database and read PostgreSQL
+  catalog/statistics views. Granting `pg_monitor` or `pg_read_all_stats` is
+  recommended for complete activity/statistics visibility.
+- No extension is required for the core catalog, activity, locks, WAL,
+  replication, storage, vacuum, index, and OS parts of the report.
+- `pg_buffercache` collection uses a one-second statement timeout, but that
+  guard is best-effort on PostgreSQL 10-12 and releases older than 13.23,
+  14.20, 15.15, 16.11, 17.7, or 18.1. Those server versions can complete the
+  extension's shared-buffer loop before observing cancellation; use a patched
+  minor release when collecting buffer-cache charts from a large buffer pool.
+
+Recommended users:
+
+- For `remote-db-only` collection, run the CLI as any OS user that can start
+  `pg-diag`. Only PostgreSQL connection privileges matter in this mode.
+- For full `remote` collection, use a dedicated SSH account with public-key
+  authentication and the same narrow host read permissions described for local
+  collection. The selected private-key file or agent socket and PostgreSQL
+  credentials remain on the collector; they are not copied or forwarded to the
+  target host. The SSH service must allow command execution, the SFTP
+  subsystem, and local TCP forwarding to the PostgreSQL endpoint.
+- For full `local` collection, run the CLI on the PostgreSQL host as an OS user
+  that can read local PostgreSQL configuration files and `/proc` process data.
+  In packaged Linux installs this is usually the `postgres` OS user, or a
+  dedicated diagnostics service user granted read access to files such as
+  `pg_hba.conf`.
+- Avoid running as `root` by default. Use a least-privilege diagnostics user and
+  grant narrow read access where possible. `pg_diag` only tries passwordless
+  `sudo -n` for `lshw` hardware inventory if it is already available.
+- If the OS user cannot read `pg_hba.conf`, the local security item
+  `cluster_inventory.remote_superuser_access` will report unsupported evidence,
+  while the rest of the report continues.
+
+Optional PostgreSQL extensions:
+
+- `pg_stat_statements` enables SQL workload sections and SQL delta charts.
+  It must be present in `shared_preload_libraries`, PostgreSQL must be
+  restarted after that change, and `CREATE EXTENSION pg_stat_statements` must
+  be run in the diagnosed database.
+- `pg_wait_sampling` enables the optional historical wait sampling profile.
+  Install the extension package, add `pg_wait_sampling` to
+  `shared_preload_libraries`, restart PostgreSQL, and run
+  `CREATE EXTENSION pg_wait_sampling` in the diagnosed database. When both
+  extensions are enabled, place `pg_stat_statements` before `pg_wait_sampling`
+  in `shared_preload_libraries`. Without it, `pg_diag` still reports wait data
+  sampled from `pg_stat_activity` in snapshots mode.
+
+Full host collection requirements (`local` collector or `remote` SSH target):
+
+- Linux host with `/proc` mounted.
+- POSIX shell plus common Linux base tools: `cat`, `grep`, `head` (including
+  `-z`), `find`, `getent`, `getconf`, `sed`, `tr`, `awk`, `df`, `mount`, and
+  `uname`.
+- `procps` tools: `ps` and `sysctl`.
+- `util-linux`: `lscpu` and `lsblk`.
+- `iproute2`: `ip`.
+- `lshw` for hardware inventory sections. Some `lshw` data requires root; if
+  passwordless `sudo -n` is available, `pg_diag` uses it automatically.
+- `sysstat` / `iostat` for disk throughput, IOPS, utilization, and
+  latency charts in snapshots mode.
+
+Missing host tools do not stop the report. Affected OS items become empty,
+unsupported, unavailable, or add a diagnostic warning; PostgreSQL SQL
+collection continues. In `remote-db-only` mode, host scripts, local-only
+Python sources, and host sampler providers are not executed or included in the
+final report; their item IDs and skip reasons are recorded in `report.log` and
+stdout.
+
+## Credentials and Security
+
+### Content Trust Boundary
+
+A content pack is executable input, not passive configuration. SQL files are
+executed in verified read-only PostgreSQL transactions, but declared shell
+sources run as operating-system commands and trusted Python sources are loaded
+as Python code. In `remote` mode, shell sources are sent to and executed on the
+SSH target with the configured SSH account's privileges.
+
+Use `--content` only with a content pack you trust and have reviewed. Content
+validation verifies schema and cross-reference contracts; it is not a sandbox
+or a malicious-code scanner. Run the collector and its SSH account with the
+least privileges needed for diagnostics.
+
+Before any content YAML is parsed, pg_diag verifies the bundled baseline for
+all Python, shell, SQL, and YAML files under the selected `--content` directory.
+Markdown documentation and item instructions are not part of this executable-content
+integrity baseline. A modified, added, or removed protected file stops the command
+before report collection starts. The failure does not print expected or
+calculated hashes; restore pg_diag and its content directory from a trusted
+distribution instead of accepting an unknown check set.
+
+### PostgreSQL Credentials
+
+Avoid putting passwords in `--password` or directly in a DSN because command
+arguments can be visible to other processes and command tracing. For short
+interactive runs, let asyncpg read the standard environment variable and omit
+`--password`:
+
+```bash
+export PGPASSWORD='change-me'
+```
+
+For automation, prefer a PostgreSQL passfile with mode `0600`:
+
+```text
+db.example.com:5432:appdb:app:change-me
+```
+
+```bash
+chmod 600 ~/.pgpass
+
+pg-diag one-shot \
+  --host db.example.com \
+  --port 5432 \
+  --database appdb \
+  --user app \
+  --passfile ~/.pgpass \
+  --collection-mode remote-db-only \
+  --out reports/appdb_one_shot
+```
+
+In `remote` mode, passfile entries are matched against the original PostgreSQL
+host and port as seen from the SSH target, before asyncpg connects through the
+local tunnel. `PGPASSFILE` and the default `~/.pgpass` are also supported.
+
+### Report Handling
+
+Reports can contain query text, object names, configuration, filesystem paths,
+host inventory, and diagnostic evidence. Built-in redaction removes recognized
+credential fields and obvious secrets, but it cannot guarantee that arbitrary
+application data or custom source output is non-sensitive. JSON and HTML files
+are created with mode `0600`; preserve restrictive permissions when copying or
+publishing them.
+
+## Quick Start
+
+After installation, activate the environment containing `pg-diag` if needed,
+then validate the bundled content and build a database-only point-in-time
+report. These commands work from any directory:
+
+```bash
+export PGPASSWORD='change-me'
+
+pg-diag validate
+
+pg-diag one-shot \
+  --host 127.0.0.1 \
+  --port 5432 \
+  --database appdb \
+  --user app \
+  --collection-mode remote-db-only \
+  --out reports/appdb_one_shot
+```
+
+Successful collection writes:
+
+```text
+reports/appdb_one_shot/report.json
+reports/appdb_one_shot/report.html
+reports/appdb_one_shot/report.log
+```
+
+Open the HTML locally in a browser. Keep the JSON artifact: it can be validated
+or rendered again without reconnecting to PostgreSQL.
+
+## Report Consumers and Automation
+
+One collection can serve several consumers. The self-contained HTML is the
+primary interactive view for a human, while JSON is the stable machine-readable
+artifact for automation. `pg_diag` itself writes report files; schedulers,
+LLM systems, ETL loaders, databases, compressors, and chat delivery are external
+components selected by the operator.
+
+```text
+                         +--------------------------+
+                         | Human DBA / on-call      |
+                         | opens report.html        |
+                         +-------------^------------+
+                                       |
++------------------+       +-----------+-----------+
+| cron / systemd   |       | pg_diag collection    |
+| timer / CI job   +------>|                          |
++------------------+       | report.html            |
+                           | report.json            |
+                           | report.log             |
+                           +-----------+------------+
+                                       |
+             +-------------------------+-------------------------+
+             |                         |                         |
+             v                         v                         v
++------------------------+  +----------------------+  +-----------------------+
+| Agentic LLM system     |  | ETL / ingestion job |  | Archive / delivery    |
+| reads report.json      |  | stores JSON / JSONB |  | gzip/zstd or summary  |
+| summarizes and triages |  | normalized facts    |  | -> bot/webhook -> chat|
++------------------------+  +----------+-----------+  +-----------+-----------+
+                                      |                          |
+                                      v                          v
+                           +----------------------+  +-----------------------+
+                           | Diagnostics database |  | On-call team chat     |
+                           | history and trends   |  | daily/on-schedule     |
+                           +----------------------+  +-----------------------+
+```
+
+Typical use cases:
+
+- A DBA opens `report.html` during an incident, filters sections and tags, and
+  exports selected charts.
+- An agentic LLM system reads `report.json`, correlates item statuses,
+  diagnostics, tables, and charts, and prepares a concise triage summary or a
+  proposed investigation plan for a human reviewer.
+- An ingestion job stores the complete artifact in a separate database (for
+  example, a PostgreSQL `jsonb` column) and optionally normalizes runtime,
+  item, diagnostic, and metric records for historical queries and dashboards.
+- A scheduled job builds a targeted report, compresses the JSON artifact or
+  produces a shorter summary, and sends it through an organization-approved
+  bot or webhook to the on-call chat every day or on another schedule.
+- A human and an LLM can review the same run: HTML provides the visual report,
+  while JSON preserves the exact structured evidence used by automation.
+
+### Graph-based LLM audits
+
+Use [the performance master prompt](diag_promt.md) for bottlenecks and operational
+health, or [the security master prompt](security_promt.md) for access control and
+security posture. Both first run the same analysis engine as Diagnostic graph and
+use the evaluated graph only as a reasoning skeleton: a work queue of findings,
+computed facts, cause links to test and pointers to evidence. The LLM then tests
+hypotheses against the original items, SQL, plans, DDL and compatible observation
+windows, reviews the PostgreSQL, kernel and hardware configuration, and writes two
+documents: a detailed audit (each problem with its cause, impact, evidence and
+actions by owner — what to change in settings, statements, schema and on the
+host) and a summary that is five to ten times shorter. Neither document describes
+the graph itself. They are written in the language of the user's request unless
+another is specified.
+
+From a trusted checkout, prepare one context per distinct capture:
+
+```bash
+node tools/report_debug/prepare_audit.cjs /path/to/performance-context.json /path/to/report.json performance
+node tools/report_debug/prepare_audit.cjs /path/to/security-context.json /path/to/report.json security
+```
+
+Outputs must be new files. HTML-only input is also supported: only its embedded
+artifact JSON is parsed, never its scripts. Provide the selected prompt, context
+and original report to the LLM; a system with shell access can run the command
+itself. The context records source/engine hashes, own and propagated assessments,
+candidate cause links, actual rule reads and item pointers. It is not a raw-data
+replacement or a completed audit. No database connection, browser or LLM API is
+needed to prepare it. See [tool details](tools/report_debug/README.md#preparing-context-for-master-prompts).
+
+For scheduled lightweight collection, combine `--tags` or `--item-id` with
+JSON-only output and optionally `--strip-meta`:
+
+```bash
+run_dir="reports/daily/$(date -u +%Y%m%dT%H%M%SZ)"
+
+pg-diag one-shot \
+  --dsn "postgresql://diag@db.example.com:5432/appdb" \
+  --collection-mode remote-db-only \
+  --tags='[Configuration,Security,Locks,Replication]' \
+  --output-format=json \
+  --strip-meta \
+  --out "$run_dir"
+
+gzip -9 "$run_dir/report.json"
+# Send report.json.gz, or a derived concise summary, with the approved chat bot.
+```
+
+The example is suitable for a `cron` job, a systemd timer, or a CI scheduler;
+credential and retention policy remain the responsibility of that environment.
+When an LLM processes a report, treat all database text and custom item output
+as untrusted data rather than instructions. Do not let an agent execute SQL,
+shell commands, or remediation actions solely because they appear in a report;
+use explicit tool allowlists, read-only credentials, redaction, and human
+approval for production changes.
+
+## Embed Markdown Audit Summaries
+
+After collecting an HTML report, use `diag_promt.md` or `security_promt.md` with
+your agent to generate a brief summary and a detailed Markdown audit. Both prompts
+specify links to evidence in the chosen HTML report. Embed the resulting files:
+
+```bash
+pg-diag --merge-md-to-html \
+  --md-files "brief summary.md" "detailed audit.md" \
+  --html-file report.html
+```
+
+The two UTF-8 Markdown files may be supplied in either order. The larger file in
+bytes is the detailed audit; equal sizes, empty files, and duplicate paths are
+rejected. A single quoted list is also accepted:
+`--md-files='["brief summary.md", "detailed audit.md"]'`.
+
+The command reads the embedded JSON and adds `summaries.brief.markdown` and
+`summaries.detailed.markdown`, then renders with the installed HTML template and
+atomically replaces the specified HTML. It works with existing schema-v5 HTML
+reports, including those collected before this feature. A separate `report.json`
+and the input Markdown files are left unchanged. Repeating the command replaces
+both summaries. Collection facts, including the original snapshot count, remain
+intact; no database connection or agent invocation is involved in the merge.
+
+The report shows a **Summary** section before Overview, with **Brief summary** and
+**Detailed report** collapsed by default and listed in the contents navigation.
+Supported Markdown includes headings, lists and nested lists, pipe tables, code,
+emphasis and blockquotes. Raw HTML is displayed as text.
+
+Use these report-local link forms, substituting real identifiers from the target:
+
+```markdown
+[Database statistics](#item-overview.database_stats)
+[queryid -4023659083661925077](#item-snapshot_delta_workload.sql_time_delta?queryid=-4023659083661925077)
+[public.orders, OID 16384](#item-object_workload.table_workload?oid=16384)
+```
+
+Clicking a link opens and scrolls to its item, clearing report filters if needed.
+Hovering over a queryid or OID link shows the same SQL/DDL preview as identifiers
+in item tables. The merge checks visible item targets and the referenced SQL/DDL;
+invalid links leave the original HTML untouched. When SQL or DDL is absent, use
+an item-only link. External documentation links may use HTTP(S); report links
+must use the fragment forms above, without file paths. Keep 64-bit queryids as
+exact strings when generating links.
+
+## Inspect and Validate Content
+
+The bundled content pack is installed inside the `pg_diag` Python package and is
+used by default from any working directory. Use `--content /path/to/content`
+only to select an explicit alternative pack; pg_diag does not implicitly load a
+same-named directory from the current working directory.
+
+Validate the bundled content pack:
+
+```bash
+pg-diag validate
+```
+
+List available report items as tab-separated item ID, source kind, source ID,
+and comma-separated tags:
+
+```bash
+pg-diag list-items
+```
+
+List query catalog entries and selected SQL files:
+
+```bash
+pg-diag list-queries
+```
+
+Preview the execution plan for PostgreSQL 18 in local snapshots mode:
+
+```bash
+pg-diag explain-plan \
+  --pg-version 180000 \
+  --run-mode snapshots \
+  --collection-mode local
+```
+
+Print the same plan as JSON:
+
+```bash
+pg-diag explain-plan \
+  --pg-version 180000 \
+  --run-mode snapshots \
+  --collection-mode local \
+  --json
+```
+
+The JSON plan separates user-visible `items` from internal `source_jobs` used
+to collect snapshot metric inputs. Every source job executes exactly one query;
+sources are not combined across report items.
+
+`--run-mode` accepts `one-shot` for a point-in-time report and `snapshots` for
+an interval report.
+
+Inspect a selected SQL query variant:
+
+```bash
+pg-diag run-query cluster.settings \
+  --pg-version 180000
+```
+
+`run-query` is an inspection command: it selects the version-specific variant
+and prints its metadata and SQL without connecting to PostgreSQL.
+
+## Report and Collection Modes
+
+The report command, collection mode, and collection timing are separate
+dimensions. After command-line and content validation, a collection run creates
+`report.log`; every successfully completed collection also writes the report
+representations selected by `--output-format` (both JSON and self-contained HTML
+by default).
+
+### Report Commands
+
+| Command | Default collection mode | Purpose | Timing behavior | Artifact result |
+| --- | --- | --- | --- | --- |
+| `one-shot` | `remote-db-only` | Point-in-time diagnostic report | Executes applicable `query`, `script`, and `python` items with `once`; does not execute or include `metric` items because no interval data exists | `runtime.mode` is `one-shot`; the public `snapshots` array is empty |
+| `snapshots` | `local` | Interval diagnostic report | Executes visible once-items, collects required repeated/end-point sources, then evaluates derived metrics | `runtime.mode` is `snapshots`; when the selected plan requires repeated SQL sampling, the artifact contains samples plus derived rates, deltas, tables, and charts |
+| `logs` | `local` | `server_log` section from csvlog files in `--log-dir`, no database | Discovers `*.csv` files in the directory, anchors the window at the newest record, then executes only `server_log` `python` items with `once`; every other item is omitted without execution | `runtime.mode` is `logs`; `runtime.database_connected` is `false`, `runtime.server_version_num` is `null`, `runtime.log_collection.source` records the directory and the detected csvlog layout |
+
+### Filtered Source Targets
+
+Every effective source manifest declares `targets: [host]`, `targets: [db]`,
+or `targets: [host, db]`. When `--item-id` or `--tags` narrows a report,
+`pg_diag` unions the targets of the items that actually execute in the selected
+report and collection modes:
+
+- host-only `local` collection does not require database parameters and never
+  connects to PostgreSQL;
+- host-only `remote` collection requires SSH, but does not open a database
+  tunnel;
+- any selection containing `db` requires `--dsn` or
+  `--host/--database/--user`;
+- mixed tag or item selections require both transports;
+- without filters, the full report keeps the normal database connection
+  requirement.
+
+For example, collect a local OS item while PostgreSQL is unavailable:
+
+```bash
+pg-diag one-shot \
+  --collection-mode local \
+  --item-id os.kernel_version \
+  --output-format html \
+  --html-out reports/kernel.html
+```
+
+Sampler-backed OS charts work the same way in `snapshots`:
+
+```bash
+pg-diag snapshots \
+  --collection-mode local \
+  --item-id snapshot_charts_os.os_cpu_utilization \
+  --duration-seconds 60 \
+  --interval-seconds 10 \
+  --output-format html \
+  --html-out reports/os_cpu.html
+```
+
+The artifact records the resolved `runtime.targets`,
+`runtime.database_connected`, and each item's `targets`. A host-only artifact
+has `runtime.server_version_num: null`.
+
+### Collection Modes
+
+| Collection mode | PostgreSQL access | Host evidence | Availability behavior |
+| --- | --- | --- | --- |
+| `remote-db-only` | Direct asyncpg connection from the collector | Not collected | Host `script`, host-dependent `python`, and host-backed `metric` items are omitted from the final report without executing their sources; DB-only sources remain available |
+| `local` | Direct asyncpg connection from the collector | Read from the collector machine | Use when the collector is the PostgreSQL host or when collector-host evidence is intentionally required |
+| `remote` | Asyncpg connection through an AsyncSSH local port forward | Read from the SSH target over the same authenticated connection | `script` sources execute on the SSH target; trusted `python` evaluates locally using SSH-backed file and process evidence |
+
+### Connection Topologies
+
+The selected collection mode determines where PostgreSQL connections originate
+and which operating system is inspected.
+
+`remote-db-only` connects directly to PostgreSQL and never opens SSH or runs
+host probes:
+
+```text
++----------------------------+       PostgreSQL protocol       +----------------------+
+| Collector host             |  ---------------------------->  | PostgreSQL endpoint  |
+|                            |                                 |                      |
+| pg-diag                    |  <----------------------------  | catalogs/statistics  |
+| Python + asyncpg           |       rows and metadata         | port 5432 or proxy   |
++----------------------------+                                 +----------------------+
+
+Host OS evidence: not collected
+Best fit: workstation, automation runner, Kubernetes job, or restricted network
+```
+
+`local` connects directly to PostgreSQL and inspects the same machine on which
+`pg-diag` is running:
+
+```text
++--------------------------------------------------------------------------+
+| PostgreSQL / collector host                                              |
+|                                                                          |
+|  +-------------------+     local socket or TCP     +------------------+  |
+|  | pg-diag           +---------------------------->| PostgreSQL       |  |
+|  |                   |<----------------------------+ instance         |  |
+|  |                   |                              +------------------+  |
+|  |                   | reads /proc, config files, ps, lshw, iostat       |
+|  +---------+---------+                                                   |
+|            +---------------------------> local host OS                    |
++--------------------------------------------------------------------------+
+
+Host OS evidence: collector machine
+Best fit: pg-diag runs directly on the PostgreSQL VM or inside its host context
+```
+
+If PostgreSQL is in a container but `pg-diag` runs on the container host,
+`local` host items describe the host. Run `pg-diag` inside the container only
+when container-local OS evidence is the intended scope and the required tools
+and files are available there.
+
+`remote` uses one SSH session for host access and a local TCP forward for the
+database connection. The PostgreSQL endpoint may be on the SSH host, in a
+container, or reachable from that host over its private network:
+
+```text
++-----------------------------+                 +-------------------------------+
+| Collector host              |  SSH commands   | SSH target host               |
+|                             +---------------->|                               |
+| pg-diag                     |  SFTP / /proc   | sshd -> shell and host probes |
+| AsyncSSH + asyncpg          |<----------------+ config, ps, lshw, iostat      |
+|       |                     |                 |                               |
+|       +-- local TCP forward +================>| PostgreSQL endpoint            |
+|             DB protocol     |  SSH tunnel     | local/container/private host  |
++-----------------------------+                 +-------------------------------+
+
+The selected key file or agent socket and PostgreSQL credentials stay on the
+collector; pg-diag does not need to be installed on the SSH target
+Host OS evidence: SSH target
+Best fit: production VM reachable only through SSH or a bastion-style endpoint
+```
+
+### Combined Report Matrix
+
+| Report command | Collection mode | Item types and scopes | Result |
+| --- | --- | --- | --- |
+| `one-shot` | `remote-db-only` | `query` and DB-only `python` run with `once`; `script`, host-dependent `python`, and all `metric` items are omitted without execution | One point-in-time PostgreSQL report without host evidence |
+| `one-shot` | `local` | `query`, `script`, and `python` run with `once`; all `metric` items are omitted without execution | Point-in-time PostgreSQL report plus collector-host evidence |
+| `one-shot` | `remote` | `query` runs with `once`; `script` runs on the SSH target; `python` evaluates locally with SSH-host evidence; all `metric` items are omitted without execution | Point-in-time PostgreSQL and SSH-target report through one SSH connection |
+| `snapshots` | `remote-db-only` | Report `query` and DB-only `python` run with `once`; SQL metric source jobs run with `every_snapshot` or `window_endpoints`; DB-backed `metric` items are calculated; host sources and metrics are omitted without execution | PostgreSQL rates, deltas, tables, and charts without host metrics |
+| `snapshots` | `local` | Report `query`, `script`, and `python` run with `once`; SQL and local sampler jobs run with `every_snapshot` or `window_endpoints`; DB- and host-backed `metric` items are calculated | PostgreSQL and collector-host rates, deltas, tables, charts, and backend `/proc` endpoints |
+| `snapshots` | `remote` | Report `query` runs with `once`; `script` runs on the SSH target; `python` evaluates locally with SSH-host evidence; SQL and SSH-host sampler jobs run with `every_snapshot` or `window_endpoints`; DB- and host-backed `metric` items are calculated | PostgreSQL and SSH-target rates, deltas, tables, charts, and backend `/proc` endpoints |
+| `logs` | `local` | csvlog files are read from `--log-dir` on the collector; only `server_log` `python` items run with `once`; nothing else executes | Server-log report from local or copied log files without PostgreSQL |
+| `logs` | `remote` | An ephemeral shell probe and the log harvester read `--log-dir` on the SSH target; only `server_log` `python` items run with `once`; no database tunnel is opened | Server-log report from a remote host without PostgreSQL credentials |
+
+`snapshots --duration-seconds 30 --interval-seconds 5` schedules seven sample
+points at 0, 5, 10, 15, 20, 25, and 30 seconds. One-time items and final
+endpoint processing can make total wall-clock time longer than 30 seconds.
+
+## Run One-Shot Reports
+
+`one-shot` defaults to `remote-db-only`. Specify the collection mode explicitly
+in automation so the source of any host evidence is unambiguous.
+
+### Remote DB-Only
+
+Remote DB-only mode collects PostgreSQL data and skips host scripts and
+host-dependent Python checks:
+
+```bash
+pg-diag one-shot \
+  --host 127.0.0.1 \
+  --port 5432 \
+  --database appdb \
+  --user app \
+  --collection-mode remote-db-only \
+  --out reports/appdb_one_shot
+```
+
+The output directory will contain:
+
+```text
+reports/appdb_one_shot/report.json
+reports/appdb_one_shot/report.html
+```
+
+To write outputs to fixed file names instead of the default files inside
+`--out`, pass exact output paths:
+
+```bash
+pg-diag one-shot \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote-db-only \
+  --json-out reports/appdb_one_shot_20260706.json \
+  --html-out reports/appdb_one_shot_20260706.html
+```
+
+With the default `--output-format=[html,json]`, if only one fixed output path is
+supplied, the other file still uses the default path under `--out`. To create
+only one report representation, select it explicitly:
+
+```bash
+# HTML only; report.json is not created
+pg-diag one-shot \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --output-format=html \
+  --html-out reports/appdb_one_shot.html
+
+# JSON only; HTML is not rendered
+pg-diag one-shot \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --output-format=json \
+  --json-out reports/appdb_one_shot.json
+```
+
+The same command can use a DSN:
+
+```bash
+pg-diag one-shot \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote-db-only \
+  --out reports/appdb_one_shot
+```
+
+### Local
+
+Local mode collects PostgreSQL data and local host data from the machine where
+`pg-diag` is running:
+
+```bash
+pg-diag one-shot \
+  --host 127.0.0.1 \
+  --port 5432 \
+  --database appdb \
+  --user app \
+  --collection-mode local \
+  --out reports/appdb_local_one_shot
+```
+
+Use local mode only when the collector runs on the PostgreSQL host or when local
+OS data from the collector host is intentionally required.
+
+### Remote over SSH
+
+Remote mode opens one authenticated SSH connection, forwards a dynamically
+allocated loopback port to PostgreSQL, and collects SQL and host data from the
+same target. `--host` and `--port` identify PostgreSQL as seen from the SSH host,
+not from the collector:
+
+```bash
+pg-diag one-shot \
+  --collection-mode remote \
+  --ssh-host db.example.com \
+  --ssh-port 22 \
+  --ssh-user pgdiag \
+  --ssh-key ~/.ssh/id_ed25519 \
+  --ssh-known-hosts ~/.ssh/pg_diag_known_hosts \
+  --host 127.0.0.1 \
+  --port 5432 \
+  --database appdb \
+  --user app \
+  --out reports/appdb_remote_one_shot
+```
+
+#### Prepare `--ssh-known-hosts`
+
+`--ssh-known-hosts` points to an OpenSSH-format `known_hosts` file on the
+collector host. It is used for strict SSH server identity verification. When
+the option is omitted, pg_diag uses `~/.ssh/known_hosts`. A separate file is
+convenient for service accounts, containers, and automated report jobs.
+
+Create a dedicated file and obtain the target host key:
+
+```bash
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+ssh-keyscan -p 22 -t ed25519 db.example.com > ~/.ssh/pg_diag_known_hosts
+chmod 600 ~/.ssh/pg_diag_known_hosts
+ssh-keygen -lf ~/.ssh/pg_diag_known_hosts
+```
+
+`ssh-keyscan` only retrieves a candidate key; it does not prove that the key
+belongs to the intended server. Before using the file, compare the displayed
+fingerprint with a value obtained through a trusted channel, such as the server
+console, configuration management inventory, or the system administrator. For
+an Ed25519 host key, the fingerprint can be checked on the server console with:
+
+```bash
+ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
+```
+
+The entry must match the value passed to `--ssh-host`. For a non-default SSH
+port, `known_hosts` uses the bracketed form `[host]:port`; `ssh-keyscan -p`
+creates this form automatically:
+
+```bash
+ssh-keyscan -p 2222 -t ed25519 db.example.com > ~/.ssh/pg_diag_known_hosts
+
+pg-diag one-shot \
+  --collection-mode remote \
+  --ssh-host db.example.com \
+  --ssh-port 2222 \
+  --ssh-user pgdiag \
+  --ssh-key ~/.ssh/id_ed25519 \
+  --ssh-known-hosts ~/.ssh/pg_diag_known_hosts \
+  --host 127.0.0.1 \
+  --port 5432 \
+  --database appdb \
+  --user app \
+  --out reports/appdb_remote_one_shot
+```
+
+If the file is missing, it has no entry for the requested host and port, or
+the server key differs from the trusted key, pg_diag terminates the SSH
+connection before collecting data. After a legitimate host-key rotation,
+replace the entry only after verifying the new fingerprint through a trusted
+channel.
+
+For an encrypted SSH key, put its passphrase in an environment variable and
+name that variable with `--ssh-key-passphrase-env`; do not place the passphrase
+on the command line:
+
+```bash
+export PGDIAG_SSH_KEY_PASSPHRASE='change-me'
+
+pg-diag one-shot \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote \
+  --ssh-host db.example.com \
+  --ssh-user pgdiag \
+  --ssh-key ~/.ssh/id_ed25519 \
+  --ssh-key-passphrase-env PGDIAG_SSH_KEY_PASSPHRASE \
+  --out reports/appdb_remote_one_shot
+```
+
+Alternatively, load the identity into an existing local `ssh-agent` and select
+it explicitly. `pg-diag` never starts an agent or runs `ssh-add`:
+
+```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+ssh-add -l
+
+pg-diag one-shot \
+  --collection-mode remote \
+  --ssh-host db.example.com \
+  --ssh-user pgdiag \
+  --ssh-agent \
+  --ssh-known-hosts ~/.ssh/pg_diag_known_hosts \
+  --host 127.0.0.1 \
+  --database appdb \
+  --user app \
+  --out reports/appdb_remote_one_shot
+```
+
+`--ssh-key` and `--ssh-agent` are mutually exclusive. Agent mode requires the
+current process to inherit a live `SSH_AUTH_SOCK`; the socket must remain
+available for the entire collection. Agent forwarding to the SSH target is
+always disabled.
+
+Remote mode requires explicit public-key authentication and strict
+`known_hosts` verification. It does not fall back to password authentication
+or the user's OpenSSH configuration. It does not upload or forward an agent,
+create a remote working directory, or require Python on the SSH target. Shell
+source text is sent to `/bin/sh` through SSH stdin, file metadata/content is
+read over the same SSH connection, and evaluation stays in the collector
+process. A private key and any PostgreSQL passfile used by the collector must
+not grant group or other access. Password lookup honors `--passfile`, a URI
+`passfile`, `PGPASSFILE`, and the default `~/.pgpass`, and matches entries
+against the original remote database host and port before `asyncpg` connects
+through the dynamic local tunnel. A URI DSN can provide the remote endpoint; a
+keyword-style DSN must be accompanied by `--host` and optionally `--port`.
+
+Remote mode rejects `sslmode=verify-full` and an `SSLContext` with hostname
+verification enabled. The dynamic forward changes the endpoint seen by
+`asyncpg` to `127.0.0.1`, so preserving the original PostgreSQL TLS hostname is
+not possible with this transport. Use direct database connectivity when
+hostname verification is required.
+
+## Run Repeated Snapshots
+
+Repeated snapshots mode collects samples over time and computes rates, deltas,
+top-N charts, and workload summaries. It defaults to `local`; choose
+`remote-db-only` explicitly when the collector does not run on the PostgreSQL
+host and no SSH host evidence is required.
+
+The collection window is bounded to keep `report.json`, self-contained HTML, and
+browser memory usage predictable:
+
+- `--duration-seconds`: 30 seconds to 86400 seconds (24 hours), default 30.
+- `--interval-seconds`: 5 seconds to 600 seconds, default 15, and not greater
+  than the duration.
+- Scheduled snapshots: at most 300. Collection starts at offset zero, continues
+  at each interval, and includes the exact window end when it is not already an
+  interval boundary.
+
+The scheduled count is `floor(duration / interval) + 1` for an exact boundary,
+or `floor(duration / interval) + 2` when the final boundary must be added. For
+example, a 24 hour report needs an interval of at least 289 seconds.
+
+Point-in-time SQL, script, and Python items, including `PostgreSQL Settings`,
+are collected exactly once before the repeated window starts. At scheduled
+points, the collector executes the SQL sources required by chart metrics. In
+`local` and `remote` modes, required host sampler providers run concurrently on
+the collector or SSH target. Start/end delta tables use a separate
+`window_endpoints` source scope and execute exactly twice: once before and once
+after the chart window. Endpoint source rows are used in memory and are not
+added to the public snapshot array. Per-backend `/proc` tables use the same
+endpoint model: process counters are read at the two window boundaries and
+converted to window-average rates.
+
+Slow chart queries do not create a backlog: stale scheduled points are skipped
+and recorded in report diagnostics. One-time collection and the final endpoint
+queries can make total command runtime longer than `--duration-seconds`.
+
+If the PostgreSQL connection closes during a query item, repeated sample, or
+window-endpoint batch, the collector waits three seconds and makes up to five
+reconnection attempts. Each connection establishment and stale-connection
+close is bounded to five seconds, so an unavailable network cannot leave the
+retry controller waiting indefinitely. A successfully reconnected read-only
+session repeats the interrupted item or the whole interrupted batch; partial
+batch data is discarded. The replacement session must report the same database
+name, server version, recovery role, and server address when those identity
+values are available. An identity change stops the run instead of merging
+samples from different PostgreSQL endpoints. If all attempts fail, the command
+exits with a specific `database host is unavailable` error and does not write a
+misleading complete report.
+
+High-cardinality statement, table, index, and function metric sources keep an
+SQL `ORDER BY ... LIMIT` on every endpoint/sample so a catalog with millions of
+objects cannot fill collector memory. Adjacent bounded samples may legitimately
+contain different keys. Deltas are calculated only for their intersection;
+unmatched keys are counted in compact `interval_coverage` metadata and are not
+treated as zero. Counter decreases or invalid values create a gap and warning.
+
+Optional `pg_stat_kcache` 2.3+ support adds per-SQL kernel CPU, filesystem I/O,
+CPU-efficiency, context-switch, page-fault, I/O-attribution, and planning delta
+tables plus database CPU, filesystem-I/O, and page-fault charts. Every item has
+its own bounded SQL source. Top-level entries avoid nested-statement double
+counting, `stats_since` protects table and chart intervals from reset/entry
+reuse, and statement tables retain clickable query IDs. Run the
+`sql_workload.pg_stat_kcache_capabilities` item to verify extension version,
+preload order, execution tracking, and optional planning tracking. Missing or
+older extension APIs mark only these optional sources as unsupported.
+
+The examples below collect for 60 seconds with a 5 second interval.
+
+### Local
+
+```bash
+pg-diag snapshots \
+  --host 127.0.0.1 \
+  --port 5432 \
+  --database appdb \
+  --user app \
+  --collection-mode local \
+  --duration-seconds 60 \
+  --interval-seconds 5 \
+  --out reports/appdb_60s
+```
+
+### Remote DB-Only
+
+```bash
+pg-diag snapshots \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote-db-only \
+  --duration-seconds 60 \
+  --interval-seconds 5 \
+  --out reports/appdb_60s_remote
+```
+
+### Remote over SSH
+
+Use the same SSH and database arguments as the one-shot remote example:
+
+```bash
+pg-diag snapshots \
+  --collection-mode remote \
+  --ssh-host db.example.com \
+  --ssh-user pgdiag \
+  --ssh-key ~/.ssh/id_ed25519 \
+  --ssh-known-hosts ~/.ssh/known_hosts \
+  --host 127.0.0.1 \
+  --port 5432 \
+  --database appdb \
+  --user app \
+  --duration-seconds 60 \
+  --interval-seconds 5 \
+  --out reports/appdb_60s_ssh
+```
+
+### Fixed Output Paths
+
+Repeated snapshot reports also support fixed output file names:
+
+```bash
+pg-diag snapshots \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote-db-only \
+  --duration-seconds 60 \
+  --interval-seconds 5 \
+  --json-out reports/appdb_60s.json \
+  --html-out reports/appdb_60s.html
+```
+
+## Select Report Items
+
+All report commands (`one-shot`, `snapshots`, `logs`) support mutually exclusive exact-ID and tag filters. The
+informational list options validate content and exit without requiring database
+or SSH arguments.
+
+List item IDs together with their tags and source-metadata descriptions:
+
+```bash
+pg-diag one-shot --list-item-ids
+```
+
+The existing catalog-oriented command remains available:
+
+```bash
+pg-diag list-items
+```
+
+`--item-id` accepts either one ID or a comma-separated array. Both forms below
+are valid:
+
+```bash
+pg-diag one-shot \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote-db-only \
+  --item-id overview.pg_settings \
+  --out reports/pg_settings
+
+pg-diag one-shot \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote-db-only \
+  --item-id=[overview.pg_settings,overview.database_stats] \
+  --out reports/settings_and_database_stats
+```
+
+Collect multiple interval items and only the hidden sources those selected
+metrics require:
+
+```bash
+pg-diag snapshots \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote-db-only \
+  --item-id=[snapshot_delta_workload.database_workload_delta,snapshot_charts_db.database_transaction_rate] \
+  --duration-seconds 30 \
+  --interval-seconds 5 \
+  --out reports/database_workload_selected
+```
+
+List the canonical filter tags:
+
+```bash
+pg-diag one-shot --list-tags
+```
+
+`--tags` accepts a scalar or comma-separated array, matches tags
+case-insensitively, and uses OR semantics: an item is selected when it has at
+least one requested tag. Brackets are optional for a scalar and supported for
+arrays:
+
+```bash
+pg-diag one-shot \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote-db-only \
+  --tags=[security,tables] \
+  --out reports/security_or_tables
+```
+
+`--item-id` and `--tags` cannot be used together. Unknown tags and every
+unknown ID in an item array are reported before SSH or PostgreSQL is opened.
+When any filter is used for collection, every selected visible item and its
+containing section start expanded in the generated HTML report. Without a
+filter, item and section expansion follows the states declared in `report.yaml`.
+
+### Filter By Item Type
+
+`--item-type` keeps only items of the requested presentation types. Values are
+case-insensitive, comma-separated, and use OR semantics inside the option; the
+filter combines with `--item-id` or `--tags` by intersection, so
+`--tags Locks --item-type table` collects the lock tables and nothing else.
+
+| Type | Meaning | Available in |
+| --- | --- | --- |
+| `table` | Point-in-time table: SQL rows, `table_json` scripts, Python records | `one-shot`, `snapshots`, `logs` |
+| `text` | Plain text: `plain_text` scripts | `one-shot`, `snapshots` |
+| `chart` | Time-series and event charts from metrics and log items | metric charts in `snapshots`; the two `server_log` charts in `one-shot`/`snapshots` with `--log-depth-time-min` and in `logs` |
+| `delta` | Table computed over the observation window from its start and end points | `snapshots` |
+
+`--list-item-ids` prints the type of every item in its `TYPE` column, and each
+artifact item records it as `item_type`. A selection that matches no item, or
+only items that cannot execute in the chosen command and collection mode (for
+example `--item-type delta` in `one-shot`), is rejected before SSH or
+PostgreSQL is opened.
+
+```bash
+# lock tables only
+pg-diag one-shot \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode remote-db-only \
+  --tags Locks --item-type table \
+  --out reports/lock_tables
+
+# every chart and delta table over a two-minute window
+pg-diag snapshots \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --collection-mode local \
+  --item-type chart,delta \
+  --duration-seconds 120 --interval-seconds 10 \
+  --out reports/window_charts
+
+# host text items only, no database connection
+pg-diag one-shot --collection-mode local --tags Kernel --item-type text
+```
+
+Content authors declare the type with `item_type` in the source manifest when
+the default derived from the source (SQL and Python are `table`, scripts follow
+`output`, metrics are `chart` or `delta`) does not apply; a collected result
+that contradicts the declaration is recorded with an `item_type_mismatch`
+warning diagnostic. See `content/EXTENDING.md`.
+
+Selection applies to visible report items, not directly to query, script,
+Python, metric, or sampler catalog identifiers. In `snapshots` mode:
+
+- Selecting a `query`, `script`, or `python` item executes it once. Since the
+  selected plan has no interval dependencies, the timed window is skipped and
+  `runtime.snapshot_count` is `0`.
+- Selecting a `metric` item automatically plans only its required hidden SQL or
+  host sampler dependencies and runs the full required sampling window.
+
+In `one-shot` mode a selected metric is not executed and the final report has
+no visible item because interval data is unavailable. The skip reason remains
+visible in stdout and `report.log`.
+
+## Collect Server Logs
+
+`--log-depth-time-min` adds the `server_log` report section: pg_diag reads the
+server `csvlog` files for a bounded time window, collapses floods of identical
+errors into series, sanitizes messages, and renders items such as the error
+chronology, top errors and warnings by frequency, crash and recovery markers,
+deadlocks, authentication failures, system/lifecycle/replication incidents,
+query termination and resource events, heavy maintenance, and a stacked time
+chart of slow-query plans written by `auto_explain`.
+
+Flag semantics:
+
+- flag absent — logs are not collected and every `server_log` item is skipped;
+- `--log-depth-time-min` without a value — the last 10 minutes;
+- `--log-depth-time-min N` — the last `N` minutes (`0` disables, maximum 10080 / 7 days);
+- works with both `one-shot` and `snapshots`; the window ends when the log
+  phase starts, which is after all other items (and after the sampling window
+  in snapshots mode).
+
+```bash
+pg-diag one-shot \
+  --host 127.0.0.1 \
+  --port 5432 \
+  --database appdb \
+  --user pgdiag \
+  --collection-mode local \
+  --log-depth-time-min 30 \
+  --out reports/appdb_with_logs
+```
+
+Collection mode support:
+
+| Collection mode | Server log collection |
+|---|---|
+| `local` | Supported: pg_diag reads the csvlog files directly on the host |
+| `remote` | Supported: an ephemeral shell harvester filters the logs on the SSH target (needs a shell-capable SSH account; SFTP-only accounts report `unsupported`) |
+| `remote-db-only` | Not supported by design; items report `unsupported` |
+
+Requirements on the server: `logging_collector = on`, `csvlog` in
+`log_destination`, and read access to the log directory for the OS user running
+`pg-diag`. English, C, or POSIX `lc_messages` enables every content item. With
+another locale, SQLSTATE-driven authentication failures and deadlocks remain
+fully available. Query termination and system incidents remain available with
+explicit `structured_sqlstate_only` partial coverage; items that require
+localized message text report `unsupported`, and the log-file overview is
+locale-independent. The complete
+privilege setup, including the ACL commands and the `log_file_mode` interaction,
+is documented
+in [docs/access-best-practices.md](docs/access-best-practices.md#server-log-access-optional).
+No additional PostgreSQL grants are needed: the reference `pgdiag` role already
+covers `pg_ls_logdir()`, `pg_current_logfile()`, and the log-related settings
+through `pg_monitor`.
+
+The current release ships nineteen log items: the error chronology, top errors
+and top warnings by frequency, crash and recovery markers, deadlocks,
+authentication failures, autovacuum runs, checkpoints, WAL archiver failures,
+transaction ID wraparound pressure, lock waits, `auto_explain` plans by
+duration, the log files overview, plus system incidents, server lifecycle,
+replication/WAL transport events, query terminations by minute, query time/temp
+file groups, and heavy/failed maintenance (the log overview needs only
+`pg_monitor`, no log-content access). Chart event text and plans use bounded,
+deduplicated references so repeated events do not duplicate large payloads.
+Log SQL links reuse the report-wide `query_texts` catalog. Retained SQL is limited
+to 2000 characters and hover previews to 300; truncated text is marked in the
+query dialog. Catalog keys are PostgreSQL Query IDs; missing/zero IDs use the first
+20 hex characters of the retained sanitized SQL's SHA256, without a prefix,
+also displayed as the link label. Each key keeps
+its first SQL sample; subsequent texts never overwrite it. Multiple texts for a
+native ID are marked as a representative sample. Grouped rows list each ID once. Count-completeness flags stay
+in JSON but are hidden from log event tables. Incomplete counts or log coverage
+produce one warning above the affected table/chart; display row limits alone do
+not trigger this warning. The SQL viewer's **Format** checkbox
+uses the bundled SQL Formatter 15.8.2 with the PostgreSQL dialect. The choice
+applies to subsequent SQL windows and is remembered in browser storage when
+available. Formatting changes only the displayed/copyable text; disabling it
+restores the saved SQL. If a truncated or unsupported statement cannot be
+formatted, the viewer keeps the saved text and wraps long lines.
+The `auto_explain` chart selects the 2000 slowest logged executions across the
+window, then shows up to 15 slowest retained executions per clock-aligned time
+bucket (one minute by default, configurable with `settings.bucket_seconds`). Every stacked
+block represents one query; its tooltip shows the exact log timestamp,
+duration, and a sanitized query sample capped at 300 characters. Clicking a
+block opens its sanitized, bounded plan in the bundled read-only
+`pg-explain-viewer`. An SFTP fallback for shell-less SSH
+accounts is planned but deliberately not part of this release.
+
+Log collection is bounded to 512 MiB scanned and 128 MiB returned per window.
+An auto_explain record can retain up to 512 KiB; chart plan references have a
+separate 64 MiB / 2000-plan budget. Reaching a scan or return limit preserves
+already collected events and marks coverage incomplete; it does not discard the
+whole item. Larger limits allow detailed analytical plans while keeping resource
+use bounded.
+
+The string values retained in the report's log tables, chart points and shared
+SQL/plan references have a **soft 128 MiB memory budget**. Admission happens after
+item-level ranking and eviction. `sys.getsizeof()` measures each retained Python
+string object without JSON serialization or UTF-8 copies. Aliases of the same
+object count once; separate equal strings count separately. Keys, container
+storage, presentation metadata, parser buffers and non-log sections are excluded.
+Unused SQL and plan payloads are not added to the report catalog.
+
+A whole output row or chart point and its references can cross the threshold.
+Further log output stops, remaining log items are marked skipped with an explicit
+budget reason, and the report finishes normally. Truncated tables/charts have
+updated displayed/omitted counts. Coverage includes `report_value_limit_hit`,
+`estimated_value_bytes`, `value_budget_bytes` and
+`value_budget_method: python_string_objects`. The estimate describes retained
+output; `parsed_records` and the covered timestamps still describe the scan.
+Admission updates a shared counter incrementally; a final traversal accounts for
+presentation-normalized values without serializing the dictionary.
+
+HTML shows a red warning immediately below the header:
+“В ходе наполнения отчёта был достигнут лимит; отчёт содержит неполные данные.”
+The warning is also shown when saved JSON is rendered later. This budget applies
+to log data in `logs`, `one-shot` and `snapshots`. It measures neither process RSS
+nor file size: intermediate buffers, metadata and HTML resources have other costs.
+
+The artifact records the phase outcome in `runtime.log_collection`
+(`{status, reason, coverage, source}`); `coverage` states the requested and
+actually covered window, scanned bytes, and truncation reasons, so an incomplete
+window is always visible instead of silently passing as healthy; `source` names
+how the files were discovered (`database` here, `directory` for `pg-diag logs`).
+
+## Analyze Log Files Without a Database
+
+`pg-diag logs` builds the `server_log` section directly from a directory of
+csvlog files. It never connects to PostgreSQL, so it works for logs copied from
+a server, for archived logs, and for a server that is down. The command keeps
+the `--collection-mode` axis of the other report commands: `local` (default)
+reads the directory on the collector machine, `remote` reads it on the SSH
+target through the same shell harvester as `--log-depth-time-min` and needs no
+database credentials.
+
+```bash
+# copied or archived logs on the workstation
+pg-diag logs \
+  --log-dir ~/incident-2026-09-05/pglog \
+  --log-depth-time-min 180 \
+  --out reports/incident_logs
+
+# the log directory of a remote server, over SSH only
+pg-diag logs \
+  --collection-mode remote \
+  --ssh-host db1.example.com \
+  --ssh-user pgdiag \
+  --ssh-key ~/.ssh/pgdiag_ed25519 \
+  --ssh-known-hosts ~/.ssh/known_hosts \
+  --log-dir /var/log/postgresql \
+  --log-depth-time-min 60 \
+  --out reports/db1_logs
+
+# only the lock and security items from the log
+pg-diag logs --log-dir /var/log/postgresql --tags Locks,Security
+```
+
+How the command differs from `--log-depth-time-min` on `one-shot`/`snapshots`:
+
+| Aspect | `one-shot`/`snapshots --log-depth-time-min` | `pg-diag logs` |
+| --- | --- | --- |
+| File discovery | `pg_ls_logdir()` through the database connection | `*.csv` entries of `--log-dir`; at most 1024 files are probed (newest by modification time first) and symlinks are refused. Modification times never stand in for record times: a truncated listing, an unreadable file, or a file whose last record could not be located within 64 MiB marks the window incomplete |
+| Record boundaries | Server-formatted window, collector parses records | CSV boundaries by quote parity, never physical lines: a date planted inside a quoted message cannot start or end a record. Tail probes are accepted only when parity closes, and the scan start chosen by binary search inside the oldest candidate is validated by record structure (falling back to the whole file); the file that anchors the window is re-checked with exact parity counted from its first byte (`source.anchor_verified`), and a file is excluded from the window only on an exact or trusted timestamp, otherwise it is verified the same way within a 512 MiB budget (`source.files_verified`; past the budget the window is incomplete) |
+| Window end | The server clock when the log phase starts | The newest complete record found in the directory, so `--log-depth-time-min` counts back from the last logged event (default 10, maximum 10080 / 7 days). With a known zone the newest record and the window are chosen on absolute time: across a DST transition both wall-clock scan bounds are widened, the absolute filter decides afterwards, and every record is placed by its own offset |
+| csvlog layout | Known from `server_version_num` | Detected per file from the column count of its first complete record (the head probe grows up to 64 MiB): 23 columns for PostgreSQL 10-12, 24 for 13, 26 for 14 and later; a directory that spans a major upgrade is parsed file by file |
+| Log clock zone | `log_timezone` and its UTC offset | Numeric suffixes (`+03`) and UTC resolve on their own; a bare abbreviation such as `MSK` has no known offset, chart items then carry a `log_timezone_unknown` warning and show the log clock as if UTC unless `--log-timezone Europe/Moscow` names the IANA zone, which also resolves the repeated hour of a fall-back transition through the suffix (`CEST`/`CET`) |
+| Logging settings, rotation findings, active file, block size | From the server GUCs and `pg_current_logfile()` | Unknown: `log_files_overview` lists the files without rotation findings and marks no file as current; `maintenance_events` qualifies page volumes against the largest supported block size (32 KiB) and reports `block_size_unknown` |
+| Message locale | From `lc_messages` | Detected from the severity field of the first complete record per file; a localized severity marks message-pattern items `unsupported` |
+| Message encoding | Per-database encoding map | UTF-8; undecodable bytes are replaced and the record is flagged `encoding_degraded` |
+| Other sections, DDL links | Collected as usual | Omitted; `runtime.ddl_extraction` is `unavailable` |
+
+The artifact records `runtime.mode: "logs"`, `runtime.log_directory`,
+`runtime.log_depth_time_min`, `runtime.log_timezone`, and
+`runtime.log_collection.source` with the directory, the numbers of probed,
+undetermined, and unreadable files, the discovery reasons, and the detected
+layout (`csv_format.columns`, `csv_format.label`). Coverage semantics are
+unchanged: any discovery gap (`files_unreadable`, `candidate_limit_hit` for a
+truncated listing or more than 64 candidate files, `discovery_incomplete` for a
+file whose last record could not be located or an unverified anchor) marks the
+window incomplete and turns counts into lower bounds. A missing or empty directory produces a report whose `server_log`
+items are `unsupported` with the reason in `runtime.log_collection.reason`;
+the command still exits with status 0 because the report was written.
+
+The `logs` report has a **300-second overall deadline**, including directory
+discovery, collection, parsing, item construction, JSON serialization and HTML
+rendering. Collection uses the remaining time with 30 seconds reserved for
+finishing the report; discovery, the local scanner and remote harvester share
+that deadline. Blocking validation, planning, artifact creation, local reads,
+parsing, query catalog construction and final rendering run in killable worker
+processes. Cancellation stops and reaps the active worker and terminates an
+active SSH command; shutdown time is reserved within the overall budget.
+Interrupted JSON/HTML writes have their temporary files removed by a supervised
+worker, while existing reports and other runs' temporary files are preserved.
+Cleanup shares the deadline, so a stalled filesystem cannot block shutdown.
+If collection times out first, the remaining time can be used to write an explicit
+collection-error report. If later stages exhaust the overall budget, the command
+exits with a deadline error. The log phase on `one-shot`/`snapshots` keeps its
+existing 60-second bound.
+
+Local and SSH scanners use the same wire framing budget and stop at the same
+record boundary when it is exhausted. `scanned_bytes` counts examined input,
+excluding transport read-ahead, so the count does not depend on buffering.
+
+## Collection Timing and Metric Evaluation
+
+### Collection Timing Scopes
+
+| Scope | Execution time | Applicable entries | Typical use |
+| --- | --- | --- | --- |
+| `once` | Once, before the timed window | Visible `query`, `script`, and `python` report items | Configuration, inventory, current activity, and security evidence |
+| `every_snapshot` | At every scheduled point in the timed window | Hidden SQL metric source jobs and sampler-provider outputs | Time-series charts, adjacent-interval rates, and interval Top-N calculations |
+| `window_endpoints` | Exactly twice: at the start and end of the timed window | Hidden SQL metric source jobs and sampler-provider outputs | Full-window counter deltas, average rates, and backend `/proc` endpoint tables |
+| `post_collection` | Once, after repeated, endpoint, and sampler sources have finished | Visible derived `metric` items assigned this internal scope by the planner | Build final charts/tables, calculate rates and deltas, apply Top-N, and attach coverage diagnostics |
+
+`post_collection` is an internal planned-item scope. Content authors select
+`every_snapshot` or `window_endpoints` through a metric's
+`requires_collection`; the planner assigns `post_collection` to the visible
+metric that consumes those sources.
+
+### `snapshots` Execution Order
+
+| Stage | Work performed | Public artifact behavior |
+| ---: | --- | --- |
+| 1 | Execute visible `once` items | Results are written to top-level `items` |
+| 2 | Collect the start value for `window_endpoints` SQL sources | Kept in memory; not added to the public `snapshots` array |
+| 3 | Start required local or SSH-host sampler providers | Providers run concurrently with the database window |
+| 4 | At scheduled offsets, execute required `every_snapshot` SQL sources | Compact source samples and their scheduled points are added to the public `snapshots` array |
+| 5 | Collect the end value for `window_endpoints` SQL sources | Kept in memory; not added to the public `snapshots` array |
+| 6 | Await sampler providers and gather their repeated or endpoint output | Provider data remains metric input rather than a visible report item |
+| 7 | Evaluate `post_collection` metrics | Derived items are written to top-level `items` |
+| 8 | Validate the artifact and write the selected JSON/HTML representation(s) | `snapshot_count` records the number of retained scheduled sample points |
+
+The timed window starts only when the selected plan needs an interval SQL
+source or host sampler. For example, `snapshots --item-id` or `--tags` with
+only selected `once` items skips stages 2-6 and does not wait for
+`--duration-seconds`.
+
+### Delta and Rate Patterns
+
+`delta` and `rate` are calculation patterns, not collection scopes.
+
+| Pattern | Required source scope | Calculation | Result examples |
+| --- | --- | --- | --- |
+| Adjacent interval | `every_snapshot` | `delta = value[n] - value[n-1]`; `rate = delta / actual adjacent duration` | Time-series rate charts and interval Top-N |
+| Full window | `window_endpoints` | `delta = end_value - start_value`; `rate = delta / actual endpoint duration` | Start/end delta tables and window-average PostgreSQL or `/proc` rates |
+| Point-in-time | `once` | No delta; the collected value is presented as current evidence | Settings, catalogs, active sessions, and host inventory |
+
+Counter resets, missing keys, invalid timestamps, and unmatched bounded Top-N
+rows do not become artificial zeroes. They produce gaps and coverage metadata
+or diagnostics in the derived metric.
+
+## Output Files and Exit Status
+
+By default, both report commands use `--out report` and create
+`report/report.log`, `report/report.json`, and `report/report.html`. `--out
+PATH` changes that directory.
+
+`--output-format` controls which report representations are written. It accepts
+one value (`--output-format=html` or `--output-format=json`) or a comma-separated
+list with optional brackets (`--output-format=[html,json]` or
+`--output-format=html,json`). The default is both formats. JSON-only collection
+does not invoke the HTML renderer; HTML-only collection does not write the JSON
+artifact file.
+
+`--json-out FILE` and `--html-out FILE` independently replace the corresponding
+enabled report path; passing a path for a format excluded by `--output-format`
+is an argument error. `report.log` is always written under `--out`. When both
+formats are enabled, the JSON and HTML paths must identify different files.
+
+`--strip-meta` is an opt-in option for `one-shot` and `snapshots`. It removes
+the item check source, source identifiers and paths, instruction text and
+references, item source catalogs, and item-level source provenance before JSON
+and HTML are written. The stripped HTML does not show the `Show SQL`, `Show
+Bash`, `Show Python`, `Show Instruction`, or `Show meta` buttons. Collected
+results are unchanged. Only presentation metadata required by the report UI is
+retained (`tags`, `display`, `render`, `chart`, and the internal visibility
+marker). The `query_texts` catalog is also retained because it contains
+diagnostic data collected from PostgreSQL and is referenced by query-ID cells;
+it is not the source code of a pg_diag check.
+
+```bash
+pg-diag snapshots \
+  --dsn "postgresql://app@127.0.0.1:5432/appdb" \
+  --duration-seconds 30 \
+  --interval-seconds 5 \
+  --strip-meta \
+  --out reports/appdb_stripped
+```
+
+Without `--strip-meta`, reports keep the complete metadata and all source,
+instruction, and metadata buttons. A stripped artifact records
+`runtime.strip_meta: true`; the start line in `report.log` also includes
+`strip_meta=true`.
+
+Each generated file has mode `0600`; JSON and HTML are written atomically.
+Progress lines are flushed to `report.log` and identically printed to stdout.
+Every line contains `progress=N%`; planner-skipped items are reported as
+`SKIP item=SECTION.ITEM reason=...` and their sources are not invoked. Empty
+results, unsupported sources, and collection errors remain visible report
+items because they describe an actual collection attempt.
+
+Do not infer success only from the presence of files: a report containing an
+item-level collection error is deliberately written for diagnosis and the
+command then exits with status `1`.
+
+| Exit status | Meaning | Report files |
+| ---: | --- | --- |
+| `0` | Command completed successfully; for report commands, no item has collection status `error` | Log and the selected report file or files are written |
+| `1` | Content/inspection failure, runtime or connection failure, or a written report contains an item collection error | `report.log` may exist even when JSON/HTML could not be written; check stderr and the log |
+| `2` | Invalid command-line invocation or rejected argument combination | Not written |
+| `130` | Interrupted with `Ctrl-C` | Do not assume a complete report |
+
+With `runtime_policy.fail_fast: false` (the normal bundled policy), independent
+items continue after an item error and the diagnostic report is written. With
+`fail_fast: true`, collection stops at the first item error and does not write
+a partial report.
+
+## Render Existing JSON
+
+`report.json` is the durable artifact. HTML can be rebuilt later without
+reconnecting to PostgreSQL:
+
+```bash
+pg-diag render \
+  --from-json reports/appdb_60s/report.json \
+  --out reports/appdb_60s/report.html
+```
+
+To create a metadata-stripped HTML copy from an existing full JSON artifact,
+add `--strip-meta`. The input JSON file is read-only and is not rewritten:
+
+```bash
+pg-diag render \
+  --from-json reports/appdb_60s/report.json \
+  --out reports/appdb_60s/report-stripped.html \
+  --strip-meta
+```
+
+## Report Contents
+
+The bundled content pack includes sections for:
+
+- PostgreSQL version and settings.
+- Operating-system inventory and charts from the collector in `local` mode or
+  the SSH target in `remote` mode.
+- Session activity, connection pressure, locks, and waits.
+- Statement workload capability checks and top SQL reports.
+- Snapshot delta/rate workload summaries.
+- Table, index, and function workload counters.
+- Optional wait sampling data when available.
+- Replication, WAL, checkpoints, and I/O views, including synchronous quorum
+  status, standby recovery state, replication capacity limits, subscription
+  table synchronization, published tables without replica identity, and
+  sender and standby lag charts in snapshots mode.
+- Checkpoint and background-writer charts in snapshots mode: checkpoints and
+  restartpoints by trigger, buffer writes by process, checkpoint write and
+  sync time, background-writer stops and backend fsyncs, and buffer
+  allocation against cleaning, each from its own narrow sampled source.
+- Storage, vacuum, wraparound, sequence, and XID horizon diagnostics.
+- Index health checks.
+- Cluster inventory, security, and configuration checks.
+- Users and roles: complete role inventory, direct and effective membership,
+  role administration rights, `ALTER ROLE`/`ALTER DATABASE` settings,
+  database, tablespace, parameter, language, and foreign-data privileges,
+  object privileges by grantee kind, relation, column, and default
+  privileges, row-level security policies, session usage and connection
+  security per role, and `pg_hba`/`pg_ident` rules as parsed by the server.
+- Point-in-time `ldd` dependencies for the PostgreSQL main process selected by
+  the connected backend PID, including instance port and PID-chain evidence in
+  `local` and `remote` modes.
+- Per-backend process statistics calculated from two `/proc` window endpoints
+  in `local` and `remote` snapshots modes.
+
+Availability depends on PostgreSQL version, installed extensions, database
+permissions, collection mode, and host permissions.
+
+### Embedded PostgreSQL Configurator
+
+**Show configurator** appears beside **Explain available** when the report
+contains usable CPU and RAM capacity, an identifiable storage class, a supported
+PostgreSQL version/platform, and current `overview.pg_settings` data. It opens an
+offline dialog running the bundled pg_configurator 0.11.0 web implementation,
+initially on **Diff**. All collected running settings, including extension
+parameters, are prefilled as CSV with their original PostgreSQL units. The diff
+compares calculated settings after unit conversion; settings outside the engine's
+scope remain in the input. Pending restart values do not replace running values.
+
+The JavaScript adapter uses online logical CPUs, total memory, and explicit
+process/container limits when present. It prefers the device backing
+`data_directory`; a uniform disk inventory is an explicitly labelled fallback.
+It also uses collected database sizes, connection/autovacuum capacity, replication
+capability and topology, WAL segment size and the largest measured interval WAL
+rate. A slot and its active sender are counted as one replica. Cumulative counters
+and CPU/disk utilization are not treated as capacity or benchmark scores.
+
+**Inputs from report** lists each selected value, its source, and assumptions.
+Workload duty, memory shares and future retention requirements remain editable in
+**Main**. The initial WAL allowance is 25% of free WAL-filesystem space, capped
+at 32 GiB; collected WAL symlinks are resolved to the appropriate mount. Confirm
+competing space requirements. Missing
+container limits are prominently disclosed: host-visible CPU/RAM must not be
+mistaken for the container allocation. **Reset to report inputs** restores the
+initial calculation inputs. Closing and reopening retains edits.
+Size fields use compact IEC notation such as `62.22Gi`; calculations retain the
+exact collected byte values. Diff values use PostgreSQL size/time suffixes, with
+disabled or automatic values such as `-1` displayed without units.
+
+The page and its rules are embedded in the report and loaded into a sandboxed
+iframe only when opened; no network connection or database change is made.
+The embedded page follows the report theme and hides its own theme switch via
+the `data-pc-embedded` flag.
+To update the pinned copy from a reviewed checkout, run
+`python tools/vendor_configurator.py /path/to/pg_configurator`. The vendor notice
+records its source revision and file hashes. Adapter regression tests run in the
+normal Node suite; browser coverage is in
+`tests/browser/test_configurator_browser.py`.
+
+### Diagnostic Graph
+
+The HTML report opens with six collapsed roots in Fit view: CPU, RAM, Disk and
+Network in the upper row, with Database health and Database security below.
+Root colors already include findings in hidden branches. Click a root or node
+to reveal its directions and detail card. Labels and collapsed-child counters
+sit inside the circles; root captions are larger than child captions.
+
+The canvas toolbar contains **Expand all**, **Collapse all**, zoom controls,
+**Fit**, **1:1**, and **Full screen**.
+**Expand all** first unfolds the entire tree; pressing it again opens every
+node's card. In this mode cards stay open independently, and each close button
+closes only its own card. **Collapse all** closes all cards and restores the six roots.
+Full screen fills the page viewport; **Exit full screen** or Escape returns to the report. Opening a report item
+also exits full screen. Drag to pan and scroll to zoom. Opening a node smoothly
+centres its card in the canvas without changing zoom. Layout changes animate
+without stretching unrelated sibling branches and respect reduced-motion
+preferences. Manual pan or zoom cancels automatic centring. Both report themes are supported.
+Branches share unused horizontal space beside deeper descendants. Solid tree
+connections follow the gaps between levels with rounded bends and avoid unrelated
+circles and detail cards.
+
+Each color has a diagnostic meaning:
+
+- **Green / OK**: the assessed measurements or completed checks did not reveal
+  warning conditions. Data presence alone does not establish OK.
+- **Yellow / Warning**, **red / Critical**: measured values or explicit findings
+  justify the severity. Cards show the evidence, values, units and criteria.
+- **Grey / Not assessed or No data**: a required measurement, complete window,
+  applicable criterion or approved baseline is unavailable. **Assessment limits**
+  explains why. Inventories and activity counts without a health criterion
+  remain reference information.
+
+Large evidence lists are split into named diagnostic directions with at most
+six report-item links per card. Each direction assesses its own inputs; it
+does not inherit a sibling's findings. Relevant context can appear in several
+directions: connection incident and limit cards include session-count charts.
+Every catalog item is bound to the
+graph, including empty, failed and unsupported items. Clicking a link opens the
+corresponding report item. Children are shown on the canvas, not repeated as a
+list in the card. Dashed arrows point from a symptom to a possible cause to
+investigate; they do not prove causation. Shared-evidence links have no arrow.
+Both are shown only for the selected node. Cards distinguish **Possible causes**,
+**Possible effects** and **Related checks**. During animation, a link is hidden
+while a moving node or closing card obstructs its route.
+
+For checks of already built reports, see the reusable
+[report debugging tools](tools/report_debug/README.md): item navigation, graph
+routes, saved-report comparison, metric/log replay and graph-only HTML refresh.
+
+The graph evaluates raw item data rather than copying the report item's
+summary severity. It distinguishes missing samples from measured zeros and
+current-window deltas from cumulative statistics. Incomplete log windows,
+truncated results and unknown risk levels cannot prove a healthy check;
+observed findings remain visible. The warning/critical boundaries share one
+scale across original nodes and the new directions. Resource-contribution
+rules additionally account for resource pressure, so their contextual
+assessment can differ from an independent source direction. The card explains
+when a branch's final color comes from its children. A healthy child cannot
+replace missing measurements in a parent that requires its own assessment.
+
+CPU separates user work, system work, I/O wait and hypervisor steal. RAM
+separates available memory/OOM, swap occupancy and cache misses. Disk covers
+latency, reads, writes and free space. Network covers interface traffic and
+errors/drops, client waits and connections, replication transport, settings
+and access/encryption. I/O wait is not CPU execution; ClientRead is not itself
+a network fault; replay age without unapplied WAL does not establish lag.
+Rate thresholds are diagnostic heuristics, not universal capacity limits.
+
+The module lives in `src/pg_diag/render/graph/`: `graph.json` declares the tree,
+`pg-diag-graph-data.js` provides data access and shared calculations,
+`pg-diag-graph-rules.js` contains the original rules,
+`pg-diag-graph-groups.js` assesses the named directions,
+`pg-diag-graph.js` combines evidence and coverage, and
+`pg-diag-graph-render.js` renders the graph. The normative contract is
+[DIAGNOSTIC_GRAPH_SPEC.md](src/pg_diag/render/graph/DIAGNOSTIC_GRAPH_SPEC.md).
+
+Repeated table samples store their column schema once in `snapshot_schemas` and
+keep only status, rows, and an optional failure reason in each snapshot point.
+Raw snapshot points are not duplicated into the self-contained HTML after
+derived metric items have been built. Reports use artifact schema version 5.
+The renderer accepts that version only. Normal artifacts contain the complete
+unified content document and source provenance. Artifacts produced with
+`--strip-meta` use the schema's reduced metadata form: the presentation unit
+registry and report-level provenance remain, while item source catalogs and
+provenance are empty.
+
+## Content Layout
+
+```text
+src/pg_diag/content/
+  README.md                 # content-pack overview and contracts
+  report.yaml               # report structure and item ordering
+  presentation.yaml         # units, formatting, and renderer rules
+  queries.yaml              # query catalog index
+  scripts.yaml              # host script catalog
+  python.yaml               # trusted Python source catalog
+  metrics.yaml              # chart/table metrics and sampler providers
+  field_reference.yaml      # inline help for declarative fields
+  catalog/                  # query manifests and version ranges
+  queries/                  # SQL source files
+  scripts/                  # host shell source files
+  python/                   # trusted Python source files
+  instructions/             # reusable and per-item diagnostic guidance
+  EXTENDING.md              # examples for adding report items
+  ITEM_DEVELOPMENT_SPEC.md  # normative item/result contract
+```
+
+`report.yaml` references items by `query`, `script`, `metric`, or `python`. SQL
+result columns are read from actual cursor metadata; the report layout does not
+hardcode table columns.
+
+The loader assembles these YAML files into one effective content document with
+canonical roots such as `sections/<section>/items/<item>`, `queries/<id>`,
+`scripts/<id>`, `metrics/<id>`, and `python_sources/<id>`. The artifact stores
+that document once together with source-file provenance. `Show meta` uses it for
+the annotated `Raw` YAML view; `Total` remains the default resolved-metadata view.
+All catalog paths and section/item defaults are explicit in `report.yaml`.
+Missing configuration is a validation error; the loader and renderer do not
+infer paths or adapt older content and artifact schemas.
+
+## Orchestrator integration
+
+The normal collection and report CLI remains human-oriented. Authors of
+`pg_play`-compatible orchestrators can use the separate
+[versioned machine contract](docs/pg_play-integration.md).
+
+For configuration review automation, extract a compact, content-addressed
+facts artifact from an existing validated report:
+
+```bash
+pg-diag configuration-facts report.json --out configuration-facts.json
+```
+
+The `pg_diag/configuration-facts-v1` contract contains PostgreSQL version,
+database size, effective `pg_settings`, installed extensions, CPU topology,
+RAM, filesystems, mounts, disks, source-report provenance, and collection
+completeness. It contains no connection credentials and does not recommend or
+apply settings. The packaged JSON Schema is
+`pg_diag/schema/configuration-facts-v1.schema.json`.
+
+## Development
+
+Keep all project Markdown files in English. Audits generated with the master
+prompts follow the requesting user's language unless another language is specified.
+
+Run the test suite:
+
+```bash
+cd pg_diag
+. .venv/bin/activate
+
+PYTHONDONTWRITEBYTECODE=1 python -m pytest -q
+```
+
+### Test with the minimum Python version
+
+On Linux, the complete suite can be run under Python 3.10 without installing
+that interpreter on the host. The Docker socket and CLI are passed into the
+Python container so the integration tests can create and reuse their PostgreSQL
+10-18 containers:
+
+```bash
+cd /path/to/pg_diag
+
+docker run --rm --init \
+  --volume "$PWD:/workspace:ro" \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
+  --volume "$(command -v docker):/usr/local/bin/docker:ro" \
+  --workdir /workspace \
+  --env PYTHONDONTWRITEBYTECODE=1 \
+  --env PG_DIAG_DOCKER_INTEGRATION=1 \
+  python:3.10-slim-bookworm \
+  sh -ec 'python -m pip install --quiet ".[test]"; python -m pytest -q -p no:cacheprovider'
+```
+
+The PostgreSQL matrix defaults to all supported majors. Restrict it during a
+targeted compatibility check by adding, for example,
+`--env PG_DIAG_DOCKER_VERSIONS=14,18`. Without
+`PG_DIAG_DOCKER_INTEGRATION=1`, only the unit suite runs and the eighteen Docker
+cases are skipped. The derived PostgreSQL images remain in the Docker build
+cache; temporary database containers are removed after their version's tests.
+
+Validate content before committing content changes:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python -m pg_diag.cli validate
+```
+
+Compile Python files:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python -m compileall -q pg_diag
+```
+
+Run static checks:
+
+```bash
+python -m ruff check pg_diag tests
+```
+
+## Notes
+
+- Runtime dependencies are intentionally focused: YAML parsing, PostgreSQL
+  access, and SSH transport.
+- Every PostgreSQL connection requests `default_transaction_read_only=on` in
+  the startup settings and verifies both the session default and current
+  transaction before collection starts. SQL source transactions additionally
+  use an explicit read-only transaction.
+- pg_diag never resets PostgreSQL statistics counters. Counter discontinuities
+  are only detected and reported; reset functions are never invoked.
+- Unsupported PostgreSQL versions fail at runtime planning.
+- Report JSON uses strict JSON values. Non-finite runtime/source numbers are
+  normalized to `null`, and invalid external artifacts are rejected.
+- Local host data and local-only Python sources are omitted without execution
+  in `remote-db-only` mode; their skip reasons are logged.
+- Host shell items retain a strict one-second timeout. Host-dependent Python
+  checks use bounded source-specific deadlines of up to 30 seconds, while each
+  nested host command is limited to five seconds. A timeout is recorded and
+  rendered inside the affected item; other items continue when `fail_fast` is
+  disabled.
+- Full `remote` mode authenticates only with the configured key, verifies the
+  configured `known_hosts` file, and keeps PostgreSQL sessions read-only through
+  the forwarded connection.
+- Blocking work requested by trusted Python sources runs in a killable child
+  process, so a source timeout does not leave its filesystem or command probe
+  running in the collector background.
+- A declared sampler provider may own a window-length command. Its command and
+  provider grace bounds are explicit in the content/provider contract; ordinary
+  host commands remain limited to five seconds.
+- Generated reports are ignored by Git by default.
+
+## License
+
+The `pg_diag` source code is distributed under the
+[MIT License](https://github.com/O2eg/pg_diag/blob/main/LICENSE). Self-contained
+HTML reports bundle Apache ECharts under Apache-2.0, highlight.js plus the
+ECharts d3 components under BSD-3-Clause, and `pg-explain-viewer` / `pg_configurator` under MIT.
+Their complete license and notice
+files are listed in
+[THIRD_PARTY_LICENSES.txt](https://github.com/O2eg/pg_diag/blob/main/src/pg_diag/render/vendor/THIRD_PARTY_LICENSES.txt)
+and are included in both source and wheel distributions. The complete package
+therefore uses the SPDX expression `MIT AND BSD-3-Clause AND Apache-2.0`.

@@ -194,6 +194,7 @@ To edit JSON directly:
 [Contributions guide](contributions/README.md) ·
 [Contribution guidelines](.github/CONTRIBUTING.md) ·
 [Multi-level territories policy](MULTI_LEVEL_TERRITORIES.md) ·
+[Disputed and special territories](DISPUTED_AND_SPECIAL_TERRITORIES.md) ·
 [Administrative structure policy](ADMINISTRATIVE_STRUCTURE.md) ·
 [The `cities.type` field](TYPE_FIELD.md)
 
@@ -214,7 +215,19 @@ Some records also carry names or points copied from open sources that ask for cr
 ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)), © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright)
 (ODbL 1.0) and [Wikidata](https://www.wikidata.org/wiki/Wikidata:Licensing) (CC0). Points are selected per record and
 rounded to eight decimals; the per-record source ledgers are in [.github/fixes-docs/ledgers/](.github/fixes-docs/ledgers/).
-Keep these credits when you redistribute the data.
+Official registers matched to records (categories, codes and unit names) also ask for credit:
+- [Statistical Office of the Slovak Republic](https://slovak.statistics.sk/wps/portal/ext/aboutus/webpage/terms/), register of spatial units REGPJ (CC BY 4.0)
+- [Geodetska uprava Republike Slovenije](https://www.e-prostor.gov.si/dostopi/javni-dostop/) (GURS), register of spatial units RPE, 13 October 2026 (CC BY 4.0)
+- [Maa- ja Ruumiamet](https://geoportaal.maaamet.ee/est/Ruumiandmed/Haldus-ja-asustusjaotus-p119.html), administrative and settlement division, 2 September 2026 (public data terms)
+- [Central Statistics Office](https://www.cso.ie/en/aboutus/whoweare/copyrightpolicy/) and Tailte Éireann, Census 2022 built-up areas (CC BY 4.0)
+- [Stats NZ](https://www.stats.govt.nz/about-us/copyright/), territorial authorities and urban-rural areas 2026 (CC BY 4.0): this work is based on Stats NZ data licensed for reuse under CC BY 4.0
+- Ville de Luxembourg, quartiers on [data.public.lu](https://data.public.lu/) (CC BY 4.0)
+- [Ministry for Development of Communities and Territories of Ukraine](https://mindev.gov.ua/), Codifier of administrative-territorial units and territories of territorial communities (KATOTTG), 7 July 2026 (CC BY 4.0): names and codes matched to records; CSC romanised the names under Cabinet of Ministers Resolution 55 (2010)
+- [Statistics South Africa](https://www.statssa.gov.za/), Census 2011 main places, distributed by UCT Libraries: main-place codes and classes matched to records; the mapping to `type` is CSC's
+
+Country names in some languages follow [Unicode CLDR](https://cldr.unicode.org/) 48.2: Copyright © 2015-2024 Unicode, Inc., under the [Unicode License v3](.github/licenses/Unicode-3.0.txt), whose notice must travel with copies.
+
+Source credits and notices for 63 sources are in [.github/licenses/SOURCES.txt](.github/licenses/SOURCES.txt); export releases attach it with the other notices. The register also identifies 233 sources whose redistribution basis remains under review. Keep the applicable credits and notices when redistributing the data.
 
 ---
 

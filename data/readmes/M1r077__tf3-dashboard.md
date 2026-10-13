@@ -49,8 +49,8 @@ which is why the companion lives here.
 2. **Companion** — download `TF3-Dashboard-<version>-windows.zip` from the
    [Releases](https://github.com/M1r077/tf3-dashboard/releases) page, unzip anywhere **except a cloud-synced folder**
    (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.
-   `C:\TF3-Dashboard` or `D:\Games\TF3 Dashboard` are fine. Mod and companion are released together: mod revision 16
-   goes with companion 0.7.x / 0.8.x (older pairs keep working, the newest features simply stay blank).
+   `C:\TF3-Dashboard` or `D:\Games\TF3 Dashboard` are fine. Mod and companion are released together: mod revision 20
+   goes with companion 0.11.x (older pairs keep working, the newest features simply stay blank).
 3. **Run** — start the game with the mod enabled, then double-click `run_dashboard.cmd`. A window with two panes
    opens (collector | server) and your browser shows the dashboard. Put the browser on your second monitor,
    press `F11`. Close the window to stop everything.
@@ -163,7 +163,7 @@ and no route is changed. The channel is a local file (`tf3dash_cmd.lua`) read by
 - **Game closed?** The dashboard still works: it shows the last recorded situation of your save (an amber bar says
   so, commands are off) so you can plan the next session on the couch. With several saves in the database, pick the
   one to look at in Settings ▸ Savegames ("View"); the live game takes over again as soon as it writes.
-- Languages: English, French, German, Brazilian Portuguese, partial Chinese — follows the game language automatically.
+- Languages: English, French, German, Brazilian Portuguese, Russian, partial Chinese — follows the game language automatically.
 
 ## Configuration
 

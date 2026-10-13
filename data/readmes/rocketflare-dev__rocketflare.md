@@ -15,6 +15,9 @@ credentials**, and the codebase is written to be driven by a coding agent: `CLAU
 `.claude/rules/`, per-directory guides and a "how it works" reference mean the next feature is a
 contract → schema → route → page (→ command) loop, not a platform project.
 
+> See **[Rocketpod](https://github.com/rocketflare-dev/rocketpod)** for a version of Rocketflare that
+> runs without Cloudflare (Node in containers, Postgres for everything).
+
 ## Getting started
 
 The kit is a starting point, not a dependency: take a copy, cut it loose from this repository's

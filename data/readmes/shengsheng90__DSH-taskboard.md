@@ -9,7 +9,7 @@ This README is written so a human **or another coding agent** can install the pl
 **Package:** `@shengsheng/dsh-taskboard`  
 **Repository:** https://github.com/shengsheng90/DSH-taskboard  
 **License:** Apache-2.0  
-**Host version policy:** DSH runtime peers use `*` (no version gate). Installation/loading is tested against `0.1.6-alpha.1`, `0.1.7-rc.1/rc.2`, and `0.2.0-rc.1/rc.2`.
+**Host version policy:** DSH runtime peers use `*` (no version gate). Installation/loading is tested against `0.1.6-alpha.1`, `0.1.7-rc.1/rc.2`, and `0.2.0-rc.1/rc.2`. This verifies installation and module loading; GUI operations and model execution still need checking after a Host upgrade.
 
 ![Native Taskboard board, task detail, and workflow views](docs/assets/taskboard-demo.gif)
 
@@ -36,7 +36,7 @@ Further design docs: [Architecture](docs/architecture.md), [Security and recover
 | Requirement | Value |
 |---|---|
 | Node.js | `^22.19.0` or `>=24.0.0` (24 recommended; built-in `node:sqlite`) |
-| pnpm | `11` (`packageManager` is `pnpm@11.15.1`) |
+| pnpm | Use `11.15.1` for repository development (`packageManager`); profile installation uses Harness's pnpm |
 | DeepSeek Harness | checkout or installation, **web** profile; no DSH version constraint |
 | Network | only needed to clone this repo and install Node dependencies |
 | Permissions | write access to `$DSH_HOME` (default `~/.dsh`) and the ability to restart the Harness process |
@@ -76,6 +76,8 @@ lsof -p <PID> -a -d cwd
 ```
 
 If nothing is listening on `3080`, search other common ports or ask the operator for the URL they use (`http://127.0.0.1:<port>`).
+
+Set `PORT` to the actual listener port and keep using that value below. Use the running Host's `DSH_HOME` and profile; the examples use profile `web`.
 
 Decide how to invoke the `dsh` CLI:
 
@@ -129,24 +131,26 @@ Pass when the dump ends with a `# == @shengsheng/dsh-taskboard` layer and the `t
 ### 5. Smoke-test module resolution
 
 ```sh
-cd ~/.dsh/profiles/web && node --input-type=module -e \
-  "import('@shengsheng/dsh-taskboard').then(m=>console.log('OK', m.name, typeof m.apply)).catch(e=>{console.error(e.message);process.exit(1)})"
+(cd "${DSH_HOME:-$HOME/.dsh}/profiles/web" && node --input-type=module -e \
+  "import('@shengsheng/dsh-taskboard').then(m=>console.log('OK', m.name, typeof m.apply)).catch(e=>{console.error(e.message);process.exit(1)})")
 ```
 
 Pass: `OK taskboard function`.
 
-Fail is usually a missing peer (`@deepseek-ai/*` or `react`). Those resolve through the install-fallback links under `~/.dsh/profiles/node_modules`, which Harness heals on boot. Re-run step 4, then retry this import.
+Fail is usually a missing peer (`@deepseek-ai/*` or `react`). Those resolve through the install-fallback links under `$DSH_HOME/profiles/node_modules` (usually `~/.dsh/profiles/node_modules`), which Harness heals on boot. Re-run step 4, then retry this import.
 
 ### 6. See whether the running process already loaded the plugin
 
 Plugin composition and client-module scanning happen **only at boot**. Installing into the profile does not hot-load the UI.
 
+**After upgrading or reinstalling the package, restart Harness in step 7 even if both checks below pass.** The manifest contains the package name, not proof that the running Host loaded the new build.
+
 ```sh
-curl -s http://127.0.0.1:3080/ | grep -c '@shengsheng/dsh-taskboard'
-curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3080/plugins/@shengsheng/dsh-taskboard/client.js
+curl -s "http://127.0.0.1:$PORT/" | grep -c '@shengsheng/dsh-taskboard'
+curl -s -o /dev/null -w '%{http_code}\n' "http://127.0.0.1:$PORT/plugins/@shengsheng/dsh-taskboard/client.js"
 ```
 
-- Manifest count `> 0` **and** bundle HTTP `200` → already active; skip the restart and go to [Confirm activation](#7-confirm-activation).
+- Manifest count `> 0` **and** bundle HTTP `200`, with no package changes since boot → client artifacts are served; skip the restart and go to [Confirm activation](#8-confirm-activation).
 - Otherwise restart Harness.
 
 ### 7. Restart Harness
@@ -157,7 +161,7 @@ From a Harness source checkout, a typical restart is:
 
 ```sh
 # stop the current listener
-OLD_PID=$(lsof -tiTCP:3080 -sTCP:LISTEN | head -1)
+OLD_PID=$(lsof -tiTCP:"$PORT" -sTCP:LISTEN | head -1)
 if [ -n "$OLD_PID" ]; then kill -TERM "$OLD_PID"; fi
 
 # wait until the port is free, then start again from the checkout root
@@ -169,10 +173,10 @@ Do not treat the first successful `GET /` as “plugin ready”. The Web server 
 
 ```sh
 for _ in $(seq 1 30); do
-  if curl -s http://127.0.0.1:3080/ | grep -q '@shengsheng/dsh-taskboard'; then echo ready; break; fi
+  if curl -s "http://127.0.0.1:$PORT/" | grep -q '@shengsheng/dsh-taskboard'; then echo ready; break; fi
   sleep 2
 done
-curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3080/plugins/@shengsheng/dsh-taskboard/client.js
+curl -s -o /dev/null -w '%{http_code}\n' "http://127.0.0.1:$PORT/plugins/@shengsheng/dsh-taskboard/client.js"
 ```
 
 A detached restart script used in a real install is documented in [docs/install-plugin-prompt.zh.md](docs/install-plugin-prompt.zh.md) (step 6). Prefer that script when the installing agent would be killed with the old Harness process group.
@@ -187,6 +191,9 @@ All of these must pass:
 | `GET /plugins/@shengsheng/dsh-taskboard/client.js` | HTTP 200 |
 | Harness boot log | no plugin import / apply error |
 | Browser | refresh `http://127.0.0.1:<port>`; a Taskboard control appears in the sidebar footer |
+| UI write | create a test project and task; refresh and confirm both persist |
+
+Loading the page alone does not verify the write channel. In browser developer tools, UI actions should POST to `/taskboard/<endpoint>` and return a `server-response` with `result.ok: true`. The channel uses Harness authentication and Origin checks. A `401` / `403` requires checking the browser login and Host access configuration; `404` indicates a missing route or an incorrect proxy path. HTTP `200` with `result.ok: false` is an application error, not a successful write. Custom RPC callers must send a `client-request` envelope with a string `rpcId`, a `method` matching the endpoint, and a `payload`.
 
 Default data files (created on first use; the Host resolves these paths):
 
@@ -207,6 +214,7 @@ Those defaults are **relative**, and a Host inherits its working directory from 
 | `incompatible with dsh` | Old package still declares a bounded DSH range | Upgrade to the package with DSH peers set to `*`; actual API failures still need adaptation |
 | `EPERM` writing `~/.dsh` | sandbox | Ask the operator for full permissions; the write is idempotent |
 | Manifest / `client.js` still 404 | no restart, or checked too early | Restart, then poll (step 7) |
+| Page loads, but create/edit fails | RPC route, authentication, proxy, or request error | Check `/taskboard/<endpoint>` requests and `result.ok` as in step 8; upgrade an older plugin and restart |
 | Import / apply error | missing peers or missing bundle entry | Heal fallbacks with `--dump-config`; confirm `dsh.profile.bundles` |
 | `declares no dsh.bundle` | package missing bundle patch | Rebuild this repo; do not hand-edit the installed tree |
 | GUI down after restart | Harness failed to boot | Read `/tmp/dsh-harness-restart.log` or the process log; confirm checkout path and `pnpm dsh` |
@@ -224,7 +232,9 @@ Install only packages you trust. `pnpm` runs package lifecycle scripts, and Harn
 5. **Approve for work** moves `backlog` → `todo`. Agents and automation may claim only eligible `todo` items.
 6. Use **Board**, **List**, **Gantt**, **Workflows**, and the Dashboard as needed. The page follows the Harness locale (Chinese or English).
 7. When an Agent submits review, open the task, read the result comment and verification, then **Accept** (`done`) or **Return for rework**.
-8. Map a Workspace before using **Open in new session**. That action opens a native blank Session with an unsent draft that carries the exact task id and revision.
+8. Map a Workspace before using **Open in new session**. It is available for `todo` / `in_progress` tasks and opens a native Session with an unsent task draft. It also binds a fresh claim to that Session, moving `todo` to `in_progress`; an existing claim must be released before a new Session can be bound. Binding increments the task version, so reread the task before writing. Send the draft when ready to start the Agent.
+
+For both manually bound and automation Sessions, a bound Goal reaching `complete` submits the task to `in_review`; `blocked` moves it to `blocked`. Human acceptance is still required for `done`.
 
 Human-only actions (UI or CLI, never model tools): approve, accept, return, archive, restore, cancel, reopen, force takeover, permanent delete.
 
@@ -275,6 +285,8 @@ There is no accept tool and no generic status tool. Follow the packaged Skill at
 
 The CLI emits schema-versioned JSON. Use it for human scripts and interoperability, not as the model's primary API.
 
+Use the absolute database and attachment paths from the Host startup log when operating its store from another directory. Relative defaults can select a different project store. Pass both `--database` and `--attachment-root`, or set `DSH_TASKBOARD_DATABASE` and `DSH_TASKBOARD_ATTACHMENTS` to those absolute paths.
+
 ```sh
 dsh-taskboard --database .dsh/taskboard.sqlite project list
 dsh-taskboard --database .dsh/taskboard.sqlite project create --key DSH --name "My project"
@@ -299,12 +311,14 @@ Exit codes: `0` success, `2` usage, `3` storage/service unavailable, `4` domain/
 If the binary is not on `PATH`, run the installed file:
 
 ```sh
-node ~/.dsh/profiles/web/node_modules/@shengsheng/dsh-taskboard/lib/cli.js --database .dsh/taskboard.sqlite storage status
+node "${DSH_HOME:-$HOME/.dsh}/profiles/web/node_modules/@shengsheng/dsh-taskboard/lib/cli.js" --database .dsh/taskboard.sqlite storage status
 ```
 
 ### Automation
 
 On the Taskboard page, create an automation for a project: interval, Agent preset, model route, worker count, and quota policy. When enabled, the Host scheduler claims eligible `todo` work, drives a root Agent Session and Goal, and stops at `in_review`. Harness currently exposes no proactive quota signal, so the plugin reports quota as uncertain: new rules default to **ignore**, while choosing **pause-on-uncertain** deliberately prevents new claims without cancelling running work.
+
+The form prefills the Host's current model and reasoning settings; `defaultModelRoute` can override the form's model default. An explicit rule model route takes precedence over the Host default. Without either a rule route or a Host default model, the worker cannot start.
 
 Assigning a saved workflow adds its ordered tabs, branches, node kinds, and configuration to the Agent's task instruction as **guidance**. The scheduler does not automatically invoke workflow nodes; `executable` means a Host provider is registered for that node kind, not that assignment turns the workflow into an implicit runner.
 
@@ -312,7 +326,7 @@ Assigning a saved workflow adds its ordered tabs, branches, node kinds, and conf
 
 `cordis.patch.yml` mounts one Host plugin id `taskboard`. Override values in the profile composition or with environment variables. Paths are resolved by the Host. The browser cannot choose the database or attachment root.
 
-Relative `databasePath` / `attachmentRoot` values are **cwd-independent**. Both are resolved together against one base, so the authority rows and the attachment bytes can never end up in different directories:
+Relative `databasePath` / `attachmentRoot` values share one base selected by the rules below. The startup cwd helps select that base; absolute paths stay fixed:
 
 1. `:memory:` and absolute paths are used as given.
 2. If the cwd-relative database already exists, that location is kept. A store created before this rule is never abandoned. When only `attachmentRoot` is relative, it anchors this step instead, so bytes an absolute database points at are not orphaned.
@@ -331,6 +345,7 @@ Set `DSH_TASKBOARD_DATABASE` / `DSH_TASKBOARD_ATTACHMENTS` to an absolute path (
 | `snapshotTaskLimit` | `1000` | Tasks per web snapshot; the page reports when it was truncated |
 | `maxAttachmentBytes` | `26214400` | Per file (25 MiB) |
 | `maxTaskAttachmentBytes` | `104857600` | Per task (100 MiB) |
+| `allowedAttachmentTypes` | See list below | MIME types permitted for attachments |
 | `minAutomationIntervalMs` | `30000` | Floor for automation interval |
 | `maxProjectWorkers` | `2` | Concurrent claims per project |
 | `maxGlobalWorkers` | `4` | Concurrent claims globally |
@@ -339,8 +354,11 @@ Set `DSH_TASKBOARD_DATABASE` / `DSH_TASKBOARD_ATTACHMENTS` to an absolute path (
 | `maxChangeWaiters` | `128` | Long-poll waiter cap |
 | `maxChangeWatchMs` | `30000` | Long-poll timeout |
 | `defaultAgentPreset` | `standard` | Worker preset |
+| `defaultModelRoute` | unset | Automation form default, in `provider:model` or `provider/model` format; otherwise uses the Host selection |
 
-Attachment content types and sizes are validated before publication. Downloads stream from disk. Dashboard and `storage status` share the same bounded SQLite integrity, revision, count, attachment-cleanup, and orphaned-claim diagnostics.
+Default `allowedAttachmentTypes`: `application/json`, `application/octet-stream`, `application/pdf`, `application/zip`, `image/gif`, `image/jpeg`, `image/png`, `image/webp`, `text/markdown`, `text/plain`. Set `allowedAttachmentTypes` and `defaultModelRoute` in the profile composition; `cordis.patch.yml` only maps the two storage path environment variables.
+
+Attachment content types and sizes are validated before publication. Downloads stream from disk. Dashboard and `storage status` share SQLite integrity results and bounded revision, count, attachment-cleanup, and orphaned-claim diagnostics.
 
 The SQLite integrity scan reads every database page, so it never runs on the snapshot path: it runs once when the database opens and on the dashboard's explicit re-check. `storageHealth.integrityCheckedAt` reports when the reported result was measured.
 
@@ -369,7 +387,7 @@ Delete the empty ones. Keep the store you use where it is, since it is reused, o
 ## Develop this repository
 
 ```sh
-pnpm install
+pnpm install --frozen-lockfile
 pnpm typecheck
 pnpm test
 pnpm build
@@ -392,6 +410,7 @@ Maintainers regenerate those files with `pnpm generate:typert` against a local D
 | [docs/acceptance-audit.md](docs/acceptance-audit.md) | Row-by-row acceptance evidence |
 | [docs/browser-e2e.md](docs/browser-e2e.md) | Deterministic browser lifecycle |
 | [docs/install-plugin-prompt.zh.md](docs/install-plugin-prompt.zh.md) | Chinese copy-paste install prompt for a Harness agent |
+| [docs/plugin-compatibility.zh.md](docs/plugin-compatibility.zh.md) | Distribution strategy, compatibility matrix, and verification boundaries |
 | [skills/manage-taskboard/SKILL.md](skills/manage-taskboard/SKILL.md) | Agent operating procedure |
 
 ## License

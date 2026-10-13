@@ -127,6 +127,10 @@ Tagr is fully responsive and works on phones and tablets. The mobile UI adapts t
 - **Multi-user authentication** — password-protected access with roles (admin, tagger, listener)
 - **Resizable panels** — drag to resize the three-panel layout to your liking
 - **Dark theme** by default
+- **English, Spanish, Catalan, French and German UI** — each user picks the language under Settings → Language; on "Automatic" it follows
+  the browser's `Accept-Language` setting and falls back to English. Translations live in
+  `messages/<locale>.json`; a new language needs its file plus an entry (and its display name) in
+  `src/i18n/locale.ts`
 - **Toast notifications** for operation feedback
 - **URL-based state** — bookmarkable views with folder, song, sort, and filter state preserved in the URL
 
@@ -245,8 +249,42 @@ pnpm dev                 # Development mode
 | `AUTH_USER` | Yes | Username of the admin account. Additional users are created from **Settings → Users**. |
 | `AUTH_PASSWORD` | Yes | Password of the admin account (plain text). |
 | `MUSIC_FOLDERS` | No | Comma-separated list of paths to music directories. Defaults to `/music` if not set. |
+| `EXCLUDE_FOLDERS` | No | Comma-separated folder names, globs or regex patterns to skip, on top of the built-in ones. See [Excluding folders](#excluding-folders). |
 | `PUID` | No | User ID for the container process. Defaults to `1000`. (Docker only) |
 | `PGID` | No | Group ID for the container process. Defaults to `1000`. (Docker only) |
+| `TAGR_INSIGHTS` | No | Set to `false` to stop sending [Insights](#insights). |
+
+### Excluding folders
+
+Some folders are never shown in the folder tree nor scanned, at any depth:
+
+- Every hidden folder (name starting with `.`: `.Trash`, `.AppleDouble`, `.@__thumb`, …)
+- NAS and OS system folders: `@eaDir` (Synology thumbnails), `#recycle` (Synology), `@Recycle` (QNAP), `#snapshot`, `@Recently-Snapshot`, `$RECYCLE.BIN`, `System Volume Information`, `lost+found`
+
+Add your own with `EXCLUDE_FOLDERS`, a comma-separated list. Each entry is a plain folder name, a glob or a regular expression, and is matched case-insensitively against the **whole folder name** (not the full path):
+
+```env
+# Skip "Podcasts", anything containing "test", "Temp1"…"Temp9", and anything ending in "_backup"
+EXCLUDE_FOLDERS="Podcasts,*test*,Temp?,.*_backup"
+```
+
+An entry is read as a **regex** when it uses regex-only syntax — `\ ^ $ + ( ) [ ] { } |`, or `.*` / `.+` / `.?`. Anything else is a **glob**: `*` matches any run of characters, `?` exactly one, and every other character (dots included) is literal.
+
+| Entry | Type | Matches | Doesn't match |
+|-------|------|---------|---------------|
+| `Podcasts` | name | `Podcasts`, `podcasts` | `My Podcasts` |
+| `Vol. 1` | name | `Vol. 1` | `Vol_ 1` |
+| `*test*` | glob | `test`, `My Tests` | `tes` |
+| `Temp?` | glob | `Temp1`, `TempA` | `Temp`, `Temp12` |
+| `.*_backup` | regex | `Album_backup`, `_backup` | `backup_old` |
+| `Temp\d+` | regex | `Temp1`, `temp42` | `Temp`, `Temporary` |
+| `(Demos\|Live)` | regex | `Demos`, `Live` | `Live 2020` |
+
+Notes:
+
+- Entries are split on commas, so a pattern can't contain one (write `a{2,3}` as `aa|aaa`).
+- An invalid regex is ignored and logged as a server warning.
+- Songs already indexed from a newly excluded folder are removed on the next scan.
 
 ---
 
@@ -275,6 +313,34 @@ back to the browser. Changing `AUTH_SECRET` invalidates stored tokens, so they h
 If ListenBrainz is unreachable, listens are kept in a queue in the database and retried with an increasing
 delay the next time you play something. The Settings dialog shows how many are still waiting. Listen history
 and play counts inside Tagr are recorded regardless of whether scrobbling is configured.
+
+---
+
+## Insights
+
+Insights are Tagr's anonymous usage statistics. Once a day, Tagr sends a small anonymous report to `https://tagr-insights.xavirincon.com/collect` so we can tell
+how many instances exist and which features are worth working on. The aggregated results are public at
+<https://tagr.xavirincon.com/insights/>.
+
+The report contains only counts and flags:
+
+- A random instance ID generated on first run (not derived from anything about you or your machine)
+- Tagr version, OS, CPU architecture, Node version and whether it runs in a container
+- Number of songs, music folders and songs per file format
+- Number of users, and how many played something in the last 7 days
+- Tag edits, edited songs and plays in the last 7 days
+- How many smart playlists, saved filters, active share links and scrobbling accounts exist
+
+It never includes file names, paths, tags, user names, tokens or your IP address (the server does not store it).
+
+**Nothing is sent until an admin has seen the notice.** After installing or upgrading, admins get a popup
+explaining what is sent, with **Keep enabled** and **Disable** buttons. Until one of them is clicked (or
+the setting is changed in **Settings → Insights**, which also shows the exact JSON), no report leaves the
+server. After that, a report goes out 30 minutes after start-up and then every 24 hours. The container log also
+says at start-up whether statistics are on.
+
+To opt out, untick it in **Settings → Insights**, or set `TAGR_INSIGHTS=false` to
+turn it off for good. The collector is open source: [suitux/tagr-insights](https://github.com/suitux/tagr-insights).
 
 ---
 

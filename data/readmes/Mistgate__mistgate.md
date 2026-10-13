@@ -1,0 +1,137 @@
+<div align="center">
+
+<img src="web/public/favicon.svg" width="96" height="96" alt="Mistgate logo">
+
+<h1>Mistgate</h1>
+
+<h3>Your own VPN for your people, without babysitting servers.</h3>
+
+<p>For family, friends, a community or a small team.<br>
+Hysteria2, AmneziaWG and VLESS REALITY on your own servers: add a server from the browser, give each person one link, and hear about an outage first.</p>
+
+<p>
+<img alt="Status: beta" src="https://img.shields.io/badge/status-beta-f2c46b">
+<a href="https://github.com/Mistgate/mistgate/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/Mistgate/mistgate?sort=semver&color=b8acf2"></a>
+<a href="LICENSE"><img alt="Licence: AGPL-3.0" src="https://img.shields.io/github/license/Mistgate/mistgate?color=b8acf2"></a>
+<a href="https://github.com/Mistgate/mistgate/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Mistgate/mistgate/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+<a href="go.mod"><img alt="Go version" src="https://img.shields.io/github/go-mod/go-version/Mistgate/mistgate"></a>
+</p>
+
+<p><a href="https://mistgate.app/"><b>Docs</b></a> · <a href="#quick-start"><b>Install</b></a> · <a href="#screenshots"><b>Screenshots</b></a> · <a href="#compared-with-other-panels"><b>Compare</b></a> · <a href="README.ru.md">Русский</a> · <a href="README.zh.md">简体中文</a></p>
+
+<p><sub><b>Beta.</b> Mistgate runs in production, but until 1.0 expect rough edges, and the API, the stored settings and the node protocol may still change. <a href="https://mistgate.app/roadmap/status/">Status and roadmap</a></sub></p>
+
+</div>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/overview-dark-en.webp">
+  <source media="(prefers-color-scheme: light)" srcset="docs/images/readme/overview-light-en.webp">
+  <img alt="The Mistgate admin: six nodes with their health and throughput, one open problem, recent events" src="docs/images/readme/overview-dark-en.webp" width="100%">
+</picture>
+
+## Why Mistgate
+
+Mistgate is for people who run a VPN for others: family, friends, a community or a small team. You install one panel, add servers to it, and send each person a link. The panel then keeps the servers configured and checked.
+
+**One link per person, several protocols.**
+Apps on the Clash/Mihomo core (kl!ck, FlClash, Clash Verge Rev) get the Hysteria2, VLESS and AmneziaWG servers from the same link, so when one protocol is blocked on someone's network, the other is already in their app. Happ gets the Hysteria2 and VLESS servers; AmneziaVPN gets a key per device from the person's page. [Client apps](docs/en/guide/client-apps.md)
+
+**VLESS REALITY, hidden behind a real site.**
+VLESS runs over TCP, with XHTTP or with RAW and Vision, or over TLS with XHTTP or WebSocket, direct or behind a CDN, and works on networks that throttle UDP. Anyone who is not a client sees a real site: by default the node's own, with its own Let's Encrypt certificate, or another site you name. Hysteria2 and VLESS can share a node, TCP 443 included. **Check ports** on the node page tests from another node whether a TCP port reaches Mistgate itself. [VLESS REALITY](docs/en/guide/vless.md) · [VLESS and Hysteria2 on one node](docs/en/guide/vless-and-hysteria2.md)
+
+**Add a server from the browser.**
+Type its IP and root password. The panel pins the SSH host key, checks the server, opens the ports in an active UFW or firewalld, installs the signed agent and waits for it to connect. The node gets its Let's Encrypt certificate itself, and **Enable WARP** gives it a Cloudflare exit. [Install a node over SSH](docs/en/getting-started/ssh-install.md)
+
+**You find out first.**
+Every 5 minutes the panel connects to every server the way an app does and loads a test page through the tunnel. On each node a doctor runs 17 host checks (disk, journal, resolver, clock, ports, BBR) and offers six fixes that run only after you confirm. Warnings go to Telegram. [Health](docs/en/operations/health.md)
+
+**Light and hidden.**
+Two static Go binaries, one for the panel and one for the node agent. SQLite and systemd: no Docker, no database server. On a small test server (1 vCPU / 1 GB) the panel alone idles at 16-20 MiB of private memory (3x-ui 68-74, PasarGuard 262-265, Remnawave 426-454); panel, node and database together on one 2 vCPU / 2 GB server take 57 MiB (the same three: 74, 297 and 761). In that test, adding and removing users and restarting the panel dropped no connections, while 3x-ui restarts its core when users change. A stranger who opens the panel's address sees a decoy site; the admin sits behind a secret path or host name. Releases are reproducible and signed offline, and nodes install only signed builds. Torrent protection blocks plaintext BitTorrent on the node; its events keep what matched and the destination port, and no address leaves the node. [Security](docs/en/operations/security.md) · [Releases and signing](docs/en/operations/releases.md) · [Benchmarks, including where Mistgate is slower](docs/en/reference/benchmarks.md)
+
+**Let your AI agent help.**
+The panel has a built-in MCP server. Claude Code, Codex or another agent reads the fleet and changes it through plan → apply. Installing a node, a doctor fix or a server password change waits until you approve it in the admin. Agents never receive subscription links, device keys or passwords. [AI agent guide](docs/en/getting-started/ai-agents.md) · [MCP](docs/en/reference/mcp.md)
+
+> **Coming soon, not in a release yet:** Xray JSON and sing-box subscriptions, and a full Telegram bot for the fleet and for users. The edition of the panel that runs on Cloudflare Workers is in the releases since v0.1.36 as a [preview](docs/en/getting-started/install-edge.md) and has not run on a real Cloudflare account yet.
+
+## Screenshots
+
+<table>
+<tr>
+<td width="50%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/node-dark-en.webp"><source media="(prefers-color-scheme: light)" srcset="docs/images/readme/node-light-en.webp"><img alt="A node page: status, WARP exit, CPU, RAM, disk and 24 hours of traffic" src="docs/images/readme/node-dark-en.webp" width="100%"></picture><br><sub><b>A node.</b> Status, WARP exit, load and 24 hours of traffic.</sub></td>
+<td width="50%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/health-dark-en.webp"><source media="(prefers-color-scheme: light)" srcset="docs/images/readme/health-light-en.webp"><img alt="Client-eye checks: a table of nodes by protocols with the latency through each tunnel" src="docs/images/readme/health-dark-en.webp" width="100%"></picture><br><sub><b>Client-eye checks.</b> Every protocol on every node, latency through the tunnel.</sub></td>
+</tr>
+<tr>
+<td width="50%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/user-dark-en.webp"><source media="(prefers-color-scheme: light)" srcset="docs/images/readme/user-light-en.webp"><img alt="A user page: quota, term, device limit, AmneziaVPN keys and the traffic that counts against the quota" src="docs/images/readme/user-dark-en.webp" width="100%"></picture><br><sub><b>A person.</b> Quota, term, devices and the traffic that counts against the quota.</sub></td>
+<td width="50%"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/phone-dark-en.webp"><source media="(prefers-color-scheme: light)" srcset="docs/images/readme/phone-light-en.webp"><img alt="The person's page on a phone: days left, traffic, and the servers in their app" src="docs/images/readme/phone-dark-en.webp" width="100%"></picture><br><sub><b>Their link in a browser.</b> Days left, traffic and their servers.</sub></td>
+</tr>
+</table>
+
+The screenshots use invented demo data.
+
+## Quick start
+
+You need a fresh Linux server (amd64 or arm64) with systemd, a domain that points directly at it (here `panel.example.com`), TCP ports 80 and 443 free, and either `openssh-client` with `ssh-keygen -Y verify` support or OpenSSL 3.2 or newer. On the server, run:
+
+```sh
+curl -fsSL https://mistgate.app/install.sh | sudo bash -s -- --public-url https://panel.example.com
+```
+
+The installer verifies the signed panel manifest, runs setup and starts Mistgate under systemd. It prints the admin URL and a one-time setup link that expires in 30 minutes. It does not change firewall rules. Add `--yes` for a non-interactive run or `--dry-run` to verify the release without changing the server. See [Install the panel](docs/en/getting-started/install-panel.md) for manual installation and the other options.
+
+Then:
+
+1. Open the setup link and create the owner: a passkey, or a password with an authenticator code.
+2. Add servers in **Nodes → Add node**, over SSH or with a one-time command ([Add a node](docs/en/getting-started/add-node.md)).
+3. Follow [First users](docs/en/getting-started/first-users.md). [Install the panel](docs/en/getting-started/install-panel.md) also covers manual installation, the hidden admin host, your own certificate and your own decoy site.
+
+**Or let an AI agent install it.** Claude Code, Codex CLI or any agent that can run `ssh` on your computer can do the steps above: copy the install prompt from the [AI agent guide](docs/en/getting-started/ai-agents.md#install-mistgate-with-an-ai-agent). It asks before every change, and you create the owner account yourself.
+
+## Compared with other panels
+
+| | Mistgate | 3x-ui | Remnawave | Hiddify | PasarGuard | s-ui |
+|:--|:--|:--|:--|:--|:--|:--|
+| Runs without Docker | ✅ | ✅ | ❌ | ✅ | partial | ✅ |
+| Database | SQLite | SQLite or PostgreSQL | PostgreSQL + Redis | MySQL + Redis | SQLite, MySQL, MariaDB or PostgreSQL | SQLite |
+| Panel RAM, idle | 16-20 MiB¹ | 68-74 MiB¹ | 426-454 MiB¹ | not measured | 262-265 MiB¹ | not measured |
+| One-line installer | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Add a node from the panel (SSH) | ✅ | ❌ | ❌ | ❌ | ❌ | ? |
+| Hysteria2 | ✅ | ✅ | partial | ✅ | ✅ | ✅ |
+| AmneziaWG | ✅ 2.0 and 3.1 | ✅ 3.1 | ? | ? | ? | ? |
+| VLESS REALITY | ✅ | ✅ | ✅ | ✅ | ✅ | ? |
+| VMess, Trojan, Shadowsocks | ❌ | ✅ | partial | ✅ | ✅ | ✅ |
+| Xray JSON or sing-box subscriptions | soon | Xray JSON | ✅ both | ✅ both | sing-box | sing-box |
+| Health checks and alerts | ✅ client-eye checks, doctor with fixes | ✅ tunnel monitor (opt-in) | ✅ status, Prometheus | partial | partial | ? |
+| Telegram bot | alerts only, full bot soon | ✅ | partial | ✅ | ✅ | ? |
+| HWID device limit | device count only | ✅ | ✅ | ? | ✅ | ? |
+| Built-in MCP server for AI agents | ✅ | ? | ❌ | ? | ? | ? |
+
+¹ Private memory of the whole panel group, idle, 0 to 200 users, no node attached, on a 1 vCPU / 1 GB test server (3x-ui includes its Xray core and fail2ban). Method, versions and limits: [Benchmarks](docs/en/reference/benchmarks.md). "?" means the project's own README and docs do not say.
+
+Others are ahead in protocol breadth, community size, HWID limits and full Telegram bots. The full table with sources, checked on 2026-10-09, is in [Comparison with other panels](docs/en/reference/comparison.md).
+
+## Status and roadmap
+
+Mistgate is in beta. The current release is [`v0.1.36`](https://github.com/Mistgate/mistgate/releases/latest), and it runs in production. Until 1.0 the API, the stored settings and the node protocol may still change. Linux binaries for amd64 and arm64 are on [GitHub Releases](https://github.com/Mistgate/mistgate/releases/latest).
+
+Next: the first run of the Cloudflare Workers edition (a [preview](docs/en/getting-started/install-edge.md)) on a real account and bringing it on par with the VPS panel, then Xray JSON and sing-box subscriptions; later a Telegram bot for the fleet and for users. Some defaults lean towards users in Russia (Yandex DNS for nodes in Russia, the doctor's control domains, split-DNS presets); all of them are settings. Details and the known limits: [Status and roadmap](docs/en/roadmap/status.md).
+
+## Documentation
+
+Everything is at [mistgate.app](https://mistgate.app/), and the same pages are in [`docs/`](docs/README.md). Good places to start:
+
+- [Overview](docs/en/getting-started/overview.md) and [Requirements](docs/en/getting-started/requirements.md)
+- [Install the panel](docs/en/getting-started/install-panel.md), [Install a node over SSH](docs/en/getting-started/ssh-install.md), [First users](docs/en/getting-started/first-users.md)
+- [Health](docs/en/operations/health.md), [Updates](docs/en/operations/updates.md), [Encrypted backups](docs/en/operations/backups.md), [Troubleshooting](docs/en/operations/troubleshooting.md)
+- [CLI](docs/en/reference/cli.md), [API](docs/en/reference/api.md), [MCP](docs/en/reference/mcp.md), [Architecture](docs/en/reference/architecture.md)
+
+## Contributing
+
+Bug reports, fixes and documentation are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) has the build, the code map, the checks CI runs and the conventions. Coding agents start with [`AGENTS.md`](AGENTS.md); the [AI agent guide](docs/en/getting-started/ai-agents.md#contribute-with-a-coding-agent) has a ready prompt for contributing.
+
+## Security
+
+Report vulnerabilities privately: see [SECURITY.md](SECURITY.md). Back up the panel's data directory (`/var/lib/mistgate`): it holds the database, the master key and the CA your nodes trust. [Encrypted backups](docs/en/operations/backups.md) to Cloudflare R2 do this on a schedule.
+
+## Licence
+
+Mistgate is free software under the [GNU Affero General Public License v3.0 only](LICENSE). If you run a modified panel for others, its admin shows a "Source code" link (`serve --source-url`) that should point to your source.

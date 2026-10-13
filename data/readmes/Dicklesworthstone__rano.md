@@ -10,7 +10,7 @@
 
 </div>
 
-rano is a **network observer for AI CLI processes** that tracks outbound connections from Claude Code, Codex CLI, Gemini CLI, and their descendants—live in your terminal and durably in SQLite.
+rano is a **network observer for AI CLI processes** that tracks observed sockets owned by Claude Code, Codex CLI, Gemini CLI, and their descendants—live in your terminal and durably in SQLite.
 
 <div align="center">
 
@@ -28,7 +28,7 @@ curl -fsSL https://raw.githubusercontent.com/Dicklesworthstone/rano/main/install
 
 **The Problem**: AI CLI tools spawn subprocesses and open sockets you can’t easily attribute back to a provider or process in real time.
 
-**The Solution**: rano polls `/proc`, maps sockets to PIDs, and prints connection events with provider tags while logging a complete history to SQLite.
+**The Solution**: rano polls `/proc`, maps sockets to PIDs, and prints observation events with provider tags while logging the observed history to SQLite. Connections that open and close between polls can be missed.
 
 ### Why Use rano?
 
@@ -415,12 +415,14 @@ rano --alert-domain "*.suspicious.com" \
 |------|-------------|
 | `--alert-domain <pattern>` | Glob pattern for domains to watch (repeatable) |
 | `--alert-max-connections <N>` | Alert when total active connections reach N (fires at >= N) |
-| `--alert-max-per-provider <N>` | Alert when any provider reaches N connections (fires at >= N) |
+| `--alert-max-per-provider <N>` | Alert when any provider reaches N concurrently observed connections (fires at >= N) |
 | `--alert-duration-ms <N>` | Alert on connections lasting longer than N ms |
 | `--alert-unknown-domain` | Alert on connections to unresolved IPs |
 | `--alert-bell` | Ring terminal bell on alert |
 | `--alert-cooldown-ms <N>` | Suppress duplicate alerts within N ms (default: 10000) |
 | `--no-alerts` | Disable all alerting |
+
+Global and provider thresholds are evaluated once after each poll has reconciled new and closed sockets. A replacement in the same poll does not create a transient breach. Ongoing breaches and re-crossings can alert again after the configured cooldown; `per_provider` retains lifetime totals, while `active_per_provider` in the final JSON summary reports current counts. Peak activity is sampled at the same poll boundary.
 
 ### Alert Output Format
 
@@ -532,6 +534,8 @@ AI CLI invocations routinely embed credentials in argv — `ANTHROPIC_API_KEY=sk
 
 `--redact-cmdline` masks cmdlines **in durable stores only** (SQLite rows, log files, exports). Live terminal display and provider attribution always see the original argv, so classification and on-screen output are unchanged.
 
+Masking preserves `/proc` argument boundaries, including empty arguments and values with spaces or newlines. A separate `--password` value is masked in full. Invalid UTF-8 is displayed with replacement characters. Session argument snapshots use the same masking; stored patterns and session names also mask recognized credential tokens, and `all` removes their values.
+
 | Mode | Behavior |
 |------|----------|
 | `off` *(default)* | Store cmdlines verbatim |
@@ -546,6 +550,8 @@ rano --pattern claude --redact-cmdline all        # maximum paranoia
 ```
 
 **Threat model**: redaction protects readers of rano's own artifacts (a shared observer.sqlite, an exported CSV attached to a ticket, log archives) from inheriting every secret that transited a monitored shell. It cannot protect against the monitored processes leaking their own secrets elsewhere.
+
+`secrets` uses named credential flags, assignments, known prefixes and token-shape heuristics. It cannot recognize arbitrary credentials embedded in scripts, free text, filenames or unrecognized flags; use `all` when the entire command line must be hidden. Live stdout remains unmasked, so capturing terminal output creates an unprotected artifact.
 
 The built-in `audit` preset enables `redact_cmdline=secrets`.
 
@@ -736,7 +742,15 @@ rano export --format jsonl | jq 'select(.ancestry_path | contains("tmux"))'
 
 ### Performance
 
-Ancestry is cached with a fixed 30-second TTL plus staleness detection; the cache is invalidated if a process's comm name changes, keeping long-running sessions accurate. Ancestry capture is active when `--show-ancestry` is passed (it is off by default to save syscalls); without it the stored `ancestry_path` is empty. Display truncates chains deeper than five levels to `... → grandparent → leaf`.
+Each poll uses a process snapshot with kernel start times. Ancestry is cached for at most 30 seconds and reused only while every process identity and comm in the chain is unchanged; PID reuse and reparenting invalidate it. Ancestry capture is active when `--show-ancestry` is passed; without it the stored `ancestry_path` is null. Display truncates chains deeper than five levels to `... → grandparent → leaf`, while JSON and SQLite retain the full chain. Reserved path characters (`%`, comma, colon and line breaks) in comm names use percent escapes so process names remain unambiguous.
+
+Exclusions prune the matching process and its descendants, including explicitly selected PIDs and nested pattern matches. The nearest selected ancestor defines each monitored root. For a socket shared by multiple monitored processes, the lowest PID is the primary owner. `ownership_json` in JSON events, SQLite and exports contains the socket inode, owner/root PID and kernel start time, and all observed monitored holders; decode this field as JSON to inspect shared ownership. PID reuse, inode replacement or a change of monitored root starts a new observation episode rather than reusing stale metadata. These records describe sampled ownership; they do not prove which holder initiated a shared socket.
+
+Provider matching uses original comm/argv before redaction. A unique direct match wins even when the monitored ancestor belongs to another provider. An unmarked or ambiguous process inherits the nearest uniquely matched ancestor within the monitored tree; an unclassifiable root stays `unknown`. Nested roots and simultaneous providers are resolved per process. `ownership_json.provider_origin` identifies the supplying PID/start time and whether the match was `direct` or inherited from an `ancestor`; the owner and monitored root remain separate identities. Changes of provider or origin start a new observation episode.
+
+TCP endpoint episodes emit `connect`/`close`, but `/proc` does not establish whether the process initiated or accepted them: `ownership_json.direction` is `unknown`. `--include-listening` admits TCP listeners with a `listen` event. UDP is included by default; connected UDP has a known peer, while a bound/sendto socket emits `bind` with no observed remote endpoint (`remote="none"`, `remote_present=false`). The kernel's zero remote address/port remain in SQLite/export, alongside this explicit absence flag. A sendto destination is not recoverable from `/proc`; no hostname is inferred for local-only observations. `--no-udp` excludes both UDP kinds.
+
+`ownership_json.socket_kind` is `endpoint`, `listener` or `bound_udp`, and `kernel_state` preserves the sampled hexadecimal state. Summary `connects`, `closes`, `active`, provider counts and connection alerts concern endpoint episodes; `listens`/`binds` count local-only observations and `socket_active`/`socket_closes` include all kinds. Namespace or socket-table/read-permission failures produce visible diagnostics, increment `observation_errors`, and make the final exit unsuccessful. This backend observes the observer's network namespace and reports when a selected process is elsewhere. A successful empty poll proves only that no admissible sockets were observed in that poll.
 
 ---
 
@@ -1012,7 +1026,7 @@ SQLite writes use an async batching system for better performance under high eve
 - **SSD storage**: Defaults work well
 - **HDD storage**: Increase `db_batch_size` to 500+
 
-If the queue fills, events are dropped with a warning. Monitor for "sqlite queue full" messages.
+If the queue fills, events are dropped with a warning. The final JSON summary reports `sqlite.observed`, `persisted`, `queue_lost`, and `write_lost`; after shutdown, observed events equal persisted events plus both loss counts. Synthesized alert rows are included. `sqlite_dropped` includes queue and failed-batch losses. Any loss, database startup/finalization failure, or requested file creation/write failure produces a nonzero exit status. Database degradation remains visible in the final summary even when monitoring continues.
 
 ### Provider Configuration (`rano.toml`)
 
@@ -1109,7 +1123,7 @@ rano --pid <pid>
 
 ### "SQLite file is locked"
 
-Transient SQLite contention between the monitor's writer and read-side commands (`status`, `report`, `export`) is retried automatically via `busy_timeout=5000` on every connection, so prompt-style status usage does not fail under load. If you still see "database is locked", another process holds an exclusive lock (e.g., a different tool) — stop it or use a separate database file:
+Read-side commands (`status`, `report`, `export`) use a five-second SQLite busy timeout. The monitor initializes with that timeout, then limits event writes to three attempts with a 250ms busy timeout and 25ms/50ms backoff. Permanent errors are not retried; exhausted transactions count the whole rolled-back batch as write loss, preserve the error, and make the final status nonzero. If another process holds a long write lock, use a separate database file or coordinate access:
 
 ```bash
 rano --sqlite /tmp/rano-$(date +%s).sqlite

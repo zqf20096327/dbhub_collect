@@ -4,10 +4,11 @@
 
 ---
 
-```json
-" 🦅 DorkEye | OSINT Dorking Tool "
-> I don't hack systems, i expose their secrets <
-```
+<div align="center">
+
+![Typing SVG](https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=22&pause=1200&color=39FF14&background=000000&center=true&vCenter=true&width=600&lines=DorkEye+%7C+OSINT+Dorking+Tool;I+don%27t+hack+systems%2C+I+expose+their+secrets)
+
+</div>
 
 <!-- ── Row 1: Project identity ── -->
 ![Python](https://img.shields.io/badge/Python-3.9%2B-3670A0?style=flat-square&logo=python&logoColor=ffdd54)
@@ -23,7 +24,7 @@
 ![Issues](https://img.shields.io/github/issues/xPloits3c/DorkEye?style=flat-square)
 ![Last Commit](https://img.shields.io/github/last-commit/xPloits3c/DorkEye?style=flat-square&logo=github)
 
-<!-- — Row 3: Community — -->
+<!-- ── Row 3: Community ── -->
 
 [![Telegram](https://img.shields.io/badge/Join-Telegram-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/DorkEye)
 
@@ -32,8 +33,8 @@
 ---
 
 ## What is DorkEye?
-**DorkEye** is an advanced, automated `OSINT DORKING TOOL` that leverages its capabilities to discover exposed web assets through intelligent search queries.
-- It combines a powerful dork generator, a full SQL,XSS injection detection engine, a 13-step autonomous analysis pipeline, an adaptive recursive crawler and Database port scanner.
+**DorkEye** is an automated `OSINT DORKING TOOL` that discovers exposed web assets through intelligent search queries.
+- It combines a dork generator driven by YAML templates (`soft` / `medium` / `aggressive` modes), an SQL and XSS testing module, a 13-step autonomous analysis pipeline, an adaptive recursive crawler, and a database port scanner.
 
 - It can identify indexed directories, sensitive files, admin panels, databases, backups, configuration files, credentials, PII data, subdomains, and technology fingerprints — efficiently and with stealth controls.
 
@@ -44,17 +45,17 @@
 
 ## Why DorkEye
 
-- Bypass CAPTCHA and rate‑limiting
-- Advanced .html report interactive
+- Bypass CAPTCHA and rate-limiting
+- Advanced, interactive HTML report
 - Maintain anonymity and avoid IP blocking
 - Clean and unfiltered search results
-- Continue Dorking for hours, DorkEye won’t get banned.
+- Keep dorking for hours — DorkEye won't get banned.
 
 <img width="1437" height="652" alt="564558417-37385827-9112-4efe-aa0a-f8941da0a2d9" src="https://github.com/user-attachments/assets/df21ead3-dd90-4692-9eab-259c6582ae86" />
 
 ---
 
-## What’s New 🥇
+## What's New 🥇
 
 | Feature | Details |
 |---------|---------|
@@ -64,8 +65,8 @@
 | 📂 File Re-Processing | [Re-run SQLi/XSS/analysis/crawl on saved result files with `-f`](Docs/cli.md) |
 | 💉 SQL Injection | [5 methods: 105 payloads](Docs/sqli.md) |
 | 💉 XSS Injection | [4 methods: 111 payloads](Docs/xss.md) |
-| ➜] Web Console | [Matrix-Style local dashboard via browser `--ui`](Docs/webconsole.md) |
-| 🚪 DB Port Scan | [15 services,no-auth probes. 3 levels severity `--dbscan`](Docs/dbscan.md) |
+| 🖥️ Web Console | [Matrix-Style local dashboard via browser `--ui`](Docs/webconsole.md) |
+| 🚪 DB Port Scan | [15 services, no-auth probes, 3 severity levels `--dbscan`](Docs/dbscan.md) |
 | 🤖 Agents Pipeline | [13-step autonomous analysis](Docs/agents.md) |
 | 🛡️ HeaderIntelAgent | [Info leaks, missing security headers, outdated server](Docs/agents.md#headerintelagent) |
 | 🧬 TechFingerprintAgent | [35 technologies detected, CVE dorks generated](Docs/agents.md#techfingerprintagent) |
@@ -73,7 +74,7 @@
 | 🔐 PiiDetectorAgent | [Phone, IBAN, fiscal code, credit card, SSN, DOB](Docs/agents.md#piidetectoragent) |
 | 🌐 SubdomainAgent | [Extracts subdomains and generates `queries`](Docs/agents.md#subdomainharvesteragent) |
 | 🔄 Adaptive Crawl | [Recursive multi-round dorking](Docs/crawler.md) |
-| 🔑 HTTP Fingerprinting | [22 browser/OS profiles — Chrome,Firefox,Safari,mobile..](Docs/fingerprinting.md) |
+| 🔑 HTTP Fingerprinting | [22 browser/OS profiles — Chrome, Firefox, Safari, mobile, etc.](Docs/fingerprinting.md) |
 | 📊 Output Formats | [HTML interactive report — all saved to `Dump/`](Docs/output_formats.md) |
 | 🗂️ File Categories | [7 auto-detected categories - whitelist / blacklist filtering](Docs/file_categories.md) |
 | 🖥️ Full CLI Reference | [All 38 flags and every possible combination](Docs/cli.md) |
@@ -81,7 +82,7 @@
 ---
 
 ## Quick Install
-```json
+```bash
 "Update:"
   sudo apt update
   sudo apt install -y python3 python3-pip python3-venv git
@@ -91,7 +92,7 @@
   cd DorkEye
 
 "Create environment:"
-  python -m venv dorkeye_env
+  python3 -m venv dorkeye_env
 
 "Activate environment:"
   source dorkeye_env/bin/activate
@@ -100,16 +101,16 @@
   pip install -r requirements.txt
 
 "WIZARD MODE:"
-  python dorkeye.py --wizard
+  python3 dorkeye.py --wizard
 ```
 
 <img width="1175" height="982" alt="dev5 0wiz" src="https://github.com/user-attachments/assets/79253966-b2ed-431e-9d46-aaa8d8297c82" />
 
 ---
 
-```json
+```bash
 "Help:"
-  python dorkeye.py -h
+  python3 dorkeye.py -h
 
 "Deactivate environment:"
   deactivate
@@ -126,43 +127,43 @@
 ---
 
 🔹 # WIZARD Mode
-```json
-  python dorkeye.py --wizard
+```bash
+  python3 dorkeye.py --wizard
 ```
 🔹 # Basic search
-```json
-  python dorkeye.py -d "inurl:admin" -o results.txt
+```bash
+  python3 dorkeye.py -d "inurl:admin" -o results.txt
 ```
 🔹 # Dork Generator + Detection
-```json
-  python dorkeye.py --dg=sqli --mode=aggressive --sqli --stealth -o report.json
+```bash
+  python3 dorkeye.py --dg=sqli --mode=aggressive --sqli --stealth -o report.json
 ```
 🔹 # SQLi + stealth
-```json
-  python dorkeye.py -d "site:example.com .php?id=" --sqli --stealth -o scan.html
+```bash
+  python3 dorkeye.py -d "site:example.com .php?id=" --sqli --stealth -o scan.html
 ```
 🔹 # Fast scan
-```json
-  python dorkeye.py -d dorks.txt --no-analyze -c 200 -o fast_results.csv
+```bash
+  python3 dorkeye.py -d dorks.txt --no-analyze -c 200 -o fast_results.csv
 ```
 🔹 # Direct SQLi test on a URL
-  ```json
-python dorkeye.py -u "https://target.com/page.php?id=1" --sqli --stealth -o result.json
+```bash
+  python3 dorkeye.py -u "https://target.com/page.php?id=1" --sqli --stealth -o result.json
 ```
 🔹 # Re-process a saved result file
-```json
-  python dorkeye.py -f Dump/results.json --sqli --xss --dbscan --analyze -o retest.html
+```bash
+  python3 dorkeye.py -f Dump/results.json --sqli --xss --dbscan --analyze -o retest.html
 ```
 
 🔹 # Web Console
-```json
-  python dorkeye.py --ui
+```bash
+  python3 dorkeye.py --ui
 ```
 
 <img width="1549" height="609" alt="image" src="https://github.com/user-attachments/assets/aae464c0-3320-4050-b11b-d83c4e3f9c54" />
 
 
-## Examples:
+## Examples
 <img width="938" height="832" alt="de-hex" src="https://github.com/user-attachments/assets/da253967-45a7-4249-aed2-9726eaa37b79" />
 
 ---
@@ -181,7 +182,7 @@ DorkEye/
 │    ├── dorkeye_analyze.py    ← Standalone analysis CLI
 │    ├── db_portscan.py   ← Scans exposed database ports
 │    ├── dorkeye_web.py   ← Local web interface
-│    ├── sqli.py     ← 5 Method sqli injection(105 payloads)
+│    ├── sqli.py     ← 5 Method sqli injection (105 payloads)
 │    └── xss.py     ← 4 Method xss injection (111 payloads)
 │ /Templates/
 │    ├── dorks_templates.yaml
@@ -216,7 +217,7 @@ DorkEye/
 │    ├── REPORT_HTML.md
 │    ├── USAGE.md
 │    └── DDGSEE.md
-│ /Screeshots
+│ /Screenshots/
 │    ├── img0
 │    └── img1
 ```
@@ -233,12 +234,13 @@ DorkEye/
 
 <img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/e3eb4dca-51e9-4d4c-a2e4-afa057564b74" />
 
-    
+**DorkEye is provided for educational and authorized security-testing purposes only.** You are solely responsible for complying with all applicable laws and for obtaining explicit, written authorization before scanning, testing, or probing any system, domain, or network you do not own. The authors and contributors accept no liability for misuse or for any damage resulting from the use of this tool.
+
 ---
 
 ## 📞 Contact
 
-- **Author: I.C.W.T** xPloits3c  
+- **Author:** I.C.W.T / xPloits3c  
 - **Email:** dorkeye@protonmail.com  
 - **Telegram:** https://t.me/DorkEye  
 ---
@@ -249,3 +251,9 @@ If you find DorkEye useful, please consider starring the repository 🌟
 
 ## 📜 License
 MIT License © 2026 I.C.W.T xPloits3c
+
+
+## Contributor
+<a href="https://github.com/xPloits3c/DorkEye/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=xPloits3c/DorkEye" />
+</a>

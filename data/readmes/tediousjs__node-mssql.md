@@ -920,6 +920,7 @@ request.execute('procedure_name', (err, result) => {
 
 __Errors__
 - EREQUEST (`RequestError`) - *Message from SQL Server*
+- EPARAM (`RequestError`) - A parameter value is not valid for its type.
 - EINJECT (`RequestError`) - Procedure name or parameter type is not a valid identifier. See [Identifiers](#identifiers).
 - ECANCEL (`RequestError`) - Cancelled.
 - ETIMEOUT (`RequestError`) - Request timeout.
@@ -1073,6 +1074,12 @@ pipeline(readableStream, transformStream, writableStream)
 request.query('select * from mytable')
 ```
 
+The readable stream is destroyed with the request's first error. Later errors are still emitted on the request, but not on the stream.
+
+If the readable stream is destroyed before the request finishes (for example because a later stream in the pipeline failed), the request still runs to the end and the rows it has left are discarded. Call `request.cancel()` to stop it early.
+
+With msnodesqlv8 before 5.6 that cancel does not stop it. The request is resumed as soon as its stream is destroyed, so that it does not keep its connection, and those versions can only cancel a paused request.
+
 
 ### pipe (stream)
 
@@ -1094,6 +1101,21 @@ stream.on('error', err => {
 stream.on('finish', () => {
     // ...
 })
+```
+
+The stream is destroyed with the request's first error, so listen for `error` on it as above. It does not emit `finish` after an error. The request still runs to the end, and its remaining rows are discarded.
+
+If the stream fails or closes before the request finishes, or was already destroyed, the request also runs to the end and its remaining rows are discarded, rather than waiting for a stream that will not read any more. Call `request.cancel()` to stop it early, bearing in mind the msnodesqlv8 caveat under [toReadableStream](#toreadablestream).
+
+`pipe()` passes errors only to the stream it is given. If you pipe through more streams after that one, use `stream.pipeline()` with [`toReadableStream`](#toreadablestream) instead, so that every error reaches you:
+
+```javascript
+const { pipeline } = require('stream')
+const request = new sql.Request()
+pipeline(request.toReadableStream(), transformStream, writableStream, err => {
+    // ...
+})
+request.query('select * from mytable')
 ```
 
 ---------------------------------------
@@ -1123,6 +1145,7 @@ request.query('select 1 as number', (err, result) => {
 __Errors__
 - ETIMEOUT (`RequestError`) - Request timeout.
 - EREQUEST (`RequestError`) - *Message from SQL Server*
+- EPARAM (`RequestError`) - A parameter value is not valid for its type.
 - ECANCEL (`RequestError`) - Cancelled.
 - ENOCONN (`RequestError`) - No connection is specified for that request.
 - ENOTOPEN (`ConnectionError`) - Connection not yet open.
@@ -1169,6 +1192,7 @@ request.batch('create procedure #temporary as select * from table', (err, result
 __Errors__
 - ETIMEOUT (`RequestError`) - Request timeout.
 - EREQUEST (`RequestError`) - *Message from SQL Server*
+- EPARAM (`RequestError`) - A parameter value is not valid for its type.
 - ECANCEL (`RequestError`) - Cancelled.
 - ENOCONN (`RequestError`) - No connection is specified for that request.
 - ENOTOPEN (`ConnectionError`) - Connection not yet open.
@@ -1210,6 +1234,8 @@ request.bulk(table, (err, result) => {
 
 **TIP**: You can also create Table variable from any recordset with `recordset.toTable()`. You can optionally specify table type name in the first argument.
 
+**TIP**: A `VarChar`, `NVarChar` or `VarBinary` column declared without a length (e.g. `sql.NVarChar`) is created as `max` when `table.create` is set, and the tedious driver loads it as `max`. It does so whether or not the table already existed, so when `table.create` is set for an existing table, give such a column its length if the table's column is sized (it loads faster) or a `sql_variant` (which cannot hold a `max` value). Without `table.create`, the tedious driver needs a column declared as `max` (e.g. `sql.NVarChar(sql.MAX)`) to bulk load into an existing `varchar(max)`, `nvarchar(max)` or `varbinary(max)` column. `Xml`, `UDT`, `Geography` and `Geometry` columns are loaded as `max` unless you give them a length.
+
 __Errors__
 - ENAME (`RequestError`) - Table name must be specified for bulk insert.
 - ETIMEOUT (`RequestError`) - Request timeout.
@@ -1242,6 +1268,10 @@ request.query('waitfor delay \'00:00:05\'; select 1 as number', (err, result) =>
 
 request.cancel()
 ```
+
+A cancelled stream emits an `error` event with code `ECANCEL`, followed by `done`.
+
+With the `msnodesqlv8` driver, a request that is already running can only be cancelled from msnodesqlv8 5.6. Earlier versions can cancel a paused stream, but let any other running request run to the end and complete as if `cancel()` had not been called.
 
 ## Transaction
 
@@ -1312,6 +1342,8 @@ transaction.begin(err => {
     })
 })
 ```
+
+The msnodesqlv8 driver has no `abortTransactionOnError` option and can't tell when the server has rolled a transaction back. If you turn `XACT_ABORT` on yourself, or the server rolls the transaction back for another reason (for example, when it picks it as a deadlock victim), the `rollback` event isn't emitted, so the `rollback()` call above fails with a `TransactionError` saying there is no transaction to roll back: the server has already rolled it back.
 
 ### Events
 
@@ -1577,6 +1609,7 @@ __Errors__
 - ENOTPREPARED (`PreparedStatementError`) - Statement is not prepared.
 - ETIMEOUT (`RequestError`) - Request timeout.
 - EREQUEST (`RequestError`) - *Message from SQL Server*
+- EPARAM (`RequestError`) - A parameter value is not valid for its type.
 - ECANCEL (`RequestError`) - Cancelled.
 
 ---------------------------------------

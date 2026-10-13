@@ -6,7 +6,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/azure-functions-db.svg)](https://pypi.org/project/azure-functions-db/)
 [![Downloads](https://static.pepy.tech/badge/azure-functions-db/month)](https://pepy.tech/project/azure-functions-db)
-[![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)](https://pypi.org/project/azure-functions-db/)
+[![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)](https://pypi.org/project/azure-functions-db/)
 [![CI](https://github.com/yeongseon/azure-functions-db-python/actions/workflows/ci-test.yml/badge.svg)](https://github.com/yeongseon/azure-functions-db-python/actions/workflows/ci-test.yml)
 [![Release](https://github.com/yeongseon/azure-functions-db-python/actions/workflows/publish-pypi.yml/badge.svg)](https://github.com/yeongseon/azure-functions-db-python/actions/workflows/publish-pypi.yml)
 [![Security Scans](https://github.com/yeongseon/azure-functions-db-python/actions/workflows/security.yml/badge.svg)](https://github.com/yeongseon/azure-functions-db-python/actions/workflows/security.yml)
@@ -26,8 +26,6 @@ SQLAlchemy-powered database integration helpers for **Azure Functions Python v2*
 
 Part of the **Azure Functions Python DX Toolkit**
 → Bring FastAPI-like developer experience to Azure Functions
-
-> **Python 3.10 is deprecated.** Support ends in the next minor release — Python 3.10 reaches end of life in October 2026. Importing the package on Python 3.10 emits a `FutureWarning`; upgrade to Python 3.11 or newer.
 
 ## Why this exists
 
@@ -170,6 +168,11 @@ azure-functions-db[postgres]
 ## Quick Start
 
 The fastest path — read rows with `@db.input`, write rows with `@db.output`:
+
+Set `DB_URL` to a SQLAlchemy connection URL for a database that contains the
+`users` and `orders` tables used below. The decorators resolve `%DB_URL%` when
+the wrapped functions run, so defining the functions does not connect to the
+database; invoking them does.
 
 ```python
 from azure_functions_db import DbBindings, DbOut

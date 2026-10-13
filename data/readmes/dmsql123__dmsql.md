@@ -1,18 +1,20 @@
 # DMSQL **- Database Manager SQL Tool**
 
-面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。纯本地运行，隐私安全无遥测，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性能监控一站式完成。
+面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性能监控一站式完成。
 
 - **官网**：[https://dmsql.top](https://dmsql.top)
 - **操作文档**：[https://dmsql.top/docs](https://dmsql.top/docs)
 - **English docs**: [https://dmsql.top/docs?lang=en](https://dmsql.top/docs?lang=en)
-- **问题反馈 / 功能需求**：请到 GitHub 提交 [Issue](https://github.com/dmsql123/dmsql/issues)
+- **问题反馈 / 功能需求**：请到 GitHub 提交 [Issue](https://github.com/dmsql123/dmsql/issues) 或发送邮件至 [service@dmsql.top](mailto:service@dmsql.top)
 
 ---
+
+
 
 ## 核心亮点
 
 - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。
-- **纯本地安全**：零云端依赖，密码通过 VS Code SecretStorage 硬件/系统级安全加密。
+- **本地直连与隐私安全**：数据库连接与 SQL 执行纯本机直连，业务数据绝不经云端中转，密码通过 VS Code SecretStorage 硬件/系统级安全加密。
 - **可视化表结构设计器**：支持可视化新建/修改表结构，字段类型、主键、自增、索引、外键约束一站式图形化配置与 DDL 预检。
 - **智能模拟数据生成器**：支持基于字段语义的 Faker 模拟数据生成（42+ 内置语义类型），并支持配置 OpenAI/DeepSeek 协议通过 AI 生成逼真测试数据。
 - **高级数据分析网格**：基于 AG Grid 构建，支持行列数据转置 (Transpose)、透视模式 (Pivot)、单元格/行深度检视器、DBeaver 风格选择与在线数据编辑持久化。
@@ -22,26 +24,15 @@
 
 ---
 
+
+
 ## 快速开始
 
 1. 点击左侧活动栏的 **DMSQL** 图标打开数据库浏览器。
-2. 点击 **➕ 新建连接**（或在命令面板输入 `DMSQL: 新建连接`），选择目标数据库类型并按向导填写配置。
+2. 点击 **+ 新建连接**（或在命令面板输入 `DMSQL: 新建连接`），选择目标数据库类型并按向导填写配置。
 3. 在树中展开连接节点（自动连接），支持通过文件夹分组管理多个连接，按 **连接 → 数据库/Schema → 表/视图/存储过程/函数/定时任务** 浏览。
 4. 打开或新建 `.sql` 文件，选中要执行的 SQL 语句（未选中则执行全文），点击编辑器右上角 ▶ 或按 `Ctrl+Enter` / `Cmd+Enter` 运行。
 5. 执行结果将在结果面板分栏中呈现；表/视图节点右键可一键查看数据、可视化修改结构、生成模拟数据、导入导出等。
-
----
-
-## 问题反馈与需求
-
-遇到 Bug 或希望增加功能，请到 GitHub 仓库提交 Issue，**不要**在其他渠道重复提交。
-
-- 提交入口：[https://github.com/dmsql123/dmsql/issues/new/choose](https://github.com/dmsql123/dmsql/issues/new/choose)
-- 仓库地址：[https://github.com/dmsql123/dmsql](https://github.com/dmsql123/dmsql)
-- **Bug**：请选择 Bug 模板，写明 IDE（VS Code / Cursor / Windsurf / Trae 等）、扩展版本、数据库类型，以及可复现步骤。
-- **需求**：请选择 Feature 模板，写明使用场景和期望行为。
-
-完整操作文档请看官网 [https://dmsql.top/docs](https://dmsql.top/docs)（[English docs](https://dmsql.top/docs?lang=en)）。本 GitHub 仓库仅提供发布说明与问题跟踪，**不包含源代码**。
 
 ---
 
@@ -50,12 +41,14 @@
 - **完整对象树**：连接 → 数据库/Schema → 数据表 / 视图 / 存储过程 / 函数 / 定时任务 → 字段 (标记主键/注释) / 索引 / 外键。
 - **分组与筛选**：支持连接文件夹分组 (Folder Group)，节点支持名称搜索/增量筛选，实时显示各节点子对象数量。
 - **右键丰富指令**：
-  - **连接节点**：重新连接、设为活动连接、编辑/复制连接、复制连接串、移动到文件夹、新建数据库、查看历史、筛选节点。
+  - **连接节点**：连接、断开连接、设为活动连接、编辑/复制连接、复制连接串、移动到文件夹、新建数据库、查看历史、筛选节点。
   - **数据库节点**：新建 SQL 文件、备份数据库、还原数据库、批量导出表信息、删除数据库。
   - **表/视图节点**：查看数据 (Preview)、查看表信息、查看 DDL、**新建/编辑表结构**、**生成模拟数据**、数据导入/导出、**生成 SQL 脚本** (SELECT/INSERT/UPDATE/DELETE/DDL)、截断/删除表。
   - **存储过程/函数/任务**：查看定义 SQL、生成运行 SQL、启用/禁用定时任务、删除。
 
 ---
+
+
 
 ## 可视化表结构设计器 (Table Designer)
 
@@ -66,6 +59,8 @@
 - **DDL 预检与执行**：修改完成后自动对比差异生成准确的 `CREATE TABLE` 或 `ALTER TABLE` DDL 代码，确认后一键应用。
 
 ---
+
+
 
 ## SQL 编辑器与智能辅助
 
@@ -80,6 +75,8 @@
 
 ---
 
+
+
 ## 结果面板 (Result View)
 
 - **高性能 AG Grid**：支持排序、多列筛选、自适应列宽、物理服务端分页 (`pageSize`) 与按需懒加载。
@@ -93,6 +90,8 @@
 
 ---
 
+
+
 ## 数据导入与跨库迁移
 
 - **多格式本地文件导入**：支持导入 CSV、XLSX、JSON、SQL 文件，智能自动解析文件首行列头。
@@ -102,6 +101,8 @@
 
 ---
 
+
+
 ## 智能模拟数据生成器 (Mock Data)
 
 - **语义推断与 Faker 规则**：根据列名与字段类型自动匹配 Faker 规则，覆盖 42+ 内置语义类型（如姓名、身份证、手机号、公司、地址、IP、金额、日期等）。
@@ -110,6 +111,8 @@
 - **安全分批写入**：支持配置每批插入条数及硬上限保护 (最高 10,000 条)。
 
 ---
+
+
 
 ## 实时监控与历史审计
 

@@ -66,12 +66,12 @@ You need one computer that stays on, with Docker and Docker Compose v2, on a 64-
 1. **Download the Compose files** from the [latest release](https://github.com/max1874/ferry/releases/latest) and enter their directory:
 
    ```bash
-   curl -fLO https://github.com/max1874/ferry/releases/download/v1.0.1/ferry-1.0.1-docker-compose.tar.gz
-   tar -xzf ferry-1.0.1-docker-compose.tar.gz
+   curl -fLO https://github.com/max1874/ferry/releases/download/v1.0.2/ferry-1.0.2-docker-compose.tar.gz
+   tar -xzf ferry-1.0.2-docker-compose.tar.gz
    cd ferry
    ```
 
-   The download holds `compose.yaml`, `.env.example` and `scripts/ferry-data.sh` for backups; keep that layout. It is not the program itself: Compose pulls the public image `ghcr.io/max1874/ferry:1.0.1` when Ferry starts.
+   The download holds `compose.yaml`, `.env.example` and `scripts/ferry-data.sh` for backups; keep that layout. It is not the program itself: Compose pulls the public image `ghcr.io/max1874/ferry:1.0.2` when Ferry starts.
 
 2. **Create your settings file:**
 
@@ -164,7 +164,7 @@ Skip steps 3 and 4 of the quick start. Ferry then listens on `http://127.0.0.1:4
 
 | Setting | Default | Meaning |
 | --- | --- | --- |
-| `FERRY_IMAGE` | `ghcr.io/max1874/ferry:1.0.1` | Image and version to run |
+| `FERRY_IMAGE` | `ghcr.io/max1874/ferry:1.0.2` | Image and version to run |
 | `FERRY_HOST_IP` | `127.0.0.1` | Host address Docker publishes the port on; must be loopback or private |
 | `FERRY_PORT` | `42817` | Port on the host and in the container |
 | `FERRY_TRUSTED_ORIGIN` | empty | Origin of your own TLS reverse proxy |

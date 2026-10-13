@@ -1,0 +1,180 @@
+```
+  _____ _           _   _    _
+ / ____| |         | | | |  | |
+| |    | |__   __ _| |_| |__| | ___ _ __ _ __ ___   ___  ___
+| |    | '_ \ / _` | __|  __  |/ _ \ '__| '_ ` _ \ / _ \/ __|
+| |____| | | | (_| | |_| |  | |  __/ |  | | | | | |  __/\__ \
+ \_____|_| |_|\__,_|\__|_|  |_|\___|_|  |_| |_| |_|\___||___/
+
+         a coworker, not a chatbot · v1.0.0 · agpl + attribution
+```
+
+# ChatHermes — build your own Hermes Agent SaaS
+
+> Open-source, **self-hosted**, multi-tenant SaaS boilerplate on top of [Nous Research's Hermes Agent](https://github.com/NousResearch/hermes-agent). Clone it, run one command, and you have a working agent platform: auth, billing, tools, memory, and a dedicated agent per paying user.
+
+> **Searching for `hermes-agent`?** This is the production reference: a multi-tenant SaaS that provisions a dedicated Hermes Agent instance per paying user, runs a shared Hermes Agent proxy for free users, and ships 14 real chat-time tools that integrate with the Hermes Agent runtime.
+
+**Start your own agent startup on it, or self-host it for your team.** Everything the hosted product runs on is in this repo — no "open core" holdback. Magic-link auth, Stripe subscriptions and credit packs, 14 working tools, persistent memory, vibe coding with public preview URLs, a Telegram connector, a REST API with OpenAPI, outbound webhooks, and an admin dashboard.
+
+```bash
+git clone https://github.com/kwkuh/chathermes.git && cd chathermes
+./bin/install.sh && ./bin/start.sh     # one command each — running in ~3 min
+```
+
+No PostgreSQL, no Redis, no Kafka. One SQLite file, three Bun processes. Deploy it to a $5 VPS, or [one-click it to Hetzner](./INSTALL.md) from the admin panel.
+
+For the end-user pitch: drop a task, close the tab, come back to a finished thing — research, drafts, code, monitoring — pushed to your Telegram, deployed to a public URL, persisted in memory.
+
+This repo is the source of [chathermes.com](https://chathermes.com). Self-host under [the ChatHermes Open Source License](./LICENSE.md), or [skip the setup](https://chathermes.com) and use the managed version.
+
+```
+A chatbot is a calculator. ChatHermes is a coworker.
+```
+
+[![License: ChatHermes OSL (AGPL + Attribution)](https://img.shields.io/badge/license-AGPL_3.0_+_Attribution-amber.svg)](./LICENSE.md)
+[![Built on Hermes Agent](https://img.shields.io/badge/built_on-Hermes_Agent-9333ea.svg)](https://github.com/NousResearch/hermes-agent)
+[![Hosted](https://img.shields.io/badge/hosted-chathermes.com-2B2B29.svg)](https://chathermes.com)
+
+## Features
+
+### 14 chat-time tools (all real, no mockups)
+`web_search` (5-tier fallback) · `browse` · `fetch_url` · `github_repo` · `news_search` · `weather` · `wikipedia` · `save_memory` · `recall_memory` · `telegram_send` · `run_js` · `generate_image` (Replicate Flux) · `analyze_image` (Gemini/GPT-4o vision) · `dispatch_subagent` (delegate to Hermes 4/Claude/GPT-5)
+
+### Multi-model chat
+Hermes 4 (405B + 70B), Hermes 3, Hermes Agent, Claude Sonnet 4.6, GPT-5, Gemini 3.1 Pro, Step 3.5 Flash, and more. Bring your own keys.
+
+### Hermes Agent integration
+- **Shared agent proxy** — Bun OpenAI-compatible proxy on `:19002` for all free-tier users
+- **Private agent provisioning** — Pro plan auto-spawns a dedicated Hetzner Cloud server per user (gated mode by default — admin must approve each spawn)
+- **Native Hermes Agent** support when you install `nous-hermes-agent` locally
+
+### Vibe coding
+"Build me a landing page for X" → multi-file fullstack project → live partial-HTML render → publish to public URL at `/p/<slug>`. 6 starter templates. Per-plan project quotas.
+
+### Conversion-focused billing
+Hero ("You're sharing. Your agent shouldn't be.") · 3-card pricing with Pro emphasized · feature comparison table · 6-question FAQ · trust bar · invoice PDF download · Stripe Checkout + Customer Portal.
+
+### Mobile super-app interface
+Bottom tab bar (Chat / Build / Memory / Plan / More) · bottom sheet for secondary nav · thumb-zone composer · safe-area inset support.
+
+### Cinematic /introducing demo
+17-chapter video-style walkthrough at `/introducing` with:
+- Pre-generated MP3 narration (en-GB-RyanNeural via edge-tts — free, cinematic British male)
+- Netflix-style subtitles
+- Procedural Web Audio backsound (Cm7 pad + 75 BPM sub-pulse + FM bell pings)
+- Self-record button (MediaRecorder + getDisplayMedia → download as WebM)
+
+### Power features
+- 18 transactional email templates via Resend
+- Public REST API at `/api/v1/*` with Bearer auth + OpenAPI 3.0.3
+- Outbound webhooks with HMAC + 3-attempt exponential backoff
+- Magic-link auth (no passwords)
+- Admin dashboard (users · tenants · LLM providers · email · Hetzner Cloud · Private Agents · billing · audit trail)
+- CLI with 13 admin operations
+- Built-in PWA, status page, Cmd+K search, auto-refresh polling everywhere
+
+## Quick start
+
+```bash
+git clone https://github.com/kwkuh/chathermes.git
+cd chathermes
+./bin/install.sh      # → setup wizard + deps + build + smoke test
+./bin/start.sh        # → boots all 3 services
+# -> open http://localhost:7000
+```
+
+Or with Docker — one image, one volume, works anywhere a container runs:
+
+```bash
+cp orchestrator/.env.example .env    # set SESSION_SECRET + one LLM key
+docker compose up -d
+```
+
+On macOS port 7000 belongs to AirPlay Receiver; use `WEB_PORT=7600 docker compose up -d`.
+
+Sign in with any email. Magic link prints to orchestrator log if you skipped Resend. Done.
+
+```bash
+./bin/health.sh       # check everything is running
+./bin/stop.sh         # shut down
+```
+
+Requires Bun >= 1.3 (or just Docker). For systemd, production hardening, and HTTPS: see [INSTALL.md](./INSTALL.md).
+
+**Deploy it anywhere.** The admin panel one-clicks to Hetzner, but nothing is tied to it — the same cloud-init block works as user data on DigitalOcean, Vultr, Linode, Scaleway, OVH, AWS, Google Cloud, Azure, Oracle Cloud, and Contabo. Container platforms read the Dockerfile directly: Coolify, Dokploy, Railway, Render, Fly.io, CapRover, Portainer, or plain Kubernetes. Copy-paste blocks for each are on [/install](https://chathermes.com/install).
+
+See [INSTALL.md](./INSTALL.md) for production setup (HTTPS, Stripe, Resend domain, Hermes Agent native).
+
+## Stack
+
+- **Web**: Next.js 16, Turbopack, Tailwind 4, Motion, react-markdown — port 7000
+- **Orchestrator**: Hono on Bun, SQLite via bun:sqlite — port 7010
+- **Hermes proxy**: Bun, OpenAI-compatible — port 19002
+
+No PostgreSQL, no Redis, no Kafka. Single SQLite file for everything.
+
+## Configuration
+
+ChatHermes reads everything from environment variables — see [`orchestrator/.env.example`](./orchestrator/.env.example).
+
+**Minimum required:**
+- `PUBLIC_BASE_URL` — your install's public URL
+- `SESSION_SECRET` — auto-generated by `bin/setup.sh`
+- One of: `NOUS_API_KEY`, `LLM_API_KEY`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, etc.
+
+**Optional but recommended:**
+- `RESEND_API_KEY` + verified domain for email
+- `STRIPE_*` keys for billing
+- `CHATHERMES_MODEL_RATES` JSON for per-model credit pricing
+- `HETZNER_API_TOKEN` for one-click and private agent deploys
+- `REPLICATE_API_TOKEN` for image generation tool
+- `GEMINI_API_KEY` for vision analysis tool
+
+**No credentials are bundled with this repo. You configure your own.**
+
+## Self-host vs Cloud
+
+The code is the same. The infrastructure isn't.
+
+| | This repo (self-host) | [chathermes.com](https://chathermes.com) |
+|---|---|---|
+| Setup time | 5 min with Docker | 30 sec (sign in) |
+| LLM API keys | bring your own | pre-pooled |
+| Hermes Agent native | install yourself (5 GB) | pre-installed |
+| Email | BYO Resend + DNS | verified domain |
+| Public preview | `your-domain.com/p/<slug>` | `chathermes.com/p/<slug>` |
+| Private agent provisioning | works with **your** Hetzner token | works with our Hetzner pool |
+| Backups | DIY (cron) | included, off-site |
+| Updates | `git pull` | automatic |
+| What you bring | servers + keys + time | email + a credit card |
+| **License** | [ChatHermes OSL](./LICENSE.md) — AGPL + Required Attribution | hosted service |
+
+We genuinely want you to self-host. The hosted version pays our team to operate the cloud-only infrastructure. See [docs/CLOUD_FEATURES.md](./docs/CLOUD_FEATURES.md) for the full split.
+
+## License
+
+[ChatHermes Open Source License v1.0](./LICENSE.md) — based on AGPL-3.0 with a Required Attribution Addendum:
+
+- Use, modify, redistribute. Sell hosting if you want.
+- Run it commercially.
+- **DO NOT** strip the visible "Powered by ChatHermes" link from the UI.
+- **DO NOT** remove the `X-Powered-By: ChatHermes` HTTP header.
+- **DO NOT** use the name "ChatHermes" or our mascot for your fork.
+
+The runtime guard refuses to start the orchestrator if the attribution module is tampered with. That's a feature, not a bug.
+
+## Contributing
+
+PRs welcome. By contributing you agree your work is licensed under the [ChatHermes Open Source License](./LICENSE.md). See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Built on
+
+- [Hermes Agent](https://github.com/NousResearch/hermes-agent) by Nous Research — the autonomous-agent runtime that makes ChatHermes possible
+- [Hermes 4](https://huggingface.co/NousResearch) — Llama-based open-weights model family
+- [Hono](https://hono.dev), [Bun](https://bun.sh), [Next.js](https://nextjs.org)
+- [Resend](https://resend.com), [Stripe](https://stripe.com), [Tailwind CSS](https://tailwindcss.com)
+
+---
+
+Made by [@kwkuh](https://x.com/kwkuh) & [@supercryptolord](https://x.com/supercryptolord) in Jakarta. Thanks to Nous Research for shipping Hermes Agent in the open.

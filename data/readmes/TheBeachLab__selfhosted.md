@@ -57,6 +57,8 @@ and the legacy kernel's package requirements.
 
 ### Services
 
+- [Vaultwarden password manager](doc/vaultwarden.md)
+- [Buchhaltung: repositorio propio privado](doc/buchhaltung.md)
 - [Msgvault communications archive](doc/msgvault.md)
 - [Taskwarrior and Nextcloud Tasks sync](doc/taskserver.md)
 - [Transmission Daemon (NordVPN)](doc/transmission.md)

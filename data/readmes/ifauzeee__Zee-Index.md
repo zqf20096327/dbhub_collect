@@ -333,7 +333,7 @@ Prefer `ADMIN_PASSWORD_HASH` over `ADMIN_PASSWORD` in production. Generate one w
 | Variable                    | Description                    | Default                  |
 | --------------------------- | ------------------------------ | ------------------------ |
 | `POSTGRES_USER`             | PostgreSQL username            | `postgres`               |
-| `POSTGRES_PASSWORD`         | PostgreSQL password            | `postgres`               |
+| `POSTGRES_PASSWORD`         | PostgreSQL password (required) | —                        |
 | `POSTGRES_DB`               | Database name                  | `zee_index`              |
 | `DATABASE_URL`              | Connection string (non-Docker) | Auto-generated in Docker |
 | `REDIS_URL`                 | Redis connection string        | `redis://redis:6379`     |
@@ -589,7 +589,7 @@ prisma/                Schema + versioned migrations
 messages/              i18n translations (en, id, zh-TW)
 __tests__/             Vitest unit tests
 e2e/                   Playwright end-to-end tests
-middleware.ts          Auth, i18n, rate limiting, CSP
+proxy.ts               Auth, i18n, rate limiting, CSP (Next 16 proxy, Node.js runtime)
 docker-compose.yml     Production stack (app, postgres, redis, caddy)
 ```
 

@@ -23,6 +23,12 @@ Real mobile UI with demonstration data and an original soundtrack; sudo executio
 - Includes all the features you'd expect from an agent: shell tools, subagents, and MCP connections, file uploads, inline images, downloadable artifacts etc.
 - Built with Bun, React, SQLite, and the [Pi agent harness](https://github.com/earendil-works/pi).
 
+## Trusted Apps
+
+Apps is an iframe-only launcher for independently hosted apps. Choose **Apps → Add app** and supply a name and browser-reachable HTTP(S) URL. Same-host different-port and Tailscale URLs work without rebuilding or adopting their services. Stars are explicit; history, icons, descriptions and attribution are retained. Every viewer has **Back to Apps**, retry/edit and honest framing/login guidance.
+
+**Only add apps you trust.** Same-host app servers may receive or interfere with Jelly cookies, including HttpOnly cookies; Tailscale protects network access, not app isolation. Jelly keeps session/CSRF and exact control-origin checks and stays unframeable. Registration does not verify embedding or availability, and removal never stops the app. See [Apps](docs/APPS.md).
+
 ## Subagent progress
 
 Delegated work appears in live, expandable cards in the conversation. Open a
@@ -49,7 +55,7 @@ Agents can inspect bounded visible browser text and element references, click/fi
 
 `apply_patch` adds Codex-style multi-file add/update/delete/move patches on both OpenAI API and ChatGPT, alongside unchanged Pi `edit`/`write`. It requires exact unique context and rejects symlinks, hardlinked sources and unsupported text. Paths are not sandboxed. Preflight checks the whole patch, but filesystem writes are **not transactional**: failures can leave partial changes, reported in a mutation ledger. Limits are 1 MiB per patch/file, 64 operations and 16 MiB combined working set.
 
-See [tool APIs and limitations](docs/ARCHITECTURE.md#structured-browser-tools). `bun run check` includes structured-browser Chromium tests, patch filesystem tests and local provider-transport tests; `bun run test:desktop` additionally requires the Linux desktop runtime.
+See [tool APIs and limitations](docs/ARCHITECTURE.md#structured-browser-tools). `bun run check:full` includes structured-browser Chromium tests, patch filesystem tests and local provider-transport tests; `bun run test:desktop` additionally requires the Linux desktop runtime.
 
 ## Quick start
 
@@ -64,14 +70,18 @@ bun run dev
 
 Open **http://127.0.0.1:5173**. **A ChatGPT subscription or OpenAI API key is required to run agents.** Connect your account or add a key in Settings before sending a message. Automatic mode prefers ChatGPT, then an API key; there is no no-key demo mode. Model availability depends on your account.
 
-Select **GPT-6 Astra Ultrafast** in Settings → Model or the composer's model menu
+Select a **Fast** variant of any model in Settings → Model or the composer's model
+menu to request priority processing with `service_tier: "priority"`. Availability
+depends on your account; higher API pricing applies.
+
+Select **GPT-6 Astra Ultrafast** in the same menus
 for eligible ChatGPT subscriptions (Pro 500 or Enterprise) or OpenAI API access.
 This requests Astra with `service_tier: "ultrafast"`; standard Astra remains the
 default. [Ultrafast has higher API pricing and separate limits](https://developers.openai.com/api/docs/guides/ultrafast-mode).
 Account-access errors are surfaced rather than silently falling back to standard.
-The selection covers chat turns, tool continuations, naming, and compaction;
-Pi subagents still use their own service-tier settings (they inherit Astra and effort,
-not Jelly's Ultrafast selection).
+Both speed selections cover chat turns, tool continuations, naming, and compaction;
+Pi subagents still use their own service-tier settings (they inherit the upstream
+model and effort, not Jelly's Fast or Ultrafast selection).
 
 Optional environment settings are documented in [`.env.example`](.env.example). Put local values in `.env.local`, which is ignored by Git. Set `FIRECRAWL_API_KEY` to enable web search and fetching.
 
@@ -84,9 +94,35 @@ bun start
 
 Open **http://127.0.0.1:3100**. Stop development first; both modes use API port 3100 by default. Production has no hot reload—restart after code changes when agents are idle. Development backend reloads interrupt active runs; set `JELLY_WATCH_API=0` to disable them.
 
+`JELLY_TAILSCALE=1 bun start` adds native HTTP listeners on discovered Tailscale addresses alongside loopback. `bun run dev:tailscale` uses native Vite listeners and its HTTP/WS loopback API proxy. Neither uses raw TCP forwarding nor LAN/wildcard listeners.
+
+For an installed service, `scripts/restart-when-idle.sh` waits up to 30 minutes for
+zero running agents and no restart holds, then restarts and checks loopback and
+private Tailscale HTTP. On macOS it reads the port and data directory from
+`/Library/LaunchDaemons/com.jelly.server.plist` and restarts
+`system/com.jelly.server`. Run it from a separate terminal outside Jelly:
+
+```sh
+sudo /bin/bash scripts/restart-when-idle.sh
+```
+
+On Linux, schedule the helper in a separate systemd user unit; it restarts
+`jelly.service`. See the [service restart details](docs/APPS.md#jelly-activation-helper).
+Direct service-manager restarts bypass this helper's idle checks.
+
 Development serves only frontend source and assets; instance data, server source, and other repository files are not downloadable through Vite. Keep credentials and private files out of `public/`, `src/client/`, `src/shared/`, and `node_modules/`.
 
 ChatGPT sign-in uses a one-time device code. Open the approval link shown in Settings, enter the code, and Jelly connects automatically. This works over Tailscale without a localhost redirect. If needed, enable device-code login in your ChatGPT security settings or ask your workspace admin.
+
+### Native Mac desktop (Peekaboo)
+
+Settings → **Tools → Native Mac desktop** configures an external signed Peekaboo
+CLI/app and an exact Bridge socket, separately from browser tools. Desktop control
+starts off and requires exact application grants. The official unmodified 4.9.0
+releases support scoped AX observation, consented exact-window screenshots and
+native snapshot-bound background input according to available host permissions
+and capabilities. No Peekaboo rebuild is required. See
+[setup, privacy and recovery](docs/PEEKABOO.md).
 
 ### Optional browser desktop
 
@@ -117,7 +153,8 @@ Conversations, credentials, browser profiles, and artifacts live in `.jelly/` by
 ## Development
 
 ```sh
-bun run check   # TypeScript, tests, and production build
+bun run check        # Fast TypeScript-only check for everyday commits
+bun run check:full   # TypeScript, all tests, and both builds before deployment
 ```
 
 Tests use temporary data and deterministic fixtures; no paid model calls are required. See [architecture](docs/ARCHITECTURE.md), [design](docs/DESIGN.md), and the [roadmap](ROADMAP.md).

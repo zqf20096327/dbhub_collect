@@ -17,7 +17,10 @@
 - `pinyin_word_romanize(text, suffix text)`
 - `pinyin_word_romanize(tokenizer_input anyelement)` (overload; use `pdb` tokenizer input such as `name::pdb.icu::text[]`)
 - `pinyin_word_romanize(tokenizer_input anyelement, suffix text)` (overload with user-table suffix)
+- `pinyin_word_romanize_batch(origins text[])` (independent plain-text documents, returns `text[]`)
+- `pinyin_word_romanize_batch(origins text[], suffix text)` (document batch with user-table suffix)
 - `pinyin_regex_phrase(text, slope integer DEFAULT NULL, max_expansions integer DEFAULT NULL, generated_pinyin boolean DEFAULT false)` (`pg_search` query helper; installed by `CREATE EXTENSION pg_pinyin` when `pg_search` is already enabled in the database, returns `pdb.query`)
+- `pinyin_regex_phrase_mode(text, mode text, slope integer DEFAULT NULL, max_expansions integer DEFAULT NULL, generated_pinyin boolean DEFAULT false)` (opt-in explicit query modes; same installation requirement)
 
 `pinyin_regex_phrase` is a Rust-backend public API, but its return type is `pdb.query`, so `pg_search` must be enabled in the database before `CREATE EXTENSION pg_pinyin`. PostgreSQL extension scripts cannot reliably enable another extension while they are being installed. If `pg_pinyin` is installed before `pg_search`, the romanization APIs are still installed and `pinyin_regex_phrase` is installed as an error stub with a clear exception.
 
@@ -27,12 +30,19 @@
 
 `pinyin_regex_phrase_patterns` returns an empty `text[]` when the input is empty, whitespace-only, or cannot be parsed as pinyin tokens. SQL NULL input still returns SQL NULL because the function is strict.
 
+`pinyin_regex_phrase_patterns_mode(text, mode text, generated_pinyin boolean DEFAULT false)`
+is the mode-aware internal helper. Its Rust tokenizer uses embedded data without
+runtime SPI, retaining `PARALLEL SAFE`. The original helpers and their signatures
+remain unchanged, including untyped NULL arguments.
+
 ## Optional pg_search SQL Helpers
 
-`sql/word.sql` is not installed automatically by `CREATE EXTENSION pg_pinyin`. It is the SQL-backend companion to `sql/pinyin.sql`; load `sql/pinyin.sql` first and use it only in databases where `pg_search` is available. `pg_search` 0.25.1 must be preloaded before `CREATE EXTENSION pg_search`, for example by starting PostgreSQL with `-c shared_preload_libraries=pg_search`.
+`sql/word.sql` is not installed automatically by `CREATE EXTENSION pg_pinyin`. It is the SQL-backend companion to `sql/pinyin.sql`; load `sql/pinyin.sql` first and use it only in databases where `pg_search` is available. `pg_search` must be preloaded before `CREATE EXTENSION pg_search`, for example by starting PostgreSQL with `-c shared_preload_libraries=pg_search`.
 
 - `sql_pinyin_regex_phrase(text, slope integer DEFAULT NULL, max_expansions integer DEFAULT NULL, generated_pinyin boolean DEFAULT false)` (SQL tokenization, returns `pdb.query`)
 - `sql_pinyin_regex_phrase_patterns(text, generated_pinyin boolean DEFAULT false)` (SQL helper returning regex phrase tokens as `text[]`)
+- `sql_pinyin_regex_phrase_mode(text, mode text, slope integer DEFAULT NULL, max_expansions integer DEFAULT NULL, generated_pinyin boolean DEFAULT false)` (independent SQL mode-aware query builder)
+- `sql_pinyin_regex_phrase_patterns_mode(text, mode text, generated_pinyin boolean DEFAULT false)` (independent SQL mode-aware pattern helper)
 `sql_pinyin_regex_phrase_patterns` follows the same empty-array behavior. `sql_pinyin_regex_phrase` and the Rust-backed `pinyin_regex_phrase` map an empty pattern array to `pdb.empty()` so they are safe to use with `@@@`; callers that want an empty user query to leave other filters unaffected should omit the `@@@` predicate or use `pdb.all()` explicitly.
 
 Recommended usage:
@@ -70,6 +80,104 @@ SELECT *
 FROM voice
 WHERE pinyin @@@ public.sql_pinyin_regex_phrase('zhengshuang');
 ```
+
+### Explicit Query Modes
+
+Development version 0.0.9 adds separate mode-aware interfaces, not ambiguous
+overloads of legacy functions. Use a mode matching the user's query intent:
+
+| Mode | Input | Plain term patterns |
+| --- | --- | --- |
+| `full` | `xi an` or `xi'an` | `xi`, `an` |
+| `initials` | `whh` | `w.*`, `h.*`, `h.*` |
+| `initials` | `zh ch sh` | `zh.*`, `ch.*`, `sh.*` |
+| `autocomplete` | `xi a` | `xi`, `a.*` |
+| `compat` | `xi an` | Original `xi.*`, `an.*` |
+
+```sql
+SELECT * FROM voice
+WHERE pinyin @@@ public.pinyin_regex_phrase_mode('xi an', 'full');
+SELECT * FROM voice
+WHERE pinyin @@@ public.pinyin_regex_phrase_mode('whh', 'initials');
+SELECT * FROM voice
+WHERE pinyin @@@ public.sql_pinyin_regex_phrase_mode('xi a', 'autocomplete');
+```
+
+New modes normalize `ü`, decomposed umlauts, `u:` and `v` to `v`, remove tone
+marks, and treat numeric tones 0-5/apostrophes as syllable boundaries (`lv4liang2`
+becomes `lv liang`). `compat` preserves the original ASCII-only behavior. Joined
+input still uses longest-first segmentation, not contextual disambiguation;
+use explicit boundaries for `xin gan` versus `xing an`. Compact initials split
+one letter at a time; only a complete explicit `zh`/`ch`/`sh` chunk is a digraph.
+Autocomplete always prefix-expands its final token, even after trailing whitespace.
+A valid final syllable prefix stays whole before greedy splitting: `yon` becomes
+`yon.*`, not `yo`, `n.*`; `niyon` becomes `ni`, `yon.*`.
+
+`full` matches exact indexed syllable terms, not the entire document: `an` no
+longer expands to `ang`. New `generated_pinyin=true` patterns accept both plain
+word-hit terms and pipe-delimited alternatives, bounding both pipes so `an`
+does not match `|ang|`. Such mixed fields require a whitespace tokenizer that
+preserves pipes, for example an index on `(pinyin::pdb.whitespace)`. Structured
+queries use `WHERE pinyin @@@ ...`, without the tokenizer cast on the left.
+This flag is not needed for Rust's plain word output.
+No index contents or dictionary coverage are reduced by selecting a query mode.
+
+New modes reject unsupported punctuation/malformed tones and inputs over 256
+Unicode characters or 64 tokens with an empty pattern array / `pdb.empty()`;
+they never search a truncated prefix. Unknown modes raise SQLSTATE `22023`, and
+SQL NULL inputs remain NULL. Existing installations use
+`ALTER EXTENSION pg_pinyin UPDATE TO '0.0.9'` after installing the new binary and
+migration; live dictionaries and stored generated values are not overwritten.
+Run the upgrade from a new database connection after replacing the Rust library,
+so an existing connection does not retain the previously loaded binary.
+
+## Token Arrays and Document Batches
+
+The unreleased development version 0.0.9 reads real `text[]` tokenizer input directly in Rust,
+without the previous SPI/JSON serialization. Existing `anyelement` signatures,
+function OIDs and generated-column bindings are unchanged; castable non-`text[]`
+inputs retain the legacy fallback. Tokens are trimmed, empty tokens dropped,
+and wholly ASCII-alphanumeric tokens lowercased. NULL token elements still raise
+an error. Array dimensions/lower bounds do not affect row-major token order.
+
+The new `pinyin_word_romanize_batch` API has different semantics: each element
+is a complete, independent plain-text document, not a token to concatenate.
+It reuses one live dictionary-version check and dictionary snapshot per explicit
+batch. Ordinary calls still check the version on every invocation. Cache identity
+also includes the metadata row's `xmin`, preventing reused version counters
+after savepoint rollback from serving an earlier uncommitted dictionary. Suffix
+overrides follow the existing cache-clear and base-version invalidation rules.
+The batch functions are `STABLE`, `STRICT`, `PARALLEL SAFE` Rust functions; use
+the existing scalar `IMMUTABLE` API for stored generated columns.
+
+```sql
+-- Tokens of ONE document; existing calls also receive the fast path.
+SELECT public.pinyin_word_romanize(ARRAY['吕', '梁', 'ABC']);
+-- lv liang abc
+
+-- THREE independent documents; NULL positions are retained.
+SELECT public.pinyin_word_romanize_batch(ARRAY['吕梁', NULL, '银行']);
+-- {"lv liang",NULL,"yin hang"}
+
+-- Pair batch output with source IDs for bounded, explicit INSERT batches.
+INSERT INTO imported_voice (id, description, pinyin)
+SELECT ids[i], documents[i], outputs[i]
+FROM (SELECT ARRAY[1, 2]::bigint[] AS ids,
+             ARRAY['吕梁', '银行']::text[] AS documents) AS batch
+CROSS JOIN LATERAL public.pinyin_word_romanize_batch(documents) AS converted(outputs)
+CROSS JOIN LATERAL generate_subscripts(documents, 1) AS item(i);
+```
+
+Here `imported_voice.pinyin` is an ordinary text column, not a generated column.
+Use bounded batches rather than aggregating an entire import into one array.
+The result is a one-dimensional array with lower bound 1; multidimensional input
+is flattened in storage order. SQL NULL input returns NULL, an empty array stays
+empty, and NULL document elements are preserved. Empty/all-NULL batches do not
+load dictionaries. No dictionary entries, output representation or index content
+are removed by these optimizations. The independent SQL backend is unchanged.
+Install the new library/migration and upgrade from a new connection with
+`ALTER EXTENSION pg_pinyin UPDATE TO '0.0.9'`. Version 0.0.8 remains the latest
+published release; these changes extend the existing 0.0.8-to-0.0.9 migration.
 
 ## Generated Column Example (Raw SQL)
 
@@ -145,14 +253,15 @@ Data prep logic is in this repo:
 - `scripts/data/generate_extension_data.py` (optimized pipeline)
 - `scripts/generate_data.sh` (one-shot entrypoint)
 
-The project includes `mozillazg/pinyin-data` as submodule at:
+The project pins its character and syllable-preserving phrase sources as submodules:
 
 - `third_party/pinyin-data`
+- `third_party/phrase-pinyin-data`
 
 Initialize submodule:
 
 ```bash
-git submodule update --init third_party/pinyin-data
+git submodule update --init third_party/pinyin-data third_party/phrase-pinyin-data
 ```
 
 Generate all extension data in one command:
@@ -163,20 +272,40 @@ Generate all extension data in one command:
 
 Notes:
 
-- char/token data is generated from `third_party/pinyin-data`.
-- word data uses `hanzi_pinyin_words.csv` when available; otherwise an empty `pinyin_words.csv` is created.
+- Source SHA-256 hashes, revisions and priorities are locked in `scripts/data/sources.lock.json`.
+- Character/token data preserves umlauts as ASCII `v`; phrase data retains the source's explicit syllables (`西安 -> xi an`, not `xian`).
+- Manual phrase corrections take priority over base phrases, then CC-CEDICT. Alternative readings and rejected records are reported, not silently discarded or greedily resegmented.
+- Missing or changed sources fail before output replacement. No private sibling repository or implicit network fetch is used.
+- Raw CC-CEDICT keeps both traditional and simplified headwords; lower-priority restoration sources preserve all released v0.0.8 keys. A hash-locked baseline checks key coverage, not just word count.
+- `coverage_audit.json` traces all 64,091 keys missing from the initial P0 selection to explicit source syllables. The old CSV is only a comparison baseline, never a pronunciation source.
 
 Generated outputs:
 
 - `sql/data/pinyin_mapping.csv`
 - `sql/data/pinyin_token.csv`
 - `sql/data/pinyin_words.csv`
+- `sql/data/manifest.json` and `sql/data/reports/*.json`
 
-If needed, override source repo:
+See [the data pipeline](scripts/data/README.md), [data attribution](sql/data/NOTICE.md),
+and [the P0/P1/P2 specification](spec/pinyin-data-and-retrieval.md).
+Code is MIT; CC-CEDICT-derived phrase data carries separate CC-BY-SA attribution/share-alike terms.
+
+Run the targeted accuracy tests after generation:
 
 ```bash
-PINYIN_DATA_DIR=/path/to/pinyin-data ./scripts/generate_data.sh
+python3 -m unittest discover -s scripts/data/tests
+python3 test/test_dictionary_accuracy.py
 ```
+
+In the shared-path test container, also run the SQL-only loader/rollback guard:
+`PGURL="$PGURL" PG_LOADER_TESTS=1 python3 -m unittest discover -s test`.
+
+Existing installations keep their live dictionary tables. Back up custom base
+entries before explicitly reloading these CSVs (or invoking the internal
+`pinyin__seed_embedded_data()` with a newly built binary). Stored generated values
+must be refreshed, for example `UPDATE voice SET description = description`,
+and expression indexes rebuilt. Updating dictionary tables alone does not
+rewrite existing stored values. Suffix dictionaries remain independent.
 
 ## Load SQL Baseline Data
 
@@ -211,6 +340,24 @@ cargo pgrx init --pg19=/usr/lib/postgresql/19/bin/pg_config
 cargo pgrx install --features pg19 --no-default-features --pg-config /usr/lib/postgresql/19/bin/pg_config
 ```
 
+Full Python integration and genuine upgrade tests require psycopg 3, an admin
+`PGURL` able to create databases, and preloaded pg_search 0.26.1. After initializing
+pgrx for the server, install the old catalog in its isolated Cargo target, then
+restore the current library before testing (PG19 example):
+
+```bash
+export PG_CONFIG=/usr/lib/postgresql/19/bin/pg_config
+bash test/prepare_upgrade.sh v0.0.8
+cargo pgrx install --features pg19 --no-default-features --pg-config "$PG_CONFIG"
+cp pg_pinyin--*--*.sql "$("$PG_CONFIG" --sharedir)/extension/"
+PGURL="$PGURL" PG_LOADER_TESTS=1 TEST_UPGRADE_DSN="$PGURL" python3 -m unittest discover -s test
+python3 -m unittest discover -s scripts/data/tests
+cargo test --lib --no-default-features --locked
+```
+
+The database tests create and clean up their own temporary databases. pgTAP also
+checks real parallel workers executing both mode-aware public and pattern APIs.
+
 ## Docker (General Upstream)
 
 Dockerfiles:
@@ -244,7 +391,7 @@ docker build -f docker/Dockerfile.test-trixie -t pg_pinyin/test:trixie \
   .
 
 # optional: pin pg_search version at build time
-# docker build --build-arg PG_SEARCH_VERSION=0.25.1 -f docker/Dockerfile.test-trixie -t pg_pinyin/test:trixie .
+# docker build --build-arg PG_SEARCH_VERSION=0.26.1 -f docker/Dockerfile.test-trixie -t pg_pinyin/test:trixie .
 ```
 
 Build PostgreSQL 19 beta test image:
@@ -253,10 +400,12 @@ Build PostgreSQL 19 beta test image:
 docker build -f docker/Dockerfile.test-pg19beta4-trixie -t pg_pinyin/test:pg19beta4 .
 ```
 
-ParadeDB 0.25.1 does not publish a PostgreSQL 19 package. The PG19 beta 4
-Dockerfile therefore builds `pg_search` from the pinned `v0.25.1` source tag,
-updates that checkout to pgrx 0.19.3, and applies the scoped
-`docker/patches/paradedb-0.25.1-pg19beta4.patch` compatibility patch. This is
+Test images now pin [pg_search 0.26.1](https://github.com/paradedb/paradedb/releases/tag/v0.26.1),
+the latest stable release verified on 2026-10-13. ParadeDB does not publish a
+PostgreSQL 19 package for this release.
+The PG19 beta 4 Dockerfile builds the pinned `v0.26.1` source commit
+`529c77e9dffe4bd86b6b7971c019bb26b8eadbfa` with its existing pgrx 0.19.3 and the
+scoped `docker/patches/paradedb-0.26.1-pg19beta4.patch` compatibility patch. This is
 an experimental compatibility build used by this project's integration and
 performance tests, not an upstream ParadeDB binary.
 
@@ -274,6 +423,140 @@ DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile.test-trixie -t pg_pinyin/tes
 ```
 
 ## Benchmark
+
+### Native Arrays and Document Batches
+
+The separate `scripts/benchmark_array_batch.py` harness compares the real
+pre-optimization P1 commit `f1094be` and the current working Rust library on the
+same 20,000 phrases. Both are unreleased 0.0.9 development snapshots, not two
+published releases. Rebuild the P1 snapshot before installing the current library,
+using the same Rust toolchain
+and release profile for both. Run inside the test container so `pg_config` and
+library paths refer to the server's filesystem:
+
+```bash
+export PG_CONFIG=/usr/lib/postgresql/19/bin/pg_config
+PG_PINYIN_BUILD_RELEASE=1 bash test/prepare_upgrade.sh f1094beeb69c093085403f5b02d616a4de7adabe
+cargo pgrx install --release --features pg19 --no-default-features --pg-config "$PG_CONFIG"
+cp pg_pinyin--*--*.sql "$("$PG_CONFIG" --sharedir)/extension/"
+python3 scripts/benchmark_array_batch.py --pgurl "$PGADMINURL" --rows 20000 --runs 3
+```
+
+Conversion and fresh heap/primary-key INSERT are separate measurements. Token
+arrays/batches are precomputed outside timing; ICU tokenization is measured
+separately. Cold means a new backend cache, not cold OS buffers. The harness
+rejects debug baselines or mismatched current release artifacts and verifies
+every output against the unchanged dictionary. It does not measure BM25 index
+maintenance or claim index reduction.
+
+The 2026-10-13 [report](benchmarks/p2_array_batch.md) and
+[raw JSON](benchmarks/p2_array_batch.json) use PostgreSQL 19 beta 4 / pg_search
+0.26.1, 20,000 phrases and three rotated repeats. Warm medians in milliseconds:
+
+| Method | Conversion | Fresh INSERT |
+| --- | ---: | ---: |
+| P1 snapshot scalar | 300.489 | 321.993 |
+| Current scalar | 258.099 | 296.844 |
+| P1 snapshot token array | 623.978 | 649.027 |
+| Native token array | 261.685 | 277.513 |
+| Batch 128 documents | 25.482 | 41.774 |
+| Batch 512 documents | 23.418 | 41.592 |
+
+Native arrays observed 2.38x faster conversion and 2.34x faster INSERT than the
+old array path. Batch 512 observed 12.8x faster conversion and 7.74x faster
+INSERT than the old scalar path, with identical verified outputs. Batch 128
+and 512 INSERT medians were close; larger batches were not uniformly faster.
+These are shared-host observations, not universal speedup/optimal-size claims.
+The host used `31946.69M` swap before timing. Input preparation/client transfer,
+BM25 maintenance and production ingestion throughput are outside this result.
+
+Local validation passed 88 Python tests, 875 pgTAP assertions and 16 Rust tests,
+including genuine released 0.0.8-to-development-0.0.9 upgrades, live cache
+mutation/rollback, TOAST and actual read-only parallel workers. Dictionary
+regeneration was deterministic and `sql/data` remained unchanged.
+
+### P1 Query Modes (pg_search 0.26.1)
+
+The separate [P1 report](benchmarks/p1_query_modes.md) and
+[raw JSON](benchmarks/p1_query_modes.json) record the 2026-10-13 PG19 beta 4
+experimental build: 20,000 phrases, 2,000 queries per method, three rotated
+repeats, top-k 10, and a fresh UUID database that is removed after the run.
+Reproduce with psycopg 3 and an administrative DSN:
+
+```bash
+python3 scripts/benchmark_pinyin_query_modes.py --pgurl "$PGADMINURL" \
+  --rows 20000 --query-limit 2000 --runs 3 --pg-search-version 0.26.1
+```
+
+Plain-field medians in milliseconds; constructor timing evaluates all 20,000
+inputs, while full queries include construction, BM25, round trips and results:
+
+| Mode | Rust warm constructor | SQL warm constructor | Rust full query batch | SQL full query batch |
+| --- | ---: | ---: | ---: | ---: |
+| `compat` | 12.152 | 1,878.998 | 1,378.673 | 1,576.698 |
+| `full` | 13.902 | 5,729.506 | 400.313 | 1,167.757 |
+| `initials` | 12.593 | 4,251.153 | 2,059.790 | 2,457.391 |
+| `autocomplete` | 14.346 | 5,373.237 | 788.271 | 1,440.392 |
+
+All pattern arrays and ranked IDs agree between backends within each mode and
+storage format. Every autocomplete corpus output is also checked against source
+syllable positions, independently of either backend. In three same-input,
+same-label exact-boundary contrasts, compat has four visible labeled false
+positives versus zero for full, with all seven positive labels retained. The
+57 pattern cases and 30 adversarial retrieval cases are targeted contract checks,
+not evidence of general retrieval accuracy or the absence of all false positives.
+
+Full and compat have different matching semantics, so their timing difference
+is not a parser algorithm speedup. Pipe-wrapped single-reading fields are much
+slower here: Rust full/initials/autocomplete batches are 4,867.482 / 15,883.333 /
+9,140.413 ms. These fields are not a realistic polyphonic performance corpus.
+The same dual-field index is 3,514,368 bytes across all three fresh builds; query
+modes do not reduce indexed content. The host had about 33.3 GB swap in use and
+other workloads, so these timings do not establish stable performance gains.
+The JSON retains raw repeats, IDs, plans and source hashes. Historical results
+below use older pg_search versions and different protocols, and are not relabeled
+or directly compared with this run.
+
+### P0 Dictionary Coverage
+
+P0 dictionary correction comparison (20,000 stratified phrases, isolated databases,
+old committed CSVs versus candidate CSVs under the same runtime):
+
+```bash
+python3 scripts/benchmark_dictionary_p0.py --pgurl "$PGADMINURL" --baseline-ref v0.0.8 --rows 20000 --runs 3
+```
+
+The dedicated [P0 report](benchmarks/p0_dictionary.md) separates targeted exact
+accuracy, warm latency, generated bytes and actual BM25/GIN sizes. Synthetic
+queries are not real user traffic. The general benchmark below remains a
+different workload and must not be compared directly with P0 timings.
+
+The coverage-preserving run includes retained, restored and new word pools in
+the same input corpus for both variants. Curated accuracy is separate from
+synthetic retrieval consistency, and fixture IDs no longer always win score ties.
+See the report for current measurements; the previous common-only run did not
+validate the 64,091 missing words and is superseded. The standalone script requires psycopg 3
+(included in the test image) and an administrative DSN able to create databases.
+
+Coverage-preserving run on PG19 beta4 / pg_search 0.25.1, 2026-10-13
+(20,000 phrases, 2,000 queries, three rotated repeats):
+
+| Metric | v0.0.8 data | Corrected data |
+| --- | ---: | ---: |
+| Phrase dictionary keys | 157,702 | 196,188; no old keys missing |
+| Curated exact readings | 33/55 | 55/55 |
+| Curated Rust Recall@10 / MRR | 0.6000 / 0.4606 | 1.0000 / 0.8273 |
+| Rust text romanization, warm median | 333.270 ms | 292.435 ms (-12.25%) |
+| Rust full-query batch, median | 1,841.729 ms | 1,867.646 ms (+1.41%) |
+| BM25 index bytes | 3,309,568 | 3,309,568 |
+
+These are targeted regressions, not general pronunciation accuracy. Full-query
+latency is effectively unchanged and no index reduction is established; generated
+word-field bytes increase by 0.19%. SQL exact-array warm conversion is 22.97%
+slower. The legacy SQL phrase-or-character path is much faster on this corpus,
+consistent with avoiding expensive character fallback for newly covered phrases,
+not a parser algorithm change. Host swapping and large run-to-run variation mean
+the three-repeat timings do not establish a stable speedup.
 
 Tokenization, query-builder, and full-search benchmark scripts:
 
@@ -295,7 +578,9 @@ It measures:
 - Standalone Rust query-token builder: `cargo run --release --bin benchmark_pinyin_regex_phrase -- --mode tokens`
 - Standalone Python query-token builder: `scripts/benchmark_pinyin_regex_phrase.py --mode tokens` using the same tokenization output
 
-All benchmark queries use `EXPLAIN (ANALYZE, BUFFERS, MEMORY, SUMMARY)`.
+The general shell benchmark uses `EXPLAIN (ANALYZE, BUFFERS, MEMORY, SUMMARY)`.
+Dedicated P0/P1 scripts record client timings and untimed execution-plan probes
+separately; their absolute times are not directly comparable with this protocol.
 
 By default, `scripts/benchmark_pg18.sh` drops and recreates a dedicated benchmark database (`BENCHMARK_DATABASE=pg_pinyin_benchmark`) before each run, then refreshes runtime state before each benchmark task. This avoids collisions with previously loaded extensions, SQL helper definitions, BM25 indexes, bench tables, and Rust dictionary caches. Set `BENCHMARK_FRESH_DATABASE=0` only when you intentionally want to reuse the database named by `PGURL`.
 
@@ -419,7 +704,7 @@ The full-query medians differ by only `0.5%`; this run does not establish an end
 
 ## Roadmap
 
-1. Tidy up the data generation pipeline and expand the word dictionary coverage.
+1. P0 reproducible, syllable-preserving data pipeline implemented; follow [the retrieval/data spec](spec/pinyin-data-and-retrieval.md) for proposed P1/P2 work.
 2. ~~Support user-provided dictionaries and allow romanization against a specific dictionary set.~~
 3. Provide a smooth upgrade path for extension dictionaries and user dictionaries.
 4. Improve English handling (including stemming).
@@ -457,4 +742,6 @@ BibTeX:
 
 ## Acknowledgements
 
-- Hanzi word-to-pinyin TSV source: [tsroten/dragonmapper `hanzi_pinyin_words.tsv`](https://github.com/tsroten/dragonmapper/blob/main/src/dragonmapper/data/hanzi_pinyin_words.tsv)
+- Character readings: [mozillazg/pinyin-data](https://github.com/mozillazg/pinyin-data).
+- Boundary-preserving phrases: [mozillazg/phrase-pinyin-data](https://github.com/mozillazg/phrase-pinyin-data) and [CC-CEDICT contributors / MDBG](https://www.mdbg.net/chinese/dictionary?page=cc-cedict). See [data notices](sql/data/NOTICE.md).
+- Historical pre-P0 joined word data came from [tsroten/dragonmapper](https://github.com/tsroten/dragonmapper/blob/main/src/dragonmapper/data/hanzi_pinyin_words.tsv); it is only a coverage baseline. Restoration uses pinned raw CC-CEDICT syllables, not guessed segmentation of this joined data.

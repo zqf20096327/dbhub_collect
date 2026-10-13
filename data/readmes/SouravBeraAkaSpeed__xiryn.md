@@ -28,6 +28,10 @@
   <a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
+<p align="center">
+  <a href="https://www.producthunt.com/products/xiryn?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-xiryn" target="_blank" rel="noopener noreferrer"><img alt="Xiryn - The open-source personal agent that runs on your computer | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1277481&amp;theme=light&amp;t=1791908087463"></a>
+</p>
+
 https://github.com/user-attachments/assets/e9769ff2-b9ae-426c-a47e-629910b11155
 
 ---
