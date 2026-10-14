@@ -7842,5 +7842,166 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2578f80f1548": {
+  "identity": {
+   "one_liner": "PostgreSQL 诊断报告工具，采集目录/统计数据生成 JSON 与 HTML 报告",
+   "review": "pg-diag 是一个针对 PostgreSQL 10-18 的诊断报告工具，通过本地或 SSH 采集数据库目录、统计、锁、WAL、复制及操作系统数据，生成 report. 与自包含 report.html，供 DBA 做健康检查与性能排查使用。它执行只读 SQL，支持快照模式与差异图表，通过声明式 content pack 定义采集项，无需在目标库安装扩展即可输出核心报告。",
+   "highlights": [
+    "支持 PostgreSQL 10-18 的版本感知 SQL 采集，提供一次性、快照和日志三种报告模式",
+    "支持本地、SSH 远程和 remote-db-only 三种采集方式，SQL 执行为只读",
+    "默认生成机器可读的 report. 和自包含的 report.html 报告"
+   ],
+   "use_cases": [
+    "PostgreSQL 实例的健康检查与性能分析",
+    "通过 SSH 对远程主机的数据库与 OS 层做联合诊断采集",
+    "将 JSON 诊断产物接入自动化系统或 LLM 工作流"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pg-diag` is a PostgreSQL diagnostic report utility for PostgreSQL 10-18. ／ - PostgreSQL version-aware SQL variants for PostgreSQL 10-18. ／ |Collector Python|PostgreSQL 10|PostgreSQL 11|PostgreSQL 12|PostgreSQL 13|PostgreSQL 14|PostgreSQL 15|PostgreSQL 16|PostgreSQL 17|PostgreSQL 18|Status|",
+     "lines": [
+      3,
+      59,
+      147
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具专为 PostgreSQL 提供诊断采集与报告，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg-diag` is a PostgreSQL diagnostic report utility for PostgreSQL 10-18. ／ It collects PostgreSQL catalog/statistics data, optional host data locally or over ／ - Read-only SQL execution.",
+   "evidence_lines": [
+    3,
+    7,
+    62
+   ]
+  },
+  "fn": "O2eg/pg_diag",
+  "sha": "2578f80f1548",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "70c691df931d": {
+  "identity": {
+   "one_liner": "自托管 WhatsApp 消息网关，基于 Baileys+PHP+Node.js+MySQL 提供 REST API",
+   "review": "该项目是一个自托管的 WhatsApp API 网关和管理面板，通过 Baileys 库以扫码方式绑定 WhatsApp 账号，对外提供 REST API、webhook 回调和 API 密钥管理，无需 Meta 官方 Cloud API。使用者是开发者、初创团队和内部工具开发者，需要 PHP 8.1+、Node.js 18+ 以及 MySQL 8.0+ 或 MariaDB 环境，支持 XAMPP/Docker 本地运行或部署到 Render/TiDB Cloud 等云端。需要注意它通过非官方协议驱动 WhatsApp，账号存在封禁风险，README 建议开启拟人化延迟、控制发送频率等安全措施。",
+   "highlights": [
+    "提供 REST API 发送 WhatsApp 消息，兼容 Meta WhatsApp Cloud API 请求格式（drop-in 别名端点）",
+    "提供 Web 管理面板，包含 API 密钥管理、消息队列监控、消息日志和 webhook 配置",
+    "支持消息队列自动重试、webhook 实时回执（送达/已读/失败事件）"
+   ],
+   "use_cases": [
+    "为业务系统接入自动化的 WhatsApp 消息发送与通知推送",
+    "自托管替代付费消息服务商，用于批量消息与定时通知场景",
+    "通过 webhook 接收消息送达状态以构建后续处理流程"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ > **A 100% Free, Self-Hosted WhatsApp API Gateway & Web Management Dashboard built with Baileys, PHP 8+, Node.js, and MySQL.** ／ ## ⚡ Quick Start: Local Setup (XAMPP / Apache / MySQL) ／ - **MySQL 8.0+** or **MariaDB** (Included in XAMPP)",
+     "lines": [
+      7,
+      12,
+      52,
+      57
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MySQL 8.0+** or **MariaDB** (Included in XAMPP)",
+     "lines": [
+      57
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Yes. The project is completely open source under the MIT License. You host it on your own server or free cloud tiers (like Render + TiDB Cloud), meaning there are zero subscription fees and zero per-message charges. ／ Yes! The repository is optimized for cloud deployment. You can deploy the web app and Node.js worker on **Render** (Free Tier) and connect to a free **TiDB Cloud Serverless** MySQL database.",
+     "lines": [
+      249,
+      258
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 MySQL 作为自身数据存储组件（存配置、消息队列、会话凭证），而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **A 100% Free, Self-Hosted WhatsApp API Gateway & Web Management Dashboard built with Baileys, PHP 8+, Node.js, and MySQL.** ／ - **MySQL 8.0+** or **MariaDB** (Included in XAMPP) ／ Yes! The repository is optimized for cloud deployment. You can deploy the web app and Node.js worker on **Render** (Free Tier) and connect to a free **TiDB Cloud Serverless** MySQL database.",
+   "evidence_lines": [
+    12,
+    57,
+    258
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "navneetyadav-code/whatsapp-api",
+  "sha": "70c691df931d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

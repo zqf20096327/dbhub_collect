@@ -9254,5 +9254,149 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8280e9906629": {
+  "identity": {
+   "one_liner": "尼日利亚NDAPS邮编的多语言校验库及PostgreSQL/DuckDB扩展",
+   "review": "该项目为尼日利亚NIPOST的11位数字字母邮编体系（NDAPS）提供解析、校验、查找与地址解析功能，覆盖Rust、Python、JavaScript、Java库，MCP服务器供AI客户端调用，并含PostgreSQL域/扩展、DuckDB扩展、Polars表达式和CSV批处理工具。适用于处理尼日利亚地址数据的开发者与数据团队；离线校验无需密钥，查找与解析需NIPOST API密钥，地址解析器为pre-alpha。",
+   "highlights": [
+    "提供Rust/Python/JavaScript/Java四语言库，共享spec测试用例保证行为一致",
+    "提供PostgreSQL原生扩展（8字节类型+索引）、PostgreSQL域SQL、DuckDB扩展与Polars表达式",
+    "提供MCP服务器支持validate/lookup/autocomplete/resolve_address等工具，离线校验无需密钥"
+   ],
+   "use_cases": [
+    "在应用或数据库中对尼日利亚11位邮编做离线解析与校验",
+    "为AI助手（MCP客户端）提供邮编查询、自动补全与地址解析工具",
+    "用CSV工具批量校验并修正客户数据中的邮编字段"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`ng_postcode` (PostgreSQL)|The postcode as native 8-byte types with index support, compiled from the Rust core|Package from Releases, then `CREATE EXTENSION ng_postcode`|`native/pg`| ／ For databases, `sql/` holds the postcode as a PostgreSQL domain and as DuckDB macros, in plain SQL that runs the same shared cases. ／ **PostgreSQL**",
+     "lines": [
+      25,
+      31,
+      92
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为PostgreSQL/DuckDB提供扩展与SQL域，是服务数据库生态的校验组件，而非仅使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`ng_postcode` (PostgreSQL)|The postcode as native 8-byte types with index support, compiled from the Rust core|Package from Releases, then `CREATE EXTENSION ng_postcode`|`native/pg`| ／ For databases, `sql/` holds the postcode as a PostgreSQL domain and as DuckDB macros, in plain SQL that runs the same shared cases. ／ Developer tools for Nigeria's National Digital Alphanumeric Postcode System (NDAPS), the building-level postcode NIPOST launched in October 2026: libraries for Rust and Python (`ng-postcode`), JavaScript (`ng-postcode-js` on npm), and Java (`ng-postcode-api`), MCP servers for AI assistants on PyPI and npm, and a resolver that turns described addresses into postcodes.",
+   "evidence_lines": [
+    25,
+    31,
+    10
+   ]
+  },
+  "fn": "Adeniyikayodee/ng-postcode",
+  "sha": "8280e9906629",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a708ffdbfc8b": {
+  "identity": {
+   "one_liner": "TypeScript Webhook 投递库，基于 PostgreSQL 存储事件与投递记录",
+   "review": "一个 TypeScript 库，为应用提供 Webhook 事件发布、签名投递、失败重试与投递记录功能，事件数据存于 PostgreSQL，由独立的 worker 进程执行投递，接收方通过 parseWebhook() 验证请求。适用于需要在 TypeScript 应用中内置 Webhook 投递能力的开发者；要求 Node.js 24+、PostgreSQL 16/17，目前为 beta 版本，公开 API 冻结但仅修正确性与安全问题。",
+   "highlights": [
+    "提供事件发布、签名投递、失败重试与每次投递尝试记录",
+    "事件与投递状态存储于 PostgreSQL，附带 SQL 迁移文件",
+    "接收方通过单个函数验证请求并获得类型化事件"
+   ],
+   "use_cases": [
+    "在 TypeScript 应用中为业务事件实现 Webhook 投递",
+    "需要可重试、可回放、可审计的 Webhook 事件历史",
+    "配合 Better Auth 插件让用户管理自己的 Webhook 端点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management wor ／ npm install good-webhooks@beta pg zod ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16 or 17. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tested v",
+     "lines": [
+      15,
+      24,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该库将事件与投递记录存入用户的 PostgreSQL 数据库，PostgreSQL 是其存储依赖而非被服务的对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management works standalone, through the Better Auth plugin, or with your own sender. ／ npm install good-webhooks@beta pg zod ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16 or 17. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tested versions.",
+   "evidence_lines": [
+    15,
+    24,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "pplytas/good-webhooks",
+  "sha": "a708ffdbfc8b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

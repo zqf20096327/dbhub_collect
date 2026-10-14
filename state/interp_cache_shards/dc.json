@@ -8309,5 +8309,148 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "165aefee3388": {
+  "identity": {
+   "one_liner": "漫画阅读平台，单体仓库全栈应用，用 PostgreSQL 存主数据",
+   "review": "Taiyō 是一个漫画/韩漫/国漫/轻小说阅读平台，当前仓库以后端 Hono API、BullMQ 章节处理 worker、Storybook 组件库和尚未完工的 TanStack Start 前端为主，面向漫画阅读社区。数据存于 PostgreSQL 18，搜索用 Meilisearch，图片上传走服务端校验与转码管线；阅读前端仍在重建中，属于进行中的项目。",
+   "highlights": [
+    "支持 manga、manhwa、manhua、light novels 多种内容格式与多语言",
+    "通过 Kysely 类型化查询构建器操作 PostgreSQL，并集成 Meilisearch 实现容错搜索",
+    "章节上传经 BullMQ 后台处理，图片管线包含 magic-byte 校验、EXIF 剥离与 JPEG 转码"
+   ],
+   "use_cases": [
+    "搭建漫画类内容的阅读与发布站点",
+    "扫描汉化组的章节上传、处理与组织归属管理流程",
+    "作为 TanStack Start + Hono + Kysely 单体仓库架构的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Kysely (typed SQL query builder) on PostgreSQL ／ - PostgreSQL 18 — primary database ／ - Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.",
+     "lines": [
+      42,
+      65,
+      183
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 18 是其主数据库，平台自身使用该库存数据，而非为数据库生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch. The repo currently ships the backend (Hono API), a BullMQ worker that processes uploaded chapters, a Storybook component playground, and a TanStack Start web app with a landing page, auth forms and legal pages. ／ - PostgreSQL 18 — primary database ／ The web app (`apps/web`) does not browse, display or read manga yet — that frontend is still to be built.",
+   "evidence_lines": [
+    5,
+    65,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "taiyomoe/taiyo",
+  "sha": "165aefee3388",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24e1775c5107": {
+  "identity": {
+   "one_liner": "本地离线健身记录应用，用 SQLite 存储全部训练数据",
+   "review": "Ischys 是一个完全运行在手机端的健身/力量训练记录应用，基于 React Native + Expo，使用 expo-sqlite 与 Drizzle ORM 在本地 SQLite 数据库中保存训练日志。无账号、无服务器、无云端，数据通过设备备份或 JSON/CSV 导出。支持 iOS/Android/Wear OS/Apple Watch，包含训练计划、个人记录检测、图表、健康平台集成与 736 个动作目录，适合注重数据隐私的健身用户。",
+   "highlights": [
+    "提供完全本地化的训练记录，数据不离开设备，支持 JSON/CSV 导出导入",
+    "支持 Apple Watch/Wear OS 手表伴随应用、Live Activity/常驻通知、Apple Health/Health Connect 集成",
+    "包含 736 个动作目录、个人记录检测、容量统计与进度图表"
+   ],
+   "use_cases": [
+    "在 iPhone/Android 上离线记录力量训练、组数次数与休息计时",
+    "通过手表控制进行中的训练并同步心率数据",
+    "从其他训练应用迁移数据（CSV 导入）或导出备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "local SQLite database and all the training logic (volume, estimated 1RM, PR ／ React Native + **Expo SDK 57** (New Architecture), **expo-sqlite** + **Drizzle",
+     "lines": [
+      36,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确应用使用本地 SQLite 存储训练数据，数据库仅作为应用自身的数据存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " local SQLite database and all the training logic (volume, estimated 1RM, PR ／ React Native + **Expo SDK 57** (New Architecture), **expo-sqlite** + **Drizzle",
+   "evidence_lines": [
+    36,
+    114
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ischys-app/Ischys",
+  "sha": "24e1775c5107",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

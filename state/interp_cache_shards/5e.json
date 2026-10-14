@@ -10134,5 +10134,92 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cfa8600d0090": {
+  "identity": {
+   "one_liner": "异步B2B线索采集评分管道，用Playwright抓取并以LLM结构化输出打分",
+   "review": "这是一个线索情报采集与评分系统：输入公司域名后，用Playwright异步抓取网页并提取为Markdown，再通过LiteLLM调用LLM做结构化抽取和ICP匹配评分，结果存入SQLite或PostgreSQL。可作CLI或FastAPI REST API运行（202+轮询）。面向需要批量收集企业线索的销售/市场场景；内建SSRF防护，但评分依赖LLM输出质量。",
+   "highlights": [
+    "支持CLI与REST API两种运行方式，API为异步提交加轮询模式",
+    "通过LiteLLM适配OpenAI、Anthropic、OpenRouter三家LLM供应商，用Pydantic v2做严格结构化校验",
+    "内建SSRF防护：URL校验、每个浏览器请求的策略审查、3xx重定向拦截",
+    "结果可持久化到SQLite或PostgreSQL，通过DATABASE_URL切换"
+   ],
+   "use_cases": [
+    "批量抓取目标公司域名并生成ICP匹配评分的B2B线索 enriched 数据",
+    "作为REST API嵌入自动化工作流（提供Docker Compose含n8n的编排）",
+    "管道式输出：CLI结果表可被下游程序读取"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A high-performance, fully asynchronous pipeline that crawls target company domains, extracts semantic Markdown, and computes deterministic ICP fit scores using LLM structured outputs. Run it as a **CLI** or as a **REST API** (FastAPI, `202 Accepted` + polling) ／ |`DATABASE_URL`|–|PostgreSQL DSN (`postgresql://user:pw@host:5432/db`). When set it replaces SQLite.|",
+     "lines": [
+      10,
+      121
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A high-performance, fully asynchronous pipeline that crawls target company domains, extracts semantic Markdown, and computes deterministic ICP fit scores using LLM structured outputs. Run it as a **CLI** or as a **REST API** (FastAPI, `202 Accepted` + polling) ／ |`DATABASE_PATH`|`leads.db`|SQLite file, used when `DATABASE_URL` is unset.|",
+     "lines": [
+      10,
+      122
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- Prompt drift. The tier bands are parsed out of `SYSTEM_PROMPT_TEMPLATE` and must equal the in-suite oracle.",
+     "lines": [
+      293
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README表明SQLite/PostgreSQL仅作为该管道的结果存储，项目本身是线索采集应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high-performance, fully asynchronous pipeline that crawls target company domains, extracts semantic Markdown, and computes deterministic ICP fit scores using LLM structured outputs. Run it as a **CLI** or as a **REST API** (FastAPI, `202 Accepted` + polling). The LLM layer is provider-agnostic through LiteLLM (OpenAI, Anthropic, OpenRouter), results are persisted to **SQLite or PostgreSQL**, and the browser is guarded against SSRF, including redirect hops. ／ |`DATABASE_URL`|–|PostgreSQL DSN (`postgresql://user:pw@host:5432/db`). When set it replaces SQLite.|",
+   "evidence_lines": [
+    10,
+    121
+   ]
+  },
+  "fn": "Nazar-Plokhuta/lead-enrichment-agent",
+  "sha": "cfa8600d0090",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

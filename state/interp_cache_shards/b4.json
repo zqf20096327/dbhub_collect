@@ -9937,5 +9937,216 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "02647137879e": {
+  "identity": {
+   "one_liner": "Go 1.26 REST API 模板，内置 PostgreSQL/SQLite 持久化与 JWT 认证",
+   "review": "一个基于 chi 路由和整洁架构的 Go REST API 项目模板，提供 JWT 认证、OpenAPI 3.1 契约校验、slog 日志、Prometheus 指标和 SQL 迁移等基础设施。面向需要快速搭建生产导向 REST 服务的 Go 开发者，通过环境变量切换 PostgreSQL（生产）与 SQLite（本地开发）两种持久化后端，并包含首个管理员引导流程与 GitHub Actions CI。",
+   "highlights": [
+    "支持 PostgreSQL 与 SQLite 双持久化后端，通过 DATABASE_DRIVER 环境变量切换",
+    "内置 JWT 认证、OpenAPI 3.1 请求/响应校验及基于 SQL 文件的自动迁移机制",
+    "提供健康检查端点、Prometheus 指标与可选 pprof 调试"
+   ],
+   "use_cases": [
+    "快速启动新的 Go REST API 项目",
+    "使用 PostgreSQL 后端的 Docker Compose 本地开发栈",
+    "通过 CI 对两种持久化后端进行集成测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL-first persistence for production with SQLite retained for local development. ／ - `DATABASE_URL`: PostgreSQL DSN when `DATABASE_DRIVER=postgres`",
+     "lines": [
+      17,
+      79
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- PostgreSQL-first persistence for production with SQLite retained for local development. ／ - `SQLITE_PATH`: SQLite database path when `DATABASE_DRIVER=sqlite`",
+     "lines": [
+      17,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL/SQLite 存储数据的应用模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Modern Go 1.26 REST API template with a small but production-oriented foundation: ／ - PostgreSQL-first persistence for production with SQLite retained for local development. ／ For a local PostgreSQL-backed stack with the API and database together:",
+   "evidence_lines": [
+    10,
+    17,
+    121
+   ]
+  },
+  "fn": "antoniopaya22/go-rest-template",
+  "sha": "02647137879e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6bdfc1409c53": {
+  "identity": {
+   "one_liner": "开源自托管会计/ERP 业务套件，以 PostgreSQL 强制复式记账为核心",
+   "review": "OpenBooks 是一个开源、自托管的会计与 ERP 业务套件，覆盖账簿、销售采购、库存、项目、制造、薪酬等模块，适合从个体经营者到多法人组织。系统以 PostgreSQL 强制执行的复式分类账为核心，通过 Docker Compose 部署 PostgreSQL、Redis、MinIO 及 Web 应用与后台 worker。README 标注为 alpha 软件，未经独立会计或安全认证。",
+   "highlights": [
+    "以 PostgreSQL 强制的复式分类账为会计内核，支持期间锁定、受控冲销、审批等会计控制",
+    "模块化业务套件，通过 Company Settings 开关启用销售、采购、库存、项目、制造、薪酬等能力",
+    "提供 Docker Compose 安装脚本，自动生成凭据、应用迁移并输出初始管理员登录"
+   ],
+   "use_cases": [
+    "中小企业或个体经营者的自托管记账与财务报表管理",
+    "多法人组织的多实体、多币种与合并报表场景",
+    "项目/建造行业的工时成本核算与进度开票"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open source, self-hosted, and built around a PostgreSQL-enforced double-entry ／ The deployment includes PostgreSQL 16, Redis 7, MinIO, the web app and a separate",
+     "lines": [
+      8,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用以 PostgreSQL 存储其账簿数据，数据库是其部署的支撑组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Open source, self-hosted, and built around a PostgreSQL-enforced double-entry ／ The deployment includes PostgreSQL 16, Redis 7, MinIO, the web app and a separate",
+   "evidence_lines": [
+    8,
+    91
+   ]
+  },
+  "fn": "braedonsaunders/openbooks",
+  "sha": "6bdfc1409c53",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "12eb04ba9b2c": {
+  "identity": {
+   "one_liner": "基于 pingap/Pingora 的分布式集中管控 Web 应用防火墙",
+   "review": "PingWAF 是一个构建在 pingap 与 Cloudflare Pingora 之上的 Web 应用防火墙，由控制平面通过 gRPC 双向流向多个边缘代理下发规则、日志与指标，控制平面使用 SeaORM 将数据持久化到 PostgreSQL 14+，日志可写入 Elasticsearch。面向需要自托管 WAF 的站点运维者，提供 Docker 与 Linux 二进制部署方式，macOS 需从源码构建。",
+   "highlights": [
+    "提供 SQLi/XSS/RCE/路径遍历/命令注入的语义检测，含四阶段流水线与异常评分",
+    "支持分布式部署：控制平面与多个数据平面代理经 gRPC 双向流同步规则、日志与指标",
+    "支持自动 ACME/Let's Encrypt 证书签发、mTLS、多维限速与 IP/Geo 访问控制"
+   ],
+   "use_cases": [
+    "为自托管站点提供边缘 WAF 防护与 CC/Bot 防御",
+    "多节点/多区域站点的集中式策略管理与流量观测",
+    "需要自动 TLS 证书管理与反向代理能力的部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ |`pingwaf-server`|Control plane: Axum REST + tonic gRPC + SeaORM/PostgreSQL + ES logs + embedded frontend + agent health monitoring| ／ - **Raw request and response capture** — headers, body prefixes, real sizes and truncation flags in PostgreSQL, so a log entry can be replayed as a `curl` command from the console. Headers are stored verbatim (cookies included) to make an attack reproducible.",
+     "lines": [
+      108,
+      118,
+      91
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Web 流量提供防火墙防护的组件，PostgreSQL 仅作为其控制平面自身的持久化存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PingWAF** is a high-performance, open-source **Web Application Firewall (WAF)** that brings Cloudflare-class edge security to your own infrastructure. It is built on top of `pingap` — a production reverse proxy powered by Cloudflare's `Pingora` networking framework — and adds a **distributed, centrally-controlled** security layer over it. ／ |Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ |`pingwaf-server`|Control plane: Axum REST + tonic gRPC + SeaORM/PostgreSQL + ES logs + embedded frontend + agent health monitoring|",
+   "evidence_lines": [
+    18,
+    108,
+    118
+   ]
+  },
+  "fn": "shuaiZend/PingWAF",
+  "sha": "12eb04ba9b2c",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8650,5 +8650,80 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c1c4b7c3f1bb": {
+  "identity": {
+   "one_liner": "基于单个 SQLite 文件的本地 MCP 消息总线，用于多 AI 代理会话协作",
+   "review": "agent-bus 为本机的多个 MCP 代理会话（Claude Code、Codex、Cursor 等）提供共享消息总线，支持消息、任务委派、能力路由与重启后的会话记忆。数据落在本地单个 SQLite 文件，无需守护进程或云服务；另提供基于 Cloudflare Workers 的 Cloud 版本。面向需要在多代理之间协调工作的开发者。",
+   "highlights": [
+    "提供 20 个 MCP 工具实现消息、广播、问答阻塞与任务委派（at-least-once 投递）",
+    "本地模式以单个 SQLite 文件持久化，支持跨会话重启的消息寻址与会话简报",
+    "提供 Slack 风格的本地驾驶舱 UI，含线程聊天、看板与活动时间线"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理会话之间的配对调试与任务交接",
+    "按能力/角色路由工作给专家型代理会话",
+    "跨工具（Claude Code、Codex、Cursor 等）协作共享上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The local bus stays the default: one SQLite file, no daemon, no account. For ／ That's the whole setup. One tiny SQLite file appears at `~/.agent-bus/bus.db`, no",
+     "lines": [
+      22,
+      176
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Specialist routing.** Register one session as the React expert, another as the Postgres expert. Use `ask_best(capability=…)` and the bus picks.",
+     "lines": [
+      243
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身消息总线数据，服务对象是 AI 代理协作而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The local bus stays the default: one SQLite file, no daemon, no account. For ／ That's the whole setup. One tiny SQLite file appears at `~/.agent-bus/bus.db`, no",
+   "evidence_lines": [
+    22,
+    176
+   ]
+  },
+  "fn": "MustaphaSteph/agent-bus",
+  "sha": "c1c4b7c3f1bb",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

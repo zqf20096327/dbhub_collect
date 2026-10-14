@@ -10336,5 +10336,226 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a20ba8cf3f76": {
+  "identity": {
+   "one_liner": "自托管告警引擎，统一告警规则、事件处理与通知路由",
+   "review": "Nightingale 是一个自托管的开源告警系统，可对接 Prometheus、VictoriaMetrics、Elasticsearch、Loki、ClickHouse、PostgreSQL 等数据源，用 PromQL、日志查询或 SQL 定义告警规则，并将通知路由到 Slack、PagerDuty 等渠道。面向需要统一管理指标与日志告警的运维团队，内置 AI 助手与 MCP 服务器，支持 Docker Compose、二进制和 Helm 部署。",
+   "highlights": [
+    "支持用 PromQL、日志查询或 SQL 跨多数据源定义告警规则",
+    "内置 AI agent 与 MCP 服务器，可通过对话生成规则与排查告警",
+    "支持分布式规则评估（n9e-edge）与可选内嵌 TSDB"
+   ],
+   "use_cases": [
+    "将分散在多套监控栈中的告警规则统一管理与路由",
+    "对指标、日志和 SQL 数据源进行统一告警评估",
+    "通过 Git/HTTP API 对告警规则做版本化与 CI 管理"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Nightingale queries Prometheus, VictoriaMetrics, Elasticsearch, Loki, ClickHouse, and PostgreSQL, evaluates alert rules, processes events, and routes notifications to Slack, PagerDuty, Discord, Email, Telegram, and Jira. The engine includes an AI agent and MCP",
+     "lines": [
+      25
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "This starts Nightingale, MySQL, Redis, VictoriaMetrics, and Categraf. Open http://localhost:17000 and sign in with **`root` / `root.2020`**.",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Nightingale brings alert rules, event processing, and notification routing into one place. Connect Prometheus, VictoriaMetrics, Elasticsearch, Loki, ClickHouse, and other data sources you already run, then deliver alerts to Slack, PagerDuty, and your team's ex ／ Nightingale queries Prometheus, VictoriaMetrics, Elasticsearch, Loki, ClickHouse, and PostgreSQL, evaluates alert rules, processes events, and routes notifications to Slack, PagerDuty, Discord, Email, Telegram, and Jira. The engine includes an AI agent and MCP",
+     "lines": [
+      21,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Nightingale 为监控生态服务，查询数据库作为数据源并消费其告警数据，而非仅使用数据库构建应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Nightingale brings alert rules, event processing, and notification routing into one place. Connect Prometheus, VictoriaMetrics, Elasticsearch, Loki, ClickHouse, and other data sources you already run, then deliver alerts to Slack, PagerDuty, and your team's existing tools. ／ Nightingale queries Prometheus, VictoriaMetrics, Elasticsearch, Loki, ClickHouse, and PostgreSQL, evaluates alert rules, processes events, and routes notifications to Slack, PagerDuty, Discord, Email, Telegram, and Jira. The engine includes an AI agent and MCP server. ／ Nightingale queries your data sources, evaluates alert conditions, processes events, and routes notifications. Your existing data stays in its current stores.",
+   "evidence_lines": [
+    21,
+    25,
+    55
+   ]
+  },
+  "fn": "ccfos/nightingale",
+  "sha": "a20ba8cf3f76",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "07678f1aac58": {
+  "identity": {
+   "one_liner": "AI 代理身份基础设施，签发可验证凭证并管理委派链",
+   "review": "ZeroID 是面向自主 AI 代理的身份管理系统，实现 OAuth 2.1、WIMSE/SPIFFE、RFC 8693 等标准，为每个代理签发全局唯一身份 URI，支持代理间委派时范围自动收窄、on-behalf-of 链路记录与实时级联吊销。面向需要为 AI 代理建立可审计身份的安全与合规团队，部署时通过 docker compose 使用 PostgreSQL 存储数据。",
+   "highlights": [
+    "实现 OAuth 2.1 签发、DPoP 发送方约束令牌、动态客户端注册（RFC 7591/7592）与 CIBA 后通道批准",
+    "支持 RFC 8693 on-behalf-of 委派链，逐跳收窄 scope 并提供级联吊销",
+    "为代理、MCP 服务器、服务与应用提供 WIMSE/SPIFFE 身份 URI 注册与生命周期管理"
+   ],
+   "use_cases": [
+    "为多代理工作流中的子代理建立可审计的委派身份链",
+    "对调用 MCP 服务器的代理进行身份注册、信任分级与实时吊销",
+    "无人在环的自主工作流中强制执行 scope 上限与委派深度限制"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up -d # starts Postgres + ZeroID",
+     "lines": [
+      170
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 提供的 docker compose 启动 Postgres 作为本系统自身的数据存储，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ZeroID is identity infrastructure for autonomous agents: a system that issues cryptographically verifiable credentials, enforces delegated authority through chains of agents, and revokes access in real time. Built on OAuth 2.1, WIMSE/SPIFFE, and RFC 8693, it implements the industry's emerging standards for agent identity before they become requirements. ／ - **Agent Identity Registry** — Register agents, MCP servers, services, and applications as first-class entities. Classify by role (`orchestrator`, `autonomous`, `tool_agent`), enrich with metadata (`framework`, `version`, `publisher`, `capabilities`), assign trust levels, and manage the full lifecycle: register → activate → deactivate → de-provision.",
+   "evidence_lines": [
+    41,
+    80
+   ]
+  },
+  "fn": "highflame-ai/zeroid",
+  "sha": "07678f1aac58",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6d4c3b7b4951": {
+  "identity": {
+   "one_liner": "本机运行的三维知识库，以 SQLite 存储并以 3D 星云呈现知识",
+   "review": "这是一个本机运行的个人知识库应用，将笔记、文档或聊天导出整理为小知识，通过浏览器以三维星云方式浏览、搜索与阅读，并支持编辑、合并、来源追溯和 JSON 导入。数据用 SQLite 保存在本机，默认只监听本机地址；适合想要离线管理个人资料与学习记录的用户，当前版本不含语义检索。",
+   "highlights": [
+    "提供三维星云界面：旋转、缩放、点击阅读，按大类/主题/小知识三级导航",
+    "支持关键词、来源、日期等多维搜索筛选，以及收藏、笔记等学习记录管理",
+    "支持统一 JSON 与离线飞书消息 JSON 导入，内置合并、拆分与修订历史"
+   ],
+   "use_cases": [
+    "个人在本机离线整理笔记、文档与聊天导出的知识片段",
+    "管理学习进度：收藏、待学、已读与 Prompt 练习记录",
+    "沿出处链接回溯原文，复核来源变化的知识条目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "技术栈：**Python 标准库 + SQLite + Vanilla JavaScript + Three.js**。资料与笔记存储在自己的电脑，默认只监听本机地址。",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确技术栈含 SQLite，仅将 SQLite 用作本机存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "技术栈：**Python 标准库 + SQLite + Vanilla JavaScript + Three.js**。资料与笔记存储在自己的电脑，默认只监听本机地址。 ／ 一个在本机运行的三维知识库。将笔记、文档或聊天导出整理成小知识，像探索星云一样旋转、缩放、点击阅读，并沿出处查看原文。 ／ 项目采用 MIT 许可。Three.js 的原始许可见 第三方说明。",
+   "evidence_lines": [
+    43,
+    3,
+    50
+   ]
+  },
+  "fn": "Dre-am-requset/knowledge-nebula",
+  "sha": "6d4c3b7b4951",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

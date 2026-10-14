@@ -9216,5 +9216,75 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a85536a5afcd": {
+  "identity": {
+   "one_liner": "OpenCode 会话存储分析与垃圾回收 CLI 工具",
+   "review": "该工具用于分析、可视化并回收 OpenCode v1/v2 在本地 SQLite 数据库及磁盘 diff/snapshot 文件中占用的存储空间，提供 status/analyze/purge/export/checkpoint 等子命令，支持 dry-run 预览、按年龄/类型/项目过滤、剥离 reasoning tokens、归档为 Markdown 和 WAL 合并，可作为 OpenCode 原生 Skill 被助手调用。面向使用 OpenCode 的开发者，要求 Python 3.10+。",
+   "highlights": [
+    "提供存储仪表盘、深度分析（最大会话/增长率/孤儿文件扫描）与项目级存储排名",
+    "支持细粒度 purge 过滤（年龄/类型/大小/项目）、dry-run 预览与删除前 Markdown 归档",
+    "提供 WAL checkpoint 合并、vacuum 回收及 JSON 结构化输出，支持 OpenCode 原生 Skill 集成"
+   ],
+   "use_cases": [
+    "清理 OpenCode 会话历史占用的数十 GB 磁盘空间",
+    "剥离 reasoning tokens 与超大工具输出以缩减 SQLite 数据库体积",
+    "将会话导出为 Markdown 存档后再删除原数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "OpenCode stores sessions, messages, and part data in a local SQLite database that grows without bound and has no built-in cleanup. It also stores file diffs and git snapshots on disk. As you use OpenCode, thinking tokens (reasoning), snapshots, and historical  ／ - *\"Strip bulky reasoning tokens from OpenCode SQLite DB to save space\"* ／ - SQLite file size, WAL journal size, and combined DB footprint",
+     "lines": [
+      16,
+      67,
+      120
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具读取、写入并维护 OpenCode 所使用的 SQLite 数据库文件（含 WAL/vacuum 操作），为数据库存储管理服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Analyze, visualize, and reclaim storage used by OpenCode sessions, diffs, and snapshots. Supports both **OpenCode v1 and v2** schemas natively across **Windows, macOS, and Linux**. ／ OpenCode stores sessions, messages, and part data in a local SQLite database that grows without bound and has no built-in cleanup. It also stores file diffs and git snapshots on disk. As you use OpenCode, thinking tokens (reasoning), snapshots, and historical sessions can easily consume tens of gigabytes of disk space and slow down queries. ／ `ocgc` provides comprehensive visibility into where your OpenCode storage goes and gives you fine-grained, safe controls to reclaim it.",
+   "evidence_lines": [
+    14,
+    16,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "codehands028/ocgc",
+  "sha": "a85536a5afcd",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

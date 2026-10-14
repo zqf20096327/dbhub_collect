@@ -9450,5 +9450,72 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7b9301bcf208": {
+  "identity": {
+   "one_liner": "Go 编写的键盘驱动 WhatsApp 终端客户端",
+   "review": "walite 是运行在 Linux/macOS 终端的 WhatsApp 非官方客户端，通过 whatsmeow 以关联设备方式接入，用纯 Go 的 SQLite 本地缓存保存会话摘要与消息，实现无需完整 HistorySync 的快速启动；适合希望在终端环境收发消息、资源受限设备的用户。分发形式为预编译二进制或源码构建，需扫码配对，非关联数据库生态工具。",
+   "highlights": [
+    "通过 whatsmeow 以关联设备方式连接 WhatsApp，支持 QR 配对与持久会话重连",
+    "使用纯 Go 实现的 SQLite 缓存（无 CGO），可保存最多 10,000 条会话摘要并分页加载历史",
+    "支持文本收发、媒体发送、引用回复、表情回应、桌面通知与多主题 TUI 界面"
+   ],
+   "use_cases": [
+    "在 Linux/macOS 终端环境中使用 WhatsApp 聊天",
+    "在老旧或低配硬件上以低资源占用运行消息客户端",
+    "偏好键盘驱动、TUI 工作流的用户日常消息沟通"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "walite is a lightweight, keyboard-driven WhatsApp client for Linux and macOS terminals. Written in Go, it connects as a linked device through whatsmeow and uses a bounded SQLite cache for fast startup and predictable resource use. ／ - Persistent pure-Go SQLite cache with no CGO requirement",
+     "lines": [
+      3,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为 walite 自身的本地缓存存储，项目不面向数据库生态服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "walite is a lightweight, keyboard-driven WhatsApp client for Linux and macOS terminals. Written in Go, it connects as a linked device through whatsmeow and uses a bounded SQLite cache for fast startup and predictable resource use. ／ - Persistent pure-Go SQLite cache with no CGO requirement ／ Building walite requires Go 1.26.0 or newer. MX Linux with XFCE/X11 on linux/amd64 and macOS on Apple Silicon are the currently validated runtime environments.",
+   "evidence_lines": [
+    3,
+    38,
+    93
+   ]
+  },
+  "fn": "antoinebaudrimont-beep/walite",
+  "sha": "7b9301bcf208",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9484,5 +9484,134 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e543bda3aea7": {
+  "identity": {
+   "one_liner": "面向人机协作的上下文与记忆持久化工具",
+   "review": "PowerContext 是一个以 Python/uv 安装的上下文管理系统，提供 Server 进程、CLI 配置向导和异步 Python 客户端、HTTP API、MCP、Core SDK 等接入方式，将任务中的决策、约束、进度等存储为 Memory 与 Handoff，供人和 Agent 在后续会话中继续工作，支持 Codex、Claude Code、LangChain 等多种 Agent 集成；README 未说明其底层数据库选型细节。",
+   "highlights": [
+    "提供 Memory、Handoff、Experience、Skill 等上下文组织结构，保留来源与历史修订",
+    "提供异步 Python 客户端、HTTP API、MCP 和进程内 Core SDK 四种接入接口",
+    "支持 Codex、Claude Code、LangChain/LangGraph 等多类 Agent 集成与远程 HTTPS 部署"
+   ],
+   "use_cases": [
+    "任务在多人或多 Agent 之间交接时保留推理与状态",
+    "为 Agent 会话提供可检索的长期记忆",
+    "通过 HTTP API 或 MCP 将上下文能力集成到自有应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 描述面向 Agent 上下文/记忆管理，未说明其自身依赖或适配任何具体数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You decide what will matter later and what needs to move with the task. PowerContext stores durable information as Memory and organizes the current objective and state into a Handoff. You can record reusable approaches as Experience or Skill. PowerContext keeps every item within the scope of the work and preserves its sources and earlier revisions. ／ Applications can use PowerContext through the async Python client, HTTP API, MCP, or the in-process Core SDK. See the interface reference to choose an entry point. ／ uv tool install --force \"powercontext[cli,server]==1.3.0\"",
+   "evidence_lines": [
+    26,
+    109,
+    39
+   ]
+  },
+  "fn": "oceanbase/powercontext",
+  "sha": "e543bda3aea7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b40e842ba286": {
+  "identity": {
+   "one_liner": "AI 编程代理用量与费用追踪器，读取本地会话文件，SQLite 存储，Web 仪表板展示",
+   "review": "该项目解析 Claude Code、Codex、OpenCode、kiro 等多种 AI 编程代理的本地会话数据，计算费用并通过 Web 仪表板展示用量趋势与费用明细，供使用 AI 编程工具的开发者追踪开销。数据存入单文件 SQLite，提供 REST API，支持 Docker 或单二进制部署。注意：仓库已于 2026-10-13 归档，不再维护。",
+   "highlights": [
+    "直接解析 Claude Code、Codex、OpenClaw、OpenCode、kiro、Pi、Hermes Agent 等多种代理的本地 JSONL/SQLite 会话文件",
+    "基于 LiteLLM 价格数据库自动计算费用，含缓存写入/读取等定价回退逻辑",
+    "单二进制（go:embed 内嵌 Web UI）+ 单文件 SQLite 存储，提供 REST API 与 ECharts 仪表板"
+   ],
+   "use_cases": [
+    "开发者追踪多种 AI 编程代理的 token 用量与费用",
+    "团队/个人按会话、模型维度分析成本构成",
+    "通过 API 将用量数据接入其他统计流程"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single binary + SQLite — zero infrastructure required. ／ - 📁 **Local file parsing** — reads Claude Code, Codex CLI, OpenClaw, Pi session files, OpenCode SQLite database, kiro session/database files, and Hermes Agent state databases directly ／ - 🗄️ **SQLite storage** — single file, zero ops, data is correctable",
+     "lines": [
+      19,
+      29,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "SQLite 仅作为该工具自身的存储层（经 modernc.org/sqlite 驱动），并非为其数据库生态服务的组件，是面向 AI 编程代理用量追踪的独立工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "README 标题区写 License: MIT，文末写 Apache 2.0，存在不一致",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lightweight, cross-platform AI coding agent usage & cost tracker. ／ Collects local session data from Claude Code, Codex, OpenClaw, OpenCode, kiro, Pi, and Hermes Agent, calculates costs automatically, and presents token usage, cost trends, and session details through a web dashboard. ／ - 🗄️ **SQLite storage** — single file, zero ops, data is correctable ／ - **SQLite** via `modernc.org/sqlite` — pure Go SQLite driver",
+   "evidence_lines": [
+    18,
+    23,
+    31,
+    181
+   ]
+  },
+  "fn": "briqt/agent-usage",
+  "sha": "b40e842ba286",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

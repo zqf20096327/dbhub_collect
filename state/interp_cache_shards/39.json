@@ -8879,5 +8879,150 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "12f330be8ab0": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，提供 CLI、Web UI 与 AI 代理技能，数据存于 SQLite",
+   "review": "Pad 是一个本地优先的项目/工作项管理应用，提供单个二进制的 CLI、localhost Web UI（看板、列表、表格视图）以及面向 Claude Code、Cursor 等编码代理的 /pad 技能，支持任务、想法、计划、文档等集合与自定义字段、约定和 playbook。数据默认存于本机 SQLite，多实例部署可改用 Postgres+Redis，也可导出迁往 Pad Cloud。适合在自己机器上开发并与 AI 代理协作的开发者使用。",
+   "highlights": [
+    "提供 CLI、Web UI（localhost:7777，含看板/列表/表格视图与实时更新）和面向多种 AI 编码工具的 /pad 技能",
+    "支持类型化集合与自定义字段、约定（conventions）与多步 playbook 工作流",
+    "支持多代理命名与活动记录归因，本地 SQLite 存储并自动做迁移前快照备份"
+   ],
+   "use_cases": [
+    "开发者在本地终端与浏览器中管理任务、计划与文档",
+    "让 Claude Code、Cursor、Codex 等 AI 代理通过自然语言读取和更新项目条目",
+    "需要离线可用、数据留存在本机的个人或小团队项目管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud| ／ **Automatic pre-migration snapshot (SQLite).** Whenever a SQLite-backed instance has pending migrations to apply, Pad first copies the database file to `pad.db.pre-<version>` next to it. If an upgrade ever goes wrong, stop the server and copy that snapshot bac",
+     "lines": [
+      25,
+      56,
+      269
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup. The compose file runs the released image; set `PAD_VERSION` in `.env` to pin it.",
+     "lines": [
+      217
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Pad 是使用 SQLite（及可选 Postgres）存储项目数据的项目管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud|",
+   "evidence_lines": [
+    25,
+    56
+   ]
+  },
+  "fn": "PerpetualSoftware/pad",
+  "sha": "12f330be8ab0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a78cc09ff51d": {
+  "identity": {
+   "one_liner": "基于 SQLite 与 LanceDB 的本地优先关系+向量数据库引擎",
+   "review": "CortexDB 是为 Cortex-Works 多智能体生态构建的本地优先数据库引擎，用 SQLite 存储关系型数据（Epic、Ticket、指派等 Scrum 结构），用内嵌 LanceDB 提供向量检索以支持语义搜索和 RAG。面向自主多智能体团队的 Scrum 任务管理场景。README 声明处于早期 Alpha，仅在 macOS 上测试，Windows/Linux 可能不稳定。",
+   "highlights": [
+    "使用 SQLite 存储关系型数据（Epic/Ticket/指派/结构关系）",
+    "内嵌 LanceDB 向量库，用于语义搜索与 RAG，零配置",
+    "从 JSONL 账本迁移到本地优先的关系与向量存储"
+   ],
+   "use_cases": [
+    "多智能体团队的 Scrum 任务与 Agent Memory 状态管理",
+    "看板、燃尽图、Sprint Backlog 的数据层（对接 cortex-studio UI）",
+    "本地语义搜索与 RAG 检索场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite (Local):** Stores relational data like Epic/Ticket tracking, assignments, and structural relationships. ／ * **SQLite Integration:** Store relational data to prepare for the workflow structure system (Epic, Ticket, Agent Assignment).",
+     "lines": [
+      22,
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为其自身生态提供数据库引擎组件的项目，而非仅使用数据库的终端应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "CortexDB is the dedicated database engine for the Cortex-Works ecosystem, managing Scrum logic (Epics, Tickets, Backlog) and Agent Memory. Designed specifically to transition away from flat JSONL ledgers to relational and vector storage, allowing for scalable, enterprise-grade AI agent tracking. ／  - **SQLite (Local):** Stores relational data like Epic/Ticket tracking, assignments, and structural relationships. ／  - **LanceDB (Local):** Lightweight vector database for semantic search and Retrieval-Augmented Generation (RAG).",
+   "evidence_lines": [
+    15,
+    22,
+    23
+   ]
+  },
+  "fn": "cortex-works/cortex-db",
+  "sha": "a78cc09ff51d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

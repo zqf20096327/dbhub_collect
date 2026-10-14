@@ -10556,5 +10556,253 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cd855407bdb8": {
+  "identity": {
+   "one_liner": "SLG游戏目录与本地游戏库管理工具，三端共用云端账号",
+   "review": "一个面向18岁以上用户的三端（Windows/网页/Android）游戏目录与个人游戏管理应用，提供目录检索、标签筛选、本地游戏扫描匹配与启动程序管理、评分收藏与公开评论，目录资料来自 Dikgames、F95 和 DLsite，由项目服务器整理后供三端读取；不托管游戏文件，Android 为测试版，本机私人数据不自动跨端同步。",
+   "highlights": [
+    "Windows 支持扫描多个本地路径自动寻找游戏根目录并核对候选与启动程序",
+    "目录资料由项目服务器从 Dikgames、F95 和 DLsite 整理，客户端可缓存离线浏览",
+    "Android 提供追踪更新、收藏与可选的 AI 翻译（用户自填 API Key）"
+   ],
+   "use_cases": [
+    "检索和浏览 SLG/视觉小说游戏目录并按标签筛选",
+    "整理本地已安装游戏：扫描匹配、启动程序管理、评分收藏",
+    "参与论坛、阅读和发布公开评论及追踪作品更新"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是面向最终用户的游戏目录与个人游戏库管理应用，未声称服务数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向 **18 周岁以上用户**的游戏目录、个人游戏管理与社区。找作品、按标签筛选、阅读公开评论，也可以整理自己已有的游戏。 ／ |Windows|目录检索、本地游戏库、扫描匹配与启动程序管理|下载发布页中的 `slgking.exe`| ／ 黄油之王 is a game catalogue and personal library manager for adults aged 18+. Windows helps organize games already on your PC; the web app provides catalogue browsing and community features; Android is available as a test build. It does not host or distribute game files. Cloud accounts and public comments are shared, while local ratings, collections and private records do not automatically sync between devices. Get downloads and matching source archives from Releases.",
+   "evidence_lines": [
+    3,
+    7,
+    55
+   ]
+  },
+  "fn": "JXZ666/slgking",
+  "sha": "cd855407bdb8",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cb0f78944860": {
+  "identity": {
+   "one_liner": "PHP 数据库封装库，统一操作 MySQL/PostgreSQL/SQLite",
+   "review": "dbhelper 是一个通过 Composer 安装的 PHP 数据库封装库，提供对 MySQL、PostgreSQL、SQLite 及 WordPress（wpdb）的连接与增删改查接口，返回关联数组或对象并抛出异常。其特色是内置审计日志机制：通过创建日志表、为所有表添加 updated_by 列并建立触发器来记录每次变更，支持自动注入与批量清理过期日志。适用于需要在 PHP 应用中快速实现数据操作与行级变更记录的开发者。",
+   "highlights": [
+    "提供 PDO 方式连接 mysql/postgres/sqlite，并支持 WordPress wpdb",
+    "内置触发器日志系统：自动创建日志表、updated_by 列及 insert/update/delete 触发器",
+    "支持自动注入 updated_by、按批次清理旧日志、SQLite 锁超时配置"
+   ],
+   "use_cases": [
+    "PHP 项目中统一封装数据库读写操作",
+    "需要对数据变更做行级审计记录的应用",
+    "WordPress 项目中使用预处理语句访问数据库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "dbhelper is a small php wrapper for mysql/postgres/sqlite databases. ／ $db->connect('pdo', 'postgres', '127.0.0.1', 'username', 'password', 'database', 5432); ／ dbhelper can support setting up a mature logging system on mysql/postgres databases.",
+     "lines": [
+      11,
+      42,
+      48
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "dbhelper is a small php wrapper for mysql/postgres/sqlite databases. ／ $db->connect('pdo', 'mysql', '127.0.0.1', 'username', 'password', 'database', 3306); ／ dbhelper can support setting up a mature logging system on mysql/postgres databases.",
+     "lines": [
+      11,
+      41,
+      48
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "dbhelper is a small php wrapper for mysql/postgres/sqlite databases. ／ ### locking in sqlite",
+     "lines": [
+      11,
+      171
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为数据库访问封装库为应用提供操作数据库的能力，属于数据库生态服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dbhelper is a small php wrapper for mysql/postgres/sqlite databases. ／ composer require vielhuber/dbhelper ／ dbhelper can support setting up a mature logging system on mysql/postgres databases.",
+   "evidence_lines": [
+    11,
+    18,
+    48
+   ]
+  },
+  "fn": "vielhuber/dbhelper",
+  "sha": "cb0f78944860",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "860326bab6b0": {
+  "identity": {
+   "one_liner": "数据库性能诊断的桌面应用、CLI 与 MCP 服务器",
+   "review": "Culprit SQL Studio 读取数据库已有的统计视图与执行计划，生成慢查询、阻塞、死锁、索引等性能分析结果，并以自然语言说明原因与修复建议。提供桌面应用、CLI 和 MCP 服务器三种形态，供 DBA 与编码代理（Claude Code、Cursor 等）排查 SQL Server、PostgreSQL、MySQL、MariaDB 的性能问题，扫描只读、修改需确认。",
+   "highlights": [
+    "提供 51 项性能检查，覆盖执行计划回归、缺失索引、N+1 查询、阻塞与死锁等",
+    "内置 MCP 服务器（25 个工具）与 JSON 输出，支持按连接配置代理权限并记录审计日志",
+    "扫描仅读取统计与目录视图，修改性操作需逐条确认，修复建议不会被自动应用"
+   ],
+   "use_cases": [
+    "DBA 排查生产库慢查询、执行计划回归与阻塞问题",
+    "开发者用编码代理结合 MCP 工具分析并验证查询性能修复",
+    "对比两个时间段或两个执行计划，定位性能退化原因"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL and MariaDB, on macOS, Linux and Windows. ／ PostgreSQL ／ The same views, wording and workflow on SQL Server, PostgreSQL, MySQL and MariaDB. When an engine can't show something, Culprit says why in one sentence. ／ |**PostgreSQL**|PostgreSQL 15 and 18, including Amazon RDS|`pg_stat_statements`, statistics views, `EXPLAIN` (generic plans from version 12)|",
+     "lines": [
+      7,
+      11,
+      56,
+      132
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL and MariaDB, on macOS, Linux and Windows. ／ MySQL ／ The same views, wording and workflow on SQL Server, PostgreSQL, MySQL and MariaDB. When an engine can't show something, Culprit says why in one sentence. ／ |**MySQL**|MySQL 8.4|`performance_schema`, `sys`, `EXPLAIN FORMAT=JSON`|",
+     "lines": [
+      7,
+      12,
+      56,
+      133
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL and MariaDB, on macOS, Linux and Windows. ／ SQL Server ／ The same views, wording and workflow on SQL Server, PostgreSQL, MySQL and MariaDB. When an engine can't show something, Culprit says why in one sentence. ／ |**SQL Server**|SQL Server 2022, Azure SQL Database|Query Store, plan cache, DMVs, the deadlock history in extended events|",
+     "lines": [
+      7,
+      10,
+      56,
+      131
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL and MariaDB, on macOS, Linux and Windows. ／ MariaDB ／ The same views, wording and workflow on SQL Server, PostgreSQL, MySQL and MariaDB. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      13,
+      56
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供性能诊断服务的工具，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL and MariaDB, on macOS, Linux and Windows. ／ 51 checks look for what actually costs time: runaway loops in plans, plan regressions, missing and unused indexes, N+1 query loops, type mismatches that block indexes, parameter-sensitive plans, queries that fail or time out, spills to disk, hot rows, statements that lock a whole table, slow storage, connection storms, replication lag, stale statistics, risky settings and more. Each finding names the queries involved, shows their share of database time, and ends with a fix you copy (Culprit never applies it for you) and a way to verify it. ／ ## Supported databases",
+   "evidence_lines": [
+    7,
+    66,
+    127
+   ]
+  },
+  "fn": "cristipufu/culprit-sql-studio",
+  "sha": "860326bab6b0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

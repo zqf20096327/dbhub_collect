@@ -10098,5 +10098,134 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4fd7fdef320b": {
+  "identity": {
+   "one_liner": "预装数据科学工具的 Ubuntu 虚拟机环境",
+   "review": "Griffon 是一个基于 Ubuntu MATE 的数据科学虚拟机，预装并配置好编程语言、笔记本、数据库、分布式计算、可视化和机器学习等多类工具，供用户下载 OVA 镜像直接运行。主要面向安全团队的数据科学培训场景，README 仅提供下载链接与安装文档入口，未列出具体工具清单。",
+   "highlights": [
+    "基于 Ubuntu MATE，工具已预装配置，可直接使用",
+    "以 OVA 虚拟机镜像形式提供下载",
+    "包含数据库、分布式计算、机器学习等多类工具"
+   ],
+   "use_cases": [
+    "数据科学学习与培训环境",
+    "安全团队的 AI/数据科学实操训练",
+    "快速获得预配置的分析环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它是包含数据库等工具的数据科学环境应用，而非为某数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Griffon is a environment for data science. Griffon is based on Ubuntu MATE and includes numerous data science tools, all installed and configured for immediate use. ／ Griffon includes many different categories of tools: ／ * Databases",
+   "evidence_lines": [
+    5,
+    20,
+    24
+   ]
+  },
+  "fn": "gtkcyber/griffon-vm",
+  "sha": "4fd7fdef320b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5fa14a85256": {
+  "identity": {
+   "one_liner": "Tauri v2 的本地优先 SQLite 复制同步引擎插件",
+   "review": "为 Tauri v2 桌面应用提供的同步插件：本地直写 SQLite，通过 shadow trigger 捕获增删改，后台将变更集复制到 Supabase/Postgres 或自定义 REST/WebSocket 后端，用 Lamport 时间戳的 LWW 策略解决冲突。面向需要离线优先能力的桌面应用开发者。目前未发布正式版本，需通过 Git 依赖安装，PostgreSQL 云适配器尚在开发中。",
+   "highlights": [
+    "通过 shadow trigger 实现变更数据捕获（CDC），无需修改现有应用 SQL",
+    "基于 Lamport 时间戳的确定性 LWW 冲突解决，支持墓碑删除",
+    "提供 TypeScript SDK 与响应式状态监听，支持 REST/WebSocket 等协议无关的变更集交换格式"
+   ],
+   "use_cases": [
+    "需要离线使用、恢复联网后自动同步的 Tauri 桌面应用",
+    "本地直写 SQLite 并向云端后端复制数据的场景"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🟣 **Supabase & PostgreSQL Cloud Adapter:** Pre-built SQL migrations, Edge Functions, and Row Level Security (RLS) integration.",
+     "lines": [
+      78
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Zero-Configuration Local-First SQLite Replication & Sync Engine for Tauri v2.** ／ `tauri-plugin-sync` enables developers to build real-time, offline-first desktop applications with Tauri v2. Write to local SQLite with 0ms latency, and let the background sync engine seamlessly replicate changesets to your remote cloud backend (Supabase, Post ／ - ⚡ **Zero-Latency Local Writes:** Query local SQLite directly at native speeds.",
+     "lines": [
+      3,
+      9,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 与云后端之间的数据复制同步提供引擎与插件组件，服务于数据库数据流而非仅作为应用消费数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`tauri-plugin-sync` enables developers to build real-time, offline-first desktop applications with Tauri v2. Write to local SQLite with 0ms latency, and let the background sync engine seamlessly replicate changesets to your remote cloud backend (Supabase, Postgres, or custom REST/WebSocket APIs) with automatic conflict resolution. ／ - 🔄 **Automatic Change Data Capture (CDC):** Shadow triggers track inserts, updates, and deletes without changing existing application SQL.",
+   "evidence_lines": [
+    9,
+    14
+   ]
+  },
+  "fn": "karan5028ji/tauri-plugin-sync",
+  "sha": "e5fa14a85256",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

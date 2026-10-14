@@ -9159,5 +9159,89 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b1123c7ddb66": {
+  "identity": {
+   "one_liner": "将 JRA-VAN 赛马数据导入 SQLite/PostgreSQL 的 Python 工具",
+   "review": "jrvltsql 是通过 JV-Link 组件获取 JRA-VAN DataLab 中央赛马数据（出马表、成绩、退款、赔率等）并存储到 SQLite 或 PostgreSQL 的 Python 命令行工具。它提供用于初始化/获取/实时状态的子命令、针对每个版本升级的数据库迁移流程以及错误退出代码。它需要 JRA-VAN 服务密钥合约，在 Windows 或带有 Wine 的 Linux+Docker 环境中运行。适用于有 DataLab 合约的用户。",
+   "highlights": [
+    "通过 JV-Link 获取批量（JVOpen）和实时（JVRTOpen）数据，并将其写入 SQLite / PostgreSQL",
+    "提供包含迁移过程和退出代码规范的手册，用于脚本执行",
+    "基于 Linux + Docker + Wine + noVNC 的 JV-Link 运行环境"
+   ],
+   "use_cases": [
+    "将 JRA-VAN 赛马数据积累到 PostgreSQL/SQLite 并进行日更同步",
+    "获取当日的实时赔率和赛道信息",
+    "通过 Docker 在 Linux 上使用 Windows 专属的 JV-Link"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SQLite または PostgreSQL に保存するツールです。コマンド名は `jltsql` です。 ／ |PostgreSQL|PostgreSQL に保存する場合だけ| ／ - `TS_SOKUHO_O*` の拡幅は、PostgreSQL では `jltsql db migrate-sokuho-capture-identity` で行います。",
+     "lines": [
+      4,
+      37,
+      98
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite または PostgreSQL に保存するツールです。コマンド名は `jltsql` です。 ／ SQLite では使えません。バックアップを取って表を作り直します。 ／ ### Windows: まず SQLite で動かす",
+     "lines": [
+      4,
+      100,
+      113
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "这是一个使用 SQLite/PostgreSQL 存储所获取数据的工具，并非直接为这些数据库本身服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "JRVLTSQL は、JRA-VAN DataLab の中央競馬（JRA）データを JV-Link で取得し、 ／ SQLite または PostgreSQL に保存するツールです。コマンド名は `jltsql` です。 ／ - JV-Link と、取得したデータの扱いは、JRA-VAN DataLab の利用規約に従ってください。",
+   "evidence_lines": [
+    3,
+    4,
+    230
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "miyamamoto/jrvltsql",
+  "sha": "b1123c7ddb66",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

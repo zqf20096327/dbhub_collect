@@ -9392,5 +9392,73 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "24bc00580537": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 原生任务板插件，以 SQLite 存储项目任务并提供 Web UI",
+   "review": "该仓库是 DeepSeek Harness 的本地插件，为 Harness 增加任务板侧边栏、任务详情与工作流视图，数据全部存于本地 SQLite，并提供 headless JSON CLI 和 Agent 工具。目标用户是使用 DeepSeek Harness 的开发者与安装代理；限制包括需 Node.js 22.19+/24+（依赖内置 node:sqlite）、必须重启 Harness 才能加载，且仅 local 项目管理。",
+   "highlights": [
+    "本地 SQLite 存储项目、任务、评论、关系、附件与工作流",
+    "提供 Agent 工具 taskboard_* 与 headless JSON CLI dsh-taskboard",
+    "原生 Web UI（非 iframe），含七状态任务流转与人工 review/accept 机制"
+   ],
+   "use_cases": [
+    "在 DeepSeek Harness 中进行本地项目与任务管理",
+    "Agent 提交工作至 in_review，由人工通过 UI/CLI 验收",
+    "通过 CLI 以脚本方式查询或操作任务板数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Native, local project task management for DeepSeek Harness. SQLite is the sole task authority. Harness Agent Sessions, Goals, Workspaces, tools, permissions, and the Web Client remain the execution and conversation owners. ／ - Local SQLite projects, tasks, comments, relations, attachments, workflows, and automation ／ |Node.js|`^22.19.0` or `>=24.0.0` (24 recommended; built-in `node:sqlite`)|",
+     "lines": [
+      5,
+      23,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 SQLite 作为任务的唯一存储权威，属于使用数据库的应用/插件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Native, local project task management for DeepSeek Harness. SQLite is the sole task authority. Harness Agent Sessions, Goals, Workspaces, tools, permissions, and the Web Client remain the execution and conversation owners. ／ - Local SQLite projects, tasks, comments, relations, attachments, workflows, and automation ／ dsh plugin --profile web add -w @shengsheng/dsh-taskboard",
+   "evidence_lines": [
+    5,
+    23,
+    94
+   ]
+  },
+  "fn": "shengsheng90/DSH-taskboard",
+  "sha": "24bc00580537",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

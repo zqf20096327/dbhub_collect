@@ -9414,5 +9414,72 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "281b3f8d8fcb": {
+  "identity": {
+   "one_liner": "Erlang/OTP + PostgreSQL 的可私有部署即时通讯后端",
+   "review": "IMBoy 提供即时通讯平台后端，包含单聊/群聊、组织与 RBAC、客服、HTTP API 与 WebSocket 长连接，使用 PostgreSQL 持久化，支持 Docker Compose 单节点部署与 Helm 实验性部署。面向需要私有部署 IM 的团队；采用 BSL 1.1 许可，四年后转为 MPL 2.0，商务版编排文件不随开源仓分发。",
+   "highlights": [
+    "提供 HTTP API 与 WebSocket 长连接，支持单聊、群聊、消息推送与多端同步",
+    "使用 PostgreSQL 持久化，提供数据库迁移与生产部署配置",
+    "支持 Docker Compose 部署、安装自检与 Release Identity 镜像核验"
+   ],
+   "use_cases": [
+    "企业私有部署即时通讯后端",
+    "组织内部客服坐席与访客 Widget 场景",
+    "本地评估与单节点生产部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 持久化与 Garage S3 附件直传 ／ 脚本会启动 PostgreSQL 18，并创建 `.env` 和 `config/sys.local.config`。按脚本提示核对数据库密码；这两个本地配置都不会提交到 Git。",
+     "lines": [
+      18,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 做持久化存储，是使用数据库的即时通讯应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSL 1.1，四年后自动转为 MPL 2.0；社区版与商务版双轨分发",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "IMBoy 是可私有部署的即时通讯平台。本仓库包含 Erlang/OTP 后端、数据库迁移、生产部署配置和产品文档；Flutter 客户端与 React 管理后台在独立仓库中。 ／ - PostgreSQL 持久化与 Garage S3 附件直传 ／ - Docker Compose 单节点生产部署（Helm/Kubernetes 为实验性，未经生产集群验证）",
+   "evidence_lines": [
+    7,
+    18,
+    19
+   ]
+  },
+  "fn": "imboy-pub/imboy",
+  "sha": "281b3f8d8fcb",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

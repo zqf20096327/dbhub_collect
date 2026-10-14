@@ -10526,5 +10526,175 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f5e0f2fbe7ba": {
+  "identity": {
+   "one_liner": "EduVulcan 电子日志的 Home Assistant 插件，用 Selenium 抓取数据并存入 SQLite",
+   "review": "Vultron 是一个 Home Assistant 附加组件，通过 headless Chromium/Selenium 登录 EduVulcan 电子校历系统，抓取成绩、消息、课表、考勤等信息，生成传感器实体和 Lovelace 卡片，数据存储在 SQLite 数据库中。它面向使用 EduVulcan 的家长和学生，支持多子女账户和幼儿园账户，内置随机请求间隔等反检测机制，也可作为 Docker 容器运行。README 明确指出使用该项目违反 EduVulcan 服务条款。",
+   "highlights": [
+    "通过 Selenium headless 浏览器登录 EduVulcan 并抓取成绩、消息、课表、考勤等数据",
+    "使用 SQLite（vultron.db）存储数据，并为每个学生生成独立的 Home Assistant 传感器实体",
+    "支持 Home Assistant 附加组件和 Docker 两种部署方式，内置随机请求间隔与夜间暂停机制"
+   ],
+   "use_cases": [
+    "家长在 Home Assistant 面板中查看子女的成绩、消息和课表",
+    "通过 Home Assistant 自动化或 Node-RED 对新成绩、新消息触发通知",
+    "幼儿园账户的出勤、餐饮和缴费信息查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ |`vultron.py`|🔑 Logowanie 📝 Oceny 💬 Uwagi ✉️ Wiadomości 📅 Plan lekcji 🎒 Zadania ✔️ Frekwencja 🏆 Osiągnięcia 📊 Monitoring 🎨 UI Setup ⚙️ Orkiestrator 👩‍🏫 Zebrania 🧸 Przedszkole|Główny silnik aplikacji. Obsługuje logowanie **Selenium Headless** (Panel Rodzica + P ／ docker exec vultron sqlite3 /data/vultron.db \"SELECT key, student_slug, data, nadawca, temat FROM przedszkole_wiadomosci;\" ／ docker exec vultron sqlite3 /data/vultron.db \"DELETE FROM przedszkole_wiadomosci WHERE key='TUTAJ_KLUCZ';\"",
+     "lines": [
+      16,
+      104,
+      830,
+      831
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该组件自身管理 SQLite 数据库并作为 Home Assistant 集成运行，属于使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`vultron.py`|🔑 Logowanie 📝 Oceny 💬 Uwagi ✉️ Wiadomości 📅 Plan lekcji 🎒 Zadania ✔️ Frekwencja 🏆 Osiągnięcia 📊 Monitoring 🎨 UI Setup ⚙️ Orkiestrator 👩‍🏫 Zebrania 🧸 Przedszkole|Główny silnik aplikacji. Obsługuje logowanie **Selenium Headless** (Panel Rodzica + Panel Wiadomości), ekstrakcję kluczy sesji (`key`), pobieranie ocen, uwag, wiadomości, planu lekcji, zadań, frekwencji i osiągnięć. Automatycznie rozpoznaje konta przedszkolne i przetwarza je osobną ścieżką (plan zajęć, ewidencja obecności, jadłospis, zebrania, opłaty, informacje o placówce, nauczyciele). Zarządza bazą **SQLite** (`vultron.db`), monitoringiem zasobów, automatyczną rejestracją kart w Home Assistant oraz pętlą czasową z mechanizmem anty-detekcji.| ／ |`gdansk.py`|🏫 **GPE Gdańsk**|Opcjonalny dostawca danych GPE/UONET+ (wybierany opcją `provider`). Ma własne logowanie i API, osobne od eduVULCAN. Opis: PL / EN.| ／ Vultron w tle uruchamia headless Chromium (Selenium) do logowania w dzienniku - to najbardziej wymagający pamięciowo fragment całego dodatku. Na **Raspberry Pi 4 z 2GB RAM bez skonfigurowanego swapu/zram** obserwowaliśmy sporadyczne zawieszenia logowania pod większym obciążeniem pamięci (inne dodatki, integracje HA działające równolegle).",
+   "evidence_lines": [
+    104,
+    105,
+    163
+   ]
+  },
+  "fn": "htomasz/vultron",
+  "sha": "f5e0f2fbe7ba",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d819a4d0955b": {
+  "identity": {
+   "one_liner": "华为云数据库相关示例项目清单（awesome 列表）",
+   "review": "该仓库是一份 awesome 风格的项目索引，以表格形式收录华为云生态下的示例项目，包含多个面向 GaussDB 的驱动与生态适配条目（如 PHP 驱动、SQLAlchemy 方言、Archery 适配），以及若干基于华为云函数、网络、监控等服务的应用示例。适合需要查找华为云/GaussDB 相关示例代码入口的用户浏览，仓库本身不含可安装组件。",
+   "highlights": [
+    "以表格收录华为云生态示例项目及其描述与状态",
+    "包含多个 GaussDB 驱动与工具适配类子项目条目",
+    "覆盖应用、监控、数据库接入等多类示例"
+   ],
+   "use_cases": [
+    "查找 GaussDB 驱动与生态适配示例",
+    "检索华为云 Serverless、网络等场景参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating|",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|enterprise-observability|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for us ／ |enterprise-serverless-todo|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for ",
+     "lines": [
+      25,
+      26
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "compat",
+     "quote": "|database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating| ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb- ／ |hibernate-orm7.4.1|应客户要求，基于hibernate7.4.1进行适配（支持 A 兼容（Oracle 风格）、M 兼容（MySQL 风格）），数据库版本505.2.1 0800SPC|gaussdb-drivers|incubating|",
+     "lines": [
+      16,
+      30,
+      32
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|cloudoperation-resource-monitor-dashboard|HuaweiCloud Resource Monitor Dashboard 是一个面向华为云弹性云服务器（ECS）、云硬盘（EVS）和云监控（CES）的资源监控仪表盘。用户配置租户 AKSK 等鉴权信息后，后端定时或手动从华为云 API 采集资源数据与使用率指标，保存到本地 SQLite 数据库，并通过 RESTful API 为前端提供查询、筛选和导出报告功能。|public-cloud-continuous-operatio",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |database-crewai-gaussdb|开源工具CrewAI兼容GaussDB|gaussdb-drivers|incubating| ／ |database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating|",
+     "lines": [
+      14,
+      15,
+      16
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库本身是项目索引列表，既非数据库工具也非使用数据库的应用，收录条目性质多样。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Awesome HuaweiCloud ／ ## Incubating Samples ／ |Repository|Description|Team|Status|",
+   "evidence_lines": [
+    1,
+    3,
+    5
+   ]
+  },
+  "fn": "huaweicloud-samples/database-awesome-huaweicloud",
+  "sha": "d819a4d0955b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

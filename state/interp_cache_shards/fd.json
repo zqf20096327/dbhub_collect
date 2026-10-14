@@ -10371,5 +10371,282 @@
   "generated_at": "2026-10-13",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "9bc72d011e26": {
+  "identity": {
+   "one_liner": "读写 Parquet 文件的 PostgreSQL 扩展，基于 COPY 命令",
+   "review": "pg_parquet 是一个 PostgreSQL 扩展，通过扩展 COPY TO/FROM 命令实现表数据与 Parquet 文件互转，支持 S3、Azure Blob、GCS、http(s)、本地文件及标准流，并可查询 Parquet 的 schema、元数据与列统计。面向需要在 PostgreSQL 与 Parquet 生态间导入导出数据的开发者。基于 pgrx 构建，安装需 rustup 和 cargo-pgrx 从源码编译。",
+   "highlights": [
+    "通过 COPY TO/FROM 在 PostgreSQL 表与 Parquet 文件间读写数据，支持 S3、Azure Blob Storage、Google Cloud Storage、http(s) 端点、文件系统和 stdin/stdout 流",
+    "提供 parquet.schema、parquet.metadata、parquet.file_metadata、parquet.column_stats 等函数查看 Parquet 文件的 schema、元数据与列统计",
+    "支持 uri 模式匹配列出并读取多个 Parquet 文件，COPY 进度可通过 pg_stat_progress_copy 视图监控"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 查询结果导出为 Parquet 文件存入对象存储用于数据分析管道",
+    "从 Parquet 文件批量导入数据到 PostgreSQL 表",
+    "在 SQL 中直接检查 Parquet 文件的 schema、元数据与列统计"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Copy from/to Parquet files in PostgreSQL! ／ `pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Ap",
+     "lines": [
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为数据库提供 Parquet 数据导入导出能力，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Apache Arrow project to read and write Parquet files and pgrx project to extend PostgreSQL's `COPY` command. ／ ## Installation From Source ／ `pg_parquet` supports reading and writing Parquet files from/to `S3`, `Azure Blob Storage`, `http(s)` and `Google Cloud Storage` object stores.",
+   "evidence_lines": [
+    8,
+    21,
+    179
+   ]
+  },
+  "fn": "CrunchyData/pg_parquet",
+  "sha": "9bc72d011e26",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5d284c8274c8": {
+  "identity": {
+   "one_liner": "企业技术支持场景的 RAG 问答与受控工单 Agent 后端",
+   "review": "这是一个面向企业技术支持的 AI 后端服务，提供知识检索问答（含拒答）与工单预览-审批-建单的受控 Agent 流程，并以 TechQA 语料做检索/生成/拒答评测闭环。面向技术支持团队与 RAG 工程开发者，采用 FastAPI、Chroma 检索、Alembic 迁移与 Docker Compose 部署，当前在线运行时仍是 Dense Chroma 检索，Hybrid 方案为冻结候选未上线。",
+   "highlights": [
+    "提供 RAG 在线检索问答 API，支持租户/类别过滤、来源返回与低相关拒答",
+    "实现受控工单 Agent：预览-确认分离、服务端草稿校验与至多一次审批消费",
+    "包含基于 TechQA 语料的检索、生成/拒答评测框架与失败归因流程"
+   ],
+   "use_cases": [
+    "企业技术支持知识库问答与来源引用检索",
+    "需要人工审批链路的工单创建流程",
+    "RAG 检索/生成方案的离线评测与回归验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "先创建默认 SQLite 父目录，再将 `.env` 载入迁移进程；",
+     "lines": [
+      391
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用数据库持久化数据（迁移/审批/文档记录）的 RAG 应用后端，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "面向**企业技术支持**场景，构建知识检索、回答 / 拒答与工单升级一体化的 **RAG + 受控工单 Agent 后端**。 ／ |RAG 在线运行时|Chroma Dense 检索、租户 / 类别过滤、来源返回、低相关拒答| ／ |工程化|Alembic、Pytest、Ruff、GitHub Actions、Docker Compose、冒烟测试|",
+   "evidence_lines": [
+    5,
+    33,
+    40
+   ]
+  },
+  "fn": "Air000000/Enterprise-Support-AI-Copilot-API",
+  "sha": "5d284c8274c8",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ab3ea7087d0": {
+  "identity": {
+   "one_liner": "自托管健康数据同步API，用Go实现，Postgres存储",
+   "review": "Open Health Sync 是一个自托管的开源服务，从 Apple Health、Oura、WHOOP 等十三个来源摄取可穿戴与健康数据，将原始载荷原样保存后映射到统一模型，通过 REST、FHIR R4、Open mHealth、CSV/Parquet 导出、webhooks 和只读 MCP server 输出。面向自托管数据的开发者与个人，依赖一个 Go 二进制加 Postgres 运行，队列基于 FOR UPDATE SKIP LOCKED，AGPL-3.0 许可。",
+   "highlights": [
+    "提供 REST API、FHIR R4、Open mHealth、CSV/Parquet 导出与 webhooks 等多种输出，以及只读 MCP server",
+    "原始载荷原样保存在磁盘或 S3，可重放处理，记录按内容哈希去重",
+    "支持 Prometheus 指标、OpenTelemetry 追踪、Helm chart 部署与每用户审计日志"
+   ],
+   "use_cases": [
+    "为健康应用提供统一的后端数据 API，聚合多个可穿戴设备来源",
+    "个人通过只读 MCP server 让 AI 代理读取自己的健康数据",
+    "研究项目采集参与者可穿戴数据，保留原始载荷并支持硬删除"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open Health Sync: thirteen sources flow into one Go binary (background sync, raw store, normalize, Postgres). All thirteen are in v0.1.0: Apple Health, Withings, Health Connect, Oura, WHOOP, Fitbit, Polar, Strava, Suunto, Ultrahuman, Dexcom, OMRON and interval ／ Free, one Go binary plus Postgres, runs on a Raspberry Pi. ／ |A crash mid-run|rerun the script and hope|Postgres queue, retries with backoff, parked after 5 attempts|",
+     "lines": [
+      3,
+      13,
+      153
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该服务自身使用 Postgres 存储队列与数据，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Free, one Go binary plus Postgres, runs on a Raspberry Pi. ／ Open Health Sync (`ohs`) is a self-hosted ingestion and normalization layer for health data. It ／ canonical model with one set of units, and serves it over a REST API and a read-only MCP server.",
+   "evidence_lines": [
+    13,
+    47,
+    49
+   ]
+  },
+  "fn": "soma-intelligence/open-health-sync",
+  "sha": "3ab3ea7087d0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f246fb9ce962": {
+  "identity": {
+   "one_liner": "课程搜索应用：React 前端 + Spring Boot 后端，用 MySQL 存课程数据",
+   "review": "CourseHub 是一个课程搜索与发布平台，学习者可注册、搜索过滤课程并跳转报名链接；提供者通过访问码注册并发布课程，管理员可管理全部课程。后端为 Spring Boot 4（Java 21，Spring Security + JWT），首次启动自动创建 coursehub 数据库和表；README 还记录了部署前的安全注意事项，如访问码无错误次数限制、令牌存于 localStorage 等。",
+   "highlights": [
+    "提供学习者/提供者/管理员三种角色，权限规则在服务端 SecurityConfig 与 CourseController 中强制执行",
+    "支持按标题、提供者、分类、技能、城市、描述的增量搜索，带前缀匹配与高亮",
+    "首次启动自动创建 coursehub 数据库和表，配置可用环境变量覆盖"
+   ],
+   "use_cases": [
+    "培训机构或提供者发布课程并展示公司信息",
+    "学习者按技能、城市、付费类型等条件检索课程并跳转报名",
+    "管理员集中增删改全部课程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "React frontend and Spring Boot backend (Spring Security + JWT + MySQL). ／ ├── src/ Spring Boot 4 backend (Java 21, Spring Security + JWT, MySQL) ／ 1. Install Java 21 and MySQL (the Maven wrapper is included, so Maven is not needed).",
+     "lines": [
+      3,
+      7,
+      76
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述这是一个使用 MySQL 存储课程数据的完整 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "React frontend and Spring Boot backend (Spring Security + JWT + MySQL). ／ ├── src/        Spring Boot 4 backend (Java 21, Spring Security + JWT, MySQL) ／ It runs on http://localhost:8080 and creates the `coursehub` database and tables on first start.",
+   "evidence_lines": [
+    3,
+    7,
+    85
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Kiran21765/Course_Search_App",
+  "sha": "f246fb9ce962",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

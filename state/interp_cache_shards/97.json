@@ -8984,5 +8984,77 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b8d3cddab5f6": {
+  "identity": {
+   "one_liner": "本地定时/一次性后台脚本任务自动化服务，SQLite 存储任务与运行记录",
+   "review": "AutoTask 是一个本地自动化服务，管理周期性与一次性后台 Python/Shell 脚本任务，提供 CLI、守护进程 autotaskd 和 Flask Web UI。任务定义与运行记录存于 SQLite，支持 cron/间隔/手动/webhook 触发、原子认领防止并发重复执行，并可通过 systemd 以用户级或系统级服务运行。适合需要在 Linux 本机管理脚本定时任务的开发者和运维人员；要求 Python 3.9+，且定时基于宿主本地时区。",
+   "highlights": [
+    "支持 recurring 与 one-off 两类任务，触发方式含 manual/cron/interval/webhook",
+    "任务定义与运行记录存于 SQLite，启动时自动执行 schema 迁移",
+    "提供 CLI、Flask Web UI 和供 AI 编码代理使用的 agent skill，可与 systemd 集成"
+   ],
+   "use_cases": [
+    "在 Linux 本机以 cron/间隔定时运行备份、轮询、报表类脚本",
+    "在指定本地时间运行一次性长任务，并查看退出码与完整日志",
+    "通过 AI 编码代理（如 Claude Code）以自然语言创建和管理定时任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "AutoTask is a local automation service that manages **recurring tasks** and **one-off background tasks** (Python / Shell scripts). It ships with a CLI (`autotask`), a daemon (`autotaskd`) and a Flask Web UI. It has a small footprint (SQLite + a polling schedul ／ - **SQLite storage**: task definitions and run records are stored in `<data_dir>/autotask.db`; every run gets its own log file. Schema migrations run automatically at startup.",
+     "lines": [
+      5,
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明任务定义与运行记录存于 SQLite，SQLite 是其自身的数据存储而非被服务的数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "AutoTask is a local automation service that manages **recurring tasks** and **one-off background tasks** (Python / Shell scripts). It ships with a CLI (`autotask`), a daemon (`autotaskd`) and a Flask Web UI. It has a small footprint (SQLite + a polling scheduler) and runs fine under systemd. ／ - **SQLite storage**: task definitions and run records are stored in `<data_dir>/autotask.db`; every run gets its own log file. Schema migrations run automatically at startup.",
+   "evidence_lines": [
+    5,
+    14
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "xm6661885/autotask",
+  "sha": "b8d3cddab5f6",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

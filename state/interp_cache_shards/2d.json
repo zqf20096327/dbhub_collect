@@ -8177,5 +8177,72 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "81e690225e61": {
+  "identity": {
+   "one_liner": "本地优先 LLM wiki：将文档摄入为带引用的可问答知识库",
+   "review": "这是一个运行在本地的个人 wiki 应用：把用户文档摄入为结构化、带引用的 wiki 页面，可通过网页界面阅读并与其聊天。关键机制是 SQLite/FTS5 存储、wiki 优先的检索路径，以及「cite-or-refuse」确定性校验——答案无工具依据时替换为拒答。使用 SQLite 作为数据存储，属于用库的应用，非 Obsidian 插件。",
+   "highlights": [
+    "使用 SQLite/FTS5 存储与检索 wiki 页面，引用边记录在 SQLite 中并可查询（L89）",
+    "检索路径为 index.md → wiki FTS5 → 原始文档块回退（L69）",
+    "每个 wiki 是本地 git 仓库，含十二项 lint 检查与安全项自动修复（L74、L83）"
+   ],
+   "use_cases": [
+    "把本地文档整理为可阅读、可问答、带出处的个人知识库",
+    "对含时效性数字的文档做带引用、可确定性计算的问答（如金融示例）",
+    "在本地离线环境下用任何 OpenAI 兼容模型运行 RAG 式问答"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "(Apache-2.0); the rest is an independent local-first build on FastAPI, HTMX and SQLite. See `NOTICE`. ／ - **Citation graph in SQLite** — every page→source and page→page edge is recorded and rebuilt deterministically, so provenance is queryable.",
+     "lines": [
+      16,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目基于 FastAPI、HTMX 和 SQLite 构建，SQLite 是其自身存储组件，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "(Apache-2.0); the rest is an independent local-first build on FastAPI, HTMX and SQLite. See `NOTICE`. ／ - **Citation graph in SQLite** — every page→source and page→page edge is recorded and rebuilt deterministically, so provenance is queryable.",
+   "evidence_lines": [
+    16,
+    89
+   ]
+  },
+  "fn": "Clod/llmwiki-marimo",
+  "sha": "81e690225e61",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

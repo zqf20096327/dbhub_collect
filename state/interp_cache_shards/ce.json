@@ -9575,5 +9575,387 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "74b7c7103c40": {
+  "identity": {
+   "one_liner": "基于关系数据模型定义可执行数据管道的Python科学工作流框架",
+   "review": "DataJoint Python 库提供基于 Relational Workflow Model 的科学数据管道框架：用户用数据库表声明工作流步骤，外键编码依赖关系，数据联合自动调度计算并保留完整数据血缘。面向需要可复现、可溯源数据处理流程的科研团队（如神经科学），经 PyPI 或 Conda 安装使用。",
+   "highlights": [
+    "以数据库表表示管道步骤，外键声明步骤间依赖并自动控制填充顺序",
+    "声明式定义计算，提供数据血缘与结果不可变机制以保证可复现性",
+    "提供 PyPI 与 Conda 双渠道安装及完整文档、教程与 API 参考"
+   ],
+   "use_cases": [
+    "科研领域构建带元数据管理与血缘追踪的数据处理管道",
+    "以数据库 schema 作为可执行规范的声明式工作流编排",
+    "需要可复现实验数据处理流程的实验室数据管理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明它是基于数据库 schema 构建数据管道的框架/库，为数据库生态提供服务而非单纯使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The **DataJoint Library** is a framework for scientific data pipelines based on the **Relational Workflow Model** — a paradigm where your database schema is an executable specification of your workflow. ／ - **Tables represent workflow steps** — Each table is a step in your pipeline ／ - **Computations are declarative** — Define *what* to compute; DataJoint handles *when*",
+   "evidence_lines": [
+    3,
+    5,
+    7
+   ]
+  },
+  "fn": "datajoint/datajoint-python",
+  "sha": "74b7c7103c40",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6df6c505ccd3": {
+  "identity": {
+   "one_liner": "自托管 YouTube 播放列表与频道同步下载器，基于 yt-dlp",
+   "review": "Yarrtube 是一个自托管服务，用于追踪 YouTube 公开播放列表和频道，并在新视频发布时自动下载到本地磁盘，供 Plex、Jellyfin、Kodi 等媒体服务器使用，附带一个可在桌面和移动端浏览器观看视频的极简 Web 界面。设计目标是通过 Docker 运行在 NAS 上，也可在普通电脑运行；作者自述为个人项目，定位轻量，不与功能完整的归档工具竞争。",
+   "highlights": [
+    "追踪 YouTube 公开播放列表和整个频道，新视频发布时自动下载",
+    "提供极简 Web 界面，支持桌面与移动端浏览器观看",
+    "支持与 Plex、Kodi、Jellyfin 集成，通过 Docker 部署"
+   ],
+   "use_cases": [
+    "在 NAS 媒体库中自动镜像订阅的 YouTube 频道和播放列表",
+    "为家庭提供无广告、无算法推荐的指定频道离线观看方式",
+    "通过浏览器直接观看已下载的视频"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是使用数据库存储自身数据的自托管终端应用，不向数据库生态提供服务或工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Yarrtube is a self-hosted service that watches tracked YouTube playlists and channels and automatically downloads new videos as they're published. ／ Yarrtube is designed to run on your NAS via Docker alongside the rest of your media stack (Plex, Jellyfin, etc.), but it runs on any laptop too.",
+   "evidence_lines": [
+    21,
+    23
+   ]
+  },
+  "fn": "sergigp/yarrtube",
+  "sha": "6df6c505ccd3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c5ea384cdf0": {
+  "identity": {
+   "one_liner": "Rust 编写的 Debian 多节点主机托管控制面板",
+   "review": "Hyperion 是面向 Debian 服务器的自托管托管面板，以 Rust 编写，通过每节点 agent 与 master 的 web UI/HTTP API/CLI 协作，一键开通 PHP、nginx、PHP-FPM、数据库和 TLS 站点，并包含备份、WAF、监控与审计日志。面向运营小型托管业务的运维人员。README 注明项目较新，多节点路径使用较少。",
+   "highlights": [
+    "提供单事务式站点开通（Linux 用户、nginx vhost、PHP-FPM 池、数据库、TLS），失败自动回滚",
+    "支持 MariaDB 或 PostgreSQL 作为站点数据库，并集成 phpMyAdmin 中继访问",
+    "提供 BLAKE3 哈希链审计日志、内核级磁盘配额、S3 加密异地备份与 restic 快照"
+   ],
+   "use_cases": [
+    "管理多台 Debian 服务器上的 PHP/WordPress/静态/反代站点",
+    "为托管客户的站点执行计划备份、异地副本与恢复",
+    "集中配置 WAF、防火墙、限流与每站点安全策略"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+     "lines": [
+      78,
+      114
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite) rather than scraping it. You pick the sites, their PHP version, profile",
+     "lines": [
+      287
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in ／ Integration tests that need a real Debian (`useradd`, `mariadb-dump`,",
+     "lines": [
+      78,
+      114,
+      347
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "面板为站点安装、配置并管理 MariaDB/PostgreSQL 数据库组件及其备份，属为数据库部署运维服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted, multi-node hosting control panel for Debian, written in Rust.** ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in ／ - Scheduled and on-demand backups (files plus a database dump), with retention",
+   "evidence_lines": [
+    3,
+    114,
+    157
+   ]
+  },
+  "fn": "nechodom/hyperion",
+  "sha": "9c5ea384cdf0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d21dac02b1c8": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的数据库安全网关与 MCP Server",
+   "review": "AgentSQL（智盾）是一个用 Go 编写的数据库安全网关兼 MCP Server，为 AI Agent 访问数据库提供 API Key 认证、SQL AST 解析、对象/列级授权、危险语句拦截、人工审批、列级脱敏与审计。当前原生支持 PostgreSQL 与 MySQL，另对多款国产数据库提供协议路径验证；控制面默认零配置 SQLite，可选 PostgreSQL 15+。适用对象为需要让 LLM Agent 受控访问生产库的运维与安全团队。注意安装仅支持 Linux amd64/arm64 与 Docker，musl/Alpine 与 CentOS 7 不支持。",
+   "highlights": [
+    "提供 stdio 与 Streamable HTTP 双 MCP 承载，含 7 个基础数据库工具，PostgreSQL 会话/计划事务另提供 8 个工具",
+    "实现默认拒绝的授权链路：对象/列授权、SQL AST 规则、危险 SQL 拦截、限流与人工审批",
+    "提供四类列级脱敏算法（mask/hash/block/range）、审计导出（JSONL/CSV/PDF/ZIP）与 Webhook/Syslog 通知"
+   ],
+   "use_cases": [
+    "让 AI Agent 通过 MCP 受控读写 PostgreSQL/MySQL 并留存审计记录",
+    "对 Agent 产生的 SQL 实施列级脱敏、危险语句拦截与人工审批闭环",
+    "多租户场景下为不同 Agent 配置数据源授权档位与规则策略"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "AgentSQL（中文品牌名：智盾，控制台显示为「AgentSQL 智盾控制台」）是面向 AI Agent 的数据库安全网关与生产级 MCP Server：让模型发出的每条 PostgreSQL/MySQL 请求在到达数据库前，经过身份认证、SQL 解析、授权与规则评估、受控执行、结果脱敏和审计。 ／ AI Agent → LLM / MCP Client → AgentSQL 网关 → PostgreSQL / MySQL ／ AgentSQL 作为数据库中立的安全网关，当前原生支持 PostgreSQL 与 MySQL。v0.5.1 的主流国产数据库指定实例与协议路径验证范围见下表。",
+     "lines": [
+      12,
+      19,
+      36
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "AgentSQL（中文品牌名：智盾，控制台显示为「AgentSQL 智盾控制台」）是面向 AI Agent 的数据库安全网关与生产级 MCP Server：让模型发出的每条 PostgreSQL/MySQL 请求在到达数据库前，经过身份认证、SQL 解析、授权与规则评估、受控执行、结果脱敏和审计。 ／ AI Agent → LLM / MCP Client → AgentSQL 网关 → PostgreSQL / MySQL ／ AgentSQL 作为数据库中立的安全网关，当前原生支持 PostgreSQL 与 MySQL。v0.5.1 的主流国产数据库指定实例与协议路径验证范围见下表。",
+     "lines": [
+      12,
+      19,
+      36
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 可追溯运维：默认零配置 SQLite；可选 PostgreSQL 15+ 控制面（PostgreSQL 18 为基准，metadata 与 audit 可分库）；支持审计导出（面向机器的 JSONL，以及 Excel/WPS 可直接打开、带公式注入防护的中文 CSV）、审批决策闭环、Prometheus 指标与健康/就绪探针。 ／ |SQLite / PostgreSQL 控制面、审计导出与仪表盘|支持|SQLite 默认零配置；PostgreSQL 可使用独立 metadata/audit 库|",
+     "lines": [
+      30,
+      222
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "> **金仓 V9 绿色边界：**仅限上述 PG 模式、单实例合成表的只读受控基础闭环；实际 license 到期日未确认。V9 Oracle 模式、原生驱动、V8、多行/深度分页、JOIN、聚合/函数、复杂表达式、类型 OID、系统目录、EXPLAIN、TLS/加密、HA/故障切换、备份恢复、B2 列级授权、多角色并发及生产负载未测。显式 `GRANT CREATE SESSION` 被拒；会话能力经 `LOGIN` + `CONNECT` 验证。非厂商认证或生产支持承诺；详见真库验证记录。 ／ ||Oracle 23ai|🔵 已适配 · 受控只读|连接 / 元数据 / 只读查询子集|",
+     "lines": [
+      55,
+      235
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "||SQL Server 2025|🔵 已适配 · 受控只读|连接 / 元数据 / 只读查询子集|",
+     "lines": [
+      238
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|OLAP|ClickHouse|🔷 已适配 · 连接级|ping / 版本 / Schema / 只读预览|",
+     "lines": [
+      256
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|TiDB|适配中|执行计划（EXPLAIN）适配实现中|",
+     "lines": [
+      44
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "|OceanBase|适配中|执行计划（EXPLAIN）适配实现中|",
+     "lines": [
+      45
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "mention",
+     "quote": "|PolarDB for PostgreSQL|协议路径已实测|指定 PG 15 社区镜像复用 `db_type=postgres`；非商业服务认证|",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|达梦数据库 DM|🟢 指定实例防护链路实测通过|DM8 Pack3、`COMPATIBLE_MODE=0`：v0.5.1 真库复验了 HTTP MCP 查询、列血缘、R010 表策略、手机号脱敏和持久化审计；R006 注释在解析阶段失败关闭，多行分页/JOIN/函数/系统目录未测，写入未放开| ／ ||达梦 DM8|🟢 已适配 · 完整防护|仅限 Pack3、COMPATIBLE_MODE=0 指定链路|",
+     "lines": [
+      49,
+      236
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "|openGauss（GaussDB）|已实测|社区版协议路径已实测通过|",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "|openGauss（GaussDB）|已实测|社区版协议路径已实测通过|",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "TDSQL",
+     "rel": "mention",
+     "quote": "|TDSQL|适配中|开源版 OpenTenBase 适配中；商用版待实测|",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "|崖山数据库 YashanDB|🔵 受控只读|标准 parser 与窄 SELECT 路径已接通；独立客户端 23.4.7.100 的真库流水线测试通过 SELECT、列血缘、R010、手机号脱敏和三条测试审计；HTTP/MCP 与持久化审计未测| ／ ||崖山 YashanDB|🔵 已适配 · 受控只读|标准 parser 接通，真库流水线通过|",
+     "lines": [
+      48,
+      237
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为数据库访问提供安全网关与 MCP 服务能力的工具/组件，本身不用于业务数据存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "Dameng",
+    "openGauss",
+    "GaussDB",
+    "YashanDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "自 v0.5.0 起代码采用 Apache-2.0，历史 v0.4.0 发布物仍按其原许可使用；另存在 Commercial License",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AgentSQL（中文品牌名：智盾，控制台显示为「AgentSQL 智盾控制台」）是面向 AI Agent 的数据库安全网关与生产级 MCP Server：让模型发出的每条 PostgreSQL/MySQL 请求在到达数据库前，经过身份认证、SQL 解析、授权与规则评估、受控执行、结果脱敏和审计。 ／ - 双 MCP 承载：本机 `stdio` 与 Streamable HTTP `/mcp`，提供 7 个基础数据库工具；默认开启的 PostgreSQL B5 会话/计划事务另提供 8 个工具。 ／ AgentSQL 作为数据库中立的安全网关，当前原生支持 PostgreSQL 与 MySQL。v0.5.1 的主流国产数据库指定实例与协议路径验证范围见下表。",
+   "evidence_lines": [
+    12,
+    26,
+    36
+   ]
+  },
+  "fn": "cuipengdba/agentsql",
+  "sha": "d21dac02b1c8",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

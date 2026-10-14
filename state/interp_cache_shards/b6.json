@@ -8561,5 +8561,141 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3ec2c745d85e": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理会话日志分析与检索工具",
+   "review": "Decant 读取本机 Claude Code、Codex、Gemini CLI 和 OpenCode 的会话日志，将提示词、工具调用和原始记录写入本地 SQLite 归档并建立全文索引，提供 token 花费、成本、上下文用量、文件触达分析及 CLI/本地 Web UI 检索与导出。面向使用 AI 编码代理、想了解会话开销与行为的开发者。运行时不发起外网调用，归档未加密但设为 owner-only 权限。",
+   "highlights": [
+    "将多款编码代理（Claude Code、Codex、Gemini CLI、OpenCode）的会话写入单一 SQLite 归档并支持全文搜索",
+    "提供 token、估算成本、上下文、工具、MCP 等维度的分析，支持 Markdown/JSON/报告/轨迹导出",
+    "通过 npx、npm、Homebrew、安装脚本和 Docker 多种方式运行，运行时不发起出站网络请求"
+   ],
+   "use_cases": [
+    "分析 AI 编码代理的 token 消耗、成本与时间去向",
+    "跨会话全文检索代理的完整对话记录与工具调用",
+    "按组织留存策略检查、管理或删除本地代理转录归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "messages into an **unencrypted** SQLite archive at `~/.decant/decant.db`, with a ／ - One SQLite archive for Claude Code, Codex, Gemini CLI, and OpenCode sessions.",
+     "lines": [
+      19,
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该工具自身存储分析数据的本地归档介质，项目并非为数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "messages into an **unencrypted** SQLite archive at `~/.decant/decant.db`, with a ／ - One SQLite archive for Claude Code, Codex, Gemini CLI, and OpenCode sessions. ／ Decant reads `~/.claude/projects`, `~/.codex`, `~/.gemini/tmp`, and",
+   "evidence_lines": [
+    19,
+    48,
+    117
+   ]
+  },
+  "fn": "dosu-ai/decant",
+  "sha": "3ec2c745d85e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0baf41650911": {
+  "identity": {
+   "one_liner": "SQLite 3 C 库的 Swift 封装及 Perfect-CRUD 驱动",
+   "review": "该包为 Swift 应用提供 SQLite 3 C API 的同步封装（SQLite/SQLiteStmt 类），并在其上实现 Perfect-CRUD 的 SQLGenDelegate/SQLExeDelegate 集成，使 Codable 类型可映射到 SQLite。要求 Swift 6.2 工具链，支持 macOS 12+、iOS 15+ 与 Linux，需系统提供 SQLite 3.29+；连接非线程安全，需每任务独占连接。适合在 Swift 6 服务端或客户端项目中通过 Perfect-CRUD 读写 SQLite 的开发者。",
+   "highlights": [
+    "提供围绕 SQLite3 C API 的同步 Swift 封装，支持 open/close/prepare/execute/forEachRow/事务及参数绑定",
+    "内置 Perfect-CRUD 集成层，支持连接池、transactionAsync 等 async API",
+    "默认关闭双引号字符串字面量回退，将双引号名称一律视为标识符"
+   ],
+   "use_cases": [
+    "Swift 6 项目中以类型化 CRUD 方式访问 SQLite 数据库",
+    "Linux/macOS/iOS 服务端应用中的会话存储（作为 Perfect-Session 的 SQLiteSessionDriver 底层）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "This project provides a Swift wrapper around the SQLite 3 C library, plus a Perfect-CRUD database driver built on top of it. ／ - **`SQLite.swift`** — a thin, synchronous Swift wrapper around the SQLite3 C API: the `SQLite` class (open/close/prepare/execute/`forEachRow`/transactions) and `SQLiteStmt` (bind-by-position/name, column reading).",
+     "lines": [
+      13,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQLite 提供语言绑定与驱动集成的组件，服务数据库生态而非以数据库为存储的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project provides a Swift wrapper around the SQLite 3 C library, plus a Perfect-CRUD database driver built on top of it. ／ - **`SQLite.swift`** — a thin, synchronous Swift wrapper around the SQLite3 C API: the `SQLite` class (open/close/prepare/execute/`forEachRow`/transactions) and `SQLiteStmt` (bind-by-position/name, column reading). ／ - **`SQLiteCRUD.swift`** — about two-thirds of the package's source — implements the integration that lets Perfect-CRUD's typed query builder target a SQLite database: `SQLiteCRUDRowReader` (a `KeyedDecodingContainer` bridge from SQLite columns to `Codable` types), `SQLiteGenDelegate`/`SQLiteExeDelegate` (PerfectCRUD's `SQLGenDelegate`/`SQLExeDelegate`), and `SQLiteDatabaseConfiguration: DatabaseConfigurationProtocol`.",
+   "evidence_lines": [
+    13,
+    23,
+    24
+   ]
+  },
+  "fn": "PerfectlySoft/Perfect-SQLite",
+  "sha": "0baf41650911",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

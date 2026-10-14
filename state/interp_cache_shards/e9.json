@@ -10247,5 +10247,81 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "72c30f52ed8b": {
+  "identity": {
+   "one_liner": "从 YAML 或 LDAP 同步 PostgreSQL 角色与权限的管理工具",
+   "review": "ldap2pg 读取 YAML 配置或 LDAP 目录查询，自动创建、更新和删除 PostgreSQL 角色与用户，并授予或回收权限，支持干跑与检查模式、记录所有 SQL 语句。面向需要将数据库角色管理与企业目录（如 Active Directory、OpenLDAP）对接的数据库管理员。",
+   "highlights": [
+    "支持从 LDAP 搜索创建/修改/删除 PostgreSQL 角色，并可用 YAML 定义静态角色",
+    "支持静态或基于 LDAP 条目地授予和回收权限，管理角色父组",
+    "提供 dry run 与 check 模式，记录每条 SQL 语句和 LDAP 搜索命令"
+   ],
+   "use_cases": [
+    "企业目录（LDAP/AD）驱动的 PostgreSQL 角色与权限自动化管理",
+    "以 YAML 配置为唯一事实来源的权限同步与定期巡检（配合 crontab/Ansible playbook）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ldap2pg: PostgreSQL role and privileges management ／ Swiss-army knife to synchronize Postgres roles and privileges from YAML or LDAP. ／ - Support PostgreSQL 18 down to 9.5.",
+     "lines": [
+      2,
+      5,
+      25
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Oracle Internet Directory and",
+     "lines": [
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "ldap2pg 是为 PostgreSQL 生态服务的角色与权限管理工具，而非仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PostgreSQL license",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " ldap2pg: PostgreSQL role and privileges management ／ ldap2pg automates the creation, update and removal of PostgreSQL roles and users from an entreprise directory. ／ ldap2pg can grant and revoke privileges too.",
+   "evidence_lines": [
+    2,
+    18,
+    21
+   ]
+  },
+  "fn": "dalibo/ldap2pg",
+  "sha": "72c30f52ed8b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

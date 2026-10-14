@@ -8211,5 +8211,142 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f14c8af809a1": {
+  "identity": {
+   "one_liner": "Linux 桌面飞行记录仪，将故障与负载持续写入单个 SQLite 文件",
+   "review": "一个常驻的 Rust systemd 用户服务，持续采集进程崩溃、日志、失败登录、软件包变更与系统负载，写入带 WAL 的单个 SQLite 环形缓冲数据库（上限 50 GB），并提供 GTK4 只读查看器按时间轴回溯现场。面向使用 systemd Linux 桌面的用户，需 Rust 1.88+ 与 SQLite 开发文件，从源码构建安装。",
+   "highlights": [
+    "通过内核 BPF 过滤与批量提交采集进程崩溃、journald、auditd、软件包事务等事件",
+    "以 SQLite WAL 模式 synchronous=FULL 写入，数据库为 50 GB 环形缓冲并支持断点续采",
+    "附带 GTK4 只读查看器，可按时刻查看事件、图表与崩溃栈",
+    "在 Arch、Debian/Ubuntu、Fedora/RHEL、openSUSE 上有 CI 测试"
+   ],
+   "use_cases": [
+    "桌面冻结、程序崩溃后回溯当时系统状态与相关事件",
+    "将分散在 journal、audit 日志、coredump、包管理器日志中的证据按时间对齐",
+    "记录软件包升级与异常关机/非正常重启历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Blackbox answers that question in one click. It records continuously, into one SQLite file, and ／ audit.log ─────────────────────────────► auditd ───┤ one thread, SQLite, WAL, GTK4, read-only, ／ - **Writes that survive a hard freeze.** SQLite runs in WAL mode with `synchronous=FULL`, so every",
+     "lines": [
+      21,
+      45,
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目将采集的数据存入单个 SQLite 文件，SQLite 是其存储组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Blackbox answers that question in one click. It records continuously, into one SQLite file, and ／  journalctl --follow ───────────────────► journald ─┼──► writer ───────► blackbox.db ◄── Blackbox app ／ You need Rust 1.88 or newer, a C compiler and SQLite's development files. The viewer also needs",
+   "evidence_lines": [
+    21,
+    44,
+    104
+   ]
+  },
+  "fn": "HawkOsm/BlackBox",
+  "sha": "f14c8af809a1",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cbe104555126": {
+  "identity": {
+   "one_liner": "自托管职位雷达，用规则过滤加 LLM 对简历打分匹配岗位",
+   "review": "Wera 是一个自托管的求职监控系统，从 Greenhouse、Lever 等公开招聘源抓取 570 多家公司的职位，先做规则过滤和本地 TF-IDF 排序，再用 LLM 对每条职位与用户简历进行匹配打分，并提供简历定制、求职信、面试题库等功能。面向求职者，部署需要 Go、Docker 和 Coral Bricks API key，数据存储使用 PostgreSQL。",
+   "highlights": [
+    "从 570+ 公司的公开招聘板抓取职位，用共享事实提取和缓存提示前缀降低 LLM 调用成本",
+    "提供简历导入与渲染（Typst 多模板、PDF/LaTeX 导出）和针对职位的定制简历生成",
+    "内置 H-1B LCA 数据导入、邮件通知、Prometheus 指标与 LLM 月度预算控制"
+   ],
+   "use_cases": [
+    "求职者按自己的简历自动筛选和评分公开职位",
+    "分析雇主在职位描述中的签证担保信息及 H-1B 申请数据",
+    "准备面试题库与生成求职信、定制简历"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Wera system architecture: browser, nginx, API, worker and PostgreSQL on one host; job boards and the inference API on the internet ／ Three containers share one PostgreSQL database on a single host. `wera-web` (nginx) is the only service reachable from the network; it serves the dashboard and proxies `/api` to `wera-api`. `wera-worker` runs the matching pipeline on a schedule. Both are the s ／ docker compose up -d postgres",
+     "lines": [
+      16,
+      18,
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Wera 使用 PostgreSQL 存储职位、用户档案等自身业务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Wera** (Swahili slang for a job or gig) is a self-hosted job radar. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Eightfold, and amazon.jobs) for 570+ companies across 28 industries, filters them with configurable rules, scores each one against your resume with an LLM on Coral Bricks, and serves the results through a REST API. Wera does not apply on your behalf. You review the matches and apply yourself. ／ Three containers share one PostgreSQL database on a single host. `wera-web` (nginx) is the only service reachable from the network; it serves the dashboard and proxies `/api` to `wera-api`. `wera-worker` runs the matching pipeline on a schedule. Both are the same Go binary.",
+   "evidence_lines": [
+    10,
+    18
+   ]
+  },
+  "fn": "jessechumo/Wera",
+  "sha": "cbe104555126",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

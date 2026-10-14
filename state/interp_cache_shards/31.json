@@ -7980,5 +7980,207 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d5326502b8fd": {
+  "identity": {
+   "one_liner": "自托管音乐元数据编辑 Web 应用，基于 Next.js/Prisma/SQLite",
+   "review": "Tagr 是一个自托管的 Web 应用，用于浏览、播放音频文件并直接把标签改动写回音频文件。面向需要在浏览器/手机上管理本地音乐库的用户，提供三栏界面、40+ 元数据字段编辑、变更历史回滚、内建播放器与 ListenBrainz scrobbling。数据（用户、播放记录、索引）通过 Prisma 存储在 SQLite 中；支持 Docker 部署。",
+   "highlights": [
+    "支持 40+ 元数据字段的内联编辑，并可将改动写回 MP3、FLAC、WAV、OGG 等 10 种音频格式",
+    "提供完整变更历史，可单条或批量回滚元数据修改",
+    "内建音频播放器（WaveSurfer.js 波形）并支持 ListenBrainz scrobbling 与多用户角色（admin/tagger/listener）"
+   ],
+   "use_cases": [
+    "自托管环境下通过浏览器整理和编辑音乐库标签",
+    "多人协作管理音乐元数据并保留变更审计记录",
+    "在手机/平板上浏览和播放本地音乐库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`DATABASE_URL`|Yes|SQLite database path. Use `file:/data/tagr.db` in Docker or `file:./data/tagr.db` locally.| ／ |`/data`|SQLite database. Persist with a named volume to avoid data loss.| ／ Browser (React Query) --> Next.js API Routes --> Prisma --> SQLite",
+     "lines": [
+      203,
+      301,
+      307
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 SQLite（经 Prisma）存储自身数据的音乐编辑应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A self-hosted music metadata editor with a modern, intuitive web UI. ／ |`DATABASE_URL`|Yes|SQLite database path. Use `file:/data/tagr.db` in Docker or `file:./data/tagr.db` locally.|",
+   "evidence_lines": [
+    5,
+    203
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "suitux/Tagr",
+  "sha": "d5326502b8fd",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2690d2679a9d": {
+  "identity": {
+   "one_liner": "开源实时答题对战平台，含多人房和1v1排位",
+   "review": "Buzrr 是一个开源实时问答游戏平台，支持多人房间答题和 ELO 排位 1v1 对战，可选接入 AI 生成题目和 RAG 知识库。架构为 Next.js 前端加 NestJS 服务端的 monorepo，实时状态存 Redis，结果经 Prisma 持久化到 PostgreSQL，通过 docker compose 一键自托管，适合想自建答题活动的个人或组织。",
+   "highlights": [
+    "提供实时多人答题房间与 ELO 排位 1v1 对战，经 WebSockets 通信",
+    "实时游戏状态存于 Redis，结束后持久化到 PostgreSQL（经 Prisma）",
+    "支持 docker compose 一键自托管，可完全离线运行"
+   ],
+   "use_cases": [
+    "自托管实时答题竞赛或课堂问答活动",
+    "好友间 1v1 排位答题对战",
+    "基于文档生成题目的知识问答场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- ⚡ **Server-authoritative game loop** — live state lives in **Redis**; only finished games are persisted to Postgres. ／ Redis; Postgres keeps the lobby record and the final result. ／ |`DATABASE_URL` / `DIRECT_URL`|✅|PostgreSQL connection (defaults to the Docker container).|",
+     "lines": [
+      24,
+      32,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用 PostgreSQL 存大厅记录和最终结果、Redis 存实时状态，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- ⚡ **Server-authoritative game loop** — live state lives in **Redis**; only finished games are persisted to Postgres. ／ Redis; Postgres keeps the lobby record and the final result. ／ |`DATABASE_URL` / `DIRECT_URL`|✅|PostgreSQL connection (defaults to the Docker container).|",
+   "evidence_lines": [
+    24,
+    32,
+    121
+   ]
+  },
+  "fn": "buzrr/buzrr",
+  "sha": "2690d2679a9d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9293dcbdee8b": {
+  "identity": {
+   "one_liner": "基于 scikit-learn 的农作物推荐 Web 应用，支持 OCR 输入",
+   "review": "Filahia 是一个 Django Web 应用，根据土壤和气候数据（N、P、K、温度、湿度、pH、降雨量）用训练好的 scikit-learn 模型推荐作物，并可经 OCR 从上传文档提取测量值。界面提供法语和阿拉伯语（gettext i18n），OCR 依赖系统安装的 Tesseract。适合农业从业者或相关使用者，部署需设置 DJANGO_SECRET_KEY。",
+   "highlights": [
+    "提供基于 scikit-learn 模型的作物推荐",
+    "支持通过 OCR 从上传文档提取测量数据",
+    "提供法语和阿拉伯语界面（gettext i18n）"
+   ],
+   "use_cases": [
+    "根据土壤与气候测量数据获取作物种植建议",
+    "从上传的文档自动提取测量值进行推荐",
+    "面向法语/阿拉伯语用户的本地化农业应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用数据库（python manage.py migrate）存数据的 Web 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Filahia (فلاحيا, from *filaha*, \"agriculture\" in Arabic) is a web application that recommends the most suitable crop from soil and climate ／ **Stack:** Django · scikit-learn · OCR · gettext i18n (fr / ar) ／ python manage.py migrate",
+   "evidence_lines": [
+    5,
+    11,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "abedellah/Filahia",
+  "sha": "9293dcbdee8b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

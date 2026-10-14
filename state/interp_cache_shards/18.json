@@ -8319,5 +8319,73 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "165402c423d2": {
+  "identity": {
+   "one_liner": "PostgreSQL SQL 文件离线校验与 lint 工具",
+   "review": "pgqv 是一个独立的 PostgreSQL 查询校验器和 linter，读取 .sql 文件并输出 rustc 风格的诊断信息（行、列、下划线标注）。它基于 libpg_query 的 PostgreSQL 17 语法离线解析，无需数据库连接，因此无法校验表列名等目录信息。适用于需要在 CI 或 pre-commit 中做 SQL 语法检查的开发者。",
+   "highlights": [
+    "离线解析 .sql 文件，语法基于 PostgreSQL 17 grammar（libpg_query）",
+    "识别 psql 元命令并只校验其中的 SQL 部分",
+    "提供 rustc 风格诊断，退出码便于接入 pre-commit 或 CI"
+   ],
+   "use_cases": [
+    "CI 流水线中校验 SQL 迁移/脚本语法",
+    "pre-commit 钩子检查 .sql 文件拼写与语法错误",
+    "无数据库环境下本地 lint SQL 文件"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pgqv` is a standalone query validator and linter for PostgreSQL. Point it at a ／ It works entirely offline - no PostgreSQL server, no database connection. ／ - **PostgreSQL 17 grammar.** Parsing uses libpg_query 17 (via",
+     "lines": [
+      3,
+      7,
+      175
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL SQL 文件提供校验/lint 能力的工具，非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pgqv` is a standalone query validator and linter for PostgreSQL. Point it at a ／ It works entirely offline - no PostgreSQL server, no database connection. ／ - **PostgreSQL 17 grammar.** Parsing uses libpg_query 17 (via",
+   "evidence_lines": [
+    3,
+    7,
+    175
+   ]
+  },
+  "fn": "serhii-chechun/pg-query-validate",
+  "sha": "165402c423d2",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

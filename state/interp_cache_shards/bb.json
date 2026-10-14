@@ -8911,5 +8911,128 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e0d4c9ab4eb": {
+  "identity": {
+   "one_liner": "Swift 编写的类型安全 SQL 查询构建 DSL，支持多方言渲染",
+   "review": "SQL（前身 SwifQL）是一个 Swift 6.3 包，用类型安全 DSL 在 Swift 中编写 SELECT/DML/DDL 语句，经 .psql/.mysql/.duck 方言 prepare 生成 SQL 与绑定参数；执行、连接池、事务由调用方驱动负责。面向需要以编程方式构建 SQL 的 Swift 开发者，通过 Swift Package Manager 引入。",
+   "highlights": [
+    "提供链式与 result builder 两种声明式查询写法，并支持可复用的参数化 SQLQuery",
+    "内置 PostgreSQL、MySQL、DuckDB 三种方言渲染，可分离查询占位符与绑定值",
+    "包含 CreateTable/AlterTable 等 DDL 构建器，仅生成语句，不管理迁移执行"
+   ],
+   "use_cases": [
+    "在 Swift 应用中类型安全地组装 SELECT/INSERT/UPDATE/DELETE 语句",
+    "按目标数据库方言生成带绑定参数的 SQL，交给自选驱动执行",
+    "以编程方式构建 CREATE/ALTER TABLE 等 DDL 文本"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver. ／ let postgres = query.prepare(.psql) ／ query.prepare(.psql)",
+     "lines": [
+      17,
+      274,
+      429
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver. ／ let mysql = query.prepare(.mysql) ／ query.prepare(.mysql)",
+     "lines": [
+      17,
+      275,
+      430
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为构建 SQL 语句的库，执行留给数据库驱动，定位为服务数据库使用的开发组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SQL (formerly SwifQL)** is a strongly typed, declarative, composable Swift DSL for building SQL. ／ Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver. ／ SQL builds statements. Your driver executes them.",
+   "evidence_lines": [
+    15,
+    17,
+    269
+   ]
+  },
+  "fn": "swiftstream/SQL",
+  "sha": "2e0d4c9ab4eb",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::seekdb代码仓库": {
+  "identity": {
+   "one_liner": "seekdb 代码仓库，用途信息不足",
+   "review": "该仓库简介仅有『seekdb代码仓库』，未说明 seekdb 是什么、实现什么功能、面向何种用户或如何安装运行，也无 README 可验证内容。基于简介无法判断其与 OceanBase 的具体关系（采集通道 keyword 提示 oceanbase，仅供参考）。在证据不足的情况下不做超出简介的推断，各项归类均按低置信处理。",
+   "highlights": [
+    "仓库以 seekdb 命名（仅名称事实）"
+   ],
+   "use_cases": [
+    "简介未提供可验证的使用场景"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "简介未说明该项目是为数据库服务的工具还是仅使用数据库的应用，证据不足",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "seekdb代码仓库"
+  },
+  "fn": "rainforest888/OceanBase-seekdb",
+  "sha": "desc::seekdb代码仓库",
+  "source": "desc",
+  "generated_at": "2026-10-14",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

@@ -11546,5 +11546,124 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "59afb371fcd0": {
+  "identity": {
+   "one_liner": "JVM 上的 SQL 解析器，将 SQL 语句转为可遍历的 Java AST",
+   "review": "JSqlParser 把 SQL 文本解析为 Java 对象树，可用 Visitor 模式遍历、改写并重新输出 SQL，也支持以流式 API 用 Java 构建语句。面向需要在 JVM 程序中处理 SQL 的开发者，如构建校验、改写或分析工具。语法覆盖 SQL 标准及十余种方言；性能数据与上游 Maven Central 版本存在差异，安装时需注意选择构建来源。",
+   "highlights": [
+    "将 SQL 语句解析为可用 Visitor 模式遍历的 Java 类层次结构",
+    "支持从 Java 以流式 API 构建语句并渲染回 SQL 文本",
+    "提供语句分类能力（returns rows / modifies data 等三值特征）"
+   ],
+   "use_cases": [
+    "在 JVM 应用中解析、校验 SQL 语句",
+    "对 SQL 进行 AST 级改写后重新生成 SQL 文本",
+    "在语句到达数据库前做读写类型的安全判断"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite`",
+     "lines": [
+      102
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite`",
+     "lines": [
+      102
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "`BigQuery` · `Snowflake` · `DuckDB` · `Redshift` · `Oracle` · `MS SQL Server` · `Sybase`",
+     "lines": [
+      101
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite`",
+     "lines": [
+      102
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`BigQuery` · `Snowflake` · `DuckDB` · `Redshift` · `Oracle` · `MS SQL Server` · `Sybase`",
+     "lines": [
+      101
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse column selection**|`COLUMNS('regexp')` select items with chained `APPLY`, `EXCEPT`, and `REPLACE` transformers|",
+     "lines": [
+      108
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite`",
+     "lines": [
+      102
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为处理 SQL 的程序提供解析能力的库，服务于数据库生态而非自身存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：LGPL 2.1 或 Apache License 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An RDBMS-agnostic SQL parser for the JVM: one grammar, twelve dialects, no native extensions. ／ Give it SQL. Get an AST you can walk, rewrite, and print back out. ／ JSqlParser targets the SQL standard plus all major RDBMS. One grammar covers all of them,",
+   "evidence_lines": [
+    3,
+    22,
+    98
+   ]
+  },
+  "fn": "JSQLParser/JSqlParser",
+  "sha": "59afb371fcd0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

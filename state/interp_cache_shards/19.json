@@ -10247,5 +10247,143 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "239bfd8238f3": {
+  "identity": {
+   "one_liner": "英国游戏价格 ETL 管线，采集五个商店价格并存入 SQLite",
+   "review": "这是一个采集、校验并追踪英国五大游戏商店（Nintendo eShop、PlayStation、Steam、Xbox）价格的 ETL 管线，将清洗后的数据以规范化 SQLite schema 存储，并提供 FastAPI 只读接口、Streamlit 仪表盘、Discord 降价提醒和 GitHub Actions 每日定时抓取；面向关注英国游戏价格的个人用户，README 注明仅供教学与作品集展示。",
+   "highlights": [
+    "提供五个商店统一 Scraper 接口的数据采集，配 pandera schema 校验与重试限速的 HTTP 会话",
+    "提供 SQLite 价格历史存储（每日一价 upsert），以及 FastAPI 查询接口、Streamlit 仪表盘和 Discord 提醒",
+    "提供 Docker 镜像与 GitHub Actions 每日定时抓取工作流，支持 --cached 离线重建"
+   ],
+   "use_cases": [
+    "追踪英国区游戏价格历史、当前折扣与历史低价",
+    "跨商店同款游戏价格对比",
+    "通过 watchlist 设置目标价并在降价时收到 Discord 提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **Price History:** A normalised `SQLite` schema keeps one price per game per day with upserts, and answers questions such as current deals, price drops and all-time lows. ／ |`storage.py`|SQLite schema, upserts and history queries.| ／ |`--db PATH`|SQLite database to record prices in.|",
+     "lines": [
+      21,
+      45,
+      76
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身存储价格的数据库，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An automated ETL (Extract, Transform, Load) and market intelligence pipeline that collects, validates, stores and analyses UK video game prices across five storefronts: Nintendo eShop, PlayStation Store, PlayStation Direct, Steam and Xbox. ／ * **Price History:** A normalised `SQLite` schema keeps one price per game per day with upserts, and answers questions such as current deals, price drops and all-time lows. ／ |`storage.py`|SQLite schema, upserts and history queries.|",
+   "evidence_lines": [
+    14,
+    21,
+    45
+   ]
+  },
+  "fn": "Furkan5E/GamePrice-Index",
+  "sha": "239bfd8238f3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "052b8ad3fa50": {
+  "identity": {
+   "one_liner": "PostgreSQL 只读 MCP 服务器，从目录读取 schema、统计、计划、锁与复制信息",
+   "review": "一个只读的 PostgreSQL MCP 服务器，供 AI 助手读取数据库的 schema、统计信息、执行计划、锁、复制状态和 PgBouncer 池信息，全部来自系统目录，从不写入也不返回表数据。每次调用在 READ ONLY 事务中执行并带语句超时，适合运维人员通过 AI 排查慢查询、锁等待、复制延迟等问题。用 C++ 编写，支持单进程管理多连接并对实例或复制组做批量查询。",
+   "highlights": [
+    "强制只读：所有调用运行在独立 READ ONLY 事务中并设置 statement_timeout，SQL 不由参数拼接",
+    "提供 schema、统计、执行计划、锁、复制、磁盘用量等目录级只读工具，并内置 13 个诊断类 prompts",
+    "单进程服务多数据库，支持按实例、复制组或标签做扇出批量查询"
+   ],
+   "use_cases": [
+    "通过 AI 助手诊断慢查询、锁争用、死锁和活跃会话问题",
+    "检查复制延迟、复制槽和缓冲缓存状态等运维巡检",
+    "在无服务器 shell 的情况下查看磁盘、WAL 和表空间用量"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg-licht ／ A read-only PostgreSQL MCP (Model Context Protocol) server: it lets an AI assistant read a ／ Why another PostgreSQL MCP:",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 生态服务的只读 MCP 服务器组件，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A read-only PostgreSQL MCP (Model Context Protocol) server: it lets an AI assistant read a ／ - Read-only is enforced, not promised: every call runs in its own `READ ONLY` transaction ／ - It answers what an operator asks — why is this slow, what is blocked, is the replica",
+   "evidence_lines": [
+    3,
+    11,
+    17
+   ]
+  },
+  "fn": "sqlambda/pg_licht",
+  "sha": "052b8ad3fa50",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8678,5 +8678,72 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c6119a5ad7bc": {
+  "identity": {
+   "one_liner": "增强 Rails ActiveRecord 默认 SQLite3 适配器的 Ruby gem",
+   "review": "该 gem 挂接到 Rails 应用中，自动增强 7.1 版本的 SQLite3Adapter，提供生成列、延迟外键、PRAGMA 调优、扩展加载和读写连接池隔离等能力，供在 Rails 中使用 SQLite 的开发者使用。注意 Rails 8 已内置大部分功能，0.9.0 起在 Rails 8 上将不再修改适配器并打印弃用警告；连接池隔离仍标记为实验性。",
+   "highlights": [
+    "支持生成列（VIRTUAL/STORED）与延迟/立即外键约束",
+    "通过 database.yml 的 pragmas 列表对全部连接应用 PRAGMA 配置，并支持加载 SQLite 扩展 gem",
+    "提供 isolate_connection_pools 选项以分离读写连接池"
+   ],
+   "use_cases": [
+    "在 Rails 7.1/7.2 项目中使用 SQLite 并需要生成列、延迟外键等特性",
+    "写入操作较多、希望隔离读写连接池的 Rails + SQLite 应用",
+    "需要在 SQLite 连接中加载扩展（如 ULID）的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# ActiveRecord Enhanced SQLite3 Adapter ／ > From version 0.9.0, on Rails 8 the gem leaves the SQLite3 adapter untouched and prints a deprecation warning at boot. Remove it from your Gemfile. Two exceptions: ／ Enhance ActiveRecord's 7.1 SQLite3 adapter. Adds support for:",
+     "lines": [
+      1,
+      13,
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 提供 ActiveRecord 适配器增强，属于服务数据库生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# ActiveRecord Enhanced SQLite3 Adapter ／ Enhance ActiveRecord's 7.1 SQLite3 adapter. Adds support for: ／ This gem hooks into your Rails application to enhance the `SQLite3Adapter` automatically. No setup required!",
+   "evidence_lines": [
+    1,
+    20,
+    37
+   ]
+  },
+  "fn": "fractaledmind/activerecord-enhancedsqlite3-adapter",
+  "sha": "c6119a5ad7bc",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

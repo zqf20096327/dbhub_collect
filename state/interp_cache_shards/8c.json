@@ -8173,5 +8173,100 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "589a3908b5d0": {
+  "identity": {
+   "one_liner": "AI 智能体的可移植治理式记忆库，以 SQLite 存储并提供 MCP 导出",
+   "review": "这是一个面向 AI 智能体的记忆库（TypeScript），提供事实溯源、有效时间双轴查询、不可变原始文本和版本化 JSON 导出格式，内置 SqliteMemoryStore 与 InMemoryStore，并可通过 MCP 导出作为服务器运行。适合为 LLM 智能体构建可审计、可迁移记忆的开发者使用。",
+   "highlights": [
+    "每个事实节点和边携带溯源标记（UserInput/AIInferred 等）",
+    "提供 validAt 与 snapshotAsOf 两条可查询时间轴，导出为带 JSON Schema 的版本化格式",
+    "提供 MemoryStore 存储接口、一致性测试套件及 MCP 导出"
+   ],
+   "use_cases": [
+    "为 LLM 智能体构建带溯源和有效时间的本地记忆存储",
+    "需要跨运行时无损迁移智能体记忆数据的场景",
+    "需要治理式擦除与审计的智能体记忆合规场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti sel ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.",
+     "lines": [
+      22,
+      52
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库使用 SQLite 作为自身存储后端，而非为数据库生态提供工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Portable, governed, model-agnostic memory for AI agents.** ／ - `MemoryStore`: a storage-agnostic interface; `SqliteMemoryStore` and `InMemoryStore` ship, with a **conformance suite** any backend can run against itself. ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.",
+   "evidence_lines": [
+    9,
+    51,
+    52
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "flytomoon/al-buddy-memory",
+  "sha": "589a3908b5d0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

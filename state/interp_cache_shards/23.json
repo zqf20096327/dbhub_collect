@@ -10085,5 +10085,164 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a405224f1f43": {
+  "identity": {
+   "one_liner": "基于 WASM 组件模型的确定性持久化工作流引擎",
+   "review": "Obelisk 是一个以 WASM Component Model 与 WIT 接口为基础的工作流引擎，单一二进制运行确定性工作流、活动与 webhook 端点，执行日志持久化到 SQLite 或 PostgreSQL。提供 CLI、gRPC 与内置 Web UI 查看执行轨迹并重放。面向需要可重放后台任务、定时任务与批处理的开发者；README 标注为 pre-release，CLI、gRPC 与数据库 schema 可能变更。",
+   "highlights": [
+    "运行时保证工作流确定性，可基于持久化执行日志重放并从崩溃恢复",
+    "活动支持错误、超时与 WASM trap 自动重试，结果持久化",
+    "单二进制内置 Web UI、CLI 与 gRPC API，支持部署图、执行轨迹与时间回溯调试"
+   ],
+   "use_cases": [
+    "周期性任务与后台作业的编排，带重试与错误处理",
+    "AI 辅助代码的沙箱化与审计执行",
+    "端到端测试自动化，记录每步日志"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL. ／ ### Running with Postgres",
+     "lines": [
+      62,
+      167
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL.",
+     "lines": [
+      62
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为工作流引擎运行时，数据库仅作为执行日志的持久化后端，而非应用存储的数据业务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "主体 AGPL-3.0，wit/ 与 proto/ 子目录为 MIT 双许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A deterministic workflow engine built on the WASM Component Model. ／ - **Obelisk Runtime**: A single binary executing deterministic workflows, activities, ／ and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL.",
+   "evidence_lines": [
+    5,
+    61,
+    62
+   ]
+  },
+  "fn": "obeli-sk/obelisk",
+  "sha": "a405224f1f43",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "941444870ce5": {
+  "identity": {
+   "one_liner": "实时入侵检测系统，RandomForest分类网络攻击日志并生成SOC仪表盘",
+   "review": "SentinelAI 是一个入侵检测系统（IDS）应用，使用 RandomForest 模型对 CICIDS2017 数据集中的 15 类网络攻击进行实时分类，提供 SOC 仪表盘、告警管理和 CSV 日志导入。数据采用多库架构：SQL（默认 SQLite，可切换 PostgreSQL）存用户认证、MongoDB 存日志与告警、Redis 存会话缓存。面向安全运维与安全分析人员，通过 Docker Compose 可快速部署 Redis 与 MongoDB。",
+   "highlights": [
+    "使用 RandomForest 模型对 15 类网络攻击进行分类，仓库内附带预训练模型文件",
+    "采用 SQL + MongoDB + Redis 混合架构，分别存储用户、日志告警与会话",
+    "提供 SOC 仪表盘，支持告警状态跟踪及 PDF/JSON 导出"
+   ],
+   "use_cases": [
+    "基于 CICIDS2017 数据集的网络攻击检测实验与演示",
+    "安全运营场景下的日志导入、告警处理与可视化",
+    "多数据库混合架构（SQL/MongoDB/Redis）的教学示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **SQL (PostgreSQL/SQLite)** : Gestion sécurisée des utilisateurs avec transactions ACID",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQL (PostgreSQL/SQLite)** : Gestion sécurisée des utilisateurs avec transactions ACID ／ |SQLite|Intégré à Python| ／ #### SQLite (par défaut)",
+     "lines": [
+      15,
+      76,
+      140
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQL/MongoDB/Redis 存储自身数据的入侵检测应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SentinelAI est un IDS polyglotte temps réel avec Machine Learning pour détecter automatiquement 15 types d'attaques réseau en utilisant une architecture hybride SQL + MongoDB + Redis.** ／ SentinelAI est un système de détection d'intrusions (IDS) avancé qui combine trois technologies de bases de données pour optimiser performance, sécurité et scalabilité : ／ - **SQL** : users (authentification ACID)",
+   "evidence_lines": [
+    5,
+    13,
+    62
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "abedellah/SentinelAI",
+  "sha": "941444870ce5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

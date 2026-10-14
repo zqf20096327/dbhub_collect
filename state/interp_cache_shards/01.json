@@ -9323,5 +9323,61 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8817130c7cc2": {
+  "identity": {
+   "one_liner": "AI原生视频编辑器，以本地MCP服务器驱动代理执行编辑",
+   "review": "OpenEdit 是一款本地运行的视频编辑应用，提供媒体导入、转写、时间线编辑、MLT/FFmpeg 渲染与质量校验；外部 AI 代理通过 MCP 接口（查询项目、应用编辑、触发渲染等）操作项目，而创意决策由代理完成。面向希望用 LLM 代理剪辑视频的用户，安装包为 Windows/Linux x64 压缩包并附带安装脚本。",
+   "highlights": [
+    "通过 MCP 服务器暴露 query_project、edit_project、run_script、trigger_render 等编辑接口供外部代理调用",
+    "本地转写（可选 faster-whisper）与 MLT/FFmpeg 渲染管线，导出基于不可变源修订并验证输出",
+    "代理读取有界时间戳帧与转写片段而非整段视频，编辑可撤销并在重开项目后保留"
+   ],
+   "use_cases": [
+    "通过 LLM 代理以自然语言描述方式剪辑视频并生成成片",
+    "本地批量导入、转写素材并导出带预览校验的成品",
+    "通过 open_edit CLI 为多个项目生成 MCP 配置接入不同代理宿主"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是使用存储与渲染运行时的视频编辑应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，另有 vendored Diffusion 源码为 MPL-2.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An AI-native video editor: **select the moment, describe the edit, review the result**. ／ ## Connect your agent ／ |Interface|Purpose|",
+   "evidence_lines": [
+    3,
+    44,
+    68
+   ]
+  },
+  "fn": "AH64-dll/OpenEdit",
+  "sha": "8817130c7cc2",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

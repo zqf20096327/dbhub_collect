@@ -8325,5 +8325,147 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "37da24eab365": {
+  "identity": {
+   "one_liner": "基于 Raft 集群的嵌入式 SQLite 数据库，提供复制与高可用",
+   "review": "Hiqlite 是一个可嵌入的数据库，在 rusqlite 之上加 openraft 实现 Raft 复制，为应用提供强一致写、自动选主、自愈、备份到 s3、分布式锁与 K/V 缓存。面向使用 Rust 开发、需要本地 SQLite 数据读取速度同时要求高可用的开发者；也提供 standalone server 二进制可单机或集群运行。",
+   "highlights": [
+    "提供 Raft 集群强一致复制、自动 leader 故障转移与自愈（L38-L42）",
+    "支持加密备份到 s3、定时或手动备份与远程恢复（L46-L48）",
+    "提供 K/V 缓存、listen/notify 实时消息、分布式锁与计数器（L63-L68）"
+   ],
+   "use_cases": [
+    "需要嵌入式 SQLite 但要求集群高可用与自动故障转移的应用",
+    "需要分布式锁、计数器或节点间实时消息的场景",
+    "以单二进制方式部署带复制能力的数据库服务"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hiqlite is an embeddable SQLite database that can form a Raft cluster to provide strong consistency, high availability",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "like a Postgres anymore as well.",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目在 SQLite/rusqlite 之上构建 Raft 复制与高可用能力，是为 SQLite 提供高可用扩展的数据库引擎组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hiqlite is an embeddable SQLite database that can form a Raft cluster to provide strong consistency, high availability ／ Hiqlite builds on top of `rusqlite` and provides an async wrapper around it. For the Raft logic, it builds on top of ／ - standalone binary with the `server` feature which can run as a single node, cluster, or proxy to an existing cluster",
+   "evidence_lines": [
+    3,
+    16,
+    70
+   ]
+  },
+  "fn": "sebadob/hiqlite",
+  "sha": "37da24eab365",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "125af7c0efe3": {
+  "identity": {
+   "one_liner": "基于 SQLite 的嵌入式本地存储库，支持记录、对象、向量与图",
+   "review": "Zova 以 SQLite 为关系核心，在其上添加内容寻址对象、精确向量检索、图关系和事务事件等存储能力，打包为单文件 .zova 格式，并提供 Rust、Python、Go、JavaScript、Zig、C ABI 多语言绑定及 CLI。面向需要在本地文件中组合 SQL、对象、向量、图存储的应用开发者；格式迁移需显式执行，不支持降级。",
+   "highlights": [
+    "提供记录（SQLite 表）、内容寻址对象（SHA-256/FastCDC 分块）、精确向量检索和图关系四类存储形态",
+    "提供 Rust、Python、Go、JavaScript、Zig、C ABI 绑定及 CLI，并支持格式 9-12 的显式迁移",
+    "可将现有 SQLite 数据库复制转换为 .zova 文件，不修改源库"
+   ],
+   "use_cases": [
+    "应用需要在单一本地文件中同时使用 SQL、对象、向量和图存储",
+    "已有 SQLite 应用需增加内容寻址对象或向量存储能力",
+    "需要多语言绑定嵌入应用的本地存储场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite-backed embedded database for records, objects, vectors, and graph-aware ／ Zova keeps SQLite as the relational core and adds native storage for",
+     "lines": [
+      5,
+      8
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是内嵌 SQLite 的嵌入式数据库库，既非为某数据库生态服务的外部工具，也非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite-backed embedded database for records, objects, vectors, and graph-aware ／ Zova keeps SQLite as the relational core and adds native storage for ／ Zova vendors SQLite. You do not need a system SQLite installation.",
+   "evidence_lines": [
+    5,
+    8,
+    110
+   ]
+  },
+  "fn": "ata-sesli/zova",
+  "sha": "125af7c0efe3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

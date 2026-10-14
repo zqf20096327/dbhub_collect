@@ -9476,5 +9476,76 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "da89b83b8c22": {
+  "identity": {
+   "one_liner": "本地优先的 AI 上下文摄取检索工具，基于 SQLite 索引并提供 MCP 服务",
+   "review": "Context Harness 将文件、Git 仓库、S3 等来源摄取为本地 SQLite 索引，支持 FTS5 关键词检索与嵌入向量混合检索，并通过 CLI 和 MCP HTTP 服务暴露给 Cursor、Claude 等 AI 工具，还可运行带工具和检查点的本地代理。使用 Rust 编写，提供二进制、Nix 与源码安装方式。",
+   "highlights": [
+    "连接器式摄取，支持文件系统、Git 仓库、S3 与 Lua 脚本扩展",
+    "基于 SQLite FTS5 的关键词检索与关键词+语义混合检索",
+    "内置 MCP Streamable HTTP 服务端与 REST API，支持可复用 profile 和本地受治理代理"
+   ],
+   "use_cases": [
+    "为 Cursor/Claude 等 AI 编码工具提供项目知识上下文",
+    "对本地文档、代码仓库进行关键词与语义混合检索",
+    "在工作区内运行可检查、可恢复的本地自动化代理任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite index, then gives you two execution paths: reusable profiles for clients such ／ - **Local-first storage** — SQLite with FTS5 for keyword search ／ Sources → Ingest + Index → Canonical SQLite Knowledge → CLI / MCP Profiles / Governed Agents",
+     "lines": [
+      15,
+      24,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为本地嵌入存储与检索索引，服务于 AI 工具而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ingests files, Git repositories, S3, and custom sources into an inspectable local ／ - **Local-first storage** — SQLite with FTS5 for keyword search ／ Sources → Ingest + Index → Canonical SQLite Knowledge → CLI / MCP Profiles / Governed Agents",
+   "evidence_lines": [
+    14,
+    24,
+    169
+   ]
+  },
+  "fn": "parallax-labs/context-harness",
+  "sha": "da89b83b8c22",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

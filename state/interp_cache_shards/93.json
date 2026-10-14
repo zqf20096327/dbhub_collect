@@ -9161,5 +9161,256 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1bd175fb69c4": {
+  "identity": {
+   "one_liner": "透明转发的 SSH/HTTPS/K8s/MySQL/PostgreSQL/RDP/VNC 堡垒机",
+   "review": "Warpgate 是一个部署在 DMZ/堡垒机上的代理服务，接受 SSH、HTTPS、Kubernetes、MySQL、PostgreSQL、RDP 和 VNC 连接并转发到目标，提供用户-目标 1:1 授权、会话录制回放、内置管理 Web UI、TOTP/OpenID Connect 2FA 与 SSO、IP 防爆破。适合需要远程访问审计的运维团队；无需客户端改造，单二进制运行，配置数据存于 SQLite。",
+   "highlights": [
+    "支持透明转发 SSH、HTTPS、Kubernetes、MySQL、PostgreSQL、RDP、VNC 连接，原生客户端无需改造",
+    "提供会话录制与实时查看，内置管理 Web UI，支持 2FA（TOTP）与 SSO（OpenID Connect）",
+    "单二进制、无依赖，内置 IP 封锁与用户锁定等防爆破机制"
+   ],
+   "use_cases": [
+    "在 DMZ 部署堡垒机，按用户精确分配对内网主机与服务的访问",
+    "录制并回放运维会话用于审计",
+    "通过浏览器直接访问 SSH/RDP/VNC 目标"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Warpgate is a smart & fully transparent SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC bastion host that doesn't require a client app or an SSH wrapper. ／ Warpgate is a service that you deploy on the bastion/DMZ host, which will accept SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC connections and provide an (optional) web admin UI.",
+     "lines": [
+      9,
+      65
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Warpgate is a smart & fully transparent SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC bastion host that doesn't require a client app or an SSH wrapper. ／ Warpgate is a service that you deploy on the bastion/DMZ host, which will accept SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC connections and provide an (optional) web admin UI.",
+     "lines": [
+      9,
+      65
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "You manage the target and user lists and assign them to each other through the admin UI, and the session history is stored in an SQLite database (default: in `/var/lib/warpgate`). ／ * Database: SQLite via `sea-orm` + `sqlx`",
+     "lines": [
+      73,
+      100
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Warpgate 为包括 MySQL 和 PostgreSQL 在内的数据库提供代理转发服务，服务于数据库访问链路。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Warpgate is a smart & fully transparent SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC bastion host that doesn't require a client app or an SSH wrapper. ／ Warpgate is a service that you deploy on the bastion/DMZ host, which will accept SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC connections and provide an (optional) web admin UI. ／ It receives connections with specifically formatted credentials, authenticates the user locally, connects to the target itself, and then connects both parties together while (optionally) recording the session.",
+   "evidence_lines": [
+    9,
+    65,
+    69
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "warp-tech/warpgate",
+  "sha": "1bd175fb69c4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1347b5b7065d": {
+  "identity": {
+   "one_liner": "VS Code 数据库客户端扩展，本地直连多库，提供查询、设计、导入导出与监控",
+   "review": "这是一个运行在 VS Code、Cursor、Windsurf、Trae 等 IDE 中的数据库客户端扩展，面向开发者，提供连接管理、SQL 编辑与补全、可视化表结构设计、数据导入导出、Faker/AI 模拟数据生成、会话监控与 SQL 历史审计等功能。数据库纯本地直连，密码经 VS Code SecretStorage 加密，README 称支持 16 种数据库。",
+   "highlights": [
+    "支持 MySQL、Oracle、PostgreSQL、达梦等 16 种数据库的本地直连",
+    "提供可视化表结构设计器、DDL 预检与结果集在线编辑回写",
+    "包含会话监控、危险 SQL 拦截、只读连接保护与 SQL 执行历史审计"
+   ],
+   "use_cases": [
+    "在 VS Code 系 IDE 中进行多数据库查询与表结构设计",
+    "跨库/跨表数据抽取迁移与 CSV/Excel/JSON/SQL 批量导入导出",
+    "生成模拟测试数据并监控活动会话、追溯 SQL 执行历史"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。 ／ - **SQL 格式化**：`Ctrl+Alt+F` / `Cmd+Alt+F` 一键格式化，智能适应 MySQL / Oracle PL/SQL / PG / SQLite 方言。",
+     "lines": [
+      3,
+      12,
+      53
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。 ／ - **SQL 格式化**：`Ctrl+Alt+F` / `Cmd+Alt+F` 一键格式化，智能适应 MySQL / Oracle PL/SQL / PG / SQLite 方言。",
+     "lines": [
+      3,
+      12,
+      53
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。 ／ - **SQL 格式化**：`Ctrl+Alt+F` / `Cmd+Alt+F` 一键格式化，智能适应 MySQL / Oracle PL/SQL / PG / SQLite 方言。",
+     "lines": [
+      3,
+      12,
+      53
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。 ／ - **SQL 格式化**：`Ctrl+Alt+F` / `Cmd+Alt+F` 一键格式化，智能适应 MySQL / Oracle PL/SQL / PG / SQLite 方言。",
+     "lines": [
+      3,
+      12,
+      53
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。",
+     "lines": [
+      3,
+      12
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。",
+     "lines": [
+      3,
+      12
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。",
+     "lines": [
+      3,
+      12
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。",
+     "lines": [
+      3,
+      12
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。",
+     "lines": [
+      3,
+      12
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。",
+     "lines": [
+      3,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为多种数据库提供客户端连接管理功能的 IDE 扩展工具，而非以数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "Dameng",
+    "openGauss",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向开发者的 VS Code 全能数据库客户端扩展，**支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino** 等 16 种数据库。数据库纯本地直连，业务数据与 SQL 绝不经云端中转，密码采用 SecretStorage 加密存储。连接管理、SQL 开发、可视化表设计、结果集分析、数据导入导出、模拟数据生成与性能监控一站式完成。 ／ - **多数据库支持**：支持 MySQL、MariaDB、Oracle、PostgreSQL、人大金仓、GaussDB、openGauss、SQL Server、SQLite、DuckDB、ClickHouse、Doris、达梦 (Dameng)、Hive、Redis、Trino。 ／ 1. 点击左侧活动栏的 **DMSQL** 图标打开数据库浏览器。",
+   "evidence_lines": [
+    3,
+    12,
+    23
+   ]
+  },
+  "fn": "dmsql123/dmsql",
+  "sha": "1347b5b7065d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

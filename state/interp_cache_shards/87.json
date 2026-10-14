@@ -7341,5 +7341,358 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e49bbaf31188": {
+  "identity": {
+   "one_liner": "代码优先数据栈的反向 ETL CLI，以 YAML 定义从仓库向业务工具的同步",
+   "review": "drt 是一个反向 ETL 工具，读取数据仓库/数据库中的数据并同步到 Slack、HubSpot 等 SaaS 目的地，供数据工程师在 CI 中运行。项目提供 CLI、约 35 种目的地连接器、dbt/Ossie 元数据引导初始化、MCP 服务器与 Claude Code 技能；核心以 Apache 2.0 发布，README 提及 open core 边界见 OPEN_CORE.md。",
+   "highlights": [
+    "提供 CLI 以 YAML 声明式定义同步，可生成 Mermaid DAG 并输出 JSON 供 CI 使用",
+    "提供 PostgreSQL、MySQL、ClickHouse、SQL Server、SQLite、BigQuery、Snowflake 等来源连接器及约 35 个目的地连接器",
+    "内置 MCP 服务器与 Claude Code 技能，支持列出、运行、校验同步及死信队列重放"
+   ],
+   "use_cases": [
+    "将数据仓库中的数据激活到 Slack、HubSpot、Google Sheets 等业务工具",
+    "在 GitHub Actions、Dagster、Airflow 等环境中以 CI 方式调度数据同步",
+    "通过 dbt manifest 或 Ossie 语义模型文件生成同步配置"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "drt init --template postgres_to_slack ／ |PostgreSQL|✅ v0.1|`pip install drt-core[postgres]`|Password (env var)| ／ |PostgreSQL (upsert)|✅ v0.4|`pip install drt-core[postgres]`|Password (env var)|",
+     "lines": [
+      70,
+      215,
+      245
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|✅ v0.5|`pip install drt-core[mysql]`|Password (env var)| ／ |MySQL (upsert)|✅ v0.4|`pip install drt-core[mysql]`|Password (env var)|",
+     "lines": [
+      220,
+      246
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|✅ v0.4.2|(core)|File path|",
+     "lines": [
+      217
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|✅ v0.6|`pip install drt-core[sqlserver]`|Password (env var)|",
+     "lines": [
+      224
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Sheets, GitHub Actions, MySQL, ClickHouse, BigQuery, …) and ／ |ClickHouse|✅ v0.4.3|`pip install drt-core[clickhouse]`|Password (env var)| ／ |ClickHouse|✅ v0.5|`pip install drt-core[clickhouse]`|Password (env var)|",
+     "lines": [
+      76,
+      219,
+      247
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为连接数据库与 SaaS 目的地的数据同步工具，为数据库生态提供数据外送管道服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0，README 提及 open core 边界（OPEN_CORE.md）",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dlt loads data in, dbt transforms it, and **drt** activates it back out — reverse ETL from your warehouse to the tools your team works in, as YAML in your own repo. No dashboard to babysit, no audience builder duplicating what dbt already does, no hosted runtime billing you per row. Your data goes straight from your warehouse to the destination — never through a drt-hosted intermediary. ／ |PostgreSQL|✅ v0.1|`pip install drt-core[postgres]`|Password (env var)| ／ |MySQL|✅ v0.5|`pip install drt-core[mysql]`|Password (env var)|",
+   "evidence_lines": [
+    7,
+    215,
+    220
+   ]
+  },
+  "fn": "drt-hub/drt",
+  "sha": "e49bbaf31188",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7933905c9dc2": {
+  "identity": {
+   "one_liner": "菲律宾比里兰省创意产业登记目录平台，React+Express+Postgres",
+   "review": "Bilikha 是一个面向比里兰省创意人才的登记目录与咨询平台，连接创意从业者与客户、地方政府和组织，覆盖 RA 11904 定义的九大创意领域。技术栈为 React 19 PWA 前端 + Express 5 后端，使用 Drizzle ORM 操作 Docker 部署的 PostgreSQL 17，前后端可独立部署。属于使用数据库存数据的应用。",
+   "highlights": [
+    "提供创意人才目录、报价发布与按工艺/姓名/城镇搜索，支持 Waray、Cebuano、Tagalog、English 日常用语别名",
+    "包含账号注册与管理员审核、工作协议、评分、组织邀请加入及通知中心",
+    "可安装 PWA，共享链接生成预览卡片，浅色/深色主题"
+   ],
+   "use_cases": [
+    "为地方省份建立创意产业人才登记与查询目录",
+    "连接本地创意从业者与客户、政府机构和组织进行聘用洽谈",
+    "管理创意领域分类（九大领域 81 个子领域）下的个人与组织档案"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "npm run db:up # Postgres in Docker ／ |Database|PostgreSQL 17|",
+     "lines": [
+      16,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储数据的目录平台应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Biliran Creative Industries Registry** — a directory and inquiry platform ／ |Database|PostgreSQL 17| ／ └── docker-compose.yml Local Postgres",
+   "evidence_lines": [
+    3,
+    28,
+    46
+   ]
+  },
+  "fn": "ELITES-ORG/bilikha",
+  "sha": "7933905c9dc2",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3a4e7a2715ec": {
+  "identity": {
+   "one_liner": "面向 CLI Agent 的上下文生命周期管理引擎，含三级缓存与虚拟文件系统",
+   "review": "ContextEngine（oGMemory 镜像）为 CLI Agent 提供上下文生命周期管理：在 Agent 循环的六个边界阶段拦截读/写/压缩/归档操作，按七类上下文类型施加不同写入策略，通过 L0/L1/L2 三级索引做分层向量检索，并以 ContextFS 将操作映射为 ctx:// 文件操作。开发模式用 InMemory+PostgreSQL，生产模式用 pgvector+RLS，另有本地 openGauss 模式。适合构建需要跨会话记忆与多租户隔离的 Agent 开发者。",
+   "highlights": [
+    "在 Agent 循环六个边界阶段拦截上下文操作，LLM 推理过程不受影响",
+    "按七类上下文类型提供 Merge/Aggregate/Append 等四种写入策略，支持 YAML 声明式 schema 扩展类型",
+    "L0/L1/L2 三级索引检索与 Outbox 异步索引模式，ContextFS 提供文件系统级多租户隔离"
+   ],
+   "use_cases": [
+    "为 CLI Agent 构建跨会话记忆与冷启动注入",
+    "多 Agent 系统中的工作上下文共享与租户隔离",
+    "长会话上下文压缩以控制 token 开销"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Dev mode**: InMemory vectors + PostgreSQL — install `postgresql` and `pgvector` extension. ／ **Production**: pgvector + PostgreSQL RLS — horizontally scalable with row-level tenant isolation.",
+     "lines": [
+      159,
+      160
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "Option A: Local OpenGauss mode (default)",
+     "lines": [
+      257
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 PostgreSQL/openGauss 作为上下文存储后端，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "opengauss-mirror/oGMemory",
+  "sha": "3a4e7a2715ec",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ff7990315bae": {
+  "identity": {
+   "one_liner": "面向达梦 DM8 与 MySQL 的只读 MCP 服务器，为 AI 代理提供受控查询",
+   "review": "db-readonly 是一个 MCP 服务器，在 AI 客户端（Codex/Claude Code/Cursor 等）与达梦 DM8、MySQL 之间提供只读访问层，通过 SQL 只读校验、表级白/黑名单、禁止 SELECT *、行数与超时限制控制查询范围，密码仅从环境变量读取。面向需要让 AI 代理安全查询生产数据库的团队。",
+   "highlights": [
+    "提供表级 allowTables/denyTables 白名单与黑名单控制，禁止 SELECT * 与全部写语句",
+    "支持 maxRows 行数上限与 queryTimeoutSeconds 查询超时限制",
+    "凭据仅从环境变量读取，并提供 Java 实体名到表名的映射查询（达梦）"
+   ],
+   "use_cases": [
+    "让 AI 代理以受控只读方式访问达梦 DM8 或 MySQL 生产/开发库",
+    "需要限制 AI 可见表、字段与返回行数的场景"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "原生支持 达梦 DM8 与 MySQL · 适配 Codex / Claude Code / Cursor 等任意 MCP 客户端 ／ |🗂️ **多数据库**|原生支持达梦 DM8 与 MySQL，信创环境也能接入 AI 生态| ／ |🧩 **Java 实体名推断**（达梦）|Java 风格实体名自动映射表名，后端团队零成本接入|",
+     "lines": [
+      7,
+      32,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "原生支持 达梦 DM8 与 MySQL · 适配 Codex / Claude Code / Cursor 等任意 MCP 客户端 ／ |🗂️ **多数据库**|原生支持达梦 DM8 与 MySQL，信创环境也能接入 AI 生态| ／ C -->|通过| E[(\"MySQL\")]",
+     "lines": [
+      7,
+      32,
+      47
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- [ ] PostgreSQL / Oracle / SQL Server 支持",
+     "lines": [
+      167
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- [ ] PostgreSQL / Oracle / SQL Server 支持",
+     "lines": [
+      167
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- [ ] PostgreSQL / Oracle / SQL Server 支持",
+     "lines": [
+      167
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为数据库提供面向 AI 客户端的只读 MCP 访问中间层，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 原生支持 达梦 DM8 与 MySQL · 适配 Codex / Claude Code / Cursor 等任意 MCP 客户端 ／ `db-readonly` 在 AI 与数据库之间加一道**只读闸门**：查询能力充分开放，写操作物理拦截，危险行为层层设防。**AI 能读什么、能读多少、能读多久，全部由你说了算。** ／     A[\"AI Agent<br/>(Codex / Claude Code / Cursor)\"] -->|MCP 协议| B[\"db-readonly\"]",
+   "evidence_lines": [
+    7,
+    25,
+    44
+   ]
+  },
+  "fn": "Oscar111111/db-readonly",
+  "sha": "ff7990315bae",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9139,5 +9139,204 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a8147ea07e5d": {
+  "identity": {
+   "one_liner": "基于开放数据格式的分析型数据库引擎",
+   "review": "Pivot 是用 Rust 编写的 OLAP 分析数据库，直接在 Delta Lake、Iceberg 等开放数据格式上执行低延迟查询，可作为服务端运行，也可作为本地引擎供用户和 AI 代理直接查询。面向需要湖仓分析与看板/应用内分析共享同一引擎的用户。README 自述处于早期开发阶段，尚未可投入生产，版本间可能有破坏性变更。",
+   "highlights": [
+    "在 Delta Lake 和 Iceberg 等开放数据格式上执行查询，数据可被其他查询引擎访问",
+    "以对象存储为后端，支持扩容、缩容和缩为零",
+    "支持服务端模式和本地嵌入模式，本地临时分析与代理查询可复用同一引擎"
+   ],
+   "use_cases": [
+    "基于湖仓开放格式的低延迟交互式分析查询",
+    "本地临时分析与 AI 代理直接查询数据源",
+    "看板与应用内分析场景的查询引擎"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "Pivot is a high-performance analytics database that runs on open data formats. It delivers low-latency queries and high concurrency without replicating data into a dedicated real-time analytics database such as ClickHouse / Druid.",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将 Pivot 描述为运行在开放数据格式上的分析数据库引擎，用于查询湖仓数据，而非使用某个数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pivot is a high-performance analytics database that runs on open data formats. It delivers low-latency queries and high concurrency without replicating data into a dedicated real-time analytics database such as ClickHouse / Druid. ／ - **Scalable** - With object storage as its backing store, Pivot can be scaled up, down, or to zero almost instantly. ／ > Pivot is in early development and not yet production ready. Expect breaking",
+   "evidence_lines": [
+    12,
+    23,
+    37
+   ]
+  },
+  "fn": "pivotlake/pivot",
+  "sha": "a8147ea07e5d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "67f55b97b58e": {
+  "identity": {
+   "one_liner": "自托管密码管理器，本地 PostgreSQL 存储加密保险库",
+   "review": "这是一个自托管的个人密码管理器，用 Docker 一键部署，后端为 Python/FastAPI，数据存于 PostgreSQL 16。所有密码以主密码派生密钥（Argon2id+Fernet）加密存储，无账号、无云同步、无遥测，也无密码找回机制。面向愿意自己管机器和备份的个人用户，不支持浏览器自动填充与团队共享。",
+   "highlights": [
+    "提供主密码加密的保险库、TOTP 双因素、安全笔记、加密附件与加密备份导出",
+    "支持从 Chrome、Bitwarden、KeePass 等通过 CSV 导入，并提供 CLI 工具与签名验证的自更新",
+    "在本机执行保险库健康检查与密码生成（crypto.getRandomValues）"
+   ],
+   "use_cases": [
+    "个人在自有硬件上自托管密码管理，不依赖第三方云服务",
+    "需要无账号、无遥测的本地密码存储与 TOTP 验证码管理",
+    "从其他密码管理器 CSV 迁移到自托管环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16|",
+     "lines": [
+      131
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明后端使用 PostgreSQL 16 作为存储数据库，密码管理器本身是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|PostgreSQL 16| ／ CipherMoth runs on your own machine with Docker. One command sets a strong database password, pulls ／ A simple, self-hosted password manager with **no accounts, no cloud, and no witnesses.**",
+   "evidence_lines": [
+    131,
+    37,
+    5
+   ]
+  },
+  "fn": "mr-grj/ciphermoth",
+  "sha": "67f55b97b58e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "adb7fb1c2f7c": {
+  "identity": {
+   "one_liner": "AI 软件工厂：多智能体流水线把需求规格转化为经审查的 PR",
+   "review": "Spaces 是一个按 research→specify→plan→tasks→implement→review→verify→deliver 流水线组织的多智能体开发运行时，面向工程负责人与中小团队，在 GitHub Spec Kit 与 Pi Coding Agent SDK 上实现 AIDLC 式规格驱动交付，内置人工审批门、看板 UI、组织知识库与数据脱敏护栏；功能意图与文档状态记录在 Postgres 中，通过 GitHub/Jira/Confluence/Linear/Slack 集成接入。",
+   "highlights": [
+    "提供 AIDLC 流水线模板，用声明式 YAML DSL 配置阶段、角色、模型、分支与重试",
+    "知识库内容分块后存入 Postgres 并建立全文索引与 pgvector 向量索引，供 agent 检索",
+    "提供数据护栏：秘密与个人数据在进入模型前替换为令牌，支持 Mask/Strict/Warn/Off 模式"
+   ],
+   "use_cases": [
+    "团队将 Jira/Linear 工单或想法转化为带审查门的自动化特性交付流水线",
+    "组织将 Confluence/GitHub 文档导入知识库供各阶段 agent 检索引用",
+    "实验 AIDLC 式规格驱动的多智能体 SDLC 工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "is chunked and indexed in Postgres (full-text plus pgvector embeddings); agents ／ Postgres, a job queue, and a project-board UI. ／ documents and every change are recorded in Postgres, with the files as the",
+     "lines": [
+      92,
+      144,
+      168
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Spaces 使用 Postgres 存储知识库索引与意图状态，是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "source-available",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Spaces is a source-available software factory. Every feature moves down an ／ is chunked and indexed in Postgres (full-text plus pgvector embeddings); agents ／  Postgres, a job queue, and a project-board UI.",
+   "evidence_lines": [
+    7,
+    92,
+    144
+   ]
+  },
+  "fn": "rayedbajwa/spaces",
+  "sha": "adb7fb1c2f7c",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

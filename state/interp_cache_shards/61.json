@@ -9407,5 +9407,96 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8f1899833f21": {
+  "identity": {
+   "one_liner": "FastAPI 安全代理注册与命令任务控制面，数据存 SQLite",
+   "review": "一个基于 FastAPI 的控制面服务，用于注册安全代理并在 SQLite 中记录其命令任务状态（仅登记不执行），提供 JWT 认证、token 黑名单、角色化 REST API 和默认关闭的 CRUDAdmin 管理界面。面向需要登记安全代理任务流程的团队；项目自述为早期阶段，单进程单 SQLite 文件，无 WAL、无速率限制、无 CSRF 防护，不支持 PostgreSQL/MySQL。",
+   "highlights": [
+    "提供带角色控制的 REST API，用于注册安全代理并跟踪命令任务状态（PENDING/RUNNING/COMPLETED/ERROR）",
+    "实现 JWT access/refresh 双令牌、数据库黑名单登出、bcrypt+SHA-256 预哈希与时间常数化验证",
+    "仅使用 SQLite 存储，README 明确声明不支持 PostgreSQL/MySQL（相关设置为已移除的死代码）"
+   ],
+   "use_cases": [
+    "为安全代理的命令任务提供登记与状态查询的集中式控制面",
+    "作为 FastAPI + JWT 认证 + SQLite 的服务模板参考实现",
+    "在单机场景下记录安全运维任务的待执行清单（非执行引擎）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Not multi-database.** SQLite only. The Postgres and MySQL settings",
+     "lines": [
+      99
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Not multi-database.** SQLite only. The Postgres and MySQL settings",
+     "lines": [
+      99
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Timing oracle**: `authenticate_user` runs a dummy bcrypt",
+     "lines": [
+      206
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Registers security agents as rows in a SQLite database. ／ the database is SQLite-on-disk with no WAL or replication. ／ - **Not multi-database.** SQLite only. The Postgres and MySQL settings",
+     "lines": [
+      20,
+      98,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储代理与任务数据的应用服务，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Status: early-stage.** This is a FastAPI control plane for registering ／ - Registers security agents as rows in a SQLite database. ／ - **Not multi-database.** SQLite only. The Postgres and MySQL settings",
+   "evidence_lines": [
+    8,
+    20,
+    99
+   ]
+  },
+  "fn": "frangelbarrera/secure-agent-orchestrator",
+  "sha": "8f1899833f21",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

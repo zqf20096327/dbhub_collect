@@ -9773,5 +9773,292 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "422877cf9262": {
+  "identity": {
+   "one_liner": "属性图数据库，内置关系、向量检索与 MCP 支持",
+   "review": "LiteGraph 是一个 .NET 实现的属性图数据库，将图关系、标签、JSON 数据与向量搜索放在同一持久层，支持嵌入 .NET 进程或以 REST 服务器独立运行，并提供 C#/Python/JavaScript SDK、MCP 服务器和 Web 仪表盘。存储层使用 SQLite（嵌入式）或 PostgreSQL+pgvector（生产与多节点集群）。适合需要在应用内嵌图与向量持久化、或通过 MCP 供 AI Agent 访问图数据的开发者。",
+   "highlights": [
+    "提供 SQLite 与 PostgreSQL+pgvector 两种存储后端，后者支持多节点集群部署",
+    "内置原生图查询语言、图算法（PageRank、中心性、社区检测等）与向量搜索",
+    "提供 REST 服务器、MCP 服务器、官方 SDK 与 Next.js/React 仪表盘，支持 Native AOT 发布"
+   ],
+   "use_cases": [
+    "为应用提供图关系、标签与向量一体的持久化层",
+    "通过 MCP 让 AI Agent 读写图数据并在图上执行检索",
+    "基于 Docker Compose 部署单节点或负载均衡后的多节点集群"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL provider with pgvector for production, including multi-node clusters behind a load balancer ／ - Vector search: pgvector HNSW in the database on PostgreSQL, `HnswLite` `2.1.0` in process on SQLite ／ - Docker Compose deployments for a single node on SQLite, a single node on PostgreSQL, and a multi-node cluster, each with MCP, the dashboard, Prometheus, Loki, and Grafana OSS",
+     "lines": [
+      16,
+      20,
+      26
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite provider for embedded, local, and test use, with in-process HNSW vector indexing through `HnswLite` ／ - Vector search: pgvector HNSW in the database on PostgreSQL, `HnswLite` `2.1.0` in process on SQLite ／ - Docker Compose deployments for a single node on SQLite, a single node on PostgreSQL, and a multi-node cluster, each with MCP, the dashboard, Prometheus, Loki, and Grafana OSS",
+     "lines": [
+      15,
+      20,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库引擎，通过内置 provider 适配 SQLite 与 PostgreSQL 作为存储层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LiteGraph is a property graph database for applications that need graph relationships, tags, labels, JSON data, and vector search in one persistence layer. It can be embedded in a .NET process with `LiteGraphClient`, run as a standalone REST server, used through official SDKs, managed through the dashboard, or controlled by AI agents through the Model Context Protocol (MCP). ／ - SQLite provider for embedded, local, and test use, with in-process HNSW vector indexing through `HnswLite` ／ - PostgreSQL provider with pgvector for production, including multi-node clusters behind a load balancer",
+   "evidence_lines": [
+    7,
+    15,
+    16
+   ]
+  },
+  "fn": "litegraphdb/litegraph",
+  "sha": "422877cf9262",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "59474475fe10": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的银行与金融聚合 REST 平台，含离线 UPI 网状结算引擎",
+   "review": "FinFlow Core 是一个用 Java 17 和 Spring Boot 3.3 构建的金融服务 REST 平台，面向需要记录交易、分类预算、生成月度分析的用户，并内置离线 UPI 网状支付结算子系统，通过 BLE 中继转发加密报文、以 CAS 去重和数字签名防篡改重放。数据存储使用 PostgreSQL，支持 Docker Compose 一键启动和 Render 部署。",
+   "highlights": [
+    "提供认证、分类、交易、月度分析等 REST API，使用 Spring Security 6 JWT 做无状态认证",
+    "内置离线 UPI 网状结算子系统，采用 RSA-OAEP + AES-256-GCM 混合加密与 CAS 去重",
+    "提供 Docker Compose 启动、Render 一键部署及单元/集成/并发测试套件"
+   ],
+   "use_cases": [
+    "个人收支记录与月度财务分析",
+    "无网络环境下的离线点对点支付报文中继与结算",
+    "金融类后端服务的参考实现与部署演练"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 作为技术栈组成部分，是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### **FinFlow Core — Production-Grade Banking & Financial Aggregation REST Platform** ／ PostgreSQL ／ * **Offline UPI Mesh Settlement Engine:** Full store-and-forward peer-to-peer payment settlement over Bluetooth Low Energy (BLE) gossip relays for zero-connectivity environments (basements, remote flights, disaster zones).",
+   "evidence_lines": [
+    10,
+    16,
+    23
+   ]
+  },
+  "fn": "ronitgupta138/finflow-core",
+  "sha": "59474475fe10",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "142787d0f985": {
+  "identity": {
+   "one_liner": "家庭/小企业自托管的轻量文档归档系统，单容器含OCR与全文搜索",
+   "review": "nexpaper 是面向家庭或小企业的自托管文档管理系统，提供上传、OCR 识别、全文搜索、电子发票读取和 Paperless-ngx 导入。它以单容器运行，数据用 SQLite 存储并直接以普通文件存放文档，支持 vault 权限、双因素认证与 OpenID Connect 登录。适合希望在家中服务器上自行管理纸质文件数字化的用户，部署通过 docker compose 完成。",
+   "highlights": [
+    "单容器运行，使用 SQLite 存储账号、设置、识别文本与搜索索引，文档以普通文件保存在 /data/dokumente",
+    "支持 OCR 文本识别、部分词匹配与字段过滤搜索（如 kind:invoice amount:>100）",
+    "支持电子发票格式 ZUGFeRD、Factur-X、XRechnung 的数据读取，并可从 Paperless-ngx 导入"
+   ],
+   "use_cases": [
+    "家庭或小企业在自己服务器上归档扫描文件与电子发票",
+    "从 Paperless-ngx 迁移已有文档库",
+    "通过手机 PWA 上传票据照片并自动归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "firm, on your own server. Upload, find, done. One container, no Redis, no Celery, no Postgres, and an import that takes ／ - **No Redis, no Celery, no Postgres.** One container, SQLite, plain readable files on the disk.",
+     "lines": [
+      4,
+      18
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **No Redis, no Celery, no Postgres.** One container, SQLite, plain readable files on the disk. ／ |`nexpaper.db`|The SQLite database: accounts, settings, the filing, the recognised text and the search index.| ／ Mount `/data` from a local disk, never from an SMB or NFS share: SQLite's locking does not work reliably over network",
+     "lines": [
+      18,
+      167,
+      182
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其用 SQLite 存储账号、设置、识别文本与搜索索引，是使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **No Redis, no Celery, no Postgres.** One container, SQLite, plain readable files on the disk. ／ **Paperless-ngx for the home: the simple version.** A light filing cabinet for the papers of a household or a small",
+   "evidence_lines": [
+    18,
+    3
+   ]
+  },
+  "fn": "DerKezorm/nexpaper",
+  "sha": "142787d0f985",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ac30d14564e3": {
+  "identity": {
+   "one_liner": "SQLite sqlite3_rsync 的 SSH 命令注入漏洞研究与复现报告",
+   "review": "该项目是针对 SQLite 3.53.4 sqlite3_rsync 工具的远程命令注入（CWE-78）漏洞披露仓库，包含漏洞机理分析（OpenSSH argv 拼接导致引号失效）、CVSS 评分、本地实验室复现脚本与修复建议（hex 编码文件名）。面向安全研究人员与 SQLite 维护者，仅含回环实验室，不含逆向 shell。",
+   "highlights": [
+    "提供漏洞机理分析：OpenSSH 远程 argv 拼接使本地单引号转义失效",
+    "包含 CVSS 3.1 评分（8.8）与 CWE-78 分类说明",
+    "提供本地回环实验室复现脚本与修复方案说明"
+   ],
+   "use_cases": [
+    "安全研究人员复现 sqlite3_rsync 命令注入",
+    "运维评估是否受 SQLite 3.53.4 影响",
+    "开发者参考上游修复方案（hex-encode filenames）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**SQLite** 3.53.4 (`b09c88c`) `sqlite3_rsync` quotes `USER@HOST:PATH` for local `/bin/sh -c`. OpenSSH then space-joins the remote argv for the login shell without those quotes. A semicolon, `$()`, backtick, or `|` in PATH runs as the SSH remote UID. Util, not ",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库内容为 SQLite 自带工具 sqlite3_rsync 的漏洞分析与复现，属于数据库安全研究材料而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU Affero GPL v3.0（报告中标注的漏洞实验代码许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Class:** RCE (command injection) ／ **SQLite** 3.53.4 (`b09c88c`) `sqlite3_rsync` quotes `USER@HOST:PATH` for local `/bin/sh -c`. OpenSSH then space-joins the remote argv for the login shell without those quotes. A semicolon, `$()`, backtick, or `|` in PATH runs as the SSH remote UID. Util, not libsqlite3. Ada Logics `readPow2` `x>16` stack smash is closed on this pin. ／ ```bash",
+   "evidence_lines": [
+    15,
+    18,
+    49
+   ]
+  },
+  "fn": "abraxas/sqlite-rsync-ssh",
+  "sha": "ac30d14564e3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

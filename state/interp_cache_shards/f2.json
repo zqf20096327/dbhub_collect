@@ -9967,5 +9967,79 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d3cb4cb403ae": {
+  "identity": {
+   "one_liner": "Rust 编写的 PostgreSQL 19 兼容数据库，单引擎支持服务端与嵌入式运行",
+   "review": "rupg 是一个用 Rust 实现的 PostgreSQL 19 兼容数据库引擎，同一引擎既可作为服务器运行，也可作为嵌入式库在进程内使用，数据存储在单一压缩列式文件中，包含 MVCC 事务、图与向量索引以及分片设计。目前处于 M1 阶段，尚未支持 SQL 查询。面向希望在应用内嵌入数据库、并关注列式存储与分布式分片场景的开发者。",
+   "highlights": [
+    "单引擎支持服务端（PostgreSQL 协议 3.0/3.2）与嵌入式（Rust/C/WASM）两种运行方式",
+    "单一 .rupg 文件存储，冷数据列式压缩、热数据行页，文件格式为分片与副本设计",
+    "提供图邻接索引 USING link 与向量索引 USING vector（DiskANN/RaBitQ）"
+   ],
+   "use_cases": [
+    "应用进程内嵌入数据库而无需独立服务器",
+    "兼容 PostgreSQL 客户端（psql、psycopg 等）接入的实验性服务端场景",
+    "需要列式分析与图/向量索引能力的 HTAP 原型"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "A PostgreSQL 19 compatible database in Rust. It runs as a server and as an embedded library, on one file. ／ A client that connects to PostgreSQL 19 connects to rupg with no change except the host, the port and the credentials. The same engine also runs inside the application process, with no server. A database is one `.rupg` file. Cold data is in compressed columns. ／ |Compatibility|Pass the PostgreSQL 19 regression suite, the isolation suite and the suites of 48 clients at the rate of a real PostgreSQL 19 server. Shims emulate versions 14 to 18.|05|",
+     "lines": [
+      3,
+      7,
+      17
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "|Analytic speed|ClickBench hot sum at most 1.753 s on `c6a.4xlarge`. That is one tenth of ClickHouse (17.53 s). TPC-H SF100 at 10x DuckDB.|02| ／ |G2|ClickBench, `c6a.4xlarge`|hot sum below ClickHouse (17.53 s)|M4|",
+     "lines": [
+      18,
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库内核/引擎实现，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PostgreSQL 19 compatible database in Rust. It runs as a server and as an embedded library, on one file. ／ **Status: M1.** The file, the log, recovery and a Rust key-value API over typed tables work. The engine does not answer SQL yet. The milestones that build the engine are issues with the label `kind/milestone`. ／ - **One engine, four ways in.** The server speaks protocol 3.0 and 3.2. The library opens a file in process from Rust, C (with libpq exports) or WebAssembly. A replica follows the log. The importer reads PostgreSQL data directories, `pg_dump` archives and logical replication. All four use the same parser, catalog, executor and file.",
+   "evidence_lines": [
+    3,
+    9,
+    46
+   ]
+  },
+  "fn": "tamnd/rupg",
+  "sha": "d3cb4cb403ae",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

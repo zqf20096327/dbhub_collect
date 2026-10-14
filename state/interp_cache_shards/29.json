@@ -9671,5 +9671,59 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c06754bf2b3c": {
+  "identity": {
+   "one_liner": "Rust 编写的单线程事件驱动内存键值存储",
+   "review": "SkiffDB 是用 Rust 从零实现的内存键值数据存储，采用单线程事件驱动核心，配套自定义二进制协议、CLI 客户端与基准工具，目标场景是低延迟缓存、会话存储与工作队列。面向学习与实验用途；服务器依赖 Linux epoll，v0.1 早期版本尚不可用于生产。安装方式为源码 cargo 构建。",
+   "highlights": [
+    "提供单线程事件驱动核心与自定义二进制线协议，附 CLI 客户端与负载生成器 skiff-bench",
+    "支持 put/fetch/bump 等命令、WAL 持久化、内存上限与后台压缩/快照",
+    "服务器要求 Linux（epoll），默认端口 7878"
+   ],
+   "use_cases": [
+    "低延迟缓存与会话存储",
+    "带原子操作的内存工作队列",
+    "实时排行榜与计数器"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明它是自研的键值存储引擎本体，而非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`SkiffDB` is a high-performance, single-threaded, event-driven, in-memory key-value data store built from the ground up in Rust. Designed for predictable sub-millisecond latencies and high concurrency, it features its own custom binary wire protocol, command dispatch engine, streaming I/O buffers, and write-ahead persistence layer. ／ `SkiffDB` operates on a **single-threaded, event-driven core** model: network polling, frame parsing, command execution, and memory storage execute sequentially on one main thread without locks, mutexes, or reference counting overhead. Heavy operations (disk fsync, background compaction, snapshotting) are offloaded to dedicated background threads. ／ v0.1.0 is an early learning release, not production ready. See docs/benchmarks.md for initial benchmark numbers and the CHANGELOG for release details. Linux is needed for the server (epoll); the client and CLI also build on Windows.",
+   "evidence_lines": [
+    8,
+    18,
+    6
+   ]
+  },
+  "fn": "skiffdb/skiffdb",
+  "sha": "c06754bf2b3c",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

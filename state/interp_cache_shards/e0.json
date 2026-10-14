@@ -9262,5 +9262,73 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "757e1287738e": {
+  "identity": {
+   "one_liner": "MCP 共享记忆层，为 AI 编码代理提供本地 SQLite 事实存储",
+   "review": "Memory Arbiter 通过 MCP 协议为 Claude Code、Cursor、Codex 等 AI 编码代理提供共享事实库：所有代理读写同一份本地 SQLite 文件，包含词法/语义召回、本地 mDeBERTa 冲突判定、来源追溯与信任级别锁定，并提供本地浏览器控制台做知识管理。面向同时使用多个 AI 编码工具的开发者，要求配置 client 与 agent_id，模型全部本地运行，仅可选 PyPI 更新检查。",
+   "highlights": [
+    "提供 4 个 MCP 工具（memory/memory_review/memory_govern/memory_repair），支持 remember/find/read/update 等操作，read 支持 span 精确切片引用",
+    "本地 mDeBERTa 编码器做冲突三分类判定，冲突发现进入 open→applying→resolved 生命周期，判定器不修改记忆",
+    "提供 provenance 追溯、append-only 版本历史、normal/protected/locked 信任级别与 none/weak/strict 工作区隔离"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理（Claude Code/Cursor/Codex/ZCode）之间共享和复用决策与事实",
+    "对代理记忆进行冲突检测、治理与审计",
+    "本地构建可浏览、可检索、可学习的个人知识库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Memory Arbiter (迷码) is a capability amplifier for your AI agents: plug it in over MCP and every agent you use — Claude Code, Cursor, Codex, ZCode — becomes one assistant with a running memory. Decisions made in Claude today are usable in Cursor tomorrow; every ／ - **Facts stay yours — and stay safe.** Full original text in one SQLite file on your machine, provenance on every write, version history on every edit, trust levels that lock what you confirmed. mema dials out nowhere on its own — the only optional call is a ",
+     "lines": [
+      12,
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用本地 SQLite 文件存储记忆数据，是为 AI 编码代理服务的应用层，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Memory Arbiter (迷码) is a capability amplifier for your AI agents: plug it in over MCP and every agent you use — Claude Code, Cursor, Codex, ZCode — becomes one assistant with a running memory. Decisions made in Claude today are usable in Cursor tomorrow; every fact carries its provenance, collisions get surfaced before they bite, and what you've locked cannot be silently overwritten. One SQLite file on your machine holds every fact in full; every model — embeddings, conflict judge — runs locally. ／ - **Facts stay yours — and stay safe.** Full original text in one SQLite file on your machine, provenance on every write, version history on every edit, trust levels that lock what you confirmed. mema dials out nowhere on its own — the only optional call is a PyPI update check (the console workbench talks to the LLM endpoint you configure).",
+   "evidence_lines": [
+    12,
+    22
+   ]
+  },
+  "fn": "billy12151/memory-arbiter-mcp",
+  "sha": "757e1287738e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

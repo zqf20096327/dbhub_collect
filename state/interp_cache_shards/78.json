@@ -7653,5 +7653,151 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "17e03cdd5ab8": {
+  "identity": {
+   "one_liner": "Swift 6 的 libmysqlclient 封装库，提供原生 MySQL API 与 PerfectCRUD 集成",
+   "review": "该仓库是 PerfectlySoft 维护的 Swift 6 包，封装 Oracle 的 libmysqlclient C 客户端库，为 Swift 开发者提供同步阻塞式的原生 MySQL 连接 API，并通过符合 DatabaseConfigurationProtocol 接入 PerfectCRUD ORM。依赖 Swift 6.2 与 macOS 12+/Linux，需通过 pkg-config 定位 mysqlclient 客户端库，可选用 Oracle libmysqlclient 8.0+ 或 MariaDB Connector/C 构建。适用于服务端 Swift 项目的数据库访问层开发。",
+   "highlights": [
+    "提供原生 MySQL API 与 PerfectCRUD 集成层两种使用方式",
+    "支持通过 MYSQL_OPT_SSL_MODE 配置 TLS 连接，并可映射到 MariaDB Connector/C 选项",
+    "支持 PerfectCRUD 动态行读取与嵌套事务（SAVEPOINT 直发）"
+   ],
+   "use_cases": [
+    "Swift 服务端应用连接 MySQL 数据库",
+    "基于 PerfectCRUD ORM 的类型安全数据访问",
+    "需要运行时动态构造查询的管理工具/模板引擎"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A Swift 6 wrapper around the MySQL client library (libmysqlclient), providing both a raw MySQL API and a PerfectCRUD integration layer.",
+     "lines": [
+      7
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- The MySQL client library, found through `pkg-config` as `mysqlclient`: Oracle's libmysqlclient 8.0 or newer (Homebrew `mysql-client` on macOS, `libmysqlclient-dev` on Linux), or MariaDB Connector/C through Debian's `libmariadb-dev-compat`. On macOS, Homebrew",
+     "lines": [
+      22
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "This also works when the package is built against MariaDB Connector/C (Debian's `libmariadb-dev-compat`), which has no `MYSQL_OPT_SSL_MODE`; the modes are mapped onto its own options, with these differences:",
+     "lines": [
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为访问 MySQL 服务器提供的 Swift 客户端封装组件，为数据库生态服务的驱动/连接器，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Swift 6 wrapper around the MySQL client library (libmysqlclient), providing both a raw MySQL API and a PerfectCRUD integration layer. ／ Perfect-MySQL is core, actively-used infrastructure, depended on directly by Perfect-NIO, ／ - The MySQL client library, found through `pkg-config` as `mysqlclient`: Oracle's libmysqlclient 8.0 or newer (Homebrew `mysql-client` on macOS, `libmysqlclient-dev` on Linux), or MariaDB Connector/C through Debian's `libmariadb-dev-compat`. On macOS, Homebrew's bottle is built for a recent macOS, which then sets the real minimum for your binary; check `brew info mysql-client`.",
+   "evidence_lines": [
+    7,
+    11,
+    22
+   ]
+  },
+  "fn": "PerfectlySoft/Perfect-MySQL",
+  "sha": "17e03cdd5ab8",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "03d107ec3e4c": {
+  "identity": {
+   "one_liner": "Astro 表单线索运营平台，捕获弃单线索并存入 SQLite",
+   "review": "cool-astro-forms 是一个 Astro 集成包，为已有 Astro 表单提供弃单线索捕获、恢复邮件、Stripe/PayPay 报价支付和自托管管理后台，数据默认写入本地 SQLite 文件，无需外部服务。适用于使用 Astro 构建服务输出站点并需要表单线索管理的运营者；要求 Astro 7.x、Node 22.12+，依赖 better-sqlite3 原生编译或可选 Turso/libSQL。",
+   "highlights": [
+    "通过注入脚本捕获表单弃单数据，写入 SQLite 文件并触发通知邮件",
+    "提供 /forms-admin 自托管管理界面，含条目、弃单、支付、转化漏斗与 CSV/.db 导出",
+    "支持 Stripe/PayPal 报价支付、Google Drive 文件上传、Cloudflare Turnstile 垃圾过滤"
+   ],
+   "use_cases": [
+    "Astro 站点捕获访问者填一半离开的表单线索并自动跟进",
+    "自托管管理表单条目、支付与转化漏斗分析",
+    "对静态/服务输出站点做线索恢复邮件与报价收款"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "When a visitor types into your form and walks away, the lead is saved. Around that capture sits the complete lead-ops platform: recovery emails, quote payments, and a self-hosted admin, with **zero external services by default**, just a SQLite file and your ex",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储表单条目与弃单线索数据，本身不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "When a visitor types into your form and walks away, the lead is saved. Around that capture sits the complete lead-ops platform: recovery emails, quote payments, and a self-hosted admin, with **zero external services by default**, just a SQLite file and your existing SMTP env vars. 1,373 unit tests and a Playwright e2e suite cover it. ／ 3. The server gates the save (origin check, rate limit, honeypot, email-or-phone requirement), dedupes repeat abandons within a 60-minute window, and writes one SQLite row with the journey trail and geolocation attached.",
+   "evidence_lines": [
+    5,
+    112
+   ]
+  },
+  "fn": "nipun-arora/cool-astro-forms",
+  "sha": "03d107ec3e4c",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

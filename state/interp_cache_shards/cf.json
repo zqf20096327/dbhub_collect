@@ -10077,5 +10077,163 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b571eaa0e5ff": {
+  "identity": {
+   "one_liner": "自托管的 Hermes Agent 多租户 SaaS 平台，含认证、计费与工具",
+   "review": "ChatHermes 是构建在 Nous Research Hermes Agent 之上的开源多租户 SaaS 模板，提供 magic-link 认证、Stripe 计费、14 个聊天工具、记忆和每付费用户专属 agent，面向想自建或自托管 agent 平台的用户。架构上仅依赖单个 SQLite 文件和三个 Bun 进程，需自备 LLM API key；许可为 AGPL + 署名附加条款。",
+   "highlights": [
+    "提供 14 个聊天时工具（搜索、浏览、记忆、图像生成/分析等）与多模型聊天",
+    "支持多租户：Pro 用户自动开通专属 Hermes Agent 实例，免费用户走共享代理",
+    "提供 magic-link 认证、Stripe 计费、REST API/OpenAPI、webhooks 与管理后台"
+   ],
+   "use_cases": [
+    "自托管团队内部 AI agent 平台",
+    "基于订阅制的 agent SaaS 创业模板",
+    "为每个付费用户开通专属 agent 实例的服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "No PostgreSQL, no Redis, no Kafka. One SQLite file, three Bun processes. Deploy it to a $5 VPS, or one-click it to Hetzner from the admin panel. ／ - **Orchestrator**: Hono on Bun, SQLite via bun:sqlite — port 7010 ／ No PostgreSQL, no Redis, no Kafka. Single SQLite file for everything.",
+     "lines": [
+      21,
+      108,
+      111
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "No PostgreSQL, no Redis, no Kafka. One SQLite file, three Bun processes. Deploy it to a $5 VPS, or one-click it to Hetzner from the admin panel. ／ No PostgreSQL, no Redis, no Kafka. Single SQLite file for everything.",
+     "lines": [
+      21,
+      111
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "**Deploy it anywhere.** The admin panel one-clicks to Hetzner, but nothing is tied to it — the same cloud-init block works as user data on DigitalOcean, Vultr, Linode, Scaleway, OVH, AWS, Google Cloud, Azure, Oracle Cloud, and Contabo. Container platforms read",
+     "lines": [
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用 SQLite 存储全部数据的 agent 应用平台，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "ChatHermes OSL：基于 AGPL-3.0 加 Required Attribution 附加条款",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Open-source, **self-hosted**, multi-tenant SaaS boilerplate on top of Nous Research's Hermes Agent. Clone it, run one command, and you have a working agent platform: auth, billing, tools, memory, and a dedicated agent per paying user. ／ - **Orchestrator**: Hono on Bun, SQLite via bun:sqlite — port 7010 ／ No PostgreSQL, no Redis, no Kafka. Single SQLite file for everything.",
+   "evidence_lines": [
+    10,
+    108,
+    111
+   ]
+  },
+  "fn": "kwkuh/chathermes",
+  "sha": "b571eaa0e5ff",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "88faa576daa4": {
+  "identity": {
+   "one_liner": "离线优先的 Electron 桌面习惯追踪应用，本地 SQLite 存储",
+   "review": "Zion 是一个离线优先的桌面习惯追踪应用，基于 Electron 与 React 构建，使用本地 SQLite（better-sqlite3）保存习惯、打卡与反思数据，提供活动环、热力图、连续记录、多档案与 JSON/CSV 导出等功能，面向学生开发者、工程师与创作者等个人用户，数据不离开本机。",
+   "highlights": [
+    "使用本地 SQLite（better-sqlite3）存储，数据保留在本机，无云端遥测",
+    "提供仪表盘活动环、365 天热力图、连续记录与里程碑徽章等追踪功能",
+    "支持一键 JSON 备份与 CSV 导出，以及多档案与密码保护"
+   ],
+   "use_cases": [
+    "开发者和学生在桌面端离线记录与追踪每日习惯",
+    "多人共用同一台设备时通过多档案分别管理习惯数据",
+    "需要导出 JSON/CSV 数据进行备份或进一步分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **100% Offline & Private**: Powered by local SQLite. Your habits, goals, reflections, and check-in history never leave your machine. Zero cloud telemetry. ／ |**Database**|better-sqlite3 (Zero-latency local embedded SQL)|",
+     "lines": [
+      24,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用本地 SQLite 存储自身数据，而非为数据库生态提供工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Zion** is a production-grade desktop application engineered for compound daily consistency, habit engineering, and distraction-free self-improvement. ／ - **100% Offline & Private**: Powered by local SQLite. Your habits, goals, reflections, and check-in history never leave your machine. Zero cloud telemetry. ／ |**Database**|better-sqlite3 (Zero-latency local embedded SQL)|",
+   "evidence_lines": [
+    20,
+    24,
+    139
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yvvsatyanarayana-dev/Zion-Habit-Tracker",
+  "sha": "88faa576daa4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9496,5 +9496,159 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c8ae83409173": {
+  "identity": {
+   "one_liner": "Go 持久化工作流引擎库，状态转移写入 Postgres/MySQL/SQLite",
+   "review": "GopherFlow 是一个以 Go 库形式提供的工作流引擎，开发者用普通 Go struct 定义状态机，每次状态转移持久化到 Postgres、MySQL 或 SQLite，重启或崩溃后可从断点恢复；引擎、REST API 与 Web 控制台打包进用户自己的二进制，无独立集群。适合用 Go 编写需要持久化、重试与可视化控制台的业务工作流的开发者。",
+   "highlights": [
+    "以状态机方式在 Go 中定义工作流，每个状态转移持久化到 Postgres、MySQL 或 SQLite 并保留动作历史",
+    "内嵌 Web 控制台（仪表盘、搜索、流程图、执行器列表）与 REST API，随 go get 导入单个二进制",
+    "执行器注册、心跳与卡死工作流修复，支持父子工作流并行执行"
+   ],
+   "use_cases": [
+    "在 Go 应用中实现崩溃可恢复的后台业务工作流",
+    "在单数据库、单二进制部署中替代独立工作流集群的自托管编排",
+    "通过 REST API 以编程方式创建、查询和等待工作流完成"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Write workflows as plain Go structs. Every state transition is persisted to a database you already run — Postgres, MySQL or SQLite — so workflows survive restarts, crashes and deploys, and resume from where they stopped. The engine, the REST API and the web co ／ - Persistent storage (Postgres, SQLite, Mysql supported) with action history ／ ### Postgres quickstart (docker compose)",
+     "lines": [
+      18,
+      49,
+      96
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Write workflows as plain Go structs. Every state transition is persisted to a database you already run — Postgres, MySQL or SQLite — so workflows survive restarts, crashes and deploys, and resume from where they stopped. The engine, the REST API and the web co ／ - Persistent storage (Postgres, SQLite, Mysql supported) with action history",
+     "lines": [
+      18,
+      49
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Write workflows as plain Go structs. Every state transition is persisted to a database you already run — Postgres, MySQL or SQLite — so workflows survive restarts, crashes and deploys, and resume from where they stopped. The engine, the REST API and the web co ／ |Scale ceiling|~19k workflows/min on one laptop + SQLite (measured)|very high, multi-cluster|single-node scheduler|whatever you build| ／ - Persistent storage (Postgres, SQLite, Mysql supported) with action history",
+     "lines": [
+      18,
+      41,
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库以数据库作为工作流状态的持久化后端，为依赖数据库的应用提供工作流引擎能力。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Write workflows as plain Go structs. Every state transition is persisted to a database you already run — Postgres, MySQL or SQLite — so workflows survive restarts, crashes and deploys, and resume from where they stopped. The engine, the REST API and the web console are a library you import into your own binary: no control-plane cluster, no broker, no sidecar, no separate worker fleet to operate. ／ - **One static binary, one database.** `gopherflow.Setup(registry)` in your `main()` gives you the engine, the API and the console. Schema migrations run themselves on start. Pure Go, no cgo — the container runs under the default seccomp profile and cross-compiles without a C toolchain. ／ - Persistent storage (Postgres, SQLite, Mysql supported) with action history",
+   "evidence_lines": [
+    18,
+    26,
+    49
+   ]
+  },
+  "fn": "RealZimboGuy/gopherflow",
+  "sha": "c8ae83409173",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "335c0b10dfb9": {
+  "identity": {
+   "one_liner": "达梦数据库的 .NET 10 ADO.NET 数据提供程序",
+   "review": "该项目为达梦（Dameng）数据库实现 .NET 10 ADO.NET 数据提供程序，提供异步操作、参数绑定、本地事务、DmDataSource 与流式 BLOB/CLOB 读取，并强制会话 TLS 证书验证。面向在 .NET 环境中访问达梦数据库的开发者。限制包括：暂无物理连接复用、不支持批量装载、分布式事务与自动重连，已验证环境仅限 DM 8.1.5.60 与 8.1.4.6 两个版本。",
+   "highlights": [
+    "支持同步及异步 Open、Prepare、Execute、Read、NextResult 和本地事务",
+    "默认要求完整会话 TLS 并验证证书",
+    "提供绑定事务的流式 BLOB/CLOB 读取与 DmDataSource 容量调度"
+   ],
+   "use_cases": [
+    "在 .NET 10 应用中通过 ADO.NET 访问达梦数据库",
+    "需要 TLS 加密连接与参数绑定查询的达梦数据访问",
+    "读取达梦数据库中的大对象（BLOB/CLOB）数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "面向达梦（Dameng）数据库的 .NET 10 ADO.NET 数据提供程序，提供异步数据库操作、参数绑定、本地事务、`DmDataSource`、流式 BLOB/CLOB 和标准 .NET 诊断接口。 ／ 发布准备、测试和 tag 规则见发布指南。本地实库测试仅使用专用 TEST 账号，配置见本地达梦环境。",
+     "lines": [
+      3,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明本项目是为达梦数据库提供 .NET 数据提供程序（驱动），属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，包含上游 DM 的 C# 代码贡献",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向达梦（Dameng）数据库的 .NET 10 ADO.NET 数据提供程序，提供异步数据库操作、参数绑定、本地事务、`DmDataSource`、流式 BLOB/CLOB 和标准 .NET 诊断接口。 ／ 这是社区维护的预览项目。包名和程序集名为 **W.DamengProvider**，公开命名空间为 **W.Dm**。它与 `DM.DmProvider` 有不同的程序集身份，现有应用和 EF 适配层需要显式更新依赖并重新编译。",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "whynpc9/W.DamengProvider",
+  "sha": "335c0b10dfb9",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

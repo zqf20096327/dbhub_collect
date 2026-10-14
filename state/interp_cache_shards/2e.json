@@ -10094,5 +10094,331 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c16840884dbb": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 扩展的稀疏线性代数加速项目",
+   "review": "OneSparse 是一个 Postgres 扩展项目，结合 SuiteSparse:GraphBLAS 与 LAGraph 实现稀疏线性代数与图计算能力，通过容器镜像分发，用 versions.env 统一管理 PostgreSQL、SuiteSparse、LAGraph 的版本，适合需要在数据库内运行图算法与稀疏矩阵计算的开发者。",
+   "highlights": [
+    "以 PostgreSQL 扩展形式提供稀疏线性代数能力",
+    "基于 SuiteSparse:GraphBLAS 与 LAGraph 实现",
+    "提供 Docker 镜像构建脚本，版本由 versions.env 统一管理"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内进行图论计算",
+    "数据库内稀疏矩阵运算",
+    "通过容器快速部署数据库内线性代数环境"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`versions.env` is the single source of truth for the PostgreSQL, SuiteSparse:GraphBLAS,",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是 PostgreSQL 扩展，为数据库添加稀疏线性代数能力，属于数据库生态组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`versions.env` is the single source of truth for the PostgreSQL, SuiteSparse:GraphBLAS, ／ ./build-image.sh Dockerfile-slim onesparse/onesparse-slim:local",
+   "evidence_lines": [
+    9,
+    14
+   ]
+  },
+  "fn": "OneSparse/OneSparse",
+  "sha": "c16840884dbb",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fb43d16772c4": {
+  "identity": {
+   "one_liner": "把多个编程助手上游渠道封装为 OpenAI/Anthropic 兼容 API 的代理网关",
+   "review": "该项目将 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo Gateway、Qoder、CodeArts 等上游渠道封装为 OpenAI/Responses/Anthropic 兼容 API，提供凭证池、健康度调度、会话粘性与按人用量统计。面向自部署学习研究者，用户与凭证数据存 SQLite，支持 Docker 或 uv 本地运行；README 声明为逆向接口，仅供学习研究。",
+   "highlights": [
+    "提供 OpenAI 兼容的 /v1/chat/completions、/v1/responses、/v1/messages 等出口",
+    "实现公共凭证池、三态健康度调度与同会话凭证粘性",
+    "内置管理台，包含三角色账号体系、审计日志与用量统计，数据存 SQLite"
+   ],
+   "use_cases": [
+    "为支持 OpenAI 兼容协议的客户端提供统一上游接入入口",
+    "集中管理多渠道账号凭证并按人统计用量",
+    "对免费层渠道做探活过滤与模型列表聚合"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计。 ／ > `scripts/create_user.py` 直接写 SQLite（`--db` 或 `DATA_DIR`，默认 `data/coding2api.sqlite3`）。老部署若已有 `secrets/users.txt`，启动时自动导入一次（已存在的不覆盖）。 ／ 账号存在 SQLite 的 `users` 表里，管理台「用户管理」页（仅管理员可见）负责日常增删改。",
+     "lines": [
+      15,
+      41,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 SQLite 存储用户与账号数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "把 **CodeBuddy**（国内站 + 国际版）、**TRAE SOLO**、**OpenCode Zen**、**Kilo Gateway**、**Qoder**、**CodeArts** 七个上游渠道封装为 OpenAI 兼容 API，提供公共凭证池、统一模型名与调度、按人用量统计。 ／ - **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计。 ／ > `scripts/create_user.py` 直接写 SQLite（`--db` 或 `DATA_DIR`，默认 `data/coding2api.sqlite3`）。老部署若已有 `secrets/users.txt`，启动时自动导入一次（已存在的不覆盖）。",
+   "evidence_lines": [
+    3,
+    15,
+    41
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "RobbsLuo/Coding2API",
+  "sha": "fb43d16772c4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "78cad805a0f7": {
+  "identity": {
+   "one_liner": "开发者免费工具清单，按类别编目并自动检测在线状态",
+   "review": "一个收录 55 个免费/免费层开发工具的 awesome 清单，覆盖 AI 编程、云托管、数据库、DevOps 等类别，提供工具链接、用途、定价模式和状态信息。面向寻找免费工具的开发者和 AI 编码用户，通过 GitHub Actions 每晚自动检查工具在线状态，接受社区 PR 贡献，MIT 许可。",
+   "highlights": [
+    "收录 55 个工具，按 16 个类别（AI、云托管、数据库、DevOps 等）编目",
+    "通过 GitHub Actions 每晚自动检查各工具链接在线状态",
+    "数据库类别列出 Supabase、Neon、Cloudflare D1、Turso、Prisma、DBeaver 等工具及其定价模式"
+   ],
+   "use_cases": [
+    "查找免费层或开源的开发、托管、数据库类工具",
+    "了解某工具的定价模式（免费/免费层/开源/BYOK）与可用性",
+    "社区协作维护和补充工具条目"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      177,
+      182
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ／ Serverless SQLite database with edge replication",
+     "lines": [
+      192,
+      197
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "清单整体是通用开发工具目录，非为数据库生态服务的工具或单纯使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Total Tools|55| ／ ### Database & Backend ／ - **Status** is automatically checked every night by GitHub Actions.",
+   "evidence_lines": [
+    19,
+    169,
+    417
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "78cad805a0f7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "af35e5969160": {
+  "identity": {
+   "one_liner": "Rust 编写的 AI 原生数据平台，在对象存储上做混合检索",
+   "review": "Loams 把文档、向量与全文索引存进用户自己的对象存储桶，用 Lance 和 Tantivy 开放格式，元数据放在内嵌 Raft metastore 或 TiKV 上，并提供 REST、Arrow Flight SQL 及兼容 Qdrant、Elasticsearch 的 API。定位为自托管数据平台，供构建 AI 检索应用的团队使用；当前为 v0.1.0-preview 预览版，API 与格式可能变动，未经生产验证。",
+   "highlights": [
+    "数据以 Lance、Tantivy 等开放格式存于对象存储（S3、GCS、Azure Blob、RustFS 或本地目录）",
+    "提供混合检索：向量 kNN、BM25 与过滤在同一 DataFusion 计划中用 RRF 融合",
+    "实现 Qdrant、Elasticsearch 客户端 API 子集，兼容现有 LangChain/LlamaIndex 集成"
+   ],
+   "use_cases": [
+    "为 AI 应用在单一对象存储桶上构建向量、全文混合检索",
+    "以 Qdrant/Elasticsearch 客户端接入自有检索服务",
+    "运行持久化的 agent 任务（Loams Durable）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Loams architecture. Clients and protocols reach a stateless gateway and router. Behind it sit the retrieval engine, Loams Live, Loams Durable, the runtime and jobs, and Loams Postgres. TiKV holds metadata, transactions and the hot WAL. Object storage holds all ／ - **Clients and protocols.** The native REST API, Arrow Flight SQL, and the Qdrant and Elasticsearch APIs, with Postgres and Kafka wire protocols to come. ／ - **Compute.** The retrieval engine, which covers the log, links, collections, the query engine, the hot tier and background workers. Beside it run Loams Live, Loams Durable and, later, a CPU-time functions runtime, jobs and Loams Postgres.",
+     "lines": [
+      41,
+      43,
+      45
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "|Loams SQL|MySQL-compatible SQL on a patched TiDB (`v8.5.8-loams.1`) over TiKV|Preview| ／ |Postgres and MySQL wire|SQL over the Postgres and MySQL wire protocols, over collections|Preview|",
+     "lines": [
+      73,
+      75
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **TiKV.** Metadata (the catalog, leases and the timestamp oracle), Live's transactions, and a hot WAL. Single-node deployments use an embedded Raft metastore instead. ／ |TiKV metastore|The catalog, leases and timestamp oracle on TiKV (`--meta tikv://…`, cargo feature `tikv`)|Preview| ／ |`loams-tikv`|The TiKV client layer: transactions, the timestamp oracle, keyspace bootstrap and the cluster GC loop|",
+     "lines": [
+      46,
+      67,
+      215
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Loams is an open-source, AI-native data platform built in Rust. It stores retrieval data in *your* object-storage bucket (RustFS, S3, GCS, Azure Blob or a local directory) in open formats: Lance and Tantivy today, Apache Iceberg next. Metadata lives in an embe ／ |Loams Durable|An embedded Resonate server: durable promises and tasks on SQLite (cargo feature `durable`)|Preview|",
+     "lines": [
+      7,
+      68
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "compat",
+     "quote": "|Loams House|ClickHouse-compatible analytics on chDB in `loams-fabric`, with `loams.house.v1` proxied by the engine|Preview. Not wired to the engine in this release (`--profile house` exists, the engine answers `house_not_configured`). Results over one block i ／ |Iceberg analytics|Iceberg tables through a REST catalog, readable by DuckDB, Spark, Trino and ClickHouse|Planned|",
+     "lines": [
+      72,
+      81
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Loams is an open-source, AI-native data platform built in Rust. It stores retrieval data in *your* object-storage bucket (RustFS, S3, GCS, Azure Blob or a local directory) in open formats: Lance and Tantivy today, Apache Iceberg next. Metadata lives in an embe ／ - **Object storage is the source of truth for data.** Documents, vectors, text indexes and the log live in open formats in your bucket. You pay object-storage prices, with no 3× block-storage replication, and losing a query node loses no data. Only the small m ／ - **More than retrieval.** *Loams Live* is a reactive document database on TiKV. *Loams Durable* embeds a Resonate server, so agent runs survive crashes without repeating model calls.",
+     "lines": [
+      7,
+      30,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据平台/存储引擎，为上层应用提供检索与数据服务，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Loams is an open-source, AI-native data platform built in Rust. It stores retrieval data in *your* object-storage bucket (RustFS, S3, GCS, Azure Blob or a local directory) in open formats: Lance and Tantivy today, Apache Iceberg next. Metadata lives in an embedded Raft metastore or in TiKV, and durable-execution state in SQLite (TiKV support is in progress). Retrieval compute is stateless and holds only caches, so it scales independently and can be replaced at any time. ／ > **Preview.** Loams' first release, v0.1.0-preview.1, is a preview: container images on `ghcr.io/ostrium-labs` (tagged `0.1.0-preview.1` and the rolling `:preview`) that you run yourself with Docker Compose, over your own Tailscale tailnet, with the hosted console at `console.loams.dev`. It is not production ready, and APIs, formats and flags can change between previews. The crates are `loams-*` and the binary is `loams`; no crate or package is published to a registry yet. Start with Running the preview; the design is public in `docs/design`.",
+   "evidence_lines": [
+    7,
+    9
+   ]
+  },
+  "fn": "ostrium-labs/loams",
+  "sha": "af35e5969160",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

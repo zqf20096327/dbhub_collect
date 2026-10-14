@@ -9709,5 +9709,312 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3a5ba17b4acc": {
+  "identity": {
+   "one_liner": "NestJS 事件溯源库，提供 DDD/CQRS 构建块与事件存储",
+   "review": "这是一个面向 NestJS 的事件溯源开发库，提供聚合、命令/查询总线、带乐观并发控制的事件存储及快照机制，用于构建 DDD/CQRS 应用。通过集成包支持 PostgreSQL、MariaDB、MySQL 和 MongoDB 持久化，另有内存存储用于测试。适合使用 NestJS 做领域驱动设计的后端开发者。",
+   "highlights": [
+    "提供聚合、类型化命令/查询总线、事件存储与快照等 DDD/CQRS 构建块",
+    "提供 PostgreSQL、MariaDB、MySQL（经 MariaDB store，自 4.1）和 MongoDB 的存储集成，及测试用内存存储",
+    "事件存储包含乐观并发控制、correlation/causation id 与全局位置，快照仓库按间隔生成快照"
+   ],
+   "use_cases": [
+    "在 NestJS 中构建基于事件溯源的 DDD/CQRS 应用",
+    "为事件流构建投影和从检查点恢复的消费者",
+    "多租户场景下用池隔离租户数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Stores** for PostgreSQL, MariaDB, MySQL (through the MariaDB store, from 4.1) and MongoDB, and in-memory stores for tests, with pools to keep the data of tenants apart. The conformance suites that every store runs are published for your own stores. ／ npm install @ocoda/event-sourcing-postgres@4 pg pg-cursor",
+     "lines": [
+      26,
+      55
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Stores** for PostgreSQL, MariaDB, MySQL (through the MariaDB store, from 4.1) and MongoDB, and in-memory stores for tests, with pools to keep the data of tenants apart. The conformance suites that every store runs are published for your own stores.",
+     "lines": [
+      26
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Stores** for PostgreSQL, MariaDB, MySQL (through the MariaDB store, from 4.1) and MongoDB, and in-memory stores for tests, with pools to keep the data of tenants apart. The conformance suites that every store runs are published for your own stores.",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用提供事件存储与数据库持久化集成，是服务于数据库存取的开发库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`@ocoda/event-sourcing` is a library for NestJS with the building blocks for Domain-Driven Design (DDD), CQRS and Event Sourcing: ／ - **Stores** for PostgreSQL, MariaDB, MySQL (through the MariaDB store, from 4.1) and MongoDB, and in-memory stores for tests, with pools to keep the data of tenants apart. The conformance suites that every store runs are published for your own stores. ／ npm install @ocoda/event-sourcing-postgres@4 pg pg-cursor",
+   "evidence_lines": [
+    19,
+    26,
+    55
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "ocoda/event-sourcing",
+  "sha": "3a5ba17b4acc",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b5b1226fd604": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理记忆引擎，单二进制离线运行，提供嵌入存储与混合检索",
+   "review": "Uteke 是一个用 Rust 编写的本地记忆引擎，供 AI 代理（如 Claude、Cursor 等 MCP 兼容客户端）存取和检索记忆。核心机制为向量+FTS5 全文的 RRF 融合检索、本地 ONNX 嵌入、Rooms 多代理共享与时间点回溯查询。通过 MCP 服务器接入代理，支持 CLI、Docker、Homebrew、Cargo 等安装方式，检索路径不调用 LLM，完全离线。",
+   "highlights": [
+    "提供向量与 FTS5 全文检索的 RRF 融合搜索，检索路径零 LLM token，本地 ONNX 嵌入",
+    "内置 MCP 服务器（JSON-RPC + HTTP），支持多代理共享 Rooms、时间点回溯与记忆关系图",
+    "单个 Rust 二进制，无 API key、无云依赖，附带 LongMemEval-S 基准测试工具可自行复现"
+   ],
+   "use_cases": [
+    "为 AI 代理提供跨会话的持久化本地记忆",
+    "团队通过 Rooms 共享可检索、带署名的知识与决策记录",
+    "隐私敏感场景（医疗、金融、法律）下的本机离线记忆存储"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Search**|**Fusion** (weighted RRF of vector + hybrid; hybrid = HNSW + FTS5 RRF)|sqlite-vec + FTS5|Vector + Graph|Vector + Graph|Vector|Hybrid (semantic + keyword + graph)|Vector + rerank|**FTS5 only**| ／ 2. **FTS5** (SQLite): finds by exact terms (\"deploy\" matches \"deploy\")",
+     "lines": [
+      122,
+      205
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Many memory layers (Python-based or TypeScript-based) require cloud API keys (OpenAI/LLM) and external infrastructure (Docker, Postgres, Qdrant). Your data gets sent to a cloud LLM provider. Uteke is a single binary with zero API keys. All embeddings run local",
+     "lines": [
+      264
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是面向 AI 代理的记忆引擎工具，内部依赖 SQLite（FTS5）实现全文检索，非直接使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Give your AI a memory that never leaves your machine. Works with Claude, Cursor, Copilot, and any MCP-compatible agent. ／ |**Search**|**Fusion** (weighted RRF of vector + hybrid; hybrid = HNSW + FTS5 RRF)|sqlite-vec + FTS5|Vector + Graph|Vector + Graph|Vector|Hybrid (semantic + keyword + graph)|Vector + rerank|**FTS5 only**| ／ |🧠 **Hybrid + Fusion Search**|Vector similarity + FTS5 full-text search, merged by Reciprocal Rank Fusion (RRF). Since v0.16.0, `fusion` (a weighted RRF of the vector and hybrid rankings) is the default recall strategy. Finds by meaning AND exact keywords.|",
+   "evidence_lines": [
+    6,
+    122,
+    148
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "codecoradev/uteke",
+  "sha": "b5b1226fd604",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c03793cf65a4": {
+  "identity": {
+   "one_liner": "AI CLI 进程出站网络观测器，轮询 /proc 归因套接字并写 SQLite 日志",
+   "review": "rano 是运行于 Linux 的网络观测工具，通过轮询 /proc 将 Claude Code、Codex、Gemini 等 AI CLI 进程及其子进程的出站套接字归因到提供方，实时输出统计并支持阈值告警；观测历史写入 SQLite 供事后用 rano report 或 SQL 查询。适合开发者与审计人员监控 AI CLI 的网络行为；依赖 Linux-only 的 /proc API，不支持 Windows，轮询间隙的短连接可能漏采。",
+   "highlights": [
+    "轮询 /proc 将套接字映射到 PID 并按 anthropic/openai/google 提供方打标签，自动跟踪子进程",
+    "观测历史写入 SQLite，提供内置聚合视图、report 与 diff 命令",
+    "支持 PTR/pcap 两种域名归因模式及基于域名、连接数、持续时长的阈值告警"
+   ],
+   "use_cases": [
+    "开发或代码审计期间监控 AI CLI 工具的出站网络行为",
+    "对比两次监控会话，发现新增/消失/变化的域名与进程",
+    "将状态输出集成到 shell 提示符并对可疑域名/连接数设置告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "rano is a **network observer for AI CLI processes** that tracks observed sockets owned by Claude Code, Codex CLI, Gemini CLI, and their descendants—live in your terminal and durably in SQLite. ／ |**SQLite logging**|Queryable history with built-in aggregate views.| ／ 3. **Log to SQLite** (default `observer.sqlite`):",
+     "lines": [
+      7,
+      28,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 rano 只是将 SQLite 用作观测历史的内置存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "rano is a **network observer for AI CLI processes** that tracks observed sockets owned by Claude Code, Codex CLI, Gemini CLI, and their descendants—live in your terminal and durably in SQLite. ／ **The Solution**: rano polls `/proc`, maps sockets to PIDs, and prints observation events with provider tags while logging the observed history to SQLite. Connections that open and close between polls can be missed. ／ |**SQLite logging**|Queryable history with built-in aggregate views.|",
+   "evidence_lines": [
+    7,
+    19,
+    28
+   ]
+  },
+  "fn": "Dicklesworthstone/rano",
+  "sha": "c03793cf65a4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f7d22e6712e4": {
+  "identity": {
+   "one_liner": "开源自托管个人理财应用，内置 MCP 服务器供 AI 客户端查询管理财务",
+   "review": "Finlynq 是一个 AGPL v3 的个人理财应用，支持预算、投资组合、目标、贷款与 CSV/OFX/PDF 导入，可通过 Docker 自托管或使用托管云。其第一方 MCP 服务器提供 100+ 工具，使 Claude、Cursor 等 MCP 客户端能读写财务数据；数据以 PostgreSQL 存储，敏感字段用 AES-256-GCM 加密。",
+   "highlights": [
+    "提供第一方 MCP 服务器，含 55 个 HTTP / 89 个 stdio 工具，支持读写操作",
+    "使用 AES-256-GCM 信封加密与 scrypt 派生 KEK 保护敏感字段",
+    "支持 CSV、Excel、OFX/QFX、PDF 文件导入与自动分类规则"
+   ],
+   "use_cases": [
+    "个人财务追踪与预算管理，自托管或使用托管云",
+    "通过 Claude、Cursor 等 MCP 客户端用自然语言查询和管理财务数据",
+    "导入银行对账单并自动分类交易"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Before the first `up`, create a sibling `.env` file with three secrets, each generated with `openssl rand -hex 32`: `PF_JWT_SECRET`, `PF_PEPPER` (≥32 chars), and `PF_STAGING_KEY` (≥32 chars). Compose fails fast with a clear message if any is missing. Then open",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用与 PostgreSQL 一同在 Docker 中运行，PostgreSQL 为该应用存储数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Two ways to use Finlynq: a free managed cloud at finlynq.com/cloud, or self-host with Docker. ／ Before the first `up`, create a sibling `.env` file with three secrets, each generated with `openssl rand -hex 32`: `PF_JWT_SECRET`, `PF_PEPPER` (≥32 chars), and `PF_STAGING_KEY` (≥32 chars). Compose fails fast with a clear message if any is missing. Then open http://localhost:3000 and register. App + PostgreSQL run in Docker; sensitive fields are encrypted at rest with a per-user key derived from the account password. Change the default PostgreSQL password (`POSTGRES_PASSWORD` in `.env`) before exposing the container to anything but localhost. Full setup notes at finlynq.com/self-hosted. ／ First-party Model Context Protocol server with 55 HTTP / 89 stdio tools covering accounts, transactions, budgets, goals, loans, portfolio, subscriptions, FX rates, rules, splits, bulk edits, and file imports.",
+   "evidence_lines": [
+    3,
+    24,
+    41
+   ]
+  },
+  "fn": "finlynq/finlynq",
+  "sha": "f7d22e6712e4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

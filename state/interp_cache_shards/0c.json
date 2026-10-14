@@ -10580,5 +10580,79 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f52b86fcde44": {
+  "identity": {
+   "one_liner": "GaussDB 的 DBeaver 客户端回归测试夹具与执行器集合",
+   "review": "该仓库为 DBeaver 的 GaussDB 适配提供客户端回归测试，包含 GUI 包测试、调试事务、调试能力矩阵、mTLS 与权限等场景的夹具和脚本。面向需要验证 DBeaver 对 GaussDB 客户端功能的开发与测试人员。运行依赖外部供应商 JDBC 驱动、专用测试库、私有连接文件及显式环境变量授权，README 明确不包含数据库内核测试源码。",
+   "highlights": [
+    "提供包界面测试、调试事务、调试能力矩阵、双向 TLS、会话取消等场景的可重复测试夹具",
+    "通过环境变量与 0600 权限的私有连接文件管理数据库连接与凭据，输出脱敏结果",
+    "包含调试能力探测程序，读取服务端版本、兼容模式与调试协议签名"
+   ],
+   "use_cases": [
+    "验证 DBeaver GaussDB 适配的 GUI 调试、包编译、TLS 等客户端功能回归",
+    "对专用测试库执行可重复的夹具 setup/verify/cleanup 生命周期测试",
+    "以能力矩阵方式探测不同 GaussDB 版本与兼容模式的调试支持情况"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB / DBeaver 客户端回归测试 ／ export GAUSSDB_PACKAGE_URL=jdbc:gaussdb://test-host:port/test_database",
+     "lines": [
+      1,
+      26
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "`GAUSSDB_HISTORY_DRIVER_CLASS`；`org.postgresql.Driver` 自动使用 `jdbc:postgresql:`，",
+     "lines": [
+      178
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为 DBeaver 的 GaussDB 适配提供客户端回归测试工具集，服务于该数据库的客户端生态验证",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# GaussDB / DBeaver 客户端回归测试 ／ - 本仓库：测试范围、执行入口、结果审计与环境说明。 ／ bash scripts/run-dbeaver-tests.sh /absolute/path/to/dbeaver",
+   "evidence_lines": [
+    1,
+    7,
+    150
+   ]
+  },
+  "fn": "jarrenL/gaussdb-dbeaver-tests",
+  "sha": "f52b86fcde44",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

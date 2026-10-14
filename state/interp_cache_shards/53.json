@@ -9380,5 +9380,73 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0a671bf069d8": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 PostgreSQL 的图书馆管理 REST API",
+   "review": "Libro 是一个用 Spring Boot 构建的图书馆管理系统 REST API，提供图书 CRUD、检索过滤、统计汇总和用户账户管理，采用分层架构、DTO 包裹实体、Spring Security HTTP Basic 认证及 Flyway 迁移，通过 Docker Compose 运行。面向图书馆工作人员与校园用户的场景，借贷功能尚未实现，README 标明为学术/作品集项目。",
+   "highlights": [
+    "提供图书的增删改查、按标题/作者/类型/价格组合过滤、排序分页与统计接口",
+    "使用 Spring Data JPA 持久化到 PostgreSQL，Flyway 在启动时准备 schema",
+    "Docker Compose 部署，提供 Swagger UI API 文档与健康检查端点"
+   ],
+   "use_cases": [
+    "管理图书馆实体书副本的馆藏记录",
+    "管理用户账户及基于角色的访问控制",
+    "作为 Spring Boot 分层架构与测试实践的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - 🛠️ **Built for development:** Docker, PostgreSQL 18, Flyway migrations, request validation, and consistent error responses. ／ |Database|PostgreSQL 18|",
+     "lines": [
+      7,
+      18,
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 PostgreSQL 存储图书和用户数据，是为图书馆业务服务的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Libro is a library management system built with Spring Boot. It helps manage a library's book collection and user accounts. ／ |Database|PostgreSQL 18| ／ The system runs as a Spring Boot API alongside PostgreSQL. Book and user requests pass through the HTTP, business, and persistence layers; Flyway prepares the schema at startup. Shared validation, mapping, security configuration, and error handling support the API. `UserRepository` has two clear consumers: `UserService` for account use cases and `LibroUserDetailsService` for the account lookup Spring Security needs during HTTP Basic authentication.",
+   "evidence_lines": [
+    10,
+    35,
+    68
+   ]
+  },
+  "fn": "kyledelfin2006/libro-library-system",
+  "sha": "0a671bf069d8",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

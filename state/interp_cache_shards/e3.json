@@ -9106,5 +9106,81 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "594aae0fdf1d": {
+  "identity": {
+   "one_liner": "内嵌进程内的 ClickHouse 引擎 OLAP SQL 引擎",
+   "review": "chDB 是一个进程内运行的 SQL OLAP 引擎，基于 ClickHouse 引擎构建，无需单独安装 ClickHouse。面向 Python 用户，提供 SQL API、pandas 兼容的 DataStore API、DB-API 2.0、UDF、会话与流式查询，可查询 Parquet、CSV、JSON、Arrow 等 60+ 格式文件，并内置自然语言生成 SQL 功能。适合在 Python 环境中做本地分析的用户。",
+   "highlights": [
+    "提供进程内 SQL OLAP 引擎，无需安装 ClickHouse 服务",
+    "支持 Parquet、CSV、JSON、Arrow、ORC 等 60+ 输入输出格式，并提供 Python DB-API 2.0 与 pandas 兼容 API",
+    "支持 Python UDF、有状态会话、流式查询及自然语言生成 SQL"
+   ],
+   "use_cases": [
+    "在 Python 中直接运行 OLAP SQL 查询，无需部署数据库服务",
+    "用 SQL 查询本地 Parquet/CSV/Arrow 等文件",
+    "在浏览器中通过 WebAssembly 构建运行 SQL"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "> chDB is an in-process SQL OLAP Engine powered by ClickHouse [^1] ／ * **🐼 Pandas-compatible DataStore API** - Use familiar pandas syntax with ClickHouse performance ／ * In-process SQL OLAP Engine, powered by ClickHouse",
+     "lines": [
+      13,
+      18,
+      20
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Driver / ecosystem API|DBAPI / ADBC|C ABI|`@clickhouse/client`|`database/sql`|Not supported|JDBC|SQLite style|Not supported|None|None|None|",
+     "lines": [
+      414
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为由 ClickHouse 引擎驱动的进程内 OLAP 引擎，是嵌入应用的数据库引擎组件而非使用数据库存储的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> chDB is an in-process SQL OLAP Engine powered by ClickHouse [^1] ／ * In-process SQL OLAP Engine, powered by ClickHouse ／ * No need to install ClickHouse",
+   "evidence_lines": [
+    13,
+    20,
+    21
+   ]
+  },
+  "fn": "chdb-io/chdb",
+  "sha": "594aae0fdf1d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

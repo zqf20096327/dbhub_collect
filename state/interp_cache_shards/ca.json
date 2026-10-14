@@ -8669,5 +8669,185 @@
   "generated_at": "2026-10-12",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f9f257e561b": {
+  "identity": {
+   "one_liner": "基于 OpenTelemetry 的 AI Agent 可观测与评估平台",
+   "review": "OpenLIT 是一个面向 AI Agent 与编码 Agent 的开源工程平台，提供基于 OpenTelemetry 的链路追踪、评估、护栏、Prompt 管理、成本与 GPU 监控。开发与运维团队可通过 Docker 自部署，SDK 支持 Python/TypeScript，采集遵循 GenAI 语义约定。README 未说明大规模部署的扩展性限制。",
+   "highlights": [
+    "提供 OpenTelemetry 原生的 LLM/Agent/Coding Agent 链路追踪与成本监控",
+    "提供 LLM-as-a-Judge 评估、护栏（提示注入检测）与 Prompt 版本管理",
+    "支持 NVIDIA/AMD/Intel GPU 监控及 70+ 集成（LLM 提供商、框架、向量库）"
+   ],
+   "use_cases": [
+    "生产环境 AI Agent 的调用链追踪与故障排查",
+    "Agent 输出质量的自动化评估与 CI 门禁",
+    "LLM 应用成本与 GPU 资源监控"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ChromaDB Pinecone Qdrant Milvus AstraDB PostgreSQL (psycopg3)",
+     "lines": [
+      333
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Connectors catalog with ClickHouse, Grafana Tempo, Loki, Prometheus, and Jaeger ／ Connectors — plug in ClickHouse, Tempo, Loki, Prometheus &amp; more",
+     "lines": [
+      237,
+      238
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为 AI 应用提供基于 OpenTelemetry 的追踪/评估服务，并作为连接器对接 ClickHouse 等后端存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "pypi",
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OpenLIT is an open-source agent harness engineering platform.** It gives teams OpenTelemetry-native tracing, evaluations, guardrails, prompt and context management, and cost and GPU monitoring for the *harness* around their AI agents and coding agents, so every agent failure can be traced, scored, and turned into a harness fix. OpenLIT is free to self-host under Apache 2.0 and works with any model, framework, or harness: Claude Code, Codex, Cursor, OpenAI Agents SDK, LangGraph, CrewAI, and 70+ more integrations. ／ Connectors catalog with ClickHouse, Grafana Tempo, Loki, Prometheus, and Jaeger ／ # 🔌 OpenTelemetry-native (GenAI semantic conventions)",
+   "evidence_lines": [
+    26,
+    237,
+    306
+   ]
+  },
+  "fn": "openlit/openlit",
+  "sha": "3f9f257e561b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e435310c4f57": {
+  "identity": {
+   "one_liner": "ioBroker 的 SQL 历史数据存储适配器",
+   "review": "ioBroker 平台的适配器，把状态历史数据写入 SQL 数据库，支持 MySQL、PostgreSQL、MS-SQL 和 SQLite。面向 ioBroker 用户，提供去抖、块时间、仅记录变化值等记录策略，并内建统计页与数据清理功能，SQLite 仅适于小数据量场景。",
+   "highlights": [
+    "提供将 ioBroker 状态历史写入 MySQL、PostgreSQL、MS-SQL、SQLite 四种数据库的适配",
+    "提供去抖时间、块时间、仅记录变化值、最小差值等数据点记录策略",
+    "提供统计页查看各数据点存储状态并支持确认式清理（Clean up）"
+   ],
+   "use_cases": [
+    "为 ioBroker 自动化系统中的设备状态保存历史数据",
+    "为数据点配置数值过滤与保留期以控制存储量",
+    "通过 SQL 表结构（sources/datapoints/ts_*）直接查询历史数据"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **DB Type**: Type of the SQL DB: MySQL, PostgreSQL, MS-SQL or SQLite3",
+     "lines": [
+      12,
+      20
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **DB Type**: Type of the SQL DB: MySQL, PostgreSQL, MS-SQL or SQLite3 ／ - **Unix socket** (MySQL only): Path of a local unix socket, e.g. `/var/run/mysqld/mysqld.sock`. When set, the adapter connects through that socket and ignores Host and Port, which are hidden. Useful when the server runs on the same machine — it is faster than",
+     "lines": [
+      12,
+      20,
+      22
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **DB Type**: Type of the SQL DB: MySQL, PostgreSQL, MS-SQL or SQLite3 ／ ### SQLite:",
+     "lines": [
+      12,
+      20,
+      56
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **Host**: IP address or host name with SQL Server ／ - **Port**: Port of SQL Server (leave blank if not sure)",
+     "lines": [
+      12,
+      21,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该适配器为 ioBroker 平台提供向 SQL 数据库写入历史数据的功能，服务于数据库存储用途",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This adapter saves state history into SQL DB. ／ Supports PostgreSQL, mysql, Microsoft SQL Server and sqlite. ／ - **Statistics tab**: lists every ID in the database with its storage type, status (logged / logging off / state deleted), number of values, estimated size and the covered time range. The **Clean up** button first shows what would be deleted and removes it only after confirmation. States that still exist but merely have logging switched off are excluded unless you tick the checkbox, because their history is still reachable and may be wanted.",
+   "evidence_lines": [
+    10,
+    12,
+    31
+   ]
+  },
+  "fn": "ioBroker/ioBroker.sql",
+  "sha": "e435310c4f57",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

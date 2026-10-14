@@ -8983,5 +8983,71 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92dcd6613aec": {
+  "identity": {
+   "one_liner": "自托管社区平台：论坛+聊天+语音+白板+主页构建一体化应用",
+   "review": "Nodyx 是一个自托管社区平台，整合论坛、实时聊天、语音频道、白板、活动和拖拽式主页构建器，面向想在自有服务器上运营社区的用户。技术栈为 Fastify/SvelteKit，数据存于 PostgreSQL 16 并用 Redis 7 管理会话，通过一键安装脚本部署，无需 Docker，支持 Rust 中继实现内网穿透访问。",
+   "highlights": [
+    "提供论坛、实时聊天、语音频道（WebRTC P2P/SFU）、白板、任务板、投票与主页构建器",
+    "安装脚本自动部署 Node.js、PostgreSQL、Redis、Caddy、PM2 及 Rust 语音中继",
+    "支持端到端加密私信、TOTP 双因素与无密码登录（ECDSA P-256）"
+   ],
+   "use_cases": [
+    "在自有 VPS 或家庭服务器上搭建独立社区站点",
+    "需要论坛与即时聊天并存、且内容可被搜索引擎索引的社区",
+    "通过 nodyx 中继在无公网端口的家用路由环境下运行实例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It installs Node.js, PostgreSQL, Redis, Caddy, PM2 and the Rust voice relay, generates every secret, runs the database migrations and creates your admin account. Unattended installs work too (`--yes`, `--network=relay`, `--admin-password-file`). ／ |Data|PostgreSQL 16 with full-text search, Redis 7 for sessions and presence, 125 migrations applied automatically at startup|",
+     "lines": [
+      145,
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据层使用 PostgreSQL 16 存储数据、Redis 7 管理会话，是使用数据库的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Nodyx gives a community one home that it owns: a forum that search engines can read, real-time chat, voice channels with screen sharing, a collaborative whiteboard, events, polls, and a public homepage you build by drag and drop. Everything runs on one server that you control, from a cheap VPS to a Raspberry Pi behind your home router. ／ It installs Node.js, PostgreSQL, Redis, Caddy, PM2 and the Rust voice relay, generates every secret, runs the database migrations and creates your admin account. Unattended installs work too (`--yes`, `--network=relay`, `--admin-password-file`). ／ |Data|PostgreSQL 16 with full-text search, Redis 7 for sessions and presence, 125 migrations applied automatically at startup|",
+   "evidence_lines": [
+    28,
+    145,
+    163
+   ]
+  },
+  "fn": "Pokled/nodyx",
+  "sha": "92dcd6613aec",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

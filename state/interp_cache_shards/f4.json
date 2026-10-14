@@ -9348,5 +9348,290 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd00024247b6": {
+  "identity": {
+   "one_liner": "基于 LLM Agent 的外贸业务员 AI 助手，本地运行的 B2B 客户开发工具",
+   "review": "这是一个面向外贸业务员的 AI 助手应用，提供开发信生成、客户背调、社媒营销、合规检查等 38 项技能。基于 Hermes Agent 驱动，后端为 FastAPI + SQLite，数据默认存储在本地 ~/.trade/ 目录。需要 LLM API Key（推荐 DeepSeek）和 Tavily 搜索 API，通过 pip 或一键脚本安装，通过浏览器界面使用。",
+   "highlights": [
+    "提供 38 项外贸场景技能：开发信生成、客户 6 层背调、市场分析、文档生成等",
+    "本地运行，业务数据默认存储在 ~/.trade/，支持 Ollama 本地模型实现数据不出本机",
+    "支持多公司数据隔离（X-Company-ID header），内置 trade doctor 自检命令"
+   ],
+   "use_cases": [
+    "外贸业务员自动生成开发信、询盘回复和报价谈判内容",
+    "对潜在客户进行邮箱注册检测、WHOIS、制裁名单等多层背景调查",
+    "定时执行早安简报、社媒内容日历、客户跟进提醒等自动化任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **后端**: FastAPI + SQLite + uvicorn",
+     "lines": [
+      262
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确后端为 FastAPI + SQLite，项目是使用数据库存储业务数据的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 外贸业务员的 AI 助手 ／ - **后端**: FastAPI + SQLite + uvicorn ／ - **业务数据默认存储在本地**（`~/.trade/`），不上传任何服务器",
+   "evidence_lines": [
+    23,
+    262,
+    240
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "chefroger/smart-trade-ai",
+  "sha": "dd00024247b6",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b9f2dcf200a7": {
+  "identity": {
+   "one_liner": "自托管播客发布管理平台，PHP+SQLite 单文件部署",
+   "review": "EasyPodcast 是一个用 PHP 和 SQLite 实现的自托管应用，用于发布和管理一个或多个播客，提供公开网页、RSS feed、统计、静态页面、用户管理和 REST API。通过单一 PHP 安装器在浏览器中完成部署，无需外部依赖或 composer；支持 Docker、Apache 部署，提供 8 种语言界面。",
+   "highlights": [
+    "提供公开网页、RSS feed、统计、页面、用户管理和 REST API",
+    "支持 Multipodcast 模式，单数据库多播客隔离管理",
+    "包含 CSRF、CSP、TOTP 2FA 等 Web 安全机制"
+   ],
+   "use_cases": [
+    "自托管播客发布与托管",
+    "单个平台管理多个播客频道",
+    "从外部 RSS feed 导入剧集"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Aplicación en **PHP + SQLite** para publicar un podcast con web pública, feed RSS, SEO y panel de administración. Sin dependencias externas ni composer.",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该应用使用 SQLite 存储播客数据，本身不面向数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Aplicación en **PHP + SQLite** para publicar un podcast con web pública, feed RSS, SEO y panel de administración. Sin dependencias externas ni composer. ／ sqlite3 podcast.sqlite < schema.sql ／ |Tabla|Uso|",
+   "evidence_lines": [
+    9,
+    51,
+    199
+   ]
+  },
+  "fn": "educollado/EasyPodcast",
+  "sha": "b9f2dcf200a7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ae1715bef44c": {
+  "identity": {
+   "one_liner": "自托管图床/图库应用，用MySQL+Redis存储并管理图片视频",
+   "review": "Photoly 是一个自托管图片托管与媒体管理网页应用，提供上传、标签/图库/文件夹分类、分享链接、QR码、Exif信息记录、位置地图、条件搜索和REST API。后端为 Python Flask + MySQL + Redis，前端 Vue 3，通过 Docker Compose 部署；README 注明旧 Java/Spring Boot 版本已迁移至 Flask，不迁移旧密码与会话。",
+   "highlights": [
+    "提供图片/视频上传、标签图库文件夹分类、分享链接与QR码功能",
+    "自动记录照片Exif信息（GPS、相机、镜头、ISO等）并展示位置地图",
+    "提供REST API及OpenAPI 3.2文档与Swagger UI"
+   ],
+   "use_cases": [
+    "个人或团队自托管图片/图库站点",
+    "需要按Exif和地理位置检索照片的媒体库管理",
+    "通过API将图片托管能力嵌入其他应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "DB: MySQL + Redis ／ The backend waits for MySQL and Redis, initializes missing tables/settings/admin once, then serves Flask with Gunicorn. Repeated startup preserves existing records and does not reset passwords. MySQL uses the Compose `mysql_data` named volume; media stays in `",
+     "lines": [
+      21,
+      38
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The local suite uses SQLite and fakeredis. Install ExifTool first (`brew install exiftool` on macOS, `apt install libimage-exiftool-perl` on Debian). For real MySQL/Redis and HTTP/Gunicorn acceptance tests, run from the repository root:",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Photoly 使用 MySQL 和 Redis 存储数据的图片托管应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is a picture host application. There are demands for the self-host and reliable picture-host applications. Photoly provides a solution just right for that. Using Photoly, you can manage your pictures and photos with easy clicks, and categorize them using tags, galleries, and namespaces. We are also sure that the search functionality could make it easier to see the photos you are interested in. Moreover, Photoly provides API for you to access our functionalities for embedding in other applications. ／ DB: MySQL + Redis ／ The backend waits for MySQL and Redis, initializes missing tables/settings/admin once, then serves Flask with Gunicorn. Repeated startup preserves existing records and does not reset passwords. MySQL uses the Compose `mysql_data` named volume; media stays in `./upload_data`. This Compose does not mount or reset the old `database/mysql-data` directory. The frontend API calls are unchanged.",
+   "evidence_lines": [
+    4,
+    21,
+    38
+   ]
+  },
+  "fn": "WiscWebGroup/photoly",
+  "sha": "ae1715bef44c",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "31ee87594cb2": {
+  "identity": {
+   "one_liner": "本地优先个人健康记录，经 MCP 暴露，数据存自有 Postgres",
+   "review": "health-os 是一个本地优先的个人健康记录系统，把化验、用药、诊断、穿戴设备和饮食日志存入用户自己的 Postgres（含 pgvector），并通过 MCP 协议向任意 MCP 客户端提供 31 个读写工具；关键值警报、药物安全规则等以确定性代码实现，数据写入需人工审批。适合想用本地模型或自托管方式管理个人健康数据的用户，需 Docker 和 Python 3.12+。",
+   "highlights": [
+    "提供 31 个 MCP 工具，通过 stdio 与任意 MCP 客户端通信",
+    "安全规则（关键值警报、药物相互作用拒绝）以确定性代码实现",
+    "数据存于本地 Postgres，写入须经 pending→approve 流程"
+   ],
+   "use_cases": [
+    "用本地模型客户端管理个人化验与用药记录",
+    "通过 PDF/照片导入化验单并做趋势分析",
+    "自托管存储穿戴设备（Apple Health/Garmin）与饮食数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Your labs, diagnoses, medications, wearable data and food log live in your own Postgres; any ／ docker compose up -d db # Postgres 16 + pgvector ／ Architecture: MCP client over stdio to mcp_server; read tools query approved views, write tools go through core/services into pending; safety, analytics, PostgreSQL with pgvector, ingestion ／ - **Your data stays in your own database.** Postgres runs locally in Docker; `data/` and `.env`",
+     "lines": [
+      7,
+      64,
+      79,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 Postgres 存储自身健康记录数据，数据库是其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local-first personal health record, exposed over MCP.** ／ docker compose up -d db               # Postgres 16 + pgvector ／  Architecture: MCP client over stdio to mcp_server; read tools query approved views, write tools go through core/services into pending; safety, analytics, PostgreSQL with pgvector, ingestion",
+   "evidence_lines": [
+    6,
+    64,
+    79
+   ]
+  },
+  "fn": "andronaft/health-os",
+  "sha": "31ee87594cb2",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

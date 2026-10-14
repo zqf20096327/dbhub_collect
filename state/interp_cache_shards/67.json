@@ -9636,5 +9636,82 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "764a20d07dea": {
+  "identity": {
+   "one_liner": "基于 Bun/SQLite 的编码代理任务与记忆层 CLI，含 MCP 接入",
+   "review": "myc 是一个面向编码代理（Claude Code、Codex、opencode 等）的本地任务队列与项目记忆工具，提供事实/决策日志、混合检索和代码索引，运行于 Bun 与 SQLite ≥3.50.4 之上，通过 myc wire 写入 hooks 与 MCP 配置，不支持原生 Windows（需 WSL）。适用于使用 AI 编码代理、需要任务与记忆跨会话持久化的开发者。",
+   "highlights": [
+    "提供任务队列、oplog 与混合（词法+向量）检索，语义搜索需显式执行 myc models fetch",
+    "支持通过 myc wire 为 Claude Code、Codex、opencode 等代理写入 hooks 与 MCP 配置",
+    "提供 myc run 在机器用户级别共享的重命令队列，状态存于 ~/.myc/queue.db"
+   ],
+   "use_cases": [
+    "为 AI 编码代理持久化任务与项目决策记忆，跨上下文压缩与机器迁移（经 git）保留",
+    "为 Claude Code / opencode 等代理配置 MCP 服务器与 hooks",
+    "多代理共享一台机器时串行执行测试、构建等重命令"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is bound to `bun:sqlite` (no native bindings on the Node side). ／ **SQLite ≥ 3.50.4.** The floor has two reasons. Below 3.44.0, FTS5 cannot be",
+     "lines": [
+      29,
+      33
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "repositories; a team server over Postgres with tokens, roles and ACL",
+     "lines": [
+      476
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "myc 是为编码代理生态服务的任务/记忆/队列工具，SQLite 仅作为其本地存储引擎。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local, fast task-and-memory layer for coding agents: a task queue, an oplog of ／ myc init                     # .myc/ + SQLite + migrations in this repo ／ myc wire                     # hooks + MCP for Claude Code, Codex, opencode, Kimi, mcode and mimo",
+   "evidence_lines": [
+    3,
+    95,
+    96
+   ]
+  },
+  "fn": "aistastudio/myc",
+  "sha": "764a20d07dea",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

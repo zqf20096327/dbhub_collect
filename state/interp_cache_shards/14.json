@@ -9730,5 +9730,148 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0108a18487a1": {
+  "identity": {
+   "one_liner": "自托管 IMAP 邮件同步入 PostgreSQL 并经 MCP 提供给 AI 代理的服务",
+   "review": "MailFathom 将用户的 IMAP 邮箱同步到自有的 PostgreSQL 数据库并建立索引，通过 Model Context Protocol 向 AI 代理提供二十余个工具，包括搜索、问答、标记、草稿和受控发送。适合希望让本地 AI 客户端读取和管理自己邮件的个人或小团队。写操作默认关闭、需逐项授权，且 1.0 版本前各版本间可能存在破坏性变更。",
+   "highlights": [
+    "提供 21 个 MCP 工具，覆盖邮件读取、标记、草稿、发送与联系人管理",
+    "读取操作基于本地副本完成，不访问邮件服务器，也不更改远端已读状态",
+    "权限按读取、标记、草稿、发送分别授予，凭据通过引用而非明文保存在配置中"
+   ],
+   "use_cases": [
+    "让 AI 聊天客户端通过 MCP 检索和问答本地邮件存档",
+    "将 IMAP 邮箱自托管同步为可搜索的本地数据库副本",
+    "以受限工具形式向代理提供起草与发送邮件的能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "MailFathom synchronizes your IMAP accounts into a PostgreSQL database you run, indexes that copy, and serves it to AI agents as tools over the Model Context Protocol. Reading answers from your copy rather than from a mail server, and it never marks anything re ／ Installing MailFathom is the real thing: what every shape needs, and the guide for Compose, Podman Quadlet, Kubernetes, or a native systemd process. Getting started then walks from an installed instance to a first successful tool call. To evaluate from the che",
+     "lines": [
+      12,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 PostgreSQL 存储同步的邮件数据，README 明确声明同步进用户运行的 PostgreSQL 数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MailFathom synchronizes your IMAP accounts into a PostgreSQL database you run, indexes that copy, and serves it to AI agents as tools over the Model Context Protocol. Reading answers from your copy rather than from a mail server, and it never marks anything read there. Writing — marking, drafting, sending — is a separate act each account and each credential has to be given, and every one of them is off until you turn it on. ／ **Docker Compose is the recommended first installation.** It is the only shape that provisions PostgreSQL for you, and its defaults publish both ports on loopback, so nothing is reachable from another machine until you decide it should be. ／ |**Reading your mail**|`list_accounts`, `list_emails`, `search_emails` — ranked lexically, and by embedding similarity once you configure a model — `get_email_content` for up to ten messages in full, and `ask_mail`, which answers a question from your mail and cites every message it drew on|",
+   "evidence_lines": [
+    12,
+    20,
+    60
+   ]
+  },
+  "fn": "fathomise/MailFathom",
+  "sha": "0108a18487a1",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2aa806a12316": {
+  "identity": {
+   "one_liner": "AI 辅助身份与证件核验平台，OCR+防伪信号+人脸比对",
+   "review": "TrustID 是为 Smart India Hackathon 题目 26188 构建的身份与证件筛查平台，前端 Next.js、后端 FastAPI，提供证件上传、OCR、篡改信号分析、人脸比对、案件管理与 PDF 报告，通过 docker compose 启动 postgres/redis/minio 基础设施，定位为授权人员的决策支持工具而非自动判定系统，区块链与活体检测等功能仍处于延期状态。",
+   "highlights": [
+    "提供证件 OCR、篡改信号分析与人脸比对等核验能力",
+    "提供可审计的案件操作、持久化生命周期状态与 PDF 报告生成",
+    "通过 docker compose 启动 postgres、redis、minio 本地基础设施"
+   ],
+   "use_cases": [
+    "身份与证件的真实性筛查工作流",
+    "需要审计记录与风险因素说明的核验案件调查",
+    "本地开发与演示环境的快速部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Requirements are Node.js 22+, npm, Python 3.11+, Docker, and Docker Compose. Start local infrastructure from the repository root with `docker compose up -d postgres redis minio`. Copy `.env.example` to `.env` if local configuration overrides are needed. Never ",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 postgres 作为本地基础设施由 docker compose 启动，是该应用的后端存储依赖",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "TrustID is an AI-assisted identity and document screening platform for Smart India Hackathon problem statement 26188: **AI-Based Fake Identity & Document Screening System**. The product promise is **Verify. Detect. Protect.** It is decision support for authorized personnel, not an autonomous legal or criminality determination system. ／ apps/api (FastAPI modular monolith, /api/v1) ／ Requirements are Node.js 22+, npm, Python 3.11+, Docker, and Docker Compose. Start local infrastructure from the repository root with `docker compose up -d postgres redis minio`. Copy `.env.example` to `.env` if local configuration overrides are needed. Never commit real secrets or identity data.",
+   "evidence_lines": [
+    3,
+    26,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "gulshanverse/TrustID-Smart-Identity-Verification-System",
+  "sha": "2aa806a12316",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

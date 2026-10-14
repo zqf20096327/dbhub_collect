@@ -9116,5 +9116,206 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92779afcb5d6": {
+  "identity": {
+   "one_liner": "嵌入式 Go 库，为 AI 代理动作提供可验证的持久内存与检查屏障",
+   "review": "Joltrin 是一个嵌入式 Go 库，在 AI 代理的动作提交前，依据服务端记录的 trace 和预置前置条件独立校验意图，而非采信代理自身声明。面向构建代理系统或本地优先应用、以及需要持久化单一应用状态的工程师。提供 MCP 服务器接入、Kubernetes 准入 webhook，底层是支持 ACID 事务、向量搜索与纠删码的 B-Tree 存储引擎。",
+   "highlights": [
+    "在动作提交前基于记录的 trace 与固定前置条件独立校验，校验与提交为同一调用",
+    "提供 MCP 服务器与 Kubernetes 验证性准入 webhook 两种接入方式",
+    "内置 ACID 事务的嵌入式 B-Tree 存储引擎，附带向量搜索、Reed-Solomon 纠删码与崩溃可恢复的代理内存"
+   ],
+   "use_cases": [
+    "为 AI 代理的危险操作（如删库）强制前置步骤（先备份并验证后才放行）",
+    "为代理系统提供崩溃安全、可被其他 worker 恢复的持久内存",
+    "以单一嵌入式库替代 Redis、队列与 Postgres 组合来持久化应用状态"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The verifier sits on an embedded, ACID-compliant B-Tree storage engine, so the trace and the agent's state share one transaction boundary. The same library gives you crash-safe agent memory that another worker can resume, vector search stored next to structure",
+     "lines": [
+      138
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理生态服务的校验与持久内存库，提供 MCP 服务器与 K8s webhook 等组件，而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Joltrin (formerly SOP) is an open-source Go library that checks an AI agent's action against the recorded trace before the action commits. The agent proposes. A separate verifier decides, using fixed preconditions and the steps the server has actually recorded. It does not use the agent's claims, its prompt context, its self-evaluation, or its confidence. ／ `sop-k8s-gate` is a validating admission webhook that applies the same barrier to cluster operations. A `DELETE` on a labelled PersistentVolumeClaim is refused by the API server until the runbook's required steps, such as a validated backup, are recorded for the trace named on the object. It runs as a Deployment with cert-manager, takes the same runbook files as the MCP server, and has a `--warn-only` mode to try a policy before it enforces. What it checks and what it leaves to you, including who may record a step, is in docs/KUBERNETES_GATE.md. ／ The verifier sits on an embedded, ACID-compliant B-Tree storage engine, so the trace and the agent's state share one transaction boundary. The same library gives you crash-safe agent memory that another worker can resume, vector search stored next to structured data, Reed-Solomon erasure coding, and swarm task coordination. It is for engineers building agent systems or local-first apps, and for teams running Redis, a queue, and Postgres only to keep one application's state durable. Benchmarks, with their limits, are in docs/BENCHMARKS.md. The long version is in docs/WHY_JOLTRIN.md and docs/SOP_ARCHITECTURE_WHITEPAPER.md.",
+   "evidence_lines": [
+    15,
+    115,
+    138
+   ]
+  },
+  "fn": "SharedCode/joltrin",
+  "sha": "92779afcb5d6",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3114dd95c2f3": {
+  "identity": {
+   "one_liner": "异步多智能体LLM框架，内置SQLite持久化与多渠道连接器",
+   "review": "chatflow-agent 是一个基于 asyncio 的多智能体对话框架，供开发者构建运行于 WhatsApp、Telegram、Webhook 和 CLI 渠道的 LLM 应用。它通过 SessionStore/SQLiteSessionStore 实现会话持久化（基于 Python 标准 sqlite3），支持 Gemini、Claude、OpenAI、Grok、Ollama 本地模型等多种 Provider，并提供 HMAC webhook 安全、自动重试与轮次回滚等机制。注意其回滚不覆盖已执行工具的外部副作用。",
+   "highlights": [
+    "提供 WhatsApp（Meta Cloud API）、Telegram、Webhook（FastAPI）与 CLI 四类渠道连接器",
+    "内置 SQLiteSessionStore 持久化，基于 Python 标准 sqlite3 库，无额外外部依赖",
+    "支持轮次失败回滚、每会话并发锁与 webhook HMAC 安全校验"
+   ],
+   "use_cases": [
+    "构建接入 WhatsApp/Telegram 的多智能体客服对话应用",
+    "通过 Ollama 运行本地 Gemma 模型实现离线对话助手",
+    "为 React/Next.js 等前端提供带会话持久化的异步 REST 聊天 API"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "#### Persistent SQLite Storage (`SQLiteSessionStore`) ／ Built on Python's standard `sqlite3` library with zero additional external packages. Safely manages Windows file locks and atomic transactions: ／ * **Turn Failure Rollback:** If an LLM request times out, rate limits, or crashes mid-turn, ChatFlow automatically rolls back dialogue history to the last consistent turn in memory and SQLite (note: rollback reverts conversational history; external side effect",
+     "lines": [
+      252,
+      254,
+      234
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是供开发者构建多智能体应用的框架，SQLite 仅作为其内置会话持久化存储层被使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Build autonomous multi-agent swarms for WhatsApp, Telegram, and Webhooks in seconds without heavy dependency chains.** ／ `chatflow-agent` is designed for developers who want the multi-agent power of OpenAI Swarm without being locked into a single provider, combined with turnkey connectors for messaging platforms like **WhatsApp** and **Telegram**. ／ ChatFlow provides native, zero-dependency persistence to ensure conversations and active specialist agents survive server restarts, worker redeployments, and crashes.",
+   "evidence_lines": [
+    10,
+    46,
+    238
+   ]
+  },
+  "fn": "GustavoBaranda/chatflow-agent",
+  "sha": "3114dd95c2f3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "65d377c10bb5": {
+  "identity": {
+   "one_liner": "自托管邮件客户端，单容器整合多个 IMAP 邮箱",
+   "review": "nexmail 是一个自托管 Web 邮件客户端，将多个 IMAP 邮箱聚合到一个容器中运行，提供会话视图、全文搜索、规则、联系人、任务、日历及多用户与 OpenID Connect 登录。面向在家自行托管服务器的个人用户。数据缓存存于单个 SQLite 文件，支持 CardDAV/CalDAV 同步。README 说明项目尚年轻，建议先在可承受问题的邮箱上试用。",
+   "highlights": [
+    "支持多个 IMAP 邮箱并列及合并收件箱视图",
+    "提供全文搜索（本地缓存）与按需的 IMAP SEARCH 服务端查询",
+    "支持 CardDAV 联系人与 CalDAV 日历同步、vCard 导入导出及 OpenID Connect 登录"
+   ],
+   "use_cases": [
+    "家庭实验室/自托管场景下在浏览器中管理多个个人邮箱",
+    "需要任务、日历、联系人围绕邮件一体管理的自托管用户",
+    "多用户共享一个自托管邮件客户端实例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "a single SQLite file, no second database, no cloud account, and no service that",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "nexmail 使用 SQLite 作为自身数据存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted email client. One container, one file, your mailboxes stay with you.** ／ machine. It is meant for people who already host things at home: one container, ／ a single SQLite file, no second database, no cloud account, and no service that",
+   "evidence_lines": [
+    5,
+    12,
+    13
+   ]
+  },
+  "fn": "DerKezorm/nexmail",
+  "sha": "65d377c10bb5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

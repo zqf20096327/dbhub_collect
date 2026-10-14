@@ -9513,5 +9513,143 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4e263e7bb6ac": {
+  "identity": {
+   "one_liner": "常驻 IRC bouncer，REST API + PWA 客户端，SQLite 存 scrollback",
+   "review": "grappa-irc 是一个自托管的常驻 IRC bouncer，包含服务端 grappa 和类 irssi 界面的 PWA 客户端 cicchetto。服务端在服务器侧终结 IRC 协议，通过 REST API 与 Phoenix Channels WebSocket 向客户端推送 JSON 数据，会话回滚记录存储在 SQLite（经 Ecto）中。面向需要随时随地访问 IRC 的老用户与自托管运维者，以单个容器部署，配置存于数据库。",
+   "highlights": [
+    "提供 REST API 与 Phoenix Channels WebSocket 双通道，客户端无需解析 IRC 协议",
+    "使用 SQLite（经 Ecto）持久化分页 scrollback，按保留策略限制",
+    "支持 docker、.deb、AUR、systemd 等多种部署方式，发布多架构镜像"
+   ],
+   "use_cases": [
+    "自托管常驻 IRC 网关，通过手机浏览器访问 IRC",
+    "在服务器侧持有 scrollback 与已读状态，客户端更换设备不丢失历史",
+    "为 irssi/weechat/hexchat 等传统 IRC 客户端提供接入桥"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Each `(user, network)` has one persistent supervised GenServer (`Grappa.Session`) owning its upstream connection. A crash is isolated to that session; the supervisor restarts with fresh state and the sqlite scrollback survives. ／ - Events stream into a per-`(network, channel)` paginated scrollback (sqlite via Ecto), bounded by a retention policy. ／ grappa runs as a single container against a sqlite DB. There is no config file — every `(user, network)` binding lives in the DB and is read by `Grappa.Bootstrap` at boot. The operator interface is `bin/grappa`.",
+     "lines": [
+      53,
+      54,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "grappa 使用 SQLite 作为自身 scrollback 数据存储，数据库是应用内部依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Each `(user, network)` has one persistent supervised GenServer (`Grappa.Session`) owning its upstream connection. A crash is isolated to that session; the supervisor restarts with fresh state and the sqlite scrollback survives. ／ grappa runs as a single container against a sqlite DB. There is no config file — every `(user, network)` binding lives in the DB and is read by `Grappa.Bootstrap` at boot. The operator interface is `bin/grappa`.",
+   "evidence_lines": [
+    53,
+    78
+   ]
+  },
+  "fn": "vjt/grappa-irc",
+  "sha": "4e263e7bb6ac",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "80100006ce14": {
+  "identity": {
+   "one_liner": "基于 Django Ninja 与 PostgreSQL 的 REST API 项目脚手架",
+   "review": "该仓库是一个 Django Ninja Extra 脚手架，用类控制器方式构建 REST API，内置 JWT/OTP/2FA 认证、缓存、Celery 后台任务、监控和种子数据，主数据库为 PostgreSQL，提供 just 一键安装、Docker Compose 与 Helm 部署配置，适合用 Python 开发后端 API 的团队作为项目起点使用。",
+   "highlights": [
+    "提供基于 Django Ninja Extra 的类控制器架构与服务层模式，含四种控制器实现示例",
+    "内置 JWT、magic link、OTP、2FA、API key 多种认证方式与缓存、后台任务、监控集成",
+    "提供 just setup 一键初始化、Docker Compose profiles 及 SDK 生成与测试配置"
+   ],
+   "use_cases": [
+    "以 Django + PostgreSQL 技术栈快速启动新的 REST API 项目",
+    "参考类控制器与服务层的项目结构组织团队代码",
+    "搭建带认证、缓存、任务队列与可观测性的后端开发环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL** - Primary database",
+     "lines": [
+      115
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 为该项目的主数据库，项目本身是使用数据库的应用脚手架",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **PostgreSQL** - Primary database ／ A production-ready, **opinionated** Django boilerplate built with **Django Ninja Extra** for creating modern REST APIs using **class-based controllers** (not function views). This project provides everything you need to quickly build scalable APIs with authentication, caching, monitoring, background tasks, and automated feature generation.",
+   "evidence_lines": [
+    115,
+    3
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "mattjaikaran/django-ninja-boilerplate",
+  "sha": "80100006ce14",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

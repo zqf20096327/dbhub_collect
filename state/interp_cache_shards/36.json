@@ -9907,5 +9907,337 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "62229679490f": {
+  "identity": {
+   "one_liner": "不依赖 cgo 访问 SQLite 的 Go 库，经子进程 Sqinn 通信",
+   "review": "Sqinn-Go 是一个 Go 语言库，通过以子进程方式启动 Sqinn 并经 stdin/stdout 通信来读写 SQLite，从而避免 cgo 依赖。适合需要在 Go 项目中使用 SQLite 但不想引入 gcc/cgo 的开发者。限制：非 database/sql 驱动，仅覆盖部分 SQLite C API，单个 Sqinn 实例为单线程处理。",
+   "highlights": [
+    "以子进程方式通过 Sqinn 访问 SQLite，无需 cgo",
+    "内嵌 linux_amd64 与 windows_amd64 的预编译 sqinn，也可自编译指定路径",
+    "提供 Exec/Query 高层接口，不实现 database/sql 驱动接口"
+   ],
+   "use_cases": [
+    "Go 项目需要 SQLite 但开发/交叉编译环境无 gcc",
+    "希望减小二进制体积、加快 Go 构建速度的场景",
+    "非并发或可自行管理多 Sqinn 实例的 SQLite 应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Sqinn-Go is a Go (Golang) library for accessing SQLite databases without cgo. ／ Sqinn over stdin/stdout/stderr. The Sqinn child process then does the SQLite ／ If you want SQLite but do not want cgo, Sqinn-Go can be a solution.",
+     "lines": [
+      10,
+      13,
+      16
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Go 语言访问 SQLite 数据库提供访问库/驱动类组件，属数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Sqinn-Go is a Go (Golang) library for accessing SQLite databases without cgo. ／ It starts Sqinn as a child process (`os/exec`) and communicates with ／ Instead, Sqinn-Go provides higher-level Exec/Query interfaces that should be",
+   "evidence_lines": [
+    10,
+    12,
+    118
+   ]
+  },
+  "fn": "cvilsmeier/sqinn-go",
+  "sha": "62229679490f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "13b8547fc959": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 Java 持久化工作流库",
+   "review": "DBOS Transact 是一个 Java 库，通过把工作流每个步骤的检查点写入 Postgres 实现持久化执行，进程崩溃或重启后可从检查点恢复状态。提供持久化队列、cron 调度和通知等能力，除 Postgres 外无需额外服务，可与 Spring 集成。面向需要长时间可靠运行流程（如支付、数据同步、AI agent）的 Java 开发者。",
+   "highlights": [
+    "将工作流步骤检查点存入 Postgres，故障后从断点恢复",
+    "提供持久化队列、cron 调度与通知机制，无需独立消息中间件",
+    "以库形式嵌入程序，支持与 Spring 等框架配合使用"
+   ],
+   "use_cases": [
+    "编排需要从故障中恢复的业务流程",
+    "构建容错的数据管道",
+    "运行依赖不稳定 API 的 AI agent 或长时间任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBOS provides lightweight durable workflows built on top of Postgres. ／ As your workflows run, DBOS checkpoints each step they take in a Postgres database.",
+     "lines": [
+      7,
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库以 Postgres 作为持久化存储来运行工作流检查点，Postgres 是其唯一依赖的数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DBOS provides lightweight durable workflows built on top of Postgres. ／ As your workflows run, DBOS checkpoints each step they take in a Postgres database. ／ This library contains all you need to add durable workflows to your program: there's no separate service or orchestrator or any external dependencies except Postgres.",
+   "evidence_lines": [
+    7,
+    10,
+    16
+   ]
+  },
+  "fn": "dbos-inc/dbos-transact-java",
+  "sha": "13b8547fc959",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "10c77a9c3bec": {
+  "identity": {
+   "one_liner": "本地自托管的 AI 编程智能体，沙箱与 MCP 扩展",
+   "review": "Spark 是一个以 Python 后端加 Web 前端实现的本地自托管 AI 编程智能体，通过浏览器界面以对话方式完成文件读写、代码搜索、Shell 与 Jupyter 等工具调用，支持多步任务规划与子 Agent 并行，提供四级沙箱与检查点回滚。适合希望在本地环境运行 AI 编程助手、关注代码与数据不出本机的开发者使用。模型侧依赖 OpenAI 兼容 API（DeepSeek、OpenAI、Ollama 等），README 未说明其会话持久化使用何种数据库。",
+   "highlights": [
+    "提供四级沙箱与工具审批流程、受保护路径列表（L16、L41）",
+    "支持 MCP 协议兼容、自定义 Provider 与项目级 skills 扩展（L45）",
+    "提供会话管理、检查点回滚与长期记忆检索（L42-L43）"
+   ],
+   "use_cases": [
+    "本地对话式编码：读取/写入文件、grep/glob 搜索、执行 Shell 与 Jupyter（L39）",
+    "多步任务拆解与最多 4 个并行子 Agent 委派（L40）",
+    "通过 OpenAI 兼容 API 接入 DeepSeek、OpenAI、Ollama 等模型（L44、L57）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明其会话持久化或记忆存储依赖哪个数据库，无法确认其为数据库生态工具或仅用库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（L5）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Spark — Local-first AI Coding Agent ／ **Code stays with you. Keys stay with you.** A self-hosted AI coding assistant that runs entirely on your machine — zero privacy leaks, full control. ／ |Extension|MCP protocol compatible, custom Provider, project-level skills (`.spark/skills/`), specialist sub-agents (`.claude/agents/`)|",
+   "evidence_lines": [
+    3,
+    9,
+    45
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "badhope/spark",
+  "sha": "10c77a9c3bec",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4fcc19a985b6": {
+  "identity": {
+   "one_liner": "为 AI 编码代理提供持久记忆的 Rust 单二进制边车工具",
+   "review": "Kimetsu 是一个运行在本地的代理记忆工具，以单个 SQLite 文件为存储，通过 MCP 接入 Claude Code、Codex、Cursor 等宿主代理，也可独立在终端运行。它记录代理经验教训、按相关性检索并回注上下文，默认管线不调用 LLM，支持记忆包导出/合并/同步与团队共享。适用于使用编码代理、希望跨会话延续上下文的开发者。",
+   "highlights": [
+    "以每项目单个 SQLite 文件存储全部记忆，默认管线零 LLM 调用，可离线运行",
+    "通过 MCP 接入 Claude Code、Codex、Pi、OpenClaw、Cursor，并提供终端独立模式",
+    "支持记忆包导出/导入/合并/跨机同步，导出前自动脱敏凭据与 PII"
+   ],
+   "use_cases": [
+    "让编码代理跨会话记住项目约定、失败模式与经验教训",
+    "团队间共享项目知识库（Kimetsu Remote 按 repo 提供 brain）",
+    "本地离线环境下的代理上下文检索与记忆基准测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Kimetsu is a sidecar brain for your agent. One Rust binary and one SQLite file ／ |**~1M**|memories held in ~3 GB RAM with sub-2s retrieval, one SQLite file| ／ - **Stays yours.** The whole brain is one SQLite file per project. No external",
+     "lines": [
+      21,
+      41,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该代理记忆应用的本地存储后端使用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 或 Apache-2.0 双许可",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kimetsu is a sidecar brain for your agent. One Rust binary and one SQLite file ／ per project, wired into Claude Code, Codex, Pi, OpenClaw, or Cursor over MCP, ／ default memory pipeline calls no LLM: storage and retrieval are local, free, and",
+   "evidence_lines": [
+    21,
+    22,
+    25
+   ]
+  },
+  "fn": "RodCor/kimetsu",
+  "sha": "4fcc19a985b6",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9cf38b5842ef": {
+  "identity": {
+   "one_liner": "从数据模型生成合成数据与可运行 dbt 项目的 CLI 工具",
+   "review": "model2data 读取 .model2data.yml 或 DBML 模型文件，生成保持外键关系的合成数据，并围绕数据搭建完整的 dbt 项目（seeds、staging 模型、测试、DuckDB/Postgres profile）。面向分析工程师、顾问与培训者，用于 CI fixture、客户演示和测试数据教学；支持指标文件生成已知值与 dbt 测试，确定性输出可提交版本库。",
+   "highlights": [
+    "读取 YAML 或 DBML 数据模型，生成保持主外键与唯一键关系的合成数据",
+    "生成完整可运行的 dbt 项目，含 seeds、staging 模型与测试，profile 支持 DuckDB 或 Postgres",
+    "支持确定性输出（--seed/--as-of）、增量日批次、历史表（SCD2）、缺陷注入与指标校验"
+   ],
+   "use_cases": [
+    "在无生产数据访问时为客户演示生成真实感数据集与 dbt 项目",
+    "在 CI 中用确定性合成数据作为 pipeline fixture",
+    "培训场景中生成按设计失败的数据以演示 dbt 测试"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "staging models, tests, and a DuckDB or Postgres profile. Add a metrics file and it also knows ／ a DuckDB (zero-config) or Postgres profile. One `dbt build` loads, builds and tests it, and ／ DuckDB (zero-config, file-based) or Postgres. ／ pip install \"model2data[postgres]\" # to target Postgres with --adapter postgres",
+     "lines": [
+      17,
+      53,
+      202,
+      211
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据建模与 dbt 分析工作流生成测试数据，并为 Postgres 提供目标 profile，是服务数据库生态的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give `model2data` a data model — a `.model2data.yml` file, or a DBML ／  DuckDB (zero-config, file-based) or Postgres. ／ pip install \"model2data[postgres]\"     # to target Postgres with --adapter postgres",
+   "evidence_lines": [
+    14,
+    202,
+    211
+   ]
+  },
+  "fn": "JB-Analytica/model2data",
+  "sha": "9cf38b5842ef",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

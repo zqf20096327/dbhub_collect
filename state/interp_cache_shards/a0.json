@@ -8859,5 +8859,143 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c0061d6788d4": {
+  "identity": {
+   "one_liner": "Swift 跨平台声明式 ORM，统一基于 SQLite+SQLCipher 后端",
+   "review": "Vein 是面向 Swift 开发者的本地优先 ORM，在 Apple、Linux、Android、Windows 上使用同一 SQLite+SQLCipher 引擎，通过 @Model 宏在编译期生成 schema，提供声明式迁移、线程安全模型、事务回滚及 SwiftUI/SwiftCrossUI 绑定；依赖经 Swift Package Manager 获取，Android 上暂无自动的数据库加密密钥存储支持。",
+   "highlights": [
+    "全平台使用同一 SQLite + SQLCipher 引擎，核心逻辑共享",
+    "@Model 宏编译期自动生成 schema，支持声明式显式迁移，失败自动回滚",
+    "模型线程安全，提供字段级锁与上下文同步，支持 #Predicate 过滤与自定义 SQL"
+   ],
+   "use_cases": [
+    "Swift 跨平台应用的本地数据持久化",
+    "需要 schema 版本迁移测试的本地优先应用",
+    "需要数据库级加密的桌面/移动应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Vein is a local first, highly abstracted ORM for Swift, backed by an SQLite (+ SQLCipher) database. Its API is heavily inspired by Apple's SwiftData framework. ／ Vein is backed by the exact same SQLite + SQLCipher database engine across every platform. Unlike other frameworks that wrap Apple-exclusive APIs on iOS and switch engines elsewhere, Vein shares its entire core logic globally. ／ - **Database & Security**: `skiptools/swift-sqlcipher` (cross platform sqlite and db level encryption)",
+     "lines": [
+      58,
+      75,
+      128
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用提供 SQLite 持久化能力的 ORM 框架，属于数据库生态的开发组件而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 提及 Alternative Licensing（双重许可），具体许可未在可见内容中给出",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Vein is a local first, highly abstracted ORM for Swift, backed by an SQLite (+ SQLCipher) database. Its API is heavily inspired by Apple's SwiftData framework. ／ * **Zero-Boilerplate Schemas:** No need to manually define your database schema (unlike Fluent for example). Vein generates all information it needs automatically from your model declarations using the `@Model` macro at compile time. ／ - **Database & Security**: `skiptools/swift-sqlcipher` (cross platform sqlite and db level encryption)",
+   "evidence_lines": [
+    58,
+    87,
+    128
+   ]
+  },
+  "fn": "amethystsoft/vein",
+  "sha": "c0061d6788d4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2aae38a81856": {
+  "identity": {
+   "one_liner": "为 PocketRisu/RisuAI 提供本地长期叙事记忆的 sidecar 服务",
+   "review": "NMOS 是一个本地运行的 sidecar 服务加浏览器插件，为 PocketRisu/RisuAI 角色扮演聊天保存不可变的对话历史，并在每次生成回复前注入预算受限的记忆包（摘录、状态、事实），支持基于 pgvector 的语义检索与可选 LLM 抽取事实。它面向 PocketRisu 用户，通过 Docker Compose 或各平台便携包安装，数据存于本地 PostgreSQL，仅限 localhost/HTTPS 使用。",
+   "highlights": [
+    "在本地以不可变历史保存对话，并在回复生成前注入预算受限的记忆包，附来源溯源",
+    "支持词汇检索与可选的语义检索（embedding 端点）以及可选 LLM 后台抽取事实",
+    "提供 Docker Compose 与 Windows/macOS/Linux 便携包两种安装方式，内置面板查看存储与注入内容"
+   ],
+   "use_cases": [
+    "PocketRisu/RisuAI 长对话角色扮演中恢复超出上下文窗口的早期内容",
+    "需要本地保存聊天记忆并带历史与溯源记录的场景",
+    "通过面板 Inspector 审计模型实际收到的记忆内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "From 0.3.0 each release also carries a bundle per system with NMOS, its own PostgreSQL 16 and Python, and the ／ short names (PostgreSQL cannot open it), NMOS asks once where to keep the data, suggesting `C:\\NMOS-data`. ／ docker compose exec -T postgres pg_dump -U nmos -d nmos -Fc > nmos-backup.dump",
+     "lines": [
+      84,
+      98,
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "NMOS 使用 PostgreSQL 16 存储其自身数据（含便携包内置数据库），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Long chats fall out of the model's context window. NMOS keeps an **immutable history** of your chat in a local ／ From 0.3.0 each release also carries a bundle per system with NMOS, its own PostgreSQL 16 and Python, and the ／ docker compose exec -T postgres pg_dump -U nmos -d nmos -Fc > nmos-backup.dump",
+   "evidence_lines": [
+    17,
+    84,
+    147
+   ]
+  },
+  "fn": "Sallos725/NMOS",
+  "sha": "2aae38a81856",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

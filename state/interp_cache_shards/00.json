@@ -8585,5 +8585,335 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "31224d872ff1": {
+  "identity": {
+   "one_liner": "AI 记忆与上下文引擎，提供 Memory API 与可本地运行的服务",
+   "review": "Supermemory 是面向 AI 应用的记忆与上下文引擎，通过统一 API 提供记忆提取、用户画像、混合检索（RAG）、连接器与文件处理，并内置 MCP 服务器和多款 AI 编程工具插件。供 AI 工具用户和构建 AI 产品的开发者使用，支持单二进制本地部署与 Docker 自托管，数据存于 ~/.supermemory 目录。",
+   "highlights": [
+    "提供 Memory API：add/profile/search 等接口，结合记忆、用户画像与 RAG 混合检索",
+    "提供 MCP 服务器及 Claude Code、Cursor、OpenCode 等工具的开源插件",
+    "支持单二进制本地运行、Docker 部署及离线模式（Ollama、本地嵌入模型）"
+   ],
+   "use_cases": [
+    "为 AI 编程助手提供跨会话的持久记忆",
+    "为 AI 代理和应用添加记忆、画像与知识库检索能力",
+    "本地/离线环境自托管记忆服务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 主题标签包含 postgres 与 drizzle-orm，其为 AI 生态提供记忆引擎服务而非使用某个数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " State-of-the-art memory and context engine for AI. ／ If you're building AI agents or apps, Supermemory gives you the entire context stack through one API — memory, RAG, user profiles, connectors, and file processing.",
+   "evidence_lines": [
+    3,
+    145
+   ]
+  },
+  "fn": "supermemoryai/supermemory",
+  "sha": "31224d872ff1",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1c20a47dee3a": {
+  "identity": {
+   "one_liner": "Flask+SQLite 学生请假两级审批原型系统及设计提案包",
+   "review": "该项目是 HKUST(GZ) 的学生请假审批课程作业集合，包含可运行的 Flask+SQLite 原型（两级审批流程、CSRF 防护、附件访问控制、密码强度策略、CI 冒烟测试）、企业级设计提案包（含 PostgreSQL DDL）与个人创意作业。通过 python app.py 在本地 5055 端口运行，面向教学与演示场景。",
+   "highlights": [
+    "提供学生请假两级审批流程（导师→学院），按请假天数区分审批链",
+    "实现 CSRF 防护、点击劫持防护（X-Frame-Options/CSP）、附件访问控制与密码强度策略",
+    "包含 66 项检查的 CI 冒烟测试套件及可选 SMTP 邮件通道"
+   ],
+   "use_cases": [
+    "高校学生请假/缺勤审批流程的演示与教学",
+    "Flask Web 应用开发与安全实践的学习参考",
+    "企业级系统设计提案（PRD、架构、数据库 DDL）的写作示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`leave-system/`|Flask + SQLite prototype (**v0.5.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control, 66-check smoke suite. Runs at `http://127.0.0.1:5055`|可執行原型：學生請假、兩級審批、CSRF 防護、附件權限|",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`saas/`|Enterprise design package for HKUST(GZ): PRD, architecture & API, data & security, UI design, roadmap & cost, plus full PostgreSQL DDL|企業級設計提案包（6 頁中英對照）＋完整資料庫 DDL|",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "原型使用 SQLite 存储数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`leave-system/`|Flask + SQLite prototype (**v0.5.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control, 66-check smoke suite. Runs at `http://127.0.0.1:5055`|可執行原型：學生請假、兩級審批、CSRF 防護、附件權限| ／ |`saas/`|Enterprise design package for HKUST(GZ): PRD, architecture & API, data & security, UI design, roadmap & cost, plus full PostgreSQL DDL|企業級設計提案包（6 頁中英對照）＋完整資料庫 DDL| ／ python app.py            # http://127.0.0.1:5055",
+   "evidence_lines": [
+    20,
+    21,
+    29
+   ]
+  },
+  "fn": "Jeng-linLi/student-absence-system",
+  "sha": "1c20a47dee3a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0872a965b9ce": {
+  "identity": {
+   "one_liner": "本地 macOS 物品档案与金融净资产盘点应用",
+   "review": "物谱是运行在 macOS 上的本地应用，提供物品档案、账户与负债盘点、财务目标测算和市场路径模拟等功能，面向低频记录资产的个人用户，无需注册账号，平时不联网。资料仅存于本机，无应用级加密，更新前需手动完整备份；由 Rust 与 React 技术栈构建，需下载 DMG 安装。",
+   "highlights": [
+    "支持物品档案记录，包含购入金额、照片、维护与售出状态及日均成本计算",
+    "提供账户资产与负债盘点、金融净资产趋势查看，以及财务独立反算与市场路径模拟",
+    "支持完整备份与恢复、自动备份、Excel 导入导出，资料仅存本机，无需账号且平时不联网"
+   ],
+   "use_cases": [
+    "每月低频盘点个人账户资产与负债，回顾净资产变化",
+    "为重要物品留档，记录购入、维护与售出信息",
+    "测算每月储蓄目标、财务独立时间及压力情景假设分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为本地点击使用的个人物品与财务盘点应用，数据库仅为其本机存储资料，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "物谱是一个本地使用的 macOS 应用。物品档案与账户盘点是两个并列起点，只用其中一个也完整成立：给重要物品留档，或每月核对资产与负债。规划在盘点之上回答未来问题，用已保存的目标、可核对的测算详情和临时试算分别呈现。无需注册账号，也无需编程或联网使用。 ／ **0.0.6 公开测试版 · Mac（Apple Silicon 与 Intel）** · 图文使用指南 · 版本说明 · 国内镜像（Gitee） · 反馈问题 ／ 完整文档入口见文档索引。从源码运行需要 Mac、Node.js、Rust 与 Xcode 命令行工具；普通用户直接下载安装包即可。",
+   "evidence_lines": [
+    7,
+    9,
+    117
+   ]
+  },
+  "fn": "CoderJackZhu/Thingary",
+  "sha": "0872a965b9ce",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "df2ed3262ff2": {
+  "identity": {
+   "one_liner": "自托管监控工具，监控网站/服务器/数据库并发布状态页，阿拉伯语优先",
+   "review": "Raaqeb 是一个自托管监控工具，可检查 HTTP 站点、TCP 端口、DNS 记录、Postgres/MySQL/Redis 数据库、Docker 容器、定时任务心跳及 TLS 证书到期，并向访客发布状态页。以单二进制运行，支持脚本或 Docker 安装，界面阿拉伯语优先（RTL）。适合需要在自己服务器上运行监控并对外展示状态页的运维人员。",
+   "highlights": [
+    "支持监控 HTTP、TCP、DNS、Postgres/MySQL/Redis 数据库、Docker 容器、定时任务心跳与 TLS 证书到期",
+    "以单个二进制文件运行，README 称可在 1 vCPU / 240MB 内存下运行，无需外部服务",
+    "提供安装脚本与 Docker 部署方式，界面阿拉伯语优先（RTL）"
+   ],
+   "use_cases": [
+    "自托管监控网站、服务器与数据库可用性",
+    "面向客户/访客发布服务状态页",
+    "监控定时任务心跳与 TLS 证书到期"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "مواقع HTTP ومنافذ TCP وسجلات DNS وقواعد بيانات Postgres وMySQL وRedis وحاويات Docker ونبضات المهام المجدولة وانتهاء صلاحية شهادات TLS. ／ HTTP sites, TCP ports, DNS records, Postgres, MySQL and Redis databases, Docker containers, the heartbeats of scheduled jobs and TLS certificate expiry.",
+     "lines": [
+      29,
+      70
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "مواقع HTTP ومنافذ TCP وسجلات DNS وقواعد بيانات Postgres وMySQL وRedis وحاويات Docker ونبضات المهام المجدولة وانتهاء صلاحية شهادات TLS. ／ HTTP sites, TCP ports, DNS records, Postgres, MySQL and Redis databases, Docker containers, the heartbeats of scheduled jobs and TLS certificate expiry.",
+     "lines": [
+      29,
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其监控对象包含 Postgres、MySQL 等数据库，属于为数据库可用性提供监控的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "راقب مواقعك وخواديمك وقواعد بياناتك، وانشر صفحة حالة لزوارك. أداة مراقبة تعمل على خادومك، وعربية أولًا. ／ Raaqeb (راقب, \"keep watch\") watches your sites, servers and databases and publishes a status page for your visitors. A monitoring tool that runs on your own server, Arabic first. ／ HTTP sites, TCP ports, DNS records, Postgres, MySQL and Redis databases, Docker containers, the heartbeats of scheduled jobs and TLS certificate expiry.",
+   "evidence_lines": [
+    3,
+    44,
+    70
+   ]
+  },
+  "fn": "Taqanah/raaqeb",
+  "sha": "df2ed3262ff2",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "345f346b95c5": {
+  "identity": {
+   "one_liner": "达梦 DM8 只读安全评估插件，60 项检查并输出等保 2.0 对照 HTML 报告",
+   "review": "这是一个运行在 DeepSeek Harness（dsh）上的达梦 DM8 数据库安全评估插件，面向数据库管理员与安全运维人员。它通过 JDBC 连库执行 53 项库内查询检查、经 SSH 执行 7 项主机侧只读检查，给出六态结论并映射等保 2.0 控制点，生成单文件 HTML 报告；不评分，需用户自备达梦商业 JDBC 驱动，DM9 与安全版等环境未验证。",
+   "highlights": [
+    "提供 13 个域共 60 项只读检查（53 项库内 + 7 项主机侧 OS/SSH），不修改数据库与主机配置",
+    "支持等保 2.0（GB/T 22239-2019）控制点对照，级别可选 2/3/4",
+    "支持单实例与 DMDSC 共享存储集群逐节点评估，输出零外部依赖的单文件 HTML 报告"
+   ],
+   "use_cases": [
+    "达梦 DM8 数据库的等保 2.0 合规自检与安全基线评估",
+    "DMDSC 集群多节点的安全配置一致性核对",
+    "生成可离线查看的 HTML 安全评估报告用于整改参考"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "达梦 DM8 数据库安全评估插件。执行 60 项只读检查，给出六态结论与等保 2.0 控制点对照，生成 HTML 报告。 ／ |达梦 JDBC 驱动|`DmJdbcDriver8.jar` 或 `DmJdbcDriver18.jar`，需自行提供，见安装第 2 步| ／ ### 2. 放置达梦 JDBC 驱动",
+     "lines": [
+      3,
+      25,
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它通过 JDBC 与 SSH 为达梦数据库提供安全评估功能，是为数据库生态服务的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "达梦 DM8 数据库安全评估插件。执行 60 项只读检查，给出六态结论与等保 2.0 控制点对照，生成 HTML 报告。 ／ - 60 项只读检查，分 13 个域：身份鉴别、认证方式与登录控制、口令策略、自主访问控制、职责分离、强制访问控制、安全审计、通信安全、存储加密、资源限制、访问路径、暴露面与代码安全、主机侧 OS/SSH ／ - 库内 SQL 均为查询语句；主机侧只执行 7 条只读命令。两者都不修改数据库与主机配置",
+   "evidence_lines": [
+    3,
+    9,
+    15
+   ]
+  },
+  "fn": "Shiyuedong-Jade/DM-security",
+  "sha": "345f346b95c5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

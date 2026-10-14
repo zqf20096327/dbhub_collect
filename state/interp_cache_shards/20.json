@@ -8641,5 +8641,170 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a10c5d4df6fa": {
+  "identity": {
+   "one_liner": "MySQL/MariaDB/PostgreSQL 数据库性能顾问代理，采集指标并生成配置建议",
+   "review": "Releem Agent 是用 Go 编写的开源守护进程，安装在数据库服务器上采集 MySQL、MariaDB、PostgreSQL 的运行指标、慢查询与 EXPLAIN 信息，发送到 Relem 云平台分析并返回配置优化建议，可一键应用或回滚。面向需要持续监控和调优数据库的 DBA 与运维人员，云分析部分依赖 Releem 托管服务。",
+   "highlights": [
+    "采集内存、CPU、磁盘、系统变量、查询执行统计与 EXPLAIN 计划等指标",
+    "支持应用推荐的 MySQL 配置并支持回滚，兼容 Amazon RDS/Aurora 参数组",
+    "不收集数据库内容数据，仅收集表结构、索引与带占位符的查询统计"
+   ],
+   "use_cases": [
+    "持续监控 MySQL/MariaDB/PostgreSQL 服务器健康状态与性能指标",
+    "获取并应用数据库配置优化建议",
+    "识别低效 SQL 查询并获得索引建议"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Releem is a database advisor for MySQL, MariaDB & PostgreSQL that provides automatic metrics analysis, actionable insights, and safe automation. It helps detect issues quickly, optimize performance continuously, and reduce manual work at scale. ／ optimization setup, and agent updates for MySQL, MariaDB, and PostgreSQL. ／ - PostgreSQL 12, 13, 14, 15, 16, 17 or 18",
+     "lines": [
+      19,
+      49,
+      154
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Releem is a database advisor for MySQL, MariaDB & PostgreSQL that provides automatic metrics analysis, actionable insights, and safe automation. It helps detect issues quickly, optimize performance continuously, and reduce manual work at scale. ／ - MySQL 5.5, 5.6, 5.7, 8.0, 8.4 or 9",
+     "lines": [
+      19,
+      151
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Releem is a database advisor for MySQL, MariaDB & PostgreSQL that provides automatic metrics analysis, actionable insights, and safe automation. It helps detect issues quickly, optimize performance continuously, and reduce manual work at scale. ／ - MariaDB 10, 11, 12, or 13",
+     "lines": [
+      19,
+      152
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该代理为 MySQL/MariaDB/PostgreSQL 提供指标采集与配置优化服务，是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Releem is a database advisor for MySQL, MariaDB & PostgreSQL that provides automatic metrics analysis, actionable insights, and safe automation. It helps detect issues quickly, optimize performance continuously, and reduce manual work at scale. ／ **Releem Agent** - Has been installed on servers, collects MySQL metrics, sends them to Cloud Platforms, and applies MySQL configurations. Open Source daemon built on Go. ／ The Releem agent collects the following data:",
+   "evidence_lines": [
+    19,
+    35,
+    140
+   ]
+  },
+  "fn": "Releem/releem-agent",
+  "sha": "a10c5d4df6fa",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e1db319e928": {
+  "identity": {
+   "one_liner": "自托管的万智牌卡牌收藏管理服务器，基于 FastAPI 与 React 构建",
+   "review": "OpenMTG 是一个自托管应用，提供卡牌收藏管理、组牌器、统计、愿望单、交易与借出追踪等功能，通过 Docker 部署，使用 PostgreSQL 或 SQLite 作为后端存储，适合想要在本地环境管理万智牌收藏的多用户个人或家庭实验室场景。价格数据来自 Scryfall API，需自行配置数据库环境变量。",
+   "highlights": [
+    "提供收藏管理、组牌器、统计分析、愿望单、卡牌交易与借出追踪等功能",
+    "支持 PostgreSQL 或 SQLite 两种数据库后端，通过 docker-compose 文件选择",
+    "接入 Scryfall API 实现卡牌模糊搜索与价格自动刷新"
+   ],
+   "use_cases": [
+    "个人或家庭多账户管理万智牌实体收藏",
+    "构建卡组并分析法力曲线、颜色分布等统计信息",
+    "在本地实例的用户间进行卡牌交易与借出记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16 / SQLite| ／ POSTGRES_DB=openmtg",
+     "lines": [
+      64,
+      84
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16 / SQLite| ／ |`SQLITE_PATH`|Path for the SQLite database file, if using `docker-compose.sqlite.yml` instead of PostgreSQL|`./sqlite-data`|",
+     "lines": [
+      64,
+      141
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 PostgreSQL/SQLite 存储自身数据的自托管应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted MTG card inventory server with multi-account support, collection tracking, deck building, statistics, wishlist, public Showroom display, card trading, loan tracking, card photos, Home Assistant integration, and import/export. Built with FastAPI and React, deployed with Docker. ／ |Database|PostgreSQL 16 / SQLite| ／ > Database backend (PostgreSQL vs SQLite) is chosen by which compose file you run, not by an environment variable: `docker-compose.yml` uses `DATA_PATH`, `docker-compose.sqlite.yml` uses `SQLITE_PATH`. This is a permanent, per-instance choice locked in at first-time setup. See the Install Guide.",
+   "evidence_lines": [
+    11,
+    64,
+    147
+   ]
+  },
+  "fn": "DredBaron/OpenMTG",
+  "sha": "5e1db319e928",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

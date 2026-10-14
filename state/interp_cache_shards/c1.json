@@ -9382,5 +9382,154 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4b8918a884ba": {
+  "identity": {
+   "one_liner": "本地优先的轻量 issue 跟踪器，单二进制基于 SQLite，内置 MCP",
+   "review": "Lific 是一个面向 AI agent 的 issue 跟踪工具，将计划和问题存储在本地 SQLite 文件中，提供 31 个 MCP 工具供 agent 调用，同时提供 Web UI 和 CLI 给人使用。单二进制部署，内置备份与 Web 服务，适合个人指挥多个 agent 协作的场景；多服务器同步不在支持范围。",
+   "highlights": [
+    "提供 31 个 MCP 工具，支持 issues、plans、pages、comments、附件等操作",
+    "单二进制内置 SQLite、Web UI 和每小时自动备份",
+    "lific connect 可为 11 种 AI 客户端写入 MCP 配置"
+   ],
+   "use_cases": [
+    "个人开发者用 AI agent 管理跨会话的项目计划与 issue",
+    "通过 MCP 让 Claude Code、Cursor 等 AI 客户端读写任务数据",
+    "本地自托管、无 Docker 依赖的轻量任务跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One binary. One SQLite file. MCP built in. ／ - **One 25 to 32 MB binary** with SQLite, the web UI and backups built in. No Docker, no Postgres.",
+     "lines": [
+      10,
+      21
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One 25 to 32 MB binary** with SQLite, the web UI and backups built in. No Docker, no Postgres.",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是一个用 SQLite 存储数据的 issue 跟踪应用，README 明确说明 no Postgres、one SQLite file",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One binary. One SQLite file. MCP built in. ／ Plans and issues live on your server instead of in the context window, so work outlives the session. Agents use it over MCP; you use the web UI. ／ It's built for one person directing several agents.",
+   "evidence_lines": [
+    10,
+    18,
+    128
+   ]
+  },
+  "fn": "VoidNullable/lific",
+  "sha": "4b8918a884ba",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5eabb7882a37": {
+  "identity": {
+   "one_liner": "NestJS+Vue3 管理后台模板，含 RBAC、代码生成与工作流",
+   "review": "栖梧是一个 MIT 许可的全栈管理后台模板，采用 NestJS 12、Vue 3.5、Element Plus 与 pnpm workspace，使用 MySQL 存数据、Redis 做限流与会话共享。面向需要快速搭建后台系统的开发者，提供用户/角色/数据权限、CRUD 代码生成、Excel 导入导出、BPMN 流程审批、OAuth2/SSO 与中英文界面。当前不提供 Docker 与远端 CI，部署依赖本地构建产物，MySQL 需 8.0.17 以上。",
+   "highlights": [
+    "提供用户、角色、部门与五种数据权限范围，含会话、审计与监控",
+    "包含 CRUD、树形与主子代码生成模板，以及 Excel 导入导出与本地/S3 存储",
+    "支持 BPMN 流程设计、审批中心、OAuth2/SSO 与中英文界面"
+   ],
+   "use_cases": [
+    "基于模板快速搭建 NestJS+Vue3 管理后台项目",
+    "需要权限管理、代码生成与流程审批的企业内部系统开发",
+    "从模板创建新项目，使用独立数据库与 Redis 库号"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "栖梧是一个 MIT 许可的管理后台模板，采用 NestJS 12、Vue 3.5、Element Plus、TypeScript、MySQL 和 Redis，使用 pnpm workspace 管理服务端、Web 与共享契约。品牌为「栖梧 / Qiwu」，项目名为 `qiwu-vue-admin`，内部包名为 `@qiwu/*`。 ／ 使用 Node 22（≥ 22.22.1）与 `package.json` 固定的 pnpm 11.28.3。先按 入门指南 准备 MySQL 空库、Redis ACL 与环境文件，凭据只写 `apps/server/.env.local`，然后在仓库根执行： ／ 原生 Windows 11 + Windows PowerShell 5.1（含 cmd 入口）已验证用于开发与完整本地闸门（`pnpm ci:local --serial`）；无文件 symlink 权限时，符号链接防护测试跳过；Windows 服务器部署及 App / 小程序发布未验证。用户须提供已验证的 MySQL（推荐 8.4，最低 8.0.17）与 Redis ≥ 7.0 服务，见入门指南；按入门指南的 Windows 清单准备独立数据库、ACL、浏览器与 `.env.local` 凭据。",
+     "lines": [
+      7,
+      33,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL 存数据和 Redis 做限流的完整应用模板，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，bpmn-js 资产另有 bpmn.io 标志义务",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "栖梧是一个 MIT 许可的管理后台模板，采用 NestJS 12、Vue 3.5、Element Plus、TypeScript、MySQL 和 Redis，使用 pnpm workspace 管理服务端、Web 与共享契约。品牌为「栖梧 / Qiwu」，项目名为 `qiwu-vue-admin`，内部包名为 `@qiwu/*`。 ／ `apps/server` 是后端，`apps/web` 是 Web，`packages/shared` 是共享 schema、类型与 i18n；`mobile/` 是独立于根 workspace 的可选移动端，PC 项目可按移动端文档删除。业务代码放项目域目录，保留 `@qiwu/*` 包 scope，不需要全仓替换模板内部命名。",
+   "evidence_lines": [
+    7,
+    74
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "732124645/qiwu-vue-admin",
+  "sha": "5eabb7882a37",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

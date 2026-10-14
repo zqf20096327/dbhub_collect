@@ -9854,5 +9854,143 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9fcdc1a0c74a": {
+  "identity": {
+   "one_liner": "可私有化部署的家庭 AI 健康管家，多模态 LLM 结构化健康画像并提供看板与咨询",
+   "review": "这是一个面向单家庭私有化部署的健康管理应用：通过多模态大模型把体检报告/化验单抽取为按成员组织的健康画像，提供指标趋势看板、AI 咨询、体检推荐与周期小结，并以飞书机器人作为移动端轻入口，RAG 支持历史报告语义检索。技术栈为 FastAPI + PostgreSQL 16/pgvector，Docker Compose 部署，需自备 OpenAI 兼容 API Key 或本地 LLM。适用于愿自建服务的家庭用户；仅支持单家庭、飞书渠道为主要移动入口。",
+   "highlights": [
+    "多模态报告导入，AI 自动抽取指标并入档为 A-H 字段族健康画像",
+    "报告向量化（pgvector）支持 AI 咨询中的语义检索与长期会话记忆",
+    "支持飞书多 Bot 渠道，每渠道绑定一名家庭成员，数据双入口回流共享"
+   ],
+   "use_cases": [
+    "家庭私有化部署管理全家人健康画像与指标趋势",
+    "拍照上传体检报告自动结构化入档并追踪异常指标",
+    "通过飞书进行文字轻问答、快捷录入与图片报告解析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL 16 + pgvector|",
+     "lines": [
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 16 + pgvector 存储健康数据的完整应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|数据库|PostgreSQL 16 + pgvector| ／ > 开源、可私有化部署的家庭 AI 健康管家。通过多模态大模型将健康数据结构化为人维度画像，提供可视化看板与 AI 咨询能力，支持飞书等渠道的资料收集与轻问答。 ／ |部署|Docker Compose|",
+   "evidence_lines": [
+    120,
+    4,
+    123
+   ]
+  },
+  "fn": "wangzhengpengjay/AI-Health-Steward",
+  "sha": "9fcdc1a0c74a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed07054a475d": {
+  "identity": {
+   "one_liner": "AI 编码代理的 shell 命令闸门：预览后果、备份、按策略放行并留审计记录",
+   "review": "Termaxa 是一个单二进制 Rust 工具，安装在 AI 编码代理（Claude Code、Codex、Cursor、Copilot CLI）的 hook 路径上，在命令执行前判定策略、预览破坏范围、执行可回滚的备份并写入仅追加的哈希链审计日志。面向独自或无人值守运行编码代理的开发者；支持对含 psql 的 DROP 等 Postgres 破坏性命令做行数估算预览（依赖 pg_class.reltuples，不扫描表）。",
+   "highlights": [
+    "提供命令执行前的后果预览、可回滚备份与仅追加哈希链审计日志",
+    "支持按仓库内策略文件判定 allow/ask/deny，并提供跨会话的熔断器计数破坏性意图",
+    "提供 observe 模式、doctor hook 探测与 report/replay 报告命令"
+   ],
+   "use_cases": [
+    "为无人值守运行的 AI 编码代理拦截 rm -rf、git reset --hard 等破坏性 shell 命令",
+    "预览 psql DROP TABLE 等 Postgres 破坏性语句影响的行数与依赖对象并先行备份",
+    "审计已发生的代理命令历史，评估引入闸门后的策略效果"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "$ termaxa check \"psql -d shop -c 'DROP TABLE users'\" ／ Row estimates come from the planner (`pg_class.reltuples`, stale between `ANALYZE`s); Termaxa never scans your tables, and the preview never executes anything of yours. It did once: the Postgres preview could run the SQL file it was analysing (GHSA-gxg4-5fmj-5 ／ |`DROP`, `TRUNCATE`, `DELETE` through `psql`|rows, dependents, whether the statement even succeeds|`pg_dump` of the tables (schema and data for `DROP`, data only otherwise)|replays the dump|",
+     "lines": [
+      106,
+      112,
+      227
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为守护 shell 与数据库破坏性命令服务的闸门工具，而非仅使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A gate between an AI coding agent and your shell.** Before a command runs, Termaxa shows what it would destroy, takes a backup it can restore, and asks or refuses by a policy you can read. For people running Claude Code, Codex, Cursor or Copilot CLI, alone or unattended. ／ Termaxa is a single Rust binary that sits in the agent's hook path, with no model, no service and no account. For every command: ／ $ termaxa check \"psql -d shop -c 'DROP TABLE users'\"",
+   "evidence_lines": [
+    3,
+    23,
+    106
+   ]
+  },
+  "fn": "termaxa/termaxa",
+  "sha": "ed07054a475d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

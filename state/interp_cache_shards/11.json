@@ -9943,5 +9943,282 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "766d744faa5f": {
+  "identity": {
+   "one_liner": "开源网站分析平台，基于 Rust 和 ClickHouse 构建数据模型",
+   "review": "Betterlytics 是一个开源网站分析应用，整合流量分析、会话回放、错误追踪、Core Web Vitals 与可用性监控。面向需要网站数据统计的团队，支持 EU 云服务或通过 Docker 自托管，无需 Cookie，采用 AGPL-3.0 许可，数据后端为 ClickHouse。",
+   "highlights": [
+    "提供页面浏览、访问者、漏斗、自定义事件等核心与进阶分析功能",
+    "包含会话回放、错误追踪、Core Web Vitals 与可用性/SSL 监控",
+    "内置 MCP 服务器，供 MCP 客户端查询流量、漏斗、错误和可用性数据"
+   ],
+   "use_cases": [
+    "网站流量与用户行为分析（Cookieless 追踪）",
+    "网站性能与可用性监控（含状态页发布）",
+    "自托管的数据合规场景（GDPR/CCPA）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Most teams piece together how their website is doing from four or five tools: one for traffic, one for session replay, one for errors, one for uptime and one for performance. Betterlytics puts all of it in one dashboard, on one data model and one bill. It runs",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Rust Next.js React TypeScript ClickHouse PostgreSQL Docker",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 ClickHouse 作为数据后端的网站分析应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，含第三方组件许可声明",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Most teams piece together how their website is doing from four or five tools: one for traffic, one for session replay, one for errors, one for uptime and one for performance. Betterlytics puts all of it in one dashboard, on one data model and one bill. It runs without cookies, is hosted in the EU or on your own servers, and never shares data with third parties. It is built on Rust and ClickHouse and open source under AGPL-3.0. ／ Betterlytics can be used as a managed cloud service or self-hosted on your own infrastructure. ／ |**Setup**|Instant, ready in 30 seconds|Manual installation via Docker|",
+   "evidence_lines": [
+    13,
+    34,
+    39
+   ]
+  },
+  "fn": "betterlytics/betterlytics",
+  "sha": "766d744faa5f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d7648f51aba1": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话长期记忆插件，以记忆宫殿信息架构组织 SQLite 存储",
+   "review": "dsh-engram 是 DSH 宿主的记忆插件，为 agent 提供跨会话长期记忆：用「房间#桩位」坐标与固定巡游路线组织记忆，底层用 SQLite 双层分库（user.db 全局、project-<hash>.db 按仓库隔离），结合 FTS5 关键词与本地嵌入向量做混合检索，并实现 SM-2 间隔重复、蒸馏、信念巩固与摄取脱敏。面向使用 dsh 的 agent 用户，提供 21 个工具与 Web 管理面板。",
+   "highlights": [
+    "以 SQLite 双层分库存储记忆，FTS5 + 本地向量（bge-small-zh-v1.5）RRF 混合检索",
+    "提供 21 个 engram_* 工具，覆盖保存、检索、SM-2 复习、蒸馏、信念巩固与导出",
+    "入库前正则脱敏密钥与个人信息，并含提示注入防护与防回声机制"
+   ],
+   "use_cases": [
+    "为 dsh agent 提供跨会话记忆与用户画像注入",
+    "历史会话回填与按项目仓库隔离的记忆管理",
+    "导出 Markdown/JSON 或 Obsidian 友好镜像目录做个人知识库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|固定路线定顺序|`tour_routes` 只增不改；`engram_tour mode=fixed` 按桩位顺序走全宫|src/store/sqlite.ts| ／ 人工处理前，停止使用该目录的所有宿主，备份数据库和 SQLite sidecar，",
+     "lines": [
+      37,
+      200
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明以 SQLite 存储记忆数据，插件是为 agent 生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|固定路线定顺序|`tour_routes` 只增不改；`engram_tour mode=fixed` 按桩位顺序走全宫|src/store/sqlite.ts| ／ - **混合检索**：FTS5（unicode61 + 中文 2-gram 预切词）与本地向量（`Xenova/bge-small-zh-v1.5`，512 维，q8）RRF 融合 + 关系边一跳扩展 + 新鲜度/命中次数乘性排序 boost；嵌入模型离线运行，下载失败自动降级纯关键词并显式标记。 ／ - **双层分库**：`user.db` 全局共享；`project-<hash>.db` 按 git origin URL 归一化哈希命名（`git@github.com:a/b.git` 与 `https://github.com/a/b` 同库；worktree 沿指针解析到主仓库 origin）；无 git 或无 origin 时按 **cwd 全量 sha256** 命名（v0.7.6 起；旧的「cwd 前 12 字符」截断命名会同前缀撞库，启动时自动 rename 迁移，新旧并存则不动并告警）。",
+   "evidence_lines": [
+    37,
+    48,
+    116
+   ]
+  },
+  "fn": "kenz1117/dsh-engram",
+  "sha": "d7648f51aba1",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7de2c8b02b0f": {
+  "identity": {
+   "one_liner": "基于 HTTP 接口的 PHP ClickHouse 客户端库",
+   "review": "这是一个 PHP 编写的 ClickHouse 客户端库，通过 ClickHouse 的 HTTP 接口通信，提供同步与异步 select/insert API、参数绑定及原生查询参数支持，命名与 ClickHouse 官方文档保持一致，不隐藏 HTTP 接口细节。它要求调用方自行注入 PSR-18 HTTP 客户端和 PSR-17 工厂（如 Symfony HttpClient），并支持 PSR-3 日志和多种 ClickHouse 数据格式。适合在 PHP 项目中直接操作 ClickHouse 的开发人员使用。",
+   "highlights": [
+    "提供同步与异步（Amp Future）select/insert API，支持所有 ClickHouse 输出格式",
+    "支持参数绑定与 ClickHouse 原生查询参数，通过 PSR-18 HTTP 客户端可插拔接入",
+    "提供 Snippets 便捷查询（当前数据库、库表大小、ShowCreateTable、版本等）"
+   ],
+   "use_cases": [
+    "在 PHP 应用中通过 HTTP 接口对 ClickHouse 执行 SELECT/INSERT 查询",
+    "需要异步并发执行 ClickHouse 查询的场景（基于 Amp Future）",
+    "获取 ClickHouse 元数据信息，如数据库大小、表列表、建表语句、版本"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# PHP ClickHouse Client ／ The library is trying not to hide any ClickHouse HTTP interface specific details. ／ Naming used here is the same as in ClickHouse docs.",
+     "lines": [
+      1,
+      10,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 ClickHouse 数据库提供 PHP 客户端能力的库，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# PHP ClickHouse Client ／ The library is trying not to hide any ClickHouse HTTP interface specific details. ／ composer require simpod/clickhouse-client",
+   "evidence_lines": [
+    1,
+    10,
+    25
+   ]
+  },
+  "fn": "simPod/PhpClickHouseClient",
+  "sha": "7de2c8b02b0f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8b0245f9643": {
+  "identity": {
+   "one_liner": "自托管多用户 Web Push 通知中心，CLI + PWA，FastAPI + SQLite 存储",
+   "review": "这是一个自托管的多用户 Web Push 通知中心，提供一行式 notify 命令行工具和可安装的 PWA 客户端，脚本、cron 或 AI agent 可向个人手机和桌面推送消息。支持 #topic 路由、关键词黑名单、webhook 转发（Telegram/QQ 预设）和投递重试；后端为 FastAPI + SQLite 单进程，需 HTTPS 域名和反向代理。",
+   "highlights": [
+    "提供一行 CLI，支持文本、图片、文件、Markdown、stdin，命令在服务端存储后即返回",
+    "支持多用户与 #topic 路由、用户/管理员两级关键词黑名单、按主题订阅限制",
+    "支持 webhook 转发（URL/header/body 模板、占位符、代理开关）及后台串行投递与失败重试"
+   ],
+   "use_cases": [
+    "自托管场景下用脚本或 cron 向个人设备推送任务结果通知",
+    "将通知按主题路由给不同用户，或将消息转发到 Telegram 等 webhook 端点",
+    "为服务器上的 AI agent 提供轻量推送通道"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Light footprint.** FastAPI + SQLite, one process, runs fine on a 2 GB Atom box. ／ server/ FastAPI backend: app.py routes, db.py SQLite, routing.py, push.py, webhooks.py, auth.py ／ |`data/notify.db`|SQLite database|",
+     "lines": [
+      24,
+      36,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储自身数据（notify.db），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Light footprint.** FastAPI + SQLite, one process, runs fine on a 2 GB Atom box. ／ server/        FastAPI backend: app.py routes, db.py SQLite, routing.py, push.py, webhooks.py, auth.py ／ |`data/notify.db`|SQLite database|",
+   "evidence_lines": [
+    24,
+    36,
+    65
+   ]
+  },
+  "fn": "xm6661885/notify",
+  "sha": "a8b0245f9643",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

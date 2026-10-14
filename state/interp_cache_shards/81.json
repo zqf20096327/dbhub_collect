@@ -9354,5 +9354,146 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e1c303933957": {
+  "identity": {
+   "one_liner": "多平台 PostgreSQL 预编译二进制安装包项目",
+   "review": "该项目为 Linux、macOS 和 Windows 提供与 Rust 支持平台对齐的 PostgreSQL 预编译二进制包，版本号沿用 PostgreSQL 版本并附构建发布序号。README 主要面向需要在本地构建或测试安装包的开发者/维护者，给出按 target triple 构建的脚本与测试方式，适合需要自行分发或嵌入 PostgreSQL 二进制的场景。",
+   "highlights": [
+    "提供 Linux、macOS、Windows 多平台 PostgreSQL 二进制安装包",
+    "版本号与 PostgreSQL 版本对齐并按构建发布迭代",
+    "提供本地构建脚本与 per-OS 测试脚本"
+   ],
+   "use_cases": [
+    "为 Rust 项目分发或测试环境提供 PostgreSQL 二进制",
+    "在 CI 中安装指定版本 PostgreSQL",
+    "针对特定 target triple 交叉构建 PostgreSQL"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL Binaries ／ PostgreSQL binaries for Linux, MacOS and Windows; releases aligned with Rust supported platforms. ／ Installation packages use the pattern `postgresql-<version>-<target>.<extension>`, where`<version>` is the",
+     "lines": [
+      1,
+      7,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目本身不是数据库应用，而是打包分发 PostgreSQL 二进制的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PostgreSQL binaries for Linux, MacOS and Windows; releases aligned with Rust supported platforms. ／ Installation packages use the pattern `postgresql-<version>-<target>.<extension>`, where`<version>` is the",
+   "evidence_lines": [
+    7,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "theseus-rs/postgresql-binaries",
+  "sha": "e1c303933957",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "47a8210f2c1a": {
+  "identity": {
+   "one_liner": "基于 Hermes Agent 的自托管对话式 AI CRM 应用",
+   "review": "KaCRM 是一个自托管的对话式 AI CRM 应用，提供客户与销售管理、可配置业务视图、AI 智能体技能与定时任务、权限审批与审计等功能，通过自然语言对话操作 CRM 工具。面向需要客户管理与销售协作的团队，仅支持源码部署，业务数据存于 PostgreSQL 并使用 pgvector 做向量存储。",
+   "highlights": [
+    "提供线索、客户、联系人、商机、报价、订单等 CRM 能力及相关记录与互动历史",
+    "支持 AI 智能体的模型、技能、工作区与定时任务配置，可通过对话访问 CRM 工具",
+    "提供用户、角色、部门、审批流与操作审计，UI 支持中英文"
+   ],
+   "use_cases": [
+    "团队自托管部署客户与销售流程管理",
+    "通过自然语言对话查询与操作 CRM 数据",
+    "配置多渠道消息集成（飞书、钉钉、企业微信）的智能体协作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Run on your infrastructure.** Store business data in PostgreSQL and configure your own model providers and messaging channels. ／ |PostgreSQL / pgvector|Business data, identities, conversations, and vector storage.| ／ |Data|PostgreSQL, pgvector, and Alembic for business storage and database migrations.|",
+     "lines": [
+      52,
+      81,
+      144
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明业务数据、身份与会话存储在 PostgreSQL/pgvector 中，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only，另有单独商业授权",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "KaCRM is a conversational AI CRM powered by Hermes Agent. Manage customers and sales processes through configurable business views, use natural language to find information and work with CRM tools, and govern operations with permissions, approvals, and audit trails. ／ |PostgreSQL / pgvector|Business data, identities, conversations, and vector storage.| ／ |Data|PostgreSQL, pgvector, and Alembic for business storage and database migrations.|",
+   "evidence_lines": [
+    9,
+    81,
+    144
+   ]
+  },
+  "fn": "dfar2008/kacrm",
+  "sha": "47a8210f2c1a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10789,5 +10789,295 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ddd5ebf4b4ef": {
+  "identity": {
+   "one_liner": "面向 AI 代理的代码搜索 MCP 服务器，以 SQLite 为索引存储",
+   "review": "这是一个 Rust 编写的单二进制 MCP 服务器，用 tree-sitter 解析源码生成 AST 索引并存入 SQLite，为 AI 代理提供函数/类搜索、调用图、文件读取等约 20-37 个工具，另支持解析 1C:Предприятие 配置导出。面向使用 Claude Code、Cursor 等 MCP 客户端的开发者，需配合后台索引守护进程运行，支持 HTTP 与 stdio 两种接入方式。",
+   "highlights": [
+    "提供 32 个 MCP 工具：全文搜索、调用图查询、文件内容读取与正则检索",
+    "支持 14 种语言的 tree-sitter AST 解析，含 1C (BSL) 与配置元数据",
+    "单个二进制分发，索引数据存储于 SQLite，经 HTTP 或 stdio 提供 MCP 服务"
+   ],
+   "use_cases": [
+    "让 AI 编码代理通过索引快速查询函数定义、调用者与调用链",
+    "对 1C:Предприятие 大型配置导出做结构化检索与影响分析",
+    "为多代码库建立共享索引，供多个 MCP 客户端会话复用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый",
+     "lines": [
+      11,
+      149
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理/开发流程服务的代码索引工具，SQLite 仅作为内部索引存储而非服务对象数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ Работает с Claude Code, Cursor, VS Code, LibreChat — с любым клиентом MCP. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый",
+   "evidence_lines": [
+    11,
+    119,
+    149
+   ]
+  },
+  "fn": "Regsorm/code-index-mcp",
+  "sha": "ddd5ebf4b4ef",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "420a8a8d37a7": {
+  "identity": {
+   "one_liner": "SSH/WinRM/Docker/数据库/AI 一体化终端工作台",
+   "review": "NexTerm 将 SSH、WinRM、SFTP、Docker 管理、数据库连接与 AI 助手集成到一个终端工作台，提供会话录制回放、端口转发、多用户账号与端到端加密的资产同步。面向需要在桌面或浏览器中统一管理主机与数据库的运维人员；桌面端可本地使用，服务端支持多用户与设备 agent 接入。",
+   "highlights": [
+    "提供 SSH/WinRM 终端、SFTP 文件管理与后台会话保活",
+    "支持连接 PostgreSQL、MySQL、Redis 及 SSH 端口转发，无需远端 agent",
+    "内置 AI 助手，接入 OpenAI 兼容接口，敏感操作需确认"
+   ],
+   "use_cases": [
+    "运维人员集中管理多台主机与 Docker 容器",
+    "需要连接 PostgreSQL/MySQL/Redis 执行日常查询与维护",
+    "跨设备同步资产、凭据并记录/回放终端会话"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **日常运维**：管理 Docker 容器与镜像，使用 PostgreSQL、MySQL、Redis 和 SSH 端口转发；PostgreSQL 与普通 SSH/SFTP 均不需要远端 agent，agent 仅用于设备管理。",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **日常运维**：管理 Docker 容器与镜像，使用 PostgreSQL、MySQL、Redis 和 SSH 端口转发；PostgreSQL 与普通 SSH/SFTP 均不需要远端 agent，agent 仅用于设备管理。",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为客户端工具连接并管理 PostgreSQL/MySQL/Redis 等数据库，为数据库使用提供运维界面。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "- **终端与文件**：SSH、WinRM 和本机终端，支持多标签、分屏、SFTP 文件管理与在线编辑。SSH 终端是守护终端：关闭标签或断开后转入「后台会话」继续运行，随时可接管；本机、WinRM 非交互与容器 exec 等普通终端随关闭结束。 ／ - **日常运维**：管理 Docker 容器与镜像，使用 PostgreSQL、MySQL、Redis 和 SSH 端口转发；PostgreSQL 与普通 SSH/SFTP 均不需要远端 agent，agent 仅用于设备管理。 ／ - **LinuxServer**：解压 server 包后，按包内 `README.md` 安装二进制、systemd 服务与环境文件。首次启动时服务端在控制台打印一次性初始化码（systemd 下用 `journalctl -u nexterm-server` 查看），在浏览器打开界面，输入初始化码并设置超管用户名与密码。访问控制默认开启（`--auth on`），无论监听地址都要求先登录账号；公网部署请只监听回环地址，并在前面配置带 TLS 的反向代理。完整命令行选项见 `nexterm-server --help`。",
+   "evidence_lines": [
+    15,
+    17,
+    53
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Hello-CTF/NexTerm",
+  "sha": "420a8a8d37a7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4ec1b5d4deb7": {
+  "identity": {
+   "one_liner": "一个使用 Nuxt+tRPC+Drizzle ORM、以 PostgreSQL 存数据的社区发帖应用",
+   "review": "Esposter 是一个发帖交流的 Web 应用，前端用 Nuxt/Vue，后端为 Azure Functions 与 tRPC API，数据经 Drizzle ORM 存入 PostgreSQL 并含实时功能；仓库同时是 pnpm monorepo 和 Claude Code 插件市场。适合想运行该应用或复用其发布包（如 trpc-nuxt-module）的开发者；本地开发需自行安装 PostgreSQL 并配置 .env。",
+   "highlights": [
+    "使用 Drizzle ORM 管理 PostgreSQL schema 与迁移（packages/db-schema，PostgreSQL 为 source of truth）",
+    "支持实时通信，后端含 Azure Functions serverless 函数与 tRPC API",
+    "同时作为 Claude Code 插件市场，可通过 claude plugin 安装多个插件"
+   ],
+   "use_cases": [
+    "部署或本地运行一个支持实时与推送通知的发帖社区应用",
+    "参考其 monorepo 架构与 AI 辅助代码评审流程（ai/queue 分支自动化评审）",
+    "复用其发布的 TypeScript 包（如 tRPC for Nuxt、Vue Phaser 集成）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is a powerful, open source object-relational database system with over 35 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance. ／ 3. Install PostgreSQL + PgAdmin. ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+     "lines": [
+      79,
+      158,
+      251
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是一个发帖 Web 应用，PostgreSQL 仅作为其数据存储被使用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Esposter is a pnpm workspaces monorepo. See monorepo tooling for workspace script orchestration and publishing boundaries. ／ |`apps/web`|Main Nuxt web application — frontend, server routes, tRPC API|—| ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+   "evidence_lines": [
+    200,
+    244,
+    251
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Esposter/Esposter",
+  "sha": "4ec1b5d4deb7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9191373f544c": {
+  "identity": {
+   "one_liner": "自托管书签管理应用，Go+SQLite 存储书签树",
+   "review": "一个用 Go 与 Vue.js 构建的自托管网址收藏夹，支持文件夹嵌套、拖拽排序、批量操作、JSON/Edge HTML 导入导出、多用户与公开书签。数据存储在本地 SQLite 单文件，可 Docker 或二进制部署，适合个人及家庭 NAS 场景使用。",
+   "highlights": [
+    "支持书签与文件夹的增删改、拖拽排序、批量操作与搜索",
+    "数据存储于本地 SQLite 单文件，备份即复制文件，支持 JSON 与 Edge HTML 格式导入导出",
+    "支持多用户账号隔离、公开书签门户与浏览器扩展同步（X-API-Key）"
+   ],
+   "use_cases": [
+    "个人或家庭 NAS 上自托管网址收藏管理",
+    "从 Edge 等浏览器迁移和备份书签",
+    "团队/家人间通过公开门户共享常用链接"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 默认端口 `8901`；数据默认是挂载目录下的 SQLite 单文件，备份即拷贝，恢复支持上传本地备份文件。 ／ - ⚡ **快速响应** - 基于SQLite本地数据库，查询速度快 ／ 项目支持在同一个实例中创建多个用户。书签树和用户配置使用账号维度隔离，适合部署在飞牛 NAS 上供家人或朋友共同使用。需要注意：这是同一个 SQLite 数据库中的逻辑隔离，不是为每个用户创建独立数据库文件。",
+     "lines": [
+      17,
+      48,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储书签数据，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个简单易用的网址收藏夹管理工具，基于Go语言后端和Vue.js前端构建。 ／ - **Go 1.21+** - 主要编程语言 ／ - **SQLite** - 本地数据库存储",
+   "evidence_lines": [
+    3,
+    97,
+    99
+   ]
+  },
+  "fn": "TechFunWay/bookmarks",
+  "sha": "9191373f544c",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

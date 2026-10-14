@@ -9954,5 +9954,137 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fa19a6ca9c6d": {
+  "identity": {
+   "one_liner": "OpenShift 应用快速部署模板，含 CI/CD 流水线与 PostgreSQL 示例栈",
+   "review": "提供一套 OpenShift 部署模板，通过 GitHub Actions 实现 PR 流水线、沙箱环境、安全扫描和 Flyway 数据库迁移，附带 PostgreSQL/Nest.js/Caddy 示例栈。面向需要在 OpenShift 上快速搭建应用开发部署流程的团队，需自备 GitHub 账号和 OpenShift 命名空间。",
+   "highlights": [
+    "提供基于 Pull Request 的 CI/CD 流水线与沙箱开发环境",
+    "集成 Flyway 数据库迁移与 Prometheus 指标导出",
+    "内置安全扫描工具与 OWASP ASVS Level 1 & 2 控制对齐"
+   ],
+   "use_cases": [
+    "在 OpenShift 上快速部署 Web 应用开发栈",
+    "为团队建立带安全门禁的 PR 部署流程",
+    "需要数据库迁移集成的 Node.js 应用模板"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* Database: Postgres, Flyway ／ `DB_PASSWORD` is generated separately for each environment. Don't change it after the first deploy: PostgreSQL keeps its first password.",
+     "lines": [
+      31,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "模板包含的示例应用使用 PostgreSQL 存储数据，本身不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository provides a template to rapidly deploy a modern web application stack to OpenShift using GitHub Actions, incorporating best practices for CI/CD, security, and observability. By hitting the ground running we can save weeks‑to‑months of development time, receive regular updates, and built‑in **Maintenance Mode Automation**, which allows an app to go on autopilot for security and dependency updates. This limits developmer involvement to critical issues only, drastically reducing labor costs and freeing up resources for higher priority work. ／  * Database: Postgres, Flyway",
+   "evidence_lines": [
+    10,
+    31
+   ]
+  },
+  "fn": "bcgov/quickstart-openshift",
+  "sha": "fa19a6ca9c6d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ae4a7f49e51": {
+  "identity": {
+   "one_liner": "本地遥测采集器，存 SQLite 并经 MCP 供 AI 查询",
+   "review": "Firewatch 复用 Laravel Nightwatch 传感器，将应用本地的请求、命令、任务执行记录捕获到本地 SQLite 文件，并通过 Model Context Protocol 暴露 overview、detect、query 等工具供 Claude Code、Cursor 等 AI 助手查询。仅用于 local/testing 环境，不向外部传输数据，且默认不脱敏 SQL、绑定参数等敏感内容。",
+   "highlights": [
+    "提供 overview、rank、detect、execution、trend 等 MCP 工具，含 N+1、queue-latency 等 detector",
+    "数据写入本地 SQLite 文件（0600 权限），取消所有 Nightwatch 外发传输",
+    "提供 read-only SQL 查询工具（单语句、10 秒超时、隔离子进程）"
+   ],
+   "use_cases": [
+    "本地开发时让 AI 助手分析 Laravel 应用的慢查询、N+1、失败任务",
+    "对比部署/代码变更前后的性能趋势"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Firewatch is local telemetry for AI debugging. It captures what Laravel Nightwatch's sensors collect into a local SQLite file and lets an AI assistant query it over the Model Context Protocol. There is no dashboard, and nothing leaves your machine. ／ - `ext-sqlite3` with SQLite 3.41.0 or newer",
+     "lines": [
+      8,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其遥测数据的本地存储文件，项目是面向 Laravel 应用调试的应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Firewatch is local telemetry for AI debugging. It captures what Laravel Nightwatch's sensors collect into a local SQLite file and lets an AI assistant query it over the Model Context Protocol. There is no dashboard, and nothing leaves your machine. ／ claude mcp add firewatch -- php artisan firewatch:server ／ - The store is `storage/firewatch/firewatch-{environment}.sqlite` (for example `firewatch-local.sqlite`), mode `0600` inside a `0700` directory that carries its own VCS ignore file. `firewatch:server`, `firewatch:doctor` and `firewatch:clear` work on the store of the environment they run in.",
+   "evidence_lines": [
+    8,
+    16,
+    105
+   ]
+  },
+  "fn": "claudiodekker/firewatch",
+  "sha": "3ae4a7f49e51",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

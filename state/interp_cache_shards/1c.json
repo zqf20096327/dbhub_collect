@@ -10009,5 +10009,137 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "08bbc9272130": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式单文件图数据库，支持 Datalog 查询与双时态时间旅行",
+   "review": "Minigraf 是一个嵌入式单文件图数据库，使用 Datalog 语言查询，每个事实携带事务时间与有效时间以支持双时态回溯。提供 Rust 原生及 Python、Node、WASM、Java、Swift、C 等绑定，面向 AI 代理记忆、移动端离线存储和浏览器场景；设计上不做分布式、客户端-服务器架构，单事实序列化上限 4080 字节。",
+   "highlights": [
+    "提供 Datalog 查询语言，支持递归规则与窗口函数、预编译语句",
+    "支持双时态模型（事务时间 + 有效时间），可回放历史状态",
+    "提供多语言绑定：Rust、Python、Node.js、WASM、Java/Android、iOS、C，并以单个 .graph 文件嵌入运行"
+   ],
+   "use_cases": [
+    "AI 代理的信念/知识存储，可修正并审计历史决策状态",
+    "移动端离线优先存储，支持追溯性更正且保留原始记录",
+    "浏览器内嵌图数据与时间旅行可视化（WASM/IndexedDB）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是嵌入式图数据库引擎/库本体，为上层应用提供存储能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "source",
+    "pypi",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ Minigraf runs as:",
+   "evidence_lines": [
+    14,
+    22,
+    174
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "08bbc9272130",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "827b1e0f9440": {
+  "identity": {
+   "one_liner": "GaussDB 开源软件生态兼容信息收集项目",
+   "review": "该项目以表格形式汇总与 GaussDB 配合使用的开源软件清单，覆盖 ORM 框架、连接池、定时任务、ETL、中间件及 AI 向量检索等类别，并为每项记录基线版本、GaussDB 版本、驱动版本与使用指南入口；面向使用 GaussDB 的开发者，帮助其选择已验证的开源组件组合，项目本身不含可安装的软件制品。",
+   "highlights": [
+    "提供 ORM、连接池、ETL、中间件、AI 等多类开源软件与 GaussDB 版本的对应表",
+    "每条记录包含基线版本、GaussDB 版本、驱动版本及使用指南链接",
+    "支持通过 ISSUE 提交不兼容信息以补充清单"
+   ],
+   "use_cases": [
+    "开发者查询某 ORM 或框架与特定 GaussDB 版本的适配版本组合",
+    "选型 ETL/中间件时确认其与 GaussDB 的验证版本",
+    "反馈开源软件对 GaussDB 的不兼容问题"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "本项目收集GaussDB开源软件生态的总体信息，包括支持的开源软件、版本以及使用指南等。 ／ > ***帮助提供信息：如果您在使用开源软件过程中发现不支持GaussDB的情况，欢迎提交ISSUE。 您需要提供开源软件名称、使用的版本、存在的问题等信息，我们将结合您提供的信息，完善相关开源软件的支持。*** ／ # GaussDB开源软件生态",
+     "lines": [
+      3,
+      7,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库为开发者提供 GaussDB 配套开源软件的兼容信息与指南，服务于数据库生态而非直接使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目收集GaussDB开源软件生态的总体信息，包括支持的开源软件、版本以及使用指南等。 ／ |大类|小类|开源 软件|基线 版本|GaussDB 版本|驱动 版本|使用 指南| ／ |ORM框架|Java|MyBatis|3.5.14|505.2.0|506.0.0|使用指南|",
+   "evidence_lines": [
+    3,
+    11,
+    13
+   ]
+  },
+  "fn": "huaweicloud-samples/database-gaussdb-ecosystem",
+  "sha": "827b1e0f9440",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

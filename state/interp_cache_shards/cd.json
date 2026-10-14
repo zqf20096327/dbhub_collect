@@ -9121,5 +9121,241 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3ba3accf3356": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 Rust 持久化工作流库",
+   "review": "DBOS Transact 的 Rust 版本，以库的形式为 Rust 程序提供持久化工作流：每步执行状态检查点写入 Postgres，进程崩溃或重启后从检查点恢复继续执行，无需独立编排服务。适合需要在故障中保持状态的长时任务开发者，限制是必须依赖 Postgres 作为状态存储。",
+   "highlights": [
+    "将工作流每步检查点写入 Postgres，进程失败后可从检查点恢复执行",
+    "以纯库形式提供，无需独立编排器或 Postgres 之外的外部依赖",
+    "兼容现有 Postgres 工具链（备份、GUI、CLI），支持任意 Postgres 提供方"
+   ],
+   "use_cases": [
+    "构建需跨崩溃/重启恢复状态的长时程序（支付、数据同步）",
+    "AI agent 等需要可靠执行的工作流场景",
+    "等待外部事件（如支付回调）且等待期超出进程生命周期的任务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBOS provides lightweight durable workflows built on top of Postgres. ／ As your workflows run, DBOS checkpoints each step they take in a Postgres database. ／ And because it's built on Postgres, it natively supports all the tooling you're familiar with (backups, GUIs, CLI tools) and works with any Postgres provider.",
+     "lines": [
+      7,
+      10,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是建立在 Postgres 检查点机制之上、为数据库生态服务的 Rust 工作流库，而非使用数据库存储业务数据的独立应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DBOS provides lightweight durable workflows built on top of Postgres. ／ As your workflows run, DBOS checkpoints each step they take in a Postgres database. ／ This library contains all you need to add durable workflows to your program: there's no separate service or orchestrator or any external dependencies except Postgres.",
+   "evidence_lines": [
+    7,
+    10,
+    16
+   ]
+  },
+  "fn": "dbos-inc/dbos-transact-rust",
+  "sha": "3ba3accf3356",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dfd439ba7e70": {
+  "identity": {
+   "one_liner": "FastAPI 全栈脚手架框架，预配置认证、数据库、前端与 Docker",
+   "review": "Vibetuner 是一个可安装的 FastAPI 脚手架与运行框架，内置 OAuth/魔法链接认证、HTMX 前端、i18n 和 Docker 部署配置。数据库可选 MongoDB（Beanie）或通过 SQLModel/SQLAlchemy 使用 PostgreSQL、MySQL、MariaDB、SQLite。面向希望快速生成 Web 应用项目的开发者，也提供与 AI 编码助手协作的指引。",
+   "highlights": [
+    "提供项目脚手架生成命令与作为依赖安装的运行框架两种使用方式",
+    "支持 MongoDB（Beanie ODM）及经 SQLModel/SQLAlchemy 的 PostgreSQL、MySQL、MariaDB、SQLite",
+    "内置 OAuth 与魔法链接认证、i18n、Redis 后台任务（可选）"
+   ],
+   "use_cases": [
+    "快速生成带认证与前后端的 Web 应用项目骨架",
+    "需要可选关系型或文档数据库的 FastAPI 应用开发",
+    "通过 scaffold update 更新既有项目模板"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **SQLModel / SQLAlchemy** — PostgreSQL, MySQL, MariaDB, SQLite (optional).",
+     "lines": [
+      71
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **SQLModel / SQLAlchemy** — PostgreSQL, MySQL, MariaDB, SQLite (optional).",
+     "lines": [
+      71
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLModel / SQLAlchemy** — PostgreSQL, MySQL, MariaDB, SQLite (optional).",
+     "lines": [
+      71
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **SQLModel / SQLAlchemy** — PostgreSQL, MySQL, MariaDB, SQLite (optional).",
+     "lines": [
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是可插拔多种数据库的脚手架/框架工具，而非以特定数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Flexible database: MongoDB (Beanie) or SQL (SQLModel/SQLAlchemy). ／ Vibetuner is the scaffolding All Tuner Labs uses to spin up new web applications. It packages a FastAPI backend, an HTMX/Tailwind frontend, OAuth + magic-link auth, optional MongoDB or SQL persistence, and Docker for both dev and production into a single installable framework. The scaffolder generates the project; the framework runs it. ／ - **SQLModel / SQLAlchemy** — PostgreSQL, MySQL, MariaDB, SQLite (optional).",
+   "evidence_lines": [
+    42,
+    52,
+    71
+   ]
+  },
+  "fn": "alltuner/vibetuner",
+  "sha": "dfd439ba7e70",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "35eaa4b8b4b0": {
+  "identity": {
+   "one_liner": "PostgreSQL 专用桌面 IDE，SQL 文件可扩展为监控/面板/按钮",
+   "review": "PlumeSQL 是一款面向 PostgreSQL 的桌面 SQL IDE，将 SQL 文件通过注释注解变成监控、面板等小工具，内置基于 PostgreSQL 自身解析器的补全、重构、EXPLAIN 可视化、PL/pgSQL 检查等功能，支持 PostGIS/pgvector/TimescaleDB 等扩展。应用本身闭源但免费，扩展与规范为 MIT，提供 macOS/Windows/Linux 版本，适合使用和管理 PostgreSQL 的开发者与运维人员。",
+   "highlights": [
+    "SQL 文件通过 @ 注解可变成可运行的小应用（监控、图表、按钮）",
+    "基于 PostgreSQL 自身解析器、目录和会话实现补全、重构与 PL/pgSQL 检查",
+    "仓库含 200+ 扩展，覆盖锁、vacuum、复制、索引等监控与管理，支持 PostGIS、TimescaleDB、pgvector、Citus 等"
+   ],
+   "use_cases": [
+    "PostgreSQL 日常查询、数据编辑与 schema 管理",
+    "通过 SQL 脚本扩展搭建团队共享的监控面板与运维小工具",
+    "借助 EXPLAIN 可视化与只读保护在生产库上做只读分析"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ > PostgreSQL server or a sample database in one click, and extensions ／ pgvector and TimescaleDB. More below.",
+     "lines": [
+      3,
+      9,
+      44
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "options `postgres_fdw`, `file_fdw` and `mysql_fdw` take.",
+     "lines": [
+      286
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供桌面 IDE 客户端与扩展生态，是服务数据库生态的工具而非使用库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "应用闭源（免费），仓库内扩展与规范为 MIT",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ **Free, no account, for macOS, Windows and Linux.** The app is closed ／ - It's all in on PostgreSQL and nothing else, so it can use everything",
+   "evidence_lines": [
+    3,
+    46,
+    54
+   ]
+  },
+  "fn": "hercstack/plumesql",
+  "sha": "35eaa4b8b4b0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9476,5 +9476,142 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9fe2be3036cb": {
+  "identity": {
+   "one_liner": "Sqinn：通过 stdin/stdout 提供 SQLite 访问的子进程工具",
+   "review": "Sqinn 是对 SQLite C API 的一种替代访问方式：它作为子进程运行，从 stdin 读取请求、转发给 SQLite 库并将响应写到 stdout，供无法直接调用 C API、但支持 fork/exec 的编程语言使用。提供执行 SQL 和查询行的函数，协议在 rfc.txt 中定义，另有 Go 语言绑定；限制为单线程且仅支持部分 C API 功能。MIT 许可，提供多平台预编译二进制。",
+   "highlights": [
+    "以子进程方式通过 stdin/stdout 二进制协议转发请求给 SQLite",
+    "提供执行 SQL 语句与查询数据库行的函数，协议由 rfc.txt 描述",
+    "提供 Linux/Windows/macOS 预编译二进制，并有 Go 语言绑定"
+   ],
+   "use_cases": [
+    "在不允许调用 C API 函数的编程环境中访问 SQLite",
+    "编程语言支持 fork/exec 但缺少可用 SQLite 绑定时的替代方案"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Sqinn is an alternative to the SQLite C API. Sqinn reads requests from stdin, ／ forwards the request to SQLite, and writes a response to stdout. It is used in ／ The SQLite database library is written in C and",
+     "lines": [
+      14,
+      15,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Sqinn 是为访问 SQLite 库提供子进程通信通道的工具组件，不是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Sqinn is an alternative to the SQLite C API. Sqinn reads requests from stdin, ／ might be to communicate with SQLite over stdin/stdout, using Sqinn. ／ Sqinn provides functions to execute SQL statements and query database rows.",
+   "evidence_lines": [
+    14,
+    22,
+    24
+   ]
+  },
+  "fn": "cvilsmeier/sqinn",
+  "sha": "9fe2be3036cb",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3e27b7e8730e": {
+  "identity": {
+   "one_liner": "开源所见即所得在线简历编辑器，基于 Next.js 与 PostgreSQL",
+   "review": "AnonResume 是一个自托管的开源简历编辑器，提供实时预览、模板、Markdown 导入、版本历史、PDF 导出与公开分享链接，面向希望自行掌控数据的个人用户和部署者。技术栈为 Next.js 16 + Drizzle ORM + PostgreSQL，数据由 PostgreSQL 存储，PDF 与 AI 任务通过独立 Worker 进程处理；当前所有版本为尝鲜测试版，AI 功能默认关闭，许可证为 AGPL-3.0。",
+   "highlights": [
+    "在 A4 画布中实时编辑预览，支持模板、Markdown 导入、版本历史差异查看与恢复，并发布只读链接或导出 PDF",
+    "提供管理后台，包含用户、角色权限、公告、审计记录、平台配置版本管理与 MFA 验证等账号安全能力",
+    "支持 Docker Compose 一键部署与源码部署，Web、PDF Worker、AI Worker 三个进程共享同一 PostgreSQL 数据库"
+   ],
+   "use_cases": [
+    "个人用户在线撰写简历并导出 PDF 或发布公开链接",
+    "部署者自托管实例，为团队成员或访客提供简历编辑服务并统一管理账号",
+    "将已有 Markdown 简历内容导入编辑器继续排版完善"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 14+ ／ 业务数据保存在 `postgres-data` 卷，自动生成的部署信任根保存在 `deployment-secrets` 卷；两者都应备份，丢失配置主密钥可能导致已加密的平台配置无法恢复。 ／ 三个进程需要连接同一个 PostgreSQL 数据库，使用一致的部署信任根，并从数据库读取已发布的平台配置。PDF Worker 可以运行多个进程，但 PDF 最大并发数通过 PostgreSQL 在全局范围内限制，而不是每个 Worker 单独计算。AI Worker 使用 PostgreSQL 持久化任务和检查点，并通过数据库锁协调执行与维护，不依赖单独的 Redis 或定时任务服务；`bun run ai:maintenance` 仅保留用于运维诊断，不应作为生产正确性的前提。",
+     "lines": [
+      13,
+      66,
+      168
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确业务数据保存在 postgres-data 卷，应用通过 PostgreSQL 持久化简历、任务队列与平台配置，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-or-later，字体图标等第三方资源另有各自许可，Logo 与品牌素材受单独 BRAND-NOTICE.md 约束",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL 14+ ／ 业务数据保存在 `postgres-data` 卷，自动生成的部署信任根保存在 `deployment-secrets` 卷；两者都应备份，丢失配置主密钥可能导致已加密的平台配置无法恢复。 ／ 三个进程需要连接同一个 PostgreSQL 数据库，使用一致的部署信任根，并从数据库读取已发布的平台配置。PDF Worker 可以运行多个进程，但 PDF 最大并发数通过 PostgreSQL 在全局范围内限制，而不是每个 Worker 单独计算。AI Worker 使用 PostgreSQL 持久化任务和检查点，并通过数据库锁协调执行与维护，不依赖单独的 Redis 或定时任务服务；`bun run ai:maintenance` 仅保留用于运维诊断，不应作为生产正确性的前提。",
+   "evidence_lines": [
+    13,
+    66,
+    168
+   ]
+  },
+  "fn": "Sapphire-Learning-Hub/AnonResume",
+  "sha": "3e27b7e8730e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

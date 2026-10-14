@@ -9499,5 +9499,205 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "05b902d882fc": {
+  "identity": {
+   "one_liner": "自托管开源发票应用，Bun+Hono+React，单容器内置 SQLite 存储",
+   "review": "Inkvoice 是面向自由职业者和小团队的自托管开票系统，覆盖发票全流程、报价、在线收款（Stripe/PayPal）、支出跟踪、多币种报表及德国 EN 16931 电子发票与 PEPPOL 传输。数据存于单个 SQLite 文件，通过 Docker/Dokploy/Coolify 一键部署，也提供云端托管版。",
+   "highlights": [
+    "单 Docker 容器部署，数据以单个 SQLite 文件保存并支持卷持久化",
+    "支持 Stripe 与 PayPal 在线收款、周期发票与公开分享链接",
+    "包含 EN 16931 电子发票模块（ZUGFeRD/XRechnung/PEPPOL）及多币种报表导出 CSV"
+   ],
+   "use_cases": [
+    "自由职业者/小团队自托管管理客户开票与在线收款",
+    "需要德国电子发票合规（XRechnung/ZUGFeRD/PEPPOL）的场景",
+    "低成本 VPS 上的多用户多币种账务管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🗄️ **Own your data** — everything lives in a single SQLite file you control. ／ - Single Docker container, native SQLite, tiny footprint ／ |`DATABASE_PATH`|no|`./data/invoice.db`|SQLite database file path|",
+     "lines": [
+      26,
+      76,
+      190
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其自身数据存储于内置 SQLite 文件，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🗄️ **Own your data** — everything lives in a single SQLite file you control. ／ - Single Docker container, native SQLite, tiny footprint ／ |`DATABASE_PATH`|no|`./data/invoice.db`|SQLite database file path|",
+   "evidence_lines": [
+    26,
+    76,
+    190
+   ]
+  },
+  "fn": "pigontech/inkvoice",
+  "sha": "05b902d882fc",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f434ad741a35": {
+  "identity": {
+   "one_liner": "Android 本地应用，把私有 Telegram 频道索引进 SQLite 目录并离线流式播放",
+   "review": "HardPlay 是一个侧载的 Android 应用，将用户自己的 Telegram 账号可读取的频道内容编目为本地媒体库：用 SQLite FTS4 对字幕和标签建全文索引，通过 TDLib 按字节范围拉流播放，推荐由本地 SQL 计算。适合想把自己的 Telegram 频道当个人影库管理的用户；需自备 Telegram api_id/api_hash，仅侧载分发，不支持自适应画质。",
+   "highlights": [
+    "用 SQLite FTS4 对字幕和标签建立离线全文索引，保留 Unicode 组合符以支持印度语系等脚本检索",
+    "通过 TDLib 的 ranged download 实现字节范围流式播放，默认 4 GB 分块缓存上限",
+    "无服务器、无分析统计、无第三方服务，本地规则解析标签并提供手动标签编辑"
+   ],
+   "use_cases": [
+    "将多个 Telegram 频道合并为带海报墙的个人流媒体库",
+    "无网络环境下按字幕/标签离线搜索已索引的媒体",
+    "在本地基于标签重合度发现未看过的内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Search that works offline.** Captions and tags are indexed with SQLite FTS4. The",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 SQLite 作为本地元数据索引发动机，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A sideloaded Android app that turns private Telegram channels into a personal, ／ **Search that works offline.** Captions and tags are indexed with SQLite FTS4. The ／ **The database never holds media.** Indexing writes metadata only. The one exception is",
+   "evidence_lines": [
+    3,
+    26,
+    78
+   ]
+  },
+  "fn": "hariomgupta70427/HardPlay",
+  "sha": "f434ad741a35",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "239fa3ead353": {
+  "identity": {
+   "one_liner": "达梦 DM8 可恢复能力评估插件，按16个恢复场景逐项核验并生成HTML报告",
+   "review": "这是一个运行在 dsh 宿主上的评估插件，通过只读 JDBC 查询和可选的 SSH 只读命令（dmrman CHECK BACKUPSET、日志扫描、文件查找），对达梦 DM8 单机与 DMDSC 集群的备份可用性、归档链完整性、坏页与恢复窗口做逐场景核对，输出 HTML 与 JSON 报告。面向达梦数据库运维人员，需自行提供商业 JDBC 驱动，不执行修复，数据守护形态与 DM9 等环境未验证。",
+   "highlights": [
+    "覆盖 16 个恢复场景（逻辑损坏 5 项、物理损坏 8 项、集群容灾 3 项），输出五档能力判定与「要求 vs 本库实际」条件对照",
+    "支持归档链逐段核对、备份集可用性核验（dmrman CHECK BACKUPSET）与 DMDSC 逐节点配置核对",
+    "库内仅执行查询语句，主机侧仅执行 3 类只读命令，不扫描、不修复、不改配置"
+   ],
+   "use_cases": [
+    "评估达梦 DM8 单机或 DMDSC 集群在误删、损坏、灾难等场景下实际可恢复到哪一点",
+    "核对备份集是否可读、归档链是否存在缺口、可回溯时间窗口的起点",
+    "生成可用于运维整改对照的 HTML 评估报告与机器可读的 findings."
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "达梦 DM8 数据库可恢复能力评估插件。按 16 个恢复场景逐项对照「要求 vs 本库实际」，回答能恢复到哪一点、要丢什么，生成 HTML 报告。 ／ |达梦 JDBC 驱动|`DmJdbcDriver18.jar` 或 `DmJdbcDriver8.jar`，需自行提供，见安装第 2 步| ／ ### 2. 放置达梦 JDBC 驱动",
+     "lines": [
+      3,
+      28,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "插件专为达梦 DM8 数据库提供恢复能力评估服务，通过 JDBC 与 dmrman 只读读取库内状态，为数据库运维服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "达梦 DM8 数据库可恢复能力评估插件。按 16 个恢复场景逐项对照「要求 vs 本库实际」，回答能恢复到哪一点、要丢什么，生成 HTML 报告。 ／ - 可选的主机侧只读核验（SSH）：`dmrman CHECK BACKUPSET`、备份日志的全库逐页裁决、备份文件查找 ／ - 所有库内 SQL 都是查询语句，主机侧只执行 3 类只读命令（`dmrman CHECK BACKUPSET`、`sh scan-backup-log.sh`、`find` 找备份文件），不修改数据库与主机配置。",
+   "evidence_lines": [
+    3,
+    16,
+    191
+   ]
+  },
+  "fn": "Shiyuedong-Jade/DM-recovery",
+  "sha": "239fa3ead353",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

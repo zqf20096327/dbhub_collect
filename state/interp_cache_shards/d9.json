@@ -9787,5 +9787,290 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "edc06530ce12": {
+  "identity": {
+   "one_liner": "自托管数据库集群管理 Web UI 与 MCP server，聚焦 Patroni/PostgreSQL 等",
+   "review": "Ivory 是一个自托管的开源数据库集群管理工具，通过单个 Docker 容器提供 Web UI 和内置 MCP server，用于部署集群、查看健康与复制延迟、执行 switchover/failover、运行 SQL 控制台、经 SSH 管理容器及读取 VM 指标。面向需要浏览器/手机端管理高可用集群的运维人员；数据库引擎以插件形式接入，PostgreSQL/Patroni 为 STABLE，其余为 BETA。",
+   "highlights": [
+    "提供基于 SSH 的集群部署与 HA 操作（switchover、failover、reinitialise），无需 agent 或编排器",
+    "内置 MCP server，允许 AI 客户端（Claude、Cursor 等）经权限门控诊断和操作集群",
+    "数据库引擎以自包含插件接入，支持 Postgres、etcd、Redis、ClickHouse、MongoDB、ZooKeeper"
+   ],
+   "use_cases": [
+    "Patroni/PostgreSQL 高可用集群的健康监控、复制延迟查看与切换操作",
+    "通过浏览器或手机查看 VM 指标、容器日志并执行集群运维（on-call 场景）",
+    "经 MCP 客户端用自然语言诊断数据库集群问题"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Ivory — open-source web UI and AI-ready MCP server for PostgreSQL Patroni, etcd, Redis, ClickHouse, MongoDB and ZooKeeper clusters ／ - **Postgres** — pgcompacttable, reduces table and index bloat without heavy locks ／ |Postgres|Postgres|STABLE|",
+     "lines": [
+      1,
+      60,
+      102
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Ivory — open-source web UI and AI-ready MCP server for PostgreSQL Patroni, etcd, Redis, ClickHouse, MongoDB and ZooKeeper clusters ／ |ClickHouse|ClickHouse|BETA|",
+     "lines": [
+      1,
+      105
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Ivory 为数据库集群的部署、监控与运维提供服务，是数据库生态的管理工具而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Ivory is a self-hosted, open-source database cluster management tool that puts control in your pocket.** ／ **Cluster management — HA operations from the browser** ／ |Keeper|Database|Stage|",
+   "evidence_lines": [
+    15,
+    42,
+    99
+   ]
+  },
+  "fn": "veegres/ivory",
+  "sha": "edc06530ce12",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "979c16b6f2fe": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，以 PostgreSQL+pgvector 为持久权威存储",
+   "review": "Dense-Mem 是一个自托管的 HTTP MCP 记忆服务器，AI 客户端通过 /mcp 提交证据，服务器以 PostgreSQL+pgvector 作为唯一持久权威，实现证据溯源、类型化声明、生命周期管理与支持门控召回，并用外部 LLM 端点做嵌入与校验。面向需要为 AI 代理提供带权限与审计的持久记忆的团队，部署方式为 Docker Compose。",
+   "highlights": [
+    "提供 MCP 接口（Streamable HTTP），记录精确证据、生命周期与溯源，返回带图状 Relationship 的证据上下文",
+    "以 PostgreSQL 与 pgvector 作为知识、生命周期、溯源、搜索、授权与审计的持久存储",
+    "支持配置任意 OpenAI 兼容端点提供嵌入与校验（含 Ollama 本地方案）"
+   ],
+   "use_cases": [
+    "为 AI 客户端/代理提供带证据溯源与权限控制的持久记忆服务",
+    "团队自托管部署 MCP 记忆服务器（含单机或多实例+Redis 协调）",
+    "需要冲突检测、支持门控召回与操作审计的记忆管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority. ／ pending PostgreSQL migrations under a database session lock before serving, so",
+     "lines": [
+      20,
+      74,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 作为唯一持久权威存储自身数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dense-Mem is a standalone HTTP MCP memory server using Streamable HTTP. It ／ PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority.",
+   "evidence_lines": [
+    17,
+    20,
+    74
+   ]
+  },
+  "fn": "markhuangai/dense-mem",
+  "sha": "979c16b6f2fe",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ce428713aae4": {
+  "identity": {
+   "one_liner": "基于模块化 Python 库的开源数据 agent，用于查询、转换和可视化多种数据",
+   "review": "TabulaFlow 是一个以表格为一等公民的数据 agent 和 Python 库：用户用自然语言描述分析需求，agent 只写查询和可视化规格，库负责数据解析与渲染，并自动追踪数据溯源。面向数据分析者、数据应用开发者和研究 text-to-SQL 的 AI/数据库研究人员，内置 BIRD-SQL、Spider 2.0 等基准评测管线；支持 SQL 数据库、Neo4j、SPARQL 端点、文件与 Hugging Face 数据集等连接器，需配置 LLM 提供商 API key 方可使用 agent 功能。",
+   "highlights": [
+    "提供统一异步接口的 Data connectors，可查询 SQL 数据库、Neo4j、SPARQL 端点、文件和数据集",
+    "自动追踪数据溯源：可视化暴露底层数据表，表暴露生成查询",
+    "内置研究扩展，支持 BIRD-SQL、Spider 2.0、CypherBench 等基准的评测与实验管线"
+   ],
+   "use_cases": [
+    "用自然语言对数据库、文件、知识图谱等数据源进行分析与可视化",
+    "构建带 LLM 或不带 LLM 的数据应用（如交互式仪表盘）",
+    "运行 text-to-SQL / data agent 基准实验并记录轨迹、token 用量与延迟"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Chat to a Bioinformatics MySQL db · ／ |PyMySQL|No|PyMySQL/PyMySQL|MIT|",
+     "lines": [
+      43,
+      284
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明提供数据连接器以查询 SQL 数据库、Neo4j 等，是为数据库生态服务的 agent/库而非仅使用某数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TabulaFlow is an open-source data agent built on a modular Python library. ／ - Data connectors: inspect schemas and query SQL ／ - **Benchmark-ready.** Run BIRD-SQL, Spider 2.0, Beaver, ARCS, AMBROSIA-S, and",
+   "evidence_lines": [
+    9,
+    82,
+    144
+   ]
+  },
+  "fn": "megagonlabs/tabulaflow",
+  "sha": "ce428713aae4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6470d50df575": {
+  "identity": {
+   "one_liner": "本地个人记忆库：汇集 Pieces/Claude Code/Codex 会话与浏览历史，经 MCP 提供检索",
+   "review": "InkVault 是一个本地运行的个人记忆归档工具：从已停运的 PiecesOS 抢救记录，并读取 Claude Code、Codex 会话文件和浏览器历史，写入单个 SQLite 文件；同时内置 MCP 服务器供 Claude/Codex 等 AI 客户端搜索记忆，并提供年度可视化面板与每日摘要（可经 Ollama 本地模型生成）。适合想长期保存 AI 会话与浏览记录的个人用户；屏幕捕捉功能仅限 Windows，部分 OCR 默认关闭。",
+   "highlights": [
+    "提供 MCP 服务器，暴露 search_memories、timeline、get_memory、memory_stats 等工具",
+    "读取 Claude Code、Codex 会话文件与多种浏览器（Chrome/Edge/Firefox 等）历史，存入单个 SQLite 文件",
+    "存储前清除 URL 中的令牌等敏感信息，屏幕捕捉时对 API key、密码等做掩码处理"
+   ],
+   "use_cases": [
+    "在 Pieces 停运前抢救导出个人记忆数据",
+    "让 AI 客户端通过 MCP 检索历史会话与浏览记录",
+    "以时间线与面板形式回顾一年的工作与项目轨迹"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "websites, people), saved as the raw records Pieces returned, so nothing is lost to interpretation. One SQLite file.",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该工具以 SQLite 文件作为自身的数据存储，属于使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " websites, people), saved as the raw records Pieces returned, so nothing is lost to interpretation. One SQLite file. ／ InkVault gathers all of it into one file on your machine: your Pieces memory, rescued once, and your conversations ／ claude mcp add inkvault --scope user -- uvx --from git+https://github.com/sandoreclegane/inkvault inkvault serve",
+   "evidence_lines": [
+    59,
+    12,
+    81
+   ]
+  },
+  "fn": "sandoreclegane/inkvault",
+  "sha": "6470d50df575",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

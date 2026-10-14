@@ -9476,5 +9476,141 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "32c970f04a94": {
+  "identity": {
+   "one_liner": "自托管求职申请跟踪应用，以单一记录聚合职位信息，配浏览器扩展与看板",
+   "review": "自托管的单用户求职申请跟踪应用，为每个职位机会维护一条持久记录，包含列表、状态变更、笔记与材料，通过浏览器扩展在 LinkedIn 页面捕获详情并更新状态，本地看板展示流程；默认以本地 SQLite 文件存数据，可选 Turso 同步，通过 Docker Compose、源码或 Linux 发行包安装，仅支持 Chromium 浏览器加载扩展。",
+   "highlights": [
+    "每个职位机会维护单条记录，聚合多个列表 URL、状态变更、笔记、事件、决策与材料",
+    "浏览器扩展在 LinkedIn 页面捕获列表详情并执行用户确认的 Easy Apply 问题填充",
+    "默认使用本地 SQLite 存储，可选 Turso 同步，通过适配器模型扩展集成"
+   ],
+   "use_cases": [
+    "跨搜索结果、重发职位与邮件统一跟踪同一职位机会",
+    "在浏览职位页面时就地更新状态、补充笔记与评论",
+    "本地看板管理申请流程的阶段推进与跟进"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stay local and extensible.** Use SQLite by default, opt into Turso synchronization, and add new built-in or private integrations through the adapter model. ／ Job Tracker is a single-user, self-hosted application designed for localhost use. By default, records—including verified form Answers and remembered values awaiting review—stay in a local SQLite file on your own machine; Turso synchronization is optional. Data",
+     "lines": [
+      22,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明默认使用本地 SQLite 文件存储用户数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Job Tracker is a self-hosted workspace built around one lasting record per job. Listings, status changes, notes, decisions, and materials stay attached to that opportunity. A browser extension captures details and reliable lifecycle updates, while a local Kanban dashboard keeps the process visible and under your control. ／ - **Stay local and extensible.** Use SQLite by default, opt into Turso synchronization, and add new built-in or private integrations through the adapter model. ／ Job Tracker is a single-user, self-hosted application designed for localhost use. By default, records—including verified form Answers and remembered values awaiting review—stay in a local SQLite file on your own machine; Turso synchronization is optional. Database backups and optional Turso synchronization include those retained private values. The extension talks only to the configured Job Tracker server, uses no third-party analytics, and keeps optional search diagnostics off by default.",
+   "evidence_lines": [
+    7,
+    22,
+    54
+   ]
+  },
+  "fn": "Muatasim-Aswad/job-tracker",
+  "sha": "32c970f04a94",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "34ec1bce1cbb": {
+  "identity": {
+   "one_liner": "本地优先项目管理应用，数据存于单文件 SQLite",
+   "review": "Fjord 是一个本地优先的桌面项目管理工具，提供看板、任务、markdown 笔记、文件附件与全文搜索，数据保存在本机单个 SQLite 数据库中，无账户无云同步。面向 Linux 为主的键盘操作用户，同时提供 CLI 和 MCP server（26 个工具），使 AI 代理能在同一项目上操作且所有改动记录作者。安装方式包括各平台安装包、Homebrew 和源码构建。",
+   "highlights": [
+    "项目、看板、任务、笔记、文件存储于单个本地 SQLite 数据库，无账户无遥测",
+    "提供 CLI 与 MCP server，AI 代理可创建/编辑/移动/归档任务，改动带作者标签",
+    "支持 Git/GitHub/Azure DevOps 集成、子任务、全文搜索与可配置键盘快捷键"
+   ],
+   "use_cases": [
+    "个人或小团队在本地管理项目和看板任务",
+    "通过 MCP 让 AI 代理参与任务管理并保留操作记录",
+    "将任务与 Git 分支、GitHub PR 流程关联管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Fjord keeps your projects, kanban boards, files and notes in a single SQLite database on your own",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目、看板、文件与笔记存储在 SQLite 数据库中，是使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Fjord keeps your projects, kanban boards, files and notes in a single SQLite database on your own ／ machine. No account, no cloud, no telemetry. It's a lightweight native desktop app (Tauri), a scriptable ／ - **AI-agent ready** — `fjord mcp` exposes 26 tools to MCP clients such as Claude. Agents can create, edit, move and archive but never hard-delete, and every change is tagged with its author.",
+   "evidence_lines": [
+    16,
+    17,
+    35
+   ]
+  },
+  "fn": "jhtjernsmo/fjord",
+  "sha": "34ec1bce1cbb",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7583,5 +7583,143 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b14a6ef8a17d": {
+  "identity": {
+   "one_liner": "自托管的持久化 Agent 应用运行平台，基于 DBOS+Postgres 检查点",
+   "review": "Druks 是一个自托管平台，用于运行持久化的 AI Agent 应用：它通过 DBOS 将每个已完成操作的结果记录在 Postgres 中，重启后重放工作流以复用结果，并提供人工审批门、沙箱调度、事件/MCP 集成和仪表盘。应用以 Python 包形式安装。面向需要在自有基础设施上运行 Agent 应用并保证运行可恢复的团队。项目处于 1.0 前的活跃开发期，接口可能变更。",
+   "highlights": [
+    "通过 DBOS 在 Postgres 中记录操作结果，重启后重放工作流以复用已完成步骤",
+    "提供人工审批门、取消、调度、事件订阅、webhook 与 MCP 服务器",
+    "通过 Drukbox 隔离沙箱分发 Agent harness，应用以 Python 包（entry-point）形式安装注册"
+   ],
+   "use_cases": [
+    "在自有基础设施上运行需要崩溃恢复能力的 Agent 工作流",
+    "需要人工审批/外部系统确认后再恢复的 Agent 流程",
+    "将工单到代码评审 PR 的软件交付流程编排为 Agent 应用（内置 Software Factory 示例）"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "workflow records the result of each completed durable operation in Postgres. ／ │ └─ result checkpointed in Postgres ／ - DBOS workflows and queues that use Postgres",
+     "lines": [
+      16,
+      79,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Druks 使用 Postgres 存储工作流检查点与状态，Postgres 是其运行依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Druks is a self-hosted **home for durable agent apps**. It runs agents through ／ workflow records the result of each completed durable operation in Postgres. ／ - DBOS workflows and queues that use Postgres",
+   "evidence_lines": [
+    11,
+    16,
+    88
+   ]
+  },
+  "fn": "czpython/druks",
+  "sha": "b14a6ef8a17d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d4764a585dda": {
+  "identity": {
+   "one_liner": "身份生命周期治理实验室：JML 自动化开通、对账、SoD 检查与权限复核",
+   "review": "该项目是一个自托管 IAM 实验环境，从 HR 参考数据出发对 LDAP 与 Keycloak 中的身份执行入转离生命周期的自动开通，并实现对账控制、职责分离检查和权限复核 Campaign。面向 IAM/GRC/IT 审计学习与演示场景；README 明确说明为实验室环境，组件间无 TLS 加密，服务密码存放于 .env。",
+   "highlights": [
+    "提供 JML 生命周期引擎（入职/调动/离职/合同到期），自动从 HR 参考数据应用到 LDAP 和 Keycloak",
+    "提供六项独立对账检查（孤儿账号、休眠账号、权限偏差、SoD 违规、过期合同、未处理离职）并生成带严重级别的报告",
+    "内置含 4 处预置异常的测试数据集，配套 26 个单元/集成测试和 CI 流水线（ruff、mypy、Bandit、gitleaks）验证引擎行为"
+   ],
+   "use_cases": [
+    "IAM/GRC/IT 审计岗位的身份治理流程学习与演示",
+    "权限复核（recertification）与职责分离控制实验",
+    "OIDC/JWT 认证联合机制的本地验证环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Stack :** OpenLDAP · Keycloak · PostgreSQL · Python · OIDC / JWT ／ |PostgreSQL|Référentiel RH, catalogue d'habilitations, modèle de rôles, règles SoD, journal de provisioning, campagnes de certification| ／ |PostgreSQL|localhost:5432|base `iam`|",
+     "lines": [
+      13,
+      27,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 列为存储 HR 参考数据、权限目录和 provisioning 日志等数据的组件，项目是通过 docker compose 运行的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|PostgreSQL|Référentiel RH, catalogue d'habilitations, modèle de rôles, règles SoD, journal de provisioning, campagnes de certification| ／ |Moteur Python (`src/`)|Cycle de vie JML, connecteurs LDAP/Keycloak, contrôles de réconciliation, CLI| ／ docker compose up -d",
+   "evidence_lines": [
+    27,
+    30,
+    36
+   ]
+  },
+  "fn": "abedellah/Clavigil",
+  "sha": "d4764a585dda",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

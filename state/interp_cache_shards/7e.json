@@ -10638,5 +10638,75 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b2c02153cf43": {
+  "identity": {
+   "one_liner": "美国电网级算力建设（数据中心/矿场/电厂）开源溯源数据集与查询站点",
+   "review": "该项目是一个带来源引用的美国数据中心、加密矿场与配套电厂开放数据集，提供地图、公开 API 与 JSON 快照三种访问方式，记录均附来源与置信级别，写入需人工审核。面向记者、研究者、地方官员与附近居民。技术栈为 Next.js + Zod 校验 + Neon Postgres（经 Drizzle），未设 DATABASE_URL 时可从快照渲染运行。",
+   "highlights": [
+    "提供公开 CORS-open API 与可 fork 的完整 JSON 数据快照，数据以 CC BY 4.0 许可发布",
+    "每条记录包含 URL 来源、检索日期与置信级别，候选记录需人工审批后发布",
+    "记录经 Zod schema 校验，测试套件在每次 PR 时验证全部数据"
+   ],
+   "use_cases": [
+    "记者与研究者查询数据中心/矿场/电厂的选址、运营方与能源用水信息",
+    "地方官员与社区居民了解本地设施的许可与补贴记录",
+    "以 API 或批量 JSON 将数据集接入自己的分析或可视化流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Stack:** Next.js 16 (App Router, RSC) · React 19 · TypeScript · Zod · Neon Postgres +",
+     "lines": [
+      198
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 Neon Postgres + Drizzle 存储其数据集，数据库仅为其站点与 API 的存储后端",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT，数据 CC BY 4.0 双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**API**|`GET /api/facilities`, `/api/facilities/{id}`, `/api/search`, `/api/stats`, `/api/schema` — CORS-open, no auth, rate-limited by IP, served with `X-License: CC-BY-4.0`. Full contract at `/api`| ／ Running without `DATABASE_URL` set renders from the `data/facilities.json` snapshot, so you ／ **Stack:** Next.js 16 (App Router, RSC) · React 19 · TypeScript · Zod · Neon Postgres +",
+   "evidence_lines": [
+    115,
+    189,
+    198
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ek33450505/compute-atlas",
+  "sha": "b2c02153cf43",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

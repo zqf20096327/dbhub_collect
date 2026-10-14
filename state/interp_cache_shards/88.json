@@ -8726,5 +8726,207 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "90748decd122": {
+  "identity": {
+   "one_liner": "内容流搜索引擎，持久化摄取+混合检索+告警",
+   "review": "Quivr V2 是一个 Go 实现的开源引擎，将持续内容流持久化摄取后在数秒内变为可检索，提供词法、语义与混合搜索、元数据分面、变更订阅与关键词/描述式告警，插件化扩展格式、模型与规则。面向需要持续跟踪主题内容的团队，要求 Linux/macOS、Docker Compose、Go 与 Node.js 环境；README 标注处于评估阶段，API 为 v0，尚不建议生产使用。",
+   "highlights": [
+    "支持词法、语义和混合搜索，每次命中从规范存储重水化并重新鉴权",
+    "提供持久化幂等摄取、不可变版本修正/撤回以及变更订阅与关键词告警",
+    "核心通用化，连接器、格式、模型和业务规则以插件形式提供"
+   ],
+   "use_cases": [
+    "持续摄取内容流并构建可检索的语料库（Corpus）",
+    "基于保存的查询和订阅对新内容触发关键词或描述式告警",
+    "对语料库进行元数据分面统计与变更跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "api -->|commit receipt + intent| pg[(PostgreSQL<br/>catalog, receipts, changes)] ／ |Transactional catalog|PostgreSQL 17|",
+     "lines": [
+      37,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 PostgreSQL 17 作为事务目录并存放规范数据，Quivr 是使用该库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    api -->|commit receipt + intent| pg[(PostgreSQL<br/>catalog, receipts, changes)] ／ |Transactional catalog|PostgreSQL 17| ／ > **Status: evaluation stage.** The API is `v0` and may change without notice. Do not",
+   "evidence_lines": [
+    37,
+    46,
+    12
+   ]
+  },
+  "fn": "The-Vibe-Company/quivr",
+  "sha": "90748decd122",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9448e69dca6f": {
+  "identity": {
+   "one_liner": "基于 ClickHouse 的开源可观测性平台，统一搜索日志与追踪",
+   "review": "HyperDX 是 ClickStack 的核心组件，用于搜索和可视化运行在 ClickHouse 集群之上的日志、指标、追踪与会话回放，面向排查生产问题的工程师。它支持 OpenTelemetry 接入、全文与属性搜索语法、告警和仪表盘，可通过 Docker 一键部署，也可对接已有 ClickHouse 或 ClickHouse Cloud。",
+   "highlights": [
+    "在现有 ClickHouse schema 之上运行，schema 无关",
+    "支持 OpenTelemetry 接入及日志、指标、追踪、会话回放关联搜索",
+    "提供 Docker 一体化部署和 CLI/TUI 工具"
+   ],
+   "use_cases": [
+    "生产环境日志与分布式追踪的统一搜索排查",
+    "基于 OpenTelemetry 的应用性能监控（APM）",
+    "为遥测数据配置告警与仪表盘"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "visualize logs and traces on top of any ClickHouse cluster (imagine Kibana, for ／ - 📝 Schema agnostic, works on top of your existing ClickHouse schema ／ HyperDX can be deployed as part of ClickStack, which includes ClickHouse,",
+     "lines": [
+      17,
+      23,
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 提供日志/追踪搜索可视化能力的可观测性工具，而非仅使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "visualize logs and traces on top of any ClickHouse cluster (imagine Kibana, for ／ HyperDX can be deployed as part of ClickStack, which includes ClickHouse, ／ docker run -p 8080:8080 -p 4317:4317 -p 4318:4318 docker.hyperdx.io/hyperdx/hyperdx-all-in-one",
+   "evidence_lines": [
+    17,
+    39,
+    43
+   ]
+  },
+  "fn": "hyperdxio/hyperdx",
+  "sha": "9448e69dca6f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a6b8584dc77a": {
+  "identity": {
+   "one_liner": "自托管剪贴板与文件传输服务，单 Go 进程用 SQLite 存储",
+   "review": "Ferry 是一个面向私有网络内多设备的自托管剪贴板和文件共享应用，消息和设备身份存于 SQLite，上传文件存本地 blob 目录；设备通过浏览器即可加入，另有可选的原生 iOS/Android 客户端。通过 Docker Compose 部署，默认仅监听回环地址，含备份恢复脚本。",
+   "highlights": [
+    "单个 Go 进程提供 Web 应用与 API，消息与设备身份存储在 SQLite，文件存于本地 blob 目录",
+    "任意浏览器即可作为客户端加入，无需在设备上安装软件",
+    "提供备份/恢复脚本，备份时暂停服务以将 SQLite 与 blob 一并归档"
+   ],
+   "use_cases": [
+    "在同一局域网内的手机与电脑间传送链接、文本、截图和文件",
+    "需要保留历史时间线而非一次性传输的自托管场景",
+    "homelab / 内网环境中不经云服务的设备间内容同步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One Go process serves the Web app and the API, stores messages and device identities in SQLite, and keeps uploaded bytes in a local blob directory. Nothing leaves the network you run it on, and there is no account to create.",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Ferry 使用 SQLite 存储自身的消息与设备身份数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License（单许可）",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One Go process serves the Web app and the API, stores messages and device identities in SQLite, and keeps uploaded bytes in a local blob directory. Nothing leaves the network you run it on, and there is no account to create. ／ Ferry is a self-hosted clipboard and file ferry for the devices on one trusted private network. It looks like a chat: everything you send lands in a single timeline that every joined device can read, so moving a link from your phone to your laptop is a paste and a copy, not an email to yourself. ／  The download holds `compose.yaml`, `.env.example` and `scripts/ferry-data.sh` for backups; keep that layout. It is not the program itself: Compose pulls the public image `ghcr.io/max1874/ferry:1.0.2` when Ferry starts.",
+   "evidence_lines": [
+    30,
+    28,
+    65
+   ]
+  },
+  "fn": "max1874/ferry",
+  "sha": "a6b8584dc77a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

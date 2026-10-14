@@ -9137,5 +9137,161 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f5963072c187": {
+  "identity": {
+   "one_liner": "自托管分布式任务调度与编排系统，基于 Docker 执行队列",
+   "review": "Chronoverse 是一个自托管的分布式工作流调度与编排平台，支持按分钟间隔定时或手动触发容器化任务。它通过 gRPC 微服务、Kafka 事件流、PostgreSQL 事务状态、ClickHouse 日志留存和 Meilisearch 日志检索组成完整技术栈，适合需要在自己的基础设施上运行定时容器任务的运维和开发团队，部署依赖 Docker Compose 或 Kubernetes。",
+   "highlights": [
+    "支持定时与手动触发工作流，具备幂等键、持久租约和事务性 outbox 的可重放执行机制",
+    "提供 ClickHouse 留存日志、Meilisearch 日志搜索和 SSE 实时日志输出",
+    "通过 runtime-agent 注册 Docker 节点，实现运行时感知的容器任务执行与清理"
+   ],
+   "use_cases": [
+    "在自有基础设施上定时调度容器化工作流",
+    "集中收集、检索和实时查看任务执行日志",
+    "跨多节点 Docker 执行队列的任务编排与重试管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL** stores transactional state, analytics, leases, runtime ownership, idempotency records, and outbox events. ／ - `runtime-agent`: registers one Docker-capable runtime node in PostgreSQL, heartbeats Docker endpoint health/capacity, marks unhealthy when Docker is unavailable, and marks itself draining on graceful shutdown. ／ - `database-migration`: applies PostgreSQL, ClickHouse, and Meilisearch schema/index migrations.",
+     "lines": [
+      39,
+      62,
+      73
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Retained job logs**: ClickHouse-backed logs, Meilisearch-backed search, raw log download, stream filtering, shareable line selections, and Server-Sent Events for live output. ／ - **ClickHouse** stores retained job logs. ／ - `joblogs-processor`: batches log events into ClickHouse and Meilisearch when retention is enabled.",
+     "lines": [
+      26,
+      40,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL、ClickHouse、Meilisearch 等数据库存储自身业务数据的应用系统，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Distributed job scheduler and orchestrator for your own infrastructure.** ／ - **PostgreSQL** stores transactional state, analytics, leases, runtime ownership, idempotency records, and outbox events. ／ - **ClickHouse** stores retained job logs.",
+   "evidence_lines": [
+    5,
+    39,
+    40
+   ]
+  },
+  "fn": "hitesh22rana/chronoverse",
+  "sha": "f5963072c187",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "78eafe135496": {
+  "identity": {
+   "one_liner": "本地优先的 Windows 科研工作台桌面应用，SQLite 为唯一权威数据源",
+   "review": "Electron + React 19 桌面应用，把任务看板、日历、项目空间、文献检索（Crossref/OpenAlex 等）、Obsidian、Zotero、RSS、内嵌 AI Agent 与定时任务整合到一个本地 Workspace Service。数据全部存本地 SQLite（better-sqlite3 + Drizzle），可离线使用；渲染进程无 Node/IPC 泛化权限，写命令带乐观并发检查。适用于 Windows 10/11 上需要本地管理科研任务与文献的个人研究者。",
+   "highlights": [
+    "任务、日历、项目、笔记与文献数据全部存于本地 SQLite（better-sqlite3 + Drizzle，32 个版本化 migration），可离线使用",
+    "通过 Local/Web API v3 读取 Zotero、浏览编辑已授权 Obsidian Vault，写回需用户确认",
+    "内置进程内 Pi Agent，经 MCP 与任务、文献、Obsidian、Zotero 等模块交互，外部写入走待确认 .request 流程"
+   ],
+   "use_cases": [
+    "个人科研任务与截止日期的看板/日历管理",
+    "多源学术文献检索（Crossref、OpenAlex、PubMed、arXiv 等）与 Zotero 导入管理",
+    "结合 Obsidian 笔记与 AI Agent 辅助的本地科研写作与定时研究任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Windows 本地优先的个人科研工作台。Electron + React 19 桌面端，TypeScript 全栈，SQLite 为唯一权威数据源；把任务、日历、项目空间、文献检索、Obsidian、Zotero、Agent 运行时和本机 MCP 连接在同一个本地 Workspace Service 后面。 ／ **不联网也能用**：任务、日历、项目、笔记和已导入文献全部存本地 SQLite；联网检索、Zotero Local API 和 AI 运行时是可选增强。 ／ |数据|SQLite（`better-sqlite3` 13.0.3 + Drizzle 0.45.2），32 个版本化 migration|",
+     "lines": [
+      3,
+      5,
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明任务、日历、笔记等数据全部存于本地 SQLite，SQLite 是该应用自身的数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库暂未附 LICENSE 文件",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Windows 本地优先的个人科研工作台。Electron + React 19 桌面端，TypeScript 全栈，SQLite 为唯一权威数据源；把任务、日历、项目空间、文献检索、Obsidian、Zotero、Agent 运行时和本机 MCP 连接在同一个本地 Workspace Service 后面。 ／ **不联网也能用**：任务、日历、项目、笔记和已导入文献全部存本地 SQLite；联网检索、Zotero Local API 和 AI 运行时是可选增强。 ／ |数据|SQLite（`better-sqlite3` 13.0.3 + Drizzle 0.45.2），32 个版本化 migration|",
+   "evidence_lines": [
+    3,
+    5,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "Jack-Liu0227/personal-research-workbench",
+  "sha": "78eafe135496",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

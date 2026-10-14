@@ -8287,5 +8287,300 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6c574049ee60": {
+  "identity": {
+   "one_liner": "无代码数据库与应用构建平台，基于 PostgreSQL 存储",
+   "review": "Baserow 是一个开源无代码/低代码平台，用于构建在线数据库、应用、自动化流程和仪表盘，并提供 AI 助手。采用 Django、Vue.js 和 PostgreSQL 实现，支持云端和自托管部署，提供 API 接口。面向需要搭建内部工具、结构化管理数据的团队，采用 open-core 模式，非高级功能基于 MIT 许可证。",
+   "highlights": [
+    "电子表格与数据库混合的数据组织方式，支持仪表盘与应用构建",
+    "API 优先、headless，可与现有工具集成",
+    "支持 Docker、Helm、Heroku 等多种自托管部署方式"
+   ],
+   "use_cases": [
+    "团队内部工具与数据门户的自建",
+    "数据可视化与业务流程自动化",
+    "自托管替代在线表格/数据库 SaaS 的数据管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Vue.js and PostgreSQL.",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其使用 PostgreSQL 等框架与工具构建产品本身，属于以数据库为存储的应用平台",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "open-core，非高级/非企业功能采用 MIT 许可证",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Baserow is the secure, open-source platform for building databases, applications, ／ * Uses popular frameworks and tools like Django, ／  Vue.js and PostgreSQL.",
+   "evidence_lines": [
+    3,
+    25,
+    26
+   ]
+  },
+  "fn": "baserow/baserow",
+  "sha": "6c574049ee60",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3b06516b9c4": {
+  "identity": {
+   "one_liner": "自托管 AI 代理集成网关，通过 MCP/REST 发现并执行应用操作",
+   "review": "一个自托管的集成网关：FastAPI 后端管理 236 个 provider 与 8,024 个 action 定义，Next.js 控制台用于管理连接、凭证与运行令牌，代理通过 MCP JSON-RPC 或 REST API 发现并执行操作。面向希望自己检查和定制代理集成层的开发者。数据默认存 SQLite，可通过 SQLAlchemy async 搭配 PostgreSQL，并使用 Alembic 迁移。",
+   "highlights": [
+    "提供 MCP JSON-RPC 2.0 端点与 REST API，支持动作发现、模式查看与执行",
+    "注册 236 个 provider、8,024 个 action schema，支持 OAuth 与加密凭证存储",
+    "内置 SSRF 防护、作用域运行时令牌与幂等执行记录"
+   ],
+   "use_cases": [
+    "为 AI 代理提供统一的工具/动作发现与执行入口",
+    "自托管场景下集中管理各 SaaS 服务的连接凭证与令牌",
+    "通过自定义 HTTP provider 接入内部 API"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Persistence|SQLite / PostgreSQL, SQLAlchemy async, aiosqlite / asyncpg, Alembic| ／ |`CONNECTOR_DATABASE_URL`|SQLAlchemy async database URL (SQLite or PostgreSQL)|SQLite file under `server/data/connector.db`| ／ - **Database Portability & Deployment**: Backed by SQLite async by default with auto-migration, with PostgreSQL supported via SQLAlchemy async and versioned Alembic migrations (`alembic upgrade head`). A single-instance deployment is recommended until distribu",
+     "lines": [
+      47,
+      124,
+      243
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provi ／ |Persistence|SQLite / PostgreSQL, SQLAlchemy async, aiosqlite / asyncpg, Alembic| ／ The API creates its SQLite database and a local encryption key on first startup if they do not exist. For a durable deployment, configure and back up a stable key before saving credentials; losing the key makes previously encrypted credentials unreadable. ／ - **Database Portability & Deployment**: Backed by SQLite async by default with auto-migration, with PostgreSQL supported via SQLAlchemy async and versioned Alembic migrations (`alembic upgrade head`). A single-instance deployment is recommended until distribu",
+     "lines": [
+      9,
+      47,
+      93,
+      243
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite/PostgreSQL 作为自身持久化存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provides screens for browsing providers and actions, managing connections and runtime tokens, and reviewing activity. SQLite stores application data locally by default, with PostgreSQL supported via SQLAlchemy async and Alembic migrations. ／ |Persistence|SQLite / PostgreSQL, SQLAlchemy async, aiosqlite / asyncpg, Alembic|",
+   "evidence_lines": [
+    9,
+    47
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "Anil-matcha/open-agent-connector",
+  "sha": "c3b06516b9c4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4eec2961ec6b": {
+  "identity": {
+   "one_liner": "Go 单二进制自托管影视媒体管理器，内置 SQLite 存储",
+   "review": "Streamline 是用 Go 编写的自托管媒体管理应用，用于电影、剧集（音乐、书籍在路线图中）的订阅、搜索、下载与库管理，面向 homelab/自托管用户。它提供 Web UI、REST API、内置请求系统、SSO 多用户，并集成 Torznab/Prowlarr 索引器、qBittorrent 等下载客户端与 Plex/Jellyfin/Emby 通知。数据存储使用内嵌 CGO-free SQLite，无需独立数据库服务器。",
+   "highlights": [
+    "单个 Go 二进制提供 Web UI、REST API（OpenAPI 3.0）、请求系统与 SSO（OIDC）多用户",
+    "集成 Torznab/Prowlarr 索引器、qBittorrent/Transmission/Deluge 下载客户端、Plex/Jellyfin/Emby 媒体服务器通知",
+    "使用 CGO-free SQLite 内嵌存储，无需额外数据库；支持 OpenTelemetry 与只读 GitOps 配置模式"
+   ],
+   "use_cases": [
+    "自托管环境（homelab）中统一管理电影/剧集的下载与媒体库",
+    "替代多个独立 PVR/请求工具的单体部署场景",
+    "通过 REST API 与 API key 做自动化集成的媒体流水线"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- CGO-free SQLite — single binary, no database server, no runtime, nothing to install alongside it",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用内嵌 SQLite 存数据的媒体管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL v3",
+   "install": [
+    "docker",
+    "helm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted unified media manager. Replaces the \\*arr stack (Radarr, Sonarr, Lidarr, Readarr) and Seerr with a single binary. ／ - CGO-free SQLite — single binary, no database server, no runtime, nothing to install alongside it ／ - REST API (OpenAPI 3.0 spec)",
+   "evidence_lines": [
+    9,
+    35,
+    32
+   ]
+  },
+  "fn": "DataHearth/streamline",
+  "sha": "4eec2961ec6b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c00d858813c4": {
+  "identity": {
+   "one_liner": "Stripe 数据的实时电视大屏仪表盘，含声音播报",
+   "review": "一个将 Stripe 账户数据展示为办公室电视大屏的开源仪表盘：实时显示 MRR/ARR、支付动态，并用音效、语音和动效播报新订阅等事件。面向 SaaS 创始团队，提供在线托管与 Docker 自托管两种方式，自托管架构为 Next.js 应用加 MySQL 数据库，数据来自 Stripe webhook 与 Events API 同步。",
+   "highlights": [
+    "通过 Stripe webhook 与 Events API 同步支付、订阅与 MRR 变化，大屏每 10 秒轮询刷新",
+    "支持自托管（Docker，amd64/arm64 镜像）与多 Stripe 账户、多屏幕、团队工作区",
+    "只读受限密钥静态加密，支持浏览器、Raspberry Pi 电视及 iOS/Android/Mac 客户端"
+   ],
+   "use_cases": [
+    "团队办公室电视上实时展示 MRR 与销售动态",
+    "自托管方式为 SaaS 公司搭建 Stripe 数据可视化大屏",
+    "在 Raspberry Pi 上长期运行低维护的营收监控屏幕"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "SaaS Monitor is a Next.js app and a MySQL database. With Docker, on a server or a Raspberry Pi ／ App --> DB[(MySQL<br/>subscriptions · MRR ledger · payments · customers)] ／ pnpm db:up # MySQL + stripe-mock",
+     "lines": [
+      113,
+      135,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明它是 Next.js 应用并使用 MySQL 存储订阅、支付等业务数据，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SaaS Monitor is a Next.js app and a MySQL database. With Docker, on a server or a Raspberry Pi ／   App --> DB[(MySQL<br/>subscriptions · MRR ledger · payments · customers)]",
+   "evidence_lines": [
+    113,
+    135
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Synapsr/SaaS-Monitor",
+  "sha": "c00d858813c4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

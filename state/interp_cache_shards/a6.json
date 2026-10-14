@@ -9379,5 +9379,160 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e0f54f1a8628": {
+  "identity": {
+   "one_liner": "Android/KMP 应用实时调试巡检桌面工具库",
+   "review": "Flocon 是一个基于 Kotlin Multiplatform 构建的调试工具，开发者将 debug 依赖接入 Android 或 KMP 应用后，可通过桌面端界面实时观察、检查网络请求、数据库（Room/SQLite）、分析事件等运行数据，也可进行 mock。它面向 Android/KMP 应用开发者，需 ADB 连接设备，通过 Maven Central 引入，提供 flocon-no-op 版本用于 release 构建。",
+   "highlights": [
+    "支持检查 Room/SQLite 数据库、HTTP、GraphQL、WebSockets、gRPC 及 analytics 数据",
+    "通过 Gradle 依赖接入，库体积约 140KB，并提供 no-op 版本用于 release 构建",
+    "包含 AI Agents (MCP) 功能与仪表盘/表格可视化"
+   ],
+   "use_cases": [
+    "开发期实时查看与检查应用内 SQLite/Room 数据库内容",
+    "调试网络请求并进行接口 mock",
+    "通过桌面端可视化监控应用运行状态"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Database (Room/SQLite)**|✅|✅|",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为开发者提供检查应用内数据库（Room/SQLite）等数据的调试组件，服务于开发调试场景。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Flocon** is an advanced debugging and inspection tool built with **Kotlin Multiplatform (KMP)**, designed to work seamlessly across Android and desktop environments. ／ It allows developers to connect a Kotlin Multiplatform or Android app to their computer and launch a **desktop interface** that can **observe, inspect, and interact with the running app** in real time — across shared Kotlin code and platform-specific implementations. ／ |**Database (Room/SQLite)**|✅|✅|",
+   "evidence_lines": [
+    3,
+    7,
+    52
+   ]
+  },
+  "fn": "openflocon/Flocon",
+  "sha": "e0f54f1a8628",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "16d7baa06292": {
+  "identity": {
+   "one_liner": "开源 text-to-SQL 引擎，可在自有数据库上调参与评测",
+   "review": "mnemiq 是一个 Apache-2.0 的自然语言转 SQL 引擎，模型仅负责生成候选查询，确定性层负责权限过滤、方言编译与 EXPLAIN 校验后才执行，并内置评测框架（beacon）用于在自己库上测准确率。面向在自己数据仓库上部署和调优 text-to-SQL 的数据团队，模型端点可指向本地 OpenAI 兼容服务；要求只读查询且必须配置角色策略，否则拒绝作答。",
+   "highlights": [
+    "管道各阶段（模型、检索、语义富集、拒绝阈值、行列策略）以可配置参数暴露",
+    "查询执行前经确定性校验：只读、权限可见性、源方言编译、EXPLAIN 通过",
+    "内置评测框架，按返回数据而非 SQL 字符串比对，区分答对/拒绝/答错三类结果"
+   ],
+   "use_cases": [
+    "在自己的数据仓库上部署并调优自然语言问答/取数",
+    "用自建问题集或 BIRD/Spider 基准评测 text-to-SQL 配置效果",
+    "对 schema 与查询不允许离开内网的环境，通过本地 LLM 端点运行"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`MNEMIQ_PG_DSN` and `MNEMIQ_CONTROL_DSN` are deliberately **not** checked — libpq accepts keyword",
+     "lines": [
+      206
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite database plus its source manifest and access policy under `demo/`. ／ the store's `vss` and `fts`, and `postgres` or `sqlite` for each source of that kind. Every command ／ Postgres, SQLite, DuckDB, Oracle, Snowflake and Databricks, with DuckDB as the universal executor.",
+     "lines": [
+      131,
+      212,
+      270
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Postgres, SQLite, DuckDB, Oracle, Snowflake and Databricks, with DuckDB as the universal executor.",
+     "lines": [
+      270
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库提供自然语言查询与评测能力的引擎，而非以数据库为存储的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "mnemiq is built to make both halves answerable. It is Apache-2.0, runs inside your own environment ／ mnemiq separates writing SQL from deciding to run it. A model proposes a query. A deterministic ／ The evaluation harness is part of the engine, not a separate research project. It runs a question",
+   "evidence_lines": [
+    39,
+    46,
+    101
+   ]
+  },
+  "fn": "agenticfabriq/mnemiq",
+  "sha": "16d7baa06292",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

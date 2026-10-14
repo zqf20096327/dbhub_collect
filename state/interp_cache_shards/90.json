@@ -8949,5 +8949,73 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "af3a190cb249": {
+  "identity": {
+   "one_liner": "基于 Roslyn 将 .NET 解决方案索引到 SQLite 的语义代码地图工具，供代码代理检索",
+   "review": "Lurp 是一个 Windows 专用的 .NET 全局工具，通过 Roslyn 编译器加载解决方案，把符号、类型关系、源码位置和来源证据存入 SQLite 数据库，为 AI 代码代理提供上下文胶囊、影响分析、语义 diff 等检索命令，并可通过 MCP 协议以 stdio 暴露 16 个读取工具；索引需要 .NET 10 SDK 且解决方案已还原，2.x 仅在 Windows 上测试。",
+   "highlights": [
+    "提供 context/impact/diff/search 等 CLI 模式，从 SQLite 索引检索带来源证据级别的代码上下文",
+    "通过 MCP over stdio 暴露 16 个读取工具，可用 --enable-write-tools 注册索引等写入工具",
+    "内置 ASP.NET Core 路由、DI、MediatR、EF Core 等六个框架适配器，生成带证据级别的类型化关系事实"
+   ],
+   "use_cases": [
+    "为 AI 代码代理提供有界上下文胶囊，避免每轮重新解析整个解决方案",
+    "分析符号调用方/被调用方、语义变更对比与死代码候选",
+    "通过 MCP 服务器让支持 MCP 的客户端查询已索引的 .NET 代码库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small,",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其将解决方案索引存入 SQLite 数据库，SQLite 仅作为其自身索引数据的存储层，项目并非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small, ／ dotnet tool install --global lurp --version 2.0.0 ／ Also MCP: `--mode=serve` exposes 16 read tools (`lurp_context`, `lurp_get_source`, `lurp_outline`, `lurp_navigate`, `lurp_find_symbol`, `lurp_search`, `lurp_impact`, `lurp_diff`, `lurp_get_symbol`, `lurp_get_annotations`, `lurp_diagnostics`, `lurp_grep`, `lurp_status`, `lurp_timings`, `lurp_refresh`, `lurp_dead_candidates`) over stdio; `--enable-write-tools` additionally registers `lurp_index` and `lurp_retract_annotation` (background re-index and annotation retraction). Index first via CLI, then serve. See CLI_REFERENCE.md#mcp.",
+   "evidence_lines": [
+    10,
+    98,
+    198
+   ]
+  },
+  "fn": "t-macabee/lurp",
+  "sha": "af3a190cb249",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

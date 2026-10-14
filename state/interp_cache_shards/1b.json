@@ -10514,5 +10514,115 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ab5dfeebeb52": {
+  "identity": {
+   "one_liner": "自托管网关，将保存的 SQL 查询转为带类型参数的版本化 REST 端点",
+   "review": "QueryAPIGate 是自托管服务，把保存的 SQL 查询发布为带类型参数、运行历史和访问控制的 REST 端点，提供 API 密钥、角色、审计日志、缓存、告警和管理控制台。面向需要把既有 SQL 封装成受管 API 的数据团队；Tier 1 数据库在 CI 中经真实服务器测试，H2、通用 JDBC 与 MongoDB 为实验性支持。",
+   "highlights": [
+    "将保存的 SQL 查询发布为版本化 REST 端点，支持类型化、防注入参数与运行历史",
+    "提供 API 密钥、角色、速率限制、审计日志、响应缓存、告警与内置管理控制台",
+    "结果可输出 JSON、NDJSON、XML、YAML、CSV、TSV、Excel、Parquet 等格式，并可通过 DuckDB 查询 Parquet/CSV/JSON 文件（本地、S3、GCS 等）"
+   ],
+   "use_cases": [
+    "将报表、BI 或分析中已有的 SQL 快速封装为受访问控制的 REST API",
+    "为多数据库/文件数据源提供统一的只读查询网关与按密钥授权",
+    "需要查询级审计、速率限制和运行历史追踪的数据服务暴露场景"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and",
+     "lines": [
+      151
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and",
+     "lines": [
+      151
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and",
+     "lines": [
+      151
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and",
+     "lines": [
+      151
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "covered by the compatibility promise. **Experimental** - H2, generic JDBC (Oracle, SQL Server, DB2, Snowflake and",
+     "lines": [
+      152
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "covered by the compatibility promise. **Experimental** - H2, generic JDBC (Oracle, SQL Server, DB2, Snowflake and",
+     "lines": [
+      152
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明其功能是对数据库运行 SQL 并将结果发布为 REST API，属于为数据库生态服务的网关组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "FSL-1.1-MIT（Functional Source License，非传统 OSI 开源许可）",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**QueryAPIGate** is a self-hosted service that runs SQL against your databases - and against Parquet, CSV and JSON files ／ **Tier 1** - PostgreSQL, MySQL, SQLite, DuckDB and ClickHouse: every feature, tested against a real server in CI, and ／ QueryAPIGate is built to expose specific query results, not database credentials:",
+   "evidence_lines": [
+    22,
+    151,
+    164
+   ]
+  },
+  "fn": "AnanthaRajuC/QueryAPIGate",
+  "sha": "ab5dfeebeb52",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

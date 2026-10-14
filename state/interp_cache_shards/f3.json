@@ -9213,5 +9213,143 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7c673211f8b1": {
+  "identity": {
+   "one_liner": "单二进制 BaaS 后端服务，以 PostgreSQL 为唯一依赖",
+   "review": "Fluxbase 是一个用 Go 编写的单二进制后端即服务平台，基于 PostgreSQL 提供自动生成的 REST/GraphQL API、认证、实时订阅、文件存储和边缘函数。面向需要快速搭建应用后端的开发者，支持 Docker/Helm 部署，PostgreSQL 16+（含 pgvector）为唯一外部依赖，也提供 MCP 服务器供 AI 助手集成。",
+   "highlights": [
+    "提供 PostgREST 兼容的 REST API 与 GraphQL API，从 PostgreSQL schema 自动生成 CRUD 端点",
+    "支持基于 PostgreSQL LISTEN/NOTIFY 的 WebSocket 实时订阅，以及认证、存储、边缘函数、后台任务等服务",
+    "内置 MCP Server 与 pgvector 语义搜索，并提供单二进制/容器部署和 Prometheus/OpenTelemetry 可观测性"
+   ],
+   "use_cases": [
+    "为 Web/移动应用快速搭建含认证与实时数据的后端",
+    "构建带知识库、聊天机器人等 AI/RAG 功能的应用",
+    "多租户 SaaS 场景下基于 RLS 的租户隔离后端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A lightweight, single-binary Backend-as-a-Service (BaaS) alternative to Supabase. Fluxbase provides essential backend services including auto-generated REST APIs, authentication, realtime subscriptions, file storage, and edge functions - all in a single Go bin ／ - **PostgREST-compatible REST API**: Auto-generates CRUD endpoints from your PostgreSQL schema ／ - **Realtime Subscriptions**: WebSocket-based live data updates using PostgreSQL LISTEN/NOTIFY ／ - PostgreSQL 16+ (with pgvector)",
+     "lines": [
+      7,
+      13,
+      16,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 PostgreSQL 作为自身数据存储的唯一依赖来提供后端服务，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A lightweight, single-binary Backend-as-a-Service (BaaS) alternative to Supabase. Fluxbase provides essential backend services including auto-generated REST APIs, authentication, realtime subscriptions, file storage, and edge functions - all in a single Go binary with PostgreSQL as the only dependency. ／ - PostgreSQL as the only external dependency ／ - PostgreSQL 16+ (with pgvector)",
+   "evidence_lines": [
+    7,
+    31,
+    43
+   ]
+  },
+  "fn": "nimbleflux/fluxbase",
+  "sha": "7c673211f8b1",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7f1691b9db45": {
+  "identity": {
+   "one_liner": "GaussDB HCS 透明多写 Flink CDC 2.3 增量采集连接器",
+   "review": "该仓库是一个实验性 Flink CDC 连接器，基于官方 Flink CDC 2.3 的 DebeziumSourceFunction 与配套 507 JDBC 驱动，读取 GaussDB HCS 透明多写实例的变更流。面向需要在 Flink 中接入该形态实例的数据工程师，支持 SQL 与 DataStream 接入。README 明确当前仅支持增量采集（无全量快照），不提供生产验收保证，且驱动需自行从产品介质获取。",
+   "highlights": [
+    "基于官方 Flink CDC 2.3 的 DebeziumSourceFunction 与嵌入式 Debezium 引擎实现，支持 Flink 1.13–1.16",
+    "通过配套 507 JDBC 的 MultiPrimaryReplicationStream 读取 HCS 透明多写实例的变更，仅支持增量模式",
+    "提供 Flink SQL connector（gaussdb-cdc）与 DataStream GaussDBSource 两种接入方式，支持 row/ 输出格式"
+   ],
+   "use_cases": [
+    "从 GaussDB HCS 透明多写实例采集增量变更到 Flink 下游",
+    "在 Flink SQL Client 或 DataStream 作业中以 Debezium JSON/RowData 形式消费变更事件"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB HCS Connector for Flink CDC 2.3 ／ 独立的实验性连接器工程，面向 **HCS GaussDB 透明多写部署**。使用官方 ／ 先从你有权使用的 GaussDB 产品介质取得配套 `gaussdbjdbc.jar`，导入本地仓库：",
+     "lines": [
+      1,
+      3,
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该连接器为 GaussDB 提供 CDC 采集适配，是服务于数据库生态的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0（README 声明保留许可声明）；README 明示为非官方扩展且不提供生产验收保证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "独立的实验性连接器工程，面向 **HCS GaussDB 透明多写部署**。使用官方 ／ 的 `MultiPrimaryReplicationStream`。不是原 JDBC 连接器仓库中的 `cdc-2.4.x` 模块。 ／ 这是非官方 GaussDB 扩展，不属于 Apache Flink CDC 已发布的 GaussDB 官方连接器。",
+   "evidence_lines": [
+    3,
+    6,
+    148
+   ]
+  },
+  "fn": "jarrenL/gaussdb-flink-cdc-2.3",
+  "sha": "7f1691b9db45",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

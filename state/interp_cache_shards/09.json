@@ -9736,5 +9736,112 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2f6edc9341ca": {
+  "identity": {
+   "one_liner": "单用户桌面版算法交易平台，本地运行并提供与网页版相同的 REST/WebSocket API",
+   "review": "OpenAlgo Desktop 是 OpenAlgo 网页版的单用户桌面版，用于在本地连接券商进行算法交易，支持 Windows/macOS/Linux/树莓派。它内置本地服务器（REST API 与 WebSocket），兼容 OpenAlgo Python SDK、TradingView、Amibroker、MCP 客户端等；限制包括需要图形桌面会话、不支持 Docker/无头模式，且仅在应用打开期间执行交易。",
+   "highlights": [
+    "提供与 OpenAlgo web 相同的 REST API（127.0.0.1:5000）和 WebSocket 行情接口（127.0.0.1:8765）",
+    "凭据经加密并存放于操作系统 keychain，无需服务器、Python 或 .env 配置",
+    "兼容 OpenAlgo Python SDK、TradingView、Amibroker、Charting、Excel、MCP 客户端等接入方式"
+   ],
+   "use_cases": [
+    "在个人桌面电脑上运行本地算法交易",
+    "通过 Python SDK 或 TradingView/Amibroker 等工具对接本地交易 API",
+    "从 OpenAlgo web 迁移到桌面单机部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库（README 标签含 sqlite）存储自身数据、面向交易员的桌面应用，不提供数据库生态服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OpenAlgo on your own computer. Install, sign in, connect your broker, trade.** ／ OpenAlgo Desktop is a single-user desktop version of ／ SDKs, TradingView, Amibroker, MCP clients and webhooks reach it through that",
+   "evidence_lines": [
+    8,
+    10,
+    159
+   ]
+  },
+  "fn": "marketcalls/openalgo-desktop",
+  "sha": "2f6edc9341ca",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8cbaa8b701c4": {
+  "identity": {
+   "one_liner": "Tidbyt 64x32 LED 屏上的英超转会信息展示应用",
+   "review": "这是一个运行在 Tidbyt 显示设备上的 Pixlet 应用，从 API-Football 与维基百科抓取英超俱乐部转会数据，在 64x32 LED 屏上分三栏显示最近转会、转入与转出费用榜。面向拥有 Tidbyt 设备的球迷用户，需自行申请 API-Football key；受免费额度限制，数据最长延迟约 6 小时，且依赖维基百科表格格式。",
+   "highlights": [
+    "提供最新转会、转入费用榜、转出费用榜三个展示区块",
+    "通过 Pixlet 的 serve/render/push 命令预览或推送到 Tidbyt 设备",
+    "对 API-Football 按俱乐部缓存 6 小时以适应免费额度限制"
+   ],
+   "use_cases": [
+    "在 Tidbyt LED 屏上追踪英超转会动态",
+    "展示当前转会窗口中俱乐部的转会费收支情况"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是从 API-Football 和维基百科读取数据并渲染到 Tidbyt 设备的终端应用，README 未涉及任何数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，数据来自 API-Football 与维基百科（CC BY-SA）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "English Premier League transfers on Tidbyt's 64x32 display, in three sections: ／    pixlet serve epl_transfers.star api_key=\"$(cat api_key.txt)\" ／ API-Football has no league-wide transfers query, so the app requests `GET https://v3.football.api-sports.io/transfers?team=<id>` for each of the 20 EPL clubs (`EPL_CLUBS`, update each season).",
+   "evidence_lines": [
+    3,
+    18,
+    27
+   ]
+  },
+  "fn": "aneeshsimha/tidbyt-epl-transfers",
+  "sha": "8cbaa8b701c4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

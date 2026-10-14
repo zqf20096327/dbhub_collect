@@ -8702,5 +8702,138 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "27137c0f5c87": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机运行",
+   "review": "ResumeForge 是一个本地优先的求职工作台应用，提供岗位管理、事实台账防虚构校验、AI 定制简历生成、多格式导出、模拟面试、自动投递与求职统计看板等功能，面向求职者使用。数据以 SQLite 存储在本机，不注册不登录，通过内置预设调用外部模型服务（OpenAI/Claude/DeepSeek 等）。依赖 FastAPI 后端与 React 前端，首次启动会自动下载 Python 与 Node.js 便携运行时。",
+   "highlights": [
+    "提供事实台账机制，生成简历时与资料库逐条比对并给出防虚构警告",
+    "支持 PDF/Word/Markdown/txt/JSON/HTML 多格式导出，带水印与一键脱敏",
+    "内置自动投递台、网申填表专用浏览器与求职进度统计看板"
+   ],
+   "use_cases": [
+    "求职者本地管理岗位信息、生成与维护多版本简历",
+    "AI 辅助简历定制与模拟面试练习",
+    "跟踪投递进度、记录面经并生成求职数据看板"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员|",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用使用 SQLite 作为本地数据存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**本地优先的 AI 简历工作台：不注册、不登录，数据只存在你自己的电脑上。** ／ |**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员|",
+   "evidence_lines": [
+    13,
+    50
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "27137c0f5c87",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "77e0ece60dc0": {
+  "identity": {
+   "one_liner": "自托管企业SSO连接器，单一Go二进制，用OAuth2风格流程桥接SAML/OIDC身份提供方",
+   "review": "Keyway 是一个面向 Go 应用开发者的自托管企业 SSO 连接器：应用只需实现一个 OAuth2 风格的授权码流程，Keyway 负责与各客户的 Okta、Auth0 等身份提供方以 SAML 或 OIDC 协议交互，并返回标准化的 {email, name, groups} 身份。它以单个静态二进制运行，默认使用 SQLite 存储，无需额外基础设施，通过 CLI 和 Admin API 管理租户与连接。",
+   "highlights": [
+    "提供统一的 OAuth2 风格登录流程，将 SAML/OIDC 协议差异封装为标准化的 {email, name, groups} 身份输出",
+    "以单个静态 Go 二进制交付，默认使用 SQLite 存储，无外部基础设施依赖",
+    "实现精确回调匹配、连接先测试后激活、一次性短时效授权码等安全规则"
+   ],
+   "use_cases": [
+    "SaaS 应用需要为不同企业客户提供各自 IdP（Okta/Auth0 等）的 SSO 登录",
+    "希望避免在每个应用中重复实现 SAML XML 签名与 OIDC 令牌验证的 Go 团队",
+    "需要多租户隔离管理客户身份连接与回调白名单的自托管部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single static Go binary. SQLite by default. Zero required infrastructure. MIT licensed. ／ Railway fits this stack well: it builds the `Dockerfile` natively, its free `*.up.railway.app` domains come with valid TLS (no Caddy needed), and a 0.5 GB volume holds the SQLite file with room to spare. Trial = $5 for 30 days, no card; after that the Free pla",
+     "lines": [
+      7,
+      196
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Keyway 使用 SQLite 作为自身默认存储组件，属于使用数据库存数据的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Keyway is a self-hosted Enterprise SSO connector for Go. Your app talks to Keyway with one simple OAuth2-style flow. Keyway talks to each customer's identity provider (Okta, Auth0, Google, Azure AD) in whatever language it speaks — SAML or OIDC — and hands your app back the same clean identity every time: `{email, name, groups}`. ／ Single static Go binary. SQLite by default. Zero required infrastructure. MIT licensed. ／ |`keyway start`|Serve flow + admin API (`--addr`, `--db`, `--base-url`, `--sp-entity-id`, `--sp-key`, `--sp-cert`)|",
+   "evidence_lines": [
+    5,
+    7,
+    100
+   ]
+  },
+  "fn": "HalxDocs/keyway",
+  "sha": "77e0ece60dc0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

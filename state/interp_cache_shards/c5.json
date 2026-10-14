@@ -9968,5 +9968,147 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e9e32b294211": {
+  "identity": {
+   "one_liner": "自部署的 AI 角色陪伴应用，含长期记忆与生图，数据存 SQLite",
+   "review": "LumiMuse 是一个基于 Next.js 的自托管 AI 角色扮演/陪伴系统，用户可创建角色、进行对话，系统从对话中提取长期记忆并在后续聊天中按 token 预算注入上下文，另支持现实时间注入、AI 生图与数据导入导出。面向想与 AI 角色长期互动的个人用户；数据以 SQLite（WAL 模式）保存在本地，支持 npm 运行或 Docker 一键部署，模型侧要求兼容 OpenAI Chat Completions 格式的接口。",
+   "highlights": [
+    "长期记忆系统：自动提取、AI 整理/归档、向量检索与重排、按 token 预算装箱注入上下文",
+    "支持 Stable Diffusion WebUI / NovelAI / ComfyUI / 自定义 API 生成图片，含版本历史管理",
+    "数据本地自有：SQLite + WAL 存储，支持导入导出备份与 Docker 持久化部署"
+   ],
+   "use_cases": [
+    "个人自托管的 AI 角色长期陪伴/角色扮演聊天",
+    "需要角色长期记忆沉淀（关系、偏好、事件）的对话场景",
+    "聊天中按角色设定自动生成插图的创作场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ - 数据库使用 SQLite，默认保存在 `data/lumimuse.db` ／ |数据库|SQLite + better-sqlite3（WAL）|",
+     "lines": [
+      13,
+      190,
+      226
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目使用 SQLite 作为自身存储数据库，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "LumiMuse 是一个轻量级 AI 角色扮演 / 陪伴系统，带长期记忆、现实时间注入、原生生图、数据导入导出和 Docker 部署支持。 ／ - 数据库使用 SQLite，默认保存在 `data/lumimuse.db` ／ |数据库|SQLite + better-sqlite3（WAL）|",
+   "evidence_lines": [
+    27,
+    190,
+    226
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "in30mn1a/LumiMuse",
+  "sha": "e9e32b294211",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5c1702fd0f5": {
+  "identity": {
+   "one_liner": "基于 MVC 与自研 ORM 的 Python 控制台联系人管理教学项目",
+   "review": "这是一个用于教学的 Python 控制台联系人管理应用，采用 MVC 架构和面向对象设计，并自行实现了一个与 SQLite 通信的定制 ORM 层。项目按 models、views、controllers、orm、repositories、services、exceptions 等模块组织，演示软件工程结构与职责分离实践，适合学习应用架构设计者使用。",
+   "highlights": [
+    "使用 MVC 架构组织应用，按 models/views/controllers 等包划分职责",
+    "自研 ORM 层，包含 database、manager、query、fields、metadata 模块，用于与 SQLite 通信",
+    "通过 Repository 和 Service 层实现业务逻辑与数据存储分离"
+   ],
+   "use_cases": [
+    "学习 Python MVC 架构与分层设计",
+    "了解自研 ORM 的实现方式",
+    "作为控制台联系人管理应用的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> An educational Python project for building a console-based Contacts Management application using MVC Architecture, Object-Oriented Programming (OOP) and a custom ORM for SQLite. ／ - طراحی یک ORM اختصاصی برای ارتباط با SQLite ／ هدف از طراحی این بخش، ایجاد یک لایه مستقل برای مدیریت عملیات ذخیره‌سازی اطلاعات است تا سایر قسمت‌های سیستم هیچ وابستگی مستقیمی به SQLite نداشته باشند.",
+     "lines": [
+      3,
+      35,
+      179
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明这是一个使用 SQLite 存储数据的控制台联系人管理应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> An educational Python project for building a console-based Contacts Management application using MVC Architecture, Object-Oriented Programming (OOP) and a custom ORM for SQLite. ／ - طراحی یک ORM اختصاصی برای ارتباط با SQLite ／ هدف از طراحی این بخش، ایجاد یک لایه مستقل برای مدیریت عملیات ذخیره‌سازی اطلاعات است تا سایر قسمت‌های سیستم هیچ وابستگی مستقیمی به SQLite نداشته باشند.",
+   "evidence_lines": [
+    3,
+    35,
+    179
+   ]
+  },
+  "fn": "mkhazaeidev/Console-Contacts-Application",
+  "sha": "e5c1702fd0f5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

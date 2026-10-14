@@ -9897,5 +9897,72 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a6ff82640fb7": {
+  "identity": {
+   "one_liner": "DuckDB 扩展，把 DuckLake 数据文件以行存储在 PostgreSQL 中",
+   "review": "pgvfs 是一个 DuckDB 扩展，实现 pgvfs:// 文件系统，将 DuckLake 的数据文件作为行存入 PostgreSQL，使一个 PostgreSQL 实例即可充当完整数据湖，支持一写多读、无对象存储和网关，另提供 pgdb:// 在 PostgreSQL 中存原生 DuckDB 数据库。面向使用 DuckDB 与 PostgreSQL 的数据团队，要求 PostgreSQL 14 及以上。",
+   "highlights": [
+    "提供 pgvfs:// 文件系统，将 DuckLake 数据文件存为 PostgreSQL 行",
+    "支持一写多读架构，读写无需对象存储、网关或 HTTP",
+    "提供 pgdb:// 在 PostgreSQL 中存原生 DuckDB 数据库"
+   ],
+   "use_cases": [
+    "以 PostgreSQL 为唯一存储运行 DuckLake 数据湖",
+    "多个 DuckDB 进程直接读写共享的湖数据",
+    "在 SQL 中构建全文与向量检索"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pgvfs: DuckLake on PostgreSQL ／ PostgreSQL. Put the DuckLake catalog in the same database and one PostgreSQL ／ HTTP. Any process whose PostgreSQL role can write may write. Works on PostgreSQL",
+     "lines": [
+      1,
+      4,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 DuckDB 扩展为 DuckLake 提供基于 PostgreSQL 的存储引擎，属于服务数据库生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pgvfs://` is a DuckDB filesystem that stores DuckLake's data files as rows in ／ HTTP. Any process whose PostgreSQL role can write may write. Works on PostgreSQL ／ `pgdb://` stores a native DuckDB database (indexes, keys, constraints, WAL) in",
+   "evidence_lines": [
+    3,
+    7,
+    46
+   ]
+  },
+  "fn": "adonm/pgvfs",
+  "sha": "a6ff82640fb7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9200,5 +9200,159 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "24d7d59655f3": {
+  "identity": {
+   "one_liner": "Gmail/Calendar 通信网络力导向图可视化应用",
+   "review": "该项目将 Google Takeout 导出的 mbox 邮件与 .ics 日历文件解析为联系人关系数据，用 Rust 解析器写入本地 SQLite，再由 Node/React + D3.js 以力导向图呈现邮件联系人、会议共同出席者等视图。面向想本地分析自己 Gmail 与 Google Calendar 社交网络的个人用户；全程本地运行，服务仅绑定 127.0.0.1，可选配置 Hugging Face API 做 LLM 垃圾联系人过滤（beta，非确定性）。",
+   "highlights": [
+    "解析 Google Takeout 导出的 .mbox 与 .ics 文件，提取邮件联系人与会议共同出席者",
+    "提供总体/邮件/日历/组织/事件组等多种过滤视图，支持垃圾联系人手动标记与恢复",
+    "全部本地运行，服务默认仅绑定 127.0.0.1，数据不上传"
+   ],
+   "use_cases": [
+    "个人分析自己的 Gmail 通信网络与会议协作关系",
+    "基于导出邮箱做本地隐私邮件网络可视化",
+    "在合成样例邮箱上试用或演示图可视化功能"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "compile SQLite from source. Later starts reuse the cache. ／ write SQLite files into `data/`; the webapp server binds to `127.0.0.1` only (and",
+     "lines": [
+      48,
+      145
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明解析器将数据写入本地 SQLite 文件，webapp 读取该库存数据，属使用数据库的应用",
+   "persona": "use",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "interactive graph. Import your Google Takeout export, and the app extracts ／ write SQLite files into `data/`; the webapp server binds to `127.0.0.1` only (and ／ compile SQLite from source. Later starts reuse the cache.",
+   "evidence_lines": [
+    13,
+    145,
+    48
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yegormishchuk/gmail-contact-graph",
+  "sha": "24d7d59655f3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c9a5b50958d7": {
+  "identity": {
+   "one_liner": "基于 Cloudflare Worker + D1 的会议访客注册与 QR 签到系统",
+   "review": "面向肯雅塔国际会议中心（KICC）的访客登记应用，提供注册表单、重复邮箱拦截、QR 徽章生成、门口扫码签到、组织者控制台与 CSV 导出。数据存储使用 Cloudflare D1（托管 SQLite）和 R2，外部集成（邮件、Google Sheets）通过 cron 触发的重试队列异步执行。部署依赖 wrangler 与 Cloudflare 账号，凭证全部走环境绑定。",
+   "highlights": [
+    "使用 Cloudflare D1（托管 SQLite）存储注册数据并靠唯一索引在数据库层拦截重复邮箱",
+    "QR 徽章采用 HMAC 签名令牌，签到支持摄像头扫码与手动回退",
+    "外部集成在 ctx.waitUntil() 中后台执行，失败进入 sync_queue 按 cron 重试"
+   ],
+   "use_cases": [
+    "会议/活动的访客登记与现场扫码签到",
+    "需要把注册数据同步到 Google Sheets 的组织方",
+    "基于 Cloudflare Workers 无服务器架构的活动管理小系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "D1 is a managed SQLite database, and every outbound integration (email, Sheets,",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个访客注册业务应用，使用 D1/SQLite 存储数据而非为数据库生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "D1 is a managed SQLite database, and every outbound integration (email, Sheets, ／ |**Duplicate-email blocking**|`worker/src/index.js` + D1 unique index|Friendly 409 with the existing registration number, enforced by the database as a backstop| ／ |D1 database|`kicc-registry`|`a9f59135-195f-43df-8863-76dfc51b62c4`|",
+   "evidence_lines": [
+    40,
+    51,
+    113
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "techhubltd254/kicc-visitor-registry",
+  "sha": "c9a5b50958d7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

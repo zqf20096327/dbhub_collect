@@ -8913,5 +8913,187 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0571c43ebebf": {
+  "identity": {
+   "one_liner": "数据库备份与恢复工具，通过 agent 管理多种数据库实例的备份操作",
+   "review": "Portabase 用于简化和自动化数据库实例的备份与恢复，通过部署的 agent 管理备份操作。支持 PostgreSQL、MySQL、MariaDB、SQLite、MongoDB、Redis、Firebird、MSSQL 及 Docker Volume。适合需要自托管备份方案的运维与开发团队。Redis/Valkey 不支持恢复，安装依赖 Docker。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite、MongoDB、Redis、Firebird、MSSQL 及 Docker Volume 的备份与恢复",
+    "通过 Portabase agent 安全管理备份操作",
+    "提供 Docker、Helm、CLI 等多种安装方式"
+   ],
+   "use_cases": [
+    "为多种数据库实例配置统一的备份/恢复流程",
+    "自托管环境的数据库备份自动化管理",
+    "备份 Docker Volume 数据"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**PostgreSQL**|✅ Stable|12, 13, 14, 15, 16, 17 and 18|Yes|",
+     "lines": [
+      61
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**MySQL**|✅ Stable|5.7, 8 and 9|Yes|",
+     "lines": [
+      62
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**MariaDB**|✅ Stable|10 and 11|Yes|",
+     "lines": [
+      63
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQLite**|✅ Stable|3.x|Yes|",
+     "lines": [
+      65
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**MSSQL Server**|✅ Stable|2017, 2019, 2022, Azure SQL|Yes|",
+     "lines": [
+      69
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为数据库备份与恢复工具，为数据库生态提供服务而非使用数据库构建应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Portabase is a tool designed to simplify the backup and restoration of your database instances. It integrates seamlessly with Portabase agents for managing operations securely and efficiently. ／ ## Supported databases",
+   "evidence_lines": [
+    7,
+    57
+   ]
+  },
+  "fn": "Portabase/portabase",
+  "sha": "0571c43ebebf",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97bce43d23cc": {
+  "identity": {
+   "one_liner": "MCP 网关：统一入口、按需发现并延迟启动下游 MCP 服务",
+   "review": "MMG 是一个 MCP（Model Context Protocol）管理网关，把多个 MCP 服务器收拢到单一稳定入口，提供渐进式工具发现、懒加载启动、用户/令牌/权限/OAuth 管理及审计日志，并支持 Agent 提交提案、人工审核后启用。面向使用多个 MCP 服务的 AI Agent 用户和管理员，通过 PyPI 安装，默认使用 SQLite 存储，可选 MySQL。",
+   "highlights": [
+    "提供 gateway_search_mcps / gateway_search_tools / gateway_call 等渐进式发现与调用工具，目录操作不启动下游服务，lazy 服务在首次真实调用时启动",
+    "支持 stdio、Streamable HTTP、SSE、REST-to-MCP 传输，以及 generic JSON、Codex TOML、Claude、DSH Cordis 配置导入导出",
+    "包含用户、令牌、权限、OAuth 隔离、调用与审计日志，以及 Agent 提案-人工审核-测试-批准流程"
+   ],
+   "use_cases": [
+    "为多个 AI Agent 提供统一的 MCP 服务入口，减少重复配置与启动开销",
+    "将既有 Codex/Claude 等客户端的 MCP 配置批量迁移并经人工审核后启用",
+    "集中管理 MCP 服务的生命周期、隔离策略与访问权限"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQLite by default and optional MySQL.",
+     "lines": [
+      192
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "On first start, MMG creates its configuration, SQLite database, and runtime data under: ／ - SQLite by default and optional MySQL.",
+     "lines": [
+      96,
+      192
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MCP/Agent 生态提供网关与管理组件，数据库仅作为其自身可选存储后端",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP Manager Gateway, or **MMG**, puts those servers behind one gateway. An agent sees a small discovery surface, searches for the capability it needs, reads the exact schema, and calls the selected tool. Catalog operations do not start downstream services; a `lazy` server starts on its first real call. ／ Listing MCPs, searching tools, and paging through the catalog never starts a downstream service. A `lazy` service starts on its first business call and can be reclaimed after an idle period. Frequently used services can be `eager`; unavailable services can be `disabled`. ／ - stdio, Streamable HTTP, legacy SSE, and REST-to-MCP transports;",
+   "evidence_lines": [
+    19,
+    47,
+    181
+   ]
+  },
+  "fn": "eraycc/mcp-manager-gateway",
+  "sha": "97bce43d23cc",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

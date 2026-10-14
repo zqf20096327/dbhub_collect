@@ -10197,5 +10197,146 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd7fbaaf7e86": {
+  "identity": {
+   "one_liner": "PostgreSQL/Greenplum/Greengage 数据库内作业调度器扩展",
+   "review": "pg_task 是运行在 PostgreSQL、Greenplum、Greengage 内部的任务调度扩展，以 background worker 实现定时或异步执行 SQL 命令。用户启用扩展后向 task 表插入行即可调度作业，结果与错误写回同一行，无需外部守护进程。构建需 PGXS 环境与 C 编译器，构建时会从上游仓库下载对应版本的源文件。",
+   "highlights": [
+    "以 background worker 在数据库内运行，通过向 task 表 INSERT 即可调度 SQL 任务",
+    "支持单次、延时、定时与重复执行，结果写回任务行的 output/error/state 列",
+    "提供约 30 个 GUC 配置项，可按 config/database/user/session 多级别设置并发、超时、分组等"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内定时或异步执行 SQL 命令（如维护、批处理任务）",
+    "需要任务状态可通过查询表直接获取的调度场景",
+    "Greenplum/Greengage 环境中的后台任务编排"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是为 PostgreSQL/Greenplum/Greengage 服务的作业调度扩展，以数据库扩展形式运行于其内部",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously. ／ It runs entirely inside the database as a set of background workers — no external daemon, no client library, nothing to babysit outside PostgreSQL itself. You enable it with a single GUC, and from then on scheduling a job is just an `INSERT` into a plain table: `pg_task` polls that table, runs `input`, and writes the result back into the same row (see Task state machine for exactly how). ／ `pg_task` is a standard PGXS extension, built against an installed PostgreSQL, Greenplum or Greengage server.",
+   "evidence_lines": [
+    3,
+    5,
+    28
+   ]
+  },
+  "fn": "RekGRpth/pg_task",
+  "sha": "dd7fbaaf7e86",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5d9570eb14bf": {
+  "identity": {
+   "one_liner": "模拟交易预测市场平台，Go撮合引擎+Kafka+PostgreSQL",
+   "review": "Probstreet 是一个用虚拟货币对真实世界事件结果进行模拟交易的预测市场平台。技术栈包括 Hono/Bun API 服务、Go 撮合引擎（支持合成匹配）、Kafka 交易管道、Processor 服务将成交批量写入 Postgres，引擎快照以二进制存入 PostgreSQL 的 BYTEA。适合对交易撮合与事件驱动架构感兴趣的开发者学习参考；定位为纯纸面交易，支付与 KYC 仅沙箱模式。",
+   "highlights": [
+    "Go 撮合引擎支持标准/铸造/合并三种匹配方式，按市场粒度加锁并发运行",
+    "成交数据经 Kafka 由 Processor 服务批量写入 Postgres，结算用 CAS 锁保证一次性",
+    "引擎快照序列化为二进制存入 PostgreSQL BYTEA 字段而非对象存储"
+   ],
+   "use_cases": [
+    "对预测市场撮合机制感兴趣的开发者学习与复现",
+    "高吞吐订单撮合与 Kafka 事件管道的架构参考",
+    "无真实资金的模拟交易产品演示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Bun TypeScript Go React Vite Hono PostgreSQL Prisma Redis Kafka Socket.io Cloudflare Docker Sentry k6 ／ |**Processor Service**|Kafka consumer — batch-inserts matched trades to Postgres, keeps persistent state consistent.| ／ PostgreSQL supports binary data through the `BYTEA` type. Instead of uploading every snapshot to an object-storage bucket, I could serialize the engine state into a compact binary representation and store the resulting bytes directly in PostgreSQL.",
+     "lines": [
+      7,
+      85,
+      161
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "I researched how Polymarket and Adipredictstreet handle resolution. Both rely on **Chainlink** — a decentralized oracle network that brings off-chain data on-chain. But Probstreet runs **entirely off-chain**. Using Chainlink would mean paying gas fees for a sy",
+     "lines": [
+      275
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为一个使用 PostgreSQL、Kafka 等存储数据并提供交易功能的平台应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Probstreet is a paper-trading prediction-market platform where users stake virtual currency on the outcomes of real-world events — crypto prices, football matches, stock movements, and more. Markets resolve automatically using live data from Binance, football-data.org, and Finnhub, with an AI oracle pipeline as fallback for unstructured events. ／ |**Processor Service**|Kafka consumer — batch-inserts matched trades to Postgres, keeps persistent state consistent.| ／ PostgreSQL supports binary data through the `BYTEA` type. Instead of uploading every snapshot to an object-storage bucket, I could serialize the engine state into a compact binary representation and store the resulting bytes directly in PostgreSQL.",
+   "evidence_lines": [
+    13,
+    85,
+    161
+   ]
+  },
+  "fn": "probstreetlabs/probstreet",
+  "sha": "5d9570eb14bf",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

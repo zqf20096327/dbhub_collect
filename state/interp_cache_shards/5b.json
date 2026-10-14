@@ -8348,5 +8348,59 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "53bb82670e50": {
+  "identity": {
+   "one_liner": "Go 进程内类型安全查询缓存库，管理共享查询与刷新生命周期",
+   "review": "cacheq 是一个 Go 1.22+ 的进程内查询缓存与状态管理库，提供类型安全的共享查询、并发请求合并、批量加载、失效刷新和可观测性。适用于后端服务、CLI/TUI 应用和后台工作者；缓存仅存于单进程，跨进程共享需外部存储。",
+   "highlights": [
+    "类型安全的共享查询与缓存，支持并发请求合并和自动批量加载",
+    "提供缓存更新、失效、可等待刷新等生命周期管理能力",
+    "支持共享执行预算限制与查询可观测性诊断事件"
+   ],
+   "use_cases": [
+    "后端服务多个组件复用相同查询结果并合并在途请求",
+    "CLI/TUI 应用中向消息循环传递加载、结果与错误状态",
+    "写操作后协调缓存更新与相关查询失效刷新"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 说明 cacheq 管理用户提供的 HTTP 请求或数据库操作的执行与结果分发，不使用数据库存储自身数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A typed, dependency-free query client for Go 1.22 and later ／ provide the HTTP requests, database operations, or other loaders; cacheq manages ／ Import `github.com/Waterkyuu/cacheq` as package `cacheq`. Requires Go 1.22 or later and has no external dependencies.",
+   "evidence_lines": [
+    8,
+    22,
+    53
+   ]
+  },
+  "fn": "Waterkyuu/cacheq",
+  "sha": "53bb82670e50",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

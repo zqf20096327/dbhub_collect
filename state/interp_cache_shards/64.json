@@ -9341,5 +9341,149 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f7d9b83a883f": {
+  "identity": {
+   "one_liner": "Oracle AI 数据库上的 RAG/NL2SQL 实验工具包",
+   "review": "该仓库提供一个面向开发者和数据科学家的实验环境，将生成式 AI 与 RAG、NL2SQL 结合，依托 Oracle AI Database 的向量检索和 SQLcl MCP 扩展 LLM 的知识。提供模型配置、文档切分嵌入、向量存储自动刷新、提示词调整和 Q&A 测试集测试床等功能。需自备 Oracle AI 数据库与嵌入/对话模型，支持裸机、容器或 Kubernetes 部署。",
+   "highlights": [
+    "提供 RAG 与 NL2SQL 的实验与测试床环境，集成 Oracle AI Database 向量检索与 SQLcl MCP",
+    "支持配置嵌入与对话模型、文档切分嵌入、向量存储从 OCI Object Storage 自动刷新",
+    "提供 Oracle Deep Data Security 策略管理与 Q&A 数据集测试检查"
+   ],
+   "use_cases": [
+    "开发者/数据科学家实验 RAG 流水线与 NL2SQL 能力",
+    "基于 Oracle AI Database 构建向量检索与 Q&A 数据集评估",
+    "在 OCI 或本地环境中部署 GenAI 实验平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "The **Oracle AI Optimizer and Toolkit** (the **AI Optimizer**) provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) an ／ - **Oracle integration:** Oracle AI Database Vector Search, Oracle Deep Data Security, SQLcl MCP, OCI, OCI GenAI, and OCI Object Storage.",
+     "lines": [
+      9,
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 Oracle AI Database 存取数据并提供集成，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "版权归 Oracle and/or its affiliates，具体许可证未在可见 README 中列出",
+   "install": [
+    "source",
+    "docker",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The **Oracle AI Optimizer and Toolkit** (the **AI Optimizer**) provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) and Natural Language to SQL (NL2SQL) capabilities. By integrating **Oracle AI Database** VectorSearch and **SQLcl** MCP, the AI Optimizer and Toolkit enables users to extend the knowledge of existing Large Language Models (LLMs) through RAG and NL2SQL. ／ - **Oracle integration:** Oracle AI Database Vector Search, Oracle Deep Data Security, SQLcl MCP, OCI, OCI GenAI, and OCI Object Storage. ／ - Oracle AI Database incl. Oracle AI Database Free",
+   "evidence_lines": [
+    9,
+    15,
+    38
+   ]
+  },
+  "fn": "oracle/ai-optimizer",
+  "sha": "f7d9b83a883f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ff1d002b0c9b": {
+  "identity": {
+   "one_liner": "Go 技术内容出版平台，私有 CMS + 静态发布，SQLite 存储",
+   "review": "一个面向 Go 开发者的多作者 Markdown 出版平台，由私有 CMS（Go/Fiber + 内嵌 React Admin）编辑内容，通过 snapshot/generation 机制经 R2 与 Astro 构建为静态公开站点，数据存储于内嵌 SQLite。适用于需要内容审核工作流、版本控制与静态发布的团队，需显式迁移数据库并配置 GitHub OAuth 登录。",
+   "highlights": [
+    "提供 CMS 编辑工作流：Draft 保存、Revision 审核、发布/归档与同事务 Audit",
+    "通过 generation/snapshot/Hook 机制生成静态站点，公开站运行时不依赖 CMS",
+    "使用 SQLite 配合 goose migrations 与 sqlc queries 进行数据管理"
+   ],
+   "use_cases": [
+    "多作者技术文章/知识库的策展与发布",
+    "需要审核流程与修订历史的 Markdown 内容编辑",
+    "静态化公开站点与私有 CMS 解耦的内容交付"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "当前私有 CMS：Go / Fiber v3 + 内嵌 React Admin → SQLite / sqlc / goose ／ |`cmd/gopheratlas-cms`|配置、共享 logger、SQLite、OAuth 服务的构造与关闭| ／ |`internal/database`, `db`|SQLite 连接池、真实 goose migrations 和 sqlc queries|",
+     "lines": [
+      19,
+      33,
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 SQLite 作为自身内容存储数据库，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "当前私有 CMS：Go / Fiber v3 + 内嵌 React Admin → SQLite / sqlc / goose ／ |`internal/database`, `db`|SQLite 连接池、真实 goose migrations 和 sqlc queries| ／ Publish **表示 SQLite 选定 Revision 并原子排队 generation/job**，并不表示公共网站已重建。路由历史永久",
+   "evidence_lines": [
+    19,
+    37,
+    191
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "deepfurry/gopher-atlas",
+  "sha": "ff1d002b0c9b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
