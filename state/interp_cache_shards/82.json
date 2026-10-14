@@ -9331,5 +9331,180 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1d8c7d24c3a9": {
+  "identity": {
+   "one_liner": "数据库结构/数据 diff 工具，比较两库并生成可回滚迁移 SQL",
+   "review": "DBDiff 是命令行数据库对比工具，比较本地或远程两个数据库的 schema 与数据，生成含 UP/DOWN 的迁移脚本，可配合 Flyway、Liquibase 等迁移工具实现数据库版本控制，也可用内置迁移执行器。面向需要做数据库变更管理的开发与运维人员，通过 --driver 支持 MySQL、PostgreSQL、SQLite，Supabase 需经 PostgreSQL 驱动。",
+   "highlights": [
+    "提供 --driver 参数支持 MySQL、PostgreSQL、SQLite 三类数据库的对比",
+    "生成同文件内的 UP/DOWN 迁移 SQL，内置 migration:up/down/status/validate 等执行命令",
+    "PostgreSQL DDL 渲染支持内置渲染器或调用 pg_dump/pg_restore"
+   ],
+   "use_cases": [
+    "数据库 schema 与数据变更的版本控制与迁移脚本生成",
+    "两个环境数据库结构的差异比对与同步",
+    "配合 Flyway/Liquibase 等工具纳入迁移流水线"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ PostgreSQL 14 and later. CI tests every supported major version.",
+     "lines": [
+      9,
+      23,
+      50
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ### MySQL",
+     "lines": [
+      9,
+      23,
+      42
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ### SQLite ／ SQLite 3.x is supported (any version supported by the installed `pdo_sqlite` PHP extension).",
+     "lines": [
+      9,
+      23,
+      156,
+      164
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "compat",
+     "quote": "|MariaDB 10.x / 11.x|MySQL wire protocol; minor DDL dialect differences|",
+     "lines": [
+      202
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "compat",
+     "quote": "|TiDB|MySQL-compatible; default port 4000|",
+     "lines": [
+      207
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库提供对比与迁移生成能力，是服务于数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ - Built-in migration runner: `migration:up`, `down`, `status`, `validate`, `repair`, `baseline`",
+   "evidence_lines": [
+    9,
+    23,
+    30
+   ]
+  },
+  "fn": "DBDiff/DBDiff",
+  "sha": "1d8c7d24c3a9",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "54b6f48bfc40": {
+  "identity": {
+   "one_liner": "轻量自托管应用监控工具，单 Go 二进制采集指标并存储于 SQLite",
+   "review": "StatLite 是一个自托管的应用监控工具，通过单个 Go 二进制轮询多个应用的指标端点，将数据存入本地 SQLite 并提供内置历史图表，支持 Spring Boot、Quarkus、Micronaut 及任意语言的固定 JSON 指标端点。面向 VPS 和小型服务器等资源受限环境的运维者使用，无需部署 Prometheus 或 Grafana，但无内置仪表盘认证。",
+   "highlights": [
+    "单个 Go 二进制轮询多个应用，指标存储在本地 SQLite 并提供内置历史图表",
+    "支持 Spring Boot、Quarkus、Micronaut 集成，以及任意语言可实现的小型固定 JSON 指标端点",
+    "采集流量、延迟、CPU、内存、应用健康和主机指标，数据保留在用户服务器上"
+   ],
+   "use_cases": [
+    "VPS 和小型服务器上应用的轻量级指标监控",
+    "不部署 Prometheus/Grafana 技术栈的简化监控方案",
+    "资源受限环境下的应用与健康状态历史查看"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "metrics locally in SQLite, and provides built-in historical ／ `storage.sqlite_path`, and `polling.interval` are required:",
+     "lines": [
+      11,
+      122
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为应用监控提供服务型工具能力，SQLite 仅作为其本地历史数据存储而非被服务的数据库生态对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "StatLite provides lightweight, self-hosted application monitoring for apps running ／ on VPSs and small servers. One Go binary polls multiple applications, stores ／ metrics locally in SQLite, and provides built-in historical",
+   "evidence_lines": [
+    9,
+    10,
+    11
+   ]
+  },
+  "fn": "PVRLabs/statlite",
+  "sha": "54b6f48bfc40",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

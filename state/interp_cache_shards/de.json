@@ -9515,5 +9515,145 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f1a5a2c11d83": {
+  "identity": {
+   "one_liner": "基于 SQLite 分片的 Blob 存储服务器，兼容 Redis 协议",
+   "review": "Blobasaur 是用 Rust 编写的分片 Blob 存储服务器，每个分片使用独立的 SQLite 数据库存储二进制大对象，通过实现 Redis 协议兼容标准 Redis 客户端。提供 TTL、命名空间、分片迁移、Prometheus 指标等能力；迁移需停机。适合需要以 Redis 接口读写大对象、用 SQLite 落盘的部署场景。",
+   "highlights": [
+    "使用多探针一致性哈希将数据分布到多个 SQLite 分片数据库",
+    "实现 Redis 协议核心命令并支持 Redis Cluster 节点发现与重定向",
+    "内置分片迁移命令，支持数据完整性与校验（需停机执行）"
+   ],
+   "use_cases": [
+    "以 Redis 客户端读写二进制大对象（Blob）的存储服务",
+    "需要 SQLite 落盘、单二进制部署的轻量存储场景",
+    "需要调整分片数量并迁移数据的部署扩容操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Blobasaur is a high-performance, sharded blob storage server written in Rust. It implements the Redis protocol for client compatibility and uses SQLite as the backend for each shard, providing a simple yet robust solution for storing and retrieving binary larg ／ - **🚀 High Performance Sharding**: Distributes data across multiple SQLite databases using multi-probe consistent hashing for optimal concurrency and scalability ／ - **💾 SQLite Backend**: Each shard uses its own SQLite database for simple deployment and reliable storage",
+     "lines": [
+      9,
+      15,
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身后端存储数据，SQLite 不是其服务的目标数据库而是内部依赖",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Blobasaur is a high-performance, sharded blob storage server written in Rust. It implements the Redis protocol for client compatibility and uses SQLite as the backend for each shard, providing a simple yet robust solution for storing and retrieving binary large objects (blobs). ／ - **💾 SQLite Backend**: Each shard uses its own SQLite database for simple deployment and reliable storage",
+   "evidence_lines": [
+    9,
+    19
+   ]
+  },
+  "fn": "iamd3vil/blobasaur",
+  "sha": "f1a5a2c11d83",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "98db1c86f4ae": {
+  "identity": {
+   "one_liner": "乐队自托管歌本与演出准备应用，用 ChordPro 管理",
+   "review": "Gigboy 是一个面向乐队和音乐人的自托管 Web 应用，用于编写、组织和排练歌曲：支持 ChordPro 渲染、移调、歌单、演出日程、新闻包、排练录音、节拍器与调音器等，数据存储于自有的 Postgres 数据库，通过 Docker Compose 一条命令部署，无公开自助注册、靠邀请链接加入成员，Apache-2.0 许可。",
+   "highlights": [
+    "支持 ChordPro 格式的歌曲渲染、移调、实时预览，并可从 OnSong 和粘贴的多个和弦谱站点导入",
+    "提供共享歌库、歌单、演出与巡演日历、新闻包/技术台单/舞台图分享、 Concert Mode 同步与排练录音",
+    "支持全量 ZIP 导出、离线 PWA、软删除恢复、保存快照与版本 diff，并通过 Docker Compose 自托管"
+   ],
+   "use_cases": [
+    "乐队自托管管理歌曲、歌单与演出资料",
+    "排练与现场演出中移调、录音、查看和弦谱",
+    "生成并分享面向场地/主办方新闻包与技术台单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Express + Postgres (Drizzle ORM)|API server & data storage| ／ mkdir -p data/postgres data/attachments",
+     "lines": [
+      127,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用将歌单、录音与新闻包等数据存于自带的 Postgres 数据库（Express + Postgres, Drizzle ORM），属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Gigboy is a web app for musicians and bands to write, organize, and rehearse songs from — built ／ |Express + Postgres (Drizzle ORM)|API server & data storage| ／ Gigboy ships as a prebuilt Docker image — no build toolchain required on the machine running it,",
+   "evidence_lines": [
+    20,
+    127,
+    142
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "blindpassasjer/gigboy",
+  "sha": "98db1c86f4ae",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

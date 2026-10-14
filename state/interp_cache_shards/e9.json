@@ -10323,5 +10323,291 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a651b84553dc": {
+  "identity": {
+   "one_liner": "开源自托管的文档电子签名应用（DocuSign 替代品）",
+   "review": "Documenso 是一个开源的文档电子签名工具，用于创建、签署和管理 PDF 签名文档，支持 PAdES 标准。面向需要自托管签署方案的个人和团队。技术栈基于 TypeScript/Next.js、Prisma ORM 与 PostgreSQL 数据库，通过 Docker、Docker Compose、Railway、Kubernetes 等多种方式部署，开发环境提供 docker 一键启动数据库与邮件服务。",
+   "highlights": [
+    "提供文档数字签署功能，基于 PDF 签名与 PAdES 标准",
+    "支持自托管，提供 Docker 镜像及多种一键部署方式",
+    "使用 Prisma ORM 与 PostgreSQL 存储数据，内置 Stripe 支付集成"
+   ],
+   "use_cases": [
+    "需要自托管电子签名流程的团队",
+    "个人对合同、协议类 PDF 文档进行签署",
+    "替代商业签署服务的开源部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Postgres SQL Database ／ - This will spin up a postgres database and inbucket mailserver in a docker container.",
+     "lines": [
+      80,
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其运行依赖 Postgres 数据库存储数据，属于使用数据库的签名应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Postgres SQL Database ／  - This will spin up a postgres database and inbucket mailserver in a docker container.",
+   "evidence_lines": [
+    80,
+    101
+   ]
+  },
+  "fn": "documenso/documenso",
+  "sha": "a651b84553dc",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c6a7a69c1ecf": {
+  "identity": {
+   "one_liner": "DSH 红队模式插件：智能体编排渗透测试，战果落本机 SQLite 事实库",
+   "review": "这是 DeepSeek Harness（DSH）的一个红队模式插件，通过一个靶标名称拉起信息收集、漏洞发现、漏洞利用、内网渗透等执行智能体角色，把发现实时写入本机 SQLite 事实库并在控制台可视化，含 56 个工具和 14 个随包技能。面向已获书面授权的攻防演练人员，要求运行在专用 Kali 虚拟机中，数据仅存本机不上报。",
+   "highlights": [
+    "提供 56 个 redteam_* 工具、14 个随包技能与 22 张事实库表",
+    "演练数据只落本机 $DSH_HOME/redteam/，无遥测、无上报、无云端同步",
+    "报告按攻击链顺序编排，附可复现报文/命令与证据截图"
+   ],
+   "use_cases": [
+    "已授权的攻防演练与红蓝对抗",
+    "企业授权范围内的安全自检",
+    "安全教学研究"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。",
+     "lines": [
+      5,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为本机事实库存储渗透测试战果数据，项目本身不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "把 DeepSeek Harness（DSH）变成一台**红队作战指挥台**： ／ 所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ **56 个 `redteam_*` 工具 · 14 个随包技能（+9 个攻击链技能见工具箱附件） · 9 个控制台页签 · 22 张事实库表**",
+   "evidence_lines": [
+    3,
+    5,
+    10
+   ]
+  },
+  "fn": "Jueze-2019/dsh-redteam-mode",
+  "sha": "c6a7a69c1ecf",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "727fe7b1863d": {
+  "identity": {
+   "one_liner": "开源自托管的聊天/语音/屏幕共享社区应用",
+   "review": "Voxpery 是一个开源、可自托管的聊天与音视频社区平台，提供文字频道、私信、语音频道、屏幕共享和审核功能，浏览器与桌面端（Windows/macOS/Linux）均可使用。后端用 Rust 和 Axum 实现，数据存储依赖 PostgreSQL 与 Redis，音视频通过 LiveKit 提供，可经 Docker Compose 一键部署整套栈，适合希望自主掌控数据与部署的社区运营者和自托管用户。",
+   "highlights": [
+    "提供文字频道、私信、语音频道、屏幕共享与审核功能",
+    "支持浏览器访问及 Windows/macOS/Linux 桌面客户端",
+    "提供 Docker Compose 自托管部署，支持数据导出与账户删除"
+   ],
+   "use_cases": [
+    "为社区自托管搭建聊天与语音交流平台",
+    "需要掌控账户数据与部署环境的团队/社群",
+    "作为可自行部署的聊天服务运行于自有服务器"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Self-host:** Start the web app, server, LiveKit, PostgreSQL, and Redis with Docker Compose: ／ Voxpery uses Rust and Axum, React and TypeScript, PostgreSQL, Redis, LiveKit, and Tauri. The contributing guide covers local development and pull requests; the architecture guide explains how the pieces fit together.",
+     "lines": [
+      31,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Voxpery 使用 PostgreSQL 与 Redis 存储数据，是一个使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-host:** Start the web app, server, LiveKit, PostgreSQL, and Redis with Docker Compose: ／ Voxpery uses Rust and Axum, React and TypeScript, PostgreSQL, Redis, LiveKit, and Tauri. The contributing guide covers local development and pull requests; the architecture guide explains how the pieces fit together.",
+   "evidence_lines": [
+    31,
+    46
+   ]
+  },
+  "fn": "emircanagac/voxpery",
+  "sha": "727fe7b1863d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "189efe2372da": {
+  "identity": {
+   "one_liner": "面向 GaussDB HCS 透明多写的 Flink CDC 2.3 增量连接器",
+   "review": "该项目是一个基于官方 Flink CDC 2.3（DebeziumSourceFunction 与嵌入式 Debezium 引擎）的连接器工程，通过配套 507 JDBC 驱动的 MultiPrimaryReplicationStream 读取 HCS 透明多写实例的逻辑复制流，提供 Flink SQL 与 DataStream 接入。仅支持增量采集，无全量快照，尚处实验阶段，未完成真实生产验收，供需要在 HCS 环境做 CDC 联调的工程师使用。",
+   "highlights": [
+    "复用官方 Flink CDC 2.3 的 DebeziumSourceFunction、反序列化器与 checkpoint/offset 存储，提供 Flink SQL connector 'gaussdb-cdc' 与 DataStream GaussDBSource 接入",
+    "通过 507 JDBC 驱动的 MultiPrimaryReplicationStream 建立复制连接，checkpoint 中以 CSN,WAL-ID,LSN 字符串保存位点",
+    "仅支持 scan.startup.mode=incremental 增量采集，输出 row（INSERT/UPDATE/DELETE）或  两种格式"
+   ],
+   "use_cases": [
+    "在 HCS GaussDB 透明多写部署上通过 Flink 增量订阅数据变更",
+    "基于 Flink checkpoint/savepoint 进行 CDC 位点管理与故障恢复联调",
+    "以内置 HcsSmokeJob 提交测试作业验证复制连接与消息解码"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "连接器通过 `pg_get_replication_slots()` 在普通租户 SQL 连接上检查槽，再使用",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "mention",
+     "quote": "`com.huawei.opengauss.jdbc.Driver` / `jdbc:opengauss://` 建立独立复制连接。",
+     "lines": [
+      65
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB HCS Connector for Flink CDC 2.3 ／ 独立的实验性连接器工程，面向 **HCS GaussDB 透明多写部署**。使用官方 ／ 先从你有权使用的 GaussDB 产品介质取得配套 `gaussdbjdbc.jar`，导入本地仓库：",
+     "lines": [
+      1,
+      3,
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 GaussDB 数据库提供 CDC 采集能力的连接器组件，本身不存数据，属数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "适配辅助类保留 Apache-2.0 许可声明；非官方 GaussDB 扩展",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# GaussDB HCS Connector for Flink CDC 2.3 ／ 独立的实验性连接器工程，面向 **HCS GaussDB 透明多写部署**。使用官方 ／ Debezium 引擎、反序列化接口及 checkpoint/offset 存储，并在底层接入配套 507 JDBC",
+   "evidence_lines": [
+    1,
+    3,
+    5
+   ]
+  },
+  "fn": "jarrenL/gaussdb-flink-cdc-2.3",
+  "sha": "189efe2372da",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

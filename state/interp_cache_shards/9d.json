@@ -9523,5 +9523,72 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "086de85a7711": {
+  "identity": {
+   "one_liner": "管理本地推理服务器的终端 UI，用 SQLite 存储模型配置档案",
+   "review": "infai 是一个 Go 编写的终端界面工具，用于管理和启动本地 LLM 推理服务器：可扫描 GGUF/SafeTensors 模型目录、从 HuggingFace 下载模型、为 llama.cpp 和 vLLM 保存启动配置档案，并实时查看推理日志。面向在本地运行推理服务的用户。所有设置与档案存储在本地 SQLite 数据库中，启动时自动执行 schema 迁移。",
+   "highlights": [
+    "支持 llama.cpp 和 vLLM 双引擎，可配置二进制路径与启动参数",
+    "提供模型目录扫描、HuggingFace 下载（支持断点续传）与命名启动档案",
+    "实时读取推理日志并跟踪 tokens-per-second 与 /metrics 请求指标"
+   ],
+   "use_cases": [
+    "在终端中集中管理多个本地推理引擎与模型文件",
+    "为不同模型保存并复用启动参数配置（上下文长度、GPU 层数等）",
+    "监控本地推理服务器的实时日志与性能指标"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "On first launch, infai creates a local SQLite database to store scan directories, engine paths, and launch profiles. Add at least one model directory and one inference engine to get started. ／ All settings and profiles are stored in a local SQLite database:",
+     "lines": [
+      141,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该应用本地存储配置的数据层，README 未提供面向数据库生态的服务或适配能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A terminal UI for managing and launching local inference servers.** ／ On first launch, infai creates a local SQLite database to store scan directories, engine paths, and launch profiles. Add at least one model directory and one inference engine to get started. ／ All settings and profiles are stored in a local SQLite database:",
+   "evidence_lines": [
+    12,
+    141,
+    164
+   ]
+  },
+  "fn": "dipankardas011/infai",
+  "sha": "086de85a7711",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

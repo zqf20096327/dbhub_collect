@@ -8997,5 +8997,142 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a67de844cea9": {
+  "identity": {
+   "one_liner": "pgBackRest 的 Prometheus 指标导出器",
+   "review": "该项目实现一个 Prometheus exporter，通过执行 pgbackrest info --output  命令采集 stanza、仓库、备份、WAL 归档等状态与指标，并提供配套 Grafana 仪表盘。需在安装 pgBackRest 的同一主机或 Docker 中运行，面向使用 pgBackRest 管理 PostgreSQL 备份的运维人员。",
+   "highlights": [
+    "提供 stanza、repository、backup、WAL 归档等多组 Prometheus 指标",
+    "支持指定采集的 stanza，并可运行在宿主机或 Docker 中",
+    "提供现成的 Grafana 仪表盘用于指标可视化"
+   ],
+   "use_cases": [
+    "监控 pgBackRest 备份任务的完成状态与耗时",
+    "跟踪 WAL 归档状态和仓库健康状态",
+    "在 Prometheus/Grafana 体系中集中展示备份信息"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`pgbackrest_backup_info`|backup info|backrest_ver, backup_name, backup_type, block_incr, database_id, lsn_start, lsn_stop, pg_version, prior, repo_key, stanza, wal_start, wal_stop|Values description: `1` - info about backup is exist.| ／ |`pgbackrest_wal_archive_status`|current WAL archive status|database_id, pg_version, repo_key, stanza, wal_max, wal_min|Values description: `0` - any one of WALMin and WALMax have empty value, there is no correct information about WAL archiving, `1` - both WAL ／ pg1-path=/var/lib/postgresql/16/main",
+     "lines": [
+      45,
+      75,
+      420
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目导出 pgBackRest（PostgreSQL 备份工具）的备份指标，为数据库生态提供监控组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Prometheus exporter for pgBackRest. ／ The metrics are collected based on result of `pgbackrest info --output json` command. By default, the metrics are collected for all stanzas received by command. You can specify stanzas to collect metrics. You need to run exporter on the same host where pgBackRest was installed or inside Docker. ／ To get a dashboard for visualizing the collected metrics, you can use a ready-made dashboard pgBackRest Exporter Dashboard or make your own.",
+   "evidence_lines": [
+    7,
+    9,
+    13
+   ]
+  },
+  "fn": "woblerr/pgbackrest_exporter",
+  "sha": "a67de844cea9",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "59f5610ae5f7": {
+  "identity": {
+   "one_liner": "AI 代理跨会话记忆层，SQLite 存储、带 Source Receipt、经 MCP 暴露",
+   "review": "该仓库提供开源记忆工具，用于在 AI 会话间保存、检查、更正和遗忘上下文，本地数据存于用户自己的 SQLite 文件，通过 MCP 或 JavaScript 接口访问，并提供连接 cairn.ink 托管服务的插件。面向使用 Claude Code、Codex 等客户端的开发者。当前为开发者预览版，默认抽取仍存在已知限制，语义召回需 OpenAI 密钥。",
+   "highlights": [
+    "提供 remember/recall/inspect/correct/forget 五个显式 MCP 记忆工具，并附带提交源文本（Source Receipt）供检查",
+    "记忆持久化于用户本地 SQLite 数据库，本地使用无需 Cairn 账号",
+    "支持 npx 一键安装与模型自检 walkthrough，验证工具、持久化与更正/遗忘流程"
+   ],
+   "use_cases": [
+    "为 Claude Code / Codex 会话保存和更正用户偏好与项目决策",
+    "需要检查记忆来源文本并按版本更正或遗忘记忆的场景",
+    "基于 MCP 或 JavaScript 构建自定义记忆集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ - **Local preview:** your SQLite database, ／ - Memory, receipts and organization persist in your selected SQLite database.",
+     "lines": [
+      74,
+      123,
+      198
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储记忆数据，SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ exposes them through MCP or JavaScript. No Cairn account is needed for local use. ／ - Memory, receipts and organization persist in your selected SQLite database.",
+   "evidence_lines": [
+    74,
+    75,
+    198
+   ]
+  },
+  "fn": "Cairn-ink/cairn-memory",
+  "sha": "59f5610ae5f7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9707,5 +9707,126 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5d68326e6ab9": {
+  "identity": {
+   "one_liner": "Git 原生不可变文档数据库，写即提交，SQLite 旁路索引",
+   "review": "LedgerDB 是一个把每次写入序列化为 protobuf 并提交到裸 git 仓库的文档数据库，无服务器进程，通过 git push/pull 复制、CAS 处理冲突；提供 CLI、Go 与 TypeScript SDK，并可用 ledgerdb index watch 把提交日志投影到 SQLite 表以支持 SQL 查询。适合需要离线写入、可审计历史、用 git 做多写者同步的开发者场景。",
+   "highlights": [
+    "每次写入以 TxV3 protobuf 形式提交为不可变 git commit，支持 RFC 6902 JSON patch 与文档修订链",
+    "复用 git 机制实现复制与同步，多写者通过共享 remote 加乐观并发（CAS）与冲突解决助手处理",
+    "提供 SQLite 旁路索引进程，把提交日志投影为集合表并支持表达式/复合索引与唯一约束"
+   ],
+   "use_cases": [
+    "需要离线写入、事后同步的本地优先文档存储场景",
+    "审计类工作负载：append 历史模式保留全部修订版本",
+    "需要用 SQL 查询 JSON 文档、同时保留 git 可追溯历史的团队"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "### Step 4 (optional): Attach the SQLite sidecar",
+     "lines": [
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库引擎，SQLite 仅作为其旁路 SQL 索引组件被使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LedgerDB is a git-native immutable document database. It accepts JSON documents, serializes each write as a TxV3 protobuf blob, and commits the result to a bare git repository on local disk under optimistic concurrency control on `refs/heads/main`. The CLI is the primary surface; a Go SDK and a TypeScript SDK sit on top of the same core. A SQLite sidecar maintained by `ledgerdb index watch` projects the immutable commit log into per-collection tables so the same data is reachable through SQL. The substrate is a real git repository — `git log`, `git cat-file`, `git fetch`, and `git push` all work against it without modification — which means replication is whatever git already does, no consensus protocol, no service mesh, no broker. ／ That shape carries weight. There is no ledgerdb server process to run. There is no gRPC plane and no raft cluster. A multi-writer topology is a set of clones with a shared remote; merges are handled by the optimistic-concurrency layer the CLI ships with and, where automatic merging is insufficient, by the conflict-resolution helpers exposed in the SDK. Offline writes are the default — you commit locally and synchronize when you have a network. The cost model and the failure model are the cost model and the failure model of git, plus one SQLite file per replica that wants SQL access.",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "osvaldoandrade/ledgerdb",
+  "sha": "5d68326e6ab9",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9ca28242e6ed": {
+  "identity": {
+   "one_liner": "OceanBase 大赛 PowerContext 赛题参赛仓库",
+   "review": "该仓库为 OceanBase 大赛 PowerContext 赛题的参赛仓库，README 仅含标题与参赛说明，未说明具体功能、目标用户、安装或运行方式，其与数据库生态的具体关系需查看代码方可确认。",
+   "highlights": [
+    "README 仅声明其为 OceanBase 大赛 PowerContext 赛题参赛仓库"
+   ],
+   "use_cases": [
+    "作为 OceanBase 大赛 PowerContext 赛题的参赛作品提交与查阅"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "OceanBase 大赛 PowerContext 赛题参赛仓库",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅说明为 OceanBase 大赛参赛仓库，无证据表明其为数据库生态工具或仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "OceanBase 大赛 PowerContext 赛题参赛仓库",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "lizerankmpop-dev/PowerContext",
+  "sha": "9ca28242e6ed",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

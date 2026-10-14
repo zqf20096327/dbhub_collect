@@ -9153,5 +9153,76 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "130adc8a37b5": {
+  "identity": {
+   "one_liner": "DMARC 聚合报告解析器，单二进制加内置仪表盘，数据存 SQLite",
+   "review": "Parse DMARC 用 Go 实现单二进制工具，通过 IMAP 或 Maildir 拉取邮箱中的 DMARC 聚合报告，解析 gzip/zip/XML 后存入单个 SQLite 文件，并提供 Web 仪表盘、Prometheus 指标和 MCP 服务器供 AI 助手查询。面向需要自行查看 DMARC 报告的域名管理员；仅支持聚合报告，不含失败报告、TLS-RPT 与告警，HTTP API 无认证需置于反向代理之后。",
+   "highlights": [
+    "提供 IMAP 与 Maildir 两种报告拉取方式，解析 gzip、zip 及原始 XML 附件",
+    "提供仪表盘、28 项 Prometheus 指标、Grafana 面板及含九个工具的 MCP 服务器",
+    "全部数据存储于单个 SQLite 文件，Docker 镜像基于 scratch 构建"
+   ],
+   "use_cases": [
+    "通过 IMAP 邮箱定期拉取并集中查看域名的 DMARC 聚合报告",
+    "在本地邮件服务器同机部署时以 Maildir 方式接管报告解析",
+    "通过 MCP 服务器让 AI 助手查询报告统计与明细"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Read your DMARC aggregate reports in one dashboard. One Go binary, SQLite, no Elasticsearch.** ／ - Stores everything in one SQLite file. No database server, no JVM. ／ |Database file|`DATABASE_PATH`|`~/.parse-dmarc/db.sqlite`, `/data/parse-dmarc.db` in Docker|",
+     "lines": [
+      13,
+      25,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确声明所有数据存储在单个 SQLite 文件中，SQLite 是该应用自身的数据存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Read your DMARC aggregate reports in one dashboard. One Go binary, SQLite, no Elasticsearch.** ／ - Stores everything in one SQLite file. No database server, no JVM. ／ - Serves an MCP server, so an AI assistant can query your reports.",
+   "evidence_lines": [
+    13,
+    25,
+    29
+   ]
+  },
+  "fn": "dmarcguardhq/parse-dmarc",
+  "sha": "130adc8a37b5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

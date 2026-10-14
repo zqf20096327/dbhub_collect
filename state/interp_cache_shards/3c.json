@@ -9372,5 +9372,137 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2f94cf77d398": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，通过 COPY 命令读写 Parquet 文件",
+   "review": "pg_parquet 是一个 PostgreSQL 扩展，基于 Apache Arrow 和 pgrx 实现，扩展 COPY 命令使其能在 Postgres 与本地文件、S3、Azure Blob、GCS、http(s) 端点间的 Parquet 文件互导数据，并支持 schema 推断建表和查看 Parquet 元数据。面向需要在 Postgres 中进行 Parquet 数据导入导出的开发者，需从源码用 rustup/cargo-pgrx 构建。",
+   "highlights": [
+    "通过 COPY TO/FROM 在 Postgres 表与 S3、Azure Blob、GCS、http(s)、本地文件及标准流的 Parquet 文件间读写数据",
+    "支持从 Parquet 文件推断列定义创建 Postgres 表并加载数据",
+    "提供 parquet.schema/metadata/file_metadata/kv_metadata 函数查看 Parquet 的 schema 与元数据"
+   ],
+   "use_cases": [
+    "将 Postgres 表或查询结果导出为 Parquet 存入对象存储",
+    "从 Parquet 文件向 Postgres 表批量导入数据",
+    "在 SQL 中检查 Parquet 文件的 schema、列统计等元数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_parquet ／ > Copy from/to Parquet files in PostgreSQL! ／ `pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Ap",
+     "lines": [
+      1,
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 提供数据导入导出能力的扩展组件，为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Apache Arrow project to read and write Parquet files and pgrx project to extend PostgreSQL's `COPY` command. ／ After installing `Postgres`, you need to set up `rustup`, `cargo-pgrx` to build the extension. ／ 1. You can export Postgres tables/queries to Parquet files, stdin/stdout or a program's stream,",
+   "evidence_lines": [
+    8,
+    22,
+    43
+   ]
+  },
+  "fn": "CrunchyData/pg_parquet",
+  "sha": "2f94cf77d398",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e6f82cb44bb9": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue的充电桩预约小程序系统",
+   "review": "一套前后端分离的新能源汽车充电预约平台，包含用户微信小程序、商家管理后台与平台管理员后台，覆盖找桩、预约、充电、结算、评价流程。使用MySQL存储数据、Redis作缓存、MybatisPlus作ORM，需Java与Node环境自行部署。README显示资源需付费获取，面向毕业设计等用途。",
+   "highlights": [
+    "提供管理员、商家、用户三端协同的充电预约、订单、会员与优惠券管理功能",
+    "支持充电桩状态监控与在线预约，内置数据统计与社区论坛模块"
+   ],
+   "use_cases": [
+    "社区、园区、商场等充电场站的预约运营管理",
+    "作为SpringBoot+Vue毕业设计/教学项目参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      14,
+      24,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用MySQL与Redis存储数据的充电预约业务应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向新能源汽车用户的智慧充电预约小程序平台，采用 SpringBoot + Vue 前后端分离架构，支持用户端小程序、商家端管理后台与平台管理员后台协同工作。平台围绕“找桩—预约—充电—结算—评价”完整流程设计，提供充电桩状态监控、在线预约、订单管理、会员体系、优惠券、积分兑换、社区论坛及数据统计等功能，适用于社区、园区、商场及公共充电场站的充电运营管理场景。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    3,
+    24,
+    29
+   ]
+  },
+  "fn": "Fankekeke/charging_station_cos",
+  "sha": "e6f82cb44bb9",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

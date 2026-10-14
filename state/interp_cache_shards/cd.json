@@ -9357,5 +9357,105 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6690f43f14f8": {
+  "identity": {
+   "one_liner": "AI 代理自改进上下文框架，记录查询意图并促进为命名管道/例程",
+   "review": "Skardi 是一个面向 AI 代理的上下文框架：代理通过统一 SQL 端点联邦查询已注册数据源，并以 ai_context 声明查询意图；所有查询写入 SQLite 或 Postgres 的审计账本，周期性重复的查询可被提升为命名管道或例程，并通过 shell、REST 和 MCP 暴露给 Claude Code、Cursor 等代理宿主。适用于需要为代理提供受治理数据访问的团队；当前为 Beta，API 可能变动。",
+   "highlights": [
+    "提供带意图记录的联邦 SQL 查询端点（POST /query + ai_context）",
+    "支持将重复查询提升为管道，并通过 shell/REST/MCP 多种绑定暴露",
+    "审计账本支持 SQLite 文件或 Postgres 存储，access_mode 控制 DML、拒绝 DDL"
+   ],
+   "use_cases": [
+    "为 AI 代理提供跨 Postgres、Parquet、SaaS API 等数据源的统一查询入口",
+    "记录代理查询意图并沉淀为可复用管道与定时例程",
+    "通过 MCP 向 Claude Code、Cursor 等宿主提供数据工具"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres database, via `SKARDI_QUERY_AUDIT_PG_DSN` — same fail-closed ／ pointed at Postgres + pgvector, MongoDB, or Lance. ／ |PostgreSQL|Full|Yes|pgvector KNN, FTS (`pg_fts`, plus `tsvector` predicates pushed down from raw SQL)|docs|",
+     "lines": [
+      102,
+      162,
+      281
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|Full|Yes|Table or catalog registration|docs|",
+     "lines": [
+      282
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "before anyone asks. And because the ledger is one SQLite file (or one ／ FTS + RRF), defaulting to a local SQLite file the skill creates and owns, or ／ |SQLite|Full|Yes|sqlite-vec KNN, FTS|docs|",
+     "lines": [
+      101,
+      161,
+      283
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Read|Yes|Columnar OLAP, filter/limit pushdown|docs|",
+     "lines": [
+      288
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Skardi 为多种数据库提供统一联邦查询和 MCP 工具面，README 含支持矩阵声明适配各数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " The loop — ① Observe: the agent asks anything, in SQL, and declares why (POST /query + ai_context → audit ledger). ② Learn: read the ledger, group by session and purpose, find the intentions that keep coming back. ③ Act: recurring queries become named pipelines; recurring intentions become routines that run before they ／ searchable context served over HTTP by `skardi-server`: hybrid search (vector +",
+   "evidence_lines": [
+    33,
+    160
+   ]
+  },
+  "fn": "SkardiLabs/skardi",
+  "sha": "6690f43f14f8",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

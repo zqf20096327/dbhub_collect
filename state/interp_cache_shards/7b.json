@@ -10076,5 +10076,161 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b4649303f646": {
+  "identity": {
+   "one_liner": "Bun 运行时任务队列，默认内存/SQLite，可选 PostgreSQL 多 broker",
+   "review": "bunqueue 是一个面向 Bun/Node/Deno 等运行时的任务队列系统，提供嵌入模式（进程内运行，内存或单个 SQLite 文件持久化）和独立 TCP 服务器两种模式，包含死信队列、cron 调度、SQLite S3 备份及内置 MCP 服务器（75 个工具）供 AI 代理控制队列。默认无需 Redis 等外部基础设施；需多 broker 扩展时使用 PostgreSQL 15–18。API 与 BullMQ 兼容，适合需要后台任务/调度或为 AI 代理提供调度能力的开发者。",
+   "highlights": [
+    "提供嵌入模式（内存/SQLite 文件）与独立 TCP 服务器模式，客户端覆盖 Node/Deno/Python/PHP/Go/Rust/Elixir",
+    "包含 DLQ、cron、速率限制、重试、SQLite S3 备份，内置含 75 个工具的 MCP 服务器",
+    "API 与 BullMQ/BullMQ Pro 兼容（Queue/Worker/QueueEvents/FlowProducer）"
+   ],
+   "use_cases": [
+    "单机或嵌入式后台任务与定时任务调度",
+    "基于 PostgreSQL 的多 broker 部署",
+    "需要通过 MCP 接口操作队列的 AI 代理/自动化场景"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ POSTGRES_PASSWORD='replace-me' \\ ／ - **PostgreSQL 15–18 multi-broker mode** — PostgreSQL 18.6 is recommended;",
+     "lines": [
+      11,
+      84,
+      240
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ SQLite file. `msgpackr` is the only runtime dependency; cron, SQLite, S3, HTTP and",
+     "lines": [
+      11,
+      44
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "password changes, percent-encoding reserved characters in the URL only. MySQL ／ **Not ideal for:** multi-region consensus or deployments that require MySQL as",
+     "lines": [
+      91,
+      258
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明服务端持久化使用 SQLite/PostgreSQL，且提供 SQLite S3 备份等功能，为数据库存储生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ - **MCP server included** — 75 tools; AI agents get full queue control out of the box",
+   "evidence_lines": [
+    11,
+    248
+   ]
+  },
+  "fn": "egeominotti/bunqueue",
+  "sha": "b4649303f646",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "356751f1c99a": {
+  "identity": {
+   "one_liner": "Home Assistant 的实验性 AI 代理 App，基于 Pi Durable 持久化任务与人工审批",
+   "review": "Hearth Pi 是一个第三方 Home Assistant App（add-on），为家庭环境提供 AI 对话代理，支持灯/开关等设备的受限读取与需人工确认的写入动作，任务与转录通过 Pi Durable 持久化到 SQLite。面向使用 Home Assistant OS 的管理员用户，提供 source 构建与 HA App 商店安装两种方式，定位为技术预览、非生产建议。",
+   "highlights": [
+    "任务检查点、转录与文档以 synchronous=FULL 写入 SQLite，重启后可恢复到已提交状态",
+    "Home 模式提供作用域受限的 HA 读取与默认需人工批准的灯/开关动作提案",
+    "支持多种 provider（offline/openai/local/anthropic/openai-codex）及本地 OpenAI 兼容服务器"
+   ],
+   "use_cases": [
+    "在 Home Assistant 中通过对话查看设备状态并经人工审批执行灯/开关操作",
+    "在隔离的非 root 无网络 worker 容器中进行受限的编码代理任务",
+    "通过 Hearth Assist 集成将语音卫星接入需确认的对话代理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state.",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 作为持久化存储的 Home Assistant AI 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Independent community App · 0.8.1 · experimental.** Not an official Home Assistant or Pi product. The pinned Pi 1.0.1 APIs are experimental. This is a technical preview, not a production recommendation or external security audit. ／ - **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state. ／ Requires **Home Assistant OS**, an administrator account and an **amd64 or aarch64** host. Use an authorized test installation with a backup; this is an experimental third-party App, not HACS or a Devices & services integration (only the optional Hearth Assist voice link adds a HACS integration).",
+   "evidence_lines": [
+    7,
+    15,
+    43
+   ]
+  },
+  "fn": "cosmyo/ha-pi-durable",
+  "sha": "356751f1c99a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9249,5 +9249,135 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "564132d01cd7": {
+  "identity": {
+   "one_liner": "JVM 上的原生持久化超图存储引擎与数据库",
+   "review": "HStore 用 copy-on-write B+tree 直接存储超边结构（含角色、权重、时间区间、嵌套边），提供 HQL 查询语言、快照隔离事务、分支、向量嵌入索引、多租户和内置 Web 控制台，以 GraalVM 原生可执行文件和 Docker 镜像分发，面向需要在 JVM 环境建模高阶关联关系的开发者。",
+   "highlights": [
+    "原生超图拓扑：支持任意元数的集合/有序超边、边嵌套边，逐成员角色与权重",
+    "快照隔离与 SERIALIZABLE 事务、世代不可变快照与时间旅行查询（AT GENERATION / AS OF）",
+    "内置 HQL 查询语言、成本优化器、HNSW 向量索引、多租户与 Web 控制台"
+   ],
+   "use_cases": [
+    "对高阶交互（如临床路径、理赔关系）建模与查询",
+    "需要不可变快照与时间旅行读取的图数据存储",
+    "嵌入向量与超边结构联合管理的语义应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "* **Operations.** PostgreSQL-style logs, `hstore.conf` / `HSTORE_*` / flag configuration, health checks, a",
+     "lines": [
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是独立的超图存储引擎/数据库，为应用提供数据存储与查询服务，不依赖其他数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "HStore is a native, persistent hypergraph storage engine and database for the JVM. A hyperedge connects any ／ writes the changed tree nodes to pages, once for all the commits since the last one. The database layer adds a ／ It is written in Java 25 and ships as one GraalVM native executable, `hstore`.",
+   "evidence_lines": [
+    3,
+    11,
+    14
+   ]
+  },
+  "fn": "metacoglabs/hypergraph",
+  "sha": "564132d01cd7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4181c20875e8": {
+  "identity": {
+   "one_liner": "基于 Roslyn 将 .NET 解决方案索引到 SQLite 并通过 MCP 服务于 AI 代理的语义地图工具",
+   "review": "Lurp 是一个 Windows 平台的 .NET 全局工具，用 Roslyn 编译器把解决方案加载并持久化到 SQLite 数据库，为 AI 代理提供符号检索、语义 diff、影响面分析和带 token 上限的上下文胶囊，并暴露 MCP 接口。使用者是在 C# 代码库上工作的代理/开发者；限制包括仅支持 Windows、需 .NET 10 运行时/SDK、保留 3 个快照、不执行源生成器。",
+   "highlights": [
+    "通过 Roslyn 将符号、类型化关系、源码跨度和出处一次性索引进 SQLite，之后可重复查询",
+    "提供 context/impact/diff/search/grep 等 CLI 模式及 MCP 工具，返回带证据等级的精确源码",
+    "包含 ASP.NET Core 路由、依赖注入、MediatR、EF Core、序列化和测试等六类框架适配器"
+   ],
+   "use_cases": [
+    "为在 C# 代码库上工作的 AI 代理提供有界的代码上下文胶囊",
+    "分析符号调用方与受影响符号的影响面（impact 分析）",
+    "对比两次索引快照间的语义变化与查找死代码候选"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small,",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理检索代码服务的工具，SQLite 仅作为其内部索引存储而非适配目标数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small, ／ (`--mode=index`, `status --solution=`, MCP `lurp_index`, and MCP `lurp_status` with ／ Shipped as a global tool (`dotnet tool install lurp`); the published version is",
+   "evidence_lines": [
+    10,
+    93,
+    182
+   ]
+  },
+  "fn": "t-macabee/lurp",
+  "sha": "4181c20875e8",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

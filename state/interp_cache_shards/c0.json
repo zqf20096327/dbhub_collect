@@ -10702,5 +10702,261 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b5111b8c3296": {
+  "identity": {
+   "one_liner": "基于 KMP 的 Android/桌面应用实时调试检查工具",
+   "review": "Flocon 是一个面向 Android 与 Kotlin Multiplatform 应用的调试检查工具，开发者将应用连接到桌面端界面，可实时观察、检查并交互网络请求、数据库（Room/SQLite）、分析数据等。通过 Gradle 引入 SDK 并初始化，需 ADB 连接设备，发布版提供 no-op 变体。",
+   "highlights": [
+    "支持实时观察、检查和交互运行中的应用",
+    "支持网络（HTTP/Mocking）、Room/SQLite 数据库、分析数据的查看",
+    "提供 MCP AI Agent 集成"
+   ],
+   "use_cases": [
+    "调试 Android/KMP 应用的网络请求与响应",
+    "检查应用内 Room/SQLite 数据库内容",
+    "通过桌面端实时查看应用仪表盘与分析数据"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Database (Room/SQLite)**|✅|✅|",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是检查和调试应用内数据库内容的开发调试工具，为数据库相关开发流程服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Flocon** is an advanced debugging and inspection tool built with **Kotlin Multiplatform (KMP)**, designed to work seamlessly across Android and desktop environments. ／ It allows developers to connect a Kotlin Multiplatform or Android app to their computer and launch a **desktop interface** that can **observe, inspect, and interact with the running app** in real time — across shared Kotlin code and platform-specific implementations. ／ |**Database (Room/SQLite)**|✅|✅|",
+   "evidence_lines": [
+    3,
+    7,
+    52
+   ]
+  },
+  "fn": "openflocon/Flocon",
+  "sha": "b5111b8c3296",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c736e188f74a": {
+  "identity": {
+   "one_liner": "基于 Oracle AQ 的 TUI 追踪工具，实时发送与查看数据库事件消息",
+   "review": "OmniView 是一个 Go 编写的 TUI 应用，配合 PL/SQL 包 OMNI_TRACER_API，通过 Oracle Advanced Queuing 队列实时收发追踪消息与调试信息，支持全局、命名订阅者和 webhook 转发三种方式，首次运行自动部署 PL/SQL 包并用 BoltDB 存储连接配置。面向需要在 Oracle 数据库应用中做消息级追踪调试的开发者；需 Oracle Instant Client 与 CGO 构建。",
+   "highlights": [
+    "通过 Oracle Advanced Queuing 实现阻塞消费者的实时消息追踪",
+    "提供全局追踪、订阅者专用过程和 webhook 转发三类消息发送方式",
+    "内置 SSRF 防护的 webhook 转发，并支持多数据库配置动态切换"
+   ],
+   "use_cases": [
+    "在 Oracle 数据库应用中实时查看调试追踪消息",
+    "将追踪消息转发到外部监控或日志聚合系统",
+    "按命名订阅者定向发送和过滤追踪消息"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "OmniView (also known as OmniInspect) is a Message Passing TUI (Text User Interface) application that enables sending event messages and debug traces from Oracle Database. It provides real-time tracing capabilities through Oracle Advanced Queuing (AQ) with a bl ／ 1. **Go Desktop Application** - A TUI application that connects to Oracle Database and listens for trace messages ／ 2. **PL/SQL Package (OMNI_TRACER_API)** - Oracle database objects that handle message enqueueing and dequeuing",
+     "lines": [
+      62,
+      66,
+      67
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为连接和观测 Oracle 数据库而构建的 TUI 追踪工具，并部署 PL/SQL 包到数据库中。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OmniView (also known as OmniInspect) is a Message Passing TUI (Text User Interface) application that enables sending event messages and debug traces from Oracle Database. It provides real-time tracing capabilities through Oracle Advanced Queuing (AQ) with a blocking consumer pattern for reliable message delivery. ／ 1. **Go Desktop Application** - A TUI application that connects to Oracle Database and listens for trace messages ／ 2. **PL/SQL Package (OMNI_TRACER_API)** - Oracle database objects that handle message enqueueing and dequeuing",
+   "evidence_lines": [
+    62,
+    66,
+    67
+   ]
+  },
+  "fn": "BasuruK/OmniInspect",
+  "sha": "c736e188f74a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0dbdd36ad13e": {
+  "identity": {
+   "one_liner": "DSH 聊天式数据库管理插件，带分级授权与危险操作确认",
+   "review": "这是一个 DSH 社区插件，让用户通过聊天安全执行数据库操作，配套侧边栏管理台（连接管理、项目授权、数据浏览、SQL 控制台）与 db-admin skill。支持 9 种数据库，提供连接级 ro/rw 权限与项目级授权、DDL 等危险操作的一次性 challengeId 确认机制，全部执行落 audit.l 审计日志。面向使用 DSH 的数据库运维/开发人员；SQL Server 路径本轮仅有离线单测，未经真机验证。",
+   "highlights": [
+    "通过 DatabaseManager 单工具多 action 提供 query/execute/schema/preview/run_script 等操作，run_script 在 node:vm 沙箱中执行并 60s 超时",
+    "实现连接级只读/读写权限加项目级授权（grants.），未授权项目一律拒绝，危险操作需一次性 challengeId 确认",
+    "全部执行写入 audit.l 审计日志，侧边栏 SQL 控制台基于 CodeMirror 6 提供多标签编辑、方言高亮与事务支持"
+   ],
+   "use_cases": [
+    "在 DSH 聊天环境中对多种数据库执行受控查询与变更操作",
+    "多项目团队按项目路径分配数据库连接的只读/读写授权",
+    "需要审计留痕与危险 DDL 二次确认的数据库管理台"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **9 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）、SQL Server",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **9 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）、SQL Server",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **9 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）、SQL Server",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **9 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）、SQL Server",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **9 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）、SQL Server",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "- **9 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）、SQL Server",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "- **9 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）、SQL Server",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为连接和操作多种数据库提供管理能力的服务工具/插件，而非仅使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "Dameng",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **9 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）、SQL Server ／ - **分级权限**：连接级只读（ro）/读写（rw）+ 项目级授权（`grants.json`：projectPathKey → 连接 → 模式）；未授权项目一律拒绝 ／ - **审计**：全部执行落 `audit.jsonl`（语句、危险级、是否确认、结果）",
+   "evidence_lines": [
+    9,
+    11,
+    13
+   ]
+  },
+  "fn": "mengqi1436/dsh-db-tool",
+  "sha": "0dbdd36ad13e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

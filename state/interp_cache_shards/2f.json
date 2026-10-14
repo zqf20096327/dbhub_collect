@@ -10528,5 +10528,74 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5ea194c4d87e": {
+  "identity": {
+   "one_liner": "本地知识搜索引擎，默认基于SQLite FTS5/BM25实现免向量RAG",
+   "review": "Jev RAG 是一个开源本地知识搜索工具，对本地文档文件夹建索引，提供 BM25、Agentic、Hybrid 等 7 种可选拣索管线，并流式输出带文件引用的答案。面向需要在本地检索个人/团队文档的开发者。默认路径不依赖向量数据库，仅用 Python 3.9+ 与 SQLite FTS5 即可运行；部分管线需配置 Jev 与答案模型提供方，当前为 alpha 状态。",
+   "highlights": [
+    "提供 7 种检索管线：BM25、Agentic 词法搜索、Hybrid 融合、Taxonomy 路由、Passage Gate、Line Search 等",
+    "默认无向量架构，使用 SQLite FTS5/BM25 建索引，不需嵌入或向量数据库",
+    "支持 Markdown、HTML、JSON、CSV、DOCX、PDF 等格式的本地增量索引，答案带编号文件引用"
+   ],
+   "use_cases": [
+    "在本地文档文件夹（如 ~/Documents）中做全文检索与问答",
+    "需要带引用来源、可复现基准结果的本地 RAG 实验",
+    "无 GPU/向量数据库环境下的中英文知识库检索（CJK bigram 分词）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax ／ Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25.",
+     "lines": [
+      32,
+      133,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 SQLite FTS5 存储与检索本地索引数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax ／ Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25.",
+   "evidence_lines": [
+    32,
+    133,
+    139
+   ]
+  },
+  "fn": "aifabrice/jev-rag",
+  "sha": "5ea194c4d87e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

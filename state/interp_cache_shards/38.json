@@ -10146,5 +10146,68 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a113f1533975": {
+  "identity": {
+   "one_liner": "VB6/VBA 可用的 sqlite3 __stdcall 封装库",
+   "review": "该项目是 SQLite 的 Win32 封装分支，将导出函数与回调改为 __stdcall 调用约定并打包为 Ax-DLL COM 包装，供 VB6/VBA 直接调用。分支内置了更新版 sqlite3 C 源码、Win32 内存标志、静态链接的 REGEXP 扩展及 64 位 DLL，适合在传统 VB 环境中读写 SQLite 数据库。",
+   "highlights": [
+    "所有导出函数与回调采用 __stdcall 约定，可直接被 VB6/VBA 调用",
+    "更新 sqlite3 C 源码至 3053004 版本，并提供 sqlite3win64.dll",
+    "静态链接 regexp 扩展以启用 REGEXP 操作符"
+   ],
+   "use_cases": [
+    "VB6/VBA 应用程序中读写 SQLite 数据库",
+    "需要在 VB 环境使用 REGEXP 操作符的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Updated sqlite3 c source from 3011001 (2016-03-03) to 3053004 (2026-07-24).",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "封装 sqlite3 引擎为 VB 可调用的库，为使用 SQLite 的开发场景提供组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- All callback functions are __stdcall. Even those used for the overloading of the SQL functions or aggregates. ／ - __stdcall convention applied in each exported function so that it can be easily used by VB6/VBA.",
+   "evidence_lines": [
+    10,
+    14
+   ]
+  },
+  "fn": "VBForumsCommunity/sqlite3win32",
+  "sha": "a113f1533975",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

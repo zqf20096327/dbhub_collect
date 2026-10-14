@@ -9725,5 +9725,111 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "57a317fd85ed": {
+  "identity": {
+   "one_liner": ".NET 编译期数据访问器生成器，声明 partial 方法与 2-way SQL 生成 ADO.NET 代码",
+   "review": "一个基于 Roslyn Source Generator 的 .NET 数据访问层生成库：开发者声明 partial 方法和 2-way SQL 文件，构建时生成无反射、无 IL emit 的 ADO.NET 实现代码，并支持 NativeAOT。适用于需要在编译期校验 SQL、追求接近手写代码性能的 .NET 应用开发者，需通过 ADO.NET 提供程序接入各数据库。",
+   "highlights": [
+    "编译期生成无反射 ADO.NET 代码，支持 NativeAOT",
+    "支持 2-way SQL：SQL 文件可直接在 SQL 工具中运行，指令通过注释表达绑定与动态条件",
+    "提供 Query Builder 属性生成 CRUD 语句，并支持 Oracle/MySQL 风格查询提示与 SQL Server 方言的专用 builder"
+   ],
+   "use_cases": [
+    "在 .NET 应用中以编译期校验方式编写数据访问层",
+    "需要手写 SQL（2-way SQL）同时获得类型安全的参数绑定与行映射",
+    "NativeAOT 场景下替代反射式 ORM/微 ORM"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`Usa.Smart.Data.Accessor.Builders.SqlServer` / `.Postgres` / `.MySql`|Provider-specific query builders|",
+     "lines": [
+      376
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`Usa.Smart.Data.Accessor.Builders.SqlServer` / `.Postgres` / `.MySql`|Provider-specific query builders|",
+     "lines": [
+      376
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`Usa.Smart.Data.Accessor.Builders.SqlServer` / `.Postgres` / `.MySql`|Provider-specific query builders|",
+     "lines": [
+      376
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "* The text is never interpreted; it goes to the database as-is (Oracle / MySQL-style comment hints —",
+     "lines": [
+      156
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "and SQLite (samples and functional tests).",
+     "lines": [
+      399
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "MySQL-compatible MariaDB 11 (`ON DUPLICATE KEY UPDATE`, `INSERT IGNORE`, `REPLACE`, paging),",
+     "lines": [
+      398
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对 Postgres/MySql/SqlServer 的专用查询 builder 包，是为数据库生态服务的 .NET 数据访问组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **compile-time data accessor generator**. You declare `partial` methods with attributes and ／ (optionally) 2-way SQL, and a Roslyn Source Generator emits the full ADO.NET implementation —",
+   "evidence_lines": [
+    7,
+    8
+   ]
+  },
+  "fn": "usausa/Smart-Net-Data-Accessor",
+  "sha": "57a317fd85ed",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9048,5 +9048,81 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "95113b1bdcd5": {
+  "identity": {
+   "one_liner": "单企业自部署项目管理系统，Docker Compose 一键安装，默认 MySQL 8.4 存储",
+   "review": "面向单企业的自托管项目管理系统，覆盖需求、项目、专题、故事、迭代、系统版本与组织权限，不含多租户能力。本仓库为发行安装入口，通过预构建镜像以 Docker Compose 启动，数据库固定使用 MySQL 8.4，另提供 pms-cli 连接器供本地 AI 工作台按权限调用 PMS 能力。适合需要私有化部署、单一实例内部使用的研发团队。",
+   "highlights": [
+    "提供需求、项目、专题、故事、迭代与系统版本的流程化交付管理，流程模板可配置",
+    "通过 Docker Compose 与预构建镜像完成安装、升级、备份恢复，数据库固定为 MySQL 8.4",
+    "提供 pms-cli 连接器，供 GPT、Claude 等本地 AI 工作台以自然语言调用 PMS 的读取与写入能力"
+   ],
+   "use_cases": [
+    "单企业内部私有化部署的研发项目管理",
+    "组织级项目组合、交付健康与风险看板",
+    "通过本地 AI 工作台以自然语言操作项目与需求数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "需要 Docker Engine 或 Docker Desktop，以及 Compose v2。默认数据库是 **MySQL 8.4**，Docker 建议至少分配 **2 GiB** 内存。 ／ 请立刻修改该密码。MySQL 与 JWT 等基础设施密钥仍由脚本随机生成，写入未被 Git 跟踪的 `.pms-bootstrap-secrets`。生产部署必须更换管理员密码（`validate-production-config.sh` 会拒绝上述默认值）。 ／ |数据库|仅 MySQL 8.4|",
+     "lines": [
+      86,
+      101,
+      234
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明默认数据库为 MySQL 8.4 且仅支持该库，PMS 是使用 MySQL 存数据的应用系统",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "需要 Docker Engine 或 Docker Desktop，以及 Compose v2。默认数据库是 **MySQL 8.4**，Docker 建议至少分配 **2 GiB** 内存。 ／ |数据库|仅 MySQL 8.4|",
+   "evidence_lines": [
+    86,
+    234
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "xiebinJava/pms-distribution",
+  "sha": "95113b1bdcd5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

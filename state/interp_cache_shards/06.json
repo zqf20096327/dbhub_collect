@@ -9729,5 +9729,71 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "08944d773f15": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，提供 zstd 压缩列类型 ztext/zb/zbytea",
+   "review": "pg_ztype 是一个 PostgreSQL 扩展，新增三种使用 zstd 压缩存储的列类型 ztext、zb、zbytea，支持训练字典进一步压缩小值，且保持与原类型兼容的输入输出、复制和 pg_dump 行为。需要 PostgreSQL 18+ 和 libzstd 1.5+，目前为 0.9 预发布版本，存储格式未冻结。适合需要在 PostgreSQL 中压缩小体积 JSON 或文本数据的开发与运维人员。",
+   "highlights": [
+    "提供 ztext、zb、zbytea 三种 zstd 压缩列类型，支持训练字典压缩",
+    "兼容原类型的输入输出、COPY、pg_dump、逻辑复制与二进制协议",
+    "提供 ztype.inspect、ztype.validate、ztype.zstd 等函数用于检查与透传压缩帧"
+   ],
+   "use_cases": [
+    "以 b 存储大量小型文档且需降低存储占用的 PostgreSQL 表",
+    "需要在不更改客户端读写方式的前提下对文本/字节列做压缩的场景",
+    "客户端自行解压 zstd 帧的读取链路"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**zstd-compressed column types for PostgreSQL: `ztext`, `zjsonb`, `zbytea`.** ／ Requires PostgreSQL 18 or newer and libzstd 1.5 or newer. CI builds and tests",
+     "lines": [
+      3,
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供扩展类型与配套工具的数据库扩展组件，不是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**zstd-compressed column types for PostgreSQL: `ztext`, `zjsonb`, `zbytea`.** ／ CREATE EXTENSION ztype; ／ Requires PostgreSQL 18 or newer and libzstd 1.5 or newer. CI builds and tests",
+   "evidence_lines": [
+    3,
+    109,
+    90
+   ]
+  },
+  "fn": "xvaara/pg_ztype",
+  "sha": "08944d773f15",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

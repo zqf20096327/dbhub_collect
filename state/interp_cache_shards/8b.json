@@ -8983,5 +8983,206 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2a9d00ba631f": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud Infrastructure 模拟器，用 Docker 运行",
+   "review": "floci-oci 是一个开源的 Oracle Cloud Infrastructure（OCI）本地模拟器，用于开发、测试和 CI 场景。它在本地容器中提供 OCI 形状的服务（Identity、Object Storage、Queue、Vault/KMS、Functions、OKE 等），支持将官方 OCI SDK、CLI 和 Terraform provider 指向本地端点；需 JDK 25 构建或直接用 Docker 运行，未实现的 OCI 功能以列表形式在 README 中说明。",
+   "highlights": [
+    "实现 OCI 真实线协议：opc-request-id、opc-next-page 分页、etag 条件请求与 OCI 错误体",
+    "官方 oci-java-sdk、Python SDK、OCI CLI 与 oracle/oci Terraform provider 可不改代码直接使用",
+    "提供 memory/persistent/hybrid/wal 四种存储模式并支持按服务覆盖"
+   ],
+   "use_cases": [
+    "无 OCI 账号时本地开发与调试 OCI 集成",
+    "CI 流水线中运行 OCI 相关集成测试",
+    "使用 Terraform/OpenTofu 验证 OCI 基础设施代码"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI.",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是云基础设施（OCI）的模拟器，面向 Oracle Cloud 而非 Oracle 数据库，与数据库生态的关系证据不足。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows.",
+   "evidence_lines": [
+    24,
+    26
+   ]
+  },
+  "fn": "floci-io/floci-oci",
+  "sha": "2a9d00ba631f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a75833aee70f": {
+  "identity": {
+   "one_liner": "外贸业务员本地 AI 助手，39 项 B2B 技能，Hermes Agent 驱动",
+   "review": "面向外贸业务员的本地运行 AI 助手，提供客户开发、背调、开发信生成、文档处理、每日简报等 39 项技能，由 Hermes Agent 作为底层 AI 引擎，后端为 FastAPI + SQLite，数据默认存于本地 ~/.trade/。需 Python 3.14 与 LLM API Key，依赖 GitHub/PyPI 安装，支持 CLI 脚本、Hermes 代装或手动三种安装方式。",
+   "highlights": [
+    "提供 39 项 B2B 技能，覆盖客户开发、OSINT 背调、开发信、商务文档生成、市场分析等场景",
+    "后端采用 FastAPI + SQLite + uvicorn，数据默认本地存储并绑定 127.0.0.1，支持多公司数据隔离与升级前自动数据库备份",
+    "内置 trade doctor 自检命令，可端到端验证 Hermes 环境、视觉识别、搜索与数据库读写"
+   ],
+   "use_cases": [
+    "外贸业务员的客户线索挖掘、背景调查与开发信自动生成",
+    "多渠道（LinkedIn、阿里国际站等）内容生成与定时自动化简报/跟进",
+    "本地管理客户资料、报价、合同等结构化业务数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **后端**: FastAPI + SQLite + uvicorn",
+     "lines": [
+      272
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明后端使用 SQLite 存储业务数据，SQLite 是该应用的存储组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **后端**: FastAPI + SQLite + uvicorn ／ - **业务数据默认存储在本地**（`~/.trade/`），不上传任何服务器 ／  外贸业务员的 AI 助手",
+   "evidence_lines": [
+    272,
+    250,
+    23
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "chefroger/smart-trade-ai",
+  "sha": "a75833aee70f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1cfe7ea487e7": {
+  "identity": {
+   "one_liner": "自托管电动车充电追踪看板，Flask + SQLite 存储",
+   "review": "一个自托管的电动车充电记录应用，通过厂商 API 连接 15 个品牌车辆，自动填充充电/里程数据，并提供仪表盘、行驶日志、维护记录、PDF 报告、ENTSU-E CO2 数据与 OBD 电池读取功能，数据全部存于本地 SQLite 文件。面向想完全掌控自身充电数据的电动车主，README 明确说明代码主要由 AI 辅助生成、按业余项目提供且无任何担保。",
+   "highlights": [
+    "通过厂商 API 连接 15 个电动车品牌，自动获取 SoC、里程、充电状态等数据",
+    "支持多车辆/车队管理、行驶日志（CSV/GPX 导出）与维护提醒",
+    "提供仪表盘、PDF 报告、ENTSU-E 每小时 CO2 强度抓取与 OBD/ELM327 电池读取"
+   ],
+   "use_cases": [
+    "电动车主本地长期记录充电成本、能耗与 CO2 数据",
+    "车队多车辆的充电与行驶日志管理",
+    "基于自记录数据生成电池健康自评估报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|No privacy / data sold to third parties|**100% local** — SQLite file on your machine|",
+     "lines": [
+      137
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是一个使用 SQLite 存储本地数据的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Source-available（源码可见许可）",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Self-hosted dashboard for tracking your electric vehicle charges** — costs, kWh, CO2, recuperation, charging losses, live vehicle status, a self-generated **battery-health certificate**, and in-browser **OBD/ELM327** cell readout. Multi-vehicle / fleet support, connects to 15 EV brands via API. Available in 6 languages. ／ Built for EV owners who want **full control over their charging data** — runs locally on your laptop, NAS, or Raspberry Pi. No cloud, no tracking, no subscription. Your data stays on your machine. ／ |No privacy / data sold to third parties|**100% local** — SQLite file on your machine|",
+   "evidence_lines": [
+    3,
+    10,
+    137
+   ]
+  },
+  "fn": "robeertm/ev-charge-tracker",
+  "sha": "1cfe7ea487e7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

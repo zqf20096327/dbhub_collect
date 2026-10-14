@@ -8725,5 +8725,70 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d4b6ca145e2b": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Go 持久化任务队列库",
+   "review": "liteq 是一个 Go 库，通过 SQLite 实现持久化任务队列，支持延迟任务、多重重试、可见性超时与去重键等队列语义。面向需要在小型应用中获得持久化队列而不引入 RabbitMQ/Redis 等外部依赖的开发者，通过 go get 安装并复用应用已有的 SQLite 依赖。",
+   "highlights": [
+    "提供持久化任务队列，支持延迟执行、剩余重试次数与可见性超时",
+    "支持基于 DedupingKey 的去重（忽略或替换重复任务）",
+    "可通过多个 DB 文件扩展并发"
+   ],
+   "use_cases": [
+    "为小型 Go 应用提供重启后不丢任务的后台队列",
+    "需要定时/延迟执行任务的场景",
+    "需避免重复投递同任务的通知类任务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Library to have a persistent job queue in Go backed by a SQLite DB. ／ _ \"github.com/mattn/go-sqlite3\"",
+     "lines": [
+      3,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "liteq 是构建在 SQLite 之上、为应用提供队列能力的 Go 组件库，而非使用数据库存储业务数据的终端应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Library to have a persistent job queue in Go backed by a SQLite DB. ／ go get github.com/khepin/liteq",
+   "evidence_lines": [
+    3,
+    17
+   ]
+  },
+  "fn": "khepin/liteq",
+  "sha": "d4b6ca145e2b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9351,5 +9351,154 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7aaaa2b470df": {
+  "identity": {
+   "one_liner": "Kafka API 兼容的消息代理，支持可插拔存储引擎",
+   "review": "Nisshi 是用 Rust 编写的单二进制消息代理，兼容 Apache Kafka API，可用 PostgreSQL、libSQL(SQLite)、S3 或内存作为存储引擎，并内置 schema registry，支持 Avro/JSON/Protobuf 校验及写入 Iceberg 或 Delta Lake 表。适合需要 Kafka 协议但希望以对象存储或数据库做持久化的用户；TLS 仅 0.7 起才真正生效，需注意升级。",
+   "highlights": [
+    "提供 Kafka API 兼容的 broker，并包含 topic、cat、proxy 等 CLI 子命令",
+    "支持 PostgreSQL、libSQL (SQLite)、S3 或内存等多种存储引擎",
+    "支持 schema 校验（Avro/JSON Schema/Protobuf）并可写入 Apache Iceberg 或 Delta Lake 表"
+   ],
+   "use_cases": [
+    "以 S3 或 PostgreSQL 作为持久化后端的消息流处理",
+    "将带 schema 的消息落地为数据湖表（Iceberg/Delta Lake/Parquet）供 Spark、DuckDB 等查询",
+    "用现有 Kafka CLI/客户端在本地或容器环境收发消息"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ Apache Kafka with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ - Available with PostgreSQL, libSQL, S3 or memory storage engines ／ STORAGE_ENGINE=\"postgres://postgres:postgres@db\"",
+     "lines": [
+      2,
+      21,
+      28,
+      322
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ Apache Kafka with PostgreSQL, libSQL (SQLite), S3 or memory storage engines.",
+     "lines": [
+      2,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明可用 PostgreSQL 或 libSQL (SQLite) 作为其存储引擎（L21/L28），是为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Apache Kafka with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ - Available with PostgreSQL, libSQL, S3 or memory storage engines ／ - **broker** an Apache Kafka API compatible broker and schema registry",
+   "evidence_lines": [
+    21,
+    28,
+    43
+   ]
+  },
+  "fn": "nisshi-io/nisshi",
+  "sha": "7aaaa2b470df",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "38a2face6f2b": {
+  "identity": {
+   "one_liner": "基于 FastAPI 与 PostgreSQL 的古兰经 REST API 服务",
+   "review": "QuranHub 提供访问古兰经内容的 REST API 与 MCP Server，覆盖 550+ 版本、90+ 语言的译文、经注、诵读音频、检索、Tajweed 规则及经文结构元数据。面向伊斯兰应用开发者与研究人员，后端基于 Python/FastAPI 与 PostgreSQL 构建，需自备 PostgreSQL 13+ 并通过 .env 配置数据库凭据运行。",
+   "highlights": [
+    "提供 +550 版本、+90 语言的多译文/经注/音频接口与高级检索",
+    "提供 MCP Server，可在 Cursor 等 MCP 兼容客户端中使用同一套工具",
+    "基于 FastAPI，包含连接池、异步处理与 Cloudflare 边缘缓存"
+   ],
+   "use_cases": [
+    "为伊斯兰类应用提供古兰经文本与音频数据后端",
+    "古兰经文献研究中的多版本对比与检索",
+    "通过 MCP 在 AI 助手中接入古兰经查询工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ Quran Hub API is a powerful, feature-rich REST API developed by **Misraj AI** that provides comprehensive access to Quranic content, including multiple translations, tafsir (commentaries), audio recitations, and advanced search capabilities. Built with modern  ／ - PostgreSQL 13+ ／ # Edit .env with your PostgreSQL database credentials",
+     "lines": [
+      9,
+      21,
+      257,
+      282
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目使用 PostgreSQL 存储并提供古兰经内容的 API 服务，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "NCL 许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Quran Hub API is a powerful, feature-rich REST API developed by **Misraj AI** that provides comprehensive access to Quranic content, including multiple translations, tafsir (commentaries), audio recitations, and advanced search capabilities. Built with modern Python technologies and PostgreSQL, it serves as a complete backend solution for Islamic applications and research projects. ／ The Quran Hub API is optimized for speed and scalability, powered by **FastAPI**, **PostgreSQL**, and **Cloudflare edge caching**.",
+   "evidence_lines": [
+    21,
+    52
+   ]
+  },
+  "fn": "misraj-ai/quranhub",
+  "sha": "38a2face6f2b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

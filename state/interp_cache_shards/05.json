@@ -9317,5 +9317,58 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "84e884804bbc": {
+  "identity": {
+   "one_liner": "2.5D 动作 RPG，Godot 客户端 + Flask/SQLite 服务端",
+   "review": "这是一款俯视角 2.5D 多人动作 RPG，提供四个职业、元素怪物、交易经济与组队语音。存档不存本地，由 Flask 服务端统一管理并作为权威数据源，后端使用 SQLite 存储账号与角色数据。面向 PC 浏览器玩家，同时展示服务端权威经济、API 安全审计和 8500+ 自动化检查等工程实现，适合想了解游戏服务端架构的开发者阅读。",
+   "highlights": [
+    "提供服务端权威的存档与经济系统，角色数据由 Flask + SQLite 服务端持有",
+    "包含 8,500+ 自动化检查与一次自建 API 的安全审计（20 项发现，19 项已关闭）",
+    "支持实时多人：其他玩家实时绘制、组队语音经 Cloudflare TURN 中继"
+   ],
+   "use_cases": [
+    "在桌面浏览器中游玩 2.5D 多人动作 RPG",
+    "参考服务端权威存档与多人经济的实现方式",
+    "了解独立游戏的 API 安全审计与自动化测试实践"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 SQLite 存数据的游戏应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A top-down 2.5D action RPG built in Godot 4.6 with GDScript, backed by a Flask account service. Four playable classes, six enemy families in forty-three elemental variants, collectable combat pets, fishing and cooking, player-to-player trading over a taxed economy, other players drawn live wherever you are and fighting the same monsters, and a complete run from town to final boss. ／ `CharacterData` holds a `SaveStorage` and never asks which implementation it has. That seam is what let the game move from a local file to the Flask service without touching the twenty-nine places that call `save_data()`. The server is the authority now — it owns level, XP, the derived stat maxima and every loot roll — so the anti-tamper passes that existed to defend a local file against a text editor are skipped rather than run against data they can no longer say anything useful about. Writes are still debounced: saving on every stat change was firing about twenty times a second in normal play.",
+   "evidence_lines": [
+    3,
+    64
+   ]
+  },
+  "fn": "Tunacanman2EZ/Elusion_RPG",
+  "sha": "84e884804bbc",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

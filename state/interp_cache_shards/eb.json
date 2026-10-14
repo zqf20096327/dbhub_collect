@@ -9400,5 +9400,78 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "206a093b9996": {
+  "identity": {
+   "one_liner": "无代理 Linux 服务器监控与交互管理工具，经 SSH 单二进制运行",
+   "review": "Pantau 是一个用 Go 编写的自托管单二进制基础设施监控与服务器管理系统，通过标准 SSH 以无代理方式采集 CPU、内存、磁盘等指标，提供期望状态漂移检测、Web 终端、SFTP 文件管理和加密快照灾备。面向需要管理多台 Linux 服务器的运维/管理员，其检查历史与遥测数据存储在内嵌 SQLite 中。",
+   "highlights": [
+    "通过标准 SSH 无代理采集实时指标（CPU 负载、内存、磁盘分区、网络出向流量等）",
+    "提供期望状态基线与漂移检测，覆盖 Docker 容器、磁盘阈值、cron 任务与备份时效",
+    "内嵌 Web 终端（xterm.js）、SFTP 文件编辑器、TOTP 两因素认证与 Argon2id/AES-256-GCM 加密快照"
+   ],
+   "use_cases": [
+    "自托管监控多台 Linux 服务器的运行状态与漂移",
+    "通过浏览器终端与 SFTP 对远程主机进行交互式管理与文件编辑",
+    "离线/隔离环境下的服务器巡检与加密配置快照备份"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **1-Click Baseline**: Auto-detects running Docker containers, disks, cron jobs, and database services (`mysqld`, `postgres`, `redis`, `nginx`).",
+     "lines": [
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Single binary. Zero remote daemons. Embedded SQLite. Native SSH. ／ - **Structured Inspection Runs & Telemetry**: Records per-host execution history (started timestamp, roundtrip duration in milliseconds, status badge, human-readable summary, and root cause diagnostic excerpts) in SQLite. Displays real-time execution duration ",
+     "lines": [
+      8,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为服务器基础设施监控与管理服务，SQLite 仅作为其内嵌数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Pantau** is a self-hosted, lightweight, single-binary infrastructure monitoring and server management system built in Go. Unlike Prometheus/Node-Exporter, Zabbix, or Datadog, Pantau operates **100% agentless** over standard SSH (`port 22`). Target servers require **no background agents, no daemon installation, and no persistent telemetry scrapers**. ／  Agentless Linux Server Monitoring, Desired State Drift Engine & Interactive Management ／ - **Structured Inspection Runs & Telemetry**: Records per-host execution history (started timestamp, roundtrip duration in milliseconds, status badge, human-readable summary, and root cause diagnostic excerpts) in SQLite. Displays real-time execution duration metrics (`duration_ms`) on host cards and list views, with automatic inline rolling pruning maintaining a strict 100 runs limit per host with zero background schedulers.",
+   "evidence_lines": [
+    27,
+    7,
+    48
+   ]
+  },
+  "fn": "herliansyah/pantau",
+  "sha": "206a093b9996",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9843,5 +9843,211 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cc886b45e32c": {
+  "identity": {
+   "one_liner": "Go/Scheme 实现的列式内存 SQL 数据库，支持 MySQL 线协议接入",
+   "review": "MemCP 是一个持久化、面向列的内存 SQL 数据库，用 Go 实现存储引擎与协议层、Scheme 实现 SQL 解析与查询优化，通过 MySQL 线协议和多个 HTTP 端点（MySQL/PostgreSQL/T-SQL 方言及 SPARQL）对外提供服务，内置全文本搜索与成本优化器。面向需要在自托管服务器上同时处理事务、搜索与分析负载的 ERP 类应用；README 自述为 Beta 状态，要求生产切换前自行验证。",
+   "highlights": [
+    "提供 MySQL 线协议服务端及 /sql、/psql、/tsql、/rdf 多个 SQL-over-HTTP 端点",
+    "采用列式主/增量存储架构，数据可从内存换出并按需重新加载",
+    "内置成本查询优化器、EXPLAIN 计划检查与实验性 JIT 编译选项"
+   ],
+   "use_cases": [
+    "以 MySQL 客户端/连接器接入的 OLTP 与 OLAP 混合负载应用",
+    "需要全文条件、排序、分页与权限过滤组合查询的文档检索场景",
+    "通过 RDF/SPARQL 端点查询图/RDF 数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- `/psql/<database>` — PostgreSQL-dialect SQL",
+     "lines": [
+      87
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Applications can connect through the MySQL wire protocol or submit MySQL- and ／ Existing MySQL clients and connectors can use MemCP's wire-protocol server.",
+     "lines": [
+      14,
+      64
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "`mysql_import` connects to a running MySQL/MariaDB server over the wire",
+     "lines": [
+      645
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它本身是数据库引擎，既非为其他数据库服务的工具/组件，也非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MemCP is a persistent, column-oriented SQL database built for applications that ／ Applications can connect through the MySQL wire protocol or submit MySQL- and ／ The storage engine and protocol/runtime integration are implemented in Go. SQL",
+   "evidence_lines": [
+    3,
+    14,
+    147
+   ]
+  },
+  "fn": "launix-de/memcp",
+  "sha": "cc886b45e32c",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f6670059078a": {
+  "identity": {
+   "one_liner": "面向安全团队的日志平台，基于 ClickHouse 存储检索",
+   "review": "Bifract 是一个开源日志管理与检测平台，面向安全团队（SIEM/DFIR 场景），使用 ClickHouse 做高吞吐日志存储与搜索，配合管道式查询语言 BQL、行为基线模型、进程溯源图、Sigma 规则告警与协作调查功能。单机部署通过安装脚本完成，日志同时以 Parquet+Iceberg 归档到对象存储，可回灌 ClickHouse。",
+   "highlights": [
+    "提供管道式查询语言 BQL，支持过滤、分组、排序及溯源图等源命令",
+    "支持进程溯源图重建，兼容 Sysmon、Tracee、Tetragon 或规范化后的 EDR 遥测数据",
+    "日志以 Parquet 加 Iceberg 元数据归档至对象存储，可原位搜索并恢复到 ClickHouse"
+   ],
+   "use_cases": [
+    "安全团队的日志集中管理与威胁狩猎",
+    "基于 Sigma 规则的检测工程与告警",
+    "进程溯源调查与调查笔记本协作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Bifract is a log platform for security teams, built on ClickHouse for high-volume storage and search. It pairs a pipe-based query language with behavioral baselines, process provenance, and collaborative investigation. ／ - **Archive:** every log written to object storage as Parquet with Iceberg metadata, searchable in place, restorable into ClickHouse.",
+     "lines": [
+      11,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 ClickHouse 存储日志数据的安全日志平台，本身不服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Bifract is a log platform for security teams, built on ClickHouse for high-volume storage and search. It pairs a pipe-based query language with behavioral baselines, process provenance, and collaborative investigation. ／ The setup wizard installs Bifract on a single Linux host, handling SSL, passwords, Docker Compose, and database initialization: ／ - **Archive:** every log written to object storage as Parquet with Iceberg metadata, searchable in place, restorable into ClickHouse.",
+   "evidence_lines": [
+    11,
+    15,
+    45
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "zaneGittins/bifract",
+  "sha": "f6670059078a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8716bbd83657": {
+  "identity": {
+   "one_liner": "基于 Laravel 的电商网站应用，含 PayPal 支付",
+   "review": "一个用 Laravel 构建的电商系统，实现商品目录、详情页、结账下单、PayPal 支付、用户注册登录与订单账户面板，并提供管理后台用于配置店铺、商品、分类、库存订单、支付与配送方式及管理员账号。面向需要搭建在线商店（标签显示面向印尼市场 toko-online）的开发者，采用 repository 模式组织代码。",
+   "highlights": [
+    "提供商品目录、详情页与结账系统，并集成 PayPal 支付",
+    "提供客户账户面板，可查看订单与修改账户信息",
+    "提供管理后台，可管理店铺设置、商品、分类、品牌、订单、支付与配送方式"
+   ],
+   "use_cases": [
+    "搭建面向消费者的在线商店网站",
+    "基于 Laravel 学习或实践 repository 模式的电商开发",
+    "需要 PayPal 支付流程的电商原型"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为使用 Laravel 构建的电商应用，数据库仅作为底层存储，未提供面向数据库生态的工具能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "this a laravel ecommerce. most simple using pattern repository for laravel and implementation paypal payment. the feature are: ／ -An admin area where shop owner can log in and manage followings:",
+   "evidence_lines": [
+    3,
+    10
+   ]
+  },
+  "fn": "fajar7xx/laravel-ecommerce-v1",
+  "sha": "8716bbd83657",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

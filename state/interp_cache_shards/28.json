@@ -9517,5 +9517,220 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ba2a96cdcae5": {
+  "identity": {
+   "one_liner": "SQL Server 数据分析 SQL 脚本合集，用于探索、分段与趋势分析",
+   "review": "该仓库提供一组面向数据分析师和 BI 从业者的 SQL 查询脚本，覆盖时间趋势、累计分析、数据分段、部分与整体等分析主题。需先按 00_setup 指南安装 SQL Server 与 SSMS，再还原 .bak 备份或运行 init 脚本加载数据；要求 SQL Server 2022 或更新版本，并配套 YouTube/Udemy 课程使用。",
+   "highlights": [
+    "提供按分析主题组织的 SQL 脚本集合（趋势、累计、分段、部分-整体等）",
+    "提供两种数据库初始化方式：还原 .bak 备份或运行 init 脚本从 CSV 加载",
+    "包含 Windows 与 Mac 的安装指南及常见错误修复说明"
+   ],
+   "use_cases": [
+    "数据分析师学习与练习 SQL 分析查询技巧",
+    "BI 从业者参考数据探索、分段与指标计算脚本",
+    "作为配套课程的数据分析项目实操材料"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**New here? Open the setup guide in the `00_setup` folder.** It walks you through installing SQL Server and creating the databases, on Windows and Mac, with the fixes for the common errors. ／ ├── 00_setup/ the setup guide: SQL Server and SSMS on Windows and Mac ／ Get the database in one of two ways. Restore `datasets/DataWarehouseAnalytics.bak` in SSMS, which needs SQL Server 2022 or newer. Or run `scripts/00_init_database.sql`, which creates the database and loads the gold tables from `C:\\sql\\sql-data-analytics-projec",
+     "lines": [
+      8,
+      12,
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 SQL Server 存储数据的分析脚本与教学项目，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，需署名",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository contains SQL queries designed to help data analysts and BI professionals quickly explore, segment, and analyze data within a relational database. Each script focuses on a specific analytical theme and demonstrates best practices for SQL queries. ／ **New here? Open the setup guide in the `00_setup` folder.** It walks you through installing SQL Server and creating the databases, on Windows and Mac, with the fixes for the common errors. ／ Get the database in one of two ways. Restore `datasets/DataWarehouseAnalytics.bak` in SSMS, which needs SQL Server 2022 or newer. Or run `scripts/00_init_database.sql`, which creates the database and loads the gold tables from `C:\\sql\\sql-data-analytics-project\\datasets\\csv-files\\`. Put the files there, or change the three paths in the script.",
+   "evidence_lines": [
+    6,
+    8,
+    17
+   ]
+  },
+  "fn": "DataWithBaraa/sql-data-analytics-project",
+  "sha": "ba2a96cdcae5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1d0ca71db788": {
+  "identity": {
+   "one_liner": "AI 导演式小说创作桌面应用，Tauri+Rust，内置 SQLite 存储故事资产",
+   "review": "StoryMoss 是一个桌面端 AI 小说创作系统，提供幕前沉浸写作与幕后故事资产管理双界面，集成多代理续写工作流、知识图谱、伏笔追踪与前文向量检索，数据本地存于 SQLite。面向使用 LLM 进行长篇小说创作的作者，需配置 OpenAI/Anthropic/Ollama 等模型端点；创作数据依赖本地数据库并发写入，历史上曾出现写锁竞争导致的回退问题。",
+   "highlights": [
+    "提供 OpenAI / Anthropic / Ollama / 本地 API 多模型接入与按角色任务路由",
+    "包含知识图谱、伏笔看板、分层摘要与前文向量检索等长篇创作资产机制",
+    "支持 Windows/macOS/Linux 预构建安装包，也可从源码以 Node.js + Rust 构建"
+   ],
+   "use_cases": [
+    "长篇小说的 AI 辅助续写与章纲/卷纲规划",
+    "角色、世界观、伏笔等故事资产的本地化持久管理",
+    "对 AI 稿件做编辑审计、质检门与改稿级联影响分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "v0.30.33 修复后续写内容仍丢失。根因：多次续写时保存操作**并发执行**，`update_scene` 全量覆写在 SQLite 写锁竞争下乱序提交，较早的小内容覆写较晚的大内容（编辑器正常但 DB 回退，重启才发现）。修复：①所有 `update_scene` **串行化**（Promise 链排队，最后一次写总是最新）；②修稿 `setContent`/`insertText` 后补同步 + 立即保存；③关闭等待 3s -> 6s（超过 SQLite busy_timeout）。 ／ 1. **后端生成链路止血**：本地 / 局域网模型默认单候选 + 全局并发限流，候选总超时硬上限 90s；LLM 连接 / 生成超时拆分；上下文准备 SQLite 高频路径 spawn_blocking 化；全局 Mutex 替换为 OnceLock / RwLock。",
+     "lines": [
+      547,
+      645
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示应用以 SQLite 作为本地数据库存储创作数据（写锁、update_scene、spawn_blocking 等描述），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Tauri ／ 访问官网 `https://storymoss.top` 或 GitHub Releases 页面，下载对应平台安装包后直接安装即可。",
+   "evidence_lines": [
+    12,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "91zgaoge/StoryMoss",
+  "sha": "1d0ca71db788",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ae31ae69b45b": {
+  "identity": {
+   "one_liner": "基于 Aiogram 3 的 VPN 项目 Telegram 机器人，管理订阅与支付",
+   "review": "为 ksiVPN 项目提供的 Telegram 机器人，处理用户开通、多渠道支付（YooMoney P2P 与 YooKassa）、订阅续期与到期通知，并通过 Remnawave Panel API 提供 VPN 访问配置。使用 PostgreSQL 存储数据、Redis 做 FSM 存储，经 Docker Compose 部署。面向运营 ksiVPN/Remnawave VPN 服务的管理员。",
+   "highlights": [
+    "通过 Remnawave Panel API 实现 VPN 访问配置，支持订阅生命周期与到期通知",
+    "支持 YooMoney P2P 与 YooKassa 两种支付渠道，可选 «Мой налог» 电子收据",
+    "内置基于机器人的数据库备份（日×7、周×4、月×12）与 Docker Compose 一键部署（PostgreSQL 17 + Redis 8 + 可选 Caddy）"
+   ],
+   "use_cases": [
+    "VPN 服务自动化订阅销售与用户开通",
+    "通过 Telegram 接收支付、发放促销码与管理推荐体系",
+    "自动化订阅到期提醒与数据库备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Multifunctional telegram bot for ksiVPN project built on the Aiogram 3 framework. Handles subscriber onboarding, multi-provider payments (YooMoney + YooKassa) with optional ФНС fiscalization via «Мой налог», automated subscription lifecycle and expiry notifica ／ 1. **PostgreSQL usage** ／ 1. Rapid deployment via Docker Compose (PostgreSQL 17 + Redis 8 + optional Caddy TLS)",
+     "lines": [
+      18,
+      22,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 存储订阅/用户数据、Redis 存储 FSM，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Multifunctional telegram bot for ksiVPN project built on the Aiogram 3 framework. Handles subscriber onboarding, multi-provider payments (YooMoney + YooKassa) with optional ФНС fiscalization via «Мой налог», automated subscription lifecycle and expiry notifications, and VPN access provisioning through Remnawave Panel. Deploys with Docker Compose — PostgreSQL 17, Redis 8, and an optional built-in Caddy TLS reverse proxy included. ／ 1. Rapid deployment via Docker Compose (PostgreSQL 17 + Redis 8 + optional Caddy TLS) ／ Edit subscription plans, promo codes and referral settings directly in PostgreSQL. The schema is initialized from `postgres/initdb/001_init_schema.sql` with example rows — update the `subscriptions` table to match your pricing.",
+   "evidence_lines": [
+    18,
+    33,
+    154
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "exmanka/ksiVPN-telegram-bot",
+  "sha": "ae31ae69b45b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

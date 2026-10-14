@@ -9651,5 +9651,131 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2dd675e98933": {
+  "identity": {
+   "one_liner": "AI Agent 长期记忆引擎，混合检索+认知治理，单机自托管",
+   "review": "aiduMEI 是一个为 AI Agent 提供长期记忆的单机自托管服务：通过读/写/萃取三条宿主钩子自动注入与记录记忆，内部用向量+BM25/trigram 加 cross-encoder 重排做混合检索，并提供零构建 Web 控制台查看和导出记忆。面向使用 Hermes、Claude Code、Cursor 等 MCP 客户端的个人与团队；当前处于功能快速迭代期，作者声明尚未完成第三方复现与独立审查，时序推理在自测中为短板。",
+   "highlights": [
+    "提供读线（注入）、写线（记录）、萃取线（会话提炼）三类宿主钩子，支持 Hermes、Claude Code、Cursor 等宿主",
+    "实现向量 + 中文 BM25/trigram + cross-encoder 重排的混合检索，以及记忆溯源、双时间轴与三轨遗忘曲线",
+    "提供零构建 Web 控制台（/ui）用于查看、调整记忆并导出 Markdown"
+   ],
+   "use_cases": [
+    "为 MCP 客户端类 Agent 添加长期记忆与自动上下文注入",
+    "对 Agent 记忆做可视化查看、溯源与 Markdown 导出",
+    "单机自托管场景下的会话精华提炼与记忆治理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**共同项**：CPU 2 核足够、闲时 < 1%；`/search` 单次 0.14~0.23s；冷启动 5.2s；数据盘千级记忆约 13 MB 向量 + 数百 KB SQLite；前端 0 依赖；Python 3.10–3.12。 ／ > 其余的轻是刻意设计：向量库嵌入式落盘（无独立进程/端口）、不吃 GPU、相关性闸门先拦闲聊、SQLite+FTS5 兜底。一句话：**云端档 1 核 1G 跑得动；自动挡/本地档建议 2 核 2G 起步。**",
+     "lines": [
+      266,
+      271
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用 SQLite+FTS5 与嵌入式向量库落盘存数据，属于使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 让你的 AI Agent **真正记住你**：混合检索 + 认知治理 + 可视化控制台 + 双引擎自动挡，**单机自托管**，MIT。 ／ |**忆** · Memory|**记忆底座与记忆逻辑**|三轨遗忘曲线 · 双时间轴（记忆**过期**而非删除）· 事件时间与入库时间分开存 · 向量 + 中文 BM25/trigram + cross-encoder 真重排（不是加权融合）· 六型分类|",
+   "evidence_lines": [
+    5,
+    97
+   ]
+  },
+  "fn": "monkey2jack/aiduMEI",
+  "sha": "2dd675e98933",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c8bb2e5d1f4d": {
+  "identity": {
+   "one_liner": "集成到 DBeaver 的 AI 聊天插件，支持任意模型",
+   "review": "Kastor 是一个 DBeaver Community 24.1+ 的插件，在编辑器旁提供 AI 聊天面板，可读取已配置连接的元数据（连接/schema/表）、执行只读 SQL，写操作需用户在聊天中批准。支持 OpenAI 兼容 API 与 Anthropic API，也可接 Ollama/LM Studio 本地模型；提供列脱敏、本地审计日志和团队策略配置。适合在 DBeaver 中用自然语言操作数据库的用户。",
+   "highlights": [
+    "列出连接、schema 和表，可描述列、键、索引",
+    "只读查询自动执行，写命令须经聊天内用户批准",
+    "支持 OpenAI 兼容 API 与 Anthropic API，可接本地模型",
+    "提供列脱敏、本地 JSONL 审计日志与 dbeaver.ini 团队策略配置"
+   ],
+   "use_cases": [
+    "在 DBeaver 中通过自然语言浏览数据库结构与执行查询",
+    "对敏感列进行脱敏后再交给外部模型分析",
+    "通过本地模型（Ollama/LM Studio）离线使用 AI 辅助查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 DBeaver 数据库客户端提供 AI 辅助功能的插件，是服务数据库操作的组件而非存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Chat de IA dentro do DBeaver (CE 24.1.0 ou mais novo) com acesso às conexões configuradas. ／ - Listar conexões, schemas e tabelas; descrever tabelas (colunas, chaves, índices). ／ - Comandos de escrita (`INSERT`, `UPDATE`, `DELETE`, DDL) **só depois da sua aprovação** no chat.",
+   "evidence_lines": [
+    5,
+    49,
+    51
+   ]
+  },
+  "fn": "EduardoRocha234/kastor-dbeaver-ai-chat",
+  "sha": "c8bb2e5d1f4d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

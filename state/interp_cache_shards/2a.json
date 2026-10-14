@@ -9442,5 +9442,150 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1c771b6884e0": {
+  "identity": {
+   "one_liner": "SQLite 调用拦截垫片库，让 Plex 媒体服务器改用 PostgreSQL 存储",
+   "review": "该项目通过 Rust 编写的 interpose 垫片拦截 Plex Media Server 的 SQLite 调用并将其转写到 PostgreSQL，无需修改 Plex 源码；附 SQLite→PostgreSQL 迁移脚本与 doctor 修复脚本。面向希望在 macOS/Linux/Docker 上让 Plex 库数据存入 PostgreSQL 的自托管用户，需按平台重新安装 shim，PostgreSQL→SQLite 方向迁移为 beta。",
+   "highlights": [
+    "以 Rust 实现的 shim 库拦截 Plex 的 SQLite C ABI 调用并转发到 PostgreSQL，无需改动 Plex 源码",
+    "提供 SQLite→PostgreSQL 与 PostgreSQL→SQLite（beta）迁移脚本及 doctor.sh 模式/数据检查修复工具",
+    "支持 macOS ARM64、Linux x86_64/ARM64 及多架构 Docker 镜像，测试矩阵覆盖 PostgreSQL 15 和 18"
+   ],
+   "use_cases": [
+    "让已有 Plex 媒体库从 SQLite 迁移到 PostgreSQL 存储",
+    "在 Docker Compose 中部署使用 PostgreSQL 的 Plex Media Server",
+    "用 PostgreSQL 标准工具对 Plex 库数据进行备份与检查"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Run Plex Media Server with PostgreSQL instead of SQLite.** ／ A small shim library that catches Plex SQLite calls and sends them to PostgreSQL. You do not need to change Plex source code.",
+     "lines": [
+      3,
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**Run Plex Media Server with PostgreSQL instead of SQLite.** ／ A small shim library that catches Plex SQLite calls and sends them to PostgreSQL. You do not need to change Plex source code. ／ ./scripts/migrate_sqlite_to_pg.sh   # SQLite → PostgreSQL",
+     "lines": [
+      3,
+      7,
+      109
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为将 Plex 的存储后端替换为 PostgreSQL 而服务的 shim 库与迁移工具，不是以数据库存数据的应用本体",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small shim library that catches Plex SQLite calls and sends them to PostgreSQL. You do not need to change Plex source code. ／ ./scripts/migrate_sqlite_to_pg.sh   # SQLite → PostgreSQL",
+   "evidence_lines": [
+    7,
+    109
+   ]
+  },
+  "fn": "cgnl/plex-postgresql",
+  "sha": "1c771b6884e0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5f7ff001417a": {
+  "identity": {
+   "one_liner": "社会超市申请家庭排名管理的 PHP+MySQL 后台应用",
+   "review": "一个面向社工超市志愿者的后台 Web 应用，用于录入申请、按评估网格自动打分、排名并管理购物卡与积分。原为 2021 年高中毕业考试项目，现补充了单元测试、CI 与安全加固；无框架的原生 PHP 实现，通过 Docker Compose 运行，仓库内仅含演示数据。",
+   "highlights": [
+    "按评估标准逐项打分并生成家庭排名，可配置评分规则并存库",
+    "购物卡的发放、撤销、管理与历史记录，支持排名导出和邮件通知",
+    "使用预处理语句、事务、表单令牌、登录限流与输出转义",
+    "提供 Docker Compose 本地运行与演示模式（数据定时重置）"
+   ],
+   "use_cases": [
+    "社会援助机构对申请家庭进行评分排名",
+    "管理购物卡额度分配与使用历史",
+    "作为无框架 PHP CRUD 应用与安全加固的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PHP 8.5 on Apache, MySQL 8.0, plain HTML/CSS/JavaScript. Docker Compose for ／ docs/deploy.md has the steps for a host with PHP and MySQL.",
+     "lines": [
+      23,
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 MySQL 8.0 存储申请、评分与购物卡数据，是为社会超市业务服务的应用程序而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Back-office web application for the volunteer who manages the ranking of the ／ PHP 8.5 on Apache, MySQL 8.0, plain HTML/CSS/JavaScript. Docker Compose for ／ |`ApplicationStore.php`|Reads and writes a record (prepared statements, transaction)|",
+   "evidence_lines": [
+    3,
+    23,
+    73
+   ]
+  },
+  "fn": "CieriS/social-supermarket_il-sole",
+  "sha": "5f7ff001417a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

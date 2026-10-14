@@ -7557,5 +7557,165 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5763a8fd94ff": {
+  "identity": {
+   "one_liner": "单二进制自托管文档归档系统，SQLite 存储 + 内容寻址",
+   "review": "Suchi 是一个用 Go 编写的自托管文档管理系统，将扫描件、邮件附件、照片等摄入后自动命名并归入编号分类树，原文以 SHA-256 内容寻址不可变存储，元数据存于 SQLite，提供 OCR、全文检索、版本、备份和 MCP 等能力。面向个人、家庭记录及自由职业者和小团队。以 Docker 镜像或单二进制部署，项目处于 v0.3.0 早期阶段。",
+   "highlights": [
+    "单静态 Go 二进制，SQLite 元数据 + SHA-256 内容寻址不可变存储，可选本地或 OpenAI 兼容模型辅助分类",
+    "支持 OCR、缩略图、条形码、加密 PDF、ZUGFeRD 发票及常见文档/邮件/归档格式读取",
+    "提供浏览器、监视文件夹、IMAP、移动端多渠道摄入，以及全文搜索、文档 ACL、OIDC、审计事件"
+   ],
+   "use_cases": [
+    "个人或家庭账单、证件、税单等文件的自动归档与检索",
+    "自由职业者或小团队的文档分类管理与共享链接",
+    "通过 IMAP 邮箱或监视文件夹自动采集扫描件并 OCR 入库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or ／ Suchi combines SQLite, content-addressed storage, a Svelte interface, and a ／ immutably by SHA-256; SQLite metadata and the API—not the content store—enforce",
+     "lines": [
+      28,
+      53,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该应用以 SQLite 作为自身元数据存储并用于内容寻址归档系统。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可（AGPL-3.0，README L186 声明以两种许可提供）",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or ／ Suchi combines SQLite, content-addressed storage, a Svelte interface, and a ／ immutably by SHA-256; SQLite metadata and the API—not the content store—enforce",
+   "evidence_lines": [
+    28,
+    53,
+    55
+   ]
+  },
+  "fn": "johnnybravo-xyz/suchi",
+  "sha": "5763a8fd94ff",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "024c384618b6": {
+  "identity": {
+   "one_liner": "自托管 LLM API 网关，统一代理多种上游模型并提供运营控制台",
+   "review": "bit-api 是一个用 Python + FastAPI + SQLite 构建的单进程 LLM API 网关，将多个上游模型服务统一为兼容 OpenAI 和 Anthropic 的调用接口，并提供用户注册、密钥配额、渠道调度、计费账务和支付等管理功能。适合需要搭建团队内部模型入口或面向用户自助控制台 API 服务的部署者；限制包括不执行模型推理、单实例单 worker 部署、无 Redis/PostgreSQL 依赖。",
+   "highlights": [
+    "提供兼容 OpenAI（Chat Completions、Responses、Embeddings）与 Anthropic Messages 的统一 API 端点",
+    "支持多渠道配置、模型映射、优先级与权重调度，可通过 Python Adapter 扩展特殊上游",
+    "内置用户/密钥/定价/用量管理，支持分组计费策略、易支付充值、签到赠额与邀请奖励"
+   ],
+   "use_cases": [
+    "为团队搭建统一入口，聚合多个 LLM 上游并统一鉴权与计费",
+    "部署带用户注册、密钥分发与充值能力的自助 API 服务",
+    "对模型调用进行用量记录、配额限制与 Token 消耗统计"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Python · FastAPI · SQLite · 单进程部署 · MIT ／ 项目采用 **FastAPI + SQLite**，无需 Redis 或 PostgreSQL；前端资源随仓库自托管，无需 Node.js 或前端构建即可运行。渠道适配、支付接入和活动策略分别通过 Adapter、Payment Provider 与事件插件扩展。 ／ |日常维护|上游号池巡检、SQLite 在线备份、SMTP 邮件、Webhook 告警、用户及全站运营看板。|",
+     "lines": [
+      7,
+      19,
+      36
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "项目采用 **FastAPI + SQLite**，无需 Redis 或 PostgreSQL；前端资源随仓库自托管，无需 Node.js 或前端构建即可运行。渠道适配、支付接入和活动策略分别通过 Adapter、Payment Provider 与事件插件扩展。",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储用户、密钥、渠道与账务数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 一个入口，连接多种模型。 可自托管的轻量 LLM API 网关与运营控制台。 ／ bit-api 将多个上游模型服务统一为兼容 OpenAI 与 Anthropic 常用调用方式的 API，并提供用户、密钥、渠道、定价、用量和支付管理。你可以用它搭建团队内部的模型入口，也可以部署带用户自助控制台的 API 服务。 ／ 项目采用 **FastAPI + SQLite**，无需 Redis 或 PostgreSQL；前端资源随仓库自托管，无需 Node.js 或前端构建即可运行。渠道适配、支付接入和活动策略分别通过 Adapter、Payment Provider 与事件插件扩展。",
+   "evidence_lines": [
+    5,
+    17,
+    19
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "kingenbomb/bitapi",
+  "sha": "024c384618b6",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10648,5 +10648,214 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "76144bccebdc": {
+  "identity": {
+   "one_liner": "支持多种 SQL 数据库的通用命令行客户端",
+   "review": "usql 是一个命令行 SQL 客户端，交互方式仿照 PostgreSQL 的 psql，支持变量、反斜杠命令、上下文补全、跨库复制等特性，可为数十种 SQL 和 NoSQL 数据库提供统一入口。适合需要在多种数据库间切换、希望用一致 CLI 界面的数据库管理员和开发者。驱动按构建标签裁剪，默认仅含基础驱动。",
+   "highlights": [
+    "提供仿 psql 的命令行界面，包含变量、反引号、反斜杠命令、上下文补全与终端图形",
+    "通过 Go SQL 驱动和构建标签支持多种数据库，可按 most/all 标签控制内置驱动集合",
+    "提供 Release、Homebrew、AUR、go install、Docker 等多种安装方式"
+   ],
+   "use_cases": [
+    "以统一 CLI 访问多种 SQL/NoSQL 数据库",
+    "在不同数据库之间执行数据复制",
+    "为非 PostgreSQL 数据库提供 psql 风格的操作环境"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ modelled on PostgreSQL's `psql`. `usql` supports most of the ／ |PostgreSQL|`postgres`|`pg`, `pgsql`, `postgresql`|[github.com/jackc/pgx/v5/stdlib][d-postgres]|",
+     "lines": [
+      9,
+      14,
+      187
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ [`base` drivers][databases] for PostgreSQL, MySQL, SQLite3, Microsoft SQL ／ |MySQL|`mysql`|`my`, `maria`, `aurora`, `mariadb`, `percona`|[github.com/go-sql-driver/mysql][d-mysql]|",
+     "lines": [
+      9,
+      122,
+      190
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ Server, Oracle, CSVQ will be included in the build: ／ |Oracle Database|`oracle`|`or`, `ora`, `oci`, `oci8`, `odpi`, `odpi-c`|[github.com/sijms/go-ora/v3][d-oracle]|",
+     "lines": [
+      9,
+      123,
+      192
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Database, SQLite3, Microsoft SQL Server, [and many other databases][databases] ／ $ docker run --rm -it --volume $(pwd)/data:/data docker.io/usql/usql:latest sqlite3://data/test.db ／ |SQLite3|`sqlite3`|`sq`, `sqlite`, `file`|[github.com/mattn/go-sqlite3][d-sqlite3] [†][f-cgo] [§][f-embedded]|",
+     "lines": [
+      10,
+      115,
+      193
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Database, SQLite3, Microsoft SQL Server, [and many other databases][databases] ／ # build/install with base drivers (PostgreSQL, MySQL, SQLite3, Microsoft SQL Server, ／ |Microsoft SQL Server|`sqlserver`|`ms`, `mssql`, `azuresql`|[github.com/microsoft/go-mssqldb][d-sqlserver]|",
+     "lines": [
+      10,
+      126,
+      191
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|`clickhouse`|`ch`|[github.com/xo/dbimp/clickhouse][d-clickhouse]|",
+     "lines": [
+      195
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|`mysql`|`my`, `maria`, `aurora`, `mariadb`, `percona`|[github.com/go-sql-driver/mysql][d-mysql]|",
+     "lines": [
+      190
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|TiDB|`tidb`|`ti`|[github.com/go-sql-driver/mysql][d-tidb]|",
+     "lines": [
+      200
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为多种数据库提供命令行接口的工具，为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ The following are the [Go SQL drivers][go-sql] that `usql` supports, the ／ |Database|Scheme / Tag|Scheme Aliases|Driver Package / Notes|",
+   "evidence_lines": [
+    9,
+    181,
+    184
+   ]
+  },
+  "fn": "xo/usql",
+  "sha": "76144bccebdc",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4c0ad543b94b": {
+  "identity": {
+   "one_liner": "自托管的费用分摊应用，内置 PostgreSQL 与 AI 票据扫描",
+   "review": "ShareTab 是一个自托管的共享费用追踪应用，用户拍照上传收据后由 AI 提取条目并分摊给组成员，支持多币种、债务简化、访客分摊、Venmo 支付链接和多语言界面。面向合租室友、朋友和旅行群体，以单个 Docker 容器部署，内置 PostgreSQL，无需外部数据库，可通过 Unraid 模板或 Docker Compose 运行。",
+   "highlights": [
+    "提供 AI 收据扫描：上传照片后提取行项目并按比例分摊税费与小费",
+    "支持多币种记录，按支出日期汇率（ECB 数据）换算到组币种",
+    "以单一 Docker 容器交付，内嵌 PostgreSQL，支持 OIDC 单点登录与魔法链接认证"
+   ],
+   "use_cases": [
+    "合租室友或朋友间追踪和结算共享开支",
+    "旅行群体的多币种花费分摊",
+    "无需注册的访客临时账单分摊"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo: ／ docker exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql ／ docker compose exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql",
+     "lines": [
+      102,
+      155,
+      158
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以单一容器内嵌 PostgreSQL 作为本应用的数据存储（L102），ShareTab 只是使用该数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo: ／ ShareTab is a free, self-hosted alternative to Splitwise for tracking shared expenses with roommates, friends, and travel groups. Snap a photo of a receipt, let AI extract the line items, and assign them to group members. Taxes and tips split proportionally. Deploy on your own server with Docker Compose.",
+   "evidence_lines": [
+    102,
+    17
+   ]
+  },
+  "fn": "sw-carlos-cristobal/sharetab",
+  "sha": "4c0ad543b94b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

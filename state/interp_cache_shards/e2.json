@@ -8003,5 +8003,143 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "53a80b0e299f": {
+  "identity": {
+   "one_liner": "Transport Fever 3 第二屏实时仪表盘，mod 导出数据+本地程序存 SQLite 展示",
+   "review": "为《Transport Fever 3》玩家提供第二显示器实时仪表盘：游戏内 Lua 模组周期性导出状态快照，本地配套程序（collector.py）读取快照并存入 SQLite 历史，浏览器访问本地服务器查看资金、线路、车辆、地图等信息，还可反向控制游戏。纯本机运行，仅用 Python 标准库，面向 Windows/Linux 玩家。",
+   "highlights": [
+    "由游戏模组与本地配套程序两部分组成，模组通过官方脚本 API 导出快照，本地程序将历史存入 SQLite 并在浏览器中提供仪表盘",
+    "支持从仪表盘控制游戏（速度、镜头、载具、停靠点配置），命令通过本地文件传递",
+    "仅依赖 Python 标准库，无需安装额外包，本地运行不上传数据"
+   ],
+   "use_cases": [
+    "在第二块显示器上实时查看游戏公司运营、车队、线路与地图信息",
+    "查看运营历史曲线与统计数据（SQLite 存储历史）",
+    "保持游戏全屏的同时从仪表盘执行游戏控制操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Pytho ／ (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.",
+     "lines": [
+      36,
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该仪表盘程序存储历史数据的本地数据库，仓库本体是游戏配套应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Mod `Second Screen Dashboard`**|mod.io (in-game Mod Hub) or `mod/` in this repo|A Lua game script that writes a snapshot of the game state to `<userdata>/dashboard_export/live.lua` every few seconds, and (if you enable it) executes commands written to `cmd.lua`. Uses only the official TF3 scripting API. Never modifies the savegame.| ／ |**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python standard library only — the Windows release zip ships a bundled Python, Linux uses the system Python (3.10+); nothing to install.| ／  (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.",
+   "evidence_lines": [
+    35,
+    36,
+    48
+   ]
+  },
+  "fn": "M1r077/tf3-dashboard",
+  "sha": "53a80b0e299f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ab1a1b1531fa": {
+  "identity": {
+   "one_liner": "开源项目与issue发现平台，按技能难度匹配贡献目标",
+   "review": "ContribScout 是一个帮助开发者寻找与其技能水平匹配的开源 GitHub 项目和 issue 的 Web 应用。前端 React/TypeScript，后端 Node.js/Express，数据存于 PostgreSQL（Neon 托管），通过后台定时任务同步仓库与 issue 数据，支持 GitHub OAuth 登录和书签收藏。需要 Node.js、PostgreSQL 连接串和 GitHub Token 才能自行部署。",
+   "highlights": [
+    "提供仓库浏览、搜索、按难度（Beginner/Intermediate/Advanced）过滤功能",
+    "通过 npm run discover 基于质量条件自动从 GitHub 发现新仓库，后台任务定时同步数据",
+    "支持 GitHub OAuth 登录，使用签名 token 无数据库会话保存书签"
+   ],
+   "use_cases": [
+    "开发者寻找匹配自身水平的开源贡献目标",
+    "维护者将项目纳入可被发现的仓库列表",
+    "自托管运行个人化的仓库发现服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database:** PostgreSQL (hosted for free on Neon) ／ **You will need:** Node.js installed, a free PostgreSQL database (from neon.tech), and a GitHub account. ／ DATABASE_URL=your_postgres_connection_string",
+     "lines": [
+      19,
+      37,
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 PostgreSQL 存储仓库与 issue 数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Database:** PostgreSQL (hosted for free on Neon) ／ - **The website almost never asks GitHub for data live, while a user is browsing.** Instead, a background job fetches repository and issue data every few hours and saves it in the database. The one exception is the file tree: opening a repository details page fetches that repository's file list straight from GitHub's API so it is always current. Everything else is served from the project's own database, which keeps the site fast and avoids running into GitHub's request limits.",
+   "evidence_lines": [
+    19,
+    107
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "csakib049/ContribScout",
+  "sha": "ab1a1b1531fa",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

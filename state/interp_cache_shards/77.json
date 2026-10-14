@@ -10212,5 +10212,342 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ff3ec4a52eef": {
+  "identity": {
+   "one_liner": "本地 MCP 服务器，用语义检索为 agent 按需挑选技能",
+   "review": "一个 Python 实现的 MCP 服务器，在 coding agent 与大型技能集合之间充当检索层：技能以 SKILL.md 形式留在磁盘，agent 用自然语言描述意图，服务器通过 Ollama 嵌入 + 余弦相似度 + MMR 多样性筛选返回少量候选，agent 通过 append-only 的 report 工具反馈结果形成策展闭环，全程可选接入 Apple 本地模型重排。面向使用 Claude Code 等 MCP 客户端的用户。",
+   "highlights": [
+    "提供 librarian_find/brainstorm/report/reindex/stats 五个 MCP 工具，agent 只读推荐、只写结果",
+    "MMR 多样性选择 + 近期推荐衰减 + 随机通配符，避免重复推荐同一批技能",
+    "全本地运行：SQLite WAL 存储、Ollama 嵌入、可选 Apple Foundation Model 重排"
+   ],
+   "use_cases": [
+    "为安装了大量 agent 技能的用户按意图检索少量相关技能，减少上下文占用",
+    "基于查询与结果日志做技能集合的持续策展（淘汰/改写描述）",
+    "为多个 agent 部署统一的技能检索与反馈习惯"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> *\"So the full shape: SQLite (skills, embeddings, query log, outcome log) + FastMCP + two read tools + one write tool. Maybe 300 lines of Python. It's small, it's one thing, and it compounds.\"* ／ Every stage is local and free: Ollama embeddings, SQLite, and (optionally) Apple Intelligence. ／ - DB is SQLite WAL at `~/.skill_librarian/librarian.db`; `query_log` and `outcome_log` are append-only — no tool deletes or rewrites log rows.",
+     "lines": [
+      25,
+      35,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身技能/日志数据的存储，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> *\"So the full shape: SQLite (skills, embeddings, query log, outcome log) + FastMCP + two read tools + one write tool. Maybe 300 lines of Python. It's small, it's one thing, and it compounds.\"* ／ A local-first MCP server that acts as a **librarian** between coding agents and a large skill collection. The collection stays raw markdown on disk — agents never load it into context. They describe what they're trying to do in plain language; the librarian finds the skills whose *meaning* matches (semantic search — no keyword guessing), makes sure the shortlist isn't three flavors of the same thing, avoids repeating what it just recommended, optionally lets Apple's on-device model deliberate over the finalists — and learns from what agents report back. ／ - DB is SQLite WAL at `~/.skill_librarian/librarian.db`; `query_log` and `outcome_log` are append-only — no tool deletes or rewrites log rows.",
+   "evidence_lines": [
+    25,
+    31,
+    150
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "aka-kika/the-librarian",
+  "sha": "ff3ec4a52eef",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "53528fc65c56": {
+  "identity": {
+   "one_liner": "自托管开源 AI 语言学习应用，基于 Next.js/Prisma/PostgreSQL",
+   "review": "Sotto 是一个可自托管的语言学习应用，围绕 CEFR 课程提供语法、阅读、听力、口语、写作五项练习，支持接入用户自己的 LLM 代理与 API 密钥（BYOK），并可完全离线运行。通过 Docker Compose 安装，数据存储在 PostgreSQL。面向希望在自己基础设施上运行学习工具的学习者。",
+   "highlights": [
+    "提供五项分级技能的 CEFR 课程与掌握度门控练习",
+    "支持 BYOK 接入自有 LLM/TTS/STT 提供商，可 100% 离线运行",
+    "通过 Docker Compose 一键安装脚本部署，配置写入 ~/.sotto"
+   ],
+   "use_cases": [
+    "个人或家庭在自托管服务器上运行语言学习课程",
+    "使用本地模型/本地代理的离线语言练习环境",
+    "基于自有笔记、文章或 YouTube 链接生成课程内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - **PostgreSQL 16 + Prisma 7:** user data, vocabulary graph, progress via a node postgres driver adapter.",
+     "lines": [
+      24,
+      186
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明用户运行该应用及其数据库（PostgreSQL）来存储学习数据，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Open source language-learning infrastructure you run yourself, with a full **CEFR course** built around _your_ work, interests, and the situations you want to rehearse. Your progress, your data, your models, on a stack **you** control. ／ PostgreSQL ／ The installer pulls the pre-built images, asks how to connect your AI (an API key, your local **Claude Code or Codex CLI** with no key, or your Claude agent on a VPS over SSH), writes config to `~/.sotto`, and starts everything. Local CLI login refreshes travel through a networkless credential-sync sidecar that copies only the CLI auth JSON into the app containers.",
+   "evidence_lines": [
+    7,
+    24,
+    44
+   ]
+  },
+  "fn": "affromero/Sotto",
+  "sha": "53528fc65c56",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "52a7eb902f67": {
+  "identity": {
+   "one_liner": "生物信息学与计算生物学资源的精选清单",
+   "review": "一个收录生物信息学领域期刊、生物数据库、Web 资源、编程语言、包管理工具、数据下载/压缩工具、序列比对软件和单细胞分析框架的精选目录。面向生物信息学学习者和研究者，按主题分类组织条目并附简短说明，本身不是软件，仅提供资源索引。",
+   "highlights": [
+    "收录期刊、数据库、工具、教程等分类资源清单",
+    "涵盖序列比对、单细胞组学等领域的常用软件条目"
+   ],
+   "use_cases": [
+    "查找生物信息学领域的数据库与工具",
+    "学习计算生物学相关语言与流程"
+   ],
+   "notes": []
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仅为资源索引列表，未实现为数据库生态的组件也未运行于某数据库之上",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Bioinformatica ／ > A curated list of top bioinformatics and computational biology journals ／ ## Databases",
+   "evidence_lines": [
+    1,
+    8,
+    29
+   ]
+  },
+  "fn": "BineetX/Bioinformatica",
+  "sha": "52a7eb902f67",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2600008e95c1": {
+  "identity": {
+   "one_liner": "单机自托管 AI 聊天前端，FastAPI + SQLite 存档，SSE 流式与世界书关键词注入",
+   "review": "Mouse 是一个自托管的 AI 聊天前端，后端 FastAPI + SQLite 同进程托管前端 SPA，可接入任意 OpenAI 兼容 API。核心机制包括世界书关键词/正则匹配注入 system 提示词、SSE 流式响应、对话持久化与自动总结。面向单人使用，支持 PWA 与 Tauri 桌面壳，通过 pip 安装依赖后由 uvicorn 启动。",
+   "highlights": [
+    "提供世界书条目的精确关键词/正则/token 匹配，命中内容注入 system 提示词",
+    "支持 SSE 流式输出、对话/分组/消息 CRUD、自动上下文总结",
+    "提供 20 个 function calling 工具，覆盖世界书、联网、文件、图书馆等"
+   ],
+   "use_cases": [
+    "单人自托管部署 AI 聊天界面并持久化聊天记录",
+    "角色扮演场景中按关键词自动注入世界书条目",
+    "导入 GPT 聊天记录并做用量统计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "单机自建的 AI 聊天前端：世界书关键词注入 · SSE 流式 · SQLite 存档 · PWA + Tauri 桌面壳 ／ - 后端 FastAPI + SQLite，前端无框架原生 HTML/CSS/JS，两者同一个进程托管 ／ |存储|SQLite|",
+     "lines": [
+      5,
+      12,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 存储对话、消息与世界书条目数据，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（第三方素材各自许可见 THIRD_PARTY_NOTICES.md）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "单机自建的 AI 聊天前端：世界书关键词注入 · SSE 流式 · SQLite 存档 · PWA + Tauri 桌面壳 ／ |存储|SQLite| ／ |数据库|SQLite3（Python 内置）|",
+   "evidence_lines": [
+    5,
+    24,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Cami-Ose/mouse",
+  "sha": "2600008e95c1",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bcc26334f030": {
+  "identity": {
+   "one_liner": "基于 Blockly 积木编程的八年级数字媒体学习环境应用",
+   "review": "这是一个面向八年级学生的编程学习环境，学生用 Blockly 积木编写小程序，含站点练习、错误侦探和评分建议功能，教师有独立视图。应用以 Cloudflare Worker 运行并使用 Cloudflare D1 数据库存储学生进度，支持二维码在手机/平板打开应用。README 未提及达梦数据库，候选命中的 'dm8' 为项目名而非 Dameng 数据库。",
+   "highlights": [
+    "提供学生端（PIN 登录）与教师端两类视图，教师端可查看与删除全部数据",
+    "以 Cloudflare Worker + D1 数据库部署，支持本地 wrangler dev 测试",
+    "教学内容与配置（站点、评分标准、积木）通过 public 下的 JS 文件可修改"
+   ],
+   "use_cases": [
+    "中学信息技术课堂的积木式编程教学",
+    "学校自托管的学生练习与作业进度管理",
+    "教师按评分标准查看与批改学生作品"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "mention",
+     "quote": "npx wrangler d1 create dm8-app-werkstatt --jurisdiction eu # ausgegebene ID in wrangler.jsonc bei database_id eintragen",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用以 Cloudflare Worker 运行并使用 D1 数据库存数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：内容 CC BY 4.0，代码 MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Die Werkstatt läuft als Cloudflare Worker mit einer D1-Datenbank. Ein kostenloses Cloudflare-Konto reicht. ／ npx wrangler d1 create dm8-app-werkstatt --jurisdiction eu   # ausgegebene ID in wrangler.jsonc bei database_id eintragen ／ npx wrangler d1 execute dm8-app-werkstatt --remote --file schema.sql",
+   "evidence_lines": [
+    10,
+    14,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mrbraendt/dm8-app-werkstatt-oer",
+  "sha": "bcc26334f030",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

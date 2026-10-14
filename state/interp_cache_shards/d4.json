@@ -7379,5 +7379,145 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a2254c9bead": {
+  "identity": {
+   "one_liner": "dokku 的 MySQL 官方服务插件，用于在 PaaS 中管理 MySQL 服务",
+   "review": "这是 Dokku PaaS 的官方 MySQL 插件，通过 CLI 命令创建、销毁、链接 MySQL 服务容器，支持自定义镜像版本、环境变量、卷挂载、内存限制、S3 备份调度及服务信息查询。面向使用 Dokku 部署应用并需要 MySQL 数据库服务的运维或开发者，安装依赖 dokku 0.35.x+ 与 docker。",
+   "highlights": [
+    "提供 mysql:create/destroy/info 等命令管理 MySQL 服务容器",
+    "支持 S3 备份、定时备份调度、GPG 加密与 IAM 认证",
+    "支持自定义镜像、卷挂载、网络、内存限制等容器配置"
+   ],
+   "use_cases": [
+    "在 Dokku PaaS 上为应用创建并链接 MySQL 数据库服务",
+    "将 MySQL 服务数据定时备份到 S3 兼容存储",
+    "以容器方式运维多个独立配置的 MySQL 实例"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Official mysql plugin for dokku. Currently defaults to installing mysql 26.7.0. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git --name mysql",
+     "lines": [
+      3,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 MySQL 提供部署与运维服务的 Dokku 插件，不是用 MySQL 存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "MySQL"
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official mysql plugin for dokku. Currently defaults to installing mysql 26.7.0. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git --name mysql",
+   "evidence_lines": [
+    3,
+    14
+   ]
+  },
+  "fn": "dokku/dokku-mysql",
+  "sha": "7a2254c9bead",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4196b34911a2": {
+  "identity": {
+   "one_liner": "协作看板应用：单 Go 二进制 + SQLite，服务器端渲染实时同步",
+   "review": "一个多人协作看板应用，支持列表/卡片增删、拖拽移动、Markdown 描述、评论与标签，页面通过压缩流实时收到整板视图更新。采用 CQRS 架构，所有写入经由单个 goroutine 和单个 SQLite 连接批处理提交，无乐观更新。适合小团队协作或作为 Go+SQLite 架构的案例研究使用，从源码构建部署。",
+   "highlights": [
+    "多人同板实时协作，变更经 zstd/brotli 压缩流推送，视图每 50ms 渲染一次",
+    "所有写入经单 goroutine 与单 SQLite 连接批量提交，各命令使用独立 savepoint",
+    "提供 kanban backup 在线一致性备份命令与 systemd/Caddy 部署脚本"
+   ],
+   "use_cases": [
+    "小团队任务/卡片协作管理",
+    "公开演示站点（支持每晚定时重置为种子数据）",
+    "Go + SQLite 单写者架构的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "It is one static Go binary (14.1 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It runs on lith, the runtime our Go and SQLite apps share: its single writer, its render l ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this ",
+     "lines": [
+      7,
+      23
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It is one static Go binary (14.1 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It runs on lith, the runtime our Go and SQLite apps share: its single writer, its render l ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this ",
+     "lines": [
+      7,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 SQLite 存储数据的看板应用，SQLite 是其自身的数据存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，含 Beer-Ware 的第三方组件",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A collaborative Kanban board, rendered on the server. Several people move cards on the same board and see each other's changes as they happen. Nothing on the page claims more than the server has confirmed. ／ It is one static Go binary (14.1 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It runs on lith, the runtime our Go and SQLite apps share: its single writer, its render loop with shared views, its compressed streams and its request edge. It is a case study by zwei und eins, compared with PLANKA Community (React, Redux, Sails.js, PostgreSQL, WebSockets). ／ `kanban backup -db … -to …` writes a consistent copy while the server runs.",
+   "evidence_lines": [
+    3,
+    7,
+    49
+   ]
+  },
+  "fn": "zweiundeins/kanban",
+  "sha": "4196b34911a2",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

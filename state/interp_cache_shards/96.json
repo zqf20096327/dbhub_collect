@@ -10572,5 +10572,341 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e716ea9126a4": {
+  "identity": {
+   "one_liner": "基于 DuckLake 与 S3 持久层的云端数据库服务",
+   "review": "SimpleBase（旧名 LessDB）是一个自托管的 serverless 数据库服务，用 Go 实现，以 DuckLake（DuckDB catalog + Parquet）为引擎、S3 为在线持久层，通过 HTTP API 提供逻辑数据库管理与参数化 SQL 执行，并集成 LLM Gateway 与只读云 Agent。适合需要在对象存储上运行单写实例数据库服务的团队；部署要求副本数固定为 1，扩展性受此约束。",
+   "highlights": [
+    "以 S3 作为在线持久层，节点可仅凭 S3 恢复数据",
+    "提供 REST API 管理逻辑数据库并执行参数化 SQL、批量事务",
+    "内置 LLM Gateway（litellm）与项目级只读 Agent，含配额与审计"
+   ],
+   "use_cases": [
+    "在 S3 兼容对象存储上自建 serverless 数据库服务",
+    "按项目隔离的多租户数据管理（认证、配额、审计）",
+    "为应用提供带鉴权与用量计量的 LLM 网关"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "从旧版本（LessDB/ha-sqlite）迁移到新链路的工作流详见 docs/ops/migration.md。",
+     "lines": [
+      112
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其本身是数据库服务/平台，为应用提供数据库能力而非仅使用某个数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "基于 DuckLake、S3 在线持久层与 Go 构建的云端数据库服务，并集成 LLM Gateway 与云 Agent。 ／ - **DuckLake-only**：用户库与系统库都走 DuckLake（DuckDB catalog + Parquet DATA_PATH）；历史 Turso/libSQL 引擎已退役。 ／ - **项目隔离**：每个 tenant/project 拥有独立 logical database 与 S3 对象前缀，认证、配额、审计按 project 划分。",
+   "evidence_lines": [
+    3,
+    18,
+    19
+   ]
+  },
+  "fn": "linkxzhou/SimpleBase",
+  "sha": "e716ea9126a4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cb3a98063079": {
+  "identity": {
+   "one_liner": "为多平台提供预编译 PostgreSQL 二进制安装包的项目",
+   "review": "该项目为 Linux、macOS 和 Windows 提供预编译的 PostgreSQL 二进制安装包，版本号与 PostgreSQL 版本对齐，并通过脚本支持本地构建与测试。目标用户是需要在不依赖系统包管理器的情况下安装 PostgreSQL 的开发者，尤其面向 Rust 生态中需要按 target triple 分发的场景；构建过程对各平台有额外工具链依赖。",
+   "highlights": [
+    "提供 Linux、macOS、Windows 多平台 PostgreSQL 预编译二进制包",
+    "版本号采用 <postgres major>.<postgres minor>.<release> 方案与 PostgreSQL 版本对齐",
+    "提供各平台本地构建脚本与测试脚本"
+   ],
+   "use_cases": [
+    "在无系统包管理器环境中安装 PostgreSQL",
+    "为多平台 Rust 项目集成 PostgreSQL 二进制依赖",
+    "为特定 target triple 自行构建 PostgreSQL 安装包"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL Binaries ／ PostgreSQL binaries for Linux, MacOS and Windows; releases aligned with Rust supported platforms.",
+     "lines": [
+      1,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 PostgreSQL 提供多平台预编译二进制分发，属于为该数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# PostgreSQL Binaries ／ PostgreSQL binaries for Linux, MacOS and Windows; releases aligned with Rust supported platforms. ／ Installation packages use the pattern `postgresql-<version>-<target>.<extension>`, where`<version>` is the",
+   "evidence_lines": [
+    1,
+    7,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "theseus-rs/postgresql-binaries",
+  "sha": "cb3a98063079",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c92a28213133": {
+  "identity": {
+   "one_liner": "基于 Next.js 和 Supabase PostgreSQL 的个人自律与承诺管理系统",
+   "review": "PACT 是一个开源的个人生产力与问责系统，提供时间块计划、里程碑追踪、深度工作专注计时、整数分级财务流水和具有截止期限与后果机制的承诺契约。数据存储于 Supabase PostgreSQL，支持 Google Calendar、GitHub 等外部连接器做证明验证。面向希望记录并执行个人目标的用户，也面向首次参与开源贡献的开发者。",
+   "highlights": [
+    "提供承诺契约机制，将任务绑定到截止期限、保密后果与解决工作流",
+    "支持 Google Calendar 双向同步，以及 GitHub、LeetCode、Codeforces 连接器做完成证明验证",
+    "包含 14 个模块：任务、计划、目标、项目、习惯、财务流水、周回顾、分析评分等，并提供 Docker 容器化部署"
+   ],
+   "use_cases": [
+    "个人目标与承诺的自我追踪，配合截止期限和后果机制执行",
+    "时间块日程规划与 Google Calendar 同步管理每日执行容量",
+    "个人财务流水记录与预算上限提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PACT** is an open-source **Personal Operating System (OS)** built with **Next.js 16**, **React 19**, **TypeScript 5**, **Tailwind CSS v4**, and **Supabase PostgreSQL** to bridge the critical divide between intention and action. Rather than functioning as a p ／ - **Database & Auth**: Supabase PostgreSQL with Row Level Security (RLS) & SSR Cookie Auth (`@supabase/ssr`)",
+     "lines": [
+      32,
+      201
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 Supabase PostgreSQL 存储数据的个人生产力 Web 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PACT** is an open-source **Personal Operating System (OS)** built with **Next.js 16**, **React 19**, **TypeScript 5**, **Tailwind CSS v4**, and **Supabase PostgreSQL** to bridge the critical divide between intention and action. Rather than functioning as a passive checklist, PACT provides an active governance system unifying time-blocked planning, strategic milestone tracking, deep work focus sessions, integer-cents financial cash flow, and unbreakable accountability contracts. ／ PACT enforces a strict database-first, server-authoritative architecture:",
+   "evidence_lines": [
+    32,
+    175
+   ]
+  },
+  "fn": "TheVicky1/Pact_OS",
+  "sha": "c92a28213133",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d0239573692d": {
+  "identity": {
+   "one_liner": "3D打印耗材线轴管理Web应用，基于Flask+SQLite",
+   "review": "一个自托管的Web应用，用于登记3D打印耗材（filament）与线轴（spool），支持称重去皮、生成带二维码的60×40mm热敏标签（通过Web Bluetooth直连Niimbot打印机）、库存报告与低库存提醒。提供称重API与Home Assistant只读集成，面向个人或小型3D打印工作者的库存管理场景。数据存储于SQLite（WAL模式），部署面向Proxmox LXC环境。",
+   "highlights": [
+    "提供耗材与线轴登记、称重历史（毛重−皮重=净重）及按材料/品牌/颜色的库存统计报告",
+    "支持生成含二维码的PDF标签，并通过Web Bluetooth直连Niimbot B1/B1 Pro/M2-H热敏打印机",
+    "提供基于API密钥的称重API（POST /api/weigh）及Home Assistant只读库存接口，支持多语言界面与TOTP双因素认证"
+   ],
+   "use_cases": [
+    "3D打印用户跟踪多轴线轴的剩余重量与低库存状态",
+    "通过电子秤+二维码扫描枪+ESP32搭建自动称重工作站",
+    "将库存数据以只读方式接入Home Assistant传感器"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Database|SQLite (WAL mode)|",
+     "lines": [
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明使用SQLite作为后端数据库存储应用数据，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Web app for managing 3D-printing filaments. ／ |Database|SQLite (WAL mode)| ／ Run it **on the Proxmox VE host** (PVE 7+). The installer creates a Debian 12 LXC and",
+   "evidence_lines": [
+    3,
+    54,
+    134
+   ]
+  },
+  "fn": "iscarelli/spool-control",
+  "sha": "d0239573692d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e2fc87b41639": {
+  "identity": {
+   "one_liner": "基于 Rails 8 的 API 应用基础模板，含认证、计费、队列与WebSocket",
+   "review": "一个 Rails 8 API 脚手架/应用基础项目，为创始团队和全栈开发者提供开箱即用的后端起点，包含 Devise JWT 认证、IAM/RBAC、Stripe 订阅、Solid Queue 后台任务、Action Cable WebSocket、Garage S3 存储及监控面板，以模块化单体加容器隔离方式部署，运行于 PostgreSQL 并支持 Docker 启动。",
+   "highlights": [
+    "提供认证、层级 IAM/RBAC、Stripe 计费、媒体管道、通知与实时 WebSocket 的集成式 API 核心",
+    "使用 Solid Queue 后台任务、自托管 S3（Garage）与 Docker 容器隔离部署（api/waka/media/db/garage）",
+    "提供 OpenAPI 3.0/Swagger 文档、数据库 schema 文档与监控遥测"
+   ],
+   "use_cases": [
+    "为 Web 与移动产品快速搭建带认证与计费的后端 API 起点",
+    "需要后台任务队列、实时推送与 S3 存储的自托管部署场景",
+    "替代逐项目重复搭建基础设施的团队工程基线"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ 2. **The BaaS Trap**: Serverless \"5-minute backends\" lure developers in with toys, then slap them with a $5,000/mo cloud hostage bill when they need relational integrity, background queues, or compliance audits. Real software runs self-hosted PostgreSQL, nativ",
+     "lines": [
+      11,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是以 PostgreSQL 为存储的 Rails 8 应用基础模板，README 声明运行 self-hosted PostgreSQL，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A battle-hardened, production-grade API core for modern web and mobile products. Authentication, hierarchical IAM, Stripe billing, access control, media pipelines, notifications, durable AI queues, real-time Action Cable WebSockets, background job topologies, operational administration, and glass-box observability stand ready—not as scattered trophies, but as one disciplined system. ／ PostgreSQL ／ 2. **The BaaS Trap**: Serverless \"5-minute backends\" lure developers in with toys, then slap them with a $5,000/mo cloud hostage bill when they need relational integrity, background queues, or compliance audits. Real software runs self-hosted PostgreSQL, native queues (Solid Queue), and self-hosted S3 (Garage).",
+   "evidence_lines": [
+    5,
+    11,
+    99
+   ]
+  },
+  "fn": "rex-9/rexone-core",
+  "sha": "e2fc87b41639",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

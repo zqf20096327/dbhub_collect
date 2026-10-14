@@ -9282,5 +9282,71 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f2aa041d6e43": {
+  "identity": {
+   "one_liner": "TiKV raw KV API 的纯 Python 客户端，含阻塞与 asyncio 两种实现",
+   "review": "该库通过 gRPC 直接与 TiKV 的 PD 和存储节点通信，实现 raw key-value API 的纯 Python 客户端，提供阻塞 RawClient 与原生 asyncio AsyncRawClient 两种接口，包含区域路由、重试退避、TTL、CAS 与双向 TLS，需 Python 3.10+，经 CI 在 TiKV 7.5 与 8.5 上测试，适合需要在 Python 中访问 TiKV 集群的开发者。",
+   "highlights": [
+    "支持完整 raw API：get/put/delete、批量、正反向范围扫描、delete_range、TTL、compare_and_swap、checksum",
+    "自动区域路由，跟随 region split/merge、leader 变更与 PD failover，每次操作带超时预算与指数退避重试",
+    "支持双向 TLS，纯 Python 实现，安装仅需 grpcio 与 protobuf 两个依赖"
+   ],
+   "use_cases": [
+    "在 Python 应用中读写 TiKV 集群的原始键值数据",
+    "用原生 asyncio 客户端在事件循环中高并发访问 TiKV",
+    "需要分布式锁场景下通过 atomic 模式执行线性izable 的 compare-and-swap"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A pure-Python client for TiKV's raw key-value API. ／ Tested with TiKV 7.5 and 8.5",
+     "lines": [
+      3,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 TiKV 数据库提供 Python 客户端访问能力的库，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A pure-Python client for TiKV's raw key-value API. ／  Tested with TiKV 7.5 and 8.5 ／ this library talks to PD and TiKV directly, the way the Go and Rust clients do:",
+   "evidence_lines": [
+    3,
+    9,
+    39
+   ]
+  },
+  "fn": "slavabobik/tikv-python",
+  "sha": "f2aa041d6e43",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9498,5 +9498,224 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b4c010b204e": {
+  "identity": {
+   "one_liner": "本地开发者调试记忆工具，记录排错过程存入 SQLite 并经 MCP 提供检索",
+   "review": "MemoryWhale 记录调试过程中的命令、输出、错误与修复方案，存入本地 SQLite，通过 MCP 供开发者及多种编码代理（Claude Code、Cursor、Zed 等 19 种兼容客户端）跨会话检索。提供 CLI、TUI、Web、桌面多种接口，本地存储无需账户、不上传数据。它定位为调试记忆层，不是通用个人记忆系统，也不能替代项目文档。",
+   "highlights": [
+    "将命令、输出、失败与修复记录存入本地 SQLite，支持 search/context 检索",
+    "通过 stdio 与 HTTP 的 MCP 服务器（mw-mcp / mw-serve）向多个编码代理提供六种记忆工具",
+    "本地运行，无需账户，非回环访问需令牌"
+   ],
+   "use_cases": [
+    "跨终端会话或 SSH 检索历史上出现过的构建错误及其修复方法",
+    "多个编码代理共享同一份本地调试记忆",
+    "在多台开发机器间保留可搜索的排错历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "failures, and the fixes that worked. It stores that evidence in local SQLite so ／ shell / mw-run ──────► local SQLite ────────► search / context",
+     "lines": [
+      20,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储调试记录的开发者工具，而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "failures, and the fixes that worked. It stores that evidence in local SQLite so ／ shell / mw-run ──────► local SQLite ────────► search / context ／ `mw-mcp` is the common integration seam: a local stdio MCP server exposing six",
+   "evidence_lines": [
+    20,
+    130,
+    144
+   ]
+  },
+  "fn": "wuisabel-gif/MemWhale",
+  "sha": "0b4c010b204e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e5ae02c5f17": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Prisma 的球衣预订登记系统",
+   "review": "一个用于 JeumalaCup 26 球衣预订登记的 Web 应用，提供公开登记表单、已占用背号列表和管理面板。管理面板包含密码登录、限流、统计、数据编辑删除及 Excel/JSON 导出功能；数据通过 Prisma ORM 存取，本地开发使用 SQLite，生产环境配置为 PostgreSQL/Supabase。适合球队组织者用于收集和登记球员球衣信息。",
+   "highlights": [
+    "提供公开球衣登记表单，并在客户端与服务器端校验姓氏与背号重复",
+    "管理面板支持密码登录、限流、统计、JSON 导入、分页与 Excel/JSON 导出",
+    "通过 Prisma ORM 支持 SQLite 本地开发与 PostgreSQL/Supabase 生产部署"
+   ],
+   "use_cases": [
+    "球队球衣预订信息收集与背号冲突检查",
+    "管理员对登记数据的查看、编辑、删除与导出",
+    "财务人员上传与审核转账凭证图片"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Prisma ORM dengan SQLite untuk pengembangan lokal dan PostgreSQL/Supabase untuk production.",
+     "lines": [
+      22
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Prisma ORM dengan SQLite untuk pengembangan lokal dan PostgreSQL/Supabase untuk production.",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个将数据存入 SQLite/PostgreSQL 的球衣登记应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "All Rights Reserved（专有许可，非开源许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Aplikasi web pendaftaran jersey PusakaFC26. Aplikasi ini menyediakan formulir pendaftaran publik, daftar nomor punggung yang sudah digunakan, dan panel admin untuk mengelola data pendaftaran. ／ - Prisma ORM dengan SQLite untuk pengembangan lokal dan PostgreSQL/Supabase untuk production.",
+   "evidence_lines": [
+    3,
+    22
+   ]
+  },
+  "fn": "pusakajeumala26/PusakaFC26",
+  "sha": "5e5ae02c5f17",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a004c718e5e": {
+  "identity": {
+   "one_liner": "达梦数据库终端命令行工具，Go 实现的 disql，提供类 psql 交互",
+   "review": "dmsql 是用 Go 编写的达梦数据库命令行客户端，基于本地 pkg/dmsdk 连接数据库，支持交互式 SQL 输入、\\dt 等元命令、事务控制、多语句执行与竖排输出，可用 -c 参数直接执行 SQL，也提供环境变量与 DSN 配置连接，支持 Docker 运行。面向达梦数据库的运维与开发人员，当前版本不含历史记录和自动补全。",
+   "highlights": [
+    "提供 \\dt、\\d、\\conninfo 等元命令查看 schema、表与连接信息",
+    "支持事务控制（BEGIN/COMMIT/ROLLBACK）、多行多语句 SQL、注释与 \\timing 等输出控制",
+    "支持环境变量与 DSN 连接配置，提供 Makefile 与 Docker 构建方式，生成静态二进制"
+   ],
+   "use_cases": [
+    "以类 psql 的交互方式查询和操作达梦数据库",
+    "通过脚本或 -c 参数批量执行 SQL 与 DDL",
+    "在容器环境中连接运行达梦服务"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "基于本地 `pkg/dmsdk` 的达梦数据库命令行，提供类似 PostgreSQL `psql` 的 SQL 交互方式。 ／ `-c` 将 SQL 原样作为一条完整语句提交，也可用于包含内部分号的达梦过程块；文件和交互模式按分号拆分，不解析过程块语法。SQL 语法使用达梦语法。当前版本不提供历史记录、自动补全或分页器；表格输出会缓冲当前结果集，较大查询建议使用 `\\x` 竖排输出。",
+     "lines": [
+      3,
+      54
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "基于本地 `pkg/dmsdk` 的达梦数据库命令行，提供类似 PostgreSQL `psql` 的 SQL 交互方式。 ／ `-W` 从终端读取密码，不回显；也可设置 `DMPASSWORD`。`-d` 指定 schema，不是 PostgreSQL 数据库名。默认连接 `localhost:5236`，用户 `SYSDBA`。",
+     "lines": [
+      3,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明这是为达梦数据库服务的命令行操作工具，基于本地 SDK 连接达梦。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于本地 `pkg/dmsdk` 的达梦数据库命令行，提供类似 PostgreSQL `psql` 的 SQL 交互方式。 ／ 支持环境变量 `DMHOST`、`DMPORT`、`DMUSER`、`DMPASSWORD`、`DMSCHEMA`、`DMDSN`。设置 DSN 后连接参数由 DSN 决定，`-W` 不生效。当前 SDK 按原文解析凭据，不做 URL 解码；普通连接参数会校验 SDK 不支持的分隔字符。 ／ 镜像采用多阶段构建，运行阶段仅包含程序和 CA 证书，以非 root 用户运行。文件挂载需允许该用户读取。容器中的 `localhost` 指容器自身；连接宿主机上的达梦服务，在 Linux 上可使用 `--network host`，或传入容器可访问的数据库地址。交互使用 `-it`，管道输入使用 `-i`。",
+   "evidence_lines": [
+    3,
+    19,
+    87
+   ]
+  },
+  "fn": "ooninoo/dmsql",
+  "sha": "4a004c718e5e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

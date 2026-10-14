@@ -10557,5 +10557,110 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fb1ce439d540": {
+  "identity": {
+   "one_liner": "原生 macOS 数据库客户端，Swift/AppKit 实现，无 Electron",
+   "review": "BerryDB 是面向 macOS 开发者、数据工程师和 DBA 的原生数据库客户端，用 Swift 6 + AppKit 构建数据网格，支持 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、Redis、MongoDB 等引擎的连接、查询、内联编辑和 Schema 浏览，凭据存于 macOS Keychain，并内置可选的 AI SQL 助手与 MCP schema 辅助工具；仅支持 macOS 15+ 且仅限 Apple Silicon。",
+   "highlights": [
+    "通过原生驱动（PostgresNIO、MySQLNIO、libsqlite3、FreeTDS 等）连接 SQL、NoSQL、键值与向量数据库",
+    "提供流式数据网格、SSH 隧道、TLS/SSL、查询历史与内联数据编辑",
+    "包含自然语言转 SQL 的 AI 助手和供编码代理读取 schema 的本地 MCP 辅助程序"
+   ],
+   "use_cases": [
+    "在 macOS 上统一连接和查询多种数据库引擎",
+    "浏览表结构、查看 ER 图并执行 SQL 查询与调优分析",
+    "通过 MCP 向 Claude Code 等编码代理提供数据库 schema 元数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL**: Native wire protocol (`PostgresNIO`), query cancellation via `pg_cancel_backend`, SSL/TLS.",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL & MariaDB**: Native driver (`MySQLNIO`), `caching_sha2_password` (with TLS on) and `mysql_native_password`, SSL/TLS, `KILL QUERY`.",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite**: Direct embedded driver via `libsqlite3`, opens WAL-mode databases.",
+     "lines": [
+      44
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Microsoft SQL Server**: TDS protocol via dynamically linked FreeTDS (`libsybdb`).",
+     "lines": [
+      45
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MySQL & MariaDB**: Native driver (`MySQLNIO`), `caching_sha2_password` (with TLS on) and `mysql_native_password`, SSL/TLS, `KILL QUERY`.",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为连接和管理多种数据库而构建的客户端工具，而非以某个数据库为存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**BerryDB** is a native database client for macOS developers, data engineers, and DBAs. It is built with **Swift 6, AppKit, and SwiftUI**, with no Electron: the data grid is an AppKit `NSTableView`. ／ Connect to SQL, NoSQL, Key-Value, and Vector databases all in a unified native workspace: ／ |Database Engine|Driver / Protocol|Direct Connection|SSH Tunnel|Inline Grid Edit|Schema Browser|",
+   "evidence_lines": [
+    26,
+    40,
+    83
+   ]
+  },
+  "fn": "berry-apps/berrydb-desktop",
+  "sha": "fb1ce439d540",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

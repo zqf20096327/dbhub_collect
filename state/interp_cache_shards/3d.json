@@ -10914,5 +10914,127 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6029a0ea7672": {
+  "identity": {
+   "one_liner": "Rust 非官方扩展标准库，从源码直接引入以降低供应链风险",
+   "review": "该项目为 Rust 开发者提供一组扩展标准库包，涵盖 base64、cel、cron、crypto、csv、markdown、网络等功能。它不使用集中式包仓库，而是直接从 Git 源码引入依赖以控制供应链风险；多数包支持 no_std。面向所有 Rust 开发者，采用 MIT 许可，部分包 fork 自其他开源 crate。",
+   "highlights": [
+    "包直接从 Git 源码引入，支持按 commit 固定版本以管理供应链",
+    "多数包通过关闭默认 std feature 支持 no_std 环境，部分支持无 alloc",
+    "包含 base64、cel、cron、crypto、csv、markdown、networking 等多类功能包"
+   ],
+   "use_cases": [
+    "需要 no_std 或嵌入式环境（如裸机、wasm32）的 Rust 项目",
+    "关注依赖供应链可追溯性的 Rust 应用开发",
+    "需要 base64、csv、markdown、网络等基础功能组件的项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 描述其为面向 Rust 开发者的通用扩展标准库，topic 中的 postgres/postgresql 仅为主题标签，全文未出现任何数据库相关功能或库名",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；含从其他开源 crate fork 的包，各自保留原许可（MIT/ISC/Apache 2.0）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Rust's (unofficial) extended standard library: simplicity, performance and supply chain security for everyone ／ Inspired by Go's extensive standard library, we are building Rust's extended standard library to bring simplicity, performance and supply chain security to every Rust developer. ／ To avoid namespace clashes and supply chain risks, we do not use a centralized package repository. Import packages directly from source, for example:",
+   "evidence_lines": [
+    1,
+    3,
+    37
+   ]
+  },
+  "fn": "rust-stdx/stdx",
+  "sha": "6029a0ea7672",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1940a5fcce41": {
+  "identity": {
+   "one_liner": "Go 微服务后台管理平台脚手架，微服务+网关+RBAC 一键部署",
+   "review": "GopherForge 是一套企业级 Go 微服务后台管理平台脚手架，包含认证、RBAC、多租户、审计日志、系统监控与代码生成器等 16 个 Go 服务，前端为 React 19 + Ant Design 6，通过 Traefik 网关统一鉴权。适合需要快速搭建企业内部管理平台或 SaaS 管理后台的 Go 团队。数据栈以 PostgreSQL 为主存储，通过 GORM+pgx 访问，goose 做版本化迁移，支持 Docker Compose 一键启动。0.x 阶段 API 与表结构可能调整，部分业务线为实验状态。",
+   "highlights": [
+    "提供 RBAC 权限、多租户、审计日志与系统监控能力",
+    "包含 16 个 Go 微服务与 Traefik 网关统一鉴权架构",
+    "内置代码生成器与 Docker Compose 一键启动"
+   ],
+   "use_cases": [
+    "快速搭建企业内部管理后台",
+    "SaaS 多租户管理平台起点",
+    "微服务架构业务系统开发脚手架"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |ORM|**GORM** + **pgx**|PostgreSQL 访问| ／ |数据库|**PostgreSQL 18**|主存储（pgvector 镜像便于扩展）|",
+     "lines": [
+      32,
+      84,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明平台以 PostgreSQL 为主存储、GORM+pgx 访问，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**GopherForge**（曾用名 `go-admin-kit`）是一套**开源的企业级 Go 微服务管理与业务平台**：后端 Go + Gin 按域拆分 **16 个 Go 服务**（认证 / RBAC / 系统 / 审计 / 文件 / 监控 / 通知 / AI / BPM / 支付等底座，以及 IM 客服、呼叫中心、CRM、公众号、工单、可见度业务线），前端 React 19 + Ant Design 6，Traefik 网关统一鉴权，自带 RBAC 权限、多租户、审计日志、系统监控与代码生成器，`make compose-up` 一条命令拉起全栈（数据栈与应用栈分离，重建应用不触碰数据）。 ／ |ORM|**GORM** + **pgx**|PostgreSQL 访问| ／ |数据库|**PostgreSQL 18**|主存储（pgvector 镜像便于扩展）|",
+   "evidence_lines": [
+    6,
+    84,
+    88
+   ]
+  },
+  "fn": "SuperiorChuo/gopherforge",
+  "sha": "1940a5fcce41",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

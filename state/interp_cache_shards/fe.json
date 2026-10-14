@@ -9727,5 +9727,158 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0f492f181615": {
+  "identity": {
+   "one_liner": "基于 Next.js + Prisma + PostgreSQL 的求职申请追踪 CRM 应用",
+   "review": "这是一个面向求职者的求职申请追踪系统，提供申请记录的增删改查、搜索筛选、统计图表、CSV/Excel 导出，并集成 Bluedoor API 实现职位数据富化和发现。技术栈为 Next.js App Router、TypeScript、Prisma ORM、PostgreSQL、NextAuth 认证，定位为学习型全栈参考项目，数据持久化依赖 PostgreSQL。",
+   "highlights": [
+    "提供求职申请的 CRUD、搜索筛选、分页、统计图表与 CSV/Excel 导出",
+    "集成 Bluedoor API 实现职位信息富化与 1.8M+ 职位发现",
+    "实现 SSR 预取、乐观更新、SSE 跨标签页同步与多层缓存"
+   ],
+   "use_cases": [
+    "个人求职过程管理与申请状态追踪",
+    "求职数据的统计分析与导出",
+    "Next.js 全栈开发学习参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**PostgreSQL**|—|Relational database for job records| ／ |**PostgreSQL**|Local Docker, Neon, Supabase, or VPS|",
+     "lines": [
+      107,
+      182
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储求职记录数据的完整应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The app is built as a **learning-oriented full-stack reference**: server-rendered pages for fast first paint, client-side TanStack Query for instant interactions, Prisma + PostgreSQL for persistence, and optional Redis/Sentry/Resend for production polish. ／ |**PostgreSQL**|—|Relational database for job records|",
+   "evidence_lines": [
+    35,
+    107
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "arnobt78/Job-Application-Tracker--NextJS-FullStack",
+  "sha": "0f492f181615",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cae63d770326": {
+  "identity": {
+   "one_liner": "TiDB 数据恢复工具，GC 后解析 TiKV/RocksDB 文件按列恢复被删数据",
+   "review": "undrop-for-tidb 是一个离线数据抢救工具，在 TiDB 误删数据且 GC 已执行后，通过直接解析 TiKV 的 RocksDB SST 文件恢复数据。面向 DBA 和运维人员，用于应急恢复场景，前提是 compaction 尚未物理擦除旧版本；支持 TiDB v6.5 实测，使用 Rust 编写，通过 cargo 编译。",
+   "highlights": [
+    "提供整库模式与逐 SST 取证模式，绕过 MVCC tombstone 使被 GC 标记删除的数据可见",
+    "支持 --as-of 时间点恢复，输出 sql/csv//raw 格式",
+    "解析 TiDB row format v1/v2 及 TiKV v6.x 键编码，内置纯 Rust SST 解析器"
+   ],
+   "use_cases": [
+    "DELETE/UPDATE/DROP 误删且 GC 已跑、compaction 未擦除前的应急数据恢复",
+    "逐 SST 文件取证与时间点版本检查",
+    "对未正确解码的行 payload 用 decode-row 手工分析"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Undrop for TiDB ／ **在 TiDB 数据被误删且 GC 之后，直接解析 TiKV/RocksDB 底层文件，按列恢复数据。**",
+     "lines": [
+      1,
+      7
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "一个类似 Oracle **ODU / BBED** 的 TiDB 数据抢救工具：绕过 TiDB SQL 层和 TiKV 的",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "`tp` 是 MySQL 类型码（3=LONG, 5=DOUBLE, 12=DATETIME, 246=NEWDECIMAL, ／ - decimal 采用 MySQL bin 格式解析，边界场景可能退化为 hex；",
+     "lines": [
+      119,
+      148
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 TiDB 生态提供数据恢复能力，直接操作 TiKV/RocksDB 存储层而非普通应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**在 TiDB 数据被误删且 GC 之后，直接解析 TiKV/RocksDB 底层文件，按列恢复数据。** ／ MVCC 可见性判断，直接读取 TiKV 的 RocksDB 文件，按表名把数据恢复出来。 ／  - **逐 SST 取证模式**（`--sst`）：用内置的纯 Rust SST 解析器直接解析每个",
+   "evidence_lines": [
+    7,
+    14,
+    34
+   ]
+  },
+  "fn": "Buddy-Yuan/undrop-for-tidb",
+  "sha": "cae63d770326",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

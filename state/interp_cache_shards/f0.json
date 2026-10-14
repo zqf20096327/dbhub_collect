@@ -8932,5 +8932,192 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a0c81797fa42": {
+  "identity": {
+   "one_liner": "Polymarket 预测市场纸面交易模拟器，含 CLI 与 MCP 服务器",
+   "review": "这是一个面向 AI 代理的 Polymarket 预测市场纸面交易模拟器：用 1 万美元虚拟资金对接真实订单簿、官方费率曲线与成交机制，供代理练习、回测并通过 Brier 分数等指标做基准评估。提供 CLI 和 MCP 服务器（stdio/streamable-http）两种接入方式，支持多账户对战与排行榜。不涉及数据库适配，数据存于本地目录。",
+   "highlights": [
+    "提供 CLI 与 MCP 服务器两种使用方式，支持 stdio 与 streamable-http 传输",
+    "模拟真实订单簿撮合、官方费率曲线与市场结算，含限价单与多结果市场",
+    "包含基准测试工具与排行榜，用于评估模型在预测市场决策上的表现"
+   ],
+   "use_cases": [
+    "让 AI 代理在真实行情下进行无风险交易练习与策略回测",
+    "对多个模型或策略进行 Brier 分数、校准度等基准对比",
+    "通过 MCP 将交易工具集成到 Claude Code、Cursor 等代理运行时"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 AI 代理生态提供交易模拟与基准评估工具，本身不依赖候选清单中的数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A zero-risk gym for AI agents on real prediction markets — real order books, official fees, verified fill fidelity. Practice, evaluate, and benchmark decision intelligence.** ／ - **Evaluate** — the `polymarket-benchmark` harness in this repository (installed separately) scores any model on prediction-market decision sets (Brier score, calibration, alpha) ／ Your agent gets the following tools via the Model Context Protocol.",
+   "evidence_lines": [
+    8,
+    13,
+    138
+   ]
+  },
+  "fn": "agent-next/polymarket-paper-trader",
+  "sha": "a0c81797fa42",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9132d98a9d3f": {
+  "identity": {
+   "one_liner": "Go 语言 SQL 解析 SDK，多方言分词/解析生成 AST 并提供 CLI 与 MCP",
+   "review": "GoSQLX 是面向 Go 开发者的 SQL 解析库，将 SQL 分词、解析并生成 AST，附带 CLI（validate/format/lint）、SQL 注入扫描器、30 条 lint 规则、VS Code 扩展与 MCP 服务器。它不是 ORM，只输出解析结果供开发者自行处理；支持 PostgreSQL、MySQL 等 8 种方言，约覆盖 80–85% SQL-99 语法，采用 Apache 2.0 许可。",
+   "highlights": [
+    "提供零拷贝分词器与递归下降解析器，生成完整 AST，并使用对象池复用",
+    "支持 PostgreSQL、MySQL、MariaDB、SQL Server、Oracle、SQLite、Snowflake、ClickHouse 8 种方言及 CTE、窗口函数、MERGE 等",
+    "包含 SQL 注入扫描、30 条 lint 规则、格式化器，并提供 CLI、VS Code 扩展、GitHub Action 与 MCP 服务器"
+   ],
+   "use_cases": [
+    "在 Go 程序中解析 SQL 并基于 AST 做自定义分析或转换",
+    "CI 中对 SQL 文件做校验、格式化与 lint 检查",
+    "通过 MCP 服务器在 AI 客户端中使用 SQL 解析工具"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ 🌐 Multi-Dialect PostgreSQL · MySQL · MariaDB SQL Server · Oracle SQLite · Snowflake · ClickHouse",
+     "lines": [
+      46,
+      96
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ 🌐 Multi-Dialect PostgreSQL · MySQL · MariaDB SQL Server · Oracle SQLite · Snowflake · ClickHouse",
+     "lines": [
+      46,
+      96
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ 🌐 Multi-Dialect PostgreSQL · MySQL · MariaDB SQL Server · Oracle SQLite · Snowflake · ClickHouse",
+     "lines": [
+      46,
+      96
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ 🌐 Multi-Dialect PostgreSQL · MySQL · MariaDB SQL Server · Oracle SQLite · Snowflake · ClickHouse",
+     "lines": [
+      46,
+      96
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ 🌐 Multi-Dialect PostgreSQL · MySQL · MariaDB SQL Server · Oracle SQLite · Snowflake · ClickHouse",
+     "lines": [
+      46,
+      96
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ 🌐 Multi-Dialect PostgreSQL · MySQL · MariaDB SQL Server · Oracle SQLite · Snowflake · ClickHouse",
+     "lines": [
+      46,
+      96
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ 🌐 Multi-Dialect PostgreSQL · MySQL · MariaDB SQL Server · Oracle SQLite · Snowflake · ClickHouse",
+     "lines": [
+      46,
+      96
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是解析/分析 SQL 语句的开发库与 CLI，为使用数据库的场景提供工具能力，本身不存储数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQL Server",
+    "Oracle",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GoSQLX is a **production-ready SQL parsing SDK** for Go. It tokenizes, parses, and generates ASTs from SQL with zero-copy optimizations and intelligent object pooling - parsing a simple SELECT in about **318 ns (~3.1M parses/sec)**. ／ - **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ ### 🤖 MCP Server (AI Integration)",
+   "evidence_lines": [
+    33,
+    46,
+    83
+   ]
+  },
+  "fn": "ajitpratap0/GoSQLX",
+  "sha": "9132d98a9d3f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

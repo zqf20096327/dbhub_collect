@@ -8411,5 +8411,251 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cd8ef90c8918": {
+  "identity": {
+   "one_liner": "把 Gemini 网页端反代成 OpenAI 兼容 API 的 Go 单二进制代理",
+   "review": "该项目通过模拟 Chrome TLS 指纹逆向 gemini.google.com 网页协议，对外暴露 /v1/chat/completions 等接口，使用户无需 Google API Key 即可调用 Gemini。内置 Cookie 池、代理池、限流和中文管理面板，支持 SQLite/MySQL/PostgreSQL 持久化请求元数据，还提供 MCP web_search 工具。适用于希望以 OpenAI SDK 接入 Gemini 的开发者与自托管用户；注意匿名模式仅支持两个模型，Pro 级模型需配置 Google 登录 cookie。",
+   "highlights": [
+    "提供 OpenAI 兼容接口 /v1/chat/completions、/v1/models、/v1/responses 及异步视频生成端点 /v1/videos",
+    "支持 Cookie 池与代理池，按最久未用优先轮转账号，每个出口 IP 独立限流",
+    "内置管理面板展示请求元数据统计，支持 SQLite/MySQL/PostgreSQL 存储"
+   ],
+   "use_cases": [
+    "为 OpenAI 兼容客户端（Cursor、dify、Cherry Studio 等）提供 Gemini 接入渠道",
+    "通过 MCP server 向 Claude Desktop 等 MCP 客户端暴露 Gemini 联网搜索工具",
+    "多账号、多出口 IP 的自托管 API 代理部署与用量统计"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 想用 MySQL / PostgreSQL，设 `SQL_DSN` 环境变量即可（不设就是 SQLite，无需改动）： ／ SQL_DSN=\"postgres://user:pass@host:5432/dbname?sslmode=disable\"",
+     "lines": [
+      54,
+      72,
+      78
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 想用 MySQL / PostgreSQL，设 `SQL_DSN` 环境变量即可（不设就是 SQLite，无需改动）： ／ SQL_DSN=\"mysql://user:pass@host:3306/dbname\"",
+     "lines": [
+      54,
+      72,
+      76
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "把 Google Gemini 网页端反代成 OpenAI 兼容 API。**单二进制**，**零账号**（匿名可跑），**Chrome 146 真指纹**，**SQLite 持久化**，自带**中文管理面板**。 ／ - SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 建表自动完成，三种库共用同一套 schema。单机就用默认 SQLite 最省事，多实例共享一个池子才需要 MySQL/PG。",
+     "lines": [
+      16,
+      54,
+      81
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目使用 SQLite/MySQL/PostgreSQL 作为自身可选的持久化后端，属于为 API 代理服务的工具组件而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Gemini web → OpenAI-compatible API.** A self-hosted proxy that turns the free gemini.google.com web app into `/v1/chat/completions` — **no Google API key, no paid quota**. Single Go binary, real Chrome TLS fingerprint, cookie pool with automatic renewal, proxy pool, built-in admin dashboard, SQLite / MySQL / PostgreSQL. Image, music, canvas and video generation (`/v1/videos`) included. ／ - SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 除了 OpenAI 接口，同一个进程、同一个端口还挂了一个 **MCP server**，在 `/mcp` 上，",
+   "evidence_lines": [
+    3,
+    54,
+    173
+   ]
+  },
+  "fn": "zexadev/gemini-web2api-go",
+  "sha": "cd8ef90c8918",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8687dc4e7e39": {
+  "identity": {
+   "one_liner": "自托管监控工具，监控网站/服务器/数据库并发布状态页",
+   "review": "Raaqeb 是一个自托管的监控与状态页工具，可监控 HTTP 站点、TCP 端口、DNS、Postgres/MySQL/Redis 数据库、Docker 容器、定时任务心跳和 TLS 证书过期，并对外发布状态页。面向需要在自有服务器上运行监控的用户，以单二进制文件运行，阿拉伯语优先支持 RTL 界面。",
+   "highlights": [
+    "监控 HTTP 站点、TCP 端口、DNS 记录、Postgres/MySQL/Redis 数据库、Docker 容器、定时任务心跳及 TLS 证书到期",
+    "单二进制文件运行，无需外部服务，标称可在 1 vCPU 和 240 MB 内存下承载 800 个监控项",
+    "内置状态页发布功能，界面阿拉伯语优先并支持 RTL"
+   ],
+   "use_cases": [
+    "自托管监控网站与服务器可用性",
+    "面向客户或访客发布服务状态页",
+    "监控数据库连接与 TLS 证书到期"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "مواقع HTTP ومنافذ TCP وسجلات DNS وقواعد بيانات Postgres وMySQL وRedis وحاويات Docker ونبضات المهام المجدولة وانتهاء صلاحية شهادات TLS. ／ HTTP sites, TCP ports, DNS records, Postgres, MySQL and Redis databases, Docker containers, the heartbeats of scheduled jobs and TLS certificate expiry.",
+     "lines": [
+      29,
+      70
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "مواقع HTTP ومنافذ TCP وسجلات DNS وقواعد بيانات Postgres وMySQL وRedis وحاويات Docker ونبضات المهام المجدولة وانتهاء صلاحية شهادات TLS. ／ HTTP sites, TCP ports, DNS records, Postgres, MySQL and Redis databases, Docker containers, the heartbeats of scheduled jobs and TLS certificate expiry.",
+     "lines": [
+      29,
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其监控对象包括 Postgres 与 MySQL 数据库，属于为数据库提供监控的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "مواقع HTTP ومنافذ TCP وسجلات DNS وقواعد بيانات Postgres وMySQL وRedis وحاويات Docker ونبضات المهام المجدولة وانتهاء صلاحية شهادات TLS. ／ Raaqeb (راقب, \"keep watch\") watches your sites, servers and databases and publishes a status page for your visitors. A monitoring tool that runs on your own server, Arabic first. ／ HTTP sites, TCP ports, DNS records, Postgres, MySQL and Redis databases, Docker containers, the heartbeats of scheduled jobs and TLS certificate expiry.",
+   "evidence_lines": [
+    29,
+    44,
+    70
+   ]
+  },
+  "fn": "Taqanah/raaqeb",
+  "sha": "8687dc4e7e39",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cd5997f1d8d5": {
+  "identity": {
+   "one_liner": "GaussDB 客户端 DBeaver 的回归测试夹具与工作流仓库",
+   "review": "该仓库为 DBeaver 的 GaussDB 适配提供客户端回归测试，包含 Package GUI 夹具、调试事务与 E2E 夹具、调试能力矩阵探针及真库回归脚本，要求 JDK 21、指定 DBeaver 分支和专用测试库，内网连接信息不得提交。面向为 DBeaver 做 GaussDB 适配验证的测试与开发人员。",
+   "highlights": [
+    "提供可重复的 Package GUI、调试事务、调试 E2E 夹具及能力探测矩阵",
+    "包含 debug-workflows.mjs 语义校验器和集中式隔离验收库准备脚本",
+    "要求连接文件 0600 权限，setup/cleanup 使用固定 schema 并以 RESTRICT 清理"
+   ],
+   "use_cases": [
+    "对 DBeaver GaussDB 适配执行客户端回归测试",
+    "验证 GaussDB 分布式/集中式 Package 编译与源码重放的降级路径",
+    "通过能力矩阵探针核对 JDBC 驱动与服务端调试能力"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "源连接文件必须指向该端点的 `postgres` 库，并包含 `url`、`host`、`port`、`database`、 ／ `create/status/drop` 在任何建库、删库操作前都会连接 `postgres` 并执行",
+     "lines": [
+      244,
+      257
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB / DBeaver 客户端回归测试 ／ 本次交付配套的 DBeaver 源码公开分支为 `codex/gaussdb-26.1.5`，最终基线提交为 ／ GaussDB 505 服务端使用什么 JDK 与客户端夹具的 JDK 要求无关。只有 JDK 8 的 GRT 节点应安装",
+     "lines": [
+      1,
+      13,
+      38
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为 DBeaver 数据库客户端的 GaussDB 适配提供测试夹具与验证工具，服务于数据库生态工具链",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# GaussDB / DBeaver 客户端回归测试 ／ - 本仓库：测试范围、执行入口、结果审计与环境说明。 ／ DBeaver 源码：https://github.com/jarrenL/dbeaver 。本仓库与 DBeaver 源码仓分别维护，执行或复现结果时必须记录两边实际使用的分支和提交号，不能只凭仓库默认分支推断测试代码与生产代码相互匹配。",
+   "evidence_lines": [
+    1,
+    7,
+    11
+   ]
+  },
+  "fn": "jarrenL/gaussdb-dbeaver-tests",
+  "sha": "cd5997f1d8d5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9017,5 +9017,96 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "28ea164d9f16": {
+  "identity": {
+   "one_liner": "自托管媒体服务器，索引媒体库并通过 SQLite/MariaDB/MySQL 存储元数据",
+   "review": "Oblecto 是一个自托管媒体服务器，用于索引电影和剧集库、抓取 TMDb/TVDB 元数据并转码流式播放，附带 Web 应用和兼容 Jellyfin 的 API，供家庭服务器用户管理自有媒体。后端可用 SQLite，也可配置为 MariaDB 或 MySQL 存储，启动时可自动迁移数据库 schema。",
+   "highlights": [
+    "提供电影与剧集库索引、元数据与海报获取及 Web 播放界面",
+    "提供 Jellyfin 兼容 API，使 Jellyfin 客户端可登录浏览与播放",
+    "支持通过配置将数据存储于 SQLite 或 MariaDB/MySQL，并在启动时自动迁移 schema"
+   ],
+   "use_cases": [
+    "在家庭服务器上自托管个人电影与剧集库并流式播放",
+    "通过 Jellyfin 客户端访问 Oblecto 管理的媒体库",
+    "使用 MariaDB/MySQL 集中存储多库元数据的部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`database`|`sqlite` with `storage` for the file, or `mariadb`/`mysql` with `host`, `username`, `password` and `database`|",
+     "lines": [
+      82
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "With SQLite, Oblecto uses the native `sqlite3` module when its binary is installed, and Node's built-in `node:sqlite` otherwise. The native module keeps the server responsive during long queries, which matters for large libraries. npm 12 skips the step that in ／ npm install -g --allow-scripts=sqlite3 oblecto ／ The first start writes a config into the `/etc/oblecto` volume. Everything Oblecto keeps lives there: config, SQLite database, artwork and logs.",
+     "lines": [
+      48,
+      51,
+      71
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|`database`|`sqlite` with `storage` for the file, or `mariadb`/`mysql` with `host`, `username`, `password` and `database`|",
+     "lines": [
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Oblecto 是使用 SQLite/MariaDB/MySQL 存储自身数据的媒体服务器应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Oblecto is a self-hosted media server for the movies and TV shows you already own. It indexes your folders, fetches metadata and artwork, and streams to its own web app and to Jellyfin apps. ／ |`database`|`sqlite` with `storage` for the file, or `mariadb`/`mysql` with `host`, `username`, `password` and `database`|",
+   "evidence_lines": [
+    10,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "robinp7720/Oblecto",
+  "sha": "28ea164d9f16",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

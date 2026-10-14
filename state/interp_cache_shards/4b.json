@@ -7338,5 +7338,83 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "32343134159c": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，提供CLI、Web UI和AI代理技能，数据存于SQLite",
+   "review": "Pad是一个本地优先的项目管理系统，提供CLI、Web UI和面向AI代理的技能安装，用于任务、计划、文档等条目的管理。数据默认存储在本机SQLite，也支持通过docker-compose使用Postgres和Redis做多实例部署，或迁移至Pad Cloud。适合在本机开发并配合Claude Code、Cursor等AI编码工具工作的开发者使用。",
+   "highlights": [
+    "提供CLI、Web UI（localhost:7777）和AI代理技能三合一的单二进制部署",
+    "内置/自定义集合支持类型化字段，条目自动编号并支持字段迁移",
+    "支持SQLite本地存储，多实例部署可通过docker-compose使用Postgres和Redis"
+   ],
+   "use_cases": [
+    "在本地终端或Web界面管理个人/小团队项目任务与计划",
+    "让Claude Code、Cursor等AI代理通过/pad技能读写项目条目并遵循约定和剧本",
+    "需要数据留在本机或离线使用的项目管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud|",
+     "lines": [
+      25,
+      56
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup. The compose file runs the released image; set `PAD_VERSION` in `.env` to pin it.",
+     "lines": [
+      217
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明数据存储使用本地SQLite（多实例可加Postgres+Redis），Pad是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud|",
+   "evidence_lines": [
+    25,
+    56
+   ]
+  },
+  "fn": "PerpetualSoftware/pad",
+  "sha": "32343134159c",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

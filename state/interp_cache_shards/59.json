@@ -8204,5 +8204,166 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "83a83a2d6cc6": {
+  "identity": {
+   "one_liner": "dokku 的 MariaDB 服务管理插件",
+   "review": "这是 PaaS 平台 dokku 的官方 MariaDB 插件，用于在 dokku 主机上创建、配置、备份、销毁 MariaDB 服务容器，并把服务链接到应用、注入连接 DSN 环境变量。面向使用 dokku 部署应用的开发者/运维。支持自定义镜像版本、内存与日志限制、卷挂载、S3 备份及定时备份配置。默认安装 MariaDB 13.0.2，依赖 dokku 0.35.x+ 与 docker 1.8.x+。",
+   "highlights": [
+    "提供 mariadb:create/destroy/info/expose/link 等命令管理 MariaDB 服务容器",
+    "支持通过 --image/--image-version 自定义服务镜像及版本",
+    "支持备份到 S3 兼容端点，含认证、加密、GPG 公钥与 cron 定时配置"
+   ],
+   "use_cases": [
+    "在 dokku PaaS 上为应用一键创建并链接 MariaDB 数据库服务",
+    "为 MariaDB 服务配置 S3 定时备份与加密",
+    "集中查看服务 DSN、运行状态、端口与挂载等信息"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "# dokku mariadb Build Status IRC Network ／ Official mariadb plugin for dokku. Currently defaults to installing mariadb 13.0.2. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mariadb.git --name mariadb",
+     "lines": [
+      1,
+      3,
+      14
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "DATABASE_URL=mysql://:SOME_PASSWORD@dokku-mariadb-lollipop:3306 ／ BLUE_DATABASE_URL=mysql://:SOME_PASSWORD@dokku-mariadb-lollipop:3306",
+     "lines": [
+      349,
+      367
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 dokku 平台提供 MariaDB 服务的创建、配置、备份与链接管理，是为数据库生态服务的工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "MariaDB"
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official mariadb plugin for dokku. Currently defaults to installing mariadb 13.0.2. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mariadb.git --name mariadb ／ mariadb:backup <service> <bucket-name> [-u|--use-iam] # create a backup of the MariaDB service to an existing s3 bucket",
+   "evidence_lines": [
+    3,
+    14,
+    21
+   ]
+  },
+  "fn": "dokku/dokku-mariadb",
+  "sha": "83a83a2d6cc6",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "86195723dc81": {
+  "identity": {
+   "one_liner": "libuv 的现代 C++11 封装库，含网络、Web、SSL 与可选数据库模块",
+   "review": "libuvcpp 将 libuv 的事件循环、句柄与请求封装为 C++ 类，提供 RAII 资源管理与同步/异步双模式 API，并扩展内存池、TCP/UDP、HTTP/1.1/2/3、WebSocket、SSL 等模块；可选启用数据库模块，以 uvcpp_db_client 客户端连接 SQLite、MySQL、PostgreSQL 三种后端。面向需要在 C++ 中进行事件驱动网络开发并提供数据库访问的工程师，通过 CMake 或预编译包集成。",
+   "highlights": [
+    "将 libuv 封装为 C++11 面向对象 API，支持异步回调与带超时的同步 wait() 双模式",
+    "提供 HTTP/1.1/HTTP/2/HTTP/3(QUIC)、WebSocket(RFC 6455)、SSL/TLS 等可选模块",
+    "数据库模块支持经 uvcpp_db_client 连接 SQLite / MySQL / PostgreSQL 三种后端"
+   ],
+   "use_cases": [
+    "在 C++ 项目中构建事件驱动的 TCP/UDP/HTTP/WebSocket 服务端与客户端",
+    "C++ 服务程序中通过统一客户端接口访问 SQLite、MySQL 或 PostgreSQL",
+    "需要 HTTPS/WSS、HTTP/2、QUIC 等协议能力的网络应用开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL, with table-style access to the result rows. It is the only module that **requires a third-party client library** (libsql",
+     "lines": [
+      198,
+      262
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL, with table-style access to the result rows. It is the only module that **requires a third-party client library** (libsql",
+     "lines": [
+      198,
+      262
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL, with table-style access to the result rows. It is the only module that **requires a third-party client library** (libsql",
+     "lines": [
+      198,
+      262
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供 db 模块文档与 UVCPP_ENABLE_DB 开关，为使用这些数据库的 C++ 开发者提供客户端组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "libuvcpp provides a thin, idiomatic C++ layer over libuv's event loop, handles, and requests.",
+   "evidence_lines": [
+    42
+   ]
+  },
+  "fn": "Antruly/libuvcpp",
+  "sha": "86195723dc81",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

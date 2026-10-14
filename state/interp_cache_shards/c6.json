@@ -9995,5 +9995,264 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "358905e61dbe": {
+  "identity": {
+   "one_liner": "基于 Flink 的分布式 CDC 数据集成工具",
+   "review": "Flink CDC 是构建在 Apache Flink 之上的流批一体数据集成工具，提供 YAML 声明式 Pipeline、Flink SQL 与 DataStream 三层 API，包含整库同步、分库分表同步、schema 演进与数据转换能力。面向需要实时捕获数据库变更并写入下游的数据工程团队，依赖对应 Flink 版本部署运行。",
+   "highlights": [
+    "提供 YAML/SQL/DataStream 三层 API 接入方式",
+    "支持整库同步、分表同步、schema 演进与数据转换",
+    "提供针对 MySQL、PostgreSQL、Oracle、SQL Server、MongoDB 等的 source connector"
+   ],
+   "use_cases": [
+    "数据库实时变更捕获并同步到下游系统",
+    "整库或分库分表的数据迁移与入湖入仓",
+    "基于 Flink SQL 的流式 ETL/ELT 管道构建"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "type: mysql ／ Doris | Elasticsearch | Fluss | Hudi | Iceberg | Kafka | MaxCompute | MySQL | OceanBase | Oracle | Paimon | PostgreSQL | StarRocks ／ MySQL | PostgreSQL | Oracle | SQL Server | MongoDB | OceanBase | TiDB | Db2 | Vitess",
+     "lines": [
+      35,
+      42,
+      59
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Doris | Elasticsearch | Fluss | Hudi | Iceberg | Kafka | MaxCompute | MySQL | OceanBase | Oracle | Paimon | PostgreSQL | StarRocks ／ MySQL | PostgreSQL | Oracle | SQL Server | MongoDB | OceanBase | TiDB | Db2 | Vitess",
+     "lines": [
+      42,
+      59
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Doris | Elasticsearch | Fluss | Hudi | Iceberg | Kafka | MaxCompute | MySQL | OceanBase | Oracle | Paimon | PostgreSQL | StarRocks ／ MySQL | PostgreSQL | Oracle | SQL Server | MongoDB | OceanBase | TiDB | Db2 | Vitess",
+     "lines": [
+      42,
+      59
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "MySQL | PostgreSQL | Oracle | SQL Server | MongoDB | OceanBase | TiDB | Db2 | Vitess",
+     "lines": [
+      59
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "MySQL | PostgreSQL | Oracle | SQL Server | MongoDB | OceanBase | TiDB | Db2 | Vitess",
+     "lines": [
+      59
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "Doris | Elasticsearch | Fluss | Hudi | Iceberg | Kafka | MaxCompute | MySQL | OceanBase | Oracle | Paimon | PostgreSQL | StarRocks ／ MySQL | PostgreSQL | Oracle | SQL Server | MongoDB | OceanBase | TiDB | Db2 | Vitess",
+     "lines": [
+      42,
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库间数据同步集成服务的连接器/管道工具，而非使用数据库存储业务数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "Oracle",
+    "SQL Server",
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Flink CDC is a distributed data integration tool for real-time data and batch data, built on top of Apache Flink. It prioritizes efficient end-to-end data integration and offers enhanced functionalities such as full database synchronization, sharding table synchronization, schema evolution and data transformation. ／ Doris | Elasticsearch | Fluss | Hudi | Iceberg | Kafka | MaxCompute | MySQL | OceanBase | Oracle | Paimon | PostgreSQL | StarRocks ／ MySQL | PostgreSQL | Oracle | SQL Server | MongoDB | OceanBase | TiDB | Db2 | Vitess",
+   "evidence_lines": [
+    19,
+    42,
+    59
+   ]
+  },
+  "fn": "apache/flink-cdc",
+  "sha": "358905e61dbe",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4efd3ea97ae3": {
+  "identity": {
+   "one_liner": "面向自治 Agent 的身份基础设施，签发可验证凭证并管理委托链",
+   "review": "ZeroID 是一个面向自治 AI Agent 的身份管理系统，实现 per-agent 身份注册、OAuth 2.1 令牌签发、RFC 8693 委托链（含逐跳 scope 收窄）、实时撤销与 WIMSE/SPIFFE 身份 URI。面向需要审计 Agent 行为与权限归属的安全/合规团队，提供 Go SDK，部署依赖 PostgreSQL 存储数据。",
+   "highlights": [
+    "提供 OAuth 2.1 令牌签发、RFC 8693 OBO 委托与逐跳 scope 衰减，令牌携带完整委托链",
+    "支持 DPoP（RFC 9449）、CIBA（OpenID CIBA Core）、动态客户端注册（RFC 7591/7592）与 CIMD",
+    "实现 WIMSE/SPIFFE 身份 URI、实时级联撤销与信任分级"
+   ],
+   "use_cases": [
+    "为多 Agent 工作流签发可验证的 per-agent 凭证并记录委托链",
+    "对 MCP 服务器、服务等非人类主体进行注册与生命周期管理",
+    "需要实时撤销与 Agent 行为归因的安全合规场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up -d # starts Postgres + ZeroID ／ docker compose up -d postgres",
+     "lines": [
+      170,
+      181
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示该项目使用 PostgreSQL 作为自身存储（docker compose 启动 Postgres），属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ZeroID is identity infrastructure for autonomous agents: a system that issues cryptographically verifiable credentials, enforces delegated authority through chains of agents, and revokes access in real time. Built on OAuth 2.1, WIMSE/SPIFFE, and RFC 8693, it implements the industry's emerging standards for agent identity before they become requirements. ／ - **Agent Identity Registry** — Register agents, MCP servers, services, and applications as first-class entities. Classify by role (`orchestrator`, `autonomous`, `tool_agent`), enrich with metadata (`framework`, `version`, `publisher`, `capabilities`), assign trust levels, and manage the full lifecycle: register → activate → deactivate → de-provision.",
+   "evidence_lines": [
+    41,
+    80
+   ]
+  },
+  "fn": "highflame-ai/zeroid",
+  "sha": "4efd3ea97ae3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d8c532f99a28": {
+  "identity": {
+   "one_liner": "SQL Server 负载测试与基准测试工具集，含 CLI 引擎与浏览器 Studio",
+   "review": "sqlsimtools 提供 sqlsim（C++/ODBC 负载引擎）、sqlpysim（Python 版）、sqlsim Studio（本地浏览器应用）及面向 AI 代理的 Workload Builder，用于对 SQL Server、Azure SQL 和 Fabric SQL 数据库做查询、脚本、重放与并发负载实验。面向数据库性能测试人员与开发者；目前处于 Public Preview，仅支持 Windows/Ubuntu x64，外部 PR 暂不接受。",
+   "highlights": [
+    "提供原生 C++/ODBC CLI（sqlsim）与 Python CLI（sqlpysim）两种负载引擎，支持查询、脚本、重放与并发负载测试",
+    "提供本地浏览器版 sqlsim Studio，用于配置、运行、监控、重放和比较工作负载",
+    "内置 Agent Skills 与 Workload Builder，可被 GitHub Copilot、Claude Code、Cursor 等代理客户端调用"
+   ],
+   "use_cases": [
+    "对 SQL Server 2019/2022/2025、Azure SQL Database、Azure SQL Managed Instance、Fabric SQL 数据库执行负载与基准测试",
+    "对同一查询在有/无索引等条件下做可重复的性能对比实验",
+    "通过自然语言让 AI 代理设计并运行工作负载实验"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Open-source load testing and benchmarking tools for SQL Server, Azure SQL, ／ All four target SQL Server 2019, 2022, and 2025, Azure SQL Database, Azure SQL ／ Microsoft ODBC Driver 18 for SQL Server",
+     "lines": [
+      5,
+      41,
+      47
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是针对 SQL Server 系数据库做负载与基准测试的工具/组件，不是用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可；README 声明非微软官方产品，不享有微软商业支持",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Open-source load testing and benchmarking tools for SQL Server, Azure SQL, ／ |**sqlsim Studio** configures, runs, monitors, replays, and compares workloads in a self-contained local browser app.|**sqlsim** is a C++/ODBC workload engine for low-overhead query, script, replay, and concurrent load testing.|**sqlpysim** is a Public Preview Python port that shares sqlsim's core workload interface, with documented compatibility gaps.|**GitHub Copilot and other agents** use the bundled skills and the sqlsimtools Workload Builder to design, run, and compare workloads from plain-language requests.| ／ All four target SQL Server 2019, 2022, and 2025, Azure SQL Database, Azure SQL",
+   "evidence_lines": [
+    5,
+    39,
+    41
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "microsoft/sqlsimtools",
+  "sha": "d8c532f99a28",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

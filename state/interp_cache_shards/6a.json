@@ -9509,5 +9509,139 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "55a7cbe03118": {
+  "identity": {
+   "one_liner": "GitHub PR 审查桌面应用，本地镜像+键盘优先操作",
+   "review": "PR Cockpit 是一个面向 GitHub 拉取请求审查的桌面应用，支持 macOS 和 Linux，通过 webhooks 维护的本地镜像缓存 PR 队列、diff、检查日志和审查线程，从磁盘快速呈现内容，提供全键盘快捷键与 CLI。它使用 Bun 服务器和 SQLite 缓存数据，GitHub 仍是数据源头。适合需要高频审查 PR 的开发者和编码代理使用者。",
+   "highlights": [
+    "通过本地镜像和 webhooks 缓存 PR 数据，支持队列、diff、检查日志、审查线程的本地读取",
+    "提供键盘驱动的全部操作，包含队列分组、白板、草稿评论、快捷操作等审查功能",
+    "附带 CLI，支持在编辑器外调起或交给编码代理处理 PR"
+   ],
+   "use_cases": [
+    "开发者在 macOS/Linux 上快速浏览和审查多个仓库的拉取请求",
+    "借助 CLI 将 PR 上下文交给编码代理继续处理",
+    "团队维护带快捷操作配置的仓库级 PR 审查流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Enable **Whiteboard (Experimental)** in **Settings → Workspace** to add the final review-queue tab. It is off by default. One personal canvas is saved in this installation's SQLite database; disabling the setting keeps it and stops board activity in every conn ／ - **On your machine:** a Bun server caches PR state in SQLite and serves the desktop UI and CLI. In replica mode, cached lists stay local; GitHub searches and keyed PR title lookups use the connected source.",
+     "lines": [
+      104,
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Bun 服务器使用 SQLite 缓存 PR 状态并服务桌面 UI，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Enable **Whiteboard (Experimental)** in **Settings → Workspace** to add the final review-queue tab. It is off by default. One personal canvas is saved in this installation's SQLite database; disabling the setting keeps it and stops board activity in every connected window. Unsaved work stays protected in its window with a visible export/re-enable banner; keep that window open until recovered. Board actions never change GitHub, manual queue groups, or queue order.",
+   "evidence_lines": [
+    104
+   ]
+  },
+  "fn": "theolundqvist/pr-cockpit",
+  "sha": "55a7cbe03118",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7e4729df2e11": {
+  "identity": {
+   "one_liner": "本地优先 macOS 跟单应用，将 Discord 交易信号转为 Alpaca 订单",
+   "review": "CopyTrading 是运行在 Apple silicon Mac 上的原生应用，读取 Discord 频道中交易者发布的股票信号，经模型解析后按账户风控限额生成订单并通过 Alpaca 下单，数据保存在本地 SQLite，支持 CLI/MCP 控制与 Ollama 等模型。面向想在本地自主运行跟单流程的个人用户，当前为开发者预览，未用于实盘验证。",
+   "highlights": [
+    "将 Discord 帖子解析为订单，并在下单前执行每日亏损、单笔、单标的与总敞口限额检查",
+    "本地 Python 引擎以 SQLite 保存状态，崩溃或休眠后与券商对账",
+    "提供 CLI 与 MCP server，交易类操作需在应用内通过 Touch ID 批准"
+   ],
+   "use_cases": [
+    "将 Discord 交易信号自动复制到 Alpaca 模拟或实盘账户",
+    "在本地服务器上无界面运行引擎持续跟单",
+    "通过 CLI 或编码代理读取运行状态、调整限额并暂停跟单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the detai",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明引擎用 SQLite 保存自身状态，数据库仅为应用存储数据而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CopyTrading is a native macOS app that reads the stock calls traders post on Discord, turns each one into an exact order, checks it against your limits, and places it with your Alpaca account. Everything runs on your Mac. ／ A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the details and the ADRs record why. ／ The engine also runs without the app, on a Mac or a Linux server, so copying continues while your Mac sleeps. `copytrading-server` reads a `copytrading.toml` file and keys from environment variables, and a Docker image is included. See Run the engine without the app.",
+   "evidence_lines": [
+    17,
+    90,
+    105
+   ]
+  },
+  "fn": "YZXBiz/copytrading",
+  "sha": "7e4729df2e11",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

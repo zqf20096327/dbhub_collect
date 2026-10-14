@@ -7618,5 +7618,177 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1e2295fb7c43": {
+  "identity": {
+   "one_liner": "面向 AI agent 的本地书签/工件注册器，用 SQLite FTS5 做本地检索",
+   "review": "artmark 是一个 Rust 编写的本地 CLI 工具，让 AI agent 在跨会话时注册、检索之前遇到的工件（文档、设计稿、issue 等）。agent 只保存指针和摘要检索卡，不复制源文件；数据存于本机 SQLite 数据库并提供 JSON 输出。适合使用 Codex、Claude Code 等 agent 工作流并需要持久化工件线索的用户。",
+   "highlights": [
+    "本地存储指针与检索卡，通过 SQLite FTS5 提供离线全文搜索",
+    "提供 agent skill 与 AGENTS.md 集成，支持 Codex 与 Claude Code",
+    "命令支持 -- 输出与定义的退出码，便于程序化调用"
+   ],
+   "use_cases": [
+    "让 agent 在后续会话中按描述找回之前的文档、Figma 文件或 GitHub issue",
+    "在无服务器、无云账户的本地环境维护可搜索的工件目录",
+    "为 agent 工作流注册并提供结构化的工件检索提示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Early / v0.2:** artmark is usable, but the CLI, JSON output, and SQLite schema are not yet stable compatibility contracts. ／ Search uses SQLite FTS5.",
+     "lines": [
+      3,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "artmark 使用 SQLite 存储其目录数据，是为 agent 工作流服务的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Early / v0.2:** artmark is usable, but the CLI, JSON output, and SQLite schema are not yet stable compatibility contracts. ／ $HOME/.artmark/artmark.db (macOS and Linux) ／ Search uses SQLite FTS5.",
+   "evidence_lines": [
+    3,
+    122,
+    126
+   ]
+  },
+  "fn": "sboorlagadda/artmark",
+  "sha": "1e2295fb7c43",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "941092b5a83e": {
+  "identity": {
+   "one_liner": "华为云数据库相关示例仓库的Awesome清单",
+   "review": "该仓库是一份 Awesome 风格的示例项目清单表，收录华为云生态下的样例仓库条目，其中 gaussdb-drivers 团队维护多个 GaussDB 适配项目（Archery 适配、PHP 驱动、SQLAlchemy 方言、AI 工具兼容等）。它本身不提供可安装的软件，面向需要查找华为云/GaussDB 示例代码的开发者，所有条目状态均标注为 incubating。",
+   "highlights": [
+    "以表格形式编目多个华为云示例仓库并标注所属团队与状态",
+    "收录 gaussdb-drivers 团队的多个 GaussDB 适配条目（Archery、PHP 驱动、SQLAlchemy 方言、LangChain 等）",
+    "条目覆盖 SQL 审核查询、驱动适配、无服务器应用等不同类型"
+   ],
+   "use_cases": [
+    "查找 GaussDB 生态的驱动与工具适配示例",
+    "检索华为云 FunctionGraph、CCE、OBS 等服务的示例参考",
+    "了解 incubating 状态的社区样例仓库目录"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating|",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|enterprise-observability|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for us ／ |enterprise-serverless-todo|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for ",
+     "lines": [
+      26,
+      27
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating| ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb- ／ |hibernate-orm7.4.1|应客户要求，基于hibernate7.4.1进行适配（支持 A 兼容（Oracle 风格）、M 兼容（MySQL 风格）），数据库版本505.2.1 0800SPC|gaussdb-drivers|incubating|",
+     "lines": [
+      17,
+      31,
+      33
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|cloudoperation-resource-monitor-dashboard|HuaweiCloud Resource Monitor Dashboard 是一个面向华为云弹性云服务器（ECS）、云硬盘（EVS）和云监控（CES）的资源监控仪表盘。用户配置租户 AKSK 等鉴权信息后，后端定时或手动从华为云 API 采集资源数据与使用率指标，保存到本地 SQLite 数据库，并通过 RESTful API 为前端提供查询、筛选和导出报告功能。|public-cloud-continuous-operatio",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |database-crewai-gaussdb|开源工具CrewAI兼容GaussDB|gaussdb-drivers|incubating| ／ |database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating|",
+     "lines": [
+      15,
+      16,
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库清单主要编目为 GaussDB 生态服务的驱动与适配工具条目，属于为数据库生态服务的目录资源。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Awesome HuaweiCloud ／ |database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating|",
+   "evidence_lines": [
+    1,
+    15,
+    17
+   ]
+  },
+  "fn": "huaweicloud-samples/database-awesome-huaweicloud",
+  "sha": "941092b5a83e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

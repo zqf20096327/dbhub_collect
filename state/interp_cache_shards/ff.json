@@ -10016,5 +10016,140 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "24e8d61add94": {
+  "identity": {
+   "one_liner": "A股金融数据自动采集平台，DAG编排定时调度落PostgreSQL/Parquet",
+   "review": "面向量化研究者的A股数据采集系统，覆盖K线、财务、Tick、ETF、指数、打板与新闻等数据，通过YAML声明任务依赖，框架执行拓扑排序、定时触发、子进程隔离、超时重试与查漏补缺；结构化数据写入PostgreSQL，海量Tick打包Parquet+zstd冷存。依赖QMT/xtquant采集源，xtquant任务仅限Windows平台。",
+   "highlights": [
+    "提供基于YAML的DAG任务编排与多pipeline多cron定时调度（当前12条pipeline）",
+    "支持verify模式按天幂等查漏补缺、backfill历史回补与断点续跑",
+    "采用冷热分离存储：结构化数据入PostgreSQL，Tick按日打包Parquet+zstd"
+   ],
+   "use_cases": [
+    "为量化研究持续采集A股行情、财务与Tick数据",
+    "自动化历史数据回补与每日增量补漏",
+    "构建覆盖新闻公告等多源数据的领域数据中枢"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**拓扑排序、定时触发、子进程隔离、超时重试、失败跳过、查漏补缺**；结构化数据落 PostgreSQL、海量 Tick 落 ／ - 🧊 **冷热分离**：结构化入 PostgreSQL，Tick 按日打包 Parquet+zstd 冷存（按股读取走谓词下推，不解压整文件） ／ |A股日线 / 分钟 K 线|每日|PostgreSQL|",
+     "lines": [
+      17,
+      26,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README明确以PostgreSQL作为结构化数据落库存储，PostgreSQL是该应用的数据存储后端而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`data_collect` 把\"采什么、何时采、采到哪、怎么补\"统一成一套框架：你用 YAML 声明任务与依赖，框架负责 ／ **拓扑排序、定时触发、子进程隔离、超时重试、失败跳过、查漏补缺**；结构化数据落 PostgreSQL、海量 Tick 落 ／ - 🧊 **冷热分离**：结构化入 PostgreSQL，Tick 按日打包 Parquet+zstd 冷存（按股读取走谓词下推，不解压整文件）",
+   "evidence_lines": [
+    16,
+    17,
+    26
+   ]
+  },
+  "fn": "YangSal/ashares_data_collect",
+  "sha": "24e8d61add94",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fee980e20939": {
+  "identity": {
+   "one_liner": "面向编码代理的决策溯源与数据流记录工具（Claude Code 插件）",
+   "review": "provLedger 是一个 Claude Code 插件和 Python 库，为数据类项目记录决策及其依据：从源码重建数据流图，保存用户原话、邮件链接等证据，并可通过 /ledger、/receipts 命令和本地仪表盘回答\"为什么这样改\"。所有记录写入本地 SQLite 文件。适用于数据工程团队和与编码代理协作、需要在编辑前看到相关约束的开发者。",
+   "highlights": [
+    "提供 /ledger、/receipts 等命令，以带记录 id 引用的方式回答项目决策问题",
+    "每次运行从源码重建数据流图并与上次比对，区分 Measured/Said/Evidenced 三类知识来源",
+    "通过 Claude Code hooks 记录会话、提示和工具调用，编辑前展示锚定在待改行上的规则，数据保存在本地 SQLite"
+   ],
+   "use_cases": [
+    "记录并追溯数据集、表、指标的变更原因及被放弃的方案",
+    "编码代理编辑代码前提示相关决策约束，捕获静默的数据列丢失类错误",
+    "接手陌生项目时查询历史决策及其来源证据"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add:",
+     "lines": [
+      160
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为编码代理工作流提供决策溯源记录的插件/库，SQLite 仅作为其本地存储格式被写入。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Claude Code plugin for data work. It keeps what was decided and why — your words, the email, the agent's reading, kept apart and never blended — and puts them in front of whoever is about to change the thing again. ／ Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add: ／ pip install provledger",
+   "evidence_lines": [
+    24,
+    160,
+    95
+   ]
+  },
+  "fn": "yizhao95/prov_ledger",
+  "sha": "fee980e20939",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

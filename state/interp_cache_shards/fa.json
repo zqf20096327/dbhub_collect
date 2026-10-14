@@ -9758,5 +9758,83 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0f7605168ad5": {
+  "identity": {
+   "one_liner": "单 Go 二进制自托管社区平台，聊天/论坛/视频房，SQLite 存储",
+   "review": "ForumChat 是一个自托管社区平台，将实时多频道聊天、论坛、WebRTC 视频房间、项目管理、私有消息、AI 助手与全文本+语义搜索集成在一个 Go 进程中，数据持久化依赖 SQLite 单文件。目标用户为独立开发者社区、学习小组、家庭/俱乐部服务器及自由职业者客户工作区等需要 Discord+论坛组合但想自持数据的场景；需通过 Docker 运行，AI 功能依赖用户自备的 Ollama 守护进程，无第三方 API 依赖。",
+   "highlights": [
+    "单 Go 二进制进程运行，SQLite 作为唯一存储引擎，支持 FTS5 全文本与语义向量融合搜索",
+    "提供实时多频道聊天、持久论坛、WebRTC 视频房间、项目/issues/todos、IMAP 邮件接入与 Web Push 推送",
+    "内置每社区 AI 助手，支持持久线程、流式回答、RAG 检索与可连接的 MCP 服务器，由自有 Ollama 驱动"
+   ],
+   "use_cases": [
+    "独立开发者社区或开源项目需要聊天+论坛+视频一体化的自托管空间",
+    "自由职业者/小型工作室为每个客户建立隔离的客户协作工作区（决策存论坛、日常在聊天、交付在项目）",
+    "教学班级或兴趣小组需要私密频道、语音/视频房间与按月归档的低频上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One binary, one DB file.** SQLite (CGO-free), no Postgres/Redis/queue to babysit. NATS optional.",
+     "lines": [
+      47
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> — one process backed by SQLite. AGPL-3.0. ／ > SQLite + single-binary model is cheap to host and trivial to back ／ - **One binary, one DB file.** SQLite (CGO-free), no Postgres/Redis/queue to babysit. NATS optional.",
+     "lines": [
+      13,
+      39,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明平台所有数据由 SQLite 存储持久化（backed by SQLite），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> — one process backed by SQLite. AGPL-3.0. ／ - **One binary, one DB file.** SQLite (CGO-free), no Postgres/Redis/queue to babysit. NATS optional. ／ and the background workers all share the same process and the same DB.",
+   "evidence_lines": [
+    13,
+    47,
+    105
+   ]
+  },
+  "fn": "atvirokodosprendimai/forumchat",
+  "sha": "0f7605168ad5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

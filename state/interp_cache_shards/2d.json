@@ -8244,5 +8244,81 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5b3eee9ee1fb": {
+  "identity": {
+   "one_liner": "Tauri v2 的本地优先 SQLite 复制与同步引擎插件",
+   "review": "tauri-plugin-sync 是面向 Tauri v2 桌面应用的 Rust 插件，提供本地 SQLite 写入与后台变更集复制到远端后端（Supabase、Postgres 或自定义 REST/WebSocket）的能力，通过 shadow triggers 实现 CDC，用 Lamport 时间戳做 LWW 冲突解决。目标用户是构建离线优先桌面应用的开发者，当前处于 v0.1.0 发布前的预发布阶段，需通过 Git 依赖安装。",
+   "highlights": [
+    "通过 shadow triggers 捕获插入、更新、删除变更，无需修改现有应用 SQL",
+    "使用 Lamport 时间戳的确定性 LWW 冲突解决，支持墓碑删除",
+    "提供带 TypeScript 类型定义和响应式状态监听的 SDK"
+   ],
+   "use_cases": [
+    "需要离线写入并在联网后自动同步的 Tauri 桌面应用",
+    "本地 SQLite 与 Supabase/Postgres 云后端之间的数据复制",
+    "网络不稳定环境下需要本地变更队列与自动重连同步的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Zero-Configuration Local-First SQLite Replication & Sync Engine for Tauri v2.** ／ `tauri-plugin-sync` enables developers to build real-time, offline-first desktop applications with Tauri v2. Write to local SQLite with 0ms latency, and let the background sync engine seamlessly replicate changesets to your remote cloud backend (Supabase, Post ／ - ⚡ **Zero-Latency Local Writes:** Query local SQLite directly at native speeds.",
+     "lines": [
+      3,
+      9,
+      13
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- 🟣 **Supabase & PostgreSQL Cloud Adapter:** Pre-built SQL migrations, Edge Functions, and Row Level Security (RLS) integration.",
+     "lines": [
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为应用提供 SQLite 数据同步能力的插件/组件，而非使用数据库存储自身数据的终端应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Zero-Configuration Local-First SQLite Replication & Sync Engine for Tauri v2.** ／ `tauri-plugin-sync` enables developers to build real-time, offline-first desktop applications with Tauri v2. Write to local SQLite with 0ms latency, and let the background sync engine seamlessly replicate changesets to your remote cloud backend (Supabase, Postgres, or custom REST/WebSocket APIs) with automatic conflict resolution. ／ - 🔄 **Automatic Change Data Capture (CDC):** Shadow triggers track inserts, updates, and deletes without changing existing application SQL.",
+   "evidence_lines": [
+    3,
+    9,
+    14
+   ]
+  },
+  "fn": "karan5028ji/tauri-plugin-sync",
+  "sha": "5b3eee9ee1fb",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

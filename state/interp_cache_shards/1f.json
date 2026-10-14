@@ -9858,5 +9858,131 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a073ef7c311e": {
+  "identity": {
+   "one_liner": "SQL Server 执行计划分析器，跨平台 GUI+CLI，内置 MCP 服务",
+   "review": "一个跨平台的 SQL Server 执行计划分析工具，解析 .sqlplan XML 并按约 30 条规则识别内存授予过大、行估算偏差、索引缺失、TempDB 溢出等问题，提供桌面 GUI、CLI 及可接入 Claude 的内置 MCP 服务；面向开发者和 DBA，离线文件分析无需连接实例，实时捕获需 SQL Server。",
+   "highlights": [
+    "解析 .sqlplan XML，提供约 30 条分析规则与缺失索引的 CREATE 语句建议",
+    "支持命令行、桌面 GUI 和内置 MCP 服务器三种使用方式",
+    "可从 Query Store 按多维度拉取查询并直接加载计划，支持计划对比"
+   ],
+   "use_cases": [
+    "离线分析 .sqlplan 文件定位查询性能问题",
+    "连接 SQL Server 实例捕获实际执行计划并批量分析 .sql 文件",
+    "通过 MCP 让 AI 客户端读取与分析已加载的执行计划"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A cross-platform SQL Server execution plan analyzer with built-in MCP server for AI-assisted analysis. Parses `.sqlplan` XML, identifies performance problems, suggests missing indexes, and provides actionable warnings — from the command line or a desktop GUI. ／ Write queries with syntax highlighting and SQL keyword completion, connect to any SQL Server, and capture plans with one click. ／ - **Missing indexes** — extracts SQL Server's index suggestions with ready-to-run CREATE statements",
+     "lines": [
+      16,
+      23,
+      78
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为分析 SQL Server 执行计划服务的专用工具，而非以数据库为存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A cross-platform SQL Server execution plan analyzer with built-in MCP server for AI-assisted analysis. Parses `.sqlplan` XML, identifies performance problems, suggests missing indexes, and provides actionable warnings — from the command line or a desktop GUI. ／ Built for developers and DBAs who want fast, automated plan analysis without clicking through SSMS. ／ - SQL Server instance (optional — only needed for live plan capture; file analysis works without one)",
+   "evidence_lines": [
+    16,
+    18,
+    95
+   ]
+  },
+  "fn": "erikdarlingdata/PerformanceStudio",
+  "sha": "a073ef7c311e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b65257ff8993": {
+  "identity": {
+   "one_liner": "Kafka 协议兼容的消息流平台，日志段持久化至 S3，broker 无状态",
+   "review": "KafScale 是一个以 Go 实现的 Kafka 协议兼容流平台，将不可变日志段直接写入 S3 作为事实源，broker 无状态，元数据与消费组状态存于 etcd，并提供 operator 在 Kubernetes 上运行，附 Web 控制台。适合需要把 Kafka 数据备份到对象存储、长期保留与回放，或以无状态 broker 方式部署的团队。不实现 exactly-once、事务、压缩主题与内部复制协议。",
+   "highlights": [
+    "实现 Kafka wire protocol 的 produce、fetch 与 consumer group API，兼容现有 Kafka 客户端",
+    "将不可变日志段与索引文件写入 S3（含 MinIO）作为事实源，broker 无状态",
+    "提供 kaf-mirror 备份工作流与 Kubernetes operator、Helm chart 部署方式"
+   ],
+   "use_cases": [
+    "将现有 Kafka 集群备份为 S3 上可回放的独立副本",
+    "以标准 Kafka 消费者长期保留并回放历史数据",
+    "满足 DORA/NIS2 等合规场景下备份与恢复测试的证据需求"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 定位为 Kafka 协议兼容的流平台/broker 实现，为数据流生态提供基础设施组件，而非使用某个数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "KafScale is a Kafka-protocol compatible streaming platform built around a simple premise: ／ KafScale separates concerns cleanly. Brokers are stateless and ephemeral. Durability lives in S3. ／ - Kafka wire protocol for core produce, fetch, and consumer group APIs",
+   "evidence_lines": [
+    13,
+    19,
+    72
+   ]
+  },
+  "fn": "KafScale/platform",
+  "sha": "b65257ff8993",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

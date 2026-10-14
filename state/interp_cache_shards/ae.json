@@ -9368,5 +9368,207 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "28c77d068c00": {
+  "identity": {
+   "one_liner": "自动化测试DBMS以发现逻辑与性能缺陷的模糊测试工具",
+   "review": "SQLancer 是一个用 Java 编写的数据库管理系统自动化测试工具，通过自动生成 SQL 语句并结合多种测试预言机（如 TLP、NoREC、PQS、DQP、CERT）来发现 DBMS 实现中的逻辑缺陷、性能问题和崩溃。它面向数据库开发者与测试人员，需 Java 11 以上和 Maven，从源码构建 JAR 运行，支持多种嵌入式与客户端/服务器型数据库。",
+   "highlights": [
+    "实现多种测试预言机（TLP、NoREC、PQS、DQP、CODDTest、CERT），用于检测逻辑缺陷、性能问题和崩溃",
+    "自动生成符合目标 DBMS 语法的 SQL 语句，并支持反馈引导的测试输入生成",
+    "内置实验性 delta debugging 缺陷输入约简功能（--use-reducer）"
+   ],
+   "use_cases": [
+    "对 PostgreSQL、MySQL、SQLite3 等受支持的 DBMS 进行自动化缺陷发现",
+    "对 DuckDB、H2 等嵌入式数据库进行无需单独安装的进程内测试",
+    "对发现的缺陷输入进行自动约简以便复现与分析"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Supported DBMSs.** SQLancer requires DBMS-specific code for each DBMS that it supports. As of January 2025, it provides support for Citus, ClickHouse, Cloudberry, CockroachDB, Databend, (Apache) DataFusion, (Apache) Doris, DuckDB, H2, HSQLDB, MariaDB, Materi",
+     "lines": [
+      58
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Supported DBMSs.** SQLancer requires DBMS-specific code for each DBMS that it supports. As of January 2025, it provides support for Citus, ClickHouse, Cloudberry, CockroachDB, Databend, (Apache) DataFusion, (Apache) Doris, DuckDB, H2, HSQLDB, MariaDB, Materi",
+     "lines": [
+      58
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "2. **Test oracles**: A key innovation in SQLancer is that it provides ways to find deep kinds of bugs in DBMSs. As a main focus, it can find logic bugs, which are bugs that cause the DBMS to fetch an incorrect result set (e.g., by omitting a record). We have p ／ java -jar sqlancer-*.jar --num-threads 4 sqlite3 --oracle NoREC ／ **Parameters.** If you launch SQLancer without parameters, available options and commands are displayed. Note that general options that are supported by all DBMS-testing implementations (e.g., `--num-threads`) need to precede the name of the DBMS to be tested ",
+     "lines": [
+      9,
+      26,
+      31
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The following commands clone SQLancer, create a JAR, and start SQLancer to test SQLite using Non-optimizing Reference Engine Construction (NoREC): ／ java -jar sqlancer-*.jar --num-threads 4 sqlite3 --oracle NoREC ／ **Parameters.** If you launch SQLancer without parameters, available options and commands are displayed. Note that general options that are supported by all DBMS-testing implementations (e.g., `--num-threads`) need to precede the name of the DBMS to be tested ",
+     "lines": [
+      19,
+      26,
+      31
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Supported DBMSs.** SQLancer requires DBMS-specific code for each DBMS that it supports. As of January 2025, it provides support for Citus, ClickHouse, Cloudberry, CockroachDB, Databend, (Apache) DataFusion, (Apache) Doris, DuckDB, H2, HSQLDB, MariaDB, Materi",
+     "lines": [
+      58
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Supported DBMSs.** SQLancer requires DBMS-specific code for each DBMS that it supports. As of January 2025, it provides support for Citus, ClickHouse, Cloudberry, CockroachDB, Databend, (Apache) DataFusion, (Apache) Doris, DuckDB, H2, HSQLDB, MariaDB, Materi",
+     "lines": [
+      58
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "**Supported DBMSs.** SQLancer requires DBMS-specific code for each DBMS that it supports. As of January 2025, it provides support for Citus, ClickHouse, Cloudberry, CockroachDB, Databend, (Apache) DataFusion, (Apache) Doris, DuckDB, H2, HSQLDB, MariaDB, Materi",
+     "lines": [
+      58
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "**Supported DBMSs.** SQLancer requires DBMS-specific code for each DBMS that it supports. As of January 2025, it provides support for Citus, ClickHouse, Cloudberry, CockroachDB, Databend, (Apache) DataFusion, (Apache) Doris, DuckDB, H2, HSQLDB, MariaDB, Materi",
+     "lines": [
+      58
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "SQLancer 是用于测试数据库管理系统实现本身的工具，服务于数据库生态而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLancer is a tool to automatically test Database Management Systems (DBMSs) in order to find bugs in their implementation. That is, it finds bugs in the code of the DBMS implementation, rather than in queries written by the user. SQLancer has found hundreds of bugs in mature and widely-known DBMSs. ／ The following commands clone SQLancer, create a JAR, and start SQLancer to test SQLite using Non-optimizing Reference Engine Construction (NoREC): ／ **Supported DBMSs.** SQLancer requires DBMS-specific code for each DBMS that it supports. As of January 2025, it provides support for Citus, ClickHouse, Cloudberry, CockroachDB, Databend, (Apache) DataFusion, (Apache) Doris, DuckDB, H2, HSQLDB, MariaDB, Materialize, MySQL, OceanBase, PostgreSQL, Presto, QuestDB, SQLite3, TiDB, and YugabyteDB. The extent to which the individual DBMSs are supported differs.",
+   "evidence_lines": [
+    5,
+    19,
+    58
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "sqlancer/sqlancer",
+  "sha": "28c77d068c00",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6c12562765fe": {
+  "identity": {
+   "one_liner": "Yjs CRDT 的纯 Go 移植，含 WebSocket 同步服务器",
+   "review": "ygo 是 Yjs CRDT 框架的纯 Go 实现，字节级兼容 Yjs V1/V2 线格式，提供 Map/Array/Text 等共享类型、UndoManager、快照、子文档与观察者机制，附带单二进制服务器 yserve（SQLite 持久化、文档版本化）和可嵌入离线同步客户端。面向在 Go 服务器或 iOS/Android 应用中实现协同编辑的开发者。",
+   "highlights": [
+    "字节级兼容 yjs@13.6.x 的 V1/V2 线格式，双向 273 个跨语言 fixture 验证",
+    "纯 Go 无 CGO，gomobile 产出 iOS xcframework 和 Android AAR，支持 js/wasm",
+    "yserve 单静态二进制服务器，Hocuspocus 协议兼容，内置 SQLite 持久化与文档版本化"
+   ],
+   "use_cases": [
+    "在 Go 后端为 Yjs 前端编辑器提供协同同步服务",
+    "移动端（Swift/Kotlin）应用内嵌离线优先的协同编辑 SDK",
+    "自托管部署替代 Node 系 Hocuspocus 服务器的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Pure Go, no CGO — mobile included.** Cross-compiles freely to every Go target. The CRDT core, the sync client and the server also compile to `js/wasm` and `wasip1/wasm`; the one exception is the SQLite-backed store in `persist/sqlite`, since `modernc.org/s ／ - **Embeddable sync client, offline-first.** The `client` package is a Go-native y-websocket/Hocuspocus provider: handshake, incremental updates, awareness, reconnect with backoff. With a `LocalStore` it persists the document to disk (pure-Go SQLite), loads it ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistenc",
+     "lines": [
+      20,
+      21,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为协同编辑生态提供 CRDT 库和同步服务器组件，SQLite 仅作为其可选持久化后端被使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pure-Go port of Yjs, the CRDT framework for collaborative applications, officially listed in the Yjs documentation's ports page. ／ - **Pure Go, no CGO — mobile included.** Cross-compiles freely to every Go target. The CRDT core, the sync client and the server also compile to `js/wasm` and `wasip1/wasm`; the one exception is the SQLite-backed store in `persist/sqlite`, since `modernc.org/sqlite` is transpiled C with no wasm target — a browser build supplies its own `persist.Store` instead (it is a seven-method interface). `gomobile bind` produces an iOS xcframework and Android AAR (manually verified on 2026-06-12, not run in CI) carrying a full mobile SDK: editable Text / Map, undo, cursors, and a built-in background sync client (WebSocket + reconnect), so a Swift / Kotlin app only renders UI. No V8, no embedded JavaScript engine, no Rust FFI bridge. ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistence and periodic document versioning built in. Also embeds as a plain `http.Handler` inside an existing Go backend.",
+   "evidence_lines": [
+    13,
+    20,
+    27
+   ]
+  },
+  "fn": "Deln0r/ygo",
+  "sha": "6c12562765fe",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

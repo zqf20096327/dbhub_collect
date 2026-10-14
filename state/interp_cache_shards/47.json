@@ -9658,5 +9658,152 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "decbe85b74ae": {
+  "identity": {
+   "one_liner": "自托管数据库集群管理 Web UI 与 MCP 服务器",
+   "review": "Ivory 是一个自托管的开源数据库集群管理工具，通过单个 Docker 容器提供 Web UI 和内置 MCP 服务器，用于部署集群、查看健康与复制延迟、执行 switchover/failover、运行 SQL 查询控制台、通过 SSH 管理容器和读取虚拟机指标。面向运维人员，无需在目标主机上安装 agent，支持 PostgreSQL/Patroni、etcd、Redis、ClickHouse、MongoDB、ZooKeeper，引擎以插件形式扩展。",
+   "highlights": [
+    "提供 Web UI 进行集群部署、健康监控与 HA 操作（switchover/failover 等）",
+    "内置 MCP 服务器，可被 Claude、Cursor 等 AI 代理调用管理集群",
+    "单 Docker 容器运行，通过 SSH 操作节点，无需 agent"
+   ],
+   "use_cases": [
+    "PostgreSQL/Patroni 高可用集群的监控与切换运维",
+    "通过 AI 代理诊断和修复数据库集群",
+    "多引擎（Redis/ClickHouse/MongoDB 等）集群的统一管理与巡检"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Ivory — open-source web UI and AI-ready MCP server for PostgreSQL Patroni, etcd, Redis, ClickHouse, MongoDB and ZooKeeper clusters ／ |Patroni|Postgres|STABLE| ／ - **PostgreSQL + Patroni GUI** — Patroni web UI for cluster health, replication lag, switchover, failover,",
+     "lines": [
+      1,
+      102,
+      130
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|ClickHouse|BETA| ／ - **ClickHouse GUI** — ClickHouse cluster monitoring, replication delay and queue, and a SQL console.",
+     "lines": [
+      106,
+      135
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Ivory 为多种数据库集群提供管理、监控与部署工具，属于数据库生态服务组件而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Ivory is a self-hosted, open-source database cluster management tool that puts control in your pocket.** ／ browser or your phone. One Docker container, **no agent on your hosts, no orchestrator, no cloud account.** ／ |Keeper|Database|Stage|",
+   "evidence_lines": [
+    15,
+    18,
+    100
+   ]
+  },
+  "fn": "veegres/ivory",
+  "sha": "decbe85b74ae",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e06b9c1713b": {
+  "identity": {
+   "one_liner": "基于 PocketBase 与 Svelte 的自托管个人简历/作品集平台",
+   "review": "Facet 是一个可自托管的个人职业档案与作品集平台，用户可创建面向不同受众的多版本档案（views）、分享链接、博客与演讲内容，并支持 GitHub 导入和 AI 简历解析。数据存储在单文件 SQLite 数据库中，通过 Docker 一键部署，适合希望自主掌控数据、按受众控制可见性的个人使用。",
+   "highlights": [
+    "支持多 views（受众版本）与四级隐私控制（public/unlisted/password/private）",
+    "数据存于自有 SQLite 数据库，提供 JSON/YAML 导出",
+    "支持 GitHub 项目导入与 AI 简历内容提取（OpenAI/Anthropic/Ollama）"
+   ],
+   "use_cases": [
+    "向不同受众（招聘方、会议、咨询客户）展示不同版本的个人档案",
+    "自托管个人主页、博客与演讲列表",
+    "上传简历并由 AI 自动生成结构化经历信息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Your data in SQLite, your uploads in a folder, both easy to backup ／ - SQLite database you own (no cloud dependency) ／ - **Database**: SQLite (embedded, single file)",
+     "lines": [
+      57,
+      66,
+      174
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存储在 SQLite 数据库中，该项目是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database**: SQLite (embedded, single file) ／ - Your data in SQLite, your uploads in a folder, both easy to backup",
+   "evidence_lines": [
+    174,
+    57
+   ]
+  },
+  "fn": "jesposito/Facet",
+  "sha": "5e06b9c1713b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10041,5 +10041,153 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b3bfe55cf0a3": {
+  "identity": {
+   "one_liner": "Rust 编写的 Postgres 逻辑复制引擎",
+   "review": "一个用 Rust 实现的 Postgres 逻辑复制/CDC 引擎，可嵌入 Rust 应用或作为独立二进制运行。对发布的表先做全量初始同步，再持续复制变更到内置或自定义目标端（ClickHouse、BigQuery、DuckLake 等）。支持 PostgreSQL 14–18，要求源库开启 wal_level=logical。适合需要把 Postgres 数据流式复制到外部存储的后端开发者与运维人员。",
+   "highlights": [
+    "支持初始同步加持续 CDC 两阶段复制，持久化检查点以支持安全重启恢复",
+    "可作为 Rust 库嵌入应用，也可通过 Docker 镜像以独立 replicator 进程运行",
+    "提供多个目标端模块：ClickHouse、BigQuery、DuckLake、Snowflake、Iceberg"
+   ],
+   "use_cases": [
+    "将 Postgres 数据变更流式复制到 ClickHouse、BigQuery 等分析存储",
+    "在 Rust 应用内嵌入 CDC 复制能力而无需引入 Kafka/Debezium 等外部协调服务",
+    "基于 Postgres publication 构建自定义目标端的数据管道"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "High-performance Postgres replication, written in Rust. ／ Supabase ETL is a high-performance Postgres replication engine written in Rust. ／ Supabase ETL supports PostgreSQL 14 through 18. PostgreSQL 15 or newer is",
+     "lines": [
+      7,
+      33,
+      143
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|`clickhouse`|ClickHouse|Public alpha| ／ ClickHouse is the fastest way to start locally: `cargo x init` runs it, and",
+     "lines": [
+      125,
+      134
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 Postgres 数据库服务的复制/ETL 工具，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Supabase ETL is a high-performance Postgres replication engine written in Rust. ／ changes to a built-in or custom destination. ／ Supabase ETL supports PostgreSQL 14 through 18. PostgreSQL 15 or newer is",
+   "evidence_lines": [
+    33,
+    36,
+    143
+   ]
+  },
+  "fn": "supabase/etl",
+  "sha": "b3bfe55cf0a3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9bad7957a651": {
+  "identity": {
+   "one_liner": ".NET 10 实现的 Ultima Online 服务器模拟器，用 PostgreSQL 持久化与 Lua 脚本",
+   "review": "Moongate 是用 C#/.NET 10 编写的开源 Ultima Online 服务器模拟器，提供登录与多分片架构、Lua 5.2 沙箱脚本、Redis 登录交接，世界保存写入 PostgreSQL 且不中断游戏循环。面向想自建 UO 服务器或基于其库开发服务器工具的开发者，README 声明项目仍在积极开发中，尚无战斗、NPC AI、死亡与技能系统。",
+   "highlights": [
+    "多分片架构：一个登录服务器可列出最多 128 个游戏服务器，各自运行独立世界与数据库",
+    "世界保存后台写入 PostgreSQL，游戏循环仅暂停约 0.1 秒复制世界到内存",
+    "内置沙箱化 Lua 5.2 脚本运行时，支持 NPC/物品脚本、计时器、事件与插件"
+   ],
+   "use_cases": [
+    "搭建自定义 Ultima Online 分片服务器",
+    "基于其 C# 库开发游戏服务器工具与服务",
+    "通过 Lua 脚本定义 NPC 行为与物品交互"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It combines Lua scripting, PostgreSQL persistence and Redis-backed login-to-game ／ tenth of a second for 173,000 entities, and the save writes to PostgreSQL in the background, only ／ To run Moongate, you need your own Ultima Online client data files, PostgreSQL,",
+     "lines": [
+      17,
+      21,
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Moongate 是使用 PostgreSQL 存储世界数据的游戏服务器应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "binary",
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Moongate is an open-source Ultima Online server emulator written in C# on .NET 10. ／ It combines Lua scripting, PostgreSQL persistence and Redis-backed login-to-game ／ To run Moongate, you need your own Ultima Online client data files, PostgreSQL,",
+   "evidence_lines": [
+    16,
+    17,
+    51
+   ]
+  },
+  "fn": "moongate-community/moongate",
+  "sha": "9bad7957a651",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

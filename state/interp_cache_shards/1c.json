@@ -10141,5 +10141,197 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6205b78bae1f": {
+  "identity": {
+   "one_liner": "QQ 平台 AI 陪伴机器人，以记忆与心境驱动的长期自主体",
+   "review": "LuckyTri 是一个运行在 Node.js 上的 QQ 陪伴机器人应用，通过 OneBot 11 或 QQ 官方机器人接入消息，用 SQLite 单文件存储记忆、关系与配置，支持日记、回顾、可撤销的状态变化、语音与插件机制。适合想搭建具备长期记忆的个人/群聊 AI 伙伴的用户；需自备模型服务与 API Key，QQ 只是当前接入通道。",
+   "highlights": [
+    "支持 OneBot 11 与 QQ 官方机器人两种接入方式，运行中可切换",
+    "数据存储为单个 SQLite 文件，含迁移、自动备份与 SHA-256 完整性校验",
+    "插件以独立受限进程运行，启用时授予权限"
+   ],
+   "use_cases": [
+    "在 QQ 群聊或私聊中运行具备长期记忆的 AI 陪伴角色",
+    "通过工作室界面查看、验证和撤销角色的状态变化",
+    "本地化部署并自管数据与备份的聊天机器人场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份|",
+     "lines": [
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 SQLite 存储自身数据（L66、L216），属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份| ／ |通道|`server/channels/`|只管消息怎么来、怎么去。OneBot 11 与 QQ 官方机器人二选一，向核心交出同一种中性消息| ／ |需要|自备的 OneBot 11 接入端（反向 WebSocket）与 QQ 账号|QQ 开放平台的机器人：AppID 与 AppSecret|",
+   "evidence_lines": [
+    66,
+    61,
+    193
+   ]
+  },
+  "fn": "TodayYueC/LuckyTri",
+  "sha": "6205b78bae1f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b2980b8f2da5": {
+  "identity": {
+   "one_liner": "自托管职位雷达：抓取职位并用 LLM 按简历打分",
+   "review": "Wera 是一个自托管求职应用，从 Greenhouse、Lever、Workday 等公开招聘源抓取 570+ 公司的职位，经规则过滤、TF-IDF 本地排序和 LLM 拟合评分后通过 REST API 提供结果。供求职者使用，含简历生成、社区模块和管理后台；依赖 Docker、Go 和 Coral Bricks 推理 API，数据存于单个 PostgreSQL 实例，不代投简历。",
+   "highlights": [
+    "从 7 类招聘源抓取职位，支持 ETag 增量抓取与内容哈希去重存储",
+    "匹配流水线包含规则过滤、TF-IDF 排序、共享事实抽取与逐用户 LLM 评分",
+    "提供简历渲染（Typst/LaTeX 导出）、求职信、社区模块、H-1B 数据导入与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "自托管个人求职职位追踪与匹配评分",
+    "基于简历生成定制简历与求职信",
+    "查询雇主 H-1B 签证担保情况"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Wera system architecture: browser, nginx, API, worker and PostgreSQL on one host; job boards and the inference API on the internet ／ Three containers share one PostgreSQL database on a single host. `wera-web` (nginx) serves the dashboard and proxies `/api` to `wera-api`; `wera-admin` does the same for the admin console, on the LAN only. `wera-worker` runs the matching pipeline on a schedule ／ docker compose up -d postgres",
+     "lines": [
+      16,
+      18,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明三个容器共享一个 PostgreSQL 数据库存放职位与用户数据，Wera 是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Wera** (Swahili slang for a job or gig) is a self-hosted job radar. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Eightfold, and amazon.jobs) for 570+ companies across 28 industries, filters them with configurable rules, scores each one against your resume with an LLM on Coral Bricks, and serves the results through a REST API. Wera does not apply on your behalf. You review the matches and apply yourself. ／ Three containers share one PostgreSQL database on a single host. `wera-web` (nginx) serves the dashboard and proxies `/api` to `wera-api`; `wera-admin` does the same for the admin console, on the LAN only. `wera-worker` runs the matching pipeline on a schedule. Both are the same Go binary. ／ Requirements: Go 1.27+, Docker, and a Coral Bricks API key. Resume rendering needs typst 0.14 on `PATH` (or `TYPST_BIN`); the Docker image includes it.",
+   "evidence_lines": [
+    10,
+    18,
+    83
+   ]
+  },
+  "fn": "jessechumo/Wera",
+  "sha": "b2980b8f2da5",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9f5071d102c1": {
+  "identity": {
+   "one_liner": "Tidbyt LED 显示屏的自定义应用集，经 GitHub Actions 推送渲染内容",
+   "review": "为 Tidbyt 64×32 LED 矩阵提供 logo、news、weather、clock 等自定义应用，用 Pixlet 编写 .star 文件，通过 GitHub Actions 定时渲染 WebP 并推送到设备，无需家庭常开机器；适合拥有 Tidbyt/Tronbyt 设备、想自行部署表盘与应用的用户。clock 在原厂硬件上仅实验性支持。",
+   "highlights": [
+    "包含 logo、news、weather、rocketfuel、clock 五个应用，经 GitHub Actions 定时渲染推送 WebP",
+    "提供 deploy.sh 直接渲染推送并取消过期循环任务",
+    "支持 Tronbyt 自托管固件，可直接放入 .star 文件运行"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上显示自定义时钟、天气、新闻卡片",
+    "无家庭常开机器的 GitHub Actions 自助部署",
+    "Tronbyt 自托管服务器的应用开发与预览"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 全文为 Tidbyt 显示应用与推送流程，未涉及任何数据库相关功能。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Custom apps for a Tidbyt (64×32 LED matrix) in a warm-dark espresso ／ palette, pushed standalone by GitHub Actions — no home machine involved. ／ ## Run them on your own Tidbyt",
+   "evidence_lines": [
+    3,
+    4,
+    14
+   ]
+  },
+  "fn": "adamlee117097/tidbyt-clock",
+  "sha": "9f5071d102c1",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

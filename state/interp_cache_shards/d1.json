@@ -8210,5 +8210,200 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "73d24eb4e78b": {
+  "identity": {
+   "one_liner": "Node.js 的 Microsoft SQL Server 客户端驱动库",
+   "review": "node-mssql 是一个用于 Node.js 应用连接和操作 Microsoft SQL Server 的客户端库，默认基于纯 JavaScript 实现的 Tedious 驱动，也可选配 MSNodeSQLv8 原生驱动。它提供连接池、事务、预处理语句、流式读取等能力，适合需要在 Node 服务中读写 SQL Server 的开发人员使用。",
+   "highlights": [
+    "支持 Tedious（纯 JavaScript）和 MSNodeSQLv8 两种 TDS 驱动",
+    "提供连接池管理、事务、预处理语句和流式读取",
+    "通过预处理语句对值自动做 SQL 注入防护"
+   ],
+   "use_cases": [
+    "Node.js 应用连接和查询 SQL Server",
+    "需要连接池和读写的 Express 等 Web 服务",
+    "大结果集的流式分批处理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Microsoft SQL Server client for Node.js**",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库是为连接 SQL Server 提供驱动/客户端能力的组件，属于数据库生态服务工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Microsoft SQL Server client for Node.js** ／ - [Tedious][tedious-url] (pure JavaScript - Windows/macOS/Linux, default)",
+   "evidence_lines": [
+    3,
+    9
+   ]
+  },
+  "fn": "tediousjs/node-mssql",
+  "sha": "73d24eb4e78b",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a77af3625e7": {
+  "identity": {
+   "one_liner": "将 Overcast 播客收听历史与订阅数据存入 SQLite 的命令行工具",
+   "review": "该工具通过 Overcast 账户认证（仅保存 cookie）或导入 OPML 文件，抓取播放列表、播客源和节目数据并写入 SQLite 数据库的各张表中；还支持下载扩展 XML 标签、字幕、章节、音频文件，并生成 HTML 页面和 Hugging Face 数据集。面向 Overcast 用户和 Datasette 使用者，用于个人播客数据的本地存档与分析。要求 Python 3.13+，通过 uv 安装运行。",
+   "highlights": [
+    "提供 save/extend/transcripts/chapters/audio/html/search 等 11 个子命令，可抓取并存档播客源 XML、字幕、章节与音频文件",
+    "支持全文搜索收听数据，并可通过脚本将存档字幕生成为 Hugging Face Parquet 数据集",
+    "支持以 OPML 文件替代账户认证进行数据导入，数据库文件路径可自定义"
+   ],
+   "use_cases": [
+    "将 Overcast 收听历史存档到本地 SQLite 数据库并用 Datasette 浏览分析",
+    "批量下载订阅播客的字幕、章节与音频文件做本地留存",
+    "将字幕存档整理发布为 Hugging Face 数据集"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Save listening history and feed/episode info from Overcast to a SQLite database. Try exploring your podcast listening habits with Datasette!",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具以 SQLite 为目标存储，为 Datasette 生态提供数据导入能力，属于服务数据库生态的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Save listening history and feed/episode info from Overcast to a SQLite database. Try exploring your podcast listening habits with Datasette! ／ The `save` command retrieves all Overcast info and stores playlists, podcast feeds, and episodes in their respective tables with a primary key `overcastId`. ／  $ uvx overcast-to-sqlite",
+   "evidence_lines": [
+    11,
+    58,
+    23
+   ]
+  },
+  "fn": "hbmartin/overcast-to-sqlite",
+  "sha": "4a77af3625e7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "634896172912": {
+  "identity": {
+   "one_liner": "自托管的工资周期个人记账应用，基于 Next.js 和 Supabase/PostgreSQL",
+   "review": "这是一个自托管、手动录入的个人理财应用，围绕工资周期做预算：拆分账单与信封预算、为目标购买按发薪节奏储蓄、处理超支后的恢复计划，并显示可投资余款。数据存于用户自建的 Supabase（PostgreSQL）项目，无银行连接或自动导入，仅支持英文和 USD。适合希望手动掌控每笔资金去向的个人用户。",
+   "highlights": [
+    "按工资周期拆分账单、信封预算与储蓄计划，计算可投资余款",
+    "支持周/双周/半月/月发薪节奏，按 IANA 时区计算日期边界",
+    "PWA 使用方式：托管后可在手机浏览器添加到主屏幕"
+   ],
+   "use_cases": [
+    "个人按发薪日规划账单、储蓄与投资预算",
+    "为未来购买目标制定分期储蓄计划",
+    "记录日常支出并回顾每月收支历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "3. Copy `.env.example` to `.env.local` and set the project URL, public anon/publishable key, and server-only PostgreSQL connection string. ／ Built with Next.js, React, TypeScript, Supabase Auth, and PostgreSQL.",
+     "lines": [
+      112,
+      133
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用通过自建的 Supabase 项目（PostgreSQL）做认证与数据存储，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You host the app and configure your own Supabase project. Your financial records are stored in that project, and the app connects to it for authentication and data storage. Access to financial records is scoped to the signed-in account. Your personal financial records and environment credentials are not part of the code published on GitHub. ／ Requirements: Node.js 24, npm, and a fresh Supabase project with email/password Auth. Linux and WSL users with nvm can run `nvm install` and `nvm use` in the repository to select its Node version. ／ 3. Copy `.env.example` to `.env.local` and set the project URL, public anon/publishable key, and server-only PostgreSQL connection string.",
+   "evidence_lines": [
+    102,
+    108,
+    112
+   ]
+  },
+  "fn": "IndexDuo/Jings-Finance-App",
+  "sha": "634896172912",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

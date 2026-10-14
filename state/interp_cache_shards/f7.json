@@ -9529,5 +9529,147 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "553befbd3661": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，将中文按字或按词转换为拼音",
+   "review": "pg_pinyin 是一个用 Rust 编写的 PostgreSQL 扩展，安装后提供按字/按词罗马化、批量转换以及配合 pg_search 的拼音查询辅助函数，支持多模式匹配与显式音节边界；面向需要在 PostgreSQL 中做中文拼音检索与索引的开发者，使用前需注意 pg_search 相关函数的启用顺序限制。",
+   "highlights": [
+    "提供按字与按词罗马化函数及批量转换接口（pinyin_char_romanize / pinyin_word_romanize 等）",
+    "提供与 pg_search 配合的拼音查询辅助函数，支持 full/initials/autocomplete/auto/compat 多种查询模式",
+    "含 Rust 后端与独立 SQL 后端两套实现，支持并行安全与显式音节边界"
+   ],
+   "use_cases": [
+    "中文姓名/文本的拼音转写与生成列维护",
+    "基于 pg_search/pg_trgm 的拼音前缀、首字母、自动补全检索"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_pinyin ／ `CREATE EXTENSION pg_pinyin` installs the Rust-backed core API:",
+     "lines": [
+      1,
+      12
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "report, not a native-query oracle. Actual query serialization records auto routes.",
+     "lines": [
+      643
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为 PostgreSQL 扩展（CREATE EXTENSION pg_pinyin），为该数据库提供拼音转换能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`CREATE EXTENSION pg_pinyin` installs the Rust-backed core API: ／ `pinyin_regex_phrase` is a Rust-backend public API, but its return type is `pdb.query`, so `pg_search` must be enabled in the database before `CREATE EXTENSION pg_pinyin`. PostgreSQL extension scripts cannot reliably enable another extension while they are being installed. If `pg_pinyin` is installed before `pg_search`, the romanization APIs are still installed and `pinyin_regex_phrase` is installed as an error stub with a clear exception.",
+   "evidence_lines": [
+    12,
+    26
+   ]
+  },
+  "fn": "aiyou178/pg_pinyin",
+  "sha": "553befbd3661",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "58b440d2a68a": {
+  "identity": {
+   "one_liner": "自托管笔记本，AI 代理经 MCP 写入笔记，Postgres 存储",
+   "review": "LockIn 是一个自托管的笔记应用：Claude Code、Codex、Cursor 等 MCP 客户端可将笔记保存、搜索、读取到其中，笔记需用户确认后归档，并可用自己的模型（浏览器 WebGPU、Ollama、Anthropic 等 key）对笔记提问，答案带引用。面向希望在 AI 会话之外留存学习笔记的用户。以 Docker Compose 部署，数据存于 Postgres 17，AGPL-3.0 许可。",
+   "highlights": [
+    "提供 MCP 服务端（18 个工具），供 MCP 客户端保存、搜索和读取笔记",
+    "支持浏览器 WebGPU、本地模型（Ollama、LM Studio）及自有 API key 的多种问答方式，答案引用笔记页码",
+    "数据导出为 Markdown 或 JSON，Docker Compose 一条命令自托管"
+   ],
+   "use_cases": [
+    "让 AI 编码代理在会话间留存和检索项目笔记",
+    "按主题组织 Markdown 笔记、PDF 与链接并做问答",
+    "个人自托管的私有笔记与学习计划管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres 17 ／ |`db`|Postgres 17. Data in the `db` volume.| ／ Everything lives in two volumes: `db` (Postgres) and `uploads` (note images and PDFs). Back up both, and take a backup before updating.",
+     "lines": [
+      12,
+      73,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据存储于捆绑的 Postgres 17 卷中，本身是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`db`|Postgres 17. Data in the `db` volume.| ／ |`migrate`|Applies migrations (`prisma migrate deploy`) and exits.| ／ |`app`|LockIn on port 3000. Note images and PDFs are stored in the `uploads` volume.|",
+   "evidence_lines": [
+    73,
+    74,
+    75
+   ]
+  },
+  "fn": "Sky-walkerX/LockIn",
+  "sha": "58b440d2a68a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

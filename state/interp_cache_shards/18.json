@@ -8387,5 +8387,72 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bc10f357c3b9": {
+  "identity": {
+   "one_liner": "Rocket+Datastar Web组件社区画廊，Go/templ/SQLite/CQRS实现",
+   "review": "该项目是一个面向 Datastar + Rocket 的 Web 组件社区目录站点，收录 51 个组件，提供在线演示、代码 Playground、组件提交流程与 autoloader 引用机制。面向使用 Datastar/Rocket 的前端开发者。站点本身用 Go、templ 编写，以单二进制运行，数据（组件版本、文件体、每标签页 UI 状态）存于内嵌 SQLite，并采用 CQRS 风格的读写分离与 SSE 实时流。",
+   "highlights": [
+    "提供 51 个组件的画廊、实时演示与基于 manifest 生成的 API 表和 Playground",
+    "以单二进制发布，资产、组件与迁移内嵌，SQLite 以纯 Go 驱动，提供 Linux/macOS/Windows 二进制与多架构镜像",
+    "实现 CQRS 命令模型与每标签页压缩 SSE 渲染流，目录同步至 SQLite 并用 FTS5 支持搜索"
+   ],
+   "use_cases": [
+    "为使用 Datastar + Rocket 的站点查找、试用和引用现成 Web 组件",
+    "通过 Playground 在线编辑组件代码并生成可分享的不可变链接",
+    "通过 GitHub issue 表单提交新组件，由机器人校验并开 PR"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler.",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是一个使用 SQLite 存储组件文件、状态与目录数据的 Web 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；来自 derekr PD rockets 的七个组件保留其 Beer-Ware 许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`. ／ With integrity in place, a changed file is refused instead of run. The autoloader reports it (`[starbase] could not load <sb-…>`), and the other components keep working. Every version the site has ever served is kept in its database. To withdraw one (a component that turned out to be malicious), delete its rows from `component_files`, then the bodies no row refers to any more: `DELETE FROM file_bodies WHERE integrity NOT IN (SELECT integrity FROM component_files)` (each distinct body is stored once, shared by the versions that have it).",
+   "evidence_lines": [
+    10,
+    32,
+    86
+   ]
+  },
+  "fn": "zweiundeins/starbase",
+  "sha": "bc10f357c3b9",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

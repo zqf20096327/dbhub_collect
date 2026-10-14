@@ -9448,5 +9448,212 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a661acb180e": {
+  "identity": {
+   "one_liner": "一组用于管理 SSMS 21/22 本地配置数据的 PowerShell 工具集",
+   "review": "该仓库提供若干 Windows PowerShell 脚本和一份 SSMS 22 配置 JSON 示例，用于在 SSMS 21 与 22 之间迁移已保存的连接、提取并解密 DPAPI 保护的连接串与凭据、以及备份/恢复连接注册表数据。面向需要在 Windows 上管理 SSMS 本地配置的数据库管理员。脚本需管理员权限加载/卸载注册表 hive，部分功能要求 PowerShell 7.x，且凭据备份仅能在同一机器同一用户下恢复。",
+   "highlights": [
+    "提供从 SSMS 21 向 SSMS 22 导入已保存连接的脚本",
+    "可提取并解密 SSMS 保存的连接字符串与凭据（DPAPI）",
+    "支持通过 .reg 文件备份和恢复 SSMS 22 连接数据"
+   ],
+   "use_cases": [
+    "SSMS 21 升级到 22 时迁移已保存的服务器连接",
+    "找回或核查本地保存的连接串与凭据",
+    "迁移或重装前备份 SSMS 连接配置"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "Small collection of PowerShell utilities and config files for SQL Server Management Studio 21 and 22. ／ This repository provides a small set of Windows PowerShell utilities SQL Server Management Studio (SSMS) 21 and 22, and a sample SSMS 22 configuration JSON. ／ My current SQL Server Mangement Studio 22 configuration JSON as described in this blog post",
+     "lines": [
+      3,
+      7,
+      42
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库为 SQL Server Management Studio 这一 SQL Server 生态管理工具提供配置维护脚本，服务数据库运维场景。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository provides a small set of Windows PowerShell utilities SQL Server Management Studio (SSMS) 21 and 22, and a sample SSMS 22 configuration JSON. ／ All scripts operate on local SSMS configuration data, require administrator privileges to load/unload registry hives, and are intended to be run on Windows. ／ - Import-SSMS21ConnectionsToSSMS22.ps1",
+   "evidence_lines": [
+    7,
+    9,
+    13
+   ]
+  },
+  "fn": "VladDBA/SSMS-Tools",
+  "sha": "5a661acb180e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "09e47f86cbdf": {
+  "identity": {
+   "one_liner": "个人网页记忆库：采集书签/收藏存入可搜索库，经 MCP 供 AI 查询",
+   "review": "Anansi 是一个本地优先的网络内容收藏与检索系统，采集 X、Reddit、GitHub stars、网页及 Chrome 书签，存入 SQLite 或 Cloudflare D1/R2 构建的可搜索库，并通过 8 个只读 MCP 工具向 AI agent 提供检索；面向开发者和使用 AI agent 的个人用户，支持本地运行或一键部署到自己的 Cloudflare 账户，语义搜索与自动标签为可选功能。",
+   "highlights": [
+    "提供 8 个只读 MCP 工具，供兼容的 AI agent 搜索、检索、列举和摘要库中内容",
+    "支持关键词 BM25 搜索，可选启用基于 Cloudflare Workers AI 与 Vectorize 的语义搜索和自动标签",
+    "支持本地 SQLite 运行或部署到自有 Cloudflare 账户（D1/R2），含队列重试与可恢复导入"
+   ],
+   "use_cases": [
+    "集中采集和管理 X/Reddit/GitHub/网页等分散收藏",
+    "让 MCP 兼容的 AI agent 查询和引用个人保存的网页资料",
+    "自托管个人知识库，数据存于本地或自有 Cloudflare 账户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 💾 **Keeps the library under your control** — run locally with SQLite or use the repository's own-account Cloudflare deployment path ／ Requirements: Bun 1.3+, Chromium-based browser. SQLite DB is created automatically. ／ packages/db/ D1/SQLite schema, migrations, search, and item operations",
+     "lines": [
+      28,
+      54,
+      234
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite/D1 作为自身存储来构建收藏库应用，而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Anansi captures X bookmarks, Reddit saves, GitHub stars, and web pages or Chrome bookmarks from the browser sessions you already use, stores them in a searchable library you control, and lets compatible AI agents search and retrieve those saved references through eight read-focused MCP tools. ／ - 💾 **Keeps the library under your control** — run locally with SQLite or use the repository's own-account Cloudflare deployment path ／ Requirements: Bun 1.3+, Chromium-based browser. SQLite DB is created automatically.",
+   "evidence_lines": [
+    5,
+    28,
+    54
+   ]
+  },
+  "fn": "jojomensah89/anansi",
+  "sha": "09e47f86cbdf",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "982dc6bbe7d9": {
+  "identity": {
+   "one_liner": "自托管家庭安全应用：位置共享、到达提醒、SOS 与碰撞检测",
+   "review": "Hearth 是一个可自行托管的家人位置共享与安全系统，提供实时地图、地点到达/离开提醒、行程记录、SOS 与碰撞告警。由 Docker 部署的 Fastify API 服务端（数据存于 Postgres）和 iOS/Android 客户端组成，适合注重数据自控的家庭用户；应用商店版本尚在审核，需自行构建客户端，官方建议上线前配置 TLS 代理并阅读安全文档。",
+   "highlights": [
+    "支持实时地图、地点到达/离开提醒、行程记录与 SOS 广播",
+    "提供精确/约略/暂停三种位置共享模式，支持数据导出与历史删除",
+    "服务端以 Docker 镜像发布，支持 amd64 与 arm64，依赖 Postgres 14+ 存储"
+   ],
+   "use_cases": [
+    "家庭自托管位置共享与到达提醒",
+    "家人 SOS 紧急求助与碰撞告警场景",
+    "需要数据完全由自有服务器掌控的隐私敏感部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres 14+ ／ It's two pieces: an API server that runs in Docker next to Postgres, and an iOS ／ POSTGRES_PASSWORD=$(openssl rand -hex 24) ／ Server tests run against a real Postgres and truncate between specs. Mocking the",
+     "lines": [
+      13,
+      31,
+      93,
+      152
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其 API 服务端运行于 Docker 旁的 Postgres 之上并以 SQL 存储业务数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "It's two pieces: an API server that runs in Docker next to Postgres, and an iOS ／ server/            Fastify 5, Drizzle, Postgres. The whole API.",
+   "evidence_lines": [
+    31,
+    164
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Qureshi-DH/hearth",
+  "sha": "982dc6bbe7d9",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8996,5 +8996,357 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4a68f0598483": {
+  "identity": {
+   "one_liner": "面向 AI 编程代理的本地持久记忆 MCP 服务器",
+   "review": "total-agent-memory 是一个为 Claude Code、Codex CLI、Cursor 等 MCP 客户端提供持久化记忆的开源服务器，把决策、方案、事实与会话摘要存储在本地目录的 SQLite 数据库中，通过 BM25、本地稠密向量、模糊匹配和知识图谱做召回并融合排序。开发者可 pip/npm/Docker 安装，团队服务器可切换 PostgreSQL 后端；默认配置在写入与检索时不调用 LLM。作者声称正投稿 JOSS 论文。",
+   "highlights": [
+    "提供 79 个 MCP 工具，通过 MCP 协议供任意 MCP 客户端使用",
+    "召回组合 BM25、本地稠密向量、模糊匹配与知识图谱，并用倒数排名融合，可选 cross-encoder 重排",
+    "事实支持有效期区间与单值事实的新值退役；默认配置写入与检索不调用 LLM，结果可复现"
+   ],
+   "use_cases": [
+    "为编程代理跨会话保存与召回项目决策、修复方案和约定",
+    "作为可本地运行、可检查、可修改的记忆基线用于研究评测",
+    "部署为团队服务器，按个人/部门/公司分层存储并提供角色与审计"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pip install \"total-agent-memory[rerank]\"`. The PostgreSQL backend of the team ／ - **PostgreSQL** (team server backend): install the extra with",
+     "lines": [
+      50,
+      136
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Each store is one directory built around a SQLite database. Recall combines",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确其为服务于 AI 编程代理的 MCP 记忆服务器组件，而非依赖数据库存数据的最终用户应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "total-agent-memory (TAM) is an open-source memory server for AI coding agents. ／ Each store is one directory built around a SQLite database. Recall combines ／ `pip install \"total-agent-memory[rerank]\"`. The PostgreSQL backend of the team",
+   "evidence_lines": [
+    14,
+    21,
+    50
+   ]
+  },
+  "fn": "vbcherepanov/total-agent-memory",
+  "sha": "4a68f0598483",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1c0973ca01e2": {
+  "identity": {
+   "one_liner": "提供 PyMongo 风格 API 的 SQLite 文档数据库 Python 库",
+   "review": "NeoSQLite 是纯 Python 库，为 SQLite 提供类 PyMongo 的文档式读写接口，包含聚合管道、索引、事务、Change Streams、GridFS 等 API，并附 NX-27017 服务器实现 MongoDB 线协议。面向熟悉 PyMongo、希望在 SQLite 上以文档模型存储数据的 Python 开发者；其 API 兼容性以测试对照 MongoDB 衡量，跳过的用例多与副本集架构相关。",
+   "highlights": [
+    "提供 PyMongo 风格 API，支持文档存储、聚合管道、多类索引与 FTS5 文本搜索",
+    "通过 SAVEPOINT 实现 ClientSession 事务 API，基于 SQLite 触发器实现 watch() 变更流",
+    "附带 NX-27017 线协议服务器，可用 PyMongo 客户端直接连接"
+   ],
+   "use_cases": [
+    "在 SQLite 上以文档模型开发 Python 应用",
+    "将使用 PyMongo API 的代码切换到 SQLite 存储",
+    "以 MongoDB 线协议访问本地 SQLite 数据文件"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# NeoSQLite - NoSQL for SQLite with PyMongo-like API ／ `NeoSQLite` (new + nosqlite) is a pure Python library that provides a schemaless, `PyMongo`-like wrapper for interacting with SQLite databases. The API is designed to be familiar to those who have worked with `PyMongo`, providing a simple and intuitive way to ",
+     "lines": [
+      1,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明其为操作 SQLite 数据库的 Python 封装库，为数据库生态提供文档接口组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`NeoSQLite` (new + nosqlite) is a pure Python library that provides a schemaless, `PyMongo`-like wrapper for interacting with SQLite databases. The API is designed to be familiar to those who have worked with `PyMongo`, providing a simple and intuitive way to work with document-based data in a relational database. ／ - **NX-27017**: MongoDB Wire Protocol Server — Use PyMongo with SQLite backend ／ pip install neosqlite",
+   "evidence_lines": [
+    5,
+    14,
+    54
+   ]
+  },
+  "fn": "cwt/neosqlite",
+  "sha": "1c0973ca01e2",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fc82b5bbf80c": {
+  "identity": {
+   "one_liner": "自托管文件浏览器与媒体流平台，统一聚合多种存储源",
+   "review": "Zee-Index 是一个自托管的文件浏览器和媒体流平台，将 Google Drive、Dropbox、S3/R2、WebDAV 和本地存储聚合到统一界面，提供视频播放、分享链接、2FA、API 密钥和管理面板。面向需要自建文件分享/媒体站点的用户，以 Docker Compose 一键部署，数据存于 PostgreSQL 16，使用 Redis 做缓存，需配置 Google OAuth 等环境变量。",
+   "highlights": [
+    "支持 Google Drive、Dropbox、S3/R2/MinIO、WebDAV 与本地磁盘多种存储源作为根目录",
+    "提供浏览器内视频/音频/图片/文档预览与流媒体播放",
+    "包含分享链接（过期/限次/水印）、角色权限、2FA、API 密钥与管理统计"
+   ],
+   "use_cases": [
+    "自托管网盘/文件目录浏览与分享",
+    "个人或团队的媒体流播放站点",
+    "对多存储源统一管理并需权限控制与审计的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 ／ - **Run it yourself.** One `docker compose up`: PostgreSQL, Redis, automatic HTTPS with Caddy, daily database backups, health checks and alerts. ／ |`POSTGRES_PASSWORD`|Database password|",
+     "lines": [
+      26,
+      41,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目以 PostgreSQL 16（Prisma）和 Redis 存储自身数据，是使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，附加署名要求",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hosted file explorer and media streaming platform. ／ - **Run it yourself.** One `docker compose up`: PostgreSQL, Redis, automatic HTTPS with Caddy, daily database backups, health checks and alerts. ／ |Data|PostgreSQL 16 with Prisma, Redis 7 with ioredis|",
+   "evidence_lines": [
+    7,
+    41,
+    171
+   ]
+  },
+  "fn": "ifauzeee/Zee-Index",
+  "sha": "fc82b5bbf80c",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e05f28dfbb84": {
+  "identity": {
+   "one_liner": "面向印度银行与信用卡场景的本地离线个人财务应用，内置 SQLite 存储",
+   "review": "LocalFinance 是一个面向印度银行与信用卡用户的个人财务管理应用，解析 PDF/CSV/Excel 银行对账单，提供交易分类、账单周期提取与仪表盘。以 Go 编译为单一可执行文件，内嵌 React 前端与纯 Go SQLite 数据库，数据完全存于本地，支持启动时自动执行 Goose schema 迁移，并提供可选的本地 PIN/密码保护。",
+   "highlights": [
+    "以单一可执行文件分发，内嵌 React 前端与纯 Go SQLite 数据库（WAL 模式），零 CGO 依赖",
+    "内置针对 HDFC、ICICI、Axis 等印度银行 PDF/CSV/Excel 对账单的解析器，支持密码加密 PDF 与通用 CSV 引擎",
+    "基于 SHA-256 哈希与 SQLite ON CONFLICT 幂等 upsert 去重，启动时通过内嵌 Goose 自动迁移 schema"
+   ],
+   "use_cases": [
+    "在本地离线管理印度银行储蓄账户与信用卡对账单，导入并分类交易记录",
+    "跟踪多账户、多年期账单周期、还款到期日与账单日历",
+    "从 Splitwise 导出群组费用 CSV 并映射到银行交易"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ - **100% Offline & Private**: Zero cloud sync, zero telemetry, no SMS scraping, and no third-party account aggregators. All your financial data stays strictly on your local machine in an open SQLite database file (`local_finance.db` or `~/.localfinance/local_f ／ - Idempotent SQLite upserts (`ON CONFLICT`) safely update balances while **strictly preserving** your custom category overrides, notes, and tags.",
+     "lines": [
+      12,
+      39,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用以嵌入式 SQLite 存储财务数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ in one application. It uses the existing `~/.localfinance/local_finance.db`; ／ - **Zero-Config Database Migrations**: Schema migrations managed automatically via embedded Goose (`github.com/pressly/goose/v3`) on startup—no external migration CLI needed.",
+   "evidence_lines": [
+    12,
+    17,
+    41
+   ]
+  },
+  "fn": "usmslm102/local-finance",
+  "sha": "e05f28dfbb84",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "77a27cd171ea": {
+  "identity": {
+   "one_liner": "达梦 DM8 可恢复能力评估插件，按16场景逐项核对并生成 HTML 报告",
+   "review": "这是运行在 DeepSeek Harness（dsh）上的评估插件，通过 JDBC 查询与可选 SSH 只读命令，对达梦 DM8 的 16 个恢复场景做「要求 vs 实际」对照，输出 HTML 与 findings.。面向达梦数据库管理员，用于评估单实例与 DMDSC 集群的备份与恢复能力；需自行提供达梦商业 JDBC 驱动，DM9、Windows、ARM 环境未验证。",
+   "highlights": [
+    "覆盖 16 个恢复场景：逻辑损坏 5 项、物理损坏 8 项、集群容灾 3 项，含 DMDSC 逐节点核对",
+    "支持归档链逐段核对、时间↔LSN 双向夹逼、备份集可用性核验，可调用 dmrman 只读命令",
+    "输出单文件 HTML 报告与 findings.，库内仅执行查询语句，主机侧仅 3 类只读命令"
+   ],
+   "use_cases": [
+    "评估达梦 DM8 单实例或 DMDSC 集群在误删误改、数据文件损坏、站点灾难等场景下的可恢复能力",
+    "核对备份集可用性与归档链完整性，确认可恢复时间点与潜在数据丢失",
+    "生成结构化评估报告用于运维评审或整改建议追踪"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "达梦 DM8 数据库可恢复能力评估插件。按 16 个恢复场景逐项对照「要求 vs 本库实际」，回答能恢复到哪一点、要丢什么，生成 HTML 报告。 ／ |达梦 JDBC 驱动|`DmJdbcDriver18.jar` 或 `DmJdbcDriver8.jar`，需自行提供，见安装第 2 步| ／ ### 2. 放置达梦 JDBC 驱动",
+     "lines": [
+      3,
+      28,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明它是为达梦 DM8 数据库提供恢复能力评估的工具插件，通过 JDBC 与 dmrman 读取数据库信息，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "达梦 DM8 数据库可恢复能力评估插件。按 16 个恢复场景逐项对照「要求 vs 本库实际」，回答能恢复到哪一点、要丢什么，生成 HTML 报告。 ／ - 16 个恢复场景，分三组覆盖：逻辑损坏 5 项（单条记录误删误改、整表误 DROP / TRUNCATE、整表批量误 UPDATE、schema 被 DROP、表结构误改）、物理损坏 8 项（单数据页、单数据文件、控制文件、联机日志、归档日志、备份集、整机与存储、表空间）、集群容灾 3 项（DMDSC 单节点故障、全集群故障、站点级灾难） ／ - 可选的主机侧只读核验（SSH）：`dmrman CHECK BACKUPSET`、备份日志的全库逐页裁决、备份文件查找",
+   "evidence_lines": [
+    3,
+    11,
+    16
+   ]
+  },
+  "fn": "Shiyuedong-Jade/DM-recovery",
+  "sha": "77a27cd171ea",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

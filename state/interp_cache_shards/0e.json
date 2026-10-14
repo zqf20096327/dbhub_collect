@@ -10060,5 +10060,77 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bfe0b8916c59": {
+  "identity": {
+   "one_liner": "DANA QRIS 动态收款网关，用 SQLite 存单并以 Telegram 通知",
+   "review": "基于 Express 实现的 DANA QRIS 动态二维码（MPM）支付网关启动模板，包含 SNAP 认证（RSA 签名、HMAC、B2B token）、webhook 验证与幂等处理，用 SQLite（better-sqlite3、WAL）保存交易与 webhook 事件，并通过 Telegram bot 推送到账通知。面向需要接入 DANA 商家收单的前端/商户开发者，README 注明上线前需完成商家注册与 UAT 清单。",
+   "highlights": [
+    "提供动态 QRIS（MPM）下单、状态查询、交易列表与统计的 REST 接口",
+    "实现 DANA SNAP 认证与 webhook HMAC_SHA512 签名验证，付款处理幂等",
+    "使用 SQLite（better-sqlite3, WAL mode）存储交易及 webhook 事件用于审计"
+   ],
+   "use_cases": [
+    "为商户站点生成动态 QRIS 收款码并跟踪支付状态",
+    "接收并验证 DANA webhook 回调，防止重复通知",
+    "通过 Telegram bot 实时接收到账提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Payment gateway DANA dengan QRIS dinamis (MPM), SQLite, dan notifikasi Telegram. ／ ├── db.js — SQLite (better-sqlite3, WAL mode) + helpers idempotent ／ - [ ] Deploy Railway: tambah Volume untuk `./data` (SQLite) dan `./keys`",
+     "lines": [
+      3,
+      49,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储交易数据的支付网关应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Payment gateway DANA dengan QRIS dinamis (MPM), SQLite, dan notifikasi Telegram. ／ ├── index.js     — Express server + endpoints + webhook ／ ├── db.js        — SQLite (better-sqlite3, WAL mode) + helpers idempotent",
+   "evidence_lines": [
+    3,
+    47,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "TheyanzXD/dana-qris-gateway",
+  "sha": "bfe0b8916c59",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

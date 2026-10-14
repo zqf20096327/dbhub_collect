@@ -9686,5 +9686,75 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3fdfe3227573": {
+  "identity": {
+   "one_liner": "DSH 知识库插件，基于 SQLite 提供本地/远程知识存储与检索",
+   "review": "该插件面向 DeepSeek Harness (DSH) 宿主，安装后提供可挂载的知识库：对话结束后由独立提取调用回写知识文档，回答前通过挂载库目录检索召回，本地使用 SQLite（WAL、FTS5）存储，也可连接带令牌认证的远程中央服务，并提供 Web 管理台。适用于使用 DSH 的个人或团队用户；要求 Node.js ^22.19.0 或 >=24.0.0，远程模式需同时升级知识服务。",
+   "highlights": [
+    "本地使用 SQLite WAL 与 FTS5 全文搜索，支持原子事务、版本历史和幂等提取任务",
+    "支持本地与远程中央服务两种 Provider，远程模式使用 Bearer Token 权限（read/propose/write/admin）",
+    "提供随插件的 Web 管理台，覆盖知识文档编辑、AI 候选审核和令牌管理"
+   ],
+   "use_cases": [
+    "为 DSH 会话提供可挂载的知识库召回与回答后知识回写",
+    "多客户端共享的中央知识库部署（认证 HTTP API）",
+    "Markdown 笔记与知识文档的目录化管理与分享"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`dsh-knowledge` 是面向 DeepSeek Harness 的知识库插件。它不修改 DSH Agent Loop，同一个插件既能使用本地 SQLite，也能连接远程中央知识库。 ／ - SQLite WAL、FTS5 全文搜索、原子事务、完整版本历史和幂等提取任务。 ／ - 用户明确要求时，模型可调用 `knowledge_base_create` 和 `knowledge_base_update` 创建或修改知识库，包括描述、标签、回写策略与专用回写模型；工具内部跟随当前 Provider 自动写入本地 SQLite 或远程中央服务，模型不传也不猜存储位置。",
+     "lines": [
+      9,
+      106,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "插件使用 SQLite 存储知识数据（本地 databasePath 指向 knowledge.sqlite），SQLite 只是其存储手段而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-knowledge` 是面向 DeepSeek Harness 的知识库插件。它不修改 DSH Agent Loop，同一个插件既能使用本地 SQLite，也能连接远程中央知识库。 ／ - SQLite WAL、FTS5 全文搜索、原子事务、完整版本历史和幂等提取任务。 ／     databasePath: !!js dshHomePath('knowledge/knowledge.sqlite')",
+   "evidence_lines": [
+    9,
+    106,
+    204
+   ]
+  },
+  "fn": "lemoncat7/dsh-knowledge",
+  "sha": "3fdfe3227573",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

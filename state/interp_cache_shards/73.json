@@ -9695,5 +9695,211 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0c3357217b54": {
+  "identity": {
+   "one_liner": "Qt 示例代码集合，含自定义控件与 SQLite WAL 等组件",
+   "review": "这是一个 Qt 示例项目仓库，包含电池、仪表盘、加载指示等 UI 控件，以及异步日志、开机自启、HTTP/WebDAV 客户端和 SQLite WAL 多线程封装等实用模块。适合 Qt 学习者和桌面应用开发者参考复用。数据库相关内容仅限 SQLite 预写式日志示例。",
+   "highlights": [
+    "提供多种 Qt UI 控件与数据可视化示例",
+    "包含多线程 SQLite WAL 模式封装",
+    "提供 HTTP/WebDAV 客户端及跨平台打包方案"
+   ],
+   "use_cases": [
+    "Qt 桌面应用开发参考",
+    "多线程 SQLite 数据库读写场景",
+    "跨平台应用打包部署"
+   ],
+   "相关项目": [
+    "Qt-Examples"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "### SqliteWAL - SQLite 预写式日志 ／ - 多线程 SQLite 数据库操作",
+     "lines": [
+      218,
+      220
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库提供面向开发者的示例组件，其中 SqliteWAL 模块用于操作 SQLite 数据库，属数据库相关工具/示例代码",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### SqliteWAL - SQLite 预写式日志 ／ - 多线程 SQLite 数据库操作",
+   "evidence_lines": [
+    218,
+    220
+   ]
+  },
+  "fn": "RealChuan/Qt-Examples",
+  "sha": "0c3357217b54",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "da6966179031": {
+  "identity": {
+   "one_liner": "本地运行的通用 LLM 智能体 harness（Rust 后端 + Vue3 前端 + Tauri 壳）",
+   "review": "KedaiAgent 是一个本地运行的 LLM 智能体运行框架，提供角色扮演/文学创作与任务工作台两种模式，内置 Agent 引擎（计划-执行-反思）、工具授权层、MCP 客户端与上下文工程，并兼容 SillyTavern 角色卡/世界书格式。面向需要在本地运行智能体、进行创作或任务自动化的一般用户，数据（含 SQLite 库）仅存本机，依赖用户自配的 OpenAI 兼容 LLM 后端。",
+   "highlights": [
+    "提供 Agent 引擎，支持 planning→executing→reflecting 状态机与 fast/deep/agent/custom 四种模式",
+    "兼容 SillyTavern 生态：支持 V2/V3 角色卡、世界书注入与正则脚本",
+    "数据仅存本地 SQLite 与文件，API Key 用 DPAPI/Keystore 加密存储"
+   ],
+   "use_cases": [
+    "加载角色卡进行长篇文学创作与沉浸式角色扮演",
+    "下发目标让模型自动拆解计划并由子代理执行的任务自动化",
+    "通过技能库/MCP/自定义工具插件扩展智能体能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库|SQLite（rusqlite，bundled 零原生依赖）|",
+     "lines": [
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 SQLite（rusqlite）作为自身数据存储层（kedai.db），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "KedaiAgent 是一个**本地运行的通用 LLM 智能体 harness**——把大模型从「聊天框」变成能干活的智能体运行框架。它内置 **Agent 引擎**（计划 → 执行 → 反思）、完整的**工具与授权层**、**上下文工程**（缓存感知压缩、跨会话记忆），并原生兼容 **SillyTavern 生态**（角色卡 / 世界书 / 变量与输出协议）。 ／ |数据库|SQLite（rusqlite，bundled 零原生依赖）| ／ - 数据库：`<数据目录>/kedai.db`（WAL 模式；桌面版与已有用户数据的场景固定在 `%APPDATA%\\com.kedai.app\\data\\`）。",
+   "evidence_lines": [
+    34,
+    92,
+    185
+   ]
+  },
+  "fn": "Sata1949/kedai",
+  "sha": "da6966179031",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4606c417e6f9": {
+  "identity": {
+   "one_liner": "终端 UI，聚合多 AI 账户与本地模型聊天/编排，数据加密存入 PostgreSQL",
+   "review": "omnicrab 是一个 Rust 编写的终端界面应用，将多个 AI 提供商账户与 Ollama 等本地模型接入统一会话，支持多账户 fanout、@agent 路由、任务编排、用量与预算统计和故障自动切换。所有存储内容在写入 PostgreSQL 前先加密，首次启动需设置不可恢复的主密码。面向需要同时管理多个 AI 账户并统筹调度的个人用户，要求 Linux、Rust 与 PostgreSQL 环境。",
+   "highlights": [
+    "支持多提供商多账户接入（Anthropic、OpenAI、Gemini、OpenRouter、Groq、DeepSeek、xAI、Mistral）及 Ollama/OpenAI 兼容本地模型",
+    "提供 /fanout、/orchestrate、@agent 路由与自动故障回退等编排能力",
+    "统计每账户请求、token 与成本，支持月度预算与订阅用量限额显示；存储内容加密后写入 PostgreSQL"
+   ],
+   "use_cases": [
+    "在终端中同时使用和对比多个 AI 账户与本地模型",
+    "多智能体协同拆分与执行任务",
+    "跟踪各账户 token 消耗、费用与订阅限额"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "omnicrab is a terminal UI that connects many AI accounts and local models and lets you chat with them, compare them, and have agents on different accounts work together. It shows how much each account is using, and everything it stores is encrypted before it r ／ You need Linux, Rust, and PostgreSQL. ／ export OMNICRAB_DATABASE_URL=postgres://USER@localhost/omnicrab # password via ~/.pgpass or PGPASSWORD",
+     "lines": [
+      3,
+      20,
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其将数据加密后存入 PostgreSQL，数据库为其存储后端，项目本身是 AI 聊天/编排应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "omnicrab is a terminal UI that connects many AI accounts and local models and lets you chat with them, compare them, and have agents on different accounts work together. It shows how much each account is using, and everything it stores is encrypted before it reaches PostgreSQL. ／ You need Linux, Rust, and PostgreSQL. ／ export OMNICRAB_DATABASE_URL=postgres://USER@localhost/omnicrab   # password via ~/.pgpass or PGPASSWORD",
+   "evidence_lines": [
+    3,
+    20,
+    42
+   ]
+  },
+  "fn": "xn0kkx/Omnicrab",
+  "sha": "4606c417e6f9",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

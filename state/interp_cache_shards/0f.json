@@ -9230,5 +9230,192 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d08ad15cd065": {
+  "identity": {
+   "one_liner": "SchemaCrawler 的 Web 应用，在线生成数据库 ER 图与文档",
+   "review": "SchemaCrawler 的配套 Web 应用，基于 Spring Boot 与 Bootstrap 构建，部署在 Heroku，通过 Docker 镜像运行，在浏览器中在线生成 SQLite 数据库的 crow's-foot ERD 图。构建需先安装 Graphviz 与 Docker，运行需配置 AWS S3 相关环境变量，适合需要在网页端查看数据库结构的开发者使用。",
+   "highlights": [
+    "提供在线生成数据库 crow's-foot ERD 图的 Web 界面",
+    "基于 Spring Boot 构建，提供 Docker 镜像部署方式",
+    "可从 Maven 构建的 jar 文件运行"
+   ],
+   "use_cases": [
+    "在浏览器中在线查看 SQLite 数据库的 ER 图",
+    "本地通过 jar 或 Docker 容器运行 SchemaCrawler Web 服务",
+    "结合 SchemaCrawler 命令行工具的在线教学演示"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "This is a Spring Boot web application with a Bootstrap user interface, with source code control in GitHub, which is automatically built on every commit by GitHub Actions using a Maven build, tests are run, and coverage measured with JaCoCo and Codecov.io, and ",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该应用为数据库生成 ER 图与结构文档，属于服务于数据库生态的工具，仅以 SQLite 作为示例数据源。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# SchemaCrawler Web Application ／ This is a Spring Boot web application with a Bootstrap user interface, with source code control in GitHub, which is automatically built on every commit by GitHub Actions using a Maven build, tests are run, and coverage measured with JaCoCo and Codecov.io, and then immediately deployed to Heroku using a Docker image, which generates an crows-foot ERD of a SQLite database. ／  `docker run -d --rm --env AWS_ACCESS_KEY_ID=xxxxx --env AWS_SECRET_ACCESS_KEY=xxxxx --env AWS_S3_BUCKET=xxxxx -p 8080:8080 -t schemacrawler/schemacrawler-webapp`",
+   "evidence_lines": [
+    7,
+    16,
+    44
+   ]
+  },
+  "fn": "schemacrawler/SchemaCrawler-Web-Application",
+  "sha": "d08ad15cd065",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "586595f6bfa3": {
+  "identity": {
+   "one_liner": "320 道数据工程面试练习题集，含 SQL/Python/Pandas/PySpark 四轨道与验证测试",
+   "review": "提供 320 道数据工程练习题，分 SQL、Python、Pandas、PySpark 四个轨道，每轨 80 题，附参考解答与正确性校验；SQL 轨道使用本地播种的 PostgreSQL 数据库，其余轨道用内置样本数据集，通过 Jupyter notebook 完成。面向自学和准备数据工程技术面试的人，环境依赖 Python 3.11/3.12、JDK 17 及版本锁定的 pip 依赖。",
+   "highlights": [
+    "提供 320 道练习题，含题目、参考解答与 320 项正确性检查及 45 项轻量检查",
+    "SQL 轨道使用本地 PostgreSQL 数据库（README 以 PostgreSQL 18 本地测试），其余轨道使用内置样本数据",
+    "提供 environment_preflight.py 预检脚本，校验解释器、依赖版本、Java 17 与 Spark 启动"
+   ],
+   "use_cases": [
+    "数据工程岗位面试的自学准备",
+    "练习 SQL 查询、数据清洗、转换与数据质量校验",
+    "在本地环境练习 PySpark 分布式数据处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**320 hands-on interview questions** across **SQL (PostgreSQL), Python, Pandas, and PySpark**, with 80 questions per track. Designed for self-study, hands-on data engineering interview preparation, and practicing data quality, transformations, and analytical p ／ |SQL|80|PostgreSQL|Joins, aggregations, CTEs, window functions, analytics, and edge cases| ／ The Python, Pandas, and PySpark tracks use realistic sample datasets with deliberately messy records to practice handling missing, duplicate, inconsistent, and invalid data. The SQL track uses a locally seeded PostgreSQL database. ／ - **PostgreSQL** for the SQL track only (developed/tested locally with **PostgreSQL 18**). No database server is needed for Python, Pandas, or PySpark.",
+     "lines": [
+      3,
+      13,
+      19,
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库本身是练习题集应用，SQL 轨道运行在本地播种的 PostgreSQL 数据库之上，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|SQL|80|PostgreSQL|Joins, aggregations, CTEs, window functions, analytics, and edge cases| ／ The Python, Pandas, and PySpark tracks use realistic sample datasets with deliberately messy records to practice handling missing, duplicate, inconsistent, and invalid data. The SQL track uses a locally seeded PostgreSQL database. ／ - **PostgreSQL** for the SQL track only (developed/tested locally with **PostgreSQL 18**). No database server is needed for Python, Pandas, or PySpark.",
+   "evidence_lines": [
+    13,
+    19,
+    49
+   ]
+  },
+  "fn": "kursad-can/data-engineering-interview-practice",
+  "sha": "586595f6bfa3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8dc0a9694c2a": {
+  "identity": {
+   "one_liner": "计算机基础知识的赛博朋克风格互动教学网站",
+   "review": "这是一个面向八年级数字媒体课程的教学网站，包含八个站点，覆盖比特与字节、图灵机、软硬件、像素、可计算性边界、AI、加密与密码安全等内容，并附带两个浏览器游戏。全程在浏览器中运行，无需服务器和注册，可通过 GitHub Pages 访问或本地打开 index.html；3D 游戏需本地 Web 服务器且引入 three.js。面向教师与学生使用，教师可通过 Issue 索取答案和试卷。与数据库无直接关联。",
+   "highlights": [
+    "提供八个教学站点，内容涵盖计算机基础、图灵机、加密与密码安全等",
+    "包含两个游戏：Point-and-Click 冒险游戏与 3D 浏览器游戏",
+    "纯浏览器运行，无需服务器与注册，字体本地化，仅 three.js 由 jsDelivr 加载"
+   ],
+   "use_cases": [
+    "中学信息技术/数字媒体课程的课堂教学（约1-2课时）",
+    "学生自主学习计算机基础知识的互动练习",
+    "教师获取配套解答与考试题用于教学评估"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未涉及任何数据库相关内容，无法确认其为数据库生态工具或数据库应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "内容 CC BY 4.0，代码 MIT，双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Eine interaktive Lernwebsite im Cyberpunk-Stil für etwa ein bis zwei Unterrichtsstunden. In acht Stationen geht es um Bits und Bytes, die Turingmaschine, Hardware und Software, Pixel, Grenzen der Berechenbarkeit, KI, Verschlüsselung und sichere Passwörter. Jede Station öffnet sich erst, wenn das Rätsel davor gelöst ist. ／ Alles läuft im Browser, ohne Server und ohne Anmeldung. Du kannst die Seite über GitHub Pages aufrufen oder den Ordner herunterladen und `index.html` öffnen. Für die Spiele ist ein kleiner lokaler Webserver nötig, zum Beispiel `python3 -m http.server`.",
+   "evidence_lines": [
+    3,
+    10
+   ]
+  },
+  "fn": "mrbraendt/dm8-0und1-oer",
+  "sha": "8dc0a9694c2a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

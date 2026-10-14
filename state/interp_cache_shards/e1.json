@@ -9023,5 +9023,243 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "89e30e730300": {
+  "identity": {
+   "one_liner": "本地多AI代理协作聊天室，共享记忆与权限控制",
+   "review": "MADRE 是一个运行在 127.0.0.1 的本地 Node 应用，把 Codex、Claude Code、Gemini CLI、OpenCode 等命令行代理汇入同一会话，跨会话索引并蒸馏对话为带类型的记忆笔记，默认只读、写操作按 #0–#4 分级并需口令确认。适合在本地同时使用多个 AI 编码代理、希望共享上下文与可控权限的个人开发者。",
+   "highlights": [
+    "在同一会话中通过 @提及 调用多个 AI CLI 代理并共享上下文",
+    "对话内容被索引并按每十轮蒸馏为决策、事实、偏好、问题四类记忆笔记",
+    "消息按 #0 至 #4 权限分级执行，写入操作支持还原点与撤销"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理围绕同一项目协同讨论与交接任务",
+    "跨会话、跨项目检索历史决策与上下文",
+    "需要细粒度权限控制与本地化运行的 AI 代理工作台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Preguntas *«¿por qué elegimos Postgres?»* tres semanas después y el proyecto contesta, aunque esa decisión la tomara otro agente en otra sesión.",
+     "lines": [
+      67
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅为多代理协作应用，未声明以某个数据库为存储或为其提供服务，Postgres 仅作为示例问题被提及",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Escribes `@codex` y contesta Codex. Escribes `@claude` y contesta Claude, **leyendo lo que Codex acaba de decir**. Escribes «@madre, pregúntale al equipo…» y cada uno opina por turno sobre lo mismo; al final, @madre resume en qué coinciden y en qué no, citando cada respuesta. ／ Todo lo que se dice queda indexado. Cuando la conversación pasa de la ventana de contexto, cada agente recibe de vuelta lo que hace falta, citado. Cada diez intercambios, el proyecto destila lo dicho en notas con tipo: una decisión, un hecho, una preferencia, una pregunta abierta. ／ **No hay nube.** MADRE no tiene servidor, ni cuenta, ni backend. Corre en `127.0.0.1` y se muere cuando cierras la terminal.",
+   "evidence_lines": [
+    41,
+    65,
+    120
+   ]
+  },
+  "fn": "jossuealcacao-exe/madre",
+  "sha": "89e30e730300",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4626d25e869e": {
+  "identity": {
+   "one_liner": "本地优先的桌面数据库客户端，支持多库连接与 SQL 编辑",
+   "review": "Plugboard（原 Relay DB）是使用 Go、Svelte 5 和 Wails 构建的桌面数据库客户端，面向需要直接连接数据库的开发者与运维人员。支持 PostgreSQL、MySQL、MariaDB、SQLite、ClickHouse、Cassandra、Redis 等多种数据库，提供连接 URL 解析、SSH 隧道、只读连接保护、表格编辑、SQL 编辑器和 schema 图；密码存于系统密钥链，无账号、无云同步、无遥测。内置 MCP 服务器，可供 AI 代理查询表结构与执行查询。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、ClickHouse、Cassandra、Redis/Valkey 等多种数据库连接",
+    "提供只读连接、生产写入确认、事务性网格编辑等防误操作机制",
+    "内置 MCP 服务器，允许 AI 代理以只读方式查看表结构并执行查询"
+   ],
+   "use_cases": [
+    "开发者在本地通过 GUI 浏览、编辑和查询多种数据库",
+    "通过 SSH 隧道安全管理生产库，依赖只读连接防止误写",
+    "将数据库结构查询能力通过 MCP 暴露给 Claude Code、Cursor 等 AI 代理"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ Plugboard showing a PostgreSQL table ／ - PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name.",
+     "lines": [
+      3,
+      12,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name. ／ - Paste a connection URL — `postgres://…`, `mysql://…`, `clickhouse://…`, `cassandra://…`, `redis://…`, a JDBC URL or a line from a `.env` file — and the form fills itself in.",
+     "lines": [
+      3,
+      37,
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name.",
+     "lines": [
+      3,
+      37
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name. ／ - Paste a connection URL — `postgres://…`, `mysql://…`, `clickhouse://…`, `cassandra://…`, `redis://…`, a JDBC URL or a line from a `.env` file — and the form fills itself in.",
+     "lines": [
+      3,
+      37,
+      39
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name.",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是连接和操作多种数据库的桌面客户端工具，为数据库生态服务而非依赖某一数据库构建应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，捆绑的图标、Logo 与字体保留各自许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ A desktop database client, formerly called Relay DB. Built with Go, Svelte 5 and Wails. ／ - Plugboard is also an MCP server: `claude mcp add plugboard -- /Applications/Plugboard.app/Contents/MacOS/plugboard mcp` (Settings ▸ AI agents shows the exact command), and Claude Code, Cursor or any other agent can list your tables, read their structure and run queries.",
+   "evidence_lines": [
+    3,
+    10,
+    90
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "falsea3/plugboard",
+  "sha": "4626d25e869e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dc5e1da1c0ca": {
+  "identity": {
+   "one_liner": "本地桌面 AI 聊天工作区，支持 QQ 接入、记忆与知识库",
+   "review": "Superstring 是一个运行在 Windows/macOS/Linux 本地的 AI Agent 聊天工作区，整合网页对话、QQ 群聊与私聊，提供长期记忆、知识库、MCP 工具扩展与技能管理。数据与会话记录保存在本机，不提供云同步；模型推理需配置 LM Studio 等本地服务或 OpenAI 兼容外部服务。适合希望本地部署个人聊天助手的用户。",
+   "highlights": [
+    "支持通过 OneBot 11 WebSocket 连接 QQ 群聊与私聊，可配置主动接话、回复窗口与数据保留期限",
+    "提供长期记忆、知识库导入（UTF-8 文本/Markdown）与 MCP 工具扩展，支持 stdio/HTTP/SSE 连接外部服务",
+    "支持原生图片输入与文本描述双模式，以及基于 QuickJS WASM 沙箱的程序化工具调用"
+   ],
+   "use_cases": [
+    "本地部署个人 AI 聊天陪伴助手",
+    "通过 QQ 接入实现群聊与私聊中的 Agent 自动回复",
+    "结合本地模型（如 LM Studio）搭建隐私优先的对话与知识库查询环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为使用本地存储保存会话与配置的聊天应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本地 Agent 工作区，主要用于日常陪伴与聊天，支持网页对话、QQ 群聊与私聊、记忆、知识库、MCP 工具扩展与技能管理。 ／ 应用安装包包含运行环境。模型推理需要 LM Studio 等本地服务或配置的外部 OpenAI 兼容服务。 ／ - MIT 许可证；依赖项附带各自的许可证与 NOTICE 原文",
+   "evidence_lines": [
+    7,
+    105,
+    142
+   ]
+  },
+  "fn": "Verdspair/superstring",
+  "sha": "dc5e1da1c0ca",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

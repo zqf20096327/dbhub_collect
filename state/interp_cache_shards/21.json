@@ -9986,5 +9986,193 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aee914347ba8": {
+  "identity": {
+   "one_liner": "开源 AI 原生笔记知识库，Evernote 替代品，内建 MCP 协议",
+   "review": "EdgeEver 是一个开源的笔记与知识库应用，采用三栏布局，支持网页剪藏、微信聊天记录导入、多维表格、海报笔记、RSS 摘要等功能，并内建 MCP/ACP 协议供外部 AI Agent 读写笔记。可零成本部署在 Cloudflare（D1/R2/Workers），或用 Docker 自托管；数据基于 SQLite，支持 ZIP 无损导出。适合希望自托管、数据自有并集成个人 AI 工作流的 Evernote 长期用户。",
+   "highlights": [
+    "内建 Model Context Protocol (MCP) 与 ACP，外部 AI Agent 可读取和整理笔记",
+    "基于标准 SQLite 存储，提供 REST API、CLI 工具与无损 ZIP 导出/导入",
+    "支持 Cloudflare Serverless 与 Docker 双部署方式，含网页剪藏、多维表格、知识库站点发布等功能"
+   ],
+   "use_cases": [
+    "个人笔记与知识库的自托管管理",
+    "多平台内容剪藏与微信聊天记录归档",
+    "通过 AI Agent 自动化整理与协作创作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI too ／ - Android app: Expo + React Native in `apps/mobile`, with SQLite local storage and incremental sync. ／ - Native desktop app: Electron + Rust sidecar combines a consistent cross-platform experience with high-performance local data services; SQLite enables offline editing, incremental sync when back online, and local backups.",
+     "lines": [
+      78,
+      170,
+      172
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite（及 Cloudflare D1）存储笔记数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI tooling, and lossless full ZIP export/import to keep your data completely independent. ／ 2. Create D1 `edgeever` and R2 `edgeever-resources` in Cloudflare. ／ EdgeEver is a modern, open-source notes and knowledge base workspace. It revives the beloved Evernote-style three-pane layout while offering an open data architecture and seamless AI Agent integration for complete ownership and smart productivity.",
+   "evidence_lines": [
+    78,
+    96,
+    19
+   ]
+  },
+  "fn": "tianma-if/edgeever",
+  "sha": "aee914347ba8",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2869389f9c52": {
+  "identity": {
+   "one_liner": "自托管宠物健康与护理追踪应用，SvelteKit+SQLite",
+   "review": "EinVault 是面向 homelab 用户的自托管宠物健康与护理追踪系统，用 SvelteKit 构建并以 SQLite 存储。它提供宠物档案、日志、健康记录、提醒、全文搜索、ICS 日历订阅和 Bearer-token API。单 Docker 容器即可运行，无外部依赖，支持基于角色的访问控制，适合想将宠物数据保留在自己硬件上的家庭与照护者。",
+   "highlights": [
+    "单 Docker 容器运行，内置 SQLite，无外部依赖",
+    "提供 Bearer-token API，可从脚本和设备无头记录数据",
+    "支持日历订阅、全文搜索与基于角色的访问控制"
+   ],
+   "use_cases": [
+    "家庭在自有硬件上管理宠物健康与护理记录",
+    "照护者通过角色账号记录遛狗、喂食等活动",
+    "通过 API 与日历订阅集成 Home Assistant、智能按钮等"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Self-contained:** single Docker container, SQLite database, no external dependencies",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个用 SQLite 存储自身数据的自托管应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "EinVault is a private, self-hosted companion health and care tracker built for homelabs. Track health records, daily activities, and care schedules for your animal companions. All data stays on your hardware. No cloud, no telemetry, no external accounts. ／ - **Self-contained:** single Docker container, SQLite database, no external dependencies",
+   "evidence_lines": [
+    8,
+    28
+   ]
+  },
+  "fn": "davefatkin/EinVault",
+  "sha": "2869389f9c52",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fc3d2786d597": {
+  "identity": {
+   "one_liner": "英西双语技术概念科普静态站点",
+   "review": "Tidbit 是一个开源的双语（英语/西班牙语）技术概念解释站点，每个条目包含一句话定义、短段落、生活类比、要点和 SVG 示意图，内容以 JSON 文件存储、纯静态无框架，可 npm 本地运行并经 GitHub Actions 发布到 GitHub Pages。面向学习技术概念的读者，不涉及数据库。",
+   "highlights": [
+    "每个条目含定义、类比、要点、SVG 图示，并双语（英/西）呈现",
+    "纯静态站点：index.html/app.js/style.css，无框架、无构建步骤",
+    "提供脚本可用 Claude 起草条目（需 Anthropic 凭据），条目内容用 npm run index 校验重建"
+   ],
+   "use_cases": [
+    "以双语形式学习 AI、网络、安全、云等基础技术概念",
+    "通过 GitHub PR 以 JSON 条目形式贡献新概念内容",
+    "作为无框架静态站点的内容组织参考"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 未涉及任何数据库，仅为使用浏览器本地存储的静态内容站点",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Technology concepts explained simply, in English and Spanish.** ／ - `index.html`, `app.js`, `style.css`: the whole site. No framework, no build step. ／ - `.github/workflows/site.yml`: validates the content and publishes to GitHub Pages on every push to `main`. No secrets.",
+   "evidence_lines": [
+    3,
+    13,
+    18
+   ]
+  },
+  "fn": "legiosai/tidbit",
+  "sha": "fc3d2786d597",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9534,5 +9534,80 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e6f66f806621": {
+  "identity": {
+   "one_liner": "基于LadybugDB图数据库的IDE长期记忆MCP服务器",
+   "review": "GraphMemory-IDE 是一个 MCP 服务器，为 VSCode、Cursor、Windsurf 等 IDE 提供跨会话的语义向量检索、图结构知识存储与实时分析，面向使用 AI 编程助手的开发者。后端嵌入 LadybugDB 图库（openCypher 查询），配合 FastAPI、JWT 认证、Codon 编译的图算法及 Docker 部署；关系型数据与遥测存于 PostgreSQL，缓存用 Redis。",
+   "highlights": [
+    "通过 MCP 协议向 IDE 提供图存储记忆与基于 sentence-transformers 的语义向量检索",
+    "支持 Codon 原生编译加速中心性、社区发现、路径分析等图算法，并自动回退到 NetworkX",
+    "提供 FastAPI 后端、JWT 认证、Prometheus/Grafana 可观测性及 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "为 IDE 中的 AI 助手提供跨会话长期记忆与语义检索",
+    "对知识图谱进行中心性、社区发现等图分析与可视化仪表盘展示",
+    "通过 MCP 工具接口在 VSCode/Cursor/Windsurf 中读写项目知识图"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Production-ready Docker deployment** — Multi-service Docker Compose with Nginx, PostgreSQL, Redis, and monitoring stack ／ |`DB_DATABASE_URL`|`postgresql://user:password@localhost:5432/graphmemory_dev`|PostgreSQL connection string (relational + telemetry storage)| ／ Database integration tests expect PostgreSQL and Redis backing services. The",
+     "lines": [
+      21,
+      52,
+      128
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是服务于 IDE/AI 开发工作流的 MCP 服务器组件，而非仅使用数据库的最终应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "An AI-assisted, long-term memory system for IDEs, powered by LadybugDB — an embedded, columnar, MIT-licensed graph database. GraphMemory-IDE is an MCP (Model Context Protocol) server that provides semantic vector search, graph-based knowledge storage, and real-time analytics. It integrates with VSCode, Cursor, and Windsurf through dedicated IDE plugins. ／ |`DB_DATABASE_URL`|`postgresql://user:password@localhost:5432/graphmemory_dev`|PostgreSQL connection string (relational + telemetry storage)| ／ GraphMemory-IDE uses a hybrid architecture where I/O-bound code (FastAPI, database clients, WebSocket) runs in CPython, while compute-heavy graph algorithms can optionally run as native-compiled Codon modules.",
+   "evidence_lines": [
+    7,
+    52,
+    62
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "elementalcollision/GraphMemory-IDE",
+  "sha": "e6f66f806621",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

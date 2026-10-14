@@ -8160,5 +8160,170 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c67866b53962": {
+  "identity": {
+   "one_liner": "自托管饮食与营养记录应用，基于Go后端与SQLite/PostgreSQL存储",
+   "review": "Mecalo 是一个自托管的饮食记录与营养管理应用，用于记录早午晚餐及零食、检索食品营养成份、按日本膳食摄取标准计算目标量。后端为 Go，前端为 Nuxt，数据通过 MECALO_DATABASE_URL 存入 SQLite 文件或 PostgreSQL/CockroachDB，支持 OIDC 登录、CSV/JSON 导出及 MCP 接口，适合需要本地部署、注重隐私的个人用户。",
+   "highlights": [
+    "支持按餐次记录饮食、食品检索、自作食品与食谱、复制历史记录",
+    "数据库通过环境变量切换：SQLite 文件路径或 postgresql:// 连接字符串（CockroachDB）",
+    "提供 MCP 服务器端点，可由 MCP 客户端读取与写入记录；支持 CSV/JSON 导出导入"
+   ],
+   "use_cases": [
+    "个人自托管饮食与营养摄入跟踪",
+    "基于日本人膳食摄取标准的营养目标管理",
+    "通过 MCP 客户端以 AI 助手方式读写饮食记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`MECALO_DATABASE_URL`|`data/mecalo.db`|SQLiteのファイルパス, または `postgresql://` で始まる CockroachDB の接続文字列|",
+     "lines": [
+      52
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ |`MECALO_DATABASE_URL`|`data/mecalo.db`|SQLiteのファイルパス, または `postgresql://` で始まる CockroachDB の接続文字列| ／ make test # バックエンドのテスト(SQLite)",
+     "lines": [
+      9,
+      52,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 SQLite/PostgreSQL 存储饮食数据的终端应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "セルフホスト型の食事記録・栄養管理アプリケーション. ／ |`MECALO_DATABASE_URL`|`data/mecalo.db`|SQLiteのファイルパス, または `postgresql://` で始まる CockroachDB の接続文字列| ／ |`MECALO_MCP_ENABLED`|`false`|MCPサーバ(`/mcp`)を有効にするか|",
+   "evidence_lines": [
+    16,
+    52,
+    71
+   ]
+  },
+  "fn": "chan-mai/Mecalo",
+  "sha": "c67866b53962",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2105e11608eb": {
+  "identity": {
+   "one_liner": "面向不可信 AI Agent 的受控 SQL 访问网关（MCP）",
+   "review": "这是一个 MCP 形式的 SQL 网关，供不可信 AI Agent 通过显式 Entity、关系代数 IR 和参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，不接受任意 SQL、不提供 DDL；可信操作者另有默认关闭、需显式授权的 execute_sql 逃生通道。提供 RBAC、字段 ACL、row policy、mask、EXPLAIN 预筛与审计等治理能力，适合需要在 Agent 场景下管控数据库访问的运维/安全团队。",
+   "highlights": [
+    "通过显式 Entity、关系代数 IR 与参数化 codegen 访问数据库，不接受任意 SQL，不提供 DDL",
+    "提供 RBAC、字段 ACL、row policy 与 mask 统一强制，以及 EXPLAIN 预筛、结果上限、超时与租户预算等成本控制",
+    "支持配置热重载、异步审计与 OpenTelemetry hook，安全能力无法证明时默认拒绝"
+   ],
+   "use_cases": [
+    "让 AI Agent（Cursor、Claude Desktop、VS Code 等 MCP 客户端）在治理约束下查询关系数据",
+    "对多租户/多数据源实施字段与行级访问控制和成本上限",
+    "为不可信调用方提供可审计、默认拒绝的 SQL 数据访问入口"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 Agent 受控访问 PostgreSQL、MySQL 与 OceanBase 服务的 SQL 网关，属于数据库生态工具而非使用库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **The governed SQL gateway for untrusted AI agents.** ／ 面向不可信 AI Agent 的受控 SQL 数据访问网关。通过显式 Entity、关系代数 IR 和 ／ 参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+   "evidence_lines": [
+    3,
+    5,
+    6
+   ]
+  },
+  "fn": "nethinwei/sql-mcp-server",
+  "sha": "2105e11608eb",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

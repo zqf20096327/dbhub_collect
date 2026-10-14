@@ -9862,5 +9862,113 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a6e96dc71d46": {
+  "identity": {
+   "one_liner": "reverse ETL 工具，以 YAML 声明将仓库数据回写到外部工具",
+   "review": "drt 是一个 reverse ETL 工具，把数据仓库中的数据同步回 Slack、HubSpot 等业务工具，配置以 YAML 存放在用户仓库中并提供 CLI 运行。提供 plan/apply 审查机制、删除保护、MCP server 和 Claude Code 技能。面向使用 dbt/dlt 工作流的数据工程团队，支持 pip 安装和自托管，Apache 2.0 开源核心。",
+   "highlights": [
+    "提供 plan/apply 只读预览与条件写入机制，并支持 max_delete_pct 删除保护",
+    "内置 MCP server 与 Claude Code 技能，支持通过 AI 客户端运行与校验同步",
+    "提供多数据库 source 连接器与 36 个 destination 连接器，支持 GitHub Actions/Dagster/Airflow 集成"
+   ],
+   "use_cases": [
+    "将数仓中用户/订单等维表字段回填到 CRM、Slack 等业务系统",
+    "在 CI 中以代码审查方式管理数据同步流程",
+    "通过 MCP 客户端或 AI 技能生成和运行数据同步配置"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|✅ v0.1|`pip install drt-core[postgres]`|Password (env var)| ／ drt init --template postgres_to_slack ／ postgres|hubspot]` scaffolds keyed Apache Ossie datasets. Review the",
+     "lines": [
+      236,
+      74,
+      99
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|✅ v0.5|`pip install drt-core[mysql]`|Password (env var)| ／ Sheets, GitHub Actions, MySQL, ClickHouse, BigQuery, …) and",
+     "lines": [
+      241,
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|✅ v0.4.2|(core)|File path|",
+     "lines": [
+      238
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|✅ v0.6|`pip install drt-core[sqlserver]`|Password (env var)|",
+     "lines": [
+      245
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|✅ v0.4.3|`pip install drt-core[clickhouse]`|Password (env var)| ／ Sheets, GitHub Actions, MySQL, ClickHouse, BigQuery, …) and",
+     "lines": [
+      240,
+      80
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "drt 读取各数据库作为 source 并向目的地写数据，是为数据栈服务的同步工具而非使用某库存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0 开源核心（OPEN_CORE.md 声明 open core 边界）",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dlt loads data in, dbt transforms it, and **drt** activates it back out — reverse ETL from your warehouse to the tools your team works in, as YAML in your own repo. No dashboard to babysit, no audience builder duplicating what dbt already does, no hosted runtime billing you per row. Your data goes straight from your warehouse to the destination — never through a drt-hosted intermediary. ／ |PostgreSQL|✅ v0.1|`pip install drt-core[postgres]`|Password (env var)| ／ |ClickHouse|✅ v0.4.3|`pip install drt-core[clickhouse]`|Password (env var)|",
+   "evidence_lines": [
+    7,
+    236,
+    240
+   ]
+  },
+  "fn": "drt-hub/drt",
+  "sha": "a6e96dc71d46",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

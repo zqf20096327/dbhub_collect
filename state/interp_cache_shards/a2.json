@@ -9420,5 +9420,166 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c4fcfa16c863": {
+  "identity": {
+   "one_liner": "基于 SQL Server 的数据仓库教程项目，含 ETL 与建模",
+   "review": "该仓库是一个教学/作品集项目，演示如何用 SQL Server 构建数据仓库：按 Medallion 架构分 Bronze/Silver/Gold 三层，从 CSV 导入数据，进行清洗、标准化，并建模为星型 schema 用于 SQL 报表与分析。面向数据工程/分析的学习者和从业者，附安装指南与课程链接；依赖 SSMS 与本地文件路径，MIT 许可。",
+   "highlights": [
+    "按 Medallion 架构实现 Bronze/Silver/Gold 三层数据仓库流程",
+    "提供从 CSV 文件到 SQL Server 的 ETL 加载脚本与数据清洗流程",
+    "在 Gold 层生成面向报表的星型 schema 数据模型"
+   ],
+   "use_cases": [
+    "学习数据仓库构建与 ETL 流程的教学实践",
+    "数据工程/分析方向的求职作品集项目",
+    "基于 SQL 的销售数据分析与报表演示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**New here? Open the setup guide in the `00_setup` folder.** It walks you through installing SQL Server and creating the databases, on Windows and Mac, with the fixes for the common errors. ／ ├── 00_setup/ the setup guide: SQL Server and SSMS on Windows and Mac ／ 1. **Bronze Layer**: Stores raw data as-is from the source systems. Data is ingested from CSV Files into SQL Server Database.",
+     "lines": [
+      8,
+      12,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQL Server 存储和处理数据，是使用数据库的教学项目，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**New here? Open the setup guide in the `00_setup` folder.** It walks you through installing SQL Server and creating the databases, on Windows and Mac, with the fixes for the common errors. ／ 1. **Bronze Layer**: Stores raw data as-is from the source systems. Data is ingested from CSV Files into SQL Server Database. ／ Develop a modern data warehouse using SQL Server to consolidate sales data, enabling analytical reporting and informed decision-making.",
+   "evidence_lines": [
+    8,
+    24,
+    60
+   ]
+  },
+  "fn": "DataWithBaraa/sql-data-warehouse-project",
+  "sha": "c4fcfa16c863",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c232a25fd7ce": {
+  "identity": {
+   "one_liner": "游戏运营控制平面平台：Server/Agent/SDK 会话传输架构",
+   "review": "Croupier 是面向单公司多游戏、多环境场景的游戏运营与管控平台，采用 Console—Server—Agent—SDK 三层架构，通过 TCP/TLS 长连接会话协议实现双向请求、多路复用与重连。使用 GORM 支持存储后端，提供六语言官方 SDK 和 Web 控制台，适合游戏公司的运维与 GM 后台团队部署使用。",
+   "highlights": [
+    "提供 Server/Agent/SDK 三层架构与统一的 TCP/TLS 会话传输，支持双向请求、重连与背压",
+    "内置支持 SQLite/MySQL/PostgreSQL/SQL Server 四种存储后端（基于 GORM）",
+    "提供 Go/C#/Java/C++/Python/JS 六种语言的官方 SDK 与 JSON Schema 驱动的控制台 UI"
+   ],
+   "use_cases": [
+    "单游戏公司内多游戏、多环境的运营管控与任务调度",
+    "游戏服务器进程与协议的健康探测与恢复",
+    "通过 Docker Compose 快速搭建带控制台的最小化部署环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|`gorm.io/driver/postgres`|Production|",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|`gorm.io/driver/mysql`|Production (recommended)|",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|`glebarez/sqlite`|Development, testing, small setups|",
+     "lines": [
+      41
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`gorm.io/driver/sqlserver`|Enterprise environments|",
+     "lines": [
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为游戏运营管控的业务控制平面，通过 GORM 驱动使用各数据库存储自身数据，而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Croupier is a Server / Agent / SDK platform for game operations and control, intended by default for multiple games and multiple environments within a single game company. The architecture has converged on a unified session transport: ／ ## Supported Databases ／ Croupier is not a fork. It is a control-plane business layer, and everything underneath is built on open-source components (versions as pinned in `go.mod` / `web/package.json`):",
+   "evidence_lines": [
+    12,
+    37,
+    79
+   ]
+  },
+  "fn": "cuihairu/croupier",
+  "sha": "c232a25fd7ce",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

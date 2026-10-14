@@ -9049,5 +9049,429 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8b1b00b2c044": {
+  "identity": {
+   "one_liner": "自托管 AI 代理集成网关，通过 MCP 或 REST 发现并执行应用动作",
+   "review": "一个开源自托管的代理集成网关：FastAPI 后端管理 256 个 provider、连接凭据和动作执行，Next.js 控制台用于浏览目录和管理连接、令牌，代理通过 MCP JSON-RPC 或 REST API 发现并执行动作。面向希望自持集成层的开发者，默认用 SQLite 存数据，可切 PostgreSQL，凭据用 AES-256-GCM 加密。",
+   "highlights": [
+    "提供 MCP JSON-RPC 2.0 端点与 REST API，用于动作发现与执行，运行时令牌支持细粒度授权",
+    "注册 256 个 provider、8,385 个动作 schema，支持 OAuth 凭据加密存储（AES-256-GCM）",
+    "内置 SSRF 防护、幂等执行、运行记录与脱敏的输入输出摘要"
+   ],
+   "use_cases": [
+    "为 AI 代理提供自托管的工具/动作网关（MCP 服务端）",
+    "需要将 GitHub、Slack 等服务凭据保留在自有运行时的团队",
+    "本地部署并自定义扩展代理集成层"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provi ／ |Persistence|SQLite / PostgreSQL, SQLAlchemy async, aiosqlite / asyncpg, Alembic| ／ |`CONNECTOR_DATABASE_URL`|SQLAlchemy async database URL (SQLite or PostgreSQL)|SQLite file under `server/data/connector.db`|",
+     "lines": [
+      9,
+      47,
+      124
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provi ／ |Persistence|SQLite / PostgreSQL, SQLAlchemy async, aiosqlite / asyncpg, Alembic| ／ The API creates its SQLite database and a local encryption key on first startup if they do not exist. For a durable deployment, configure and back up a stable key before saving credentials; losing the key makes previously encrypted credentials unreadable.",
+     "lines": [
+      9,
+      47,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明项目用 SQLite/PostgreSQL 通过 SQLAlchemy 存储自身应用数据，数据库非其服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provides screens for browsing providers and actions, managing connections and runtime tokens, and reviewing activity. SQLite stores application data locally by default, with PostgreSQL supported via SQLAlchemy async and Alembic migrations. ／ |Persistence|SQLite / PostgreSQL, SQLAlchemy async, aiosqlite / asyncpg, Alembic|",
+   "evidence_lines": [
+    9,
+    47
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "Anil-matcha/open-agent-connector",
+  "sha": "8b1b00b2c044",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3479707ec9a9": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的 Golang 全栈 Headless 内容管理平台",
+   "review": "这是一款用 Go 编写的开源无头内容管理系统（CMS），提供 REST/gRPC 双协议 API、多租户隔离、三级权限控制、原生国际化和内容分发到多个社交平台的能力，配套 Vue/React/Taro/Flutter 多套前端。它面向需要统一管理与分发内容的企业团队，数据库支持 PostgreSQL 与 MySQL，并集成 Redis、OpenSearch、MinIO 等依赖服务，通过 Docker Compose 启动依赖、gow CLI 运行后端。",
+   "highlights": [
+    "提供 RESTful 与 gRPC 双协议接口，Protobuf 作为单一 API 契约并自动生成 OpenAPI 文档",
+    "实现多租户数据隔离与菜单/接口/数据三级权限管控，内置多语言翻译管理",
+    "支持内容分发至 10 个社交平台，并提供知识库 RAG、语义搜索等 AI 功能"
+   ],
+   "use_cases": [
+    "企业多站点、多语言内容管理与发布",
+    "将内容定时分发到微信公众号、Mastodon 等社交平台",
+    "需要多端（Web/小程序/App）统一调用 Headless API 的内容中台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库|",
+     "lines": [
+      49
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL/MySQL 存储数据的 CMS 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "text2sql",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "风行（GoWind HCH）是一款开箱即用的企业级 Golang 全栈 Headless 内容平台（HCH = Headless Content Hub，无头内容中枢），为企业提供灵活、可扩展的全域内容管理与分发解决方案。 ／ |数据库|PostgreSQL / MySQL|关系型数据库| ／ |多租户管理|租户新增、启用/禁用、套餐配置与数据隔离；新增租户自动初始化角色与管理员|",
+   "evidence_lines": [
+    14,
+    49,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tx7do/go-wind-cms",
+  "sha": "3479707ec9a9",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "075702f9b5c1": {
+  "identity": {
+   "one_liner": "终端日历/待办/日志管理器，本地 SQLite 存储，支持 iCal 与 CalDAV 同步",
+   "review": "chroncal 是一个终端优先的日历、待办与日志管理工具，提供 TUI 交互界面和可脚本化的 CLI。数据以单个 SQLite 文件本地存储并自动迁移，支持完整的 iCal (RFC 5545) 导入导出和 CalDAV 同步。适合希望在终端管理日程、保持数据本地化的个人用户。",
+   "highlights": [
+    "SQLite 单文件本地存储，含自动迁移（L34、L916）",
+    "完整 iCal (RFC 5545) 导入导出与 CalDAV 同步（L25-L26）",
+    "TUI 与 CLI 双模式，支持 JSON 输出供脚本和 LLM 使用（L22、L24、L36）"
+   ],
+   "use_cases": [
+    "在终端以 TUI 交互式管理日程、待办与日志",
+    "通过 CLI 脚本批量访问事件、提醒和 free/busy 查询",
+    "与 CalDAV 服务器（含 Google）双向同步日历数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and cale ／ - **SQLite storage** with automatic migrations ／ |`db`|Path to SQLite database|`$XDG_DATA_HOME/chroncal/chroncal.db`|",
+     "lines": [
+      14,
+      34,
+      813
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存储于 SQLite 文件，chroncal 是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and calendars. ／ - **SQLite storage** with automatic migrations",
+   "evidence_lines": [
+    14,
+    34
+   ]
+  },
+  "fn": "DouglasdeMoura/chroncal",
+  "sha": "075702f9b5c1",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c6179d85fc0": {
+  "identity": {
+   "one_liner": "TIDAL桌面播放器，将曲库镜像到本地SQLite实现即时搜索",
+   "review": "一个 TIDAL 桌面音乐播放器，把用户的 TIDAL 曲库同步到本机 SQLite 数据库，搜索、浏览、播放历史与音频分析均在本地进行。提供音乐视频索引、Genre Galaxy 流派图谱、无缝播放、automix 和手机 PWA 遥控。面向拥有大量已保存曲目、重视本地检索速度与本地数据归属的 TIDAL 用户；依赖 TIDAL（非官方 API）与可选的 Last.fm。",
+   "highlights": [
+    "曲库镜像至本地 SQLite，搜索与浏览本地执行",
+    "音乐视频索引与视频站，按流派/年份浏览现场、翻唱与替代版本",
+    "无缝播放与基于音频分析的 automix/DJ 过渡，支持手机 PWA 遥控"
+   ],
+   "use_cases": [
+    "大量已存曲目的本地即时检索与库管理",
+    "现场演出/翻唱视频的索引与站式连续观看",
+    "局域网内用手机遥控桌面播放"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "NOORwave is a desktop music player for TIDAL built for **instant local search and fast library browsing**. Your synced library lives in a SQLite database on your own machine, so searching your saved collection runs locally. Your library and listening history s ／ NOORwave is that second thing. It pulls your TIDAL library down into a SQLite database on your own machine, then builds a real desktop player on top of it. Search answers instantly because it never leaves your disk. The queue is something you shape, not someth ／ Your whole TIDAL library is mirrored into SQLite on your disk. Search runs locally, so results land as you type: no spinner, no round trip, no rate limit. Artist pages, album pages, filters, and shuffle all read from the same local copy, and incremental sync k",
+     "lines": [
+      7,
+      23,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确用 SQLite 存储本地曲库数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "NOORwave is a desktop music player for TIDAL built for **instant local search and fast library browsing**. Your synced library lives in a SQLite database on your own machine, so searching your saved collection runs locally. Your library and listening history stay on your disk; TIDAL supplies the audio. ／ NOORwave is that second thing. It pulls your TIDAL library down into a SQLite database on your own machine, then builds a real desktop player on top of it. Search answers instantly because it never leaves your disk. The queue is something you shape, not something that happens to you. Transitions are planned instead of stumbled into. And your own taste becomes a map you can fly through. ／ Your whole TIDAL library is mirrored into SQLite on your disk. Search runs locally, so results land as you type: no spinner, no round trip, no rate limit. Artist pages, album pages, filters, and shuffle all read from the same local copy, and incremental sync keeps it fresh in seconds.",
+   "evidence_lines": [
+    7,
+    23,
+    33
+   ]
+  },
+  "fn": "biggiesmallcap-blip/NOORwave",
+  "sha": "9c6179d85fc0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97eddbc07b90": {
+  "identity": {
+   "one_liner": "基于SpringBoot与Vue的同城搬家预约服务平台，含用户/商家/管理三端",
+   "review": "这是一个同城搬家服务预约系统，采用SpringBoot+MySQL+Redis后端与Vue前端的分离架构，用户端为微信小程序。平台提供下单、调度、订单追踪、计价、商家审核与数据统计等功能，面向用户、搬家公司与平台运营方三类角色。README 未提供数据库表结构与部署细节。",
+   "highlights": [
+    "提供用户小程序端、商家端与管理员端三端协同的订单、调度与审核功能",
+    "支持多维度计价规则配置与订单状态实时追踪",
+    "提供订单量、营收趋势等运营数据统计与可视化"
+   ],
+   "use_cases": [
+    "同城搬家服务的在线预约与订单调度",
+    "搬家公司资质审核与车辆、员工管理",
+    "平台运营方的订单、财务与统计数据管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      19,
+      29,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明后端使用 MySQL 作为数据库存储业务数据，属于使用数据库的应用系统",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个功能完善的同城搬家服务预约系统，采用前后端分离架构。平台连接用户、商家与管理员，提供从在线预约、智能调度、订单管理到售后评价的全流程服务解决方案。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    3,
+    29,
+    34
+   ]
+  },
+  "fn": "Fankekeke/move_place_cos_public",
+  "sha": "97eddbc07b90",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "376db04e82a2": {
+  "identity": {
+   "one_liner": "本机模型网关，让 Cursor/Devin 使用自配模型 API",
+   "review": "这是一个 Windows 桌面应用（Tauri + Rust），在本机架设模型网关并改写 Cursor 的代理配置与 CA 信任，使 Cursor 和 Devin 转发到用户自配的 OpenAI 或 Anthropic 协议模型服务；附带模型库、调用记录、Token 用量与费用估算。面向需要为 Cursor/Devin 接入自有模型来源的用户，目前仅提供 Windows x64 安装包，模型服务与 Key 需自备。",
+   "highlights": [
+    "提供本机模型网关，支持 OpenAI Chat/Responses 与 Anthropic 协议，含连接测试",
+    "记录调用成败、耗时与 Token 用量，并按参考单价估算金额",
+    "支持 Cursor 官方/本地/混合三种模型来源切换，Devin 走可选本机网关与模型绑定"
+   ],
+   "use_cases": [
+    "让 Cursor 使用自配的模型 API 而非仅官方模型",
+    "为 Devin 配置模型映射并通过本机网关接入",
+    "统计与估算 AI 编码调用的 Token 消耗和费用"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是面向 AI 编码工具的桌面应用，数据仅存于本机 SQLite，不服务于任何数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，基于 leookun/cursor-byok 衍生",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "让 Cursor 和 Devin 使用你配置的模型 API：本机模型网关，含模型库、接入状态与调用记录。 ／ - **模型库**：地址、API Key、模型 ID；OpenAI Chat / Responses 与 Anthropic；带连接测试。 ／ 3. 用 Cursor：初始化本地 CA 并按提示信任，再到「Cursor」页选择模型来源。**开启本地或混合模式会结束正在运行的 Cursor，先保存工作**；想让官方模型与你的模型同时可用就选「混合」。",
+   "evidence_lines": [
+    3,
+    9,
+    21
+   ]
+  },
+  "fn": "haxsd/haxsd-byok",
+  "sha": "376db04e82a2",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

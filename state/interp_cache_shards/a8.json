@@ -9528,5 +9528,85 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ee6fa559671a": {
+  "identity": {
+   "one_liner": "自托管的 Claude Code 网关，为每台设备提供密钥、限额与用量追踪",
+   "review": "DeviceGate 是一个运行在局域网内的自托管网关，基于 Next.js 和 SQLite 构建，为多台机器上的 Claude Code 提供独立的设备令牌、模型访问控制、请求/令牌/费用限额以及用量与审计记录。面向在多台自有设备上使用同一 Claude 订阅的个人用户，依赖 Node.js/Bun 与 TeamClaude 上游组件，设计上仅限局域网部署。",
+   "highlights": [
+    "提供按设备的模型访问白名单、日/周请求、令牌与费用限额及并发限制",
+    "记录每请求的输入/输出/缓存令牌用量与 API 费率折算成本，可按设备、模型、日期筛选",
+    "包含管理员操作与登录尝试的审计日志，提示词与响应内容不存储，令牌仅以哈希保存"
+   ],
+   "use_cases": [
+    "个人在笔记本、台式机等多台自有设备上共享一个 Claude 订阅并区分用量来源",
+    "为自动化机器单独配置受限的模型访问（如仅允许 Haiku）与额度",
+    "在局域网内集中管理 Claude Code 的接入密钥并随时吊销设备令牌"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Small.** One Next.js process and one SQLite file. No Redis, Postgres or Docker required. ／ |`DATABASE_PATH`|no|SQLite file. Default `./data/gateway.db`.|",
+     "lines": [
+      52,
+      182
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Small.** One Next.js process and one SQLite file. No Redis, Postgres or Docker required.",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该项目是一个使用 SQLite 存储数据的网关应用，而非为某数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Small.** One Next.js process and one SQLite file. No Redis, Postgres or Docker required. ／ |`DATABASE_PATH`|no|SQLite file. Default `./data/gateway.db`.| ／ **A self-hosted gateway that gives each of your machines its own key, model access, limits and",
+   "evidence_lines": [
+    52,
+    182,
+    7
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "jkugsiya/DeviceGate",
+  "sha": "ee6fa559671a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9338,5 +9338,78 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d5e31a136df": {
+  "identity": {
+   "one_liner": "本地优先的跨平台待办/日历桌面应用，基于 Tauri+Rust，本地存储用 SQLite",
+   "review": "todofy 是一个面向 Linux、macOS 和 Windows 的本地优先任务与日历桌面应用，提供列表、看板、日历视图、专注计时器和提醒等功能，数据默认存于本地 SQLite 并完全离线可用；可选的账号同步功能由 Supabase 支持，需付费订阅，自托管方案在文档中有说明。适合需要本地数据掌控和跨设备可选同步的个人用户。",
+   "highlights": [
+    "本地优先存储，数据存于本地 SQLite，完全离线可用",
+    "支持可选账号同步（Supabase 支持，带行级安全），以及单向推送任务到 Google Calendar",
+    "提供自然语言快速添加、语音输入（whisper.cpp）、重复任务、Pomodoro 计时器等能力"
+   ],
+   "use_cases": [
+    "个人任务与日程管理（列表/看板/日历多视图）",
+    "需要离线可用的本地任务管理场景",
+    "跨设备可选同步与 Google Calendar 单向推送日程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 💾 **Local‑first** — everything is stored in a local SQLite database and works fully offline; sync is additive, and with no account there's no cloud and no tracking",
+     "lines": [
+      52
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "1. **Create a Supabase project** — the free tier is plenty — at supabase.com, or use any Postgres you control. Make sure **Email** auth is enabled (it is by default).",
+     "lines": [
+      236
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用用 SQLite 存储自身数据，并用 Supabase（Postgres）作为可选同步后端，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 💾 **Local‑first** — everything is stored in a local SQLite database and works fully offline; sync is additive, and with no account there's no cloud and no tracking ／ - ☁️ **Optional account sync** — official Todofy Cloud Sync is a Pro feature at **€3.99/month or €39/year**; local use stays free, and the source-available self-hosting setup remains documented below. Buy securely in Lemon Squeezy before or after creating an account, then return to Todofy, sign in, and activate the emailed license for that account. Sign in with email/password or **Continue with Google** to sync tasks, board column settings, labels, focus history, and journal across devices (backed by Supabase, with row‑level security). Sessions are kept in your OS secret store. If you switch accounts on one installation, Todofy pauses before syncing and lets you load the new account's cloud data or safely copy the current device data into it with new record IDs",
+   "evidence_lines": [
+    52,
+    48
+   ]
+  },
+  "fn": "salarzeidanlou/todofy",
+  "sha": "6d5e31a136df",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

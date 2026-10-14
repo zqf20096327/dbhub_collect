@@ -9633,5 +9633,78 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cf76421aed7d": {
+  "identity": {
+   "one_liner": "团队级沙箱 AI Agent 运行平台，网关注入凭据",
+   "review": "OneCLI 是开源团队 AI Agent 平台：为每个成员提供一个运行在沙箱中的个人 Agent，出站请求经 Rust 网关注入凭据并执行策略，密钥 AES-256-GCM 加密存储。供企业为员工部署使用，支持 IdP 集成、Slack 交互与人工审批，可自托管或用 Helm 部署。",
+   "highlights": [
+    "提供每人一个隔离沙箱 Agent，唯一出站通道为凭据注入网关",
+    "凭据采用 AES-256-GCM 静态加密，按主机与路径模式匹配注入",
+    "支持 IdP 集成、Slight/仪表盘交互、定时任务与人在回路审批"
+   ],
+   "use_cases": [
+    "企业为每位员工部署受控的个人 AI Agent",
+    "统一管理团队凭据与权限策略，密钥不交付给 Agent",
+    "在自有基础设施（笔记本/家庭服务器/VPC）自托管 Agent 运行环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "That's the whole setup: `pnpm dev` generates `.env` with every required secret, starts PostgreSQL, applies migrations, and runs the full stack. Prerequisites, the command reference, project structure, and configuration live in docs/development.md.",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明本地开发由平台自身启动 PostgreSQL 并应用迁移，API Server 拥有数据库，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，ee/ 目录另有例外条款",
+   "install": [
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "OneCLI is an open-source platform for running AI agents as a team. You create an agent per person, give each agent the access it needs, and it works in a sandbox, routed through a gateway that injects the credentials and enforces your policy. ／ - **API Server**: the control plane. Owns the database, the conversation plane, and the work queue the runner polls. ／ That's the whole setup: `pnpm dev` generates `.env` with every required secret, starts PostgreSQL, applies migrations, and runs the full stack. Prerequisites, the command reference, project structure, and configuration live in docs/development.md.",
+   "evidence_lines": [
+    32,
+    74,
+    91
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "onecli/onecli",
+  "sha": "cf76421aed7d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

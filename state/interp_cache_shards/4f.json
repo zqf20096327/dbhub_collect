@@ -10403,5 +10403,72 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "66e14a33040a": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，实现 SQL 与 NATS 消息系统集成",
+   "review": "pgnats 是一个用 Rust（pgrx 框架）编写的 PostgreSQL 扩展，让用户在 SQL 中直接向 NATS 发布消息、订阅主题触发数据库函数、使用 JetStream 的 KV 存储和对象存储，并通过 FDW 配置连接。面向需要在 PostgreSQL 内集成 NATS 消息流的开发者；要求 Rust 1.88.0 以上，需自行用 cargo pgrx 构建安装。",
+   "highlights": [
+    "提供 SQL 函数向 NATS 主题发布 binary/text/JSON/JSONB 消息及 request 请求",
+    "支持订阅 NATS 主题并调用指定 PostgreSQL 函数处理消息",
+    "支持 JetStream 的 Key-Value 存储与 Object Store 文件操作，可按功能特性裁剪构建"
+   ],
+   "use_cases": [
+    "从 SQL 直接发布/请求 NATS 消息的事件通知场景",
+    "NATS 消息到达时触发数据库函数处理数据",
+    "通过 SQL 操作 JetStream KV 与对象存储"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# 📡 pgnats - PostgreSQL extension for NATS messaging ／ Provides seamless integration between PostgreSQL and NATS messaging system, ／ - Subscriptions to NATS subjects that invoke PostgreSQL functions on incoming messages",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为数据库提供 NATS 消息集成能力，属数据库生态组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 📡 pgnats - PostgreSQL extension for NATS messaging ／ Provides seamless integration between PostgreSQL and NATS messaging system, ／ cargo pgrx package --pg-config <PATH TO PG_CONFIG> [--out-dir <THE DIRECTORY TO OUTPUT THE PACKAGE>]",
+   "evidence_lines": [
+    1,
+    3,
+    28
+   ]
+  },
+  "fn": "luxms/pgnats",
+  "sha": "66e14a33040a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

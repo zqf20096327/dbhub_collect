@@ -8835,5 +8835,346 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4637eded22ca": {
+  "identity": {
+   "one_liner": "基于 Proton Bridge 的 Proton Mail MCP 服务器与 CLI",
+   "review": "通过本地 Proton Bridge 的 IMAP/SMTP 接口读取、搜索、草拟、发送和管理 Proton 邮件，向 Claude Desktop、Claude Code、Cline 等 MCP 客户端暴露约 100 个工具，同时提供完整 CLI 供脚本自动化；依赖 Proton Bridge 已安装运行，支持只读模式、发送门控与本地 SQLite 全文索引，需 Node.js 24 以上。",
+   "highlights": [
+    "提供约 100 个 MCP 工具，并可经 CLI 调用同名命令用于脚本和 cron",
+    "内置本地全文搜索索引，查询不经远程 IMAP",
+    "支持只读模式、发送门控、破坏性操作确认与多账号配置"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 等 MCP 客户端中读取、搜索和管理 Proton 邮箱",
+    "用脚本或 cron 批量处理邮件、草拟回复、整理线程",
+    "本地优先环境下管理 Proton 邮件并保存附件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ |`search_indexed_emails` (local SQLite index)|~10 ms| ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      115,
+      445,
+      515
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库的邮件客户端/MCP 应用，本地索引数据存储于 SQLite。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 100 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken.",
+   "evidence_lines": [
+    21,
+    115
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "4637eded22ca",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9ce88b331fcf": {
+  "identity": {
+   "one_liner": "PostgreSQL 多版本构建安装与扩展测试管理工具",
+   "review": "Norsu 是一个面向 PostgreSQL 扩展开发者的命令行工具，用于从多个 git 仓库快速安装、更新和移除自定义 PostgreSQL 构建，并对扩展运行回归测试套件。支持按目标分支搜索、安装 contrib 扩展、通过 pgxs 执行 make、启动临时实例。需 Python 3.11+，通过 uv 或 pipx 安装。",
+   "highlights": [
+    "安装、更新、移除多个 PostgreSQL release/dev 分支构建，并显示构建属性",
+    "跨多个 git 仓库搜索匹配分支并按版本新旧或名称相似度排序",
+    "使用回归测试套件安装并测试扩展，支持 pgxs 构建和启动临时实例"
+   ],
+   "use_cases": [
+    "扩展开发者对多个 PostgreSQL 大版本批量运行回归测试",
+    "需要并行维护多个 PostgreSQL 版本构建的环境",
+    "快速启动临时 PostgreSQL 实例进行 psql 调试或数据导入导出"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "## Norsu -- PostgreSQL builds manager ／ and updating custom PostgreSQL builds, as well as testing your extensions ／ several major PostgreSQL releases. Over time, running regression test suites",
+     "lines": [
+      4,
+      9,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 构建安装与扩展回归测试提供自动化服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Norsu (finnish for *elephant*) is meant to be a tool for quickly installing ／ against them. ／ * install and test PostgreSQL extensions using regression test suites;",
+   "evidence_lines": [
+    8,
+    10,
+    22
+   ]
+  },
+  "fn": "funbringer/norsu",
+  "sha": "9ce88b331fcf",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e648274ed38a": {
+  "identity": {
+   "one_liner": "自托管的求职申请追踪器，以浏览器扩展采集+本地Kanban面板管理求职记录",
+   "review": "Job Tracker 是一个单用户、本地运行的自托管求职申请管理应用，为每个职位机会维护一条持久记录，包含多个链接、状态变更、笔记和材料。它通过浏览器扩展从 LinkedIn 等页面采集职位信息，提供本地 Kanban 面板可视化，默认使用本地 SQLite 存储，可选同步到 Turso，并向 AI 代理开放 OpenAPI 结构化接口。",
+   "highlights": [
+    "每个职位机会对应一条记录，聚合多个 URL、状态变更、笔记、事件与材料，支持转发贴匹配确认合并",
+    "提供浏览器扩展，可在 LinkedIn 页面内采集职位详情、更新状态并受控填写 Easy Apply 问题",
+    "默认使用本地 SQLite 文件存储，可选 Turso 同步，并通过适配器模型扩展集成，API 经 /openapi. 暴露"
+   ],
+   "use_cases": [
+    "跨搜索页、转发贴、邮件等多渠道追踪同一职位机会的完整申请历史",
+    "在浏览职位页面时即时记录详情、状态与笔记，避免事后手工整理",
+    "本地部署管理个人求职流程，通过 Kanban 面板跟踪各阶段的申请进展"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stay local and extensible.** Use SQLite by default, opt into Turso synchronization, and add new built-in or private integrations through the adapter model. ／ Job Tracker is a single-user, self-hosted application designed for localhost use. By default, records—including verified form Answers and remembered values awaiting review—stay in a local SQLite file on your own machine; Turso synchronization is optional. Data",
+     "lines": [
+      22,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以本地 SQLite 文件作为默认存储，属于使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Job Tracker is a single-user, self-hosted application designed for localhost use. By default, records—including verified form Answers and remembered values awaiting review—stay in a local SQLite file on your own machine; Turso synchronization is optional. Database backups and optional Turso synchronization include those retained private values. The extension talks only to the configured Job Tracker server, uses no third-party analytics, and keeps optional search diagnostics off by default. ／ - **Stay local and extensible.** Use SQLite by default, opt into Turso synchronization, and add new built-in or private integrations through the adapter model. ／ Job Tracker is a self-hosted workspace built around one lasting record per job. Listings, status changes, notes, decisions, and materials stay attached to that opportunity. A browser extension captures details and reliable lifecycle updates, while a local Kanban dashboard keeps the process visible and under your control.",
+   "evidence_lines": [
+    54,
+    22,
+    7
+   ]
+  },
+  "fn": "Muatasim-Aswad/job-tracker",
+  "sha": "e648274ed38a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4ab992acc888": {
+  "identity": {
+   "one_liner": "多智能体软件开发流水线平台，规格输入产出经审查的 PR",
+   "review": "Spaces 是一个 AI 软件开发流水线运行时：将需求描述经 research→specify→plan→implement→review→verify→deliver 多个角色化 agent 处理，最终生成经人工门禁批准的 pull request。面向希望以规格驱动方式开发软件的团队，基于 GitHub Spec Kit 与 Pi Coding Agent SDK，使用 Postgres 作为数据库、任务队列与事件总线，模型密钥由用户自备。许可证限个人使用。",
+   "highlights": [
+    "提供八个阶段的 agent 流水线，每个阶段产出可读文档工件，阶段间设人工审批门禁",
+    "使用 Postgres 同时承担数据库、任务队列与事件总线角色，每个项目独立 worker 进程",
+    "数据护栏功能在内容到达模型前将密钥与个人数据替换为令牌"
+   ],
+   "use_cases": [
+    "将 Jira/Linear 工单或自然语言需求转化为带审查与 QA 报告的 pull request",
+    "团队在本地或云端自托管 AI 开发流水线并在关键节点人工审批",
+    "按阶段成本路由多个模型提供商（Anthropic/OpenAI/OpenRouter）的调用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres 16 + pgvector ／ Prerequisites: Bun 1.4+ and Docker (for Postgres). ／ make setup # .env with a fresh ENCRYPTION_KEY, dependencies, Chromium, Postgres, schema, UI ／ Under the hood one image runs in three roles, connected by Postgres, which is",
+     "lines": [
+      10,
+      47,
+      52,
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Postgres 是该平台自身的数据库、任务队列与事件总线，Spaces 是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "License: personal use（仅限个人使用）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Under the hood one image runs in three roles, connected by Postgres, which is ／ Prerequisites: Bun 1.4+ and Docker (for Postgres). ／ License: personal use",
+   "evidence_lines": [
+    122,
+    47,
+    12
+   ]
+  },
+  "fn": "rayedbajwa/spaces",
+  "sha": "4ab992acc888",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2077ec45b73e": {
+  "identity": {
+   "one_liner": "Rust 编写的无头 CMS，单二进制加单个 Postgres 库，按内容类型生成 API",
+   "review": "TachyonCMS 是一个用 Rust 实现的无头 CMS：用户通过 API 定义集合与字段，系统据此生成 REST 内容 API，支持过滤、排序、分页、关系填充、角色权限与模式变更预览，数据存于 Postgres。当前处于 pre-alpha，核心内容 API 可用，认证之外的管理 UI、媒体、草稿和 GraphQL 尚未实现。适合愿意自行部署并参与早期开发的开发者使用。",
+   "highlights": [
+    "根据自定义内容类型自动生成 REST API，支持过滤、排序、分页、关系填充与虚拟字段",
+    "提供会话、bearer token 与作用域 API key 三种认证方式及四种内置角色",
+    "模式变更支持预览与确认机制，内容类型可导出为 JSON 供版本管理"
+   ],
+   "use_cases": [
+    "为网站或应用提供自托管的内容 API 后端",
+    "需要以文件形式管理内容类型定义（schema 即代码）的内容团队",
+    "基于 Rust/Postgres 技术栈构建内容管理场景的原型"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A headless CMS written in Rust. One binary, one Postgres database, and an API generated from the content types you define. ／ crates/tachyon-db Postgres migrations and queries",
+     "lines": [
+      3,
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它是使用单个 Postgres 数据库存内容的内容管理系统，Postgres 是其存储依赖",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A headless CMS written in Rust. One binary, one Postgres database, and an API generated from the content types you define. ／ crates/tachyon-db     Postgres migrations and queries",
+   "evidence_lines": [
+    3,
+    142
+   ]
+  },
+  "fn": "tachyon-cms/tachyoncms",
+  "sha": "2077ec45b73e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

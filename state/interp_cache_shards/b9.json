@@ -9073,5 +9073,295 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1247eaea3a75": {
+  "identity": {
+   "one_liner": "基于Spark的电影推荐系统，含爬虫、网站、后台与推荐模块",
+   "review": "这是一个毕业设计性质的电影推荐系统，由Scrapy爬虫、SSM框架的电影网站、EasyUI后台管理和Spark ALS推荐引擎四部分组成，使用Hadoop/Hive/Kafka/Flume处理离线与实时数据，推荐结果写入MySQL供前端展示，适合学习大数据推荐流程的开发者。新版功能已迁移至独立仓库CineMatch。",
+   "highlights": [
+    "提供爬虫、电影网站、后台管理与Spark推荐系统四个子模块",
+    "使用Spark ALS算法进行离线模型训练并通过RMSE选型",
+    "通过nginx+flume+kafka+spark streaming实现实时点击数据处理"
+   ],
+   "use_cases": [
+    "学习基于Spark的电影推荐系统完整搭建流程",
+    "搭建带离线与实时推荐的电影网站演示环境",
+    "作为大数据课程设计或毕业设计参考项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**软件架构：** mysql + scrapy ／ **软件架构：** mysql + mybatis + spring + springmvc ／ **软件架构：** hadoop + zookeeper + flume + kafka + nginx + spark + hive + mysql",
+     "lines": [
+      28,
+      39,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用MySQL存储电影、用户及推荐结果数据，自身是推荐应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "本次项目是基于大数据过滤引擎的电影推荐系统--“懂你”电影网站，包含了爬虫、电影网站（前端和后端）、后台管理系统以及推荐系统（Spark）。 ／ **软件架构：** hadoop + zookeeper + flume + kafka + nginx + spark + hive + mysql ／ **8.数据入库，** 存储为所有用户推荐的电影结果，mysql中存入的格式为(userid, movieid,rating)",
+   "evidence_lines": [
+    21,
+    65,
+    154
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "CodeRayZhang/Movie_Recommend",
+  "sha": "1247eaea3a75",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c8721552abda": {
+  "identity": {
+   "one_liner": "开源 text-to-SQL 引擎，可在自有数据库上调优与评测",
+   "review": "mnemiq 是一个 Apache-2.0 的自然语言转 SQL 引擎，模型只负责生成查询，前置确定性层负责只读校验、权限、方言编译和 EXPLAIN 验证，并内置评测 harness 用于在自己的数据库上测量效果。面向需要在自有数仓上部署与调优 text-to-SQL 的数据团队，支持 PostgreSQL、SQLite、DuckDB、Oracle、Snowflake 等数据源，运行需自备 OpenAI 兼容 LLM 端点。",
+   "highlights": [
+    "将 text-to-SQL 流水线各阶段（模型选择、schema 检索、语义增强、拒绝阈值、行列策略）暴露为可配置项",
+    "内置评测 harness，按返回数据而非 SQL 字符串匹配判分，区分正确、拒绝、错误三类结果",
+    "确定性决策层在查询触库前强制只读、权限、方言编译与 EXPLAIN 校验，并保留审计 trace"
+   ],
+   "use_cases": [
+    "在自己的数据库上部署可调优、可审计的自然语言问数服务",
+    "对 text-to-SQL 配置做分标签的问题集评测与诊断",
+    "通过 OpenAI 兼容端点接入本地模型实现数据不出内网的问数"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "the store's `vss` and `fts`, and `postgres` or `sqlite` for each source of that kind. Every command ／ Postgres, SQLite, DuckDB, Oracle, Snowflake and Databricks, with DuckDB as the universal executor.",
+     "lines": [
+      215,
+      273
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite database plus its source manifest and access policy under `demo/`. ／ the store's `vss` and `fts`, and `postgres` or `sqlite` for each source of that kind. Every command ／ Postgres, SQLite, DuckDB, Oracle, Snowflake and Databricks, with DuckDB as the universal executor.",
+     "lines": [
+      133,
+      215,
+      273
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Postgres, SQLite, DuckDB, Oracle, Snowflake and Databricks, with DuckDB as the universal executor.",
+     "lines": [
+      273
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库生态提供自然语言查询与评测能力的引擎工具，而非使用数据库存自身数据的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An open-source engine that answers natural-language questions over your database, built so that ／ mnemiq is the engine and the evaluation harness for doing that.",
+   "evidence_lines": [
+    7,
+    42
+   ]
+  },
+  "fn": "agenticfabriq/mnemiq",
+  "sha": "c8721552abda",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a0be9ca68259": {
+  "identity": {
+   "one_liner": "本地自托管的 AI 编程智能体，支持 MCP 与四档沙箱",
+   "review": "Spark 是一个以 Python 实现的本地优先 AI 编程智能体，提供 Web UI、桌面窗口、终端 TUI 和 CLI 四种运行形态，内置工具沙箱、向量长期记忆、检查点回滚和 MCP 客户端/服务端能力。面向希望在本地运行 AI 编程助手的开发者，支持任意 OpenAI 兼容 API 端点及本地 Ollama，无 API key 时以演示模式启动。README 未提及使用任何数据库存储数据。",
+   "highlights": [
+    "提供 Web、桌面、TUI、CLI 四种形态，并可作为 MCP 服务端向其他 MCP 客户端暴露内置工具",
+    "实现四级沙箱权限、受保护路径和通配符权限规则引擎",
+    "支持任意 OpenAI 兼容端点、多模型配置切换与本地 Ollama"
+   ],
+   "use_cases": [
+    "在本地机器上运行自托管 AI 编程助手进行代码阅读、编辑与重构",
+    "通过 spark exec 在自动化脚本或 CI 中执行编码任务",
+    "通过 spark mcp-serve 将内置工具提供给其他 MCP 客户端使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 只描述其为使用 LLM API 的编程智能体应用，未声明为某个数据库生态服务的工具，也未提及任何数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Spark — Local-first AI Coding Agent ／ **Code stays with you. Keys stay with you.** A self-hosted AI coding assistant that runs entirely on your machine — zero privacy leaks, full control. ／ |MCP server|`spark mcp-serve`|Expose every built-in tool to other MCP clients|",
+   "evidence_lines": [
+    3,
+    9,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "badhope/spark",
+  "sha": "a0be9ca68259",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "13f6184dc6d7": {
+  "identity": {
+   "one_liner": "本地优先桌面项目管理应用，数据存于单个 SQLite 库",
+   "review": "Fjord 是一个本地优先的桌面项目管理工具，将项目、看板、文件和笔记保存在用户机器上的单个 SQLite 数据库中，无需账户或云服务。它提供 Tauri 桌面应用、CLI 和 MCP 服务器三种形态，供个人开发者和 AI 代理在同一项目数据上协作，支持 Git/GitHub/Azure DevOps 集成， Linux 为主要平台，同时提供 Windows 和 macOS 构建。",
+   "highlights": [
+    "将项目、看板、任务、文件与笔记存储在本地单个 SQLite 数据库中，无账户、无云、无遥测",
+    "提供 CLI 和 MCP 服务器（27 个工具）供 AI 客户端如 Claude Code、Cursor 操作项目数据，所有变更记录作者",
+    "集成 Git、GitHub 与 Azure DevOps：从任务创建分支、查看 PR 状态、合并 PR 自动移动任务"
+   ],
+   "use_cases": [
+    "个人或小团队在本地使用看板管理项目任务与笔记",
+    "通过 MCP 让 AI 代理创建、编辑和移动任务并与人工协作",
+    "从 Azure Boards 导入工作项到本地看板"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Fjord keeps your projects, kanban boards, files and notes in a single SQLite database on your own",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目数据保存在用户机器上的单个 SQLite 数据库中，SQLite 是其存储后端而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Fjord keeps your projects, kanban boards, files and notes in a single SQLite database on your own ／ machine. No account, no cloud, no telemetry. It's a lightweight native desktop app (Tauri), a scriptable ／ - **AI-agent ready** — `fjord mcp` exposes 27 tools to MCP clients such as Claude Code and Cursor, and an Agent Skill teaches agents how to use them. Agents can create, edit, move and archive but never hard-delete, and every change is tagged with its author.",
+   "evidence_lines": [
+    16,
+    17,
+    35
+   ]
+  },
+  "fn": "jhtjernsmo/fjord",
+  "sha": "13f6184dc6d7",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

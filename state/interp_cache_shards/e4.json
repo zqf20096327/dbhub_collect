@@ -9427,5 +9427,148 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "532bf23ce6d4": {
+  "identity": {
+   "one_liner": "Telegram 机器人管理面板，提供反向代理与消息路由",
+   "review": "BotMux 是一个用 Go 编写的自托管 Web 控制台，通过 Bot API 接管 Telegram 机器人的 long polling，提供多机器人仪表盘、消息监控、分析、管理员操作和审计日志。它还内置反向代理、Slack 等协议桥接，以及基于规则和 LLM 的机器人间消息路由。数据（含长轮询队列）持久化在 SQLite 中，适合需要统一管理多个 Telegram 机器人的运维人员使用。",
+   "highlights": [
+    "提供 Web 仪表盘，用于多机器人监控、消息搜索、分析与审计日志",
+    "内置反向代理与 long polling 队列，基于 SQLite 持久化消费者偏移量（L78）",
+    "支持机器人间消息路由（规则与 LLM 判定）及 Slack 等协议桥接"
+   ],
+   "use_cases": [
+    "集中管理多个 Telegram 群组/频道机器人的消息与权限",
+    "为旧 webhook 机器人提供 polling 转发代理",
+    "跨机器人、跨协议（Slack 等）的消息转发与桥接"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Durable SQLite queue with persisted consumer offsets and waiter notification for efficient long polling ／ |`-db`|`botdata.db`|Path to SQLite database file| ／ **Delivery:** Long-poll updates and consumer offsets live in SQLite and survive restarts. Managed queues retain unread updates without the previous 1000-item eviction. A history write failure, queue write failure, or backend delivery failure prevents acknowled",
+     "lines": [
+      78,
+      344,
+      479
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其自身数据的持久化存储，不面向数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Durable SQLite queue with persisted consumer offsets and waiter notification for efficient long polling ／ Web-based command center for managing Telegram groups and channels via Bot API, with built-in reverse proxy for legacy webhook bots.",
+   "evidence_lines": [
+    78,
+    14
+   ]
+  },
+  "fn": "skrashevich/botmux",
+  "sha": "532bf23ce6d4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "61902b35827a": {
+  "identity": {
+   "one_liner": "发布随机内容的社交/社区站点应用，Nuxt monorepo，PostgreSQL 存数据",
+   "review": "Esposter 是一个用于发布随机内容的 pnpm monorepo Web 应用，前端用 Nuxt/Vue，后端通过 tRPC API 和 Drizzle ORM 连接 PostgreSQL 存储数据，并部署为 Azure Serverless。它面向想要使用该站点或参与开发的使用者；README 主要给出本地开发步骤，未提供完整的生产部署细节。",
+   "highlights": [
+    "Nuxt 前端 + tRPC + Drizzle ORM 的 monorepo 应用架构",
+    "支持 PostgreSQL 作为数据源，含 Drizzle schema 与迁移",
+    "含 Claude Code 插件市场与 AI 自动化 review 流程"
+   ],
+   "use_cases": [
+    "搭建/运行一个内容发布类 Web 站点",
+    "作为 Nuxt+tRPC+Drizzle 技术栈的参考工程",
+    "托管 Claude Code 插件市场"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ PostgreSQL is a powerful, open source object-relational database system with over 35 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance. ／ 3. Install PostgreSQL + PgAdmin. ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+     "lines": [
+      80,
+      82,
+      161,
+      254
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 列为技术栈并要求本地安装以运行该站点，数据库用于存应用数据而非被服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Esposter is a pnpm workspaces monorepo. See monorepo tooling for workspace script orchestration and publishing boundaries. ／ |`apps/functions`|Serverless Azure Functions backend — push notifications, webhooks, EventGrid|—| ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+   "evidence_lines": [
+    203,
+    245,
+    254
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Esposter/Esposter",
+  "sha": "61902b35827a",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

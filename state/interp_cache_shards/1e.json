@@ -8745,5 +8745,77 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b9cbf6513af3": {
+  "identity": {
+   "one_liner": "美国数据中心/矿场/配套电站的开源可溯源数据集站点",
+   "review": "Compute Atlas 是一个包含地图、公开 API 和 JSON 快照的数据集网站，收录美国数据中心、加密矿场及配套电站的位置、状态、能耗水耗等信息，每条记录附带带检索日期的公开来源。面向记者、研究人员、地方官员和周边居民。技术上使用 Next.js 构建，通过 Neon Postgres + Drizzle 提供在线数据，未配置数据库时可用快照渲染；所有候选记录需人工审核后才发布。",
+   "highlights": [
+    "提供公开 CORS API（/api/facilities、/api/stats 等）与一次性 fork 的完整 JSON 数据文件",
+    "每条记录要求至少一个带 URL、标签和检索日期的公开来源，新记录须经人工审核",
+    "数据模型由 Zod schema 校验，测试套件在每次 PR 时验证全部记录"
+   ],
+   "use_cases": [
+    "记者或研究人员检索并引用数据中心建设的来源化数据",
+    "地方官员或居民查询本地设施的许可、能耗与社区影响记录",
+    "开发者通过公开 API 或批量 JSON 在应用中使用该数据集"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Stack:** Next.js 16 (App Router, RSC) · React 19 · TypeScript · Zod · Neon Postgres +",
+     "lines": [
+      208
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 Neon Postgres + Drizzle 存储其数据集，是使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT，数据 CC BY 4.0（双许可结构）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**API**|`GET /api/facilities`, `/api/facilities/{id}`, `/api/search`, `/api/stats`, `/api/schema` — CORS-open, no auth, rate-limited by IP, served with `X-License: CC-BY-4.0`. Full contract at `/api`| ／ Running without `DATABASE_URL` set renders from the `data/facilities.json` snapshot, so you ／ **Stack:** Next.js 16 (App Router, RSC) · React 19 · TypeScript · Zod · Neon Postgres +",
+   "evidence_lines": [
+    125,
+    199,
+    208
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ek33450505/compute-atlas",
+  "sha": "b9cbf6513af3",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

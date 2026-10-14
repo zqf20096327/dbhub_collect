@@ -9274,5 +9274,83 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2539476ed56f": {
+  "identity": {
+   "one_liner": "Python 库，用于查询 SQL 数据库并返回 numpy 数组",
+   "review": "sqlutilpy 是一个 Python 模块，可将 SQL 查询结果转为 numpy 数组，并支持将数组上传为表列、执行本地数组与数据库表的 join 查询。支持 PostgreSQL、SQLite 和 DuckDB，其中上传和 local_join 功能仅限 PostgreSQL。适用于需要在 Python 中批量处理数据库查询结果的科研或数据用户。",
+   "highlights": [
+    "提供 get/execute 接口，将查询结果返回为 numpy 数组或字典",
+    "提供 upload 将数组作为表列上传、local_join 实现本地数组与数据库表联合查询（仅 PostgreSQL）",
+    "支持 PostgreSQL、SQLite、DuckDB 三种数据库，通过 driver 参数选择 SQLite/DuckDB 文件"
+   ],
+   "use_cases": [
+    "在 Python 中批量读取数百万行查询结果为 numpy 数组",
+    "将本地数组数据上传为数据库表列",
+    "本地数组与远端数据库表执行 join 查询"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The module works with PostgreSQL, SQLite and DuckDB databases. ／ Throughout this readme, I will assume that if you are using PostgreSQL, then ／ Uploading tables and `local_join` are only available with PostgreSQL.",
+     "lines": [
+      10,
+      24,
+      61
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The module works with PostgreSQL, SQLite and DuckDB databases. ／ ## SQLite and DuckDB ／ The same `get()` and `execute()` functions work with SQLite and DuckDB",
+     "lines": [
+      10,
+      51,
+      53
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明该模块用于连接 PostgreSQL、SQLite、DuckDB 执行查询、上传与 join，属于为数据库生态服务的 Python 工具库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Python module to query SQL databases and return numpy arrays, upload ／ The module works with PostgreSQL, SQLite and DuckDB databases. ／ Uploading tables and `local_join` are only available with PostgreSQL.",
+   "evidence_lines": [
+    7,
+    10,
+    61
+   ]
+  },
+  "fn": "segasai/sqlutilpy",
+  "sha": "2539476ed56f",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

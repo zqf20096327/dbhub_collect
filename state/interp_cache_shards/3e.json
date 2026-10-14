@@ -9992,5 +9992,239 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "959deacb7863": {
+  "identity": {
+   "one_liner": "面向多个 AI Agent 的本地长期记忆核心，以 SQLite 为事实存储",
+   "review": "Scope Recall 为 Hermes、Codex、Claude Code、WorkBuddy 和 dsh 等 Agent 提供共享的本地长期记忆：SQLite 作为唯一事实权威，LanceDB 或 sqlite-bruteforce 作为可重建的向量伴随索引，通过 hooks 和 MCP 服务器接入各宿主，并提供检查、更正、删除记忆及安装/卸载的维护 CLI。面向使用这些 Agent 的用户与运维者；PostgreSQL/pgvector 不在 v3 发行范围内。",
+   "highlights": [
+    "多个 Agent 宿主通过适配器共享同一个 SQLite 记忆存储，每条记忆记录来源宿主",
+    "提供 plan/apply/doctor/uninstall 等维护 CLI，卸载默认保留记忆数据，purge 需单独确认",
+    "提供 profile 和 entity 只读视图，仅返回已确认合并的事实性声明"
+   ],
+   "use_cases": [
+    "为多个 AI Agent 建立可共享、可审计、可更正的本地长期记忆",
+    "对 Agent 记忆进行检查、更正、静默或删除的治理操作",
+    "离线或受限环境下通过 wheel/sdist 与 SHA256SUMS 安装记忆组件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP s ／ migration procedure for a 2.0.1 memory database. SQLite remains the only fact ／ `sqlite-bruteforce` backend needs no extra):",
+     "lines": [
+      3,
+      20,
+      55
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra adds the LanceDB vector companion, the default `vector.backend`; without it, configure `sqlite-bruteforce` or recall stays lexical. Postgre",
+     "lines": [
+      115
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite 作为存储数据的事实权威，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP server (the MCP tools need the optional `codex` extra; dsh runs the hooks through a plugin). The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ the same isolated Python environment the host uses. The default vector store is LanceDB: without ／ The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra adds the LanceDB vector companion, the default `vector.backend`; without it, configure `sqlite-bruteforce` or recall stays lexical. PostgreSQL/pgvector is outside this v3 distribution; an explicit configuration error directs operators to retain the old installation and use the migration guide.",
+   "evidence_lines": [
+    3,
+    53,
+    115
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "959deacb7863",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "be5be3f66531": {
+  "identity": {
+   "one_liner": "语义层sidecar，将YAML模型编译为8种SQL方言",
+   "review": "OrionBelt是一个语义与上下文层，用户或AI代理以YAML声明维度、度量、指标与连接，由带AST的编译器生成面向8种SQL方言的查询SQL，并通过PostgreSQL wire、Arrow Flight SQL、REST、MCP四种接口对外提供。面向需要治理指标定义并让代理与BI工具共用同一模型的数据团队；许可证为BUSL-1.1（source-available），需Python 3.12+。",
+   "highlights": [
+    "将声明式YAML模型经AST编译为8种SQL方言的查询，支持TPC-DS逐行比对验证",
+    "提供PostgreSQL wire、Arrow Flight SQL、REST、MCP四种查询接口，并支持MCP工具调用与规则评估",
+    "Composite Fact Layer规划器阻断fan-trap连接路径，模型可导出为RDF图并以SPARQL查询"
+   ],
+   "use_cases": [
+    "AI代理通过MCP或oneshot API提交任务级模型并批量执行查询",
+    "BI工具经Postgres驱动或Flight SQL连接语义层执行治理后的指标查询",
+    "同一YAML指标模型在多个数据引擎之间编译复用"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Compiles to **BigQuery, ClickHouse, Databricks, Dremio, DuckDB/MotherDuck, MySQL, PostgreSQL, and Snowflake.** The warehouse behind the model is independent of the surface in front of it: any of the four surfaces, against any of the eight dialects. ／ |**PostgreSQL wire**|`5432`|Postgres protocol|DuckDB via `ATTACH`, Tableau, Dremio as a federated source, Power BI, Superset, DBeaver, Metabase, `psql`| ／ - Your BI tool should connect over the Postgres driver it already ships, with no new connector to install and no vendor runtime in the path.",
+     "lines": [
+      46,
+      37,
+      95
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Compiles to **BigQuery, ClickHouse, Databricks, Dremio, DuckDB/MotherDuck, MySQL, PostgreSQL, and Snowflake.** The warehouse behind the model is independent of the surface in front of it: any of the four surfaces, against any of the eight dialects.",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Compiles to **BigQuery, ClickHouse, Databricks, Dremio, DuckDB/MotherDuck, MySQL, PostgreSQL, and Snowflake.** The warehouse behind the model is independent of the surface in front of it: any of the four surfaces, against any of the eight dialects. ／ **This is checked, not asserted.** 40 TPC-DS queries are built against a single OBML model and compared row by row against each engine's own reference SQL: 39 of 40 match on DuckDB at sf=1, 37 of 40 on ClickHouse at sf=10. Every one of the remaining difference",
+     "lines": [
+      46,
+      84
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据仓库和BI/代理提供语义编译与查询代理服务，自身不存业务数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BUSL-1.1（source-available）",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OrionBelt is a **semantic and context layer** with a **rule engine**, and it runs as a **semantic sidecar**. You or an agent declare dimensions, measures, metrics, and joins in YAML, scoped to one task or maintained as a shared model. OrionBelt compiles them into dialect-specific SQL through a real AST, and routes multi-fact queries through a Composite Fact Layer planner that blocks the join paths that produce fan traps. Queries ask for `\"Total Revenue\" by \"Country\"`; physical table and column mappings live in the model. ／ Compiles to **BigQuery, ClickHouse, Databricks, Dremio, DuckDB/MotherDuck, MySQL, PostgreSQL, and Snowflake.** The warehouse behind the model is independent of the surface in front of it: any of the four surfaces, against any of the eight dialects. ／ |**MCP**|stdio / HTTP|Model Context Protocol|AI agents: Claude, Cursor, Copilot, Windsurf|",
+   "evidence_lines": [
+    19,
+    46,
+    40
+   ]
+  },
+  "fn": "ralforion/orionbelt-semantic-layer",
+  "sha": "be5be3f66531",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fd980132a35e": {
+  "identity": {
+   "one_liner": "GEO 运营系统：内容生产流水线加 AI 可见性闭环，基于 FastAPI 与 Vue 3",
+   "review": "一个面向品牌内容运营团队的自托管 Web 系统，提供关键词、知识库、提示词模板管理，按 10 步流程批量生产软文，并追踪品牌在 AI 回答中的收录与引用情况形成选题回流。后端 FastAPI + SQLAlchemy，数据存储于本地 SQLite 单文件（零安装），含 JWT 鉴权与 Fernet 字段级加密；需自行配置 OpenAI 兼容接口的 LLM 密钥。",
+   "highlights": [
+    "提供 10 步标准化内容生产流程与有界并发批量执行队列，失败退避重试并支持断点续跑",
+    "通过 OpenAI 兼容接口调用大模型，可配置多条 LLM 配置并分配不同角色",
+    "数据存储于 SQLite 单文件，启动时由 Alembic 自动建表与迁移，敏感字段以密文落库"
+   ],
+   "use_cases": [
+    "品牌内容团队批量生成与发布多平台软文",
+    "追踪品牌在 AI 回答中的收录、提及与引用归因",
+    "沉淀行业知识库与提示词模板供团队复用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库|SQLite（单文件，零安装零服务）|",
+     "lines": [
+      128
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明系统使用 SQLite 存储全部业务数据（38 张核心表），SQLite 是其内置存储而非适配对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|数据库|SQLite（单文件，零安装零服务）| ／ > 本仓库**不包含数据库文件**。首次启动时后端会自动建表并创建一个空库，无需手动初始化。",
+   "evidence_lines": [
+    128,
+    209
+   ]
+  },
+  "fn": "wqadlw/latent",
+  "sha": "fd980132a35e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

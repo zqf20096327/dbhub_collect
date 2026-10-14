@@ -10338,5 +10338,150 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bc787db80767": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Python 分布式任务队列与调度器",
+   "review": "Chancy 是一个用于 Python 的分布式任务队列和调度器，将任务、调度、限流等功能全部构建在 Postgres 之上，无需额外运行 RabbitMQ、Redis 或独立监控服务。适合需要在 Python 应用中处理后台任务并希望以 Postgres 作为唯一基础设施的团队；核心依赖 psycopg3，采用 MIT 许可。",
+   "highlights": [
+    "支持优先级、重试、超时、调度、全局限流、全局唯一性、错误捕获与取消等任务能力",
+    "单 worker 可处理多队列，混合线程、进程、子解释器和 asyncio 任务，队列可在运行时创建、删除、修改和暂停",
+    "支持事务性入队，在单个事务中原子地入队任务及其依赖数据"
+   ],
+   "use_cases": [
+    "Python 应用的后台任务与定时/cron 任务处理",
+    "希望仅依赖 Postgres 而不引入独立消息队列或调度服务的场景",
+    "需要事务性入队以保证任务与业务数据一致性的工作流"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres. ／ PostgreSQL Versions ／ RabbitMQ or redis. Every feature is built on top of Postgres. No need",
+     "lines": [
+      6,
+      13,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其功能全部构建于 Postgres 之上，核心仅依赖 psycopg3，为围绕数据库能力的任务队列工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Chancy is a distributed task queue and scheduler for Python built on top of ／ Postgres. ／ - **Minimal dependencies** - Core functionality requires only psycopg3 - which",
+   "evidence_lines": [
+    5,
+    6,
+    20
+   ]
+  },
+  "fn": "TkTech/chancy",
+  "sha": "bc787db80767",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1a818000d880": {
+  "identity": {
+   "one_liner": "Go 客户端库，通过手写二进制协议包将事务语句流水线化单次往返发送给 TiDB",
+   "review": "这是一个 Go 开发库，为 TiDB 提供流水线化的 MySQL 二进制协议客户端：将事务内各语句的 COM_STMT_EXECUTE 包背靠背写入一次网络往返完成，以降低事务延迟。面向需要在批量语句场景优化延迟的 Go 开发者。限制：仅支持悲观事务，暂不支持 TLS 和协议压缩，语句结果只能通过回调获取。",
+   "highlights": [
+    "通过手写 COM_STMT_PREPARE/COM_STMT_EXECUTE 包在单次网络往返中流水线发送整个事务的语句",
+    "提供连接池（Open/AcquireConn）与基于 SQL 文本的 prepared statement LRU 缓存",
+    "通过回调逐语句流式读取行数据，不在内存中缓冲整个结果集"
+   ],
+   "use_cases": [
+    "批量语句事务的延迟优化（README 实测 TiDB Cloud 集群事务 P95 从 62.4ms 降至 31.5ms）",
+    "只读批量查询或可容忍部分失败的尽力而为写入场景（ExecuteAutoCommit）",
+    "与现有 database/sql 连接并存的 Go 应用中专用流水线路径"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Sends every statement in a batch over MySQL's **binary** protocol ／ as it runs, same as issuing them one at a time under MySQL's default ／ plain, err = sql.Open(\"mysql\", dsn)",
+     "lines": [
+      5,
+      107,
+      155
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# tidb-binary-multistmt ／ - **Benefit**: measured on a real TiDB Cloud cluster, this roughly halved ／ |TiDB CPU|205%|195%|",
+     "lines": [
+      1,
+      14,
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明这是为 TiDB 数据库连接和协议交互服务的 Go 客户端库，不是使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Sends every statement in a batch over MySQL's **binary** protocol ／ - **Benefit**: measured on a real TiDB Cloud cluster, this roughly halved ／ conn, err := binarymultistmt.Dial(ctx, \"user:pass@tcp(host:4000)/db\")",
+   "evidence_lines": [
+    5,
+    14,
+    48
+   ]
+  },
+  "fn": "dulao5/tidb-binary-multistmt",
+  "sha": "1a818000d880",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

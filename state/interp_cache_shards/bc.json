@@ -8287,5 +8287,144 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3dadbe79fcb0": {
+  "identity": {
+   "one_liner": "Neon 开源 JS/TS SDK、CLI 与框架插件的 monorepo",
+   "review": "该仓库以 pnpm workspace 组织 Neon 的多个独立发布包，包含 Neon CLI、Config-as-Code 运行时、TypeScript SDK、实时查询 SDK（含 React/TanStack/Drizzle/Kysely 适配）及认证与 Postgres 数据访问客户端，面向使用 Neon 平台的前后端开发者；各包独立版本发布，开发需 Node.js >= 22 与 pnpm。",
+   "highlights": [
+    "提供 Neon CLI（neon/neonctl）及 @neon/sdk 官方 TypeScript SDK",
+    "提供实时查询 SDK，含 React、TanStack DB、Drizzle、Kysely 适配器",
+    "提供 Config-as-Code（neon.ts）的 diff 引擎与 plan/apply 运行时"
+   ],
+   "use_cases": [
+    "通过 CLI 或 SDK 以编程方式管理 Neon 项目与分支",
+    "在前端框架中订阅 Neon 实时 live queries",
+    "以代码方式定义并应用 Neon 配置策略"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`@neon/postgrest-js`|Generic PostgreSQL client for the Neon Data API without built-in authentication.|",
+     "lines": [
+      51
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库提供用于访问和管理 Neon（Postgres 平台）的 SDK、CLI 与插件，是为数据库生态服务的工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Neon JavaScript/TypeScript packages ／ |`@neon/sdk`|The official TypeScript SDK for the Neon API — a modern, Fetch-based client generated from Neon's OpenAPI spec (successor to `@neondatabase/api-client`).| ／ |`@neon/postgrest-js`|Generic PostgreSQL client for the Neon Data API without built-in authentication.|",
+   "evidence_lines": [
+    1,
+    30,
+    51
+   ]
+  },
+  "fn": "neondatabase/neon-pkgs",
+  "sha": "3dadbe79fcb0",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d6e1f93814fc": {
+  "identity": {
+   "one_liner": "AI 代理自适应记忆 MCP 服务器，混合检索+神经记忆图",
+   "review": "自托管的 MCP 记忆服务器，为 AI 代理和团队提供跨会话持久记忆：混合检索（语义+BM25）、AI 重排序和基于 Hebbian 学习的记忆图，每次检索会加强关联边的权重。技术栈为 FastAPI + PostgreSQL + Qdrant + Redis + Next.js，支持团队工作区、RBAC 与上下文隔离，可连接 Claude、ChatGPT 等 MCP 客户端；需 Python 3.11+、Node 20+ 和 Docker，嵌入需 OpenAI key 或自托管推理服务。",
+   "highlights": [
+    "提供 70 个 MCP 工具，覆盖记忆、上下文、代理控制平面、文件等模块",
+    "实现混合检索（语义+BM25）与 Hebbian 神经记忆图遍历两条查询路径",
+    "支持工作区/上下文/用户三级数据隔离与团队 RBAC"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 MCP 客户端提供跨会话长期记忆",
+    "团队共享知识与上下文的多租户管理",
+    "自主代理的记忆基座与状态管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Kagura Memory Cloud**|**PostgreSQL + Qdrant + Neural graph**|**Hebbian + Sleep Maintenance**|**Team / org**| ／ **Tech stack:** FastAPI (async) · PostgreSQL · Qdrant · Redis · Next.js 16 · OAuth2 · MCP over Streamable HTTP",
+     "lines": [
+      40,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明使用 PostgreSQL 作为存储组件存数据，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Kagura Memory Cloud**|**PostgreSQL + Qdrant + Neural graph**|**Hebbian + Sleep Maintenance**|**Team / org**| ／ **Tech stack:** FastAPI (async) · PostgreSQL · Qdrant · Redis · Next.js 16 · OAuth2 · MCP over Streamable HTTP",
+   "evidence_lines": [
+    40,
+    99
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "kagura-ai/memory-cloud",
+  "sha": "d6e1f93814fc",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

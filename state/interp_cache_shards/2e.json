@@ -10420,5 +10420,194 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2bd9f3e30bb4": {
+  "identity": {
+   "one_liner": "数据库课程项目：比较 Java 文件操作与 PostgreSQL/openGauss 的基础任务性能",
+   "review": "这是南方科技大学数据库原理(H)课程的实验项目，用 Java 实现 CSV 文件读写、关键词查询、索引查找、关联统计与并发读写等基准任务，并在 PostgreSQL 与 openGauss 上运行计时比较。面向课程教学与实验报告场景，仓库不含数据库容器和凭据，需自行准备数据库实例与连接配置。",
+   "highlights": [
+    "实现关键词查询、持久化更新、索引查找、关联统计及并发读写等基准任务",
+    "提供计时结果数据（timings.csv、workers.csv、increments.csv.gz）",
+    "通过 properties 文件与 PG_PASSWORD/OG_PASSWORD 环境变量配置数据库连接"
+   ],
+   "use_cases": [
+    "数据库课程实验与教学演示",
+    "在指定数据集和任务上对比文件操作与两种 DBMS 的运行耗时"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "比较 Java CSV 文件操作、PostgreSQL 与 openGauss 的关键词查询、持久化更新、索引查找、关联统计及并发读写。 ／ 本仓库不包含密码，也不包含数据库容器或现成数据库。运行前需要准备数据库、课程数据与自己的连接配置。`03_dbms/*.properties` 和 `shared/database.properties` 中的地址及用户名是本次实验配置，可按实际环境修改。通过 `PG_PASSWORD`、`OG_PASSWORD` 环境变量或终端隐藏输入提供密码；切勿提交本机凭据。",
+     "lines": [
+      3,
+      12
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "比较 Java CSV 文件操作、PostgreSQL 与 openGauss 的关键词查询、持久化更新、索引查找、关联统计及并发读写。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 PostgreSQL 与 openGauss 运行实验任务存取数据的项目，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "比较 Java CSV 文件操作、PostgreSQL 与 openGauss 的关键词查询、持久化更新、索引查找、关联统计及并发读写。 ／ 本仓库不包含密码，也不包含数据库容器或现成数据库。运行前需要准备数据库、课程数据与自己的连接配置。`03_dbms/*.properties` 和 `shared/database.properties` 中的地址及用户名是本次实验配置，可按实际环境修改。通过 `PG_PASSWORD`、`OG_PASSWORD` 环境变量或终端隐藏输入提供密码；切勿提交本机凭据。",
+   "evidence_lines": [
+    3,
+    12
+   ]
+  },
+  "fn": "JamesYip-dev/Database-H-_proj_1",
+  "sha": "2bd9f3e30bb4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d6653d37871d": {
+  "identity": {
+   "one_liner": "GaussDB 数据面 MCP 服务，供 AI 客户端安全查询操作库内数据",
+   "review": "该项目为华为云 GaussDB 507 提供数据面 MCP 服务，AI 客户端（如 Dify、Claude Code）通过 stdio 或 streamable HTTP 调用其 7 个工具（查询/写入/DDL/EXPLAIN/元数据浏览）来执行 SQL。它实装三层 SQL 防护（词法白名单、工具通道锁、只读会话）、Bearer 鉴权与审计日志，凭证仅存服务端。需 Linux+Python 3.11 配合 GaussDB 官方驱动（Windows 走 pyodbc 轨），Oracle 兼容（A/ORA）库是第一优先场景。",
+   "highlights": [
+    "提供 7 个 MCP 工具（查询/写入/DDL/EXPLAIN/元数据浏览），支持 stdio 与 streamable HTTP 两种传输",
+    "实现三层 SQL 防护：应用层白名单、工具通道风险锁、只读会话与最小权限账号指引",
+    "内置 Bearer token 鉴权、JSONL 审计、credentials. 热轮换与公网 sslmode 护栏"
+   ],
+   "use_cases": [
+    "让 Dify、Claude Code 等 AI 客户端在安全防护下查询和操作 GaussDB 中的业务数据",
+    "对 GaussDB Oracle 兼容（A/ORA）库执行经过风险分级的 SQL 与元数据浏览",
+    "需要审计日志与凭证不经 LLM 的数据库数据面接入场景"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`GAUSSDB_DATA_MCP_APPLICATION_NAME`|`gaussdb_data_mcp`|连接 `application_name`，便于 `pg_stat_activity` 区分流量|",
+     "lines": [
+      200
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "> 诚实声明（沿用 AWS mysql-mcp 的话术）：词法白名单不是安全边界，它会保守误拒个别合法语句；真正的边界是只读会话 + 最小权限账号。 ／ |维度|polardb-mcp|AWS mysql-mcp|openGauss 官方 mcp-opengauss|**本服务**|",
+     "lines": [
+      46,
+      50
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "compat",
+     "quote": "**Oracle 兼容（A/ORA）库是第一优先场景**：MERGE INTO、DUAL、层次查询、MINUS、序列、DECODE 等 Oracle 系语法在词法层与真库（集中式 + 分布式）均已验证（实测备忘见§4.1）。A 库的 upsert 用 MERGE 表达，而非 PG 的 ON CONFLICT（A 库不支持）： ／ Oracle 风格（A 兼容）库是本服务的第一优先场景。建库参数与语法行为**随实例形态而异**",
+     "lines": [
+      5,
+      292
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "mention",
+     "quote": "|维度|polardb-mcp|AWS mysql-mcp|openGauss 官方 mcp-opengauss|**本服务**|",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "mention",
+     "quote": "|维度|polardb-mcp|AWS mysql-mcp|openGauss 官方 mcp-opengauss|**本服务**|",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB Data MCP Server ／ GaussDB 507 **数据面 MCP 服务**。AI 客户端（Dify、Claude Code 等）通过它在三层安全防护下查询与操作 GaussDB 里的业务数据；数据库凭证只保存在服务端，不经过 LLM。 ／ gaussdb-mcp（管控面，已有） gaussdb-data-mcp（本服务，数据面）",
+     "lines": [
+      1,
+      3,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 GaussDB 数据库提供 MCP 数据面服务组件，本身不是使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "GaussDB 507 **数据面 MCP 服务**。AI 客户端（Dify、Claude Code 等）通过它在三层安全防护下查询与操作 GaussDB 里的业务数据；数据库凭证只保存在服务端，不经过 LLM。 ／ - 工具：7 个（查询 / 写入 / DDL / EXPLAIN / 元数据浏览），三档风险分级 ／ - 安全底座：`huaweicloud-mcp-core` 1.1.1（Apache 2.0）的 guardrails / 审计 / 脱敏管线",
+   "evidence_lines": [
+    3,
+    14,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "plafaithing/huawei-gaussdb-data-mcp",
+  "sha": "d6653d37871d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

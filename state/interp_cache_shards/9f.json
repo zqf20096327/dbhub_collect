@@ -10804,5 +10804,79 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f93aeec730da": {
+  "identity": {
+   "one_liner": "基于 eve 框架的 Slack 数据分析代理，从 Postgres 读取数据回答业务问题",
+   "review": "该项目是一个部署在 Vercel 上的 Slack 机器人模板，基于 eve 代理框架，用户在 Slack 中提问业务问题（如 MRR），代理查找表结构与指标定义后生成 SQL 查询 Postgres 并返回数字、图表或表格。查询以只读事务运行，通过 Slack ID 映射到 Postgres 角色实现权限控制，高成本查询需人工批准。适合已使用 Postgres 存业务数据并希望团队在 Slack 内自助查询的团队。",
+   "highlights": [
+    "代理以只读事务运行查询，并按用户 Slack 身份映射到 Postgres 角色控制可见数据",
+    "查询前由 Postgres 估算成本，高开销查询需提问者批准",
+    "支持自定义指标定义、SQL 规范与记忆内容，并可加载演示数据"
+   ],
+   "use_cases": [
+    "团队在 Slack 中以自然语言查询 Postgres 业务数据",
+    "为不同成员或频道配置不同的数据库只读角色与权限",
+    "基于模板定制指标口径后部署为企业内部数据问答代理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`DATABASE_URL`|The connection string for your Postgres database, version 14 or later. Use a database user that can create schemas and roles, such as the database owner.| ／ |Data|Postgres|",
+     "lines": [
+      15,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该项目从 Postgres 数据库读取数据回答业务问题，数据库是其存数据的来源而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Slack-based data analyst built on eve that answers questions about your business from a Postgres database. Ask \"What was our MRR last month?\" in Slack and it replies with the number, plus a chart or table when one helps. ／ |Data|Postgres| ／ The agent can only read your database. These safeguards keep it that way and protect your data:",
+   "evidence_lines": [
+    5,
+    32,
+    44
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "vercel-labs/eve-data-analyst-template",
+  "sha": "f93aeec730da",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

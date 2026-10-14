@@ -7189,5 +7189,231 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6ca54ac881e4": {
+  "identity": {
+   "one_liner": "本地优先个人知识库 CLI，Postgres+pgvector 混合检索与 GraphRAG",
+   "review": "second-brain 提供 `brain` CLI 与内置 MCP 服务器，把 Markdown 笔记、PDF/DOCX、Slack、Gmail、转写文本等摄入 Postgres + pgvector，支持 FTS+向量混合搜索、实体图谱（GraphRAG）、LLM 增强、本地 Web UI 及 `brain ask` 带引用的多跳问答；完全本地运行（Ollama 可选，无云端 API）。面向希望让 AI agent 或个人检索自身知识资产的用户，核心运行时依赖 Docker 中的 Postgres 容器。",
+   "highlights": [
+    "支持混合检索：Postgres FTS + pgvector 向量搜索，可选 GraphRAG 实体图谱层",
+    "内置 MCP 服务器（brain-mcp），供任意 AI agent 通过 CLI/MCP 查询语料",
+    "完全本地运行：可选 Ollama 嵌入与 LLM 增强，提供本地 Web UI（127.0.0.1:8765）"
+   ],
+   "use_cases": [
+    "个人知识库/笔记库的统一存储与检索（含 Obsidian vault）",
+    "为 AI 编码代理或助手提供低 token 消耗的本地语料查询（MCP/CLI）",
+    "职业文档、会议转写、Slack/Gmail 内容的沉淀与定期摘要回顾"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat.  ／ Install the CLI, then run the offline demo — a throwaway Postgres seeded with a synthetic *Larkspur* compliance corpus. No Ollama, no personal data, no model downloads: ／ Full install — the `brain` CLI plus the runtime (Postgres, and optionally Ollama / graph / wiki):",
+     "lines": [
+      12,
+      46,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确将笔记、转写、Slack/Gmail 等数据存储在 Postgres + pgvector 中，Postgres 是其存数据的依赖组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat. You read it through the CLI or the local web UI; the older rendered wiki still builds, as a legacy view. ／ Full install — the `brain` CLI plus the runtime (Postgres, and optionally Ollama / graph / wiki): ／ **Prerequisites (core):** Git, Python 3.11+, and a running Docker (Desktop or Engine) — the Postgres + pgvector database runs in a container on port 55432.",
+   "evidence_lines": [
+    12,
+    74,
+    94
+   ]
+  },
+  "fn": "mshtawythug/second-brain",
+  "sha": "6ca54ac881e4",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b42b568b5d75": {
+  "identity": {
+   "one_liner": "基于 pi-durable 引擎、经 Telegram 交互的持久化服务器 AI 代理网关",
+   "review": "在 Linux 服务器上以 systemd 服务常驻运行 pi 编码代理，通过 Telegram Bot API 长轮询收发消息，每步状态持久化到 SQLite，崩溃或重启后可从断点恢复。面向拥有服务器并希望在聊天中远程操作服务器的个人用户，支持 bash、文件读写工具及插件扩展。",
+   "highlights": [
+    "提供持久化执行：每个代理步骤先保存，崩溃或重启后恢复运行并保证答案恰好送达一次",
+    "通过 Telegram Bot API 长轮询通信，无需开放域名或 Web 服务器",
+    "支持插件机制（Web 搜索、MCP、技能、辅助代理、提醒任务）与多 AI 提供商"
+   ],
+   "use_cases": [
+    "从手机 Telegram 远程查询和操作自己的服务器",
+    "需要长时间运行、可中断恢复的个人 AI 代理任务",
+    "基于 pi-durable 构建自定义代理应用（提供库文档）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools:",
+     "lines": [
+      165
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明持久化会话存储在 SQLite 中，属使用数据库存数据的应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A daemon on pi-durable (`@earendil-works/pi-durable`) ／ that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools: ／ `bash`, `read`, `write`, `edit` and `telegram_send_file`. It shares pi's login and runs as a systemd user service on",
+   "evidence_lines": [
+    164,
+    165,
+    166
+   ]
+  },
+  "fn": "smixs/pi-durable-telegram",
+  "sha": "b42b568b5d75",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "105659948313": {
+  "identity": {
+   "one_liner": "Rust 全栈数据库 ER 图设计工具，浏览器画布 + actix-web 后端与实时协作",
+   "review": "coldrawdb 是一个自托管的数据库 ER 图（ERD）设计工具，前端用 Rust/Leptos/WASM 在浏览器中绘制表、字段与关系，后端以 actix-web + SQLite 提供持久化、用户鉴权、房间协作和 WebSocket OT 实时编辑。支持从 PostgreSQL/SQLite 读取表结构、执行 DDL，导出多引擎 SQL/DBML/JSON，并内置本地 MCP 服务供 AI 客户端操作图表，可 Docker 单容器部署。适合需要自托管协作建模的数据库设计人员。",
+   "highlights": [
+    "提供浏览器端可视化 ERD 编辑：表、字段、关系、索引、枚举、自定义类型、自动布局与关系推断",
+    "支持读取 PostgreSQL / SQLite 表结构并向目标库执行 DDL，导出多引擎 SQL、DBML、JSON 与数据字典 Markdown",
+    "内置 WebSocket OT 实时协作、房间与权限管理，以及包含 11 个工具的本地 MCP 服务"
+   ],
+   "use_cases": [
+    "团队自托管协作设计数据库表结构与 ER 图",
+    "从现有 PostgreSQL/SQLite 库导入结构进行建模并回写 DDL",
+    "通过 MCP 让 AI 客户端参与图表的读取与编辑"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **连接数据库**：读取 PostgreSQL / SQLite 表结构，或向目标数据库执行 DDL；PostgreSQL 支持指定 schema。连接数据库能力与 SQL 文件支持的引擎范围不同。",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "coldrawdb 使用 Rust + Leptos / WASM 构建浏览器编辑器，以 actix-web + SQLite 提供持久化、用户鉴权和实时协作。可以通过 Docker 自托管，也可以从源码运行，并通过本地 MCP 服务让 AI 客户端参与图表编辑。 ／ - **连接数据库**：读取 PostgreSQL / SQLite 表结构，或向目标数据库执行 DDL；PostgreSQL 支持指定 schema。连接数据库能力与 SQL 文件支持的引擎范围不同。",
+     "lines": [
+      7,
+      11
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "-d '{\"name\":\"demo\",\"database\":\"mysql\"}'",
+     "lines": [
+      104
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明可读取 PostgreSQL/SQLite 表结构并向目标数据库执行 DDL，是为数据库建模服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 自托管、浏览器端的数据库 ER 图设计工具 产品理念借鉴 drawDB 与 PDManer，开发中参考 drawDB 源码对齐，核心应用以 Rust 重新实现 ／ coldrawdb 使用 Rust + Leptos / WASM 构建浏览器编辑器，以 actix-web + SQLite 提供持久化、用户鉴权和实时协作。可以通过 Docker 自托管，也可以从源码运行，并通过本地 MCP 服务让 AI 客户端参与图表编辑。 ／ - **连接数据库**：读取 PostgreSQL / SQLite 表结构，或向目标数据库执行 DDL；PostgreSQL 支持指定 schema。连接数据库能力与 SQL 文件支持的引擎范围不同。",
+   "evidence_lines": [
+    2,
+    7,
+    11
+   ]
+  },
+  "fn": "dorname/coldrawdb",
+  "sha": "105659948313",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

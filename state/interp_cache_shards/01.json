@@ -9379,5 +9379,199 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a7b79c758ca": {
+  "identity": {
+   "one_liner": "基于 Tauri 的桌面数据浏览器，快速查看 CSV/Parquet 文件与多种数据库",
+   "review": "Duckling 是一款基于 Tauri 的桌面应用，用于快速浏览 parquet/csv/ 文件数据及多种数据库，内置 SQL 编辑器、透视表、列画像、值查看与结果导出等功能。原生支持 DuckDB 与 SQLite，对 PostgreSQL、MySQL、ClickHouse 提供实验性连接；项目自述目标并非完整的数据库管理工具，而是轻量数据浏览与分析。",
+   "highlights": [
+    "提供 SQL 编辑器，支持 schema 自动补全、EXPLAIN、语句级拆分执行与 Jinja2 风格模板变量批量查询",
+    "支持将结果导出为 CSV/TSV/JSON/Parquet/XLSX，并可复制为 Markdown/HTML 等多种表格格式",
+    "原生支持 DuckDB 与 SQLite，实验性支持 PostgreSQL、MySQL、ClickHouse 及 Doris/StarRocks（MySQL 协议）"
+   ],
+   "use_cases": [
+    "快速浏览和检查 parquet/csv 等本地文件数据",
+    "连接多种数据库进行轻量查询、列统计与数据探查",
+    "通过模板变量对多表或多组合批量执行 SQL 并分页查看结果"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL ／ - **PostgreSQL** — host / port / database / user / password + SSL mode. ／ - **SSH tunnel** — available for MySQL / PostgreSQL, using reusable SSH profiles or manual configuration.",
+     "lines": [
+      11,
+      42,
+      52
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL ／ - **MySQL** — host / port / database / user / password. ／ - **SSH tunnel** — available for MySQL / PostgreSQL, using reusable SSH profiles or manual configuration.",
+     "lines": [
+      12,
+      41,
+      52
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It supports DuckDB / SQLite natively, and provides experimental support for the following databases (not heavily tested): ／ - **SQLite** — open a database file.",
+     "lines": [
+      9,
+      40
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- ClickHouse (HTTP interface, usually port `8123`) ／ - **ClickHouse** — host / port / database / user / password (HTTP interface).",
+     "lines": [
+      13,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为浏览和查询多种数据库及数据文件服务的桌面客户端工具，而非仅使用数据库存储数据的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Duckling is a lightweight desktop application built using Tauri, designed for quickly browsing `parquet`/`csv`/`json` file data and various databases. Beyond browsing, it ships with a SQL editor, pivot tables, column profiling, value inspection, and data export to help you explore and analyze data without leaving the app. ／ It supports DuckDB / SQLite natively, and provides experimental support for the following databases (not heavily tested): ／ Note: The current objective of this project is not to develop a fully functional database management tool, but rather to facilitate quick browsing and lightweight analysis of various types of data.",
+   "evidence_lines": [
+    7,
+    9,
+    16
+   ]
+  },
+  "fn": "l1xnan/duckling",
+  "sha": "7a7b79c758ca",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "40c399eecc64": {
+  "identity": {
+   "one_liner": "Linux 开源服务器控制面板，集成 Web 服务器、数据库、安全与站点管理",
+   "review": "VortexPanel 是一个自托管的 Linux 服务器控制面板，用 Python/Flask + Alpine.js 构建，供服务器管理员通过 Web 界面管理 Nginx/Apache/OpenLiteSpeed/Caddy、PHP 站点、WordPress、数据库、防火墙、WAF 和 Fail2ban。关键机制包括一键应用安装、ModSecurity WAF 集成、面板自身 2FA 与 HTTPS，以及从 cPanel/aaPanel/Hestia 导入站点的迁移向导。",
+   "highlights": [
+    "支持多 Web 服务器（Nginx、Apache、OpenLiteSpeed、Caddy）与多数据库引擎（MySQL、MariaDB、PostgreSQL、MongoDB）的一键安装和管理",
+    "内置 ModSecurity WAF（OWASP CRS v4）、Fail2ban、UFW/firewalld 防火墙管理和 PHP Webshell 扫描器",
+    "提供站点导入向导，可从 cPanel、aaPanel、HestiaCP、CyberPanel 备份迁移站点，并支持 S3/FTP 等多种备份目标"
+   ],
+   "use_cases": [
+    "自托管 VPS/云服务器上通过图形面板管理网站、PHP 应用和数据库",
+    "从 cPanel、aaPanel、HestiaCP 等商业或旧面板迁移站点",
+    "为托管站点配置 WAF、Fail2ban、SSL 证书和自动化备份"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine ／ - **27** one-click installs: Nginx, Apache, OpenLiteSpeed, Caddy, PHP (multi-version), MySQL, MariaDB, PostgreSQL, MongoDB, Redis, **Memcached**, **FFmpeg** (multi-version, side by side), Docker, Node.js, Python, Composer, Fail2ban, ClamAV, ModSecurity, Roundc",
+     "lines": [
+      89,
+      93
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **PHP 7.4 → 8.5**, **Nginx / Apache / OpenLiteSpeed / Caddy**, **MariaDB / MySQL** — pick any combination ／ - MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine ／ - **27** one-click installs: Nginx, Apache, OpenLiteSpeed, Caddy, PHP (multi-version), MySQL, MariaDB, PostgreSQL, MongoDB, Redis, **Memcached**, **FFmpeg** (multi-version, side by side), Docker, Node.js, Python, Composer, Fail2ban, ClamAV, ModSecurity, Roundc",
+     "lines": [
+      63,
+      89,
+      93
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|**Oracle Linux**|8, 9|",
+     "lines": [
+      178
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **PHP 7.4 → 8.5**, **Nginx / Apache / OpenLiteSpeed / Caddy**, **MariaDB / MySQL** — pick any combination ／ - MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine ／ - **27** one-click installs: Nginx, Apache, OpenLiteSpeed, Caddy, PHP (multi-version), MySQL, MariaDB, PostgreSQL, MongoDB, Redis, **Memcached**, **FFmpeg** (multi-version, side by side), Docker, Node.js, Python, Composer, Fail2ban, ClamAV, ModSecurity, Roundc",
+     "lines": [
+      63,
+      89,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "面板为服务器上的数据库等组件提供安装与管理界面，属于为数据库生态服务的运维工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Free, open-source server control panel for Linux. ／ A self-hosted alternative to cPanel, Plesk, and aaPanel — WAF, Fail2Ban, Load Balancer, WP Toolkit, 2FA, and HTTPS for the panel itself, all built in and free, with no paid Pro tier. ／ - MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine",
+   "evidence_lines": [
+    5,
+    6,
+    89
+   ]
+  },
+  "fn": "BrowserlessAPI/VortexPanel",
+  "sha": "40c399eecc64",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

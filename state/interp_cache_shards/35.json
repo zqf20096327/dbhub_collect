@@ -8910,5 +8910,278 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d6c23092bb16": {
+  "identity": {
+   "one_liner": "Windows/macOS 本地开发环境桌面应用，打包并管理 nginx/PHP/MySQL 等服务栈",
+   "review": "EnvKit 是一款免费但不开源的桌面应用，在 Windows 与 macOS（仅 Apple Silicon）上以托盘应用形式打包运行 nginx/Apache、多版本 PHP、MySQL/MariaDB、PostgreSQL、Redis、MongoDB 等服务，提供 .test 域名受信 HTTPS、PATH 同步、一键启停与自诊断，并通过内置 MCP 服务器供 AI 助手操控栈；面向本地开发 Laravel/WordPress 等站点的开发者，源码不公开。",
+   "highlights": [
+    "打包多套数据库与运行时（MySQL/MariaDB/PostgreSQL/Redis/MongoDB/Node.js/Python），支持任意自定义版本安装",
+    "内置 MCP 服务器，允许 AI 客户端管理站点、数据库和服务",
+    "提供 Laragon 项目与数据库导入（含 MySQL → MariaDB 迁移）及端口冲突自诊断修复"
+   ],
+   "use_cases": [
+    "在 Windows/macOS 本地搭建 PHP/Node 网站开发环境",
+    "通过 AI 助手以自然语言启停服务、诊断 MySQL 等服务故障",
+    "从 Laragon 等旧环境迁移项目与数据库"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Bundled databases & tools** — MySQL/MariaDB (incl. **MySQL 8**), PostgreSQL, Redis, ／ MongoDB, Redis, PostgreSQL, or Python. ／ |PostgreSQL|✅|💲 Pro|🟡|❌|❌|",
+     "lines": [
+      139,
+      143,
+      175
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **PATH.** The bundled tools (php, composer, node, git, mysql, redis-cli, …) are added ／ - **Bundled databases & tools** — MySQL/MariaDB (incl. **MySQL 8**), PostgreSQL, Redis, ／  MySQL databases, start/stop and diagnose services.",
+     "lines": [
+      94,
+      139,
+      154
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Apache, multiple PHP versions, MySQL/MariaDB, PostgreSQL, Redis, MongoDB, Mailpit, Node.js, ／ - **Bundled databases & tools** — MySQL/MariaDB (incl. **MySQL 8**), PostgreSQL, Redis, ／ - **Import from Laragon** — projects **and** databases (incl. MySQL → MariaDB transfer).",
+     "lines": [
+      10,
+      139,
+      149
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为本地开发栈打包、运行并管理 MySQL/MariaDB/PostgreSQL 等数据库服务，属数据库生态的开发环境工具而非以某库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "免费使用但不开源，专有许可（All rights reserved）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "EnvKit is a desktop app that runs your entire local web-development stack — nginx **or** ／ - **Bundled databases & tools** — MySQL/MariaDB (incl. **MySQL 8**), PostgreSQL, Redis, ／ EnvKit ships an MCP server so AI assistants can operate your local stack.",
+   "evidence_lines": [
+    9,
+    139,
+    198
+   ]
+  },
+  "fn": "Env-Kit/envkit-releases",
+  "sha": "d6c23092bb16",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2ce517df27aa": {
+  "identity": {
+   "one_liner": "jmoiron/sqlx 的 API 兼容替代库，提供自动 Rebind、IN 展开与 Hook 机制",
+   "review": "这是一个 Go 语言的 SQL 工具库，作为 jmoiron/sqlx 的直接替换版本，保持 API 兼容，换导入路径即可迁移。它提供占位符自动转换（Auto-Rebind）、IN 子句切片自动展开、可插拔 SQL 拦截 Hook、泛型 JSON 列类型等功能，并修复了 sqlx 的多处已知问题。面向使用 sqlx 且需支持 PostgreSQL、MySQL、SQLite、SQL Server 等多种数据库的 Go 开发者，要求 Go 1.21+。",
+   "highlights": [
+    "Auto-Rebind：统一使用 ? 占位符，自动转换为 PostgreSQL/MySQL/SQLite/SQL Server 的绑定格式",
+    "IN (?) 上下文识别：切片参数在 IN 子句中自动展开，其他位置不展开",
+    "Hook 系统：可插拔 SQL 拦截器（onion 模型），支持全局与按调用粒度，用于日志/追踪/指标"
+   ],
+   "use_cases": [
+    "将现有 jmoiron/sqlx 项目迁移至修复版并保留原 API 调用",
+    "在多种数据库间复用同一套 ? 占位符 SQL 代码",
+    "为 SQL 执行添加日志、追踪、指标等拦截逻辑"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ db, err := sqlx.Connect(\"postgres\", dsn) ／ db, err := sqlex.Connect(\"postgres\", dsn)",
+     "lines": [
+      22,
+      59,
+      62
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ |**Cross-database out of the box**|Write SQL with `?` everywhere — works on PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      22,
+      110
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ |**Cross-database out of the box**|Write SQL with `?` everywhere — works on PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      22,
+      110
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ |**Cross-database out of the box**|Write SQL with `?` everywhere — works on PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      22,
+      110
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|`:123` / `:1`|❌ preserved as literal|Digit-start rejected (avoids Oracle `:N` / SQLite `?NNN` conflicts)|",
+     "lines": [
+      225
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库访问层服务的 Go 开发库，提供跨数据库的 SQL 绑定与查询辅助能力，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> A **drop-in replacement** for jmoiron/sqlx — 100% API-compatible, with added Hook aspects, generic JSON types, bug fixes, and more. ／ - 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ - 🪝 **Hook system** — pluggable SQL interceptors for logging, tracing, metrics (onion model), with both global and per-call granularity.",
+   "evidence_lines": [
+    11,
+    22,
+    26
+   ]
+  },
+  "fn": "go-sqlex/sqlex",
+  "sha": "2ce517df27aa",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b1a0f2f2e79d": {
+  "identity": {
+   "one_liner": "开源可用性监控工具，含状态页与 on-call，基于 Postgres+ClickHouse",
+   "review": "uptimepage 是一个可用性监控平台，支持 HTTP、TCP、ICMP、心跳、DNS、TLS 证书、域名到期及浏览器登录流等多种检查类型，提供公开状态页、告警通道、值班轮换与升级策略，可通过 REST API、Terraform 和 MCP 操作。面向 SaaS 创始人、平台/SRE 与自托管用户；自托管时依赖 Postgres 与 ClickHouse 存储数据，通过 docker compose 或单二进制运行。",
+   "highlights": [
+    "提供 8 种检查类型（HTTP/TCP/ICMP/heartbeat/DNS/TLS 证书/域名到期/浏览器流程），支持多区域探测代理",
+    "内置公开状态页（HTML+JSON+RSS），提供告警通道、事件管理与 on-call 轮换/升级策略",
+    "支持 REST API、Terraform provider 与 MCP server 实现自动化管理"
+   ],
+   "use_cases": [
+    "对网站/API/定时任务进行多区域可用性监控与故障告警",
+    "向客户发布公开状态页并管理事件通报",
+    "以代码方式（Terraform/API/MCP）管理监控目标与通知渠道"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+     "lines": [
+      78,
+      180
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+     "lines": [
+      78,
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 Postgres + ClickHouse 作为自身存储后端，属使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，提供免费托管层与自托管选项",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+   "evidence_lines": [
+    78,
+    180
+   ]
+  },
+  "fn": "uptimepage/uptimepage",
+  "sha": "b1a0f2f2e79d",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

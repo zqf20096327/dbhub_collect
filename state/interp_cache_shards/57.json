@@ -8719,5 +8719,88 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5b8e449b6083": {
+  "identity": {
+   "one_liner": "NativeScript 的 SQLite 插件，含原生线程与 Node-API/JNI 绑定",
+   "review": "这是一个为 NativeScript 应用提供 SQLite 访问的插件集（monorepo），包含 sqlite-core API、Node-API 绑定（sqlite-napi）、JNI/Objective-C 桥（sqlite-bridge）和默认引擎。所有调用在原生线程上运行并返回 Promise，Android 默认启用 WAL，支持加载扩展和按库指定 SQLCipher 等自定义引擎，并提供 TypeORM 适配入口。供 NativeScript 移动开发者在 Android/iOS 应用中读写本地 SQLite 数据库。",
+   "highlights": [
+    "所有数据库调用在原生线程执行并返回 Promise，不阻塞 JS 线程",
+    "支持每库配置引擎（如 SQLCipher）及加载 SQLite 扩展（Android）",
+    "提供 TypeORM 适配入口（/typeorm）与 sqlite-android-framework 平台引擎包"
+   ],
+   "use_cases": [
+    "NativeScript 移动应用的本地数据持久化",
+    "需要在 Android/iOS 上使用 WAL、批量执行或原生线程异步查询的场景",
+    "使用 SQLCipher 加密库或自定义 SQLite 构建的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "sqlite ／ SQLite for NativeScript, everything included: native threads, Node-API and JNI / Objective-C bindings, a default SQLite on each platform. Pick the smaller packages (sqlite-core, sqlite-napi...) to bring your own. ／ `ns plugin add @nativescript-community/sqlite`",
+     "lines": [
+      3,
+      10,
+      17
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "TypeORM's browser build references every database driver and a few node modules, so the webpack config needs (see `spike/nssqlite-spike/webpack.config.js` for a working one): the `browser` alias field, an alias for the `typeorm/browser` prefix, `false` fallbac",
+     "lines": [
+      386
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "TypeORM's browser build references every database driver and a few node modules, so the webpack config needs (see `spike/nssqlite-spike/webpack.config.js` for a working one): the `browser` alias field, an alias for the `typeorm/browser` prefix, `false` fallbac",
+     "lines": [
+      386
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库为 NativeScript 应用提供 SQLite 驱动/绑定组件，是为数据库生态服务的开发库而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " SQLite for NativeScript, everything included: native threads, Node-API and JNI / Objective-C bindings, a default SQLite on each platform. Pick the smaller packages (sqlite-core, sqlite-napi...) to bring your own. ／ `ns plugin add @nativescript-community/sqlite` ／ This brings everything and needs no setup: `sqlite-core` (the API and the native core), `sqlite-napi` (Node-API binding, NativeScript 9.1+), `sqlite-bridge` (JNI / Objective-C, any NativeScript version) and `sqlite-default-engine` (the default SQLite):",
+   "evidence_lines": [
+    10,
+    17,
+    19
+   ]
+  },
+  "fn": "nativescript-community/sqlite",
+  "sha": "5b8e449b6083",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

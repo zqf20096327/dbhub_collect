@@ -9108,5 +9108,148 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b50f1ee5626e": {
+  "identity": {
+   "one_liner": "AI CLI 进程网络观测器，轮询 /proc 并将套接字归因记录到 SQLite",
+   "review": "rano 是一个终端网络观测工具，通过轮询 Linux /proc 或 macOS libproc，将 Claude Code、Codex CLI、Gemini CLI 及其子进程打开的套接字映射到 PID 并标记提供商，可选将历史写入 SQLite 供查询与聚合。仅支持 Linux/macOS/WSL2，不支持 Windows；轮询间隔内瞬时的连接可能被漏采。",
+   "highlights": [
+    "将观测到的套接字按进程归属标记为 anthropic、openai、google 或 unknown 提供商",
+    "可选 SQLite 日志记录，内置聚合视图可查询历史",
+    "支持 PTR 反向解析与 pcap（libpcap 捕获 DNS/TLS SNI）两种域名归因模式"
+   ],
+   "use_cases": [
+    "开发或审计时观察 AI CLI 工具的网络连接行为",
+    "按提供商统计终端工具的外联域名与 IP",
+    "将观测历史持久化到 SQLite 做事后导出与 diff"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "rano is a **network observer for AI CLI processes** that tracks observed sockets owned by Claude Code, Codex CLI, Gemini CLI, and their descendants—live in your terminal and durably in SQLite when logging is enabled. ／ |**SQLite logging**|Queryable history with built-in aggregate views.|",
+     "lines": [
+      7,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该工具自身的观测日志存储（--sqlite 写入并查询），不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The Solution**: rano polls Linux `/proc` (or macOS libproc), maps sockets to PIDs, and prints observation events with provider tags while logging the observed history to SQLite. Connections that open and close between polls can be missed. ／ |**SQLite logging**|Queryable history with built-in aggregate views.|",
+   "evidence_lines": [
+    21,
+    30
+   ]
+  },
+  "fn": "Dicklesworthstone/rano",
+  "sha": "b50f1ee5626e",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "36d48b147b86": {
+  "identity": {
+   "one_liner": "自托管个人知识库后端，基于 PostgreSQL+pgvector 存储与检索",
+   "review": "Postgram 是一个自托管的知识与生产力后端，将笔记、任务、人物、项目和 agent 记忆存为类型化实体，提供混合检索、知识图谱和会话上下文梳理机制，人类通过浏览器 UI 与 CLI 使用，agent 通过 MCP/REST 访问；面向单人或小型可信团队的本地/单机部署，非多租户 SaaS，依赖 Docker Compose 运行。",
+   "highlights": [
+    "基于 PostgreSQL + pgvector 实现持久化与向量搜索，结合关键词的混合检索与图扩展",
+    "提供 REST API、Streamable HTTP MCP 端点与 CLI（pgm）供人类和 agent 访问",
+    "包含会话上下文与持久记忆的角色划分，以及归档/晋升（groom）机制和审计日志"
+   ],
+   "use_cases": [
+    "个人或小型团队的自托管知识库与笔记/任务管理",
+    "为 AI agent 提供可检查的共享记忆与知识语料",
+    "本地 Markdown 仓库同步与 LLM 关系抽取构建知识图谱"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The first run creates persistent Docker volumes for PostgreSQL and ／ `\"postgres\":\"connected\"`. ／ - PostgreSQL + `pgvector` for persistence and vector search",
+     "lines": [
+      86,
+      128,
+      180
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- Talon SQLite migration tooling",
+     "lines": [
+      170
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 PostgreSQL + pgvector 作为核心持久化与向量检索组件，属于使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A self-hosted productivity and knowledge backend for humans and AI agents. ／ - PostgreSQL + `pgvector` for persistence and vector search ／ Postgram is a TypeScript Node.js application built around a service layer.",
+   "evidence_lines": [
+    5,
+    180,
+    176
+   ]
+  },
+  "fn": "ivo-toby/postgram",
+  "sha": "36d48b147b86",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9398,5 +9398,78 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "57ad50901475": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理技能路由器，经 MCP 提供带置信度与证据的排序匹配。",
+   "review": "SkillRoute 为编码代理索引 SKILL.md 技能包，解析标题、触发器、模板与关系，通过 MCP 提供 route/search/inspect 三个工具，返回带置信度和来源证据的排序结果；目录默认存于单个 SQLite 文件，支持 15 种代理 harness。面向构建/使用 AI 代理的开发者，需 Node.js 20+ 与 Python/uv。",
+   "highlights": [
+    "提供 3 个 MCP 工具（route/search/inspect_skill）并适配 15 种代理 harness 的声明式清单",
+    "包含 4 种检索后端：local token、SQLite FTS5 (BM25)、Astra DB Data API、LangChain 适配器",
+    "含 Agent Skills 规范校验器、路由 trace 重放与 golden-route 评测"
+   ],
+   "use_cases": [
+    "为 Claude Code/Codex/Cursor 等代理安装插件以索引和路由本地技能库",
+    "将技能包的规范校验作为 CI 门禁",
+    "通过 Skill Atlas 交互式图浏览技能库并调试路由决策"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "any agent over MCP. One SQLite file, no services to run; add the Astra DB backend when you outgrow it. ／ |**Retrieval backends**|local token · SQLite FTS5 (BM25) · Astra DB Data API · LangChain adapter|wheel| ／ B --> C[(\"SQLite catalog<br/>skills · excerpts · graph · traces\")] ／ - **Backends** — local token retrieval by default; SQLite FTS5 (BM25) for larger local libraries,",
+     "lines": [
+      33,
+      149,
+      217,
+      224
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明其用 SQLite 文件存储自身目录，是为代理技能路由服务的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "any agent over MCP. One SQLite file, no services to run; add the Astra DB backend when you outgrow it. ／ The bundled MCP server exposes three tools over stdio — `skillroute.route`, `skillroute.search`, and ／ |**Retrieval backends**|local token · SQLite FTS5 (BM25) · Astra DB Data API · LangChain adapter|wheel|",
+   "evidence_lines": [
+    33,
+    113,
+    149
+   ]
+  },
+  "fn": "jestatsio/skillroute",
+  "sha": "57ad50901475",
+  "source": "readme",
+  "generated_at": "2026-10-14",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
