@@ -257,6 +257,7 @@ never mix with a real history.
 ### UX
 - **Dark/Light mode** — toggle in navbar, synced across all tabs via localStorage
 - **6 languages** — German, English, French, Spanish, Italian, Dutch, all kept at **full parity** (every user-facing string translated in all six, not just de/en)
+- **Kilometres or miles, any currency** (v3.0.155) — distances, speeds and consumption in km or miles (kWh/100 km or kWh/100 mi), and the currency sign of your choice (€, $, £, CHF, kr …; prices are never converted, only the sign). A new install picks language, units and currency from the browser's language and country; everything can be set in Settings → Language · Units. Data is always stored in km, the API stays in km.
 
 ---
 
@@ -378,6 +379,7 @@ needed.
 |-------|---------|------|
 | **Kia** | `hyundai-kia-connect-api` | Username / Password ¹ |
 | **Hyundai** | `hyundai-kia-connect-api` | Username / Password ¹ |
+| **Kia / Hyundai / Genesis (Pleos)** | none — official Pleos Vehicle Data API (Europe) | Client ID / Secret from pleos.ai ⁴ |
 | **Volkswagen** | `carconnectivity` + connector | Username / Password |
 | **Škoda** | none — official MyŠkoda Public API | API key (MyŠkoda app) + VIN ² |
 | **Škoda (old access)** | `carconnectivity` + connector | Username / Password ³ |
@@ -392,6 +394,7 @@ needed.
 | **Smart #1/#3** | `pySmartHashtag` | Username / Password |
 | **Porsche** | `pyporscheconnectapi` | Username / Password |
 | **XPENG** | *(none — built-in)* | Enode Client ID / Secret |
+| **Home Assistant** (any car HA knows) | none — reads HA's REST API | HA address + long-lived token + entity prefix ⁵ |
 
 After installing, configure credentials in Settings > Vehicle API. Optional background sync polls your vehicle at a configurable interval (1-12h).
 
@@ -408,6 +411,34 @@ There the app falls back to fetching a refresh token once through a browser
 ("Fetch Token" in Settings, valid about a year). It detects which of the two
 cases it is in and offers only the one that can actually work, instead of
 pointing at an upgrade that cannot happen.
+
+**⁴ Kia/Hyundai in Europe — use Pleos:** since 14 October 2026 Kia and Hyundai Europe
+refuse every sign-in by third-party programs, Home Assistant included. The password check
+still passes; the token exchange right after it answers `HTTP 400` with code **9035**
+("Unusual activity has been detected so you've been logged out"), and each attempt also logs
+the owner out of the official app. The app recognises this, says so plainly instead of
+pointing at the password, and stops signing in by itself (only *Test connection* asks again).
+
+The way out is the manufacturer group's official
+[Pleos personal Vehicle Data API](https://document.pleos.ai/en/api-reference/vehicle-data-api/getting-started/for-private-users/request-my-vehicle-api-key):
+on [pleos.ai](https://pleos.ai/) open the account menu → *My Vehicle Data API* → pick the
+brand → *Get API Key* → sign in with your Kia/Hyundai account, and copy the Client ID and
+Client Secret. A car that hit the block gets a switch-over form in Settings → Vehicles; the
+key is checked with Pleos before anything is stored, and everything recorded so far stays.
+Pleos serves what the car last reported: state of charge, charging and plug state, AC/DC
+targets, time to full, range, odometer, position, doors and lock, climate and outside
+temperature. Not available: 12 V battery, state of health, charging power, remote control
+and waking the car; trips are derived from parking events. Pleos says data flows fully
+24 hours after consent.
+
+**⁵ Home Assistant:** for a car without a vendor API you can use — for example an
+XPENG G6 (no public XPENG API yet) — the tracker can read the car from Home Assistant.
+Whatever brings the car into HA works: the core Tibber integration (state of charge,
+target, range, plug and charging state), an OBD dongle such as the WiCAN Pro over MQTT
+(state of charge, odometer, pack values, 12 V), or a later official integration. Give the
+car's entities one shared start (e.g. `sensor.xpeng_g6_soc`, `sensor.xpeng_g6_odometer`,
+`device_tracker.xpeng_g6`) and enter that prefix; *Test connection* lists the entities it
+picked. A container on a NAS may not resolve `*.ts.net` names — use the LAN address.
 
 **Škoda note:** Škoda is retiring the unofficial app API in October 2026. The app now
 speaks the official [MyŠkoda Public API](https://public.api.connect.skoda-auto.cz/docs):
@@ -478,9 +509,11 @@ Configure in Settings > Vehicle:
 
 ---
 
-## Languages
+## Languages, units and currency
 
-Switchable from Settings > Language:
+Language, distance unit (km or miles) and currency sign are set in Settings > Language · Units — or, on a new install, detected from the browser (`en-US` → English, miles, US dollars). Language and units follow the device; the currency is detected once and then kept. An install that already has data keeps exactly what it showed before v3.0.155.
+
+Languages:
 
 - Deutsch
 - English
@@ -489,7 +522,7 @@ Switchable from Settings > Language:
 - Italiano
 - Nederlands
 
-1257 translated strings per language, kept at full parity across all six (standing order — every user-facing string is translated in all languages, not just German/English). German is the source and remains the fallback if a key is ever missing. New languages can be added by dropping a `<lang>.json` file into `translations/`.
+1772 translated strings per language, kept at full parity across all six (standing order — every user-facing string is translated in all languages, not just German/English). German is the source and remains the fallback if a key is ever missing. New languages can be added by dropping a `<lang>.json` file into `translations/`.
 
 ---
 

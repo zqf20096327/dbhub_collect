@@ -8,6 +8,35 @@ Learn more in the announcement post: https://kerkour.com/stdx
 See [DESIGN.md](./DESIGN.md) for design principles and lessons learned.
 
 
+## Supported Platforms
+
+### Tier 1
+
+Tier 1 platforms are extensively checked and tested.
+
+* x86_64 Linux (`x86_64-unknown-linux-gnu` / `x86_64-unknown-linux-musl`)
+* aarch64 Linux (`aarch64-unknown-linux-gnu` / `aarch64-unknown-linux-musl`)
+* wasm32 (`wasm32-wasip1`)
+* aarch64 macOS (`aarch64-apple-darwin`)
+
+
+### Tier 2
+
+Tier 2 platforms are guaranteed to build but may or may not be tested depending on the current hardware availability.
+
+* aarch64 Android (`aarch64-linux-android`)
+* aarch64 iOS (`aarch64-apple-ios`)
+* riscV32imac Bare Metal (`riscv32imac-unknown-none-elf`)
+* armv7E-M Bare metal (`thumbv7em-none-eabi`)
+
+
+### Tier 3
+
+Tier 3 targets are those which the Rust codebase has support for, but are not built or tested automatically, so they may or may not work.
+
+* Everything else supported by Rust: https://doc.rust-lang.org/stable/rustc/platform-support.html
+
+
 ## Usage
 
 To avoid namespace clashes and supply chain risks, we do not use a centralized package repository. Import packages directly from source, for example:
@@ -26,15 +55,6 @@ Contrary to what the name may suggest, most packages also support `no_std` envir
 
 
 Other than crates in the [`beta`](https://github.com/rust-stdx/beta) repository, the `main` branch is considered stable. Minor breaking changes may happen from time to time, but we will do our best to reduce disruptions.
-
-
-### Supported platforms
-
-Best efforts are made to support all the platforms where Rust can run.
-
-`x86_64-unknown-linux-gnu`, `aarch64-unknown-linux-gnu` and `wasm32-wasip1` are currently tested and benchmarked.
-
-Please open an issue if you encounter a problem on a specific platform.
 
 
 ## Documentation
@@ -103,12 +123,12 @@ Any contribution submitted for inclusion in this project shall be licensed as ab
 | `bel` | https://github.com/cel-rust/cel-rust | 8287d04156a1b31efe0dd53db78e943fef15c59a | MIT |
 | `cron` | https://github.com/zslayton/cron | ?? | MIT |
 | `anyerr` | https://github.com/dtolnay/anyhow | 5a88bc48ca18c9720be292487dcdcbc93004d15a | MIT |
-| `constant_time_eq` | https://github.com/cesarb/constant_time_eq | 09a34625babf29e1b622ed46e959ea517986b12a | CC0-1.0 |
+| `constant_time_eq` | https://codeberg.org/cesarb/constant_time_eq | f5f9476a7f84206ecda2b33f3eb2a3fc1badbbe6 | MIT |
+| `count_instructions` | https://github.com/cesarb/count_instructions | ce2b66ff3fc2aa16fd330d00a2f60e8288847228 | MIT |
 | `crc32` | https://github.com/srijs/rust-crc32fast | 479ecdf0174dd3a0f7d48b2f66a386d8d2369963 | MIT |
 | `embed` | https://github.com/pyrossh/rust-embed | 105fdfebab5820ea0628149ee62b34f6d2df3bb8 | MIT |
 | `derivative` | https://github.com/mcarton/rust-derivative | 5179a968ca6d70792f62dfe6727ab8d5b8b5cf5e | MIT |
 | `form_urlencoded` | https://github.com/servo/rust-url | 54346fa288e16b25b71c45149d7067c752b450e0 | MIT |
-| `httpdate` | https://github.com/pyfisch/httpdate | 63f723c6eae30ec130a6c5625ec38c4b49b0891c | MIT |
 | `indexmap` | https://github.com/indexmap-rs/indexmap | 41a870887c4c77adf665886e63df08f406bfe37a | MIT |
 | `ipnetwork` | https://github.com/achanda/ipnetwork | f01575cbf2fc596c0a1761c122aa92525cbb7974 | MIT |
 | `maxminddb` | https://github.com/oschwald/maxminddb-rust | b5a6ccc2f1c8e990b54bbac648f524cdf043522a | ISC |

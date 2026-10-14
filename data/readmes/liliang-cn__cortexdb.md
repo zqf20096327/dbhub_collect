@@ -14,7 +14,8 @@ AI memory and a knowledge graph in one SQLite file. Pure Go, no service to run, 
 | Claude Code | `/plugin marketplace add liliang-cn/cortexdb`, then `/plugin install cortexdb@cortexdb` |
 | Codex | `codex plugin marketplace add liliang-cn/cortexdb && codex plugin add cortexdb@cortexdb` |
 | Claude Code mod (optional) | `/plugin install cortexdb-live@cortexdb` |
-| DeepSeek Harness | `dsh plugin --profile web add cortexdb-dsh-memory` ([guide](plugins/dsh-cortexdb-memory/README.md)) |
+| DeepSeek Harness | `dsh plugin --profile web add "github:liliang-cn/cortexdb#semver:^2&path:/plugins/dsh-cortexdb-memory"` ([guide](plugins/dsh-cortexdb-memory/README.md)) |
+| Obsidian | unzip a release's `cortexdb-obsidian.zip` into `<vault>/.obsidian/plugins/` ([guide](plugins/obsidian-cortexdb/README.md)) |
 | Shared-brain server | `go install github.com/liliang-cn/cortexdb/v2/cmd/cortexdb-grpc@latest` |
 | Clients | `cargo add cortexdb-client` · `pip install cortexdb-client` · `npm install cortexdb-client` |
 
@@ -29,7 +30,7 @@ rec, _ := brain.Recall(ctx, cortexdb.KnowledgeMemoryRecallRequest{Query: "what d
 fmt.Println(rec.ContextPack.Text)
 ```
 
-The plugin gives Claude Code and Codex one global brain at `~/.cortexdb/cortexdb.db`, `/remember`, `/recall` and an auto-recall hook. Point several agents or machines at one `cortexdb-grpc` and they share the same memory and graph.
+The plugin gives Claude Code and Codex one global brain at `~/.cortexdb/cortexdb.db`, `/remember`, `/recall` and an auto-recall hook. A session starts with an index of what the brain knows about its project, an agent about to open a file is told what happened to it before, and a session's durable facts are captured with `<private>` text and credentials kept out. Point several agents or machines at one `cortexdb-grpc` and they share the same memory and graph.
 
 In Codex, review and trust the plugin hooks in `/hooks` to activate automatic
 recall. See the [plugin guide](plugins/cortexdb/README.md) for setup and
@@ -81,7 +82,7 @@ Haiku runs on Claude Code's own model access, so no API key is needed. Language:
 | Variable | Meaning |
 | --- | --- |
 | `CORTEXDB_PATH` | Database file (default `~/.cortexdb/cortexdb.db`) |
-| `CORTEXDB_REMOTE` | Use a shared `cortexdb-grpc` at `host:port` instead of a local file |
+| `CORTEXDB_REMOTE` | Use a shared `cortexdb-grpc` at `host:port` (plaintext) or `https://host` (TLS, behind a proxy) instead of a local file |
 | `CORTEXDB_GRPC_TOKEN` | Bearer token for that server |
 | `CORTEXDB_GRPC_ADDR` | Server listen address (default `127.0.0.1:47821`) |
 | `CORTEXDB_EMBED_BASE_URL` | OpenAI-compatible embeddings endpoint; unset = lexical mode |

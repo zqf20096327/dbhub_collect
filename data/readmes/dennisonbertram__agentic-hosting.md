@@ -3,10 +3,23 @@
 A self-hosted PaaS for bare metal servers, designed to be operated by AI agents via REST API. Includes an optional supervisory dashboard for humans.
 
 - **Repo**: github.com/dennisonbertram/agentic-hosting
+- **Docs**: [Documentation site](https://dennisonbertram.github.io/agentic-hosting/) (source in `docs-site/`)
 - **Stack**: Go binary + Docker + gVisor + Traefik + Nixpacks + SQLite
 - **Language**: Go 1.25 (requires CGO for SQLite)
 - **Binary**: `ah`
 - **Default port**: 8080 (loopback only, behind Traefik)
+
+## Give this to your agent
+
+One shareable link is enough for an agent to install the control plane, register a tenant, deploy from git, add Postgres/Redis, and read logs.
+
+| What | URL (after merge to `main`) |
+|------|-------------------------------|
+| **llms.txt** (llmstxt.org index) | https://raw.githubusercontent.com/dennisonbertram/agentic-hosting/main/llms.txt |
+| **llms-full.txt** (all docs) | https://raw.githubusercontent.com/dennisonbertram/agentic-hosting/main/llms-full.txt |
+| **Operator skill** | https://raw.githubusercontent.com/dennisonbertram/agentic-hosting/main/skills/agentic-hosting/SKILL.md |
+
+Docs-site copies: `/llms.txt` and `/llms-full.txt` (GitHub Pages: `https://dennisonbertram.github.io/agentic-hosting/llms.txt`). The Claude Code skill and `/ah-*` slash commands in `.claude/` are the same API, split for interactive use. Details: [Give this to your agent](https://dennisonbertram.github.io/agentic-hosting/for-agents/).
 
 ## Design Principles
 
@@ -32,7 +45,7 @@ A self-hosted PaaS for bare metal servers, designed to be operated by AI agents 
 ```
 
 - **ah** — control plane (single Go binary, systemd service)
-- **Traefik** — reverse proxy, discovers services via Docker labels, handles TLS
+- **Traefik** — reverse proxy and TLS. Service routes are written as file-provider config (`traefik.enable=false` on containers so image labels cannot hijack routing)
 - **gVisor (runsc)** — container runtime, syscall interception for tenant isolation
 - **Nixpacks** — zero-config source-to-image builds
 - **SQLite** — two databases: `ah.db` (state) and `ah-metering.db` (metering), WAL mode
@@ -41,13 +54,32 @@ A self-hosted PaaS for bare metal servers, designed to be operated by AI agents 
 
 - Linux (Ubuntu 22.04+ recommended)
 - Docker 29+ with gVisor runtime configured
-- Go 1.21+ with CGO enabled
+- Go 1.25+ with CGO enabled
 - Nixpacks installed
 - Traefik running as Docker container
-- `AH_BOOTSTRAP_TOKEN` environment variable (min 32 chars)
+- `AH_BOOTSTRAP_TOKEN` environment variable (min 32 chars; authorizes tenant registration)
+- `AH_ADMIN_TOKEN` environment variable (min 32 chars per token; authorizes recover, reactivate and quota update)
 - `/var/lib/ah/master.key` — hex-encoded 32-byte key
 
+Environment variables read by `ah`:
+
+| Variable | Purpose |
+|---|---|
+| `AH_BOOTSTRAP_TOKEN` | Tenant registration token (min 32 chars, comma-separated for rotation) |
+| `AH_ADMIN_TOKEN` | Operator token for `POST /v1/auth/recover`, `POST /v1/tenants/{id}/reactivate` and `PATCH /v1/tenants/{id}/quotas` (min 32 chars per token, comma-separated for rotation). If unset, bootstrap tokens are accepted for those routes with a deprecation warning |
+| `AH_METER_DB_PATH` | Metering database path. Defaults to `ah-metering.db` next to the state database |
+| `AH_BASE_DOMAIN` | Base domain for service URLs (`https://{name}.{base-domain}`) |
+| `AH_EXTERNAL_TLS_TERMINATED` | `true` when TLS is terminated in front of Traefik |
+
 ## Installation
+
+For a Mac mini demo, use the [Mac mini first-run guide](docs/ops/macmini.md) for the isolated Lima VM, local health check, ngrok setup, and first deployment. It runs the same Go application with Docker and gVisor inside Ubuntu; the existing Hetzner/server install remains separate in [the fresh-install guide](docs/ops/fresh-install.md).
+
+For a fresh Ubuntu 24.04 amd64 host, `scripts/bootstrap-stack.sh` installs and configures everything below in one run, including generating the master key, bootstrap token and admin token (see the fresh-install guide). The manual steps that follow are for reference or customized setups.
+
+### Run the OpenRouter example on the Mac mini
+
+The [OpenRouter agent guide](examples/openrouter-agent/README.md#mac-mini-hosted-example) records one successful local ARM64 hosted-model request (HTTP 200, calculator result `42`) and the manual app/relay setup. It is not a one-command installer; the relay invocation was reconstructed from inspected settings and not replayed verbatim on a fresh VM. The temporary QA VM was deleted, and ngrok, public DNS, and TLS were not tested.
 
 ### 1. Install dependencies
 
@@ -127,16 +159,18 @@ mkdir -p /var/lib/ah/builds /var/lib/ah/backups
 head -c 32 /dev/urandom | xxd -p -c 64 > /var/lib/ah/master.key
 chmod 600 /var/lib/ah/master.key
 
-# Generate bootstrap token
+# Generate the bootstrap token and the admin token (run twice; use a different value for each)
+openssl rand -hex 32
 openssl rand -hex 32
 ```
 
 ### 4. Configure and start systemd service
 
 ```bash
-# Set bootstrap token
+# Set bootstrap and admin tokens
 cat > /etc/default/ah <<'EOF'
 AH_BOOTSTRAP_TOKEN=<your-32+-char-token-here>
+AH_ADMIN_TOKEN=<a-different-32+-char-token-here>
 EOF
 chmod 600 /etc/default/ah
 
@@ -155,7 +189,7 @@ curl -H 'X-Forwarded-Proto: https' http://127.0.0.1:8080/v1/system/health
 
 ### Authentication
 
-All endpoints except `GET /v1/system/health` and `POST /v1/tenants/register` require:
+Tenant routes require a Bearer key. Public (no API key): `GET /v1/system/health`, `POST /v1/tenants/register`, `POST /v1/auth/recover`, `POST /v1/tenants/{tenantID}/reactivate`, `POST /v1/system/bootstrap-token/validate`, `PATCH /v1/tenants/{tenantID}/quotas`. Register sends `X-Bootstrap-Token`. Recover, reactivate, and quota patch send `X-Admin-Token` when `AH_ADMIN_TOKEN` is set (bootstrap tokens then get 403 on those routes); if unset, `X-Bootstrap-Token` still works (deprecated). Bootstrap validate takes `{"token":"…"}` in the JSON body and always returns `200 {"valid":true|false}`.
 
 ```
 Authorization: Bearer <api_key>
@@ -176,6 +210,25 @@ curl -X POST http://localhost:8080/v1/tenants/register \
 {
   "tenant_id": "ten_abc123",
   "api_key": "keyid.secret"
+}
+```
+
+### Key recovery
+
+Recovery needs the admin token, not the bootstrap token. The response contains a new API key in the `key` field, shown once:
+
+```bash
+curl -X POST http://localhost:8080/v1/auth/recover \
+  -H 'Content-Type: application/json' \
+  -H 'X-Admin-Token: <admin-token>' \
+  -d '{"email": "admin@example.com"}'
+
+# Response
+{
+  "id": "<key-id>",
+  "key": "keyid.secret",
+  "name": "...",
+  "created_at": <unix-seconds>
 }
 ```
 
@@ -270,7 +323,7 @@ POST /v1/databases
 GET    /v1/databases                          # List databases
 GET    /v1/databases/{dbID}                   # Get database
 GET    /v1/databases/{dbID}/connection-string # Get connection string (decrypted)
-DELETE /v1/databases/{dbID}                   # Delete database and data
+DELETE /v1/databases/{dbID}                   # Delete database and data (not limited to 30s; stops the container, wipes and removes the volume)
 ```
 
 ## Operational Details
@@ -289,7 +342,7 @@ DELETE /v1/databases/{dbID}                   # Delete database and data
 
 ### Background Processes
 
-- **Reconciler** (60s interval): Syncs DB state to Docker reality. Detects crashes, circuit breakers.
+- **Reconciler** (30s interval): Syncs DB state to Docker reality. Detects crashes, circuit breakers.
 - **GC** (5min interval): Cleans orphaned containers, volumes, images, build directories.
 - **Circuit breaker**: 5 crashes in 10 minutes stops restarting. Reset with `POST /v1/services/{id}/reset`.
 - **Disk watermarks**: Warns at 80% usage, blocks new deploys at 90%.
@@ -299,7 +352,7 @@ DELETE /v1/databases/{dbID}                   # Delete database and data
 ```bash
 ah backup
 # Creates timestamped gzip backups in /var/lib/ah/backups/
-# Keeps last 10 backups
+# Keeps the newest 10 state and 10 metering backups
 # Uses VACUUM INTO for WAL-safe snapshots
 ```
 
@@ -310,14 +363,15 @@ ah backup
 - **CapDrop=ALL**: No Linux capabilities
 - **no-new-privileges**: Containers cannot escalate privileges
 - **Encrypted secrets**: Env vars and database credentials encrypted with AES-256-GCM using tenant-derived keys
-- **API keys**: bcrypt-hashed, prefix-indexed for performance
+- **API keys**: HMAC-SHA256 of `keyID.secret` using the master key (constant-time compare). bcrypt is used for passwords, not API keys.
 - **Rate limiting**: Per-tenant (100 req/s burst 200) + global (500 req/s burst 1000)
-- **Idempotency**: POST/PUT/DELETE accept `Idempotency-Key` header (stored per tenant+method+path)
+- **Idempotency**: Authenticated mutating routes accept `Idempotency-Key` (tenant + method + path + body hash). TTL is **10 minutes**. `POST /v1/environments/{id}/exec` is excluded.
 
 ### Networking
 
-- Services are accessible via Traefik at `http://<service-name>.<tenant-subdomain>.<domain>`
-- Traefik discovers services via Docker labels set by ah
+- Without `--base-domain`: `http://{serviceID}.localhost`
+- With `--base-domain example.com`: `https://{dns_label}.example.com`
+- Traefik file-provider config is written by `ah`; containers set `traefik.enable=false`
 - ah API is loopback-only by default (Traefik reverse proxies it)
 
 ## Development
@@ -327,7 +381,7 @@ ah backup
 make build
 
 # Run locally (requires Docker + gVisor)
-AH_BOOTSTRAP_TOKEN=dev-token-32-chars-minimum make run
+AH_BOOTSTRAP_TOKEN=dev-token-32-chars-minimum AH_ADMIN_TOKEN=dev-admin-token-32-chars-minimum make run
 
 # Run in dev mode (no HTTPS enforcement, open registration)
 ./bin/ah --dev --open-registration --port 8080
@@ -345,33 +399,34 @@ agentic-hosting ships with a Claude Code skill, slash commands, and bash scripts
 Copy the skill to your Claude Code skills directory:
 
 ```bash
+curl -fsSL https://agentic.hosting/install-skill.sh | bash
+# or copy from the repo:
 mkdir -p ~/.claude/skills/agentic-hosting
 cp .claude/skills/agentic-hosting/SKILL.md ~/.claude/skills/agentic-hosting/SKILL.md
+cp .claude/commands/ah-*.md ~/.claude/commands/
 ```
 
 Claude will automatically load the skill and know how to operate agentic-hosting: authentication, deployment flows, database provisioning, error handling, and all API limits.
 
 ### Slash Commands
 
-Copy the commands to your project:
-
-```bash
-cp -r .claude/commands/ /your/project/.claude/commands/
-```
+Files in `.claude/commands/` are named `ah-*.md`. There are no `/deploy` `/status` `/db` `/logs` command files.
 
 | Command | Description |
 |---------|-------------|
-| `/deploy <git-url-or-image> <name> [port]` | Deploy from a git URL (Nixpacks build) or Docker image |
-| `/status` | Full dashboard — disk, services, databases, circuit breakers |
-| `/db <service> <postgres\|redis> [name]` | Provision a database and wire it to a service |
-| `/logs <service> [build-id]` | Stream build logs for a service |
+| `/ah-deploy <git-url-or-image> <name> [port]` | Deploy from a git URL (Nixpacks build) or Docker image |
+| `/ah-status` | Full dashboard — disk, services, databases, circuit breakers |
+| `/ah-db <service> <postgres\|redis> [name]` | Provision a database and wire it to a service |
+| `/ah-logs <service> [build-id]` | Stream runtime logs, or build logs when a build-id is given |
+| `/ah-register <name> <email>` | Register a tenant (needs bootstrap token) |
+| `/ah-snapshot <service> [name]` | Snapshot a service for forking |
 
 **Example usage in Claude Code:**
 ```
-/deploy https://github.com/org/my-app web 3000
-/status
-/db web postgres
-/logs web
+/ah-deploy https://github.com/org/my-app web 3000
+/ah-status
+/ah-db web postgres
+/ah-logs web
 ```
 
 ### Bash Scripts
@@ -385,20 +440,16 @@ export AH_KEY="keyid.secret"
 
 # Register a new tenant (one-time)
 AH_BOOTSTRAP_TOKEN=<token> ./scripts/register.sh my-tenant me@example.com
+```
 
-# Deploy from git or Docker image
-./scripts/deploy.sh https://github.com/org/repo my-app 3000
-./scripts/deploy.sh nginx:alpine my-site 80
+For deploys, status, build logs and databases, use the `ahc` CLI:
 
-# Check status of everything
-./scripts/status.sh
-
-# Provision a database and wire it to a service
-./scripts/db-provision.sh my-app postgres
-./scripts/db-provision.sh my-app redis
-
-# Stream build logs
-./scripts/logs.sh my-app
+```bash
+ahc deploy https://github.com/org/repo my-app
+ahc deploy nginx:alpine my-site
+ahc status
+ahc db provision my-app postgres
+ahc build logs my-app
 ```
 
 See [`scripts/README.md`](scripts/README.md) for full documentation.
@@ -406,13 +457,28 @@ See [`scripts/README.md`](scripts/README.md) for full documentation.
 ## Comparisons
 
 - [ah vs OpenShell / NemoClaw](docs/exploration/ah-vs-openshell.md) — where each tool fits and how they complement each other
+- [InstaBox compatibility (2026-10-14)](docs/investigations/instabox-compatibility-2026-10-14.md) — can ah run on InstaBox (InsForge / Hang Huang)? Likely as a constrained `--dev` single-tenant box; blocked for stock production install and unattended signup
+
+## Documentation site
+
+The public docs match the [agentic.hosting](https://agentic.hosting) landing page (Instrument Serif + Inter, stone palette) and are generated from `docs-site/` (Astro). They describe **only what the Go API actually implements** — see `internal/api/server.go`. Stale-vs-correct claims from the alignment pass are listed in [`docs-site/CORRECTIONS.md`](docs-site/CORRECTIONS.md).
+
+```bash
+cd docs-site
+npm ci
+npm run dev          # http://127.0.0.1:4321/
+npm run build        # GitHub Pages defaults (base /agentic-hosting/)
+npm run build:site   # for the website container (base /docs/)
+```
+
+GitHub Pages deploys on push to `main` via `.github/workflows/docs.yml`. After enabling Pages (source: GitHub Actions), the site is `https://dennisonbertram.github.io/agentic-hosting/`.
+
+To bake docs into the nginx website image, build from the **repository root**:
+
+```bash
+docker build -f website/Dockerfile -t website .
+```
 
 ## Planned Work
 
-See [GitHub Issues](https://github.com/dennisonbertram/agentic-hosting/issues) for planned enhancements including:
-
-- HKDF key separation
-- Multi-domain routing
-- Billing/metering API
-- mTLS for inter-service communication
-- Audit logging
+See [GitHub Issues](https://github.com/dennisonbertram/agentic-hosting/issues) and the [docs roadmap](https://dennisonbertram.github.io/agentic-hosting/roadmap/). Known gaps include HKDF key separation, billing (metering is query-only), Prometheus export, and multi-node SQLite. Audit log lines already exist for sensitive reads.

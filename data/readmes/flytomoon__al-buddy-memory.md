@@ -67,7 +67,8 @@ entry before you upgrade.
 
 Node ≥ 20. One runtime dependency (`better-sqlite3`, with prebuilt binaries for Node 22, 24, 25
 and 26 on macOS, Linux and Windows; on Node 20 it compiles from source, which needs Python and a
-C++ toolchain); transformers.js is optional.
+C++ toolchain). Postgres (`pg`), the MCP SDK and the on-device model (transformers.js) are optional:
+they load only if you use them, and `npm install --omit=optional` leaves them out.
 
 Prior art: the Letta project published the idea of a pinned memory tier and a background pass over memory (memory blocks; sleep-time agents). What is different here: every derived fact must cite the raw it rests on or it is refused, the raw is never rewritten, and a whole pass can be reviewed and undone, with the undo and its reason kept on record.
 
@@ -206,8 +207,11 @@ edition adds:
 - multi-process safety for serverless deployments
 - data-API query executors
 - database row-level security
-- read audit
 - an enterprise readiness suite
+
+The seams these plug into are public, and so is read audit: `PostgresMemoryStore` with
+`accessAudit: { sink, reads: true }` hears every read and write of a tenant, inside the call's own
+transaction. [docs/EXTENSION-POINTS.md](docs/EXTENSION-POINTS.md)
 
 To ask about it, contact the repository owner, [@flytomoon](https://github.com/flytomoon).
 
@@ -268,10 +272,8 @@ the width and number type of the default on-device model), on the same laptop, s
 | Semantic recall, top 10 — first of a session | 488 ms (765 ms) | 1,619 ms (3,200 ms) |
 | Semantic recall, top 10 — thereafter | 22 ms median (36 ms) | 113 ms median (187 ms) |
 
-On a real personal store (7,357 memories, 2026-09-26): 42 MB and a 50 ms first lookup since
-0.8.3 (57 MB and 117 ms on 0.8.1, when the keyword index still kept its own copy of the text
-and every vector was copied into an array before the scan); repeated lookups 33 ms median. `gaugeStore` measures
-any store file this way and `checkBudgets` says which numbers are over budget.
+`gaugeStore` measures any store file this way and `checkBudgets` says which numbers are over
+budget.
 
 The history of this section is worth keeping: on 2026-09-19 it measured the JSON cost,
 named float32 storage as the fix, and filed it here as a weak spot. It was built six days
@@ -533,11 +535,13 @@ In Claude: *Customize → Connectors → Add custom connector*, URL `https://…
 ChatGPT: *Settings → Security and login → Developer mode*, then add the same URL. Each app
 opens a consent page once; the passphrase allows it. Only hashes of codes and tokens are
 kept on disk. Five wrong passphrases from one app lock that app out for 15 minutes, and twenty
-from all apps within 15 minutes lock every app out; each lock is logged. Facts an app writes
-carry its name in the audit trail, as over stdio. Two things stay on your machine: `export` answers
+from all apps within 15 minutes lock every app out; each lock is logged. A fact an app writes
+records it as the fact's `origin`, by the name the app registered with and the consent page
+showed, and the audit event for each call names it too. Two things stay on your machine: `export` answers
 inline and never writes a file, and `pin` is refused, because a pinned rule rides every
 assistant's prompt; pin from an assistant on the local server (`al-buddy-memory mcp`), and the
-remote apps get those rules with their first `recall`. For an organisation, the same server can be
+remote apps get those rules with their first `recall` after signing in, and again with the next
+one after the rules change. For an organisation, the same server can be
 signed in by your own identity provider instead: [docs/SIGN-IN.md](docs/SIGN-IN.md).
 
 ## Use it as a Claude Code plugin
@@ -630,7 +634,7 @@ it continuous. The same step with a copy button: [albuddy.com/claude.html](https
 - [x] A comparison table and a live paste-your-export demo (albuddy.com)
 - [x] Transaction time, the second half of bi-temporal: "what did we believe at X", including a fact held wrongly and later corrected (v0.5.0)
 - [x] A Postgres backend behind the same `MemoryStore` interface, for multi-tenant and hosted deployments (SQLite stays the local-first default; the backend runs the shared conformance suite)
-- [ ] Framework integrations (LangChain, CrewAI, Vercel AI SDK)
+- [x] Framework integrations: Vercel AI SDK, LangChain/LangGraph, Mastra (v0.7.0)
 
 ## Development
 

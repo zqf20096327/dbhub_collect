@@ -165,7 +165,7 @@ Esto importa más que cualquier función.
 
 **Tus llaves, donde hacen falta y en ningún otro lado.** Cuando das la llave de un agente, MADRE la escribe en el archivo donde ese CLI la busca, cerrada a tu usuario, y no conserva copia. Una integración no tiene CLI al que dársela, así que esa —y solo esa— la guarda MADRE, en su propia bodega de tu máquina, con permisos de solo tu usuario, aceptada únicamente desde esta computadora. Nunca en su config, ni en su registro, ni en sus logs, ni en lo que lee un agente: la ficha solo muestra que hay una guardada y cuántos caracteres tiene.
 
-**Nada sale por su cuenta.** Lo que un agente lee viaja a *su* proveedor, con tu cuenta y tus límites — como si lo hubieras corrido en tu terminal, porque eso es exactamente lo que MADRE hace. Lo que MADRE consulta por su cuenta está declarado, con lo que lo apaga: la consulta diaria de versiones nuevas (npm y GitHub), la cuota de tu plan de Claude, los embeddings e imágenes de Gemini si los activas, y los reportes de fallos, apagados por defecto.
+**Nada sale por su cuenta.** Lo que un agente lee viaja a *su* proveedor, con tu cuenta y tus límites — como si lo hubieras corrido en tu terminal, porque eso es exactamente lo que MADRE hace. Lo que MADRE consulta por su cuenta está declarado, con lo que lo apaga: la consulta diaria de versiones nuevas (npm y GitHub), la cuota de tu plan de Claude, los embeddings e imágenes de Gemini si los activas, y los reportes de fallos, apagados por defecto. Y una vez al día, siempre, un aviso de que esta copia sigue en uso: un identificador al azar, la versión de MADRE, el sistema y la versión de Node. Sin tu nombre, tu correo, tu IP ni nada de tus proyectos; es como el autor sabe cuántas personas usan MADRE.
 
 **Y te deja leerlo.** Toca el núcleo del Mapa de memoria y se abre «Lo que se envía»: el documento exacto que MADRE escribe en tu nombre cada turno, el comando exacto con el que lo entrega, y el registro de cada llamada que salió de esta máquina. No es una promesa: es una pantalla.
 
@@ -224,7 +224,12 @@ MADRE es gratis y seguirá siéndolo. Si te ahorra tiempo y quieres que siga cre
 puedes [apadrinarla](https://github.com/sponsors/jossuealcacao-exe). Nada del producto
 cambia según lo que hagas con ese enlace.
 
-Apache-2.0 · [Jossué Alcalá](https://jossuealcala.com/en/)
+Apache-2.0 · [Jossue Alcalá](https://jossuealcala.com/en/)
+
+El código es libre: úsalo, modifícalo y haz forks. El nombre **MADRE**, su logo y madre.run son
+marcas de Jossue Alcalá. Un fork que se distribuya conserva el archivo [`NOTICE`](NOTICE) con la línea
+«Based on MADRE by Jossue Alcalá», y si cambia el código lleva otro nombre. Qué sí y qué no:
+[TRADEMARKS.md](TRADEMARKS.md).
 
 <br>
 

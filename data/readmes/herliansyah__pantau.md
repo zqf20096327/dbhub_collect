@@ -160,17 +160,25 @@ Pantau inspects remote hosts via non-interactive SSH commands, continuously vali
 - **Seamless Maximize & Hierarchical Navigation**: One-click maximize to full viewport without disconnecting SSH sessions; stacked modal layering and sequential `Escape` dismissal preserve terminal navigation.
 
 ### 15. 🔄 Update Checker & Zero-Ops Semi-Automatic Self-Update
-- **Asynchronous Update Checker**: Periodically checks for upstream GitHub releases (every 12 hours with 6-hour cache TTL) and displays update indicators on the web dashboard.
+- **Asynchronous Update Checker & CLI Release Notes**: Periodically checks for upstream GitHub Releases (every 12 hours with 6-hour cache TTL) and displays update indicators on the web dashboard. Running `pantau -check-update` in the terminal fetches the latest release, prints the download URL, and renders formatted release notes directly to stdout.
 - **SHA-256 Integrity Verification**: Validates downloaded release archives against official `checksums.txt` manifests before unpacking.
 - **Pre-flight Smoke Test & Rollback**: Verifies candidate binary execution (`pantau.tmp -v`) prior to swapping; immediately aborts if any architecture or runtime incompatibility is detected.
 - **Cross-Platform Atomic Swap**: In-place replacement on Linux and Windows (using `.exe.old` renaming to bypass OS executable file locking).
-- **Graceful Process Handover**: Zero-data-loss restart preserving CLI flags and database state, paired with auto-reconnecting browser clients.
+- **Graceful Process Handover**: Zero-data-loss restart preserving CLI flags and database state, utilizing `instance.AcquireWithTimeout` (up to 3s retry) to seamlessly hand over the database lock from the terminating parent to the newly spawned child process without collision, paired with auto-reconnecting browser clients.
 - **Airgapped-First & Docker Awareness**: Fails silently in airgapped environments (with `-disable-update-check` flag), and intelligently detects Docker containers to display `docker compose pull` recommendations instead of binary swapping.
 
 ### 16. 📖 Airgapped In-App Documentation Modal & Embedded Changelog
 - **Embedded Single-Source Guides**: Pantau's official README, User Guide (bilingual EN/ID), and Changelog are embedded directly inside the single binary via `go:embed`.
 - **Zero-Dependency In-App Reader**: Read operational guides offline without internet or external CDN dependencies via the **Documentation Modal** (`75vw × 80vh`), featuring an integrated micro-parser, theme-aware syntax styling, and smooth-scrolling dynamic Table of Contents.
 - **Dual Entry Point**: Accessible before login on initial setup and disaster recovery screens, as well as post-authentication via header `(?)`, footer version badge, and Settings links.
+
+### 17. ⚡ In-App Activity Console & Live Event Stream
+- **Real-Time Operational Observability**: Stream live runtime daemon and subsystem operations (`inspect`, `ssh`, `transfer`, `terminal`, `snapshot`, `system`, and `auth`) directly to the browser via zero-dependency Server-Sent Events (`GET /api/logs/stream`).
+- **Telemetry Ring Buffer**: In-memory fixed-capacity ring buffer (100 records) and non-blocking broadcaster wrapping Go standard library `log/slog` for instant cold-start operational context.
+- **Redaction Filter**: Deterministic boundary filter automatically sanitizing SSH passwords, private keys, authentication tokens, passphrases, and 2FA secrets into `[REDACTED]`.
+- **Collapsible Activity Console Drawer**: Bottom diagnostic drawer docked above the footer with a 5-column running table (`Time`, `Level`, `Module`, `Host`, `Message & Details`), expandable attribute cards, Smart Auto-Scroll, pause/resume freeze toggle, severity level filtering (`ALL`, `ERROR`, `WARN`, `INFO`), instant search, and client-side `.log` / `.json` file export.
+- **Footer Trigger & Global Shortcut**: Triggered via footer button `⚡ Activity` with live pulse indicator, unread error counter badge, or global shortcut `Ctrl + \`` (backtick).
+- **Zero-Waste Performance Throttling**: Skips 100% of DOM manipulation when the drawer is closed and coalesces incoming events with `requestAnimationFrame` when open to eliminate CPU waste and layout thrashing.
 
 ---
 
@@ -261,7 +269,7 @@ systemctl enable --now pantau
 | `-db` | `PANTAU_DB` (or `DB_PATH`) | `pantau.db` | Path to SQLite database file |
 | `-open` | - | `true` (Windows) / `false` | Automatically open default web browser on launch |
 | `-disable-2fa` | - | `false` | Emergency bypass flag to disable TOTP 2FA directly from host terminal |
-| `-check-update` | - | `false` | Check for latest upstream release version and exit |
+| `-check-update` | - | `false` | Check for latest upstream release version, print release notes, and exit |
 | `-update` | - | `false` | Update Pantau executable to latest release and exit |
 | `-disable-update-check` | `PANTAU_DISABLE_UPDATE_CHECK` | `false` | Disable background update checker (recommended for airgapped environments) |
 | `-v`, `-version` | - | - | Print Pantau version and exit |

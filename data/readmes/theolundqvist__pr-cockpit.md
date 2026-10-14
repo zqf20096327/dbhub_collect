@@ -18,7 +18,7 @@ Run this in your terminal as your normal user, **not with `sudo`**:
 curl -fsSL https://raw.githubusercontent.com/theolundqvist/pr-cockpit/main/scripts/bootstrap | bash
 ```
 
-[Read the installer first](scripts/bootstrap). It checks prerequisites, installs the desktop app and `pr-cockpit` CLI, and opens setup. On macOS it offers to install missing tools where supported; on Linux it checks system prerequisites and installs missing Bun and GitHub CLI tools into the managed installation.
+[Read the installer first](scripts/bootstrap). It checks prerequisites, installs the desktop app and `pr-cockpit` CLI, and opens setup. On macOS it offers to install missing tools where supported; on Linux it checks system prerequisites and installs missing Bun and GitHub CLI tools into the managed installation. Both install and update paths use private Bun 1.4.3, verified against official SHA-256 checksums, without replacing your own Bun.
 
 **Supported platforms:** macOS and Linux, both with Git 2.38 or newer; the installer stops with the found version when Git is older. Linux also requires systemd and the desktop libraries listed by the installer; x64 and arm64 are supported. X11 is supported directly; Wayland uses XWayland, and global shortcuts depend on compositor policy. Windows is not supported.
 
@@ -69,6 +69,19 @@ Press **⌘Z** (Ctrl+Z on Windows/Linux) to undo a title change from Rename or a
 
 Desktop notifications are off by default. In **Settings → Notifications**, choose events and combine rules for human or bot authors, comment text, repositories, and review requests. GitHub bot accounts and configured review bots count as bots; unknown authors match neither human nor bot filters.
 
+Repositories can add **quick actions** to the PR sidebar and the PR-row **Quick actions** submenu by committing `.github/pr-cockpit.json`. Each action posts a fixed comment or adds a label. Cockpit reads it from the repository's default branch and shows the actions on every open PR there:
+
+```json
+{
+  "quickActions": [
+    { "label": "Preview", "comment": "@preview", "key": "P" },
+    { "label": "Order", "addLabel": "order", "key": "O" }
+  ]
+}
+```
+
+Each entry needs exactly one of `comment` or `addLabel`; `key` is optional, and keys Cockpit already uses are ignored. **Settings → Agents & merging → Quick actions** shows the format and copies a prompt that asks your coding agent to write the file. **Your quick actions** in the same place apply only to your Cockpit, on top of each repository's file: an entry with a matching `label` changes only the fields it sets or hides that action with `"hidden": true`, other entries add buttons, and `"repos": ["owner/repo"]` limits an entry to those repositories.
+
 <details>
 <summary><strong>Everyday shortcuts</strong></summary>
 
@@ -76,6 +89,7 @@ Desktop notifications are off by default. In **Settings → Notifications**, cho
 | --- | --- |
 | <kbd>j</kbd> / <kbd>k</kbd> | Move |
 | <kbd>enter</kbd> / <kbd>esc</kbd> | Open / back |
+| <kbd>⌘[</kbd> / <kbd>⌘]</kbd> | Back / forward (macOS) |
 | <kbd>d</kbd> | Conversation / Files |
 | <kbd>c</kbd> / <kbd>r</kbd> | Comment / reply |
 | <kbd>p</kbd> | Open in the configured agent |

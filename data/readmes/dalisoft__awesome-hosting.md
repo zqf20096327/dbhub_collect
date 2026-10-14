@@ -20,10 +20,11 @@ thank you Alibaba Qwen team**_
 
 > There amount are not real money, it is credits within sponsor platform.
 
-| Name                                          | Status           | Tier     |
-| --------------------------------------------- | ---------------- | -------- |
-| [Qwen Ambassador](https://qwen.ai/ambassador) | Active           | Platinum |
-| [KiloCode](https://kilo.ai)                   | Previous sponsor | Silver   |
+| Name                                          | Status   | Tier     |
+| --------------------------------------------- | -------- | -------- |
+| [Qwen Ambassador](https://qwen.ai/ambassador) | Active   | Platinum |
+| [KiloCode](https://kilo.ai)                   | One-time | Silver   |
+| [Prisma](https://www.prisma.io)               | One-time | Silver   |
 
 ## Status
 
@@ -254,6 +255,7 @@ List of all Virtual Private Server <sup>[1](#status)</sup>
 | [Waicore][waicore-ref]                            | Germany EP1 (€ 3/m)                                                           | No                 | No                    |                  |
 | [netcup](https://www.netcup.com)                  | [VPS 250 G11s](https://www.netcup.com/en/server/vps) (€ 3.35/m)               | No                 | No                    |                  |
 | [Scaleway](https://www.scaleway.com)              | [Stardust1-s](https://www.scaleway.com/en/pricing) (€ 3.35/m)                 | No                 | No                    |                  |
+| [Arct Cloud](https://www.arct.cloud/pricing)      | [Pricing](https://www.arct.cloud/pricing) (3.89 \$/m)                         | No                 | No                    |                  |
 | [DigitalOcean][do-ref]                            | Standard 512MiB (4 \$/m)                                                      | $200 credit        | No                    |                  |
 | [Kamatera](https://www.kamatera.com) ⛔️           | Simple (4 \$/m)                                                               | 30-day             |                       |                  |
 | [VPSServer](https://www.vpsserver.com)            | [Starter](https://www.vpsserver.com/plans) (4 \$/m)                           | 30-day             | $100 credit           |                  |

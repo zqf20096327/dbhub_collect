@@ -38,33 +38,9 @@ constraints.
 
 Learn how to set up [lightweight Spring Boot monitoring without Prometheus and Grafana](https://pvrlabs.xyz/articles/lightweight-spring-boot-monitoring.html).
 
-## Try it
-
-Release images are available on [Docker Hub](https://hub.docker.com/r/pvrlabs/statlite)
-for `linux/amd64` and `linux/arm64`.
-
-```bash
-docker run --rm \
-  -p 127.0.0.1:9090:9090 \
-  docker.io/pvrlabs/statlite:latest
-```
-
-Open <http://127.0.0.1:9090>. StatLite monitors itself by default, so the
-dashboard starts with live data. To monitor your own application from Docker,
-mount a config as described in
-[Monitor an application](docs/docker.md#monitor-an-application). In that
-container, `127.0.0.1` is StatLite.
-
-See the [Docker guide](docs/docker.md) for persistent storage, container
-networking, local builds, and access guidance.
-
-StatLite provides predefined application and host metrics with built-in charts.
-It does not provide PromQL, unrestricted custom metrics, custom dashboard
-building, distributed tracing, centralized logs, or built-in alert delivery.
-The [one-shot API checks](examples/api-automation/) can run from cron or a
-systemd timer when you want a notification; you choose the threshold and where
-the message goes. See [monitoring options for small applications and VPS
-deployments](docs/monitoring-options.md) for the practical tradeoffs.
+StatLite focuses on predefined application and host metrics with built-in
+charts. See [monitoring options](docs/monitoring-options.md) for capabilities,
+limitations, and tradeoffs.
 
 ## Install
 
@@ -82,6 +58,37 @@ brew install pvrlabs/tap/statlite
 
 See [Installation](docs/install.md) for supported platforms, custom install
 locations, source builds, and server-wide Linux setup.
+
+## Try it
+
+Start StatLite:
+
+```bash
+statlite
+```
+
+Open <http://127.0.0.1:9090>. StatLite monitors itself by default, so the
+dashboard starts with live data.
+
+## Docker
+
+Alternatively, run StatLite with Docker. Release images are available on
+[Docker Hub](https://hub.docker.com/r/pvrlabs/statlite) for `linux/amd64` and
+`linux/arm64`.
+
+```bash
+docker run --rm \
+  -p 127.0.0.1:9090:9090 \
+  docker.io/pvrlabs/statlite:latest
+```
+
+Open <http://127.0.0.1:9090>. To monitor your own application from Docker,
+mount a config as described in
+[Monitor an application](docs/docker.md#monitor-an-application). In that
+container, `127.0.0.1` is StatLite.
+
+See the [Docker guide](docs/docker.md) for persistent storage, container
+networking, local builds, and access guidance.
 
 ## Configure an application
 

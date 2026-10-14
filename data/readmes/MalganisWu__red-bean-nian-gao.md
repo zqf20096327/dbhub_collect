@@ -7,7 +7,7 @@
 
 [![CI](https://github.com/MalganisWu/red-bean-nian-gao/actions/workflows/ci.yml/badge.svg)](https://github.com/MalganisWu/red-bean-nian-gao/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D24.9.0%20%3C26-brightgreen)](package.json)
+![Node.js](https://img.shields.io/badge/node-%3E%3D24.9.0%20%3C26-brightgreen)
 
 [English](README.en.md) · **简体中文**
 
@@ -161,7 +161,7 @@ red-bean-nian-gao/
 - [`docs/design/backend/architecture.md`](docs/design/backend/architecture.md) —— 后端分层与依赖方向
 - [`docs/design/agent/pipeline.md`](docs/design/agent/pipeline.md) —— 主会话 Pipeline 与 Hook
 - [`docs/design/session/session-trajectory.md`](docs/design/session/session-trajectory.md) —— 轨迹审计视图的信息架构
-- [`docs/decisions/`](docs/decisions/) —— ADR：选了什么、代价是什么、排除了什么
+- [`docs/decisions/`](docs/decisions/) —— 决策记录：选了什么、代价是什么、排除了什么
 - [`backend/STACK.md`](backend/STACK.md) —— 后端技术选型与理由
 - [`AGENTS.md`](AGENTS.md) —— 本仓遵循的开发规范
 

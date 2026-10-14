@@ -16,6 +16,7 @@
 - **成长中心**（仅 CodeBuddy）：自动领 Buddy 旅行礼物、派 Buddy、领任务奖、断登补登、连登兑换、开盲盒；不可逆动作可用 `GROWTH_IRREVERSIBLE_ACTIONS=false` 关停；管理台可手动执行。
 - **脱敏统计**：不存对话内容；明细 90 天、小时汇总永久；按人/渠道/模型/凭证可视化；按 OpenRouter 刊例价估算成本（人民币为主）。
 - **管理台安全加固**：登录限流、CSRF 校验、请求体上限、Host 白名单。
+- **窄屏表格转卡片**：列多的表格（凭证 / 明细 / 模型列表等）在 <768px 自动由「一行 = 一张卡」呈现——列名收成一排可点的排序片，每个字段在自己行首显示字段名；DOM 不变，读屏语义与宽屏一致。
 
 协议层实现（私有信封、签名、门禁伪装等）见 [`TECHNICAL.md`](TECHNICAL.md)。
 
@@ -130,6 +131,10 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 - **流式带 usage 帧**：收尾时在 finish chunk 之后、`data: [DONE]` 之前补一帧 `choices: []` 的 usage（OpenAI 标准形态），只从流里读用量的客户端据此显示 tok/s、上下文占用率与会话 token 统计；上游没上报时不补（不发 0 占位），非流式出口的 `usage` 同理，未上报字段一律为 `null`。
 - **思考 token 需客户端带 `reasoning_effort`**：CodeBuddy 渠道在客户端**未给**时补 `medium`（上游缺此字段会把整段思考以「可见推演」写进正文）；显式给的值原样透传、不被覆盖。
 
+### Playground 高级参数
+
+Playground 请求表单可选填 `temperature` / `max_tokens` / `reasoning_effort`，**留空即不发送该键**（各渠道自取其默认）。前端校验边界与 `compat/openai/request.py` 一致（`temperature` ≤ 1000、`max_tokens` 为 ≤ 4,000,000 的正整数），不会出现「界面放行、后端 400」。`reasoning_effort` 控件只在模型元数据给出 `supports_reasoning` 或 `default_effort` 时出现，候选为标准三档（`low`/`medium`/`high`，上游声明的默认档若不在其中则追加），默认选中「不发送」——某个档位是否被接受由上游裁决。
+
 ## 渠道
 
 > CodeBuddy（含国际版）/ TRAE / Qoder / CodeArts 需填凭证；**OpenCode Zen 与 Kilo Gateway 是无凭证的免费层渠道**——池里是一条虚拟占位行（让调度 / 冷却 / 统计照常工作），额度列显示「免费层（无额度接口）」，健康度恒为「无探测」（未知 ≠ 耗尽）。虚拟行**删除后重启会复活**，永久停用请用「暂停」。
@@ -220,6 +225,10 @@ claude
 
 **鉴权**：`x-api-key` 与 `Authorization: Bearer` 都接受。**流式**：`message_start` → `content_block_start/delta/stop` → `message_delta`（含 `stop_reason` 与 usage）→ `message_stop`；无 `[DONE]` 哨兵，thinking 块在 `content_block_stop` 前补 `signature_delta`。**缓存命中**：出口 usage 按 Anthropic 语义拆两笔——`input_tokens` 只计未命中，命中另记 `cache_read_input_tokens`（内部 `input_tokens` 是 OpenAI 口径的 `prompt_tokens`，含命中），Claude Code 据此显示缓存读 token。**`count_tokens`**：`POST /v1/messages/count_tokens` 本地估算输入 token（不转发上游）。**不支持**：图片 / 文档块、Anthropic 服务端工具一律显式 400。
 
+### CC Switch 一键导入
+
+「API Key 管理」页在创建 Key 后可生成 [CC Switch](https://github.com/farion1231/cc-switch) 的 `ccswitch://` 导入深链（Claude Code / Codex CLI / OpenCode 三个目标各一个按钮），点一下即由桌面端弹确认框写入地址、Key 与模型。深链**只能由点击触发**（浏览器拦截自动跳转），且**含 Key 明文**，仅在创建 Key 的展示期内可用。协议与 `app` / `apiFormat` 取值见 CC Switch 用户手册「Deep Link Protocol」，需 CC Switch v4.0.10+。注意 **endpoint 形态随 `apiFormat` 而变**：Anthropic 格式（Claude Code）填到根、**不带 `/v1`**；两个 OpenAI 格式填到 `/v1`。本服务没有 Gemini 出口，故不提供 `app=gemini` 入口。
+
 ### 余额查询
 
 `GET /v1/user/balance` 兼容 DeepSeek 余额接口形状，Bearer `sk-...` 鉴权，供 Cherry Studio / cc-switch 等客户端显示余额。余额来自凭证池的额度探测缓存（`QUOTA_PROBE_MINUTES` 周期刷新），按可用凭证汇总，单位为上游 credits：
@@ -238,7 +247,7 @@ claude
 
 ### 池健康检查
 
-`GET /health` 只回 `{"status":"ok"}`（进程存活，适合容器存活探针）；`GET /healthz` 额外给出凭证池计数，供外部监控在池子耗尽时提前告警——那是「服务活着但用不了」的状态，存活探针看不出来。两个端点都不鉴权。
+`GET /health` 只回 `{"status":"ok"}`（进程存活，适合容器存活探针）；`GET /healthz` 额外给出凭证池计数，**并在 `ready == 0` 时回 HTTP 503**（就绪探针）——那是「进程活着但没有可用凭证」的状态，对话请求必然 503，负载均衡/外部监控应据此摘流量。计数在两种状态下都返回，监控可读到「为什么不可用」。两个端点都不鉴权。
 
 ```json
 {
@@ -247,7 +256,27 @@ claude
 }
 ```
 
-五类计数互斥且合计 = `total`，与调度器同一口径。`ready=0` 时对话请求直接返回 503，值得配置告警。
+五类计数互斥且合计 = `total`，与调度器同一口径。`ready=0` 时 `/healthz` 返回 503 且 `status` 为 `unavailable`；请把**存活**探针配在 `/health`（恒 200），把 `/healthz` 用作就绪/告警——把容器 healthcheck 指到 `/healthz` 会在池子耗尽时把容器标成 unhealthy，而重启并不能修好一个没有可用凭证的池子。
+
+> 升级注意：`/healthz` 的 HTTP 状态从「恒 200」变为「ready=0 时 503」。只判 HTTP 200 的外部监控会在此后开始报警，这是预期行为；若你只想要计数、不想被状态码影响，改读 `/health` + 自行解析计数即可。
+
+### Prometheus 指标（`GET /metrics`）
+
+`GET /metrics` 输出 Prometheus text 格式（`text/plain; version=0.0.4`），供 Prometheus/Grafana 直接抓取。默认开启，**不鉴权**——与同样裸暴露的 `/healthz` 同口径；`METRICS_ENABLED=false`（可热更）时端点返回 404。
+
+导出五个指标家族：
+
+| 指标 | 类型 | 标签 | 数据源 |
+| --- | --- | --- | --- |
+| `coding2api_requests_total` | counter | `provider` / `model` / `status`(ok\|error) | `usage_hourly`（永久，跨重启单调） |
+| `coding2api_tokens_total` | counter | `provider` / `type`(input\|output\|reasoning\|cached) | `usage_hourly` |
+| `coding2api_credentials` | gauge | `state`(ready\|cooling\|paused\|disabled) | 凭证池（与 `/healthz` 同口径） |
+| `coding2api_upstream_errors_total` | counter | `provider` / `kind`（受控失败原因） | 进程内计数（重启归零） |
+| `coding2api_task_failures_total` | counter | `task` | 进程内任务运行态（重启归零） |
+
+**禁用高基数标签**：不含 `credential_id` / `api_key_id` / `username` —— 一个账号一条时间序列会让 Prometheus 侧内存与查询失控。`requests_total` / `tokens_total` 读**永久保留**的小时汇总（不是 90 天的明细），因此 scrape 时不做明细全表扫描、且计数跨重启单调；进程内计数（失败原因、任务失败）重启归零，由 Prometheus 的 counter reset 语义吸收。
+
+> 已知偏离：扫描报告列了 `upstream_errors_total{provider,kind}` 且数据源写 `usage_hourly`，但小时汇总没有 `error_type` 维度，用 90 天明细当 `_total` 会随裁剪下降——故 `kind` 改由进程内计数器提供（重启归零），其余家族仍取小时汇总。
 
 ## API Key 的绑定、白名单、来源 IP 与到期时间
 
@@ -264,11 +293,45 @@ claude
 
 > OpenCode Zen / Kilo Gateway 是无凭证渠道，池里是一条虚拟占位行。**暂停它是永久停用的唯一方式**——删除后下次重启会被种子重新补上。暂停也会把该渠道从模型列表摘掉。
 
+## 凭证批量运维
+
+池子一大，「逐个点签到 / 探测」就不现实。凭证页提供多选 + 批量操作条：每行一个 checkbox、组头一个「全选本渠道」，勾选后顶部出现操作条（探测额度 / 每日签到 / 暂停 / 恢复 / 取消选择）。
+
+- **后端批量端点**：`POST /api/credentials/batch`，body `{action: "probe"|"toggle"|"checkin"|"revive", ids: [...], enabled?}`（`enabled` 仅 `toggle` 用）。一次请求最多 200 条，重复 id 自动去重。
+- **逐条隔离**：单条失败不影响其余条——凭证不存在、渠道不支持该能力、上游报错都只体现在该条结果里，其余条照常执行。响应为 `{action, total, succeeded, failed, results: [{id, ok, error?, detail?}]}`：`ok` 表示该条动作是否成功；`error` 表示这条根本没执行到上游（`credential not found` / `credential does not support ...` / `action_failed`），`detail` 是动作自身的返回体（probe 的剩余额度、checkin 的积分与状态）。
+- **暂停是显式状态而非取反**：批量「暂停」对所有选中项传 `enabled=false`，不会让「已启用 + 已暂停」的混选走向相反方向。
+- **只收已有单条端点的动作**：`refresh`（token 预刷新）没有单条入口且由后台按到期窗口驱动，批量强刷会白耗一次性票据；`delete` 破坏性太强，需要单独的二次确认流，都不走这个通道。
+- **审计只记一条汇总**（`toggle` / `revive`）：批量暂停 50 个号是一次操作、一个意图，逐条落库会把审计流水刷成噪声。`probe` / `checkin` 与单条端点同为只读语义，不写审计。
+
+## 凭证限额护栏
+
+凭证级**可选**护栏，给「这个号别用超」一个显式开关：行内菜单「设置限额」配置，四个护栏各自独立、全部留空 = 不受限（老库升级后行为不变）。判定在**选号前**完成，触顶的凭证不再参与对话流量；后台任务（签到 / 探测 / 成长中心）照常运行，与「暂停」同口径。
+
+- **保留积分**：账户剩余积分 **≤** 该值时整号停用——给号留底，避免把额度跑空。与当日用量无关；余额未知（渠道不上报）时不猜、不停用。
+- **每日 token 上限**：当日累计 `输入 + 输出` token **达到**该值时整号停用。
+- **每日积分上限**：当日累计 credit 达到该值时整号停用。
+- **按模型 token 上限**：`{模型: 上限}`，某模型当日累计达到上限时**只停该模型**，其余模型照常可用。
+- **当日 = 北京时间自然日**（与签到、活跃上报同一时区），0 点刷新计数，避免与上游「每日重置」出现半天错位。
+- **无可用凭证 503**：当所有候选都因限额被跳过时，复用 `no_healthy_credential`（账号级原因，换个模型也未必能用）；与「模型级冷却」的 `model_unavailable` 区分开。
+- 写入 `PUT /api/credentials/{id}/limits`（整体替换：只传要开的护栏，缺省字段 = 关闭该护栏；四个全关时删除配置行）。改动即时生效（写入后主动失效选号侧快照，不等 TTL）。审计动作 `credential.limits`。
+
+> 实现注：判定需要「当日聚合用量」，那是每请求都变的动态数据，因此不进 `Candidate.is_selectable`（纯函数，只吃凭证自身状态），而在 executor 选号前用 `LimitGuard` 过滤；`LimitGuard` 对「限额表 + 当日用量」做进程内快照缓存（默认 15s），避免每次选号都查一次聚合。
+
+## 凭证在途上限
+
+`MAX_INFLIGHT_PER_CREDENTIAL`（默认 `0` = 不限）：同一凭证的**并发请求**达到该值后不再参与选号，避免把单账号打进上游限流 / 封号——多配几个号本就是为了分摊，把一个号打满不如把请求分出去。跨渠道全局生效（与 CodeArts 的渠道内 `CODEARTS_MAX_CONCURRENCY` 正交）。
+
+- 计数是**进程内**的：单实例语义，多实例部署各自计数（与 `/api/tasks` 运行态同口径）。
+- 租约在请求结束时释放（含成功、轮换、异常、客户端断开）；另有 **600s TTL 兜底**——漏释放的租约过期后被回收，宁可偶尔多放一个请求，也不能让号被静默占死。
+- 全部候选都占满时与限额护栏同口径报「无可用凭证」503。
+- 可在管理台「任务与配置」页热更，下一请求即生效（无快照缓存）。
+
 ## 凭证池的筛选与分组
 
 凭证多了以后，列表页把「找到某个号」这件事拆成三层，默认首屏只铺渠道级总览：
 
-- **筛选工具条**：搜索（昵称 / 渠道 / id，忽略大小写）× 渠道 × 状态三件套。三者是 **AND** 关系，纯前端收敛，不改后端排序（后端仍按 `sort` / `order` 给全量）。命中时显示「筛选后 N / 总数」，并提供「清空」；无匹配给空态而非空白表格。渠道 / 状态下拉里的计数来自当前全量，切换筛选不会自我缩窄。
+- **筛选工具条**：搜索（昵称 / 渠道 / id，忽略大小写）× 渠道 × 状态 × 标签四件套。四者是 **AND** 关系，纯前端收敛，不改后端排序（后端仍按 `sort` / `order` 给全量）。命中时显示「筛选后 N / 总数」，并提供「清空」；无匹配给空态而非空白表格。渠道 / 状态 / 标签下拉里的计数来自当前全量，切换筛选不会自我缩窄。**标签下拉只在池里真的出现过标签时渲染**（没有标签时不留一个恒为「全部标签」的空控件）；标签是结构化维度，**不参与搜索词匹配**——否则「查一个恰好叫『生产』的昵称」会变得不可能。
+- **标签**：每条凭证可贴任意个运维标签（逗号分隔，最多 16 个、单个 ≤ 24 字符；半角/全角逗号与分号都当分隔符），入口在行内「更多操作 → 设置标签」。标签**只用于列表筛选与展示**，不参与选号、不改变任何请求行为——把标签当策略用会让改名静默改变线上流量。行内最多列两个标签，多余收成 `+N` 并在悬浮里给全量。
 - **组排序**：单独一个控件，只重排「渠道组」，不动组内行序（行序仍由列头 / 后端 `sort` 决定）。默认**额度从高到低**，按组内额度剩余合计排名，让还能打最多的渠道排前面；可切回**渠道顺序**（固定，30s 轮询不会让组头乱跳）。无额度接口的免费层垫底（不当 `0` 参与比较），额度相同（含都为 null）时回落到渠道顺序。
 - **按渠道分组**：列表按渠道聚合，组头做成一张紧凑的「渠道仪表盘」——品牌图标 + 渠道名 + 账号数，加上**状态分布**（图标 + 计数，只列出现过的态，口径与行内状态徽章同一套 `credentialState`）、**额度合计**（占比环 + 数字；环是纯图形仪表，精确百分比写在「额度合计」标签行，对组内非 null 值求和，免费层 zen / kilo 无额度接口时显示 `—` 而不是 `0`，也不出环），以及**到期积分**（主窗口 1.5 天一块，次窗口 7 天仅在**比主窗口多**时再出一块——次窗口是主窗口的超集，数字相同说明没有超出 1.5 天的部分，CodeArts 每日池当天清零、两窗口恒等，就只列一块，不把同一个数字说两遍）。点组头折叠 / 展开该渠道，**默认全折叠**（首屏先看结构，要看具体账号再展开）；筛选生效时自动展开命中渠道，清空筛选回到折叠总览。组顺序默认「额度从高到低」，也可用工具条切到固定的全站渠道顺序（CodeBuddy、TRAE 在前），不随行排序键变化。渠道名只出现在组头，行内不重复。
 - **列头跟着展开区走**：没有全局表头，列头（含排序按钮与列说明）渲染在每个展开的渠道组内部，并在滚动容器里吸顶——折叠态下组头本身就是总览，列名没有对应内容，只有展开某组时才需要「这一列是什么」的锚点。同一时间可能有多个组展开，各组列头共用同一套排序状态（点任一处都写回同一个后端 `sort` 参数）。**「成长中心」列只在支持的渠道（CodeBuddy）出现**，其余渠道留一个空占位格——列数保持恒定，否则 auto 布局会重算列宽、下面展开的组整列错位。
@@ -306,9 +369,11 @@ OpenRouter 收录数百条，其中多数本服务没接。每行带 `available`
 
 ### 口径
 
-时间范围默认**最近 24 小时**（另有 7 天 / 30 天 / 全部）：打开统计页的第一问题是「这个池子现在怎么样」，7 天会把当天的波动摊平。
+时间范围默认**最近 24 小时**（另有 7 天 / 30 天 / 全部 / **自定义**）：打开统计页的第一问题是「这个池子现在怎么样」，7 天会把当天的波动摊平。**自定义**给两个 `datetime-local` 输入（精确到分钟、按**浏览器本地时区**解析），两端可只填一边（另一边不限）；起点不早于终点时整窗作废并提示，不静默退回全量。所有统计端点因此多接受一个 `until`（epoch 秒，半开上界）：`[since, until)`，`until` 本身不计入——用户填的「结束时间」是瞬时右端点，两次相邻查询不重叠。
 
 **明细失败类型**是受控枚举（后端 `CONTROLLED_ERROR_TYPES`，界面只展示中文翻译）：模型级冷却耗尽记「该模型暂时不可用」（`model_unavailable`，换个模型即可用），凭证池真耗尽才记「无可用凭证」（`no_healthy_credential`）——两者对外错误码相同（`no_healthy_credential` 503），仅统计口径区分。
+
+**请求 ID（`X-Request-ID`）**：每个请求都在响应头带一个 `X-Request-ID`（任何响应都带，含被拒的 413 / 400）。入站 `X-Request-ID` 合法则沿用（便于与客户端日志对齐），否则自生成；合法字符集 `[A-Za-z0-9._:-]`、长度 1–128，越界即丢弃改用自生成（客户端可写，不校验会被塞入换行/超长串）。该 ID 随请求落进 `usage_events.request_id`，统计页「请求明细」的**时间列悬停**可见——用于把用户报的一个请求与这行明细对齐。老库历史行为 `NULL`（不回填）。**不透传到上游**：各渠道出站头语义不同（qoder 的 `X-Request-ID` 是 uid 派生的防重放值，trae/codearts 有指纹敏感头），统一改写会破坏既有契约。
 
 统计页 **Credit 消耗**列：CodeBuddy 是上游**真值**；TRAE 的 `token_usage` 帧只有 token 数，credit 按官方单价**推算**并标 `≈`；CodeArts 福利模型按每日池 1:1 扣减推算，同样标 `≈`。单价表集中在 `src/provider/trae/pricing.py` 与 `src/provider/codearts/units.py`，未收录的模型不推算（显示 `—`）。历史明细可分别用 `scripts/backfill_trae_credit.py` / `scripts/convert_codearts_credit_unit.py` 补齐。
 
@@ -327,6 +392,10 @@ OpenRouter 收录数百条，其中多数本服务没接。每行带 `available`
 
 **分组统计**面板用 tabs 切四个维度（按渠道 / 按模型 / 按用户 / 按凭证），共用同一张表（请求数 / 成功数 / 成功率 / 输入 / 输出 / 命中缓存 / Credit / 成本），对应端点 `GET /api/stats/by-provider|by-model|by-user|by-credential`。默认按请求数降序，点列头可切换排序。**按用户 / 按凭证**只对 admin 与 operator 展示。**口径差异**：渠道 / 模型 / 用户三维读**小时汇总**（永久保留，最近 5 分钟内的请求尚未计入）；**凭证维度读明细表**（小时汇总主键里没有 `credential_id`），故只覆盖**最近 90 天**。
 
+**点行钻取**：点分组表任意一行，下方「请求明细」即按该行钻取（渠道 / 模型 / 凭证按同名列过滤，用户维度走作用域参数），条件叠加、可多个维度层层收窄，面板上方显示当前过滤标签并可一键清除。`GET /api/stats/events` 因此接受 `provider` / `model` / `credential_id` 三个过滤参数（`AND` 语义）。
+
+**导出 CSV**：明细面板右上「导出 CSV」（仅 admin / operator）按**当前时间范围 + 当前钻取过滤**导出逐请求明细，`GET /api/stats/events?format=csv`。文件带 UTF-8 BOM（Excel 认编码）、`\r\n` 换行、时间列 ISO 8601（UTC），并对以 `= + - @`（及制表符/回车）开头的**文本**单元格加前导单引号防公式注入（数值含负数原样）。单次导出上限 10000 行，超出截断并在响应头 `X-Export-Truncated: 1` 标出，页面提示收窄条件。
+
 若历史数据偏小（老库升级前落的明细没被覆盖、或补过明细后没重算），用 `python3 scripts/rollup_hourly.py --apply` 一次性重算（默认预览、**写库前自动备份**、幂等）。脚本先报告缺口与两侧时间跨度，并提示**明细已过保留期无法还原**的区间。
 
 ### 列表排序
@@ -337,7 +406,7 @@ OpenRouter 收录数百条，其中多数本服务没接。每行带 `available`
 
 ## 后台任务
 
-额度探测、token 预刷新、每日签到、成长中心、活跃上报、明细清理、渠道模型列表刷新、模型目录刷新（OpenRouter）、运维告警共 9 类，由 `TaskRunner` 自动调度，失败互不影响。每类任务的上次执行时间、最近结果与错误在管理台**「任务与配置」页**查看（30 秒自动刷新），运行态只存在于**本次进程**内，重启归零。
+额度探测、token 预刷新、每日签到、成长中心、活跃上报、明细清理、数据库备份、渠道模型列表刷新、模型目录刷新（OpenRouter）、运维告警共 10 类，由 `TaskRunner` 自动调度，失败互不影响。每类任务的上次执行时间、最近结果与错误在管理台**「任务与配置」页**查看（30 秒自动刷新），运行态只存在于**本次进程**内，重启归零。每个任务卡片带「立即运行」按钮（`POST /api/tasks/{key}/run`，admin + CSRF）：**绕过时点窗口但绕过不了开关**——`due()` 未到点也照跑，而任务被开关关掉时如实回 `ran=false`（不把「关了」谎报成「跑过了」）；同一任务已在跑时立刻回 `busy=true`、不排队、不并发打上游；同步等这一轮跑完再返回结果。
 
 **渠道模型列表刷新**（`MODEL_CATALOG_MINUTES`，默认 30、下限 5）是兜底保鲜：模型表本身按「谁访问 `/v1/models` 或 Playground 谁刷新、TTL 300s」更新，这条只保证**没人访问时也会更新**。周期取 30 分钟是跟 zen 免费模型判活缓存对齐——再密也不会让 zen 多探活。
 
@@ -348,6 +417,31 @@ OpenRouter 收录数百条，其中多数本服务没接。每行带 `available`
 CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端对话事件，账号长期只被本网关自动调用时会断连登。`ACTIVITY_REPORT_ENABLED=true` 时，后台任务在每天 `ACTIVITY_REPORT_HOUR`（默认 10 点）所在整点窗口为每个账号补发**一条** `chat_request_send` 事件续上连登——与积分、调度无关，上报失败不影响聊天请求。凭证行内菜单也可手动补报一次。适用于 CodeBuddy 与 CodeBuddy 国际版。
 
 > ⚠️ **风险与限制**：官方活动条款禁止用模拟器 / 脚本篡改活动数据，处罚为**取消资格并追回已发礼品**。默认关闭，开启前请自行评估账号风险。事件名与请求形状依赖上游实现，**上游改版即失效**，不承诺任何收益，不作为可靠性功能。实测（2026-09-21）：缺少 `userId` 时上游返回 HTTP 200 `{"code":0}` 却**静默丢弃**；OAuth 凭证的 `user_id`/`account_uid` 可能为空，此时回落取 bearer JWT 的 `sub`，仍缺失则跳过（不编造）。
+
+### 数据库备份与恢复
+
+**后台自动备份**（`BACKUP_INTERVAL_MINUTES`，默认 1440 分钟 = 每日一次）把主库一致性快照写进 `DATA_DIR/backups/`，并只保留最近 `BACKUP_KEEP` 份（默认 7）。
+
+- **用 `VACUUM INTO` 而不是复制文件**：WAL 模式下主库文件不含尚未 checkpoint 的已提交事务，直接 `cp` 会丢数据。`VACUUM INTO` 读一份一致性快照并重写成**紧凑、无 WAL 的独立库**，恢复时只需原子替换主库。
+- **落盘即校验**：写完立刻 `PRAGMA integrity_check`，不过则删掉半成品并记日志——一个写坏的备份比没有备份更危险。产物 `0600`、目录 `0700`（库内是凭证密文与明文用量/审计）。
+- **失败不影响服务**：备份是普通后台任务，异常只记日志、进任务卡片，不拖垮聊天请求。
+
+**手动备份**（升级/迁移前留一份）：
+
+```bash
+python3 scripts/backup_db.py                 # 备份到 DATA_DIR/backups/，保留 7 份
+python3 scripts/backup_db.py --keep 14       # 保留 14 份（0 = 不清理）
+python3 scripts/backup_db.py --out /path/dir # 指定备份目录
+```
+
+**恢复**（**先停服**，脚本不做「服务是否在跑」探测——容器/权限都可能误判）：
+
+```bash
+python3 scripts/restore_db.py data/backups/coding2api-20261014-030000.sqlite3            # 预览：只校验，不改动
+python3 scripts/restore_db.py data/backups/coding2api-20261014-030000.sqlite3 --apply    # 校验 → 安全副本 → 原子替换
+```
+
+恢复流程：校验备份完整性（不过直接拒绝，绝不把坏文件换进生产库）→ 给现有主库做一份 `.pre-restore-<时间戳>` 安全副本（同样走 `VACUUM INTO`，不漏 WAL 中未 checkpoint 的事务）→ 原子替换主库 → 删除 `-wal`/`-shm` 残留（它们属于旧库，留着会损坏新库）。**恢复后重启服务。**
 
 ## 配置
 
@@ -372,15 +466,19 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `ACTIVITY_REPORT_ENABLED` | `false` | 活跃上报（CodeBuddy 与国际版）：每天为账号补发一条对话事件续连登。**默认关闭**——条款禁止篡改活动数据，上游改版即失效 |
 | `ACTIVITY_REPORT_HOUR` | `10` | 活跃上报的本地（北京）时间整点窗口；仅在开关开启时生效 |
 | `ALERT_ENABLED` | `true` | 运维告警开关：后台周期评估四类风险（池耗尽 / 任务连续失败 / token 临近到期 / 上游错误率骤升），命中落 `alert_events` |
-| `ALERT_WEBHOOK_URL` | 空 | 告警 Webhook：命中时 POST JSON，多个用逗号分隔（≤16 个，仅 `http(s)`，拒内网/回环/链路本地/保留地址防 SSRF），并发投递、全部成功才算成功（总预算 15s）；留空 = 只留站内记录 |
+| `ALERT_WEBHOOK_URL` | 空 | 告警 Webhook：命中时 POST JSON（body 带 `status`：`firing` / `resolved`），多个用逗号分隔（≤16 个，仅 `http(s)`，拒内网/回环/链路本地/保留地址防 SSRF，投递前再按 DNS 解析复核一次、解析失败即跳过），并发投递、全部成功才算成功（总预算 15s）；请求恒带 `X-Coding2API-Signature: sha256=<HMAC-SHA256(APP_SECRET, body)>` 供收端验真；留空 = 只留站内记录 |
 | `ALERT_INTERVAL_MINUTES` | `5` | 运维告警评估周期（下限 1 分钟） |
 | `ALERT_SILENCE_MINUTES` | `30` | 同一 `(规则, 对象)` 的静默窗：窗口内只落库 / 推送一次；`0` 关闭静默 |
+| `ALERT_FOR_TICKS` | `1` | 进入迟滞：同一告警连续命中这么多轮才真正告警（滤掉单轮毛刺）；`1` = 首轮即报 |
+| `ALERT_CLEAR_TICKS` | `2` | 恢复迟滞：告警中的条目连续这么多轮不再命中才确认恢复（写 `resolved_at` 并外推 `status="resolved"` 通知），避免单轮抖动误撤 |
 | `ALERT_POOL_READY_MIN` | `1` | 池耗尽阈值：可用凭证数少于该值时告警；`0` 关闭该规则 |
 | `ALERT_TASK_FAILURES` | `3` | 后台任务连续失败达到该次数时告警（成功一轮清零）；`0` 关闭 |
 | `ALERT_TOKEN_EXPIRY_HOURS` | `24` | token 剩余时间少于该小时数时告警；`0` 关闭 |
 | `ALERT_ERROR_RATE_THRESHOLD` | `0.5` | 上游错误率阈值：统计窗内失败占比达到该值且样本足够时告警；`0` 关闭 |
 | `ALERT_ERROR_RATE_MIN_REQUESTS` | `20` | 错误率最小样本数：窗内请求数少于该值不判 |
 | `ALERT_ERROR_RATE_WINDOW_MINUTES` | `15` | 错误率统计窗（分钟），数据源为 `usage_events` 明细 |
+| `BACKUP_INTERVAL_MINUTES` | `1440` | 数据库备份后台任务周期（分钟），下限 60；`VACUUM INTO` 一致性快照落 `DATA_DIR/backups/` |
+| `BACKUP_KEEP` | `7` | 备份保留份数：只留最近这么多份，更旧的按时间删除；`0` 表示不清理 |
 | `QUOTA_EXPIRY_WINDOW_SECONDS` | `129600` | 主到期排序窗口：把距到期 ≤ 该秒数的积分加总，多的账号先用；CodeBuddy 与 TRAE 都按包独立到期、都参与；`≤0` 关闭整套到期排序 |
 | `QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS` | `604800` | 次到期排序窗口：主窗口打平时才比较；`≤0` 关闭该级 |
 | `CONVERSATION_STICKY_SECONDS` | `3600` | 会话粘性 TTL：优先按请求体显式会话标识，无则回落消息前缀指纹；手动 pin 优先；带 `user_id` 时不派生前缀兜底键；`≤0` 关闭 |
@@ -419,19 +517,24 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `CODEBUDDY_SANITIZE_CHANNEL_MARKERS` | `true` | 出站 `system`/`assistant` 正文命中「伪装其他厂商官方客户端」指纹串时替换为占位符（上游 11128 内容风控），只改出站副本；`false` 关闭 |
 | `REFRESH_SKEW_HOURS` | `24` | token 到期前该小时数窗口内预刷新。短寿命渠道自行封顶（CodeArts STS 只有 2h，封顶 45min） |
 | `TOKEN_EXPIRY_WARNING_SECONDS` | `3600` | 管理台 token 到期预警阈值；`≤0` 关闭预警。纯展示，不参与调度 |
-| `PACER_MIN_SECONDS` / `PACER_MAX_SECONDS` | `5` / `20` | 全局节流器随机等待区间（秒） |
+| `PACER_MIN_SECONDS` / `PACER_MAX_SECONDS` | `5` / `20` | 全局节流器随机等待区间（秒）。区间相等时（聊天节流器的 `*_CHAT_MIN_INTERVAL` 形态）额外**向上**抖动 ±25%，避免多实例精确同拍；下限不击穿 |
 | `AUTO_CONTINUE_MAX` | `10` | 上游以 `finish_reason=length` 截断时同凭证自动续写的最多次数；`0` 关闭 |
 | `CONTEXT_COMPRESS_ENABLED` | `true` | 按模型目录里的输入上限裁剪过长对话，避免撞上游硬限制；目录里查不到上限的模型不受影响 |
 | `CONTEXT_COMPRESS_RESERVE_TOKENS` | `4096` | 压缩预算里为模型回复预留的输出 token 数 |
 | `CONTEXT_COMPRESS_MIN_KEEP_MESSAGES` | `4` | 无论多长都保留的最近消息条数 |
 | `CONTEXT_COMPRESS_SAFETY_RATIO` | `0.95` | 按模型上限的百分比计算压缩预算，给 token 估算误差留余量 |
 | `UPSTREAM_COMPLETE_TIMEOUT_SECONDS` | `600` | 非流式聚合整体超时（秒）：超时按瞬态错误换号重试；`≤0` 关闭 |
+| `MAX_INFLIGHT_PER_CREDENTIAL` | `0` | 单账号在途请求上限（跨渠道全局）：并发占满的号不再参与选号；`0` = 不限。租约请求结束释放，另有 600s TTL 兜底漏释放 |
+| `METRICS_ENABLED` | `true` | 是否暴露 `GET /metrics`（Prometheus text 格式，**不鉴权**，与 `/healthz` 同口径）；`false` 关闭（返回 404）。可热更 |
+| `FORCE_DISABLE_THINKING` | `false` | 出站剥离思考内容：开启后响应里不再有 `reasoning_content` / Anthropic `thinking` 块 / Responses reasoning item，**只过滤响应、不改请求体**（上游仍照常思考）。三个出口、流式与非流式一致生效。可热更 |
+| `REASONING_EFFORT_MAP` | `""` | 出站 `reasoning_effort` 档位映射：格式 `渠道=from:to,from:to;*=from:to`（渠道取 `KNOWN_PROVIDERS`，`*` 兜底）；目标写 `none` = 删除该键、走渠道默认。只改写客户端**显式**给的档位，渠道自身 `setdefault` 补的默认档不受影响。留空 = 原样透传。可热更 |
+| `ANTHROPIC_THINKING_EFFORTS` | `""` | Anthropic 入站 `thinking.budget_tokens` → 上游 `reasoning_effort`：格式 `预算:档位,预算:档位,disabled:档位`（`disabled` 匹配 `thinking.type=="disabled"`；其余取「阈值 ≤ budget_tokens 中最大的那一档」，低于最小阈值不映射）。留空 = 完全不映射（`thinking` 照旧忽略）。可热更 |
 
 ### 管理台热更（「任务与配置」页）
 
-上表中带「可热更」语义的 **39 项**可不改 `.env`、不重启，直接在管理台「任务与配置」页修改：
+上表中带「可热更」语义的 **48 项**可不改 `.env`、不重启，直接在管理台「任务与配置」页修改：
 
-`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`CONTEXT_COMPRESS_ENABLED`、`CONTEXT_COMPRESS_RESERVE_TOKENS`、`CONTEXT_COMPRESS_MIN_KEEP_MESSAGES`、`CONTEXT_COMPRESS_SAFETY_RATIO`、`MODEL_FALLBACK_GROUPS`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`REFRESH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`MODEL_CATALOG_MINUTES`、`OPENROUTER_CATALOG_MINUTES`、`USD_CNY_RATE`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`CODEBUDDY_INTL_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`、`ALERT_ENABLED`、`ALERT_WEBHOOK_URL`、`ALERT_INTERVAL_MINUTES`、`ALERT_SILENCE_MINUTES`、`ALERT_POOL_READY_MIN`、`ALERT_TASK_FAILURES`、`ALERT_TOKEN_EXPIRY_HOURS`、`ALERT_ERROR_RATE_THRESHOLD`、`ALERT_ERROR_RATE_MIN_REQUESTS`、`ALERT_ERROR_RATE_WINDOW_MINUTES`。
+`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`CONTEXT_COMPRESS_ENABLED`、`CONTEXT_COMPRESS_RESERVE_TOKENS`、`CONTEXT_COMPRESS_MIN_KEEP_MESSAGES`、`CONTEXT_COMPRESS_SAFETY_RATIO`、`MODEL_FALLBACK_GROUPS`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`MAX_INFLIGHT_PER_CREDENTIAL`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`REFRESH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`MODEL_CATALOG_MINUTES`、`OPENROUTER_CATALOG_MINUTES`、`USD_CNY_RATE`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`CODEBUDDY_INTL_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`、`ALERT_ENABLED`、`ALERT_WEBHOOK_URL`、`ALERT_INTERVAL_MINUTES`、`ALERT_SILENCE_MINUTES`、`ALERT_FOR_TICKS`、`ALERT_CLEAR_TICKS`、`ALERT_POOL_READY_MIN`、`ALERT_TASK_FAILURES`、`ALERT_TOKEN_EXPIRY_HOURS`、`ALERT_ERROR_RATE_THRESHOLD`、`ALERT_ERROR_RATE_MIN_REQUESTS`、`ALERT_ERROR_RATE_WINDOW_MINUTES`、`BACKUP_INTERVAL_MINUTES`、`BACKUP_KEEP`、`METRICS_ENABLED`、`FORCE_DISABLE_THINKING`、`REASONING_EFFORT_MAP`、`ANTHROPIC_THINKING_EFFORTS`。
 
 要点：**优先级 `DB 覆盖值 > .env`**——改过后 .env 对该项不再生效，页面标「DB 覆盖」，点「恢复默认」删掉覆盖行才回落 .env。值存 `runtime_settings` 表（纯 key/value），新增可热更项无需迁移；白名单外的 key、非法类型 / 越界值写入前即拒。启动期项（`APP_SECRET` / `PORT` / `DATA_DIR` / `USERS_FILE` / `OPENROUTER_MODELS_URL` / 上游端点白名单）**不在**白名单。接口 `GET /api/settings` 读快照、`PUT /api/settings` 写（admin + CSRF），传 `null` 恢复默认。该页同时展示**后台任务运行态**，页面按 tab 组织；运行态是**进程内**的（`GET /api/tasks`，admin，页面每 30 秒刷新），重启归零。
 
@@ -457,7 +560,7 @@ sudo systemctl restart coding2api       # systemd
 **确认升级已生效**（先查版本，再查路由）：
 
 ```bash
-# 1) schema 版本已迁移（期望 18）且账号已导入
+# 1) schema 版本已迁移（期望 22）且账号已导入
 sqlite3 data/coding2api.sqlite3 "PRAGMA user_version; SELECT username, role, enabled FROM users;"
 # 2) 路由存在：期望 401（未登录），404 = 旧后端进程
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8000/api/users

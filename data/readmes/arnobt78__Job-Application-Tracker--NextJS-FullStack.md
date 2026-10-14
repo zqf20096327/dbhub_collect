@@ -1,4 +1,4 @@
-# Job Application Tracker & Discovery — Next.js, TypeScript, NextAuth v5, Prisma, PostgreSQL, Bluedoor API (+ FastAPI AI Pipeline) FullStack Project
+# Job Application Tracker & Discovery — Next.js, TypeScript, Prisma, PostgreSQL, Bluedoor API (+ FastAPI AI Pipeline) FullStack Project
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
@@ -91,7 +91,7 @@ The app is built as a **learning-oriented full-stack reference**: server-rendere
 
 ### User Experience
 
-- **NextAuth v5 authentication** — credentials, Google/GitHub OAuth, guest demo sign-in dropdown
+- **NextAuth v5 authentication** — credentials, Google OAuth, guest demo sign-in dropdown
 - **Custom auth UI** — branded Sign In / Sign Up forms (no hosted provider chrome)
 - **Notification bell** — SSE + BroadcastChannel; unread badge + popover list
 - **Dark / light / system theme** — via `next-themes`
@@ -133,17 +133,17 @@ The app is built as a **learning-oriented full-stack reference**: server-rendere
 
 ### Backend & Data
 
-| Library                    | Version  | What it does                                                |
-| -------------------------- | -------- | ----------------------------------------------------------- |
-| **Next.js Server Actions** | —        | Type-safe server functions (`"use server"`)                 |
-| **Prisma**                 | 6.x      | ORM — type-safe DB queries and migrations                   |
-| **PostgreSQL**             | —        | Relational database for job records                         |
+| Library                    | Version  | What it does                                                      |
+| -------------------------- | -------- | ----------------------------------------------------------------- |
+| **Next.js Server Actions** | —        | Type-safe server functions (`"use server"`)                       |
+| **Prisma**                 | 6.x      | ORM — type-safe DB queries and migrations                         |
+| **PostgreSQL**             | —        | Relational database for job records                               |
 | **NextAuth v5**            | 5.x      | Authentication — JWT session, Prisma adapter, OAuth + credentials |
-| **Bluedoor API**           | —        | Free job postings API — enrichment + discover (no auth key) |
-| **Upstash Redis**          | optional | Read-through cache + SSE invalidation streams               |
-| **Resend**                 | optional | Email alerts when postings change                           |
-| **exceljs / papaparse**    | —        | Excel/CSV export generation                                 |
-| **dayjs**                  | —        | Date formatting in exports and charts                       |
+| **Bluedoor API**           | —        | Free job postings API — enrichment + discover (no auth key)       |
+| **Upstash Redis**          | optional | Read-through cache + SSE invalidation streams                     |
+| **Resend**                 | optional | Email alerts when postings change                                 |
+| **exceljs / papaparse**    | —        | Excel/CSV export generation                                       |
+| **dayjs**                  | —        | Date formatting in exports and charts                             |
 
 ### Phase 2 — Python AI Service
 
@@ -225,7 +225,7 @@ User action (CreateJobForm / DiscoverJobCard / DeleteJobButton)
 │   │   │   └── [id]/page.tsx         # /dashboard/[id] — edit dialog via URL
 │   │   ├── discover/
 │   │   │   ├── page.tsx              # /discover — Bluedoor job search
-│   │   │   └── loading.tsx           # Streaming skeleton (static card shells)
+│   │   │   └── loading.tsx           # Instant shell: same page view, cache-only queries
 │   │   └── stats/
 │   │       └── page.tsx              # /stats — analytics + charts
 │   ├── sign-in/[[...sign-in]]/       # Custom sign-in page
@@ -291,7 +291,7 @@ Before you start, install:
 
 | Requirement            | Notes                                |
 | ---------------------- | ------------------------------------ |
-| **Node.js 20+**        | LTS recommended                      |
+| **Node.js 24.x**       | Matches `engines` + `.nvmrc`         |
 | **npm** (or pnpm/yarn) | Package manager                      |
 | **PostgreSQL**         | Local Docker, Neon, Supabase, or VPS |
 | **PostgreSQL client**  | psql, TablePlus, or pgAdmin          |
@@ -356,11 +356,11 @@ Create `.env.local` in the project root (never commit it). A full template lives
 
 ### Required
 
-| Variable       | Description                                 | How to get it                                              |
-| -------------- | ------------------------------------------- | ---------------------------------------------------------- |
-| `AUTH_SECRET`  | JWT signing secret for NextAuth sessions    | `openssl rand -base64 32`                                  |
-| `DATABASE_URL` | PostgreSQL connection string                | Neon, Supabase, local Postgres…                            |
-| `DIRECT_URL`   | Direct DB URL for Prisma migrations         | Usually same as `DATABASE_URL`                             |
+| Variable       | Description                              | How to get it                   |
+| -------------- | ---------------------------------------- | ------------------------------- |
+| `AUTH_SECRET`  | JWT signing secret for NextAuth sessions | `openssl rand -base64 32`       |
+| `DATABASE_URL` | PostgreSQL connection string             | Neon, Supabase, local Postgres… |
+| `DIRECT_URL`   | Direct DB URL for Prisma migrations      | Usually same as `DATABASE_URL`  |
 
 **Demo credentials** (pre-seeded for local dev):
 
@@ -370,13 +370,11 @@ Email:    test@user.com
 Password: 12345678
 ```
 
-**OAuth (optional)** — add these to enable Google / GitHub sign-in:
+**OAuth (optional)** — add these to enable Google sign-in:
 
 ```env
 AUTH_GOOGLE_ID=        # Google Cloud Console → OAuth 2.0 → callback: /api/auth/callback/google
 AUTH_GOOGLE_SECRET=
-AUTH_GITHUB_ID=        # GitHub → Settings → Developer settings → OAuth Apps → callback: /api/auth/callback/github
-AUTH_GITHUB_SECRET=
 ```
 
 **Example local PostgreSQL:**
@@ -573,7 +571,7 @@ Prisma queries always include `userId` in `where` clauses so users cannot access
 
 - **Proxy:** `proxy.ts` — NextAuth JWT gate protects `/dashboard`, `/discover`, `/stats`, `/timeline`, `/profile`
 - **Custom UI:** `SignInForm.tsx`, `SignUpForm.tsx` — glassmorphic cards, no hosted provider chrome
-- **OAuth:** `AuthOAuthButtons` — `signIn('google')` / `signIn('github')` from `next-auth/react`
+- **OAuth:** `AuthOAuthButtons` — `signIn('google')` from `next-auth/react`
 - **Demo login:** guest dropdown on sign-in page — `useGuestSignIn` → `signIn('credentials', { email, password })`
 - **SSR user:** `dashboard/layout.tsx` → `auth()` → `NavUserProvider`
 
@@ -748,8 +746,8 @@ See `docs/PROJECT_PLAN.md` for Coolify VPS deployment and n8n automation roadmap
 
 | Component                 | Purpose                                       |
 | ------------------------- | --------------------------------------------- |
-| `StatsContainer`          | 3 status cards (pending, interview, declined) |
-| `StatsKpiRow`             | Response rate, interview rate, top job type   |
+| `StatsContainer`          | 6-card grid: 3 status cards + `StatsKpiCards` |
+| `StatsKpiCards`           | Response rate, interview rate, top job type   |
 | `ApplicationTrendChart`   | Monthly bar + projected line                  |
 | `WeeklyVelocityChart`     | 12-week area chart                            |
 | `StatusDistributionChart` | Donut chart                                   |
@@ -780,7 +778,7 @@ Both forms accept a **`standalone`** prop:
 | `useJobsListBodyLoading` | `useJobsListBodyLoading.ts` | Skeleton only on cold cache         |
 | `useAIPipeline`          | `useAIPipeline.ts`          | AI insights mutation                |
 | `useGuestSignIn`         | `useGuestSignIn.ts`         | Demo account login flow             |
-| `useNavUserSession`      | `useNavUserSession.ts`      | SSR avatar + NextAuth useSession     |
+| `useNavUserSession`      | `useNavUserSession.ts`      | SSR avatar + NextAuth useSession    |
 
 **Reuse `useJobsMutation` in another project:**
 
@@ -851,14 +849,22 @@ mutate({
 
 ```typescript
 // proxy.ts
-import { auth } from '@/auth';
-const PROTECTED = ['/dashboard', '/discover', '/stats', '/timeline', '/profile'];
+import { auth } from "@/auth";
+const PROTECTED = [
+  "/dashboard",
+  "/discover",
+  "/stats",
+  "/timeline",
+  "/profile",
+];
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
-  const isProtected = PROTECTED.some(p => pathname === p || pathname.startsWith(p + '/'));
+  const isProtected = PROTECTED.some(
+    (p) => pathname === p || pathname.startsWith(p + "/"),
+  );
   if (isProtected && !req.auth) {
-    return NextResponse.redirect(new URL('/sign-in', req.url));
+    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 });
 ```
@@ -902,7 +908,6 @@ npm test   # 51 tests
 - [ ] `DATABASE_URL` + `DIRECT_URL` in Vercel env
 - [ ] `NEXT_PUBLIC_APP_URL` set to production domain (needed for webhook registration + email links)
 - [ ] Optional: `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` — Google OAuth (callback: `/api/auth/callback/google`)
-- [ ] Optional: `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` — GitHub OAuth (callback: `/api/auth/callback/github`)
 - [ ] Optional: Upstash Redis for multi-instance cache/SSE
 - [ ] Optional: `CRON_SECRET` for nightly Bluedoor re-sync
 - [ ] Optional: `BLUEDOOR_WEBHOOK_SECRET` for live webhook events

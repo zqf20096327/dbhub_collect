@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/YZXBiz/copytrading/releases/download/v0.1.0-alpha.9/CopyTrading-0.1.0-alpha.9.dmg"><img src="https://img.shields.io/badge/Download_for_macOS-0.1.0--alpha.9-1d1d1f?style=for-the-badge&logo=apple&logoColor=white" alt="Download CopyTrading for macOS" height="36"></a>
+  <a href="https://github.com/YZXBiz/copytrading/releases/download/v0.1.0-alpha.10/CopyTrading-0.1.0-alpha.10.dmg"><img src="https://img.shields.io/badge/Download_for_macOS-0.1.0--alpha.10-1d1d1f?style=for-the-badge&logo=apple&logoColor=white" alt="Download CopyTrading for macOS" height="36"></a>
 </p>
 
 <p align="center">
@@ -36,7 +36,7 @@ CopyTrading is a native macOS app that reads the stock calls traders post on Dis
 > **Developer preview.** CopyTrading has not been qualified for live trading. Start with an Alpaca paper account, and see [validation](docs/validation.md) for what has and has not been proven.
 
 <p align="center">
-  <a href="docs/assets/account.png"><img src="docs/assets/account.png" alt="An account: its balance and the day's change, the equity curve, cash and buying power, every limit under one Limits title with today's loss and what is in stocks against their caps, and each position with whose shares they are (sample data)" width="860"></a>
+  <a href="docs/assets/account.png"><img src="docs/assets/account.png" alt="A paper account that is copying, with Stop Copying: its balance, the day's change, cash and buying power on one line, the equity curve, its limits, a call waiting for you, and each position marked as from the guru or yours" width="860"></a>
 </p>
 
 <details>
@@ -44,9 +44,9 @@ CopyTrading is a native macOS app that reads the stock calls traders post on Dis
 <br>
 <table>
   <tr>
-    <td width="33%"><a href="docs/assets/guru.png"><img src="docs/assets/guru.png" alt="A guru: today's numbers and every post on one timeline, with what each account did (sample data)"></a></td>
-    <td width="33%"><a href="docs/assets/guru-sheet.png"><img src="docs/assets/guru-sheet.png" alt="A guru's settings: where they post, the account they copy into with what each call buys, and their playbook (sample data)"></a></td>
-    <td width="33%"><a href="docs/assets/connections.png"><img src="docs/assets/connections.png" alt="Connections: Discord, the model that reads posts, broker accounts, and gurus (sample data)"></a></td>
+    <td width="33%"><a href="docs/assets/guru.png"><img src="docs/assets/guru.png" alt="A guru who copies into one paper account: today's numbers and every post on one timeline, traded, waiting, or ignored"></a></td>
+    <td width="33%"><a href="docs/assets/guru-sheet.png"><img src="docs/assets/guru-sheet.png" alt="A guru's settings: where they post, the one account they copy into with what each call buys, their playbook, and an example"></a></td>
+    <td width="33%"><a href="docs/assets/connections.png"><img src="docs/assets/connections.png" alt="Connections: Discord, the model that reads posts, the optional chat filter, and two paper broker accounts, all connected"></a></td>
   </tr>
   <tr>
     <td align="center"><sub><b>A guru</b>: every post and what came of it</sub></td>
@@ -59,8 +59,8 @@ CopyTrading is a native macOS app that reads the stock calls traders post on Dis
 ## Features
 
 - **Posts become exact orders.** A model you choose reads each post, and every ticker, price, and fraction must appear in the post itself, so it cannot invent a number.
-- **Your limits, per account.** Daily loss, per-order, per-symbol, and total exposure limits are checked before every copied buy. New accounts start with entries off.
-- **Many traders, many accounts.** Each trader-to-account link has its own sizing, and paper and live accounts sit side by side.
+- **Your limits, per account.** Daily loss, per-order, per-symbol, and total exposure limits are checked before every copied buy. Each account has its own **Start Copying** and **Stop Copying**.
+- **Many traders, many accounts.** Each account follows one guru and sizes its calls from that guru's full position, so several gurus copy side by side into their own accounts, paper and live together.
 - **Every position traces to its post.** Each copied buy is kept as a lot that names the post behind it, and you can sell any lot on its own. Shares you trade yourself in Alpaca are counted as yours on the next sync.
 - **Always live.** Balances, positions, and the equity curve are read from your broker even while copying is paused. Fills arrive as notifications, the menu bar shows today's change, and after time away a recap says what happened.
 - **Room to change your mind.** A sale or a confirmed copy waits a few seconds with Undo before it leaves, and a skipped call can be brought back.
@@ -74,7 +74,7 @@ Works with a dozen hosted model services, local models through Ollama, or any Op
 
 You need an Apple silicon Mac running macOS 26 or later.
 
-1. **[Download CopyTrading for macOS](https://github.com/YZXBiz/copytrading/releases/download/v0.1.0-alpha.9/CopyTrading-0.1.0-alpha.9.dmg)** (55 MB).
+1. **[Download CopyTrading for macOS](https://github.com/YZXBiz/copytrading/releases/download/v0.1.0-alpha.10/CopyTrading-0.1.0-alpha.10.dmg)** (57 MB).
 2. Open the DMG and drag **CopyTrading** into **Applications**.
 3. Open CopyTrading. Preview builds are not yet notarized by Apple, so the first time macOS blocks it: go to **System Settings → Privacy & Security** and choose **Open Anyway**. You only do this once.
 
@@ -102,7 +102,7 @@ Everything is set up in **Connections**, top to bottom:
 4. **Gurus**: choose the account each guru copies into (its max per stock is the guru's full position), press **Learn from Channel**, and review the playbook it drafts.
 5. Press **Start Copying**. It checks every connection first, and starts only when they all pass.
 
-Every field that needs a key or an ID has a **Where do I find this?** link. When you are ready, press **Resume Entries** on the account's page and watch the first post arrive on the guru's page.
+Every field that needs a key or an ID has a **Where do I find this?** link. When you are ready, press **Start Copying** on the account's page and watch the first post arrive on the guru's page.
 
 ## How it works
 
@@ -116,16 +116,22 @@ A SwiftUI app supervises one local Python engine. The engine owns every decision
 
 ## Command line and agents
 
-The `copytrading` CLI and MCP server let you, a script, or a coding agent read the running app and pause it. Anything that could trade becomes a proposal you approve with Touch ID in the app.
+The `copytrading` CLI and MCP server let you, a script, or a coding agent read the running app and pause it. Anything that could trade becomes a proposal you approve with Touch ID in the app. `copytrading accounts limits ACCOUNT --max-order-usd 300 …` changes an account's limits and `copytrading start` starts copying with Start Copying's own checks; both wait for your Touch ID in the app. Turn it on in **Settings → Agent Access**; the command ships inside the app at `CopyTrading.app/Contents/Helpers/copytrading`.
 
 ```console
 $ copytrading status
-Engine      Ready
-Processing  Running
-Accounts    paper-main  entries enabled, recovery manual
+Engine      running
+Processing  running
+Source      connected
+Model       ready
+Queued      0 messages, 0 signals
+Account     primary  running, copying on, recovery manual
 
-$ copytrading accounts resume paper-main
-Waiting for approval in CopyTrading: proposal p-4e1a9c, expires 16:42.
+$ copytrading accounts limits primary --max-order-usd 300
+Waiting for approval in CopyTrading: change primary: max order usd = 300. Proposal p-4e1a9c07d2b3, expires 2026-10-14 16:42:00.
+
+$ copytrading start
+Waiting for approval in CopyTrading: start copying. Proposal p-81f0c6a95e24, expires 2026-10-14 16:43:10.
 ```
 
 See [agent control](docs/agent-control.md) for the commands, permission tiers, and threat model.

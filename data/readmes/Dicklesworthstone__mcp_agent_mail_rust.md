@@ -26,6 +26,7 @@ curl -fsSL "https://raw.githubusercontent.com/Dicklesworthstone/mcp_agent_mail_r
 ```
 
 <p><em>Works on Linux and macOS (x86_64 and aarch64). Auto-detects your platform, downloads the right binary, and configures detected coding agents for HTTP MCP.</em></p>
+<p><em>Needs <code>minisign</code> on <code>PATH</code> to verify the release (and <code>xz</code> on minimal Linux images); see <a href="#one-liner-recommended">One-Liner</a>.</em></p>
 </div>
 
 ---
@@ -76,15 +77,15 @@ curl -fsSL "https://raw.githubusercontent.com/Dicklesworthstone/mcp_agent_mail_r
 
 **The Problem**: Modern projects often run multiple coding agents at once (backend, frontend, scripts, infra). Without a shared coordination fabric, agents overwrite each other's edits, miss critical context from parallel workstreams, and require humans to relay messages across tools and teams.
 
-**The Solution**: Agent Mail gives every coding agent a persistent identity (e.g., `GreenCastle`), an inbox/outbox, searchable threaded conversations, and advisory file reservations (leases) to signal editing intent. Everything is backed by Git for human-auditable artifacts and SQLite for fast indexing and search.
-
-### Why Use Agent Mail?
-
-| Feature | What I
+**The Solution**: Agent Mail gives every coding agent a persistent identity (e.g., `GreenCastle`), an inbox/outbox, searchable threaded conversations, and advisory file reser
 
 [...截断...]
 
-t Does |
+vations (leases) to signal editing intent. Everything is backed by Git for human-auditable artifacts and SQLite for fast indexing and search.
+
+### Why Use Agent Mail?
+
+| Feature | What It Does |
 |---------|--------------|
 | **Advisory File Reservations** | Agents declare exclusive or shared leases on file globs before editing, preventing conflicts with a pre-commit guard |
 | **Asynchronous Messaging** | Threaded inbox/outbox with subjects, CC/BCC, acknowledgments, and importance levels |
@@ -137,7 +138,4 @@ Example exchange between two agents coordinating a refactor:
 │ │ I'm reserving src/auth/** for the next hour. Can you focus on the API    │ │
 │ │ tests in tests/api/** instead?                                           │ │
 │ │ [ack_required: true]                                                     │ │
-│ └──────────────────────────────────────────────────────────────────────────┘ │
-│                                                                              │
-│ ┌──────────────────────────────────────────────────────────────────────────┐ │
-│ │ BlueLake -> 
+│ └──────────────────────────────────────────────────────────────────────

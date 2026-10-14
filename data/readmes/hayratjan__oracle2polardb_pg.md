@@ -1,9 +1,12 @@
-<!-- 文档版本：v2.2 · 企业级迁移平台 -->
+<!-- 文档版本：v2.4.3 · 企业级迁移平台 -->
+
+<img src="./frontend/src/assets/logo.svg" width="880" height="100" />
+</br>
 <h1 align="center">Oracle 至 PolarDB PostgreSQL</h1>
 <h3 align="center">企业级数据库迁移与同步平台</h3>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/版本-v2.2-2563EB?style=for-the-badge" alt="Version" />
+  <img src="https://img.shields.io/badge/版本-v2.4.3-2563EB?style=for-the-badge" alt="Version" />
   <img src="https://img.shields.io/badge/状态-生产可用-22C55E?style=for-the-badge" alt="Status" />
   <img src="https://img.shields.io/badge/许可-专有-64748B?style=for-the-badge" alt="License" />
 </p>
@@ -102,6 +105,7 @@
 | [✨ 亮点功能 · v2](#-亮点功能--v2) | 表级向导 · 整库编排 · 目标环境 DDL |
 | [🆕 v2.1 优化与修复](#-v21-优化与修复) | 日志体系 · 事务保护 · bigint 截断 · 超时控制 |
 | [🆕 v2.2 企业级加固](#-v22-企业级加固) | 安全加固 · 运维命令 · 类型补全 · 索引告警 · 注释迁移 · 多层校验 |
+| [🆕 v2.3 ~ v2.4.3 迁移正确性与语法兼容](#-v23--v243-迁移正确性与语法兼容) | 数据库对比预览 · SQL 语法兼容 · 桌面客户端 · P0 正确性修复 · DDL 注入加固 |
 | [📌 适用场景与版本](#-适用场景与版本) | 源端/目标端版本与典型场景 |
 | [✨ 核心功能矩阵](#-核心功能矩阵) | 连接、对象、策略、可观测性 |
 | [🏗 系统架构](#-系统架构) | 前后端分层与数据流 |
@@ -448,6 +452,47 @@ python manage.py healthcheck                                    # 命令行健�
 
 ---
 
+## 🆕 v2.3 ~ v2.4.3 迁移正确性与语法兼容
+
+> [!IMPORTANT]
+> 本阶段重点：**数据库对比预览与立即增量同步** · **SQL 语法兼容优化** · **Tauri 跨平台桌面客户端** · **cx_Oracle → oracledb 迁移** · **13 项 P0/P1/P2 正确性修复** · **DDL 注入加固**
+
+### 🔄 v2.4 数据库对比预览 + 立即增量同步
+
+- **只读对比预览**：同步前查看源/目标差异规模（待插入/待删除/共存行数），不执行任何写操作
+- **主键对齐增量**：拉取两端主键集合做差集，目标侧缺少的 INSERT、多出的 DELETE，共存行做哈希对比检测 UPDATE 并回放
+- **水位列增量**：按时间戳/自增列水位追加，配合 Celery Beat 定时调度
+- 详见 [docs/数据库对比与增量同步使用说明.md](docs/数据库对比与增量同步使用说明.md)
+
+### 🛠 v2.5 SQL 语法兼容 + 桌面客户端
+
+- **驱动迁移**：`cx_Oracle` → `python-oracledb`（thin 模式，无需 Instant Client），修复 CI 构建失败
+- **语法转换增强**：DECODE→CASE WHEN（括号平衡扫描支持嵌套）、NVL2、LISTAGG→STRING_AGG、TO_DATE/TO_CHAR/TO_NUMBER、EXECUTE IMMEDIATE、DBMS_OUTPUT，以及 13 类 Oracle 专有语法人工审查清单
+- **Tauri 桌面客户端**：跨平台打包，详见 [docs/桌面客户端构建与打包指南.md](docs/桌面客户端构建与打包指南.md)
+
+### ✅ v2.4.2 / v2.4.3 正确性修复（P0×8 + P1/P2×5）
+
+> 完整分析与实施记录见 [docs/迁移语法问题分析与改善方案.md](docs/迁移语法问题分析与改善方案.md)
+
+| 修复 | 影响 |
+|:-----|:-----|
+| 整库编排 `view_progress` 被单视图任务覆盖 | 断点续传失效——中断后 resume 丢失阶段状态 |
+| COPY 路径多字节 BLOB 逐字节 `\xNN` 转义 | 多字节 BLOB 经 COPY 写入即损坏 |
+| 导数后 IDENTITY/序列 `setval` 对齐 `MAX(列值)` | 业务切换后新插入主键冲突 |
+| `ROWNUM <= N` 改写为 `FETCH FIRST` | 窗口函数进 WHERE 导致视图/查询语法错误 |
+| 哈希表达式按列类型分派（`build_typed_hash_exprs`） | 数值列 ORA-01481 → 增量同步 UPDATE 检测失效、数据静默漂移 |
+| LOB 读取/解码失败默认抛错（`LOB_ERROR_POLICY`） | 损坏 BLOB/CLOB 静默置 NULL，行数校验无法发现 |
+| `validate_full` 综合校验接入单表迁移主流程 | 高级校验此前已实现但从未被调用 |
+| 整库终态对「仅导出未创建」对象降级 `partial` | 触发器模板/不兼容例程不再被误报为已完成（`manual_objects` 清单） |
+| 触发器模板语句级 WHEN 引用 NEW/OLD 校验 | 生成的 DDL 在 PG 上直接执行报错 |
+| 其余：`CURRENT_DATE` 语义修正 · 校验相对容差 · 抽样主键原生绑定 · 并行 worker 钳制到连接池上限 · Oracle 连接显式 UTF-8 · UPDATE 扫描达上限写结构化标记 | — |
+
+### 🛡 DDL 注入加固
+
+`views.py` / `view_materialization.py` / `schema_converter.py` 中的 CREATE/DROP VIEW、物化视图、表、序列、Schema、TRUNCATE、`search_path` 等 DDL 全部改用 **psycopg2.sql Identifier 官方安全组合**（标识符参数化等价方案），消除 f-string SQL 注入风险。
+
+---
+
 ## 📌 适用场景与版本
 
 <table>
@@ -620,13 +665,13 @@ flowchart TB
     <td>Django ORM · JSONField</td>
   </tr>
   <tr>
-    <td><strong>执行层</strong></td>
-    <td>Celery Worker / 线程池 · 分批读写 · 类型映射 · 约束回放</td>
-    <td>Celery · cx_Oracle · psycopg2</td>
-  </tr>
-  <tr>
-    <td><strong>数据层</strong></td>
-    <td>Oracle (cx_Oracle) ──► PolarDB (psycopg2) / SQLite</td>
+      <td><strong>执行层</strong></td>
+      <td>Celery Worker / 线程池 · 分批读写 · 类型映射 · 约束回放</td>
+      <td>Celery · python-oracledb · psycopg2</td>
+    </tr>
+    <tr>
+      <td><strong>数据层</strong></td>
+      <td>Oracle (python-oracledb) ──► PolarDB (psycopg2) / SQLite</td>
     <td>连接池 · 凭据加密</td>
   </tr>
 </table>
@@ -681,13 +726,13 @@ flowchart TB
     </tr>
     <tr>
       <td><strong>数据库驱动</strong></td>
-      <td>cx_Oracle（Oracle）· psycopg2（PostgreSQL/PolarDB）</td>
+      <td>python-oracledb（Oracle，v2.5 起，thin 模式免客户端）· psycopg2（PostgreSQL/PolarDB）</td>
       <td>✅</td>
     </tr>
     <tr>
       <td><strong>Oracle 客户端</strong></td>
-      <td>Oracle Instant Client 19c+（cx_Oracle 依赖）</td>
-      <td>✅</td>
+      <td>无需 Instant Client（oracledb thin 模式）；仅 thick 模式功能需要 19c+ 客户端</td>
+      <td>可选</td>
     </tr>
     <tr>
       <td><strong>异步任务</strong></td>
@@ -918,7 +963,7 @@ flowchart TB
       <td valign="top">
         <ul>
           <li>Python 3.12 · Django 5.2 · DRF</li>
-          <li>cx_Oracle · psycopg2 · Celery</li>
+          <li>python-oracledb · psycopg2 · Celery</li>
           <li>JWT · Fernet 凭据加密</li>
         </ul>
       </td>
@@ -958,11 +1003,14 @@ pnpm build      # 生产构建
 
 ## 🐳 Docker 部署
 
-项目提供 `Dockerfile` 与 `docker-compose.yml`，支持容器化一键部署：
+前后端合并为**单镜像**（Vue 产物打进镜像，由 Django + WhiteNoise 同源直出），`docker-compose.yml` 一键部署：
 
 ```bash
-# 一键启动（Redis + Django + Celery Worker + Celery Beat）
+# 一键启动（Redis + Django(含前端) + Celery Worker + Celery Beat）
 docker compose up -d
+
+# 源库是 Oracle 11g（thin 连不上，需要内置 Instant Client 的 thick 变体）
+APP_TARGET=thick docker compose up -d --build
 
 # 查看日志
 docker compose logs -f web
@@ -973,16 +1021,20 @@ docker compose down
 
 | 服务 | 说明 | 端口 |
 |:-----|:-----|:-----|
-| `redis` | 消息队列与结果后端 | 6379 |
-| `web` | Django 应用（含 migrate） | 8000 |
+| `redis` | 消息队列与结果后端 | 6379（仅 compose 内网） |
+| `web` | Django 应用，SPA + API 同源（启动时自动 migrate） | 8000 |
 | `celery-worker` | 异步任务 Worker | — |
 | `celery-beat` | 定时任务调度器 | — |
+
+镜像两个 target：`thin`（默认，oracledb thin，可连 Oracle 12.1+）与 `thick`（内含 Instant Client 19.32，可连 11.2.0.4，仅 x86_64）。CI 会把两者分别推成 `:latest` 与 `:latest-thick`。
 
 **生产部署注意事项：**
 1. 修改 `.env` 中的 `DJANGO_SECRET_KEY` 和 `MIGRATION_FERNET_KEY`
 2. 设置 `DJANGO_DEBUG=false`
-3. 容器内需挂载 Oracle Instant Client（或使用包含客户端的基础镜像）
-4. 使用 Nginx 反向代理，将前端静态文件与 API 统一入口
+3. Oracle 11g 源库用 `APP_TARGET=thick`，无需再自行挂载 Instant Client
+4. 前置 Nginx/云 LB 终结 TLS 即可，应用侧不再需要为静态资源单独反代
+
+详见 [docs/Docker部署指南.md](docs/Docker部署指南.md)。
 
 ---
 
@@ -990,7 +1042,7 @@ docker compose down
 
 ### Q1：Discovery 接口「没有返回响应」/ 一直转圈
 
-**原因：** Oracle 主机不可达或网络不通，`cx_Oracle.connect()` 阻塞。
+**原因：** Oracle 主机不可达或网络不通，`oracledb.connect()` 阻塞。
 
 **解决：**
 - 检查 Oracle 连接配置（host/port/service_name）
@@ -1022,7 +1074,7 @@ docker compose down
 
 ### Q6：Oracle 连接报 `DPI-1040: cannot locate Oracle software`
 
-**原因：** Oracle Instant Client 未安装或路径未配置。
+**原因：** 仅 thick 模式需要 Oracle Instant Client；v2.5 起默认使用 python-oracledb thin 模式，无需客户端。如启用了 thick 模式，请按下面方式配置路径。
 
 **解决：**
 ```bash
@@ -1092,6 +1144,11 @@ ORACLE_CLIENT_LIB=/opt/instantclient_23_3
     <tr>
       <td><a href="docs/数据模型-is_migrate表结构说明.md">数据模型与表结构说明</a></td>
       <td>is_migrate 表结构与字段说明</td>
+      <td>开发</td>
+    </tr>
+    <tr>
+      <td><a href="docs/迁移语法问题分析与改善方案.md">迁移语法问题分析与改善方案</a></td>
+      <td>视图/表/物化视图/触发器/整库迁移的问题分析、P0~P2 修复清单与实施记录（v2.4.2/v2.4.3）</td>
       <td>开发</td>
     </tr>
     <tr>

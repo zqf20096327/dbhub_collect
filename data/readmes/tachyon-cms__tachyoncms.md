@@ -1,0 +1,175 @@
+# TachyonCMS
+
+A headless CMS written in Rust. One binary, one Postgres database, and an API generated from the content types you define.
+
+> [!WARNING]
+> TachyonCMS is pre-alpha. The core content API works today. Auth, the admin UI, media, drafts and GraphQL don't exist yet, so don't put it on a public network. Watch the repo to follow along, or jump in.
+
+## Why another CMS?
+
+Pick a CMS today and you usually pick a side. Some are built for developers: typed, API-first, a pleasure to code against, and baffling to the person who has to publish the Tuesday newsletter. WordPress is built for the editor, and you pay for that ease in plugins, patches and page speed.
+
+We think you can have both. Here's what we're building toward:
+
+- **Fast by default.** Rust, Axum and Tokio, with published content read from a single row. We'll publish reproducible benchmarks against the popular CMSs before we claim a single number.
+- **Safe by default.** No `unsafe` code, every query either checked at compile time or built from a validated filter tree with bound parameters, and plugins that run in a WebAssembly sandbox with only the permissions you approve.
+- **Easy for editors.** An admin that someone who has only used WordPress can pick up without training, from adding a content type to scheduling a post.
+
+## What works today
+
+- Define collections and their fields over the API: text (one value or a list), textarea, number (one or a list), checkbox, date, email, URL, select and radio (with labels), slug, relationship (to one collection or several), code, map points you can search by distance (`near` returns the nearest first and pages with `page`), JSON, groups and repeatable arrays, arranged in rows, collapsible sections and tabs that shape the editing screen without changing your data. Every field can carry admin hints such as a description, a placeholder, a sidebar position or a condition for when it shows.
+- Sign in with a session cookie or a bearer token, or use scoped API keys. Four roles (Admin, Editor, Author, Viewer) decide who can change what, and you can add your own.
+- Create, read, update and delete documents, with validation errors that tell you exactly which field is wrong (`seo.title`, `links.0.url`).
+- Send only what changed. An update to `seo.title` leaves the rest of `seo` alone, lists are replaced whole, and `null` clears a field wherever it sits (inside a `json` field it's just a value).
+- Date-times are stored in UTC to the millisecond, so what you filter on is exactly what was saved.
+- Paginated lists, newest first.
+- Errors in the standard [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) format, each with a request ID you can find in the logs.
+- Soft delete, UUIDv7 IDs, and date-times stored in UTC.
+- Filter (`where[price][gt]=10`), including through relationships (`where[author.name][equals]=Ann`) and into list rows (`where[links.url][like]=docs`), sort (`sort=-price`) and page through results with cursors; link documents with relationship fields and get them back populated (`depth=2`); edit singleton globals such as site settings.
+- Ask for only what you need. `select[title]=true` returns just the title (and `id`), `populate[authors][name]=true` trims the documents your links fill in, and a collection's `defaultPopulate` sets that trim once. A relationship's `maxDepth` stops population going deeper than you want, whatever `depth` a request asks for.
+- Virtual fields show a value from a linked document without storing it: a field with `"virtual": "author.name"` reads the author's name on every read, and you can filter on it like any other field.
+- Join fields list the documents that link to this one. Give a category `{"type": "join", "collection": "posts", "on": "category"}` and every read shows its posts, newest first. Page, sort, filter and count them per request with `joins[posts][limit]=5&joins[posts][sort]=-title`, or switch them off with `joins=false`. A join inside a group goes by its path, `joins[meta.recent]` or `joins[meta][recent]`.
+
+## Try it
+
+You'll need Rust (stable), Docker, and [`sqlx-cli`](https://crates.io/crates/sqlx-cli) if you plan to change queries.
+
+```bash
+git clone https://github.com/tachyon-cms/tachyoncms.git
+cd tachyoncms
+cp .env.example .env
+docker compose up -d
+set -a; source .env; set +a
+cargo run -p tachyon -- serve
+```
+
+The server listens on `127.0.0.1:3000`. Until someone runs setup it logs `setup needed`, and nothing can be changed.
+
+### First run
+
+Create the first Admin. This works once; after that, setup refuses.
+
+```bash
+curl -X POST localhost:3000/api/setup \
+  -H 'content-type: application/json' \
+  -d '{"email": "you@example.com", "name": "You", "password": "a long passphrase you will remember"}'
+```
+
+Sign in. A browser gets a session cookie; from the command line, ask for a bearer token instead and keep it:
+
+```bash
+curl -X POST localhost:3000/api/auth/login \
+  -H 'content-type: application/json' \
+  -d '{"email": "you@example.com", "password": "a long passphrase you will remember", "bearer": true}'
+
+export TOKEN=tcs_...   # the "token" from the response
+```
+
+Create a content type:
+
+```bash
+curl -X POST localhost:3000/api/admin/collections \
+  -H "authorization: Bearer $TOKEN" \
+  -H 'content-type: application/json' \
+  -d '{"slug": "posts", "fields": [
+        {"name": "title", "type": "text", "required": true, "maxLength": 120},
+        {"name": "publishedOn", "type": "date", "dateOnly": true}
+      ]}'
+```
+
+Add a post, then list posts. Reading needs no sign-in:
+
+```bash
+curl -X POST localhost:3000/api/posts \
+  -H "authorization: Bearer $TOKEN" \
+  -H 'content-type: application/json' \
+  -d '{"title": "Hello, world", "publishedOn": "2026-10-12"}'
+
+curl localhost:3000/api/posts
+```
+
+For a website or a server that writes content, make an API key scoped to what it needs. The key is shown once:
+
+```bash
+curl -X POST localhost:3000/api/auth/keys \
+  -H "authorization: Bearer $TOKEN" \
+  -H 'content-type: application/json' \
+  -d '{"name": "website", "scopes": ["posts:read"]}'
+```
+
+### Who can do what
+
+Anyone can read. Signed-in users write according to their role:
+
+| Role | Can |
+|---|---|
+| Viewer | read |
+| Author | create content, and change or delete what they created |
+| Editor | change all content and globals |
+| Admin | everything, including content types, users and roles |
+
+Admins manage users at `/api/users` and roles at `/api/admin/roles`. A user's email, role and password stay private, but their profile fields (such as `name`) show wherever another document links to them, so keep private details out of profile fields; custom roles can be added alongside the four built-in ones. The last Admin can't be removed. Passwords need at least 12 characters, and ones known from data breaches are refused. Five wrong passwords in 15 minutes lock an account for 15 minutes.
+
+### Putting it online
+
+Set `public_url` to the address people use, such as `https://cms.example.com`, and serve it over HTTPS. Set it behind a reverse proxy too, even though the server itself listens on `127.0.0.1`: browser sign-ins compare against it. The server won't start on a public address without it, because browser sign-ins only accept changes coming from that address. Other settings live under `[auth]` in `tachyon.toml` (see `tachyon.example.toml`), or in the environment as `TACHYON_AUTH__SETTING`.
+
+## Changing your content types
+
+Fields change. Maybe "title" should have been "headline", or that "summary" field never earned its keep. Change the schema and TachyonCMS carries your documents across:
+
+```bash
+curl -X PUT localhost:3000/api/admin/collections/posts \
+  -H "authorization: Bearer $TOKEN" \
+  -H 'content-type: application/json' \
+  -d '{"schema": {"slug": "posts", "fields": [{"name": "headline", "type": "text"}]},
+       "renames": {"title": "headline"}}'
+```
+
+Renamed fields keep their data. Anything that would delete or retype data comes back first as a preview (what changes, how many documents it touches, which ones won't validate) and only goes through when you send it again with `"confirm": true`. `POST .../posts/preview` shows the same report without changing anything.
+
+Prefer files under version control? Export every content type, edit the JSON, and apply it:
+
+```bash
+cargo run -p tachyon -- schema export -o schema.json
+cargo run -p tachyon -- schema diff schema.json --rename posts:title=headline
+cargo run -p tachyon -- schema apply schema.json --rename posts:title=headline
+```
+
+## Roadmap
+
+| Milestone | What it adds |
+|---|---|
+| 1 | Schemas, validation, REST CRUD |
+| 2 | Filters, sorting, relationships, globals **(done)** |
+| 3 | Auth, sessions, API keys, access rules |
+| 4 | Drafts, versions, scheduled publishing, Trash |
+| 5 | Localization and full-text search |
+| 6 | Media library and image processing |
+| 7 | GraphQL and OpenAPI |
+| 8 | Passkeys, two-factor auth, single sign-on |
+| 9 | WebAssembly plugins and webhooks |
+| 10 | Live preview |
+| 11 | WordPress importer |
+| 12 | Release builds, Docker image, Helm chart, benchmarks |
+
+The admin UI is built alongside, starting after milestone 3.
+
+## Project layout
+
+```
+crates/tachyon-core   content model and validation (no I/O)
+crates/tachyon-db     Postgres migrations and queries
+crates/tachyon-api    the HTTP API
+crates/tachyon        the binary
+```
+
+## Contributing
+
+Bug reports, ideas and pull requests are all welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers setup, tests and how we review. If you've found a security issue, please don't open a public issue. [SECURITY.md](SECURITY.md) explains how to report it privately.
+
+Everyone taking part agrees to our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## License
+
+[MIT](LICENSE)

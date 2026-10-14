@@ -4,14 +4,14 @@
 
 <h1 align="center">Croupier</h1>
 
+<p align="center"><a href="README.md">English</a> | <a href="README.zh.md">中文</a></p>
+
 <p align="center">
   <img src="https://github.com/cuihairu/croupier/actions/workflows/ci.yml/badge.svg" alt="CI"/>
   <img src="https://codecov.io/gh/cuihairu/croupier/branch/main/graph/badge.svg?t=1789350127" alt="codecov"/>
   <img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License"/>
   <img src="https://img.shields.io/badge/go-1.27.2+-green.svg" alt="Go Version"/>
 </p>
-
-[English](README.md) | [中文](README.zh.md)
 
 Croupier is a Server / Agent / SDK platform for game operations and control, intended by default for multiple games and multiple environments within a single game company. The architecture has converged on a unified session transport:
 
@@ -74,6 +74,7 @@ All official SDKs are maintained together in the `sdks/` directory of this monor
 
 Three tiers: Console (Web) → Server (control plane, capable of multi-instance HA) → Agent (proxy inside the game VPC) → Game Server / SDK.
 Entry points are separated by audience: the web console uses L7 (HTTP API / SSE), while agents use internal L4 (long-lived TCP connections).
+The health-probe system is layered the same way for every runtime — one shared kernel (`core/healthprobe`), protocol checkers (HTTP/TCP/process/DB plus a declarative game-protocol skeleton), and execution placed wherever the network perspective matters, extensible via external probe adapters (see [agent-health-recovery-review.md](docs/design/agent-health-recovery-review.md)).
 
 See the [architecture overview](docs/architecture/index.md) and the [load balancing guide](docs/operations/load-balancing.md) for details.
 

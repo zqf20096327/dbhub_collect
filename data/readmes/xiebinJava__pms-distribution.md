@@ -18,6 +18,24 @@
 </p>
 
 <p align="center">
+  <img src="docs/screenshots/requirements.png" alt="功能需求澄清与所属系统" width="920" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/topics.png" alt="专题调研工作台" width="450" />
+  <img src="docs/screenshots/stories.png" alt="故事流程与迭代计划会" width="450" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/iterations.png" alt="迭代计划与系统版本关联" width="920" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/iteration-create.png" alt="独立创建迭代：所属项目可选，选择所属系统与系统版本" width="450" />
+  <img src="docs/screenshots/system-versions.png" alt="系统版本：计划中、开发中与已发布" width="450" />
+</p>
+
+<p align="center">
   <img src="docs/screenshots/organization.png" alt="组织架构" width="450" />
   <img src="docs/screenshots/login.png" alt="登录页" width="450" />
 </p>
@@ -31,7 +49,13 @@
   <img src="docs/screenshots/audit.png" alt="审计日志" width="450" />
 </p>
 
-<p align="center"><sub>截图来自隔离演示实例。本次新增截图展示中文界面、流程模板、企业项目看板与审计日志能力。</sub></p>
+<p align="center"><sub>以上 14 张截图于 2026-10-09 使用正式 1.1.0 镜像重新拍摄，均为中文界面。项目、需求、专题、故事、迭代、系统版本和组织信息来自隔离演示库中的虚构数据，不包含真实业务或人员信息。点击图片可查看原图。</sub></p>
+
+## 1.1.1 更新重点
+
+- **AI 参与项目管理生命周期**：后端提供可授权的资源上下文、能力查询、项目创建回读和需求分析成果保存契约，配套 `pms-cli` 可通过自然语言入口安全调用。
+- **系统版本关联视图**：系统版本详情新增关联项目、专题、故事和来源迭代的展示，按项目和迭代组织信息，不把专题与迭代误表示为上下级关系。
+- **发行一致性**：前后端镜像、发行仓库和安装包统一锁定到 `1.1.1`，继续使用固定版本镜像，不使用 `latest`。
 
 ## 1.1.0 更新重点
 
@@ -94,11 +118,115 @@ cd pms-distribution
 
 请立刻修改该密码。MySQL 与 JWT 等基础设施密钥仍由脚本随机生成，写入未被 Git 跟踪的 `.pms-bootstrap-secrets`。生产部署必须更换管理员密码（`validate-production-config.sh` 会拒绝上述默认值）。
 
-当前发行版本：[`1.1.0`](https://github.com/xiebinJava/pms-distribution/releases/tag/v1.1.0)。镜像在 GHCR，可匿名拉取，支持 `linux/amd64` 和 `linux/arm64`。
+当前发行版本：[`1.1.1`](https://github.com/xiebinJava/pms-distribution/releases/tag/v1.1.1)。镜像在 GHCR，可匿名拉取，支持 `linux/amd64` 和 `linux/arm64`。
 
-也可直接下载 [tar.gz 安装包](https://github.com/xiebinJava/pms-distribution/releases/download/v1.1.0/pms-1.1.0.tar.gz)、[zip 安装包](https://github.com/xiebinJava/pms-distribution/releases/download/v1.1.0/pms-1.1.0.zip) 和 [SHA256SUMS](https://github.com/xiebinJava/pms-distribution/releases/download/v1.1.0/SHA256SUMS)。把两个安装包与校验文件放在同一目录，运行 `sha256sum -c SHA256SUMS`（macOS 使用 `shasum -a 256 -c SHA256SUMS`）核对后再解压安装。
+也可直接下载 [tar.gz 安装包](https://github.com/xiebinJava/pms-distribution/releases/download/v1.1.1/pms-1.1.1.tar.gz)、[zip 安装包](https://github.com/xiebinJava/pms-distribution/releases/download/v1.1.1/pms-1.1.1.zip) 和 [SHA256SUMS](https://github.com/xiebinJava/pms-distribution/releases/download/v1.1.1/SHA256SUMS)。把两个安装包与校验文件放在同一目录，运行 `sha256sum -c SHA256SUMS`（macOS 使用 `shasum -a 256 -c SHA256SUMS`）核对后再解压安装。
 
-安装、升级、备份恢复与正式镜像界面的验收范围见 [1.1.0 发布验收记录](docs/operations/release-1.1.0-verification.md)。本版对两项 Spring MVC 发现采用限定到包版本、JAR 路径且于 2026-11-09 到期的“不具备触发条件”例外；这不代表依赖已修复，详见 [安全适用性评估](https://github.com/xiebinJava/pms-backend/blob/main/docs/security/1.1.0-spring-mvc-assessment.md)。其他 HIGH / CRITICAL 安全门禁保持启用。
+安装、升级、备份恢复与正式镜像界面的验收范围见 [1.1.0 发布验收记录](docs/operations/release-1.1.0-verification.md)。1.1.1 复用同一发行流程，并新增 AI 连接器和系统版本关联能力；本版对两项 Spring MVC 发现采用限定到包版本、JAR 路径且于 2026-11-09 到期的“不具备触发条件”例外；这不代表依赖已修复，详见 [安全适用性评估](https://github.com/xiebinJava/pms-backend/blob/main/docs/security/1.1.0-spring-mvc-assessment.md)。其他 HIGH / CRITICAL 安全门禁保持启用。
+
+## 使用 pms-cli 让 AI 操作 PMS
+
+PMS 的 Web 界面负责人工查看和确认，`pms-cli` 负责把 PMS 的权限、流程模板、字段校验、幂等和审计能力提供给 GPT、Claude、Codex、DeepSeek 等本地 AI 工作台。用户在 AI 聊天窗口中用自然语言提出请求，AI 再调用本机的 `pms` 命令完成读取、预览、写入和结果回读。
+
+`pms-cli` 不是另一个 PMS 服务，也不是一个独立的聊天窗口；它是 AI 工作台与当前 PMS 实例之间的安全连接器。项目地址：[xiebinJava/pms-cli](https://github.com/xiebinJava/pms-cli)，npm 包：[`@brad.xie/pms-cli`](https://www.npmjs.com/package/@brad.xie/pms-cli)。
+
+### 安装和首次配置
+
+本机需要 Node.js 22 或更高版本。PMS 已经启动后，在终端执行：
+
+```bash
+npm install -g @brad.xie/pms-cli
+export PMS_BASE_URL=http://localhost:5173/api
+pms doctor --format json
+pms auth login
+pms auth status
+```
+
+`PMS_BASE_URL` 必须是纯 URL，不要粘贴 Markdown 链接。`pms auth login` 会打开 PMS 登录页，登录后的长期凭据保存在操作系统钥匙串中，不会把 Token 打印到终端。
+
+如果使用 Codex，可以继续安装 PMS 工作台 Skill：
+
+```bash
+pms skill install --global
+pms doctor --format json
+```
+
+Skill 的作用是告诉 AI 什么时候读取 PMS 上下文、什么时候必须先预览、哪些操作需要用户明确确认；真正的权限和业务校验仍由 PMS 后端执行。其他本地 AI 工作台可以参考 [pms-cli 安装说明](https://github.com/xiebinJava/pms-cli/blob/release/docs/installation.md) 安装同一份 Skill。
+
+Windows PowerShell 设置地址时使用：
+
+```powershell
+$env:PMS_BASE_URL = "http://localhost:5173/api"
+```
+
+### 在 AI 聊天窗口中使用
+
+安装并登录后，在已经配置本地 CLI 的 GPT、Claude、Codex 或 DeepSeek 工作台中直接用自然语言描述目标。例如：
+
+```text
+读取当前 PMS 中的项目列表，告诉我每个项目的名称、负责人、状态和时间范围。
+```
+
+```text
+先读取当前可用的项目类型和流程模板。如果有必填信息先问我；然后创建项目“AI Native PMS”，描述是“让 AI 参与项目管理全生命周期”，优先级中，开始日期 2026-10-12，结束日期 2026-11-30。创建后回读项目详情和流程上下文。
+```
+
+```text
+读取需求 23 的当前流程节点、可写能力和上下文版本，分析“搭建一个智能体”的目标、用户场景和验收标准。保存前先展示准备写入的内容，得到我确认后再保存，并回读需求详情和审计引用。
+```
+
+AI 应该先读取事实和当前流程上下文，再执行写入。项目创建和需求分析保存都必须返回执行结果、精确回读数据以及 `trace.operationId`，便于在 PMS 审计日志中追踪。
+
+### 手动验证 pms-cli
+
+如果暂时没有可用的 AI 聊天工作台，也可以直接在终端验证连接器：
+
+```bash
+pms capabilities --format json
+pms search project --keyword AI --format json
+pms get project 7 --format json
+pms context project 7 --format json
+pms dashboard summary --format json
+```
+
+写操作分为“只读计划”和“明确执行”两步：
+
+```bash
+# 只读：读取项目类型和流程模板，生成创建预览
+pms scenario project-create plan \
+  --arguments-json '{"name":"AI Native PMS","description":"让 AI 参与项目管理全生命周期"}' \
+  --format json
+
+# 写入：必须由调用方明确执行，并提供幂等键
+pms scenario project-create execute \
+  --arguments-json '{"name":"AI Native PMS","description":"让 AI 参与项目管理全生命周期"}' \
+  --idempotency-key project-ai-native-pms-1 \
+  --format json
+```
+
+需求分析保存需要明确需求 ID、节点 ID、上下文版本和写入字段；CLI 不会猜测节点、自动完成节点、修改所属系统或覆盖人工正文：
+
+```bash
+pms scenario requirement-analysis plan 23 \
+  --node-id 301 --version 7 \
+  --arguments-json '{"interpretation":"补充用户场景和验收标准"}' \
+  --format json
+
+pms scenario requirement-analysis execute 23 \
+  --node-id 301 --version 7 \
+  --arguments-json '{"interpretation":"补充用户场景和验收标准"}' \
+  --idempotency-key requirement-analysis-23-7 \
+  --format json
+```
+
+其中 `plan` 不写入数据，`execute` 才会写入。重复请求必须复用同一个幂等键；如果是正式环境，建议先让 AI 展示计划和待写入字段，再由用户明确确认。
+
+### 常见问题
+
+- `pms: command not found`：重新打开终端，确认 npm 全局 bin 目录已加入 PATH，或执行 `npm prefix -g` 检查全局安装位置。
+- `auth status` 反复弹钥匙串：在系统钥匙串弹窗中允许当前终端或 `node` 访问“pms-cli”，必要时重新执行 `pms auth login`。
+- `doctor` 显示地址错误：检查 `PMS_BASE_URL` 是否为 `http://localhost:5173/api` 或实际部署地址，不能带 Markdown 方括号和圆括号。
+- AI 只能给出草稿：先运行 `pms capabilities --format json` 和对应资源的 `pms context`，确认当前账号拥有目标流程节点的写权限。
 
 如果改了 `PMS_PORT`，请把 `PMS_CORS_ALLOWED_ORIGINS` 和 `PMS_PUBLIC_BASE_URL` 改成同一端口。只改端口、不改 CORS 时，浏览器登录会被后端拒绝。`bootstrap.sh` 在端口已改、CORS 仍是示例值时，会自动对齐（见下方配置）。
 
@@ -108,7 +236,7 @@ cd pms-distribution
 ./scripts/status.sh
 ./scripts/logs.sh backend
 ./scripts/backup.sh
-./scripts/upgrade.sh 1.1.0
+./scripts/upgrade.sh 1.1.1
 ```
 
 升级前先更新本仓库的安装脚本，再执行升级命令。1.1.0 修复了旧脚本导出旧版本环境变量、导致 Compose 仍拉取旧镜像的问题；不能仅修改旧安装目录中的 `.env` 就认为升级已完成。升级会先备份，数据库迁移至 V69，其中项目交接的已废弃历史字段会被清理。

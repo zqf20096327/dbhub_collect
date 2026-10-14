@@ -5,7 +5,7 @@
 # EinVault
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.8.0-7348f4.svg)](https://github.com/davefatkin/EinVault/releases)
+[![Version](https://img.shields.io/badge/version-1.9.0-7348f4.svg)](https://github.com/davefatkin/EinVault/releases)
 
 EinVault is a private, self-hosted companion health and care tracker built for homelabs. Track health records, daily activities, and care schedules for your animal companions. All data stays on your hardware. No cloud, no telemetry, no external accounts.
 
@@ -50,7 +50,7 @@ Want a look before you self-host? There's a read-only demo at **[demo.einvault.a
 ## Features
 
 - **Companion profiles:** species, breed, bio, vet info, emergency contacts, and avatar photo
-- **Daily journal:** per-companion entries with mood tracking, photo and video uploads, and a configurable daily media limit (default 5)
+- **Daily journal:** per-companion entries with mood tracking, photo and video uploads, and a configurable daily media limit (default 5). Each day also shows its health events, weights and documents, and you can add them, or link a health event from another day, from the day page
 - **Notes:** pinned, tagged markdown notes per companion with photos and videos, multi-tag filtering, and per-note sharing to caretakers
 - **Caretaker sheet:** a printable one-pager with schedules, contacts, and shared notes for sitters without an account; pick which sections, notes, and photos go on paper
 - **Health tracking:** vet visits, vaccinations, medications, procedures, and weight history

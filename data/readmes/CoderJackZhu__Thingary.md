@@ -6,11 +6,13 @@
 
 <p align="center"><strong>给记账坚持不下来的人：不用每天记流水。重要的东西留个档，每月盘一次钱，需要时算算未来。</strong></p>
 
-物谱是一个本地使用的 macOS 应用。物品档案与账户盘点是两个并列起点，只用其中一个也完整成立：给重要物品留档，或每月核对资产与负债。规划在盘点之上回答未来问题，用已保存的目标、可核对的测算详情和临时试算分别呈现。无需注册账号，也无需编程或联网使用。
+物谱是一个本地使用的桌面应用。公开测试版提供 macOS 安装包，Windows 候选版正在验收。物品档案与账户盘点是两个并列起点，只用其中一个也完整成立：给重要物品留档，或每月核对资产与负债。规划在盘点之上回答未来问题，用已保存的目标、可核对的测算详情和临时试算分别呈现。无需注册账号，也无需编程或联网使用。
 
 **[0.0.6 公开测试版 · Mac（Apple Silicon 与 Intel）](https://github.com/CoderJackZhu/Thingary/releases/tag/v0.0.6)** · [图文使用指南](docs/USER_GUIDE.md#download) · [版本说明](https://github.com/CoderJackZhu/Thingary/releases/tag/v0.0.6) · [国内镜像（Gitee）](https://gitee.com/CoderJackZhu/thingary/releases) · [反馈问题](https://github.com/CoderJackZhu/Thingary/issues)
 
 > 0.0.6 公开测试版提供 Apple Silicon 与 Intel 通用 DMG，下载以 Release 的公开附件为准。本版将资料格式升级至 schema 40，旧版不能直接打开升级后的资料，请先做完整备份，见[更新步骤](docs/USER_GUIDE.md#update)。
+
+> Windows 0.0.7 当前为未签名候选版，目标为 Windows 10 1809+／Windows 11 x64，尚未公开发布。可在 [Windows 候选包工作流](https://github.com/CoderJackZhu/Thingary/actions/workflows/windows-package.yml)查看成功运行的安装包附件（需登录 GitHub，保留 30 天）；安装与限制见[Windows 使用说明](docs/USER_GUIDE.md#windows-install)。Mac 公开版仍是 0.0.6。
 
 ![21 秒 0.0.6 原生界面预览：总览、物品、账户、目标、资金轨迹与市场模拟](docs/images/walkthrough.gif)
 
@@ -30,7 +32,8 @@
 | 芯片 | 通用安装包，同时支持 Apple Silicon 与 Intel；Intel Mac 尚未实机验证 |
 | 系统 | 已在 macOS 27 验证；打包最低目标为 macOS 14，其他版本尚未实测 |
 | 语言与更新 | 界面为中文；设置中可主动检查更新，仍需手动下载安装 |
-| 其他平台 | 暂无 Windows、Linux、手机客户端或跨设备同步 |
+| Windows | 0.0.7 x64 候选版，目标 Windows 10 1809+／11；原生验收未完成，尚无公开 Release |
+| 其他平台 | 暂无 Linux、手机客户端或跨设备同步 |
 
 本系列处于公开测试阶段。更新前请先完整备份，再按[更新步骤](docs/USER_GUIDE.md#update)手动替换应用；较低的公开版本号不表示资料格式可以降级。
 
@@ -38,9 +41,11 @@
 
 ## 资料与隐私
 
+帮助入口与资料保护说明见[关于与帮助](docs/USER_GUIDE.md#help)和[隐私与资料安全](docs/USER_GUIDE.md#privacy)。
+
 资料只在你的电脑上：没有账号，应用平时不联网（只有你在「设置 › 数据管理」点「检查更新」时，才会向 Gitee 和 GitHub 各查询一次公开的版本列表，不发送任何资料），代码公开可查。**资料与备份没有应用级加密**；若主动选用云盘作为额外备份位置，副本由该云盘软件同步。自动备份和主资料同盘，仍应额外保留异地完整备份。
 
-删除应用不会删除资料。更新、换 Mac、资料位置、恢复与当前限制统一见[使用指南](docs/USER_GUIDE.md#update)。反馈时请遮住真实资料，不上传数据库或备份；漏洞请按[安全政策](SECURITY.md)私下报告。
+Mac 删除应用保留资料；Windows 卸载默认保留资料，若要保留记录，不要勾选卸载器的“删除应用数据”。更新、换机、资料位置、恢复与当前限制统一见[使用指南](docs/USER_GUIDE.md#update)。反馈时请遮住真实资料，不上传数据库或备份；漏洞请按[安全政策](SECURITY.md)私下报告。
 
 ## 现在可以做什么
 
@@ -70,7 +75,7 @@
 **假设分析**继续回答“条件变了会怎样”：
 
 - 压力测试：收益降低、通胀升高、生活费增加、提前退休或投入减少，分别会怎样影响缺口和时间。
-- 市场路径模拟：查看多条随机路径的中位数和分位区间，支持 1,000、1 万和 10 万条路径。图上的覆盖占比是模型结果，不能当作现实成功概率。
+- 市场路径模拟：查看多条随机路径的中位数和分位区间，支持 1,000、1 万和 2 万条路径。图上的覆盖占比是模型结果，不能当作现实成功概率。
 - 敏感性矩阵：比较不同储蓄、收益、预算和退休月份的组合。
 - 收益顺序检查：把同一次下跌分别放在退休开头和末段，查看资金缺口出现的时间为什么不同。
 
@@ -126,6 +131,6 @@
 
 ## 许可
 
-规划模块的早期实现参考了 [Wealthfolio](https://github.com/wealthfolio/wealthfolio) 的公开实现。
+当前规划纯计算由独立 Rust 核心承担，在隔离实现环境中依据冻结的行为规格编写；界面与数据适配仍由 TypeScript 承担，不属于此次隔离重建范围。当前核心与历史参考的区别见[来源告知](SOURCE_NOTICES.md)，接口与构建见[核心说明](crates/planning-engine/README.md)。
 
 代码按 [AGPL-3.0-or-later](LICENSE) 授权（0.0.4 及更早版本发布时标注为 GPL-3.0-or-later），第三方依赖许可见 [THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES.md)。名称「物谱」「Thingary」与应用图标不在 AGPL 授权范围内；修改版再发布请采用自己的名称与图标，详见[品牌使用说明](docs/brand/README.md)。

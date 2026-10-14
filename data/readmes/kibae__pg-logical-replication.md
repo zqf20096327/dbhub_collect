@@ -1,7 +1,7 @@
 # pg-logical-replication
 
 - [PostgreSQL Logical Replication](https://www.postgresql.org/docs/current/logical-replication.html) client for node.js(
-  `>=20.0.0`)
+  `>=22.0.0`)
 - Supported plugins
     - [pgoutput](https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html) (Native to
       PostgreSQL, Recommended)
@@ -14,13 +14,13 @@
 [![NPM Version](https://badge.fury.io/js/pg-logical-replication.svg)](https://www.npmjs.com/package/pg-logical-replication)
 [![License](https://img.shields.io/github/license/kibae/pg-logical-replication)](https://github.com/kibae/pg-logical-replication/blob/main/LICENSE)
 
-| PostgreSQL Versions | on Node.js 20, 22, 24, 26                                                                                                                                                                                                        |
+| PostgreSQL Versions | on Node.js 22, 24, 26                                                                                                                                                                                                        |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| PostgreSQL 14       | [![Node.js(20, 22, 24, 26) w/Postgres 14](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql14.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql14.yml) |
-| PostgreSQL 15       | [![Node.js(20, 22, 24, 26) w/Postgres 15](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql15.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql15.yml) |
-| PostgreSQL 16       | [![Node.js(20, 22, 24, 26) w/Postgres 16](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql16.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql16.yml) |
-| PostgreSQL 17       | [![Node.js(20, 22, 24, 26) w/Postgres 17](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql17.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql17.yml) |
-| PostgreSQL 18       | [![Node.js(20, 22, 24, 26) w/Postgres 18](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql18.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql18.yml) |
+| PostgreSQL 14       | [![Node.js(22, 24, 26) w/Postgres 14](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql14.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql14.yml) |
+| PostgreSQL 15       | [![Node.js(22, 24, 26) w/Postgres 15](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql15.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql15.yml) |
+| PostgreSQL 16       | [![Node.js(22, 24, 26) w/Postgres 16](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql16.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql16.yml) |
+| PostgreSQL 17       | [![Node.js(22, 24, 26) w/Postgres 17](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql17.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql17.yml) |
+| PostgreSQL 18       | [![Node.js(22, 24, 26) w/Postgres 18](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql18.yml/badge.svg)](https://github.com/kibae/pg-logical-replication/actions/workflows/nodejs-pgsql18.yml) |
 
 ## 1. Install
 
@@ -30,6 +30,13 @@
 ```sh
 $ npm install pg-logical-replication
 ```
+
+### Upgrading to 2.6.0
+
+- Upgrade to Node.js 22 or later before installing 2.6.0.
+- `acknowledge(lsn)` now sends the supplied position unchanged. Pass the exclusive end of durably processed WAL and remove any `-1` compensation for the previous behavior.
+- For transaction-end checkpoints, use pgoutput's `commitEndLsn` or wal2json's `nextlsn` (enable `includeLsn: true`). The LSN passed to a wal2json `data` handler is not necessarily the transaction end.
+- Method signatures and replication configuration options remain unchanged. See the [changelog](CHANGELOG.md) for details.
 
 ## 2. Usage
 
@@ -165,6 +172,7 @@ const service = new LogicalReplicationService({
 ### 3-3. `acknowledge(lsn: string): Promise<boolean>`
 
 - After processing the data, it signals the PostgreSQL server that it is OK to clear the WAL log.
+- `lsn` is the exclusive end position of durably processed WAL. It is sent unchanged in the written, flushed, and applied fields of the standby status update.
 - Usually this is done **automatically**.
 - Manually use only when `new LogicalReplicationService({}, {acknowledge: {auto: false}})`.
 

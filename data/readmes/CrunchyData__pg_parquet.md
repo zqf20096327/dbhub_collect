@@ -19,6 +19,7 @@ COPY table FROM 's3://mybucket/data.parquet' WITH (format 'parquet');
 - [Installation From Source](#installation-from-source)
 - [Usage](#usage)
   - [Copy FROM/TO Parquet files TO/FROM Postgres tables](#copy-fromto-parquet-files-tofrom-postgres-tables)
+  - [Create Postgres tables from Parquet files](#create-postgres-tables-from-parquet-files)
   - [COPY FROM/TO Parquet stdin/stdout TO/FROM Postgres tables)](#copy-fromto-parquet-stdinstdout-tofrom-postgres-tables)
   - [COPY FROM/TO Parquet program stream TO/FROM Postgres tables)](#copy-fromto-parquet-program-stream-tofrom-postgres-tables)
   - [Inspect Parquet schema](#inspect-parquet-schema)
@@ -87,7 +88,7 @@ psql> "CREATE EXTENSION pg_parquet;"
 ## Usage
 There are mainly 3 things that you can do with `pg_parquet`:
 1. You can export Postgres tables/queries to Parquet files, stdin/stdout or a program's stream,
-2. You can ingest data from Parquet files to Postgres tables,
+2. You can ingest data from Parquet files to Postgres tables with type coercion and schema inference,
 3. You can inspect the schema and metadata of Parquet files.
 
 ### COPY from/to Parquet files to/from Postgres tables
@@ -128,6 +129,32 @@ COPY product_example FROM '/tmp/product_example.parquet';
 -- show table
 SELECT * FROM product_example;
 ```
+
+### Create Postgres tables from Parquet files
+You can use `CREATE TABLE () WITH (definition_from = <uri>)` command to **infer** the columns of Postgres tables.
+You can even infer + populate the table via `CREATE TABLE () WITH (load_from = <uri>)`.
+
+```sql
+-- create table with inferred columns and populated rows
+CREATE TABLE product_inferred_example () WITH (load_from = '/tmp/product_example.parquet');
+
+-- show table
+SELECT * FROM product_inferred_example;
+```
+
+> [!NOTE]
+> If the inferred column is of composite type, a new type will be created named as `parquet_structs.struct_<hash>`. Hash is determined by
+field types and names of the composite type. The type is created by the user that runs the command, so that user needs `CREATE` privilege
+on the `parquet_structs` schema, which the extension grants to `public`. The generated types are not dropped together with the table.
+The `parquet_structs` schema belongs to the extension, so `DROP EXTENSION pg_parquet` reports the dependency while any table still has such
+a column, and `DROP EXTENSION pg_parquet CASCADE` drops those columns along with the types. Drop or alter the columns first.
+
+> [!NOTE]
+> Postgres has no unsigned integers, so an unsigned column is inferred as the next wider type e.g. `uint32` as `bigint` and `uint64`
+> as `numeric(20,0)`. A 16 byte fixed size binary column is inferred as `uuid`, which is the type that `COPY FROM` reads it into.
+> A `map` column requires the [crunchy_map](https://github.com/CrunchyData/postgres-map) extension. The command
+> errors out for a parquet type that has no Postgres counterpart e.g. `Duration` or `Decimal256`, in which case you can create the table
+> with explicit column definitions and then `COPY FROM` the parquet file.
 
 ### COPY from/to Parquet stdin/stdout to/from Postgres tables
 
@@ -190,6 +217,16 @@ SELECT stats_null_count, stats_distinct_count, stats_min, stats_max, compression
  stats_null_count | stats_distinct_count | stats_min | stats_max |    compression     |        encodings         | index_page_offset | dictionary_page_offset | data_page_offset | total_compressed_size | total_uncompressed_size 
 ------------------+----------------------+-----------+-----------+--------------------+--------------------------+-------------------+------------------------+------------------+-----------------------+-------------------------
                 0 |                      | 1         | 1         | GZIP(GzipLevel(6)) | PLAIN,RLE,RLE_DICTIONARY |                   |                      4 |               42 |                   101 |                      61
+(1 row)
+```
+
+The `stats_geospatial` column reports the bounding box and the geometry types that Parquet computed for a geospatial column, as `jsonb`. It is `NULL` for the columns that have no geospatial statistics, which are all of the columns except the `geometry` and `geography` ones. The geometry types are the ISO WKB codes that the [Parquet geospatial specification](https://github.com/apache/parquet-format/blob/master/Geospatial.md) lists, e.g. `1` is a point and `2` is a linestring. The `zmin`, `zmax`, `mmin` and `mmax` bounds are only reported for the geometries that have those dimensions. A `geometry` column is also reported as `NULL` when it contains a PostGIS type that the Parquet geospatial specification does not cover, e.g. a curved, triangulated or polyhedral one, since those cannot be bounded. A `geography` column always reports its geometry types, but its bounding box is only reported when all of its geometries are points: the edges of a `geography` are geodesics, which can reach beyond the box that the coordinates of their endpoints give.
+
+```sql
+SELECT path_in_schema, stats_geospatial FROM parquet.metadata('/tmp/geo_example.parquet') WHERE stats_geospatial IS NOT NULL;
+ path_in_schema |                                     stats_geospatial
+----------------+--------------------------------------------------------------------------------------------
+ location       | {"bbox": {"xmax": 5.0, "xmin": 1.0, "ymax": 6.0, "ymin": 2.0}, "geospatial_types": [1, 2]}
 (1 row)
 ```
 
@@ -474,13 +511,14 @@ There is currently only one GUC parameter to enable/disable the `pg_parquet`:
 | `timestamptz` (3) | INT64                     | TIMESTAMP_MICROS |
 | `time`            | INT64                     | TIME_MICROS      |
 | `timetz`(3)       | INT64                     | TIME_MICROS      |
-| `geometry`(4)     | BYTE_ARRAY                |                  |
+| `geometry`(4)     | BYTE_ARRAY                | GEOMETRY         |
+| `geography`(4)    | BYTE_ARRAY                | GEOGRAPHY        |
 
 ### Nested Types
 | PostgreSQL Type   | Parquet Physical Type     | Logical Type     |
 |-------------------|---------------------------|------------------|
 | `composite`       | GROUP                     | STRUCT           |
-| `array`           | element's physical type   | LIST             |
+| `array`(7)        | element's physical type   | LIST             |
 | `crunchy_map`(5)  | GROUP                     | MAP              |
 
 > [!WARNING]
@@ -492,9 +530,10 @@ There is currently only one GUC parameter to enable/disable the `pg_parquet`:
 >    * `numeric` is allowed by Postgres. (precision and scale not specified). These are represented by a default precision (38) and scale (9) instead of writing them as string. You get runtime error if your table tries to write a numeric value which is not allowed by the default precision and scale (29 integral digits before decimal point, 9 digits after decimal point). Reading into such a column keeps all the digits of the file's value, be it a decimal or a string, since Postgres stores an unbounded numeric at any precision and scale.
 > - (2) The `date` type is represented according to `Unix epoch` when writing to Parquet files. It is converted back according to `PostgreSQL epoch` when reading from Parquet files.
 > - (3) The `timestamptz` and `timetz` types are adjusted to `UTC` when writing to Parquet files. They are converted back with `UTC` timezone when reading from Parquet files.
-> - (4) The `geometry` type is represented as `BYTE_ARRAY` encoded as `WKB`, specified by [geoparquet spec](https://geoparquet.org/releases/v1.1.0/), when `postgis` extension is created. Otherwise, it is represented as `BYTE_ARRAY` with `STRING` logical type.
+> - (4) The `geometry` and `geography` types are represented as `BYTE_ARRAY` encoded as `WKB` with the `GEOMETRY` and `GEOGRAPHY` logical types, specified by the [parquet geospatial spec](https://github.com/apache/parquet-format/blob/master/Geospatial.md), when `postgis` extension is created. Otherwise, they are represented as `BYTE_ARRAY` with `STRING` logical type. The `crs` of the logical type is taken from the `srid` of the column's type modifier, e.g. `geometry(point, 3857)` is written with the `EPSG:3857` crs. A column whose `srid` is lon/lat on the `WGS84` ellipsoid is written with the default crs of the spec, which is `OGC:CRS84`, and a `geometry` column without an `srid` is written with the unset crs of the spec, which is `srid:0`. An `srid` that no authority in `spatial_ref_sys` claims is written with the engine specific `srid:<code>` form of the spec, e.g. `srid:990000`, so that it is not mistaken for an unset crs. An `srid` whose `auth_name` holds the `:` separator, or is `srid` itself, takes that same form, since its `authority:code` form would not read back as this `srid`. A `geography` column without an `srid` is written with the default crs, since PostGIS geographies are on the `WGS84` ellipsoid. The bounding box and the geometry types of each column are written as geospatial statistics, except for the bounding box of a `geography` column that has edges, as described [above](#inspect-parquet-metadata). On read, the `srid` of the geometries is restored from the `crs` of the logical type, resolving its `authority:code` form through `spatial_ref_sys` and taking the code of its `srid:<code>` form as the `srid` itself, and falls back to the `srid` of the target column's type modifier when the file has no `crs`.
 > - (5) `crunchy_map` is dependent on functionality provided by [Crunchy Bridge](https://www.crunchydata.com/products/crunchy-bridge). The `crunchy_map` type is represented as `GROUP` with `MAP` logical type when `crunchy_map` extension is created. Otherwise, it is represented as `BYTE_ARRAY` with `STRING` logical type.
 > - (6) The `oid8` type only exists on PostgreSQL 19 and later. It is written as an unsigned `INT64`, so its whole range round-trips.
+> - (7) Only one dimensional arrays can be written, since a parquet `LIST` is one dimensional. A multi dimensional array value, e.g. `'{{1,2},{3,4}}'::int[]`, is rejected rather than silently flattened.
 
 > [!NOTE]
 > `infinity` and `-infinity` values of the `date`, `timestamp` and `timestamptz` types are written as the limits of the underlying `INT32`/`INT64`, which is how `COPY FROM` reads them back. A temporal value in the Parquet file that `PostgreSQL` cannot represent is rejected with an out of range error.
@@ -503,7 +542,7 @@ There is currently only one GUC parameter to enable/disable the `pg_parquet`:
 > Any type that does not have a corresponding Parquet type will be represented, as a fallback mechanism, as `BYTE_ARRAY` with `STRING` logical type. e.g. `enum`
 
 > [!NOTE]
-> `COPY FROM` does not need an exact type match: a file's column is cast to the table's column type whenever `PostgreSQL` has a cast between them. That is what makes the files of the other writers readable, e.g. the `TIME_MILLIS`, `FIXED_LEN_BYTE_ARRAY` or wider than `DECIMAL(38)` columns of `Spark`, and the dictionary encoded (`pandas` categorical), view or null typed columns that the `Arrow` based writers record in their schema. An `INT96` timestamp column, which `Hive`, `Impala` and `Spark` write, records no resolution of its own, so it is read as microseconds, which is the resolution `PostgreSQL` stores and covers its whole timestamp range.
+> `COPY FROM` does not need an exact type match: a file's column is cast to the table's column type whenever `PostgreSQL` has a cast between them. That is what makes the files of the other writers readable, e.g. the `TIME_MILLIS`, `FIXED_LEN_BYTE_ARRAY` or wider than `DECIMAL(38)` columns of `Spark`, and the dictionary encoded (`pandas` categorical), view or null typed columns that the `Arrow` based writers record in their schema. An `INT96` timestamp column, which `Hive`, `Impala` and `Spark` write, records no resolution of its own, so it is read as microseconds, which is the resolution `PostgreSQL` stores and covers its whole timestamp range. A fractional column that is read into an integer column is rounded the way `PostgreSQL` rounds it, i.e. a `DECIMAL` half away from zero and a `FLOAT` half to even, rather than truncated toward zero.
 
 ## Postgres Support Matrix
 `pg_parquet` supports the following PostgreSQL versions:

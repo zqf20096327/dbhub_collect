@@ -1,5 +1,6 @@
 <div align="center">
-<img width="1280" height="640" alt="image" src="https://github.com/user-attachments/assets/5dbde17a-1ac7-4f55-8773-511e18f45753" />
+<img width="1280" height="640" alt="image" src="https://github.com/user-attachments/assets/648a142b-34ed-4762-b309-a51e9f9cd53d" />
+
 </div>
 
 ---
@@ -28,7 +29,7 @@
 
 [![Telegram](https://img.shields.io/badge/Join-Telegram-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/DorkEye)
 
-![image](https://github.com/user-attachments/assets/c52b3326-6224-4fd5-9d41-d9f22e887b7a)
+<img width="980" height="640" alt="image" src="https://github.com/user-attachments/assets/13dea163-578c-41ad-9e2b-497bb373ab77" />
 
 ---
 

@@ -96,7 +96,7 @@ dsh plugin --profile web add file:/path/to/dsh-plugin-dm-security
 | `password` | string | — | 数据库口令。会写入会话日志，建议改用设置卡片或凭据库 |
 | `privs` | string | 自动判定 | 连接账号具备的权限层。账号是 `SYSDBA` 或持有 `DBA` 角色时按 SYSDBA 处理 |
 | `level` | integer | `3` | 等保对照级别，2 / 3 / 4 |
-| `sshUser` / `sshPassword` | string | — | 主机侧检查的 SSH 账号与口令。两者都填才会执行主机侧检查 |
+| `sshUser` / `sshPassword` | string | — | 主机侧检查的 SSH 账号与口令。两者都填才会执行主机侧检查。多节点用逗号分隔且与 `targets` 同序（两节点的运维账号/口令未必相同），只给一个值时所有节点共用；这一项不按空格拆分（口令里可以有空格） |
 | `sshHost` | string | 各目标自身主机 | SSH 目标主机，逗号分隔且与 `targets` 同序 |
 | `sshPort` | integer | `22` | SSH 端口 |
 | `sshHostKey` | string | — | 主机密钥指纹，逗号分隔且与 `targets` 同序。plink 在 `-batch` 模式下要求密钥已知 |
@@ -191,7 +191,7 @@ DMDSC 多节点时，每节点各出一份报告，并在概况下增加节点�
 - 数据守护主备形态已在共享存储集群上验证过逐节点采集，但主备角色切换未实测。
 - 以下环境未验证：安全版（`mac.*` 的六态路径）、DM9、Windows 上的达梦、ARM 架构（鲲鹏 / 飞腾）。
 - `AUDIT_FILE_FULL_MODE` 的取值语义（写满后报错还是覆盖）未确认，报告只陈述取值不判方向。
-- 开发时注意：宿主加载的是 profile 目录下的副本，改完代码要同步源码、安装目录与 profile 副本三处，再重启 dsh。
+- 开发时注意：宿主加载的是 **profile 目录下的安装副本**（`$DSH_HOME/profiles/web/node_modules/dsh-plugin-dm-security`），仓库源码改了不会自动生效。流程是先推送，再 `dsh plugin --profile web update dsh-plugin-dm-security` 更新副本，最后重启 `dsh web`。这个 profile 虽然声明了 `patchReload: live`，但那只覆盖补丁文件，插件代码没有热重载通道，原因见 DESIGN §11。
 - Java 8 下首次运行会编译桥接器，产物在 `home/runtime/classes`；删除 `home/runtime/` 可清空，下次运行自动重建。
 
 ## 卸载

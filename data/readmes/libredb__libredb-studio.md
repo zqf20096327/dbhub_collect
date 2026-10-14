@@ -36,7 +36,8 @@
   <a href="https://planet.mysql.com/showcase/?search=LibreDB">MySQL</a>,
   <a href="https://redis.io/docs/latest/develop/tools/#libredb-studio">Redis</a>,
   <a href="https://valkey.io/participants/#:~:text=LibreDB%20Studio%20connects%20to%20Valkey">Valkey</a>,
-  <a href="https://clickhouse.com/docs/integrations/connectors/tools/gui#libredb-studio">ClickHouse</a>,
+  <a href="https://clickhouse.com/docs/integrations/connectors/tools/gui#libredb-studio">ClickHouse Visual Interfaces</a>,
+  <a href="https://clickhouse.com/docs/integrations/connectors/sql-clients/libredb-studio">ClickHouse SQL Clients</a>,
   <a href="https://mariadb.com/docs/server/clients-and-utilities/graphical-and-enhanced-clients/libredb-studio">MariaDB</a>,
   <a href="https://trino.io/ecosystem/client-application#libredb-studio">Trino</a>,
   <a href="https://docs.yugabyte.com/stable/integrations/tools/libredb-studio/">YugabyteDB</a>,
@@ -64,12 +65,12 @@
 
 <p align="center">
   <a href="https://github.com/libredb/libredb-studio"><img src="https://img.shields.io/github/stars/libredb/libredb-studio?style=social" alt="GitHub stars"></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-  <a href="https://sonarcloud.io/project/overview?id=libredb_libredb-studio"><img src="https://sonarcloud
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yell
 
 [...截断...]
 
-.io/api/project_badges/measure?project=libredb_libredb-studio&metric=alert_status" alt="Quality Gate"></a>
+ow.svg" alt="License: MIT"></a>
+  <a href="https://sonarcloud.io/project/overview?id=libredb_libredb-studio"><img src="https://sonarcloud.io/api/project_badges/measure?project=libredb_libredb-studio&metric=alert_status" alt="Quality Gate"></a>
   <a href="https://codecov.io/github/libredb/libredb-studio"><img src="https://codecov.io/github/libredb/libredb-studio/graph/badge.svg?token=VA6CO9R7IH" alt="Coverage"></a>
   <a href="https://deepwiki.com/libredb/libredb-studio"><img src=".github/assets/deepwiki-badge.svg" alt="Ask DeepWiki"></a>
   <a href="https://artifacthub.io/packages/helm/libredb-studio/libredb-studio"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/libredb-studio" alt="Artifact Hub"></a>
@@ -130,4 +131,4 @@ You create a Postgres on a managed platform. It is ready in forty seconds. Then 
 
 LibreDB Studio goes the other way. It deploys next to the data: a container, a Helm chart, an operator, a one-click template on your PaaS, or `npm i @libredb/studio` inside your own product. Nothing has to face outward.
 
-Thirty-five engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, Firestore, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, BigQuery, Databend, Snowflake, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdrant, InfluxDB (InfluxQL), InfluxDB 3 (SQL), Oxia, S3-compatible object storage, Kubernetes, MQTT, RabbitMQ and OPC UA, with the same explorer everywhere, and ER diagrams, schema diff and monitoring wherever the engine has something to report. Three of the thirty-five are read-only because their own SQL is: Druid, Elasticsearch and OpenSearch have no `UPDATE` and no `CREATE TABLE` in the grammar at all, so those controls are reported as unsupported instead of failing when used. Cassandr
+Thirty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, Firestore, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, BigQuery, Databend, Snowflake, Apache Spark, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdrant, InfluxDB (InfluxQL), InfluxDB 3 (SQL), Oxia, S3-compatible object storage, Kubernetes, MQTT, RabbitMQ and OPC UA, with the same explorer everywhere, and ER diagrams, schema diff and monitoring wherever the engine has something to report. Three of the thirty-six are read-only because their own SQL is: Druid, Elasticsearch and OpenSear

@@ -72,6 +72,15 @@ CREATE TABLE hcs_changes (event STRING) WITH (
 `hcs.cms-endpoints` 可填一个或多个入口，每项显式写端口，逗号分隔；支持域名、IPv4、
 `[IPv6]:port` 和不同端口。这里填写 CMS 入口，不填写普通 CN 的 HA 复制端口。
 节点选择及租户节点发现由原厂驱动完成。不需要为每个 CMS 建一个 Flink Source。
+连接器通过 `pg_get_replication_slots()` 在普通租户 SQL 连接上检查槽，再使用
+`com.huawei.opengauss.jdbc.Driver` / `jdbc:opengauss://` 建立独立复制连接。
+复制连接配置 `allowConnThreadPool=false`、`replication=database`、
+`preferQueryMode=simple` 和 `assumeMinServerVersion=9.4`，由其 `getReplicationAPI()`
+启动多写逻辑流。内网单独验证这一路径时，错误从 9049 变为 HBA 复制连接拒绝，
+表明已到达复制认证阶段；后续 HBA 调整引发实例重启，目标 PDB 尚未恢复，
+因此此版本仍未完成真实复制流启动及增量验收。
+参见[驱动证据、诊断入口及内网追问](docs/HCS_START_REPLICATION_9049.md)。
+CMS 端口按实际部署填写，例如内网部署使用的 `13003`；示例端口不是固定要求。
 
 `schema-name` 和 `table-name` 按 Java 正则整串匹配。多表 JSON 输出中包含 `source.schema/table`。
 `output.format=json` 使用官方 `JsonDebeziumDeserializationSchema`，输出一列 STRING；
@@ -146,6 +155,10 @@ scripts/verify-matrix.sh
 版本测试记录见 [`VALIDATION.md`](VALIDATION.md)。测试覆盖真实 CDC 2.3 引擎的 checkpoint/恢复、
 真实 507 驱动的三段位点及 ACK 报文、事务边界、多 CMS 参数传递、SQL 工厂和官方反序列化。
 协议测试使用合成复制报文，框架测试使用受控复制流，没有模拟成“已完成真实 HCS 验收”。
+
+供内网 AI 或产品工程师补充开发依据的文档：
+[`透明多写 CDC 开发背景与问题`](docs/HCS_TRANSPARENT_MULTIWRITE_DEVELOPMENT_QUESTIONS.md)。
+包含当前实现假设、已反馈的错误，以及协议、位点、恢复和后续扩展需要明确的问题，可独立下载后回答。
 
 内网需继续验证：
 - 两个及以上写节点产生 INSERT / UPDATE / DELETE，核对漏数、重复及事务顺序。

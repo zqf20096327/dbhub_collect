@@ -18,13 +18,13 @@ Elusion is a PC game, played with a keyboard and mouse in a desktop browser at [
 
 The first time a character stands in town, a welcome card gives the way out to the Field and lists every key. **H** brings the keys back at any time, and they are read from the game's own input settings, so the card cannot drift from the game. **Change keys** on that card (or on Options) turns the list into buttons: click one, press the new key. Every key but Escape and Enter can be moved, each action takes two, and a key taken from another action says so.
 
-Options also sets the **text size** (up to 150%, for a big screen or one across the room) and the **font**: the standard one, or one of five that suit the game — Pixelify Sans, Tiny5, MedievalSharp, IM Fell English and Grenze Gotisch, each under the SIL Open Font License (see [assetlicense.md](assetlicense.md)).
+Options also sets the **text size** (up to 150%, for a big screen or one across the room) and the **font**: the standard one, or one of five that suit the game — Pixelify Sans, Tiny5, MedievalSharp, IM Fell English and Grenze Gotisch, each under the SIL Open Font License (see [assetlicense.md](assetlicense.md)). It also has a switch for **other players' attacks**: on by default; off, nobody else's waves, axes, spells, dynamite, orbs or auras are drawn, and a healer's aura still heals you, unseen.
 
 | | |
 |---|---|
 | Move | W A S D, or the arrow keys |
 | Sprint | hold Shift |
-| Attack, aiming with the mouse | Space, or left-click |
+| Attack, aiming with the mouse (with no mouse on the game, the way you face) | Space, or left-click |
 | Healer: drop a healing aura at the mouse | right-click |
 | Use the shop, bank, fire or fishing spot | E |
 | Use the item on a hotbar key | 1 to 0 |
@@ -36,7 +36,13 @@ Those are the keys as the game comes; Change keys moves any of them but Esc and 
 
 The version is in the login screen's corner and at the foot of **Menu** — MAJOR.MINOR.PATCH, 0.x until launch.
 
-The bar along the bottom holds the windows a player opens all the time; Friends, Players, Guild, Trade, the Kingdom board and **Kills** are under **Social**, and Controls, Options and logging out under **Menu**.
+The bar along the bottom holds the windows a player opens all the time; Friends, Players, Guild, **Party**, Trade, the Kingdom board and **Kills** are under **Social**, and Controls, Options and logging out under **Menu**.
+
+**Party** puts up to four players together: invite somebody by name or from the Players list, and the party is made when they accept. The window shows each member's class, level, area and health, the leader can hand the party on or remove somebody, and the party has its own chat tab. On the **Map** your party in the same area is drawn in the party's colour with their names, beside every monster on the ground you have explored, each in its element's colour.
+
+**Party voice**: switch Voice on in the Party window and talk to your party, with an open mic or push-to-talk (V) and a mute key (B); a speaker lights beside the name of whoever is talking. **Voice settings**, in the same window: how loud everyone is and each player on their own (up to 200%), how loud your microphone is (up to 200%) with a live level bar, an open-mic sensitivity line so keys and the room stay out, and switches for noise suppression and echo cancellation. It is the browser's own calling, with its echo cancellation and noise suppression, and every call goes through a relay (Cloudflare's TURN), so no player ever sees another's internet address. It is in the browser version of the game.
+
+**Click a name** - over a player's head, in the Players list or in chat - to whisper, add them as a friend, trade, invite them to your party or guild, or report them to staff.
 
 **Kills** (or **K**) is the kill record: every monster in the game with its picture, how many of each your character has killed and when the last one fell, and — on the Everyone tab — every player's kills added up, with who has killed the most of each. The server counts them; the pictures are cut from each monster's own art.
 
@@ -197,7 +203,7 @@ Player trading arrived after the audit and gets its own section there, because i
 
 Everyone in the same area sees everyone else: walking and idling the right way round, swinging, the tank's aura lit, the pet trailing behind, and the name over the head in the colour they chose, with the guild tag and the crown or staff badge. It runs over a WebSocket to a small asyncio server beside the API, ten updates a second per area, and none of it touches the database. The socket never sees a login: the game trades its session for a two-minute ticket, so a ban or a sign-out elsewhere ends the connection within seconds without the socket server knowing how logins work. And the game only ever says *where* it is — who somebody is (name, rank, colour, which pets they may show) comes from the server's own rows. Since 0.7.0 the same socket carries the monsters too — next section.
 
-Since 0.19.0 you see their attacks as well: meteors, thrown axes, Dynamite, slash waves and healing orbs, each built from the class's own scene as a *picture* that touches nothing — no hit, no XP, no pull — so only the attacker's own game ever lands a blow. A lever pulled opens its gate for everyone in the area, and the server remembers it for whoever walks in later. And other players are played back on their own game's clock instead of chased toward their newest step, so they walk past evenly rather than surging and stalling.
+Since 0.19.0 you see their attacks as well: meteors, thrown axes, Dynamite, slash waves and healing orbs, each built from the class's own scene as a *picture* that touches nothing — no hit, no XP, no pull — so only the attacker's own game ever lands a blow. A lever pulled opens its gate for everyone in the area, and the server remembers it for whoever walks in later. And other players are played back on their own game's clock instead of chased toward their newest step, so they walk past evenly rather than surging and stalling. Since 0.41.0 each of them wears the aim ring you wear, pointing where theirs points, and a health bar under their name: everything you see on yourself, they see on you.
 
 ### The same monsters, and a bag each — `src/world/monstersync.gd`, `src/shared/targets.gd`
 
@@ -281,11 +287,11 @@ Calling the virtualenv's interpreter directly is deliberate: it skips having to 
 
 To see other players and share monsters with them, start `presence.py` the same way in a second window (`.\venv\Scripts\python.exe presence.py`). Without it the game plays exactly as before: it draws nobody else and fights its own monsters.
 
-That serves a hundred and sixteen endpoints — accounts and sessions, character saves, the shared bank, combat kills, loot, the vendor, fishing and cooking, item use, reviving, player trading, guilds, chat, friends, the kingdom ledger and staff tools — plus interactive Swagger docs (via flasgger) at `http://127.0.0.1:5000/apidocs`, which is the quickest way to see the whole surface at once.
+That serves a hundred and twenty-four endpoints — accounts and sessions, character saves, the shared bank, combat kills, loot, the vendor, fishing and cooking, item use, reviving, player trading, guilds, chat, friends, the kingdom ledger and staff tools — plus interactive Swagger docs (via flasgger) at `http://127.0.0.1:5000/apidocs`, which is the quickest way to see the whole surface at once.
 
-A hundred and eleven of the hundred and sixteen require a bearer token. The five that do not are `register`, `login`, `status`, and the two halves of account recovery (`recover` sends a code to the verified email, `reset` spends it), and that is the whole public surface.
+A hundred and nineteen of the hundred and twenty-four require a bearer token. The five that do not are `register`, `login`, `status`, and the two halves of account recovery (`recover` sends a code to the verified email, `reset` spends it), and that is the whole public surface.
 
-The backend has fifty-two test suites, run together with one command:
+The backend has fifty-four test suites, run together with one command:
 
 ```bat
 cd <your-path>\game\api
@@ -304,15 +310,17 @@ test_moderation.py     156 checks    the moderation record, a log that opens on 
 test_ownership.py      150 checks    no route hands over a row that is not yours
 test_chatrooms.py      142 checks    chat channels, whispers, pictures posted by link
 test_trades.py         136 checks    a trade reaches the right person and means what they saw
-test_security_doc.py   135 checks    SECURITY.md is checked, not trusted
+test_security_doc.py   146 checks    SECURITY.md is checked, not trusted
 test_refusals.py       127 checks    401, 403, and the 404 that is really a 403
 test_rollback.py       126 checks    the save history: snapshots, the owner's rollback, giving a player an item
-test_presence.py       132 checks    players seeing each other, whose game runs each area's monsters, every attack and lever
+test_presence.py       150 checks    players seeing each other, whose game runs each area's monsters, every attack and lever, party voice's calls
 test_quality.py        113 checks    rolled gear from drops and the shop, carried whole by every path; armour's resistance
 test_pacing.py         114 checks    the pace of the game: what the server pays, the store charges and the shop pays back
 test_chatsafety.py     100 checks    ignore, report and mute; a card per reported player
 test_combatbook.py     106 checks    the server's books on every monster: every hit, spawn and death judged
 test_friends.py         76 checks    asking, answering and ending a friendship
+test_parties.py         50 checks    parties: asked, joined, led, left, and their own chat room
+test_voice.py           46 checks    party voice's relay (only a party's, only through it), and reporting a player
 test_chardelete.py      72 checks    deleting a character, and only the character
 test_chat.py            67 checks    world chat, end to end, one line as typed
 test_throttle.py        62 checks    login lockout, per-IP spray, token rotation
@@ -325,13 +333,14 @@ test_coowner.py         56 checks    the co-owner's gate: named by the server, l
 test_recovery.py        54 checks    account recovery, adversarially
 test_maintenance.py     53 checks    the owner's kill switch
 test_accounts.py        50 checks    signing in: one game per account, locks, no mail
+test_tokens.py          47 checks    a login bound to its copy of the game, theft ends it all, short staff logins, the password again
 test_settings.py        49 checks    the options screen's rules
 test_teleport.py        49 checks    moving players and landing them spread out
 test_map.py             48 checks    the map's fog rules and their storage
 test_tradegates.py      41 checks    the owner's trade switch, and fresh mythic and Perfect finds held 48 hours
 test_gifts.py           40 checks    the gifts ledger: every gift and what it was worth, the report, the past read back
 test_killrecord.py      40 checks    every paid kill counted per character and monster
-test_clientbuild.py     37 checks    the client build gate
+test_clientbuild.py     38 checks    the client build gate, and the way back in by hand
 test_guildlife.py       37 checks    what members are playing, what happened
 test_healing.py         34 checks    the heal clamp stays quiet for honest play
 test_revocation.py      34 checks    what it costs to change your mind
@@ -345,14 +354,14 @@ test_catalogue.py       13 checks    the shipped catalogue arms every protection
 test_attackxp.py        12 checks    attack XP is banked at the kill
 test_skill_train.py     10 checks    skills train only as fast as time allows
 					─────
-					4,977 checks, 0 failures
+					5,150 checks, 0 failures
 ```
 
-Each suite points `ELUSION_DB` at a throwaway file before importing `app.py`, so running them never touches the real database. The fifty-second, `test_mail.py`, sends a real email to prove the mail settings work, so it needs the SMTP settings in the API's `.env` and is not in the count.
+Each suite points `ELUSION_DB` at a throwaway file before importing `app.py`, so running them never touches the real database. The fifty-fifth, `test_mail.py`, sends a real email to prove the mail settings work, so it needs the SMTP settings in the API's `.env` and is not in the count.
 
-The game has its own in-engine suite as well — `src/tools/testrunner.gd`, run headless by `run_tests.ps1` — **3,959 checks, 0 failures and one skip** — the skip is the sound registry, which is filled one recording at a time (the teleport is the first); see [docs/audio.md](docs/audio.md). It runs inside a real Godot instance with the autoloads up, so it can compare the `.tres` data files against the constants the code actually uses. The first thing it does is load all 158 scripts under `src/` and name any that will not compile, because a build error that surfaces as eight unrelated failures costs an hour to trace.
+The game has its own in-engine suite as well — `src/tools/testrunner.gd`, run headless by `run_tests.ps1` — **4,135 checks, 0 failures and one skip** — the skip is the sound registry, which is filled one recording at a time (the teleport is the first); see [docs/audio.md](docs/audio.md). It runs inside a real Godot instance with the autoloads up, so it can compare the `.tres` data files against the constants the code actually uses. The first thing it does is load all 164 scripts under `src/` and name any that will not compile, because a build error that surfaces as eight unrelated failures costs an hour to trace.
 
-**If you cloned this repo, it will report `3893 passed, 0 failed, 27 skipped` and exit 0.** That is correct. One of those skips is the empty sound registry, which is the same on any machine; the other twenty-six are worth explaining because they are the one place this repository is deliberately incomplete — see [the note below](#a-clone-is-missing-the-item-art-on-purpose).
+**If you cloned this repo, it will report `4069 passed, 0 failed, 27 skipped` and exit 0.** That is correct. One of those skips is the empty sound registry, which is the same on any machine; the other twenty-six are worth explaining because they are the one place this repository is deliberately incomplete — see [the note below](#a-clone-is-missing-the-item-art-on-purpose).
 
 **Both suites run on GitHub for every push and every pull request** (`.github/workflows/tests.yml`, here and in the API repo). The game's run is a clone — no art pack — so a new check that needs the art and does not say so fails there before it reaches anybody who clones this. The API's runs `run_tests.ps1` itself, so a green tick means what a green run on the PC means.
 
@@ -373,7 +382,7 @@ Without the service running, the login screen will tell you it can't reach the s
 
 **On the live server:** `.\tools\deploy_web.ps1 -Export` exports the Web preset, uploads it under a new name and swaps it in, keeping the build it replaced; `-Rollback` puts that one back, and `-DryRun` prints every command without running any. Files whose bytes did not change keep their dates, so a returning player downloads only what changed. The API repo's `DEPLOY.md` has the rest.
 
-**On Windows:** export the **Windows** preset, which writes one file, `builds/windows/ElusionRPG.exe`, with the game inside it. It looks for the service at `127.0.0.1:5000` unless told otherwise: `--server=<address>` on its command line, or a one-line `server.cfg` beside its save data.
+**On Windows:** export the **Windows** preset, which writes one file, `builds/windows/ElusionRPG.exe`, with the game inside it. It looks for the service at `127.0.0.1:5000` unless told otherwise: `--server=<address>` on its command line, or a one-line `server.cfg` beside its save data. The address must be `https://`; plain `http://` is only for a server on the same PC.
 
 ### A clone is missing the item art on purpose
 

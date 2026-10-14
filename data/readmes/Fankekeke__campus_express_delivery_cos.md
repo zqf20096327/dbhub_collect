@@ -1,14 +1,17 @@
-### 基于SpringBoot + Vue的校园快递配送系统.
+![](https://img.shields.io/badge/License-MIT-blue.svg)
 
-校园跑腿 快递配送 配送系统 校园配送 快递小程序 配送员接单 校园物流 校内快递
+![](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)
 
-###### 管理员：
-公告信息 、用户地址 、优惠券管理 、配送订单评价 、兑换记录 、物品管理 、配送订单管理 、配送员管理 、配送员收益 、用户管理 、提现记录 、配送员审核 、接单中心 、投诉记录 、消息通知 、社区论坛 、贴子回复 、配送价格规则 、配送排行、数据统计。
+![](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-###### 用户/配送员：
-小程序账户注册登录、个人信息修改、优惠券兑换、地址管理、我的订单、我的收益、消息通知、社区论坛、发帖回复、积分兑换、我的优惠券、下单配送计算、在线沟通、申请配送员、在线接单、订单评价、订单投诉。
+# 基于 SpringBoot + Vue 的校园快递配送系统+小程序 (Campus Express Delivery System + Mini Program)
+
+校园快递代取 · 配送员接单 · 优惠券与积分体系 · 订单核销 · 数据统计
+
+本项目是一套面向高校场景的校园快递配送平台，采用前后端分离架构，覆盖用户、配送员、管理员三类角色。平台围绕“快递代取、在线下单、配送接单、费用结算、评价投诉、社区互动、数据统计”等核心流程设计，支持用户发布快递代取订单、配送员在线接单、管理员统一监管订单与配送人员，并提供优惠券、积分兑换、配送价格规则、提现审核、社区论坛等功能，适用于高校校园快递代取、宿舍楼配送、校园跑腿服务等场景。
 
 #### 安装环境
+️**注意**：请确保您的开发环境已安装以下依赖。
 
 JAVA 环境 
 
@@ -16,24 +19,141 @@ Node.js环境 [https://nodejs.org/en/] 选择14.17
 
 Yarn 打开cmd， 输入npm install -g yarn !!!必须安装完毕nodejs
 
-Mysql 数据库 [https://blog.csdn.net/qq_40303031/article/details/88935262] 一定要把账户和密码记住
+Mysql 数据库 一定要把账户和密码记住
 
 redis
 
-Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
+Idea 编译器
 
-WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
+WebStorm OR VScode 编译器
 
 #### 采用技术及功能
 
 后端：SpringBoot、MybatisPlus、MySQL、Redis、
 前端：Vue、Apex、Antd、Axios
 
-平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件)
+平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件) + 百度地图 API + 微信小程序
 
 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)
 
 开发环境：windows10 or windows7 ， vscode or webstorm ， idea + lambok
+
+---
+
+## 核心特性
+
+- **三端协同运营**：打通用户、配送员与管理员端，实现下单、接单、配送、结算、评价全流程闭环。
+- **智能下单与费用计算**：用户填写收发地址、物品信息后，系统自动计算配送费用，下单前即可预览价格明细。
+- **配送员在线接单**：配送员可申请入驻，通过审核后进入接单中心，查看待配送订单并在线接单。
+- **优惠券与积分体系**：支持优惠券发放、兑换与核销，用户可通过积分兑换权益，提升平台活跃度。
+- **订单评价与投诉管理**：用户对配送服务进行评价或投诉，管理员可跟踪处理，保障服务质量。
+- **多维数据看板**：提供配送订单统计、配送排行、收益分析、提现记录等运营数据，辅助校园配送团队管理。
+- **社区互动能力**：内置社区论坛与帖子回复功能，方便用户交流取件经验、反馈问题或发布互助信息。
+---
+
+## 适用场景
+
+- 高校快递代取与宿舍楼配送
+- 校园跑腿接单与费用结算
+- 校园配送员管理与收益提现
+- 校园社区互动与服务反馈
+- 校园快递运营数据统计与分析
+---
+
+## 功能模块概览
+
+### 管理员端
+
+管理员端负责平台整体运营、订单监管、配送员审核与数据统计：
+
+**平台基础管理**
+
+- **公告信息**：发布平台通知、配送规则调整、系统维护公告等信息。
+- **用户管理**：管理注册用户资料、账户状态及平台使用权限。
+- **用户地址**：查看和管理用户常用收发地址，辅助订单核验。
+- **消息通知**：向用户或配送员推送订单状态、审核结果及系统提醒。
+- **社区论坛 / 贴子回复**：管理社区帖子、评论及违规内容，维护校园社区秩序。
+
+**订单与配送管理**
+
+- **配送订单管理**：查看全平台快递代取订单状态、配送进度与费用明细。
+- **接单中心**：监控待接单订单，支持管理员介入调度或异常订单处理。
+- **配送订单评价**：查看用户对配送服务的评分与文字反馈。
+- **投诉记录**：处理用户提交的订单投诉，跟踪处理结果。
+- **物品管理**：维护常见物品类型、重量区间及配送注意事项。
+
+**配送员与财务管理**
+
+- **配送员管理**：管理配送员账号、基本信息、接单状态与服务记录。
+- **配送员审核**：审核配送员入驻申请，确认身份与配送资格。
+- **配送员收益**：查看配送员订单收益、累计收入及收益明细。
+- **提现记录**：审核配送员提现申请，记录提现流水与到账状态。
+- **配送价格规则**：配置基础配送费、距离加价、重量加价、时段加价等计价规则。
+
+**营销与数据统计**
+
+- **优惠券管理**：创建优惠券、设置使用规则并监控发放与核销情况。
+- **兑换记录**：查看用户积分兑换、优惠券兑换等记录。
+- **配送排行**：统计配送员接单量、完成率、好评率等排行数据。
+- **数据统计**：分析订单量、配送收入、用户活跃度、投诉率等核心指标。
+
+### 用户 / 配送员端
+
+用户与配送员共用小程序端，根据角色展示不同功能：
+
+**账户与个人中心**
+
+- **小程序账户注册登录**：支持手机号注册、登录与账号安全维护。
+- **个人信息修改**：更新姓名、联系方式、头像等个人资料。
+- **地址管理**：添加、编辑常用收发地址，方便快速下单。
+- **消息通知**：接收订单状态变更、接单提醒、系统公告等消息。
+
+**用户下单与服务**
+
+- **下单配送计算**：填写快递信息、取件地址与送达地址，系统自动计算配送费用。
+- **我的订单**：查看待接单、配送中、已完成等订单状态与费用明细。
+- **我的优惠券**：领取、查看和使用平台发放的配送优惠券。
+- **优惠券兑换**：通过活动或积分兑换优惠券，用于订单抵扣。
+- **积分兑换**：使用积分兑换配送券、服务权益或其他平台物品。
+- **订单评价**：对已完成的配送服务进行评分与文字评价。
+- **订单投诉**：针对配送异常、物品损坏或服务问题提交投诉。
+
+**配送员接单与收益**
+
+- **申请配送员**：提交配送员入驻申请，等待管理员审核。
+- **在线接单**：在接单中心查看可接订单，选择合适订单进行接单配送。
+- **我的收益**：查看个人配送收入、订单结算明细及可提现金额。
+- **在线沟通**：与用户在线沟通，确认取件地址、送达时间等服务细节。
+
+**社区互动**
+
+- **社区论坛**：浏览校园快递、取件经验、配送反馈等相关帖子。
+- **发帖回复**：发布帖子或回复他人内容，参与校园社区交流。
+
+---
+
+## 项目结构
+
+```text
+pharmacy-dispensing-system/
+├── backend/            # 后端 API 服务
+│   ├── src/
+│   │   ├── controllers/  # 控制器
+│   │   ├── models/       # 数据模型
+│   │   ├── routes/       # 路由
+│   │   └── services/     # 业务逻辑
+│   └── package.json
+├── frontend/           # 前端 Web 应用
+│   ├── src/
+│   │   ├── views/      # 页面视图
+│   │   ├── components/ # 公共组件
+│   │   └── store/      # 状态管理
+│   └── package.json
+├── docs/               # 项目文档与 API 接口说明
+├── LICENSE
+└── README.md
+```
+---
 
 
 #### 前台启动方式
@@ -43,35 +163,33 @@ WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
 #### 默认后台账户密码
 [管理员]
 admin
-1234qwer
+123456
+
+[员工]
+fank
+123456
 
 #### 项目截图
-暂无
-
 |  |  |
 |---------------------|---------------------|
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/f5e91d86-310f-4111-bfe8-04e0b7b055e0.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/454515fb-2463-47f7-a500-35401bc079aa.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/e447a13a-d1c5-4e69-b061-d894fef7c8e5.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/25947bbd-f2d5-46ac-ad0a-9f6e218d6910.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/d10e855d-bfbd-4657-9e29-c135b1973cbb.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/8b62f175-7fe0-4190-85aa-5c5f528810e4.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/c4213d24-8a49-40c6-af83-abc39186a3d1.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/7e62d7e2-3298-4608-8d6e-1fcbb7b8473e.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/c0fe139b-28fe-433b-9274-ff5532e0041b.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/7db593fd-18f1-4950-b9b6-6997b43e7b9a.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/b5075868-b8eb-4d88-bb6f-ca2a7703d73b.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/004fb194-6703-42e8-9d42-c1e479893a5a.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/a6e11f18-119d-46a5-9356-a767d1476c83.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/2bdc98f9-a462-4ca1-91cc-9bddd84da105.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/a2b607b4-f347-45cf-86b0-cb20f9db5658.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/ff41a5a7-51a5-4c96-9c60-0e20b2dbcb63.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/92090130-219a-4171-bd09-4f046f959167.png) |  |
+| ![](./assets/image%20(1).png) | ![](./assets/image%20(2).png) |
+| ![](./assets/image%20(3).png) | ![](./assets/image%20(4).png) |
+| ![](./assets/image%20(5).png) | ![](./assets/image%20(6).png) |
+| ![](./assets/image%20(7).png) | ![](./assets/image%20(8).png) |
+| ![](./assets/image%20(9).png) | ![](./assets/image%20(10).png) |
+| ![](./assets/image%20(11).png) | ![](./assets/image%20(12).png) |
+| ![](./assets/image%20(13).png) | ![](./assets/image%20(14).png) |
+| ![](./assets/image%20(15).png) | ![](./assets/image%20(16).png) |
+| ![](./assets/image%20(17).png) |  |
 
-|  |  |
-|---------------------|---------------------|
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/51331379-1bf9-46e6-8e9a-03d69bef0f49.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/3dc6f4e7-7b51-420d-8e82-17a79baf72c0.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/34998475-cbe9-413b-a6bf-cce8c7313c8a.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1e97f1ef-5bcf-4080-9bbf-bb08063b79c1.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/5249bf69-2c8f-468f-8420-09b86fce685f.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/0f86ec82-d089-469c-bc41-dc81a2137a44.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/914f6307-1eae-468a-8a65-5c8421406b01.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/0f2def3a-01e6-490d-87bb-b3474250f959.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/84e64eca-2245-4b62-9f5e-e2e8f36dfb8e.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/f3a15e94-e28e-481e-9e08-3ac833933f6d.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/54d4c328-fa21-45af-869d-2c34093326ba.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/e9172a0e-9ad0-44cb-a4a2-22d1fce1169d.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/8fbc3748-b300-4ded-813b-b2c657bf165f.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/ce0c1cf3-4d25-4675-9fd8-b50892444427.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/8b29271b-2b77-47c5-9b07-d28b375d7186.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/a663a92d-e431-471b-b054-15c5300431ec.png) |
-
-![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/work/936e9baf53eb9a217af4f89c616dc19.png)
+| ![](./assets/app_image%20(1).png) | ![](./assets/app_image%20(2).png) |
+| ![](./assets/app_image%20(3).png) | ![](./assets/app_image%20(4).png) |
+| ![](./assets/app_image%20(5).png) | ![](./assets/app_image%20(6).png) |
+| ![](./assets/app_image%20(7).png) | ![](./assets/app_image%20(8).png) |
+| ![](./assets/app_image%20(9).png) | ![](./assets/app_image%20(10).png) |
+| ![](./assets/app_image%20(11).png) | ![](./assets/app_image%20(12).png) |
+| ![](./assets/app_image%20(13).png) | ![](./assets/app_image%20(14).png) |
+| ![](./assets/app_image%20(15).png) | ![](./assets/app_image%20(16).png) |
 
 #### 演示视频
 
@@ -89,7 +207,10 @@ WeChat: `Storm_Berserker`
 
 > 项目部署调试不好包退！功能逻辑没讲明白包退！
 
+<div align=center><img align="center" src="./assets/product_word.png" alt="fankekeke" /></div>
+
 #### 其它资源
+[2026年-答辩顺利通过-客户评价🀄](https://berserker287.github.io/2026/06/29/2026%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
 [2025年-答辩顺利通过-客户评价🍜](https://berserker287.github.io/2025/06/18/2025%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
@@ -113,5 +234,8 @@ WeChat: `Storm_Berserker`
 
 More info: [悲伤的橘子树](https://berserker287.github.io/)
 
-<p><img align="center" src="https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/%E5%90%88%E4%BD%9C%E7%89%A9%E6%96%99%E6%A0%B7%E5%BC%8F%20(3).png" alt="fankekeke" /></p>
+<div align="center"><img align="center" src="./assets/chat_qr_code.png" alt="fankekeke" width=250 /></div>
 
+<p><img align="center" src="./assets/wechat_group.png" alt="fankekeke" /></p>
+
+**感谢查看**

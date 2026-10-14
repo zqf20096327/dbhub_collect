@@ -23,8 +23,6 @@ DatI (Data Intelligence) is a lightweight semantic gateway connecting **AI Agent
 
 Demo URL: https://dati-demo.zhangyimin.me
 
-Account / Password: `demo` / `demo123`
-
 The demo instance is preloaded with sample data and reset periodically.
 
 ### Demo
@@ -123,7 +121,11 @@ Open `http://localhost:8085`. Register with username `admin` to get super admin 
 - **API Specification**: [docs/api/openapi.json](docs/api/openapi.json) (Used by E2E test toolchains)
 - **AI Coding Assistant Guidelines**: [AGENTS.md](AGENTS.md) and [.agents/rules/](.agents/rules) (Backend, frontend, and design system rules)
 
-## Acknowledgments
+## Community
 
-Thanks to the [LINUX DO](https://linux.do/t/topic/2929301) community for discussions and support.
+- **Articles**: [DEV.to Series (DatI Devlog)](https://dev.to/yimindev/series/45213)
+- **Discussions**: [LINUX DO](https://linux.do/t/topic/2929301)
+- **WeChat Official Account**:
+
+  <img src="docs/images/qrcode_for_dati_niffler.jpg" width="140" alt="WeChat Official Account" />
 

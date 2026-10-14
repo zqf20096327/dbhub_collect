@@ -2,7 +2,7 @@
 
 [![Test](https://github.com/chefroger/smart-trade-ai/actions/workflows/test.yml/badge.svg)](https://github.com/chefroger/smart-trade-ai/actions/workflows/test.yml)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
+[![Python 3.14](https://img.shields.io/badge/python-3.14-blue)](https://www.python.org/)
 
 [中文](README.md) | [English](README.en.md)
 
@@ -163,7 +163,7 @@ trade
 curl -fsSL https://raw.githubusercontent.com/chefroger/smart-trade-ai/main/scripts/install.sh | bash
 ```
 
-脚本自动完成：Python 环境检查 → Hermes Agent → Trade 安装 → 38 个 skills → 数据库初始化。
+脚本自动完成：Python 环境检查 → Hermes Agent → Trade 安装 → 39 个 skills → 数据库初始化。
 
 > **如果你希望安装前先审查脚本**：
 > ```bash
@@ -185,33 +185,43 @@ python server.py
 
 ### 方式 3：手动一步步装
 
-**前置条件**：Python >= 3.11 · Git · LLM API Key（推荐 DeepSeek；也兼容 OpenAI / Anthropic 等）
+**前置条件**：**Python 3.14** · Git · LLM API Key（推荐 DeepSeek；也兼容 OpenAI / Anthropic 等）
+
+> ⚠️ **Python 必须是 3.14，不能是 3.11~3.13。** Trade 是**进程内**嵌 Hermes 运行的，
+> 两者必须用同一个 Python 大版本。Hermes 从 v0.21.6 起只提供 3.14 的依赖集
+> （它声明的 `>=3.11` 只是留给旧安装跑升级步骤的过渡桥），在 3.11~3.13 上会出现
+> 「装得上、起不来」。上面的方式 1 / 方式 2 会自动用 Hermes 自带的 3.14，无需操心。
 
 ```bash
-# 1. 安装 Hermes Agent（AI 引擎）—— 必须用固定 tag，不要用 main：
-#    main 每天都在前进；且从 v0.21.6 起上游把核心依赖标成了 Python 3.14+，
-#    在 3.11–3.13 上装 main 会一条依赖都不装（Hermes 起不来）。
-git clone --branch v2026.9.24 https://github.com/NousResearch/hermes-agent.git ~/.hermes/hermes-agent
-cd ~/.hermes/hermes-agent && pip install -e "."
+# 1. 安装 Hermes Agent（AI 引擎）—— 用官方安装器，它会自带 Python 3.14
+#    注意：不要把某个 tag 克隆到 ~/.hermes/hermes-agent 覆盖掉已装的那份
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
 
 # 2. 配置 LLM
 hermes setup      # 按提示选择 provider、填入 API Key
 
-# 3. 安装 Smart Trade AI
+# 3. 安装 Smart Trade AI（用上一步 Hermes 自带的 3.14 建 venv）
 git clone --branch main https://github.com/chefroger/smart-trade-ai.git ~/.trade/foreign-trade-assistant
-cd ~/.trade/foreign-trade-assistant && pip install -e ".[docs]"
+cd ~/.trade/foreign-trade-assistant
+python3.14 -m venv ~/.trade/venv
+~/.trade/venv/bin/pip install -r requirements.txt
+~/.trade/venv/bin/pip install -e "." --no-deps
 
 # 4. 安装 skills 并启动
-install-trade-skills
-python server.py
+~/.trade/venv/bin/python -c "from trade.post_install import install_skills; install_skills()"
+~/.trade/venv/bin/python server.py
 # → 浏览器打开 http://127.0.0.1:9119/trade
 ```
+
+> 如果启动后 Trade 界面提示「Hermes 版本过旧」，说明你的 Hermes 低于 0.21.6。
+> **不需要手动处理** —— Trade 会在后台自动升级它，界面上会显示进度。
 
 ### Windows
 
 **安装前需手动安装 Python 和 Git：**
 
-1. **Python** — 从 [python.org](https://www.python.org/downloads/) 下载 **Python 3.11 ~ 3.13 Windows installer (64-bit)**，安装时勾选「Add Python to PATH」。
+1. **Python** — 从 [python.org](https://www.python.org/downloads/) 下载 **Python 3.14 Windows installer (64-bit)**，安装时勾选「Add Python to PATH」。
+   > ⚠️ 必须是 **3.14**，不能用 3.11~3.13：Trade 进程内嵌 Hermes，两者必须同一个 Python 大版本（详见「方式 3」的说明）。
 2. **Git** — 从 [git-scm.com](https://git-scm.com/download/win) 下载 Windows installer，默认选项一路下一步即可。或在 PowerShell 中执行 `winget install --id Git.Git -e --silent`。
 
 > Node.js 无需手动安装 — Hermes 的一键安装脚本会自动处理。
@@ -256,6 +266,7 @@ python server.py
 | 客户背调 | 6 层验证：邮箱平台检测→WHOIS→企业邮箱验证→制裁名单→技术栈→LinkedIn |
 | 客户画像 | 单一客户 15 维深度画像：决策链/采购偏好/社交风格/送礼建议等 |
 | 客户开发向导 | 三问启动 + 自动搜索 + 开发信生成，零门槛找客户 |
+| 国内线索挖掘 | 找货源厂家（主）/ 挖竞品国内厂家（重点）/ 找国内客户，免费公开渠道（产业带+搜索引擎+海关记录+人工核对） |
 | 买家画像 | 按决策角色（采购/技术/老板）分层定制 FAB 价值主张和沟通策略 |
 | 销售管线 | 客户旅程 5 阶段映射 + 30 天跟进表 + KPI 追踪 + 管线健康度看板 |
 | 邮箱情报 | 120+ 平台邮箱注册检测，识别企业 vs 个人邮箱 |
@@ -326,12 +337,12 @@ trade/                     B2B 业务层
 ├── api/                   FastAPI 路由（10 个业务域）
 ├── osint/                 客户背调模块（6 层检测）
 ├── skill_router.py        Skill 自动匹配引擎
-├── skill_registry.py      38 个 skill 注册表（纯数据）
+├── skill_registry.py      39 个 skill 注册表（纯数据）
 ├── bootstrap.py            启动引导（Hermes 版本检查、env 加载、Skills 同步）
 ├── app.py                  FastAPI app factory
 └── ... + 22 个业务模块
 
-skills/                    38 个 B2B skills（Markdown 驱动）
+skills/                    39 个 B2B skills（Markdown 驱动）
 tests/                     Python 测试（28 个文件）＋ 文档读取规则端到端实测
 tests_js/                  前端工具函数测试（node:test，零依赖；CI 会执行）
 server.py                  FastAPI 入口
@@ -352,7 +363,7 @@ ruff check trade/ server.py                 # 代码检查
 
 ## 文档
 
-- [使用说明书](TRADE-GUIDE.md) — 从零上手：界面认知、38 个技能全解、日常用法、常见问题
+- [使用说明书](TRADE-GUIDE.md) — 从零上手：界面认知、38 个可用技能全解、日常用法、常见问题
 - [Windows 安装教程](docs/index.md) — 零基础用户 20 分钟快速安装指南
 - [LinkedIn 获客功能使用说明](docs/linkedin-guide.md) — 免费 / Premium / Sales Navigator（Core·Advanced·Advanced Plus）功能分级与使用示例
 - [COMPATIBILITY.md](COMPATIBILITY.md) — Hermes 版本兼容性记录

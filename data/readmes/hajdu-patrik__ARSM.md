@@ -127,33 +127,48 @@ Cloudflare R2 additionally needs `ObjectStorage:DisablePayloadSigning` and
 SigV4 implementation or the CRC32 checksum that AWSSDK.S3 v4 sends by default, and uploads fail
 without them. RustFS (like MinIO before it) keeps both `false`.
 
-## Temporary Public Test Link
+## Fixed Public Test Hostname (Cloudflare Named Tunnel)
 
-A Cloudflare quick tunnel makes an instance running on your own machine reachable from the internet for a short test, without a Cloudflare account. It is for temporary testing only, never for production.
+A Cloudflare named tunnel exposes the same reverse-proxy setup on a fixed hostname of your own domain. The URL is stable, so the WebUI is built once. It is for testing only, never for production.
 
 ### Requirements
 
 The development stack started by the AppHost cannot be shared this way: the dev WebUI calls the API at its local `VITE_API_URL` (a `localhost` address), which a remote browser cannot reach. Share a setup where the built WebUI and the API answer on one origin:
 
-- a reverse proxy serves the production build of the WebUI and forwards `/api` to the ApiService, and the tunnel points at that proxy;
-- the WebUI is built with `VITE_API_URL` and `VITE_SITE_URL` set to the tunnel URL; the build pins that origin in the Content-Security-Policy `connect-src`, so every new tunnel URL needs a rebuild;
-- the API lists the tunnel URL in `Cors:AllowedOrigins` (cookie-bearing mutations from any other `Origin` are rejected) and trusts the proxy through `ForwardedHeaders:KnownProxies` or `ForwardedHeaders:KnownNetworks`, so it sees the original `https` scheme that the `__Host-` session cookies need.
+- a reverse proxy serves the production build of the WebUI and forwards `/api` to the ApiService, and the tunnel points at that proxy (`<proxy port>`);
+- the WebUI is built with `VITE_API_URL` and `VITE_SITE_URL` set to `https://<hostname>`; the build pins that origin in the Content-Security-Policy `connect-src`;
+- the API lists `https://<hostname>` in `Cors:AllowedOrigins` (cookie-bearing mutations from any other `Origin` are rejected) and trusts the proxy through `ForwardedHeaders:KnownProxies` or `ForwardedHeaders:KnownNetworks`, so it sees the original `https` scheme that the `__Host-` session cookies need.
 
 ### Steps
 
-1. Install `cloudflared` from [Cloudflare's downloads page](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/).
-2. Start the tunnel: `cloudflared tunnel --url http://localhost:<proxy port>`. It prints a random `https://<name>.trycloudflare.com` URL.
-3. Set that URL in `Cors:AllowedOrigins` and restart the API, then rebuild and restart the WebUI with the URL as described above.
-4. Accounts: on an empty database the first admin can be created from the `Bootstrap:Admin` configuration (`Email`, `Password`, `FirstName`, `LastName`, `Specialization`, `Expertise` array; optional `MiddleName`, `PhoneNumber`; environment form `Bootstrap__Admin__*`). It runs only while no admin exists, never touches existing accounts, and the `Bootstrap__Admin__Password` setting should be removed once the admin exists. Further users are registered in the app by the admin; share each user's credentials privately.
+1. Create a Cloudflare account and add `<domain>` (Free plan). Check that the imported DNS records, including MX and SPF, survived.
+2. At the registrar, switch the nameservers to the two Cloudflare ones and wait until the zone is Active (minutes to hours; resolvers may disagree meanwhile).
+3. Run `cloudflared tunnel login`. It creates the origin certificate `~/.cloudflared/cert.pem`, which is scoped to one zone. When several domains are used on one machine, keep one certificate per zone and pass `--origincert <file>`; otherwise `route dns` puts the record into the wrong zone.
+4. Create the tunnel: `cloudflared tunnel create --credentials-file <path> <tunnel-name>`. Keep the credentials file private.
+5. Point the hostname at it: `cloudflared tunnel route dns <tunnel-name> <hostname>`.
+6. Write a config file and check it with `cloudflared tunnel --config <file> ingress validate`:
+
+   ```yaml
+   tunnel: <tunnel-name>
+   credentials-file: <path>
+   ingress:
+     - hostname: <hostname>
+       service: http://127.0.0.1:<proxy port>
+     - service: http_status:404
+   ```
+
+7. Run the tunnel: `cloudflared tunnel --no-autoupdate --config <file> run`.
+8. Build the WebUI with `VITE_API_URL` and `VITE_SITE_URL` set to `https://<hostname>` and set `Cors:AllowedOrigins` to the same value (see Requirements). This is needed only once: the URL is fixed, so a restart needs no rebuild.
+9. Accounts: on an empty database the first admin can be created from the `Bootstrap:Admin` configuration (`Email`, `Password`, `FirstName`, `LastName`, `Specialization`, `Expertise` array; optional `MiddleName`, `PhoneNumber`; environment form `Bootstrap__Admin__*`). It runs only while no admin exists, never touches existing accounts, and the `Bootstrap__Admin__Password` setting should be removed once the admin exists. Further users are registered in the app by the admin; share each user's credentials privately.
+10. Optional autostart on Windows: register a scheduled task that runs the command of step 7 at logon (`Register-ScheduledTask` with an interactive logon, wrapped in `conhost.exe --headless` so no console window opens, and restart on failure; no administrator rights needed), or run `cloudflared service install` (needs an administrator shell).
 
 ### Limits
 
 | Limit | Detail |
 | ----- | ------ |
-| Changing URL | The quick-tunnel URL is random and changes on every `cloudflared` restart (then repeat step 3). |
 | Availability | The link works only while your machine, Docker and `cloudflared` are running. |
 | Access | Anyone who has the link can reach the app's sign-in page. |
-| Stopping | Stop `cloudflared` and the link stops working. |
+| Stopping | Stop the tunnel and the link stops working. Never kill every `cloudflared.exe` when other tunnels run on the machine; stop only this one. |
 
 ## Useful Commands
 

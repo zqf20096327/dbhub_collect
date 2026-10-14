@@ -23,29 +23,26 @@ Currently, Norsu can:
 
 ### Setup
 
-> NOTE: Python 3.3+ is required.
+> NOTE: Python 3.11+ is required.
 
-To install a stable release, just run the following in your favorite shell:
-
-```bash
-pip install --user norsu
-```
-
-Also, make sure that [python's user base](https://pip.readthedocs.io/en/latest/user_guide/#user-installs) is in `$PATH`:
+To install a stable release, use [uv](https://docs.astral.sh/uv/):
 
 ```bash
-# add this to .bashrc (or .zshrc, whatever)
-export PATH=$PATH:$(python -c "import site; print(site.getuserbase())")/bin
+uv tool install norsu
 ```
 
-and you're good to go!
+(`pipx install norsu` works as well.) Make sure the tool bin directory is in `$PATH`
+(see `uv tool update-shell`), and you're good to go!
 
 
 To install a dev version, clone this repo and run:
 
 ```bash
-pip install --user -U .
+uv tool install --reinstall .
 ```
+
+For development, `uv sync` sets up a virtualenv with all dev tools;
+`make lint fmt typecheck` runs the checks, `make test` runs the test suite.
 
 ### Config
 
@@ -181,7 +178,7 @@ norsu pgxs 9.6.9 -R -- installcheck
 scan-build norsu pgxs 9.5 10 -- clean all
 ```
 
-#### `norsu run target [cmd_option]...`
+#### `norsu run [target] [cmd_option]...`
 
 Known `cmd_options`:
 
@@ -193,6 +190,8 @@ Known `cmd_options`:
 * `--dump` -- save DB dump to a file before node shutdown
 
 Create and run a temporary instance (DB) of PostgreSQL using build named `target`.
+If `target` is omitted, norsu picks the only installed build, or `master` if
+there are several builds; otherwise it lists the builds to choose from.
 The instance will be up & running until the command is interrupted (e.g. with `SIGINT`).
 
 Examples:

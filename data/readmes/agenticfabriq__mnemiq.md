@@ -51,7 +51,9 @@ reason rather than a plausible number.
 
 Two properties fall out of that ordering. Permissions apply *before* schema retrieval, so the model
 is never shown a table the caller may not see — naming it is useless rather than refused. And every
-answer carries a trace: the SQL that ran, the tables it touched, the enrichment version behind it.
+answer carries a trace: the SQL as asked, the tables it touched, the enrichment version behind it.
+Where a row or column policy rewrote that SQL, the answer says which tables it narrowed, and the
+statement as executed -- which can name the policy's own tables -- is kept in the audit trace.
 
 ![The nine stages of a mnemiq answer: knowledge sources, enrichment, the semantic contract,
 retrieval, generation, the decider, execution, verification, and the answer with its trace.
@@ -167,7 +169,8 @@ revenue column, and the engine says so instead of returning a number.
 Access is fail-closed. A role is required — pass `--roles analyst`, or `export
 MNEMIQ_ROLES=analyst` alongside the other settings above. Without a role the engine grants nothing
 and defers, which is the correct behaviour and the first thing people mistake for a bug. No policy,
-no grants, no snapshot — no data.
+no grants, no snapshot — no data. The policy format, and what row filters do and do not cover, is
+in [docs/access-policy.md](docs/access-policy.md).
 
 ### Which LLM endpoints work
 

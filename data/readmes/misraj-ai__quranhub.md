@@ -12,7 +12,7 @@
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0%2B-red)](https://www.sqlalchemy.org/)
 [![Misraj AI](https://img.shields.io/badge/By-Misraj%20AI-gold)](https://misraj.ai)
 
-**A comprehensive REST API providing access to the Holy Quran in +300 editions across +50 languages**
+**A comprehensive REST API providing access to the Holy Quran in +550 editions across +90 languages**
 
 **Developed and Maintained by [Misraj AI](https://misraj.ai)**
 
@@ -35,15 +35,18 @@ Quran Hub API is a powerful, feature-rich REST API developed by **Misraj AI** th
 <td>
 
 **Content Coverage**
-- 📚 **+434** Total Editions  
-- 📝 **+345** Text Editions  
-- 🔊 **+89** Audio Editions  
-- 📊 **+509,196** Audio Files  
+- 📚 **+551** Total Editions  
+- 📝 **+343** Text Editions  
+- 🔊 **+208** Audio Editions  
+- 📊 **+522,762** Audio Files  
 - 🎧 **+77,425** Word-by-Word Audio Clips (×2 bitrates)  
 - 🧠 **+77,433** Quranic Words Analyzed  
 - 🏷️ **+2,468** Unique Morphological Tags  
 - 🌿 **+1,805** Arabic Roots  
 - 🔁 **+2.5M** Word–Tag Associations  
+- 🎙️ **+151** Reciters  
+- 🌐 **+95** Languages  
+- 🏳️ **+20** Reciter Nationalities  
 
 </td>
 
@@ -51,9 +54,9 @@ Quran Hub API is a powerful, feature-rich REST API developed by **Misraj AI** th
 
 **Edition Types**
 - 📖 **+157** Tafsir Editions
-- 🌍 **+167** Translations
-- 🎤 **+45** Surah Recitations
-- 📤 **+13** Quran Scripts
+- 🌍 **+166** Translations
+- 🎤 **+164** Surah Recitations
+- 📤 **+12** Quran Scripts
 - 📿 **+43** Verse-by-Verse
 - 🎧 **1** Word-by-Word Audio
 - 🗣️ **+8** Narrations
@@ -162,8 +165,31 @@ Access audio recitations and reciter information.
 |------|-------------|---------------|
 | `get_distinct_audio_editions` | List unique audio reciters | - |
 | `get_all_narrator_identifiers` | Get all reciter identifiers | - |
-| `get_audio_editions_by_narrator` | Audio by specific reciter | `"quran-warsh"` |
+| `get_reciter_nationalities` | List the countries the reciters come from, with reciter and edition counts | - |
+| `get_audio_editions_by_reciter_nationality` | Audio editions of the reciters of a nationality (ISO country code; optional `narrator` and `language`) | `"KW"` or `countryCode: "EG", narrator: "quran-warsh"` |
+| `get_audio_editions_by_narrator` | All audio editions of a narration — verse-by-verse and surah-only reciters, each with its available `types` and bitrates | `"quran-hafs"` |
 | `get_word_audio` | Per-word pronunciation audio (word-by-word edition) | `"1:1:2"` or `"1:1"` |
+
+### 🏳️ Reciters by Nationality
+
+Every audio reciter carries a `nationality` — `{"code": "KW", "en": "Kuwait", "ar": "الكويت"}` (ISO 3166-1 alpha-2 code plus the country name in English and Arabic) — returned with the reciter metadata (`imageUrl`, `shortDescription`) by the audio edition endpoints.
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /v1/edition/audio/nationality` | The countries of the audio reciters, with the number of reciters and editions for each |
+| `GET /v1/edition/audio/nationality/{countryCode}` | Audio editions of the reciters of a nationality — surah and verse-by-verse, one entry per edition identifier with its available `types` and bitrates. Optional `narrator` (e.g. `quran-warsh`) and `language` filters |
+| `GET /v1/edition/analysis` | `reciters.byNationality` gives the number of reciters per country |
+
+```bash
+# which countries do the reciters come from?
+curl "https://api.quranhub.com/v1/edition/audio/nationality"
+
+# Kuwaiti reciters
+curl "https://api.quranhub.com/v1/edition/audio/nationality/KW"
+
+# Egyptian reciters of the Warsh narration
+curl "https://api.quranhub.com/v1/edition/audio/nationality/EG?narrator=quran-warsh"
+```
 
 ### 📖 Special Features
 Advanced features for studying and understanding the Quran.
@@ -171,6 +197,9 @@ Advanced features for studying and understanding the Quran.
 | Tool | Description | Example Input |
 |------|-------------|---------------|
 | `get_tajweed_rules` | Tajweed rules for specific words | `"1:1:2"` |
+| `get_ayah_tajweed_rules` | Word-by-word Tajweed rules for a whole ayah | `"2:255"` |
+| `get_all_tajweed_rules` | List all Tajweed rules with multi-language names | - |
+| `get_tajweed_rule_details` | Names and descriptions of one Tajweed rule | `"noon_ghunnah"` |
 | `get_word_line_number` | Line number for word location | `"1:1:2"` |
 | `get_word_image` | Word-by-word images | `location: "1:1:2", type: "v4"` |
 | `get_all_sajdas` | Get all prostration verses | - |
@@ -224,6 +253,7 @@ Comprehensive Quranic word morphology tools for linguistic, grammatical, and roo
 | Tool | Description | Example Input |
 |------|--------------|---------------|
 | `get_word_morphology` | Get morphological breakdown for a specific word | `location: "1:1:1"` |
+| `get_ayah_morphological_analysis` | Morphological breakdown for all words of an ayah | `reference: "1:1"` |
 | `search_by_tags` | Search words by morphological tags (AND/OR logic) | `tags: "فع,ضي", match_all: true` |
 | `search_by_category` | Find words within a tag category | `category: "Afal", tag_code: "فع"` |
 | `search_by_root` | Get all words derived from a root | `root: "حمد"` |
@@ -258,8 +288,8 @@ For complete API documentation and additional features, visit [https://qurani.ai
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/misraj-ai/quranhub-api.git
-cd quranhub-api
+git clone https://github.com/misraj-ai/quranhub.git
+cd quranhub
 ```
 
 2. **Create virtual environment**
@@ -290,7 +320,7 @@ psql -U your_user -d quranhub -f database/quranhub_snapshot_dump.sql
 
 6. **Run the application**
 ```bash
-uvicorn src.main:app --reload
+PYTHONPATH=src uvicorn src.main:app --host 0.0.0.0 --port 8080 --reload
 ```
 
 The API will be available at `http://localhost:8080`
@@ -298,8 +328,11 @@ The API will be available at `http://localhost:8080`
 ### 🐳 Docker Installation
 
 ```bash
-# Build and run with Docker Compose
-docker-compose up -d
+# Build the image
+docker build -t quranhub .
+
+# Run it (the database settings come from your .env file)
+docker run -p 8080:8080 --env-file .env quranhub
 
 # The API will be available at http://localhost:8080
 # API documentation at http://localhost:8080/docs

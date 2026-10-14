@@ -1,7 +1,7 @@
 # NOORwave: TIDAL desktop music player
 
 <p align="center">
-  <img width="1280" height="640" alt="NOORwave" src="frontend/static/social/source-animated.svg" />
+  <img width="1280" height="640" alt="NOORwave" src="docs/assets/banner.svg" />
 </p>
 
 <p align="center">
@@ -13,23 +13,11 @@ NOORwave is a desktop music player for TIDAL built for **instant local search an
 **Music video indexing** finds live performances, covers, and alternate versions of tracks in your library, bringing them together in a video wall you can browse by genre and year. Video stations turn that growing catalog into a daily lineup you can keep watching. **Genre Galaxy** maps your whole library as a navigable star field. Gapless hi-fi playback, automix, planned DJ transitions, and phone remote control round out the player.
 
 <p align="center">
-  Instant local search &middot; fast library browsing &middot; music video indexing and stations &middot; Genre Galaxy &middot; gapless lossless playback &middot; planned DJ transitions &middot; dockable player &middot; animated backgrounds &middot; phone remote
-</p>
-
-<p align="center">
-  <a href="../../releases/latest"><strong>Download</strong></a> &middot;
+  <a href="https://noorwave.app"><strong>noorwave.app</strong></a> &middot;
+  <a href="https://noorwave.app/#download"><strong>Download v1.1.1</strong></a> &middot;
   <a href="#connect-lastfm-seriously">Last.fm setup</a> &middot;
-  <a href="#run-from-source">Run from source</a> &middot;
-  <a href="#the-phone-in-your-pocket-is-the-remote">Phone remote</a> &middot;
-  <a href="#where-this-actually-is">Project status</a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Rust-2024-orange?style=flat-square&logo=rust" alt="Rust"/>
-  <img src="https://img.shields.io/badge/Svelte-5-ff3e00?style=flat-square&logo=svelte" alt="Svelte 5"/>
-  <img src="https://img.shields.io/badge/Tauri-2-ffc131?style=flat-square&logo=tauri" alt="Tauri"/>
-  <img src="https://img.shields.io/badge/SQLite-3-003b57?style=flat-square&logo=sqlite" alt="SQLite"/>
-  <img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-5B4B8A?style=flat-square" alt="PolyForm Noncommercial 1.0.0"/>
+  <a href="#the-phone-remote-set-up">Phone remote</a> &middot;
+  <a href="../../issues">Report a bug</a>
 </p>
 
 <p align="center">
@@ -142,6 +130,7 @@ Not a year-end slideshow. A ridgeline of when you actually listen across the day
   <img alt="Listening analytics in the Clay light theme: listening pulse, rhythm, completion and skip rate over time" src="docs/assets/shots/analytics-light.webp" width="900" />
 </p>
 
+
 ## Connect Last.fm. Seriously.
 
 **This is the single highest-value thing you can do after signing into TIDAL.** NOORwave works without it, but a meaningful slice of what makes it interesting is dark until you connect it.
@@ -163,54 +152,30 @@ How to set it up:
 
 No Last.fm key ships with the app, so this step is on you. It is worth the minute.
 
+
 ## Download
 
-Latest build: [GitHub Releases](../../releases/latest). Every release ships notes on its release page, with the full history in [docs/releases](docs/releases).
+**NOORwave v1.1.1 is out.** Get it from [noorwave.app](https://noorwave.app/#download), or use the direct links below. They always serve the newest version.
 
-| Platform | Artifact | Notes |
+| Platform | Download | Notes |
 |---|---|---|
-| Windows | `NOORwave-vX.Y.Z-windows-x64-setup.exe` | Per-user installer, updates in place. Recommended. |
-| Windows | `NOORwave-vX.Y.Z-windows-x64.zip` | Portable. Unzip anywhere, run `NOORwave.exe`. |
-| macOS ARM64 | `NOORwave-vX.Y.Z-macos-arm64.tar.gz` | Portable. Gatekeeper may need `xattr -cr NOORwave noor-server`. |
-| macOS x64 | `NOORwave-vX.Y.Z-macos-x64.tar.gz` | Portable. |
-| Linux x64 | `NOORwave-vX.Y.Z-linux-x64.tar.gz` | Portable. |
+| Windows | [Installer (.exe)](https://releases.noorwave.app/latest/NOORwave-windows-x64-setup.exe) | Per-user installer, updates in place. Recommended. |
+| Windows | [Portable (.zip)](https://releases.noorwave.app/latest/NOORwave-windows-x64.zip) | Unzip anywhere, run `NOORwave.exe`. |
+| Linux x64 | [Archive (.tar.gz)](https://releases.noorwave.app/latest/NOORwave-linux-x64.tar.gz) | Portable. |
+| macOS | [v1.1.0 on GitHub](../../releases/tag/v1.1.0) | Mac builds stay on v1.1.0 for now. Gatekeeper may need `xattr -cr NOORwave noor-server`. |
 
-Windows builds are not CA-signed yet, so SmartScreen can warn on first launch. The updater payload itself is signed with the project's Tauri updater key.
+SHA-256 checksums: [sha256sums.txt](https://releases.noorwave.app/v1.1.1/sha256sums.txt). New versions ship from noorwave.app only; the GitHub Releases here hold v1.1.0 and older.
 
-The Windows portable zip remains the recovery option if installation or updating is blocked. Installed app code lives under `%LOCALAPPDATA%\Programs\NOORwave`, with your database, settings and logs under `%LOCALAPPDATA%\NOORwave`.
+**Already installed, or downloaded v1.1.0 from GitHub?** You do not need to reinstall. On Windows, v1.1.0 checks noorwave.app for updates and takes you on to v1.1.1 by itself. Older installs (v1.0.9 and before) update to v1.1.0 first, then straight on to v1.1.1. Linux and portable copies update by downloading the new build.
 
-## Run From Source
+### What's new in v1.1.1
 
-You need Rust stable, Node 24, pnpm 10, and a TIDAL account (you sign in from inside the app).
+- **On Air:** music videos as numbered TV channels on a daily clock, with a channel for each scene.
+- **Atlas:** a map of every music video NOORwave knows, grouped into scenes, with journeys from one artist to the next.
+- **Archive and Logbook:** every song with all its versions and concerts, and your liked, saved and watched videos by day.
+- **Sound Space** gets a new layout, and Automix now weaves new songs through your library.
 
-Fastest path, backend and frontend together:
-
-```powershell
-.\scripts\dev.ps1
-```
-
-Or run them yourself:
-
-```powershell
-cargo run -p noor-server
-```
-
-```powershell
-cd frontend
-pnpm install
-pnpm dev
-```
-
-- **Dev server with hot reload:** `http://127.0.0.1:17601`
-- **Backend-served production UI:** `http://127.0.0.1:17600`
-
-For the full desktop shell, which launches the server for you and adds the tray, media keys, and updater:
-
-```powershell
-cargo run -p noor-app
-```
-
-On first run the server prints its master access PIN in the startup banner. On loopback the desktop UI fetches it automatically. Normal phone setup uses the QR flow in **Settings -> Remote -> Phone remote**. Under the desktop app the PIN only works on this computer until you turn on **PIN sign-in** there (which also creates a new PIN) for a browser that cannot pair; **New PIN** rotates it without unpairing phones.
+Windows builds are not CA-signed yet, so SmartScreen can warn on first launch. Updates are signed and verified by the app before they install. Installed copies update themselves from noorwave.app.
 
 ## The Phone Remote, Set Up
 
@@ -220,111 +185,12 @@ In the installed desktop app:
 2. Optional: enable **Start NOORwave in the tray when I sign in** so the remote is available without opening the main window first.
 3. Select **Pair phone**, then scan it with the phone's camera. If NOORwave is already installed on the phone's home screen, enter the temporary six-digit code instead. The QR and code expire after two minutes and work once.
 4. Open the paired remote and optionally add it to the phone's home screen. The device receives its own persistent credential; the permanent master PIN is not embedded in the QR.
-5. Back on the desktop, use **Paired devices** to rename or revoke individual phones. **Reset all remote access** rotates the master PIN and disconnects every remote session.
 
-If the friendly `.local` address does not open, choose the direct Wi-Fi address under **Use a different connection address**, refresh the QR, and pair that origin separately. Windows may show a firewall prompt the first time LAN access is enabled; allow NOORwave on private networks. Guest Wi-Fi/client isolation and VPNs can prevent local devices from seeing one another.
+If the friendly `.local` address does not open, choose the direct Wi-Fi address under **Use a different connection address**, refresh the QR, and pair that origin separately. Windows may show a firewall prompt the first time LAN access is enabled; allow NOORwave on private networks. Phone Remote is same-LAN only: no cloud relay, port forwarding, or internet discovery.
 
-For a standalone `noor-server`, run with `--host`, open `http://<LAN-IP>:17600/remote`, and use the master PIN (a standalone server accepts it from the LAN unless PIN sign-in was turned off). QR generation and paired-device management are deliberately restricted to the local desktop settings surface. Phone Remote is same-LAN only: it does not use a cloud relay, port forwarding, or internet discovery.
+## Bugs and ideas
 
-## Configuration
-
-### Ports
-
-| Port | What | Default | Override |
-|---|---|---|---|
-| Backend | `noor-server` HTTP, WebSocket, and the `/remote` PWA | `17600` | `NOOR_PORT` |
-| Dev server | Vite frontend during `pnpm dev` | `17601` | `NOOR_DEV_PORT` |
-
-The backend port is baked into the frontend at build time. If you change `NOOR_PORT`, rebuild the frontend so the UI points at the right place. The dev-server port is the only origin the backend trusts for CORS in dev, so keep it in sync on both sides.
-
-### Bind address
-
-The server listens on `127.0.0.1` by default, so nothing off your machine can reach it. To expose it on your LAN, use the tray's **Network access** toggle, pass `--host`, or set `NOOR_ADDR=0.0.0.0:17600`.
-
-Precedence, highest first: `NOOR_ADDR` > `--host` > the saved Network-access setting > loopback.
-
-### Environment variables
-
-All optional. The app ships with working defaults, including built-in TIDAL credentials.
-
-| Variable | Purpose |
-|---|---|
-| `NOOR_PORT` | Backend listen port. Rebuild the frontend after changing. |
-| `NOOR_DEV_PORT` | Vite dev-server port, and the trusted CORS origin in dev. |
-| `NOOR_ADDR` | Full `host:port` bind address. Overrides `NOOR_PORT` and `--host`. |
-| `NOOR_DB` | Path to the SQLite database file. |
-| `NOOR_DATA_DIR` | Base data directory (database, token) for installed builds. |
-| `NOOR_WWW_DIR` | Directory of the built frontend to serve. |
-| `LASTFM_API_KEY` / `LASTFM_API_SECRET` | Last.fm, if you prefer env vars to the Settings panel. The secret enables scrobbling. |
-| `TIDAL_CLIENT_ID` / `TIDAL_CLIENT_SECRET` | Override the built-in TIDAL app credentials. |
-| `TIDAL_PKCE_CLIENT_ID` / `TIDAL_PKCE_CLIENT_SECRET` | Override the TIDAL PKCE login credentials. |
-| `DISCOGS_TOKEN` / `DISCOGS_USER_AGENT` | Discogs label and release metadata. |
-| `SPORTIFY_API_BASE_URL` | Override the Sportify metadata proxy base URL. |
-
-A few cache-tuning knobs exist (`DISCOVERY_CACHE_TTL_DAYS`, `RESOLVE_CACHE_TTL_DAYS`, `RESOLVE_RETRY_AFTER_DAYS`, `RESOLVE_EAGER_N`, `RESOLVE_BULK_CONCURRENCY`). Defaults are fine.
-
-## How It Is Built
-
-```text
-noor-app       Tauri 2 desktop shell: tray, media keys, updater, sidecar manager
-noor-server    Rust Axum server: SQLite, audio engine, integrations, WebSocket events
-frontend       SvelteKit 2 + Svelte 5 UI, static build served by noor-server
-docs           Specs, plans, inventories, design memory
-scripts        Build, dev launcher, smoke tests, data utilities
-```
-
-- **Sidecar model.** The Tauri shell spawns `noor-server` as a child process, waits for `GET /api/ping`, then opens the WebView. Shutdown goes through `POST /api/shutdown` before any force kill.
-- **One server, two front doors.** The same process serves the desktop UI and the LAN `/remote` PWA. That is why it stays a real HTTP server.
-- **Auth.** The desktop loopback session is automatic. Phones normally receive individually revocable credentials through a one-use, two-minute pairing ticket; the shared master PIN remains a recovery fallback. Protected HTTP requests use a bearer header and WebSockets use a query credential because browsers cannot set headers on an upgrade.
-- **Storage.** One local SQLite file. No account, no cloud, no sync.
-
-Verify a change:
-
-```powershell
-cargo test --workspace --locked
-```
-
-```powershell
-cd frontend
-pnpm check
-pnpm test
-pnpm run build
-```
-
-Release mechanics live in [docs/release-checklist.md](docs/release-checklist.md).
-
-## Where This Actually Is
-
-**1.0, built by one person.**
-
-It is not a demo. It is the player I use every day, and the daily-driver path (sync, search, queue, gapless playback, remote) is genuinely solid. 1.0 means the whole app now shares one design and one way of working. It is still one developer's project moving fast, and it shows in places.
-
-What that means for you:
-
-- Rough edges land and get fixed quickly. Expect frequent releases.
-- Genre Galaxy works and is a lot of fun, but interaction and rendering polish is ongoing.
-- Windows is the priority platform. WASAPI exclusive output is the most tuned path by a wide margin. macOS and Linux build and run, but portable-only and less exercised.
-- ACRCloud audio fingerprinting is scaffolded, not finished.
-- This is a single-user local app. There is no hosted mode, no multi-user auth, no quotas.
-- Some panels are further along than others. If something looks unfinished, it probably is.
-
-Bug reports are genuinely useful. Screenshots and the version string from the sidebar help a lot.
-
-## Contributing
-
-Small, focused changes. Rust, Svelte, and TypeScript are the first-class languages. Do not commit local databases, build output, secrets, signing keys, or machine-local config.
-
-```powershell
-cargo fmt --all -- --check
-```
-
-To refresh the screenshots in this README, drop 2000-wide window captures into `docs/assets/raw/` named `<surface>-<theme>.webp` (for example `home-dark.webp`), then:
-
-```powershell
-python scripts/build-readme-tour.py
-```
-
-It crops the caption strip, rounds the corners into `docs/assets/shots/`, and bakes the rotating `tour.webp` and `themes.webp`.
+Bug reports are genuinely useful. Open an [issue](../../issues) with a screenshot and the version string from the sidebar.
 
 ## Disclaimer
 
@@ -332,8 +198,8 @@ NOORwave uses TIDAL's unofficial API through PKCE OAuth2. It is not affiliated w
 
 ## License
 
-NOORwave is source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE). Personal, educational, research, hobby, and other non-commercial use is free. The license does not limit rights you may have under applicable law, including fair use.
+Copyright 2026 biggiesmallcap-blip. All rights reserved.
 
-Commercial use, managed hosting, redistribution, and OEM use require a separate commercial license from the copyright holder.
+NOORwave's source code is not public. The app is free to download and use for personal, non-commercial listening.
 
-Earlier releases published under MIT remain available under their original terms.
+Source code previously published here (up to and including v1.1.0) was released under the [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0), and earlier releases under MIT. Those copies remain under their original terms. Later versions are not covered by either license.

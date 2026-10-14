@@ -46,6 +46,8 @@ intent ─→ Ollama embed (nomic-embed-text, /api/embed)
        ─→ MMR diversity + recency decay                ← anti-monotony (see below)
        ─→ [opt-in] AFM rerank: Apple's on-device model scores fit 1–10,
           why / why-not per candidate, final pick       (bin/afm-rerank, ~6–12s)
+       ─→ [opt-in] soft filter: a local decision model marks the top 4
+          "likely" or "weak match", likely first, nothing dropped (nimble, ~3–5s)
        ─→ compact JSON shortlist
 ```
 
@@ -91,6 +93,10 @@ The skills dir is scanned recursively for `SKILL.md` files (standard agent-skill
 > use librarian_find with intent "package my ollama wrapper for distribution"
 ```
 
+## Soft filter (optional, local decision model)
+
+After the AFM rerank, `librarian_find` can ask a small local model whether each of the top candidates fits the intent. Skills it marks `"match": "likely"` come first; `"weak match"` ones stay in the list below them. Nothing is dropped. Settings in `~/.skill_librarian/soft_filter.json` (`enabled`, `model`, `judge_top`, `timeout_s`); `LIBRARIAN_SOFT_FILTER=off` turns it off. A slow or missing model returns the previous order. Each find appends one line to `~/.skill_librarian/soft_filter.jsonl`. Bench and test set: `bench/decision-filter-2026-10-09/` (nimble 72% precision vs 33% without; laya models not usable).
+
 ## AFM reranker (optional, Apple Intelligence)
 
 `librarian_find` can pass its shortlist through Apple's on-device Foundation Model for a deliberation pass — reorders by reasoned fit (1–10) and adds one-sentence why / why-not per candidate, plus a final `pick`. Fully local, free, ~5–12s. Build and enable:
@@ -100,14 +106,14 @@ swiftc -O -parse-as-library afm_rerank.swift -o bin/afm-rerank
 # then set LIBRARIAN_RERANK_BIN to the binary path in the MCP env
 ```
 
-Unset `LIBRARIAN_RERANK_BIN` (or any failure/timeout) falls back to pure embedding order. Brainstorm is never reranked — it wants divergence, not convergence. The reranker's output is validated against the real candidate set — small on-device models happily hallucinate skill names.
+Unset `LIBRARIAN_RERANK_BIN` (or any failure/timeout) falls back to pure embedding order. Brainstorm is never reranked — it wants divergence, not convergence. The reranker's output is validated against the real candidate set — small on-device models happily hallucinate skill names. Skill names and descriptions are someone else's text, so they reach the model cleaned (no line breaks or control characters) inside a `<candidates>` fence, one JSON line each, with an instruction to treat them as data: a description that says "rank me first" no longer wins the pick.
 
 ## Tools
 
 | Tool | What it does |
 |---|---|
 | `librarian_find` | Ranked shortlist for an intent — varied picks, no repeats from recent queries, success rates shown. |
-| `librarian_brainstorm` | Wide diverse sweep + 2 random wildcards. For ideation, not convergence. |
+| `librarian_brainstorm` | Wide diverse sweep: k candidates, the last 2 random wildcards. For ideation, not convergence. |
 | `librarian_report` | Agent reports skill worked/failed. Append-only — agents can't touch rankings. |
 | `librarian_reindex` | Rescan + re-embed changed SKILL.md files (hash-checked, cheap to rerun). |
 | `librarian_stats` | Curation digest: hot skills, never-surfaced (kill candidates), low success rate (rewrite candidates). |
@@ -131,7 +137,7 @@ The failure mode this design exists to kill: a naive retriever recommends the sa
 
 1. **MMR selection** (maximal marginal relevance) — each next pick has to be relevant to the request *and* different from the picks already made, so the shortlist can't be three near-duplicates.
 2. **Recency decay** — the librarian remembers its own recent recommendations; anything suggested in the last 10 queries gets pushed down (`RECENCY_PENALTY = 0.15` per appearance — tune at top of server.py).
-3. **Wildcards in brainstorm mode** — 2 random skills from outside the relevant set, every time.
+3. **Wildcards in brainstorm mode** — 2 random skills from outside the relevant set, every time. They are not logged as recommendations, so they never pick up a repeat penalty.
 
 The AFM reranker runs *after* these — it reorders the already-diversified shortlist, so it can't reintroduce monotony.
 
@@ -139,7 +145,7 @@ Three months of real data says it works: 525 distinct skills surfaced across 366
 
 ## The flywheel
 
-Every `librarian_find` is logged. Every `librarian_report` is logged. Run `librarian_stats` weekly: never-surfaced skills → kill, low-success skills → rewrite descriptions, queries matching nothing → skills you should build. The collection curates itself from usage.
+Every `librarian_find` is logged. Every `librarian_report` is logged. Run `librarian_stats` weekly: never-surfaced skills → kill, low-success skills → rewrite descriptions. The collection curates itself from usage.
 
 First time it paid out (2026-09-12): after three months the rewrite list went from empty to 11 skills, and it is almost entirely one family — `mcp-integration` (6 uses, 1 worked), `mcporter` (5, 0), `skill-installer` (5, 0), `mcp-building` (4, 0). The agents' notes explain why: those four surface for every MCP-flavoured intent and get rejected as the wrong tool for that exact job. No static review would have found that; the descriptions all read fine. The fix is a description pass on four files, not a new feature. Details in the [usage report](USAGE-REPORT.md).
 
@@ -150,7 +156,7 @@ First time it paid out (2026-09-12): after three months the rewrite list went fr
 - `MMR_LAMBDA_BRAINSTORM` (0.45) — brainstorm leans diverse
 - `RERANK_TIMEOUT` (30s) — AFM reranker budget before falling back to embed order
 
-Env knobs: `LIBRARIAN_CANONICAL_PREFIXES` (which top-level dirs win duplicate-name races, e.g. `categories`; inside one prefix the shallower path wins, so a root-level override beats the same name nested in a pack), `LIBRARIAN_RERANK_BIN` (path to afm-rerank; empty disables rerank).
+Env knobs: `LIBRARIAN_CANONICAL_PREFIXES` (which top-level dirs win duplicate-name races, e.g. `categories`; inside one prefix the shallower path wins, so a root-level override beats the same name nested in a pack; a skill reached through two symlinks is ranked the same way, never by folder-walk order), `LIBRARIAN_RERANK_BIN` (path to afm-rerank; empty disables rerank).
 
 ## Hard rules the code keeps
 

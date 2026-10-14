@@ -101,7 +101,7 @@ egration-with-graphql-yoga--envelop)
 - **Powerful Querying**: Typed filters, nested paths, pagination, sorting, and aggregations across the supported contract
 - **Aggregation Queries**: Built-in support for GROUP BY queries with aggregation operations (SUM, COUNT, AVG, MIN, MAX)
 - **Auto-Generated Resolvers**: Automatically generates resolve methods for relationship fields
-- **Automatic Index Creation**: Generates MongoDB indexes for ObjectId fields and single references, including leaves inside embedded objects and embedded arrays; see the [index reference](./docs/reference/extensions.md#automatic-mongodb-indexes)
+- **Automatic Index Creation**: Generates MongoDB indexes for ObjectId fields and single references, including leaves inside embedded objects and embedded arrays. The top-level `id` index is unused, since the record key is `_id`; `onModelCreated: (model) => model.schema.removeIndex({ id: 1 })` removes it from a `connect()` type. See the [index reference](./docs/reference/extensions.md#automatic-mongodb-indexes)
 - **Business Logic**: Implement business logic and domain validations declaratively
 - **State Machines**: Built-in support for declarative state machine workflows
 - **Lifecycle Hooks**: Controller methods for granular control over operations
@@ -112,13 +112,11 @@ egration-with-graphql-yoga--envelop)
 ## 📦 Installation
 
 ```bash
-npm install mongoose@^8.24.2 graphql@^16.11.0 @simtlix/simfinity-js@3.5.9
+npm install mongoose@^8.24.2 graphql@^16.11.0 @simtlix/simfinity-js@3.6.0
 ```
 
 **Prerequisites**: Simfinity.js requires `mongoose` and `graphql` as peer dependencies. Keep them within the ranges above so your application and Simfinity share a single Mongoose and GraphQL instance; npm reports an out-of-range version as a peer conflict. The MCP transports need the optional peer `@modelcontextprotocol/sdk@^1.31.0`, which is not installed automatically, and `graphql-middleware` is not a Simfinity dependency.
 
 ## PostgreSQL support
 
-Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many linking entities, and references inside embedded objects. PostgreSQL installation does not pull Mongoose, MongoDB, or MCP dependencies.
-
-Version 3.3.0 separates the driver-free relational runtime into `@simtlix/simfinity-sql`. PostgreSQL suppli
+Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many linking entities, and references inside embedded objects. PostgreSQL install

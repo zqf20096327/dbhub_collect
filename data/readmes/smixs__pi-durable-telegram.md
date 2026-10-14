@@ -58,6 +58,8 @@ More in [docs/install.md](docs/install.md).
   answers in the chat.
 - **Send it things.** A photo of an error, a PDF, a voice note. It reads, looks and listens, and sends files back.
 - **Walk away.** Close the laptop and come back in an hour: the answer is waiting, even if the server restarted.
+- **Read it easily.** Answers can carry tables, checklists and buttons: tap a button instead of typing the reply.
+  While the agent types, a stop button sits under its answer.
 
 ## Commands
 
@@ -86,6 +88,25 @@ no domain and no web server.
 **It does not lose its place.** Every step the agent takes is saved before you see it. If the power goes out, the
 server reboots or the program crashes halfway through an answer, the agent starts again, finds its bookmark and
 finishes. You get one answer, not zero and not two. Messages you send while it is busy wait in line.
+
+</details>
+
+<details>
+<summary><b>Plugins</b></summary>
+
+The core stays small: it carries your messages, files, buttons and answers. Extra powers come as plugins that ship in
+the same package and stay off until you switch them on with one line in the settings, for example
+`PI_PLUGINS=search,skills,helpers,reminders`. A plugin can also be your own, from a folder or from npm.
+
+| Plugin | What it gives the agent | Status |
+|---|---|---|
+| Web search | looks things up on the internet with your Tavily, Exa, Brave or Parallel key | available |
+| MCP | connects MCP servers: calendars, databases, your own tools | available |
+| Skills | a folder of instructions it reads when a task needs them | available |
+| Helpers | splits a big job between helper agents, on a cheaper model if you like | available |
+| Tasks and reminders | does something later on its own and writes to you first | available |
+
+How to switch each one on and how to write your own: [docs/plugins.md](docs/plugins.md).
 
 </details>
 

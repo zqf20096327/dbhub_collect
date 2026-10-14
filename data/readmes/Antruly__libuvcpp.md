@@ -2,7 +2,7 @@
   <img src="./uvcpp.svg" alt="libuvcpp logo" width="160" height="160">
 </p>
 
-[![version](https://img.shields.io/badge/version-1.6.22--dev-blue.svg)](./RELEASE.md)
+[![version](https://img.shields.io/badge/version-1.7.0-blue.svg)](./RELEASE.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![CI · Linux · Ubuntu](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml)
 [![CI · Windows · MSVC](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml)
@@ -14,25 +14,25 @@
 🔧 Modern C++11 wrapper for [libuv](https://github.com/libuv/libuv) — event-driven I/O with
 object-oriented APIs, dual-mode async/sync support, HTTP/1.1, WebSocket (RFC 6455), and SSL/TLS.
 
-- **Version**: `1.6.22-dev` — **Author**: `zhuweiye` — **License**: `MIT`
+- **Version**: `1.7.0` — **Author**: `zhuweiye` — **License**: `MIT`
 - **Languages**: [English](./README.md) · [中文](./README.zh.md)
 
 ## Download
 
 <!-- downloads:start -->
-The newest release is **v1.6.4**. Six prebuilt packages, each one self-contained — the
+The newest release is **v1.7.0**. Six prebuilt packages, each one self-contained — the
 Release and Debug builds of the library, all the public headers, `uvcpp.pc` and the CMake
 package files, and no extra DLLs or `.so` files to ship alongside. Which modules a given
 package enables is recorded per version in [CHANGELOG.md](./CHANGELOG.md).
 
 | Platform | Toolchain | Package |
 |---|---|---|
-| Windows x64 | MSVC 2022 | [libuvcpp-1.6.4-msvc-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.6.4/libuvcpp-1.6.4-msvc-x64.zip) · 18.3 MB |
-| Windows arm64 | MSVC 2022 | [libuvcpp-1.6.4-msvc-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.6.4/libuvcpp-1.6.4-msvc-arm64.zip) · 17.7 MB |
-| Windows x64 | MinGW-w64 (GCC) | [libuvcpp-1.6.4-mingw-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.6.4/libuvcpp-1.6.4-mingw-x64.zip) · 22.7 MB |
-| Windows arm64 | MinGW-w64 (clang + libc++) | [libuvcpp-1.6.4-mingw-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.6.4/libuvcpp-1.6.4-mingw-arm64.zip) · 18.4 MB |
-| Linux x64 | GCC | [libuvcpp-1.6.4-linux-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.6.4/libuvcpp-1.6.4-linux-x64.zip) · 22.5 MB |
-| Linux arm64 | GCC | [libuvcpp-1.6.4-linux-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.6.4/libuvcpp-1.6.4-linux-arm64.zip) · 22.7 MB |
+| Windows x64 | MSVC 2022 | [libuvcpp-1.7.0-msvc-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-msvc-x64.zip) · 21.8 MB |
+| Windows arm64 | MSVC 2022 | [libuvcpp-1.7.0-msvc-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-msvc-arm64.zip) · 22.7 MB |
+| Windows x64 | MinGW-w64 (GCC) | [libuvcpp-1.7.0-mingw-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-mingw-x64.zip) · 27.1 MB |
+| Windows arm64 | MinGW-w64 (clang + libc++) | [libuvcpp-1.7.0-mingw-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-mingw-arm64.zip) · 20.8 MB |
+| Linux x64 | GCC | [libuvcpp-1.7.0-linux-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-linux-x64.zip) · 24.9 MB |
+| Linux arm64 | GCC | [libuvcpp-1.7.0-linux-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-linux-arm64.zip) · 25.2 MB |
 
 Every earlier release is on the **[Releases page](https://github.com/Antruly/libuvcpp/releases)**.
 What a package contains, and why it is laid out that way:
@@ -141,16 +141,18 @@ in the package — are in [`RELEASE.md`](./RELEASE.md#调试档debug-版).
 | `uvcpp_ws_frame` | Frame struct with opcode, mask, close-code helpers |
 | `uvcpp_http_common` | HTTP method/status enums, version enum (HVER_10/11/20), header helpers |
 
-**Optional features** — each is opt-in, and none of them is switched on by
-`UVCPP_BUILD_WEB=ON`:
+**Optional features** — each is opt-in, and `UVCPP_BUILD_WEB=ON` switches none of
+them on:
 
 | Switch | Adds |
 |---|---|
-| `UVCPP_ENABLE_ZLIB` | Per-Message Deflate compression (RFC 7692) for WebSocket |
+| `UVCPP_ENABLE_ZLIB` | Per-Message Deflate compression (RFC 7692) for WebSocket, and gzip/deflate `Content-Encoding` for HTTP response bodies |
+| `UVCPP_ENABLE_BROTLI` | `br` as a second `Content-Encoding` for HTTP response bodies (~11 % smaller than gzip at equal effort) |
 | `UVCPP_ENABLE_OPENSSL` | HTTPS / WSS |
 | `UVCPP_ENABLE_NGHTTP2` | HTTP/2 (RFC 9113) — TLS + ALPN by default, plus cleartext h2 (prior knowledge, RFC 9113 §3.4) when you ask for it. Nothing upgrades on its own |
 | `UVCPP_ENABLE_QUIC` | The QUIC transport (RFC 9000) in the net layer — needs an OpenSSL ≥ 3.2 with the QUIC API |
 | `UVCPP_ENABLE_HTTP3` | HTTP/3 (RFC 9114) in the web layer, on its own UDP sockets, so HTTP/1.1 and HTTP/2 are untouched |
+| `UVCPP_ENABLE_YYJSON` | A second JSON parser (yyjson) next to nlohmann, in the `json` module rather than the web layer — same accessors, same statuses, faster parse; a private dependency compiled into the same library |
 
 What each switch *requires*, and when it is force-disabled instead of failing the
 configure, is in [CMake Options](#cmake-options) below. What each one costs at runtime is
@@ -304,15 +306,19 @@ OpenSSL ≥ 3.2 with the QUIC API for QUIC and HTTP/3), and how the switches int
 | `UVCPP_ENABLE_QUIC` | `OFF` | Enable the QUIC transport (ngtcp2, linked static) in the **net layer**. Requires `UVCPP_ENABLE_OPENSSL=ON`, an **OpenSSL ≥ 3.2 with the QUIC API**, and `UVCPP_BUILD_NET=ON` — force-disabled without them. **1.4.1 is a real link protocol: handshake, streams, close and idle timeout work; HTTP/3 rides on top of it (next row).** **As of 1.5.0 all six release legs enable it** (earlier packages did not). See [`doc/quic-guide.md`](doc/quic-guide.md) |
 | `UVCPP_ENABLE_HTTP3` | `OFF` | Enable HTTP/3 (RFC 9114) in the **web layer**, parsed by nghttp3 and carried over the QUIC transport (both linked static). Requires `UVCPP_ENABLE_QUIC=ON` and `UVCPP_BUILD_WEB=ON` — force-disabled without them. **1.4.1 is an end-to-end transport: `uvcpp_http_client` / `uvcpp_http_server` speak it, h1/h2 are untouched (it runs on UDP).** **As of 1.5.0 all six release legs enable it** (earlier packages did not). See [`doc/http3-guide.md`](doc/http3-guide.md) |
 | `UVCPP_ENABLE_WSDL` | `OFF` | Enable the WSDL/SOAP module (XML via pugixml, linked static). Requires `UVCPP_BUILD_WEBAPP=ON`. See [`doc/wsdl-guide.md`](doc/wsdl-guide.md) (the document half) and [`doc/soap-guide.md`](doc/soap-guide.md) (the runtime half) |
+| `UVCPP_ENABLE_YYJSON` | `OFF` | Enable the **optional yyjson JSON backend** (`src/yyjson/`): a *second* parser alongside nlohmann, with the same accessor names (`uvcpp_json_get_string/bool/int/double`), the same statuses, and a bridge into `uvcpp_json_writer`. Its parse is faster, its DOM is smaller, and the parser does not recurse. **Turned off, nothing about the nlohmann path changes** (`using uvcpp_json = nlohmann::json` and every `uvcpp_json_*` keep their behaviour; the exported symbol set and `DT_NEEDED` of the library are unchanged). yyjson is a **private** dependency (one header + one `.c`, compiled as object code into the same `uvcpp` library — no extra artifact), fetched via `FetchContent`. **As of 1.7.0 it is in the release package** — all six release legs enable it (earlier packages did not), and four CI jobs really build it: the Ubuntu / macOS / MSVC matrix entries plus the single `ci-mingw64.yml` job. See [`doc/json-guide.md`](doc/json-guide.md) §13 |
+| `UVCPP_ENABLE_BROTLI` | `OFF` | Enable the **brotli body compressor** — `br` as a second `Content-Encoding` for HTTP response bodies next to gzip/deflate, picked by the same `Accept-Encoding` negotiation (`br` wins on `q`-ties with gzip because it is the smaller of the two; `*` and the zlib-less build are covered too). **What it buys is bytes on the wire, not speed**: at the default quality the same body is ~11 % smaller than gzip level 6, and because the compressed variant is served out of the response cache the per-request cost is the same as gzip's — an entry that compresses without a cache tag pays for the encode every request. The default quality is `5` (brotli's own default), deliberately not `0`. **Turned off, nothing changes** (no `br` in `Accept-Encoding` negotiation, and the exported symbol set / `DT_NEEDED` of the library are unchanged). brotli is a **private** dependency, found via pkg-config/`find_library` when the system has it and built from source via `FetchContent` (tag pinned to `BROTLI_VERSION`) otherwise — **two** static libraries, so a static-library user links `-lbrotlienc -lbrotlidec` themselves. **As of 1.7.0 it is in the release package** — every release leg passes `UVCPP_BROTLI_FROM_SOURCE=ON` so the package stays self-contained — and five CI jobs really build it: the Ubuntu `brotli` + `brotli-no-zlib`, macOS and MSVC matrix entries plus the single `ci-mingw64.yml` job. See [`doc/web-http-guide.md`](doc/web-http-guide.md) |
+| `UVCPP_BROTLI_FROM_SOURCE` | `OFF` | Skip the system lookup entirely (`find_package(PkgConfig)` → `find_path`/`find_library`) and build brotli from the source pinned by `BROTLI_VERSION`, linking it statically. **The lookup runs system-first**, so on a machine that happens to have `libbrotli-dev` the "links the static `.a`" promise silently turns into three `DT_NEEDED` entries (`libbrotlienc` / `libbrotlidec` / `libbrotlicommon`) — and nothing turns red, because the release workflow's `ldd` blacklist does not name brotli. Any release leg that enables brotli passes this so its package stays self-contained. The discovery block is skipped *without being called* (its results land in the CMake cache, so calling it once would leak the previous answer into the next configure of the same tree). Default `OFF` leaves today's behaviour byte-for-byte. See [`doc/web-http-guide.md`](doc/web-http-guide.md) |
 | `UVCPP_ENABLE_CAPI` | `OFF` | Export the **C ABI** (`src/capi/`, C99 headers for C#/P-Invoke and any other FFI) out of the same `uvcpp` library — no extra artifact. Requires `UVCPP_BUILD_NET=ON` and `UVCPP_BUILD_WEB=ON`; force-disabled without them (the C surface spans net/web/webapp). **Turned on for every release configuration.** See [`doc/capi-guide.md`](doc/capi-guide.md) |
-| `UVCPP_ENABLE_DB` | `OFF` | Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL, with table-style access to the result rows. It is the only module that **requires a third-party client library** (libsqlite3 / libmysqlclient / libpq) — force-disabled when none of the three is found. **Every release configuration turns it on**, so the prebuilt packages ship it. See [`doc/db-guide.md`](doc/db-guide.md) |
+| `UVCPP_ENABLE_DB` | `OFF` | Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL, with table-style access to the result rows. It is the only module that **requires a third-party client library** (libsqlite3 / libmysqlclient / libpq) — force-disabled when none of the three is found. **Every release configuration turns it on, with all three backends**: SQLite is compiled in from source, and MySQL/PostgreSQL are in the package but loaded at run time (next rows). See [`doc/db-guide.md`](doc/db-guide.md) |
 | `UVCPP_ENABLE_DB_SQLITE` | `ON` | Build the SQLite backend of the db module (needs `sqlite3.h` + libsqlite3). Not found ⇒ **this one backend is force-disabled with a warning**; the others still build |
 | `UVCPP_DB_SQLITE_FROM_SOURCE` | `OFF` | Build that SQLite backend from a **hash-pinned source amalgamation** (one static `sqlite3.c`, forced PIC) instead of `find_package(SQLite3)`. **The six release legs use it**: linking the system `libsqlite3.so` would add a `DT_NEEDED` and break the packages' self-contained promise, while the system `libsqlite3.a` on Ubuntu 24.04 is not PIC (verified: `R_X86_64_PC32 … can not be used when making a shared object`). Needs network at configure time, or the zip placed by hand; both are described in [`doc/db-guide.md`](doc/db-guide.md) |
-| `UVCPP_ENABLE_DB_MYSQL` | `ON` | Build the MySQL backend (needs `mysql.h` + libmysqlclient). Non-standard installs: `-DCMAKE_PREFIX_PATH=…` or `-DUVCPP_DB_MYSQL_INCLUDE_DIR=… -DUVCPP_DB_MYSQL_LIBRARY=…` |
-| `UVCPP_ENABLE_DB_PGSQL` | `ON` | Build the PostgreSQL backend (needs `libpq-fe.h` + libpq). Non-standard installs: `-DCMAKE_PREFIX_PATH=…` or `-DPostgreSQL_INCLUDE_DIR=… -DPostgreSQL_LIBRARY=…` |
+| `UVCPP_ENABLE_DB_MYSQL` | `ON` | Build the MySQL backend (needs `mysql.h` + libmysqlclient). Non-standard installs: `-DCMAKE_PREFIX_PATH=…` or `-DUVCPP_DB_MYSQL_INCLUDE_DIR=… -DUVCPP_DB_MYSQL_LIBRARY=…`. **On by default, and on in every release package** (with `UVCPP_DB_RUNTIME_LOAD=ON`, which is what keeps the package loadable without libmysqlclient) |
+| `UVCPP_ENABLE_DB_PGSQL` | `ON` | Build the PostgreSQL backend (needs `libpq-fe.h` + libpq). Non-standard installs: `-DCMAKE_PREFIX_PATH=…` or `-DPostgreSQL_INCLUDE_DIR=… -DPostgreSQL_LIBRARY=…`. **On by default, and on in every release package** (with `UVCPP_DB_RUNTIME_LOAD=ON`) |
+| `UVCPP_DB_RUNTIME_LOAD` | `OFF` | Take the MySQL / PostgreSQL symbols from a client library loaded **at run time** (`dlopen` / `LoadLibrary`) instead of linking it. **The six release legs use it, and the reason is the packages' users, not the library**: `DT_NEEDED` (the PE import table on Windows) is resolved at **load time**, so linking libmysqlclient/libpq means a machine that has never installed either cannot even *load* the library — even if it only ever runs HTTP and never touches `db`. With this on, such a machine runs everything except "actually connecting to MySQL/PG", where it gets `uvcpp_db_status::NO_DRIVER` plus a message naming the candidates that were tried (`UVCPP_DB_MYSQL_LIBRARY` / `UVCPP_DB_PGSQL_LIBRARY` override the search). It changes only *where the symbols come from*, not *which backends exist*: `mysql.h` / `libpq-fe.h` are still needed at configure time (`MYSQL_BIND`'s layout has to come from the real header), so `UVCPP_DB_MYSQL_ENABLE` / `UVCPP_DB_PGSQL_ENABLE` still mean "the header was found". Default `OFF` leaves today's behaviour byte-for-byte. See [`doc/db-guide.md`](doc/db-guide.md) |
 | `UVCPP_USE_SYSTEM_LIBUV` | `ON` | Prefer system-installed libuv |
 | `UVCPP_BUILD_LIBUV_FROM_SOURCE` | `OFF` | Fetch and build libuv from source via `FetchContent` |
-| `UVCPP_STATIC_RUNTIME` | `OFF` | Statically link the compiler runtime (`libgcc`/`libstdc++`) into the library. **MinGW and Linux only — a no-op on MSVC**, which uses `/MD` and ships `vcruntime`/`msvcp` in the package |
+| `UVCPP_STATIC_RUNTIME` | `OFF` | Statically link the compiler runtime (`libgcc`/`libstdc++`) into the library. **MinGW and Linux only — a no-op on MSVC**, which uses `/MD` and ships `vcruntime`/`msvcp` in the package. **On Linux it also applies to every executable, and a *shared* `libuvcpp.so` built with it cannot be combined with a consumer that uses the system `libstdc++.so.6`** — both copies instantiate the same COMDAT templates (`std::once_flag`'s `__once_proxy`, `std::__future_base::_State_baseV2`) and ELF's global symbol scope makes one side jump into the other's frame, so the failure is a run-time segfault or `double free`, **not a link error**. **That is why the release workflow's two Linux legs no longer pass it** (1.7.0 onwards) — the Linux packages therefore need the system `libstdc++.so.6` / `libgcc_s.so.1`, which every distro with a C++ runtime already has. The two MinGW legs still pass it: PE has no global symbol scope, so there is nothing to interpose, and a MinGW user's machine may not have `libstdc++-6.dll`. See [`doc/build-guide.md`](doc/build-guide.md) |
 | `UVCPP_ENABLE_TRY_WRITE` | `ON` | Try `uv_try_write` before copying into a write buffer |
 | `UVCPP_TRY_WRITE_MIN_BYTES` | `32768` | Smallest payload worth attempting `uv_try_write` for (a `CACHE STRING`, not an `option()`) |
 | `UVCPP_ENABLE_UDP_GSO` | `ON` when Windows **and** `UVCPP_ENABLE_QUIC=ON`, else `OFF` | Send-side UDP Segmentation Offload for the QUIC transport: hand a batch of equal-sized datagrams to the stack in **one** `WSASendTo` via `UDP_SEND_MSG_SIZE`, instead of one syscall per datagram. The segment size is taken from what each aggregate write reports, so the wire carries exactly the datagrams it carries today. **Windows only** — the code is compiled out elsewhere and the switch is a no-op there. See [`doc/quic-guide.md`](doc/quic-guide.md) |

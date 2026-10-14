@@ -10,7 +10,9 @@
 
 </div>
 
-rano is a **network observer for AI CLI processes** that tracks observed sockets owned by Claude Code, Codex CLI, Gemini CLI, and their descendants—live in your terminal and durably in SQLite.
+rano is a **network observer for AI CLI processes** that tracks observed sockets owned by Claude Code, Codex CLI, Gemini CLI, and their descendants—live in your terminal and durably in SQLite when logging is enabled.
+
+This README describes the development source. The latest published release checked on 2026-10-14 is [v0.2.0](https://github.com/Dicklesworthstone/rano/releases/tag/v0.2.0); the source version `0.2.1` is unreleased. The observation, durability, configuration and reporting repairs described here are not promises about the older release binary. Independent verification and whole-project qualification remain open; see [the dated reality check](docs/reality-check.md) for the original failures and proof requirements.
 
 <div align="center">
 
@@ -28,13 +30,13 @@ curl -fsSL https://raw.githubusercontent.com/Dicklesworthstone/rano/main/install
 
 **The Problem**: AI CLI tools spawn subprocesses and open sockets you can’t easily attribute back to a provider or process in real time.
 
-**The Solution**: rano polls `/proc`, maps sockets to PIDs, and prints observation events with provider tags while logging the observed history to SQLite. Connections that open and close between polls can be missed.
+**The Solution**: rano polls Linux `/proc` (or macOS libproc), maps sockets to PIDs, and prints observation events with provider tags while logging the observed history to SQLite. Connections that open and close between polls can be missed.
 
 ### Why Use rano?
 
 | Feature | What It Does |
 |---------|--------------|
-| **Provider-aware** | Tags traffic as `anthropic`, `openai`, `google`, or `unknown`. |
+| **Provider-aware** | Tags observed endpoint episodes as `anthropic`, `openai`, `google`, or `unknown`. |
 | **Descendant-aware** | Follows child processes automatically. |
 | **Live stats** | In-terminal summaries with top IPs/domains and provider totals. |
 | **SQLite logging** | Queryable history with built-in aggregate views. |
@@ -68,10 +70,10 @@ sqlite3 observer.sqlite "select * from provider_counts;"
 
 ## Design Philosophy
 
-1. **Trustworthy attribution**: tie sockets to PIDs and command lines, not guesses.
-2. **Low overhead**: polling `/proc` is fast and avoids ptrace or intrusive hooks.
+1. **Explicit attribution**: preserve observed socket owners, monitored roots and provider-match origins; a shared owner does not prove who initiated a socket.
+2. **Low overhead**: polling `/proc` (Linux) or libproc (macOS) avoids ptrace or intrusive hooks; workload measurements and their limits are documented below.
 3. **Human-first output**: readable live output with clear provider tags and colors.
-4. **Durable history**: every run can be analyzed later via SQLite views.
+4. **Durable observed history**: enabled SQLite logging reports persistence and loss explicitly; polling can miss sockets between observations.
 
 ---
 
@@ -110,13 +112,53 @@ curl -fsSL https://raw.githubusercontent.com/Dicklesworthstone/rano/main/install
 
 # Auto-update PATH in shell rc files
 curl -fsSL https://raw.githubusercontent.com/Dicklesworthstone/rano/main/install.sh | bash -s -- --easy-mode
+
+# Build the exact release tag from source
+bash install.sh --from-source --version v0.2.0 --verify
+
+# Explicit development source ref; resolved commit and binary checksum are reported
+bash install.sh --from-source --ref main --verify
 ```
+
+An unresolved latest release or failed archive download exits unsuccessfully; the installer never invents a prerelease version or silently substitutes a different source HEAD. `--from-source --version` selects that exact tag, while `--ref` explicitly selects a source branch, full ref (such as `refs/tags/v0.2.0`) or commit and cannot combine with `--version`. A bare non-commit name denotes a branch. Source builds use Cargo's emitted executable path, including redirected `CARGO_TARGET_DIR` and target triples. They require Git, Cargo and Python 3 for artifact metadata parsing.
+
+Archive installation requires a valid SHA256 using `sha256sum` or stock macOS `shasum`, a supported regular-file archive layout and a binary whose reported version matches the selected release. `--artifact-url`, `--checksum` and `--checksum-url` support explicit archives and checksum sidecars. Candidates are verified before installation, and verification failures return nonzero; prior destination bytes and temporary/source files are retained for recovery. `--quiet` suppresses ordinary output, and startup files are changed only with explicit `--easy-mode`. The updater completes its installer download before execution and passes custom OWNER/REPO and literal arguments to the installer process.
+
+### Platform support
+
+Native monitoring has two backends with the same events and output:
+
+- **Linux** reads `/proc`: process records, `/proc/<pid>/fd` socket links and the `/proc/net/{tcp,tcp6,udp,udp6}` tables.
+- **macOS** (since 0.2.1) reads the whole process table with `sysctl(KERN_PROC_ALL)` and arguments with `KERN_PROCARGS2`. For each target it lists socket descriptors with `proc_pidinfo(PROC_PIDLISTFDS)` and reads each socket's TCP/UDP endpoints and state with `proc_pidfdinfo(PROC_PIDFDSOCKETINFO)`.
+
+The monitor checks its backend before starting capture or creating SQLite/file output, and refuses with an actionable error (`backend_unavailable` in JSON diagnostics) if the check fails:
+
+- **Linux:** readable self process identity, descriptors, network namespace and the selected TCP/UDP tables.
+- **macOS:** its own process record, plus a loopback UDP probe socket (connected, never sent on) that must decode with the expected addresses, ports and protocol. A future kernel with a different socket record layout therefore fails closed instead of reporting zero sockets.
+
+Target-specific visibility failures during monitoring remain explicit observation errors and may coexist with valid observations of other targets. On macOS, an unprivileged observer cannot list the descriptors of other users' processes (root daemons, for example). Each such target is reported as an observation error, like an unreadable `/proc/<pid>/fd` on Linux.
+
+| Command | Linux | macOS |
+|---------|-------|-------|
+| Monitor (default command) | Requires readable Linux procfs and target visibility | libproc backend; targets must belong to the observing user (or run rano as root) |
+| report/export/diff | SQLite history, independent of procfs | SQLite history |
+| status | Current activity requires a fresh observable Linux process; history remains available | Same contract, with the macOS process record as the observer identity |
+| config commands | Independent of procfs | Same |
+
+Backend differences in recorded fields:
+
+- The ownership JSON's `inode` field holds the kernel's opaque socket handle on macOS; there are no socket inodes there.
+- `start_time` is the process start time in clock ticks since boot on Linux, and in microseconds since the Unix epoch on macOS.
+- TCP states use the Linux codes on both platforms (`01` established, `0A` listen, ...).
+- An IPv6 socket carrying IPv4 traffic is reported as an IPv4-mapped IPv6 address, as Linux `tcp6`/`udp6` do.
+
+WSL2 runs the Linux backend; targets must be visible inside that Linux environment and its network namespace.
 
 ### Windows
 
-Windows is not supported. rano relies on Linux-only `/proc` filesystem APIs
-(`/proc/net/tcp`, `/proc/[pid]/fd`, etc.) and Unix libc functions (`getnameinfo`,
-`localtime_r`) that have no Windows equivalents. On Windows, use
+Windows is not supported. rano's observer backends use Linux `/proc` or macOS
+libproc, and Unix libc functions (`getnameinfo`, `localtime_r`) that have no
+Windows equivalents. On Windows, use
 [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/) and install the Linux
 binary inside the WSL environment.
 
@@ -162,7 +204,7 @@ cargo install --git https://github.com/Dicklesworthstone/rano --locked
 
 ### `rano`
 
-Monitor outgoing connections and print events/stats.
+Monitor observed sockets and print events/stats. TCP peer ownership does not distinguish an outgoing connection from an accepted connection.
 
 ```bash
 rano --pattern claude --pattern codex
@@ -187,8 +229,8 @@ rano --once
 --pcap                    # Force pcap mode (falls back)
 --pcap-interface <name>   # Capture interface for pcap mode (default: auto)
 --pcap-cache-max <n>      # DNS/SNI cache cap, >= 100 (default: 10000)
---no-dns                  # Disable PTR lookups
---include-udp             # Include UDP sockets
+--no-dns                  # Disable PTR lookups (pcap evidence can still apply)
+--include-udp             # Include UDP sockets (default: enabled)
 --no-udp                  # Exclude UDP sockets
 --include-listening       # Include TCP listening sockets
 --log-file <path>         # Append output to a file
@@ -199,7 +241,7 @@ rano --once
 --db-batch-size <n>       # SQLite batch size (events per transaction)
 --db-flush-ms <ms>        # SQLite flush interval in ms
 --db-queue-max <n>        # SQLite queue capacity (events)
---stats-interval-ms <ms>  # Live stats cadence (0 disables)
+--stats-interval-ms <ms>  # Live stats cadence (default: 5000; 0 disables)
 --stats-width <n>         # ASCII bar width
 --stats-top <n>           # Top-N lists size
 --stats-view <name>       # Stats view provider|domain|port|process (repeatable)
@@ -214,6 +256,7 @@ rano --once
 --theme <vivid|mono|colorblind>
 --no-banner
 --config <path>           # Load key=value config
+--config-toml <path>      # Load provider TOML config
 --no-config
 ```
 
@@ -221,23 +264,65 @@ rano --once
 
 rano can resolve domains in two modes:
 
-- **PTR (default)**: reverse DNS lookups. No elevated privileges required.
-- **pcap**: uses libpcap to capture DNS responses + TLS SNI. Requires root/CAP_NET_RAW.
+- **PTR (default)**: reverse DNS lookups on two background workers. No elevated privileges required; target process descriptors must still be readable.
+- **pcap**: uses libpcap to capture DNS responses + TLS SNI. Requires a build with `--features pcap` and root/CAP_NET_RAW for live capture.
   If capture fails, rano logs a warning and falls back to PTR automatically.
+
+PTR lookup never waits on the polling thread. A new endpoint initially has
+`unknown` hostname evidence; a completed lookup can emit `domain_update` for a
+held endpoint and correct its original SQLite row, reports and exports. A
+one-poll `--once` run can finish before PTR completes. Queue saturation or an
+unresolved lookup leaves the hostname unknown. The final `ptr` health object
+reports requests, completions, unresolved/deferred work, pending age and cache
+occupancy. Scratch state is limited to 64 queued requests, two workers and 1,024
+cached positive/negative results with a 600-second TTL; accurate lifetime
+statistics still grow with distinct observed identities and names. Pending
+lookups cannot delay shutdown, though a blocked system call may occupy either
+worker until it returns. `--alert-unknown-domain` includes pending PTR results.
 
 Every resolved domain carries a **provenance source** so you can weigh
 attribution confidence:
 
-| `domain_source` | Meaning | Confidence |
+| `domain_source` | Meaning | Observation scope |
 |-----------------|---------|------------|
-| `sni` | Observed in the TLS ClientHello handshake | Highest — what the process actually dialed |
-| `dns` | Answer from a captured DNS response | High — name the process looked up |
-| `ptr` | Reverse DNS on the remote IP | Indicative — CDN/shared hosts may be misleading |
+| `sni` | Visible hostname in a captured TLS ClientHello | Full local/remote socket tuple; observed inode and capture time checked |
+| `dns` | One unexpired hostname candidate from captured DNS answers | Host-global answer IP; does not prove this process queried that name |
+| `ptr` | Reverse DNS on the remote IP | IP-level fallback; CDN/shared hosts may be misleading |
 | *(absent)* | Unresolved or attribution unavailable | — |
 
 The source appears as `"domain_source"` in `--json` events, in SQLite
 (`events.domain_source`), in exports, and as a `[sni]`-style suffix on report
 Top Domains rows.
+Socket ownership metadata includes `domain_evidence`: observation scope, `capture_kind`
+(`live`, `offline`, or `none`), the original capture timestamp, ambiguity flags,
+the number of valid DNS candidates, and a sorted sample of up to eight names.
+Multiple DNS candidates remain ambiguous; PTR can still provide a separately labeled
+fallback. DNS records expire at their observed TTL, capped at five minutes; SNI
+cache entries expire after ten minutes. Expired/future captures, older reordered
+SNI messages, known inode changes and retired tuples cannot supply an old association.
+A hostname already observed on the same held inode remains historical evidence
+after cache expiry. Sockets that disappear entirely between polls remain outside
+the observer's coverage.
+Report domain/provider groups containing multiple provenance kinds are labeled
+`mixed`; a single SNI row does not promote other DNS/PTR/unresolved observations
+in that group to SNI evidence.
+
+Late associations emit `domain_update` records to live output and file logs, linked
+by the observation ID inside decoded `ownership_json`. SQLite corrects that
+original connect row rather than inserting another connection. Exports and reports see the corrected
+provenance with unchanged connect/close/provider counts; metadata-write failure is
+reported separately and makes the run unsuccessful.
+
+Pcap capture supports Ethernet frames with up to two VLAN tags; the capture filter
+admits untagged, single-tagged and double-tagged DNS/TLS traffic. Other datalink
+types produce an actionable startup warning and fallback. Live idle timeouts keep
+the capture worker running. Final summaries expose `pcap` packet/mapping/delivery/
+drain/loss counters, kernel/interface drop snapshots, state and errors. Mapping
+loss or a runtime capture failure warns, falls back to PTR (or unresolved names
+with `--no-dns`) and ends with a nonzero status while preserving valid socket
+observations. Offline EOF is successful completion; truncated-file read errors
+are failures. Queue delivery/drain counters describe parsed messages, not a
+guarantee that every message contains unexpired hostname evidence.
 Examples:
 
 ```bash
@@ -249,12 +334,21 @@ rano --pcap --pattern claude
 rano --domain-mode ptr
 ```
 
-Offline verification (no root) is supported via a pcap file:
+Offline replay requires a pcap-enabled build and a regular capture file; it does
+not require root. It preserves original capture timestamps and streams all
+messages through a bounded queue, including with `--once`. Old fixture records
+may be expired and never become fresh evidence simply because they are replayed:
 
 ```bash
 RANO_PCAP_FILE=tests/fixtures/pcap/dns-fixture.pcap \
   rano --pcap --once --json --no-banner
 ```
+
+The pcap E2E script generates current packet fixtures for real held sockets and
+also tests real live capture inside a private Linux network namespace. TLS
+extraction requires a complete visible ClientHello in one captured transport
+payload. Segmented handshakes, encrypted ClientHello inner names and encrypted
+DNS are not reconstructed; an outer SNI name is not proof of an ECH inner name.
 
 ### `rano update`
 
@@ -299,16 +393,25 @@ rano report --latest --color always
 **Report sections**
 
 - **Session**: run ID, start/end times, duration, host, patterns
-- **Summary**: total events, connects, closes, active connections
-- **Providers**: event counts per provider (anthropic, openai, google, unknown)
-- **Top Domains**: most active domains with provider attribution
-- **Top IPs**: most active remote IPs with reverse DNS
+- **Summary**: total events, connects, closes, filtered connect-close balance, observed event peak, and average/maximum valid close duration with sample count
+- **Providers**: event/connect/close counts and distinct observed domains and peer IPs per provider
+- **Top Domains**: most observed domain/provider groups, including unresolved `unknown` groups
+- **Top IPs**: most observed peer IPs with a stored representative domain when available
+- **Hourly Activity**: UTC hour bins with event counts per provider
+
+All report sections use one database read snapshot. JSON schema `meta.version = "2.0"` labels filtered metrics separately from full-session metadata. Durations include only nonnegative integer `duration_ms` values on close rows; absent samples produce `null`, while a measured zero remains zero. Domain/IP counts exclude unknown domains and absent peer addresses. Count ties sort by name, and an IP with several known domains uses the alphabetically first as its display representative.
+
+`summary.peak_active` reconstructs the stored connect/close ledger in UTC timestamp and event-ID order, carrying earlier history into a selected window. Aggregate reports take the maximum per session; they never add separate observers together. This event-order peak can differ from the monitor's reconciled poll-boundary peak and cannot recover connections missed by polling. Missing opening history, invalid timestamps, absent run identity or event ordering, and windows with no endpoint events produce a typed `peak_unavailable_reason`. Unfiltered reports count malformed-time rows in `unbucketed_events`; time-filtered queries refuse timestamps they cannot order. The filtered connect-close balance is historical arithmetic and can be negative when a window contains only closes.
 
 **Time range formats**
 
 - Relative: `1h`, `24h`, `7d`, `30m`, `1w`
 - Date: `2026-01-17` (interpreted as midnight UTC)
 - RFC3339: `2026-01-17T10:00:00Z`
+
+Dates are checked against the Gregorian calendar. Timestamps accept a known numeric offset or `Z`, lower-case `t`/`z`, and up to nine fractional digits; query comparisons normalize both stored timestamps and boundaries to fixed nanosecond UTC precision. Leap-second inputs and the unknown offset `-00:00` are rejected explicitly. Relative arithmetic is checked, and `--since` must precede `--until`; the start is inclusive and the end exclusive.
+
+`--latest` selects the newest session by metadata start time, including a valid empty session, with run ID as a deterministic tie-breaker. An events-only legacy database falls back to each run's latest normalized event. Explicit run IDs and unambiguous session names are accepted by report/export/diff; a missing reference or duplicate name fails with an actionable error. Diff thresholds must be finite and within `0..100`, and lists/count ties have stable ordering.
 
 ### `rano diff`
 
@@ -331,6 +434,7 @@ rano diff --old "morning-claude-audit-2026-01-20" --new "afternoon-claude-audit-
 - **Removed domains**: domains present in old session but not new
 - **Changed domains**: domains whose counts change above threshold
 - **New processes**: process names that appear only in new session
+- **Removed processes**: process names that appear only in old session
 - **Provider changes**: significant per-provider count shifts
 
 ### `rano status`
@@ -352,14 +456,17 @@ rano status --sqlite /path/to/rano.sqlite
 
 | Variable | Description |
 |----------|-------------|
-| `{active}` | Current active connection count |
-| `{total}` | Total connections this session |
-| `{anthropic}` | Anthropic provider connection count |
-| `{openai}` | OpenAI provider connection count |
-| `{google}` | Google provider connection count |
+| `{active}` | Endpoint count in a fresh valid poll from the live observer |
+| `{total}` | Historical endpoint observations this session |
+| `{anthropic}` | Historical Anthropic endpoint observations |
+| `{openai}` | Historical OpenAI endpoint observations |
+| `{google}` | Historical Google endpoint observations |
 | `{session_name}` | Current session name (if available) |
+| `{state}` | `fresh`, `ended`, `stale`, `degraded`, `unverified`, or `unavailable` |
 
 **Default format**: `{active} active | anthropic:{anthropic} openai:{openai}`
+
+Activity comes from the monitor's published poll count, with its host and PID/kernel-start-time identity checked. Its observation timestamp must be no older than the greater of five seconds or three configured poll intervals; a blocked or stopped monitor cannot refresh it by publishing old observations later. Finalized sessions always return zero current activity without inventing close events. Legacy history lacks this proof and returns zero activity with `unverified`; its totals and name remain available. A newer empty session still takes precedence. Counts and metadata are read from one SQLite snapshot while the monitor keeps writing. Database/query errors are returned explicitly.
 
 **Shell integration examples**
 
@@ -376,13 +483,13 @@ command = "rano status 2>/dev/null"
 when = "command -v rano"
 ```
 
-**Performance**: Optimized for prompt use (<50ms typical execution).
+**Performance**: Status reads a consistent database snapshot and checks observer identity. Query time depends on the database and host; the original <50 ms design target is not a current latency qualification.
 
 ---
 
 ## Alert Thresholds
 
-rano can proactively alert you when connections match suspicious patterns or exceed thresholds. Alerts appear on stderr with distinct formatting so you can monitor without watching output constantly.
+rano can alert when observed endpoint episodes match domain patterns or reach concurrent-count thresholds. Pretty alerts appear on stderr; JSON alerts share stdout with observation records.
 
 ### Quick Examples
 
@@ -390,16 +497,16 @@ rano can proactively alert you when connections match suspicious patterns or exc
 # Watch for connections to suspicious domains
 rano --alert-domain "*.evil.com" --alert-domain "*.malware.org"
 
-# Alert when total connections exceed 100
+# Alert when concurrently observed endpoints reach 100
 rano --alert-max-connections 100
 
-# Alert when any provider exceeds 50 connections
+# Alert when any provider reaches 50 concurrently observed endpoints
 rano --alert-max-per-provider 50
 
-# Alert on connections lasting longer than 30 seconds
+# Alert when an endpoint closes after more than 30 seconds
 rano --alert-duration-ms 30000
 
-# Alert on unresolved domains (potential DNS tunneling)
+# Alert on endpoints without resolved hostname evidence
 rano --alert-unknown-domain
 
 # Combine multiple alerts for security monitoring
@@ -416,7 +523,7 @@ rano --alert-domain "*.suspicious.com" \
 | `--alert-domain <pattern>` | Glob pattern for domains to watch (repeatable) |
 | `--alert-max-connections <N>` | Alert when total active connections reach N (fires at >= N) |
 | `--alert-max-per-provider <N>` | Alert when any provider reaches N concurrently observed connections (fires at >= N) |
-| `--alert-duration-ms <N>` | Alert on connections lasting longer than N ms |
+| `--alert-duration-ms <N>` | Alert when an endpoint closes with duration greater than N ms |
 | `--alert-unknown-domain` | Alert on connections to unresolved IPs |
 | `--alert-bell` | Ring terminal bell on alert |
 | `--alert-cooldown-ms <N>` | Suppress duplicate alerts within N ms (default: 10000) |
@@ -492,7 +599,7 @@ rano --alert-domain "*.cn" \
 1. Verify the pattern matches: `rano --alert-domain "*.example.com" --once` should show the flag is accepted
 2. Check cooldown: default is 10 seconds. Use `--alert-cooldown-ms 1000` for more frequent alerts
 3. Ensure `--no-alerts` is not set
-4. For domain alerts, ensure DNS resolution is working (`--no-dns` disables it)
+4. For domain alerts, ensure hostname evidence is available (`--no-dns` disables PTR only; pcap may still supply DNS/SNI)
 
 **Too many alerts (spam)**
 
@@ -504,7 +611,9 @@ rano --alert-domain "*.cn" \
 
 ## Performance
 
-rano's second design pillar is low overhead. Measured evidence — scan-pass latency at 500/2000 tracked connections, durable SQLite throughput across batch sizes, and a bounded-RSS/zero-drop soak — lives in [docs/perf.md](docs/perf.md), reproducible via `scripts/bench.sh` and `scripts/e2e/soak-memory.sh` (nightly, non-blocking in CI).
+rano's second design pillar is low overhead. [docs/perf.md](docs/perf.md) separates historical results from the repaired counted benchmark and a progressing 600-second default/no-DNS soak. `scripts/bench.sh` measures complete invocations with and without DNS/SQLite; its paced durable workload is not maximum writer capacity. Broader PID/endpoint diversity, PTR, ancestry and pcap resource qualification remains open. A performance win requires candidate and incumbent in the same invocation.
+
+As checked on 2026-10-14, the general CI, distribution, release automation and installer-notification workflows are disabled manually. The active perf workflow is nonblocking and cannot establish a current whole-project gate. Their source files or historical green jobs are not evidence of a currently qualified release.
 
 ---
 
@@ -563,15 +672,15 @@ rano includes built-in configuration presets for common use cases. Presets bundl
 
 | Preset | Description | Key Settings |
 |--------|-------------|--------------|
-| `audit` | Security review / minimal noise | `stats_interval_ms=0`, `include_udp=true`, `summary_only=true` |
+| `audit` | Security review / minimal noise | `summary_only=true`, `stats_interval_ms=0`, `include_udp=true`, `no_dns=false`, `log_format=json`, `redact_cmdline=secrets` |
 | `quiet` | Reduce terminal output | `stats_interval_ms=0`, `no_banner=true`, `summary_only=true` |
-| `live` | Real-time monitoring focus | `stats_interval_ms=500`, `stats_top=10` |
-| `verbose` | Maximum detail | `include_udp=true`, `include_listening=true`, `stats_interval_ms=1000` |
+| `live` | Real-time monitoring focus | `stats_interval_ms=500`, `stats_top=10`, `stats_view=provider,domain`, `stats_cycle_ms=5000` |
+| `verbose` | Maximum detail | `include_udp=true`, `include_listening=true`, `stats_interval_ms=1000`, `stats_top=10` |
 
 ### Quick Examples
 
 ```bash
-# Security audit mode - captures everything, minimal output noise
+# Security audit preset - sampled observations with minimal output noise
 rano --preset audit --pattern claude
 
 # Quiet mode - background monitoring
@@ -624,7 +733,7 @@ The first line comment `# Description: ...` becomes the preset description shown
 - One `key=value` per line
 - Lines starting with `#` are comments
 - Uses the same keys as config files (see Configuration section)
-- Boolean values: `true` or `false`
+- Boolean values: `true`/`false`, `yes`/`no`, `on`/`off`, or `1`/`0`
 
 ### Preset Merging
 
@@ -661,19 +770,19 @@ error: Unknown preset 'mypreset'. Available: audit, live, quiet, verbose
 
 **Preset not loading values**
 
-1. Check file format: must be `key=value` (no spaces around `=`)
+1. Check file format: must be `key=value`; whitespace around the key and value is trimmed
 2. Verify key names match config options (see Configuration section)
-3. For boolean values, use `true` or `false` (not `yes`/`no` or `1`/`0`)
+3. For boolean values, use `true`/`false`, `yes`/`no`, `on`/`off`, or `1`/`0`
 
 ---
 
 ## Process Ancestry
 
-rano tracks the full process ancestry chain for each connection, showing exactly how a network-making process was spawned. This is invaluable for understanding which AI CLI session initiated a particular connection, especially when processes spawn deep subprocess trees.
+rano can record the observed process ancestry chain with `--show-ancestry`. It helps identify a socket owner's monitored tree; shared ownership does not prove which process initiated the connection.
 
 ### How It Works
 
-For each tracked process, rano walks the process tree from init (PID 1) down to the process making the connection. The ancestry is stored as a comma-separated path:
+For each tracked process, rano walks visible parent identities and reverses the result into root-to-owner order. The chain can stop before PID 1 when an ancestor is unavailable. The ancestry is stored as a comma-separated path:
 
 ```
 init:1,systemd:500,sshd:1200,bash:1500,tmux:1600,bash:1700,claude:2000
@@ -727,7 +836,7 @@ The ancestry path is included in CSV and JSONL exports:
 rano export --format csv > connections.csv
 
 # Filter and analyze ancestry in JSON
-rano export --format jsonl | jq 'select(.ancestry_path | contains("tmux"))'
+rano export --format jsonl | jq 'select((.ancestry_path // "") | contains("tmux"))'
 ```
 
 ### Use Cases
@@ -794,6 +903,7 @@ rano export --format csv --sqlite /path/to/observer.sqlite > export.csv
 | `--domain <pattern>` | Filter by domain glob pattern (repeatable) |
 | `--fields <list>` | Override default field list (comma-separated) |
 | `--no-header` | Omit CSV header row |
+| `--output <path>` / `-o <path>` | Write to a file instead of stdout; replaces an existing destination |
 
 ### Output Fields
 
@@ -803,21 +913,23 @@ Both CSV and JSONL include these fields (in order for CSV):
 |-------|------|-------------|
 | `ts` | string | ISO 8601 timestamp |
 | `run_id` | string | Session identifier |
-| `event` | string | `connect` or `close` |
+| `event` | string | `connect`, `close`, `listen`, `bind`, or synthesized threshold `alert` |
 | `provider` | string | anthropic, openai, google, unknown |
-| `pid` | integer | Process ID |
+| `pid` | integer | Process ID; absent on synthesized threshold alerts |
 | `comm` | string | Process command name |
-| `cmdline` | string | Full command line |
+| `cmdline` | string | Stored command line, subject to the monitor's redaction mode |
 | `proto` | string | `tcp` or `udp` |
 | `local_ip` | string | Local IP address |
 | `local_port` | integer | Local port |
 | `remote_ip` | string | Remote IP address |
 | `remote_port` | integer | Remote port |
 | `domain` | string | Resolved domain name (if available) |
+| `domain_source` | string | `sni`, `dns`, or `ptr` when attributed |
 | `ancestry_path` | string | Process ancestry chain (`comm:pid,comm:pid,...`); NULL unless `--show-ancestry` is enabled |
 | `duration_ms` | integer | Connection duration in ms (close events only) |
 | `alert` | integer | `1` when an alert emitted for this event (cooldown-suppressed alerts stay `0`) |
 | `retry_count` | integer | Connections-in-window at retry-warning trigger time (close events only) |
+| `ownership_json` | string | Encoded JSON with observation/owner/root identity, socket kind, peer presence, direction and hostname evidence; decode separately |
 
 ### Format Notes
 
@@ -879,6 +991,10 @@ rano config show
 # Show configuration as JSON
 rano config show --json
 
+# Inspect the same presets and overrides a monitor would use
+rano config show --json --preset live --interval-ms 100
+rano config check --preset live --interval-ms 100
+
 # List config file search paths
 rano config paths
 ```
@@ -887,10 +1003,28 @@ rano config paths
 
 | Subcommand | Description |
 |------------|-------------|
-| `config check` | Validate all config files and report errors/warnings; `--config <path>` / `--config-toml <path>` include overrides, and a set `RANO_CONFIG_TOML` is always checked |
-| `config show` | Display the resolved configuration (all sources merged) |
-| `config show --json` | Output resolved configuration as JSON |
+| `config check` | Resolve and validate the same selected files, ordered presets and monitor options; report errors/warnings |
+| `config show` | Display effective monitor settings, provider matcher and source origins |
+| `config show --json` | Typed `effective` settings, `providers`, `origins`, `sources` and `warnings`; recognized credentials are masked |
 | `config paths` | Show where rano looks for config files |
+
+Both `check` and `show` accept monitor options. `show --json` selects the inspection
+format; use `show --json -- --json` to also inspect JSON monitoring. Inspection
+does not open output sinks or start capture. Runtime file/database permissions and
+capture availability are checked when monitoring starts.
+
+Settings resolve as defaults, the selected KV file, presets in their given order,
+then CLI options. A later source replaces a list setting; repeated list keys or
+flags within that source append. An invalid selected source fails even if a later
+option would replace its value. Unknown file keys remain visible warnings.
+`--no-config` suppresses KV/TOML discovery and explicit/env file overrides;
+explicitly requested presets still load. Missing explicit or environment-selected
+sources are errors.
+
+Inspection omits raw source contents and masks recognized credential flags,
+assignments and token shapes even when monitoring uses `redact_cmdline=off`.
+Original values still drive matching. Arbitrary credentials embedded in unrecognized
+free text or filenames remain outside this heuristic policy.
 
 ### Validation Output
 
@@ -916,7 +1050,7 @@ rano config paths
 | Invalid enum values | `'domain_mode' must be one of [auto, ptr, pcap], got 'invalid'` |
 | Zero where >= 1 required | `'db_batch_size' must be >= 1, got 0` |
 | Invalid stats_view | `'stats_view' contains invalid value 'invalid'` |
-| TOML syntax errors | `TOML parse error: expected `]`...` |
+| TOML syntax errors | Invalid table or array syntax |
 | Invalid provider mode | `providers.mode must be one of [merge, replace], got 'bad'` |
 | Missing parent directory | `log_file parent directory '/nonexistent' does not exist` |
 
@@ -948,7 +1082,7 @@ rano config paths
 | Issue | Fix |
 |-------|-----|
 | `unknown key 'intervall_ms'` | Fix typo: `interval_ms` |
-| `must be a boolean` | Use `true`, `false`, `1`, `0`, `yes`, or `no` |
+| `must be a boolean` | Use `true`, `false`, `1`, `0`, `yes`, `no`, `on`, or `off` |
 | `must be one of [auto, ptr, pcap]` | Use a valid value from the list |
 | `TOML parse error` | Check TOML syntax (missing quotes, brackets) |
 | `must be >= 1` | Use a positive integer (not 0) |
@@ -967,7 +1101,10 @@ Logs are written to `logs/e2e/config-validation-*.log`.
 
 ## Configuration
 
-Default path: `~/.config/rano/config.conf`
+The KV path is `--config <path>`, then a set `RANO_CONFIG`, then
+`$XDG_CONFIG_HOME/rano/config.conf` (or `~/.config/rano/config.conf` when XDG is unset).
+User presets use the same configuration directory under `rano/presets/` and override
+builtins with the same name.
 
 ```ini
 # Process matching
@@ -1038,6 +1175,8 @@ Customize provider pattern matching without recompiling. rano searches for confi
 4. `--config-toml <path>` (CLI)
 5. `RANO_CONFIG_TOML` (env)
 
+These TOML sources apply in the listed order; an environment-selected file has the highest precedence. Missing default files are ignored. Missing explicit/env sources, unreadable selected files, invalid TOML or invalid values fail resolution. `--no-config` suppresses all TOML sources. The XDG location replaces `~/.config/rano/` when `XDG_CONFIG_HOME` is set.
+
 **Example `rano.toml`:**
 
 ```toml
@@ -1063,10 +1202,10 @@ google = ["corp-gemini"]
 | openai | `codex`, `openai` |
 | google | `gemini`, `google` |
 
-**Verification:** Run with `--once` to see provider attribution:
+**Inspection:** Run with `--once` while the selected process owns a held socket to see provider attribution. A successful empty poll is not proof of attribution:
 
 ```bash
-rano --pattern myprocess --once 2>&1 | grep provider
+rano --pattern myprocess --once --json
 ```
 
 ---
@@ -1081,7 +1220,7 @@ rano --pattern myprocess --once 2>&1 | grep provider
                │
                ▼
 ┌──────────────────────────────┐
-│          /proc Poller         │
+│    /proc or libproc Poller    │
 │  sockets ↔ inodes ↔ PIDs      │
 └──────────────┬───────────────┘
                │
@@ -1151,14 +1290,14 @@ rano --stats-interval-ms 2000
 
 ## Live Stats Views
 
-rano provides four real-time stats views that display aggregated connection data as colorized bar charts. Views can cycle automatically or be displayed individually.
+rano provides four live stats views that display accumulated observation counts as colorized bar charts. Views can cycle automatically or be displayed individually. Provider/domain/IP totals describe observations since startup; the separate active/peak figures describe reconciled poll counts, and neither recovers traffic missed between polls.
 
 ### Available Views
 
 | View | Description | Use Case |
 |------|-------------|----------|
 | `provider` | Connections grouped by AI provider (anthropic, openai, google, unknown) | See which AI services are being used |
-| `domain` | Top domains by connection count | Identify active endpoints |
+| `domain` | Top domains by accumulated endpoint observation count | Identify frequently observed endpoints |
 | `port` | Top destination ports | Monitor protocol distribution |
 | `process` | Top process names (comm) | See which executables are connecting |
 
@@ -1183,7 +1322,7 @@ rano --stats-view domain --stats-top 10 --stats-width 60 --stats-interval-ms 100
 | Flag | Default | Description |
 |------|---------|-------------|
 | `--stats-view <view>` | provider | View to display (repeatable for cycling) |
-| `--stats-interval-ms <ms>` | 2000 | How often to refresh stats (0 disables) |
+| `--stats-interval-ms <ms>` | 5000 | How often to refresh stats (0 disables) |
 | `--stats-cycle-ms <ms>` | 0 | Cycle between views (0 = no cycling) |
 | `--stats-top <n>` | 5 | Number of items to show in domain/port/process views |
 | `--stats-width <n>` | 40 | Width of bar charts in characters |
@@ -1261,12 +1400,12 @@ Or via presets:
 
 ```bash
 # The 'live' preset enables frequent stats
-rano --preset live  # stats_interval_ms=500, stats_top=10
+rano --preset live  # stats_interval_ms=500, stats_top=10; provider/domain cycle every 5000 ms
 ```
 
 ### Verify pcap attribution (E2E)
 
-The offline pcap test uses the shared harness and writes logs to `logs/e2e/`:
+The pcap test uses the shared harness for current offline packets and live capture in a private Linux network namespace. It requires a pcap-enabled binary; the live portion requires capture/network-namespace privileges. It writes logs to `logs/e2e/`:
 
 ```bash
 scripts/e2e/run.sh pcap-attribution scripts/e2e/pcap-attribution.sh
@@ -1284,7 +1423,8 @@ Logs:
 
 - **Perfect hostname attribution**: pcap relies on observed DNS/SNI; some flows still resolve via PTR or remain `unknown`.
 - **Packet-level inspection**: it’s not a packet sniffer; use tcpdump/wireshark for payloads.
-- **Windows not supported**: primary monitoring relies on `/proc` and Unix libc APIs; use WSL 2 on Windows.
+- **Windows not supported**: monitoring relies on Linux `/proc` or macOS libproc and Unix libc APIs; use WSL 2 on Windows.
+- **macOS needs ownership for visibility**: an unprivileged observer sees the sockets of its own user's processes only; other users' targets are reported as observation errors.
 
 ---
 
@@ -1326,4 +1466,4 @@ rano --json --log-file /tmp/rano.jsonl
 
 ## License
 
-License is currently unspecified.
+See [LICENSE](LICENSE), titled “MIT License (with OpenAI/Anthropic Rider),” for the full terms. Cargo metadata currently declares `MIT`; the LICENSE file also contains the additional rider and restrictions.

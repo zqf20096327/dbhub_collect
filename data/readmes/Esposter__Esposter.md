@@ -1,7 +1,10 @@
 # [Esposter](https://esposter.com)
 
 [![Build Status][badge-ci]][url-ci]
+[![Duplicate Code][badge-duplicates]][url-ci]
 [![Repository Score][badge-score]][url-score]
+[![OpenSSF Scorecard][badge-openssf]][url-openssf]
+[![skills.sh installs][badge-skills]][url-skills]
 [![Apache-2.0 licensed][badge-license]][url-license]
 
 ## Table of Contents
@@ -380,10 +383,9 @@ flowchart LR
 | [`packages/parse-tmx`](https://github.com/Esposter/Esposter/tree/main/packages/parse-tmx)                       | Parser for Tiled Map Editor `.tmx` files                                                                                                                                        |     ✓     |
 | [`packages/pitch-transcription`](https://github.com/Esposter/Esposter/tree/main/packages/pitch-transcription)   | The notes in a recording — Basic Pitch on the current TensorFlow.js, its readings turned into notes, bends and MIDI                                                             |     ✓     |
 | [`packages/shared`](https://github.com/Esposter/Esposter/tree/main/packages/shared)                             | Shared TypeScript types, utilities, and error classes                                                                                                                           |     ✓     |
-| [`packages/shared-node`](https://github.com/Esposter/Esposter/tree/main/packages/shared-node)                   | Node-only shared tooling — hidden-window child processes and benchmark reporting for vitest bench runs                                                                          |     —     |
+| [`packages/shared-node`](https://github.com/Esposter/Esposter/tree/main/packages/shared-node)                   | Node-only shared tooling — the machine-wide download cache, hidden-window child processes and benchmark reporting for vitest bench runs                                         |     —     |
 | [`packages/trpc-msw`](https://github.com/Esposter/Esposter/tree/main/packages/trpc-msw)                         | tRPC for Mock Service Worker — every transport answered by tRPC's own handlers                                                                                                  |     ✓     |
 | [`packages/trpc-nuxt-module`](https://github.com/Esposter/Esposter/tree/main/packages/trpc-nuxt-module)         | tRPC for Nuxt — a module registering the router's HTTP and WebSocket handlers, with composables over `useAsyncData`                                                             |     ✓     |
-| [`packages/virrun`](https://github.com/Esposter/Esposter/tree/main/packages/virrun)                             | Ephemeral, in-memory virtual runner — runs a repo's real toolchain isolated                                                                                                     |     ✓     |
 | [`packages/vue-phaserjs`](https://github.com/Esposter/Esposter/tree/main/packages/vue-phaserjs)                 | Phaser game engine integration for Vue                                                                                                                                          |     ✓     |
 | [`scripts`](https://github.com/Esposter/Esposter/tree/main/scripts)                                             | The repository's own tooling — workspace graph, dependency report, sweep scans                                                                                                  |     —     |
 
@@ -414,8 +416,13 @@ This project is licensed under the [Apache-2.0 license](https://github.com/Espos
 
 [badge-ci]: https://github.com/Esposter/Esposter/actions/workflows/CI.yaml/badge.svg?event=push&branch=main
 [url-ci]: https://github.com/Esposter/Esposter/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain
-[badge-license]: https://img.shields.io/github/license/Esposter/Esposter.svg?color=blue
-[url-license]: https://github.com/Esposter/Esposter/blob/main/LICENSE
+[badge-duplicates]: https://img.shields.io/badge/duplicate%20code-0%20clones-33c854
 [badge-score]: https://img.shields.io/badge/score-94%2F100-33c854
 [url-score]: https://github.com/Esposter/Esposter/blob/main/SCORE.md
+[badge-openssf]: https://api.scorecard.dev/projects/github.com/Esposter/Esposter/badge
+[url-openssf]: https://scorecard.dev/viewer/?uri=github.com/Esposter/Esposter
+[badge-skills]: https://skills.sh/b/Esposter/Esposter
+[url-skills]: https://skills.sh/Esposter/Esposter
+[badge-license]: https://img.shields.io/github/license/Esposter/Esposter.svg?color=blue
+[url-license]: https://github.com/Esposter/Esposter/blob/main/LICENSE
 [url-npm]: https://www.npmjs.com/package/Esposter/v/latest
