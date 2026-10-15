@@ -9342,5 +9342,76 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3efc07556213": {
+  "identity": {
+   "one_liner": "NestJS 模块化单体电商后端 API，用 PostgreSQL/Redis/BullMQ",
+   "review": "一个基于 NestJS 的电商后端参考实现，包含结账 SAGA、库存行锁、RSA JWT 认证和 CQRS 查询适配器，通过 ACL 网关隔离模块。面向希望本地运行参考后端的开发者，使用 Docker 启动 Postgres 和 Redis，支持单元、集成、e2e 和架构测试；支付目前为模拟适配器，仅支持单实例部署。",
+   "highlights": [
+    "结账流程实现为 BullMQ SAGA，含补偿逻辑；库存预留使用行锁",
+    "模块通过 ACL 网关与领域事件通信，读路径走 CQRS 查询适配器",
+    "提供单元、集成（Testcontainers）、e2e、架构及 OpenAPI 校验的测试与 CI"
+   ],
+   "use_cases": [
+    "本地搭建/研究电商后端参考架构",
+    "作为 DDD/模块化单体开发的示例工程",
+    "配合配套 admin/storefront 仓库组成全栈演示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ `npm run setup` writes `.env.development`, starts Postgres and Redis, runs migrations, and seeds fixtures.",
+     "lines": [
+      7,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是用 Postgres/Redis 存数据的电商 API 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> NestJS ecommerce API. Checkout, stock, and auth live here. Reference backend, not a hosted store. ／ `npm run setup` writes `.env.development`, starts Postgres and Redis, runs migrations, and seeds fixtures.",
+   "evidence_lines": [
+    15,
+    65
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "raouf-b-dev/ecommerce-store-api",
+  "sha": "3efc07556213",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

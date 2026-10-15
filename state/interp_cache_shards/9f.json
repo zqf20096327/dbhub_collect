@@ -10878,5 +10878,201 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ed4eedddc79b": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 用量追踪面板，用 SQLite 持久化用量历史",
+   "review": "该项目为 CLIProxyAPI（CPA）提供独立的用量追踪仪表盘，采集请求用量、成本估算、请求延迟与凭据配额数据，并以 SQLite 本地库持久化历史，支持定时备份、只读分享视图。面向已部署 CPA 的运维/使用者，需 Go 1.26+ 或 Docker 部署，且依赖 CPA 开启用量统计配置。",
+   "highlights": [
+    "将 CPA 用量持久化到 SQLite 并支持定时备份",
+    "按模型、API Key、提供方分析用量与估算成本",
+    "监控凭据配额与健康状态，可导出请求明细"
+   ],
+   "use_cases": [
+    "追踪 CLIProxyAPI 的 token 用量与成本",
+    "排查请求成功率、TTFT 与延迟问题",
+    "共享只读用量视图给单个 CPA API Key"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Keep your history**: persist CPA usage in SQLite with scheduled backups.",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用数据库存自身数据的用量追踪仪表盘应用，SQLite 仅作其持久化存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Keep usage history for CLIProxyAPI (CPA), understand model costs, and track request performance and credential quotas. CPA Usage Keeper brings overviews, realtime diagnostics, request details, and quota history into one independently deployed dashboard. ／ - **Keep your history**: persist CPA usage in SQLite with scheduled backups.",
+   "evidence_lines": [
+    18,
+    50
+   ]
+  },
+  "fn": "Willxup/cpa-usage-keeper",
+  "sha": "ed4eedddc79b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e7cfdf46249": {
+  "identity": {
+   "one_liner": "GitHub PR 审查桌面应用，本地镜像缓存加速打开",
+   "review": "PR Cockpit 是面向 macOS 和 Linux 的 GitHub pull request 审查桌面应用，通过 webhook 维护的本地镜像存储 PR 队列、diff、检查日志与评论线程，配合键盘快捷键和 CLI 使用；本机用 Bun 服务器将 PR 状态缓存于 SQLite 并为桌面 UI 提供数据，GitHub 仍为数据源。适合需要高频审查 PR 的开发者与代码审查流程。",
+   "highlights": [
+    "提供 PR 队列、diff、检查日志和评审线程的本地缓存读取",
+    "支持键盘快捷键操作与面向编码代理的 CLI",
+    "支持通过 GitHub App webhook 或轮询保持数据更新"
+   ],
+   "use_cases": [
+    "开发者日常审查和管理所在仓库的 pull request",
+    "需要快速浏览大型仓库 PR 队列与失败检查日志",
+    "为编码代理提供 PR 审查上下文与快捷操作入口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **On your machine:** a Bun server caches PR state in SQLite and serves the desktop UI and CLI. In replica mode, cached lists stay local; GitHub searches and keyed PR title lookups use the connected source.",
+     "lines": [
+      161
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为 GitHub PR 审查桌面应用，仅将 PR 状态缓存于本地 SQLite，SQLite 是其使用的数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PR Cockpit is a desktop app for GitHub pull requests on **macOS and Linux**. A local mirror, kept current by webhooks, holds every PR you care about, so the queue, the diff, the failed check logs and the review threads paint from disk. Keyboard for everything; GitHub stays the source of truth.",
+   "evidence_lines": [
+    5
+   ]
+  },
+  "fn": "theolundqvist/pr-cockpit",
+  "sha": "5e7cfdf46249",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e9786b596eda": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue+MySQL的在线音乐播放小程序系统",
+   "review": "一套前后端分离的在线音乐平台小程序，包含歌曲/专辑/歌手/歌词管理、在线播放、搜索、收藏关注、评价与数据统计等功能，分管理员端与用户端。面向音乐分享社区、校园平台及毕业设计等使用场景，使用SpringBoot+MybatisPlus+MySQL+Redis构建，需自备MySQL与Redis环境，作者以付费方式提供部署与讲解服务。",
+   "highlights": [
+    "提供歌曲、专辑、歌手、歌词等内容的上传与维护功能",
+    "支持音乐在线播放、关键词搜索、收藏关注与播放历史记录",
+    "包含管理员与普通用户两类角色，提供权限隔离与运营数据统计报表"
+   ],
+   "use_cases": [
+    "在线音乐播放小程序",
+    "校园或个人音乐分享平台",
+    "小型音乐内容管理系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 MySQL 作为数据库存储业务数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库) ／ 本项目是一套面向移动端用户的在线音乐小程序系统，采用前后端分离架构，覆盖管理员与普通用户两类角色。系统围绕“歌曲管理、专辑管理、歌手管理、歌词管理、歌曲类型、音乐搜索、在线播放、收藏关注、歌曲评价、播放历史、系统通知、数据统计”等核心业务设计，支持用户注册登录、在线搜索与播放音乐、查看歌手与专辑详情、收藏歌曲与关注歌手、查看公告与系统消息，管理员完成歌曲/专辑/歌手/歌词的上传与维护、用户管理、收藏与播放数据查看、公告发布、消息推送与多维度运营统计，适用于在线音乐平台、校园音乐社区、个人音乐分享小程序、音乐爱好者交流平台及小型音乐内容管理系统。",
+   "evidence_lines": [
+    26,
+    31,
+    5
+   ]
+  },
+  "fn": "Fankekeke/music_cloud_cos",
+  "sha": "e9786b596eda",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

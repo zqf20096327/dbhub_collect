@@ -9561,5 +9561,69 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "34d4052c25e7": {
+  "identity": {
+   "one_liner": "Android 应用本地数据逆向分析报告集，含加密 SQLite 数据层取证",
+   "review": "收录十五份授权 Android 样本的静态逆向与本地数据取证报告，内容包含数据库结构、SQL 表列、签名/风控组件与脱敏聚合结果，并提供只读 SQLite 检查、APK 字符串搜索等配套脚本。面向安全研究、数据可移植性取证与防御验证人员；不公开 APK、数据库文件与密钥等敏感内容。",
+   "highlights": [
+    "包含数据库结构、SQL 表和列、函数地址、哈希与合成测试向量等取证结果",
+    "tools/ 提供只读 SQLite 检查、APK 字符串搜索与发布前脱敏扫描工具",
+    "公开范围声明对行值、密钥、账号等敏感内容脱敏，仅保留完整性哈希"
+   ],
+   "use_cases": [
+    "Android 应用本地数据层的安全研究与取证分析",
+    "验证应用数据可移植性与防御机制",
+    "参照其方法论开展授权样本逆向"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|高德地图|`com.autonavi.minimap`|`17.00.0.2005`|`170000`|加密 SQLite、JNI key 安装、导航/搜索历史| ／ |闲鱼|`com.taobao.idlefish`|`7.28.40`|`521`|MTOP 认证与签名、上传下载、四层风控、权限隐私、21 个明文 SQLite| ／ |知乎|`com.zhihu.android`|`11.10.0`|`41012`|X-Zse 签名链、Bangcle 分组加密、RUID/ZST 指纹、盐选与 OGV、应用列表上报、42 个设备端 SQLite|",
+     "lines": [
+      9,
+      15,
+      18
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库为逆向分析报告与配套只读检查脚本，未声明为数据库生态提供工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "本仓库公开十五份授权 Android 样本（含哔哩哔哩 9.14.0 播放链实测）的静态逆向与本地数据取证结果：高德地图数据库封装、小红书原生签名/风控组件、支付宝数据库与登录/支付/风控调用面、微信数据库与登录/消息/支付/设备风控、拼多多网络协议/风控/动态库与本地存储、美团网络与设备风控、闲鱼网络协议/认证/上传下载/风控与本地存储、大麦网络协议/认证/上传下载/风控与权限隐私、滴滴出行网络/认证/上传下载/风控与权限隐私、知乎网络协议/认证/盐选与视频/风控与本地存储、哔哩哔哩网络协议/认证/上传下载/风控/DRM 与本地存储、纷玩岛网络协议/认证/上传下载/风控与本地存储、原神 Android 网络协议/认证/上传下载/风控/权限隐私与客户端渲染管线。内容聚焦可验证的版本、哈希、方法、函数地址、代码片段、数据库结构和脱敏聚合结果。 ／ tools/README.md 提供只读 SQLite 检查、APK 字符串搜索、密钥派生占位脚本、shield 外层重放和发布前脱敏扫描。所有秘密通过环境变量或命令行传入，不写入仓库。",
+   "evidence_lines": [
+    3,
+    50
+   ]
+  },
+  "fn": "Reverse-Engineered-Android/mobile-app-reverse-reports",
+  "sha": "34d4052c25e7",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

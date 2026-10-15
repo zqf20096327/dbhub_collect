@@ -7250,5 +7250,300 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "32c6ea5f2fdf": {
+  "identity": {
+   "one_liner": "自托管中文 RSS 阅读工作台，集成双语翻译与 AI 改写",
+   "review": "QMReader 是一个自托管的 RSS 阅读工作台，提供订阅源聚合、英文标题自动补中文翻译、乔木风格改写、人工点评和文章上下文 AI 对话，并把翻译/改写/点评沉淀为可分享的公开资产（含 RSS 与贡献者页）。面向技术内容读者和个人/小团队自托管场景，采用 Node/Express + SQLite，刷新拆分为 fetch worker 与 AI worker 两段。",
+   "highlights": [
+    "聚合 RSSHub、直接 RSS、sitemap、Hacker News、Product Hunt 等多类信息源，后台刷新拆分为 fetch worker 与 AI worker",
+    "提供英文标题自动中文翻译、正文译文生成与乔木风格改写，译文/改写/点评可生成带稳定深链的公开资产和 RSS",
+    "支持自托管部署（Node+systemd 或 Docker Compose），运行数据存储于 SQLite，用户 AI key 保存在浏览器 localStorage"
+   ],
+   "use_cases": [
+    "个人技术内容阅读工作流：订阅多源、双语阅读、AI 辅助消化文章",
+    "沉淀可复用的公开阅读资产：翻译、改写、点评生成稳定深链与 RSS 订阅流",
+    "小团队/个人自托管部署 RSS 阅读器并管理信息源刷新策略"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|自托管部署|支持 Node + systemd，也支持 Docker Compose；SQLite 存储运行数据| ／ 首次启动会按 `STARTUP_REFRESH_DELAY_MS` 决定是否触发全量刷新。运行数据写入 `data/`，包括 RSS 缓存、SQLite 数据库、截图和日志；这些文件默认被 `.gitignore` 排除。",
+     "lines": [
+      82,
+      98
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个 RSS 阅读应用，SQLite 仅用于存储其自身运行数据（README L82、L98），非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|自托管部署|支持 Node + systemd，也支持 Docker Compose；SQLite 存储运行数据| ／ 首次启动会按 `STARTUP_REFRESH_DELAY_MS` 决定是否触发全量刷新。运行数据写入 `data/`，包括 RSS 缓存、SQLite 数据库、截图和日志；这些文件默认被 `.gitignore` 排除。 ／ - A static frontend served by Express, with SQLite for runtime data.",
+   "evidence_lines": [
+    82,
+    98,
+    304
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "joeseesun/qmreader",
+  "sha": "32c6ea5f2fdf",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f3532281e8bb": {
+  "identity": {
+   "one_liner": "Go 语言 ORM 库，受 Django 启发，支持多方言数据库与内置管理面板",
+   "review": "KORM 是一个 Go 语言的 ORM/框架库，提供结构体 AutoMigrate、查询构建器、事务、Schema Diff 干跑迁移，并内置 Admin Dashboard、认证中间件、websocket PubSub 总线与交互式 Shell。面向使用 Go 并发/异步场景的开发者，需按数据库单独安装驱动（sqlite/pg/mysql driver 包）。",
+   "highlights": [
+    "支持 SQLite、MySQL、MariaDB、PostgreSQL、CockroachDB 方言，提供并发安全的驱动读写",
+    "提供 AutoMigrate、Schema Diff 干跑迁移与外键/索引/check 等 SQL 标签支持",
+    "内置 Admin Dashboard、Auth 中间件、事件总线（PubSub websockets）与交互式 Shell"
+   ],
+   "use_cases": [
+    "Go 应用中从结构体生成表结构并执行 CRUD 查询",
+    "在多 KORM 实例间通过事件总线同步数据分布",
+    "通过管理面板查看实时日志并管理数据"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Postgres ／ - **Dialect-Aware** : Proposes tailored SQL for SQLite, PostgreSQL, CockroachDB, and MySQL / MariaDB (e.g. SQLite-safe `ADD COLUMN` avoiding illegal inline `UNIQUE` constraints).",
+     "lines": [
+      92,
+      167
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Mysql ／ - **Dialect-Aware** : Proposes tailored SQL for SQLite, PostgreSQL, CockroachDB, and MySQL / MariaDB (e.g. SQLite-safe `ADD COLUMN` avoiding illegal inline `UNIQUE` constraints).",
+     "lines": [
+      90,
+      167
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Sqlite",
+     "lines": [
+      89
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Dialect-Aware** : Proposes tailored SQL for SQLite, PostgreSQL, CockroachDB, and MySQL / MariaDB (e.g. SQLite-safe `ADD COLUMN` avoiding illegal inline `UNIQUE` constraints).",
+     "lines": [
+      167
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为操作多种数据库提供 ORM 能力的 Go 库，属于数据库生态的开发组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "#### Supported databases: ／ go get -u github.com/kamalshkeir/korm@latest ／ - **Dialect-Aware** : Proposes tailored SQL for SQLite, PostgreSQL, CockroachDB, and MySQL / MariaDB (e.g. SQLite-safe `ADD COLUMN` avoiding illegal inline `UNIQUE` constraints).",
+   "evidence_lines": [
+    88,
+    98,
+    167
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "kamalshkeir/korm",
+  "sha": "f3532281e8bb",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "16c91a26a373": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，含记忆网关与 MCP 工具",
+   "review": "Stiller Brain 是一个供 AI 模型与客户端使用的长期记忆后端：AI 通过 MCP 工具主动查、存、改记忆，ST 网关在回复前按对话语境注入相关记忆。使用 Python 与 SQLite 存储，通过 OpenAI 兼容 Chat Completions 网关接入，支持源码安装于 Windows/Linux 及 Android 实验部署。面向具备 MCP 与网关接入能力的模型使用者。",
+   "highlights": [
+    "提供 MCP 工具与 OpenAI 兼容网关两种接入方式，可连接同一份数据",
+    "记忆分自我定义、情感、学习、工具、规划等模块，支持版本回看与自写提醒",
+    "提供日常 8 入口的工具档与完整的 54 项工具目录"
+   ],
+   "use_cases": [
+    "为 LLM 客户端在回复前自动注入相关长期记忆",
+    "AI 主动保存、查询与修改经历、知识与计划记录",
+    "本地私有部署的个人 AI 记忆库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`0.2.0-preview.7` · Python / SQLite · 幻觉黑匣子提示修正 · 情绪层与网关改良保留 · 日常 8 入口 · 源码开发预览",
+     "lines": [
+      285
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite 作为自身存储运行（L285），SQLite 仅为其数据存储层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "非商业源码预览",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ST 是面向 LLM 的长期记忆后端。它接住 AI 自己写下的经历、理解与打算，再通过网关，在回复开始前带回与当前话题相关的记忆；MCP 工具则让 AI 随时主动查阅、保存和修改。接入以网关接口与 MCP 工具调用能力为依据，面向具备相应能力的模型与客户端。 ／ `0.2.0-preview.7` · Python / SQLite · 幻觉黑匣子提示修正 · 情绪层与网关改良保留 · 日常 8 入口 · 源码开发预览 ／ **安装检查只访问本机，不调用真实模型。软件装好后，再由 AI 完成自我定义的初始设置。** 当前网关适配 OpenAI 兼容 Chat Completions，客户端还需支持对应 MCP 连接与完整工具续轮。",
+   "evidence_lines": [
+    7,
+    285,
+    275
+   ]
+  },
+  "fn": "AZHi-xinxin/StillerBrain",
+  "sha": "16c91a26a373",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c13921754b3c": {
+  "identity": {
+   "one_liner": "DaJet 服务的 Web API 托管服务器",
+   "review": "这是用于托管 DaJet 服务的 Web API 服务器，README 提供了 Windows/Linux 下安装 .NET 10 SDK 后解压运行可执行文件的方式，以及通过 Docker Hub 拉取镜像并启动容器的方式，启动后可通过 /status 端点查看状态。适用于需要以 HTTP 服务形式运行 DaJet 集成服务的用户；README 未展示其具体功能细节与配置说明。",
+   "highlights": [
+    "以 Web API 形式托管 DaJet 服务",
+    "支持 Windows/Linux 本地安装和 Docker 容器两种运行方式",
+    "提供 /status 端点用于查看服务状态"
+   ],
+   "use_cases": [
+    "以 HTTP 服务方式运行 DaJet 集成服务",
+    "在容器环境中部署 DaJet 服务",
+    "需要独立服务进程承载 DaJet 功能的集成场景"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 定位为托管 DaJet 服务的 Web API 服务器组件，服务于集成场景而非最终业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "WEB API сервер для хостинга сервисов DaJet. ／ docker pull zhichkin/dajet-http-server",
+   "evidence_lines": [
+    5,
+    24
+   ]
+  },
+  "fn": "zhichkin/dajet-http-server",
+  "sha": "c13921754b3c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

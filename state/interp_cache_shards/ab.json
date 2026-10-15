@@ -9224,5 +9224,109 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2c782c0d7b52": {
+  "identity": {
+   "one_liner": "jmoiron/sqlx 的 API 兼容替代库，提供自动占位符重绑与 Hook 机制",
+   "review": "sqlex 是 Go 语言数据库访问库 jmoiron/sqlx 的 drop-in 替代，保持 API 兼容，提供自动 Rebind（`?` 适配 PostgreSQL/MySQL/SQLite/SQL Server 占位符）、自动 IN 展开、可插拔 Hook、泛型 JSON 列类型及 20+ 项 bug 修复，要求 Go 1.21+。面向需要在 Go 项目中访问关系数据库、或从 sqlx 迁移的开发者。",
+   "highlights": [
+    "Auto-Rebind：统一使用 `?` 占位符，自动转换为 PostgreSQL ($1)、MySQL、SQLite、SQL Server (@p1) 各自的绑定格式",
+    "提供 Hook 拦截器系统（洋葱模型），用于日志、追踪、指标；支持全局与按调用粒度",
+    "自动识别 IN (?) 上下文并展开切片参数，提供 AsValue/AsList 转义 API"
+   ],
+   "use_cases": [
+    "Go 项目中从 jmoiron/sqlx 迁移（仅改 import 路径）",
+    "同一套 SQL 代码需运行在多种关系数据库上",
+    "为 SQL 执行注入日志、追踪或指标 Hook"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ |**Cross-database out of the box**|Write SQL with `?` everywhere — works on PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      22,
+      110
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ |**Cross-database out of the box**|Write SQL with `?` everywhere — works on PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      22,
+      110
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ |**Cross-database out of the box**|Write SQL with `?` everywhere — works on PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      22,
+      110
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ |**Cross-database out of the box**|Write SQL with `?` everywhere — works on PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      22,
+      110
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|`:123` / `:1`|❌ preserved as literal|Digit-start rejected (avoids Oracle `:N` / SQLite `?NNN` conflicts)|",
+     "lines": [
+      225
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为 jmoiron/sqlx 的 API 兼容替代，是为 Go 应用访问多种数据库提供服务的库组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（L6）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> A **drop-in replacement** for jmoiron/sqlx — 100% API-compatible, with added Hook aspects, generic JSON types, bug fixes, and more. ／ - 🚀 **Auto-Rebind** — write `?` everywhere, works on PostgreSQL (`$1`), MySQL (`?`), SQLite (`?`), SQL Server (`@p1`). No more manual `db.Rebind()`. Including `Preparex`. ／ go get github.com/go-sqlex/sqlex",
+   "evidence_lines": [
+    11,
+    22,
+    36
+   ]
+  },
+  "fn": "go-sqlex/sqlex",
+  "sha": "2c782c0d7b52",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

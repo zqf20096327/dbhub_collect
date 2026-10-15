@@ -9587,5 +9587,120 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "220195e176b4": {
+  "identity": {
+   "one_liner": "GaussDB 数据面 MCP 服务，带三层 SQL 防护供 AI 客户端查询数据",
+   "review": "该项目是面向 GaussDB 的数据面 MCP 服务器，让 Dify、Claude Code 等 AI 客户端在白名单、通道锁、只读会话三层防护下执行查询、写入、DDL、EXPLAIN 与元数据浏览。凭证仅存服务端并支持热轮换，传输支持 stdio 与 HTTP+Bearer 鉴权，内置审计与脱敏。Oracle 兼容（A/ORA）形态为第一优先场景，需 Linux + Python 3.11 与官方驱动（Windows 走 pyodbc 轨）。",
+   "highlights": [
+    "提供 7 个工具（查询/写入/DDL/EXPLAIN/元数据浏览）并按三档风险分级，配合 sql_guard 白名单与工具通道锁",
+    "支持 stdio 与 streamable HTTP 传输、Bearer token 鉴权、JSONL 审计与脱敏管线，凭证文件 0600 热轮换",
+    "支持 psycopg2 与 pyodbc 双驱动轨，覆盖 Linux/Windows 及集中式/分布式 A/ORA 兼容库"
+   ],
+   "use_cases": [
+    "AI 客户端通过 MCP 协议在只读默认与风险分级下查询/操作 GaussDB 业务数据",
+    "企业内网部署受控的数据库数据面访问入口（远程 HTTP + Bearer + 审计）",
+    "对 Oracle 兼容形态库进行 MERGE INTO 等语法的 AI 辅助查询与验证"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "分布式 `ORA`/`MYSQL`/`M`（分布式默认 postgres 库是 MYSQL 兼容，集中式默认 A）；",
+     "lines": [
+      359
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "> 诚实声明（沿用 AWS mysql-mcp 的话术）：词法白名单不是安全边界，它会保守误拒个别合法语句；真正的边界是只读会话 + 最小权限账号。 ／ |维度|polardb-mcp|AWS mysql-mcp|openGauss 官方 mcp-opengauss|**本服务**|",
+     "lines": [
+      46,
+      50
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "**Oracle 兼容（A/ORA）库是第一优先场景**：MERGE INTO、DUAL、层次查询、MINUS、序列、DECODE 等 Oracle 系语法在词法层与真库（集中式 + 分布式）均已验证（实测备忘见§4.1）。A 库的 upsert 用 MERGE 表达，而非 PG 的 ON CONFLICT（A 库不支持）：",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "mention",
+     "quote": "|维度|polardb-mcp|AWS mysql-mcp|openGauss 官方 mcp-opengauss|**本服务**|",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "mention",
+     "quote": "|维度|polardb-mcp|AWS mysql-mcp|openGauss 官方 mcp-opengauss|**本服务**|",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB Data MCP Server ／ GaussDB 507 **数据面 MCP 服务**。AI 客户端（Dify、Claude Code 等）通过它在三层安全防护下查询与操作 GaussDB 里的业务数据；数据库凭证只保存在服务端，不经过 LLM。 ／ gaussdb-mcp（管控面，已有） gaussdb-data-mcp（本服务，数据面）",
+     "lines": [
+      1,
+      3,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 GaussDB 提供数据面 SQL 访问通道的 MCP 服务组件，通过数据库协议连接并服务上层 AI 客户端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "依赖的 huaweicloud-mcp-core 为 Apache 2.0，项目自身许可证未在可见部分声明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "GaussDB 507 **数据面 MCP 服务**。AI 客户端（Dify、Claude Code 等）通过它在三层安全防护下查询与操作 GaussDB 里的业务数据；数据库凭证只保存在服务端，不经过 LLM。 ／ - 工具：7 个（查询 / 写入 / DDL / EXPLAIN / 元数据浏览），三档风险分级 ／ gaussdb-mcp（管控面，已有）                      gaussdb-data-mcp（本服务，数据面）",
+   "evidence_lines": [
+    3,
+    14,
+    24
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "plafaithing/huawei-gaussdb-data-mcp",
+  "sha": "220195e176b4",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11867,5 +11867,417 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f0e9b6d748c9": {
+  "identity": {
+   "one_liner": "Go 库，将 CEL 表达式转换为多方言 SQL 条件",
+   "review": "cel2sql 是一个 Go 开发库，把 CEL 表达式编译为 PostgreSQL、MySQL、SQLite、DuckDB、BigQuery、Spark SQL、OpenSearch SQL 七种方言的条件语句，内置 SQL 注入与 ReDoS 防护、参数化查询输出，并可分析查询生成方言相关的索引建议。适合需要在应用中让用户以 CEL 编写过滤器并安全落库为 SQL 的开发者。",
+   "highlights": [
+    "支持 7 种 SQL 方言，通过 WithDialect 选项切换，默认 PostgreSQL",
+    "内置安全机制：字段名校验、JSON 转义、ReDoS 防护、递归深度与输出长度限制",
+    "提供 AnalyzeQuery 查询分析与各方言索引建议，支持参数化查询"
+   ],
+   "use_cases": [
+    "在 Go 应用中将用户编写的 CEL 过滤表达式转换为对应数据库的 SQL",
+    "开发期发现查询所需索引、进行性能调优",
+    "需要防注入的类型安全动态查询构建"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Convert CEL (Common Expression Language) expressions to SQL for PostgreSQL, MySQL, SQLite, DuckDB, BigQuery, Apache Spark SQL, and OpenSearch SQL ／ ✅ **Multi-Dialect**: PostgreSQL, MySQL, SQLite, DuckDB, BigQuery, Apache Spark SQL, and OpenSearch SQL from a single API",
+     "lines": [
+      3,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> Convert CEL (Common Expression Language) expressions to SQL for PostgreSQL, MySQL, SQLite, DuckDB, BigQuery, Apache Spark SQL, and OpenSearch SQL ／ ✅ **Multi-Dialect**: PostgreSQL, MySQL, SQLite, DuckDB, BigQuery, Apache Spark SQL, and OpenSearch SQL from a single API",
+     "lines": [
+      3,
+      37
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Convert CEL (Common Expression Language) expressions to SQL for PostgreSQL, MySQL, SQLite, DuckDB, BigQuery, Apache Spark SQL, and OpenSearch SQL ／ ✅ **Multi-Dialect**: PostgreSQL, MySQL, SQLite, DuckDB, BigQuery, Apache Spark SQL, and OpenSearch SQL from a single API",
+     "lines": [
+      3,
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是将 CEL 转换为 SQL 以服务数据库查询的开发库，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**cel2sql** makes it easy to build dynamic SQL queries using CEL expressions. Write type-safe, expressive filters in CEL and automatically convert them to SQL for your database of choice. ／ ✅ **Multi-Dialect**: PostgreSQL, MySQL, SQLite, DuckDB, BigQuery, Apache Spark SQL, and OpenSearch SQL from a single API ／ go get github.com/spandigital/cel2sql/v3",
+   "evidence_lines": [
+    16,
+    37,
+    23
+   ]
+  },
+  "fn": "SPANDigital/cel2sql",
+  "sha": "f0e9b6d748c9",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "575fb1a87451": {
+  "identity": {
+   "one_liner": "本地优先的多智能体 MCP 协调中心，基于 SQLite/WAL 存储",
+   "review": "Okto Nexus 是一个面向同一代码仓库内多智能体团队的 MCP 服务器与运维枢纽，通过 HTTP 暴露 MCP、REST/SSE 和仪表盘，提供持久身份、消息收件箱、任务交接、治理策略与事件日志等能力。适合需要在本地部署多智能体协作基础设施的开发团队。协调数据存储在本地 SQLite/WAL 数据库中，当前为开发版本，部分适配尚待最终验收。",
+   "highlights": [
+    "提供 MCP over HTTP 端点、REST API、SSE 与内置 React 仪表盘",
+    "消息支持持久投递、租约重发、确认与已读回执，交接支持原子认领与依赖图",
+    "协调记录持久化于本地 SQLite/WAL 数据库，无需云端服务"
+   ],
+   "use_cases": [
+    "多智能体在同一代码仓库内协作的消息传递与任务交接",
+    "需要人工审批与治理控制的智能体通信管理",
+    "本地部署的智能体团队可观测性与事件回放"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite database in WAL mode. Optional metrics, referenced workspace files, and ／ |Storage|local SQLite/WAL catalog + adapter-backed artifact payloads| ／ Always continue from `next_cursor`. The waiter uses SQLite",
+     "lines": [
+      17,
+      29,
+      230
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL, or cloud broker adapter.",
+     "lines": [
+      1131
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该协调中心自身的持久化存储，README 未声称其为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite database in WAL mode. Optional metrics, referenced workspace files, and ／ |Storage|local SQLite/WAL catalog + adapter-backed artifact payloads| ／ - coordination truth is durable in SQLite; bounded process caches are",
+   "evidence_lines": [
+    17,
+    29,
+    258
+   ]
+  },
+  "fn": "OktoLabsAI/okto-nexus",
+  "sha": "575fb1a87451",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b14aeb5a713c": {
+  "identity": {
+   "one_liner": "本地数据库 CLI 管理器，免 Docker 以原生进程运行 21 种数据库引擎",
+   "review": "SpinDB 是一个命令行工具，用于在本地以原生进程方式创建、启动、连接数据库，支持 PostgreSQL、MySQL、MongoDB、Redis、ClickHouse 等 21 种引擎，数据存放在 ~/.spindb 目录。它面向需要在本地运行多种数据库的开发者，提供创建、备份、连接增强 shell、copy-on-write 分支等命令；许可证为 PolyForm Noncommercial，限制商用。",
+   "highlights": [
+    "支持 21 种数据库引擎在 macOS、Linux、Windows 上以原生进程运行，无需 Docker 或 VM",
+    "提供统一的 create/start/connect/backup/branch 命令及增强 shell（pgcli、mycli、iredis）与 Web UI",
+    "支持 copy-on-write 数据库分支，在 APFS/Btrfs/ZFS 等文件系统上即时分叉"
+   ],
+   "use_cases": [
+    "本地开发环境中快速运行多种数据库而无需容器",
+    "在同一机器上并行运行同一数据库的多个版本",
+    "为本地数据库创建分支副本用于功能开发与测试"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|🐘 **PostgreSQL**|Relational SQL|✅|✅|✅|✅|✅|",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|🐬 **MySQL**|Relational SQL|✅|✅|✅|✅|✅|",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|🪶 **SQLite**|Embedded SQL|✅|✅|✅|✅|✅|",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|📚 **LibSQL**|Embedded SQL Server|✅|✅|✅|✅|❌|",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|🏠 **ClickHouse**|Columnar OLAP|✅|✅|✅|✅|❌|",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|🦭 **MariaDB**|Relational SQL|✅|✅|✅|✅|✅|",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 CLI 为多种数据库引擎提供安装、启动、备份与连接等管理能力，是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 许可证（非商业用途）",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SpinDB is a universal database management tool that combines a package manager, a unified API, and native client tooling for 21 different database engines—all from a single command-line interface. No Docker, no VMs, no platform-specific installers. Just databases, running natively on your machine. ／ SpinDB supports **21 database engines** across **5 platform architectures**—all with a consistent API. ／ spindb create mydb --engine [postgresql|mysql|mariadb|mongodb|ferretdb|redis|valkey|clickhouse|sqlite|duckdb|qdrant|meilisearch|couchdb|cockroachdb|surrealdb|questdb|typedb|influxdb|weaviate|tigerbeetle|libsql]",
+   "evidence_lines": [
+    15,
+    26,
+    181
+   ]
+  },
+  "fn": "robertjbass/spindb",
+  "sha": "b14aeb5a713c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b131d9ec109a": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的知识库插件，提供检索召回与本地 SQLite/中央服务存储",
+   "review": "该仓库是 DeepSeek Harness（DSH）的插件，提供知识库分组、全文检索、项目与会话挂载、按权限召回与回写，并内置笔记文档和工作日报功能。存储可选本地 SQLite 或需认证的中央知识服务。面向使用 DSH 的开发者，适配特定宿主版本 0.2.0-rc.2，需 Node.js 22.19+ 或 24+，通过 dsh plugin 命令安装。",
+   "highlights": [
+    "提供知识库与文档分组、全文检索及按权限召回与回写",
+    "支持本地 SQLite 或认证的中央知识服务作为存储，多客户端可连接同一服务",
+    "内置笔记文档与工作日报功能，支持版本历史、补记与导出"
+   ],
+   "use_cases": [
+    "在 DeepSeek Harness 会话中挂载知识库进行检索召回",
+    "团队通过中央知识服务共享知识文档",
+    "按工作目录采集并整理工作日报"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 本地 SQLite 或认证的中央知识服务，多个客户端可连接同一服务。",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以本地 SQLite 作为自身数据存储后端，属于使用数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "面向 DeepSeek Harness 的知识库、笔记与工作日报插件。支持本地使用和远程中央知识库，不修改 DSH Agent Loop。 ／ - 本地 SQLite 或认证的中央知识服务，多个客户端可连接同一服务。 ／ 适配 DeepSeek Harness **0.2.0-rc.2**（宿主仍为 RC），需要 Node.js **^22.19.0 或 >=24.0.0**。其他宿主版本请先查阅兼容说明和对应版本的发布说明。",
+   "evidence_lines": [
+    3,
+    13,
+    17
+   ]
+  },
+  "fn": "lemoncat7/dsh-knowledge",
+  "sha": "b131d9ec109a",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "03c805db5c57": {
+  "identity": {
+   "one_liner": "面向汽修车间的预约与工单排程管理应用",
+   "review": "ARSM 是一个面向汽修店的管理应用，提供预约登记、技师认领工单、实时状态更新、月历视图、配件与工时报价（含 PDF 导出）及月度报表。后端为 ASP.NET Core + EF Core + PostgreSQL，前端 React，使用 .NET Aspire 编排本地容器。适合小型汽修团队部署自用；测试访问依赖 Cloudflare 隧道，仅限非生产用途。",
+   "highlights": [
+    "预约认领与工单进度跟踪，支持技师/管理员角色区分",
+    "配件与工时价格目录、报价单 PDF 导出及按年月报表",
+    "通过 .NET Aspire AppHost 编排 PostgreSQL 与 RustFS 对象存储的本地栈"
+   ],
+   "use_cases": [
+    "汽修门店的日常预约与工单管理",
+    "报价单与公司经营数据统计",
+    "需要通过隧道向外部提供测试访问的本地部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL| ／ - `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + RustFS + ApiService + WebUI) ／ - Docker Desktop running locally (required for the PostgreSQL and RustFS containers via AppHost)",
+     "lines": [
+      36,
+      43,
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 作为应用的数据库层（Database|PostgreSQL，AppHost 启动 PostgreSQL 容器），是使用数据库的业务应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ARSM is a workshop scheduling and operations app for auto service teams. It helps mechanics and admins organize appointments, claim work, and track repair progress in one responsive dashboard. ／ |Database|PostgreSQL| ／ - `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + RustFS + ApiService + WebUI)",
+   "evidence_lines": [
+    12,
+    36,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "hajdu-patrik/ARSM",
+  "sha": "03c805db5c57",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

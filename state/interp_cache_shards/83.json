@@ -10160,5 +10160,74 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8827420cc302": {
+  "identity": {
+   "one_liner": "内省 PostgreSQL schema 并输出 JSON/Mermaid/DBML/SQL DDL 的 CLI",
+   "review": "remus 是一个 Rust 编写的命令行工具，读取 PostgreSQL 数据库的 schema，生成 Mermaid ER 图、DBML、SQL DDL 和 JSON 四种文本格式，也可通过 pg_catalog 单条 SQL 导出后离线转换。适合需要在文档、README 或 CI 中维护 schema 图示与文本描述的开发者；仅做读取内省，不写数据库数据。",
+   "highlights": [
+    "从单个静态二进制输出 Mermaid、DBML、SQL DDL 和 JSON 四种格式",
+    "保留枚举、域、复合类型、分区表、RLS、视图等 schema 细节",
+    "支持 --print-sql 生成 pg_catalog 查询，可不经凭据离线导出内省结果"
+   ],
+   "use_cases": [
+    "在 GitHub issue/README 中嵌入可渲染的 Mermaid ER 图",
+    "生成 dbdiagram.io 可导入的 DBML 文件",
+    "在 CI 中以 --no-input 模式批量导出 schema 文档"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Your Postgres schema, as text. ／ remus your Postgres schema, as text ／ ? Database postgres://localhost/app",
+     "lines": [
+      3,
+      28,
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具专门内省 PostgreSQL schema 并生成文档格式，为数据库生态服务而非用库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Your Postgres schema, as text. ／  Mermaid · DBML · SQL DDL · JSON, from one static binary. ／ remus --print-sql | psql \"$DATABASE_URL\" -Atf - > schema.json",
+   "evidence_lines": [
+    3,
+    5,
+    64
+   ]
+  },
+  "fn": "lupidae/remus",
+  "sha": "8827420cc302",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

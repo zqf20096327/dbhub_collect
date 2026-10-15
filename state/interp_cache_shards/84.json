@@ -9613,5 +9613,184 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a62e3c2078d": {
+  "identity": {
+   "one_liner": "Tina4 PHP：零依赖的 PHP 全栈 Web 框架，内置 ORM 与统一数据库适配层",
+   "review": "Tina4 PHP 是一个通过 Composer 安装的 PHP Web 框架，内置路由、Active Record ORM、JWT 认证、GraphQL、WebSocket、迁移与 OpenAPI 自动生成等组件。数据库层通过 Database::create() 提供统一适配，声明支持 SQLite、PostgreSQL、MySQL、MSSQL 和 Firebird，驱动可选独立安装。适用于用 PHP 构建含数据库的 Web 应用与 API 的开发者。",
+   "highlights": [
+    "通过统一适配器连接 SQLite、PostgreSQL、MySQL、MSSQL、Firebird，提供连接池、查询缓存、事务与 SQL 方言转换",
+    "内置 Active Record ORM，支持类型化字段、关联关系、软删除、QueryBuilder、自动 CRUD 生成与带回滚的迁移",
+    "核心零第三方运行时依赖，附带路由、JWT、GraphQL、队列、会话、i18n、Swagger/OpenAPI 生成等组件与 CLI 工具"
+   ],
+   "use_cases": [
+    "用 PHP 构建基于 SQL 数据库的 Web 应用或 REST/GraphQL API",
+    "需要 ORM、自动 CRUD 与数据库迁移脚手架的项目",
+    "通过 Swagger/OpenAPI 自动生成接口文档的 API 开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Database** (6)|SQLite, PostgreSQL, MySQL, MSSQL, Firebird -- unified adapter, connection pooling, query cache, transactions, race-safe ID generation, SQL dialect translation|",
+     "lines": [
+      49
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**Database** (6)|SQLite, PostgreSQL, MySQL, MSSQL, Firebird -- unified adapter, connection pooling, query cache, transactions, race-safe ID generation, SQL dialect translation|",
+     "lines": [
+      49
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Database** (6)|SQLite, PostgreSQL, MySQL, MSSQL, Firebird -- unified adapter, connection pooling, query cache, transactions, race-safe ID generation, SQL dialect translation| ／ $db = Database::create('sqlite:///app.db'); ／ DATABASE_PATH=app.db # SQLite database path (or use TINA4_DATABASE_URL)",
+     "lines": [
+      49,
+      92,
+      350
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**Database** (6)|SQLite, PostgreSQL, MySQL, MSSQL, Firebird -- unified adapter, connection pooling, query cache, transactions, race-safe ID generation, SQL dialect translation|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架为数据库应用开发提供 ORM、适配器、迁移等组件，属于服务数据库生态的工具而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Database** (6)|SQLite, PostgreSQL, MySQL, MSSQL, Firebird -- unified adapter, connection pooling, query cache, transactions, race-safe ID generation, SQL dialect translation| ／ |**ORM** (7)|Active Record with typed fields, relationships (`has_one`/`has_many`/`belongs_to`), soft delete, QueryBuilder + MongoDB support, Auto-CRUD generator, migrations with rollback| ／ Unified interface via `Database::create()`:",
+   "evidence_lines": [
+    49,
+    50,
+    87
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "tina4stack/tina4-php",
+  "sha": "7a62e3c2078d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "685ac2cda44d": {
+  "identity": {
+   "one_liner": "3x-ui 面板的流量系数 sidecar，通过元数据表临时调整计数",
+   "review": "XuiFactor 是运行在 Linux 上、配合 3x-ui 3.x 面板的 sidecar 守护进程，可对单个或批量客户端的流量计数应用临时系数，规则元数据写入面板的 SQLite 或 PostgreSQL 数据库的 xui_factor_* 表。提供备份、审计日志、systemd 服务和元数据自动清理命令，适合运维 3x-ui 代理面板的服务器管理员使用。",
+   "highlights": [
+    "以 sidecar 方式对 3x-ui 客户端计数应用临时流量系数，不修改 3x-ui 源码",
+    "支持 SQLite 与 PostgreSQL 两种面板数据库后端，元数据存于同库的 xui_factor_* 表",
+    "提供 backup、audit、cleanup、doctor 等命令及 systemd 服务与元数据自动清理"
+   ],
+   "use_cases": [
+    "需要按用户或批量调整 3x-ui 面板流量计数的代理服务器运维",
+    "需要审计流量系数变更事件并定期清理元数据的环境",
+    "面板后端在 SQLite 或 PostgreSQL 之间迁移时的系数规则管理"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Traffic factor sidecar for 3x-ui 3.x on Linux, over SQLite or PostgreSQL. ／ database: /etc/x-ui/x-ui.db (SQLite) or the panel PostgreSQL DSN ／ Point XuiFactor at a PostgreSQL panel with `database_backend` and `database_dsn` in the config file, or leave the defaults: the daemon and one-off commands read `XUI_DB_TYPE` and `XUI_DB_DSN` from the panel service environment file (`/etc/default/x-ui`, `/etc/",
+     "lines": [
+      5,
+      45,
+      49
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Traffic factor sidecar for 3x-ui 3.x on Linux, over SQLite or PostgreSQL. ／ XuiFactor applies temporary traffic factors to 3x-ui client counters as a sidecar. It does not modify 3x-ui source code. Rule metadata is stored in the same database using `xui_factor_*` metadata tables, whether the panel runs on its SQLite file or a PostgreSQ ／ database: /etc/x-ui/x-ui.db (SQLite) or the panel PostgreSQL DSN",
+     "lines": [
+      5,
+      12,
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 3x-ui 面板的数据库计数提供 sidecar 服务，属于围绕数据库数据工作的组件而非最终用户应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0 单一许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Traffic factor sidecar for 3x-ui 3.x on Linux, over SQLite or PostgreSQL. ／ XuiFactor applies temporary traffic factors to 3x-ui client counters as a sidecar. It does not modify 3x-ui source code. Rule metadata is stored in the same database using `xui_factor_*` metadata tables, whether the panel runs on its SQLite file or a PostgreSQL database. ／ database: /etc/x-ui/x-ui.db (SQLite) or the panel PostgreSQL DSN",
+   "evidence_lines": [
+    5,
+    12,
+    45
+   ]
+  },
+  "fn": "PdYrust/XuiFactor",
+  "sha": "685ac2cda44d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

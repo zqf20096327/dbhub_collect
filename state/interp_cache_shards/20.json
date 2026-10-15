@@ -8806,5 +8806,301 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0c72c063b5bd": {
+  "identity": {
+   "one_liner": "Rails 的 SQL 后端虚拟 actor 库，提供持久状态与有序操作",
+   "review": "Solid Objects 是一个 Ruby gem，为 Rails 应用提供虚拟 actor 模型：每个 actor 有稳定身份，状态存放在应用已有的 SQL 数据库中，方法调用按序逐个执行，支持重试、提醒与崩溃后恢复，无需 Redis 或独立 actor 服务。要求 Ruby 3.3+、Rails 7.1+，正确性核心在 SQLite、PostgreSQL 和 MySQL 上测试，交付为 at-least-once 语义。",
+   "highlights": [
+    "actor 状态持久化在应用现有 SQL 数据库中，支持 SQLite、PostgreSQL、MySQL",
+    "同一身份的并发调用进入持久邮箱并按序逐个提交，重启后提醒与调度可恢复",
+    "一次成功 turn 原子提交状态、提醒、消息、副作用与广播，提供 fencing 与 effect ID 去重机制"
+   ],
+   "use_cases": [
+    "票务预留、购物车、库存持有等需要持久过期与防重复支付的流程",
+    "多人房间、协作文档等需要有序变更的会话",
+    "跨请求/任务保持顺序、需在部署重启后延续的账号与审批工作流"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. Redis and a separate actor service are not required. ／ against SQLite, PostgreSQL, and MySQL. It makes no claim of measured scale:",
+     "lines": [
+      118,
+      183
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. Redis and a separate actor service are not required. ／ against SQLite, PostgreSQL, and MySQL. It makes no claim of measured scale:",
+     "lines": [
+      118,
+      183
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "staged consequences together inside the Rails application. It uses SQLite, ／ against SQLite, PostgreSQL, and MySQL. It makes no claim of measured scale:",
+     "lines": [
+      117,
+      183
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Rails 应用服务的 Ruby gem 组件，以 SQL 数据库作为其状态存储后端，属于数据库生态的组件而非存数据的最终应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可，独立项目，与 Cloudflare 无隶属关系",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Solid Objects is a SQL-backed virtual actor library for Ruby on Rails, with ／ staged consequences together inside the Rails application. It uses SQLite, ／ The generator adds Solid Objects tables to the application's existing database.",
+   "evidence_lines": [
+    8,
+    117,
+    59
+   ]
+  },
+  "fn": "cardmagic/solid-objects-ruby",
+  "sha": "0c72c063b5bd",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3d697888d32": {
+  "identity": {
+   "one_liner": "离线优先内存数据网格，CRDT 同步 + Rust 服务器",
+   "review": "TopGun v2 是一个离线优先的实时数据同步平台，含 TypeScript 客户端与 Rust 服务器，数据存于服务器内嵌 redb 存储而非外挂数据库，通过 LWW-Map/OR-Map CRDT 与逻辑时钟实现冲突消解，经 Merkle 树做增量同步，客户端持久化到 IndexedDB。面向需要离线可用、实时协作能力的应用开发者，提供 React hooks、混合搜索及 MCP 接口；当前为单节点稳定，多节点 Raft 集群仍在路线图中。",
+   "highlights": [
+    "基于 LWW-Map/OR-Map CRDT 与逻辑时钟实现自动冲突消解，通过 Merkle 树做增量 delta 同步",
+    "服务器使用内嵌 redb 存储与 WAL，无需外挂数据库，支持 Docker/npm/预编译二进制部署",
+    "内置精确+BM25 全文+语义向量三路混合搜索（RRF 融合）及 HNSW 向量索引，附带 MCP 服务器供 AI 客户端读写数据"
+   ],
+   "use_cases": [
+    "构建离线优先的实时协作/待办/文档类应用",
+    "自托管场景下需要实时同步且不部署独立数据库的团队",
+    "通过 MCP 让 Claude Desktop、Cursor 等 AI 客户端查询和订阅实时数据"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 声明使用内嵌 redb 存储、无需外挂数据库，未表明服务于某个数据库生态或依赖候选库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Build real-time apps that work offline. Local writes are instant and survive disconnects; reconnecting clients sync seamlessly with automatic conflict resolution. Self-host today: the server keeps your data in an embedded store, so there is no database to run. Apache-2.0, Rust server, TypeScript client. AI agents talk to your data natively through MCP. ／ - **Pluggable storage**: Data lives in an embedded store inside the server (redb) — no database to run; bring your own client-side adapter. ／ - **AI-native**: AI agents read and mutate your live data natively over MCP — the bundled `@topgunbuild/mcp-server` exposes your maps to Claude Desktop, Cursor, or any MCP client. Query, mutate, search, and subscribe without leaving your agent workflow.",
+   "evidence_lines": [
+    7,
+    19,
+    22
+   ]
+  },
+  "fn": "TopGunBuild/topgun",
+  "sha": "c3d697888d32",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1c067a3a9633": {
+  "identity": {
+   "one_liner": "自托管个人财务管理平台，用 PostgreSQL+pgvector 存储，支持可选 AI 代理",
+   "review": "FinCo-Pilot 是一个自托管的个人财务工作台，提供账户、交易、预算、目标、资产、发票、多币种与报表管理，支持 OFX/QIF/CAMT/CSV 导入和 Pluggy、Enable Banking、SimpleFIN 银行同步，并集成 OIDC/SSO、TOTP、passkey 认证。面向希望自主掌控财务数据的个人与小团队，通过 Docker Compose 部署，默认使用 PostgreSQL+pgvector，AI 代理功能默认关闭、需显式开启。",
+   "highlights": [
+    "支持多账户、多币种、预算、目标、资产估值与净值守业/现金流/分类报表",
+    "支持 OFX、QIF、CAMT、CSV 文件导入及 Pluggy/Enable Banking/SimpleFIN 银行同步",
+    "提供可选 AI 代理，含多 LLM 提供商接入、内置 MCP 服务器与按代理 RAG 知识库"
+   ],
+   "use_cases": [
+    "个人或家庭记账、预算与资产净值跟踪",
+    "自托管环境下的多用户/共享开销协作管理",
+    "在本地部署并接入自有 LLM 提供商的 AI 财务问答场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL + pgvector|",
+     "lines": [
+      148
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储数据的个人财务应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "FinCo-Pilot is a privacy-first personal finance platform for managing accounts, transactions, budgets, goals, assets, invoices, shared expenses, reports, bank connections, and optional AI agents from one workspace. It is designed to keep financial data under the operator's control while providing a fast, modern web experience. ／ |Database|PostgreSQL + pgvector|",
+   "evidence_lines": [
+    10,
+    148
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "S2zxx0zxx/FinCo-pilot",
+  "sha": "1c067a3a9633",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b0915077b7fa": {
+  "identity": {
+   "one_liner": "球衣预订登记系统，Next.js+Prisma+PostgreSQL/SQLite 存储",
+   "review": "为 PusakaFC26 球衣预订构建的 Web 应用：公开表单带前后端重复校验（姓氏与号码），管理面板支持登录、统计、JSON 导入与 Excel/JSON 导出、收据审核与生成。开发环境用 SQLite，生产用 PostgreSQL/Supabase，通过 Prisma ORM 访问数据，可用 Bun 或 Node 运行。适合球队社团类预订登记场景。",
+   "highlights": [
+    "公开预订表单，客户端与服务端双重校验姓名与号码重复",
+    "管理面板提供密码登录、速率限制、统计、分页、JSON 导入与 Excel/JSON 导出",
+    "通过 Prisma 支持 SQLite 本地开发与 PostgreSQL/Supabase 生产部署"
+   ],
+   "use_cases": [
+    "球队/社团球衣等物品的预订登记与名额管理",
+    "财务人员审核转账凭证、生成与分享收据",
+    "需要公开查看已占用号码的预订场景"
+   ],
+   "limits": [
+    "许可证为 All Rights Reserved，非开源许可"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Prisma ORM dengan SQLite untuk pengembangan lokal dan PostgreSQL/Supabase untuk production.",
+     "lines": [
+      23
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Prisma ORM dengan SQLite untuk pengembangan lokal dan PostgreSQL/Supabase untuk production. ／ - SQLite lokal melalui `DATABASE_URL`",
+     "lines": [
+      23,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 Prisma 通过 SQLite/PostgreSQL 存储预订数据的球衣预订应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "All Rights Reserved（保留所有权利，非 OSI 开源许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Aplikasi web pendaftaran jersey PusakaFC26. Aplikasi ini menyediakan formulir pendaftaran publik, daftar nomor punggung yang sudah digunakan, dan panel admin untuk mengelola data pendaftaran. ／ - API Next.js untuk orders dan operasi admin. ／ - Prisma ORM dengan SQLite untuk pengembangan lokal dan PostgreSQL/Supabase untuk production.",
+   "evidence_lines": [
+    3,
+    22,
+    23
+   ]
+  },
+  "fn": "pusakajeumala26/PusakaFC26",
+  "sha": "b0915077b7fa",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

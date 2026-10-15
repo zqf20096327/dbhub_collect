@@ -10635,5 +10635,165 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5c56007c7996": {
+  "identity": {
+   "one_liner": "基于 Next.js + Go + PostgreSQL 的动漫发现、追番与本地弹幕播放平台",
+   "review": "一个自托管的全栈动漫平台，提供番剧浏览、追番管理、本地视频播放与弹幕匹配功能，面向动漫爱好者与自托管用户。前端用 Next.js RSC，后端为 Go（chi + pgx + sqlc），以 PostgreSQL 16 作为唯一主数据存储，弹幕匹配依赖 dandanplay API，采用 Docker Compose 部署，许可证为 AGPL-3.0。",
+   "highlights": [
+    "支持番剧浏览、订阅追番、观看进度管理与本地视频播放",
+    "弹幕通过 dandanplay API 以文件哈希 + 文件名三阶段匹配加载，支持 MKV 内嵌字幕提取",
+    "提供 Docker Compose 部署与中英文双语界面"
+   ],
+   "use_cases": [
+    "自托管个人追番与观看记录管理",
+    "本地视频文件播放并加载匹配弹幕",
+    "番剧社区与评论交流站点部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Production stack:** Next.js 16 + Bun + Go 1.26 (chi + pgx + sqlc) + PostgreSQL 16 + Node ws-server (Socket.IO) ／ |Database|PostgreSQL 16 · pg_cron · pg_trgm| ／ # Docker Desktop (Postgres container)",
+     "lines": [
+      17,
+      90,
+      107
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 16 作为平台的主数据存储，项目是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Production stack:** Next.js 16 + Bun + Go 1.26 (chi + pgx + sqlc) + PostgreSQL 16 + Node ws-server (Socket.IO) ／ |Database|PostgreSQL 16 · pg_cron · pg_trgm| ／ |5432|postgres|primary datastore|",
+   "evidence_lines": [
+    17,
+    90,
+    147
+   ]
+  },
+  "fn": "lawrenceli0228/animego",
+  "sha": "5c56007c7996",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b3ae4bf64600": {
+  "identity": {
+   "one_liner": "React 应用全链路可视化调试工具，Alt+右键追踪 UI 到 SQL 与数据表",
+   "review": "Feel 是一个仅用于开发环境的可视化调试工具，在 React 应用中按 Alt+右键任意元素即可查看组件链、API 路由、后端处理函数、SQL 查询与数据表。通过 Vite 插件、Next.js 插件和 Node 包实现，支持 Postgres、MySQL/MariaDB 及 Prisma、Drizzle 等 ORM，数据库表结构视图目前仅支持 Postgres，SQLite 运行时追踪尚未支持。",
+   "highlights": [
+    "提供组件链与数据流追踪，从前端组件到 API 路由、后端处理函数、SQL 与数据表",
+    "支持通过 pg、Prisma、Drizzle 显示 Postgres 的每请求查询、表结构与变更历史，MySQL/MariaDB 支持查询与耗时追踪",
+    "仅作用于开发模式，不向生产构建注入代码；含静态分析可发现尚未触发的潜在调用"
+   ],
+   "use_cases": [
+    "排查 React 应用中 UI 数据的来源，定位对应的后端代码与 SQL",
+    "理解 AI 生成或他人编写的代码库中数据流与调用链",
+    "开发期观察 ORM 查询与数据库表的对应关系"
+   ],
+   "personas": []
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|Postgres: queries per request, tables, structure, change history — through `pg`, **Prisma** (7, or 6 with `@prisma/adapter-pg`) or **Drizzle** (`drizzle-orm/node-postgres`)|",
+     "lines": [
+      99
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "||**MySQL / MariaDB**: queries per request, tables, timing and the line in your code — through `mysql2` (callbacks or `mysql2/promise`, pools, `getConnection`, transactions) or **Drizzle** (`drizzle-orm/mysql2`)|",
+     "lines": [
+      100
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "||**MySQL / MariaDB**: queries per request, tables, timing and the line in your code — through `mysql2` (callbacks or `mysql2/promise`, pools, `getConnection`, transactions) or **Drizzle** (`drizzle-orm/mysql2`)|",
+     "lines": [
+      100
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **SQLite** — the static side understands Drizzle's SQLite tables, the runtime side doesn't yet",
+     "lines": [
+      109
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为开发者提供数据库查询与表结构的可视化追踪能力，属服务数据库使用的开发组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Alt + right-click any element in your React app and see the whole stack behind it** — ／ |Database|Postgres: queries per request, tables, structure, change history — through `pg`, **Prisma** (7, or 6 with `@prisma/adapter-pg`) or **Drizzle** (`drizzle-orm/node-postgres`)| ／ |`@feel-dev/vite-plugin`|Vite|tags every JSX element with its file:line, tags components, injects the client|",
+   "evidence_lines": [
+    3,
+    99,
+    121
+   ]
+  },
+  "fn": "Nirbhay71/Feel-your-project",
+  "sha": "b3ae4bf64600",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

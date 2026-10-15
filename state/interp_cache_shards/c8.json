@@ -8975,5 +8975,188 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f0a55c452ed": {
+  "identity": {
+   "one_liner": "Postgres 迁移与 SQL 的静态检查 linter",
+   "review": "Squawk 是一个针对 PostgreSQL 迁移脚本和 SQL 的命令行 linter，通过内置规则检查可能引发锁表或停机的迁移写法，支持通过注释、配置文件排除规则，并可集成到 GitHub PR 评论、pre-commit、VSCode 中使用。面向使用 Postgres 并管理 schema 迁移的开发者，安装方式包括 npm、PyPI、Docker 和 GitHub Action。",
+   "highlights": [
+    "提供 CLI 检查 SQL/迁移文件，规则可通过 --exclude、squawk-ignore 注释或 .squawk.toml 配置文件排除",
+    "支持以 upload-to-github 子命令在 GitHub Pull Request 上创建评论，提供 GitHub Action、pre-commit hook 和 VSCode 插件",
+    "基于自研 parser（参照 rust-analyzer）生成 CST 并在其上构建 AST 进行检查，提供 WASM Playground 在浏览器运行"
+   ],
+   "use_cases": [
+    "CI/CD 流水线中对 Postgres 迁移文件做 lint 检查",
+    "在 GitHub PR 中自动评论迁移 SQL 的规则违例",
+    "配合 pre-commit 在提交前检查 SQL 文件"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Linter for Postgres migrations & SQL ／ practices around Postgres schemas and SQL. ／ files: path/to/postgres/migrations/written/in/sql",
+     "lines": [
+      3,
+      10,
+      144
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 迁移与 SQL 提供检查服务的 linter 工具，不使用数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Linter for Postgres migrations & SQL ／ Prevent unexpected downtime caused by database migrations and encourage best ／ Squawk works as a CLI tool but can also create comments on GitHub Pull",
+   "evidence_lines": [
+    3,
+    9,
+    124
+   ]
+  },
+  "fn": "sbdchd/squawk",
+  "sha": "4f0a55c452ed",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7b8cbb50333d": {
+  "identity": {
+   "one_liner": "Rust 编写的原生数据库 GUI 客户端，支持 PostgreSQL/MySQL/MariaDB/SQLite",
+   "review": "一个用 Rust + egui 编写的桌面数据库图形客户端，提供连接管理、SSH 隧道、TLS、带暂存编辑的数据表格、结构编辑生成 ALTER 语句，以及带 schema 感知自动补全的 SQL 编辑器。面向需要在 macOS/Linux 上浏览和编辑 PostgreSQL、MySQL 8、MariaDB、SQLite 数据的开发者与运维人员；macOS 为主要目标平台，Windows 未提及。",
+   "highlights": [
+    "数据表格编辑采用暂存模式，修改以 SQL 形式预览后在单事务中提交",
+    "SQL 编辑器提供各方言语法高亮与别名感知的 schema 自动补全",
+    "支持 SSH 隧道（密码/私钥）与可配置级别的 TLS，支持导入 CSV 和导出 CSV/JSON/SQL"
+   ],
+   "use_cases": [
+    "本地或远程开发环境中浏览、查询和编辑多种关系数据库数据",
+    "通过 SSH 隧道和 TLS 连接管理生产/测试等分组连接",
+    "CSV 数据导入与查询结果/表数据导出"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "One ~30 MB binary, no Electron, no web view: PostgreSQL, MySQL, MariaDB and SQLite, with SSH ／ - PostgreSQL, MySQL 8, MariaDB, SQLite ／ - Paste a URL (`postgres://…`, `mysql://…`, `mariadb://…`, `sqlite:///path`) to fill the form; **Test** before saving",
+     "lines": [
+      4,
+      17,
+      21
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "One ~30 MB binary, no Electron, no web view: PostgreSQL, MySQL, MariaDB and SQLite, with SSH ／ - PostgreSQL, MySQL 8, MariaDB, SQLite ／ - Paste a URL (`postgres://…`, `mysql://…`, `mariadb://…`, `sqlite:///path`) to fill the form; **Test** before saving",
+     "lines": [
+      4,
+      17,
+      21
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One ~30 MB binary, no Electron, no web view: PostgreSQL, MySQL, MariaDB and SQLite, with SSH ／ - PostgreSQL, MySQL 8, MariaDB, SQLite ／ - Paste a URL (`postgres://…`, `mysql://…`, `mariadb://…`, `sqlite:///path`) to fill the form; **Test** before saving",
+     "lines": [
+      4,
+      17,
+      21
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "One ~30 MB binary, no Electron, no web view: PostgreSQL, MySQL, MariaDB and SQLite, with SSH ／ - PostgreSQL, MySQL 8, MariaDB, SQLite ／ - Paste a URL (`postgres://…`, `mysql://…`, `mariadb://…`, `sqlite:///path`) to fill the form; **Test** before saving",
+     "lines": [
+      4,
+      17,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为连接和管理 PostgreSQL/MySQL/MariaDB/SQLite 数据库提供 GUI 客户端工具，而非自身使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A fast, native database GUI in the spirit of TablePlus, written in Rust. ／ - PostgreSQL, MySQL 8, MariaDB, SQLite ／   driver/       Connection trait + PostgreSQL (tokio-postgres), MySQL/MariaDB (mysql_async),",
+   "evidence_lines": [
+    3,
+    17,
+    174
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "michaelshimeles/tableplus-rs",
+  "sha": "7b8cbb50333d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

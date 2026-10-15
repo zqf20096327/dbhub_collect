@@ -9984,5 +9984,223 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "97f0f9239121": {
+  "identity": {
+   "one_liner": "数据库集群自托管管理平台：Web GUI + MCP 服务器",
+   "review": "Ivory 是一个自托管的开源数据库集群管理工具，通过单个 Docker 容器提供 Web UI 与内置 MCP 服务器，支持集群部署、健康与复制延迟监控、主备切换/故障转移、SQL 查询控制台和容器管理，且主机上无需安装 agent。面向需要统一管理 PostgreSQL/Patroni、etcd、Redis、ClickHouse、MongoDB、ZooKeeper 集群的运维人员，也允许 AI agent 经 MCP 接入执行诊断和操作。",
+   "highlights": [
+    "通过 Web UI 提供集群部署、健康监控、switchover/failover 等 HA 操作与 SQL 查询控制台",
+    "内置 MCP 服务器，允许 Claude、Cursor 等 AI agent 诊断和操作数据库集群，受按用户权限控制",
+    "单 Docker 容器运行，经 SSH 操作节点，主机上无需安装 agent 或编排器"
+   ],
+   "use_cases": [
+    "统一管理和监控 PostgreSQL/Patroni 等高可用集群，执行切换与故障转移",
+    "通过 AI agent（MCP 客户端）以自然语言诊断和处理集群问题",
+    "通过 SSH 和模板在自有 VM 上部署 HA 集群，无需 Kubernetes/Ansible"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Ivory — open-source web UI and AI-ready MCP server for PostgreSQL Patroni, etcd, Redis, ClickHouse, MongoDB and ZooKeeper clusters ／ |PostgreSQL|High-availability cluster with Patroni|STABLE|",
+     "lines": [
+      1,
+      98
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Replicated cluster|BETA|",
+     "lines": [
+      102
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为多种数据库集群提供部署、监控、管理操作的工具，而非自身使用数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Ivory — open-source web UI and AI-ready MCP server for PostgreSQL Patroni, etcd, Redis, ClickHouse, MongoDB and ZooKeeper clusters ／ **One place for the whole life of a cluster.** One web UI to **deploy a cluster**, watch its **health and replication lag**, run a **switchover or failover**, ／ |PostgreSQL|High-availability cluster with Patroni|STABLE| ／ Ivory is a self-hosted, open-source GUI, web dashboard and MCP server for database cluster management,",
+   "evidence_lines": [
+    1,
+    13,
+    98,
+    125
+   ]
+  },
+  "fn": "veegres/ivory",
+  "sha": "97f0f9239121",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "45f8f6dc28cd": {
+  "identity": {
+   "one_liner": "面向编码代理的决策溯源与数据流追踪记录工具",
+   "review": "一个以 Claude Code 插件形式分发的溯源记录工具，读取 git 仓库生成数据流图谱，用 hooks 记录提示词、工具调用与决策依据，并以带记录 id 的 /ledger 命令回答“为什么这样改”。面向数据工程团队与使用编码代理的开发者；记录以 SQLite 文件保存在本机，核心库也可通过 pip 单独安装使用。",
+   "highlights": [
+    "以 Claude Code 插件分发，包含 hooks、技能与只读 dashboard，支持 pip 安装核心库（L82-L95）",
+    "记录来源分为 Measured/Said/Evidenced 三类，来源缺失时标注 unstated（L46-L52）",
+    "数据全部保存在本机 SQLite 文件，hooks 不阻塞执行，除非声明 block 约束（L160-L170）"
+   ],
+   "use_cases": [
+    "回答项目历史决策问题（如为什么采用某数据切分）（L8-L14）",
+    "编码代理编辑前展示既有约束与已否决路径（L57,L167）",
+    "接手陌生项目时查看任务、节点与数据流图（L60,L70）"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add:",
+     "lines": [
+      160
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为编码代理和数据工程工作流提供审计与溯源服务，数据库仅作本机存储介质被使用",
+   "persona": "use",
+   "dbs": [],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Claude Code plugin for data work. It keeps what was decided and why — your words, the email, the agent's reading, kept apart and never blended — and puts them in front of whoever is about to change the thing again. ／ Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add: ／ |`PreToolUse` (Edit / Write / MultiEdit)|shows the rules anchored on the lines about to change — at most 600 characters, nothing when nothing anchors there|",
+   "evidence_lines": [
+    24,
+    160,
+    167
+   ]
+  },
+  "fn": "yizhao95/prov_ledger",
+  "sha": "45f8f6dc28cd",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8cd9062f90f": {
+  "identity": {
+   "one_liner": "Yunzai 群聊艾特记录与提醒插件，数据存本机 SQLite",
+   "review": "这是 Yunzai 机器人的插件，记录群内艾特消息并提供查询、生成 QQ 聊天风格长图与被动提醒功能。数据存储在本机 SQLite（依赖 Node 22.13+ 的 node:sqlite 或 better-sqlite3），支持上下文记录、自动清理、锅巴配置面板和按群开关。面向 Yunzai 机器人用户/群聊场景，属于使用数据库的应用插件而非数据库生态工具。",
+   "highlights": [
+    "自动记录艾特消息（含被艾特者、内容、图片、引用、时间）并支持上下文存库",
+    "生成 QQ 聊天风格长图展示查询结果，内置默认开启的被动提醒",
+    "数据存本机 SQLite，含 WAL 日志，支持自动清理过期记录与孤儿图片",
+    "提供锅巴配置面板，配置修改实时生效，支持按群三态覆盖开关"
+   ],
+   "use_cases": [
+    "群聊中查询自己/他人被艾特的记录并以聊天长图展示",
+    "被艾特后在下一次发言时收到提醒截图",
+    "按群管理艾特记录保留、提醒开关与上下文配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 内置**默认开启**的被动提醒。数据存本机 SQLite，配置修改实时生效，无需重启机器人。 ／ **依赖要求**：Node **22.13+**（用内置 `node:sqlite`，无需编译）。 ／ 低于这个版本时请自行安装 `better-sqlite3`：",
+     "lines": [
+      4,
+      27,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存本机 SQLite，插件只是使用 SQLite 存储艾特记录，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-or-later 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 内置**默认开启**的被动提醒。数据存本机 SQLite，配置修改实时生效，无需重启机器人。 ／ **依赖要求**：Node **22.13+**（用内置 `node:sqlite`，无需编译）。 ／ ├── atme.db          # SQLite（记录 / 开关 / 未读 / 全体艾特 / 冷却）",
+   "evidence_lines": [
+    4,
+    27,
+    121
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "cchanlan/atme-plugin",
+  "sha": "a8cd9062f90f",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

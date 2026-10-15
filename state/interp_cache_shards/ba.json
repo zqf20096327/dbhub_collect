@@ -9616,5 +9616,258 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "731b670fd930": {
+  "identity": {
+   "one_liner": "基于 Dear ImGui 的 C++ 跨平台数据库客户端",
+   "review": "DearSQL 是用 C++ 和 Dear ImGui 编写的数据库客户端，提供图形界面浏览 schema、表结构并运行 SQL 查询，同一二进制还支持 --tui 终端模式、--mcp 为编码代理提供 MCP 数据库工具、--lsp 提供编辑器 SQL 补全。面向需要跨平台 SQL 客户端的开发者和代理使用者，通过 GitHub Releases 或安装脚本分发。",
+   "highlights": [
+    "同一二进制提供 GUI、TUI 和 MCP/LSP 三种运行模式",
+    "连接保存支持命名连接、URL 及 SQLite/DuckDB/CSV 文件",
+    "支持查询历史、schema 浏览与格式化结果展示"
+   ],
+   "use_cases": [
+    "通过图形界面或终端浏览和查询多种数据库",
+    "为编码代理提供 MCP 数据库工具",
+    "为编辑器提供 SQL 补全与悬停提示"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite, DuckDB, PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis and more",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQLite, DuckDB, PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis and more",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- SQLite, DuckDB, PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis and more",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite, DuckDB, PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis and more",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- SQLite, DuckDB, PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis and more",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- SQLite, DuckDB, PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis and more",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明支持的数据库清单并用于浏览和查询，是为数据库生态服务的客户端工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- SQLite, DuckDB, PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis and more ／ dearsql --tui [connection]   # browse and query in the terminal ／ dearsql --mcp                # database tools for coding agents (MCP)",
+   "evidence_lines": [
+    15,
+    29,
+    30
+   ]
+  },
+  "fn": "dunkbing/dearsql",
+  "sha": "731b670fd930",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9cc1f3e409fe": {
+  "identity": {
+   "one_liner": "本地优先的 Windows 时间追踪应用，以 SQLite 存储前台活动记录",
+   "review": "TimePrism 是一个 Windows 桌面时间追踪工具，通过后台采样前台应用记录时间使用情况，数据先经隐私处理再持久化到本地 SQLite，支持 Idle 校正、提醒和学习/休息分类。面向希望免手动计时、数据留在本地的 Windows 用户，基于 Tauri + Vue + Rust 构建，目前仅覆盖 Windows 平台。",
+   "highlights": [
+    "后台采样前台应用并支持隐私规则处理（浏览器标题 FULL/BLUR/NONE、白名单模式）",
+    "Idle 时段事务性校正与重新归因，区分 FOREGROUND/IDLE_CONFIRMED 来源",
+    "数据存储在本地 SQLite，v0.1.1 无云同步和账号依赖"
+   ],
+   "use_cases": [
+    "Windows 个人时间使用统计与学习/休息分析",
+    "需要隐私处理的前台应用活动记录",
+    "配合桌面宠物进行提醒与专注守护"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|后台采样前台应用，不要求手动开关计时器。|核心数据存储在本地 SQLite，正常持久化前先经过隐私处理。|Idle 时段由用户确认，可归因到之前的应用，也可标记为学习 / 休息 / 离开，或稍后处理。| ／ SQLite 持久化 ／ 首次启用追踪、Pause / Resume 状态和旧数据库迁移都持久化在 SQLite 中。",
+     "lines": [
+      35,
+      68,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明核心使用记录保存在本地 SQLite，该应用是使用数据库存数据的产品而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|后台采样前台应用，不要求手动开关计时器。|核心数据存储在本地 SQLite，正常持久化前先经过隐私处理。|Idle 时段由用户确认，可归因到之前的应用，也可标记为学习 / 休息 / 离开，或稍后处理。| ／ - 核心使用记录保存在本地 SQLite； ／ |存储|SQLite / rusqlite|",
+   "evidence_lines": [
+    35,
+    146,
+    210
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Air000000/timeprism",
+  "sha": "9cc1f3e409fe",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "63c187be561a": {
+  "identity": {
+   "one_liner": "英雄联盟电竞版足球经理游戏的 FastAPI 后端与游戏引擎",
+   "review": "该仓库包含 League Manager 的 REST API 与完整游戏引擎，玩家经营一支英雄联盟电竞战队，涵盖选秀、赛程、训练、转会与董事会评价等机制，通过 advance 逐日推进存档。面向想游玩此管理游戏的玩家（配合浏览器前端使用）。数据用 SQLAlchemy 存于本地 SQLite 文件，首次启动自动建库，无外部服务与 API 密钥。",
+   "highlights": [
+    "提供完整的生涯游戏 API，覆盖选秀、比赛、训练、合同、转会与董事会评审等操作",
+    "用 SQLAlchemy 存取本地 SQLite 数据库，首次启动自动创建 league_manager.db",
+    "游戏数据随仓库附带于 app/data，运行无需外部服务或 API 密钥"
+   ],
+   "use_cases": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The API starts on http://127.0.0.1:8020. Check it is alive at http://127.0.0.1:8020/api/health and browse the interactive API reference at http://127.0.0.1:8020/docs. The SQLite file `league_manager.db` is created on first start. There are no external services ／ |`LEAGUE_MANAGER_DATABASE_URL`|`sqlite:///league_manager.db`|SQLAlchemy database URL|",
+     "lines": [
+      44,
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个用 SQLite 存生涯存档数据的游戏后端，SQLite 是其存储依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This repo holds the API and the whole game engine. The browser client lives in league-manager-ui and only draws what this service returns. ／ The API starts on http://127.0.0.1:8020. Check it is alive at http://127.0.0.1:8020/api/health and browse the interactive API reference at http://127.0.0.1:8020/docs. The SQLite file `league_manager.db` is created on first start. There are no external services and no API keys. All game data ships in `app/data`. ／ |`LEAGUE_MANAGER_DATABASE_URL`|`sqlite:///league_manager.db`|SQLAlchemy database URL|",
+   "evidence_lines": [
+    5,
+    44,
+    53
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "MartinSG98/league-manager-backend",
+  "sha": "63c187be561a",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

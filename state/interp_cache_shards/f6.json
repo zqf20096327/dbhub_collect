@@ -10258,5 +10258,227 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a97bc2c1b3d6": {
+  "identity": {
+   "one_liner": "Tiger Cloud 的命令行管理工具，内置 MCP 服务器",
+   "review": "Tiger CLI 是 Tiger Cloud（Timescale 旗下 Postgres 云服务）的命令行接口，用于认证、项目管理、数据库服务的创建/启停/扩缩容/日志/指标查询，以及 psql 连接、SQL 执行、schema 查看等数据库操作，并内置 MCP 服务器供 Claude Code 等 AI 助手调用这些能力。适用于使用 Tiger Cloud 并希望通过命令行或 AI 代理管理 Postgres 服务的开发者与运维人员。",
+   "highlights": [
+    "提供数据库服务生命周期管理命令：创建、fork、启停、扩缩容、删除、日志与指标查询",
+    "集成 MCP 服务器，向 AI 助手暴露服务管理与 SQL 查询、schema 读取工具",
+    "内置 psql 连接、SQL 执行、连接 URI 获取、连通性测试与 schema 信息显示等数据库操作"
+   ],
+   "use_cases": [
+    "通过命令行管理 Tiger Cloud 上的 Postgres 数据库服务",
+    "为 AI 编程助手配置 MCP 服务器以查询和管理数据库服务",
+    "查询服务指标时间序列与日志进行运维检查"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- `psql` - Connect to a database with psql (in an interactive terminal, if the service has read replicas, offers to connect to one of them; use `--no-replica-prompt` to skip) (alias: `connect`) ／ - `service_metrics_available` - List the metric names available for a service (hardware usage, PostgreSQL settings and activity, PgBouncer pools, TimescaleDB internals)",
+     "lines": [
+      105,
+      195
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 CLI 为 Tiger Cloud 的 Postgres 数据库服务提供管理与查询命令，并为 AI 助手提供访问这些服务的 MCP 服务器",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tiger CLI is the command-line interface for Tiger Cloud. It provides commands for managing and querying database services, as well as an integrated Model Context Protocol (MCP) server for use with AI assistants. ／ - `tiger db` - Database operations ／ Tiger CLI includes a Model Context Protocol (MCP) server that enables AI assistants like Claude Code to interact with your Tiger Cloud infrastructure. The MCP server provides programmatic access to database services and operations.",
+   "evidence_lines": [
+    3,
+    104,
+    141
+   ]
+  },
+  "fn": "timescale/tiger-cli",
+  "sha": "a97bc2c1b3d6",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3ba6f33e6a0": {
+  "identity": {
+   "one_liner": "面向 AI agent 的后端即服务平台，一行调用提供 Postgres 等资源",
+   "review": "Run402 是一个供 AI agent 通过 CLI/SDK/MCP 自主开通和使用的开源后端平台，提供 Postgres 数据库、REST API、认证、文件存储、静态托管与 serverless functions，并通过 x402/MPP 微支付由 agent 自付费用。适合构建需要自主配置后端的 agent 工作流；注意其自托管运行时位于单独的 run402-core 仓库，托管云控制面为闭源。",
+   "highlights": [
+    "通过 CLI、TypeScript SDK 与 MCP server 三种接口提供数据库开通、部署、支付等后端操作",
+    "一次调用可开通 Postgres 数据库、REST API、用户认证、文件存储、静态托管与 serverless functions",
+    "基于 principal/authenticator 的身份与授权模型，agent 与人的操作均可归属"
+   ],
+   "use_cases": [
+    "AI agent 自主开通 Postgres 数据库并部署应用",
+    "为 coding agent 提供 MCP 工具形式的 backend 操作",
+    "在 shell 脚本或 CI 中用 CLI 完成 provision 与 staged deploy"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres, auth, storage, serverless functions and staged deploys &mdash; ／ One call to run402 gives an agent a full Postgres database, REST API, user auth, content-addressed file storage, static site hosting, serverless functions, and image generation, paid with x402 (USDC on Base) or MPP (pathUSD on Tempo, or sats over Bitcoin Light",
+     "lines": [
+      5,
+      21
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "`r.project(id).apply.resolve({ url, method: \"GET\" })` (from MCP, a `run` snippet) returns `would_serve`, `diagnostic_status`, `match`, normalized request data, warnings, full resolution JSON, `edge_propagation`, and next steps. When returned, `asset_path`, `re",
+     "lines": [
+      179
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其核心能力是供 agent 开通和管理 Postgres 数据库及后端资源，属于为数据库使用提供基础设施的服务层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "多许可：本仓库 agent 接口为 MIT，run402-core 为 Apache-2.0，托管云控制面专有",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Run402 is open-source backend infrastructure for AI agents and coding agents** — a backend-as-a-service addressed to a machine rather than to a person. An autonomous agent provisions a Postgres database, user auth, file storage, serverless functions and site hosting, ships them through one staged deploy workflow, and pays for the usage itself. Comparable in surface to Supabase, Firebase or Vercel; different in that there is no dashboard you have to sign into to get started (the console exists for people; the agent never needs it) and no human-issued API key to copy. ／ One call to run402 gives an agent a full Postgres database, REST API, user auth, content-addressed file storage, static site hosting, serverless functions, and image generation, paid with x402 (USDC on Base) or MPP (pathUSD on Tempo, or sats over Bitcoin Lightning) — or card-funded allowance. The prototype tier is free on testnet. ／ |`run402-mcp`|Claude Desktop, Cursor, Cline, Claude Code: core run402 operations as MCP tools|",
+   "evidence_lines": [
+    17,
+    21,
+    35
+   ]
+  },
+  "fn": "kychee-com/run402",
+  "sha": "c3ba6f33e6a0",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e9b2426269b7": {
+  "identity": {
+   "one_liner": "Java 实现的 DuckDB 网络 服务层，讲 PostgreSQL 线协议",
+   "review": "SlackerDB 是一个 Java 编写的服务层，把 DuckDB 数据库放到网络上，通过 PostgreSQL 线协议让标准 PostgreSQL 客户端（JDBC、psql、DBeaver 等）直接连接，支持多会话共享同一 DuckDB 文件、SQL 注册为 HTTP 缓存端点和批量 COPY 导入。适合需要在多客户端间共享 DuckDB 分析数据的团队；依赖 JDK17 与 Maven 构建，尚未提供包管理器安装方式。",
+   "highlights": [
+    "实现 PostgreSQL 线协议，JDBC/ODBC/libpq/psql 等标准客户端可直接连接",
+    "支持多客户端并发会话访问同一 DuckDB 数据库，含连接池与查询取消",
+    "可将参数化 SQL 注册为带缓存和版本管理的 HTTP 端点",
+    "支持 CSV/BINARY 批量 COPY 导入与 WebSocket 异步 SQL"
+   ],
+   "use_cases": [
+    "为 BI 工具和仪表盘提供期望 PostgreSQL 连接的分析后端",
+    "多团队/多工具并发查询同一 .duckdb 文件",
+    "作为嵌入式分析存储集成进 Java 应用"
+   ],
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "lines": [
+      8,
+      14
+     ]
+    }
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL clients connect without any special driver, and it lets several clients use the same DuckDB database at once — something a p ／ * *PostgreSQL Wire Protocol* – Standard PostgreSQL clients connect as‑is: JDBC, ODBC, libpq, psql, Python, and database tools such as DBeaver. A system catalog compatibility layer (`pg_catalog` emulation) keeps third‑party client metadata queries working.",
+     "lines": [
+      8,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 DuckDB 提供网络代理/服务层能力，是为数据库生态服务的中间件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL clients connect without any special driver, and it lets several clients use the same DuckDB database at once — something a plain DuckDB process cannot do. On top of that it adds a registered‑SQL layer that turns queries into cacheable HTTP endpoints, and a bulk COPY path for loading data. ／ * *PostgreSQL Wire Protocol* – Standard PostgreSQL clients connect as‑is: JDBC, ODBC, libpq, psql, Python, and database tools such as DBeaver. A system catalog compatibility layer (`pg_catalog` emulation) keeps third‑party client metadata queries working.",
+   "evidence_lines": [
+    8,
+    14
+   ]
+  },
+  "fn": "robotslacker/slackerdb",
+  "sha": "e9b2426269b7",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

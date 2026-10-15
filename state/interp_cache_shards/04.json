@@ -9309,5 +9309,274 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d65ca550b3d7": {
+  "identity": {
+   "one_liner": "基于 R2RML/RML 映射语言从异构数据源生成 RDF 知识图谱的引擎",
+   "review": "Morph-KGC 是一个 RDF 知识图谱物化引擎，通过 R2RML 和 RML 映射把关系数据库、表格文件、JSON/XML、Python 数据结构等异构数据源转换为 RDF 三元组，基于 pandas 实现，支持 mapping partitions 以降低大规模数据物化的执行时间与内存消耗，可通过 PyPI 安装并以命令行或 Python 库方式运行，适合数据集成与知识图谱构建场景使用。",
+   "highlights": [
+    "支持 R2RML、RML、YARRRML、RML-FNML 映射语言",
+    "输入数据源涵盖关系数据库、表格/层级文件、Python 数据结构、HTTP API 等",
+    "提供 mapping partitions 机制用于大规模知识图谱物化，并可集成 RDFLib、Oxigraph"
+   ],
+   "use_cases": [
+    "从关系数据库等异构数据源构建 RDF 知识图谱",
+    "数据集成与 ETL 流程中的 RDF 物化",
+    "作为 Python 库嵌入数据管线生成 RDF 三元组"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Relational databases**: MySQL, PostgreSQL, Oracle, Microsoft SQL Server, MariaDB, SQLite.",
+     "lines": [
+      25
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Relational databases**: MySQL, PostgreSQL, Oracle, Microsoft SQL Server, MariaDB, SQLite.",
+     "lines": [
+      25
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Relational databases**: MySQL, PostgreSQL, Oracle, Microsoft SQL Server, MariaDB, SQLite.",
+     "lines": [
+      25
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Relational databases**: MySQL, PostgreSQL, Oracle, Microsoft SQL Server, MariaDB, SQLite.",
+     "lines": [
+      25
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Relational databases**: MySQL, PostgreSQL, Oracle, Microsoft SQL Server, MariaDB, SQLite.",
+     "lines": [
+      25
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Relational databases**: MySQL, PostgreSQL, Oracle, Microsoft SQL Server, MariaDB, SQLite.",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为数据集成引擎读取多种数据库数据生成 RDF，为数据工程流程服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Morph-KGC** is an engine that constructs **RDF** knowledge graphs from heterogeneous data sources with the **R2RML** and **RML** mapping languages. Morph-KGC is built on top of pandas and it leverages *mapping partitions* to significantly reduce execution times and memory consumption for large data sources. ／  - **Relational databases**: MySQL, PostgreSQL, Oracle, Microsoft SQL Server, MariaDB, SQLite. ／ pip install morph-kgc",
+   "evidence_lines": [
+    12,
+    25,
+    45
+   ]
+  },
+  "fn": "morph-kgc/morph-kgc",
+  "sha": "d65ca550b3d7",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1371e67de27b": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的用户行为分析平台，事件经 Kafka 入 ClickHouse/Doris 数仓",
+   "review": "这是一个用 Go 实现的用户行为分析（UBA）系统，提供事件、漏斗、留存、归因、路径、分群等 25 个分析模型，配套 Web/C# 埋点 SDK 与管理后台。事件由 Collector 写入 Kafka，由 Doris Routine Load 或 ClickHouse Kafka 表引擎拉取入仓；业务数据存 PostgreSQL。当前 ClickHouse 分支为编译期关闭状态，实际仅 Doris 在运行。适合需要自建行为分析能力的团队部署使用。",
+   "highlights": [
+    "提供 25 个分析模型，覆盖通用行为分析、用户深度洞察与游戏专项场景",
+    "事件经 Kafka 由 OLAP 引擎自行拉取入仓，支持 ClickHouse/Doris 二选一（当前编译期仅启用 Doris）",
+    "内置多租户隔离、风险规则告警与 Apache Superset 报表对接"
+   ],
+   "use_cases": [
+    "网站/App/游戏的行为数据采集与漏斗、留存、归因分析",
+    "基于行为分群的营销触达与 A/B 实验",
+    "游戏数值运营（关卡、付费分层、LTV、经济系统监控）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|ORM|Ent|Go 实体框架（PostgreSQL）| ／ PostgreSQL 的表结构由 ent 在 Core 首次启动时自动迁移（`app/core/service/configs/data.yaml` 里 ／ # PostgreSQL（业务库）：只需导入字典/初始数据（表结构已自动迁移）",
+     "lines": [
+      88,
+      299,
+      305
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **OLAP 数仓二选一**：原生支持 ClickHouse 与 Apache Doris 两种 OLAP 引擎，部署时任选其一（不叠加使用），极致查询性能 ／ |OLAP 引擎|ClickHouse / Apache Doris|列式存储，极致分析性能| ／ > **Routine Load**，ClickHouse 用 **Kafka 表引擎 + 物化视图**。`uba-ingest` 负责把 Doris 这条",
+     "lines": [
+      18,
+      89,
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL/ClickHouse/Doris 存储业务与分析数据的用户行为分析应用，而非为某数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **OLAP 数仓二选一**：原生支持 ClickHouse 与 Apache Doris 两种 OLAP 引擎，部署时任选其一（不叠加使用），极致查询性能 ／ |ORM|Ent|Go 实体框架（PostgreSQL）| ／ |OLAP 引擎|ClickHouse / Apache Doris|列式存储，极致分析性能|",
+   "evidence_lines": [
+    18,
+    88,
+    89
+   ]
+  },
+  "fn": "tx7do/go-wind-uba",
+  "sha": "1371e67de27b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c47313788a3c": {
+  "identity": {
+   "one_liner": "AI 代理共享记忆与消息服务，基于 MCP 和 JSON API，单容器 SQLite 存储",
+   "review": "这是一个为 AI 代理提供组织级共享记忆、提醒和代理间消息传递的自托管服务。代理通过 MCP 或 HTTP 记录和检索问题答案，带信任加权排序和可选的 Claude Code 插件。适合使用多个 AI 代理协作的团队；限制是单容器单 SQLite 副本，重启即短暂中断，Postgres 支持仍在路线图中。",
+   "highlights": [
+    "提供 MCP over HTTP 和 JSON API 接口，含十个工具（bab_learn、bab_send、bab_search 等）",
+    "单容器自托管，数据存于单个 SQLite 文件，Apache-2.0 许可",
+    "支持信任加权排序（strong/fair/weak）、记忆验证标记和按模式脱敏密钥与邮箱"
+   ],
+   "use_cases": [
+    "多团队 AI 代理共享调试修复和经验，避免重复排查",
+    "跨时区代理间异步消息传递与交接",
+    "维护者固定 house rules，供代理在修改代码前检索标准与决策"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One replica.** BAB runs on SQLite as one container, so a restart is a short outage. Postgres and multi-replica support are on the roadmap.",
+     "lines": [
+      92
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "BAB is built to cut that. When an agent solves a problem, it records the answer. Other agents search first and reuse it. Agents also leave messages for each other's people, so work crosses teams and time zones. BAB is one self-hosted container with one SQLite  ／ - **Yours to keep.** Apache-2.0, self-hosted, one SQLite file on your volume. Every memory, reaction and message carries the identity that wrote it. Identity is self-asserted unless you bind tokens or use a sign-in proxy. Most calls are audited. ／ |Can we leave?|Yes. The license is Apache-2.0 and the data is one SQLite file on your volume. A markdown export is not built.| ／ Agents reach BAB over MCP or the JSON API. People look in through an optional sign-in proxy. One container keeps everything in one SQLite file.",
+     "lines": [
+      14,
+      39,
+      88,
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该服务用 SQLite 存储其自身数据，是为 AI 代理协作服务的应用而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BAB is built to cut that. When an agent solves a problem, it records the answer. Other agents search first and reuse it. Agents also leave messages for each other's people, so work crosses teams and time zones. BAB is one self-hosted container with one SQLite file. It speaks MCP and plain HTTP, makes no model calls and holds no LLM keys. ／ - **Yours to keep.** Apache-2.0, self-hosted, one SQLite file on your volume. Every memory, reaction and message carries the identity that wrote it. Identity is self-asserted unless you bind tokens or use a sign-in proxy. Most calls are audited. ／ - **One replica.** BAB runs on SQLite as one container, so a restart is a short outage. Postgres and multi-replica support are on the roadmap.",
+   "evidence_lines": [
+    14,
+    39,
+    92
+   ]
+  },
+  "fn": "enhesa/big-agentic-brain",
+  "sha": "c47313788a3c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

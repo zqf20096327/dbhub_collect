@@ -8855,5 +8855,172 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ba0e72ab3f49": {
+  "identity": {
+   "one_liner": "原生 macOS 数据库客户端，内置多协议驱动与 SQL 编辑",
+   "review": "Foxlume Query 是一个用 Swift/AppKit 构建的原生 macOS 数据库客户端，提供 SQL 自动补全、数据表格编辑、查询计划图、ER 图和结构编辑器，协议内置无需安装驱动，支持 Safe Mode 与 Touch ID 保护写入。目前为 0.1.0 alpha，无预编译下载，需从源码构建，PostgreSQL 和 MySQL 为重点支持对象。适合需要在 Mac 上管理数据库的开发者。",
+   "highlights": [
+    "以 Swift 实现内置 PostgreSQL、MySQL、MongoDB、Redis 协议，无需安装驱动",
+    "提供 ER 图、查询计划图（Explain/Explain Analyze）和带 ALTER 预览的结构编辑器",
+    "编辑采用暂存事务保存，每连接可配置 Safe Mode（含 Touch ID 与只读）"
+   ],
+   "use_cases": [
+    "Mac 上浏览、编辑和导出 PostgreSQL/MySQL 数据",
+    "查看查询执行计划并定位慢步骤",
+    "生成 schema ER 图并导出 PNG/PDF"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**PostgreSQL**|✅ Supported|Tested with 18; SCRAM-SHA-256, MD5, TLS 1.3|",
+     "lines": [
+      86
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**MySQL**|✅ Supported|Tested with 8.4; caching_sha2_password, TLS 1.3|",
+     "lines": [
+      87
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|🧪 Beta|Uses the system SQLite|",
+     "lines": [
+      89
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "SQL Server and other engines, plan comparison, JSON and XLSX import, MongoDB X.509 authentication and certificate revocation checks. See the CHANGELOG for what is new.",
+     "lines": [
+      180
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB|🧪 Beta|Uses the MySQL driver|",
+     "lines": [
+      88
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "该应用是为连接和管理多种数据库服务的客户端工具，而非使用某个库存数据的应用。",
+   "persona": "ops",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0 及以上，内嵌 DuckDB（MIT）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A fast, native macOS database client for PostgreSQL and MySQL.** ／ ## Supported databases ／ ## Install",
+   "evidence_lines": [
+    5,
+    82,
+    96
+   ]
+  },
+  "fn": "dannymaster1995-developer/foxlume-query",
+  "sha": "ba0e72ab3f49",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d89bbe20ebc7": {
+  "identity": {
+   "one_liner": "本地桌面 AI Agent 聊天工作区，支持 QQ 接入、记忆与知识库",
+   "review": "Superstring 是一个运行于 Windows/macOS/Linux 的本地 Agent 聊天应用，整合网页对话与 QQ 群聊/私聊，提供长期记忆、知识库、MCP 工具扩展与技能管理。面向个人日常陪伴聊天用户；通过连接外部 OneBot 11 WebSocket 服务（如 NapCat）接入 QQ，模型推理依赖 LM Studio 等本地服务或 OpenAI 兼容端点，数据保存在本机，不提供云同步。",
+   "highlights": [
+    "支持网页对话、QQ 群聊与私聊统一管理，接入 OneBot 11 WebSocket 服务",
+    "提供长期记忆与知识库导入，支持通过 stdio/HTTP/SSE 连接外部 MCP 服务",
+    "本地运行，会话记录、配置与密钥保存在本机，支持 Windows/macOS/Linux 安装包"
+   ],
+   "use_cases": [
+    "个人 AI 陪伴与日常聊天",
+    "QQ 群聊/私聊中的 Agent 自动应答",
+    "本地知识库问答与 MCP 工具扩展"
+   ],
+   "installation_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明其为使用本地数据库存储会话与配置数据的桌面聊天应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本地 Agent 工作区，主要用于日常陪伴与聊天，支持网页对话、QQ 群聊与私聊、记忆、知识库、MCP 工具扩展与技能管理。 ／ 升级前请完全退出程序并备份整个数据目录。切勿使用旧版程序打开已迁移的数据库。当前 main 分支源码数据库结构版本为 66（已发布的 v0.4.0-alpha-2 安装包仍为 54，未重新打包发布）。版本差异、数据位置与回退步骤见 UPGRADING.md。 ／ 应用安装包包含运行环境。模型推理需要 LM Studio 等本地服务或配置的外部 OpenAI 兼容服务。",
+   "evidence_lines": [
+    7,
+    123,
+    108
+   ]
+  },
+  "fn": "Verdspair/superstring",
+  "sha": "d89bbe20ebc7",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

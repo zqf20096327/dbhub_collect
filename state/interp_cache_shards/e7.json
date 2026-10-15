@@ -9776,5 +9776,143 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2a25216bbec": {
+  "identity": {
+   "one_liner": "Rocket 的 Datastar Web 组件社区画廊站点，Go + SQLite + CQRS 构建",
+   "review": "这是一个为 Rocket 框架服务的 Datastar Web 组件画廊网站，收录 51 个 sb-* 组件并提供沙盒 Playground、GitHub issue 提交流程和组件自托管分发。站点本身用 Go + templ + SQLite 实现，采用 CQRS 架构和 SSE 实时流，二进制内嵌资产与迁移，适合想使用或贡献 Rocket 组件的前端/Go 开发者。",
+   "highlights": [
+    "提供 51 个 Datastar Rocket 组件，每个组件含实时演示、API 表和可分享的代码 Playground",
+    "单文件自包含二进制，内嵌资产、组件与迁移，组件文件以内容寻址方式存于 SQLite（FTS5 搜索）",
+    "通过 autoloader 与 importmap + SHA-384 integrity 实现组件的按需加载与版本锁定"
+   ],
+   "use_cases": [
+    "在任意站点上按需加载和使用 sb-* Web 组件",
+    "通过 GitHub issue 表单向社区提交或开发自定义 Rocket 组件",
+    "部署一个展示组件目录与实时示例的站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`. ／ - **Catalog:** `components/` is embedded. At startup `SyncCatalog` mirrors it into SQLite (FTS5 for search).",
+     "lines": [
+      10,
+      32,
+      138
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 是该站点自身存储状态、目录与组件文件的数据库，而非为 SQLite 生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；七个来自 derekr PD rockets 的组件保留 Beer-Ware 许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Community Components for Rocket.** A community gallery of Rocket web components for Datastar, in the spirit of shoelace.style. ／ The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`. ／ - **Catalog:** `components/` is embedded. At startup `SyncCatalog` mirrors it into SQLite (FTS5 for search).",
+   "evidence_lines": [
+    8,
+    32,
+    138
+   ]
+  },
+  "fn": "zweiundeins/starbase",
+  "sha": "a2a25216bbec",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "414464d11597": {
+  "identity": {
+   "one_liner": "自托管 AI 跑团叙事者应用，Web 服务用 PostgreSQL 存数据",
+   "review": "这是一个用于主持《黑暗世界》桌面 RPG 团跑的 Web 应用，由 Docker 自托管，提供 Classic（Revised）与 V5 两种规则版的骰池结算、角色卡、Discord 风格聊天界面，并用 LM Studio/Ollama 本地 LLM 加 ChromaDB 上的 RAG 记忆生成叙事回复，支持英语和希腊语。后端为 Flask + PostgreSQL 16 + Redis 7，面向想在自己机器上跑团的主持人和玩家。",
+   "highlights": [
+    "支持 oWoD Revised 与 V5 两套规则的骰池计算与角色创建，骰子由服务端掷出并发布",
+    "通过 LM Studio/Ollama 运行本地 LLM，用 ChromaDB 与 bge-m3 嵌入实现长期记忆与规则书检索，界面支持英语和希腊语",
+    "提供邀请码注册、封禁、登录审计等管理功能，以 Docker Compose 部署（nginx + gunicorn + Flask）"
+   ],
+   "use_cases": [
+    "自托管运行《黑暗世界》Classic 或 V5 规则的线上团跑",
+    "需要本地 LLM 生成叙事、不依赖云端的桌面 RPG 辅助主持",
+    "英语/希腊语双语的跑团聊天与角色卡管理"
+   ],
+   "extra_flag": false
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Backend|Python 3.12, Flask 3.1 on gunicorn 26, PostgreSQL 16, Redis 7, server-sent events| ／ 2. Edit `.env`: put your own keys in `FLASK_SECRET_KEY` and `JWT_SECRET_KEY`, and generate `POSTGRES_USER` and `POSTGRES_PASSWORD` (how). Never keep the template values.",
+     "lines": [
+      146,
+      103
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它是跑团 Web 应用，PostgreSQL 16 列于其后端技术栈中作为存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShadowRealms AI is a web app for running World of Darkness chronicles with an AI Storyteller. You host it yourself: Docker for the app, and local language models through LM Studio and Ollama, so the stories stay on your machine. Every chronicle is either Classic (oWoD Revised) or V5, and the interface and the Storyteller work in English and Greek. ／ |Backend|Python 3.12, Flask 3.1 on gunicorn 26, PostgreSQL 16, Redis 7, server-sent events|",
+   "evidence_lines": [
+    34,
+    146
+   ]
+  },
+  "fn": "Somnius/shadowrealms-ai",
+  "sha": "414464d11597",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9433,5 +9433,73 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a692440cc17c": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理控制平面，状态持久化于 SQLite",
+   "review": "Pallium 是一个面向 AI 编码代理的本地控制平面 CLI，提供路由、工作流、循环、多代理团队、代码索引与知识库等服务。它将任务状态、会话与知识文档存储在本地 SQLite 数据库中，使其在崩溃或会话结束后仍可恢复；通过 npm 全局安装，以单二进制运行，支持通过 MCP 暴露知识上下文。适用于使用编码代理并需要持久化编排与仓库记忆的开发者。",
+   "highlights": [
+    "将任务状态与会话持久化在本地 SQLite，进程崩溃或会话结束后任务可恢复",
+    "提供七个服务：路由、工作流、循环、代理团队、代码索引、知识库、会话感知，共享一个内核",
+    "知识文档存储于 SQLite 并支持 BM25 搜索，可物化为 Markdown 文件；提供 MCP 接口 pallium_knowledge_context"
+   ],
+   "use_cases": [
+    "对代码仓库运行多代理并行工作流，且需要任务状态跨会话持久化",
+    "为代码库构建带引用校验的知识文档并做检索",
+    "管理编码代理会话与决策记录"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Pallium architecture: any agent drives pallium route, which picks one of six services built on one kernel with SQLite state, worktrees, verification gates, budgets and a run journal; any provider does the work ／ - **State lives in SQLite**, not the context window, so a task survives the ／ Docs live in SQLite with BM25 search and materialize to",
+     "lines": [
+      24,
+      39,
+      166
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为 Pallium 自身存储状态与文档的内置数据库（L24/L39），并非为 SQLite 生态服务的工具。",
+   "persona": "use",
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Pallium architecture: any agent drives pallium route, which picks one of six services built on one kernel with SQLite state, worktrees, verification gates, budgets and a run journal; any provider does the work ／ - **State lives in SQLite**, not the context window, so a task survives the ／ Docs live in SQLite with BM25 search and materialize to",
+   "evidence_lines": [
+    24,
+    39,
+    166
+   ]
+  },
+  "fn": "tszaks/pallium",
+  "sha": "a692440cc17c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

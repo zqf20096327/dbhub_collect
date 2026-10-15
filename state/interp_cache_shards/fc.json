@@ -9650,5 +9650,136 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "535d839e5a3c": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud Infrastructure 模拟器，Docker 运行",
+   "review": "floci-oci 是一个开源的本地 OCI（Oracle Cloud Infrastructure）模拟器，用 docker compose 启动后在 4599 端口提供对象存储、IAM、队列、流、KMS、Functions、OKE 等 OCI 形态服务，供 OCI SDK、CLI 和 Terraform 无改动对接。面向需要本地开发和 CI 测试 OCI 集成的开发者；要求 JDK 25 从源码构建，Functions/OKE 真实模式依赖 Docker sidecar。",
+   "highlights": [
+    "在本地容器内提供 Identity、Object Storage、Queue、Streaming、Vault/KMS、Functions、OKE 等 OCI 服务的真实请求/响应协议",
+    "官方 oci-java-sdk、Python SDK、OCI CLI 和 oracle/oci Terraform provider 可不加改动连接使用",
+    "提供 memory、persistent、hybrid、wal 四种存储模式，并支持按租户 OCID 的资源隔离"
+   ],
+   "use_cases": [
+    "无 Oracle Cloud 账号时本地开发 OCI 集成代码",
+    "CI 流水线中替代真实云租户运行集成测试",
+    "用 Terraform/OpenTofu 对 OCI 形态基础设施做本地演练"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI.",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 OCI 云服务的开发与测试提供本地模拟组件，本身不使用数据库存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（L12）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows. ／ docker compose up",
+   "evidence_lines": [
+    24,
+    26,
+    52
+   ]
+  },
+  "fn": "floci-io/floci-oci",
+  "sha": "535d839e5a3c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0af522526d98": {
+  "identity": {
+   "one_liner": "TypeScript webhook 投递库，用 PostgreSQL 存储事件并经 worker 签名投递",
+   "review": "good-webhooks 是一个面向 TypeScript 应用的 npm 库，提供 webhook 事件发布、投递、重试、签名验证与端点管理。事件与投递记录存储在用户的 PostgreSQL 数据库中，由应用自行运行的 worker 完成投递，要求 PostgreSQL 16 或 17、Node.js 24+。当前为 beta，公共 API 已冻结，适合在自己的服务中嵌入 webhook 投递能力的开发者。",
+   "highlights": [
+    "提供 publish() 发布类型化事件，worker 完成签名、发送、重试并记录每次投递尝试",
+    "事件与投递历史存储在用户的 PostgreSQL 数据库中，需 PostgreSQL 16 或 17",
+    "接收方通过 parseWebhook() 验证请求并获取类型化事件，端点管理支持独立使用或 Better Auth 插件"
+   ],
+   "use_cases": [
+    "在 TypeScript 应用中嵌入带重试与签名的 webhook 投递",
+    "为签名登录用户提供自助 webhook 端点管理（Better Auth 插件）",
+    "接收侧验证 Standard Webhooks 请求并做去重处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management wor ／ npm install good-webhooks@beta pg zod",
+     "lines": [
+      15,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库只是将事件数据存储在用户的 PostgreSQL 数据库中，为应用提供 webhook 投递功能，并非服务于数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management works standalone, through the Better Auth plugin, or with your own sender. ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16 or 17. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tested versions.",
+   "evidence_lines": [
+    15,
+    27
+   ]
+  },
+  "fn": "pplytas/good-webhooks",
+  "sha": "0af522526d98",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

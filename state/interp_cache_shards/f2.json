@@ -10189,5 +10189,68 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e08573303743": {
+  "identity": {
+   "one_liner": "C#/.NET 编写的分布式 SQL 数据库，基于 Raft 复制的 KV 存储层",
+   "review": "CamusDB 是用 C#/.NET 实现的分布式 SQL 数据库，SQL 接口运行在 Raft 复制的多版本事务性 KV 存储之上，默认串行化隔离，支持写时复制分支、误删对象恢复、时间旅行读取与查询结果缓存，通过 JSON/HTTP 或 gRPC 访问。适合需要强一致分布式 SQL 的 .NET 使用者；README 自述部分特性为 alpha，API 与存储格式可能变动。",
+   "highlights": [
+    "提供 SQL 接口与 ACID 事务，默认串行化隔离，跨分区写使用基于 Raft 的两阶段提交",
+    "支持数据库写时复制分支（CREATE DATABASE … BRANCH FROM）、误删对象 RELINK 恢复与 AS OF SYSTEM TIME 时间旅行读取",
+    "纯 .NET 实现（SQL 解析器、查询计划器、事务层、存储节点单进程），含统计驱动的查询计划与多种索引类型"
+   ],
+   "use_cases": [
+    "需要强一致/串行化隔离的分布式 SQL 数据存储",
+    "为生产数据创建廉价 staging 克隆、schema 迁移演练、按 PR 的临时数据库",
+    "通过误删恢复与历史快照读取进行数据回溯与调试"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **SQL dialect** — SELECT (including `FROM`-less `SELECT <expr>`), INSERT, UPDATE, DELETE, TRUNCATE, CREATE/DROP/ALTER TABLE, transactions (BEGIN / COMMIT / ROLLBACK), parameterized placeholders, prepared statements, table aliases, derived tables, inner, left",
+     "lines": [
+      74
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库本身是一个数据库内核/引擎，而非为现有数据库生态服务的工具或使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CamusDB is a SQL distributed database written in C# on .NET. It provides a SQL interface with a Raft-replicated, transactional key-value storage layer, and makes a few opinionated choices: **serializable isolation/strong consistency are the default**; databases can be **branched copy-on-write like code**; and **dropped objects are recoverable** instead of instantly destroyed. It can auto-scale based on traffic. Development is driven by performance, Jepsen-style testing, chaos engineering, fault injection, and degraded-state testing. ／ CamusDB's engine is written in modern C# on .NET: the SQL parser, the query planner and operators, the transaction layer, and the embedded Kahuna storage node all run in a single .NET process (with RocksDB underneath for persistence). Because the engine itself is pure .NET, extending it means writing ordinary C#: bring your own NuGet libraries and custom business logic directly into the database layer without crossing a language boundary or fighting a foreign extension API. Reading and debugging the engine is equally direct, and it runs on any platform .NET 10 supports. Clients talk to it over a JSON/HTTP API or a gRPC API with a .NET client library. ／ - **SQL dialect** — SELECT (including `FROM`-less `SELECT <expr>`), INSERT, UPDATE, DELETE, TRUNCATE, CREATE/DROP/ALTER TABLE, transactions (BEGIN / COMMIT / ROLLBACK), parameterized placeholders, prepared statements, table aliases, derived tables, inner, left/right outer and cross joins, comma joins, row-level DISTINCT, `CASE` expressions, `CAST` and the `::` shorthand, `INSERT INTO … SELECT`, `INSERT … RETURNING`, `CREATE TABLE … AS SELECT`, `DESCRIBE` / `SHOW TABLES [FROM | IN db] [LIKE 'pattern']` / `SHOW COLUMNS` / `SHOW INDEXES`, PostgreSQL expression forms (digit separators such as `200_000`, `%`, array subscripts), and case-insensitive identifier handling.",
+   "evidence_lines": [
+    3,
+    67,
+    74
+   ]
+  },
+  "fn": "camusdb/camusdb",
+  "sha": "e08573303743",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

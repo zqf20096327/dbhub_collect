@@ -8988,5 +8988,313 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "18b8a7ddc91c": {
+  "identity": {
+   "one_liner": "基于 SQL Server 的数据仓库构建教程项目，含 ETL 与建模全流程",
+   "review": "这是一个配套视频课程的教学项目仓库，演示如何在 SQL Server 中从 CRM/ERP 的 CSV 原始文件构建数据仓库：按 Medallion 架构分 Bronze/Silver/Gold 三层，逐步完成数据加载、清洗、星型模型建模和 SQL 分析。面向想学习数据工程与分析的学习者，需在本地安装 SQL Server 与 SSMS，仅覆盖最新数据集，不做历史数据化。",
+   "highlights": [
+    "实现 Medallion 架构的 Bronze/Silver/Gold 三层数据仓库分层",
+    "包含从 CSV 文件加载、清洗、标准化到星型模型建模的 ETL 脚本",
+    "提供安装指南、数据模型文档与基于 SQL 的分析查询"
+   ],
+   "use_cases": [
+    "学习数据仓库分层架构与 ETL 流程构建",
+    "练习 SQL 数据清洗、建模与分析查询",
+    "作为数据工程教学的课程配套材料"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "You take raw files from two systems, a CRM and an ERP, and build one data warehouse in SQL Server. At the end, the data is clean and ready for analysis. ／ **New here? Open the setup guide in the `00_setup` folder.** It walks you through installing SQL Server and creating the database, on Windows and Mac, with the fixes for the common errors. ／ 1. **Bronze Layer**: Stores raw data as-is from the source systems. Data is ingested from CSV Files into SQL Server Database.",
+     "lines": [
+      7,
+      9,
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是在 SQL Server 中存数据的教学仓库，不是为数据库生态服务的工具或组件",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You take raw files from two systems, a CRM and an ERP, and build one data warehouse in SQL Server. At the end, the data is clean and ready for analysis. ／ 1. **Bronze Layer**: Stores raw data as-is from the source systems. Data is ingested from CSV Files into SQL Server Database.",
+   "evidence_lines": [
+    7,
+    25
+   ]
+  },
+  "fn": "DataWithBaraa/sql-data-warehouse-project",
+  "sha": "18b8a7ddc91c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97ff6d8b3845": {
+  "identity": {
+   "one_liner": "",
+   "review": "bunqueue 是面向 Bun/Node.js 等运行时的任务队列系统，支持嵌入式（内存或单个 SQLite 文件）与独立 TCP 服务器两种模式，扩展时可用 PostgreSQL 多 broker 部署。它提供 DLQ、cron 调度、S3 备份和内置 MCP 服务器，供需要任务调度与 AI 代理自动化的开发者使用；服务器端仅支持 Bun，且明确不支持 MySQL 作为队列存储。",
+   "highlights": [
+    "支持嵌入式（内存/SQLite）与多 broker PostgreSQL 服务器两种部署模式",
+    "内置 MCP 服务器（79 个工具）、DLQ、cron、重试退避与死信队列",
+    "提供 BullMQ 兼容的 Queue/Worker/FlowProducer API 与多语言客户端协议"
+   ],
+   "use_cases": [
+    "单机或嵌入式后台任务与定时任务处理",
+    "以 PostgreSQL 为存储的多 broker 队列集群",
+    "为 AI 代理提供调度与队列控制能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "password changes, percent-encoding reserved characters in the URL only. MySQL ／ **Not ideal for:** multi-region consensus or deployments that require MySQL as",
+     "lines": [
+      91,
+      258
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它使用 SQLite/PostgreSQL 作为队列数据的存储，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／  DLQ, cron, SQLite S3 backups, and native MCP. Built for AI agents and automation. No Redis. ／ |**How it works**|Queue runs inside your process|Standalone server, clients connect via TCP|",
+   "evidence_lines": [
+    11,
+    12,
+    267
+   ],
+   "softened": [
+    "one_liner:『高性能』置空"
+   ]
+  },
+  "fn": "egeominotti/bunqueue",
+  "sha": "97ff6d8b3845",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3bc8cec0334a": {
+  "identity": {
+   "one_liner": "嵌入式代理记忆数据库，单文件内统一关系/图/向量与MVCC事务",
+   "review": "contextdb 是一个以 Rust 库和 CLI 形式提供的嵌入式数据库，在同一 MVCC 事务下提供关系存储、图遍历（SQL/PGQ 风格）与向量相似度搜索，并通过声明式约束（状态机、DAG、IMMUNABLE 等）在引擎层执行策略不变量；支持通过中央服务器以 dial-by-key 方式双向同步。面向构建 agent 记忆系统的开发者，当前仅提供 Rust 接口，Python/TypeScript 绑定在路线图中。",
+   "highlights": [
+    "单事务内原子更新关系行、图邻接结构与向量索引，MVCC 读写不互斥",
+    "提供引擎强制的策略约束：STATE MACHINE、DAG、IMMUNABLE、PROPAGATE、TTL 等",
+    "实例间通过中央 SyncServer 加密身份拨号同步，支持离线优先与按表声明冲突策略"
+   ],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "**Relational (PostgreSQL-compatible SQL)** — SELECT, INSERT, UPDATE, DELETE, JOINs (INNER/LEFT), CTEs, upsert (`ON CONFLICT DO UPDATE`), DISTINCT, LIMIT, IN with subqueries, LIKE, BETWEEN, parameter binding (`$name`).",
+     "lines": [
+      163
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "If you're building agent memory today, you're probably stitching together SQLite for state, a vector database for embeddings, and application code for graph traversal. contextdb replaces all three — and adds **enforceable policy constraints** (state machines, ",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它本身是一个嵌入式数据库引擎（Rust 库+CLI），供 agent 记忆系统使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "An embedded database for agentic memory systems. Relational storage, graph traversal, and vector similarity search under unified MVCC transactions — in a single file, in a single process. Every agent, device, or service runs its own contextdb. They sync bidirectionally through a central server by dial-by-key — reaching it through its own cryptographic identity, no broker to install — knowledge learned by one becomes available to all, with per-table conflict resolution. No port forwarding, no VPN — a node behind NAT dials outbound, and machines on one LAN sync with zero external infrastructure. ／ contextdb is an embedded database. The primary interface is the Rust API: ／ contextdb-engine = \"1.0.0\"",
+   "evidence_lines": [
+    10,
+    35,
+    99
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "context-graph-ai/contextdb",
+  "sha": "3bc8cec0334a",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5bc686b44d40": {
+  "identity": {
+   "one_liner": "达梦数据库的非官方 Entity Framework Core 10 提供程序",
+   "review": "该项目为达梦 DM8 数据库实现 EF Core 10 关系提供程序，默认基于官方 DM.DmProvider 驱动，可选 W.DamengProvider 驱动扩展；支持反向工程、迁移脚本生成与执行、标识列/序列等达梦专用值生成 API，并附可安装的达梦 SQL 方言 Agent Skill。面向使用 .NET 与 EF Core 访问达梦的开发者；README 明确列出不负责建库、DDL 迁移无原子性等边界。",
+   "highlights": [
+    "提供 UseDameng 扩展接入 EF Core 10，默认使用官方 DM.DmProvider ADO.NET 驱动",
+    "支持 dotnet ef dbcontext scaffold 反向工程与迁移脚本生成执行，覆盖 CRUD、事务、隔离级别等真实数据库回归测试",
+    "附带 skills/dameng-sql 可安装 Agent Skill，整理达梦 SQL 方言与 Oracle/MySQL/SQL Server 差异索引"
+   ],
+   "use_cases": [
+    "在 .NET 10 / EF Core 10 应用中通过 ORM 访问达梦 DM8 数据库",
+    "使用 dotnet ef 生成并执行达梦迁移脚本、反向工程现有模式",
+    "为 AI 助手安装达梦 SQL 方言参考 skill"
+   ],
+   "install": [
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "这是一个独立维护的非官方达梦数据库 Entity Framework Core 10 关系数据库提供程序。 ／ - 达梦 DM8；各轮实例版本记录见兼容性矩阵，不声明最低服务器版本；",
+     "lines": [
+      3,
+      11
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "仓库在 `skills/dameng-sql` 提供可安装的 Agent Skill，按达梦公开 SQL 文档整理方言差异：与 Oracle / MySQL / SQL Server 一致的部分只作索引，表空间、`IDENTITY` / 序列、DMSQL、页大小、聚集主键、`compatible_mode` 等达梦特有写法带有示例。",
+     "lines": [
+      132
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "仓库在 `skills/dameng-sql` 提供可安装的 Agent Skill，按达梦公开 SQL 文档整理方言差异：与 Oracle / MySQL / SQL Server 一致的部分只作索引，表空间、`IDENTITY` / 序列、DMSQL、页大小、聚集主键、`compatible_mode` 等达梦特有写法带有示例。",
+     "lines": [
+      132
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "仓库在 `skills/dameng-sql` 提供可安装的 Agent Skill，按达梦公开 SQL 文档整理方言差异：与 Oracle / MySQL / SQL Server 一致的部分只作索引，表空间、`IDENTITY` / 序列、DMSQL、页大小、聚集主键、`compatible_mode` 等达梦特有写法带有示例。",
+     "lines": [
+      132
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为达梦数据库提供 EF Core 提供程序与 SQL 方言 skill，属服务该数据库生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是一个独立维护的非官方达梦数据库 Entity Framework Core 10 关系数据库提供程序。 ／ - 达梦 DM8；各轮实例版本记录见兼容性矩阵，不声明最低服务器版本； ／ 仓库在 `skills/dameng-sql` 提供可安装的 Agent Skill，按达梦公开 SQL 文档整理方言差异：与 Oracle / MySQL / SQL Server 一致的部分只作索引，表空间、`IDENTITY` / 序列、DMSQL、页大小、聚集主键、`compatible_mode` 等达梦特有写法带有示例。",
+   "evidence_lines": [
+    3,
+    11,
+    132
+   ]
+  },
+  "fn": "whynpc9/W.EntityFrameworkCore.Dameng",
+  "sha": "5bc686b44d40",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

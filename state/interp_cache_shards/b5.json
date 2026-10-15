@@ -9980,5 +9980,148 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "17ef2fb07bce": {
+  "identity": {
+   "one_liner": "自托管蛋鸡养殖场管理系统，基于 .NET 与 PostgreSQL",
+   "review": "Cluckwork 是一个自托管的家禽养殖场管理系统，当前聚焦蛋鸡产蛋场景，用于记录每日分等级产量、按 FIFO 追溯鸡蛋批次、拦截用药限制批次并管理销售与库存。技术栈为 ASP.NET Core API 加 React SPA，单容器部署，依赖 PostgreSQL 与 EF Core，多租户隔离在数据层实现，适用于养殖场经营者与运维自托管实例的用户。",
+   "highlights": [
+    "支持按鸡舍/群记录每日产蛋，分拣计数与可售目标核对，生成鸡蛋批次并全链路 FIFO 追溯",
+    "提供多租户架构，租户隔离在数据层通过 EF 全局查询过滤与插入时租户戳实现",
+    "API 与前端 SPA 打包为单容器，通过 Aspire 本地开发或 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "蛋鸡养殖场的日常生产记录、库存与销售管理",
+    "鸡蛋批次从产蛋到销售的追溯与用药限制拦截",
+    "多农场/多租户的自托管养殖经营数据管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backend:** C# / .NET 10 (ASP.NET Core minimal APIs) · **Database:** PostgreSQL (EF Core) ／ Aspire starts PostgreSQL, Redis, the API, and Vite; waits on their existing ／ # edit deploy/.env: set POSTGRES_PASSWORD and a JWT RSA keypair (Jwt__*KeyPem)",
+     "lines": [
+      28,
+      47,
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 PostgreSQL 作为后端存储的养殖场管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Backend:** C# / .NET 10 (ASP.NET Core minimal APIs) · **Database:** PostgreSQL (EF Core) ／ Cluckwork helps a farm run its daily operation from one system: record ／ Multi-tenant from the root, so the system scales past a single farm:",
+   "evidence_lines": [
+    28,
+    7,
+    124
+   ]
+  },
+  "fn": "mforce/cluckwork",
+  "sha": "17ef2fb07bce",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e4f78a4fe0f5": {
+  "identity": {
+   "one_liner": "面向 GaussDB HCS 透明多写的 Flink CDC 2.3 实验性连接器",
+   "review": "基于官方 Flink CDC 2.3 构建的独立连接器工程，通过 GaussDB 507 JDBC 驱动的 MultiPrimaryReplicationStream 读取 HCS 透明多写实例的逻辑复制流，仅支持增量采集，需预建复制槽并依赖用户自备的产品介质驱动。面向需要在 Flink 中接入 GaussDB HCS CDC 数据的开发/运维人员，README 明确未完成生产验收。",
+   "highlights": [
+    "基于官方 flink-connector-debezium 2.3.0 与嵌入式 Debezium 引擎实现，支持 Flink 1.13–1.16 多 profile 构建",
+    "通过 507 驱动 MultiPrimaryReplicationStream 读取多写逻辑流，checkpoint 中保存 CSN,WAL-ID,LSN 三段位点",
+    "提供 Flink SQL connector 'gaussdb-cdc' 与 DataStream GaussDBSource 两种接入方式，输出 row/json 格式"
+   ],
+   "use_cases": [
+    "从 GaussDB HCS 透明多写实例增量采集变更数据到 Flink 下游",
+    "通过 Flink SQL Client 以 gaussdb-cdc 连接器消费 CDC 事件",
+    "搭建内网验证与联调测试作业，推进 HCS CDC 适配开发"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "连接器通过 `pg_get_replication_slots()` 在普通租户 SQL 连接上检查槽，再使用",
+     "lines": [
+      68
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB HCS Connector for Flink CDC 2.3 ／ 独立的实验性连接器工程，面向 **HCS GaussDB 透明多写部署**。使用官方 ／ 先从你有权使用的 GaussDB 产品介质取得配套 `gaussdbjdbc.jar`，导入本地仓库：",
+     "lines": [
+      1,
+      3,
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 GaussDB 数据库提供 Flink CDC 采集连接器，属于数据库生态服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# GaussDB HCS Connector for Flink CDC 2.3 ／ 独立的实验性连接器工程，面向 **HCS GaussDB 透明多写部署**。使用官方 ／ 这是非官方 GaussDB 扩展，不属于 Apache Flink CDC 已发布的 GaussDB 官方连接器。",
+   "evidence_lines": [
+    1,
+    3,
+    177
+   ]
+  },
+  "fn": "jarrenL/gaussdb-flink-cdc-2.3",
+  "sha": "e4f78a4fe0f5",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

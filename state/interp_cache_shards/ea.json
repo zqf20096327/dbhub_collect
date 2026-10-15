@@ -9017,5 +9017,166 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0744116419cc": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展目录工具：采集扩展元数据并存入 PG，提供 Web/JSON API 查询",
+   "review": "pgext 用于编目 PostgreSQL 扩展生态，收录 2507 个扩展及其包可用性矩阵；它把目录数据存入 PostgreSQL，并提供 Web UI 与 JSON API 查询。面向 PG 使用的运维/DBA 人群，以单个静态二进制分发，支持从 APT/RPM 仓库元数据构建目录。",
+   "highlights": [
+    "采集并解析 APT/RPM 仓库元数据，维护扩展知识库并存入 PostgreSQL",
+    "提供自包含的 Web 应用与 JSON API 查询扩展目录",
+    "单个静态二进制，提供 init/serve/status/fetch/parse/reload 等子命令"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 扩展选型查询包可用性",
+    "维护 PGDG/Pigsty 仓库的扩展元数据目录",
+    "通过 JSON API 集成扩展目录查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**pgext** catalogs the PostgreSQL extension universe: 2,507 extensions, including ／ maintain the curated extension knowledge base — all stored in PostgreSQL.",
+     "lines": [
+      8,
+      16
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "It does not read `primary_db` and does not require a SQLite driver.",
+     "lines": [
+      72
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明 pgext 为 PostgreSQL 扩展生态构建并服务目录，使用 PostgreSQL 存储目录数据，属为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**pgext** catalogs the PostgreSQL extension universe: 2,507 extensions, including ／ - **Build the catalog**: fetch repository metadata, parse APT/RPM packages, and ／ All you need is a PostgreSQL database to hold the catalog:",
+   "evidence_lines": [
+    8,
+    15,
+    22
+   ]
+  },
+  "fn": "pgsty/pgext",
+  "sha": "0744116419cc",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4b3ee480ae7b": {
+  "identity": {
+   "one_liner": "VastBase/openGauss/PostgreSQL 离线应急数据恢复工具",
+   "review": "vbdul 是一款数据库应急数据恢复工具，在实例无法启动、误删表/数据、无备份的场景下直接解析磁盘数据文件抢救数据，提供空闲页扫描、WAL 日志挖掘（logminer）和基于 ProBackup 备份的时间点恢复。二进制发行，正式版需向供应商申请 license；仅支持 Heap 行存引擎，运行于 Linux x86_64/aarch64。",
+   "highlights": [
+    "支持直接解析数据文件离线导出表/schema/整库数据，并生成导入脚本",
+    "支持 DROP/TRUNCATE 后文件系统空闲页扫描恢复和 WAL DML 挖掘恢复",
+    "以只读方式访问数据文件，输出仅写入自身目录",
+    "支持 PostgreSQL 10~17 内核及 openGauss 内核版本"
+   ],
+   "use_cases": [
+    "数据库无法启动且无备份时从磁盘文件抢救数据",
+    "DROP TABLE/TRUNCATE 误操作后的数据还原",
+    "通过 WAL 挖掘定位误操作事务并恢复被误删/误改的行"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db_type|是|`vastbase` 或 `postgresql`，按实例内核填；填错直接报错退出| ／ |data_dir|是|数据目录（VastBase 如 `/home/vastbase/data/vastbase`；PG 如 `/var/lib/pgsql/17/data`）| ／ |postgresql|pg10 ~ pg17|对应 PostgreSQL 10 ~ 17|",
+     "lines": [
+      34,
+      36,
+      58
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ |vastbase|v3|G100 2215/308/309（openGauss 内核）|",
+     "lines": [
+      3,
+      55
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具直接解析 VastBase/openGauss/PostgreSQL 的数据文件与 WAL，为这些数据库提供数据恢复服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "正式版需 license（受限模式），Beta 版无需 license",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# vbdul - VastBase/openGauss 数据应急恢复工具 ／ vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ - 仅支持 Heap（行存）引擎；ustore（undo 引擎）、cstore（列存引擎）暂不支持",
+   "evidence_lines": [
+    1,
+    3,
+    196
+   ]
+  },
+  "fn": "LiXiangYu0612/vbdul",
+  "sha": "4b3ee480ae7b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

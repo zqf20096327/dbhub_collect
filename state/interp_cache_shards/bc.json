@@ -8426,5 +8426,142 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "57ec3ba9740b": {
+  "identity": {
+   "one_liner": "自托管家庭藏书/媒体编目应用，FastAPI+SQLite 单容器",
+   "review": "Shelf 是一个自托管的家庭图书与媒体编目系统，支持条码扫描、拍照识别（AI 视觉模型）、自动抓取元数据与封面、借阅跟踪和库存盘点，覆盖书籍、DVD、CD、漫画和游戏等多种媒体类型。面向家庭/个人藏书管理场景，通过 FastAPI、SQLite 和 HTMX 实现单 Docker 容器部署，数据完全保留在本地网络内。",
+   "highlights": [
+    "支持相机/USB 条码扫描与 8 种扫描模式（添加、借出、归还、盘点等）",
+    "拍照整架识别：通过视觉模型（Anthropic API、OpenAI 兼容端点或本地 Ollama）批量导入书籍",
+    "级联元数据查询与封面管线，整合 Open Library、TMDb、IGDB、MusicBrainz、DNB 等数据源",
+    "单 Docker 容器运行，SQLite 存储，多用户支持"
+   ],
+   "use_cases": [
+    "家庭图书/媒体收藏编目与估值报告生成",
+    "图书借阅跟踪（家庭成员间）",
+    "本地库房/书架盘点审计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Zero cloud dependency** — runs entirely on your network in a single Docker container with a SQLite database. Your data never leaves your home ／ shelf.db — SQLite database ／ |Backend|Python 3.12, FastAPI, SQLite (WAL mode)|",
+     "lines": [
+      26,
+      100,
+      265
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 SQLite 作为自身持久化后端（shelf.db），数据库是其存储组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted home library catalog with barcode scanning, multi-mode scanning workflows, automatic metadata lookup, cover art, and collection management — all in a single Docker container. ／ - **Zero cloud dependency** — runs entirely on your network in a single Docker container with a SQLite database. Your data never leaves your home ／   shelf.db        — SQLite database",
+   "evidence_lines": [
+    10,
+    26,
+    100
+   ]
+  },
+  "fn": "dgahagan/shelf",
+  "sha": "57ec3ba9740b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5abbb4afdbbf": {
+  "identity": {
+   "one_liner": "自托管的 TeamSpeak 网页客户端与协议网关，浏览器接入语音与频道",
+   "review": "WebTS 是一个独立的 TeamSpeak 网页客户端与协议网关，用 Rust/Tokio 实现网关，React 构建网页界面，成员通过邮箱登录并导入 TS 身份加入频道，使用 rusqlite 以 SQLite 存储账号、身份密文与会话。面向自托管部署者，提供一键安装脚本、Docker 镜像与 Windows 运行包；TS6、移动语音等仍标注为实验支持。",
+   "highlights": [
+    "以该用户身份连接 TeamSpeak 服务器并继承原有权限，支持频道树显示、聊天与 Opus 双向语音",
+    "提供本地 GTCRN/RNNoise AI 降噪、好友 Olm 双棘轮 E2EE 私信（实验）与身份密文加密存储",
+    "提供中文一键安装脚本、webts 管理菜单、Docker Compose 与 Windows 免 Docker 运行包"
+   ],
+   "use_cases": [
+    "为 TeamSpeak 团队部署自托管网页接入站点，免装原生客户端",
+    "需要邮箱账号体系与多 TS 身份管理的社区站点",
+    "浏览器内语音通话并需本地 AI 降噪的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文|",
+     "lines": [
+      135
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite 存储账号、身份密文与会话，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WebTS 是独立开源的 **TeamSpeak 网页客户端与协议网关**。成员通过邮箱登录、创建或导入 TeamSpeak 身份，在浏览器里加入已有频道；网站以该身份连接目标服务器，继承它原有的权限。部署者掌握自己的账号数据库、密钥、邮件服务和默认服务器配置。 ／ |持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文| ／ 这条命令安装缺少的 Docker / Compose，下载最新正式版本源码，再通过中文引导配置站名、运营资料、域名、公网 IP、邮箱和默认 TS 地址，构建并启动容器。安装后输入 **`webts`** 打开中文管理菜单。首次构建需要时间；部署前准备 HTTPS 域名、TLS SMTP 和开启全局语音加密的 TS 服务器。逐步安装与站长开通。",
+   "evidence_lines": [
+    15,
+    135,
+    69
+   ]
+  },
+  "fn": "PTPHAP/WebTS",
+  "sha": "5abbb4afdbbf",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

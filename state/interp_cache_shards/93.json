@@ -9543,5 +9543,152 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c002f851042b": {
+  "identity": {
+   "one_liner": "本地数据同步工具：以 UI 构建、运行并校验库间数据同步任务",
+   "review": "Syncforge 是运行在本地机器上的数据同步工具，用户通过界面把 PostgreSQL、MySQL、MongoDB、Cosmos DB 或 CSV 之间的表拷贝任务定义为 JSON 作业规范，支持字段映射、跨库 lookup、预览与 dry-run，并可用增量水位线重跑，事后逐字段比对源与目标。适合需要在平台迁移中反复搬表、希望作业可提交代码评审的开发者。README 声明其无登录认证，仅限绑定 127.0.0.1 的本机使用，不可暴露为生产服务。",
+   "highlights": [
+    "支持在 UI 中映射字段并生成可版本评审的 JSON 作业规范，可预览和 dry-run 后再写入",
+    "支持跨库 lookup 关联、SQL 查询源、增量运行（watermark）以及源/目标逐字段比对校验",
+    "连接凭据以 AES-256-GCM 加密存储，写入一律按 key 字段 upsert"
+   ],
+   "use_cases": [
+    "平台迁移期间反复拷贝表、重命名字段并转换取值的同步任务",
+    "同步完成后校验目标库与源库数据是否一致",
+    "通过增量水位线只同步新增和变更的行"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Build, run and verify data sync jobs between **PostgreSQL**, **MySQL**, **MongoDB** and **Cosmos DB** from a UI, instead of writing another one-off script. Uploaded **CSV files** work as a source too. ／ - **Browse schemas** of PostgreSQL and MySQL tables and views, and of MongoDB and Cosmos DB collections (fields are inferred by sampling documents, including nested paths like `address.city`). ／ - **Join related data**: look up values from other tables or collections, in the same database or a different one (an order's customer email from the CRM), or read a PostgreSQL source through your own SQL query.",
+     "lines": [
+      3,
+      20,
+      22
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Build, run and verify data sync jobs between **PostgreSQL**, **MySQL**, **MongoDB** and **Cosmos DB** from a UI, instead of writing another one-off script. Uploaded **CSV files** work as a source too. ／ - **Browse schemas** of PostgreSQL and MySQL tables and views, and of MongoDB and Cosmos DB collections (fields are inferred by sampling documents, including nested paths like `address.city`).",
+     "lines": [
+      3,
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接并读取/写入多种数据库以完成数据同步的工具，而非以某个数据库为存储的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Build, run and verify data sync jobs between **PostgreSQL**, **MySQL**, **MongoDB** and **Cosmos DB** from a UI, instead of writing another one-off script. Uploaded **CSV files** work as a source too. ／ Syncforge runs on your machine. You point it at two databases (or a CSV file and a database), pick a table, tick the fields you need, decide how each one lands in the target, and run it. It can then check the result for you: it re-maps a sample of source rows and compares them field by field with what is in the target. ／ > **Local-only tool, not for production.** Syncforge has no login and trusts everyone who can reach it. It is meant to run on your own machine, bound to `127.0.0.1`, for people who are already trusted with the databases it connects to. Do not expose it to a network, host it as a service, or reuse its code as a pattern for internet-facing applications. See Security model.",
+   "evidence_lines": [
+    3,
+    5,
+    8
+   ]
+  },
+  "fn": "MohammedRaslan/sync-forge",
+  "sha": "c002f851042b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5b48ffa16cb4": {
+  "identity": {
+   "one_liner": "PostgreSQL 14–19 简繁中文消息翻译目录集",
+   "review": "该仓库为 PostgreSQL 14–19 提供完整的 zh_CN 与 zh_TW 消息目录（PO 文件），覆盖 324 个文件、135,034 条消息，通过 msgfmt 校验并提供 make mo 编译、make dist 打包及 PGWeb 审核导入流程，面向需要中文界面的 PostgreSQL 用户与翻译贡献者。使用时需将 PO 编译为 .mo 并部署到对应安装目录。",
+   "highlights": [
+    "提供 PostgreSQL 14–19 全部分支的 zh_CN/zh_TW PO 目录，声称为 100% 翻译、零 fuzzy",
+    "提供 Makefile 工作流：make check 校验、make stats 统计、make mo 编译、make dist 可复现打包",
+    "提供双语审校工作台（pgsql.cc/nls）与 PGWeb 审核导入脚本 bin/pgweb-bundle.py"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 14–19 部署简体或繁体中文消息目录",
+    "参与中文翻译审校，通过工作台提交修正",
+    "为 pgtranslation/messages.git 上游回传校准后的中文目录"
+   ],
+   "cat_other_note": null
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL Chinese Message Catalogs ／ **Complete `zh_CN` and `zh_TW` translations for PostgreSQL 14 – 19** ／ complete Simplified and Traditional Chinese catalogs for PostgreSQL 14–19:",
+     "lines": [
+      1,
+      3,
+      65
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 本体提供中文消息目录与翻译工作流，属于服务数据库生态的工具/资源库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PostgreSQL License（与 postgres.git 一致，见 LICENSE）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# PostgreSQL Chinese Message Catalogs ／ **162 files and 67,517 messages per language; 324 files and 135,034 messages in total.** Both languages are 100% translated, with zero fuzzy and zero untranslated entries — every file clean under `msgfmt --check --check-format`. ／ make check            validate all 324 zh_CN/zh_TW catalogs (msgfmt, completeness, headers, alignment)",
+   "evidence_lines": [
+    1,
+    14,
+    128
+   ]
+  },
+  "fn": "pgsty/pgnls",
+  "sha": "5b48ffa16cb4",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

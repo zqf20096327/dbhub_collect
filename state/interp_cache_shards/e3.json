@@ -9236,5 +9236,80 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3631a1d8363c": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，用 Rust 实现中文按字/按词转拼音",
+   "review": "这是一个 PostgreSQL 扩展，通过 CREATE EXTENSION 安装 Rust 后端的拼音转换函数，支持按字、按词及批量罗马化，并提供与 pg_search、pg_trgm 配合的拼音正则查询辅助函数，面向需要在 PostgreSQL 中做中文拼音检索的开发者。部分查询函数要求先启用 pg_search；SQL 后端需手动加载 word.sql。",
+   "highlights": [
+    "提供 pinyin_char_romanize / pinyin_word_romanize 及批量版本等 SQL 函数，实现中文按字、按词转拼音",
+    "提供 pinyin_regex_phrase 等查询辅助函数，与 pg_search 索引配合生成拼音前缀/首字母/自动补全模式查询",
+    "包含独立 SQL 后端解析器（sql/word.sql），不依赖 Rust 库即可运行"
+   ],
+   "use_cases": [
+    "为含中文字段的 PostgreSQL 表构建拼音搜索/模糊匹配",
+    "基于拼音首字母、自动补全等模式实现中文查询辅助",
+    "与 pg_search 的 BM25 检索结合做拼音短语查询"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_pinyin ／ `CREATE EXTENSION pg_pinyin` installs the Rust-backed core API: ／ `sql/word.sql` is not installed automatically by `CREATE EXTENSION pg_pinyin`. It is the SQL-backend companion to `sql/pinyin.sql`; load `sql/pinyin.sql` first and use it only in databases where `pg_search` is available. `pg_search` must be preloaded before `CREATE EXTENSION pg_search`, for example by starting PostgreSQL with `-c shared_preload_libraries=pg_search`.",
+     "lines": [
+      1,
+      12,
+      41
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "report, not a native-query oracle. Actual query serialization records auto routes.",
+     "lines": [
+      681
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明其为 PostgreSQL 扩展，通过 CREATE EXTENSION 安装并提供 SQL 函数，为该数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`CREATE EXTENSION pg_pinyin` installs the Rust-backed core API: ／ - `pinyin_regex_phrase(text, slope integer DEFAULT NULL, max_expansions integer DEFAULT NULL, generated_pinyin boolean DEFAULT false)` (`pg_search` query helper; installed by `CREATE EXTENSION pg_pinyin` when `pg_search` is already enabled in the database, returns `pdb.query`) ／ `sql/word.sql` is not installed automatically by `CREATE EXTENSION pg_pinyin`. It is the SQL-backend companion to `sql/pinyin.sql`; load `sql/pinyin.sql` first and use it only in databases where `pg_search` is available. `pg_search` must be preloaded before `CREATE EXTENSION pg_search`, for example by starting PostgreSQL with `-c shared_preload_libraries=pg_search`.",
+   "evidence_lines": [
+    12,
+    22,
+    41
+   ]
+  },
+  "fn": "aiyou178/pg_pinyin",
+  "sha": "3631a1d8363c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

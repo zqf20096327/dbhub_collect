@@ -9995,5 +9995,61 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f17372fb7c3b": {
+  "identity": {
+   "one_liner": "本机模型网关，让 Cursor/Devin/Codex 使用自配的模型 API",
+   "review": "这是一个 Tauri 桌面应用，通过本机代理与本地 CA 接管 Cursor、Devin、ChatGPT 客户端内 Codex 的模型请求，将推理转发到用户自配的 OpenAI 或 Anthropic 协议服务，并提供模型库、调用记录与 Token 用量统计。面向使用 AI 编程工具且需要切换模型来源的用户。目前仅提供 Windows x64 安装包，模型服务需自备，Key 明文保存在本地 SQLite 数据库中。",
+   "highlights": [
+    "支持 OpenAI Chat/Responses 与 Anthropic 协议，含连接测试",
+    "提供调用成败、耗时、Token 用量记录与金额估算",
+    "本机网关仅监听 127.0.0.1，Key 与设置保存于本地"
+   ],
+   "use_cases": [
+    "让 Cursor 使用自定义模型 API（官方/本地/混合模式）",
+    "为 Devin 与 Codex 客户端配置模型映射与网关",
+    "统计 AI 编程工具的调用与 Token 消耗"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它是面向终端用户的桌面应用，仅在本地数据库中保存配置与调用记录，不是为某数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，基于 leookun/cursor-byok 沿用",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "让 Cursor、Devin 和 ChatGPT 客户端中的 Codex 使用你配置的模型 API：本机模型网关，含模型库、接入状态与调用记录。 ／ - 数据目录为 `%USERPROFILE%\\.haxsd-byok-devin-v3`，含数据库、证书与运行数据。API Key 存在本地数据库里，备份请按敏感文件保管。 ／ 基于 leookun/cursor-byok，沿用 MIT 许可证。",
+   "evidence_lines": [
+    3,
+    32,
+    46
+   ]
+  },
+  "fn": "haxsd/haxsd-byok",
+  "sha": "f17372fb7c3b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

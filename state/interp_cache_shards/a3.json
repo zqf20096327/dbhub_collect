@@ -8657,5 +8657,285 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f59a2879077a": {
+  "identity": {
+   "one_liner": "基于 NestJS 与 MikroORM 的博客克隆后端启动模板",
+   "review": "一个 NestJS + TypeScript 后端模板，以博客应用为示例，内置 MikroORM/PostgreSQL 迁移与种子、JWT/OAuth/2FA 认证、RBAC 授权、Redis 缓存、RabbitMQ 任务队列及 Docker Compose 部署脚本，供开发者通过 degit 或模板按钮快速创建新项目；依赖 pnpm，不支持 npm/yarn。",
+   "highlights": [
+    "提供基于 MikroORM 的 PostgreSQL 迁移与种子脚本（create/up/down/seed）",
+    "内置 JWT 刷新令牌轮换、OAuth、2FA(TOTP) 与会话管理",
+    "配置通过 Zod 在启动时校验，各集成可按需移除"
+   ],
+   "use_cases": [
+    "作为 NestJS 新项目的起始模板",
+    "学习 NestJS 中 CRUD、认证、授权等实践示例",
+    "通过 Docker Compose 快速部署博客类后端服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🏪 **MikroORM** on 🐘 **PostgreSQL**, with migrations and seeders ／ - Docker, for local PostgreSQL, Redis, RabbitMQ and a mail catcher",
+     "lines": [
+      24,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 PostgreSQL 存数据的博客应用模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> ### Blog made using Nestjs + Mikro-orm codebase(backend) containing real world examples (CRUD, auth (password based and oauth), advanced patterns, etc) and batteries included and ever-evolving ／ - 🏪 **MikroORM** on 🐘 **PostgreSQL**, with migrations and seeders ／ - Docker, for local PostgreSQL, Redis, RabbitMQ and a mail catcher",
+   "evidence_lines": [
+    3,
+    24,
+    39
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "rubiin/ultimate-nest",
+  "sha": "f59a2879077a",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d527d4c39b54": {
+  "identity": {
+   "one_liner": "本地文件型 AI 代理长期记忆 SDK，SQLite+FTS5 五层结构，无向量库",
+   "review": "提供五个 PyPI 包（SDK、CLI、MCP server、Hermes 适配器、LangGraph BaseStore），为 AI 代理提供基于本地 SQLite + FTS5 的分层长期记忆存储与检索，不使用向量数据库或嵌入模型。面向代理框架开发者和 MCP 客户端用户；使用需激活账号并持有服务端签名的 entitlement，本地数据保留在机器上。",
+   "highlights": [
+    "提供 SDK、CLI、MCP server、Hermes 适配器、LangGraph BaseStore 五个 PyPI 包",
+    "基于 SQLite + FTS5 的五层（HOT/WARM/COLD/REFERENCE/ARCHIVE）本地存储结构，多租户设计",
+    "代码 MIT 许可，本地引擎可 fork 移除账号校验"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、Cursor 等 MCP 客户端接入长期记忆",
+    "在 LangGraph 应用中作为跨线程 BaseStore 持久化代理记忆",
+    "通过 Hermes Agent 或直接 SDK 调用读写本地代理记忆"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`sibyl-memory-client` is a local-first agentic memory SDK. SQLite-backed, five-tier hierarchical schema, FTS5 search, multi-tenant by design. No vector database. No embedding model. No external retrieval service. The memory lives on the agent's machine; the su ／ |`sibyl-memory-client`|PyPI|Local-first agentic memory SDK. SQLite-backed five-tier hierarchical schema, FTS5 search, multi-tenant, with self-learning skill detection and local memory linter. Foundation of the plugin family.| ／ |`sibyl-memory-mcp`|PyPI|MCP server. Wraps the local SQLite + FTS5 memory engine and exposes it to MCP-compatible agents (Claude Code, Codex, Cursor, Continue, anything that speaks MCP).|",
+     "lines": [
+      27,
+      41,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 代理生态提供记忆存储组件，SQLite 仅作为其内嵌存储引擎而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`sibyl-memory-client` is a local-first agentic memory SDK. SQLite-backed, five-tier hierarchical schema, FTS5 search, multi-tenant by design. No vector database. No embedding model. No external retrieval service. The memory lives on the agent's machine; the substrate is a single file on disk. ／ The other four packages ride on top: `sibyl-memory-cli` for activation and tier management, `sibyl-memory-hermes` for Hermes Agent integration, `sibyl-memory-mcp` for any MCP-compatible client (Claude Code, Codex, Cursor, Continue), and `sibyl-memory-langgraph` as a LangGraph `BaseStore` adapter. ／ |`sibyl-memory-mcp`|PyPI|MCP server. Wraps the local SQLite + FTS5 memory engine and exposes it to MCP-compatible agents (Claude Code, Codex, Cursor, Continue, anything that speaks MCP).|",
+   "evidence_lines": [
+    27,
+    31,
+    44
+   ]
+  },
+  "fn": "Sibyl-Labs/Sibyl-Memory",
+  "sha": "d527d4c39b54",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "63e853ea833b": {
+  "identity": {
+   "one_liner": "Go 编写的开源业务平台，用 DSL 与 YAML 在 SQLite/PostgreSQL 上运行记账应用",
+   "review": "OneBase 是一个用 Go 实现的开源业务平台，元数据用 YAML 描述、业务逻辑用内置 DSL 编写，数据存储于 SQLite 文件或 PostgreSQL，面向做记账/ERP 类应用的开发者，模式类似 1C。支持文档过账、登记簿、报表、可视化表单设计器、REST API 与 MCP 服务器；同一配置可在 SQLite 与 PostgreSQL 间切换。",
+   "highlights": [
+    "元数据以 YAML 描述、业务逻辑用内置 DSL 编写，单二进制运行，配置可存于文件（git）或数据库内",
+    "提供登记簿（剩余/周转）、复式记账会计、报表组合配置、可视化表单设计器与 REST API",
+    "内置 MCP 服务器与 AI 辅助开发流程（AGENTS.md 生成、onebase check 反馈）"
+   ],
+   "use_cases": [
+    "构建贸易/仓库、会计、CRM 等记账类业务应用",
+    "用 git 管理业务配置并进行热重载开发",
+    "让 AI 代理基于 MCP 与校验命令编写和检查业务配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ PostgreSQL, запуск, конфигуратор, остановка:",
+     "lines": [
+      5,
+      22,
+      48
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ onebase dev --project ./склад --sqlite ./склад.db --open",
+     "lines": [
+      5,
+      22,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台将应用数据存储于 SQLite 或 PostgreSQL（L5、L22、L202），数据库是其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ |Платформа|`onebase.exe`|Go-бинарник: рантайм, DSL, REST API, лаунчер|",
+   "evidence_lines": [
+    5,
+    22,
+    200
+   ]
+  },
+  "fn": "ivanarama/onebase",
+  "sha": "63e853ea833b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fb7046f0596e": {
+  "identity": {
+   "one_liner": "AI求职桌面助手，聚合四平台岗位检索与本地简历管理",
+   "review": "跨平台桌面应用，聚合 BOSS直聘、猎聘、智联招聘、前程无忧的岗位检索，并提供简历编辑、AI 修改、模拟面试、投递记录等功能；数据保存在本机（主题标签含 sqlite），AI 功能需用户自行连接模型服务。面向中国求职者个人用户；安装包未签名，单岗位自动投递仍为实验功能。",
+   "highlights": [
+    "一次检索 BOSS直聘、猎聘、智联招聘、前程无忧四个平台并统一筛选",
+    "本地导入 PDF/DOCX/MD/TXT 简历，支持 AI 修改、模拟面试与投递记录跟踪",
+    "简历、会话与记录保存在本机，AI 功能需连接用户自己的模型服务"
+   ],
+   "use_cases": [
+    "在多个招聘网站集中搜索和筛选岗位",
+    "基于 JD 修改简历并准备面试",
+    "记录投递历史并跟进下一步事项"
+   ],
+   "ai_kind": [
+    "dba-agent"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用本机数据库（sqlite）存储简历、会话与投递记录的求职应用，不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 跨平台找岗位，把简历、面试和投递串起来。 开源 AI 求职桌面助手 · macOS / Windows · 数据保存在本机 ／ 支持 **BOSS直聘、猎聘、智联招聘、前程无忧**。选择平台后一次发起检索，结果陆续出现，直接在列表与详情之间浏览。 ／ - **本地数据与模型**：简历、会话和记录保存在本机；使用 AI 时，所需材料会发送给你选择的模型服务，可能产生费用。简历分析与匹配使用脱敏副本，不替换原文件。",
+   "evidence_lines": [
+    4,
+    29,
+    102
+   ]
+  },
+  "fn": "russeell/jobfindsme",
+  "sha": "fb7046f0596e",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

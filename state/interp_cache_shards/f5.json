@@ -9348,5 +9348,266 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "58fc00029dac": {
+  "identity": {
+   "one_liner": "面向 AI 代理的 Rust 数据库 CLI，支持加密连接与按需原生/JDBC worker",
+   "review": "SQLX 是一个 Rust 编写的命令行数据库客户端，供开发者和 AI 代理在终端调用 SQL 或数据库命令。它将连接配置加密保存，按数据库类型在首次使用时下载原生 worker 或 JDBC worker 执行语句并返回结构化结果，可通过 MCP 服务器及 Codex、Claude 等插件集成，需 Node.js 22+ 安装，容器方式仅暴露 SQL 执行路径。",
+   "highlights": [
+    "提供 CLI 与 MCP 服务器两种调用方式，支持 Codex、Claude Code、DeepSeek Harness、Pi 插件安装",
+    "数据源连接以加密形式保存，按需下载原生或 JDBC 数据库 worker（主程序不含驱动）",
+    "支持 sqlx datasource/sql/skill/update 等子命令，提供容器镜像部署"
+   ],
+   "use_cases": [
+    "在终端或 CI 中对多种数据库执行 SQL 与命令",
+    "为 AI 代理（MCP 客户端）提供数据库访问工具",
+    "加密管理多数据源连接配置"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ sqlx datasource add --name dev --type postgresql --host db.example.com --port 5432 --database app ／ |PostgreSQL|`postgresql`, `postgres`, `pgsql`|native worker|port 5432 by default|",
+     "lines": [
+      5,
+      166,
+      180
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |MySQL|`mysql`|native worker|port 3306 by default|",
+     "lines": [
+      5,
+      173
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |Oracle|`oracle`|JDBC worker|`--service <service-name>` is required|",
+     "lines": [
+      5,
+      184
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |SQLite|`sqlite`, `sqlite3`|native worker|`--path <file>` (or `--database`) opens or creates a local file; no host, port or credentials; `--property mode=ro` and `--property busy_timeout=<ms>`|",
+     "lines": [
+      5,
+      193
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |SQL Server|`sqlserver`, `mssql`|JDBC worker|port 1433 by default|",
+     "lines": [
+      5,
+      185
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |ClickHouse|`clickhouse`|JDBC worker|connects to the HTTP port, 8123 by default|",
+     "lines": [
+      5,
+      186
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |MariaDB|`mariadb`|reuses the MySQL worker|port 3306 by default|",
+     "lines": [
+      5,
+      174
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |TiDB|`tidb`|reuses the MySQL worker|port 4000 by default|",
+     "lines": [
+      5,
+      175
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |OceanBase|`oceanbase`, `ob`|reuses the MySQL worker|port 2881 by default; connect as `user@tenant`|",
+     "lines": [
+      5,
+      177
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |Dameng|`dameng`, `dm`|JDBC worker|port 5236 by default; the account is also the default schema|",
+     "lines": [
+      5,
+      189
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas ／ |openGauss|`opengauss`, `gaussdb`|JDBC worker|port 5432 by default; authenticates with its own driver|",
+     "lines": [
+      5,
+      183
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "|openGauss|`opengauss`, `gaussdb`|JDBC worker|port 5432 by default; authenticates with its own driver|",
+     "lines": [
+      183
+     ]
+    },
+    {
+     "db": "GBase",
+     "rel": "support",
+     "quote": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBas",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为一个连接多种数据库、供代理调用的 CLI 工具，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase",
+    "Dameng",
+    "openGauss",
+    "GaussDB",
+    "GBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Connect to MySQL, MariaDB, TiDB, GreatSQL, OceanBase, PostgreSQL, CockroachDB, YugabyteDB, openGauss, Oracle, SQL Server, ClickHouse, Trino, Presto, StarRocks, Apache Doris, TDengine, Dameng, KingbaseES, Apache Kylin, XuguDB, IBM Db2, IBM Informix, SUNDB, GBase 8s, Redis and MongoDB, or open a local SQLite, DuckDB or H2 file, from your terminal or from your agent. Connections are saved encrypted, one invocation runs one or more statements or commands, and the results come back complete and structured. ／ The installer verifies the release manifest, `SHA256SUMS` and the downloaded archive before installing. It uses the same user-level location as the platform installers and installs the Skill into `./sqlx`, which no agent watches: `--target codex`, `--target claude`, `--target dsh`, `--target pi` or `--target <directory>` place the Skill where it is actually discovered, and `--cli-only` installs the CLI alone. Any other first argument is run as a SQLX command instead of installing, so `npx -y @ottermind/sqlx@latest mcp` starts the MCP server. Node.js is needed only by the installer, never by the CLI. ／ |MySQL|`mysql`|native worker|port 3306 by default|",
+   "evidence_lines": [
+    5,
+    60,
+    173
+   ]
+  },
+  "fn": "OtterMind/sqlx",
+  "sha": "58fc00029dac",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b2e50ab36274": {
+  "identity": {
+   "one_liner": "SSMS 22 的开源生产力扩展插件",
+   "review": "这是一个面向 SQL Server Management Studio 22 的免费开源扩展插件，为 SQL Server 开发者和 DBA 提供智能 SQL 补全、T-SQL 格式化、查询历史、服务器健康监控及结果导出（Excel/Google Sheets/邮件）等功能。基于 AxialSqlTools（Apache-2.0）分叉开发，通过 VSIX 安装并支持自动更新。",
+   "highlights": [
+    "提供上下文感知的 SQL 补全，覆盖表、视图、列、存储过程、函数等对象",
+    "支持查询结果导出至 Excel、Google Sheets、邮件及多种格式（INSERT/CSV/JSON/XML/HTML）",
+    "包含查询历史、服务器健康仪表盘与执行统计汇总"
+   ],
+   "use_cases": [
+    "SQL Server 开发者提升查询编写与结果处理效率",
+    "DBA 监控服务器健康状态与查询执行统计",
+    "需要将查询结果批量导出或传输的场景"
+   ],
+   "official": false,
+   "license": "Apache-2.0",
+   "install": "VSIX（SSMS 扩展安装器）",
+   "repo": "https://github.com/PuLuShen/MSSQLTOOL"
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "# MSSQL Tool for SSMS 22 ／ > MSSQL Tool is a free, open-source productivity extension for SQL Server Management Studio 22. ／ > Built for SQL Server developers and DBAs who want faster query writing",
+     "lines": [
+      1,
+      11,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明该扩展专为 SQL Server Management Studio 22 构建，服务于 SQL Server 开发与管理工作流。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，基于 AxialSqlTools 分叉",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MSSQL Tool for SSMS 22 ／ > MSSQL Tool is a free, open-source productivity extension for SQL Server Management Studio 22. ／ > Built for SQL Server developers and DBAs who want faster query writing",
+   "evidence_lines": [
+    1,
+    11,
+    14
+   ]
+  },
+  "fn": "PuLuShen/MSSQLTOOL",
+  "sha": "b2e50ab36274",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

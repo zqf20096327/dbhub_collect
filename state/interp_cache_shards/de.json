@@ -9655,5 +9655,175 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "378b302ba204": {
+  "identity": {
+   "one_liner": "单二进制 PHP 运行时：内嵌 Zend PHP、Web 服务器、SQLite 兼容数据库与 SQL 代理",
+   "review": "ePHPm 将 PHP 运行栈打包为单个 Rust 二进制：通过 FFI 链接真实 Zend 引擎，内置 Tokio+Hyper Web 服务器、PHP 执行池、KV 缓存、SQLite 兼容的 Turso 嵌入式引擎和带连接池的 SQL 代理，面向需要在开发到生产间以同一方式运行 PHP 应用的开发者。需注意 SQL Server 代理未实现，Windows 构建缺少 pgsql 扩展。",
+   "highlights": [
+    "内嵌真实 Zend PHP 引擎（FFI 链接），提供 Web 服务器、进程管理与系统服务自管理",
+    "内置 SQLite 兼容 Turso 引擎、KV 缓存，以及带连接池、读写分离与健康检查的 SQL 代理",
+    "支持 MySQL 与 PostgreSQL 代理、ACME 自动 TLS、OpenTelemetry 追踪与 gossip 集群"
+   ],
+   "use_cases": [
+    "本地开发到生产部署一致运行的 PHP 应用托管",
+    "无外部 MySQL/Redis 依赖的单进程 PHP 应用部署",
+    "为现有 MySQL/PostgreSQL 后端提供连接池代理"
+   ],
+   "cat_note": null
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. Th ／ > **Postgres caveat.** `pdo_pgsql` and `pgsql` are compiled into the released Linux and macOS binaries, but **not** into the Windows binary, so on Windows \"no code changes\" holds for MySQL apps out of the box but not for a stock Postgres app. The PostgreSQL fr ／ # or PostgreSQL ／ url = \"postgres://user:pass@db-server:5432/myapp\"",
+     "lines": [
+      126,
+      128,
+      134,
+      136
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* **Database:** Replaces external MySQL with the embedded, zero-dependency Turso engine — a pure-Rust SQLite-compatible database compiled into the binary (supports clustering) ／ If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. The PostgreSQL proxy supports trust, md5, and SCRAM-SHA-256 authentication. SQL Server (TDS) proxying is not implemented. ／ [db.mysql]",
+     "lines": [
+      20,
+      126,
+      131
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "* **Database:** Replaces external MySQL with the embedded, zero-dependency Turso engine — a pure-Rust SQLite-compatible database compiled into the binary (supports clustering) ／ No external database needed. ePHPm embeds SQLite and exposes it via MySQL wire protocol through **litewire**. Your PHP app thinks it's talking to MySQL — it's actually talking to SQLite. One binary, one `.db` file, done.",
+     "lines": [
+      20,
+      141
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. Th",
+     "lines": [
+      126
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PHP 应用的数据库访问提供嵌入式引擎、SQL 代理与连接池等服务，属数据库生态工具而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "README 声明所有仓库保持 100% MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Database:** Replaces external MySQL with the embedded, zero-dependency Turso engine — a pure-Rust SQLite-compatible database compiled into the binary (supports clustering) ／ ePHPm has also packed a highly robust and cloud-native feature set by drawing direct inspiration from other modern runtimes. This includes automatic ACME TLS certificate management and server-level middleware handlers (similar to RoadRunner and FrankenPHP), alongside an in-process SQL proxy with connection pooling and slow query logging inspired directly by ProxySQL. Combined with native cluster synchronization, OpenTelemetry tracing (OTLP), and container-aware runtime autotuning, ePHPm is fully prepared for modern cloud environments. ／ If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. The PostgreSQL proxy supports trust, md5, and SCRAM-SHA-256 authentication. SQL Server (TDS) proxying is not implemented.",
+   "evidence_lines": [
+    20,
+    22,
+    126
+   ]
+  },
+  "fn": "ephpm/ephpm",
+  "sha": "378b302ba204",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e28efeb7d4a0": {
+  "identity": {
+   "one_liner": "基于个人 Postgres 的本地优先健康记录，通过 MCP 暴露",
+   "review": "一个本地优先的个人健康记录系统，将化验、用药、诊断、可穿戴设备和饮食数据存在用户自己的 Postgres（含 pgvector）中，并通过 33 个 MCP 工具供任意 MCP 客户端读写；关键值告警、药物交互拦截等安全规则以确定性代码实现，数据须经 pending→approve 流程确认。适合想用本地模型管理个人健康数据的自托管用户。",
+   "highlights": [
+    "提供 33 个 MCP 工具，通过 stdio 连接任意 MCP 客户端（本地或云模型）",
+    "安全规则为确定性代码：关键值告警、药物交互拦截、危机热线工具，数据须经审批生效",
+    "支持化验报告（PDF/照片）提取入库、营养分析、趋势统计及 Apple Health/Garmin 导入"
+   ],
+   "use_cases": [
+    "用本地 LLM 客户端（LM Studio、Ollama 等）查询和管理个人健康数据",
+    "化验单数字化归档与指标趋势分析",
+    "本地自托管存储健康记录并控制数据外流"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Your labs, diagnoses, medications, wearable data and food log live in your own Postgres; any ／ docker compose up -d db # Postgres 16 + pgvector ／ Architecture: MCP client over stdio to mcp_server; read tools query approved views, write tools go through core/services into pending; safety, analytics, PostgreSQL with pgvector, ingestion",
+     "lines": [
+      7,
+      64,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存在用户自己的 Postgres 数据库中，health-os 本身是使用该库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local-first personal health record, exposed over MCP.** ／ docker compose up -d db               # Postgres 16 + pgvector ／  Architecture: MCP client over stdio to mcp_server; read tools query approved views, write tools go through core/services into pending; safety, analytics, PostgreSQL with pgvector, ingestion",
+   "evidence_lines": [
+    6,
+    64,
+    79
+   ]
+  },
+  "fn": "andronaft/health-os",
+  "sha": "e28efeb7d4a0",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9397,5 +9397,284 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0a115093b2ae": {
+  "identity": {
+   "one_liner": "AI 原生笔记/知识库应用，支持 Cloudflare Serverless 与 Docker 自托管",
+   "review": "EdgeEver 是一个开源笔记与知识库工作区，提供 Evernote 式三栏布局、多端同步、网页剪藏、AI 代理集成（MCP/ACP）与多种导出格式。数据层构建在标准 SQLite 之上，可部署于 Cloudflare（D1/R2）或通过 Docker 自托管于 VPS/NAS，适合个人与团队用于笔记管理与知识发布。",
+   "highlights": [
+    "数据构建于标准 SQLite，提供 REST API、CLI 工具与无损 ZIP 导入导出",
+    "内置 MCP/ACP 协议，外部 AI Agent 可读取和整理笔记",
+    "支持 Cloudflare Serverless 免费部署与 Docker 自托管，多平台客户端覆盖"
+   ],
+   "use_cases": [
+    "个人/团队笔记与知识库管理，多设备即时同步",
+    "网页内容剪藏与微信聊天记录归档",
+    "将笔记本发布为受密码保护的知识库网站"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI too ／ - Android app: Expo + React Native in `apps/mobile`, with SQLite local storage and incremental sync. ／ - Native desktop app: Electron + Rust sidecar combines a consistent cross-platform experience with high-performance local data services; SQLite enables offline editing, incremental sync when back online, and local backups.",
+     "lines": [
+      78,
+      170,
+      172
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据层构建在标准 SQLite 上并用 Cloudflare D1/R2 存储数据，属使用数据库的应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI tooling, and lossless full ZIP export/import to keep your data completely independent. ／ 2. Create D1 `edgeever` and R2 `edgeever-resources` in Cloudflare.",
+   "evidence_lines": [
+    78,
+    96
+   ]
+  },
+  "fn": "tianma-if/edgeever",
+  "sha": "0a115093b2ae",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1c982ceea6db": {
+  "identity": {
+   "one_liner": "巴西国家课程大纲 BNCC 的开放数据集，含可复现提取管道",
+   "review": "将巴西基础教育国家课程（BNCC）的 1721 条学习目标整理为经校验、带来源溯源的结构化开放数据，提供 JSON/SQLite/CSV 格式、npm/PyPI 包、MCP 服务器与免费 REST API，附可复现的提取与验证管道。面向教育研究者、应用开发者和 AI 代理；数据为 CC BY 4.0、代码 MIT，格式变更遵循 schema 版本化约束。",
+   "highlights": [
+    "提供 JSON、SQLite、CSV 三种格式的同一数据集，SQLite/CSV 由 JSON 经管道生成",
+    "提供 MCP 服务器（@bncc/mcp）、npm/PyPI 包和免费无密钥的 REST API",
+    "CI 自动复现提取管道，逐字符校验数据与官方 PDF 一致"
+   ],
+   "use_cases": [
+    "按 SQL/表格方式查询和分析课程学习目标",
+    "为教育类应用或 AI 代理提供课程数据源（含 MCP 接口）",
+    "基于官方文件溯源复核课程条目内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`derivados/`|O mesmo dado em SQLite e CSV, gerados dos JSONs (para SQL e planilhas)| ／ sqlite3 derivados/bncc.sqlite \" ／ |Arquivos derivados|SQLite, dump SQL, CSV|`derivados/`|",
+     "lines": [
+      60,
+      71,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为派生存储格式分发课程数据，SQLite 仅用于存数据而非被服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：数据 CC BY 4.0，代码 MIT",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`derivados/`|O mesmo dado em SQLite e CSV, gerados dos JSONs (para SQL e planilhas)| ／ |Servidor MCP|ferramentas MCP sobre o JSON|local: `npx -y @bncc/mcp`; hospedado: `https://mcp.bncc.dev/mcp`|",
+   "evidence_lines": [
+    60,
+    89
+   ]
+  },
+  "fn": "bncc-dev/bncc-dados",
+  "sha": "1c982ceea6db",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ac63c4700455": {
+  "identity": {
+   "one_liner": "Rust 微服务实现的 Polymarket 克隆预测市场项目",
+   "review": "该项目用 Rust 微服务架构复刻 Polymarket 预测市场，包含订单簿读写、价格更新消费组等服务，服务间按 order-service → websocket-service → grpc-service → service-api 的顺序依赖启动，技术栈含 Redpanda、ClickHouse、NATS。适合学习并发编程、gRPC 与流式数据处理的开发者参考，README 自述前端结构不完善。",
+   "highlights": [
+    "提供订单簿读取与操作的子系统架构图",
+    "README 包含 rpk topic consume、consumer group seek 等 Redpanda 命令",
+    "定义内部服务的依赖启动顺序"
+   ],
+   "use_cases": [
+    "学习 Rust 微服务与并发编程实践",
+    "参考流式数据处理（Redpanda/ClickHouse/NATS）的集成方式",
+    "测试后端服务的功能性前端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- ClickHouse - A fast open-source OLAP database management system.",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 自述这是 Polymarket 克隆项目，ClickHouse 等列于其使用的技术清单中。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Used magic ／ - ClickHouse - A fast open-source OLAP database management system. ／ - order-service -> websocket-service -> grpc-service -> service-api",
+   "evidence_lines": [
+    14,
+    17,
+    29
+   ]
+  },
+  "fn": "ArshilHapani/polyMarketClone",
+  "sha": "ac63c4700455",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "626dcc880ee0": {
+  "identity": {
+   "one_liner": "面向 PostgreSQL 的桌面 IDE，SQL 文件可扩展为工具",
+   "review": "PlumeSQL 是一个仅针对 PostgreSQL 的桌面 SQL IDE，支持补全、数据网格编辑、EXPLAIN、PL/pgSQL 检查，并允许用带注释的 SQL 文件生成监控、图表等小应用，提供含 200 余个扩展的扩展市场。应用本体闭源、免费、无需账号，支持 macOS/Windows/Linux，扩展和规范为 MIT 许可。适用于以 PostgreSQL 为主要数据库的开发与运维人员；目前仍处 beta 阶段，不支持其他数据库。",
+   "highlights": [
+    "基于 PostgreSQL 自身的解析器、目录和会话实现补全、文档提示与 PL/pgSQL 检查",
+    "提供 200 余个 SQL 文件扩展，覆盖锁监控、图表、地图、PostGIS/pgvector/TimescaleDB 等",
+    "带 @connection/@readonly/@inputs 等注释的 SQL 脚本可自配置运行与展示方式"
+   ],
+   "use_cases": [
+    "PostgreSQL 开发中的查询编写、补全与重构",
+    "通过 SQL 文件扩展构建锁监控、仪表盘等小工具",
+    "生产库上的只读脚本执行与写操作确认"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ - It's all in on PostgreSQL and nothing else, so it can use everything ／ them really well. PlumeSQL only does PostgreSQL, and goes deep on it.",
+     "lines": [
+      3,
+      54,
+      82
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "options `postgres_fdw`, `file_fdw` and `mysql_fdw` take.",
+     "lines": [
+      286
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确其是只面向 PostgreSQL 的桌面 IDE 工具，为 PostgreSQL 生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "应用本体闭源，仓库中的扩展与规范为 MIT；应用处于 beta，自带自动更新",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ **Free, no account, for macOS, Windows and Linux.** The app is closed ／ them really well. PlumeSQL only does PostgreSQL, and goes deep on it.",
+   "evidence_lines": [
+    3,
+    46,
+    82
+   ]
+  },
+  "fn": "hercstack/plumesql",
+  "sha": "626dcc880ee0",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8697,5 +8697,70 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5b3579808ff1": {
+  "identity": {
+   "one_liner": "从 SQLite 提取 B-tree、pager 与 WAL 的独立键值存储引擎",
+   "review": "btreelite 将 SQLite 存储子系统中的 B-tree、pager 和 WAL 代码剥离出来，去除 SQL 层，形成一个仅提供键值语义的嵌入式存储引擎，编译产物为无第三方依赖的静态库。面向需要在应用内嵌 KV 存储、且希望复用 SQLite 成熟存储机制的开发者；其文件格式与 SQLite 页布局相同但 magic 字符串不同，sqlite3 CLI 无法当作 SQL 库打开。",
+   "highlights": [
+    "提供基于字节串键值的 B-tree 存储接口，一个数据库文件可包含多个 B-tree",
+    "继承 SQLite 的 WAL 机制，默认开启 ACID 事务（synchronous=FULL）",
+    "支持进程内多线程与跨进程文件锁并发，并支持内存数据库模式"
+   ],
+   "use_cases": [
+    "为 C 应用嵌入无 SQL 层的键值存储",
+    "作为测试或临时用途的内存 KV 存储",
+    "与 SQLite SQL 引擎进行同负载基准对比的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "A standalone key-value storage engine extracted from SQLite's storage ／ - **Origin**: derived from SQLite 3.54.0 (public domain). The B-tree, pager, ／ - **ACID transactions**: inherited from SQLite's write-ahead log, on by",
+     "lines": [
+      3,
+      9,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目本身是供应用嵌入的存储引擎组件，属于为数据存储服务的库而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "派生自公有领域的 SQLite，README 声明本项目同为公有领域",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A standalone key-value storage engine extracted from SQLite's storage ／ - **Origin**: derived from SQLite 3.54.0 (public domain). The B-tree, pager, ／ - **Build artifact**: `libbtreelite.a` (no third-party",
+   "evidence_lines": [
+    3,
+    9,
+    32
+   ]
+  },
+  "fn": "lichuang/btreelite",
+  "sha": "5b3579808ff1",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

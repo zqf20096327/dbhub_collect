@@ -8817,5 +8817,101 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "185d48dea2f9": {
+  "identity": {
+   "one_liner": "四款数据库在低配服务器基准测试中使用的实际配置文件集合",
+   "review": "该仓库收录作者在一台 2 GB 内存 DigitalOcean 服务器上对 PostgreSQL、MySQL、MariaDB、SQLite 做基准测试时所用的确切配置文件，包含各库的 tuning.conf、pragmas.sql 等及放置路径说明，并说明测试遵循的规则（统一持久性、连接池等）。适合想在同类低配环境复现或参考配置的运维与开发者。",
+   "highlights": [
+    "提供 PostgreSQL/MySQL/MariaDB/SQLite 四库的具体配置文件及部署路径",
+    "说明统一的测试规则：相同 fsync 持久性、25% 内存 buffer pool、10 连接池",
+    "记录 SQLite WAL 模式及 synchronous=NORMAL/FULL 的对比设置"
+   ],
+   "use_cases": [
+    "在小内存 VPS 上参考数据库配置",
+    "复现或校验四库基准测试的配置条件",
+    "对比各库默认配置与基准配置差异"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Postgres|16.15 (Ubuntu apt)|`postgres/tuning.conf`, dropped into `/etc/postgresql/16/main/conf.d/`| ／ - **App side:** each database got a pool of 10 connections from the Go app (`pgx` for Postgres,",
+     "lines": [
+      9,
+      23
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|8.0.46 (Ubuntu apt)|`mysql-mariadb/feed.cnf`, dropped into `/etc/mysql/conf.d/`| ／ `go-sql-driver/mysql` for both MySQL and MariaDB with the same binary, `mattn/go-sqlite3` for SQLite).",
+     "lines": [
+      10,
+      24
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|3.53 (bundled with mattn/go-sqlite3)|`sqlite/pragmas.sql`| ／ - **SQLite runs in WAL mode with `synchronous = NORMAL`**, the usual production setup. Because that's weaker",
+     "lines": [
+      12,
+      21
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB|10.11.14 (Ubuntu apt)|the same `feed.cnf`, plus `mariadb-statistics.sql` after loading data| ／ `go-sql-driver/mysql` for both MySQL and MariaDB with the same binary, `mattn/go-sqlite3` for SQLite).",
+     "lines": [
+      11,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库内容是数据库服务器的配置文件与测试规则，为数据库运行与评测服务，而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "These are the exact database settings from my benchmark of four databases on one $12 DigitalOcean droplet ／ |Database|Version|Config| ／ |SQLite|3.53 (bundled with mattn/go-sqlite3)|`sqlite/pragmas.sql`|",
+   "evidence_lines": [
+    3,
+    7,
+    12
+   ]
+  },
+  "fn": "arjaythedev/database-benchmark-configs",
+  "sha": "185d48dea2f9",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

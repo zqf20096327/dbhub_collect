@@ -10609,5 +10609,261 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8e76fc66d0ab": {
+  "identity": {
+   "one_liner": "離線優先的 POS/ERP/點餐/CRM 整合應用，本機 SQLite 存儲",
+   "review": "POS Pro 是一款整合收銀、庫存採購、複式記帳與會員 CRM 的桌面應用，面向攤販、餐飲外帶與零售等小型店家。資料預設存本機（桌面版走 SQLite，瀏覽器版走 localStorage），手機可透過區網 HTTPS 配對共用店面資料庫，雲端同步為選用的 Supabase 快照。完整 ERP/CRM 能力持續開發中。",
+   "highlights": [
+    "支援收銀、預訂出餐、庫存、採購帳務、複式記帳與會員 CRM 流程",
+    "桌面版使用 SQLite，瀏覽器版使用 localStorage，資料層由 dataAccess.js 抽象共用",
+    "提供繁中/英/日/簡中四語介面與離線優先運行模式"
+   ],
+   "use_cases": [
+    "小型店家的收銀與庫存採購管理",
+    "需要會員點數與 RFM 分群的零售/餐飲經營",
+    "無網路環境下的離線記帳與出餐管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模與店型，不設訂閱或進階功能解鎖費。資料預設存在本機（桌面版走 SQLite、獨立瀏覽器版走 localStorage）；配對手機直接使用店面電腦同一個資料庫。雲端同步是選用。 ／ - 📱 **共用店面** — 私人區網 HTTPS 配對，手機與電腦使用同一個 SQLite 資料庫 ／ 需要 Node.js 24 或更新的受支援版本。桌面版原生 SQLite 套件會依 Electron 版本重建。",
+     "lines": [
+      41,
+      73,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明資料預設存本機 SQLite，該倉庫是使用 SQLite 存資料的 POS/ERP 應用，而非為資料庫生態服務的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模與店型，不設訂閱或進階功能解鎖費。資料預設存在本機（桌面版走 SQLite、獨立瀏覽器版走 localStorage）；配對手機直接使用店面電腦同一個資料庫。雲端同步是選用。 ／ 資料層由 `src/utils/dataAccess.js` 抽象：桌面走 SQLite、瀏覽器走 localStorage，UI 共用一套。",
+   "evidence_lines": [
+    41,
+    137
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Hao0321/pos-pro",
+  "sha": "8e76fc66d0ab",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ffa5199bcd2f": {
+  "identity": {
+   "one_liner": "Windows 原生多数据源数据库客户端，统一连接浏览与查询编辑",
+   "review": "DataCraft Studio 是一款仅限 Windows 的闭源数据库客户端应用，提供连接管理、元数据浏览、支持多引擎自动补全的查询编辑器、结果网格与导出功能。面向需要在本地访问 SQL/文档/搜索/向量等数据源的用户，采用 Free/Pro 双版本模式，凭据存于 Windows Credential Manager。",
+   "highlights": [
+    "支持 PostgreSQL、SQL Server、MySQL、SQLite、DuckDB、MongoDB、Elasticsearch、Qdrant 及 CSV/Excel/JSON/Parquet 等 12 种数据源",
+    "查询编辑器基于实时 schema 提供自动补全，结果网格支持 JSON 查看与 CSV/Excel/TSV/JSON/Markdown 导出",
+    "无遥测、无账号（Free 版），密码存于 Windows Credential Manager"
+   ],
+   "use_cases": [
+    "在单一 Windows 桌面应用中浏览和查询多种数据库与本地文件",
+    "编写 SQL、MongoDB 管道与 Elasticsearch 查询时需要引擎感知的自动补全",
+    "将查询结果导出为 CSV/Excel/JSON/Markdown 或流式写入磁盘"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, SQL Server, MySQL, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, CSV, Excel, JSON and Parquet, all through the same connection flow. ／ **Autocomplete for every engine:** T-SQL, PostgreSQL, MongoDB pipelines and Elasticsearch Query DSL. ／ Autocomplete for SQL Server, PostgreSQL, MongoDB and Elasticsearch ／ PostgreSQL",
+     "lines": [
+      24,
+      43,
+      45,
+      71
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, SQL Server, MySQL, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, CSV, Excel, JSON and Parquet, all through the same connection flow. ／ MySQL / MariaDB ／ © 2026 Sayed Masry. Free to use under the licence. PostgreSQL, SQL Server, MySQL, MariaDB, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, Excel and Parquet are trademarks of their respective owners, named only to identify the data sources DataCraft connects t",
+     "lines": [
+      24,
+      73,
+      144
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL, SQL Server, MySQL, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, CSV, Excel, JSON and Parquet, all through the same connection flow. ／ SQLite ／ © 2026 Sayed Masry. Free to use under the licence. PostgreSQL, SQL Server, MySQL, MariaDB, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, Excel and Parquet are trademarks of their respective owners, named only to identify the data sources DataCraft connects t",
+     "lines": [
+      24,
+      74,
+      144
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "PostgreSQL, SQL Server, MySQL, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, CSV, Excel, JSON and Parquet, all through the same connection flow. ／ Autocomplete for SQL Server, PostgreSQL, MongoDB and Elasticsearch ／ SQL Server",
+     "lines": [
+      24,
+      45,
+      72
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MySQL / MariaDB ／ © 2026 Sayed Masry. Free to use under the licence. PostgreSQL, SQL Server, MySQL, MariaDB, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, Excel and Parquet are trademarks of their respective owners, named only to identify the data sources DataCraft connects t",
+     "lines": [
+      73,
+      144
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "客户端工具用于连接和查询数据库，本身不依赖某一数据库存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "闭源免费，Free/Pro 双版本（Pro 订阅解锁功能）",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL, SQL Server, MySQL, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, CSV, Excel, JSON and Parquet, all through the same connection flow. ／ ## 🗄️ Supported data sources ／ No. DataCraft Studio is free to use but closed source. This page publishes the releases and hosts the issue tracker. See the licence.",
+   "evidence_lines": [
+    24,
+    69,
+    130
+   ]
+  },
+  "fn": "elsayedsamyeid/datacraft-studio",
+  "sha": "ffa5199bcd2f",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8710a4cc3b9f": {
+  "identity": {
+   "one_liner": "本地优先的学生错题本桌面应用，内置 SQLite 存储，AI 打标组卷",
+   "review": "一款 Tauri 2 桌面应用，面向中小学家长与学生，把 PDF/Word/图片试卷自动切题入库，用 AI（GLM/DeepSeek/Kimi 等 OpenAI 兼容接口）做知识点打标、解析与同类题生成，支持 SM-2 复习与组卷打印。数据存于本地 SQLite 文件，无账号无云端，AI 需自配 Key，可选 Mock 离线体验。",
+   "highlights": [
+    "PDF/Word/图片试卷自动切题与 AI 校对，支持题型自动识别落库",
+    "本地 SQLite 存储（~/.cuotiji/cuotiji.db），JSON 导入导出迁移，无账号无遥测",
+    "基于 SM-2 的间隔重复复习计划、薄弱优先组卷与知识图谱分析"
+   ],
+   "use_cases": [
+    "家长/学生整理考试错题并按薄弱知识点组卷打印",
+    "按 1/3/7/15 天间隔排期与 SM-2 自评进行错题复习",
+    "配合多模态模型拍照识别试卷题目并生成 AI 解析与变式练习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|💾 本地 SQLite 存储|✅|`~/.cuotiji/cuotiji.db`，复制即备份；跨版本自动迁移零破坏|",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以本地 SQLite 文件存储错题数据，SQLite 是其内嵌数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|💾 本地 SQLite 存储|✅|`~/.cuotiji/cuotiji.db`，复制即备份；跨版本自动迁移零破坏| ／ Tauri 2 壳（Rust） ／  ├─ rusqlite 本地数据库（与旧版 schema 零迁移）",
+   "evidence_lines": [
+    83,
+    140,
+    142
+   ]
+  },
+  "fn": "Jasmine-Coder-Dev/error-notebook",
+  "sha": "8710a4cc3b9f",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8171,5 +8171,75 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a929b8e9454c": {
+  "identity": {
+   "one_liner": "面向 LLM 代理的组织记忆库，用 PostgreSQL/pgvector 做检索",
+   "review": "Mem++ 是一个 Python 实现的组织记忆系统，供长期运行、读取组织记录的 LLM 代理使用。写入时不调用语言模型，逐字保存带日期记录；读取时通过 PostgreSQL 全文检索、pgvector 向量和实体标签三路索引加权融合，支持 as-of 时间过滤并输出带日期与署名的证据块。要求 Python 3.13+ 和 PostgreSQL 16/17 + pgvector，需设置 MEMORY_DATABASE_URL。",
+   "highlights": [
+    "append-only 存储，写入路径零 LLM 调用，记录逐字保存且可回放历史状态",
+    "三路索引（PostgreSQL 全文检索、pgvector 向量、实体标签）经加权 Reciprocal Rank Fusion 融合",
+    "支持 occurred_at ≤ θ 的 as-of 查询，并提供可选的去重合并（需 Anthropic SDK）"
+   ],
+   "use_cases": [
+    "从 Slack、邮件、会议纪要、工单等组织记录中问答的组织助理",
+    "需要按日期追溯记录状态的审计与合规查询",
+    "追踪决策来源与事故认知随时间演变的复盘"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 with pgvector ／ (PostgreSQL full-text search ranked by `ts_rank_cd`), by vector (pgvector) and by entity tag. ／ |**Database**|PostgreSQL 16 + pgvector container on port 5433|Project-local PostgreSQL 17 cluster over a unix socket|",
+     "lines": [
+      26,
+      94,
+      124
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为为 LLM 代理提供组织记忆能力的组件，依赖 PostgreSQL/pgvector 实现存储与检索。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL 16 with pgvector ／ (PostgreSQL full-text search ranked by `ts_rank_cd`), by vector (pgvector) and by entity tag. ／ |**Database**|PostgreSQL 16 + pgvector container on port 5433|Project-local PostgreSQL 17 cluster over a unix socket|",
+   "evidence_lines": [
+    26,
+    94,
+    124
+   ]
+  },
+  "fn": "AIDAChip-Inc/mem-plus-plus",
+  "sha": "a929b8e9454c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

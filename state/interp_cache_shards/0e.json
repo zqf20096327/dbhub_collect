@@ -10132,5 +10132,143 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "13949fa59ec5": {
+  "identity": {
+   "one_liner": "JVM 上的原生持久化超图存储引擎与数据库",
+   "review": "HStore 是面向高阶关联的持久化超图数据库，超边可直接包含成员与嵌套超边，避免拆成成对边或关系表。采用写时复制 B+树、WAL、快照隔离事务、分支与 HQL 查询语言，附带 Web 控制台 HStore Studio，提供 Docker 镜像运行，适合需要在 JVM 环境存储和查询高阶关系结构的开发者。",
+   "highlights": [
+    "支持任意基数的集合/有序超边及超边嵌套，成员携带角色、权重与有效期",
+    "提供快照隔离与可串行化事务、分支（CREATE BRANCH/MERGE）、代际时间旅行查询",
+    "内置 HQL 声明式查询、HNSW 向量索引语义平面与多租户权限管理"
+   ],
+   "use_cases": [
+    "临床索赔、护理路径等带角色与嵌套结构的高阶关系建模",
+    "需要不可变快照、分支与 what-if 差异合并的数据场景",
+    "基于嵌入向量与超图结构结合的语义检索"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "* **Operations.** PostgreSQL-style logs, `hstore.conf` / `HSTORE_*` / flag configuration, health checks, a",
+     "lines": [
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是数据库存储引擎/内核本身，属于数据库生态的基础组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "HStore is a native, persistent hypergraph storage engine and database for the JVM. A hyperedge connects any ／ writes the changed tree nodes to pages, once for all the commits since the last one. The database layer adds a ／ It is written in Java 25 and ships as one GraalVM native executable, `hstore`.",
+   "evidence_lines": [
+    3,
+    11,
+    14
+   ]
+  },
+  "fn": "metacoglabs/hypergraph",
+  "sha": "13949fa59ec5",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c8d5368bc9a5": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 学习插件，将工作内容转为可复习的本地知识循环",
+   "review": "这是 DeepSeek Harness（DSH）的 learning-mode 插件，把完成任务中的概念转成结构化解释并安排间隔复习，用户可查看、纠正或遗忘模型对偏好的推断。学习数据存储在本地 SQLite 数据库（thread.sqlite），通过 npm 以 DSH 插件方式安装，依赖辅助模型调用，不改动主 agent。",
+   "highlights": [
+    "将已完成工作转为结构化解释，并按间隔复习调度概念复习",
+    "学习数据存储于本地 SQLite 文件，支持版本化导出与清除",
+    "用户可纠正模型推断，优先级固定为显式偏好→用户纠正→模型推断"
+   ],
+   "use_cases": [
+    "在使用 DSH 的日常工作中持续沉淀与复习概念",
+    "本地私有环境下的学习偏好管理与审查"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+     "lines": [
+      18,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "插件使用本地 SQLite 数据库存放学习线程数据，SQLite 是其存储依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-explain` is a learning-mode plugin for DeepSeek Harness. It turns useful concepts from completed work into structured explanations, schedules lightweight reviews, and lets you inspect or correct what it learns about you. ／ The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+   "evidence_lines": [
+    16,
+    18,
+    79
+   ]
+  },
+  "fn": "yuezengwu/dsh-explain",
+  "sha": "c8d5368bc9a5",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

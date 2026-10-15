@@ -8927,5 +8927,118 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3eb9edced00c": {
+  "identity": {
+   "one_liner": "Exasol 的湖仓原位查询引擎，基于 Rust UDF 运行 DataFusion",
+   "review": "该项目为 Exasol 数据库提供湖仓查询引擎：以 Exasol Virtual Schema 形式部署，在 Rust UDF 中运行 Apache DataFusion，可直接用 SQL 查询 Iceberg、Delta 和 Parquet 表，并通过文件分片与谓词下布利用集群并行能力，不物化数据。面向需要在 Exasol SQL 中访问开放表格式数据的用户，部署依赖 Exasol 环境（SaaS、Docker 或本地部署）。",
+   "highlights": [
+    "在 Rust UDF 内运行 Apache DataFusion，从 SQL 直接查询 Iceberg、Delta 和 Parquet 表",
+    "支持 Iceberg REST、Unity Catalog、AWS Glue 及直接存储访问，含文件分片与投影/过滤/聚合/连接下推",
+    "查询不物化、不复制数据，每次查询从源元数据出发"
+   ],
+   "use_cases": [
+    "在 Exasol 中以 SQL 查询存储在数据湖中的 Iceberg/Delta/Parquet 表",
+    "无需导出或复制数据即可对湖仓表做下推分析查询",
+    "利用 Exasol 集群节点并行执行分片后的湖仓扫描任务"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 Exasol 数据库提供虚拟 schema 形式的查询引擎组件，属于服务数据库生态的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**In-place lakehouse query engine for Exasol. DataFusion runs in Rust UDFs and queries Iceberg, ／ `lakehouse-engine-rs` is a query engine for lakehouses. The engine is an Exasol Virtual Schema. ／ - **Execution model.** Apache DataFusion runs inside stateless",
+   "evidence_lines": [
+    13,
+    33,
+    35
+   ]
+  },
+  "fn": "exasol-labs/lakehouse-engine-rs",
+  "sha": "3eb9edced00c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "30eef75e0571": {
+  "identity": {
+   "one_liner": "KICC 会议中心访客登记系统，Cloudflare Worker + D1 存储与 QR 签到",
+   "review": "这是一个为肯雅塔国际会议中心（KICC）构建的访客登记应用，提供登记表单、QR 徽章、门口扫码签到、组织者控制台和 CSV 导出，运行在 Cloudflare Workers 上，数据存于 Cloudflare D1 数据库与 R2 桶。仓库描述称数据层为 TiDB-ready，但 README 正文仅使用 D1。适合活动组织方部署使用，依赖 wrangler CLI 与 Cloudflare 账户。",
+   "highlights": [
+    "提供登记、QR 徽章生成、门口扫码签到与组织者控制台功能",
+    "数据写入 Cloudflare D1 数据库，徽章图片存于 R2 桶，并含重试队列与审计日志",
+    "部署前运行密钥扫描（npm run verify），凭据仅从环境绑定读取"
+   ],
+   "use_cases": [
+    "会议/活动的参会人登记与现场签到",
+    "基于 QR 徽章的门禁核验",
+    "组织方查看 KPI、管理事件并导出 CSV 名单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 显示系统使用 Cloudflare D1/R2 存储自身业务数据，是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|D1 database|`kicc-registry`|`a9f59135-195f-43df-8863-76dfc51b62c4`| ／    Delegate phone   │  Cloudflare Worker  (kicc-visitor-registry) │ ／ npx wrangler d1 create kicc-registry --config worker/wrangler.toml",
+   "evidence_lines": [
+    111,
+    34,
+    118
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "techhubltd254/kicc-visitor-registry",
+  "sha": "30eef75e0571",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

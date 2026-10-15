@@ -10254,5 +10254,146 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "23687033deb8": {
+  "identity": {
+   "one_liner": "Rust 事件溯源实体框架，基于 sqlx 持久化到 PostgreSQL",
+   "review": "这是一个 Rust 开发库，用于以事件溯源模式构建应用：通过派生宏自动生成仓库方法，将实体事件持久化到 PostgreSQL，提供幂等保护、乐观并发控制和游标分页。适合用 Rust 编写事件溯源应用的开发者。注意它依赖 sqlx，仅支持 PostgreSQL 作为持久化后端。",
+   "highlights": [
+    "提供派生宏自动生成实体的仓库 CRUD 方法，SQL 经 sqlx 编译期校验",
+    "支持事件溯源、幂等操作防护、基于事件序列的乐观并发控制与游标分页",
+    "提供 Forgettable<T> 机制删除个人数据以满足 GDPR，并含 testing feature"
+   ],
+   "use_cases": [
+    "用 Rust 构建事件溯源应用",
+    "需要审计事件流与可重放实体状态的持久化场景",
+    "需按 GDPR 删除个人数据但保留事件历史的应用"
+   ],
+   "review_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "An Event Sourcing Entity Framework for Rust that simplifies building event-sourced applications with PostgreSQL. ／ Persisted to postgres with: ／ let pool = PgPool::connect(\"postgres://localhost/myapp\").await?;",
+     "lines": [
+      8,
+      15,
+      62
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 PostgreSQL 提供事件溯源持久化能力的 Rust 开发库，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An Event Sourcing Entity Framework for Rust that simplifies building event-sourced applications with PostgreSQL. ／ Persisted to postgres with:",
+   "evidence_lines": [
+    8,
+    15
+   ]
+  },
+  "fn": "GaloyMoney/es-entity",
+  "sha": "23687033deb8",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8000c7d8dec4": {
+  "identity": {
+   "one_liner": "模块化分布式混合搜索系统，提供摄取、嵌入与关键词/向量融合检索 REST API",
+   "review": "Amgix 是一个分布式混合搜索服务，将文档摄取队列、向量化编码、关键词与语义检索及融合排序整合到一个 REST API 后。面向需要在应用中加入搜索能力的开发者。支持 Docker 单容器部署（Amgix One），数据可存于 Postgres、MariaDB 或 Qdrant，并提供 Python/TypeScript/Rust/C# 客户端。",
+   "highlights": [
+    "提供统一的 REST API 处理文档摄取、嵌入与混合检索",
+    "服务端完成查询向量化、关键词搜索、语义搜索与排序融合",
+    "后端存储可切换，支持 Postgres、MariaDB 或 Qdrant"
+   ],
+   "use_cases": [
+    "为应用添加关键词与语义混合搜索能力",
+    "需要异步摄取队列与去重重试机制的索引管道",
+    "标识符类脏数据（含标点缺失、型号编码）的检索场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backend Agnostic:** Run on Postgres, MariaDB, or Qdrant without changing your code.",
+     "lines": [
+      71
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Backend Agnostic:** Run on Postgres, MariaDB, or Qdrant without changing your code.",
+     "lines": [
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统自身将 Postgres/MariaDB/Qdrant 作为可选后端存储数据，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Amgix is an open-source system that handles ingestion, embedding, and hybrid retrieval behind one REST API.** You do not need to stitch together queues, a vector database, and ranking or fusion logic in your application. ／ Amgix One packs the API, encoders, RabbitMQ, and Qdrant into one container — the easiest way to try Amgix or run it with modest requirements. ／ - **Backend Agnostic:** Run on Postgres, MariaDB, or Qdrant without changing your code.",
+   "evidence_lines": [
+    6,
+    13,
+    71
+   ]
+  },
+  "fn": "amgix/amgix-server",
+  "sha": "8000c7d8dec4",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

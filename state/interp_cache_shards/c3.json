@@ -9368,5 +9368,74 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6b108e0a749a": {
+  "identity": {
+   "one_liner": "Rust 编写的自托管 pastebin，基于 axum 与 sqlite3 后端",
+   "review": "wastebin 是一个自托管贴文（paste）分享服务，用 Rust 实现，以 sqlite3 作为存储后端。提供 Web 界面与 HTTP API，支持语法高亮、Markdown 渲染、贴文加密与过期删除，并附 wastebin-ctl 命令行工具管理数据库条目。面向需要私有部署文本分享的用户；README 明确提示其无用户认证与 DoS 缓解，不建议直接暴露公网。",
+   "highlights": [
+    "提供 Web 界面、HTTP API 及 wastebin-ctl 命令行工具，支持创建、读取、删除贴文",
+    "支持 zstd 压缩、ChaCha20Poly1305 加密、过期/阅后即焚删除及 >170 种语言语法高亮",
+    "以单二进制交付，可经二进制、Docker、docker-compose、Nix 或源码运行"
+   ],
+   "use_cases": [
+    "自托管文本/代码片段分享服务",
+    "通过 API 或 neovim 插件从命令行、剪贴板、stdin 快速上传内容",
+    "配合反向代理限流的内网或私有部署场景"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* axum and sqlite3 ／ > with `TMPDIR` being set. If database migrations fail with an extended sqlite ／ |`WASTEBIN_DATABASE_PATH`|Path to the sqlite3 database file.|`:memory:`|",
+     "lines": [
+      39,
+      91,
+      193
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其以 sqlite3 作为存储后端保存贴文数据（WASTEBIN_DATABASE_PATH），属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* axum and sqlite3 ／ |`WASTEBIN_DATABASE_PATH`|Path to the sqlite3 database file.|`:memory:`|",
+   "evidence_lines": [
+    39,
+    193
+   ]
+  },
+  "fn": "matze/wastebin",
+  "sha": "6b108e0a749a",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

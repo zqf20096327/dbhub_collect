@@ -10662,5 +10662,304 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "394ae78bdd7e": {
+  "identity": {
+   "one_liner": "Rust 整表传输引擎，Python 一行调用在库间搬表",
+   "review": "apitap 是一个数据传输引擎，通过数据库自有 wire 协议（COPY、RowBinary、LOAD DATA、逻辑复制、MySQL binlog）在 Postgres、MySQL、ClickHouse、BigQuery 等之间整表搬数，支持 replace/append/merge/log_based 模式与批量 CDC，内存按 cgroup 有界。以 PyPI wheel 提供，供数据工程场景使用；预 1.0 版本需固定版本号。",
+   "highlights": [
+    "支持 postgres/mysql/clickhouse/bigquery 等来源与目标，含 binlog/WAL 批量 CDC 与原子 swap",
+    "Rust 引擎走数据库原生 wire 协议，Python 侧为 abi3 wheel 薄绑定，内存按 cgroup 有界",
+    "apitap.read() 通过 Arrow C stream 协议输出 polars/pyarrow/duckdb/pandas"
+   ],
+   "use_cases": [
+    "跨数据库整表批量搬迁与定时同步（cron/Airflow/K8s 调度）",
+    "从 Postgres/MySQL 向 ClickHouse/BigQuery/Iceberg 的增量 CDC 管道",
+    "内存受限容器内的数据导入作业"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (any REST catalog)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "lines": [
+      44,
+      45,
+      46
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL binlog — through its own Rust wire clients, moves tables over parallel ／ |**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (any REST catalog)|",
+     "lines": [
+      7,
+      44,
+      45
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (any REST catalog)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "lines": [
+      44,
+      45,
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |MySQL / MariaDB|`mysql://user:pass@host:3306/db?ssl-mode=verify_identity`|TLS is **required for any non-loopback host** since 0.55.1; `ssl-mode` = `disabled` (send in clear, on purpose) · `required` (encrypt, no verify) · `verify_ca` · `verify_identity` (defa",
+     "lines": [
+      44,
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 自述为在数据库之间移动表的传输引擎，属服务于数据库生态的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "apitap is a transfer engine, not an API client. It speaks the databases' own ／ MySQL binlog — through its own Rust wire clients, moves tables over parallel ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+   "evidence_lines": [
+    5,
+    7,
+    46
+   ]
+  },
+  "fn": "apitap/apitap-lib",
+  "sha": "394ae78bdd7e",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1de5ab76cfcc": {
+  "identity": {
+   "one_liner": "Conduit 的 PostgreSQL 连接器插件，提供源与目标端",
+   "review": "这是 Conduit 数据管线的 PostgreSQL 连接器插件，同时实现 source（读取）与 destination（写入）。source 支持初始快照加 CDC 模式，通过逻辑复制槽和 publication 捕获表变更；destination 以 upsert 写入。适用于需要把 PostgreSQL 变更数据接入 Conduit 管线的开发者，要求连接用户具备逻辑复制相关权限。",
+   "highlights": [
+    "提供 source 与 destination 两种连接器",
+    "source 支持快照模式与基于逻辑复制槽的 CDC 模式",
+    "基于 pgx 驱动，支持 TLS/SCRAM 认证及 channel binding 配置"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 表变更以 CDC 方式接入 Conduit 数据管线",
+    "初始化时对指定表做快照读取",
+    "将 Conduit 中的记录写入 PostgreSQL"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Conduit Connector PostgreSQL ／ The PostgreSQL connector is a Conduit ／ This connector implements Change Data Capture (CDC) features for PostgreSQL by",
+     "lines": [
+      1,
+      3,
+      58
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Conduit 管线服务的 PostgreSQL 连接器插件，为数据集成提供读取/写入能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Conduit Connector PostgreSQL ／ plugin. It provides both, a source and a destination PostgresSQL connector. ／ This connector implements Change Data Capture (CDC) features for PostgreSQL by",
+   "evidence_lines": [
+    1,
+    4,
+    58
+   ]
+  },
+  "fn": "ConduitIO/conduit-connector-postgres",
+  "sha": "1de5ab76cfcc",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9e3a59bef023": {
+  "identity": {
+   "one_liner": "本地 Rust 归档工具，将多来源 AI 会话历史统一存入 SQLite",
+   "review": "Polylogue 是一个本地优先的 AI 会话历史归档系统，将 ChatGPT、Claude、Codex、Gemini 及 agent 历史导入统一的 SQLite 归档库，提供守护进程、按 Session/Message 读取和凭证脱敏输出。当前仅实现部分功能：搜索、导出、完整规范化和 MCP/HTTP 均未完成，README 标注 product_path 为 partial，适合跟踪其开发的用户。",
+   "highlights": [
+    "支持 Codex 与 Claude 常规文件导入及提供方进度跟踪",
+    "提供终端与 JSON 两种降级只读路径，流式输出有界范围",
+    "内置 credential-output 引擎，实现 22 族凭证掩码",
+    "守护进程持有归档锁，支持独立多归档与显式恢复流程"
+   ],
+   "use_cases": [
+    "将多个 AI 提供方的会话历史集中为本地可审计归档",
+    "对含凭证的会话内容做脱敏后的终端/JSON 查看",
+    "作为 MCP 生态的本地历史数据底座（尚未完成）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "This repository contains the standalone Rust foundation. It implements foundation identity/value contracts, durable SQLite schema checks, shared content files, one archive writer, read-only handles and a real daemon/status client. Explicit immutable Codex and  ／ `crates/credential-output` owns the shared pure streaming credential presentation engine; terminal and Session rendering use it without changing their response limits. `crates/model` is pure. Only `crates/store` owns SQLite connections; public handles expose t",
+     "lines": [
+      3,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 AI 会话历史提供归档/审计工具能力，SQLite 是其存储组件而非被使用的最终应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository contains the standalone Rust foundation. It implements foundation identity/value contracts, durable SQLite schema checks, shared content files, one archive writer, read-only handles and a real daemon/status client. Explicit immutable Codex and context-declared Claude regular-file imports and provider-state progress are registered. Selected uncontested Messages have a streaming terminal reference read, and known selected Session catalogs have a degraded normalized JSON read. Full canonical finalization, export, search, MCP and HTTP remain unfinished. Status reports `product_path: \"partial\"`; an initialized empty schema is not a completed ingestion or M1 demonstration. ／ `crates/credential-output` owns the shared pure streaming credential presentation engine; terminal and Session rendering use it without changing their response limits. `crates/model` is pure. Only `crates/store` owns SQLite connections; public handles expose typed operations. `crates/hashed-blobs` is the reviewed shared file layer plus an explicit read-only capability, documented in source provenance. The owner publishes the reviewed file layer as `hashed-blobs-v0.1.0`; consumer pins require their own verification. Store limits distinguish these primitives from complete input acquisition and recovery.",
+   "evidence_lines": [
+    3,
+    22
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "9e3a59bef023",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8eba3c194b95": {
+  "identity": {
+   "one_liner": "Go 运行时，为 SQLite 与 Datastar 应用提供线性写入与 SSE 渲染",
+   "review": "lith 是一个 Go 运行时库，为基于 SQLite 和 Datastar 的 Web 应用提供单写入连接、即时模式渲染和 SSE 超媒体推流等机制，并附带 sqlite、writer、live、sse、backup 等包。面向用 Go 构建超媒体应用的开发者；通过 go run 命令从源码生成项目模板使用，MIT 许可。",
+   "highlights": [
+    "提供单一写入者包：命令按序批量执行，每批一个事务和 savepoint",
+    "提供 sqlite 包：读写连接池、pragma、user_version 迁移、VACUUM INTO 备份",
+    "提供 backup 包对接 Litestream 到 S3，含快照与每日校验"
+   ],
+   "use_cases": [
+    "用 Go 构建基于 SQLite 和 Datastar 的超媒体应用",
+    "需要单写入者事务模型和 SSE 流推送的 Web 应用",
+    "需要租户级独立数据库与进程内负载测试的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "for Go, SQLite and Datastar apps, built by zwei und eins gmbh. ／ |`sqlite`|one write connection and a `query_only` read pool whose connections keep their statements prepared, pragmas, `user_version` migrations, read-only opens, `VACUUM INTO` backups|",
+     "lines": [
+      11,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为供 Go + SQLite + Datastar 应用使用的运行时/包集合，而非自身存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**L**inear writes, **I**mmediate mode, **T**icks, **H**ypermedia: a runtime ／ |`sqlite`|one write connection and a `query_only` read pool whose connections keep their statements prepared, pragmas, `user_version` migrations, read-only opens, `VACUUM INTO` backups|",
+   "evidence_lines": [
+    10,
+    28
+   ]
+  },
+  "fn": "zweiundeins/lith",
+  "sha": "8eba3c194b95",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

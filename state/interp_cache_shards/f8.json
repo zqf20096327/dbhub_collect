@@ -9176,5 +9176,209 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b3cc7e960f39": {
+  "identity": {
+   "one_liner": "基于 DuckLake 与 S3 持久层的云端数据库服务",
+   "review": "SimpleBase 是一个用 Go 构建的云端数据库服务，本地磁盘仅作缓存，数据以 DuckLake（DuckDB catalog + Parquet）格式持久化到 S3 兼容存储，并提供 HTTP API 管理逻辑数据库、执行参数化 SQL、调用 LLM Gateway 与只读云 Agent。面向需要以 S3 为持久层运行数据库服务的团队，部署上限制副本数为 1，即单写实例架构。",
+   "highlights": [
+    "以 S3 兼容存储为在线持久层，节点丢失本地数据后可仅凭 S3 恢复",
+    "提供项目隔离的逻辑数据库管理、SQL 执行、配额与审计 API",
+    "集成 OpenAI 兼容的 LLM Gateway 与项目级只读工具 Agent"
+   ],
+   "use_cases": [
+    "需要数据库文件/数据持久化在 S3 上的自托管云端数据库服务场景",
+    "为应用提供带认证、配额与审计的多项目 SQL 接入服务",
+    "在数据库服务内统一封装多供应商 LLM 调用与用量计量"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "从旧版本（LessDB/ha-sqlite）迁移到新链路的工作流详见 docs/ops/migration.md。",
+     "lines": [
+      112
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目本身是一个数据库服务应用，使用 DuckDB/DuckLake 与 S3 存储自身数据，而非为某个数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "基于 DuckLake、S3 在线持久层与 Go 构建的云端数据库服务，并集成 LLM Gateway 与云 Agent。 ／ - **S3 是在线持久层**：本地磁盘仅作缓存与工作集；节点丢失本地数据后可仅凭 S3 恢复。 ／ - DuckDB / DuckLake",
+   "evidence_lines": [
+    3,
+    16,
+    133
+   ]
+  },
+  "fn": "linkxzhou/SimpleBase",
+  "sha": "b3cc7e960f39",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "42f92413c5de": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions 临时 runner 机群控制器",
+   "review": "Zoomies 是一个自托管的 GitHub Actions runner 机群控制器：监听 workflow_job webhook，为每个任务启动一次性 runner，任务结束即销毁，并提供实时 Web UI 管理。面向需要自建 CI runner 的团队；以单个 Go 二进制运行，状态存于 SQLite，支持多主机 agent 与 S3 备份，无需 Kubernetes。",
+   "highlights": [
+    "为每个排队任务启动临时 runner，任务结束即销毁，默认一任务一 runner",
+    "以 GitHub App 身份认证并签发单次使用的 JIT 注册令牌",
+    "提供实时 Web UI、Prometheus 指标、审计日志，并支持夜间数据库备份至 S3 兼容存储"
+   ],
+   "use_cases": [
+    "为 GitHub 组织或仓库自托管弹性 CI runner 机群",
+    "将私有硬件（家庭实验室/NAT 后主机）接入 GitHub Actions 运行池",
+    "需要临时、隔离的 runner 环境以避免跨 workflow 泄漏"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      16,
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身状态，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Single Go binary. SQLite. AGPL-3.0. ／ You point Zoomies at a GitHub organisation, or at a repository on a personal ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+   "evidence_lines": [
+    16,
+    67,
+    102
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "42f92413c5de",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a4a4beed8875": {
+  "identity": {
+   "one_liner": "DSH 酒馆会话存储插件，用 SQLite 接管聊天与变量历史存档",
+   "review": "这是一个面向 DSH Tavern（SillyTavern 类酒馆）的插件，把聊天、会话事件和 MVU 变量历史从 JSON 存档改为由 SQLite 管理，支持增量存档、按需读取、服务端脚本执行与物理尾部回退；供使用 DSH Tavern 玩角色扮演卡的用户安装，需匹配特定上游版本（当前适配 Tavern 2.7.0），卸载后保留 SQLite 数据库不回转 JSON。",
+   "highlights": [
+    "SQLite 增量存档：头字段与消息楼层分开存储，局部更新只写变化部分，会话事件由事务与 WAL 管理",
+    "历史按需读取与 MVU 变量归档：按楼层范围读取，旧变量树归档后按需补回",
+    "服务端 MVU 与卡脚本执行，支持正文与状态一起的物理尾部回退"
+   ],
+   "use_cases": [
+    "为 DSH Tavern 酒馆替换 JSON 存档为 SQLite 存储",
+    "长对话历史的按需读取与旧楼层变量补数",
+    "失败轮次清理与回退到一致状态"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# DSH Tavern SQLite V2 ／ **服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。** ／ 这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是为 DSH Tavern 应用提供存储功能的插件，SQLite 是其数据存储手段而非其服务的生态组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3，基于 DSH Tavern 的独立修改版",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ **已发布版本 0.4.14：适配酒馆上游 main `d189da12`（完整提交 `d189da122a8651c53ffc55ff465913f2e7f49d75`，Tavern **2.7.0**）。** 支持**最新一次发送的统一撤销**：不论该次发送本身成功、报错、被中断、只留下部分产物，也不论**上一轮**是成功、失败、未完成还是未知形态，都由你主动回退到发送前状态；回合形态不构成回退资格。 目标适配版本以对应 Releases 更新说明为准；其他未适配版本可能运行报错，请更新到标注的酒馆版本或自行适配插件。安装检查通过不代表运行期功能兼容。",
+   "evidence_lines": [
+    5,
+    34
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "a4a4beed8875",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

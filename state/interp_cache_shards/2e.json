@@ -10609,5 +10609,76 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fb22dd9c9d5c": {
+  "identity": {
+   "one_liner": "位置优先的多租户电商系统，Go + PostgreSQL，内置分布式事务",
+   "review": "一个以门店电子围栏为核心的多租户电商系统，买家按位置解析门店、下单校验围栏；面向连锁门店的 O2O 与同城配送业务。技术栈为 Go 后端、PostgreSQL 单库（含行级安全与 pgvector）、Flutter 买家端与 Vue 3 商家后台，docker compose 一键启动，并内置 Rust 实现的 dtmrs 分布式事务协调器与基于 MCP 的 AI 员工提案机制。",
+   "highlights": [
+    "按门店电子围栏解析门店，收货地址出围栏即拒绝下单",
+    "通过 MCP 流式 HTTP 接口向任意 agent harness 开放 AI 员工工具，写操作走人工审批的提案队列",
+    "内置 dtmrs 事务协调器（SAGA/TCC/XA），支持单进程与微服务两种部署形态，向量检索与全文检索均在 PostgreSQL 内实现"
+   ],
+   "use_cases": [
+    "连锁便利店、生鲜、药店等从实体门店发货的 O2O 电商",
+    "多门店同城配送与按距离分档计费的本地配送场景",
+    "需要多租户隔离或多商家形态的电商部署"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "开源多租户电商系统 · 多门店 O2O 与同城配送 · 电子围栏按位置分配门店 · Go + PostgreSQL + Flutter + Vue 3 ／ PostgreSQL ／ 靠的是每张表都带 `merchant_id`、父子关系用复合外键钉死、以及 PostgreSQL 行级安全兜底。",
+     "lines": [
+      6,
+      13,
+      146
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 PostgreSQL 作为唯一数据库存储业务数据（L13、L249），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "开源多租户电商系统 · 多门店 O2O 与同城配送 · 电子围栏按位置分配门店 · Go + PostgreSQL + Flutter + Vue 3 ／ 靠的是每张表都带 `merchant_id`、父子关系用复合外键钉死、以及 PostgreSQL 行级安全兜底。 ／ **只有一个数据库。** 向量检索在 `pgvector`，全文检索在 `tsvector`，任务队列是一张表。",
+   "evidence_lines": [
+    6,
+    146,
+    249
+   ]
+  },
+  "fn": "jackwangfeng/keel",
+  "sha": "fb22dd9c9d5c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

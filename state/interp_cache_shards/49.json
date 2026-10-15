@@ -9547,5 +9547,144 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "36fd4b8080db": {
+  "identity": {
+   "one_liner": "可在页面上直接编辑内容的 Svelte 建站系统，内置 SQLite 存储",
+   "review": "Editable 是一个 Svelte 建站项目，编辑者直接在页面上修改内容，而内容模型、组件和样式保留在用户自己的代码库中；数据存储在 data/ 目录下的 SQLite 数据库与上传资源中，并通过 pnpm 脚本安装、重置和备份。适合希望不引入独立 CMS、自行托管和定制站点的开发者使用；还内置远程 MCP 服务器，供代理客户端读取和写入页面。",
+   "highlights": [
+    "编辑者直接在页面上编辑内容，内容模型与组件保留在用户代码库中",
+    "提供远程 MCP 服务器端点，代理可列出、读取、创建和编辑页面",
+    "提供 pnpm 数据脚本用于备份、重置本地 SQLite 数据库",
+    "支持多语言翻译文档的读取与写入"
+   ],
+   "use_cases": [
+    "无需单独 CMS 的可编辑 Svelte 网站搭建",
+    "通过 MCP 客户端由代理程序管理站点页面内容",
+    "基于自有 git 仓库定制与部署内容站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That folder is `data/`: an SQLite database (`db.sqlite3`) and uploaded assets (`assets/`). Locally it defaults to `./data`; on Fly.io it's a persistent volume at `/data`; on a VPS it's `/data` on the host, bind-mounted into the container at the same path. The ",
+     "lines": [
+      717
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明站点数据存储于 data/ 目录下的 SQLite 数据库，项目是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Editable lets you build and edit a Svelte website without adding a separate CMS. Editors work directly on the page, while the content model, components, layouts, and styling remain in the codebase you own. Use the included defaults and adapt the colors and fonts to deploy a beautiful site within minutes — or customize the entire layout and model your own content types. This manual explains how to build and run a site with Editable. ／ To reset your local database to the initial default site content (asks for confirmation and backs up your current database first; assets stay in place, and the fresh content appears on the next dev server start):",
+   "evidence_lines": [
+    3,
+    143
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "michael/editable",
+  "sha": "36fd4b8080db",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4d5c24a6911e": {
+  "identity": {
+   "one_liner": "自托管 Twitch 与 Kick 掉宝挂机工具，多账号观看并自动领取",
+   "review": "GrubDrops 是一个用 Go 编写的自托管 Web 应用，用于在 Twitch 和 Kick 平台上多账号挂机观看直播、累计时长并自动领取游戏掉宝。它通过 Docker 部署，数据存储在单个 SQLite 文件中，支持白名单驱动、优先级调度、Discord 告警和 OIDC 单点登录。README 中标注当前存在关键认证问题，运行可能不符合预期。",
+   "highlights": [
+    "支持多账号同时挂机 Twitch 与 Kick，自动观看、累计时长并领取掉宝",
+    "提供 Web 控制台，含白名单、优先级列表、历史记录和实时事件流",
+    "支持 Docker 部署、Chrome sidecar 回放、代理与 OIDC 单点登录"
+   ],
+   "use_cases": [
+    "homelab 用户长期挂机领取 Twitch/Kick 游戏掉宝",
+    "同时管理多个平台账号的观看时长与领取记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "image and a single SQLite file. ／ - **Discovery** scrapes both catalogs into SQLite every few minutes. ／ |`GRUB_DB_PATH`|`/data/miner.db`|SQLite path (use e.g. `./miner.db` outside Docker).|",
+     "lines": [
+      31,
+      157,
+      183
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 SQLite 作为自身数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hosted, set-and-forget Twitch &amp; Kick drops miner. ／ drops — across several accounts at once. One small self-hosted web app: a Docker ／ image and a single SQLite file.",
+   "evidence_lines": [
+    12,
+    30,
+    31
+   ]
+  },
+  "fn": "aalejandrofer/GrubDrops",
+  "sha": "4d5c24a6911e",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

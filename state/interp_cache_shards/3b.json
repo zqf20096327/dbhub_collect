@@ -9559,5 +9559,150 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8ec280073614": {
+  "identity": {
+   "one_liner": "自托管网页抓取工具，将页面转为 Markdown 供 AI 智能体读取",
+   "review": "AgentCrawl 是一个面向 AI 智能体的自托管网页抓取与 Markdown 提取工具，提供 CLI、Python 库、Docker/HTTP API 和 MCP 服务器四种运行方式，将网页与本地文档转为 Markdown、文本、链接、元数据等格式。持久化爬取任务、缓存与失败记录存储在本地 SQLite 数据库中，仅支持自托管部署。",
+   "highlights": [
+    "提供 CLI、Python 库、HTTP API、Docker 与 MCP 多种接口，暴露 scrape_url、crawl_site、extract_structured 等工具",
+    "使用 SQLite 存储爬取任务、检查点、事件、重试与失败记录，并支持从 SQLite 生成只读静态 HTML 仪表盘",
+    "支持 Playwright 浏览器渲染、robots.txt、SSRF 防护、API bearer 认证及 Firecrawl v2 API 兼容端点"
+   ],
+   "use_cases": [
+    "为 AI 智能体/MCP 客户端提供网页抓取与结构化提取能力",
+    "自托管环境中的批量爬取、任务持久化与失败检查",
+    "生成 llms.txt 或可引用的分块（chunks）内容用于文档处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ - 📊 Read-only dashboard: generate static HTML from SQLite with `agentcrawl dashboard` or open `/dashboard` on the API server (it follows the API auth setting). ／ |Durable crawls|SQLite jobs, events, checkpoints, retries, and failure records.|",
+     "lines": [
+      100,
+      102,
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目将爬取任务、缓存与失败记录存储在本地 SQLite 数据库中，SQLite 是其内部存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ AgentCrawl gives agents a simple way to read normal web pages without pasting raw HTML into chat or routing every URL through a hosted scraper. It turns pages and local documents into Markdown, text, links, metadata, JSON-LD, and crawl results. It runs from the CLI, Python, Docker/API, or as an MCP server. ／ |Durable crawls|SQLite jobs, events, checkpoints, retries, and failure records.|",
+   "evidence_lines": [
+    100,
+    11,
+    117
+   ]
+  },
+  "fn": "JorG18/agentcrawl",
+  "sha": "8ec280073614",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4d7a1a09b6bf": {
+  "identity": {
+   "one_liner": "基于 Next.js、PartyKit 与 Postgres 的实时协作画布应用",
+   "review": "一个使用 Next.js 和 PartyKit 构建的实时协作白板应用，支持多人通过房间链接共同创建和拖动卡片与文本块，看板数据以 Drizzle ORM 持久化存储在 Postgres 中。README 自述为展示全栈与实时技能的作品集项目，目前脚手架已完成，实时与持久化部分仍在接入中。",
+   "highlights": [
+    "通过 PartyKit 房间实现实时协作与成员在场显示",
+    "使用 Drizzle ORM 将看板与对象持久化到 Postgres",
+    "提供刷新后状态保留的看板存储"
+   ],
+   "use_cases": [
+    "多人实时协作编辑卡片与文本画布",
+    "全栈实时应用的学习参考"
+   ],
+   "usage_notes": [
+    "README 自述为作品集项目，脚手架已完成，实时与持久化部分待接入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Stack:** Next.js, PartyKit, Postgres, Drizzle ORM ／ - Boards and objects are stored in Postgres with Drizzle ORM. ／ 1. Copy `.env.example` to `.env` and fill in the values for your PartyKit host and Postgres database.",
+     "lines": [
+      8,
+      35,
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用 Postgres 存储看板数据的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Stack:** Next.js, PartyKit, Postgres, Drizzle ORM ／  - Boards and objects are stored in Postgres with Drizzle ORM. ／ _Project scaffold complete — ready for real-time and persistence wiring._",
+   "evidence_lines": [
+    8,
+    35,
+    83
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "kamalesh404/collaborative-canvas",
+  "sha": "4d7a1a09b6bf",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

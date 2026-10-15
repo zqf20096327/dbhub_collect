@@ -9717,5 +9717,71 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "da18c55a131a": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Drizzle 的力量训练记录应用，用 Postgres 存储数据",
+   "review": "Rep Deck 是一个力量训练追踪 Web 应用，用户可记录每组重量/次数/RPE、管理版本化训练计划、追踪体重等身体指标并查看预估 1RM 趋势。数据写入走 Server Action，读取走 Drizzle 类型化查询，存储使用 Postgres（运行时经 Supavisor 连接池，迁移走直连），配合 Supabase 做托管 Postgres 与 Google OAuth。适合健身者自用或自部署。",
+   "highlights": [
+    "通过 Server Action 写入、Drizzle 类型化查询读取，存储于 Postgres（运行时经 Supavisor 连接池，迁移走直连）",
+    "支持版本化训练计划、拖拽排序、会话日期回填与实时 PR 检测",
+    "内置以 Epley 公式计算预估 1RM 的分析视图（基于 Recharts）"
+   ],
+   "use_cases": [
+    "健身者记录训练数据与 PR",
+    "管理多版本训练计划",
+    "查看力量与身体指标趋势图表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Postgres — Direct driver via `postgres`. Runtime uses the Supavisor pooler (port 6543); migrations use the direct connection (port 5432). ／ - Postgres — Instance via Supabase or a local install",
+     "lines": [
+      35,
+      158
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 Postgres/Supabase 存储数据的训练记录应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rep Deck is a strength-training tracker built for lifters who care about raw progression — load, volume, intensity, and consistency. Log every set, maintain versioned training plans, monitor body composition, and track estimated 1RM trends across time. Every write goes through a Server Action; every read is a typed Drizzle query. No spreadsheets. ／ - Postgres — Direct driver via `postgres`. Runtime uses the Supavisor pooler (port 6543); migrations use the direct connection (port 5432). ／ - Supabase — Managed Postgres + Google OAuth via `@supabase/ssr`. Session sync into Drizzle happens in `/auth/callback`.",
+   "evidence_lines": [
+    3,
+    35,
+    36
+   ]
+  },
+  "fn": "rudra-xi/rep-deck",
+  "sha": "da18c55a131a",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

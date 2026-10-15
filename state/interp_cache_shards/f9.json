@@ -8044,5 +8044,215 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ab6cadace6d6": {
+  "identity": {
+   "one_liner": "嵌入式单文件双时态图数据库，Datalog 查询",
+   "review": "Minigraf 是一个用 Rust 编写的单文件嵌入式图数据库，支持 Datalog 查询、双时态时间回溯和窗口函数，可编译为原生、WASM 等形态并提供 Python/Node/Java/Swift/C 等绑定，面向 AI 代理记忆、移动应用离线存储和浏览器场景；按设计不做分布式和客户端-服务器模式，单实例针对小于一百万节点优化。",
+   "highlights": [
+    "提供 Datalog 查询与递归规则，事实为 EAV 边",
+    "支持双时态查询（事务时间+有效时间）与时间回溯",
+    "以单文件嵌入运行，支持原生、WASM、移动端等多平台绑定"
+   ],
+   "use_cases": [
+    "AI 代理的知识/记忆存储与历史审计",
+    "移动应用离线优先存储及追溯性修正",
+    "浏览器内嵌图数据与时间回溯可视化"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是自带存储引擎的嵌入式数据库本体，不依赖其他数据库存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "source",
+    "pypi",
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ Minigraf runs as:",
+   "evidence_lines": [
+    14,
+    22,
+    174
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "ab6cadace6d6",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7d28f5d970f8": {
+  "identity": {
+   "one_liner": "自托管家庭事务整理应用，数据存于单一 SQLite 文件",
+   "review": "FamilyOS 是一个自托管的家庭事务整理 Web 应用，提供共享日历、任务与购物清单、家务、食谱、家庭记录与墙面展示等功能；数据存放在单个 SQLite 文件中，可运行在树莓派等自有硬件上，支持通过 MCP 协议接入外部 AI 代理，AI 建议需人工批准后生效。适合以自托管方式管理家庭日常的家庭用户使用。",
+   "highlights": [
+    "提供共享日历、任务、购物清单、家务、食谱和家庭记录等功能",
+    "数据存储于单个 SQLite 文件，支持每晚自动备份并可加密复制到 S3 或 WebDAV",
+    "在 /mcp 路径提供 Model Context Protocol 服务器，可接入 Claude Desktop 等 MCP 客户端"
+   ],
+   "use_cases": [
+    "家庭自托管部署（如树莓派）管理日历、家务和购物清单",
+    "将平板或旧电视作为厨房墙面只读展示屏",
+    "通过 MCP 客户端以自然语言查询和提议家庭日程与清单变更"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Raspberry Pi is enough), with your data in one SQLite file. Share a school notice, a photo of a",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是一个用 SQLite 存储自身数据的家庭组织 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted, privacy-first organizer for families.** FamilyOS brings a household's calendar, ／ Raspberry Pi is enough), with your data in one SQLite file. Share a school notice, a photo of a ／ FamilyOS is a Model Context Protocol server at `/mcp`. An admin",
+   "evidence_lines": [
+    3,
+    5,
+    158
+   ]
+  },
+  "fn": "onurceri/family-os",
+  "sha": "7d28f5d970f8",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4d64de9ceff2": {
+  "identity": {
+   "one_liner": "本地优先的科研全流程 AI 助手工作台，基于 SQLite 单机存储",
+   "review": "SciFlow 是一个本地优先、单机部署的科研 AI 助手：输入研究主题后经 LangGraph 流水线完成文献调研、大纲生成、Agentic RAG 分章起草、质量评分回炉、润色与引用格式化。数据（文献、笔记、记忆、Key）存于本地 SQLite 单文件，面向需要本地部署的科研写作用户，通过 OpenAI 兼容协议对接自选模型端点。",
+   "highlights": [
+    "支持文献调研、大纲、起草、润色、引用格式化的全自动流水线，含人工确认点与断点续跑",
+    "提供 sqlite-vec 向量检索 + FTS5 全文的本地混合 RAG 知识库，支持 8 种引用样式与 BibTeX/RIS 导入导出",
+    "AI 能力通过 MCP 工具台暴露为标准 MCP 工具，支持任意 OpenAI 兼容端点（含 Ollama 等本地端点）"
+   ],
+   "use_cases": [
+    "本地部署的学术论文写作与文献综述辅助",
+    "个人科研知识库构建与基于文献的引用问答",
+    "投稿流程管理（选刊匹配、Cover Letter 生成、投稿状态跟踪）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **本地优先**：SQLite 单文件开箱即跑，你的文献、笔记、记忆、Key 全部落本地，不建多租户、不上传第三方云。",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有数据（文献、笔记、记忆、产物）均存于本地 SQLite，SQLite 是其存储依赖而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SciFlow 是一个**本地优先、单机部署**的科研 AI 助手：输入一个研究主题，自动完成 **文献调研 → 研究规划 → 大纲（人工确认）→ 分章起草（边写边查的 Agentic RAG）→ 质量门评分（不达标自动 Reflexion 回炉）→ 润色 → 引用格式化 → 投稿辅助** 的科研全生命周期，并以 NotebookLM 式 RAG 知识库 + 可视化工作台沉淀过程资产。 ／ - **本地优先**：SQLite 单文件开箱即跑，你的文献、笔记、记忆、Key 全部落本地，不建多租户、不上传第三方云。 ／ - 全流程产物（文档/版本/引用/记忆）均存于本地 SQLite，删除 `DATABASE_PATH` 指向的 db 文件即可回到干净状态。",
+   "evidence_lines": [
+    17,
+    20,
+    183
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "badhope/sciflow",
+  "sha": "4d64de9ceff2",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

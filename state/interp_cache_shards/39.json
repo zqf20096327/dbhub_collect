@@ -9338,5 +9338,84 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8872e29c70aa": {
+  "identity": {
+   "one_liner": "自托管多账号 LLM 网关，提供 OpenAI 兼容路由与配额感知调度",
+   "review": "openllms 是一个自托管的 LLM 网关，把多个 ChatGPT/Claude/Codex 账号聚合为单个 OpenAI 兼容 API，根据剩余配额、重置时间和错误状态在账号间路由与故障转移，提供 failover/balance/quota-first 等预设。数据存于 SQLite（也可通过 DATABASE_URL 使用 PostgreSQL），密钥以文件存放。面向想统一管理自有订阅席位并通过 Cursor、Claude Code 或脚本调用的个人和团队。",
+   "highlights": [
+    "提供 OpenAI 兼容 API 路由，支持 Cursor、Claude Code、Codex 等客户端接入",
+    "支持多账号配额感知路由与故障转移，提供 8 种路由预设（failover、balance、quota-first 等）",
+    "提供健康检查端点（/health、/ready、/livez、/readyz）与配套 CLI 管理工具"
+   ],
+   "use_cases": [
+    "将多个已付费的 LLM 订阅席位聚合为一个 API 端点供脚本和编辑器调用",
+    "按剩余配额与重置时间在多个账号间自动分流，避免单一账号被耗尽",
+    "本地自托管部署（Docker 或 Go 二进制），数据与密钥保存在本地磁盘"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-first OSS** — Docker *or* a local Go binary + SQLite + files on disk ／ docker compose -f deploy/oss/docker-compose.yml down -v # delete SQLite + secrets too ／ export DATABASE_URL=sqlite:./data/llms.db",
+     "lines": [
+      17,
+      65,
+      93
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Prefer Postgres? `make dev-db` starts one in Docker on `127.0.0.1:54329` (`deploy/dev/compose.yaml`); then ／ `export DATABASE_URL=postgres://llms:llms@127.0.0.1:54329/llms?sslmode=disable` before `./bin/llms-gateway`.",
+     "lines": [
+      109,
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "网关仅以 SQLite/PostgreSQL 作为自身配置与数据存储，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Turn ChatGPT / Claude (and Codex) seats you already pay for into **one OpenAI-compatible API**. ／ - **Local-first OSS** — Docker *or* a local Go binary + SQLite + files on disk ／ export DATABASE_URL=sqlite:./data/llms.db",
+   "evidence_lines": [
+    5,
+    17,
+    93
+   ]
+  },
+  "fn": "goodtek-xyz/openllms",
+  "sha": "8872e29c70aa",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

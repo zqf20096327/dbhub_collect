@@ -9570,5 +9570,154 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eafb57f82a0b": {
+  "identity": {
+   "one_liner": "基于 SpringBoot+Vue 的停车场车位管理与预约系统",
+   "review": "一套前后端分离的停车场管理系统，包含车位预约、出入场登记、会员价格体系、支付宝支付、订单管理与数据大屏等功能，分管理员、员工、车主三类角色。面向停车场运营方及毕业设计场景，后端使用 SpringBoot+MyBatisPlus，数据存储于 MySQL，Redis 作缓存。README 提示需自行准备 MySQL 与 Redis 环境，项目资源获取需联系作者付费。",
+   "highlights": [
+    "提供车位预约、出入场管理、订单与会员体系等停车场业务功能",
+    "支持支付宝在线支付与数据大屏统计展示",
+    "分管理员、员工（车管员）、用户（车主）三端角色协同"
+   ],
+   "use_cases": [
+    "商业综合体/住宅小区/园区停车场管理",
+    "无人值守智慧停车场场景",
+    "停车费线上缴纳与会员运营"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 MySQL 作为数据库存储业务数据，是为停车场业务服务的应用而非数据库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向商业综合体、住宅小区、园区等场景的停车场管理系统，采用前后端分离架构，覆盖系统管理员、员工（车管员）、用户（车主）三类角色。系统围绕\"车位预约、出入场管理、会员价格体系、支付宝在线支付、订单管理、车位实时监控\"等核心业务设计，支持用户在线预约车位、查看车位实时状态、支付宝缴纳停车费，员工处理车辆入场登记，管理员统筹车位资源、会员体系、数据统计与系统公告，适用于智慧停车场、无人值守停车场、园区停车管理等场景。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/parking_lot_cos",
+  "sha": "eafb57f82a0b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "116b9fc6a740": {
+  "identity": {
+   "one_liner": "中间件离线部署打包工具：本地 Web 选型打包，服务器零交互部署",
+   "review": "该项目提供一个本地运行的 Web 打包器（python packer.py），用户勾选 MySQL、Redis、Kafka、PostgreSQL 等中间件并配置端口、密码、备份策略后，生成含镜像与脚本的离线 tar 包；服务器解压后执行 deploy.sh 零交互完成 Docker/Compose 安装与部署。面向内网/无公网的交付场景，支持 MySQL 主从、Redis 哨兵等多机拓扑；备份恢复当前仅覆盖 MySQL。",
+   "highlights": [
+    "支持零交互、幂等可重跑的离线部署脚本 deploy.sh，含完整性校验、磁盘端口预检与健康实测",
+    "内置定时备份（crontab + mysqldump/pg_dump/mongodump）与 restore.sh 一键恢复脚本",
+    "提供插件化扩展接口，已落地 PostgreSQL、Kafka、Prometheus、Grafana、Elasticsearch 等插件，支持 MySQL 主从/Redis 哨兵/Kafka 集群等多机拓扑"
+   ],
+   "use_cases": [
+    "内网/隔离机房/无公网服务器的中间件离线交付部署",
+    "需按项目定制端口、密码、备份策略并生成离线安装包的交付团队",
+    "需要 MySQL 主从、Redis 哨兵等集群形态跨多台服务器部署的场景"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ |PostgreSQL|15.19|15432|compose 自带 `pg_isready` 健康检查|",
+     "lines": [
+      46,
+      214
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ - **集群形态**：MySQL 单机 / **主从复制**(一主一从 · GTID 自动同步 · 部署时自动配置复制，8.0 与 5.7 均支持)； ／ - **MySQL 参数可定制**：自动挂载 `conf/<svc>/my.cnf`（内置 sql_mode 严格模式声明），改参数不用进容器",
+     "lines": [
+      46,
+      49,
+      51
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 MySQL、PostgreSQL 等数据库及中间件提供打包与部署服务，本身不依赖数据库存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "在本地 Web 界面上选好中间件、端口、密码、数据库、备份策略，一键打出**只含本次所需物料**的离线包； ／ - **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ - **插件化扩展**：新增中间件只需一个插件文件 + 镜像 tar，页面勾选/端口/密码表单/编排生成全自动纳入",
+   "evidence_lines": [
+    5,
+    46,
+    48
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "litianyanaa-pixel/middleware-offline-deploy",
+  "sha": "116b9fc6a740",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

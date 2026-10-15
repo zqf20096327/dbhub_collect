@@ -9116,5 +9116,92 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "13809f79b52d": {
+  "identity": {
+   "one_liner": "Rust 编写的开源 SIEM，以 OCSF Parquet 对象存储与嵌入式 chDB 查询日志",
+   "review": "nano 是一个用 Rust 编写的开源 SIEM 引擎，提供日志摄取（Vector/Tenzir）、nPL 管道查询语言、检测规则生命周期管理和告警分诊，事件以 OCSF 1.9 Parquet 存于对象存储并由嵌入式 chDB 查询，PostgreSQL 存元数据。面向安全分析师，采用 Docker 一键安装，AGPL-3.0 开源核心，Hosted 计划、AI 助手、Cases 等为商业功能；旧 ClickHouse 版本已停止支持。",
+   "highlights": [
+    "支持 Vector（HTTP/HEC/OTLP/syslog/S3 pull）与 Tenzir 两种摄取方式，事件以 OCSF 1.9 Parquet 写入 RustFS 对象存储",
+    "提供 nPL 管道查询语言与嵌入式 chDB 查询引擎，检测规则支持 Staging→Live→Alerting 生命周期与实时/定时执行",
+    "附带规则/解析器仓库自动同步、enrichment marketplace 与检测即代码（nanodac）配套组件"
+   ],
+   "use_cases": [
+    "安全分析师的日志检索与威胁检测",
+    "自托管或离线/气隔环境的安全事件监控",
+    "基于 Git 的检测规则管理与威胁情报富化"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "(PostgreSQL + Dragonfly + RustFS object store + one single-tenant lake cell ／ single-tenant lake cell; PostgreSQL for metadata.",
+     "lines": [
+      52,
+      138
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "### Upgrading from the ClickHouse edition ／ The ClickHouse edition is retired and **cannot be upgraded in place**. Run ／ over a ClickHouse install, the installer stops before changing anything and ／ ClickHouse source is the `legacy/clickhouse` branch, unsupported. ／ queried by the lake cell's embedded chDB engine. There is no ClickHouse server. See ／ > The retired ClickHouse edition (UDM + the ClickHouse `legacy` compose",
+     "lines": [
+      84,
+      86,
+      87,
+      91,
+      123,
+      127
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 PostgreSQL 存储元数据、用嵌入式 chDB 查询对象存储，是使用数据库的 SIEM 应用而非为数据库服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "open-core：引擎为 AGPL-3.0，解析器内容以 Apache-2.0 单独发布，Hosted 功能商业提供",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A lightweight, opinionated SIEM. Search, detection, and triage for security ／ (PostgreSQL + Dragonfly + RustFS object store + one single-tenant lake cell ／  single-tenant lake cell; PostgreSQL for metadata.",
+   "evidence_lines": [
+    3,
+    52,
+    138
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nano-rs/nano",
+  "sha": "13809f79b52d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

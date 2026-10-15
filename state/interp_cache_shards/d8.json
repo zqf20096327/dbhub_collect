@@ -9498,5 +9498,226 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "abdb0a9513a4": {
+  "identity": {
+   "one_liner": "提供美国联邦支出数据 RESTful API 的服务端应用",
+   "review": "这是 USAspending.gov 背后的 Django 服务端应用，通过 RESTful API 对外提供美国联邦支出数据。数据存储于 PostgreSQL（data_store_api 库），并依赖 OpenSearch 支持部分检索端点，附 ETL 数据加载器、物化视图及 Docker Compose 部署方案。面向需要本地搭建或二次开发该 API 的开发者与数据使用者。",
+   "highlights": [
+    "通过 RESTful API 提供 USAspending.gov 联邦支出数据",
+    "使用 PostgreSQL 存储数据，支持通过 manage.py 执行迁移、物化视图与数据加载",
+    "提供 Docker Compose 编排的本地开发环境，并集成 OpenSearch 索引生成"
+   ],
+   "use_cases": [
+    "本地搭建联邦支出数据 API 进行查询或二次开发",
+    "从 Data Broker 数据库或数据文件执行 ETL 加载流程",
+    "为 API 端点运行测试与开发调试"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- `PostgreSQL` version 16.x (with a dedicated `data_store_api` database) ／ export DATABASE_URL=postgres://usaspending:usaspender@localhost:5432/data_store_api ／ export BROKER_DB=postgres://usaspending:usaspender@localhost:5432/data_broker ／ A postgres database is required to run the app. You can run it in a `postgres` docker container (preferred), or run a PostgreSQL server on your local machine. In either case, it will be empty until data is loaded.",
+     "lines": [
+      29,
+      63,
+      65,
+      98
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用将数据存储于 PostgreSQL 并从中提供服务，数据库是其数据后端而非被服务的对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "_This API is utilized by USAspending.gov to obtain all federal spending data which is open source and provided to the public as part of the DATA Act._ ／ A postgres database is required to run the app. You can run it in a `postgres` docker container (preferred), or run a PostgreSQL server on your local machine. In either case, it will be empty until data is loaded. ／ docker compose --profile usaspending up usaspending-api",
+   "evidence_lines": [
+    6,
+    98,
+    209
+   ]
+  },
+  "fn": "fedspendingtransparency/usaspending-api",
+  "sha": "abdb0a9513a4",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24af2dbedbd0": {
+  "identity": {
+   "one_liner": "面向主机托管商的开源自托管计费与自动化平台",
+   "review": "HostPanel 是一个面向主机/域名销售商的自托管计费与自动化平台，提供客户门户、发票与支付、域名注册商对接、CWP 等 provisioning 集成与工单，并支持从 WHMCS 导入数据。后端为 ASP.NET Core 9 + PostgreSQL，前端 Nuxt 4/Vue 3，采用 AGPL-3.0 许可，通过 Docker Compose 运行，支付网关与注册商以插件 SDK 形式扩展。",
+   "highlights": [
+    "提供客户门户、管理面板、账单发票、域名管理与工单功能",
+    "支付网关、注册商与 provisioning 面板通过插件接口与 SDK 扩展",
+    "支持从 WHMCS 安装导入客户与数据"
+   ],
+   "use_cases": [
+    "主机/域名销售商的客户计费与开通自动化",
+    "自托管替代闭源 WHMCS 的部署",
+    "需要插件化对接支付网关与主机控制面板的场景"
+   ],
+   "use_cases_fallback": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Modern stack.** ASP.NET Core 9 + PostgreSQL on the backend, Nuxt 4 / Vue 3 on the front. ／ |Backend API|ASP.NET Core 9, Wolverine, EF Core, PostgreSQL|",
+     "lines": [
+      23,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储数据的业务应用（托管计费系统），而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0 单一许可；SSO 模式依赖私有包 registry 中的 Innovayse.Auth 组件",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Self-hosted billing and automation for web hosting companies. ／ - **Modern stack.** ASP.NET Core 9 + PostgreSQL on the backend, Nuxt 4 / Vue 3 on the front. ／ |Backend API|ASP.NET Core 9, Wolverine, EF Core, PostgreSQL|",
+   "evidence_lines": [
+    5,
+    23,
+    58
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "innovayse/hostpanel",
+  "sha": "24af2dbedbd0",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "928f3061d2f2": {
+  "identity": {
+   "one_liner": "Hermes Agent 的本地长期记忆与上下文压缩插件，基于 SQLite 事件溯源",
+   "review": "Chronicle 是面向 Hermes Agent 的插件，提供跨会话持久记忆与记忆感知的上下文压缩：捕获会话片段，事件溯源写入本地 SQLite（WAL 模式），通过 FTS5 与可选本地嵌入服务器实现检索；无外部服务依赖，需 Python 3.9+，经 hermes plugins 安装。",
+   "highlights": [
+    "以 SQLite WAL 模式存储，事件溯源并带出处、更正与遗忘工具",
+    "FTS5 全文检索，可选用 OpenAI 兼容本地嵌入服务器（LM Studio/Ollama/llama.cpp）",
+    "提供 chronicle_remember/search/answer/correct/forget 等记忆工具与上下文压缩引擎"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 提供跨会话长期记忆",
+    "在长对话中做记忆感知的上下文压缩",
+    "无外部服务的本地记忆存档"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "your machine in SQLite; relevant memories come back when they are useful. ／ - **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections ／ `db_path` | `~/.hermes/commons/db/chronicle/chronicle.db` | SQLite database location",
+     "lines": [
+      17,
+      103,
+      278
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 作为自身内置存储引擎，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "your machine in SQLite; relevant memories come back when they are useful. ／ `~/.hermes/commons/db/chronicle/chronicle.db`. Chronicle has no required Python ／ - **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections",
+   "evidence_lines": [
+    17,
+    56,
+    103
+   ]
+  },
+  "fn": "indigokarasu/chronicle-agent-context-and-memory",
+  "sha": "928f3061d2f2",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9735,5 +9735,307 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "da2b4ed61e6d": {
+  "identity": {
+   "one_liner": "MCP 服务器，通过 SQLAlchemy 让 LLM 访问多种关系数据库",
+   "review": "MCP Alchemy 是一个 MCP 服务器，连接 Claude Desktop 等客户端与关系数据库，提供表名检索、schema 定义读取、SQL 执行等工具接口，支持连接池配置与 claude-local-files 大结果集导出。基于 SQLAlchemy 适配多种数据库，面向需要在 LLM 对话中查询和分析数据库的用户。",
+   "highlights": [
+    "提供 all_table_names、filter_table_names、schema_definitions、execute_query 等 MCP 工具",
+    "支持 stdio、HTTP/SSE 多种传输方式，基于 SQLAlchemy 连接池（pool_pre_ping、pool_recycle 可配置）",
+    "通过 claude-local-files 集成可导出完整结果集用于大数据集分析与报告"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 中探索数据库结构并辅助编写、验证 SQL 查询",
+    "对大规模数据集执行查询分析并生成报告/可视化",
+    "以 MCP 服务器形式（stdio 或 HTTP）接入支持 MCP 协议的客户端"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### PostgreSQL ／ \"my_postgres_db\": {",
+     "lines": [
+      15,
+      43,
+      47
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### MySQL/MariaDB ／ \"my_mysql_db\": {",
+     "lines": [
+      15,
+      51,
+      55
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### Oracle ／ \"my_oracle_db\": {",
+     "lines": [
+      15,
+      67,
+      71
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### SQLite (built into Python) ／ \"my_sqlite_db\": {",
+     "lines": [
+      15,
+      35,
+      39
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### Microsoft SQL Server ／ \"my_mssql_db\": {",
+     "lines": [
+      15,
+      59,
+      63
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### MySQL/MariaDB ／ (PostgreSQL, MySQL/MariaDB, MS SQL Server, Oracle) preinstalled:",
+     "lines": [
+      15,
+      51,
+      96
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 LLM 客户端提供数据库连接、schema 读取与 SQL 执行能力，是服务于数据库访问的工具组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Let Claude be your database expert! MCP Alchemy connects Claude Desktop directly to your databases, allowing it to: ／ Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ - **all_table_names**",
+   "evidence_lines": [
+    7,
+    15,
+    150
+   ]
+  },
+  "fn": "runekaagaard/mcp-alchemy",
+  "sha": "da2b4ed61e6d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c2632b075a89": {
+  "identity": {
+   "one_liner": "面向 Next.js 的开源无头 CMS 与可视化页面构建器",
+   "review": "Nextly 是嵌入自有 Next.js 应用的内容平台，开发者用 TypeScript 或管理界面中的可视化 Schema Builder 定义内容模型，再通过可视化页面构建器组页、多语言、版本管理与定时发布。通过 Drizzle 适配器支持 PostgreSQL/MySQL/SQLite，提供 REST 与 Direct API、RBAC 及插件 SDK，目前处于 alpha 阶段，要求 Node 20+/Next.js 16+。",
+   "highlights": [
+    "支持在 TypeScript 代码或管理端可视化 Schema Builder 中定义内容模型",
+    "提供 PostgreSQL、MySQL、SQLite 数据库适配器及插件 SDK",
+    "具备多语言、版本历史、定时发布和字段级 RBAC 能力"
+   ],
+   "use_cases": [
+    "在自有 Next.js 应用中自托管内容管理与页面构建",
+    "需要代码级 schema 定义与类型安全 API 的内容平台搭建",
+    "多语言、多版本发布流程的内容站点管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Your database, your storage.** PostgreSQL, MySQL, or SQLite. Local disk by default; S3 (and R2, MinIO), Vercel Blob, or UploadThing for production. ／ |**@nextlyhq/adapter-postgres**|PostgreSQL adapter (recommended for production)| ／ |PostgreSQL|15.0+|Standard PG, Neon (also reachable via Vercel Marketplace), Supabase, RDS, Aurora PG, Railway, Cloud SQL.|",
+     "lines": [
+      41,
+      93,
+      141
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Your database, your storage.** PostgreSQL, MySQL, or SQLite. Local disk by default; S3 (and R2, MinIO), Vercel Blob, or UploadThing for production. ／ |**@nextlyhq/adapter-mysql**|MySQL adapter| ／ |MySQL|8.0+|MariaDB, TiDB, Aurora MySQL, PlanetScale, Vitess on best-effort.|",
+     "lines": [
+      41,
+      94,
+      142
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Your database, your storage.** PostgreSQL, MySQL, or SQLite. Local disk by default; S3 (and R2, MinIO), Vercel Blob, or UploadThing for production. ／ |**@nextlyhq/adapter-sqlite**|SQLite adapter (local demos only)| ／ |SQLite|3.38+|Bundled with `better-sqlite3`. Local demos only.|",
+     "lines": [
+      41,
+      95,
+      143
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|8.0+|MariaDB, TiDB, Aurora MySQL, PlanetScale, Vitess on best-effort.| ／ |Database / storage|Postgres, MySQL, SQLite|Postgres, MongoDB, SQLite|Postgres, MySQL/MariaDB, SQLite|Sanity Content Lake (managed)|",
+     "lines": [
+      142,
+      178
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|MySQL|8.0+|MariaDB, TiDB, Aurora MySQL, PlanetScale, Vitess on best-effort.|",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Nextly 是使用数据库存储内容数据的 CMS 应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Nextly is an open-source content platform for Next.js. ／ - **Your database, your storage.** PostgreSQL, MySQL, or SQLite. Local disk by default; S3 (and R2, MinIO), Vercel Blob, or UploadThing for production. ／ |**@nextlyhq/adapter-postgres**|PostgreSQL adapter (recommended for production)|",
+   "evidence_lines": [
+    26,
+    41,
+    93
+   ]
+  },
+  "fn": "nextlyhq/nextly",
+  "sha": "c2632b075a89",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2d154aaed898": {
+  "identity": {
+   "one_liner": "自托管的页面与数据库协作工作区，内置 MCP 服务器",
+   "review": "Leafdesk 是一个可自托管的开源工作区，提供页面、数据库、实时协作编辑、仪表盘和导入功能，并通过内置 MCP 服务器加 OAuth 2.1 让 Claude 等 AI 客户端在授权后检索、读取和编辑工作区。面向需要自建知识库并接入 AI 助手的团队，数据存储在用户自己的 PostgreSQL 中，通过 docker compose 部署。",
+   "highlights": [
+    "支持页面与数据库实时协作编辑（Yjs over WebSocket）、离线编辑与同步",
+    "内置 MCP 服务器，AI 客户端经 OAuth 2.1 授权后可搜索、读取和编辑工作区",
+    "数据库支持表格/看板/日历等多种视图、关系、公式、rollup 及仪表盘"
+   ],
+   "use_cases": [
+    "团队自托管知识库与项目工作区",
+    "让 Claude 等 MCP 客户端在 OAuth 授权下读写工作区内容",
+    "从 Notion/Obsidian/Markdown 导入现有内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ # and POSTGRES_PASSWORD to the output of: openssl rand -hex 24",
+     "lines": [
+      23,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存于用户自己的 PostgreSQL，该系统是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ - **Built for AI assistants**: connect Claude or any other MCP client over OAuth 2.1 and approve",
+   "evidence_lines": [
+    23,
+    15
+   ]
+  },
+  "fn": "esmworks/leafdesk",
+  "sha": "2d154aaed898",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8582,5 +8582,252 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "95eeda8dfb5a": {
+  "identity": {
+   "one_liner": "终端里的 psql 风格多数据库 CLI 工具台",
+   "review": "dbcrust 是一个 Rust 编写的命令行数据库客户端，支持 PostgreSQL、MySQL、SQLite、ClickHouse、MongoDB、Elasticsearch 等连接，并可用 SQL 查询本地 Parquet/CSV/JSON 文件。提供 REPL 自动补全、EXPLAIN 可视化、SSH 隧道、Vault 凭据、一次性脚本模式与 Python API，附带可选 AI 生成 SQL 与 Django ORM 性能分析。适合开发者与 DBA 日常查询与脚本化使用。",
+   "highlights": [
+    "支持多数据库连接与 psql 风格反斜杠命令 REPL",
+    "通过 Apache DataFusion 对 Parquet/CSV/JSON 文件执行 SQL",
+    "提供一次性执行模式（JSON 输出、稳定退出码、--read-only）供脚本与 agent 调用"
+   ],
+   "use_cases": [
+    "终端中跨多种数据库的交互式查询与管理",
+    "对本地数据文件进行无需导入的 SQL 分析",
+    "为编码 agent 提供可 shell 调用的数据库访问 CLI"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Docker databases, Vault-backed connections, and SQL over Parquet/CSV/JSON files — with optional AI, Djan ／ dbc postgres://user:pass@localhost/mydb ／ |PostgreSQL|`postgres://user:pass@localhost:5432/mydb?sslmode=require`|",
+     "lines": [
+      3,
+      12,
+      58
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Docker databases, Vault-backed connections, and SQL over Parquet/CSV/JSON files — with optional AI, Djan ／ |MySQL|`mysql://root:pass@localhost:3306/mydb`|",
+     "lines": [
+      3,
+      59
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Docker databases, Vault-backed connections, and SQL over Parquet/CSV/JSON files — with optional AI, Djan ／ dbcrust sqlite:///path/to/db.sqlite -c \"SELECT count(*) FROM users\" # run and exit ／ |SQLite|`sqlite:///path/to/db.sqlite` or `./path/to/db.sqlite`|",
+     "lines": [
+      3,
+      51,
+      60
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Docker databases, Vault-backed connections, and SQL over Parquet/CSV/JSON files — with optional AI, Djan ／ |ClickHouse|`clickhouse://user:pass@localhost:8123/default`|",
+     "lines": [
+      3,
+      61
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是连接多种数据库的 CLI 客户端工具，为数据库生态服务而非使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Docker databases, Vault-backed connections, and SQL over Parquet/CSV/JSON files — with optional AI, Django ORM analysis, Python bindings, and a desktop GUI. ／ - **One workflow across databases** — the same REPL, commands, and muscle memory across PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, and Elasticsearch. ／ dbcrust postgres://user:pass@localhost/mydb     # interactive session",
+   "evidence_lines": [
+    3,
+    21,
+    48
+   ]
+  },
+  "fn": "clement-tourriere/dbcrust",
+  "sha": "95eeda8dfb5a",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8fdb5c7b23d9": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue的工地物料与安全管理应用，用MySQL存数据",
+   "review": "这是一套面向建筑工程的物料采购、出入库、安全巡检、气象预警与安全评分管理系统，前后端分离，分系统管理员、采购监管、普通员工三类角色，支持多站点管理。使用SpringBoot+MybatisPlus+MySQL+Redis后端和Vue前端，部署需自备Java、Node.js、MySQL与Redis环境；资源非免费，附带付费部署与讲解服务。",
+   "highlights": [
+    "覆盖物料采购审批、出入库管理、安全巡检闭环、气象预警与安全评分等功能模块",
+    "支持三类角色（系统管理员、采购监管、普通员工）与多站点数据隔离",
+    "后端使用SpringBoot+MybatisPlus+MySQL+Redis，前端使用Vue，员工端提供微信小程序/H5/APP入口"
+   ],
+   "use_cases": [
+    "房建、市政、路桥等施工项目的物料与安全管理",
+    "施工企业安全巡检与隐患排查治理",
+    "库存与采购流程的多站点监管"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明后端使用MySQL作为数据库存储业务数据，系统本身是使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "资源非免费，需联系作者付费获取部署与讲解服务",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向建筑工程领域的工地物料与安全综合管理系统，采用前后端分离架构，覆盖系统管理员、采购监管、普通员工三类角色。系统围绕\"物料采购审批、出入库管理、安全巡检、安全教育、气象预警、安全评分、用工评价、进度计划\"等核心业务设计，支持员工在线提交物料申请、管理员审批后完成出入库，安全员执行巡检任务并闭环整改，同时集成气象预警与安全评分机制，适用于房建、市政、路桥等各类施工项目的物料与安全管理场景。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/construction_cos",
+  "sha": "8fdb5c7b23d9",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "555bd868353f": {
+  "identity": {
+   "one_liner": "250M参数边缘小语言模型，用SQLite FTS5 NVMe总线做事实检索",
+   "review": "一个约250M参数的指令小模型（SLM），README 称其通过半参数化解耦将事实存储放在本地 SQLite FTS5（BM25）NVMe 存储上，并用特殊 token 把算术路由到确定性 AST 求值器。提供 Colab 基准复现、本地终端引擎、知识摄入 CLI 与 Python API。适合在边缘设备上做事实问答与算术验证的研究者；基准数据由作者自行测量。",
+   "highlights": [
+    "将非参数事实存储置于本地 SQLite FTS5 引擎，运行于 NVMe 闪存，含 24,628 篇预置百科条目",
+    "通过 <|calc|> token 将算术表达式路由到沙箱化 AST SafeMath 确定性求值器",
+    "提供知识摄入 CLI/Python API 及 Hugging Face 数据集转换脚本，无需重训练即可扩充知识库"
+   ],
+   "use_cases": [
+    "边缘硬件上的事实问答与检索增强生成",
+    "需要确定性算术结果的本地推理场景",
+    "将维基百科等数据集转换为本地检索知识库"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* ⚡ **Semi-Parametric Decoupling with Native NVMe Bus:** Decouples compact parametric weights from non-parametric factual storage using an ultra-low latency (**0.002 ms** cached local lookup) SQLite FTS5 engine operating directly on high-speed NVMe flash stora ／ AviGPT-250M-Instruct introduces **Semi-Parametric Decoupling** to edge AI: decoupling **Cognitive Reasoning** (handled by 250M compact transformer weights) from **Factual Memory** (stored in a native, zero-latency NVMe SSD memory bus powered by SQLite FTS5 BM2 ／ |**AviGPT-250M (Bus ON)**|250M|Active (SQLite FTS5 + SafeMath)|**100.0%**|**100.0%**|**100.0%**|",
+     "lines": [
+      23,
+      30,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明模型的事实记忆存储由 SQLite FTS5 引擎承载，SQLite 是其内部存储组件而非被服务的目标数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "* ⚡ **Semi-Parametric Decoupling with Native NVMe Bus:** Decouples compact parametric weights from non-parametric factual storage using an ultra-low latency (**0.002 ms** cached local lookup) SQLite FTS5 engine operating directly on high-speed NVMe flash storage. ／ AviGPT-250M-Instruct replaces heavy vector databases (FAISS, Chroma, Pinecone) with an optimized, sub-millisecond local SQLite FTS5 engine operating directly on high-speed NVMe storage:",
+   "evidence_lines": [
+    23,
+    73
+   ]
+  },
+  "fn": "Avinashricky211/AviGPT-250M",
+  "sha": "555bd868353f",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

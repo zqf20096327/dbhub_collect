@@ -9411,5 +9411,148 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "04638c72c15d": {
+  "identity": {
+   "one_liner": "AI 驱动的授权安全测试工作区，NestJS + Ink TUI + Web/Desktop 架构",
+   "review": "一个面向授权安全测试与安全自动化的 TypeScript 工作区，含 NestJS 后端、Ink 终端 UI 与 Tauri 桌面应用，供需要在授权范围内执行渗透测试、侦察与报告流程的安全研究人员使用。内置安全工具模块、MCP 双向集成、HITL 审批与审计留痕；使用 SQLite 作本地数据存储，要求 Node.js >= 24。",
+   "highlights": [
+    "提供 MCP 双向集成：可将工具暴露为 stdio MCP server，也可调用外部 MCP server",
+    "内置安全工具模块覆盖 web、网络、OSINT、防御与报告工作流，并提供基准测试套件",
+    "每次对话/LLM/工具调用持久化为审计记录，敏感工具经 HITL 审批"
+   ],
+   "use_cases": [
+    "授权渗透测试与侦察工作流自动化",
+    "通过 MCP 将安全工具集成到其他 AI 代理",
+    "代理性能基准评测（Pass@1、token、沙箱合规）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- End-to-end TypeScript architecture (`NestJS + Ink TUI + Web / Desktop + SQLite`).",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其工作区本地存储（L33 架构说明），项目本体是安全测试应用而非数据库生态组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Secbot is an AI-powered TypeScript security automation workspace with a NestJS backend, an Ink terminal UI, and a Web / Desktop app. ／ - End-to-end TypeScript architecture (`NestJS + Ink TUI + Web / Desktop + SQLite`). ／ - Built-in security tool modules for web, network, OSINT, defense, and reporting workflows.",
+   "evidence_lines": [
+    7,
+    33,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "iammm0/secbot",
+  "sha": "04638c72c15d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "70e2f9310627": {
+  "identity": {
+   "one_liner": "本地运行的拉美求职聚合应用，用 SQLite 存储数据",
+   "review": "一个本地求职工具，抓取拉美招聘平台的职位，自动加入招聘“黑名单”公司，并根据用户技能对职位进行颜色标记。面向拉美个人求职者。使用 Bun/SvelteKit 和 Drizzle ORM，数据存储在本地 SQLite (bun:sqlite 或 better-sqlite3) 中，无需登录；目前仅集成了 GetOnBoard，部分平台受限于抓取限制。",
+   "highlights": [
+    "聚合多个拉美求职平台的职位搜索结果，并支持增量更新",
+    "根据已发布职位的频率自动维护公司黑名单",
+    "根据用户的技能资料对职位列表进行颜色标记",
+    "本地运行，无需账户，数据存储在本地 SQLite 中"
+   ],
+   "use_cases": [
+    "跨拉美门户网站的日常个人求职搜索",
+    "过滤掉重复发布同一职位的公司",
+    "根据自身技能栈评估职位匹配度"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.| ／ |`bun run dev:node`|Igual, con Node (usa `better-sqlite3`).|",
+     "lines": [
+      40,
+      88,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该应用通过 Web 抓取获取数据，并使用 SQLite 存储自身数据，为最终用户而非数据库生态系统提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.| ／ Busca vacantes en los portales de empleo de Latinoamérica, saca de tu lista a las empresas",
+   "evidence_lines": [
+    40,
+    88,
+    5
+   ]
+  },
+  "fn": "SebastianAsprino/jobfilter",
+  "sha": "70e2f9310627",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

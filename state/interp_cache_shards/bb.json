@@ -9099,5 +9099,147 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6adaddcf96a2": {
+  "identity": {
+   "one_liner": "Rust 原生 macOS 多代理开发驾驶舱，用 worktree 隔离并行运行 CLI 编码代理",
+   "review": "一个基于 GPUI + SQLite 构建的桌面应用，用于打开仓库、创建隔离的 git worktree、并行运行 Claude Code/Codex 等命令行编码代理，并提供 Git 审查、终端面板、自动化调度与手机远程配对等功能；面向需要同时管理多个编码代理会话的开发者。SQLite 仅作为其内部数据存储组件。",
+   "highlights": [
+    "提供基于 git worktree 的任务隔离与多代理并行会话管理",
+    "提供 CLI（oximux）与 headless serve 模式，可从 shell/CI 驱动会话、代理与调度",
+    "包含签名验证的自动更新、MCP 设备共享（oximux mcp）及 iOS/Android 模拟器控制"
+   ],
+   "use_cases": [
+    "并行运行多个 CLI 编码代理处理不同任务分支",
+    "通过 cron 式自动化无人值守触发代理运行",
+    "通过 P2P 链路用手机查看/控制桌面上的代理会话与终端"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stack**: Rust 1.95 (edition 2024) + GPUI + `longbridge/gpui-kit` + SQLite + Tokio",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是应用自身技术栈中的内部存储组件，该项目是为代理编排服务的桌面应用而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，单一许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust-native, multi-agent development cockpit for macOS and Windows. Open a repo → spawn isolated worktrees → run CLI coding agents (Claude Code, Codex, Pi, omp) in parallel → review every change through a GitLens-grade Git UX. ／ - **Stack**: Rust 1.95 (edition 2024) + GPUI + `longbridge/gpui-kit` + SQLite + Tokio ／ - **Workspaces & worktrees** — open a repo, spin up isolated `oximux/<slug>` worktrees per task; create, switch, archive, stash.",
+   "evidence_lines": [
+    7,
+    9,
+    133
+   ]
+  },
+  "fn": "nhtera/OxiMux",
+  "sha": "6adaddcf96a2",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fc1bb4123702": {
+  "identity": {
+   "one_liner": "本地优先的 AI 会话与浏览历史持久化库，存入 SQLite 并经 MCP 检索",
+   "review": "InkVault 将 Claude Code、Codex 等本地会话记录和用户选择的浏览器历史同步复制到一个本地 SQLite 文件（vault.db），提供 Memory Atlas 仪表盘进行搜索，并内置 MCP 服务器（search_memories、timeline 等工具）供 AI 客户端检索历史上下文；面向希望保留 AI 对话与浏览记录的个人用户，仅本机运行，依赖 uv 安装。",
+   "highlights": [
+    "将受支持的 AI 会话与浏览器历史复制到一个本地 SQLite 文件 vault.db",
+    "内置 MCP 服务器，提供 search_memories、timeline、get_memory、memory_stats 工具",
+    "提供本地 Memory Atlas 仪表盘与每日摘要（经 Ollama 本地模型生成）"
+   ],
+   "use_cases": [
+    "在原工具清除历史后检索过去的 AI 对话与浏览记录",
+    "让 Claude Code/Codex 等 MCP 客户端查询用户过往工作上下文",
+    "以时间线和图表形式回顾一年的工作活动"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "InkVault preserves supported AI sessions and the browser history you choose in a local SQLite vault, ／ Pieces records in one local SQLite file, `vault.db`. Keep it independently of the tools that produced it.",
+     "lines": [
+      8,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将数据存储在本地 SQLite 文件 vault.db 中，SQLite 是其数据存储本体。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可，另有需安装的可选组件（screen watcher），未见双许可说明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "InkVault preserves supported AI sessions and the browser history you choose in a local SQLite vault, ／  Pieces records in one local SQLite file, `vault.db`. Keep it independently of the tools that produced it. ／ - **Search for your AI tools**: an MCP server with `search_memories` (keyword + meaning, merged), `timeline`",
+   "evidence_lines": [
+    8,
+    60,
+    61
+   ]
+  },
+  "fn": "sandoreclegane/inkvault",
+  "sha": "fc1bb4123702",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9570,5 +9570,79 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "283835ba08eb": {
+  "identity": {
+   "one_liner": "AI Agent 语义数据网关，MCP 访问与审计",
+   "review": "ContextGate 是面向 AI Agent 的语义数据网关，管理员接入数据源、验证查询并发布为受控工具，用户经 MCP 端点以自己的参数执行查询。提供按 Agent 的授权、只读保护、超时与结果限制及审计日志，元数据需 PostgreSQL 存储，部署于 Linux 或 Docker。",
+   "highlights": [
+    "提供经验证的查询发布机制，带参数契约与版本控制",
+    "支持按 Agent 的访问授权、过期、暂停与撤销，并输出审计/OTLP 日志",
+    "对 SQL、文档、键值、搜索、图、时序及 HTTP API 数据源实施只读与结果限制"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供受控、可审计的数据库查询通道",
+    "企业内共享业务语义并统一管理 Agent 数据访问",
+    "只读场景下限制 Agent 查询范围与结果规模"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ContextGate 0.8.1 provides Linux **arm64 / amd64** packages with the UI, private C++ runtime libraries, documentation, examples and checksums. They require glibc ≥ 2.36 and a PostgreSQL metadata database. macOS users can run the service through Docker / OrbSta",
+     "lines": [
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI Agent 访问数据库提供受控网关与审计组件，服务数据库生态而非直接面向终端业务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ContextGate turns existing business queries into verified, authorized and traceable tools for AI Agents. Administrators connect sources, explain queries, verify them and publish. Users connect their existing Agent client, find an authorized query and run it with their own inputs. ／ |Bounded native reads|Read-only protection, timeouts, cancellation and result limits across SQL, document, key-value, search, graph, time-series and HTTP API sources| ／ ContextGate 0.8.1 provides Linux **arm64 / amd64** packages with the UI, private C++ runtime libraries, documentation, examples and checksums. They require glibc ≥ 2.36 and a PostgreSQL metadata database. macOS users can run the service through Docker / OrbStack.",
+   "evidence_lines": [
+    15,
+    40,
+    48
+   ]
+  },
+  "fn": "SamuelSupe/contextGate",
+  "sha": "283835ba08eb",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

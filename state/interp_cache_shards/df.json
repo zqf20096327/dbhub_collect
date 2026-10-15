@@ -9819,5 +9819,143 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6de56164bef0": {
+  "identity": {
+   "one_liner": "仙境传说 Online 3 PC 客户端的开源 C# 服务端模拟器",
+   "review": "该项目用 C#/.NET 10 实现 RO3 PC 客户端对应的服务端协议，提供登录、地图、战斗、公会、副本等多人游戏系统，SQLite 用于存储数据。面向想搭建本地或多人服务器的玩家和参与协议逆向、系统实现的开发者；需自备原版客户端并导出数据，部分服务端行为为推断重建。",
+   "highlights": [
+    "基于客户端文档化协议实现登录、地图、战斗、公会、副本等游戏系统",
+    "使用 SQLite 存储数据，首次启动自动创建数据库 data/ro3emu.db",
+    "提供 Windows 一键脚本与 Linux systemd 部署方式，含数据导出工具与客户端补丁工具"
+   ],
+   "use_cases": [
+    "在自己电脑上运行本地 RO3 服务器进行游戏",
+    "在 Linux 主机上为朋友搭建多人服务器",
+    "参与协议逆向研究、游戏系统实现与测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "with data exported from your own client, or help implement and test game systems. The server uses .NET 10 and SQLite; ／ SQLite ／ |`src/Ro3Emu.Server`|the server: HTTP, micro gate, game gate, game loop, services, SQLite stores|",
+     "lines": [
+      4,
+      14,
+      277
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明服务器使用 SQLite 存储数据（data/ro3emu.db），该项目是使用数据库的游戏应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "with data exported from your own client, or help implement and test game systems. The server uses .NET 10 and SQLite; ／ The first start creates the gate key pair (`data/gate_rsa_*.pem`) and the database (`data/ro3emu.db`). Defaults:",
+   "evidence_lines": [
+    4,
+    175
+   ]
+  },
+  "fn": "aethai/ro3emu-server",
+  "sha": "6de56164bef0",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dccc90c75504": {
+  "identity": {
+   "one_liner": "读取 MapleStory 经典世界客户端 SQLite 快照的本地 RAG Codex Skill",
+   "review": "CW RAG 是一个供 Codex 调用的本地 Skill，把冒险岛经典世界客户端的静态数据（怪物、地图、装备、技能、任务等）解析为 SQLite 快照，用 FTS5 做文本检索并读取结构字段，供玩家以自然语言查询装备对比、练级路线等；CLI 不调用模型 API，也不使用 embeddings，数据不含掉落率等实时信息，需自行构建快照。",
+   "highlights": [
+    "将客户端静态数据构建为本地 SQLite 快照，使用 FTS5 做文本检索、SQLite 查询读取结构字段",
+    "命令行只查询本地快照，不发起网络请求、不上传客户端文件",
+    "包含子 Skill cw-rag-leveling，基于客户端攻击动作帧延迟计算挥刀时间并按每秒经验排序"
+   ],
+   "use_cases": [
+    "离线查询经典世界客户端中的装备、怪物、地图、技能与任务数据",
+    "借助 Codex 用自然语言比较装备属性或规划练级路线"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "CW RAG（Classic World RAG）是一个供 Codex 使用的本地 Skill，用来检索 MapleStory Classic World（冒险岛经典世界）客户端静态数据。它在用户指定目录创建 SQLite 快照。Python 和 SQLite 负责索引与查询，SQLite FTS5 检索文本，SQLite 查询读取结构字段和静态关系。CW RAG 不包含托管助手或模型 API，不使用 embeddings 或向量数据库。客户端文件只读，查询只读取已保存的快照。 ／ 它是一个在本机检索 MapleStory Classic World 静态客户端数据的 Codex Skill，读取用户选定目录中的 SQLite 快照。",
+     "lines": [
+      9,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该 Skill 自身存储快照数据的内置组件，项目是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "CW RAG（Classic World RAG）是一个供 Codex 使用的本地 Skill，用来检索 MapleStory Classic World（冒险岛经典世界）客户端静态数据。它在用户指定目录创建 SQLite 快照。Python 和 SQLite 负责索引与查询，SQLite FTS5 检索文本，SQLite 查询读取结构字段和静态关系。CW RAG 不包含托管助手或模型 API，不使用 embeddings 或向量数据库。客户端文件只读，查询只读取已保存的快照。 ／ 不包含。CW RAG 用 Python 和 SQLite 检索本地快照。FTS5 用于文本检索，SQLite 查询用于读取结构字段和静态关系。CLI 不调用模型 API，也不依赖 embeddings 或向量数据库。由你使用的 AI 根据检索结果组织答案。",
+   "evidence_lines": [
+    9,
+    113
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "PigeonAI-Yang/cw-rag",
+  "sha": "dccc90c75504",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

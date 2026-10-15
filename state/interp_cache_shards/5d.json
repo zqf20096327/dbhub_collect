@@ -9095,5 +9095,84 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68c6b44c4f26": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的认知记忆数据库，支持记忆衰减、合并与矛盾检测",
+   "review": "YantrikDB 是一个为 AI Agent 提供持久记忆的数据库，实现时间衰减遗忘、相似记忆合并和矛盾检测，并提供 15 个 MCP 工具。支持嵌入库（Python/Rust）、MCP server 和 HTTP 集群三种形态，本地默认用 SQLite 文件存储，集群版基于 openraft 提供 HA。适合需要跨会话记忆管理的 Agent 开发者。",
+   "highlights": [
+    "提供 15 个 MCP 工具，含 remember/recall/forget/think 等记忆操作与主动触发",
+    "支持嵌入式库（pip/cargo）、MCP stdio/SSE、HTTP 二进制协议及 2-voter+1-witness openraft HA 集群",
+    "实现时间衰减（可配半衰期）、实体关系图、会话上下文和多信号评分"
+   ],
+   "use_cases": [
+    "为 Claude Code/Cursor/Windsurf 等 MCP 客户端添加持久记忆",
+    "通过 HTTP API 部署多租户记忆集群",
+    "在 Python/Rust 应用中嵌入记忆引擎"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That's it. No env vars. Uses a local SQLite memory file at `~/.yantrikdb/memory.db`. First call auto-initializes the schema. Restart your client — the `yantrikdb` MCP server will show up with 15 memory tools (see below).",
+     "lines": [
+      118
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "db.record(\"decided to use PostgreSQL\") # auto-linked to session",
+     "lines": [
+      329
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本体是一个为 AI Agent 生态提供记忆存储服务的数据库引擎/服务，而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A memory database that forgets, consolidates, and detects contradictions.** ／ YantrikDB is different. It's a **cognitive memory engine** — embed it, run it as a server, or connect via MCP. It thinks about what it stores. ／ Full cognitive architecture lives in the standalone engine repo. This server repo focuses on deployment, HTTP API, and cluster operations. ／ **v0.20.0** — in production use. The embeddable engine has been used in production by the YantrikOS ecosystem since early 2026; the network server runs live on a multi-node Proxmox cluster with multiple tenants.",
+   "evidence_lines": [
+    11,
+    15,
+    99,
+    197
+   ]
+  },
+  "fn": "yantrikos/yantrikdb-server",
+  "sha": "68c6b44c4f26",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

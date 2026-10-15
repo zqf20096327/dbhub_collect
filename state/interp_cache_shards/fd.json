@@ -10857,5 +10857,75 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8cc68cf8f3ce": {
+  "identity": {
+   "one_liner": "自托管的 Splitwise 替代品，内置 AI 收据扫描与 PostgreSQL 的费用分摊应用",
+   "review": "ShareTab 是一个用于记录和分摊共同开支的 Web 应用，面向合租室友、朋友和旅行群体，支持 AI 提取收据条目、多种分摊模式、多币种、Venmo 支付链接与 OIDC 登录。应用以单个 Docker 容器部署，内部捆绑 PostgreSQL 存储，通过 Prisma 管理数据库 schema。",
+   "highlights": [
+    "以单个 Docker 容器部署，内部捆绑 PostgreSQL，无需外部数据库",
+    "支持 AI 收据扫描，可插拔接入 OpenAI、Claude、Ollama 等多种 AI 提供方",
+    "支持多币种、OIDC 单点登录、PWA、9 种界面语言"
+   ],
+   "use_cases": [
+    "合租或旅行群体的共同开支记录与结算",
+    "拍照上传收据由 AI 提取条目并分配给成员",
+    "在自有服务器或 Unraid 上自托管部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo: ／ docker exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql ／ Files can change between the dump and the copy while people use ShareTab. For a backup where everything matches, stop the container and copy all of its data while it is stopped: on Unraid the whole `/mnt/user/appdata/sharetab/` folder (it includes the database",
+     "lines": [
+      102,
+      155,
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以内部捆绑的 PostgreSQL 作为自身数据存储，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo: ／ ShareTab is a free, self-hosted alternative to Splitwise for tracking shared expenses with roommates, friends, and travel groups. Snap a photo of a receipt, let AI extract the line items, and assign them to group members. Taxes and tips split proportionally. Deploy on your own server with Docker Compose. ／ - **Self-hosted** -- Docker Compose deployment, designed for Unraid",
+   "evidence_lines": [
+    102,
+    17,
+    98
+   ]
+  },
+  "fn": "sw-carlos-cristobal/sharetab",
+  "sha": "8cc68cf8f3ce",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

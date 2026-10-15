@@ -8586,5 +8586,67 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "40aa7002ccef": {
+  "identity": {
+   "one_liner": "用于在阿里云 Stack 上编排管理 PolarDB-X 实例的 Terraform 模块",
+   "review": "这是一个 Terraform 复合模块，供运维人员用声明式配置创建和管理 PolarDB-X 实例，包含实例创建、数据库与账户管理、一次性手动备份、三权分立超级账户、日志引擎 CDC、读写分离和只读实例，由五个可独立启用的子模块组成；周期备份策略需另用 polardbx_backup_policy 子模块。",
+   "highlights": [
+    "提供实例、数据库、账户、只读实例等 PolarDB-X 资源的 Terraform 编排能力",
+    "支持读写分离配置与 HTAP 场景实例接入",
+    "由五个解耦子模块组成，可按需独立启用"
+   ],
+   "use_cases": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "# Alibaba Cloud PolarDBX Terraform Module ／ This module is designed to create and manage **PolarDBX instances**, **one-time manual backups**, **super accounts (three-role rights separation)**, **Log Engine (CDC)**, **read-write splitting configurations**, and **read-only instances** on Alibaba Cloud Sta ／ - Create a new PolarDBX instance (or reuse an existing one)",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该模块为 PolarDB-X 数据库提供基础设施编排服务，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PolarDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This module is designed to create and manage **PolarDBX instances**, **one-time manual backups**, **super accounts (three-role rights separation)**, **Log Engine (CDC)**, **read-write splitting configurations**, and **read-only instances** on Alibaba Cloud Stack, providing integrated infrastructure orchestration capabilities for PolarDBX. ／ > - This module is a **composite wrapper module**, internally invoking five independent submodules: `polardbx_instance`, `polardbx_super_account`, `polardbx_log_engine`, `polardbx_read_write_splitting`, and `polardbx_readonly_instance`. Each submodule is fully decoupled and can be enabled independently.",
+   "evidence_lines": [
+    3,
+    19
+   ]
+  },
+  "fn": "apsarastack-automation/terraform-alibabacloudstack-polardbx",
+  "sha": "40aa7002ccef",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

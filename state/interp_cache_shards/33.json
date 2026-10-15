@@ -8330,5 +8330,195 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8ee16672a38d": {
+  "identity": {
+   "one_liner": "自托管轻量应用监控工具，Go 单二进制采集指标存入 SQLite",
+   "review": "StatLite 是一个自托管的应用监控工具，用 Go 编写，单个二进制轮询多个应用的指标端点（Spring Boot Actuator、Quarkus/Micronaut Micrometer 或自定义 JSON 端点），将历史数据存入本地 SQLite 并提供内置图表，面向 VPS 和小型服务器场景；无内置认证，需自行控制访问。",
+   "highlights": [
+    "支持 Spring Boot、Quarkus、Micronaut 集成及任意语言可实现的自定义 JSON 指标端点",
+    "采集流量、延迟、CPU、内存、应用健康与主机指标，数据存储于本地 SQLite",
+    "提供 Homebrew、安装脚本与 Docker 镜像（linux/amd64 与 linux/arm64）"
+   ],
+   "use_cases": [
+    "VPS 或资源受限小服务器上的应用与主机指标监控",
+    "不部署 Prometheus/Grafana 栈的自托管监控替代方案",
+    "Spring Boot/Quarkus/Micronaut 应用的开箱即用指标采集"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "metrics locally in SQLite, and provides built-in historical ／ `storage.sqlite_path`, and `polling.interval` are required:",
+     "lines": [
+      11,
+      122
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是采集与展示应用指标的监控组件，SQLite 仅作为其本地历史存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "on VPSs and small servers. One Go binary polls multiple applications, stores ／ metrics locally in SQLite, and provides built-in historical ／ StatLite supports Spring Boot, Quarkus, and Micronaut integrations, and other",
+   "evidence_lines": [
+    10,
+    11,
+    19
+   ]
+  },
+  "fn": "PVRLabs/statlite",
+  "sha": "8ee16672a38d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3c7b2a3943e4": {
+  "identity": {
+   "one_liner": "日志文件分析工具，通过模式配置提取字段并生成交互式仪表盘",
+   "review": "一个用 Go 编写的日志分析工具，用户在 JSON 配置中定义日志行模式与待提取的 token，程序解析非结构化日志文件并生成仪表盘，支持类型推断、依赖 token、单位转换、stdin 读取、follow 实时跟踪及 JSON/NDJSON/CSV 结构化导出。适用于需要快速将日志可视化的开发者与运维人员；需为每种日志格式编写模式配置。",
+   "highlights": [
+    "支持基于 token 模式的日志字段提取，自动推断数据类型并解析时间戳",
+    "提供 --follow 实时跟踪模式与 --format json/ndjson/csv 结构化导出",
+    "包含 suggest 子命令，可对日志分组并自动生成初始模式配置"
+   ],
+   "use_cases": [
+    "将 Web 服务器或应用日志文件转化为可视化仪表盘",
+    "持续跟踪增长的日志文件并实时流式提取记录",
+    "将日志解析结果导出为 JSON/CSV 供其他工具使用"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅描述通用日志文件解析与仪表盘功能，未提及为任何数据库或其生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Turn unstructured log files into a dashboard in seconds. ／ In `config/config.json`, define some simple patterns featured in your log files using a set of tokens to control which values should be extracted. These tokens can have any identifying name, and will be grouped across all patterns and targeted for extraction from the log file. ／ Instead of launching the dashboard, you can export the extracted data as structured records for use in other tools. Use `-f` or `--format` to choose `json`, `ndjson` or `csv`, and optionally `-o` or `--output` to write to a file (the format is inferred from the file extension when `--format` is omitted).",
+   "evidence_lines": [
+    3,
+    19,
+    194
+   ]
+  },
+  "fn": "tom-draper/log-analyzer",
+  "sha": "3c7b2a3943e4",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b02b477fd09d": {
+  "identity": {
+   "one_liner": "基于 SpringBoot+Vue 的社区食堂点餐管理系统",
+   "review": "一套面向城市社区食堂场景的前后端分离点餐与运营管理系统，覆盖管理员、商家、用户三类角色，提供餐品管理、在线下单、支付宝支付、会员积分与论坛功能；后端使用 SpringBoot、MybatisPlus、MySQL、Redis，用户端通过微信小程序或 H5 访问。面向社区助老食堂、便民食堂等运营方及毕业设计场景。",
+   "highlights": [
+    "支持多食堂入驻，商家独立管理餐品与订单，平台统一审核监管",
+    "提供会员积分体系，含积分获取规则配置与积分兑换商品管理",
+    "集成支付宝在线支付，订单状态实时更新"
+   ],
+   "use_cases": [
+    "社区助老食堂与街道便民食堂运营管理",
+    "多社区食堂连锁平台的多商家入驻管理",
+    "线上预订结合线下自提/配送的餐饮场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 MySQL 作为数据库存储业务数据，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向城市社区食堂场景的多食堂管理平台，采用前后端分离架构，覆盖系统管理员、商家（食堂运营方）、用户（社区居民）三类角色。系统围绕\"多食堂入驻管理、餐品分类展示、在线下单支付、会员积分兑换、社区论坛交流、订单评价反馈\"等核心业务设计，支持用户浏览食堂餐品、加入购物车、支付宝在线支付、参与论坛互动，商家管理本店餐品与订单、维护会员体系，系统管理员统筹平台商家审核、餐品分类、订单监管与内容审核，适用于社区助老食堂、街道便民食堂、多社区食堂连锁运营等场景。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/urban_community_cafeteria_cos",
+  "sha": "b02b477fd09d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

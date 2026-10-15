@@ -9261,5 +9261,165 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d9799c290e62": {
+  "identity": {
+   "one_liner": "本地优先的 AI Agent 记忆引擎，Rust 单二进制 + MCP 服务",
+   "review": "Uteke 是一个为 AI Agent 提供持久记忆的本地存储与检索引擎，以 Rust 单二进制运行，内嵌 SQLite（FTS5）并使用本地 ONNX 嵌入，通过 MCP server（uteke-mcp）供 Claude Code、Cursor 等 MCP 兼容 Agent 读写记忆，支持向量+全文融合检索、Rooms 多 Agent 共享和时间点回溯查询；数据不出本机，查询不消耗 LLM token。适合构建离线、隐私敏感场景的 Agent 开发者与终端重度用户。",
+   "highlights": [
+    "提供 MCP server（JSON-RPC/HTTP），供 MCP 兼容 Agent 接入",
+    "实现向量 + FTS5 全文检索的 RRF 融合搜索与本地 ONNX 嵌入",
+    "支持 Rooms 多 Agent 共享记忆、时间点（time-travel）查询与关系图链接"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP Agent 添加跨会话持久记忆",
+    "医疗、金融、法律等要求数据本地的场景",
+    "团队共享知识库（会议纪要、项目决策的多人可检索存储）"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Many memory layers (Python-based or TypeScript-based) require cloud API keys (OpenAI/LLM) and external infrastructure (Docker, Postgres, Qdrant). Your data gets sent to a cloud LLM provider. Uteke is a single binary with zero API keys. All embeddings run local",
+     "lines": [
+      264
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Search**|**Fusion** (weighted RRF of vector + hybrid; hybrid = HNSW + FTS5 RRF)|sqlite-vec + FTS5|Vector + Graph|Vector + Graph|Vector|Hybrid (semantic + keyword + graph)|Vector + rerank|**FTS5 only**| ／ 2. **FTS5** (SQLite): finds by exact terms (\"deploy\" matches \"deploy\")",
+     "lines": [
+      122,
+      205
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目内嵌 SQLite（FTS5）作为自身存储引擎，面向 AI Agent 用户提供记忆服务，而非为数据库生态服务的工具。",
+   "ai_kind": [
+    "mcp"
+   ],
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Docker**|`docker run -d -p 127.0.0.1:8767:8767 -v uteke-data:/data ghcr.io/codecoradev/uteke:latest`| ／ |**Search**|**Fusion** (weighted RRF of vector + hybrid; hybrid = HNSW + FTS5 RRF)|sqlite-vec + FTS5|Vector + Graph|Vector + Graph|Vector|Hybrid (semantic + keyword + graph)|Vector + rerank|**FTS5 only**| ／ |🧠 **Hybrid + Fusion Search**|Vector similarity + FTS5 full-text search, merged by Reciprocal Rank Fusion (RRF). Since v0.16.0, `fusion` (a weighted RRF of the vector and hybrid rankings) is the default recall strategy. Finds by meaning AND exact keywords.|",
+   "evidence_lines": [
+    45,
+    122,
+    148
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "codecoradev/uteke",
+  "sha": "d9799c290e62",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "29aab58c30c8": {
+  "identity": {
+   "one_liner": "QQ 群消息实时摘要与待办推送应用，基于 NapCat/OneBot v11 接收 + LLM 提取",
+   "review": "通过 NapCat/OneBot v11 只读接收指定 QQ 群消息，本地用规则加可选百炼 LLM 过滤闲聊、提取通知与待办，生成摘要后经 WxPusher 等多通道推送微信，并内置移动端待办台 PWA、决策日志、置信度解释与评测基线。数据落 SQLite，仅支持 Windows、Python 3.12+，需自备 NapCat 与推送通道配置。",
+   "highlights": [
+    "通过 NapCat/OneBot v11 接收群消息，支持重启后 24 小时历史补采，白名单群消息在本地完成筛选与摘要",
+    "支持 WxPusher、Server酱、Telegram、Discord、企业微信、邮件等多推送通道并带失败回退",
+    "使用 SQLite + JSONL 存储消息去重、摘要归档、决策日志与模型用量（llm_calls 表）",
+    "提供 MCP 只读接口、iCalendar 导出、simulate 回放与 benchmark 评测集"
+   ],
+   "use_cases": [
+    "班级群/学院群通知与截止时间的自动提取和微信推送",
+    "群消息降噪后的移动端待办管理与周复盘",
+    "使用 simulate/benchmark 在不联网情况下验证过滤与摘要链路"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`qq_live_digest/store.py`|SQLite + JSONL：消息去重、摘要归档、投递去重、模型用量与重启恢复| ／ 每次调用模型都会往 SQLite 的 `llm_calls` 表落**一行**：provider、模型名、输入/输出 token、",
+     "lines": [
+      40,
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 SQLite 存储消息去重、摘要归档与模型用量数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`qq_live_digest/store.py`|SQLite + JSONL：消息去重、摘要归档、投递去重、模型用量与重启恢复| ／ 每次调用模型都会往 SQLite 的 `llm_calls` 表落**一行**：provider、模型名、输入/输出 token、",
+   "evidence_lines": [
+    40,
+    102
+   ]
+  },
+  "fn": "wc985732-lang/qq-live-digest",
+  "sha": "29aab58c30c8",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9656,5 +9656,146 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "007e20c0b392": {
+  "identity": {
+   "one_liner": "SQL 数据分析教学项目，含脚本、数据集与路线图",
+   "review": "这是一个数据分析课程的配套素材仓库，包含销售数据库的探索性分析脚本（01–06）和进阶分析脚本（07–13），覆盖趋势、累计、细分、占比等技术与两份报表。面向学习 SQL 分析的学员，需自行安装 SQL Server 2022+ 并通过还原 .bak 备份或运行初始化脚本导入数据，依赖 SSMS/Docker 环境。",
+   "highlights": [
+    "提供 13 个编号 SQL 脚本，覆盖探索性分析与进阶分析两部分",
+    "数据以 .bak 备份和 CSV 两种形式随仓库提供",
+    "附 setup 指南及 Mac 上一键 Docker 启动方式"
+   ],
+   "use_cases": [
+    "学习 SQL 探索性数据分析",
+    "练习趋势、累计、细分、占比等分析查询",
+    "作为视频/Udemy 课程的实践材料"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**New here? Open the setup guide in the `00_setup` folder.** It walks you through installing SQL Server and creating the database, on Windows and Mac, with the fixes for the common errors. ／ - Restore `01_datasets/DataWarehouseAnalytics.bak` in SSMS. It needs SQL Server 2022 or newer.",
+     "lines": [
+      9,
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是使用 SQL Server 存储数据并查询分析的教学项目，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，需署名",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**New here? Open the setup guide in the `00_setup` folder.** It walks you through installing SQL Server and creating the database, on Windows and Mac, with the fixes for the common errors. ／ - Restore `01_datasets/DataWarehouseAnalytics.bak` in SSMS. It needs SQL Server 2022 or newer. ／ - Or run `03_scripts/00_init_database.sql`. It builds the database from the CSV files in `C:\\sql\\sql-data-analytics-project\\01_datasets\\csv-files\\`.",
+   "evidence_lines": [
+    9,
+    20,
+    21
+   ]
+  },
+  "fn": "DataWithBaraa/sql-data-analytics-project",
+  "sha": "007e20c0b392",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "de09cbae0853": {
+  "identity": {
+   "one_liner": "基于单 Go 二进制与 SQLite 的协作看板应用",
+   "review": "一个服务端渲染的多人协作看板应用，将 Go 二进制与 SQLite 文件打包为单个静态程序，通过单一写协程、CQRS 视图渲染和压缩流实现实时协作。面向需要自托管轻量看板的小团队；与 PLANKA 相比不含搜索、附件、REST API 等功能，仅支持卡片归档而非删除。",
+   "highlights": [
+    "单静态 Go 二进制运行，数据存于单个 SQLite 文件，写入经单写协程批量提交",
+    "通过服务端推送的压缩流（zstd/brotli）实现多人实时协作，流可在重启后重连并恢复状态",
+    "提供 kanban backup 命令在服务器运行时生成一致性备份副本"
+   ],
+   "use_cases": [
+    "小团队自托管的协作任务看板",
+    "SQLite 单写者架构与实时流的 Go 应用案例参考"
+   ],
+   "": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It is one static Go binary (14.1 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It runs on lith, the runtime our Go and SQLite apps share: its single writer, its render l ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this  ／ - **Robust streams.** The stream reconnects after a deploy or restart and always starts with the whole board. An action's outcome is written to SQLite by the same command, so it survives a deploy: the page says which outcome it got last, and the new process se",
+     "lines": [
+      7,
+      23,
+      25
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "It is one static Go binary (14.1 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It runs on lith, the runtime our Go and SQLite apps share: its single writer, its render l ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this ",
+     "lines": [
+      7,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 SQLite 存储数据的看板应用本体，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It is one static Go binary (14.1 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It runs on lith, the runtime our Go and SQLite apps share: its single writer, its render loop with shared views, its compressed streams and its request edge. It is a case study by zwei und eins, compared with PLANKA Community (React, Redux, Sails.js, PostgreSQL, WebSockets). ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this card move since the page was drawn\" run inside the command, in microseconds, with no lock held across the network. This follows Anders Murphy's findings on SQLite and contention. The writer prepares each statement once on its connection and keeps it, since the driver would parse every statement again on every call, and it checkpoints the WAL between batches. Reads use their own pool. SQLite runs with `synchronous=FULL`, so it is as durable as PostgreSQL's defaults.",
+   "evidence_lines": [
+    7,
+    23
+   ]
+  },
+  "fn": "zweiundeins/kanban",
+  "sha": "de09cbae0853",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10311,5 +10311,71 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6c4208254b52": {
+  "identity": {
+   "one_liner": "本地优先的 X/Twitter 媒体下载归档工具，内置 Web UI 与任务队列",
+   "review": "open-Xdownload 用于抓取并归档 X/Twitter 的图片、视频和 GIF，支持单帖、用户、列表和关注账号四类任务，提供批量任务、定时计划、增量归档、失败重试与 Cookie 池，数据存于 SQLite 文件，媒体可存本地目录。面向自托管用户，通过 Docker 或二进制运行，服务默认无内置鉴权，仅绑定 localhost。",
+   "highlights": [
+    "支持单帖、用户、列表、关注账号四类归档任务及批量（单批至多 200 个）与定时计划",
+    "提供增量归档、重复媒体跳过、失败重试队列与多组 Cookie 轮换",
+    "内置 Web UI 工作台与媒体库，支持 SMB/WebDAV 场景的本地目录存储，凭据可经环境变量注入且不持久化"
+   ],
+   "use_cases": [
+    "自托管归档 X/Twitter 用户的媒体时间线并按用户筛选浏览",
+    "通过定时计划对列表或关注账号做增量媒体备份",
+    "以 Docker 部署在 NAS 或本地服务器，配合反代与 TLS 提供局域网访问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`-data-dir`|`OPEN_XDOWNLOAD_DATA_DIR`|`data`|SQLite database directory; the database file is `open-xdownload.db`.| ／ |`-data-dir`|`OPEN_XDOWNLOAD_DATA_DIR`|`data`|SQLite 数据库目录，数据库文件为 `open-xdownload.db`。|",
+     "lines": [
+      125,
+      412
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其用 SQLite 存储自身数据（数据库文件 open-xdownload.db），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "open-Xdownload is a local-first X / Twitter media downloader. It comes with a built-in Web UI and background task queue, supports four task types — single posts, users, lists, and followed accounts — and offers batch tasks, scheduled plans, incremental archiving, failure retry, a cookie pool, and local-directory storage. ／ |`-data-dir`|`OPEN_XDOWNLOAD_DATA_DIR`|`data`|SQLite database directory; the database file is `open-xdownload.db`.|",
+   "evidence_lines": [
+    7,
+    125
+   ]
+  },
+  "fn": "chenbin3625/open-Xdownload",
+  "sha": "6c4208254b52",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

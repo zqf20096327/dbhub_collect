@@ -9718,5 +9718,152 @@
   "generated_at": "2026-10-14",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "1178971e92af": {
+  "identity": {
+   "one_liner": "Linux 鼠标选中文本捕获工具，本地 SQLite 存储",
+   "review": "该工具监听 X11/Wayland 的 PRIMARY 选区，用户高亮文本即自动捕获并连同会话名、来源应用写入本地 SQLite，提供 CLI、tkinter GUI 和系统托盘三种前端，支持标签、搜索及 Markdown/CSV/JSON 导出。面向研究人员、写作者等需要留存高亮记录的 Linux 用户；仅支持 Linux，Wayland 下部分功能受限。",
+   "highlights": [
+    "捕获 X11 PRIMARY 选区并记录来源应用与窗口（X11 与 Wayland）",
+    "本地 SQLite 存储，支持会话分组、标签与实时搜索",
+    "导出为 Markdown、CSV 或 JSON，可按捕获次数自动导出"
+   ],
+   "use_cases": [
+    "研究人员与写作者收集高亮文本记录",
+    "需要按会话整理并导出摘录内容",
+    "记录文本来源应用与窗口信息"
+   ],
+   "（占位移除）": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "to a local SQLite database, tagged with a session name and which app the text ／ - **SQLite storage** — every capture is stored locally at `~/.local/share/highlight_scraper/captures.db` ／ |`db_path`|`~/.local/share/highlight_scraper/captures.db`|SQLite database location|",
+     "lines": [
+      4,
+      17,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该工具将捕获数据存入本地 SQLite 数据库，SQLite 仅作存储层使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "to a local SQLite database, tagged with a session name and which app the text ／ - **SQLite storage** — every capture is stored locally at `~/.local/share/highlight_scraper/captures.db`",
+   "evidence_lines": [
+    4,
+    17
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "BleedingCodes/highlight-scraper",
+  "sha": "1178971e92af",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed76f0b637d6": {
+  "identity": {
+   "one_liner": "Windows 本地优先科研工作台，Electron 桌面应用以 SQLite 为唯一权威数据源",
+   "review": "一个运行于 Windows 的个人科研工作台桌面应用，提供任务看板、日历、项目空间、文献检索、RSS、Obsidian 与 Zotero 集成及内置 Agent 运行时。任务、笔记与文献数据全部存于本地 SQLite（better-sqlite3 + Drizzle，39 个版本化 migration），联网检索和 AI 为可选增强；目前仅支持 Windows 10/11 x64，且仓库尚未附 LICENSE 文件。",
+   "highlights": [
+    "所有任务、日历、笔记与文献数据存于本地 SQLite，离线可用，含 39 个版本化 migration",
+    "内置进程内 Pi Agent，通过 MCP 与任务、文献、Obsidian、Zotero 等模块交互，外部写入需用户确认",
+    "所有写命令带 expectedRevision 实现乐观并发，Renderer 进程无 Node 与数据库访问权限"
+   ],
+   "use_cases": [
+    "在 Windows 本地管理科研任务、日历与项目进度",
+    "检索 Crossref、OpenAlex、PubMed、arXiv 等文献源并导入 Zotero",
+    "通过内置 Agent 与定时任务辅助文献整理与 Obsidian 笔记写作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Windows 本地优先的个人科研工作台。Electron + React 19 桌面端，TypeScript 全栈，SQLite 为唯一权威数据源；把任务、日历、项目空间、文献检索、Obsidian、Zotero、Agent 运行时和本机 MCP 连接在同一个本地 Workspace Service 后面。 ／ **不联网也能用**：任务、日历、项目、笔记和已导入文献全部存本地 SQLite；联网检索、Zotero Local API 和 AI 运行时是可选增强。 ／ |数据|SQLite（`better-sqlite3` 13.0.3 + Drizzle 0.45.2），39 个版本化 migration|",
+     "lines": [
+      3,
+      5,
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身任务、日历与文献数据的桌面应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库暂未附 LICENSE 文件（README L184）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Windows 本地优先的个人科研工作台。Electron + React 19 桌面端，TypeScript 全栈，SQLite 为唯一权威数据源；把任务、日历、项目空间、文献检索、Obsidian、Zotero、Agent 运行时和本机 MCP 连接在同一个本地 Workspace Service 后面。 ／ |数据|SQLite（`better-sqlite3` 13.0.3 + Drizzle 0.45.2），39 个版本化 migration|",
+   "evidence_lines": [
+    3,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "Jack-Liu0227/personal-research-workbench",
+  "sha": "ed76f0b637d6",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

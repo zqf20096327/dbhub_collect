@@ -9947,5 +9947,72 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ad5e2ea1d9f7": {
+  "identity": {
+   "one_liner": "AI Agent 对话平台，含可嵌入运行时与完整审计轨迹",
+   "review": "这是一个 AI Agent 对话产品仓库，提供流式对话、工具调用、子 Agent 委派、定时任务和只读的运行轨迹审计视图；后端用 Fastify 和 pg 直写 SQL 持久化，Agent 循环等核心逻辑放在独立的运行时 SDK 仓并通过 runtime.lock 锁定版本。适合需要自托管 Agent 平台并留存执行审计记录的团队部署使用。",
+   "highlights": [
+    "支持 SSE 流式对话、工具调用与子 Agent 委派，运行记录写入只追加的事实日志并提供只读审计视图",
+    "提供定时任务（cron 触发）能力，带重试策略、投递队列与独立执行历史",
+    "后端基于 Fastify，通过 pg 直接写 SQL 实现持久化；运行时 SDK 通过 runtime.lock 锁定到确切 commit"
+   ],
+   "use_cases": [
+    "自托管带审计轨迹的 Agent 对话平台",
+    "需要人工确认中断（interrupt）流程的 Agent 任务执行",
+    "基于 cron 的定时 Agent 运行与执行历史留存"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **`backend/`** —— Fastify、直接写 SQL 的 `pg`、启动时一次性完成装配的 composition root，以及",
+     "lines": [
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明本仓库是产品侧应用，负责会话、持久化与接口，后端用 pg 直写 SQL 存数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**一个 AI Agent 对话平台。** 支持流式对话、工具调用、子 Agent 委派、定时任务，并为每次运行留下完整审计轨迹。 ／ - **本仓库** —— 产品侧。负责会话、持久化、认证、HTTP/SSE 接口、定时任务和设计系统。 ／ - **`backend/`** —— Fastify、直接写 SQL 的 `pg`、启动时一次性完成装配的 composition root，以及",
+   "evidence_lines": [
+    3,
+    25,
+    65
+   ]
+  },
+  "fn": "MalganisWu/red-bean-nian-gao",
+  "sha": "ad5e2ea1d9f7",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

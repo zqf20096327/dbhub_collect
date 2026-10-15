@@ -9415,5 +9415,136 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f12ee1c23904": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，以 PostgreSQL+pgvector 为持久存储",
+   "review": "Dense-Mem 是一个用 Go 编写的自托管 HTTP MCP 记忆服务器，为 AI 客户端/LLM 提供证据存档、类型化声明、冲突检测、向量召回和生命周期管理。它以 PostgreSQL 加 pgvector 作为唯一持久化权威存储，Redis 仅用于多实例协调。面向需要为 LLM 应用构建带授权与溯源的记忆服务的团队，通过 Docker Compose 部署，启动时需配置完整的嵌入与验证模型。",
+   "highlights": [
+    "实现 MCP 协议（Streamable HTTP）的记忆服务器，提供证据溯源、类型化声明、冲突检测与召回",
+    "以 PostgreSQL 和 pgvector 作为持久化存储，内置迁移执行，多实例部署可用 Redis 协调",
+    "支持 OpenAI 兼容嵌入/验证端点（含 Ollama 本地运行）及 Cloudflare Workers AI BGE-M3 批量配置"
+   ],
+   "use_cases": [
+    "为 LLM 客户端提供带权限与生命周期的私有/团队共享记忆服务",
+    "基于 pgvector 的向量检索与知识图谱关系召回",
+    "自托管部署并配合 Ollama 等本地模型实现全本地运行"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority. ／ the process. PostgreSQL slow-query logging uses",
+     "lines": [
+      20,
+      74,
+      99
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是通过 MCP 为 AI 客户端提供记忆服务的组件，PostgreSQL 是其底层存储依赖而非使用目的",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dense-Mem is a standalone HTTP MCP memory server using Streamable HTTP. It ／ PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority.",
+   "evidence_lines": [
+    17,
+    20,
+    74
+   ]
+  },
+  "fn": "markhuangai/dense-mem",
+  "sha": "f12ee1c23904",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "530ebf7eeb53": {
+  "identity": {
+   "one_liner": "基于 SQLite 的事件存储与文档数据库库（Critter Stack）",
+   "review": "Fisher 是 JasperFx Critter Stack 中的 .NET 库，在 SQLite 文件之上提供与 Marten、Polecat 相同 API 的事件溯源与文档存储，无独立服务器进程，备份即复制文件。适合使用 Marten API 但希望内嵌存储的 .NET 开发者；限制包括单写者、未编译查询及部分 Marten 特性缺失。",
+   "highlights": [
+    "提供事件溯源与文档存储，API 与 Marten/Polecat 相同，支持 LINQ（含连接、分组、分页）、五种投影形态与异步投影守护进程",
+    "通过 704 项 JasperFx.Events.ComplianceTests 跨存储合规测试及自身 2631 项测试",
+    "提供 Fisher.AspNetCore 与 Fisher.EntityFrameworkCore 伴随包及 DI 注册"
+   ],
+   "use_cases": [
+    ".NET 应用中进程内嵌的事件溯源存储",
+    "与 Marten/Polecat 共用 API 的文档持久化",
+    "无需部署数据库服务器的测试与单租户/多租户文档存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 .NET 应用在 SQLite 之上提供事件存储与文档持久化能力，属数据库生态服务组件而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLite-backed Event Store and Document Database inside the Critter Stack. ／ Fisher is Marten and Polecat for SQLite — ／ event sourcing and document storage with the same API, in a database that is a **file inside your own",
+   "evidence_lines": [
+    3,
+    13,
+    14
+   ],
+   "softened": []
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "JasperFx/fisher",
+  "sha": "530ebf7eeb53",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

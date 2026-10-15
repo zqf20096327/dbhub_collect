@@ -9756,5 +9756,135 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d7eb6a253eb9": {
+  "identity": {
+   "one_liner": "项目制终端工作区，持久化可分离终端+文件树+编辑器",
+   "review": "throng 是一个 Windows 桌面终端工作区，为每个项目提供独立的标签页/分栏布局，内嵌 PowerShell、Git Bash、CMD 终端、代码编辑器和实时文件树；终端由后台服务托管，关闭窗口后任务继续运行并可重新连接。面向在命令行中管理多项目和多个 AI 代理的开发者。目前仅支持 Windows 11，macOS/Linux 在计划中，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供按项目保存与恢复的可停靠终端/编辑器/文件树布局",
+    "终端运行于后台服务，关闭窗口后可重新附着并保留回滚缓冲",
+    "编辑器支持 55 种语言的语法高亮及 Markdown 实时预览"
+   ],
+   "use_cases": [
+    "在单窗口中管理多个项目的多组终端会话",
+    "长时间运行构建/服务/AI 代理时不因关闭窗口而中断",
+    "跨多显示器拖离标签页并配合文件树进行项目内编辑"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未描述任何数据库相关功能或依赖，属通用开发者桌面应用，与数据库生态关系证据不足",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "throng is a desktop workspace for people who live in the command line. Give each project its own ／ think and restored exactly as you left it. Terminals run in a background service, so closing the ／ throng runs on **Windows 11** today; macOS (#22) and",
+   "evidence_lines": [
+    12,
+    15,
+    48
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Bidthedog/throng",
+  "sha": "d7eb6a253eb9",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c18c9a16c0c7": {
+  "identity": {
+   "one_liner": "AI 内容生成平台的 PHP 后端引擎，SQLite 自动建库",
+   "review": "NeuraVision 产品的后端引擎，包含成员看板逻辑、认证、后端 API、额度/积分与自助托管的流量切分追踪器，仅导出后端代码。运行于 PHP 7.4+，可用 SQLite 自动建表存储用户、追踪事件等数据，通过环境变量配置各项密钥。适合需要自托管该平台后端或研究其模块结构的开发者。",
+   "highlights": [
+    "提供认证、后端 API、积分与流量切分追踪等子系统",
+    "SQLite 数据库在首次请求时自动创建，无需导入 schema",
+    "通过 .env 环境变量配置，支持 ad 平台令牌、SMTP、hCaptcha、Telegram bot 等"
+   ],
+   "use_cases": [
+    "自托管 NeuraVision 平台的后端服务",
+    "为已有前端/看板提供认证与生成 API",
+    "搭建带 A/B 流量切分追踪的分析后端"
+   ],
+   "cat_note": "应用后端"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Storage:** SQLite, auto-created on first request (`CREATE TABLE IF NOT EXISTS` per module) ／ The SQLite databases under `data/` are created automatically on first request — there's ／ - SQLite databases (`*.sqlite`, `*.db`) — user accounts, tracker events, reviews, etc.",
+     "lines": [
+      22,
+      32,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 SQLite 存储用户账户与追踪事件的产品后端引擎",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "专有许可，保留所有权利",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Backend engine for the NeuraVision product: member dashboard logic, backend API, ／ - **Storage:** SQLite, auto-created on first request (`CREATE TABLE IF NOT EXISTS` per module) ／ Proprietary — all rights reserved. See `LICENSE`.",
+   "evidence_lines": [
+    11,
+    22,
+    52
+   ]
+  },
+  "fn": "NeuroVision-Studio/NeuraVision",
+  "sha": "c18c9a16c0c7",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9350,5 +9350,89 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e55d8cf376d": {
+  "identity": {
+   "one_liner": "开源产品分析平台，基于 Go+PostgreSQL+ClickHouse",
+   "review": "Pug 是一个开源产品分析平台，用于采集事件并分析用户行为，提供漏斗、留存、趋势、细分和用户流分析及可定制仪表盘。后端用 Go 编写，通过 NATS 摄取事件，PostgreSQL 存关系数据，ClickHouse 存分析数据。适合需要自托管产品分析并关注 GDPR 等合规删数据的团队；采用 AGPL v3 许可。",
+   "highlights": [
+    "事件摄取管道基于 NATS，含地理位置、user-agent、bot 检测与归因 enrichment",
+    "提供趋势、漏斗、留存、细分、用户流（Sankey）分析与可组合仪表盘",
+    "支持 GDPR/DPDP 数据主体的事件与档案删除"
+   ],
+   "use_cases": [
+    "自托管的产品/网站行为分析",
+    "用户画像与实时访客监控",
+    "合规要求下的用户数据删除处理"
+   ],
+   "ai_kind": [
+    "mcp",
+    "other"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Built in Go on PostgreSQL, ClickHouse, and NATS. ／ - **PostgreSQL**: relational store (orgs, projects, dashboards, auth) ／ > **Local databases only.** By default `seed` migrates Postgres and ClickHouse",
+     "lines": [
+      11,
+      57,
+      81
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Built in Go on PostgreSQL, ClickHouse, and NATS. ／ ClickHouse-backed profile and activity API. ／ - **ClickHouse**: analytical store for events, insights, and profiles",
+     "lines": [
+      11,
+      22,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 与 ClickHouse 作为自身数据存储的成品分析应用，非为某数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pug is an open-source product analytics platform. Capture events, identify the ／ - **PostgreSQL**: relational store (orgs, projects, dashboards, auth) ／ - **ClickHouse**: analytical store for events, insights, and profiles",
+   "evidence_lines": [
+    7,
+    57,
+    58
+   ]
+  },
+  "fn": "pug-sh/pug",
+  "sha": "0e55d8cf376d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

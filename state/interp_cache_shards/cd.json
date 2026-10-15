@@ -9457,5 +9457,146 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "27f511dcb75a": {
+  "identity": {
+   "one_liner": "自主 Agent 身份基础设施，基于 OAuth 2.1 签发与吊销代理凭证",
+   "review": "ZeroID 是面向自主 AI Agent 的身份管理系统（AAIMS），为每个 Agent 签发可加密验证的短时凭证，支持 RFC 8693 的 on-behalf-of 委托链、逐步范围收窄、实时级联吊销、DPoP 与 CIBA 审批等机制，底层通过 docker compose 部署并使用 PostgreSQL 存储数据。面向需要区分“哪个 Agent 以谁授权执行了什么操作”的安全与合规团队。",
+   "highlights": [
+    "支持 OAuth 2.1 多种授权流程（client_credentials、jwt_bearer、token_exchange、CIBA 等）及 RFC 9449 DPoP 发送方约束令牌",
+    "提供 Agent 身份注册表与 WIMSE/SPIFFE 身份 URI，实现代理间委托链的范围收窄、深度控制与级联吊销",
+    "通过 docker compose 部署，包含 PostgreSQL 作为存储组件"
+   ],
+   "use_cases": [
+    "为多 Agent 工作流签发可审计的委托凭证并追踪授权链",
+    "对 MCP 服务器、服务等非人类主体进行注册、信任分级与实时吊销",
+    "Agent 场景下的合规审计，回答“哪个 Agent 代表谁执行了操作”"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up -d # starts Postgres + ZeroID ／ docker compose up -d postgres",
+     "lines": [
+      171,
+      182
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 部署说明中 ZeroID 通过 docker compose 启动 PostgreSQL 并依赖其存储（如 dpop_jti 主键），属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **DPoP Sender-Constrained Tokens** — RFC 9449. Clients may attach a `DPoP` proof JWT to any `/oauth2/token` call; the issued token then carries `cnf.jkt` and `token_type: \"DPoP\"`. Proof replay is blocked by an atomic `dpop_jti` upsert (DB primary key — no pre-check race). Resource servers retrieve `cnf` via introspection and validate the per-request proof themselves. Full reference: `docs/dpop-and-dcr.md`.",
+   "evidence_lines": [
+    82
+   ]
+  },
+  "fn": "highflame-ai/zeroid",
+  "sha": "27f511dcb75a",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "34d240db7137": {
+  "identity": {
+   "one_liner": "无代理 Linux 服务器监控与 SSH 交互管理工具，单 Go 二进制",
+   "review": "Pantau 是一个用 Go 编写的自托管 Linux 服务器监控系统，通过标准 SSH 以无代理方式采集 CPU、内存、磁盘等指标，并提供期望状态漂移检测、Web 终端、SFTP 文件管理、Docker 控制与网络可观测性。目标主机无需安装任何守护进程；检测历史记录存储在内嵌 SQLite 中，支持快照加密备份到 GitHub。面向需要管理少量服务器的基础设施管理员。",
+   "highlights": [
+    "通过标准 SSH 无代理采集 CPU、内存、磁盘、网络等实时指标",
+    "支持期望状态基线定义与漂移检测，含根因诊断摘录",
+    "内嵌 SQLite 记录检查历史，支持 Argon2id + AES-256-GCM 加密快照与 GitHub 灾备同步"
+   ],
+   "use_cases": [
+    "自托管服务器基础设施监控与漂移巡检",
+    "通过浏览器进行远程 Web 终端操作与 SFTP 文件编辑",
+    "跨主机文件流式传输与服务器硬件生命周期评估"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **1-Click Baseline**: Auto-detects running Docker containers, disks, cron jobs, and database services (`mysqld`, `postgres`, `redis`, `nginx`).",
+     "lines": [
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Structured Inspection Runs & Telemetry**: Records per-host execution history (started timestamp, roundtrip duration in milliseconds, status badge, human-readable summary, and root cause diagnostic excerpts) in SQLite. Displays real-time execution duration  ／ - **Database**: Pure-Go SQLite (`modernc.org/sqlite`) with Write-Ahead Logging (WAL mode)",
+     "lines": [
+      48,
+      222
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目是通用 Linux 服务器监控管理工具，SQLite 仅作其内部存储，PostgreSQL 等仅在服务探测时被提及，非为数据库生态服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（L18）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Pantau** is a self-hosted, lightweight, single-binary infrastructure monitoring and server management system built in Go. Unlike Prometheus/Node-Exporter, Zabbix, or Datadog, Pantau operates **100% agentless** over standard SSH (`port 22`). Target servers require **no background agents, no daemon installation, and no persistent telemetry scrapers**. ／ - **Structured Inspection Runs & Telemetry**: Records per-host execution history (started timestamp, roundtrip duration in milliseconds, status badge, human-readable summary, and root cause diagnostic excerpts) in SQLite. Displays real-time execution duration metrics (`duration_ms`) on host cards and list views, with automatic inline rolling pruning maintaining a strict 100 runs limit per host with zero background schedulers.",
+   "evidence_lines": [
+    27,
+    48
+   ]
+  },
+  "fn": "herliansyah/pantau",
+  "sha": "34d240db7137",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

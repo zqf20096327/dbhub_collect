@@ -9119,5 +9119,63 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4502cd44e0fa": {
+  "identity": {
+   "one_liner": "Polymarket 预测市场的模拟交易与基准评测环境，含 MCP 服务器",
+   "review": "为 AI agent 提供针对 Polymarket 实时订单簿的纸面交易模拟器，使用与真实交易所相同的费率与撮合机制，并用 Brier 分数等指标对模型决策进行基准评测。通过 CLI 或 MCP 服务器供 agent/策略开发者运行，支持 Claude Code、Cursor 等多种 MCP 宿主；远程 HTTP 传输模式无认证，仅限自托管使用。",
+   "highlights": [
+    "提供 CLI 与 MCP 服务器（stdio 与 streamable-http 传输）两种访问方式",
+    "模拟撮合消费真实订单簿并按官方费率曲线计费，支持限价单与多结果市场",
+    "支持 Kalshi 市场纸面交易，并提供策略回测、对比与排行榜功能"
+   ],
+   "use_cases": [
+    "在不投入真实资金的情况下测试 AI agent 的预测市场交易决策",
+    "以 Brier 分数、校准度等指标对不同模型的决策能力做基准评测",
+    "对交易策略进行回测与多账户 A/B 对比"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 未表明使用 SQLite 等数据库存取数据，项目为面向 agent 的模拟交易与评测环境，非使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（L6）",
+   "install": [
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A zero-risk gym for AI agents on real prediction markets — real order books, official fees, verified fill fidelity. Practice, evaluate, and benchmark decision intelligence.** ／ - **Evaluate** — the `polymarket-benchmark` harness in this repository (installed separately) scores any model on prediction-market decision sets (Brier score, calibration, alpha) ／ |`mcp`|Start MCP server (stdio transport)|",
+   "evidence_lines": [
+    8,
+    13,
+    136
+   ]
+  },
+  "fn": "agent-next/polymarket-paper-trader",
+  "sha": "4502cd44e0fa",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

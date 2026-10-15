@@ -9793,5 +9793,172 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e916f7d167b": {
+  "identity": {
+   "one_liner": "单二进制数据库 MCP 服务器，让 AI 助手访问 MySQL/MariaDB/PostgreSQL/SQLite",
+   "review": "dbmcp 是一个以单一二进制文件分发的 MCP 服务器，为 AI 客户端提供数据库 schema 发现、查询读取/写入和 explain 等工具，支持 stdio 与 HTTP 传输、Bearer 认证、TLS 连接和默认只读模式，并内置 PII 脱敏与写保护。适合需要让 Claude Desktop、Cursor 等 MCP 客户端安全访问 MySQL、MariaDB、PostgreSQL 或 SQLite 的开发者使用。",
+   "highlights": [
+    "单二进制约 7MB，无 Python/Node/Docker 运行时依赖，支持 stdio 与 HTTP/SSE 传输",
+    "提供 listDatabases/listTables/listViews 等只读发现工具及 readQuery/writeQuery/DDL 工具，默认只读模式隐藏写工具",
+    "支持 SSL/TLS、Bearer 令牌认证、连接池与查询超时配置，内置 PII 脱敏与写防护"
+   ],
+   "use_cases": [
+    "让 MCP 客户端（如 Claude Desktop、Cursor）连接本地或远程数据库进行 schema 探索与查询",
+    "以只读模式向 AI 助手暴露生产/开发库，限制写入操作",
+    "通过 HTTP 传输多客户端共享数据库访问，配合 Bearer 令牌认证"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ |`--db-backend`|`DB_BACKEND`|*(required)*|`mysql`, `mariadb`, `postgres`, or `sqlite`|",
+     "lines": [
+      8,
+      16,
+      127
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ dbmcp http --db-backend mysql --db-user root --db-name mydb --port 9001",
+     "lines": [
+      8,
+      16,
+      63
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ |`--db-backend`|`DB_BACKEND`|*(required)*|`mysql`, `mariadb`, `postgres`, or `sqlite`|",
+     "lines": [
+      8,
+      16,
+      127
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ # MySQL/MariaDB",
+     "lines": [
+      8,
+      16,
+      91
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为面向 SQL 数据库的 MCP 服务器，为访问 MySQL/MariaDB/PostgreSQL/SQLite 提供工具与配置接口",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ - **Single binary** — ~7 MB, no Python/Node/Docker needed",
+   "evidence_lines": [
+    8,
+    16,
+    18
+   ]
+  },
+  "fn": "haymon-ai/dbmcp",
+  "sha": "2e916f7d167b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e83f735f89d": {
+  "identity": {
+   "one_liner": "Vonng 的个人博客站点源码，基于 Hugo 构建",
+   "review": "这是 Ruohang Feng（Vonng）的个人博客仓库，内容主题包含 PostgreSQL、数据库与 Cloud-Exit 等技术话题，文章内容以 CC BY 4.0 许可发布。仓库使用 Hugo Extended（0.166.0+）和 Go Modules 构建站点，通过 make 命令本地开发、构建和检查，推送到 main 分支后由 Cloudflare Pages 和 GitHub Pages 自动发布。适合想阅读其文章的读者或复现站点构建的开发者。",
+   "highlights": [
+    "提供 make dev/build/check 命令用于本地开发、生产构建与严格校验",
+    "使用 OINK Hugo Module 作为主题并通过 go.mod 固定版本",
+    "推送 main 分支即由 Cloudflare Pages 与 GitHub Pages 自动发布"
+   ],
+   "use_cases": [
+    "阅读作者关于 PostgreSQL、数据库、Cloud-Exit 的技术文章",
+    "复现或本地运行该博客站点的构建流程",
+    "参考基于 Hugo Modules 的多语言博客站点结构"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "This is **Ruohang Feng** / Vonng's blog, about PostgreSQL, Database, Cloud-Exit, and other tech topics.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅说明博客内容涉及 PostgreSQL 话题，未见其为数据库生态提供工具或使用数据库存储",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "内容采用 CC BY 4.0 许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is **Ruohang Feng** / Vonng's blog, about PostgreSQL, Database, Cloud-Exit, and other tech topics. ／ Requires **Hugo Extended 0.166.0+** and Go (Hugo Modules pull the theme). ／ This blog is licensed under **CC BY 4.0**. You're free to share and adapt the content,",
+   "evidence_lines": [
+    5,
+    13,
+    44
+   ]
+  },
+  "fn": "Vonng/vonng.com",
+  "sha": "1e83f735f89d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

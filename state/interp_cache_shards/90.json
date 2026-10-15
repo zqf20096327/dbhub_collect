@@ -9108,5 +9108,232 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bd1271ab7020": {
+  "identity": {
+   "one_liner": "schema 优先的 TypeScript 全栈框架 monorepo，单一 schema 驱动校验、API 与持久化",
+   "review": "这是一个 TypeScript 框架 monorepo，包含 schema 校验、HTTP 端点契约、类型化客户端、OpenAPI 生成、React 表单、依赖注入、ORM（基于 Knex）等多个 @cleverbrush/* 包，通过共享 schema 让前后端各层保持类型同步。面向构建契约驱动 Web 应用的 TypeScript 开发者。其中包含 ClickHouse 的 Knex 方言包和基于 PostgreSQL 的任务调度持久化包，需 Node.js 24+ 运行。",
+   "highlights": [
+    "提供 @cleverbrush/schema 单一 schema 定义，驱动运行时校验、类型推断、JSON Schema 与 Standard Schema v1 集成",
+    "包含 Knex ORM 层、迁移 CLI，以及 @cleverbrush/knex-clickhouse（ClickHouse 方言）和 @cleverbrush/scheduler-postgres（PostgreSQL 任务持久化）",
+    "覆盖服务端契约、OpenAPI 3.x 生成、类型化 HTTP 客户端与 React 表单等全栈组件"
+   ],
+   "use_cases": [
+    "以共享 schema 为契约构建类型安全的 TypeScript 全栈 Web 应用",
+    "在 Knex 中使用 ClickHouse 方言进行查询",
+    "在 PostgreSQL 上实现事务性入队与租约机制的任务调度持久化"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`@cleverbrush/scheduler-postgres`|PostgreSQL job persistence, transactional enqueue and fenced leases.|",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|`@cleverbrush/knex-clickhouse`|ClickHouse dialect support for Knex.|",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为应用开发提供组件库，其中包含服务于具体数据库的适配包（Knex ClickHouse 方言、PostgreSQL 任务持久化）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cleverbrush is a schema-first TypeScript framework monorepo. It provides the ／ |`@cleverbrush/orm`|Knex-backed ORM layer with typed entity maps and query helpers.| ／ |`@cleverbrush/knex-clickhouse`|ClickHouse dialect support for Knex.|",
+   "evidence_lines": [
+    9,
+    33,
+    36
+   ]
+  },
+  "fn": "cleverbrush/framework",
+  "sha": "bd1271ab7020",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "58c12bc216a1": {
+  "identity": {
+   "one_liner": "Lean 4 编写的 RealWorld 全栈示例应用，使用 PostgreSQL 存储",
+   "review": "一个用 Lean 4 同时实现后端与前端的 RealWorld（Conduit）示例应用，通过 libpq 绑定与连接池读写 PostgreSQL，启动时自动执行 SQL 迁移，并以 lake exe 或编译出的二进制运行。面向想了解 Lean 4 Web 开发的开发者，运行需自备 PostgreSQL 服务器及 libpq/OpenSSL 头文件。",
+   "highlights": [
+    "提供完整 RealWorld API 与站点实现，启动时自动应用 SQL 迁移",
+    "包含单元测试、RealWorld API 套件、前端套件与 e2e 脚本",
+    "核心库附带 Lean 形式化证明（如 slug 有效性与授权正确性）"
+   ],
+   "use_cases": [
+    "学习 Lean 4 全栈 Web 开发",
+    "作为 RealWorld 规范的 Lean 4 参考实现",
+    "研究带证明的 Web 库组合方式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The app runs on Lean 4.34.1 with `Std.Http.Server` and PostgreSQL, and uses these libraries: ／ You need elan and a PostgreSQL server. Building also needs the `libpq` and OpenSSL 3 headers and `pkg-config` (`brew install libpq openssl@3 pkg-config`, or `apt-get install libpq-dev libssl-dev pkg-config`).",
+     "lines": [
+      10,
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 PostgreSQL 作为自身数据存储，README 明确说明运行需 PostgreSQL 服务器并通过 DATABASE_URL 连接",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，另含 RealWorld Conduit 主题的独立 MIT 许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The app runs on Lean 4.34.1 with `Std.Http.Server` and PostgreSQL, and uses these libraries: ／ You need elan and a PostgreSQL server. Building also needs the `libpq` and OpenSSL 3 headers and `pkg-config` (`brew install libpq openssl@3 pkg-config`, or `apt-get install libpq-dev libssl-dev pkg-config`).",
+   "evidence_lines": [
+    10,
+    42
+   ]
+  },
+  "fn": "saviorand/lean-realworld-example-app",
+  "sha": "58c12bc216a1",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "111ca5baf04c": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Prisma 的旅游预订全栈平台，使用 TiDB Cloud 存储数据",
+   "review": "这是一个旅游套餐预订全栈 Web 应用，使用 Next.js 16、Prisma ORM 和 TiDB Cloud（MySQL 兼容）构建，集成 Stripe 支付、NextAuth 认证与角色保护的管理面板。适合开发者作为全栈项目参考或搭建旅游预订站点；依赖 TiDB Cloud、Stripe、Resend 等多个外部服务账号。",
+   "highlights": [
+    "提供游客端浏览、预订、评论、收藏与基于 Stripe 的支付流程",
+    "提供角色保护的管理面板，包含旅游项目、目的地、订单与用户的 CRUD 管理",
+    "使用 Prisma ORM 通过 @prisma/adapter-mariadb 适配器连接 TiDB Cloud，支持 TLS 加密连接"
+   ],
+   "use_cases": [
+    "搭建旅游线路浏览与在线预订网站",
+    "Next.js + Prisma + TiDB Cloud 全栈开发参考项目",
+    "带 RBAC 权限的内容与订单后台管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A full-stack, production-ready travel booking platform built with **Next.js 16**, **Prisma**, **TiDB Cloud**, **NextAuth v5**, and **Stripe**. Browse tours, book experiences, pay securely, and manage everything from a role-protected admin panel. ／ |**Database**|TiDB Cloud (MySQL-compatible)|",
+     "lines": [
+      3,
+      56
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|**Database**|TiDB Cloud (MySQL-compatible)|",
+     "lines": [
+      56
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|**ORM**|Prisma 7 + `@prisma/adapter-mariadb`| ／ Your TiDB adapter isn't loaded correctly. Switch to `@prisma/adapter-mariadb` with a parsed `DATABASE_URL`.",
+     "lines": [
+      57,
+      238
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据库为 TiDB Cloud，项目本身是使用该库存数据的预订应用，而非服务数据库的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A full-stack, production-ready travel booking platform built with **Next.js 16**, **Prisma**, **TiDB Cloud**, **NextAuth v5**, and **Stripe**. Browse tours, book experiences, pay securely, and manage everything from a role-protected admin panel. ／ |**Database**|TiDB Cloud (MySQL-compatible)| ／ |**ORM**|Prisma 7 + `@prisma/adapter-mariadb`|",
+   "evidence_lines": [
+    3,
+    56,
+    57
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "M-SuhaibGM/travel-pk",
+  "sha": "111ca5baf04c",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

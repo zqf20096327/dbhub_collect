@@ -9065,5 +9065,226 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "53375bd0d6d1": {
+  "identity": {
+   "one_liner": "将 Notion 工作区镜像为本地 SQLite 归档与规范化 Markdown 的采集工具",
+   "review": "notcrawl 从 Notion Desktop 本地缓存、官方 API 或 MCP 连接器同步工作区内容，写入本地 SQLite 归档并生成规范化 Markdown，提供 FTS5 全文检索、TUI 浏览、CSV 导出、只读 SQL 查询与基于 git 快照的分享。面向需要在 Notion UI 之外搜索、查询、对比或共享工作区历史的个人与 agent。Desktop 模式为只读快照，Markdown 导出不抓取第三方媒体内容。",
+   "highlights": [
+    "支持 desktop、api、notion-mcp 三种同步来源，API 模式对只读请求做最多四次重试",
+    "提供基于 SQLite FTS5 的全文检索、TUI 浏览器与只读 SQL 查询命令",
+    "支持将 SQLite 表与 Markdown 发布为 git 快照，供其他机器无需 Notion 凭据订阅检索"
+   ],
+   "use_cases": [
+    "本地离线搜索与查询 Notion 工作区历史",
+    "将 Notion 数据库行导出为 CSV 供后续处理",
+    "在多台机器间通过 git 快照共享归档"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`notcrawl` mirrors a Notion workspace into local SQLite and normalized Markdown. It is for people and agents that need to search, query, diff, or share workspace history without depending on the Notion UI. ／ SQLite is the canonical archive. Markdown is the durable human-readable export. ／ The sync reads a snapshot of Notion's local cache. Search uses the SQLite FTS5 index, and `export-md` writes the normalized archive under `~/.notcrawl/pages`.",
+     "lines": [
+      11,
+      13,
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该工具以 SQLite 作为自身归档存储，服务于 Notion 内容采集而非数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`notcrawl` mirrors a Notion workspace into local SQLite and normalized Markdown. It is for people and agents that need to search, query, diff, or share workspace history without depending on the Notion UI. ／ SQLite is the canonical archive. Markdown is the durable human-readable export. ／ The sync reads a snapshot of Notion's local cache. Search uses the SQLite FTS5 index, and `export-md` writes the normalized archive under `~/.notcrawl/pages`.",
+   "evidence_lines": [
+    11,
+    13,
+    35
+   ]
+  },
+  "fn": "openclaw/notcrawl",
+  "sha": "53375bd0d6d1",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0abd27f1327d": {
+  "identity": {
+   "one_liner": "基于 Nuxt 与 PostgreSQL 的社区发帖应用，pnpm monorepo 架构",
+   "review": "Esposter 是一个用于发布随机内容的社交发帖 Web 应用，采用 pnpm workspaces monorepo 组织代码，前端使用 Nuxt/Vue/Pinia，后端为 Azure Functions serverless，数据层通过 Drizzle ORM 以 PostgreSQL 为事实来源（packages/db-schema），本地开发需自行安装 PostgreSQL 与 PgAdmin。适合希望参考全栈 Nuxt + tRPC + Drizzle 项目结构、以及 AI 评审流水线实践的开发者。",
+   "highlights": [
+    "pnpm workspaces monorepo，包含 Web 应用、Azure Functions 后端及多个已发布 npm 包",
+    "数据层使用 Drizzle ORM，schema 与迁移以 PostgreSQL 为 source of truth",
+    "包含基于 GitHub Actions 与 headless Claude 的自动化 AI 代码评审流水线（ai/queue 分支）"
+   ],
+   "use_cases": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is a powerful, open source object-relational database system with over 35 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance. ／ 3. Install PostgreSQL + PgAdmin. ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+     "lines": [
+      82,
+      161,
+      254
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是发帖应用，PostgreSQL 与 Drizzle 作为其数据存储层使用（L161 要求本地安装 PostgreSQL，L254 称其为 source of truth）",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "3. Install PostgreSQL + PgAdmin. ／ Esposter is a pnpm workspaces monorepo. See monorepo tooling for workspace script orchestration and publishing boundaries. ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+   "evidence_lines": [
+    161,
+    203,
+    254
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Esposter/Esposter",
+  "sha": "0abd27f1327d",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d24fca005328": {
+  "identity": {
+   "one_liner": "TIDAL 桌面播放器，本地 SQLite 镜像库实现即时检索",
+   "review": "NOORwave 是一个 TIDAL 桌面音乐播放器，把用户的 TIDAL 曲库镜像到本地 SQLite 数据库，搜索、浏览、音频分析均在本机完成。面向已收藏大量曲目、追求本地检索与播放控制的流媒体用户。提供音乐视频索引、Genre Galaxy 星图、无缝播放、automix 与手机 PWA 遥控；依赖 TIDAL 非官方 API（PKCE OAuth2），音频仍由 TIDAL 提供。",
+   "highlights": [
+    "将 TIDAL 曲库镜像至本地 SQLite，搜索与浏览全部本地读取并支持增量同步",
+    "提供音乐视频索引、Genre Galaxy 流派星图与基于收听历史的 automix",
+    "内置 /remote PWA 手机遥控，支持受信 LAN 访问与二维码配对"
+   ],
+   "use_cases": [
+    "本地快速检索与浏览大规模 TIDAL 收藏曲库",
+    "音乐视频（现场/翻唱/替代版本）的索引与视频站播放",
+    "通过手机在局域网遥控桌面播放"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "NOORwave is a desktop music player for TIDAL built for **instant local search and fast library browsing**. Your synced library lives in a SQLite database on your own machine, so searching your saved collection runs locally. Your library and listening history s ／ NOORwave is that second thing. It pulls your TIDAL library down into a SQLite database on your own machine, then builds a real desktop player on top of it. Search answers instantly because it never leaves your disk. The queue is something you shape, not someth ／ Your whole TIDAL library is mirrored into SQLite on your disk. Search runs locally, so results land as you type: no spinner, no round trip, no rate limit. Artist pages, album pages, filters, and shuffle all read from the same local copy, and incremental sync k",
+     "lines": [
+      7,
+      23,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目将数据存于用户本机 SQLite 数据库，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "NOORwave is a desktop music player for TIDAL built for **instant local search and fast library browsing**. Your synced library lives in a SQLite database on your own machine, so searching your saved collection runs locally. Your library and listening history stay on your disk; TIDAL supplies the audio. ／ NOORwave is that second thing. It pulls your TIDAL library down into a SQLite database on your own machine, then builds a real desktop player on top of it. Search answers instantly because it never leaves your disk. The queue is something you shape, not something that happens to you. Transitions are planned instead of stumbled into. And your own taste becomes a map you can fly through.",
+   "evidence_lines": [
+    7,
+    23
+   ]
+  },
+  "fn": "biggiesmallcap-blip/NOORwave",
+  "sha": "d24fca005328",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8141,5 +8141,134 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b94771f3c7ce": {
+  "identity": {
+   "one_liner": "自托管 API 优先的 AI 呼叫中心，单 Go 二进制+FreeSWITCH",
+   "review": "这是一个可自托管、以 REST+SSE API 为核心的 AI 呼叫中心应用：语音模型经 FreeSWITCH 直接接听来电，按阶段流转对话，可转人工坐席（Chrome 扩展承载 SIP 话路），每次通话生成单条 CDR/转录/录音记录。面向需要将呼叫中心嵌入自身产品的开发者，支持 OpenAI Realtime、Qwen 等多家语音服务商，数据存于 PostgreSQL。",
+   "highlights": [
+    "提供 REST + SSE API 及 OpenAPI 规范，Go 服务器与 TypeScript 客户端由规范生成",
+    "语音模型作为 SIP 端点直接应答，流程按阶段驱动对话并转接 mod_callcenter 队列",
+    "每次通话聚合为单条 CDR，含转录与录音，录音可存文件系统或 S3 兼容存储"
+   ],
+   "use_cases": [
+    "搭建 AI 自动应答并可转人工的呼叫中心",
+    "将语音机器人能力通过 REST API 嵌入自有产品",
+    "中英双语客服场景的机器人+人工坐席协作"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "inside it — plus PostgreSQL and FreeSWITCH. ／ make dev-up # PostgreSQL in Docker",
+     "lines": [
+      13,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 FreeSWITCH 从该数据库读取目录与队列，PostgreSQL 是本应用存数据的组件而非适配对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "inside it — plus PostgreSQL and FreeSWITCH. ／ FreeSWITCH reads its directory and its `mod_callcenter` queues *from the ／ make dev-up            # PostgreSQL in Docker",
+   "evidence_lines": [
+    13,
+    90,
+    111
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "rasonyang/ai-native-callcenter",
+  "sha": "b94771f3c7ce",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c83478185ac4": {
+  "identity": {
+   "one_liner": "2.5D 俯视角动作 RPG，Godot 客户端 + Flask/SQLite 服务端",
+   "review": "这是一款用 Godot 4.6 与 GDScript 开发的 PC 网页版动作 RPG，提供四种职业、怪物生态、组队、交易与公会等玩法；角色存档与经济由 Flask + SQLite 的服务端托管，服务器为权威端。面向多人在线玩家，同时公开其 API 安全审计与自动化测试结果。",
+   "highlights": [
+    "支持注册登录、组队、聊天、语音、玩家交易与公会等多人功能",
+    "存档由服务端权威管理，客户端通过可替换的存储接口读写",
+    "附带针对自身 API 的安全审计记录与 8500+ 自动化检查"
+   ],
+   "use_cases": [
+    "多人在线动作 RPG 游戏体验",
+    "Godot + Flask/SQLite 架构的参考实现",
+    "游戏服务端经济与事件系统的运行示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "SQLite 作为该游戏服务端的存储组件，仓库主体是使用数据库的游戏应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A top-down 2.5D action RPG built in Godot 4.6 with GDScript, backed by a Flask account service. Four playable classes, six enemy families in forty-three elemental variants, collectable combat pets, fishing and cooking, player-to-player trading over a taxed economy, other players drawn live wherever you are and fighting the same monsters, and a complete run from town to final boss. ／ Elusion is a PC game, played with a keyboard and mouse in a desktop browser at play.elusionrpg.com. It is not made for phones. ／ `CharacterData` holds a `SaveStorage` and never asks which implementation it has. That seam is what let the game move from a local file to the Flask service without touching the twenty-nine places that call `save_data()`. The server is the authority now — it owns level, XP, the derived stat maxima and every loot roll — so the anti-tamper passes that existed to defend a local file against a text editor are skipped rather than run against data they can no longer say anything useful about. Writes are still debounced: saving on every stat change was firing about twenty times a second in normal play.",
+   "evidence_lines": [
+    3,
+    17,
+    68
+   ]
+  },
+  "fn": "Tunacanman2EZ/Elusion_RPG",
+  "sha": "c83478185ac4",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

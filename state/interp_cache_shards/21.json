@@ -10174,5 +10174,86 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4031556ec1a5": {
+  "identity": {
+   "one_liner": "将七家上游编码渠道封装为 OpenAI/Anthropic 兼容 API 的凭证池网关",
+   "review": "把 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo Gateway、Qoder、CodeArts 等上游渠道封装为 OpenAI/Responses/Anthropic 兼容 API，提供公共凭证池、健康度调度、会话粘性与按人用量统计；面向需要统一出口的团队/自部署用户，内置三角色账号体系，用户数据存 SQLite，README 声明为逆向接口仅供学习研究。",
+   "highlights": [
+    "提供 /v1/chat/completions、/v1/responses、/v1/messages 等 OpenAI/Anthropic 兼容端点",
+    "实现凭证池健康度调度、模型级冷却与多轮会话粘性",
+    "用户与凭证数据存 SQLite，支持三角色账号体系与审计日志"
+   ],
+   "use_cases": [
+    "为多个上游编码模型渠道提供统一 API 出口",
+    "团队共享凭证池并按人统计用量",
+    "自部署管理多账号额度与每日签到"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计。 ／ > `scripts/create_user.py` 直接写 SQLite（`--db` 或 `DATA_DIR`，默认 `data/coding2api.sqlite3`）。老部署若已有 `secrets/users.txt`，启动时自动导入一次（已存在的不覆盖）。 ／ 账号存在 SQLite 的 `users` 表里，管理台「用户管理」页（仅管理员可见）负责日常增删改。",
+     "lines": [
+      15,
+      43,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是把上游渠道封装为 API 的网关服务，SQLite 仅作为其自身用户/账号数据存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "把 **CodeBuddy**（国内站 + 国际版）、**TRAE SOLO**、**OpenCode Zen**、**Kilo Gateway**、**Qoder**、**CodeArts** 七个上游渠道封装为 OpenAI 兼容 API，提供公共凭证池、统一模型名与调度、按人用量统计。 ／ - **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计。 ／ > `scripts/create_user.py` 直接写 SQLite（`--db` 或 `DATA_DIR`，默认 `data/coding2api.sqlite3`）。老部署若已有 `secrets/users.txt`，启动时自动导入一次（已存在的不覆盖）。",
+   "evidence_lines": [
+    3,
+    15,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "RobbsLuo/Coding2API",
+  "sha": "4031556ec1a5",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8931,5 +8931,165 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0500b38d3300": {
+  "identity": {
+   "one_liner": "本地 AWS 模拟器，提供 AWS 兼容 API 与 SQLite 持久化",
+   "review": "stackd 是一个用 Go 编写的本地 AWS 模拟器，提供 AWS 兼容的 HTTP API 控制面，可从 AWS CLI、SDK 或 Go 测试中调用；控制面状态可选地持久化到 SQLite。Lambda、ECS、RDS 等真实执行需要显式配置 Docker、KVM 或 k3d 等运行时依赖。适合需要在本地开发、测试 AWS 工作流、且明确接受其功能尚不完整的开发者。",
+   "highlights": [
+    "提供 AWS 兼容 HTTP API，支持 AWS CLI、SDK 与 Terraform 调用",
+    "控制面状态可通过 -database 参数持久化到 SQLite",
+    "Lambda/ECS/EC2/EKS 等真实执行需显式启用对应运行时（Docker、QEMU/KVM、k3d）"
+   ],
+   "use_cases": [
+    "在本地运行 AWS 兼容端点进行开发与测试",
+    "用 Go 测试嵌入方式验证 AWS 工作流",
+    "本地演练 Terraform/CloudFormation 应用部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "optional SQLite persistence, and real runtime/engine backends for supported ／ ./bin/stackd -listen 127.0.0.1:4566 -database ./data/stackd.sqlite ／ use `--account-id 123456789012`. SQLite keeps the ID across restarts. A conflicting",
+     "lines": [
+      4,
+      27,
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 持久化控制面状态，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0；内嵌依赖保留各自许可声明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "stackd is a local AWS emulator with Go control planes, AWS-compatible HTTP APIs, ／ optional SQLite persistence, and real runtime/engine backends for supported ／ ./bin/stackd -listen 127.0.0.1:4566 -database ./data/stackd.sqlite",
+   "evidence_lines": [
+    3,
+    4,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "radkawar/stackd",
+  "sha": "0500b38d3300",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ffce96a6bcdb": {
+  "identity": {
+   "one_liner": "本地优先的 AI 知识与 Agent 工作台，Markdown 笔记+会话+向量/图谱存储",
+   "review": "一个本地运行的 AI 知识与 Agent 工作台，将 Markdown 笔记、聊天与编码会话存入统一知识库，提供向量检索、知识图谱、长期记忆、看板和工作流，支持 MCP 工具接入。数据默认存 SQLite，可切换 PostgreSQL + pgvector。适合希望在本地管理知识与运行编码 Agent 的个人用户；基于 ASP.NET Core 后端，可选 Tauri 桌面端。",
+   "highlights": [
+    "Markdown 笔记与对话/编码会话共享同一知识库，支持向量索引、知识图谱与长期记忆",
+    "支持 MCP 服务器管理（stdio/sse）、技能、代理与工作流编排",
+    "向量存储支持本地 sqlite-vec 或 PostgreSQL pgvector，全部数据本地运行"
+   ],
+   "use_cases": [
+    "个人知识管理与语义检索",
+    "对话/编码 Agent 会话与代码仓库内工作（worktree、分支、PR）",
+    "本地多模型调用与用量统计"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-first**: SQLite + `sqlite-vec` out of the box, or PostgreSQL + `pgvector`. ／ - Vectors live in local `sqlite-vec`, or PostgreSQL `pgvector`. ／ - The data directory is injected by the shell through `HETU_DATA_DIR` (SQLite and logs live in the OS user data dir).",
+     "lines": [
+      14,
+      77,
+      127
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Local-first**: SQLite + `sqlite-vec` out of the box, or PostgreSQL + `pgvector`. ／ - Vectors live in local `sqlite-vec`, or PostgreSQL `pgvector`. ／ - Vectors in local `sqlite-vec` or PostgreSQL `pgvector`; both databases support the same feature set. ／ - (Optional) PostgreSQL **16+** with the `pgvector` extension",
+     "lines": [
+      14,
+      77,
+      132,
+      187
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 SQLite/PostgreSQL 作为自身数据与向量存储，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hetu is a **local-first** knowledge and agent workspace: Markdown notes, chat and coding sessions share one store, and a vector index, knowledge graph, long-term memory plus tasks/workflows tie everything into a living network. All data and model calls stay on your machine — no account, no uploads. ／ |Storage|SQLite (default, `sqlite-vec`) / PostgreSQL 16+ (`pgvector`)|",
+   "evidence_lines": [
+    9,
+    139
+   ]
+  },
+  "fn": "wosledon/Hetu",
+  "sha": "ffce96a6bcdb",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

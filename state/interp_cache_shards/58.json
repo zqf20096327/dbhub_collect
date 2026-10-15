@@ -10337,5 +10337,152 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a0179182bba": {
+  "identity": {
+   "one_liner": "配置驱动的多智能体对话 AI 编排中间件",
+   "review": "EDDI 是一个基于 Java 25 和 Quarkus 构建的对话式 AI 编排中间件，通过 JSON 配置而非代码定义智能体行为，提供多智能体编排、RAG、持久记忆、MCP/A2A 协议支持和合规审计基础设施。面向需要在生产环境治理 AI 智能体的平台运维者和企业团队，通过一键安装脚本和 Docker Compose 部署，支持 MongoDB 或 PostgreSQL 作为存储后端。",
+   "highlights": [
+    "提供多智能体编排，包含 7 种内置群体讨论风格和运行时动态创建智能体",
+    "支持 MCP、A2A、OpenAI Chat Completions API、Slack 与 OAuth 2.0 协议集成",
+    "内置 HMAC-SHA256 审计账本、加密密钥库及 GDPR/HIPAA/EU AI Act 合规基础设施"
+   ],
+   "use_cases": [
+    "在生产环境部署和治理多智能体对话系统",
+    "通过 Slack 通道或内置 Chat UI 运行多智能体群组讨论与协作",
+    "需要审计追踪和合规能力的企业级 AI 智能体运维"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "bash install.sh --db=postgres --with-auth # PostgreSQL + Keycloak ／ bash install.sh --full # Everything enabled (PostgreSQL + auth + monitoring) ／ Available compose overlays: `docker-compose.auth.yml` (Keycloak), `docker-compose.monitoring.yml` (Prometheus+Grafana), `docker-compose.nats.yml` (cluster mode with one replica and one NATS server), `docker-compose.ollama.yml` (local LLM; add `docker-compose.o",
+     "lines": [
+      47,
+      48,
+      109
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|**Enterprise Cloud**|Azure OpenAI · Amazon Bedrock · Oracle GenAI · Google Vertex AI|",
+     "lines": [
+      216
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "EDDI 是使用 MongoDB/PostgreSQL 作为自身存储后端的应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**E.D.D.I** (Enhanced Dialog Driven Interface) is a production-grade, **config-driven multi-agent orchestration middleware** for conversational AI. It coordinates users, AI agents, and business systems through **intelligent routing, persistent memory, and API orchestration** — without writing code. ／ bash install.sh --db=postgres --with-auth  # PostgreSQL + Keycloak ／ # Default (EDDI + MongoDB)",
+   "evidence_lines": [
+    11,
+    47,
+    103
+   ]
+  },
+  "fn": "labsai/EDDI",
+  "sha": "9a0179182bba",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5977f945b778": {
+  "identity": {
+   "one_liner": "AI 驱动的 NLP 教学平台，四角色单实例部署",
+   "review": "Nova 是一个面向 NLP 课程的教与学平台，单一部署提供学习者、教师、开发者、监控四种角色视图。教师编写知识点与练习蓝图，学生提问并获得分步讲解与自动评分；基于 LangGraph 的协调/工作引擎运行，要求配置 MySQL 数据库，支持 Docker Compose 部署完整分布式栈。",
+   "highlights": [
+    "四种角色视图（学习者/教师/开发者/监控）基于访问控制隔离",
+    "教师定义蓝图自动生成练习并按加权评分标准自动批改",
+    "内置监控视图展示 web、worker、sandbox 的对话、追踪与指标"
+   ],
+   "use_cases": [
+    "NLP 课堂教学与练习批改",
+    "问答式分步知识点学习",
+    "LLM 应用运行时与服务可观测性观察"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- A MySQL database, configured in `.env`. ／ > For the full distributed stack (nginx, MySQL, Redis, web, worker, sandbox manager), use the provided `compose.yaml`.",
+     "lines": [
+      97,
+      103
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 MySQL 作为平台数据库存储数据（配置于 .env，bootstrap-db 初始化），属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Nova is a teaching and learning assistant for NLP courses. A single deployment serves four roles — Learner, Teacher, Developer and Monitor — so one instance covers a whole class. ／ - A MySQL database, configured in `.env`. ／ > For the full distributed stack (nginx, MySQL, Redis, web, worker, sandbox manager), use the provided `compose.yaml`.",
+   "evidence_lines": [
+    24,
+    97,
+    103
+   ]
+  },
+  "fn": "liunor/nlp-agent",
+  "sha": "5977f945b778",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10889,5 +10889,197 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e83bb66d6d16": {
+  "identity": {
+   "one_liner": "为 Rails ActiveRecord 提供基于 PostgreSQL 全文检索的搜索 gem",
+   "review": "pg_search 是一个 Ruby gem，为 ActiveRecord 模型构建命名作用域，利用 PostgreSQL 全文搜索实现两种检索方式：跨模型全局索引的 multi-search 和单模型高级搜索的 search scopes。面向使用 Rails/ActiveRecord 且需要数据库内搜索能力的开发者；要求 Ruby 3.3+、Active Record 8.0+、PostgreSQL 9.2+，部分功能需 PostgreSQL 扩展。",
+   "highlights": [
+    "支持 multi-search 跨多个模型建立全局搜索索引（pg_search_documents 表）",
+    "支持 search scopes 单模型搜索及 tsearch、trigram、metaphone 等检索方式",
+    "提供 rake 任务重建索引，支持指定 PostgreSQL schema search path"
+   ],
+   "use_cases": [
+    "Rails 应用的全站通用搜索页面",
+    "模型列表过滤、自动补全等场景",
+    "多租户数据库按 schema 重建搜索索引"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_search ／ pg_search builds named scopes that take advantage of PostgreSQL's full text ／ - PostgreSQL 9.2+",
+     "lines": [
+      1,
+      9,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 全文搜索提供 ActiveRecord 集成能力的 gem，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pg_search builds named scopes that take advantage of PostgreSQL's full text ／ - Active Record 8.0+ ／ $ gem install pg_search",
+   "evidence_lines": [
+    9,
+    17,
+    24
+   ]
+  },
+  "fn": "Casecommons/pg_search",
+  "sha": "e83bb66d6d16",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2d9cf3126c03": {
+  "identity": {
+   "one_liner": "自托管邮件服务器 Web 管理面板，基于 Postfix/Dovecot 提供域名与邮箱可视化管理",
+   "review": "这是一个在自有服务器上部署邮件服务的 Docker 化面板，用 Web 界面管理域名、邮箱账户、密码和转发规则，并可一键生成 Cloudflare 的 MX/SPF/DKIM/DMARC 记录。面向希望自建邮件系统的管理员，支持 IMAP/POP3/SMTP 客户端、TOTP/Passkey、API Token，内置备份与跨 VPS 一键迁移。SQLite 仅作为面板数据库使用，部署要求服务器开放 25 等端口且需 PTR 支持。",
+   "highlights": [
+    "提供域名、邮箱账户、别名与 Catch-all 转发规则的 Web 可视化管理",
+    "集成 Cloudflare DNS API，自动生成并推送 MX、SPF、DKIM、DMARC 记录",
+    "支持 TOTP、Passkey、API Token 审计日志，提供环境检查、邮件队列、备份与一键迁移"
+   ],
+   "use_cases": [
+    "在自有 VPS 上搭建并管理完整的自托管邮件服务",
+    "批量配置多个域名的邮件 DNS 记录与邮箱账户",
+    "通过加密迁移包在服务器间整体搬迁邮件实例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述这是一个使用 SQLite 存面板数据的邮件服务应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later，描述与 L125 一致；描述中另提到 mit-license 主题标签，README 正文未见",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "在自己的服务器上搭建邮件服务，通过 Web 面板管理域名、邮箱和转发规则。 ／ - **可视化管理**：集中管理多个域名、邮箱账户、密码和邮件转发，支持别名、前缀匹配与 Catch-all。 ／ clover backup       # 备份面板数据库与邮件配置 ／ - 邮件与配置保存在服务器的 Docker 数据卷中；Roundcube 的通讯录和偏好独立保存。",
+   "evidence_lines": [
+    3,
+    7,
+    84,
+    119
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Vincentkeio/clover-mail",
+  "sha": "2d9cf3126c03",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b91e1bb0ef21": {
+  "identity": {
+   "one_liner": "PostgreSQL 生物信息学扩展，将多组学计算下沉到数据库内执行",
+   "review": "pg_bio 是一个用 Rust（pgrx）编写的原生 PostgreSQL 扩展，在数据库内实现基因组区间检索、3D 坐标 Z-Order 编码、单细胞稀疏矩阵（CSR）、跨组学向量空间、UniProt API 直连和 SMILES 化学指纹检索等能力，并提供 pgbio-py Python SDK。面向生物信息学、药物发现领域的科研与数据工程人员，运行依赖 PostgreSQL 及 pgvector。",
+   "highlights": [
+    "提供基因组 1D 区间（Range Types + GiST）、3D 坐标 Morton 编码、CSR 稀疏矩阵和 Tanimoto 分子相似度等原生 SQL 算子",
+    "内置 Rust HTTP 客户端，可在 SQL 中直接调用 UniProt REST API 获取并解析蛋白质元数据",
+    "支持结合 pgvector 的 1280 维跨组学向量查询，并提供 HNSW/IVFFlat 索引与 halfvec 压缩选项"
+   ],
+   "use_cases": [
+    "在 SQL 内执行药物发现与合成生物学设计流程（如 Safe Harbor 位点筛选、分子虚拟筛选）",
+    "单细胞 RNA-Seq 稀疏矩阵的存储与剂量计算",
+    "通过 pgbio-py 与 Jupyter 进行生物数据分析"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**`pg_bio`** is a native PostgreSQL extension written in highly optimized Rust (`pgrx`). ／ * **The Engine:** `pg_bio` treats the human genome as a 1D spatial environment utilizing native PostgreSQL **Range Types (`int4range`)** and **`GiST` (Generalized Search Tree) indexes**.",
+     "lines": [
+      3,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是 PostgreSQL 原生扩展，为数据库提供多组学计算能力，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**`pg_bio`** is a native PostgreSQL extension written in highly optimized Rust (`pgrx`). ／ `pg_bio` eliminates this entire nightmare. It provides four distinct computational layers natively inside PostgreSQL. We move the compute directly to the data, resulting in order-of-magnitude speedups.",
+   "evidence_lines": [
+    3,
+    19
+   ]
+  },
+  "fn": "jonatas/pg_bio",
+  "sha": "b91e1bb0ef21",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

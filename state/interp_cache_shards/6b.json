@@ -9621,5 +9621,214 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06912cc937ff": {
+  "identity": {
+   "one_liner": "AI 导演式小说创作桌面应用，Tauri+Rust 实现多代理协作写作",
+   "review": "StoryMoss 是一款桌面端 AI 小说创作软件，基于 Tauri、React 与 Rust 构建，本地使用 SQLite 存储故事资产与创作数据。它提供续写、编辑审计、知识图谱、伏笔追踪、多模型接入（OpenAI/Anthropic/Ollama）等功能，面向中文长篇小说作者；依赖本地或远程 LLM 服务运行。",
+   "highlights": [
+    "提供幕前沉浸写作与幕后工作室双界面，包含角色、世界观、知识图谱、伏笔看板等资产管理",
+    "支持多模型适配：OpenAI、Anthropic、Ollama 及本地 API，按角色与任务路由模型",
+    "实现多代理协作续写流程，含质量门、前文检索注入、分层摘要与资产回流机制"
+   ],
+   "use_cases": [
+    "长篇中文网文的连载创作与一致性维护",
+    "需要伏笔管理、角色状态追踪的小说项目管理",
+    "利用本地或云端 LLM 辅助大纲、章纲与正文生成"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "v0.30.33 修复后续写内容仍丢失。根因：多次续写时保存操作**并发执行**，`update_scene` 全量覆写在 SQLite 写锁竞争下乱序提交，较早的小内容覆写较晚的大内容（编辑器正常但 DB 回退，重启才发现）。修复：①所有 `update_scene` **串行化**（Promise 链排队，最后一次写总是最新）；②修稿 `setContent`/`insertText` 后补同步 + 立即保存；③关闭等待 3s -> 6s（超过 SQLite busy_timeout）。 ／ 1. **后端生成链路止血**：本地 / 局域网模型默认单候选 + 全局并发限流，候选总超时硬上限 90s；LLM 连接 / 生成超时拆分；上下文准备 SQLite 高频路径 spawn_blocking 化；全局 Mutex 替换为 OnceLock / RwLock。",
+     "lines": [
+      563,
+      661
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该桌面应用以 SQLite 存储创作数据（角色、章节、知情流水等），属使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|🔌|**多模型适配**|OpenAI / Anthropic / Ollama / 本地 API，角色 × 任务模型路由|",
+   "evidence_lines": [
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "91zgaoge/StoryMoss",
+  "sha": "06912cc937ff",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "38ceaf7fbee4": {
+  "identity": {
+   "one_liner": "基于 Proton Bridge 的 Proton Mail MCP 服务器与 CLI",
+   "review": "该项目在 Proton 官方 Bridge（本地 IMAP/SMTP 网关）之上提供 MCP 服务器和 CLI，让 Claude Desktop、Claude Code、Cline 等 MCP 客户端以及 shell 脚本能读取、搜索、起草和发送 Proton 邮件，共 100 个工具。它依赖 Node.js 24+ 和正在运行的 Proton Bridge，用本地 SQLite 建全文索引加速搜索，并提供只读模式、发送门控等安全控制。",
+   "highlights": [
+    "提供 100 个 MCP 工具及对应的完整 CLI 命令，支持读写邮件、搜索、管理文件夹与附件",
+    "使用本地 SQLite 索引实现全文搜索，查询不逐次走 IMAP",
+    "内置只读模式、发送门控、破坏性操作确认与按操作允许列表等安全控制"
+   ],
+   "use_cases": [
+    "在 Claude Desktop/Claude Code 等 MCP 客户端中自然语言管理 Proton 邮箱",
+    "通过 CLI 在 cron 和 shell 脚本中自动化邮件处理",
+    "多 Proton 账户的本地索引与草稿隔离管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ |`search_indexed_emails` (local SQLite index)|~10 ms| ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      115,
+      445,
+      515
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储本地邮件索引和草稿，本身是面向邮件的 MCP 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 100 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken.",
+   "evidence_lines": [
+    21,
+    115
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "38ceaf7fbee4",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5fbf65c8a2ab": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，用 Rust/pgrx 在 SQL 中实现量化金融函数",
+   "review": "pgQuant 是一个用 Rust 和 pgrx 编写的 PostgreSQL 扩展，将收益率、VaR/ES 风险指标、波动率模型（EWMA/GARCH）、协方差、因子构建和均值方差组合优化等量化金融计算以 SQL 函数形式提供，直接作用于用户已有的价格和收益表。面向需要在数据库内做量化分析的金融开发者/分析师，通过 CREATE EXTENSION 启用，支持脚本安装、预编译二进制和源码编译三种方式。",
+   "highlights": [
+    "以 SQL 函数提供收益率、VaR/ES、EWMA/GARCH 波动率、协方差矩阵等量化计算",
+    "支持 SMB/HML/WML 因子构建与均值方差、Black-Litterman、风险平价等组合优化",
+    "函数接受 SQL 查询文本或 double precision[] 数组作为输入，不拥有固定 schema"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内对自有的价格/收益表直接做风险与波动率分析",
+    "构建多因子组合并进行均值方差等组合优化",
+    "避免将数据导出到外部量化计算环境的场景"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pgQuant` is a PostgreSQL extension written in Rust (using `pgrx`) that brings quantitative finance primitives - returns, risk (VaR/ES), volatility (rolling/EWMA/GARCH), covariance (sample/shrinkage), factor construction (HML/SMB/WML), and mean-variance portfo",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 提供量化函数的扩展，服务于数据库生态而非仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pgQuant` is a PostgreSQL extension written in Rust (using `pgrx`) that brings quantitative finance primitives - returns, risk (VaR/ES), volatility (rolling/EWMA/GARCH), covariance (sample/shrinkage), factor construction (HML/SMB/WML), and mean-variance portfolio optimization directly into SQL. It operates directly on your own price and returns tables. ／ CREATE EXTENSION pgquant;",
+   "evidence_lines": [
+    11,
+    72
+   ]
+  },
+  "fn": "pranshu05/pgQuant",
+  "sha": "5fbf65c8a2ab",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

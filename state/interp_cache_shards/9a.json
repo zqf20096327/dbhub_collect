@@ -10465,5 +10465,74 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a620f19ef828": {
+  "identity": {
+   "one_liner": "自托管制品仓库，存储构建产物、包、镜像与大文件并支持 HA 与镜像",
+   "review": "Arkvory 是一个自托管的构建产物与包存储服务，用于保存构建输出、UPack/npm/Unity 包、容器镜像和 Git LFS 大文件，并向 CI/CD、部署代理和开发者分发。它自带 HTTP API、CLI 和 TypeScript SDK，以 PostgreSQL 存储数据，支持分块续传、SHA-256 校验、保留策略、备份代理以及基于 DRBD/Pacemaker 的单站点高可用集群；S3 存储未实现。",
+   "highlights": [
+    "支持 OCI 镜像、Git LFS、npm/UPack 等多种协议与包格式，提供分块续传与 HTTP Range 下载",
+    "提供定时备份代理、保留策略/配额，以及基于 DRBD 9 + Pacemaker + fencing 的单站点高可用集群",
+    "提供 HTTP API、arkvoryctl 命令行客户端与 TypeScript SDK，控制台支持十一种语言"
+   ],
+   "use_cases": [
+    "为 CI/CD 流水线和部署代理存储与分发构建产物、包版本与 stage 晋升",
+    "托管 Docker/Podman 容器镜像与 Helm chart 的私有镜像仓库",
+    "为 Git 仓库（Unity/Unreal）提供 Git LFS 大文件服务与文件锁定"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Windows 10/11, Windows Server 2019+ (x64)|`Arkvory-Setup-x64.exe` — a wizard with Node.js and PostgreSQL included; works offline|Windows| ／ |Any host with Docker|Docker Compose: API, worker, backup agent and PostgreSQL|Docker| ／ A standalone installation is one server with PostgreSQL and a local content directory: if it stops, clients wait until it is back. A high-availability cluster needs Linux servers on one site with DRBD 9, Pacemaker and a fence device for each server; Windows an",
+     "lines": [
+      39,
+      41,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明安装包内含 PostgreSQL 且单机安装为「one server with PostgreSQL」，即以 PostgreSQL 作为自身存储后端的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Arkvory is a self-hosted repository for the files your builds produce. You install it on your own server; it stores builds, packages and large assets and delivers them to the people and systems that need them: deployment agents, CI/CD pipelines, test machines, developers and game teams. ／ - **High availability on one site.** Two or three Linux servers keep one synchronous copy of all data (DRBD, Pacemaker, mandatory fencing): when the active server fails, another takes over, and a write is acknowledged only when it is on two complete copies. ／ A standalone installation is one server with PostgreSQL and a local content directory: if it stops, clients wait until it is back. A high-availability cluster needs Linux servers on one site with DRBD 9, Pacemaker and a fence device for each server; Windows and Docker Compose stay standalone. Neither protects against the loss of a site: use backups and, where needed, a mirror on a second site. Content storage and the backup vault are local directories; S3 is not implemented. A new backup vault is encrypted by default, with a recovery kit kept off the server.",
+   "evidence_lines": [
+    15,
+    28,
+    80
+   ]
+  },
+  "fn": "ProAnima/Arkvory",
+  "sha": "a620f19ef828",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

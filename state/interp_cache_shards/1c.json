@@ -10333,5 +10333,72 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f517199fb490": {
+  "identity": {
+   "one_liner": "用 Selenium 抓取 MoviesMod 影视信息并存入 MySQL 的爬虫",
+   "review": "一个 Python 网页爬虫项目，通过 Selenium 抓取 MoviesMod 网站的电影/剧集详情、下载链接和图片，使用多进程并行抓取，结果写入 MySQL 数据库，并通过 Telegram bot 推送进度和错误通知。支持 Docker Compose 运行和交互式单标题模式。适用于需要从该站点采集影视元数据的个人使用者；注意下载链接数小时内即失效，数据仅作当日快照。",
+   "highlights": [
+    "使用 Selenium 无头模式抓取网页，multiprocessing 多进程并行处理",
+    "抓取结果写入 MySQL，支持存储链接有效性校验与失效清理",
+    "提供交互式 CLI 与 Docker Compose 两种运行方式，Telegram bot 实时通知"
+   ],
+   "use_cases": [
+    "批量抓取 MoviesMod 站点的电影/剧集元数据与下载链接",
+    "按标题、季、分辨率交互式选择抓取特定内容",
+    "通过 Docker Compose 定期运行抓取并刷新过期链接"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Database Integration**: Stores scraped data in a MySQL database. ／ - The MySQL rows are a snapshot of *what was available*, not a permanent mirror — re-scrape a title to refresh its links.",
+     "lines": [
+      16,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目本身是爬虫应用，使用 MySQL 存储抓取的数据，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Python-based web scraper for extracting movie and series details, including download links and images, from the MoviesMod website. The project uses **Selenium** for web scraping, **multiprocessing** for parallel execution, **MySQL** for data storage, and **Telegram** for real-time notifications. ／ - **Database Integration**: Stores scraped data in a MySQL database. ／ - `db` is MySQL 8.0 with `init.sql` applied on first start; credentials come from `DB_NAME` / `DB_USER` / `DB_PASSWORD` in `.env`.",
+   "evidence_lines": [
+    3,
+    16,
+    122
+   ]
+  },
+  "fn": "barryallen16/moviemod-scraper",
+  "sha": "f517199fb490",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

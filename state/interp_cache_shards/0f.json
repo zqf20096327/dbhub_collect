@@ -9417,5 +9417,136 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f9162386fa31": {
+  "identity": {
+   "one_liner": "为 Alembic 增加 PostgreSQL 枚举类型自动生成迁移的扩展库",
+   "review": "该库是一个 Alembic 扩展，导入后可让 autogenerate 自动生成创建、修改、删除 PostgreSQL 枚举类型的迁移，包括枚举值增删改和部分索引的保留与重建，并支持通过配置项关闭部分功能。适用于在 Python/SQLAlchemy 项目中管理 PostgreSQL schema 枚举的开发者；安装方式为 pip install。",
+   "highlights": [
+    "自动检测并生成枚举类型的创建、删除及枚举值增删改的迁移",
+    "修改枚举值时保留并重建引用该枚举的部分索引",
+    "提供 include_name、detect_enum_values_changes 等配置项控制行为"
+   ],
+   "use_cases": [
+    "SQLAlchemy 项目中 enum 类型与代码同步的 schema 迁移",
+    "Alembic autogenerate 无法处理枚举变更时的补充方案"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# alembic-postgresql-enum ／ - Create enums that currently are not in postgres schema ／ pip install alembic-postgresql-enum",
+     "lines": [
+      1,
+      6,
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 的迁移工具 Alembic 提供枚举管理扩展，属于数据库生态服务的工具/组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Alembic autogenerate support for creation, alteration and deletion of enums ／ pip install alembic-postgresql-enum",
+   "evidence_lines": [
+    3,
+    17
+   ]
+  },
+  "fn": "Pogchamp-company/alembic-postgresql-enum",
+  "sha": "f9162386fa31",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f9b29a924892": {
+  "identity": {
+   "one_liner": "本地成人媒体离线库与播放器，Rust 原生应用，用 SQLite 索引",
+   "review": "一个 Rust 原生桌面应用（egui+wgpu+GStreamer），对用户自有的成人媒体文件夹建索引，提供浏览、搜索、评分、标记、收件箱分诊和播放，不移动不改写原文件；评分与历史存在本地 SQLite 库。默认离线构建不含网络代码，仅支持 Linux 为主，状态为 alpha。适合想本地管理自有媒体集合的个人用户。",
+   "highlights": [
+    "读取并索引本地图片/视频，不移动、不改名、不写 sidecar 文件",
+    "SQLite FTS5 全文搜索文件名、标签、分类与标记",
+    "默认离线构建不编译网络栈，无账号无遥测"
+   ],
+   "use_cases": [
+    "本地成人媒体集合的私人编目与浏览",
+    "键盘驱动的单手浏览与播放（含无障碍预设）"
+   ],
+   "class unused": 1
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "JizzCraft is a native Rust app (egui + wgpu, GStreamer, SQLite) that indexes the folders you point it at, then lets you browse, search, rate, tag, triage and play, without ever moving, renaming or modifying a file. No account, no telemetry, and the default bui ／ - **Your files are read, never touched.** No moves, no renames, no sidecar files, no tags written into your media. Ratings, history and markers live in one SQLite database. A test hashes a media tree before and after every engine command.",
+     "lines": [
+      20,
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 SQLite 存储索引、评分与历史数据，是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "JizzCraft is a native Rust app (egui + wgpu, GStreamer, SQLite) that indexes the folders you point it at, then lets you browse, search, rate, tag, triage and play, without ever moving, renaming or modifying a file. No account, no telemetry, and the default build contains no network code at all. ／ - **Your files are read, never touched.** No moves, no renames, no sidecar files, no tags written into your media. Ratings, history and markers live in one SQLite database. A test hashes a media tree before and after every engine command.",
+   "evidence_lines": [
+    20,
+    71
+   ]
+  },
+  "fn": "kerstz/JizzCraft",
+  "sha": "f9b29a924892",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

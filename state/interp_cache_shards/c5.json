@@ -10110,5 +10110,297 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "900463415d27": {
+  "identity": {
+   "one_liner": "开源可用性监控与状态页，运行于 Cloudflare Workers 或单容器",
+   "review": "OpenUptime 提供可用性监控与公开状态页，支持 HTTP、TCP、DNS、心跳及 PostgreSQL、MySQL、Redis 探测，带告警、事件维护窗口与订阅。可部署到 Cloudflare Workers（需外部 Postgres）或 Docker 单容器自托管，含 MCP server 供 agent 管理监控。适合需要自托管监控服务的运维团队；托管版另有付费计划功能，自托管版为 MIT 且无配额限制。",
+   "highlights": [
+    "支持 HTTP、TCP、DNS、心跳及 PostgreSQL、MySQL、Redis 探测，带关键字匹配与慢响应告警",
+    "提供事件、维护窗口、公开状态页及 Slack、Telegram、PagerDuty、webhook 等告警渠道",
+    "内置 MCP server，供 MCP 客户端通过 OAuth 或 API key 管理监控、事件与状态页"
+   ],
+   "use_cases": [
+    "自托管服务可用性监控与告警",
+    "对外发布公开状态页",
+    "通过 MCP 由 AI agent 管理监控配置"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- HTTP, TCP, DNS, heartbeat, PostgreSQL, MySQL and Redis checks, with keyword matching and slow-response alerts ／ |`packages/db-pg`|Postgres implementation of `Repo`: Drizzle schema, migrations| ／ - A Postgres database reachable from the internet (Neon, Supabase, RDS, your own). Workers connect through Hyperdrive.",
+     "lines": [
+      9,
+      19,
+      35
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- HTTP, TCP, DNS, heartbeat, PostgreSQL, MySQL and Redis checks, with keyword matching and slow-response alerts",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对 PostgreSQL、MySQL、Redis 等数据库的探测检查，属于为监控数据库服务端点服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可，另有托管版付费服务但核心代码相同",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open-source uptime monitoring and status pages. Runs on Cloudflare Workers with Postgres, or in one Docker container. ／ - HTTP, TCP, DNS, heartbeat, PostgreSQL, MySQL and Redis checks, with keyword matching and slow-response alerts ／ |`packages/db-pg`|Postgres implementation of `Repo`: Drizzle schema, migrations|",
+   "evidence_lines": [
+    5,
+    9,
+    19
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "becoolme/openuptime",
+  "sha": "900463415d27",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1c1cd803b012": {
+  "identity": {
+   "one_liner": "Rust 编写的原生桌面 SQL/NoSQL 数据库客户端",
+   "review": "Baza Studio 是用 Rust 与 egui/wgpu 实现的原生桌面数据库客户端，运行于 Windows/macOS，提供 SQL 编辑器、表格数据编辑、查询构建器、导入导出、表设计器及内置 SSH 隧道和加密连接凭据库。它面向直接操作多种关系型与非关系型数据库的开发与运维人员。当前为 0.4.0-preview 预览版，安装包尚未签名或公证。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite、SQL Server、Oracle、ClickHouse、Redis、MongoDB 等多族数据库的连接与查询",
+    "提供表格数据编辑、查询构建器、CSV/JSON 导入导出与表设计器",
+    "内置 SSH 隧道、TLS 连接与 AES-256-GCM 加密的本地连接凭据库"
+   ],
+   "use_cases": [
+    "在桌面端浏览、编辑多种数据库中的表数据",
+    "通过 SSH 隧道与 TLS 安全连接远端数据库",
+    "CSV/JSON/SQL 文件的数据导入导出"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|PostgreSQL, TimescaleDB, CockroachDB, YugabyteDB, Greenplum, Amazon RDS / Aurora, Amazon Redshift, Azure, Google Cloud SQL, Supabase, Neon|PostgreSQL 17, TimescaleDB, CockroachDB|",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|MySQL, MariaDB, Percona, TiDB, PlanetScale, SingleStore, OceanBase, Amazon RDS / Aurora, Azure, Google Cloud SQL|MySQL 8.4, MariaDB 11, TiDB|",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|Oracle Database, Autonomous Database, Amazon RDS for Oracle, Oracle Database Free|Oracle Database 23ai Free|",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|SQLite|yes|",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|Microsoft SQL Server, Azure SQL Database, Azure SQL Managed Instance, Amazon RDS for SQL Server, Azure SQL Edge|Azure SQL Edge (SQL Server 2019 engine)|",
+     "lines": [
+      18
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|ClickHouse, ClickHouse Cloud|ClickHouse 26|",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|MySQL, MariaDB, Percona, TiDB, PlanetScale, SingleStore, OceanBase, Amazon RDS / Aurora, Azure, Google Cloud SQL|MySQL 8.4, MariaDB 11, TiDB|",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|MySQL|MySQL, MariaDB, Percona, TiDB, PlanetScale, SingleStore, OceanBase, Amazon RDS / Aurora, Azure, Google Cloud SQL|MySQL 8.4, MariaDB 11, TiDB|",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|MySQL|MySQL, MariaDB, Percona, TiDB, PlanetScale, SingleStore, OceanBase, Amazon RDS / Aurora, Azure, Google Cloud SQL|MySQL 8.4, MariaDB 11, TiDB|",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为连接多种数据库的桌面客户端工具，为数据库生态提供服务而非自建数据存储应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0-or-later，单一许可证",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Baza Studio is a native desktop database client for Windows and macOS. It speaks to relational databases (PostgreSQL, MySQL / MariaDB, SQLite, Microsoft SQL Server, Oracle), analytical ones (ClickHouse, DuckDB), key-value and document stores (Redis, MongoDB, Cassandra, Amazon DynamoDB) and search engines (Elasticsearch, OpenSearch), plus the cloud services built on them. It is written in Rust and draws its own window with egui and wgpu: there is no Electron, no WebView and no browser engine inside, and it runs without a Python server or Docker. All of its code is in `native/`. The program is free software under GPL-3.0-or-later and is an early preview (0.4.0-preview.1). ／ ## Supported databases ／ |PostgreSQL|PostgreSQL, TimescaleDB, CockroachDB, YugabyteDB, Greenplum, Amazon RDS / Aurora, Amazon Redshift, Azure, Google Cloud SQL, Supabase, Neon|PostgreSQL 17, TimescaleDB, CockroachDB|",
+   "evidence_lines": [
+    9,
+    11,
+    15
+   ]
+  },
+  "fn": "SurMistrz666/BazaStudio",
+  "sha": "1c1cd803b012",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c4592a13a46e": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 Markdown 笔记检索工具，为编码代理提供记忆",
+   "review": "gestalt-core 对用户的 Markdown 笔记做本地检索，为 Claude Code 和 Cursor 等编码代理在会话开始和每次提示前提供相关笔记片段。索引存于单个 SQLite 文件，包含 sqlite-vec 向量检索、FTS5 BM25 词法检索和可选的 Qwen3 重排序，并提供 MCP 服务器与 hooks 集成；数据不出本机、无需 API key。附带的 BEIR 基准结果为开发集调参所得，作者声明该数字偏乐观。",
+   "highlights": [
+    "提供混合检索：stella_en_400M_v5 向量（sqlite-vec）加 FTS5 BM25 词法回退，索引为单个 SQLite 文件",
+    "提供 MCP 服务器（gestalt_search）、会话启动和每提示 hooks 及斜杠命令，集成 Claude Code 与 Cursor",
+    "包含可复跑的 BEIR 检索基准与统计检验（bootstrap 区间、置换检验、reproduce.py）"
+   ],
+   "use_cases": [
+    "为 Claude Code / Cursor 会话注入历史笔记上下文，实现跨会话记忆",
+    "对本地 Obsidian 等 Markdown 笔记库做稠密与词法混合检索",
+    "复现和对比 BM25、稠密向量与重排序流水线在 BEIR 数据集上的检索指标"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Local search over your Markdown notes for Claude Code and Cursor (re-runnable BEIR benchmarks included).** Notes in, the right section back at the right moment. A stella_en_400M_v5 dense leg in SQLite with sqlite-vec, full-text BM25 as the lexical fallback,  ／ - **Dense search** over your notes: stella_en_400M_v5 vectors in sqlite-vec, with FTS5 BM25 as the lexical leg for a machine without the model, in one SQLite file. No service to run. ／ B --> I[(\"SQLite index<br/>FTS5 + vectors\")]",
+     "lines": [
+      11,
+      29,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将笔记索引存于 SQLite 文件，是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local search over your Markdown notes for Claude Code and Cursor (re-runnable BEIR benchmarks included).** Notes in, the right section back at the right moment. A stella_en_400M_v5 dense leg in SQLite with sqlite-vec, full-text BM25 as the lexical fallback, an optional cross-encoder rerank blended with the dense order, and hooks that put what matters in front of the agent at session start and before each prompt. Nothing leaves your machine and nothing needs an API key. ／ - **Dense search** over your notes: stella_en_400M_v5 vectors in sqlite-vec, with FTS5 BM25 as the lexical leg for a machine without the model, in one SQLite file. No service to run. ／ - **Agent integration**: an MCP server (`gestalt_search`), session-start and per-prompt hooks, slash commands such as `/save` and `/learn`, for Claude Code and Cursor.",
+   "evidence_lines": [
+    11,
+    29,
+    31
+   ]
+  },
+  "fn": "phbui/gestalt-core",
+  "sha": "c4592a13a46e",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

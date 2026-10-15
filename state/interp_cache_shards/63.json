@@ -10025,5 +10025,207 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1506345e7a4f": {
+  "identity": {
+   "one_liner": "DDIA 第二版中文翻译项目，Hugo 构建在线书站",
+   "review": "这是《设计数据密集型应用》第二版的中文翻译仓库，提供在线阅读站点（ddia.vonng.com），支持 EPUB 导出、llms.txt 输出与本地 Hugo 构建，由冯若航主持并有 212 位贡献者参与校订。面向数据库与分布式系统学习者，属于图书翻译项目而非数据库工具，README 中 PostgreSQL 仅出现在译者介绍中。",
+   "highlights": [
+    "提供在线阅读版本，支持 Markdown / llms.txt 输出和 EPUB 导出",
+    "提供 make dev / make build / make check 等 Hugo 本地构建命令",
+    "包含简繁转换脚本与持续更新的翻译校订流程"
+   ],
+   "use_cases": [
+    "学习数据密集型系统设计概念",
+    "参与或查阅 DDIA 中文翻译校订",
+    "自行构建本地书籍站点"
+   ],
+   "review_note": null
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**译者**：冯若航 / Vonng (rh@vonng.com) Pigsty 创始人，活跃开源贡献者，PostgreSQL Hacker。开源 RDS PG 发行版 Pigsty 与公众号《老冯云数》作者，数据库老司机，云计算泥石流，曾于阿里，苹果，探探担任架构师与DBA。",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库内容为图书翻译与站点构建，README 未声明其为数据库生态的工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "翻译声明仅供学习研究，未列出标准开源许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 设计数据密集型应用（第二版） - 中文翻译版 ／ **阅读**：访问 https://ddia.vonng.com 阅读本书在线版本，或使用 Hugo / OINK 1.3.0 主题自行构建。在线版支持稳定图表编号与交叉引用、顺序阅读、整书打印、Markdown / `llms.txt` 输出和 EPUB 导出。 ／ ## 本地开发",
+   "evidence_lines": [
+    1,
+    13,
+    18
+   ]
+  },
+  "fn": "Vonng/ddia",
+  "sha": "1506345e7a4f",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9d33d309ece1": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 MCP 服务器，供 AI 助手执行 SQL 与探索元数据",
+   "review": "这是 ClickHouse 组织发布的 MCP 服务器，将 ClickHouse 接入支持 MCP 协议的 AI 客户端（如 Claude Desktop）。提供 run_query、list_databases、list_tables 等工具，默认以只读模式执行 SQL，支持查询参数绑定、DESCRIBE/EXPLAIN 预检查、chDB 内嵌引擎查询，以及 HTTP/SSE 传输下的令牌或 OAuth 认证。适合需要让 AI 助手安全查询 ClickHouse 集群的运维与数据团队使用。",
+   "highlights": [
+    "提供 run_query、list_databases、list_tables 等 MCP 工具，默认只读执行 SQL，可通过 CLICKHOUSE_ALLOW_WRITE_ACCESS 开启写入",
+    "支持 MCP 2026-07-28 规范及 2024-11-05 至 2025-11-25 的旧版握手协议，含查询参数绑定与 DESCRIBE/EXPLAIN ESTIMATE 预检查",
+    "HTTP/SSE 传输默认要求认证，支持静态令牌、OAuth/OIDC 模式，并提供 /health 健康检查端点"
+   ],
+   "use_cases": [
+    "将 ClickHouse 接入 Claude Desktop 等 MCP 客户端，用自然语言驱动的代理执行分析 SQL",
+    "通过 AI 助手浏览数据库、表结构与列元数据，辅助分析前查询检查（DESCRIBE、EXPLAIN ESTIMATE）",
+    "借助 chDB 附加组件在无 ETL 情况下对文件、URL 等数据源执行内嵌 ClickHouse SQL 查询"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# ClickHouse MCP Server ／ An MCP server for ClickHouse. ／  * Execute SQL queries on your ClickHouse cluster.",
+     "lines": [
+      1,
+      5,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 提供 MCP 协议接入层，使 AI 客户端能查询该数据库，属于为其服务的中间件组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An MCP server for ClickHouse. ／  * Execute SQL queries on your ClickHouse cluster. ／ When using HTTP or SSE transport, authentication is **required by default**. The `stdio` transport (default) does not require authentication as it only communicates via standard input/output.",
+   "evidence_lines": [
+    5,
+    29,
+    173
+   ]
+  },
+  "fn": "ClickHouse/mcp-clickhouse",
+  "sha": "9d33d309ece1",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "45eae7e47f5b": {
+  "identity": {
+   "one_liner": "PostgreSQL schema 管理工具，用 YAML 文件版本化管理数据库对象",
+   "review": "pglifecycle 将 PostgreSQL 数据库 schema 保存在版本控制的 YAML 项目中，每个数据库对象一个文件并通过 JSON-Schema 校验。提供 pull（从活库或 pg_dump 归档读取）、build（生成 pg_restore 兼容归档）、create（脚手架）三个子命令，通过 Homebrew、Cargo、Docker 及预编译二进制分发，面向管理 PostgreSQL schema 的 DBA 与开发者。",
+   "highlights": [
+    "提供 pull/build/create 子命令，实现活库与 YAML 项目间的 schema 双向流转",
+    "schema 对象按文件存储为 YAML 并经 JSON-Schema 校验",
+    "build 生成 pg_restore 兼容的自定义格式归档"
+   ],
+   "use_cases": [
+    "将现有 PostgreSQL 数据库 schema 纳入 Git 版本控制",
+    "从 pg_dump 归档重建可恢复的 schema 归档",
+    "以代码化方式管理多环境 schema 变更"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A PostgreSQL schema management tool ／ - **`pull`** reads a live database (or a `pg_dump` archive) and writes ／ The image bundles the PostgreSQL 17 client tools pglifecycle shells out to.",
+     "lines": [
+      3,
+      14,
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为 PostgreSQL schema 管理工具，读取活库并生成 pg_restore 兼容归档，为数据库运维服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PostgreSQL schema management tool ／ pglifecycle keeps your database schema in a version-controlled project ／ - **`pull`** reads a live database (or a `pg_dump` archive) and writes",
+   "evidence_lines": [
+    3,
+    9,
+    14
+   ]
+  },
+  "fn": "gmr/pglifecycle",
+  "sha": "45eae7e47f5b",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

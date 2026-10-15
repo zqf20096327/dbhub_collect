@@ -7669,5 +7669,170 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "18098d206cde": {
+  "identity": {
+   "one_liner": "开源数据摄取引擎，将数据库/Kafka/S3 复制到 Apache Iceberg",
+   "review": "OLake 是一个数据摄取/复制引擎，通过全量加载、CDC 和增量同步，将 PostgreSQL、MySQL、MongoDB、Oracle、MSSQL 等数据库及 Kafka、S3 的数据写入 Apache Iceberg 或 Parquet，支持多种 Iceberg Catalog。提供 Web UI 与 CLI 两种使用方式，可经 Docker Compose、Helm 等部署。适合需要搭建湖仓数据管道的数据工程师。",
+   "highlights": [
+    "支持全量加载、CDC 与增量三种同步模式，含自动 schema 发现与演进",
+    "写入 Apache Iceberg 或 Parquet，支持 Glue、Hive、JDBC、REST 等 Catalog",
+    "提供 Web UI 与 CLI（spec/check/discover/sync 等命令）两种运行方式"
+   ],
+   "use_cases": [
+    "将 OLTP 数据库迁移复制到 Iceberg 湖仓",
+    "基于 CDC 数据为 Athena、Trino 等 BI/查询引擎供数",
+    "在云对象存储上构建近实时数据湖仓"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Ice ／ |PostgreSQL|✅|✅ `pgoutput`|✅|`wal2json` deprecated|Postgres Docs|",
+     "lines": [
+      34,
+      76
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Ice ／ |MySQL|✅|✅|✅|Binlog-based CDC|MySQL Docs|",
+     "lines": [
+      34,
+      77
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "**OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Ice ／ |Oracle|✅|WIP|✅|JDBC based Full Load & Incremental|Oracle Docs|",
+     "lines": [
+      34,
+      79
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Ice ／ |MSSQL|✅|✅|✅|Full Load, CDC & Incremental|MSSQL Docs|",
+     "lines": [
+      34,
+      81
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为多种数据库提供专用的复制/同步连接器，属于为数据库生态服务的数据管道工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OLake Go** supports replication from **transactional databases** such as **PostgreSQL, MySQL, MongoDB, Oracle, DB2, and MSSQL**, **event-streaming systems like Apache Kafka** and **Object-store like S3**, into open data lakehouse formats such as **Apache Iceberg** or **Plain Parquet** — delivering blazing-fast performance with minimal infrastructure cost. ／ ### 🔧 Supported Sources and Destinations ／ curl -sSL https://raw.githubusercontent.com/datazip-inc/olake-ui/master/docker-compose.yml | docker compose -f - up -d",
+   "evidence_lines": [
+    34,
+    70,
+    131
+   ]
+  },
+  "fn": "datazip-inc/olake",
+  "sha": "18098d206cde",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7f109dbbc1bf": {
+  "identity": {
+   "one_liner": "自托管 Linux 设备管理（MDM）服务器，用各发行版原生工具管理设备",
+   "review": "lindm 是一个自托管的 Linux 设备管理（MDM）服务器，提供设备注册、配置分发、磁盘加密与密钥托管、远程锁定/擦除、系统更新、漏洞通告和远程协助等功能。它面向需要管理 Linux 设备集群的管理员，依赖各发行版原生包与系统工具，服务端用 Go 编写并以 PostgreSQL 作为存储和工作队列，支持通过自建签名发布包安装，管理端提供审计日志与双人审批机制。",
+   "highlights": [
+    "提供设备注册、配置分阶段发布、磁盘加密密钥托管、远程锁定/擦除与 OS 更新窗口管理",
+    "支持浏览器端经用户同意的远程协助、签名审计日志与导出，并内置 MCP server 供 AI 助手接入",
+    "服务端为 Go 实现，以 PostgreSQL 作为存储与工作队列，设备代理通过网络进程与 root 执行器分离"
+   ],
+   "use_cases": [
+    "企业或团队对 Ubuntu/Debian/Fedora/RHEL 等 Linux 设备集群的集中注册与配置管理",
+    "设备丢失时的远程锁定与擦除响应流程（含独立审批）",
+    "基于厂商安全通告的漏洞跟踪与补丁请求管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`lindmd` is a Go server with PostgreSQL as its store and work queue.",
+     "lines": [
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 lindmd 是以 PostgreSQL 作为存储和工作队列的 Go 服务器，PostgreSQL 是其内部依赖而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，第三方代码与数据保留各自许可（见 NOTICE）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "lindm is a self-hosted MDM for Linux fleets. ／ |Server platform|Architecture|PostgreSQL|Packages|Install mode|Lifecycle| ／ `lindmd` is a Go server with PostgreSQL as its store and work queue.",
+   "evidence_lines": [
+    8,
+    105,
+    159
+   ]
+  },
+  "fn": "radkawar/lindm",
+  "sha": "7f109dbbc1bf",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

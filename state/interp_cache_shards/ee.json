@@ -8298,5 +8298,166 @@
   "generated_at": "2026-10-14",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "75e6deefe315": {
+  "identity": {
+   "one_liner": "Rust 版本地优先 issue 跟踪器，SQLite 存储 + JSONL 导出协作",
+   "review": "br 是 Steve Yegge's beads 的 Rust 移植，冻结在经典 SQLite+JSONL 架构上，用于在 git 仓库内做本地优先、非侵入式 issue 跟踪。面向开发者与 AI 编码代理，所有命令支持 --json 输出，变更自动刷新 JSONL 供 git 合并，但不自动 commit/push、不装钩子、无后台守护进程；需 Rust nightly 可从源码构建。",
+   "highlights": [
+    "本地 issue 状态存于 .beads/ 下 SQLite，变更默认自动刷新 JSONL 导出供 git 协作",
+    "每个命令支持 --json，另提供 TOON、TOON、plain、quiet 等输出模式，供 AI 代理读取",
+    "默认非侵入：不自动 commit/push/pull、不安装钩子、不运行后台服务"
+   ],
+   "use_cases": [
+    "离线/本地仓库内进行带依赖关系的 issue 跟踪",
+    "通过 git 合并 JSONL 实现多人或代理间的任务协作",
+    "为 AI 编码代理提供机器可读的任务队列与状态输出"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储自身 issue 数据，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**br** is a local-first issue tracker that stores issues in SQLite with JSONL export for git-friendly collaboration. It provides dependency-aware issue tracking, machine-readable output, sync/recovery tooling, and agent-friendly workflows without leaving your repository. ／ # beads.db       # SQLite database ／ **SQLite** for fast local queries. **JSONL** for git-friendly collaboration.",
+   "evidence_lines": [
+    44,
+    97,
+    104
+   ]
+  },
+  "fn": "Dicklesworthstone/beads_rust",
+  "sha": "75e6deefe315",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "50bb55ac893a": {
+  "identity": {
+   "one_liner": "AI 编码代理的持久化记忆系统，本地 SQLite 存储，带事实更替机制",
+   "review": "Knowl 为 Claude Code、Cursor、Codex 等 AI 编码代理提供持久化记忆，通过 MCP 或 CLI 读写事实，并在同一主题出现新事实时将旧记录标记为 superseded 以免新旧冲突。数据存储于本地 SQLite，支持 npm 全局安装，无需 API key；对 Bun/Deno 直接运行不支持，另提供可选的 knowl.cloud 托管共享层。",
+   "highlights": [
+    "提供 28 个 MCP 工具，通过 MCP 或 CLI 为多个 AI 代理提供读写记忆",
+    "实现事实更替（supersession）机制：同一主题新写入会取代旧记录，旧记录保留于 timeline 可查",
+    "本地运行，捆绑 SQLite、tree-sitter 与嵌入运行时，声明无数据外发、无需 API key"
+   ],
+   "use_cases": [
+    "为 Claude Code/Cursor/Codex 等代理维护跨会话的项目事实与决策记忆",
+    "多个代理并行工作（含 git worktree）时共享同一份记忆存储",
+    "团队通过可选的 knowl.cloud 工作区跨成员共享代理知识"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Claude Code answers which database the project uses from memory, records the move to Postgres and retires the MySQL decision; Codex answers the same question from that memory in a second terminal; the Claude app answers from the same store over the hosted conn ／ Most memory systems are append-only. Storing \"we moved to SQLite\" leaves \"we use PostgreSQL\"",
+     "lines": [
+      42,
+      164
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Claude Code answers which database the project uses from memory, records the move to Postgres and retires the MySQL decision; Codex answers the same question from that memory in a second terminal; the Claude app answers from the same store over the hosted conn",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "addons (SQLite, tree-sitter, the embedding runtime), so running the CLI under the Bun or Deno ／ Most memory systems are append-only. Storing \"we moved to SQLite\" leaves \"we use PostgreSQL\"",
+     "lines": [
+      72,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以本地捆绑的 SQLite 作为自身记忆数据的存储，属使用数据库的应用，而非为某数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Knowl is persistent memory for Claude Code, Cursor and Codex, over ／ addons (SQLite, tree-sitter, the embedding runtime), so running the CLI under the Bun or Deno ／ npm install -g @dat999zx/knowl",
+   "evidence_lines": [
+    32,
+    72,
+    49
+   ]
+  },
+  "fn": "dat999zx/knowl",
+  "sha": "50bb55ac893a",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

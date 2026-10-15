@@ -7717,5 +7717,276 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6ff73e795736": {
+  "identity": {
+   "one_liner": "常驻 IRC bouncer，服务端终止 IRC 协议并提供 REST/WebSocket API",
+   "review": "grappa-irc 是一个自托管 IRC bouncer，包含服务端 grappa（Elixir/Phoenix，终止上游 IRC 并暴露 REST 与 WebSocket 接口）和 PWA 客户端 cicchetto。数据以 SQLite 通过 Ecto 存储会话回滚记录，单容器运行，支持 Docker、deb、AUR 等安装方式，面向自托管 IRC 用户。",
+   "highlights": [
+    "每个 (user, network) 会话由独立监督的 GenServer 管理，崩溃仅影响该会话",
+    "会话回滚记录经 Ecto 写入 SQLite，按保留策略限量",
+    "客户端不解析 IRC 协议，仅消费 JSON 资源与事件流"
+   ],
+   "use_cases": [
+    "在浏览器或手机 PWA 上持续保持 IRC 在线并回看历史消息",
+    "在 VPS 上自托管个人 IRC 网关",
+    "通过 shottino 桥接从 irssi/weechat 等客户端连接"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Events stream into a per-`(network, channel)` paginated scrollback (sqlite via Ecto), bounded by a retention policy. ／ grappa runs as a single container against a sqlite DB. There is no config file — every `(user, network)` binding lives in the DB and is read by `Grappa.Bootstrap` at boot. The operator interface is `bin/grappa`.",
+     "lines": [
+      54,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "grappa 是使用 SQLite 存储回滚记录的 IRC 聊天应用，SQLite 仅作为其数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Events stream into a per-`(network, channel)` paginated scrollback (sqlite via Ecto), bounded by a retention policy. ／ grappa runs as a single container against a sqlite DB. There is no config file — every `(user, network)` binding lives in the DB and is read by `Grappa.Bootstrap` at boot. The operator interface is `bin/grappa`.",
+   "evidence_lines": [
+    54,
+    78
+   ]
+  },
+  "fn": "vjt/grappa-irc",
+  "sha": "6ff73e795736",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d7d798d49c27": {
+  "identity": {
+   "one_liner": "将 .NET 解决方案索引进 SQLite 的 Roslyn 语义地图，供 AI 代理查询",
+   "review": "Lurp 是一个 Windows 专用命令行工具，通过 Roslyn 加载 .NET 解决方案，把符号、类型关系、源码位置等存入 SQLite 快照库，之后提供上下文胶囊、语义 diff、影响面分析、全文搜索等查询，并暴露 MCP 接口供 AI 代理使用；需要 .NET 10 运行时（索引还需 SDK），且工作区必须可还原。",
+   "highlights": [
+    "提供 context、impact、diff、search、grep 等十余个 CLI 子命令及 MCP 接口",
+    "以快照方式持久化符号与类型关系，支持增量索引与证据级别标注",
+    "内置 ASP.NET Core、DI、MediatR、EF Core 等六个框架关系适配器"
+   ],
+   "use_cases": [
+    "为 AI 代理提供代码库的有界上下文检索",
+    "分析 C# 项目的调用影响面与语义变更",
+    "查找死代码候选与未使用的 using 指令"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small,",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "SQLite 仅作为该工具索引数据的内部存储，工具本身服务于 .NET 代码分析与代理检索生态而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small, ／ |`index`|Build or update the snapshot-bound map in `index.db`.| ／ (`--mode=index`, `status --solution=`, MCP `lurp_index`, and MCP `lurp_status` with",
+   "evidence_lines": [
+    10,
+    53,
+    93
+   ]
+  },
+  "fn": "t-macabee/lurp",
+  "sha": "d7d798d49c27",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "66b6b1c8b547": {
+  "identity": {
+   "one_liner": "基于 Next.js + Prisma + PostgreSQL 的求职申请跟踪系统",
+   "review": "一个全栈求职申请跟踪（CRM）应用，提供申请记录增删改查、内置职位目录、统计图表与 CSV/Excel 导出，使用 Prisma ORM 持久化到 PostgreSQL，配合 NextAuth 认证与可选的 FastAPI AI 管道，面向求职者及全栈学习者的参考项目。",
+   "highlights": [
+    "提供职位申请的 CRUD、搜索过滤、分页与统计图表面板",
+    "使用 Prisma ORM 读写 PostgreSQL，支持 CSV/Excel 数据导出",
+    "内置职位目录与定时同步任务，可选 FastAPI/Ollama AI 分析管道"
+   ],
+   "use_cases": [
+    "求职者集中管理和跟踪投递记录与状态",
+    "全栈学习参考：Next.js App Router、TanStack Query、Prisma 实践",
+    "基于内置职位目录发现并跟踪新职位"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Job Application Tracker & Discovery — Next.js, TypeScript, Prisma, PostgreSQL, Job Postings Catalog (+ FastAPI AI Pipeline) FullStack Project ／ PostgreSQL ／ |**PostgreSQL**|—|Relational database for job records|",
+     "lines": [
+      1,
+      10,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个以 PostgreSQL 存储求职数据的完整 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A production-style, full-stack **job application CRM** — not a generic job board. It helps you track applications you have already submitted, link them to postings in the app's own Postgres job postings catalog (salary, status, workplace and lifecycle changes), discover new roles to track, visualize your search with charts and KPIs, and (Phase 2) run an AI insights pipeline. Built for learning: App Router SSR, Server Actions, TanStack Query hydration, optimistic UI, multi-layer caching, SSE cross-tab sync, and strict TypeScript end-to-end. ／ |**PostgreSQL**|—|Relational database for job records|",
+   "evidence_lines": [
+    15,
+    108
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "arnobt78/Job-Application-Tracker--NextJS-FullStack",
+  "sha": "66b6b1c8b547",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b91e5365f425": {
+  "identity": {
+   "one_liner": "Windows 本地复式记账应用，数据存储于本地 SQLite 文件",
+   "review": "Ledjoro 是面向 Windows 小型企业的免费开源记账软件，提供复式账簿、发票、账单、银行对账、销售税计算及 QuickBooks 导入与同步。数据以本地 SQLite 文件存储，无需订阅或云账户，支持自动备份与一键还原。当前为 beta 版本，exe 未做代码签名，作者建议用户自行保留备份。",
+   "highlights": [
+    "数据以本地 SQLite 文件保存，支持加密备份与还原",
+    "支持银行对账、OFX/QFX/QBO 语句文件导入及自动备份计划",
+    "支持 QuickBooks Desktop 导入与 Web Connector 同步，并可生成发票 PDF"
+   ],
+   "use_cases": [
+    "小型企业在 Windows 上离线管理复式账簿",
+    "从 QuickBooks 迁移账务数据并持续同步",
+    "导入银行对账单文件并完成银行对账"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Ledjoro is one native Windows program (no browser, no Chromium, no Electron, no web view) with your data in a local SQLite file and zero npm dependencies. Original design and code; not affiliated with or endorsed by Intuit. ／ - **The engine** (ledger, SQLite database, importers, reports) is the same code the tests exercise. It runs as a hidden background process embedded in the exe (Node.js single-executable app), unpacks to `Ledjoro-Data\\engine\\` on first launch, has its SHA-256 v",
+     "lines": [
+      28,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明应用将账簿数据存储在本地 SQLite 文件中，SQLite 是其数据存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Ledjoro is one native Windows program (no browser, no Chromium, no Electron, no web view) with your data in a local SQLite file and zero npm dependencies. Original design and code; not affiliated with or endorsed by Intuit. ／ **Free, private accounting for small businesses on Windows.** Invoices, bills, bank reconciliation and reports, with your books kept in a file on your own computer. No account to create, no subscription, nothing sent anywhere.",
+   "evidence_lines": [
+    28,
+    5
+   ]
+  },
+  "fn": "Tusivo/Ledjoro",
+  "sha": "b91e5365f425",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

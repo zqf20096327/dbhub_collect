@@ -9531,5 +9531,145 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fde3cfcf898f": {
+  "identity": {
+   "one_liner": "SQL 原生时序数据库，单二进制，Parquet 存储，兼容 InfluxDB 协议",
+   "review": "Arc 是一个时序分析型数据库，提供高吞吐写入、自动 Parquet 存储与压缩、SQL 查询层、保留策略和连续查询，使用 DuckDB 作为查询引擎，以单个静态链接二进制部署。面向需长期保留机器/设备遥测数据的团队，支持 InfluxDB Line Protocol 与 Telegraf 写入，采用 AGPL-3.0 许可，另有商业授权选项。",
+   "highlights": [
+    "支持 InfluxDB Line Protocol 与 Telegraf 兼容写入，数据以 Apache Parquet 格式存储于本地磁盘、S3、Azure 或 S3 兼容对象存储",
+    "提供 JSON、MessagePack、Arrow IPC 三种查询输出格式，使用 DuckDB 作为查询引擎",
+    "单个静态链接二进制部署，无外部运行时依赖，支持保留策略、连续查询、备份恢复与认证"
+   ],
+   "use_cases": [
+    "机器、车辆、IoT 设备遥测数据的长期全分辨率存储与分析",
+    "从 InfluxDB 逐步迁移：通过 Line Protocol 双写验证后切换",
+    "边缘/离线（air-gap）环境下的本地遥测采集与 SQL 分析"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Operational overhead**: A simple workload turns into a PostgreSQL extension stack or a multi-service cluster. ／ - If your workload is primarily transactional relational data and already fits comfortably in PostgreSQL, start by evaluating TimescaleDB. ／ Arc deploys as one statically-linked executable. No JVM, no Python environment, no PostgreSQL cluster to manage, no ZooKeeper ensemble to babysit. Run it on a laptop, a factory edge box, an on-premises server, or a Kubernetes cluster. Same binary, same config ",
+     "lines": [
+      27,
+      51,
+      148
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "See the InfluxDB migration guide, or compare Arc with TimescaleDB, InfluxDB, ClickHouse, and Elasticsearch.",
+     "lines": [
+      74
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "Arc 本身是一个独立时序数据库（以 DuckDB 为查询引擎），既非为其他数据库生态服务的工具，也非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另有 Arc Enterprise 商业许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open, SQL-native time-series database for telemetry you need to keep. Arc ingests 34M+ records/sec, stores data as standard Parquet on infrastructure you own, and lets you query recent and historical data together. InfluxDB Line Protocol and Telegraf compatible. Single binary. AGPL-3.0. ／ Arc is a complete time-series analytical database: ingestion pipeline, Parquet storage engine, compaction system, SQL query layer, retention policy manager, continuous query scheduler, and telemetry integrations — in one binary. It uses DuckDB as its query engine, while Arc adds the pieces needed to run a durable ingestion and analytics service: high-throughput writes with automatic Parquet flushing, background compaction, scheduled compute, data lifecycle management, authentication, backup and restore, and enterprise clustering. ／ See the InfluxDB migration guide, or compare Arc with TimescaleDB, InfluxDB, ClickHouse, and Elasticsearch.",
+   "evidence_lines": [
+    13,
+    37,
+    74
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Basekick-Labs/arc",
+  "sha": "fde3cfcf898f",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97a58ec559e0": {
+  "identity": {
+   "one_liner": "校验并规范化 OpenTelemetry 属性键值对的 JavaScript 库",
+   "review": "这是一个 npm 库，用于在调用点提前校验 OpenTelemetry 属性是否符合语义约束（值类型、键字符、null/NaN 处理），输出可直接交给 exporter 或日志行的干净对象。面向产生遥测数据的 JS 开发者。注意：仓库名含 tidb 但内容与 TiDB 数据库无关。",
+   "highlights": [
+    "提供 sanitizeAttributes/sanitizeAttribute/sanitizeValue/sanitizeKey 及 AttributeValidationError 导出",
+    "在产生值的调用点提前校验，避免 exporter 丢弃整批遥测数据",
+    "拒绝 null、NaN、±Infinity 等在 OTLP 编码中有风险或易隐藏 bug 的值"
+   ],
+   "use_cases": [
+    "为 OpenTelemetry 导出器准备符合规范的属性对象",
+    "在遥测管道上游提前发现并修复非法属性值"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "# open-tidb",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 内容为 OpenTelemetry 属性校验库，未涉及任何数据库功能，与 TiDB 仅同名。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Validates and coerces key-value attribute pairs against OpenTelemetry semantic type constraints, returning a clean object you can hand to an exporter or log line. ／ The exports are: `sanitizeAttributes`, `sanitizeAttribute`, `sanitizeValue`, `sanitizeKey`, and the `AttributeValidationError` class. `sanitizeAttributes` accepts a plain object or a `Map` and returns a fresh plain object — the input is never mutated. ／ OpenTelemetry attribute values must be `string | boolean | number | homogeneous array of those`. Exporters and collectors enforce this late, often by dropping the entire batch when they hit a bad value. This library checks early, at the call site where the bad value was produced, so you find out about the problem immediately and can fix the caller rather than losing telemetry downstream.",
+   "evidence_lines": [
+    3,
+    14,
+    18
+   ]
+  },
+  "fn": "ShujiPereira/open-tidb",
+  "sha": "97a58ec559e0",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

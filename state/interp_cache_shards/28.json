@@ -9732,5 +9732,85 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c74915b3387f": {
+  "identity": {
+   "one_liner": "异步 B2B 线索抓取打分 Agent，LLM 结构化输出+Playwright 爬取",
+   "review": "一个用 Playwright 抓取企业网站、经 LLM 结构化输出生成语义摘要并计算 ICP 匹配分数的线索富化流水线，提供 CLI 和 FastAPI 异步 REST API 两种运行方式，结果持久化到 SQLite 或 PostgreSQL，并通过 LiteLLM 支持 OpenAI/Anthropic/OpenRouter 多家模型供应商，适合需要批量线索评估与集成的销售/市场开发团队。",
+   "highlights": [
+    "支持 CLI 与 FastAPI REST API 两种运行方式，任务为异步提交加轮询",
+    "通过 LiteLLM 以 Pydantic v2 response_format 校验 LLM 输出，供应商可一行配置切换",
+    "内置 SSRF 防护，对每次浏览器导航、子资源请求及重定向逐一校验目标地址",
+    "结果可持久化到 SQLite 或 PostgreSQL，写入使用唯一约束去重保证幂等"
+   ],
+   "use_cases": [
+    "批量抓取企业官网并生成 ICP 匹配度评分的线索富化",
+    "通过 REST API 将线索富化嵌入自动化工作流（含 n8n Compose 栈）",
+    "以离线测试（147 项）覆盖的流水线二次开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`DATABASE_URL`|–|PostgreSQL DSN (`postgresql://user:pw@host:5432/db`). When set it replaces SQLite.| ／ docker compose exec postgres psql -U postgres -d leads_db \\",
+     "lines": [
+      121,
+      178
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`DATABASE_URL`|–|PostgreSQL DSN (`postgresql://user:pw@host:5432/db`). When set it replaces SQLite.| ／ # SQLite",
+     "lines": [
+      121,
+      174
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite/PostgreSQL 仅作为流水线结果的存储后端，项目本身是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high-performance, fully asynchronous pipeline that crawls target company domains, extracts semantic Markdown, and computes deterministic ICP fit scores using LLM structured outputs. Run it as a **CLI** or as a **REST API** (FastAPI, `202 Accepted` + polling). The LLM layer is provider-agnostic through LiteLLM (OpenAI, Anthropic, OpenRouter), results are persisted to **SQLite or PostgreSQL**, and the browser is guarded against SSRF, including redirect hops. ／ |`DATABASE_URL`|–|PostgreSQL DSN (`postgresql://user:pw@host:5432/db`). When set it replaces SQLite.| ／ **Docker Compose**: API, PostgreSQL and n8n together (see Docker Compose & n8n):",
+   "evidence_lines": [
+    10,
+    121,
+    165
+   ]
+  },
+  "fn": "Nazar-Plokhuta/lead-enrichment-agent",
+  "sha": "c74915b3387f",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

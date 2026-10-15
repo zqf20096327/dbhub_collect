@@ -9460,5 +9460,71 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4da24b828cc8": {
+  "identity": {
+   "one_liner": "Go 生态组件库，含 MySQL binlog canal 处理等模块",
+   "review": "go-fries/fries 是一组 Go 语言组件库，从 go-kratos-ecosystem/components 迁移而来，提供批处理、缓存、事件分发、限流、分布式锁、MySQL binlog canal 处理、GORM/Ent 集成等模块，供 Go 开发者在 Kratos、Gin、Chi 等框架中按需引入。MySQL 模块通过 canal 处理 binlog 并用 Redis 存储位点；v4 版本相对 v3 可能包含破坏性变更。",
+   "highlights": [
+    "提供 mysql/canal 模块用于 MySQL binlog 处理，支持 Redis 位点存储与 server 生命周期集成",
+    "提供 GORM、Ent、Redis 等数据库相关组件的集成模块（日志、多驱动路由、缓存后端等）",
+    "通过 go get 安装，MIT 许可，模块覆盖批处理、队列、限流、加密、健康检查等通用能力"
+   ],
+   "use_cases": [
+    "Go 应用需要消费 MySQL binlog 并持久化消费位点",
+    "为 GORM/Ent 项目补充多目标日志、OpenTelemetry 日志等集成",
+    "在 Kratos/Gin/Chi 项目中引入队列、限流、分布式锁等通用组件"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|`mysql/canal` `mysql/canal/positioner/redis` `mysql/canal/server`|MySQL binlog processing with Redis position storage and server lifecycle integration.|",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供为 MySQL binlog 处理及 GORM/Ent/Redis 服务的集成组件，属于为数据库生态服务的工具库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Ent|`ent` `ent/multidriver`|Ent integrations for logging and routing operations across multiple drivers.| ／ |GORM|`gorm/logger/multi` `gorm/logger/otel` `gorm/scope`|Multi-target and OpenTelemetry loggers plus reusable query scopes for GORM.| ／ |MySQL|`mysql/canal` `mysql/canal/positioner/redis` `mysql/canal/server`|MySQL binlog processing with Redis position storage and server lifecycle integration.|",
+   "evidence_lines": [
+    41,
+    47,
+    59
+   ]
+  },
+  "fn": "go-fries/fries",
+  "sha": "4da24b828cc8",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

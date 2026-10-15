@@ -9588,5 +9588,96 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1a37b99ed138": {
+  "identity": {
+   "one_liner": "Rust 编写的 AI 原生数据平台，在对象存储上提供混合检索等多种索引",
+   "review": "Loams 是一个以对象存储桶为唯一数据底座的开源数据平台，将向量/BM25 混合检索、响应式文档、图、分析、SQL 与持久化 agent 运行整合在单一引擎上，数据以 Lance、Tantivy 等开放格式存放。面向需要自建检索与数据基础设施的开发者，当前为 Preview 版本，通过 Docker Compose 自托管，API 与格式仍可能变动。",
+   "highlights": [
+    "在单个 DataFusion 查询中融合向量、BM25 与过滤（RRF）",
+    "兼容 Qdrant 与 Elasticsearch 客户端 API，并提供 Arrow Flight SQL 与 Postgres/MySQL wire 接入",
+    "提供 TypeScript、Python、Go、Rust 等 SDK 及 Web 控制台、桌面端与 CLI"
+   ],
+   "use_cases": [
+    "在对象存储上为 AI 应用构建混合检索（向量+全文）",
+    "用单引擎替代多个检索/图/流式组件的自托管部署",
+    "基于开放格式（Lance、Tantivy、Iceberg）直接读取桶内数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "|**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      31,
+      35
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "|**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      31,
+      35
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "compat",
+     "quote": "|**Loams House**|ClickHouse-compatible analytics with engine-level access control (opt-in profile)|",
+     "lines": [
+      34
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket| ／ Apache License 2.0. Loams builds on DataFusion, Lance, Tantivy, Quickwit, qdrant-edge, SlateDB, openraft, TiKV, TiDB, Neon, Grafeo, chDB and Resonate; attributions are in NOTICE. Everything needed to self-host Loams is open source here; only metering, billing ",
+     "lines": [
+      35,
+      75
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目本身是运行在对象存储上的数据平台引擎组件，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0，open core：计量、计费与商业 API 为专有",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Loams is an open-source, AI-native data platform in Rust. It keeps your data in *your* object-storage bucket (S3, GCS, Azure Blob, RustFS or a local directory) in open formats: Lance and Tantivy today, Iceberg next. Compute is stateless and holds only caches. ／ > **Preview (v0.1.0-preview.2).** You run the stack yourself with Docker Compose, locally or on your own VMs, over your own Tailscale tailnet, and use the hosted console at console.loams.dev. Not production ready: APIs, formats and flags can change between previews. ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire|",
+   "evidence_lines": [
+    7,
+    9,
+    31
+   ]
+  },
+  "fn": "ostrium-labs/loams",
+  "sha": "1a37b99ed138",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
