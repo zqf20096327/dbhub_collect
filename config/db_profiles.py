@@ -75,8 +75,9 @@ PROFILES = [
      "orgs": ["postgres", "percona"],
      "search": None,
      "brand_infer": {"percona": ["MySQL", "PostgreSQL"]},
-     "watch": ["postgres/postgres"],
-     "notes": "postgres topic 为变体补扫；percona org+品牌词双修"},
+     "watch": ["postgres/postgres", "darold/ora2pg"],
+     "notes": "postgres topic 为变体补扫；percona org+品牌词双修；"
+              "ora2pg 无 topic，四通道唯一入口是 watch"},
     {"name": "MySQL", "section": "intl", "enabled": True,
      "aliases": ["mysql"],
      "topics": ["mysql", "mysql-database"],
