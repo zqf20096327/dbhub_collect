@@ -9411,5 +9411,98 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ff34396716d4": {
+  "identity": {
+   "one_liner": "自托管 VPN 面板，用 SSH 添加节点并管理代理协议",
+   "review": "Mistgate 是一个自托管面板，用于为家人、朋友或小团队运行 VPN，支持 Hysteria2、VLESS REALITY 和 AmneziaWG 协议，通过浏览器经 SSH 添加服务器，为每人生成一条订阅链接，并提供客户端视角健康检查、Telegram 告警和内置 MCP 服务器供 AI 代理操作。面板与节点为两个静态 Go 二进制，使用 SQLite 存储，无需 Docker 或独立数据库服务器，当前处于 beta 阶段，API 与节点协议仍可能变更。",
+   "highlights": [
+    "提供 Hysteria2、VLESS REALITY、AmneziaWG 协议支持，每人一条订阅链接",
+    "面板内置 MCP 服务器，允许 Claude Code、Codex 等 AI 代理以 plan→apply 方式管理节点，敏感凭据不下发",
+    "每 5 分钟以客户端方式做隧道健康检查，节点 doctor 执行 17 项主机检查，警告发送至 Telegram"
+   ],
+   "use_cases": [
+    "为家庭、朋友、社区或小团队自托管 VPN 并按人分发链接",
+    "通过浏览器 SSH 一键添加新节点并自动配置证书、端口与防火墙",
+    "借助 AI 代理（MCP）批量巡检、修复和安装节点，变更需人工确认"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+     "lines": [
+      79
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+     "lines": [
+      79
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Two static Go binaries, one for the panel and one for the node agent. SQLite and systemd: no Docker, no database server. On a small test server (1 vCPU / 1 GB) the panel alone idles at 16-20 MiB of private memory (3x-ui 68-74, PasarGuard 262-265, Remnawave 426 ／ |Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+     "lines": [
+      39,
+      79
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite|",
+     "lines": [
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板自身使用 SQLite 存储其配置与运行数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Two static Go binaries, one for the panel and one for the node agent. SQLite and systemd: no Docker, no database server. On a small test server (1 vCPU / 1 GB) the panel alone idles at 16-20 MiB of private memory (3x-ui 68-74, PasarGuard 262-265, Remnawave 426-454); panel, node and database together on one 2 vCPU / 2 GB server take 57 MiB (the same three: 74, 297 and 761). In that test, adding and removing users and restarting the panel dropped no connections, while 3x-ui restarts its core when users change. A stranger who opens the panel's address sees a decoy site; the admin sits behind a secret path or host name. Releases are reproducible and signed offline, and nodes install only signed builds. Torrent protection blocks plaintext BitTorrent on the node; its events keep what matched and the destination port, and no address leaves the node. Security · Releases and signing · Benchmarks, including where Mistgate is slower ／ |Database|SQLite|SQLite or PostgreSQL|PostgreSQL + Redis|MySQL + Redis|SQLite, MySQL, MariaDB or PostgreSQL|SQLite| ／ The panel has a built-in MCP server. Claude Code, Codex or another agent reads the fleet and changes it through plan → apply. Installing a node, a doctor fix or a server password change waits until you approve it in the admin. Agents never receive subscription links, device keys or passwords. AI agent guide · MCP",
+   "evidence_lines": [
+    39,
+    79,
+    42
+   ]
+  },
+  "fn": "Mistgate/mistgate",
+  "sha": "ff34396716d4",
+  "source": "readme",
+  "generated_at": "2026-10-15",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
