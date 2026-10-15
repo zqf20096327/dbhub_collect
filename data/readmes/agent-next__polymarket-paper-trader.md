@@ -102,6 +102,7 @@ pm-trader stats
 - **Verified fidelity.** The live test suite asserts that simulated fills land inside the band of prices the market actually quoted (Data API v2 price history) and that fees match the official curve exactly — run against real APIs on CI
 - **Upstream-aligned.** The client tracks the current Gamma / CLOB / Data API surface, contract-verified by live probes
 - **Multi-outcome markets** — any number of outcomes, not just YES/NO
+- **Kalshi too.** Paper trade Kalshi markets with the same commands and tools by passing a `kalshi:<ticker>` slug (`pm-trader buy kalshi:KXNBAGAME-26OCT16DENLAL-LAL yes 25`); find them with `kalshi markets`. Fees follow each series' published curve ([docs/kalshi.md](docs/kalshi.md))
 - **100% coverage gate** on the core package, plus end-to-end tests against the live API
 
 ## CLI commands
@@ -123,6 +124,9 @@ pm-trader stats
 | `sell SLUG OUTCOME SHARES [--type fok\|fak]` | Sell at market price |
 | `portfolio` | Open positions with live prices |
 | `history [--limit N]` | Trade history |
+| `kalshi markets [--limit N] [--status open\|closed\|settled] [--series T] [--event T]` | Kalshi markets (read-only) |
+| `kalshi market TICKER` | One Kalshi market (read-only) |
+| `kalshi book TICKER [--depth N]` | Kalshi YES order book (read-only) |
 | `orders place SLUG OUTCOME SIDE AMOUNT PRICE` | Limit order (GTC/GTD) |
 | `orders list` | Open limit orders (pending and partially filled) |
 | `orders cancel ID` | Cancel a limit order |
@@ -215,6 +219,9 @@ authenticating proxy in front of it — the container has no auth of its own.
 | `get_event` | Event details — a group of related markets |
 | `get_market` | Market details with outcomes and prices |
 | `get_order_book` | Live order book snapshot (bids + asks) |
+| `kalshi_markets` | Kalshi markets, read-only (open/closed/settled, by series or event) |
+| `kalshi_market` | One Kalshi market by ticker, read-only |
+| `kalshi_book` | Live Kalshi YES order book, read-only |
 | `watch_prices` | Monitor prices for multiple markets |
 | `buy` | Buy shares at best available prices |
 | `sell` | Sell shares at best available prices |

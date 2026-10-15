@@ -2,22 +2,40 @@
 
 [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@datawithbaraa) [![Udemy](https://img.shields.io/badge/Udemy-A435F0?style=for-the-badge&logo=udemy&logoColor=white)](https://www.udemy.com/course/sql-for-exploratory-data-analysis-eda-real-world-project/) [![Website](https://img.shields.io/badge/datawithbaraa.com-111111?style=for-the-badge&logo=googlechrome&logoColor=white)](https://www.datawithbaraa.com) [![License](https://img.shields.io/github/license/DataWithBaraa/sql-data-analytics-project?style=for-the-badge&color=2EA043)](LICENSE) [![Stars](https://img.shields.io/github/stars/DataWithBaraa/sql-data-analytics-project?style=for-the-badge&color=F5B301)](https://github.com/DataWithBaraa/sql-data-analytics-project)
 
-A comprehensive collection of SQL scripts for data exploration, analytics, and reporting. These scripts cover various analyses such as database exploration, measures and metrics, time-based trends, cumulative analytics, segmentation, and more.
-This repository contains SQL queries designed to help data analysts and BI professionals quickly explore, segment, and analyze data within a relational database. Each script focuses on a specific analytical theme and demonstrates best practices for SQL queries.
+The materials of the data analytics project: the data, every query from the videos, and the project roadmap.
 
-**New here? Open the setup guide in the `00_setup` folder.** It walks you through installing SQL Server and creating the databases, on Windows and Mac, with the fixes for the common errors.
+You explore a sales database step by step, then go deeper with trends, segments and two full reports.
+
+**New here? Open the setup guide in the `00_setup` folder.** It walks you through installing SQL Server and creating the database, on Windows and Mac, with the fixes for the common errors.
 
 ```
 sql-data-analytics-project/
-├── 00_setup/      the setup guide: SQL Server and SSMS on Windows and Mac
-├── datasets/
+├── 00_setup/                        the setup guide, and the one-click Docker start for Mac
+├── 01_datasets/                     the data, as a backup and as CSV files
 │   ├── DataWarehouseAnalytics.bak   the database, ready to restore
-│   └── csv-files/                   the same data as CSV, layer by layer: bronze, silver, gold
-├── docs/          the project roadmap and the notes
-└── scripts/       00 creates the database, 01 to 06 explore, 07 to 13 analyze and report
+│   └── csv-files/                   the same data, to build the database yourself
+├── 02_docs/                         the project roadmap and notes
+└── 03_scripts/                      the queries, in the order of the videos
+    └── 00_init_database.sql         builds the database from the CSV files
 ```
 
-Get the database in one of two ways. Restore `datasets/DataWarehouseAnalytics.bak` in SSMS, which needs SQL Server 2022 or newer. Or run `scripts/00_init_database.sql`, which creates the database and loads the gold tables from `C:\sql\sql-data-analytics-project\datasets\csv-files\`. Put the files there, or change the three paths in the script.
+Get the database in one of two ways:
+
+- Restore `01_datasets/DataWarehouseAnalytics.bak` in SSMS. It needs SQL Server 2022 or newer.
+- Or run `03_scripts/00_init_database.sql`. It builds the database from the CSV files in `C:\sql\sql-data-analytics-project\01_datasets\csv-files\`.
+
+The videos show the folders without numbers: `datasets` there is `01_datasets` here, `scripts` is `03_scripts`.
+
+---
+
+## 🗺️ What you build
+
+![The project roadmap](02_docs/Project%20Roadmap.png)
+
+The project has two parts, and the scripts follow them:
+
+- **Exploratory data analysis**, scripts `01` to `06`: you get to know the data, from the tables and dates to the big numbers and the top performers.
+- **Advanced analytics**, scripts `07` to `13`: you go deeper with trends, running totals, performance, part-to-whole and segments. Two reports close the project, one for customers and one for products.
 
 ---
 
@@ -55,4 +73,4 @@ More on YouTube: [Data projects](https://www.youtube.com/playlist?list=PLNcg_FV9
 
 ## 🌟 About me
 
-Hi, I'm **Baraa Khatib Salkini**. I spent 17 years in enterprise data engineering and built one of the largest lakehouses at Mercedes-Benz. Today I teach data full-time at **Data With Baraa**: visually, step by step, from zero to hero.
+Hi, I'm **Baraa Khatib Salkini**. I spent years in enterprise data engineering and built one of the largest lakehouses at Mercedes-Benz. Today I teach data full-time at **Data With Baraa**: visually, step by step, from zero to hero.

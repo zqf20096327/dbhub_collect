@@ -20,6 +20,17 @@ https://github.com/user-attachments/assets/25be65a8-3f14-42ee-a2e2-a92d369a6ce8
 > [disclaimer](DISCLAIMER.md) and the [security policy](SECURITY.md) before you put your family's
 > data in it.
 
+## Roadmap
+
+- [x] Extensions are isolated from each other: each one reaches only its own data, files and secrets
+- [x] Install and remove extensions from Settings (official, signed packages); pets, vehicles, home,
+      kitchen and photos & weather become optional
+- [ ] Home Assistant: sensors and who is home on Today and the wall display
+- [ ] Home Assistant: FamilyOS notifications and actions from your automations
+- [ ] Home Assistant integration (HACS): the family calendar and lists as Home Assistant entities
+- [ ] Extensions from other authors, with your explicit consent
+- [ ] 1.0: a stable data format and API, with a backward-compatibility promise
+
 ## Features
 
 - **Today.** One page you can read from the door: the next thing with a countdown, each person's
@@ -185,7 +196,7 @@ pnpm lint         # Biome, Prettier (.svelte), dependency-cruiser
 pnpm typecheck    # TypeScript and svelte-check
 pnpm e2e          # essential flows in Playwright against the production build
 pnpm gen          # regenerate openapi.json and the typed API client
-pnpm build        # web app and bundled server
+pnpm build        # web app, bundled server and extension packages
 ```
 
 TypeScript end to end: Hono, Kysely on SQLite and better-auth on Node.js; a SvelteKit SPA with

@@ -9,7 +9,7 @@
 Ask a question and get a chart, a table and a kanban side by side, each one a real widget you can drag, pin and keep. Any model, including local, running on your machine under MIT.
 
 [![ci](https://github.com/ashark-ai-05/opencanvas/actions/workflows/ci.yml/badge.svg)](https://github.com/ashark-ai-05/opencanvas/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-775%20passing-2dd4bf)](./docs/guide.md#develop)
+[![tests](https://img.shields.io/badge/tests-816%20passing-2dd4bf)](./docs/guide.md#develop)
 [![license](https://img.shields.io/badge/license-MIT-fbbf24)](./LICENSE)
 [![stars](https://img.shields.io/github/stars/ashark-ai-05/opencanvas?style=flat&color=a78bfa)](https://github.com/ashark-ai-05/opencanvas/stargazers)
 
@@ -43,15 +43,32 @@ The model never prints the answer. It calls `place_widget` with a typed payload,
 
 ```bash
 git clone https://github.com/ashark-ai-05/opencanvas.git && cd opencanvas
-pnpm install && cp .env.example .env    # add one provider key, or none
-pnpm electron:dev                       # or `pnpm dev` → http://127.0.0.1:3458
+pnpm install && pnpm start      # builds once, opens http://127.0.0.1:3457
 ```
 
-**No API key? Start typing anyway.** Timers, checklists, reminders, events, notes, arithmetic and unit conversions are recognised as you type and placed on Enter, with no model call at all.
+One process, one port, no `.env` needed. **Already have a model?** On first run OpenCanvas picks it up automatically: an `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GEMINI_API_KEY`, `GROQ_API_KEY` or `OPENROUTER_API_KEY` in your environment, or a running Ollama. Otherwise connect one later in **Settings** ([Pick a model](./docs/guide.md#pick-a-model)). Prefer the desktop app? `pnpm electron:dev`. Hacking on the UI with hot reload? `pnpm dev`.
+
+<details>
+<summary>Coming soon (not published yet): one-command install</summary>
+
+```bash
+npx opencanvas
+# or
+docker build -f Dockerfile.local -t opencanvas https://github.com/ashark-ai-05/opencanvas.git
+docker run --rm -p 127.0.0.1:3457:3457 -v opencanvas:/root/.opencanvas opencanvas
+```
+
+The launcher package lives in [`launcher/`](./launcher/) and the local Docker image in [`Dockerfile.local`](./Dockerfile.local). Neither is published yet — waiting on an OK to push `opencanvas` to npm and a `ghcr.io/ashark-ai-05/opencanvas` image. The public Railway demo image (`Dockerfile`) is unchanged.
+
+</details>
+
+**No API key? Start typing anyway.** Timers, checklists, reminders, events, notes, arithmetic and unit conversions are recognised as you type and placed on Enter, with no model call at all. This is an unedited recording of a fresh install:
 
 <p align="center">
-  <img src="docs/instant-widgets.svg" alt="Typing '25 min focus' into the composer. A chip previews 'Timer 25:00 · Focus', Enter places a live timer on the canvas, and a note reads 'Placed Timer 25:00 · Focus without the model'." width="100%">
+  <img src="docs/first-run.gif" alt="A fresh OpenCanvas with no API key. Typing '25 min focus', 'standup tomorrow 9am', '12 km in miles' and a checklist places a live timer, an event card, a conversion and a checklist on the canvas. Then a script POSTs this repo's real git log to /v1/canvas/widgets and it appears as a table." width="100%">
 </p>
+
+<sub>Recorded with <code>node scripts/record-first-run.mjs</code> against <code>pnpm start</code>. No API key — the fast lane places widgets, the canvas auto-tidies after the first few, and a script POSTs this repo's real <code>git log</code> to <code>/v1/canvas/widgets</code>. The hero GIF above is a scripted dashboard streamed in over the same REST API (<code>scripts/record-demo.mjs</code>), not a live model run.</sub>
 
 ---
 
@@ -64,12 +81,24 @@ pnpm electron:dev                       # or `pnpm dev` → http://127.0.0.1:345
 - **Memory that compounds.** Every conversation indexes into a local SQLite + sqlite-vec store. `⌘K` finds any widget from any chat, weeks later.
 - **Drive it from anywhere.** A REST API and SSE bus let cron jobs, scripts and other agents place widgets on your canvas.
 - **Yours.** Binds to `127.0.0.1`, token-guarded routes, null-origin sandboxes for model-written HTML, no telemetry. [Threat model](./SECURITY.md).
+- **Canvas that keeps itself neat.** After the first few widgets the layout auto-tidies; click the widget count (or `/tidy`) anytime. Wide tables get a full row.
 
 <p align="center">
   <img src="docs/widgets.png" alt="Six OpenCanvas widgets: a Vega-Lite bar chart, a kanban board, a table, a running pomodoro timer, a TypeScript code block and a sandboxed HTML embed, all rendered on the dark canvas." width="100%">
 </p>
 
 *Six of the 15 built-in widget kinds. Each is a schema plus a React component; the model learns them from the tool description.*
+
+### OpenCanvas or mcp-screen?
+
+Same visual language, different jobs:
+
+| You want… | Use |
+|---|---|
+| A full chat-plus-canvas workspace with any model, memory, a KB and schedules | **OpenCanvas** (this repo) |
+| A screen that your existing terminal agent (Claude Code, Codex, opencode) draws on, next to the terminal you already use | **[mcp-screen](https://github.com/ashark-ai-05/mcp-screen)** |
+
+mcp-screen reuses OpenCanvas's event bus, widget-registry and null-origin sandbox designs, without tldraw or a chat UI of its own. Scripts and agents can also draw on OpenCanvas directly: `POST /v1/canvas/widgets` ([API reference](https://ashark-ai-05.github.io/opencanvas/api.html)).
 
 ---
 

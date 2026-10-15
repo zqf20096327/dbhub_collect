@@ -1,16 +1,17 @@
 <p align="center">
-  <img src="docs/cover.png" alt="POS Pro" width="760">
+  <img src="public/brand/erp-logo.png" alt="POS Pro：ERP、點餐、CRM 整合品牌 Logo" width="160">
 </p>
 
-<h1 align="center">POS Pro</h1>
+<h1 align="center">POS Pro｜ERP・點餐・CRM</h1>
 
 <p align="center">
-  全功能免費、離線優先的 POS 收銀系統 — 收銀 · 庫存 · 會員儲值 · 進貨訂貨 · 複式記帳 · 報表<br>
-  <i>A free, offline-first POS for every merchant · Windows desktop (Electron) + PWA · 繁體中文</i>
+  所有店家，全部功能免費。從收銀升級為 ERP、點餐與 CRM 整合營運系統。<br>
+  收銀 · 預訂出餐 · 採購與應付 · 庫存 · 會員 · 會計 · Agent 快速建單<br>
+  <i>Free, offline-first ERP, ordering and member CRM · Windows desktop + shared-store mobile · 繁體中文 / English / 日本語 / 简体中文</i>
 </p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-2.7.1-b8895a">
+  <img alt="version" src="https://img.shields.io/badge/version-2.14.0-2b20f4">
   <img alt="platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20PWA-555">
   <img alt="tests" src="https://img.shields.io/badge/tests-vitest%20%2B%20native-3f9c5e">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-green">
@@ -18,13 +19,44 @@
 
 ---
 
+[English quick start](docs/QUICK_START.en.md) · [日本語ガイド](docs/QUICK_START.ja.md)
+
 ## 這是什麼
 
-目前版本：v2.7.1。正式預訂出餐、原料預留與手機／電腦共用店面，加入小數原料損耗、保存失敗與原編號復原、跨日／跨月帳務及活動時間修正。Windows 安裝檔未簽章；本機安裝包與 GitHub Release 的交付範圍見 [2.7.1 安裝說明](docs/INSTALLER_2_7_1.md)。
+目前版本：v2.14.0。產品以 **POS Pro｜ERP・點餐・CRM** 呈現，採用鈷藍、黑、米白的全新介面與桌面／手機 Logo；從收銀延伸到採購與應付、庫存會計、顧客點餐與預訂出餐、會員經營。Agent 回覆貼上就能核對單價與數量，缺少資料會引導補填；離開或重新載入後可接回同一張未完成草稿。完整 ERP 與 CRM **持續開發中**，銷售預收與跨單核銷、多倉批次、關帳稅務、人事薪資、企業客戶與商機管理等仍有未完成能力，見 [完整目標清單](product-capabilities.json)。本機交付與限制見 [2.14.0 安裝說明](docs/INSTALLER_2_14_0.md)。
 
-POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模與店型，不設訂閱或進階功能解鎖費。資料預設存在本機（桌面版走 SQLite、瀏覽器版走 localStorage），雲端同步是選用。
+| 整合範圍 | 目前提供的主要流程 |
+| --- | --- |
+| ERP 日常營運 | 收銀、庫存、採購應付、客戶銷售應收、退貨退款、複式帳務與報表 |
+| 點餐與出餐 | 顧客掃碼點餐、店員登記預訂／現場／外送、原料預留、收款及交付 |
+| 會員 CRM | 會員檔案、點數與分級、儲值、生日提醒、RFM 客群分析 |
 
-目前程式以零售流程為基礎；攤販、餐飲外帶、零售／手作的起步範本，以及 LINE 接單，已列入後續規格。所有新模組沿用相同免費政策，外部平台的費用與配額另行清楚標示。
+提供可切換的 **明亮簡約** 與原有 **海報風格**。2.13.1 加入風格預覽卡、手機頂端切換與首次裝置語言判斷。登入前即可選繁體中文、English、日本語、简体中文；偏好依裝置保存。切換會保留購物車、Agent 草稿與未完成輸入，商品名稱、售價、TWD 幣別和帳本不改寫。翻譯仍待母語者校對，詳見 [語言與外觀](docs/LANGUAGE_AND_STYLE.md)。
+
+2.14.0 加入還原預覽、還原前完整保護副本及「資料復原」引導。查不到舊收款時會保留原單號，協助找回正式紀錄；已有新營運資料時保留兩份帳本供核對。見 [復原指南](docs/RECOVERY_GUIDE.md)。
+
+2.13.0 接通「銷售與應收」：客戶同意報價後直接帶入銷售單，依下一步處理分批交貨、部分收款、退貨折讓與原收款退款。接單不扣庫存或收款；交付才認列應收，收款不再重複記營收。四語畫面、總帳報表、完整備份與私人共用店面沿用同一份正式回執。見 [傻瓜操作指南](docs/SALES_GUIDE.md)。完整 ERP 範圍仍持續開發。
+
+2.12.0 新增「報價與價目表」：三步開立客戶專屬報價、各客戶單價分開記住、保留修訂歷史，並可下載勾選商品的一般售價目錄。收到報價後由買方核對建立採購，不自動入庫或付款。格式公開，可由其他 ERP／Agent 使用；檔案沒有身份簽章或加密，詳見 [使用流程與協議](docs/BUSINESS_EXCHANGE.md)。
+
+![明亮簡約英文工作區](docs/bright-workspace-2.11.png)
+
+<img src="docs/bright-login-2.13.1.png" alt="明亮簡約英文登入與可點選的風格預覽" width="680">
+<img src="docs/bright-mobile-preferences-2.13.1.png" alt="手機頂端的日文語言與外觀選擇" width="220">
+
+首頁可先選「顧客與點餐（CRM）」或「營運管理（ERP）」；前者幫你照顧客人，後者幫你顧好貨和錢。兩個工作區共用同一間店的資料，保留直接收銀與快速建單，不必先理解專有名詞。
+
+POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模與店型，不設訂閱或進階功能解鎖費。資料預設存在本機（桌面版走 SQLite、獨立瀏覽器版走 localStorage）；配對手機直接使用店面電腦同一個資料庫。雲端同步是選用。
+
+已提供攤販、餐飲外帶、零售／手作的情境起步，以及丼飯試賣演練。正式餐飲流程可登記預訂、現場與外送單；LINE 自動接單、外部外送平台串接仍在規劃。所有新模組沿用相同免費政策，外部平台的費用與配額另行清楚標示。
+
+## 讓建單少一點步驟
+
+1. 在「快速建單」說出品名數量，或按商品；需要 Agent 時，一鍵複製這次需要的建單資料。
+2. 貼上 Agent 的完整回覆，直接看單價、數量與合計。缺資料就按「下一步」補填，不用找哪個欄位漏了。
+3. 確認後才建單。收款、收貨、付款各有明確確認；結果未確認時鎖定原單，沿用原編號核對。
+
+這個裝置會保留未完成草稿，依店面、帳號與角色隔離；正式訂單與庫存仍由店面資料庫負責。詳細範圍見 [Agent 建單協議](docs/AGENT_DOCUMENT_PROTOCOL.md)。
 
 ## 產品方向與開發依據
 
@@ -34,7 +66,11 @@ POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模�
 - [第一個情境模板：丼飯外帶](docs/SCENARIO_TEMPLATES.md)：套用菜單、正式接單與獨立試賣演練。
 - [正式預訂與出餐](docs/RESTAURANT_WORKFLOW.md)：原料／包材預留、產能、取餐號、收款、交付、取消退款與完整復原。
 - [營業可靠性驗收](docs/OPERATING_READINESS.md)：已執行範圍、實機待驗項目及使用限制。
+- [簡易工作台與完整 ERP 目標](docs/EASY_WORKSPACE.md)：從要做的事開始、一鍵交給 Agent，以及尚未完成的全產品能力。
 - [手機與電腦共用店面](docs/SHARED_STORE.md)：電腦資料庫、私人區網 HTTPS、一次性配對、帳號權限與斷線核對。
+- [ERP 採購到付款](docs/ERP-FOUNDATION.md)：分批收貨、請款核對、分次付款、沖銷與帳務；保留免費政策及已驗證能力界線。
+- [Agent 快速建單協議](docs/AGENT_DOCUMENT_PROTOCOL.md)：同一入口支援文字、點選商品與 Agent 草稿，預覽後一次建單。
+- [跨公司交換與採用理由](docs/BUSINESS_EXCHANGE.md)：其他公司的 Agent 可輸出開放 JSON；品項對照記住後同店面裝置共用。
 
 正式預訂可由店員登記預訂、現場或外送單；LINE 自動接單與外部外送平台串接仍在後續規劃。
 
@@ -44,15 +80,28 @@ POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模�
 - 🍚 **預訂出餐** — 成品或配方原料預留、分時產能、每日取餐號、出餐狀態、全額收款與取消退款
 - 📱 **共用店面** — 私人區網 HTTPS 配對，手機與電腦使用同一個 SQLite 資料庫
 - 📦 **庫存** — 即時扣庫、安全庫存提醒、批量改價、CSV 匯入匯出、商品變動歷史、過期警示
-- 👥 **會員** — 點數、分級、儲值卡、生日贈點、RFM 自動分群
-- 🚚 **進貨訂貨** — 廠商管理、依供應商一鍵建單、AI 智慧補貨建議、歷史單價
+- 👥 **會員** — 點數、分級、儲值卡、生日提醒、RFM 自動分群
+- 🚚 **進貨訂貨** — 廠商管理、依供應商一鍵建單、依歷史銷售與庫存提出補貨建議、歷史單價
+- 📒 **採購帳務** — 不超收的分批收貨、供應商請款、到期與欠款、銀行／班次現金分次付款、原付款沖銷
+- ↩️ **採購退貨** — 未請款／已請款部分退貨、供應商待退、分次退款與保留歷史的更正
+- ✨ **快速建單** — 貼上 Agent 回覆直接核對、商品搜尋、單價小計、缺資料引導、未完成草稿復原、跨公司品項對照與大字模式；銷售先帶入購物車，預訂與採購確認建立
 - 🧮 **複式記帳** — 銷售/成本/儲值自動入帳、損益表、資產負債表、日記帳、CSV 匯出
 - 📊 **報表** — 每日營收、毛利、熱賣滯銷、客單價、員工績效
 - 📱 **顧客掃碼點餐**　☁️ **雲端同步（Supabase，選用）**　🔔 **Discord / Slack 通知（選用）**
 
 ## 📸 截圖
 
-![功能總覽](docs/features.png)
+桌面首頁與登入、手機工作區及顧客點餐，皆為本版隔離示範資料。
+
+![ERP 與 CRM 工作區](docs/workspace-2.10.png)
+
+<p>
+  <img src="docs/workspace-phone-2.10.png" alt="手機工作區選擇" width="250">
+  <img src="docs/quick-review-2.10.png" alt="手機建單單價與合計核對" width="250">
+  <img src="docs/customer-menu-2.10.png" alt="顧客手機點餐" width="250">
+</p>
+
+[品牌與視覺規格](docs/BRANDING.md)
 
 ## 🚀 安裝
 
@@ -63,7 +112,7 @@ POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模�
 
 首次啟動由你建立管理員名稱與至少 8 字元密碼。既有帳號會保留；舊的短密碼必須在驗證後更換，登入流程不再重建預設帳號。
 
-最新版的本機產物與更新方式見 [2.7.0 安裝檔說明](docs/INSTALLER_2_7_0.md)；[2.6.1 安裝檔紀錄](docs/INSTALLER_2_6_1.md)保留為歷史資料。
+最新版的本機產物與更新方式見 [2.14.0 安裝檔說明](docs/INSTALLER_2_14_0.md)；[2.9.1 安裝檔紀錄](docs/INSTALLER_2_9_1.md)保留為歷史資料。桌面安裝及資料目錄沿用 POS Pro，既有店面不因品牌更新而切換資料目錄。
 
 ### 自行編譯 / 開發
 

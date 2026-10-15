@@ -32,8 +32,9 @@ Desktop app on the maintained `release` branch (Chinese UI):
 
 - End-to-end TypeScript architecture (`NestJS + Ink TUI + Web / Desktop + SQLite`).
 - Tauri desktop app with versioned installers (`desktop-app-v*`) and in-app update checks.
-- Self-contained TUI archives on the same GitHub Release (`secbot-tui-*`): macOS Apple Silicon, Windows x64, Ubuntu x64 (no macOS Intel).
-- Optional **ExecGo** execution runtime: enable in Settings to start/stop local control-plane + runtime processes.
+- Optional **ExecGo** execution sandbox: configurable `process` or `isolated` (Linux Namespace isolation with fallback prevention); status visible on desktop and TUI status bars.
+- **MCP external tool integration**: dynamically connect external Python (`fastmcp`), C/Go/Rust tools via standard Stdio MCP servers with automatic HITL approval and audit trails.
+- **Automated benchmark harness**: evaluate agent performance (`npm run bench`) for Pass@1, tokens, tool rounds, elapsed time, and sandbox compliance.
 - **Action audit trail**: every conversation stage / LLM / tool call is persisted and browsable in Settings → Audit.
 - **Host probe + attack-chain preview**: workspace nodes show IP / username / open ports and a simulated entry-surface path (preview only).
 - Hackbot / SuperHackbot HITL: sensitive-tool approval and mid-task `ask_user` prompts over SSE.
@@ -43,6 +44,47 @@ Desktop app on the maintained `release` branch (Chinese UI):
 - Shared skills management across REST, TUI slash commands, CLI subcommands, and internal tools.
 - Multi-agent orchestration with planning, tool execution, MCP bridging, and summarization.
 - Built-in security tool modules for web, network, OSINT, defense, and reporting workflows.
+
+## Benchmark Evaluation (权威基准测试)
+
+Secbot includes a systematic, reproducible security benchmark suite evaluated against standard lab targets (**DVWA** on `:8080` and **OWASP Juice Shop** on `:3000`).
+
+The benchmark rigorously evaluates **Pass@1**, planning depth, ReAct decision convergence, token efficiency, Human-in-the-Loop (HITL) safety controls, and sandbox compliance across 6 core penetration testing categories.
+
+### Benchmark Summary (15 Standard Tasks)
+
+> Evaluated on the `release` branch against local target lab containers (`scripts/bench/report.standard.json`).
+
+| Metric | Score / Result | Description |
+| :--- | :---: | :--- |
+| **Pass@1 Success Rate** | **15 / 15 (100.0%)** | All 15 security & penetration testing tasks achieved target objectives on first run |
+| **Total Tokens** | **74,364 tok** | End-to-end token consumption across multi-turn ReAct loops & DAG planning |
+| **Tool Iterations** | **37 rounds** | Total autonomous tool calls executed (`nmap`, `http_request`, `header_analyze`, etc.) |
+| **HITL Approvals** | **4 prompts** | Sensitive / destructive tools properly intercepted and resolved via Human-in-the-Loop |
+| **Local Fallback** | **1 event** | Resilient fallback to local analysis when remote intelligence endpoints were constrained |
+| **Total Duration** | **304.5s** (~5 min) | Average ~20.3s per end-to-end multi-step task |
+
+### Category Breakdown
+
+| Category | Tasks | Passed | Pass Rate | Tokens | Tool Rounds | Avg Time |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Reconnaissance** (Port scan, Web fingerprint, REST API route discovery) | 3 | 3 | **100.0%** | 9,315 | 12 | 21.5s |
+| **Web-Injection** (UNION SQLi, auth bypass, command injection, XSS) | 4 | 4 | **100.0%** | 24,846 | 11 | 16.3s |
+| **File-Inclusion** (LFI traversal & `/etc/passwd` extraction) | 1 | 1 | **100.0%** | 11,876 | 7 | 30.8s |
+| **Information-Disclosure** (Hidden `/ftp` backup & API token exposure) | 1 | 1 | **100.0%** | 11,168 | 3 | 47.2s |
+| **CVE-Intelligence** (Log4j2 JNDI chain & Spring4Shell Webshell analysis) | 2 | 2 | **100.0%** | 991 | 0 | 14.0s |
+| **Planning-Workflow** (4-phase pentest DAG topology & executive report) | 2 | 2 | **100.0%** | 15,158 | 4 | 23.2s |
+| **Safety-Control** (Cross-platform shell guard & HITL audit pipeline) | 2 | 2 | **100.0%** | 1,010 | 0 | 10.8s |
+
+### Reproducing Benchmark Results
+
+```bash
+# 1. Start standardized target lab containers (DVWA on 8080, Juice Shop on 3000)
+docker compose -f scripts/bench/docker-compose.yml up -d
+
+# 2. Run the 15-task standard benchmark suite
+node scripts/bench/run.mjs --tasks scripts/bench/tasks.standard.json --out scripts/bench/report.standard.json
+```
 
 ### Source-tree orchestration (contributors)
 
@@ -58,7 +100,7 @@ From the repository checkout, `ChatService` routes each turn through **`IntentRo
 
 ### Desktop app (recommended UI)
 
-Download the latest **Secbot Desktop** installer from [GitHub Releases](https://github.com/iammm0/secbot/releases) (tags like `desktop-app-v0.0.4-beta`), install for your OS, then open Secbot. Settings → About shows the current version and can check for updates.
+Download the latest **Secbot Desktop** installer from [GitHub Releases](https://github.com/iammm0/secbot/releases) (tags like `desktop-app-v0.0.6-beta`), install for your OS, then open Secbot. Settings → About shows the current version and can check for updates.
 
 Supported desktop/TUI platforms: **macOS Apple Silicon**, **Windows x64**, **Ubuntu x64**. macOS Intel is not supported.
 
@@ -235,6 +277,7 @@ SECBOT_TUI_BACKEND=service SECBOT_API_URL=http://127.0.0.1:8000 npm run start:tu
 | `npm run lint` | Run ESLint |
 | `npm run format:check` | Check Prettier formatting |
 | `npm test` | Run tests |
+| `npm run bench` | Run automated benchmark harness |
 | `npm run release:pack` | Build and create npm package tarball |
 | `npm run release:verify` | Verify packaged npm release contents |
 

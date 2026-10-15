@@ -40,10 +40,14 @@ mvn -Pflink-1.16 clean verify
 2. 准备 CMS 入口、租户认证信息、租户数据库名称和数据库账号。
 3. 由管理员按目标版本文档开启逻辑复制，并在目标租户/数据库预建一个专用复制槽。
    本连接器不会自动建槽、删槽、修改 HBA 或数据库参数。
+   新实例的具体操作记录见[透明多写实例接入前置条件](docs/HCS_INSTANCE_PREREQUISITES.md)。
 4. Flink TaskManager 必须能访问配置的 CMS 入口及 CMS 返回的租户节点地址。
 5. 源并行度设为 1，开启 checkpoint。初次启动从复制槽可用位置读取，不能把它当成“仅采集启动后数据”。
 
-没有全量快照与增量衔接；`scan.startup.mode` 仅接受 `incremental`。
+连接器不执行首次全量；`scan.startup.mode` 仅接受 `incremental`。若允许停写维护窗口，
+客户可先用普通 JDBC 完成全量，并在**恢复写入之前**创建专用复制槽，再用本连接器
+持续采集增量。具体交接顺序、在线方案的边界及只读内网探针见
+[HCS 首次全量与增量衔接](docs/HCS_INITIAL_SNAPSHOT_HANDOFF.md)。
 本实现要求服务端提供按事务排列的 BEGIN、非批量 JSON DML、COMMIT；未知消息或重叠事务使任务失败，
 由 Flink 按 checkpoint 恢复，不会回退到 SQL 解码。
 
@@ -73,20 +77,32 @@ CREATE TABLE hcs_changes (event STRING) WITH (
 `[IPv6]:port` 和不同端口。这里填写 CMS 入口，不填写普通 CN 的 HA 复制端口。
 节点选择及租户节点发现由原厂驱动完成。不需要为每个 CMS 建一个 Flink Source。
 连接器通过 `pg_get_replication_slots()` 在普通租户 SQL 连接上检查槽，再使用
-`com.huawei.opengauss.jdbc.Driver` / `jdbc:opengauss://` 建立独立复制连接。
+`com.huawei.gaussdb.jdbc.Driver` / `jdbc:gaussdb://` 建立独立复制连接。
 复制连接配置 `allowConnThreadPool=false`、`replication=database`、
 `preferQueryMode=simple` 和 `assumeMinServerVersion=9.4`，由其 `getReplicationAPI()`
-启动多写逻辑流。内网单独验证这一路径时，错误从 9049 变为 HBA 复制连接拒绝，
-表明已到达复制认证阶段；后续 HBA 调整引发实例重启，目标 PDB 尚未恢复，
-因此此版本仍未完成真实复制流启动及增量验收。
+启动多写逻辑流。新实例已单独实测这套 GaussDB JDBC 连接参数：返回
+`TenantConnection`，`start()` 返回 `MultiPrimaryReplicationStream`，`readPending()`
+读到了 BEGIN、JSON INSERT/UPDATE/DELETE、COMMIT 和三段位点。
+该测试尚未运行本 Flink 连接器；checkpoint ACK 和故障恢复仍待真机联调。
 参见[驱动证据、诊断入口及内网追问](docs/HCS_START_REPLICATION_9049.md)。
 CMS 端口按实际部署填写，例如内网部署使用的 `13003`；示例端口不是固定要求。
+
+507.1 开发指南的逻辑解码选项说明确认：显式 `decode-style=j` 会覆盖槽插件的默认格式，
+因此 `parallel_binary_decoding` 槽名本身不代表本连接一定收到二进制数据；
+`sending-batch` 未设置时默认 `0`（逐条发送）。透明多写章节及官方 JDBC 示例
+均未要求设置 `output-order`；新实例也已在未设置它时成功读取增量。因此 HCS
+连接器不查询 `confirm_csn`，也不发送 `output-order`。上述解码选项在完整
+Flink 任务中的行为仍需真机验证。
 
 `schema-name` 和 `table-name` 按 Java 正则整串匹配。多表 JSON 输出中包含 `source.schema/table`。
 `output.format=json` 使用官方 `JsonDebeziumDeserializationSchema`，输出一列 STRING；
 `output.format=row`（默认）使用官方 `RowDataDebeziumDeserializeSchema`，输出 INSERT、UPDATE_BEFORE、
 UPDATE_AFTER、DELETE。行模式要求 WAL 包含声明字段的完整前后镜像；缺失字段报错，不补造 NULL。
 请与管理员确认 REPLICA IDENTITY FULL 及解码配置；异构表采集优先使用 JSON 模式。
+JSON 模式下，UPDATE/DELETE 的 `before` 只包含 WAL 实际提供的旧列；若插件只返回主键，
+非主键旧值会缺席，不会被填成 NULL。协议明确返回的 NULL 仍保留为 NULL，连接器不会
+另查当前表去猜测历史值。HCS 复制报文会严格按 UTF-8 解码，遇到非法字节直接报错。
+若源表或下游仍出现乱码，请对照原始复制报文字节、运行中的连接器版本和下游输出编码。
 
 | 参数 | 默认值 | 说明 |
 | --- | --- | --- |

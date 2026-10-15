@@ -47,6 +47,7 @@ here is a number the build checked.
 | `f1-geometry.db` | The OpenStreetMap circuit centrelines (ODbL), shipped beside `f1.db` and never merged into it. See *Illustration*. |
 | `f1` | Command-line query tool. `./f1` with no arguments prints the commands. |
 | `f1_database.json` | Full JSON export of every table. **Not committed** — `make export` writes it in about a second, and each release carries a copy. |
+| `f1-facts.db` | The facts artefact: `f1.db` less everything that stays share-alike, for release under CC BY 4.0. **Not committed** — `make export` writes it with `tools/facts_export.py` from the set `tools/facts_artefact.py` declares, and the release workflow publishes it beside `f1.db`. |
 | `f1_compat.json` | JSON in the *original* v1 key layout, so anything already consuming that file keeps working. |
 | `schema.sql` | The schema, commented. Served at `lapledger.org/schema.sql`, so a downloader can read what the tables mean. |
 | `build.py` | Rebuilds `f1.db` and `f1-geometry.db` from the data modules. Idempotent, and byte-for-byte reproducible. <!-- fig:stages -->40<!-- /fig --> named stages; `STAGES` is the schedule. |
@@ -86,7 +87,7 @@ here is a number the build checked.
 | `docs/BUILD-NOTES.md` | What changed in each version, what it exposed, what was deliberately not done. |
 | `docs/LANDED.md` | What has landed and what was declined, with the reason. The open queue is GitHub Issues. |
 | `docs/LOCAL-SETUP.md` | Getting `/backlog-loop` running on your own machine, from nothing. |
-| `docs/MEASUREMENT.md` | How arrivals and search impressions are counted, what that cost the footer's promise, and the two numbers to read. |
+| `docs/MEASUREMENT.md` | How arrivals and search impressions are counted, what that cost the site's promise, and the two numbers to read. |
 | `CONTRIBUTING.md` | How to add data without breaking the checks. Read before editing. |
 | `ATTRIBUTION.md` | Where the data came from, and the licensing that follows from it. Served at `lapledger.org/ATTRIBUTION.md`, beside the data it covers. |
 | `LICENSE-DATA`, `LICENSE` | The terms the data is offered under (CC BY-SA 4.0, and CC BY 4.0 for the columns this project wrote itself and has granted) and the terms the code is. `LICENSE-DATA` is served at `lapledger.org/LICENSE-DATA`. |

@@ -190,6 +190,21 @@ pnpm dev:web    # http://localhost:4321  (proxies /api to the API)
 pnpm typecheck
 ```
 
+## MCP server
+
+Agents (Claude, Cursor, Codex and any MCP client) can manage monitors, incidents and status pages over Streamable HTTP at
+`/api/mcp`, authorizing with OAuth or an API key:
+
+```bash
+claude mcp add --transport http openuptime https://openuptime.app/api/mcp   # or https://<your-host>/api/mcp
+```
+
+Client setup, scopes and the tool list are in the [MCP docs](https://openuptime.app/docs/mcp).
+An agent skill that teaches the common workflows ships in [skills/openuptime](skills/openuptime):
+`npx skills add becoolme/openuptime`.
+ The hosted server is listed
+in the [MCP Registry](https://registry.modelcontextprotocol.io) as `app.openuptime/mcp`; [server.json](server.json) is its entry.
+
 Tests, how checks run, the MCP server, alert channels and the other details are in [docs/reference.md](docs/reference.md).
 
 ## Open source vs hosted

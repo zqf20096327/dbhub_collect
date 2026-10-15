@@ -1,4 +1,4 @@
-dqlite [![CI Tests](https://github.com/canonical/dqlite/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/canonical/dqlite/actions/workflows/build-and-test.yml) [![codecov](https://codecov.io/gh/canonical/dqlite/branch/main/graph/badge.svg)](https://codecov.io/gh/canonical/dqlite)
+dqlite [![CI Tests](https://github.com/canonical/dqlite/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/canonical/dqlite/actions/workflows/build-and-test.yml) [![codecov](https://codecov.io/gh/canonical/dqlite/branch/master/graph/badge.svg)](https://codecov.io/gh/canonical/dqlite)
 ======
 
 [English](./README.md)|[简体中文](./README_CH.md)
@@ -25,7 +25,7 @@ License
 The dqlite library is released under a slightly modified version of LGPLv3,
 that includes a copyright exception allowing users to statically link the
 library code in their project and release the final work under their own terms.
-See the full [license](https://github.com/canonical/dqlite/blob/main/LICENSE)
+See the full [license](https://github.com/canonical/dqlite/blob/master/LICENSE)
 text.
 
 Compatibility
@@ -69,17 +69,6 @@ sudo add-apt-repository ppa:dqlite/dev
 sudo apt update
 sudo apt install libdqlite-dev
 ```
-
-Operating
----------
-
-To inspect the state of a running dqlite instance, create a snapshot of data to load onto a node or even to inspect past database states, install `dqlite-utils`:
-
-```bash
-sudo snap install dqlite-utils --classic
-```
-
-See the [dqlite documentation](https://canonical.com/dqlite/docs) for more information.
 
 Contributing
 ------------

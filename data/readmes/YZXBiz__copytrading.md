@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/YZXBiz/copytrading/releases/download/v0.1.0-alpha.10/CopyTrading-0.1.0-alpha.10.dmg"><img src="https://img.shields.io/badge/Download_for_macOS-0.1.0--alpha.10-1d1d1f?style=for-the-badge&logo=apple&logoColor=white" alt="Download CopyTrading for macOS" height="36"></a>
+  <a href="https://github.com/YZXBiz/copytrading/releases/download/v0.1.0-alpha.11/CopyTrading-0.1.0-alpha.11.dmg"><img src="https://img.shields.io/badge/Download_for_macOS-0.1.0--alpha.11-1d1d1f?style=for-the-badge&logo=apple&logoColor=white" alt="Download CopyTrading for macOS" height="36"></a>
 </p>
 
 <p align="center">
@@ -46,7 +46,7 @@ CopyTrading is a native macOS app that reads the stock calls traders post on Dis
   <tr>
     <td width="33%"><a href="docs/assets/guru.png"><img src="docs/assets/guru.png" alt="A guru who copies into one paper account: today's numbers and every post on one timeline, traded, waiting, or ignored"></a></td>
     <td width="33%"><a href="docs/assets/guru-sheet.png"><img src="docs/assets/guru-sheet.png" alt="A guru's settings: where they post, the one account they copy into with what each call buys, their playbook, and an example"></a></td>
-    <td width="33%"><a href="docs/assets/connections.png"><img src="docs/assets/connections.png" alt="Connections: Discord, the model that reads posts, the optional chat filter, and two paper broker accounts, all connected"></a></td>
+    <td width="33%"><a href="docs/assets/connections.png"><img src="docs/assets/connections.png" alt="Connections: Discord, the model that reads posts, and two paper broker accounts, all connected"></a></td>
   </tr>
   <tr>
     <td align="center"><sub><b>A guru</b>: every post and what came of it</sub></td>
@@ -74,7 +74,7 @@ Works with a dozen hosted model services, local models through Ollama, or any Op
 
 You need an Apple silicon Mac running macOS 26 or later.
 
-1. **[Download CopyTrading for macOS](https://github.com/YZXBiz/copytrading/releases/download/v0.1.0-alpha.10/CopyTrading-0.1.0-alpha.10.dmg)** (57 MB).
+1. **[Download CopyTrading for macOS](https://github.com/YZXBiz/copytrading/releases/download/v0.1.0-alpha.11/CopyTrading-0.1.0-alpha.11.dmg)** (57 MB).
 2. Open the DMG and drag **CopyTrading** into **Applications**.
 3. Open CopyTrading. Preview builds are not yet notarized by Apple, so the first time macOS blocks it: go to **System Settings → Privacy & Security** and choose **Open Anyway**. You only do this once.
 

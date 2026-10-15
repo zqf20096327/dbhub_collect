@@ -2,7 +2,7 @@
   <img src="docs/assets/logo/sct-logo.svg" width="288" alt="sct logo">
 </p>
 
-A local-first SNOMED CT toolchain that's 10-100x faster than IHTSDO Snowstorm. One binary - from raw RF2 release to NDJSON, then SQL, Parquet, Markdown, TUI, GUI, graphs and MCP/LLM tool use. Core RF2 builds and native SDK/SQLite/FST queries run on your machine without REST APIs or external servers; release downloads, URL imports, and Ollama-backed features are explicit opt-in network clients.
+A local-first SNOMED CT toolchain. One binary - from raw RF2 release to NDJSON, then SQL, Parquet, Markdown, TUI, GUI, graphs and MCP/LLM tool use. Core RF2 builds and native SDK/SQLite/FST queries run on your machine without REST APIs or external servers; release downloads, URL imports, and Ollama-backed features are explicit opt-in network clients.
 
 This is very much a work in progress, but it's ready to use and I would very much like feedback on how it performs for you.
 
@@ -26,8 +26,7 @@ flowchart TD
     MD --> RAG["RAG / LLM file reading"]
 ```
 
-Plus `sct diff` (compare two NDJSON releases), `sct info` (inspect any artefact),
-and `sct gui` / `sct tui` for visual, point-and-click exploration.
+Plus `sct diff` (compare two NDJSON releases), `sct info` (inspect any artefact), `sct cite` (cite the terminology source, local derived artefact, and software), and `sct gui` / `sct tui` for visual, point-and-click exploration.
 
 The canonical NDJSON artefact at the centre is stable, versionable, and greppable. The main file contains concepts; `--refsets all` adds provenance-declared payload-refset and history companion streams so non-concept RF2 rows remain lossless. All other outputs are derived from this NDJSON bundle and can be regenerated at any time.
 
@@ -41,16 +40,15 @@ SNOMED CT is distributed as RF2 - a set of tab-separated files that require join
 
 ## Speed comparison
 
-| Operation | `sct` + SQLite | Snowstorm Lite | `sct` speedup |
-| --- | --- | --- | --- |
-| Import - Clinical Edition | 22s | 209s | ~10x faster |
-| Import - Full UK Monolith | ~57s | Failed (OOM)* | ∞ |
-| Single concept lookup (SCTID) | 6ms | 491ms | ~80x faster |
-| Free-text search (10 results) | 2ms | 202ms | ~100x faster |
+| Operation | `sct` 0.29.0 | Snowstorm Lite 2.5.0 | Result |
+|---|---:|---:|---:|
+| Clean UK Monolith import to a queryable store | 57.75 s | 702.76 s | `sct` 12.2x faster |
+| FHIR concept lookup | 5.2 ms | 9.5 ms | `sct serve` 1.8x faster |
+| FHIR text search (10 results) | 5.0 ms | 11.9 ms | `sct serve` 2.4x faster |
+| FHIR direct children | 4.9 ms | 8.4 ms | `sct serve` 1.7x faster |
+| FHIR subsumption | 5.2 ms | 38.8 ms | `sct serve` 7.5x faster |
 
-> * Snowstorm Lite running in Docker with 24Gb of Java heap allocation ran out of memory on the full UK Monolith, which has 837,930 concepts. `sct` handled it in under a minute.
-
-These comparison numbers predate the current 837,930-concept release and haven't been re-run against a live Snowstorm Lite instance since - treat them as indicative rather than current. For up-to-date `sct`-only timings, see [docs/benchmarks.md](docs/benchmarks.md). Feel free to run the benchmarks yourself (including a fresh Snowstorm Lite comparison) and share your results, perhaps as an Issue.
+Measured on the same Lenovo laptop against the same 837,930-concept UK Monolith 42.3.0 release. The clean import row compares `sct ndjson` plus `sct sqlite` with Snowstorm Lite's package loader; adding `sct`'s optional 11.6-million-row transitive closure brings its build to 93.52 s, still 7.5x faster. FHIR rows compare both servers over loopback using 20 measured runs after 5 warmups. Snowstorm ran with an 8-16 GiB Java heap and completed the full import with an 8.78 GiB container memory peak; `sct` peaked at 3.88 GiB. See the [full methodology, historical results, conformance limitations, and raw evidence](docs/benchmarks.md#snowstorm-lite-comparison).
 
 ---
 
@@ -240,6 +238,7 @@ For all further information see the full documentation by either exploring the [
 * [sct map](docs/commands/map.md) - map codes between SNOMED CT, Read v2, CTV3, ICD-10, and OPCS-4: `sct map <code>` shows all cross-terminology equivalents of a single code, `sct map --from read2 --to snomed` maps a stream (`sct trud download --multi-terminology` builds the full workspace). Aliases: `sct transcode`, `sct crosswalk`
 * `sct codelist` - build, compose, import, validate, and export clinical code lists; `add --ecl "<<73211009"` populates from an ECL query
 * `sct info <file>` - inspect any `.ndjson`, `.db`, or `.arrow` artefact and print a summary
+* [sct cite](docs/commands/cite.md) - generate text, BibTeX, or CSL-JSON citations from the exact database used
 * `sct diff --old <file> --new <file>` - compare two NDJSON releases and report what changed
 * `sct paths` - show where sct looks for databases, embeddings, and config files
 * [sct bench](docs/commands/bench.md) - benchmark SDK/CLI performance or semantic retrieval quality against fixed local scenarios, with reproducible machine-readable reports
@@ -250,6 +249,8 @@ For all further information see the full documentation by either exploring the [
 The natural single-value readers `lookup`, `lexical`, `semantic`, and `refset info|members|profile` also accept `-` for ordered stdin batches. Use `--format json` or `--format yaml` when a caller needs each input paired with its result set; `lookup`, `lexical`, `semantic`, and `refset members` additionally offer mutually exclusive `--ids` output for a flat stream into another command.
 
 Run any subcommand with `--help` for full option reference.
+
+The `sct cite` command was inspired by Oli Evans's [`ods`](https://github.com/olizilla/ods), particularly its separation of source, derived-data, and software citations.
 
 ---
 

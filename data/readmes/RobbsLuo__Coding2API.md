@@ -15,6 +15,7 @@
 - **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计。
 - **成长中心**（仅 CodeBuddy）：自动领 Buddy 旅行礼物、派 Buddy、领任务奖、断登补登、连登兑换、开盲盒；不可逆动作可用 `GROWTH_IRREVERSIBLE_ACTIONS=false` 关停；管理台可手动执行。
 - **脱敏统计**：不存对话内容；明细 90 天、小时汇总永久；按人/渠道/模型/凭证可视化；按 OpenRouter 刊例价估算成本（人民币为主）。
+- **上游状态聚合**：把各模型 / 网关提供方的官方状态页（OpenCode Zen、Kilo、DeepSeek、Together、Moonshot、MiniMax、OpenAI、Anthropic）归一化后并排展示，用于区分「上游整体故障」与「本服务凭证 / 额度问题」。只做解释、不参与选号 / 熔断；快照只存内存、重启归零。
 - **管理台安全加固**：登录限流、CSRF 校验、请求体上限、Host 白名单。
 - **窄屏表格转卡片**：列多的表格（凭证 / 明细 / 模型列表等）在 <768px 自动由「一行 = 一张卡」呈现——列名收成一排可点的排序片，每个字段在自己行首显示字段名；DOM 不变，读屏语义与宽屏一致。
 
@@ -69,7 +70,7 @@ docker compose pull
 
 | 角色 | 能做什么 |
 |---|---|
-| `admin` | 用户管理、任务与配置、凭证读写、全部统计、审计日志 |
+| `admin` | 用户管理、任务与配置、凭证读写、全部统计、审计日志、上游状态 |
 | `operator` | 凭证读写（含导入 / 删除 / 启停 / 签到 / 成长 / 切换账号）、全部统计 |
 | `viewer` | 只读：看仪表盘、凭证列表、统计与 Playground |
 
@@ -211,7 +212,7 @@ codex -c "model_providers.coding2api={ name='coding2api', base_url='http://127.0
       '你的任务'
 ```
 
-支持文本、流式正文、思考摘要（`reasoning` item）、函数工具调用与 `finish_reason=length` → `response.incomplete`。`text.format` 映射到 chat 的 `response_format`（`text` / `json_object` 直通，`json_schema` 展开成 `{type, json_schema:{name, description?, schema, strict?}}`）。**不支持** `store=true`、`previous_response_id`（服务端无状态，不假装支持）、Responses 私有工具——一律显式 400，不静默降级。`include=["reasoning.encrypted_content"]`（Codex 每轮必带）接受但忽略。
+支持文本、流式正文、思考摘要（`reasoning` item）、函数工具调用与 `finish_reason=length` → `response.incomplete`。`text.format` 映射到 chat 的 `response_format`（`text` / `json_object` 直通，`json_schema` 展开成 `{type, json_schema:{name, description?, schema, strict?}}`）。内容 part 映射为：`input_text` / `text` / `output_text` → chat text，`input_image` → chat `image_url`（URL 原样透传，含 `detail` 时一并带上）。**不支持** `store=true`、`previous_response_id`（服务端无状态，不假装支持）、`input_file`（需服务端文件存储）、Responses 私有工具——一律显式 400，不静默降级。`include=["reasoning.encrypted_content"]`（Codex 每轮必带）接受但忽略。
 
 ### Anthropic Messages API（Claude Code）
 
@@ -223,11 +224,11 @@ export ANTHROPIC_AUTH_TOKEN=sk-你的key     # 或 ANTHROPIC_API_KEY（走 x-api
 claude
 ```
 
-**鉴权**：`x-api-key` 与 `Authorization: Bearer` 都接受。**流式**：`message_start` → `content_block_start/delta/stop` → `message_delta`（含 `stop_reason` 与 usage）→ `message_stop`；无 `[DONE]` 哨兵，thinking 块在 `content_block_stop` 前补 `signature_delta`。**缓存命中**：出口 usage 按 Anthropic 语义拆两笔——`input_tokens` 只计未命中，命中另记 `cache_read_input_tokens`（内部 `input_tokens` 是 OpenAI 口径的 `prompt_tokens`，含命中），Claude Code 据此显示缓存读 token。**`count_tokens`**：`POST /v1/messages/count_tokens` 本地估算输入 token（不转发上游）。**不支持**：图片 / 文档块、Anthropic 服务端工具一律显式 400。
+**鉴权**：`x-api-key` 与 `Authorization: Bearer` 都接受。**流式**：`message_start` → `content_block_start/delta/stop` → `message_delta`（含 `stop_reason` 与 usage）→ `message_stop`；无 `[DONE]` 哨兵，thinking 块在 `content_block_stop` 前补 `signature_delta`。**缓存命中**：出口 usage 按 Anthropic 语义拆两笔——`input_tokens` 只计未命中，命中另记 `cache_read_input_tokens`（内部 `input_tokens` 是 OpenAI 口径的 `prompt_tokens`，含命中），Claude Code 据此显示缓存读 token。**`count_tokens`**：`POST /v1/messages/count_tokens` 本地估算输入 token（不转发上游）。**图片**：`image` 块（`source.type=base64` 拼成 `data:` URL、`source.type=url` 直传）归一为 chat 的 `image_url` 内容块，`tool_result.content` 内的图片同样保留——纯文本内容仍折成字符串，故无图请求的映射结果与旧版逐字节一致。**不支持**：`document` 块（PDF，chat 上游无对应表达）、`source.type=file`、Anthropic 服务端工具一律显式 400。
 
 ### CC Switch 一键导入
 
-「API Key 管理」页在创建 Key 后可生成 [CC Switch](https://github.com/farion1231/cc-switch) 的 `ccswitch://` 导入深链（Claude Code / Codex CLI / OpenCode 三个目标各一个按钮），点一下即由桌面端弹确认框写入地址、Key 与模型。深链**只能由点击触发**（浏览器拦截自动跳转），且**含 Key 明文**，仅在创建 Key 的展示期内可用。协议与 `app` / `apiFormat` 取值见 CC Switch 用户手册「Deep Link Protocol」，需 CC Switch v4.0.10+。注意 **endpoint 形态随 `apiFormat` 而变**：Anthropic 格式（Claude Code）填到根、**不带 `/v1`**；两个 OpenAI 格式填到 `/v1`。本服务没有 Gemini 出口，故不提供 `app=gemini` 入口。
+「API Key 管理」页可生成 [CC Switch](https://github.com/farion1231/cc-switch) 的 `ccswitch://` 导入深链（Claude Code / Codex CLI / OpenCode 三个目标各一个按钮），点一下即由桌面端弹确认框写入地址、Key 与模型。两处入口：**创建 Key 成功后的对话框**（直接用刚生成的一次性明文 Key，关闭对话框即不再保留）与 **Key 列表每行的「导入 CC Switch」**（列表只存脱敏 `preview`，需粘贴创建时保存的完整 Key，只留在对话框内存里）。两处都可用「默认模型」下拉选择要写入的模型——与 Playground 同源（`/api/playground/models`），按渠道分组。深链**只能由点击触发**（浏览器拦截自动跳转），且**含 Key 明文**，故仅在用户主动打开、且已给出 Key 时生成。协议与 `app` / `apiFormat` 取值见 CC Switch 用户手册「Deep Link Protocol」，需 CC Switch v4.0.10+。注意 **endpoint 形态随 `apiFormat` 而变**：Anthropic 格式（Claude Code）填到根、**不带 `/v1`**；两个 OpenAI 格式填到 `/v1`。本服务没有 Gemini 出口，故不提供 `app=gemini` 入口。
 
 ### 余额查询
 
@@ -286,6 +287,8 @@ claude
 - **来源 IP 白名单**：逗号分隔的 IP 或 CIDR（如 `203.0.113.9,10.0.0.0/8`），留空 = 不限制；写入时校验并规范化（`10.0.0.1` → `10.0.0.1/32`），来源不在白名单返回 403。**默认不采信 `X-Forwarded-For`**（客户端可写）；仅 `TRUST_PROXY=true` 时按 XFF 判定、取**最后一个**条目，故只适用于「本服务前恰好一层受信反代」。
 - **模型白名单**：逗号分隔的模型名或 fnmatch glob（如 `glm-*,kimi-k3`），留空 = 不限制；匹配不区分大小写，`模型@渠道` 后缀不参与匹配，白名单外返回 400，`/v1/models` 也只列白名单内模型。
 - **到期时间**：epoch 秒，留空 = 永不过期，到期后立即 401（与「Key 不存在」统一文案，不泄露可枚举信息）。
+
+**导入 CC Switch**：Key 列表每行的「导入 CC Switch」按钮打开对话框，粘贴创建时保存的完整 Key（列表只存脱敏 `preview`，服务端不再保留明文，故必须由用户提供），再选一个默认模型，即可生成 Claude Code / Codex CLI / OpenCode 三个 `ccswitch://` 导入深链；默认模型下拉与 Playground 同源（`/api/playground/models`），按渠道分组。粘贴的 Key 只留在对话框内存中，关闭即清除。创建 Key 成功后的对话框内也提供同样的导入按钮（那里直接用刚生成的明文 Key）。
 
 ## 凭证暂停
 
@@ -361,6 +364,16 @@ OpenRouter 收录数百条，其中多数本服务没接。每行带 `available`
 
 「能力分」列头可点排序，按**综合智能指数**（智）排；无分数的行排末尾（不冒充 0 分）。只给这一个分项排序入口——表头一列对应一个入口，三项各排会把表头挤成一排按钮。
 
+### 管理台「上游状态」页
+
+管理台「上游状态」页（`GET /api/upstream-status`，仅管理员可见）聚合各模型 / 网关提供方的**官方状态页**，回答「这个报错是上游整体挂了，还是我这边凭证 / 额度的问题」——本服务自己的 429/5xx 冷却只能回答「这个号现在不行」，官方状态页补上另一半。
+
+- **来源**：OpenCode Zen（自定义 JSON，**逐模型 TTFT / tps**）、Kilo、Moonshot / Kimi、MiniMax、OpenAI、Anthropic（Statuspage v2）、Together AI（Better Stack JSON:API）、DeepSeek（Atom 事故史）。按 `scope` 分两组展示：`channel`（与本站渠道一一对应，如 zen / kilo）排在 `model`（经渠道间接使用）之前。
+- **归一化六档**：`operational` / `degraded`（性能下降）/ `partial`（部分中断）/ `major`（重大故障）/ `maintenance`（维护中）/ `unknown`（抓取失败）。Statuspage 的 `critical` 并入 `major`。整体档位取**最差**的源，但 `unknown` 排最后——一个源连不上不该压过其余源报出的真实故障。
+- **只做解释、不做决策**：官方状态页滞后于本服务的实时冷却（模型级冷却见 `src/provider/kilo/client.py`），把它并入选号 / 熔断只会让调度更慢更糊涂。
+- **只存内存、不落盘**：状态数据分钟级易变，重启后拿一份几小时前的「一切正常」比显示「尚未抓取」危险得多。抓取由后台任务（`UPSTREAM_STATUS_MINUTES`，默认 5 分钟）负责，单源失败只在该源卡片上标错误原因，绝不让整轮抛异常。
+- **本页不覆盖**仅提供 HTML、无稳定机器可读端点的源（Groq、腾讯云、阿里云、华为云、SiliconFlow、Qoder、智谱、TRAE）——加源前先确认端点能稳定返回 JSON / XML，否则等于每天修一次 HTML 解析。
+
 ### token 到期展示
 
 凭证列表的 **token 剩余**列显示 access token 距到期还有多久，低于 `TOKEN_EXPIRY_WARNING_SECONDS`（默认 1 小时）标红。到期时间优先取上游 `expires_at`，缺失时回落 JWT `exp`；都取不到显示 `—`，**不猜本地 TTL**（否则是凭空捏造的预警）。
@@ -382,7 +395,7 @@ OpenRouter 收录数百条，其中多数本服务没接。每行带 `available`
 - **写入时定值**：成本在写明细时算好落库（`usage_events.cost_usd` / `cost_cny`），历史行**不随价表或汇率重算**；上线前历史两列为 `NULL`，可用 `scripts/backfill_cost.py --apply` 补齐（默认预览、写库前自动备份、幂等）。
 - **匹配不到就不计**：本地模型名按 OpenRouter 的 `id` / 展示名等值匹配（`src/model_match.py`，**命中不唯一就不配**），未匹配或未上报输入 token 的不计入，聚合值 `null` 显示 `—`（**不拿 0 冒充免费**），故成本是**下限**。
 
-**缓存命中率**：**Token 消耗**卡片在 token 分项后追加缓存命中率 = 命中 token ÷ 输入 token（保留 1 位小数）；**未上报或输入为 0 时显示 `—`**。
+**缓存命中率**：**Token 消耗**卡片在 token 分项后追加缓存命中率 = 命中 token ÷ 输入 token（保留 1 位小数）；**未上报或输入为 0 时显示 `—`**。**分组统计**表（「命中缓存」列后）与**请求明细**表（「命中」列后）各加一列只读的**命中率**，同公式、同占位规则（派生列不参与排序）。
 
 ### 积分记录
 
@@ -390,9 +403,13 @@ OpenRouter 收录数百条，其中多数本服务没接。每行带 `available`
 
 ### 分组维度与重新汇总
 
-**分组统计**面板用 tabs 切四个维度（按渠道 / 按模型 / 按用户 / 按凭证），共用同一张表（请求数 / 成功数 / 成功率 / 输入 / 输出 / 命中缓存 / Credit / 成本），对应端点 `GET /api/stats/by-provider|by-model|by-user|by-credential`。默认按请求数降序，点列头可切换排序。**按用户 / 按凭证**只对 admin 与 operator 展示。**口径差异**：渠道 / 模型 / 用户三维读**小时汇总**（永久保留，最近 5 分钟内的请求尚未计入）；**凭证维度读明细表**（小时汇总主键里没有 `credential_id`），故只覆盖**最近 90 天**。
+**分组统计**面板用 tabs 切四个维度（按渠道 / 按模型 / 按用户 / 按凭证），共用同一张表（请求数 / 成功数 / 成功率 / 输入 / 输出 / 命中缓存 / 命中率 / Credit / 成本 / 平均耗时 / 平均首字 / P95 耗时 / P95 首字），对应端点 `GET /api/stats/by-provider|by-model|by-user|by-credential`。默认按请求数降序，点列头可切换排序。**按用户 / 按凭证**只对 admin 与 operator 展示。**口径差异**：渠道 / 模型 / 用户三维读**小时汇总**（永久保留，最近 5 分钟内的请求尚未计入）；**凭证维度读明细表**（小时汇总主键里没有 `credential_id`），故只覆盖**最近 90 天**。
+
+**延迟四列**：**只统计成功请求**（失败请求的耗时会拉偏「典型耗时」）。**平均耗时 / 平均首字** = `latency_sum ÷ 成功数`（读小时汇总，与总览卡片、图表同口径，永久保留）；**P95 耗时 / P95 首字** = 第 95 百分位，按 **nearest-rank**（第 `⌈0.95·n⌉` 小的值，n = 该组有值样本数）从**逐请求明细**算出——小时汇总只有和与计数，数学上还原不出分布，故分位列只覆盖**最近 90 天**。`ttfb_ms` 对非流式 / 未产出首字的成功请求为 `NULL`，两列各自独立排名（只数有值样本）。无成功样本 / 未上报延迟时显示 `—`（不拿 0 冒充）。四个新列都可点列头排序（`sort=avg_latency_ms|avg_ttfb_ms|p95_latency_ms|p95_ttfb_ms`）。
 
 **点行钻取**：点分组表任意一行，下方「请求明细」即按该行钻取（渠道 / 模型 / 凭证按同名列过滤，用户维度走作用域参数），条件叠加、可多个维度层层收窄，面板上方显示当前过滤标签并可一键清除。`GET /api/stats/events` 因此接受 `provider` / `model` / `credential_id` 三个过滤参数（`AND` 语义）。
+
+**明细表列合并**：请求明细把同类列并成一列，默认值一眼可读、悬停展开全部子项：**Token**（默认「输入 / 输出 · 命中率」，悬停含命中 token）、**延迟**（默认「耗时 / 首字」）。列数从 14 压到约 10，窄屏卡片也少一半字段。排序能力不丢：点合并列头弹出下拉选子列（Token → 输入 / 输出 / 命中 / 命中率，延迟 → 耗时 / 首字），选中即按该子列排序；**命中率**子列走后端 `sort=cache_rate`（命中 ÷ 输入，输入为 0 或未上报时为 `NULL`，与其它可空列同排序语义）。
 
 **导出 CSV**：明细面板右上「导出 CSV」（仅 admin / operator）按**当前时间范围 + 当前钻取过滤**导出逐请求明细，`GET /api/stats/events?format=csv`。文件带 UTF-8 BOM（Excel 认编码）、`\r\n` 换行、时间列 ISO 8601（UTC），并对以 `= + - @`（及制表符/回车）开头的**文本**单元格加前导单引号防公式注入（数值含负数原样）。单次导出上限 10000 行，超出截断并在响应头 `X-Export-Truncated: 1` 标出，页面提示收窄条件。
 
@@ -404,9 +421,17 @@ OpenRouter 收录数百条，其中多数本服务没接。每行带 `available`
 
 适用端点：`/api/credentials`、`/api/users`、`/api/api-keys`、`/api/audit`、`/api/alerts`、`/api/model-catalog`、`/api/credentials/{id}/credit-events`、`/api/credentials/{id}/accounts`、`/api/stats/by-*`、`/api/stats/events`（逐请求明细：默认按 rowid 游标分页返回 `next_before`；按其它列排序或时间升序时改用 `LIMIT/OFFSET` 并返回 `total`）。各端点的白名单键与默认排序见 `src/api/`。
 
+### 列表分页
+
+管理台各列表**统一分页**：共享同一套页码文案（`第 N / M 页`）、每页选项（`20 / 50 / 100`，默认 `50`）与上一页 / 下一页按钮。扁平列表一律由**后端**分页——`GET` 列表端点接受 `limit`（每页条数）+ `offset`（偏移）并返回 `total`（**筛选后**的总条数，供前端算页数）；原列表键名不变，只新增 `total`，向后兼容。`/api/users`、`/api/api-keys`、`/api/alerts`、`/api/audit` 在 SQL 层 `LIMIT/OFFSET`；`/api/model-catalog` 因排序键含派生字段（能力分 / 可用性）先内存排序再切片。
+
+`/api/model-catalog` 另接受两个筛选参数（服务端生效，前端搜索框去抖 250ms 后回第一页）：`q`（大小写不敏感地匹配模型 `id` 与名称）与 `only_available`（`true` 时只留 `available=true` 的行）。`total` 是筛选后的条数，顶层 `count` 仍是目录全量（页头展示「命中 N / 共 M」）。
+
+**分组类表**（凭证页按渠道分组、用量统计分组表）不分页，保持一次性全量展示——它们的行数由渠道 / 分组维度决定，本就不受明细规模影响。
+
 ## 后台任务
 
-额度探测、token 预刷新、每日签到、成长中心、活跃上报、明细清理、数据库备份、渠道模型列表刷新、模型目录刷新（OpenRouter）、运维告警共 10 类，由 `TaskRunner` 自动调度，失败互不影响。每类任务的上次执行时间、最近结果与错误在管理台**「任务与配置」页**查看（30 秒自动刷新），运行态只存在于**本次进程**内，重启归零。每个任务卡片带「立即运行」按钮（`POST /api/tasks/{key}/run`，admin + CSRF）：**绕过时点窗口但绕过不了开关**——`due()` 未到点也照跑，而任务被开关关掉时如实回 `ran=false`（不把「关了」谎报成「跑过了」）；同一任务已在跑时立刻回 `busy=true`、不排队、不并发打上游；同步等这一轮跑完再返回结果。
+额度探测、token 预刷新、每日签到、成长中心、活跃上报、明细清理、数据库备份、渠道模型列表刷新、模型目录刷新（OpenRouter）、运维告警、上游状态页聚合共 11 类，由 `TaskRunner` 自动调度，失败互不影响。每类任务的上次执行时间、最近结果与错误在管理台**「任务与配置」页**查看（30 秒自动刷新），运行态只存在于**本次进程**内，重启归零。每个任务卡片带「立即运行」按钮（`POST /api/tasks/{key}/run`，admin + CSRF）：**绕过时点窗口但绕过不了开关**——`due()` 未到点也照跑，而任务被开关关掉时如实回 `ran=false`（不把「关了」谎报成「跑过了」）；同一任务已在跑时立刻回 `busy=true`、不排队、不并发打上游；同步等这一轮跑完再返回结果。
 
 **渠道模型列表刷新**（`MODEL_CATALOG_MINUTES`，默认 30、下限 5）是兜底保鲜：模型表本身按「谁访问 `/v1/models` 或 Playground 谁刷新、TTL 300s」更新，这条只保证**没人访问时也会更新**。周期取 30 分钟是跟 zen 免费模型判活缓存对齐——再密也不会让 zen 多探活。
 
@@ -452,7 +477,7 @@ python3 scripts/restore_db.py data/backups/coding2api-20261014-030000.sqlite3 --
 | `APP_SECRET` | **必填** | 凭证加密密钥，≥16 字符；丢失 = 凭证全部作废，无密钥轮换。启动时拒绝低熵值（全同字符 / 周期重复 / 字符集过小） |
 | `ADMIN_USERNAMES` | 空 | **仅引导期**：逗号分隔的用户名，首次启动时被提权为 `admin`；DB 里已有角色后不再生效 |
 | `USERS_FILE` | `secrets/users.txt` | **仅引导期**：老式用户文件路径，启动时一次性导入 SQLite（幂等）。账号唯一源是 `users` 表 |
-| `PUBLIC_BASE_URL` | `http://127.0.0.1:8000` | 浏览器可达地址；TRAE 登录回调依赖它 |
+| `PUBLIC_BASE_URL` | `http://127.0.0.1:8000` | 浏览器可达地址；TRAE 登录回调（`+/authorize`）依赖它，scheme 为 https 时额外下发 HSTS。**不决定会话 Cookie 的 `Secure`**——那按请求实际协议动态判定（`X-Forwarded-Proto` 优先，无该头则看 Host），同一实例 LAN(http) 与隧道(https) 双入口才能都登录 |
 | `DATA_DIR` | `./data` | SQLite 与运行数据目录 |
 | `DEFAULT_MODEL` | `glm-5.2` | 模型为空/`auto` 时的默认 |
 | `QUOTA_PROBE_MINUTES` | `60` | 额度探测周期（下限 1 分钟） |
@@ -479,6 +504,9 @@ python3 scripts/restore_db.py data/backups/coding2api-20261014-030000.sqlite3 --
 | `ALERT_ERROR_RATE_WINDOW_MINUTES` | `15` | 错误率统计窗（分钟），数据源为 `usage_events` 明细 |
 | `BACKUP_INTERVAL_MINUTES` | `1440` | 数据库备份后台任务周期（分钟），下限 60；`VACUUM INTO` 一致性快照落 `DATA_DIR/backups/` |
 | `BACKUP_KEEP` | `7` | 备份保留份数：只留最近这么多份，更旧的按时间删除；`0` 表示不清理 |
+| `UPSTREAM_STATUS_ENABLED` | `true` | 上游状态页聚合开关：后台并发抓各模型 / 网关提供方的官方状态接口并归一化，管理台「上游状态」页只读展示。**只做解释不做决策**；快照只存内存、重启归零 |
+| `UPSTREAM_STATUS_MINUTES` | `5` | 上游状态页抓取周期（下限 1 分钟） |
+| `UPSTREAM_STATUS_TIMEOUT_SECONDS` | `10.0` | 单源 HTTP 超时（秒）：8 个源并发抓，慢的那个不该拖住整轮 |
 | `QUOTA_EXPIRY_WINDOW_SECONDS` | `129600` | 主到期排序窗口：把距到期 ≤ 该秒数的积分加总，多的账号先用；CodeBuddy 与 TRAE 都按包独立到期、都参与；`≤0` 关闭整套到期排序 |
 | `QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS` | `604800` | 次到期排序窗口：主窗口打平时才比较；`≤0` 关闭该级 |
 | `CONVERSATION_STICKY_SECONDS` | `3600` | 会话粘性 TTL：优先按请求体显式会话标识，无则回落消息前缀指纹；手动 pin 优先；带 `user_id` 时不派生前缀兜底键；`≤0` 关闭 |
@@ -532,9 +560,9 @@ python3 scripts/restore_db.py data/backups/coding2api-20261014-030000.sqlite3 --
 
 ### 管理台热更（「任务与配置」页）
 
-上表中带「可热更」语义的 **48 项**可不改 `.env`、不重启，直接在管理台「任务与配置」页修改：
+上表中带「可热更」语义的 **50 项**可不改 `.env`、不重启，直接在管理台「任务与配置」页修改：
 
-`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`CONTEXT_COMPRESS_ENABLED`、`CONTEXT_COMPRESS_RESERVE_TOKENS`、`CONTEXT_COMPRESS_MIN_KEEP_MESSAGES`、`CONTEXT_COMPRESS_SAFETY_RATIO`、`MODEL_FALLBACK_GROUPS`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`MAX_INFLIGHT_PER_CREDENTIAL`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`REFRESH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`MODEL_CATALOG_MINUTES`、`OPENROUTER_CATALOG_MINUTES`、`USD_CNY_RATE`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`CODEBUDDY_INTL_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`、`ALERT_ENABLED`、`ALERT_WEBHOOK_URL`、`ALERT_INTERVAL_MINUTES`、`ALERT_SILENCE_MINUTES`、`ALERT_FOR_TICKS`、`ALERT_CLEAR_TICKS`、`ALERT_POOL_READY_MIN`、`ALERT_TASK_FAILURES`、`ALERT_TOKEN_EXPIRY_HOURS`、`ALERT_ERROR_RATE_THRESHOLD`、`ALERT_ERROR_RATE_MIN_REQUESTS`、`ALERT_ERROR_RATE_WINDOW_MINUTES`、`BACKUP_INTERVAL_MINUTES`、`BACKUP_KEEP`、`METRICS_ENABLED`、`FORCE_DISABLE_THINKING`、`REASONING_EFFORT_MAP`、`ANTHROPIC_THINKING_EFFORTS`。
+`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`CONTEXT_COMPRESS_ENABLED`、`CONTEXT_COMPRESS_RESERVE_TOKENS`、`CONTEXT_COMPRESS_MIN_KEEP_MESSAGES`、`CONTEXT_COMPRESS_SAFETY_RATIO`、`MODEL_FALLBACK_GROUPS`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`MAX_INFLIGHT_PER_CREDENTIAL`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`REFRESH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`MODEL_CATALOG_MINUTES`、`OPENROUTER_CATALOG_MINUTES`、`USD_CNY_RATE`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`CODEBUDDY_INTL_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`、`ALERT_ENABLED`、`ALERT_WEBHOOK_URL`、`ALERT_INTERVAL_MINUTES`、`ALERT_SILENCE_MINUTES`、`ALERT_FOR_TICKS`、`ALERT_CLEAR_TICKS`、`ALERT_POOL_READY_MIN`、`ALERT_TASK_FAILURES`、`ALERT_TOKEN_EXPIRY_HOURS`、`ALERT_ERROR_RATE_THRESHOLD`、`ALERT_ERROR_RATE_MIN_REQUESTS`、`ALERT_ERROR_RATE_WINDOW_MINUTES`、`BACKUP_INTERVAL_MINUTES`、`BACKUP_KEEP`、`UPSTREAM_STATUS_ENABLED`、`UPSTREAM_STATUS_MINUTES`、`METRICS_ENABLED`、`FORCE_DISABLE_THINKING`、`REASONING_EFFORT_MAP`、`ANTHROPIC_THINKING_EFFORTS`。
 
 要点：**优先级 `DB 覆盖值 > .env`**——改过后 .env 对该项不再生效，页面标「DB 覆盖」，点「恢复默认」删掉覆盖行才回落 .env。值存 `runtime_settings` 表（纯 key/value），新增可热更项无需迁移；白名单外的 key、非法类型 / 越界值写入前即拒。启动期项（`APP_SECRET` / `PORT` / `DATA_DIR` / `USERS_FILE` / `OPENROUTER_MODELS_URL` / 上游端点白名单）**不在**白名单。接口 `GET /api/settings` 读快照、`PUT /api/settings` 写（admin + CSRF），传 `null` 恢复默认。该页同时展示**后台任务运行态**，页面按 tab 组织；运行态是**进程内**的（`GET /api/tasks`，admin，页面每 30 秒刷新），重启归零。
 

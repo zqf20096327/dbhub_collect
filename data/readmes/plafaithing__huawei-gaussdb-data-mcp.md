@@ -84,7 +84,7 @@ chmod +x install.sh run.sh
 ./install.sh
 ```
 
-`install.sh` 用 `uv`（有则优先）或 `python3 -m venv` 建立本目录下的 `.venv`，离线装 core wheel + 本服务；若 `wheels/` 下存在 GaussDB 官方驱动 whl（部署者自行从官方发布包放入，不入库），一并安装。校验文件完整性：`sha256sum -c SHA256SUMS`。
+`install.sh` 用 `uv`（有则优先）或 `python3 -m venv` 建立本目录下的 `.venv`，离线装 core wheel + 本服务；若 `wheels/` 下存在 GaussDB 官方驱动 whl（部署者经 `fetch-driver.sh` 提取或手动放入，不入库——仅 x86_64 基础 whl 随包提供，见 §2.3），且**架构与本机一致**时一并安装。校验文件完整性：`sha256sum -c SHA256SUMS`。
 
 ### 2.2 uv 在线安装（开发路线）
 
@@ -96,24 +96,49 @@ uv run gaussdb-data-mcp --help
 
 ### 2.3 官方驱动安装（Linux / Python 3.11，连接云上实例必须）
 
-GaussDB 507 的自研驱动**不发布 PyPI**，只随数据库发布包提供，且**仅 Linux x86_64/ARM64 + Python 3.11**：
+GaussDB 507 的自研驱动**不发布 PyPI**，只随数据库驱动发布包（`DBS-GaussDB-driver_*.tar.gz`，
+约 1.6GB）按 **部署形态 / OS 变体 / CPU 架构** 分发，且仅 **Linux x86_64/ARM64 + Python 3.11**。
 
-1. `wheels/` 已内置**基础驱动 whl**（HCE 2.0 变体，x86_64 + Python 3.11，ECS 实测可用）；
-   部署环境为其他 OS（Euler/Suse 等）时，从
-   [官方驱动包](https://support.huaweicloud.com/intl/zh-cn/usermanual-gaussdb/gaussdb_01_083.html)
-   对应变体目录取 whl **替换 `wheels/` 内同名文件**（各变体 whl 内容不同，文件名相同）；
-2. 安装前**清理已装的开源 psycopg2**（官方要求，否则 import 到错误驱动）：
+**路径 A（推荐）：fetch-driver.sh 自动提取**
+
+```bash
+./fetch-driver.sh /path/to/DBS-GaussDB-driver_*.tar.gz
+```
+
+脚本自动完成：`uname -m` + `/etc/os-release` 识别架构与 OS 变体（Hce2.0 / Euler2.x /
+Suse15.x；映射不到时列出包内可用变体让用户选）→ 取对应部署形态的
+`python_driver.tar.gz`（默认 Centralized，`FETCH_DRIVER_SHAPE` 覆盖）→ **流式解包**
+（`tar -xzOf` 逐层提取单成员，不把大包整体展开，临时文件即用即删）→ 把
+`GaussDB_Kernel_*_py311-none-linux_<arch>.whl` 放进 `wheels/`（**先删同架构旧 whl**——
+各 OS 变体 whl 内容不同、文件名相同，混装会装错）→ 打印下方安装三步提示。
+幂等可重入；输入层层降级：官方外层包 / 已解包的 `python_driver.tar.gz` /
+单 OS 变体包 / 直接给 whl 路径均可；`FETCH_DRIVER_VARIANT=Hce2.0` 可跳过 OS 自动映射。
+
+**两架构（x86_64 / ARM64）**：whl 文件名以 `linux_x86_64` / `linux_aarch64` 区分，
+可同存于 `wheels/`（Docker 多架构构建各取所需，见 §6.3）。仓库入库的是 x86_64
+基础 whl（HCE 2.0 变体，ECS 实测可用）；**ARM 机器**从
+[官方驱动页](https://support.huaweicloud.com/intl/zh-cn/usermanual-gaussdb/gaussdb_01_083.html)
+下载 `arm64` 驱动包后在其上跑一次 `fetch-driver.sh` 即可（本仓库不放假 ARM whl）。
+
+**路径 B（手动兜底）**：从官方发布包对应变体目录取 whl 放入 `wheels/`
+（替换同架构旧文件）。
+
+装好后（两路径相同）：
+
+1. 安装前**清理已装的开源 psycopg2**（官方要求，否则 import 到错误驱动）：
    `pip uninstall psycopg2 psycopg2-binary`；
-3. 安装 whl；系统依赖：`libkeyutils1 libsasl2-2 libldap-common`
+2. 安装 whl；系统依赖：`libkeyutils1 libsasl2-2 libldap-common`
    （Debian 系 `apt-get install -y libkeyutils1 libsasl2-2 libldap-common`）；
-4. 非数据库用户运行时设置库搜索路径：
+3. 非数据库用户运行时设置库搜索路径：
 
 ```bash
 export LD_LIBRARY_PATH=/usr/local/lib/python3.11/site-packages/gaussdb_psycopg2.lib
 ```
 
 不设置时驱动加载报错（对应错误码 `GAUSSDB_DATA_MCP_DRIVER_MISSING` 的另一种成因）。
-完整的容器内安装与实测记录见 `tests/integration/README.md`。
+`install.sh` 内置驱动前置检查：wheels/ 无匹配本机架构的 whl 时提示跑
+fetch-driver.sh；有 whl 但**架构与 `uname -m` 不一致时拒绝安装**（防 ARM 机器装
+x86 whl）。完整的容器内安装与实测记录见 `tests/integration/README.md`。
 
 **为什么不能用开源 psycopg2**：云上实例认证默认 sha256，开源驱动不支持（实测报
 `none of the server's SASL authentication mechanisms are supported`）——这与公网/内网
@@ -166,6 +191,23 @@ python.org 安装的 Python 即消失。
 `%s`）、`statement_timeout` 通过连接后 `SET` 下发（ODBC 无启动参数）——工具行为
 与 Linux 轨完全一致。
 
+**中文编码（issue #1 实测修复）**：Windows 中文系统的 gsqlodbc 会按本地代码页
+（GBK）误解窄字符（SQL_C_CHAR）参数里的 UTF-8 中文——`"张三"` 入库成乱码。服务已
+内置规避：连接固定 `ansi=False`（Unicode 模式）+ 参数走宽字符绑定（UTF-16LE）+
+SQL_CHAR 按 UTF-8 解码；另加 `LFConversion=0`（gsqlodbc 派生自 psqlODBC，默认把
+读回文本里的 LF 规范化成 CRLF——写入无损、仅读取失真，关闭后读回与存储逐字节一致，
+2026-10-15 本地 A 库实测）。中文与特殊字符往返经真库回归（
+`tests/integration/test_live_data_fidelity.py`，凭证门控见该文件 docstring；设
+`GAUSSDB_DATA_MCP_PYODBC_LIVE=1` 与 `DB_*` 环境变量另有单驱动轨中文往返），
+未设门时自动跳过。
+
+**verify-ca / verify-full 的轨道差异**：pyodbc 轨要求 `sslrootcert` 显式配置
+（credentials.json 或 `GAUSSDB_DATA_MCP_DB_SSLROOTCERT`，建议绝对路径），缺失即拒绝
+连接（`GAUSSDB_DATA_MCP_CA_MISSING`，fail-closed）；证书路径以 `SSLRootCert={...}`
+形式透传给驱动。注意：gsqlodbc 对该参数是否真实执行 CA 校验**未经实测证实**（本地
+验证仅确认参数被驱动接受），确需 CA 校验的生产环境优先 psycopg2 轨（Linux）或
+Docker 轨（§6.3）。
+
 **已知问题（已规避）**：Windows 上 GaussDB ODBC DLL 在进程退出的清理阶段触发
 堆损坏（exit code `0xC0000374` / `-1073740940`，驱动已知问题，**不影响运行期
 功能**）。服务在正常退出路径（stdio EOF / HTTP 关停）已内置规避：跳过解释器
@@ -194,6 +236,9 @@ export GAUSSDB_DATA_MCP_DB_SSLMODE=prefer        # 内网默认即可；公网�
 HTTP 对外（ECS 部署）额外需要：`tokens.json`（一行令牌表，见 §3.3）+
 `MCP_SERVER_HOST=0.0.0.0`。CA 证书零配置：`sslmode=verify-ca` 时把控制台下载的
 `cacert.pem` 放到 credentials.json 旁边即可（见 §3.2）。
+
+嫌手搓文件麻烦可以用向导：`./bootstrap.sh`（交互或全参数）生成 0600 的
+credentials.json + tokens.json（openssl 随机令牌），并按 sslmode 打印 CA 证书获取提示。
 
 ### 3.1 环境变量（全量参考）
 
@@ -225,6 +270,11 @@ HTTP 对外（ECS 部署）额外需要：`tokens.json`（一行令牌表，见 
 `DB_*` 兜底项：`DB_HOST` / `DB_PORT` / `DB_DBNAME` / `DB_USER` / `DB_PASSWORD` /
 `DB_SSLMODE`（默认 `prefer`）/ `DB_SSLROOTCERT` / `DB_SSLCERT` / `DB_SSLKEY`。
 
+> **`READ_ONLY`（重启生效）与 `ENABLE_DDL`（热读）不对称是刻意设计**：
+> `READ_ONLY` 是部署时的安全姿态快照，固化在启动的中间件里，运行期改环境变量
+> 不会放行写工具；`ENABLE_DDL` 热读是运维灵活性（紧急放行 DDL 无需重启）。
+> 勿把「改 env 立即生效」的预期套在 `READ_ONLY` 上。
+
 ### 3.2 credentials.json（数据库凭证）
 
 ```json
@@ -239,6 +289,7 @@ HTTP 对外（ECS 部署）额外需要：`tokens.json`（一行令牌表，见 
 ```
 
 - 权限必须 `0600`（Windows 跳过权限位检查），否则读取即报 `MCP_CREDENTIAL_ERROR`；
+  Windows 建议用 NTFS ACL 限制 credentials.json 的访问账户范围（右键 → 属性 → 安全）；
 - **每次工具调用热重读**：原子替换文件（写临时文件后 `mv`）即可轮换凭证，无需重启；
 - `port` 无默认值：GaussDB CN 端口通常 **8000**，驱动默认 5432 是错的（见故障排查）；
 - **公网地址护栏（fail-closed）**：host 是公网地址（含域名）而 `sslmode` 低于
@@ -482,9 +533,10 @@ credentials.json 同目录即可，见 §3.2）。
 ### 6.3 Docker 部署
 
 ```bash
-# 构建前：把官方自研驱动 whl 复制进 wheels/（按部署 OS 从官方发布包选对应版本，
-# 如 HCE 2.0 x86_64 取 Hce2.0_X86_64 包内 whl；whl 不入库）
-cp <官方发布包>/GaussDB_Kernel_507_0_0-2.9.10-py311-none-linux_x86_64.whl wheels/
+# 构建前：把官方自研驱动 whl 放进 wheels/——推荐 ./fetch-driver.sh <官方驱动包>
+# （按本机 OS/变体自动提取；或手动复制，如 HCE 2.0 x86_64 取 Hce2.0_X86_64 包内 whl；
+# 两架构 whl 可同存 wheels/，构建时按目标架构自动取舍，whl 不入库）
+./fetch-driver.sh /path/to/DBS-GaussDB-driver_*.tar.gz   # 或手动 cp（见 §2.3 路径 B）
 docker build -t gaussdb-data-mcp -f deploy/Dockerfile .
 docker run -d -p 127.0.0.1:8000:8000 \
   -v /opt/mcp/credentials.json:/app/credentials.json:ro \
@@ -495,6 +547,15 @@ docker run -d -p 127.0.0.1:8000:8000 \
   -e GAUSSDB_DATA_MCP_AUDIT_FILE=/app/audit/audit.jsonl \
   -e MCP_SERVER_HOST=0.0.0.0 \
   gaussdb-data-mcp
+```
+
+**多架构构建**：Dockerfile 按 RUN 内 `uname -m`（buildx 下即目标平台架构）挑选
+`linux_x86_64` / `linux_aarch64` 驱动 whl，缺目标架构 whl 时构建 fail-fast 并提示
+先跑 fetch-driver.sh：
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t <registry>/gaussdb-data-mcp \
+  -f deploy/Dockerfile --push .
 ```
 
 镜像内已含 core 与服务，`wheels/` 下的驱动 whl 随构建一并安装，镜像内的
@@ -561,6 +622,7 @@ docker run -d -p 127.0.0.1:8000:8000 \
 | 认证失败（`GAUSSDB_DATA_MCP_AUTH_FAILED`） | 凭证配错。服务**不重试**（防 10 次锁号 1 天），修复 credentials.json 后下次调用自动恢复 |
 | 连不上库（`GAUSSDB_DATA_MCP_CONNECT_FAILED`） | **5432 陷阱**：GaussDB CN 端口通常是 **8000**，驱动默认 5432 是错的；`port` 必须显式配置（无默认值是刻意的） |
 | 拒连，编码相关报错 | 目标库 `ZHS16GBK` / `GB18030_2022` 编码：官方 Python 驱动 2.9.10 起无法连接，建库须用兼容 PG 的编码（如 UTF8） |
+| Windows 轨中文变 `?` 或乱码 | 旧版缺编码规避（issue #1，已修复）：服务连接固定 `ansi=False` + 宽字符参数 + SQL_CHAR UTF-8 解码；确认使用本版代码，详见 §2.5 |
 | `GAUSSDB_DATA_MCP_DRIVER_MISSING` | psycopg2 轨：未装官方驱动 whl（或装了开源 psycopg2 未清理），Linux/py3.11 限制与安装步骤见 §2.3；pyodbc 轨：`uv pip install pyodbc` + 安装 GaussDB ODBC 驱动，见 §2.5 |
 | `GAUSSDB_DATA_MCP_DRIVER_INVALID` | `GAUSSDB_DATA_MCP_DRIVER` 只接受 `psycopg2` / `pyodbc` |
 | Windows 退出时崩溃（exit code `0xC0000374`） | GaussDB ODBC DLL 退出清理堆损坏（已知问题，不影响运行期）；正常退出路径已规避（§2.5），强杀进程仍可见一次崩溃报告，无数据风险 |
@@ -573,7 +635,7 @@ docker run -d -p 127.0.0.1:8000:8000 \
 | `MCP_READ_ONLY` | 只读门拦截：需要写环境时设 `GAUSSDB_DATA_MCP_READ_ONLY=false` 并重启（hint 会指向该变量） |
 | `GAUSSDB_DATA_MCP_DDL_DISABLED` | DDL 通道未开：`GAUSSDB_DATA_MCP_ENABLE_DDL=true`（且 READ_ONLY=false） |
 | `GAUSSDB_DATA_MCP_RISK_MISMATCH` | 语句与工具通道不匹配：UPDATE 走 `execute_sql_write`，DDL 走 `execute_sql_dangerous` |
-| `GAUSSDB_DATA_MCP_EXEC_FAILED` | 数据库执行报错（语法/权限等）：看信封 message；池内死连接重试一次是安全的 |
+| `GAUSSDB_DATA_MCP_EXEC_FAILED` | 数据库执行报错（语法/权限等）：看信封 message；池内死连接重试一次是安全的。注意：数据库原始错误文本会透传给客户端（诊断需要，截断至 300 字符），生产环境若担心表结构泄露可在反代层过滤 |
 | `EXEC_FAILED`：`cannot execute nextval()/setval() in a read-only transaction` | 序列推进被只读会话（第二层）拦截，设计如此：序列无法经 `execute_sql` 推进；写环境用 `execute_sql_write` 的 `INSERT ... VALUES (seq.NEXTVAL)`，或 DDL 通道 `ALTER SEQUENCE`（详见 §4.1 序列条目） |
 | `EXEC_FAILED`：`Currval of sequence ... is not yet defined in this session` | CURRVAL 需同会话先成功 NEXTVAL；本服务读通道的 NEXTVAL 一律被只读会话拦截，故经本服务查 CURRVAL 总是此报错（Oracle/PG 本义，非缺陷） |
 | 建库报 `Compatibility args ... is invalid` | `DBCOMPATIBILITY` 取值随形态而异：集中式只认 `'A'`，分布式只认 `'ORA'`（详见 §4.1） |

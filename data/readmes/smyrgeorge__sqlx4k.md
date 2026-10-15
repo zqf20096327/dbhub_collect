@@ -81,6 +81,7 @@ sqlx4k {
 - [Acquiring and using connections](#acquiring-and-using-connections)
 - [Running queries](#running-queries)
     - [execute() - for SQL statements that modify data](#execute----for-sql-statements-that-modify-data)
+    - [executeWithResult () - For inserts that generate an id](#executeWithResult----for-inserts-that-generate-an-id)
     - [fetchAll() - for queries that return data](#fetchall----for-queries-that-return-data)
     - [fetch() - for streaming large results](#fetch----for-streaming-large-results)
 - [Prepared statements (named and positional parameters)](#prepared-statements)
@@ -118,7 +119,8 @@ sqlx4k {
 - Postgres COPY. COPY FROM STDIN is an order of magnitude faster than multi-row INSERT for bulk loads.
 - `kotlinx.serialization` module. JSON and JSONB columns to and from @Serializable classes, and a generic @Converter for
   any serializable type.
-- Type coverage, NUMERIC/decimal, Duration or interval, enum or composite types.
+- Type coverage: a Kotlin decimal type for NUMERIC/decimal (values already decode as exact text), Duration or interval,
+  enum or composite types.
 - WASM support (?).
 
 ### Supported Databases
@@ -334,6 +336,20 @@ Returns the number of affected rows (INSERT, UPDATE, DELETE, DDL statements):
 // With raw SQL string
 val affected: Long = db.execute("insert into users(id, name) values (1, 'Alice');").getOrThrow()
 ```
+
+#### executeWithResult () - For inserts that generate an id
+
+Like `execute`, but also returns the id the database generated for an inserted row (`AUTO_INCREMENT` on
+MySQL/MariaDB, the rowid on SQLite), with no extra query:
+
+```kotlin
+val res: ExecuteResult = db.executeWithResult("insert into users(name) values ('Alice');").getOrThrow()
+res.rowsAffected // 1
+res.lastInsertId // the generated id, or null when the statement generated none
+```
+
+`lastInsertId` is always `null` on PostgreSQL, which has no such value: use `INSERT ... RETURNING id` with `fetchAll`
+there. For a multi-row insert, MySQL reports the first generated id and SQLite the last.
 
 #### fetchAll () - For queries that return data
 
@@ -595,6 +611,9 @@ interface Sqlx4kRepository : CrudRepository<Sqlx4k> {
 > A `@Query` method's name prefix determines its shape and expected return type: `findAll`/`findAllBy…` →
 > `Result<List<T>>`, `findOneBy…` → `Result<T?>`, `countAll`/`countBy…` → `Result<Long>`, `existsBy…` →
 > `Result<Boolean>`, `deleteAll`/`deleteBy…` and `execute…` → `Result<Long>` (affected rows).
+> `streamAll`/`streamAllBy…` stream the rows instead of loading them all: declare them as non-`suspend`
+> functions returning `Flow<T>`; the query runs when the flow is collected, and a failure fails the collection.
+> They fetch rows in chunks of `@Query(fetchSize = …)` rows (the driver's default when unset).
 
 > [!NOTE]
 > Besides your @Query methods, because your interface extends `CrudRepository<T>`, the generator also adds the CRUD

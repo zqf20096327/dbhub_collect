@@ -253,10 +253,10 @@ Useful resources and dependencies that are used in Lingo.
 - [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.10
 - [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless): ^1.2.0
 - [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.2.6
-- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.1.23
+- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.3.0
 - [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.1.16
 - [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.1.15
-- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.3.3
+- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.5.0
 - [@types/node](https://www.npmjs.com/package/@types/node): ^26.2.0
 - [@types/react](https://www.npmjs.com/package/@types/react): ^19.3.0
 - [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): ^19.3.0
@@ -266,12 +266,12 @@ Useful resources and dependencies that are used in Lingo.
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.0
 - [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.1
 - [drizzle-kit](https://www.npmjs.com/package/drizzle-kit): ^0.31.11
-- [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.2
+- [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.4
 - [eslint](https://www.npmjs.com/package/eslint): ^9
 - [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.3.6
 - [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier): ^10.1.8
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.52.0
-- [next](https://www.npmjs.com/package/next): ^16.3.8
+- [next](https://www.npmjs.com/package/next): ^16.4.0
 - [pg](https://www.npmjs.com/package/pg): ^8.23.0
 - [postcss](https://www.npmjs.com/package/postcss): ^8
 - [prettier](https://www.npmjs.com/package/prettier): ^3.9.8

@@ -1,14 +1,14 @@
 <p align="center">
-  <img alt="" src="https://good-webhooks.dev/readme/mark.png" width="56" height="56" />
+  <img alt="" src="https://good-webhooks.dev/readme/mark-square.png" width="56" height="56" />
 </p>
 
 <h1 align="center">Good Webhooks</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/good-webhooks"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/npm/v/good-webhooks.svg?size=xs&mode=dark" /><img alt="npm version" src="https://shieldcn.dev/npm/v/good-webhooks.svg?size=xs&mode=light" /></picture></a>
-  <a href="https://www.npmjs.com/package/good-webhooks"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/npm/dw/good-webhooks.svg?variant=secondary&size=xs&mode=dark" /><img alt="npm downloads" src="https://shieldcn.dev/npm/dw/good-webhooks.svg?variant=secondary&size=xs&mode=light" /></picture></a>
-  <a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/license/pplytas/good-webhooks.svg?variant=secondary&size=xs&mode=dark" /><img alt="MIT license" src="https://shieldcn.dev/github/license/pplytas/good-webhooks.svg?variant=secondary&size=xs&mode=light" /></picture></a>
-  <a href="https://github.com/pplytas/good-webhooks/actions/workflows/ci.yml"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ci/pplytas/good-webhooks.svg?workflow=ci.yml&branch=main&variant=secondary&size=xs&mode=dark" /><img alt="CI status" src="https://shieldcn.dev/github/ci/pplytas/good-webhooks.svg?workflow=ci.yml&branch=main&variant=secondary&size=xs&mode=light" /></picture></a>
+  <a href="https://www.npmjs.com/package/good-webhooks"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/npm/v/good-webhooks.svg?size=xs&mode=dark&font=geist" /><img alt="npm version" src="https://shieldcn.dev/npm/v/good-webhooks.svg?size=xs&mode=light&font=geist" /></picture></a>
+  <a href="https://www.npmjs.com/package/good-webhooks"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/npm/dw/good-webhooks.svg?variant=secondary&size=xs&mode=dark&font=geist" /><img alt="npm downloads" src="https://shieldcn.dev/npm/dw/good-webhooks.svg?variant=secondary&size=xs&mode=light&font=geist" /></picture></a>
+  <a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/license/pplytas/good-webhooks.svg?variant=secondary&size=xs&mode=dark&font=geist" /><img alt="MIT license" src="https://shieldcn.dev/github/license/pplytas/good-webhooks.svg?variant=secondary&size=xs&mode=light&font=geist" /></picture></a>
+  <a href="https://github.com/pplytas/good-webhooks/actions/workflows/ci.yml"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ci/pplytas/good-webhooks.svg?workflow=ci.yml&branch=main&variant=secondary&size=xs&mode=dark&font=geist" /><img alt="CI status" src="https://shieldcn.dev/github/ci/pplytas/good-webhooks.svg?workflow=ci.yml&branch=main&variant=secondary&size=xs&mode=light&font=geist" /></picture></a>
 </p>
 
 <p align="center">
@@ -26,8 +26,8 @@ You publish typed events. Good Webhooks stores them in your PostgreSQL database,
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://good-webhooks.dev/readme/flow-dark.png" />
-    <img alt="Your app calls publish(), which records the event and one delivery per endpoint in PostgreSQL. A worker signs, sends, retries, and records each delivery. The receiver calls parseWebhook() to verify it and get a typed event." src="https://good-webhooks.dev/readme/flow-light.png" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://good-webhooks.dev/readme/pipeline-dark.png" />
+    <img alt="Your app calls publish(), which records the event and one delivery per endpoint in PostgreSQL. A worker signs, sends, retries, and records each delivery. The receiver calls parseWebhook() to verify it and get a typed event." src="https://good-webhooks.dev/readme/pipeline-light.png" />
   </picture>
 </p>
 
@@ -58,7 +58,7 @@ Two interactive examples show the full path from a business action to a verified
 - [Order fulfillment](examples/order-fulfillment): place a shop order, send it to a warehouse, simulate an outage, and replay a delivery without creating a second shipment.
 - [Better Auth billing](examples/better-auth-billing): sign in, manage personal endpoints, publish invoice events, and inspect delivery attempts within the signed-in user's scope.
 
-Each example has its own npm lockfile, PostgreSQL setup, browser UI, receiver, and separate worker process. Both install `good-webhooks@0.1.0-beta.3` from npm and can run together. Follow the [examples guide](examples/README.md) to get started.
+Each example has its own npm lockfile, PostgreSQL setup, browser UI, receiver, and separate worker process. Both install `good-webhooks@0.1.0-beta.5` from npm and can run together. Follow the [examples guide](examples/README.md) to get started.
 
 ## Work on the repository
 
@@ -118,7 +118,7 @@ pnpm --dir packages/good-webhooks pack
 In your application, install the resulting archive using npm or your preferred package manager:
 
 ```sh
-npm install /absolute/path/to/packages/good-webhooks/good-webhooks-0.1.0-beta.3.tgz
+npm install /absolute/path/to/packages/good-webhooks/good-webhooks-0.1.0-beta.5.tgz
 ```
 
 `pnpm test:package` verifies the archive with fresh npm consumers, both with and without Better Auth, including the published declarations and SQL exports. Registry publication is a separate release step.

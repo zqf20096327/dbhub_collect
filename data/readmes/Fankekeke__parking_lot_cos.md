@@ -1,8 +1,17 @@
-### 基于SpringBoot + Vue的停车场管理系统.
+![](https://img.shields.io/badge/License-MIT-blue.svg)
 
-智能停车场管理系统、车位预约平台、智慧停车管理平台、停车场车位监控系统
- 
+![](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)
+
+![](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+
+# 基于 SpringBoot + Vue 的停车场管理系统 (Parking Lot Management System)
+
+车位预约 · 会员体系 · 支付宝支付 · 出入场管理 · 数据大屏 · 多角色协同
+
+本项目是一套面向商业综合体、住宅小区、园区等场景的停车场管理系统，采用前后端分离架构，覆盖系统管理员、员工（车管员）、用户（车主）三类角色。系统围绕"车位预约、出入场管理、会员价格体系、支付宝在线支付、订单管理、车位实时监控"等核心业务设计，支持用户在线预约车位、查看车位实时状态、支付宝缴纳停车费，员工处理车辆入场登记，管理员统筹车位资源、会员体系、数据统计与系统公告，适用于智慧停车场、无人值守停车场、园区停车管理等场景。
+
 #### 安装环境
+️**注意**：请确保您的开发环境已安装以下依赖。
 
 JAVA 环境 
 
@@ -10,52 +19,154 @@ Node.js环境 [https://nodejs.org/en/] 选择14.17
 
 Yarn 打开cmd， 输入npm install -g yarn !!!必须安装完毕nodejs
 
-Mysql 数据库 [https://blog.csdn.net/qq_40303031/article/details/88935262] 一定要把账户和密码记住
+Mysql 数据库 一定要把账户和密码记住
 
 redis
 
-Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
+Idea 编译器
 
-WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
+WebStorm OR VScode 编译器
 
 #### 采用技术及功能
 
 后端：SpringBoot、MybatisPlus、MySQL、Redis、
 前端：Vue、Apex、Antd、Axios
-报表：Spread.js
 
-平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件) + SpreadJS
+平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件) + 百度地图 API
 
 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)
 
 开发环境：windows10 or windows7 ， vscode or webstorm ， idea + lambok
 
->此项目的研究内容主要是建立基于Web的停车场管理系统，该系统面向停车场管理员、停车场用户，不同的用户登录系统获得的权限不同，使用的功能也不同，获取的信息也有所差异。
+---
 
-停车场管理员可以通过系统登录并管理停车场的日常运营，包括车辆进出管理、停车位管理、收费管理等。停车场工作人员主要负责车辆进出管理，监控停车场的车辆进出情况，使用系统进行车辆识别、放行、收费等操作，且工作人员可以实时查看停车场的停车位情况，并在需要时进行停车位的调整和管理。停车场用户功能有通过系统注册账号并登录，进行停车预订、支付等操；可以通过系统查询停车场的空闲停车位信息，并进行预订操作，选择停车场和停车位，预定停车时间；系统根据用户停车时间和停车场收费标准计算停车费用，用户可以通过系统选择支付方式进行支付。
-具体如下：
-1.	用户管理：
-在系统信息管理中，包括添加角色信息、管理角色信息、添加用户信息、管理用户信息、管理角色信息和管理用户信息模块可以对角色和用户进行查询、编辑和删除；会在其中设置员工的信息和权限等；注册和登录：用户可以通过注册账户并登录系统来访问其功能。
-个人资料管理：用户可以编辑和更新其个人信息，如联系信息、车辆信息等。
-2.	停车位管理：
-主要包括添加车位信息、管理车位信息，管理车位信息模块可以对车主车位信息进行查询、编辑和删除；
-停车位分配：管理人员可以将停车位分配给用户，或者系统可以根据用户需求自动分配停车位。
-实时停车位状态：用户可以查看停车场内实时的停车位情况，以便选择空余的停车位。
-3.	预订和付款：
-预订停车位：用户可以提前预订停车位，确保有空位可用。
-付款系统：用户可以使用在线支付或其他支付方式支付停车费用。
-4.	进出管理：
-入场/出场记录：系统记录用户车辆的进出时间，并计算停车费用。
-固定车主停车管理中，可对车主的停车信息进行查询和删除；在临时车辆信息管理中，可对临时车主的停车信息进行查询和删除。
-5.	费用管理：
-主要包括添加收费信息、管理收费信息。可以选择是月用户还是年用户。相应的，管理收费信息可以对车主的费用进行一个收费，可以对车主的收费信息进行查询和删除；
-6.	报告和统计：
-停车数据分析：生成停车场使用情况的报告和统计数据，如停车位利用率、繁忙时段等。
-收入报表：生成停车场的收入报表，包括总收入、各种费用的收入比例等。
-7.	通知和提醒：
-预约提醒：向用户发送预约成功和即将到期的提醒。
-违规提醒：对于超时停车或其他违规行为，向用户发送提醒通知。
-8.	打印管理：对所需要打印的信息进行打印处理，包括对固定车主和临时车主相关信息进行打印和取票机的打印。
+## 核心特性
+
+- **车位预约管理**：用户可在线选择车位、预约时段，系统自动校验时段冲突，避免重复预约。
+- **车位实时状态监控**：实时展示各车位占用/空闲/维修状态，支持按区域、类型筛选查看。
+- **会员价格体系**：支持会员等级配置与差异化停车价格，会员享受折扣费率，提升用户粘性。
+- **支付宝在线支付**：集成支付宝停车缴费，支持扫码支付与无感支付（车牌绑定免密扣款），提升出场效率。
+- **出入场管理**：员工处理车辆入场登记，系统自动计算停车时长与费用，生成停车订单。
+- **订单全流程管理**：覆盖预约订单、停车订单、会员订单，支持按状态筛选查询与订单详情追溯。
+- **车辆信息管理**：用户可绑定多辆车辆，管理车牌号码、车型等信息，方便快速预约与支付。
+- **消息通知**：系统向用户推送预约结果、订单状态变更、会员到期提醒等消息。
+- **数据大屏可视化**：实时展示订单趋势、月度收入统计、车位使用率、会员增长等核心指标。
+- **公告信息发布**：管理员发布停车场通知、优惠活动、系统维护等信息，用户端可查看。
+---
+
+## 适用场景
+
+- 商业综合体停车场
+- 住宅小区停车场
+- 园区/写字楼停车场
+- 医院停车场
+- 交通枢纽停车场
+- 无人值守智慧停车场
+---
+
+## 功能模块概览
+
+### 系统管理员端
+
+系统管理员端负责平台整体运营、车位资源管理、会员体系配置、数据统计与系统管理：
+
+**平台基础管理**
+
+- **用户管理**：管理注册用户账号、实名认证状态、账户状态与违规处理。
+- **员工管理**：管理平台员工账号、岗位分配（车管员、客服）与权限配置。
+- **角色管理**：配置系统角色（管理员、员工、用户），分配菜单权限与操作权限。
+- **系统公告**：发布停车场通知、优惠活动、系统维护信息与政策更新。
+
+**车位与车辆管理**
+
+- **车位管理**：管理车位资源，包括车位编号、位置、类型（普通/VIP/新能源）、收费标准与状态。
+- **车位状态**：实时查看所有车位占用/空闲/维修状态，支持按区域筛选与状态统计。
+- **车辆管理**：查看全平台绑定车辆信息，包括车牌号、车主、车型与绑定状态。
+
+**会员与价格管理**
+
+- **会员管理**：管理会员用户列表，查看会员等级、有效期与消费记录。
+- **会员价格**：配置会员等级与差异化停车价格规则，设置会员折扣比例与专属套餐。
+
+**订单管理**
+
+- **订单管理**：查看全平台停车订单，包括订单号、车牌、车位、入场/出场时间、费用与支付状态。
+- **会员订单**：单独查看会员用户的停车订单，统计会员消费数据。
+
+**数据统计**
+
+- **首页订单趋势统计**：以折线图展示近7日/30日订单量与收入趋势，直观呈现运营动态。
+- **月份统计**：按月统计收入、订单量、车位使用率、会员增长等核心指标，支持导出报表。
+- **数据大屏**：实时展示车位使用率、今日收入、订单总量、会员数等可视化图表。
+
+**消息管理**
+
+- **用户消息**：查看与管理系统发送给用户的消息记录，支持批量发送通知。
+
+### 员工端（车管员）
+
+员工端面向停车场现场管理人员，负责车辆入场登记、车位预约处理与状态监控：
+
+**个人信息**
+
+- **个人信息**：维护员工姓名、工号、联系方式与登录密码。
+
+**出入场管理**
+
+- **订单管理（处理入场）**：查看待入场预约单，核实预约信息后登记入场时间，更新车位状态为占用。
+- **车位预约**：查看用户提交的预约申请，审核通过或驳回，处理预约变更请求。
+
+**车位监控**
+
+- **车位状态**：实时查看各车位占用/空闲状态，快速定位空闲车位引导车辆停放。
+
+### 用户端（车主）
+
+用户端面向车主，通过微信小程序或 H5 提供车位预约、订单管理、支付与会员服务：
+
+**账户与车辆管理**
+
+- **个人信息**：维护姓名、手机号、邮箱与登录密码。
+- **我的车辆**：绑定/解绑车辆，管理车牌号码、车型、颜色等信息，支持多车绑定。
+
+**车位预约**
+
+- **车位预约**：浏览可用车位，选择车位与时段提交预约，查看预约状态（待审核/已通过/已驳回）。
+
+**订单与支付**
+
+- **我的订单**：查看个人停车订单列表，包括预约订单与停车订单，查看订单详情与费用明细。
+- **支付宝在线支付**：通过支付宝缴纳停车费，支持扫码支付与无感支付（车牌绑定后自动扣款）。
+
+**会员与消息**
+
+- **我的会员**：查看会员等级、有效期、剩余权益与会员价格折扣，支持会员续费。
+- **我的消息**：查看系统推送的预约结果、订单状态、会员到期提醒等消息。
+
+---
+
+## 项目结构
+
+```text
+pharmacy-dispensing-system/
+├── backend/            # 后端 API 服务
+│   ├── src/
+│   │   ├── controllers/  # 控制器
+│   │   ├── models/       # 数据模型
+│   │   ├── routes/       # 路由
+│   │   └── services/     # 业务逻辑
+│   └── package.json
+├── frontend/           # 前端 Web 应用
+│   ├── src/
+│   │   ├── views/      # 页面视图
+│   │   ├── components/ # 公共组件
+│   │   └── store/      # 状态管理
+│   └── package.json
+├── docs/               # 项目文档与 API 接口说明
+├── LICENSE
+└── README.md
+```
+---
 
 
 #### 前台启动方式
@@ -65,26 +176,25 @@ WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
 #### 默认后台账户密码
 [管理员]
 admin
-1234qwer
+123456
 
-[用户]
+[员工]
 fank
-1234qwer
+123456
 
-## 项目截图
-
+#### 项目截图
 |  |  |
 |---------------------|---------------------|
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428797789.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428952843.jpg) |
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710429285008.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428939320.jpg) |
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710429236895.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428922060.jpg) |
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710429202622.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428910448.jpg) |
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710429139032.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428898988.jpg) |
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710429110913.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428874569.jpg) |
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710429081402.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428843986.jpg) |
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710429014212.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428829118.jpg) |
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710429001447.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428812516.jpg) |
-|![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1710428974850.jpg) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/work/936e9baf53eb9a217af4f89c616dc19.png) |
+| ![](./assets/image%20(1).jpg) | ![](./assets/image%20(2).jpg) |
+| ![](./assets/image%20(3).jpg) | ![](./assets/image%20(4).jpg) |
+| ![](./assets/image%20(5).jpg) | ![](./assets/image%20(6).jpg) |
+| ![](./assets/image%20(7).jpg) | ![](./assets/image%20(8).jpg) |
+| ![](./assets/image%20(9).jpg) | ![](./assets/image%20(10).jpg) |
+| ![](./assets/image%20(11).jpg) | ![](./assets/image%20(12).jpg) |
+| ![](./assets/image%20(13).jpg) | ![](./assets/image%20(14).jpg) |
+| ![](./assets/image%20(15).jpg) | ![](./assets/image%20(16).jpg) |
+| ![](./assets/image%20(17).jpg) | ![](./assets/image%20(18).jpg) |
+| ![](./assets/image%20(19).jpg) | 
 
 
 #### 演示视频
@@ -103,7 +213,10 @@ WeChat: `Storm_Berserker`
 
 > 项目部署调试不好包退！功能逻辑没讲明白包退！
 
+<div align=center><img align="center" src="./assets/product_word.png" alt="fankekeke" /></div>
+
 #### 其它资源
+[2026年-答辩顺利通过-客户评价🀄](https://berserker287.github.io/2026/06/29/2026%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
 [2025年-答辩顺利通过-客户评价🍜](https://berserker287.github.io/2025/06/18/2025%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
@@ -127,4 +240,8 @@ WeChat: `Storm_Berserker`
 
 More info: [悲伤的橘子树](https://berserker287.github.io/)
 
-<p><img align="center" src="https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/%E5%90%88%E4%BD%9C%E7%89%A9%E6%96%99%E6%A0%B7%E5%BC%8F%20(3).png" alt="fankekeke" /></p>
+<div align="center"><img align="center" src="./assets/chat_qr_code.png" alt="fankekeke" width=250 /></div>
+
+<p><img align="center" src="./assets/wechat_group.png" alt="fankekeke" /></p>
+
+**感谢查看**

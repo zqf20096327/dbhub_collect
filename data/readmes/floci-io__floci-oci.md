@@ -483,7 +483,7 @@ config at real OCI.
 
 ### Release train
 
-Stable releases ship on the **1st and 3rd Tuesday of each month**. Between trains, `floci/floci-oci:nightly` tracks `main`. Every merged fix is available the next day, and dated `nightly-mmddyyyy` tags let you pin a specific night's build.
+Stable releases ship on the **15th and the last day of each month**, cut automatically at 00:30 US Central time. Between trains, `floci/floci-oci:nightly` tracks `main`. Every merged fix is available the next day, and dated `nightly-mmddyyyy` tags let you pin a specific night's build.
 
 Versions are derived from Conventional Commits by [semantic-release](https://github.com/semantic-release/semantic-release); `CHANGELOG.md` is generated, never hand-edited. Releases are cut from `main` only: there are no maintenance branches.
 
@@ -494,7 +494,7 @@ All settings are overridable through environment variables with the `FLOCI_OCI_`
 | Variable | Default | Description |
 |---|---|---|
 | `FLOCI_OCI_PORT` | `4599` | Port exposed by the floci-oci API |
-| `FLOCI_OCI_DEFAULT_REGION` | `us-ashburn-1` | Home region given to a tenancy the first time it is seen, and the region for requests whose `Host` names no OCI region |
+| `FLOCI_OCI_DEFAULT_REGION` | `us-ashburn-1` | Home region given to a tenancy the first time it is seen, which is also where its requests land when the `Host` names no OCI region |
 | `FLOCI_OCI_DEFAULT_REALM` | `oc1` | Realm key for OCIDs when the region is not a known OCI region; known regions use their own realm (e.g. `uk-gov-london-1` is `oc4`) |
 | `FLOCI_OCI_DEFAULT_TENANCY_ID` | `ocid1.tenancy.oc1..flocilocal…` | Tenancy used for unsigned requests |
 | `FLOCI_OCI_DEFAULT_NAMESPACE` | `floci-local` | Object Storage namespace |

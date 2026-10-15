@@ -1,5 +1,11 @@
 # DevTem WinUI 3 starter
 
+> **1.0 stable** — API and template flags are frozen (new options arrive as new
+> values, never renames). Install with `dotnet new install DevTem.Templates`
+> (this package IS the Visual Studio channel — File → New → Project, no VSIX),
+> scaffold with `dotnet new devtem-winui`, and ship. Showcase: the screenshots
+> below + the 8-panel tour (`docs/screenshots/demo-tour.png`).
+
 <p align="center">
   <img src="Assets/Logo.png" alt="DevTem logo" width="120" />
 </p>
@@ -17,7 +23,7 @@ It is built for teams that want a real app shell instead of a blank canvas: **MV
 ## Contents
 
 - [Install the template](#install-the-template) · [Requirements](#requirements) · [Screenshots](#screenshots)
-- [Why DevTem](#why-devtem) · [What ships out of the box](#what-ships-out-of-the-box) · [What's new](#whats-new-in-060-beta)
+- [Why DevTem](#why-devtem) · [What ships out of the box](#what-ships-out-of-the-box) · [What's new](#whats-new-in-100)
 - [Starter presets](#starter-presets) · [Pages](#pages-from-030) · [Ship it](#ship-it) · [Identity & notifications](#identity--notifications)
 - [Run this repo locally](#run-this-repo-locally) · [FAQ](#faq) · [Repository layout](#repository-layout)
 
@@ -100,22 +106,24 @@ the flags, and each scaffold records its picks in a generated
 
 ![Settings page — theme, language, update channel, test toast, tray](docs/screenshots/settings.png)
 
-## What's new in 0.8.0-beta
+## What's new in 1.0.0
 
-- Ecosystem + control polish, cherry-picked not cloned: the Diagnostics log
-  section now collapses into a `SettingsExpander` (header + live count,
-  content hidden until opened) — adopted because it rides the already-referenced
-  Toolkit SettingsControls assembly (zero new dependencies, weight-neutral by
-  construction) with the a11y contract held (expand/collapse exposed to
-  assistive tech, names/headings/live-regions green).
-- Evaluated and declined on record: standalone `Expander` package (covered
-  with zero new deps), `WinUICommunity.LandingPages` (third-party, Win2D
-  native dep, 7.1.0 predates the .NET 10 graph), Win2D splash/icon work (no
-  consumer — PNG + vector pipeline serves). Reasons in `docs/DECISIONS.md`.
-- Telemetry, answered without shipping any: opt-in Sentry-envelope sample in
-  `docs/feature-guides/telemetry-sample.md` (AppCenter retired 2025-03-31);
-  defaults still phone home never. AOT annual check: line hasn't moved
-  (unpackaged XAML + NativeAOT still broken upstream) — track stays due 2027-09.
+- Stable: template symbols and values are frozen (see `docs/V1.0-ADVANCED-PLAN.md`
+  §1.2 for the inventory) — future options arrive as new values, never renames,
+  so scaffold scripts keep working. Invalid distribution/updates pairs still fail
+  at build time with a headline MSBuild error.
+- Stable channel: fresh installs default to stable updates
+  (`ChannelResolver` + `AppInfo.DefaultChannel`, pinned headlessly); the `stable`
+  branch tracks this release while `beta` stays for the next cycle.
+- Proof, not promises: all five presets scaffold + build clean, production tests
+  green, full 22-combo matrix + smoke green, weight 273.8 MB carries. Version-text
+  screenshots re-captured at `1.0.0`; `why-devtem.md` argues from the peer
+  head-to-head; announcement drafts (marketplace, awesome-winui, video shot-list)
+  ship in `docs/`.
+
+![Diagnostics page - status, metrics, live log tail, export bundle](docs/screenshots/diagnostics.png)
+
+![Tour - launch, settings, dark theme, update check, toast, diagnostics, about](docs/screenshots/demo-tour.png)
 
 ![Diagnostics log section collapsed — header with live count](docs/screenshots/controls.png)
 

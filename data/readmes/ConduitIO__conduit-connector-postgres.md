@@ -369,6 +369,42 @@ deleted, the record will be ignored.
 
 If there is no key, the record will be simply appended.
 
+### Keys, columns and acknowledgements
+
+- **Upsert key.** With a structured record key (or a raw key that is a JSON object),
+  a create, update or snapshot record is `INSERT ... ON CONFLICT (<key columns>) DO
+  UPDATE SET` every other field of the record. The key columns must carry a primary
+  key or unique constraint, otherwise Postgres rejects the statement. When a record has
+  no field besides its key columns (a table whose columns are all key columns), the
+  statement is `ON CONFLICT DO NOTHING`, so a redelivery is a no-op.
+- **Columns.** Each record is written with exactly its own fields. A field the table has
+  no column for fails the write; the destination does not create or alter tables. A
+  field the record lacks is not written: an insert gets the column default, an existing
+  row keeps its value. A create, update or snapshot record without fields fails with
+  `postgres.destination.payload_empty`.
+- **Key values** must be one non-null scalar per key column, for upserts and deletes. A
+  null value fails with `postgres.destination.key_column_missing` (a delete would match
+  every row with a NULL there, an upsert would append a new row on every redelivery), and
+  a list or object fails with `postgres.destination.key_value_not_scalar` (a delete would
+  match several rows or none).
+- **Deletes** need a key and delete the rows matching every key column.
+- **Raw JSON** keys and payloads are decoded without going through `float64`: an integer
+  literal is an `int64` (or `uint64`), and any other number keeps its literal, so
+  `numeric`, `text` and `json`/`jsonb` columns store it exactly. Integer columns take a
+  whole value in any form (`1e3`, `7.0`) and reject a fraction; `real` and `float8`
+  columns store the nearest float. Structured data that arrives over the plugin protocol
+  has already passed through a double (ConduitIO/conduit#3100), so integers above 2^53
+  sent that way are rounded before the destination sees them.
+- **Names** of the table and columns are quoted as Postgres identifiers, so reserved
+  words, upper case and double quotes work. A name with a NUL byte or longer than 63 bytes
+  fails with `postgres.destination.invalid_identifier`, because Postgres would address a
+  different table or column. The table name is one identifier: a dot is part of the name,
+  not a schema separator.
+- **Acknowledgements.** A write is one implicit transaction. If any statement or the
+  commit fails, nothing from that write is stored and no record of it is acknowledged;
+  the records are redelivered (at-least-once). Keyed upserts make redelivery
+  idempotent; keyless inserts append again.
+
 ### Numeric columns
 
 Decimal values (`big.Rat`) are sent to Postgres as exact decimal strings, and
@@ -417,8 +453,7 @@ Postgres 17.5:
 - `time`, `inet`: rejected.
 
 Every accepted conversion to a non-numeric type is a silent coercion if the
-schema maps a numeric field to the wrong column, so check the mapping.
-<!-- /readmegen:description -->
+schema maps a numeric field to the wrong column, so check the mapping.<!-- /readmegen:description -->
 
 ## Source Configuration Parameters
 
@@ -454,6 +489,19 @@ pipelines:
           # Type: bool
           # Required: no
           logrepl.autoCleanup: "true"
+          # LogreplImportDebeziumOffset starts the pipeline from a Debezium
+          # Postgres connector's committed offset instead of a snapshot. It is
+          # written by `conduit migrate kafka-connect --cutover`, not by hand.
+          # It applies only while the pipeline has no position: the first
+          # acknowledged record writes an ordinary position and the setting is
+          # ignored from then on (remove it once the import is complete).
+          # Requires snapshotMode "never" and cdcMode "logrepl", and an existing
+          # slot and publication, which import mode never creates. Requires
+          # Conduit v0.19.0 or later, which acks a record only after its
+          # position is persisted.
+          # Type: string
+          # Required: no
+          logrepl.import.debeziumOffset: ""
           # LogreplPublicationName determines the publication name in case the
           # connector uses logical replication to listen to changes (see
           # CDCMode).
@@ -586,7 +634,7 @@ pipelines:
           sdk.rate.perSecond: "0"
           # The format of the output record. See the Conduit documentation for a
           # full list of supported formats
-          # (https://conduit.io/docs/using/connectors/configuration-parameters/output-format).
+          # (https://conduitdata.io/docs/using/connectors/configuration-parameters/output-format).
           # Type: string
           # Required: no
           sdk.record.format: "opencdc/json"

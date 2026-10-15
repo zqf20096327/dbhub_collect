@@ -22,8 +22,10 @@
 ## 项目亮点
 
 - **25+ 全场景分析模型**：覆盖通用用户行为分析（事件/漏斗/留存/归因/分布/路径/分群/点击/属性/行为序列）、用户深度洞察（生命周期/流失回流/间隔时间/矩阵象限/付费营收/会话分析/异常检测/新老对比/转化路径）、游戏专项（关卡分析/付费分层/LTV/滚服留存/PCU 在线/经济系统）三大类，从基础指标到深度归因再到游戏数值分析一站式覆盖
-- **双引擎可切换数据仓库**：原生支持 ClickHouse 与 Apache Doris 两种 OLAP 引擎，按需二选一部署，极致查询性能
-- **全链路事件采集**：自研 Web SDK，零代码埋点 + 自定义事件，数据经 Kafka 实时写入数仓
+- **OLAP 数仓二选一**：原生支持 ClickHouse 与 Apache Doris 两种 OLAP 引擎，部署时任选其一（不叠加使用），极致查询性能
+- **全链路事件采集**：自研 Web SDK，全埋点（自动 PV/SPA 路由/页面停留）+ 自定义事件，离线补发与采样合规，服务端 UA/IP 补全，数据经 Kafka 实时写入数仓
+- **分析→存档→触达增长闭环**：持久化用户分群、自定义看板、指标阈值告警、定时报告订阅、功能开关/A-B 实验、营销触达、自助 SQL 查询、用户 360，从洞察到行动一站式完成
+- **通知与可视化**：多渠道通知域（站内信/邮件/SMS/Webhook）+ 事件路由规则 + 消息模板 + 投递台账；可视化埋点零代码定义事件；rrweb 会话回放还原用户操作
 - **多租户架构**：租户数据物理隔离，自动初始化部门、角色与管理员，开箱即用
 - **微服务架构**：基于 go-kratos 微服务框架，支持服务发现、链路追踪、分布式缓存
 - **风险事件检测**：内置风险规则引擎，支持 Webhook 实时告警，守护业务安全
@@ -164,6 +166,9 @@ graph TB
 | 功能   | 说明                                                 |
 |------|----------------------------------------------------|
 | 事件采集 | 支持自定义事件上报，Web SDK 零代码接入                            |
+| 全埋点采集 | 自动 page_view（SPA 路由监听）、页面停留与点击坐标，无需逐点埋点      |
+| 可靠上报 | 队列本地持久化（崩溃/断网自动补发）、会话级采样、隐私合规开关          |
+| 服务端补全 | UA 解析（操作系统/浏览器/设备类型）与 IP 地理兜底，客户端不可信字段不依赖 |
 | 应用管理 | 管理采集应用，生成 AppID / AppKey，配置采集参数                    |
 | 数据同步 | 同一份业务模型可落到 ClickHouse 或 Doris 任一引擎，字段、分区、索引、主键保持一致 |
 | 会话管理 | 自动关联用户会话，支持会话级行为分析                                 |
@@ -198,13 +203,32 @@ graph TB
 | PCU/ACU   | 同时在线峰值与均值（游戏）            |
 | 经济系统     | 代币产出/消耗平衡，监控通涨（游戏）       |
 
+### 增长闭环
+
+| 功能        | 说明                                        |
+|-----------|-------------------------------------------|
+| 持久化用户分群   | 圈选定义保存，定时/手动刷新，成员下钻；漏斗与圈选页一键存为分群 |
+| 自定义看板     | 分析模型组件自由组页（趋势/活跃/分布/漏斗/留存），参数快照存档 |
+| 指标阈值告警    | 事件量/活跃/金额阈值监控，站内信 + Webhook 双通道，静默期防打扰 |
+| 定时报告      | 周期执行分析查询，摘要与 CSV 经站内信/Webhook 定时送达 |
+| 功能开关/AB 实验 | 多变量 + 千分比权重 + 放量比例，一致性哈希稳定分流，实验结果自动聚合 |
+| 用户 360    | 行为序列 + 用户标签 + 身份识别（ID-Mapping）个体档案页 |
+| 自助 SQL 查询 | 只读白名单 + 行数上限 + 超时管控的 OLAP 查询控制台，结果可导出 |
+| ID-Mapping 引擎 | 登录用户与设备共现自动构建跨端身份关联                |
+| 动态标签      | 规则表达式周期计算人群，自动写入用户标签              |
+| 通知管理      | 多渠道通知（站内信/邮件/SMS/Webhook），事件路由规则、消息模板、投递台账，渠道测试与试投 |
+| 营销触达      | 分群 × 文案 × 站内信群发，立即/定时发送，发送进度与统计     |
+| 可视化埋点     | 页面 + 元素 XPath → 事件名，零代码定义埋点，SDK 自动匹配上报 |
+| 会话回放      | 基于 rrweb 录制用户操作，分块上传，管理端播放器还原用户行为 |
+
 ### 风险与安全
 
 | 功能         | 说明                    |
 |------------|-----------------------|
 | 风险规则引擎     | 可视化配置风险检测规则，支持多维度条件组合 |
 | 风险事件管理     | 自动检测风险事件，支持人工审核与处理    |
-| Webhook 告警 | 风险事件实时推送至第三方系统        |
+| 风险事件推送     | 订阅 Kafka 风险事件流，高风险事件自动触发网络钩子 |
+| Webhook 告警 | 风险与告警事件实时推送第三方系统（HMAC 签名 + 重试 + 投递日志） |
 
 ### 组织与权限
 
@@ -395,7 +419,8 @@ psql -h localhost -U postgres -d gwubd -f sql/postgresql/default-data.sql
 # 可选：演示数据
 psql -h localhost -U postgres -d gwubd -f sql/postgresql/demo-data.sql
 
-# ClickHouse（分析引擎，与 Doris 二选一）：纯 SQL，按文件名顺序执行
+# ClickHouse（分析引擎，与 Doris 二选一）：推荐用 uba-ingest ch-apply 自动装配（建库 + 按序执行全部脚本）；
+#   手工执行则按文件名顺序跑以下纯 SQL
 clickhouse-client --queries-file sql/clickhouse/1_base_tables.sql sql/clickhouse/02_kafka_tables.sql sql/clickhouse/03_aggregate_tables.sql sql/clickhouse/04_indexes.sql sql/clickhouse/05_views.sql
 
 # Doris（分析引擎，与 ClickHouse 二选一）：脚本含 {{...}} 占位符，不能直接执行，见下一步 uba-ingest apply
@@ -421,6 +446,10 @@ make ingest
 
 # 每日聚合回算（等价 cron；容器部署时由 ingest-etl 常驻代管）
 ./bin/uba-ingest -c app/core/service/configs etl --loop --at 02:00
+
+# 选 ClickHouse 时的等价操作：ch-apply 装配 schema；ch-etl 每日回算 sessions/users 宽表并收敛去重
+./bin/uba-ingest -c app/core/service/configs ch-apply --wait 5m
+./bin/uba-ingest -c app/core/service/configs ch-etl --loop --at 02:00
 ```
 
 DSN 与 broker 只从 `configs` 或环境变量（`UBA_DORIS_DSN` / `UBA_KAFKA_BROKERS`）读取，不走命令行。
@@ -489,7 +518,7 @@ make docker-up
 
 ## OLAP 引擎选型与 Schema 设计
 
-- **ClickHouse 与 Apache Doris 为二选一关系**，但开关 `data.UseClickHouse` 目前是 `internal/data/data.go` 里的**编译期常量 `false`**：ClickHouse 分支被编译掉，实际只有 Doris 在跑。换引擎需改该常量并重新构建，且 ClickHouse 侧仍有已知缺陷（详见 `docs/architecture.md` 的「双引擎」一节）
+- **ClickHouse 与 Apache Doris 为二选一关系**，但开关 `data.UseClickHouse` 目前是 `internal/data/data.go` 里的**编译期常量 `false`**：ClickHouse 分支被编译掉，实际只有 Doris 在跑。换引擎需改该常量并重新构建。ClickHouse 侧的读数逻辑已与 Doris 对齐（事件去重 / FINAL 读 / 派生表按天回算），切换前先 `uba-ingest ch-apply` 装配、再以 `ch-etl --loop` 按天回算；存量部署迁移与残余口径差异见 `docs/architecture.md` 的「OLAP 引擎二选一」一节
 - 两种引擎共用同一份业务模型，字段、分区、索引、主键定义保持一致
 - 支持 struct 定义自动生成、注解（json、ch）自动处理
 - 支持批量数据写入，严格模式下自动补齐 NOT NULL 字段

@@ -5,21 +5,23 @@
 
 ## 界面预览
 
-手机待办台：完成度卡片、紧急/待办标签、截止时间、群来源，以及“查看完整原文”和“纠错”入口。
+手机待办台：完成度卡片、紧急/待办/学业标签、截止时间与群来源；每张卡一行「详细 / 原文 / 纠错」
+开关（短标签给眼睛看，完整名称留给读屏），并支持跟随系统 / 浅色 / 深色主题。
 
 <p align="center">
-  <img src="docs/screenshots/mobile-tasks.jpg" width="380" alt="手机待办台：完成度卡片、紧急与待办标签、群来源、查看完整原文与纠错入口" />
+  <img src="docs/screenshots/mobile-tasks.jpg" width="380" alt="手机待办台：完成度卡片、紧急与待办标签、群来源，以及一行「详细 / 原文 / 纠错」开关" />
 </p>
 
-群聊降噪效果（26 秒）：假群里的一天 500 条消息，经本地规则过滤、重复合并后只剩 23 次通知，
-并顺手建好 63 项待办。画面里的群、人、消息全部是程序生成的虚构示例：
+群聊降噪效果（26 秒）：假群里的一天 500 条消息，经本地规则过滤、重复合并后只剩 30 次通知，
+并顺手建好 62 项待办。画面里的群、人、消息全部是程序生成的虚构示例：
 
 <p align="center">
-  <img src="docs/demo/demo.gif" width="720" alt="假群聊回放演示：500 条群消息 → 过滤 377 条 + 重复 54 条 → 68 条要点 → 23 次通知 → 63 项待办" />
+  <img src="docs/demo/demo.gif" width="720" alt="假群聊回放演示：500 条群消息 → 过滤 377 条 + 重复 54 条 → 67 条要点 → 30 次通知 → 62 项待办" />
 </p>
 
 这条片子由 `python tools/make_demo.py` 生成，**数字全部来自真实回放**，可用
-`python main.py simulate --count 500` 自己复现；也提供 [mp4 版](docs/demo/demo.mp4)（0.5 MB）。
+`python main.py simulate --count 500` 自己复现；配色跟待办台共用 `qq_live_digest/theme.py` 的同一套
+token。也提供 [mp4 版](docs/demo/demo.mp4)（约 0.6 MB）。
 
 ## 功能概览
 
@@ -28,7 +30,7 @@
 - 可将低优先级群标记为安静群，只接收明确通知，不立即推送讨论。
 - 群里发的 PDF、Word、Excel、PPT、zip 和截图可自动解析并纳入摘要。
 - 班级群和闲聊群转发的同一条通知支持跨群去重。
-- 支持 WxPusher、Server酱、PushPlus、Webhook 等推送通道。
+- 支持 WxPusher、Server酱、PushPlus、Webhook、ntfy、Telegram、Discord、企业微信、邮件等推送通道。
 - 提供移动端待办台、截止提醒、候选确认、完成/忽略/稍后提醒和周复盘。
 - 支持 NapCat/OneBot v11 实时接收和重启后的 24 小时历史补采。
 
@@ -41,12 +43,19 @@
 | `qq_live_digest/catchup.py` | 调用 NapCat API 补采历史消息，按 `msg_id` 去重 |
 | `qq_live_digest/store.py` | SQLite + JSONL：消息去重、摘要归档、投递去重、模型用量与重启恢复 |
 | `qq_live_digest/llmstats.py` | 模型用量词表与日 / 周 / 月聚合、token 成本折算 |
+| `qq_live_digest/observe.py` | 可观测面板：过滤率 / 候选量 / 模型调用 / 推送成功率（脱敏、只读聚合） |
+| `qq_live_digest/events.py` | 事件级跨群聚合：按对象+动作+时间+截止+来源把同一事件合成一条（默认关，可拆分） |
+| `qq_live_digest/restapi.py` | 只读 REST 数据口径：通知 / 待办 / 截止时间 / 面板（网页与 CLI 共用，只发 SELECT） |
+| `qq_live_digest/mcp.py` | MCP 接口：5 个只读 Tool + 2 个可写待办 Tool（仅 tasks、必须 confirm、记审计），stdio 给 Cursor / Claude 用 |
+| `qq_live_digest/ics.py` | 日历导出：把有明确时间的待办导成 iCalendar（只读，供手机 / 桌面日历订阅） |
+| `qq_live_digest/conflicts.py` | 时间冲突检测：截止时间相近的待办按组提醒（只读，不擅自改任务） |
+| `qq_live_digest/abtest.py` | Prompt / 模型 A/B：固定评测集上对比两套配置的准确率 / 成本 / 延迟（只读） |
 | `qq_live_digest/summarizer.py` | 分级筛选、待办/截止提取、推送文本生成 |
-| `qq_live_digest/push.py` | WxPusher / Server酱 / PushPlus / Webhook / QQ 私聊，失败自动回退 |
+| `qq_live_digest/push.py` | WxPusher / Server酱 / PushPlus / Webhook / ntfy / Telegram / Discord / 企业微信 / 邮件 / QQ 私聊，失败自动回退 |
 | `qq_live_digest/service.py` | 10 分钟滚动窗口、紧急立即推、无重点不推、失败重试 |
 | `qq_live_digest/bot.py` | 可选的 QQ 官方机器人，当前关闭 |
 | 外部 `watchdog.ps1` | 可选的健康检查、自动重启和故障告警脚本，部署在 NapCat 目录 |
-| `main.py` | CLI：run / catchup / tick / preview / send-test / doctor / stats / decisions / llm-stats / feedback / groups / simulate |
+| `main.py` | CLI：run / catchup / tick / preview / send-test / doctor / stats / decisions / llm-stats / feedback / groups / observe / events / api / ab / conflicts / ics / mcp / simulate |
 
 ## 环境要求
 
@@ -74,7 +83,9 @@ Copy-Item .env.example .env
 - `QQ_DIGEST_GROUPS`：要监控的群号，逗号分隔。
   留空则**不处理任何群**（不会默认接收全部群）。
 - `QQ_DIGEST_ONEBOT_TOKEN`：与 NapCat OneBot HTTP 上报配置一致。
+  **v0.4.1 起**：留空时接收器只允许监听 `127.0.0.1` / `localhost` / `::1`，监听其它地址会拒绝启动。
 - `WXPUSHER_APP_TOKEN`、`WXPUSHER_UIDS`：推荐使用的微信推送通道。
+- `NTFY_TOPICS`、`TELEGRAM_BOT_TOKEN`+`TELEGRAM_CHAT_IDS`、`QQ_DIGEST_DISCORD_WEBHOOKS`、`QQ_DIGEST_WECOM_KEYS`、`QQ_DIGEST_SMTP_*`+`QQ_DIGEST_MAIL_TO`：A14 新增的多端通道（ntfy / Telegram / Discord / 企业微信 / 邮件），和已有通道一样参与失败回退。
 - `DASHSCOPE_API_KEY`：可选；不填会使用本地规则摘要。
 
 启动前先自检：
@@ -131,6 +142,27 @@ cd <项目目录>
 
 # 群级策略：每个群最终生效的安静群 / 关键词 / 最低分 / 模型档 / 免打扰
 .\.venv\Scripts\python.exe main.py groups
+
+# 事件级跨群聚合：开关 / 最近合并 / 人工拆分覆盖（默认关闭，QQ_DIGEST_EVENT_MERGE=1 打开）
+.\.venv\Scripts\python.exe main.py events
+
+# 只读 REST API：接口目录 / 鉴权状态 / 访问地址（A15，字段见 docs/API.md）
+.\.venv\Scripts\python.exe main.py api
+
+# MCP 接口：5 只读 + 2 可写待办 Tool，stdio 给 Cursor / Claude 查询（A1/A2，--list-tools 可离线打印 Tool 定义）
+.\.venv\Scripts\python.exe main.py mcp --list-tools
+
+# 日历导出：把有明确时间的待办导成 ICS，导入手机 / 桌面日历（A13）
+.\.venv\Scripts\python.exe main.py ics
+
+# 时间冲突检测：截止时间相近的待办按组提醒，只提醒不改任务（A12）
+.\.venv\Scripts\python.exe main.py conflicts
+
+# Prompt / 模型 A/B：固定评测集上对比两套配置的准确率 / 成本 / 延迟（A22，--list 看内置预设）
+.\.venv\Scripts\python.exe main.py ab --a default --b strict
+
+# 可观测面板：过滤率 / 候选量 / 模型调用 / 推送成功率（脱敏）
+.\.venv\Scripts\python.exe main.py observe
 
 # 假群聊回放：500 条消息走完整链路，一条真实推送都不发（不联网、不碰 data/）
 .\.venv\Scripts\python.exe main.py simulate --count 500
@@ -268,6 +300,31 @@ QQ_DIGEST_GROUP_POLICIES={"123456": {"quiet": true, "min_score": 5, "keywords": 
 
 `doctor` 的「群白名单」一行会提示有几个群配了策略。
 
+### 消息处理面板 `main.py observe`
+
+跑得对不对，一眼看数字。`A32` 把「消息是怎么被处理的」摊开：收了多少条、判了多少条、过滤掉多少、
+攒出多少候选、调了几次模型、推成功几次——**全部脱敏**（群号掩码、不带正文），可以直接贴出来。
+
+| 段 | 数字 | 口径 |
+| --- | --- | --- |
+| 收 | 消息数 / 出现过的群数 / 最活跃的几个群（掩码） | 按消息时间归窗 |
+| 判 | 已决条数 / 过滤率 | 过滤率 = 未命中 / 已决；待投递、延后未决这类过程态不进分母 |
+| 候选 | 推送 + 保留 + 待确认 | 同一批消息的三种去向 |
+| 调 | 模型调用次数 / 失败次数 / token 用量 | 与 `main.py llm-stats` 同源 |
+| 推 | 推送成功率 | = 成功 /（成功 + 失败），待发不算分母 |
+| 办 | 候选待办 / 已确认 | 人工确认闭环 |
+
+数据不足时给 `0.0`，不假装 100%；时间窗口按半开区间取，刚写入的同秒数据不会漏。
+
+```powershell
+.\.venv\Scripts\python.exe main.py observe            # 最近 7 天（按日视图）
+.\.venv\Scripts\python.exe main.py observe --days 1   # 只看今天
+.\.venv\Scripts\python.exe main.py observe --json     # 交给脚本消费
+```
+
+开了待办台的话，同一个服务还提供网页版 `/panel`（token 与待办台相同）；`doctor` 的「可观测面板」
+一行给出最近 7 天的概况。
+
 ### 假群聊回放 `main.py simulate`
 
 想验证「500 条群消息最后剩下几条通知」，不用真去加群、也不用量自己的数据：
@@ -402,7 +459,10 @@ QQ_DIGEST_QUIET_HOURS=23:00-07:00
 - 同一任务同一天最多提醒一次；候选确认卡默认同一任务 24 小时最多一次，每天最多 4 张。
 - 每周日 20:30 生成一次简短复盘：候选数、确认率、忽略率、完成率、提醒数和逾期未完成数。
 - 访问地址和 token：`python main.py tasks --import-existing`，命令会打印可访问的 URL。
+- 可观测面板：同一个服务还提供 `/panel`（过滤率 / 候选量 / 模型调用 / 推送成功率，群号掩码），token 与待办台相同。
 - 回填历史摘要：`python main.py tasks --reset --import-existing --days 7`。
+- 每张卡片一行「详细 / 原文 / 纠错」开关（命中区 44px，勾选圆点 45px）；外观在设置页切
+  「跟随系统 / 浅色 / 深色」，选择只存浏览器 `localStorage`，服务端不新增配置项。
 - 关闭待办台：`QQ_DIGEST_WEB=0`；改端口 `QQ_DIGEST_WEB_PORT`。
 
 事务闭环相关配置：
@@ -422,7 +482,8 @@ QQ_DIGEST_WEEKLY_REVIEW_TIME=20:30
 `tailscale serve --bg 8766`，把本机待办台暴露为带 HTTPS 的 tailnet 地址。
 把该地址写入 `QQ_DIGEST_WEB_BASE_URL` 后，推送里的确认链接会稳定指向 Tailscale，
 不会再去猜测局域网 IP。页面支持 manifest 和 service worker，可以从手机浏览器
-添加到桌面，作为轻量 PWA 使用。
+添加到桌面，作为轻量 PWA 使用；装好后即使**断网也能打开**，回放最近一次的通知 / 待办（离线只读），
+写操作会先提示连网。
 
 ## 群文件与图片（AI 读取）
 

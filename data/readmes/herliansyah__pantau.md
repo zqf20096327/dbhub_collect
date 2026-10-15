@@ -90,7 +90,7 @@ Pantau inspects remote hosts via non-interactive SSH commands, continuously vali
 - **Structured Inspection Runs & Telemetry**: Records per-host execution history (started timestamp, roundtrip duration in milliseconds, status badge, human-readable summary, and root cause diagnostic excerpts) in SQLite. Displays real-time execution duration metrics (`duration_ms`) on host cards and list views, with automatic inline rolling pruning maintaining a strict 100 runs limit per host with zero background schedulers.
 - **Inspection Guard, Anti-Flood Cooldown & Hung NFS Protection**: Enforces a 15-second per-host cooldown on manual inspections (`HTTP 429 Too Many Requests`), an explicit in-flight concurrency lock (`HTTP 409 Conflict`), an enforced 45-second total hard timeout budget, and isolated local filesystem queries (`df -lPk /`) with 5-second execution timeouts to prevent hung NFS/network storage deadlocks.
 - **One-Time Key Provisioning**: Provide target root/sudo password once in RAM. Pantau idempotently injects its universal RSA 4096-bit public key into `~/.ssh/authorized_keys` (universally supported across legacy OpenSSH 5.3+ through modern OpenSSH) and discards the password immediately from memory.
-- **Legacy Server Compatibility**: Native cipher fallbacks (`aes128-cbc`, `3des-cbc`, `diffie-hellman-group1-sha1`, `ssh-dss`) allow monitoring legacy Linux servers (CentOS 6, Debian 7, OpenSSH 5.3+).
+- **Legacy Server Compatibility & TOFU**: Native cipher and host key fallbacks (`aes128-cbc`, `3des-cbc`, `diffie-hellman-group1-sha1`, `ssh-dss`, `ssh-rsa`) allow monitoring legacy Linux servers (CentOS 5/6, Debian 7, OpenSSH 4.3+). Built-in TOFU (Trust-On-First-Use) automatically records host fingerprints upon initial handshake while guarding against MITM attacks.
 - **Mass Inspection & Freshness Indicators**: Trigger simultaneous bulk inspection across all hosts via `⚡ Inspect All` running through a bounded worker pool (max 5 parallel host sessions) with an anti-flood lock, configurable background inspection intervals (with `0` seconds support to pause/disable background worker for pure on-demand manual inspection), dynamic time-ago indicators, and automated Stale Inspection warnings with pause suppression.
 
 ### 2. 📋 Desired State Baseline & Automated Drift Engine
@@ -179,6 +179,21 @@ Pantau inspects remote hosts via non-interactive SSH commands, continuously vali
 - **Collapsible Activity Console Drawer**: Bottom diagnostic drawer docked above the footer with a 5-column running table (`Time`, `Level`, `Module`, `Host`, `Message & Details`), expandable attribute cards, Smart Auto-Scroll, pause/resume freeze toggle, severity level filtering (`ALL`, `ERROR`, `WARN`, `INFO`), instant search, and client-side `.log` / `.json` file export.
 - **Footer Trigger & Global Shortcut**: Triggered via footer button `⚡ Activity` with live pulse indicator, unread error counter badge, or global shortcut `Ctrl + \`` (backtick).
 - **Zero-Waste Performance Throttling**: Skips 100% of DOM manipulation when the drawer is closed and coalesces incoming events with `requestAnimationFrame` when open to eliminate CPU waste and layout thrashing.
+
+### 18. ⚡ Top Resource Consumers & Process Telemetry
+- **Agentless Process Observability**: Continuously extracts top 5 resource-consuming processes across three dimensions—Top CPU (`%cpu`), Top Physical Memory (`rss`), and Top Virtual Memory (Swap)—during every standard inspection cycle without running background remote daemons.
+- **Conditional Swap Scanner**: Low-overhead `/proc/[0-9]*/status` VmSwap extraction executed conditionally only when swap memory usage is detected (`SwapUsedBytes > 0`), avoiding CPU churn on systems with swap unconfigured.
+- **Overview Telemetry Widget**: Responsive 3-column process card inside the Host Detail Overview tab showing PID, user, memory footprint, and command details, paired with a direct one-click launcher to open the interactive Terminal Dock.
+
+### 19. 📦 Polyglot Package Inventory & Software Hygiene
+- **Agentless Multi-Distro Inventory**: Discovers installed system software across Debian/Ubuntu (`dpkg-query`), RHEL/CentOS/AlmaLinux/Rocky (`rpm`), Alpine (`apk`), and Arch (`pacman`) via native zero-dependency CLI inspection.
+- **Software Hygiene & Dormant Detection**: Automatically categorizes packages into **Manual Install** (explicitly requested by operators) vs **Base System** (OS distro baseline/dependencies), and flags **Dormant Packages** whose associated systemd service units remain inactive, disabled, or failed.
+- **Dedicated Packages Tab & Guardrails**: Integrated package exploration tab in the Workspace Modal with instant text search, category filters (`⭐ Manual Install`, `💤 Dormant Packages`, `📋 All Packages`), on-demand rescan button with a 30-second anti-flood cooldown timer (`HTTP 429`), and background concurrency locking (`HTTP 409`).
+
+### 20. 🌐 Agentless Network Diagnostics & Hop Analysis
+- **On-Demand Diagnostic Probes**: Real-time interactive Ping, Traceroute (with tracepath auto-fallback), zero-dependency TCP Port Probe (`/dev/tcp`), and DNS Resolve streamed directly over Server-Sent Events (SSE).
+- **Automated Hop Analysis**: Categorizes network hops into Local/Private VPC, ISP Transit, and Destination zones, with automated blackhole packet drop detection and latency jump alerts (>60ms).
+- **Concurrency & Human-Error Protection**: Singleflight guard prevents concurrent diagnostic tasks per source host, while target selection automatically disables unreachable/offline hosts.
 
 ---
 
@@ -272,6 +287,8 @@ systemctl enable --now pantau
 | `-check-update` | - | `false` | Check for latest upstream release version, print release notes, and exit |
 | `-update` | - | `false` | Update Pantau executable to latest release and exit |
 | `-disable-update-check` | `PANTAU_DISABLE_UPDATE_CHECK` | `false` | Disable background update checker (recommended for airgapped environments) |
+| `-log-level` | `PANTAU_LOG_LEVEL` | `error` | Console log level (`debug`, `info`, `warn`, `error`, `off`) |
+| `-q`, `-quiet` | - | `false` | Suppress non-error console logs (shorthand for `-log-level=error`) |
 | `-v`, `-version` | - | - | Print Pantau version and exit |
 
 ---

@@ -168,6 +168,44 @@ migration; live dictionaries and stored generated values are not overwritten.
 Run the upgrade from a new database connection after replacing the Rust library,
 so an existing connection does not retain the previously loaded binary.
 
+### Standalone SQL Parser
+
+The optional `sql/word.sql` parser uses static regex aggregation for compatibility
+queries and longest-prefix regex/string matching for explicit modes. It still
+reads the live `pinyin.pinyin_token` table on every call; no parser cache table,
+Rust dependency or query-mode/coverage change is introduced. Reload this file to
+update an existing SQL-only installation, without rebuilding an index:
+
+```bash
+psql "$PGURL" -v ON_ERROR_STOP=1 -f sql/word.sql
+```
+
+The shared tokenizer and Rust APIs are unchanged. Null/empty semantics, generated
+patterns, `xi'an`, tone validation and initials remain covered by regressions.
+The [SQL parser specification](spec/pinyin-sql-parser-perf.md) records the
+implementation and old/new parser, query-construction and BM25 benchmark protocol.
+
+One local PG19 beta4 / pg_search 0.26.1 measurement used 20,000 documents,
+2,000 queries per mode and three warm repeats. Within-mode time reductions
+(ratio of three-round medians, not comparisons between different modes):
+
+| Mode | Pattern Time Reduction | Client Search Time Reduction |
+| --- | ---: | ---: |
+| compat | 14.6% | 4.4% |
+| full | 17.3% | 11.3% |
+| initials | 2.0% | -2.1% (slower) |
+| autocomplete | 14.9% | 18.3% |
+| auto | 22.3% | 10.2% |
+
+Initials search did not improve: its three paired rounds were 2.1%, 9.5% and
+13.1% slower. Its small parser difference and compatibility search were noisy.
+This shared host had high memory pressure; these are observations, not guaranteed
+production gains. Exact patterns, constructed queries, full hit IDs/scores and
+Top-K stayed equal; all six fresh indexes were 3,350,528 bytes. Client time
+includes per-query planning; prepared plans and concurrency were not measured.
+See the [report](benchmarks/sql_parser.md), [raw evidence](benchmarks/sql_parser.json.gz)
+and retained [first-pass trial](benchmarks/sql_parser_first_pass.md).
+
 ### Automatic Query Routing
 
 `auto` is opt-in on the mode-aware APIs. The default `pinyin_regex_phrase` and
@@ -803,6 +841,80 @@ All of these changes use phrase_prefix in this corpus; known-source coverage
 above checks any matching position, not whether the source wins Top-1.
 The shared index remains 3,350,528 bytes
 with 58,349 positions; Auto does not reduce stored/indexed content.
+
+### BM25 Bulk Import
+
+The standalone `scripts/benchmark_bm25_import.py` harness measures the complete
+raw-document ingestion pipeline, including client upload, conversion, transaction
+commits and search readiness. It compares row-at-a-time INSERT, generated-column
+COPY, scalar staging and bounded document-batch staging with a real document/ICU
+and pinyin/whitespace BM25 index. Precomputed pinyin COPY is a separate lower-bound
+control with conversion excluded, not a competing end-to-end conversion method.
+
+Run inside the server's Linux test container with psycopg 3 and a freshly rebuilt
+matching release library. The CLI verifies a local server before fingerprinting
+installed files; a remote DSN cannot supply that build evidence. The benchmark
+uses and removes a disposable UUID database, so the DSN
+must be administrative. No previous P1 baseline library is needed. Defaults are
+20,000 documents, three rotated repeats, transaction sizes 512/4,096/20,000 and
+512-document conversion arrays. Each case has fresh backend/table/index state;
+both existing-index ingestion and post-load index creation are measured.
+
+```bash
+export PG_CONFIG=/usr/lib/postgresql/19/bin/pg_config
+cargo pgrx install --release --features pg19 --no-default-features --pg-config "$PG_CONFIG"
+python3 scripts/benchmark_bm25_import.py --dsn "$PGADMINURL" \
+  --rows 20000 --repeats 3 --transaction-rows 512,4096,20000 \
+  --batch-documents 512 --search-probes 64 \
+  --pg-search-version 0.26.1 --postgresql-version-pattern 19beta4 \
+  --current-build-artifact "${CARGO_TARGET_DIR:-target}/release/libpg_pinyin.so" \
+  --json-output benchmarks/bm25_import.json.gz \
+  --markdown-output benchmarks/bm25_import.md
+```
+
+The harness refuses to overwrite existing reports. The protocol and all
+remaining candidates are recorded in [the improvement roadmap](spec/pinyin-improvement-roadmap.md).
+
+The 2026-10-14 [report](benchmarks/bm25_import.md) and
+[lossless raw JSON](benchmarks/bm25_import.json.gz) cover 90 timed samples on
+PG19 beta 4 / pg_search 0.26.1 with durability enabled. The measured source is
+`b29763b`, before PR #5 merged; the report preserves that baseline rather than
+claiming timings for the subsequently rebased publication branch. At 20,000 rows per
+transaction, total-ready medians in milliseconds are:
+
+| Method | Existing BM25 index | Build BM25 after load |
+| --- | ---: | ---: |
+| Pipelined per-document INSERT, generated pinyin | 660.910 | 611.119 |
+| COPY, generated pinyin | 510.890 | 506.850 |
+| COPY staging, scalar conversion | 566.583 | 573.578 |
+| COPY staging, 512-document batch conversion | 307.486 | 308.075 |
+| Precomputed pinyin COPY, conversion excluded | 168.097 | 182.993 |
+
+Batch staging reduced total-ready latency versus generated-column COPY by
+39.81% / 39.22% in this run. With 4,096-row transactions, the same batch path
+took 322.070 / 339.823 ms; 512-row transactions took 383.679 / 350.117 ms.
+Deferred building was not uniformly faster once build and ANALYZE were included.
+All stored rows, NULL/empty/document-boundary gold cases and full positional
+search hit sets were preserved. The 64 source probes (63 distinct token windows)
+also retained identical Top-K IDs and scores across all 90 samples. This is
+pipeline optimization using the existing
+batch API, not a new Rust algorithm, pronunciation improvement or version bump.
+
+At 20,000 rows per transaction, the online generated COPY and batch path both
+used about 3.46 MiB of BM25 relation storage; deferred builds used about 3.44 MiB.
+Sampled backend RSS maxima were 120.8 versus 125.9 MiB online: this is not a
+memory reduction. Small online batch transactions produced about 5.59 MiB of
+index storage at observation time. Segment merging/steady-state storage is not
+measured, so do not treat these bytes as permanent index compression. The shared
+host used `32486.81M` swap before timing; three rounds remain exploratory.
+
+For an existing generated-column table, ordinary COPY preserves automatic
+romanization on later writes. Batch staging requires a plain stored pinyin
+column and explicit maintenance on later INSERT/UPDATE; it must not silently
+replace a generated column. The [reference staging SQL and adoption limits](spec/pinyin-improvement-roadmap.md#reference-staging-sql)
+show that path. Treat 512-document arrays and 4,096-row transactions as starting
+points to retest on production-sized documents, not universally optimal bounds.
+The earlier unindexed INSERT figures above are not BM25 import throughput.
 
 ### P1 Query Modes (pg_search 0.26.1)
 

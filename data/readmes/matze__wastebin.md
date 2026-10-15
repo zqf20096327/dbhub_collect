@@ -14,7 +14,9 @@ A minimal pastebin with a design shamelessly copied from
 You are reading the documentation for an **unreleased version**. You can refer
 to released versions here:
 
-**[3.8.0](https://github.com/matze/wastebin/tree/3e2f1425aa4aa8072da79b2a8c0c6af75074efa6)**
+**[3.9.0](https://github.com/matze/wastebin/tree/c829df9d116368459541b145350ea319d7a04b26)**
+•
+[3.8.0](https://github.com/matze/wastebin/tree/3e2f1425aa4aa8072da79b2a8c0c6af75074efa6)
 •
 [3.7.2](https://github.com/matze/wastebin/tree/dfca1dc82b78394d8e2dfe209d9ef3fb539da605)
 •
@@ -206,7 +208,7 @@ run-time behavior:
 | `WASTEBIN_PASTE_EXPIRATIONS`      | Possible paste expirations as a comma-separated list of seconds or values with duration magnitudes (`s`, `m`, `h`, `d`, `M`, `y` for seconds, minutes, hours, days, months and years respectively). Appending `=d` to one of the value makes it the default selection. | see [here](https://github.com/matze/wastebin/blob/eb61c78506a165605f145e8374ed64822405eda0/crates/wastebin_server/src/env.rs#L166) |
 | `WASTEBIN_SIGNING_KEY`            | Key to sign cookies. Must be at least 64 bytes long.          | Random key generated at startup, i.e. cookies will become invalid after restarts and paste creators will not be able to delete their pastes. |
 | `WASTEBIN_THEME`                  | Theme colors, one of `ayu`, `base16ocean`, `catppuccin`, `coldark`, `gruvbox`, `monokai`, `onehalf`, `rosepine`, `solarized`. See [this page](https://matze.github.io/wastebin/) for a preview. | `ayu` |
-| `WASTEBIN_TITLE`                  | HTML page title.                                              | `wastebin`            |
+| `WASTEBIN_TITLE`                  | HTML page title. Pastes with their own title use that title instead. | `wastebin`            |
 | `WASTEBIN_UNIX_SOCKET_PATH`       | Path to a Unix socket to accept connections from.             |                       |
 | `RUST_LOG`                        | Log level. Besides the typical `trace`, `debug`, `info` etc. keys, you can also set the `tower_http` key to a log level to get additional request and response logs. |  |
 

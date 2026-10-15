@@ -349,8 +349,8 @@ Useful resources and dependencies that are used in NewTube.
 - [@mux/mux-node](https://www.npmjs.com/package/@mux/mux-node): ^15.3.0
 - [@mux/mux-uploader-react](https://www.npmjs.com/package/@mux/mux-uploader-react): ^1.5.0
 - [@mux/mux-video-react](https://www.npmjs.com/package/@mux/mux-video-react): ^0.31.4
-- [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless): ^1.1.0
-- [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.11
+- [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless): ^1.2.0
+- [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.12
 - [@t3-oss/env-nextjs](https://www.npmjs.com/package/@t3-oss/env-nextjs): ^0.13.11
 - [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.3.3
 - [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query): ^5.104.1
@@ -362,7 +362,7 @@ Useful resources and dependencies that are used in NewTube.
 - [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): 19.3.0
 - [@uploadthing/react](https://www.npmjs.com/package/@uploadthing/react): ^7.3.3
 - [@upstash/workflow](https://www.npmjs.com/package/@upstash/workflow): ^1.3.3
-- [@vercel/config](https://www.npmjs.com/package/@vercel/config): ^0.7.2
+- [@vercel/config](https://www.npmjs.com/package/@vercel/config): ^0.12.0
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [client-only](https://www.npmjs.com/package/client-only): ^0.0.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
@@ -381,7 +381,7 @@ Useful resources and dependencies that are used in NewTube.
 - [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss): ^4.4.0
 - [jiti](https://www.npmjs.com/package/jiti): ^2.7.0
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.46.0
-- [next](https://www.npmjs.com/package/next): ^16.3.6
+- [next](https://www.npmjs.com/package/next): ^16.3.8
 - [openai](https://www.npmjs.com/package/openai): ^7.27.0
 - [player.style](https://www.npmjs.com/package/player.style): ^0.3.4
 - [postcss](https://www.npmjs.com/package/postcss): ^8
@@ -392,7 +392,7 @@ Useful resources and dependencies that are used in NewTube.
 - [react-dom](https://www.npmjs.com/package/react-dom): 19.3.0
 - [react-error-boundary](https://www.npmjs.com/package/react-error-boundary): ^6.1.5
 - [react-hook-form](https://www.npmjs.com/package/react-hook-form): ^7.89.0
-- [react-hot-toast](https://www.npmjs.com/package/react-hot-toast): ^2.6.0
+- [react-hot-toast](https://www.npmjs.com/package/react-hot-toast): ^2.6.1
 - [server-only](https://www.npmjs.com/package/server-only): ^0.0.1
 - [superjson](https://www.npmjs.com/package/superjson): ^2.2.6
 - [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.7.0

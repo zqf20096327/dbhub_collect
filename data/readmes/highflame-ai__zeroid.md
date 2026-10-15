@@ -101,6 +101,7 @@ OAuth/OIDC authenticates a human to a service. **ZeroID implements true delegate
 - **Credential Policies** — Governance templates that enforce TTL, allowed grant types, required trust levels, and max delegation depth. Defines each agent's operational envelope programmatically, replacing per-action consent with policy-based controls.
 - **Continuous Access Evaluation (CAE)** — Revoke credentials in real time when risk signals fire via the OpenID Shared Signals Framework (SSF). Revoke the orchestrator's credential and the entire downstream chain is invalidated immediately—no waiting for token expiry.
 - **Attestation Framework** — Pluggable verifiers behind a fail-closed contract: software, platform, and hardware attestation elevate trust levels before credentials are issued. Ships with an OIDC verifier (GitHub Actions, GCP Workload Identity, Kubernetes projected SA tokens, etc.) plus per-tenant `AttestationPolicy` for issuer allowlisting and claim binding. Full reference: [`docs/attestation.md`](docs/attestation.md).
+- **Trusted issuers** — agents registered in a customer IdP reach ZeroID with the IdP's own tokens: an ID-JAG redeemed with `jwt-bearer`, or the person's OpenID Connect ID token exchanged by the agent it was issued to (RFC 8693, `private_key_jwt` only, positively an ID token). Issuers are per-account rows (`federation.issuer_store: db`) of kind `person` or `workload`, read live on every grant, with credential bindings that map the agent to its own identity, the tenant derived rather than requested, adopted agents only, and a hook (`Server.SetFederatedPersonResolver`) that maps the IdP person to the deployer's user. Standalone deployments keep the static `external_issuers` list. Full reference: [`docs/external-issuers.md`](docs/external-issuers.md); a mock IdP for local runs is [`cmd/zeroid-mockidp`](cmd/zeroid-mockidp/README.md).
 - **WIMSE Proof Tokens** — Single-use, nonce-bound tokens for service-to-service verification and replay protection.
 
 ---
@@ -899,6 +900,8 @@ graph TD
 | **DPoP-bound** (any grant + `DPoP` header) | — (modifier) | — (inherits grant) | — (inherits grant) | adds `cnf.jkt` claim; response `token_type: "DPoP"` |
 | **DCR client_credentials** | ES256 | 1 hour | DCR client's WIMSE URI (when bound) | identical claims to internal `client_credentials`; client's `registration_source` distinguishes provenance for audit |
 
+**Refresh token rotation:** every `refresh_token` grant rotates — the presented refresh token is consumed and a new one is returned, in the same token family. A refresh token can be used once. Presenting one that has already been rotated is treated as a sign that the family has leaked ([RFC 9700 §4.14.2](https://www.rfc-editor.org/rfc/rfc9700#section-4.14.2)): ZeroID revokes every refresh token in the family, including the newest, along with the access tokens issued from the family (and their delegated descendants), and answers `invalid_grant`, the same response as any other unusable refresh token. The exception is a short grace window after each rotation, `token.refresh_reuse_grace_seconds` (env `ZEROID_REFRESH_REUSE_GRACE_SECONDS`, default 10, range 0–300): within it, a second presentation of the rotated-out token is refused with `invalid_grant` as a concurrent retry and nothing is revoked, so tabs or processes that share one refresh token and refresh at the same moment keep their session. The grace covers only rotation — a token whose family was revoked (reuse detection, RFC 7009 revocation, authorization-code replay) is refused outright — and its cost is that a stolen rotated-out token used within the window does not revoke the family. Set it to 0 for strict RFC 9700 behaviour, in which two concurrent refreshes with one token leave the family revoked. Clients should still serialise refreshes and keep only the newest refresh token. If the server fails after consuming the token but before answering, it puts the presented token back, so retrying with it rotates normally. To end a session, revoke the refresh token at `/oauth2/token/revoke` (RFC 7009): that revokes the family and its access tokens.
+
 ---
 
 ## API Reference
@@ -916,7 +919,7 @@ graph TD
 | GET | `/.well-known/spiffe-trust-bundle.json` | SPIFFE JWT-SVID trust bundle |
 | POST | `/oauth2/token` | Issue token (7 grant types, including `urn:openid:params:grant-type:ciba`) |
 | POST | `/oauth2/token/introspect` | Token introspection (RFC 7662) |
-| POST | `/oauth2/token/revoke` | Token revocation (RFC 7009) |
+| POST | `/oauth2/token/revoke` | Token revocation (RFC 7009): access tokens and refresh tokens. Revoking a refresh token revokes its whole family and the access tokens issued from it; when the request identifies a client, only that client's refresh tokens are revoked. `200` for unknown, invalid or already-revoked tokens; `500 server_error` if the revocation could not be carried out |
 | POST | `/oauth2/bc-authorize` | CIBA backchannel authorization request (OpenID CIBA Core §7) |
 | POST | `/oauth2/register` | Dynamic client registration (RFC 7591). Requires initial access token with `client:register` scope. |
 | GET / PUT / DELETE | `/oauth2/register/{client_id}` | Client management (RFC 7592). Authenticated by `registration_access_token`. |
@@ -1004,8 +1007,18 @@ only when `Server.EnsureClient` is called with a marked context.
 | GET | `/delegations/graph` | Depth-bounded delegation subgraph centered on an identity (`?identity_id=&depth=`) |
 | GET | `/delegations/by-jti/{jti}` | Full lineage root → leaf for any credential (forensic provenance walk) |
 | GET | `/delegations/chains` | List delegation tree summaries in a time window (`?since=&until=&limit=`) |
+| GET, POST | `/external-issuers` | List or add the account's trusted issuers ([contract](docs/external-issuers.md#admin-api)) |
+| GET, PATCH, DELETE | `/external-issuers/{id}` | Read, change or remove a trusted issuer |
+| POST | `/external-issuers/check` | Probe an issuer's JWKS |
+| GET | `/external-issuers/bindings` | List the account's credential bindings across issuers (`?identity_id=`) |
+| GET, POST | `/external-issuers/{id}/bindings` | List (`?identity_id=`) or add credential bindings (optionally creating the agent's OAuth client) |
+| GET, PATCH, DELETE | `/external-issuers/{id}/bindings/{binding_id}` | Read, enable/disable or remove a binding |
 | POST | `/oauth2/bc-authorize/{auth_req_id}/approve` | Approve a pending CIBA request (tenant-scoped) |
 | POST | `/oauth2/bc-authorize/{auth_req_id}/deny` | Deny a pending CIBA request (tenant-scoped) |
+
+`public_key_pem` on the agent and identity write paths must be an SPKI EC P-256 (ES256) key; anything else is a `400` naming the reason.
+The agent registry never returns the PEM: each agent carries `has_public_key` and, when a key is enrolled, `public_key_thumbprint` (its RFC 7638 JWK SHA-256 thumbprint, base64url).
+See [§5.3 of the extensions spec](docs/spec/zeroid-oauth-extensions.md#53-nhi-delegation-requires-an-actor-proof-of-possession) for the details.
 
 Full interactive docs at `GET /docs` when running.
 

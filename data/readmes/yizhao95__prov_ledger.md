@@ -59,7 +59,7 @@ The knowledge comes from three sources, kept apart:
 
 - **Measured** — the map is rebuilt from the source on every run and compared with the run before, so what changed is counted rather than reported.
 - **Said** — your words, recorded verbatim as you type them.
-- **Evidenced** — an email, a meeting note, a ticket: a label, a time and a link, never the body.
+- **Evidenced** — an email, a meeting note, a ticket: a label, a time, a link and the passage someone said, never the whole body.
 
 When none of them has anything to say, the record says *unstated* and stops there.
 
@@ -120,7 +120,7 @@ Each command below was run for real against a scratch ledger; the lines under it
 ```console
 $ claude plugin list
   ❯ provledger@provledger
-    Version: 0.4.7
+    Version: 0.4.8
     Scope: user
     Status: ✔ enabled
 ```

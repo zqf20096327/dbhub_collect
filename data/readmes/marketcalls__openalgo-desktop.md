@@ -16,8 +16,7 @@ OpenAlgo Desktop is a single-user desktop version of
 macOS, Linux and Raspberry Pi, with the same screens, the same API and the same
 market data feed as the web version. There is no server to set up, no Python to
 install and no `.env` file: every setting and credential is entered inside the
-app, and secrets are kept encrypted with a key held in your operating system's
-keychain.
+app, and secrets are kept encrypted with a key locked by your OpenAlgo password.
 
 ## Contents
 
@@ -31,6 +30,7 @@ keychain.
 - [Sandbox mode (analyzer mode)](#sandbox-mode-analyzer-mode)
 - [Ports](#ports)
 - [Where your data lives, and backups](#where-your-data-lives-and-backups)
+- [Updating OpenAlgo Desktop](#updating-openalgo-desktop)
 - [Supported brokers](#supported-brokers)
 - [What is included, and what is not](#what-is-included-and-what-is-not)
 - [Guides](#guides)
@@ -87,7 +87,7 @@ desktop, and it trades only while it is open.
 | Raspberry Pi 3 or Zero 2 W with 64-bit Raspberry Pi OS | Not tested | 1 GB of memory or less is too little for comfortable use. |
 | 32-bit Raspberry Pi OS (any Pi) | Not supported | No 32-bit build. |
 | Headless Linux (no desktop: servers, Raspberry Pi OS Lite, SSH-only), Docker | Not supported | The app opens a window and cannot run without a desktop session. Use [OpenAlgo web](https://github.com/marketcalls/openalgo) for a server. |
-| Running as a background service (Windows service, systemd unit, launchd daemon) | Not supported | The app runs as the signed-in user, with that user's keychain. |
+| Running as a background service (Windows service, systemd unit, launchd daemon) | Not supported | The app runs as the signed-in user, and its keys stay locked until that user signs in to OpenAlgo. |
 
 "Supported" means an installer is built for that system and a problem on it
 is a bug to report. The automated tests run on every change on the build
@@ -334,33 +334,102 @@ Everything OpenAlgo Desktop stores is in one folder:
 | Linux and Raspberry Pi | `~/.local/share/com.openalgo.desktop` |
 
 Inside it: `openalgo.db` (account, settings, strategies, encrypted broker
-credentials), `sandbox.db` (sandbox mode), `logs.db` (order and API logs),
-`historify.duckdb` (Historify market data), and your OpenScript and custom
-indicator files.
+credentials and the locked keys), `sandbox.db` (sandbox mode), `logs.db`
+(order and API logs), `historify.duckdb` (Historify market data), and your
+OpenScript and custom indicator files.
 
-Broker credentials, tokens and your API key are encrypted. The encryption key
-is kept in your operating system's keychain (macOS Keychain, Windows Credential
-Manager, or the Secret Service on Linux), not in this folder. On a Linux
-machine with no keychain (for example Raspberry Pi OS Lite) the key is instead
-protected by your OpenAlgo password and kept in `vault.json` in the same
-folder; the app tells you when it is working this way.
+Broker credentials, tokens, your API key and your two-factor login secret are
+encrypted. The encryption key is itself locked with your OpenAlgo password
+(Argon2id) and kept in `openalgo.db`. OpenAlgo Desktop does not use your
+operating system's keychain on any platform: not the macOS Keychain, not the
+Windows Credential Manager, not the Secret Service of Linux or Raspberry Pi.
+A copy of the folder is useless to anyone without your password.
+
+What this means day to day:
+
+- **Sign in after OpenAlgo starts.** Until you do, the API (`/api/v1`), the
+  market data feed, TradingView and Chartink webhooks, AI clients (MCP) and
+  your broker connection stay off: programs are told "Sign in to OpenAlgo to
+  use the API". Telegram and WhatsApp bots that you had switched on start
+  when you sign in. Everything goes off again when you log out, and the
+  unlocked key is wiped from memory; quitting OpenAlgo does the same.
+- **Keep your password safe.** It cannot be recovered. If you forget it, the
+  sign-in page's Forgot password sets a new one: your account, settings,
+  strategies and history stay, and you enter your broker keys again, copy the
+  new API key into your tools, and set up two-factor login again.
 
 **To back up**, close OpenAlgo Desktop and copy the whole folder. Restore it by
-closing the app and copying the folder back.
+closing the app and copying the folder back. A backup opens on any computer
+with the password you had when you made it, because the locked keys travel
+with it.
 
-A backup restores on the same computer and user account, where the keychain
-still holds the key. On a new computer the keychain does not have that key, so
-the copied account and credentials cannot be opened there. To move to a new
-computer, install OpenAlgo Desktop there, create your account, and add your
-broker again. (A backup made in password mode, with `vault.json`, opens on any
-computer with your OpenAlgo password.)
+**Before an update changes your data**, OpenAlgo backs it up by itself: the
+first time a newer version opens the folder, it copies every database into
+`backups/` inside the folder before anything is migrated. If the new version
+then cannot open the data, it puts that copy back, so the folder is exactly
+as the old version left it, and says so. The copy exists only for that
+start: it is deleted as soon as the new version has opened the data (or put
+it back), so no older copy of your account, broker keys or API key is kept.
+`data-version.json` records the version that last opened the folder; an
+older version will not open a folder a newer one has used (it says so and
+changes nothing). See
+[Updating OpenAlgo Desktop](docs/user/updating.md#your-data-is-backed-up-before-an-update).
 
-Resetting your account (Reset account, on the forgotten-password page) replaces
-the key in the keychain. The account and saved credentials in backups made
-before a reset can then no longer be opened, because the key they need is
-gone; make a new backup once you have set OpenAlgo up again. (A password-mode
-backup carries its own `vault.json` and still opens with the password you had
-then.)
+Resetting your account (Reset account, on the forgotten-password page) removes
+the account and its keys; make a new backup once you have set OpenAlgo up
+again. Backups made before a reset still open with the password you had then.
+
+**Upgrading from an earlier build** that kept the keys in the system keychain
+(macOS Keychain, Windows Credential Manager, or the Secret Service on Linux and
+Raspberry Pi):
+the first time you sign in in the OpenAlgo Desktop window, OpenAlgo reads them
+from the keychain one last time (allow it when your computer asks), moves them
+into `openalgo.db`, checks them, and deletes the keychain entries. After that
+it never asks again. If the keychain cannot be read, the sign-in page offers to
+try again or to start fresh. An earlier build's `vault.json` is moved into
+`openalgo.db` the same way and then deleted. A sign-in from a browser, another
+device or a tunnel does not move anything: it asks you to sign in once in the
+desktop window first.
+
+**What a failed sign-in tells.** Only the OpenAlgo Desktop window is told why
+the saved keys could not be opened, with the ways out. A browser, a program,
+another device or a tunnel gets "Invalid credentials" for every failure, after
+the same amount of work, so nobody can learn from a failed sign-in whether a
+name or a password was right.
+
+## Updating OpenAlgo Desktop
+
+OpenAlgo Desktop checks for a newer version each time it starts; to check at
+any time, open the profile menu and choose **Check for Updates**. When one is
+available a small notice shows the version and its release notes. It only
+tells you: **nothing is downloaded until you choose Update**.
+
+**Update** downloads the new version, checks its signature against the key
+built into the app (an update that does not match is refused), installs it
+and restarts; then you sign in again. Before it downloads, and again before it restarts, OpenAlgo
+names anything a restart would interrupt (running Live strategies, OpenScript
+runs, scalping stops, open orders at your broker) and asks you to confirm;
+sandbox-only activity gets a lighter warning. It never restarts on its own.
+
+| Installed from | How it updates |
+| --- | --- |
+| macOS `.dmg` | In the app: replaces OpenAlgo Desktop |
+| Windows setup `.exe` | In the app: runs the new installer (passive, for your user only) |
+| Linux or Raspberry Pi AppImage | In the app: replaces the `.AppImage` file |
+| Linux or Raspberry Pi `.deb` | The app tells you and links to the release page; download the new `.deb` there and install it over the old one |
+
+You can always install a newer version by hand over the old one from
+[Releases](https://github.com/marketcalls/openalgo-desktop/releases). Your
+account, settings, broker keys, strategies, sandbox data and Historify data
+are kept either way.
+
+The first time the new version starts, it backs up your data before it
+changes anything, and if it then cannot open the data it puts that copy back
+and says so. The copy is deleted as soon as the new version has opened your
+data. An older version never opens data that a newer version has used; it
+says so and changes nothing. Details:
+[Updating OpenAlgo Desktop](docs/user/updating.md). Maintainers:
+[how a release reaches installed copies](docs/release/updates.md).
 
 ## Supported brokers
 
@@ -412,6 +481,7 @@ connected at a time.
 - [Broker sign-in](docs/user/brokers.md)
 - [Sandbox mode (analyzer mode)](docs/user/sandbox.md)
 - [Connecting Claude Desktop and Claude Code (MCP)](docs/user/mcp.md)
+- [Updating OpenAlgo Desktop](docs/user/updating.md)
 - [Troubleshooting](docs/user/troubleshooting.md)
 - [Changelog](CHANGELOG.md)
 - OpenAlgo documentation: [docs.openalgo.in](https://docs.openalgo.in)
@@ -486,13 +556,13 @@ later runs only rebuild what changed. What a development run does:
   changes restart the app.
 - **A development build always uses ports 5500 and 8766**, not 5000 and
   8765, so it can run next to an installed copy or OpenAlgo web.
-- **It uses the same data folder and keychain entries as the installed app**
+- **It uses the same data folder as the installed app**
   (see [Where your data lives](#where-your-data-lives-and-backups)). Close the
   installed app first, and back up the data folder if it holds an account you
   care about.
 
-To run only the server, with no window, a temporary data folder and an
-in-memory keychain, so nothing touches your real data:
+To run only the server, with no window and a temporary data folder, so
+nothing touches your real data:
 
 ```bash
 npm run build                                          # build the interface into dist/

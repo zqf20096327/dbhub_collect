@@ -47,7 +47,6 @@ deploy.
                       ┌─────▼─────┐  ┌─────▼─────┐  ┌─────▼──────┐
                       │ D1        │  │ R2        │  │ waitUntil()│
                       │ registry  │  │ exports   │  │ email ·    │
-                      │ + audit   │  │ + badges  │  │ Sheets ·   │
                       └───────────┘  └───────────┘  │ TIDC       │
                                                      └─────┬──────┘
                                         cron */10 ─────────┘
@@ -55,7 +54,6 @@ deploy.
 ```
 
 **Why it scales.** Cloudflare Workers run at the edge with no servers to size,
-D1 is a managed SQLite database, and every outbound integration (email, Sheets,
 TIDC) runs *after* the response inside `ctx.waitUntil()` and is retried by a
 cron trigger. A slow Google Sheet or a dead mail API never delays a delegate at
 the desk, and no registration is ever lost — failures land in `sync_queue` and
@@ -70,10 +68,9 @@ are retried with exponential backoff.
 | Visitor registration form | `public/index.html` + `register.js` | Server-validated, mobile-first |
 | **Duplicate-email blocking** | `worker/src/index.js` + D1 unique index | Friendly 409 with the existing registration number, enforced by the database as a backstop |
 | **Automatic confirmation email** | `worker/src/lib/email.js` + `templates/confirmation.js` | Resend, MailChannels or your own webhook; branded HTML + plain text, sent in the background |
-| **Google Sheets backend** | `worker/src/lib/sheets.js` + `scripts/apps-script/Code.gs` | Every registration appended to a Sheet; idempotent, never double-writes |
 | **Per-delegate QR badge** | `worker/src/lib/badge.js` + `public/badge.html` | HMAC-signed token; a badge cannot be forged |
 | **Door check-in** | `public/checkin.html` + `checkin.js` | Camera scanning (vendored jsQR) with manual fallback, per-gate logging, vibrate feedback |
-| Organiser console | `public/admin.html` + `admin.js` | KPIs, search, filters, pagination, check-in/undo, delete |
+| Organiser console | `public/admin` + `admin.js` | KPIs, search, filters, pagination, check-in/undo, delete |
 | **CSV export** | `/api/admin/export.csv` | UTF-8 BOM + ISO dates, opens cleanly in Excel |
 | Event manager | `/api/admin/events` | Add and edit events from the console; DB is the source of truth |
 | Runtime event branding | `config/event.config.json` | One file drives colours, copy, categories, countries and events |
@@ -104,7 +101,7 @@ are retried with exponential backoff.
 │   └── src/
 │       ├── index.js             router
 │       ├── config.json          generated from config/event.config.json
-│       ├── lib/                 http, crypto, badge, email, sheets, tidc, sync
+│       ├── lib/                 http, crypto, badge, email, tidc, sync
 │       ├── routes/admin.js      admin API
 │       └── templates/           confirmation email
 ├── scripts/
@@ -112,7 +109,6 @@ are retried with exponential backoff.
 │   ├── verify.mjs               secret scan + pre-deploy checks
 │   ├── generate-secrets.mjs     random signing secrets
 │   ├── hash-passcode.mjs        passcode → SHA-256
-│   └── apps-script/Code.gs      paste into Google Apps Script
 └── .dev.vars.example            template for local secrets (never committed)
 ```
 
@@ -237,25 +233,6 @@ comes from the config, so the email restyles when the site does.
 
 ---
 
-## Connecting Google Sheets
-
-1. Create a Google Sheet and name the tab `KICC Registrations`.
-2. **Extensions → Apps Script**, delete the stub, paste `scripts/apps-script/Code.gs`.
-3. Set `SHARED_SECRET` in that file to a long random string.
-4. **Deploy → New deployment → Web app** — *Execute as: Me*, *Who has access: Anyone*. Copy the `/exec` URL.
-5. Store it:
-
-```bash
-npx wrangler secret put SHEETS_WEBHOOK_URL    --config worker/wrangler.toml
-npx wrangler secret put SHEETS_SHARED_SECRET  --config worker/wrangler.toml
-```
-
-Every registration is then appended as a row, in the background. The script is
-idempotent — re-running a sync never duplicates a row. Turn it off with
-`features.googleSheetsSync: false` in the config.
-
----
-
 ## TIDC — provider unverified
 
 A TIDC credential set (numeric account id, short public key, UUID private key)
@@ -300,7 +277,6 @@ Almost everything lives in `config/event.config.json`. Edit it, run
 | `site` | Organisation name, tagline, address, support phone/email, public URL |
 | `brand` | Every colour on the site, the badge, the email and the poster |
 | `hero` | Headline, sub-headline, chips |
-| `features` | Toggle duplicate blocking, email, Sheets, QR badges, TIDC, rate limit |
 | `registration` | Categories, day options, countries, consent wording, open/closed |
 | `email` | Sender name/address, reply-to, subject template |
 | `checkin.gates` | The entrance list on the door scanner |
@@ -349,7 +325,7 @@ npm run verify       # pre-deploy checks
 ```
 
 **On the event day:** open `/checkin.html` on each scanner phone, pick the gate,
-grant camera permission. The organiser console at `/admin.html` shows live
+grant camera permission. The organiser console at `/admin` shows live
 numbers and can export at any time.
 
 ---

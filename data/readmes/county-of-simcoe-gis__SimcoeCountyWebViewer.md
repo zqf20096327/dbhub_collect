@@ -25,6 +25,7 @@ An interactive web mapping application for exploring geographic data, property i
 - [Drawing & Annotation](#drawing--annotation)
 - [Signing In](#signing-in)
 - [URL Sharing & Deep Linking](#url-sharing--deep-linking)
+- [Layer Setup](#layer-setup)
 - [Developer Guide](#developer-guide)
 - [Revision History](#revision-history)
 
@@ -125,6 +126,14 @@ The Layers tab, also called the Table of Contents, controls the map layers that 
 - Use the layer menu to access **Layer Info**, **Zoom to Layer**, **Download**, **Attribute Table**, **Opacity**, and **Remove Layer** when available.
 - Adjust per-layer opacity directly in the layer list.
 - Open the settings menu to switch between **List** and **Folder** view, sort alphabetically, adjust global opacity, save or reset layer state, and open the full legend.
+
+#### Timed Refresh
+
+Layers that define a refresh interval, and layers with a time dimension, show a play/pause button. Time layers use 5 seconds when no interval is set. Folder headers in Folder view and the group selector in List view also show one, which controls every refreshable layer in that group.
+
+- Turning a layer on starts its refresh, and turning it off stops it. Play state is not saved when the page reloads.
+- WMS layers with a time dimension show a slider below the layer. Play steps through the times and wraps back to the first, and dragging the slider pauses playback. Other layers re-request their current data on each interval.
+- Publishers set the refresh interval with `REFRESH_INTERVAL` (GeoServer) or `REFRESH` (ArcGIS). See [Layer Setup](#layer-setup).
 
 ### Tools
 
@@ -338,6 +347,43 @@ The property popup's **Share** button can also generate a direct property link.
 
 ---
 
+## Layer Setup
+
+Publishers control how a layer appears in the app with keywords. GeoServer keywords are added to the layer's keyword list as `KEY=VALUE` entries. ArcGIS keywords are added to the layer description as `#KEY=VALUE` entries.
+
+### GeoServer Keywords
+
+Keyword names are case-sensitive. Set each keyword on the level shown in the **Set on** column.
+
+| Keyword               | Set on     | Value                                        | Effect                                                                                                                                                                         |
+| --------------------- | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DEFAULT_GROUP`       | Root layer | Group name                                   | Opens this group by default. Matching ignores case.                                                                                                                            |
+| `VISIBLE_LAYERS`      | Group      | Layer names separated by commas              | Turns these layers on when the map loads. Use `VISIBLE_LAYERS=ALL` to turn on every layer in the group.                                                                        |
+| `GROUP_PREFIX`        | Group      | Text                                         | Adds the text and a dash before each layer name in the group.                                                                                                                  |
+| `LIVE_LAYER`          | Layer      | `true` or `false` (a bare keyword is `true`) | Shows the info icon and makes the layer interactive for identify.                                                                                                              |
+| `DISPLAY_NAME`        | Layer      | Text                                         | Sets the layer name used in Identify results and shared map layer lists.                                                                                                       |
+| `OPACITY`             | Layer      | Number from 0 to 1                           | Sets the starting opacity. A value of 0 is ignored and the default of 1 is used.                                                                                               |
+| `DOWNLOAD`            | Layer      | `true` or `false`                            | Adds a download option to the layer.                                                                                                                                           |
+| `WARNING`             | Layer      | Text                                         | Shows a disclaimer with this message before the layer can be turned on.                                                                                                        |
+| `DISCLAIMER_TITLE`    | Layer      | Text                                         | Sets the title of the disclaimer dialog. Acceptance lasts for the session.                                                                                                     |
+| `DISCLAIMER_URL`      | Layer      | URL                                          | Adds a link to more information in the disclaimer dialog.                                                                                                                      |
+| `STATIC_IMAGE_LEGEND` | Layer      | `true` or `false`                            | Resizes the legend image to the size declared by the layer's style.                                                                                                            |
+| `REFRESH_INTERVAL`    | Layer      | Seconds                                      | Sets the timed refresh interval. Values under 5 are raised to 5. A zero or missing value turns off timed refresh, except on layers with a time dimension, which use 5 seconds. |
+
+### ArcGIS Keywords
+
+Keyword names are not case-sensitive. Values cannot contain `#` or `=`.
+
+| Keyword       | Value                           | Effect                                                                                                                                    |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `CATEGORY`    | Group names separated by commas | Places the layer in each named Table of Contents group. Underscores display as spaces. Layers without a category go to **Uncategorized**. |
+| `VISIBLE`     | `TRUE` or `FALSE`               | Turns the layer on or off when the map loads. Overrides the service default.                                                              |
+| `LIVELAYER`   | `TRUE` or `FALSE`               | Shows the info icon and makes the layer interactive for identify.                                                                         |
+| `DESCRIPTION` | Text                            | Sets the abstract shown in Layer Info.                                                                                                    |
+| `REFRESH`     | Seconds                         | Sets the timed refresh interval, with the same rules as `REFRESH_INTERVAL`.                                                               |
+
+---
+
 ## Developer Guide
 
 ### Setup
@@ -418,6 +464,51 @@ Edits on the host hot-reload inside the container. Container `node_modules` are 
 ---
 
 ## Revision History
+
+### v2.0.6 (2026-10-15)
+
+- **Timed Layer Refresh** — Layers with a refresh interval or time dimension get play/pause controls, and Folder headers and List group selectors control every refreshable layer in that group.
+- **WMS Time Slider** — WMS layers with a time dimension show a slider that steps through available times, and dragging the slider pauses playback.
+- **Layer Setup Keywords** — Added `REFRESH_INTERVAL` and `CATEGORY` keyword support for publishers, documented in [Layer Setup](#layer-setup).
+- **2026 Imagery** — Added the 2026 imagery service to the Basemap Switcher.
+
+### v2.0.5 (2026-10-09)
+
+- **Box Select Results** — Added a map control to draw a box and view results for layers and parcels within the selected area, with a Settings toggle to show or hide it.
+- **Show All Fields Option** — Layers and sources can now be configured to show system fields that are hidden by default in Identify, the Results popup, CSV export, and the Attribute Table.
+- **General Maintenance** — Fixed search result zoom so the map centers on the located place, and updated package dependencies.
+
+### v2.0.4 (2026-10-02)
+
+- **511 Live Feeds Road Closures** — Added public road closures (Blocks, Detours, and Closures) into the 511 Live Feeds theme with layer toggles, distinct line indicators, and feature popup details.
+- **Custom Coordinate Projections** — Added support for custom EPSG projections (including EPSG:32190 / MTM Zone 9) for coordinate transforms and layer reprojection.
+- **Grid Layout for Results & Identify** — Modernized the Results popup and attribute info rows to a structured grid layout with preserved field alias casing.
+- **General Maintenance** — Updated Waze symbology and applied general stability fixes.
+
+### v2.0.3 (2026-09-28)
+
+- **Sidebar Navigation & Deep Linking** — Added sidebar shortcut URL parameters to navigate directly into specific tools and themes.
+- **Waze Event Information** — Expanded Waze traffic feed popup content with richer event details and formatted descriptions.
+- **ArcGIS Token Print Support** — Enhanced Print Tool request handling with ArcGIS token management to support printing secured map and basemap services.
+- **Search Usability Improvements** — Added automatic whitespace trimming to search inputs and keywords to improve match accuracy.
+- **General Maintenance** — Proactive token refresh buffer tuning, session stability enhancements, and bug fixes.
+
+### v2.0.2 (2026-09-18)
+
+- **ArcGIS Token Management** — Enhanced ArcGIS token handling with proactive token renewal and immediate refresh on expired credentials.
+- **Municipality Search Matching** — Added string normalization for municipality matching to improve accuracy in spatial queries and search filters.
+- **Header Layout Refinement** — Cleaned up header branding and removed legacy overlay text from app configuration.
+- **General Maintenance** — Layer loading gating and stability bug fixes across map services.
+
+### v2.0.1 (2026-09-17)
+
+- **Attribute Table Column Resizing** — Added interactive column resizing in the Attribute Table grid along with column type formatting (dates, URLs) and automatic system field filtering.
+- **Direct Property Links** — Added a direct shareable link button in the property popup for quick sharing of specific parcels.
+- **ArcGIS Field Metadata & Aliases** — Enhanced Identify and feature popups with support for ArcGIS field metadata, aliases, and formatted values.
+- **Basemap Switcher UI Upgrade** — Refreshed Basemap Switcher with improved button styling, options panel positioning, and updated iconography.
+- **Property Report Multi-Record Handling** — Enhanced Property Report handling to support multiple records per Assessment Roll Number (ARN) with fallback municipality lookup.
+- **Docker Containerization** — Added production Docker support with a multi-stage Dockerfile and Docker Compose configurations.
+- **General Maintenance** — Migrated token persistence to localStorage for improved session handling, updated package dependencies, and improved dark mode loading placeholders in layer legends.
 
 ### v2.0.0 (2026-07-07)
 

@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/v4.2-latest-green" alt="v4.2"/>
+  <img src="https://img.shields.io/badge/v4.10-latest-green" alt="v4.10"/>
   <img src="https://img.shields.io/badge/language-Rust-orange" alt="Rust"/>
   <img src="https://img.shields.io/badge/search-Hybrid_RRF_+_cross--encoder-blueviolet" alt="Hybrid RRF + cross-encoder"/>
   <img src="https://img.shields.io/badge/embeddings-jina--embeddings--v5--nano_(768--dim,_int8)-blue" alt="jina-embeddings-v5-text-nano-retrieval"/>
@@ -151,7 +151,7 @@ v4.6.0 targets the LongMemEval categories a top-k retriever alone cannot win: mu
 
 **vs the best memory servers on the market:**
 
-| Feature | MemoryPilot v4.2 | MemPalace v3.3.3 | agentmemory v0.9 | Mem0 | Zep / Graphiti |
+| Feature | MemoryPilot v4.7 | MemPalace v3.3.3 | agentmemory v0.9 | Mem0 | Zep / Graphiti |
 |---------|-----------------|----------------|------------------|------|----------------|
 | LongMemEval R@5 | **99.1%** | 98.4% | 95.2% | 94.4% | 63.8% |
 | LongMemEval MRR | **94.9%** | not published | 88.2% | not published | not published |
@@ -185,7 +185,7 @@ v4.6.0 targets the LongMemEval categories a top-k retriever alone cannot win: mu
 | HTTP API | Multi-threaded REST server (optional) | No | REST + MCP + leases + signals | Cloud hosted | REST + GraphQL |
 | Memory types | 13 types, importance 1-5 | Wings/Rooms hierarchy | Tier-based (working / short / long / archival) | 1 type | Episodic / semantic |
 | MCP tools | 41 tools | 29 tools | **51 tools** | N/A | Limited MCP server |
-| Hooks / event capture | File watcher + auto-linter (Rust-only) | No | **12 named hooks** (SessionStart, UserPromptSubmit, PreToolUse...) | No | No |
+| Hooks / event capture | SessionStart auto-recall + Stop auto-ingest for **Cursor, Claude Code and Codex** (incremental, distilled, agent narration filtered, secrets redacted) + file watcher | No | **12 named hooks** (Claude Code, Cursor, Codex, Copilot CLI…) | No | No |
 | Privacy | 100% local, zero API calls | 100% local | 100% local (SQLite) | Cloud dependent | Cloud or self-host (LLM required) |
 | Language | Rust (single binary, zero deps) | Python (pip install) | TypeScript / Node (npm install) | SaaS | Python + Neo4j |
 | Startup | 1-2 ms (`open_at`) / synchronous warm via `open_at_warm` | ~5 ms | Node boot + iii-engine init | N/A (cloud) | Heavy (Neo4j boot) |
@@ -193,7 +193,7 @@ v4.6.0 targets the LongMemEval categories a top-k retriever alone cannot win: mu
 | Storage | SQLite WAL + FTS5 + 16-conn read pool | ChromaDB | SQLite + iii-engine | Cloud DB | Neo4j + Postgres |
 | Concurrency | EmbedPool (4) + RerankPool (1, tunable) + 16 read conns + debounced cleanup | Single-threaded | Node event loop | Single-threaded | Neo4j-bound |
 | External LLM dependency | **None** | None | None (local embeddings) | OpenAI required | LLM required for ingestion |
-| GitHub stars (May 2026) | nascent | nascent | **11 083** | 53k | — |
+| GitHub stars (Sept 2026) | nascent | nascent | **~28.9k** | 53k | — |
 
 ## The 9 Pillars
 
@@ -279,6 +279,22 @@ No LLM needed — pure regex + keyword heuristics. The AI can still override by 
 
 One tool call returns a dense JSON snapshot of a project under 1500 tokens: tech stack, architecture decisions, active bugs, recent changes, key components, and **team members** (auto-detected person entities). Supports `compact: true` for AAAK compression.
 
+## What's new in v4.10
+
+- **Outdated memories hidden automatically**: when a newer memory says "X instead of Y" about an older one, or is a newer status of the same thing, the older one is tagged `superseded` (kept, readable by id, `unsupersede` to undo) and no longer surfaces in recall or search.
+- **Better recall**: the memories matching the current task come first and are always reranked by the cross-encoder. Recall golden set: top-1 73% → 82%, top-5 91% → 100%, cross-project leak 9% → 0%.
+- **Index repair** at startup (`repair_index`), and `MemoryPilot --seal-backup FILE...` to encrypt credentials inside old backups.
+
+## What's new in v4.9
+
+- **Project isolation in recall**: memories from another project only surface when they name the current one (cross-project leak 55% → 18%, hit rates unchanged).
+- **Lean tool list**: 17 core tools (~13 KB of schema per conversation instead of ~24 KB); everything else through `memory_admin`. `MEMORYPILOT_TOOLS=full` restores the full list.
+- **Credentials encrypted at rest**: XChaCha20-Poly1305, key in the macOS Keychain (key file elsewhere), transparent decryption locally, masked over HTTP.
+- **`archive_transcripts`**: old raw transcripts move to `~/.MemoryPilot/archive/*.jsonl` and out of the live index.
+- **`find_conflicts`**: report of same-project memories that contradict each other.
+- **`rate_skill`**: usage feedback on learned skills; reliable ones rank first, failing ones are demoted.
+- **Remote access**: `--http` now requires a token (`~/.MemoryPilot/http.token`), as `Authorization: Bearer` or `/mcp/<token>`. `scripts/remote-access.sh` sets up a LaunchAgent and a Cloudflare tunnel so claude.ai, the iPhone app or another PC can use the same memory.
+
 ## Install
 
 ### Homebrew (macOS / Linux)
@@ -307,7 +323,7 @@ If no pre-built binary is available for your platform, it falls back to `cargo b
 
 ```bash
 # Via Cargo, pinned to a release tag — works anywhere Rust runs:
-cargo install --git https://github.com/Soflutionltd/MemoryPilot --tag v4.2.0 --features http --bin MemoryPilot
+cargo install --git https://github.com/Soflutionltd/MemoryPilot --tag v4.10.0 --bin MemoryPilot
 
 # Local clone + auto-config (same installer, run from inside the repo):
 git clone https://github.com/Soflutionltd/MemoryPilot.git && cd MemoryPilot && ./install.sh
@@ -425,7 +441,26 @@ MemoryPilot --backfill-force
 | `delete_memory` | Delete by ID (cascades to entities and links). |
 | `list_memories` | List with project/kind filters and pagination. |
 
-### Knowledge Graph
+#### Agent hooks (automatic memory, zero agent effort)
+
+```bash
+MemoryPilot --install-hooks
+```
+
+Installs two hooks in every agent found (existing settings and hooks are kept, a `.bak` is written):
+
+| Agent | File | Session start output |
+|---|---|---|
+| Cursor | `~/.cursor/hooks.json` | `additional_context` |
+| Claude Code | `~/.claude/settings.json` | `hookSpecificOutput.additionalContext` |
+| Codex | `~/.codex/hooks.json` | `hookSpecificOutput.additionalContext` |
+
+- **Session start** runs `MemoryPilot --hook session-start --agent <agent>` and injects the compact recall of the opened project.
+- **Stop** runs `MemoryPilot --hook stop --agent <agent>`, answers `{}` immediately and distills, in a detached process, only the transcript lines added since the previous turn. From user messages only what the user typed is kept (Cursor `<user_query>`, Claude Code meta lines skipped), agent narration ("Checking…", "Let me…", "Je vais…") is filtered out, and obvious secrets (API keys, JWTs, IBANs) are redacted before storage.
+
+State: `~/.MemoryPilot/cursor-hooks-state.json`. Log: `~/.MemoryPilot/cursor-hooks.log`. Set `MEMORYPILOT_DB=/path/copy.db` to test against a copy.
+
+## Knowledge Graph
 
 | Tool | Description |
 |------|-------------|

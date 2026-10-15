@@ -6,21 +6,21 @@
 
 ### One workspace for every data source you use.
 
-Explore, query and understand databases, document stores, search engines and local files<br>
+Explore, query and understand databases, document stores, search engines, vector stores and local files<br>
 in one fast, native Windows app. Your data never leaves your machine.
 
 <br>
 
 <a href="https://github.com/elsayedsamyeid/datacraft-studio/releases/latest/download/DataCraft-Studio-x64-setup.exe"><img src="https://img.shields.io/badge/Download%20for%20Windows-2563eb?style=for-the-badge&logo=windows&logoColor=white" alt="Download for Windows" height="44"></a>
 
-<sub>Windows 10 / 11 · 64-bit · Free forever · No account needed</sub>
+<sub>Windows 10 / 11 · 64-bit · Free forever · No account needed · <a href="https://github.com/elsayedsamyeid/datacraft-studio/releases/latest">Release notes</a></sub>
 
 <br><br>
 
 [![Latest release](https://img.shields.io/github/v/release/elsayedsamyeid/datacraft-studio?style=flat-square&label=latest&color=0f172a)](https://github.com/elsayedsamyeid/datacraft-studio/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/elsayedsamyeid/datacraft-studio/total?style=flat-square&color=0f172a)](https://github.com/elsayedsamyeid/datacraft-studio/releases)
 ![No telemetry](https://img.shields.io/badge/telemetry-none-16a34a?style=flat-square)
-![Data sources](https://img.shields.io/badge/data%20sources-11-7c3aed?style=flat-square)
+![Data sources](https://img.shields.io/badge/data%20sources-12-7c3aed?style=flat-square)
 
 <br>
 
@@ -37,7 +37,7 @@ in one fast, native Windows app. Your data never leaves your machine.
 <td width="50%" valign="top">
 
 ### 🔌 Every source, one app
-PostgreSQL, SQL Server, MySQL, SQLite, DuckDB, MongoDB, Elasticsearch, CSV, Excel, JSON and Parquet, all through the same connection flow.
+PostgreSQL, SQL Server, MySQL, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, CSV, Excel, JSON and Parquet, all through the same connection flow.
 
 </td>
 <td width="50%" valign="top">
@@ -90,7 +90,7 @@ CSV and Excel, copy as CSV, TSV, JSON or Markdown, and stream very large results
   <img src="assets/screenshots/json-viewer-light.png" alt="A nested MongoDB document in the JSON viewer" width="100%">
 </picture>
 
-**Eleven sources, one connection picker, and history across all of them.**
+**Every source in one connection picker, with history across all of them.**
 
 <img src="assets/providers-history.png" alt="The connection picker and cross-source query history" width="100%">
 
@@ -130,6 +130,7 @@ CSV and Excel, copy as CSV, TSV, JSON or Markdown, and stream very large results
 ![DuckDB](https://img.shields.io/badge/DuckDB-FFC700?style=for-the-badge&logo=duckdb&logoColor=black)
 ![MongoDB](https://img.shields.io/badge/MongoDB-00A35C?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white)
+![Qdrant](https://img.shields.io/badge/Qdrant-DC244C?style=for-the-badge)
 ![CSV](https://img.shields.io/badge/CSV-16A34A?style=for-the-badge)
 ![Excel](https://img.shields.io/badge/Excel-15803D?style=for-the-badge)
 ![JSON](https://img.shields.io/badge/JSON-334155?style=for-the-badge)
@@ -141,7 +142,7 @@ One app for everyone. Free has no time limit and needs no account. Sign in with 
 
 | | Free | Pro |
 | --- | :---: | :---: |
-| All eleven data sources, unlimited connections | ✅ | ✅ |
+| All twelve data sources, unlimited connections | ✅ | ✅ |
 | Metadata explorer and database search | ✅ | ✅ |
 | Query editor with engine-aware autocomplete | ✅ | ✅ |
 | Result grid, JSON viewer, aggregates, export | ✅ | ✅ |
@@ -157,31 +158,24 @@ One app for everyone. Free has no time limit and needs no account. Sign in with 
 
 **Getting Pro:** in the app, open **Settings → Features → Plan** and choose **Sign in to unlock Pro**, then [request Pro](https://github.com/elsayedsamyeid/datacraft-studio/issues/new?template=pro_request.yml) with your email partly hidden (for example `s****@gmail.com`). Once it's enabled, sign out and in again.
 
-## ⬇️ Download
-
-<div align="center">
-
-<a href="https://github.com/elsayedsamyeid/datacraft-studio/releases/latest/download/DataCraft-Studio-x64-setup.exe"><img src="https://img.shields.io/badge/Download%20DataCraft%20Studio-2563eb?style=for-the-badge&logo=windows&logoColor=white" alt="Download DataCraft Studio" height="44"></a>
-
-</div>
-
-| Package | Best for |
-| --- | --- |
-| [**Setup (.exe)**](https://github.com/elsayedsamyeid/datacraft-studio/releases/latest/download/DataCraft-Studio-x64-setup.exe) | Most people. Installs everything it needs. |
-| [**MSI**](https://github.com/elsayedsamyeid/datacraft-studio/releases/latest/download/DataCraft-Studio-x64.msi) | Managed or scripted installs. |
-| [**Portable (.zip)**](https://github.com/elsayedsamyeid/datacraft-studio/releases/latest/download/DataCraft-Studio-x64-portable.zip) | Running without installing. Keep the folder together. |
-
-**Requirements:** Windows 10 or 11, 64-bit.
-
-> [!TIP]
-> The installers aren't code signed yet, so Windows SmartScreen may warn about a new publisher. Check the SHA-256 in the [release notes](https://github.com/elsayedsamyeid/datacraft-studio/releases/latest) with `Get-FileHash .\DataCraft-Studio-x64-setup.exe`, then choose **More info → Run anyway**.
-
 ## ❓ FAQ
+
+<details>
+<summary><b>Windows says it protected my PC. Is DataCraft safe?</b></summary>
+<br>
+DataCraft isn't code signed yet, so Windows SmartScreen doesn't recognise the publisher. Choose <b>More info → Run anyway</b>. To check the download first, compare <code>Get-FileHash .\DataCraft-Studio-x64-setup.exe</code> with the SHA-256 in the <a href="https://github.com/elsayedsamyeid/datacraft-studio/releases/latest">release notes</a>.
+</details>
+
+<details>
+<summary><b>How do I update?</b></summary>
+<br>
+Pro updates itself: when a new version is ready, click <b>Install and restart</b>. On Free, download and run the new installer over the one you have. You never need to uninstall first, and your connections and settings are kept.
+</details>
 
 <details>
 <summary><b>Is Free really free?</b></summary>
 <br>
-Yes. No time limit, no connection limit and no account. All eleven data sources are included.
+Yes. No time limit, no connection limit and no account. All twelve data sources are included.
 </details>
 
 <details>
@@ -218,4 +212,4 @@ If DataCraft Studio helps you, **give it a star** so others can find it.
 
 ---
 
-<sub>© 2026 Sayed Masry. Free to use under the <a href="LICENSE.md">licence</a>. PostgreSQL, SQL Server, MySQL, MariaDB, SQLite, DuckDB, MongoDB, Elasticsearch, Excel and Parquet are trademarks of their respective owners, named only to identify the data sources DataCraft connects to.</sub>
+<sub>© 2026 Sayed Masry. Free to use under the <a href="LICENSE.md">licence</a>. PostgreSQL, SQL Server, MySQL, MariaDB, SQLite, DuckDB, MongoDB, Elasticsearch, Qdrant, Excel and Parquet are trademarks of their respective owners, named only to identify the data sources DataCraft connects to.</sub>

@@ -49,8 +49,8 @@ which is why the companion lives here.
 2. **Companion** — download `TF3-Dashboard-<version>-windows.zip` from the
    [Releases](https://github.com/M1r077/tf3-dashboard/releases) page, unzip anywhere **except a cloud-synced folder**
    (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.
-   `C:\TF3-Dashboard` or `D:\Games\TF3 Dashboard` are fine. Mod and companion are released together: mod revision 21
-   goes with companion 0.11.x (older pairs keep working, the newest features simply stay blank).
+   `C:\TF3-Dashboard` or `D:\Games\TF3 Dashboard` are fine. Mod and companion are released together: mod revision 23
+   goes with companion 0.14.x (older pairs keep working, the newest features simply stay blank).
 3. **Run** — start the game with the mod enabled, then double-click `run_dashboard.cmd`. A window with two panes
    opens (collector | server) and your browser shows the dashboard. Put the browser on your second monitor,
    press `F11`. Close the window to stop everything.
@@ -153,7 +153,12 @@ and no route is changed. The channel is a local file (`tf3dash_cmd.lua`) read by
 - **Finances** — balance, yearly result, transported, network size and company value over time, and the **game's own
   finance journal** (mod revision 13): the same table as the game's Finances window, by financial year, with every
   line (running costs and maintenance by carrier, upkeep of roads, tracks, buildings, income, construction and
-  vehicle purchases), kept for the whole savegame. Cards can be dragged and resized; the layout is saved per browser.
+  vehicle purchases), kept for the whole savegame, and a button that exports the lot as an Excel workbook - with the vehicle catalogue
+  (every model the game knows, mod revision 22: years, speed, power, capacity per cargo, lifespan, price) and the
+  income and costs of every line per year. Cards can be dragged and resized; the layout is saved per browser.
+- **Line finances** (mod revision 23) — each line's balance over the last 12 months in the Lines table, and in its
+  card the income / running costs / balance per year over the whole game (the game itself shows 5 periods). Amounts
+  in the game's colours, blue and salmon. Table columns can be reordered by dragging their header.
 - **Layouts** — the arrangement of every tab plus the display sizes, as presets: *Default*, *Vertical screen* (for a
   portrait monitor) and your own; *Personal 1* always follows what you arrange. Copy a layout to the clipboard to share
   it, paste one you were given.
@@ -202,6 +207,8 @@ also shows the export folder, when the companion was last seen, and the current 
   each vehicle for 7 days) and one point per game day for lines, towns, stations and industries, kept for as long
   as the save exists - like the game's own logbooks. It compacts itself once an hour, so it stays in the tens of
   megabytes. Configurable, see `collector.py --help`.
+- Smooth vehicle motion (Settings) animates the markers in the browser between two samples: about 1 ms per frame at
+  60 fps with 300 vehicles, nothing on the game side. Off by default.
 - The server listens on `127.0.0.1` only. Commands are refused from any other address, and from other websites
   open in the same browser (a request must come from the dashboard's own page).
 - The game icons are extracted from **your** game installation at first start (`dashboard/extract_icons.py`); they

@@ -295,14 +295,14 @@ Useful resources and dependencies that are used in Canva Clone.
 <!--- DEPENDENCIES_START --->
 - [@auth/core](https://www.npmjs.com/package/@auth/core): ^0.41.3
 - [@auth/drizzle-adapter](https://www.npmjs.com/package/@auth/drizzle-adapter): ^1.11.3
-- [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser): ^8.0.6
+- [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser): ^8.0.7
 - [@hono/auth-js](https://www.npmjs.com/package/@hono/auth-js): ^1.0.11
 - [@hono/zod-validator](https://www.npmjs.com/package/@hono/zod-validator): ^0.9.1
 - [@imgly/background-removal](https://www.npmjs.com/package/@imgly/background-removal): ^1.7.0
 - [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless): ^1.0.2
 - [@paralleldrive/cuid2](https://www.npmjs.com/package/@paralleldrive/cuid2): ^3.3.0
 - [@radix-ui/react-alert-dialog](https://www.npmjs.com/package/@radix-ui/react-alert-dialog): ^1.1.15
-- [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.1.11
+- [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.2.7
 - [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.1.15
 - [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu): ^2.1.16
 - [@radix-ui/react-label](https://www.npmjs.com/package/@radix-ui/react-label): ^2.1.8
@@ -311,7 +311,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [@radix-ui/react-slider](https://www.npmjs.com/package/@radix-ui/react-slider): ^1.3.6
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.2.4
 - [@radix-ui/react-tooltip](https://www.npmjs.com/package/@radix-ui/react-tooltip): ^1.2.8
-- [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.4
+- [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.12
 - [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.3.3
 - [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query): ^5.104.1
 - [@trivago/prettier-plugin-sort-imports](https://www.npmjs.com/package/@trivago/prettier-plugin-sort-imports): ^6.0.0
@@ -327,7 +327,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [date-fns](https://www.npmjs.com/package/date-fns): ^4.1.0
-- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.1
+- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.7
 - [drizzle-kit](https://www.npmjs.com/package/drizzle-kit): ^0.31.11
 - [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.0
 - [drizzle-zod](https://www.npmjs.com/package/drizzle-zod): ^0.8.3
@@ -343,7 +343,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [next](https://www.npmjs.com/package/next): 16.3.6
 - [next-auth](https://www.npmjs.com/package/next-auth): ^5.0.0-beta.32
 - [next-themes](https://www.npmjs.com/package/next-themes): ^0.4.6
-- [onnxruntime-web](https://www.npmjs.com/package/onnxruntime-web): 1.29.0
+- [onnxruntime-web](https://www.npmjs.com/package/onnxruntime-web): 1.30.0
 - [openai](https://www.npmjs.com/package/openai): ^7.15.0
 - [pg](https://www.npmjs.com/package/pg): ^8.18.0
 - [postcss](https://www.npmjs.com/package/postcss): ^8
