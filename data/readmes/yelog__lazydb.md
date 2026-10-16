@@ -4,7 +4,9 @@
 LazyDB lets you browse schemas, write and run SQL, inspect relations, manage
 connection profiles, and expose project-scoped database access to coding agents
 without leaving your terminal. It is written in Rust and supports PostgreSQL,
-MySQL, MariaDB, Oracle, SQL Server, SQLite, and Redis.
+MySQL, MariaDB, Oracle, SQL Server, SQLite, Redis, and MongoDB. MongoDB uses a
+document explorer, bounded JSON console, and native BSON/EJSON handling; see the
+[MongoDB guide](docs/mongodb.md) for current scope and verification limits.
 
 > **Project status:** LazyDB is currently in beta. The core database workspace,
 > connection management, SQL execution, and coding-agent interfaces are usable,
@@ -74,6 +76,10 @@ Run the following on Mac or Linux to install LazyDB
 ```bash
 curl -fsSL https://lazydb.yelog.org/install.sh | sh
 ```
+
+Linux installers check the release's published glibc requirement before
+downloading its archive. See [Linux runtime compatibility](docs/linux-runtime-compatibility.md)
+for how to inspect your system and how the requirement is measured.
 
 Run the following on Windows to install LazyDB:
 

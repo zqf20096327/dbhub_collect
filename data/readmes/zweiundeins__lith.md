@@ -27,6 +27,7 @@ HTML with templ, and each app keeps its own pages and domain model.
 | --- | --- |
 | [`sqlite`](sqlite) | one write connection and a `query_only` read pool whose connections keep their statements prepared, pragmas, `user_version` migrations, read-only opens, `VACUUM INTO` backups |
 | [`writer`](writer) | the single writer: `Send`, `Do` and `DoValue`, batches with a savepoint per command, prepared statements, `Once` for retried requests, `Exclusive` for work between batches |
+| [`events`](events) | event sourcing on the writer: typed streams, deciders that decide from a state row, projections that commit with their events, rebuilds into copies, catch-up projectors, upcasters, retention |
 | [`live`](live) | topics mark views dirty; a tick feeds render workers that read one snapshot each and render each changed view once for all its viewers |
 | [`sse`](sse) | Datastar events, formatted once and written to many streams, with zstd, brotli or gzip per stream and a deadline on every write; `ReadSignals` for any method; a memory budget that books what each stream holds, sizes its window from its frames, and can cap the streams by memory |
 | [`edge`](edge) | sessions, CSRF, client IP, CSP with a nonce, compression, precompressed static files, rate limiters, health checks |
@@ -36,6 +37,7 @@ HTML with templ, and each app keeps its own pages and domain model.
 | [`backup`](backup) | Litestream to S3: restore if missing, attach, snapshots, daily verify (its own module) |
 | [`dbmetrics/prom`](dbmetrics/prom) | a Prometheus observer for `dbmetrics` (its own module) |
 | [`prom`](prom) | the writer's, the hub's and the stream budget's numbers in Prometheus (its own module) |
+| [`minify`](minify) | JavaScript and CSS minified with tdewolff/minify for `edge.Static`, before it hashes and precompresses them (its own module) |
 
 Everything is pure Go and builds with `CGO_ENABLED=0`.
 

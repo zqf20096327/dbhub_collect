@@ -1,0 +1,242 @@
+# quack
+
+quack answers questions about your own data on a machine with no internet connection.
+It stores tables in DuckDB, documents as searchable chunks, and the entities in both as a
+knowledge graph. One agent answers across all three and shows every step it took.
+
+It is one static binary: a terminal session, a print mode, a web UI, a REST API, and an MCP
+server. It needs only a local model server such as Ollama.
+
+## What you can ask it
+
+Most tools do one of two things: SQL over a database, or chat over a pile of PDFs. quack
+puts both in one workspace, adds a graph of their entities, and lets one agent choose. The
+examples below run against the [demo workspace](#try-it).
+
+**Questions your tables answer.** The agent writes DuckDB SQL, shows you the statement,
+runs it, and explains the rows.
+
+```bash
+quack -w storms -p "which states had the most direct deaths, and from what kind of weather?"
+quack -w storms -p "chart property damage by month"     # returns a chart plus the numbers
+```
+
+**Questions your documents answer.** Retrieval combines vector similarity with a keyword
+index. Every `[n]` in the answer must match a chunk retrieved on that turn. `--mode query`
+forbids answering from anything else.
+
+```bash
+quack -w storms -p "what wind speeds define an EF3?" --mode query
+quack -w storms -p "what is the difference between a direct and an indirect fatality?" --mode query
+```
+
+**Questions that need both at once.** The tables hold the numbers; the documents say
+what the numbers mean. A SQL tool or a document chatbot gets only half.
+
+```bash
+quack -w storms -p "deaths per million residents by state, top ten"   # joins the storm table to Census figures imported over HTTPS
+quack -w storms -p "how many people died in mobile homes, and do those count as direct deaths?"
+```
+
+**Questions about how things connect.** Once the graph is built, the agent walks it
+(neighborhoods, shortest paths, every entity of a class) instead of guessing a join.
+
+```bash
+quack -w storms -p "which forecast offices recorded events that killed people in mobile homes?"
+quack -w storms graph path 58277 GSP    # a fatality -> its flash flood -> the office that recorded it
+```
+
+**Follow-up questions.** Sessions live in the workspace file. You can resume one, or
+export it as a Markdown transcript or as the SQL that ran.
+
+```bash
+quack -w storms -p "and how many of those were indirect?" -c
+```
+
+What it will not do:
+
+- write to your data without asking;
+- cite a source it did not retrieve;
+- reach the network while answering a question;
+- store anything that reveals a workspace's contents outside that workspace's own file.
+
+## Install
+
+- **Binary:** download one for Linux (x86_64, aarch64), macOS (Apple silicon), or Windows
+  (x86_64, arm64) from the releases page. Each release carries `SHA256SUMS` and a build
+  provenance attestation you can check with `gh attestation verify`.
+- **macOS:** `brew install smoketurner/tap/quack`.
+- **Debian, Ubuntu, Fedora, RHEL:** install the `quack` package from
+  [packages.smoketurner.com](https://packages.smoketurner.com), which has the APT and DNF
+  setup. The `.deb` and `.rpm` files are also on the releases page.
+- **Container:** `ghcr.io/smoketurner/quack` starts `quack serve`. Its
+  `docker-compose.yml` runs Ollama beside it.
+- **Source:** `cargo build --release`. Needs `cmake` and a C++ compiler, plus `clang` and
+  `go` on Linux.
+
+## Configure
+
+Run `quack init`, or just `quack`: with no config file it offers to run `quack init` first.
+It finds a running Ollama and the API keys and AWS credentials in your environment, and asks
+which chat and embedding models to use. It shows the changes and checks the result with
+`quack doctor` before it writes `~/.config/quack/config.toml`. If a check fails, it writes
+nothing. Run it again to change models: it edits the file in place and keeps every other
+setting and comment. The file names the variable that holds an API key (`api_key_env`), never
+the key.
+
+To write the file yourself, name your models in `~/.config/quack/config.toml`. The smallest
+working setup, with Ollama:
+
+```toml
+[general]
+chat_model = "ollama/gpt-oss:20b"
+
+[embedding]
+model = "ollama/qwen3-embedding:0.6b"
+dimension = 1024
+
+[providers.ollama]
+type = "ollama"
+```
+
+quack supports Ollama, OpenAI-compatible endpoints, Anthropic, and Amazon Bedrock. A
+provider takes no auth, an API key, or OAuth. Bedrock uses whatever the AWS CLI would use:
+the environment, `aws_profile` or `AWS_PROFILE`, `aws sso login`, or instance roles.
+[docs/providers.md](docs/providers.md) covers each provider type and gateway (Bedrock,
+LiteLLM, Azure API Management), and [docs/authentication.md](docs/authentication.md) covers
+how people sign in to `quack serve`. The Anthropic and OpenAI APIs
+directly:
+
+```toml
+[general]
+chat_model = "anthropic/claude-opus-5-5"   # or "openai/gpt-5.6-sol"
+
+[providers.anthropic]
+type = "anthropic"
+auth = "api-key"
+api_key_env = "ANTHROPIC_API_KEY"
+
+[providers.openai]
+type = "openai"
+auth = "api-key"
+api_key_env = "OPENAI_API_KEY"
+```
+
+The same models through Amazon Bedrock:
+
+```toml
+[general]
+chat_model = "bedrock/us.anthropic.claude-opus-5-5"   # or "mantle/openai.gpt-5.6-sol", "mantle/openai.gpt-oss-120b"
+
+[providers.bedrock]              # bedrock-runtime: Converse (default), chat-completions, or responses
+type = "bedrock"
+aws_profile = "my-sso-profile"   # optional
+region = "us-east-1"             # optional
+
+[providers.mantle]               # bedrock-mantle: responses (default) or chat-completions
+type = "bedrock-mantle"
+aws_profile = "my-sso-profile"
+# base_url = "https://vpce-0123456789abcdef0.bedrock-mantle.us-east-1.vpce.amazonaws.com"   # a VPC endpoint without private DNS
+```
+
+Reasoning effort is set per kind of call. Unset sends nothing, so each model uses its own
+default. quack sends the field each provider expects and refuses a level the model lacks:
+
+```toml
+[analysis]
+effort = "high"              # chat turns
+background_effort = "low"    # graph extraction and the ontology's document pass
+```
+
+- `QUACK_CONFIG_DIR` and `QUACK_DATA_DIR` move the config and data directories.
+- `[embedding].dimension` must be the width your embedding model produces. `quack doctor`
+  checks it.
+- quack adds the query and document prefixes each known embedding model was trained with.
+  `[embedding]` overrides them.
+- After you change the embedding model, its width, or those prefixes, run
+  `quack embeddings refresh -w NAME` for each workspace. Until you do, keyword search still
+  finds its documents.
+
+## Try it
+
+```bash
+make demo-data      # about two minutes
+```
+
+This builds a workspace from NOAA's 2024 Storm Events Database: three linked tables,
+Census population figures imported over HTTPS, the government documents that define every
+code in the tables, an ontology, and a knowledge graph. Every question above works against
+it. [examples/](examples/) has the walkthrough and a second workspace built from USAID
+supply chain shipments.
+
+## Use it
+
+```bash
+quack workspace create sales             # -w names a workspace that exists; with no -w, commands use "default"
+quack ingest sales.csv -w sales          # CSV, Parquet, JSON, and XLSX become tables
+quack ingest policy.pdf -w sales --pin   # PDF, DOCX, DOC, PPTX, PPT, HTML, Markdown, and text become chunks; --pin puts the full text in every prompt
+quack ingest policy.pdf -w sales --replace   # a changed file takes the old document's place once ready; the old one stays until then
+quack ingest contracts/ -w sales [--prune]   # every supported file in a folder; run it again to pick up changed files and report (or --prune) deleted ones
+quack import sqlite:/data/shop.db --table orders --from orders   # snapshot a SQLite query, or an https file
+```
+
+```bash
+quack -w sales                           # terminal session
+quack -w sales -q "SELECT region, sum(total) FROM sales GROUP BY 1" -f csv   # SQL, no agent
+cat orders.csv | quack -q "SELECT count(*) FROM stdin"   # piped data is the table `stdin`
+```
+
+```bash
+quack -p "which invoices are overdue?" -f json -w sales   # one answer as JSON, with its session_id
+quack saved add overdue --from-session ID                 # keep that answer's SQL under a name
+quack saved run overdue --exit-code      # re-run it without the model; exit 5 when the result changed (cron is the scheduler)
+quack context edit                       # definitions and rules the agent follows
+quack ontology propose                   # draft classes and relations from the tables, then review
+quack graph extract -y                   # build the knowledge graph
+```
+
+```bash
+quack serve --local                      # web UI, REST API, and MCP on http://127.0.0.1:8080
+quack mcp -w sales                       # MCP over stdio for Claude Code and editors (relays to a running session)
+quack user add alice --admin             # users, tokens, members, and the audit log for `quack serve`
+quack workspace list                     # every workspace in the data directory
+```
+
+```bash
+quack config                             # every setting, the value in force, and where it came from
+quack config --changed                   # only what config.toml and the environment set
+quack doctor                             # check config, data dir, workspace, model providers, and bind address; say how to fix each
+```
+
+You need no configuration to start. Without a chat model, `quack` and `quack -q` still run
+SQL, load files, and take every slash command; asking a question tells you how to set up a
+model.
+
+Exit codes: 0 ok, 1 error, 2 usage, 3 write refused, 4 auth required, 5 a saved question's result changed (`--exit-code`).
+
+## How it works
+
+- Retrieval combines vector search with quack's own BM25 index. No DuckDB extension is
+  loaded at runtime, so the binary stays one file.
+- The agent asks before it writes. Print mode refuses writes without `--allow-write`, and
+  the API requires the write scope. Once a turn has read document or graph text, a write
+  needs a person's approval even with `--allow-write`, and is refused where nobody can be
+  asked, so a document cannot dictate a write. Pinned documents and table rows are not
+  covered by this rule.
+- quack proposes the ontology from your tables and documents, and a person accepts it.
+  Extraction follows it, and every node and edge records where it came from.
+- Everything that could reveal workspace content stays in that workspace's file. The
+  server keeps users, tokens, and an append-only access log separately.
+
+## Develop
+
+```bash
+make lint test deny   # clippy with warnings denied, the suite, advisories and licenses
+make help             # everything else
+```
+
+[CONTRIBUTING.md](CONTRIBUTING.md) has the conventions and [docs/](docs/) has the rest.
+
+## License
+
+Apache-2.0 or MIT, at your option.

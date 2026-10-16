@@ -82,7 +82,7 @@
 | 受控工单 Agent | `search_kb` / `classify_ticket` / `create_ticket`，预览-确认 + 人工审批 |
 | 核心技术支持数据 | TechQA 28,481 Technotes、610 条可回答检索问题、910 条生成 / 拒答问答记录 |
 | RAG 评测 | 冻结 TRAIN / DEV、文档级 Recall@K / MRR、生成 / 拒答评测框架 |
-| 重排 / Hybrid 实验 | Dense Top-100 + `qwen3-rerank` 正式冻结验证集对比；BM25 / RRF / Hybrid 为离线受控实验 |
+| 重排 / Hybrid | 保留冻结离线实验；可选 Hybrid 搜索、实验问答默认关闭；默认检索/问答及工单仍为 Dense |
 | 失败归因 | 候选覆盖、chunk 拥挤、证据级审计、路线准入门槛 |
 | AgentOps | Agent 运行记录 / 工具调用 / 审批 / 检索轨迹与聚合指标 |
 | 工程化 | Alembic、Pytest、Ruff、GitHub Actions、Docker Compose、冒烟测试 |
@@ -214,7 +214,7 @@ request.draft == server-side approval_request.draft_json
 
 # 3. RAG 在线运行时
 
-当前在线 API 路径保持为 **Dense Chroma 检索**。
+API 默认保持 **Dense Chroma 检索**；搜索和实验问答另提供默认关闭的 Hybrid 可选路径。
 
 主要能力：
 
@@ -228,13 +228,79 @@ request.draft == server-side approval_request.draft_json
 
 问答路径仅根据检索 上下文 生成答案，并返回对应 sources。当前低相关拒答使用 Dense Top-1 距离作为工程信号。
 
-> **在线 / 离线边界：** BM25 / RRF / Hybrid / `qwen3-rerank` 当前用于 `experiments/evals/` 的离线评测与受控对照，不把它们描述成线上检索已切换到 Hybrid。
+> **运行时边界：** Hybrid 搜索和实验问答需要显式选择并开启服务端开关，不接管默认问答或 Ticket Agent。实验问答使用尚未独立验收的 v5.3 gate，不代表稳定拒答策略已升级。代码接入不等于已部署、已开启或已证明整链质量。
+
+## 3.1 可选 Hybrid 搜索
+
+先通过 Document Backend 上传并显式索引文档，再在服务端 `.env` 配置已有 embedding 凭据、专用 `DASHSCOPE_RERANK_API_KEY` / `DASHSCOPE_RERANK_BASE_URL`，并设置 `RAG_HYBRID_SEARCH_ENABLED=true`。地址格式参见 [.env.example](.env.example)；重启服务或重建 Compose API 容器使配置生效。
+
+**开启前须批准数据外发与费用：** 查询会发往 embedding 服务；查询及最多 100 条当前租户候选正文会发往配置的 rerank 服务。每次搜索都会调用模型，未配置全局费用额度；不要把密钥交给浏览器或提交到 Git。
+
+使用现有 JWT 调用 `POST /rag/search`，请求体：
+
+```json
+{"query": "VPN error 809", "category": "it", "retrieval_mode": "hybrid", "top_k": 14}
+```
+
+- 路线固定为 `Dense100 + BM25100 → RRF(k=60) Top100 → qwen3-rerank → Top14`，返回其前 `top_k` 条；Hybrid 省略 `top_k` 时为 14，允许 1–14。Dense 仍默认 3、允许 1–10。
+- 只检索 SQL 文档后端标记为 `indexed`、当前版本、当前租户且匹配 category 的 chunk；两个通道共享此范围。仅存在于旧静态 Chroma 索引、未通过文档后端登记的内容不进入 Hybrid；TechQA 离线语料也不会自动导入。
+- `rerank_score` 越大越相关，但不是概率。`fusion_score`、`dense_rank`、`bm25_rank` 用于解释来源；BM25 独有命中的 `distance` / `dense_rank` 为 `null`。**不得把 Dense 的 0.9 距离阈值用于这些分数。** 审计 JSON 明确记录 Hybrid 模式和分数类型，Hybrid 的 `top_distance` 留空。
+- 失败返回脱敏 HTTP 503，不暗中切换检索方案。显式改为 `retrieval_mode: "dense"` 可回退；关闭开关并重启可禁用 Hybrid。重排客户端不自动重试，超时 15 秒；embedding 沿用原客户端策略。
+- Demo 上限为每租户/所选分类 5000 条可见 chunk，BM25 每请求重建，无持久化第二索引。英文技术词分词不覆盖中文；纯中文查询跳过 BM25，保留 Dense + 重排。规模或中文检索需要扩大时再单独测量和改进。
+- 发送候选正文前及返回结果前复查 SQL 内容/可见性，发现删除或变更则终止请求；这不是 SQL 与 Chroma 的跨存储原子快照。上传、重建中、失败和删除状态不会被当作可见文档。
+
+搜索接口不调用答案生成、不改变拒答逻辑、不创建工单；实验问答见下一节，完整问答与审批演示仍需独立验收。
+
+小范围接线验收脚本（默认只展示计划，零模型调用且不读取 `.env`）：
+
+```bash
+python -m scripts.smoke_hybrid_runtime
+# 仅在明确批准本次数据外发和费用后执行；此参数本身不构成授权：
+python -m scripts.smoke_hybrid_runtime --execute --env-file .env
+```
+
+真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查默认 Dense、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。
+固定使用北京 `text-embedding-v4`（最多 8 次）及新加坡 `qwen3-rerank`（最多 3 次），禁用 SDK/传输层重试与重定向。发送前校验端点、模型及文本白名单；单次请求体最多 4 KiB、累计 16 KiB。控制台只记录尝试次数、字节、状态、耗时和服务端 usage，不打印密钥或提供方错误正文。任何失败即停止，不自动重新运行。
+预算按 [官方价格](https://www.alibabacloud.com/help/en/model-studio/model-pricing) 保守预留 ¥1，短文本预计不足 ¥0.1；次数/字节限制不是提供方账单硬限额。中断后的请求可能已计费，重新执行须重新确认，不能把脚本重跑当成免费续跑。
+
+2026-10-16 已获授权完成一次真实提供方冒烟：8 次 embedding + 3 次重排全部 HTTP 200，服务端 usage 分别为 126 / 162 tokens，9 项接线检查通过；[逐次结果与边界](docs/reports/hybrid_runtime_smoke_2026-10-16.json)。这是临时 ASGI 环境的小范围验证，不证明 Hybrid 优于 Dense，也不代表已开启现有服务或验收问答、拒答、工单整链。
+
+## 3.2 实验 Hybrid 问答（默认关闭）
+
+该路径验证集成，不是 v5.3 的正式晋级：其独立语义质量尚未确认，历史误放行/误拒仍是已知风险。默认 `/rag/ask` 继续使用 Dense + Top1 距离阈值，Ticket Agent 不变。
+
+只在批准数据外发及费用后，在服务端同时开启 `RAG_HYBRID_SEARCH_ENABLED=true`、`RAG_HYBRID_ASK_ENABLED=true` 并重启。须另配置专用 `DASHSCOPE_PHASE_B_API_KEY` / `DASHSCOPE_PHASE_B_BASE_URL`（运行时不回退到重排或通用密钥）；生成沿用 `DASHSCOPE_API_KEY` / `DASHSCOPE_BASE_URL`，模型按 `CHAT_MODEL` 或 `DASHSCOPE_MODEL` 选择。默认示例分类端点为新加坡，通用生成端点为北京；批准外发时应分别核对。
+
+使用现有 JWT 请求 `POST /rag/ask`：
+
+```json
+{"question": "How do I resolve VPN error 809?", "category": "it", "retrieval_mode": "hybrid", "refusal_policy": "v5_3_experimental"}
+```
+
+Hybrid 默认 `top_k=14`，允许 1–14，显式较小值只使用该 Top14 前缀；Dense 仍默认 3、最多 10。Hybrid 必须显式声明实验策略，且**不能传 `max_distance`**（包括原默认值 0.9），否则 HTTP 422；不把任何距离或重排分数作为充分性阈值。
+
+```text
+Hybrid 检索（同一租户/分类、已索引当前版本，最多 Top14）
+→ 空语料：no_context，零模型请求
+→ v5.3 需求/适用性/版本覆盖检查 + 原文行引用校验
+→ 不足/冲突/条件缺失/歧义：refused_insufficient_evidence，不生成
+→ 充分：基于完整有序来源生成，校验 [Source N] 属于 gate 支持的来源
+→ 生成器自行拒答：refused_by_generator；合法答案：ok
+```
+
+- 固定分类模型 `qwen3.5-plus-2026-04-20`，复用原 v5.3 提示词与严格解析器，不读取评测样本、标签或 DEV；分类最多 2048 输出 tokens，生成最多 1024，两者超时各 30 秒、无 SDK 自动重试。检索侧 embedding 仍沿用原客户端策略。
+- 问题和最多 14 条全文会额外发往分类服务；放行后再发往配置的生成服务。非空请求比搜索最多增加两次 chat 调用；没有新增全局费用硬限额。本阶段没有真实执行这些新增调用。
+- 分类格式错误、非法行引用、截断、超时、空生成或答案缺少/含未批准的 `[Source N]` 均为脱敏 HTTP 503 + `failed` 审计，不算正确拒答、不暗中放行或回退 Dense。显式选择 Dense 并移除实验策略可回退；关闭 ask 开关只禁用实验问答。
+- 发送分类/生成上下文前及返回前复查 SQL 可见性和内容，变化则终止；仍不是跨 SQL/Chroma 原子快照。返回 `top_distance=null`，sources 保留距离与重排分数的不同语义。
+- 响应与成功/正常拒答审计包含 `refusal_policy`、`evidence_gate`（需求、覆盖检查、原文证据、缺口与歧义）；失败审计仅记录模式、策略及异常类型，不泄露提供方错误正文。AgentOps 可按两个新增拒答状态过滤，汇总 `retrieval_status_counts` 显示全部状态。
+
+**校验只证明格式、引用出处和状态接线，不证明语义蕴含、逐句忠实或抗提示注入。** 不把有效引用或实验 gate 放行写成答案正确率，也不改写历史 NO_PROMOTION / FAIL。
 
 ---
 
 # 4. RAG 评测与迭代：从 Dense 基线到当前状态
 
-`experiments/evals/` 是正式离线评测入口。当前在线 API 仍使用 **Dense Chroma 检索**；下面的 Hybrid、rerank、直接 Top14 属于离线评测与冻结工程候选，不等同于已上线能力。
+`experiments/evals/` 是正式离线评测入口。默认 API 与默认问答/工单仍使用 **Dense Chroma 检索**；可选 Hybrid 搜索及实验问答见上一节。下面记录的是离线实验与冻结工程选择，不是新运行时语料的质量验收或公网部署证明。
 
 ## 4.1 评测契约
 
@@ -259,7 +325,7 @@ TechQA 的 qrel 是文档级，而检索器返回 chunk。正式 IR 评测会保
 
 > **查询文本尾部空白漂移：** 历史 retrieval 与 generation 数据中，有些问题语义完全相同，只在末尾多了空格或换行。250/450 条 可回答问题 存在这种差异，其中 74 条 Top3 排序发生变化、5 条 标准相关文档准入 发生变化。由于这不是语义变化，这 5 条不用于因果失败计数；后续 模型服务调用前统一对 query 做 `rstrip()`。
 
-R4 C1 的正式历史状态仍是 **FAIL**。后续冻结工程候选保留固定 Hybrid 路线，是基于整体证据做出的工程选择，不改写这次正式实验结论，也不代表当前在线 API 已切换到 Hybrid。
+R4 C1 的正式历史状态仍是 **FAIL**。后续冻结工程候选保留固定 Hybrid 路线，是基于整体证据做出的工程选择；可选搜索接入不改写历史结论，也不代表默认 API 或问答已切换到 Hybrid。
 
 ---
 
@@ -367,14 +433,14 @@ qwen3-rerank
 
 - 检索参数研究：**CLOSED**
 - 上下文 组装研究：**CLOSED**
-- 当前在线运行时：仍是 **Dense Chroma 检索**
-- Hybrid + 重排 + 直接 Top14：**冻结工程候选，尚未推广到在线运行时**
+- 当前默认运行时、问答和工单：仍是 **Dense Chroma 检索**
+- Hybrid + 重排 + 直接 Top14：**已接入默认关闭的可选搜索和实验问答，工单不变；整链质量尚未验收**
 
 ---
 
 ## 4.6 当前拒答线：证据充分性
 
-冻结检索 / 上下文 后，离线研究转向判断 **直接 Top14 是否包含足够证据**；在线低相关拒答仍保留 Dense Top1 距离阈值（默认 0.9），没有被下面的开发候选替换。
+冻结检索 / 上下文 后，离线研究转向判断 **直接 Top14 是否包含足够证据**；默认低相关拒答仍保留 Dense Top1 距离阈值（默认 0.9），没有被开发候选替换。另有显式开启的 v5.3 实验问答路径，不代表其通过独立质量验收。
 
 | 阶段 | 本次方案 | 结果 | 失败归因 | 结论 | 详情 |
 | --- | --- | --- | --- | --- | --- |
@@ -382,7 +448,16 @@ qwen3-rerank
 | **拒答 v2.1** | 新分类契约 + 新的 AI 草稿代理标签 | 平衡准确率 **0.775**，门槛 0.80；充分召回 .85，不足召回 .70 | 只差 1 个 样本 即可过门槛，但后验检查发现部分 分歧 来自**标注契约与问题实际要求不一致**，不能简单继续调 提示词 | **FAIL**，不修改门槛后重跑 | [v2.1 结果](experiments/evals/reports/refusal_evidence_sufficiency/v2_ai_proxy_v2_1_result.md) |
 | **拒答 v3** | 从盲标 AI 草稿中冻结 50 条 TRAIN，25 充分 / 25 不充分 | 与 AI proxy 一致 **38/50**；平衡准确率 **0.76**；两类召回均 0.76 | 充分题误拒 6 条、不足题误放行 6 条；标签不是独立人工金标 | **FAIL**，不进入生成验收或 runtime | [v3 结果](experiments/evals/reports/refusal_evidence_sufficiency/v3_ai_proxy_result.md) |
 | **v4 / v5.1 配对开发诊断** | 20 条 TRAIN 同题对照；v5.1 选择来源行，由代码提取原文并推导决策 | 40 次调用全部有效；AI proxy 一致 **16/20 → 17/20**；估算总费 ¥0.741975 | 不足题误放行 **4/6 → 2/6**，但新增 1 个充分题误拒；费用约 2.06 倍、p50 延迟约 1.82 倍 | **NO_PROMOTION**；非独立 AI 标签、小型已见 TRAIN，不能宣称全面改善 | [v5.1 冻结结果](experiments/evals/reports/refusal_evidence_sufficiency/v5_1_paired_result.md) |
-| **v5.2 离线候选 / 演示** | 强制检查请求结果、适用性、版本与时效；复用行引用校验 | 纯合成手写响应、自检；**没有真实模型评测** | 缺字段报错、已声明缺口拒答；错误的 SUPPORTED / NOT_REQUIRED 仍可能通过 | **NOT_MODEL_EVALUATED / NO_PROMOTION**，不是实际效果证明 | [候选边界](experiments/evals/reports/refusal_evidence_sufficiency/v5_2_requirement_coverage_candidate.md)、[演示](docs/demo_script.md#21-离线拒答-gate-演示) |
+| **v5.2 必填覆盖审计** | 强制检查请求结果、适用性、版本与时效；复用行引用校验 | 14 条虚构控制题真实模型对照：v5.1 有效且符合构造标签 **14/14**，v5.2 **12/14**，另有 2 次格式失败 | 模型将已有证据的审计栏位输出为空引用；格式失败不是正确拒答 | **NO_PROMOTION**；控制题不是自然问题准确率 | [控制题结果](experiments/evals/reports/refusal_evidence_sufficiency/v5_2_control_result.md)、[零调用机制演示](docs/demo_script.md#21-离线拒答-gate-演示) |
+| **v5.2.1 引用示例调整** | 仅修改提示词中的引用示例，不放宽 schema / 引用校验 | 同一批已见虚构控制题，新跑 v5.2 / v5.2.1 均 **14/14** 有效且符合构造标签 | 旧版本的 2 次格式失败在同期基线中也未重现，不能归功于新示例 | **未证明格式修复收益 / NO_PROMOTION** | [同期回归结果](experiments/evals/reports/refusal_evidence_sufficiency/v5_2_1_regression_result.md) |
+| **v5.1 / v5.2.1 自然 TRAIN 诊断** | 30 条冻结自然问题、完整 Top14、两组新跑 | 25 条二元 AI proxy 标签一致 **19/25 → 21/25**；充分题误拒 **5/21 → 3/21** | 修正 4 次误拒、引入 2 次；不足题误放行仍 **1/4**；费用约 1.36 倍 | **仅开发诊断 / NO_PROMOTION** | [自然问题结果](experiments/evals/reports/refusal_evidence_sufficiency/natural_v5_2_1_result.md) |
+| **v5.2.1 / v5.3 问题范围回归** | 明确只检查必要请求，并要求具体事故的证据适用性；相同 30 题、两组重新运行 | 二元 AI proxy 标签一致 **22/25 → 23/25**；充分题误拒 **2/21 → 1/21**；60 次调用估算 ¥1.917294 | 修正 2 次误拒、新增 1 次；**同一个不足案例仍误放行（1/4）**，部分标签一致的推理仍有无依据外推 | **仅已见题开发回归 / NO_PROMOTION**，未解决语义可靠性 | [v5.3 完整结果](experiments/evals/reports/refusal_evidence_sufficiency/v5_3_regression_result.md) |
+
+后两次自然问题实验使用同一套冻结 AI proxy 标签：21 条充分、4 条不足、5 条有歧义；
+5 条有歧义只作描述，不计入二元一致率。这不是独立专家金标，也没有生成答案或验证线上整链。
+v5.3 的设计已经参考这些题；其同期 v5.2.1 基线为 22/25，不能拿历史 21/25 来夸大增益。
+目前不继续在这 30 题上追加提示词或重复付费调用；后续语义验证需先明确新样本与冻结口径，
+另行授权数据发送和费用。v5.2～v5.3 均未替换线上 Dense 距离拒答。
 
 完整实验契约、索引与冻结产物见 [experiments/evals/README.md](experiments/evals/README.md)。
 
@@ -628,8 +703,8 @@ Workflow：
 当前项目对外表述保持以下边界：
 
 - TechQA 是长期主技术支持语料与主评测基准，不再计划迁移到另一套 primary corpus；
-- 不把离线 BM25 / RRF / Hybrid 实验写成已经上线的 Hybrid 检索；
-- portfolio-v1 的 Hybrid + 重排已评测并冻结为工程候选，但尚未上线；R4 C1 的正式结论仍为 FAIL；
+- 不把离线 BM25 / RRF / Hybrid 实验或默认关闭的可选搜索写成默认线上已切换或公网已部署；
+- portfolio-v1 的 Hybrid + 重排已冻结并接入可选搜索和默认关闭的实验问答，工单未接入；R4 C1 的正式结论仍为 FAIL；
 - 直接 Top14 是 TRAIN 开发阶段的选择，不是通用最优值；
 - 局部扩展 / 结构扩展的负结果不能证明 Parent-Child 或文档结构方法普遍无效；
 - 拒答策略和最终生成验证尚未冻结；

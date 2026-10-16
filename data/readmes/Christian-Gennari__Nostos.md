@@ -1,0 +1,381 @@
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="docs/brand/logo-light.svg" />
+    <img alt="Nostos" src="docs/brand/logo-light.svg" width="276" />
+  </picture>
+
+  <p><strong>A home for reading, thinking, and writing.</strong></p>
+  <p>Bring books, notes, ideas, and drafts together in one connected place.</p>
+
+  <p>
+    <a href="#what-is-nostos">About</a> •
+    <a href="#features">Features</a> •
+    <a href="#getting-started">Getting Started</a> •
+    <a href="#architecture--tech-stack">Tech Stack</a> •
+    <a href="#documentation">Docs</a> •
+    <a href="#license--trademark">License</a>
+  </p>
+</div>
+
+<hr>
+
+<div align="center">
+  <a href="https://nostos.page">
+    <img
+      width="2880"
+      height="1620"
+      alt="Nostos Launch Film — A home for your reading life"
+      src="docs/screenshots/promo-poster.png"
+    />
+  </a>
+  <p><em>Watch the launch film on <a href="https://nostos.page">nostos.page</a></em></p>
+</div>
+
+## What is Nostos?
+
+Nostos is a personal reading and writing environment built around a simple idea: what you read should be able to stay connected to what you think and what you eventually write.
+
+Instead of splitting that process across a library app, an e-book reader, a notes system, and a writing tool, Nostos keeps the whole path together. You can collect physical books, EPUBs, PDFs, and audiobooks; read or listen inside the app; capture notes and highlights; connect ideas through topics; and bring that material into the Writing Studio when it is time to turn reading into your own work.
+
+The interface is deliberately restrained. There are no social feeds, reading streaks, engagement mechanics, or productivity scores competing for attention. The emphasis stays on the library and the work you are doing with it.
+
+This repository contains the canonical Nostos product and the complete public **SelfHosted** application. The official hosted Nostos Cloud service uses the same product model and Angular frontend through a separate private hosting composition.
+
+---
+
+## Features
+
+### Library
+
+Keep different kinds of books in one collection without flattening them into the same experience.
+
+- **Physical books:** Add books with metadata and ISBN lookup while keeping them alongside digital titles.
+- **EPUB and PDF:** Store and read files directly in Nostos.
+- **Audiobooks:** Import M4B, M4A, and MP3 audio with chapter-aware playback. Multi-track audiobooks play as one continuous book.
+- **Collections and filtering:** Organize books into nested collections, move them with drag and drop, and filter by reading state, rating, recency, or collection.
+- **Works and editions:** Nostos can group matching editions using normalized ISBNs or title and author identity.
+- **Free-source acquisition:** Search and import supported public-domain material from Project Gutenberg and LibriVox. Imported books become ordinary Nostos library items rather than remaining dependent on the source.
+
+<div align="center">
+  <img width="2880" height="1800" alt="Nostos Library with collections and book covers" src="docs/screenshots/library.png" />
+</div>
+
+<details>
+  <summary><strong>View Library Screenshots</strong></summary>
+  <br />
+  <table>
+    <tr>
+      <td width="50%">
+        <strong>Book Overview & Progress</strong><br /><br />
+        <img width="2880" height="1800" alt="Book Details" src="docs/screenshots/book-details.png" />
+      </td>
+      <td width="50%">
+        <strong>Cataloging & Import</strong><br /><br />
+        <img width="2880" height="1800" alt="Add Book Modal" src="docs/screenshots/add-book-modal.png" />
+      </td>
+    </tr>
+  </table>
+</details>
+
+---
+
+### Reading & Listening
+
+Nostos includes readers for the formats it stores, so notes and progress can stay close to the source.
+
+- **EPUB reader:** Read EPUB files in the browser and capture text from the book as you go.
+- **PDF reader:** Read PDFs, select passages, and create highlights without leaving Nostos.
+- **Audiobook player:** Listen to chaptered audiobooks with saved playback progress.
+- **Contextual notes:** Keep thoughts attached to the book they came from instead of moving them into a disconnected notes folder.
+- **E-reader highlights:** Import Kobo databases or KOReader sidecars from Settings → Library. Review destinations, match an existing book or add a missing one, and undo an import. Repeat imports keep confirmed matches and avoid duplicates.
+
+<div align="center">
+  <img width="2880" height="1800" alt="Nostos EPUB reader open at the first chapter of Moby-Dick" src="docs/screenshots/reader.png" />
+</div>
+
+---
+
+### Brain & Topics
+
+The Brain is where notes from individual books start to connect.
+
+- **Wiki-links:** Use `[[Topic]]` links in notes to connect recurring ideas.
+- **Topic views:** Browse topics as a list or explore their relationships in the interactive graph.
+- **Evidence-first navigation:** Move from an idea back to the notes and reading material that support it.
+- **Automatic cleanup:** Topics with no remaining references can be cleaned up automatically.
+
+<div align="center">
+  <img
+    width="2880"
+    height="1800"
+    alt="Nostos Brain topic index and linked notes"
+    src="docs/screenshots/brain-list.png"
+  />
+</div>
+
+<div align="center">
+  <img
+    width="3800"
+    height="1820"
+    alt="Nostos Brain interactive topic graph"
+    src="docs/screenshots/brain-graph.png"
+  />
+</div>
+
+---
+
+### Writing Studio
+
+The Writing Studio brings drafting and source material into the same workspace.
+
+- **Three-panel workspace:** Keep a project and chapter tree on the left, the draft in the center, and relevant source material on the right.
+- **Notes and quotations at hand:** Browse material from the library while writing and insert useful passages into the draft.
+- **Rich editing with Markdown round-tripping:** TinyMCE provides the editing surface while Turndown keeps Markdown conversion available.
+- **Automatic saving:** Draft changes are saved in the background.
+
+<div align="center">
+  <img
+    width="2880"
+    height="1800"
+    alt="Nostos Writing Studio"
+    src="docs/screenshots/writing-studio.png"
+  />
+</div>
+
+---
+
+### Optional AI Assistance
+
+Nostos can use configured AI services for features such as **Ask Nostos** and speech-to-text, but AI is not required for the core product.
+
+In the public SelfHosted application, AI provider configuration remains under the operator's control. The hosted service can provide managed AI through its own private infrastructure. The product-level interfaces stay provider-neutral in this repository.
+
+---
+
+### Portability, Backup & Integrations
+
+- **Portable library archives:** Export and import `.nostos` files to move library data between Nostos installations. See [Library portability and migration](docs/cloud/portability.md) for the exact steps, contents, limits, recovery behavior, and verification status.
+- **External media (SelfHosted):** Link a folder of audiobooks and ebooks that is already on your server. Nostos reads the files in place and never copies, modifies or deletes them. See the [External media guide](docs/external-media.md).
+- **Read aloud:** Listen to an EPUB or a PDF from the page it is open on. Nostos marks the sentence being spoken and turns the pages. It uses the device's own voice, or a natural voice from a speech server you connect. See the [Read aloud guide](docs/read-aloud.md).
+- **Local backup and restore:** SelfHosted installations include local backup and restore workflows with integrity checks and restore safeguards.
+- **OPDS export:** A configurable OPDS catalogue can expose a self-hosted library to compatible readers on networks you control.
+
+#### Moving a library
+
+When a host advertises migration, open **Settings → Backups & data → Move your library**.
+
+- **Export:** Choose **Export library**, then **Download archive** when it is ready.
+- **Import:** Choose **Import library…** and select the `.nostos` file.
+
+An empty destination activates after verification. A populated destination asks
+you to confirm **Replace library** and keeps a recovery copy for seven days.
+
+One real SelfHosted → Cloud import is recorded for the hosted alpha. Cloud export, restoring a replaced library, and Cloud → SelfHosted import have not been verified there. The shared Settings UI in this repository has no **Restore previous** button; the recovery operation is currently exposed by the SelfHosted API. See the [portability guide](docs/cloud/portability.md) for details.
+
+---
+
+## SelfHosted and Nostos Cloud
+
+Nostos is one product with two deployment modes.
+
+### SelfHosted
+
+The public executable in this repository is complete on its own. It uses:
+
+- SQLite for relational data
+- the local filesystem for book media
+- local backup and restore
+- operator-configured AI providers when AI features are enabled
+
+Your library database and stored media stay on the machine or server where you run Nostos. Features that contact external services, such as public catalogue imports, metadata lookup, or optional AI, naturally require network access when you use them.
+
+### Nostos Cloud
+
+The official hosted service composes the public Nostos product with private hosting infrastructure for authentication, tenant provisioning, managed storage, billing, managed AI, and operations.
+
+Reusable product behavior, the domain model, capability contracts, and the customer-facing Angular application live here first. Hosted provider and operator implementations remain private.
+
+See the [public/private boundary ADR](docs/adr/cloud-public-private-boundary.md) and [deployment capabilities](docs/cloud/deployment-modes.md) for the architectural contract.
+
+---
+
+## Architecture & Tech Stack
+
+Nostos is designed as a single product with a reusable product layer, a public SelfHosted host, and one shared frontend.
+
+```text
+Nostos/
+├── Nostos.Product/       # canonical product, domain, application and API behavior
+├── Nostos.Backend/       # public SelfHosted host: SQLite, local files, backup, BYOK
+├── Nostos.Shared/        # shared DTOs and product contracts
+├── Nostos.Frontend/      # Angular application shared by SelfHosted and Cloud
+└── docs/                 # product, architecture and operational documentation
+```
+
+### Core stack
+
+- **Backend:** [.NET 10](https://dotnet.microsoft.com/) with ASP.NET Core Minimal APIs
+- **Database:** SQLite with Entity Framework Core 10 in the public SelfHosted host
+- **Frontend:** [Angular 21](https://angular.dev/) with standalone components and Signals
+- **EPUB:** `epub.js`
+- **PDF:** `ngx-extended-pdf-viewer`
+- **Audio:** `Howler.js`
+- **Topic graph:** Graphology, Sigma.js, and `d3-force`
+- **Editor:** TinyMCE with Turndown for Markdown conversion
+- **Icons:** Phosphor
+- **Typography:** Newsreader and Hanken Grotesk
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+- [Node.js LTS](https://nodejs.org/) with npm
+
+### Development
+
+Clone the repository, install the root tooling and frontend dependencies, then start the backend and frontend together.
+
+```bash
+git clone https://github.com/Christian-Gennari/Nostos.git
+cd Nostos
+
+npm install
+npm --prefix Nostos.Frontend install
+npm start
+```
+
+The Angular development server runs at **http://localhost:4200** and proxies API requests to the backend on port **5099**.
+
+### Production
+
+```bash
+npm run prod
+```
+
+This builds the Angular frontend and serves the application through the .NET host. Open **http://localhost:5099** in your browser.
+
+### Docker / Compose
+
+The official SelfHosted image is **`ghcr.io/christian-gennari/nostos`**. The `latest` tag is published only after the complete public product CI passes on `main`. Each release also gets an immutable `selfhosted-sha-<commit>` tag.
+
+The container keeps application binaries under `/app` and all durable SelfHosted data under **`/data`**. Do not relocate ASP.NET's content root to persist data: the frontend is served from the application's `wwwroot`, while the SQLite database and library storage have their own configurable paths.
+
+Run the official image directly:
+
+```bash
+docker pull ghcr.io/christian-gennari/nostos:latest
+docker volume create nostos-data
+docker run -d \
+  --name nostos \
+  -p 5099:8080 \
+  -v nostos-data:/data \
+  --restart unless-stopped \
+  ghcr.io/christian-gennari/nostos:latest
+```
+
+Or use the included Compose file:
+
+```bash
+docker compose up -d
+```
+
+Then open **http://localhost:5099**. The named `nostos-data` volume contains `nostos.db`, stored books, local backup archives, and the Data Protection key ring in `keys/`, so replacing the container preserves both library data and provider keys saved in Settings. The image sets `DataProtection__KeysPath=/data/keys`; custom container configurations must keep that directory on persistent storage.
+
+Older images stored the key ring at `/home/app/.aspnet/DataProtection-Keys` inside the container. Before replacing an older container, preserve that directory's key files in the volume's `keys/` directory, with ownership that allows the app user to read and write them. If the old container has already been removed and its key ring was not saved, the encrypted provider keys cannot be recovered: re-enter and save the affected keys in Settings. Keys supplied through environment variables still work. Keep the key ring private and back it up together with the database; it is needed to decrypt saved secrets and is not part of portable library exports.
+
+To update to the newest verified SelfHosted image:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+To pin a specific immutable SelfHosted build, set its release tag when running Compose:
+
+```bash
+NOSTOS_IMAGE_TAG=selfhosted-sha-<full-public-commit-sha> docker compose up -d
+```
+
+The `selfhosted-sha-*` prefix is intentional. Historical `sha-*` tags in the same GHCR package predate the hosted/SelfHosted package split and may identify old Cloud artifacts; do not use those as SelfHosted pins.
+
+Compose keeps the existing named volume across image replacement. Use Nostos' portable `.nostos` export/backup features as your user-owned backup and migration path; a Docker volume is persistent storage, not a substitute for backups.
+
+#### Use books that are already on your server
+
+Nostos can read audiobooks and ebooks from a folder you already have, without copying them. It never modifies or deletes those files.
+
+1. In `compose.yml`, uncomment the folder line and replace `/mnt/audiobooks` with your folder:
+
+   ```yaml
+       volumes:
+         - nostos-data:/data
+         - /mnt/audiobooks:/external/media:ro
+   ```
+
+2. Let the container's user read the files, then apply the change:
+
+   ```bash
+   chmod -R o+rX /mnt/audiobooks
+   docker compose up -d
+   ```
+
+3. Open **Settings → This server → External media**, press **Scan folder**, review what was found, and import.
+
+The image looks in `/external/media`, so no other setting is needed. Until a folder is mounted there, that Settings page shows these steps.
+
+The [External media guide](docs/external-media.md) covers `docker run`, installs without Docker, the folder layout Nostos expects, and what to check when the folder does not show up.
+
+If you prefer to build from the source you cloned instead of pulling GHCR:
+
+```bash
+docker build --pull -t nostos:selfhosted .
+```
+
+For a non-container install, the historical database location remains `<content root>/nostos.db` unless `Persistence__DatabasePath` is configured explicitly. `Storage__BooksRoot` and `Storage__BackupsRoot` can likewise override their local paths. Data Protection retains its platform default key location unless `DataProtection__KeysPath` is set; relative key paths are resolved from the content root. When changing an existing key location, copy the old key files to the new location before restarting to retain access to saved provider keys.
+
+For provider-specific behavior and requirements, see [Content Providers & Acquisition](docs/content-providers.md).
+
+---
+
+## Design
+
+Nostos uses an editorial visual language built around warm paper-like surfaces, restrained forest green, literary typography, and low-chrome controls. The goal is to make the application feel closer to a considered reading environment than a conventional SaaS dashboard.
+
+The Nostos mark is a doorway and a subtle lowercase `n`: a Forest Green (`#293E32`) rounded tile with a White (`#FFFFFF`) arch cut from it. The mark remains the same in light and dark themes.
+
+Read the [Design Manifesto](docs/design-manifesto.md) for the product's visual and interaction principles, or browse the [brand assets](_brand-assets/README.md).
+
+---
+
+## Documentation
+
+- **[Security Policy](SECURITY.md):** Supported versions, private vulnerability reporting, and safe testing guidance for SelfHosted and official Nostos Cloud.
+- **[Releases](https://github.com/Christian-Gennari/Nostos/releases):** Reader-facing changes to Nostos.
+- **[Releases](docs/releases.md):** CalVer tags and the release notes workflow.
+- **[Design Manifesto](docs/design-manifesto.md):** Product, visual, and interaction principles.
+- **[External media](docs/external-media.md):** Setting up and using a folder of books that is already on a SelfHosted server.
+- **[Read aloud](docs/read-aloud.md):** Listening to a book, and connecting a natural voice on a SelfHosted server.
+- **[Content Providers & Acquisition](docs/content-providers.md):** Provider architecture and import behavior for external catalogues.
+- **[Library skill for agents](.agents/skills/nostos-library/SKILL.md):** How an AI agent adds and organises books and collections through the REST API.
+- **[Backend Endpoints](Nostos.Backend/_docs/endpoints.md):** REST API reference.
+- **[Public/private boundary ADR](docs/adr/cloud-public-private-boundary.md):** Ownership boundary between the public product and official hosted composition.
+- **[Deployment Capabilities](docs/cloud/deployment-modes.md):** SelfHosted and Cloud capability contract.
+- **[Library portability and migration](docs/cloud/portability.md):** Customer steps, API behavior, limits, and verification status for `.nostos` archives and library transfer.
+- **[SelfHosted Activation & Recovery](docs/selfhosted-activation-recovery.md):** Replacing a library after import, the seven-day recovery copy, restore, maintenance states and operator recovery.
+- **[PostgreSQL Compatibility](docs/cloud/postgresql-compatibility-spike.md):** Evidence for the shared relational product model.
+
+Current development work is tracked in [GitHub Issues](https://github.com/Christian-Gennari/Nostos/issues).
+
+---
+
+## License & Trademark
+
+Nostos is licensed under the **[GNU General Public License v3.0 or later](./LICENSE)**. You may run, study, modify, and redistribute the software under those terms.
+
+The Nostos name, related word marks, and official visual identity are not granted by the GPL. Distributed forks and derivative builds must use independent naming and branding. See [TRADEMARK.md](./TRADEMARK.md) for the full policy.
+
+The EPUB reader bundles the **[Libron](https://github.com/nicoverbruggen/libron)** typeface (© Nico Verbruggen, derived from Readerly and Newsreader), licensed separately under the [SIL Open Font License 1.1](./Nostos.Frontend/public/fonts/libron/OFL.txt).

@@ -2,12 +2,16 @@
   <a href="https://madre.run"><img src="https://raw.githubusercontent.com/jossuealcacao-exe/madre/main/docs/madre-banner.png" alt="MADRE · Todas tus IAs en un mismo chat · Codex, Claude Code, Gemini CLI y OpenCode" width="100%"></a>
 </p>
 
+<p align="center"><b>Español</b> · <a href="README.en.md">English</a></p>
+
+<p align="center"><sub><b>In English:</b> MADRE puts Codex, Claude Code, Gemini CLI and OpenCode in one local chat on your machine, with one memory they all share. It opens in your browser's language, Spanish or English. <a href="README.en.md"><b>Read the full README in English →</b></a></sub></p>
+
 <p align="center">
   <a href="https://www.npmjs.com/package/@jossuealcala/madre"><img alt="npm" src="https://img.shields.io/npm/v/@jossuealcala/madre?style=flat-square&label=npm&color=9bff66&labelColor=050605"></a>
   <a href="https://github.com/jossuealcacao-exe/madre/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/jossuealcacao-exe/madre/ci.yml?style=flat-square&label=CI&color=9bff66&labelColor=050605"></a>
   <img alt="node" src="https://img.shields.io/badge/node-%E2%89%A5%2022.5-9bff66?style=flat-square&labelColor=050605">
   <img alt="dependencies" src="https://img.shields.io/badge/dependencias-0-9bff66?style=flat-square&labelColor=050605">
-  <img alt="license" src="https://img.shields.io/badge/licencia-Apache--2.0-9bff66?style=flat-square&labelColor=050605">
+  <img alt="license" src="https://img.shields.io/badge/licencia-AGPL--3.0-9bff66?style=flat-square&labelColor=050605">
 </p>
 
 <br>
@@ -41,7 +45,7 @@ MADRE usa las sesiones que esas CLIs ya tienen en tu máquina.
 
 - **Inicio**: todos tus proyectos en un lugar, abiertos o dormidos, con lo que pasó en cada uno.
 - **El Coordinador**: un agente que lee entre tus proyectos, firma conexiones y lleva órdenes de uno a otro.
-- **Conexiones**: un proyecto consulta lo que otro ya aprendió, solo si tú lo firmas.
+- **Conexiones**: un proyecto consulta lo que otro ya aprendió, solo con una conexión que firmas tú o, si lo permites, el Coordinador.
 - **Permisos a tu manera**: de `#0` Incógnito a `#4` Acceso total, con la llave que tú eliges.
 - **Ajustes y Diagnóstico**: todo lo que configuras en una ventana, y el remedio cuando algo falla.
 - **Módulos como apps**, varias conversaciones a la vez y un editor de código en el visor.
@@ -70,7 +74,7 @@ Hoy eso son cuatro ventanas, cuatro contextos y tú copiando y pegando entre ell
   <img src="https://raw.githubusercontent.com/jossuealcacao-exe/madre/main/docs/media/1.0/ksp-inicio.webp" alt="Inicio de MADRE 1.0: el Coordinador con su resumen reciente, quién te espera, las conexiones y una tarjeta por proyecto" width="100%">
 </p>
 
-`madre` abre **Inicio**. La primera vez te acompaña en tres pasos: conectar tus agentes (una vez para todos tus proyectos), agregar tus carpetas y abrir las que vas a usar. Cada tarjeta dice si un agente trabaja, si alguien te espera y qué se decidió mientras no estabas.
+`npx @jossuealcala/madre` abre **Inicio**. La primera vez te acompaña en tres pasos: conectar tus agentes (una vez para todos tus proyectos), agregar tus carpetas y abrir las que vas a usar. Cada tarjeta dice si un agente trabaja, si alguien te espera y qué se decidió mientras no estabas.
 
 ## Un Coordinador que ve todos tus proyectos
 
@@ -133,7 +137,7 @@ Cada panel se abre al lado o en una ventana que mueves. Varias conversaciones tr
 
 ## Hazla tuya
 
-MADRE trae doce módulos —Ahorro de tokens, Intenciones, IA local, GitHub, Continuidad y más—, en un tablero como de apps. El siguiente lo escribes tú, o se lo pides a un agente.
+MADRE trae doce módulos —Ahorro de tokens, Esfuerzo sugerido, IA local, GitHub, Continuidad y más—, en un tablero como de apps. El siguiente lo escribes tú, o se lo pides a un agente.
 
 **Un módulo es un archivo.** Sin build, sin dependencias, sin registrarse en ningún lado. Lo copias a una carpeta, recargas y aparece con su interruptor, sus ajustes y su ficha. Con uno puedes añadir un comando `/loquesea` que el proyecto entiende, darle a los agentes una herramienta que antes no tenían, cambiar cómo se comporta MADRE, o conectarla con algo que ya usas.
 
@@ -185,7 +189,7 @@ Necesitas **Node 22.5** o superior y al menos una de estas CLIs con sesión inic
 npx @jossuealcala/madre
 ```
 
-Desde cualquier carpeta, abre **Inicio** en `http://127.0.0.1:4317/salas`: todos tus proyectos en un lugar, con el Coordinador arriba. La primera vez te acompaña en tres pasos: **conectar tus agentes** (instalar y firmar cada CLI ahí mismo, una vez para todos tus proyectos), **agregar tus proyectos** (eliges las carpetas; agregarlas no las abre) y **abrir** los que vas a usar. Cada proyecto corre por su cuenta, con su propia memoria.
+Desde cualquier carpeta, abre **Inicio** en `http://127.0.0.1:4317/salas`: todos tus proyectos en un lugar, con el Coordinador arriba. La primera vez te acompaña en tres pasos: **conectar tus agentes** (instalar cada CLI e iniciar sesión ahí mismo, una vez para todos tus proyectos), **agregar tus proyectos** (eliges las carpetas; agregarlas no las abre) y **abrir** los que vas a usar. Cada proyecto corre por su cuenta, con su propia memoria.
 
 Si prefieres entrar directo a un proyecto, como antes:
 
@@ -198,7 +202,9 @@ npx @jossuealcala/madre start
 npx @jossuealcala/madre doctor    # qué hay instalado, quién tiene sesión
 ```
 
-MADRE habla **español**. En Ajustes › Apariencia la pasas a inglés.
+**Actualizar.** `npx @jossuealcala/madre` sin versión baja la más reciente cada vez que arranca: ciérrala y vuelve a abrirla, o usa el aviso de versión nueva dentro de MADRE, que la actualiza con un clic. Si la instalaste con `npm install -g`, vuelve a instalarla: `npm install -g @jossuealcala/madre@latest`.
+
+MADRE habla **español** e **inglés**: la primera vez se abre en el idioma de tu navegador, y en Ajustes › Apariencia lo cambias cuando quieras.
 
 <br>
 
@@ -224,11 +230,14 @@ MADRE es gratis y seguirá siéndolo. Si te ahorra tiempo y quieres que siga cre
 puedes [apadrinarla](https://github.com/sponsors/jossuealcacao-exe). Nada del producto
 cambia según lo que hagas con ese enlace.
 
-Apache-2.0 · [Jossue Alcalá](https://jossuealcala.com/en/)
+AGPL-3.0 con términos adicionales · © 2026 [Jossue Alcalá](https://jossuealcala.com)
 
-El código es libre: úsalo, modifícalo y haz forks. El nombre **MADRE**, su logo y madre.run son
-marcas de Jossue Alcalá. Un fork que se distribuya conserva el archivo [`NOTICE`](NOTICE) con la línea
-«Based on MADRE by Jossue Alcalá», y si cambia el código lleva otro nombre. Qué sí y qué no:
+El código es software libre bajo la [GNU AGPL v3](LICENSE) con [términos adicionales](ADDITIONAL-TERMS.md):
+úsalo, modifícalo y haz forks, siempre que tu versión siga abierta con la misma licencia y conserve
+visible la autoría —«MADRE ‹versión› · © 2026 Jossue Alcalá» en la esquina de cada proyecto y de Inicio,
+con enlace a jossuealcala.com, o «Desarrollado con MADRE de Jossue Alcalá» si lleva otro nombre—. El
+nombre **MADRE**, su logo y madre.run son marcas de Jossue Alcalá: una versión modificada lleva otro
+nombre. Hasta la 1.0.1, MADRE se publicó con licencia Apache 2.0. Qué se puede y qué no:
 [TRADEMARKS.md](TRADEMARKS.md).
 
 <br>

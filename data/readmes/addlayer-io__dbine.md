@@ -391,7 +391,7 @@ No driver needs vendor libraries for the app to start:
 
 DBine is free and will stay that way. If it's useful to you, you can support it
 with whatever you like, once or every month, from
-[GitHub Sponsors](https://github.com/sponsors/addlayer-io). It is support, not
+[Buy Me a Coffee](https://buymeacoffee.com/addlayer). It is support, not
 a license: the app works the same.
 
 ## Download
@@ -401,7 +401,8 @@ The installers are in
 
 - **Windows:** `.msi` or `-setup.exe`.
 - **macOS:** `.dmg`, in Apple Silicon or Intel version.
-- **Linux:** `.AppImage`, `.deb` or `.rpm`.
+- **Linux:** `.AppImage`, `.deb`, `.rpm` or `.flatpak`
+  ([how to install the `.flatpak`](docs/flathub.md#downloadable-flatpak)).
 
 The binaries are not yet signed by Apple or Microsoft:
 

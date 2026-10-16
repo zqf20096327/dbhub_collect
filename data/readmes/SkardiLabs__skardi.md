@@ -318,6 +318,10 @@ agents; deploy it next to your data, behind your usual auth.
 - **Offline jobs** — async batch writes (append, or upsert into Lance on merge
   keys) with atomic commit, crash recovery and a run ledger you can list and
   inspect. [docs/jobs.md](docs/jobs.md)
+- **Webhooks** — a `kind: webhook` YAML becomes a public route that verifies a
+  provider's push deliveries (WhatsApp Cloud API today) and appends them to a
+  table, with the same column grammar as a source pack; a job then dedups them
+  into Lance. [docs/webhooks.md](docs/webhooks.md)
 - **Retrieval built in** — KNN, FTS and hybrid RRF in SQL; `candle()` embeddings,
   `chunk()`, `onnx_predict()` and `llm_extract()` as UDFs, so content and vector
   land on the same row atomically. [docs/embeddings/](docs/embeddings/)
@@ -339,7 +343,7 @@ agents; deploy it next to your data, behind your usual auth.
 | InfluxDB 3 | Read | No | Time series over Arrow Flight SQL | [docs](docs/influxdb/) |
 | S3 / GCS / Azure | Read | No | CSV, Parquet, Lance in object stores | [docs](docs/S3_USAGE.md) |
 | CSV / Parquet | Read | No | Local or remote files | [docs](docs/server.md) |
-| SaaS via Open Connector | Read | Yes | GitHub, Slack, Notion, Feishu, Gmail, Discord, Outlook, OneDrive, Google Drive, Dropbox packs as stable SQL tables; Slack channel history and Feishu document text as content tables, with time-window pushdown for incremental scans; pushdown + TTL cache | [docs](docs/open-connector.md) |
+| SaaS via Open Connector | Read | Yes | GitHub, Slack, Notion, Feishu, Gmail, Discord, Outlook, OneDrive, Google Drive, Dropbox, WhatsApp packs as stable SQL tables; Slack channel history and Feishu document text as content tables, with time-window pushdown for incremental scans; pushdown + TTL cache | [docs](docs/open-connector.md) |
 | Documents | Read | No | PDF/Office/ODF/image → per-page Markdown, tables, images; Markdown and plain text read directly, one row per heading or paragraph run | [docs](docs/documents.md) |
 | RSS / Atom | Read | Yes | Feeds as `feeds` + `items`; per-feed TTL cache, fault isolation, un-sandboxed fetch egress | [docs](docs/rss.md) |
 | Graph (Apache AGE) | Read | Yes | Read-only openCypher over Postgres; YAML views as catalog tables, `cypher_query` UDTF | [docs](docs/graph.md) |
@@ -407,7 +411,7 @@ Source-specific demos are linked from the table above.
 
 Reference: [server](docs/server.md) (ad-hoc queries, `ai_context`, the audit
 ledger) · [CLI](docs/cli.md) · [pipelines](docs/pipelines.md) ·
-[jobs](docs/jobs.md) · [semantics](docs/semantics.md) ·
+[jobs](docs/jobs.md) · [webhooks](docs/webhooks.md) · [semantics](docs/semantics.md) ·
 [federated queries](docs/federated-queries.md) ·
 [embeddings](docs/embeddings/) · [chunking](docs/chunk.md) ·
 [ONNX](docs/onnx_predict.md) · [LLM extraction](docs/llm_extract.md) ·

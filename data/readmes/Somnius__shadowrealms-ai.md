@@ -6,7 +6,7 @@
 
 ### Self-hosted AI Storyteller for World of Darkness chronicles
 
-[![Version](https://img.shields.io/badge/version-0.11.0-blue.svg)](docs/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.16.0-blue.svg)](docs/CHANGELOG.md)
 [![CI](https://github.com/Somnius/shadowrealms-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/Somnius/shadowrealms-ai/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/Somnius/shadowrealms-ai/actions/workflows/codeql.yml/badge.svg)](https://github.com/Somnius/shadowrealms-ai/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
@@ -17,11 +17,11 @@
 
 ### ▶ Watch the trailer
 
-[![Trailer preview: a V5 roll lands a messy critical with the blood-red flash](assets/trailer/trailer-preview.webp)](https://github.com/Somnius/shadowrealms-ai/releases/download/trailer-v0.10.0/trailer_en_1080p60.mp4)
+[![Trailer preview: a V5 roll from the Storyteller's roll chip ends in a bestial failure, then /ai explain on the dice card](assets/trailer/trailer-preview.webp)](https://github.com/Somnius/shadowrealms-ai/releases/download/trailer-v0.14.0/trailer_en_1080p60.mp4)
 
-**[English (2 min)](https://github.com/Somnius/shadowrealms-ai/releases/download/trailer-v0.10.0/trailer_en_1080p60.mp4)** · **[Ελληνικά (2 λεπτά)](https://github.com/Somnius/shadowrealms-ai/releases/download/trailer-v0.10.0/trailer_el_1080p60.mp4)** · [release page](https://github.com/Somnius/shadowrealms-ai/releases/tag/trailer-v0.10.0)
+**[English (2:30)](https://github.com/Somnius/shadowrealms-ai/releases/download/trailer-v0.14.0/trailer_en_1080p60.mp4)** · **[Ελληνικά (2:30)](https://github.com/Somnius/shadowrealms-ai/releases/download/trailer-v0.14.0/trailer_el_1080p60.mp4)** · [release page](https://github.com/Somnius/shadowrealms-ai/releases/tag/trailer-v0.14.0)
 
-<sub>Recorded on a fresh copy of the app: real AI Storyteller replies from a local model, real server dice rolls, original score.</sub>
+<sub>Recorded on a demo copy of the app: real AI Storyteller replies from a local model, real server dice rolls, original score. The first trailer (v0.10.0) is still <a href="https://github.com/Somnius/shadowrealms-ai/releases/tag/trailer-v0.10.0">here</a>.</sub>
 
 </div>
 
@@ -64,8 +64,10 @@ ShadowRealms AI is a web app for running World of Darkness chronicles with an AI
 
 ### Characters
 
-- A character forge per edition: Classic with the Revised budgets (7/5/3, 13/9/5, virtues, 15 freebies), V5 in the corebook's order with all 16 clans, powers, rituals and predator types picked from a catalog built from the books (with short descriptions in English and Greek), and creation rules each Storyteller sets per chronicle.
+- A character forge per edition: Classic with the Revised budgets (7/5/3, 13/9/5, virtues, 15 freebies), V5 in the corebook's order with all 16 clans, powers, rituals, predator types, Merits, Flaws and loresheets picked from a catalog built from the books (with short descriptions in English and Greek), a guided mode for new players, a check on the server, and creation rules each Storyteller sets per chronicle.
 - Read-only sheets with trackers (Hunger, Willpower, Humanity), portraits, and one playing character per chronicle.
+- Ghoul sheets for both editions, made from a vampire's sheet ("Add a ghoul retainer"): V5 retainers on the corebook's mortal templates or player ghouls by the Players Guide, with a level 1 power from the domitor and a Blood Bond (no blood pool, as in V5); Classic Revised ghouls by *Ghouls: Fatal Addiction*, with their Blood Pool. A ghoul follows its domitor, and the AI Storyteller knows about it.
+- Character sheets export to PDF, V5 and Classic, ghouls included: a fillable version, and a print version without form fields that looks the same in every PDF viewer. Long backgrounds and notes continue on extra pages.
 - Sheets lock after creation; later changes go through downtime requests the Storyteller approves.
 
 ### AI

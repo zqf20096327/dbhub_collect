@@ -1,0 +1,254 @@
+<div align="center">
+
+# Closure: Pricing, metering, and actions for AI products
+
+### Iterate on pricing, and act on customer usage, while your meters stay precise.
+
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-43AF11.svg)](http://makeapullrequest.com)
+[![Commit activity](https://img.shields.io/github/commit-activity/m/disjointinc/closure?color=black)](https://github.com/disjointinc/closure/commits/main)
+[![Skills](https://img.shields.io/badge/skills-closure--setup--assistant-1f6feb)](skills/SKILL.md)
+[![License: MIT](https://img.shields.io/badge/license-MIT-9d2235)](LICENSE)
+
+[How Closure works](#how-closure-works) · [Use cases](#use-cases) · [Quickstart](#quickstart) · [Contributing](#contributing)
+
+</div>
+
+## How Closure works
+
+### Architecture
+
+![Closure architecture](docs/assets/architecture.png)
+
+Your app sends meter events and balance checks to the Closure API. Each one is
+checked and recorded in Redis, so your users never wait on the database.
+Events are flushed to Postgres in batches, which keeps a full record and can
+rebuild Redis if it's ever lost. When a usage threshold is hit, Hatchet sends a
+task to Slack, Teams, Linear, Jira, or a webhook.
+
+### Principles
+
+Closure is built on a few principles:
+
+1. Pricing should be managed in code
+1. Pricing is always being tweaked
+1. Metering shouldn't introduce a visible delay for users
+1. Resources are versioned and immutable
+1. Sensitive payment info shouldn't be stored on your servers
+1. 3P providers should process payment and calculate taxes
+
+## Use cases
+
+With the right primitives, you can build any metering, entitlements, and
+billing system you want.
+
+### Inspiration
+
+- Credit wallets
+- Sliding-scale top-up packs
+- Soft limits
+- Reserved action pools
+- OpenAI's [hybrid access systems](https://openai.com/index/beyond-rate-limits/)
+- Discounts and referral bonuses
+
+### Teams
+
+- **Finance** can send invoices automatically and reconcile revenue with usage costs.
+- **Growth** can run promotions, coupons, and referrals, and analyze lifecycle data without engineers.
+- **Sales and Customer Success** can create custom deals in-house and get notified about customers' product activity in Slack, Teams, Linear, Jira, or any other webhook-enabled system.
+- **Engineering** can ship at the speed of Claude and implement blocks before charges happen.
+
+## Quickstart
+
+### Guided (recommended)
+
+We're starting to work more closely with a handful of teams; see if you're a
+fit [here](https://www.findclosure.dev/alpha).
+
+### Self-hosted (advanced)
+
+If you want to self-host, you can deploy a hobby instance in one line on Linux using Docker.
+
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/disjointinc/closure/HEAD/bin/deploy-hobby)"
+```
+
+This runs everything on one machine: Closure itself, plus the services it
+relies on.
+
+- **Postgres** and **Redis** store Closure's data.
+- **[Hatchet](https://hatchet.run)** sends task notifications. It lines them
+  up, sends no more than each integration's rate limit allows, and retries
+  ones that fail. Its dashboard (http://localhost:3246) shows every
+  notification it has sent. Log in as `admin@example.com`, with the password
+  from `.env` (see below).
+- **[Nango](https://nango.dev)** stores the logins for Slack, Teams, Linear,
+  and Jira, and makes the calls to them. Before anyone can connect one of
+  those apps, open the Nango dashboard (http://localhost:3256, username
+  `admin`, password from `.env`) and add the app
+  there, with the client ID and secret from your own Slack (or Teams, Linear,
+  Jira) app. Plain webhooks don't need this.
+
+#### Passwords and keys
+
+The first time you run the one-liner, it makes a random password or key for
+each setting below and saves them in a file named `.env` next to
+`compose.yml` (`~/.closure/bin/.env` if you used the one-liner). Look there
+when you need one, like a dashboard password. To choose your own instead, put
+it in that file before your first run.
+
+| Setting                              | What it protects                                   | Can you change it later?                                                           |
+| ------------------------------------ | -------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `CLOSURE_API_KEY`                    | The API, web portal, and docs (username `admin`)   | Yes                                                                                |
+| `CLOSURE_REDIS_PASSWORD`             | Redis                                              | Yes                                                                                |
+| `CLOSURE_NANGO_SECRET_KEY`           | Closure's access to Nango                          | Yes                                                                                |
+| `CLOSURE_NANGO_DASHBOARD_PASSWORD`   | The Nango dashboard (username `admin`)             | Yes                                                                                |
+| `CLOSURE_POSTGRES_PASSWORD`          | The database                                       | No: only used when the database is first created; editing it later has no effect   |
+| `CLOSURE_HATCHET_DASHBOARD_PASSWORD` | The Hatchet dashboard                              | No: only used when Hatchet first starts; editing it later has no effect            |
+| `CLOSURE_SECRETS_KEY`                | Webhook passwords and tokens Closure stores        | Never: changing it makes the webhook secrets already saved unreadable              |
+| `CLOSURE_NANGO_ENCRYPTION_KEY`       | Slack, Teams, Linear, and Jira logins Nango stores | Never: changing it makes the saved logins unreadable, so everyone has to reconnect |
+
+To change one marked "Yes", edit it in `.env` and rerun the one-liner.
+
+If you choose your own: make the two keys with `openssl rand -base64 32`, and
+use only letters and numbers for the passwords (some of these services put
+the password inside a web address, where symbols like `@` or `/` break it).
+The Hatchet password also needs an uppercase letter, a lowercase letter, and a
+number. `CLOSURE_NANGO_SECRET_KEY` must be a UUID (make one with `uuidgen`),
+since Nango rejects anything else.
+
+If your webhooks need to reach machines on your own network (like an internal
+service at `http://10.0.0.5`), also add
+`CLOSURE_OUTBOUND_ALLOW_PRIVATE_NETWORKS=true` to `.env`. It's off by default
+so that nobody can use a webhook to reach machines they shouldn't.
+
+#### Running on an ARM server
+
+Most computers, servers, and Windows machines use Intel or AMD chips, and
+everything just works. Macs with Apple chips work too, because Docker Desktop
+translates for them automatically.
+
+The one exception is a Linux machine with an ARM chip (like an AWS Graviton
+server or a Raspberry Pi). Nango only publishes a version built for Intel and
+AMD chips, so it won't start until you install a translator. On Debian or
+Ubuntu:
+
+```
+sudo apt-get install qemu-user-static
+```
+
+You only need to do this once. It keeps working after restarts.
+
+#### Reaching it from other machines (HTTPS)
+
+Out of the box, Closure only accepts connections from the machine it runs
+on. To reach it from elsewhere, you can serve it on your own domain over
+HTTPS:
+
+1. **Pick three domain names**, one each for the web portal, docs, and API
+   (e.g. `app.example.com`, `docs.example.com`, `api.example.com`).
+2. **Point each one at your server** with a DNS A record. Do this before
+   anything else: Closure requests HTTPS certificates as soon as it starts,
+   and the request fails if the domain doesn't reach your server yet.
+3. **Open ports 80 and 443** to the internet in your server's firewall (on
+   AWS, its security group). Leave every other port closed.
+4. **Add these lines to `.env`**, with your own domains. Keep the
+   `https://` at the start of each URL:
+
+   ```
+   CLOSURE_PUBLIC_WEB_URL=https://app.example.com
+   CLOSURE_PUBLIC_DOCS_URL=https://docs.example.com
+   CLOSURE_PUBLIC_API_URL=https://api.example.com
+   CLOSURE_GATEWAY_HTTP_PORT=80
+   CLOSURE_GATEWAY_HTTPS_PORT=443
+   ```
+
+5. **Rerun the one-liner.**
+6. **Check it works:** `https://app.example.com` should ask for a login
+   (username `admin`, password `CLOSURE_API_KEY` from `.env`), and this
+   should print `200`:
+
+   ```
+   curl -s -o /dev/null -w '%{http_code}\n' \
+     -H "Authorization: Bearer <CLOSURE_API_KEY>" \
+     https://api.example.com/v0/plan
+   ```
+
+   If it doesn't, the gateway's logs say why:
+   `docker compose -p closure logs closure-gateway`.
+
+## Contributing
+
+Contributions are what make open source great, and any contribution you make
+is greatly appreciated.
+
+Have an idea that would make Closure better? [Fork the repo](https://github.com/disjointinc/closure/fork)
+and [open a pull request](http://makeapullrequest.com), or just
+[open an issue](https://github.com/disjointinc/closure/issues/new). And if
+Closure helps you, give it a star. Thanks!
+
+### Developing locally
+
+The first time only, make the passwords and keys the stack needs. They're
+saved in `bin/.env`, which the stack and the tests both read:
+
+```
+node bin/generate-env.ts
+```
+
+Now, to start and run the whole stack in Docker, just run:
+
+```
+docker compose -p closure -f bin/compose.yml up -d
+```
+
+Default UI is available at http://localhost:3226. The web portal and docs ask
+for a login: username `admin`, password `CLOSURE_API_KEY` from `bin/.env`.
+API calls send the same key as an `Authorization: Bearer` header.
+
+Both commands work the same in PowerShell on Windows. One Windows tip: clone
+the repo inside WSL (e.g. into `~/closure` in an Ubuntu terminal) rather than
+onto the Windows drive. Docker reads files there much faster, and it reliably
+notices your edits, which the live reloading below depends on.
+
+This starts the same services as the one-liner above: `deploy-hobby` uses the
+checkout's `bin/compose.yml` when run from a clone, so both paths produce the
+same result. (The curl one-liner just runs a pristine snapshot downloaded to
+`~/.closure` instead of your working tree.)
+
+Code changes are picked up live: the API restarts itself on file changes
+(`node --watch`), and the web app hot-reloads (Vite).
+
+#### Migrations
+
+The API's database schema lives in `api/db/schema.ts` (Drizzle). To change it:
+
+1. Edit `api/db/schema.ts`.
+1. Generate the SQL: `npm run db:generate -w api` (writes `api/db/migrations/`).
+1. Apply it. Pending migrations run automatically on the next
+   `docker compose -p closure -f bin/compose.yml up -d` (via the one-shot
+   `closure-migrate` service), or apply them to your local db immediately with
+   `npm run db:migrate -w api`.
+
+Note: unlike other API changes, all web changes, and all docs changes, DB migrations must be applied before they take effect. No hot-reloading.
+
+#### Ports
+
+To change a port, set its env var before starting the stack (in your shell or
+in `bin/.env`). Everything follows it: Docker, tests, and scripts.
+
+| Env var                      | Default | Serves                |
+| ---------------------------- | ------- | --------------------- |
+| `CLOSURE_POSTGRES_PORT`      | 54326   | Postgres              |
+| `CLOSURE_REDIS_PORT`         | 63796   | Redis                 |
+| `CLOSURE_API_PORT`           | 3216    | API                   |
+| `CLOSURE_WEB_PORT`           | 3226    | Web console           |
+| `CLOSURE_DOCS_PORT`          | 3236    | Docs site             |
+| `CLOSURE_HATCHET_PORT`       | 3246    | Hatchet dashboard     |
+| `CLOSURE_HATCHET_GRPC_PORT`  | 3247    | Hatchet (workers)     |
+| `CLOSURE_NANGO_PORT`         | 3256    | Nango API + dashboard |
+| `CLOSURE_NANGO_CONNECT_PORT` | 3257    | Nango Connect UI      |
+
+#### Task notifications
+
+Hatchet and Nango (see [Self-hosted](#self-hosted-advanced)) start with the
+stack, and the API tests need both running.

@@ -47,8 +47,8 @@ tree, forms, the language, queries and reports, and the pitfalls.
 - **Scripting language** — two dialects over one compiler (**CES**, C-flavoured, the default; **VES**,
   keyword-fenced), procedures and functions, lambdas with closure capture, `try … except`,
   multi-line strings for query texts, **LINQ** (`from … where … join … group by … orderby … select`)
-  compiled into the bytecode, 94 built-in functions and 7 procedures. Bytecode of 82 opcodes, kept
-  in an ahead-of-time cache so a module compiles once per configuration version.
+  compiled into the bytecode, 94 built-in functions and 7 procedures. Bytecode of 81 opcodes, kept
+  in an ahead-of-time cache so a module compiles once per configuration version and engine.
 - **Designer** — metadata tree, form designer (drag a field onto a form and a bound control
   appears), code editor with IntelliSense, a query constructor that edits the query inside the
   literal the caret is in, a spreadsheet template editor, configuration compare, and a git panel.
@@ -110,6 +110,7 @@ On a copy of a 40 000-employee payroll base (Release, x86): a month's payroll re
 ### Windows
 
 1. Install [Visual Studio 2019 or 2022](https://visualstudio.microsoft.com/) with the **Desktop development with C++** workload.
+   CMake is not needed for the MSBuild build.
 2. Clone the repository and initialise the wxWidgets submodule:
    ```cmd
    git clone https://github.com/open-enterprise-solutions/enterprise.git
@@ -247,6 +248,7 @@ enterprise/
         ├── fileserver/       # A file base in the thin client's process
         ├── enterprise/       # Enterprise runtime executable
         ├── enterprise-thin/  # The thin client runtime executable
+        ├── designer-thin/    # The thin designer executable
         ├── designer/         # Designer/IDE executable
         ├── wenterprise-server/ # Web server (wes process)
         ├── launcher/         # Launcher (connection chooser)
@@ -295,8 +297,8 @@ Bug reports and feature requests are welcome as GitHub Issues.
 ## License
 
 OES is **source-available, not open source**, under the
-[PolyForm Noncommercial License 1.0.0](LICENSE.md). Copyright is held by Open Enterprise
-Solutions.
+[PolyForm Noncommercial License 1.0.0](LICENSE.md). Copyright is held by Maksym Korniienko,
+acting as Open Enterprise Solutions until it is registered as a company ([NOTICE.md](NOTICE.md)).
 
 **Free, and meant to be used:** clone it, build it, break it, change it, run it on your own
 machine, write configurations for it, teach a course from it, write a thesis about it, publish

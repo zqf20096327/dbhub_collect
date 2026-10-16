@@ -49,6 +49,7 @@ Apps and starters that work with these packages live in [`neondatabase/examples`
 | --- | --- |
 | `@neon/auth` | Authentication adapters for Neon Auth (Supabase-compatible and Better Auth APIs), with React, Next.js, and framework-agnostic server toolkit entrypoints. |
 | `@neon/postgrest-js` | Generic PostgreSQL client for the Neon Data API without built-in authentication. |
+| `@neon/neon-js` | Unified client combining Neon Auth and the Neon Data API, with automatic token injection into database queries. |
 
 `neon-new` and `vite-plugin-neon-new` are **deprecated**. Use Claimable Neon in the Neon CLI: `npx neon@latest claim create`. The old alias packages (`get-db`, `neondb`, `vite-plugin-db`, `@neondatabase/vite-plugin-postgres`) still re-export them.
 

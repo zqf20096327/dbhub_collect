@@ -173,8 +173,12 @@ deploys and recovery steps.
 - **Off-site copies** to S3 (client-side `age` encryption, several targets with
   their own retention) or FTP / FTPS / SFTP. The local copy can be dropped once
   the off-site copy is verified.
-- **restic snapshots** per site, taken automatically before updates, with diff,
-  restore and keep-for-N-days.
+- **Backup before every automatic update:** a full backup (files plus database)
+  is taken before each WordPress auto-update run. It is deleted after a set
+  number of days (14 by default) when every update went in cleanly, and kept
+  until deleted by hand when one failed.
+- **restic snapshots** per site, by hand, with diff, restore and
+  keep-for-N-days.
 - Restore everything, only the database or only the files; restore into a new
   domain with WordPress URLs rewritten; download a backup, or upload a
   `.tar.gz` to restore.
@@ -186,9 +190,11 @@ deploys and recovery steps.
   request, so a demoted or locked user loses access at once.
 - Two-factor auth (mandatory for admins) with backup codes, and a list of
   signed-in devices you can sign out.
-- **WAF** per site, with Standard and Strict levels and per-rule overrides. The
-  **Protection** page shows what was blocked, helps tune false positives, and
-  keeps the ban history.
+- **WAF** per site, with Standard and Strict levels and per-rule overrides, plus
+  an opt-in **OWASP Core Rule Set** tier (ModSecurity v3 from Debian's packages;
+  detection-only first, per-site paranoia, threshold and path-scoped
+  exclusions). The **Protection** page shows what was blocked, helps tune false
+  positives, and keeps the ban history.
 - **Brute-force protection** built on `nftables` ban sets for the panel, SSH,
   FTP, mail and WordPress logins, with escalation for repeat offenders.
 - **Firewall** managed by the panel: open ports, presets and optional
@@ -226,9 +232,12 @@ deploys and recovery steps.
 
 For agencies that sell maintenance:
 
-- **Care packages** bundle backups, updates, checks and monitoring into a paid
-  plan. The plan is enforced on its sites, and its name and price are stored
-  with each activation, so later edits don't rewrite past invoices.
+- **Care packages** bundle backups, updates, checks, monitoring, the firewall
+  (Standard or Strict, plus the OWASP Core Rule Set) and brute-force protection
+  into a paid plan. The plan is enforced on its sites, and its name and price
+  are stored with each activation, so later edits don't rewrite past invoices.
+  When a site lacks protection the plan sells because of the server (the
+  brute-force scanner off, ModSecurity not installed), you get a notification.
 - A monthly **service checklist** per site, and Slack messages that say what to
   invoice.
 - **Monthly customer reports** covering updates, backups, uptime, load speed and

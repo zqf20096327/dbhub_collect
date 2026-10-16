@@ -12,6 +12,12 @@
   <p><a href="#quick-start"><strong>Quick start</strong></a> · <a href="#troubleshooting">Troubleshooting</a> · <a href="README.zh-Hans.md">简体中文</a></p>
 </div>
 
+<p align="center">
+  <a href="https://max1874.com/ferry/"><img src="docs/demo.en.gif" width="600" alt="A link sent from the iPhone shows up in the Mac's timeline, and the Mac sends back a photo"></a>
+  <br>
+  <sub>A recorded demo from <a href="https://max1874.com/ferry/">max1874.com/ferry</a>, where you can try it yourself.</sub>
+</p>
+
 ## Deploy with your agent
 
 Copy the prompt below and send it to an agent that can run commands on the computer where you want Ferry installed. It will guide the Docker deployment; you may need to approve installation or system permissions.

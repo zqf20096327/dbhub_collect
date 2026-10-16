@@ -80,11 +80,53 @@ octop-harness is a library (not an app) that turns deepagents into a deployable 
 - 17 user-editable provider presets, including Hunyuan, Kimi, GLM, DeepSeek, MiniMax, and Moonshot.
 
 #### Memory (tiered)
-- Each turn is captured as **L0 raw events**, then distilled asynchronously into **L2 atoms** (`AtomCard`s) and **L3 entity pages**.
+- `MEMORY.md` (strong memory) and `USER.md` (profile) are user-maintained, including
+  onboarding. Their full contents are snapshotted
+  once per session and reused from the checkpoint, even when structured memory
+  is disabled. Manual edits apply to new sessions. Agent file
+  tools cannot edit them. Hosts can expose manual editors.
+- Workspace context loading, session snapshots, prompt formatting and cache
+  breakpoints use deepagents' native `MemoryMiddleware`. Memory rules live in
+  workspace `AGENTS.md`; the existing filesystem guard enforces both documents'
+  file-tool write protection. Template updates do not overwrite existing user
+  documents; update legacy auto-writing rules in `AGENTS.md` / `USER.md` when migrating.
+- Ordinary saves and automatic promotions check current owner documents through
+  `BackendWorkspace`, without refreshing the chat snapshot. Proven conflicts
+  retire the old atom and create a replacement review candidate, retaining evidence.
+  `memory_save` reports conflicts or incomplete checks. Duplicates remain stored
+  and are suppressed against matching session context. Uncertain checks leave facts
+  active. File-tool guards complement the host's shell/OS permissions.
+- Remember requests use `memory_save(content, topic)` to persist directly through
+  octop-memory; `memory_search` / `memory_get` retrieve additional history.
+- Eligible conversation content is captured as **L0 raw events**, then distilled asynchronously into **L2 atoms** (`AtomCard`s) and **L3 entity pages**. Runtime failures are excluded; normal troubleshooting knowledge and explicit remember requests remain eligible.
+- Model failures raise after retries; retry eligibility follows LangChain's defaults, with the existing retry budget and backoff settings. Callers must handle exceptions from `call()` / streaming. Checkpoints retain failed tasks without adding a synthetic assistant reply. Hosts display errors separately; automatic team failure notifications use `configurable.octop_memory_capture_exclude=true` to keep diagnostics out of memory.
 - Powered by the octop-memory middleware; memory travels with the workspace.
 - Recall is frozen once per user turn and appended to the model-facing user message,
   keeping the system prompt stable. Checkpoints preserve recall snapshots for exact
   replay while chat history and capture retain the original user text.
+
+Memory extraction can be configured independently of main chat:
+`memory_extract_max_tokens` sets the candidate/episode output budget (default
+2048), while `memory_aux_light_timeout_s` / `memory_aux_heavy_timeout_s` set
+per-request timeouts (30–3600 seconds). `memory_aux_max_retries` defaults to 2
+extra attempts per model and accepts 0–10; `memory_aux_retry_backoff_s` defaults
+to 1 second and doubles up to 60 seconds. Only transport/transient HTTP failures
+are retried. SDK retries are disabled on separate cached model instances, so
+main-chat retry settings are unaffected. `ChatModelFactory.get_chat_model(ref,
+max_retries=0)` exposes that isolated construction path.
+
+`memory_aux_thinking="auto"` or `"off"` disables thinking for known Qwen3/QwQ
+chat-template models; unsupported models keep their defaults. `"on"` keeps the
+model default. `memory_aux_extra_body` can supply vendor-specific settings such
+as `reasoning_effort`; these apply only to the first selected OpenAI-compatible
+model, never to fallback models. Fallback options are rebuilt for each target,
+and output budgets respect the target model's configured output limit. Retries,
+model fallback, and multiple extraction stages can extend total extraction time
+beyond a single request timeout.
+
+#### Host-owned memory restore
+
+Hosts can use `MemoryMiddleware.pause_background(timeout=120)` as a context manager after pausing graph admission. It drains capture, extraction and maintenance workers for that middleware only, skips new background submissions while paused, and resumes admission on exit or timeout. Keep it held while closing and recreating the memory runtime; other experts remain independent.
 
 #### Tools & skills
 - Built-in tools: browser (octop-browser), web search, files, ``ask_user_question`` for
@@ -259,6 +301,15 @@ requires `ModelConfig.native_tool_search=True`; unsupported routed models use
 the configured `tool_search_fallback`. Set the mode to `eager` to disable
 progressive loading.
 
+For OpenAI-compatible providers, each model can set `api_mode` to
+`"chat_completions"` (default) or `"responses"`. The choice is explicit for
+official and compatible endpoints alike. Native OpenAI tool search requires
+Responses. Models using Responses may also opt in to
+`api_fallback="chat_completions"`. The fallback is disabled by default and is
+used only for clear unsupported-endpoint/model errors, before any streamed
+output. It does not apply to native tool search or other Responses-only request
+features, and never masks authentication, rate-limit, timeout, or server errors.
+
 ## Documentation
 
 - [What is Octop Harness?](#what-is-octop-harness)
@@ -343,3 +394,15 @@ Thanks to all contributors:
 <a href="https://github.com/TencentCloud/octop-harness/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=TencentCloud/octop-harness" />
 </a>
+
+### Channel plugins
+
+A `kind: channel` manifest may register a channel class with
+`ctx.channel("acme", AcmeChannel, label="Acme IM", fields=[...])`.
+The class must inherit the hosts gateway `BaseChannel`; factories are not
+accepted. Harness stores metadata without importing the gateway. The host
+registers implementations before constructing persisted channels. Plugin IDs
+own their kinds: updates replace the same plugin, and conflicting owners are
+rejected. Hosts must stop affected live instances before replacing or removing
+registrations. Installing this library alone does not add channels to a host
+that has not implemented the bridge.

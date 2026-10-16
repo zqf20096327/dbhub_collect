@@ -16,7 +16,29 @@ If you have any suggestion or comment, please feel free to open an issue.
 go get github.com/vahid-sohrabloo/chconn/v3
 ```
 
-Requires the latest two stable Go releases.
+Requires Go 1.27 or newer.
+
+## Breaking changes in v3.1.0
+
+v3.1.0 makes builds much smaller and faster. A package that uses chconn columns
+now compiles only the column types it uses. To get there, a few APIs changed:
+
+- **Go 1.27 is required.** `Array()`, `Nullable()`, `LC()` and `LowCardinality()`
+  are now generic methods. Calls such as `column.NewString().LowCardinality().Array()`
+  do not change.
+- **No method values for these methods.** `f := col.Nullable` does not compile.
+  Call the method, or use the constructor: `column.NewBaseNullable(col)`.
+- **These methods do not satisfy interfaces.** An interface of your own that needs
+  `Nullable()` or `Array()` no longer matches the column types.
+- **`Elem()` is removed** from the column types. It was only used inside chconn.
+- **`FixedString(N)` read with dynamic columns** (`ColumnByType`, `Query` and
+  `Rows.Scan`) is now a `*column.FixedString`, and its values are `string`, not
+  `[N]byte`. Code that type-asserts it to `*column.Base[[N]byte]`, or expects
+  `[N]byte` from `RowAny`, must change. `Scan` into `*[N]byte`, `*string` or `*[]byte`
+  still works. Typed columns from `column.New[[N]byte]()` do not change.
+- **Too-long FixedString values fail the insert.** A value longer than N makes
+  `ValidateInsert`, and so the insert, return an error. Shorter strings are padded
+  with zero bytes, as ClickHouse does.
 
 ## Quick Start
 
@@ -285,6 +307,8 @@ The pool implements the same `Select`, `Insert`, `Query`, `Exec` methods as a si
 | Point, Ring, Polygon, MultiPolygon | `column.NewPoint()` |
 | Nothing | `column.NewNothing()` |
 
+`Array()`, `Nullable()`, `LC()` and `LowCardinality()` are generic methods. Call them without type arguments, for example `column.NewString().LowCardinality().Array()`. Go builds a wrapper type only in the packages that call these methods, so a package that uses `column.New[uint64]()` does not also compile the nullable, array and low-cardinality types of `uint64`.
+
 ### Compression
 
 ```go
@@ -319,9 +343,56 @@ chgen model -dsn "clickhouse://localhost:9000" -table users -out models/user.go
 # Generate model from SQL file
 chgen model -sql create_users.sql -out models/user.go
 
-# Generate column declarations for insert/select
-chgen columns -dsn "clickhouse://localhost:9000" -table users -out columns/user_columns.go
+# Generate columns for every struct with db+chtype tags in a file
+chgen columns -input models/user.go
 ```
+
+`chgen columns` writes `<file>_columns_gen.go`. Every field with both a `db` and a
+`chtype` tag must map to a column, or generation fails. Fields without these tags
+(or with `db:"-"`) are ignored. Fields of type `any` or `[]any` (what `chgen model`
+emits for Tuple/Nested) are skipped with a warning until you give them a struct type.
+The fields of a Tuple/Nested element struct must match the `chtype` elements by name,
+type and order.
+
+A field type maps to a column when:
+
+- it matches the `chtype` directly (`uint64` → `UInt64`, `*string` → `Nullable(String)`, ...), or
+- it is a named type whose underlying type matches. chgen then casts in both
+  directions: `type Flag int8` with `chtype:"Int8"` writes `int8(m.Flag)` and reads
+  `Flag(...)`. Pointers and slices of named types (`*Flag`, `[]Flag`) are not cast;
+  use `chconv` for them, or
+- it has a `chconv` tag. `chconv:"Func"` writes `Func(m.X)` with a package-level
+  func that takes one argument; `chconv:".Method"` writes `m.X.Method()`. The
+  result type must match the `chtype`. `Read` cannot invert a conversion, so it
+  leaves these fields zero.
+
+#### Custom templates
+
+`-template file.tmpl` (repeatable) adds Go `text/template` files to the built-in
+template:
+
+- Define `extra` to add methods. It runs once per struct, after the built-in methods.
+- Define a built-in block to replace it (an empty block removes the method): `file`, `struct`, `constructor`, `columns`,
+  `write`, `read`, `setWriteBufferSize`, `reset`, `columnNames`, `insertQuery`, `iter`.
+- Two template files cannot define the same block.
+
+```
+{{define "extra" -}}
+func (t *{{.ColsName}}) NumRows() int { return t.{{(index .Fields 0).Name}}.NumRow() }
+{{- end}}
+```
+
+`file` receives `Package`, `WithIter` and `Structs`. Every other block receives one
+struct with:
+
+- `Name`, `ColsName`, `Fields`, `HasTupleOrNested`, `ColumnNames`
+- per field: `Name`, `GoType`, `DBName`, `ChType`, `FieldType`, `Constructor`,
+  `AppendMethod`, `WriteExpr`, `ReadExpr` (empty when it cannot be read back),
+  `NeedsStrictFalse`, `IsTuple`, `IsNested`, `TupleType`, `SubColumns`
+- per sub-column: `FieldName`, `ColVar`, `DBName`, `ChType`, `FieldType`,
+  `Constructor`, `AppendMethod`, `WriteExpr`, `ReadExpr`
+
+These block names and fields follow semver.
 
 ### SQL Builder
 

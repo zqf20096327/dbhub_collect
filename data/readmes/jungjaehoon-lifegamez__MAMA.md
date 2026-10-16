@@ -63,26 +63,25 @@ the rest are gathered into an hourly reminder between 09:00 and 21:00.
 
 ## Getting started
 
-You need Node.js 22.13+, a logged-in `claude` or `codex` CLI, and a Telegram bot in a group
+You need Node.js 22.13+, a signed-in `claude` or `codex` CLI, and a Telegram bot in a group
 for common changes (Discord and Slack work too). Create that group even for a solo owner;
-use its negative group or supergroup ID during setup. Private chats enter personal sessions.
+setup binds it when you send `/bind` there. Private chats enter personal sessions.
 
 ```bash
 npm install -g @jungjaehoon/mama-os
 mama init          # asks for settings; tokens are typed at hidden prompts
-mama register-owner YOUR_TELEGRAM_USER_ID # after setting member_root outside HOME
-~/.mama/start.sh   # or the launchctl command init prints
 ```
 
-On macOS `mama init` also installs the document toolkit the sessions use for office files and
-charts; after an upgrade, run `mama tools install` again.
+`mama init` checks the backend and the bot token first, pairs you through a code the bot sends
+you, then registers you as the first owner,
+installs the document toolkit the sessions use for office files and charts, and starts MAMA. When
+it says MAMA is running, send your bot a message. After an upgrade, run `mama tools install` again.
 
 To run from a checkout instead, run `pnpm install` and `pnpm build`, then use
 `node packages/standalone/dist/cli/index.js` wherever the guides say `mama`.
 
-Before registration, set `member_root` in `~/.mama/config.yaml` to an absolute directory
-outside HOME. Replace `YOUR_TELEGRAM_USER_ID` with each owner's positive user ID and register
-them before starting the daemon. See [owner setup](docs/start/owner-setup.md).
+Another owner is added with `mama register-owner <telegram id>` while MAMA is stopped. See
+[owner setup](docs/start/owner-setup.md).
 
 Then send your bot a message. Setup is done when MAMA answers you, not when the process is
 running. The [first-day tutorial](docs/start/tutorial.md) walks through connecting a source,
@@ -182,10 +181,10 @@ These are the current package versions.
 
 | Package                                                     | Role                             | Version |
 | ----------------------------------------------------------- | -------------------------------- | ------- |
-| [MAMA OS](packages/standalone/README.md)                    | Owner agent and `mama` command   | 0.77.0  |
-| [mama-core](packages/mama-core/README.md)                   | Shared engine and public exports | 8.7.0   |
-| [Public MCP server](packages/mcp-server/README.md)          | Development memory over stdio    | 2.5.0   |
-| [Claude Code plugin](packages/claude-code-plugin/README.md) | Development commands and hooks   | 2.2.0   |
+| [MAMA OS](packages/standalone/README.md)                    | Owner agent and `mama` command   | 0.78.0  |
+| [mama-core](packages/mama-core/README.md)                   | Shared engine and public exports | 8.8.0   |
+| [Public MCP server](packages/mcp-server/README.md)          | Development memory over stdio    | 2.6.0   |
+| [Claude Code plugin](packages/claude-code-plugin/README.md) | Development commands and hooks   | 2.3.0   |
 
 ## Roadmap
 
@@ -198,25 +197,25 @@ on the developer's own Mac. 1.0 is the stage where anyone can install it.
 | 2. Your own work           | It finds the work in your sources, adds news to it, answers who is doing what and how things went, keeps reports and the board in line with the work, and follows your corrections, on Claude or Codex | Live on one install; 2 of 5 owner checks accepted                                                                       |
 | 3. A shared engine         | Another project builds its own records, history and search on mama-core                                                                                                                                | Done                                                                                                                    |
 | 4. People                  | Each person has a DM with its own records, jobs and skills; members work in the group within what they are granted                                                                                     | In progress: owners' DMs built and in use (one daily, one a few times); members without the owner role not yet verified |
-| 5. 1.0: anyone can install | A fresh install on macOS, Linux or Docker, set up from the docs alone and kept across upgrades                                                                                                         | In progress: 3 of 52                                                                                                    |
+| 5. 1.0: anyone can install | A fresh install on macOS, Linux or Docker, set up from the docs alone and kept across upgrades                                                                                                         | In progress: 12 of 52                                                                                                   |
 
 Messengers: Telegram is live; Discord and Slack have not run live yet. Windows is not planned for
 1.0.
 
 ### 1.0 progress
 
-| Area             | What it covers                                                                                                              | Done       |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| Install          | One command per platform, a check of the AI CLI you sign in to, a Node path that survives upgrades, document tools on Linux | 0 / 6      |
-| Setup            | Pairing in Telegram instead of typed IDs, defaults instead of edited files, the service started for you                     | 0 / 7      |
-| Operations       | Status, `mama doctor`, update (also from chat), backup and restore, upgrade checks, logs, log rotation, uninstall           | 2 / 9      |
-| Linux            | Document rendering, sandbox checks, a full run                                                                              | 0 / 5      |
-| Docker           | An official image, signing in inside the container, the same isolation inside it                                            | 0 / 5      |
-| Everyday use     | Chat commands such as `/stop`, usage and limits, a health view, Discord and Slack verified or marked experimental           | 0 / 4      |
-| People           | The remaining live checks, and use by more than one person                                                                  | 0 / 5      |
-| Your own work    | The owner checks of stage 2 accepted                                                                                        | 0 / 4      |
-| Fixes and guides | Chatwork polling, shutdown order, prompt size, test stability, CI coverage, a guide per platform, what 1.x promises         | 1 / 7      |
-| **Total**        |                                                                                                                             | **3 / 52** |
+| Area             | What it covers                                                                                                              | Done        |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| Install          | One command per platform, a check of the AI CLI you sign in to, a Node path that survives upgrades, document tools on Linux | 2 / 6       |
+| Setup            | Pairing in Telegram instead of typed IDs, defaults instead of edited files, the service started for you                     | 1 / 7       |
+| Operations       | Status, `mama doctor`, update (also from chat), backup and restore, upgrade checks, logs, log rotation, uninstall           | 7 / 9       |
+| Linux            | Document rendering, sandbox checks, a full run                                                                              | 0 / 5       |
+| Docker           | An official image, signing in inside the container, the same isolation inside it                                            | 0 / 5       |
+| Everyday use     | Chat commands such as `/stop`, usage and limits, a health view, Discord and Slack verified or marked experimental           | 1 / 4       |
+| People           | The remaining live checks, and use by more than one person                                                                  | 0 / 5       |
+| Your own work    | The owner checks of stage 2 accepted                                                                                        | 0 / 4       |
+| Fixes and guides | Chatwork polling, shutdown order, prompt size, test stability, CI coverage, a guide per platform, what 1.x promises         | 1 / 7       |
+| **Total**        |                                                                                                                             | **12 / 52** |
 
 Each item, with what is true today and how it is checked, is in the
 [1.0 work list](docs/development/work/v1.md). Ongoing live checks are in the

@@ -131,7 +131,8 @@ sqlx_migrator::postgres_migration!(
 );
 ```
 
-If your up and down queries are simple strings, you can simplify the implementation:
+If your up and down queries are simple strings, you can simplify the implementation.
+A `(up, down)` tuple is a reversible operation and a single string is an irreversible one:
 ```rust
 sqlx_migrator::postgres_migration!(
     FirstMigration,
@@ -142,10 +143,31 @@ sqlx_migrator::postgres_migration!(
         (
             "CREATE TABLE sample (id INTEGER PRIMARY KEY, name TEXT)",
             "DROP TABLE sample"
-        )
+        ),
+        "INSERT INTO sample (id, name) VALUES (1, 'seed')"
     ]
 );
 ```
+
+SQL can also be kept in files next to the migration and embedded at compile time.
+Paths are resolved relative to the invoking file, like `include_str!`. A base path
+expands to `<base>.up.sql` and `<base>.down.sql`; explicit `up:` and `down:` files
+can be given instead, and `up:` alone creates an irreversible operation:
+```rust
+sqlx_migrator::postgres_migration!(
+    FirstMigration,
+    "main",
+    "first_migration",
+    sqlx_migrator::vec_box![],
+    sqlx_migrator::vec_box![
+        sqlx_migrator::include_sql!("sql/0001"),
+        sqlx_migrator::include_sql!(up: "sql/0001_seed.sql"),
+    ]
+);
+```
+
+The macros cover the simple case. For a migration which needs `replaces`, `run_before`
+or `is_atomic`, implement the `Migration` trait by hand as shown above.
 
 Finally, create a migrator to run your migrations:
 
@@ -164,6 +186,25 @@ async fn main() {
 }
 ```
 
+## Locking and transactions
+
+While a plan runs, the migrator holds a database lock so two processes cannot
+migrate at the same time. Postgres uses a session level advisory lock and MySQL uses
+`GET_LOCK`; SQLite serialises writers itself. Session level locks are not reliable
+behind a transaction pooling proxy such as PgBouncer, and are unnecessary when a
+single process runs migrations, so the strategy can be changed:
+
+```rust
+use sqlx_migrator::migrator::LockStrategy;
+let migrator = Migrator::<Postgres>::new().set_lock_strategy(LockStrategy::None);
+```
+
+Atomic migrations run inside a transaction. MySQL and MariaDB commit implicitly on
+most DDL statements, so on those backends a failed atomic migration cannot be rolled
+back as a unit. The migrator reports this through
+`DatabaseOperation::supports_transactional_ddl` and logs a `tracing` warning when an
+atomic migration runs on such a backend.
+
 # Running Migrations
 
 You can run migrations directly or integrate them into a CLI:
@@ -172,11 +213,18 @@ You can run migrations directly or integrate them into a CLI:
 use sqlx_migrator::migrator::Plan;
 let mut conn = pool.acquire().await?;
 // use apply all to apply all pending migration
-migrator.run(&mut *conn, &Plan::apply_all()).await.unwrap();
+let report = migrator.run(&mut *conn, &Plan::apply_all()).await.unwrap();
+// the report lists what ran and how long each migration took
+for record in report.records() {
+    println!("{}:{} took {:?}", record.app(), record.name(), record.elapsed());
+}
 // or use revert all to revert all applied migrations
 migrator.run(&mut *conn, &Plan::revert_all()).await.unwrap();
 // If you need to apply or revert to certain stage then see `Plan` docs
 ```
+
+Progress is emitted through the `tracing` crate at `info` level, with a span per run
+and per migration carrying the app and name, so any `tracing` subscriber can show it.
 
 ## CLI Integration
 To integrate sqlx_migrator into your CLI, you can either use the built-in
@@ -229,29 +277,32 @@ For each migration in your old system, create an equivalent migration in `sqlx_m
 The `OldMigrator` trait allows you to bridge between your old migration system and `sqlx_migrator`. Here's a implementation example for sqlx sql:
 
 ```rust
-use sqlx_migrator::sync::OldMigator;
-use sqlx::Database
+use sqlx::Postgres;
+use sqlx_migrator::error::Error;
+use sqlx_migrator::migration::Migration;
+use sqlx_migrator::sync::OldMigrator;
 
 struct SqlxMigrator;
 
 #[async_trait::async_trait]
-impl<DB, T> OldMigrator<DB> for SqlxMigrator
-    DB: Database,
-{
+impl OldMigrator<Postgres> for SqlxMigrator {
     async fn applied_migrations(
         &self,
-        connection: &mut <DB as Database>::Connection,
-    ) -> Result<Vec<Box<dyn Migration<DB>>>, Error> {
-        let old_migrations = sqlx::query!(
-            "SELECT version, description FROM _sqlx_migrations ORDER BY version"
+        connection: &mut sqlx::PgConnection,
+    ) -> Result<Vec<Box<dyn Migration<Postgres>>>, Error> {
+        let old_migrations: Vec<(i64, String)> = sqlx::query_as(
+            "SELECT version, description FROM _sqlx_migrations ORDER BY version",
         )
         .fetch_all(connection)
         .await?;
-        let mut migrations = vec![];
+        let mut migrations: Vec<Box<dyn Migration<Postgres>>> = vec![];
         // your custom logic here to map from old migrator to new migration
         // for example for sqlx you may use a migration name as combination of both version
         // and description or only one between them it is your choice
         // and sqlx migrator have no preference between them
+        for (version, description) in old_migrations {
+            migrations.push(Box::new(("main", format!("{version}_{description}"))));
+        }
         Ok(migrations)
     }
 }

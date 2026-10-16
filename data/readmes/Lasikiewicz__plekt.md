@@ -19,12 +19,12 @@
   <a href="docs/README.md">Full documentation</a> ·
   <a href="https://plekt.net">Website</a> ·
   <a href="https://discord.gg/7ZmEGKcRC5">Discord</a> ·
-  <a href="https://www.reddit.com/r/plembfin/">Reddit</a>
+  <a href="https://www.reddit.com/r/plekt/">Reddit</a>
 </p>
 
 ---
 
-> **v2.0.0.** Plekt writes watched state and playback progress to connected media
+> **v2.1.0.** Plekt writes watched state and playback progress to connected media
 > servers, so **back up first** (Settings → Backup → Local). Report
 > issues on the [issue tracker](https://github.com/Lasikiewicz/plekt/issues).
 
@@ -77,7 +77,7 @@ None of these talk to each other - they all talk to Plekt.
 ## Key Features
 
 - **Canonical sync** - Seamless two-way sync keeps watched state aligned across every connected app with intelligent auto-reconciliation
-- **Force Sync** - Flexible on-demand sync per-title (with season scoping) or library-wide with comprehensive live progress logging; title pushes finish local media servers before draining a paced, retrying Trakt queue, and cancellation finishes the current history item before skipping queued items
+- **Force Sync** - Flexible on-demand sync per-title (with season scoping) or library-wide with comprehensive live progress logging; confirmed plans report partially applied results with missing titles instead of counting unmatched items as done. Title pushes finish local media servers before draining a paced, retrying Trakt queue, and cancellation finishes the current history item before skipping queued items
 - **Instant state restoration** - Automatically synchronizes watch history to newly added media and rebuilt server libraries
 - **Cross-platform resume** - Pause playback on one server and pick up right where you left off on another
 - **Rewatch tracking** - Full multi-watch history logging with smart deduplication that preserves authentic repeat viewings
@@ -87,7 +87,8 @@ None of these talk to each other - they all talk to Plekt.
 - **Personal media organization** - Save movies, shows, and episodes to a watch list or playlists (optionally synced two ways to Plex, Emby, and Jellyfin, or filled automatically from genre, original language, year, and watched rules, with TV playlists holding the next episode of each show, and watched items removed if you choose), and rate them from their media pages; episode ratings use one canonical show/season/episode identity everywhere
 - **Cache-first media detail pages** - Reuse the latest local history snapshot on reload so known artwork, summaries, watched rows, and watch dates stay visible while provider metadata refreshes
 - **Paged media libraries** - Movies and TV Shows load more cards as you scroll without rebuilding the cards already on screen; saved TV pages revalidate after 30 minutes when reopened
-- **Personal Rating Sync** - One-toggle, two-way rating sync with every connected Plex, Emby, Jellyfin, and Trakt account through an isolated durable queue, with Plekt as the conflict authority
+- **Season navigation** - Show pages open the latest regular season at the top; season links select the requested season, with Season 1 opening at the page top and other seasons scrolling into view after loading.
+- **Personal Rating Sync** - One-toggle, two-way rating sync with every connected Plex, Emby, Jellyfin, and Trakt account through an isolated durable queue, with Plekt as the conflict authority; scans missing at least two ratings and over 20% of a provider's rated baseline pause for review with approve/dismiss controls that preserve ratings until approved
 - **Plex Watchlist Sync** - One-toggle, two-way sync between Plekt and the Plex account watchlist, with safe first-run union, durable retries, a Sync now action, and a plain-language explanation of anything Plex refuses
 - **Upcoming episodes calendar** - Air date schedule for upcoming and past releases, pre-cached for instant loading
 - **Discover hub** - Personalized recommendations from your watch history plus cached trending, now-playing, airing-today, and genre feeds paint immediately from saved data, exclude titles you have already watched, and refresh live through the update stream with direct TMDB detail navigation
@@ -95,12 +96,12 @@ None of these talk to each other - they all talk to Plekt.
 - **Seerr integration** - Discover and request movies and TV shows directly from detail pages via Overseerr or Jellyseerr
 - **Movie collections** - Explore related franchise entries, sequels, prequels, and spin-offs from movie detail pages and collection search results
 - **Direct server deep links** - Quick one-click links to jump directly to any title in Plex, Emby, or Jellyfin
-- **Automated backups** - Built-in daily local backups with optional scheduled offsite backups to Backblaze B2
+- **Automated backups** - Built-in daily local backups with optional scheduled offsite backups to Backblaze B2; interrupted restore fences recover after a three-minute stale heartbeat, while failure notices remain until dismissed
 - **Guided first-run setup** - A one-time account claim replaces the old generated-password dead end, followed by a resumable `/setup` wizard that connects media servers, adds metadata, configures webhooks, optionally connects Trakt, and tunes watch and Up Next sync
 - **Self-hosted & private** - Runs entirely on your own hardware with dedicated SQLite storage and full data ownership
 - **Enterprise-grade security** - Hardened with strict Content Security Policy (CSP), scrypt password hashing, rate limiting, and HMAC session signing
 - **High-performance artwork cache** - Fast local caching for high-resolution posters, backdrops, and logos from TMDB, TheTVDB, and Fanart.tv; metadata is warmed in the background as media is discovered or a TV show is rematched so the dashboard stays cache-first
-- **Comprehensive metadata** - Precision episode titles, season numbering, and air dates from TheTVDB; episode cards use their cached season poster when available; rich cast, trailers, and reviews from TMDB
+- **Comprehensive metadata** - Precision episode titles, season numbering, and air dates from TheTVDB; choose and save a poster per season in Edit Images, and use season posters on episode cards when available; rich cast, trailers, and reviews from TMDB
 - **Unified multi-source search** - Blazingly fast search across your local libraries, TMDB movies/shows/collections, and TheTVDB with local media prioritized
 - **Progressive Web App (PWA)** - Installable directly on iOS, Android, macOS, and Windows with a native app experience
 
@@ -119,6 +120,9 @@ On a phone, open the navigation drawer to reach the switches.
 The **Appearance** menu on movie and TV detail pages controls which optional sections,
 such as cast, trailers, and reviews, are shown. It is separate from the style and mode
 switches.
+
+The sidebar **Appearance** panel has a **Text size** slider from 100% to 130%. The setting is
+saved on the Plekt server, so it applies wherever you open Plekt.
 
 ---
 
@@ -205,7 +209,7 @@ everything else about setup is identical.
 
 ### Public demo
 
-Try the [public Plekt demo](https://demo.plembfin.com/) with `demo` / `demo`.
+Try the [public Plekt demo](https://demo.plekt.net/) with `demo` / `demo`.
 It runs in an isolated demo mode on a dedicated Oracle Cloud Compute instance;
 actions are simulated in the browser, media-provider integrations are disabled,
 and the fixed bundled artwork and metadata catalogue is served without contacting
@@ -219,30 +223,42 @@ rebuild an image.
 
 ### Method A: Docker Compose (recommended)
 
-1. Create a `.env` file beside the Compose file and fill in a unique admin password.
-   Never commit this file:
-   ```dotenv
-   ADMIN_PASSWORD=
-   ```
-   The value must be filled in before starting the container.
-2. Create a `docker-compose.yml`. This pulls the published `:latest` image directly -
-   no local clone needed:
-   ```yaml
-   services:
-     plekt:
-       image: ghcr.io/lasikiewicz/plekt:latest
-       container_name: plekt
-       ports:
-         - "5056:5055"
-       volumes:
-         - ./data:/data
-       environment:
-         ADMIN_USERNAME: admin
-         ADMIN_PASSWORD: "${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env before starting}"
-       restart: unless-stopped
-   ```
-3. Start it: `docker compose up -d`
-4. Open `http://localhost:5056` and log in.
+Create a `.env` file beside the Compose file with your own admin password (never commit it),
+save the Compose file below as `docker-compose.yml`, then run `docker compose up -d` and open
+`http://localhost:5056`. It pulls the published image, so no local clone or build is needed:
+
+```dotenv
+ADMIN_PASSWORD=your-own-password
+```
+
+```yaml
+services:
+  plekt:
+    image: ghcr.io/lasikiewicz/plekt:latest
+    container_name: plekt
+    ports:
+      - "5056:5055"
+    volumes:
+      # Database, cached artwork and generated config live here. Keep this folder.
+      - ./data:/data
+    environment:
+      # Host port Plekt is published on.
+      PLEKT_PUBLISHED_PORT: "5056"
+      # Dashboard login. Set ADMIN_PASSWORD in the .env file beside this file.
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env before starting}"
+    restart: unless-stopped
+```
+
+Then, in the dashboard:
+
+1. Add a media server (Plex, Jellyfin or Emby) under the setup wizard's **Media servers** stage.
+2. Import your existing watch history (see [Importing Watch History](#importing-watch-history)).
+3. Check **Sync Activity** to see what Plekt changed and why.
+
+Every optional setting (webhooks, backups, Trakt, extra metadata keys) is listed in the
+[Configuration Reference](#configuration-reference). The default quick-start Compose file is
+[`docker-compose.yml`](docker-compose.yml) in this repository.
 
 > [!IMPORTANT]
 > On **Docker Desktop for macOS or Windows**, keep `/data` on a named volume, not a
@@ -258,8 +274,9 @@ tester instance, use the secure overlay below behind an HTTPS reverse proxy or V
 give each tester an isolated `data/` volume.
 
 > [!TIP]
-> Building from a local clone instead (for contributing changes)? Swap the `image:`
-> line for `build: .`, then run `docker compose up -d --build`.
+> Building from a local clone instead (for contributing changes)? Use the dev overlay:
+> `docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build`.
+> This builds your checkout as `plekt:dev`; the default file pulls the published image.
 
 > [!TIP]
 > Want a hardened production setup (read-only filesystem, required secrets,
@@ -460,7 +477,7 @@ playing, backing off to every 45 seconds while idle.
 Unplayed`. Leave everything else unticked, and enable **Send All Properties**.
 
 **Jellyfin** - Install the **Webhooks** plugin → add a **Generic Webhook** named
-`plembfin` → paste the URL → enable `Playback Start/Progress/Stop` and `User Data
+`plekt` (a display label; existing webhook names can stay unchanged) → paste the URL → enable `Playback Start/Progress/Stop` and `User Data
 Saved` under Notification Type, `Movies`/`Episodes` under Item Type → check **Send All
 Properties**.
 
@@ -472,7 +489,7 @@ Plekt runs automated daily backups; each type has its own schedule, retention, a
 manual Back Up Now button.
 
 - **Watch history backups** - snapshots of history, playstates, and resume markers (`data/backups/watch-history`)
-- **Full Plekt backups** - AES-256-GCM encrypted, includes settings/keys/credentials/history (`data/backups/plembfin`); restore checks SQLite integrity before import and explains recovery options if the database is corrupt
+- **Full Plekt backups** - AES-256-GCM encrypted, includes settings/keys/credentials/history (`data/backups/plembfin`, including new installs; the folder name is retained for compatibility); restore checks SQLite integrity before import and explains recovery options if the database is corrupt
 - **Personal watchlist recovery** - full backups include the local canonical watchlist and sync ledger; restore pauses provider delivery until an explicit publish, while watch-history-only backups exclude it
 - **Remote backups** - optional Backblaze B2 copies of either type, with per-type schedules and retention settings (Settings → Backup → Remote)
 
@@ -539,9 +556,8 @@ is in [`.env.example`](.env.example).
 | `TMDB_API_KEY` | _none_ | Default TMDB key (Settings takes precedence). |
 | `YOUTUBE_API_KEY` | _none_ | Optional key for trailer metadata (Settings takes precedence). |
 | `OMDB_API_KEY` | _none_ | Optional key for IMDb rating badges. Free tier: 1,000 req/day. |
-| `PUBLIC_TRAKS_SITE_KEY` | _none_ | Optional public website build setting for Traks; the browser uses first-party `/t` and `/api/event` routes. Use the current key from the Traks Installation panel. |
-| `TRAKS_COLLECTOR_ORIGIN` | _none_ | Cloudflare Pages runtime origin for the Traks collector; it is kept out of browser configuration. `PUBLIC_TRAKS_SCRIPT_URL` remains a legacy fallback. |
-| `PLEKT_TRAKS_COLLECTOR_ORIGIN` / `PLEKT_TRAKS_SITE_KEY` | _none_ | Optional public-demo Traks settings; the demo proxies `/t` and `/api/event` first-party. `PLEKT_TRAKS_SCRIPT_URL` remains a legacy origin fallback. |
+| Public website Traks | Fixed in website source | `plekt.net` loads the Traks collector script with its own site key. |
+| Public demo Traks | Demo mode only | `PLEKT_DEMO_MODE=1` enables the separate demo site key and collector CSP allowance. Self-hosted installs load no tracker. |
 | `PLEX_SERVER_URL` / `PLEX_TOKEN` / `PLEX_USERNAME` / `PLEX_ENABLED` | _none_ | Default Plex values (Settings takes precedence). |
 | `EMBY_SERVER_URL` / `EMBY_API_KEY` / `EMBY_USER_ID` / `EMBY_ENABLED` | _none_ | Default Emby values (Settings takes precedence). |
 | `JELLYFIN_SERVER_URL` / `JELLYFIN_API_KEY` / `JELLYFIN_USER_ID` / `JELLYFIN_ENABLED` | _none_ | Default Jellyfin values (Settings takes precedence). |
@@ -564,6 +580,8 @@ is in [`.env.example`](.env.example).
 | `PLEKT_DEBUG_SCHEDULER` | _off_ | Set `1` to log per-step scheduler timing, plus a per-tick summary carrying the real interval between ticks. |
 | `PLEKT_PAUSE_SCHEDULED_WORKER` | _off_ | Diagnostic mode: keep real-time provider listeners available while pausing scheduled sync ticks and background-job polling. |
 
+For SQLite tables and persisted application data, see [`docs/sqlite-schema.md`](docs/sqlite-schema.md).
+
 ---
 
 ## Architecture
@@ -581,12 +599,19 @@ check, and a clean-directory boot test - before it ships. Personal watchlist del
 its own leased queue, provider ownership ledger, complete-snapshot gate, and failure budget,
 so a provider watchlist outage cannot pause watched-state or rating synchronization.
 
+The scheduler automatically recovers interrupted restore locks after three minutes
+without a heartbeat, allowing live playback tracking and history recording to resume.
+
 For the full picture - file map, subsystem map, and per-feature references - start at
 [`docs/architecture.md`](docs/architecture.md) and the [docs index](docs/README.md).
 
 ---
 
 ## Development Workflow
+
+Agents start with `AGENTS.md` and `CLAUDE.md`. Release procedures keep their explicit
+changelog and running-build approvals; read-only workflow prechecks are described in
+[Development](docs/development.md#workflow-checks).
 
 ```bash
 npm install
@@ -630,7 +655,7 @@ Every push to `develop`/`alpha` builds and publishes a rolling image
 publishing - a breaking change is caught before release, not after.
 
 The **Force to main** release workflow publishes AMD64 and ARM64 images, then updates
-the Oracle-hosted [public demo](https://demo.plembfin.com/) and verifies its release
+the Oracle-hosted [public demo](https://demo.plekt.net/) and verifies its release
 version. It does not update the local Portainer environment.
 
 The local pre-push gate is never bypassed during promotion. If its test run hits the
@@ -643,7 +668,7 @@ after they pass; the retried push must still pass the complete build gate.
 
 - **[Support Plekt](https://github.com/sponsors/Lasikiewicz)** - help keep the complete self-hosted application free, private, and maintained. Sponsorship does not unlock features or change roadmap priority.
 - **[Discord](https://discord.gg/7ZmEGKcRC5)** - chat with other users, get help, and follow along with development.
-- **[r/plembfin](https://www.reddit.com/r/plembfin/)** - discussions, feature requests, and release announcements on Reddit.
+- **[r/plekt](https://www.reddit.com/r/plekt/)** - discussions, feature requests, and release announcements on Reddit.
 
 ---
 

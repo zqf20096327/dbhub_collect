@@ -195,6 +195,22 @@ Pantau inspects remote hosts via non-interactive SSH commands, continuously vali
 - **Automated Hop Analysis**: Categorizes network hops into Local/Private VPC, ISP Transit, and Destination zones, with automated blackhole packet drop detection and latency jump alerts (>60ms).
 - **Concurrency & Human-Error Protection**: Singleflight guard prevents concurrent diagnostic tasks per source host, while target selection automatically disables unreachable/offline hosts.
 
+### 21. ⚖️ Multi-Host Side-by-Side Comparison & Scoring Matrix
+- **Head-to-Head Comparative Matrix**: Side-by-side interactive evaluation comparing 2 to 4 hosts inside a dedicated Workspace Modal using client-side inspection telemetry.
+- **Standardized Multi-Category Scoring**: Evaluates hosts across Compute, Storage & I/O, Network Health, and System Hygiene & Lifecycle with a 5% deadband noise filter and stale-host penalty.
+- **Automated Decision Synthesis & Export**: Generates executive workload placement recommendations and one-click formatted Markdown summaries for stakeholder reports.
+
+### 22. 📌 File Pinning with Notes & Global Bookmarks
+- **Operational File & Directory Pinning**: Pin critical configuration files and log paths per host with contextual operator notes and visual badges.
+- **Quick Access & Global Bookmarks**: Instant access via the file manager Quick Access toolbar or globally across all hosts through the header `🔖 Bookmarks` launcher.
+- **Cross-Host Navigation & Terminal Jump**: Search pinned files globally, open them in the integrated code editor, or launch a Terminal Dock session straight into the parent directory.
+
+### 23. ⚡ Terminal Presets Live Search & Pinned Paths Quick-Access
+- **Terminal Presets Live Search**: Instant real-time filtering in the terminal presets dropdown by preset title, command, or tmux session tag (`t:tag`), enabling rapid command execution across extensive preset catalogs.
+- **Terminal Pinned Paths Dropdown**: Dedicated Quick-Access dropdown (`📌`) directly in the terminal toolbar listing all pinned files and directories for the active host with real-time path & note search filtering, 1-click `cd` directory jump, and quoted path injection into the shell session.
+- **Streamlined Terminal Toolbar & Direct Navigation**: Clean toolbar layout with host status badge, font zoom controls (`+`/`-`/`0`), 1-click context jump to Host File Manager (`📁 Files`), and split-pane controls (`⬛ Split`).
+- **Active Working Directory Tracking**: Real-time tracking of remote shell working directory via shell window titles and OSC 7 ANSI escape sequences.
+
 ---
 
 ## 🚀 Quick Start

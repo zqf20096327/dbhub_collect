@@ -1,32 +1,17 @@
-### 基于SpringBoot + Vue物料质量检测系统.
+![](https://img.shields.io/badge/License-MIT-blue.svg)
 
-耗材入库质检、IQC进料检验、质量追溯系统
+![](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)
 
-##### 基础档案与标准定义
-###### 检测项/模板管理： 自定义耗材检测指标与分级标准，通过数字化模板实现不同物料检测方案的快速调用。
+![](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-###### 物料/供应商管理： 统一维护耗材属性与供应来源，建立完整的供应商评价体系，从源头把控物料质量。
+# 基于 SpringBoot + Vue 的物料质量检测系统 (Material Quality Inspection System)
 
-###### 常见缺陷库： 预设标准缺陷分类与代码，规范检测人员对异常问题的描述，为后续质量分析提供结构化数据。
+来料检验(IQC) · 过程检验(IPQC) · 出货检验(OQC) · 检测模板 · 缺陷管理 · 工单管理 · 统计看板 · 全流程追溯
 
-##### 生产组织与资源配置
-###### 客户/工单管理： 关联客户需求并下达检测任务，全过程追踪工单执行进度，确保检测业务有序流转。
-
-###### 员工/工作站管理： 科学配置检测人员权限与设备工位，实现人、机、料、法、环的数字化协同管理。
-
-##### 全链路质量检验体系
-###### 来料检测 (IQC)： 严控入库第一道关卡，对到货耗材进行抽样核验，防止不合格品流入生产或仓储环节。
-
-###### 过程检验 (IPQC)： 实时监控生产加工中的耗材状态，及时发现并拦截工序异常，降低成品的质量风险。
-
-###### 出货检验 (OQQC)： 完成成品包装后的终审抽检，确保交付至客户手中的耗材完全符合合同质量标准。
-
-##### 数字化支撑与统计决策
-###### 统计看板： 聚合合格率、缺陷趋势及供应商表现等核心指标，通过可视化图表辅助管理层进行质量决策。
-
-###### 系统管理： 负责角色权限分配、系统日志审计及基础参数设置，保障整个检测平台运行的安全与稳定。
+本项目是一套面向制造业企业的全流程质量管理系统（QMS），采用前后端分离架构，覆盖管理员单一角色。系统围绕"来料检验、过程检验、出货检验、检测模板管理、常见缺陷库、工单管理、供应商管理、统计看板"等核心业务设计，支持检验标准结构化配置、检验任务自动触发、不合格品闭环处理、SPC统计过程控制、质量数据可视化分析，实现从来料到出货的全链路质量管控与追溯，适用于离散制造、电子装配、机械加工、汽车零部件等制造行业的质量管理场景。
 
 #### 安装环境
+️**注意**：请确保您的开发环境已安装以下依赖。
 
 JAVA 环境 
 
@@ -34,59 +19,145 @@ Node.js环境 [https://nodejs.org/en/] 选择14.17
 
 Yarn 打开cmd， 输入npm install -g yarn !!!必须安装完毕nodejs
 
-Mysql 数据库 [https://blog.csdn.net/qq_40303031/article/details/88935262] 一定要把账户和密码记住
+Mysql 数据库 一定要把账户和密码记住
 
 redis
 
-Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
+Idea 编译器
 
-WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
+WebStorm OR VScode 编译器
 
 #### 采用技术及功能
 
 后端：SpringBoot、MybatisPlus、MySQL、Redis、
 前端：Vue、Apex、Antd、Axios
 
-平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件)
+平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件) + 百度地图 API
 
 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)
 
 开发环境：windows10 or windows7 ， vscode or webstorm ， idea + lambok
 
-> 管理员: 客户管理、检测项管理、检测模板、常见缺陷、物料管理、工单管理、员工管理、工作站管理、供应商信息、来料检测、过程检验、出货检验、系统管理、统计看板
+---
+
+## 核心特性
+
+- **全流程质量检验**：覆盖来料检验（IQC）、过程检验（IPQC，含首件/巡检/末件）、出货检验（OQC）三大检验环节，支持检验任务自动触发与移动端数据采集。
+- **检测模板管理**：可视化配置检验模板，支持按物料/产品绑定检验项目、检验方法、判定标准（上下限/公差带）、抽样方案（AQL/GB2828），实现检验标准结构化与版本管理。
+- **常见缺陷库**：建立标准化缺陷分类体系（Critical/Major/Minor），记录缺陷代码、缺陷描述、缺陷图片、发生工序、根因分析，支持缺陷频次统计与柏拉图分析。
+- **工单管理**：管理质量检验工单，包括工单编号、关联物料/产品、检验类型、检验状态（待检验/检验中/已完成/异常）、检验员、检验时间，支持工单自动派发与进度跟踪。
+- **不合格品闭环**：不合格品自动触发评审流程（MRB），支持返工、返修、让步接收、报废、退货五种处置方式，关联纠正预防措施（CAPA）跟踪，确保问题闭环。
+- **SPC统计过程控制**：对计量型检验数据自动生成控制图（Xbar-R图、P图等），支持过程能力指数（Cp/Cpk）计算与异常预警。
+- **供应商质量管理**：管理供应商档案与质量评级，自动统计供应商来料合格率、PPM值，支持供应商质量绩效评估与改进协同。
+- **统计看板**：可视化展示质量核心指标，包括合格率趋势、缺陷柏拉图、供应商质量记分卡、工单完成率、SPC报警等，支持多维度筛选与报表导出。
+- **全流程追溯**：支持按物料批次号/工单号/序列号进行正反向质量追溯，从来料批次追溯至成品出货，或从成品反向追溯至原材料批次与供应商。
+---
+
+## 适用场景
+
+- 离散制造企业质量管理（电子装配、机械加工、汽车零部件等）
+- 来料检验（IQC）数字化管理
+- 生产过程质量控制与SPC监控
+- 成品出货检验（OQC）与质量报告生成
+- 供应商质量绩效评估与协同改进
+- 质量追溯与客诉处理
+- 制造业企业ISO9001/IATF16949质量管理体系落地
+---
+
+## 功能模块概览
+
+## 管理员端
+
+管理员为系统唯一角色，负责平台全部功能的配置、执行与管理：
+
+### 基础数据管理
+
+- **客户管理**：管理客户信息，包括客户名称、联系人、联系方式、地址、客户特殊质量要求（如PPAP等级、标识规范），支持按客户绑定差异化检验标准。
+- **供应商信息管理**：管理供应商档案，包括供应商名称、行业类别、联系人、联系方式、地址、资质文件、质量评级、合作状态，支持供应商质量绩效统计（来料合格率、PPM值）。
+- **物料管理**：管理物料/产品主数据，包括物料编码、名称、规格型号、物料类型（原材料/半成品/成品）、所属客户、关联供应商、检验等级、AQL抽样方案，支持物料分类树形管理与条码生成。
+- **员工管理**：管理系统用户与检验员信息，包括姓名、工号、所属部门（质量部/生产部等）、岗位角色（IQC检验员/IPQC检验员/OQC检验员/质量工程师/质量经理）、联系方式、账户状态。
+- **工作站管理**：管理检验工作站/工位信息，包括工作站编号、名称、所属产线/车间、工位类型（来料检验站/过程检验站/出货检验站）、关联检测设备、工位状态。
+
+### 检验标准管理
+
+- **检测项管理**：管理检验项目库，包括检测项名称、检测项类型（计量型/计数型）、检测方法（目视/卡尺/三坐标/光谱仪等）、计量单位、标准值、上限、下限、公差带，支持检测项分类管理。
+- **检测模板**：可视化配置检测模板，将检测项组合为完整检验方案，绑定适用物料/产品、抽样方案（GB2828/AQL）、判定规则、检验工序（来料/过程/出货），支持模板版本管理与生效/失效控制。
+- **常见缺陷**：管理缺陷分类库，包括缺陷代码、缺陷名称、缺陷等级（Critical/Major/Minor）、缺陷描述、缺陷图片、适用物料/工序、根因分类，支持缺陷频次统计与TOP问题分析。
+
+### 质量检验执行
+
+- **来料检测（IQC）**：采购订单到货后自动生成来料检验工单，检验员扫码加载检验模板，逐项录入检测结果（计量型填实测值自动判定、计数型选合格/不合格），系统根据AQL抽样方案自动判定批次结论（放行/隔离/让步/退货），不合格批次自动触发MRB评审流程。
+- **过程检验（IPQC）**：覆盖首件检验、巡检、末件检验场景，巡检任务按预设频率自动推送至检验员，支持关键工序SPC实时监控与异常预警，检验数据自动关联生产工单与工序。
+- **出货检验（OQC）**：成品出货前按客户标准执行出货检验，支持功能测试、外观检查、包装验证，检验报告自动生成PDF并关联发货通知单。
+
+### 工单与异常管理
+
+- **工单管理**：统一管理所有质量检验工单，包括工单编号、检验类型（IQC/IPQC/OQC）、关联物料/批次、检验员、工单状态（待检验/检验中/已完成/异常）、创建时间、完成时间，支持按状态/时间/检验员/物料筛选与工单进度跟踪。
+- **不合格品管理**：不合格品自动登记并触发评审流程，支持返工、返修、让步接收、报废、退货五种处置方式，记录处置意见、责任部门、处理结果，支持返工后重新检验。
+- **CAPA管理**：纠正与预防措施跟踪，记录问题描述、根因分析（5Why/鱼骨图）、纠正措施、预防措施、责任人、计划完成时间、实际完成时间、效果验证，超期自动提醒升级。
+
+### 统计看板
+
+- **质量概览看板**：实时展示今日检验工单数、合格率、不合格品数量、SPC报警数等核心指标。
+- **合格率趋势**：按日/周/月展示来料合格率、过程合格率、出货合格率趋势折线图。
+- **缺陷分析**：缺陷柏拉图（Pareto Chart）展示TOP缺陷类型与频次，支持按物料/工序/供应商维度筛选。
+- **供应商质量记分卡**：展示各供应商来料合格率、PPM值、批次合格率排名，支持供应商质量绩效对比。
+- **SPC控制图**：对关键计量特性自动生成Xbar-R图、P图等，实时显示过程能力指数（Cp/Cpk），异常点自动标注。
+- **工单统计**：展示工单完成率、平均检验时长、检验员工作量统计。
+- **报表导出**：支持检验报告、质量月报、供应商质量报告等导出为Excel/PDF。
+
+### 系统管理
+
+- **角色权限管理**：配置系统角色与权限，支持按部门/岗位分配功能权限与数据权限。
+- **操作日志**：记录用户操作日志，包括操作人、操作时间、操作模块、操作内容，支持日志查询与审计。
+- **数据字典**：管理系统基础字典数据，包括物料分类、缺陷分类、检验类型、处置方式等。
+
+## 项目结构
+
+```text
+pharmacy-dispensing-system/
+├── backend/            # 后端 API 服务
+│   ├── src/
+│   │   ├── controllers/  # 控制器
+│   │   ├── models/       # 数据模型
+│   │   ├── routes/       # 路由
+│   │   └── services/     # 业务逻辑
+│   └── package.json
+├── frontend/           # 前端 Web 应用
+│   ├── src/
+│   │   ├── views/      # 页面视图
+│   │   ├── components/ # 公共组件
+│   │   └── store/      # 状态管理
+│   └── package.json
+├── docs/               # 项目文档与 API 接口说明
+├── LICENSE
+└── README.md
+```
+---
 
 
 #### 前台启动方式
 安装所需文件 yarn install 
 运行 yarn run dev
 
-#### 后端启动方式
-
-1.首先启动redis，进入redis目录终端。输入redis-server回车
-2.导入sql文件，修改数据库与redis连接配置
-3.idea中启动后端项目
-
 #### 默认后台账户密码
 [管理员]
 admin
-1234qwer
-
+123456
 
 #### 项目截图
 
 |  |  |
 |---------------------|---------------------|
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934504638.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934405280.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934490065.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934394961.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934481870.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934377201.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934471611.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934359291.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934460695.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934345379.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934441477.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934334801.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934425388.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934323809.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934416369.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1712934314638.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/work/936e9baf53eb9a217af4f89c616dc19.png) |
-
-
+| ![](./assets/image%20(1).png) | ![](./assets/image%20(2).png) |
+| ![](./assets/image%20(3).png) | ![](./assets/image%20(4).png) |
+| ![](./assets/image%20(5).png) | ![](./assets/image%20(6).png) |
+| ![](./assets/image%20(7).png) | ![](./assets/image%20(8).png) |
+| ![](./assets/image%20(9).png) | ![](./assets/image%20(10).png) |
+| ![](./assets/image%20(11).png) | ![](./assets/image%20(12).png) |
+| ![](./assets/image%20(13).png) | ![](./assets/image%20(14).png) |
+| ![](./assets/image%20(15).png) | ![](./assets/image%20(16).png) |
+| ![](./assets/image%20(17).png) 
 
 #### 演示视频
 
@@ -104,7 +175,10 @@ WeChat: `Storm_Berserker`
 
 > 项目部署调试不好包退！功能逻辑没讲明白包退！
 
+<div align=center><img align="center" src="./assets/product_word.png" alt="fankekeke" /></div>
+
 #### 其它资源
+[2026年-答辩顺利通过-客户评价🀄](https://berserker287.github.io/2026/06/29/2026%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
 [2025年-答辩顺利通过-客户评价🍜](https://berserker287.github.io/2025/06/18/2025%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
@@ -122,11 +196,14 @@ WeChat: `Storm_Berserker`
 
 [计算机专业毕业答辩小tips](https://zhuanlan.zhihu.com/p/145911029)
 
-
 #### 接JAVAWEB毕设，纯原创，价格公道，诚信第一
 
 `网站建设、小程序、H5、APP、各种系统 选题+开题报告+任务书+程序定制+安装调试+项目讲解+论文+答辩PPT`
 
 More info: [悲伤的橘子树](https://berserker287.github.io/)
 
-<p><img align="center" src="https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/%E5%90%88%E4%BD%9C%E7%89%A9%E6%96%99%E6%A0%B7%E5%BC%8F%20(3).png" alt="fankekeke" /></p>
+<div align="center"><img align="center" src="./assets/chat_qr_code.png" alt="fankekeke" width=250 /></div>
+
+<p><img align="center" src="./assets/wechat_group.png" alt="fankekeke" /></p>
+
+**感谢查看**

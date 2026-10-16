@@ -42,14 +42,24 @@ What ships today:
   `npx @ekwo-ai/mcp`, so any AI agent can operate the books.
 - **Modules** for fixed assets, budgets, corporate income tax and electronic
   invoicing.
+- **The compass of the company** — `financial_analysis()` reads, from the
+  posted entries, the aggregates a country pack defines (revenue, equity,
+  cash, receivables, payables…), or, in a country whose pack defines none,
+  thirteen of them read by account type through the generic framework, so that days of cash, net margin, current
+  ratio, equity ratio, days of sales and of purchases outstanding and growth
+  come from the books with nothing to set up. The Analysis screen of Ekwo
+  Cloud and the `financial_analysis` tool of the MCP server read it;
+  [`docs/analysis.md`](docs/analysis.md) says how, and how a pack adds the
+  section.
 - **Format libraries** under MIT — the files administrations, banks and
   e-invoicing networks exchange, written and read.
 
 Who it is for: a company that wants to keep its own books with an AI at the
-keyboard; an accounting firm that runs several companies inside one
-installation; a developer who needs a real double-entry core with tax rules as
-data rather than as code; and anyone who wants to leave a proprietary system
-with the books intact.
+keyboard, and a founder who wants to know, from those books, how long the cash
+lasts and how fast customers pay; an accounting firm that runs several
+companies inside one installation; a developer who needs a real double-entry
+core with tax rules as data rather than as code; and anyone who wants to leave
+a proprietary system with the books intact.
 
 ## What is in this repository
 
@@ -431,6 +441,27 @@ belongs here, under AGPL, and no licence key gates it. If no, it is a service,
 because something has to be kept alive for it — a contract, a certificate, a
 credential, a machine. [`docs/cloud-services.md`](docs/cloud-services.md) lists
 them, and says what will never be sold.
+
+## Support
+
+Three ways to get help, from the open to the dedicated:
+
+- **In the open, for everyone.** [Issues](https://github.com/Ekwo-ai/ekwo-os/issues)
+  for a bug or a rule that is wrong for your country, with the text of law
+  cited; [Discussions](https://github.com/Ekwo-ai/ekwo-os/discussions) for a
+  question or an idea. The team reads both, and a fix lands in this repository
+  for everyone.
+- **By e-mail, with Hosted and Pro.** A company or a firm on
+  [Ekwo Cloud](https://cloud.ekwo.ai) writes from its Support page and gets a
+  written answer from the people who write Ekwo. What each plan includes:
+  [ekwo.ai/pricing](https://ekwo.ai/pricing/).
+- **On quote: Ekwo Consulting.** The services line of Ekwo, for what no plan
+  covers — a country pack written or reviewed with a professional of that
+  country, a module, a connector to the software you already run, a migration
+  done with you, onboarding and training, or a named contact with an agreed
+  response time. A scope, a price and a date before anything starts, and what
+  belongs in this repository is published here:
+  [ekwo.ai/consulting](https://ekwo.ai/consulting/).
 
 ## Security
 

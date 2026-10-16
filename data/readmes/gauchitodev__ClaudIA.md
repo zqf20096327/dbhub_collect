@@ -94,6 +94,8 @@ Lo mínimo:
 
 Las de Groq, OpenRouter, NVIDIA y Cerebras son el respaldo de la IA, y cada proveedor se usa solo si tiene su key. El resto es opcional y está explicado en el mismo archivo. `config.toml` está en `.gitignore` y nunca se sube.
 
+Los horarios del bot (la trivia, la pregunta del día, los cumpleaños, los cierres) van con la hora de Uruguay (`America/Montevideo`). Para usar otra zona, definí `TZ` en el entorno antes de arrancarlo; `.estado` muestra la que está usando.
+
 ### 4. Primer arranque y vinculación
 
 ```sh
@@ -133,7 +135,9 @@ Android duerme a Termux si no se le avisa. Lo que usamos en la tablet:
 
    y darle permiso de ejecución con `chmod +x ~/.termux/boot/arrancar`.
 
-`npm start` corre `start-process.js`, que relanza el bot solo si se cae. Ojo con el log: tiene volcados de las claves de la sesión de Baileys, así que no lo compartas entero.
+4. Opcional, para ver la batería con `.bat` y en `.estado`: `pkg install termux-api` y la app **Termux:API**, también de F-Droid (cada fuente firma sus versiones distinto, así que tiene que venir del mismo lugar que Termux).
+
+`npm start` corre `start-process.js`, que relanza el bot solo si se cae. Si se cae apenas arranca (por ejemplo, con better-sqlite3 compilado para otra versión de Node después de un `pkg upgrade`), espera cada vez más entre intentos, hasta 5 minutos, para no llenar el log. Ojo con el log: tiene volcados de las claves de la sesión de Baileys, así que no lo compartas entero.
 
 ### Actualizar
 

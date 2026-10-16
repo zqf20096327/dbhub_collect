@@ -11,7 +11,7 @@ Local, queryable knowledge base and note vault with hybrid search and an entity-
 [![PyPI downloads](https://img.shields.io/pypi/dm/secondbrain-py)](https://pypistats.org/packages/secondbrain-py)
 [![GitHub stars](https://img.shields.io/github/stars/mshtawythug/second-brain)](https://github.com/mshtawythug/second-brain)
 
-Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat. You read it through the CLI or the [local web UI](#local-web-ui); the older [rendered wiki](docs/vault-and-wiki.md) still builds, as a legacy view.
+Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat. You read it through the CLI or the [local web UI](#local-web-ui); the older [rendered wiki](docs/vault-and-wiki.md) is a legacy view, dormant since R2 (`brain-rebuild --only quartz` rebuilds it).
 
 The everyday loop — capture a note, search it back, read the top hit, check the corpus:
 
@@ -151,6 +151,8 @@ brain ui --lan --read-only                # read from your phone: LAN address + 
 Reading from another device always needs a token. `--lan` binds this machine's LAN address and mints a token, then prints the URL to open. See [Reading your brain from a phone](docs/guides/brain-ui-on-your-phone.md) for the manual `--host <LAN address> --token <secret>` form and the caveats.
 
 It adds no runtime dependency — `starlette` and `uvicorn` already ship as transitive deps of the MCP SDK — and the front end is hand-written static assets with no bundler and no CDN, so it works fully offline.
+
+If the vault-sync watcher is not running, the top bar says so — "Watcher not running — external edits will not appear in search" — because edits made outside `brain ui` only reach search once `brain vault sync --watch` (or a manual `brain vault sync`) picks them up.
 
 Beside each note, the inspector shows its local link graph — the note and its direct neighbours, click a node to open it — and a rail of related notes ranked by the same hybrid scoring and cosine floor `brain search` uses. Both are read-only: they read what is already in the database and never trigger a build.
 

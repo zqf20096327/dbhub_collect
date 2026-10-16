@@ -2,6 +2,7 @@
 <h1 align="center">JizzCraft</h1>
 <p align="center"><b>A private, offline library and player for your own adult collection.</b><br>
 Your files stay where they are. Your history stays on your disk. Your browser history stays boring.</p>
+<p align="center"><i>Offline by design: nothing leaves your machine, including your dignity.<br>No telemetry. Only shame, and that stays local too. Self-hosted, self-served.</i></p>
 <p align="center">
   <a href="https://github.com/kerstz/JizzCraft/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/kerstz/JizzCraft?include_prereleases&style=flat-square&color=ff8a6b"></a>
   <a href="https://github.com/kerstz/JizzCraft/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/kerstz/JizzCraft/ci.yml?branch=main&style=flat-square&label=CI"></a>
@@ -76,12 +77,12 @@ gh attestation verify jizzcraft-*-linux.tar.xz --repo kerstz/JizzCraft   # build
 
 Because the usual options are a general-purpose media player that forgets everything, a self-hosted media server with a web UI and an account system for an audience of one, or a folder called `homework`.
 
-- **Your files are read, never touched.** No moves, no renames, no sidecar files, no tags written into your media. Ratings, history and markers live in one SQLite database. A test hashes a media tree before and after every engine command.
-- **Offline is a build property, not a setting.** The default build does not contain a network stack, and a test fails if one sneaks into the dependency tree. GStreamer's network-capable elements are removed from the app's registry at start-up, so a streaming playlist renamed to `.mp4` is refused, not fetched.
-- **Discreet when it matters.** `Ctrl+Shift+H` is a boss key (pause, mute, discreet mode, minimize). Discreet mode retitles the window "Viewer", swaps the icon, hides names and blurs thumbnails. Share-safe mode blurs everything until hovered. A neutral "Viewer" launcher starts the app disguised.
-- **Keyboard first, one hand if you like.** Arrows, `Enter`, `/` to search, `V` to triage new imports, `R` for a random pick. A left-hand preset puts browsing, playback, ratings and the boss key around `WASD` ([details](#one-hand-is-enough)), which is also a motor-accessibility setting.
-- **Native and fast.** A virtualized grid that renders only visible rows and loads only a window of them from SQLite, thumbnails in a background pool, playback paced by the GStreamer clock. Measured, including where it is slow ([docs/bench.md](docs/bench.md)).
-- **Scriptable.** One registry of named commands drives the menus, the shortcuts, a JSON CLI and `--cmd` ([Built for agents](#built-for-agents)).
+- **Your files are read, never touched.** No moves, no renames, no sidecar files, no tags written into your media. Ratings, history and markers live in one SQLite database. A test hashes a media tree before and after every engine command. Someone in this relationship has to keep their hands to themselves.
+- **Offline is a build property, not a setting.** The default build does not contain a network stack, and a test fails if one sneaks into the dependency tree. GStreamer's network-capable elements are removed from the app's registry at start-up, so a streaming playlist renamed to `.mp4` is refused, not fetched. It doesn't ignore the internet; it has never heard of it.
+- **Discreet when it matters.** `Ctrl+Shift+H` is a boss key (pause, mute, discreet mode, minimize). `Ctrl+Shift+M` is a panic switch: it jumps full-screen, with sound, to a local video you chose in advance (Library menu, Privacy, "Panic video"), turns discreet mode on and records nothing in history; with no video chosen it acts as the boss key. Discreet mode retitles the window "Viewer", swaps the icon, hides names and blurs thumbnails. Share-safe mode blurs everything until hovered. A neutral "Viewer" launcher starts the app disguised. Your alibi plays at full volume.
+- **Keyboard first, one hand if you like.** Arrows, `Enter`, `/` to search, `V` to triage new imports, `R` for a random pick. A left-hand preset puts browsing, playback, ratings and the boss key around `WASD` ([details](#one-hand-is-enough)), which is also a motor-accessibility setting. Gamers will feel right at home; that is the explanation we are going with.
+- **Native and fast.** A virtualized grid that renders only visible rows and loads only a window of them from SQLite, thumbnails in a background pool, playback paced by the GStreamer clock. Measured, including where it is slow ([docs/bench.md](docs/bench.md)). Blazingly fast (the Rust community requires us to say this), blazingly discreet (the part you care about).
+- **Scriptable.** One registry of named commands drives the menus, the shortcuts, a JSON CLI and `--cmd` ([Built for agents](#built-for-agents)). Yes, you can automate it. No, we won't ask why.
 
 ### A look around
 
@@ -109,6 +110,9 @@ One code base, one `main` branch, two builds. The editions are two release tarba
 | Build | `cargo build --release -p jizzcraft` | `cargo build --release -p jizzcraft --features online` |
 | Release file | `jizzcraft-<version>-<arch>-linux.tar.xz` | `jizzcraft-online-<version>-<arch>-linux.tar.xz` |
 | Install | `install.sh` (or `--edition offline`) | `install.sh --edition online` |
+| Streaming | n/a | Direct, HLS and DASH playback from addresses you give; nothing written to disk unless you press Download. |
+| Web pages | n/a | A generic page reader for standard video markup, plus your own resolver tools and your own extractor rules (JSON you write). It knows no site and ships no rule. |
+| Saving | n/a | Download a file, page, HLS or DASH video to a folder you choose: never overwrites, resumes within a session, pauses on a full disk. Live streams are refused. |
 | Proxy / VPN kill switch | n/a | yes: with it on, nothing connects unless your proxy or VPN interface is set |
 
 Library, settings and thumbnails are shared, so switching editions loses nothing. JizzCraft ships **no site, indexer, tracker, source or catalog** in either edition. Details: [docs/editions.md](docs/editions.md).
@@ -119,11 +123,11 @@ Library, settings and thumbnails are shared, so switching editions loses nothing
 > JizzCraft is **alpha software**, held together by clippy and optimism. It works, it is tested, and it will still have rough edges and change between versions. Keep a backup of anything you cannot replace (`jizzcraft-cli` has a backup command).
 
 - **Platforms.** Linux is the only tested platform (one main machine: H.264, VA-API, AMD GPU, Wayland). Windows and macOS compile and are built by CI, but have never run on real hardware; the Windows files may be missing from a release when that job fails.
-- **Verified by automated tests**: scan, search, favorites, ratings, hide/inbox, history, markers, filters, saved views, folder tree, stable shuffle, fingerprint relink, backup and metadata export/import, bit-rot detection, schema migration; thumbnails, scrub previews, integrity checks; the player state machine on a real GStreamer pipeline; the network guard; keymap invariants (no duplicate chords, physical keys on AZERTY); 18 end-to-end scenarios (`cargo xtask e2e`, a required CI check) and performance budgets (`cargo xtask perf`).
-- **Only checked through commands and screenshots, not by hand**: mouse wheel zoom, drag-panning, timeline dragging, fullscreen, boss-key minimize under different compositors, the native folder dialog, triage, the player bar chips, autoplay, slideshow, and the vault's lock screen and Settings flow (covered by tests, never seen on screen by the maintainers).
+- **Verified by automated tests**: scan, search, favorites, ratings, hide/inbox, history, markers, filters, saved views, folder tree, stable shuffle, fingerprint relink, backup and metadata export/import, bit-rot detection, schema migration; thumbnails, scrub previews, integrity checks; the player state machine on a real GStreamer pipeline; the network guard; keymap invariants (no duplicate chords, physical keys on AZERTY); 22 end-to-end scenarios (`cargo xtask e2e`, a required CI check) and performance budgets (`cargo xtask perf`).
+- **Only checked through commands and screenshots, not by hand**: mouse wheel zoom, drag-panning, timeline dragging, fullscreen, boss-key minimize under different compositors, the native folder dialog, triage, the player bar chips, autoplay, slideshow, and the unlocked vault's Settings flow (covered by tests, never seen on screen by the maintainers; the lock screen and the Privacy page are rendered by `cargo xtask screenshots` and were checked).
 - **Upgrading from 0.1.0**: the library migrates in place on first start, after writing a backup next to it; 0.1.0 cannot open it again afterwards (restore the backup to go back). Checked with a library created by the 0.1.0 binary.
 - **Known gaps**: CPU use on high-resolution video is 3 to 6 times `gst-play-1.0` (colour conversion runs on the CPU; a shader is on the [roadmap](ROADMAP.md)); subtitles are local `.srt` / `.vtt` sidecars only; no file watching (rescan is manual); AVIF is not decoded; GStreamer parses imported videos without a sandbox.
-- **Streaming (Online edition, experimental)**: direct video addresses, HLS (on demand and live) and DASH on demand. Not supported: live DASH, low-latency HLS, TS or WebM separate audio, DRM, subtitles for streams.
+- **Streaming (Online edition, experimental)**: direct video addresses, HLS (on demand and live) and DASH on demand, pages through a generic reader, and saving to a folder. Not supported: live DASH, low-latency HLS, recording live streams, TS or WebM separate audio, DRM, subtitles for streams, resuming a save after a restart.
 
 What changed in this version: [CHANGELOG.md](CHANGELOG.md).
 
@@ -132,9 +136,10 @@ What changed in this version: [CHANGELOG.md](CHANGELOG.md).
 **Library.** Import a folder (native dialog) and JizzCraft indexes images and videos recursively. Symbolic links and hidden folders are skipped, Unicode names are fine, duplicate imports are no-ops, and a file that went missing stays flagged instead of silently dropped. Search is full text (SQLite FTS5) over file names, tags, categories and marker labels: case and accent insensitive, every word a prefix. Filter by Images / Videos / Favorites, sort by name, date added, size, duration, rating or play history.
 
 - **Views**: Continue, Recently played, Top rated, Unrated, Inbox, Hidden, Damaged, Missing, With markers, plus your own saved views and a folder tree with counts.
+- **Interop**: reads NFO files, Stash exports and funscripts, finds possible duplicates by look, writes NFO files outside your library; never a server. See [docs/interop.md](docs/interop.md).
 - **Organise**: 0–5 star ratings, a reversible *hide* (a database flag, nothing else), playlists, categories (a tree) and tags; private tags and categories are not indexed for search. Multi-select with bulk rate, favorite, hide and "Add to". See [docs/organise.md](docs/organise.md).
-- **Inbox triage**: review new imports one at a time with `V`: keep, hide, favorite, undo. Nothing is ever deleted.
-- **Moves are recognised**: once files are fingerprinted (size plus the first and last 64 KiB), a renamed or moved file keeps its rating, history and markers at the next rescan. It judges a file by its cover and its last page.
+- **Inbox triage**: review new imports one at a time with `V`: keep, hide, favorite, undo. Nothing is ever deleted. Tinder for files, without the matches and without the regrets.
+- **Moves are recognised**: once files are fingerprinted (size plus the first and last 64 KiB), a renamed or moved file keeps its rating, history and markers at the next rescan. It judges a file by its cover and its last page. You can rename `definitely_not_that.mp4` all you like; it will still know.
 - **Shuffle** that never repeats or skips while paging, a **random pick** (`R`) and a **slideshow** (`T`).
 
 **Viewer and player.**
@@ -168,9 +173,34 @@ Turn it on once: press `?` in the library and click *Left-hand keys*, or start t
 | Back | `Q` clears the search | `Q` back to the library | `Q` leaves fullscreen, then goes back |
 | Also | `1`–`4` switch tabs | `X` hide / unhide | `X` mute, `G` fullscreen, `Shift+A` / `Shift+D` previous / next item |
 
-Anywhere: `Alt+1`–`Alt+5` rate, `Ctrl+O` import, `Ctrl+R` rescan, `Ctrl+Shift+H` boss key. Inbox triage: `D` keep, `S` or `X` hide, `W` favorite, `A` undo, `Q` leave. Press `?` in the app for the full list of both presets (it is generated from the same table the app uses).
+Anywhere: `Alt+1`–`Alt+5` rate, `Ctrl+O` import, `Ctrl+R` rescan, `Ctrl+Shift+H` boss key, `Ctrl+Shift+M` panic switch, `Ctrl+Shift+L` lock the encrypted library (vault only). Inbox triage: `D` keep, `S` or `X` hide, `W` favorite, `A` undo, `Q` leave. Press `?` in the app for the full list of both presets (it is generated from the same table the app uses).
 
 **Honest footnote: what still wants the other hand or a pointer.** Turning the preset on (one click, or the `--cmd` above); `?`, `/` and typing a search, `Home` / `End`, `Alt+0`; the system folder picker behind `Ctrl+O`; dragging the timeline, panning a zoomed image, the sidebar, sorting, the inspector and the player-bar chips; seeking during triage. The bindings are checked by tests as a table but have not been verified by hand yet.
+
+### FAQ
+
+<details>
+<summary><b>Legality, Rust, the cloud, visitors and more</b></summary>
+
+**Is this legal?** It is a media library and player, about as legal as a file manager with a nicer grid. JizzCraft ships no media, no sites, no indexers and no catalogs. It is for adults (18+) managing media they own or are entitled to keep; what you put in it, or search for and download with the Online edition, is your responsibility.
+
+**Why Rust?** Because if anything was going to crash in the middle of playback, it was not going to be us. Rust gives a native app with no garbage-collector pauses, and tests that can prove things like "no network crate in the default build". Also, we were legally required to mention it in the title (we were not).
+
+**Where is the cloud?** Above your house, where it belongs. The default (Offline) build has no network code at all, not compiled and not linked, and a test fails if any appears. Your library is one SQLite database on your own disk.
+
+**Does it phone home?** It does not even know where home is. No account, no telemetry, no update check: the app never contacts GitHub by itself. You update by re-running the installer.
+
+**Will it rename, move or "organise" my files?** No. Ratings, tags, history and markers live in the database; your files are read, never written. Even "hide" is just a flag.
+
+**What if someone walks in?** Practise the chord now. `Ctrl+Shift+H` is the boss key and `Ctrl+Shift+M` the panic switch (see [Discreet when it matters](#why)). The minimize step has not been checked by hand under every compositor, so do a dry run first.
+
+**Does it act as a media server?** No. Nothing listens, nothing is served; to use a remote library, mount the share and add the folder ([docs/interop.md](docs/interop.md)).
+
+**Can I encrypt the library?** Yes, with the [vault](docs/vault.md) (alpha, off by default). There is no recovery: that is not a missing feature, it is the feature. Write the passphrase down somewhere that is not a file called `passphrase.txt`.
+
+**Windows or macOS?** In theory, enthusiastically. Both compile in CI, but neither has ever run on real hardware (see [Status](#status-020-alpha)). Brave testers welcome, discretion guaranteed.
+
+</details>
 
 ### Troubleshooting
 
@@ -218,6 +248,7 @@ Promises are cheap, so here is where each one is enforced. If one of these tests
 | Paths are turned into stable opaque tags before they reach logs (full paths only with `JIZZCRAFT_DEBUG=1`) | `redacted_paths_are_stable_opaque_tags` in [`crates/core/src/privacy.rs`](crates/core/src/privacy.rs) |
 | Online edition: the kill switch means zero connections | e2e scenario `s14_kill_switch_means_zero_connections` in [`tests/e2e/tests/scenarios.rs`](tests/e2e/tests/scenarios.rs) |
 | Online edition: indexer and source keys never reach errors, debug output or listings | [`crates/fetch/tests/security.rs`](crates/fetch/tests/security.rs) |
+| Online edition: a save never overwrites a file and removes only its own `.part`; every page and save re-checks the kill switch; the page reader never posts, sends cookies or bundles a site | `downloads_never_overwrite`, `downloads_and_pages_recheck_the_kill_switch`, `page_reader_has_no_bypass`, `page_reader_bundles_no_site`, `extracted_urls_pass_inward_ok` in [`crates/fetch/tests/security.rs`](crates/fetch/tests/security.rs) |
 
 And the rules that are design, not tests:
 
@@ -282,7 +313,7 @@ What it exposes: your IP is visible to the indexers you configure, to BitTorrent
 
 ## Roadmap
 
-YUV→RGB in a shader, embedded subtitles and audio tracks for local files, perceptual-hash duplicates, file watching, sandboxed decoding, AUR/Flatpak/AppImage, and real-hardware runs on Windows and macOS. The full list, including what is explicitly not planned, is in [ROADMAP.md](ROADMAP.md). Features are proposed and voted on in the open: [docs/feature-process.md](docs/feature-process.md). The app never contacts GitHub by itself.
+YUV→RGB in a shader, embedded subtitles and audio tracks for local files, file watching, sandboxed decoding, AUR/Flatpak/AppImage, and real-hardware runs on Windows and macOS. The full list, including what is explicitly not planned, is in [ROADMAP.md](ROADMAP.md). Features are proposed and voted on in the open: [docs/feature-process.md](docs/feature-process.md). The app never contacts GitHub by itself.
 
 ## Contributing and security
 

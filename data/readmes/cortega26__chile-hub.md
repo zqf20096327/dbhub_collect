@@ -39,6 +39,26 @@
 
 ---
 
+## Comprueba el valor con tres pruebas reproducibles
+
+Un cruce de datos públicos debe **funcionar, dejar rastro y mostrar qué datos faltan**.
+Este repositorio incluye una [prueba de valor reproducible](docs/proof-of-value.md)
+que cruza Censo 2024, hogares y estimaciones comunales de pobreza con claves CUT.
+
+```bash
+python scripts/proof_of_value.py --runs 5 --output /tmp/chile-hub-value-proof.json
+```
+
+El resultado incorpora **cobertura de cruces, claves sin correspondencia,
+tiempos observados y hashes SHA-256 de entradas y resultados**. No exige
+instalación de paquetes adicionales ni acceder a redes externas. Puedes
+[revisar el protocolo y sus límites](docs/proof-of-value.md), o abrir los
+[notebooks de investigación existentes](examples/notebooks/README.md).
+
+> La reproducibilidad no es una prueba de superioridad frente a otro proveedor
+> ni constituye por sí sola evidencia de adopción. No publicamos comparaciones
+> de ahorro de tiempo sin una línea base independiente.
+
 ## El dato público existe. El problema es dejarlo listo para usar.
 
 Si trabajas con datos de Chile, probablemente ya conoces la fricción: archivos Excel con formatos cambiantes, códigos territoriales que pierden ceros, fuentes dispersas, APIs inconsistentes y cruces que fallan por diferencias mínimas de nombres.
@@ -189,7 +209,7 @@ El mismo estado se publica en el sitio, con historial de builds y detalle por ca
 ### Respaldo adicional
 
 <!-- START_TEST_COUNT -->
-- **1400 tests** (`pytest --collect-only`) que validan extracción, contratos e integridad de datos.
+- **1424 tests** (`pytest --collect-only`) que validan extracción, contratos e integridad de datos.
 <!-- END_TEST_COUNT -->
 <!-- START_ADR_COUNT -->
 - **24 ADRs** ([`docs/adr/`](docs/adr/)) que documentan cada decisión de arquitectura con su contexto, consecuencias y tradeoffs — no solo el "qué", sino el "por qué".
@@ -745,7 +765,7 @@ Autor y mantenedor: **Carlos Ortega** — ORCID [0009-0000-3470-6181](https://or
 | `latitud` / `longitud` | `DOUBLE` | `"Coordenadas geográficas"` |
 | `estado_funcionamiento` | `VARCHAR` | `"Vigente"` |
 
-**11. finanzas_municipales** — Indicadores financieros municipales anuales desde SINIM/SUBDERE. CAPA PARCIAL/CANDIDATO: 3 de 346 comunas (0.9%). Usar con precaución; no representa cobertura nacional. (PK: anio, codigo_comuna)
+**11. finanzas_municipales** — Indicadores financieros municipales anuales desde SINIM/SUBDERE. Cobertura 345/346 comunas (año 2024; falta Antártica 12202, hueco conocido de la fuente). Extracción mensual vía monthly-scrape. (PK: anio, codigo_comuna)
 | Columna | Tipo | Ejemplo |
 |:---|:---|:---|
 | `anio` | `INTEGER` | `2024` |
@@ -787,6 +807,9 @@ Autor y mantenedor: **Carlos Ortega** — ORCID [0009-0000-3470-6181](https://or
 | `anio_permisos_edificacion` | `INTEGER` | `2023` |
 | `mp25_promedio_ultimo_anio` | `DOUBLE` | `18.4` |
 | `anio_calidad_aire` | `INTEGER` | `2026` |
+| `tasa_pobreza_ingresos_ultimo_anio` | `DOUBLE` | `9.0` |
+| `tasa_pobreza_multidimensional_ultimo_anio` | `DOUBLE` | `19.5` |
+| `anio_pobreza` | `INTEGER` | `2022` |
 
 **15. empresas** — Registro de Empresas y Sociedades (RES) con RUT, razon social, tipo societario, capital, fecha de constitucion y comuna de domicilio. (PK: rut)
 | Columna | Tipo | Ejemplo |

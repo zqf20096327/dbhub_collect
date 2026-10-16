@@ -129,7 +129,7 @@ To stop playing press Ctrl+C in either the terminal or mpv
 <details><summary>List all subcommands</summary>
 
     $ library
-    library (v3.2.011; 102 subcommands)
+    library (v3.2.011; 104 subcommands)
 
     Create database subcommands:
     ╭─────────────────┬──────────────────────────────────────────╮
@@ -178,10 +178,10 @@ To stop playing press Ctrl+C in either the terminal or mpv
     ├──────────────────┼────────────────────────────────────────────────┤
     │ extract-links    │ Extract inner links from lists of web links    │
     ├──────────────────┼────────────────────────────────────────────────┤
+    │ links-download   │ Download links from lists of web links         │
+    ├──────────────────┼────────────────────────────────────────────────┤
+    │ direct-download  │ Download URLs directly                         │
+    ├──────────────────┼────────────────────────────────────────────────┤
     │ extract-text     │ Extract human text from lists of web links     │
     ├──────────────────┼────────────────────────────────────────────────┤
-    │ markdown-links   │ Extract titles from lists of web links         │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ expand-links     │ Expand search urls with query text             │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ nouns            │ Unstructured text -> compo
+    │ markdown-links   │ Extract titles from lists 

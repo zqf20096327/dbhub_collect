@@ -37,7 +37,7 @@
 Your agent starts every session blank, so you keep a `CLAUDE.md`. It only grows. Six months in it
 still names the database you migrated off last spring, and now the agent gets both answers.
 
-Knowl is persistent memory for Claude Code, Cursor and Codex, over
+Knowl is persistent memory for AI agents, for code, research and everyday life, over
 [MCP](https://modelcontextprotocol.io) or the CLI. When a fact is replaced, the old one is retired
 instead of competing with the new one. No API key needed. When Knowl isn't sure the new fact
 replaces the old, it leaves both active and hands you the `knowl supersede` command to say so.
@@ -90,7 +90,10 @@ registers Knowl with whichever agents it detects. It also warms a local embeddin
 in the background — `init` succeeds either way, and without it you still get keyword search.
 
 To refresh every repository and every machine-wide host after an update, run `knowl init --all`
-once. It replaces `knowl upgrade --all`, which still works for one release.
+once. It only upgrades what is already set up: your repositories, the global store if you have one, and
+a global instruction block (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`) only where one is already
+there. It never creates any of them; `knowl init` and `knowl init --global <host>` do that. It replaces
+`knowl upgrade --all`, which still works for one release.
 
 That is the whole setup. You do not record memory by hand: your agent reads and writes it as it
 works.
@@ -751,7 +754,8 @@ is refused as before. Either way a repo's private knowledge stays private until 
 - **Garbage collection** that previews by default and protects anything recently used. `knowl gc`
 - **`knowl doctor`** — one command that checks setup, config, integrity, schema, retrieval, vector
   coverage, agent registration, and workspace health.
-- **Optional AI** — configure a provider for `knowl ask` and raw-text ingest. Every feature above
+- **Optional AI** — configure a provider for `knowl ask` and raw-text ingest, and pick a domain
+  profile (`code`, `general`, `academic` or your own) for what ingest keeps. Every feature above
   works without one.
 
 → [Portability and maintenance](docs/reference.md#portability-and-maintenance) ·

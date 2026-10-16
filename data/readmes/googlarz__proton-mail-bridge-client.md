@@ -35,8 +35,8 @@ Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mai
 > **No terminal?** Follow the [step-by-step guide](docs/install-for-non-developers.md) instead.
 
 1. **Install and sign in to [Proton Mail Bridge](https://proton.me/mail/bridge)**, and leave it running. In the Bridge app, open your account and copy the **Bridge password** (it is not your Proton password).
-2. **Connect Claude Desktop**, either way:
-   - **Bundle:** download the `proton-mail-bridge-client-<your-os>.mcpb` for macOS (`darwin-arm64` Apple silicon, `darwin-x64` Intel), Linux (`linux-x64`, `linux-arm64`) or Windows (`win32-x64`) from the [latest release](https://github.com/googlarz/proton-mail-bridge-client/releases/latest) and open it. Claude Desktop asks for your Proton address and the Bridge password, plus optional settings (Bridge IMAP/SMTP host and port, read-only, allow sending, signature, extra accounts, data and download folders, tool tier); the defaults match a standard Bridge install.
+2. **Connect Claude Desktop**, either way (quit Claude Desktop completely first, so it does not overwrite the config on exit):
+   - **Bundle** (needs Node.js 24 or later on the machine): download the `proton-mail-bridge-client-<your-os>.mcpb` for macOS (`darwin-arm64` Apple silicon, `darwin-x64` Intel), Linux (`linux-x64`, `linux-arm64`) or Windows (`win32-x64`) from the [latest release](https://github.com/googlarz/proton-mail-bridge-client/releases/latest) and open it. Claude Desktop asks for your Proton address and the Bridge password, plus optional settings (Bridge IMAP/SMTP host and port, read-only, allow sending, signature, extra accounts, data and download folders, tool tier); the defaults match a standard Bridge install.
    - **npm:** `npm install -g proton-mail-bridge-client`, then `proton-mail-bridge-client setup-claude-desktop` (it checks your Bridge ports and writes the config). Fully quit and reopen Claude Desktop afterwards.
 3. **Check it works:** run `proton-mail-bridge-client doctor`, or ask Claude "run the Proton Mail doctor".
 4. **Try these prompts:**
@@ -81,7 +81,7 @@ Download: [proton.me/mail/bridge](https://proton.me/mail/bridge)
 
 **3. Your Bridge credentials** — from the Bridge app:
 - IMAP host/port (default: `127.0.0.1:1143`)
-- SMTP host/port (default: `127.0.0.1:1025`)
+- SMTP host/port (default: `127.0.0.1:1025`); the IMAP and SMTP password is the same Bridge password
 - Username (your Proton email address)
 - Bridge password (see note above)
 
@@ -290,11 +290,11 @@ Reload the Cline extension after saving. Proton Mail tools will appear in Cline'
 
 ## Multi-account support (v2.1.0+)
 
-Support multiple Proton Mail addresses configured in Bridge (using Bridge's **Split Addresses** feature). Each address gets its own isolated service stack, local index, and drafts storage.
+Use more than one Proton mailbox from the same server: either several addresses of one account (Bridge's **Split Addresses** feature) or separate Proton accounts signed in to the same Bridge. Each one gets its own isolated service stack, local index, and drafts storage.
 
 ### Setup
 
-First, enable **Split Addresses** in Proton Bridge and configure each address as a separate account. Bridge will generate a separate password for each address. Then set `PROTONMAIL_ACCOUNTS_JSON`:
+In Proton Bridge, make each address or account its own login: with **Split Addresses** on, every address has a login; separate accounts each have their own. Bridge generates a separate password for each login, and the same password works for IMAP and SMTP. The first account is `PROTONMAIL_USERNAME` / `PROTONMAIL_PASSWORD`; **`PROTONMAIL_ACCOUNTS_JSON` lists only the additional ones**, as a JSON array on one line:
 
 ```json
 {
@@ -304,27 +304,22 @@ First, enable **Split Addresses** in Proton Bridge and configure each address as
       "env": {
         "PROTONMAIL_USERNAME": "primary@proton.me",
         "PROTONMAIL_PASSWORD": "primary-bridge-password",
-        "PROTONMAIL_IMAP_HOST": "127.0.0.1",
-        "PROTONMAIL_IMAP_PORT": "1143",
-        "PROTONMAIL_IMAP_SECURE": "false",
-        "PROTONMAIL_SMTP_HOST": "127.0.0.1",
-        "PROTONMAIL_SMTP_PORT": "1025",
-        "PROTONMAIL_ACCOUNTS_JSON": "[
-          { \"address\": \"primary@proton.me\", \"password\": \"primary-bridge-password\" },
-          { \"address\": \"alias@proton.me\", \"password\": \"alias-bridge-password\" },
-          { \"address\": \"business@custom.com\", \"password\": \"business-bridge-password\" }
-        ]"
+        "PROTONMAIL_ACCOUNTS_JSON": "[{\"address\": \"alias@proton.me\", \"password\": \"alias-bridge-password\"}, {\"address\": \"business@custom.com\", \"password\": \"business-bridge-password\"}]"
       }
     }
   }
 }
 ```
 
-**Note:** The password is the **Bridge password for each address**, not your Proton account password. Bridge generates a unique password for each Split Address.
+Instead of `password` an entry can use `passwordFile` (path to a file with the Bridge password) or `passwordCommand` (a command that prints it), so the password need not sit in the client config; use only one of the three. `autoSyncFolder` sets that account's folders for background sync (default `PROTONMAIL_AUTO_SYNC_FOLDER`). Folders in a list that an account does not have are skipped and reported as `skippedFolders`.
+
+Listing the primary address again is refused at startup ("duplicate address"). Host, ports and the TLS mode default to the primary account's; an entry can override them with `imapHost`, `imapPort`, `imapSecure`, `smtpHost`, `smtpPort` and `smtpSecure`.
+
+**Note:** The password is the **Bridge password for each login**, not your Proton account password.
 
 ### How it works
 
-- **Primary account:** the first entry in `PROTONMAIL_ACCOUNTS_JSON` (or the main `PROTONMAIL_USERNAME`/`PROTONMAIL_PASSWORD` pair if not set). Email IDs from the primary account have no prefix.
+- **Primary account:** the `PROTONMAIL_USERNAME`/`PROTONMAIL_PASSWORD` pair. Email IDs from the primary account have no prefix.
 - **Additional accounts:** each has an auto-generated slug (e.g., `alias`, `business`). Email IDs carry an account prefix: `alias::message-id`, `business::message-id`.
 - **Sending:** `send_email`, `reply_to_email`, etc. route through the account matching the `from` address. If no account matches, the primary connection is used with a header override (for non-configured aliases).
 - **Search and read:** all read tools (search, threads, analytics, digest) automatically fan out across all configured accounts and merge results, preserving the account prefix in returned IDs.
@@ -484,7 +479,7 @@ PROTONMAIL_IMAP_PORT='1143'
 PROTONMAIL_IMAP_SECURE='false'
 PROTONMAIL_SMTP_HOST='127.0.0.1'
 PROTONMAIL_SMTP_PORT='1025'
-PROTONMAIL_SMTP_SECURE='true'         # Bridge's local SMTP port requires implicit TLS from the first byte; set false only for a non-Bridge SMTP relay
+PROTONMAIL_SMTP_SECURE='true'         # true = implicit TLS, false = STARTTLS. Unset, the server tries the other mode itself if Bridge's SMTP mode differs
 PROTONMAIL_IMAP_USERNAME=''           # optional: log in to IMAP as a different user than PROTONMAIL_USERNAME (default: the same). The send identity, and RESTRICT_OUTBOUND_TO_SELF, still use PROTONMAIL_USERNAME.
 PROTONMAIL_IMAP_PASSWORD=''           # optional: a different IMAP password than PROTONMAIL_PASSWORD (default: the same)
 
@@ -528,6 +523,11 @@ PROTONMAIL_SYNC_INTERVAL_MINUTES='5'
 PROTONMAIL_IDLE_WATCH='true'
 PROTONMAIL_IDLE_MAX_SECONDS='30'
 
+# Attachments
+PROTONMAIL_MAX_INLINE_KB='40'         # in KB (older name PROTONMAIL_MAX_INLINE_BYTES still works, also in KB): largest attachment get_attachment_content returns inline as base64
+PROTONMAIL_PDF_MAX_MB='10'            # largest PDF get_attachment_text extracts text from (1-100 MB); bigger ones are refused with a message
+PROTONMAIL_PDF_MAX_PAGES='50'         # pages get_attachment_text reads from a PDF (1-2000); a longer PDF is cut off with a note saying how many pages are missing
+
 # Tuning and diagnostics
 PROTONMAIL_OP_DELAY_MS='0'            # minimum gap in ms between IMAP mailbox operations (0-5000); raise it to be gentler on a slow Bridge. 0 = no throttling
 PROTONMAIL_DEBUG='false'              # true: get_connection_status and run_doctor include the raw underlying connection error text (otherwise only a classified cause and suggestion)
@@ -548,7 +548,7 @@ With several accounts or a signature, the server sends from whichever `from` the
 | Search and read | Native Claude UX | IMAP + local index |
 | Send email | No | Yes |
 | Draft workflows | Better first-party UX | Full control incl. remote draft sync |
-| Attachment content | Limited | Fetch and save to disk |
+| Attachment content | Limited | Fetch, save to disk, read text from PDFs |
 | Mailbox actions | Limited | Full (star, move, archive, trash, restore, delete, batch) |
 | Folder management | No | Yes (create, rename, delete) |
 | CLI access | No | Full parity with MCP |
@@ -593,6 +593,8 @@ With several accounts or a signature, the server sends from whichever `from` the
 
 ### Import/export & attachments
 `export_email` · `import_email` · `get_attachment_text` · `get_emails_by_ids`
+
+`get_attachment_text` reads text-like attachments and PDFs. A PDF comes back page by page, each page headed `--- Page N of M ---`, and the result has a `pdf` field with `totalPages`, `extractedPages`, `omittedPages` and `truncated`. It is limited by `PROTONMAIL_PDF_MAX_MB` (default 10) and `PROTONMAIL_PDF_MAX_PAGES` (default 50); past the page limit the text ends with a line saying how many pages were left out. A password-protected PDF, a damaged file and a scan without a text layer each fail with a short explanation. The PDF is read in memory with [unpdf](https://github.com/unjs/unpdf) (pure JavaScript, no native module): nothing is written to disk, nothing is downloaded, and a document that takes longer than 30 seconds is stopped.
 
 ---
 
@@ -666,7 +668,7 @@ Measured in October 2026 (v2.7.0) on a copy of the same ~57,000-message index. "
 - List and search results are compact by default: attachments are metadata only, and empty or derivable fields are left out. Pass `fields: ["subject","from","date"]` to trim further — 10 results is roughly 800 tokens that way, versus about 11,000 for 50 full results.
 - Defaults are bounded: `search_emails`/`search_indexed_emails` return 50 (pass `limit` for more), `list_drafts` 20, `list_scheduled_sends` 50 newest first. Each reports `hasMore`; page with `offset`.
 - Draft and queued-message bodies are shortened to a preview in list and update responses (`bodyTruncated`, `bodyLength`); use `get_draft` for one full draft. Attachment content is never inlined in a listing.
-- Large attachments: set `PROTONMAIL_ALLOW_FILE_DOWNLOAD_DIR` and pass `saveTo`, rather than raising `PROTONMAIL_MAX_INLINE_BYTES`.
+- Large attachments: set `PROTONMAIL_ALLOW_FILE_DOWNLOAD_DIR` and pass `saveTo`, rather than raising `PROTONMAIL_MAX_INLINE_KB`.
 - **`PROTONMAIL_TOOL_TIER=core`** exposes 25 tools instead of 100: about 7k tokens of tool definitions instead of about 21k (roughly 67% less; the earlier measurement with a reference tokenizer, 7k against 20k for 96 tools, scaled by the 3.7% the four newest tool definitions add), paid on every conversation that loads the server.
 - Repeating an `update_draft` that changes nothing on a draft whose remote copy is already in sync does no store write and no IMAP upload. (A draft whose last sync failed, or that was edited with `syncToRemote:false`, still syncs.)
 

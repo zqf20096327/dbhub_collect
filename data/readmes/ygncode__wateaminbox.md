@@ -1,0 +1,355 @@
+# WATeamInbox
+
+An open-source, multi-user omnichannel team inbox for managing customer conversations, assignments, contacts, and team workflows from one web application.
+
+WATeamInbox supports **WhatsApp linked devices** and **Telegram Bot accounts** today. Its channel-neutral messaging spine is designed for additional providers without forcing every channel into WhatsApp-specific identities, capabilities, or delivery semantics.
+
+> [!WARNING]
+> **Open-source beta:** interfaces, migrations, and behavior may change without backward compatibility. The development defaults are not production-hardened. Evaluate each enabled channel integration, credential model, data handling, backups, monitoring, provider policy, and account-risk implications before any production use.
+
+WATeamInbox is an independent project and is not affiliated with, endorsed by, or sponsored by WhatsApp, Telegram, or Meta. The linked-device WhatsApp provider uses an unofficial client library; WhatsApp policy or protocol changes can interrupt service and may result in account restrictions or bans. No account-safety guarantee is provided. Third-party names are used only to describe interoperability; all trademarks belong to their respective owners.
+
+**Service status:** self-hosting this beta is currently the only product path in this repository. A separate public marketing site and Cloud interest waitlist may exist outside this monorepo; they are not part of the self-hostable application and do not promise pricing, launch date, feature set, SLA, account, or support entitlements for a managed Cloud product.
+
+## Channel support
+
+| Channel | Provider | Status | Connection model |
+| --- | --- | --- | --- |
+| WhatsApp | Linked device (`whatsapp_linked_device`) | Available | QR pairing through the whatsmeow worker runtime |
+| Telegram | Bot API (`telegram_bot`) | Available when configured | BotFather token, verified webhooks, and HTTPS Bot API calls |
+| WhatsApp | Cloud API (`meta_cloud`) | Planned | Official Meta-hosted API |
+| Email | Gmail, Microsoft Graph, IMAP/SMTP | Planned | Provider-specific OAuth or mailbox credentials |
+| Messenger | Meta | Planned | Meta OAuth and webhooks |
+| Instagram | Meta | Planned | Meta OAuth and webhooks |
+
+“Planned” describes architectural direction, not a release date or compatibility promise. Available channels can expose different capabilities because the inbox follows each provider's actual contract rather than pretending every network behaves the same way.
+
+## Features
+
+- One shared realtime inbox across supported channels and connected accounts
+- WhatsApp linked-device connectivity powered by whatsmeow
+- Telegram Bot connectivity through verified webhooks and the Telegram Bot API
+- Capability-aware composition, message actions, attachments, reactions, presence, and typing behavior
+- Contact assignment and role-based conversation visibility
+- Unified customer profiles with channel endpoints, notes, tags, labels, and bulk import/export
+- Groups, quick replies, search, analytics, audit logs, and team management
+- In-app notification center, desktop notifications, realtime toasts, and optional Web Push
+- Tenant-isolated PostgreSQL schemas
+- Durable provider commands, events, retries, and reconciliation
+
+## Architecture
+
+```mermaid
+flowchart TB
+    web["React web app"]
+    api["Hono API + channel-neutral spine<br/>(Bun)"]
+    centrifugo["Centrifugo"]
+    postgres["PostgreSQL<br/>public + tenant schemas"]
+    storage["S3-compatible media storage"]
+    search["Meilisearch"]
+
+    telegramAdapter["Telegram Bot adapter"]
+    telegram["Telegram Bot API"]
+
+    nats["NATS JetStream"]
+    orchestrator["Go orchestrator"]
+    worker["WhatsApp linked-device worker<br/>(whatsmeow)"]
+    whatsapp["WhatsApp linked device"]
+
+    planned["Planned adapters<br/>WhatsApp Cloud · Email<br/>Messenger · Instagram"]
+
+    web <-->|authenticated REST| api
+    web <-->|WebSocket| centrifugo
+    api -->|realtime publish| centrifugo
+    centrifugo <-->|NATS broker| nats
+    api <-->|normalized application data| postgres
+    api <-->|media| storage
+    api <-->|search projections| search
+
+    api <-->|adapter contract| telegramAdapter
+    telegram -->|verified webhooks| telegramAdapter
+    telegramAdapter -->|HTTPS actions| telegram
+
+    api <-->|durable commands/events| nats
+    nats --> orchestrator
+    orchestrator -->|manages| worker
+    worker <-->|sessions and messages| postgres
+    worker <-->|media| storage
+    worker <-->|provider protocol| whatsapp
+
+    api -.->|same versioned adapter boundary| planned
+```
+
+The channel-neutral spine separates a **channel** (for example, WhatsApp or Telegram) from a concrete **provider** (for example, linked device, Cloud API, or Bot API). It normalizes durable concepts such as channel accounts, customer endpoints, conversations, messages, attachments, and delivery outcomes while keeping provider-specific credentials and capabilities behind adapters.
+
+Telegram runs through the Bun API as a webhook/HTTPS adapter. Linked-device WhatsApp keeps its specialized Go worker and orchestrator runtime, connected to the API through durable NATS commands and events. Planned providers extend the adapter boundary; they are not implemented merely because they appear in the diagram.
+
+### Repository layout
+
+| Path | Purpose |
+| --- | --- |
+| `apps/web` | React 19, Vite, Tailwind CSS, TanStack Query |
+| `apps/api` | Hono API, channel ingress, normalized messaging services, and provider dispatch running on Bun |
+| `packages/adapter-telegram` | Telegram Bot normalization, capability contract, and outbound transport |
+| `packages/database` | Kysely database client and migrations |
+| `packages/shared` | Shared types, including versioned channel and provider contracts |
+| `packages/ui` | Shared React components |
+| `services/orchestrator` | Go process manager for linked-device WhatsApp workers |
+| `services/whatsapp` | Go WhatsApp worker using whatsmeow |
+| `services/shared` | Shared Go packages |
+
+### Beta limitations
+
+- The production topology can run multiple homogeneous API replicas behind its internal readiness-aware router, but all services still share one host; this is not host HA. Horizontal orchestrator scaling is not supported.
+- Multi-replica API deployments use shared PostgreSQL rate limiting and database-fenced background work. Memory limiting remains available only for a single API process.
+- Channel capabilities are provider-specific. Telegram bots, linked-device WhatsApp accounts, and future providers do not have identical rules for initiation, groups, receipts, typing, reactions, media, editing, or deletion.
+- WhatsApp history depends on what the primary device and protocol make available. Protocol changes can interrupt pairing, sync, or delivery.
+- Durable messaging is at-least-once. A crash after a provider accepts a send but before the result is recorded can leave delivery outcome uncertain and require operator reconciliation.
+- WhatsApp Cloud API, email, Messenger, and Instagram are roadmap items, not available integrations in this repository today.
+- Scheduled and bulk sends are paced and capped, but those controls do not establish recipient consent or guarantee account safety. Media uploads are capped at 50 MiB.
+- Operators remain responsible for backups, restores, monitoring, retention, privacy/compliance, abuse prevention, provider terms, dependency updates, and incident response.
+
+## Prerequisites
+
+- [Bun](https://bun.sh/) 1.2.18 or newer
+- [Go](https://go.dev/) 1.25 or newer
+- [Docker](https://www.docker.com/) with Docker Compose
+- Credentials for one transactional email provider in production: a [Resend](https://resend.com/) API key, or a [Cloudflare Email Service](https://developers.cloudflare.com/email-service/) account ID with an Email Sending token (local development uses a log-only transport)
+
+## Local development
+
+### 1. Install dependencies
+
+```bash
+bun install
+```
+
+Go dependencies are downloaded automatically by Go when the services build.
+
+### 2. Configure environment variables
+
+Create the root environment file:
+
+```bash
+cp .env.example .env
+```
+
+`JWT_SECRET` and `CENTRIFUGO_TOKEN_HMAC_SECRET` are required in **every** environment. The API ships no default for either and refuses to start when one is missing or blank: HS256 accepts a zero-length key, and a key committed to this repository would be equally forgeable, so a server started without `NODE_ENV=production` would otherwise issue tokens anyone could mint. Give them independent random values of at least 32 characters, and set `CENTRIFUGO_API_KEY` too:
+
+```bash
+printf 'JWT_SECRET=%s\n' "$(openssl rand -base64 48)" >> .env
+printf 'CENTRIFUGO_TOKEN_HMAC_SECRET=%s\n' "$(openssl rand -base64 48)" >> .env
+printf 'CENTRIFUGO_API_KEY=%s\n' "$(openssl rand -base64 32)" >> .env
+```
+
+`./dev-start.sh` performs the two signing-secret steps for you when they are absent, printing what it added. Both Centrifugo values are server secrets and must never be exposed to the browser; `docker compose` reads the same `.env`, so the Centrifugo container picks up whatever you set here.
+
+The test suite injects its own throwaway secrets (`apps/api/bunfig.toml`), so `bun test` needs no `.env`.
+
+Bun loads the root `.env` when commands are run from the repository root. If you run an app directly from its workspace directory, create an app-local ignored `.env` or export the required variables first. Common frontend values are:
+
+```env
+VITE_API_URL=http://localhost:4445/api
+VITE_CENTRIFUGO_URL=ws://localhost:4451/connection/websocket
+```
+
+### 3. Start infrastructure
+
+```bash
+docker compose up -d
+```
+
+This starts:
+
+| Service | Address |
+| --- | --- |
+| PostgreSQL | `localhost:4447` |
+| NATS | `localhost:4448` |
+| NATS monitoring | <http://localhost:8222> |
+| Centrifugo WebSocket/API | <http://localhost:4451> |
+| Centrifugo metrics | <http://localhost:4451/metrics> |
+| Meilisearch | <http://localhost:4449> |
+| MinIO S3 API | <http://localhost:4450> |
+| MinIO console | <http://localhost:9001> |
+
+### 4. Run migrations
+
+```bash
+bun run db:migrate
+```
+
+Migrations create the central tables and tenant-isolated schemas.
+
+### 5. Start the application
+
+```bash
+bun run dev
+```
+
+The main development endpoints are:
+
+- Web app: <http://localhost:4444>
+- API: <http://localhost:4445/api>
+- API health: <http://localhost:4445/api/health>
+- Orchestrator: <http://localhost:8080>
+
+The root development command builds the linked-device WhatsApp worker before starting the orchestrator. The orchestrator then manages worker processes for active linked-device connections.
+
+Telegram Bot runs inside the API through the channel adapter. Connecting a bot locally requires channel-credential encryption keys and a publicly reachable HTTPS `APP_URL` so Telegram can deliver webhooks; `localhost` alone is not sufficient. See [channel-neutral spine operations](docs/operations/channel-neutral-spine.md#connecting-a-channel-locally).
+
+## Web Push notifications
+
+Web Push is optional. Without it, desktop notifications work only while the application is loaded. Configure Web Push to receive notifications while the app is backgrounded or closed.
+
+### Generate VAPID keys
+
+Generate one stable key pair:
+
+```bash
+bunx web-push generate-vapid-keys --json
+```
+
+Configure the API with both keys:
+
+```env
+VAPID_PUBLIC_KEY=generated-public-key
+VAPID_PRIVATE_KEY=generated-private-key
+VAPID_SUBJECT=mailto:notifications@example.com
+```
+
+Expose only the same public key to the Vite build:
+
+```env
+VITE_VAPID_PUBLIC_KEY=generated-public-key
+```
+
+Never expose `VAPID_PRIVATE_KEY`, and do not regenerate the pair on every deployment. Changing keys invalidates existing browser subscriptions.
+
+Restart the API and rebuild/restart the web app after changing these values. Web Push requires HTTPS in production; browsers allow `localhost` as a secure development context.
+
+### Enable and verify
+
+1. Sign in and open **Settings → Notifications**.
+2. Enable desktop notifications and accept the browser permission prompt.
+3. In Chrome or Edge DevTools, open **Application → Service Workers**.
+4. Confirm `/notification-sw.js` is active.
+5. Confirm these requests succeed in the Network panel:
+   - `GET /api/notifications/push/status`
+   - `POST /api/notifications/push/subscribe`
+6. Close all application tabs and send an incoming message through a connected channel.
+7. Click the OS notification and verify that it opens the correct conversation.
+
+The receiving user must be assigned to the contact or have permission to view all chats. Disabled notifications, quiet hours, and muted contacts suppress delivery.
+
+## Optional product analytics (GA4)
+
+The web app can optionally report anonymous product usage (sanitized page views and a small set of allowlisted events) to a Google Analytics 4 property **that you own**. It is fully inert by default: nothing loads, no consent banner appears, and no request is made to Google unless you opt in.
+
+To enable it, set all of the following and rebuild the web app/image (the values are compiled into the browser bundle, so changing them always requires a rebuild):
+
+```env
+VITE_GA_ENABLED=true              # only the exact string "true" enables it
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX  # your own GA4 web stream ID
+VITE_GA_REQUIRE_CONSENT=true      # recommended default: per-browser consent prompt
+```
+
+With consent required (the default), each visitor must accept an in-app prompt before `gtag.js` loads; declining sends nothing, and consent can be changed later under **Settings → Personal → Privacy & analytics**. Setting `VITE_GA_REQUIRE_CONSENT=false` is an explicit operator policy decision that makes you responsible for another valid consent mechanism.
+
+URLs are canonicalized before sending, so workspace/contact/job identifiers, invitation and reset tokens, query strings, and message or customer content never reach GA. No user or workspace correlation is performed. GA data is approximate (ad blockers and declined consent suppress events) — never treat it as authoritative usage or billing data.
+
+See [docs/product-analytics.md](docs/product-analytics.md) for the full configuration reference, event list, GA property setup checklist (including disabling Enhanced Measurement page views and Google Signals), and privacy notes.
+
+## Useful commands
+
+| Command | Description |
+| --- | --- |
+| `bun run dev` | Start workspace development processes |
+| `bun run build` | Build all applications, packages, and services |
+| `bun run lint` | Run TypeScript/Astro/Go lint checks |
+| `bun run typecheck` | Type-check shared packages, API, and web app |
+| `bun run format` | Format TypeScript workspace files with Biome |
+| `bun run test` | Run API, web, and short Go tests |
+| `bun run test:db-contracts` | Verify tenant schema creation and PostgreSQL search |
+| `bun run test:integration` | Run database and Go integration tests |
+| `bun run check:unused` | Find unused files and dependencies with Knip |
+| `bun run db:migrate` | Apply database migrations |
+| `bun run db:generate` | Regenerate Kysely database types |
+| `docker compose down` | Stop local infrastructure |
+
+Integration tests require the local infrastructure and use:
+
+```bash
+RUN_DB_INTEGRATION=1 bun run test:integration
+```
+
+## Health checks
+
+The API exposes:
+
+- `GET /api/health` — overall service status
+- `GET /api/health/live` — liveness probe
+- `GET /api/health/ready` — PostgreSQL, NATS, event consumer, outbox, and Centrifugo readiness
+
+An unavailable NATS connection or Centrifugo instance reports degraded readiness, while PostgreSQL failure reports the service as unready.
+
+## Production deployment
+
+Do not use `docker-compose.yml` for production; it contains development-only credentials and exposed service ports. A security-conscious single-host baseline is defined in `compose.production.yml`; it is deployment guidance, not an audit, certification, managed service, or guarantee of fitness for your environment. See [docs/deployment.md](docs/deployment.md) for TLS, secret generation, migrations, private storage, backups, restores, upgrades, rollback, and monitoring.
+
+The public marketing site and Cloud waitlist live in a separate repository and are not required to self-host this application.
+
+## Troubleshooting
+
+### Realtime events do not arrive
+
+- Check that `VITE_CENTRIFUGO_URL` is reachable from the browser.
+- Check `GET /api/health/ready` for Centrifugo and NATS status.
+- Confirm the API and Centrifugo use the same token HMAC secret, audience, and issuer.
+- Confirm the browser receives a token from `POST /api/realtime/token`.
+
+### Web Push does not arrive
+
+- Check `GET /api/notifications/push/status`; `configured` and `subscribed` should both be `true`.
+- Verify browser and operating-system notification permissions.
+- Ensure the service worker is active and the application is served over HTTPS or `localhost`.
+- Ensure the user can view the contact, is outside quiet hours, and has not muted it.
+- Check API logs for `Web Push batch completed`. An `attempted` value of zero means no eligible recipient or stored subscription.
+
+### Database state needs to be reset
+
+The repository includes `scripts/clean-db.sh`. It is destructive; inspect it before running and never use it against a production database.
+
+### NATS debugging
+
+Use `scripts/debug-nats.sh`, or start the optional NATS toolbox:
+
+```bash
+docker compose --profile debug up -d nats-box
+```
+
+## Security and support
+
+- Never commit `.env` files, JWT/Centrifugo secrets, VAPID private keys, mail provider keys, Telegram bot tokens, channel credentials, WhatsApp session data, or production storage credentials.
+- Keep `VITE_*` variables limited to values safe for browsers and use HTTPS for non-local deployments.
+- Report suspected vulnerabilities privately according to [SECURITY.md](SECURITY.md); do not open a public security issue.
+- Before publishing a fork or changing repository visibility, use the [public repository release checklist](docs/public-release-checklist.md).
+- Use [GitHub Issues](https://github.com/ygncode/wateaminbox/issues) for reproducible bugs and development questions. This community beta does not include guaranteed support or response times.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Before opening a pull request, run the checks relevant to your change; the standard code-change checks are:
+
+```bash
+bun run lint
+bun run typecheck
+bun run test
+bun run build
+```
+
+Run integration tests when changing database migrations, channel adapters, provider ingress or dispatch, NATS behavior, the orchestrator, WhatsApp worker, or end-to-end messaging flows.
+
+## License
+
+WATeamInbox's original content is available under the [MIT License](LICENSE), copyright © 2026 WATeamInbox contributors.
+
+The whatsmeow Go dependency and `vendor/whatsmeow` submodule are licensed separately under MPL-2.0. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for details; the MIT License does not relicense third-party components.

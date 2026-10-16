@@ -462,7 +462,36 @@ The paper's results are summarized in the next section.
 
 # Results
 
-All numbers in this section, except [Independent reproduction](#independent-reproduction), are **as reported in the [Mem++ paper](https://arxiv.org/abs/2610.02002)** (Tables 1 to 4 and 7, Figure 4). Scores are LLM-judge scores from a `gpt-4o-mini` judge on a 0 to 100 scale. Within each answerer block, **bold** marks the best result and <ins>underline</ins> the second best, as in the paper.
+The dated self-run evaluations below are separate from the historical paper evaluation. The original benchmark tables that follow, except [Independent reproduction](#independent-reproduction), are **as reported in the [Mem++ paper](https://arxiv.org/abs/2610.02002)** (Tables 1 to 4 and 7, Figure 4), using a `gpt-4o-mini` judge on a 0 to 100 scale. Within those answerer blocks, **bold** marks the best result and <ins>underline</ins> the second best, as in the paper.
+
+### OrgMemBench official-harness run — 2026-10-15
+
+New self-run results using the unchanged upstream neutral answerer and judge, both `claude-sonnet-4-6`, with local ONNX MiniLM-384 embeddings and PostgreSQL/pgvector:
+
+| Tier | Artifacts | Questions | Mean rubric score (0–100) |
+|:---|---:|---:|---:|
+| Small | 126 | 11 | **64.96** |
+| Medium | 443 | 73 | **55.67** |
+
+These are weighted partial-credit scores, not percentages of fully correct answers. Single runs; no confidence intervals. They are not a leaderboard ranking and use a different judge from the paper tables below. See the [full protocol, all metrics, raw answers/judgments and audit](docs/evaluations/2026-10-15-orgmembench/README.md).
+
+
+
+### MemoryBench full coverage — 2026-10-16
+
+All **819 official test items across 28 datasets** now have recorded outputs: the original 50 LoCoMo outputs plus 769 new outputs. Claude Sonnet 4.6, local ONNX MiniLM-384 / PostgreSQL retrieval at k=50, and effective per-dataset caps stayed fixed across 28 independent native SINGLE-dataset off-policy experiments. The website rejected the 2.09 MiB DEFLATE ZIP and a 1.61 MiB lossless BZIP2 ZIP despite its published 500 MiB limit. A direct-client attempt to the same public upload endpoint also returned HTTP 413 with an nginx error page; no accepted full submission is established. Full organizer evaluation and public ranking remain pending; generation and provenance checks are not an accuracy score. The archive retains 48 capped responses and seven provider refusals, including five empty outputs whose website acceptance is unverified. See [exact split counts, protocol, API evidence and audit summary](docs/evaluations/2026-10-16-memorybench-full/README.md).
+
+### MemoryBench LoCoMo-family results — 2026-10-15
+
+| Coverage | Metric | Result | Evaluation status |
+|:---|:---|---:|:---|
+| Locomo-0 through Locomo-9; all 50 official test items | Native local F1 (0–1) | **0.3950822** | Local scoring of the submitted 50-item subset |
+| Same 50 submitted items | Organizer email average (0–1) | **0.6560** | Evaluation-complete email; partial case coverage; no public rank established |
+
+The organizer email assigns these same 50 answers to both Open-Domain and Long-Short; these are overlapping labels, not two complete case evaluations. Its average is a different metric from local F1 and does not establish an Elo rank.
+
+Ten independent native off-policy experiments used 20 own training dialogs per dataset, Claude Sonnet 4.6 answers, and local ONNX MiniLM-384 / PostgreSQL retrieval at k=50. Settings stayed fixed; no test answers were replaced. This covers the LoCoMo family within MemoryBench, not the full suite or the paper's original LoCoMo protocol. See [protocol, per-dataset results and audit summary](docs/evaluations/2026-10-15-memorybench-locomo-family/README.md).
+
 
 ### OrgMemBench
 

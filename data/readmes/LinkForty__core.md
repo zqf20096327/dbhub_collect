@@ -447,13 +447,32 @@ SHORTLINK_DOMAIN=yourdomain.com
 
 Core does not create a `users` table. Authentication and user management are the consumer's responsibility. The `user_id` column on `links` and `webhooks` is optional (nullable, no foreign key) — use it for multi-tenant scoping when your auth layer provides a user identity.
 
+### Short codes and URL resolution
+
+Every short code is unique across the server. Links created through Core's API have no organization, so they all share one set of codes.
+
+An application that builds on Core and assigns links to organizations (by setting `links.organization_id`) gets one set of codes per organization: two organizations can each have `promo`. Template slugs stay unique across the server, and URLs resolve like this:
+
+- `/{templateSlug}/{shortCode}` resolves to exactly one link.
+- `/{shortCode}` prefers the organization the request belongs to, then a link without a template, then the oldest link with that code.
+
+To tell Core which organization a request belongs to, for example by custom domain, register a resolver:
+
+```typescript
+import { setLinkScopeResolver } from '@linkforty/core';
+
+setLinkScopeResolver(async (request) => organizationIdForHost(request.headers.host) ?? null);
+```
+
+The redirect, SDK resolve and preview routes all use it. A resolver that throws is logged and treated as null.
+
 ### Links Table
 
 | Column                  | Type         | Description                              |
 |-------------------------|--------------|------------------------------------------|
 | id                      | UUID         | Primary key                              |
 | user_id                 | UUID         | Optional owner/tenant identifier         |
-| short_code              | VARCHAR(20)  | Unique short code                        |
+| short_code              | VARCHAR(20)  | Short code, unique per organization_id   |
 | original_url            | TEXT         | Original URL                             |
 | title                   | VARCHAR(255) | Link title                               |
 | description             | TEXT         | Link description                         |
@@ -836,6 +855,38 @@ adb shell am start -a android.intent.action.VIEW \
   -d "https://yourdomain.com/test"
 ```
 
+
+## Export and Import
+
+Move a server's links and analytics to another LinkForty server (self-hosted or LinkForty Cloud), or keep a backup, with a **bundle**: one gzipped file of newline-delimited JSON.
+
+```bash
+# Everything on this server
+DATABASE_URL=postgres://... npx linkforty export backup.lfbundle
+
+# One organization's data
+DATABASE_URL=postgres://... npx linkforty export acme.lfbundle --organization <organization-id>
+
+# Check a bundle against a database without writing anything
+DATABASE_URL=postgres://... npx linkforty import acme.lfbundle --dry-run
+
+# Import it; add --organization <id> to import into an existing organization
+DATABASE_URL=postgres://... npx linkforty import acme.lfbundle
+```
+
+**What a bundle carries:** organizations (name and the `appConfig` and `launchpad` settings), link templates, links, click events, device fingerprints, install events, in-app events and webhooks.
+
+**What it leaves out:**
+- **Webhook signing secrets.** Import issues new ones and prints them, so update your receivers.
+- **Link-safety state** (`warn_at`, `disabled_at`, `disabled_reason`, `suspended_at`), which belongs to the server that set it.
+
+**How import works:**
+- **Ids are kept**, so links, clicks and installs stay connected and apps keep their install ids.
+- **Checked first.** It reports conflicts before writing anything: ids already present, short codes already used in the target organization, template slugs already taken.
+- **All or nothing.** It writes everything in one transaction.
+- **Tamper check.** A bundle that was cut short or edited is refused, because its checksum no longer matches.
+
+**From code:** use `exportBundle`, `exportBundleToFile`, `importBundle` and `importBundleFile`, exported from the package root. `BUNDLE_TABLES` lists every column and whether a bundle carries it. A schema test fails when a column is added without a classification there.
 
 ## Migrate from Another Platform
 

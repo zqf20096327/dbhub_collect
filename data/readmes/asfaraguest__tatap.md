@@ -13,6 +13,13 @@
   </p>
 
   <p>
+    <a href="https://github.com/asfaraguest/tatap/releases/latest/download/tatap-release-v2.7.2.apk"><img src="https://img.shields.io/badge/Download-Android%20Mobile-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android Mobile APK"></a>
+    <a href="https://github.com/asfaraguest/tatap/releases/latest/download/tatap-tv-release-v2.7.2.apk"><img src="https://img.shields.io/badge/Download-Android%20TV-0081C9?style=for-the-badge&logo=android&logoColor=white" alt="Android TV APK"></a>
+    <a href="https://github.com/asfaraguest/tatap/releases/latest/download/tatap-windows-x64-portable.zip"><img src="https://img.shields.io/badge/Download-Windows%20x64-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows Portable"></a>
+    <a href="https://github.com/asfaraguest/tatap/releases/latest/download/Tatap-x86_64.AppImage"><img src="https://img.shields.io/badge/Download-Linux%20AppImage-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux AppImage"></a>
+  </p>
+
+  <p>
     <a href="https://trakteer.id/bagus_azizul" target="_blank"><img src="https://img.shields.io/badge/Trakteer-Dukung%20Karya-be1e2d?style=flat-square" alt="Trakteer"></a>
     <a href="https://ko-fi.com/L5J028GNTA" target="_blank"><img src="https://img.shields.io/badge/Ko--fi-Beli%20Kopi-FF5E5B?style=flat-square&logo=ko-fi&logoColor=white" alt="Ko-fi"></a>
   </p>
@@ -63,10 +70,54 @@ Pilih paket instalasi resmi sesuai perangkat Anda:
 
 | Platform Perangkat | Tombol Unduh Langsung | Format Berkas | Keterangan & Kompatibilitas |
 | :--- | :---: | :---: | :--- |
-| **Android Ponsel / Tablet** | [![Unduh Android APK](https://img.shields.io/badge/Download-Android%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/asfaraguest/tatap/releases/latest/download/tatap-release-v2.7.1.apk) | `.apk` (~35 MB) | Signed Production APK (Android 7.0 s/d 16, Adaptive Icons) |
-| **Android TV / Google TV** | [![Unduh Android TV APK](https://img.shields.io/badge/Download-Android%20TV%20APK-0081C9?style=for-the-badge&logo=android&logoColor=white)](https://github.com/asfaraguest/tatap/releases/latest/download/tatap-tv-release-v2.7.1.apk) | `.apk` (~35 MB) | Signed Production APK khusus TV (Leanback 10-foot UI & Remote D-pad) |
+| **Android Ponsel / Tablet** | [![Unduh Android APK](https://img.shields.io/badge/Download-Android%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/asfaraguest/tatap/releases/latest/download/tatap-release-v2.7.2.apk) | `.apk` (~35 MB) | Signed Production APK (Android 7.0 s/d 16, Watch Portrait View & Adaptive Icons) |
+| **Android TV / Google TV** | [![Unduh Android TV APK](https://img.shields.io/badge/Download-Android%20TV%20APK-0081C9?style=for-the-badge&logo=android&logoColor=white)](https://github.com/asfaraguest/tatap/releases/latest/download/tatap-tv-release-v2.7.2.apk) | `.apk` (~35 MB) | Signed Production APK khusus TV (Leanback 10-foot UI & Remote D-pad) |
 | **Windows (x64)** | [![Unduh Windows Portable](https://img.shields.io/badge/Download-Windows%20Portable-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/asfaraguest/tatap/releases/latest/download/tatap-windows-x64-portable.zip) | `.zip` (~26 MB) | Standalone Portable (Ekstrak zip & jalankan `Tatap.exe`) |
 | **Linux (x86_64)** | [![Unduh Linux AppImage](https://img.shields.io/badge/Download-Linux%20AppImage-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/asfaraguest/tatap/releases/latest/download/Tatap-x86_64.AppImage) | `.AppImage` (~58 MB) | Standalone AppImage (Berikan izin `chmod +x` lalu jalankan) |
+
+Seluruh arsip versi rilis stabil sebelumnya tersedia di [Halaman Rilis Resmi GitHub](https://github.com/asfaraguest/tatap/releases).
+
+### Menjalankan Versi Self-Hosted (Web Server / VPS / Localhost)
+
+Bagi pengguna yang ingin menjalankan Tatap sebagai layanan web mandiri (*self-hosted*) di server lokal, HomeLab, maupun VPS Linux:
+
+1. **Prasyarat Sistem:**
+   - Python 3.11 atau lebih baru (`python3 --version`)
+   - Git (`git --version`)
+
+2. **Kloning & Pemasangan Otomatis:**
+   ```bash
+   git clone https://github.com/asfaraguest/tatap.git
+   cd tatap
+   ./install.sh
+   ```
+   *Skrip `./install.sh` akan menyiapkan virtual environment Python (`venv/`), memasang seluruh pustaka dependensi (`requirements.txt`), serta menginisialisasi basis data SQLite lokal.*
+
+3. **Menjalankan Layanan:**
+   - **Mode Interaktif (Foreground):**
+     ```bash
+     ./run.sh
+     ```
+     Buka peramban di `http://127.0.0.1:8767`.
+   - **Mode Latar Belakang (Background Daemon Service):**
+     ```bash
+     ./manage.sh start     # Menjalankan server di latar belakang
+     ./manage.sh status    # Memeriksa status proses dan PID
+     ./manage.sh logs      # Melihat log aktivitas pemutaran & server
+     ./manage.sh stop      # Menghentikan server
+     ```
+
+4. **Akses Jaringan Lokal (LAN) atau Server VPS (Remote Access):**
+   Secara bawaan, backend mendengarkan pada host lokal `127.0.0.1`. Untuk membuka akses ke perangkat lain dalam satu jaringan Wi-Fi/LAN atau server publik, setel variabel `APP_HOST` ke `0.0.0.0`:
+   ```bash
+   APP_HOST=0.0.0.0 ./run.sh
+   ```
+   *Atau buat berkas konfigurasi `.env` pada direktori root:*
+   ```env
+   APP_HOST=0.0.0.0
+   APP_PORT=8767
+   ```
+   Akses antarmuka web dari perangkat apa pun di peramban via `http://<IP_SERVER_ANDA>:8767`.
 
 ---
 

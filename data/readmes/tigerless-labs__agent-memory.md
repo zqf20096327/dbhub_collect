@@ -232,7 +232,9 @@ which source session is archived or cited:
 ```toml
 [executor.write]
 reasoner = "host"
-host = "muse-code" # or "source", "codex", or "claude-code"
+host = "muse-code" # or "source", "hermes", "codex", or "claude-code"
+host_provider = "" # Hermes can pin "openrouter" independently of its model
+tool_mode = "auto" # supported Hosts use native tools; use "text" for compatibility
 
 [executor.manage]
 reasoner = "host"
@@ -246,12 +248,22 @@ the producing host only as `--source-host`, so it supplies the default or resolv
 marker that prevents recursive capture.
 
 Write runs the reasoner as a standard tool-use agent over one toolkit — `recall`, `read`, and
-`submit_operations` — with no cap on looks or turns. An endpoint reasoner drives that loop through
-native function calling. Claude Code and Codex run their own loop in one headless process per
-batch: the toolkit is served by a per-batch stdio MCP server, their built-in tools, user
+`submit_operations`. An endpoint reasoner drives that loop through native function calling.
+Claude Code, Codex, Hermes, and Muse Code run their own loop in one headless process per batch by
+default: the toolkit is served by a per-batch stdio MCP server, their built-in tools, user
 configuration and native memory are off, and the distillation instructions replace their system
-prompt. Hermes and Muse Code keep the line-oriented text protocol. A run that ends without an
-accepted submission writes nothing and leaves the backlog for retry.
+prompt where the Host supports replacement. Hermes and Muse use one combined prompt file and an
+isolated process with only that batch's MCP `recall`, `read`, and `submit_operations` tools. Muse native
+mode requires Muse Code 1.4.4 or newer, caps a run at eight model steps, and fails explicitly on
+older versions; it never falls back to text. When Muse is routed through the supported local
+pproxy bridge, a scoped loopback
+adapter expands Responses API namespace tools to Muse's canonical MCP ids; it neither executes
+tools nor holds credentials. Hermes uses a temporary profile, an exact dynamic MCP toolset,
+and a provider selected independently of the model; OpenRouter therefore needs no Vertex project
+or gcloud authentication. `tool_mode = "text"` forces the compatibility protocol for a Host. A run that ends
+without an accepted submission writes nothing and leaves the backlog for retry. `tool_mode`
+applies only to Write Host reasoners; endpoint Write remains native function calling and Manage
+review remains the bounded text-verdict path.
 
 Either operation can select its own model endpoint by setting `reasoner = "endpoint"` and the
 usual `model`, `endpoint`, `project`, `location`, or `timeout_seconds` values in that operation's
@@ -336,6 +348,36 @@ OpenAI-compatible endpoint can be selected with `endpoint` and a `GEMINI_API_KEY
 the environment. Store configuration contains no secret, and service-account keys must not be
 committed to the repository.
 
+### Hermes Agent
+
+Hermes native Write requires Hermes Agent 0.22.2 or newer. Hermes may still use Gemini/Vertex,
+but it is not coupled to it. To run Hermes through OpenRouter without gcloud, export the key and
+pin the provider and model in the Write policy:
+
+```bash
+export OPENROUTER_API_KEY="..."
+```
+
+```toml
+[executor.write]
+reasoner = "host"
+host = "hermes"
+host_provider = "openrouter"
+host_model = "meta/muse-spark-1.3-contributor"
+host_allow_data_training = true # required explicit consent for contributor-tier data use
+tool_mode = "auto"
+```
+
+Each batch gets a fresh Hermes profile containing only an `agent-memory-write` stdio MCP server.
+The exact toolset prevents Shell, Web, Hermes memory, skills, delegation, plugins, and personal
+MCP servers from entering the run. Secrets remain in the process environment and are never
+written to the temporary profile. `tool_mode = "text"` explicitly retains the compatibility
+loop; native failures never switch to it automatically.
+
+The contributor model permits Meta to use prompts and completions for training. Memory refuses
+Hermes' unattended contributor route unless `host_allow_data_training = true` is explicitly set;
+use the non-contributor model for sensitive or proprietary sessions.
+
 ### Muse Code
 
 Install [Muse Code](https://dev.meta.ai/docs/muse-code), make sure `muse` is on `PATH`, and make
@@ -394,11 +436,14 @@ mem-exp interop --workspace /tmp/muse-memory-smoke \
 Then omit `--pairs` and pass `--hosts claude-code,codex,hermes,muse-code` for the 4×4 matrix.
 Current limitations: only the root Muse session log is captured; child/observer logs are ignored,
 setup installs MCP only when `--mcp` is requested, and live hook/MCP/sandbox behavior must be
-verified on a machine with Muse Code installed and authenticated. Muse 1.4.3 with the tested
-OpenRouter model may shorten a fully qualified MCP tool ID to `memory_recall`; Muse rejects that
-shorthand even though the configured server handshake succeeds. Lifecycle hooks and SessionStart
-injection do not depend on that optional model-driven MCP call. A missing Muse login is reported
-as `BLOCKED_BY_MUSE_AUTH`; echo or mocked providers do not count as live E2E evidence.
+verified on a machine with Muse Code installed and authenticated. Muse 1.4.3 does not support the
+exact `run.toolset` MCP selection required by native Write mode. Muse 1.4.9 plus OpenRouter emits
+Responses namespace calls as a namespace and child name while Muse dispatches canonical flat MCP
+ids; native Write bridges that local pproxy transport for the duration of the run. The live matrix
+is opt-in with `AGENT_MEMORY_LIVE_MUSE_NATIVE=1`, selects Muse through the default `auto` posture,
+and covers New, Recall/Read/Supersede, Skip, and tool-error observation. Lifecycle hooks and
+SessionStart injection do not depend on native Write.
+Echo or mocked providers do not count as live E2E evidence.
 
 ## Let it sleep
 

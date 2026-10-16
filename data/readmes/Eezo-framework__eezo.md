@@ -19,6 +19,16 @@
   <a href="https://eezo.io/docs">Docs</a> ·
   <a href="https://eezo.io/api/">API</a>
 </p>
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=IOsSpHu3eKE">
+    <img src="https://img.youtube.com/vi/IOsSpHu3eKE/maxresdefault.jpg" width="720"
+         alt="Shopping for a Scala framework, the Scala Days talk">
+  </a>
+</p>
+<p align="center">
+  &#9654; <a href="https://www.youtube.com/watch?v=IOsSpHu3eKE">Watch the Scala Days talk</a>, 27 minutes:
+  Daniel Ciocîrlan and Riccardo Cardin build a shop with Eezo on stage, from the first case class to a working checkout.
+</p>
 
 ---
 
@@ -73,7 +83,7 @@ Deploying is done with `eezo deploy` on Fly.io.
 `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("io.eezo" % "sbt-eezo" % "0.1.0")
+addSbtPlugin("io.eezo" % "sbt-eezo" % "0.2.0")
 ```
 
 `build.sbt`:
@@ -83,7 +93,7 @@ scalaVersion := "3.8.4"
 
 enablePlugins(EezoPlugin)
 
-libraryDependencies += "io.eezo" %% "eezo" % "0.1.0"
+libraryDependencies += "io.eezo" %% "eezo" % "0.2.0"
 
 scalacOptions ++= Seq("-release", "25", "-deprecation", "-feature", "-unchecked", "-no-indent")
 
@@ -177,10 +187,10 @@ object Main extends EezoApp {
 ```
 
 `AppSchema` registers the models that derive `Table`, and the schema commands run against it:
-`eezo status` shows the drift between the case classes and the database, `sync` applies it in
-development, `freeze` writes a migration, `migrate` runs the migrations in production. A model
-that derives `Table` beside `Form` and `Resource` gets its seven routes backed by Postgres, and
-the posts you create in the browser survive a restart.
+`eezo db status` shows the drift between the case classes and the database, `eezo db sync`
+applies it in development, `eezo db freeze` writes a migration, `eezo db migrate` runs the
+migrations in production. A model that derives `Table` beside `Form` and `Resource` gets its
+seven routes backed by Postgres, and the posts you create in the browser survive a restart.
 Check out the [the case class](docs/explanation/the-case-class.md) and the
 [schema and migrations](docs/explanation/schema-and-migrations.md) pages for more details.
 
@@ -224,12 +234,13 @@ final class Board extends Component[List[Order]] {
 eezo new <name>       scaffold a new application in ./<name>
 eezo dev              serve, restarting on every save
 eezo routes           what is mounted
-eezo status           the drift between the models and the database
-eezo sync             apply that drift to the development database
-eezo freeze           write the drift as a migration
-eezo migrate          run the migrations
+eezo db status        the drift between the models and the database
+eezo db sync          apply that drift to the development database
+eezo db freeze        write the drift as a migration
+eezo db migrate       run the migrations
 eezo build            stage the jars, the migrations and a Dockerfile
 eezo deploy           build, deploy to Fly.io, migrate, wait for health
+eezo upgrade          move to the latest release on Maven Central
 ```
 
 The launcher is [`bin/eezo`](bin/eezo) in this repository.
@@ -253,7 +264,7 @@ sbt publishLocalForExample      # publishes eezo and sbt-eezo locally and record
 cd examples
 sbt hello/run                   # http://localhost:8080/hello
 sbt reminders/run               # runs the job once against the development Postgres
-sbt "blog/run sync --apply"     # creates the tables, then:
+sbt "blog/run db sync --apply"     # creates the tables, then:
 sbt blog/run                    # http://localhost:8080, posts under /admin/posts
 ```
 
@@ -301,6 +312,12 @@ The `db` suite starts a real Postgres through testcontainers, so it needs a Dock
 `sbt check` runs the regression half of that suite, and `sbt backlog` runs the tests that
 describe open work and are expected to fail until it lands. The decisions behind the framework
 are recorded in [`docs/adr`](docs/adr).
+
+Pull requests target `dev`, the trunk. `main` is the latest release: it moves only by fast forward
+when a version is tagged, so the front page, this README and a plain clone always describe what is
+on Maven Central. Releasing is `bin/release <version>` on `dev`: it bumps the version literals the
+docs quote, fast forwards `main`, and pushes the tag that publishes the artifacts and deploys the
+site.
 
 ## Licence
 
