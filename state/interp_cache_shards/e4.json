@@ -9644,5 +9644,181 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c37796f6c28b": {
+  "identity": {
+   "one_liner": "Go 编写的端口/服务就绪检测工具，支持超时等待",
+   "review": "wait4it 是一个用 Go 编写的命令行工具，用于检测端口是否可连接，或 MySQL、PostgreSQL、Redis 等服务是否就绪，还能发起 HTTP 调用校验响应码与文本。它支持超时参数和基于 YAML 的多检查定义，可在服务未就绪时等待指定时长后失败。适用于容器编排启动顺序控制、CI 流水线和部署脚本中做依赖服务就绪判断。",
+   "highlights": [
+    "支持 TCP 端口、MySQL、PostgreSQL、MongoDB、Oracle、Redis、Kafka 等多种服务的就绪检测",
+    "支持超时设置，可在指定时间内等待服务就绪后失败退出",
+    "支持通过 YAML 文件定义多项检查（Multi-Check）"
+   ],
+   "use_cases": [
+    "容器/编排环境中等待依赖数据库或消息队列就绪后再启动应用",
+    "CI/CD 流水线中检测服务可用性",
+    "脚本中对 HTTP 接口响应码与响应文本做检查"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "MySQL, PostgreSQL, MongoDB or Redis server is ready or not, Also you can do Http call and check ／ * PostgresQL",
+     "lines": [
+      6,
+      14
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL, PostgreSQL, MongoDB or Redis server is ready or not, Also you can do Http call and check ／ * MySQL",
+     "lines": [
+      6,
+      13
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "* Oracle",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为检测数据库等服务是否就绪提供服务探测能力，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A simple go application to test whether a port is ready to accept a connection or check ／ MySQL, PostgreSQL, MongoDB or Redis server is ready or not, Also you can do Http call and check ／ ## Supported Services",
+   "evidence_lines": [
+    5,
+    6,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "ph4r5h4d/wait4it",
+  "sha": "c37796f6c28b",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f5ed3b5076b0": {
+  "identity": {
+   "one_liner": "Java JDBC 驱动，在驱动层实现对 sql-proxy 的负载均衡",
+   "review": "lb-driver 是网易开源的 JDBC 驱动，包装 mysql-connector-java，将原本由 nlb/slb 承担的负载均衡下沉到驱动层，面向带 proxy 架构的数据库。提供本地模式（从地址串获取节点）与 config-server 模式（动态获取节点、不重启扩缩容），支持健康检查、故障剔除和多可用区感知，适用于 OceanBase、TiDB 等。",
+   "highlights": [
+    "自动探活并屏蔽故障 sql-proxy 节点，按连接数自动均衡",
+    "支持 config-server 模式动态上下线 sql-proxy，无需重启业务进程",
+    "支持多可用区（AZ）亲和与降级兜底逻辑"
+   ],
+   "use_cases": [
+    "业务直连 OceanBase OBProxy、TiDB 等 sql-proxy 的场景",
+    "需要避免负载均衡器成为性能瓶颈的连接链路",
+    "需要多可用区就近接入与故障降级的部署"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "* 仅依赖slf4j-api和mysql-connector-java，没有其他依赖 ／ jdbc:mysql:lb:local://10.189.0.1:6000,10.189.0.2:6000,10.189.0.3:6000/mydatabase?connectTimeout=5000&socketTimeout=10000&logStats=true",
+     "lines": [
+      18,
+      44
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "* 适用于oceanbase、tidb等 ／ TiDB",
+     "lines": [
+      19,
+      110
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "* 适用于oceanbase、tidb等 ／ 网易开源 lb-driver：OceanBase OBProxy 驱动层负载均衡实践",
+     "lines": [
+      19,
+      105
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为 proxy 架构数据库提供驱动层负载均衡的组件，服务于数据库生态而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Load-Balance-Driver, wrapper of mysql-jdbc-driver, suitable for use in databases with proxy architecture, such as OceanBase, TiDB, etc. ／ * 适用于需要业务直连sql-proxy，而非通过负载均衡器（nlb/slb），使得负载均衡的逻辑从nlb/slb下沉到driver层 ／ * 适用于oceanbase、tidb等",
+   "evidence_lines": [
+    3,
+    14,
+    19
+   ]
+  },
+  "fn": "netease-im/lb-driver",
+  "sha": "f5ed3b5076b0",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

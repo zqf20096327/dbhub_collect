@@ -9816,5 +9816,389 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7c9822a8cc79": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的 Golang 全栈 Headless 内容管理平台",
+   "review": "一款以 Protobuf 为单一 API 契约的开箱即用内容管理平台，后端基于 go-kratos + Ent ORM，数据存于 PostgreSQL/MySQL，提供 REST/gRPC 双协议接口，配套 Vue/React/Taro/Flutter 多端前端。面向需要多租户、多语言内容管理与多渠道分发的企业和团队，包含三级权限管控与 AI 助手模块。",
+   "highlights": [
+    "API 优先：REST/gRPC 双协议接口，OpenAPI 文档自动生成，另提供 GraphQL 只读内容查询端点",
+    "多租户数据隔离，支持菜单/接口/数据三级权限管控与按钮级控制",
+    "内容建模可视化自定义，支持多站点配置、版本化、协同编辑与社交平台分发",
+    "AI 助手模块：知识库 RAG（pgvector 向量检索）、自然语言转只读 SQL、内容 AI 生成"
+   ],
+   "use_cases": [
+    "企业官网/门户等多端内容管理与分发",
+    "需要多租户 SaaS 化内容平台的企业",
+    "多语言/出海业务的内容运营场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库| ／ |知识库 RAG|文档上传（txt/md/docx/pdf）自动切片向量化入 pgvector，对话检索注入相关片段|",
+     "lines": [
+      49,
+      145
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该平台使用 PostgreSQL/MySQL 作为自身内容数据的存储数据库，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|数据库|PostgreSQL / MySQL|关系型数据库| ／ 风行（GoWind HCH）是一款开箱即用的企业级 Golang 全栈 Headless 内容平台（HCH = Headless Content Hub，无头内容中枢），为企业提供灵活、可扩展的全域内容管理与分发解决方案。 ／ |Headless API|完整 OpenAPI 接口，支持内容 CRUD，适配多端调用；另有 GraphQL 只读内容查询（帖子/页面/分类/标签，独立 `:6702` 端点）|",
+   "evidence_lines": [
+    49,
+    14,
+    125
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tx7do/go-wind-cms",
+  "sha": "7c9822a8cc79",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c384da2ae8fb": {
+  "identity": {
+   "one_liner": "OpenAlgo 的单用户桌面版算法交易平台",
+   "review": "OpenAlgo Desktop 是 OpenAlgo 算法交易平台的单用户桌面版本，运行于 Windows、macOS 和 Linux，内置本地服务器提供与网页版相同的 REST API 和 WebSocket 行情接口，供 Python SDK、TradingView、Amibroker、MCP 客户端等直接对接。适合需要在本地桌面运行自动化交易的个人交易者；限制包括仅在有图形桌面时运行、不支持 Docker/后台服务、同时只能运行一个实例。",
+   "highlights": [
+    "提供与 OpenAlgo web 相同的 REST API (/api/v1) 和行情 WebSocket 接口",
+    "支持 Windows、macOS（Intel/Apple Silicon）与 Linux x64/ARM64 安装包",
+    "凭据本地加密存储，支持两步验证登录"
+   ],
+   "use_cases": [
+    "个人桌面端算法交易与券商对接",
+    "通过本地 API 接入 TradingView、Amibroker、Python SDK 等外部工具",
+    "在本地运行策略与止损/目标跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用数据库（SQLite 主题标签）存储本地账户与配置的交易应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OpenAlgo on your own computer. Install, sign in, connect your broker, trade.** ／ OpenAlgo Desktop is a single-user desktop version of ／ same market data feed as the web version. There is no server to set up, no Python to",
+   "evidence_lines": [
+    8,
+    10,
+    13
+   ]
+  },
+  "fn": "marketcalls/openalgo-desktop",
+  "sha": "c384da2ae8fb",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fe2908943e2e": {
+  "identity": {
+   "one_liner": "基于 SQLite 的泛基因组图与比对数据文件格式",
+   "review": "该项目将 GBZ 泛基因组图和 GAF 序列比对文件转换为 SQLite 数据库文件格式，支持免于整体加载的局部访问和子图查询，提供 construct 与 query 等 Rust 命令行工具。面向基因组学研究中需要交互式访问泛基因组图及其比对数据的用户。注意 GAF-base 格式仍处于开发中，且建议数据库文件放在本地 SSD 上。",
+   "highlights": [
+    "提供 gbz-base 与 gaf-base 命令行工具，实现 GBZ 图到数据库文件的转换与子图查询",
+    "支持路径/偏移/节点/snarl 等多种子图查询方式，可输出 GFA 或 JSON 格式",
+    "支持将 GAF 比对数据构建为数据库并按子图提取对齐读段"
+   ],
+   "use_cases": [
+    "交互式访问大型泛基因组图的局部区域而无需整体加载",
+    "从 GBZ-base 数据库中提取子图及其上叠加的比对读段",
+    "将 GAF 比对文件转换为可查询的本地数据库格式"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# GBZ and GAF in SQLite ／ SQLite-based file formats for:",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目使用 SQLite 作为底层存储实现泛基因组数据的文件格式与查询工具，而非使用数据库构建应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# GBZ and GAF in SQLite ／ SQLite-based file formats for: ／ cargo build --release",
+   "evidence_lines": [
+    1,
+    3,
+    17
+   ]
+  },
+  "fn": "jltsiren/gbz-base",
+  "sha": "fe2908943e2e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fb683bdc4392": {
+  "identity": {
+   "one_liner": "Rust 编写的 Debian 多节点主机托管控制面板",
+   "review": "在 Debian 服务器上运行的托管控制面板，通过每节点一个 agent 加主节点 Web UI 的架构，自动化 PHP/nginx/PHP-FPM/数据库/TLS/WordPress 站点的开通流程，并附带备份、监控、WAF、防火墙与审计日志。面向自托管托管服务商或小型托管业务运维人员；支持 MariaDB 与 PostgreSQL 作为站点数据库，仅支持 Debian 12/13 平台。",
+   "highlights": [
+    "以单事务开通站点（Linux 用户、nginx vhost、PHP-FPM 池、数据库、TLS），失败时回滚已完成步骤",
+    "提供定期与按需备份，支持 S3（age 加密）、FTP/FTPS/SFTP 异地副本及 restic 快照",
+    "提供基于 BLAKE3 哈希链的审计日志、每站点 WAF 与基于 nftables 的防火墙"
+   ],
+   "use_cases": [
+    "在单台或多台 Debian 服务器上托管 PHP/WordPress 站点并集中管理",
+    "从 HestiaCP 或 CloudPanel 迁移托管站点",
+    "对托管业务实施磁盘配额、备份策略与操作审计"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+     "lines": [
+      78,
+      114
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite) rather than scraping it. You pick the sites, their PHP version, profile",
+     "lines": [
+      296
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+     "lines": [
+      78,
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "面板为站点开通和管理数据库实例（安装 MariaDB/PostgreSQL、phpMyAdmin）提供服务，属数据库生态管理工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted, multi-node hosting control panel for Debian, written in Rust.** ／ One agent on each server, one web UI on the master. Hyperion provisions PHP, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+   "evidence_lines": [
+    3,
+    5,
+    114
+   ]
+  },
+  "fn": "nechodom/hyperion",
+  "sha": "fb683bdc4392",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7e93d3f157ce": {
+  "identity": {
+   "one_liner": "基于 Tauri 的桌面 SQL 客户端，支持多种数据库",
+   "review": "SQL Pro 是一个桌面端 SQL 客户端，类似 Sequel Pro，支持 MySQL、PostgreSQL、SQL Server 和 SQLite，基于 Tauri v2（Rust 后端）与 Vue 3 + TypeScript 前端构建，可运行于 macOS、Windows 和 Linux。通过安装脚本分发，应用未签名，也可用 bun 从源码开发运行。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、SQL Server、SQLite 等数据库连接",
+    "跨平台运行于 macOS、Windows、Linux，提供 .dmg/.msi/.deb/.rpm/.AppImage 安装形式",
+    "Tauri v2（Rust 后端）+ Vue 3 + TypeScript 构建，可源码开发运行"
+   ],
+   "use_cases": [
+    "在桌面端浏览和查询多种 SQL 数据库",
+    "在 macOS/Linux/Windows 上安装使用的数据库图形客户端",
+    "希望参与开发的 Tauri + Vue 桌面应用开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A small desktop SQL client, like Sequel Pro. It works with MySQL, PostgreSQL, SQL Server and SQLite.",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A small desktop SQL client, like Sequel Pro. It works with MySQL, PostgreSQL, SQL Server and SQLite.",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A small desktop SQL client, like Sequel Pro. It works with MySQL, PostgreSQL, SQL Server and SQLite.",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A small desktop SQL client, like Sequel Pro. It works with MySQL, PostgreSQL, SQL Server and SQLite.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接多种数据库的桌面客户端工具，为数据库的使用和管理服务，而非以某数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A small desktop SQL client, like Sequel Pro. It works with MySQL, PostgreSQL, SQL Server and SQLite. ／ It is built with Tauri v2 (Rust backend) and Vue 3 + TypeScript (frontend). ／ The flow is: component -> `Session` -> `DatabaseApi` -> Rust command.",
+   "evidence_lines": [
+    5,
+    9,
+    56
+   ]
+  },
+  "fn": "necessarylion/sql-pro",
+  "sha": "7e93d3f157ce",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

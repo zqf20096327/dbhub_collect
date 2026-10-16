@@ -9001,5 +9001,120 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cedf107d0bd4": {
+  "identity": {
+   "one_liner": "C11 编写的崩溃安全嵌入式键值存储引擎",
+   "review": "tarn 是一个用 C11 实现的嵌入式键值存储库，每次写入追加到段文件并 fsync 后返回，崩溃后通过逐条校验记录恢复。索引采用内存哈希表，支持压缩合并，提供 C API 和命令行工具。构建依赖 CMake，可运行于 Linux、macOS 和 Windows。适合需要在 C 项目中嵌入键值存储的开发者；限制包括索引须全部驻留内存、无范围扫描、单目录单句柄。",
+   "highlights": [
+    "每次写入追加段文件并 fsync 后确认，支持崩溃后恢复已确认写入",
+    "内存哈希表索引实现单次读取查询，支持 tarn_compact 压缩",
+    "提供 C API、tarn 命令行工具与 tarn_bench 基准工具，含 libFuzzer 恢复代码模糊测试"
+   ],
+   "use_cases": [
+    "为 C/C++ 项目嵌入持久化键值存储",
+    "需要写入落盘确认保证的场景",
+    "单机少量键的简单持久化存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 实现键值存储引擎本体（段文件、索引、恢复），是为存储生态服务的引擎而非使用外部数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small embedded key-value store in C11 that does not lose writes. ／ **Segments.** Data lives in append-only files named `00000001.seg`, ／ **Index.** An in-memory hash table maps every key to the segment and offset",
+   "evidence_lines": [
+    3,
+    33,
+    44
+   ]
+  },
+  "fn": "ReazGan/tarndb",
+  "sha": "cedf107d0bd4",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2d0253b42114": {
+  "identity": {
+   "one_liner": "开发者个人课程笔记与学习资源合集仓库",
+   "review": "这是作者个人学习路径的笔记仓库，收录其所学课程的目录（前端、Node.js、Nestjs、AI/ML 等）以及一份按主题整理的外部参考资源清单（Git、CSS、Vue、Python 等）。适合编程学习者查阅或借鉴该资源列表，仓库本身不提供可安装运行的软件，README 也声明后续计划重构目录结构。",
+   "highlights": [
+    "包含 30 余门课程的笔记与主题索引，覆盖前端、后端、AI/ML 等方向",
+    "提供按主题分类的外部工具与学习资源链接清单",
+    "不包含安装或运行说明，仅为笔记与链接集合"
+   ],
+   "use_cases": [
+    "作为个人课程笔记的参考示例",
+    "按主题查找外部学习资源链接",
+    "借鉴技术学习路径的组织方式"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Express using PostgreSQL|Backend,Express, PostgreSQL, SQL, Docker|",
+     "lines": [
+      41
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库为课程笔记与资源链接集合，未提供为数据库生态服务的工具，也未声明使用数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is Babylon, a collection or a library of courses I have took or I'm taking; basically those folders up there are my notes some code and personal thoughts about different technologies, from Frontend to AI/ML, you can (Or will) find almost anything here. ／ The aim of this repository is to have a set of tools for myself (Or you) to keep checking them, in order to remember of find topic. I'm also adding a reference list for tools I found useful. ／ |Express using PostgreSQL|Backend,Express, PostgreSQL, SQL, Docker|",
+   "evidence_lines": [
+    10,
+    12,
+    41
+   ]
+  },
+  "fn": "AndresMpa/babylon",
+  "sha": "2d0253b42114",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

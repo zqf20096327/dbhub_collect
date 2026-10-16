@@ -9562,5 +9562,153 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a483fd386a28": {
+  "identity": {
+   "one_liner": "Tiger Cloud 的命令行工具，含 MCP 服务器供 AI 助手操作 Postgres 服务",
+   "review": "Tiger CLI 是 Tiger Cloud 的官方命令行界面，提供认证、项目管理、数据库服务生命周期管理（创建、启停、扩缩容、fork）、psql 连接、SQL 查询和 schema 查看等命令，并内置 MCP 服务器供 Claude Code 等 AI 助手调用服务管理与数据库操作工具。适用于通过终端或 AI 编码代理管理 Tiger Cloud Postgres 服务的用户，依赖 Tiger Cloud 账号认证。",
+   "highlights": [
+    "提供 service 生命周期管理、db psql/query/schema、metrics 时序查询等 CLI 命令",
+    "内置 MCP 服务器，暴露 service_list/db_query/db_schema 等工具并支持 stdio 与 HTTP 传输",
+    "可向 AI 编码代理安装 PostgreSQL 与 TimescaleDB skills，并代理 Postgres/TimescaleDB 文档语义搜索"
+   ],
+   "use_cases": [
+    "通过命令行管理 Tiger Cloud 数据库服务（创建、启停、扩缩容、查看日志与指标）",
+    "为 AI 编码代理配置 MCP 工具以查询和操作 Postgres 数据库",
+    "向编码代理安装 PostgreSQL/TimescaleDB 技能与文档检索能力"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- `psql` - Connect to a database with psql (in an interactive terminal, if the service has read replicas, offers to connect to one of them; use `--no-replica-prompt` to skip) (alias: `connect`) ／ - `query` - Execute a SQL query against a database and display the results, without needing psql (alias: `sql`) ／ - `install` - Install PostgreSQL and TimescaleDB skills for AI coding agents (alias: `add`)",
+     "lines": [
+      105,
+      106,
+      123
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明其为管理 Tiger Cloud 数据库服务的 CLI 与 MCP 服务器，是为数据库服务生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tiger CLI is the command-line interface for Tiger Cloud. It provides commands for managing and querying database services, as well as an integrated Model Context Protocol (MCP) server for use with AI assistants. ／ - `tiger db` - Database operations ／ Tiger CLI includes a Model Context Protocol (MCP) server that enables AI assistants like Claude Code to interact with your Tiger Cloud infrastructure. The MCP server provides programmatic access to database services and operations.",
+   "evidence_lines": [
+    3,
+    104,
+    143
+   ]
+  },
+  "fn": "timescale/tiger-cli",
+  "sha": "a483fd386a28",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8fc353e4f8ea": {
+  "identity": {
+   "one_liner": "自托管日志平台，OTLP 接入 + PostgreSQL 全文检索",
+   "review": "Logwell 是一个自托管日志聚合平台，通过 OTLP 协议和简单 HTTP API 接收日志，用 PostgreSQL tsvector 实现全文检索，支持 SSE 实时流查看，并提供 TypeScript、Python、Go SDK。适用于需要结构化日志且数据自持的个人或小团队；README 标注为 Alpha 软件，不建议生产环境使用。",
+   "highlights": [
+    "支持 OTLP 原生接入与简单 JSON HTTP 摄取 API，批量上限 100 条",
+    "使用 PostgreSQL tsvector 实现日志全文检索，无需独立搜索集群",
+    "提供 TypeScript/Python/Go SDK 及 OpenTelemetry 各语言导出示例"
+   ],
+   "use_cases": [
+    "个人项目或初创团队的自托管日志后端",
+    "开发调试期间的实时日志流查看",
+    "已使用 OpenTelemetry 的应用接入日志收集"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL backend** — Full-text search via tsvector, no separate search cluster needed ／ |Database|PostgreSQL| ／ DATABASE_URL=\"postgres://root:mysecretpassword@localhost:5432/local\"",
+     "lines": [
+      47,
+      85,
+      135
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "- High-volume production systems (10k+ logs/second) — use Loki or Clickhouse",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 Database 为 PostgreSQL，Logwell 是使用 PostgreSQL 存储日志数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker",
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Logwell is a self-hosted logging platform with real-time streaming, full-text search, and OTLP-compatible ingestion. Deploy in minutes, own your data. ／ - **PostgreSQL backend** — Full-text search via tsvector, no separate search cluster needed ／ |Database|PostgreSQL|",
+   "evidence_lines": [
+    3,
+    47,
+    85
+   ]
+  },
+  "fn": "Divkix/Logwell",
+  "sha": "8fc353e4f8ea",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

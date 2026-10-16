@@ -9825,5 +9825,170 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "40de1cfce1a0": {
+  "identity": {
+   "one_liner": "Rust 表级数据传输引擎，Python 绑定，支持多库间整表搬迁",
+   "review": "apitap 是一个用 Rust 实现的数据传输引擎，通过 pip 提供一行式 Python API，用于在 Postgres、MySQL、ClickHouse、BigQuery 等数据库间移动整表。它直接使用各库的二进制协议（COPY、RowBinary、LOAD DATA、binlog/逻辑复制），支持 replace/append/merge/log_based 模式、增量同步与批量 CDC，内存按容器 cgroup 限额规划。适合需要在受限容器资源下做 ELT/批量数据管道的数据工程团队。",
+   "highlights": [
+    "支持 replace/append/merge/log_based 多种传输模式，含增量加载与批量 CDC",
+    "以 Rust wire client 直连各库二进制协议（COPY、RowBinary、LOAD DATA、binlog、逻辑复制）",
+    "内存上限按 cgroup 规划，与表大小无关，可经 apitap.read() 输出 polars/pyarrow/duckdb/pandas"
+   ],
+   "use_cases": [
+    "数据库间整表迁移与批量装载（如 Postgres → ClickHouse、MySQL → BigQuery）",
+    "基于 binlog/WAL 的批量 CDC 增量同步",
+    "定时批处理管道（cron、Airflow、Kubernetes）中的数据搬运环节"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (any REST catalog)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "lines": [
+      44,
+      45,
+      46
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL binlog — through its own Rust wire clients, moves tables over parallel ／ |**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (any REST catalog)|",
+     "lines": [
+      7,
+      44,
+      45
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (any REST catalog)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "lines": [
+      44,
+      45,
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |MySQL / MariaDB|`mysql://user:pass@host:3306/db?ssl-mode=verify_identity`|TLS is **required for any non-loopback host** since 0.55.1; `ssl-mode` = `disabled` (send in clear, on purpose) · `required` (encrypt, no verify) · `verify_ca` · `verify_identity` (defa",
+     "lines": [
+      44,
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为数据库间表传输引擎，为数据管道/迁移任务服务，而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "apitap is a transfer engine, not an API client. It speaks the databases' own ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg| ／ |**Runtime**|CPython ≥ 3.9, one `abi3` wheel (`manylinux_x86_64`); the engine is Rust, nothing in the data path is Python|",
+   "evidence_lines": [
+    5,
+    46,
+    48
+   ]
+  },
+  "fn": "apitap/apitap-lib",
+  "sha": "40de1cfce1a0",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cc88ad956fed": {
+  "identity": {
+   "one_liner": "自托管 Linux 设备管理（MDM）服务器，用 PostgreSQL 作存储与队列",
+   "review": "lindm 是面向 Linux 设备群的自托管 MDM 系统，提供设备注册、配置下发、磁盘加密密钥托管、远程锁定/擦除、系统更新与远程协助等功能，采用各发行版原生工具实现。它供自行托管服务器的运维管理员使用，服务端以 Go 编写，依赖 PostgreSQL 作为存储与工作队列，安装需自行构建签名发布包。",
+   "highlights": [
+    "支持设备注册、配置分阶段发布、双人审批与远程锁定/擦除",
+    "提供 TPM 磁盘加密与恢复密钥托管、带签名的审计日志及导出",
+    "包含 MCP 服务器，供 AI 助手接入"
+   ],
+   "use_cases": [
+    "企业或机构对 Linux 台式机/笔记本机队进行集中注册与配置管理",
+    "对丢失设备执行远程锁定与擦除，并对破坏性操作执行独立审批",
+    "跟踪厂商安全公告并按设备核查漏洞发现与补丁请求"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`lindmd` is a Go server with PostgreSQL as its store and work queue.",
+     "lines": [
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 lindmd 是以 PostgreSQL 作为存储与工作队列的 Go 服务器，PostgreSQL 是其自身依赖而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0；第三方代码与数据保留各自许可，见 NOTICE",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "lindm is a self-hosted MDM for Linux fleets. ／ `lindmd` is a Go server with PostgreSQL as its store and work queue.",
+   "evidence_lines": [
+    8,
+    159
+   ]
+  },
+  "fn": "radkawar/lindm",
+  "sha": "cc88ad956fed",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

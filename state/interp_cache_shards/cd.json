@@ -9598,5 +9598,83 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f3d128daa695": {
+  "identity": {
+   "one_liner": "面向智能体记忆的嵌入式数据库，统一 MVCC 事务下提供关系、图与向量存储",
+   "review": "contextdb 是一个以 Rust 库和 CLI 形式提供的嵌入式数据库，在单一文件、单一进程内同时提供关系存储、图遍历与向量相似度检索，并通过 MVCC 事务保证三者一致。面向构建智能体记忆系统的开发者，通过 Cargo 安装使用；SQL 语法兼容 PostgreSQL，内置状态机、DAG 等策略约束，实例间支持基于加密身份的双向同步。Python/TypeScript 绑定尚未提供。",
+   "highlights": [
+    "在统一 MVCC 事务中同时更新关系行、图邻接结构与向量索引",
+    "支持 SQL/PGQ 风格图查询（GRAPH_TABLE MATCH）与 pgvector 风格向量检索（<=>）",
+    "提供引擎级策略约束：STATE MACHINE、IMMUTABLE、DAG、PROPAGATE、RETAIN TTL",
+    "实例间通过 enrollment ticket 进行双向 P2P 同步，支持表级冲突策略"
+   ],
+   "use_cases": [
+    "为智能体（agent）记忆系统提供本地嵌入式持久化",
+    "需要关系、图、向量混合查询的嵌入式场景",
+    "离线优先的多节点数据同步部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "**Relational (PostgreSQL-compatible SQL)** — SELECT, INSERT, UPDATE, DELETE, JOINs (INNER/LEFT), CTEs, upsert (`ON CONFLICT DO UPDATE`), DISTINCT, LIMIT, IN with subqueries, LIKE, BETWEEN, parameter binding (`$name`).",
+     "lines": [
+      170
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "If you're building agent memory today, you're probably stitching together SQLite for state, a vector database for embeddings, and application code for graph traversal. contextdb replaces all three — and adds **enforceable policy constraints** (state machines, ",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位其为数据库引擎本体，通过提供存储与查询能力服务上层应用而非仅消费数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "An embedded database for agentic memory systems. Relational storage, graph traversal, and vector similarity search under unified MVCC transactions — in a single file, in a single process. Every agent, device, or service runs its own contextdb, and each one works standalone. Instances sync bidirectionally with per-table conflict resolution, so knowledge learned by one becomes available to all: machines on one LAN sync over iroh with no server setup, and how you wire production (including an optional SyncServer) is your choice. No port forwarding, no VPN — a node behind NAT dials outbound. ／ contextdb is an embedded database. The primary interface is the Rust API: ／ **Relational (PostgreSQL-compatible SQL)** — SELECT, INSERT, UPDATE, DELETE, JOINs (INNER/LEFT), CTEs, upsert (`ON CONFLICT DO UPDATE`), DISTINCT, LIMIT, IN with subqueries, LIKE, BETWEEN, parameter binding (`$name`).",
+   "evidence_lines": [
+    10,
+    37,
+    170
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "context-graph-ai/contextdb",
+  "sha": "f3d128daa695",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

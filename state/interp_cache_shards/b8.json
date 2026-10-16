@@ -7938,5 +7938,150 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c52937761b1e": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的本地记忆库，单 SQLite 存储提供混合检索与 MCP 服务",
+   "review": "Mimir 将类型化记忆、markdown 文档索引和 tree-sitter 代码符号统一存入一个本地 SQLite 图数据库，通过 FTS5 BM25 与本地 ONNX 语义向量做混合检索，并以全局注册的 MCP server 暴露给 AI 编码代理。面向使用 AI 编码工具的开发者，需安装 Rust CLI 或预编译二进制；数据全部留本地，嵌入模型可离线跳过。",
+   "highlights": [
+    "将记忆、文档块与代码符号统一存入单一 SQLite 图，支持 BM25+向量混合检索与倒数排名融合",
+    "通过 tree-sitter 提取十余种语言的代码符号与调用/导入边，支持 callers、impact 等图查询",
+    "内置 MCP server，一次注册即可按工作目录识别项目服务多个仓库，并提供 grounding 校验记忆与代码符号的链接"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨项目持久化记忆与语义召回",
+    "在代码仓库中建立符号调用图并评估改动的波及范围",
+    "对本地 markdown 文档做增量索引与混合搜索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Unified, local-first memory for AI coding agents.** One SQLite store where",
+     "lines": [
+      7
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- DECISION [m:XY9QRT] (10mo): we chose sqlite over postgres — don't relitigate",
+     "lines": [
+      358
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身存储组件，而非为数据库生态提供工具或组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Unified, local-first memory for AI coding agents.** One SQLite store where ／ searched together by hybrid BM25 + local-ONNX semantic retrieval, and exposed ／ - **Code graph.** Tree-sitter symbol extraction (Rust, TypeScript/JS,",
+   "evidence_lines": [
+    7,
+    9,
+    56
+   ]
+  },
+  "fn": "MakerViking/mimir",
+  "sha": "c52937761b1e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6c757f2e68bb": {
+  "identity": {
+   "one_liner": "AI 产品计量与计费系统，应用 Postgres+Redis 存储事件与余额数据",
+   "review": "Closure 是一个面向 AI 产品的定价、计量与余额管理系统，供金融、增长、销售和工程团队使用。应用通过 API 上报计量事件，Redis 提供即时校验，事件批量写入 Postgres 保留完整记录并可重建 Redis，阈值触发时由 Hatchet 向 Slack、Teams 等发送通知，支持 Docker 一行命令自托管部署。",
+   "highlights": [
+    "提供计量事件与余额检查 API，事件先写入 Redis 再批量刷入 Postgres 保存完整记录",
+    "支持通过 Docker 一行命令在 Linux 上部署自托管实例，含 Web 控制台、文档站与 API",
+    "数据库 schema 基于 Drizzle 管理，提供迁移生成与应用命令"
+   ],
+   "use_cases": [
+    "为 AI 产品构建计量、额度与订阅计费体系",
+    "金融团队自动开票并将收入与使用成本对账",
+    "增长团队运行促销、优惠券与推荐返利并分析生命周期数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Events are flushed to Postgres in batches, which keeps a full record and can ／ - **Postgres** and **Redis** store Closure's data. ／ |`CLOSURE_POSTGRES_PASSWORD`|The database|No: only used when the database is first created; editing it later has no effect|",
+     "lines": [
+      20,
+      74,
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 Postgres 与 Redis 存储 Closure 自身的数据，数据库是应用依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Events are flushed to Postgres in batches, which keeps a full record and can ／ - **Postgres** and **Redis** store Closure's data. ／ docker compose -p closure -f bin/compose.yml up -d",
+   "evidence_lines": [
+    20,
+    74,
+    189
+   ]
+  },
+  "fn": "disjointinc/closure",
+  "sha": "6c757f2e68bb",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

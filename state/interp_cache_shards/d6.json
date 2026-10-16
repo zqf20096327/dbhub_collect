@@ -9501,5 +9501,226 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5fe2c8014e9d": {
+  "identity": {
+   "one_liner": "单文件嵌入式双时态图数据库，支持 Datalog 查询",
+   "review": "Minigraf 是一个以 Rust 编写的单文件嵌入式图数据库，提供 Datalog 查询与双时态时间回溯能力，支持窗口函数、预编译语句，并以 WASM 方式运行于浏览器。面向 AI 代理记忆、移动应用离线存储等场景，通过 PyPI/npm/Maven/SPM 等提供多语言绑定。设计上明确不做分布式与客户端-服务器模式，事实大小上限 4080 字节。",
+   "highlights": [
+    "提供 Datalog 查询语言，支持递归规则与窗口函数",
+    "实现双时态模型（事务时间+有效时间），可回放任一历史状态",
+    "提供 Python/Node.js/Java/Swift/Kotlin/C/WASM 多平台绑定"
+   ],
+   "use_cases": [
+    "为 AI 代理存储可审计、可回溯的信念/记忆",
+    "移动应用离线优先存储与追溯性修正",
+    "浏览器内嵌图数据（IndexedDB-backed WASM）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      93
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是数据库本体（存储引擎），既非为现有数据库服务的工具，也非以数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "pypi",
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ - ✅ **Embed anywhere** - Native, WASM, mobile, IoT - one `.graph` file",
+   "evidence_lines": [
+    14,
+    22,
+    27
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "5fe2c8014e9d",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "33b12a4437b0": {
+  "identity": {
+   "one_liner": "PostgreSQL 线协议透明代理，在数据库边界加解密 Keycloak PII 列",
+   "review": "该项目实现一个位于 Keycloak 与 CloudNativePG 数据库之间的 PostgreSQL 线协议代理，写入时加密、读取时解密指定 PII 列，密钥由外部 KMS（Vault Transit 或静态 KEK）托管。面向在 Kubernetes 上运行 Keycloak 并需对其数据库中用户敏感字段做列级加密的运维人员；支持 SCRAM 双端终结、TLS 重发起、离线回填迁移工具，但不防护代理进程自身被攻破的情形。",
+   "highlights": [
+    "作为 PostgreSQL 线协议透明代理，按 Parse→Bind→Execute 状态跟踪连接，对指定列在 Bind 时加密、DataRow 时解密",
+    "数据加密密钥由外部 KMS（Vault Transit 或静态 KEK）包装，密钥不落在数据库内",
+    "提供 cmd/backfill 离线迁移工具，通过 $KKP$ 标记实现幂等回填加密"
+   ],
+   "use_cases": [
+    "对 Keycloak 数据库中的用户 PII 列做列级加密",
+    "结合 Vault Transit 管理加密密钥并支持 KEK 轮换",
+    "将已运行的 Keycloak 数据库以停机回填方式迁移为加密存储"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A transparent PostgreSQL wire-protocol proxy that sits between Keycloak and its CloudNativePG (CNPG) database and encrypts/decrypts PII columns on the fly. Keycloak talks to the proxy exactly as it would to PostgreSQL; the proxy forwards traffic to the real CN ／ The point of a wire-protocol proxy (rather than storage encryption or in-DB triggers) is **where the key lives**: in the proxy process and the KMS, *outside* PostgreSQL. That defends against a DB administrator with a live-DB shell or a SQL dump on a running da ／ The proxy binary lives in `cmd/proxy`; `pg_query_go` links against the embedded PostgreSQL parser via cgo, so the multi-stage `Dockerfile` builds with `CGO_ENABLED=1` on `golang:1.26.2-bookworm` and ships on `gcr.io/distroless/base-debian12:nonroot`. `make ima",
+     "lines": [
+      6,
+      10,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一个为 PostgreSQL 数据库流量提供加解密服务的代理组件，而非以数据库作存储的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A transparent PostgreSQL wire-protocol proxy that sits between Keycloak and its CloudNativePG (CNPG) database and encrypts/decrypts PII columns on the fly. Keycloak talks to the proxy exactly as it would to PostgreSQL; the proxy forwards traffic to the real CNPG cluster, encrypting designated column values on writes and decrypting them on reads. The data encryption key is wrapped by a KMS (HashiCorp Vault Transit or a static fake), so it never lives inside the database. ／ The proxy terminates SCRAM on both legs — it is a SCRAM server to Keycloak and a SCRAM client to CNPG — and re-originates TLS. The data path is stateful per connection: it tracks `Parse → Bind → Execute` so it knows which bound parameters carry PII values and which `DataRow` fields are encrypted on the way back. Writes encrypt at `Bind`; reads decrypt at `DataRow`. Anything the proxy does not recognise (DDL, Liquibase migrations, `COPY`, ...) is byte passthrough. ／ The proxy is a standard `Deployment` + `Service`. It is wired into the data path by pointing Keycloak's `KC_DB_URL_HOST`/`KC_DB_URL_PORT` at the proxy `Service`; the proxy in turn dials the real CNPG read-write `Service`. A `Secret` carries the SCRAM credentials and the KEK (static KMS) or the Vault token (Vault Transit). The pod runs unprivileged (`runAsNonRoot`, `readOnlyRootFilesystem`, dropped capabilities, `seccompProfile: RuntimeDefault`) and is PodSecurity-restricted compliant.",
+   "evidence_lines": [
+    6,
+    14,
+    56
+   ]
+  },
+  "fn": "cozystack/keycloak-kms-proxy",
+  "sha": "33b12a4437b0",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "875668c55b6e": {
+  "identity": {
+   "one_liner": "VastBase/openGauss/PostgreSQL 离线应急数据恢复工具",
+   "review": "vbdul 是一款针对 VastBase/openGauss 及 PostgreSQL 的应急数据恢复命令行工具，在数据库无法启动、误删表或无备份的场景下直接解析磁盘数据文件抢救数据。它提供字典构建、空闲页扫描、WAL logminer 挖掘和基于 ProBackup 备份的时间点恢复，仅支持 Heap 行存引擎，正式版需向供应商申请 license。",
+   "highlights": [
+    "支持离线解析数据文件，提供 DROP/TRUNCATE 后的文件系统空闲页扫描恢复",
+    "提供 logminer 从 WAL 挖掘 INSERT/DELETE/UPDATE 并恢复误删或误改的行",
+    "以只读方式访问原始数据文件，支持 Linux x86_64 与 aarch64"
+   ],
+   "use_cases": [
+    "数据库实例崩溃、系统表损坏且无备份时的数据抢救",
+    "误执行 DROP TABLE/TRUNCATE 后的页面级数据还原",
+    "通过 WAL 挖掘定位误操作事务并恢复被删改的行"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db_type|是|`vastbase` 或 `postgresql`，按实例内核填；填错直接报错退出| ／ |postgresql|pg10 ~ pg17|对应 PostgreSQL 10 ~ 17|",
+     "lines": [
+      34,
+      58
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# vbdul - VastBase/openGauss 数据应急恢复工具 ／ vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ |vastbase|v3|G100 2215/308/309（openGauss 内核）|",
+     "lines": [
+      1,
+      3,
+      55
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 VastBase/openGauss/PostgreSQL 数据库提供离线数据恢复能力的专用工具，不依赖数据库进程运行",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "专有工具，正式版需生成 license request 并向供应商换取 license 后才能完整使用，Beta 版无需 license",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ |db_type|是|`vastbase` 或 `postgresql`，按实例内核填；填错直接报错退出| ／ |postgresql|pg10 ~ pg17|对应 PostgreSQL 10 ~ 17|",
+   "evidence_lines": [
+    3,
+    34,
+    58
+   ]
+  },
+  "fn": "LiXiangYu0612/vbdul",
+  "sha": "875668c55b6e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8531,5 +8531,186 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4fc8bc787ea0": {
+  "identity": {
+   "one_liner": "基于 NestJS + MikroORM + PostgreSQL 的博客克隆启动模板",
+   "review": "这是一个 NestJS 后端启动模板，实现博客示例项目，包含 JWT/OAuth 认证、RBAC 授权、MikroORM 迁移与种子、Redis 缓存、RabbitMQ 任务队列等集成，面向需要快速搭建 NestJS 项目的开发者。通过 npx degit 或 GitHub 模板按钮获取，依赖 pnpm 与 Docker 运行。",
+   "highlights": [
+    "提供 MikroORM 迁移与 seeders，通过 orm CLI 命令生成和应用迁移",
+    "内置认证体系：JWT 访问/刷新令牌、OAuth（Google、Facebook）、2FA(TOTP)、会话管理",
+    "提供 Docker Compose 部署脚本 deploy.sh，应用容器启动时自动执行迁移和种子"
+   ],
+   "use_cases": [
+    "作为 NestJS 后端项目的起始模板快速初始化",
+    "学习 NestJS 中 CRUD、认证授权等实际实现方式",
+    "本地或容器化部署带完整周边集成的博客类 API 服务"
+   ],
+   "review_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🏪 **MikroORM** on 🐘 **PostgreSQL**, with migrations and seeders ／ - Docker, for local PostgreSQL, Redis, RabbitMQ and a mail catcher",
+     "lines": [
+      24,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 PostgreSQL 存储数据的 NestJS 博客应用模板，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> ### Blog made using Nestjs + Mikro-orm codebase(backend) containing real world examples (CRUD, auth (password based and oauth), advanced patterns, etc) and batteries included and ever-evolving ／ - 🏪 **MikroORM** on 🐘 **PostgreSQL**, with migrations and seeders ／ `scripts/deploy.sh` drives the local stack in `docker-compose.dev.yml`: the app plus Postgres, Redis,",
+   "evidence_lines": [
+    3,
+    24,
+    109
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "rubiin/ultimate-nest",
+  "sha": "4fc8bc787ea0",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "22a999060704": {
+  "identity": {
+   "one_liner": "为 h5i-app 框架的 Rust 代码提供 Lean4 形式化验证基准",
+   "review": "该仓库为 h5i-app（一个将内核提取到 Lean 4 中进行证明的 Rust 框架）提供基准测试。包含验证基准（衡量可被证明的真实 Rust 代码规模）和性能基准（与 Go、TypeScript、Python 服务器对比）。主要面向关注形式化验证软件的开发者与研究者。",
+   "highlights": [
+    "提供验证基准（prove/），衡量真实世界 Rust 代码可被 Lean 4 证明的程度",
+    "提供性能基准（performance/），测量 h5i-app 服务器运行速度",
+    "结果公开于 benchmark.h5i.dev"
+   ],
+   "use_cases": [
+    "评估 h5i-app 框架的形式化验证能力",
+    "对比 h5i-app 与 Go/TypeScript/Python 服务器的性能"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明与任何数据库的适配或依赖关系，仅仓库标签中出现 postgresql",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0；移植代码保留上游许可（nora: MIT）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Benchmarks for h5i-app, a Rust framework whose kernel is extracted to Lean 4 and proved there. ／ |Verification|How much real-world Rust can h5i-app prove?|`prove/`|benchmark.h5i.dev/prove| ／ |Performance|Is an h5i-app server as fast as Go, TypeScript or Python?|`performance/`|benchmark.h5i.dev/performance|",
+   "evidence_lines": [
+    3,
+    7,
+    8
+   ]
+  },
+  "fn": "h5i-dev/h5i-app-bench",
+  "sha": "22a999060704",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9567030cfd74": {
+  "identity": {
+   "one_liner": "本地桌面工作区，可视化数据库 schema、OpenAPI 定义与编码代理会话",
+   "review": "Schematlas 是一个本地优先的桌面工作区，用于在仓库内生成并维护架构图、wiki、数据库 schema 图和 OpenAPI 定义，并与本地编码代理协作，产物以文件形式存放在仓库 .schematlas/ 目录下。面向使用本地 AI 编码代理并需要为代码库编写活文档的开发者。技术栈为 Tauri 2、Rust 和 Leptos，提供 macOS/Windows/Linux 安装包，构建需 Node.js 24+、Rust 1.95+ 和 trunk。",
+   "highlights": [
+    "支持生成架构图、wiki、数据库 schema 图（ERD）和 OpenAPI 定义，并以文件形式存于仓库",
+    "与本地编码代理集成，会话仅保留 session id，无遥测，连接串与凭据仅存内存",
+    "提供 macOS/Windows/Linux 安装包，支持从源码构建"
+   ],
+   "use_cases": [
+    "为代码库生成并维护随仓库版本管理的架构文档与数据库 schema 图",
+    "借助本地编码代理协作编写 wiki 与图表的团队或个人开发者",
+    "本地浏览数据库 schema 快照与 OpenAPI 定义"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 提供连接数据库、读取 schema 快照并生成图表的功能，属于为数据库生态服务的工具，不是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Living documentation for your repository: architecture diagrams, a wiki and database schemas, written with your local coding agent and stored as files in your repository. ／ Built with Tauri 2, Rust and Leptos. Licensed under Apache 2.0. ／ - Diagrams and docs are files in your repository, under `.schematlas/`.",
+   "evidence_lines": [
+    3,
+    5,
+    54
+   ]
+  },
+  "fn": "Jacqkues/schematlas",
+  "sha": "9567030cfd74",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

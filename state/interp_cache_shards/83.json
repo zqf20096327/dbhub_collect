@@ -10229,5 +10229,68 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bb7725cf37ad": {
+  "identity": {
+   "one_liner": "多平台 IM 消息通道桥，为 AI Agent 提供统一消息抽象",
+   "review": "octop-gateway 是一个 Python 编写的 IM 通道桥，将飞书、钉钉、QQ、企业微信、Telegram 等平台的消息归一化为 InboundMessage/MessageEvent 流，Agent 只需写一个异步处理器即可接入多平台；支持自定义通道、多租户、媒体后端和速率限制，通过 pip 安装，需 Python 3.12+。README 未涉及任何数据库。",
+   "highlights": [
+    "提供 10 个内置平台适配器（Feishu/DingTalk/QQ/WeCom/WeChat iLink/Yuanbao/Xiaoyi/MQTT/Telegram/Discord），统一为 BaseChannel 接口",
+    "处理器为异步生成器，输出 MESSAGE/DELTA/COMPLETED/ERROR 事件，支持 token 流式传输",
+    "支持自定义通道注册、多租户隔离、可插拔 MediaBackend 及每通道速率限制/超时/输入指示器"
+   ],
+   "use_cases": [
+    "将同一个 AI Agent 同时接入多个 IM 平台",
+    "为 bot 构建统一的消息处理管道（传输/解析/媒体/投递由网关处理）",
+    "需要主动推送（push_text/push_to_all）与多租户多通道运行的场景"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未提及数据库，项目定位为 IM 平台与 AI Agent 之间的消息桥，未声明服务任何数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**octop-gateway** is a multi-platform IM channel bridge with a unified message abstraction for AI agents and bots. It connects to mainstream IM platforms and normalizes every inbound message into one processing pipeline, so your agent logic is written **once** and runs across Feishu, DingTalk, QQ, WeCom, WeChat iLink, Yuanbao, Xiaoyi, MQTT, and Telegram. ／ Harness Gateway sits between your agent and the outside world. Each platform is implemented as a `BaseChannel` subclass that knows how to connect, parse inbound traffic, and send replies. A `ChannelManager` orchestrates them through async queues and hands your agent a normalized stream of `MessageEvent`s. You never write platform-specific code in your bot — just one processor. ／ |**Channel model**|`BaseChannel` + per-platform adapter (10 built-in)|",
+   "evidence_lines": [
+    19,
+    38,
+    47
+   ]
+  },
+  "fn": "TencentCloud/octop-gateway",
+  "sha": "bb7725cf37ad",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

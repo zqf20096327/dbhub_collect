@@ -10209,5 +10209,77 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3ed475d98d4b": {
+  "identity": {
+   "one_liner": "本地优先个人知识库 CLI，基于 Postgres+pgvector 混合检索",
+   "review": "second-brain 是一个本地知识库 CLI，把 Markdown 笔记、Krisp 转写、Slack、Gmail 等内容存入容器化的 Postgres+pgvector，通过 FTS+向量混合检索、GraphRAG 实体图和本地 Ollama 嵌入实现查询，并内置 MCP 服务器供 AI 代理读取。面向个人知识管理者和使用 AI 代理的用户，核心依赖为 Docker、Python 3.11+，运行时可选 Ollama。",
+   "highlights": [
+    "提供 FTS+pgvector 混合检索、GraphRAG 实体图和本地 LLM 富化，可选 minimal/standard/full 三档 profile",
+    "内置 MCP 服务器（brain-mcp），支持任意 MCP 客户端或 shell 代理查询语料，并带 token 预算与返回上限控制",
+    "数据存储于 Postgres+pgvector 容器，README 称完全本地运行、无需云端 API key"
+   ],
+   "use_cases": [
+    "将笔记、转写、邮件等个人语料集中存储并做混合检索",
+    "通过 MCP 让 AI 代理按需检索知识库以减少上下文 token 消耗",
+    "搭建本地 Web UI 浏览、编辑与查看笔记链接图"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat.  ／ Install the CLI, then run the offline demo — a throwaway Postgres seeded with a synthetic *Larkspur* compliance corpus. No Ollama, no personal data, no model downloads: ／ Full install — the `brain` CLI plus the runtime (Postgres, and optionally Ollama / graph / wiki):",
+     "lines": [
+      12,
+      46,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该工具以 Postgres+pgvector 存储自身语料数据，属于使用数据库的应用而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat. You read it through the CLI or the local web UI; the older rendered wiki is a legacy view, dormant since R2 (`brain-rebuild --only quartz` rebuilds it). ／ **Prerequisites (core):** Git, Python 3.11+, and a running Docker (Desktop or Engine) — the Postgres + pgvector database runs in a container on port 55432. ／ `brain` and the bundled `brain-mcp` server are harness-agnostic — any agent that runs a shell command or speaks MCP can query the corpus.",
+   "evidence_lines": [
+    12,
+    94,
+    153
+   ]
+  },
+  "fn": "mshtawythug/second-brain",
+  "sha": "3ed475d98d4b",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

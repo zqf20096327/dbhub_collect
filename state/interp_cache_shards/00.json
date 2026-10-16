@@ -9296,5 +9296,78 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8ac0c592539c": {
+  "identity": {
+   "one_liner": "Hey.com 邮箱的本地 MCP 服务器，供 Claude 等客户端读写邮件",
+   "review": "一个运行在本地的 MCP 服务器，让 Claude Code/Claude Desktop/Cursor 等 MCP 客户端读取、发送、搜索和整理 Hey.com 邮箱，提供 37 个工具；登录通过 Python webview 捕获会话 Cookie，本地用 SQLite 缓存消息与全文搜索。因 Hey 无公开 API，采用非官方 Web 端点，可能随页面变更失效，且仅支持英文界面账号。",
+   "highlights": [
+    "提供 37 个 MCP 工具，覆盖读信、标签/集合、发送与草稿、分拣、Screener、搜索与缓存状态",
+    "本地缓存使用 SQLite 存储消息、会话线程并支持全文搜索",
+    "写入操作先获取 CSRF token，并按 x-ratelimit 响应头退避；凭据仅存会话 Cookie（权限 600）"
+   ],
+   "use_cases": [
+    "在 Claude 等 MCP 客户端中读写和整理 Hey.com 邮箱",
+    "本地化处理邮件分拣（set aside、reply later、screening）",
+    "对邮箱消息做本地缓存与全文搜索"
+   ],
+   "ai_flag_holder": "na"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Cache|Local SQLite for messages, threads and full-text search|",
+     "lines": [
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内部消息缓存存储，项目本身服务于邮箱操作而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A local MCP server that gives Claude read/write access to your Hey.com inbox. A Bun/TypeScript server exposes the tools over stdio, and a small Python helper captures session cookies through the system webview at login. No cloud relay, no stored credentials. ／ |Cache|Local SQLite for messages, threads and full-text search|",
+   "evidence_lines": [
+    12,
+    69
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Sealjay/mcp-hey",
+  "sha": "8ac0c592539c",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

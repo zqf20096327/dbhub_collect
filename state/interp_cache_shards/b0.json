@@ -8325,5 +8325,140 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "470483ea1d67": {
+  "identity": {
+   "one_liner": "本地 MCP 代码知识图谱服务器，索引代码库供 AI 代理查询",
+   "review": "该项目是一个本地运行的 MCP 服务器，将代码库索引为持久化的知识图谱，包含函数、类、导入和 HTTP 路由及其关系，支持 162 种语言，并通过混合 LSP 为部分语言提供语义类型解析，供 Claude Code、Codex 等编码代理检索代码上下文。后端以纯 C 实现，使用内存中 SQLite 存储，提供单文件二进制安装，无需托管服务或 API 密钥；面向使用 AI 编码工具的开发者。",
+   "highlights": [
+    "索引函数、类、导入、HTTP 路由及其关系，覆盖 162 种语言（内置 tree-sitter 语法）",
+    "原生 C 后端提供 17 个 MCP 工具，支持 45 种客户端集成，无需 Docker、语言运行时或 API 密钥",
+    "使用内存中 SQLite、LZ4 压缩与混合 LSP 语义解析，查询和索引均在本地运行"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex 等编码代理提供持久化代码知识图谱与低 token 检索",
+    "在浏览器中浏览代码架构图、调用关系和依赖路径，理解陌生代码库",
+    "本地代码聊天与变更影响分析（文件依赖、调用者/被调用者）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Indexing performance**: Linux kernel (28M LOC, 75K files) in 3 minutes. RAM-first pipeline: LZ4 compression, in-memory SQLite, fused Aho-Corasick pattern matching. Memory released after indexing.",
+     "lines": [
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将索引数据存储于内存中 SQLite，是为编码代理服务的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Search your code, follow call graphs, and explore software architecture in your browser.** codebase-memory-mcp is a local Model Context Protocol (MCP) server that gives Claude Code, Codex, and other coding agents a persistent code knowledge graph. It indexes functions, classes, imports, HTTP routes, and their relationships across 162 languages. Hybrid LSP adds semantic type resolution for **Python, TypeScript, JavaScript, JSX/TSX, PHP, C#, Go, C, C++, Java, Kotlin, Rust, and Perl**. ／ The native C backend exposes 17 MCP tools and supports 45 automatic or conditional client integrations. Indexing and graph queries need no hosted service or API key. ／ - **Indexing performance**: Linux kernel (28M LOC, 75K files) in 3 minutes. RAM-first pipeline: LZ4 compression, in-memory SQLite, fused Aho-Corasick pattern matching. Memory released after indexing.",
+   "evidence_lines": [
+    18,
+    24,
+    62
+   ]
+  },
+  "fn": "DeusData/codebase-memory-mcp",
+  "sha": "470483ea1d67",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "aff5780918ac": {
+  "identity": {
+   "one_liner": "树莓派单二进制系统监控器，采集指标存入 SQLite 并提供仪表盘与告警",
+   "review": "Vigil 是一个面向 Raspberry Pi 的单二进制监控工具，采集 CPU、内存、磁盘、网络、温度等指标写入本地 SQLite（WAL 模式），并提供 TUI 仪表盘、阈值/变化率告警（Discord/webhook/ntfy 通知）、Docker 容器监控、挂载点看门狗和 HTTP/TCP 服务健康检查，支持 headless 模式与 --once --json 脚本输出；面向自托管 homelab 用户，MIT 许可，通过源码构建或 Docker 部署。",
+   "highlights": [
+    "采集 CPU/内存/磁盘/网络/温度/限频指标，写入 SQLite（WAL 模式），支持保留期配置与批量写入",
+    "提供阈值与变化率告警规则，支持 Discord/webhook/ntfy.sh 通知与静默时段",
+    "支持 Docker 容器监控、挂载点看门狗、HTTP/TCP 服务健康检查及 --headless/--once --json 模式"
+   ],
+   "use_cases": [
+    "树莓派/homelab 自托管环境的系统指标监控与告警",
+    "通过 --once --json 输出供脚本或 cron 快照集成",
+    "监控 Docker 容器资源、挂载点存在性与 HTTP/TCP 服务可达性"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Persistent storage** — SQLite (WAL mode), configurable retention, batched writes ／ |`db_path`|`/data/vigil.db`|SQLite database path|",
+     "lines": [
+      19,
+      113
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将采集的系统指标持久存储于本地 SQLite，数据库仅作为自身存储层而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A single binary that watches your Pi around the clock. No stack, no agents, no noise. ／ - **Persistent storage** — SQLite (WAL mode), configurable retention, batched writes ／ Monitors HTTP endpoints and TCP ports on a background interval. A `service_down:<name>` alert fires after N consecutive failures (default 2) and auto-resolves when the service responds again. A \"Services\" panel appears in the TUI showing status, latency, and last-checked time. Results are persisted to the `service_checks` SQLite table.",
+   "evidence_lines": [
+    3,
+    19,
+    197
+   ]
+  },
+  "fn": "baudsmithstudios/vigil",
+  "sha": "aff5780918ac",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

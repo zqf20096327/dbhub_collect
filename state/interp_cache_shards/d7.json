@@ -10358,5 +10358,106 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ad01d9389488": {
+  "identity": {
+   "one_liner": "自托管网关，将保存的 SQL 查询发布为带类型参数的 REST 端点",
+   "review": "QueryAPIGate 是一个自托管服务，把保存的 SQL 查询转换成版本化的 REST 端点，提供类型化、防注入的参数、作用域 API 密钥、行级 JWT 绑定、运行历史、审计日志和管理控制台，并通过 MCP server 向 AI agent 暴露查询。面向需要将已有 SQL 安全地以 API 形式开放给应用、合作方或流水线的后端与数据团队，支持 PostgreSQL、MySQL、SQLite、DuckDB、ClickHouse、MongoDB、H2 及 JDBC 连接。许可证为 FSL-1.1-MIT。",
+   "highlights": [
+    "支持将保存的 SQL 查询发布为版本化 REST 端点，参数带类型校验（int/float/str/bool、enum、min/max 等）",
+    "支持 PostgreSQL、MySQL、SQLite、DuckDB、ClickHouse、MongoDB、H2 与 JDBC 连接，并可通过 DuckDB 读取 Parquet、CSV、JSON 文件",
+    "提供作用域 API 密钥、角色、列脱敏、防篡改审计日志、MCP server、SSE 实时事件与 OpenAPI 文档生成"
+   ],
+   "use_cases": [
+    "将报表、仪表盘、ETL 作业中的 SQL 查询安全地暴露为 REST API",
+    "为 AI agent 通过 MCP 工具形式提供受治理的数据库查询入口",
+    "定时增量导出查询结果到 S3、GCS、R2 或本地目录"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk. ／ pip install \"queryapigate[postgres]\" # pick the drivers you need: mysql, postgres, clickhouse, h2, duckdb",
+     "lines": [
+      92,
+      115
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk. ／ pip install \"queryapigate[postgres]\" # pick the drivers you need: mysql, postgres, clickhouse, h2, duckdb",
+     "lines": [
+      92,
+      115
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk. ／ SQLite needs no extra driver. H2 and generic JDBC connections (`queryapigate[h2]`) also need a Java runtime; H2's own",
+     "lines": [
+      92,
+      119
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk. ／ pip install \"queryapigate[postgres]\" # pick the drivers you need: mysql, postgres, clickhouse, h2, duckdb",
+     "lines": [
+      92,
+      115
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该服务为多种数据库提供统一的查询网关与 API 治理层，是为数据库生态服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "FSL-1.1-MIT（Functional Source License，转为 MIT）",
+   "install": [
+    "pypi",
+    "docker",
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**QueryAPIGate** is a self-hosted service that runs SQL against your databases - and against Parquet, CSV and JSON files ／  PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk. ／ - **Docker, Helm and several instances** - one PostgreSQL store, Redis for shared",
+   "evidence_lines": [
+    36,
+    92,
+    106
+   ]
+  },
+  "fn": "AnanthaRajuC/QueryAPIGate",
+  "sha": "ad01d9389488",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

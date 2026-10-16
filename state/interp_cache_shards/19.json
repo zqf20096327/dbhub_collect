@@ -10450,5 +10450,148 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "509192a6ad3d": {
+  "identity": {
+   "one_liner": "本地AI对话归档系统，以SQLite存储并经MCP提供检索",
+   "review": "将ChatGPT、Claude、Codex等来源的会话历史导入本地归档，通过守护进程和MCP stdio适配器提供会话列表、全文检索与带署名的笔记写入。面向需要留存与审计AI交互记录的个人或团队。README明示大量能力未完成，状态为partial，且不支持通用导出与损坏恢复。",
+   "highlights": [
+    "提供守护进程模式与MCP stdio适配器，支持检索、受限读取和状态查询",
+    "支持Codex历史SQLite格式导入与Claude主目录受控读取，凭据默认脱敏",
+    "提供一次性受控恢复命令，复制并哈希校验归档文件"
+   ],
+   "use_cases": [
+    "将多来源AI会话历史统一为可搜索的本地归档",
+    "通过MCP在AI客户端中检索已归档的会话内容",
+    "对归档文件执行校验和验证的受控副本恢复"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "selected committed synthetic fixtures/oracle, and launches only that package",
+     "lines": [
+      137
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "This repository contains the standalone Rust foundation. It implements foundation identity/value contracts, durable SQLite schema checks, shared content files, one archive writer, read-only handles and a real daemon/status client. Explicit immutable Codex and  ／ `polylogue --archive SOURCE recover --to NEW_DEST` is a one-shot daemon mode. The source must be stopped, with its existing archive lock. It copies and hash-verifies independent files, admits one complete previous-generation durable WAL tail after a checksum-v ／ The daemon traverses the entire pinned retained admission and selected Session/Message catalog. Text search uses SQLite FTS5 membership over a query-local corpus built only from selected human/model Text blocks, with case/diacritic and stroke-letter folding. T",
+     "lines": [
+      3,
+      20,
+      190
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以SQLite作为自身归档的持久化存储，是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This repository contains the standalone Rust foundation. It implements foundation identity/value contracts, durable SQLite schema checks, shared content files, one archive writer, read-only handles and a real daemon/status client. Explicit immutable Codex and context-declared Claude regular-file imports and provider-state progress are registered. Selected source Messages have a streaming terminal reference read, and exact native Claude Session reads can prove a supported normalized JSON/terminal shape. Session listing and human/model prose search share one typed daemon query; general queries retain explicit degraded coverage. A thin MCP stdio adapter exposes retained search, bounded reads, status and attributed note/correction writes. Full canonical finalization, general export, full MCP capabilities and HTTP remain unfinished. Status reports `product_path: \"partial\"`; an initialized empty schema is not a completed ingestion or M1 demonstration. ／ `polylogue --archive SOURCE recover --to NEW_DEST` is a one-shot daemon mode. The source must be stopped, with its existing archive lock. It copies and hash-verifies independent files, admits one complete previous-generation durable WAL tail after a checksum-valid committed current prefix, and recovers only the copy through pinned SQLite and the checksum VFS. Malformed/current-generation damage, partial or mixed tails, busy sources, overlapping paths and existing destinations refuse. The first path supports the present plain file blobs written by this foundation; other blob layouts refuse explicitly.",
+   "evidence_lines": [
+    3,
+    20
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "509192a6ad3d",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7029070f2122": {
+  "identity": {
+   "one_liner": "Go+SQLite+Datastar 应用的运行时库，单写者线性写入",
+   "review": "lith 是一个面向 Go、SQLite 与 Datastar 的应用运行时库，提供单一写者的线性写入、immediate mode 渲染、tick 与 SSE 超媒体推送。其 sqlite 包封装写连接、只读连接池、user_version 迁移与 VACUUM INTO 备份，backup 包支持 Litestream 到 S3。适合用 Go 构建超媒体 Web 应用并自托管 SQLite 的开发者。",
+   "highlights": [
+    "提供 sqlite、writer、events、live、sse、edge、tenant 等 Go 包，含 user_version 迁移与 VACUUM INTO 备份",
+    "backup 包支持 Litestream 到 S3 的备份与每日校验，prom/dbmetrics 提供 Prometheus 指标",
+    "纯 Go 构建，CGO_ENABLED=0，附带项目模板、loadtest 与 agent skill 文档"
+   ],
+   "use_cases": [
+    "用 Go 和 Datastar 构建超媒体/SSE Web 应用",
+    "基于 SQLite 的单写者事件溯源应用",
+    "需要内置备份、指标与部署模板的自托管服务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite: one writer, WAL ／ for Go, SQLite and Datastar apps, built by zwei und eins gmbh. ／ |`sqlite`|one write connection and a `query_only` read pool whose connections keep their statements prepared, pragmas, `user_version` migrations, read-only opens, `VACUUM INTO` backups|",
+     "lines": [
+      6,
+      11,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为构建 SQLite+Datastar 应用提供运行时与 sqlite 封装包，是服务于数据库生态的组件而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**L**inear writes, **I**mmediate mode, **T**icks, **H**ypermedia: a runtime ／ for Go, SQLite and Datastar apps, built by zwei und eins gmbh. ／ |`sqlite`|one write connection and a `query_only` read pool whose connections keep their statements prepared, pragmas, `user_version` migrations, read-only opens, `VACUUM INTO` backups|",
+   "evidence_lines": [
+    10,
+    11,
+    28
+   ]
+  },
+  "fn": "zweiundeins/lith",
+  "sha": "7029070f2122",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

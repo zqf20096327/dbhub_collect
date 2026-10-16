@@ -10199,5 +10199,256 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d6041f07f5ae": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Chatterbox 模型的开源文本转语音与声音克隆应用",
+   "review": "Echonic 是一个自托管的 TTS 与声音克隆 Web 应用，浏览器内录音或上传音频即可创建可复用声音，生成音频存于 Cloudflare R2，推理由 Modal 上的 Chatterbox GPU 服务完成，内置组织级多租户与 Polar 按量计费。数据存储依赖 PostgreSQL，经 Drizzle ORM 访问，需自备数据库、R2、Modal 等外部服务方可运行。",
+   "highlights": [
+    "提供文本转语音生成与浏览器内声音克隆（录音或上传音频，最短 10 秒）",
+    "支持组织级多租户工作区，通过 Better Auth 实现团队协作与声音共享",
+    "集成 Polar 按用量计费，后端实时计量字符数与克隆事件"
+   ],
+   "use_cases": [
+    "需要自托管语音合成服务的团队与开发者",
+    "需要按用量计费的多租户语音平台部署",
+    "将自定义声音克隆集成到内部工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **A PostgreSQL database** – Any managed Postgres instance. ／ - PostgreSQL (local installation or a hosted provider) ／ - **PostgreSQL Database connection**: `DATABASE_URL`",
+     "lines": [
+      86,
+      115,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明需要 PostgreSQL 数据库存储数据，项目本身是使用数据库的 TTS 应用而非数据库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " AI-powered text-to-speech and voice cloning application built with Next.js 16 and the Chatterbox model. ／ - **A PostgreSQL database** – Any managed Postgres instance. ／ - **PostgreSQL Database connection**: `DATABASE_URL`",
+   "evidence_lines": [
+    7,
+    86,
+    130
+   ]
+  },
+  "fn": "Pr1ncep5/echonic",
+  "sha": "d6041f07f5ae",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a24c3ca73ab9": {
+  "identity": {
+   "one_liner": "Windows/macOS 本地开发环境，集成 Apache/Nginx/PHP 与多数据库服务",
+   "review": "KaradelikDev 是一个基于 Tauri 2 + Rust 的本地开发环境管理器，提供 Apache、Nginx、PHP 多版本切换，以及 MySQL/MariaDB、PostgreSQL、MongoDB、Redis 等服务的启停与版本选择，并自动生成 *.test 虚拟主机、本地 SSL 证书和数据库备份。面向 PHP/Web 开发者，用于在 Windows 与 macOS 上搭建本地开发栈。",
+   "highlights": [
+    "支持 MySQL/MariaDB、PostgreSQL、MongoDB、Redis、Memcached、Mailpit 等服务的启动、停止、日志与版本切换",
+    "提供数据库管理器：连接信息、用户授权、.sql 备份与恢复、定时自动备份",
+    "自动虚拟主机（www 目录映射 *.test）与本地 CA 证书签发，支持 Laravel/Symfony 识别和 Vite 代理"
+   ],
+   "use_cases": [
+    "在 Windows/macOS 本地搭建 PHP/Web 开发环境",
+    "本地运行和切换多个版本的 MySQL/MariaDB/PostgreSQL 实例并做备份恢复",
+    "为多个本地项目自动配置虚拟主机与 HTTPS"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL ve MariaDB, PostgreSQL, MongoDB, Redis, Memcached, Mailpit ／ |Sürüm başına veritabanı parolası|MySQL 8.4, 9.4 ve MariaDB'nin her biri kendi parolasını tutar; sürüm değişince \"Access denied\" olmaz.|",
+     "lines": [
+      28,
+      86
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL ve MariaDB, PostgreSQL, MongoDB, Redis, Memcached, Mailpit ／ |Sürüm başına veritabanı parolası|MySQL 8.4, 9.4 ve MariaDB'nin her biri kendi parolasını tutar; sürüm değişince \"Access denied\" olmaz.|",
+     "lines": [
+      28,
+      86
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- MySQL ve MariaDB, PostgreSQL, MongoDB, Redis, Memcached, Mailpit",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为本地开发提供数据库服务的运行、版本管理与备份界面，是服务于数据库使用的工具组件而非以数据库为存储的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- MySQL ve MariaDB, PostgreSQL, MongoDB, Redis, Memcached, Mailpit ／ **Veritabanı yöneticisi**",
+   "evidence_lines": [
+    28,
+    46
+   ]
+  },
+  "fn": "enesbsafak/karadelikdev",
+  "sha": "a24c3ca73ab9",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "77bfe7556cf6": {
+  "identity": {
+   "one_liner": "IDEA 插件：读取数据库表结构生成实体类与 MyBatis XML",
+   "review": "这是一个 IntelliJ IDEA 插件，通过 Tools 菜单或包右键菜单启动，连接 TiDB/MySQL/Oracle/DB2/PostgreSQL/SQLServer 等数据库，读取表结构后生成实体类（domain）与 MyBatis/iBatis2 XML 映射文件，面向需要在 IDEA 内完成数据层代码生成的 Java 开发者。",
+   "highlights": [
+    "支持连接 TiDB / MySQL / Oracle / DB2 / PostgreSQL / SQLServer",
+    "根据表结构生成实体类（domain）与 MyBatis / iBatis2 XML 文件",
+    "以 IDEA 插件形式集成，入口为 Tools 菜单或包右键"
+   ],
+   "use_cases": [
+    "Java 项目中根据已有数据表生成 MyBatis 映射代码",
+    "老项目中生成 iBatis2 XML 映射文件",
+    "在 IDEA 内完成数据层骨架代码生成"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "数据库代码生成器：连接数据库（支持 TiDB / MySQL / Oracle / DB2 / PostgreSQL / SQLServer），",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "数据库代码生成器：连接数据库（支持 TiDB / MySQL / Oracle / DB2 / PostgreSQL / SQLServer），",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "数据库代码生成器：连接数据库（支持 TiDB / MySQL / Oracle / DB2 / PostgreSQL / SQLServer），",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "数据库代码生成器：连接数据库（支持 TiDB / MySQL / Oracle / DB2 / PostgreSQL / SQLServer），",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "数据库代码生成器：连接数据库（支持 TiDB / MySQL / Oracle / DB2 / PostgreSQL / SQLServer），",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为数据库表结构生成 ORM 代码，是为数据库开发流程服务的工具而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "数据库代码生成器：连接数据库（支持 TiDB / MySQL / Oracle / DB2 / PostgreSQL / SQLServer）， ／  根据表结构生成实体类（domain）与 MyBatis / iBatis2 XML 文件。",
+   "evidence_lines": [
+    3,
+    4
+   ]
+  },
+  "fn": "yongjiu8/CodeGeneration",
+  "sha": "77bfe7556cf6",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

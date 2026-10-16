@@ -10484,5 +10484,142 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "48870a4e9cdf": {
+  "identity": {
+   "one_liner": "自托管 Gerrit 风格代码评审与内置 CI 系统，单二进制运行",
+   "review": "CitriC 是一个自托管的代码评审加持续集成系统，采用 Gerrit 式工作流：每次提交生成变更（CL），包含 diff、评审人、行内评论和构建结果。SQLite 作为存储，无需外部服务，通过 Docker、deb/rpm 包或单个二进制部署，适合想在自有环境运行代码评审和 CI 流程的团队。",
+   "highlights": [
+    "提供 Gerrit 式评审流程：CL、patchset、Change-Ids、stacked CLs、OWNERS 文件与评审人自动分配",
+    "内置 CI，按仓库以 .citric.toml 配置，lint/test/integration/format 在每个 patchset 上运行",
+    "支持 Docker、deb/rpm、单二进制及 Windows 服务等多种部署方式，并支持 OpenID Connect 单点登录"
+   ],
+   "use_cases": [
+    "自托管 Gerrit 式代码评审环境",
+    "与评审流程绑定的提交门禁 CI",
+    "多机器分布式构建节点（Linux/macOS/Windows）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "green. One binary, one SQLite file, no external services.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用单个 SQLite 文件存数据，CitriC 本身是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted code review and CI.** Push a change, get a CL with a diff, ／ green. One binary, one SQLite file, no external services.",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "blaxstar/citric",
+  "sha": "48870a4e9cdf",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "496d42d1ae4b": {
+  "identity": {
+   "one_liner": "离线数据问答 Agent，用 DuckDB 存表并结合文档检索与知识图谱",
+   "review": "quack 是一个离线运行的数据问答工具：把 CSV/PDF 等文件导入 DuckDB 表和可检索文档块，并从两者抽取实体构建知识图谱，由单个 Agent 综合生成带引用的回答。面向需要在无网络环境分析本地表格与文档的个人或团队，通过本地 Ollama 等模型服务运行，提供终端、Web UI、REST API 和 MCP 接口。",
+   "highlights": [
+    "将表格存入 DuckDB、文档转为可检索块，并构建跨两者的知识图谱，由同一 Agent 查询",
+    "提供终端会话、打印模式、Web UI、REST API 和 MCP server，打包为单个静态二进制文件",
+    "支持 Ollama、OpenAI 兼容端点、Anthropic 和 Amazon Bedrock 作为模型提供方"
+   ],
+   "use_cases": [
+    "在无互联网连接的机器上对本地表格和文档进行问答分析",
+    "通过 quack mcp / MCP server 在 Claude Code 或编辑器中接入自有数据工作区",
+    "用保存的问题（saved queries）配合 cron 做结果变更检测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "quack import sqlite:/data/shop.db --table orders --from orders # snapshot a SQLite query, or an https file",
+     "lines": [
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "DuckDB 作为其内嵌存储机制使用，工具本身面向最终用户的数据问答而非服务数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0 或 MIT 双许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It stores tables in DuckDB, documents as searchable chunks, and the entities in both as a ／ quack import sqlite:/data/shop.db --table orders --from orders   # snapshot a SQLite query, or an https file ／ quack serve --local                      # web UI, REST API, and MCP on http://127.0.0.1:8080",
+   "evidence_lines": [
+    4,
+    159,
+    178
+   ]
+  },
+  "fn": "smoketurner/quack",
+  "sha": "496d42d1ae4b",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

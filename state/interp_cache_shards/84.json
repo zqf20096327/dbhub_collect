@@ -9792,5 +9792,136 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c626e3e7f60b": {
+  "identity": {
+   "one_liner": "开源数据集成平台，提供600+连接器用于ELT管道与AI代理",
+   "review": "Airbyte 是一个开源数据移动平台，用于在 API、数据库、文件与数据仓库、数据湖及 AI 应用之间执行 ELT/ETL 同步。它提供 600+ 连接器目录、无代码 Connector Builder 与低代码 CDK，支持 Airflow、Dagster、Kestra 编排，并提供开源版与 Cloud 两种部署方式。面向数据工程师，另提供面向 AI 代理的 Agent SDK，可通过 uv pip 安装，企业版提供额外安全特性。",
+   "highlights": [
+    "提供 600+ 连接器目录，覆盖 API、数据库、数据仓库与数据湖",
+    "提供 no-code Connector Builder 与 low-code CDK 用于创建连接器",
+    "支持与 Airflow、Dagster、Kestra 编排集成，并提供 open-source Agent SDK 供 LLM 工具调用"
+   ],
+   "use_cases": [
+    "将数据从数据库/API/文件集中到数据仓库或数据湖（ELT/ETL）",
+    "通过 CDC 变更数据捕获进行数据同步",
+    "为 AI 代理/LLM 提供业务数据的连接器工具"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明其功能是连接器形式的数据库间数据移动工具，数据库为源/目标而非应用存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "We believe that only an **open-source solution to data movement** can cover the long tail of data sources while empowering data engineers to customize existing connectors. Our ultimate vision is to help you move data from any source to any destination — whether that destination is a data warehouse, a data lake, or an AI agent. Airbyte provides a catalog of 600+ connectors for APIs, databases, data warehouses, data lakes, and AI applications. ／ - **Moving data into warehouses, lakes, or databases (ELT / ETL)** → use Airbyte Open Source (this repo) or Airbyte Cloud. 600+ connectors for APIs, databases, data warehouses, and data lakes. ／ - Orchestrate Airbyte syncs with Airflow, Dagster, Kestra, or the Airbyte API.",
+   "evidence_lines": [
+    27,
+    34,
+    44
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "airbytehq/airbyte",
+  "sha": "c626e3e7f60b",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4b809e9d93d8": {
+  "identity": {
+   "one_liner": "基于 Proton Bridge 的 Proton Mail MCP 服务器与 CLI",
+   "review": "该项目在 Proton Mail Bridge 之上提供 MCP 服务器和命令行工具，供 Claude Desktop、Cline 等 MCP 客户端或脚本读取、搜索、起草和发送 Proton 邮件，包含约 100 个工具，支持只读模式和发送确认等安全控制；依赖本地运行的 Proton Bridge 和 Node.js 24+，并用本地 SQLite 索引加速全文搜索。",
+   "highlights": [
+    "提供约 100 个 MCP 工具，并为每个工具提供对应 CLI 命令，可用于脚本、cron 和管道自动化",
+    "通过本地 IMAP 连接 Bridge 读取邮件，维护本地全文搜索索引，查询不触发 IMAP",
+    "支持只读模式、发送门槛、破坏性操作确认和按操作允许列表等安全控制"
+   ],
+   "use_cases": [
+    "在 Claude Desktop/Claude Code/Cline 中通过对话收发、检索和整理 Proton Mail",
+    "用脚本或 cron 批量处理邮件任务，如生成收件箱摘要、起草待审回复",
+    "多 Proton 账户/多地址的本地集中管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      115,
+      521
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用数据库的邮件客户端应用：仅将 SQLite 用于本地邮件索引存储，不向数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 100 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ **How this relates to Proton Bridge.** This is a layer on top of Proton Mail Bridge, not a replacement for it. Bridge is Proton's official, local IMAP/SMTP gateway and the only supported way to reach a Proton mailbox from other software; this project talks to it. Bridge's own `--cli` mode manages Bridge itself (signing in, account details and the Bridge password, ports and other settings), it is not a mail client. Proton does not publish a terminal mail client, so reading, searching, drafting and sending from Claude or a script is what this adds on top, together with the safety controls above. Bridge has to be running and signed in.",
+   "evidence_lines": [
+    21,
+    51
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "4b809e9d93d8",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

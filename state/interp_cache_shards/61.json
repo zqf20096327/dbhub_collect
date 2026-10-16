@@ -9783,5 +9783,148 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9d25c583b5b5": {
+  "identity": {
+   "one_liner": "基于 Tauri 的 PostgreSQL 桌面管理客户端",
+   "review": "一个跨平台的 PostgreSQL 桌面客户端，提供 SQL 编辑器、结果网格编辑、ER 图、性能监控、角色与扩展管理等 GUI 功能，通过 tokio-postgres 简单查询协议执行 SQL。面向需要图形界面管理 PostgreSQL 的开发者和运维人员；README 仅展示 PostgreSQL 适配，macOS 构建尚未签名。",
+   "highlights": [
+    "提供 Monaco SQL 编辑器、自动补全、EXPLAIN ANALYZE 计划查看与查询历史",
+    "支持结果内联编辑、CSV/JSON/SQL/Markdown/XML 导出与 CSV 导入",
+    "包含 schema 侧边栏、ER 图导出、VACUUM/ANALYZE/REINDEX 维护操作、SSH 隧道连接与性能监控"
+   ],
+   "use_cases": [
+    "在 macOS/Windows/Linux 桌面上通过 GUI 管理和查询 PostgreSQL 数据库",
+    "浏览 schema 结构、查看 ER 图并执行表数据编辑与导出",
+    "通过性能监控面板查看活动、锁、索引建议与慢查询"
+   ],
+   "use_cases_end": false
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A desktop PostgreSQL client for macOS, Windows and Linux, built with Tauri, React and Rust. Free and open source under the MIT license. It needs no account and collects no telemetry. ／ - User SQL runs through the simple query protocol of `tokio-postgres`, so values arrive as text and are passed on without conversion. ／ The PostgreSQL integration tests are ignored by default and need a database:",
+     "lines": [
+      3,
+      67,
+      96
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供桌面管理客户端，属于数据库生态工具而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A desktop PostgreSQL client for macOS, Windows and Linux, built with Tauri, React and Rust. Free and open source under the MIT license. It needs no account and collects no telemetry. ／ - User SQL runs through the simple query protocol of `tokio-postgres`, so values arrive as text and are passed on without conversion.",
+   "evidence_lines": [
+    3,
+    67
+   ]
+  },
+  "fn": "rust-dd/rsql",
+  "sha": "9d25c583b5b5",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8a2d98c44e82": {
+  "identity": {
+   "one_liner": "无代理的 Linux 服务器监控与 SSH 交互管理系统，单 Go 二进制",
+   "review": "Pantau 是一个自托管的服务器监控与管理应用，通过标准 SSH 无代理采集 CPU、内存、磁盘等指标，提供期望状态漂移检测、Web 终端、SFTP 编辑、跨主机文件传输和加密快照灾备，面向自托管服务器的运维管理员使用。其执行历史、主机配置等数据存储在内嵌 SQLite（WAL 模式）中，README 提示该工具以 root 权限执行远程命令，需自行做好认证与网络安全防护。",
+   "highlights": [
+    "通过标准 SSH 无代理采集指标，目标主机无需安装守护进程，兼容 OpenSSH 4.3+ 的旧版服务器",
+    "提供期望状态基线与漂移检测、根因摘录诊断、跨主机内存流式传输及 Argon2id + AES-256-GCM 加密快照与 GitHub 同步",
+    "内置浏览器 Web 终端（xterm.js）、SFTP 文件管理器、TOTP 双因素认证，前端资源全部嵌入二进制支持离线运行"
+   ],
+   "use_cases": [
+    "无代理监控多台 Linux 服务器的资源指标、Docker 容器与安全状况",
+    "对服务器做期望状态基线管理与配置漂移告警",
+    "内网或隔离环境中的远程主机管理与应急灾备恢复"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **1-Click Baseline**: Auto-detects running Docker containers, disks, cron jobs, and database services (`mysqld`, `postgres`, `redis`, `nginx`).",
+     "lines": [
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single binary. Zero remote daemons. Embedded SQLite. Native SSH. ／ - **Structured Inspection Runs & Telemetry**: Records per-host execution history (started timestamp, roundtrip duration in milliseconds, status badge, human-readable summary, and root cause diagnostic excerpts) in SQLite. Displays real-time execution duration  ／ - **Database**: Pure-Go SQLite (`modernc.org/sqlite`) with Write-Ahead Logging (WAL mode)",
+     "lines": [
+      8,
+      48,
+      238
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Pantau 是服务器监控管理应用，SQLite 仅作为其内嵌数据存储，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Pantau** is a self-hosted, lightweight, single-binary infrastructure monitoring and server management system built in Go. Unlike Prometheus/Node-Exporter, Zabbix, or Datadog, Pantau operates **100% agentless** over standard SSH (`port 22`). Target servers require **no background agents, no daemon installation, and no persistent telemetry scrapers**. ／ - **Structured Inspection Runs & Telemetry**: Records per-host execution history (started timestamp, roundtrip duration in milliseconds, status badge, human-readable summary, and root cause diagnostic excerpts) in SQLite. Displays real-time execution duration metrics (`duration_ms`) on host cards and list views, with automatic inline rolling pruning maintaining a strict 100 runs limit per host with zero background schedulers.",
+   "evidence_lines": [
+    27,
+    48
+   ]
+  },
+  "fn": "herliansyah/pantau",
+  "sha": "8a2d98c44e82",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

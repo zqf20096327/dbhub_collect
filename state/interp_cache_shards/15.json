@@ -10640,5 +10640,145 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "73979f1a71fc": {
+  "identity": {
+   "one_liner": "本地知识搜索引擎，默认免向量库的 SQLite FTS5/BM25 检索加 Jev 重排",
+   "review": "Jev RAG 是一个本地优先的知识搜索工具，对本地文档文件夹建立索引并提供七条可选检索流水线，输出带文件引用的答案。默认使用 SQLite FTS5/BM25 无向量检索，可选嵌入混合、多轮代理式检索等路径；需要 Python 3.9+，远程重排和答案生成依赖外部模型服务。适合想在本地文档上做检索问答的开发者和个人用户。",
+   "highlights": [
+    "提供七条可选检索流水线：BM25+Jev、Agentic 词汇检索、嵌入混合、多轮 Agentic Hybrid、分类路由混合、Passage Gate、分层 Line Search",
+    "默认无需嵌入模型和向量数据库，使用 SQLite FTS5/BM25 建立本地索引",
+    "发布可复现的 BEIR NFCorpus 基准结果，包括延迟、成本与负面结果"
+   ],
+   "use_cases": [
+    "本地 Markdown、PDF、DOCX 等文档库的检索与带引用问答",
+    "需要免向量索引的中文本地词汇检索（CJK bigram 分词）",
+    "检索流水线的基准对比实验"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax ／ Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25.",
+     "lines": [
+      32,
+      133,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为本地索引存储来构建知识搜索应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25. ／ > Status: alpha. The software is usable locally, but APIs and storage schemas may change before 1.0. ／ - Local incremental indexing for Markdown, text, HTML, JSON, CSV, YAML, DOCX, and PDF.",
+   "evidence_lines": [
+    139,
+    164,
+    184
+   ]
+  },
+  "fn": "aifabrice/jev-rag",
+  "sha": "73979f1a71fc",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4ed054c0d927": {
+  "identity": {
+   "one_liner": "开源实时问答竞技平台，Redis 存实时状态、Postgres 存对局结果",
+   "review": "Buzrr 是一个开源实时问答平台，支持多人房间答题与 1v1 排位对战，面向想自建 Kahoot/QuizUp 类应用的部署者。实时状态存 Redis、对局结果持久化到 Postgres，通过 Prisma 访问数据库，可用 docker compose 一键自托管，AI 题目生成功能可选。",
+   "highlights": [
+    "实时多人答题房间，经 WebSockets 通信，玩家免账号加入",
+    "1v1 对战带 ELO 排位与机器人对手",
+    "AI 生成题目与基于 RAG 的知识空间（可选）"
+   ],
+   "use_cases": [
+    "课堂/活动现场实时问答互动",
+    "朋友间 1v1 知识对战",
+    "企业/学校自托管答题活动"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Redis; Postgres keeps the lobby record and the final result. ／ multiple instances, and the Redis/Postgres split. Detailed docs live in ／ |`DATABASE_URL` / `DIRECT_URL`|✅|PostgreSQL connection (defaults to the Docker container).|",
+     "lines": [
+      32,
+      39,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 PostgreSQL 存储对局记录、Redis 存储实时状态，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- ⚡ **Server-authoritative game loop** — live state lives in **Redis**; only finished games are persisted to Postgres. ／ Redis; Postgres keeps the lobby record and the final result. ／ - 🏠 **Self-host anywhere** — `docker compose up` runs the whole thing, **fully offline** on a school server if you like. No SaaS accounts required.",
+   "evidence_lines": [
+    24,
+    32,
+    22
+   ]
+  },
+  "fn": "buzrr/buzrr",
+  "sha": "4ed054c0d927",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

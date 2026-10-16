@@ -9634,5 +9634,120 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "291b66fbaa77": {
+  "identity": {
+   "one_liner": "TypeORM 扩展库，提供建库/删库、种子数据与查询参数工具",
+   "review": "基于 TypeORM 的 Node.js 工具库，提供 CLI 与编程接口用于创建/删除数据库、生成与运行种子数据、检测 schema 漂移、生成迁移文件及重命名约束等修复操作，并管理多个数据源实例。面向使用 TypeORM 的 Node.js 开发者。部分辅助函数（如重命名索引/外键）仅支持 postgres、cockroachdb、mysql、mariadb 等驱动。",
+   "highlights": [
+    "提供 CLI 与代码 API 进行数据库 create/drop 与 seeding",
+    "支持 schema 漂移检测、迁移生成与约束重命名等修复助手",
+    "提供命名锁与行级写锁工具及数据库错误分类函数"
+   ],
+   "use_cases": [
+    "TypeORM 项目的数据库初始化与种子数据填充",
+    "生产环境迁移后校验 schema 与实体元数据是否漂移",
+    "多副本部署下用数据库锁保证迁移仅执行一次"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`--initialDatabase`|`db create`|`undefined`|Specify the initial database to connect to. This option is only relevant for the `postgres` driver, which must always connect to a database. If no database is provided, the database name will be equal to the connect ／ `renameIndex` and `renameForeignKey` support `postgres`, `cockroachdb`, `mysql` and `mariadb` and throw a `DriverError` ／ `withDatabaseLock(queryRunner, name, fn, { timeout })` runs `fn` while holding a named advisory lock (`postgres`,",
+     "lines": [
+      65,
+      231,
+      241
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "stays resumable (mysql commits DDL regardless of the surrounding transaction) and safe to run against a database which ／ `renameIndex` and `renameForeignKey` support `postgres`, `cockroachdb`, `mysql` and `mariadb` and throw a `DriverError` ／ `mysql`, `mariadb`), for example so only one replica runs the migrations (with `migrationsRun` off, since",
+     "lines": [
+      221,
+      231,
+      242
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "`renameIndex` and `renameForeignKey` support `postgres`, `cockroachdb`, `mysql` and `mariadb` and throw a `DriverError` ／ `mysql`, `mariadb`), for example so only one replica runs the migrations (with `migrationsRun` off, since",
+     "lines": [
+      231,
+      242
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "the column in place (keeping its values) on every relational driver but sqlite, which typeorm handles safely by",
+     "lines": [
+      233
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "`fn`, so concurrent callers for the same row take turns (`postgres`, `cockroachdb`, `mysql`, `mariadb`, `oracle`,",
+     "lines": [
+      255
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`mssql`). It resolves what `fn` returns, or `null` when no row matches:",
+     "lines": [
+      256
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为使用 TypeORM 的数据库应用提供库管理、seeding 与迁移辅助的工具库，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is a library to ／ npm install typeorm-extension typeorm --save ／ - `typeorm-extension db create` to create the database",
+   "evidence_lines": [
+    11,
+    21,
+    37
+   ]
+  },
+  "fn": "tada5hi/typeorm-extension",
+  "sha": "291b66fbaa77",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

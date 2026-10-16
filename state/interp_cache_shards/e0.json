@@ -9676,5 +9676,80 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "41684d84fe2f": {
+  "identity": {
+   "one_liner": "基于 SQLancer 的 YashanDB 黑盒逻辑测试工程",
+   "review": "这是部署在 Tinghua 服务器上的测试工程项目，用 SQLancer 的 TLP_WHERE 方法对 YashanDB 23.4.1.109 做七天连续黑盒逻辑测试，由 systemd 托管，支持 TLP、NoREC 等方法与多类数据生成器，结果保存在 results 目录。适用于数据库质量保障人员做缺陷挖掘；仓库含口令管理约定，且明确不插桩内核、不报告覆盖率。",
+   "highlights": [
+    "实现 TLP WHERE 分区比较与 NoREC 方法，生成器覆盖 INT/NULL 数据、UPDATE/DELETE、INNER/LEFT JOIN 及确定性表达式",
+    "七天长测由 systemd 托管，按小时轮次保存 manifest、oracle-metrics、summary 等结果文件",
+    "包含 3 项结果比较单元测试与 12 项固定数据契约检查"
+   ],
+   "use_cases": [
+    "对 YashanDB 进行 TLP 逻辑一致性测试",
+    "长时间无人值守运行并记录数据库缺陷候选证据",
+    "评估新版本数据库在生成测试下的行为一致性"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "Tinghua 上的 SQLancer / YashanDB 黑盒逻辑测试工程。 ／ 在日志查看命令中按 Ctrl+C 只退出查看，不会停止测试。详细 SQL 日志位于各次 `results/<run-id>/logs/yashandb/`，控制台为 `console.log`；运行前清单为 `manifest.json`，实时预言机计数为 `oracle-metrics.json`，结束统计为 `summary.json`。",
+     "lines": [
+      3,
+      24
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "- 模式：`mysql`；监听 `127.0.0.1:1688`（原生）与 `127.0.0.1:1690`（MySQL）。 ／ - Java 11；MySQL Connector/J 8.4.0，通过 `yashandb-mysql8` Maven profile 选择。",
+     "lines": [
+      9,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目用 SQLancer 对 YashanDB 做黑盒逻辑测试并产出结果产物，属于为数据库质量保障服务的测试工具工程",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "YashanDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tinghua 上的 SQLancer / YashanDB 黑盒逻辑测试工程。 ／ 3 项结果比较单元测试、12 项固定数据契约检查，以及跨 10 个数据库状态的 10,000 次 TLP 检查通过。短测最终结果为 `results/20261016_131554_829092_yashandb_tlp_where/summary.json`；早期失败目录保留了适配诊断，不计为已确认数据库缺陷。 ／ 当前生成器支持 INT、NULL 数据、重复行、简单索引、UPDATE/DELETE、INNER/LEFT JOIN，以及有界算术、COALESCE、ABS、NULLIF、AND/OR/NOT 等确定性表达式。TLP 比较完整投影行的频数，保留重复次数与 NULL。",
+   "evidence_lines": [
+    3,
+    36,
+    38
+   ]
+  },
+  "fn": "AldonahZero/YashanDBTest",
+  "sha": "41684d84fe2f",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

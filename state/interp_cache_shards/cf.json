@@ -10302,5 +10302,88 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ca722af63402": {
+  "identity": {
+   "one_liner": "MySQL 备份守护进程，支持全量/binlog 备份与 PITR",
+   "review": "MyHoard 是一个运行于 Linux/systemd 环境的 MySQL 备份守护进程，内部使用 Percona XtraBackup 做全量与增量备份，并通过将备份的 binlog 以 relay log 方式回放实现时间点恢复（PITR），适合管理主从复制环境下的备份与故障切换。要求 MySQL 8.x+、GTID、ROW 格式 binlog 和 InnoDB 表，需提供外部 GTID 信息。",
+   "highlights": [
+    "支持自动周期性全量/增量备份及近实时的二进制日志备份",
+    "提供基于对象存储（S3/GCS/Azure）的备份存储与加密压缩",
+    "支持 PITR 及基于 HTTP API 的状态管理与备份恢复"
+   ],
+   "use_cases": [
+    "主从复制架构下的 MySQL 定期备份与 binlog 归档",
+    "误删数据后按时间点恢复数据库",
+    "多节点环境中备份职责在主库故障切换时的连续接管"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MyHoard is a daemon for creating, managing and restoring MySQL backups. ／ MySQL servers (requires external system to provide executed GTID info for the ／ There are a number existing tools and scripts for managing MySQL backups so",
+     "lines": [
+      3,
+      18,
+      36
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "backup daemon for PostgreSQL.",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "MySQL is a registered trademark of Oracle and/or its affiliates. Other names may be trademarks of their respective owners.",
+     "lines": [
+      1186
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MySQL 数据库提供备份/恢复功能的守护进程工具，服务于数据库运维生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MyHoard is a daemon for creating, managing and restoring MySQL backups. ／ - percona-xtrabackup ／ Currently MyHoard only works on Linux and expects MySQL service to be managed",
+   "evidence_lines": [
+    3,
+    141,
+    146
+   ]
+  },
+  "fn": "Aiven-Open/myhoard",
+  "sha": "ca722af63402",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

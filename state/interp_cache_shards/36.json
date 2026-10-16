@@ -10239,5 +10239,79 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4e874574447f": {
+  "identity": {
+   "one_liner": "离线漏洞数据库与包搜索库，数据汇入 SQLite 供本地查询",
+   "review": "该仓库提供 vdb 库与 CLI，将 AppThreat vuln-list、OSV、NVD、GitHub 等来源的漏洞公告转换为 CVE 5.2 记录，以 SQLite 文件（.vdb7）存储并建立 purl/vers 索引，支持完全离线按 purl、CPE 或 git URL 查询。主要供 owasp-dep-scan 等软件成分分析工具作为依赖库使用，也可通过 vdb db 子命令下载或自建分片数据库。",
+   "highlights": [
+    "提供 CLI 与 Python 库，数据存储为普通 SQLite 数据库文件，可被任意 SQLite 工具读取",
+    "支持多上游数据源合并（vuln-list、OSV、NVD、GitHub），覆盖多款 Linux 发行版的公告",
+    "提供 vdb db 子命令进行数据库的分阶段刷新、校验与原子替换，支持多种 scope 变体"
+   ],
+   "use_cases": [
+    "为软件成分分析（SCA）工具提供本地离线漏洞数据",
+    "在无网络环境下按 purl、CPE 或 git URL 查询组件漏洞",
+    "在自有 CI 中构建并发布定制化的漏洞数据库镜像"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Bottlerocket, Debian, Oracle Linux, RHEL/CentOS, Rocky Linux, Ubuntu, Photon, ／ Oracle Linux comes from the vuln-list `oval/oracle` tree (ELSA errata). Rows",
+     "lines": [
+      64,
+      92
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "schema, and stores it in SQLite with indexes built for fast offline lookup by ／ library. The `.vdb7` files are ordinary SQLite databases. ／ Lookups run entirely against local SQLite files; there is no network access",
+     "lines": [
+      5,
+      10,
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为依赖扫描等安全工具提供漏洞数据服务，属于为软件生态服务的工具/组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An offline vulnerability database and package search library. `vdb` downloads ／ data from AppThreat vuln-list, OSV, NVD and GitHub, converts it into the CVE 5.2 ／ This package is primarily a library, used by",
+   "evidence_lines": [
+    3,
+    4,
+    134
+   ]
+  },
+  "fn": "AppThreat/vulnerability-db",
+  "sha": "4e874574447f",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

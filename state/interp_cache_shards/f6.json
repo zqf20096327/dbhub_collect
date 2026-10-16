@@ -10480,5 +10480,280 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7d7a9ca7af6b": {
+  "identity": {
+   "one_liner": "Solana 链上价格 oracle 程序，以 21 CU 实现链上数据更新",
+   "review": "Doppler 是运行在 Solana 上的链上 oracle 程序，供发布者写入价格等固定长度 payload，消费端通过 Rust/TypeScript SDK 读取 feed。其机制为单 admin 单 feed、序列号递增校验、no_std Rust 生成 sBPF 程序。它与数据库领域无关（此处 Oracle 为预言机含义），编目归入区块链/DeFi 类项目。",
+   "highlights": [
+    "提供 Rust 与 TypeScript SDK，支持部署、更新、读取、订阅 feed",
+    "每次 update 消耗 21 CU（u64 feed），序列号递增用于防重放与排序",
+    "feed 由 admin 与 seed 派生，无需维护程序 keypair，清单以 doppler.json 描述"
+   ],
+   "use_cases": [
+    "Solana DeFi 应用需要链上价格 feed",
+    "需要低开销链上写入任意固定长度 payload 的场景",
+    "多个 feed 需在单笔交易中批量更新的发布者"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "A 21 CU Solana Oracle Program ／ Doppler is an ultra-optimized oracle program for Solana, achieving unparalleled performance at just **21 Compute Units (CUs)** per update. Built with low-level optimizations and minimal overhead, Doppler sets the standard for high-frequency, low-latency price  ／ - **21 CU Oracle Updates**: The most efficient oracle implementation on Solana",
+     "lines": [
+      1,
+      5,
+      9
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 描述的是 Solana 链上 oracle 程序与 SDK，未涉及任何数据库的使用或服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A 21 CU Solana Oracle Program ／ Doppler is an ultra-optimized oracle program for Solana, achieving unparalleled performance at just **21 Compute Units (CUs)** per update. Built with low-level optimizations and minimal overhead, Doppler sets the standard for high-frequency, low-latency price feeds on Solana. ／ Add the Doppler SDK and the Solana crates it hands you back to your `Cargo.toml`:",
+   "evidence_lines": [
+    1,
+    5,
+    19
+   ]
+  },
+  "fn": "blueshift-gg/doppler",
+  "sha": "7d7a9ca7af6b",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ccd3917390a": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Prisma 的 SaaS 型 AI 平台应用",
+   "review": "Genius 是一个 Next.js 构建的 SaaS 平台，提供对话、图像生成、代码生成、音乐生成等 AI 功能，使用 OpenAI 与 Replicate API，通过 Prisma 连接 MySQL（如 Aiven）存数据，集成 Clerk 认证与 Stripe 支付。面向需要自部署完整 AI 应用前后的开发者，需自行配置多个 API 密钥与数据库 URL。",
+   "highlights": [
+    "支持对话、图像生成、代码生成、音乐生成等 AI 功能页面",
+    "使用 Prisma ORM 连接 MySQL 数据库",
+    "集成 Clerk 认证、Stripe 支付与 Crisp 客服组件"
+   ],
+   "use_cases": [
+    "自部署一个多功能的 AI 生成类 Web 应用",
+    "作为 Next.js + Prisma + MySQL 全栈项目的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "If you don't have an Aiven account, sign up here. After creating an account, set up a MySQL database. In the Aiven dashboard, find your database connection details and construct the `DATABASE_URL` in the following format: ／ DATABASE_URL=\"mysql://<username>:<password>@<host>:<port>/genius-ai?ssl-mode=REQUIRED\" ／ React JS Next JS Typescript Tailwind CSS Netlify Prisma MySQL",
+     "lines": [
+      54,
+      57,
+      124
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "- @prisma/adapter-mariadb: ^7.10.0",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 MySQL 存储数据的 AI 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "If you don't have an Aiven account, sign up here. After creating an account, set up a MySQL database. In the Aiven dashboard, find your database connection details and construct the `DATABASE_URL` in the following format: ／ React JS Next JS Typescript Tailwind CSS Netlify Prisma MySQL",
+   "evidence_lines": [
+    54,
+    124
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanidhyy/genius-ai",
+  "sha": "5ccd3917390a",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "497e3bba354c": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue的旅游住宿民宿预订小程序系统",
+   "review": "一套前后端分离的旅游住宿小程序项目，覆盖民宿与房间管理、预定下单、订单统计评价、景点与攻略发布、论坛社区等业务，管理员与用户分角色操作。使用SpringBoot、MybatisPlus、MySQL、Redis、Vue等实现，面向景区民宿平台等场景，README显示为毕业设计类付费项目。",
+   "highlights": [
+    "支持民宿预定、房间管理、订单管理与统计、订单评价等业务功能",
+    "提供景点与旅游攻略的发布管理以及论坛社区互动",
+    "采用SpringBoot+MybatisPlus+MySQL+Redis后端与Vue前端的前后端分离架构"
+   ],
+   "use_cases": [
+    "景区民宿预订平台",
+    "乡村旅游住宿服务平台",
+    "旅游攻略分享与住宿预订结合平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用MySQL作为数据库存储业务数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库) ／ 本项目是一套面向旅游目的地、景区民宿及旅行爱好者的旅游住宿小程序，采用前后端分离架构，覆盖管理员与用户两类角色。系统围绕\"前端导航管理、景点发布、旅游攻略、民宿预定、房间管理、订单管理、订单评价、论坛社区\"等核心业务设计，支持用户浏览景点与攻略、预定民宿房间、发布论坛帖子、参与评价互动，管理员负责平台前端导航配置、景点与攻略内容发布、民宿与房间管理、订单统计与论坛管理，实现从旅游信息展示、民宿预定、订单处理到社区互动的全流程数字化管理，适用于景区民宿平台、乡村旅游服务平台、旅游目的地信息小程序及民宿预订系统。",
+   "evidence_lines": [
+    26,
+    31,
+    5
+   ]
+  },
+  "fn": "Fankekeke/travel_cos",
+  "sha": "497e3bba354c",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8336e60c3bb0": {
+  "identity": {
+   "one_liner": "PostgreSQL 内核研讨工作坊，围绕预选视频展开深入讨论",
+   "review": "这是 PostgreSQL Mentoring Program 旗下的一个研讨会项目，由 Robert Haas 发起。参与者需事先观看指定视频，再通过 Zoom 会议进行讨论，主题涵盖执行器、规划器、vacuum、AIO 等 PostgreSQL 内核议题，选题由 Discord 社区投票产生。面向希望深入理解 PostgreSQL 源码与内核机制的开发者。",
+   "highlights": [
+    "按月组织 PostgreSQL 内核主题的研讨会，主题覆盖规划器、执行器、B-Tree 索引、vacuum、I/O 等",
+    "采用视频预看加 Zoom 讨论的形式开展交流",
+    "议题通过 PostgreSQL Mentoring Discord 投票产生"
+   ],
+   "use_cases": [
+    "参与 PostgreSQL 内核学习与源码研讨",
+    "准备向 PostgreSQL 社区提交补丁的开发者了解内部机制",
+    "获取历届内核主题研讨的视频清单"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "# PostgreSQL Hacking Workshop ／ PostgreSQL Hacking Workshop is a side program of PostgreSQL Mentoring Program initiated by Robert Haas. ／ - pg_plan_advice: Plan Stability and User Planner Control for PostgreSQL? - October",
+     "lines": [
+      1,
+      3,
+      9
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库是 PostgreSQL 内核主题的社区研讨活动，不提供任何工具或组件，无充分证据归入 tool/app。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL Hacking Workshop is a side program of PostgreSQL Mentoring Program initiated by Robert Haas. ／ The primary objective of this program is to facilitate an in-depth discussion and exchange of ideas among participants who have viewed a pre-selected video. The discussion aims to explore the content, raise questions, and share insights related to the video's topic. ／ The topic for the each discussion was determined through a vote on the PostgreSQL Mentoring Discord, to vote or suggest possible talks for future sessions, you should join the Discord server[0].",
+   "evidence_lines": [
+    3,
+    40,
+    44
+   ]
+  },
+  "fn": "pghacking/workshop",
+  "sha": "8336e60c3bb0",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10975,5 +10975,74 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a7d7925ecd1": {
+  "identity": {
+   "one_liner": "单机自托管的智能体长期记忆引擎，含混合检索与控制台",
+   "review": "这是一个为 AI Agent 提供长期记忆的系统，宿主（Hermes、Claude Code、Cursor 等 MCP 客户端）管短期对话，aiduMEI 通过向量、BM25/trigram 与 cross-encoder 重排的混合检索存取长期记忆，提供读/写/萃取三条钩子脚本和 /ui 可视化控制台。以 Python/FastAPI 运行，底层使用嵌入式向量库与 SQLite 存储，面向需要给智能体接入记忆层的开发者。",
+   "highlights": [
+    "支持向量检索与中文 BM25/trigram 及 cross-encoder 重排的混合检索",
+    "提供与 Hermes、Claude Code、Cursor 宿主对接的读线/写线/萃取线钩子脚本及接线自检脚本（check_ingest_wiring.py）",
+    "包含零构建 Web 控制台（/ui），支持记忆查看、调整与 Markdown 导出"
+   ],
+   "use_cases": [
+    "为 MCP 客户端类 Agent 注入和写入长期记忆",
+    "会话结束后自动提炼会话精华并存为独立记忆",
+    "自托管环境下对 Agent 记忆进行可视化查看与导出"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**共同项**：CPU 2 核足够、闲时 < 1%；`/search` 单次 0.14~0.23s；冷启动 5.2s；数据盘千级记忆约 13 MB 向量 + 数百 KB SQLite；前端 0 依赖；Python 3.10–3.12。 ／ > 其余的轻是刻意设计：向量库嵌入式落盘（无独立进程/端口）、不吃 GPU、相关性闸门先拦闲聊、SQLite+FTS5 兜底。一句话：**云端档 1 核 1G 跑得动；自动挡/本地档建议 2 核 2G 起步。**",
+     "lines": [
+      266,
+      271
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是给 AI Agent 存取记忆的应用，SQLite 是其嵌入式存储依赖，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 让你的 AI Agent **真正记住你**：混合检索 + 认知治理 + 可视化控制台 + 双引擎自动挡，**单机自托管**，MIT。 ／ > 宿主（Hermes / Claude Code / Cursor / 任何 MCP 客户端）管短期对话，aiduMEI 管长期记忆。 ／ |**忆** · Memory|**记忆底座与记忆逻辑**|三轨遗忘曲线 · 双时间轴（记忆**过期**而非删除）· 事件时间与入库时间分开存 · 向量 + 中文 BM25/trigram + cross-encoder 真重排（不是加权融合）· 六型分类|",
+   "evidence_lines": [
+    5,
+    6,
+    97
+   ]
+  },
+  "fn": "monkey2jack/aiduMEI",
+  "sha": "7a7d7925ecd1",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

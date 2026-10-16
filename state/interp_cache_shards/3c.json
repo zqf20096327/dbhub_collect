@@ -9504,5 +9504,258 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ec1e262ba6b": {
+  "identity": {
+   "one_liner": "自托管密码管理器，本地 SQLite 存储、主密码加密、无云端同步",
+   "review": "CipherMoth 是一个自托管的个人密码管理应用，通过 Docker 部署，密码库以单个 SQLite 文件保存在本地卷中。所有条目用 AES-256-GCM 加密，主密码经 Argon2id 派生密钥，不提供找回机制。适合愿意自管备份、接受无浏览器填充和移动端的个人用户。",
+   "highlights": [
+    "条目内容（含名称、附件、TOTP 密钥）以 AES-256-GCM 加密存储，主密码经 Argon2id 派生保险库密钥",
+    "支持密码生成、TOTP 两步验证、加密备份（.cmbackup）与本地快照，并提供 CLI 管理命令",
+    "可从 Chrome、Bitwarden、KeePass 等通过 CSV 导入数据"
+   ],
+   "use_cases": [
+    "在自有机器上自托管个人密码库，不依赖第三方云服务",
+    "需要离线加密备份与快照的个人密码管理",
+    "从其他密码管理器通过 CSV 迁移现有条目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "> Coming from CipherMoth 1.x (PostgreSQL)? This release needs a fresh install with a new vault; it never reads or deletes ／ - **docs/UPDATING.md** - updating, snapshots, restoring a snapshot, and moving from a PostgreSQL install",
+     "lines": [
+      52,
+      158
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ one SQLite file in a persistent Docker volume, so it survives restarts and updates, and a consistent snapshot of it is ／ |Database|SQLite 3.53 (one file, WAL, full sync)|",
+     "lines": [
+      11,
+      45,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是一个使用 SQLite 存储自身数据的密码管理应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "one SQLite file in a persistent Docker volume, so it survives restarts and updates, and a consistent snapshot of it is ／ > Coming from CipherMoth 1.x (PostgreSQL)? This release needs a fresh install with a new vault; it never reads or deletes ／ |Backend|Python 3.13, FastAPI, SQLAlchemy 2.0, aiosqlite|",
+   "evidence_lines": [
+    45,
+    52,
+    149
+   ]
+  },
+  "fn": "mr-grj/ciphermoth",
+  "sha": "2ec1e262ba6b",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e190c425cadf": {
+  "identity": {
+   "one_liner": "Hermes Agent 的本地长期记忆与上下文压缩插件，基于 SQLite 存储",
+   "review": "Chronicle 是 Hermes Agent 的插件，提供跨会话持久记忆和感知记忆的上下文压缩：用 SQLite（WAL 模式）在本地保存事实与对话片段，检索支持 FTS5 全文加可选的本地 OpenAI 兼容嵌入服务，无需额外服务或依赖。适合本地运行 Hermes、需要记忆持久化与可审计记忆管理的用户，要求 Python 3.9+。",
+   "highlights": [
+    "提供 MemoryProvider 和 ContextEngine 两个插件槽，事件溯源存储并支持更正、遗忘与访问控制",
+    "检索采用 FTS5 全文加结构化查询的双层机制，可回退并在证据不足时弃答",
+    "无必需外部服务，嵌入可自动探测本地 LM Studio/Ollama/llama.cpp 服务器"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 提供跨会话持久记忆",
+    "长对话中在压缩前持久化片段并在需要时逐字节还原",
+    "在无嵌入模型环境下以全文检索实现本地记忆召回"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "your machine in SQLite; relevant memories come back when they are useful. ／ - **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections",
+     "lines": [
+      17,
+      103
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Chronicle 使用 SQLite 存储其自身记忆数据，服务对象是 AI 代理而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可（README 标注 MIT License）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections ／ - **ChronicleMemoryProvider** durably captures conversation history and retrieves",
+   "evidence_lines": [
+    103,
+    67
+   ]
+  },
+  "fn": "indigokarasu/chronicle-agent-context-and-memory",
+  "sha": "e190c425cadf",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ea396b86b2ce": {
+  "identity": {
+   "one_liner": "数据库性能诊断桌面应用、CLI 与 MCP 服务器",
+   "review": "Culprit SQL Studio 读取数据库自带的统计视图（如 Query Store、pg_stat_statements、performance_schema），分析慢查询、执行计划、索引、阻塞与死锁，并给出文字化结论与修复建议但不自动执行。提供桌面应用、CLI 和 MCP 服务器三种形态，面向 DBA 和使用 Claude Code、Cursor 等编码代理的开发者，当前需从源码构建（Rust + Bun）。",
+   "highlights": [
+    "包含 52 项检查，覆盖执行计划回退、缺失/未用索引、N+1 查询、锁表语句、复制延迟等，按数据库时间占比排序并附修复建议",
+    "提供 MCP 服务器（25 个工具）和 JSON 输出，支持按连接配置代理权限并记录本地审计日志",
+    "扫描只读统计与目录视图，写操作需显式确认，密码保存在操作系统钥匙串"
+   ],
+   "use_cases": [
+    "排查生产库慢查询与执行计划回退，定位时间消耗来源",
+    "分析阻塞会话树与死锁模式",
+    "让编码代理通过 MCP 工具只读地调查数据库性能问题"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ |**SQL Server**|SQL Server 2022, Azure SQL Database|Query Store, plan cache, DMVs, the deadlock history in extended events|",
+     "lines": [
+      7,
+      133
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ |**PostgreSQL**|PostgreSQL 15 and 18, including Amazon RDS|`pg_stat_statements`, statistics views, `EXPLAIN` (generic plans from version 12)|",
+     "lines": [
+      7,
+      134
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ |**MySQL**|MySQL 8.4|`performance_schema`, `sys`, `EXPLAIN FORMAT=JSON`|",
+     "lines": [
+      7,
+      135
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ |**MariaDB**|MariaDB 10.11 and 11.8|`performance_schema`, the slow query log, user statistics, `ANALYZE FORMAT=JSON`, `SHOW ANALYZE`|",
+     "lines": [
+      7,
+      136
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ |**SQLite** (preview)|SQLite 3.53 files|The file itself, opened read-only: schema, `sqlite_stat1`, `dbstat`, pragmas, `EXPLAIN QUERY PLAN`. No changes to your app. SQLite keeps no query history, so Culprit reads the one your framework already logs (Rails, Djan",
+     "lines": [
+      7,
+      137
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具连接并读取多种数据库的统计视图做性能诊断，是为数据库生态服务的工具而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server",
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ Culprit does the digging in seconds. It reads the statistics your database already keeps, works out where the time goes, and tells you in one sentence what is wrong, what it costs and what to change: ／ Culprit is designed to be driven by an agent as comfortably as by a person. `culprit mcp` serves 25 tools over the Model Context Protocol (dashboard, findings, plans, insights, what changed, blocking, waits, index advice, verify and more), every CLI command prints JSON when piped, and finding ids are stable, so an agent can find a problem, fix the code and prove the fix worked.",
+   "evidence_lines": [
+    7,
+    34,
+    109
+   ]
+  },
+  "fn": "cristipufu/culprit-sql-studio",
+  "sha": "ea396b86b2ce",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

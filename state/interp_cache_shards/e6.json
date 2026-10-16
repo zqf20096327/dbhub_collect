@@ -9413,5 +9413,242 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "59487babb1a7": {
+  "identity": {
+   "one_liner": "面向 Next.js 的开源内容平台与可视化页面构建器",
+   "review": "Nextly 是一个嵌入 Next.js 应用的 MIT 开源 CMS 与可视化页面构建器，开发者可用 TypeScript 定义内容模型或在管理界面中构建，支持多语言、版本历史与定时发布，数据存于自有的 PostgreSQL、MySQL 或 SQLite 数据库，通过独立的数据库适配器包连接。适用于需要在自有技术栈中自托管内容管理的 Next.js 团队，项目当前处于 alpha 阶段。",
+   "highlights": [
+    "提供数据库适配器包：adapter-postgres、adapter-mysql、adapter-sqlite",
+    "支持在 TypeScript 中或通过 Visual Schema Builder 定义内容模型，并生成类型",
+    "提供插件 SDK、Webhooks、RBAC 权限与版本历史/定时发布功能"
+   ],
+   "use_cases": [
+    "在 Next.js 应用中自托管内容管理与页面构建",
+    "多语言站点的内容编辑与按语言发布",
+    "需要版本比较、恢复与定时批量发布的编辑流程"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**@nextlyhq/adapter-postgres**|PostgreSQL adapter (recommended for production)|",
+     "lines": [
+      93
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**@nextlyhq/adapter-mysql**|MySQL adapter|",
+     "lines": [
+      94
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**@nextlyhq/adapter-sqlite**|SQLite adapter (local demos only)|",
+     "lines": [
+      95
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|MySQL|8.0+|MariaDB, TiDB, Aurora MySQL, PlanetScale, Vitess on best-effort.|",
+     "lines": [
+      142
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|MySQL|8.0+|MariaDB, TiDB, Aurora MySQL, PlanetScale, Vitess on best-effort.|",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Nextly 是运行在 Next.js 应用中、使用 PostgreSQL/MySQL/SQLite 存储内容数据的内容平台，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Nextly is an open-source content platform for Next.js. ／ - **Your database, your storage.** PostgreSQL, MySQL, or SQLite. Local disk by default; S3 (and R2, MinIO), Vercel Blob, or UploadThing for production. ／ |**@nextlyhq/adapter-postgres**|PostgreSQL adapter (recommended for production)|",
+   "evidence_lines": [
+    26,
+    41,
+    93
+   ]
+  },
+  "fn": "nextlyhq/nextly",
+  "sha": "59487babb1a7",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9167a262a6c8": {
+  "identity": {
+   "one_liner": "自托管网页抓取与 Markdown 提取工具，供 AI 代理读取网页",
+   "review": "AgentCrawl 是一个自托管的网页抓取工具，把网页和本地文档转成 Markdown、文本、链接、元数据、JSON-LD 等格式，供 AI 代理读取。它提供 CLI、Python 库、Docker/HTTP API 和 MCP server 四种使用方式，用 SQLite 存储任务、缓存与失败记录。项目自述处于早期阶段；浏览器渲染需额外安装 Playwright。",
+   "highlights": [
+    "提供 CLI、Python 库、HTTP API、Docker 和 MCP server 多种接口",
+    "支持持久化爬取任务：检查点、分页、取消、重试与失败记录（SQLite 存储）",
+    "支持 Firecrawl v2 兼容 API 端点（/v2/scrape、/v2/map、/v2/search、/v2/crawl）"
+   ],
+   "use_cases": [
+    "为 AI 代理/MCP 客户端提供网页内容的结构化读取",
+    "自托管部署的批量抓取与站点地图/llms.txt 生成",
+    "CSS schema 的无 LLM 结构化抽取"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ |Durable crawls|SQLite jobs, events, checkpoints, retries, and failure records.| ／ |Local dashboard|Read-only static HTML over SQLite via `agentcrawl dashboard` and `/dashboard`; the HTTP view follows the API auth setting.|",
+     "lines": [
+      103,
+      120,
+      121
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "SQLite 仅作为内部任务/缓存存储使用，项目本身是网页抓取工具，不面向数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0；skills 部分另以 MIT-0 发布（仅技能文本）",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "🕷️ **A small self-hosted crawler for AI agents.** ／ - 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ |MCP|Standards-based stdio MCP server for agent clients.|",
+   "evidence_lines": [
+    9,
+    103,
+    118
+   ]
+  },
+  "fn": "JorG18/agentcrawl",
+  "sha": "9167a262a6c8",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f75f050ddf81": {
+  "identity": {
+   "one_liner": "开源自托管 ISP 计费与管理系统，基于 Node.js 和 SQLite",
+   "review": "OPEN-ISP 是一个面向 ISP 运营商的自托管计费与管理系统，提供客户 PWA、管理/技术员/收款员门户，集成 MikroTik PPPoE/hotspot、多厂商 OLT、TR-069、RADIUS、WhatsApp/Telegram 通知与 QRIS 支付。数据使用 better-sqlite3 (SQLite) 存储，通过 Docker Compose 或 Node.js（≥20）运行。README 注明代码由 AI 生成，高级菜单需在 settings.json 中配置免费激活码解锁。",
+   "highlights": [
+    "提供 ISP 计费、自动隔离、QRIS/webhook 支付与账单打印",
+    "支持 MikroTik PPPoE/hotspot、多厂商 OLT（SNMP/CLI）、TR-069 与 RADIUS",
+    "使用 better-sqlite3 (SQLite) 存储数据，提供数据库备份/恢复功能"
+   ],
+   "use_cases": [
+    "小型 ISP/Fiber optic 运营商的客户计费与隔离管理",
+    "通过 MikroTik RouterOS 与 OLT 设备进行网络设备管理",
+    "面向客户的自助 PWA 与 WhatsApp/Telegram 通知场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**OPEN-ISP** adalah aplikasi billing dan manajemen ISP yang lengkap: tagihan otomatis, isolir otomatis, pembayaran (QRIS/webhook), perangkat MikroTik (PPPoE & hotspot), OLT PON multi-vendor, TR-069 (GenieACS/ACS), RADIUS, peta jaringan, notifikasi WhatsApp & T ／ Node.js · Express · EJS · better-sqlite3 (SQLite) · Bootstrap 5 + Bootstrap Icons (vendor lokal) · Leaflet · PWA/Service Worker · sharp · net-snmp · MikroTik RouterOS API · GoWA (WhatsApp gateway) · Telegram Bot API.",
+     "lines": [
+      16,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite 为基础数据库存储业务数据的 ISP 计费应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OPEN-ISP** adalah aplikasi billing dan manajemen ISP yang lengkap: tagihan otomatis, isolir otomatis, pembayaran (QRIS/webhook), perangkat MikroTik (PPPoE & hotspot), OLT PON multi-vendor, TR-069 (GenieACS/ACS), RADIUS, peta jaringan, notifikasi WhatsApp & Telegram, hingga portal self-service pelanggan dalam satu platform — semuanya berjalan mandiri (self-hosted) dengan SQLite sebagai basis data. **NOTE:** dibuat dan ditulis oleh AI (Deepseek), on opencode. ／ Node.js · Express · EJS · better-sqlite3 (SQLite) · Bootstrap 5 + Bootstrap Icons (vendor lokal) · Leaflet · PWA/Service Worker · sharp · net-snmp · MikroTik RouterOS API · GoWA (WhatsApp gateway) · Telegram Bot API.",
+   "evidence_lines": [
+    16,
+    99
+   ]
+  },
+  "fn": "oxpoe/open-isp",
+  "sha": "f75f050ddf81",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

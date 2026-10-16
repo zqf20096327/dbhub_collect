@@ -9777,5 +9777,402 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2c3c52c12769": {
+  "identity": {
+   "one_liner": "Laravel 包，将数据库 schema 实时渲染为可缩放 ER 图",
+   "review": "这是一个 Laravel 包，扫描应用数据库结构后用 Mermaid 渲染可平移缩放的 ER 图，只读取结构（表、列、键、索引），不查询行数据。面向 Laravel 开发者，附带 schema 健康检查、diff 和多格式（DBML/JSON/CSV/Markdown/llm）导出命令。要求 PHP 8.2+ 与 Laravel 12+，默认仅在 local 环境启用，生产使用需配置授权。",
+   "highlights": [
+    "实时渲染 ER 图并提供 focus 模式、表名过滤、PNG/SVG/DBML/JSON 等多格式导出",
+    "提供 truss:doctor 结构体检（缺主键、未索引外键等）与 truss:diff schema 对比，可接入 CI",
+    "支持多数据库连接配置切换，仅读取结构不查询行数据"
+   ],
+   "use_cases": [
+    "在 Laravel 应用内查看和理解表间外键关系",
+    "CI 中做 schema 漂移检查与结构问题审查",
+    "为编码 agent 导出精简的结构上下文"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "'mysql' => [], ／ php artisan truss:doctor --connection=mysql --format=json ／ php artisan truss:export --connection=mysql --exclude=telemetry ／ export TRUSS_DSN=\"pgsql://user:pass@db.example.com:5432/shop\" # also mysql://, mariadb://, or a SQLite file path",
+     "lines": [
+      78,
+      106,
+      134,
+      300
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "export TRUSS_DSN=\"pgsql://user:pass@db.example.com:5432/shop\" # also mysql://, mariadb://, or a SQLite file path",
+     "lines": [
+      300
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "export TRUSS_DSN=\"pgsql://user:pass@db.example.com:5432/shop\" # also mysql://, mariadb://, or a SQLite file path",
+     "lines": [
+      300
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Laravel 包为数据库 schema 提供可视化与结构导出工具，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Laravel Truss is a live database structure viewer. It scans your live schema and renders it as a scrollable, zoomable ER diagram right inside your app, so you can see how the tables actually connect without opening a DB client. It reads **structure only** (tables, columns, keys, indexes); row data is never queried or exposed. ／ - Export the diagram as PNG or SVG, or its structure as JSON, CSV, a Markdown data dictionary, DBML, or a token-trimmed `llm` format, from the browser or, for CI and tooling, from the command line with `php artisan truss:export`. Structure-only and deterministic. `--format=html` writes the whole diagram as one self-contained file that opens with no server and no install. ／ composer require albertoarena/laravel-truss --dev",
+   "evidence_lines": [
+    12,
+    24,
+    50
+   ]
+  },
+  "fn": "albertoarena/laravel-truss",
+  "sha": "2c3c52c12769",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d09b0dbb403e": {
+  "identity": {
+   "one_liner": "ClickHouse 原生 TCP 协议的 Go 驱动",
+   "review": "chconn 是用 Go 实现的 ClickHouse 驱动，通过原生 TCP 协议读写数据。它提供列式批量插入与读取、行式查询扫描、结构体映射、流式插入、参数化查询、连接池、LZ4/ZSTD 压缩与 TLS 支持，并附 chgen 代码生成器和 SQL 构建器。适合在 Go 程序中直接访问 ClickHouse 的开发者；要求 Go 1.27+，支持 ClickHouse 24.3 及以上版本。",
+   "highlights": [
+    "通过 ClickHouse 原生 TCP 协议通信，提供列式批量插入/读取与行式 Query/Scan 两种访问模式",
+    "覆盖 ClickHouse 类型矩阵（UInt/Int128/256、Decimal、DateTime64、Map、Tuple、Nested、JSON、Variant、Dynamic 等），支持 Nullable、Array、LowCardinality 泛型方法",
+    "内置连接池（chpool）、LZ4/ZSTD 压缩、TLS/SSL、参数化查询、context 取消、chgen 代码生成与 SQL 构建器"
+   ],
+   "use_cases": [
+    "Go 应用需要以原生协议直连 ClickHouse 进行批量数据写入与读取",
+    "从 ClickHouse 表生成 Go 模型与列代码（chgen）",
+    "按版本矩阵（24.3–26.2）维护的 ClickHouse Go 接入层开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# chconn - ClickHouse Native Protocol Driver for Go ／ chconn is a pure Go driver for ClickHouse using the native TCP protocol. It is designed for high-performance, column-oriented data access with full generics support. ／ - **ClickHouse**: 24.3+",
+     "lines": [
+      7,
+      9,
+      308
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 提供专用 Go 语言驱动，属数据库生态的连接组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# chconn - ClickHouse Native Protocol Driver for Go ／ chconn is a pure Go driver for ClickHouse using the native TCP protocol. It is designed for high-performance, column-oriented data access with full generics support. ／ go get github.com/vahid-sohrabloo/chconn/v3",
+   "evidence_lines": [
+    7,
+    9,
+    16
+   ]
+  },
+  "fn": "vahid-sohrabloo/chconn",
+  "sha": "d09b0dbb403e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cd55bf936583": {
+  "identity": {
+   "one_liner": "业务应用开发平台：元数据描述生成数据库表、表单与报表",
+   "review": "OES 是一个用 C++17 编写的业务应用开发平台，用户以元数据描述业务对象，用内置脚本语言编写规则，平台将其编译为数据库表、表单和报表，并提供设计器、调试器、应用服务器与瘦客户端。内置 MCP 服务器供 AI 助手读写配置。许可证为 PolyForm Noncommercial，仅源码可得、非开源。适用对象是构建进销存、会计、薪酬等企业内部应用的开发者。",
+   "highlights": [
+    "提供设计器、编译器、远程调试器、多数据库层、应用服务器与瘦客户端",
+    "内置 MCP 服务器，提供 127 个工具供 AI 助手读写元数据、运行代码与驱动调试器",
+    "支持 Firebird、PostgreSQL、ODBC 与 SQLite，配置变更以 diff 方式应用到数据库"
+   ],
+   "use_cases": [
+    "开发库存、会计、薪酬、销售等记账类业务应用",
+    "通过元数据与配置 diff 管理应用 schema 演进",
+    "让 AI 助手通过 MCP 读取、构建和检查平台配置"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Firebird and PostgreSQL side by side, one worker pool for all, and each base with its own ／ - **Databases** — Firebird (embedded, shipped with the distribution) and PostgreSQL for production; ／ |Production alternative|PostgreSQL|",
+     "lines": [
+      71,
+      80,
+      191
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "ODBC; SQLite for tests and logging. ／ The top-level `CMakeLists.txt` (CMake ≥ 3.20) builds every target. DB drivers opt in — `OES_USE_FIREBIRD`, `OES_USE_POSTGRESQL`, `OES_USE_ODBC` (all default OFF); SQLite is always embedded, no flag: ／ |Other databases|ODBC; SQLite (tests + logging)|",
+     "lines": [
+      81,
+      155,
+      192
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该平台使用 Firebird/PostgreSQL/SQLite 存储其业务应用数据，而非为数据库生态提供工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0，source-available，非开源",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OES is a source-available platform for building line-of-business applications — stock, accounting, ／ It ships with everything that loop needs: a designer, a compiler and bytecode interpreter, a remote ／ one process, a thin client and a web server — and a built-in **MCP server**, so an",
+   "evidence_lines": [
+    3,
+    10,
+    12
+   ]
+  },
+  "fn": "open-enterprise-solutions/enterprise",
+  "sha": "cd55bf936583",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ea4fb1848e92": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue+MySQL的仓库管理系统，覆盖采购-审批-出入库全流程",
+   "review": "一套前后端分离的仓库/进销存管理系统，面向企业仓储场景，区分管理员、申请人、库房管理员三类角色，实现采购申请、审批、入库、出库、库存盘点与单据导出等功能。技术栈为SpringBoot+MybatisPlus+MySQL+Redis+Vue。README后段主要面向毕业设计答辩的付费部署与讲解服务，部署文档较简略。",
+   "highlights": [
+    "支持采购申请、审批流转、入库、出库、库存盘点的全流程管理",
+    "区分管理员、申请人、库房管理员三类角色并做权限隔离",
+    "支持入库单/出库单导出为 Excel/PDF"
+   ],
+   "use_cases": [
+    "企业仓储中心与物流仓库的进销存管理",
+    "学校/医院后勤物资仓库管理",
+    "毕业设计参考项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明系统使用 MySQL 作为数据库存储数据，项目本身是业务应用而非数据库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "非开源免费资源，需联系作者付费获取部署与讲解服务",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向企业仓储物流场景的通用仓库管理系统，采用前后端分离架构，覆盖管理员、申请人（商家/部门）与库房管理员三类角色。系统围绕\"物资采购、申请审批、入库管理、出库管理、库存盘点、供应商管理、采购组合、单据导出\"等核心业务设计，支持申请人在线提交物资领用/采购申请、管理员审批与生成采购单、库房管理员验收入库、按需出库至各部门，实现从采购申请、审批、采购、入库、出库到库存盘点的全流程数字化管理，适用于企业仓储中心、物流仓库、电商仓库、制造工厂原料仓、学校/医院后勤仓库及连锁门店中央仓库的日常运营。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/warehouse_cos",
+  "sha": "ea4fb1848e92",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "382f0b95e7d1": {
+  "identity": {
+   "one_liner": "基于 Doctrine ORM 的 PHP 关系数据库层库",
+   "review": "Tueen/database 是面向 Telegram 机器人的 PHP 数据库访问库，基于 PHP 8.4 与 Doctrine ORM 3，提供启动时惰性 schema 同步、多币种账本模型、PSR-16 缓存及 tueen-db CLI 管理 schema 与缓存，经 composer 安装。适用于在 Tueen Bot Framework 内或独立使用它的 PHP 开发者；要求 PHP 8.4+。",
+   "highlights": [
+    "通过 Doctrine ORM 3 提供启动时的惰性 schema 差异同步，无需手动 CLI 迁移",
+    "内置 Telegram 领域模型（聊天、用户、频道、消息等）与多币种钱包/记账模型",
+    "附带 tueen-db CLI 用于 schema 校验、状态查看与缓存管理"
+   ],
+   "use_cases": [
+    "PHP Telegram 机器人开发的数据层",
+    "需要零迁移 CLI 的 Doctrine ORM 项目",
+    "多币种钱包/订阅计费功能建模"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 📦 **Plug & Play Multi-Database Support:** SQLite (in-memory & file), MySQL 8+, MariaDB, and PostgreSQL out of the box.",
+     "lines": [
+      24
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 📦 **Plug & Play Multi-Database Support:** SQLite (in-memory & file), MySQL 8+, MariaDB, and PostgreSQL out of the box.",
+     "lines": [
+      24
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 📦 **Plug & Play Multi-Database Support:** SQLite (in-memory & file), MySQL 8+, MariaDB, and PostgreSQL out of the box.",
+     "lines": [
+      24
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- 📦 **Plug & Play Multi-Database Support:** SQLite (in-memory & file), MySQL 8+, MariaDB, and PostgreSQL out of the box.",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为数据库访问层库为基于数据库的 Telegram 机器人提供服务，本身不是数据库也不是仅消费数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Tueen Database** is an enterprise-grade, zero-config relational database layer crafted specifically for high-throughput Telegram bots. Built on **PHP 8.4+** and **Doctrine ORM 3**, it works seamlessly both inside the **Tueen Bot Framework** and as a high-performance standalone library. ／ - 📦 **Plug & Play Multi-Database Support:** SQLite (in-memory & file), MySQL 8+, MariaDB, and PostgreSQL out of the box. ／ composer require tueen/database",
+   "evidence_lines": [
+    16,
+    24,
+    31
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tueen/database",
+  "sha": "382f0b95e7d1",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

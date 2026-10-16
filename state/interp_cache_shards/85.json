@@ -10522,5 +10522,257 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "74ff5b50540a": {
+  "identity": {
+   "one_liner": "Spark SQL执行下推中间层，将JVM执行卸载到原生引擎",
+   "review": "Gluten 是 Apache 旗下的 Spark 插件式中间层，把 Spark 物理计划经 Substrait 转换后交给 ClickHouse 或 Velox 等原生引擎执行，无需修改 DataFrame API 或 SQL。面向希望加速 Spark SQL 的用户，提供列式 shuffle、回退机制、Spark UI 指标，目前支持 Spark 3.4–4.1。",
+   "highlights": [
+    "将 Spark 物理计划转换为 Substrait 计划并通过 JNI 下推到原生引擎执行",
+    "提供回退机制，不支持的算子回落到原生 Spark 执行",
+    "支持 ClickHouse、Velox、Bolt 三种后端，兼容 Spark 3.4/3.5/4.0/4.1"
+   ],
+   "use_cases": [
+    "加速大规模 Spark SQL 数据处理作业",
+    "在不修改查询代码的情况下启用原生列式执行引擎",
+    "通过 Qualification Tool 评估工作负载与 Gluten 的兼容性"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Currently, Gluten supports only the ClickHouse and Velox backends. Velox is a C++ database acceleration library that provides reusable, extensible, and high-performance data processing components. In addition, Gluten is designed to be extensible, ／ For **ClickHouse** backend, please refer to ClickHouse.md. ／ ### ClickHouse Backend",
+     "lines": [
+      42,
+      76,
+      135
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Gluten 为 Spark SQL 生态服务，将执行下推到 ClickHouse/Velox 等原生引擎，本身是引擎加速组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A Middle Layer for Offloading JVM-Based SQL Execution to Native Engines** ／ “Gluten” is Latin for \"glue\". The main goal of the Gluten project is to glue native engines to Spark SQL. Thus, we can benefit from the high performance of native engines and the high scalability enabled by the Spark ecosystem. ／ Currently, Gluten supports only the ClickHouse and Velox backends. Velox is a C++ database acceleration library that provides reusable, extensible, and high-performance data processing components. In addition, Gluten is designed to be extensible,",
+   "evidence_lines": [
+    3,
+    20,
+    42
+   ]
+  },
+  "fn": "apache/gluten",
+  "sha": "74ff5b50540a",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0db023587606": {
+  "identity": {
+   "one_liner": "原生 macOS 数据库客户端，Swift/AppKit 多引擎连接与查询",
+   "review": "BerryDB 是用 Swift 6 与 AppKit 构建的 macOS 桌面数据库客户端，面向开发者、数据工程师和 DBA。它通过原生驱动连接 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、Redis、MongoDB 等引擎，提供数据网格、SSH 隧道、Keychain 凭据存储，并内置可选的 AI SQL 助手和 MCP schema 辅助工具。仅支持 macOS 15+ 且限 Apple Silicon。",
+   "highlights": [
+    "以原生驱动（PostgresNIO、MySQLNIO、libsqlite3、FreeTDS 等）连接 SQL、NoSQL、键值与向量数据库",
+    "提供流式 AppKit 数据网格、SQL 编辑器、内联编辑、SSH 隧道与 macOS Keychain 凭据存储",
+    "包含可选 AI SQL 助手（自然语言生成 SQL、EXPLAIN 分析）与本地 MCP schema 辅助程序"
+   ],
+   "use_cases": [
+    "在 macOS 上统一查询和管理多种数据库引擎的日常开发与运维",
+    "通过 SSH 隧道访问生产库并浏览 schema、编辑数据",
+    "借助 AI 助手或 MCP 向编码代理提供数据库 schema 元数据"
+   ],
+   "ai_note": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL**: Native wire protocol (`PostgresNIO`), query cancellation via `pg_cancel_backend`, SSL/TLS. ／ |**PostgreSQL**|Pure Swift (`PostgresNIO`)|✅|✅|✅|✅|",
+     "lines": [
+      42,
+      85
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL & MariaDB**: Native driver (`MySQLNIO`), `caching_sha2_password` (with TLS on) and `mysql_native_password`, SSL/TLS, `KILL QUERY`. ／ |**MySQL / MariaDB**|Pure Swift (`MySQLNIO`)|✅|✅|✅|✅|",
+     "lines": [
+      43,
+      86
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite**: Direct embedded driver via `libsqlite3`, opens WAL-mode databases. ／ |**SQLite** (3.x)|Embedded (`libsqlite3`)|✅|N/A|✅|✅|",
+     "lines": [
+      44,
+      87
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Microsoft SQL Server**: TDS protocol via dynamically linked FreeTDS (`libsybdb`). ／ |**Microsoft SQL Server**|FreeTDS (`libsybdb`)|✅|✅|✅|✅|",
+     "lines": [
+      45,
+      88
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MySQL & MariaDB**: Native driver (`MySQLNIO`), `caching_sha2_password` (with TLS on) and `mysql_native_password`, SSL/TLS, `KILL QUERY`. ／ |**MySQL / MariaDB**|Pure Swift (`MySQLNIO`)|✅|✅|✅|✅|",
+     "lines": [
+      43,
+      86
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接、浏览和管理多种数据库的客户端工具，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**BerryDB** is a native database client for macOS developers, data engineers, and DBAs. It is built with **Swift 6, AppKit, and SwiftUI**, with no Electron: the data grid is an AppKit `NSTableView`. ／ Connect to SQL, NoSQL, Key-Value, and Vector databases all in a unified native workspace: ／ |Database Engine|Driver / Protocol|Direct Connection|SSH Tunnel|Inline Grid Edit|Schema Browser|",
+   "evidence_lines": [
+    26,
+    40,
+    83
+   ]
+  },
+  "fn": "berry-apps/berrydb-desktop",
+  "sha": "0db023587606",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ac03aa6bb6cb": {
+  "identity": {
+   "one_liner": "本地优先的 CLI/GUI 时间追踪工具，数据存 SQLite",
+   "review": "HumbleBee 是一个本地优先的时间追踪应用，提供 CLI 与基于 Wails/React 的桌面 GUI，数据以 SQLite 存储在本地 ~/.humblebee/humblebee.db（经 modernc.org/sqlite 内嵌、无 CGO）。面向自由职业者等需要本地记录工时的用户，支持工作项管理、计时与月度报告；README 未提及云同步，数据仅存本地。",
+   "highlights": [
+    "提供 CLI 与独立的本地 GUI（Wails/React），共用同一本地数据库格式",
+    "通过 modernc.org/sqlite 内嵌 SQLite，无需 CGO，数据存于 ~/.humblebee/humblebee.db",
+    "提供 humblebee doctor 健康检查与幂等修复，支持月度报告与跨午夜时间拆分"
+   ],
+   "use_cases": [
+    "自由职业者本地记录客户项目工时",
+    "需要离线、数据仅存本地的工时统计与月度报告",
+    "单机环境下用 CLI 或 GUI 管理工作项与计时器"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite is embedded via `modernc.org/sqlite` (no CGO)",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明通过 modernc.org/sqlite 内嵌 SQLite 存储应用自身数据，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Local-first CLI time tracking that stays out of your way. ／ - SQLite is embedded via `modernc.org/sqlite` (no CGO) ／ HumbleBee also ships a standalone local-first GUI built with Wails and React. The GUI uses the same local database format as the CLI, but it does not require the CLI to be installed.",
+   "evidence_lines": [
+    3,
+    8,
+    48
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "grobmeier/humblebee",
+  "sha": "ac03aa6bb6cb",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

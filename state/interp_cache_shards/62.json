@@ -9546,5 +9546,185 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e79f9828d943": {
+  "identity": {
+   "one_liner": "MariaDB/MySQL/PostgreSQL 复制拓扑监控、备份与高可用切换工具",
+   "review": "replication-manager 面向 MariaDB、MySQL、Percona Server 及 3.1.43 版本起的 PostgreSQL 复制集群，提供实时复制监控、计划备份与恢复、故障自动切换与主从切换、代理后端管理及告警可观测能力。适合运维人员在 OpenSVC 或 Kubernetes 环境中管理多套数据库复制拓扑。",
+   "highlights": [
+    "支持 GTID、多源、延迟复制等多拓扑的实时监控与自动故障切换",
+    "提供 mysqldump、mydumper、mariabackup、xtrabackup、pg_basebackup 等方式的计划备份与恢复",
+    "支持 ProxySQL、MaxScale、HAProxy、Spider 后端自动管理及 OAuth2 SSO、RBAC API"
+   ],
+   "use_cases": [
+    "管理 MariaDB/MySQL/PostgreSQL 复制集群的监控与告警",
+    "数据库集群的自动 failover 与计划内 switchover",
+    "备份调度、保留策略与时间点恢复管理"
+   ],
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "lines": [
+      1,
+      3,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 MariaDB/MySQL/PostgreSQL 复制拓扑服务的监控、备份与高可用管理工具，而非使用数据库存储数据的应用。"
+  },
+  "classification": {
+   "cat": "高可用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "## Replication Manager for MariaDB, MySQL and PostgreSQL ／ Replication Manager is an open-source database monitoring, backup, and high-availability tool. It provides automated failover, scheduled maintenance, and full observability for MariaDB, MySQL, and Percona Server replication topologies, and, since 3.1.43, for P ／ **MariaDB & MySQL Monitoring**",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "## Replication Manager for MariaDB, MySQL and PostgreSQL ／ Replication Manager is an open-source database monitoring, backup, and high-availability tool. It provides automated failover, scheduled maintenance, and full observability for MariaDB, MySQL, and Percona Server replication topologies, and, since 3.1.43, for P ／ **MariaDB & MySQL Monitoring**",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "## Replication Manager for MariaDB, MySQL and PostgreSQL ／ Replication Manager is an open-source database monitoring, backup, and high-availability tool. It provides automated failover, scheduled maintenance, and full observability for MariaDB, MySQL, and Percona Server replication topologies, and, since 3.1.43, for P ／ **PostgreSQL**",
+     "lines": [
+      1,
+      3,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MariaDB/MySQL/PostgreSQL 复制集群提供监控、备份与 failover 的运维工具，而非仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB",
+    "MySQL",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPLv3 单许可",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Replication Manager is an open-source database monitoring, backup, and high-availability tool. It provides automated failover, scheduled maintenance, and full observability for MariaDB, MySQL, and Percona Server replication topologies, and, since 3.1.43, for PostgreSQL clusters. ／  * Leader election and automatic primary election on failure detection (failover) ／  * Automated backend management for ProxySQL, MaxScale, HAProxy, and Spider",
+   "evidence_lines": [
+    3,
+    29,
+    44
+   ]
+  },
+  "fn": "signal18/replication-manager",
+  "sha": "e79f9828d943",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3767ca758467": {
+  "identity": {
+   "one_liner": "Litestar+SQLAlchemy 2+PostgreSQL 的 Docker 化应用模板",
+   "review": "一个 Docker 化的 Litestar Web 应用项目模板，集成 SQLAlchemy 2、Alembic 迁移、modern-di IOC 容器，附带 pytest 自动回滚测试、ruff/ty 代码检查与 OpenTelemetry 链路追踪配置，适合需要快速搭建基于 PostgreSQL 的 Litestar 服务的开发者作为起步骨架。",
+   "highlights": [
+    "提供 Docker Compose 编排的 Litestar + SQLAlchemy 2 + PostgreSQL 项目骨架，含 IOC 容器与 DI",
+    "内置 pytest 测试（每用例自动回滚）、Alembic 迁移、ruff/ty 检查与 OpenTelemetry 追踪配置"
+   ],
+   "use_cases": [
+    "快速初始化 Litestar + PostgreSQL 后端服务项目",
+    "需要开箱即用 DI、迁移、测试与可观测性配置的团队脚手架"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Dockerized Litestar, SQLAlchemy 2 and PostgreSQL app template with DI.",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "模板是使用 PostgreSQL 存数据的 Litestar 应用骨架，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dockerized Litestar, SQLAlchemy 2 and PostgreSQL app template with DI. ／ - `Alembic` for DB migrations",
+   "evidence_lines": [
+    12,
+    19
+   ]
+  },
+  "fn": "modern-python/litestar-sqlalchemy-template",
+  "sha": "3767ca758467",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

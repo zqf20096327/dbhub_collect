@@ -8399,5 +8399,108 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7d051e6028f4": {
+  "identity": {
+   "one_liner": "单二进制 MCP 服务器，连接 AI 助手与 SQL 数据库",
+   "review": "dbmcp 是一个用单个二进制分发的 MCP 服务器，让 Claude Desktop、Cursor 等 MCP 客户端通过 stdio 或 HTTP 传输访问 MySQL、MariaDB、PostgreSQL 或 SQLite。它提供库/表/视图/触发器/函数的元数据发现工具及读写查询、DDL、explain 工具，默认只读、内置 PII 脱敏与写保护，支持 TLS 与 Bearer Token 认证。适合需要让 AI 助手安全查询数据库的用户。",
+   "highlights": [
+    "单一二进制（约 7 MB），支持 MySQL/MariaDB、PostgreSQL、SQLite 四种后端",
+    "提供 schema 发现、readQuery/writeQuery、DDL 与 explainQuery 等 MCP 工具，只读模式隐藏写工具",
+    "支持 stdio 与 HTTP 传输，配置支持 CLI 参数、环境变量两级覆盖，含 SSL/TLS 与连接池/查询超时选项"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor 等 MCP 客户端中以只读方式让 AI 查询数据库",
+    "通过 HTTP 传输部署远程/多客户端共享的数据库 MCP 服务",
+    "需要 PII 脱敏与写保护的数据访问代理场景"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ |`--db-backend`|`DB_BACKEND`|*(required)*|`mysql`, `mariadb`, `postgres`, or `sqlite`|",
+     "lines": [
+      8,
+      16,
+      127
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ dbmcp http --db-backend mysql --db-user root --db-name mydb --port 9001",
+     "lines": [
+      8,
+      16,
+      63
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ |`--db-backend`|`DB_BACKEND`|*(required)*|`mysql`, `mariadb`, `postgres`, or `sqlite`|",
+     "lines": [
+      8,
+      16,
+      127
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ # MySQL/MariaDB",
+     "lines": [
+      8,
+      16,
+      91
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为数据库提供 MCP 访问通道的服务端工具，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ - **MCP tools** — schema discovery (`listDatabases`, `listTables`, `listViews`, `listTriggers`, `listFunctions`, `listProcedures`, `listMaterializedViews`), data access (`readQuery`, `writeQuery`), DDL (`createDatabase`, `dropDatabase`, `dropTable`), and `explainQuery`. Read-only mode hides the write tools (`writeQuery`, `createDatabase`, `dropDatabase`, `dropTable`). See MCP Tools for per-backend availability.",
+   "evidence_lines": [
+    8,
+    16,
+    17
+   ]
+  },
+  "fn": "haymon-ai/dbmcp",
+  "sha": "7d051e6028f4",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

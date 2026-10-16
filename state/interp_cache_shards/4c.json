@@ -9882,5 +9882,242 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c3577deeaeac": {
+  "identity": {
+   "one_liner": "基于 DuckDB 的本地优先数据工作台，支持跨源 SQL 查询与 AI 问数",
+   "review": "DuckQuery 是一个基于 DuckDB 引擎的本地优先数据工作台，可将 CSV、Excel、Parquet、JSON 等本地文件导入为可查询表，并连接 MySQL、PostgreSQL、SQLite、DuckDB 数据库进行跨源关联查询，提供 SQL 编辑器、可视化查询、图表与导出，另有 text-to-SQL 智能体和 MCP 服务。适合需要临时对账、数据核查与分析的用户，无需 ETL；应用本身无多用户鉴权，Docker 部署默认仅监听本机。",
+   "highlights": [
+    "导入 CSV/Excel/Parquet/JSON 并与 MySQL/PostgreSQL/SQLite/DuckDB 外部库做跨源 JOIN",
+    "内置 text-to-SQL 智能体与 duckquery-mcp 服务，支持只读限量查询和三种权限模式",
+    "提供桌面安装包与 Docker 部署，支持异步后台任务、可视化查询、图表与多格式导出"
+   ],
+   "use_cases": [
+    "用 Excel/CSV 与业务数据库做临时对账和跨源核查",
+    "本地数据探索分析，免搭建数仓",
+    "通过 MCP 让 Claude Code/Cursor 等 AI 编程工具查询数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。 ／ 示例：用一条 SQL 关联本地文件与 MySQL",
+     "lines": [
+      66,
+      79,
+      83
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。",
+     "lines": [
+      66,
+      79
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。",
+     "lines": [
+      66,
+      79
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供数据库连接与跨源查询能力，是为数据库分析服务的工具，而非使用数据库存储业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DuckQuery 是独立开发、基于 DuckDB 的本地优先数据工作台，适合临时对账、跨源核查和数据探索。文件导入、数据库连接、SQL、可视化查询、图表和导出都在一个界面里完成，不需要为一次分析搭建数仓。 ／ |核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。",
+   "evidence_lines": [
+    19,
+    66,
+    79
+   ]
+  },
+  "fn": "Chenkeliang/duckdb-query",
+  "sha": "c3577deeaeac",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d09bf9692980": {
+  "identity": {
+   "one_liner": "用 Rust 代码编写 SQLX 数据库迁移的 Rust 库",
+   "review": "一个 Rust 库，让开发者以 Rust 代码而非 SQL 脚本定义 SQLX 数据库迁移。通过实现 Operation/Migration trait 或宏声明迁移，支持可逆/不可逆操作、编译期内嵌 SQL 文件、原子迁移与锁策略，并提供内置 CLI 命令及从旧迁移系统同步的 OldMigrator 桥接。适用于 Rust/SQLX 项目开发者。限制：MySQL/MariaDB 上 DDL 隐式提交使原子迁移无法整体回滚。",
+   "highlights": [
+    "支持通过 Operation/Migration trait、宏或编译期内嵌 SQL 文件定义迁移",
+    "支持 PostgreSQL、SQLite、MySQL 及 any 后端，含会话级锁策略与事务性 DDL 检测",
+    "提供内置 CLI 命令及 OldMigrator trait 用于从旧迁移系统同步"
+   ],
+   "use_cases": [
+    "Rust/SQLX 项目中用代码管理数据库 schema 迁移",
+    "将既有 SQL 迁移系统（如 sqlx、diesel、seaorm）的历史迁移同步到本工具",
+    "在 CLI 工具中集成迁移执行命令"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- [x] PostgreSQL",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- [x] MySql",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- [x] SQLite",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "Atomic migrations run inside a transaction. MySQL and MariaDB commit implicitly on",
+     "lines": [
+      117
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库 schema 迁移服务的 Rust 库，为使用数据库的项目提供迁移能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust library for writing SQLX migrations using Rust instead of SQL. ／ Supported Databases: ／ Add `sqlx_migrator` to your `Cargo.toml` with the appropriate database feature:",
+   "evidence_lines": [
+    3,
+    9,
+    18
+   ]
+  },
+  "fn": "iamsauravsharma/sqlx_migrator",
+  "sha": "d09bf9692980",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6c43a4fed39c": {
+  "identity": {
+   "one_liner": "动物科普播客静态网站，部署于 Vercel",
+   "review": "这是一个播客与科普内容的静态展示网站，包含首页、播客库、通讯订阅与关于页。维护者通过编辑 site.config.js 填入播客平台链接、订阅表单 URL 和节目列表，推送后 Vercel 自动重新部署；本地可用 npx serve 预览。与数据库无关联，面向内容站点维护者使用。",
+   "highlights": [
+    "配置文件驱动的站点内容更新（site.config.js）",
+    "部署在 Vercel，推送 main 分支后自动部署",
+    "支持播客链接、通讯订阅表单与节目列表配置"
+   ],
+   "use_cases": [
+    "展示播客节目与往期列表",
+    "嵌入第三方通讯订阅表单",
+    "静态站点本地预览与发布"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未提及使用任何数据库，仅描述静态站点配置与部署。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Website for **Wildlife Tidbits** — fun, science-backed animal facts from conservation biologist Dr. Audra A. Huffmeyer. ／ - Live: deployed on Vercel (auto-deploys from `main`) ／ Open `site.config.js`:",
+   "evidence_lines": [
+    3,
+    6,
+    10
+   ]
+  },
+  "fn": "ahuffmeyer-hub/wildlife-tidbits",
+  "sha": "6c43a4fed39c",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

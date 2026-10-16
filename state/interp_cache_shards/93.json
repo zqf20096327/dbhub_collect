@@ -9690,5 +9690,82 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cdbb4627cbc8": {
+  "identity": {
+   "one_liner": "自托管个人财务追踪应用，本地 SQLite 存储预算、资产与贷款建模",
+   "review": "这是一个自托管的个人财务管理系统，用于记录月度预算、管理资产与投资组合、进行住房贷款建模，数据全部存于服务端 SQLite 数据库。提供桌面应用、Docker 和源码三种运行方式，数据保留在本机。附带一个本地 MCP 服务器，允许 Claude 等 AI 助手通过本机 stdio 读取财务数据并做受控修改；无登录机制，公网暴露需自行加反向代理或 VPN。",
+   "highlights": [
+    "支持预算追踪、资产与投资组合管理、含完整摊销计划的贷款计算，支持 NOK/USD 等货币及挪威语/英语",
+    "提供桌面应用（macOS/Windows）、Docker 镜像和源码构建三种运行方式，自动每日备份 SQLite 数据库",
+    "内置本地 MCP 服务器，供 AI 助手经 stdio 读取财务数据并执行受保护的操作"
+   ],
+   "use_cases": [
+    "个人/家庭在本地记录预算、资产净值与投资组合",
+    "使用贷款摊销与税务计算建模购房贷款场景",
+    "通过 MCP 让本地 AI 助手读取并分析自己的财务数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "React TypeScript Vite Docker SQLite ／ A self-hosted personal finance tracker. Track monthly budgets, manage assets and investments, model housing loans, and get smart spending recommendations. All data is stored server-side in a SQLite database via Docker — zero browser storage. Norwegian is nativ ／ They are the same application. The desktop app runs the same server, the same SQLite database and ／ |`make backup`|Copy the SQLite database to `./backups/` (timestamped)|",
+     "lines": [
+      5,
+      19,
+      44,
+      201
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 SQLite 存储自身数据的财务应用，SQLite 为其内置存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A self-hosted personal finance tracker. Track monthly budgets, manage assets and investments, model housing loans, and get smart spending recommendations. All data is stored server-side in a SQLite database via Docker — zero browser storage. Norwegian is natively supported. ／ They are the same application. The desktop app runs the same server, the same SQLite database and ／ docker run -d \\",
+   "evidence_lines": [
+    19,
+    44,
+    109
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mortennordbye/headroom",
+  "sha": "cdbb4627cbc8",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

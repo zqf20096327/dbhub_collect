@@ -9747,5 +9747,172 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b595d1611956": {
+  "identity": {
+   "one_liner": "华为云 OBS 对象存储服务的 Java SDK",
+   "review": "该仓库是华为云对象存储服务（OBS）的 Java 软件开发工具包，提供 ObsClient 等接口用于桶与对象的操作，包括上传下载、生命周期管理、CORS、服务端/客户端加密、桶日志、多段上传等功能。面向需要在 Java 应用中接入 OBS 的开发者，README 以版本变更记录为主，未包含安装文档，属对象存储而非数据库生态。",
+   "highlights": [
+    "提供访问华为云 OBS 的 Java 客户端，包含桶配置、对象上传下载、多段上传等接口",
+    "支持客户端加密、SSE-KMS 服务端加密及 AK/SK 凭证提供者接口（IObsCredentialsProvider）",
+    "支持桶生命周期、日志、CORS、WORM、inventory 等配置管理功能"
+   ],
+   "use_cases": [
+    "在 Java 应用中读写华为云 OBS 上的对象与桶",
+    "通过代码管理桶的加密、日志、生命周期等配置",
+    "基于 SDK 构建对象存储相关的工具或服务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "该 SDK 服务于华为云 OBS 对象存储而非任何数据库，README 未体现数据库相关生态位",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Version 3.26.9 ／ 1. Supported bucket real-time log configuration feature ／ 5. OIDC token can be used to initialize ObsClient.",
+   "evidence_lines": [
+    1,
+    3,
+    20
+   ]
+  },
+  "fn": "huaweicloud/huaweicloud-sdk-java-obs",
+  "sha": "b595d1611956",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cc65309fb508": {
+  "identity": {
+   "one_liner": "华为云数据库相关示例仓库编目清单，围绕 GaussDB 生态适配",
+   "review": "这是一个华为云示例项目索引仓库，以表格列出多个 incubating 状态的子项目，其中 gaussdb-drivers 团队维护的条目为 GaussDB 提供多语言驱动、ORM 方言（SQLAlchemy、Hibernate）及 Archery、CrewAI、LangChain、n8n、Dify 等开源工具的适配。适合需要在华为云上接入或使用 GaussDB 的开发者查找对应适配方案。",
+   "highlights": [
+    "包含面向 PHP、Python SQLAlchemy、Hibernate 等 的 GaussDB 驱动与方言适配项目",
+    "收录 Archery、LangChain、n8n、Dify 等开源工具对 GaussDB 的适配示例",
+    "以清单形式维护各子仓库的描述、团队与状态信息"
+   ],
+   "use_cases": [
+    "查找特定语言或框架接入 GaussDB 的驱动/适配实现",
+    "参考华为云上 Serverless、监控、数据流处理等示例架构",
+    "评估开源工具与 GaussDB 的兼容接入路径"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating|",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|enterprise-observability|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for us ／ |enterprise-serverless-todo|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for ",
+     "lines": [
+      29,
+      30
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "compat",
+     "quote": "|database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating| ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb-",
+     "lines": [
+      18,
+      34
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|cloudoperation-resource-monitor-dashboard|HuaweiCloud Resource Monitor Dashboard 是一个面向华为云弹性云服务器（ECS）、云硬盘（EVS）和云监控（CES）的资源监控仪表盘。用户配置租户 AKSK 等鉴权信息后，后端定时或手动从华为云 API 采集资源数据与使用率指标，保存到本地 SQLite 数据库，并通过 RESTful API 为前端提供查询、筛选和导出报告功能。|public-cloud-continuous-operatio",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "|application-intelligence-logistics-tracking|This project demonstrates how to build a logistics tracking agent with VPC network connectivity on Huawei Cloud. The agent is built using Strands Agents SDK, deployed via FunctionGraph, and can query a private Gauss ／ |database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |database-crewai-gaussdb|开源工具CrewAI兼容GaussDB|gaussdb-drivers|incubating| ／ |database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating| ／ |database-langchain-gaussdb-sync|GaussDB生态建设：适配LangChain，提供同步VectorStore和ChatMessageHistory能力|gaussdb-drivers|incubating| ／ |database-lightrag-gaussdb|开源工具LightRAG兼容GaussDB|gaussdb-drivers|incubating| ／ |database-n8n-gaussdb|gaussdb生态建设：n8n 兼容gaussdb|gaussdb-drivers|incubating| ／ |database-ragflow|生态建设，GaussDB 适配 RAGFlow|gaussdb-drivers|incubating| ／ |database-superagi-gaussdb|开源工具SpuerAGI兼容GaussDB|gaussdb-drivers|incubating| ／ |dify-gaussdb|gaussdb生态建设：dify适配兼容gaussdb|gaussdb-drivers|incubating| ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb-drivers|incubating| ／ |hibernate-orm7.4.1|应客户要求，基于hibernate7.4.1进行适配（支持 A 兼容（Oracle 风格）、M 兼容（MySQL 风格）），数据库版本505.2.1 0800SPC|gaussdb-drivers|incubating| ／ |langgraph-gaussdb|gaussdb生态建设：适配langgraph|gaussdb-drivers|incubating|",
+     "lines": [
+      9,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      25,
+      34,
+      36,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库主体包含为 GaussDB 提供驱动、方言和工具适配的项目，属于为数据库生态服务的组件集合",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|application-intelligence-logistics-tracking|This project demonstrates how to build a logistics tracking agent with VPC network connectivity on Huawei Cloud. The agent is built using Strands Agents SDK, deployed via FunctionGraph, and can query a private GaussDB database to track shipments and identify potential delays.|public-cloud-continuous-operation-competence-center|incubating| ／ |database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb-drivers|incubating|",
+   "evidence_lines": [
+    9,
+    16,
+    34
+   ]
+  },
+  "fn": "huaweicloud-samples/database-awesome-huaweicloud",
+  "sha": "cc65309fb508",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

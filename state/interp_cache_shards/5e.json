@@ -10221,5 +10221,136 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cd31f0fb22a6": {
+  "identity": {
+   "one_liner": "自托管的局域网剪贴板与文件中转服务，单 Go 进程内置 Web 应用",
+   "review": "Ferry 是一个自托管工具，在私有网络内为多设备提供统一的剪贴板文本与文件时间线，浏览器即为客户端，另有可选的原生 iOS/Android 应用。单 Go 进程用 SQLite 存储消息与设备身份，文件存本地 blob 目录；通过 Docker Compose 部署，支持访问密码、令牌吊销和备份脚本。",
+   "highlights": [
+    "单 Go 进程同时提供 Web 应用与 API，消息和设备身份存储于 SQLite，上传文件存于本地 blob 目录",
+    "支持可选共享密码与可吊销设备令牌，默认仅监听回环地址，LAN 监听需显式开启",
+    "提供 backup/restore 脚本，备份时暂停服务以一致地归档 SQLite 与 blob 数据"
+   ],
+   "use_cases": [
+    "同一局域网内手机与电脑之间互传链接、文本、图片和文件",
+    "homelab 环境下自托管、不依赖云账号的设备间内容同步",
+    "需要保留可回溯历史时间线的设备间传输场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One Go process serves the Web app and the API, stores messages and device identities in SQLite, and keeps uploaded bytes in a local blob directory. Nothing leaves the network you run it on, and there is no account to create. ／ The tool briefly stops a running Ferry so SQLite and blobs are archived together, and refuses archives that contain anything other than Ferry's data. Restore writes the safety backup before it replaces the volume, and restarts Ferry only after a successful res",
+     "lines": [
+      34,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Ferry 是使用 SQLite 存储消息与设备身份的自托管应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One Go process serves the Web app and the API, stores messages and device identities in SQLite, and keeps uploaded bytes in a local blob directory. Nothing leaves the network you run it on, and there is no account to create. ／  The download holds `compose.yaml`, `.env.example` and `scripts/ferry-data.sh` for backups; keep that layout. It is not the program itself: Compose pulls the public image `ghcr.io/max1874/ferry:1.0.2` when Ferry starts.",
+   "evidence_lines": [
+    34,
+    69
+   ]
+  },
+  "fn": "max1874/ferry",
+  "sha": "cd31f0fb22a6",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "815bc508abcb": {
+  "identity": {
+   "one_liner": "基于 Next.js 15 与 Prisma 的公司博客与内容管理系统",
+   "review": "一个包含 CMS、博客、项目展示、团队管理、订单系统和后台面板的网站项目，由单个开发者完成设计与部署，使用 Next.js 15、TypeScript、Tailwind CSS 构建，通过 Prisma ORM 操作 SQLite 存储数据，采用 JWT 和 bcrypt 做认证。适合需要 Persian/RTL 界面的团队参考部署，数据层为本地 SQLite 文件库。",
+   "highlights": [
+    "内置 CMS、博客、项目展示、团队管理、订单系统和管理面板",
+    "使用 Prisma ORM 读写 SQLite 数据库，提供完整数据模型定义",
+    "支持 JWT/bcrypt 认证与基于角色的访问控制，界面支持 RTL 波斯语字体"
+   ],
+   "use_cases": [
+    "公司官网与博客的内容发布管理",
+    "团队项目展示与服务订购入口",
+    "基于 Next.js + Prisma + SQLite 的全栈项目参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** - Lightweight and fast database",
+     "lines": [
+      127
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用 SQLite 存储数据的博客/CMS 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project includes a Content Management System (CMS), professional blog, project showcase, team management, ordering system, and advanced admin panel. ／ - **Prisma 6.16** - Modern ORM ／ - **SQLite** - Lightweight and fast database",
+   "evidence_lines": [
+    36,
+    126,
+    127
+   ]
+  },
+  "fn": "mohammad-ali-saberi/FaraIdeh",
+  "sha": "815bc508abcb",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

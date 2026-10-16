@@ -10865,5 +10865,143 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "744afc1f57e8": {
+  "identity": {
+   "one_liner": "基于 Boost.Asio 的 C++20/26 协程 Web 框架，含 MySQL 连接池中间件",
+   "review": "Hical 是一个基于 Boost.Asio 的 C++20/26 Web 框架，提供 HTTP/WebSocket 服务、协程异步 I/O、PMR 内存池、反射路由及 OpenAPI 文档生成；其可选数据库中间件基于 Boost.MySQL 提供协程连接池、自动事务与慢查询检测，供 C++ 开发者构建后端服务。通过 vcpkg/Conan/源码分发。",
+   "highlights": [
+    "提供基于 Boost.MySQL 的协程连接池、自动事务与慢查询检测（需 Boost >= 1.85）",
+    "支持 C++26 反射自动路由注册与 JSON 序列化，并提供 C++20 宏回退",
+    "提供 picohttpparser 零拷贝 HTTP 解析、自研 WebSocket（RFC 6455）与 OpenAPI 3.0 文档生成"
+   ],
+   "use_cases": [
+    "使用 C++20/26 协程构建 HTTP/WebSocket 后端服务",
+    "需要 MySQL 连接池与自动事务的 C++ 应用",
+    "需要 OpenAPI 3.0 接口文档生成的 API 服务开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Database middleware** — Coroutine connection pool + auto-transaction + slow query detection (Boost.MySQL)",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架包含基于 Boost.MySQL 的数据库中间件，为应用提供 MySQL 连接池等数据库访问能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Hical** is a modern C++20/26 high-performance web framework built on Boost.Asio with a native HTTP/WebSocket stack (picohttpparser + self-developed WebSocket), leveraging C++26 reflection and PMR memory pooling for maximum throughput. ／ - **Database middleware** — Coroutine connection pool + auto-transaction + slow query detection (Boost.MySQL) ／ |Boost >= 1.82|Asio, System, JSON; DB middleware needs >= 1.85|",
+   "evidence_lines": [
+    15,
+    40,
+    77
+   ]
+  },
+  "fn": "Hical61/Hical",
+  "sha": "744afc1f57e8",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9150804c580e": {
+  "identity": {
+   "one_liner": "TypeScript Webhook 投递库，事件存于 PostgreSQL",
+   "review": "一个供 TypeScript 应用嵌入的 Webhook 投递库：应用调用 publish() 将类型化事件写入 PostgreSQL，由用户运行的 worker 签名发送、重试失败并记录每次投递，接收方通过 parseWebhook() 验证。需要 Node.js 24+ 与 PostgreSQL 16-18，适合需要在自建应用中实现签名 Webhook 交付与端点管理的开发者。",
+   "highlights": [
+    "提供事件发布、worker 签名投递、失败重试与投递记录能力",
+    "接收方可通过 parseWebhook() 单函数验证请求",
+    "端点管理可独立使用或经 Better Auth 插件集成"
+   ],
+   "use_cases": [
+    "在 TypeScript 应用中实现 Webhook 交付与重试",
+    "让登录用户管理自己的 Webhook 端点",
+    "接收并验证 Standard Webhooks 请求"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management wor ／ Your app calls publish(), which records the event and one delivery per endpoint in PostgreSQL. A worker signs, sends, retries, and records each delivery. The receiver calls parseWebhook() to verify it and get a typed event. ／ npm install good-webhooks pg zod",
+     "lines": [
+      15,
+      17,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库是嵌入应用的开发库，使用 PostgreSQL 存储事件数据，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management works standalone, through the Better Auth plugin, or with your own sender. ／ npm install good-webhooks pg zod",
+   "evidence_lines": [
+    15,
+    24
+   ]
+  },
+  "fn": "pplytas/good-webhooks",
+  "sha": "9150804c580e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

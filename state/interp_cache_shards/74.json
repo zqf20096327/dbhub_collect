@@ -9484,5 +9484,184 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5971228122b6": {
+  "identity": {
+   "one_liner": "终端日历/待办/日志管理器，本地 SQLite 存储",
+   "review": "chroncal 是一个面向终端的日历、待办与日志管理工具，提供 TUI 交互界面和可脚本化的 CLI，支持 iCal（RFC 5545）导入导出与 CalDAV 同步、重复事件、提醒和全文搜索。数据以单个 SQLite 文件保存在本地，随程序自动迁移。适合需要在命令行环境管理个人日程、并用脚本访问日程数据的用户。",
+   "highlights": [
+    "提供 TUI 与 CLI 两种操作方式，支持 JSON 输出供脚本调用",
+    "实现 iCal (RFC 5545) 导入导出与 CalDAV 同步",
+    "数据以单个 SQLite 文件本地存储，含自动迁移"
+   ],
+   "use_cases": [
+    "在终端中管理日程、待办与日志",
+    "通过脚本自动化访问日历事件数据",
+    "与 CalDAV 服务器同步本地日历"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and cale ／ - **SQLite storage** with automatic migrations ／ |`db`|Path to SQLite database|`$XDG_DATA_HOME/chroncal/chroncal.db`| ／ The database is a single SQLite file:",
+     "lines": [
+      14,
+      34,
+      815,
+      918
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "chroncal 是使用 SQLite 存储自身日历数据的终端应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and calendars. ／ - **SQLite storage** with automatic migrations",
+   "evidence_lines": [
+    14,
+    34
+   ]
+  },
+  "fn": "DouglasdeMoura/chroncal",
+  "sha": "5971228122b6",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4731bd2e4dae": {
+  "identity": {
+   "one_liner": "Rust 编写的 Redis 兼容内存数据库，支持全文与向量搜索",
+   "review": "KiviDB 是用 Rust 实现的内存键值存储，通过 RESP 协议兼容 Redis 命令面，并提供 Redis Stack 风格的 FT.* 全文、标签、数值与向量（FLAT/HNSW）搜索命令，支持快照与 AOF 持久化及 Lua、TLS 可选构建。面向希望以现有 Redis 客户端接入搜索与向量负载的开发者；默认监听 6380 端口，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "实现 Redis RESP 协议，可使用现有 Redis 客户端连接（L148）",
+    "提供 Redis Stack 风格 FT.* 命令，支持全文 BM25、标签/数值过滤与 FLAT/HNSW 向量 ANN 搜索（L11, L78-80）",
+    "支持快照与 AOF 持久化，可在快照中保存 HNSW 索引图；提供 lua/tls 可选构建变体与 Docker、deb/rpm、二进制发布（L103, L112-116, L169-239）"
+   ],
+   "use_cases": [
+    "以 Redis 客户端接入的内存键值与缓存工作负载",
+    "全文检索与向量 ANN 搜索（如 embedding 相似度查询）",
+    "需要持久化（快照/AOF）的内存数据服务部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是自实现的数据库存储引擎本体（RESP 协议服务端），不是为既有数据库服务的工具，也不只是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only（README 声明使用 KiviDB 不使应用受 AGPL 约束）",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**KiviDB** is a fast, Redis-compatible in-memory store written in Rust. It speaks the Redis ／ - **Protocol**: Redis-compatible command surface (see COMMANDS.md for the supported commands) ／ - **License**: GNU Affero General Public License v3 (AGPL-3.0-only), open source; using KiviDB does not put your application under the AGPL; see License",
+   "evidence_lines": [
+    5,
+    10,
+    15
+   ]
+  },
+  "fn": "kividbio/kividb",
+  "sha": "4731bd2e4dae",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e505b1420af": {
+  "identity": {
+   "one_liner": "macOS EPUB 阅读器，内置 AI 伴读与真实地图释义",
+   "review": "「历历 · Vivid」是运行在 macOS 上的 EPUB 电子书阅读器，基于 Electron 构建，数据保存在本机 SQLite 数据库中。它提供分页、目录、位置恢复、批注本式 AI 伴读、选区/本章总结、Natural Earth 舆图插页与 Wikidata 实体释义，并通过工具层强制截断已读边界防止剧透。适合需要在阅读中获得地名地图与语境释义的读者。需注意未签名、无自动更新，AI 功能需自备 DeepSeek Key。",
+   "highlights": [
+    "支持 EPUB 分页、目录、位置恢复、日夜主题与字体对调",
+    "悬停专名可查看 Natural Earth 舆图、Wikidata 基础事实与语境释义",
+    "AI 伴读通过工具层逐次读取并强制截断已读边界，独立于提示词控制防剧透"
+   ],
+   "use_cases": [
+    "阅读包含真实地名/人名的 EPUB 书籍时查看地图与百科释义",
+    "需要 AI 总结与伴读但要求不泄露未读内容的场景",
+    "本地隐私优先的电子书管理（数据存于本机，Key 经 safeStorage 加密）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "应用将 EPUB、数据库、释义与对话保存在本机用户数据目录，属于使用数据库存储数据的桌面应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "许可证待定，package.json 标为 UNLICENSED，尚未授予开源许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "历历是一个优先照顾阅读体验的 macOS EPUB 阅读器。专名线保持稀疏，悬停时展示真实地图和此处语境释义；伴读和按需总结只能通过工具读取已读边界之前的内容。 ／ EPUB、数据库、释义、人工纠错、报告和对话保存在本机 `~/Library/Application Support/Vivid/`，不进入仓库。Key 只通过 Electron safeStorage 加密保存；应用没有读取 Key 到渲染器的接口。设置中的“保存在系统钥匙串中”指使用系统保护能力加密，本机文件中保存的是密文。",
+   "evidence_lines": [
+    5,
+    47
+   ]
+  },
+  "fn": "lynxlangya/vivid-reader",
+  "sha": "1e505b1420af",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

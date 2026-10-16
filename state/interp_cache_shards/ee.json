@@ -8459,5 +8459,358 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d3826df51d29": {
+  "identity": {
+   "one_liner": "React Native + expo-sqlite 的本地 CRUD 学习应用",
+   "review": "一个基于 React Native 和 expo-sqlite v15 的移动端用户 CRUD 应用，数据持久化到设备本地 SQLite 数据库。项目采用 Clean Architecture 四层结构（Domain/Data/Presentation/DI）和 TypeScript 严格模式，定位为教学示例，面向学习移动开发与架构模式的开发者，通过 Expo 可在 Android/iOS 模拟器或真机运行。",
+   "highlights": [
+    "实现用户数据的完整 CRUD 流程，持久化到本地 SQLite 文件（user_db.db）",
+    "采用 Clean Architecture 分层组织代码，通过依赖注入可替换存储实现",
+    "使用 expo-sqlite v15 同步 API 并对查询参数化以防范 SQL 注入"
+   ],
+   "use_cases": [
+    "学习 React Native 与 Expo 本地数据库开发的教学参考",
+    "学习 Clean Architecture 在移动端的分层实现",
+    "需要本地 SQLite 存储的移动端原型参考"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Este repositório foi concebido como um **projeto de aprendizado aprofundado**. Ele implementa um fluxo completo de **CRUD** (*Create, Read, Update, Delete*) de usuários persistido em um banco de dados **SQLite nativo e local**, executando em dispositivos móvei",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明这是一个将用户数据持久化到本地 SQLite 的移动应用，SQLite 仅作为其存储后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Este repositório foi concebido como um **projeto de aprendizado aprofundado**. Ele implementa um fluxo completo de **CRUD** (*Create, Read, Update, Delete*) de usuários persistido em um banco de dados **SQLite nativo e local**, executando em dispositivos móveis Android e iOS. ／  - `repositories/SQLiteUserRepository.ts`: Implementa `IUserRepository`. Utiliza a API moderna do `expo-sqlite` para executar queries parametrizadas com proteção contra SQL Injection. ／ - **Responsabilidade:** Instanciar as implementações de dados e injetá-las nos casos de uso. Permite trocar o banco de dados (por exemplo, de SQLite para API REST ou Mock de Testes) sem alterar uma única linha das regras de negócio ou das telas!",
+   "evidence_lines": [
+    16,
+    96,
+    109
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "brunoemferreira/CRUDReactNativeSQLite",
+  "sha": "d3826df51d29",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2828fd047a7c": {
+  "identity": {
+   "one_liner": "Go 编写的模块化电商 REST API 后端，采用 Clean Architecture 与 DDD",
+   "review": "KomeCore 是一个用 Go 实现的电商后端 REST API，提供多店铺商品目录、购物车结算、优惠券、支付对账、物流追踪、评价与员工管理等功能。它通过 pgx/v5 和 go-mssqldb 驱动支持 PostgreSQL 与 SQL Server 双方言，配置 DB_TARGET 切换，并集成 Redis 缓存与 Midtrans 支付。面向需要搭建电商系统的 Go 开发者，提供 Docker Compose、Makefile 及 API 测试集合。",
+   "highlights": [
+    "支持 PostgreSQL 与 Microsoft SQL Server 双方言，无需改动业务逻辑即可切换",
+    "包含幂等键防重复扣款、库存预留防超卖及事务性 Outbox 事件投递机制",
+    "提供覆盖 95 个端点的 Postman、Bruno、VS Code REST Client 及 OpenAPI 测试集合"
+   ],
+   "use_cases": [
+    "作为 Go 电商后端项目的起步基础或架构参考",
+    "需要多店铺、多支付方式与物流对接的电商业务场景",
+    "学习 Clean Architecture、DDD 及 Outbox 等模式的实践示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Dual-Dialect Database Support**: Works seamlessly on both PostgreSQL and Microsoft SQL Server without changing any business logic. ／ |**Relational Database**|PostgreSQL & SQL Server|`pgx/v5`, `go-mssqldb`| ／ > **Environment Setup**: Configure `DB_TARGET` (`postgres` · `supabase` · `sqlserver`), `STORAGE_PROVIDER` (`supabase` · `gcs` · `noop`), and `REDIS_ENABLED` (`true` · `false`) directly in `.env`. Database migrations live in `migrations/<dialect>/`.",
+     "lines": [
+      34,
+      48,
+      57
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "* **Dual-Dialect Database Support**: Works seamlessly on both PostgreSQL and Microsoft SQL Server without changing any business logic. ／ |**Relational Database**|PostgreSQL & SQL Server|`pgx/v5`, `go-mssqldb`| ／ > **Environment Setup**: Configure `DB_TARGET` (`postgres` · `supabase` · `sqlserver`), `STORAGE_PROVIDER` (`supabase` · `gcs` · `noop`), and `REDIS_ENABLED` (`true` · `false`) directly in `.env`. Database migrations live in `migrations/<dialect>/`.",
+     "lines": [
+      34,
+      48,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL/SQL Server 存储数据的电商业务系统，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Clean, scalable backend service engineered for modern e-commerce platforms in Go. ／ |**Relational Database**|PostgreSQL & SQL Server|`pgx/v5`, `go-mssqldb`| ／ > **Environment Setup**: Configure `DB_TARGET` (`postgres` · `supabase` · `sqlserver`), `STORAGE_PROVIDER` (`supabase` · `gcs` · `noop`), and `REDIS_ENABLED` (`true` · `false`) directly in `.env`. Database migrations live in `migrations/<dialect>/`.",
+   "evidence_lines": [
+    3,
+    48,
+    57
+   ]
+  },
+  "fn": "Deuterrr/komecore",
+  "sha": "2828fd047a7c",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "616a7c1d2edd": {
+  "identity": {
+   "one_liner": "尼日利亚NDAPS邮编多语言校验库，提供PostgreSQL/DuckDB扩展与MCP服务器",
+   "review": "该项目为尼日利亚NIPOST数字邮编体系（NDAPS）提供离线解析、校验与查询能力，覆盖Rust、Python、JavaScript、Java四语言库，并提供PostgreSQL域类型/扩展、DuckDB扩展、Polars表达式及MCP服务器供AI助手调用。面向处理尼日利亚地址的开发者与集成方；除离线校验外，查询与地址解析需NIPOST API密钥，resolver处于pre-release阶段。",
+   "highlights": [
+    "提供Rust/Python/JavaScript/Java多语言离线解析与校验库，共享同一spec测试用例",
+    "提供PostgreSQL域类型与原生扩展、DuckDB扩展及Polars表达式",
+    "提供MCP服务器，支持校验、查询、按位置查找等工具，供AI客户端调用"
+   ],
+   "use_cases": [
+    "在应用或数据库层校验与规范化尼日利亚11位数字邮编",
+    "通过MCP让AI助手执行邮编校验与查询",
+    "对CSV文件批量校验并生成修正建议"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`ng_postcode` (PostgreSQL)|The postcode as native 8-byte types with index support, compiled from the Rust core|Package from Releases, then `CREATE EXTENSION ng_postcode`|`native/pg`| ／ For databases, `sql/` holds the postcode as a PostgreSQL domain and as DuckDB macros, in plain SQL that runs the same shared cases. ／ **PostgreSQL**",
+     "lines": [
+      25,
+      31,
+      92
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为处理邮编数据的开发者提供库与数据库扩展/MCP工具，本身不是用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`ng-postcode` (Rust)|Parse, validate and format codes offline; client for the postcode.gov.ng API|`cargo add ng-postcode`|`src/`, docs| ／ |`ng_postcode` (PostgreSQL)|The postcode as native 8-byte types with index support, compiled from the Rust core|Package from Releases, then `CREATE EXTENSION ng_postcode`|`native/pg`| ／ |`ng-postcode-mcp`|MCP server: validate, look up, autocomplete, find by location, resolve addresses|`uvx ng-postcode-mcp`|`mcp/`|",
+   "evidence_lines": [
+    18,
+    25,
+    22
+   ]
+  },
+  "fn": "Adeniyikayodee/ng-postcode",
+  "sha": "616a7c1d2edd",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "beb850cd5949": {
+  "identity": {
+   "one_liner": "跨引擎桌面数据库管理器，含 Profiler、对比迁移与 AI 助手",
+   "review": "DBine 是 AddLayer 出品的桌面多引擎数据库管理应用，基于 Tauri 2、Rust 内核与 Vue 3 构建，运行于 Windows/macOS/Linux。提供连接树、SSH 隧道、查询编辑器、服务器监控、Profiler、表设计器、ER 图、schema 比对与跨引擎迁移等功能，面向需要同时管理多类数据库的开发者与运维人员。",
+   "highlights": [
+    "支持关系型、分析型、文档、键值、图、时序、搜索等多类数据库引擎的连接与查询",
+    "提供 Profiler 实时捕获查询、schema 比对、克隆同步与跨引擎迁移",
+    "内置 SSH 隧道、只读连接，并支持从 DBeaver、DataGrip 等工具导入连接"
+   ],
+   "use_cases": [
+    "在单一桌面应用中管理多种 SQL 和 NoSQL 数据库连接并执行查询",
+    "跨不同引擎迁移、克隆或同步数据库表结构与数据",
+    "实时查看某数据库上所有客户端运行的查询并定位慢查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      369
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      369
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      369
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "own users don't have it, such as SQLite, DuckDB or DynamoDB. Details:",
+     "lines": [
+      247
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|Analytical|DuckDB · CSV / Parquet / JSON files · ClickHouse · Trino · Presto · Starburst · BigQuery · Athena · Snowflake · Databricks · Redshift · StarRocks · Doris · Databend · Hive · Impala · Drill · Dremio · Calcite Avatica · Flight SQL · Teradata · Vertic",
+     "lines": [
+      370
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      369
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      369
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      369
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供连接、查询、监控、迁移等面向数据库管理的能力，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DBine** is a desktop multi-engine database manager from AddLayer. One app ／  - compare schemas, migrate, clone or sync, and Profiler; ／ - **Migrate, clone and sync databases:** \"Migrate…\" in a database's menu moves",
+   "evidence_lines": [
+    3,
+    41,
+    150
+   ],
+   "softened": []
+  },
+  "fn": "addlayer-io/dbine",
+  "sha": "beb850cd5949",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

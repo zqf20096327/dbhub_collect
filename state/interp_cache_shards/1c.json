@@ -10400,5 +10400,160 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "36f5bb3ef619": {
+  "identity": {
+   "one_liner": "本地优先的影视/书籍/游戏个人记录应用，数据存于单一 SQLite 文件",
+   "review": "一个面向 Windows 用户的本地媒体日记应用，用于记录电影、剧集、书籍和游戏的观看/阅读/游玩历史，提供海报墙、时间线、统计和基于个人评分的推荐（使用本地文本嵌入模型）。数据完全存于本地单个 SQLite 文件，无需账号；安装需 uv、Node.js 20+ 及 TMDB 等外部 API 密钥。",
+   "highlights": [
+    "支持电影、剧集、书籍、游戏四种模式，可分别开关并独立配色",
+    "支持导入 Letterboxd、IMDb、Goodreads、StoryGraph 导出文件，并可 zip 备份/恢复",
+    "所有数据本地存储于单个 SQLite 文件，可完全离线使用已缓存内容"
+   ],
+   "use_cases": [
+    "个人记录和管理影视、书籍、游戏观看/阅读历史",
+    "离线环境下的本地媒体收藏管理",
+    "基于个人评分获取推荐和品味分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A personal diary for films, TV series, books and games, for Windows. Log what you watch, read and play in a couple of keystrokes, see your history as a poster wall, timeline and stats, and get recommendations that learn from your own ratings. Everything runs l",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用数据存储于本地 SQLite 文件，SQLite 仅作其数据存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A personal diary for films, TV series, books and games, for Windows. Log what you watch, read and play in a couple of keystrokes, see your history as a poster wall, timeline and stats, and get recommendations that learn from your own ratings. Everything runs locally: one SQLite file plus a folder of cached images. No account, no cloud. ／ Your library lives in `backend/data/` (database, covers, models) and never leaves your machine. Only title lookups go out, from the backend, to the services above (TMDB, OMDb, TVmaze, Open Library, Hardcover, Google Books, RAWG), plus ntfy.sh if you turn on phone alerts. `backend/.env`, `backend/data/` and any CSV exports in the repo root are git-ignored.",
+   "evidence_lines": [
+    3,
+    120
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Emadab/reel",
+  "sha": "36f5bb3ef619",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a5b41fac442e": {
+  "identity": {
+   "one_liner": "GaussDB/openGauss DBA 诊断智能体的 Kubernetes 容器化交付方案",
+   "review": "该仓库将 opencode 与 gh_skill 的 GaussDB/openGauss DBA 技能集封装为多个容器镜像（runtime、kb-import、frontend、网关），部署到 Kubernetes，每用户一个无状态 Agent Pod，状态存于 NAS PVC，SQLite 保存会话数据。面向实施、运维及需要数据库诊断与知识库检索能力的企业内部用户。仓库含部署手册、冒烟脚本与离线交付打包流程。",
+   "highlights": [
+    "提供 runtime/kb-import/frontend/网关等多镜像的 K8s 部署清单与按工号建 Pod 的模板",
+    "支持知识库导入与标准化（word/pdf/txt/照片/表格转结构化 md）及离线交付包打包",
+    "内置 SM2/SM3 签名中间件适配与 NetworkPolicy 隔离配置"
+   ],
+   "use_cases": [
+    "企业内为多个用户按工号隔离地交付 GaussDB/openGauss 诊断智能体服务",
+    "知识库文档标准化导入与检索问答",
+    "客户内网的容器化离线交付与部署验证"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户一个 Agent Pod，Pod 无状态，状态全部在 NAS 上；知识库导入与诊断运行分成两个镜像。 ／ |镜像|`gaussdb-agent-runtime`（诊断 skill + 知识库查询）、`gaussdb-agent-kb-import`（知识库导入）、`gaussdb-agent-frontend`（deepseek-harness 前端改造，无状态）|",
+     "lines": [
+      3,
+      21
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户一个 Agent Pod，Pod 无状态，状态全部在 NAS 上；知识库导入与诊断运行分成两个镜像。 ／ |`从源码构建到K8s运行-完整手册.md`|实施 / 开发|从 GitHub 拉代码、自己构建五个镜像（含用 openGauss 官方二进制包打向量库镜像）、推仓库、部署到浏览器里用起来，图文、每步带实测输出|",
+     "lines": [
+      3,
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|SQLite|在 runtime Pod 内运行，`opencode.db` 直接位于 NAS 挂载路径；NFSv4.1 + `local_lock=all` + 单 Pod 独占 + 优雅停机 + 启动自检 + 退出备份|",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 GaussDB/openGauss 提供诊断（DBA 技能、知识库、WDR）服务的智能体工具，不是使用数据库实现自身业务的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户一个 Agent Pod，Pod 无状态，状态全部在 NAS 上；知识库导入与诊断运行分成两个镜像。 ／ |镜像|`gaussdb-agent-runtime`（诊断 skill + 知识库查询）、`gaussdb-agent-kb-import`（知识库导入）、`gaussdb-agent-frontend`（deepseek-harness 前端改造，无状态）|",
+   "evidence_lines": [
+    3,
+    21
+   ]
+  },
+  "fn": "sqlrush/gh_agent_k8s",
+  "sha": "a5b41fac442e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9286,5 +9286,203 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f548773dccb": {
+  "identity": {
+   "one_liner": "分布式自托管在线状态监控系统，单二进制 Go 实现",
+   "review": "SolidPing 是一个多租户分布式监控系统，通过多区域 worker 执行 43 类健康检查（含 HTTP、SSL、7 种数据库连接检查等），提供状态页、事件管理与值班升级，全部功能打包在单个 Go 二进制中。面向需要自托管基础设施监控的组织；默认用 SQLite 存储，生产环境可切换 PostgreSQL。",
+   "highlights": [
+    "提供 43 种检查类型，含 PostgreSQL、MySQL/MariaDB、MSSQL、Oracle、ClickHouse、MongoDB、Redis 的连接与查询执行检查",
+    "支持多区域分布式 worker、内网私有 agent、状态页、事件关联与值班升级策略",
+    "单二进制运行，存储支持 SQLite（默认）、内嵌或外置 PostgreSQL，分发提供 Docker 镜像、brew/scoop 包与 Helm chart"
+   ],
+   "use_cases": [
+    "多区域基础设施与服务可用性监控",
+    "数据库实例连通性与查询执行健康检查",
+    "自托管状态页发布与故障值班升级"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|Connection + query execution|",
+     "lines": [
+      139
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL/MariaDB|Connection + query execution|",
+     "lines": [
+      140
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL/MariaDB|Connection + query execution|",
+     "lines": [
+      140
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|Connection + query execution|",
+     "lines": [
+      142
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|MSSQL|Connection + query execution|",
+     "lines": [
+      141
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Connection + query execution|",
+     "lines": [
+      143
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Low footprint**: Single binary; SQLite, embedded Postgres, or external Postgres",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库及基础设施提供健康检查监控能力，是服务于运维生态的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SolidPing is a multi-tenant monitoring system that enables organizations to monitor their infrastructure through distributed workers executing health checks. It's designed for low resource consumption and easy self-hosting. ／ ### Databases ／ - **Low footprint**: Single binary; SQLite, embedded Postgres, or external Postgres",
+   "evidence_lines": [
+    44,
+    136,
+    52
+   ]
+  },
+  "fn": "fclairamb/solidping",
+  "sha": "4f548773dccb",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e80dea24fe37": {
+  "identity": {
+   "one_liner": "面向编码代理的本地记忆库，以 PostgreSQL+pgvector 存储",
+   "review": "Memory Layer 是一个本地优先的记忆系统，用于把项目工作过程转化为可检索的知识，供 Codex、Claude 等编码代理或开发者后续会话查询。它用 Rust 实现 CLI/TUI，数据存于带 pgvector 的 PostgreSQL，并提供 MCP 只读接口与浏览器 UI；原生安装需自备带 pgvector 的 PostgreSQL，v2 相对 v1 为破坏性升级。",
+   "highlights": [
+    "以 PostgreSQL+pgvector 存储，提供词法、语义、关系和代码图检索的带引用回答",
+    "提供 TUI、浏览器 UI 和 CLI，并通过 MCP 暴露只读项目记忆工具",
+    "包含带消融对照、产物与成本/延迟报告的可重复评估流程"
+   ],
+   "use_cases": [
+    "为编码代理会话提供项目历史证据与上下文恢复",
+    "团队或个人对项目工作内容进行捕获、审阅与查询",
+    "通过 MCP 将项目记忆接入支持 MCP 的客户端"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It captures what happened, curates what matters, stores it in PostgreSQL with ／ Native installations need a PostgreSQL database with pgvector; the install",
+     "lines": [
+      11,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 PostgreSQL 作为自身数据存储，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可（README License 节声明 dual-licensed）",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It captures what happened, curates what matters, stores it in PostgreSQL with ／ Native installations need a PostgreSQL database with pgvector; the install ／ - MCP — read-only project-memory",
+   "evidence_lines": [
+    11,
+    66,
+    87
+   ]
+  },
+  "fn": "3vilM33pl3/memory",
+  "sha": "e80dea24fe37",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

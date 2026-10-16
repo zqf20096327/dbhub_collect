@@ -9504,5 +9504,125 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d3bf3fbb1946": {
+  "identity": {
+   "one_liner": "零散小型工具集合仓库，含多个 Docker 化工具",
+   "review": "该仓库汇集多个规模较小、不单独建仓的工具，包括 Docker 化的 MySQLTuner 与 Tuning-Primer、CircleCI Orbs、Slack 通知器、Renovate 共享配置、32 位 Ubuntu 镜像等。适合需要这些零散运维与开发辅助工具的用户按子目录分别取用；README 未提供统一安装说明，各子工具需分别查看。",
+   "highlights": [
+    "包含 Docker 化的 MySQLTuner 与 Tuning-Primer 工具",
+    "提供 CircleCI Orbs、GHA 可复用工作流等 CI 相关工具",
+    "包含 Slack 通知器与 Renovate 共享配置"
+   ],
+   "use_cases": [
+    "需要以 Docker 方式运行 MySQLTuner 等调优脚本",
+    "复用 CircleCI Orbs 或 GitHub Actions 可复用工作流",
+    "配置 Renovate 共享依赖更新规则"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "仓库包含 Docker 化的 MySQLTuner/Tuning-Primer 等 PostgreSQL/MySQL 服务类工具，属于为数据库生态服务的工具集合。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- `Dockerized MySQLTuner`_ ／ - `Dockerized Tuning-Primer`_ ／ .. _Dockerized MySQLTuner: https://github.com/TheKevJames/tools/tree/master/docker-mysqltuner",
+   "evidence_lines": [
+    17,
+    18,
+    31
+   ]
+  },
+  "fn": "TheKevJames/tools",
+  "sha": "d3bf3fbb1946",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c61fc7a4441b": {
+  "identity": {
+   "one_liner": "MG 车辆自托管仪表盘与行程记录 Web 应用",
+   "review": "GarageStack 是一个面向 SAIC 产现代 MG 车型（如 MG4、ZS EV）的自托管 Web 应用，通过登录 SAIC iSmart API 获取车辆遥测数据，提供实时仪表盘、行程地图与日志、能耗统计、远程控制、保养提醒和推送通知。行程等数据存入内置 PostgreSQL，以 Docker 单容器或 Compose 部署。",
+   "highlights": [
+    "通过 SAIC iSmart API 读取车辆遥测数据并生成实时仪表盘",
+    "自动保存行程并在地图上绘制，支持导出报表与数据全量导出",
+    "提供 Home Assistant MQTT discovery、只读 API token 和 OpenID Connect 单点登录",
+    "以 Docker 单容器或 Compose 栈运行于自有硬件"
+   ],
+   "use_cases": [
+    "MG 电动/混动车主自托管查看车辆状态与行程记录",
+    "需要车辆行程税务日志并导出表格的用户",
+    "将车辆数据接入 Home Assistant 等家庭实验室环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A single Docker image that bundles every service -- nginx, the .NET API + worker, PostgreSQL, Mosquitto, and the SAIC gateway. No Compose file or external database needed. Ideal for Unraid and similar NAS environments where running multiple containers is incon ／ > `POSTGRES_PASSWORD` is omitted -- a strong random password is auto-generated on first start and saved to `/data/.postgres_password`. Pass `-e POSTGRES_PASSWORD=yourpassword` explicitly if you need a known value (e.g. to connect with an external DB tool).",
+     "lines": [
+      147,
+      158
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储车辆遥测与行程数据的终端应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GarageStack is a free, open-source web app for **modern MG cars**, the ones built by SAIC Motor such as the MG4, MG5, ZS EV and HS PHEV. It signs in to the SAIC iSmart API, the same backend the official MG iSmart app uses, and turns what your car reports into something worth opening: ／ - **Trip history** -- Browse past journeys on an interactive map, each drawn on the roads it took and coloured by speed or by the speed limit, with a heatmap of the roads you drive most. Each trip is saved to the database a few minutes after the car parks. After upgrading from a version that did not save trips, the existing history is saved in the background on the Worker's first start.",
+   "evidence_lines": [
+    11,
+    43
+   ]
+  },
+  "fn": "joszz/GarageStack",
+  "sha": "c61fc7a4441b",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

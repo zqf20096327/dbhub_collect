@@ -9909,5 +9909,76 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f8c149338ff7": {
+  "identity": {
+   "one_liner": "家庭/小型办公室网络安全监控工具，用 Zeek 镜像流量加 LLM 分诊",
+   "review": "tapwatch 通过交换机镜像端口运行 Zeek 读取网络流量 JSON 日志，用 24 个 Python 检测器生成案例，并可选调用小型 LLM 对告警做分诊，告警可推送到 ntfy/Discord 等。面向家庭和小型办公网络的自托管使用者，依赖标准库 Python、PyYAML、SQLite 和 Docker 中的 Zeek，案例台为无 JavaScript 的服务端渲染页面。",
+   "highlights": [
+    "提供 26 种案例类型的 24 个 Python 检测器，学习基线在重启后保留并跟随设备",
+    "支持可选 osquery 代理为主机流量命名程序，并用代码事实为 LLM 分诊设限",
+    "提供无 JavaScript 的案例台界面，含队列、证据页、审计与过期抑制规则"
+   ],
+   "use_cases": [
+    "家庭或小型办公室镜像端口上的网络安全监控",
+    "IoT 设备行为异常与新设备接入的检测",
+    "可在无网络环境下用合成 pcap 做评估回放"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs",
+     "lines": [
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其自身的依赖之一用于内部数据，项目本身是为网络安全监控而非数据库生态服务的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "- **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs ／ **Network security monitoring for a home or small office: Zeek on a mirror port, readable ／ and alerts reach your phone. One small box runs it all, with no SIEM and no cloud.",
+   "evidence_lines": [
+    62,
+    8,
+    14
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "barnabys-drew/tapwatch",
+  "sha": "f8c149338ff7",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

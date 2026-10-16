@@ -9178,5 +9178,220 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eaef462aee79": {
+  "identity": {
+   "one_liner": "基于 React 与 OpenLayers 的交互式 Web 地图查看器",
+   "review": "Simcoe County 的交互式 Web 地图应用，用于浏览地理数据、房产信息与公共服务，提供图层管理、搜索、属性表、绘制标注、打印与主题面板等功能，基于 GeoServer 和 ArcGIS Server 构建。供该县居民与 GIS 人员使用；应用通过 .env 中的连接串接入外部 PostgreSQL/SQL Server，仓库不包含数据库容器。",
+   "highlights": [
+    "支持地址、宗地、图层、工具、主题等多种类型的搜索与结果定位",
+    "包含图层目录、属性表检查与 CSV 导出、绘制标注工作区（My Maps）、服务端 PDF/图片打印",
+    "可添加 GeoJSON、KML、GPX、Shapefile、CSV 数据并连接 WMS、WFS 与 ArcGIS 服务"
+   ],
+   "use_cases": [
+    "浏览县域地理数据、房产与社区服务信息",
+    "发布和查看基于 GeoServer/ArcGIS Server 的地图服务",
+    "面向公众的专题地图（垃圾设施、林业、交通等主题）应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- The app connects to external PostgreSQL/SQL Server via the connection strings in `.env` — no database container is included.",
+     "lines": [
+      398
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- The app connects to external PostgreSQL/SQL Server via the connection strings in `.env` — no database container is included.",
+     "lines": [
+      398
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README L398 说明应用通过连接串连接外部 PostgreSQL/SQL Server 存取数据，数据库仅为后端存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An interactive web mapping application for exploring geographic data, property information, and community services across Simcoe County. ／ - Publishers set the refresh interval with `REFRESH_INTERVAL` (GeoServer) or `REFRESH` (ArcGIS). See Layer Setup.",
+   "evidence_lines": [
+    3,
+    101
+   ]
+  },
+  "fn": "county-of-simcoe-gis/SimcoeCountyWebViewer",
+  "sha": "eaef462aee79",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "139d6f199f72": {
+  "identity": {
+   "one_liner": "自托管状态页与 on-call 的开源正常运行监控工具",
+   "review": "uptimepage 提供可用性监控、公共状态页和 on-call 值班功能，支持 HTTP、TCP、ICMP、心跳、DNS、TLS 证书等 8 种检查类型，可通过 REST API、Terraform provider 和 MCP server 管理。运行时使用 Postgres 与 ClickHouse 存储数据，以单二进制 Docker 镜像自托管，也提供托管服务。适合 SRE、平台团队和自托管用户。",
+   "highlights": [
+    "支持 HTTP、TCP、ICMP、DNS、TLS 证书、域名到期、cron 心跳、浏览器登录流等 8 种检查类型，可多区域部署探测代理",
+    "内置公开状态页（HTML/JSON/RSS）、事件管理与 on-call 轮换/升级策略，支持 14+ 告警渠道",
+    "提供 REST API、官方 Terraform provider 与 MCP server，检查与配置可代码化"
+   ],
+   "use_cases": [
+    "为 SaaS/网站搭建面向客户的公共状态页并对故障进行 on-call 呼叫",
+    "以多区域探针定时监控服务端点与证书/域名有效期",
+    "通过 Terraform 与 REST API 将监控目标与告警渠道纳入代码化管理"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+     "lines": [
+      78,
+      180
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+     "lines": [
+      78,
+      180
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为监控数据库所存服务的可用性，本身不是数据库应用，属于数据库生态的服务工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另提供托管服务",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Monitor HTTP, TCP, ICMP ping, cron-job heartbeats, DNS, TLS-certificate and ／ |**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+   "evidence_lines": [
+    7,
+    78,
+    180
+   ]
+  },
+  "fn": "uptimepage/uptimepage",
+  "sha": "139d6f199f72",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4024c5ef1046": {
+  "identity": {
+   "one_liner": "DSH 酒馆的 SQLite 存储与服务端执行插件",
+   "review": "这是一个面向 DSH Tavern（酒馆）的插件，将聊天、会话事件和 MVU 变量历史交由 SQLite 增量存档管理，并把 MVU 结算、卡脚本等计算移到服务端执行，支持历史按需读取、物理尾部回退与原档只读分叉。面向使用该酒馆并需要更好存档管理的玩家，安装方式为 Windows 安装器或 Linux 一键脚本，依赖特定上游酒馆版本适配。",
+   "highlights": [
+    "将聊天头字段与消息楼层分开存储，SQLite 事务与 WAL 管理会话事件，支持增量写入与按范围读取",
+    "支持物理截断事件尾部的回退，同库同事务提交正文与变量",
+    "原档保持只读，用户可创建 SQLite 新分叉继续会话"
+   ],
+   "use_cases": [
+    "为 DSH Tavern 会话提供 SQLite 增量存档与按需读取",
+    "需要对会话正文、变量与进度做一致状态回退的场景",
+    "在保留原档的前提下创建新分叉继续游玩"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。**",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是面向 DSH Tavern 的插件，将应用自身的聊天与变量历史存入 SQLite，属于使用数据库的应用侧组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "基于 DSH Tavern 适配，遵循 GNU AGPL v3，为独立修改版",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。** ／ 这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "4024c5ef1046",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

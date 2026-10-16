@@ -9569,5 +9569,74 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "331d3479d9c4": {
+  "identity": {
+   "one_liner": "自托管观影夜应用，管理电影夜计划、选片与 WebRTC 同步观看",
+   "review": "一个用 Vue3 + FastAPI 构建的自托管 Web 应用，为朋友团体组织电影夜：日期投票、电影推荐（基于 TMDB 数据）、随机选片，以及通过 MediaMTX 转发的 WebRTC 共同观看。数据存 SQLite，使用 SQLModel 与 Alembic 管理迁移，以单 Docker 容器部署，无账号体系，通过邀请链接加入，UI 提供英德双语。",
+   "highlights": [
+    "通过 WebRTC（经 MediaMTX 的 WHIP/WHEP 信令）同步观看，支持浏览器标签共享或 OBS WHIP 推流，延迟低于 1 秒",
+    "电影目录与元数据来自 TMDB API，支持可选的 LLM 驱动电影搜索（自带 Anthropic 或 OpenRouter 密钥）",
+    "单 Docker 容器部署，数据（SQLite、推送密钥、头像）持久化于卷；无需账号，基于设备的身份验证，采用一次性邀请链接"
+   ],
+   "use_cases": [
+    "远程朋友团体举办定期电影夜，支持投票、随机选择及同步观看",
+    "家庭/朋友群组维护共享的观看历史，包含评分、年度回顾和观影品味匹配",
+    "基于 TMDB 目录浏览按订阅服务的流媒体可用性"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`DATABASE_URL`|SQLite|`backend/screenmates.db`, or `/data/screenmates.db` in Docker.| ／ backend/ FastAPI, SQLModel, SQLite, Alembic",
+     "lines": [
+      157,
+      217
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README describes a self-contained web app that uses SQLite to store its own data, not a tool serving databases",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted web app for movie nights with friends. ／ |`DATABASE_URL`|SQLite|`backend/screenmates.db`, or `/data/screenmates.db` in Docker.| ／ backend/   FastAPI, SQLModel, SQLite, Alembic",
+   "evidence_lines": [
+    5,
+    157,
+    217
+   ]
+  },
+  "fn": "marcmeier/screenmates",
+  "sha": "331d3479d9c4",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

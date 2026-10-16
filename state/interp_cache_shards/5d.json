@@ -9174,5 +9174,175 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a19204f43d16": {
+  "identity": {
+   "one_liner": "PHP 自托管网页分析工具，默认存 SQLite，可切 MySQL/MariaDB",
+   "review": "Minilytics 是用 PHP 编写的自托管网页分析工具，提供访问统计仪表盘与自定义事件跟踪，并支持从 Umami、Matomo 导入历史数据。数据默认存于 SQLite，可在后台切换为 MySQL 或 MariaDB，无需 Node.js 或独立数据库服务器即可运行，适合想在普通虚拟主机上自行部署并控制访问数据的人使用。",
+   "highlights": [
+    "默认以 SQLite 存储分析数据，可在设置中切换为 MySQL 或 MariaDB 并测试连接",
+    "支持从仪表盘或命令行导入 Umami 和 Matomo 历史数据",
+    "发布压缩包已捆绑 vendor 依赖，解压到网站根目录即可安装，生产运行不依赖 Node.js"
+   ],
+   "use_cases": [
+    "在普通 Apache 托管主机上自托管网页访问统计",
+    "从 Umami/Matomo 等工具迁移历史分析数据",
+    "使用 SQLite 或托管 MySQL/MariaDB 存储访问事件数据"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ - For MySQL or MariaDB: the `pdo_mysql` PHP extension and a database/user with `CREATE`, `ALTER`, `INDEX`, `SELECT`, `INSERT`, `UPDATE` and `DELETE` permissions ／ To use a managed database, open **Settings → Database**, select MySQL or MariaDB, enter the host, port, database name, username and password, then use **Test connection** before saving. The test can create the named database when it is missing if the database ",
+     "lines": [
+      12,
+      25,
+      47
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ - PHP 8.1 or later with the `sqlite3` and `pdo_sqlite` extensions enabled ／ SQLite is the default (because it's lightweight and doesn't require a separated server), but you can change it any time !",
+     "lines": [
+      12,
+      23,
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ - For MySQL or MariaDB: the `pdo_mysql` PHP extension and a database/user with `CREATE`, `ALTER`, `INDEX`, `SELECT`, `INSERT`, `UPDATE` and `DELETE` permissions ／ To use a managed database, open **Settings → Database**, select MySQL or MariaDB, enter the host, port, database name, username and password, then use **Test connection** before saving. The test can create the named database when it is missing if the database ",
+     "lines": [
+      12,
+      25,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该工具以 SQLite/MySQL/MariaDB 存储自身分析数据，网页分析是其主体功能而非数据库生态组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Minilytics is a lightweight, privacy-friendly web analytics tool written in PHP. Most analytics tools need Node.js, Docker or a separate database server. **Minilytics doesn't**. ／ SQLite is the default (because it's lightweight and doesn't require a separated server), but you can change it any time ! ／ To use a managed database, open **Settings → Database**, select MySQL or MariaDB, enter the host, port, database name, username and password, then use **Test connection** before saving. The test can create the named database when it is missing if the database user has the `CREATE` permission. **Existing SQLite analytics are not copied automatically**.",
+   "evidence_lines": [
+    10,
+    46,
+    47
+   ]
+  },
+  "fn": "axthauvin/minilytics",
+  "sha": "a19204f43d16",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "80dc9b3b792d": {
+  "identity": {
+   "one_liner": "TiDB 分布式数据库教学工作坊，含8个渐进式Lab构建电商平台",
+   "review": "这是一个面向学习者的 TiDB 教学工作坊项目，通过两周、8个 Lab 让学员在构建电商平台的过程中练习 CRUD、事务、分片、索引优化、Docker 部署与 Prometheus/Grafana 监控。技术栈为 Python/FastAPI/SQLAlchemy/TiDB，提供环境变量配置与克隆即用的 Quick Start，未声明生产用途。",
+   "highlights": [
+    "提供 8 个渐进式 Lab，覆盖连接、CRUD、事务、分片、性能优化、部署与监控",
+    "包含 Docker Compose 环境与 Python starter 应用，克隆后可运行",
+    "附架构概述、ERD、术语表、FAQ 等配套文档"
+   ],
+   "use_cases": [
+    "学习 TiDB 分布式数据库基础概念与 CRUD/事务操作",
+    "练习电商平台的数据分片与生产部署流程",
+    "了解 Prometheus/Grafana 监控集成实践"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# TiDB + SCaiLE Learning Workshop ／ - **TiDB 기본**: CRUD, 트랜잭션, 분산 시스템 개념 ／ - **데이터베이스**: TiDB + SCaiLE",
+     "lines": [
+      1,
+      7,
+      77
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是围绕 TiDB 数据库的教学工作坊，为数据库生态提供学习材料而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# TiDB + SCaiLE Learning Workshop ／ **Learn distributed databases by building a real e-commerce platform.** ／ |01|환경 설정|TiDB 연결, Python 기초|1-2h|",
+   "evidence_lines": [
+    1,
+    3,
+    56
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "hongkyukim/tidb-scale-workshop",
+  "sha": "80dc9b3b792d",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

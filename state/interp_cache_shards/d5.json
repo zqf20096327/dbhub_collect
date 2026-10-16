@@ -9203,5 +9203,85 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "424f61aa9bfb": {
+  "identity": {
+   "one_liner": "基于仓库上下文与编码信号推荐并分发 AI 编码代理 harness 配置的控制平面",
+   "review": "该仓库提供推荐引擎与控制平面两部分：前者扫描仓库中的 harness 文件（规则、技能、hooks 等）检测问题并生成建议，后者将批准的工件分发给指定人员或团队并报告安装状态。数据持久化使用 Postgres，LLM 调用仅经由 tetriz-py 服务。面向使用 Claude Code、Codex、Cursor 等编码代理并需统一管理团队配置的开发团队。仅源码发布，v0.1.0 预发布版本，API 可能变动。",
+   "highlights": [
+    "提供 on-disk 扫描器，检测 harness 文件中的冲突、缺失文件引用与过宽权限",
+    "控制平面支持按人员/团队定位分发，并报告每人安装状态，支持 test/control 分组投放",
+    "组件可独立使用：推荐引擎与控制 plane 相互独立，扫描可在无模型调用下运行"
+   ],
+   "use_cases": [
+    "团队统一管理并分发 Claude Code/Codex/Cursor 等代理的规则、技能与 hooks 配置",
+    "通过信号数据（会话分析、代码评审主题）生成新的 harness 工件建议",
+    "以手动 test/control 方式验证配置变更效果"
+   ],
+   "分类": "应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Scan a repository's harness for problems|Go 1.26+, Postgres; Docker can provide a throwaway database|Recommendations quick start| ／ |Mount the control plane in your own Go server|Go 1.26+, Postgres 15+|Using it as a Go library| ／ The on-disk recommendations scan makes no model call, but persists its findings to Postgres. The recommendations engine and the control plane are independent components; you can use either on its own. ／ - **`recommendations scan`** reads the directory you provide and writes findings to your Postgres. It calls no model.",
+     "lines": [
+      66,
+      70,
+      72,
+      102
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "You can use these inputs to populate the inventory, usage and session-signal data that Harness Recommendations reads. **The integration needs an adapter:** this repository does not import Agent Desk's JSON or SQLite store directly, and an inventory entry does ",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库使用 Postgres 存储自身数据（findings、工件定义），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT License，单一许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The engine persists findings and recommendations. You choose which to adopt; publishing a recommendation to the control plane is an explicit integration step. ／ |Scan a repository's harness for problems|Go 1.26+, Postgres; Docker can provide a throwaway database|Recommendations quick start| ／ - **`recommendations scan`** reads the directory you provide and writes findings to your Postgres. It calls no model.",
+   "evidence_lines": [
+    25,
+    66,
+    102
+   ]
+  },
+  "fn": "tetriz-ai/tetriz-harness",
+  "sha": "424f61aa9bfb",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

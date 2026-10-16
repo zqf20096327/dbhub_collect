@@ -9380,5 +9380,140 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1f97f6281e14": {
+  "identity": {
+   "one_liner": "Go 编写的个人免签约码支付平台，内嵌 SQLite 单文件运行",
+   "review": "KunPay 是一个用 Go 编写的个人免签约码支付系统，绑定个人微信/支付宝/QQ 收款码，通过安卓监控 APP 监听到账通知并回填订单，兼容易支付协议供存量商户对接。数据存储于内嵌的 SQLite 数据库（纯 Go 驱动，免 CGO），全部资源 go:embed 打包为单个二进制文件部署，适合需要个人收款通道、能自行部署服务器并承担合规评估的用户。",
+   "highlights": [
+    "兼容易支付（EasyPay）协议，提供 submit.php/mapi.php/api.php 三接口及 MD5/RSA 双签名校验",
+    "SQLite 作为唯一存储，纯 Go 驱动内嵌于单二进制，支持 Linux/Windows/macOS 交叉编译",
+    "提供金额尾数匹配、多码轮询、安卓监控 APP 心跳上报及主备设备自动接管"
+   ],
+   "use_cases": [
+    "个人站长自建收款码支付平台",
+    "存量易支付商户零改造迁移对接",
+    "基于云手机实现 7×24 收款到账监控"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **🎯 零依赖部署**:页面、静态资源、SQLite 驱动全部 go:embed 内嵌,**一个二进制文件**跑起整个平台,Windows / Linux / macOS 全平台支持; ／ |`/opt/kunpay/data/kunpay.db`|SQLite 数据库(全部业务数据)| ／ - SQLite(modernc.org/sqlite 纯 Go 驱动,免 CGO,天生可交叉编译)",
+     "lines": [
+      9,
+      87,
+      266
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明全部业务数据存储在自带的 SQLite 数据库中，属于使用数据库的应用系统。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，含支付合规附加声明",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**坤支付**是一套用 **Go 语言**从零编写的个人免签约「码支付」平台:绑定你自己的微信 / 支付宝 / QQ 收款码,安卓监控APP 自动监听到账通知并回填订单——**资金全程直达个人账户,平台不经手一分钱**。 ／ |`/opt/kunpay/data/kunpay.db`|SQLite 数据库(全部业务数据)| ／ - SQLite(modernc.org/sqlite 纯 Go 驱动,免 CGO,天生可交叉编译)",
+   "evidence_lines": [
+    7,
+    87,
+    266
+   ]
+  },
+  "fn": "kungec/kunpay",
+  "sha": "1f97f6281e14",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3c15b6ae90d9": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue的超市进销存与成本管理系统",
+   "review": "一套前后端分离的超市进销存与成本管理系统，覆盖入库、出库、盘库、供应商准入、订单、员工薪资与数据统计，管理员可导出出入库单。后端使用SpringBoot+MybatisPlus+MySQL+Redis，前端为Vue。面向中小型超市、便利店等零售场景，README中部分模块描述与商业推广内容并存。",
+   "highlights": [
+    "提供入库、出库、库存盘点与供应商准入管理功能，支持导出入库单与出库单",
+    "提供订单类型统计、售出统计与七天出入库数据可视化看板",
+    "支持管理员与员工两类角色的权限隔离与员工薪资记录管理"
+   ],
+   "use_cases": [
+    "中小型超市或便利店的进销存日常管理",
+    "社区生鲜店或连锁门店的库存与成本核算",
+    "校园/企业内部超市的运营管理平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用MySQL作为业务数据存储数据库，属于使用数据库的应用系统",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向中小型超市的进销存与成本一体化管理系统，采用前后端分离架构，覆盖管理员与员工两类角色。系统围绕\"商品入库、销售出库、库存盘点、供应商准入、订单管理、薪资发放、成本核算、数据统计\"等核心业务设计，支持商品全流程出入库追踪、供应商准入审核、订单类型统计、售出统计、盘库统计、员工薪资涨幅统计与薪资发放记录管理，管理员可导出入库单与出库单，实现超市采购、销售、库存、人力成本与财务结算的数字化闭环，适用于中小型超市、便利店、社区生鲜店、连锁门店及仓储式零售企业的日常运营管理。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/store_cost",
+  "sha": "3c15b6ae90d9",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

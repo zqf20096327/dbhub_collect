@@ -8365,5 +8365,149 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "69791d9fb9f8": {
+  "identity": {
+   "one_liner": "面向出版者的 PHP+React 自托管 CMS，以 MySQL 存储内容",
+   "review": "VonCMS 是一个供出版机构使用的开源内容管理系统，提供文章、页面、草稿、评论管理、SEO 元数据、主题与插件扩展等能力。运行架构为编译后的 React 前端加 PHP API，数据存于 MySQL（要求 5.7+），可部署在共享主机或源码方式运行。",
+   "highlights": [
+    "提供内容管理：文章、页面、草稿、定时发布、媒体管理、评论审核",
+    "内置 SEO 能力：元数据、站点地图、feed、JSON-LD、Open Graph",
+    "支持主题注册与插件扩展机制，PHP API 与 React 前端分层",
+    "提供安装向导、备份、审计日志与修复工具"
+   ],
+   "use_cases": [
+    "出版机构在共享主机上自托管新闻/博客站点",
+    "需要 SEO 友好输出且不想运行 Node.js 生产环境的发布场景",
+    "开发者基于源码定制主题、插件与扩展"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- PHP and MySQL for shared-hosting deployment. ／ |Database|MySQL 5.7 or newer| ／ On Windows, Laragon is the easiest PHP/MySQL stack for local checks. XAMPP, WAMP, native PHP, Docker, or a remote dev server also work as long as PHP and MySQL meet the requirements. ／ -> MySQL",
+     "lines": [
+      28,
+      51,
+      65,
+      151
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "CMS 是使用 MySQL 存储内容数据的应用，README 明确要求 MySQL 作为数据库层",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "VonCMS is a lightweight PHP and React CMS not only for shared hosting, but on many levels that suite your needs. It is built for publishers who want a modern admin dashboard, clean public themes, SEO-friendly output, and extensibility without running a heavy plugin stack. ／ |Database|MySQL 5.7 or newer| ／   -> MySQL",
+   "evidence_lines": [
+    5,
+    51,
+    151
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Vondereich/VonCMS",
+  "sha": "69791d9fb9f8",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c727cfe133e9": {
+  "identity": {
+   "one_liner": "自托管家庭藏书编目应用，条码/拍照录入+元数据抓取",
+   "review": "Shelf 是一个自托管的家庭媒体收藏管理应用，通过手机摄像头、USB/蓝牙条码枪或整架照片（AI 视觉模型识别书脊）录入书籍、DVD、CD、漫画、游戏等藏品，并自动从 Open Library、TMDb、IGDB、MusicBrainz 等来源抓取元数据与封面，支持借出跟踪、系列管理和估值报告。后端为 FastAPI + SQLite（WAL 模式），打包为单个 Docker 容器，面向家用/自托管场景的多用户部署。",
+   "highlights": [
+    "支持摄像头与 USB/蓝牙条码扫描，8 种扫描模式（添加、借出、归还、盘点等）",
+    "支持整架照片批量录入，可接 Anthropic、OpenAI 兼容端点或本地 Ollama 视觉模型",
+    "从 Open Library、TMDb、IGDB、MusicBrainz 等来源抓取元数据与封面，支持借出与库存盘点跟踪"
+   ],
+   "use_cases": [
+    "家庭藏书/媒体收藏的条码化编目与管理",
+    "图书借出记录与库存盘点审计",
+    "离线自托管环境下的个人图书馆管理（PWA）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Zero cloud dependency** — runs entirely on your network in a single Docker container with a SQLite database. Your data never leaves your home ／ shelf.db — SQLite database ／ |Backend|Python 3.12, FastAPI, SQLite (WAL mode)|",
+     "lines": [
+      26,
+      100,
+      265
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其以 SQLite 作为自身存储数据的数据库，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted home library catalog with barcode scanning, multi-mode scanning workflows, automatic metadata lookup, cover art, and collection management — all in a single Docker container. ／ - **Zero cloud dependency** — runs entirely on your network in a single Docker container with a SQLite database. Your data never leaves your home ／ docker compose up -d",
+   "evidence_lines": [
+    10,
+    26,
+    73
+   ]
+  },
+  "fn": "dgahagan/shelf",
+  "sha": "c727cfe133e9",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

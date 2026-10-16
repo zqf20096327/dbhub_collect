@@ -9328,5 +9328,88 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "82d070fb43c7": {
+  "identity": {
+   "one_liner": "协作看板应用：单个 Go 静态二进制加 SQLite 文件实现",
+   "review": "一个服务端渲染的多人协作看板应用，支持列表/卡片增删、拖拽移动、评论与标签。所有写入经单个 goroutine 与单个 SQLite 连接串行批处理，页面通过压缩 SSE 流接收整板视图。面向需要自部署看板的小团队，也作为 zwei und eins 的技术案例研究；缺少搜索、过滤器、API 等功能。",
+   "highlights": [
+    "单静态 Go 二进制内嵌全部资源，数据存储为一个 SQLite 文件",
+    "CQRS 架构：命令经 POST 提交，变更通过 zstd/brotli 压缩流推送整板视图",
+    "提供 kanban backup 在线一致备份及 Prometheus 指标端点"
+   ],
+   "use_cases": [
+    "小团队自部署协作看板",
+    "SQLite 单写入者高并发场景的技术参考实现"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "persona": "use"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "It is one static Go binary (17.1 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It runs on lith, the runtime our Go and SQLite apps share: its single writer, its render l ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this ",
+     "lines": [
+      7,
+      23
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It is one static Go binary (17.1 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It runs on lith, the runtime our Go and SQLite apps share: its single writer, its render l ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this  ／ - **Robust streams.** The stream reconnects after a deploy or restart and always starts with the whole board. An action's outcome is written to SQLite by the same command, so it survives a deploy: the page says which outcome it got last, and the new process se",
+     "lines": [
+      7,
+      23,
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 Go 与 SQLite 构建的看板应用，数据库仅为其存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It is one static Go binary (17.1 MB) with one SQLite file, Datastar in the browser and Starbase components for dragging, renaming in place, the card dialog and messages. It runs on lith, the runtime our Go and SQLite apps share: its single writer, its render loop with shared views, its compressed streams and its request edge. It is a case study by zwei und eins, compared with PLANKA Community (React, Redux, Sails.js, PostgreSQL, WebSockets). ／ - **One writer, batched.** All writes go through one goroutine and one SQLite connection. While a batch commits, new commands queue up. The next transaction takes all of them, each in its own savepoint, so one refusal undoes only itself. Checks like \"did this card move since the page was drawn\" run inside the command, in microseconds, with no lock held across the network. This follows Anders Murphy's findings on SQLite and contention. The writer prepares each statement once on its connection and keeps it, since the driver would parse every statement again on every call, and it checkpoints the WAL between batches. Reads use their own pool. SQLite runs with `synchronous=FULL`, so it is as durable as PostgreSQL's defaults.",
+   "evidence_lines": [
+    7,
+    23
+   ]
+  },
+  "fn": "zweiundeins/kanban",
+  "sha": "82d070fb43c7",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

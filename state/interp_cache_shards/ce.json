@@ -9957,5 +9957,234 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d77f9daa94c4": {
+  "identity": {
+   "one_liner": "macOS 本地优先的每日笔记应用，笔记存于 SQLite 文件",
+   "review": "Note Repo 是一款 macOS 原生每日笔记应用（Swift 编写），笔记以本地 SQLite 文件存储，无账号与云同步。附带 noterepo 命令行工具，可读写同一 SQLite 文件并输出 JSON，面向个人记笔记的用户以及需要程序化读写笔记的编码代理；仅支持 macOS 14 及以上。",
+   "highlights": [
+    "笔记存储为本机 SQLite 文件，无账号、无云同步",
+    "提供 noterepo CLI，可读取、写入、搜索、备份笔记并输出 JSON",
+    "应用与 CLI 共享同一 SQLite 文件，写入在约一秒内同步到打开的窗口并合并编辑"
+   ],
+   "use_cases": [
+    "在 Mac 上以天为单位记录日常笔记并通过星标/搜索管理",
+    "供编码代理通过命令行读写和整理笔记内容",
+    "演示前重置笔记本并事后恢复备份"
+   ],
+   "use_cases_backup": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "There are no accounts, AI tools, or calendar integrations. Your notes live in a SQLite file on your Mac. ／ The tool writes to the same SQLite file as the app. The app notices within a second and updates the open window, so you see the changes as they happen. If you're typing in the same day at that moment, your edits and the tool's are merged instead of one overwri",
+     "lines": [
+      5,
+      79
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "noterepo add https://sqlite.org/wal.html",
+     "lines": [
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用将笔记数据存储在本地 SQLite 文件中，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "There are no accounts, AI tools, or calendar integrations. Your notes live in a SQLite file on your Mac. ／ The tool writes to the same SQLite file as the app. The app notices within a second and updates the open window, so you see the changes as they happen. If you're typing in the same day at that moment, your edits and the tool's are merged instead of one overwriting the other. ／ Note Repo is a native Mac app written in Swift. The changelog lists what changed in each release.",
+   "evidence_lines": [
+    5,
+    79,
+    11
+   ]
+  },
+  "fn": "flaviocopes/note-repo",
+  "sha": "d77f9daa94c4",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2711e6a14739": {
+  "identity": {
+   "one_liner": "开源 AI 原生金融智能平台，以知识图谱建模账簿与投资组合",
+   "review": "RoboSystems 是一个自托管的开源金融平台，将会计账簿、财报和投资组合建模为知识图谱，提供 Web 应用、REST/GraphQL/MCP 接口，供 AI 代理与分析师查询和操作。它以 schema-per-tenant 方式共享 PostgreSQL 数据库，并通过 dbt/Dagster 管道接入 QuickBooks 与 SEC XBRL 数据，依赖 AWS CloudFormation 部署整套基础设施。",
+   "highlights": [
+    "每个租户独享图数据库实例，扩展共享单一 PostgreSQL 数据库并按 schema 隔离",
+    "提供 Cypher、GraphQL 与 MCP 接口，AI Operator 通过 SSE 流式执行并支持幂等操作信封",
+    "通过 dbt/Dagster 管道接入 QuickBooks ELT 和 SEC XBRL 报告数据"
+   ],
+   "use_cases": [
+    "企业与会计团队的记账、结账与 XBRL 财务报告编制",
+    "投资管理中的私募持仓跟踪与跨图谱的发行方研究",
+    "AI 代理驱动的财务分析与 SEC 公开文件查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL for IAM, graph metadata, extensions and Dagster ／ - **Schema-per-graph OLTP** — each graph gets its own PostgreSQL schema, with `search_path` re-stamped on every request rather than inherited from a pooled connection. A CI structural test pins the contract.",
+     "lines": [
+      78,
+      187
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为使用 PostgreSQL、DuckDB、OpenSearch 等数据库存储自身数据的金融应用平台",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- PostgreSQL for IAM, graph metadata, extensions and Dagster ／ RoboSystems is an open-source, AI-native financial intelligence platform for accounting, financial reporting, and investment management. It models your financial data as a **knowledge graph** — transactions, facts, reporting elements, and the calculation structures that relate them are all nodes and edges, with the semantics preserved rather than flattened into rows you query around. On top of that graph it gives AI agents and analysts a ledger-grade system of record they can both query and operate — closing the books, producing reports, and analyzing portfolios across your own ledger, your holdings, and SEC public filings queryable alongside them. Powers RoboLedger and RoboInvestor.",
+   "evidence_lines": [
+    78,
+    3
+   ]
+  },
+  "fn": "RoboFinSystems/robosystems",
+  "sha": "2711e6a14739",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d3b40072d63e": {
+  "identity": {
+   "one_liner": "自托管邮件客户端，Go+Next.js 实现的多账户 WebMail 平台",
+   "review": "RMS Mail 是一个自托管邮件客户端，将索引、同步和存储移到服务端，通过 Go 后端与 Next.js 前端提供浏览器访问，支持 IMAP/SMTP、多账户统一收件箱、MCP Server 与 Telegram 集成。Mono 版使用 SQLite，Mono Pro 与 Unified 版使用 PostgreSQL + Redis。面向 VPS 用户、开发者和自托管爱好者。",
+   "highlights": [
+    "通过内置 MCP Server 支持从 Cursor、Zed、Claude Desktop 等代理进行邮件搜索与操作",
+    "支持 IMAP IDLE 推送同步、双向 flag 同步与分批 checkpoint 的批量同步",
+    "使用原生数据库 FTS 做本地索引搜索，支持多账户统一收件箱与跨账户批量操作"
+   ],
+   "use_cases": [
+    "多账户邮件集中管理，需要统一收件箱与跨账户搜索",
+    "通过 IDE/MCP/Telegram 自动化操作邮箱",
+    "VPS 或 homelab 环境中的自托管 webmail 部署"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ |**Mono**|**Stable**|Multi-user deployment with strict 1:1 user-to-mailbox isolation (SQLite).| ／ Replaces Roundcube/SnappyMail and outdated self-hosted webmail stacks. Runs on **LibSQL/SQLite** (WAL, `busy_timeout`) with a single backend binary plus Next.js UI container.",
+     "lines": [
+      6,
+      221,
+      230
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |**Mono Pro**|**Stable**|Mono product model on enterprise infrastructure (PostgreSQL + Redis + async workers).|",
+     "lines": [
+      7,
+      222
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite/PostgreSQL 作为自身数据存储引擎，是一个使用数据库的邮件应用",
+   "persona": "use",
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3，单许可；Mono 版含完整源码",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RMS Mail moves indexing, synchronization, and storage to the server layer. ／ |**Mono**|**Stable**|Multi-user deployment with strict 1:1 user-to-mailbox isolation (SQLite).| ／ |**Mono Pro**|**Stable**|Mono product model on enterprise infrastructure (PostgreSQL + Redis + async workers).|",
+   "evidence_lines": [
+    79,
+    221,
+    222
+   ]
+  },
+  "fn": "max-ramas/rms-mail-public",
+  "sha": "d3b40072d63e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

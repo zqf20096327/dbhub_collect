@@ -9028,5 +9028,348 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f5c62612d89e": {
+  "identity": {
+   "one_liner": "基于 Rust 的开源 SIEM，日志存对象存储并以嵌入式 chDB 引擎查询",
+   "review": "nano 是一个开源（AGPL-3.0，open-core）SIEM 安全事件管理平台，为安全分析师提供日志搜索、检测规则和告警分诊能力。事件以 OCSF 1.9 Parquet 落在 RustFS 对象存储，由嵌入式 chDB 引擎查询，PostgreSQL 仅存元数据；查询语言为自带的管道式 nPL。早期的 ClickHouse 版本已退役，不能原地升级。",
+   "highlights": [
+    "支持通过 Vector（HTTP/HEC/OTLP/syslog/S3）与 Tenzir 两种方式采集日志，存储为 OCSF 1.9 Parquet",
+    "内置检测规则生命周期（Staging→Live→Alerting）、定时与实时（5 秒微批）检测及告警去重分组",
+    "提供管道式查询语言 nPL，由嵌入式 chDB 引擎在对象存储上执行查询"
+   ],
+   "use_cases": [
+    "安全团队的日志搜索与威胁检测（SIEM）",
+    "以 OCSF 1.9 标准格式统一存储与查询多源安全日志",
+    "检测即代码场景，通过 Git 仓库同步和管理检测规则"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "(PostgreSQL + Dragonfly + RustFS object store + one single-tenant lake cell ／ single-tenant lake cell; PostgreSQL for metadata.",
+     "lines": [
+      52,
+      138
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "### Upgrading from the ClickHouse edition ／ The ClickHouse edition is retired and **cannot be upgraded in place**. Run ／ over a ClickHouse install, the installer stops before changing anything and",
+     "lines": [
+      84,
+      86,
+      87
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为安全分析场景提供日志采集、存储、搜索与检测的 SIEM 平台组件，PostgreSQL 仅作元数据存储、chDB 作查询引擎。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0 开源核心（open-core），托管版与部分平台功能由商业提供",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This repository is the open-core engine, licensed under **AGPL-3.0**. Hosted ／  single-tenant lake cell; PostgreSQL for metadata. ／ queried by the lake cell's embedded chDB engine. There is no ClickHouse server. See",
+   "evidence_lines": [
+    31,
+    138,
+    123
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nano-rs/nano",
+  "sha": "f5c62612d89e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5c9f1311eeb8": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue的食堂采购与库存管理系统",
+   "review": "一套面向高校、企业、医院等食堂场景的采购与库存管理系统，覆盖采购申请、审批、入库、出库、盘点与供应商管理流程，分管理员、商家、库房管理员三类角色。技术栈为SpringBoot+MybatisPlus+MySQL+Redis后端与Vue前端，部署需自备MySQL与Redis环境，README另附付费部署讲解服务信息。",
+   "highlights": [
+    "支持采购申请、审批流转、入库、出库、库存盘点全流程管理",
+    "提供管理员、食堂商家、库房管理员三类角色的权限隔离",
+    "支持入库单与出库单导出为 Excel/PDF 格式"
+   ],
+   "use_cases": [
+    "高校及企业食堂的采购与库存管理",
+    "医院营养食堂、机关单位食堂的物资出入库管理",
+    "连锁餐饮中央厨房的采购流程管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明系统以 MySQL 作为数据库存储业务数据，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向高校、企业园区、医院及机关单位食堂的采购与库存一体化管理系统，采用前后端分离架构，覆盖管理员、食堂商家与库房管理员三类角色。系统围绕\"物资采购、申请审批、入库管理、出库管理、库存盘点、供应商管理、采购组合、单据导出\"等核心业务设计，支持食堂商家在线提交食材申请、管理员审批与生成采购单、库房管理员验收入库、按需出库至各食堂档口，实现从采购申请、审批、采购、入库、出库到库存盘点的全流程数字化管理，适用于高校食堂、企业员工食堂、医院营养食堂、机关单位食堂及连锁餐饮中央厨房的日常运营。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/canteen_cos",
+  "sha": "5c9f1311eeb8",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "45a90eae2168": {
+  "identity": {
+   "one_liner": "为 Claude Code 与 Codex 提供本地共享记忆与代理协作层，基于 SQLite 存储",
+   "review": "MeMesh 是一个供 Claude Code 和 Codex 等编码代理使用的本地记忆协作层，通过 MCP 插件和 CLI 工具保存、检索会话偏好、项目决策与交接笔记，并支持本地代理之间交换消息。数据以单个 SQLite 文件存储在 ~/.memesh 目录，无需云服务。适合在多会话、多代理环境下编码的开发者使用。",
+   "highlights": [
+    "提供 12 个记忆与协调工具，包括 remember/recall/forget/task_state/message 等",
+    "记忆以单文件存储在本地 ~/.memesh/knowledge-graph.db，无需云服务",
+    "支持本地代理间经 MCP/HTTP/CLI 的消息投递，带评分排序与导入导出备份"
+   ],
+   "use_cases": [
+    "编码代理跨会话记住项目决策与用户偏好",
+    "同一台机器上多个代理共享上下文与交接说明",
+    "本地运行中的代理之间交换任务、问题与结果"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 说明记忆存储于本地 SQLite 文件数据库（~/.memesh/knowledge-graph.db），其为代理生态服务的工具层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Memories live in one file on your computer: `~/.memesh/knowledge-graph.db`. MeMesh needs no cloud memory service or separate AI model. Automatic reminders depend on the host integration; a handoff is context, not a guarantee that a task will restart itself. ／ npm install -g @pcircle/memesh ／ > Remember that this project uses SQLite.",
+   "evidence_lines": [
+    14,
+    35,
+    45
+   ],
+   "softened": []
+  },
+  "fn": "PCIRCLE-AI/memesh",
+  "sha": "45a90eae2168",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a9013b91311b": {
+  "identity": {
+   "one_liner": "开源 ITIL 4 ITSM 平台，集成 Active Directory 与 PostgreSQL 存储",
+   "review": "S-Aloha 是一个可本地部署的开源 ITIL 4 ITSM 平台，覆盖事件、请求、问题、变更、CMDB、SLA、知识库、项目及 NIS 2 合规评估，面向使用 Active Directory 的组织 IT 部门。技术栈为 ASP.NET Core 10 + React 19 + PostgreSQL 16，通过 EF Core 迁移初始化数据，身份认证走 LDAP/AD 并签发 JWT，以 Docker Compose 四容器方式运行，AGPLv3 许可。",
+   "highlights": [
+    "实现 10 项 ITIL 4 实践与 250 余条管理规则，包含事件、变更、CMDB、SLA、知识库等模块",
+    "集成 Active Directory (LDAP) 认证并签发 JWT，按 AD 组控制角色与数据可见范围",
+    "提供 NIS 2 合规评估（基于 ANSSI ReCyF）与混合检索（PostgreSQL 全文 + 可选 bge-m3 embeddings）"
+   ],
+   "use_cases": [
+    "使用 Active Directory 的组织需要本地部署的 ITSM/工单管理平台",
+    "受 NIS 2 约束的实体在同一平台跟踪合规差距与安全事件",
+    "支持团队需要 CMDB、SLA 监控与 ITIL 流程化的运维管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Données**|PostgreSQL 16 ; migrations EF appliquées au démarrage| ／ |**Recherche**|Plein texte PostgreSQL + embeddings `bge-m3` dans un service séparé, facultatif|",
+     "lines": [
+      201,
+      202
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 16 为该平台自身的数据存储，EF 迁移在启动时应用于该库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Données**|PostgreSQL 16 ; migrations EF appliquées au démarrage| ／ On-prem, quatre containers (dont la recherche sémantique, facultative) : vos données restent",
+   "evidence_lines": [
+    201,
+    51
+   ]
+  },
+  "fn": "christian-raj/S-Aloha",
+  "sha": "a9013b91311b",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d2878cf80f18": {
+  "identity": {
+   "one_liner": "单二进制 Go MCP 服务器，将个人 WhatsApp 账户封装为 42 个工具",
+   "review": "该项目将 WhatsApp 个人账户通过 whatsmeow 库封装为 MCP 工具集，供 Claude Desktop、Cursor 等 MCP 客户端调用，覆盖消息收发、群组管理、投票、媒体与隐私设置。消息与 会话数据缓存于本地 SQLite，通过 HTTP 守护进程在 127.0.0.1:8765 提供服务，需手机扫码配对，仅单实例运行。",
+   "highlights": [
+    "提供 42 个 MCP 工具，覆盖消息、群组、投票、媒体与隐私操作",
+    "消息缓存写入本地 SQLite，仅在工具调用时提供给模型",
+    "单二进制 Go 实现，通过 flock(2) 强制单实例访问存储文件"
+   ],
+   "use_cases": [
+    "让 MCP 客户端读写个人 WhatsApp 消息与群组",
+    "通过 LLM 代理执行消息发送、回复、媒体传输等操作",
+    "本地持久化聊天历史并按需回填历史记录"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A single-binary Go MCP server that wraps whatsmeow to expose a personal WhatsApp account to LLMs. `whatsapp-mcp serve` runs as a lightweight HTTP daemon on `127.0.0.1:8765`; MCP clients (Claude Desktop, Cursor, Claude Code, etc.) connect to it via HTTP — no pr ／ - **Single-instance enforcement** — a `flock(2)` on `store/.lock` prevents two `serve` processes racing on the same SQLite files. ／ Events reach SQLite **only while `serve` runs**. After downtime, whatsmeow backfills via `HistorySync` within WhatsApp's own retention window; anything older is lost, and `request_sync` backfills one chat on demand. A `flock(2)` on `store/.lock` allows one `se",
+     "lines": [
+      13,
+      24,
+      95
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明消息与会话数据存储于本地 SQLite 文件，项目是使用该库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A single-binary Go MCP server that wraps whatsmeow to expose a personal WhatsApp account to LLMs. `whatsapp-mcp serve` runs as a lightweight HTTP daemon on `127.0.0.1:8765`; MCP clients (Claude Desktop, Cursor, Claude Code, etc.) connect to it via HTTP — no process spawning, no stdin/stdout juggling. Messages are cached in local SQLite and only travel to the model when the agent calls a tool. ／ Data lives under `./store/` (`-store DIR`): `messages.db` (message cache), `whatsapp.db` (whatsmeow session) and `.lock`. Query tools read SQLite; send and action tools call whatsmeow; incoming events are written to SQLite by a goroutine in the same process.",
+   "evidence_lines": [
+    13,
+    126
+   ]
+  },
+  "fn": "Sealjay/mcp-whatsapp",
+  "sha": "d2878cf80f18",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

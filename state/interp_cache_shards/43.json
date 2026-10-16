@@ -9481,5 +9481,73 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ed9e9eae08c5": {
+  "identity": {
+   "one_liner": "把 WorkBuddy/CodeBuddy 额度封装为本地 OpenAI/Anthropic 兼容 API 的 Android 网关",
+   "review": "一个运行在 Android 手机上的本地 API 网关应用，用 Kotlin 原生实现 HTTP 服务，将 WorkBuddy/CodeBuddy 积分额度转为 OpenAI/Anthropic 兼容接口供局域网内客户端调用；内置多账号轮换、自动签到、AES-GCM 加密的 Key 管理，数据存于本地 SQLite（WAL 模式），需编译 APK 安装，README 声明仅供学习研究使用。",
+   "highlights": [
+    "提供 OpenAI Chat、Anthropic Messages、OpenAI Responses 三种协议的流式与非流式接口",
+    "支持多账号加权轮换、失败冷却、自动重试与每日自动签到",
+    "请求用量记录写入 SQLite，支持筛选与统计",
+    "API Key 采用 AES-GCM（AndroidKeyStore）加密存储"
+   ],
+   "use_cases": [
+    "在局域网内通过标准 OpenAI/Anthropic 协议客户端调用 WorkBuddy 额度",
+    "学习 API 网关原理与 Android 原生开发"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 📊 **用量记录** — 每次请求的输入 / 输出 / 思考链入库（SQLite），支持筛选与统计 ／ |存储|SQLite（`SQLiteOpenHelper`，WAL 模式）| ／ |`databases/`|SQLite 数据库（账号、应用 Key、用量记录）|",
+     "lines": [
+      41,
+      102,
+      115
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为应用自身存储账号、Key 与用量记录，项目是为上游模型服务封装 API 的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个跑在 Android 手机上的本地 API 网关。启动后，你的电脑、平板或其它 App 可以通过局域网连到手机上的 API 端口， ／ |存储|SQLite（`SQLiteOpenHelper`，WAL 模式）| ／ |`databases/`|SQLite 数据库（账号、应用 Key、用量记录）|",
+   "evidence_lines": [
+    24,
+    102,
+    115
+   ]
+  },
+  "fn": "jilin0105/WorkBuddy2API-Android",
+  "sha": "ed9e9eae08c5",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

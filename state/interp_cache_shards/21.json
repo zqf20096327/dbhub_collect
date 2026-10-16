@@ -10255,5 +10255,73 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "462412a4dbab": {
+  "identity": {
+   "one_liner": "面向 Markdown/Obsidian 知识库的本地语义图 MCP 服务器",
+   "review": "NOUZ 是一个基于 MCP 协议的本地服务器，将 Markdown 笔记库（Obsidian、Logseq 或任意 Markdown 目录）转换为带层级 DAG 和语义关联的结构图，通过向量比对自动分类笔记并提供检索、漂移检测等 MCP 工具，供 Claude Desktop、Cursor 等 AI 客户端调用。使用 SQLite 作为本地缓存，嵌入计算可通过 LM Studio/Ollama 本地完成，通过 pip 安装。",
+   "highlights": [
+    "提供 suggest_metadata、index_all、search_chunks 等 MCP 工具，用于笔记分类、图遍历与分块检索",
+    "支持 LM Studio/Ollama/OpenAI 三种嵌入提供方，嵌入计算可完全本地运行",
+    "使用 SQLite 作为本地缓存索引，提供 LUCA/PRIZMA/SLOI 三种运行模式"
+   ],
+   "use_cases": [
+    "为 Obsidian/Logseq 笔记库构建可供 AI 代理访问的语义结构图",
+    "在本地环境中向 MCP 客户端提供笔记语义检索与元数据建议",
+    "检测笔记库内容随时间的领域漂移（core_drift）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`core_mix` — не сумма типов артефактов. Это доменный профиль в SQLite-индексе. L4/L3/L2 получают его из собственного текста при `recalc_signs`, а родительские узлы могут затем получить усредненный профиль дочерних содержательных узлов через `recalc_core_mix`.  ／ |`NOUZ_DATABASE_NAME`|`obsidian_kb.db`|Имя файла SQLite-кэша внутри `OBSIDIAN_ROOT`; удобно для изолированных проверок, например `obsidian_kb.public.db`| ／ |`NOUZ_DATABASE_PATH`|*(пусто)*|Полный путь к SQLite-кэшу; имеет приоритет над `NOUZ_DATABASE_NAME`|",
+     "lines": [
+      41,
+      146,
+      147
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Markdown 知识库与 AI 代理之间提供服务的 MCP 服务器组件，SQLite 仅作为其内部缓存使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "NOUZ выступает прослойкой между вашей базой заметок и AI-агентом. Он помогает превратить разрозненные Markdown-файлы в граф, с которым удобно работать и вам, и агенту: ／ pip install nouz-mcp ／ Подключение к Claude Desktop, Cursor, Opencode или любому MCP-клиенту:",
+   "evidence_lines": [
+    18,
+    48,
+    76
+   ]
+  },
+  "fn": "Semiotronika/NOUZ-MCP",
+  "sha": "462412a4dbab",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

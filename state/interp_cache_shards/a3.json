@@ -8937,5 +8937,141 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f14f053a2904": {
+  "identity": {
+   "one_liner": "AI 应用记忆层 Python 框架，用数据库持久化智能体记忆",
+   "review": "MemoRizz 是为 AI 智能体提供持久记忆的 Python 框架，将情景、语义、程序性等记忆存储到 MongoDB、Oracle、本地文件系统等后端，并提供语义检索、遗忘机制、MCP 服务和 CLI/UI。面向构建持久化智能体的开发者，需 Python 3.10+，采用 PolyForm Noncommercial 许可，限制商业使用。",
+   "highlights": [
+    "支持 MongoDB、Oracle、Notion 及本地文件系统作为记忆存储后端，通过统一 provider 契约接入",
+    "提供知识库摄取、语义/混合检索、记忆保留与可逆遗忘机制",
+    "可作为 MCP server 暴露，并为 Codex 和 Claude Code 提供记忆插件"
+   ],
+   "use_cases": [
+    "为跨会话智能体构建持久化记忆",
+    "将文件和文件夹转为可语义检索的智能体知识库",
+    "为 Codex/Claude Code 会话添加事实与历史摘要记忆"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "with local filesystem storage, or use MongoDB, Oracle, or ／ - Persistent notes and searchable history: filesystem and Oracle notebooks",
+     "lines": [
+      34,
+      184
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其借助 MongoDB、Oracle 等数据库作为存储 provider，为 AI 应用提供记忆管理层，数据库是其服务的后端而非该应用的业务数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0（source available，禁止商用）",
+   "install": [
+    "pypi",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " with local filesystem storage, or use MongoDB, Oracle, or ／ python -m pip install memorizz ／ Source available under PolyForm Noncommercial 1.0.0. See NOTICE.",
+   "evidence_lines": [
+    34,
+    147,
+    193
+   ]
+  },
+  "fn": "RichmondAlake/memorizz",
+  "sha": "f14f053a2904",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9f666d44ea7b": {
+  "identity": {
+   "one_liner": "本地 Markdown 笔记索引为 SQLite 库并经 MCP 供编码代理检索的记忆引擎",
+   "review": "Renor 将用户文件夹中的 Markdown 笔记索引到本地 SQLite 数据库，用嵌入加关键词、实体信号排序，并通过 MCP 协议提供 search、recall、remember 工具，供 Claude Code、Codex 等编码客户端在会话间复用上下文。面向每天运行编码代理、愿意自建 Node 服务的单人用户，提供 stdio 与 HTTP（OAuth）两种服务形态，托管版在 renor.cloud。要求 Node 22，better-sqlite3 原生模块需按主版本重建；HTTP 服务不支持原生 Windows。",
+   "highlights": [
+    "将 Markdown 笔记索引到本地 SQLite 数据库，用 embeddings 加关键词与实体信号排序检索",
+    "提供 stdio 与 HTTP 两种 MCP 服务形态，HTTP 版含 OAuth 登录与目录权限自检",
+    "支持 eval-hash/none 等离线嵌入配置，安装依赖后索引与检索可离线运行"
+   ],
+   "use_cases": [
+    "为每天使用编码代理的个人开发者保存并召回项目决策上下文",
+    "在 Claude Code、Codex 等 MCP 客户端中接入本地笔记搜索与事实记忆",
+    "自托管运行且不调用付费模型的离线索引与检索场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**What it does.** It indexes your Markdown notes into a local SQLite database, ranks them with embeddings plus keyword and entity signals, and exposes search, recall and remember tools over MCP. Two servers ship here: a command-line server on stdin/stdout, and",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身笔记索引的本地存储，定位是为编码代理提供记忆服务的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only；导入的上游文件保持 ISC",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**What it does.** It indexes your Markdown notes into a local SQLite database, ranks them with embeddings plus keyword and entity signals, and exposes search, recall and remember tools over MCP. Two servers ship here: a command-line server on stdin/stdout, and an HTTP server with OAuth sign-in. ／ **Who it is for.** People who run coding agents every day and are willing to run a Node service. It is a single-owner engine: one person's notes, one set of agents. It is not a multi-user product. ／ **License.** AGPL-3.0-only for Renor's work (LICENSE); imported upstream files remain ISC (NOTICE). Contributing: CONTRIBUTING.md. Security reports: SECURITY.md. Agent instructions, including the self-hosted setup, are in skill/SKILL.md.",
+   "evidence_lines": [
+    19,
+    21,
+    25
+   ]
+  },
+  "fn": "patrickpassosb/renor-engine",
+  "sha": "9f666d44ea7b",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

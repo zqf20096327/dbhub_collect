@@ -9251,5 +9251,139 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "71cec24bc4af": {
+  "identity": {
+   "one_liner": "为 SQLite FTS5 提供 ICU 分词扩展（Zig 实现）",
+   "review": "该项目用 Zig 重新实现 SQLite FTS5 的自定义 ICU 分词器，通过 .load 加载共享库后可在 FTS5 虚拟表中启用 icu 及 icu_ja、icu_zh 等多语言/特定语言分词规则，适合需要多语言全文检索的 SQLite 用户。需自行准备 Zig 0.16+、SQLite3 与 ICU 开发库并本地构建，支持 FTS5 API v1/v2，并提供容器化构建与测试脚本。",
+   "highlights": [
+    "提供 icu 通用分词器及日/中/泰/韩等 8 个特定语言分词器",
+    "同时支持 FTS5 API v2 与旧版 v1 扩展入口点",
+    "提供多发行版容器化构建与测试流程"
+   ],
+   "use_cases": [
+    "SQLite FTS5 多语言全文检索分词",
+    "中日韩等语言的词边界切分与文本规范化",
+    "在多发行版环境中通过容器构建和测试扩展"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# FTS5 ICU Tokenizer for SQLite (Zig 0.16.0 & 0.17.0 Edition) ／ This project provides custom FTS5 tokenizers for SQLite implemented in **Zig 0.16.0** (with verified forward compatibility for **Zig 0.17.0**) using the International Components for Unicode (ICU) library to provide robust word segmentation and text normalizati ／ - **Old C Problem**: Error handling across temporary text buffers and ICU handles required fragile `goto cleanup;` branches. Missing a `free()` or `ubrk_close()` call on an error path caused memory leaks during high-throughput SQLite FTS indexing sessions.",
+     "lines": [
+      1,
+      5,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 SQLite FTS5 提供可加载的分词器扩展，属服务于数据库的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project provides custom FTS5 tokenizers for SQLite implemented in **Zig 0.16.0** (with verified forward compatibility for **Zig 0.17.0**) using the International Components for Unicode (ICU) library to provide robust word segmentation and text normalization across multiple languages. ／ CREATE VIRTUAL TABLE documents USING fts5(content, tokenize = 'icu');",
+   "evidence_lines": [
+    5,
+    143
+   ]
+  },
+  "fn": "cwt/fts5-icu-tokenizer",
+  "sha": "71cec24bc4af",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0204f20abb59": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地消息协作系统，基于 MCP 服务器与 SQLite 消息代理",
+   "review": "该项目为 Codex 与 Claude Code 提供本地消息协作：通过 MCP 服务器、Unix 套接字和一个由 SQLite 支撑的 broker 在多个代理间传递持久化消息，并配套 Incus 沙箱实现隔离运行、持久化项目与代理记忆。面向同时使用多个 AI 编码代理的开发者；README 还提供终端/浏览器仪表盘、安装脚本与 macOS/Linux 部署布局说明。",
+   "highlights": [
+    "通过 MCP 服务器与 Unix 套接字连接 Codex 和 Claude，实现带持久消息与自动投递的实时协作",
+    "提供基于 Incus 的隔离工作区，代理在容器内运行，/workspace 与 /home/agent 跨容器替换持久化",
+    "secured 模式运行一个共享 broker 和 SQLite 数据库，并提供只读仪表盘与 token 用量软上限"
+   ],
+   "use_cases": [
+    "在沙箱中同时运行 Codex 与 Claude 会话并让两者交换消息",
+    "以容器隔离方式托管 AI 编码代理并持久化项目文件与代理记忆",
+    "通过只读仪表盘查看代理连接、待处理消息与 token 消耗"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**workspace**; **secured** owns one broker and SQLite database. ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+     "lines": [
+      71,
+      75
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 broker 使用 SQLite 数据库存放消息，项目是用数据库支撑自身功能的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可（L9）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "With `secured_runtime = true`, Codex, Claude and the read-only dashboard run in ／ **workspace**; **secured** owns one broker and SQLite database. ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+   "evidence_lines": [
+    70,
+    71,
+    75
+   ]
+  },
+  "fn": "makarski/collab-ai",
+  "sha": "0204f20abb59",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

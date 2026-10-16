@@ -10975,5 +10975,72 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5dfd77c8decc": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式时序数据库与事件驱动回测引擎",
+   "review": "h5i-db 面向量化研究场景，提供内嵌时序数据库、Python 回测接口和本地 Web UI，支持每次回测固定数据版本并按 fork 隔离运行；其 research lab 组件用 PostgreSQL 记录多 agent 提交的策略试验。适合在终端中运行量化回测并需要人工审核 agent 结果的研究者。",
+   "highlights": [
+    "提供嵌入式时序数据库与事件驱动回测引擎，通过 pip 安装、无需独立服务器",
+    "支持时间序列 SQL（ASOF join、time_bucket、vwap、滚动窗口）及按版本读取历史数据",
+    "每次回测在数据库独立 fork 中执行，试验结果通过本地 Web UI 审阅"
+   ],
+   "use_cases": [
+    "对行情数据执行版本可复现的策略回测与参数扫描",
+    "多 agent 提交策略、人工审核晋升的研究工作流（research lab）",
+    "从文件加载 OHLCV/成交数据并用 SQL 做时序分析"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "apps/lab/demo.sh # PostgreSQL in Docker, synthetic market, three scripted agents, 127.0.0.1:8202 ／ On your own data the lab needs PostgreSQL and an h5i-db database with an instruments catalog, book snapshots and a seal over the holdout span. apps/lab/README.md lists the settings, the strategy language and what the proofs cover.",
+     "lines": [
+      54,
+      65
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库与回测引擎组件，lab 组件依赖 PostgreSQL 存储试验记录，为量化研究生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**h5i-db** is an embedded time-series database and event-driven backtester for quant research, written in Rust. Use it from Python, and review what your agents ran in a local web UI. ／ `apps/lab` is a ledger for one person running many agents against one database. An agent submits a strategy as a short rule program with JSON parameters. A worker backtests it on the agent's fork through the service API and records the trial whether the run succeeded or not. The protocol is an h5i-app kernel with Lean proofs: every trial is counted, an agent cannot read past its decision time or into the sealed holdout, the holdout is evaluated once, and only a human promotes. ／ On your own data the lab needs PostgreSQL and an h5i-db database with an instruments catalog, book snapshots and a seal over the holdout span. apps/lab/README.md lists the settings, the strategy language and what the proofs cover.",
+   "evidence_lines": [
+    11,
+    51,
+    65
+   ]
+  },
+  "fn": "Koukyosyumei/h5i-db",
+  "sha": "5dfd77c8decc",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

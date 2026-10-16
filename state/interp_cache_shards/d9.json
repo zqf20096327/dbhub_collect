@@ -10325,5 +10325,194 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "32ab5aa36e3a": {
+  "identity": {
+   "one_liner": "基于单会话持续记忆的 AI 数字实体应用，用 Postgres 持久化",
+   "review": "MIRA 是一个个人 AI 助手应用，通过单一永久会话线程实现连续性：旧对话折叠为第一人称记忆、按使用天数衰减、经语义检索被动注入上下文，并包含子皮层上下文准备与 Peanut Gallery 观察机制、基于 Postgres 的行为反馈循环。使用 Postgres 与 Valkey 存储，通过 Docker 运行，面向想搭建个人数字实体的用户。",
+   "highlights": [
+    "提供对话段落折叠、第一人称记忆生成与记忆衰减/召回机制",
+    "包含 Text-Based LoRA 行为反馈循环，将对话信号积累于 Postgres 并合成用户模型",
+    "工具从文件系统自动发现注册，支持按需启用与临时工具"
+   ],
+   "use_cases": [
+    "个人 AI 助手/聊天陪伴场景",
+    "长期记忆管理实验",
+    "自定义工具扩展与 Home Assistant 等集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section i ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider re ／ docker run -it -v mira-data:/opt/vault -v mira-userdata:/opt/mira/app/data -v mira-pgdata:/var/lib/postgresql/17/main -v mira-valkey:/var/lib/valkey -v mira-backups:/opt/mira/backups -p 1993:1993 mira:latest",
+     "lines": [
+      40,
+      83,
+      225
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "MIRA 使用 PostgreSQL 存储行为信号与会话历史，属使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section involved. These signals accumulate in Postgres.",
+   "evidence_lines": [
+    40
+   ]
+  },
+  "fn": "taylorsatula/mira",
+  "sha": "32ab5aa36e3a",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8d00108e9c76": {
+  "identity": {
+   "one_liner": "键盘优先的终端 TUI 数据库客户端，支持 MCP 供编码代理访问数据库",
+   "review": "LazyDB 是用 Rust 编写的终端数据库工作台，提供 schema 浏览、SQL 编辑执行、连接管理，并通过 MCP 将项目级数据库访问暴露给编码代理；支持 PostgreSQL、MySQL、Oracle、SQL Server、SQLite、Redis、MongoDB 等。适合在终端中使用数据库的开发者和 AI 编码代理用户；README 标注项目处于 beta，尚非 DataGrip 的生产级替代品。",
+   "highlights": [
+    "提供 schema 浏览、SQL 控制台、事务管理、关系数据预览等终端数据库工作区功能",
+    "支持通过 MCP 将数据库访问暴露给 Claude Code、Codex、OpenCode 等编码代理",
+    "针对不同数据库提供能力感知的目录编辑器与用户/角色查看"
+   ],
+   "use_cases": [
+    "在终端中浏览和管理多种数据库",
+    "为编码代理配置项目级数据库访问",
+    "离线编写与保存 SQL"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "without leaving your terminal. It is written in Rust and supports PostgreSQL, ／ identically. PostgreSQL lists cluster roles from `pg_roles`; MySQL and ／ and `e` edits directly selected objects. PostgreSQL exposes the broadest",
+     "lines": [
+      5,
+      201,
+      207
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL, MariaDB, Oracle, SQL Server, SQLite, Redis, and MongoDB. MongoDB uses a ／ identically. PostgreSQL lists cluster roles from `pg_roles`; MySQL and ／ materialized views, sequences, databases, and roles); Oracle, MySQL,",
+     "lines": [
+      6,
+      201,
+      209
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "MySQL, MariaDB, Oracle, SQL Server, SQLite, Redis, and MongoDB. MongoDB uses a ／ materialized views, sequences, databases, and roles); Oracle, MySQL,",
+     "lines": [
+      6,
+      209
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "MySQL, MariaDB, Oracle, SQL Server, SQLite, Redis, and MongoDB. MongoDB uses a ／ MariaDB, SQL Server, and SQLite expose their currently implemented table/view",
+     "lines": [
+      6,
+      210
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "MySQL, MariaDB, Oracle, SQL Server, SQLite, Redis, and MongoDB. MongoDB uses a ／ MariaDB, SQL Server, and SQLite expose their currently implemented table/view",
+     "lines": [
+      6,
+      210
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MySQL, MariaDB, Oracle, SQL Server, SQLite, Redis, and MongoDB. MongoDB uses a ／ For a ready-to-use MariaDB instance with broad test data-type coverage, see the ／ MariaDB, SQL Server, and SQLite expose their currently implemented table/view",
+     "lines": [
+      6,
+      50,
+      210
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供终端客户端与 MCP 访问组件，是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LazyDB is a keyboard-first database workspace for the terminal. ／ connection profiles, and expose project-scoped database access to coding agents ／ without leaving your terminal. It is written in Rust and supports PostgreSQL,",
+   "evidence_lines": [
+    1,
+    4,
+    5
+   ]
+  },
+  "fn": "yelog/lazydb",
+  "sha": "8d00108e9c76",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

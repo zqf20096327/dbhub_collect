@@ -10020,5 +10020,183 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b7baa50d7dd": {
+  "identity": {
+   "one_liner": "AI Agent 自改进上下文框架，记录查询意图并固化为工具",
+   "review": "Skardi 是面向 AI Agent 的开源上下文框架：Agent 通过统一 SQL 端点查询已注册数据源并声明意图，框架将查询与意图写入审计账本（SQLite 或 Postgres 文件/库），把反复出现的查询提升为命名 pipeline，通过 shell、REST 和 MCP 双传输暴露给 Claude Code、Cursor 等宿主。README 标注为 Beta，API 可能变动。",
+   "highlights": [
+    "提供统一 SQL 联邦查询入口，通过 ai_context 记录 purpose/session_id/task 且不执行",
+    "审计账本支持 SQLite 文件或 Postgres 存储（SKARDI_QUERY_AUDIT_PG_DSN）",
+    "提升的 pipeline 同时支持 shell、REST 与 MCP（stdio 与 streamable HTTP）绑定，access_mode 按 source 控制 DML、拒绝 DDL"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供带意图记录的跨数据源联邦查询",
+    "将 Agent 重复使用的查询固化命名 pipeline 或例行任务",
+    "通过 auto-context 技能将文档或数据存储转为 HTTP 可检索上下文（向量+FTS+RRF）"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres database, via `SKARDI_QUERY_AUDIT_PG_DSN` — same fail-closed ／ pointed at Postgres + pgvector, MongoDB, or Lance. ／ |PostgreSQL|Full|Yes|pgvector KNN, FTS (`pg_fts`, plus `tsvector` predicates pushed down from raw SQL)|docs| ／ |Graph (Apache AGE)|Read|Yes|Read-only openCypher over Postgres; YAML views as catalog tables, `cypher_query` UDTF|docs|",
+     "lines": [
+      102,
+      162,
+      285,
+      301
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|Full|Yes|Table or catalog registration|docs| ／ |SeekDB|Full|Yes|MySQL-wire CRUD, FULLTEXT, HNSW|docs|",
+     "lines": [
+      286,
+      291
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "until it lands you can read the ledger yourself with plain SQL — it is a SQLite ／ before anyone asks. And because the ledger is one SQLite file (or one ／ FTS + RRF), defaulting to a local SQLite file the skill creates and owns, or ／ a small SQLite file for the ledger and optional auth. One server serves many ／ |SQLite|Full|Yes|sqlite-vec KNN, FTS|docs|",
+     "lines": [
+      70,
+      101,
+      161,
+      259,
+      287
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Read|Yes|Columnar OLAP, filter/limit pushdown|docs|",
+     "lines": [
+      292
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Agent 生态提供数据接入与查询服务组件，后端连接 PostgreSQL/MySQL/SQLite/ClickHouse 等多种数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Skardi is an open-source self-improving context framework.** ／  The loop — ① Observe: the agent asks anything, in SQL, and declares why (POST /query + ai_context → audit ledger). ② Learn: read the ledger, group by session and purpose, find the intentions that keep coming back. ③ Act: recurring queries become named pipelines; recurring intentions become routines that run before they ／ and MCP over both transports (local stdio and remote streamable HTTP) — so the ／ searchable context served over HTTP by `skardi-server`: hybrid search (vector +",
+   "evidence_lines": [
+    3,
+    33,
+    81,
+    160
+   ]
+  },
+  "fn": "SkardiLabs/skardi",
+  "sha": "0b7baa50d7dd",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3e47cc6f133": {
+  "identity": {
+   "one_liner": "離線優先的 POS/ERP/CRM 一體化收銀營運系統，資料存本機 SQLite",
+   "review": "面向店家的免費收銀與營運系統，涵蓋收銀、庫存、採購帳務、會員 CRM 與顧客點餐，離線優先運行於 Windows 桌面（Electron）與配對手機。桌面版以 better-sqlite3 存本機資料，瀏覽器版走 localStorage，雲端同步為選用的 Supabase 快照；完整 ERP/CRM 能力仍在開發中。",
+   "highlights": [
+    "桌面版與配對手機共用同一份 SQLite 資料庫，瀏覽器版資料存 localStorage",
+    "支援收銀、庫存、採購應付、複式記帳、會員 CRM 與掃碼點餐流程",
+    "提供繁中/英/日/简四語介面與 Agent 快速建單協議，雲端同步為選用 Supabase 快照"
+   ],
+   "use_cases": [
+    "攤販、餐飲外帶、零售手作店家的離線收銀與庫存管理",
+    "需要會員點數分級與 RFM 客群分析的門市營運",
+    "透過區網配對讓手機與桌面共用店面資料作業"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模與店型，不設訂閱或進階功能解鎖費。資料預設存在本機（桌面版走 SQLite、獨立瀏覽器版走 localStorage）；配對手機直接使用店面電腦同一個資料庫。雲端同步是選用。 ／ - 📱 **共用店面** — 私人區網 HTTPS 配對，手機與電腦使用同一個 SQLite 資料庫 ／ 需要 Node.js 24 或更新的受支援版本。桌面版原生 SQLite 套件會依 Electron 版本重建。",
+     "lines": [
+      50,
+      82,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明確說明資料預設存在本機 SQLite，屬於使用 SQLite 存資料的應用系統而非為資料庫生態服務的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模與店型，不設訂閱或進階功能解鎖費。資料預設存在本機（桌面版走 SQLite、獨立瀏覽器版走 localStorage）；配對手機直接使用店面電腦同一個資料庫。雲端同步是選用。 ／ 資料層由 `src/utils/dataAccess.js` 抽象：桌面走 SQLite、瀏覽器走 localStorage，UI 共用一套。",
+   "evidence_lines": [
+    50,
+    146
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Hao0321/pos-pro",
+  "sha": "c3e47cc6f133",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -12279,5 +12279,182 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9487c7e8af32": {
+  "identity": {
+   "one_liner": "面向 AI 代理的便携记忆库：以原始文本为准、事实作废不删除",
+   "review": "为 AI 代理提供可移植、受治理、模型无关的记忆存储，事实只作废不覆盖，原始文本不可编辑为唯一真源，所有事实与链接可导出为带版本 JSON Schema 的格式。内置 SqliteMemoryStore/InMemoryStore 与一致性测试套件，含 MCP 导出。适合需要事实溯源、有效时间与合规删除的代理开发者。",
+   "highlights": [
+    "每个事实与链接携带来源标注（provenance），支持 validAt 与 snapshotAsOf 有效时间查询",
+    "提供 exportPortable/importPortable 版本化 JSON 导入导出格式及一致性测试套件",
+    "内置 SqliteMemoryStore 与 InMemoryStore，本地运行无需服务端与 API 密钥"
+   ],
+   "use_cases": [
+    "为 AI 代理构建带溯源与时间维度的长期记忆",
+    "通过 MCP 服务器向代理客户端提供共享记忆存储",
+    "需要可跨运行时无损迁移的代理记忆导出与导入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti sel ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.",
+     "lines": [
+      22,
+      52
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身记忆数据的 AI 代理记忆库，SQLite 仅为其内置存储实现而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti self-hosts (graph DB + LLM key required)| ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.",
+   "evidence_lines": [
+    22,
+    52
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "flytomoon/al-buddy-memory",
+  "sha": "9487c7e8af32",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8badd03c10f": {
+  "identity": {
+   "one_liner": "零依赖 PHP+MySQL 的中外历史同期大事对照阅读工具",
+   "review": "一个自托管的内容管理系统：以中国历史节点为轴，展示同期世界大事与中外联动，内置 25 个朝代分期、117 个节点、669 条世界大事。用 PHP + PDO/MySQL 实现，带安装向导、后台增删改查、CSV 批量导入与 JSON 数据包导出导入，含投稿审核功能。适合历史学习者与自建网站的内容维护者；要求 PHP 7.4~8.4 与 MySQL 5.5~8.4/MariaDB 10.x，兼容 5.5 的写法（DATETIME 处理、排序规则锁定）是其实现细节。",
+   "highlights": [
+    "提供安装向导，支持自动建表、导入数据、自动建库（需 MySQL 全局 CREATE 权限）",
+    "后台支持内容增删改查、CSV 批量导入、JSON/ZIP 数据包导出导入与投稿审核",
+    "前台提供时间轴、±1~±20 年时间窗口筛选、全站搜索与响应式布局"
+   ],
+   "use_cases": [
+    "自托管搭建中外历史对照阅读站",
+    "批量整理导入历史事件数据（CSV/JSON）",
+    "学习中国历史节点对应的同期世界大事"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "一个零依赖、零构建的 PHP + MySQL 历史对照阅读工具。 ／ > ⚠️ **自动建库需要 MySQL 账号有全局 `CREATE` 权限。** 宝塔与多数虚拟主机",
+     "lines": [
+      9,
+      107
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|数据库|**MySQL 5.5 ~ 8.4** / MariaDB 10.x|",
+     "lines": [
+      270
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "location ~ \\.(sqlite|sql|bak|old|log|ini)$ { deny all; }",
+     "lines": [
+      346
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 MySQL 存储朝代、事件、联动等内容数据，是通过 PDO 使用数据库的历史阅读应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个零依赖、零构建的 PHP + MySQL 历史对照阅读工具。 ／ |数据库|**MySQL 5.5 ~ 8.4** / MariaDB 10.x|",
+   "evidence_lines": [
+    9,
+    270
+   ]
+  },
+  "fn": "rongshu8/intertext-history",
+  "sha": "a8badd03c10f",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9967,5 +9967,81 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a7f773b03df8": {
+  "identity": {
+   "one_liner": "Nano Stores 的 SQL 封装，将 SQL 查询转为响应式 store",
+   "review": "这是一个 Nano Stores 的包装库，通过 db.store()/select()/exec 等接口把 SQL 查询结果生成响应式 store，并在数据库变更时自动更新。支持 SQLocal（浏览器 SQLite）、Expo（React Native）、PGLite（浏览器内 PostgreSQL）及自定义驱动，提供 migrateIfNeeded 迁移助手和参数化查询防注入。适用于在浏览器或 React Native 中做本地数据管理的 JS/TS 前端开发者。",
+   "highlights": [
+    "支持 SQLocal、Expo、PGLite 及自定义多种数据库驱动，可在浏览器（OPFS）和 React Native 中运行",
+    "提供 db.store() 生成响应式 store，数据变更时自动更新，并支持与 Drizzle ORM 配合实现类型安全查询",
+    "内置 migrateIfNeeded 迁移助手，通过 localStorage 与 Web Lock 在多标签页间管理 schema 版本"
+   ],
+   "use_cases": [
+    "在浏览器中使用 SQLite/PGLite 存储数据并保持 UI 与查询结果同步",
+    "React Native（Expo）应用中的本地 SQLite 数据管理",
+    "需要 schema 版本迁移与多标签页一致性的前端本地数据库应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PGLite to use PostgreSQL rich features in browsers:",
+     "lines": [
+      108
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "[Nano Stores] wrapper around SQLite or PGLite to generate reactive stores ／ SQLocal is our to use SQLite in the browser: ／ export const db = openDb(sqlocalDriver('app.sqlite'))",
+     "lines": [
+      6,
+      35,
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为前端应用提供操作 SQLite/PGLite 的驱动封装与响应式 store 生成，是为数据库生态服务的工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "[Nano Stores] wrapper around SQLite or PGLite to generate reactive stores ／ - Support multiple databases drivers: **SQLocal, Expo, PGLite**, ／ PGLite to use PostgreSQL rich features in browsers:",
+   "evidence_lines": [
+    6,
+    10,
+    108
+   ]
+  },
+  "fn": "nanostores/sql",
+  "sha": "a7f773b03df8",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

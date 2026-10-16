@@ -9417,5 +9417,227 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9494f1e11d19": {
+  "identity": {
+   "one_liner": "数据库版本控制工具，提供 Git 式提交/分支/回滚，经 MCP 供 AI 代理调用",
+   "review": "GFS 用 Docker 管理隔离的数据库环境，对数据库状态做提交、分支、回滚和时间旅行查询，并通过内置 MCP 服务器供 Claude Code、Cursor 等 AI 代理调用；支持 PostgreSQL、MySQL、SQLite，还提供懒克隆远程 PostgreSQL（copy-on-read，实验性）。面向让 AI 代理安全操作数据库的开发者。",
+   "highlights": [
+    "支持对数据库状态执行 commit、branch、checkout、schema diff 等类 Git 操作",
+    "内置 MCP 服务器（stdio/HTTP），供 MCP 兼容代理直接调用",
+    "支持懒克隆远程 PostgreSQL 数据库（copy-on-read，实验性），可检测源端变更"
+   ],
+   "use_cases": [
+    "AI 代理执行迁移/写操作前建立可回滚检查点",
+    "在隔离分支上试验有风险的 schema 变更",
+    "跨提交对比 schema 或导出/导入数据（SQL、custom、CSV）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL** (versions 13-18) ／ - Lazily clone a remote PostgreSQL database (copy-on-read, experimental), with ／ gfs init --database-provider postgres --database-version 17",
+     "lines": [
+      61,
+      78,
+      109
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL** (versions 8.0-8.1)",
+     "lines": [
+      62
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** (version 3) — embedded, so no container runtime is required",
+     "lines": [
+      63
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明为数据库提供版本控制能力，通过 Docker 管理数据库环境，是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GFS (Git For database Systems) brings Git-like version control to your databases. It enables you to: ／ - **MCP integration.** Agents interact with GFS natively through the Model Context Protocol, no shell wrappers needed. ／ ## Supported Databases",
+   "evidence_lines": [
+    33,
+    52,
+    59
+   ]
+  },
+  "fn": "Guepard-Corp/gfs",
+  "sha": "9494f1e11d19",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "46d371f2dd50": {
+  "identity": {
+   "one_liner": "面向俄罗斯个体从业者的本地开票桌面应用，用 SQLite 存储数据并生成 PDF 账单",
+   "review": "DocKit 是运行于 Windows 10/11 的离线桌面程序，用 Go 和 Fyne 编写，供个体从业者开具账单和完工证明 PDF、管理客户与文档历史。数据以 SQLite 存于本地（通过 VACUUM INTO 备份），支持 JSON 导出、内置西里尔字体，无需注册或联网。v0.1 为文本预览，无电子签名和银行集成。",
+   "highlights": [
+    "本地 SQLite 存储，支持备份、恢复（VACUUM INTO）与 JSON 全量导出",
+    "生成含西里尔字体的账单/完工证明 PDF，支持浅色/深色主题",
+    "文档保存双方信息快照，历史记录不可变，可通过文档重新生成新单据"
+   ],
+   "use_cases": [
+    "个体从业者开具服务账单与完工证明",
+    "离线管理客户资料与文档历史",
+    "按文档历史快速生成新编号的单据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Резервное копирование SQLite, восстановление и экспорт всех пользовательских данных в JSON. ／ В **Настройках** доступны резервное копирование и восстановление. Копия создаётся средствами SQLite (`VACUUM INTO`). При восстановлении проверяются версия схемы, целостность и связи базы. Перед заменой автоматически создаётся файл `before-restore-*.db` в папке",
+     "lines": [
+      33,
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "程序使用 SQLite 存储自身业务数据（客户、账单、文档历史），SQLite 为其内置存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，依赖含 BSD-3-Clause 与 MIT 许可组件",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Локальное приложение для Windows 10/11 x64 на Go и Fyne: счета на оплату, акты выполненных работ и клиенты. Регистрация, сервер и интернет для работы не нужны. Аналитики и телеметрии нет. ／ По умолчанию база расположена в `%APPDATA%\\DocKit\\dockit.db`, отдельно от исполняемого файла. Fyne также сохраняет настройки окна в своей пользовательской директории. Все данные остаются на компьютере. ／ Миграция `internal/store/migrations/001.sql` встроена в программу, выполняется транзакционно и отслеживается через `PRAGMA user_version`. SQL с пользовательскими значениями параметризован. Номер документа уникален в пределах его типа. Документ и все позиции сохраняются одной транзакцией.",
+   "evidence_lines": [
+    3,
+    42,
+    84
+   ]
+  },
+  "fn": "cryptoangelito/DocKit",
+  "sha": "46d371f2dd50",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "31bec50b236a": {
+  "identity": {
+   "one_liner": "用 Roslyn 把 .NET 解决方案索引进 SQLite 供 AI 代理查询的语义地图工具",
+   "review": "Lurp 通过 Roslyn 将 .NET 解决方案一次性索引到 SQLite，持久化符号、类型关系、源码位置与证据等级，向代理提供检索、语义 diff、影响可达性和 token 有界的上下文胶囊，避免每轮重复解析整个解决方案。它面向使用 C# 代码库的 AI 代理开发者，通过 dotnet tool 安装；仅支持 Windows，需 .NET 10 运行时，索引还需可构建目标解决方案的 SDK。",
+   "highlights": [
+    "提供 context/impact/diff/search/grep 等 CLI 模式，实现上下文胶囊、影响分析与语义差异查询",
+    "通过 MCP 接口（lurp_index、lurp_status 等）供代理调用",
+    "包含 ASP.NET Core、DI、MediatR、EF Core、序列化、测试六类框架适配器，输出类型化关系事实"
+   ],
+   "use_cases": [
+    "AI 代理读取 C# 代码库时获取带证据等级的紧凑代码上下文",
+    "查询符号调用方/被调用方以做变更影响分析",
+    "对两次索引快照做语义 diff 与死代码候选检测"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small,",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Lurp 用 SQLite 作为自身索引存储介质，是服务于代码分析/代理工作流的工具而非使用数据库存业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small, ／ (`--mode=index`, `status --solution=`, MCP `lurp_index`, and MCP `lurp_status` with ／ Lurp models framework-mediated relationships through six adapters that emit",
+   "evidence_lines": [
+    10,
+    93,
+    148
+   ]
+  },
+  "fn": "t-macabee/lurp",
+  "sha": "31bec50b236a",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

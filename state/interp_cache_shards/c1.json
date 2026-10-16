@@ -9671,5 +9671,89 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ae5f2f0440e": {
+  "identity": {
+   "one_liner": "AI 代理的持久化记忆系统，基于本地 SQLite，经 MCP/CLI 读写",
+   "review": "Knowl 为 AI 代理（Claude Code、Codex、Cursor 等）提供持久化记忆：事实带类型与来源，当新事实取代旧事实时将旧条目标记为 superseded 而非并存，从而降低过期信息被检索到的概率。数据存储在本地 SQLite，无需 API key，通过 MCP 服务器或 CLI 接入，npm 全局安装，Node.js 22+ 运行。",
+   "highlights": [
+    "提供 supersession 机制：同主题新写入自动将旧事实标记为 superseded 并移出常规检索",
+    "提供 28 个 MCP 工具，本地运行无需 API key，并捆绑 SQLite、tree-sitter 与嵌入运行时",
+    "支持十余种代理宿主的接入注册（Claude Code、Codex、Cursor、Zed、JetBrains 等），并提供可选的 knowl.cloud 共享层"
+   ],
+   "use_cases": [
+    "为编码代理维护项目决策记忆，数据库选型等事实变更时自动退役旧记录",
+    "多代理/多终端共享同一份记忆存储，包括 git worktree 场景",
+    "团队通过 knowl.cloud 工作区跨成员共享代理知识"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "addons (SQLite, tree-sitter, the embedding runtime), so running the CLI under the Bun or Deno",
+     "lines": [
+      72
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Most memory systems are append-only. Storing \"we moved to SQLite\" leaves \"we use PostgreSQL\"",
+     "lines": [
+      167
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Claude Code answers which database the project uses from memory, records the move to Postgres and retires the MySQL decision; Codex answers the same question from that memory in a second terminal; the Claude app answers from the same store over the hosted conn",
+     "lines": [
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Knowl 使用内嵌 SQLite 存储自身记忆数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Knowl is persistent memory for AI agents, for code, research and everyday life, over ／ addons (SQLite, tree-sitter, the embedding runtime), so running the CLI under the Bun or Deno ／ `knowl init` registers the MCP server for every host it finds. Start a new session afterwards so",
+   "evidence_lines": [
+    32,
+    72,
+    146
+   ]
+  },
+  "fn": "dat999zx/knowl",
+  "sha": "2ae5f2f0440e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10377,5 +10377,77 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8bfdbd8b2b38": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的自主后端平台，经 MCP 治理 PostgreSQL 变更",
+   "review": "Backenly 是一个自主后端平台：用户通过 Claude Code、Cursor 等编码代理经 MCP 服务器描述需求，平台推导数据模型、生成 REST 端点和 RLS 策略，所有变更经带 dry-run、审计和回滚的 executeAction 内核落库到 PostgreSQL，并由 MAPE-K 闭环持续修复漂移。数据经 PostgREST 提供服务，支持云端或自托管（npm + Docker Compose）。适合希望由 AI 代理搭建并维护后端的开发者。",
+   "highlights": [
+    "提供 MCP 服务器，声明 20 个工具供编码代理读取状态、执行迁移和数据操作",
+    "所有变更经单一类型化 action 内核处理，支持 dry-run、审计与回滚",
+    "数据存于 PostgreSQL，每项目独立 schema，经 PostgREST 提供 /db/* 数据面，支持 pg_dump 导出"
+   ],
+   "use_cases": [
+    "由编码代理（Claude Code/Cursor/Codex）搭建和维护应用后端",
+    "自托管多租户后端，依赖 Postgres RLS 与 grants 做项目隔离",
+    "需要带审计与回滚的受控数据库变更流程的团队"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The autonomous backend platform for agentic coding. PostgreSQL, REST APIs, auth, ／ never locked in: direct Postgres connection strings and full `pg_dump` exports ／ Your coding agent drives Backenly over MCP. The Brain plans the change, executeAction governs and verifies it, and it lands in PostgreSQL. A closed MAPE-K autonomy loop watches the running backend and repairs it back through the Brain.",
+     "lines": [
+      7,
+      45,
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "平台围绕 PostgreSQL 提供治理化的 schema 迁移、RLS 策略、备份角色与 PostgREST 数据面，为数据库的运行与变更管理服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Your coding agent drives Backenly over MCP. The Brain plans the change, executeAction governs and verifies it, and it lands in PostgreSQL. A closed MAPE-K autonomy loop watches the running backend and repairs it back through the Brain. ／ |**Database**|PostgreSQL with a schema per project, served through PostgREST| ／ - **PostgreSQL 15**, with `pg_stat_statements` preloaded",
+   "evidence_lines": [
+    50,
+    69,
+    216
+   ]
+  },
+  "fn": "backenly/backenly",
+  "sha": "8bfdbd8b2b38",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

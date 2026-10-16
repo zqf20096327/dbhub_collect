@@ -10252,5 +10252,141 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9e5fe91bc0d8": {
+  "identity": {
+   "one_liner": "Oracle Linux 的 UEK Linux 内核源码仓库",
+   "review": "该仓库托管 Oracle 为 Oracle Linux 构建的 Unbreakable Enterprise Kernel（UEK）内核源码，包含尚未合入主线的 Oracle 补丁，提供 ueknext 等多个生产分支，源码每周刷新，二进制 RPM 公开发布。面向 Oracle Linux 用户和内核开发者，但不接受 GitHub 上的 pull request，源码本身不提供支持。",
+   "highlights": [
+    "提供 UEK 各版本（ueknext、uek8、uek7、uek6）的完整内核源码与 git 历史",
+    "仓库每周随新开发版本刷新，支持 x86_64 与 aarch64 架构",
+    "构建需 libdtrace-ctf 及标准内核构建工具"
+   ],
+   "use_cases": [
+    "查看或构建 Oracle Linux UEK 内核源码",
+    "跟踪 Oracle 对 Linux 内核的未合入主线补丁",
+    "为 Oracle Linux 生产环境获取对应内核版本的二进制 RPM"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "# Oracle Linux: Unbreakable Enterprise Kernel (UEK) ／ The Unbreakable Enterprise Kernel (UEK) is a Linux kernel built by Oracle and supported via Oracle Linux Support. Its focus is performance, stability, and minimal backports by tracking the mainline source code as closely as is practical. UEK is well-tested and ／ Oracle is a long-time contributor to Linux and we have always had a strong emphasis on upstreaming and open-sourcing our changes to the kernel. Keeping our changes open source allows us to integrate with upstream Linux kernels quickly, which also means we have",
+     "lines": [
+      1,
+      5,
+      7
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该仓库是 Linux 内核项目，README 未声明任何数据库适配或服务关系，此处 Oracle 指 Oracle Linux 而非数据库产品。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Oracle Linux: Unbreakable Enterprise Kernel (UEK) ／ The Unbreakable Enterprise Kernel (UEK) is a Linux kernel built by Oracle and supported via Oracle Linux Support. Its focus is performance, stability, and minimal backports by tracking the mainline source code as closely as is practical. UEK is well-tested and used to run Oracle's Engineered Systems, Oracle Cloud Infrastructure, and large-scale enterprise deployments for Oracle Linux customers. ／ This repository contains the source for the Unbreakable Enterprise Kernel",
+   "evidence_lines": [
+    1,
+    5,
+    9
+   ]
+  },
+  "fn": "oracle/linux-uek",
+  "sha": "9e5fe91bc0d8",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "52c8932d77bc": {
+  "identity": {
+   "one_liner": "开源联盟营销伙伴归因与分成支付平台，事件溯源架构",
+   "review": "OpenPartner 是一个自托管的伙伴/创作者联盟计划平台，追踪从点击到收入的完整归因链，并通过 Stripe Connect 完成分成支付。面向需要自主运营联盟计划的团队，采用事件溯源设计（原始数据不可变，归因为视图），支持四种归因模型，数据可导出为 JSON/CSV/SQL 并在新实例中恢复，MIT 许可，托管版与自托管版运行同一套代码。",
+   "highlights": [
+    "实现 click→signup→revenue 的多会话、跨设备归因，支持 last_click/first_click/linear/position 四种可从原始表重算的归因模型",
+    "基于事件溯源：原始数据不可变，归因结果为派生视图",
+    "提供按表的 JSON + CSV + SQL 导出，支持经 /import 或 psql 恢复到自托管实例"
+   ],
+   "use_cases": [
+    "自托管运营创作者/联盟伙伴计划并跟踪收入归因",
+    "需要将归因与佣金账本数据完整导出迁移的场景",
+    "通过 SDK 与 REST API 将伙伴管理集成到现有产品"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql`",
+     "lines": [
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用数据库存储归因与账本数据的联盟营销应用，psql 恢复实例数据表明其后端为 PostgreSQL",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；托管托管版为付费服务，核心代码开源于本仓库",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql` ／ Self-hosted is the GitHub repo you're reading. Hosted tiers run the same code on OpenPartner infra. Full pricing details: openpartner.dev/pricing. ／ - `packages/db` — shared Knex migrations and TypeScript types",
+   "evidence_lines": [
+    114,
+    36,
+    73
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "getcoherence/openpartner",
+  "sha": "52c8932d77bc",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

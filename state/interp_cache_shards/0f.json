@@ -9548,5 +9548,140 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "42ab3d4c54cb": {
+  "identity": {
+   "one_liner": ".NET 内嵌持久化文档存储数据库，无服务器、单 DLL",
+   "review": "Stellar.FastDB 是面向 .NET（8/9/10）的内嵌文档/键值存储数据库，通过 NuGet 分发，API 类似 ConcurrentDictionary 并支持 async/await 与 LINQ 查询。提供多种持久化模式、后台压缩、LZ4 压缩与 AES 加密。适合游戏服务器、桌面应用等单进程内嵌场景，不支持跨进程共享连接，每个集合存储在独立文件。",
+   "highlights": [
+    "内嵌无服务器架构，提供类 .NET Dictionary 的线程安全 API，支持并发读写与 LINQ 查询",
+    "支持 Flushed/Synced/Buffered 三种持久化模式，带块校验与后台空间回收（compaction）",
+    "支持 JSON/MessagePack 序列化格式、LZ4 压缩与 AES 加密"
+   ],
+   "use_cases": [
+    "游戏服务器或桌面应用的内嵌持久化数据存储",
+    "需要高并发读写、单进程内运行的键值/文档存储",
+    "对存储体积敏感、可配置序列化契约的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Insert 10,000 | SQLite | 687 | 444 KB | ／ Delete 10,000 | SQLite | 697 | 444 KB | ／ Upsert 10,000 | SQLite | 679 | 444 KB |",
+     "lines": [
+      51,
+      59,
+      67
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "自身是数据库存储引擎，README 未声明依赖其他数据库存数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Stellar.FastDB - High Performance Embedded Storage for C# (.NET) ／ - Serverless, embedded document storage. ／ - Schema-less NoSQL storage that adapts to changes.",
+   "evidence_lines": [
+    1,
+    8,
+    15
+   ]
+  },
+  "fn": "stonstad/Stellar.FastDB",
+  "sha": "42ab3d4c54cb",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f7fa485f2785": {
+  "identity": {
+   "one_liner": "自托管家庭安全应用，提供位置共享、到达提醒与SOS，基于Postgres",
+   "review": "Hearth 是一个自托管的家庭安全系统，包含运行于 Docker 的 API 服务器（Fastify + Drizzle + Postgres）以及 iOS/Android 客户端（Expo/React Native），提供实时地图、地点到达提醒、行程记录、SOS 与碰撞警报等功能。数据存储在用户自己的 Postgres 服务器上。适合希望自行掌控位置数据的家庭；README 提示尚未经独立安全审计，应用商店版本仍在审核中，需自行构建客户端或通过 TLS 代理访问。",
+   "highlights": [
+    "提供实时位置共享、地点到达/离开提醒、行程记录、SOS/check-in 与可选碰撞警报功能",
+    "API 服务器以 Docker 镜像（amd64/arm64）发布，通过 docker compose 部署，数据存于 Postgres 14+",
+    "支持按圈子设置精确、近似（750 m）或暂停的位置共享粒度，并提供数据导出与历史擦除功能"
+   ],
+   "use_cases": [
+    "家庭自托管位置共享与到达提醒服务",
+    "在自有服务器上运行 SOS/碰撞警报等安全功能，替代商业托管方案",
+    "需自行掌控位置数据存储、导出与删除的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres 14+ ／ It's two pieces: an API server that runs in Docker next to Postgres, and an iOS ／ POSTGRES_PASSWORD=$(openssl rand -hex 24)",
+     "lines": [
+      13,
+      31,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Hearth 是使用 Postgres 存储数据的自托管应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "It's two pieces: an API server that runs in Docker next to Postgres, and an iOS ／ server/            Fastify 5, Drizzle, Postgres. The whole API.",
+   "evidence_lines": [
+    31,
+    165
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Qureshi-DH/hearth",
+  "sha": "f7fa485f2785",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

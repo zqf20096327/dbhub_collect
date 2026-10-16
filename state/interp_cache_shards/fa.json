@@ -9959,5 +9959,71 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fe94de39d389": {
+  "identity": {
+   "one_liner": "1950–2026年F1赛事记录，构建为单一可查询SQLite数据库",
+   "review": "该项目将1950年以来的F1世界锦标赛数据（比赛、参赛、排位赛、积分榜）整理为一个规范化、可查询的 SQLite 数据库，并在每次构建时与独立来源交叉核对，每行记录带置信度标注，来源分歧保留在记录中。面向 F1 数据分析者与开放数据使用者，通过 make 构建并用 ./f1 命令行工具查询。数据许可为 CC BY-SA 4.0 等多重条款。",
+   "highlights": [
+    "提供包含53张表、43个视图、177,485行的单一SQLite数据库文件 f1.db，及JSON/Parquet导出",
+    "每次构建从数据源重建并与独立来源交叉核对，每行记录携带 confidence 置信度字段，分歧记录在案",
+    "无依赖构建：除一个加载器外全部使用 Python 3.9+ 标准库，make all 完成重建、校验与导出"
+   ],
+   "use_cases": [
+    "以SQL查询F1历史赛事、参赛、排位与积分数据",
+    "需要带来源核对与置信度标注的体育开放数据研究",
+    "基于JSON/Parquet导出进行下游数据分析或可视化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "to run — as one normalised, queryable SQLite database. It is rebuilt from ／ |`f1.db`|The SQLite database. 53 tables, 43 views, 177,485 rows. This is the artefact.| ／ Or hit it directly — it's a plain SQLite file:",
+     "lines": [
+      6,
+      44,
+      257
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是以SQLite存储数据的F1数据集应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：数据为 CC BY-SA 4.0（自写/授权列为 CC BY 4.0，f1-facts.db 整体 CC BY 4.0），代码另有 LICENSE",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "to run — as one normalised, queryable SQLite database. It is rebuilt from ／ |`f1.db`|The SQLite database. 53 tables, 43 views, 177,485 rows. This is the artefact.|",
+   "evidence_lines": [
+    6,
+    44
+   ]
+  },
+  "fn": "Alex-Farley/formula-1-data",
+  "sha": "fe94de39d389",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

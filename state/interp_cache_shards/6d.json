@@ -9526,5 +9526,74 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a942f38df4c7": {
+  "identity": {
+   "one_liner": "基于 pi-durable 的 Telegram 常驻 AI 代理守护进程，历史存 SQLite",
+   "review": "一个部署在 Linux 服务器上的守护进程，通过长轮询 Telegram Bot API 接收消息，运行 pi 编码代理并执行 bash/读写文件等工具，回复发回 Telegram；每个授权私聊对应一个持久会话，状态存储于 SQLite，崩溃或重启后可从断点恢复。面向想在服务器上拥有常驻个人 AI 代理的用户，需 Node.js 22.19+ 并以 systemd 用户服务运行。",
+   "highlights": [
+    "以 systemd 用户服务常驻运行，崩溃或重启后从持久化书签恢复执行，消息排队依次处理",
+    "提供插件机制，可启用网页搜索、MCP 服务器连接、技能、助手代理与定时任务",
+    "仅响应授权的 Telegram 账号，会话与文件保存在用户自己的服务器上"
+   ],
+   "use_cases": [
+    "从手机 Telegram 远程检查和管理个人服务器（排查磁盘、站点故障等）",
+    "发送照片、PDF 或语音让代理读取并返回结果文件",
+    "需要长时间运行、中断后可恢复的代理任务处理"
+   ],
+   "use_cases2": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools:",
+     "lines": [
+      167
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该代理应用的会话存储，README 描述其为 Telegram 上的 AI 代理应用而非数据库服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A daemon on pi-durable (`@earendil-works/pi-durable`) ／ that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools: ／ `bash`, `read`, `write`, `edit` and `telegram_send_file`. It shares pi's login and runs as a systemd user service on",
+   "evidence_lines": [
+    166,
+    167,
+    168
+   ]
+  },
+  "fn": "smixs/pi-durable-telegram",
+  "sha": "a942f38df4c7",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

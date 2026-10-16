@@ -10014,5 +10014,138 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0d48c9f50e61": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的开源上下文服务，跨会话持久化记忆与交接",
+   "review": "PowerContext 是一个为 AI Agent 提供持久上下文的开源服务，将决策、约束、证据等持久化为可版本化的 Artifact，跨会话、跨 Agent、跨人复用。提供 Server、CLI、Dashboard、MCP/HTTP 接口和 Python 客户端，支持 Basic（无模型 API）与 Full（需生成与嵌入 API 凭据）两种记忆模式，存储可选 SQLite 或嵌入式 seekdb。适用于多 Agent 协作与任务交接场景。",
+   "highlights": [
+    "提供 Memory、Topic Memory、Handoff、Experience、Skill 服务，以版本化 Artifact 存储，支持生命周期管理与审查收件箱",
+    "提供 HTTP/MCP 接口、Python 客户端、CLI、Dashboard 与 Agent 插件（Codex、Claude Code 等）",
+    "Basic memory 模式无需模型 API 即可显式保存与检索；附带 22 个中文 Jupyter 教程"
+   ],
+   "use_cases": [
+    "为多 Agent 会话持久化项目决策与约束，实现跨会话/跨 Agent 上下文续接",
+    "记录任务交接（Work Contract → Prepared Handoff → Acknowledgement → Task Outcome）供后续接管",
+    "通过审查收件箱沉淀并复用经过审核的 Experience/Skill"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The wizard asks about storage, local or remote usage, memory capabilities, Dashboard/access, and Agent connections. SQLite is the simplest first storage choice; choose embedded seekdb only when you need it and can approve its dependency install.",
+     "lines": [
+      47
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 表明它是面向 AI Agent 的上下文服务，数据库（SQLite/seekdb）仅作为可选存储后端被提及，未表明为数据库生态服务或仅以数据库为数据存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**PowerContext is an open-source context service for AI agents.** It keeps the durable part of your work — decisions, ／ |Builtin runtime|Memory, Handoff, Experience, and Skill services, scheduling, inference, and supported storage backends|Running the standard local Server| ／ |Server and integrations|HTTP/MCP, Python Client, CLI, Dashboard, and Agent plugins|Connecting an Agent or application|",
+   "evidence_lines": [
+    130,
+    139,
+    140
+   ]
+  },
+  "fn": "oceanbase/powercontext",
+  "sha": "0d48c9f50e61",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b50942a0c59c": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue的产品售后服务管理系统",
+   "review": "一套前后端分离的产品售后维修管理系统，覆盖工单流转、在线预约报修、维修跟踪、支付宝缴费与评价管理，含管理员、客户、维修员三类角色端。使用MySQL存储数据、Redis缓存、Shiro权限控制。主要面向售后维修类业务场景（如家电/数码维修平台），README显示为毕业设计类项目，部署需付费联系作者获取资源。",
+   "highlights": [
+    "提供管理员、客户、维修员三角色分离的功能端，覆盖工单创建、派单、维修、验收全流程",
+    "集成支付宝支付并自动生成缴费记录，支持评价评分体系",
+    "后端采用SpringBoot+MybatisPlus+MySQL+Redis，前端采用Vue+Antd"
+   ],
+   "use_cases": [
+    "家电维修售后服务平台",
+    "数码产品售后维修系统",
+    "企业设备维护管理系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用MySQL存储业务数据，本身是售后服务应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向产品售后维修场景的在线服务管理系统，采用前后端分离架构，覆盖管理员、客户与维修员三类角色。系统围绕\"工单管理、维修预约、维修信息、缴费记录、评价管理、公告通知、支付宝支付\"等核心业务设计，支持客户在线提交售后申请、查看维修进度、在线缴费与评价服务，维修员接收任务并更新维修状态，管理员完成全局运营管控、工单调度、用户与员工管理及服务质量监督，适用于家电维修平台、数码产品售后系统、汽车4S店售后管理、家电品牌售后服务平台及企业设备维护管理系统。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/after_sale_cos",
+  "sha": "b50942a0c59c",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

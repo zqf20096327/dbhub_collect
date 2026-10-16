@@ -8930,5 +8930,206 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bd9e50bee442": {
+  "identity": {
+   "one_liner": "自托管个人联系人管理（CRM）应用，含导入去重、富化与提醒跟踪",
+   "review": "Contrack 是一个自托管的联系人管理应用，按导入→去重→富化→跟踪四步流程组织功能，提供命令面板、地图选择、自动备份和 MCP 接口以连接 Claude、Cursor 等 AI 客户端。面向个人、家庭或小团队的私有通讯录管理场景，通过 Docker 部署，数据保存在本地，AI 功能可选且用户可自带模型。",
+   "highlights": [
+    "提供导入、去重、富化、跟踪四步联系人管理流程，支持 90 天撤销",
+    "提供 MCP/API 接口，可连接 Claude、ChatGPT、Cursor 等 AI 客户端，支持只读访问",
+    "支持一键或按计划的完整性校验数据库快照备份，数据存储在本地"
+   ],
+   "use_cases": [
+    "个人或家庭自托管联系人管理与关系维护",
+    "将分散在 Apple、Google、LinkedIn、Facebook 等处的通讯录导入并去重合并",
+    "通过 AI 助手查询联系人上下文并自动记录笔记与提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为使用数据库存储联系人数据的自托管联系人管理应用，而非为某数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Contrack solves all of these by being an all-in-one, self-hosted contact management app that a follows a simple 4 step process: ／ Backups: verified snapshots of your database ／ Settings, MCP and API: connecting Claude, Cursor and other clients",
+   "evidence_lines": [
+    18,
+    62,
+    66
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "arvarik/contrack",
+  "sha": "bd9e50bee442",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "18db8de579ec": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue的食品工厂MES+进销存制造管理系统",
+   "review": "一套面向食品加工企业的前后端分离制造执行与进销存系统，覆盖生产流程、工艺路线、原料批次追溯、库房、订单与支付等模块，含管理员/员工/用户三角色。后端采用SpringBoot+MybatisPlus，数据存储依赖MySQL与Redis，主要面向食品加工厂管理及教学演示场景。",
+   "highlights": [
+    "实现管理员、员工、用户三角色权限体系与四阶段制造流程管理",
+    "包含原材料批次追溯、多库房管理、库存预警与出库审批功能",
+    "提供订单支付、数据统计看板等模块，前端采用Vue+Antd"
+   ],
+   "use_cases": [
+    "中小型食品加工厂的生产与库存管理",
+    "食品分装/预制菜工厂的批次追溯与订单协同",
+    "教学实训或毕业设计参考"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明系统以MySQL作为数据库存储业务数据，MySQL仅为该应用的数据存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套面向食品加工企业的轻量级 MES + 进销存一体化制造管理系统，采用前后端分离架构，覆盖**管理员、员工、用户（客户）**三类角色。系统围绕\"食品制造流程、工艺路线、原材料批次、库房管理、出库审批、订单管理、在线支付、设备维修、数据统计\"等核心业务设计，支持从初级产品加工、二次加工、食品制造、食品分装全流程管理，实现原料到成品的批次追溯、工单执行、库存预警、设备维保、订单履约、支付对账的全链路数字化管控，适用于中小型食品加工厂、预制菜工厂、烘焙工厂、肉制品加工厂、饮料分装厂等场景。 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/factory_execution_public_cos",
+  "sha": "18db8de579ec",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "db1e29d60cf4": {
+  "identity": {
+   "one_liner": "自托管项目管理工具，基于 Angular/Fastify/PostgreSQL，支持实时协作与 MCP",
+   "review": "Kanera 是一个项目管理应用，提供看板、任务、笔记、自动化、实时协作和 REST API，可用托管服务或自托管部署。技术栈为 Angular 22、Fastify 5、Socket.IO 4、PostgreSQL 与 Drizzle ORM。对数据库生态而言它是使用 PostgreSQL 存数据的应用，同时内置 MCP 服务器和 CLI 供 AI 代理操作其接口。",
+   "highlights": [
+    "提供看板、表格、日历等多种视图及工作区共享列表、标签、自定义字段与触发式自动化",
+    "内置 MCP 服务器、CLI 与 TypeScript SDK，供 AI 代理和脚本读写任务数据",
+    "支持实时协作、通知集成（Slack/Discord/Telegram/Zulip/ntfy/Gotify）和 REST API/webhooks"
+   ],
+   "use_cases": [
+    "团队跨项目、跨客户的任务与工作流管理",
+    "将 AI 代理接入任务看板，跟踪代理执行进度与结果",
+    "自托管部署，通过 REST API 与 MCP 与其他工具集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Kanera is a pnpm monorepo built with Angular 22, Fastify 5, Socket.IO 4, PostgreSQL 18, Drizzle ORM, and Valkey.",
+     "lines": [
+      204
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明仓库技术栈使用 PostgreSQL 18 存储数据，是使用数据库的应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Automate and integrate.** Handle repetitive updates with trigger-based automations, post card activity into Slack, Discord, Telegram, or Zulip, and connect other tools through the REST API, webhooks, and MCP server. ／ |**MCP server**|Claude, ChatGPT, Codex, GitHub Copilot, Cursor, Gemini CLI, OpenCode, and other MCP clients, connected with OAuth|`https://mcp.kanera.app/mcp` · MCP setup guides|",
+   "evidence_lines": [
+    24,
+    81
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "happendev/Kanera",
+  "sha": "db1e29d60cf4",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

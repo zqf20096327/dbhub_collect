@@ -10424,5 +10424,221 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bcc4187a61fb": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的本地持久化记忆 MCP 服务器",
+   "review": "Cortex 是一个跨平台 MCP 服务器，为 Claude Code、Codex、Gemini CLI 等本地 MCP 宿主提供跨会话记忆工具，包含写入查重、来源分级、更正链、预测校准与衰减巩固机制。数据默认存于本地 SQLite 文件，可选配置远程 PostgreSQL + pgvector。适用于希望让编码代理保留项目决策与上下文、且要求数据留在本机的用户。",
+   "highlights": [
+    "提供 57 个记忆工具和 11 个生命周期钩子，支持 Claude Code、Codex 等多个宿主共享记忆",
+    "默认使用本地 SQLite 存储，可选 PostgreSQL + pgvector 后端",
+    "检索回路不含 LLM 调用，含新颖性检查、引用可解析性分级与预测校准评分"
+   ],
+   "use_cases": [
+    "在多个会话间保留编码代理的项目决策与修复上下文",
+    "Claude Code 与 Codex 切换使用时共享同一份项目记忆",
+    "对代理记忆进行来源可验证性与预测校准的本地质量管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Sovereign is what it is today.** Everything runs on your machine: a local SQLite file by ／ SQLite store. No PostgreSQL required. ／ uv tool install \"hypermnesia-mcp[sqlite]\"",
+     "lines": [
+      16,
+      65,
+      70
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "default, or PostgreSQL + pgvector if you prefer. No LLM in the retrieval loop, and nothing ／ on first use. Optional integrations, remote PostgreSQL, and OTLP telemetry use the network only ／ An existing PostgreSQL setup is kept: a configured `database_url` option (or `DATABASE_URL`),",
+     "lines": [
+      17,
+      102,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将 SQLite/PostgreSQL 用作自身记忆数据的存储后端，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Sovereign is what it is today.** Everything runs on your machine: a local SQLite file by ／ default, or PostgreSQL + pgvector if you prefer. No LLM in the retrieval loop, and nothing ／ on first use. Optional integrations, remote PostgreSQL, and OTLP telemetry use the network only",
+   "evidence_lines": [
+    16,
+    17,
+    102
+   ]
+  },
+  "fn": "cdeust/Cortex",
+  "sha": "bcc4187a61fb",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "111c2d1b044e": {
+  "identity": {
+   "one_liner": "开源的 TV Time 替代影视追踪应用，本地 SQLite 存储数据",
+   "review": "一款隐私优先的影视剧集追踪移动应用（React Native/Expo），导入 TV Time 的 GDPR 导出数据后在手机本地重建观看历史，数据存于设备端数据库，无需账户即可使用，可选社区功能与付费同步层。给从 TV Time 迁移的用户使用。运行需 npm install 与 npx expo start。",
+   "highlights": [
+    "导入 TV Time GDPR 导出（剧集、日期、评分、情绪、列表）并本地重建历史",
+    "支持 iOS 和 Android，本地数据为唯一事实来源，追踪功能无需账户",
+    "提供导出功能，可随时以 TV Time 原格式导出全部数据"
+   ],
+   "use_cases": [
+    "从 TV Time 迁移观看记录",
+    "本地优先的影视剧集追踪与管理",
+    "自建社区服务器（OpenTv-backend，AGPL-3.0）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "arguments, so a counter meant to force a re-read of SQLite is deleted silently —",
+     "lines": [
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用设备端 SQLite 存储数据的移动应用，不面向数据库生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**The database on your phone is the source of truth.** The tracker needs no ／ arguments, so a counter meant to force a re-read of SQLite is deleted silently —",
+   "evidence_lines": [
+    22,
+    88
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "theopentv/opentv-app",
+  "sha": "111c2d1b044e",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fd94097c6e88": {
+  "identity": {
+   "one_liner": "Telegram 聊天/论坛导出工具，将消息写入 SQLite 并按话题分文件夹",
+   "review": "一个 Python 编写的 Telegram 聊天与论坛导出 CLI，基于 Telethon，通过多账号并行和 Telegram 的 takeout 导出模式批量下载消息，将数据存入 SQLite、JSONL、文本文件，并可生成离线 HTML 阅读页；支持断点续传、按日期/作者/类型过滤和增量更新，供需要备份或离线检索 Telegram 聊天记录的个人用户使用。",
+   "highlights": [
+    "支持将整个聊天或论坛导出到 SQLite，按话题生成文件夹，每 100 条消息提交一次进度，中断后可续传",
+    "支持多账号并行下载与 takeout 导出模式，可通过交互模式或命令行参数运行",
+    "生成 index.html 离线阅读页、messages.txt 和 messages.jsonl，并支持日期/作者/消息类型过滤"
+   ],
+   "use_cases": [
+    "批量备份 Telegram 群组或频道的完整消息记录",
+    "论坛群组按话题归档并在浏览器中离线检索",
+    "通过脚本或 cron 定期增量更新已导出的聊天"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: a ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages and append them to the files, so a repeat run of a large chat takes seconds. When a forum topic is renamed, its folder is  ／ - `index.html` to read the dump in a browser, offline; `messages.txt` for reading in an editor, `messages.jsonl` for scripts, and the SQLite database for queries.",
+     "lines": [
+      12,
+      27,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个导出 Telegram 聊天的终端应用，SQLite 是其存储导出数据的组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: about 4× faster than Telegram Desktop's own export, and a whole forum in one pass instead of topic by topic. ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages and append them to the files, so a repeat run of a large chat takes seconds. When a forum topic is renamed, its folder is renamed too.",
+   "evidence_lines": [
+    12,
+    27
+   ]
+  },
+  "fn": "renkagod/tg-chat-dump",
+  "sha": "fd94097c6e88",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8623,5 +8623,72 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f0b07b8c6869": {
+  "identity": {
+   "one_liner": "MariaDB 基金会官方 CI 的 Buildbot 配置仓库",
+   "review": "该仓库包含 MariaDB 基金会 CI 系统的配置，基于 Buildbot 的一个 fork 运行，用于构建和测试 MariaDB Server、Galera 包及 C/C++/ODBC 连接器。多个 master 共享一个数据库并通过 Crossbar 协调，构建在 Docker、宿主进程和 libvirt 虚拟机三类 worker 上运行。面向维护该 CI 的运维者与贡献者，需用 uv、Docker/Podman 进行本地开发。",
+   "highlights": [
+    "构建并测试 MariaDB Server、Galera 包及 C/C++/ODBC 连接器",
+    "多 master 架构，共享一个数据库并通过 Crossbar 消息路由协调",
+    "支持 Docker latent、非 latent 进程和 libvirt 虚拟机三类构建 worker"
+   ],
+   "use_cases": [
+    "为 MariaDB Server 各平台运行构建、安装与升级测试",
+    "记录和交叉引用 MTR 测试失败，便于查询历史构建结果",
+    "为 Galera 包和 Foundry 插件提供 CI 构建"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "This repository is the configuration of the MariaDB Foundation's CI. It runs on a fork of Buildbot (vladbogo/buildbot, branch `grid`) and builds and tests: ／ - MariaDB Server, including the packages that go into a release;",
+     "lines": [
+      19,
+      21
+     ]
+    }
+   ],
+   "dbs": [
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是 MariaDB 基金会 CI 的配置，为构建和测试 MariaDB Server 服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "MariaDB"
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository is the configuration of the MariaDB Foundation's CI. It runs on a fork of Buildbot (vladbogo/buildbot, branch `grid`) and builds and tests: ／ - MariaDB Server, including the packages that go into a release; ／ The masters share one database and coordinate through a Crossbar message router. The builds, and their load, are spread over the masters.",
+   "evidence_lines": [
+    19,
+    21,
+    88
+   ]
+  },
+  "fn": "MariaDB/buildbot",
+  "sha": "f0b07b8c6869",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

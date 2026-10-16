@@ -8344,5 +8344,71 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fb53dace96c8": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，允许非超级用户使用高级特性",
+   "review": "supautils 是一个 PostgreSQL 加载库扩展，通过特权角色代理机制，让非超级用户可创建事件触发器、publication、FDW 和扩展，并提供保留角色保护、扩展版本限制等权限控制。面向无法向最终用户授予 SUPERUSER 权限的云托管部署场景，通过 postgresql.conf 配置管理，不向数据库添加表或函数。",
+   "highlights": [
+    "允许特权角色创建 publication、FDW、事件触发器和扩展，无需 SUPERUSER",
+    "提供保留角色保护和默认危险角色（如 pg_read_server_files）的 GRANT 限制",
+    "完全通过 postgresql.conf 配置，不向数据库添加表、函数或安全标签"
+   ],
+   "use_cases": [
+    "云托管 PostgreSQL 服务中向租户开放高级功能而不授予 SUPERUSER",
+    "多租户环境下保护管理类角色免受 CREATEROLE 用户篡改"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL version ／ Supautils is an extension that unlocks advanced Postgres features without granting SUPERUSER access. ／ Completely managed by configuration — no tables, functions, or security labels are added to your database. This makes upgrades effortless and lets you apply settings cluster-wide solely via `postgresql.conf`.",
+     "lines": [
+      4,
+      6,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 的加载库扩展，为数据库权限管理提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Supautils is an extension that unlocks advanced Postgres features without granting SUPERUSER access. ／ It's a loadable library that securely allows creating event triggers, publications, extensions to non-superusers. Built for cloud deployments where giving SUPERUSER rights to end users isn’t an option. ／ Completely managed by configuration — no tables, functions, or security labels are added to your database. This makes upgrades effortless and lets you apply settings cluster-wide solely via `postgresql.conf`.",
+   "evidence_lines": [
+    6,
+    8,
+    10
+   ]
+  },
+  "fn": "supabase/supautils",
+  "sha": "fb53dace96c8",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

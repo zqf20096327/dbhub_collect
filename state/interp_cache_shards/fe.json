@@ -9880,5 +9880,89 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b43f6ca797dd": {
+  "identity": {
+   "one_liner": "Go 编写的开源业务平台，YAML+DSL 配置，数据存于 SQLite/PostgreSQL",
+   "review": "OneBase 是一个用 Go 编写、面向记账类业务场景的低代码业务平台：元数据用 YAML 描述，业务逻辑用内置 DSL 编写，数据存储在 SQLite 文件或 PostgreSQL 中。提供表单/报表/寄存器等记账模型、REST API、MCP 服务器与内置 AI 助手，适合需要构建ERP/记账类应用的开发者和业务用户。",
+   "highlights": [
+    "单二进制运行，配置以 YAML+DSL 描述，同一配置可运行于 SQLite 或 PostgreSQL",
+    "提供 REST API 与 MCP 服务器，支持 onebase check 编译执行查询校验配置",
+    "内置角色权限、记录级访问控制、双因素认证与 AI 助手"
+   ],
+   "use_cases": [
+    "构建贸易/库存/会计等记账类业务应用",
+    "通过 MCP 与 AI 代理编写和校验业务配置",
+    "以单文件 SQLite 方式交付自包含信息库"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ PostgreSQL, запуск, конфигуратор, остановка: ／ |Информационная база|SQLite-файл или PostgreSQL|Прикладные и служебные таблицы; при `config_source: database` — также `_onebase_config`|",
+     "lines": [
+      5,
+      22,
+      48,
+      202
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ onebase dev --project ./склад --sqlite ./склад.db --open ／ самодостаточна, её можно отдать как один файл SQLite.",
+     "lines": [
+      5,
+      22,
+      126,
+      156
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是运行时/DSL 平台，为在其上构建的业务应用提供机制，SQLite/PostgreSQL 作为其数据存储层被明确适配。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ - **Интеграции** — REST API с английскими именами полей, MCP-сервер, ／ |Платформа|`onebase.exe`|Go-бинарник: рантайм, DSL, REST API, лаунчер|",
+   "evidence_lines": [
+    5,
+    90,
+    200
+   ]
+  },
+  "fn": "ivanarama/onebase",
+  "sha": "b43f6ca797dd",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

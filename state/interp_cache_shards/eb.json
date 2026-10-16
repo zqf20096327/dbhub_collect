@@ -9545,5 +9545,74 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6ef22843042c": {
+  "identity": {
+   "one_liner": "AI 编码助手的跨会话记忆层，SQLite FTS5 检索",
+   "review": "Varve 为 Codex、Claude Code 等 AI 编码框架提供跨会话记忆：环境/状态/历史三层结构，状态快照只追加注入到请求尾部以保持 prompt 缓存，历史通过 SQLite FTS5 本地全文检索并可回溯原文行号；零 LLM 调用、无第三方依赖，依赖 Windows + PowerShell 7 + Python 3.10+，Claude Code 侧历史检索尚未适配。",
+   "highlights": [
+    "三层记忆结构（环境/状态/历史），状态注入只追加在请求尾部以保持 prompt 缓存",
+    "基于 SQLite FTS5 的本地全文检索，索引随写入实时同步，支持关键词、主题时间线与 FTS5 原生语法",
+    "零 LLM 调用、零第三方依赖（Python 标准库 + PowerShell 7），数据全部本地存储，库可随时重建"
+   ],
+   "use_cases": [
+    "AI 编码助手跨会话保留项目环境与任务状态",
+    "在本地会话日志中按关键词/主题回溯历史对话与轨迹",
+    "多项目并发推进时通过全局状态卡共享上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**给 AI 编码助手（Codex 及后续框架）的跨会话记忆层**——三层结构（环境 / 状态 / 历史）、**只追加的注入**（不破坏 prompt 缓存）、**SQLite 全文检索**、**全局状态卡**（跨工作区 / 跨框架，只增不减的快照流）。 ／ |找历史靠记关键词|`rg` 硬搜|SQLite FTS5 全文索引 + 多变体检索 + **可回溯到原文行号**| ／ |库大小|97.6 MB（本地 SQLite，可随时重建）|",
+     "lines": [
+      8,
+      25,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为本地存储引擎保存会话记忆数据，本身不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**给 AI 编码助手（Codex 及后续框架）的跨会话记忆层**——三层结构（环境 / 状态 / 历史）、**只追加的注入**（不破坏 prompt 缓存）、**SQLite 全文检索**、**全局状态卡**（跨工作区 / 跨框架，只增不减的快照流）。 ／ 零 LLM 调用、零第三方依赖（Python 标准库 + PowerShell 7）。 ／ - 数据全部落在本机：会话日志（`~/.codex/sessions/`）**只读**，派生的 SQLite 库与状态卡都在 `<VARVE_DATA>` 下，**不上传任何地方**。",
+   "evidence_lines": [
+    8,
+    10,
+    162
+   ]
+  },
+  "fn": "rittenpoems-beep/varve",
+  "sha": "6ef22843042c",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

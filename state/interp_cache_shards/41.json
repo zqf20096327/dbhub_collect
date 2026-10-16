@@ -7827,5 +7827,421 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5bf4ab20f002": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions 临时 runner 集群控制器",
+   "review": "Zoomies 是一个自托管的 GitHub Actions runner 集群控制器：监听 workflow_job webhook，为每个任务启动一次性临时 runner，任务结束即销毁，通过 GitHub App 认证生成 JIT 注册令牌，并提供实时 Web UI 与跨主机 agent 管理。面向需要弹性 CI runner 容量的团队与 home lab 用户，状态存储使用内嵌 SQLite，无需 Kubernetes 或独立数据库服务器。",
+   "highlights": [
+    "为每个排队的任务启动一个全新 runner，任务结束后销毁，默认临时运行",
+    "通过 workflow_job webhook 事件驱动伸缩，支持一控制器多 agent、多操作系统镜像",
+    "使用 SQLite 存储状态，提供 Prometheus 指标、结构化日志与审计记录"
+   ],
+   "use_cases": [
+    "为 GitHub 组织或仓库提供按需弹性的自托管 runner 集群",
+    "将私有内网机器（NAT 后）接入 GitHub Actions runner 池",
+    "单机或少量主机上运行无需 Kubernetes 的 runner 管理平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      16,
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库使用内嵌 SQLite 存储自身状态，是为 GitHub Actions 服务的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You point Zoomies at a GitHub organisation, or at a repository on a personal ／ Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+   "evidence_lines": [
+    66,
+    16,
+    101
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "5bf4ab20f002",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3236df716453": {
+  "identity": {
+   "one_liner": "华为云官方 AI 代理插件，提供技能、MCP 工具与安全护栏",
+   "review": "该项目为 AI 编码代理提供华为云集成，通过 npm 安装到 OpenCode、Codex、CodeArts Agent 等多个代理目标，提供云知识技能、KooCLI 工具链、MCP 服务器（支持 stdio 与远程 HTTP）及拦截高危命令的安全钩子。面向在华为云上构建、部署和运维资源的 AI 代理使用者；README 提及的 GaussDB 等属于其覆盖的云服务清单之一，并非专门的数据库工具。",
+   "highlights": [
+    "提供 MCP 服务器，支持 stdio 和 Streamable HTTP (127.0.0.1:9528) 两种接入方式",
+    "内置安全钩子，拦截读取凭据文件、导出环境变量等高危命令并弹出确认",
+    "支持通过 npx 安装到 OpenCode、Codex、DSH、Hermes 等多种代理目标"
+   ],
+   "use_cases": [
+    "让 AI 编码代理通过 KooCLI 操作华为云资源",
+    "为任意支持 MCP 的代理注册华为云工具集",
+    "对代理执行的终端命令做安全拦截与确认"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "mention",
+     "quote": "- **Guided cloud operations** — agents get step-by-step guidance for 20+ commonly used Huawei Cloud services (ECS, OBS, VPC, RDS, GaussDB, FunctionGraph, APIG, CCE, and more) ／ ECS, OBS, VPC, IAM, RDS, GaussDB, FunctionGraph, APIG, CCE, SMN/DMS, ModelArts, Cloud Eye, CTS, DEW, Billing, CBR, WAF/AAD, DDS/DCS, Deployment, and Getting Started guides.",
+     "lines": [
+      388,
+      396
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为 AI 代理提供操作云服务的 CLI 与 MCP 工具集，属于服务云/数据库生态的工具组件而非用库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Help AI coding agents use Huawei Cloud safely and accurately — a single integration that gives agents cloud knowledge, CLI tooling, and safety guardrails. ／ Any agent that supports MCP can use the standard config: ／ …（5 行代码略）",
+   "evidence_lines": [
+    11,
+    246,
+    252
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "huaweicloud/huaweicloud-devkit",
+  "sha": "3236df716453",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "62550c46859a": {
+  "identity": {
+   "one_liner": "ASP.NET Core 自托管个人与业务管理 Web 应用，使用 PostgreSQL 存储数据",
+   "review": "Maroik 是一个自托管的 ASP.NET Core MVC 应用，提供个人财务管理、日历、公告板和基于角色的用户管理。数据存储于 PostgreSQL，通过 EF Core 仓储层访问，架构采用 DDD + Clean Architecture，测试使用 Testcontainers 运行真实 PostgreSQL 与 RabbitMQ。适合需要自建财务与内容管理站点的个人或小团队。",
+   "highlights": [
+    "提供个人财务、日历、公告板和基于角色的用户管理功能",
+    "采用 DDD + Clean Architecture，通过 NetArchTest 架构测试约束分层依赖",
+    "以 Docker Compose 运行各服务，上传文件经 ClamAV 扫描，邮件经 RabbitMQ 队列发送"
+   ],
+   "use_cases": [
+    "自托管个人或小企业的收支记录与财务报表",
+    "共享日历与公告板的内部站点",
+    "带角色权限管理的自建内容站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 17",
+     "lines": [
+      133
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储数据的 Web 应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, calendar management, bulletin boards, and role-based user management. ／ - PostgreSQL 17 ／ Every service runs as a container under Docker Compose. Uploads are scanned by ClamAV before they are stored, the",
+   "evidence_lines": [
+    6,
+    133,
+    112
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik",
+  "sha": "62550c46859a",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f1ef76add731": {
+  "identity": {
+   "one_liner": "自托管桌面 ERP 应用，本地运行并内嵌 PostgreSQL 存储",
+   "review": "Celerp 是一个可下载、自托管的企业运营管理软件，涵盖库存、开票、采购、制造、复式记账会计和 CRM 等模块，面向个人创业者到企业的办公场景。它以桌面应用形式在本机运行，自动捆绑或复用现有 PostgreSQL 服务器存数据，通过 Python 模块 API 支持扩展，并提供 REST API 与 CSV 导入导出。",
+   "highlights": [
+    "提供库存、发票、复式记账、制造、CRM 等业务模块，可经 Settings > Modules 开关",
+    "使用事件溯源账本，内嵌 PostgreSQL 作为主数据库，支持指向现有服务器（--db-url）",
+    "提供内置 REST API 和模块化扩展机制，模块为放入 modules/ 目录的 Python 包"
+   ],
+   "use_cases": [
+    "中小企业自托管管理库存、开票与财务，无需云服务",
+    "团队在局域网内共享运行本地服务器访问同一套业务系统",
+    "开发者基于模块 API 构建自定义业务模块"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "No PostgreSQL to install: `celerp init` uses your existing PostgreSQL server if one is ／ service. Point it at a specific server with `celerp init --db-url postgresql+asyncpg://…`. ／ - **No setup** - the desktop app bundles Postgres, runs migrations on launch, opens in your browser",
+     "lines": [
+      50,
+      52,
+      78
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- SQLite in-memory for tests - no external dependencies to run the test suite",
+     "lines": [
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统以 PostgreSQL 作为自身主数据库存储业务数据，是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "source-available 核心 + MIT 模块（README 描述 'Modular, source-available core, MIT modules'）",
+   "install": [
+    "binary",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Celerp runs on your machine and keeps its primary database local. Optional Connect features can relay remote access or send selected data to Celerp cloud services. ／ - **Python/FastAPI** backend, **FastHTML** UI, embedded **PostgreSQL**",
+   "evidence_lines": [
+    76,
+    116
+   ]
+  },
+  "fn": "celerp/celerp",
+  "sha": "f1ef76add731",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "906fba826d64": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue+MySQL的饮食健康监控管理系统",
+   "review": "一套前后端分离的饮食与运动健康管理平台，提供饮食记录、营养分析、运动打卡、食谱管理、社区论坛与敏感词过滤、数据统计等功能，含管理员与用户两端角色。使用MySQL存数据、Redis做缓存、MyBatisPlus作ORM。面向个人健康管理、校园/企业健康平台及毕业设计场景；README注明资源获取需联系作者付费并附带部署讲解服务。",
+   "highlights": [
+    "提供饮食记录、营养计算与摄入报告生成",
+    "包含管理员与用户双角色功能模块（内容管理、社区、数据统计）",
+    "内置敏感词过滤机制，支持自定义词库与DFA/Trie匹配"
+   ],
+   "use_cases": [
+    "个人健康饮食与运动管理",
+    "校园/企业健康管理平台",
+    "毕业设计/教学参考项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明平台后台使用MySQL作为数据库存储业务数据，属使用数据库的应用系统。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "非开源许可发布，资源需付费获取（附带部署讲解服务）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/dietary_health_public_cos",
+  "sha": "906fba826d64",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d103131b8ee0": {
+  "identity": {
+   "one_liner": "企业技术支持场景的 RAG 问答与受控工单 Agent 后端",
+   "review": "面向企业技术支持场景的后端服务，实现知识检索、带来源回答与拒答、工单分类与人工审批建单的完整链路，使用 Chroma 做检索、SQLite 存储数据，并以 TechQA 数据集做检索与生成评测。适合需要构建可控、可追踪知识问答与工单升级流程的团队参考或部署。",
+   "highlights": [
+    "提供 RAG 检索问答（/rag/search、/rag/ask），支持租户/类别过滤、来源返回与低相关拒答",
+    "提供受控工单 Agent，预览-确认分离，审批草稿服务端持久化且至多一次消费",
+    "内置 TechQA 语料（28,481 篇文档、910 条问答记录）的检索/生成/拒答评测框架"
+   ],
+   "use_cases": [
+    "企业内部技术支持知识库问答与证据检索",
+    "需要人工审批控制的工单自动分类与创建流程",
+    "RAG 检索、重排与融合路线的离线评测与失败归因实验"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查默认 Dense、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。",
+     "lines": [
+      184
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite、Chroma 等存储数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向**企业技术支持**场景，构建知识检索、回答 / 拒答与工单升级一体化的 **RAG + 受控工单 Agent 后端**。 ／ 真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查默认 Dense、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。",
+   "evidence_lines": [
+    5,
+    184
+   ]
+  },
+  "fn": "Air000000/Enterprise-Support-AI-Copilot-API",
+  "sha": "d103131b8ee0",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

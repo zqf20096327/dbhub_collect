@@ -9773,5 +9773,128 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ff4af0799ba0": {
+  "identity": {
+   "one_liner": "自托管的 Facebook/Instagram 社媒自动化与 CRM 应用，基于 PostgreSQL",
+   "review": "PostStack 是一个自托管的社媒管理应用，提供 Facebook、Instagram、YouTube、Telegram、Gmail 的发帖排期、私信/评论自动回复、drip 序列和联系人 CRM。面向希望自行掌控数据与成本的 solopreneur、代理机构和开发者。应用以 Docker Compose 一键启动，数据存于 PostgreSQL，自动回复规则、API 密钥限流等依赖 Postgres 支持；AI 草稿回复为可选的 PRO 功能且默认需人工审核。",
+   "highlights": [
+    "支持 Facebook、Instagram、YouTube、Telegram、Gmail 多平台的消息自动回复与收件箱管理",
+    "提供联系人 CRM、标签、drip 消息序列与 REST API（Bearer 密钥鉴权、Scalar 文档）",
+    "对 OAuth 令牌使用 AES-256-GCM 加密，限流与 JWT 会话失效由 Postgres 支持"
+   ],
+   "use_cases": [
+    "自托管替代 ManyChat 类社媒自动化服务，管理私信与评论自动回复",
+    "团队共享收件箱与联系人 CRM 运营",
+    "通过 REST API 与 n8n/Zapier 集成自定义自动化流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rate limiting** on auth endpoints (Postgres-backed) ／ - **JWT session invalidation** on logout (Postgres denylist) ／ Builds and starts everything -- PostgreSQL, the Hono web server, graphile-worker:",
+     "lines": [
+      56,
+      57,
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 PostgreSQL 作为自身数据存储（限流、会话失效、数据均存于 Postgres），属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0（source-available）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Self-hosted social media management for Facebook, Instagram, YouTube, Telegram & Gmail -- publish & schedule posts, auto-reply to DMs, comments and emails, and run drip sequences, all from one place. ／ - **One-command startup** -- `docker compose up`",
+   "evidence_lines": [
+    3,
+    50
+   ]
+  },
+  "fn": "jurczykpawel/poststack",
+  "sha": "ff4af0799ba0",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dda6a0e5ff80": {
+  "identity": {
+   "one_liner": "Android 端 TikTok 网页版第三方客户端，基于 WebView 封装",
+   "review": "TikView 是一个面向 Android 8.0+ 的非官方 TikTok 网页版客户端，加载 TikTok 网页并覆盖评论面板、订阅/推荐标签页。支持在应用内配置 HTTP/SOCKS5 代理、清理 cookies、通过系统分享打开 TikTok 链接。不使用私有 API，不含内置 VPN，代理不支持账密认证；可用性依赖 TikTok 网页版在 WebView 中的支持情况。提供 GitHub Actions 构建 APK 与本地测试脚本。",
+   "highlights": [
+    "提供 TikTok 网页版浏览、全屏视频播放与独立评论面板",
+    "支持应用内配置 HTTP/HTTPS/SOCKS5 代理及 cookies 清理",
+    "提供基于 Gradle 和 GitHub Actions 的 APK 构建流程及无 Android SDK 的 URL/代理校验测试"
+   ],
+   "use_cases": [
+    "在 Android 设备上以网页版方式浏览 TikTok 内容与评论",
+    "在 TikTok 网页访问受限的网络环境下通过自备代理访问",
+    "以调试签名的 APK 进行个人测试使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未涉及任何数据库的使用或依赖，仅为一个 WebView 客户端应用，无法判断数据库生态位",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Отдельный неофициальный клиент веб-версии TikTok для Android 8.0+. Это исходники приложения, а не модифицированный APK TikTok. ／ - Веб-версия TikTok, воспроизведение и полноэкранное видео. ／ Единственное разрешение — интернет. Cookies и адрес прокси хранятся локально; резервное копирование отключено. Нет JavaScript-моста к Android, доступа к файлам устройства, аналитики и отключения TLS-проверок. Контент и данные входа обрабатывает сайт TikTok. Используйте только доверенный прокси.",
+   "evidence_lines": [
+    3,
+    32,
+    49
+   ]
+  },
+  "fn": "din820553-debug/TikView",
+  "sha": "dda6a0e5ff80",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

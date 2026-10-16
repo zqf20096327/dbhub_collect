@@ -8914,5 +8914,339 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d26e6691e377": {
+  "identity": {
+   "one_liner": "AI 代理长期记忆运行时，Markdown 为源、SQLite 索引为缓存",
+   "review": "agent-memory 为 AI 代理提供跨会话的长期记忆：Markdown 文件作为唯一事实源，SQLite 索引仅作可重建缓存，提供本地 BM25/FTS5 检索、按路径分级读取和独立的睡眠期整理层。通过 CLI、hooks 和 stdio MCP 服务接入 Claude Code、Codex 等宿主，无需 API 密钥。当前尚无 PyPI 发布，需从源码检出安装，要求 Python 3.12+ 与 uv。",
+   "highlights": [
+    "Markdown 文件为事实源，SQLite 索引可随时删除重建（有测试保证）",
+    "提供 CLI、生命周期 hooks 与 stdio MCP 服务（memory_recall、memory_record 等调用）",
+    "三路读取：MEMORY.md 注入、BM25/FTS5 排序检索（可融合向量插件）、纯目录 ls/grep"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex CLI 等编码代理提供跨会话记忆共享",
+    "需要本地运行、无 API 密钥、可 git 管理的记忆存储",
+    "带有效性区间与按日期回溯（recall --as-of）的记忆生命周期管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "the single source of truth, the SQLite index beside them is a cache you can delete at any time, ／ Run `mem --store /path/to/store rebuild` to rebuild the SQLite cache from Markdown.",
+     "lines": [
+      7,
+      437
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为旁路缓存索引被使用，项目本身是面向 AI 代理的记忆运行时，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "the single source of truth, the SQLite index beside them is a cache you can delete at any time, ／ Requires Python 3.12 or higher and uv. There is no release on ／ Pass `--mcp` to setup when the host should also receive the `agent-memory` stdio MCP server.",
+   "evidence_lines": [
+    7,
+    122,
+    199
+   ]
+  },
+  "fn": "tigerless-labs/agent-memory",
+  "sha": "d26e6691e377",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "80e0e420eda9": {
+  "identity": {
+   "one_liner": "本地科研数据可视化 Web 应用，Next.js+FastAPI+SQLite 实现导入、质检与出版级图导出",
+   "review": "LabViz 是面向研究者、学生和教学实验室的本地数据可视化 Web 应用：导入 CSV/TSV/JSON/XLSX 表格，做数据质量检查与清洗，生成折线、散点、热图、3D 曲面等图表并进行拟合统计，导出 PNG/SVG/PDF 出版图。默认单机部署，用 SQLite 存项目元数据、本地文件存对象，仓库中保留 PostgreSQL/MinIO 适配器用于集成测试与未来共享部署。",
+   "highlights": [
+    "支持导入 CSV、TSV、TXT、JSON、XLSX 并提供缺失值、重复与网格问题的质检与清洗流程",
+    "支持折线、散点、柱状、直方图、箱线、热图及结构化 3D 曲面图，可导出 PNG/SVG/PDF",
+    "使用 SQLite 存储项目/处理元数据，本地文件系统存储对象与图形，全部处理在本地运行"
+   ],
+   "use_cases": [
+    "科研实验数据的导入、质量检查与出版级图表导出",
+    "教学实验室的数据可视化课程与练习（含合成教学数据集）",
+    "需要完全离线、数据留在本地的单用户分析场景"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Optional integration route|PostgreSQL and S3-compatible/MinIO adapters, worker and container/infrastructure code| ／ deployment; local file storage performs the object-storage role. PostgreSQL and S3-compatible ／ **100/100 chaos cases**, and three enforced performance runs. PostgreSQL/MinIO were real isolated",
+     "lines": [
+      112,
+      115,
+      151
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "→ SQLite metadata + local files (processed objects / figures) ／ |Persistence|SQLite for project/processing metadata; local filesystem for objects and figures| ／ FastAPI remains the backend. SQLite replaces the need for a database **server** in the local",
+     "lines": [
+      101,
+      108,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 SQLite 存储项目元数据的数据可视化应用，PostgreSQL 仅为可选集成适配器且非用户前置条件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    → SQLite metadata + local files (processed objects / figures) ／ |Persistence|SQLite for project/processing metadata; local filesystem for objects and figures| ／ deployment; local file storage performs the object-storage role. PostgreSQL and S3-compatible",
+   "evidence_lines": [
+    101,
+    108,
+    115
+   ]
+  },
+  "fn": "DDDYT24/lab-data-visualization-tool",
+  "sha": "80e0e420eda9",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3672b6436f21": {
+  "identity": {
+   "one_liner": "Nextcloud 全套 Docker Compose 编排模板，含 MariaDB 等容器",
+   "review": "这是一个用 Docker Compose 编排 Nextcloud 及其周边组件的部署模板，容器包含 Nextcloud、MariaDB、Redis、Collabora、cron 任务、HaRP 和 WebSocket 白板服务，并配置了服务启动依赖。面向想在自托管环境（如 Homelab）部署 Nextcloud 的用户，需自行准备 Nginx Proxy Manager 或 Traefik 等反向代理以提供 HTTPS。",
+   "highlights": [
+    "以独立容器编排 Nextcloud、MariaDB、Redis、Collabora、cron 任务与 WebSocket 服务",
+    "提供依赖配置，确保数据库和 Redis 先于其他容器启动",
+    "包含自定义 Dockerfile 构建，为 Nextcloud 镜像加入 ffmpeg"
+   ],
+   "use_cases": [
+    "自托管部署 Nextcloud 全套服务",
+    "需要集成 Collabora 与白板实时协作的 Nextcloud 环境",
+    "配合 Nginx Proxy Manager/Traefik 反向代理的 Docker 部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "# Nextcloud docker-compose template with MariaDB, Redis, Nextcloud, Nextcloud-cronjobs, Collabora, HaRP and WebSocket server ／ - MariaDB (mariadb:11.5.2)",
+     "lines": [
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 MariaDB 为 Nextcloud 存数据的 Docker Compose 编排模板，属使用数据库的应用栈。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Nextcloud docker-compose template with MariaDB, Redis, Nextcloud, Nextcloud-cronjobs, Collabora, HaRP and WebSocket server ／ - MariaDB (mariadb:11.5.2) ／ The stack also includes dependencies to make sure the DB and Memcache (Redis) are available before the other containers are started.",
+   "evidence_lines": [
+    3,
+    8,
+    16
+   ]
+  },
+  "fn": "Andreaux/Nextcloud-Docker-Compose",
+  "sha": "3672b6436f21",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f5af86f85d12": {
+  "identity": {
+   "one_liner": "基于 pingap/Pingora 的分布式集中管控型 Web 应用防火墙",
+   "review": "PingWAF 是一个用 Rust 编写的 Web 应用防火墙/反向代理，控制平面通过 gRPC 长连接向多个边缘 agent 下发规则并回收日志与指标，提供 SQLi/XSS 等语义检测、CC/Bot 防护、自动 ACME 证书和内嵌多语言管理界面。适合需要自托管边缘防护与集中策略管理的运维团队；持久化依赖 PostgreSQL 14+，日志存储可选 Elasticsearch，预编译二进制目前仅覆盖 Linux。",
+   "highlights": [
+    "支持 all-in-one 与 server+agent 两种部署形态，控制平面与数据平面通过 gRPC 双向流同步规则、日志与指标",
+    "提供 SQLi/XSS/RCE/路径穿越/命令注入的语义检测、Cloudflare 风格表达式规则与异常评分四阶段流水线",
+    "内置 ACME 自动签发、mTLS 客户端证书签发/吊销、限流、IP/Geo 访问控制及请求日志回放"
+   ],
+   "use_cases": [
+    "为多节点或跨区域站点提供集中策略管控的边缘 WAF 部署",
+    "自托管场景下替代外部托管的流量防护与 Bot/CC 应对",
+    "需要请求日志留存、攻击复现（curl 回放）与流量分析的安全运维"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ |`pingwaf-server`|Control plane: Axum REST + tonic gRPC + SeaORM/PostgreSQL + ES logs + embedded frontend + agent health monitoring|",
+     "lines": [
+      108,
+      118
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Web 流量提供防护的安全组件，使用 PostgreSQL 存储配置与日志而非作为面向数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PingWAF** is a high-performance, open-source **Web Application Firewall (WAF)** that brings Cloudflare-class edge security to your own infrastructure. It is built on top of `pingap` — a production reverse proxy powered by Cloudflare's `Pingora` networking framework — and adds a **distributed, centrally-controlled** security layer over it. ／ |Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ The bundled `docker-compose.yml` starts PingWAF in `all-in-one` mode together with PostgreSQL, pulling the pre-built image from GHCR (`ghcr.io/shuaizend/pingwaf:latest`):",
+   "evidence_lines": [
+    18,
+    108,
+    130
+   ]
+  },
+  "fn": "shuaiZend/PingWAF",
+  "sha": "f5af86f85d12",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0229be4fea84": {
+  "identity": {
+   "one_liner": "个人笔记仓库，记录探索心得与玩具软件",
+   "review": "这是一个个人 musing/学习笔记仓库，按年份组织目录，收录待办想法清单，内容涵盖 LLM 代理、沙箱执行（gVisor、Monty、Pyodide）、Rust 游戏引擎 Bevy、Polars 表达式编译等杂项主题，并非数据库相关工具或应用，仅供作者本人及浏览者阅读参考。",
+   "highlights": [
+    "按年份文件夹组织笔记内容",
+    "包含想法待办清单与玩具软件链接"
+   ],
+   "use_cases": [
+    "个人学习笔记归档",
+    "技术调研灵感来源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅含个人笔记与想法清单，无数据库工具或应用证据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository contains a history of musings, ／ toy software, and other notes.",
+   "evidence_lines": [
+    3,
+    4
+   ]
+  },
+  "fn": "dkmiller/tidbits",
+  "sha": "0229be4fea84",
+  "source": "readme",
+  "generated_at": "2026-10-16",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
