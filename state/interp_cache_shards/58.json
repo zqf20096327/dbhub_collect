@@ -10621,5 +10621,73 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ab316bfe84b": {
+  "identity": {
+   "one_liner": "基于 Rust/axum 和 SQLite 的自托管 pastebin 服务",
+   "review": "wastebin 是一个用 Rust 编写、基于 axum 框架的自托管贴代码（pastebin）应用，数据存储在 SQLite 文件中。它以单二进制运行，提供语法高亮、Markdown 渲染、贴文加密（ChaCha20Poly1305）与过期删除等功能，并通过 HTTP API 和 wastebin-ctl 命令行工具操作。适合个人或内网部署分享代码片段；README 提示其无用户认证和 DoS 防护，不建议直接暴露公网。",
+   "highlights": [
+    "以 SQLite 为后端存储，单二进制运行，提供 Docker、Nix、源码构建等多种部署方式",
+    "支持 170+ 语言的语法高亮、GitHub-flavored Markdown 渲染及 zstd 压缩",
+    "使用 ChaCha20Poly1305 加密贴文内容，支持过期删除、阅后删除及 API 操作"
+   ],
+   "use_cases": [
+    "自托管代码片段/文本分享服务",
+    "通过 API 或 neovim 插件从命令行快速贴出日志或命令输出",
+    "内网团队间临时分享带语法高亮的代码内容"
+   ],
+   "ai": false
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* axum and sqlite3",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为 pastebin 应用，使用 sqlite3 作为数据存储后端",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* axum and sqlite3 ／ persist the database as `state.db` via the `WASTEBIN_DATABASE_PATH` environment ／ |`WASTEBIN_DATABASE_PATH`|Path to the sqlite3 database file.|`:memory:`|",
+   "evidence_lines": [
+    39,
+    78,
+    193
+   ]
+  },
+  "fn": "matze/wastebin",
+  "sha": "2ab316bfe84b",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
