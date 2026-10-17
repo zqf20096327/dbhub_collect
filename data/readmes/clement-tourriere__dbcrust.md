@@ -1,6 +1,6 @@
 # DBCrust
 
-**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Docker databases, Vault-backed connections, and SQL over Parquet/CSV/JSON files — with optional AI, Django ORM analysis, Python bindings, and a desktop GUI.
+**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Redis/Valkey, SQL Server/Azure SQL, Amazon Redshift, libSQL/Turso, InfluxDB, Amazon S3/R2/MinIO object stores, DynamoDB and CloudWatch Logs (opt-in AWS builds), DuckDB/DuckLake (opt-in build), Docker databases, Vault-backed connections, and SQL over Parquet/CSV/JSON files — with optional AI, Django ORM analysis, Python bindings, and a desktop GUI.
 
 [![CI](https://github.com/clement-tourriere/dbcrust/actions/workflows/ci.yml/badge.svg)](https://github.com/clement-tourriere/dbcrust/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/dbcrust.svg)](https://pypi.org/project/dbcrust/)
@@ -24,6 +24,7 @@ dbc postgres://user:pass@localhost/mydb
 - **DBCrust for Django** — catch N+1 queries, missing `select_related` / `prefetch_related`, slow views, and index opportunities before production.
 - **Production-friendly plumbing** — SSH tunnels (with auto-tunnel patterns), HashiCorp Vault dynamic credentials, Docker container auto-discovery, encrypted password storage.
 - **A REPL that helps** — context-aware autocompletion, syntax highlighting, history search, external editor, EXPLAIN visualization (including an interactive TUI), named queries, saved sessions.
+- **Agent-safe connections** — a credential broker (`dbcrust broker`, `dbcrust-agent`, MCP) keeps database passwords out of AI agents' reach: enrolled aliases, forced read-only, row/time limits and an audit log; it can run as its own OS user. See [Agent connections](https://clement-tourriere.github.io/dbcrust/user-guide/agent-connections/).
 - **Scriptable, embeddable, agent-ready** — `-c`/`-f`/stdin one-shots with `-o json|csv` output, stable exit codes, a `--read-only` guard, and a Python API powered by the same Rust core.
 
 ## Install
@@ -70,6 +71,15 @@ Every connection type is a URL:
 | MongoDB | `mongodb://user:pass@localhost:27017/mydb` |
 | Elasticsearch | `elasticsearch://localhost:9200` |
 | White Dragon | `white-dragon://localhost:7700` |
+| Redis / Valkey | `redis://localhost:6379/0` · `rediss://user:pass@host:6380` (TLS) |
+| SQL Server / Azure SQL | `mssql://user:pass@localhost:1433/mydb` (TLS verified by default) · `mssql://user:pass@host%5CINSTANCE/mydb` |
+| Amazon Redshift | `redshift://user:pass@cluster.abc.eu-west-1.redshift.amazonaws.com:5439/dev` (TLS required by default) |
+| libSQL / Turso | `libsql://my-db-org.turso.io?authToken=…` (HTTPS) · `libsql+http://localhost:8080` (local sqld) |
+| InfluxDB | `influxdb://localhost:8086/db` (v1, InfluxQL) · `influxdb2://:TOKEN@localhost/bucket?org=acme` (v2, Flux) · `influxdb3://:TOKEN@localhost/db` (v3, SQL) · `influxdbs://…` (TLS) |
+| Amazon DynamoDB *(opt-in: `--features aws`, Rust ≥ 1.94.1)* | `dynamodb://eu-west-1/Orders?profile=prod` · `dynamodb+http://localhost:8000?region=local` — PartiQL `SELECT` and `tables`, `describe`, `scan`, `get`, `query`; bounded reads, capacity reported, no writes |
+| Amazon CloudWatch Logs *(opt-in: `--features aws`, Rust ≥ 1.94.1)* | `cloudwatch://eu-west-1/aws/lambda/orders?profile=prod` — Logs Insights over a mandatory time window (`since 30m fields @message \| filter …`), `groups`, `streams`, `tail`; queries are stopped on Ctrl-C and timeout, scanned bytes reported |
+| Amazon S3 / R2 / MinIO *(opt-in: `--features aws`, Rust ≥ 1.94.1)* | `s3://my-bucket/logs/?region=eu-west-1` · `s3://KEY:SECRET@bucket?endpoint=https://host:9000` · `r2://account/bucket` · `minio://host:9000/bucket` — typed read-only commands: `ls`, `head`, `get`, `buckets` |
+| DuckDB / DuckLake (opt-in: `--features duckdb`) | `duckdb:///data/warehouse.duckdb` · `duckdb://:memory:` · `warehouse.duckdb` · `--read-only` is enforced by the engine |
 | Parquet / CSV / JSON | `./data.parquet` · `./logs/app.csv` · `file://` picker · `json:///events.json` |
 | Docker container | `docker://` (interactive picker) · `docker://my-postgres/mydb` |
 | Saved session | `session://production_db` |
@@ -89,9 +99,11 @@ dbcrust session://prod --read-only --no-input -o json \
 echo "SELECT count(*) FROM logs" | dbcrust ./logs.parquet   # stdin scripts; files are databases too
 ```
 
-The contract is built for programmatic callers: results-only stdout (status goes to stderr, the pager never engages), JSON errors on stderr under `-o json`, stable exit codes (`0` ok · `1` SQL error · `2` usage · `3` connection · `4` blocked by `--read-only`), `--timeout`/`--max-rows` limits, and `--no-input` so no prompt can ever hang an agent. The binary documents itself: run **`dbcrust agents`** for the full ~100-line contract, and paste the ready-made snippet into your project's `CLAUDE.md`/`AGENTS.md` from the [agent quickstart](https://clement-tourriere.github.io/dbcrust/ai-agents/quickstart/).
+The contract is built for programmatic callers: results-only stdout (status goes to stderr, the pager never engages), JSON errors on stderr under `-o json`, stable exit codes (`0` ok · `1` SQL error · `2` usage · `3` connection · `4` blocked by `--read-only`), `--timeout`/`--max-rows` limits, and `--no-input` so no prompt can ever hang an agent. The binary documents itself: run **`dbcrust agents`** for the full ~130-line contract, and paste the ready-made snippet into your project's `CLAUDE.md`/`AGENTS.md` from the [agent quickstart](https://clement-tourriere.github.io/dbcrust/ai-agents/quickstart/).
 
 `--read-only` is a best-effort statement guard backed by connect-level hardening (SQLite `query_only`, PostgreSQL `default_transaction_read_only`); for hard guarantees use a read-only database role — details in [safety & guardrails](https://clement-tourriere.github.io/dbcrust/ai-agents/safety/).
+
+For databases that matter, don't hand the agent a password at all: enroll the connection with the **credential broker** (`sudo dbcrust broker install-service`, then `dbcrust broker enroll …`) and give the agent the credential-free `dbcrust-agent` client (CLI or MCP server). See [Agent connections](https://clement-tourriere.github.io/dbcrust/user-guide/agent-connections/).
 
 ## SQL over local files
 
@@ -144,7 +156,7 @@ Turn natural language into SQL without leaving your session. The assistant uses 
 ```
 
 - **Providers**: Anthropic, OpenAI, Gemini, Ollama, Groq, DeepSeek, xAI, OpenRouter, and more — 25+ via [genai](https://crates.io/crates/genai), including any OpenAI-compatible endpoint for self-hosted models.
-- **Privacy controls**: AI is opt-in. `??` sends schema metadata and your prompt/history; query results stay local. `???` and Django "Investigate with AI" can send bounded result rows, query plans, captured SQL, and source context. API keys live in your OS keychain, an encrypted file, or environment variables.
+- **Privacy controls**: AI is opt-in. `??` sends schema metadata and your prompt/history; query results stay local. `???` and Django "Investigate with AI" can send bounded result rows, query plans, captured SQL, and source context. API keys live in the secret store (OS keychain, or a passphrase-encrypted file on Linux) or environment variables.
 
 More in the [AI assistant guide](https://clement-tourriere.github.io/dbcrust/user-guide/ai-assistant/) and [privacy notes](https://clement-tourriere.github.io/dbcrust/user-guide/ai-assistant/#privacy-notes).
 

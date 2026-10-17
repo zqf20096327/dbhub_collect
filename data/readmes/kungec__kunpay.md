@@ -3,7 +3,7 @@
 <p align="center">
   <b>开箱即用的个人免签约码支付系统 · Go 单文件部署</b><br>
   易支付协议完全兼容 · 安卓APP扫码配对 · 多码轮询 · 审计级资金流水<br>
-  <sub>v1.3.2 · 经过 29 轮安全审计 / 黑盒渗透 / 数据竞争检测的持续加固</sub>
+  <sub>v1.3.5 · 经过 29 轮安全审计 / 黑盒渗透 / 数据竞争检测的持续加固</sub>
 </p>
 
 **坤支付**是一套用 **Go 语言**从零编写的个人免签约「码支付」平台:绑定你自己的微信 / 支付宝 / QQ 收款码,安卓监控APP 自动监听到账通知并回填订单——**资金全程直达个人账户,平台不经手一分钱**。
@@ -15,6 +15,8 @@
 - **🤝 同作者生态**:推荐用 **[坤面板 KunPanel](https://github.com/kungec/kunpanel)** 部署坤支付 —— 反向代理 / Let's Encrypt 证书 / WAF 防火墙 / 计划任务备份开箱即用(见下文安装部署)。
 
 ### ✨ 核心特性
+
+> 📖 **[完整使用教程](docs/使用教程.md)** —— 从部署、配收款码、手机挂机到商户接入、日常运营、FAQ 排障的全流程指引。
 
 | | |
 |---|---|
@@ -81,7 +83,7 @@ curl -fsSL https://raw.githubusercontent.com/kungec/kunpay/main/scripts/install.
 ```
 
 自动完成: 下载最新版 → 安装到 `/opt/kunpay` → 创建系统用户与服务 → 开机自启并启动 → 健康检查确认。
-卸载: 命令末尾加 `uninstall` 参数(数据库与收款码数据保留)。指定版本: 前面加 `KUNPAY_VERSION=v1.3.2`。
+卸载: 命令末尾加 `uninstall` 参数(数据库与收款码数据保留)。指定版本: 前面加 `KUNPAY_VERSION=v1.3.5`。
 
 ### Windows 部署
 
@@ -101,8 +103,8 @@ curl -fsSL https://raw.githubusercontent.com/kungec/kunpay/main/scripts/install.
 
 | 下载 | 说明 |
 |---|---|
-| [**📱 安卓监控APP (APK)**](https://github.com/kungec/kunpay/releases/download/v1.3.2/KunPayMonitor.apk) | 自动监听微信/支付宝/QQ收款通知,安装即用 |
-| **🖥 平台主程序** | [Linux](https://github.com/kungec/kunpay/releases/download/v1.3.2/kunpay_linux_amd64.tar.gz) · [Windows](https://github.com/kungec/kunpay/releases/download/v1.3.2/kunpay_windows_amd64.zip) · [macOS](https://github.com/kungec/kunpay/releases/download/v1.3.2/kunpay_darwin_arm64.tar.gz) |
+| [**📱 安卓监控APP (APK)**](https://github.com/kungec/kunpay/releases/download/v1.3.5/KunPayMonitor.apk) | 自动监听微信/支付宝/QQ收款通知,安装即用 |
+| **🖥 平台主程序** | [Linux](https://github.com/kungec/kunpay/releases/download/v1.3.5/kunpay_linux_amd64.tar.gz) · [Windows](https://github.com/kungec/kunpay/releases/download/v1.3.5/kunpay_windows_amd64.zip) · [macOS](https://github.com/kungec/kunpay/releases/download/v1.3.5/kunpay_darwin_arm64.tar.gz) |
 
 > 更多版本与源码见 [Releases](https://github.com/kungec/kunpay/releases) 页面。推送 `v*` 标签时 CI 会自动构建全平台产物并发布 Release。
 
@@ -262,11 +264,14 @@ kunpay_darwin_amd64/kunpay       Intel Mac
 
 ## 上线配置流程(管理员)
 
-1. 登录后台 → **渠道管理**:为每个渠道上传你的个人收款二维码
-2. **监控设备**:添加设备,复制 Token
-3. 在收款手机安装支持 V免签协议的监控APP,配置服务器地址与 Token,开启短信/通知监听
-4. **系统设置**:修改站点名称、客服、全局费率、公告等
-5. 商户在首页注册 → 商户中心拿 PID/KEY → 按开发文档接入
+> 📖 逐步操作请看 **[完整使用教程](docs/使用教程.md)**,以下是速览:
+
+1. 登录后台 → **系统设置**:改强密码、站点名称、全局费率、开放注册
+2. 商户登录商户中心 → **我的通道**:上传自己的个人收款码(直收,平台不经手)
+3. **监控设备**:添加设备 → 生成「扫码配对」二维码
+4. 收款手机安装 **KunPayMonitor.apk** → 扫码配对 → 按提示完成三项授权 → 监控自动启动
+5. 商户在首页注册(或管理员开通)→ 商户中心拿 PID/KEY → 按内置文档 `/doc` 接入
+6. 用「支付测试」页走一笔真实支付,验证 收款通知 → 订单匹配 → 回调跳转 全链路
 
 ## 技术栈
 

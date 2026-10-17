@@ -2,6 +2,8 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/goodtek-xyz/openllms?style=social)](https://github.com/goodtek-xyz/openllms)
 
+> This repository is a publish-only mirror of the upstream source; pull requests are reviewed here and carried upstream with credit — see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Turn ChatGPT / Claude (and Codex) seats you already pay for into **one OpenAI-compatible API**.  
 The gateway watches remaining quota and spreads traffic so one login doesn’t get burned while others sit idle.
 
@@ -286,6 +288,14 @@ Useful day-to-day:
 | `reset-soon` | Prefer seats whose window resets sooner |
 | `steward` | Score remaining × reset urgency (leans OAuth) |
 | `parallel` | Fan-out when enabled for your build/plan |
+
+Prebuilt binaries: [GitHub Releases](https://github.com/goodtek-xyz/openllms/releases) — each release lists
+`SHA256SUMS` and a build provenance attestation (`gh attestation verify llms_<os>_<arch> --repo goodtek-xyz/openllms`).
+
+Updating the CLI: `llms update` replaces the running binary in place with the build the gateway serves at `/dist`
+(checked against `/dist/SHA256SUMS`; the old binary stays if anything fails) and warns when another `llms` comes first
+on your PATH. A gateway image built with `CLI_DIST=1` serves `/dist`; without it, rebuild with
+`go build -o bin/llms ./cmd/llms` (or `go install github.com/goodtek-xyz/openllms/cmd/llms@latest`).
 
 Hosted helpers (`llms login`, `llms plan`, `llms free`, `llms upgrade`) talk to [llms.goodtek.xyz](https://llms.goodtek.xyz). Local OSS can ignore them after bootstrap.
 

@@ -1,6 +1,6 @@
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="./examples/official-site/assets/brand/logo-horizontal-light.svg"><img src="./examples/official-site/assets/brand/logo-horizontal-dark.svg" width="280" alt="SQLPage" /></picture></p>
 
-[![A real SQLPage customer app: inspect its SQL, search the table, and save a customer](./docs/sqlpage.gif)](./examples/official-site/sqlpage_introduction_video.mp4)
+[![SQLPage in 30 seconds: build apps with SQL](./docs/sqlpage.gif)](./docs/sqlpage.mp4)
 
 **Turn your data into an app.** Tables, forms and charts, written in SQL.
 
@@ -178,7 +178,7 @@ a cheaper ARM cloud instance, using the docker image is the easiest way to do it
 
 ### Hosting
 
-For managed SQLPage hosting, use [DataPage](https://datapage.app). To run SQLPage yourself on a VPS, [Hostinger](https://www.hostg.xyz/aff_c?offer_id=815&aff_id=243720&url_id=6808) is another option; this is an affiliate link, so we receive a small commission if you buy through it.
+For managed SQLPage hosting, use [DataPage](https://datapage.app). To run SQLPage yourself on a VPS, [Hostinger](https://www.hostg.xyz/aff_c?offer_id=815&aff_id=243720&url_id=6808) is another option: they partner with us, and let you get 10% off using the code `SQLPAGE10` on any annual+ plan.
 
 ### On macOS, with Homebrew
 

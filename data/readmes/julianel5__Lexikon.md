@@ -13,7 +13,7 @@ Inspired by [Jiten](https://jiten.moe), which does the same for Japanese.
 - **Light and dark theme**, shareable URLs and a layout that works on a phone.
 
 [![CI](https://github.com/julianel5/Lexikon/actions/workflows/ci.yml/badge.svg)](https://github.com/julianel5/Lexikon/actions/workflows/ci.yml)
-[![Live site](https://img.shields.io/badge/live-lexikon.up.railway.app-7c3aed)](https://lexikon.up.railway.app)
+[![Live site](https://img.shields.io/badge/live-lexikon.moe-7c3aed)](https://lexikon.moe)
 
 <p align="center">
   <img src="docs/screenshots/sentence.jpg" alt="Lexikon in dark mode: the sentence 'Ich ging gestern mit meinen Freunden in die Stadt' cut into words, with the card of 'ich' below" width="49%">
@@ -91,7 +91,23 @@ Ingest options:
 | `input` | path to the kaikki JSONL dump (positional) | — |
 | `-o, --output` | output SQLite path | `data/dictionary.db` |
 | `-b, --batch` | rows per insert transaction | `5000` |
+| `--freq` | word frequency list (a Leipzig `*-words.txt` or a Yomitan frequency `.zip`), see below | none |
 | `--no-verify` | skip post-build sample lookups | off |
+
+**Word frequencies (optional).** With `--freq` the ingest adds up, for every entry, how often its
+headword and inflected forms occur in a word list of the
+[Leipzig Corpora Collection](https://wortschatz.uni-leipzig.de/en/download) (CC BY, see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)) and stores it in `entries.freq`, with the rank
+in `entries.freq_rank` (1 = most frequent, 0 = not in the list). Put the list in `data/raw/`
+(git-ignored) and run:
+
+```bash
+python ingest/ingest.py data/raw/kaikki.org-dictionary-German.jsonl -o data/dictionary.db   --freq data/raw/deu_web_2024_1M-words.txt
+```
+
+A spelling is counted for the entries Wiktionary has a page for (the headword, or an inflected-form
+page such as *Häuser* → Haus). Only a spelling that has no page is split between the entries that
+list it in their table of forms. Without `--freq` both columns are `0` and nothing else changes.
 
 ### 2. Run the API
 
@@ -168,7 +184,7 @@ Base URL: `http://localhost:3000`
 ### `GET /api/health`
 
 ```json
-{ "status": "ok", "entries": 102740, "searchKeys": 4060857, "dbPath": "…/data/dictionary.db" }
+{ "status": "ok", "entries": 102740, "searchKeys": 4060857, "frequencyEntries": 62551 }
 ```
 
 ### `GET /api/suggest?q={query}&limit={n}`
@@ -197,7 +213,8 @@ curl "http://localhost:3000/api/suggest?q=schoen"
       "snippet": "beautiful, lovely, pretty, handsome",
       "kind": 1,
       "match": "translit",
-      "exactForm": true
+      "exactForm": true,
+      "freqRank": 223
     }
   ]
 }
@@ -260,12 +277,17 @@ curl -X POST http://localhost:3000/api/parse \
 
 The lemma is chosen from the keys the ingest already stores for inflected forms; ranking uses a
 part-of-speech prior (articles, prepositions and pronouns first), whether the word is capitalised
-in the middle of a sentence (a noun) and the size of the entry. Without a frequency list some
-ambiguous words still pick the wrong lemma first (*mir* → es); the other candidates are returned.
+in the middle of a sentence (a noun) and, for databases built with `--freq`, how frequent the entry
+is (without it, the size of the entry stands in for frequency). Some ambiguous words can still pick
+the wrong lemma first: Wiktionary lists the same pronoun table in every personal pronoun, so for
+*mir* or *ihm* the right pronoun (ich, er) is among the candidates but not always the first; the
+other candidates are always returned.
 
 ### `GET /api/entry/:id`
 
 Full stored entry as JSON (forms, senses, examples, sounds, relations).
+When the database has word frequencies, the entry also has `frequency`: `{ "count": 100872, "rank": 11 }`
+(occurrences in the word list and rank, 1 = most frequent).
 Returns `404` for an unknown id and `400` for a non-numeric id.
 
 ```bash
@@ -297,7 +319,9 @@ CREATE TABLE entries (
   word   TEXT NOT NULL,
   pos    TEXT NOT NULL,
   gender TEXT,
-  data   TEXT NOT NULL            -- JSON blob: forms, senses, IPA, relations…
+  data   TEXT NOT NULL,           -- JSON blob: forms, senses, IPA, relations…
+  freq      INTEGER NOT NULL DEFAULT 0,  -- occurrences in the frequency list (0 without --freq)
+  freq_rank INTEGER NOT NULL DEFAULT 0   -- 1 = most frequent entry, 0 = not in the list
 );
 
 CREATE TABLE search_keys (
@@ -319,6 +343,7 @@ CREATE TABLE autocomplete (
   word     TEXT    NOT NULL,
   pos      TEXT    NOT NULL,
   weight   INTEGER NOT NULL,      -- size of the entry JSON, a popularity proxy
+  freq     INTEGER NOT NULL DEFAULT 0,  -- copy of entries.freq
   PRIMARY KEY (kind, key, entry_id)
 ) WITHOUT ROWID;
 ```
@@ -336,16 +361,27 @@ The live site runs on [Railway](https://railway.com), deployed from `main` on ev
 - **Web** (`web/Dockerfile`): a static build served by nginx (`deploy/nginx.conf.template`).
   `VITE_API_BASE` is baked in at build time, so it must point to the API's public URL.
 
-To ship a new dictionary, build `dictionary.db` with the ingest, upload it to the volume next
-to the old one, swap the files and restart the API service.
+To ship a new dictionary, build `dictionary.db` with the ingest and run `bash deploy/deploy-db.sh`
+(it backs up, uploads, checks, swaps, restarts and verifies), then purge the Cloudflare cache.
+
+**Domains.** The site is at <https://lexikon.moe> and the API at <https://api.lexikon.moe>, both
+proxied by Cloudflare (SSL mode Full (strict)); `www.lexikon.moe` redirects to the main domain
+and the old Railway URL of the web app redirects too. Cloudflare also protects the API: `GET /api/*`
+responses (except `/api/health`) are cached for a couple of hours, and a rate limit blocks an IP
+that sends more than 100 requests in 10 seconds. `CORS_ORIGIN` on the API holds **one** origin
+(`https://lexikon.moe`): with several, the `Access-Control-Allow-Origin` header would change
+per request and a cached response could be served to the wrong site.
 
 ## Roadmap
 
 Known limits, roughly in the order they would be worth fixing:
 
-- **No word frequency data**, so some ambiguous words still pick a rare lemma first
-  (*mir* → es). A frequency list would fix this and enable a "common words" filter.
-- **Separable verbs** (*ich stehe um 7 Uhr auf* → aufstehen) are not recognised.
+- **Personal pronouns are still ambiguous**: Wiktionary lists the same table in every one of them,
+  so *mir* or *ihm* do not always get their lemma (*ich*, *er*) first.
+- **No "common words" filter yet**: the interface shows the frequency rank of every word (`#349`),
+  but you cannot filter or sort by it.
+- **Separable verbs** are recognised only when the two parts are next to each other (*ich stehe auf*
+  → aufstehen); with words in between (*ich stehe um 7 Uhr auf*) they are not.
 - **Multi-word expressions** are only found when the whole phrase is a dictionary entry.
 - **English queries are not lemmatized** (`went` does not find *gehen*).
 - Ideas: Anki export, example sentences from Tatoeba.
@@ -355,6 +391,8 @@ Known limits, roughly in the order they would be worth fixing:
 - `data/raw/*` and `data/*.db` are **not** committed — rebuild them with step 1.
 - Lexical data is derived from Wiktionary via kaikki.org (CC BY-SA 4.0); see
   [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- Word frequencies come from the [Leipzig Corpora Collection](https://wortschatz.uni-leipzig.de/en/download)
+  (Wortschatz Leipzig, CC BY); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Contributing
 

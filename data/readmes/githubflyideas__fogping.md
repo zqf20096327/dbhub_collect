@@ -3,17 +3,17 @@
 > 
 > *🚫 No Perl. No RRDtool. No Web Server. No Config Files.*
 > 
-![window: a 40-minute congestion event — smoke spreads, bursts marked ◆](docs/hero15.png)
-![window: a 40-minute congestion event — smoke spreads, bursts marked ◆](docs/hero17.png)
-![window: a 40-minute congestion event — smoke spreads, bursts marked ◆](docs/hero16.png)
+![fogping: PING target latency graph (dark theme)](docs/images/fogping-ping.png)
+![fogping: TCP target latency graph (amber theme)](docs/images/fogping-tcp.png)
+![fogping: target editor (daylight theme)](docs/images/fogping-targets.png)
 
 ## Quick start
 
 ```bash
 mkdir -p ~/fogping && cd ~/fogping
-wget https://github.com/githubflyideas/fogping/releases/download/v1.1.2/fogping-v1.1.2-linux-amd64.tar.gz
+wget https://github.com/githubflyideas/fogping/releases/download/v1.2.2/fogping-v1.2.2-linux-amd64.tar.gz
 
-tar -xzf fogping-v1.1.2-linux-amd64.tar.gz
+tar -xzf fogping-v1.2.2-linux-amd64.tar.gz
 ./fogping --edit user=admin passwd=admin1234
 ```
 Open `http://localhost:8518`, log in(user=admin passwd=admin1234 )
@@ -28,8 +28,6 @@ Open `http://localhost:8518`, log in(user=admin passwd=admin1234 )
 ./fogping user=admin,alice,bob passwd=admin1234,alice-pw,bob-pw
 ```
 
-`./fogping --help` prints the common commands with copy-ready examples. The rest of
-this page covers each step in detail.
 
 ## Docker
 
@@ -37,18 +35,14 @@ Images for linux/amd64, arm64 and arm/v7 (Raspberry Pi, NAS, RouterOS). Data liv
 
 ```bash
 # first run: --edit so you can add targets in the web UI
-docker run -d --name fogping --restart unless-stopped \
-  --user $(id -u):$(id -g) -p 8518:8518 \
-  -v ~/fogping:/data githubflyideas/fogping \
-  --edit user=admin passwd=change-me
+docker run -d --name fogping --restart unless-stopped   -p 8518:8518   -v fogping_data:/data   githubflyideas/fogping:latest   --edit user=admin passwd=change-me
 
 # done editing: recreate without --edit (data in ~/fogping is kept)
 docker rm -f fogping
-docker run -d --name fogping --restart unless-stopped \
-  --user $(id -u):$(id -g) -p 8518:8518 \
-  -v ~/fogping:/data githubflyideas/fogping \
-  user=admin passwd=change-me
+docker run -d --name fogping --restart unless-stopped   -p 8518:8518   -v fogping_data:/data   githubflyideas/fogping:latest            user=admin passwd=change-me
 ```
+`./fogping --help` prints the common commands with copy-ready examples. The rest of
+this page covers each step in detail.
 
 Everything after the image name is passed to fogping as-is (`--edit`, `--days=90`,
 `user=` / `passwd=`). Where you can set environment variables but not a command
@@ -94,10 +88,10 @@ extra capabilities on Docker 20.10+; `--user` keeps the mounted directory writab
 
 ```bash
 sudo mkdir -p /opt/fogping && sudo chown "$USER": /opt/fogping && cd /opt/fogping
-wget https://github.com/githubflyideas/fogping/releases/download/v1.1.2/fogping-v1.1.2-linux-amd64.tar.gz
-wget https://github.com/githubflyideas/fogping/releases/download/v1.1.2/SHA256SUMS
-sha256sum --ignore-missing -c SHA256SUMS     # expect: fogping-v1.1.2-linux-amd64.tar.gz: OK
-tar -xzf fogping-v1.1.2-linux-amd64.tar.gz
+wget https://github.com/githubflyideas/fogping/releases/download/v1.2.2/fogping-v1.2.2-linux-amd64.tar.gz
+wget https://github.com/githubflyideas/fogping/releases/download/v1.2.2/SHA256SUMS
+sha256sum --ignore-missing -c SHA256SUMS     # expect: fogping-v1.2.2-linux-amd64.tar.gz: OK
+tar -xzf fogping-v1.2.2-linux-amd64.tar.gz
 ./fogping --version
 ```
 
@@ -780,3 +774,7 @@ oscilloscope without cgo.
 ## License
 
 apache 2.0
+
+## Sponsor slot
+
+The sponsor box in the web UI shows up to four images from [githubflyideas/ads-sponsor](https://github.com/githubflyideas/ads-sponsor). The program itself fetches them from GitHub about once an hour and caches them in a `sponsor` folder inside its data directory; if that cache is empty, the browser may fetch them from GitHub directly. If neither works, the built-in sponsor text is shown.

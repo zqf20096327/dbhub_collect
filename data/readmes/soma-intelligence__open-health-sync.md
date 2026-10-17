@@ -51,6 +51,13 @@ docker pull ghcr.io/soma-intelligence/open-health-sync:0.1.0
 
 </div>
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/demo/demo-dark.gif">
+  <img src="docs/demo/demo-light.gif" width="100%" alt="Terminal recording of the quickstart. docker compose up starts ohs and Postgres; ohs seed --demo writes 90 days of synthetic data from Oura, WHOOP, Withings, Fitbit, Polar and Apple Health, 44144 rows. The daily endpoint returns one day with 8132 steps from apple_health, a resting heart rate of 53 and a sleep score of 62 from oura, and the source of every figure. One heart rate reading of 70 bpm comes back from /samples, as a FHIR R4 Observation with LOINC 8867-4 and UCUM /min, and as an Open mHealth heart-rate data point in beats/min. tools/list on the MCP endpoint lists sixteen read-only tools.">
+</picture>
+
+<sub>The quickstart, recorded on v0.1.0 with synthetic data: start the stack, load 90 days from six devices, then read one day of the merged view, one heart rate reading as REST, FHIR R4 and Open mHealth, and the MCP tools. Nothing is mocked; <a href="docs/demo/README.md">the tape</a> renders it again.</sub>
+
 Open Health Sync (`ohs`) is a self-hosted ingestion and normalization layer for health data. It
 pulls from providers, accepts uploads from phones, stores each payload verbatim, maps it to one
 canonical model with one set of units, and serves it over a REST API and a read-only MCP server.
@@ -119,7 +126,7 @@ Provider deletions are honored too.
 | ✅ | Background sync and `/freshness` | ✅ | Health app export import |
 | ✅ | Prometheus metrics and OpenTelemetry traces, off by default ([docs](docs/observability.md)) | | |
 | ✅ | A merged view across sources, with priorities per user and metric ([docs](docs/api.md#several-sources-of-one-metric-the-merged-view)) | | |
-| ✅ | Read-only admin console at `/console` ([docs](docs/console.md)) | | |
+| ✅ | Admin console at `/console`: run the pipeline and turn providers on from the browser ([docs](docs/console.md)) | | |
 | ✅ | Consent per user, source and category, with a revocation webhook ([docs](docs/consent.md)) | | |
 | ✅ | Complete per-user archive for data portability ([docs](docs/exports.md#complete-user-archive-data-portability)) | | |
 | ✅ | Append-only audit log of every authenticated request, read with `GET /v1/audit` ([docs](docs/audit-log.md)) | | |
@@ -140,6 +147,7 @@ Provider deletions are honored too.
 | 🔜 | ECG recordings over REST, FHIR (waveform as SampledData), MCP and exports ([docs](docs/api.md#ecg-recordings)) | | |
 | 🔜 | Self reports: a person's own ratings (feeling, mood, stress, energy, sleep quality and more) next to their synced data ([docs](docs/self-reports.md)) | | |
 | 🔜 | Share links (SMART Health Links): an encrypted FHIR bundle for a doctor or coach, with expiry, passcode and a built-in viewer ([docs](docs/share-links.md)) | | |
+| 🔜 | Tenants and their API keys managed over HTTP with an instance admin key, for one instance serving several teams ([docs](docs/admin-api.md)) | | |
 | ✅ | Personal mode (`ohs admin personal setup`) and [eight small Python recipes](docs/recipes/README.md) on your own data | 🛠 | Health records (EHR) through SMART on FHIR |
 | ✅ | [Kotlin, Swift, React Native and Flutter SDKs](docs/sdks/README.md) and example apps | 🛠 | Garmin, Coros |
 
@@ -267,7 +275,7 @@ Integration paths, vendor programs and tracking issues for each:
 | Strava | ✅ Available | OAuth, scheduled pulls, webhook events ([guide](docs/connectors/strava.md)) |
 | Polar | ✅ Available | OAuth, scheduled pulls, webhooks ([guide](docs/connectors/polar.md)) |
 | Garmin | 🛠 Planned ([#9](https://github.com/soma-intelligence/open-health-sync/issues/9)) | partner program; Garmin has paused new applications ([research notes](docs/connectors/garmin.md)) |
-| Fitbit | ✅ Available | Google Health API: OAuth, scheduled pulls, signed webhooks ([guide](docs/connectors/fitbit.md)). Google is not onboarding new projects yet |
+| Fitbit | ✅ Available | Google Health API: OAuth, scheduled pulls, signed webhooks ([guide](docs/connectors/fitbit.md)). Unverified Google projects serve at most 100 users |
 | Suunto | ✅ Available | partner program: OAuth, scheduled pulls, signed notifications ([guide](docs/connectors/suunto.md)) |
 | Ultrahuman | ✅ Available | Partnership API: OAuth, daily pulls; ring data and M1 glucose ([guide](docs/connectors/ultrahuman.md)) |
 | intervals.icu | ✅ Available | OAuth, scheduled pulls, webhooks; activities from Garmin, Wahoo, Zwift, Coros and more, plus daily wellness ([guide](docs/connectors/intervals-icu.md)) |
@@ -275,6 +283,7 @@ Integration paths, vendor programs and tracking issues for each:
 | Dexcom | ✅ Available | CGM glucose: OAuth, scheduled pulls ([guide](docs/connectors/dexcom.md)) |
 | OMRON | ✅ Available | blood pressure and weight: partner API, OAuth, scheduled pulls ([guide](docs/connectors/omron.md)) |
 | Xiaomi | 🔜 Next release | `ohs import mi-fitness` loads the Mi Fitness data copy (full history); ongoing data through Health Connect or Apple Health ([guide](docs/connectors/xiaomi.md)) |
+| Bluetooth devices | 🔜 Next release | heart rate straps, blood pressure cuffs, scales, glucose meters, thermometers and pulse oximeters on the standard Bluetooth health profiles, through the [`ohs-bridge`](docs/bridge.md) desktop bridge (macOS, Linux, Raspberry Pi, Windows) or the Swift and Kotlin SDKs; no vendor account ([guide](docs/connectors/bluetooth.md)) |
 | Activity files | 🔜 Next release | `ohs import files` loads FIT, GPX and TCX files, and Garmin, COROS, Wahoo, Suunto, Zwift and Strava exports ([guide](docs/connectors/activity-files.md)) |
 | FreeStyle Libre | No public API | through Health Connect or Apple Health ([notes](docs/connectors/freestyle-libre.md)) |
 | Coros | 🛠 Planned | cloud API, OAuth |
@@ -421,6 +430,21 @@ flowchart LR
    MCP server reads the same data, read only.
 
 Details: [architecture](docs/architecture.md), [API guide](docs/api.md).
+
+### A provider is turned on, then a user connects
+
+In the admin console you paste the keys of your Oura app and Oura is on, with no restart. Your
+app then creates a connection link and sends its user to it. The user picks Oura, then Withings,
+and allows access at each. `ohs` exchanges the code, stores the grant encrypted, pulls the history
+in the background and normalizes it. Back in the console, the pipeline shows the data moving
+through and the user's page shows each source active and fresh.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/demo/flow-dark.gif">
+  <img src="docs/demo/flow-light.gif" width="100%" alt="Browser recording. In the admin console of a fresh instance, the overview shows the pipeline as five stages, all at zero. On the Oura page, not set up yet, the operator pastes a client ID and secret and saves them: Oura is on. The app Sleep Diary then opens a connection link for its user: a page in frosted glass panels lists Oura, WHOOP, Withings, Polar and Strava, with 0 of 5 connected and 30 minutes left on the link. The user connects Oura: a consent screen marked as a test server lists the scopes, Allow leads to Oura is connected, and back on the page Oura shows as connected. Withings follows. Back in the console, the overview counts 2 connections, the sync runs and the raw data stored, and the user's page shows both connections active and healthy, with 51 records over 3 days.">
+</picture>
+
+<sub>Recorded on this repository with synthetic data. The console, the connect page, the code exchange, the encrypted grant, the background pulls and the normalization are the real ones; the provider side (consent screen and API) is played by the test servers of the connector tests. How it was made: <a href="docs/demo/README.md#provider-flow">docs/demo</a>.</sub>
 
 ### See it run
 
@@ -668,6 +692,8 @@ Health Connect reading in the Kotlin SDK, then health records (EHR) through SMAR
 - [Server SDKs](docs/server-sdks.md): TypeScript and Python clients for your backend, and a
   [Postman collection](docs/api-collections.md) (next release).
 - [Example apps](examples/README.md): iOS (HealthKit), Android and React Native, built on the SDKs.
+- [Desktop bridge](docs/bridge.md): `ohs-bridge` sends what Bluetooth health devices and
+  USB-mounted watches record, from a computer or a Raspberry Pi (next release).
 - [Architecture](docs/architecture.md): roles, pipeline, storage, reliability.
 - Connectors: [supported and planned sources](docs/connectors/README.md),
   [Apple Health](docs/connectors/apple-health.md),
@@ -677,7 +703,8 @@ Health Connect reading in the Kotlin SDK, then health records (EHR) through SMAR
 - [Background sync](docs/background-sync.md): webhooks, backstop pulls, freshness.
 - [Backup and restore](docs/backup-and-restore.md): one archive with the database and raw store, and how to put it back.
 - [Connect page](docs/connect-page.md): a hosted page where your users connect their sources, then return to your app.
-- [Admin console](docs/console.md): a read-only page for users, connections, freshness and webhook deliveries.
+- [Admin console](docs/console.md): run the pipeline from the browser: providers and their keys, users and connections, sync and processing jobs, webhooks, API keys and the audit log.
+- [Admin API](docs/admin-api.md): run one instance for several teams: create tenants, manage their keys and fill a demo user over HTTP (next release).
 - [Recipes](docs/recipes/README.md): personal setup and small tools on your own data.
 - [RR intervals and HRV](docs/hrv.md): beat-to-beat intervals and the HRV derived from them.
 - [Menstrual cycles](docs/menstrual-cycles.md): cycles derived from recorded flow, without predictions.

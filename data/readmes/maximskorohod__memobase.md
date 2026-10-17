@@ -11,7 +11,7 @@
 <h3 align="center">🌐 Русский · <a href="README.en.md">English</a></h3>
 
 <p align="center">
-  <a href="https://www.youtube.com/@MaximSkorohood"><img alt="YouTube: @MaximSkorohood" src="https://img.shields.io/badge/YouTube-%40MaximSkorohood-FF0000?logo=youtube&logoColor=white"></a>
+  <a href="https://www.youtube.com/@MaximSkorohod"><img alt="YouTube: @MaximSkorohod" src="https://img.shields.io/badge/YouTube-%40MaximSkorohod-FF0000?logo=youtube&logoColor=white"></a>
   <a href="https://t.me/+XrhmiKgCQdY5MjFi"><img alt="Telegram" src="https://img.shields.io/badge/Telegram-community-26A5E4?logo=telegram&logoColor=white"></a>
   <a href="https://skorehood.com"><img alt="skorehood.com" src="https://img.shields.io/badge/skorehood.com-0A0A0A?logo=googlechrome&logoColor=white"></a>
 </p>
@@ -283,7 +283,7 @@ MemoBase закрывает обе дыры. Это как **NotebookLM, но л
 
 ## Ограничения
 
-- Полностью локального (без внешних API) движка эмбеддинга пока нет: вопрос и фрагменты уходят на эмбеддинг/переранжирование в облако. Заготовка есть — можно указать свой OpenAI-совместимый сервер (`memobase.embedder.provider: openai-compat` + `base_url`). Мастер настройки уже умеет записывать выбор «локально», но движка под него ещё нет.
+- Локальный эмбеддинг (`memobase.embedder.provider: local`, fastembed + multilingual-e5-large, ~2.2 ГБ) работает без ключей, но переранжирование (Cohere) остаётся облачным. На hermes 0.22+ fastembed нельзя поставить pip'ом в управляемое окружение — локальный режим там пока только через свой OpenAI-совместимый сервер (`openai-compat` + `base_url`).
 - Нет истинного возобновления посреди пакета эмбеддинга — задача либо доходит до конца, либо перезапускается с последней завершённой стадии (сами загруженные фрагменты не теряются благодаря дедупу по SHA-256).
 - Документы `.txt` не несут структуры разделов — их фрагменты идут с `section=None` (страница/раздел у цитаты не показывается).
 - Оценка стоимости внешних вызовов — best-effort по публичному прайсингу провайдеров, не гарантированная цена биллинга.
@@ -297,8 +297,8 @@ MemoBase закрывает обе дыры. Это как **NotebookLM, но л
 
 ## Автор
 
-Сделано **Maxim Vasko** — [skorehood.com](https://skorehood.com) · [YouTube @MaximSkorohood](https://www.youtube.com/@MaximSkorohood) · [Telegram](https://t.me/+XrhmiKgCQdY5MjFi)
+Сделано **Maxim Skorohod** — [skorehood.com](https://skorehood.com) · [YouTube @MaximSkorohod](https://www.youtube.com/@MaximSkorohod) · [Telegram](https://t.me/+XrhmiKgCQdY5MjFi)
 
 ## Лицензия
 
-MIT — copyright © 2026 Maxim Vasko. Полный текст — в [`LICENSE`](LICENSE).
+MIT — copyright © 2026 Maxim Skorohod. Полный текст — в [`LICENSE`](LICENSE).

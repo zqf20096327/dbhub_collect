@@ -17,7 +17,7 @@ This project provides a easy and fast way to run common services for development
 
 Clone this repository or download and run `make help` to see all informations.
 
-This project is using Docker by default, if you want to use Podman instead, you need to use `DEVBOX_ENGINE` variable before run the command. Example: `DEVBOX_ENGINE=podman make redis7.0-up`.
+The compose command is detected automatically: `podman compose` is used if available, otherwise `docker compose`. If neither is found, an error is shown. To force an engine, use the optional `DEVBOX_ENGINE` variable (`docker` or `podman`) before run the command. Example: `DEVBOX_ENGINE=podman make redis7.0-up`.
 
 ## Services provided
 
@@ -26,7 +26,7 @@ This project is using Docker by default, if you want to use Podman instead, you 
 * Keycloak [24.0](https://www.keycloak.org/docs/latest/release_notes/index.html#keycloak-24-0-0), [25.0](https://www.keycloak.org/docs/latest/release_notes/index.html#keycloak-25-0-0).
 * MariaDB [10.5](https://mariadb.com/kb/en/mariadb-server-10-5/), [10.6](https://mariadb.com/kb/en/mariadb-server-10-6/), [11.0](https://mariadb.com/kb/en/mariadb-server-11-0/), [11.4](https://mariadb.com/kb/en/mariadb-server-11-4/).
 * Memcached [1.6](https://memcached.org/).
-* [MinIO](https://min.io/).
+* Silo [latest](https://silo.pgsty.com/).
 * MongoDB [4.4](https://docs.mongodb.com/manual/release-notes/4.4/), [5.0](https://docs.mongodb.com/manual/release-notes/5.0/), [6.0](https://docs.mongodb.com/manual/release-notes/6.0/), [7.0](https://docs.mongodb.com/manual/release-notes/7.0/), [8.0](https://docs.mongodb.com/manual/release-notes/8.0/).
 * MySQL [5.7](https://dev.mysql.com/doc/relnotes/mysql/5.7/en/), [8.0](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/), [8.4](https://dev.mysql.com/doc/relnotes/mysql/8.4/en/), [9.0](https://dev.mysql.com/doc/relnotes/mysql/9.0/en/).
 * Postgres [13.2](https://www.postgresql.org/docs/13/release-13-2.html), [14.2](https://www.postgresql.org/docs/14/release-14-2.html), [15.3](https://www.postgresql.org/docs/15/release-15-3.html), [16](https://www.postgresql.org/docs/16/release.html), [17](https://www.postgresql.org/docs/17/release.html).

@@ -2,7 +2,7 @@
   <img src="./uvcpp.svg" alt="libuvcpp logo" width="160" height="160">
 </p>
 
-[![version](https://img.shields.io/badge/version-1.7.2--dev-blue.svg)](./RELEASE.md)
+[![version](https://img.shields.io/badge/version-1.7.4-blue.svg)](./RELEASE.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![CI · Linux · Ubuntu](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml)
 [![CI · Windows · MSVC](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml)
@@ -14,7 +14,7 @@
 🔧 Modern C++11 wrapper for [libuv](https://github.com/libuv/libuv) — event-driven I/O with
 object-oriented APIs, dual-mode async/sync support, HTTP/1.1, WebSocket (RFC 6455), and SSL/TLS.
 
-- **Version**: `1.7.2-dev` — **Author**: `zhuweiye` — **License**: `MIT`
+- **Version**: `1.7.4` — **Author**: `zhuweiye` — **License**: `MIT`
 - **Languages**: [English](./README.md) · [中文](./README.zh.md)
 
 ## Download
@@ -39,9 +39,61 @@ What a package contains, and why it is laid out that way:
 [doc/release-process.md](doc/release-process.md).
 <!-- downloads:end -->
 
+## Install
+
+Besides the zips, releases ship `.deb` / `.rpm` packages and — once the repository
+signing key is configured — feed two package channels. Both install the dev
+surface — headers, the CMake config, `uvcpp.pc` — so `find_package(uvcpp CONFIG)`
+and `pkg-config --cflags --libs uvcpp` work right after installing.
+
+> **The apt/dnf channels are not live yet** (`GPG_PRIVATE_KEY` is not configured),
+> so the packages are published as release assets only. Install them directly:
+>
+> ```sh
+> sudo apt install ./libuvcpp1_<ver>-1_amd64.deb ./libuvcpp-dev_<ver>-1_amd64.deb
+> # or, on the RPM side:
+> sudo rpm -i libuvcpp1-<ver>-1.x86_64.rpm libuvcpp-devel-<ver>-1.x86_64.rpm
+> ```
+>
+> The two channel sections below describe what those commands become once the key
+> is in place.
+
+**Windows** — run `libuvcpp-<ver>-msvc-<arch>-setup.exe` from the release assets.
+It is **not code-signed yet** (the certificate is not configured), so SmartScreen
+warns on first run. It installs to `Program Files\libuvcpp`, optionally adds `bin\`
+to the system `PATH`, and registers an uninstaller.
+
+**Debian / Ubuntu** (apt):
+
+```sh
+sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://antruly.github.io/libuvcpp/apt/key.asc |
+  sudo tee /etc/apt/keyrings/libuvcpp.asc >/dev/null
+echo "deb [signed-by=/etc/apt/keyrings/libuvcpp.asc] https://antruly.github.io/libuvcpp/apt stable main" |
+  sudo tee /etc/apt/sources.list.d/libuvcpp.list
+sudo apt update
+sudo apt install libuvcpp-dev
+```
+
+**Fedora / RHEL / openSUSE** (dnf, or `zypper` on openSUSE):
+
+```sh
+sudo curl -fsSL -o /etc/yum.repos.d/libuvcpp.repo https://antruly.github.io/libuvcpp/rpm/libuvcpp.repo
+sudo dnf install libuvcpp-devel
+```
+
+The repository metadata is GPG-signed in both channels (`InRelease` for apt,
+`repomd.xml.asc` for dnf); the key is the one fetched above.
+
+> The distro packages link the **system** `libuv` and `zlib` (pulled in as
+> `libuv1-dev` / `zlib1g-dev`, `libuv-devel` / `zlib-devel`), while the zips above
+> are self-contained. Don't mix them: linking a self-contained copy against a process
+> that also loads the system libuv puts two libuv instances in one process.
+
 ## Table of contents
 
 - [Download](#download)
+- [Install](#install)
 - [Overview](#overview)
 - [Features](#features)
 - [Documentation](#documentation)
@@ -294,6 +346,7 @@ OpenSSL ≥ 3.2 with the QUIC API for QUIC and HTTP/3), and how the switches int
 | `UVCPP_BUILD_STATIC` | auto | Build static uvcpp library |
 | `UVCPP_BUILD_SHARED` | auto | Build shared uvcpp library |
 | `UVCPP_FOLLOW_LIBUV_BUILD` | `ON` | Keep `UVCPP_BUILD_SHARED`/`UVCPP_BUILD_STATIC` at `auto`, following libuv's own `BUILD_SHARED_LIBS` |
+| `UVCPP_SET_SOVERSION` | `OFF` | Set `VERSION`/`SOVERSION` on the shared library, so an installed `libuvcpp.so` becomes the chain `libuvcpp.so.1.7.4` → `libuvcpp.so.1` → `libuvcpp.so`. **This is for distro packages only, and it is off by default on purpose**: the release zips deliberately carry one unversioned `libuvcpp.so` (that is the name `tests/tools/package_release.py` copies and `check_config_contract.py` checks), and the `.deb`/`.rpm` build is the only thing that turns it on. ELF only — a no-op on Windows, and skipped on macOS (there it would rename the file to `libuvcpp.1.dylib`). See [`packaging/README.md`](packaging/README.md) |
 | `UVCPP_BUILD_EXPAND` | `OFF` | Build expand module (memory pool) |
 | `UVCPP_BUILD_NET` | `ON` | Build net module (TCP/UDP client/server) |
 | `UVCPP_BUILD_WEB` | `OFF` | Build web module (HTTP + WebSocket) |

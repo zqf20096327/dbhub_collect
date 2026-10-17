@@ -5,18 +5,26 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 
-**Network security monitoring for a home or small office: Zeek on a mirror port, readable
-detection code, and AI triage that can't override the facts.**
+**Network security monitoring for a home or small office: Zeek on a mirror port, the router's
+own syslog, optional endpoint agents, readable detection code, and AI triage that can't override
+the facts.**
 
 tapwatch watches a copy of your router's traffic and finds what's odd: new devices, beaconing,
-DNS tunnelling, exposed services, rogue DHCP, IoT devices talking somewhere new. An optional
-small AI model ([Jev](https://docs.typesafe.ai)) helps decide what's worth interrupting you for,
-and alerts reach your phone. One small box runs it all, with no SIEM and no cloud.
+DNS tunnelling, exposed services, rogue DHCP, scans, remote-control tools, IoT devices talking
+somewhere new. The router's syslog adds its IPS verdicts and admin logins; an osquery agent on a
+PC names the program behind a connection and catches encoded commands and shells spawned by
+documents. A first contact says what kind of site it is (offline lists, with an optional small
+model for the rest; odd TLS sessions and upload spikes carry the listed kind), and on the tapwatch
+PC a case says whether the owner's coding agent was behind it. An optional small AI model
+([Jev](https://docs.typesafe.ai)) helps decide what's worth interrupting you for, and alerts
+reach your phone. One small box runs it all, with no SIEM; nothing leaves but your
+notifications, list downloads and the optional AI questions, and those see words, not packets.
 
 ## Why this exists
 
 - **Homes have no SOC.** Commercial NSM assumes an analyst reads alerts all day. tapwatch's job is
-  to stay quiet: one real home night produced **8 digest items and 0 alerts**.
+  to stay quiet: one real home night produced **ten items to read and one alert** without Jev,
+  two with ([eval/RESULTS.md](eval/RESULTS.md)).
 - **Most devices can't run an agent.** TVs, cameras, hubs and phones are only visible on the
   wire, so tapwatch watches the network first. Computers can optionally run an
   [osquery agent](agents/README.md) that names the program behind a connection.
@@ -32,7 +40,10 @@ and alerts reach your phone. One small box runs it all, with no SIEM and no clou
 flowchart LR
     M["Switch mirror port"] --> Z["Zeek<br/>JSON logs"]
     S["Router syslog<br/>(optional)"] --> Z
+    A["Endpoint agents<br/>osquery (optional)"] --> Z
+    L["Offline lists<br/>Tranco · OUI · ASN · UT1 kinds"] --> D
     Z --> D["Detectors<br/>(plain code)"]
+    D -. "unlisted domain, once<br/>(optional, 30-day cache)" .-> C["Categorizer<br/>small model"]
     D --> H["Host context<br/>osquery + agent transcripts<br/>(optional)"]
     H --> J["Jev triage<br/>(optional)"]
     J --> R{"Router"}
@@ -47,24 +58,40 @@ The full design, routing rules and trade-offs are in **[docs/ARCHITECTURE.md](do
 
 ## Highlights
 
-- **26 case types from 24 detectors** tuned for homes (table below). Each is plain Python with
+- **27 case types from 25 detectors** tuned for homes (table below). Each is plain Python with
   tests and a written spec. Learned baselines survive restarts and follow the *device* (DHCP
   hostname, then MAC, then IP), so a laptop keeps its history when it moves between addresses.
+- **Sites named by kind.** First contacts, odd TLS sessions and upload spikes carry the kind of
+  site from the offline UT1 lists (advertising, remote control, file hosting, media, ...), and,
+  opt-in, from a small model asked once per domain which of a fixed set of labels fits (security
+  vendor, conferencing, CDN, SaaS, ...), cached, a fact only, never routing.
 - **Quiet by design.** A 3-day learning period sends the AI's alerts to the digest. Code-proven
   ceilings keep known shapes out of your phone: heartbeats to push, EDR, NTP and STUN services,
-  popular destinations, uploads to sync services or a sync company's own network, symmetric
-  video-call hours. "Suppress similar" rules can cover a whole domain, and cases they match
-  arrive already closed.
+  popular destinations, uploads to sync services, a sync company's own network or from a laptop
+  marked employer-managed, symmetric video-call hours, a "scan" from a phone the router just
+  moved between access points or that tore down a page's sessions. "Suppress similar" rules can
+  cover a whole domain, and cases they match arrive already closed.
+- **The router's own signals.** Its syslog (UniFi CEF, parsed against real lines) brings IPS
+  verdicts, admin logins (a new source or repeated failures always alert) and Wi-Fi client
+  events the mirror can't see.
 - **Guardrailed AI triage.** Always-alert rules never reach the model and can't be suppressed.
   "Is this domain normal?" is never asked (it's the model's measured weak spot). The model needs
   0.75 confidence to alert on its own. Without an API key, it runs rules-only.
-- **Agent-aware host context.** For traffic from the tapwatch machine, osquery names the program
-  and Claude Code session markers and transcripts show whether the owner asked for it. Process
-  proof outranks transcript context, and five host rules read the agent's own rows for shapes the
-  wire can't show.
+- **Agent-aware host context.** For traffic from the tapwatch machine (matched by its DHCP name,
+  not just its address), osquery names the program, and Claude Code session markers, the exec
+  parent chain and transcripts show whether the owner asked for it. Process proof outranks
+  transcript context, and five host rules read the agent's own rows for shapes the wire can't
+  show.
+- **It watches itself.** Every feed it depends on (Zeek's logs, each endpoint agent's frequent
+  queries) has a measured longest-allowed silence; a feed that stops is a case within minutes, not a
+  blind spot found days later. `tapwatch selfcheck` replays 18 scripted attack and false-positive
+  shapes through the detectors as configured and reports a detection rate; CI runs it, and it is one
+  command to run after a deploy.
 - **A case desk with no JavaScript.** It's a queue, a case page with ±5 minutes of Zeek evidence,
-  workflow, notes, an audit trail, expiring "suppress similar" rules and stats. The CSP allows no
-  scripts, and every change carries a CSRF token.
+  workflow, notes, an audit trail, expiring "suppress similar" rules and stats, including a
+  week-by-week benchmark: noise rate, how often the model agreed with your dispositions, and how
+  often host context's verdict matched them. The CSP allows no scripts, and every change carries a
+  CSRF token.
 - **Private by design.** The AI sees device *names*, never internal IPs, MACs or packet contents.
   Network strings are quoted as untrusted. A personal-data gate runs in CI.
 - **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs
@@ -107,7 +134,8 @@ a digest item into an alert without losing anything. The home night's one rules-
 a remote-control tool found on a work laptop, which the labels call benign and the detector is right
 about; two of its items are a phone's iCloud backup and a work laptop's EDR upload. The earlier run
 (2026-10-13) and what changed are in [eval/RESULTS.md](eval/RESULTS.md). The sample is small, so
-treat it as a sanity check, not a benchmark.
+treat it as a sanity check, not a benchmark. The scripted self-check (`tapwatch selfcheck`) stands at
+15/15 attack shapes detected and 3/3 false-positive shapes quiet, and runs on every push to `dev`.
 
 ## What it catches
 
@@ -123,7 +151,7 @@ treat it as a sanity check, not a benchmark.
 | `iot_drift` | a camera, TV, hub or other fixed-function device talks to new networks, countries or ports |
 | `odd_port` | outbound on a port no device in the house uses, or an unusually long connection |
 | `dns_bypass` | a device starts resolving names outside your resolver (plain, DoT, DoQ, DoH) |
-| `upload_spike` | an hour of uploads far above that device's normal for that hour |
+| `upload_spike` | an hour of uploads far above that device's normal for that hour; capped at the digest when assets.yaml marks it employer-managed |
 | `upload_stopped` | a steady uploader (a camera) goes quiet for hours |
 | `off_hours` | a device busy at an hour it's normally idle |
 | `tls_odd` | encrypted sessions stacking weak oddities (no name, unexplained IP, odd port, bad cert) |
@@ -147,7 +175,7 @@ You need a managed switch that can **mirror** the port your router plugs into
 git clone https://github.com/barnabys-drew/tapwatch && cd tapwatch
 python3 -m venv .venv && .venv/bin/pip install -e .
 .venv/bin/tapwatch init            # detects your router and interfaces, asks a few questions
-.venv/bin/tapwatch update-feeds    # public lists: popular domains, MAC vendors, IP-to-network
+.venv/bin/tapwatch update-feeds    # public lists: popular domains, MAC vendors, IP-to-network, site categories
 TAP_IFACE=<mirror NIC> docker compose -f deploy/docker-compose.yml up -d --build
 ```
 
@@ -181,12 +209,14 @@ eval/replay.sh eval/data/synthetic.pcap eval/out/synthetic        # Zeek in Dock
 | `tapwatch ui` | the case desk at http://127.0.0.1:8765/ (set `TAPWATCH_UI_TOKEN` for other devices) |
 | `tapwatch digest` | send the pending digest now (it also goes out daily) |
 | `tapwatch mark 42 fp` | close case 42 as a false (`fp`) or true (`tp`) positive |
-| `tapwatch update-feeds` | refresh the public lists (weekly is plenty) |
+| `tapwatch update-feeds` | refresh the public lists: Tranco, IEEE MAC vendors, iptoasn, UT1 site categories (weekly is plenty) |
 | `tapwatch syslog` | receive the router's CEF syslog into `udm.log` |
 | `tapwatch service install` | install systemd user services (alerter, case desk, watchdog; `--capture-iface` adds capture, `--syslog` the router syslog listener) |
 | `tapwatch who 42 --zeek-dir DIR` | ask the PC (osquery and agent transcripts) who made case 42's traffic |
 | `tapwatch explain [--apply]` | find repeat cases host context explains, and suggest or apply suppressions |
 | `tapwatch replay` / `tapwatch eval` | push finished logs through the pipeline, or score rules-only vs Jev on labelled traffic |
+| `tapwatch selfcheck` | detection rate on 18 scripted attack and false-positive shapes, rules only; exit 1 on a regression |
+| `tapwatch benchmark` | week-by-week noise rate, Jev agreement and host-context accuracy from the case desk, as Markdown |
 | `tapwatch test-alert` / `tapwatch notify` | check your notification channels |
 
 Optional extras: [router syslog](docs/setup/router-syslog.md) adds the router's own IPS verdicts
@@ -202,6 +232,8 @@ connection and feed the five host rules.
 - **Your notifications**, to the channels you configure. They include the device name and its LAN
   address. Domain names in them are defanged.
 - **Public list downloads** (`update-feeds`): downloads only, nothing is sent.
+- **Domain categorizer**, if enabled (`categories: {ai: true}`, off by default): the public registrable
+  domain only (`example.com`), to Anthropic, once per domain, cached for 30 days, at most `per_hour` (default 60) an hour.
 
 Packet contents and MAC addresses never leave, and internal addresses never reach the AI.
 
@@ -211,7 +243,9 @@ Packet contents and MAC addresses never leave, and internal addresses never reac
 src/tapwatch/        the package
   cli.py               subcommands, wiring
   zeek.py              log replay and live follower (rotation-safe)
-  detectors.py         every detector, plus state encoding
+  detectors.py         every network detector, plus state encoding
+  hostrules.py         the five endpoint rules over the agent's osquery rows
+  categories.py        kind of site: offline UT1 lists, optional small-model lookup, cache
   hostctx.py           osquery and agent-transcript host context
   summarizer.py        case -> short IP-free text for the AI
   triage.py            Jev client (typed questions, pinned model)
@@ -251,17 +285,25 @@ make test lint
 python3 tools/check_personal_data.py     # no personal data in tracked files
 ```
 
-CI runs the personal-data gate, ruff and pytest on every push to `dev`, and adds Semgrep and Trivy
-on PRs into `main`.
+CI runs the personal-data gate, ruff and pytest (synthetic data only) on every push to `dev`, and
+adds Semgrep and Trivy on PRs into `main`.
 
 ## Status
 
 **v0.1.1**, running on a real home network, so expect rough edges. The Linux paths (a bare
 container following this README, and the Compose stack) were installed from scratch and run on
-2026-10-15. The router syslog feed is verified against a live UniFi gateway, and the first endpoint
-rules (R17–R21) are in. Next up, per the [roadmap](docs/ROADMAP.md): a long-running test of host
-context (in progress), a clean-machine Windows test, and Linux endpoint rules. macOS waits until
-there's a Mac to test on.
+2026-10-15. The router syslog feed is verified against a live UniFi gateway, the five endpoint
+rules (R17–R21) are in, and host context's attribution of a one-second `curl` to the agent that
+ran it was verified live on 2026-10-16. Site categories (UT1 lists, optional model) landed the
+same day. On 2026-10-17 the host-context verdicts were verified live on test shapes: the owner's
+prompt naming a destination corroborates the agent's connection, and a tampered binary's connection
+raised the bad-signature rule. The same day fixed a blind spot found by looking: the Windows agent's
+signature check had been running per socket, slowly enough that osquery banned the query for a day
+at a time, so the check now runs once per program, and a new rule watches every feed for silence
+(it caught that ban ten minutes after deploy). A scripted detection-rate check runs in CI, and the
+stats page gained a week-by-week benchmark. Next up, per the [roadmap](docs/ROADMAP.md): a
+clean-machine Windows test, Linux endpoint rules, and letting the noise rate fall as the baselines
+age. macOS waits until there's a Mac to test on.
 
 ## License
 

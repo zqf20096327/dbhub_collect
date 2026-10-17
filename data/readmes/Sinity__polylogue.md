@@ -20,13 +20,32 @@ Use fresh isolated state. `XDG_RUNTIME_DIR` must be absolute. The archive defaul
 
 The foreground daemon owns the archive lock, writable schema and its derived socket. Ctrl-C stops admission, closes clients and joins handlers and its capture/compute workers before releasing the writer. A second archive can run independently; competing archive aliases and occupied endpoints are refused. Startup never adopts a foreign listener. Missing/empty database files with retained recovery sidecars require explicit recovery, and newer durable schemas are refused before mutation.
 
+## Stopped local copy restore
+
+Fresh archives record their acquisition lineage before retaining any source. A stopped local custody copy can keep that lineage with:
+
+```sh
+polylogue --archive COPY daemon --prepare-copy restore --request-id UUIDv7 --retired-writers
+polylogue --archive COPY daemon
+```
+
+Stop/disable the original writer and keep other copies inactive. Preserve the complete coordinated archive, embeddings, blobs, existing lock and durable sidecars before opening the copy. The disposable index may be omitted. `--retired-writers` asserts this custody; the destination lock supplies local exclusion only. It does not detect clones or fence another host.
+
+Preparation holds the normal lock, validates durable WAL/schema, SQLite integrity, immutable identities and every retained blob/revision, and exits without intake or a socket. It emits a flushed pending progress object followed by a final report and degraded exit 5. Interruption retains one versioned `copy_preparation` metadata value; ordinary writer startup refuses until the same request resumes. A changed/different action refuses. Completion uses the existing `client_request` row. An inherited completed request returns `historical_completion` without a new preparation; declare each newly activated raw copy with a fresh action ID. Restore allocates no new input identities and preserves citations and authored notes.
+
+Archive format **3** fences writers unaware of preparation. Ordinary preserving migration retains the exact prior database/sidecar set under `migrations/v1-to-v3-*` or `v2-to-v3-*`, advances the format/counter and preserves existing lineage when present. It never manufactures missing historical lineage. Actual legacy archives lacking that authority stay read-only after migration and cannot use this restore mode. Independent-copy and primary-backed preparation remain unsupported; configured preparation and `--until-idle` refuse. The normal daemon rebuilds its omitted disposable index from retained sources after successful preparation.
+
+Status exposes lineage, pending preparation, unavailable retained blob-file count and `latest_acknowledged_head: "unknown"`. Preparation preserves existing recovery qualification; neither SQLite integrity nor declaration proves the latest independently acknowledged head. Missing bytes fail explicitly; other readable retained content remains usable. The declared `local_cold_restore_demo` exercises synthetic base/patch history, authored correction, empty retained bytes, durable WAL custody, CLI/MCP discovery, interrupted retry, inherited receipts and damaged/older controls. This local drill does not prove off-disk backup, provider repair, installed use or a complete product slice.
+
+The drill requires `--binary`, `--unaware-binary`, `--output`, `--sdk-python` (an immutable Nix SDK environment) and `--sdk-client` (the specification's `joint-consumer/mcp_client.py`). It freezes the supplied official Python MCP SDK adapter and its companion collectors, retaining their hashes, initialization/tool discovery and call receipts. CLI, direct JSON-RPC and official SDK reads must agree on discovered operations, source origins and exact correction history. `--retained-proof PREVIOUS_OUTPUT` adds official SDK reads to that same stopped restored archive and binary without regenerating custody evidence; this mode does not require `--unaware-binary`.
+
 ## Controlled copy recovery
 
 `polylogue --archive SOURCE recover --to NEW_DEST` is a one-shot daemon mode. The source must be stopped, with its existing archive lock. It copies and hash-verifies independent files, admits one complete previous-generation durable WAL tail after a checksum-valid committed current prefix, and recovers only the copy through pinned SQLite and the checksum VFS. Malformed/current-generation damage, partial or mixed tails, busy sources, overlapping paths and existing destinations refuse. The first path supports the present plain file blobs written by this foundation; other blob layouts refuse explicitly.
 
 The command validates database integrity, immutable identities, blob and retained-revision bytes, then reopens through the production reader. It retains exact source-manifest bytes and a checks receipt under `NEW_DEST/recovery-receipts/`. Publication is an atomic non-replacing rename after syncing. Failed owned staging is named in the error; a killed operation may leave `.polylogue-recovery-*` staging beside the destination. Neither is the requested destination. A completed command returns **degraded exit 5**, with the usable destination and typed `recovery` qualification. It starts no ingestion and adopts no publication lineage. Independent historical acknowledgements must be compared separately; internal integrity cannot establish the latest acknowledged head.
 
-Archive format **2** persists this qualification in `archive.db`, and older binaries refuse it. Status, retained reads and matching or empty queries retain the qualification after ordinary writes, restart and index recreation. There is no clearing command. Healthy format-1 archives migrate under the ordinary daemon owner, after preserving the exact database main/WAL/SHM set under `migrations/v1-to-v2-*`; the migration changes format and advances the local write counter, preserving retained identities and bytes. A cold standalone reader requires the daemon to perform that migration. No general corruption recovery, index rebuild/swap, portable export/import or service cutover is implied.
+Archive format **3** persists this qualification in `archive.db`, and older binaries refuse it. Status, retained reads and matching or empty queries retain the qualification after ordinary writes, restart and index recreation. There is no clearing command. Healthy format-1/2 archives migrate under the ordinary daemon owner after preserving the exact database main/WAL/SHM set; the migration changes format and advances the local write counter, preserving retained identities and bytes. Historical archives without acquisition lineage remain read-only. A cold standalone reader requires the daemon to perform that migration. No general corruption recovery, index rebuild/swap, portable export/import or service cutover is implied.
 
 ## Development
 
@@ -51,16 +70,93 @@ coverage limits.
 
 Explicit `codex_home` configuration discovers rollout snapshots independently of thread catalog membership, then advances the same home in bounded turns with a one-second pause through the existing owner queues. Each turn admits at most 512 candidate evaluations and 32 MiB of charged source bytes, then releases capacity for the next turn. A bounded directory cursor progresses beyond earlier prefixes; unchanged content adds no observations. `--until-idle` handles the startup snapshot only. Retained prompt-history references stay separate from conversations, with pending coverage and source provenance in status and query replies. The [configured discovery guide](docs/rewrite/codex-configured-discovery.md) describes relative paths, admission, missing versus empty evidence, and retained reads after source removal. General source reconciliation remains unfinished.
 
+Optional `codex_home.paginated_history` names an additional physical history
+source; it has no default. `paginated_interval_seconds` selects its quiet interval
+(default 300). One parked worker advances reusable byte/checkpoint quanta through
+the existing owner, allowing ordinary acquisition and reads between grants.
+This route streams a complete SQLite read view into a plain base
+or one changed-page blob with flat archive extents. Its raw acquisition does not
+inherit the bounded row decoder's 16 MiB limit. Startup reports physical acquisition as pending; continuation reports its exact
+retained `paginated_input` after complete custody. Availability and interpretation
+remain separate. See the
+[physical-history contract](docs/rewrite/codex-configured-discovery.md#physical-history).
+Synthetic packaged CLI/MCP acceptance covers this configured operation path.
+Complete Session reconstruction, production capture and multi-GB resource
+qualification remain open.
+
 ## Observed Claude source subset
 
-One explicit regular Claude main location can now be retained at startup with
+One explicit regular Claude main location can be retained and kept current with
 `daemon --config FILE [--until-idle] [--json]`. Verified growth preserves its
 input/chain and parses retained pieces through the existing source owner. The
 [observed-source guide](docs/rewrite/observed-source.md) documents configuration,
 source-row qualification, separator and unfinished-tail behavior, retained
 `input cat ID` presentation, and the independent client demonstration. Default
 input presentation is credential-masked; source offsets and hashes remain raw
-coordinates. Directory discovery, watchers, rewrites and full M1 remain open.
+coordinates. Normal configured mode polls that main and its explicitly required tool-result bodies through the existing bounded acquisition owner. `--until-idle` remains finite startup admission. Directory discovery, general watcher semantics, rewrites and full M1 remain open.
+
+## Retained Claude identity and values
+
+The explicit Claude-main path keeps decoded native UTF-16 identifiers separate
+from interpreted text. Ambiguous identity coordinates use versioned framing;
+literal `~u:` strings cannot impersonate a surrogate. Interpreted-text repairs
+are counted in Session qualification diagnostics, separately from record errors.
+Opaque tool inputs retain numeric tokens, null/absence and non-scalar keys.
+Privacy checks original declared native identities and public-reference/origin
+components before reversible encoding. Credential-bearing identities refuse;
+ordinary provider lookalikes and literal marker strings remain ordinary data.
+
+Bounded model pages encode supported opaque fields and complete field-origin
+entries as `{"encoding":"canonical-json-v1","json":"…","masked":false}` after privacy
+assessment. `masked:true` identifies transformed content. Normalized Session JSON
+and export retain original-value JSON shapes; privacy-transformed export does
+not prove unchanged-value round trips. Structural witnesses are preserved or
+explicitly refused. Portable normalized reimport remains unavailable. Direct
+assembled `attrs` and block `data` objects use canonical decoded key order.
+Direct documents first index selected keys and field handles in a private,
+file-backed SQLite TEMP B-tree, then stream each admitted retained leaf. Direct
+documents have no additional aggregate key-set cap; existing per-leaf and
+model-page admissions still apply. Sorting checks deadlines and cancellation;
+storage exhaustion refuses rather than returning a complete partial object.
+Process startup must provide private on-disk temporary storage (the existing
+`TMPDIR` contract); source publication does not qualify a deployment's placement.
+
+Use fresh isolated archives for this candidate. Native index20 and revised
+parser/selection recipes distinguish the changed interpretation. Existing
+index18 and index19 are refused with their files preserved. Installed migration
+remains unsupported. Invalid raw
+UTF-8 and non-scalar immediate metadata selectors remain unsupported. Encoded
+reasoning/attachment block addresses are refused. Other provider identity cases
+remain unqualified. Codex keeps its scalar-only source boundary.
+
+### Reproducing the native identity regression
+
+[`scripts/check-native-identity.py`](scripts/check-native-identity.py) runs the
+finite three-input/eight-Message corpus through CLI, official SDK reads, export,
+restart, owned provider removal and isolated index reconstruction, followed by
+separate synthetic native-identity privacy refusals and exact-value controls. It retains
+raw responses, failures, source bindings and hashes in a new private directory.
+Use the checked binary's actual source commit, not a branch name:
+
+```sh
+python3 scripts/check-native-identity.py \
+  --artifact-kind checked-package \
+  --binary /absolute/checked/polylogue --source /absolute/native-checkout \
+  --candidate CURRENT_COMMIT --package-source CHECKED_PACKAGE_COMMIT \
+  --spec-repo /absolute/spec --spec-revision SPEC_COMMIT \
+  --corpus-path polylogue-sinex-joint/realization/demos/native-identity \
+  --oracle-path polylogue-sinex-joint/realization/demos/native-identity/public_oracle.py \
+  --sdk-python /absolute/pinned/python \
+  --sdk-client /absolute/spec/polylogue-sinex-joint/realization/demos/joint-consumer/mcp_client.py \
+  --output /absolute/new/private/results
+```
+
+The runner extracts the corpus and independent oracle from the pinned spec and
+freezes the supplied SDK client and its collector. Package and current source
+must match except for this runner and README. This finite regression does not
+qualify installed migration, unsupported reimport or every export clause above.
+An early package built without checks must use `--artifact-kind smoke-package`;
+its successful client run does not replace the normal checked-package gate.
 
 ## Delivery boundary
 
@@ -214,7 +310,7 @@ The first supported selection is a native Session's active Text/Thinking blocks,
 
 The shared operation is `polylogue::model_read::execute`, called by the daemon adapter. It uses typed immutable store views and the engine's existing Session qualification. Certificates frame sealed normalized value hashes, actual attribution and exact source-origin descriptor hashes. Equal text with changed preferred origins stales; implementation-only body row replacement is insufficient to stale. A different unrelated retained source can advance the serving view without invalidating an exact block. Tokens contain hashes and numeric positions only, authenticated by a daemon-instance key. Restart/key loss refuses an old token; a fresh retained read remains available after provider removal. No old view or payload is retained for continuation service.
 
-Credential-output-v1 replays preceding Text, Thinking and textual ToolResult output in the same Message, even when hidden. Ordinary recognizers end at each block boundary; recognized PEM suppression and END progress survive until the Message ends. ToolCall fields and structured result channels are independent strings and cannot change this body carry. Fully excluded Messages require no replay. Necessary ToolResult output uses the same typed normalized-field decoder as JSON export, admitted at 65,536 encoded bytes; larger/conflicting fields and unknown necessary body kinds refuse before usable data. Arbitrary huge tool-body support remains unavailable. Scalar/escape/replacement boundaries stay indivisible. The reader retains a finite display window and fits it by measured compact UTF-8 JSON size using `ceil(bytes/4)`; socket frames are transport only. CLI has no duplicated text companion. MCP requests select the shared `mcp` presentation, which fits its ready MCP follow-up call and fixed short text companion in this same operation. Budgets below 128 receive the explicit minimum diagnostic envelope; insufficient supported budgets return a sufficient capacity for retrying the same reference and cursor. Supported capacity is at most 1,048,576 estimated tokens; larger required metadata or existing typed metadata admissions refuse explicitly. Body scans replay prefixes, so CPU cost is not append-local; existing source-effect cells and qualification membership remain admitted allocation units. Whole-process/corpus resource acceptance is unqualified.
+Credential-output-v1 replays preceding Text, Thinking and textual ToolResult output in the same Message, even when hidden. Ordinary recognizers end at each block boundary; recognized PEM suppression and END progress survive until the Message ends. ToolCall fields and structured result channels are independent strings and cannot change this body carry. Fully excluded Messages require no replay. Necessary ToolResult output uses the same typed normalized-field decoder as JSON export, admitted at 65,536 encoded bytes; larger/conflicting fields and unknown necessary body kinds refuse before usable data. Arbitrary huge tool-body support remains unavailable. Scalar/escape/replacement boundaries stay indivisible. The reader assembles consecutive selected fragments across Message and block boundaries into one bounded page. It keeps the complete qualification envelope and each fragment’s source and field origins. A final page is tested with `next:null` before fitting a nonfinal prefix, since removing the continuation can make the final response smaller. The reader retains a finite display window and fits it by measured compact UTF-8 JSON size using `ceil(bytes/4)`; socket frames are transport only. CLI has no duplicated text companion. MCP requests select the shared `mcp` presentation, which fits its ready MCP follow-up call and fixed short text companion in this same operation. Budgets below 128 receive the explicit minimum diagnostic envelope; insufficient supported budgets return a sufficient capacity for retrying the same reference and cursor. Supported capacity is at most 1,048,576 estimated tokens; larger required metadata or existing typed metadata admissions refuse explicitly. Each operation admits at most 16 MiB of transformation input, including prefix replay, independently of its output budget. Each selected traversal admits one million Message/block callbacks; qualification retains its separate 16 MiB admission. Exceeding these work allowances returns `selected_transform_work_admission` or `selected_traversal_work_admission`, rather than an empty successful page. Body scans replay prefixes, so CPU cost is not append-local; existing source-effect cells and qualification membership remain admitted allocation units. Whole-process/corpus resource acceptance is unqualified.
 
 The request uses the existing daemon worker and absolute 30-second read lifetime, with cooperative disconnect checks. Live removal epochs/generation and the Session's current excision authority are rechecked before handoff, and current selected bodies are re-resolved. Native authored privacy/excision products and their broader acceptance remain unavailable. The MCP adapter below reuses this operation; the broader agent-read/M1 capability remains incomplete.
 

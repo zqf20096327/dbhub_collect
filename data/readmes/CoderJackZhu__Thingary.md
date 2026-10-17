@@ -1,3 +1,5 @@
+[简体中文](README.md) | [English](README.en.md)
+
 <p align="center">
   <img src="src-tauri/icons/icon.png" alt="物谱应用图标：谱线与记录点" width="112" height="112">
 </p>
@@ -8,7 +10,7 @@
 
 钱分散在银行卡、余额宝、券商、基金平台、公积金和房贷里，很难看清全貌。物谱是本地使用的桌面应用：每月对照各平台录一次余额和欠款，就能看到净资产变化，并回答三个问题：**每月要存多少、什么时候能不靠工资、歇一阵能撑多久。** 无需账号，不联网也能用，资料只在你的电脑上。
 
-**[下载 0.0.7](https://github.com/CoderJackZhu/Thingary/releases/tag/v0.0.7)**（Mac：Apple Silicon 与 Intel；Windows 10/11 x64）· [快速上手](docs/QUICKSTART.md) · [国内镜像](https://gitee.com/CoderJackZhu/thingary/releases) · [反馈问题](https://github.com/CoderJackZhu/Thingary/issues)
+**[下载 0.0.7](https://github.com/CoderJackZhu/Thingary/releases/tag/v0.0.7)**（Mac：Apple Silicon 与 Intel；Windows 10/11 x64）· [产品主页](https://coderjackzhu.github.io/Thingary/) · [快速上手](docs/QUICKSTART.md) · [国内镜像](https://gitee.com/CoderJackZhu/thingary/releases) · [反馈问题](https://github.com/CoderJackZhu/Thingary/issues)
 
 ![21 秒界面预览：总览、账户盘点、目标、存钱目标、区间回顾与物品](docs/images/walkthrough.gif)
 
@@ -24,7 +26,7 @@
 |---|---|
 | **账户盘点** | 定期核对资产与负债，看净资产趋势；支持房产、个人养老金、保险、黄金等账户类型 |
 | **目标与规划** | 反算每月要存多少、估算财务独立时间；比较购买、休息或换工作的影响 |
-| **存钱目标与区间回顾** | 为一笔钱设目标并随盘点看进度；默认回看近 12 个月的盘点、收入与重要支出，也可选自然年或自选日期 |
+| **存钱目标与区间回顾** | 为一笔钱设目标并随盘点看进度；默认回看近 1 年的盘点、收入与重要支出，也可选近 30 天、今年以来、全部或自定义期间 |
 | **物品档案（可选）** | 价格、照片、维修与保障，日均成本；周期费用与虚拟资产可按需打开 |
 | **资料保护** | 完整备份、自动备份、最近删除；备份可用你保管的恢复密钥加密 |
 
@@ -32,7 +34,7 @@
 
 ## 资料与隐私
 
-资料只在本机，没有账号，平时不联网（只有你点「检查更新」时才查询公开版本列表）。主资料库和图片未加密，备份可选加密；自动备份和主资料同盘，请另外保留一份异地备份。详见[隐私与资料安全](docs/USER_GUIDE.md#privacy)。
+资料只在本机，没有账号，资料使用完全离线（仅当你开启「启动时检查更新」或点「检查更新」时查询公开版本列表）。主资料库和图片未加密，备份可选加密；自动备份和主资料同盘，请另外保留一份异地备份。详见[隐私与资料安全](docs/USER_GUIDE.md#privacy)。
 
 ## 支持范围
 

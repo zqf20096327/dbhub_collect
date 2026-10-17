@@ -18,25 +18,25 @@ Supported Databases:
 Add `sqlx_migrator` to your `Cargo.toml` with the appropriate database feature:
 
 ```toml
-sqlx_migrator = { version = "0.19.0", features=["postgres"] }
+sqlx_migrator = { version = "0.20.0", features=["postgres"] }
 ```
 
 OR
 
 ```toml
-sqlx_migrator = { version = "0.19.0", features=["mysql"] }
+sqlx_migrator = { version = "0.20.0", features=["mysql"] }
 ```
 
 OR
 
 ```toml
-sqlx_migrator = { version = "0.19.0", features=["sqlite"] }
+sqlx_migrator = { version = "0.20.0", features=["sqlite"] }
 ```
 
 OR
 
 ```toml
-sqlx_migrator = { version = "0.19.0", features=[
+sqlx_migrator = { version = "0.20.0", features=[
     "any",
     # Plus any one of above database driver
     ] }
@@ -186,6 +186,18 @@ async fn main() {
 }
 ```
 
+## Migration table
+
+Applied migrations are recorded in `_sqlx_migrator_migrations`, with an optional prefix
+and schema (see `Migrator::set_table_prefix` and `Migrator::set_schema`). The table is
+created and changed by the migrator's own internal migrations, a numbered list of SQL
+statements per database. A small meta table next to it, `_sqlx_migrator_meta`,
+records the name of every internal migration which has run. When a release adds an internal
+migration, older databases run it the next time migrations run; a database changed by
+an internal migration this release does not know is refused rather than guessed at.
+Each internal migration is safe to rerun, so databases created before the meta table
+existed simply catch up.
+
 ## Locking and transactions
 
 While a plan runs, the migrator holds a database lock so two processes cannot
@@ -238,6 +250,27 @@ use sqlx_migrator::cli::MigrationCommand;
 
 MigrationCommand::parse_and_run(&mut *conn, &migrator).await.unwrap();
 ```
+
+The command provides these subcommands:
+
+| Subcommand | Purpose |
+| --- | --- |
+| `apply` | Apply pending migrations. `--plan` shows what would run, `--check` fails when something is pending, `--fake` only records them, `--app` / `--migration` / `--count` limit the plan. |
+| `revert` | Revert the last applied migration by default; `--all`, `--app` / `--migration` or `--count` choose more. Asks for confirmation unless `--force` is passed. |
+| `redo` | Revert the last applied migration and apply it again, handy while developing a migration. |
+| `list` | Show every migration with its status: applied, pending, replaced, or unknown (in the table but no longer in the code). |
+| `prune` | Delete unknown entries from the migration table after migrations were removed from the code. Asks for confirmation unless `--force` is passed. |
+| `drop` | Drop the migration table once every migration is reverted. |
+
+The default output is a table sized to its content. With the optional `json` feature
+enabled, `list`, `apply --plan` and `revert --plan` also accept `--format json` for
+scripting:
+
+```toml
+sqlx_migrator = { version = "0.20.0", features=["postgres", "json"] }
+```
+
+Confirmation prompts need a terminal, so pass `--force` when running non-interactively.
 
 #### Extending Your Own CLI with Migrator Support
 
@@ -318,7 +351,10 @@ let sqlx_sql_migrator = SqlxMigrator;
 migrator.sync(&mut *conn, &sqlx_sql_migrator).await?;
 ```
 
-You can also implement above functionality for other migrator such as `diesel`, `seaorm` etc as well as for renaming table name of `sqlx_migrator`
+You can also implement above functionality for other migrators such as `diesel` or `seaorm`.
+The implementation may be generic over the database. A `Migrator` is itself an
+`OldMigrator`, which covers renaming the migration table or moving it to another schema:
+build a migrator with the old table prefix or schema and sync from it.
 
 [license_badge]: https://img.shields.io/github/license/iamsauravsharma/sqlx_migrator.svg?style=for-the-badge
 [license_link]: LICENSE

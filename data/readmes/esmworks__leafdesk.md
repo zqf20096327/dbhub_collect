@@ -24,12 +24,12 @@ after you approve them over OAuth.
   what it may read or change; optional AI writing, AI properties, a chat that remembers what you
   tell it, reusable skills, and agents that work on database rows, with Anthropic, OpenAI, Google
   or a local model.
-- **Bring your pages**: import a Notion *Markdown & CSV* export, an Obsidian vault, Markdown files,
-  Word documents, a folder or CSV.
+- **Bring your pages**: import a Notion *Markdown & CSV* export, an Obsidian vault, a Trello board,
+  Markdown files, Word documents, a folder or CSV.
 - **Ready for a team**: teamspaces, page permissions, guests, single sign-on (OIDC, SAML), SCIM,
   two-step verification, passkeys and an audit log.
 - **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL,
-  Apache-2.0 licensed, in English, Turkish, German, Spanish and French.
+  AGPL-3.0 licensed, in 16 languages.
 
 Claude planning a launch in Leafdesk over MCP: a database, its tasks, a board view and a kickoff
 page, all showing up live (sped up):
@@ -56,22 +56,36 @@ versions, upgrades and running behind a domain.
   colors included) and markdown shortcuts, icons (beside the title), backgrounds (a color that suits the light and dark theme, or black, with an optional faint
   pattern), favorites, duplicate, move, trash with restore (emptied after a time owners choose), export as Markdown or PDF (or, with
   subpages, as a ZIP; owners can export the whole workspace, see [Export](#export)), and search
-  over titles and content: full-text, and also by meaning when the server has an embeddings model
-  (see [Semantic search](#semantic-search)).
-- **Home page**: quick buttons for a new page, database or template; the database rows assigned
-  to you that aren't done and that you can open, grouped as overdue, today, the next 7 days, later
-  and no date; and the pages edited last.
-- **Search box** (Cmd/Ctrl+K): before you type, the pages last edited. Narrow a search with
-  `in:Projects` or `in:"Launch plan"` (that page and everything under it; several pages of that
-  title, or several `in:`, search under any of them; a title nobody can see finds nothing) and
-  `type:page`, `type:database` or `type:row` (database rows); filters work without words too,
-  listing the pages they match, last edited first. Type `>` for commands: new page or d
+  over titles and content: full-text (every word of the search, each also as the start of a
+  longer word, so pages show up while you type: "kond plan" finds "Kondenser planı", while the
+  middle of a word doesn't match; Japanese and Chinese words also inside a sentence, which has no
+  spaces between words: "会議" finds "明日の会議について", a word's characters only side by side;
+  Korean words by their start, so with a particle joined on: "회의" finds "회의를"; pages whose
+  title has the words come first; past the first 80,000 characters of a huge page's text, words
+  aren't found), and also by meaning when the server has an embeddings model
+  (see [Semantic search](#semantic-search)). Full-text search also looks inside the PDFs and
+  Word documents a page shows, with or without an embeddings model: a page is found when one of
+  its documents has every word, after
 
 [...截断...]
 
-atabase,
+ the pages that have them in their own text, and the result
+  names the document, with the text around the words. Only documents the page's readers may open
+  through it count, as for semantic search; a document's first 80,000 characters are searched,
+  and a scan without a text layer has no words to find.
+- **Home page**: quick buttons for a new page, database or template; today's daily note (or a
+  button that starts it) and the few before it; the database rows assigned to you that aren't done
+  and that you can open, grouped as overdue, today, the next 7 days, later and no date; and the
+  pages edited last.
+- **Search box** (Cmd/Ctrl+K): before you type, the pages last edited. Narrow a search with
+  `in:Projects` or `in:"Launch plan"` (that page and everything under it; several pages of that
+  title, or several `in:`, search under any of them; a title nobody can see finds nothing) and
+  `type:page`, `type:database`, `type:row` (database rows) or `type:journal` (your daily notes);
+  filters work without words too,
+  listing the pages they match, last edited first. Type `>` for commands: new page or database,
   from a template, import, trash, inbox, settings and keyboard shortcuts. The line under the
-  results puts each of these into the box.
+  results puts each of these into the box. The words you typed show in bold in the text under each
+  result.
 - **Page style**: at the top of a page's `⋯` menu, a typeface for the page (default, serif or
   mono), small text, and full width. It is set per page and everyone sees it, changing live for
   whoever has the page open; anyone who can edit the page can change it. Copies and templates keep
@@ -81,7 +95,9 @@ atabase,
   keeps the current style. Databases always use the full width. With the comments panel open, a
   page moves left of it (and narrows when the window is too small) instead of running under it.
 - **Rich blocks**: callouts, LaTeX equations (block and inline, KaTeX), Mermaid diagrams with a
-  live preview, a table of contents and a breadcrumb, and columns (2 to 5, resizable, blocks
+  live preview, a table of contents, a breadcrumb, a list of the page's subpages (live, each reader
+  seeing those they may open; a page with one doesn't list them again at its end when published or
+  printed), and columns (2 to 5, resizable, blocks
   dragged in and out with the side menu, stacked on phones), also on published pages and in
   Markdown. Code blocks take their language from a menu (plain text and 42 languages) and color
   their code in it, published pages and the print view included.
@@ -100,19 +116,4 @@ atabase,
 - **Realtime collaboration**: several people can edit the same page at once (Yjs over WebSocket
   via Hocuspocus), with live cursors. The page header shows who else has the page open, including
   people who can only view it.
-- **Offline editing**: pages you opened before stay readable and editable without a connection;
-  the edits sync when it is back, merged with what others wrote meanwhile. The sidebar and
-  recently opened databases stay readable. The page header shows offline, syncing and synced (see
-  [Install and offline use](#install-and-offline-use)).
-- **Installable app**: install Leafdesk from the browser on desktop (Chrome, Edge) or add it to
-  the home screen on phones; it opens in its own window. The app's icon offers a quick note, and on
-  phones that support it Leafdesk shows up in the share sheet: text and links shared to it open the
-  quick note filled in, saved as a private page in the workspace you pick or as a row of one of its
-  databases. Where the server can transcribe, the quick note takes voice notes too (see
-  [Voice notes](#voice-notes)).
-- **Find and replace** in a page (Cmd/Ctrl+F): highlights every match, steps through them, and
-  replaces one or all in a single undo step. Anyone who can open the page can search it.
-- **Databases**: every row is also a page.
-  - Properties: text, number, select, multi-select, status, date, checkbox, checklist, URL,
-    email, phone, files & media (uploads with image thumbnails), person, one- or two-way relations to other databases, formulas, rollups over
-    relations, and the read-
+- **

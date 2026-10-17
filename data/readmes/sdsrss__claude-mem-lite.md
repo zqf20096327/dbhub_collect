@@ -92,4 +92,4 @@ How claude-mem-lite differs from the major neighbors in the LLM-memory space (ve
 - **Observation relations** -- Bidirectional links between related observations based on file overlap
 - **User prompt capture** -- Records user prompts via UserPromptSubmit hook for intent tracking
 - **Read file tracking** -- Tracks files read during sessions for richer episode context
-- **Degraded fallback when the LLM fails** -- An episode the deterministic rules already rate notable (an error fixed, a config or schema file changed) is saved with inferred
+- **Degraded fallback when the LLM fails** -- An episode that fixed an error is saved with inferred metadata (as an activity event) instead of being discarded, when a command

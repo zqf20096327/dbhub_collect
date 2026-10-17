@@ -1,5 +1,7 @@
 # Rowsafe
 
+![rowsafe add saves the database once; rowsafe pulse finds a session idle in a transaction and 200 thousand dead rows; rowsafe fix ends the session and cleans up; the score goes from 88 to 98](docs/demo/rowsafe-demo.gif)
+
 **The database admin you never hired.** Rowsafe looks after the databases you run on your own servers: backups you can restore to any second, a restore test every week, monitoring with one-click fixes, and a safety net for AI coding agents.
 
 This repository is the open-source part of [Rowsafe](https://rowsafe.sh): the agent, the `rowsafe` CLI, the installer and the MCP server. Everything that touches your data is here, under Apache-2.0.
@@ -17,14 +19,51 @@ This repository is the open-source part of [Rowsafe](https://rowsafe.sh): the ag
 
 Features per database: `protocol.EngineCapabilities`.
 
-## Get started
+## Try it now
+
+On your database server (PostgreSQL on Linux):
 
 ```sh
-curl -fsSL https://rowsafe.sh/cli | sh           # the CLI, on your Mac or Linux computer
-rowsafe login
-rowsafe hosts add root@203.0.113.10              # installs the agent on that server over SSH
-# or on the database server itself:  curl -fsSL https://rowsafe.sh | sudo sh
+curl -fsSL https://rowsafe.sh | sudo sh -s -- --no-account
+sudo rowsafe status shop                  # protected? backups, the change log, the last restore test
+sudo rowsafe mark shop before-migration   # a restore point (a Mark)
+sudo rowsafe backups shop                 # also: proofs, backup, proof
 ```
+
+Continuous backups to your own bucket (encrypted on the server, with a passphrase only you have), Marks, a weekly restore test and Pulse. Restoring through Rowsafe (Rewind) comes with the dashboard, for now.
+
+From anywhere, on a PostgreSQL you can connect to (managed ones too):
+
+```sh
+curl -fsSL https://rowsafe.sh/cli | sh
+rowsafe add shop postgres://user@host:5432/dbname   # once: checks it connects, saves it on this computer
+rowsafe pulse shop                                  # a 0–100 health score and what to fix
+rowsafe fix shop                                    # apply a fix, after you confirm
+rowsafe insights | top | activity | settings | tune shop
+rowsafe schema shop [TABLE…]                        # tables, columns, keys, indexes (used or not): compact for an AI agent
+rowsafe explain shop "SELECT …"                     # why a query is slow, and the index that would likely help
+rowsafe preview shop 0042.sql                       # check a migration first: locks, rewrites, a verdict
+rowsafe mcp shop --allow-writes                     # the same as MCP tools for Claude Code, Codex or Cursor
+rowsafe use shop                                    # in a project: then just `rowsafe pulse`
+```
+
+Pulse checks cleanup falling behind, bloat, duplicate and unused indexes, stuck sessions, locks, connections, replication slots, transaction ID wraparound and settings. The connection string stays in your config folder, readable only by you; `rowsafe pulse postgres://…` works once without saving, and `rowsafe use shop` makes it a project's database. Through a pooler, everything works but the fixes that run inside the database. Nothing is sent to Rowsafe. `rowsafe help local` has the rest; the demo above is a [real recording](docs/demo).
+
+MySQL and MariaDB work the same way (`rowsafe add shop mysql://user@host:3306/dbname`): stuck sessions and locks, long transactions, InnoDB's old row versions, the buffer pool, free space inside tables, unused and duplicate indexes, tables without a primary key and the slow query log, with fixes to end a session, drop an index, turn on the slow log and rebuild a table. Not yet: `schema`, `explain`, `preview`, replication checks, and MariaDB settings changes (they live in its configuration file).
+
+On Windows, download `rowsafe-windows-amd64.exe` (or `-arm64.exe`) from the [latest release](https://github.com/rowsafe/rowsafe/releases/latest); the commands from anywhere work there, fixes included, except MySQL for now.
+
+## Link it to the dashboard
+
+[The dashboard](https://app.rowsafe.sh) adds every server and database in one place, alerts, history, Rewind in one click and teams. Free for one server.
+
+```sh
+sudo rowsafe login                    # on a server set up above: keeps its backups, Marks and restore tests
+rowsafe login                         # on your computer
+rowsafe hosts add root@203.0.113.10   # then add more servers: installs the agent over SSH
+```
+
+Or install on a new server already linked: `curl -fsSL https://rowsafe.sh | sudo sh`.
 
 **Rewind**: continuous backups, restore to any second.
 
@@ -70,11 +109,13 @@ Full guide: [Quickstart](https://rowsafe.sh/docs/quickstart).
 | `cmd/rowsafe`, `client` | The CLI. |
 | `mcp`, `integrations/` | Guard: the MCP server, Claude Code and Codex plugins, and the GitHub Action (`rowsafe/action`). |
 | `collect`, `tune` | Monitoring, and settings recommendations. |
+| `pulse`, `local` | The health score and its fixes, and Rowsafe on a connection string (`rowsafe pulse postgres://…`). |
 | `protocol` | API types shared by the agent, the CLI and the control plane. |
 | `internal/pgbackrest`, `internal/pginspect` | PostgreSQL. |
 | `internal/engine` | MySQL/MariaDB, MongoDB, ClickHouse, Redis/Valkey, SQLite, Qdrant, Meilisearch. |
 | `scripts/install.sh` | The installer served at `https://rowsafe.sh`. |
 | `scripts/cli.sh` | The CLI installer served at `https://rowsafe.sh/cli` (macOS and Linux). |
+| `integrations/npm` | The `rowsafe` npm package: downloads the release's CLI for the platform (checked against `SHA256SUMS`) on first run. |
 | `release`, `cmd/rowsafe-release` | Release signing and verification. |
 
 ## Safety
@@ -85,6 +126,7 @@ Full guide: [Quickstart](https://rowsafe.sh/docs/quickstart).
 - **Your data and secrets stay on your server.** Backups are encrypted before upload; Rowsafe sees table names and counts, not rows.
 - **Signed, reproducible releases** with automatic rollback. See [verifying releases](docs/verifying-releases.md).
 - **Monitoring is read-only.** `ROWSAFE_COLLECT_QUERY_TEXT=false` keeps query text on your server; `ROWSAFE_MONITORING=false` turns it off.
+- **No usage tracking unless you turn it on.** The CLI sends nothing about how you use it by default. `rowsafe telemetry on` sends, after each command, its name (`cloud create`, never its arguments), the CLI version, OS, exit code, a duration range, whether a terminal or an AI agent ran it, whether you're logged in, and a random ID made on this computer. `rowsafe telemetry status` shows exactly what goes out; `rowsafe telemetry off`, `ROWSAFE_TELEMETRY=0` or `DO_NOT_TRACK=1` stop it. The schema is [`protocol/telemetry.go`](protocol/telemetry.go).
 
 ## Build
 

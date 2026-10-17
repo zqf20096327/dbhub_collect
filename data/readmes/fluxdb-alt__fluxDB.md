@@ -1,8 +1,10 @@
-# FluxDB — 跨平台数据库客户端与 SQL 编辑器
+# FluxDB
 
-**基于 Rust + GPUI 的开源数据库管理工具（Database GUI），支持 macOS、Windows 和 Linux。**
+**开源、跨平台的原生数据库客户端与 SQL 编辑器。**
 
-在一个原生桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite 和 Redis，完成 SQL 查询、数据编辑、表结构管理与键值操作。无论是 MySQL / PostgreSQL 图形化管理、SQLite 数据库浏览，还是 Redis 可视化管理，都可以在同一个工作区中完成。
+在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。
+
+基于 Rust + GPUI 构建，不依赖 Electron 或 WebView，支持 macOS、Windows 和 Linux。
 
 **简体中文 | [English](./README.en.md)**
 
@@ -11,20 +13,23 @@
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue)](./LICENSE)
 ![Platforms](https://img.shields.io/badge/平台-macOS%20%7C%20Windows%20%7C%20Linux-blue)
 
-[下载安装](#下载安装) · [功能特性](#功能特性) · [操作手册](./docs/user-guide.md) · [参与贡献](#参与贡献) · [支持与赞助](#支持与赞助)
+[下载最新版本](https://github.com/fluxdb-alt/fluxDB/releases/latest) · [功能特性](#功能特性) · [安装说明](#下载安装) · [操作手册](./docs/user-guide.md) · [反馈问题](https://github.com/fluxdb-alt/fluxDB/issues)
 
-![FluxDB 主界面](docs/screenshots/home_page.png)
 
-> FluxDB 仍处于早期开发阶段，功能与兼容性正在持续完善，尚未经过广泛的真实场景验证。操作重要数据前，请先做好备份。
+**演示视频** · 2 分 46 秒 · MP4，约 8.6 MB
+
+https://github.com/user-attachments/assets/f6075999-a87f-4644-9d14-dbda49a7981d
+
+> 早期版本，当前界面主要为中文，功能与兼容性尚未经过广泛的真实场景验证。建议先连接测试库；操作重要数据前，请先备份。
 
 ## 功能特性
 
-- **多数据库管理**：统一管理连接，在侧边栏浏览数据库、Schema、表和 Redis 键。
 - **SQL 编辑器**：语法高亮、代码折叠、关键字与表列补全、SQL 格式化和查询历史。
 - **数据浏览与编辑**：分页浏览、筛选数据、编辑并回写结果，支持数据导出与 SQL 文件执行。
 - **表结构管理**：查看列信息和 DDL，创建、修改数据表。
+- **ER 关系图**：浏览数据库外键，手动记录本地逻辑关系，并从单表展开关联视图。本地逻辑关系不会创建或修改数据库外键。
 - **Redis 工作台**：浏览与编辑键值，查看键详情，通过内嵌终端执行命令。
-- **原生桌面体验**：使用 Rust + GPUI 构建，无 WebView 渲染依赖，提供明暗主题。
+- **多连接工作区**：在侧边栏管理连接与数据库对象，使用标签页切换工作内容，提供明暗主题。
 
 ### 数据库支持
 
@@ -36,16 +41,6 @@
 | PostgreSQL | SQL 查询、Schema 与对象浏览、表结构管理、数据编辑、用户与角色权限管理、原生客户端工具 |
 | SQLite | 本地数据库连接、SQL 查询、表结构浏览与数据编辑 |
 | Redis | 连接总览、键值浏览与编辑、工作台与命令终端 |
-
-### 界面预览
-
-| SQL 编辑器 | 数据浏览与编辑 |
-| :---: | :---: |
-| ![SQL 编辑器](docs/screenshots/sql_editor_adapter.png) | ![数据浏览与编辑](docs/screenshots/mysql_data_table_ui.png) |
-
-| 表结构管理 | Redis 键值详情 |
-| :---: | :---: |
-| ![表结构管理](docs/screenshots/mysql_table_info.png) | ![Redis 键值详情](docs/screenshots/redis_detail.png) |
 
 ## 下载安装
 
@@ -67,6 +62,9 @@
 安装后，点击「添加连接」，选择数据库类型，填写连接信息并测试连接，即可开始使用。详细步骤见[操作手册](./docs/user-guide.md)（当前以 macOS 界面和快捷键为例）。
 
 ## 从源码运行
+
+<details>
+<summary>构建依赖、运行与打包步骤</summary>
 
 ### 环境要求
 
@@ -102,6 +100,8 @@ macOS 可使用仓库脚本生成包含动态库的 `.app` 和 `.dmg`：
 
 脚本支持 `PROFILE=debug`、`CREATE_DMG=0` 等选项，详见[打包脚本](./scripts/package-macos.sh)。Windows 安装器与 Linux DEB 的构建步骤见[发布工作流](./.github/workflows/release.yml)。
 
+</details>
+
 ## 参与贡献
 
 欢迎报告问题、提出建议、改进文档和提交代码。
@@ -115,34 +115,32 @@ Rust 修改提交前运行：
 ```bash
 cargo fmt --all -- --check
 cargo check --workspace --locked
-cargo test --workspace --locked
 ```
 
-部分数据库集成测试需要对应的数据库服务，请在 PR 中说明测试环境与未验证范围。UI 行为修改还需启动应用验证主窗口及相关交互。
-
-### 项目结构
-
-| 目录 | 职责 |
-| --- | --- |
-| `apps/fluxdb-desktop` | GPUI 桌面界面与交互 |
-| `crates/fluxdb-app` | 应用状态与业务编排 |
-| `crates/fluxdb-core` | 领域模型、错误类型与连接器接口 |
-| `crates/fluxdb-connectors` | 各数据库连接与操作实现 |
-| `crates/fluxdb-storage` | 配置与连接持久化 |
-| `crates/fluxdb-editor-core` | 通用编辑器内核 |
-| `crates/fluxdb-editor-language` | 编辑器语言适配协议 |
+UI 行为修改还需启动应用验证主窗口及相关交互。
 
 本项目代码由 AI 生成，人工负责需求定义与验收，包括审阅变更、运行测试和检查界面效果。
 
 ## 路线图
 
-- [ ] 完善尚未完整接入的设置项。
-- [ ] 扩大 Windows / Linux 的发行版与硬件兼容性验证。
-- [ ] 接入 MongoDB，支持集合浏览与文档编辑。
-- [ ] 支持界面国际化与多语言切换。
-- [ ] 探索自然语言转 SQL、补全增强与查询结果解释等 AI 功能。
+### 已完成
 
-以上为规划方向，尚未完成的功能不代表当前版本已经支持。
+- **MySQL**：连接管理（TLS/SSL、SSH 隧道、代理、超时与字符集等选项）、SQL 编辑与执行、库表与数据浏览编辑、表结构管理、结果导出，以及 mysqldump 备份与恢复、mysql 客户端工具入口。
+- **TiDB**：复用 MySQL 协议与驱动，已适配 TiDB 的 SQL 方言、补全与结构管理，与 MySQL 一同验证。
+- **PostgreSQL**：SQL 查询、Schema 与对象浏览、表结构管理、数据编辑、用户与角色权限管理，以及 psql 原生客户端工具。
+- **SQLite**：本地数据库文件连接、SQL 查询、表结构浏览与数据编辑。
+- **Redis**：连接总览、键空间浏览、键值与 TTL 编辑、工作台与内嵌命令终端。
+- **AI Agent**：对话式智能体，可编写、解释并执行 SQL，探索数据库与 Redis、读取文件、做 BI 分析并生成报表产物；提供工具权限分级与写入审批、MCP Client / Server、模型与插件配置。
+
+### 还未接入
+
+以下为规划方向，尚未完成的功能不代表当前版本已经支持。
+
+- **国际化与多语言**：界面文案目前固定为简体中文，计划抽出统一文案层并支持运行时语言切换，先覆盖简体中文与 English。
+- **MongoDB**：文档型数据源，计划支持连接管理、集合与文档浏览、文档编辑与索引查看。
+- **MariaDB**：协议兼容 MySQL，但系统表、语法与备份参数存在差异，需完成版本识别与方言适配后再作为独立数据源接入。
+- **SQL Server**：T-SQL 方言与连接协议不同，需要接入驱动，并补齐对象浏览与数据编辑能力。
+- **更多数据库**：按社区需求排序推进候选数据源（如 Oracle、ClickHouse、DuckDB、Elasticsearch / OpenSearch 等），复用现有 Connector 分层、SQL 方言与 AI 工具抽象；每个数据源需补齐连接管理、对象浏览、数据浏览与编辑、导入导出与备份恢复等能力后，才计入「已完成」。
 
 ## 支持与赞助
 
@@ -166,3 +164,5 @@ cargo test --workspace --locked
 ## 许可证
 
 FluxDB 采用 [GNU GPL v3.0 或更新版本](./LICENSE) 开源许可证。
+
+项目版权与授权声明见 [NOTICE](./NOTICE)。

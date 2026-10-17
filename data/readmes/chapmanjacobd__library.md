@@ -18,7 +18,7 @@ Linux recommended but [Windows setup instructions](./Windows.md) available.
 
     pip install library
 
-Should also work on Mac OS.
+Mac OS is also supported.
 
 ### External dependencies
 
@@ -27,26 +27,23 @@ Required: `ffmpeg`
 Some features work better with: `mpv`, `fd-find`, `fish`
 
 Optional Python extras are grouped under `library[deluxe]`. This includes
-`gallery-dl` (used by `gallery-add`), `internetarchive` (used for Internet
-Archive downloads), and `cdx_toolkit` (used by the `--webcache`/`--wayback`
-CDX extractor):
+`gallery-dl` (used by `database add gallery`), `internetarchive` (used for
+Internet Archive downloads), and `cdx_toolkit` (used by the
+`--webcache`/`--wayback` CDX extractor):
 
     pip install "library[deluxe]"
 
-Torrent metadata commands (`torrents-add` and `torrents-dump`) require the
-`libtorrent` Python bindings. They are included by `library[deluxe]` when using
-Python 3.12 or 3.13; Python 3.14 wheels are not available yet, so use Python
-3.13 for torrent support.
-
-If the PyPI wheel is unavailable for your Python or platform, these system
-packages provide the bindings:
+Torrent metadata commands (`database add torrents` and `torrent dump`) require
+the `libtorrent` Python bindings. They are included by `library[deluxe]` on
+Python 3.12 and 3.13. On Python 3.14, libtorrent-rasterbar bindings are
+usually provided by distro packages rather than PyPI:
 
 * Debian/Ubuntu: `sudo apt install python3-libtorrent`
 * Fedora: `sudo dnf install rb_libtorrent-python3`
 * macOS/Homebrew: `brew install libtorrent-rasterbar`
 
 The Debian, Fedora, and Homebrew packages are built for their system or
-Homebrew Python and may not be importable from a separate uv virtualenv. There
+Homebrew Python and are not importable from a separate uv virtualenv. There
 is no official Scoop package for the Python bindings; on Windows, use Python
 3.13 and `pip install "library[deluxe]"`.
 
@@ -58,17 +55,17 @@ is no official Scoop package for the Python bindings; on Windows, use Python
 
 For thirty terabytes of video the initial scan takes about four hours to complete.
 After that, subsequent scans of the path (or any subpaths) are much quicker--only
-new files will be read by `ffprobe`.
+new files are read by `ffprobe`.
 
-    library fsadd tv.db ./video/folder/
+    library database add filesystem tv.db ./video/folder/
 
 ![termtosvg](./examples/extract.svg)
 
 ### 2. Watch / Listen from local files
 
-    library watch tv.db                           # the default post-action is to do nothing
-    library watch tv.db --post-action delete      # delete file after playing
-    library listen finalists.db -k ask_delete     # ask whether to delete file after playing
+    library play video tv.db                           # the default post-action is to do nothing
+    library play video tv.db --post-action delete      # delete file after playing
+    library play audio finalists.db -k ask_delete      # ask whether to delete file after playing
 
 To stop playing press Ctrl+C in either the terminal or mpv
 
@@ -80,18 +77,18 @@ To stop playing press Ctrl+C in either the terminal or mpv
 
 Download playlist and channel metadata. Break free of the YouTube algo~
 
-    library tubeadd educational.db https://www.youtube.com/c/BranchEducation/videos
+    library database add video educational.db https://www.youtube.com/c/BranchEducation/videos
 
-[![termtosvg](./examples/tubeadd.svg "library tubeadd example")](https://asciinema.org/a/BzplqNj9sCERH3A80GVvwsTTT)
+[![termtosvg](./examples/tubeadd.svg "library database add video example")](https://asciinema.org/a/BzplqNj9sCERH3A80GVvwsTTT)
 
-And you can always add more later--even from different websites.
+And you can add more at any time--even from different websites.
 
-    library tubeadd maker.db https://vimeo.com/terburg
+    library database add video maker.db https://vimeo.com/terburg
 
 To prevent mistakes the default configuration is to download metadata for only
 the most recent 20,000 videos per playlist/channel.
 
-    library tubeadd maker.db --extractor-config playlistend=1000
+    library database add video maker.db --extractor-config playlistend=1000
 
 Be aware that there are some YouTube Channels which have many items--for example
 the TEDx channel has about 180,000 videos. Some channels even have upwards of
@@ -101,26 +98,26 @@ the metadata for 180,000 videos.
 
 TIP! If you often copy and paste many URLs you can paste line-delimited text as arguments via a subshell. For example, in `fish` shell with [cb](https://github.com/niedzielski/cb):
 
-    library tubeadd my.db (cb)
+    library database add video my.db (cb)
 
 Or in BASH:
 
-    library tubeadd my.db $(
+    library database add 
 
 [...截断...]
 
-xclip -selection c)
+video my.db $(xclip -selection c)
 
 #### 1a. Get new videos for saved playlists
 
-Tubeupdate will go through the list of added playlists and fetch metadata for
-any videos not previously seen.
+Tubeupdate goes through the list of stored playlists and fetches metadata for
+any videos not seen before.
 
-    library tube-update tube.db
+    library database update video tube.db
 
 ### 2. Watch / Listen from websites
 
-    library watch maker.db
+    library play video maker.db
 
 To stop playing press Ctrl+C in either the terminal or mpv
 
@@ -128,60 +125,57 @@ To stop playing press Ctrl+C in either the terminal or mpv
 
 <details><summary>List all subcommands</summary>
 
+Commands are organized by resource. Use `database` (or `db`) for database
+operations, `filesystem` (or `fs`) for filesystem operations, `document` (or
+`doc`/`docs`) for document operations, and `file` (or `files`) for file
+operations. The `ls` alias can be used for nested list commands. Resource group
+names and their aliases take precedence over flat command names, so a few former
+flat commands are now only reachable through a group (for example
+`database filesystem list`, `captions`, `table markdown`, `tabs open`,
+`links extract`, `text extract`, and `torrent info`).
+
     $ library
-    library (v3.2.011; 104 subcommands)
+    library (v4.0.0; 118 subcommands)
 
     Create database subcommands:
-    ╭─────────────────┬──────────────────────────────────────────╮
-    │ fs-add          │ Add local media                          │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ tube-add        │ Add online video media (yt-dlp)          │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ web-add         │ Add open-directory media                 │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ gallery-add     │ Add online gallery media (gallery-dl)    │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ tabs-add        │ Create a tabs database; Add URLs         │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ links-add       │ Create a link-scraping database          │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ site-add        │ Auto-scrape website data to SQLite       │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ tables-add      │ Add table-like data to SQLite            │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ reddit-add      │ Create a reddit database; Add subreddits │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ hn-add          │ Create / Update a Hacker News database   │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ getty-add       │ Create / Update a Getty Museum database  │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ substack        │ Backup substack articles                 │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ tildes          │ Backup tildes comments and topics        │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ nicotine-import │ Import paths from nicotine+              │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ places-import   │ Import places of interest (POIs)         │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ row-add         │ Add arbitrary data to SQLite             │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ computers-add   │ Add computer info to SQLite              │
-    ├─────────────────┼──────────────────────────────────────────┤
-    │ torrents-add    │ Add torrent info to SQLite               │
-    ╰─────────────────┴──────────────────────────────────────────╯
+    ╭──────────────────────────┬──────────────────────────────────────────╮
+    │ database add filesystem  │ Add local media                          │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add video       │ Add online video media (yt-dlp)          │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add web         │ Add open-directory media                 │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add gallery     │ Add online gallery media (gallery-dl)    │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add tabs        │ Create a tabs database; Add URLs         │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add links       │ Create a link-scraping database          │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add site        │ Auto-scrape website data to SQLite       │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add tables      │ Add table-like data to SQLite            │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add reddit      │ Create a reddit database; Add subreddits │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add hackernews  │ Create / Update a Hacker News database   │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add getty       │ Create / Update a Getty Museum database  │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add substack    │ Backup substack articles                 │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add tildes      │ Backup tildes comments and topics        │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database import nicotine │ Import paths from nicotine+              │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database import places   │ Import places of interest (POIs)         │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add row         │ Add arbitrary data to SQLite             │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add computers   │ Add computer info to SQLite              │
+    ├──────────────────────────┼──────────────────────────────────────────┤
+    │ database add torrents    │ Add torrent info to SQLite               │
+    ╰──────────────────────────┴──────────────────────────────────────────╯
 
     Text subcommands:
-    ╭──────────────────┬────────────────────────────────────────────────╮
-    │ cluster-sort     │ Sort text and images by similarity             │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ regex-sort       │ Sort text by regex split and corpus comparison │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ extract-links    │ Extract inner links from lists of web links    │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ links-download   │ Download links from lists of web links         │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ direct-download  │ Download URLs directly                         │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ extract-text     │ Extract human text from lists of web links     │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ markdown-links   │ Extract titles from lists 
+    ╭───────────────────────┬────────────────────────────────────────────────╮
+  

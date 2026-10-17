@@ -121,6 +121,15 @@ prints a ready-made session cookie for each, valid for 30 days and reused on
 later runs, to skip the sign-in form in scripts and headless browsers. Under
 `pnpm dev:tunnel`, send it as `__Secure-better-auth.session_token`.
 
+**Seed images.** The seed is an anonymized sample of production (see
+`packages/db/README.md`) that keeps the production media and chapter IDs. Apps
+load images through a local read-only proxy (`IMAGES_PORT`): it serves what is
+in your RustFS bucket and falls back to the production CDN for everything else,
+so the sample shows real covers and pages while uploads only ever land in
+RustFS. To work offline, download
+<https://cdn.taiyo.moe/dev/sample-images.zip>, unzip it into `output/`, and run
+`pnpm -F @taiyomoe/scripts cli upload-sample-images`.
+
 **Env files.** The root `.env` holds every local port and credential, and
 `bootstrap` derives the connection URLs in `apps/*/.env` from it. To change a
 port or a credential, edit the root `.env` and rerun `pnpm bootstrap`. Leave
@@ -142,9 +151,11 @@ and one serves the API docs. The web app reaches the API through its own origin
 (`/_api` and `/api/auth` are proxied by Vite), so sign-in cookies work over the
 tunnel too. The URLs change on every run and are never written to disk.
 
-**HyperDX** runs locally, but its collector only accepts logs after you sign up
-in its UI. Copy the ingestion key into `HYPERDX_INGESTION_KEY` in
-`apps/api/.env` to turn log shipping on; until then the API logs to stdout only.
+**HyperDX** is what production ships logs to, but locally it is opt-in: set
+`COMPOSE_PROFILES="hyperdx"` in the root `.env` and rerun `pnpm bootstrap`. Its
+collector only accepts logs after you sign up in its UI; copy the ingestion key
+into `HYPERDX_INGESTION_KEY` in `apps/api/.env` to turn log shipping on. Without
+the profile, or until then, the API logs to stdout only.
 
 ## 📝 Available scripts
 
@@ -169,7 +180,7 @@ Package-specific:
 
 ```bash
 pnpm -F db kysely migrate latest   # apply migrations
-pnpm -F db kysely seed run         # seed sample data
+pnpm -F db kysely seed run         # seed the production sample
 pnpm -F storybook dev              # storybook dev server
 pnpm -F storybook build            # static storybook build
 pnpm -F api dev                    # tsx-watch the API

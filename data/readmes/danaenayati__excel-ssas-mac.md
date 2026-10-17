@@ -1,0 +1,458 @@
+# Cube Explorer: SQL Server Analysis Services (SSAS) cubes in Excel for Mac
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+![macOS 13.5+](https://img.shields.io/badge/macOS-13.5%2B-lightgrey.svg)
+![Excel for Mac](https://img.shields.io/badge/Excel-for%20Mac-217346.svg)
+
+**Connect Excel for Mac to an SSAS cube and build PivotTable reports from it, with no
+Windows PC, no Parallels and no virtual machine.** Free and open source.
+
+Excel for Windows can connect to a **SQL Server Analysis Services (SSAS)** cube
+(*Data > Get Data > From Database > From Analysis Services*) and build PivotTables from
+it. Excel for Mac cannot: the option is simply not there, and OLAP PivotTables do not
+exist on the Mac. **Cube Explorer** adds them. You get a PivotTable-style panel inside
+Excel for Mac that connects to your company's cube (tabular or multidimensional), lets
+you pick measures and fields, filter, drill down and calculate, and writes refreshable
+results into your sheet. It also brings cube formulas like `CUBEVALUE` and
+`CUBEMEMBER`, slicers and charts. It works the way Excel on Windows does, with the same
+menus and words.
+
+![The Cube Explorer panel next to a report built from the built-in Sample cube, in Compact Form](docs/images/panel-compact.png)
+
+*The panel and a report from the built-in Sample cube (shown here in the panel's
+browser preview).*
+
+Nothing is installed or changed on the company server. Your Mac signs in to the cube
+the same way Windows Excel does, with your Windows (domain) user name and password.
+
+---
+
+## Contents
+
+- [What it can do](#what-it-can-do)
+- [What you need](#what-you-need)
+- [Install](#install)
+- [Turn it on in Excel](#turn-it-on-in-excel)
+- [Connect to your cube](#connect-to-your-cube)
+- [Use it, step by step](#use-it-step-by-step)
+- [Update](#update)
+- [Uninstall](#uninstall)
+- [If something goes wrong](#if-something-goes-wrong)
+- [How it compares with Excel on Windows](#how-it-compares-with-excel-on-windows)
+- [Questions](#questions)
+- [Privacy and security](#privacy-and-security)
+- [How it works (for developers)](#how-it-works-for-developers)
+- [License](#license)
+
+---
+
+## What it can do
+
+**Building a report (PivotTable)**
+- Field list with measures (by measure group and display folder), dimensions and
+  their fields, **KPIs** (Value, Goal, Status, Trend) and **named sets** (also sets
+  that span several fields); search. A multi-level hierarchy lists its **levels**, so
+  you can place just one of them, such as only **Month** of a Calendar.
+- The four areas: Filters, Columns, Rows, Values. Tick a field, drag it, or use its
+  menu to move it.
+- **Report Layout**: Compact Form (Excel's default), Outline Form, Tabular Form.
+- **Subtotals**: none, at the bottom of each group, or at the top of each group.
+  **Grand Totals**: Excel's four choices. **Repeat All Item Labels**, **For empty
+  cells show**, **Hide empty** rows and columns, **Defer updates**.
+- **Report styles** modelled on Excel's PivotTable Styles, with its Style Options:
+  Row Headers, Column Headers, Banded Rows, Banded Columns.
+- Drill down and up (Expand / Collapse, Expand / Collapse Entire Field).
+- Several reports per workbook and per sheet; each sheet's report follows you as you
+  move between sheets, as on Windows.
+
+**Sorting and filtering, from the sheet too**
+- Click a cell with a small ▾ in the report (a page filter, "Row Labels", "Column
+  Labels", a field name) to open the same choices as the Windows dropdown.
+- Sort A to Z, Z to A, or by any measure. In nested fields, sorting by a value
+  works within each outer item, as in Excel.
+- **Label Filters**, **Value Filters** (including **Top 10**: items, percent or sum),
+  and **Date Filters** for date fields (Today, This Month, Last Quarter, Year to
+  Date, Between, All Dates in the Period, and the rest of Excel's list).
+- Item checklists with search. Totals count only the items that are shown
+  ("visual totals"), the default for cube PivotTables on Windows, or every item with
+  **Include filtered items in totals** (totals then carry an asterisk, as in Excel).
+- **Slicers**: buttons in the panel, one per item, to filter the report with a click
+  (Multi-Select and Clear Filter as in Excel).
+
+**Values**
+- **Show Values As**: all 14 of Excel's choices (% of Grand / Column / Row Total, % Of,
+  % of Parent Row / Column / Parent Total, Difference From, % Difference From,
+  Running Total In, % Running Total In, Rank Smallest to Largest / Largest to
+  Smallest, Index), with base field and base item.
+- **Number Format** per value field, kept on every refresh, and its own **name**
+  (Windows: Value Field Settings > Custom Name).
+- The same measure more than once (**Duplicate**), for example the number and its
+  percentage side by side.
+- KPI Status and Trend shown as Excel's traffic lights and arrows.
+
+**Calculations**
+- **Calculated measures** (Windows: OLAP Tools > MDX Calculated Measure), with a
+  **Check** button that asks the cube whether the formula works.
+- **Calculated items** of a field (Windows: OLAP Tools > MDX Calculated Member).
+- **Group Items**: show several items of a field as one item. *(Excel on Windows
+  cannot group a cube field; Cube Explorer can.)*
+
+**More**
+- **Show Details**: the rows behind a number, on a new sheet (first 1,000 rows), like
+  double-clicking a value on Windows.
+- **Cube formulas**: `CUBE.VALUE`, `CUBE.MEMBER`, `CUBE.MEMBERPROPERTY`,
+  `CUBE.RANKEDMEMBER` and `CUBE.SETCOUNT` in any cell, and **Convert to Formulas**,
+  which turns a report into such formulas (Windows: OLAP Tools > Convert to Formulas).
+- **Charts that follow a report**, the nearest thing to a PivotChart: **Insert Chart**
+  (Clustered Column, Stacked Column, Clustered Bar, Line, Pie, Area) puts an ordinary
+  Excel chart beside the report, built like a PivotChart (no totals), and every
+  refresh updates it.
+- **Right-click a report cell** for a **Cube Explorer** menu: Show Details, Refresh,
+  Refresh All, Expand, Collapse, Expand Entire Field, Collapse Entire Field.
+- **Refresh**, **Refresh All**, **Refresh when the workbook opens**, **Refresh Every**
+  1 to 60 minutes (while the panel is open), and Cancel for a slow query.
+- **Connections** by server name (`server`, `server:port`, `server\instance`) or by web
+  address (`https://…/msmdpump.dll`), signing in with NTLM or Kerberos, or Basic over
+  https.
+- A built-in **Sample cube** to try everything without a server.
+
+---
+
+## What you need
+
+- A Mac with **macOS 13.5 (Ventura) or later**, Apple silicon or Intel.
+- **Microsoft Excel for Mac**, version 16, kept up to date (Microsoft 365 or a
+  perpetual licence; add-ins are allowed by default).
+- Your company's **SSAS server name**, as you would type it in Windows Excel
+  (`server`, `server:port` or `server\instance`, or a web address such as
+  `https://server/olap/msmdpump.dll`), and your **Windows user name and password**
+  (`DOMAIN\user`).
+- Access to that server: the office network or the company **VPN**, the same as on
+  Windows.
+- An internet connection **once**, while installing.
+
+**You do not need to install anything else first.** The installer brings what it
+needs and keeps it in its own folder:
+
+| Part | What it is for | Where it comes from |
+|---|---|---|
+| Python 3.12 | runs the helper | downloaded by uv into the Cube Explorer folder |
+| pyspnego, gssapi, krb5, keyring, cryptography, truststore (and their small dependencies) | Windows sign-in (NTLM, and Kerberos through the Mac's own Kerberos), storing your password in the Keychain, the local certificate, checking `https://` servers against the certificates your Mac trusts | installed by uv from PyPI into the helper's private environment (ready-made, nothing is compiled) |
+| [uv](https://github.com/astral-sh/uv) 0.12.5 | installs Python and those libraries | your Mac's own copy if you have one, otherwise downloaded and checked against its published SHA-256 |
+| [Node.js](https://nodejs.org) 24 LTS | builds the Excel panel (React, TypeScript, Vite) | your Mac's own copy if it is recent enough, otherwise downloaded and checked against its published SHA-256 |
+
+Nothing is installed system-wide, and nothing needs administrator rights.
+
+---
+
+## Install
+
+Open **Terminal** (press Cmd+Space, type *Terminal*, press Return) and paste this one
+line:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/danaenayati/excel-ssas-mac/main/get.sh | bash
+```
+
+That downloads Cube Explorer into a folder called **CubeExplorer** in your home
+folder and installs it. It takes a few minutes the first time.
+
+Other ways, if you prefer:
+
+- With git:
+  ```bash
+  git clone https://github.com/danaenayati/excel-ssas-mac.git ~/CubeExplorer && ~/CubeExplorer/install.sh
+  ```
+- Without either: on the GitHub page click **Code > Download ZIP**, open the ZIP,
+  then in Terminal type `bash ` (with a space), drag `install.sh` from the unzipped
+  folder into the Terminal window, and press Return.
+
+**During the install, macOS asks for your Mac password (or Touch ID) once.** That
+lets Excel trust the helper on this Mac. The certificate involved works only for
+`https://localhost`, and the key that made it is destroyed straight away.
+
+When it finishes, it prints **Done. Cube Explorer is installed.**
+
+---
+
+## Turn it on in Excel
+
+You do this once.
+
+1. **Quit Excel completely** (Cmd+Q) if it is open, then open it again.
+2. On the **Home** tab, click **Add-ins** (at the far right of the ribbon).
+3. Choose **Cube Explorer** from the list.
+4. A **Cube Explorer** button now sits at the far right of the **Home** tab. Click it
+   whenever you want the panel.
+
+Older Excel versions have no Add-ins button on Home: use **Insert > My Add-ins**
+(the small arrow beside it) > **Cube Explorer** instead.
+
+Workbooks with a Cube Explorer report open the panel by themselves the next time.
+
+---
+
+## Connect to your cube
+
+**Try the Sample cube first.** In the panel, choose **Sample cube**. It is built in and
+needs no server or VPN, so you can see how everything works.
+
+**Then add your company's server.** Connect the VPN, then either:
+
+- In the panel: **Add connection**, then fill in the server, choose how to sign in
+  (**User name and password (NTLM)** suits most servers; **Windows Authentication
+  (Kerberos)** is for servers that accept only Kerberos; **Basic** appears for
+  `https://` addresses set up for it), and enter your `DOMAIN\user` and password. Or
+- In Terminal, run the checker, which tests each step and says exactly where it stops
+  if something is wrong, then offers to save the connection:
+  ```bash
+  ~/CubeExplorer/cube-probe
+  ```
+
+Your password is stored in the Mac's **Keychain**, never in a workbook or a file.
+
+---
+
+## Use it, step by step
+
+1. **Pick the cube.** Choose your connection, then the database and the cube.
+2. **Click the cell** where the report should start (an empty area of a sheet).
+3. **Tick fields.** Measures go to **Values**, other fields to **Rows**. Use a field's
+   menu (or drag it) to move it to **Columns** or **Filters**. The report appears at
+   the selected cell, and the cube works out every number, including totals.
+4. **Filter and sort.** Click any ▾ in the report, or choose **Sort and Filter…** in a
+   field's menu: sort, Label / Date / Value Filters, Top 10, the item checklist.
+   A filtered field shows ▼.
+5. **Lay it out.** Under the areas: **Report layout**, **Subtotals**, **Grand totals**,
+   **Repeat All Item Labels**, **For empty cells show**.
+6. **Show values another way.** In a Values field's menu: **Show Values As**, **Number
+   Format**, **Duplicate**.
+7. **Calculate.**
+   - A new measure: **Calculated Measures > New Calculated Measure…** at the top of
+     the field list. Type a name and an MDX formula, for example
+     `[Measures].[Revenue] / [Measures].[Rides]`, press **Check**, then **OK**, and
+     tick it like any measure.
+   - A new item of a field: that field's **Sort and Filter… > Calculated Item…**.
+   - Several items as one: **Sort and Filter… > Group Items…**, tick the items, name
+     the group.
+8. **Drill down.** Select a row or column label, then **Expand** or **Collapse** in
+   the panel, or use **Expand / Collapse Entire Field**.
+9. **See the details.** Select a number and press **Show Details**: its rows go to a
+   new sheet.
+10. **Refresh.** **Refresh** updates the report, **Refresh All** every report in the
+    workbook. The report's **⋯** menu has **Refresh when the workbook opens**.
+11. **Use formulas.** Type cube formulas in any cell, for example:
+    ```
+    =CUBE.VALUE("Sales Cube/Sales/Model", "[Measures].[Revenue]", "[Date].[Year].&[2025]")
+    =CUBE.MEMBER("Sales Cube", "[Date].[Year].&[2025]")
+    ```
+    The first argument is the connection's name, followed by `/Database/Cube` when the
+    server has more than one. The other arguments are unique member names, as the
+    cube writes them. Or choose **Convert to Formulas** in the report's **⋯** menu to
+    turn a whole report into formulas you can rearrange freely.
+    `CUBE.RANKEDMEMBER` and `CUBE.SETCOUNT` take the set as MDX text, such as
+    `"[Geography].[City].Children"`. A wrong argument shows `#VALUE!`, a member the cube
+    does not have `#N/A`; point at the cell to read why. The formulas ask the cube again
+    on Cmd+Option+F9 or **Refresh All**. Convert to Formulas cannot be undone, and is
+    refused for numbers no single formula can give: Show Values As, KPIs, calculated
+    measures, groups, named sets, and a page filter with several items.
+12. **More reports.** **New report here** starts another report at the selected cell.
+    Each sheet's report comes back when you go to that sheet.
+13. **Slicers.** In the report's **⋯** menu choose **Insert Slicer…**, tick fields, and
+    click their buttons in the panel to filter (Cmd-click or **Multi-Select** for
+    several items, **Clear Filter** for all).
+14. **Charts.** In the report's **⋯** menu choose **Insert Chart** and a type. The chart
+    sits beside the report and changes with it on every refresh; **Delete Chart**
+    removes it.
+15. **Look.** Under the areas, pick a **Style** and the Style Options (Row Headers,
+    Column Headers, Banded Rows, Banded Columns). In a value field's menu,
+    **Value Field Settings…** gives it its own name.
+16. **Right-click.** Right-click a cell of a report and choose **Cube Explorer** for
+    Show Details, Refresh, Refresh All, Expand and Collapse.
+17. **Automatic refresh.** In the report's **⋯** menu, **Refresh Every** refreshes every
+    report in the workbook every 1 to 60 minutes while the panel is open.
+
+The report is saved in the workbook. Open the file later and press **Refresh** for new
+numbers. A colleague without Cube Explorer still sees the numbers as plain cells.
+
+---
+
+## Update
+
+Run the install line again (or `~/CubeExplorer/install.sh` if you cloned it). It
+updates in place and keeps your connections. Then close the panel (✕) and open it
+again from the **Home** tab; after an update that changes the formulas, quit and reopen
+Excel.
+
+---
+
+## Uninstall
+
+```bash
+~/CubeExplorer/uninstall.sh
+```
+
+It removes the helper and its login item, the add-in, the downloaded tools, saved
+connections and their Keychain passwords, and the certificate trust (macOS may ask for
+your password). Your workbooks keep the numbers already in them. Afterwards you can
+delete the `~/CubeExplorer` folder, and quit and reopen Excel to clear the button.
+
+---
+
+## If something goes wrong
+
+| What you see | What to do |
+|---|---|
+| "The helper is not running." | In Terminal: `launchctl kickstart -k gui/$(id -u)/com.cubebridge.helper` |
+| The panel is blank, or Excel cannot load the add-in | Run the installer again, then quit and reopen Excel. |
+| Cube Explorer is not in the **Add-ins** list | Quit Excel completely (Cmd+Q), reopen it, then **Home > Add-ins** again. |
+| "Can't reach the server" | Connect the VPN. Run `~/CubeExplorer/cube-probe` to see which step fails. |
+| "The server refused the sign-in" | Check the user name is `DOMAIN\user` and the password is current. |
+| Sign-in fails although the password is right | Your server may accept only Kerberos: add the connection again with **Windows Authentication (Kerberos)**. Kerberos needs the server's name (not its IP address) and the company network or VPN. |
+| "This Mac does not trust the server's certificate" | Ask IT to install the company's root certificate on the Mac; it is then trusted here as in Safari. |
+| "Couldn't find the port of instance …" | Ask a Windows colleague for the port and enter the server as `name:port`. |
+| "This view would return … cells" | Add a filter or remove a field. The limit protects Excel from freezing. |
+| Nothing appears after ticking fields | Select an empty cell outside other reports; on a new sheet the report starts at the selected cell. |
+| macOS asks whether Python may use the keychain or the local network | Choose **Always Allow** / **Allow**. It is the helper. |
+| A cube formula shows `#N/A` | Point at the cell: the message says why (unknown member, wrong connection name, no VPN). |
+
+The helper's log is `~/Library/Application Support/CubeBridge/logs/helper.log`. It
+records what failed and why, never passwords. The localhost certificate lasts about two
+years; the panel warns before it expires, and running the installer renews it.
+
+---
+
+## How it compares with Excel on Windows
+
+**Works as on Windows:** everything listed under [What it can do](#what-it-can-do).
+
+**Goes further than Windows for cube reports:** grouping items of a cube field (Excel
+on Windows greys out Group for cube PivotTables).
+
+**Different:**
+- It is not a native PivotTable object, so Excel's own PivotTable tabs, Slicer and
+  Timeline objects and PivotCharts do not attach to it. Cube Explorer offers the same
+  things its own way: slicers are buttons in the panel, charts are ordinary Excel charts
+  that follow the report, and styles are applied by the panel.
+- Changes made through the panel cannot be undone with Cmd+Z; change them back in the
+  panel instead.
+- Show Details is a button in the panel or the right-click menu instead of a
+  double-click. The right-click menu appears on every cell, not only report cells.
+- Refresh Every runs while the panel is open (it opens with the workbook).
+- Cube formulas take unique member names. On Windows a `CUBEVALUE` can point at a
+  cell holding a `CUBEMEMBER`; here a cell can only hold text or a number, so the names
+  go into the formula itself (Convert to Formulas does this for you). They read
+  `CUBE.VALUE` rather than `CUBEVALUE`, because add-in functions always carry a name
+  prefix.
+- Windows signs in as whoever is logged in to the PC. On a Mac you give the user name
+  and password once, and the connection signs in with NTLM, or with Kerberos (using a
+  Kerberos ticket the Mac already has, or one got with that password). Connections to
+  a web address (`msmdpump.dll`) can also use Basic over `https://`.
+- PivotTables your colleagues built on Windows do not refresh on a Mac; build the
+  report again here once.
+
+---
+
+## Questions
+
+### Can Excel for Mac connect to SQL Server Analysis Services?
+
+Not on its own. Excel for Mac has no *From Analysis Services* connection and cannot
+make OLAP PivotTables. Cube Explorer adds both: a connection to the SSAS server and a
+PivotTable-style panel that writes the report into your sheet.
+
+### Do I need Windows, Parallels or a virtual machine?
+
+No. Cube Explorer runs on the Mac itself. It talks to the server the way Excel on
+Windows does (the same native protocol, MDX queries and Windows sign-in), so nothing
+has to be installed or changed on the server either.
+
+### Does it work with tabular models and multidimensional cubes?
+
+Both are queried the same way (MDX over the same protocol). It has been used with a
+tabular model on SQL Server Analysis Services and with the built-in Sample cube.
+
+### Does it work with Azure Analysis Services or Power BI datasets?
+
+Not yet. Those need a Microsoft Entra ID (Azure AD) sign-in, which Cube Explorer does
+not have. It supports NTLM and Kerberos (Windows sign-in), and Basic over `https://`.
+
+### Can I use CUBEVALUE and CUBEMEMBER formulas on a Mac?
+
+Yes, as `CUBE.VALUE`, `CUBE.MEMBER`, `CUBE.MEMBERPROPERTY`, `CUBE.RANKEDMEMBER` and
+`CUBE.SETCOUNT`, and **Convert to Formulas** turns a report into them. See
+[Use it, step by step](#use-it-step-by-step), step 11.
+
+### Is there a Power Pivot for Mac?
+
+No; Microsoft does not make one. If your data is already in an SSAS cube, Cube
+Explorer lets you work with it from Excel for Mac.
+
+### Is it free? Does it change data on the server?
+
+It is free and open source (GPL-3.0). It only reads from the cube and cannot change
+anything on the server.
+
+---
+
+## Privacy and security
+
+- The helper runs only on your Mac and only answers Excel on the same Mac
+  (`https://localhost`), with a secret token that only the panel knows.
+- Your password stays in the macOS Keychain. It is never written to a workbook, a file
+  or the log.
+- Cube Explorer only reads from the cube. It cannot change data on the server.
+- Formulas typed into the panel or found in a workbook are checked before they reach the
+  cube: one expression only, no statements.
+- The installer downloads only from the official sources above and checks each
+  download against a fixed checksum before using it.
+
+---
+
+## How it works (for developers)
+
+```
+addin/    The Excel panel: an Office.js task-pane add-in (React, TypeScript, Vite),
+          plus the custom functions behind CUBE.*
+helper/   A local Python service: SSAS's native TCP protocol and XMLA over HTTP(S),
+          NTLM, Kerberos and Basic sign-in, MDX generation, and a small HTTPS API
+          for the panel
+docs/     Design notes and images
+```
+
+- The panel builds a layout; the helper turns it into MDX, sends it to SSAS over its
+  native binary protocol ([MS-SSAS], the same one ADOMD.NET uses on Windows), or for a
+  web address as SOAP over HTTP(S) to `msmdpump.dll`, and turns the answer into a grid
+  the panel writes into the sheet. The JSON contract between the two is
+  `addin/src/types.ts`.
+- Tests: `cd helper && uv run pytest` and `cd addin && npm test`. With MIT Kerberos
+  installed (`brew install krb5`), `tests/test_kerberos_real.py` also starts a
+  throwaway Kerberos server on 127.0.0.1 and signs in with real tickets over TCP and
+  HTTP; without it, those tests are skipped.
+- `npm run build` builds the panel, then the cube functions (`addin/src/functions/`)
+  into `dist/functions.js`, `functions.html` and `functions.json`, which Excel runs in
+  its own JavaScript-only runtime, apart from the panel.
+- Try the panel in a browser without Excel, against the built-in Sample cube:
+  `cd addin && npm run dev`, then open `http://localhost:5173/`.
+- The undocumented parts of the SSAS wire protocol come from the
+  [ssas-xmla-tcp](https://github.com/oluies/ssas-xmla-tcp) project (Apache-2.0); see
+  `THIRD_PARTY_NOTICES.md`.
+- Untested against a real Analysis Services server so far: Kerberos (over TCP and
+  HTTP), connections to `msmdpump.dll`, and the named-instance lookup on port 2382.
+  The tests cover them against stand-in servers; Kerberos also against a real Kerberos
+  server (above), with the Mac's own Kerberos library on the client side.
+
+---
+
+## License
+
+Copyright (C) 2026 Dana Enayati
+
+Cube Explorer is free software: you can redistribute it and/or modify it under the
+terms of the **GNU General Public License** as published by the Free Software
+Foundation, either **version 3** of the License, or (at your option) any later version.
+It is distributed in the hope that it will be useful, but **without any warranty**;
+see [LICENSE](LICENSE) for the full text.
+
+Libraries and tools by others are listed with their licences in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

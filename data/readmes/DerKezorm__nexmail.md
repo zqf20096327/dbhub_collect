@@ -6,7 +6,7 @@
 
 **A self-hosted email client. One container, one file, your mailboxes stay with you.**
 
-[Project site](https://nexmail.nexapps.dev) · [Report an issue](https://github.com/DerKezorm/nexmail/issues/new)
+[Report an issue](https://github.com/DerKezorm/nexmail/issues/new)
 
 <picture>
   <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/mail-hell-en.webp">
@@ -26,7 +26,7 @@ Roundcube is webmail bolted onto one mailbox. Thunderbird does not run in a
 browser. Commercial clients want to pull your mail onto their servers. nexmail
 is the third option — and if you can use Outlook, you should feel at home.
 
-> **Version 0.24.3.** It reads, writes, searches, sorts, labels, sends,
+> **Version 0.24.4.** It reads, writes, searches, sorts, labels, sends,
 > schedules, prints, answers for you while you are away, keeps a calendar and
 > your address books in sync with iCloud or Google, invites people to your own
 > appointments, rephrases a draft with an AI service of your choice, backs

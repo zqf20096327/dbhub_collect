@@ -44,9 +44,8 @@ The following figure illustrates the high-level architecture of PostgreSQL-V.
 ![](figures/DEEP10M.png)
 
 ## Note
-⚠️The `main` branch is currently under active development.  
-
-For an executable prototype, please switch to the [cidr branch](https://github.com/purduedb/PostgreSQL-V/tree/cidr), which contains the version used in our CIDR submission to validate the proposed design.
+### ⚠️ Prototype Notice:
+This branch contains the prototype version used in our CIDR submission to validate the proposed design.
 
 ## Citation
 If you find our system useful for your research, please cite the following paper:

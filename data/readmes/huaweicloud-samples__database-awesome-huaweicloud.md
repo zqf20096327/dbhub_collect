@@ -21,6 +21,7 @@
 | [database-langchain-gaussdb-sync](https://github.com/huaweicloud-samples/database-langchain-gaussdb-sync) | GaussDB生态建设：适配LangChain，提供同步VectorStore和ChatMessageHistory能力 | gaussdb-drivers | incubating |
 | [database-lightrag-gaussdb](https://github.com/huaweicloud-samples/database-lightrag-gaussdb) | 开源工具LightRAG兼容GaussDB | gaussdb-drivers | incubating |
 | [database-n8n-gaussdb](https://github.com/huaweicloud-samples/database-n8n-gaussdb) | gaussdb生态建设：n8n 兼容gaussdb | gaussdb-drivers | incubating |
+| [database-prisma-orm-gaussdb](https://github.com/huaweicloud-samples/database-prisma-orm-gaussdb) | prisma-orm兼容GaussDB | gaussdb-drivers | incubating |
 | [database-ragflow](https://github.com/huaweicloud-samples/database-ragflow) | 生态建设，GaussDB 适配 RAGFlow | gaussdb-drivers | incubating |
 | [database-superagi-gaussdb](https://github.com/huaweicloud-samples/database-superagi-gaussdb) | 开源工具SpuerAGI兼容GaussDB | gaussdb-drivers | incubating |
 | [deterministic-operations-devops-alarm-webhook](https://github.com/huaweicloud-samples/deterministic-operations-devops-alarm-webhook) | This practice delivers an alarm-driven automation loop: function errors → AOM alarm → SMN → FunctionGraph → webhook. When a function fails, the alarm is captured and a signed incident event is posted to a user-configured endpoint. It targets DevOps/SRE teams as a reference for automatic incident reporting. | public-cloud-continuous-operation-competence-center | incubating |

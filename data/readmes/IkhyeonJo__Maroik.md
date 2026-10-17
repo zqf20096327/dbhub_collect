@@ -1,4 +1,6 @@
-# Maroik [https://www.maroik.com]
+# Maroik
+
+# [https://www.maroik.com]
 
 # Contact: admin@maroik.com
 
@@ -57,6 +59,43 @@ Maroik is a modern web application built with ASP.NET Core MVC, featuring a comp
 - **Rich domain model.** Value objects (`Email`, `Money`, `CurrencyCode`, `AccountRole`, …) replace primitive strings; admin actions are intent-revealing aggregate operations (`ChangeRole`, `Lock`/`Unlock`, `ForceConfirmEmail`/`RevokeEmailConfirmation`, `AcceptServiceTerms`/`RevokeServiceTerms`, `SoftDelete`/`Restore`, `AdminResetPassword`) instead of a field-overwriting update.
 - **Use-case DTOs.** Self-registration, admin account creation and admin account update each have their own request type, so a registration form can never carry a role, lock or confirmation flag.
 - **Test-first development.** Every change starts with a failing test, including the log entries it must write; real PostgreSQL and RabbitMQ run in Testcontainers instead of mocks wherever the behaviour depends on them.
+
+## Development Timeline
+Maroik has been built by one developer since May 2021. It was developed in a private repository until September 2026, when the project moved to this public repository; all development now happens here. The earlier history — about 4,300 commits — stays in the private repository; those commits show on the contribution graph of the [author's GitHub profile](https://github.com/IkhyeonJo).
+
+| When | Milestone |
+|---|---|
+| 2021-05 | Project starts as *MyLaboratory*: ASP.NET Core (2.1 → .NET 5) with MariaDB, run under docker-compose from the first week |
+| 2021-06 | AdminLTE 3 layout, NonFactors MVC grid |
+| 2021-07 | Excel export, registration with e-mail confirmation, password reset, separate admin / user dashboards, English / Korean localization (resx) |
+| 2021-08 | Account book: assets, income, expenditure, fixed income / expenditure with deposit-day notices |
+| 2021-12 | MariaDB 10.6 |
+| 2022-07 | User dashboard backend and charts for income and expenditure |
+| 2022-08 | Public anonymous dashboard and landing pages; role-based navigation menu (Admin / User / Anonymous) stored in the database |
+| 2022-09 | .NET 6 |
+| 2022-10 | Renamed to **Maroik**; Free Forum with Summernote editor and HTML sanitizing |
+| 2022-11 | Forum comments, locked and notice posts; security headers |
+| 2023-03 | .NET 7 |
+| 2023-04 | Income and expenditure statistics |
+| 2023-08 | Global AJAX error handling; debugging docker-compose in VS Code |
+| 2024-02 | .NET 8; dashboard breakdowns of each income / expenditure class |
+| 2024-04 – 09 | Calendar (FullCalendar): calendars, events, reminders, sharing, browsing others' calendars |
+| 2024-05 | Private notes, per-account time zones, default monetary unit, dashboard year / month selection |
+| 2024-09 | Maroik.FileStorage service |
+| 2025-01 | Attachments and inline images for forum posts, calendar events and private notes; server resource monitoring on the admin dashboard; Let's Encrypt certificates renewed automatically with Certbot |
+| 2025-03 | .NET 9 |
+| 2025-04 | MariaDB → PostgreSQL |
+| 2025-05 | DNS moved from AWS Route 53 to Cloudflare; ClamAV virus scanning of uploads; public demo account |
+| 2025-07 | Database transactions for account-book writes |
+| 2025-08 | BCrypt password hashing |
+| 2025-11 | .NET 10; data access split into repositories and clients |
+| 2025-12 | Project split into Core layers (Repository, Service, Client, PostgreSQL) |
+| 2026-04 | Maroik.Core.Contract; first unit tests |
+| 2026-05 – 08 | DDD + Clean Architecture refactor, ending with the Maroik.Core.Domain project; CI/CD with a coverage gate; Serilog |
+| 2026-07 | Valkey (replacing Redis), RabbitMQ and the Maroik.Worker mail service |
+| 2026-09 | Client scripts migrated to TypeScript; repository and E2E tests on real PostgreSQL (Testcontainers); a series of whole-solution reviews fixing race conditions and security gaps; strict TDD and logging rules; mutation testing (Domain 78 % → 92 %) |
+| 2026-09-28 | Moved from the private repository to this public repository, where all development continues |
+| 2026-10 | Service mutation score 70 % → 96 %; TLS ended at Cloudflare through a Cloudflare Tunnel; RSA replaced with ASP.NET Core Data Protection; memory-safety, logging-template, security and banned-API analyzers as build errors; admin and menu safeguards against locking administrators out |
 
 ## Architecture
 
@@ -288,24 +327,23 @@ dotnet test --project Maroik.Core.Service.Tests            # any single project
 ## Screenshots
 
 ### Login
-<img width="551" height="574" alt="0" src="https://github.com/user-attachments/assets/748bba8d-09d0-4dff-9d40-b85df3aa7764" />
+<img width="551" height="574" alt="1" src="https://github.com/user-attachments/assets/54821d51-5fce-46b6-a182-c97bbfa86b76" />
 
 ### User Dashboard
-<img width="1893" height="934" alt="1" src="https://github.com/user-attachments/assets/663dd6a7-9325-4f02-9ae5-057fe3cc5034" />
+<img width="1893" height="934" alt="2" src="https://github.com/user-attachments/assets/670fa326-a4ac-4d40-998c-ee03c60b0c66" />
 
 ### Calendar
-<img width="1894" height="932" alt="2" src="https://github.com/user-attachments/assets/8cf018c1-0edb-4963-869e-aa9a16da3f75" />
+<img width="1894" height="932" alt="3" src="https://github.com/user-attachments/assets/68a9864e-805d-4e4b-a1dd-0a473ac939f9" />
 
 ### Forum
-<img width="1911" height="935" alt="3" src="https://github.com/user-attachments/assets/222a259e-0be9-44f2-896a-62834060d87c" />
+<img width="1911" height="935" alt="4" src="https://github.com/user-attachments/assets/b24632b5-00e1-48dd-8b59-783f0b59cdcf" />
 
 ### NonfactorGrid
-<img width="1914" height="935" alt="4" src="https://github.com/user-attachments/assets/278f170f-f2ee-4c02-9a3a-1ef6bb6f1c3c" />
-<img width="1916" height="930" alt="5" src="https://github.com/user-attachments/assets/74695073-ba46-4ffe-a9ca-e8fe7a995cb4" />
+<img width="1914" height="935" alt="5" src="https://github.com/user-attachments/assets/9b503e28-2677-4069-a72b-e604997eb68a" />
+<img width="1916" height="930" alt="6" src="https://github.com/user-attachments/assets/479cd480-568e-4cb9-b391-56f62d7dc098" />
 
 ### User Profile
-<img width="1885" height="932" alt="6" src="https://github.com/user-attachments/assets/bb54de54-3032-4d09-8e94-ded722824c51" />
-
+<img width="1885" height="932" alt="7" src="https://github.com/user-attachments/assets/6162c519-b963-4eef-a286-dd91db5e9efe" />
 
 ## Contributing
 1. Fork the repository
