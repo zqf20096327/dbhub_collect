@@ -10402,5 +10402,150 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f83a4b8ae01": {
+  "identity": {
+   "one_liner": "开源在线监控、状态页与 on-call 一体化工具，单二进制自托管",
+   "review": "uptimepage 提供 HTTP/TCP/ICMP/DNS/TLS/域名到期/心跳/浏览器登录流等 8 类检查，多区域探测，并内置公开状态页、事件管理与值班升级策略，支持 REST API、Terraform 和 MCP server。面向 SaaS 创始人、平台/SRE 与自托管用户；后端依赖 Postgres 与 ClickHouse，另有托管服务。",
+   "highlights": [
+    "支持 8 种检查类型，默认间隔 60 秒，多区域探测代理",
+    "内置公开状态页（HTML/JSON/RSS）、事件叙述与维护窗口",
+    "提供 REST API、官方 Terraform provider 与默认关闭的 MCP server"
+   ],
+   "use_cases": [
+    "为对外服务搭建客户可订阅的公开状态页",
+    "对网站、端口、证书与定时任务做周期性可用性检查并多渠道告警",
+    "自托管单二进制部署，配合 on-call 轮换与升级策略"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+     "lines": [
+      78,
+      180
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+     "lines": [
+      78,
+      180
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为服务可用性监控/状态页场景提供组件，Postgres 与 ClickHouse 是其运行所依赖的存储后端",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，同时提供免费起步的托管服务",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up. ／ |**Checks**|HTTP, TCP, ICMP ping, heartbeat (inbound dead-man's-switch), DNS, TLS-cert expiry, domain expiry, browser login flow with per-step timings, manual (state set by an operator); a circuit breaker per monitor, designed for ~50k concurrent in-flight|",
+   "evidence_lines": [
+    78,
+    180,
+    71
+   ]
+  },
+  "fn": "uptimepage/uptimepage",
+  "sha": "4f83a4b8ae01",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "149a2f9ea10f": {
+  "identity": {
+   "one_liner": "Swift 嵌入式加密文档数据库，单文件+WAL 恢复",
+   "review": "BlazeDB 是一个面向 Swift 应用的嵌入式文档数据库，基于 Codable 而非 SQL，页面默认 AES-256-GCM 加密，提供事务、进程内 live queries、REPL/CLI 以及 C ABI 供其他语言嵌入。macOS 与 Linux 经 CI 运行时测试，iOS 等平台仅编译测试，Android/KMM 为实验性；每个数据库文件只允许单个引擎写入进程。适合需要本地加密存储的 Swift 开发者。",
+   "highlights": [
+    "提供页面级 AES-256-GCM 加密与 PBKDF2-HMAC-SHA256 密钥派生",
+    "支持事务、进程内 live queries 与 WAL 恢复",
+    "附带 blazedb CLI/REPL、BlazeDoctor/BlazeDump/BlazeInfo 工具及 C ABI（BlazeDBC）"
+   ],
+   "use_cases": [
+    "Swift/iOS/macOS 应用的本地加密数据存储",
+    "通过 C ABI/cgo 在 Go 等语言中嵌入同一引擎",
+    "单写者进程（app、daemon 或 Vapor 服务）拥有的本地数据库文件"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|BlazeDB fits|Reach for SQLite or GRDB instead| ／ SQLite still wins plenty of benchmarks. We say so on purpose: Why not SQLite? ／ |Choose a store|Embedded Swift storage comparison · Why not SQLite?|",
+     "lines": [
+      37,
+      43,
+      201
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该仓库本身是数据库引擎，不属于为其他数据库服务的工具，也不只是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BlazeDB is an embedded **document** database (Swift `Codable`, not SQL). Pages are encrypted by default. You get transactions, live queries, and a `blazedb` CLI. macOS and Linux are runtime-tested in CI; iOS and friends are compile-tested; Android/KMM is experimental. ／ - Public database-opening APIs require a password; keys are derived with PBKDF2-HMAC-SHA256 and pages use AES-256-GCM (key management — not Argon2id) ／ **Runs as:** SwiftUI app, CLI, Vapor service, or anything linking `BlazeDBC` (Go, C, etc.). The engine always lives in **one** process that holds the file open; see When to pass for sharing rules.",
+   "evidence_lines": [
+    5,
+    140,
+    146
+   ]
+  },
+  "fn": "Mikedan37/BlazeDB",
+  "sha": "149a2f9ea10f",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10147,5 +10147,93 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b7a510c02764": {
+  "identity": {
+   "one_liner": "基于 Podman/Docker Compose 的开发环境服务编排工具",
+   "review": "Devbox 通过 Make 和 Podman/Docker Compose 一键启动常见开发用服务（含多个版本的 MariaDB、MySQL、PostgreSQL，以及 Kafka、Redis、RabbitMQ 等），并提供 Web 管理界面，供开发者在本地运行项目依赖或测试环境而无需本地安装。自动检测容器引擎，也可用 DEVBOX_ENGINE 变量强制指定。",
+   "highlights": [
+    "提供 MariaDB 10.5/10.6/11.0/11.4、MySQL 5.7/8.0/8.4/9.0、PostgreSQL 13.2–17 等多版本数据库容器实例",
+    "自动检测 podman compose 或 docker compose，支持 DEVBOX_ENGINE 变量强制指定引擎",
+    "通过 make help 查看全部可用命令，包含 Kafka、Redis、RabbitMQ、Keycloak 等服务"
+   ],
+   "use_cases": [
+    "为项目快速启动本地开发依赖服务（数据库、消息队列、缓存等）",
+    "运行不同版本的数据库进行兼容性测试",
+    "避免在宿主机直接安装各类服务"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* Postgres 13.2, 14.2, 15.3, 16, 17.",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* MySQL 5.7, 8.0, 8.4, 9.0.",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* MariaDB 10.5, 10.6, 11.0, 11.4.",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以容器方式提供数据库等服务的开发环境运行环境，属于服务于数据库使用环节的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "This project provides a easy and fast way to run common services for development environments using Podman or Docker. for your project or tests, instead installing these locally in your machine. Using this, you can run anyone services listed below with web interfaces to manage them. ／ The compose command is detected automatically: `podman compose` is used if available, otherwise `docker compose`. If neither is found, an error is shown. To force an engine, use the optional `DEVBOX_ENGINE` variable (`docker` or `podman`) before run the command. Example: `DEVBOX_ENGINE=podman make redis7.0-up`. ／ ## Services provided",
+   "evidence_lines": [
+    7,
+    20,
+    22
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "joubertredrat/devbox",
+  "sha": "b7a510c02764",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

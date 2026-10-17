@@ -9241,5 +9241,102 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "744146a62ca8": {
+  "identity": {
+   "one_liner": "Rust 库，用 Rust 代码编写并运行 SQLX 数据库迁移",
+   "review": "sqlx_migrator 是一个 Rust crate，让开发者以实现 Operation/Migration trait 的方式定义数据库迁移，替代纯 SQL 脚本，支持 PostgreSQL、MySQL、SQLite 及 any 驱动。提供迁移记录表、数据库锁防止并发迁移、事务性 DDL 提示，并可内嵌 CLI 子命令（apply/revert/list 等）或集成进现有 CLI，适合使用 SQLX 的 Rust 后端开发者管理 schema 版本。",
+   "highlights": [
+    "支持以 Rust 实现 Operation/Migration trait 定义迁移，也支持宏和编译期内嵌 SQL 文件",
+    "运行时持有数据库锁（Postgres advisory lock、MySQL GET_LOCK）防止多进程并发迁移",
+    "内置 CLI 子命令 apply/revert/redo/list/prune/drop，支持 --plan/--check/--fake 与 JSON 输出"
+   ],
+   "use_cases": [
+    "Rust + SQLX 项目中用代码而非 SQL 脚本管理 schema 迁移",
+    "将迁移命令集成到应用自身的 CLI 中",
+    "从 sqlx sql 等旧迁移系统通过 OldMigrator trait 同步过渡"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- [x] PostgreSQL ／ sqlx_migrator = { version = \"0.20.0\", features=[\"postgres\"] } ／ To use `sqlx_migrator`, implement the `Operation` trait to define your migration logic. Here's an example using PostgreSQL:",
+     "lines": [
+      11,
+      21,
+      47
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- [x] MySql ／ sqlx_migrator = { version = \"0.20.0\", features=[\"mysql\"] } ／ migrate at the same time. Postgres uses a session level advisory lock and MySQL uses",
+     "lines": [
+      13,
+      27,
+      119
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- [x] SQLite ／ sqlx_migrator = { version = \"0.20.0\", features=[\"sqlite\"] } ／ `GET_LOCK`; SQLite serialises writers itself. Session level locks are not reliable",
+     "lines": [
+      12,
+      33,
+      120
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "Atomic migrations run inside a transaction. MySQL and MariaDB commit implicitly on",
+     "lines": [
+      129
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQLX 生态提供迁移能力的库/工具，而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust library for writing SQLX migrations using Rust instead of SQL. ／ Supported Databases: ／ Finally, create a migrator to run your migrations:",
+   "evidence_lines": [
+    3,
+    9,
+    95
+   ]
+  },
+  "fn": "iamsauravsharma/sqlx_migrator",
+  "sha": "744146a62ca8",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

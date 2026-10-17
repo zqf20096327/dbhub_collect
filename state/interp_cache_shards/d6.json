@@ -9722,5 +9722,141 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c44867103b53": {
+  "identity": {
+   "one_liner": "基于SQLite的CLI媒体库管理工具集",
+   "review": "这是一个包含118个子命令的命令行媒体库工具集，用于索引、浏览和整理本地及在线媒体（视频、音频、图库、网页等）。它将元数据存入SQLite数据库（如 tv.db），依赖 ffmpeg/ffprobe 提取信息，适合管理大规模本地文件收藏和追踪 YouTube 等在线播放列表的用户，需通过 pip 安装，部分功能需额外安装 library[deluxe] 扩展。",
+   "highlights": [
+    "提供118个子命令，支持从本地文件系统、YouTube、Vimeo、gallery-dl 等来源提取元数据并存入 SQLite 数据库",
+    "支持通过数据库记录播放媒体并在播放后执行删除等后处理动作",
+    "提供 database add/website、tables、row、torrents 等多种数据入库子命令"
+   ],
+   "use_cases": [
+    "为大型本地视频/音频收藏建立可检索的索引并按库播放",
+    "批量下载和更新 YouTube 等平台的播放列表与频道元数据",
+    "将网站、reddit、Hacker News 等在线内容抓取归档到 SQLite"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "│ database add site │ Auto-scrape website data to SQLite │ ／ │ database add tables │ Add table-like data to SQLite │ ／ │ database add row │ Add arbitrary data to SQLite │",
+     "lines": [
+      146,
+      148,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示该工具将媒体元数据存入 SQLite 数据库文件（如 tv.db），属于使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " library database add filesystem tv.db ./video/folder/ ／  library (v4.0.0; 118 subcommands) ／  │ database add site │ Auto-scrape website data to SQLite │",
+   "evidence_lines": [
+    56,
+    130,
+    146
+   ]
+  },
+  "fn": "chapmanjacobd/library",
+  "sha": "c44867103b53",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "180368253757": {
+  "identity": {
+   "one_liner": "Transport Fever 3 第二屏实时仪表盘，mod 导出数据+本地程序存储展示",
+   "review": "为游戏《Transport Fever 3》提供的第二屏仪表盘，由游戏内 Lua mod（定期导出游戏状态快照）和本地配套程序组成；collector.py 将历史快照写入本地 SQLite 数据库，server.py 在浏览器中提供仪表盘页面，并可通过文件通道反向控制游戏。面向该游戏的玩家，Windows/Linux 可用，仅用 Python 标准库，全部本地运行。",
+   "highlights": [
+    "配套程序每几秒读取 mod 导出的游戏状态快照，将历史数据存入本地 SQLite 数据库",
+    "提供资金、线路、载具、车站、地图等实时视图与历史曲线，并支持可选的游戏控制",
+    "仅依赖 Python 标准库运行，提供 Windows/Linux 发行包，数据不出本机"
+   ],
+   "use_cases": [
+    "在第二台显示器上实时监控 Transport Fever 3 公司运营状态",
+    "通过仪表盘在不退出全屏游戏的情况下控制游戏速度、镜头和载具",
+    "查看线路、载具与运输量的历史趋势与警告信息"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Pytho ／ (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it. ／ collector/ collector.py (tf3dash_live.lua + tf3dash_slow_*.lua -> SQLite), luatable.py (Lua parser), tf3paths.py (folder detection), schema.sql",
+     "lines": [
+      36,
+      48,
+      225
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 用于存储仪表盘自身采集的游戏历史数据，仓库是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Mod `Second Screen Dashboard`**|mod.io (in-game Mod Hub) or `mod/` in this repo|A Lua game script that writes a snapshot of the game state to `<userdata>/dashboard_export/live.lua` every few seconds, and (if you enable it) executes commands written to `cmd.lua`. Uses only the official TF3 scripting API. Never modifies the savegame.| ／ |**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python standard library only — the Windows release zip ships a bundled Python, Linux uses the system Python (3.10+); nothing to install.|",
+   "evidence_lines": [
+    35,
+    36
+   ]
+  },
+  "fn": "M1r077/tf3-dashboard",
+  "sha": "180368253757",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

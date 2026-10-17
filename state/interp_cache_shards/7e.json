@@ -11050,5 +11050,74 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1afe907c33cb": {
+  "identity": {
+   "one_liner": "AI 代理上下文服务，将决策/约束等持久化为可版本化的制品",
+   "review": "PowerContext 是面向 AI 代理的开源上下文服务，把决策、约束、交接记录、经验与技能存为服务端版本化制品，供跨会话、跨代理或人员接续工作；提供 HTTP/MCP、Python 客户端、CLI 与 Dashboard，支持 SQLite 或嵌入式 seekdb 作为存储后端，需 Python 3.11+ 与 uv，Windows 支持标注为实验性。",
+   "highlights": [
+    "Memory/Handoff/Experience/Skill 四类版本化制品，支持评审收件箱与不可变修订",
+    "PreparedContext 按字节预算召回上下文，提供 HTTP/MCP、Python Client、CLI 与 Dashboard 接口",
+    "显式 Memory 写入无需模型 API，自动抽取需配置生成与嵌入管道"
+   ],
+   "use_cases": [
+    "多代理/多会话间交接任务上下文",
+    "为代理提供需人工评审后复用的经验与技能管理",
+    "跨会话的长期记忆与主题记忆存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The wizard asks about storage, local or remote usage, memory capabilities, Dashboard/access, and Agent connections. SQLite is the simplest first storage choice; choose embedded seekdb only when you need it and can approve its dependency install.",
+     "lines": [
+      183
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其以 SQLite 等作为自身存储后端，属于使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PowerContext is an open-source context service for AI agents.** It keeps the durable part of your work — decisions, ／ |Builtin runtime|Memory, Handoff, Experience, and Skill services, scheduling, inference, and supported storage backends|Running the standard local Server| ／ The wizard asks about storage, local or remote usage, memory capabilities, Dashboard/access, and Agent connections. SQLite is the simplest first storage choice; choose embedded seekdb only when you need it and can approve its dependency install.",
+   "evidence_lines": [
+    16,
+    25,
+    183
+   ]
+  },
+  "fn": "oceanbase/powercontext",
+  "sha": "1afe907c33cb",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

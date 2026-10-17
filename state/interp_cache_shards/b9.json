@@ -9654,5 +9654,152 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "723cb97ea592": {
+  "identity": {
+   "one_liner": "为编码 agent 提供本地任务队列与记忆层的 CLI，基于 SQLite 与 MCP",
+   "review": "myc 是一个面向编码 agent 的本地工具，提供任务队列、事实与决策日志、混合检索（词法+向量）和代码索引，数据存储在 SQLite 中。通过 `myc wire` 为 Claude Code、Codex、opencode 等 agent 写入 hooks 与 MCP 配置；需 SQLite ≥ 3.50.4，语义检索的嵌入模型需显式下载。适合本地管理 AI 编码代理的任务与上下文。",
+   "highlights": [
+    "提供任务队列、oplog、混合检索与代码索引，默认无网络调用",
+    "通过 MCP 与 hooks 接入 Claude Code、Codex、opencode 等 agent",
+    "要求 SQLite ≥ 3.50.4，并在启动时校验所用 SQLite 版本"
+   ],
+   "use_cases": [
+    "为 AI 编码 agent 持久化任务与决策记忆",
+    "多 agent 共享机器上的重命令队列",
+    "通过 git 在多台机器间迁移 agent 工作状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "repositories; a team server over Postgres with tokens, roles and ACL ／ Postgres runs the schema itself on an empty volume, and the server registers",
+     "lines": [
+      484,
+      504
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The engine inside myc is still Bun (`bun:sqlite`, no native bindings on the ／ **SQLite ≥ 3.50.4.** The floor has two reasons. Below 3.44.0, FTS5 cannot be ／ myc init                     # .myc/ + SQLite + migrations in this repo",
+     "lines": [
+      29,
+      45,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "myc 使用 SQLite 作为自身数据存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The engine inside myc is still Bun (`bun:sqlite`, no native bindings on the ／ myc init                     # .myc/ + SQLite + migrations in this repo ／ myc wire                     # hooks + MCP for Claude Code, Codex, opencode, Kimi, mcode and mimo",
+   "evidence_lines": [
+    29,
+    105,
+    106
+   ]
+  },
+  "fn": "aistastudio/myc",
+  "sha": "723cb97ea592",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "395f1c663166": {
+  "identity": {
+   "one_liner": "本地 LLM 可观测性工具，接收 OpenTelemetry 追踪并存入单个 SQLite 文件",
+   "review": "spoor 是一个用 Go 编写的 LLM 应用与编码代理的追踪观测工具：接收 OTLP/HTTP 追踪，存储到单个 SQLite 文件，并提供 Web 界面查看每次模型调用的上下文构成、token 用量、耗时与成本估算，还提供只读 MCP 端点供代理读取。面向使用 Claude Code、OpenLLMetry 等发送追踪的开发者。仅接收 traces，不支持 gRPC 接收，端口无认证。",
+   "highlights": [
+    "接收 OTLP/HTTP 追踪并存储到单个 SQLite 文件，schema 有文档且可用 sqlite3 直接打开",
+    "按 token 类型（输入、缓存读、缓存写、输出）分别计价展示每次模型调用的成本",
+    "提供只读 MCP 端点和单文件 HTML 导出，支持 Claude Code、OpenLLMetry、OpenInference、Vercel AI SDK 等多种发送方"
+   ],
+   "use_cases": [
+    "排查 LLM 代理上下文增长与 prompt 缓存失效问题",
+    "分析各模型调用的 token 与成本分布",
+    "本地查看代理会话的工具调用过程记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **One SQLite file.** It is the storage, the backup unit and the read API: open it with `sqlite3`, the schema is documented and stable.",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内嵌存储单元（存储、备份单元和读取 API），项目本身是为 LLM 可观测性服务的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **One SQLite file.** It is the storage, the backup unit and the read API: open it with `sqlite3`, the schema is documented and stable. ／ spoor receives OpenTelemetry traces from LLM applications and coding agents, stores them, and shows what each model call added to its context, where the prompt cache broke, and where the time, the tokens and the money went. Your agent can read the traces too. ／ - **Your agent reads it too.** A read-only MCP endpoint and a one-file HTML export, with nothing to install.",
+   "evidence_lines": [
+    35,
+    18,
+    40
+   ]
+  },
+  "fn": "jhisse/spoor",
+  "sha": "395f1c663166",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9896,5 +9896,132 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "77dad9697092": {
+  "identity": {
+   "one_liner": "AI 学习路径原型：对话澄清目标并生成学习闭环",
+   "review": "WenFlow 是一个从真实问题出发的 AI 学习路径原型，通过多轮对话澄清学习目标、生成可执行路径并提供回合式教学与遗忘曲线复习。面向学习者与自托管部署者，采用 Vue3 + Node.js + Express + Prisma，数据存储使用两个 SQLite 库（主库 51 模型 + system 库 14 表），AI 接入走 OpenAI 兼容网关。README 自述处于早期实验阶段。",
+   "highlights": [
+    "双库 SQLite 架构：主库 51 个 Prisma 模型 + system 库 14 表，含迁移与备份命令",
+    "Agent/Skill 编排：顶层 Agent 编排、prompts/core YAML 为真源的编译发布链路",
+    "自带 18 页管理后台与虚拟学习者仿真（黑盒模拟 + Quick Learn）"
+   ],
+   "use_cases": [
+    "自托管 AI 学习/教学路径实验平台",
+    "教育类 Agent/Skill 编排与 Prompt 工程流程参考",
+    "虚拟学习者仿真验证教学功能"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**数据库（当前）**|SQLite（主库 51 个 Prisma 模型 + 1 张运行期建表，system 库 14 表，双库架构）| ／ 当前使用两个 SQLite 库，相对 URL 按各自 Schema 目录解析： ／ ### 本地 SQLite 路径约定",
+     "lines": [
+      149,
+      169,
+      302
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目使用两个 SQLite 库存储学习数据，SQLite 是其内置存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT（README 徽章区标注，正文另有说明为早期实验原型）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**数据库（当前）**|SQLite（主库 51 个 Prisma 模型 + 1 张运行期建表，system 库 14 表，双库架构）| ／ 当前使用两个 SQLite 库，相对 URL 按各自 Schema 目录解析： ／ |**Agent / Skill 编排**|EduClaw Gateway + 5 个顶层 Agent（goal/path/teaching/profile/simulation，无 prompt 编排器）/ Skill 执行层（prompts/core 真源 → 编译产物 → DB 镜像）+ Coordinators + Durable Outbox 事件链|",
+   "evidence_lines": [
+    149,
+    169,
+    151
+   ]
+  },
+  "fn": "wenflow-org/wenflow",
+  "sha": "77dad9697092",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dc361449d17c": {
+  "identity": {
+   "one_liner": "为 Claude Code 与 Codex CLI 提供本地持久记忆的 Rust 单二进制工具",
+   "review": "Muninn 通过 Claude Code/Codex 的 hooks 在会话结束时保存决策记录，检索时只返回当前有效的决策并替换旧决策，读取路径不含 LLM；还能把 CLAUDE.md/AGENTS.md 规则编译为权限规则和 deny hook。面向个人 AI 编码助手用户；局限包括上下文占用较高、跨语言检索弱、不支持团队共享。",
+   "highlights": [
+    "基于 SQLite + FTS5 的本地存储，单 Rust 二进制，无云服务、无 API key",
+    "检索按 cue 锚定，700 token 预算内返回带出处的证据，读取路径不运行 LLM",
+    "可将 CLAUDE.md/AGENTS.md 规则转换为权限规则和 deny hook"
+   ],
+   "use_cases": [
+    "AI 编码助手跨会话保留已变更的技术决策",
+    "防止助手重复已失败或已被否决的方案",
+    "把自然语言规则固化为自动拦截的操作限制"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 说明 Muninn 通过 hooks 为 Claude Code/Codex 提供持久记忆服务，是服务于编码助手生态的组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Muninn: persistent memory for Claude Code and Codex ／ It also turns the rules in your `CLAUDE.md` or `AGENTS.md` into settings that block the action, ／ You never call Muninn. It rides along on the hooks Claude Code and Codex already fire, reads from",
+   "evidence_lines": [
+    10,
+    27,
+    82
+   ]
+  },
+  "fn": "ilien-dev/muninn",
+  "sha": "dc361449d17c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

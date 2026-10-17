@@ -9183,5 +9183,221 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5243c9d86fcc": {
+  "identity": {
+   "one_liner": "自托管家庭事务管理应用，20个模块一体化，数据存于单个 SQLite 文件",
+   "review": "Yuvomi 是一个自托管的家庭事务应用，把任务、日历、预算、膳食、健康、文档等功能整合在一个容器中运行，面向家庭、情侣或个人用户。数据以单个 SQLite 文件存储于自有服务器，支持 Docker/Podman 部署、可选 AES-256 数据库加密，并提供 OpenAPI 与 MCP 端点。",
+   "highlights": [
+    "包含任务、日历、预算、膳食、购物、文档等 20 个模块，可按需开关，模块间数据联动",
+    "数据存储为单个 SQLite 文件（/data/yuvomi.db），支持定时备份与可选 AES-256 加密",
+    "提供 Bearer Token 认证、OpenAPI 3.1 规范和内置 MCP 端点，支持推送通知与双向日历同步"
+   ],
+   "use_cases": [
+    "家庭或个人在自有服务器/NAS 上集中管理任务、日历、账单与膳食计划",
+    "替代多个订阅制家庭应用，数据自持并支持备份迁移",
+    "在平板或手机上以 PWA 方式查看家庭日程与共享购物清单"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**What if you want your data somewhere else?** Everything lives in one SQLite file on your own ／ - **Your data** - one SQLite file at `/data/yuvomi.db`, plus the folder, WebDAV or Drive if you moved documents there.",
+     "lines": [
+      105,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明数据以单个 SQLite 文件存储（L105、L134），该项目是使用 SQLite 存储数据的家庭应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**What if you want your data somewhere else?** Everything lives in one SQLite file on your own ／ - **Your data** - one SQLite file at `/data/yuvomi.db`, plus the folder, WebDAV or Drive if you moved documents there.",
+   "evidence_lines": [
+    105,
+    134
+   ]
+  },
+  "fn": "ulsklyc/yuvomi",
+  "sha": "5243c9d86fcc",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f8bccbfa5c6e": {
+  "identity": {
+   "one_liner": "多租户插件化 AI SaaS 平台，用于企业知识管理与 RAG",
+   "review": "这是一个以 npm monorepo 组织的 NestJS + Next.js 多租户 AI 平台，含 Core/Gateway/AI Orchestrator 三个平台服务、五个插件 API 和三个前端，用于企业知识管理、RAG 问答与数据分析，面向需要租户隔离与权限感知 AI 的企业场景。本地依赖 PostgreSQL（pgvector）、Redis、MinIO 由 Docker Compose 供应；许多架构决策与安全边界仍为规划状态，认证适配器仅限本地开发。",
+   "highlights": [
+    "提供 Gateway/Core API/AI Orchestrator 三服务与 Knowledge、Data Analytics 等五插件 API 的 monorepo 结构",
+    "本地基础设施通过 Docker Compose 提供 PostgreSQL（pgvector）、Redis、MinIO",
+    "AI Orchestrator 通过 Core 策略与 Knowledge 安全检索实现带服务端引用的 RAG 流程"
+   ],
+   "use_cases": [
+    "企业知识库与权限感知的 RAG 问答",
+    "多租户 SaaS 平台架构参考",
+    "文档处理与数据分析插件化开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`infrastructure/`|Local PostgreSQL, Redis, storage configuration; Docker, gateway, observability documentation| ／ loopback, with defaults PostgreSQL `5432`, Redis `6379`, MinIO API `9000`, MinIO ／ console `9001`. The validated local setup uses PostgreSQL `15432` and Redis `16379`",
+     "lines": [
+      44,
+      117,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL/Redis/MinIO 存储数据的 AI SaaS 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Amani IA is a multi-tenant, plugin-based AI SaaS organized as an npm monorepo. ／ |`infrastructure/`|Local PostgreSQL, Redis, storage configuration; Docker, gateway, observability documentation| ／ See the component READMEs for credentials, health probes and pgvector verification.",
+   "evidence_lines": [
+    3,
+    44,
+    121
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "AndrixNg1/amani.ia",
+  "sha": "f8bccbfa5c6e",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6b1573e2748c": {
+  "identity": {
+   "one_liner": "ASP.NET Core 博客系统与管理面板，通过 EF Core 使用 SQL Server",
+   "review": "这是一个基于 ASP.NET Core Web API 与 MVC 开发的博客应用及配套管理面板，管理文章、分类、用户、视频和评论。数据通过 Entity Framework Core 以 Code First 迁移方式存于 SQL Server，适合 .NET 学习者在 BTK 培训语境下参考；README 说明管理员权限与登录流程尚未完成，不适用于公开生产环境。",
+   "highlights": [
+    "提供文章、分类、用户、视频、评论的 REST API 及 MVC 管理面板",
+    "使用 EF Core Code First 迁移创建数据库，支持 Docker 运行 SQL Server",
+    "提供 Swagger UI 与 OpenAPI 文档（限 Development 环境）"
+   ],
+   "use_cases": [
+    "学习 ASP.NET Core Web API 与 MVC 分层架构的实践示例",
+    "需要带审核流程的博客内容管理后台",
+    "本地开发环境搭建 .NET + SQL Server 练手项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SQL Server ／ |Veritabanı|Microsoft SQL Server| ／ - Erişilebilir bir Microsoft SQL Server örneği",
+     "lines": [
+      7,
+      61,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQL Server 存储博客数据的博客应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ASP.NET Core Web API ile geliştirilen bir blog uygulaması ve bu API’yi tüketen MVC yönetim arayüzü. Makaleler, kategoriler, yazarlar, videolar ve yorumlar ayrı bir API üzerinden yönetilir; ziyaretçi arayüzü içerikleri Razor View Component’leriyle sunar. ／ |Veritabanı|Microsoft SQL Server| ／ > Proje geliştirme aşamasındadır. Admin erişim kontrolü ve kullanıcı oturum akışı henüz tamamlanmamıştır. Uygulama adı AIBlog olsa da mevcut sürümde bir yapay zekâ servisi entegrasyonu bulunmaz.",
+   "evidence_lines": [
+    3,
+    61,
+    12
+   ]
+  },
+  "fn": "seyitbugraerden/aspnet-api-btk",
+  "sha": "6b1573e2748c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

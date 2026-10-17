@@ -9392,5 +9392,164 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d9d90d33bd09": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions runner 编排控制器，单 Go 二进制，用 SQLite 存状态",
+   "review": "Zoomies 用于管理自托管的 GitHub Actions runner 集群：监听 workflow_job webhook，为每个任务启动一次性 runner 并在结束后销毁，支持 GitHub App 认证、多主机 agent、自动扩缩和实时 Web UI。SQLite 存储状态，无需数据库服务器和 Kubernetes，通过安装脚本或 Docker Compose 部署，适合运维 CI 基础设施的团队。",
+   "highlights": [
+    "为每个排队的 job 启动一次性临时 runner，任务结束即销毁",
+    "提供实时 Web UI、Prometheus 指标、结构化日志和 SQLite 状态存储",
+    "支持 webhook 驱动扩缩、多主机多 OS agent，以及内置数据库备份到 S3 兼容目标"
+   ],
+   "use_cases": [
+    "为 GitHub 组织或仓库提供临时自托管 runner，替代静态 runner",
+    "利用家庭实验室/私有机器运行 CI，无需公网 IP 或端口转发",
+    "单机或少量主机的 runner 集群管理，不引入 Kubernetes"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      16,
+      101
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目运行 GitHub Actions runner，使用 SQLite 作为自身状态存储，属于为 CI 基础设施服务的工具而非使用数据库构建的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Single Go binary. SQLite. AGPL-3.0. ／ You point Zoomies at a GitHub organisation, or at a repository on a personal ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+   "evidence_lines": [
+    16,
+    66,
+    101
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "d9d90d33bd09",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "21c9ab2958a9": {
+  "identity": {
+   "one_liner": "基于 FastAPI+SQLAlchemy+SQLite 的图像处理 REST API",
+   "review": "Pictura 是一个图像处理后端服务，提供图片上传与缩放、裁剪、旋转、水印等八种转换操作，包含 JWT 认证与按用户隔离。默认使用 SQLite 存储用户与图片元数据，并可通过 DATABASE_URL 切换到 PostgreSQL；限制包括无迁移机制、图片仅存本地磁盘。适合需要自建图片处理 API 的 Python 使用者。",
+   "highlights": [
+    "提供八种图像转换端点：resize、crop、rotate、flip、watermark、compress、convert、filter",
+    "支持 JWT 认证与 Argon2 密码哈希，上传校验类型、大小与像素数",
+    "通过 SQLAlchemy DATABASE_URL 支持 SQLite 与 PostgreSQL，提供 Docker Compose 部署与测试套件"
+   ],
+   "use_cases": [
+    "需要图像上传与处理能力的后端 API 服务",
+    "需要 JWT 认证和多用户隔离的图片管理场景",
+    "本地或 Docker 环境部署的图像处理微服务"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ Two named volumes keep your data safe across rebuilds: `database` (the SQLite file) and `image_storage` (uploaded and transformed images). ／ |`DATABASE_URL`|No|`sqlite:///./image_service.db`|SQLAlchemy database URL. Docker sets it to `sqlite:////data/images.db`| ／ - SQLite supports a single writer, so run one uvicorn worker. For multiple workers or heavier traffic, point `DATABASE_URL` at PostgreSQL.",
+     "lines": [
+      9,
+      98,
+      191,
+      256
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite supports a single writer, so run one uvicorn worker. For multiple workers or heavier traffic, point `DATABASE_URL` at PostgreSQL.",
+     "lines": [
+      256
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite/PostgreSQL 存储用户账户与图片元数据，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Pictura is a small, focused image-processing backend built with FastAPI, SQLAlchemy and Pillow. Users sign up, log in to get a JWT, upload images, and apply transformations. Every transformation p[...] ／ |`DATABASE_URL`|No|`sqlite:///./image_service.db`|SQLAlchemy database URL. Docker sets it to `sqlite:////data/images.db`| ／ - **Database:** Stores user accounts and image metadata using SQLAlchemy.",
+   "evidence_lines": [
+    17,
+    191,
+    238
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SamiKhan43/Image-Processing-Application-",
+  "sha": "21c9ab2958a9",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

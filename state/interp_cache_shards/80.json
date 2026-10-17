@@ -9323,5 +9323,79 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "87e53a66b32a": {
+  "identity": {
+   "one_liner": "本地 SNOMED CT 工具链，将 RF2 转为 NDJSON 并生成 SQLite 等格式",
+   "review": "该仓库提供命令行工具链 sct，用于把 NHS SNOMED CT 的 RF2 发布文件转换为规范化 NDJSON，进而生成 SQLite（含 FTS5）、Parquet、Markdown、Arrow 等产物，并提供 FHIR R4 术语服务、TUI/GUI 浏览、ECL 查询、CTV3/ReadV2 映射和 MCP 服务。面向医疗术语开发者与运维者，核心流程本地运行，TRUD 下载与 Ollama 嵌入为可选联网功能。",
+   "highlights": [
+    "提供 RF2 → NDJSON → SQLite/Parquet/Markdown/Arrow 的本地转换管线，可用 sqlite3、duckdb、jq、ripgrep 查询",
+    "包含 sct serve 实现的 FHIR R4 术语服务器（$lookup/$validate-code/$subsumes/$expand，支持 ECL）",
+    "提供 sct mcp 本地 MCP 服务器与 Ollama 向量语义搜索（实验性）"
+   ],
+   "use_cases": [
+    "在本地无 REST 服务器环境下构建与查询 SNOMED CT 概念、层级和 refset 数据",
+    "生成临床编码（codelist）与 CTV3/ReadV2 映射文件",
+    "部署 FHIR 术语服务（支持 Docker Compose + Caddy）"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A local-first SNOMED CT toolchain. One binary - from raw RF2 release to NDJSON, then SQL, Parquet, Markdown, TUI, GUI, graphs and MCP/LLM tool use. Core RF2 builds and native SDK/SQLite/FST queries run on your machine without REST APIs or external servers; rel ／ * sct sqlite - load NDJSON into a SQLite database with FTS5",
+     "lines": [
+      3,
+      175
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具链包含 sct sqlite 子命令，将数据装载为带 FTS5 的 SQLite 数据库并以其支撑查询与 MCP 服务，属于服务于数据/数据库流程的工具组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A local-first SNOMED CT toolchain. One binary - from raw RF2 release to NDJSON, then SQL, Parquet, Markdown, TUI, GUI, graphs and MCP/LLM tool use. Core RF2 builds and native SDK/SQLite/FST queries run on your machine without REST APIs or external servers; release downloads, URL imports, and Ollama-backed features are explicit opt-in network clients. ／ SNOMED CT is distributed as RF2 - a set of tab-separated files that require joining across multiple tables to get anything useful. The entire healthcare industry relies on remote terminology servers for this, with the overhead of network calls and REST APIs. `sct` performs the join once creating an NDJSON artefact, and produces standard files you can query locally with `sqlite3`, `duckdb`, `jq`, `ripgrep`, or an LLM. No server, no API key, no network. ／ * sct sqlite - load NDJSON into a SQLite database with FTS5",
+   "evidence_lines": [
+    3,
+    22,
+    175
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "pacharanero/sct",
+  "sha": "87e53a66b32a",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

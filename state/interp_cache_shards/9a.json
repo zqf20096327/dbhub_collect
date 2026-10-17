@@ -10534,5 +10534,135 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f2fb948f50ce": {
+  "identity": {
+   "one_liner": "基于 SwiftUI 与 GRDB/SQLite 的健康习惯追踪 iOS 应用",
+   "review": "这是一款习惯追踪类 iOS 应用，用户可创建习惯、按可自定义频率打卡，应用内置抗衰老星级评分、12 级健康等级、成就系统和提醒通知，数据通过 GRDB 存储于本地 SQLite，支持 CSV/JSON 导出。面向关注健康长寿的个人用户，也可从 App Store 直接下载使用。",
+   "highlights": [
+    "使用 GRDB 进行本地 SQLite 数据存储，应用启动时自动初始化数据库",
+    "支持 CSV 导出与 JSON 全量备份（习惯、打卡、休息日、提醒等）",
+    "提供 12 级健康评级、24 项成就与多语言（英/简中）本地化"
+   ],
+   "use_cases": [
+    "个人日常健康习惯打卡与追踪",
+    "基于科学评分的习惯管理与成就激励",
+    "本地数据导出与备份分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **GRDB Database**: Robust local data storage with SQLite ／ - **GRDB**: SQLite database with Swift integration",
+     "lines": [
+      58,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用通过 GRDB 将数据存储于本地 SQLite，数据库仅作为应用的数据层而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "CC BY-NC 4.0（非商业许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A modern habit-tracking iOS app built with SwiftUI and GRDB, designed to help users build and maintain habits that promote long-term health and longevity. Longevity Master focuses on evidence-based habits that contribute to healthy aging and overall well-being. ／ - **GRDB Database**: Robust local data storage with SQLite ／ The app uses GRDB for local data storage. The database is automatically initialized when the app launches.",
+   "evidence_lines": [
+    8,
+    58,
+    131
+   ]
+  },
+  "fn": "banghuazhao/longevity-master",
+  "sha": "f2fb948f50ce",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ee2063d9e678": {
+  "identity": {
+   "one_liner": "本地 Windows 取证调查 CLI，证据规范化入 SQLite 并结合本地 llama.cpp 模型分析",
+   "review": "Locard 是一个运行在本地的 Windows 数字取证调查 CLI，将证据事件规范化写入 SQLite，再通过本地 llama.cpp 服务调用 MiniCPM5-2B 模型对检索到的记录做辅助分析，全程不外发敏感证据。面向需要在离线环境下做取证的分析师；项目自述尚未最终完成，当前更像高级原型。",
+   "highlights": [
+    "将取证事件规范化存入 SQLite 并保留原始证据 ID 与来源",
+    "通过本地 llama.cpp 调用 MiniCPM5-2B，不向外部 AI 服务发送证据",
+    "内置确定性抽取、引用校验、上下文限制与禁止模型执行查询等防护机制"
+   ],
+   "use_cases": [
+    "需要数据不出本地的 Windows 取证调查",
+    "对已检索证据记录做摘要与关联解读",
+    "在笔记本等无大型 GPU 的环境运行 AI 辅助分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|image &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目将证据事件规范化写入 SQLite 作为数据存储，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|image &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Locard is a local Windows forensic investigation CLI, named after Edmond Locard and the principle that **every contact leaves a trace**. Locard was designed around a foundational principle: **A forensic investigation should never require sending sensitive evidence to an external AI service.** To ensure trust and accuracy in the investigative process, Locard improves reliability through strict systemic safeguards rather than relying on LLM scale. It preserves source provenance, normalizes events into SQLite, retrieves evidence deterministically, and optionally asks MiniCPM5 through a local llama.cpp server to analyze retrieved records. Watch Locard's introduction video| ／ The interactive CLI in V6 uses the existing V0-V5 forensic capabilities. Even though this project is its in Version 6, which is supposed to be its final form, there is still a **lot** left to be done. At this stage Locard is a solution that did not pass the test of running in a live environment. It's more like and advanced prototype.",
+   "evidence_lines": [
+    14,
+    67
+   ]
+  },
+  "fn": "jeanlucdupont/locard",
+  "sha": "ee2063d9e678",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

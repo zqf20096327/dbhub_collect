@@ -8563,5 +8563,240 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6ff818905c3d": {
+  "identity": {
+   "one_liner": "跨库整表迁移引擎：Rust 线路协议传输，Python 单行 API",
+   "review": "apitap 是一个表数据传输引擎，用 Rust 实现各数据库自有线路格式（COPY、RowBinary、LOAD DATA、binlog/逻辑复制），在内存受限容器中并行搬表并原子切换。提供 pip 安装的 Python 绑定，面向需要批量迁移与批量 CDC 的数据工程人员。预 1.0 版本，要求精确固定版本。",
+   "highlights": [
+    "支持 postgres/mysql/clickhouse/bigquery/gcs/s3/iceberg 等源与目标 URL，提供 replace/append/merge/log_based 四种传输模式",
+    "通过自身 Rust 线路客户端读写二进制 COPY、RowBinary、LOAD DATA、逻辑复制与 MySQL binlog",
+    "内存按 pipes×buffers 规划并读取 cgroup 限制，不随表大小增长；导出 read() 经 Arrow C stream 协议输出 polars/pyarrow/duckdb/pandas"
+   ],
+   "use_cases": [
+    "整表批量迁移与定期快照同步（cron/Airflow/Kubernetes 调度）",
+    "从 Postgres/MySQL/MariaDB binlog 或 WAL 做批量 CDC 到 Postgres、ClickHouse、MySQL、BigQuery、Iceberg",
+    "内存受限容器环境下的数据管道传输与 Arrow DataFrame 读取"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (REST catalogs with bearer auth)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "lines": [
+      44,
+      45,
+      46
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (REST catalogs with bearer auth)| ／ MySQL binlog — through its own Rust wire clients, moves tables over parallel",
+     "lines": [
+      44,
+      45,
+      7
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (REST catalogs with bearer auth)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "lines": [
+      44,
+      45,
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |MySQL / MariaDB|`mysql://user:pass@host:3306/db?ssl-mode=verify_identity`|TLS is **required for any non-loopback host** since 0.55.1; `ssl-mode` = `disabled` (send in clear, on purpose) · `required` (encrypt, no verify) · `verify_ca` · `verify_identity` (defa",
+     "lines": [
+      44,
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定义其为数据库间表传输引擎（transfer engine），服务于数据迁移场景而非业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "apitap is a transfer engine, not an API client. It speaks the databases' own ／ |**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (REST catalogs with bearer auth)|",
+   "evidence_lines": [
+    5,
+    44,
+    45
+   ]
+  },
+  "fn": "apitap/apitap-lib",
+  "sha": "6ff818905c3d",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cdfb4db79976": {
+  "identity": {
+   "one_liner": "本地优先的时间追踪工具，CLI 与桌面 GUI，数据存 SQLite",
+   "review": "HumbleBee 是一个本地优先的时间追踪应用，提供 CLI 和基于 Wails/React 的桌面 GUI，数据以内嵌 SQLite 存储（无 CGO），支持工作项管理、计时器与月度报表，并提供 doctor 健康检查与修复命令。面向需要本地数据、隐私场景的自由职业者等用户；当前为单用户模式。",
+   "highlights": [
+    "提供 CLI 与独立的本地桌面 GUI，两者共用同一本地数据库格式",
+    "以内嵌 SQLite 存储数据（经 modernc.org/sqlite，无 CGO）",
+    "包含计时器、工作项管理、月度报表及 doctor 健康检查/修复命令"
+   ],
+   "use_cases": [
+    "本地记录工作时间并生成月度报表",
+    "通过 CLI 管理客户/项目工作项树",
+    "不依赖云服务的桌面时间追踪"
+   ],
+   "description_fallback": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite is embedded via `modernc.org/sqlite` (no CGO)",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存储于内嵌 SQLite 数据库，SQLite 仅作为其本地存储使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- SQLite is embedded via `modernc.org/sqlite` (no CGO) ／ - Database path: `~/.humblebee/humblebee.db` ／ HumbleBee also ships a standalone local-first GUI built with Wails and React. The GUI uses the same local database format as the CLI, but it does not require the CLI to be installed.",
+   "evidence_lines": [
+    8,
+    37,
+    48
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "grobmeier/humblebee",
+  "sha": "cdfb4db79976",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "71fb6c7eca5c": {
+  "identity": {
+   "one_liner": "达梦数据库的 .NET ADO.NET 数据提供程序",
+   "review": "社区维护的达梦数据库 ADO.NET 驱动，提供异步操作、参数绑定、本地事务、流式 BLOB/CLOB、DmDataSource 连接源及 DbProviderFactories 注册，默认强制 TLS。支持 netstandard2.1 至 net10.0 多目标，供 .NET 开发者接入达梦数据库使用，已验证环境限于 DM 8.1.x 部分版本。",
+   "highlights": [
+    "提供异步 Open/Prepare/Execute/Read 与本地事务，默认要求完整会话 TLS 并验证证书",
+    "支持流式 BLOB/CLOB 读取、存储过程与输出游标、数组绑定与 DbBatch（视目标框架）",
+    "多目标发布 netstandard2.1/net6.0/net8.0/net9.0/net10.0"
+   ],
+   "use_cases": [
+    ".NET 应用通过 ADO.NET/EF 接入达梦数据库",
+    "需要 TLS 加密连接与流式 LOB 处理的达梦访问场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "面向达梦（Dameng）数据库的 .NET 6/8/9/10 ADO.NET 数据提供程序，提供异步数据库操作、参数绑定、本地事务、`DmDataSource`、流式 BLOB/CLOB 和标准 .NET 诊断接口。 ／ 发布准备、测试和 tag 规则见发布指南。本地实库测试仅使用专用 TEST 账号，配置见本地达梦环境。",
+     "lines": [
+      3,
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为达梦数据库提供 ADO.NET 驱动，是服务数据库生态的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，包含上游 DM 的 C# 代码贡献",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向达梦（Dameng）数据库的 .NET 6/8/9/10 ADO.NET 数据提供程序，提供异步数据库操作、参数绑定、本地事务、`DmDataSource`、流式 BLOB/CLOB 和标准 .NET 诊断接口。 ／ 这是社区维护的 ADO.NET 项目。包名和程序集名为 **W.DamengProvider**，公开命名空间为 **W.Dm**。它与 `DM.DmProvider` 有不同的程序集身份，现有应用和 EF 适配层需要显式更新依赖并重新编译。",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "whynpc9/W.DamengProvider",
+  "sha": "71fb6c7eca5c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

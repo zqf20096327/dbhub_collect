@@ -8599,5 +8599,62 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7b2cb2bc7ba2": {
+  "identity": {
+   "one_liner": "英西双语技术术语词典站点，提供 JSON API 与 MCP 服务器",
+   "review": "一个用平实语言解释技术术语的双语词典应用，内容涵盖 AI、云、网络、安全等主题，每个词条含定义、类比、图示和链接。面向非工程师的普通读者，同时为开发者和 AI 代理提供 Markdown 输出、JSON API 和 MCP 接口。内容由 JSON 文件经构建脚本生成静态站点，部署在 Cloudflare Pages，不依赖数据库。",
+   "highlights": [
+    "提供 JSON API（/v1/terms.json、/v1/terms/<slug>.json）与 OpenAPI 文档",
+    "内置 MCP 服务器（/mcp，Streamable HTTP），提供 search_terms、get_term、list_topic、term_of_the_day 工具",
+    "词条以 content/entries/*.json 存储，构建脚本校验并生成双语静态页面与 llms.txt"
+   ],
+   "use_cases": [
+    "非技术读者以英语或西班牙语查阅技术术语的平实释义",
+    "AI 代理通过 MCP 服务器检索术语定义",
+    "开发者通过 JSON API 以只读方式获取全部词条内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库是一个内容词典站点应用，README 未声明依赖或适配任何数据库，仅以 JSON 文件与 Cloudflare Pages 存储和分发内容。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The tech dictionary, explained simply, in English and Spanish.** ／ - **JSON API**: `/v1/terms.json` lists every term; `/v1/terms/<slug>.json` has the full entry. OpenAPI, RFC 9457 errors, fair-use `RateLimit` headers. ／ - `content/entries/*.json`: one file per term, both languages inside. `content/img/*.svg`: its diagram. `content/subjects.json`: the topics.",
+   "evidence_lines": [
+    3,
+    38,
+    49
+   ]
+  },
+  "fn": "legiosai/tidbit",
+  "sha": "7b2cb2bc7ba2",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

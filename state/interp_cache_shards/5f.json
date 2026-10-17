@@ -9692,5 +9692,159 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1d891e6773e4": {
+  "identity": {
+   "one_liner": "AI 原生 Rust 业务应用库与运行时，模型驱动查询与审计变更",
+   "review": "TeaQL 是一个面向 Rust 业务应用开发的库和运行时：通过语义模型生成类型化的 Q 查询、E 表达式和带审计原因的图变更 API，由数据库 provider 执行并自动生成执行日志与字段级审计事件。其 API 与渐进式 Assist 专为编码代理（coding agent）的工作方式设计，适合希望用模型驱动方式开发可审查业务应用的团队，需要稳定 Rust 工具链（edition 2024）。",
+   "highlights": [
+    "提供模型驱动的 Q 查询 API、E 读取 API 和统一 Save 边界的图变更 API，包含 Checker 与可配置 Mutation Policy",
+    "运行时自动生成执行诊断日志、trace 上下文和字段级审计事件，支持参数脱敏的 SQL 诊断输出",
+    "为编码代理提供渐进式 Assist 服务（cargo teaql 命令），按需分发 API 指引"
+   ],
+   "use_cases": [
+    "在 Rust 中以模型驱动方式开发需要变更审计和执行日志的业务应用",
+    "与编码代理协作生成、审查和维护领域库代码"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Rust is a backend reference runtime with PostgreSQL, MySQL, SQLite and in-memory execution. Optional web, cache, cloud and tool integrations are separate crates. A generated domain library supplies application-specific Q/E APIs; the runtime is reusable and dom",
+     "lines": [
+      273
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Rust is a backend reference runtime with PostgreSQL, MySQL, SQLite and in-memory execution. Optional web, cache, cloud and tool integrations are separate crates. A generated domain library supplies application-specific Q/E APIs; the runtime is reusable and dom",
+     "lines": [
+      273
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "trace: School -> request -> sqlite -> select ／ Build a small school-management application in Rust using SQLite.",
+     "lines": [
+      164,
+      230
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 ORM/查询构建库和运行时通过数据库 provider 执行 SQL，是为数据库应用开发服务的组件而非使用数据库的业务应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Q** queries, **E** expressions and mutation methods. This repository provides ／ the reusable, domain-independent **runtime** that executes them through ／ metadata, Context, Checker, Policy and database providers.",
+   "evidence_lines": [
+    27,
+    28,
+    29
+   ]
+  },
+  "fn": "teaql/teaql-rs",
+  "sha": "1d891e6773e4",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5318d49ad1f2": {
+  "identity": {
+   "one_liner": "Hermes Agent 的本地长期记忆与上下文压缩插件，基于 SQLite 存储",
+   "review": "Chronicle 是一个 Hermes Agent 插件，通过 MemoryProvider 与 ContextEngine 两个插件槽提供跨会话的持久记忆和压缩前先归档的上下文压缩，数据存于本地 SQLite（WAL 模式），事件溯源、无外部服务依赖，可选本地 OpenAI 兼容嵌入服务提升语义召回。面向 Hermes Agent 用户，要求 Python 3.9+，MIT 许可。",
+   "highlights": [
+    "记忆以事件溯源方式存储在本地 SQLite 数据库，支持检索、更正与遗忘",
+    "提供记忆感知的上下文压缩，折叠的消息先归档，可按 span 逐字节恢复",
+    "可选接入本地 OpenAI 兼容嵌入服务（LM Studio/Ollama/llama.cpp），无嵌入模型时回退全文检索"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 提供跨会话持久化的用户偏好、决策与历史记录",
+    "长对话场景下的上下文压缩与被折叠内容的恢复",
+    "不依赖托管记忆服务的本地优先 agent 记忆方案"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "your machine in SQLite; relevant memories come back when they are useful. ／ Chronicle stores durable memory in a local SQLite database at ／ - **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections",
+     "lines": [
+      17,
+      79,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Chronicle 将持久记忆存储在本地 SQLite 数据库中，SQLite 是其存储后端而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Chronicle stores durable memory in a local SQLite database at ／ - **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections ／ Chronicle gives your Hermes agent durable long-term memory and safer working-memory",
+   "evidence_lines": [
+    79,
+    120,
+    15
+   ]
+  },
+  "fn": "indigokarasu/chronicle-agent-context-and-memory",
+  "sha": "5318d49ad1f2",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

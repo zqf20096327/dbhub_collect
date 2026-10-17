@@ -8913,5 +8913,216 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e4007e5ebcb9": {
+  "identity": {
+   "one_liner": "Claude Code 的 MCP 持久化长期记忆插件，单 SQLite 存储",
+   "review": "claude-mem-lite 通过 MCP 服务器和 Claude Code 钩子自动捕获编码会话中的决策、修复与上下文，提供 FTS5 BM25 全文检索与查询扩展。它为使用 Claude Code 的开发者服务，仅依赖 Node.js 和单个本地 SQLite 数据库，无需外部向量库等服务；安装方式为 Claude Code 插件安装或 npx。",
+   "highlights": [
+    "通过七个 Claude Code 生命周期钩子自动捕获观察记录（决策、bugfix、feature 等六类）",
+    "FTS5 BM25 全文检索，支持伪相关反馈、概念共现查询扩展及 --deep 多查询融合",
+    "单本地 SQLite 数据库存储，零外部服务依赖，episode 批处理减少 LLM 调用"
+   ],
+   "use_cases": [
+    "为 Claude Code 会话提供跨会话的长期记忆与上下文召回",
+    "Bash 出错时自动检索历史上相关修复记录",
+    "按时间线浏览与检索项目编码决策和文件修改历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Zero external services. Single SQLite database. Minimal overhead.",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明自身将数据存于单个本地 SQLite 数据库，SQLite 是其存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Zero external services. Single SQLite database. Minimal overhead. ／ `claude-mem-lite` is a **persistent memory** (also called *long-term memory* or *cross-session context*) system for **Claude Code** — Anthropic's CLI coding agent. It runs as an **MCP server** plus a set of Claude Code hooks, automatically capturing coding observations, decisions, and bug fixes during sessions, then providing full-text search with query expansion to recall them later. ／ - **Automatic capture** -- Hooks into the Claude Code lifecycle (SessionStart, PreCompact, PreToolUse, PostToolUse, PostToolUseFailure, Stop, UserPromptSubmit — the seven events in `hooks/hooks.json`) to record observations without manual effort",
+   "evidence_lines": [
+    12,
+    5,
+    82
+   ]
+  },
+  "fn": "sdsrss/claude-mem-lite",
+  "sha": "e4007e5ebcb9",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9468d57f5397": {
+  "identity": {
+   "one_liner": "UFC/MMA 赛事逐回合数据的采集脚本与 SQLite 数据库",
+   "review": "该项目抓取 UFC Stats、Sherdog、PFL、Oktagon、Sofascore 等来源的 MMA 赛事、选手与逐回合统计数据，生成一个带明确 schema 的 SQLite 数据库，并通过 GitHub Action 每日自动更新、以 Release 发布 canon.db，另提供基于 sql.js 的静态查询网站。供 MMA 数据分析者或其他仓库直接下载使用，并附本地更新与测试脚本。",
+   "highlights": [
+    "提供包含 events、fights、round_stats、fighters、odds、judge_scores 等 15 张表的 SQLite 数据库及 schema",
+    "由 GitHub Action 每日抓取并发布新版本 Release，可按 tag 固定数据库版本",
+    "附带 sql.js 静态网站，支持在浏览器中查询数据库并执行 SQL"
+   ],
+   "use_cases": [
+    "MMA 赛事与选手数据的统计分析与建模",
+    "跨赛事（UFC、PRIDE、PFL 等）逐回合数据查询",
+    "基于赔率与裁判评分的历史数据研究"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A SQLite database of MMA events, fights and round-by-round stats (UFC, PRIDE and more),",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储抓取的 MMA 数据并提供下载，是使用数据库的应用/数据集而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A SQLite database of MMA events, fights and round-by-round stats (UFC, PRIDE and more), ／ - Database: latest release (`canon.db`) ／ A GitHub Action runs daily. It fetches any new events from UFC Stats, reloads the",
+   "evidence_lines": [
+    3,
+    11,
+    95
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Jadevit/fight-canon-db",
+  "sha": "9468d57f5397",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f756b015c8b": {
+  "identity": {
+   "one_liner": "pi 编码代理的本地长期记忆扩展，索引 ACP 压缩摘要至 SQLite FTS5",
+   "review": "这是一个 pi coding agent 的扩展，将 allow-list 内来源的 ACP 压缩摘要块（pi sidecar、opencode-acp、bili 会话文件）增量去重后写入本地 SQLite FTS5 库，并注册 memory_search 与可选 memory_expand 工具供模型查询，含中文 trigram/like 混合检索与凭据脱敏过滤；仅经 git 分发、无 npm 包，需 Node ≥22.19 与 pi ≥0.85.1，数据仅存本地、无网络请求。",
+   "highlights": [
+    "通过 node:sqlite 使用 SQLite FTS5（trigram + LIKE 混合）实现本地全文检索，支持中文短查询",
+    "基于 allow-list 的增量扫描与 mtime+size 水印、UNIQUE+INSERT OR IGNORE 去重、tombstone 剪除",
+    "入库前对 topic/summary 做凭据与 URL 脱敏替换，且无网络请求、不写会话文件"
+   ],
+   "use_cases": [
+    "为 pi 编码代理提供跨会话的历史工作内容检索记忆",
+    "集中检索 billion-context-pi、opencode-acp 等产生的压缩摘要/会话状态文件",
+    "在本地离线环境下维护可清理（prune/rescan）的会话压缩块索引"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**allow-listed ACP compression blocks → SQLite FTS5 → `memory_search`**.",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其内部使用 node:sqlite/SQLite FTS5 存储自身索引数据（~/.pi/pi-billion-memory.db），SQLite 是其本地存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**allow-listed ACP compression blocks → SQLite FTS5 → `memory_search`**. ／ - **Node.js >= 22.19.0** (built-in `node:sqlite`; Node 24 is recommended and ／ opencode-acp ses_*.json           ┤─ allow-list ─► scanSources() ─► ~/.pi/pi-billion-memory.db",
+   "evidence_lines": [
+    8,
+    75,
+    169
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tjp72/pi-billion-memory",
+  "sha": "3f756b015c8b",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

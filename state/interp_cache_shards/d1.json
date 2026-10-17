@@ -8613,5 +8613,71 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b9abe7c47776": {
+  "identity": {
+   "one_liner": "本地无登录的拉美求职聚合应用，抓取招聘门户并按简历匹配打分",
+   "review": "JobFilter 是一个本地运行的求职聚合工具：用 Bun 或 Node 抓取 GetOnBoard、Computrabajo 等拉美招聘门户的职位，自动屏蔽重复发布空缺的公司，并按用户 profile 中的技能对职位做红绿橙匹配排序。数据存于本地 SQLite，不登录任何平台；需要 Bun 1.4+ 或 Node 22+，用户需自行配置 profile 配置文件，部分平台集成仍在计划中。",
+   "highlights": [
+    "支持 GetOnBoard 与覆盖 17 国的 Computrabajo 门户抓取，LinkedIn 等在路线图中",
+    "自动黑名单：识别 3 个月内重复发布同职位 3 次以上的公司并过滤",
+    "按用户 skills.json 生成职位匹配热力图并排序，数据保存在本地 SQLite（bun:sqlite / better-sqlite3）"
+   ],
+   "use_cases": [
+    "拉美求职者每日批量检索并筛选新增职位",
+    "过滤长期重复招聘的公司，减少无效投递",
+    "按个人技术栈对职位进行匹配度排序与申请管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.| ／ |`bun run dev:node`|Igual, con Node (usa `better-sqlite3`).|",
+     "lines": [
+      41,
+      90,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确数据保存在本地 SQLite 中，数据库仅作为应用存储而非被服务的对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ - Arquitectura: slices verticales con CQRS, Drizzle y la base de",
+   "evidence_lines": [
+    41,
+    103
+   ]
+  },
+  "fn": "SebastianAsprino/jobfilter",
+  "sha": "b9abe7c47776",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

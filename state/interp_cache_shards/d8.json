@@ -9877,5 +9877,295 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e205ea84159": {
+  "identity": {
+   "one_liner": "基于单一 Postgres 库的开源制造 ERP/MES/QMS 系统",
+   "review": "Carbon 将 ERP、MRP、MES 与 QMS 整合在同一 Postgres 数据库上，提供报价、库存、车间执行、质量与批次追溯等功能，通过 REST API 和 MCP 服务器对外暴露操作，可自托管或使用云版。面向制造业团队；API 密钥与 MCP 在自托管部署中需商业许可。",
+   "highlights": [
+    "工程、计划、生产、质量与会计数据写入同一 Postgres 数据库，使用行级安全与租户级记录隔离",
+    "提供带 OpenAPI 规范的类型化 REST API 及权限感知的 MCP 服务器",
+    "支持正向与反向批次/序列号追溯，可通过 Docker 从源码本地运行完整后端"
+   ],
+   "use_cases": [
+    "制造企业的物料计划（MRP）、库存与车间执行管理",
+    "批次与序列号双向质量追溯",
+    "以 Carbon 为核心构建定制端到端制造系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres ／ Carbon puts ERP, MRP, MES and QMS in **one Postgres database you can inspect, own and extend**. Engineering, planning, production, quality and accounting update the same data, without synchronization jobs between separate product databases. ／ - Postgres row-level security and tenant-scoped records ／ ERP and MES are React Router apps over a single Postgres database. Permissions (row-level security), computed totals and change events live in the database itself; background work runs through Inngest, which calls back into the ERP to execute jobs. The archite ／ |Database|Postgres with row-level security, PostgREST and Kysely|",
+     "lines": [
+      26,
+      59,
+      85,
+      122,
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 ERP/MES 是运行在单一 Postgres 数据库之上的应用，Postgres 为其存储数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，API/MCP 与企业功能需商业许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Carbon puts ERP, MRP, MES and QMS in **one Postgres database you can inspect, own and extend**. Engineering, planning, production, quality and accounting update the same data, without synchronization jobs between separate product databases. ／ ERP and MES are React Router apps over a single Postgres database. Permissions (row-level security), computed totals and change events live in the database itself; background work runs through Inngest, which calls back into the ERP to execute jobs. The architecture guide follows one click all the way down. ／ `pnpm dev` boots the whole backend in Docker (Postgres, PostgREST, auth, storage, realtime, Inngest, Redis and a mail catcher), applies migrations, generates types and starts the apps:",
+   "evidence_lines": [
+    59,
+    122,
+    220
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "crbnos/carbon",
+  "sha": "0e205ea84159",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "adb400d99840": {
+  "identity": {
+   "one_liner": "Go 库，为 AI agent 动作提供基于已记录 trace 的独立验证屏障",
+   "review": "Joltrin 是一个 Go 库，在 AI agent 的动作提交前，依据服务端实际记录的 trace 和预置前置条件做独立验证，通过 MCP server 接入 Claude Code、Codex 等支持 MCP 的 agent，并提供 Kubernetes admission webhook 把同一屏障用于集群操作。状态存储在内嵌 B-Tree 引擎中，验证与提交共享同一事务边界。适用于需要在 agent 执行危险操作前做强制步骤校验的团队。",
+   "highlights": [
+    "动作提交前基于已记录 trace 与前置条件独立验证，不依赖 agent 自身声明",
+    "提供 MCP server，可注册到 Claude Code、Codex、Gemini CLI 等 agent，另有 sop-k8s-gate 校验 webhook",
+    "内嵌 ACID B-Tree 存储引擎，验证与提交共享同一事务边界，支持自定义 runbook 与 --lessons 记忆"
+   ],
+   "use_cases": [
+    "阻止 agent 在备份未验证前执行数据库删除等破坏性操作",
+    "通过 MCP/A2A 为多 agent 团队的任务交接加入强制步骤校验",
+    "用 Kubernetes admission webhook 对 PVC 删除等集群操作施加 runbook 门禁"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The verifier sits on an embedded, ACID-compliant B-Tree storage engine, so the trace and the agent's state share one transaction boundary. The same library gives you crash-safe agent memory that another worker can resume, vector search stored next to structure",
+     "lines": [
+      150
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 未声明其服务于某数据库生态，主要面向 AI agent 动作验证，内嵌 B-Tree 仅作自身状态存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Joltrin (formerly SOP) is an open-source Go library that checks an AI agent's action against the recorded trace before the action commits. The agent proposes. A separate verifier decides, using fixed preconditions and the steps the server has actually recorded. It does not use the agent's claims, its prompt context, its self-evaluation, or its confidence. ／ Any agent that supports MCP can use the barrier. One command downloads a binary of about 6 MB (no Go needed), checks its checksum, and registers it with Claude Code, Codex, and the Gemini CLI, whichever are installed. It takes a few seconds and does not use `sudo`: ／ `sop-k8s-gate` is a validating admission webhook that applies the same barrier to cluster operations. A `DELETE` on a labelled PersistentVolumeClaim is refused by the API server until the runbook's required steps, such as a validated backup, are recorded for the trace named on the object. It runs as a Deployment with cert-manager, takes the same runbook files as the MCP server, and has a `--warn-only` mode to try a policy before it enforces. What it checks and what it leaves to you, including who may record a step, is in docs/KUBERNETES_GATE.md.",
+   "evidence_lines": [
+    15,
+    73,
+    127
+   ]
+  },
+  "fn": "SharedCode/joltrin",
+  "sha": "adb400d99840",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ddc1bb8be07": {
+  "identity": {
+   "one_liner": "异步多智能体框架，内置 SQLite 会话持久化与多渠道接入",
+   "review": "一个基于 asyncio 的轻量多智能体编排框架，提供 WhatsApp、Telegram、Webhook 与 CLI 连接器，支持 Gemini、OpenAI、Claude、Grok 及经 Ollama 的本地模型切换。会话历史持久化到 SQLite（标准库 sqlite3），并包含会话并发锁、webhook 反重试、回合失败回滚等机制。面向需要在消息平台上构建多智能体对话的开发者。",
+   "highlights": [
+    "支持 WhatsApp（Meta Cloud API）、Telegram、Webhook（FastAPI）与 CLI 四类通道连接器",
+    "使用 Python 标准库 sqlite3 实现会话持久化，回合失败时回滚对话历史",
+    "多 LLM 提供方切换：Gemini、OpenAI、Claude、Grok 及 Ollama 本地模型"
+   ],
+   "use_cases": [
+    "在 WhatsApp/Telegram 上部署多智能体客服对话",
+    "离线本地运行 LLM 对话机器人",
+    "构建需要会话持久化与失败重试机制的消息机器人"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **Turn Failure Rollback:** If an LLM request times out, rate limits, or crashes mid-turn, ChatFlow automatically rolls back dialogue history to the last consistent turn in memory and SQLite (note: rollback reverts conversational history; external side effect ／ import sqlite3 ／ #### Persistent SQLite Storage (`SQLiteSessionStore`)",
+     "lines": [
+      234,
+      279,
+      325
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "框架使用 SQLite 存储会话历史与元数据，属于使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Turn Failure Rollback:** If an LLM request times out, rate limits, or crashes mid-turn, ChatFlow automatically rolls back dialogue history to the last consistent turn in memory and SQLite (note: rollback reverts conversational history; external side effects of already executed tools are not rolled back), ensuring clean context without orphaned partial turns. See Tool Idempotency & Side-Effect Handling for how to design tools that are safe to retry.",
+   "evidence_lines": [
+    234
+   ]
+  },
+  "fn": "GustavoBaranda/chatflow-agent",
+  "sha": "3ddc1bb8be07",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b982f8669f9": {
+  "identity": {
+   "one_liner": "自托管 DMARC 报告监控应用，收集解析邮箱中的 rua 报告",
+   "review": "一个开源自托管的 DMARC 监控应用，面向机构用户：轮询接收 rua= 报告的邮箱，收集、解析并以图表展示报告数据，支持不限域名数且数据不出本地基础设施。技术栈为 ASP.NET Core + React，使用 PostgreSQL 存储数据，通过 Docker Compose 或 Render/Railway 等平台部署，含 OIDC 登录与 PostgreSQL 17→18 升级运维文档。",
+   "highlights": [
+    "提供 api/worker/all/migrate 四种 APP_MODE 运行模式的单一镜像",
+    "支持通过 mailbox sync 端点查看与手动触发报告摄入状态",
+    "提供 /api/v1 契约下的域名、客户端、分析、告警等 REST 端点"
+   ],
+   "use_cases": [
+    "自托管监控域名 DMARC 合规情况",
+    "在本地或私有基础设施中解析和可视化 DMARC 聚合报告",
+    "多域名邮件安全运营的集中控制台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL (for local/dev and container deployments) ／ PostgreSQL. Two containers. ／ |Use a Postgres you already run|`-f compose.yml -f compose.external-db.yml`|",
+     "lines": [
+      23,
+      43,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个用 PostgreSQL 存数据、面向最终用户的 DMARC 监控应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open-source, self-hosted DMARC monitoring for agencies. Point it at the mailbox ／ - PostgreSQL (for local/dev and container deployments) ／ Build and run the single image in two modes (`api`, `worker`) plus PostgreSQL:",
+   "evidence_lines": [
+    9,
+    23,
+    121
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "dmarc-analyzer-net/DmarcAnalyzerApp",
+  "sha": "8b982f8669f9",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

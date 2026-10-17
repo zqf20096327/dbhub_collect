@@ -8520,5 +8520,280 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2fea3a42e93e": {
+  "identity": {
+   "one_liner": "Litestar+SQLAlchemy 2+PostgreSQL 的 Docker 化应用模板",
+   "review": "这是一个基于 Litestar 框架与 SQLAlchemy 2 的 Python Web 应用项目模板，以 PostgreSQL 为数据库，内置 DI 容器、Alembic 迁移、pytest 自动回滚测试和 OpenTelemetry 可观测性配置，通过 Docker Compose 与 justfile 组织开发流程。适合需要快速搭建带认证以外的标准化后端项目结构的 Python 开发者。",
+   "highlights": [
+    "提供 Docker 化的 Litestar + SQLAlchemy 2 + PostgreSQL 项目模板，含 DI 容器",
+    "集成 Alembic 数据库迁移与 pytest 测试（每个用例后自动回滚）",
+    "支持通过 OpenTelemetry 配置生产环境链路追踪与采样"
+   ],
+   "use_cases": [
+    "快速初始化 Litestar + PostgreSQL 后端项目",
+    "需要统一 DI、迁移、测试与可观测性配置的团队脚手架",
+    "作为 modern-python 模板体系的一部分供浏览选用"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Dockerized Litestar, SQLAlchemy 2 and PostgreSQL app template with DI.",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "模板以 PostgreSQL 作为自身应用的存储数据库，通过 SQLAlchemy 访问，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dockerized Litestar, SQLAlchemy 2 and PostgreSQL app template with DI. ／ - `Alembic` for DB migrations",
+   "evidence_lines": [
+    12,
+    19
+   ]
+  },
+  "fn": "modern-python/litestar-sqlalchemy-template",
+  "sha": "2fea3a42e93e",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c9c20f819140": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Go 分布式任务队列库与服务",
+   "review": "Dhara 提供 Go 语言任务队列，可用作内嵌库或独立 server/worker 二进制。它将任务状态与执行日志存储在 PostgreSQL 中，用 SELECT FOR UPDATE SKIP LOCKED 实现并发认领，并内置心跳、reaper、重试、幂等入队与嵌入式迁移机制，面向需要在 Go 应用中实现可靠异步任务的开发者。",
+   "highlights": [
+    "使用 PostgreSQL 的 SKIP LOCKED 事务操作实现多 worker 原子认领任务",
+    "支持事务性入队（任务与业务写操作同事务提交）与幂等键去重",
+    "迁移文件通过 go:embed 内置于库中，提供库调用、CLI 与自定义 fs.FS 三种迁移方式"
+   ],
+   "use_cases": [
+    "在 Go 应用内实现异步/延时任务，且需与数据库事务原子提交",
+    "以 Docker Compose 运行 HTTP API 与 worker 的独立任务队列服务",
+    "需要重试、死信队列与任务状态可查询的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Dhara uses PostgreSQL as the single source of truth for task state and execution logs. ／ 1. **Atomic Concurrency with PostgreSQL (`SKIP LOCKED`)**",
+     "lines": [
+      14,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目以 PostgreSQL 为任务状态存储与队列代理，是为数据库生态服务的组件而非普通使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Dhara** is a lightweight, production-focused distributed task queue library and service for Go, backed by PostgreSQL. Designed for simplicity, reliability, and high visibility, Dhara handles the complete task queue lifecycle without requiring heavy external dependencies like Redis or RabbitMQ. ／ Dhara uses PostgreSQL as the single source of truth for task state and execution logs.",
+   "evidence_lines": [
+    3,
+    14
+   ]
+  },
+  "fn": "Md-Talim/dhara",
+  "sha": "c9c20f819140",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "23225acf0ba1": {
+  "identity": {
+   "one_liner": "开源跨平台原生数据库 GUI 客户端与 SQL 编辑器",
+   "review": "fluxDB 是基于 Rust + GPUI 构建的桌面数据库客户端与 SQL 编辑器，提供 SQL 编辑、数据浏览编辑、表结构管理、ER 关系图与 Redis 工作台等功能，供需要连接 MySQL、TiDB、PostgreSQL、SQLite、Redis 的开发与运维人员使用。README 自述为早期版本，界面目前仅简体中文，未公证的 macOS 包需手动放行。",
+   "highlights": [
+    "提供 SQL 编辑器、数据浏览编辑、表结构管理、ER 关系图与 Redis 工作台",
+    "基于 Rust + GPUI 构建，不依赖 Electron 或 WebView，支持 macOS、Windows、Linux",
+    "内置 AI Agent，支持 SQL 编写执行、MCP Client/Server 与写入审批"
+   ],
+   "use_cases": [
+    "在桌面端连接并管理 MySQL、TiDB、PostgreSQL、SQLite、Redis 数据库",
+    "通过 SQL 编辑器进行查询、格式化与数据导出",
+    "通过内嵌终端浏览与编辑 Redis 键值"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ |PostgreSQL|SQL 查询、Schema 与对象浏览、表结构管理、数据编辑、用户与角色权限管理、原生客户端工具| ／ - **PostgreSQL**：SQL 查询、Schema 与对象浏览、表结构管理、数据编辑、用户与角色权限管理，以及 psql 原生客户端工具。",
+     "lines": [
+      5,
+      40,
+      126
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ |MySQL / TiDB|连接管理、SQL 查询、表结构管理、数据编辑、导出与备份| ／ - **MySQL**：连接管理（TLS/SSL、SSH 隧道、代理、超时与字符集等选项）、SQL 编辑与执行、库表与数据浏览编辑、表结构管理、结果导出，以及 mysqldump 备份与恢复、mysql 客户端工具入口。",
+     "lines": [
+      5,
+      39,
+      124
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **更多数据库**：按社区需求排序推进候选数据源（如 Oracle、ClickHouse、DuckDB、Elasticsearch / OpenSearch 等），复用现有 Connector 分层、SQL 方言与 AI 工具抽象；每个数据源需补齐连接管理、对象浏览、数据浏览与编辑、导入导出与备份恢复等能力后，才计入「已完成」。",
+     "lines": [
+      139
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ |SQLite|本地数据库连接、SQL 查询、表结构浏览与数据编辑| ／ - **SQLite**：本地数据库文件连接、SQL 查询、表结构浏览与数据编辑。",
+     "lines": [
+      5,
+      41,
+      127
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- **SQL Server**：T-SQL 方言与连接协议不同，需要接入驱动，并补齐对象浏览与数据编辑能力。",
+     "lines": [
+      138
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "- **更多数据库**：按社区需求排序推进候选数据源（如 Oracle、ClickHouse、DuckDB、Elasticsearch / OpenSearch 等），复用现有 Connector 分层、SQL 方言与 AI 工具抽象；每个数据源需补齐连接管理、对象浏览、数据浏览与编辑、导入导出与备份恢复等能力后，才计入「已完成」。",
+     "lines": [
+      139
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "- **MariaDB**：协议兼容 MySQL，但系统表、语法与备份参数存在差异，需完成版本识别与方言适配后再作为独立数据源接入。",
+     "lines": [
+      137
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ |MySQL / TiDB|连接管理、SQL 查询、表结构管理、数据编辑、导出与备份| ／ - **TiDB**：复用 MySQL 协议与驱动，已适配 TiDB 的 SQL 方言、补全与结构管理，与 MySQL 一同验证。",
+     "lines": [
+      5,
+      39,
+      125
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为连接多种数据库的客户端工具，为数据库生态提供服务而非使用数据库存数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 或更新版本",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**开源、跨平台的原生数据库客户端与 SQL 编辑器。** ／ 在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ ### 数据库支持",
+   "evidence_lines": [
+    3,
+    5,
+    33
+   ]
+  },
+  "fn": "fluxdb-alt/fluxDB",
+  "sha": "23225acf0ba1",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

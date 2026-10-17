@@ -9755,5 +9755,196 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dad546735660": {
+  "identity": {
+   "one_liner": "单 Go 二进制的自托管平台，集成网站、博客、邮件、加密聊天，数据存 SQLite",
+   "review": "VayuPress 将网站、博客、PGP 邮件服务器、端到端加密聊天、防爬虫盾、无 Cookie 分析与 Tor .onion 服务打包进一个 Go 二进制，数据存储在用户自己的单个 SQLite 文件中，通过 VayuOS 控制台管理。面向希望在自有 VPS 上自托管全部线上存在、不依赖 SaaS 服务的个人与组织；采用 Apache-2.0 许可，作者声明不出售、不再授权。",
+   "highlights": [
+    "单个 Go 二进制提供网站、博客、SMTP/IMAP/POP3 邮件、端到端加密聊天、cookieless 分析与 Tor .onion 服务",
+    "数据存储在用户自有 VPS 上的单个 SQLite 文件中，无遥测、无 SaaS 依赖",
+    "内置 MCP 服务器、VayuAPI 与插件/主题契约（VCB），支持多域名多站点同进程运行"
+   ],
+   "use_cases": [
+    "在自有 VPS 上自托管域名网站、博客与邮件服务",
+    "为个人或小型企业提供不依赖第三方云的内容发布与私密通信基础设施",
+    "在受限网络环境下通过 Tor .onion 发布内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One VPS. One process. One SQLite file. One console. No telemetry, no SaaS, no SDKs. ／ Pageviews, sessions, top pages, referrers, UTM campaigns, custom events, funnels, retention, revenue and a live visitor panel — stored in your own SQLite. A visitor is a **server-side hash with a salt that rotates daily**, so visits cannot be linked across day ／ |**Where your data lives**|Your VPS, your SQLite file|Vendor clouds you don't control|",
+     "lines": [
+      6,
+      135,
+      222
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 SQLite 存储自身数据（页面分析、帖子等），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，作者声明不会出售、更改许可或转为源码可见许可",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One VPS. One process. One SQLite file. One console. No telemetry, no SaaS, no SDKs. ／ VayuPress began as a publishing engine. It is now a **complete sovereign platform in one Go binary**:",
+   "evidence_lines": [
+    6,
+    26
+   ]
+  },
+  "fn": "johalputt/VayuPress",
+  "sha": "dad546735660",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a9513c6c293f": {
+  "identity": {
+   "one_liner": "Windows 桌面工具，用于在多个 OpenAI Codex 账户间切换登录",
+   "review": "这是一个 Windows 桌面应用，用于在多个 OpenAI Codex 账户配置间切换，共享同一 Codex Home 目录，并提供用量额度查看、DPAPI 加密凭据备份回滚、Telegram 远程控制等能力。它面向需要管理多个 Codex 账户的 Windows 用户。应用自身用本地 SQLite 存储设置与配置元数据，令牌不写入 SQLite。",
+   "highlights": [
+    "使用 Windows DPAPI 加密保存配置凭据并在替换登录前支持加密备份与回滚",
+    "提供可选的认证 Remote API 与基于按钮的 Telegram 控制通道",
+    "在界面中显示各配置档案的 5 小时与每周用量额度而不展示 bearer token"
+   ],
+   "use_cases": [
+    "在同一台 Windows 机器上管理并切换多个 Codex 账户登录",
+    "通过 Telegram 远程查看账户状态、启动/停止 Codex 或执行电源操作",
+    "为凭据文件建立加密备份并在切换失败时回滚"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Store app settings and profile metadata in a local SQLite database. ／ - Tokens are never stored in SQLite, returned by the Remote API, or printed in the interface.",
+     "lines": [
+      35,
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用将自身设置与配置元数据存入本地 SQLite 数据库，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，v2.0.0 尚未配置 Authenticode 代码签名证书",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Store app settings and profile metadata in a local SQLite database. ／ Codex Account Switcher is an open-source Windows desktop app for safely switching between multiple OpenAI Codex accounts, viewing 5-hour and weekly usage limits, and controlling Codex from an optional Telegram bot. It keeps one shared Codex Home for chats, projects, MCP servers, plugins, skills, and settings while changing only the active sign-in.",
+   "evidence_lines": [
+    35,
+    10
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "korsun009/codex-account-switcher",
+  "sha": "a9513c6c293f",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c4772f9dfb2b": {
+  "identity": {
+   "one_liner": "自托管的 HTTP 目录列表文件浏览器，支持媒体预览与下载",
+   "review": "Folderhug 是一个自托管的文件浏览器，用于浏览和搜索 HTTP 目录列表（如 seedbox 下载目录），提供列表/网格视图、缩略图、媒体预览，并可将文件下载到浏览器或服务器队列。面向自托管用户，通过 Docker Compose 部署，提供 /api/v1 API 与令牌认证；仅支持 Apache/nginx 标准目录列表页，无上传和多账户功能。",
+   "highlights": [
+    "提供浏览、搜索、过滤 HTTP 目录列表源的界面，源文件保持不变",
+    "支持下载到浏览器或通过服务器队列保存到挂载目录",
+    "提供 /api/v1 API，含令牌认证、JSON/CSV 导出与 OpenAPI 规范"
+   ],
+   "use_cases": [
+    "浏览 seedbox 等远程下载目录并选取文件下载",
+    "通过脚本调用 API 扫描目录、检索索引或排队下载",
+    "自托管环境下的媒体预览与文件管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是一个自托管文件浏览器应用，未提供为某个数据库生态服务的功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "项目代码采用 MIT 许可证",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Folderhug is a self-hosted file explorer for HTTP directory listings, such as a seedbox's download folder. Add your sources, browse and search their folders, preview supported media, and download files to your browser or server. Folderhug leaves the source files unchanged. ／ Open `http://localhost:48321` on the server, or `http://SERVER-IP:48321` from a device on your LAN. Create the owner password in the browser. Anyone who can reach a fresh installation can claim the owner account, so finish setup before sharing the address or exposing it outside your trusted network. The app creates its credential key on first start. ／ The default Compose file pulls `ghcr.io/themartz90/folderhug:latest`. You do not need a `.env` file for ordinary LAN access. See operations and backups for a custom address, an HTTPS reverse proxy, updates, or a source build.",
+   "evidence_lines": [
+    5,
+    36,
+    40
+   ]
+  },
+  "fn": "themartz90/folderhug",
+  "sha": "c4772f9dfb2b",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10459,5 +10459,58 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d0a42aa95d49": {
+  "identity": {
+   "one_liner": "Godot 客户端 + Flask/SQLite 服务端的 2.5D 多人动作 RPG 游戏",
+   "review": "这是一个用 Godot 4.6 与 GDScript 开发的俯视角 2.5D 动作 RPG，配套 Flask 账户服务，存档与经济由服务端权威管理，数据落在 SQLite。仓库包含游戏玩法、GM 面板、API 自查与 8500+ 自动化测试，适合想研究 Godot 客户端与 Flask 后端如何协同做多人游戏存档与反作弊的开发者阅读。",
+   "highlights": [
+    "提供 Godot 4.6 客户端与 Flask 账户服务端，存档、等级、掉落由服务端权威管理",
+    "支持四人组队、玩家交易、队伍语音（经 Cloudflare TURN 中继）与 GM 世界活动面板",
+    "包含针对自身 API 的安全审计（20 项发现、19 项关闭）与 8500+ 自动化检查"
+   ],
+   "use_cases": [
+    "作为 Godot + Flask + SQLite 架构的多人游戏参考实现阅读",
+    "研究服务端权威存档与客户端存储解耦（SaveStorage 抽象）的实现",
+    "参考游戏世界活动/事件系统的服务端与 API 设计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是用 SQLite 存数据的游戏应用，SQLite 是其 Flask 服务端的存储组件而非被服务的生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`CharacterData` holds a `SaveStorage` and never asks which implementation it has. That seam is what let the game move from a local file to the Flask service without touching the twenty-nine places that call `save_data()`. The server is the authority now — it owns level, XP, the derived stat maxima and every loot roll — so the anti-tamper passes that existed to defend a local file against a text editor are skipped rather than run against data they can no longer say anything useful about. Writes are still debounced: saving on every stat change was firing about twenty times a second in normal play. ／ A top-down 2.5D action RPG built in Godot 4.6 with GDScript, backed by a Flask account service. Four playable classes, six enemy families in forty-three elemental variants, collectable combat pets, fishing and cooking, player-to-player trading over a taxed economy, other players drawn live wherever you are and fighting the same monsters, and a complete run from town to final boss.",
+   "evidence_lines": [
+    68,
+    3
+   ]
+  },
+  "fn": "Tunacanman2EZ/Elusion_RPG",
+  "sha": "d0a42aa95d49",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

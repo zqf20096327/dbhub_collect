@@ -9604,5 +9604,230 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7c2e96f0bb12": {
+  "identity": {
+   "one_liner": "自托管地理空间数据目录，含语义搜索、OGC/STAC API 与地图构建器",
+   "review": "GeoLens 是一个自托管的地理空间数据目录与地图构建平台，面向将空间数据分散在文件、PostGIS 数据库、Web 服务和 STAC 目录中的团队。它把数据汇入统一可搜索目录并记录来源与刷新状态，通过 OGC API 与 STAC 对外提供访问，Docker Compose 部署，内置一个 PostgreSQL 实例，无内置高可用。",
+   "highlights": [
+    "提供数据集上传、服务导入、来源追踪与版本恢复",
+    "通过 OGC API Features/Records、STAC、DCAT 和矢量/COG 瓦片输出数据",
+    "提供只读 MCP 服务器供 AI 代理搜索目录，AI 功能默认关闭需管理员配置"
+   ],
+   "use_cases": [
+    "汇聚分散在文件共享、PostGIS、WFS/ArcGIS 服务与 STAC 目录中的空间数据",
+    "团队在浏览器中构建、共享和嵌入地图",
+    "供 QGIS、脚本和 AI 代理通过 OGC API/STAC/MCP 读取目录数据"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- One PostgreSQL instance, with no built-in high availability or clustering.",
+     "lines": [
+      242
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "GeoLens 是使用 PostgreSQL/PostGIS 存储目录与数据集的应用，数据库是其内置部署组件。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "on your own servers with Docker Compose, sends no telemetry and is licensed under Apache 2.0. ／ - Serve tables already in GeoLens's PostGIS database in place, import WFS, ArcGIS and OGC API",
+   "evidence_lines": [
+    31,
+    92
+   ]
+  },
+  "fn": "geolens-io/geolens",
+  "sha": "7c2e96f0bb12",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "52563dc93de0": {
+  "identity": {
+   "one_liner": "Nessus 漏洞分诊 TUI，导入 .nessus 至 SQLite 并编排安全工具",
+   "review": "Cerno 是面向渗透测试与漏洞管理人员的终端 TUI 工具：将 .nessus 扫描文件解析进本地 SQLite 数据库，按严重性/主机筛选审阅漏洞，并一键发起 nmap、NetExec 等命令验证。进度与会话持久化于 SQLite，同时通过内置 MCP 服务器允许 MCP 客户端查询数据、生成命令。需 Python 3.11+，经 pipx 安装。",
+   "highlights": [
+    "将 .nessus 文件解析导入本地 SQLite 数据库（~/.cerno/cerno.db），持久化审阅进度、会话与工具执行记录",
+    "提供交互式 TUI 按严重性、主机、可利用性浏览与筛选漏洞发现",
+    "内置 MCP 服务器，支持从 MCP 客户端（如 Claude CLI）程序化查询发现并生成命令"
+   ],
+   "use_cases": [
+    "对大量 Nessus 扫描结果进行分诊与验证流程跟踪",
+    "针对具体漏洞主机/端口一键发起 nmap、NetExec 等验证命令并记录产物",
+    "通过 MCP 客户端以编程方式查询扫描发现数据"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 💾 SQLite-backed persistence — never lose review progress; track risk across scans ／ 1. **Import** — parse one or more `.nessus` files into a local SQLite database (`~/.cerno/cerno.db`). ／ **Database:** SQLite-backed persistence at `~/.cerno/cerno.db` tracks scans, findings, sessions, tool executions, and artifacts. Cross-scan tracking enables host history queries. See docs/DATABASE.md for schema details.",
+     "lines": [
+      9,
+      54,
+      231
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "**Supported protocols:** SMB, SSH, LDAP, MSSQL, RDP, WinRM, FTP, NFS, VNC, WMI",
+     "lines": [
+      203
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该安全工具自身的数据持久化存储，不为数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A **TUI tool** for reviewing Nessus scan findings and orchestrating security tools (**nmap**, **NetExec**, custom commands). Import `.nessus` files into a SQLite database for organized, persistent vulnerability verification and exploitation. ／ 1. **Import** — parse one or more `.nessus` files into a local SQLite database (`~/.cerno/cerno.db`). ／ The same database and tooling are also exposed over the Model Context Protocol, so an MCP client (e.g. Claude CLI) can query findings and generate commands programmatically.",
+   "evidence_lines": [
+    5,
+    54,
+    59
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "ridgebackinfosec/cerno",
+  "sha": "52563dc93de0",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ce1010276534": {
+  "identity": {
+   "one_liner": "自托管 AI 编程代理长期记忆存储，基于 Postgres+pgvector 的 MCP 服务",
+   "review": "HyperMnesia 为 AI 编程代理（如 Claude Code 或任意 MCP 客户端）提供自托管的长期记忆：文档 RAG 检索（混合 RRF + cross-encoder 重排）、组件约束映射注入，以及双时间轴个人记忆。所有数据存于 Postgres+pgvector，embedding 可走 Ollama/TEI 本地模型，通过 MCP 工具和 Claude Code hooks 两类接口工作。需自备 Postgres 实例。",
+   "highlights": [
+    "提供 doc-RAG 检索：bge-m3 稠密向量与词法 tsvector 经 RRF 融合，可选 cross-encoder 重排",
+    "个人记忆采用双时间轴（事件时间/摄取时间）与 supersede-not-overwrite 机制，带出处证据图",
+    "以 MCP 工具暴露搜索/映射/记忆，并通过 Claude Code hooks 实现约束注入与会话捕获"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 MCP 客户端提供跨会话的项目约束与个人记忆",
+    "在编辑前自动注入文件路径对应的架构规则（component->constraint 映射）",
+    "本地/离线环境下基于 Ollama/TEI embedding 自托管记忆存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly",
+     "lines": [
+      10,
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存于 Postgres+pgvector，属使用数据库存储的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly ／ no cloud dependency. Runs on a laptop, one server, or Kubernetes.",
+   "evidence_lines": [
+    10,
+    18,
+    20
+   ]
+  },
+  "fn": "Recluse/HyperMnesia",
+  "sha": "ce1010276534",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

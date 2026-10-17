@@ -9496,5 +9496,73 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0263fdfc7901": {
+  "identity": {
+   "one_liner": "基于 Cloudflare Workers 的多租户 SaaS 起始模板，运行于 Postgres",
+   "review": "Rocketflare 是一个多租户 SaaS 起始工具包，把租户隔离、登录鉴权、角色权限、后台任务、实时推送、文件存储、AI 聊天与检索、CLI 等平台能力预置在一个仓库里，运行在 Cloudflare Workers 之上，数据层使用 Postgres 17 加 pgvector（本地 Docker，部署走 Neon 或 Hyperdrive）。面向要快速搭建内部工具或 B2B 产品的开发者，代码结构为编码代理驱动的开发流程做了专门组织。",
+   "highlights": [
+    "提供多租户/单租户切换、行级 tenant_id 过滤与预留 RLS 策略的隔离实现",
+    "数据层使用 Postgres 17 + pgvector，支持本地 Docker、Neon serverless 驱动或 Hyperdrive 接任意 Postgres",
+    "包含 AI 层：多提供商对话、Agents on Workflows、向量与 tsvector 混合检索（RRF 融合）"
+   ],
+   "use_cases": [
+    "以 Cloudflare Workers 为运行时快速搭建 B2B SaaS 或内部工具",
+    "需要多租户隔离与租户级 API key 的应用脚手架",
+    "构建带聊天、代理与向量检索功能的 AI 应用起点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "running as a single Cloudflare Worker over Postgres, with a React UI and a shared contract package ／ |Database|Postgres 17 + pgvector — Docker locally; deployed, Neon over its serverless driver (a fresh copy's default) or any Postgres through Hyperdrive and `postgres.js` (`DATABASE_DRIVER`, D35); Drizzle, one client per request|",
+     "lines": [
+      10,
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 Postgres 存储数据的应用起始模板，而非为数据库生态服务的工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A multi-tenant SaaS starter kit for Cloudflare Workers — copy it, rename it, ship an internal tool or a B2B product. ／ running as a single Cloudflare Worker over Postgres, with a React UI and a shared contract package ／ |Database|Postgres 17 + pgvector — Docker locally; deployed, Neon over its serverless driver (a fresh copy's default) or any Postgres through Hyperdrive and `postgres.js` (`DATABASE_DRIVER`, D35); Drizzle, one client per request|",
+   "evidence_lines": [
+    5,
+    10,
+    68
+   ]
+  },
+  "fn": "rocketflare-dev/rocketflare",
+  "sha": "0263fdfc7901",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

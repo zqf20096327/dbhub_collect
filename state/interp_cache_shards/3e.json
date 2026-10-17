@@ -10298,5 +10298,105 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1c9084451e5a": {
+  "identity": {
+   "one_liner": "AI 代理自改进上下文框架，记录查询意图并固化为流水线工具",
+   "review": "Skardi 是面向 AI 代理的查询与上下文框架：代理通过 SQL 联邦查询已注册的数据源，并声明查询意图；系统将请求记录到 SQLite 或 Postgres 的审计账本，把反复出现的查询固化为命名流水线，并通过 shell、REST 和 MCP 暴露为工具。附带的 auto-context 技能把文档或数据存储转为向量+FTS 混合检索服务。适合为 Claude Code、Cursor 等代理宿主搭建可治理的数据访问层。",
+   "highlights": [
+    "提供带 ai_context 的 POST /query 接口，记录每条 SQL 的 purpose、session_id 和 task 到审计账本",
+    "支持将重复查询提升为流水线 YAML，经 shell、REST 与 MCP（stdio 和流式 HTTP）多绑定复用",
+    "auto-context 提供向量+FTS+RRF 混合检索，可指向 SQLite、Postgres+pgvector、MongoDB 或 Lance"
+   ],
+   "use_cases": [
+    "为 AI 代理提供可审计的联邦 SQL 数据访问层",
+    "把代理反复执行的查询自动沉淀为命名工具与定时例程",
+    "将文档目录或已有数据存储转换为 HTTP 混合检索上下文服务"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres database, via `SKARDI_QUERY_AUDIT_PG_DSN` — same fail-closed ／ pointed at Postgres + pgvector, MongoDB, or Lance.",
+     "lines": [
+      102,
+      162
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "until it lands you can read the ledger yourself with plain SQL — it is a SQLite ／ before anyone asks. And because the ledger is one SQLite file (or one ／ FTS + RRF), defaulting to a local SQLite file the skill creates and owns, or",
+     "lines": [
+      70,
+      101,
+      161
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|Full|Yes|Table or catalog registration|docs|",
+     "lines": [
+      286
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Read|Yes|Columnar OLAP, filter/limit pushdown|docs|",
+     "lines": [
+      292
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Skardi 将已注册的数据库作为数据源接入并统一提供联邦查询与检索服务，是为数据访问与代理生态服务的中间层组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "MySQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**1 — Serve your data, with the ledger on.** One `ctx.yaml` names your sources ／ Both MCP bindings — the local `skardi mcp` bridge and the server's `/mcp` ／ searchable context served over HTTP by `skardi-server`: hybrid search (vector +",
+   "evidence_lines": [
+    35,
+    92,
+    160
+   ]
+  },
+  "fn": "SkardiLabs/skardi",
+  "sha": "1c9084451e5a",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

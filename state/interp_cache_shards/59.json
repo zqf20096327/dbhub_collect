@@ -8509,5 +8509,214 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4052be02b501": {
+  "identity": {
+   "one_liner": "单二进制 Go 网络延迟监控工具，内置 SQLite 存储",
+   "review": "fogping 是一个类似 SmokePing 的网络延迟监控工具，用 Go 编写为单个静态链接二进制文件，内置 SQLite 数据库存储目标与历史数据，提供 Web UI 管理 PING/TCP 探测目标并展示延迟图。适合自托管网络质量观测的运维人员；支持 Docker 部署、systemd 服务、多用户登录与数据保留期配置。仅支持 Linux x86-64，端口固定 8518，无外部数据库依赖。",
+   "highlights": [
+    "单二进制运行，内置 SQLite 存储，无需外部数据库或 Web 服务器",
+    "支持 PING（ICMP）与 TCP 连接延迟探测，可选 fast/normal/slow 探测节奏或自定义间隔",
+    "提供 Web UI 管理目标、多用户登录、--edit 只读模式控制及 40/90 天数据保留"
+   ],
+   "use_cases": [
+    "自托管网络链路质量与延迟监控",
+    "在 Raspberry Pi、NAS 等设备上以 Docker 部署轻量探测",
+    "监控内网网关、公网服务的 PING/TCP 可达性与延迟趋势"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **One binary, embedded SQLite, Web UI—just `scp` and run.** ／ Targets are stored in the SQLite database and changed in one place only: the web",
+     "lines": [
+      2,
+      213
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "fogping 使用 SQLite 内嵌存储自身监控数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **One binary, embedded SQLite, Web UI—just `scp` and run.** ／ - Nothing else: no database server, no runtime, no web server. ／ Targets are stored in the SQLite database and changed in one place only: the web",
+   "evidence_lines": [
+    2,
+    69,
+    213
+   ]
+  },
+  "fn": "githubflyideas/fogping",
+  "sha": "4052be02b501",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "db48d54072c7": {
+  "identity": {
+   "one_liner": "本地 Windows 桌面应用，通过 RSS 监控自由职业平台项目机会",
+   "review": "RASED 是运行于 Windows x64 的 Electron 桌面应用，通过 RSS 及公共页面监控 Mostaql、Nafezly、Khamsat、KAF 等自由职业平台的新项目，提供桌面提醒、过滤保存、本地笔记，并可选接入自有 API key 的 AI 助手生成提案草稿。数据存储于本地 SQLite，面向阿拉伯语自由职业者，MIT 许可，无需服务器或平台登录。",
+   "highlights": [
+    "通过 RSS 与公共页面抓取 Mostaql、Nafezly、Khamsat、KAF 的项目机会并提供桌面提醒",
+    "提供阿拉伯语 RTL/英语 LTR 双语界面、保存的过滤条件与本地笔记",
+    "可选的提案助手支持使用用户自有的 Gemini、OpenAI、Claude API key 生成草稿"
+   ],
+   "use_cases": [
+    "自由职业者跟踪 Mostaql、Nafezly 等平台的新项目机会",
+    "需要本地保存搜索过滤条件与项目笔记的场景",
+    "借助 AI 生成投标提案草稿并配合 Chrome 扩展快速填写"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "حمّل **RASED-Setup-0.8.1.exe** من قسم **Assets** في صفحة الإصدار، ثم شغّل المثبت على **Windows x64**. لا تحتاج Node.js أو SQLite؛ ملفات Source code للمبرمجين فقط. المثبت غير موقّع حاليًا، وقد يعرض Windows تحذيرًا. تأكد من مصدر التحميل وقارن البصمة بملف `SHA256 ／ المتطلبات: **Windows x64، Node.js 24، npm**. Electron وSQLite ضمن الاعتماديات.",
+     "lines": [
+      15,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该应用的本地数据存储依赖，README 未提供任何面向数据库生态的服务能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "تطبيق Windows محلي لمتابعة فرص العمل الحر من **مستقل ونفذلي وخمسات وكاف**، بواجهة عربية وإنجليزية وتنبيهات سطح المكتب. لا يحتاج سيرفر أو حساب راصد. ／ المتطلبات: **Windows x64، Node.js 24، npm**. Electron وSQLite ضمن الاعتماديات. ／ البيانات محلية في `%APPDATA%\\RASED`، دون تحليلات تُرسل للمطور. يتصل الجهاز بالمنصات وGitHub، وبموفر AI المختار عند استخدامه. مفاتيح AI مشفرة بتشفير Windows؛ قاعدة البيانات والملاحظات ليست مشفرة بواسطة التطبيق. اقرأ الخصوصية والشروط قبل الاستخدام.",
+   "evidence_lines": [
+    3,
+    38,
+    68
+   ]
+  },
+  "fn": "deved234/rased",
+  "sha": "db48d54072c7",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "72d942ed53be": {
+  "identity": {
+   "one_liner": "本地 MCP 服务器，将代码库索引为 SQLite 符号图供 AI 代理查询",
+   "review": "code-atlas 是一个本地优先的 MCP 服务器，用各语言的解析器把代码库解析成 SQLite 符号图，在索引期解析跨文件关系，向 AI 编码代理提供调用方、实现、影响面等查询工具，支持 PHP、TypeScript/JavaScript、Python 和 T-SQL 四种语言适配器，通过 stdio 与 MCP 客户端通信。适用于维护未亲手编写的大型代码库、由 AI 代理做代码阅读的场景；核心无 LLM，完全离线运行，不修改代码。",
+   "highlights": [
+    "提供 24 个 MCP 工具，回答已解析的关系类问题（调用方、实现、影响半径、可达性）",
+    "支持 PHP、TypeScript/JavaScript、Python、T-SQL 四种语言适配器，可通过 JSONL 契约扩展新语言",
+    "离线运行于本地 SQLite，支持基于 git diff 的增量更新，所有边标注解析方式"
+   ],
+   "use_cases": [
+    "AI 编码代理对大型代码库（>10k 文件）做符号关系查询与影响分析",
+    "代码库导航与入职（onboarding）信息检索",
+    "通过 Claude Code 插件或任意 MCP 客户端集成到现有工作流"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "out. code-atlas parses each language with its **best** parser into a **SQLite symbol graph**, ／ MCP client talks stdio to the language-agnostic core, which drives per-language adapters over a versioned JSONL contract, stores a symbol graph in SQLite, and feeds a deterministic onboarding layer with an opt-in LLM package behind three seams. ／ exposes the MCP tools. Everything runs offline against local SQLite, with incremental updates via",
+     "lines": [
+      57,
+      74,
+      78
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "SQLite 仅作为其内部符号图存储引擎使用，项目本身服务于 AI 编码代理而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "out. code-atlas parses each language with its **best** parser into a **SQLite symbol graph**, ／ MCP client talks stdio to the language-agnostic core, which drives per-language adapters over a versioned JSONL contract, stores a symbol graph in SQLite, and feeds a deterministic onboarding layer with an opt-in LLM package behind three seams. ／ To run the server without a checkout: `uvx --from git+https://github.com/cuongdinhngo/code-atlas.git",
+   "evidence_lines": [
+    57,
+    74,
+    128
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "cuongdinhngo/code-atlas",
+  "sha": "72d942ed53be",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

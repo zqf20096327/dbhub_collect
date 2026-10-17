@@ -9261,5 +9261,81 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6fbeb2f005a0": {
+  "identity": {
+   "one_liner": "Swift Web 框架，自带 HTTP 引擎并提供 PostgreSQL/Redis/SQLite 数据访问组件",
+   "review": "Garuda 是一个 Swift 服务端 Web 框架，自带解析 HTTP/1.1、HTTP/2 和 HTTP/3 的引擎，基于自研 Vega 运行时，不依赖 Foundation 和 SwiftNIO。它通过 GarudaPostgres、GarudaRedis、GarudaSQLite 组件读写 PostgreSQL、Redis 和 SQLite，面向用 Swift 构建生产服务的开发者，要求 Swift 6.2 以上，仅支持 Linux 和 macOS。",
+   "highlights": [
+    "提供 GarudaPostgres、GarudaRedis、GarudaSQLite 组件，通过 vega-db 读写 PostgreSQL、Redis（含 Cluster 与 Sentinel）和 SQLite",
+    "自带 HTTP 引擎，实现 HTTP/1.1、HTTP/2、HTTP/3（QUIC）、TLS 1.2/1.3、WebSockets 和 WebTransport",
+    "生成 OpenAPI 3.1 文档，提供 Prometheus 指标、健康检查和分布式追踪"
+   ],
+   "use_cases": [
+    "用 Swift 构建需要 HTTP/2、HTTP/3 或 WebTransport 的服务端应用",
+    "需要 PostgreSQL、Redis 或 SQLite 数据访问的 Swift 后端服务",
+    "从 Kitura 或 axum 迁移路由风格的服务端项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Data|PostgreSQL, Redis (including Redis Cluster and Sentinel) and SQLite, from vega-db through `GarudaPostgres`, `GarudaRedis` and `GarudaSQLite`| ／ **PostgreSQL** (`GarudaPostgres`) supports SCRAM-SHA-256, TLS (required by",
+     "lines": [
+      66,
+      411
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Data|PostgreSQL, Redis (including Redis Cluster and Sentinel) and SQLite, from vega-db through `GarudaPostgres`, `GarudaRedis` and `GarudaSQLite`| ／ **SQLite** (`GarudaSQLite`):",
+     "lines": [
+      66,
+      441
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架为 PostgreSQL、Redis、SQLite 提供专门的数据访问组件（GarudaPostgres/GarudaRedis/GarudaSQLite），为应用开发服务的生态组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Garuda is a Swift web framework and the HTTP server underneath it. It is my attempt to create a spiritual successor to Kitura: a server written in Swift, with its own HTTP engine, for the protocols and the application features a production service needs today. ／ |Data|PostgreSQL, Redis (including Redis Cluster and Sentinel) and SQLite, from vega-db through `GarudaPostgres`, `GarudaRedis` and `GarudaSQLite`| ／ own: `GarudaPostgres`, `GarudaRedis`, `GarudaSQLite`, `GarudaUploads` and",
+   "evidence_lines": [
+    5,
+    66,
+    122
+   ]
+  },
+  "fn": "grepjava/garuda",
+  "sha": "6fbeb2f005a0",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

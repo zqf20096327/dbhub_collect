@@ -10388,5 +10388,73 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "89e7a9c8a5d2": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的上下文优化引擎，经 MCP+hooks 压缩工具输出并持久化会话记忆",
+   "review": "TokenForge 是一个开源上下文优化引擎，通过 hooks 和 MCP 拦截 AI 编码代理的工具交互，过滤或压缩过大的工具输出，并用本地 SQLite + FTS5 全文检索持久化和召回会话知识，支持 Claude Code、Gemini CLI、VS Code Copilot 等 17 个平台。它本身不提供数据库服务，SQLite 仅作为其内部会话记忆的存储介质，属于使用数据库的应用。",
+   "highlights": [
+    "支持通过 hooks 与 MCP 集成拦截、过滤或压缩工具输出",
+    "使用 SQLite 存储会话信息并通过 FTS5 全文检索召回",
+    "声明支持 Claude Code、Gemini CLI、VS Code Copilot、OpenCode、Codex CLI 等平台"
+   ],
+   "use_cases": [
+    "AI 编码代理会话中减少重复工具输出占用的上下文",
+    "跨会话保留和检索有用的会话知识",
+    "在多个 AI 开发环境间统一管理工具交互路由"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Persistent Memory** — store and retrieve session knowledge using SQLite and FTS5 full-text search. ／ 3. Stores useful session information in a local SQLite database.",
+     "lines": [
+      16,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目为 AI 编码代理工作流服务，SQLite 仅作为其自身会话记忆的内部存储而非其服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Persistent Memory** — store and retrieve session knowledge using SQLite and FTS5 full-text search. ／ - **MCP Integration** — connect AI coding agents through the Model Context Protocol. ／ 3. Stores useful session information in a local SQLite database.",
+   "evidence_lines": [
+    16,
+    18,
+    38
+   ]
+  },
+  "fn": "speedydivid/TokenForge",
+  "sha": "89e7a9c8a5d2",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

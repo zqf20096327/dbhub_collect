@@ -10449,5 +10449,81 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b6ed69a6accd": {
+  "identity": {
+   "one_liner": "ASP.NET Core 自托管 Web 应用，含记账、日历、论坛与用户管理",
+   "review": "Maroik 是一名开发者自 2021 年起构建并运营的自托管个人与业务管理应用，功能涵盖记账、日历日程、公告板和基于角色的用户管理。后端采用 ASP.NET Core 与 DDD/Clean Architecture 分层，2025 年 4 月起数据存储从 MariaDB 迁移到 PostgreSQL，依赖 RabbitMQ、Valkey 等组件，通过 docker-compose 运行。",
+   "highlights": [
+    "提供记账（含四 decimal 精度金额与行锁事务）、日历、公告板、角色用户管理与后台仪表盘功能",
+    "采用 DDD + Clean Architecture 分层，使用 NetArchTest 架构规则和 Testcontainers 中的真实 PostgreSQL/RabbitMQ 进行测试",
+    "2025-04 从 MariaDB 迁移至 PostgreSQL，数据访问基于 EF Core"
+   ],
+   "use_cases": [
+    "自托管部署用于个人或小型业务的财务记账与资产记录",
+    "团队或社区需要的日历共享与公告板系统",
+    "需要基于角色的用户管理与审计日志的后台管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Test-first development.** Every change starts with a failing test, including the log entries it must write; real PostgreSQL and RabbitMQ run in Testcontainers instead of mocks wherever the behaviour depends on them. ／ |2025-12|Project split into Core layers (Repository, Service, Client, PostgreSQL)|",
+     "lines": [
+      61,
+      92
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|2021-05|Project starts as *MyLaboratory*: ASP.NET Core (2.1 → .NET 5) with MariaDB, run under docker-compose from the first week| ／ |2025-04|MariaDB → PostgreSQL|",
+     "lines": [
+      68,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 PostgreSQL 存储数据的自托管 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, calendar management, bulletin boards, and role-based user management. ／ - **Test-first development.** Every change starts with a failing test, including the log entries it must write; real PostgreSQL and RabbitMQ run in Testcontainers instead of mocks wherever the behaviour depends on them. ／ |2025-04|MariaDB → PostgreSQL|",
+   "evidence_lines": [
+    8,
+    61,
+    87
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik",
+  "sha": "b6ed69a6accd",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

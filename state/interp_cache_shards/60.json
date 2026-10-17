@@ -9749,5 +9749,172 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "338d84618b56": {
+  "identity": {
+   "one_liner": "基于 LLM 的对话式 BI 工具，支持自然语言转 SQL 查询分析",
+   "review": "OpenChatBI 是一个开源的对话式 BI 工具，基于 LangGraph 和 LangChain 构建 agent 工作流，实现自然语言转 SQL、数据可视化、时序预测和异常下钻分析。它面向需要通过自然语言查询数据仓库的业务和分析人员，支持 Presto、PostgreSQL、MySQL 等数据源，目录存储可用文件系统或 SQLAlchemy 支持的数据库，并提供 Streamlit/Gradio 示例 UI 与 CLI。",
+   "highlights": [
+    "通过 text2sql 工作流将自然语言转换为 SQL 并执行查询",
+    "内置数据分析子代理，支持时序预测、异常检测与多维下钻分析",
+    "数据目录支持向量或 BM25 检索，存储后端可选文件系统或数据库"
+   ],
+   "use_cases": [
+    "业务人员通过自然语言查询和可视化数据仓库数据",
+    "时序数据的趋势预测、异常检测与根因下钻分析",
+    "构建基于 MCP 工具和知识库检索的对话式数据分析应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Data Warehouse (Database) credentials (like Presto, PostgreSQL, MySQL, etc.) ／ `postgresql+psycopg://user:pass@host/db`, `mysql+pymysql://user:pass@host/db`). ／ for PostgreSQL, install the `psycopg` driver (`pip install openchatbi[postgresql]`).",
+     "lines": [
+      46,
+      222,
+      224
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Data Warehouse (Database) credentials (like Presto, PostgreSQL, MySQL, etc.) ／ `postgresql+psycopg://user:pass@host/db`, `mysql+pymysql://user:pass@host/db`). ／ For MySQL, install the `pymysql` driver (`pip install openchatbi[mysql]`);",
+     "lines": [
+      46,
+      222,
+      223
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": " database** (e.g., `sqlite:///catalog.db`, ／   connection_string: sqlite:///./catalog.db",
+     "lines": [
+      221,
+      238
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是连接数据仓库运行生成 SQL 进行分析的 BI 应用，数据库为其查询对象与目录存储，而非服务的生态组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenChatBI is an open source, chat-based intelligent BI tool powered by large language models, designed to help users ／ it provides chat agents and workflows that support natural language to SQL conversion and streamlined data analysis. ／ - Data Warehouse (Database) credentials (like Presto, PostgreSQL, MySQL, etc.)",
+   "evidence_lines": [
+    3,
+    5,
+    46
+   ]
+  },
+  "fn": "zhongyu09/openchatbi",
+  "sha": "338d84618b56",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0a598fa3daaf": {
+  "identity": {
+   "one_liner": "PostgreSQL 桌面 IDE，SQL 文件可扩展为监控、仪表盘等小工具",
+   "review": "PlumeSQL 是一个专注 PostgreSQL 的桌面 IDE，应用闭源免费、无账号，支持 macOS、Windows 和 Linux，仍处于 beta。核心机制是内置注释注解（@connection、@readonly、@inputs 等）让 SQL 文件变成可运行的监控、图表或按钮类小应用，并提供 200 多个扩展；补全和校验基于 PostgreSQL 自身解析器，支持 PostGIS、pgvector、TimescaleDB 等扩展，运行于 PostgreSQL 13 到 18。",
+   "highlights": [
+    "SQL 文件通过注释注解（@connection、@readonly、@inputs、@extension）声明连接、只读与展示方式",
+    "补全与 PL/pgSQL 检查基于 PostgreSQL 自身解析器、目录和会话",
+    "仓库包含 200 多个 MIT 许可的扩展，覆盖锁、vacuum、备份、EXPLAIN 计划图等"
+   ],
+   "use_cases": [
+    "需要编辑、补全、重构和只读保护 SQL 脚本的 PostgreSQL 日常开发",
+    "用 SQL 文件生成锁监控、图表、地图、KPI 仪表盘并分发给团队",
+    "在生产连接上执行带确认与回滚保护的变更和 EXPLAIN ANALYZE"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ - It's all in on PostgreSQL and nothing else, so it can use everything ／ pgvector and TimescaleDB. More below.",
+     "lines": [
+      3,
+      54,
+      44
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "options `postgres_fdw`, `file_fdw` and `mysql_fdw` take.",
+     "lines": [
+      286
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接并操作 PostgreSQL 的桌面 IDE 工具，而非用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "应用闭源，仓库内扩展与规范为 MIT",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ **Free, no account, for macOS, Windows and Linux.** The app is closed ／ them really well. PlumeSQL only does PostgreSQL, and goes deep on it.",
+   "evidence_lines": [
+    3,
+    46,
+    82
+   ]
+  },
+  "fn": "hercstack/plumesql",
+  "sha": "0a598fa3daaf",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

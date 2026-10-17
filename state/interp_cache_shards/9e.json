@@ -10172,5 +10172,140 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8d119e21caf1": {
+  "identity": {
+   "one_liner": "自托管 AI 漫画/条漫/解说视频生成工作室",
+   "review": "OpenManga 是一个自托管的 AI 漫画生产工具：将故事转为结构化状态（角色、章节、分镜规格），生成一致性的漫画页、webtoon 条漫和解说视频，支持 BYOK 供应商密钥、本地 Kokoro TTS、确定性排版及 PDF/EPUB/MP4 等多种导出。面向漫画创作者和视频频道运营者，通过 Docker Compose 部署，使用 PostgreSQL 存储数据。",
+   "highlights": [
+    "提供从故事分析、参考图、分镜生成到配音、导出的完整生产流水线",
+    "支持 BYOK 自备供应商密钥与本地 Kokoro-82M 语音合成，无需 API 密钥亦可运行",
+    "导出支持 PDF、PSD 分层文件、EPUB、CBZ、MP4 视频及 YouTube 发布包等多种格式"
+   ],
+   "use_cases": [
+    "自托管生成一致性角色的漫画/条漫/解说视频",
+    "漫画印刷出版（KDP 尺寸、出血、CMYK 软校样）",
+    "YouTube 频道内容批量生产与发布包制作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "cp .env.example .env # set POSTGRES_PASSWORD, SESSION_SECRET (openssl rand -hex 32), public URLs, INITIAL_ADMIN_* ／ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres redis kokoro",
+     "lines": [
+      157,
+      186
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 的 docker compose 命令中启动 postgres 服务，数据库是应用自身的存储组件而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted production tool for consistent AI-generated manhwa, manga, webtoons and illustrated recaps. It is not \"story → giant prompt → comic.png\": the story becomes structured state (cast, world, chapters, scenes, pages, panel specs), canonical references pin identity, panels are generated cheaply and versioned, and lettering, layout, narration and exports are deterministic.",
+   "evidence_lines": [
+    23
+   ]
+  },
+  "fn": "pr0h0/OpenManga",
+  "sha": "8d119e21caf1",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b1e3eccb9468": {
+  "identity": {
+   "one_liner": "可自托管的任务看板应用，内置 MCP 供 AI 助手读写看板",
+   "review": "Kanbanto 是一个自托管的项目/任务管理应用，提供看板、时间线和大纲三种视图，支持团队协作、人力规划、工时记录、文件附件和日历集成。它通过 MCP 让 Claude、ChatGPT 等 AI 助手读取看板并代为处理任务，数据存储于 PostgreSQL，通过 Docker Compose 一键部署，适合想让人工智能参与日常任务管理的个人或团队。",
+   "highlights": [
+    "提供看板、时间线、大纲三种视图及子任务、工时记录、人力规划功能",
+    "支持接入 Claude、ChatGPT 等 AI 助手读写看板（MCP），并可控制其只读或可写权限",
+    "通过 Docker Compose 自托管部署，数据留存于本地 PostgreSQL"
+   ],
+   "use_cases": [
+    "团队或个人自托管的项目与任务看板管理",
+    "让 AI 助手读取看板、拆解笔记为任务并执行工作项",
+    "带人力规划与工时统计的资源安排"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose exec db pg_dump -U kankan -d kankan -Fc -f /tmp/kanbanto.dump",
+     "lines": [
+      151
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用 PostgreSQL 存储看板数据的任务管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "fair-code",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "docker compose exec db pg_dump -U kankan -d kankan -Fc -f /tmp/kanbanto.dump ／ docker compose up -d --build --wait ／ - **Work with your AI assistant:** connect Claude, ChatGPT or your own agent by signing in once (or with a token),",
+   "evidence_lines": [
+    151,
+    102,
+    57
+   ]
+  },
+  "fn": "baibao577/kanbanto",
+  "sha": "b1e3eccb9468",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

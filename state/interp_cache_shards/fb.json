@@ -9352,5 +9352,70 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4740cb965b69": {
+  "identity": {
+   "one_liner": "Rust/GTK4 编写的 Linux 文件管理器，SQLite 存标签",
+   "review": "Flux 是面向 Linux（GNOME/Wayland）的 GTK4/Libadwaita 文件管理器，用 Rust 编写，Relm4 提供响应式架构，Tokio 处理异步 I/O、Rayon 做并行文件处理。功能包括压缩包内浏览、文件搜索、SMB/SFTP 等网络位置、标签（基于 user.xdg.tags，标签数据存于 SQLite）、预览面板与内嵌终端。需 GTK4 与 libadwaita 1.4+，从源码或 AUR 安装。",
+   "highlights": [
+    "支持像目录一样浏览 zip、7z、rar、tar、iso、deb 压缩包内容，不实际解压",
+    "支持 SMB、SFTP、FTP、WebDAV、NFS、MTP、Google Drive 及 LUKS 加密卷",
+    "标签基于 user.xdg.tags 文件属性，标签数据由 SQLite 存储，含 600+ 测试并用 libFuzzer 对解析器 fuzz"
+   ],
+   "use_cases": [
+    "在 GNOME/Wayland 桌面环境以键盘驱动的图形方式管理本地文件",
+    "浏览和检索网络共享（SMB/SFTP 等）与远程存储位置",
+    "为文件打标签并按标签检索，浏览压缩包归档内容而不解压"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Rust, Relm4 and GTK4, Tokio and Rayon, Nucleo for fuzzy matching, the `ignore` crate for directory walking, and SQLite for tags. There are 600+ tests (`sh tests.sh`), and the parsers are fuzzed with libFuzzer.",
+     "lines": [
+      140
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 存储标签数据，是使用数据库的桌面应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPLv3 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Flux is a GTK4/Libadwaita file manager for Linux, written in Rust. I wanted something that opens instantly, looks at home on GNOME and Wayland, and can be driven from the keyboard. It does that, and it does it faster than the other GUI file managers I tried. ／ Rust, Relm4 and GTK4, Tokio and Rayon, Nucleo for fuzzy matching, the `ignore` crate for directory walking, and SQLite for tags. There are 600+ tests (`sh tests.sh`), and the parsers are fuzzed with libFuzzer.",
+   "evidence_lines": [
+    7,
+    140
+   ]
+  },
+  "fn": "killown/flux",
+  "sha": "4740cb965b69",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

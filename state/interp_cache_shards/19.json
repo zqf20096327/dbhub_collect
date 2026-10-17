@@ -10593,5 +10593,262 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f6ce26976688": {
+  "identity": {
+   "one_liner": "终端数据库 CLI 工作台，psql 风格统一 REPL 连接多类数据库与文件",
+   "review": "dbcrust 是一个 Rust 编写的命令行数据库客户端，通过统一 URL 连接串提供交互式 REPL（自动补全、语法高亮、psql 风格反斜杠命令）、一次性脚本执行与 JSON/CSV 输出，并支持 SSH 隧道、Vault 凭据、Docker 容器发现和可选的 AI 生成 SQL。面向开发者与运维人员在终端中查询多种数据库及 Parquet/CSV/JSON 文件。",
+   "highlights": [
+    "提供统一 REPL 与 60+ psql 风格命令，支持 PostgreSQL、MySQL、SQLite、ClickHouse、MongoDB、Elasticsearch 等多种连接",
+    "基于 Apache DataFusion 实现 SQL 查询本地 Parquet/CSV/JSON 文件",
+    "提供 `--read-only` 守卫、凭据 broker、MCP 客户端与可编程一次性模式（稳定退出码、JSON 错误输出）"
+   ],
+   "use_cases": [
+    "在终端中交互式查询和管理多种数据库",
+    "用 SQL 直接检查本地数据文件而不导入数据库",
+    "为编码代理/脚本提供可组合、可限制权限的数据库命令行访问"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Redis/Valkey, SQL Server/Azure SQL, Amazon Redshift, libSQL/Turso, InfluxDB, Amazon S3/R2/MinIO object s ／ dbc postgres://user:pass@localhost/mydb ／ |PostgreSQL|`postgres://user:pass@localhost:5432/mydb?sslmode=require`|",
+     "lines": [
+      3,
+      12,
+      59
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Redis/Valkey, SQL Server/Azure SQL, Amazon Redshift, libSQL/Turso, InfluxDB, Amazon S3/R2/MinIO object s ／ - **One workflow across databases** — the same REPL, commands, and muscle memory across PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, and Elasticsearch. ／ |MySQL|`mysql://root:pass@localhost:3306/mydb`|",
+     "lines": [
+      3,
+      21,
+      60
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Redis/Valkey, SQL Server/Azure SQL, Amazon Redshift, libSQL/Turso, InfluxDB, Amazon S3/R2/MinIO object s ／ dbcrust sqlite:///path/to/db.sqlite -c \"SELECT count(*) FROM users\" # run and exit ／ |SQLite|`sqlite:///path/to/db.sqlite` or `./path/to/db.sqlite`|",
+     "lines": [
+      3,
+      52,
+      61
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Redis/Valkey, SQL Server/Azure SQL, Amazon Redshift, libSQL/Turso, InfluxDB, Amazon S3/R2/MinIO object s ／ |SQL Server / Azure SQL|`mssql://user:pass@localhost:1433/mydb` (TLS verified by default) · `mssql://user:pass@host%5CINSTANCE/mydb`|",
+     "lines": [
+      3,
+      67
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Redis/Valkey, SQL Server/Azure SQL, Amazon Redshift, libSQL/Turso, InfluxDB, Amazon S3/R2/MinIO object s ／ - **One workflow across databases** — the same REPL, commands, and muscle memory across PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, and Elasticsearch. ／ |ClickHouse|`clickhouse://user:pass@localhost:8123/default`|",
+     "lines": [
+      3,
+      21,
+      62
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接和查询多种数据库的 CLI 客户端工具，本身不存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A fast psql-style database workbench for your terminal.** One CLI for PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, Elasticsearch, White Dragon search, Redis/Valkey, SQL Server/Azure SQL, Amazon Redshift, libSQL/Turso, InfluxDB, Amazon S3/R2/MinIO object stores, DynamoDB and CloudWatch Logs (opt-in AWS builds), DuckDB/DuckLake (opt-in build), Docker databases, Vault-backed connections, and SQL over Parquet/CSV/JSON files — with optional AI, Django ORM analysis, Python bindings, and a desktop GUI. ／ - **One workflow across databases** — the same REPL, commands, and muscle memory across PostgreSQL, MySQL, SQLite, ClickHouse, MongoDB, and Elasticsearch. ／ |PostgreSQL|`postgres://user:pass@localhost:5432/mydb?sslmode=require`|",
+   "evidence_lines": [
+    3,
+    21,
+    59
+   ]
+  },
+  "fn": "clement-tourriere/dbcrust",
+  "sha": "f6ce26976688",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c8c3ab86492": {
+  "identity": {
+   "one_liner": "开源联盟伙伴归因与分佣平台，基于事件溯源",
+   "review": "OpenPartner 是一个自托管的联盟/创作者合作伙伴平台，实现从点击、注册到收入的完整归因链，并通过 Stripe Connect 完成分佣支付。面向需要自建合作伙伴计划、掌控归因与佣金数据的团队。采用事件溯源设计，归因模型可从原始数据重新推导；支持 JSON/CSV/SQL 导出与导入回灌，提供 OpenAPI 规范和嵌入式 SDK。",
+   "highlights": [
+    "实现 click→signup→revenue 全链路归因，支持跨设备身份拼接与延迟转化（默认60天，可配置）",
+    "提供四种归因模型（last_click/first_click/linear/position），可从原始表重新推导",
+    "提供按表的 JSON+CSV+SQL 导出，支持通过 POST /import 或 psql 恢复 SQL dump 回灌"
+   ],
+   "use_cases": [
+    "自托管运行联盟/推荐合作伙伴计划并跟踪归因",
+    "通过 Stripe Connect 向合作伙伴执行佣金分佣",
+    "将推荐链接、统计与收益嵌入自有应用（headless + SDK）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql`",
+     "lines": [
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示其使用 Knex 迁移与 psql 恢复 SQL dump 存取自身业务数据，是使用数据库的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可；另有付费托管服务层",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "- `packages/db` — shared Knex migrations and TypeScript types ／ - Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql` ／ - Deployment: DigitalOcean App Platform spec + single-host `docker-compose.prod.yml` behind Caddy",
+   "evidence_lines": [
+    75,
+    118,
+    124
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "getcoherence/openpartner",
+  "sha": "9c8c3ab86492",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "84eb3edf9a31": {
+  "identity": {
+   "one_liner": "Python RDF 1.1/1.2 库，提供 RDFLib 兼容 API 与 SQLite 存储",
+   "review": "RDFCore 是一个处理 RDF 数据的 Python 库，实现 RDF 1.1 及部分 RDF 1.2 特性，提供 RDFLib 兼容的 Graph/Dataset API、流式解析器与序列化器，并内置 SQLiteStore 用于磁盘存储超大图。面向需要处理链接数据/RDF 图的 Python 开发者，无运行时依赖，要求 Python 3.10+，不支持 SPARQL 与 JSON-LD。",
+   "highlights": [
+    "提供 RDF 1.1/1.2 多格式的流式解析与序列化，支持 Turtle、TriG、N-Triples、N-Quads、RDF/XML",
+    "内置 SQLiteStore 持久化存储，支持事务、savepoint 与版本化 JSON 术语表示",
+    "实现 RDF/RDFS 蕴含推理及外部排序，支持 gzip/bzip2/xz 压缩输入"
+   ],
+   "use_cases": [
+    "处理超出内存的大型 RDF/N-Triples 文件的流式计数、校验与格式转换",
+    "需要将 RDF 数据持久化到磁盘的场景",
+    "从 RDFLib 迁移常见 Graph/Term API 用法代码"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite-backed store, external sorting, and bounded I/O helpers. ／ store = SQLiteStore(\"data.sqlite3\") ／ SQLite databases use a versioned JSON representation of RDF terms. Opening",
+     "lines": [
+      5,
+      249,
+      259
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Python RDF 处理库，内置 SQLiteStore 以 SQLite 作为自身存储后端，服务于 RDF 数据处理而非特定数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "RDFCore is a Python library for RDF 1.1 and selected RDF 1.2 features. It ／ `SQLiteStore` when data should remain on disk or when the full graph should",
+   "evidence_lines": [
+    3,
+    243
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "domel/RDFCore",
+  "sha": "84eb3edf9a31",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

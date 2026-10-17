@@ -7728,5 +7728,187 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "316735953ec0": {
+  "identity": {
+   "one_liner": "跨平台桌面 PostgreSQL 客户端，基于 Tauri/React/Rust",
+   "review": "RSQL 是一款运行于 macOS、Windows 和 Linux 的桌面 PostgreSQL 管理客户端，采用 Tauri + React + Rust 构建，MIT 许可。提供 SQL 编辑器、结果分页加载、内联编辑、CSV/JSON 导入导出、ER 图、性能监控、SSH 隧道连接等能力，面向需要图形界面操作 PostgreSQL 的数据库使用者。密码以未加密形式存储在本地数据库中。",
+   "highlights": [
+    "提供 Monaco SQL 编辑器，带补全、格式化、查询历史与 EXPLAIN ANALYZE 计划查看器",
+    "支持结果分页加载（最高 1,000,000 行或 256 MB）、内联编辑、CSV/JSON/SQL INSERT/Markdown/XML 导出与 CSV 导入",
+    "提供 schema 侧边栏、ER 图导出、schema diff、性能监控、角色与扩展管理、SSH 隧道与 SSL 连接"
+   ],
+   "use_cases": [
+    "通过图形界面编写、执行 SQL 并查看与编辑查询结果",
+    "浏览与维护 PostgreSQL schema（DDL、VACUUM/ANALYZE/REINDEX、ER 图、schema diff）",
+    "监控服务器活动、锁与慢查询，管理角色、扩展与服务端设置"
+   ],
+   "classification": {
+    "cat": "管理",
+    "db_verdicts": [
+     {
+      "db": "PostgreSQL",
+      "rel": "support",
+      "lines": [
+       3,
+       69
+      ]
+     }
+    ],
+    "eco": "tool",
+    "eco_why": "README 定位为桌面 PostgreSQL 客户端，是为数据库操作服务的工具而非使用数据库存数据的应用。",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "MIT",
+    "install": [
+     "binary",
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     3,
+     69
+    ]
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A desktop PostgreSQL client for macOS, Windows and Linux, built with Tauri, React and Rust. Free and open source under the MIT license. It needs no account and collects no telemetry. ／ - User SQL runs through the simple query protocol of `tokio-postgres`, so values arrive as text and are passed on without conversion.",
+     "lines": [
+      3,
+      69
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为桌面 PostgreSQL 客户端，是为数据库操作服务的工具而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A desktop PostgreSQL client for macOS, Windows and Linux, built with Tauri, React and Rust. Free and open source under the MIT license. It needs no account and collects no telemetry. ／ - User SQL runs through the simple query protocol of `tokio-postgres`, so values arrive as text and are passed on without conversion.",
+   "evidence_lines": [
+    3,
+    69
+   ]
+  },
+  "fn": "rust-dd/rsql",
+  "sha": "316735953ec0",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24a5adc7da9f": {
+  "identity": {
+   "one_liner": "基于 RAG 的文档智能平台，提供解析、向量检索与带引用的问答",
+   "review": "DocuMind 是一个开源自托管文档智能工作区：用户上传 PDF、DOCX 等文档，经 Docling 做版面感知解析，分块嵌入后存入 Qdrant，配合 Gemini 进行带来源引用的对话式问答。面向需要私有化文档问答的用户，采用 Next.js + FastAPI + PostgreSQL + Celery 架构，文档与任务数据以 PostgreSQL 16 为权威存储，内置 JWT 双令牌认证与多租户隔离。",
+   "highlights": [
+    "支持 PDF、DOCX、XLSX、PPTX 等多格式上传，经 Docling 做版面与表格结构化解析",
+    "向量检索使用 Qdrant，每个查询强制携带 user_id/document_id 载荷过滤实现租户隔离",
+    "后台解析任务由 Celery + Redis 承载，使用 lease_token 防护与 Celery Beat 租约恢复"
+   ],
+   "use_cases": [
+    "私有化部署的文档问答与知识库检索",
+    "需要来源引用可核验的 RAG 问答场景",
+    "多用户文档解析、导出与管理"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "3. **Database (`backend/app/models/`):** PostgreSQL 16 managed via Alembic migrations. Serves as the authoritative source of truth for users, refresh session families, documents, and processing jobs. ／ |**Database**|PostgreSQL|16-alpine|Authoritative ACID store for users, documents, and jobs|",
+     "lines": [
+      73,
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 PostgreSQL 存储用户、文档与任务数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "3. **Database (`backend/app/models/`):** PostgreSQL 16 managed via Alembic migrations. Serves as the authoritative source of truth for users, refresh session families, documents, and processing jobs.",
+   "evidence_lines": [
+    73
+   ]
+  },
+  "fn": "yashrajagawane/documind",
+  "sha": "24a5adc7da9f",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

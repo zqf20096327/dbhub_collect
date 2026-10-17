@@ -9980,5 +9980,77 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0d50f1560814": {
+  "identity": {
+   "one_liner": "基于 Wiktionary 数据构建的德英学习词典应用，使用 SQLite 存储",
+   "review": "Lexikon 从 kaikki.org 的德语 Wiktionary JSONL 转储构建 SQLite 词典库，通过 Hono 提供只读 REST API，前端为 React 查询界面。支持容错搜索、英文反查、整句分词解析和语法表展示，供德语学习者查词使用。数据库需自行通过 Python ingest 脚本构建（约 1 GB 源转储）。",
+   "highlights": [
+    "提供四种索引键（精确/转写/去变音/英文释义词）支持模糊与反向搜索",
+    "提供 /api/parse 接口将整句切词并解析为词典原形，含复合词拆分",
+    "ingest 管道支持词频列表（Leipzig/Yomitan）写入 entries.freq 排名字段"
+   ],
+   "use_cases": [
+    "德语学习者在阅读/观看内容时查词与反查英文对应",
+    "粘贴德语句子逐词解析出词典原形",
+    "基于同一 SQLite 库自建词典查询 API 服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Ingest|Python 3 (stdlib only, optional `tqdm`) → SQLite| ／ |API|Node.js + Hono + `better-sqlite3` (read-only)|",
+     "lines": [
+      32,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目以 SQLite 存储词典数据并向用户提供查询服务，SQLite 是其数据层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "kaikki.org German JSONL  ──►  ingest/ingest.py  ──►  data/dictionary.db  ──►  server (Hono)  ──►  web (React) ／ |API|Node.js + Hono + `better-sqlite3` (read-only)| ／ |Hosting|Railway: API with a persistent volume, web as static files behind nginx|",
+   "evidence_lines": [
+    24,
+    33,
+    36
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "julianel5/Lexikon",
+  "sha": "0d50f1560814",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

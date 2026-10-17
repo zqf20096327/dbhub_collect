@@ -10151,5 +10151,142 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4e2d5f90d154": {
+  "identity": {
+   "one_liner": "Rust 编写的 DynamoDB 本地模拟器，以 SQLite 作存储层",
+   "review": "Dynoxide 是一个 DynamoDB 模拟器，以 SQLite 为存储层，可作为 HTTP 服务器、MCP 服务器、Rust/iOS 嵌入库或 WebAssembly 运行，通过 Parity Suite 对照真实 AWS 验证兼容性，面向本地开发、测试与 CI 场景，不支持备份、全局表等云端操作。",
+   "highlights": [
+    "实现 DynamoDB API：表、项、query/scan、批处理、事务、PartiQL、Streams、TTL、GSI/LSI",
+    "以单静态二进制、HTTP 服务器、MCP 服务器、Rust 嵌入库和 WebAssembly 多种形态运行",
+    "由公开 conformance suite（Parity Suite）对照真实 AWS 持续验证"
+   ],
+   "use_cases": [
+    "本地开发和集成测试中替代 DynamoDB Local 的后端",
+    "CI 流水线中的 DynamoDB 依赖（npm/Docker/GitHub Action）",
+    "为编码代理提供 MCP 接口访问 DynamoDB 兼容 API"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "A DynamoDB emulator in Rust, backed by SQLite. Runs as an HTTP server or an MCP server for coding agents, embeds into Rust and iOS applications as a library, and compiles to WebAssembly for the browser. ／ |Storage|SQLite|SQLite|SQLite (via DDB Local)|Its own (in-memory, persistent or WAL)|Its own (in-memory, optional on-disk state)|LevelDB| ／ Dynoxide uses SQLite as its storage layer. (AWS's DynamoDB Local also uses SQLite internally.)",
+     "lines": [
+      5,
+      61,
+      133
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 DynamoDB 生态服务的本地模拟器工具，SQLite 仅作为其内部存储层被使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT 与 Apache 2.0",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A DynamoDB emulator in Rust, backed by SQLite. Runs as an HTTP server or an MCP server for coding agents, embeds into Rust and iOS applications as a library, and compiles to WebAssembly for the browser. ／ Dynoxide implements the DynamoDB API across tables, items, query and scan, batches, transactions, PartiQL, streams, TTL, and tags, with GSI and LSI support, the full expression syntax, and DynamoDB-compatible pagination, validation, and error codes. For the operation-by-operation breakdown and a comparison, see the compatibility summary. ／ Dynoxide is built for local development, testing, and CI, not as a production DynamoDB replacement, so two classes of thing are missing on purpose.",
+   "evidence_lines": [
+    5,
+    111,
+    115
+   ]
+  },
+  "fn": "nubo-db/dynoxide",
+  "sha": "4e2d5f90d154",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bf9132cb1abd": {
+  "identity": {
+   "one_liner": "PostgreSQL 向量搜索扩展，将向量索引与内核引擎解耦",
+   "review": "Purdue 数据库组开发的 PostgreSQL 向量检索扩展，采用将向量索引与 PostgreSQL 核心引擎解耦的架构，并提供轻量一致性机制处理索引不一致问题。兼容 pgvector API，可作为其替代品安装使用；当前为 CIDR 论文配套的原型分支，安装需自备 PostgreSQL 环境并运行脚本构建。",
+   "highlights": [
+    "解耦向量索引与 PostgreSQL 核心引擎的架构设计，并含索引一致性机制",
+    "实现 pgvector 相同 API（IndexAmRoutine），与 pgvector 兼容",
+    "提供 SIFT10M、DEEP10M 数据集的实验结果"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中运行向量相似度检索",
+    "以 pgvector 兼容方式替换现有向量索引",
+    "向量数据库解耦架构的研究与复现"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL-V ／ **Open-Source Vector Similarity Search for PostgreSQL** ／ **PostgreSQL-V** is a new integrated vector database system developed by **Purdue Database Group** that enables fast vector search in PostgreSQL. It achieves performance on par with specialized vector databases.",
+     "lines": [
+      1,
+      2,
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 的扩展/存储组件为该数据库生态提供向量索引能力，而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PostgreSQL-V** is a new integrated vector database system developed by **Purdue Database Group** that enables fast vector search in PostgreSQL. It achieves performance on par with specialized vector databases. ／ Unlike prior systems (e.g., pgvector) that inherits legacy overhead by reusing PostgreSQL’s page-oriented structure, PostgreSQL-V adopts a novel architectural design that decouples vector indexes from PostgreSQL’s core engine. This decoupling offers many benefits, such as directly leveraging native vector index libraries for high performance. However, it also introduces the challenge of index inconsistency, which we address with a lightweight consistency mechanism. ／ This branch contains the prototype version used in our CIDR submission to validate the proposed design.",
+   "evidence_lines": [
+    6,
+    8,
+    46
+   ]
+  },
+  "fn": "purduedb/PostgreSQL-V",
+  "sha": "bf9132cb1abd",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

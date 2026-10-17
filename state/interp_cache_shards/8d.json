@@ -9040,5 +9040,80 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f2f3b1d24f45": {
+  "identity": {
+   "one_liner": "本地优先桌面多智能体AI工作台，用SQLite加密存储状态",
+   "review": "KIN 是一个开源的本地优先桌面应用，用于在个人工作站上运行多智能体AI协作组织，包含编排器、领域专家、频道与私信机制。它支持通过 Ollama 运行本地模型，或接入 OpenRouter、OpenAI、Anthropic 等云 API，并将执行状态以加密 SQLite 形式持久化，用于断点恢复与配额切换。适合希望在本地运行多智能体工作流的开发者。",
+   "highlights": [
+    "提供多智能体组织架构，包含工作区编排器、领域专家角色、部门频道与私信通道",
+    "支持混合模型路由：本地 Ollama 自动发现，以及 OpenRouter/OpenAI/Anthropic/Gemini/DeepSeek/Groq 云 API 接入",
+    "将执行检查点与模型选择状态写入 SQLite，支持 429 配额检测与一键切换本地模型"
+   ],
+   "use_cases": [
+    "在本地桌面运行多智能体任务分解与协作工作流",
+    "需要离线/本地模型推理的私有 AI 工作区场景",
+    "通过 cron/interval 例程执行定时自动化任务与浏览器/桌面控制"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ - **Autonomous Quota Guard**: Gracefully detects upstream API rate limits (429) or token exhaustion, checkpoints execution state to SQLite, and provides one-click failover to unmetered local Ollama. ／ - **Instant Auto-Persistence**: Selecting any model in Agent Inspector or Swarm Map updates `agent_identities.active_model_id` in SQLite immediately and broadcasts updates across the UI without manual save clicks.",
+     "lines": [
+      13,
+      33,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为桌面应用，使用 SQLite 存储执行状态与模型配置，SQLite 是其内置状态存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**KIN** is an open-source, local-first desktop application designed to run autonomous swarms of specialized AI coworkers. Unlike conventional single-prompt chatbots or cloud-tethered dashboards, KIN operates directly on your local workstation as a sovereign multi-agent organization. ／ - **Autonomous Quota Guard**: Gracefully detects upstream API rate limits (429) or token exhaustion, checkpoints execution state to SQLite, and provides one-click failover to unmetered local Ollama. ／ npm install",
+   "evidence_lines": [
+    26,
+    33,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "abhayzangir1/KIN",
+  "sha": "f2f3b1d24f45",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

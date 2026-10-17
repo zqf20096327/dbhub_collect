@@ -10292,5 +10292,184 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "35bc7240d9da": {
+  "identity": {
+   "one_liner": "Neovim 插件，将数据库表变为可编辑缓冲区，支持 SQL 暂存与跨库联邦查询",
+   "review": "dadbod-grip.nvim 是一个 Neovim 插件，把数据库表渲染为可编辑 Vim 缓冲区，提供 schema 浏览、外键跳转、变更暂存后生成 SQL 并以单事务应用，并借助 DuckDB 实现跨数据源联邦查询与本地/远程文件读取。面向习惯 Vim 操作的开发者，依赖各数据库的命令行客户端；支持 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server，另含可选的自然语言生成 SQL（AI）功能。",
+   "highlights": [
+    "提供可编辑表格缓冲区：编辑暂存后生成 SQL，确认后在单事务中应用，支持撤销单个或全部暂存修改",
+    "通过 DuckDB 支持 parquet/csv/json 等文件的打开、写入及跨数据库联邦查询（:GripAttach）",
+    "提供 :GripAsk 从自然语言请求生成 SQL，AI 请求与 SQL 均通过 stdin 传递"
+   ],
+   "use_cases": [
+    "在 Neovim 内浏览 schema、编辑表数据并审查生成的 SQL",
+    "通过 DuckDB 跨多个数据库/文件源联合查询",
+    "用自然语言生成 SQL 并在查询面板中执行与导出结果"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|`psql`| ／ :GripConnect postgresql://user:password@localhost:5432/app",
+     "lines": [
+      31,
+      82
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL or MariaDB|`mysql`| ／ :GripConnect mysql://user:password@localhost:3306/app",
+     "lines": [
+      32,
+      83
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|`sqlite3`|",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`sqlcmd`| ／ :GripConnect sqlserver://user:password@localhost:1433/app",
+     "lines": [
+      35,
+      87
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": ":GripConnect mariadb://user:password@localhost:3306/app",
+     "lines": [
+      84
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为连接和操作数据库服务的 Neovim 客户端插件，而非使用数据库存自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Dadbod Grip turns database tables into editable Vim buffers, with schema browsing, staged mutations, generated SQL, relationship navigation, and cross-database federation inside Neovim. ／ |PostgreSQL|`psql`| ／ DuckDB supplies file access and cross-database federation. CSV, TSV, JSON, NDJSON, JSONL, Parquet, Arrow, and IPC files can opt into write mode. XLSX and ORC remain read-only because Dadbod Grip does not have an explicit safe write format for them.",
+   "evidence_lines": [
+    10,
+    31,
+    158
+   ]
+  },
+  "fn": "joryeugene/dadbod-grip.nvim",
+  "sha": "35bc7240d9da",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c1ac33fea5d2": {
+  "identity": {
+   "one_liner": "Bun 原生 sql 的类型安全模型驱动查询构建器",
+   "review": "该仓库为 Bun 运行时提供查询构建库：从模型文件推断表/列/主键获得类型提示，提供 select/insert/update/delete、关联加载、事务、迁移生成、种子数据和 LRU 查询缓存等能力，底层基于 Bun 的 tagged template sql，并附带 CLI 做内省与 explain。面向在 Bun 上写 TypeScript 应用的开发者，README 中的基准测试仅基于 SQLite 场景。",
+   "highlights": [
+    "从模型文件推断表/列/主键，提供全类型安全的链式查询构建",
+    "支持事务（重试/隔离级别/savepoint）、基于模型的迁移生成与种子数据填充",
+    "内置 LRU 查询缓存（TTL）、模型生命周期钩子与软删除支持"
+   ],
+   "use_cases": [
+    "在 Bun 项目中以类型安全方式构建 SQL 查询",
+    "从模型生成并执行数据库迁移、生成测试种子数据",
+    "通过 CLI 进行内省、连通性检查与 explain 分析"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "dialect: 'postgres',",
+     "lines": [
+      76
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Benchmarked on Apple M3 Pro, Bun 1.3.11, SQLite with 1,000 users and 5,000 posts. Kysely uses the official `kysely-bun-sqlite` adapter.",
+     "lines": [
+      208
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库访问服务的查询构建库，不是用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Fully-typed, model-driven Query Builder for Bun’s native `sql`. ／ - **Typed from Models**: Infer tables/columns/PKs from your model files; `selectFrom('users')` and `where({ active: true })` are typed. ／ bun add bun-query-builder",
+   "evidence_lines": [
+    9,
+    17,
+    55
+   ]
+  },
+  "fn": "stacksjs/bun-query-builder",
+  "sha": "c1ac33fea5d2",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

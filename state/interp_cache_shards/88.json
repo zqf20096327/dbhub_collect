@@ -9084,5 +9084,73 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "db5eb11eebe3": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的自托管长期记忆引擎，含混合检索与可视化控制台",
+   "review": "aiduMEI 是一个为 AI Agent 提供长期记忆的服务，通过 FastAPI 服务加读写/萃取钩子接入 Hermes、Claude Code、Codex CLI、Cursor 等宿主，实现记忆写入、混合检索、会话提炼与认知溯源。面向需要给智能体持久记忆的个人或团队，单机自托管部署；文档声明处于快速迭代期，时序推理等指标存在短板且未经复跑验证。",
+   "highlights": [
+    "提供向量 + BM25/trigram + cross-encoder 重排的混合检索，以及六型记忆分类与三轨遗忘曲线机制",
+    "提供读线/写线/萃取线钩子脚本，适配 Hermes、Claude Code、Codex CLI 等宿主的记忆注入与写入",
+    "提供 /ui 可视化控制台与认知治理：记忆来源打标、会话溯源、Markdown 导出"
+   ],
+   "use_cases": [
+    "为 MCP 客户端宿主的 AI 助手添加跨会话长期记忆",
+    "单机自托管场景下的智能体记忆写入、检索与会话精华提炼",
+    "需要对 AI 生成记忆做来源溯源与人工调阅治理的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**共同项**：CPU 2 核足够、闲时 < 1%；`/search` 单次 0.14~0.23s；冷启动 5.2s；数据盘千级记忆约 13 MB 向量 + 数百 KB SQLite；前端 0 依赖；Python 3.10–3.12。 ／ > 其余的轻是刻意设计：向量库嵌入式落盘（无独立进程/端口）、不吃 GPU、相关性闸门先拦闲聊、SQLite+FTS5 兜底。一句话：**云端档 1 核 1G 跑得动；自动挡/本地档建议 2 核 2G 起步。**",
+     "lines": [
+      269,
+      274
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 等作为自身存储的 AI 记忆服务应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README L5 声明），包版本 0.4.0.post2",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 让你的 AI Agent **真正记住你**：混合检索 + 认知治理 + 可视化控制台 + 双引擎自动挡，**单机自托管**，MIT。 ／ > 宿主（Hermes / Claude Code / Codex CLI / Cursor / 任何 MCP 客户端）管短期对话，aiduMEI 管长期记忆。",
+   "evidence_lines": [
+    5,
+    6
+   ]
+  },
+  "fn": "monkey2jack/aiduMEI",
+  "sha": "db5eb11eebe3",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

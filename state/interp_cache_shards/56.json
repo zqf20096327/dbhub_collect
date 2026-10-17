@@ -8939,5 +8939,82 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "be6c9d67c9f5": {
+  "identity": {
+   "one_liner": "基于 Java Swing 与 Spring Boot 的校园活动管理桌面应用",
+   "review": "CEMS 是一个三层架构的校园活动管理系统：Java Swing 桌面客户端通过 REST API 与 Spring Boot 后端通信，数据存储于 TiDB/MySQL，采用 3NF schema 与外键约束实现容量与报名的事务性校验。面向高校的活动提案、审批与报名场景。默认配置含每日零点定时清库的演示模式，实际部署需手动关闭。",
+   "highlights": [
+    "三层架构：Swing 客户端不含 SQL 与数据库凭据，全部经 REST API 访问数据",
+    "基于 TiDB/MySQL 的 3NF schema，通过外键约束与实时容量校验阻止场地超额报名",
+    "内置 RBAC 角色（学生/组织者/管理员）与定时数据重置任务"
+   ],
+   "use_cases": [
+    "高校活动提案、审批与报名流程管理",
+    "演示/作品集环境下的活动管理系统部署参考"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "3. **Data Layer (Database):** A **TiDB / MySQL Cloud** relational database structured in 3NF, enforcing data integrity via strict Foreign Key constraints and case-sensitive schemas. ／ 2. Update the `application.properties` file with your TiDB/MySQL database credentials.",
+     "lines": [
+      13,
+      30
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "3. **Data Layer (Database):** A **TiDB / MySQL Cloud** relational database structured in 3NF, enforcing data integrity via strict Foreign Key constraints and case-sensitive schemas. ／ 2. Update the `application.properties` file with your TiDB/MySQL database credentials. ／ - **Data Integrity:** Fixed TiDB case-sensitivity constraints and implemented automatic 5-character UUID generation for primary keys (`Reg_ID`) to prevent truncation and default value errors.",
+     "lines": [
+      13,
+      30,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 TiDB/MySQL 作为数据层存储活动数据，本身不服务于数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CEMS is a robust, 3-tier enterprise application designed to streamline the proposal, approval, and registration of academic and extracurricular events across a university campus. ／ 3. **Data Layer (Database):** A **TiDB / MySQL Cloud** relational database structured in 3NF, enforcing data integrity via strict Foreign Key constraints and case-sensitive schemas. ／ Because CEMS is a distributed application, you will need to run both the API and the Client.",
+   "evidence_lines": [
+    3,
+    13,
+    26
+   ]
+  },
+  "fn": "avikumarzs/CEMS",
+  "sha": "be6c9d67c9f5",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

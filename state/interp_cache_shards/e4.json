@@ -9820,5 +9820,77 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6aac946156ad": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 项目记忆服务器，数据存于单个 SQLite 文件",
+   "review": "FlowState 是一个本地运行的 MCP 服务器，为 Claude、ChatGPT、Cursor、Grok 等 AI 应用提供共享的项目记忆：通过 start_here 读取简报、log_work 记录决策/变更/待办，并支持审核队列、硬规则、交接笔记、撤销历史和跨项目链接。数据保存在本机单个 SQLite 文件中，可选 GitHub 异地备份与 Cloudflare Tunnel 远程访问。面向使用多个 AI 工具、需要在会话与应用间延续项目上下文的开发者。",
+   "highlights": [
+    "提供 start_here、log_work、ask 等 MCP 工具，用于读取项目简报、记录工作与检索既有记录",
+    "数据存储在本机单个 SQLite 文件，支持编号迁移、完整性校验备份与按 OS 调度的夜间备份",
+    "提供审核队列、撤销/历史、来源标记与按应用密钥的问责记录（记录哪个应用/模型/机器做了修改）"
+   ],
+   "use_cases": [
+    "多个 AI 应用（Claude、ChatGPT、Cursor、Grok）共享同一份项目上下文与决策记录",
+    "跨会话交接任务：AI 通过交接笔记和待办从上次停止处继续",
+    "需要本地保存、可审核、可撤销的 AI 工作日志与项目记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in one SQLite file on your computer. Nothing is sent anywhere unless you turn",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有数据存于本机单个 SQLite 文件，SQLite 是其存储后端，项目本身是为 AI 应用服务的 MCP 服务器而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "FlowState is a local MCP server. It gives every AI app you ／ Everything lives in one SQLite file on your computer. Nothing is sent anywhere unless you turn ／ 2. creates `.venv` in the repo folder and runs `pip install -e mcp-server` into it (skip with `--skip-install`);",
+   "evidence_lines": [
+    5,
+    10,
+    44
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "dialectforge/FlowState",
+  "sha": "6aac946156ad",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

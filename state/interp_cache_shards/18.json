@@ -8454,5 +8454,152 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "29ba9d5f2309": {
+  "identity": {
+   "one_liner": "配置驱动的多智能体会话编排中间件，基于 Quarkus 构建",
+   "review": "EDDI 是一个用 Java 与 Quarkus 实现的对话式 AI 编排中间件，通过版本化 JSON 配置定义智能体，提供多智能体分组讨论、持久化用户记忆、MCP/A2A 协议、RAG 与密钥保管等功能。面向需要在生产环境治理 AI 智能体的平台运维与开发人员，通过一键安装脚本以 Docker Compose 部署，默认使用 MongoDB，可选 PostgreSQL 存储。",
+   "highlights": [
+    "以版本化 JSON 配置定义智能体行为，支持多智能体分组对话与运行时动态创建智能体",
+    "内置 MCP、A2A、OpenAI Chat Completions API、Slack、OpenAPI 与 OAuth 2.0 支持",
+    "提供信封加密密钥库、HMAC-SHA256 审计账本，并按声明支持 GDPR、HIPAA、EU AI Act 合规基础设施"
+   ],
+   "use_cases": [
+    "部署对话式 AI 智能体并接入 Slack 等渠道",
+    "多智能体分组讨论、评审与协商类工作流编排",
+    "需要审计追踪与合规基础设施的企业 AI 智能体托管"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "bash install.sh --db=postgres --with-auth # PostgreSQL + Keycloak ／ bash install.sh --full # Everything enabled (PostgreSQL + auth + monitoring) ／ Available compose overlays: `docker-compose.auth.yml` (Keycloak), `docker-compose.monitoring.yml` (Prometheus+Grafana), `docker-compose.nats.yml` (cluster mode with one replica and one NATS server), `docker-compose.ollama.yml` (local LLM; add `docker-compose.o",
+     "lines": [
+      47,
+      48,
+      109
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|**Enterprise Cloud**|Azure OpenAI · Amazon Bedrock · Oracle GenAI · Google Vertex AI|",
+     "lines": [
+      216
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "EDDI 使用 MongoDB（默认）或 PostgreSQL 存储自身数据，是构建在这些数据库之上的应用程序而非为其服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**E.D.D.I** (Enhanced Dialog Driven Interface) is a production-grade, **config-driven multi-agent orchestration middleware** for conversational AI. It coordinates users, AI agents, and business systems through **intelligent routing, persistent memory, and API orchestration** — without writing code. ／ bash install.sh --db=postgres --with-auth  # PostgreSQL + Keycloak ／ # Default (EDDI + MongoDB)",
+   "evidence_lines": [
+    11,
+    47,
+    103
+   ]
+  },
+  "fn": "labsai/EDDI",
+  "sha": "29ba9d5f2309",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9a31830ba890": {
+  "identity": {
+   "one_liner": "自托管个人 AI 助手引擎，多用户多渠道，Node.js + PostgreSQL 存储",
+   "review": "Brambit 是一个可自托管的个人 AI 助手引擎，一个实例供多人各建账户与助手，支持网页、Telegram、WhatsApp、邮件和 Slack 渠道，接入任意 OpenAI 兼容模型或 Gemini，并提供记忆、连接器、沙箱代码执行、托管小应用和定时任务。后端为 Node.js 单体，用 PostgreSQL 存账户、会话与执行记录，模型与渠道功能依赖各自的密钥配置。",
+   "highlights": [
+    "多渠道对话：网页、Telegram、WhatsApp、邮件、Slack 共用一个助手",
+    "模型可插拔：任何 OpenAI 兼容 API 或 Gemini，通过 modelos.yaml 按任务路由并支持 fallback",
+    "每个账户独立沙箱容器，写操作需确认，数据存于本地 PostgreSQL 与加密文件系统"
+   ],
+   "use_cases": [
+    "家庭/团队共享一个自托管实例，每人拥有独立助手与记忆",
+    "需要将助手接入 Telegram/WhatsApp/Slack 等现有渠道的场景",
+    "自带 LLM 密钥、数据保存在自己服务器上的私有部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "with it (Postgres 14 from npm); nothing else to install. ／ conversations and workers together in one service. PostgreSQL stores accounts,",
+     "lines": [
+      137,
+      192
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Brambit 是使用 PostgreSQL 存储账户、会话与执行记录的应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0；同名托管服务 Brambs 由同一团队运营",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "conversations and workers together in one service. PostgreSQL stores accounts, ／ with it (Postgres 14 from npm); nothing else to install.",
+   "evidence_lines": [
+    192,
+    137
+   ]
+  },
+  "fn": "morethanrealio/brambit",
+  "sha": "9a31830ba890",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

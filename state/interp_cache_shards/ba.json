@@ -9869,5 +9869,139 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c27b245db0a7": {
+  "identity": {
+   "one_liner": "Swift 跨平台声明式 ORM，基于 SQLite + SQLCipher",
+   "review": "Vein 是一个面向 Swift 开发者的本地优先 ORM 框架，以 SQLite（含 SQLCipher 加密）作为统一底层引擎，API 风格类似 SwiftData，可在 Apple、Linux、Android、Windows 上编译运行。提供编译期宏生成模型、声明式迁移、事务回滚、线程安全模型等机制；Android 上暂不自动支持数据库级加密。通过 Swift Package Manager 安装。",
+   "highlights": [
+    "全平台统一使用 SQLite + SQLCipher 引擎，支持跨平台编译同一套 Swift 模型",
+    "通过 @Model 宏在编译期生成模型信息，支持声明式 schema 迁移与迁移失败回滚",
+    "提供事务 API、字段级锁线程安全模型及 #Predicate 过滤与自定义 SQL 支持"
+   ],
+   "use_cases": [
+    "Swift 跨平台应用（Apple/Android/Linux/Windows）的本地数据持久化",
+    "SwiftUI / SwiftCrossUI 声明式 UI 的响应式数据绑定",
+    "需要数据库级加密或内存数据库做迁移测试的本地存储场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Vein is a local first, highly abstracted ORM for Swift, backed by an SQLite (+ SQLCipher) database. Its API is heavily inspired by Apple's SwiftData framework. ／ Vein is backed by the exact same SQLite + SQLCipher database engine across every platform. Unlike other frameworks that wrap Apple-exclusive APIs on iOS and switch engines elsewhere, Vein shares its entire core logic globally. ／ - **Database & Security**: `skiptools/swift-sqlcipher` (cross platform sqlite and db level encryption)",
+     "lines": [
+      58,
+      75,
+      128
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明 Vein 是 backed by SQLite 的 ORM 框架，为使用数据库的应用提供持久化层（L58）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 提到 Alternative Licensing 与 CLA，可能存在双许可安排",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Vein is a local first, highly abstracted ORM for Swift, backed by an SQLite (+ SQLCipher) database. Its API is heavily inspired by Apple's SwiftData framework. ／ * **Zero-Boilerplate Schemas:** No need to manually define your database schema (unlike Fluent for example). Vein generates all information it needs automatically from your model declarations using the `@Model` macro at compile time. ／ - **Obtaining:** All dependencies are automatically fetched via **Swift Package Manager (SPM)** using the project's `Package.swift` manifest.",
+   "evidence_lines": [
+    58,
+    87,
+    137
+   ]
+  },
+  "fn": "amethystsoft/vein",
+  "sha": "c27b245db0a7",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8e436dd3ccdf": {
+  "identity": {
+   "one_liner": "Misskey 专用备份工具，定时加密备份 PostgreSQL 与 Redis 并上传 R2",
+   "review": "一个面向 Misskey 实例的 Docker 化备份工具，用 Go 编写，通过 pg_dump 与 redis-cli --rdb 获取数据，经 zstd 压缩和 AES 加密后按 Cron 计划上传至 Cloudflare R2 或 S3 兼容存储，支持 pg_restore 健全校验、世代管理和 Discord 通知。适用于自托管 Misskey 的运维者，需要配置加密密钥、数据库访问权限及对象存储桶。",
+   "highlights": [
+    "定时（Cron）备份 PostgreSQL 与 Redis，加密后上传 Cloudflare R2 / S3 兼容存储",
+    "使用 pg_restore 验证转储健全性后再保存，支持按世代数自动清理旧备份",
+    "支持签名 URL 直接恢复、重试与并行分片上传、Discord 通知"
+   ],
+   "use_cases": [
+    "为 Misskey 实例的 PostgreSQL 与 Redis 数据做定期加密备份",
+    "需要异地对象存储（R2/S3 兼容）保存备份并自动管理保留世代",
+    "通过签名 URL 在无需 R2 配置的情况下恢复备份"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Misskeyで利用するPostgreSQLとRedisを自動でバックアップ・管理することを目的としたDocker Image/Toolです🌱 ／ - 🔎 pg_restoreでダンプ健全性を検証してから保存 ／ - PostgreSQLデータベースへのアクセス権限",
+     "lines": [
+      3,
+      9,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 PostgreSQL/Redis 数据库提供备份与恢复服务，属于数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Misskeyで利用するPostgreSQLとRedisを自動でバックアップ・管理することを目的としたDocker Image/Toolです🌱 ／ - 🔎 pg_restoreでダンプ健全性を検証してから保存",
+   "evidence_lines": [
+    3,
+    9
+   ]
+  },
+  "fn": "team-shahu/misskey-backup",
+  "sha": "8e436dd3ccdf",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

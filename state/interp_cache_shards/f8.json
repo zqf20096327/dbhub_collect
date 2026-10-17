@@ -9515,5 +9515,74 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c381778008e7": {
+  "identity": {
+   "one_liner": "Windows WebCacheV01.dat（ESE 数据库）取证分析工具",
+   "review": "读取 Windows 的 WebCacheV01.dat（ESE 格式）数据库，以只读方式解析脏关闭库、从空闲页和事务日志恢复已删除记录，解码二进制属性并标注数据来源与哈希，导出 PDF/Excel/CSV/JSON/SQLite/离线 HTML 报告。面向 DFIR 取证分析人员，安装为 Windows 10/11 桌面程序，也可用 Python 3.13+ 从源码运行。",
+   "highlights": [
+    "只读打开脏状态 ESE 数据库，从未分配页和事务日志恢复已删除/未刷新记录，每条记录附文件、偏移、方法与置信度",
+    "解码二进制存储的访问计数、标题、下载记录、HTTP 头、Cookie、HSTS 及证书，并提供十六进制查看",
+    "导出 CSV、Excel、JSON、SQLite、PDF、离线 HTML 及带 SHA-256 清单的完整案件包"
+   ],
+   "use_cases": [
+    "Windows 浏览器/应用活动痕迹的取证检查",
+    "事件响应中的已删除缓存记录恢复",
+    "需要数据来源与完整性证明的报告输出"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Excel workbook, JSON, SQLite, a PDF report, a self-contained offline HTML",
+     "lines": [
+      66
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为读取/分析 ESE 数据库文件（WebCacheV01.dat）而构建的取证工具，不是使用数据库存储业务数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`WebCacheV01.dat`, the database in which Windows records web and app activity ／ - **Reads dirty databases as they are.** No repair, no soft recovery, no ／  Excel workbook, JSON, SQLite, a PDF report, a self-contained offline HTML",
+   "evidence_lines": [
+    4,
+    43,
+    66
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "akhil-dara/WebCache-Forensic-Analyzer",
+  "sha": "c381778008e7",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

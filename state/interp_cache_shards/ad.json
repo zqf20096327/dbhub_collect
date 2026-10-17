@@ -9967,5 +9967,141 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ff2d5c8c5ea": {
+  "identity": {
+   "one_liner": "离线优先的个人财务与投资组合跟踪应用，本地 SQLite 存储",
+   "review": "FinanceCopilot 是一款用 Flutter 构建的跨平台（macOS/Windows/Android）个人财务与投资组合跟踪应用，支持银行账户、股票、ETF、债券、加密资产与多币种记账，提供 CSV/Excel/PDF 导入、资产配置分析和再平衡草稿。所有数据存储在本地 SQLite 文件（经 Drift 访问），可选 Google Drive 同步，无遥测。适合注重数据本地化的个人用户。",
+   "highlights": [
+    "支持 CSV、XLSX、PDF 银行对账单自动表格重建导入，无需按银行定制模板",
+    "支持 13 种货币及每日汇率与历史回填，ISIN 优先的资产匹配",
+    "数据全部存储在本地 SQLite 文件，可选 Google Drive 同步"
+   ],
+   "use_cases": [
+    "个人银行账户与投资组合的本地记账与净值跟踪",
+    "ETF/债券/多币种资产的配置与集中度分析",
+    "目标导向的储蓄/投资分桶（Pillars）与再平衡草稿生成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built with Flutter for **macOS**, **Windows**, and **Android**. All data lives in a local SQLite file. Optional Google Drive sync if you want it across devices; nothing leaves your machine if you don't. ／ - **Offline-first** — all data lives locally in SQLite; market data and composition are cached after each sync ／ |DB|Drift (SQLite)|",
+     "lines": [
+      5,
+      193,
+      204
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有数据存储在本地 SQLite 文件中，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Built with Flutter for **macOS**, **Windows**, and **Android**. All data lives in a local SQLite file. Optional Google Drive sync if you want it across devices; nothing leaves your machine if you don't. ／ - **Offline-first** — all data lives locally in SQLite; market data and composition are cached after each sync ／ |DB|Drift (SQLite)|",
+   "evidence_lines": [
+    5,
+    193,
+    204
+   ]
+  },
+  "fn": "marcobazzani/FinanceCopilot",
+  "sha": "7ff2d5c8c5ea",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "95381607412c": {
+  "identity": {
+   "one_liner": "本地语义搜索启动器，用 SQLite 存索引并混合检索",
+   "review": "Lantern 是一个 macOS Spotlight 替代启动器，用 EmbeddingGemma 2 模型在本地对文件、代码、PDF、照片、录音做语义索引，检索层将向量（sqlite-vec）与 SQLite FTS5/BM25 关键词结果用 RRF 融合排序。面向 Apple Silicon Mac 用户，索引为单个本地 SQLite 文件，默认离线运行、无遥测。",
+   "highlights": [
+    "索引以单个本地 SQLite 文件存储，混合 embeddings 与 SQLite FTS5/BM25，经 Reciprocal Rank Fusion 排序",
+    "用 MLX 运行 EmbeddingGemma 2 模型，默认离线运行，无遥测",
+    "支持 Raycast 和 Alfred 内嵌搜索、Apple Music/Spotify 歌曲检索、代码符号定位与图片/录音语义搜索"
+   ],
+   "use_cases": [
+    "在 Mac 上按语义查找文件、代码定义、PDF 页、照片和录音片段",
+    "替代 Spotlight 做应用与系统设置快速检索",
+    "在 Raycast/Alfred 中内嵌本地语义搜索"
+   ],
+   "confidence": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Hybrid ranking:** meaning (embeddings) and exact words (SQLite FTS5/BM25) fused with Reciprocal Rank Fusion. ／ - The index is one SQLite file in `~/Library/Application Support/Lantern/` (not synced with iCloud). It contains text",
+     "lines": [
+      53,
+      426
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 SQLite 存储自身搜索索引的桌面应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lantern runs entirely on your Mac. It indexes your folders with Google DeepMind's open **EmbeddingGemma 2** model ／ - **Hybrid ranking:** meaning (embeddings) and exact words (SQLite FTS5/BM25) fused with Reciprocal Rank Fusion. ／ - **For the prebuilt app (`Lantern.dmg`):** a Mac with Apple Silicon (M1 or newer) and macOS 14 or newer. Python 3.12,",
+   "evidence_lines": [
+    13,
+    53,
+    67
+   ]
+  },
+  "fn": "misterekkk/lantern",
+  "sha": "95381607412c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

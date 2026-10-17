@@ -9443,5 +9443,89 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3a651409db63": {
+  "identity": {
+   "one_liner": "openGauss 配置问答助手：固定 RAG 链路加单 Agent 工具调用",
+   "review": "面向 openGauss 使用者的配置问答服务，将个人适配笔记与速查文档切片入本地向量库（Chroma），通过混合检索（BM25+向量+RRF）生成带引用的答案，并在代码层实现拒答与证据门闩；提供 FastAPI /ask 与 /agent 接口及离线评测。作者自述为小样本 demo，未做生产部署，语料以个人笔记为主、未大规模收录官方文档。",
+   "highlights": [
+    "提供混合检索（BM25 + 向量 + 加权 RRF + 标识符提权）与带 [n] 引用的生成",
+    "实现代码层拒答与证据门闩（相关度过低不调用大模型）",
+    "包含 FastAPI 接口（/ask、/agent）、交互式命令行与离线评测脚本"
+   ],
+   "use_cases": [
+    "查询 openGauss B 兼容/Dolphin 协议等散落配置项",
+    "对配置问答做离线评测与消融实验",
+    "作为 RAG + 单 Agent 工具调用的实现参考"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# opengauss-rag ／ openGauss **配置问答助手**：固定 RAG 链路 + 单 Agent（工具调用）。",
+     "lines": [
+      1,
+      3
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "语料来自开源实习中的 B 兼容 / Dolphin MySQL 协议 / Peewee 适配笔记，目标是让分散的配置说明变成**可检索、可引用、不足可拒答**的问答服务；在此基础上增加一个**单 Agent**，让模型自己决定用哪个工具，并用代码层门闩保证「没有证据不下结论」。 ／ 参与 openGauss 开源适配时发现：B 库创建、schema 与 PyMySQL `database` 同名、`enable_dolphin_proto` / native 密码等配置点散落在文档与个人笔记中，新手很难一次查准。本项目将个人笔记与任务速查（`personal/peewee-notes.md`、`personal/opengauss-peewee-cheatsheet.md`）切片入库，提供：",
+     "lines": [
+      5,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 openGauss 的配置查阅提供问答检索服务，是围绕该数据库生态的工具而非使用数据库存储业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "个人学习项目，代码可自由查看；openGauss 文档与笔记版权归原作者约束",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "openGauss **配置问答助手**：固定 RAG 链路 + 单 Agent（工具调用）。 ／ 参与 openGauss 开源适配时发现：B 库创建、schema 与 PyMySQL `database` 同名、`enable_dolphin_proto` / native 密码等配置点散落在文档与个人笔记中，新手很难一次查准。本项目将个人笔记与任务速查（`personal/peewee-notes.md`、`personal/opengauss-peewee-cheatsheet.md`）切片入库，提供： ／ - **未做生产部署**：无鉴权、无限流、无并发压测、无观测；Dockerfile 已提供但未在本机验证构建（本机未安装 Docker）",
+   "evidence_lines": [
+    3,
+    11,
+    261
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "xuf56191-sys/opengauss-rag1",
+  "sha": "3a651409db63",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

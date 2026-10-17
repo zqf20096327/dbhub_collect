@@ -10170,5 +10170,89 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d0d2f807251f": {
+  "identity": {
+   "one_liner": "面向小型制造业的桌面 ERP，覆盖库存/BOM/批次追溯，支持 MySQL 或 SQLite 存储",
+   "review": "RFERP 是一款运行于 Windows 的桌面库存与批次追溯 ERP 应用，采用 Go + Fyne 构建，数据可存于 MySQL 8 或本地 SQLite 文件。提供用户权限、BOM、生产批次、库存与备份导出功能，含首启数据库向导和 Ed25519 签名的自动更新。适合需要多人共享数据库或单机使用的小型制造场景。",
+   "highlights": [
+    "支持 MySQL 8 与本地 SQLite 双存储后端，含整库备份恢复与 CSV 导出",
+    "内置四角色权限体系与操作审计日志",
+    "首启向导可自动检测本地 MySQL、建库建表并加密保存连接信息"
+   ],
+   "use_cases": [
+    "小型制造企业的库存与生产批次管理",
+    "多人共享一套库存数据库的仓库场景",
+    "需要批次追溯（原料来源追踪）的生产环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Built with **Go + Fyne**; data is stored in **MySQL 8** or in a local **SQLite** file; supports one-click install and auto-update. ／ - **Backup & export**: whole-database backup and restore (MySQL SQL dump, SQLite snapshot), per-table CSV export; data directory configurable ／ |**MySQL** (default)|Several people / several machines share one database. Requires MySQL 8 on the machine.|",
+     "lines": [
+      8,
+      23,
+      37
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built with **Go + Fyne**; data is stored in **MySQL 8** or in a local **SQLite** file; supports one-click install and auto-update. ／ - **Backup & export**: whole-database backup and restore (MySQL SQL dump, SQLite snapshot), per-table CSV export; data directory configurable ／ |**SQLite**|Single machine, no extra install. The whole database is one file: `<data directory>\\rferp.db`.|",
+     "lines": [
+      8,
+      23,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 MySQL/SQLite 存储业务数据的桌面 ERP 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "专有许可（All rights reserved），仓库仅用于参考和 issue 跟踪",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A desktop **inventory & batch-traceability** application for small manufacturing — covering products, parts, BOM, production batches, stock, operation logs and data backup/export. ／ Built with **Go + Fyne**; data is stored in **MySQL 8** or in a local **SQLite** file; supports one-click install and auto-update. ／ |Database|MySQL 8.0, or embedded SQLite (`modernc.org/sqlite`, pure Go, no CGO)|",
+   "evidence_lines": [
+    6,
+    8,
+    123
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "LzYita/RFERP",
+  "sha": "d0d2f807251f",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

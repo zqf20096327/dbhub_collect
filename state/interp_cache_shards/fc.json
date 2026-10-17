@@ -9781,5 +9781,140 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "12b053c1543e": {
+  "identity": {
+   "one_liner": "终端日历/待办/日志管理器，本地 SQLite 存储，支持 iCal 与 CalDAV 同步",
+   "review": "chroncal 是运行在终端的日历、待办与日志管理工具，提供 TUI 交互界面和可脚本化的 CLI。数据以单个 SQLite 文件本地存储并自动迁移，支持 RFC 5545 全量 iCal 导入导出和 CalDAV 同步（含冲突处理与 Google 重新认证）。适合偏好终端工作流、要求数据本地化和标准格式互通的用户。",
+   "highlights": [
+    "提供 TUI 与 CLI 两种操作方式，支持事件、待办、日志、闹钟、free/busy 查询",
+    "支持 RFC 5545 iCal 导入导出与 CalDAV 同步",
+    "数据存储于单个本地 SQLite 文件，带自动迁移"
+   ],
+   "use_cases": [
+    "终端环境下的日历与待办管理",
+    "需要 iCal/CalDAV 与其他日历服务互通的场景",
+    "通过脚本自动化访问日程数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and cale ／ - **SQLite storage** with automatic migrations",
+     "lines": [
+      14,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 SQLite 用于存储该程序自身数据，chroncal 是使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and calendars. ／ - **SQLite storage** with automatic migrations",
+   "evidence_lines": [
+    14,
+    34
+   ]
+  },
+  "fn": "DouglasdeMoura/chroncal",
+  "sha": "12b053c1543e",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2c7a855d997e": {
+  "identity": {
+   "one_liner": "Go 编写的自托管网络视频录像机（NVR），单二进制内置 Web UI",
+   "review": "一个用 Go 实现的自托管 NVR 系统，把低功耗 ARM 设备变成视频监控服务器。它支持 RTSP、ONVIF、GB/T 28181、小米摄像头等多种接入协议，输出 WebRTC/HLS/FLV 等播放流，并采用 SQLite 作为嵌入式存储，浏览器端 ONNX 做 AI 检测。面向家庭/NAS/小企业的自部署监控用户，提供脚本、Docker 与二进制安装方式，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "支持 RTSP/ONVIF/GB/T 28181/小米/WHIP 等摄像头接入协议，并可输出 WebRTC/HLS/FLV/RTSP/RTMP 流",
+    "单静态二进制部署，内嵌 Svelte Web UI，可在 512MB 内存预算下运行于 ARM 设备",
+    "提供浏览器端 AI 检测（ONNX Runtime Web + WebGPU）与自适应录像、时间 lapse、S3 卸载等能力"
+   ],
+   "use_cases": [
+    "在树莓派/NAS 等低功耗设备上自建家庭或小型监控录像系统",
+    "需要接入 GB/T 28181 或小米等国产摄像头协议的监控场景",
+    "无需云端依赖、离线本地运行的视频监控与 AI 事件检测部署"
+   ],
+   "excluded": false
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示它是使用数据库存储数据的 NVR 应用，SQLite 以徽章形式出现，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only，pkg/ 目录附链接例外",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MiBee NVR ／ > **Turn any low-power ARM device into a professional NVR in 60 seconds.** ／ > Single binary, zero dependencies, no cloud required. Runs on low-power ARM devices with a 512MB memory budget. ／ - **Single Binary**: Zero dependencies, embedded Svelte 5 SPA, `CGO_ENABLED=0`",
+   "evidence_lines": [
+    1,
+    15,
+    16,
+    76
+   ]
+  },
+  "fn": "Mi-Bee-Studio/MiBeeNvr",
+  "sha": "2c7a855d997e",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

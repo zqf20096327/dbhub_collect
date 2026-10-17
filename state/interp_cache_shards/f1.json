@@ -9114,5 +9114,141 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a9dbeb273166": {
+  "identity": {
+   "one_liner": "git 托管的 AI Agent 调试经验库，通过 MCP 提供检索",
+   "review": "MisakaNet 把失败修复经验写成 Markdown 课程，经代码评审与 E0–E4 证据分级，用纯标准库 BM25 检索，并暴露 8 个 MCP 工具、llms.txt、A2A 发现等 Agent 原生接口。面向使用 AI 编码助手的开发者，可作插件接入 Claude Code、Codex 等，也可作为 Python 库嵌入；检索基于关键词而非向量匹配。",
+   "highlights": [
+    "提供 MCP server（8 个工具）及 WebMCP、llms.txt、A2A agent-card 等 Agent 接入方式",
+    "课程为 Markdown 文件，按 E0–E4 证据等级分级，检索用标准库 BM25，无向量数据库依赖",
+    "支持作为 GitHub Action 在工作流失败时检索并评论最接近的课程"
+   ],
+   "use_cases": [
+    "AI 编码助手在调试失败前检索已验证的修复经验",
+    "提交未覆盖故障的 intake，沉淀为后续可检索课程",
+    "CI 工作流失败时自动匹配并评论相关修复建议"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 未声明为任何数据库生态服务的工具，本体是基于 git/BM25 的经验知识库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> MisakaNet is that place: a git-backed **failure memory**. Every lesson is a Markdown file in this ／ Agent-native interfaces: MCP server (8 tools), WebMCP, `llms.txt`, ／ |❌ a vector database / RAG stack|✅ BM25 keyword search, stdlib only (Python ≥ 3.10 still required)|",
+   "evidence_lines": [
+    13,
+    17,
+    100
+   ]
+  },
+  "fn": "Ikalus1988/MisakaNet",
+  "sha": "a9dbeb273166",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "73903e50ea8c": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 AI agent 长期记忆核心，提供共享存储与召回",
+   "review": "为 Hermes、Codex、Claude Code、WorkBuddy、dsh 等 AI agent 提供共享的本地长期记忆：以 SQLite 为唯一事实权威，LanceDB（或 sqlite-bruteforce）作为可重建的向量伴随索引，通过 hooks 和 MCP 服务器接入各宿主，并提供安装、检查、更正与删除记忆的维护 CLI。适合在同一台机器上运行多个 agent 并希望它们共享记忆的用户。",
+   "highlights": [
+    "以 SQLite 为唯一事实存储，多个 agent 宿主适配器共享同一记忆库",
+    "提供 hooks 与 MCP 服务器两种接入方式（MCP 需 codex extra）",
+    "提供 plan/apply 安装、doctor 检查与 receipt 驱动的卸载/清除 CLI"
+   ],
+   "use_cases": [
+    "为多个 AI agent 建立可共享、可更正、可删除的本地长期记忆",
+    "需要基于来源证据的事实召回而非逐句判定的记忆管理",
+    "agent 记忆库的安装、迁移、备份与索引重建运维"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP s ／ is captured. SQLite is the only fact authority; host adapters share the same",
+     "lines": [
+      3,
+      19
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra adds the LanceDB vector companion, the default `vector.backend`; without it, configure `sqlite-bruteforce` or recall stays lexical. Postgre",
+     "lines": [
+      115
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite 作为自身存储事实数据的应用组件，为 AI agent 提供记忆服务，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP server (the MCP tools need the optional `codex` extra; dsh runs the hooks through a plugin). The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ is captured. SQLite is the only fact authority; host adapters share the same ／ The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra adds the LanceDB vector companion, the default `vector.backend`; without it, configure `sqlite-bruteforce` or recall stays lexical. PostgreSQL/pgvector is outside this v3 distribution; an explicit configuration error directs operators to retain the old installation and use the migration guide.",
+   "evidence_lines": [
+    3,
+    19,
+    115
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "73903e50ea8c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

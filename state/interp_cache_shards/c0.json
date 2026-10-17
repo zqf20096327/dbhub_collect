@@ -11035,5 +11035,72 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "649cd9513e45": {
+  "identity": {
+   "one_liner": "基于 PocketBase（内嵌 SQLite）的实时群聊应用",
+   "review": "一个自托管的实时群聊应用，前端为原生 TypeScript，后端由单个 PocketBase 二进制承担认证、数据、实时推送和静态文件服务，数据（含上传文件）存放在 pb_data 目录。支持公开/私密房间、私信、消息回应、附件、Telegram 桥接、PWA 及 Android 客户端，提供 systemd 和 Dokku 部署说明。适合需要自托管小型群聊的用户。",
+   "highlights": [
+    "后端由单个 PocketBase 二进制实现，承担认证、数据存储、实时推送与静态文件服务",
+    "支持房间消息实时同步、私信、附件上传（每条消息最多 10 个 20 MB 文件）与可选 Telegram 双向桥接",
+    "提供 systemd、Docker/Dokku 部署方式，并在管理界面支持定时备份（可选 S3 存储）"
+   ],
+   "use_cases": [
+    "自托管团队或社群的实时群聊",
+    "需要与 Telegram 群组互通消息的场景",
+    "作为 PocketBase 应用开发的参考实现"
+   ],
+   "use_cases_unused": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+     "lines": [
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据（SQLite 与上传文件）存于 pb_data 目录，是通过 PocketBase 使用 SQLite 存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small, fast, real-time group chat. One PocketBase binary is the whole backend ／ Open http://127.0.0.1:8090 and sign up (top right). The dev database lives in `pb_data/` — delete it to start over. ／ # All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+   "evidence_lines": [
+    3,
+    48,
+    120
+   ]
+  },
+  "fn": "border-radius/chat",
+  "sha": "649cd9513e45",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

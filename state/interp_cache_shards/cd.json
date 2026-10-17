@@ -9676,5 +9676,89 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "67643f1a0222": {
+  "identity": {
+   "one_liner": "为 AI 代理提供共享记忆的脑启发式服务，SQLite 存储",
+   "review": "这是一个多 AI 代理共享记忆系统，提供 13 个脑区域、醒/睡循环、实时可视化界面，代理可通过 REST API、SDK 或 MCP 连接读写同一份记忆。支持 Claude、GPT、Gemini、DeepSeek 或本地 LLM，内置治理、审计日志和业务价值指标，数据存储在单个 SQLite 文件中。适合需要在多个代理间共享客户上下文的企业使用。",
+   "highlights": [
+    "提供 REST API、JS/Python SDK 和 MCP 服务器三种代理接入方式",
+    "包含审计日志、记忆作用域（private/shared/global）、按代理读写权限和 PII 脱敏",
+    "数据存储在单个 SQLite 文件（WAL 模式），支持 Docker 或 Node.js ≥ 22 部署"
+   ],
+   "use_cases": [
+    "多个 AI 代理间共享客户上下文，避免客户重复陈述信息",
+    "代理间交接（handoff）时传递已学到的知识",
+    "需要对代理记忆读写行为进行审计和权限治理的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Both go away with the move to PostgreSQL + pgvector (see the Roadmap).",
+     "lines": [
+      253
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Storage is **SQLite** via `better-sqlite3`. Prebuilt binaries exist for Linux, macOS and Windows; on other platforms `npm install` needs Python, make and a C++ compiler. Docker and an NVIDIA GPU are only needed to run a local model on vLLM. ／ ## Storage: SQLite ／ The whole brain lives in **one SQLite file**, `data/brain.db` (WAL mode), created automatically on first run.",
+     "lines": [
+      45,
+      221,
+      223
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite 存储记忆数据的 AI 代理应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**One shared brain for all of a company's AI agents.** Create agents in the UI, or plug in agents that already run elsewhere through a REST API, an SDK or MCP. They all read and write **one** memory, so what one agent learns, every agent can use. Customers stop repeating themselves, agents hand off to each other without losing context, and the company builds up knowledge from every conversation. ／ Storage is **SQLite** via `better-sqlite3`. Prebuilt binaries exist for Linux, macOS and Windows; on other platforms `npm install` needs Python, make and a C++ compiler. Docker and an NVIDIA GPU are only needed to run a local model on vLLM. ／ ### 3. MCP: for Claude Desktop/Code, Cursor and agent frameworks",
+   "evidence_lines": [
+    13,
+    45,
+    107
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "leluong141996-dev/Agent-Brain-Hub",
+  "sha": "67643f1a0222",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

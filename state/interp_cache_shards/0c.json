@@ -10961,5 +10961,181 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "090644b44081": {
+  "identity": {
+   "one_liner": "类型安全的 Dart ORM，含模型生成与迁移机制",
+   "review": "这是一个 Dart 语言的 ORM 库，开发者用 Dart 声明模型后生成类型化表与客户端代码，并通过 review 过的迁移定义管理 schema。提供 SQLite 和 PostgreSQL 模块，README 声明还支持 MySQL 与 MariaDB。通过 dart pub add 安装，需 Dart 3.13，当前为 6.0.0-beta.12 测试版，beta.8 起有破坏性变更且无兼容层。",
+   "highlights": [
+    "提供 Dart 模型声明、代码生成与类型化查询（create/update/whereAny/count）",
+    "提供迁移定义与指纹校验，可拒绝不安全的外键与复制配置",
+    "按模块划分公共入口（schema/query/database/sqlite/postgres/migration 等）"
+   ],
+   "use_cases": [
+    "Dart/Flutter 应用的数据库访问层开发",
+    "需要类型安全查询与迁移管理的 Dart 项目",
+    "SQLite/PostgreSQL 后端的 schema 演进管理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**6.0.0-beta.12** requires Dart 3.13. Native SQLite and PostgreSQL 18 are verified ／ PostgreSQL and SQLite modules. Catch failures outside the transaction; native",
+     "lines": [
+      5,
+      16
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**6.0.0-beta.12** requires Dart 3.13. Native SQLite and PostgreSQL 18 are verified ／ import 'package:orm/sqlite.dart';",
+     "lines": [
+      5,
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Dart 应用访问数据库提供 ORM 与迁移能力的库，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Plain Dart models, generated typed tables and explicit database sessions. ／ **6.0.0-beta.12** requires Dart 3.13. Native SQLite and PostgreSQL 18 are verified ／ dart pub add orm:6.0.0-beta.12",
+   "evidence_lines": [
+    3,
+    5,
+    31
+   ]
+  },
+  "fn": "medz/dart-orm",
+  "sha": "090644b44081",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "08741ef49bb5": {
+  "identity": {
+   "one_liner": "华为云数据库相关示例项目清单目录",
+   "review": "该仓库是一份华为云示例项目目录，以表格形式编目多个仓库，涵盖 GaussDB 驱动与生态适配（SQLAlchemy 方言、PHP 驱动、Archery、CrewAI、LangChain 等）及 Serverless、网络、可观测性等示例。供需要查找华为云数据库接入或云上架构参考实现的开发者检索使用，各条目状态均标注为 incubating。",
+   "highlights": [
+    "收录 GaussDB 驱动与 ORM/框架适配类示例仓库条目",
+    "包含 SQL 审核查询平台 Archery 的 GaussDB 引擎适配条目",
+    "按团队与 incubating 状态标注目录条目"
+   ],
+   "use_cases": [
+    "查找连接 GaussDB 的各类驱动与框架适配项目",
+    "检索华为云 Serverless、网络、监控等参考示例",
+    "了解华为云数据库生态适配项目清单"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating|",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|enterprise-observability|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for us ／ |enterprise-serverless-todo|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for  ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb-",
+     "lines": [
+      30,
+      31,
+      35
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating| ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb- ／ |hibernate-orm7.4.1|应客户要求，基于hibernate7.4.1进行适配（支持 A 兼容（Oracle 风格）、M 兼容（MySQL 风格）），数据库版本505.2.1 0800SPC|gaussdb-drivers|incubating|",
+     "lines": [
+      18,
+      35,
+      37
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|cloudoperation-resource-monitor-dashboard|HuaweiCloud Resource Monitor Dashboard 是一个面向华为云弹性云服务器（ECS）、云硬盘（EVS）和云监控（CES）的资源监控仪表盘。用户配置租户 AKSK 等鉴权信息后，后端定时或手动从华为云 API 采集资源数据与使用率指标，保存到本地 SQLite 数据库，并通过 RESTful API 为前端提供查询、筛选和导出报告功能。|public-cloud-continuous-operatio",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "mention",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |database-crewai-gaussdb|开源工具CrewAI兼容GaussDB|gaussdb-drivers|incubating|",
+     "lines": [
+      16,
+      17
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该仓库是示例项目清单目录，本身不实现数据库相关功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "## Incubating Samples ／ |Repository|Description|Team|Status| ／ |database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating|",
+   "evidence_lines": [
+    3,
+    5,
+    16
+   ]
+  },
+  "fn": "huaweicloud-samples/database-awesome-huaweicloud",
+  "sha": "08741ef49bb5",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

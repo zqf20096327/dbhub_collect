@@ -10537,5 +10537,89 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d5a2d634b40e": {
+  "identity": {
+   "one_liner": "离线解析 openGauss 数据目录堆文件并导出 SQL/CSV/DDL 的 Go 工具",
+   "review": "gauss2sql-go 直接读取 openGauss 数据目录中的堆文件，在无在线服务的情况下导出表结构 DDL、INSERT SQL、CSV 及元数据 JSON，支持独立表空间、TOAST、分区表、坏块恢复与 GBK/GB18030 转码，以静态二进制交付。适用于需要在离线环境下读取 openGauss 数据的 DBA、运维与数据恢复人员。",
+   "highlights": [
+    "离线读取 openGauss 数据目录堆文件，导出 SQL / CSV / DDL / 元数据 JSON，不依赖在线服务",
+    "流式导出使内存峰值与表大小无关，支持 >1GiB 多段表文件与 --parallel/--jobs 双层并行",
+    "坏块三级处理（页头损坏/坏行/字段级损坏），支持导出已删除行与多种字符集解码"
+   ],
+   "use_cases": [
+    "数据库无法启动时的离线数据导出与还原",
+    "跨库迁移前的数据抽取（SQL/CSV/DDL）",
+    "误删数据排查（--deleted/--only-deleted 导出已删除行）"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "> 离线解析 openGauss（含 openGauss 衍生库）数据目录堆文件并导出为 SQL / CSV / DDL / 元数据 JSON 的 Go 实现。 ／ gauss2sql-go 是 gauss2sql（Python 版）的 **Golang 完整重写版**，功能完全等同：直接读取 openGauss 数据目录中的堆文件（heap file），不依赖任何在线服务，实现数据库对象的导出与数据还原。 ／ - **全版本兼容**：openGauss 5.0.0 ~ 6.0.6 共 12 个正式发布版本（x86_64）全功能回归 ALL PASS；openGauss 衍生库 MogDB 5.0.9 实测 18/18 ALL PASS",
+     "lines": [
+      9,
+      11,
+      15
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **独立表空间自动发现**（v0.2.16）：经 `pg_tblspc` 符号链接解析独立表空间里的表与 TOAST 文件真实路径，无需手动指定；pg_default 行为不变",
+     "lines": [
+      22
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "mention",
+     "quote": "2. **LOCPATH 双向注意**：自建 zh_CN.gbk/zh_CN.gb18030 在用户目录，跑 gaussdb/gs_initdb 须 `export LOCPATH=_og/usr/lib/locale`；但 initdb UTF8 集群时该变量会覆盖系统 locale 查找导致 `invalid locale \"en_US.UTF-8\"`，需 `unset LOCPATH` 用系统 en_US.utf8。 ／ 5. **后台进程回收**：裸 `nohup &` 随 shell 结束被杀，须 `setsid bash -c \"...; exec gaussdb\" & disown` 脱离会话。",
+     "lines": [
+      234,
+      237
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 openGauss 数据目录提供离线解析导出能力，是服务于该数据库生态的工具而非使用它存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 离线解析 openGauss（含 openGauss 衍生库）数据目录堆文件并导出为 SQL / CSV / DDL / 元数据 JSON 的 Go 实现。 ／ gauss2sql-go 是 gauss2sql（Python 版）的 **Golang 完整重写版**，功能完全等同：直接读取 openGauss 数据目录中的堆文件（heap file），不依赖任何在线服务，实现数据库对象的导出与数据还原。",
+   "evidence_lines": [
+    9,
+    11
+   ]
+  },
+  "fn": "raysuen/gauss2sql",
+  "sha": "d5a2d634b40e",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

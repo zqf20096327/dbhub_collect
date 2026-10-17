@@ -11030,5 +11030,163 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1a9908fe631c": {
+  "identity": {
+   "one_liner": "NestJS 模块化单体电商 API，含 SAGA 结账与库存锁",
+   "review": "这是一个基于 NestJS 的电商后端 API，实现结账 SAGA、库存行锁预留、RSA JWT/RBAC 认证和 CQRS 读适配器，数据存储使用 PostgreSQL 和 Redis（BullMQ 队列）。面向需要参考后端架构的开发者，通过 Docker 本地运行，含单元、集成、e2e 与架构测试的 CI 流程；支付为 mock 适配器，尚未接入真实支付渠道。",
+   "highlights": [
+    "提供基于 BullMQ 的带补偿结账 SAGA 与库存行锁预留",
+    "支持 RSA JWT 与 RBAC 认证，模块通过 ACL 网关与领域事件通信",
+    "提供 Grafana 可选监控栈及 OpenAPI/Swagger 文档"
+   ],
+   "use_cases": [
+    "作为电商后端结账/库存/认证模块的参考实现",
+    "学习 DDD 模块化单体与 CQRS/ACL 架构的工程实践",
+    "本地 Docker 环境下运行并验证分层测试（单元/集成/e2e）"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ `npm run setup` writes `.env.development`, starts Postgres and Redis, runs migrations, and seeds fixtures.",
+     "lines": [
+      7,
+      65
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该 API 使用 Postgres 和 Redis 存储数据并运行迁移，属于使用数据库的应用而非为其服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> NestJS ecommerce API. Checkout, stock, and auth live here. Reference backend, not a hosted store. ／ `npm run setup` writes `.env.development`, starts Postgres and Redis, runs migrations, and seeds fixtures. ／ |Deploy|Single-instance ops (migrations, health probes, backup/smoke). Not multi-instance yet.|",
+   "evidence_lines": [
+    15,
+    65,
+    26
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "raouf-b-dev/ecommerce-store-api",
+  "sha": "1a9908fe631c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4e2e686922e4": {
+  "identity": {
+   "one_liner": "Windows 下轻量便携的 PHP + MySQL/MariaDB 本地服务器管理器",
+   "review": "Servisan 是用 Rust 编写的 Windows 本地开发环境管理器，编排便携版 PHP 8.3 与 MySQL/MariaDB 11.4 运行时，提供系统托盘、Web 仪表盘、phpMyAdmin 一键安装与 CLI。通过 Windows Job Object 在退出时回收子进程，数据目录完全隔离，MySQL 仅绑定 127.0.0.1，仅面向本地开发。",
+   "highlights": [
+    "通过 Windows Job Object（KILL_ON_JOB_CLOSE）管理 PHP/MySQL 子进程生命周期，退出时清理子进程",
+    "提供系统托盘、Web 仪表盘、phpMyAdmin 安装配置命令及 start/stop/status/init/shell 等 CLI",
+    "便携式目录结构（data/logs/config/www），PHP 8080 / MySQL 3307 默认端口避免冲突"
+   ],
+   "use_cases": [
+    "在 Windows 上搭建与携带便携的 PHP + MySQL/MariaDB 本地开发环境",
+    "替代 Laragon/XAMPP 类工具并避免注册表写入与残留进程",
+    "通过 CLI/托盘统一启停本地服务并用 phpMyAdmin 管理数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Ultra-lightweight, portable, and blazing-fast local PHP + MySQL server manager for Windows, crafted in Rust.** ／ **Servisan** is a modern, high-performance, and completely portable alternative to legacy local server environments like Laragon and XAMPP. Built from the ground up in **Rust**, it orchestrates native **PHP** and **MySQL/MariaDB** runtimes inside a self-contai",
+     "lines": [
+      5,
+      27
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Servisan** is a modern, high-performance, and completely portable alternative to legacy local server environments like Laragon and XAMPP. Built from the ground up in **Rust**, it orchestrates native **PHP** and **MySQL/MariaDB** runtimes inside a self-contai ／ > **Zero Dependencies:** Both packages are 100% self-contained with PHP 8.3 and MariaDB 11.4 LTS runtime. Works immediately on **any Windows PC**—even if Laragon, XAMPP, or Docker was never installed.",
+     "lines": [
+      27,
+      69
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "*Note: Reusing PHP and MySQL binaries redistributed alongside portable packages is governed by their respective licenses (PHP License and GNU GPL / Oracle MySQL FOSS License Exception).*",
+     "lines": [
+      176
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目编排和管理 MySQL/MariaDB 服务器运行时进程，为使用数据库的开发环境服务，而非自身使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；随包分发的 PHP 与 MySQL 二进制遵循其各自许可（PHP License / GPL / Oracle FOSS 例外）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Ultra-lightweight, portable, and blazing-fast local PHP + MySQL server manager for Windows, crafted in Rust.** ／ **Servisan** is a modern, high-performance, and completely portable alternative to legacy local server environments like Laragon and XAMPP. Built from the ground up in **Rust**, it orchestrates native **PHP** and **MySQL/MariaDB** runtimes inside a self-contained directory with zero Windows registry pollution, instant startup, and foolproof process cleanup. ／ * 🛡️ **Zero Zombie Processes:** Controlled via native **Windows Job Objects** (`JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE`). If Servisan exits, stops, or crashes, child PHP/MySQL processes are reaped cleanly—no lingering background instances locking ports.",
+   "evidence_lines": [
+    5,
+    27,
+    35
+   ]
+  },
+  "fn": "Haniel26/servisan",
+  "sha": "4e2e686922e4",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

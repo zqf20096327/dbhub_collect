@@ -8952,5 +8952,204 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e7241005c9d": {
+  "identity": {
+   "one_liner": "自托管 AI 讲故事 Web 应用，用于跑 darkness 世代编年史",
+   "review": "ShadowRealms AI 是一个自托管的 Web 应用，用于运行 World of Darkness 编年史：服务器端骰子检定、Discord 风格聊天、角色卡生成，并通过 LM Studio/Ollama 本地模型生成讲故事者回复，用 ChromaDB 存 RAG 记忆。后端为 Flask + PostgreSQL 16，支持语音朗读与 Whisper 转写，界面支持英语和希腊语。需 Docker 部署并建议 NVIDIA GPU。",
+   "highlights": [
+    "实现 Classic (oWoD Revised) 与 V5 两版规则的骰子检定，由服务器端计算骰池并生成骰子卡片",
+    "通过 LM Studio 与 Ollama 运行本地 LLM，并使用 ChromaDB 中的 bge-m3 嵌入实现长期记忆与规则书检索",
+    "提供语音功能容器（Piper/Pocket TTS、Whisper 转写）及英/希腊语界面与翻译"
+   ],
+   "use_cases": [
+    "跑 World of Darkness Classic 或 V5 线上/混合团，需要 AI 讲故事者辅助",
+    "需要本地部署、数据不出本机的角色扮演聊天与骰子记录场景",
+    "希腊语玩家使用本地化界面与希腊语模型回复"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Edit `.env`: put your own keys in `FLASK_SECRET_KEY` and `JWT_SECRET_KEY`, and generate `POSTGRES_USER` and `POSTGRES_PASSWORD` (how). Never keep the template values. ／ |Backend|Python 3.12, Flask 3.1 on gunicorn 26, PostgreSQL 16, Redis 7, server-sent events|",
+     "lines": [
+      127,
+      176
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其为自托管 Web 应用，后端技术栈中列出 PostgreSQL 16 与 Redis 7 作为存储组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShadowRealms AI is a web app for running World of Darkness chronicles with an AI Storyteller. You host it yourself: Docker for the app, and local language models through LM Studio and Ollama, so the stories stay on your machine. Every chronicle is either Classic (oWoD Revised) or V5, and the interface and the Storyteller work in English and Greek.",
+   "evidence_lines": [
+    44
+   ]
+  },
+  "fn": "Somnius/shadowrealms-ai",
+  "sha": "2e7241005c9d",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b2431f0a40c": {
+  "identity": {
+   "one_liner": "从数据模型生成可通过测试的合成数据并附带 dbt 项目的 CLI",
+   "review": "model2data 是一个 Python CLI，读取 YAML 或 DBML 描述的表结构，生成外键可解析、数值可校验的确定性合成数据，并写出包含 seeds、staging 模型和测试的 dbt 项目，支持 DuckDB 或 Postgres 作为目标。面向需要在无生产数据时做演示、CI 固件和培训的分析工程师与顾问。",
+   "highlights": [
+    "生成外键可解析、可复现（--seed/--as-of）的合成数据",
+    "自动生成包含 seeds、staging 模型和 dbt 测试的可运行 dbt 项目",
+    "支持 Faker 全部 provider 与约 40 种列名模式，可注入缺陷用于训练"
+   ],
+   "use_cases": [
+    "无生产数据访问时为客户演示构建分析管道",
+    "在 CI 中使用确定性固定数据测试数据管道",
+    "生成带已知缺陷的数据用于 dbt 测试培训"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "optional unit test fixtures (`--unit-tests`), and a DuckDB or Postgres profile. ／ pip install \"model2data[postgres]\" # to target Postgres with --adapter postgres",
+     "lines": [
+      183,
+      244
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据工程工作流生成测试数据并生成面向 DuckDB/Postgres 的 dbt 项目，属于服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可；配套 studio 提供免费/付费商业计划",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pip install model2data ／ optional unit test fixtures (`--unit-tests`), and a DuckDB or Postgres profile.",
+   "evidence_lines": [
+    18,
+    183
+   ]
+  },
+  "fn": "JB-Analytica/model2data",
+  "sha": "8b2431f0a40c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ef152b66dd6b": {
+  "identity": {
+   "one_liner": "延迟与吞吐量培训实验套件，含核心银行模拟API与docker环境",
+   "review": "该仓库为 FIAP/Alura 的延迟与吞吐量企业培训项目，提供预配置的 GitHub Codespaces 环境：Spring Boot 银行模拟 API、PostgreSQL 16、Redis、Prometheus、Grafana、Jaeger 等组成的 docker compose 栈，配合 k6 负载实验脚本与学生实验手册。实验涵盖 EXPLAIN 分析、索引、缓存、连接池与限流，面向参加该培训的工程师。PostgreSQL 是实验中的被诊断对象，而非本项目为数据库生态服务的工具。",
+   "highlights": [
+    "包含 8 个 k6 压测实验（基线测量、SLO 违规、连接池耗尽、限流等）及配套实验手册",
+    "通过 docker compose 提供完整技术栈：Spring Boot 3 API、PostgreSQL 16、Redis 7、Prometheus、Grafana、Jaeger",
+    "实验覆盖 EXPLAIN ANALYZE 查询计划分析、选择性索引创建与 Cache-Aside 模式实现"
+   ],
+   "use_cases": [
+    "分布式系统延迟与吞吐量培训的实操练习",
+    "k6 负载测试与 OpenTelemetry 分布式追踪学习",
+    "PostgreSQL 查询优化与 HikariCP 连接池调优演练"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "* 📖 **Roteiro do Aluno:** `labs/lab02b-explain-postgresql/Lab 02B - Roteiro Aluno.md` ／ * ⚡ **Acesso ao PostgreSQL & Análise do Plano:** ／ docker exec -it banco-postgres psql -U postgres -d banco_db ／ |**PostgreSQL 16**|`5432`|Banco relacional com 150k transações para tuning de queries|",
+     "lines": [
+      62,
+      63,
+      65,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 PostgreSQL 存储数据的银行模拟 API 及培训环境，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Este repositório contém a infraestrutura completa, a API simulada de Core Banking e os roteiros de laboratórios práticos para o treinamento executivo de **Latência e Vazão** (*Latency & Throughput*) em sistemas distribuídos. ／ |**PostgreSQL 16**|`5432`|Banco relacional com 150k transações para tuning de queries|",
+   "evidence_lines": [
+    10,
+    111
+   ]
+  },
+  "fn": "rafaelmatsuyama/FIAP-Corporate-LatencyThroughput",
+  "sha": "ef152b66dd6b",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

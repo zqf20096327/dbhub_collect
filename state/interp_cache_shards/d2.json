@@ -10020,5 +10020,92 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "26679297eff5": {
+  "identity": {
+   "one_liner": "安全优先的 SQL 编辑器，兼作 PostgreSQL 协议代理入口",
+   "review": "autodb 是一个基于 Go 的 SQL 客户端工具，提供终端 UI、浏览器界面和 Neovim 插件四种前端。它对连接 DSN 加密存储，内置角色访问控制、无 WHERE 的 UPDATE/DELETE 拦截和审计日志，并以 PostgreSQL wire 协议代理的形式部署在生产库前，为开发者、应用和 AI agent 分发个人访问令牌。支持 PostgreSQL、MySQL、SQLite 三种数据库，安装方式为 Homebrew、mise、脚本或源码构建，无 Windows 原生版本。",
+   "highlights": [
+    "提供终端、原生窗口、浏览器和 Neovim 插件四种前端界面",
+    "实现角色访问控制（reader/editor/admin）、危险 SQL 拦截和可查询的审计日志",
+    "内置 PostgreSQL wire 协议代理，支持个人访问令牌、IP 白名单与 DSN 加密存储"
+   ],
+   "use_cases": [
+    "为生产数据库设置统一访问入口，避免共享数据库密码",
+    "为 AI agent 分配只读账户并审计其全部 SQL 语句",
+    "在终端或 Neovim 中以加密凭据方式管理多数据库连接"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "under your passphrase. It is also a **PostgreSQL-wire proxy**. Put it in front ／ **Read-only means read-only:** readers run inside transactions PostgreSQL itself keeps read-only, so a write hidden in a function still fails ／ **Databases:** PostgreSQL, MySQL and SQLite",
+     "lines": [
+      18,
+      35,
+      47
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Databases:** PostgreSQL, MySQL and SQLite",
+     "lines": [
+      47
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Databases:** PostgreSQL, MySQL and SQLite ／ |Cancelling on SQLite|Why a cancel on a SQLite target can be lost, and what to do|",
+     "lines": [
+      47,
+      240
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为连接和管理 PostgreSQL、MySQL、SQLite 数据库提供安全访问与审计的工具组件，而非以某个数据库为存储的应用（其自身元数据使用 SQLite 仅是内部实现）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A security-first SQL editor that doubles as the gate in front of your production database. ／ under your passphrase. It is also a **PostgreSQL-wire proxy**. Put it in front ／ **Databases:** PostgreSQL, MySQL and SQLite",
+   "evidence_lines": [
+    5,
+    18,
+    47
+   ]
+  },
+  "fn": "yongjohnlee80/autodb",
+  "sha": "26679297eff5",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

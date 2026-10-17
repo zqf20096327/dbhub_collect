@@ -10332,5 +10332,161 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7fbcbf64316a": {
+  "identity": {
+   "one_liner": "本地优先的自托管密码管理器，加密本地保险库",
+   "review": "CipherMoth 是一个无账号、无云端、无遥测的密码管理器，提供桌面版和 Docker 自托管版，用主密码解锁本地加密保险库，支持 TOTP 双因子、密码生成、健康检查、CSV 导入和加密备份。作者自述未经第三方安全审计，定位为个人在可信硬件上使用。数据存于本地 SQLite 文件（自托管版曾有 PostgreSQL 方案，需按升级流程迁移）。",
+   "highlights": [
+    "所有条目内容用 AES-256-GCM 加密，主密码经 Argon2id 派生密钥",
+    "支持 TOTP 双因子码、附件加密存储、密码健康检查与生成器",
+    "提供 .cmbackup 完整加密备份与快照机制，含 CLI 管理工具"
+   ],
+   "use_cases": [
+    "在个人电脑上离线管理密码与 2FA 密钥",
+    "自托管 Docker 实例集中存放个人密码",
+    "从 Chrome、Bitwarden、KeePass 等通过 CSV 导入迁移"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Then open **http://localhost:3000**. CONTRIBUTING.md covers manual setup and servers. Coming from 2.0 or PostgreSQL? Read the upgrade procedure first; those vaults are never converted automatically.",
+     "lines": [
+      59
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ |Database|SQLite 3.53 (one file, WAL, full sync)|",
+     "lines": [
+      11,
+      146
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite（自托管版曾用 PostgreSQL）存储保险库数据的密码管理器应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local-first desktop password manager with **no accounts, no cloud, and no witnesses.** ／ SQLite ／ Open CipherMoth, choose a strong master password, and add your first password. That's it. Your vault lives in your user data folder and survives app updates. The old Alpha app and Docker edition have separate vaults; nothing is moved automatically.",
+   "evidence_lines": [
+    5,
+    11,
+    49
+   ]
+  },
+  "fn": "mr-grj/ciphermoth",
+  "sha": "7fbcbf64316a",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b86b52617b8": {
+  "identity": {
+   "one_liner": "Bricksforge 插件 CVE-2026-85097 漏洞利用与安全检测工具集",
+   "review": "针对 WordPress Bricksforge 插件（Pro Forms 模块 ≤3.1.8.9）文件上传致 RCE 漏洞的双工具集：exploit.py 实现完整利用链（nonce 获取、polyglot 上传、web shell），safechecker.py 提供非侵入式版本检测与审计；结果可导出为 JSON/CSV/JSONL/SQLite。面向获授权的红蓝队安全测试人员，README 明确要求书面授权方可使用。",
+   "highlights": [
+    "exploit.py 实现完整攻击链：nonce 获取、polyglot 上传、表单提交、shell 验证",
+    "safechecker.py 提供非侵入式漏洞检测：WordPress/插件/版本识别、REST 路由枚举",
+    "结果支持 JSON、CSV、HTML、JSONL、SQLite 输出格式，支持代理轮换与速率限制"
+   ],
+   "use_cases": [
+    "对授权目标的 Bricksforge 漏洞利用测试（红队演练）",
+    "非侵入式资产盘点与版本审计（蓝队防御）",
+    "批量目标的并发扫描与结果导出报告"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- CVE-2026-60206 - Oracle WebLogic SAML Auth Bypass Exploit Framework",
+     "lines": [
+      187
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|[+] **Multiple Output Formats**|JSON, CSV, HTML, JSONL, SQLite| ／ |SQLite output|[+]|[+]|",
+     "lines": [
+      61,
+      166
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "工具集仅将 SQLite 作为扫描结果的输出存储格式，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|[+] **Multiple Output Formats**|JSON, CSV, HTML, JSONL, SQLite| ／ |[+] **JSON/CSV/SQL/JSONL Output**|Export results for reporting| ／ |SQLite output|[+]|[+]|",
+   "evidence_lines": [
+    61,
+    91,
+    166
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "tc4dy/CVE-2026-85097-Toolkit",
+  "sha": "8b86b52617b8",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

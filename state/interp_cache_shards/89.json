@@ -8790,5 +8790,87 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4277142a8a1c": {
+  "identity": {
+   "one_liner": "rails new 风格 CLI，脚手架生成仅 API 的 Postgres Go 服务",
+   "review": "Bogie 是一个 Go CLI 脚手架工具，为 Rails 团队生成基于 Gin、sqlc、goose、River、Kamal 的 API-only、仅支持 Postgres 的 Go 服务，生成器在写文件的同时完成代码注册。面向需要在 Rails 应用旁添加一个 Go 服务的团队。当前为 v0.2.x，明确不支持 SQLite，生成应用不依赖 Bogie 本身。",
+   "highlights": [
+    "提供 rails new 风格的 new/g/d 生成器，生成的代码自动完成注册",
+    "通过 goose 管理迁移、sqlc 生成查询、River 提供基于 Postgres 的后台任务（--jobs 可选）",
+    "内置 bin/ci 流水线、Kamal 2 部署配置与加密 credentials 管理"
+   ],
+   "use_cases": [
+    "Rails 团队为高并发或长连接场景在 Rails 应用旁补充 Go 服务",
+    "生成 webhook 接收器、socket 网关或队列 worker 类 Go 微服务",
+    "需要统一迁移、查询生成与部署配置的 Go API 项目脚手架"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ You need **Docker with Compose v2** (or your own Postgres, see ／ requires it. The generated app runs its Postgres in Compose on port 5440, so it",
+     "lines": [
+      6,
+      47,
+      50
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite is deliberately out until River's SQLite driver is stable",
+     "lines": [
+      211
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Rails+Go 技术栈生成数据库应用的开发工具，本身不存数据，通过 sqlc/goose/pgx 适配 Postgres。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ out of Gin, sqlc, goose, River and Kamal, with generators that also wire the code in. ／ |Queries|sqlc + pgx/v5. SQL in `.sql` files, checked against the migrations at generate time| ／ |Background jobs|River, opt-in with `--jobs`: Postgres-backed, no Redis, enqueue in the same transaction| ／ - **Not configurable (yet).** Postgres only, Gin only, one choice per concern.",
+   "evidence_lines": [
+    6,
+    7,
+    176,
+    179,
+    210
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bogie-go/bogie",
+  "sha": "4277142a8a1c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

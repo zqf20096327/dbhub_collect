@@ -8916,5 +8916,158 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e235e840d741": {
+  "identity": {
+   "one_liner": "基于 Drizzle ORM 的类型安全仓储层辅助库",
+   "review": "better-drizzle 包装 Drizzle ORM 1.x，提供 findUnique、嵌套关系过滤、分页、行锁、事务、插件等仓储 API，类型由 Drizzle schema 端到端推导。面向使用 TypeScript 与 Drizzle 的 Node.js 开发者。仅支持 drizzle-orm 1.x RC 版本，0.x 需停留在 0.2.x。",
+   "highlights": [
+    "提供 include/select 关系加载、some/every/none 嵌套关系过滤与 paginate()/cursor() 分页",
+    "支持 param() 预编译语句、事务嵌套 savepoint、死锁自动重试",
+    "内置 softDelete、timestamps、uuid、cache、tenant 等插件及 Zod schema 生成"
+   ],
+   "use_cases": [
+    "在 Drizzle 项目中减少服务层重复查询代码",
+    "多表共享数据的多租户隔离（tenant 插件）",
+    "需要软删除、时间戳、UUIDv7 等通用写法统一的团队"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "import { integer, pgTable, text } from 'drizzle-orm/pg-core'; ／ PostgreSQL and MySQL. SQLite fails fast instead of silently dropping the lock, and `locks: { transactionsOnly: true }` enforces that locked reads only run inside a transaction. ／ Declare the shape with Drizzle's `$type<T>()` and every scalar leaf becomes a typed dot path. PostgreSQL.",
+     "lines": [
+      41,
+      175,
+      132
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL and MySQL. SQLite fails fast instead of silently dropping the lock, and `locks: { transactionsOnly: true }` enforces that locked reads only run inside a transaction. ／ `better-drizzle/uuid` fills UUIDv7 ids on create and makes them optional in create types; `buuid()` stores them as 16 bytes on MySQL and SQLite. See UUIDs.",
+     "lines": [
+      175,
+      203
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL and MySQL. SQLite fails fast instead of silently dropping the lock, and `locks: { transactionsOnly: true }` enforces that locked reads only run inside a transaction. ／ `better-drizzle/uuid` fills UUIDv7 ids on create and makes them optional in create types; `buuid()` stores them as 16 bytes on MySQL and SQLite. See UUIDs. ／ Relation loading wins because the batched loader issues one query per relation node instead of the per-row work the equivalent hand-written code ends up doing. Numbers are SQLite in-memory to isolate wrapper overhead from I/O; reproduce them with `bun run benc",
+     "lines": [
+      175,
+      203,
+      241
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Drizzle ORM 提供仓储层封装，服务于数据库访问开发而非直接使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Type-safe repository helpers for Drizzle ORM. ／ > better-drizzle supports **only Drizzle ORM 1.x** (`drizzle-orm` `>=1.0.0-rc.4 <1.0.0-rc.5`; later release candidates are not supported yet) and its `defineRelations(...)` API. **`drizzle-orm` 0.x is not supported** - projects on 0.x must stay on better-drizzle `0.2.x`. Install `drizzle-orm` with the explicit version: until Drizzle 1.0 is tagged `latest`, a plain install resolves to 0.x. See upgrading. ／ PostgreSQL and MySQL. SQLite fails fast instead of silently dropping the lock, and `locks: { transactionsOnly: true }` enforces that locked reads only run inside a transaction.",
+   "evidence_lines": [
+    9,
+    33,
+    175
+   ]
+  },
+  "fn": "almeidazs/better-drizzle",
+  "sha": "e235e840d741",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "42dc8128a357": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 网关的自托管管理控制台与用量可观测面板",
+   "review": "Oh My CPA 是为 CLIProxyAPI（CPA）网关配套的 Web 控制台，用于管理 AI 提供商、OAuth 凭证和客户端密钥，并记录每次请求的用量与成本。单个 Go 二进制内嵌 React 控制台，使用本地 SQLite 存储数据，用 CPA 管理密钥登录，提供 Docker Compose 和原生可执行文件两种部署方式，需单独安装 CPA。",
+   "highlights": [
+    "管理 AI 提供商、OAuth 凭证和网关客户端密钥",
+    "记录并展示每次请求的延迟、令牌和成本，提供仪表盘与实时路由视图",
+    "单 Go 二进制内嵌 React 控制台，使用本地 SQLite 数据库，可离线运行"
+   ],
+   "use_cases": [
+    "为自托管的 CLIProxyAPI 网关集中管理提供商凭证与配置",
+    "统计和审计 AI 网关请求的令牌用量与成本",
+    "离线环境下部署网关用量观测与管理面板"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "binary with the React console embedded and a local SQLite database, runs offline, and",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 CLIProxyAPI 网关提供管理控制台与遥测记录，属服务数据库生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "adapts protocols, holds credentials and proxies requests. **Oh My CPA** (OMC) is a web ／ records the usage and cost of every request. It is a single Go ／ binary with the React console embedded and a local SQLite database, runs offline, and",
+   "evidence_lines": [
+    31,
+    33,
+    34
+   ]
+  },
+  "fn": "WizisCool/oh-my-cpa",
+  "sha": "42dc8128a357",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

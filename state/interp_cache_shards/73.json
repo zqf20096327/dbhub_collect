@@ -10043,5 +10043,59 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "efc82f8ea5cb": {
+  "identity": {
+   "one_liner": "Tidbyt Gen 2 像素显示屏的 16MB SPI flash 完整转储存档",
+   "review": "这是一个 Tidbyt Gen 2 像素显示屏的完整 SPI flash 二进制镜像存档仓库，用 esptool 读取并校验生成，附分区表信息与恢复（write-flash）方法，NVS 分区为空即刷入后需重新配置。面向需要恢复设备固件或做嵌入式研究的个人用户，与数据库无关。",
+   "highlights": [
+    "提供 16MB 全片 flash 转储文件及 SHA256 校验值",
+    "附分区布局表（nvs/otadata/app0/app1）与转储、恢复命令",
+    "NVS 分区为 0xFF 空白，刷入后设备需重新配置"
+   ],
+   "use_cases": [
+    "Tidbyt Gen 2 固件恢复/重刷",
+    "ESP32 flash 分区布局研究"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "内容为消费级硬件固件镜像存档，未提供任何数据库服务或适配组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "固件镜像为 Tidbyt 专有内容，仓库仅供个人存档/恢复/研究，声明非官方",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Complete 16 MB SPI flash dump of a **Tidbyt Gen 2 (2nd generation)** pixel display, archived for research and recovery purposes. ／ Tools: Python 3.14 + esptool v5.6.0. The device auto-entered download mode over USB. ／ Matches the official layout in tidbyt/hdk (`boards/default_8mb.csv`). Only the first 8 MB of the 16 MB chip is partitioned; the rest reads as erased (`0xFF`).",
+   "evidence_lines": [
+    3,
+    28,
+    39
+   ]
+  },
+  "fn": "lancetm714/tidbyt-gen2-firmware",
+  "sha": "efc82f8ea5cb",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

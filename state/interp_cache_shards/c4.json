@@ -10627,5 +10627,82 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c31cc18f27f3": {
+  "identity": {
+   "one_liner": "DBMS 性能评测项目：对比 PostgreSQL 与 openGauss",
+   "review": "一个课程实验项目，通过 Java 21 + JDBC 客户端在相同负载下对比 PostgreSQL 16.15 与 openGauss 5.0.0 的读写、索引、并发吞吐等表现，并与 TSV 文件直接读写作对照。使用 Docker 运行两个数据库容器，数据集为程序化放大的 IMDb 风格数据。适用于数据库课程实验或想复现该评测流程的学习者。",
+   "highlights": [
+    "提供 8 项实验：文件扫描 vs 数据库检索、更新、B-tree 索引、倒排索引、规模缩放、ACID、两库对比、并发吞吐",
+    "计时方法为预热 1 次加运行 5 次取中位数（热缓存）",
+    "两库均以 Docker 容器运行，共用同一 PostgreSQL JDBC 驱动"
+   ],
+   "use_cases": [
+    "数据库课程实验：演示 DBMS 相对文件读写的特性",
+    "在统一负载下采集 PostgreSQL 与 openGauss 的性能数据",
+    "教学演示 ACID 与完整性约束行为"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **数据库**：PostgreSQL 16.15（端口 5432，库 dbperf）与 openGauss 5.0.0（端口 5433，库 postgres），均以 Docker 运行。 ／ - **客户端**：Java 21 + JDBC，用同一个 PostgreSQL 驱动连接两个库，保证除数据库本身外变量一致。",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "- **数据库**：PostgreSQL 16.15（端口 5432，库 dbperf）与 openGauss 5.0.0（端口 5433，库 postgres），均以 Docker 运行。 ／ |E6|PostgreSQL vs openGauss（同负载）|Q2|",
+     "lines": [
+      11,
+      46
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明该程序为评测数据库性能而构建，直接针对 PostgreSQL 与 openGauss 运行基准负载",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Project 1：DBMS 性能评测 ／ - **数据库**：PostgreSQL 16.15（端口 5432，库 dbperf）与 openGauss 5.0.0（端口 5433，库 postgres），均以 Docker 运行。 ／ - **客户端**：Java 21 + JDBC，用同一个 PostgreSQL 驱动连接两个库，保证除数据库本身外变量一致。",
+   "evidence_lines": [
+    1,
+    11,
+    13
+   ]
+  },
+  "fn": "Siegunfried/dbms-performance-evaluation",
+  "sha": "c31cc18f27f3",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

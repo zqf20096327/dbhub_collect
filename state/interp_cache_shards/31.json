@@ -8377,5 +8377,78 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1aa0186bffc6": {
+  "identity": {
+   "one_liner": "基于 Hono/Kysely/TanStack Start 的漫画阅读平台",
+   "review": "一个漫画/韩漫/国漫/轻小说阅读平台，当前仓库提供 Hono 后端 API、BullMQ 章节处理 worker、Storybook 组件库和 TanStack Start 前端（浏览/阅读前端尚未完成）。以 PostgreSQL 为主库，通过 Kysely 类型化查询构建器访问，集成测试通过 Docker 连接真实 Postgres。适合希望自建漫画站点并参与 monorepo 全栈开发的用户。",
+   "highlights": [
+    "支持 manga、manhwa、manhua、light novel 多格式内容及 100+ 语言技术能力",
+    "基于 Kysely 的类型化 SQL 查询，PostgreSQL 18 作为主数据库",
+    "内置 Better Auth 认证、BullMQ 后台章节处理、Meilisearch 容错搜索"
+   ],
+   "use_cases": [
+    "自托管漫画阅读平台",
+    "漫画章节上传与后台转码处理",
+    "多语言内容管理与用户社区（关注/历史/书架）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Kysely (typed SQL query builder) on PostgreSQL ／ - PostgreSQL 18 — primary database ／ - Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.",
+     "lines": [
+      42,
+      65,
+      194
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台以 PostgreSQL 存储业务数据，是使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch. The repo currently ships the backend (Hono API), a BullMQ worker that processes uploaded chapters, a Storybook component playground, and a TanStack Start web app with a landing page, auth forms and legal pages. ／ - Kysely (typed SQL query builder) on PostgreSQL ／ - PostgreSQL 18 — primary database",
+   "evidence_lines": [
+    5,
+    42,
+    65
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "taiyomoe/taiyo",
+  "sha": "1aa0186bffc6",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

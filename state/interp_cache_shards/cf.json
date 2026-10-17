@@ -10385,5 +10385,74 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ba72a9bba11b": {
+  "identity": {
+   "one_liner": "ARD 协议教程，用 ClickHouse 双组织数据分析示例演示能力发现",
+   "review": "该仓库是一个可运行的教程实验环境，通过 MarketDataCo（数据提供方）与 ProductCo（消费方）两个组织的数据分析场景，演示 Agentic Resource Discovery 协议的目录发布、搜索、导入、绑定与调用流程。运行方式为 Docker Compose 一键启动两个控制平面和 ClickHouse 实例。面向学习智能体系统跨组织边界开发的开发者与架构师；README 明确说明这不是生产级认证或部署模板。",
+   "highlights": [
+    "提供 make smoke 一键运行的双组织端到端示例，包含目录发布、搜索、导入、绑定与规划工作流",
+    "提供 /.well-known/ai-catalog.json 协议目录端点与 control plane UI 供直接检查",
+    "附七节课的 docs/lessons.md 讲解协议与运行时概念"
+   ],
+   "use_cases": [
+    "学习 ARD 协议的发现与运行时调用分离机制",
+    "演示跨组织能力借用时数据边界与隐私保护的实现方式",
+    "作为多智能体工作流调用外部能力的动手实验环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "A market data provider, **MarketDataCo**, owns a ClickHouse-backed benchmark dataset. Another company, **ProductCo**, is planning a product launch and needs the benchmark figures, but should never see ClickHouse credentials, raw rows, or MarketDataCo's interna ／ CH[(\"ClickHouse\")] ／ `docker-compose.yml` brings up the two control planes, ClickHouse, and both agent services. `market-data-co/main.py` is the provider — the multi-step workflow over ClickHouse, the privacy guard, and the registered capability. `product-co/main.py` is the consumer — the wrapper around the borrowed capability, the boundary metadata it captures, and the downstream planning workflow. `scripts/seed_ard.sh` is the lifecycle script: publish → catalog → search → import → bind. `sample_payloads/plan_launch.json` is the default planning input you can edit between runs.",
+     "lines": [
+      46,
+      76,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是教程实验环境，使用 ClickHouse 作为示例场景的数据存储，而非为其生态提供工具组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A market data provider, **MarketDataCo**, owns a ClickHouse-backed benchmark dataset. Another company, **ProductCo**, is planning a product launch and needs the benchmark figures, but should never see ClickHouse credentials, raw rows, or MarketDataCo's internal logic. The closest thing to this today is data exports, secure views, or bespoke integrations. ARD reframes the problem. ／ That single command starts two local control planes and a ClickHouse instance, registers both agents, publishes the provider capability through ARD, then runs the consumer through search, import, binding, and a planning workflow. ／ `docker-compose.yml` brings up the two control planes, ClickHouse, and both agent services. `market-data-co/main.py` is the provider — the multi-step workflow over ClickHouse, the privacy guard, and the registered capability. `product-co/main.py` is the consumer — the wrapper around the borrowed capability, the boundary metadata it captures, and the downstream planning workflow. `scripts/seed_ard.sh` is the lifecycle script: publish → catalog → search → import → bind. `sample_payloads/plan_launch.json` is the default planning input you can edit between runs.",
+   "evidence_lines": [
+    46,
+    89,
+    132
+   ]
+  },
+  "fn": "Agent-Field/agentic-resource-discovery-lab",
+  "sha": "ba72a9bba11b",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

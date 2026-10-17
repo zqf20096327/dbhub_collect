@@ -10191,5 +10191,72 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "140a60ef097a": {
+  "identity": {
+   "one_liner": "将 .NET 解决方案索引进 SQLite 的 Roslyn 语义地图，供代码代理查询",
+   "review": "Lurp 通过 Roslyn 编译器把 C# 解决方案的符号、类型关系、源码位置等信息一次性索引进 SQLite，之后供 AI 代理通过 CLI 或 MCP 查询上下文胶囊、影响分析、语义 diff 等。面向在 .NET 代码库上工作的开发者和代码代理使用者。仅支持 Windows，需 .NET 10 运行时，索引还需 .NET SDK 且解决方案已还原。",
+   "highlights": [
+    "提供 context、impact、diff、search、find-symbol 等 CLI 命令及对应 MCP 接口",
+    "按快照索引，包含符号、类型关系、来源溯源与证据等级，支持增量更新",
+    "通过 ASP.NET Core、DI、MediatR、EF Core 等六类适配器生成类型化关系事实"
+   ],
+   "use_cases": [
+    "为 AI 代码代理提供有界的代码上下文，替代反复 grep 和重新解析",
+    "分析符号调用关系与变更影响范围",
+    "对两次索引进度做语义 diff 与死代码候选排查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small,",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Lurp 将 .NET 解决方案索引进 SQLite 作为自身存储，而非为 SQLite 生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small, ／ |`index`|Build or update the snapshot-bound map in `index.db`.| ／ (`--mode=index`, `status --solution=`, MCP `lurp_index`, and MCP `lurp_status` with",
+   "evidence_lines": [
+    10,
+    53,
+    93
+   ]
+  },
+  "fn": "t-macabee/lurp",
+  "sha": "140a60ef097a",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

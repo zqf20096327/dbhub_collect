@@ -9926,5 +9926,238 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "145c03406053": {
+  "identity": {
+   "one_liner": "面向编码代理的本地记忆库，Rust CLI/TUI + PostgreSQL/pgvector 存储",
+   "review": "Memory Layer 为编码代理和开发者提供本地优先的记忆系统：采集项目工作内容，经筛选后存入带 pgvector 的 PostgreSQL，通过 TUI、浏览器 UI、CLI 和 MCP 只读工具检索带引用的答案。原生安装需自备 PostgreSQL+pgvector，Windows 原生服务端仍在预览阶段。",
+   "highlights": [
+    "通过 CLI、TUI 和浏览器 UI 提供记忆的查询与检视，检索涵盖词法、语义、关系和代码图",
+    "提供 MCP 只读项目记忆工具（stdio 或本地 Streamable HTTP），并配有 Codex Desktop 插件",
+    "支持成对消融的可复现评估，输出 gate 与成本/延迟报告"
+   ],
+   "use_cases": [
+    "为编码代理（Codex/Claude 等）提供跨会话的项目证据与记忆",
+    "开发者在改动前查询项目历史、中断后恢复上下文",
+    "对记忆检索质量做可复现的基准评估"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It captures what happened, curates what matters, stores it in PostgreSQL with ／ The reproducible demo needs only Docker; it starts PostgreSQL with pgvector, ／ Native installations need a PostgreSQL database with pgvector; the install",
+     "lines": [
+      11,
+      26,
+      66
+     ]
+    }
+   ],
+   "eco": "tool",
+   "ai_why": null,
+   "eco_why": "README 表明它是为编码代理提供记忆检索/存储能力的工具组件，以 PostgreSQL 作为后端存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Memory Layer is a local-first memory system for coding agents and developers. ／ It captures what happened, curates what matters, stores it in PostgreSQL with ／ - MCP — read-only project-memory",
+   "evidence_lines": [
+    7,
+    11,
+    87
+   ]
+  },
+  "fn": "3vilM33pl3/memory",
+  "sha": "145c03406053",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a7847fd32f6": {
+  "identity": {
+   "one_liner": "ParadeDB 的官方 SQLAlchemy 集成库",
+   "review": "该项目为 ParadeDB 提供官方 SQLAlchemy 集成，使 Python 开发者能通过 ORM 使用 ParadeDB 的全文检索、向量检索等能力。要求 Python 3.10+、SQLAlchemy 2.0.32+、PostgreSQL 15+ 及 pg_search 0.26.2+，采用 MIT 许可。",
+   "highlights": [
+    "提供 ParadeDB 的官方 SQLAlchemy 集成",
+    "支持 PostgreSQL 15+ 与 ParadeDB/pg_search 0.26.2+，pgvector 提供向量类型",
+    "支持 SQLAlchemy 2.0.32+ 与 Python 3.10+"
+   ],
+   "use_cases": [
+    "在 Python/SQLAlchemy 应用中使用 ParadeDB 的全文检索",
+    "通过 ORM 访问 ParadeDB 的向量检索能力",
+    " ParadeDB 应用程序的数据层开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Just use Postgres. ／ One Postgres for your application data, full-text search, vector retrieval, and aggregations. ／ |PostgreSQL|15+|",
+     "lines": [
+      7,
+      8,
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ParadeDB（基于 PostgreSQL 的数据库）提供 SQLAlchemy 集成组件，属数据库生态的开发库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单一许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## ParadeDB for SQLAlchemy ／ The official SQLAlchemy integration for ParadeDB. Get started with the setup guide. ／ |PostgreSQL|15+|",
+   "evidence_lines": [
+    24,
+    26,
+    34
+   ]
+  },
+  "fn": "paradedb/sqlalchemy-paradedb",
+  "sha": "4a7847fd32f6",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f345fee0e15": {
+  "identity": {
+   "one_liner": "Java 21 基准测试，对比文件、PostgreSQL 与 openGauss 的数据操作性能",
+   "review": "一个 Java 21 编写的基准测试项目，在同一顺序与并发工作负载下比较纯文本文件、PostgreSQL 与 openGauss 的查询和更新性能，包含标题精确/子串查询、批量更新及 1/2/4/8 并发实验。通过 JDBC 专有驱动分别适配两个数据库，附带完整原始测量 CSV。面向需要对比文件与数据库操作性能的实验者或课程项目场景。",
+   "highlights": [
+    "通过 JDBC 对 PostgreSQL 与 openGauss 运行查询、更新与并发基准实验",
+    "包含从 9,204 行到 1,012,440 行的两档数据集及确定性扩展脚本",
+    "保留带 SHA-256 校验的 append-only 原始测量 CSV 作为正式结果"
+   ],
+   "use_cases": [
+    "对比文件操作与数据库操作的查询/更新性能",
+    "评估 PostgreSQL 与 openGauss 在相同工作负载下的表现",
+    "研究查询并发度增加对响应的影响"
+   ],
+   "source_editions_note": "含三个源版本：canonical、single-file、Blackboard 教学"
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A Java 21 benchmark comparing data operations in a plain text file, PostgreSQL, ／ |PostgreSQL|JDBC against `public.movies` / `public.movies_large`| ／ - PostgreSQL JDBC driver `lib/postgresql-42.7.14.jar`;",
+     "lines": [
+      3,
+      20,
+      58
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "and openGauss. The project asks: ／ |openGauss|JDBC against `gaussdb.movies` / `gaussdb.movies_large`| ／ - openGauss JDBC driver `lib/opengauss-jdbc-7.0.0-RC3.jar`;",
+     "lines": [
+      4,
+      21,
+      59
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "mention",
+     "quote": "|`BENCHMARK_OPENGAUSS_USER`|`gaussdb`| ／ |`BENCHMARK_OPENGAUSS_SCHEMA`|`gaussdb`|",
+     "lines": [
+      97,
+      98
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为测试 PostgreSQL 与 openGauss 性能而构建的基准工具，不是使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Java 21 benchmark comparing data operations in a plain text file, PostgreSQL, ／ |PostgreSQL|JDBC against `public.movies` / `public.movies_large`| ／ |openGauss|JDBC against `gaussdb.movies` / `gaussdb.movies_large`| ／ - openGauss JDBC driver `lib/opengauss-jdbc-7.0.0-RC3.jar`;",
+   "evidence_lines": [
+    3,
+    20,
+    21,
+    59
+   ]
+  },
+  "fn": "SharrKer/A-dbms-performance-project",
+  "sha": "3f345fee0e15",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

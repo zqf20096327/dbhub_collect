@@ -10639,5 +10639,147 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96107f6e715e": {
+  "identity": {
+   "one_liner": "基于 WASM 组件模型的确定性持久化工作流运行时",
+   "review": "Obelisk 是一个以 WASM Component Model 和 WIT 接口为基础的工作流引擎，提供确定性工作流、可重试活动与 webhook 端点，执行步骤以执行日志形式持久化到 SQLite 或 PostgreSQL。面向需要周期任务、后台作业、批处理与端到端测试自动化的开发者，自带 Web UI、CLI 与 gRPC 接口；目前处于 pre-release 阶段，CLI、gRPC、WIT 与数据库 schema 均可能变更。",
+   "highlights": [
+    "工作流确定性执行，基于持久化执行日志可完整重放，崩溃后可恢复",
+    "活动支持错误、超时与 WASM trap 的自动重试，结果持久化",
+    "单一二进制内含 Web UI、CLI 与 gRPC API，支持执行追踪与时间回溯调试"
+   ],
+   "use_cases": [
+    "周期性任务的自动化检查",
+    "带错误处理与重试的后台/批处理作业",
+    "AI 辅助代码的沙箱与审计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL. ／ ### Running with Postgres",
+     "lines": [
+      62,
+      167
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL.",
+     "lines": [
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 SQLite 或 PostgreSQL 持久化执行日志，数据库为其存储后端而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "主体 AGPL-3.0，wit/ 与 proto/ 子目录为 MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A deterministic workflow runtime built on the WASM Component Model. ／ and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL.",
+   "evidence_lines": [
+    5,
+    62
+   ]
+  },
+  "fn": "obeli-sk/obelisk",
+  "sha": "96107f6e715e",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c84485577063": {
+  "identity": {
+   "one_liner": "自托管 TeamSpeak 网页客户端与协议网关，Rust 实现 TS 协议转接",
+   "review": "WebTS 是一个部署在自己服务器上的 TeamSpeak 网页客户端：用户在浏览器中登录账号、导入 TS 身份并连接已有频道，Rust 网关负责协议转换与会话，语音经 WebRTC 传输并带本地 AI 降噪。数据用 SQLite 保存账号、身份密文与会话。适合想给 TeamSpeak 服务器提供浏览器接入的站长；TS6 与移动语音仍标注为实验支持。",
+   "highlights": [
+    "网页端支持频道树显示、TS 聊天、Opus 双向语音与权限操作（移动/踢出/频道管理）",
+    "支持导入/创建 TeamSpeak 身份并以原有权限连接目标服务器，网关以该身份接入",
+    "内置 GTCRN/RNNoise 本地降噪、好友 Olm 双棘轮加密私信（实验）与私有 S3 加密存储"
+   ],
+   "use_cases": [
+    "为已有 TeamSpeak 服务器提供浏览器网页接入入口",
+    "自托管部署，站长自控账号数据库、密钥与邮件服务",
+    "在浏览器中实现带降噪与加密私信的语音社区"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文|",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite (rusqlite) 持久化账号、身份密文与会话，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文| ／ WebTS 是独立开源的 **TeamSpeak 网页客户端与协议网关**。成员登录自己的账号、创建或导入 TeamSpeak 身份，在浏览器里加入已有频道；网站以该身份连接目标服务器，继承它原有的权限。部署者掌握自己的账号数据库、密钥、邮件服务和默认服务器配置。",
+   "evidence_lines": [
+    147,
+    15
+   ]
+  },
+  "fn": "PTPHAP/WebTS",
+  "sha": "c84485577063",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

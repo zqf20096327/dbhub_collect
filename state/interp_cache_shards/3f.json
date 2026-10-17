@@ -9692,5 +9692,77 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5d7a183aec1c": {
+  "identity": {
+   "one_liner": "自托管健康数据同步 API，归一化多源可穿戴数据",
+   "review": "Open Health Sync 用 Go 编写，把 Apple Health、Oura、WHOOP 等十三个来源的数据拉取、原样存档并映射到统一模型，通过 REST、FHIR R4、Open mHealth、CSV/Parquet、webhook 和只读 MCP 服务输出。队列和存储依赖 Postgres（FOR UPDATE SKIP LOCKED），可部署为单个二进制加 Postgres，支持 Docker、Helm 和树莓派。面向想自建健康数据后端或个人数据档案的开发者和团队，AGPL-3.0 许可。",
+   "highlights": [
+    "从十三个健康数据源摄取并归一化到统一模型，输出 REST、FHIR R4、Open mHealth、CSV/Parquet 与 webhooks",
+    "提供只读 MCP 服务器供 AI 代理访问数据，保留原始 payload 以支持重新处理",
+    "部署形态包含 Docker 镜像、Helm chart 与单二进制加 Postgres（可运行于树莓派）"
+   ],
+   "use_cases": [
+    "为健康类 App 提供统一的后端 API，聚合多个可穿戴设备数据",
+    "在本地搭建个人健康数据档案并供 AI 代理只读访问",
+    "收集研究参与者可穿戴数据的科研项目，需审计与硬删除能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Free, one Go binary plus Postgres, runs on a Raspberry Pi. ／ |A crash mid-run|rerun the script and hope|Postgres queue, retries with backoff, parked after 5 attempts| ／ - **One binary plus Postgres.** The queue lives in Postgres (`FOR UPDATE SKIP LOCKED`). No",
+     "lines": [
+      13,
+      163,
+      213
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其队列与数据存储建于 Postgres 之上（L13、L163），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "helm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Free, one Go binary plus Postgres, runs on a Raspberry Pi. ／ Open Health Sync (`ohs`) is a self-hosted ingestion and normalization layer for health data. It ／ |A crash mid-run|rerun the script and hope|Postgres queue, retries with backoff, parked after 5 attempts|",
+   "evidence_lines": [
+    13,
+    51,
+    163
+   ]
+  },
+  "fn": "soma-intelligence/open-health-sync",
+  "sha": "5d7a183aec1c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8567,5 +8567,80 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d613d7e58a4c": {
+  "identity": {
+   "one_liner": "Swift 类型安全 SQL 查询 DSL，支持多方言渲染",
+   "review": "SwiftStream/SQL（前身为 SwifQL）是一个用 Swift 编写 SQL 的 DSL 库，提供链式与 Result Builder 两种声明式写法，支持 SELECT/INSERT/UPDATE/DELETE 及表 DDL 构建。它只负责生成与按方言准备语句，执行交由数据库驱动。适用于 Swift 服务端开发者，需 Swift 6.3 及以上。",
+   "highlights": [
+    "提供类型安全的模型引用与链式/Result Builder 两种声明式查询构建方式",
+    "支持按 PostgreSQL、MySQL、DuckDB 方言准备语句，输出 plain 或带绑定值的 splitted 形式",
+    "包含 INSERT/UPDATE/DELETE 及 CREATE TABLE/ALTER TABLE 等 DML/DDL 构建器"
+   ],
+   "use_cases": [
+    "在 Swift 项目中以类型安全方式构建复杂 SQL 查询",
+    "同一查询结构面向多种 SQL 方言渲染生成语句",
+    "构建带绑定参数的预处理语句供驱动执行"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver. ／ let postgres = query.prepare(.psql)",
+     "lines": [
+      17,
+      303
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver. ／ let mysql = query.prepare(.mysql)",
+     "lines": [
+      17,
+      304
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为构建 SQL 语句供数据库驱动执行而服务，自身不管理连接或执行，属于数据库生态的开发工具库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SQL (formerly SwifQL)** is a strongly typed, declarative, composable Swift DSL for building SQL. ／ Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver.",
+   "evidence_lines": [
+    15,
+    17
+   ]
+  },
+  "fn": "swiftstream/SQL",
+  "sha": "d613d7e58a4c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

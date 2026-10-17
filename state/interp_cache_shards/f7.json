@@ -9800,5 +9800,144 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aeb58905b032": {
+  "identity": {
+   "one_liner": "基于 RAG 与 text-to-SQL 的新员工入职问答助手",
+   "review": "一个面向企业新员工的对话式入职助手，从公司文档与代码做 RAG 检索，并通过意图路由对业务数据执行 text-to-SQL。采用 FastAPI + Next.js，数据层为 PostgreSQL 16（pgvector、pg_trgm），SQL 仅限只读 SELECT，并借助行级安全按部门与角色限定查询范围，附带夜间评估与管理控制台。",
+   "highlights": [
+    "混合检索：pgvector 余弦相似度、Postgres 全文 ts_rank 与三元组模糊匹配，经 RRF 融合",
+    "SQL 只读执行：解析层仅接受单条 SELECT，并以 SET LOCAL 在同一事务中设置行级安全上下文",
+    "提供夜间评估回路、OpenTelemetry 追踪及 PII 脱敏、令牌预算等防护机制"
+   ],
+   "use_cases": [
+    "新员工就文档、代码与业务数据（项目、OKR、工单等）提问",
+    "需要按部门/角色隔离答案权限的企业内部知识问答",
+    "带评估基线与成本面板的 LLM 应用运维"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 with pgvector ／ - Hybrid retrieval over the chunk store: pgvector cosine, Postgres full-text ／ |Data|PostgreSQL 16 + pgvector + pg_trgm, Alembic migrations|",
+     "lines": [
+      7,
+      63,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 PostgreSQL 16 作为自身数据与向量存储层，是一个使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A conversational onboarding assistant that answers new-hire questions from ／ |Data|PostgreSQL 16 + pgvector + pg_trgm, Alembic migrations| ／ `make up` builds the images, starts Postgres (pgvector), Redis, the API, the",
+   "evidence_lines": [
+    10,
+    126,
+    153
+   ]
+  },
+  "fn": "Taki-chiasf/Onboarding-assistant",
+  "sha": "aeb58905b032",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e9b6d3f4369d": {
+  "identity": {
+   "one_liner": "自托管协作工作区，含页面、数据库与内置 MCP 服务器",
+   "review": "Leafdesk 是一个可自托管的开源协作工作区，提供块编辑器、以行为页面的数据库、实时协作和内置 MCP 服务器，供个人与团队使用，AI 助手经 OAuth 2.1 授权后可搜索、读取、编辑工作区。数据存储在使用方的 PostgreSQL，通过 docker compose 部署，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供块编辑器与多种视图（表格、看板、日历、图库、时间线、图表、表单）的数据库，支持关联、公式和汇总",
+    "内置 MCP 服务器，经 OAuth 2.1 授权后供 AI 客户端搜索、读取和编辑工作区",
+    "支持实时协作（Yjs/Hocuspocus）、离线编辑，以及从 Notion、Obsidian、Trello、Markdown 等导入"
+   ],
+   "use_cases": [
+    "团队自托管的知识库与协作文档平台",
+    "通过 MCP 让 AI 助手安全地读写团队工作区数据",
+    "从 Notion/Obsidian/Trello 迁移页面与数据"
+   ],
+   "cat": "应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ # and POSTGRES_PASSWORD to the output of: openssl rand -hex 24",
+     "lines": [
+      23,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确数据存储在使用方自己的 PostgreSQL 中，项目是使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ # and POSTGRES_PASSWORD to the output of: openssl rand -hex 24",
+   "evidence_lines": [
+    23,
+    38
+   ]
+  },
+  "fn": "esmworks/leafdesk",
+  "sha": "e9b6d3f4369d",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

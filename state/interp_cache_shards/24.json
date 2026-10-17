@@ -7974,5 +7974,143 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "002560102bac": {
+  "identity": {
+   "one_liner": "hermes-agent 的对话记忆插件，本地 SQLite 存储事实并混合检索",
+   "review": "MemoHood 是 hermes-agent 的记忆提供者插件：从对话中提取事实（含 Gemini 门控与 SUPERSEDE 版本管理），存入本地 SQLite，回答前通过 FTS5/BM25 与向量检索混合召回并注入提示词。面向使用 hermes-agent 的用户，通过安装脚本一键部署；向量嵌入、重排与事实抽取依赖 Cloudflare/Gemini/Cohere 的可选 API 密钥。",
+   "highlights": [
+    "在本地 SQLite 中存储对话事实，支持 SUPERSEDE 版本替换与历史留存",
+    "提供 FTS5/BM25 全文检索与向量检索的混合召回（RRF 融合），含俄语词干化",
+    "事实置信度按遗忘曲线夜间衰减，支持 pinned 事实与月度外部调用支出上限"
+   ],
+   "use_cases": [
+    "为 hermes-agent 提供跨会话的事实记忆与自动召回",
+    "在离线/无 API 密钥模式下运行基于关键词的记忆",
+    "需要在换模型后保留记忆的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**1. Один командой.** Установщик сам находит venv `hermes-agent`, ставит зависимости (`sqlite-vec`, `PyStemmer`, `ftfy`, `requests`, `model2vec`), копирует папку плагина в `<HERMES_HOME>/plugins/memohood/` и включает `memory.provider: memohood` в `config.yaml`",
+     "lines": [
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向 AI agent 的对话记忆插件，用 SQLite 作为本地存储，不提供数据库服务能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MemoHood — это плагин памяти диалогов для hermes-agent. Представьте, что у агента появился личный дневник: он сам записывает туда важное из разговора — факты, решения, исправления, предпочтения — и сам подглядывает в него перед каждым новым ответом, без того, чтобы вы отдельно просили что-то запомнить. ／ Без памяти агент помнит только то, что помещается в текущий контекст: начали новую сессию — и всё, что было вчера, исчезло. MemoHood хранит важное отдельно, в локальной базе на вашей машине, и подмешивает нужные кусочки обратно в разговор ровно тогда, когда они пригодились бы. Это провайдер памяти (`memory.provider`) для hermes-agent — устанавливается одной командой и работает полностью автономно. ／ **1. Один командой.** Установщик сам находит venv `hermes-agent`, ставит зависимости (`sqlite-vec`, `PyStemmer`, `ftfy`, `requests`, `model2vec`), копирует папку плагина в `<HERMES_HOME>/plugins/memohood/` и включает `memory.provider: memohood` в `config.yaml` — руками копировать папку или редактировать конфиг не нужно:",
+   "evidence_lines": [
+    29,
+    31,
+    78
+   ]
+  },
+  "fn": "maximskorohod/memohood",
+  "sha": "002560102bac",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a112b18979a": {
+  "identity": {
+   "one_liner": "免费开发者工具目录，含数据库/后端类目与在线状态",
+   "review": "这是一个以表格形式编目 55 个免费或免费层开发者工具的清单仓库，涵盖 AI 编码、云托管、数据库与后端、DevOps、安全等类目，并通过 GitHub Actions 每晚自动检查各工具站点是否在线。给寻找免费工具的开发者查阅使用，本身不实现任何数据库功能，PostgreSQL、SQLite 等条目仅是所收录工具的描述信息。",
+   "highlights": [
+    "收录 55 个工具，含数据库与后端类目（Supabase、Neon、Cloudflare D1、Turso 等）",
+    "通过 GitHub Actions 每晚自动检查收录工具的在线状态",
+    "每条目记录用途、定价模式与在线状态"
+   ],
+   "use_cases": [
+    "查找提供免费层的数据库与后端服务",
+    "按类目浏览 AI、托管、DevOps 等免费开发者工具",
+    "查看收录工具的可用性状态"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      177,
+      182
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ／ Serverless SQLite database with edge replication",
+     "lines": [
+      192,
+      197
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅为工具清单，未实现为数据库生态服务的功能，也未使用数据库存数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 🛠️️ Awesome Free Dev Tools ／ ### Database & Backend ／ - **Status** is automatically checked every night by GitHub Actions.",
+   "evidence_lines": [
+    1,
+    169,
+    417
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "4a112b18979a",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

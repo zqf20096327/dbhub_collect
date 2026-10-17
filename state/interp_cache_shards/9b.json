@@ -9469,5 +9469,177 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "754533db3486": {
+  "identity": {
+   "one_liner": "开源 AI 笔记与知识库应用，支持多端同步与 MCP",
+   "review": "EdgeEver 是一个开源笔记与个人知识库工作区，提供三栏布局编辑、全文本搜索、浏览器剪藏、多端同步及内置 MCP/ACP 的 AI 助手能力。面向个人知识管理用户，可零成本部署在 Cloudflare（使用 D1/R2），或通过 Docker 自托管，自托管容器使用 SQLite 存储并支持 ZIP 备份与 Markdown 导入导出。",
+   "highlights": [
+    "提供 Web、macOS、Windows、Linux、iOS、Android 客户端及浏览器剪藏扩展，支持多设备即时同步",
+    "内置 MCP 与 ACP 协议，供外部 Agent 读写数据，BYOK 兼容 OpenAI、Claude、Gemini 及自定义端点",
+    "自托管容器使用 SQLite，支持标准 SQLite 数据库、ZIP 备份与 Markdown 导入导出"
+   ],
+   "use_cases": [
+    "个人多设备笔记记录与全文检索",
+    "网页内容剪藏与多平台结构化采集",
+    "自托管或 Cloudflare 免费额度上的私有知识库部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Multi-Device Sync & Foundation**|• Seamless, low-latency sync across desktop, mobile, and web with zero device limits • Official client support across Web, macOS, Windows, Linux, iOS, and Android • Offline-first with auto-sync queue: write smoothly offline, ／ Docker runs the same frontend, API routes, services, authentication, MCP implementation, and migrations as Cloudflare. The container uses SQLite with local files or S3-compatible attachment storage and supports `amd64` and `arm64`. See Deploy EdgeEver with Doc ／ - Android app: Expo + React Native in `apps/mobile`, with SQLite local storage and incremental sync.",
+     "lines": [
+      77,
+      123,
+      190
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 D1/SQLite 存储笔记数据的笔记与知识库应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " AI-native knowledge base & Evernote/Obsidian alternative with instant sync & native MCP. Free on Cloudflare or self-hosted via Docker. ／ |**Multi-Device Sync & Foundation**|• Seamless, low-latency sync across desktop, mobile, and web with zero device limits • Official client support across Web, macOS, Windows, Linux, iOS, and Android • Offline-first with auto-sync queue: write smoothly offline, automatically resume and sync when reconnected • Standard SQLite database, lossless ZIP backup & Markdown export/import|• **Zero Server Cost for Life**: 100% runnable on Cloudflare Free tier (~150k short notes & ~50k images) • **Flexible Docker Self-Hosting**: One-click deployment for VPS, NAS, or home server with millions of notes & instant sync • Server-side brute-force protection and tenant security| ／ 3. **Import & Configure the Project**: Create a Worker named `edgeever` from the Fork's `main` branch in Cloudflare **Workers & Pages**. Use the repository root and keep Cloudflare's default Workers Builds deploy command, which runs in Cloudflare. Ensure its API token can read and edit D1. The deploy command creates the bindings; do not edit Fork files.",
+   "evidence_lines": [
+    3,
+    77,
+    108
+   ]
+  },
+  "fn": "tianma-if/edgeever",
+  "sha": "754533db3486",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "becc697c9b7a": {
+  "identity": {
+   "one_liner": "自托管网关，将保存的 SQL 查询转为版本化 REST 端点",
+   "review": "QueryAPIGate 是一个自托管服务，把保存的 SQL 查询发布为带类型参数、访问控制和运行历史的版本化 REST 端点，同时提供 MCP 工具、SSE 事件流、定时导出和管理控制台。面向需要将现有 SQL 安全暴露为 API 的数据工程与后端团队，通过 API key、角色、JWT 和列脱敏控制访问。支持 PostgreSQL、MySQL、SQLite、DuckDB、ClickHouse、MongoDB、H2 和 JDBC 连接。",
+   "highlights": [
+    "将保存的 SQL 查询发布为带类型化、防注入参数的版本化 REST 端点，并提供 MCP server、SSE 实时事件和定时导出等多种出口",
+    "提供作用域 API key、角色、SSO/JWT 登录、行级绑定、列脱敏和带哈希链签名的审计日志",
+    "支持 PostgreSQL、MySQL、SQLite、DuckDB、ClickHouse、MongoDB、H2/JDBC 及通过 DuckDB 读取 Parquet/CSV/JSON 文件，输出八种格式"
+   ],
+   "use_cases": [
+    "将报表、仪表盘、ETL 任务中已有的 SQL 查询安全地暴露为 REST API",
+    "为 AI 代理提供经治理的 SQL 查询 MCP 工具",
+    "把查询结果定时增量导出到 S3/GCS/R2 等对象存储"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk. ／ pip install \"queryapigate[postgres]\" # pick the drivers you need: mysql, postgres, clickhouse, h2, duckdb",
+     "lines": [
+      92,
+      115
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk. ／ pip install \"queryapigate[postgres]\" # pick the drivers you need: mysql, postgres, clickhouse, h2, duckdb",
+     "lines": [
+      92,
+      115
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk. ／ SQLite needs no extra driver. H2 and generic JDBC connections (`queryapigate[h2]`) also need a Java runtime; H2's own",
+     "lines": [
+      92,
+      119
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk. ／ pip install \"queryapigate[postgres]\" # pick the drivers you need: mysql, postgres, clickhouse, h2, duckdb",
+     "lines": [
+      92,
+      115
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明该网关连接多种数据库并为其提供 API 治理层，是为数据库生态服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**QueryAPIGate** is a self-hosted service that runs SQL against your databases - and against Parquet, CSV and JSON files ／ - **An MCP server for AI agents** - saved queries as tools, OAuth sign-in, write tools that ／  PostgreSQL, MySQL, SQLite, DuckDB, ClickHouse and MongoDB; H2 and JDBC; Parquet, CSV and JSON on S3, GCS, R2 or disk.",
+   "evidence_lines": [
+    36,
+    89,
+    92
+   ]
+  },
+  "fn": "AnanthaRajuC/QueryAPIGate",
+  "sha": "becc697c9b7a",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

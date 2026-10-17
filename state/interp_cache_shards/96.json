@@ -11044,5 +11044,151 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0838b5a597b3": {
+  "identity": {
+   "one_liner": "开源桌面 SQL 工作台，内置 3 个驱动并支持 24 个插件适配多种数据库",
+   "review": "Tabularis 是一个跨平台桌面 SQL 客户端，提供连接管理、SQL 编辑器、SQL 笔记本、ER 图、可视化查询构建器、可视化 EXPLAIN 和数据表格编辑等功能，内置 PostgreSQL、MySQL/MariaDB、SQLite 驱动，其余数据库（SQL Server、ClickHouse、Oracle 等）通过 JSON-RPC 插件接入，并内置 MCP 服务器供 AI 代理读取 schema 和执行查询，面向需要在桌面端管理多种数据库的开发者与 DBA。",
+   "highlights": [
+    "内置 PostgreSQL、MySQL/MariaDB、SQLite 驱动，通过插件支持 ClickHouse、SQL Server、Oracle、Dameng 等 24 种数据源",
+    "内置 MCP 服务器，支持 Claude、Cursor、Devin 读取 schema 并执行查询；支持基于 Ollama 本地模型的 text-to-SQL",
+    "提供 SQL 笔记本（SQL+Markdown 单元、跨单元变量、图表）、交互式 ER 图、可视化 EXPLAIN 执行计划图和 SSH 隧道连接管理"
+   ],
+   "use_cases": [
+    "在桌面端统一连接和查询 MySQL/MariaDB、PostgreSQL、SQLite 等多种数据库",
+    "编写 SQL 笔记本文档，混合 SQL 与 Markdown 单元并生成图表",
+    "通过 MCP 服务器让 AI 代理（Claude、Cursor 等）访问数据库 schema 并运行查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection.",
+     "lines": [
+      81,
+      203
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      203,
+      260
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      203,
+      260
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection. ／ - **Cross-Database Support:** Works with PostgreSQL, MySQL/MariaDB, and SQLite using the best available `EXPLAIN` format per driver.",
+     "lines": [
+      81,
+      203,
+      260
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|DM / Dameng|tabularis-dameng-plugin|Oracle|tabularis-oracle-plugin|",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Elasticsearch|tabularis-elasticsearch-plugin|SQL Server|tabularis-sqlserver-plugin|",
+     "lines": [
+      93
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|tabularis-clickhouse-plugin|LibSQL / Turso|tabularis-libsql-plugin|",
+     "lines": [
+      87
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|DM / Dameng|tabularis-dameng-plugin|Oracle|tabularis-oracle-plugin|",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|Scoped|CockroachDB, TiDB|",
+     "lines": [
+      105
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接、查询和管理多种数据库的桌面客户端工具，本身不依赖某一数据库存数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0（对比表中自述 free，未说明多许可结构）",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tabularis is an open-source desktop SQL workspace with 3 built-in database drivers and 24 shipped plugins, including DuckDB, ClickHouse, Redis and Firestore. Its built-in MCP server lets Claude, Cursor and Devin (formerly Windsurf) read your schema and run queries in the same app you already use. ／ PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage on the website: ／ - **ER Diagram:** Interactive Entity-Relationship visualization (pan, zoom, layout) with selective table diagram generation.",
+   "evidence_lines": [
+    6,
+    81,
+    213
+   ]
+  },
+  "fn": "TabularisDB/tabularis",
+  "sha": "0838b5a597b3",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

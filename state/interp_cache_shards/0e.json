@@ -10398,5 +10398,218 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b0e68012f04": {
+  "identity": {
+   "one_liner": "面向 coding agent 的规范，将 macOS 微信 SQLCipher 库解密导出为 SQLite",
+   "review": "该仓库提供一套供 Claude Code、Codex 等 coding agent 使用的技能文件与实现规范，指导 Agent 自行编写工具，在授权范围内解密 macOS 微信 4.x 的本地 SQLCipher 数据库并导出为标准 SQLite 库。仓库本身不附带可运行程序，密钥获取的分支 B 依赖具体客户端版本，不保证仅凭文档完成。",
+   "highlights": [
+    "提供含密钥派生、HMAC 认证、逐页解密、WAL 处理与验收标准的完整实现规范（SKILL.md 与 references/）",
+    "输出目标为标准 SQLite 数据库，可用普通 SQLite 工具只读查询",
+    "要求逐库报告结果，失败或受限恢复产物须单独标记"
+   ],
+   "use_cases": [
+    "在授权范围内导出本人 macOS 微信 4.x 聊天记录为明文 SQLite 数据库",
+    "为 coding agent 提供解密实现的规范与测试依据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "面向 Claude Code、Codex 等 coding agent 的技能与实现规范，用于在授权范围内将 macOS 微信 4.x 的本地 SQLCipher 数据库恢复为标准 SQLite 数据库。 ／ - 输出目标是标准 SQLite 数据库，不是已解析好的聊天文本。正文编码、压缩、联系人与附件关联是后续工作。",
+     "lines": [
+      3,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是面向微信数据导出的技能规范，SQLite 仅作为其输出数据的目标格式，不提供数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向 Claude Code、Codex 等 coding agent 的技能与实现规范，用于在授权范围内将 macOS 微信 4.x 的本地 SQLCipher 数据库恢复为标准 SQLite 数据库。 ／ 需要区分“有足够的规范让 Agent 实现”和“仓库已经附带可运行程序”：当前仓库提供的是前者，不附带现成解密器或 MCP Server。已取得密钥后的解密流程有完整规范；密钥获取的分支 A 有完整实现思路，分支 B 仍需针对具体客户端版本分析。具体边界见下文。 ／ - 输出目标是标准 SQLite 数据库，不是已解析好的聊天文本。正文编码、压缩、联系人与附件关联是后续工作。",
+   "evidence_lines": [
+    3,
+    13,
+    29
+   ]
+  },
+  "fn": "robbin/wechat-exporter",
+  "sha": "0b0e68012f04",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5bfe74b3a867": {
+  "identity": {
+   "one_liner": "自托管事务邮件 API 服务器，基于 Bun+Elysia+PostgreSQL",
+   "review": "一个自托管的事务邮件发送服务，提供 REST API、Web 控制台、DKIM 签名、带重试的 Postgres 邮件队列、webhook、模板、入站 SMTP 与回收站功能，以单个 Docker 容器交付。面向需要以编程方式发送事务邮件的开发者。注意：README 明确投递效果取决于发送域名与 IP 信誉，且 relay 模式仍在路线图中。",
+   "highlights": [
+    "提供 REST API 发送事务邮件，附带 OpenAPI 3.0 文档与 API key 认证",
+    "内置直接 SMTP 投递与入站 SMTP 接收，支持 DKIM 签名及 SPF/DKIM/DMARC 校验",
+    "基于 PostgreSQL 的邮件队列，支持重试、崩溃恢复与 DMARC 报告解析"
+   ],
+   "use_cases": [
+    "从自己的服务器以 API 方式发送事务邮件（验证码、通知等）",
+    "接收并存储入站邮件及解析 DMARC 聚合报告",
+    "替代 SaaS 邮件 API 的自托管部署场景"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - **Email queue**: Postgres-backed with 3 retries, crash recovery, and exactly-once delivery semantics ／ |Database|PostgreSQL 16+|",
+     "lines": [
+      9,
+      81,
+      165
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明邮件队列由 Postgres 支撑（Postgres-backed），数据库为其自身存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Email queue**: Postgres-backed with 3 retries, crash recovery, and exactly-once delivery semantics ／ |Database|PostgreSQL 16+|",
+   "evidence_lines": [
+    81,
+    165
+   ]
+  },
+  "fn": "mohamedboukari/bunmail",
+  "sha": "5bfe74b3a867",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0ea12afe3292": {
+  "identity": {
+   "one_liner": "C++ 微基准：对比纯文件、索引文件、PostgreSQL 与 openGauss 查询性能",
+   "review": "这是南科大 CS213 数据库系统课程的实验项目，用一个约 1340 行的 C++ 程序 filmbench，对纯 CSV 文件、自建索引文件、PostgreSQL 与 openGauss 四种存储方案执行扫描、全文检索、连接、更新等九类查询的计时对比，通过 libpq 连接数据库，输出 report.pdf 作为交付物。面向课程评审与想复现实验的读者，需在 WSL 内以 Docker 容器运行数据库。",
+   "highlights": [
+    "单文件 C++17 基准程序，通过 libpq 连接 PostgreSQL/openGauss，支持 scan、ftsearch、join、update 等 9 类操作",
+    "双时钟测量模型：记录调用方等待时间 C、服务器执行时间 S 与往返时间 T",
+    "附带 10 表 76,131 行的 SQL 数据集，同一份 SQL 可加载到两种引擎并校验结果一致"
+   ],
+   "use_cases": [
+    "数据库课程实验/教学演示",
+    "DBMS 与文件系统性能对比研究",
+    "PostgreSQL 与 openGauss 的同负载行为验证"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |`sudo apt install g++ libpq-dev`|g++ ≥ 13, libpq 16| ／ ./filmbench db --dsn \"$DSN\" --op scan --term night                               # PostgreSQL",
+     "lines": [
+      8,
+      45,
+      120
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "openGauss ／ |openGauss, as a **Linux container** (optional)|7.0.0-RC3; needed only for Section 9| ／ If you do want it, any openGauss 7 image works; the harness talks to it through libpq",
+     "lines": [
+      9,
+      47,
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "程序通过 libpq 驱动数据库做基准测量，是为数据库评测服务的工具而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### A micro-benchmark comparing a plain file, an indexed file, PostgreSQL, and openGauss. ／ |`filmbench.cpp`|The whole experiment: both file layouts and both databases, one C++ file (~1,340 lines).| ／ If you do want it, any openGauss 7 image works; the harness talks to it through libpq",
+   "evidence_lines": [
+    3,
+    23,
+    90
+   ]
+  },
+  "fn": "DevEason/SUSTech-CS213-DBMS-vs-File",
+  "sha": "0ea12afe3292",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

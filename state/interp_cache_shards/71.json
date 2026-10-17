@@ -9241,5 +9241,72 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8265381459be": {
+  "identity": {
+   "one_liner": "可扩展数据栈平台，通过适配器连接工具与服务",
+   "review": "DSUI 是一个自托管的数据栈平台，通过适配器连接 PostgreSQL、DuckDB、Airflow、dbt、S3/MinIO 等服务，并提供 UI 管理数据库文件（如打开 DuckDB 文件）。面向数据工程团队，可用 TypeScript SDK 编写自定义适配器与插件扩展页面、动作和工作流，需通过 npx 或官方 Docker 镜像部署。",
+   "highlights": [
+    "通过适配器连接 Airflow、dbt、PostgreSQL、S3/MinIO、DuckDB 等服务",
+    "提供 TypeScript Adapter SDK 与 Plugin SDK，可构建自定义集成、页面、动作和工作流",
+    "支持本地 npx 运行和 Docker 自托管部署，本地状态存储于 /data"
+   ],
+   "use_cases": [
+    "数据工程团队在统一界面连接和管理多种数据服务",
+    "自托管环境中通过 dsui.yaml 集中配置数据栈",
+    "用插件 SDK 构建面向自身基础设施的定制能力"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Connect Apache Airflow, dbt, PostgreSQL, S3-compatible storage such as MinIO, and DuckDB through adapters that bring service-specific capabilities into DSUI. ／ |Apache Airflow|dbt|PostgreSQL|Amazon S3|MinIO|DuckDB|",
+     "lines": [
+      68,
+      72
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它通过适配器为连接数据库和其他数据服务提供 UI 与扩展机制，本身是服务数据栈的工具而非使用库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Connect Apache Airflow, dbt, PostgreSQL, S3-compatible storage such as MinIO, and DuckDB through adapters that bring service-specific capabilities into DSUI. ／ Install plugins to extend DSUI beyond connected services. Use the TypeScript Plugin SDK to build custom pages, actions, and workflows tailored to your infrastructure. ／ The official container keeps its local state in `/data`. It does not need a separate database or control plane. The official container image is published through GitHub Container Registry:",
+   "evidence_lines": [
+    68,
+    79,
+    83
+   ]
+  },
+  "fn": "northgraindata/dsui",
+  "sha": "8265381459be",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10597,5 +10597,71 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b0d43135bf9c": {
+  "identity": {
+   "one_liner": "为 arr 套件提供 Cloudflare 域名与 HTTPS 证书的反向代理容器",
+   "review": "Caretakarr 是一个 Go 编写的单容器工具，把 Sonarr、Radarr、Plex 等 arr 套件服务通过 Cloudflare DNS 发布到真实域名并自动签发 HTTPS 证书。它内嵌 Caddy，用 SQLite 存储配置，生成 Caddy JSON 并原子加载；自带 Web UI 管理域名、路由、访问控制和证书状态。仅支持局域网/Tailscale 私有地址，不支持公网 IP 和 IPv6。",
+   "highlights": [
+    "通过 ACME DNS-01 在 Cloudflare 上自动签发通配符或单主机证书，无需开放入站端口",
+    "配置存于 SQLite，渲染 Caddy JSON 后原子加载，加载失败自动回滚",
+    "提供 Web UI 管理路由、CIDR 白名单、basic auth、2FA/passkey 及证书与 DNS 状态"
+   ],
+   "use_cases": [
+    "为家庭局域网/NAS 上的 arr 套件服务分配真实域名和有效 HTTPS 证书",
+    "在 Tailscale 等 tailnet 环境中通过单一容器统一管理多服务域名路由",
+    "需要按路由做访问控制（白名单、basic auth、魔法链接）的内部服务发布"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One container that puts your arr stack (Sonarr, Radarr, Plex and friends) behind real domains on Cloudflare with valid HTTPS certificates. A small web UI manages domains and routes. Caddy runs embedded in the same Go process, and its configuration is generated",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为自身配置和状态的存储，项目是为 arr 套件提供域名/证书代理的应用，不服务于数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One container that puts your arr stack (Sonarr, Radarr, Plex and friends) behind real domains on Cloudflare with valid HTTPS certificates. A small web UI manages domains and routes. Caddy runs embedded in the same Go process, and its configuration is generated from SQLite and applied atomically. ／ Every change writes SQLite, renders the full Caddy JSON, and loads it with `caddy.Load`. If Caddy rejects it, the database change is rolled back, the previous configuration stays live, and the UI shows Caddy's exact error. If the stored configuration fails to load at startup, Caretakarr serves a bootstrap configuration (the UI only) and shows a banner instead of crash-looping. ／ **Backups.** Copy `/data` (SQLite database and Caddy's certificate storage).",
+   "evidence_lines": [
+    5,
+    95,
+    91
+   ]
+  },
+  "fn": "caretakarr/caretakarr",
+  "sha": "b0d43135bf9c",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

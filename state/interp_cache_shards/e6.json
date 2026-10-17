@@ -9650,5 +9650,81 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b19e8ae1f508": {
+  "identity": {
+   "one_liner": "自托管渗透测试项目管理平台，用 PostgreSQL 存储",
+   "review": "Flowdit 是面向渗透测试人员和安全顾问的自托管项目平台，集中管理漏洞发现、目标范围、方法论清单与客户门户，并支持 PDF/DOCX 报告导出和一个自主 AI 扫描代理。数据存于 PostgreSQL 15+，通过 Docker Compose 或手动方式部署，账户由操作员经 CLI 创建，UI 与 AI 报告仅支持西班牙语。",
+   "highlights": [
+    "提供漏洞跟踪、CVSS v3.1 计算、OWASP WSTG 清单与报告导出（PDF/DOCX）",
+    "包含自主 AI 扫描代理，支持 Groq、Anthropic、DeepSeek、Kimi 及 OpenAI 兼容本地模型",
+    "提供只读客户门户、多租户组织、OIDC SSO 与 TOTP 两因素认证"
+   ],
+   "use_cases": [
+    "渗透测试项目的发现与漏洞管理",
+    "生成面向客户的专业测试报告",
+    "搭建带客户门户的测试协作平台"
+   ],
+   "ai_notes": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 15+| ／ - PostgreSQL 15+ ／ Spins up Postgres, backend (with Chromium/Ghostscript for PDF export), and Nginx, with no manual setup:",
+     "lines": [
+      113,
+      129,
+      137
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据库层为 PostgreSQL 15+，平台将其作为自身存储使用，未为数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Database|PostgreSQL 15+| ／ Flowdit is a self-hosted platform for penetration testers and security consultants. It centralizes everything that happens during an engagement (findings, targets, methodology checklists, team activity) and exposes a live read-only portal so clients can follow the project as it progresses, instead of waiting for a PDF at the end. ／ Spins up Postgres, backend (with Chromium/Ghostscript for PDF export), and Nginx, with no manual setup:",
+   "evidence_lines": [
+    113,
+    13,
+    137
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "pirrandi/flowdit",
+  "sha": "b19e8ae1f508",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8410,5 +8410,74 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4174adb00c0b": {
+  "identity": {
+   "one_liner": "本地运行的二次元插画整理工具，用本地模型识别角色并归类查重",
+   "review": "Emaki 是一个在 Windows 本机运行的动漫插画整理应用，通过 onnxruntime 本地运行 PixAI/WD14 标签模型识别角色、作品和画师，按角色/作品归类、支持标签筛选、相似图查重和漫画按册管理，识别结果存入 SQLite。适合有大量本地二次元图收藏、希望不上传图片即可自动整理的个人用户。识别模型约 2.2 GB，首次使用需下载。",
+   "highlights": [
+    "本地运行识别模型（PixAI Tagger、WD EVA02，经 DirectML/WebGPU/CPU），图片不上传",
+    "按角色、作品、画师维度整理图库，支持中/日/英文别名搜索与标签组合筛选",
+    "提供查重（相同与画面相似）、漫画/截图/照片自动分类、撤销操作与移动硬盘容错"
+   ],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库（你做的所有整理）|`data/emaki.sqlite`| ／ `data/` 不会被提交到 Git。备份的话复制 `data/emaki.sqlite` 就行，缩略图和模型都能重新生成、重新下载。想换位置可以在 `.env` 里改 `EMAKI_DATA_DIR`，其他配置见 .env.example。 ／ 前端是 React + Vite + Tailwind，后端是 Node.js + Fastify + SQLite，识别用 onnxruntime-node。架构和各页面的设计说明在 docs/ARCHITECTURE.md 和 docs/FRONTEND.md，开发任务清单在 docs/TASKS.md。",
+     "lines": [
+      133,
+      138,
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明整理数据存储在 data/emaki.sqlite，SQLite 仅作为本应用的存储层使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "给习惯存很多图在自己手机电脑准备的群友准备的，一个在自己电脑上跑的插画整理工具。把存了几万张的二次元图文件夹丢进来，它会认出每张图画的是哪个角色、属于哪部作品，然后按角色 / 作品帮你归好类。漫画、截图、照片、表情包会自动分出去，重复的图也能找出来。 ／ |数据库（你做的所有整理）|`data/emaki.sqlite`| ／ 前端是 React + Vite + Tailwind，后端是 Node.js + Fastify + SQLite，识别用 onnxruntime-node。架构和各页面的设计说明在 docs/ARCHITECTURE.md 和 docs/FRONTEND.md，开发任务清单在 docs/TASKS.md。",
+   "evidence_lines": [
+    3,
+    133,
+    171
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nickname21kmr/emaki",
+  "sha": "4174adb00c0b",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

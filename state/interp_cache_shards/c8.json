@@ -9258,5 +9258,219 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e338b70a73e1": {
+  "identity": {
+   "one_liner": "自托管的 booru 风格个人图库应用，以 SQLite 按画廊存储",
+   "review": "一个用 Go 编写的自托管图库应用，用于整理本地图片/漫画收藏，支持标签管理、SD 生成元数据读取、ONNX 本地自动打标、去重和 REST API。数据以每画廊一个 SQLite 文件存储，无需数据库服务器；定位为本地网络使用，不建议暴露公网。",
+   "highlights": [
+    "每画廊对应单个 SQLite 文件存储，编译为自包含单二进制文件",
+    "支持 ONNX 模型本地自动打标（WD14、JoyTag 等），CPU/GPU 运行",
+    "提供 REST API、插件/主题机制，在线功能交由可选的 monloader 伴侣程序处理"
+   ],
+   "use_cases": [
+    "个人本地图片/漫画收藏的标签化管理与检索",
+    "Stable Diffusion / ComfyUI 生成图片的元数据归档与自动打标",
+    "本地局域网内搭建私有图库服务"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Monbooru compiles to a single self-contained binary (~21 MB, web assets embedded) with seven Go dependencies. Storage is one SQLite file per gallery: no database server, no cache layer, nothing else to run. Your collection stays ordinary files and folders on d ／ - SQLite, through the pure-Go modernc.org/sqlite driver, stores each gallery.",
+     "lines": [
+      28,
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明用 SQLite 文件为每个画廊存储数据，本应用是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Monbooru compiles to a single self-contained binary (~21 MB, web assets embedded) with seven Go dependencies. Storage is one SQLite file per gallery: no database server, no cache layer, nothing else to run. Your collection stays ordinary files and folders on disk, the database and thumbnails live in a separate data directory, so removing monbooru leaves your images exactly where they were. The UI is server-rendered with no JS framework and no frontend build step. ／ - SQLite, through the pure-Go modernc.org/sqlite driver, stores each gallery.",
+   "evidence_lines": [
+    28,
+    77
+   ]
+  },
+  "fn": "monbooru/monbooru",
+  "sha": "e338b70a73e1",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c6b6e09096f7": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 PowerShell 任务管理模块",
+   "review": "PSWorkItem 是一个 PowerShell 7 模块，用单个 SQLite 数据库文件存储个人任务与分类，提供创建、查询、更新、归档任务及汇总报告的命令，并包含一个 TUI 管理控制台。它依赖 MySQLite 模块访问数据库，要求 64 位 Windows 或 Linux 平台，作者说明其定位为个人用途而非完整项目管理方案。",
+   "highlights": [
+    "任务、分类、归档数据存储在单个 SQLite 数据库文件（默认 $HOME\\PSWorkItem.db）的三个表中",
+    "提供 Get-PSWorkItemReport 汇总报告及 Open-PSWorkItemConsole TUI 控制台",
+    "通过 PowerShell Gallery 安装，依赖 MySQLite 模块，需 PowerShell 7.3+"
+   ],
+   "use_cases": [
+    "个人工作与待办事项的命令行管理",
+    "按分类、截止日期查询任务并生成汇总报告",
+    "完成任务后自动归档到 Archive 表留存"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": ":information_source: This module is a replacement for the MyTasks module. The original PowerShell module offered simple tasks or to-do management. All data was stored in XML files. This module conceptually is designed the same way but instead uses a SQLite dat ／ The module is based on three tables in a SQLite database file. The primary `Tasks` table is where active items are stored.",
+     "lines": [
+      8,
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该模块使用 SQLite 数据库文件存储自身任务数据，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": ":information_source: This module is a replacement for the MyTasks module. The original PowerShell module offered simple tasks or to-do management. All data was stored in XML files. This module conceptually is designed the same way but instead uses a SQLite database file. The module commands are wrapped around functions from the MySQLite module. ／ The module is based on three tables in a SQLite database file. The primary `Tasks` table is where active items are stored.",
+   "evidence_lines": [
+    8,
+    49
+   ]
+  },
+  "fn": "jdhitsolutions/PSWorkItem",
+  "sha": "c6b6e09096f7",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7c8e445cb1f7": {
+  "identity": {
+   "one_liner": "自托管多账号 LLM 网关，提供 OpenAI 兼容 API",
+   "review": "该项目把已付费的 ChatGPT/Claude 账号聚合成一个 OpenAI 兼容 API，内置配额感知路由、故障转移与多种轮转策略，配 CLI 管理路由和密钥。数据默认存 SQLite 并以文件保存密钥，开发环境可用 Docker 启动 Postgres；面向想统一管理多个 LLM 账号的自托管用户。",
+   "highlights": [
+    "提供 OpenAI 兼容路由，多个上游账号共享一条路由并支持 failover、fill-first、balance、quota-first 等预设策略",
+    "通过 llms status 查询账号剩余配额与重置时间，实现配额感知的流量分配",
+    "支持 Docker 与 Go 二进制两种启动方式，数据落 SQLite 与文件密钥，开发环境可用 make dev-db 启动 Postgres"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Code、Codex 等工具提供统一的 OpenAI 兼容 Base URL",
+    "聚合多个 LLM 账号并在配额耗尽或出错时自动切换",
+    "本地自托管运行 LLM API 网关并自行备份 SQLite 数据与密钥文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Prefer Postgres? `make dev-db` starts one in Docker on `127.0.0.1:54329` (`deploy/dev/compose.yaml`); then ／ `export DATABASE_URL=postgres://llms:llms@127.0.0.1:54329/llms?sslmode=disable` before `./bin/llms-gateway`.",
+     "lines": [
+      111,
+      112
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-first OSS** — Docker *or* a local Go binary + SQLite + files on disk ／ export DATABASE_URL=sqlite:./data/llms.db ／ |Docker: volume `/data/llms.db` · Go: `./data/llms.db`|SQLite|",
+     "lines": [
+      19,
+      95,
+      293
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "网关仅将 SQLite（可选 Postgres）用作自身账户、路由与密钥数据的存储，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，另有托管云服务版本",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Turn ChatGPT / Claude (and Codex) seats you already pay for into **one OpenAI-compatible API**. ／ - **Local-first OSS** — Docker *or* a local Go binary + SQLite + files on disk ／ |Docker: volume `/data/llms.db` · Go: `./data/llms.db`|SQLite|",
+   "evidence_lines": [
+    7,
+    19,
+    293
+   ]
+  },
+  "fn": "goodtek-xyz/openllms",
+  "sha": "7c8e445cb1f7",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

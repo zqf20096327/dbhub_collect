@@ -10445,5 +10445,83 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aecf8fdb9c30": {
+  "identity": {
+   "one_liner": "本地生物识别门控的凭证代理，为 AI 子进程发放短生命周期凭证",
+   "review": "briefcred 是运行在 macOS 上的本地凭证代理：守护进程保管真实密钥，向 AI 代理子进程发放占位符令牌和一次性 Postgres 角色、AWS STS 会话、SSH 证书，由本地代理在出口替换真实凭证，并以 Cedar 策略和只追加审计日志约束每次请求。面向在本地运行 AI 代理、需要限制凭证暴露的开发者。目前为 alpha 未发布状态，仅能从源码安装，尚无外部安全评审。",
+   "highlights": [
+    "发放短生命周期凭证：Postgres 动态角色、AWS STS 会话、SSH 证书，会话结束即吊销",
+    "本地 TLS 代理替换占位符令牌为真实密钥，每个请求由 Cedar 策略裁决，支持 HTTP/1.1、HTTP/2、SSE、WebSocket 与 gRPC",
+    "提供只追加 JSONL 审计日志、Prometheus 指标端点、Touch ID 门控与 MCP 工具"
+   ],
+   "use_cases": [
+    "限制 AI 代理对 API 密钥和数据库凭证的可见性与使用范围",
+    "为一次性数据库访问发放会话结束即吊销的 Postgres 角色",
+    "对本地代理子进程的凭证铸造、请求与吊销行为进行审计记录"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Credentials that end.** Postgres roles, AWS STS sessions and SSH ／ for crate in cli daemon hook helper-postgres helper-sts; do ／ - **The PostgreSQL proxy.** The same handoff for databases: the subprocess ／ - PostgreSQL server binaries to run the end-to-end tests. Any 14 or newer",
+     "lines": [
+      23,
+      36,
+      63,
+      83
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "its own memory for a digest would have a confirmation oracle for guessed",
+     "lines": [
+      1351
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供专门的 helper-postgres 与 PostgreSQL 代理组件，为 PostgreSQL 凭证的发放与代理交接服务，属数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **The PostgreSQL proxy.** The same handoff for databases: the subprocess ／ - **Operations.** An append-only JSONL audit log, a Prometheus endpoint, a ／ - **Minting.** `postgres-dynamic` roles, `aws-sts` sessions and `ssh-cert`",
+   "evidence_lines": [
+    63,
+    66,
+    56
+   ]
+  },
+  "fn": "vkend/briefcred",
+  "sha": "aecf8fdb9c30",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9767,5 +9767,154 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f4496e50023": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的 Go 全栈 Headless 内容管理平台",
+   "review": "风行（GoWind HCH）是一个用 Go 编写的无头内容管理系统，提供 REST/gRPC 双协议 API 与内容建模、多租户、多语言、审批流、社交分发等功能，并附 Vue/React/Taro/Flutter 多套前端。数据存储使用 PostgreSQL 或 MySQL，向量化检索依赖 pgvector。适合需要自建多端内容门户、并具备 Go 与 Docker 运维能力的企业团队部署使用。",
+   "highlights": [
+    "提供 RESTful / gRPC 双协议接口，OpenAPI 文档自动生成，另有 GraphQL 只读内容查询端点",
+    "支持多租户数据隔离与菜单/接口/数据三级 RBAC 权限控制",
+    "内置 AI 助手：知识库 RAG（文档向量化入 pgvector）、自然语言转只读 SQL、内容语义搜索与 AI 内容生成"
+   ],
+   "use_cases": [
+    "企业官网、内容门户、博客等多端内容发布场景",
+    "需要多租户与精细化权限隔离的内容运营平台",
+    "微信小程序与移动 App 内容分发（Taro/Flutter 前台）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库|",
+     "lines": [
+      49
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个内容管理平台，README 声明使用 PostgreSQL/MySQL 作为关系型数据库存数据，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "风行（GoWind HCH）是一款开箱即用的企业级 Golang 全栈 Headless 内容平台（HCH = Headless Content Hub，无头内容中枢），为企业提供灵活、可扩展的全域内容管理与分发解决方案。 ／ |数据库|PostgreSQL / MySQL|关系型数据库|",
+   "evidence_lines": [
+    14,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tx7do/go-wind-cms",
+  "sha": "3f4496e50023",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e60c01107888": {
+  "identity": {
+   "one_liner": "自托管一次性阅后即焚加密消息分享服务",
+   "review": "一个用 PHP 编写的自托管 Web 应用，用户写入消息后生成含随机解密密钥的链接，消息以 AES-128-GCM 加密存储，收件人打开链接读取后记录即被删除。支持 JSON 文件或 MySQL 两种存储方式，消息上限 10,000 字节。适合需要自建临时保密信息传递通道的个人或团队部署。",
+   "highlights": [
+    "消息以 AES-128-GCM 加密后存储，接收方打开链接后记录被删除",
+    "提供 json 文件和 MySQL 两种存储方式，可经 config.json 切换",
+    "自包含 PHP 应用，通过 .htaccess 提供存储目录访问控制规则"
+   ],
+   "use_cases": [
+    "通过链接向他人一次性分享密码或敏感文本",
+    "在已有 MySQL 环境的自托管服务器上部署私有消息分享服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- For MySQL storage only: PHP `mysqli` and a MySQL-compatible database. ／ 4. Create the `config.json`. Choose `json` to store records in local files, or `mysql` to use a database: ／ 5. For MySQL, create the `local/database.json` file and specify the connection details:",
+     "lines": [
+      29,
+      36,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 MySQL 存储消息记录的自托管应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Write a message and OneView creates a link containing a randomly generated decryption key. Messages are encrypted with AES-128-GCM before storage. The message is returned when the recipient opens it, then its stored record is deleted. Messages are limited to **10,000 bytes**. ／ - For MySQL storage only: PHP `mysqli` and a MySQL-compatible database. ／ |`mysql`|The `oneview_records` database table|Installations already using MySQL|",
+   "evidence_lines": [
+    20,
+    29,
+    72
+   ]
+  },
+  "fn": "arizon-dev/oneview",
+  "sha": "e60c01107888",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

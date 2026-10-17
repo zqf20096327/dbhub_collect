@@ -9580,5 +9580,83 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "660cc4b770b1": {
+  "identity": {
+   "one_liner": "本地数据同步作业工具，在 PostgreSQL/MySQL/MongoDB/Cosmos DB/CSV 间建映射",
+   "review": "Syncforge 是在本地运行的 ETL/数据同步工具：通过 UI 构建作业规格（JSON 文件），配置源目标、字段映射、转换和查询，支持预览、dry-run、全量/增量（watermark）运行，并在运行后逐字段比对源与目标。适合需要在平台迁移期间反复搬表、重命名字段的开发者；README 明确它是仅限本机、非生产用途的工具，无登录机制。通过 Docker Compose 启动。",
+   "highlights": [
+    "提供字段映射、转换（类型转换、表达式、lookup join）、预览与 dry-run，写入采用按键字段 upsert",
+    "支持全量复制与基于 watermark 字段的增量运行，失败后可从断点恢复",
+    "运行后对源与目标做行数统计和逐字段抽样比对，生成核对报告"
+   ],
+   "use_cases": [
+    "平台迁移期间在不同数据库间定期同步表数据并核对结果",
+    "将一次性迁移脚本整理为可代码评审的 JSON 作业规格",
+    "从 CSV 文件导入数据或将其作为 lookup 参与跨库任务"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Build, run and verify data sync jobs between **PostgreSQL**, **MySQL**, **MongoDB** and **Cosmos DB** from a UI, instead of writing another one-off script. Uploaded **CSV files** work as a source too. ／ - **Browse schemas** of PostgreSQL and MySQL tables and views, and of MongoDB and Cosmos DB collections (fields are inferred by sampling documents, including nested paths like `address.city`). ／ - **Join related data**: look up values from other tables or collections, in the same database or a different one (an order's customer email from the CRM), or read a PostgreSQL source through your own SQL query.",
+     "lines": [
+      3,
+      20,
+      22
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Build, run and verify data sync jobs between **PostgreSQL**, **MySQL**, **MongoDB** and **Cosmos DB** from a UI, instead of writing another one-off script. Uploaded **CSV files** work as a source too. ／ - **Browse schemas** of PostgreSQL and MySQL tables and views, and of MongoDB and Cosmos DB collections (fields are inferred by sampling documents, including nested paths like `address.city`). ／ This also starts a PostgreSQL, a MySQL and a MongoDB with sample data. Add these connections in the UI:",
+     "lines": [
+      3,
+      20,
+      54
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为连接多种数据库执行同步/迁移作业的工具，自身不作为业务应用使用数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Build, run and verify data sync jobs between **PostgreSQL**, **MySQL**, **MongoDB** and **Cosmos DB** from a UI, instead of writing another one-off script. Uploaded **CSV files** work as a source too. ／ Syncforge runs on your machine. You point it at two databases (or a CSV file and a database), pick a table, tick the fields you need, decide how each one lands in the target, and run it. It can then check the result for you: it re-maps a sample of source rows and compares them field by field with what is in the target. ／ > **Local-only tool, not for production.** Syncforge has no login and trusts everyone who can reach it. It is meant to run on your own machine, bound to `127.0.0.1`, for people who are already trusted with the databases it connects to. Do not expose it to a network, host it as a service, or reuse its code as a pattern for internet-facing applications. See Security model.",
+   "evidence_lines": [
+    3,
+    5,
+    8
+   ]
+  },
+  "fn": "MohammedRaslan/sync-forge",
+  "sha": "660cc4b770b1",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

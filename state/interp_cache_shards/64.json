@@ -9550,5 +9550,83 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "03580d7db755": {
+  "identity": {
+   "one_liner": "本地AI对话历史归档系统，统一检索审计各AI会话",
+   "review": "Polylogue 的 Rust 基础组件，用于将 Codex、Claude 等AI代理的会话历史导入本地归档，提供 SQLite 完整性校验、只读查询句柄、守护进程状态客户端和 MCP stdio 适配器，支持副本恢复与受控恢复流程。面向需要在本地留存和检索AI对话记录的用户。README 明确标注 product_path 为 partial，通用导出与完整 MCP 能力尚未完成。",
+   "highlights": [
+    "提供单一归档写入器、只读句柄和守护进程/状态客户端架构",
+    "通过 MCP stdio 适配器暴露保留搜索、有界读取和带署名的笔记/更正写入",
+    "支持归档格式3的停止副本恢复和一次性校验和验证恢复命令"
+   ],
+   "use_cases": [
+    "将 Codex/Claude 等AI代理会话历史统一归档为可检索的本地档案",
+    "对已停止的本地归档副本执行恢复和完整性校验",
+    "通过 MCP 客户端或 CLI 查询归档会话并写入更正记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "This repository contains the standalone Rust foundation. It implements foundation identity/value contracts, durable SQLite schema checks, shared content files, one archive writer, read-only handles and a real daemon/status client. Explicit immutable Codex and  ／ Preparation holds the normal lock, validates durable WAL/schema, SQLite integrity, immutable identities and every retained blob/revision, and exits without intake or a socket. It emits a flushed pending progress object followed by a final report and degraded e",
+     "lines": [
+      3,
+      29
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "The runner extracts the corpus and independent oracle from the pinned spec and ／ selected committed synthetic fixtures/oracle, and launches only that package",
+     "lines": [
+      143,
+      227
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该系统使用 SQLite 作为自身归档存储，而非为数据库生态提供服务的工具或组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Polylogue Rust foundation ／ This repository contains the standalone Rust foundation. It implements foundation identity/value contracts, durable SQLite schema checks, shared content files, one archive writer, read-only handles and a real daemon/status client. Explicit immutable Codex and context-declared Claude regular-file imports and provider-state progress are registered. Selected source Messages have a streaming terminal reference read, and exact native Claude Session reads can prove a supported normalized JSON/terminal shape. Session listing and human/model prose search share one typed daemon query; general queries retain explicit degraded coverage. A thin MCP stdio adapter exposes retained search, bounded reads, status and attributed note/correction writes. Full canonical finalization, general export, full MCP capabilities and HTTP remain unfinished. Status reports `product_path: \"partial\"`; an initialized empty schema is not a completed ingestion or M1 demonstration. ／ `crates/credential-output` owns the shared pure streaming credential presentation engine; terminal and Session rendering use it without changing their response limits. `crates/model` is pure. Only `crates/store` owns SQLite connections; public handles expose typed operations. `crates/hashed-blobs` is the reviewed shared file layer plus an explicit read-only capability, documented in source provenance. The immutable `hashed-blobs-v0.1.0` release remains consumed; the prepared 0.1.1 repair follows the shared release procedure, with independently verified consumer pins. Store limits distinguish these primitives from complete input acquisition and recovery.",
+   "evidence_lines": [
+    1,
+    3,
+    49
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "03580d7db755",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

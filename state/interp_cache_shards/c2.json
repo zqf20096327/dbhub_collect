@@ -9941,5 +9941,94 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8688140fa696": {
+  "identity": {
+   "one_liner": "基于数据库的 Django 任务队列后端，无需 Redis/RabbitMQ",
+   "review": "django-ox 将 Django Tasks 框架跑在现有数据库上，用 SELECT ... FOR UPDATE SKIP LOCKED 或原子 UPDATE 抢占任务，worker 死亡时由 reaper 归还任务并按指数退避重试；支持事务性入队、Django admin 管理与周期调度。面向已依赖 PostgreSQL/MySQL/SQLite 的 Django 项目，要求 Python 3.12+，Django 5.2 LTS 至 6.1。",
+   "highlights": [
+    "任务队列为数据库表，worker 死亡后任务由 reaper 返回队列并按指数退避重试",
+    "支持事务性入队，任务随业务数据在同一事务中提交或回滚",
+    "通过 ox_worker CLI 运行，支持多进程/线程并发、心跳文件与 ox_health 健康检查"
+   ],
+   "use_cases": [
+    "Django 项目中以现有数据库替代独立消息代理执行后台任务",
+    "需要任务在 worker 崩溃后自动回队并重试的场景",
+    "在 Django admin 中管理重试、丢弃任务与周期性调度"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ PostgreSQL 16; no-op tasks; django-ox 1.9.0 vs django-tasks-db 0.13.0; medians of five runs. ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence.",
+     "lines": [
+      41,
+      55,
+      57
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ it (PostgreSQL, MySQL 8+) and an atomic compare-and-set UPDATE elsewhere",
+     "lines": [
+      41,
+      57,
+      94
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ (including SQLite), and a reaper returns tasks whose worker died to the queue.",
+     "lines": [
+      41,
+      57,
+      95
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它将使用者的数据库用作任务队列表存储，属于依赖数据库存数据的应用侧组件而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSD 3-Clause",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stop running Redis to send an email. django-ox runs Django's Tasks framework in your existing database. When a worker dies, another worker picks up its tasks. You run one process: the worker. ／ Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks retry with exponential backoff by default, with every attempt's traceback kept. ／ Enqueue inside `transaction.atomic()` on the database holding `OxTask`, and the task commits or rolls back with your application data. No `transaction.on_commit()` needed.",
+   "evidence_lines": [
+    10,
+    41,
+    47
+   ]
+  },
+  "fn": "oxpull/django-ox",
+  "sha": "8688140fa696",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9521,5 +9521,146 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0201deea61bd": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 行级安全(RLS)实现 Django 多租户隔离的库",
+   "review": "django-rls-tenants 是一个 Django 库，通过 PostgreSQL 的 Row-Level Security 把租户隔离下沉到数据库层，使 ORM、raw SQL、dbshell 查询都由数据库过滤。面向需要在单库单 schema 下做 SaaS 多租户隔离的 Python/Django 开发者，提供 RLSProtectedModel、DRF/Celery 集成等；要求 PostgreSQL 15+、Django 5.2+、Python 3.12+，且数据库角色不得为 superuser 或 BYPASSRLS。",
+   "highlights": [
+    "RLS 策略由数据库执行，覆盖 ORM 查询、raw SQL、dbshell 及数据迁移",
+    "缺省 fail-closed：缺少租户上下文时返回零行，可选 STRICT_MODE 抛出 NoTenantContextError",
+    "提供 Django admin 租户切换、DRF mixin、Celery @rls_task 及跨租户外键校验等集成"
+   ],
+   "use_cases": [
+    "在共享单库单 schema 上构建需要租户隔离的 Django/SaaS 应用",
+    "为现有 Django 项目补加数据库层强制租户过滤与审计检查（check_rls）",
+    "在 Celery 任务、异步视图和管理命令中传递租户上下文"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Database-enforced multitenancy for Django using PostgreSQL ／ pushes enforcement to PostgreSQL itself using Row-Level Security. Every query — ／ |PostgreSQL|15, 16, 17, 18|",
+     "lines": [
+      11,
+      20,
+      139
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库依赖并封装 PostgreSQL 的 RLS 能力，为使用 PostgreSQL 的应用提供隔离组件，属数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Database-enforced multitenancy for Django using PostgreSQL ／ - **Database-enforced isolation** -- RLS policies protect tenant tables across ORM ／ |PostgreSQL|15, 16, 17, 18|",
+   "evidence_lines": [
+    11,
+    28,
+    139
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "dvoraj75/django-rls-tenants",
+  "sha": "0201deea61bd",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "083973644e4e": {
+  "identity": {
+   "one_liner": "本地 AI 编程 token 用量与成本追踪仪表盘，读取本地文件生成报表",
+   "review": "RepoSpend 是一个本地运行的 CLI 工具，通过 npx 启动 localhost 仪表盘，读取 Codex、Claude Code、GitHub Copilot 等工具的本地会话文件，按仓库、会话、模型统计 token 用量与 API 等价成本估算；内部使用 better-sqlite3 存储数据。面向需要按项目维度分析 AI 编程开销的开发者与团队，数据不上传，Cursor 支持为实验性。",
+   "highlights": [
+    "读取本地 Codex、Claude Code、GitHub Copilot、Cursor 会话文件，只读且不上传数据",
+    "按仓库、会话、模型、工具维度统计 token 用量与 API 等价成本估算",
+    "通过 npx repospend 启动本地仪表盘，默认监听 localhost:2005"
+   ],
+   "use_cases": [
+    "按仓库分析 AI 编程工具的 token 消耗与成本集中点",
+    "排查异常昂贵的会话与模型/工具组合",
+    "本地查看缓存命中、token 结构等用量细节"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Cursor|Experimental opt-in|Local JSONL and SQLite/vscdb discovery; tokens/cost only when local data includes them| ／ RepoSpend uses `better-sqlite3`, so npm may install a native SQLite package for",
+     "lines": [
+      120,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 better-sqlite3 作为内部依赖存储数据，项目本身是面向 AI 编程工具用量追踪的应用而非数据库生态组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RepoSpend uses `better-sqlite3`, so npm may install a native SQLite package for ／ RepoSpend is a local-first dashboard for tracking AI coding token usage and API-equivalent spend by repository, session, model, and tool. It supports local Codex, Claude Code, and GitHub Copilot usage data, runs with `npx repospend`, and does not upload prompts, code, transcripts, or usage data. ／ npx repospend",
+   "evidence_lines": [
+    136,
+    3,
+    43
+   ]
+  },
+  "fn": "mehmetdemircs/RepoSpend",
+  "sha": "083973644e4e",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

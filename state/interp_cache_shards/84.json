@@ -9923,5 +9923,80 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8b8048e01d5a": {
+  "identity": {
+   "one_liner": "自托管的Claude Code应用托管平台，每应用配Supabase后端",
+   "review": "该项目在单台 VM 上为团队用 Claude Code 构建的应用提供自托管运行环境，通过控制平面为每个应用开通独立的 Postgres 数据库、GoTrue、PostgREST 等组件，部署经 MCP 服务器和 Claude Code 插件触发，并提供 Supabase Studio 与管理控制台。面向应用开发者与管理员，README 标注状态为 alpha。需要 Docker、Node 24 等环境。",
+   "highlights": [
+    "控制平面为每个应用开通独立的 Postgres 数据库及 GoTrue、PostgREST 容器，并用 Caddy 配置路由",
+    "通过 MCP 服务器与 Claude Code 插件完成应用部署，部署流程支持 GitHub Actions",
+    "提供多项目 Supabase Studio 与管理控制台，包含备份恢复、SSO 与安全检查（security linter）"
+   ],
+   "use_cases": [
+    "团队在自托管单机上托管多个内部应用及其数据库",
+    "开发者通过 Claude Code 对话式部署和管理应用",
+    "管理员集中查看各应用的发布、成员与审计日志"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Self-hosted hosting for the apps your team builds with Claude Code. Each app gets its own Supabase backend (Postgres database, Auth, REST API, Edge Functions) and its static frontend, all served from a single VM. Developers (\"app builders\") don't use a UI to d ／ - The **control plane** provisions each app (a Postgres database, its own GoTrue and PostgREST containers, a tenant in the shared services), deploys it, and configures Caddy's routes. Details: docs/ARCHITECTURE.md §3. ／ control-plane/ Hono API + MCP server + admin API + provisioning (Docker, Caddy, Postgres)",
+     "lines": [
+      3,
+      46,
+      52
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为每个应用开通并管理 Postgres 数据库及配套服务，属于为数据库部署与托管服务的平台组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Self-hosted hosting for the apps your team builds with Claude Code. Each app gets its own Supabase backend (Postgres database, Auth, REST API, Edge Functions) and its static frontend, all served from a single VM. Developers (\"app builders\") don't use a UI to deploy: they ask Claude Code to \"deploy the app to the platform\", through an MCP server and a Claude Code plugin. They inspect their apps in a multi-project Supabase Studio. Admins see every app, in Studio and in an admin console. ／ - The **control plane** provisions each app (a Postgres database, its own GoTrue and PostgREST containers, a tenant in the shared services), deploys it, and configures Caddy's routes. Details: docs/ARCHITECTURE.md §3. ／   control-plane/      Hono API + MCP server + admin API + provisioning (Docker, Caddy, Postgres)",
+   "evidence_lines": [
+    3,
+    46,
+    52
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "marmelab/platform",
+  "sha": "8b8048e01d5a",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8918,5 +8918,187 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "79b32a88d0d6": {
+  "identity": {
+   "one_liner": "Laravel 数据库结构查看器，实时将 schema 渲染为可缩放 ER 图",
+   "review": "一个 Laravel 包，读取数据库结构（表、列、键、索引），在应用内渲染为可平移缩放的 Mermaid ER 图，不查询行数据；提供 schema 导出（DBML/JSON/CSV/Markdown/HTML 等）、schema diff 和结构健康检查命令。面向 Laravel 开发者，用于查看结构、CI 校验和为编码代理提供上下文。要求 PHP 8.2+ 和 Laravel 12+。",
+   "highlights": [
+    "通过 Mermaid 渲染实时 ER 图，仅读取结构、不查询行数据",
+    "提供 truss:export/truss:diff/truss:doctor 命令，可在 CI 中做 schema 导出、漂移检查与健康检查",
+    "支持多数据库连接切换及导出为 DBML、JSON、CSV、Markdown、DBML、llm 等格式"
+   ],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "export TRUSS_DSN=\"pgsql://user:pass@db.example.com:5432/shop\" # also mysql://, mariadb://, or a SQLite file path",
+     "lines": [
+      300
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "export TRUSS_DSN=\"pgsql://user:pass@db.example.com:5432/shop\" # also mysql://, mariadb://, or a SQLite file path",
+     "lines": [
+      300
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "export TRUSS_DSN=\"pgsql://user:pass@db.example.com:5432/shop\" # also mysql://, mariadb://, or a SQLite file path",
+     "lines": [
+      300
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该包为 Laravel 应用内省并可视化数据库结构，是为数据库生态服务的工具而非以数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Laravel Truss is a live database structure viewer. It scans your live schema and renders it as a scrollable, zoomable ER diagram right inside your app, so you can see how the tables actually connect without opening a DB client. It reads **structure only** (tables, columns, keys, indexes); row data is never queried or exposed. ／ - Export the diagram as PNG or SVG, or its structure as JSON, CSV, a Markdown data dictionary, DBML, or a token-trimmed `llm` format, from the browser or, for CI and tooling, from the command line with `php artisan truss:export`. Structure-only and deterministic. `--format=html` writes the whole diagram as one self-contained file that opens with no server and no install. ／ composer require albertoarena/laravel-truss --dev",
+   "evidence_lines": [
+    12,
+    24,
+    50
+   ]
+  },
+  "fn": "albertoarena/laravel-truss",
+  "sha": "79b32a88d0d6",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5dfa323c24ec": {
+  "identity": {
+   "one_liner": "单二进制 MCP 服务器，让 AI 助手连接 SQL 数据库",
+   "review": "dbmcp 是一个用 Rust 系单二进制发布的 MCP 服务器，为 MySQL、MariaDB、PostgreSQL、SQLite 提供统一的 MCP 工具接口（schema 发现、读/写查询、DDL、explain），支持 stdio 与 HTTP 传输、SSH 隧道、TLS、只读模式和连接池/超时配置，内置 PII 脱敏与写防护。面向使用 Claude Desktop、Cursor 等 MCP 客户端的开发者和运维人员，通过安装脚本、Docker 或 Cargo 部署。",
+   "highlights": [
+    "提供 MCP 工具集：schema 发现、readQuery/writeQuery、DDL 与 explainQuery，只读模式下隐藏写工具",
+    "支持 stdio 与 HTTP 两种传输，可通过 SSH 隧道经堡垒机访问数据库，支持 TLS 与 bearer token 认证",
+    "单二进制（约 7 MB），无 Python/Node/Docker 运行时依赖，两层配置（CLI 优先于环境变量）"
+   ],
+   "use_cases": [
+    "在 Claude Desktop、Cursor 等 MCP 客户端中接入 MySQL/MariaDB/PostgreSQL/SQLite 进行数据查询",
+    "通过只读模式与写防护让 AI 助手安全访问生产/敏感数据库",
+    "经 SSH 堡垒机隧道访问内网数据库"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ - **SSH tunnel** — reach MySQL/MariaDB/PostgreSQL through an SSH bastion with an embedded client: password or key auth, `known_hosts` verification, automatic reconnect",
+     "lines": [
+      8,
+      16,
+      21
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ - **SSH tunnel** — reach MySQL/MariaDB/PostgreSQL through an SSH bastion with an embedded client: password or key auth, `known_hosts` verification, automatic reconnect",
+     "lines": [
+      8,
+      16,
+      21
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ |`--db-backend`|`DB_BACKEND`|*(required)*|`mysql`, `mariadb`, `postgres`, or `sqlite`|",
+     "lines": [
+      8,
+      16,
+      128
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ - **SSH tunnel** — reach MySQL/MariaDB/PostgreSQL through an SSH bastion with an embedded client: password or key auth, `known_hosts` verification, automatic reconnect",
+     "lines": [
+      8,
+      16,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 MySQL/MariaDB/PostgreSQL/SQLite 提供 MCP 接口访问的服务器工具，服务于数据库生态而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A single-binary MCP server for SQL databases. Connect your AI assistant to MySQL/MariaDB, PostgreSQL, or SQLite with zero runtime dependencies. ／ - **Multi-database** — MySQL/MariaDB, PostgreSQL, and SQLite from one binary ／ - **Multiple transports** — stdio (for Claude Desktop, Cursor) and HTTP (for remote/multi-client)",
+   "evidence_lines": [
+    8,
+    16,
+    19
+   ]
+  },
+  "fn": "haymon-ai/dbmcp",
+  "sha": "5dfa323c24ec",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

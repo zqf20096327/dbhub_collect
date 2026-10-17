@@ -9809,5 +9809,131 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "669bf783a24d": {
+  "identity": {
+   "one_liner": "分布式可自托管运行时间监控系统，单二进制执行健康检查",
+   "review": "SolidPing 是一个多租户 uptime 监控系统，通过分布式 worker 执行 43 种健康检查（含 7 种数据库连接检查），提供状态页、事件管理与值班升级机制，后端可用 SQLite 或 PostgreSQL 存储数据，面向需要自托管基础设施监控的组织。它还内置 MCP server，供 AI/LLM 工具访问。",
+   "highlights": [
+    "提供 43 种检查类型，包括 PostgreSQL、MySQL、MSSQL、Oracle、ClickHouse 等数据库的连接与查询执行检查",
+    "支持多区域分布式 worker、私有 agent 与基于租约的调度",
+    "以单 Go 二进制运行，存储支持 SQLite、内嵌或外部 PostgreSQL，并提供 MCP server"
+   ],
+   "use_cases": [
+    "自托管基础设施与服务的可用性监控",
+    "数据库、消息队列、网络协议端点的健康检查",
+    "多区域拨测与状态页、事件值班告警管理"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Low footprint**: Single binary; SQLite, embedded Postgres, or external Postgres ／ - PostgreSQL 15+ ／ |PostgreSQL|Connection + query execution|",
+     "lines": [
+      52,
+      74,
+      139
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL/MariaDB|Connection + query execution|",
+     "lines": [
+      140
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL/MariaDB|Connection + query execution|",
+     "lines": [
+      140
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|Connection + query execution|",
+     "lines": [
+      142
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|MSSQL|Connection + query execution|",
+     "lines": [
+      141
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Connection + query execution|",
+     "lines": [
+      143
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Low footprint**: Single binary; SQLite, embedded Postgres, or external Postgres ／ ### SQLite (the default — good for a single instance)",
+     "lines": [
+      52,
+      188
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对各数据库的连接与查询执行检查类型，并支持以 SQLite/PostgreSQL 作为自身存储，为数据库生态提供监控服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SolidPing is a multi-tenant monitoring system that enables organizations to monitor their infrastructure through distributed workers executing health checks. It's designed for low resource consumption and easy self-hosting. ／ - **43 check types**: HTTP, TCP, UDP, ICMP, DNS, DNSBL, NTP, SSL/Domain, SSH, RDP, VNC, FTP/SFTP, SMTP/POP3/IMAP, Email (JMAP passive inbox), WebSocket, SIP, gRPC, Prometheus, 7 databases (Postgres, MySQL, MSSQL, Oracle, ClickHouse, MongoDB, Redis), 3 message queues (Kafka, RabbitMQ, MQTT), Docker, Kubernetes, SNMP, Freebox line, game server (Source/A2S, Minecraft), headless browser, custom JS, website crawl, health endpoint, heartbeat ／ - **Low footprint**: Single binary; SQLite, embedded Postgres, or external Postgres",
+   "evidence_lines": [
+    44,
+    48,
+    52
+   ]
+  },
+  "fn": "fclairamb/solidping",
+  "sha": "669bf783a24d",
+  "source": "readme",
+  "generated_at": "2026-10-17",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
