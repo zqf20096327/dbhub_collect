@@ -47,21 +47,31 @@
 
 ---
 
+> [!NOTE]
+> ### 📢 Notice on Known UI Bugs & Upcoming Hotfix
+> We are actively tracking a few visual and modal display issues identified in the current release:
+> - **Dark-on-Dark Text Contrast**: Certain UI elements and buttons may inadvertently display dark or black text on dark background surfaces in dark mode, making them difficult to read.
+> - **Modal Configuration & Display Behavior**: Some dialog modals may open with unexpected dimensions, misplaced focus, or unconfigured default states in specific layouts.
+> 
+> **We are actively working on these fixes!** A follow-up release addressing these UI contrast issues and modal configuration defects is coming **ASAP**. Thank you for your patience and support!
+
+---
+
 ## 🚀 Download & Install (No Technical Skills Needed)
 
 Get Compust up and running on Windows in less than two minutes. **No Python, Node.js, XAMPP, MySQL, Git, or command-line experience required.**
 
-### 📥 1. Official Downloads (v1.0.2)
+### 📥 1. Official Downloads (v1.0.3)
 Download the release assets directly from GitHub Releases:
-- 💿 **[Windows Setup Wizard (Compust-Setup-v1.0.2.exe)](https://github.com/putbullet/compust/releases/latest)** (~222 MB) — Recommended for most users. Includes bundled Python runtime, automatic updates, start menu and desktop shortcuts, and system tray integration.
-- 📦 **[Windows Portable Release (Compust-Windows-Portable-v1.0.2.zip)](https://github.com/putbullet/compust/releases/latest)** (~82 MB) — Zero installation required. Simply extract anywhere and launch `Compust.bat`.
+- 💿 **[Windows Setup Wizard (Compust-Setup-v1.0.3.exe)](https://github.com/putbullet/compust/releases/latest)** (~222 MB) — Recommended for most users. Includes bundled Python runtime, automatic updates, start menu and desktop shortcuts, and system tray integration.
+- 📦 **[Windows Portable Release (Compust-Windows-Portable-v1.0.3.zip)](https://github.com/putbullet/compust/releases/latest)** (~82 MB) — Zero installation required. Simply extract anywhere and launch `Compust.bat`.
 - Each release provides an official SHA-256 checksum file to independently verify package integrity.
 
 ---
 
 ### 🪄 2. The 5-Step Setup Walkthrough
 
-1. **Download the Setup File**: Click the link above to download `Compust-Setup-v1.0.2.exe` (or extract `Compust-Windows-Portable-v1.0.2.zip`).
+1. **Download the Setup File**: Click the link above to download `Compust-Setup-v1.0.3.exe` (or extract `Compust-Windows-Portable-v1.0.3.zip`).
 2. **Start the Installer**: Double-click the downloaded setup file. Choose your preferred language: **English**, **Français**, or **Nederlands**.
 3. **Choose Installation Folder**: The installer defaults to your user profile directory (`%LOCALAPPDATA%\Programs\Compust`), requiring **zero administrator permissions**.
 4. **AI Assistance Setup**:

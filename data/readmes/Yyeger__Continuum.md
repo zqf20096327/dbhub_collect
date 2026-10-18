@@ -34,7 +34,8 @@ that support one; see the [idempotency guide](guides/idempotency.md).
 Continuum is a durable execution engine — Temporal's programming model, but
 OTP-native and Postgres-backed. No separate cluster service, no paid SaaS
 dependency, no polyglot SDK. It lives in your application's supervision tree
-and uses the database you already run.
+and uses the database you already run — including SQLite, for applications
+that run on a single node.
 
 ## See it happen
 
@@ -167,7 +168,8 @@ survives a crash?"* for Elixir-first teams.
   silent corruption.
 - **One dependency.** Postgres is the only thing you need to operate — it is
   the journal, the lease store, the timer wheel, and the signal bus
-  (`LISTEN`/`NOTIFY`).
+  (`LISTEN`/`NOTIFY`). A single-node application can use SQLite in its place;
+  see the [SQLite guide](guides/sqlite.md).
 - **It's just OTP.** Continuum is a supervision tree you add to your own app.
   Crash recovery, leasing, and back-pressure are built on processes, not an
   external coordinator.
@@ -222,7 +224,7 @@ Add Continuum and a Postgres driver to your dependencies:
 ```elixir
 def deps do
   [
-    {:continuum, "~> 0.8.5"},
+    {:continuum, "~> 0.9.0"},
     {:postgrex, "~> 0.19"}
   ]
 end
@@ -241,6 +243,12 @@ Generate and run the migration:
 mix continuum.gen.migration --repo MyApp.Repo
 mix ecto.migrate
 ```
+
+**Running on one node?** Add `{:ecto_sqlite3, "~> 0.25"}`, point Continuum at
+an `Ecto.Adapters.SQLite3` repo with
+`journal: Continuum.Runtime.Journal.SQLite`, and the same generator writes the
+SQLite schema. The [SQLite guide](guides/sqlite.md) covers the recommended
+repo settings and what is PostgreSQL-only.
 
 Add Continuum's runtime children to your supervision tree, **after** your repo:
 
@@ -277,6 +285,9 @@ end
 - **Postgres journal** with lease + fencing-token CAS on every write. A stolen
   lease produces a write failure and terminates the stale engine — it never
   corrupts history.
+- **SQLite journal** for single-node deployments, with the same fencing and
+  replay semantics on an `ecto_sqlite3` repo. Clustering and event partitions
+  remain PostgreSQL features.
 - **Activity execution** through the built-in worker pool by default, or an
   optional `Continuum.Oban` executor for teams that already operate Oban.
   Continuum keeps retry/timeout policy, idempotency, and fencing-token commits
@@ -393,7 +404,7 @@ cover the entire surface:
 - *Determinism rules and replay drift*
 - *Sagas and compensation* · *Child workflows* · *Long-running workflows*
 - *Patching workflows* · *Workflow versioning*
-- *Multi-instance Continuum* · *Clustering* · *Namespaces*
+- *Multi-instance Continuum* · *Clustering* · *Namespaces* · *SQLite*
 - *Search attributes and structured queries*
 - *Operations* · *Auditing* · *Observer* · *Observability (OpenTelemetry)* ·
   *Snapshots*
@@ -407,7 +418,7 @@ Upgrading? See the [migration guides](https://github.com/Yyeger/Continuum/tree/m
 
 ## Status
 
-Continuum is **v0.8.5 (pre-1.0)**. The durable engine, determinism enforcement,
+Continuum is **v0.9.0 (pre-1.0)**. The durable engine, determinism enforcement,
 workflow composition, observability, and clustering surface are implemented and
 covered by tests, including crash-resume, lease-fencing races, and
 property-based replay. APIs may still change before 1.0 — pin to a specific

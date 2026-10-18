@@ -20,7 +20,7 @@
 - **Model() API** - ORM-style CRUD with auto-populated IDs (int + UUID via `autoincrement` tag), composite PKs
 - **AutoID** - Stripe-like prefixed IDs (`usr_`, `ord_`) with dual-key pattern, `FindByPublicID()`, prefix validation
 - **NullStringMap** - Dynamic scanning without predefined structs
-- **Named Placeholders** - `{:name}` syntax with `Bind(Params{})` for readable queries
+- **Named Placeholders** - `{:name}` syntax with `relica.Params` (`Where`, `Having`, `NewQuery(...).BindParams`) for readable queries
 - **Functional Expressions** - CASE, COALESCE, NULLIF, GREATEST, LEAST, CONCAT
 - **Transactional()** - Auto commit/rollback helper with panic recovery
 - **Dynamic WHERE** - `AndWhere()` / `OrWhere()` for conditional query building
@@ -322,15 +322,24 @@ db.Select().From("articles").
     Where(relica.Like("title", "go", "database")).  // title LIKE '%go%' AND title LIKE '%database%'
     All(&articles)
 
-// Custom matching (prefix/suffix)
+// Custom matching: Match(left, right) sets the % on each side
 db.Select().From("files").
-    Where(relica.Like("filename", ".txt").Match(false, true)).  // filename LIKE '%.txt'
+    Where(relica.Like("filename", ".txt").Match(true, false)).  // filename LIKE '%.txt' (suffix)
+    All(&files)
+db.Select().From("files").
+    Where(relica.Like("filename", "report").Match(false, true)).  // filename LIKE 'report%' (prefix)
     All(&files)
 
 // OR logic
 db.Select().From("users").
     Where(relica.OrLike("email", "gmail", "yahoo")).  // email LIKE '%gmail%' OR email LIKE '%yahoo%'
     All(&users)
+
+// Case-insensitive on every database (v0.19.1+): ILIKE on PostgreSQL,
+// LOWER(col) LIKE LOWER(?) on MySQL and SQLite. Also NotILike, OrILike, OrNotILike.
+db.Select().From("hosts").
+    Where(relica.ILike("cpu_model", "xeon")).
+    All(&hosts)
 ```
 
 #### Logical Combinators
@@ -508,16 +517,14 @@ type Order struct {
 #### Transactions
 
 ```go
-tx, err := db.Begin(ctx)
-defer tx.Rollback()
-
-user := User{Name: "Alice"}
-err = tx.Model(&user).Insert()
-
-if err == nil {
-    tx.Commit()
-}
+err := db.Transactional(ctx, func(tx *relica.Tx) error {
+    user := User{Name: "Alice"}
+    return tx.Model(&user).Insert() // error → rollback, nil → commit
+})
 ```
+
+Every statement of the transaction must go through `tx` (or a repository that receives it as a
+`relica.Executor`) — see [Transactions in AGENTS.md](AGENTS.md#transactions) for the rules.
 
 #### Advanced Usage
 
@@ -656,27 +663,35 @@ db.Select("category").From("products").Distinct().All(&categories)
 
 ### Row Locking (FOR UPDATE / FOR SHARE)
 
-**Pessimistic locking** for concurrent data access. Silently ignored for SQLite (database-level locking).
+**Pessimistic locking** for concurrent data access. A lock lives as long as its transaction, so
+lock **only through `tx`**: on `db` the SELECT autocommits and the lock is released at once.
+Omitted from the SQL on SQLite (database-level locking).
 
 ```go
-// Exclusive lock — block other transactions from reading/writing
-db.Select().From("accounts").
-    Where(relica.Eq("id", accountID)).
-    ForUpdate().
-    One(&account)
+err := db.Transactional(ctx, func(tx *relica.Tx) error {
+    // Exclusive lock — other transactions wait to update or lock these rows
+    if err := tx.Select().From("accounts").
+        Where(relica.Eq("id", accountID)).
+        ForUpdate().
+        One(&account); err != nil {
+        return err
+    }
 
-// Shared lock — allow concurrent reads, block writes
-db.Select().From("products").
-    Where(relica.Eq("id", productID)).
-    ForShare().
-    One(&product)
+    // Shared lock — others may read and share-lock, but not update
+    if err := tx.Select().From("products").
+        Where(relica.Eq("id", productID)).
+        ForShare().
+        One(&product); err != nil {
+        return err
+    }
 
-// Non-blocking lock — skip locked rows (job queue pattern)
-db.Select().From("tasks").
-    Where(relica.Eq("status", "pending")).
-    ForUpdateSkipLocked().
-    Limit(10).
-    All(&tasks)
+    // Non-blocking lock — skip rows locked by other workers (job queue pattern)
+    return tx.Select().From("tasks").
+        Where(relica.Eq("status", "pending")).
+        ForUpdateSkipLocked().
+        Limit(10).
+        All(&tasks)
+})
 ```
 
 ### Aggregate Functions
@@ -784,10 +799,12 @@ Note: `All()` returns empty slice for no results, not an error.
 
 #### Error Classification
 
-Database-agnostic error helpers — work with PostgreSQL, MySQL, and SQLite:
+Error helpers read the driver's **error code** (PostgreSQL SQLSTATE, MySQL/MariaDB error number,
+SQLite extended result code) anywhere in the error tree, so they work with pgx and lib/pq,
+go-sql-driver/mysql, modernc.org/sqlite and mattn/go-sqlite3 — also on a non-English server:
 
 ```go
-_, err := db.Model(&user).Insert()
+err := db.Model(&user).Insert()
 
 if relica.IsUniqueViolation(err) {
     // duplicate key (e.g., email already exists)
@@ -801,7 +818,13 @@ if relica.IsNotNullViolation(err) {
 if relica.IsCheckViolation(err) {
     // CHECK constraint failed
 }
+
+// Concurrency (v0.19.1+): the database rolled the transaction back — run it again as a whole
+if relica.IsDeadlock(err) || relica.IsSerializationFailure(err) { /* retry with backoff */ }
+if relica.IsLockTimeout(err) { /* lock not acquired in time (lock_timeout, NOWAIT, SQLite busy) */ }
 ```
+
+A complete retry helper is in [AGENTS.md](AGENTS.md#retrying-deadlocks-and-serialization-failures).
 
 ### Advanced SQL Features
 
@@ -1107,9 +1130,10 @@ err = db.Select().
     WithContext(ctx).
     One(&user)
 
-// Transaction context auto-propagates
-tx, _ := db.BeginTx(ctx, nil)
-tx.Select().From("users").One(&user) // Uses ctx automatically
+// Transaction context auto-propagates: every query on tx runs under the ctx given to Begin
+err = db.Transactional(ctx, func(tx *relica.Tx) error {
+    return tx.Select().From("users").One(&user) // uses ctx automatically
+})
 ```
 
 ## 🏗️ Database Support

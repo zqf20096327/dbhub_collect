@@ -6,7 +6,7 @@ Script properties:
 - Continually updated, Provide Shell Interaction and Autoinstall
 - Source compiler installation, most stable source is the latest version, and download from the official or high-speed mirrors
 - Some security optimization
-- Providing a plurality of database versions (MySQL-9.7 LTS, MySQL-8.4 LTS, MySQL-8.2, MySQL-8.0, MySQL-5.7, MySQL-5.6, MySQL-5.5, MariaDB-13.0, MariaDB-10.11, MariaDB-10.5, MariaDB-10.4, MariaDB-5.5, Percona-8.0, Percona-5.7, Percona-5.6, Percona-5.5, PostgreSQL-18.6, ClickHouse, MongoDB)
+- Providing a plurality of database versions (MySQL-9.7 LTS, MySQL-8.4 LTS, MySQL-8.2, MySQL-8.0, MySQL-5.7, MySQL-5.6, MySQL-5.5, MariaDB-13.0, MariaDB-10.11, MariaDB-11.8 LTS, MariaDB-11.4 LTS, MariaDB-5.5, Percona-8.0, Percona-5.7, Percona-5.6, Percona-5.5, PostgreSQL-18.6, ClickHouse, MongoDB)
 - Providing multiple PHP versions (PHP-8.5, PHP-8.4, PHP-8.3, PHP-8.2, PHP-8.1, PHP-8.0, PHP-7.4, PHP-7.3, PHP-7.2, PHP-7.1, PHP-7.0, PHP-5.6, PHP-5.5, PHP-5.4, PHP-5.3)
 - Provide Nginx (with native HTTP/3 & QUIC, OpenSSL 3.5.8), Tengine, OpenResty, Caddy, Apache and ngx_lua_waf
 - Providing a plurality of Tomcat version (Tomcat-11, Tomcat-10, Tomcat-9, Tomcat-8, Tomcat-7)
@@ -163,3 +163,18 @@ systemctl {start|stop|status|restart} clickhouse-server
 For feedback, questions, and to follow the progress of the project: <br />
 [Telegram Group](https://t.me/oneinstackn)<br />
 [OneinStack](https://oneinstack.com)<br />
+
+## Anonymous Installation Statistics & Privacy Notice
+
+To better guide future updates, version maintenance, and mirror optimization for OneinStack, `install.sh` sends a lightweight, non-blocking anonymous telemetry request when an installation starts and completes:
+
+1. **What is collected**:
+   - **System environment**: OS distribution and version (e.g., `ubuntu-24.04`, `debian-12`, `rocky-9`), CPU architecture (e.g., `x86_64`, `aarch64`), and network region flag (used for mirror routing).
+   - **Selected component options**: The software flags/options selected for installation (e.g., Web server option, PHP version and extension names, Database version and install method, JDK/Tomcat, Redis/Valkey/Memcached flags).
+   - **Installation status & duration**: A randomly generated single-run session ID (`install_id`), start/completion status, and total installation time (in minutes).
+2. **Purpose of statistics**:
+   - To understand real-world usage trends across Linux distributions and software versions, measure compilation durations, and track installation success rates so we can prioritize dependency updates, OS compatibility fixes, and mirror bandwidth allocation.
+3. **Privacy guarantee**:
+   - **No personal or sensitive data is ever collected**: We NEVER collect or transmit database passwords, SSH ports, hostnames, system usernames, domain names, directory contents, or any personally identifiable information (PII).
+   - Telemetry requests run asynchronously in the background with a strict 2–3 second timeout and will never block or affect your installation process even in offline or restricted network environments.
+

@@ -31,6 +31,7 @@
 - **Unit of Work** — `TTSession<T>` applies the inserts, updates and deletes you mark in one transaction
 - **JSON serialization** — full round-trip with `TTJSonContext`
 - **REST HTTP module** — attribute-based routing, CORS, JWT (HS256 and RS256, with `kid` key rotation), multi-tenant support
+- **OpenAPI 3.1 document** - `Trysil.OpenAPI` describes the HTTP server, entity schemas and validation constraints included, on `/openapi.json`
 - **Nullable types** — `TTNullable<T>` generic wrapper
 - **Connection pooling** — delegated to FireDAC
 - **Structured logging** — SQL tracing with thread-safe correlation IDs
@@ -169,7 +170,7 @@ boss install davidlastrucci/Trysil
 Boss adds the core sources to the Search Path, subfolders included. For the JSON
 and HTTP modules add `modules\Trysil\Trysil.JSon` and `modules\Trysil\Trysil.Http`
 as well, together with the three subfolders of the latter: `Authentication`,
-`Log` and `MultiTenant`.
+`Log` and `MultiTenant`. For the OpenAPI document add `modules\Trysil\Trysil.OpenAPI`.
 
 ### Manual
 
@@ -177,7 +178,7 @@ as well, together with the three subfolders of the latter: `Authentication`,
    ```
    git clone https://github.com/davidlastrucci/Trysil.git
    ```
-2. Open `Packages/<ver>/Trysil.groupproj` in the Delphi IDE and **Build All**, or run from the command line:
+2. Open `Packages/<ver>/TrysilGroup.groupproj` in the Delphi IDE and **Build All**, or run from the command line:
    ```
    Packages\Build370.bat
    ```
@@ -222,7 +223,8 @@ TTConnection (abstract)
 Modules
   ├── Trysil          → ORM core
   ├── Trysil.JSon     → JSON serialization via TTJSonContext
-  └── Trysil.Http     → REST hosting, routing, CORS, JWT, multi-tenant
+  ├── Trysil.Http     → REST hosting, routing, CORS, JWT, multi-tenant
+  └── Trysil.OpenAPI  → OpenAPI 3.1 document of the HTTP server
 ```
 
 ## The Name

@@ -90,20 +90,16 @@ Homebrew is the recommended way. It handles installing and upgrading:
 
 ```sh
 brew install --cask ShayanAbbas1/dbdelve/dbdelve
-```
-
-macOS will refuse to open it the first time. DBDelve is signed ad-hoc: there's
-no Developer ID behind it and nothing is notarized, so Gatekeeper declines.
-Clearing the quarantine flag fixes this:
-
-```sh
 xattr -dr com.apple.quarantine /Applications/DBDelve.app
 ```
 
-Once per install, not once per launch — but an update is a new install, so
-you'll run it again after each one. Your connections and query history are kept
-outside the app and survive. macOS will ask once more for the saved passwords in
-your Keychain, because each release carries a different ad-hoc signature. I'll
+Don't skip the second line, or macOS will refuse to open the app. DBDelve is
+signed ad-hoc: there's no Developer ID behind it and nothing is notarized, so
+Gatekeeper declines until the quarantine flag is cleared.
+
+Your connections and query history are kept outside the app and survive updates.
+macOS will ask once more for the saved passwords in your Keychain after each
+update, because each release carries a different ad-hoc signature. I'll
 pay for a Developer ID if enough people end up using this, which removes all of
 the above.
 
@@ -217,4 +213,9 @@ GitHub at startup to check for updates, which you can turn off in Settings.
 
 ## License
 
-MIT. See [NOTICES.md](NOTICES.md) for third-party font and theme licenses.
+Copyright (C) 2026 Shayan Abbas and contributors. Licensed under the
+[GNU General Public License v3.0](LICENSE). See [NOTICES.md](NOTICES.md) for
+third-party font and theme licenses.
+
+Code contributed before the switch to GPL-3.0 was released under the
+[MIT License](licenses/MIT-dbdelve.txt), and that notice still applies to it.

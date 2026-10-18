@@ -32,9 +32,18 @@ BunMail targets developers who want a **programmatic transactional email API** a
 ```bash
 git clone https://github.com/mohamedboukari/bunmail.git && cd bunmail
 cp .env.example .env
-echo "POSTGRES_PASSWORD=$(openssl rand -hex 16)" >> .env
+# docker compose runs BunMail in production mode, which refuses to start
+# without these. Later lines in .env win over the template's defaults.
+cat >> .env <<EOF
+POSTGRES_PASSWORD=$(openssl rand -hex 16)
+DKIM_ENCRYPTION_KEY=$(openssl rand -base64 32)
+MAIL_HOSTNAME=mail.yourcompany.com
+BUNMAIL_OWNER_EMAIL=you@yourcompany.com
+EOF
 docker compose up -d
 ```
+
+Replace `mail.yourcompany.com` with this server's real hostname (placeholders such as `*.example.com` are refused) and `you@yourcompany.com` with your email: it becomes the dashboard login.
 
 Then seed your first API key and send a test email:
 
@@ -53,7 +62,9 @@ curl -X POST http://localhost:3000/api/v1/emails/send \
   }'
 ```
 
-Open the dashboard at <http://localhost:3000/dashboard> (set `DASHBOARD_PASSWORD` in `.env` to enable).
+In production mode the `from` domain must first be registered and DKIM-verified (see [docs/self-hosting.md](docs/self-hosting.md#register-your-domain-generates-dkim-keys)), otherwise the send is rejected.
+
+To open the dashboard, claim the owner account: on first boot BunMail logs a one-time setup link (`docker compose logs app | grep 'Owner setup link'`). Open it, choose a password (15 characters or more), and you are signed in at <http://localhost:3000/dashboard>. After that, sign in with `BUNMAIL_OWNER_EMAIL` and that password. Lost the link? `docker compose exec app bun run src/db/reset-owner.ts` prints a new one.
 
 > Local dev without Docker? See [docs/self-hosting.md](docs/self-hosting.md).
 
@@ -92,16 +103,16 @@ Run [mail-tester.com](https://www.mail-tester.com) to get a deliverability score
 - **SMTP submission**: apps (Infisical, Netbird, Dify, any Nodemailer backend) send *through* BunMail over SMTP using an API key as the password; switch an app off SendGrid/Brevo with a credentials-only change ([docs/smtp-submission.md](docs/smtp-submission.md))
 - **DKIM signing**: auto-generates 2048-bit RSA keys per domain
 - **SPF / DKIM / DMARC verification**: DNS checks built into the dashboard
-- **Email queue**: Postgres-backed with 3 retries, crash recovery, and exactly-once delivery semantics
+- **Email queue**: Postgres-backed with MTA-style retry backoff (up to 48 h for temporary failures such as greylisting), lease-based crash recovery that is safe with several replicas, and exactly-once delivery semantics
 - **Templates**: Mustache-style `{{variable}}` substitution
-- **Webhooks**: HMAC-signed events with timestamp-bound replay protection: `email.sent`, `email.failed`, `email.bounced`, `email.received`, `email.complained`
+- **Webhooks**: HMAC-signed events with timestamp-bound replay protection: `email.queued`, `email.sent`, `email.failed`, `email.bounced`, `email.received` (`email.complained` is reserved for future feedback-loop processing)
 - **Inbound SMTP**: receive and store incoming mail with DNSBL, recipient validation, and per-IP rate limiting
 - **Inbound notifications**: per-domain "you have new mail" summary email on receive, DKIM-signed from the recipient domain; opt-in via each domain's `notify_email`
 - **API key auth**: SHA-256 hashed Bearer tokens with per-key rate limiting
 - **Trash + auto-purge**: Gmail-style soft delete on outbound and inbound, restorable until purged after `TRASH_RETENTION_DAYS` (default 7)
 - **Suppression list**: per-API-key list of addresses we refuse to send to; gate runs at `POST /emails/send` so bounced/unsubscribed recipients can't re-tank IP reputation
 - **DMARC aggregate report ingest**: daily `rua` reports from Microsoft / Google / Yahoo are auto-parsed (gzip / zip / raw XML) and surfaced in the dashboard so misaligned source IPs are visible at a glance
-- **Web dashboard**: server-rendered (Elysia JSX), bulk operations, real-time stats (24h sent, success rate, queue depth)
+- **Web dashboard**: server-rendered (Elysia JSX), bulk operations, real-time stats (24h sent, success rate, queue depth); owner account login with revocable server-side sessions, invite-only teammate accounts (admin or member), a Users page to change roles, deactivate or remove accounts, issue one-time password reset links and transfer ownership, and per-user API keys (members manage their own restricted keys; deactivating an account disables its keys)
 - **OpenAPI 3.0**: interactive docs at `/api/docs`
 - **Type-safe**: strict TypeScript, Drizzle ORM, no `any`
 
@@ -192,7 +203,7 @@ curl -X POST http://localhost:3000/api/v1/emails/send \
 | Framework | [Elysia](https://elysiajs.com) |
 | ORM | [Drizzle ORM](https://orm.drizzle.team) (`drizzle-orm/bun-sql`) |
 | Database | PostgreSQL 16+ |
-| SMTP outbound | Nodemailer (direct mode + DKIM) |
+| SMTP outbound | Nodemailer (one transport per recipient MX on port 25 + DKIM) |
 | SMTP inbound | smtp-server + mailparser |
 | Dashboard | Elysia JSX (`@elysiajs/html` + `@kitajs/html`) |
 | Deployment | Docker + Docker Compose |
@@ -226,7 +237,8 @@ bun install
 bun run dev            # start dev server (--watch)
 bun test               # run all tests
 bun test test/unit     # unit tests only
-bun test test/e2e      # integration tests only
+bun test test/e2e      # e2e (plugin) tests only
+bun run test:integration  # real-Postgres tests (bun run test:integration:setup first)
 bunx tsc --noEmit      # type check (TypeScript 7, native)
 bun run lint           # oxlint (type-aware)
 docker compose up -d   # full stack with Postgres
@@ -239,6 +251,8 @@ See [docs/](docs/) for module-level documentation:
 - [docs/emails.md](docs/emails.md): Outbound module
 - [docs/inbound.md](docs/inbound.md): Inbound module
 - [docs/dmarc-reports.md](docs/dmarc-reports.md): DMARC `rua` aggregate report ingest
+- [docs/users.md](docs/users.md): Dashboard accounts, roles, invitations, sessions and password reset links
+- [docs/logging.md](docs/logging.md): Log format, correlation IDs and tracing a request, email or SMTP session
 - [docs/self-hosting.md](docs/self-hosting.md): Production deployment with DNS records
 - [THREAT_MODEL.md](THREAT_MODEL.md): Assets, attackers, controls, and operator responsibilities
 - [SECURITY.md](SECURITY.md): Reporting a vulnerability
@@ -261,8 +275,7 @@ Active issues: [github.com/mohamedboukari/bunmail/issues](https://github.com/moh
 
 Near-term highlights:
 
-- Webhook delivery persistence + replay (in-memory retries today)
-- Trash purge tombstones for audit trail
+- Two-factor login, passkeys and SSO for dashboard accounts (#220, #223, #224)
 - Optional SMTP relay mode (use Resend / SES / Postmark as the underlying sender)
 - Bun-native SMTP client (subsumes per-domain TLS observability and `requireValidCert`)
 

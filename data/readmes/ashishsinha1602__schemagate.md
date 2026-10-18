@@ -405,7 +405,8 @@ PostgreSQL itself allowed. With claude-sonnet-5-5, all 19,624:
 | paper's best (LoRA-tuned Mistral-7B) | 0.933 | -- | not reported |
 
 The paper's systems are 2024-25 models; details and limits in
-[BENCHMARKS.md](BENCHMARKS.md#access-control-a-second-benchmark-spider-acl).
+[BENCHMARKS.md](BENCHMARKS.md#access-control-a-second-benchmark-spider-acl), and both results in one
+[technical report (PDF)](docs/papers/schemagate_access_control.pdf), [DOI 10.5281/zenodo.23446210](https://doi.org/10.5281/zenodo.23446210).
 
 **On public benchmarks, so you can check them without trusting me:**
 [BENCHMARKS.md](BENCHMARKS.md) has schemagate on Spider and BIRD, with the
@@ -1152,6 +1153,16 @@ chain = retriever | RunnableLambda(prompt_fragment) | your_sql_prompt | llm
 
 The principal is bound at construction on purpose. Build one retriever per
 caller; a chain can't forget to pass identity if the retriever already has it.
+
+**jev4pg.** `schemagate.integrations.jev4pg.ScopedCatalog` wraps
+[jev4pg](https://github.com/Sheltercosmo/jev4pg)'s per-tenant catalogue so its
+planner, SQL validator and semantic operators see only what each caller may
+read. See [docs/jev4pg.md](docs/jev4pg.md).
+
+**Questions about what text says.** `semantic_query` (MCP, off by default) runs
+your SQL under the same scope check, then asks the model which rows' text meets
+a criterion, or for one short answer per row. See
+[docs/semantic-operators.md](docs/semantic-operators.md).
 
 ## On Oracle Cloud
 

@@ -492,6 +492,21 @@ If Red can’t find where your `model` is defined you can override where it look
                                              :require<MyApp::Schema::Related> };
 ```
 
+#### creating through a scalar relationship
+
+An empty scalar relationship returns an undefined, false type object carrying the relationship's creation context, rather than `Nil`. Call `.^create` on that object to create the related row and fill the foreign key automatically:
+
+```raku
+my $parent = $child.parent.^create(:name<parent>);
+
+# For a relationship declared with :has-one (use Red <has-one>):
+my $profile = $account.profile.^create(:description<profile>);
+```
+
+For a belongs-to relationship, Red saves the foreign key on the existing source row. For `:has-one`, Red supplies the source key to the new related row. The source must already be saved. Both writes participate in one transaction; a failed operation rolls back its writes and restores the source's attribute and dirty state. Inside a transaction, the operation uses a savepoint.
+
+Existing relationships continue to return their related instances. An empty relationship still tests false and undefined, but code that checks specifically for `Nil` should use `.defined` instead. Creation uses `.^create`, while plural relationships continue to use `.create`.
+
 #### custom table name
 
 ```raku
@@ -528,6 +543,67 @@ $object.^save;
 ```raku
 Question.^all.grep: { .answer == 42 }; # returns a result seq
 ```
+
+#### transactions and savepoints
+
+`red-do :transaction` commits when its block succeeds and rolls back when it fails. Nested transactional blocks on the same connection use savepoints. They can see uncommitted outer changes, and their successful changes remain subject to an outer rollback. Catch an inner exception to roll back only that inner block and continue the outer transaction; an exception that propagates out rolls back the outer block too.
+
+```raku
+red-do :transaction, {
+    Person.^create: :name<Alice>;
+    try {
+        red-do :transaction, {
+            Person.^create: :name<Bob>;
+            # A failure here rolls back Bob, leaving Alice in the outer transaction.
+        }
+    }
+};
+```
+
+Drivers provide `savepoint($name)`, `rollback-to-savepoint($name)` and `release-savepoint($name)` on the current connection. Rolling back to a savepoint leaves that savepoint active; releasing it does not commit the surrounding transaction. Savepoints do not coordinate concurrent tasks. Await asynchronous database work before leaving an automatic transactional block, and avoid overlapping access to its connection.
+
+##### Explicit transaction guards
+
+Declare a named `:$guard` parameter to take explicit control of a transaction. The block receives a `Red::Transaction::Guard`; a positional parameter, if declared, still receives the transaction's driver. A slurpy named parameter alone does not enable manual control. Blocks that declare neither `:$guard` nor the named placeholder `$:guard` retain automatic commit and rollback. Automatic scopes retain Raku's `KEEP`/`UNDO` behavior: a nonlocal `return` or `fail` unwinds the scope and rolls it back.
+
+```raku
+my $work = red-do :transaction, -> :$guard! {
+    $guard.start: -> :&commit {
+        Person.^create: :name<Alice>;
+        commit();
+    }
+};
+await $work;
+```
+
+You can also use Raku's named placeholder `$:guard` instead of writing `-` :$guard!>. Using it inside a block implicitly declares the required named parameter, so `red-do` recognizes it as a manual transaction. Both direct commit and asynchronous work are supported:
+
+```raku
+red-do :transaction, {
+    Person.^create: :name<Alice>;
+    $:guard.commit;
+};
+
+my $work = red-do :transaction, {
+    $:guard.start: -> :&commit {
+        Person.^create: :name<Bob>;
+        commit();
+    }
+};
+await $work;
+```
+
+Each guard starts with one participant, which `red-do` releases automatically when its block exits, including with `:async`. The last release rolls back an unfinished scope. Do not release that initial participant yourself.
+
+`.do(&block)` reserves a participant, runs the block immediately and releases when it finishes, returning its result. `.start(&block)` reserves before scheduling and returns a Promise; completion releases the participant. Failed scheduling returns the reservation. Both restore the guard's transaction context and inject `:&commit` and `:&rollback` only when explicitly declared in the block's signature. An escaping exception immediately rolls back and propagates (breaking the Promise for `.start`). A Promise returned by `.do` does not extend its participation; use `.start` for asynchronous work. Returning a pending Promise from `.do` emits `X::Red::Transaction::AsyncResult`, a resumable warning that suggests `.start` without awaiting or replacing the result. Already completed Promises do not warn. To silence an intentional pending result, handle this type in `CONTROL` and call `.resume`.
+
+For explicit lifetime control, `retain()` adds a participant and `release()` removes one. Both return the guard. Each additional participant must be released exactly once. To use a guard after its `red-do` block returns, retain it or schedule work with `.start` before exiting. For manually scheduled work, reserve before scheduling, release in its `LEAVE`, and return the reservation if scheduling fails.
+
+`commit()` confirms immediately, without waiting for participants. Explicit `rollback()` and exceptions escaping the block also close an open scope immediately. Pending participants must still release after closure; these releases execute no SQL. Retaining a closed guard, releasing with no remaining participants, or committing a closed guard raises `X::Red::Transaction`. Explicit rollback remains idempotent. An exception after commit cannot undo it. Garbage collection provides no cleanup guarantee.
+
+A nested guard controls a savepoint with its own participant count. Its last release rolls back only that savepoint. Its parent cannot run queries, open another child, or commit until that child closes. Parent rollback also invalidates all descendants. Drivers, statements, iterators and lazy queries belonging to a closed scope reject further database access. Ordinary driver use outside the scope is unaffected; direct access to a native database handle bypasses these guards.
+
+Guards keep the reserved session usable by asynchronous work that inherits the block's context. Participant bookkeeping is synchronized, but does not permit simultaneous database operations: overlapping database access is rejected with `X::Red::Transaction`. No returned Promise is required to retain a manual transaction. With `:async`, an automatic transaction's Promise resolves after commit; a manual transaction's Promise represents only execution of its block, not guard completion.
 
 #### phasers
 

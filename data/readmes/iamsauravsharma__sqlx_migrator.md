@@ -11,7 +11,6 @@ Supported Databases:
 - [x] PostgreSQL
 - [x] SQLite
 - [x] MySql
-- [x] Any
 
 ## Installation
 
@@ -31,15 +30,6 @@ OR
 
 ```toml
 sqlx_migrator = { version = "0.20.0", features=["sqlite"] }
-```
-
-OR
-
-```toml
-sqlx_migrator = { version = "0.20.0", features=[
-    "any",
-    # Plus any one of above database driver
-    ] }
 ```
 
 # Usage
@@ -172,7 +162,7 @@ or `is_atomic`, implement the `Migration` trait by hand as shown above.
 Finally, create a migrator to run your migrations:
 
 ```rust
-use sqlx_migrator::migrator::{Info, Migrate, Migrator};
+use sqlx_migrator::migrator::Migrator;
 use sqlx::Postgres;
 
 #[tokio::main]
@@ -189,33 +179,70 @@ async fn main() {
 ## Migration table
 
 Applied migrations are recorded in `_sqlx_migrator_migrations`, with an optional prefix
-and schema (see `Migrator::set_table_prefix` and `Migrator::set_schema`). The table is
-created and changed by the migrator's own internal migrations, a numbered list of SQL
-statements per database. A small meta table next to it, `_sqlx_migrator_meta`,
-records the name of every internal migration which has run. When a release adds an internal
-migration, older databases run it the next time migrations run; a database changed by
-an internal migration this release does not know is refused rather than guessed at.
-Each internal migration is safe to rerun, so databases created before the meta table
-existed simply catch up.
+and schema (see `Dialect::postgres_with`, `Dialect::mysql_with` and `Dialect::sqlite_with`).
+The migrator creates and changes this table itself with numbered internal migrations. A
+small meta table next to it, `_sqlx_migrator_meta`, records which of them have run, so each
+runs once. A database changed by an internal migration this release does not know is
+refused.
+
+Each row records the migration's `app`, `name` and `applied_time`, plus:
+
+- `success`: `false` while a non atomic migration is running or after it failed.
+- `execution_time_ns`: how long the migration took in nanoseconds, `0` for fake runs and synced migrations.
+- `batch`: migrations applied by one run share a batch, `revert --last-batch` reverts it.
+  Rows already in the table when this column is added get their `id` as batch, so they
+  count as one batch each in apply order. Synced migrations are recorded as one batch.
+
+A non atomic migration is recorded with `success = false` before its operations run and
+marked successful after the last one. If it fails part way the database is partly
+migrated, so every run is refused with `Error::FailedMigration` until you fix the database
+by hand and run `repair`, which removes the failed entry so the migration runs again.
+Atomic migrations are recorded in the same transaction as their operations, so they never
+leave a failed entry.
 
 ## Locking and transactions
 
-While a plan runs, the migrator holds a database lock so two processes cannot
-migrate at the same time. Postgres uses a session level advisory lock and MySQL uses
-`GET_LOCK`; SQLite serialises writers itself. Session level locks are not reliable
-behind a transaction pooling proxy such as PgBouncer, and are unnecessary when a
-single process runs migrations, so the strategy can be changed:
+While a plan runs the migrator locks, so two processes cannot migrate at once. Choose the
+lock with `Dialect::set_lock_strategy`, which fails for a lock the database does not have:
+
+| `LockStrategy` | Use |
+| --- | --- |
+| `Advisory` | A lock held by the connection, the default on Postgres and MySQL. Not reliable behind a transaction pooling proxy such as PgBouncer. |
+| `None` | No lock, for a single process. The default on SQLite, which serialises writers. |
+| `Row` | A row in a `_sqlx_migrator_lock` table, on every database. A run which finds the row fails with `Error::LockHeld`. A crashed run leaves its row, delete it by hand. |
+| `TransactionAdvisory` | Postgres only. An advisory lock held until the end of one transaction which holds the whole plan, so it works behind PgBouncer, the plan is applied entirely or not at all and every migration must be atomic. |
+| `TableShareUpdateExclusive` | Postgres only. Like `TransactionAdvisory`, and also `LOCK TABLE` on the migration table in `SHARE UPDATE EXCLUSIVE` mode, which other transactions can still read. |
+| `TableAccessExclusive` | Postgres only. Like `TransactionAdvisory`, and also `LOCK TABLE` in `ACCESS EXCLUSIVE` mode, which blocks reads of the migration table too. |
 
 ```rust
 use sqlx_migrator::migrator::LockStrategy;
-let migrator = Migrator::<Postgres>::new().set_lock_strategy(LockStrategy::None);
+use sqlx_migrator::{Dialect, Migrator};
+let dialect = Dialect::postgres().set_lock_strategy(LockStrategy::TransactionAdvisory).unwrap();
+let migrator = Migrator::<Postgres>::new(dialect);
 ```
 
 Atomic migrations run inside a transaction. MySQL and MariaDB commit implicitly on
 most DDL statements, so on those backends a failed atomic migration cannot be rolled
-back as a unit. The migrator reports this through
-`DatabaseOperation::supports_transactional_ddl` and logs a `tracing` warning when an
-atomic migration runs on such a backend.
+back as a unit.
+
+## Custom SQL
+
+A migrator is configured by a `Dialect` value holding the table prefix, schema and advisory lock
+options, plus the SQL built from them. `Migrator::default` uses the built in
+`Dialect::postgres`, `Dialect::mysql` or `Dialect::sqlite`. The table prefix and schema are arguments of the `_with`
+constructors, for example `Dialect::postgres_with(Some("prefix"), Some("schema"))`. Adjust a built in dialect with `set_lock_strategy` and `set_create_schema` where the database has it, and pass it to `Migrator::new`:
+
+```rust
+use sqlx::Postgres;
+use sqlx_migrator::migrator::LockStrategy;
+use sqlx_migrator::{Dialect, Migrator};
+
+let dialect = Dialect::postgres().set_lock_strategy(LockStrategy::None).unwrap();
+let migrator = Migrator::<Postgres>::new(dialect);
+```
+
+Generic code over the database uses `SupportedDatabase`, which every sqlx database the
+crate can execute SQL against implements automatically.
 
 # Running Migrations
 
@@ -256,9 +283,10 @@ The command provides these subcommands:
 | Subcommand | Purpose |
 | --- | --- |
 | `apply` | Apply pending migrations. `--plan` shows what would run, `--check` fails when something is pending, `--fake` only records them, `--app` / `--migration` / `--count` limit the plan. |
-| `revert` | Revert the last applied migration by default; `--all`, `--app` / `--migration` or `--count` choose more. Asks for confirmation unless `--force` is passed. |
+| `revert` | Revert the last applied migration by default; `--all`, `--app` / `--migration`, `--count` or `--last-batch` (everything the last run applied) choose more. Asks for confirmation unless `--force` is passed. |
 | `redo` | Revert the last applied migration and apply it again, handy while developing a migration. |
-| `list` | Show every migration with its status: applied, pending, replaced, or unknown (in the table but no longer in the code). |
+| `list` | Show every migration with its status (applied, failed, pending, replaced or unknown), batch and execution time. |
+| `repair` | Remove failed entries from the migration table after fixing the database by hand, so those migrations run again. Asks for confirmation unless `--force` is passed. |
 | `prune` | Delete unknown entries from the migration table after migrations were removed from the code. Asks for confirmation unless `--force` is passed. |
 | `drop` | Drop the migration table once every migration is reverted. |
 
@@ -345,8 +373,6 @@ impl OldMigrator<Postgres> for SqlxMigrator {
 Before running your main migration code, execute the sync operation
 
 ```rust
-use sqlx_migrator::Synchronize;
-
 let sqlx_sql_migrator = SqlxMigrator;
 migrator.sync(&mut *conn, &sqlx_sql_migrator).await?;
 ```

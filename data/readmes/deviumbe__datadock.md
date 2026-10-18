@@ -6,7 +6,7 @@
 
 ### The database client that finally organizes itself the way *you* think.
 
-**Projects → Environments → Connections.** One clean desktop app for PostgreSQL, MySQL, SQLite, SQL Server, Oracle, MongoDB, Redis, InfluxDB — plus DuckDB, ClickHouse, Snowflake and BigQuery — with browsing, editing, structure changes, import/export, SSH tunneling, ER diagrams, a realtime Redis queue viewer, a live replication-topology monitor and a command palette built in.
+**Workspaces → Projects → Environments → Connections.** One clean desktop app for PostgreSQL, MySQL, SQLite, SQL Server, Oracle, MongoDB, Redis, InfluxDB — plus DuckDB, ClickHouse, Snowflake and BigQuery — with browsing, editing, structure changes, import/export, SSH tunneling, ER diagrams, a realtime Redis queue viewer, a live replication-topology monitor and a command palette built in.
 
 <br/>
 
@@ -34,18 +34,21 @@ Most database clients dump every connection into one flat, unsearchable list. If
 DataDock fixes the part that actually slows you down: **organization.**
 
 ```
-📁 Acme Shop
- ├─ 🗂  Local
- │   └─ ● Sample Shop        (SQLite)
- ├─ 🗂  Staging
- │   └─ ● shop-staging       (PostgreSQL)
- └─ 🗂  Production
-     ├─ ● shop-primary       (PostgreSQL over SSH)
-     ├─ ● metrics            (InfluxDB)
-     └─ ● jobs & cache       (Redis)
+🏢 Acme Corp                      ← switch workspaces from the sidebar
+ └─ 📁 Acme Shop
+     ├─ 🗂  Local
+     │   └─ ● Sample Shop        (SQLite)
+     ├─ 🗂  Staging
+     │   └─ ● shop-staging       (PostgreSQL)
+     └─ 🗂  Production
+         ├─ ● shop-primary       (PostgreSQL over SSH)
+         ├─ ● metrics            (InfluxDB)
+         └─ ● jobs & cache       (Redis)
 ```
 
 Click your way down — **project → environment → connection** — and you're in. No more `prod_db_2_FINAL_v3` in a sea of saved connections.
+
+Work for several clients? Give each one a workspace: every workspace has its own project list, and the sidebar only ever shows the workspace you switched to — so two clients' "Shop" projects never sit side by side. With a single workspace the switcher stays out of the way.
 
 ---
 
@@ -55,11 +58,12 @@ Everything here ships **today**. Scan the table for the lay of the land, then ex
 
 | | Area | What you get |
 |:--:|---|---|
-| 🗄️ | **Organized connections** | Projects → environment folders → connections — color-coded, encrypted at rest, shareable, with a read-only safe mode |
+| 🗄️ | **Organized connections** | Workspaces → projects → environment folders → connections — one workspace in view at a time, color-coded, encrypted at rest, shareable, importable from DataGrip, with a read-only safe mode |
 | 🔌 | **Fifteen engines** | PostgreSQL · MySQL / MariaDB · SQLite · SQL Server · Oracle · CockroachDB · TimescaleDB · Amazon Redshift · MongoDB · Redis · InfluxDB · **DuckDB · ClickHouse · Snowflake · Google BigQuery** |
 | 🌐 | **Replication topology** | Group connections into a replication set and watch it **live** — primary/replica roles, per-link lag (green/amber/red), node health badges and click-through to any node's workspace |
 | 📨 | **Redis & live queues** | Browse keys by prefix, inspect any value type, run commands — plus a realtime, framework-agnostic queue dashboard (Laravel/Horizon · BullMQ · Sidekiq · RQ · Celery) |
 | 🔐 | **SSH tunneling** | Reach databases behind a bastion via private key, password or agent |
+| 🔒 | **Vault & Touch ID** | Keep connections, SSH profiles and AI keys in one AES-256-GCM encrypted `.ddvault` file you can sync (Proton Drive, iCloud, …) and open on another Mac with the passphrase — unlock with Touch ID, auto-lock on idle or sleep |
 | 📊 | **Spreadsheet-style editing** | Paginate, sort, filter, inline- and bulk-edit — every change committed in a transaction |
 | 🔗 | **Visual exploration** | Click-through foreign keys, a record Explorer, a related-records overview, an interactive ER diagram and a dependency map |
 | 🧱 | **Structure editor** | Create / drop tables and edit columns, types, foreign keys & indexes — no hand-written DDL |
@@ -71,19 +75,22 @@ Everything here ships **today**. Scan the table for the lay of the land, then ex
 | 📦 | **Import & export** | CSV · Excel · JSON · SQL · zipped whole-DB dumps · result → new table |
 | 🎭 | **Data masking** | Anonymize chosen columns with realistic fake data on export — safely copy production into a local database |
 | 🛠️ | **Server tools** | Databases, users & roles and a process list (with kill) |
-| 🎨 | **Comfortable to live in** | Dark / light themes, a ⌘K command palette and collapsible panels |
+| 🎨 | **Comfortable to live in** | Themes (12 colour presets or your own colours, 8 interface fonts, 6 code fonts, 5 icon sets), a ⌘K command palette and collapsible panels |
 
 <details>
 <summary><b>📖 Expand for the full feature tour</b></summary>
 <br>
 
 #### 🗄️ Organized connections
-- **Projects → Environment folders → Connections** — a real hierarchy, not a flat list.
+- **Workspaces → Projects → Environment folders → Connections** — a real hierarchy, not a flat list.
+- **One workspace at a time** — switch from the sidebar (or ⌘K → *Switch to …*); projects of other workspaces are never shown alongside. Right-click a project to move it to another workspace.
+- **Environment template** — a new project can start with Local · Development · Staging · Production folders in one click.
 - Color-coded connections with live status dots (connecting / connected / error).
 - **Duplicate a connection** in one click — useful for cloning a staging config to try against prod.
 - Credentials **encrypted at rest** with the OS keychain (Electron `safeStorage`) — never stored in plain text.
 - **Read-only "safe mode"** per connection — guard production by blocking edits, inserts/deletes, DDL, imports and mutating SQL, with a clear 🔒 badge.
 - **Share connections** — export your project/environment/connection tree to JSON (secrets stripped) and import it on another machine.
+- **Import from DataGrip** — point DataDock at a DataGrip project folder and its data sources become projects, environments and connections (`prod@shop` → *Shop / Production*), SSH tunnels become reusable SSH profiles, and a preview with per-connection checkboxes shows exactly what will be added before anything is written. Passwords stay in DataGrip's keychain, so you enter them on first connect.
 
 #### 🔌 Multi-engine
 - **PostgreSQL · MySQL / MariaDB · SQLite · Microsoft SQL Server · Oracle Database · MongoDB · Redis · InfluxDB · DuckDB · ClickHouse · Snowflake · Google BigQuery** — all from one app, plus the Postgres-wire engines **CockroachDB · TimescaleDB · Amazon Redshift**.
@@ -93,6 +100,14 @@ Everything here ships **today**. Scan the table for the lay of the land, then ex
 
 #### 🔐 SSH tunneling
 - Reach databases that only live behind a bastion: **connect via SSH (private key, password, or agent), then to the DB** — exactly how you'd hit a prod/staging box.
+
+#### 🔒 Vault & Touch ID
+- **One encrypted file instead of plain JSON** — Settings → Vault → *Create vault…* seals your whole catalog (workspaces, projects, environments, connections) plus every secret-bearing setting (SSH profiles, AI provider keys, MCP token) into a single `.ddvault` file, then deletes the plaintext `datadock.json`. Hosts, usernames and passwords are all inside the ciphertext.
+- **Portable by design** — AES-256-GCM with a key derived from your passphrase (scrypt). Drop the file in a synced folder such as Proton Drive and use *Open existing vault…* on a second Mac: nothing is bound to one machine's keychain. There is no recovery — a forgotten passphrase means a lost vault.
+- **Touch ID unlock** — opt in per Mac and the vault key is kept in that Mac's keychain (Electron `safeStorage`), released after a fingerprint. The passphrase prompt is always there as a fallback, and is what another Mac uses the first time.
+- **Lock screen & auto-lock** — DataDock starts locked when a vault is configured. It locks again after a configurable idle period, when the Mac sleeps or its screen locks, or on demand (`⌘⇧L`); locking closes every database connection and drops the key from memory.
+- **Multi-device safe** — the file carries a revision counter in its header. When another machine writes a newer revision, DataDock reloads it and tells you; it never silently overwrites a newer revision with an older one.
+- Without a vault nothing changes: secrets stay encrypted at rest with the OS keychain as before.
 
 #### 📊 Browse & edit data like a spreadsheet
 - Fast result grid with **pagination, sorting and column filters**.
@@ -116,11 +131,12 @@ Everything here ships **today**. Scan the table for the lay of the land, then ex
 
 #### ⚙️ Settings (⌘,)
 - **AI Providers** — add keys for Anthropic, Google, Mistral or xAI (Grok), or point at a local **Ollama** server (no key needed); pick the active provider and model, and **Test** the connection.
-- **Appearance** — interface scale (zoom), light/dark theme, comfortable/compact row density, and the default page size.
+- **Appearance** — dark / light / follow-system mode, a colour preset per mode (or a custom theme built from seven base colours), interface and code fonts, icon set and weight, interface scale (zoom), comfortable/compact row density, and the default page size.
+- **Vault** — create or open an encrypted `.ddvault` file, toggle Touch ID unlock for this Mac, set the idle auto-lock, or lock right away.
 - **About** — a little love from [Devium](https://devium.be/): built with a smile for everybody. 🙂
 
 #### 🎨 Comfortable to live in
-- **Dark and light themes**, remembered between sessions.
+- **Themes** — seven dark and five light colour presets, or a custom palette; bundled fonts (Inter, Geist, IBM Plex, Source Sans, Manrope, DM Sans, Space Grotesk; JetBrains Mono, Geist Mono, Fira Code, Source Code Pro, IBM Plex Mono) and five icon sets (Lucide, Tabler, Phosphor, Heroicons, Material), all remembered between sessions.
 - **Automatic updates** — DataDock checks GitHub Releases on launch; when a newer version is out you get a *"New version — Update now"* prompt that downloads and installs it in place (or *Check for Updates…* from the app menu anytime).
 - Collapsible sidebar and table list to maximize screen for data.
 - **Command palette (⌘K)** — fuzzy-search connections, tables and actions from anywhere in the app. Jump to any table, open a query tab, switch themes, open the ER diagram — all without touching the mouse. Navigate with ↑↓, confirm with ↵, dismiss with Esc.
@@ -269,6 +285,7 @@ npm run build
 |---|---|
 | `⌘K` / `Ctrl+K` | Open command palette |
 | `⌘,` / `Ctrl+,` | Open settings |
+| `⌘⇧L` / `Ctrl+⇧L` | Lock the vault |
 | `⌘⇧A` / `Ctrl+⇧A` | Chat with your data |
 | `⌘T` / `Ctrl+T` | New query tab |
 | `⌘↵` / `Ctrl+↵` | Run query |
@@ -297,7 +314,8 @@ AI: `@anthropic-ai/sdk` + `openai` (OpenAI-compatible endpoints for Gemini, Mist
 
 | Area | Highlights |
 |---|---|
-| 🗄️ **Connections** | Projects → environments hierarchy · duplicate · **one-click engine presets** (Postgres · MySQL/MariaDB · SQL Server · Mongo · Redis · SQLite) · read-only safe mode (with timed 15-min write-unlock) · production banners · export / import (secrets stripped) |
+| 🗄️ **Connections** | Workspaces → projects → environments hierarchy · workspace switcher · duplicate · **one-click engine presets** (Postgres · MySQL/MariaDB · SQL Server · Mongo · Redis · SQLite) · read-only safe mode (with timed 15-min write-unlock) · production banners · export / import (secrets stripped) |
+| 🔒 **Vault** | Encrypted portable `.ddvault` (AES-256-GCM · scrypt passphrase) holding the catalog, SSH profiles, AI keys and MCP token · create / open on another Mac · **Touch ID unlock** (per-Mac keychain key, passphrase fallback) · lock screen on launch · auto-lock on idle, sleep and screen lock · revision-aware reload when another device writes the file |
 | 📊 **Data editing** | Spreadsheet grid (paginate · sort · filter) · inline + row-detail editing · transactional commit · bulk edit · duplicate row · generate INSERT/UPDATE · undo / redo · **soft-delete recovery** (find & restore rows hidden by `deleted_at` / `archived_at` / `removed_at`) · **time-travel row history** (right-click a row → Row history: a timeline of every edit you've made to it, with before→after diffs and one-click restore of earlier values) |
 | 🔗 **Explore** | Click-through FK navigation · record Explorer · related-records overview (everything linked to one record, drill-down) · ER diagram (drag · zoom · fit · export SVG/PNG) · dependency explorer · universal search (find any value across every table, with per-connection table exclusions) |
 | 🧱 **Schema** | Create / drop tables · column · type · nullable · FK & index editing · **environment diff** (tables · columns · indexes · data, with optional checks) · schema diff · data diff · data generator · migration-script generator (diff → `ALTER`) |

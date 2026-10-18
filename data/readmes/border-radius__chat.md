@@ -2,14 +2,20 @@
 
 A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) binary is the whole backend
 (auth, data, realtime, static files); the frontend is vanilla TypeScript bundled by esbuild — no framework,
-~42 KB of JS and ~6 KB of CSS gzipped (`npm run build` fails over its budget: 42.05 KB of JS, 6.10 KB of CSS).
+~43 KB of JS and ~6 KB of CSS gzipped (`npm run build` fails over its budget: 43.45 KB of JS, 6.35 KB of CSS).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshot-dark.png">
+  <img alt="A room in Chat: the room list with unread counts on the left; messages with avatars, a reply, a photo and emoji reactions on the right" src="docs/screenshot-light.png">
+</picture>
 
 - Public rooms anyone can create; hide rooms you don't care about; creators archive rooms (read-only, history kept)
-- Room access, chosen by each room's creator: **Private** (only the people they add), **Public** (everyone with an account) or **Open Air** (anyone can read it, no account needed; the home page shows these rooms to guests, who log in or sign up to join in)
+- Room access, chosen by each room's creator: **Private** (only the people they add), **Public** (everyone with an account) or **Open Air** (anyone can read it, no account needed; the home page shows these rooms to guests, who log in or sign up to join in); and who can post: everyone who can read it, or only the people they choose (the others read and react)
 - Live messages, edits and deletes (deleted messages leave a placeholder)
 - Full history: scroll back to the very first message of any room (windowed, ≤300 messages in the DOM)
 - Direct messages between any two users, private to them; close a conversation and it comes back on the next message
 - Avatars (or colored initials) and a profile page to change your picture, display name (unique) and password, and to log out
+- Search in any room or DM: every word you type, in any case ("привет" finds "Привет"), newest first; pick a result to go to it, however far back
 - Replies: answer any message with a quote of it; click the quote to jump to the original, however far back
 - Links in messages are clickable and open in a new tab (http, https and www. addresses only)
 - Emoji: a picker in the composer, and reactions on any message (as many different ones as you like), live for everyone
@@ -27,7 +33,6 @@ A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) bin
   to a room (or reloading) doesn't download them again. All of it is cleared on logout
 - Installable as an app (PWA: Add to Home Screen, the browser's Install button); it opens offline to its shell
 - Optimistic sending with safe retries, reconnect gap-fill, light/dark themes, works on phones
-- An Android app (React Native, Expo) with the same features, for any server: you add servers by their address and switch between them — see [`mobile/`](mobile/README.md)
 
 Design: [`docs/DESIGN.md`](docs/DESIGN.md) · QA: [`docs/QA.md`](docs/QA.md) · Refactoring plan: [`docs/REFACTOR.md`](docs/REFACTOR.md) · Archived plans: [MVP build](docs/history/BUILD_PLAN.md), [avatars, DMs, attachments](docs/history/NEXT_FEATURES_PLAN.md)
 
@@ -62,6 +67,7 @@ The PocketBase admin UI is at http://127.0.0.1:8090/_/ (create a superuser with
 | `npm run test:int` | Integration tests: schema, API rules, hooks, realtime, pagination |
 | `npm run test:e2e` | Playwright end-to-end tests against the production build |
 | `npm run schema:snapshot` | Rewrite `docs/schema.snapshot.json` (every collection's API rules, fields and indexes, and the rate limits) after a migration changes them; `test:int` fails while it is out of date |
+| `npm run screenshots` | Rewrite the README screenshots (`docs/screenshot-*.png`): a throwaway server with made-up people and messages, photographed in Chromium after `npm run build` |
 | `npm run check` | typecheck + lint + lint:sinks + test + test:int + build (what CI runs before e2e) |
 
 Every test run starts its own PocketBase on a free port with a temp data dir — nothing to clean up, and no fakes
@@ -78,7 +84,6 @@ web/src/         frontend: api.ts (the only module that talks to PocketBase, thr
                  store, cache.ts (the room cache), sw.ts (the service worker), views/, lib/ (pure logic)
 web/styles/      app.css (bundles app/*.css, one file per part) and viewer.css
 scripts/         build, dev, fetch-pocketbase, pb-types (PocketBase's types for the hooks), html-sink check
-mobile/          the Android app (Expo): its own screens on the web client's api.ts, store and room controller
 tests/           unit/, integration/, e2e/, perf/ (scale measurements), support/ (PocketBase harness, Telegram stub, helpers)
 ```
 
@@ -168,6 +173,11 @@ are part of the backups, so plan disk space for them. **Rate limits** (per IP: m
 per 10 s, reactions 30 per 10 s, forwarding and deleting several messages 20 requests per minute each, password changes 5 per minute, new rooms 5 per minute, opening DMs 10 per minute, marking rooms read 120 per minute, signups 20 per minute; PocketBase defaults for the rest)
 are set by the migrations and adjustable under *Settings → Rate limits*.
 
+## Link previews
+
+Messages show a line under them for each link: the page's favicon and title ([`docs/DESIGN.md` §28](docs/DESIGN.md)).
+The server fetches them, only from public addresses. Set `LINK_PREVIEWS=off` to turn it off.
+
 ## Telegram integration
 
 An optional bridge between rooms and Telegram groups ([`docs/DESIGN.md` §26](docs/DESIGN.md)). A bot sits in your
@@ -190,3 +200,7 @@ the bot posts chat messages with the author's name above them.
 
 The bridge is self-contained: `pb_hooks/telegram.pb.js`, `pb_hooks/telegram/` and its own `tg_*` collections. Delete
 the first two to remove it.
+
+## License
+
+[GNU General Public License v3.0](LICENSE) or later.

@@ -2,7 +2,7 @@
   <img src="./uvcpp.svg" alt="libuvcpp logo" width="160" height="160">
 </p>
 
-[![version](https://img.shields.io/badge/version-1.7.4-blue.svg)](./RELEASE.md)
+[![version](https://img.shields.io/badge/version-1.7.5--dev-blue.svg)](./RELEASE.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![CI · Linux · Ubuntu](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml)
 [![CI · Windows · MSVC](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml)
@@ -14,25 +14,25 @@
 🔧 Modern C++11 wrapper for [libuv](https://github.com/libuv/libuv) — event-driven I/O with
 object-oriented APIs, dual-mode async/sync support, HTTP/1.1, WebSocket (RFC 6455), and SSL/TLS.
 
-- **Version**: `1.7.4` — **Author**: `zhuweiye` — **License**: `MIT`
+- **Version**: `1.7.5-dev` — **Author**: `zhuweiye` — **License**: `MIT`
 - **Languages**: [English](./README.md) · [中文](./README.zh.md)
 
 ## Download
 
 <!-- downloads:start -->
-The newest release is **v1.7.0**. Six prebuilt packages, each one self-contained — the
+The newest release is **v1.7.4**. Six prebuilt packages, each one self-contained — the
 Release and Debug builds of the library, all the public headers, `uvcpp.pc` and the CMake
 package files, and no extra DLLs or `.so` files to ship alongside. Which modules a given
 package enables is recorded per version in [CHANGELOG.md](./CHANGELOG.md).
 
 | Platform | Toolchain | Package |
 |---|---|---|
-| Windows x64 | MSVC 2022 | [libuvcpp-1.7.0-msvc-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-msvc-x64.zip) · 21.8 MB |
-| Windows arm64 | MSVC 2022 | [libuvcpp-1.7.0-msvc-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-msvc-arm64.zip) · 22.7 MB |
-| Windows x64 | MinGW-w64 (GCC) | [libuvcpp-1.7.0-mingw-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-mingw-x64.zip) · 27.1 MB |
-| Windows arm64 | MinGW-w64 (clang + libc++) | [libuvcpp-1.7.0-mingw-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-mingw-arm64.zip) · 20.8 MB |
-| Linux x64 | GCC | [libuvcpp-1.7.0-linux-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-linux-x64.zip) · 24.9 MB |
-| Linux arm64 | GCC | [libuvcpp-1.7.0-linux-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.0/libuvcpp-1.7.0-linux-arm64.zip) · 25.2 MB |
+| Windows x64 | MSVC 2022 | [libuvcpp-1.7.4-msvc-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.4/libuvcpp-1.7.4-msvc-x64.zip) · 22.3 MB |
+| Windows arm64 | MSVC 2022 | [libuvcpp-1.7.4-msvc-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.4/libuvcpp-1.7.4-msvc-arm64.zip) · 23.2 MB |
+| Windows x64 | MinGW-w64 (GCC) | [libuvcpp-1.7.4-mingw-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.4/libuvcpp-1.7.4-mingw-x64.zip) · 27.7 MB |
+| Windows arm64 | MinGW-w64 (clang + libc++) | [libuvcpp-1.7.4-mingw-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.4/libuvcpp-1.7.4-mingw-arm64.zip) · 21.2 MB |
+| Linux x64 | GCC | [libuvcpp-1.7.4-linux-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.4/libuvcpp-1.7.4-linux-x64.zip) · 25.5 MB |
+| Linux arm64 | GCC | [libuvcpp-1.7.4-linux-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.7.4/libuvcpp-1.7.4-linux-arm64.zip) · 25.7 MB |
 
 Every earlier release is on the **[Releases page](https://github.com/Antruly/libuvcpp/releases)**.
 What a package contains, and why it is laid out that way:
@@ -41,27 +41,25 @@ What a package contains, and why it is laid out that way:
 
 ## Install
 
-Besides the zips, releases ship `.deb` / `.rpm` packages and — once the repository
-signing key is configured — feed two package channels. Both install the dev
-surface — headers, the CMake config, `uvcpp.pc` — so `find_package(uvcpp CONFIG)`
-and `pkg-config --cflags --libs uvcpp` work right after installing.
+Besides the zips, releases ship `.deb` / `.rpm` packages and feed two package
+channels hosted on GitHub Pages. Both install the dev surface — headers, the CMake
+config, `uvcpp.pc` — so `find_package(uvcpp CONFIG)` and
+`pkg-config --cflags --libs uvcpp` work right after installing.
 
-> **The apt/dnf channels are not live yet** (`GPG_PRIVATE_KEY` is not configured),
-> so the packages are published as release assets only. Install them directly:
->
-> ```sh
-> sudo apt install ./libuvcpp1_<ver>-1_amd64.deb ./libuvcpp-dev_<ver>-1_amd64.deb
-> # or, on the RPM side:
-> sudo rpm -i libuvcpp1-<ver>-1.x86_64.rpm libuvcpp-devel-<ver>-1.x86_64.rpm
-> ```
->
-> The two channel sections below describe what those commands become once the key
-> is in place.
+Every package is also attached to its release, so you can install it without the
+channel:
+
+```sh
+sudo apt install ./libuvcpp1_<ver>-1_amd64.deb ./libuvcpp-dev_<ver>-1_amd64.deb
+# or, on the RPM side:
+sudo rpm -i libuvcpp1-<ver>-1.x86_64.rpm libuvcpp-devel-<ver>-1.x86_64.rpm
+```
 
 **Windows** — run `libuvcpp-<ver>-msvc-<arch>-setup.exe` from the release assets.
-It is **not code-signed yet** (the certificate is not configured), so SmartScreen
-warns on first run. It installs to `Program Files\libuvcpp`, optionally adds `bin\`
-to the system `PATH`, and registers an uninstaller.
+It is signed, but with a **self-signed** certificate (there is no public CA
+certificate yet), so SmartScreen still warns about an unknown publisher on first
+run. It installs to `Program Files\libuvcpp`, optionally adds `bin\` to the system
+`PATH`, and registers an uninstaller.
 
 **Debian / Ubuntu** (apt):
 
@@ -285,6 +283,7 @@ CI** (`tests/tools/check_doc_snippets.py`), so they are safe to copy.
 | JSON (core) | [doc/json-guide.md](doc/json-guide.md) | Building a JSON response by hand: the escape contract, sticky failures, limits, and how it meets the response layer |
 | JSON (reflection) | [doc/json-reflect-guide.md](doc/json-reflect-guide.md) | Declaring a field table with one macro and sharing it in both directions: the two-layer split, read semantics, error reporting, and what C++11 costs |
 | net | [doc/net-guide.md](doc/net-guide.md) | TCP/UDP clients and servers; the async and sync modes, and where they must not be mixed |
+| SOCKS5 | [doc/socks5-guide.md](doc/socks5-guide.md) | A complete client and server: CONNECT / BIND / UDP ASSOCIATE, no-auth and RFC 1929, IPv4/IPv6/domains; the transparent CONNECT proxy built into `uvcpp_tcp_client` / HTTP / WS clients, the UDP data plane, backpressure and timeouts, and the "the defaults are an open proxy" warning |
 | web (HTTP half) | [doc/web-http-guide.md](doc/web-http-guide.md) | HTTP server/client/parser/static server; why shutdown takes two calls |
 | web (WS half) | [doc/web-ws-guide.md](doc/web-ws-guide.md) | WebSocket handshake, frames, close codes |
 | webapp (framework) | [doc/webapp-guide.md](doc/webapp-guide.md) | Routing, middleware, request/response, upload, static, WebSocket, logging — and multi-loop scaling in §19 |
@@ -298,7 +297,7 @@ CI** (`tests/tools/check_doc_snippets.py`), so they are safe to copy.
 | expand | [doc/expand-guide.md](doc/expand-guide.md) | Memory pool, page heap and span, and why they ship disabled |
 | WSDL (document + publishing) | [doc/wsdl-guide.md](doc/wsdl-guide.md) | Parsing a WSDL 1.1 document into a model, looking things up by QName, serving it or generating one |
 | SOAP (envelope + dispatch) | [doc/soap-guide.md](doc/soap-guide.md) | Envelopes and `soap:Fault` in 1.1 and 1.2, the dispatch key derived from the binding, the nine rejections and which side each one belongs to, and why the response wrapper is not the dispatch key |
-| db (SQLite / MySQL / PostgreSQL) | [doc/db-guide.md](doc/db-guide.md) | One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parameter binding, transactions and the no-retry-inside-a-transaction rule, what `DECIMAL` costs you, the async facade (`uvcpp_db_async`, callbacks + a future) and the optional connection pool built on the same connection, and how to run the tests against a real server |
+| db (SQLite / MySQL / PostgreSQL) | [doc/db-guide.md](doc/db-guide.md) | One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parameter binding, transactions and the no-retry-inside-a-transaction rule, what `DECIMAL` costs you, the async facade (`uvcpp_db_async`, callbacks + a future) and the optional connection pool built on the same connection, and how to run the tests against a real server. What each database's driver policy is — which backends are in the repository, which client libraries are **not** in the package, and what happens when one is missing — is in [`doc/db-driver-policy.md`](doc/db-driver-policy.md) |
 | C ABI (`uvcpp_c_*`) | [doc/capi-guide.md](doc/capi-guide.md) | The `extern "C"` surface for C#/P-Invoke and other FFI: the option and its guard chain, the five ABI rules (error codes, callback-table `size`, ownership classes, thread rule, ABI version), what each module provides and deliberately does not, and what the mutation table actually measured. **1.5.3 completes all eight slices** (foundation + net + webapp/web + HTTP/2 + QUIC + HTTP/3 + db, 402 functions); all it needs is `-DUVCPP_ENABLE_CAPI=ON`, and db additionally needs its own `-DUVCPP_ENABLE_DB=ON` plus a backend. **As of 1.5.0 all six release legs ship it**, alongside the C# binding in [`bindings/csharp/`](bindings/csharp/README.md) (which covers the first seven slices, 321 of the 402 — db is a stated gap) |
 | Build & packaging | [doc/build-guide.md](doc/build-guide.md) | What every switch means and how the switches combine, the build trees, the platform dependencies, the repository layout, and the failures worth recognising |
 | Performance | [doc/benchmark.md](doc/benchmark.md) | Measured per-connection memory, throughput and stability |
@@ -363,13 +362,15 @@ OpenSSL ≥ 3.2 with the QUIC API for QUIC and HTTP/3), and how the switches int
 | `UVCPP_ENABLE_BROTLI` | `OFF` | Enable the **brotli body compressor** — `br` as a second `Content-Encoding` for HTTP response bodies next to gzip/deflate, picked by the same `Accept-Encoding` negotiation (`br` wins on `q`-ties with gzip because it is the smaller of the two; `*` and the zlib-less build are covered too). **What it buys is bytes on the wire, not speed**: at the default quality the same body is ~11 % smaller than gzip level 6, and because the compressed variant is served out of the response cache the per-request cost is the same as gzip's — an entry that compresses without a cache tag pays for the encode every request. The default quality is `5` (brotli's own default), deliberately not `0`. **Turned off, nothing changes** (no `br` in `Accept-Encoding` negotiation, and the exported symbol set / `DT_NEEDED` of the library are unchanged). brotli is a **private** dependency, found via pkg-config/`find_library` when the system has it and built from source via `FetchContent` (tag pinned to `BROTLI_VERSION`) otherwise — **two** static libraries, so a static-library user links `-lbrotlienc -lbrotlidec` themselves. **As of 1.7.0 it is in the release package** — every release leg passes `UVCPP_BROTLI_FROM_SOURCE=ON` so the package stays self-contained — and five CI jobs really build it: the Ubuntu `brotli` + `brotli-no-zlib`, macOS and MSVC matrix entries plus the single `ci-mingw64.yml` job. See [`doc/web-http-guide.md`](doc/web-http-guide.md) |
 | `UVCPP_BROTLI_FROM_SOURCE` | `OFF` | Skip the system lookup entirely (`find_package(PkgConfig)` → `find_path`/`find_library`) and build brotli from the source pinned by `BROTLI_VERSION`, linking it statically. **The lookup runs system-first**, so on a machine that happens to have `libbrotli-dev` the "links the static `.a`" promise silently turns into three `DT_NEEDED` entries (`libbrotlienc` / `libbrotlidec` / `libbrotlicommon`) — and nothing turns red, because the release workflow's `ldd` blacklist does not name brotli. Any release leg that enables brotli passes this so its package stays self-contained. The discovery block is skipped *without being called* (its results land in the CMake cache, so calling it once would leak the previous answer into the next configure of the same tree). Default `OFF` leaves today's behaviour byte-for-byte. See [`doc/web-http-guide.md`](doc/web-http-guide.md) |
 | `UVCPP_ENABLE_CAPI` | `OFF` | Export the **C ABI** (`src/capi/`, C99 headers for C#/P-Invoke and any other FFI) out of the same `uvcpp` library — no extra artifact. Requires `UVCPP_BUILD_NET=ON` and `UVCPP_BUILD_WEB=ON`; force-disabled without them (the C surface spans net/web/webapp). **Turned on for every release configuration.** See [`doc/capi-guide.md`](doc/capi-guide.md) |
-| `UVCPP_ENABLE_DB` | `OFF` | Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** (libsqlite3 / libmysqlclient / libpq / an ODBC driver manager) — force-disabled when none of the four is found. **Every release configuration turns it on, with all three client-library backends**: SQLite is compiled in from source, and MySQL/PostgreSQL are in the package but loaded at run time (next rows); whether the ODBC backend is in a given package depends on whether that build machine had `sql.h` (next-next row). See [`doc/db-guide.md`](doc/db-guide.md) |
+| `UVCPP_ENABLE_DB` | `OFF` | Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** (libsqlite3 / libmysqlclient / libpq / an ODBC driver manager) — force-disabled only when those four SQL back-ends and the MongoDB one below are all missing. **Every release configuration turns it on, with all three client-library backends**: SQLite is compiled in from source, and MySQL/PostgreSQL are in the package but loaded at run time (next rows); whether the ODBC backend is in a given package depends on whether that build machine had `sql.h` (next-next row). The module also carries a MongoDB client (the row after ODBC), which is **not** part of this back-end list. See [`doc/db-guide.md`](doc/db-guide.md) |
 | `UVCPP_ENABLE_DB_SQLITE` | `ON` | Build the SQLite backend of the db module (needs `sqlite3.h` + libsqlite3). Not found ⇒ **this one backend is force-disabled with a warning**; the others still build |
 | `UVCPP_DB_SQLITE_FROM_SOURCE` | `OFF` | Build that SQLite backend from a **hash-pinned source amalgamation** (one static `sqlite3.c`, forced PIC) instead of `find_package(SQLite3)`. **The six release legs use it**: linking the system `libsqlite3.so` would add a `DT_NEEDED` and break the packages' self-contained promise, while the system `libsqlite3.a` on Ubuntu 24.04 is not PIC (verified: `R_X86_64_PC32 … can not be used when making a shared object`). Needs network at configure time, or the zip placed by hand; both are described in [`doc/db-guide.md`](doc/db-guide.md) |
 | `UVCPP_ENABLE_DB_MYSQL` | `ON` | Build the MySQL backend (needs `mysql.h` + libmysqlclient). Non-standard installs: `-DCMAKE_PREFIX_PATH=…` or `-DUVCPP_DB_MYSQL_INCLUDE_DIR=… -DUVCPP_DB_MYSQL_LIBRARY=…`. **On by default, and on in every release package** (with `UVCPP_DB_RUNTIME_LOAD=ON`, which is what keeps the package loadable without libmysqlclient) |
 | `UVCPP_ENABLE_DB_PGSQL` | `ON` | Build the PostgreSQL backend (needs `libpq-fe.h` + libpq). Non-standard installs: `-DCMAKE_PREFIX_PATH=…` or `-DPostgreSQL_INCLUDE_DIR=… -DPostgreSQL_LIBRARY=…`. **On by default, and on in every release package** (with `UVCPP_DB_RUNTIME_LOAD=ON`) |
 | `UVCPP_ENABLE_DB_ODBC` | `ON` | Build the ODBC backend of the db module (needs `sql.h` + a driver manager: `libodbc` on Linux, the system `odbc32` on Windows). Unlike the three above, it targets **an interface, not one database** — *what* it connects to is chosen by the connection string's `Driver=` / `DSN=` (Microsoft ships no linkable C client library for SQL Server; `msodbcsql18` *is* an ODBC driver), and it tries no other driver name. Not found ⇒ **this one backend is force-disabled with a warning**; the others still build. It honours `UVCPP_DB_RUNTIME_LOAD` like MySQL/PG: what gets linked is the **driver manager**, which is a client library of the same kind (a plain unixODBC package on Linux/macOS; on Windows `odbc32.dll` belongs to the OS, so linking it costs nothing). So "is this backend built" and "is there a driver for the data source you open" are two different questions — the second is answered at `open()`, in the driver manager's own words |
-| `UVCPP_DB_RUNTIME_LOAD` | `OFF` | Take the MySQL / PostgreSQL / ODBC symbols from a client library loaded **at run time** (`dlopen` / `LoadLibrary`) instead of linking it; for ODBC that library is the **driver manager** (the actual driver is still loaded by the manager itself). **The six release legs use it, and the reason is the packages' users, not the library**: `DT_NEEDED` (the PE import table on Windows) is resolved at **load time**, so linking libmysqlclient/libpq/libodbc means a machine that has never installed those libraries cannot even *load* the library — even if it only ever runs HTTP and never touches `db`. With this on, such a machine runs everything except "actually connecting to MySQL/PG/ODBC", where it gets `uvcpp_db_status::NO_DRIVER` plus a message naming the candidates that were tried (`UVCPP_DB_MYSQL_LIBRARY` / `UVCPP_DB_PGSQL_LIBRARY` / `UVCPP_DB_ODBC_LIBRARY` override the search). It changes only *where the symbols come from*, not *which backends exist*: `mysql.h` / `libpq-fe.h` / `sql.h` are still needed at configure time (`MYSQL_BIND`'s layout has to come from the real header), so `UVCPP_DB_MYSQL_ENABLE` / `UVCPP_DB_PGSQL_ENABLE` / `UVCPP_DB_ODBC_ENABLE` still mean "the header was found". Default `OFF` leaves today's behaviour byte-for-byte. See [`doc/db-guide.md`](doc/db-guide.md) |
+| `UVCPP_ENABLE_DB_MONGODB` | `ON` | Build the **MongoDB backend** (`<db/uvcpp_mongo.h>`, class `uvcpp_mongo_client`): JSON in, JSON out, a sync core plus async over the libuv thread pool. It is **not** an `uvcpp_db_client` back-end — `uvcpp_db_drivers()` does not list it. Only the headers (`mongoc/mongoc.h`, `bson/bson.h`) are needed at build time: `libmongoc-1.0` / `libbson-1.0` are never linked or shipped and are loaded at run time instead (`UVCPP_DB_MONGOC_LIBRARY` / `UVCPP_DB_BSON_LIBRARY` override the search); if they are missing, `open()` returns `NO_DRIVER` and the process carries on. Not found ⇒ **this backend is force-disabled with a warning**. See [`doc/mongodb-guide.md`](doc/mongodb-guide.md) |
+| `UVCPP_DB_RUNTIME_LOAD` | `OFF` | Take the MySQL / PostgreSQL / ODBC / MongoDB symbols from a client library loaded **at run time** (`dlopen` / `LoadLibrary`) instead of linking it; for ODBC that library is the **driver manager** (the actual driver is still loaded by the manager itself). **The six release legs use it, and the reason is the packages' users, not the library**: `DT_NEEDED` (the PE import table on Windows) is resolved at **load time**, so linking libmysqlclient/libpq/libodbc means a machine that has never installed those libraries cannot even *load* the library — even if it only ever runs HTTP and never touches `db`. With this on, such a machine runs everything except "actually connecting to MySQL/PG/ODBC", where it gets `uvcpp_db_status::NO_DRIVER` plus a message naming the candidates that were tried (`UVCPP_DB_MYSQL_LIBRARY` / `UVCPP_DB_PGSQL_LIBRARY` / `UVCPP_DB_ODBC_LIBRARY` / `UVCPP_DB_MONGOC_LIBRARY` / `UVCPP_DB_BSON_LIBRARY` override the search). It changes only *where the symbols come from*, not *which backends exist*: `mysql.h` / `libpq-fe.h` / `sql.h` are still needed at configure time (`MYSQL_BIND`'s layout has to come from the real header), so `UVCPP_DB_MYSQL_ENABLE` / `UVCPP_DB_PGSQL_ENABLE` / `UVCPP_DB_ODBC_ENABLE` still mean "the header was found". Default `OFF` leaves today's behaviour byte-for-byte. See [`doc/db-guide.md`](doc/db-guide.md) |
+| `UVCPP_ENABLE_REDIS` | `ON` | Enable the **Redis client** (`src/redis/`): built-in RESP2/RESP3, asynchronous over `uvcpp_tcp_client`, with AUTH / SELECT / pipelines / pub-sub / `HELLO 3` / `rediss://`. **No third-party client library is needed** (not hiredis), which is why it is on by default; it depends on the net module and is force-disabled when `UVCPP_BUILD_NET=OFF`. See [`doc/redis-guide.md`](doc/redis-guide.md) |
 | `UVCPP_USE_SYSTEM_LIBUV` | `ON` | Prefer system-installed libuv |
 | `UVCPP_BUILD_LIBUV_FROM_SOURCE` | `OFF` | Fetch and build libuv from source via `FetchContent` |
 | `UVCPP_STATIC_RUNTIME` | `OFF` | Statically link the compiler runtime (`libgcc`/`libstdc++`) into the library. **MinGW and Linux only — a no-op on MSVC**, which uses `/MD` and ships `vcruntime`/`msvcp` in the package. **On Linux it also applies to every executable, and a *shared* `libuvcpp.so` built with it cannot be combined with a consumer that uses the system `libstdc++.so.6`** — both copies instantiate the same COMDAT templates (`std::once_flag`'s `__once_proxy`, `std::__future_base::_State_baseV2`) and ELF's global symbol scope makes one side jump into the other's frame, so the failure is a run-time segfault or `double free`, **not a link error**. **That is why the release workflow's two Linux legs no longer pass it** (1.7.0 onwards) — the Linux packages therefore need the system `libstdc++.so.6` / `libgcc_s.so.1`, which every distro with a C++ runtime already has. The two MinGW legs still pass it: PE has no global symbol scope, so there is nothing to interpose, and a MinGW user's machine may not have `libstdc++-6.dll`. See [`doc/build-guide.md`](doc/build-guide.md) |

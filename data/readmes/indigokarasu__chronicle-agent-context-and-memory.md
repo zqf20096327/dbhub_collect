@@ -201,16 +201,22 @@ compares each schedule's cron string against a persisted watermark
 curation queue, inside a wall-clock budget (`maintenance.budget_ms`, default
 5ms; a call with nothing due costs ~0.08ms and executes no SQL at all). The work
 itself is then done by the existing bounded per-turn drain, on the ordinary
-`append_event` write path. What is scheduled: session reaping
-(`reaper.schedule`), belief decay (`forgetting.decay_schedule`), the CSP
-consistency sweep (`health.consistency_sweep.schedule`), the health/self-heal
-run (`health.schedule`), the session-index backfill
-(`curation.sweep_schedule`), and the exact-name identity sweep
-(`identity.schedule`). An empty cron string disables a schedule; so does
+`append_event` write path. An empty cron string disables a schedule; so does
 an unparseable one, loudly. `core.maintenance_status()` reports last-run and
 next-due per schedule, plus the tasks that are deliberately **not** scheduled
 and why (e.g. `derive`, which mints new beliefs — a capture path, not
 maintenance).
+
+Six maintenance jobs are scheduled, each on its own cadence:
+
+| Job | Config key | Default schedule | What it does |
+|-----|------------|------------------|--------------|
+| Session reaper | `reaper.schedule` | `*/5 * * * *` (every 5 min) | Finalizes sessions idle past `reaper.reap_threshold` and recovers interrupted reap on startup (§12.4). Runs most often because sessions go stale in minutes. |
+| Belief decay | `forgetting.decay_schedule` | `0 3 * * *` (daily 03:00 UTC) | Asymmetric fidelity decay — verbatim → gist → parametric_only — one rung off each belief per sweep (§20). Daily because fidelity fades over months, and each sweep is bounded. |
+| CSP consistency sweep | `health.consistency_sweep.schedule` | `0 * * * *` (hourly) | Single-cardinality predicates with more than one active value (§21). Hourly so contradictions surface quickly without waiting for the daily health run. |
+| Health / self-heal | `health.schedule` | `0 4 * * *` (daily 04:00 UTC) | Auditor, Tier-1 self-heal, embedder-mismatch heal and federate sweep (§21). Runs at 04:00, deliberately offset from identity (05:00) so a hook call never has to choose between two due jobs. |
+| Session-index backfill | `curation.sweep_schedule` | `0 * * * *` (hourly) | Backfills index rows for ended sessions that have none (issue #6). Hourly, independent of health. |
+| Identity sweep | `identity.schedule` | `0 5 * * *` (daily 05:00 UTC) | Exact-name sweep that **proposes merge candidates only** — it never merges automatically (§...). Gated on `identity.enabled`, which also gates the mention-driven proposal path since both write to the same queue. |
 
 **Identity is adjudicated, never inferred.** The `identity` sweep exists to ask
 questions, not answer them: an exact `(normalized_name, owner, domain)`
@@ -309,7 +315,11 @@ memory:
                          # grows with the corpus. 'sqlite-vec' opts into the ANN fast path,
                          # which needs `pip install sqlite-vec` AND a sqlite3 built with
                          # loadable-extension support (Apple's macOS system Python has
-                         # neither). Missing either — or a vec0 left over at a different
+                         # neither). The PyPI `sqlite-vec` package tracks the original
+                         # asg017/sqlite-vec, which is unmaintained; the community-maintained
+                         # fork vlasky/sqlite-vec is an alternative
+                         # (`pip install git+https://github.com/vlasky/sqlite-vec.git`).
+                         # Missing either — or a vec0 left over at a different
                          # embedding width — falls back to the paged scan on its own. The
                          # top-k is the same either way; only the time to get it changes.
   maintenance:            # the in-process cadence; see "Maintenance runs on
@@ -357,6 +367,7 @@ memory:
       share_write_path: 0.5
       share_embed: 0.3
       share_maintenance: 0.2
+    sweep_schedule: "0 * * * *"   # hourly session-index backfill for ended sessions
     lease_seconds: 900   # a 'running' job older than this is treated as abandoned
     max_attempts: 20
     retention:
@@ -708,6 +719,8 @@ is which Hermes extension points a system owns and what must run behind it.
 | Mem0 | ✓ | — | Every turn | ✓ |
 | Hindsight | ✓ | — | Default on | Default on |
 | Graphiti | — | — | MCP/custom | MCP/custom |
+| Mnemosyne | ✓ | — | Every turn | ✓ |
+| Limbic | ✓ | — | Agent-directed | ✓ |
 
 **Auto-capture** means Hermes stores completed turns without the model choosing a
 tool. **Auto-recall** means memory is added to turn context automatically, not
@@ -722,6 +735,8 @@ merely exposed through a search tool.
 | Mem0 | Mem0 Platform | — | Search, add, update, delete |
 | Hindsight | Hindsight Cloud | — | Retain, recall, reflect |
 | Graphiti | No provider | — | MCP episode/graph tools |
+| Mnemosyne | Local SQLite | — | remember, recall, search |
+| Limbic | Local SQLite | — | remember, recall |
 
 Among these systems, Chronicle alone fills both the Hermes memory-provider and
 context-engine slots. Its context engine rescues valuable spans into durable

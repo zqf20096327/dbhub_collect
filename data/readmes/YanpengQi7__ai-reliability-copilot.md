@@ -1,16 +1,52 @@
 # AI Reliability Copilot
 
-> Turn incident chaos into a structured 9-section response in seconds.
+> An open-source, evidence-first copilot for investigating production incidents and coordinating response.
+
+[![CI](https://github.com/YanpengQi7/ai-reliability-copilot/actions/workflows/ci.yml/badge.svg)](https://github.com/YanpengQi7/ai-reliability-copilot/actions/workflows/ci.yml)
+
+**[Try the live demo](https://ai-reliability-copilot.vercel.app)** · **[Get started locally](#quick-start)** · **[Contribute](./CONTRIBUTING.md)** · **[Security](./SECURITY.md)** · **[Usage guide (中文)](./USAGE.md)**
 
 ![AI Reliability Copilot — incident analysis form](./public/hero.png)
 
-Paste a production incident — logs, metrics, on-call notes. The copilot streams back a structured analysis: severity, ranked root-cause hypotheses with evidence, a copy-pasteable investigation checklist, a mitigation plan with rollback steps, customer-facing impact, postmortem skeleton, and prioritized follow-ups.
+Give it an incident, alert, logs, metrics, or on-call notes. It produces a structured response with severity, ranked hypotheses, cited evidence, investigation steps, mitigations with rollback plans, customer impact, a postmortem draft, and follow-ups. Use the web app, CLI, or MCP tools in your existing AI client.
 
-But the real story isn't the prompt. It's the **eval pipeline** — a 5-dimension rubric, a 5-scenario regression suite, and an LLM-as-judge that scores every change, so prompt iteration is measured instead of vibes-based.
+The project is built around **inspectable evidence and measured iteration**: investigation reports retain supporting and contradicting references, and the evaluation pipeline records uncertainty and failure cases instead of presenting prompt scores as proof of reliability.
 
-**Live demo:** [ai-reliability-copilot.vercel.app](https://ai-reliability-copilot.vercel.app)
-**📖 Usage guide (Chinese):** [USAGE.md](./USAGE.md) — how to actually use it, end-to-end
-**Methodology deep-dive:** [EVALUATION.md](./EVALUATION.md)
+If this helps your on-call work, **a GitHub star helps other SREs discover it**. Bugs, scenario contributions, and thoughtful feedback are welcome too.
+
+## Quick start
+
+Requires Node.js 22 or later. The core app can run locally without Supabase; persistence and archive features become available when Supabase is configured.
+
+```bash
+git clone https://github.com/YanpengQi7/ai-reliability-copilot.git
+cd ai-reliability-copilot
+npm ci
+cp .env.local.example .env.local
+```
+
+Add a `DEEPSEEK_API_KEY` to `.env.local`, then start the app:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). For database-backed features, configure the Supabase values in `.env.local` and apply [`supabase/schema.sql`](./supabase/schema.sql). See the [full setup and usage guide](./USAGE.md) for webhooks, MCP, the CLI, and the knowledge base.
+
+## What you can do
+
+- **Investigate with evidence:** inspect collected evidence, filter by service or type, open citations, and review missing or conflicting references.
+- **Keep reports portable:** export complete investigations and analyses as Markdown or JSON, with sensitive evidence excluded by default.
+- **Coordinate response:** assign owners and track investigation, mitigation, and follow-up actions.
+- **Use your own workflow:** work in the browser, pipe alerts through the CLI, or connect an MCP client to search runbooks and incident history.
+- **Evaluate changes transparently:** replay saved agent runs, compare outputs, and inspect the limits of the benchmark.
+
+## Project guides
+
+- [Full usage guide (中文)](./USAGE.md) — setup and end-to-end workflows
+- [Evaluation methodology](./EVALUATION.md) — rubric, methodology, limitations, and roadmap
+- [Evidence-first evaluation v2](./EVAL-V2.md) — frozen artifacts, comparison method, and replay instructions
+- [Contributing](./CONTRIBUTING.md) — development setup and useful ways to help
 
 **Evidence-first evaluation v2:** [EVAL-V2.md](./EVAL-V2.md) — frozen trial artifacts, blinded same-judge comparisons, fixed-answer calibration, failure accounting, and paired incident-family intervals. Includes 30 synthetic candidate cases awaiting independent review. Public pipeline demo: `/evals/benchmark`. Historical results below are legacy findings, not v2 quality claims.
 
@@ -42,6 +78,20 @@ The `/investigate` product and new v2 agentic runs share one planning and diagno
 - **DeepSeek** for both analyzer and judge (provider-swappable in one file)
 - **Supabase Postgres** for persistence; service-role client server-side only
 - **Vercel** auto-deploys on push to `main`
+
+## Investigation evidence workspace
+
+On **Investigate**, inspect the evidence captured by the investigator with local text search, kind and service filters, and cited/uncited views. Citation buttons in planner decisions, claims, and root-cause hypotheses open the referenced record, clearing filters that would hide it. Missing references and conflicting records with the same ID are called out for review. The reference audit checks record presence and identity, while factual support and arithmetic still require review.
+
+Use **Copy investigation report**, **Download Markdown**, or **Download JSON** to keep the diagnosis, supporting and contradicting references, structured measurements and derivations, unresolved checks, planner decisions, read outcomes, usage, and presentation response together. Reports retain unknown severity and incomplete status, including investigations stopped by a budget or step cap. Exports always use the full run, regardless of evidence filters. The scenario and requested language are captured when the run starts; later selections do not relabel the report, and canceled responses cannot replace a newer result.
+
+Evidence bodies, tool inputs and observations, and planner query fields are excluded by default. An explicit opt-in includes them with supported credential patterns redacted. Narratives and source metadata may still contain incident details; review the report before sharing. Original source hashes are labeled as provenance because omitted or redacted content cannot be verified against the original hashes. Filtering and exports run in the browser without additional model calls, server writes, or automatic browser storage.
+
+## Local evidence intake
+
+Use **Choose files** or drag log and alert files into the New page. Import up to five UTF-8 `.txt`, `.log`, `.json`, `.md`, or `.csv` files, preview the combined evidence, then append it to the current context or explicitly replace it. A single replacement keeps alert JSON intact for **Parse alert JSON**. File reads happen in the browser; contents are sent only when you start analysis. Invalid batches and context over the 50,000-character limit leave the existing evidence intact, with no silent truncation.
+
+The **Credential check** shows detected credential types and their locations without repeating the matched credentials. You can redact in the editor, and analysis automatically redacts supported patterns in the browser before submission. The saved input snapshot and exported raw context use that same sanitized input. Private-key redaction removes the complete key block, including truncated blocks. Detection covers known patterns; review evidence for other sensitive information.
 
 ## The 9-section output schema
 
@@ -105,15 +155,16 @@ See [EVALUATION.md](./EVALUATION.md) for the full methodology, including limitat
 
 Each has enough context (metrics, logs, deploy history, on-call notes) to differentiate prompt versions. Browse them at `/scenarios`.
 
-## Use it from your own Claude Code (MCP server mode)
+## Use it from an MCP client
 
-This project ships as **both a web app and an MCP server**. Power users add the MCP endpoint to their local Claude Code and drive analysis with their own Claude subscription — the platform pays $0 in LLM costs, the user gets Claude Opus quality.
+The MCP server exposes incident data, knowledge search, alert parsing, output guidance, and persistence tools. **Your MCP client’s model generates the analysis**; the server does not provide an `analyze_incident` model call. Search may use configured embeddings, and saved results use the configured database, so operating costs depend on your provider and deployment setup.
 
 ```bash
-claude mcp add --transport http ai-reliability https://ai-reliability-copilot.vercel.app/api/mcp
+# Local development after running `npm run dev`
+claude mcp add --transport http ai-reliability http://localhost:3000/api/mcp
 ```
 
-7 tools exposed: `search_kb`, `find_similar_incidents`, `list_scenarios`, `get_scenario`, `parse_alert_json`, `get_output_schema`, `save_incident_analysis`. See [USAGE.md](./USAGE.md) workflow D-bis for the full pattern.
+Hosted production and preview deployments require `MCP_AUTH_TOKEN` unless the owner explicitly enables public machine API access. If a token is configured, pass the owner-provided token as an Authorization bearer header in your MCP client. Treat incident context and knowledge-base content as sensitive; only connect a deployment you trust. The server exposes seven tools: `search_kb`, `find_similar_incidents`, `list_scenarios`, `get_scenario`, `parse_alert_json`, `get_output_schema`, and `save_incident_analysis`. See [USAGE.md](./USAGE.md#工作流-d-bis在自己的-claude-code-里用mcp-模式--推荐给团队内部) for the full setup.
 
 ## Use it from your terminal (CLI)
 
@@ -146,6 +197,28 @@ Make the AI understand **your company**: drop your runbooks, postmortems, and se
 - **Sample docs** in `sample-kb/` show what's expected — replace with yours.
 
 The signature for similarity retrieval is the chunk text itself. Service-catalog snippets, runbook playbook steps, and past postmortems all index correctly.
+
+## Search the incident archive
+
+The **Incidents** page searches the full saved archive, including records beyond the newest 50. Search titles, services, and symptoms for text, combine it with an exact service name, or filter by inclusive creation dates in UTC. Text searches ignore case and treat punctuation such as `%`, `_`, and `*` literally. Select a service badge to filter by that service.
+
+Browse 25 incidents per page with **Older matches** and **Newest matches**. Filters and the current page are stored in the URL for bookmarks, browser history, and sharing with people who already have access. Applying different filters starts from the newest matching records. Records without creation dates appear last. Pagination preserves timestamp precision and uses incident IDs to distinguish records created at the same time.
+
+Archive queries fetch only title, service, symptoms, creation date, and ID; raw incident context is not fetched for the list. Invalid filters show a correction message before querying, and database failures offer a retry of the same page. Hosted deployments retain their existing private-data settings.
+
+## Analysis review and portable reports
+
+Saved incident pages include an **Analysis history & comparison** workspace. Open any saved run, choose another run as a baseline, and review changes across all nine analysis sections. Commands, supporting evidence, mitigation risks, rollback steps, and follow-ups stay visible in the comparison. Different output languages are called out; content differences do not imply better quality. The evaluation button and internal-document audit always refer to the displayed run. Review selections live in the URL so browser history and bookmarks preserve them.
+
+Use **Copy report**, **Download Markdown**, or **Download JSON** to take a complete analysis into a handoff or postmortem. Raw incident context is excluded by default and can be included explicitly. On the New page, exports become available only after generation completes, including when persistence is disabled or saving fails. The report uses the incident input captured when that generation started. Exports run in the browser without extra model calls, database writes, or third-party services.
+
+## Response actions and handoffs
+
+After analysis completes, **Response workspace** turns the investigation checklist, mitigations, and follow-ups into a manual action list. Assign an owner, record observed outcomes or blockers, and mark actions to do, in progress, blocked, or done. Progress counts and filters help the next responder see what remains. Commands, expected results, mitigation risks, and rollback steps stay visible; marking an action done records your assessment.
+
+**Copy handoff**, **Download Markdown**, and **Download JSON** include every recommended action alongside the progress you recorded, with blocked and remaining actions called out. Observed outcomes are labeled separately from the model's expected results. Handoffs omit raw incident context and symptoms and redact supported credential patterns from notes and source recommendations. Review them for other sensitive information before sharing.
+
+Progress stays in memory by default. Saved incident analyses offer **Remember progress in this browser**; this opt-in stores only action status, owner, and outcome on this browser, without team synchronization. Turning it off removes the local copy while keeping your current session. Other open tabs retain their session notes and stop saving this analysis. Each incident, analysis run, and exact source version has separate progress, so reruns start fresh. Completed analyses that could not be saved still support session-only tracking and handoff exports. Resetting progress requires confirmation inside the workspace.
 
 ## Similar-incident search
 
@@ -221,4 +294,3 @@ and send it as a Bearer token to retrieve detailed dependency diagnostics.
 ## License
 
 MIT
-

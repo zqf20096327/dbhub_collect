@@ -47,6 +47,7 @@
    - [10. 100% Zero Pip Dependencies (`dependencies = []`)](#10-100-zero-pip-dependencies-dependencies--)
    - [11. Duplicate Clones & Portable-SSD Mirrors (`smart-drive repos`)](#11-duplicate-clones--portable-ssd-mirrors-smart-drive-repos)
    - [12. Gitignore Governance & Personal Data Protection (`smart-drive gitignore`)](#12-gitignore-governance--personal-data-protection-smart-drive-gitignore)
+   - [13. Folder Moves That Keep Coding Agents Working (`smart-drive relink`)](#13-folder-moves-that-keep-coding-agents-working-smart-drive-relink)
 4. [3-Step Quickstart](#3-step-quickstart)
 5. [The 5 Preset Profiles](#the-5-preset-profiles)
 6. [Cross-Platform Portable Launchers Guide](#cross-platform-portable-launchers-guide)
@@ -276,6 +277,22 @@ Ensures clean, robust `.gitignore` rules across every git repository on the driv
 - **Public Repository Leak Detection**: Zero-network remote URL inspection flags when personal learning data is tracked in repositories with public remotes (GitHub, GitLab, Bitbucket) or unconfigured remotes.
 - **Safe Untracking (`--untrack`)**: Runs `git rm -r --cached` on matching tracked files without touching files in the working tree and refusing when staged changes exist.
 
+### 13. Folder Moves That Keep Coding Agents Working (`smart-drive relink`)
+Coding agents remember every project and MCP server by absolute path, and exFAT cannot keep a link at the old place. Whenever `organize` or `classify` moves a folder, SmartDrive rewrites those paths for you:
+- **Agent settings**: Claude Code (`~/.claude.json`), Claude desktop (config, sessions, worktree records), Codex (`config.toml`), Gemini CLI, Antigravity, Cursor, Windsurf, the Constellation manifest and the drive's `.mcp.json`. Each file keeps its own format and is first copied to `<file>.bak.smart-drive`; permission settings are never touched.
+- **History and repositories**: Claude Code history and memory move to the new project's folder, git worktrees are repaired, and editable installs inside a moved `.venv` point at the new place.
+- **Journal**: every batch of moves is logged in `.smart_drive/moves.jsonl`, so it can be applied again later.
+
+How to run it:
+```bash
+smart-drive organize --dry-run                             # preview the moves and which agents will follow
+smart-drive organize --apply                               # move, then relink the agents
+smart-drive relink                                         # apply the latest batch again (e.g. after closing an agent)
+smart-drive relink "E:\Old\proj" "E:\New\proj" --dry-run   # a folder moved by hand: preview
+smart-drive relink "E:\Old\proj" "E:\New\proj"             # ...then apply
+```
+Close Claude desktop, Claude Code and Codex before relinking (an open agent can write its old settings back), then reopen them. If a command inside a moved `.venv` still points at the old place, run `uv sync --reinstall` in that project.
+
 ---
 
 ## 3-Step Quickstart
@@ -370,7 +387,8 @@ All commands can be invoked via `smart-drive <command>` or `python -m smart_driv
 | `audit` | `--root <path>`, `--json`, `--markdown`, `--export <file>` | Detailed storage breakdown and cluster slack metrics, modelled at 512 KB exFAT clusters; the report names the detected filesystem and says when that model does not apply (APFS, NTFS, ext4 ...). Hard-linked data is counted once and the extra paths are reported ("Hard Links Not Counted"), and symlinks are skipped and counted. |
 | `clean` | `--dry-run` *(default)*, `--apply`, `--tier {1,2,3}`, `--log`, `--json` | Safe junk cleaner with mandatory dry-run safeguard and inviolable whitelist protection. With `--apply` it exits `1` if a deletion failed (items refused by the safety guard are reported but are not failures). |
 | `search` | `<query>`, `--ext <ext>`, `--size <spec>`, `--category <cat>`, `--limit <n>`, `--json` | Sub-10ms SQLite FTS5 multi-criteria query parser with BM25 ranking. |
-| `organize` | `--dry-run`, `--apply`, `--clean`, `--json` | Autonomous drive auto-zoning, loose-file relocation, AcademicClassifier routing, and slack rebalancing. |
+| `organize` | `--dry-run`, `--apply`, `--clean`, `--json` | Autonomous drive auto-zoning, loose-file relocation, AcademicClassifier routing, and slack rebalancing; keeps coding agents pointed at moved folders. |
+| `relink` | `[OLD NEW]`, `--root <path>`, `--dry-run`, `--json` | Rewrites project and MCP server paths remembered by coding agents, carries Claude Code history over, and repairs git worktrees after folders move. |
 | `sentinel` | `--root <path>`, `--auto-heal`, `--no-heal`, `--json` | 1-touch health audit (detected filesystem, git repo status) and shield self-healing (alias: `agent-check`). |
 | `mcp` | `[{serve,register}]`, `--root <path>`, `--all`, `--auth-token <token>`, `--require-auth` | Starts the JSON-RPC 2.0 stdio MCP server (`serve`) or registers configs for AI agents (`register`). |
 | `mcp-config` | `--all`, `--antigravity`, `--claude`, `--cursor`, `--windsurf`, `--workspace`, `--json` | Auto-registers SmartDrive MCP Server in standard AI coding agent config files. |

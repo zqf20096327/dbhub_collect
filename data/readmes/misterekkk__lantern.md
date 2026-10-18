@@ -95,6 +95,12 @@ commit (EmbeddingGemma 2 support), `transformers`, `tokenizers`, `sqlite-vec`, `
 
 ## Installation
 
+### Via Homebrew (Recommended)
+
+```bash
+brew install --cask misterekkk/tap/lantern
+```
+
 ### Download the app (`Lantern.dmg`)
 
 1. Download **`Lantern.dmg`** from [Releases](https://github.com/misterekkk/lantern/releases) (or the latest artifact of
@@ -481,14 +487,20 @@ uv run lantern daemon stop | uninstall
 - Memory (measured on M4): idle daemon ~490 MB, plus ~340 MB for the photo query model while the panel is in use
   (released after 5 minutes); the indexing process up to ~2 GB for text, ~3.3 GB for recordings and ~4 GB for photos,
   then it exits.
-- Photo search was measured on 1,000 Flickr30k photos and an 80-photo test folder; real libraries (screenshots,
-  documents, many similar photos) may behave differently. Text inside images is not read (no OCR).
+- Photo search was measured on 1,000 Flickr30k photos and an 80-photo test folder; real libraries (many similar
+  photos, blurred or strongly skewed phone shots of documents) may behave differently.
 - Audio search was evaluated on synthetic speech; real recordings (noise, several speakers) may do worse.
   Transcripts cover the first 4 hours of a recording; audio embeddings cover all of it.
 - Large files (> 64 MB, mostly videos) are recognised by size and content samples, not a full hash.
 - CSV/TSV and large number-heavy files are indexed by their head only (when not ignored).
 - Polish inflection in keyword search is approximated by stem prefixes, not a real stemmer.
 - Full list of open questions: [docs/DECISIONS.md](docs/DECISIONS.md#open-questions).
+
+## Acknowledgements & Prior Art
+
+- [DigUp](https://github.com/ARahim3/DigUp) by [@ARahim3](https://github.com/ARahim3) — for demonstrating the power of on-device multimodal search with EmbeddingGemma 2, which initially inspired this project.
+- Google DeepMind for [EmbeddingGemma 2](https://huggingface.co/google/embeddinggemma-2).
+- Apple MLX team for [mlx](https://github.com/ml-explore/mlx) and [mlx-vlm](https://github.com/ml-explore/mlx-vlm).
 
 ## License
 

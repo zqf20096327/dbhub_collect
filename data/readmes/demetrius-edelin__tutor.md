@@ -1,4 +1,4 @@
-# <img src="src/app/public/logo.svg" alt="" height="32"> Tutor - books, YouTube and online docs teacher
+# <img src="src/app/public/logo.svg" alt="" height="32"> Tutor: a personal teacher for your books, online documentation, and YouTube videos
 
 > See also my other project, [Tapas Habit & Goal Tracker](https://tapastracker.app), a full-featured habit tracker for iPhone and Android. Also, **I am looking for a full-time role** as an AI/software developer. Contact me on [LinkedIn](https://www.linkedin.com/in/demetrius-edelin/).
 
@@ -35,39 +35,64 @@ A chat with a book answers the questions that you think of. The tutor turns your
 - **Your control.** You select the concepts to test, to learn, and to skip. You also set the order of the study queue. The tutor only suggests.
 - **One course from all your material.** A book, the online documentation, and a YouTube course about the same subject give one concept map.
 
+## Download
+
+For macOS and Windows, a download contains all the parts of the tutor. You do not need Node.js, git, or a terminal. You need an API key for Anthropic, OpenAI, OpenRouter, or Google Gemini. See [Which model to use](#which-model-to-use).
+
+1. Open the [latest release](https://github.com/demetrius-edelin/tutor/releases/latest) and download the zip file for your computer:
+   - macOS: `Tutor-<version>-macos.zip`. It works on Macs with Apple silicon and on Macs with Intel.
+   - Windows: `Tutor-<version>-windows-x64.zip`.
+2. Start the tutor:
+   - macOS: if the browser did not unzip the file, double-click it. Drag `Tutor` into the Applications folder. Then open `Tutor`.
+   - Windows: right-click the zip file and click "Extract All". Open the new folder and double-click `Start Tutor`.
+3. The browser opens the tutor. The first time, it opens the Settings page. Select the model, type the API key, and click "Save".
+
+If the system shows a warning at the first start:
+
+- macOS: if macOS cannot verify Tutor, open System Settings > Privacy & Security. Scroll down and click "Open Anyway" next to the message about Tutor. A release with the signature of the developer does not show this warning.
+- Windows: click "More info", then "Run anyway". If Windows asks if you want to run the file, click "Run".
+
+To stop the tutor:
+
+- macOS: click "Stop the tutor" on the Settings page. When you log out or turn off the computer, the tutor also stops.
+- Windows: close the window of the tutor.
+
+To start the tutor again, open `Tutor` or double-click `Start Tutor` again. If the tutor runs already, the browser opens it.
+
+The tutor keeps the `.env` file and the `data/` folder in `~/Library/Application Support/Tutor` on macOS and in `%LOCALAPPDATA%\Tutor` on Windows. To update the tutor, stop it and replace `Tutor` or the folder with the new download. Your data stays. On macOS, the log of the tutor is in `~/Library/Logs/Tutor.log`.
+
+The download has no terminal commands, for example `npm run fetch`. For the commands, install the tutor from the source code.
+
 ## Quick start
 
-You need Node.js 22 or later and an API key for Anthropic, OpenAI, OpenRouter, or Google Gemini. An OpenRouter key or a Gemini key serves the whole app, also YouTube videos. With an Anthropic key or an OpenAI key, YouTube videos need a second key. See [Which model to use](#which-model-to-use).
+To install the tutor from the source code, you need Node.js 22 or later and an API key for Anthropic, OpenAI, OpenRouter, or Google Gemini. An OpenRouter key or a Gemini key serves the whole app, also YouTube videos. With an Anthropic key or an OpenAI key, YouTube videos need a second key. See [Which model to use](#which-model-to-use).
 
 ```sh
 git clone https://github.com/demetrius-edelin/tutor.git
 cd tutor
 npm install
-cp .env.example .env   # then set the provider, the model, and the API key
-npm run llm:check      # optional: send 3 small test requests to the model
 npm start              # then open http://localhost:3000
 ```
 
-In the Windows command prompt, use `copy` instead of `cp`.
-
 Then, in the app:
 
-1. Make a subject, for example "SQL".
-2. Add a book in one of these ways:
+1. Click "Settings" at the top right. Select the provider, type the API key and the model name, and click "Save". Then click "Test the model".
+2. Make a subject, for example "SQL".
+3. Add a book in one of these ways:
    - Click "Add a book" and select an EPUB file or a tagged PDF file.
    - Click "Add an online book or video". Then type the address of an online book, of online documentation, or of a YouTube video or playlist.
-3. Select one chapter and click "Preview". The preview shows the concepts of the chapter and changes nothing.
-4. If the concepts look correct, click "Save these chapters". Then start to study.
+4. Select one chapter and click "Preview". The preview shows the concepts of the chapter and changes nothing.
+5. If the concepts look correct, click "Save these chapters". Then start to study.
 
 Before each run, the app shows the number of model requests. Later, click "Add chapters" next to the book to add more chapters.
 
 ## How it works
 
-You use the tutor in four steps. Steps 1 and 2 are commands in the terminal. Steps 3 and 4 are in the app, in the browser.
+You use the tutor in four steps. Step 1 has a command in the terminal and the Settings page of the app. Step 2 is a command in the terminal. Steps 3 and 4 are in the app, in the browser.
 
 ```mermaid
 flowchart LR
-    S1["1. Set up<br/>npm install<br/>.env"] --> S2["2. Start the app<br/>npm start"]
+    S1["1. Set up<br/>npm install<br/>Settings page"] --> S2["2. Start the app<br/>npm start"]
     S2 --> S3["3. Add a book file,<br/>online docs, or a video<br/>preview, then save<br/>some chapters"]
     S3 --> S4["4. Study"]
     S4 -->|"more chapters or books"| S3
@@ -107,7 +132,7 @@ The [command reference](docs/commands.md) explains each command and its options.
 
 ## Configuration
 
-The tutor reads its configuration from the `.env` file. Copy `.env.example` to `.env`. The file explains each value.
+The tutor reads its configuration from the `.env` file. The Settings page of the app writes this file for you. If `.env` does not exist, the page makes it from `.env.example`. You can also copy `.env.example` to `.env` and edit it by hand. The file explains each value.
 
 | Variable | Value |
 |---|---|
@@ -119,7 +144,7 @@ The tutor reads its configuration from the `.env` file. Copy `.env.example` to `
 | `VIDEO_PROVIDER` | Videos only. `openrouter` or `google`. Both give a Gemini model, the only kind of model that reads YouTube videos. |
 | `VIDEO_MODEL` | Videos only. A Gemini model, exactly as the video provider writes it. |
 
-The tutor has no default model. After a change to `.env`, run `npm run llm:check`.
+The tutor has no default model. After a change on the Settings page, the tutor uses the new model at once. Click "Test the model" to send one small request. After a change to `.env` by hand, start the app again. To test the model with 3 requests, run `npm run llm:check`.
 
 ### Which model to use
 
@@ -239,7 +264,7 @@ See [Add a YouTube video or playlist](docs/usage.md#add-a-youtube-video-or-playl
 - **In which order does the concept map show the concepts?** In the order of the books, the chapters, and the sections. The order in which you add the chapters does not change it.
 - **Can I move or delete the book file after I add it?** Yes. The tutor keeps a copy of the book file in the folder of the book.
 - **Can the tutor teach from online documentation?** Yes. On the subject screen, click "Add an online book or video" and type the address. See [Add an online book](docs/usage.md#add-an-online-book).
-- **Can the tutor teach from a YouTube course?** Yes. Set the video model in `.env`. On the subject screen, click "Add an online book or video" and type the address of the video or of the playlist. The concept map and the lessons show the video at the point of each reference. See [Add a YouTube video or playlist](docs/usage.md#add-a-youtube-video-or-playlist).
+- **Can the tutor teach from a YouTube course?** Yes. Set the video model on the Settings page. On the subject screen, click "Add an online book or video" and type the address of the video or of the playlist. The concept map and the lessons show the video at the point of each reference. See [Add a YouTube video or playlist](docs/usage.md#add-a-youtube-video-or-playlist).
 - **How do I add a second book to a subject?** On the subject screen, click "Add a book" or "Add an online book or video". The tutor adds the concepts of the new book to the concept map of the subject.
 - **How do I make a new subject?** On the list of subjects, type a name in the "New subject" field. Then click "Create".
 - **How do I delete a subject?** On the list of subjects, click "Delete" below the subject. Then click the red button in the panel that opens. The tutor deletes the books, the concepts, your progress, and the folder of the subject. You cannot undo this.
@@ -262,12 +287,13 @@ Planned:
 | `npm test` | Run the tests. The tests use a fake model client, so they do not call a model. |
 | `npm run test:watch` | Run the tests again after each change. |
 | `npm run typecheck` | Check the TypeScript types of the server and of the app. |
+| `npm run package` | Build the downloads for macOS and Windows into `release/`. Run it on a Mac. See the [release guide](docs/release.md). |
 
 ### Tech stack
 
 | Part | Tools |
 |---|---|
-| Language | TypeScript on Node.js 22. |
+| Language | TypeScript on Node.js 22 or later. The downloads contain Node.js 24. |
 | Server | Fastify. |
 | App | React 19 and Vite. |
 | Database | SQLite, with better-sqlite3. |
@@ -295,8 +321,9 @@ src/
   tutor/        diagnosis, lessons, questions, grader, and study queue
   server/       HTTP API
   app/          browser app (React)
-docs/           usage guide and command reference
+docs/           usage guide, command reference, and release guide
 test/           tests, a fake model client, and a builder for test EPUB files
+scripts/        the build of the downloads for macOS and Windows
 data/           your books, the results, and the database (not in git)
 ```
 

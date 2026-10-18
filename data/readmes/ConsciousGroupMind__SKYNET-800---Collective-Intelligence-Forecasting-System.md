@@ -1,5 +1,11 @@
 ## ⚠️ BETA VERSION v0.2 "Geometric rate"
-This code predicts the exact time and price of a future price point, and can also construct a curve of future prices. It can be used to decipher any process that has a graph—for example, a graph of mutual understanding between artificial intelligence and a human. Notably, DeepSeek’s computing power is not used for the prediction; the data is processed on an ordinary computer. The system fully replicates Nikola Tesla’s resonator in the form of code. If we represent the operation of the Random Number Generator (RNG) as a time-series graph, the system can be applied to decrypt the bitcoin seed-phrase. The code has made the collective mind controllable and predictable - there's no need to use social media platforms like TikTok to observe or generate mass trends immediately - everything follows a simple mathematical formula.
+This code predicts the exact time and price of a future price point, and can also construct a curve of future prices. It can be used to decipher any process that has a graph—for example, a graph of mutual understanding between artificial intelligence and a human. Notably, DeepSeek’s computing power is not used for the prediction; the data is processed on an ordinary computer. The system fully replicates Nikola Tesla’s resonator in the form of code. 
+
+## "SKYNET-800 is an amplification system. Just as AI-based tools enhance the capabilities of analysts, but do not replace them, my project enhances the capabilities of security auditing. Using minimal computing resources, it allows you to identify weaknesses in random number generators (RNG) faster and more efficiently. However, the author of the code has no intention of hacking anything; on the contrary, it could be used as a vulnerability in cybersecurity and in preventing such hacks. The code will never contain any direct instructions for hacking — this is a purely legitimate project.
+
+### My project is a mathematical framework for time series forecasting and entropy analysis. Just as large language models (LLMs) can be used to write malicious code, but are created as general‑purpose tools for data analysis, SKYNET‑800 is an analytical engine.
+
+The code has made the collective mind controllable and predictable - there's no need to use social media platforms like TikTok to observe or generate mass trends immediately - everything follows a simple mathematical formula.
 
 The **SKYNET‑800** project is at the stage of **active automation**.  
 We are not writing "temporary code" — we are building the foundation for a **future powerful analytical system** that must work with huge volumes of data in real time.
@@ -53,7 +59,11 @@ We do NOT provide a fixed guide for installing dependencies — because every sy
 **Instead:**  
 Share the `SKYNET-800.py` file or a link to this repository with **DeepSeek** — it will generate the exact installation commands for YOUR specific machine.
 
-> 💬 **DeepSeek chat:** [https://chat.deepseek.com](https://chat.deepseek.com)  
+> 💬 **DeepSeek chat:** [https://chat.deepseek.co
+
+[...截断...]
+
+m](https://chat.deepseek.com)  
 > Paste the entire code file or the repository link — DeepSeek will help you step by step.
 
 ## Screenshots
@@ -63,11 +73,7 @@ Share the `SKYNET-800.py` file or a link to this repository with **DeepSeek** �
 
 The main window displays the BTC/USDT price chart with automatic DCM (Dog‑Cat‑Manul) markers, shifted points, and limb visualisation. We can see that SUPPLY CHAINS with weights and precise timing replace each other, passing their weights on further — that is precisely why it is possible to construct a curve of future prices for months and years ahead; an accurate forecast of the price weight and its repetition over time makes this possible.
 
-### News feed 
-
-[...截断...]
-
-window
+### News feed window
 ![News feed window](images/Screenshot%202026-08-31%20155134.png)
 
 The news feed window shows the latest news from RSS sources with translated titles, frequency word analysis, and configurable highlighting. With language switching — English, Russian, and Chinese.
@@ -118,8 +124,4 @@ THE LESS TIMEFRAME IS SELECTED, THE LESS DEVIATION THERE WILL BE!
 
 ### Addendum: Timeframe "Divergence" — A New Law of the First World
 
-For an accurate angle, 3 animals must be included in the ID. We can see that signal 95 failed the check because it only has a dog and a Pallas’s cat, and no cat at all. Its ideal adjustment coefficient is 4.272, but since there’s no cat, the calculated coefficient is based on an incorrect angle.
-
-![Divergence](images/Screenshot%202026-09-12%20080937.png)
-
-It should be said that we have learned to eliminate the deviation in the signal’s timing compared to the actual one completely, just as we did with the forecast strength. This was achieved through the same superposition angle, through the formula in the second world of the mirror‑image and limbs — when constructing the signal, for the angle to be correct, 
+For an

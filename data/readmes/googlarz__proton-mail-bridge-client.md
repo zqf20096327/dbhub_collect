@@ -524,6 +524,7 @@ PROTONMAIL_IDLE_WATCH='true'
 PROTONMAIL_IDLE_MAX_SECONDS='30'
 
 # Attachments
+PROTONMAIL_SHORTEN_LINKS='false'     # true = long tracking links in Markdown bodies become host/… (unsubscribe, confirm, reset links are kept)
 PROTONMAIL_MAX_INLINE_KB='40'         # in KB (older name PROTONMAIL_MAX_INLINE_BYTES still works, also in KB): largest attachment get_attachment_content returns inline as base64
 PROTONMAIL_PDF_MAX_MB='10'            # largest PDF get_attachment_text extracts text from (1-100 MB); bigger ones are refused with a message
 PROTONMAIL_PDF_MAX_PAGES='50'         # pages get_attachment_text reads from a PDF (1-2000); a longer PDF is cut off with a note saying how many pages are missing
@@ -695,6 +696,7 @@ To check a real Bridge yourself, run the read-only smoke test: `PROTONMAIL_USERN
 - `get_emails` and `search_emails` return a composite `emailId` — use it for all subsequent reads and actions.
 - `search_indexed_emails` supports `from:`, `to:`, `subject:`, `label:`, `domain:` shortcuts.
 - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.
+- **Several clients at once.** Every MCP client starts its own server. Per data directory, only one of them runs the background sync and the IDLE watch (it holds `background-sync.lock`); the others serve tools from the index and take over when it exits. `get_runtime_status` shows `backgroundSync.leader`. A manual `sync_emails` / `run_background_sync` always runs.
 - Filters on the local index ignore case and accents, and match spelling variants: `Müller` finds `Mueller`, `lodz` finds `Łódź`, `strasse` finds `Straße`. Live `search_emails` and `count_messages` go through Bridge: a query with umlauts or other non-ASCII letters also matches the spelled-out form (`Müller` finds `Mueller`), but a plain ASCII query is sent as typed, so `Mueller` does not find `Müller` there. Use `search_indexed_emails` for that.
 - Audit logs live at `PROTONMAIL_DATA_DIR/audit.log`.
 - Draft sync is best-effort — the local draft is always preserved even if remote sync fails.

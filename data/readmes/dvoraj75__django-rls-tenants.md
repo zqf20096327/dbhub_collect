@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/dvoraj75/django-rls-tenants/actions/workflows/ci.yml/badge.svg)](https://github.com/dvoraj75/django-rls-tenants/actions/workflows/ci.yml)
 [![PyPI version](https://img.shields.io/pypi/v/django-rls-tenants)](https://pypi.org/project/django-rls-tenants/)
+[![Latest on Django Packages](https://img.shields.io/badge/Django%20Packages-django--rls--tenants-8c3c26)](https://djangopackages.org/packages/p/django-rls-tenants/)
 [![Python versions](https://img.shields.io/pypi/pyversions/django-rls-tenants)](https://pypi.org/project/django-rls-tenants/)
 [![Django versions](https://img.shields.io/badge/django-5.2%20%7C%206.0%20%7C%206.1-blue)](https://www.djangoproject.com/)
 [![Code style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000)](https://docs.astral.sh/ruff/)
@@ -67,12 +68,31 @@ returns zero rows, never leaked data.
   `--parallel`, `--json`, a failure summary and exit status), so reports, re-indexing and
   backfills need no context code of their own.
   [Management commands guide →](https://dvoraj75.github.io/django-rls-tenants/guides/management-commands/)
+- **Audit logging** -- structured records on the `django_rls_tenants.audit` logger each
+  time a tenant or admin context is entered, exited or refused (who, which tenant, which
+  code path), ready for a JSON formatter and routed with Django's `LOGGING`.
+  [Audit logging guide →](https://dvoraj75.github.io/django-rls-tenants/guides/audit-logging/)
+- **Users in several tenants** -- a user model that adds `rls_tenant_ids`
+  (`MultiTenantUser`) selects the tenant a request runs in with an `X-Tenant` header or
+  `switch_tenant()`; the middleware, the DRF mixin and the admin check every selection
+  against the user's tenants and refuse any other with a 403.
+  [Guide →](https://dvoraj75.github.io/django-rls-tenants/guides/multi-tenant-users/)
 - **Raw SQL helpers** -- `safe_tenant_sql()` builds a tenant-filter predicate;
   `current_tenant_value_sql()` returns the current tenant ID expression for inserts
   and projections. Both reuse the expressions used by RLS policies.
   [Raw SQL guide →](https://dvoraj75.github.io/django-rls-tenants/guides/raw-sql/)
 - **M2M isolation** -- auto-detected subquery-based RLS policies on M2M through tables;
   `check_rls --generate` writes the migration that creates them.
+- **Third-party tables** -- `AddRLSPolicy` adds the same policy to a table of an app you
+  do not own, and `RLS_TENANTS["EXTERNAL_MODELS"]` makes `check_rls`, the cross-tenant
+  foreign key check and the `select_related()` / `prefetch_related()` tenant filters treat
+  the model as protected.
+  [Guide →](https://dvoraj75.github.io/django-rls-tenants/guides/protecting-models/#tables-you-do-not-own)
+- **Sharing rows across tenants** -- `extra_predicates` (`SharedWith`, `TenantField`,
+  `RawPredicate`) let a tenant read rows another tenant shares with it, in a separate
+  `FOR SELECT` policy that never lets it update or delete them; `including_shared()`
+  queries them.
+  [Guide →](https://dvoraj75.github.io/django-rls-tenants/guides/protecting-models/#sharing-rows-across-tenants)
 - **Single schema, single database** -- no schema-per-tenant overhead, no connection
   routing.
 

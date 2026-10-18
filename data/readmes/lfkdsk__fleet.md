@@ -1,5 +1,7 @@
 English | [中文](README.zh-CN.md)
 
+<p align="center"><img src="docs/assets/banner.png" alt="Fleet: orchestrate CLI coding agents through one SQLite ledger" width="100%"></p>
+
 # Fleet
 
 Fleet is a local orchestrator for CLI coding agents: it runs bounded tasks through the CLIs you already use and keeps scheduling state, evidence, and decisions in a SQLite ledger.

@@ -60,7 +60,7 @@ docker compose exec coding2api python scripts/create_user.py admin --role admin
 
 ```bash
 docker compose pull
-# 或指定版本：docker pull ghcr.io/robbsluo/coding2api:v0.6.0
+# 或指定版本：docker pull ghcr.io/robbsluo/coding2api:v0.8.0
 ```
 
 推送新版本：打 tag `v*` 推到 main 即触发 publish workflow（`.github/workflows/publish.yml`），同时打 `<tag>` 与 `:latest` 到 GHCR；也可在 Actions 页面手动触发。
@@ -71,7 +71,7 @@ docker compose pull
 
 | 角色 | 能做什么 |
 |---|---|
-| `admin` | 用户管理、任务与配置、凭证读写、全部统计、审计日志、上游状态、模型列表 |
+| `admin` | 用户管理、任务与配置、凭证读写、全部统计、审计日志、服务端日志、上游状态、模型列表 |
 | `operator` | 凭证读写（含导入 / 删除 / 启停 / 签到 / 成长 / 切换账号）、全部统计、上游状态、模型列表 |
 | `viewer` | 只读：看仪表盘、凭证列表、统计与 Playground |
 
@@ -97,11 +97,20 @@ echo "$PASSWORD" | python3 scripts/create_user.py alice --role admin --password-
 
 ## 审计
 
-「审计日志」页（仅管理员可见）记录登录与写操作，可按操作者/动作筛选、分页查看：**登录**（成败都记）、**账号变动**（新建、激活、改角色、禁用/启用、改密、重置密码、硬删）、**凭证写操作**（导入、删除、启停、指定 pin、复活、切换账号）与**告警人工处置**（标记恢复）。每条含时间、操作者、
+「审计日志」页（仅管理员可见）记录登录与写操作，可按操作者/动作筛选、分页查看：**登录**（成败都记）、**账号变动**（新建、激活、改角色、禁用/启用、改密、重置密码、硬删）、**凭证写操作**（导入、删除、启停、指定 pin、复活、切换账号）与**告警人工处置**（标记恢复）。每条含时
 
 [...截断...]
 
-动作、对象、说明与来源 IP。**绝不包含密码或令牌明文**（一次性激活令牌明文只在创建响应出现一次，库里只有 SHA-256 摘要）。保留期与请求明细一致（默认 90 天），由后台清理任务裁剪。
+间、操作者、动作、对象、说明与来源 IP。**绝不包含密码或令牌明文**（一次性激活令牌明文只在创建响应出现一次，库里只有 SHA-256 摘要）。保留期与请求明细一致（默认 90 天），由后台清理任务裁剪。
+
+## 服务端日志
+
+「服务端日志」页（`/logs`，仅管理员可见）是**只读**的进程内实时日志视图：`GET /api/logs?limit=` 取最近若干行，`GET /api/logs/stream` 走 SSE 先回放缓冲、再推新行。页面上可做级别筛选、关键字过滤、跟随最新、暂停与清空——**没有任何写入或执行入口**，订阅者只能读。
+
+- **只收本进程 `logging` 记录**，不读文件、不 tail：多进程 / 容器下各进程只看得见自己那份，这是刻意的（日志文件轮转与权限差异会让「看文件」变成一个会骗人的视图）。
+- **脱敏是硬前提**：每行发出前过白名单，命中 `token` / `secret` / `authorization` / `cookie` / `password` / `api_key`（含 `X-Api-Key:`、`client_secret=`、JSON 键形态）、`sk-…` 形状或 `Bearer <值>` 的**整行丢弃**。宁可漏一条日志，也不把凭证推进浏览器。
+- **缓冲有界**：容量是 `LOG_BUFFER_LINES`（默认 500，可热更），环形覆盖最旧；调小立即裁掉多余行。`0` 关闭整页（两个端点都 404，handler 也摘下），与 `/metrics` 关闭同口径。
+- 单行上限 4000 字符；每行带 `seq`（回放与实时去重）、时间、级别、logger、`request_id`（有则带上）。订阅者上限 4，超限 429 + `Retry-After`。
 
 ## 使用
 
@@ -151,14 +160,4 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 - **首事件超时**（`STREAM_FIRST_EVENT_TIMEOUT_SECONDS`，默认 `0`）：客户端还**没收到任何内容**时超时，安全地换号重试——记 `upstream_first_event_timeout`，按瞬态错误处理（短冷却、不累计）。注释帧 / 心跳**不**重置计时。
 - **流内空闲超时**（`STREAM_IDLE_TIMEOUT_SECONDS`，默认 `0`）：**已出帧**后超时只能断流并以错误帧收尾（记 `upstream_idle_timeout`），**不换号**——半截输出无法回滚，换号会把两个账号的内容拼给客户端。
-- 实现上**不能**用 `asyncio.wait_for(anext(...))`：超时会 cancel 上游生成器直接断流。这里用可复用的 Task + `asyncio.wait`，超时只放弃等待、任务继续跑，下一次继续等同一个任务。
-
-两项都默认关闭是刻意的：实测慢上下文首字可达 40–71s，给一个「看起来合理」的默认值会静默杀掉正常长请求。要用请在管理台按部署实际打开（推荐 `60` / `300`）。
-
-### Playground 高级参数
-
-Playground 请求表单可选填 `temperature` / `max_tokens` / `reasoning_effort`，**留空即不发送该键**（各渠道自取其默认）。前端校验边界与 `compat/openai/request.py` 一致（`temperature` ≤ 1000、`max_tokens` 为 ≤ 4,000,000 的正整数），不会出现「界面放行、后端 400」。`reasoning_effort` 控件只在模型元数据给出 `supports_reasoning` 或 `default_effort` 时出现，候选为标准三档（`low`/`medium`/`high`，上游声明的默认档若不在其中则追加），默认选中「不发送」——某个档位是否被接受由上游裁决。
-
-## 渠道
-
-> CodeBuddy（含国际版）/ TRAE / Qoder / CodeArts 需填凭证；**OpenCode Zen 与 Kilo Gateway 是无凭证的免费层渠道**——池里是一条虚拟占位行（让调度 / 冷却 / 统计照常工作），额度列显示「免费层（无额度接口）」，健康度恒为「无探测」（未知 ≠ 耗尽
+- 实现上**不能**用 `asyncio.wait_for(anext(...))`：超时会 cancel 上游生成器直接断流。这

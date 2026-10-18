@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="CHANGELOG.md"><img alt="Version 1.2.0" src="https://img.shields.io/badge/version-1.2.0-F5643A"></a>
+  <a href="CHANGELOG.md"><img alt="Version 1.3.0" src="https://img.shields.io/badge/version-1.3.0-F5643A"></a>
   <a href="LICENSE"><img alt="License AGPL-3.0" src="https://img.shields.io/badge/license-AGPL--3.0-blue"></a>
   <a href="https://github.com/Qureshi-DH/hearth/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Qureshi-DH/hearth/actions/workflows/ci.yml/badge.svg?branch=main"></a>
   <img alt="Expo SDK 55" src="https://img.shields.io/badge/Expo-SDK%2055-000020?logo=expo">
@@ -42,8 +42,12 @@ own servers, under a privacy policy you don't control. Hearth runs on yours.
 No company account, no analytics, no ads, and nothing is sent to us.
 
 It's two pieces: an API server that runs in Docker next to Postgres, and an iOS
-and Android app that talks to it. Apart from your server, the app only reaches
-the map tile host and, if you turn it on, Expo push.
+and Android app that talks to it. Apart from your server, the app reaches the
+map tile host and the phone's own geocoder for street names, which is Apple's
+or Google's and is sent the spots it names. Street names can be switched off in
+the app. Push goes through Expo if your server uses it, and an Android build
+with Firebase in it registers with Google for push when it starts. The
+[privacy page](docs/docs/privacy.md) has the details.
 
 ## Status
 
@@ -77,7 +81,8 @@ soon. Until they're out you build the app yourself. Read
 </table>
 
 - **Live map.** Everyone in your circle, with battery and how they're moving.
-- **Places.** Hear when someone arrives at or leaves home, school or work.
+- **Places.** Hear when someone leaves home and gets to school, with how far they came.
+  Choose what you hear per place and per person, and set quiet hours.
 - **Live drives.** Follow a drive as it happens, a fix a second while you watch.
 - **SOS and check-ins.** One press alerts the whole family, and pausing can't block it.
 - **Crash alerts.** Optional. The phone asks first, and silence raises the alarm.

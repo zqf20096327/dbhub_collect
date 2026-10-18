@@ -29,7 +29,7 @@ schedules are deterministic code, not LLM judgement.
   age-gated risk calculators, a screening calendar, a weekly report, a doctor-visit brief.
 - **Food log** — meals with a 41-nutrient profile, %RDA, deficiency/excess flags, meal templates.
 - **Devices** — Apple Health export and Garmin import.
-- **33 MCP tools + server instructions** — the safety rules are sent to every client on connect;
+- **36 MCP tools + server instructions** — the safety rules are sent to every client on connect;
   see [mcp_server/README.md](mcp_server/README.md).
 
 ## Try it in one command
@@ -38,8 +38,8 @@ Only Docker needed. Starts a throwaway database with a fictional patient — two
 (LDL creeping up), blood pressure, medications, a food log and a lab panel awaiting approval:
 
 ```bash
-git clone https://github.com/andronaft/health-os && cd health-os/demo
-docker compose up -d --build
+git clone https://github.com/andronaft/health-os && cd health-os
+make demo                             # or: cd demo && docker compose up -d --build
 ```
 
 Point your MCP client at it:
@@ -59,7 +59,7 @@ Point your MCP client at it:
 ```
 
 Ask *"show my health summary"*, *"is my LDL trending up?"*, *"what's pending review?"*,
-*"what am I short on nutritionally?"*. Remove it all with `docker compose down -v`.
+*"what am I short on nutritionally?"*. Remove it all with `make demo-down`.
 
 ## Install for your own data
 
