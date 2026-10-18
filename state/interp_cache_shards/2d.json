@@ -8765,5 +8765,209 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4da697b7afde": {
+  "identity": {
+   "one_liner": "FastAPI 项目脚手架，提供多分支模块化后端微服务起点",
+   "review": "一个面向 FastAPI 后端项目的起步模板仓库，通过不同分支提供基础版、SQLAlchemy 异步数据库版、日志查看版等变体，包含 JWT 认证、pytest 测试、AGENTS.md 等。适合需要快速初始化 FastAPI 微服务项目的开发者；数据库相关能力仅在 sqlalchemy 分支中集成，主分支为精简样板。",
+   "highlights": [
+    "提供 main/base/sqlalchemy/log-viewer 多分支变体，按需集成 Async SQLAlchemy、OpenAPI 文档、日志查看器",
+    "内置基于 OAuth2 密码流的 JWT 认证流程与演示用户",
+    "包含异步 pytest 测试套件与 AI 编码代理指南 AGENTS.md"
+   ],
+   "use_cases": [
+    "快速初始化 FastAPI 后端微服务项目",
+    "需要异步 SQLAlchemy 数据库访问的项目起点",
+    "需要内置认证与日志查看的开发模板"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是使用数据库的应用开发模板，本身不服务于数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**FastStart** is a modular and flexible starting point for building backend microservices with FastAPI. This repository provides a robust base structure with various extensions and configurations to help you get started quickly and efficiently. ／ |sqlalchemy|Extends `base` with integrated support for Async SQLAlchemy to handle asynchronous database operations efficiently.| ／  - **tests**: Async pytest suite covering authentication, user CRUD, and the admin-only authorization rules.",
+   "evidence_lines": [
+    12,
+    26,
+    92
+   ]
+  },
+  "fn": "Hoopoes/FastStart",
+  "sha": "4da697b7afde",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e2f9d498cd4d": {
+  "identity": {
+   "one_liner": "能力安全沙箱运行时，Lua/JS/WASM 受控执行，内置 SQLite",
+   "review": "Hull 是一个面向应用的加固运行时：应用以清单声明可访问的文件、环境变量、出站主机和数据库资源，运行时强制执行这些边界，并通过 hull build 打包为单个静态二进制。内置 SQLite 存储，hull/db 提供 Postgres/MySQL 等 DSN 后端。适合需要在受控环境中分发和运行 Lua/JS/WASM 应用的开发者。",
+   "highlights": [
+    "应用通过清单声明能力（文件、环境变量、出站主机、数据库资源），运行时强制执行",
+    "hull build 生成单文件静态可执行文件，支持 Linux/macOS/Windows/FreeBSD/OpenBSD/NetBSD",
+    "包含 Ed25519 签名验证、SBOM 输出（CycloneDX/SPDX）、测试与部署配置生成等 30+ 子命令"
+   ],
+   "use_cases": [
+    "打包分发单文件应用并约束其运行时权限",
+    "运行 AI 生成代码并限制其可访问资源",
+    "基于内置 SQLite 或外部数据库 DSN 开发小型服务"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`postgres`|pure-C PostgreSQL wire backend (no libpq)|a `postgres://` / `postgresql://` DSN on `hull/db`|",
+     "lines": [
+      224
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`mysql`|pure-C MySQL / MariaDB wire backend (no libmysql)|a `mysql://` / `mariadb://` DSN on `hull/db`|",
+     "lines": [
+      225
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|`mysql`|pure-C MySQL / MariaDB wire backend (no libmysql)|a `mysql://` / `mariadb://` DSN on `hull/db`|",
+     "lines": [
+      225
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hardened, capability-secure runtime infrastructure for AI-native systems. Lua, JavaScript, and WASM execute under declared, kernel-enforced capability boundaries. SQLite storage. Single static binary. ／ |<code>hull test &lt;dir&gt;</code>|In-process test runner (no TCP, memory SQLite)|",
+     "lines": [
+      5,
+      118
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为应用运行时基础设施，为应用提供数据库访问能力（内置 SQLite 与 DB DSN 后端），本身不是使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Hardened, capability-secure runtime infrastructure for AI-native systems. Lua, JavaScript, and WASM execute under declared, kernel-enforced capability boundaries. SQLite storage. Single static binary. ／ The app declares its capabilities (files, environment variables, outbound hosts, database resources) in a manifest. The runtime enforces those bounds. `hull build` produces a single static executable (under 10 MB) that runs on Linux, macOS, Windows, FreeBSD, OpenBSD, and NetBSD. Code, schema, static assets, tests, and signatures all packaged together. The resulting binary is the product. ／ |<code>hull agent &lt;subcommand&gt;</code>|AI agent interface. Routes, schema, tests, requests as JSON|",
+   "evidence_lines": [
+    5,
+    9,
+    120
+   ]
+  },
+  "fn": "artalis-io/hull",
+  "sha": "e2f9d498cd4d",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9d304825a4b7": {
+  "identity": {
+   "one_liner": "Analogue 3D labels.db 文件的浏览器端查看编辑工具",
+   "review": "一个完全在浏览器本地运行的 labels.db 编辑器，用于查看、搜索、修改并导出 Analogue 3D 主机的标签文件：解析头部、CRC32 签名索引与 BGRA 图像块，支持插入/替换/删除标签图片、注入烧录卡标签并批量导出。面向 Analogue 3D 用户与自制标签维护者，提供在线版和 Docker 自托管两种方式；不依赖任何服务器上传数据。",
+   "highlights": [
+    "在浏览器本地解析/编辑/导出 labels.db，含头部、CRC32 签名索引与 BGRA 图像块",
+    "支持插入、替换、删除标签图片及批量导出 ZIP，支持撤销操作",
+    "提供 Docker Compose 自托管与在线版两种使用方式"
+   ],
+   "use_cases": [
+    "为 Analogue 3D 游戏卡带制作或替换标签图",
+    "从现有 labels.db 批量提取标签图片",
+    "自托管在线工具供他人使用"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "labels.db 是 Analogue 3D 设备的本地文件格式而非数据库服务，该工具是操作此文件的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The **Labels.db File Editor** is a fully client-side web application for viewing, editing, and creating `labels.db` files used by the Analogue 3D. ／ - `Dockerfile` – builds the app with Node, then serves the compiled `dist/` via nginx.",
+   "evidence_lines": [
+    11,
+    177
+   ]
+  },
+  "fn": "Chrisser73/analogue-3d-labels-db-editor",
+  "sha": "9d304825a4b7",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9896,5 +9896,144 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bf5e037983c6": {
+  "identity": {
+   "one_liner": "Jellyfin/Emby 自托管仪表盘，用 PostgreSQL 存播放历史与统计",
+   "review": "JellyGlance 是一个面向自托管媒体服务器的仪表盘应用，连接 Jellyfin 或 Emby 读取会话与播放数据，并把播放历史落库到自身维护的 PostgreSQL 中，提供仪表盘、统计、请求管理、日历、通知与备份导出/恢复功能，并集成 *arr、下载器、通知等周边应用。部署以单个 Docker 容器加 PostgreSQL 为主，支持 OIDC 登录与多语言界面。",
+   "highlights": [
+    "连接 Jellyfin 或 Emby，读取实时会话、播放历史并写入自身 PostgreSQL 存储（L59）",
+    "提供备份导出与恢复功能，备份存于可访问的普通文件夹（L85）",
+    "统计图表基于每日/每月 rollup 表读取，支持播放记录保留天数配置（L274、L280）"
+   ],
+   "use_cases": [
+    "自托管 Jellyfin/Emby 用户查看实时播放会话与观看统计",
+    "集中管理 Jellyseerr/Overseerr 请求与下载队列、日历",
+    "对媒体服务器播放历史进行备份导出与恢复"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "JellyGlance connects to your Jellyfin or Emby server and keeps its own PostgreSQL history of what's played, by whom and on what. On top of that it gives you a home dashboard, statistics and recaps, and links to the request, download and \\*arr apps you already  ／ It runs as a single Docker container next to PostgreSQL. It's free, with no ads, subscriptions or paid tiers. Try the read-only **live demo** first if you like (its source is in JellyGlance/Demo). ／ image: postgres:16-alpine",
+     "lines": [
+      59,
+      61,
+      197
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 PostgreSQL 存储自身播放历史与统计数据，是为媒体服务器生态服务的应用而非数据库工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "JellyGlance connects to your Jellyfin or Emby server and keeps its own PostgreSQL history of what's played, by whom and on what. On top of that it gives you a home dashboard, statistics and recaps, and links to the request, download and \\*arr apps you already run, so you can see and manage your server without a pile of browser tabs. ／ It runs as a single Docker container next to PostgreSQL. It's free, with no ads, subscriptions or paid tiers. Try the read-only **live demo** first if you like (its source is in JellyGlance/Demo). ／     image: postgres:16-alpine",
+   "evidence_lines": [
+    59,
+    61,
+    197
+   ]
+  },
+  "fn": "JellyGlance/Server",
+  "sha": "bf5e037983c6",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cedc8f5d49f3": {
+  "identity": {
+   "one_liner": "读书记录与分析应用，含条码录入、全文检索与AI分析",
+   "review": "Kidoku 是一个日语读书记录管理 Web 应用，支持通过书名搜索或条码扫描录入书籍、按年查看阅读卡片、查看月度统计，并调用 ChatGPT 分析阅读倾向，全文检索由 MeiliSearch 实现。技术栈为 Next.js + NestJS + GraphQL + Prisma ORM，后端采用 DDD 分层架构，通过 Docker Compose 本地运行，适合想自托管读书记录的个人用户。",
+   "highlights": [
+    "支持书名搜索或条码扫描录入书籍",
+    "基于 MeiliSearch 的日语全文检索",
+    "调用 ChatGPT 生成阅读倾向分析，含月度/分类统计可视化"
+   ],
+   "use_cases": [
+    "个人读书记录与年度阅读回顾",
+    "阅读量与类别的统计分析",
+    "本地自托管的读书数据管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|データベース|MySQL 9.3 + Prisma ORM|",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL 存储数据的读书记录应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Kidoku - 読書記録管理 ／ |データベース|MySQL 9.3 + Prisma ORM|",
+   "evidence_lines": [
+    12,
+    30
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Rasukarusan/kidoku",
+  "sha": "cedc8f5d49f3",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

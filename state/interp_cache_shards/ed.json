@@ -9100,5 +9100,82 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68d2c1553d68": {
+  "identity": {
+   "one_liner": "Home Assistant 的 MySQL/MariaDB 查询集成组件",
+   "review": "这是一个 Home Assistant 自定义集成，通过 mysql_query.query 和 mysql_query.execute 两个动作对 MySQL 或 MariaDB 数据库执行读写：query 运行只读 SELECT，execute 执行 INSERT/UPDATE/DELETE/DDL，支持参数化语句、多连接配置、连接池和 TLS。需 HA 2026.3.0+ 与 MySQL 5.6.5+/MariaDB 10.0+，通过 HACS 或手动安装。",
+   "highlights": [
+    "提供 query/execute 两个动作，分别处理只读查询和写入语句，支持参数化占位符",
+    "支持通过 UI 配置多个数据库连接，可选只读连接和 TLS 加密",
+    "内置行数限制与并发调用排队，依赖 aiomysql 驱动"
+   ],
+   "use_cases": [
+    "在 Home Assistant 自动化/脚本中读取外部 MySQL 数据库数据",
+    "从 HA 执行对 MySQL/MariaDB 的写入或 DDL 操作",
+    "同一 HA 实例管理多个 MySQL 服务器连接"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands  ／ - MySQL 5.6.5 or newer, or MariaDB 10.0 or newer: ```query``` relies on read-only transactions.",
+     "lines": [
+      11,
+      40
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands  ／ - MySQL 5.6.5 or newer, or MariaDB 10.0 or newer: ```query``` relies on read-only transactions.",
+     "lines": [
+      11,
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该组件为 Home Assistant 平台的自定义集成，通过 aiomysql 驱动使用 MySQL/MariaDB 存取数据，而非为数据库生态本身服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands you what it changed. Both can return an iterable data structure you can use straight from a template. ／ - MySQL 5.6.5 or newer, or MariaDB 10.0 or newer: ```query``` relies on read-only transactions. ／ ### Option 1: Using HACS (recommended)",
+   "evidence_lines": [
+    11,
+    40,
+    45
+   ]
+  },
+  "fn": "IAsDoubleYou/homeassistant-mysql_query",
+  "sha": "68d2c1553d68",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

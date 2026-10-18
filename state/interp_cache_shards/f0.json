@@ -9298,5 +9298,198 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "220c91631f16": {
+  "identity": {
+   "one_liner": "纯 Rust 编写的嵌入式 SQL 数据库，内置 MVCC 与列式存储",
+   "review": "Stoolap 是一个用纯 Rust 实现的嵌入式 SQL 数据库，无需外部服务器进程，面向低延迟事务负载与实时分析查询。提供 ACID/MVCC 事务、AS OF 时间旅行查询、代价优化器、多种索引（含 HNSW 向量索引）与热/冷列式存储架构，附带 CLI 和 Web 管理界面 Stoolap Studio，并提供 Node.js/Python/PHP 等驱动。适合嵌入到 Rust 应用中作为本地存储引擎使用。",
+   "highlights": [
+    "支持 ACID 事务、MVCC 与 AS OF 时间旅行查询",
+    "支持 VECTOR(N) 类型与 HNSW 近似最近邻向量搜索",
+    "采用热/冷卷存储架构，冷卷为带 LZ4 压缩的不可变列式文件"
+   ],
+   "use_cases": [
+    "嵌入 Rust 应用作为本地事务型存储",
+    "需要向量/语义搜索的本地数据场景",
+    "实时分析查询与时间旅行查询场景"
+   ],
+   "classification": {
+    "cat": "内核/引擎",
+    "db_verdicts": [
+     {
+      "db": "PostgreSQL",
+      "rel": "mention",
+      "lines": [
+       31,
+       43
+      ]
+     },
+     {
+      "db": "SQLite",
+      "rel": "mention",
+      "lines": [
+       31
+      ]
+     }
+    ],
+    "eco": "tool",
+    "eco_why": "该项目本身即是一个数据库引擎，并非使用其他数据库的应用",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "build",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "",
+    "install": [
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     3,
+     16,
+     17
+    ]
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Feature|Stoolap|SQLite|DuckDB|PostgreSQL| ／ *PostgreSQL typically needs extensions for temporal query workflows.",
+     "lines": [
+      31,
+      43
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Feature|Stoolap|SQLite|DuckDB|PostgreSQL|",
+     "lines": [
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目本身即是一个数据库引擎，并非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A Modern Embedded SQL Database in Pure Rust ／ Stoolap is a feature-rich embedded SQL database built in pure Rust. ／ It targets low-latency transactional workloads and real-time analytical queries, with modern SQL features and no external server process.",
+   "evidence_lines": [
+    3,
+    16,
+    17
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "stoolap/stoolap",
+  "sha": "220c91631f16",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "348bdebad629": {
+  "identity": {
+   "one_liner": "通过 Proton Bridge 提供邮件 MCP 服务器与 CLI",
+   "review": "该项目在 Proton Mail Bridge 之上提供 MCP 服务器和 CLI，共 100 个工具，供 Claude Desktop、Claude Code、Cline 等 MCP 客户端读取、搜索、起草和发送 Proton 邮件。依赖本地运行的 Proton Bridge（IMAP/SMTP），并维护基于 SQLite 的本地全文索引，支持只读模式和发送门控等安全选项，要求 Node.js 24+。",
+   "highlights": [
+    "提供 100 个 MCP 工具及对应的 CLI 命令，支持读取、搜索、起草、发送和文件夹管理",
+    "维护本地 SQLite 全文索引，搜索不依赖每次 IMAP 查询",
+    "支持只读模式、发送门控、危险操作确认与多账户"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 等 MCP 客户端中用自然语言处理 Proton 邮件",
+    "通过脚本、cron 或管道实现邮件自动化",
+    "本地优先环境下离线快速检索邮件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ |`search_indexed_emails` (local SQLite index)|~10 ms| ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      115,
+      451,
+      521
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储本地邮件索引，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 100 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken.",
+   "evidence_lines": [
+    21,
+    115
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "348bdebad629",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10097,5 +10097,75 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4078794e6108": {
+  "identity": {
+   "one_liner": "企业技术支持场景的 RAG 问答与受控工单 Agent 后端",
+   "review": "面向企业技术支持场景的后端服务，从 TechQA 知识库检索证据生成带来源的回答，低相关时拒答；工单创建需预览、审批确认后才真实写库，并以 AgentOps 记录运行轨迹。基于 FastAPI、SQLModel、SQLite 与 Chroma，供需要受控知识问答与工单升级流程的技术支持团队使用；Hybrid 检索与实验问答默认关闭，README 声明尚未完成部署验收。",
+   "highlights": [
+    "提供 /rag/search 与 /rag/ask 接口，返回带 sources 的回答并支持低相关拒答",
+    "受控工单 Agent 通过预览-确认与服务端持久化审批草稿创建工单，并发决策至多一次生效",
+    "集成 AgentOps 记录检索轨迹、工具调用与审批链路，提供基于 TechQA 的检索/生成/拒答评测框架"
+   ],
+   "use_cases": [
+    "企业技术支持知识库问答与证据引用",
+    "需要人工审批的工单分类与升级流程",
+    "RAG 检索、拒答与失败归因的离线评测迭代"
+   ],
+   "use_cases_trunc": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查默认 Dense、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。",
+     "lines": [
+      184
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统使用 SQLite 与 Chroma 存储数据并提供业务 API，属于使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向**企业技术支持**场景，构建知识检索、回答 / 拒答与工单升级一体化的 **RAG + 受控工单 Agent 后端**。 ／ |受控工单 Agent|`search_kb` / `classify_ticket` / `create_ticket`，预览-确认 + 人工审批| ／ 真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查默认 Dense、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。",
+   "evidence_lines": [
+    5,
+    34,
+    184
+   ]
+  },
+  "fn": "Air000000/Enterprise-Support-AI-Copilot-API",
+  "sha": "4078794e6108",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

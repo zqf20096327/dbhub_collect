@@ -10103,5 +10103,85 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9023f4e2f47d": {
+  "identity": {
+   "one_liner": "本地单用户 Web Agent 应用，使用 SQLite 做本机持久化",
+   "review": "这是一个可独立运行的单用户本地 Web Agent，通过 Responses 或 Chat Completions 协议连接用户自配的模型服务，提供流式聊天、MCP、文件与命令执行、长期记忆和插件等能力；会话、消息、事件等数据以 SQLite（WAL 模式）保存在本机并支持自动迁移。面向希望在可信本机环境运行个人 Agent 的用户，不支持公网访问、登录与多租户。",
+   "highlights": [
+    "支持 Responses 与 Chat Completions 两种协议连接自配模型服务",
+    "会话、消息、运行、事件等数据以 SQLite v13 / WAL 保存在本机并自动迁移",
+    "支持 MCP、本地 Skill、Hook、插件安装与轻量多 Agent 团队"
+   ],
+   "use_cases": [
+    "在可信本机环境运行带文件与命令执行能力的个人 AI 助手",
+    "需要对会话与执行记录做本机持久化与用量审计的场景",
+    "通过 MCP/插件扩展模型工具能力的开发工作流"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 会话、消息、运行、步骤、事件和脱敏配置：SQLite v13 / WAL；重启后保留，旧数据库自动迁移，升级前请备份。",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目是聊天与执行应用，用 SQLite 存储会话、消息等自身数据，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个可独立运行的单用户本地 Web Agent。通过 Responses 或 Chat Completions 连接自己的模型，聊天与执行记录保存在本机。统一自主循环支持直接回答、受控文件与命令、MCP、真实时间查询和可选计划；同时提供流式回答、多轮聊天、停止、重试、重新生成、Markdown 和会话管理。 ／ - 会话、消息、运行、步骤、事件和脱敏配置：SQLite v13 / WAL；重启后保留，旧数据库自动迁移，升级前请备份。",
+   "evidence_lines": [
+    7,
+    39
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "baixiaonian/myagent",
+  "sha": "9023f4e2f47d",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9586,5 +9586,168 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1537a7966b48": {
+  "identity": {
+   "one_liner": "SQL-to-MCP 工具工厂，提供受治理的 SQL 执行边界",
+   "review": "hs-sql-agent 是一个 .NET 实现的 SQL-to-MCP 工具工厂与 SQL 执行网关：工程师在 Admin UI 中定义参数化 SQL 模板并发布为类型化 MCP 工具，AI 代理只传参数，所有执行经 fail-closed SQL 编译器、按 key 的库/表白名单、限流与审计。支持 PostgreSQL、MySQL、SQL Server、Oracle、SQLite、Firebird 六种数据库，适合需要向 AI 代理开放受控 SQL 能力的团队。",
+   "highlights": [
+    "支持将工程审核过的参数化 SQL 模板发布为带 JSON Schema 的 MCP 工具",
+    "实现 fail-closed SQL 编译流程（parsed→bound→canonical→validated→executable）与 DML 预览-审批-提交协议",
+    "提供按 key 的数据库/表绑定、限流、审计记录，以及 Prometheus/OpenTelemetry 可观测性"
+   ],
+   "use_cases": [
+    "为 Claude Desktop、Cursor、VS Code 等 MCP 客户端提供受治理的 SQL 查询/DML 工具",
+    "企业内通过审批流程与审计向 AI 代理开放生产数据库的受限 DML 操作",
+    "将 SQL 执行网关嵌入现有 ASP.NET Core 应用"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      46
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      46
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      46
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      46
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其支持六种数据库并提供 provider-aware 校验与 lowering，是服务数据库生态的治理/网关组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`hs-sql-agent` is an open-source **SQL-to-MCP tool factory and governed SQL execution boundary**. Define parameterized SQL in the Admin UI, publish it as a typed MCP tool, and let AI agents supply only the arguments — without writing a new C# method or redeploying your MCP server for every database operation. ／ Every published tool still runs through the same fail-closed SQL compiler, per-key database/table policy, runtime limits, audit trail, and Safe DML approval controls. Raw SQL tools remain available for cases where an agent genuinely needs flexible ad-hoc querying. ／ It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application.",
+   "evidence_lines": [
+    9,
+    11,
+    13
+   ]
+  },
+  "fn": "tse-wei-chen/hs-sql-agent",
+  "sha": "1537a7966b48",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8cfa3dc23ee6": {
+  "identity": {
+   "one_liner": "Tidbyt 设备的湿球温度/造雪窗口显示应用",
+   "review": "一个运行在 Tidbyt 像素屏上的造雪条件显示应用，通过 GitHub Actions 每 30 分钟从 NWS 与 Open-Meteo 拉取气象数据，迭代求解湿球温度，展示当前值、3 小时趋势、12 小时预报柱状图与最佳造雪窗口，温度超阈值时自动从轮播隐藏。面向拥有 Tidbyt 设备的后院造雪爱好者，用 Star（Pixlet）编写，本地可用 pixlet 预览与测试。",
+   "highlights": [
+    "通过 GitHub Actions 定时（每 30 分钟）拉取 NWS 与 Open-Meteo 数据并推送到 Tidbyt，无需自建服务器",
+    "用 Magnus 蒸汽压与 WMI 干湿表系数迭代求解湿球温度，并内置离线测试校验计算结果",
+    "温度高于阈值时自动从设备轮播移除，支持自定义经纬度、NWS 站点、时区等变量"
+   ],
+   "use_cases": [
+    "后院人工造雪前查看湿球温度与可造雪时段",
+    "在 Tidbyt 设备上按位置显示湿球温度与 12 小时预报",
+    "美国以外地区依赖 Open-Meteo 数据的湿球温度显示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 显示这是一个从天气 API 取数并在 Tidbyt 设备上渲染的应用，未实现任何数据库相关功能。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Tidbyt app for backyard snowmaking. It shows the current wet bulb temperature, the 3-hour trend, a 12-hour forecast chart, and the best snowmaking window for your location. GitHub Actions updates it every 30 minutes - no server, no local machine. ／ |Current wet bulb|Latest NWS station observation (api.weather.gov)| ／ - Built with Pixlet",
+   "evidence_lines": [
+    3,
+    87,
+    113
+   ]
+  },
+  "fn": "kkarner23/tidbyt-wetbulb",
+  "sha": "8cfa3dc23ee6",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

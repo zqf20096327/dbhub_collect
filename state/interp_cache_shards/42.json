@@ -8600,5 +8600,176 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d33c150133b": {
+  "identity": {
+   "one_liner": "基于 PySide6 的桌面 Text2SQL 客户端，读真实表结构生成并执行 SQL",
+   "review": "沐问 MuAsk 是开源桌面数据库查询工具，用户用中文描述需求后由 AI 读取库内真实表名、字段与中文注释生成 SQL，经本地预检、可人工修改后一键执行并分页查看。面向开发、测试、运维与数据分析人员，内置 14 类数据库驱动（含达梦、人大金仓等信创库），支持 OpenAI/Anthropic 双协议与 Ollama 本地模型。神通、崖山 YashanDB、H2 未列入内置类型，需经自定义方式接入。",
+   "highlights": [
+    "自动读取数据库真实表结构（表、列、主外键、中文注释），按问题相关性筛选表",
+    "内置 14 类数据库驱动，随安装包分发，支持 OpenAI 与 Anthropic 双协议及 Ollama 本地模型",
+    "提供 Windows/macOS/Linux 三平台打包版本地运行，连接信息与查询结果留存本机"
+   ],
+   "use_cases": [
+    "接手缺少文档的多表数据库后快速查询数据",
+    "信创数据库环境（达梦、人大金仓、瀚高、海量、GBase）下的轻量查询客户端",
+    "使用本地 Ollama 模型在内网完成取数，避免数据外传"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **跨平台纯 Python / 自包含 wheel**：`PyMySQL`（MySQL、MariaDB、OceanBase MySQL 租户、TiDB、GBase 8a）、`psycopg2-binary`（PostgreSQL、OpenGauss、瀚高、海量，金仓 PG 协议兜底）、`oracledb`（Oracle 瘦模式，无需 Instant Client）、`pymssql`（自带 FreeTDS，无需 ODBC）、`ibm_db`（DB2，自带 clidriver）。 ／ |PostgreSQL|psycopg2|PG 协议（5432）|✅ 内置|✅ 内置|",
+     "lines": [
+      191,
+      211
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **跨平台纯 Python / 自包含 wheel**：`PyMySQL`（MySQL、MariaDB、OceanBase MySQL 租户、TiDB、GBase 8a）、`psycopg2-binary`（PostgreSQL、OpenGauss、瀚高、海量，金仓 PG 协议兜底）、`oracledb`（Oracle 瘦模式，无需 Instant Client）、`pymssql`（自带 FreeTDS，无需 ODBC）、`ibm_db`（DB2，自带 clidriver）。 ／ |MySQL|PyMySQL|MySQL 协议（3306）|✅ 内置|✅ 内置|",
+     "lines": [
+      191,
+      209
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|oracledb（瘦模式，无需 Instant Client）|`service_name` 或 SID（1521）|✅ 内置|✅ 内置| ／ - Oracle：`oracle+oracledb://user:pwd@host:1521/?service_name=ORCL`（或用 SID：`…/XE`）",
+     "lines": [
+      218,
+      232
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|pymssql（自带 FreeTDS，无需 ODBC）|TDS（1433）|✅ 内置|✅ 内置| ／ - SQL Server：`mssql+pymssql://user:pwd@host:1433/db`",
+     "lines": [
+      219,
+      233
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **跨平台纯 Python / 自包含 wheel**：`PyMySQL`（MySQL、MariaDB、OceanBase MySQL 租户、TiDB、GBase 8a）、`psycopg2-binary`（PostgreSQL、OpenGauss、瀚高、海量，金仓 PG 协议兜底）、`oracledb`（Oracle 瘦模式，无需 Instant Client）、`pymssql`（自带 FreeTDS，无需 ODBC）、`ibm_db`（DB2，自带 clidriver）。 ／ |MariaDB|PyMySQL|兼容 MySQL 协议（3306）|✅ 内置|✅ 内置|",
+     "lines": [
+      191,
+      210
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- **跨平台纯 Python / 自包含 wheel**：`PyMySQL`（MySQL、MariaDB、OceanBase MySQL 租户、TiDB、GBase 8a）、`psycopg2-binary`（PostgreSQL、OpenGauss、瀚高、海量，金仓 PG 协议兜底）、`oracledb`（Oracle 瘦模式，无需 Instant Client）、`pymssql`（自带 FreeTDS，无需 ODBC）、`ibm_db`（DB2，自带 clidriver）。 ／ |TiDB|PyMySQL|兼容 MySQL 协议（4000）|✅ 内置|✅ 内置|",
+     "lines": [
+      191,
+      217
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "- **跨平台纯 Python / 自包含 wheel**：`PyMySQL`（MySQL、MariaDB、OceanBase MySQL 租户、TiDB、GBase 8a）、`psycopg2-binary`（PostgreSQL、OpenGauss、瀚高、海量，金仓 PG 协议兜底）、`oracledb`（Oracle 瘦模式，无需 Instant Client）、`pymssql`（自带 FreeTDS，无需 ODBC）、`ibm_db`（DB2，自带 clidriver）。 ／ |OceanBase|PyMySQL|MySQL 租户兼容 MySQL 协议（2881）|✅ 内置|✅ 内置|",
+     "lines": [
+      191,
+      216
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "- **信创原生驱动**：`dmpython` + `dmSQLAlchemy`（达梦）、`ksycopg2`（人大金仓）仅有 Windows / Linux wheel，已用平台标记限定，macOS 上安装时自动跳过。 ／ |达梦 DM|dmpython + dmSQLAlchemy（官方，wheel 自带客户端库）|DM 协议（5236）|✅ 内置|⚠️ 厂商无 macOS 驱动|",
+     "lines": [
+      192,
+      220
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "- **跨平台纯 Python / 自包含 wheel**：`PyMySQL`（MySQL、MariaDB、OceanBase MySQL 租户、TiDB、GBase 8a）、`psycopg2-binary`（PostgreSQL、OpenGauss、瀚高、海量，金仓 PG 协议兜底）、`oracledb`（Oracle 瘦模式，无需 Instant Client）、`pymssql`（自带 FreeTDS，无需 ODBC）、`ibm_db`（DB2，自带 clidriver）。 ／ |OpenGauss|psycopg2|PG 协议（5432）|✅ 内置|✅ 内置|",
+     "lines": [
+      191,
+      212
+     ]
+    },
+    {
+     "db": "GBase",
+     "rel": "support",
+     "quote": "|南大通用 GBase 8a|PyMySQL|兼容 MySQL 协议（5258）|✅ 内置|✅ 内置|",
+     "lines": [
+      221
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "mention",
+     "quote": "> **神通（ShenTong）/ 崖山 YashanDB / H2 未列入内置类型**：神通官方仅发布 JDBC / ODBC 驱动；崖山官方 Python 驱动不通过 PyPI 分发；H2 是纯 Java 引擎，必须本机装有 JVM 和 `h2.jar` 才能经 JDBC 桥接入——都与「开箱直连」目标冲突。需要连接时请选「其他（自定义）」，自行安装桥接驱动并提供 SQLAlchemy 连接串。OceanBase 的 **Oracle 租户**同理（MySQL 租户已内置）。",
+     "lines": [
+      225
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为数据库查询客户端为使用多种数据库的用户提供 Text2SQL 能力，本身不以某个数据库为存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "MariaDB",
+    "TiDB",
+    "OceanBase",
+    "Dameng",
+    "openGauss",
+    "GBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**沐问 MuAsk** 就是为这个场景做的。它是一款基于 **PySide6** 的桌面数据库查询工具，把「自然语言 → SQL → 执行」整条链路做成开箱即用的客户端： ／ |数据库支持|14 类数据库内置驱动，含达梦、人大金仓、瀚高、海量、OceanBase、TiDB、GBase 8a 等信创库| ／ |**Text2SQL**|中文输入 → AI 生成 SQL → 本地预检（拦截散文、括号不匹配等）→ 可编辑 → 一键执行，SELECT 分页浏览|",
+   "evidence_lines": [
+    33,
+    44,
+    61
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "vfaner/muask",
+  "sha": "3d33c150133b",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

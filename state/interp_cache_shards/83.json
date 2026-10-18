@@ -10471,5 +10471,75 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f260f0ca9929": {
+  "identity": {
+   "one_liner": "Windows 前台应用时长记录器，数据存本机 SQLite",
+   "review": "基于 Electron 与 Node 内置 node:sqlite 的 Windows 桌面工具，每秒采样前台窗口并区分空闲/锁屏/休眠，生成日/周/月视图与热力图日历，支持分类规则引擎、ManicTime 历史导入、备份与托盘常驻，数据仅存本机不上传，适合想在本机追踪应用使用时长的 Windows 10/11 用户。",
+   "highlights": [
+    "每秒采样前台窗口，区分空闲/锁屏/休眠，提供日/周/月视图与热力图日历",
+    "数据全部存于本机目录，程序内无网络请求，支持全量快照与 CSV 备份",
+    "提供便携版与安装版，支持 ManicTime 历史数据库只读导入与命令行调试参数"
+   ],
+   "use_cases": [
+    "本机记录前台应用使用时长与分布",
+    "按 exe 名/产品名自定义分类统计（含游戏模板）",
+    "从 ManicTime 迁移历史数据到本库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Electron + 原生 HTML/CSS/JS，零框架、零运行时依赖（原生模块只有 koffi 与 Node 内置的 `node:sqlite`）。",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 node:sqlite 存储本机记录数据的桌面应用，SQLite 只是内嵌存储依赖。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Electron + 原生 HTML/CSS/JS，零框架、零运行时依赖（原生模块只有 koffi 与 Node 内置的 `node:sqlite`）。 ／ - 全部数据在 `%LOCALAPPDATA%\\NamiTime\\`（`data.db` + 备份目录），**不上传任何东西**，程序里没有任何网络请求",
+   "evidence_lines": [
+    6,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Zany2020/Nami-time-tracker",
+  "sha": "f260f0ca9929",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

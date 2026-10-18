@@ -9710,5 +9710,85 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e159d6095568": {
+  "identity": {
+   "one_liner": "从数据库 schema 生成 GraphQL/REST API 的引擎，请求编译为单条 SQL",
+   "review": "Excalibase API 引擎：启动时内省已有 Postgres 或 MySQL 的表结构，自动生成 GraphQL 类型与 REST 端点，并把每个 GraphQL 请求编译成一条 SQL，在引擎层按角色强制行/列权限，经 WebSocket 推送实时变更。面向想在现有数据库上快速暴露 API 的后端开发者；实时能力依赖配套的 watcher/CDC 组件，权限规则在 MySQL 上以差分测试对齐 RLS。",
+   "highlights": [
+    "启动时内省数据库 schema，零配置生成 GraphQL 类型与 REST 端点，每个请求编译为一条 SQL",
+    "支持按角色/表/操作的权限（行过滤、列清单、写检查），以及基于 WAL/binlog 的 WebSocket 实时订阅",
+    "提供 GraalVM 原生镜像（约 134 MB）与 TypeScript SDK @excalibase/sdk"
+   ],
+   "use_cases": [
+    "为现有 Postgres/MySQL 数据库快速生成 GraphQL 与 REST API",
+    "需要在 API 层实现按角色的行/列级权限控制的场景",
+    "需要通过 WebSocket 订阅数据库变更的实时应用"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ **Instant GraphQL + REST APIs on your existing Postgres or MySQL.** Introspects the schema at startup, compiles each GraphQL request into one SQL statement, enforces per-role permissions in the engine (the same rules on MySQL, which has no row-level security), ／ |🧭|**Vector k-NN search** — pgvector-backed, cosine/L2/IP distance, HNSW indexes|Search & Vector| ／ |📡|**Realtime subscriptions** — WebSocket, backed by WAL (Postgres) or binlog (MySQL) via NATS CDC, filtered by the subscriber's permissions|Subscriptions|",
+     "lines": [
+      8,
+      12,
+      24,
+      25
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ **Instant GraphQL + REST APIs on your existing Postgres or MySQL.** Introspects the schema at startup, compiles each GraphQL request into one SQL statement, enforces per-role permissions in the engine (the same rules on MySQL, which has no row-level security), ／ |📡|**Realtime subscriptions** — WebSocket, backed by WAL (Postgres) or binlog (MySQL) via NATS CDC, filtered by the subscriber's permissions|Subscriptions|",
+     "lines": [
+      9,
+      12,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为构建在现有数据库之上的 API 引擎，内省 schema 并编译 SQL，属服务数据库生态的工具/组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Instant GraphQL + REST APIs on your existing Postgres or MySQL.** Introspects the schema at startup, compiles each GraphQL request into one SQL statement, enforces per-role permissions in the engine (the same rules on MySQL, which has no row-level security), streams realtime changes over WebSocket, and ships a 134 MB native binary. ／ |**excalibase-graphql** *(this)*|GraphQL + REST engine on your DB| ／ - **SqlDialect SPI**: each DB declares which operators it supports; schema is built dynamically from that. Adding a new DB = implementing one dialect interface",
+   "evidence_lines": [
+    12,
+    54,
+    74
+   ]
+  },
+  "fn": "excalibase/excalibase-graphql",
+  "sha": "e159d6095568",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

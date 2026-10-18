@@ -9115,5 +9115,72 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a4e218890eb1": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Spring Boot、以 PostgreSQL 存储数据的全栈电商应用",
+   "review": "SmartCart 是一个全栈电商系统：顾客浏览/搜索商品、经 Razorpay 或 PhonePe 支付，管理员通过仪表盘管理订单与商品；后端为 Spring Boot，数据存于 PostgreSQL 16，使用 Flyway 迁移、JSONB 与行级锁，并通过 @Async 后台任务、SSE 和 WebSocket(STOMP) 实现邮件/发票任务与实时状态推送。适合作为电商/支付/异步任务场景的参考实现；支付需配置 Razorpay 测试密钥方可实际结算。",
+   "highlights": [
+    "使用 PostgreSQL 16，含 Flyway 迁移、行级锁与 JSONB + trigram 索引",
+    "支持 Razorpay 与 PhonePe 支付，提供幂等结账、webhook 去重与自动退款",
+    "通过 @Async 线程池与 WebSocket/STOMP 实时展示后台任务状态"
+   ],
+   "use_cases": [
+    "需要支付、订单与库存实时推送的电商 storefront 与后台管理",
+    "带任务监控的后台作业（邮件/发票/通知）处理场景",
+    "基于 Spring Boot + Next.js 的全栈部署实践（Docker/K8s/Render/Vercel）"
+   ],
+   "chances": 0
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Database**|PostgreSQL 16, Flyway migrations, row-level locks for stock and payments, JSONB + trigram indexes| ／ - Without Docker: JDK 17+, Maven 3.9+, Node.js 20.9+ and PostgreSQL 14+.",
+     "lines": [
+      101,
+      121
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据库层使用 PostgreSQL 16 存储业务数据，本项目是使用数据库的电商应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Database**|PostgreSQL 16, Flyway migrations, row-level locks for stock and payments, JSONB + trigram indexes| ／ - Without Docker: JDK 17+, Maven 3.9+, Node.js 20.9+ and PostgreSQL 14+.",
+   "evidence_lines": [
+    101,
+    121
+   ]
+  },
+  "fn": "dheerajdonepudi14/SmartCart",
+  "sha": "a4e218890eb1",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9259,5 +9259,80 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8fb6b18a2d73": {
+  "identity": {
+   "one_liner": "自托管敏捷项目管理/缺陷跟踪应用，Rust+PostgreSQL 实现",
+   "review": "santi 是一个可自托管的开源项目管理与 issue 跟踪系统，提供 Scrum/Kanban 看板、backlog、sprint 规划、epic 管理等功能，通过 REST JSON API、CLI 和 MCP server 对外提供服务，适合敏捷团队管理任务。后端为 Rust(axum)，数据存于 PostgreSQL 17 容器卷，需自行安排 pg_dump 备份；当前版本 0.1.0，HTTP API 在 1.0 前可能变动。",
+   "highlights": [
+    "提供 Scrum/Kanban 看板、backlog、sprint、epic 管理与 CSV 导入",
+    "提供 JSON API、CLI 及 MCP server 供脚本和 AI agent 使用",
+    "以单个 Docker 镜像分发，数据存储于 PostgreSQL 卷"
+   ],
+   "use_cases": [
+    "敏捷团队自托管项目与 issue 跟踪",
+    "从 Jira 或 Linear 通过 CSV 迁移历史 issue",
+    "通过 CLI/MCP 让脚本或 AI agent 操作项目数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "documented JSON API. The server is written in Rust (axum, PostgreSQL), the UI in React, and the ／ in the `santi-postgres` volume; migrations run every time the server starts. ／ |`DATABASE_URL`|required|PostgreSQL 17 connection string|",
+     "lines": [
+      5,
+      52,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统使用 PostgreSQL 作为自身数据存储，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：Apache License 2.0 或 MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "santi is a free, open-source agile tracker you host yourself. Teams plan work on Scrum or Kanban ／ documented JSON API. The server is written in Rust (axum, PostgreSQL), the UI in React, and the ／ in the `santi-postgres` volume; migrations run every time the server starts.",
+   "evidence_lines": [
+    3,
+    5,
+    52
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "emersonjds/santi",
+  "sha": "8fb6b18a2d73",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

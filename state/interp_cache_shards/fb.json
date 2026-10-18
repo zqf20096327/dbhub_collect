@@ -9417,5 +9417,151 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b9eede6c6f2f": {
+  "identity": {
+   "one_liner": "运行在 Postgres/Supabase 上的开源复式记账核心",
+   "review": "Ekwo OS 是一套以 schema、迁移和工具形式分发的复式记账核心，安装到用户自己的 Supabase 项目（即 Postgres 数据库）中，附带 CLI（npx ekwo-os init）、MCP server 和按国家划分的税则数据包，供企业、会计事务所和开发者自管账簿并让 AI 代理读写。无独立服务器，依赖 Supabase 的 REST API 与行级安全；许可为 AGPL-3.0。",
+   "highlights": [
+    "提供 schema 迁移、复式记账规则、税务与报表，由数据库触发器强制借贷平衡与期间锁定",
+    "提供 MCP server 与 CLI，使 AI 代理和终端可操作账簿",
+    "包含百余个国家的会计科目、税码与申报表数据包，以及 FEC/XBRL/Peppol/Factur-X 格式库"
+   ],
+   "use_cases": [
+    "企业在自有 Supabase 项目中自管账簿与增值税申报",
+    "会计事务所在单一安装中管理多家公司账套",
+    "开发者为应用接入带税务规则的复式记账核心"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run: ／ - **Tested on real Postgres.** The test suite runs the migrations, the seeds,",
+     "lines": [
+      25,
+      64,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 Postgres/Supabase 作为账簿数据存储本体，是使用数据库的应用核心而非为数据库生态服务的工具",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0（格式库为 MIT 双许可）",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A double-entry accounting core for Postgres. There is no server to run: ／ npx -y ekwo-os@latest init ／ - **The MCP server**, hosted at `https://mcp.ekwo.ai/mcp` or run locally with",
+   "evidence_lines": [
+    64,
+    125,
+    39
+   ]
+  },
+  "fn": "Ekwo-ai/ekwo-os",
+  "sha": "b9eede6c6f2f",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ef6b884b2e0": {
+  "identity": {
+   "one_liner": "Go+SQLite 的单二进制 CMS，内置 HTMX 管理后台与 REST API",
+   "review": "一个用 Go 编写、以 SQLite 为内嵌数据库的内容管理系统，编译为单个二进制文件部署运行，内置 HTMX/Alpine.js 管理后台、REST API、主题与模块系统，并提供多语言、webhook、媒体库、表单构建和 SEO 功能，另含可选的 MCP 端点供 AI 代理读取站点内容。适合需要自托管网站、希望简化部署运维的开发者与站长使用；源码构建需 Go、Node.js 等工具链。",
+   "highlights": [
+    "单二进制部署，SQLite 内嵌数据库并自带迁移，无外部运行时依赖",
+    "提供 REST API（Bearer 认证、权限、限流）与内置 HTMX/Alpine.js 管理后台",
+    "支持多语言内容、主题与模块系统、webhooks、MCP 只读端点"
+   ],
+   "use_cases": [
+    "自托管企业或个人网站的内容管理",
+    "作为 headless CMS 通过 REST API 向前端提供内容",
+    "需要多语言站点与表单收集的中小型站点搭建"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Full-Text Search**: Built-in SQLite FTS5 search for fast content discovery ／ - **SQLite Database**: Zero-configuration embedded database with migrations",
+     "lines": [
+      80,
+      148
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该 CMS 使用 SQLite 作为内嵌数据库存储站点内容，属于使用数据库的应用。",
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL v3",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> A single-binary Go CMS with HTMX/Alpine.js admin, REST API, themes & modules. SQLite by default — drop onto a server, run the rest. ／ - **SQLite Database**: Zero-configuration embedded database with migrations",
+   "evidence_lines": [
+    3,
+    148
+   ]
+  },
+  "fn": "olegiv/ocms-go",
+  "sha": "3ef6b884b2e0",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8668,5 +8668,142 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0051eb60c298": {
+  "identity": {
+   "one_liner": "将生产事故转为结构化 LLM 响应的事故分析助手",
+   "review": "这是一个基于 Next.js 与 AI SDK 的事故响应应用：输入告警、日志或 on-call 笔记，生成含严重级别、根因假设、缓解步骤、事后复盘草稿的 9 段结构化报告。面向 SRE/on-call 人员，提供 Web、CLI 和 MCP 三种入口，内置 5 场景回归套件与 LLM 评审评估流水线；持久化依赖配置 Supabase Postgres，未配置则功能受限。",
+   "highlights": [
+    "支持 Web、CLI、MCP 三种使用入口，输出 9 段结构化事故报告",
+    "内置 5 场景回归套件与 LLM-as-judge 评估流水线，含报告回放与对比",
+    "浏览器端证据导入与凭据自动脱敏，导出支持 Markdown/JSON"
+   ],
+   "use_cases": [
+    "on-call 工程师的事故调查与响应协调",
+    "LLM 提示词版本的回归评估与对比",
+    "事故复盘草稿与后续行动跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Supabase Postgres** for persistence; service-role client server-side only",
+     "lines": [
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该应用使用 Supabase Postgres 存储持久化数据，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give it an incident, alert, logs, metrics, or on-call notes. It produces a structured response with severity, ranked hypotheses, cited evidence, investigation steps, mitigations with rollback plans, customer impact, a postmortem draft, and follow-ups. Use the web app, CLI, or MCP tools in your existing AI client. ／ - **Supabase Postgres** for persistence; service-role client server-side only",
+   "evidence_lines": [
+    11,
+    67
+   ]
+  },
+  "fn": "YanpengQi7/ai-reliability-copilot",
+  "sha": "0051eb60c298",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3b2b2ac735ca": {
+  "identity": {
+   "one_liner": "Deno 技术栈的 SaaS 起步模板：内置认证、多租户、计费与实时",
+   "review": "一个基于 Deno 的 SaaS 脚手架模板，提供带 TOTP 二次验证的登录、群组角色多租户、按成员 Stripe 计费、CQRS outbox、离线 SPA 和公开网站，用 Docker Compose 编排 Postgres、Valkey 与监控组件。面向要启动多用户 Web 产品的开发者，可从模板创建仓库后填充环境变量开始开发；README 标明尚在开发中。",
+   "highlights": [
+    "提供带 TOTP 二次验证的认证、群组角色多租户与按成员计费",
+    "通过 Docker Compose 编排 Postgres、Valkey、Traefik、VictoriaMetrics、VictoriaLogs 与 Grafana",
+    "SPA 使用 IndexedDB 支持离线读写队列，重连后处理冲突写入"
+   ],
+   "use_cases": [
+    "启动需要认证、多租户与后台任务的 SaaS MVP",
+    "需要离线优先 Web 应用的产品",
+    "需要自托管单节点部署（非 serverless）的项目"
+   ],
+   "use_cases_2": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Deno, Postgres, Docker Compose. Work in progress.** ／ Postgres, Valkey, VictoriaMetrics, VictoriaLogs and Grafana. ／ Architecture diagram. Clients: apps/spa, a Preact and Vite PWA with sign-up, sign-in, TOTP and profile, talks to apps/api over REST and WebSocket; an IndexedDB offline store keeps the last notes and groups and queues writes made offline. apps/mpa is the public",
+     "lines": [
+      5,
+      54,
+      100
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Postgres 是该应用的权威数据存储、Valkey 是 API 缓存，仓库是使用数据库的 SaaS 应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Deno, Postgres, Docker Compose. Work in progress.** ／ **Use it if** you are starting a multi-user web product and want auth, tenancy and operations ／ Architecture diagram. Clients: apps/spa, a Preact and Vite PWA with sign-up, sign-in, TOTP and profile, talks to apps/api over REST and WebSocket; an IndexedDB offline store keeps the last notes and groups and queues writes made offline. apps/mpa is the public website on Fresh, server-rendered, calling the API only for the newsletter. Servers: apps/api on Hono (auth, groups, CQRS dispatch, web push) and apps/worker, which drains outbox_events. Data: Postgres is authoritative and Valkey is the API cache; Docker Compose also runs Traefik, VictoriaMetrics, VictoriaLogs and Grafana. Shared code: libs/domain, libs/server, libs/ui and the @spy4x packages on JSR.",
+   "evidence_lines": [
+    5,
+    56,
+    100
+   ]
+  },
+  "fn": "spy4x/seed",
+  "sha": "3b2b2ac735ca",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

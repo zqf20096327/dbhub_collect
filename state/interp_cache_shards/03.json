@@ -10848,5 +10848,176 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eaf41b8eaaea": {
+  "identity": {
+   "one_liner": "TypeScript webhook 投递库，事件存入 PostgreSQL 并由 worker 签名投递",
+   "review": "这是一个 TypeScript/npm 包，用于在应用中实现 webhook 投递：发布类型化事件存储到 PostgreSQL，由独立 worker 进程完成签名发送、失败重试和投递记录，接收方调用 parseWebhook() 验证。面向需要在 TypeScript 应用中内建 webhook 能力的开发者，要求 Node.js 24+ 与 PostgreSQL 16-18，还可通过 Better Auth 插件管理端点。",
+   "highlights": [
+    "提供 publish() 发布类型化事件、worker 签名投递、失败重试与逐次投递记录",
+    "事件与投递状态存储于 PostgreSQL，提供 SQL 迁移文件",
+    "内置 Standard Webhooks 签名，接收方调用 parseWebhook() 验证并获取类型化事件",
+    "提供 Better Auth 插件用于终端用户管理自己的 webhook 端点"
+   ],
+   "use_cases": [
+    "在 TypeScript 应用中内建 webhook 事件投递与重试机制",
+    "基于 Better Auth 的应用让用户自管 webhook 端点",
+    "作为 webhook 接收方验证并解析来自该库的签名请求"
+   ],
+   "ai": false,
+   "ai_kind": []
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management wor ／ npm install good-webhooks pg zod ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tes",
+     "lines": [
+      15,
+      24,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用提供 webhook 投递能力的 npm 库/组件，以 PostgreSQL 为存储后端，而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management works standalone, through the Better Auth plugin, or with your own sender. ／ npm install good-webhooks pg zod ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tested versions.",
+   "evidence_lines": [
+    15,
+    24,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "pplytas/good-webhooks",
+  "sha": "eaf41b8eaaea",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b069d3f912ab": {
+  "identity": {
+   "one_liner": "AI 代理的可移植记忆库，以 SQLite 为存储、原始文本为准",
+   "review": "为 AI 代理提供本地记忆存储的 TypeScript 库兼 MCP 服务器：事实被失效而非删除、原始文本不可编辑、带来源标注（provenance）与有效期查询，并提供带 JSON Schema 的版本化导出格式。内置 SqliteMemoryStore 与 InMemoryStore，嵌入在设备端通过 transformers.js 计算。适合需要本地、无密钥、可审计记忆的代理开发者。",
+   "highlights": [
+    "提供 MemoryStore 存储接口及 SqliteMemoryStore/InMemoryStore 实现，含一致性测试套件",
+    "每个事实与边携带来源标注（UserInput/AIInferred/GuardianAdded/SystemGenerated），支持 validAt 与 snapshotAsOf 时间轴查询",
+    "提供 exportPortable/importPortable 版本化 JSON 交换格式及 JSON Schema，MCP 导出位于 al-buddy-memory/mcp"
+   ],
+   "use_cases": [
+    "为 AI 代理构建带来源与历史可追溯的长期记忆",
+    "在本地无服务、无 API 密钥环境下运行代理记忆存储",
+    "跨运行时/框架无损迁移代理记忆数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Postgres.** `PostgresMemoryStore` (pgvector 0.8 or newer) sits behind the same",
+     "lines": [
+      153
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti sel",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 SQLite 为磁盘存储（L22、L52），仅使用数据库而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti self-hosts (graph DB + LLM key required)| ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file. ／ - `exportPortable` / `importPortable`: the lossless interchange format, versioned, with a JSON Schema.",
+   "evidence_lines": [
+    22,
+    52,
+    54
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "flytomoon/al-buddy-memory",
+  "sha": "b069d3f912ab",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

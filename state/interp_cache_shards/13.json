@@ -10942,5 +10942,88 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "910b8a30283d": {
+  "identity": {
+   "one_liner": ".NET 后台任务库，含重试/死信/看板与多存储适配",
+   "review": "NexJob 是一个 .NET 后台任务调度库，提供重试、死信队列、截止时间、崩溃恢复和内置 Dashboard，通过独立的存储包适配 PostgreSQL、SQL Server、Redis、MongoDB 或内存存储，并支持 Kafka、RabbitMQ 等消息源触发。面向需要在 .NET 应用中运行可靠后台作业的开发者，要求 .NET 8 或 .NET 10，MIT 许可。",
+   "highlights": [
+    "提供重试、死信队列、截止时间、幂等与崩溃恢复机制",
+    "通过独立 NuGet 包适配 PostgreSQL/SQL Server/Redis/MongoDB 存储并经契约测试覆盖",
+    "内置 Dashboard 与 OpenTelemetry、健康检查集成"
+   ],
+   "use_cases": [
+    ".NET 应用中的可靠后台作业调度与重试处理",
+    "多节点共享数据库的分布式任务执行",
+    "从 Kafka/RabbitMQ 等消息代理触发任务并通过 outbox 模式保证投递"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL · SQL Server · Redis · MongoDB · in-memory. ／ - **The same tests on every provider.** One contract suite runs on InMemory, PostgreSQL, SQL Server, Redis and MongoDB. ／ |PostgreSQL|`NexJob.Postgres`|Production ready|",
+     "lines": [
+      5,
+      60,
+      85
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "PostgreSQL · SQL Server · Redis · MongoDB · in-memory. ／ - **The same tests on every provider.** One contract suite runs on InMemory, PostgreSQL, SQL Server, Redis and MongoDB. ／ - **A killed process.** On SQL Server a node runs in its own process and is killed in the middle of a job.",
+     "lines": [
+      5,
+      60,
+      62
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为使用数据库作任务存储的 .NET 应用提供后台任务组件，含专门的存储适配包",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "## Storage Providers ／ |PostgreSQL|`NexJob.Postgres`|Production ready| ／ |SQL Server|`NexJob.SqlServer`|Production ready|",
+   "evidence_lines": [
+    80,
+    85,
+    86
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "oluciano/NexJob",
+  "sha": "910b8a30283d",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

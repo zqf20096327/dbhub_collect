@@ -9712,5 +9712,124 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06d393eed02a": {
+  "identity": {
+   "one_liner": "终端优先的本地工作追踪工具，含 TUI、CLI 与后台守护进程",
+   "review": "Crona 是面向开发者的本地优先工作追踪工具，提供终端 TUI、可脚本化 CLI 和后台本地守护进程，用于任务规划、专注会话（番茄钟）追踪与数据导出。数据存储采用 SQLite。适合习惯在终端工作的个人开发者；macOS 伴侣应用处于 beta，PDF 导出依赖本地渲染工具。",
+   "highlights": [
+    "提供 Bubble Tea 终端 UI 与可脚本化 CLI",
+    "后台守护进程支持本地提醒与定时任务",
+    "支持任务、习惯、专注统计与 PDF 导出"
+   ],
+   "use_cases": [
+    "开发者的日常任务与专注时间追踪",
+    "终端环境下的番茄钟工作流",
+    "本地离线的个人工作复盘与统计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- `kernel`: internal source tree for the background daemon, SQLite store, timer, IPC, and update checks",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Crona 是使用 SQLite 存储自身数据的终端应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Crona is a local-first work tracker for developers. It combines a terminal UI, a scriptable CLI, and a background local daemon into one workflow for planning work, tracking focus sessions, reviewing momentum, and exporting structured artifacts. ／ - `kernel`: internal source tree for the background daemon, SQLite store, timer, IPC, and update checks",
+   "evidence_lines": [
+    5,
+    16
+   ]
+  },
+  "fn": "webxsid/crona",
+  "sha": "06d393eed02a",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dafeb2a6b857": {
+  "identity": {
+   "one_liner": "Go 静态分析 linter，检测事务开启期间误用原数据库句柄",
+   "review": "txbypass 是一个 Go linter，通过 SSA 静态分析检测在事务回调内绕过 tx 而直接使用外层连接池句柄的代码，这类写法会导致写入脱离回滚、锁等待或读不到未提交数据。面向使用 database/sql、gorm、pgx、bun 等 Go 数据库库的开发者，可经 go install、go vet、golangci-lint 插件等方式运行，支持数据库/sql 等 20 余个库的事务 API 模式，当前版本为 0.1.0。",
+   "highlights": [
+    "提供 outer-handle、outer-context 两条规则，报告事务开启期间对原句柄的使用，支持 //txbypass:ignore 指令",
+    "支持 database/sql、sqlx、pgx v4/v5、gorm、bun、ent、go-redis、MongoDB 等 20 余个 Go 库的事务 API",
+    "可经 mise、go install、go vet、golangci-lint 模块插件或 release 归档运行"
+   ],
+   "use_cases": [
+    "检测事务内误用外层 DB 句柄导致审计日志等写入脱离回滚的 Go 代码",
+    "在 CI 中通过 go vet 或 golangci-lint 集成事务句柄误用检查",
+    "排查并发场景下事务外连接持有锁导致死等的代码"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目是检测 Go 代码中数据库事务句柄误用的静态分析工具，为数据库使用提供质量保障服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Go linter that reports a database handle used inside a transaction it opened. ／ |`outer-handle`|🟢 On|The handle a transaction was opened on, used while the transaction is open → Use the transaction| ／ |database/sql||`DB.Begin`, `DB.BeginTx`|",
+   "evidence_lines": [
+    7,
+    116,
+    132
+   ]
+  },
+  "fn": "mpyw/txbypass",
+  "sha": "dafeb2a6b857",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

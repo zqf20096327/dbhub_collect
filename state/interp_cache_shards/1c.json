@@ -10555,5 +10555,176 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "244ee7bdc471": {
+  "identity": {
+   "one_liner": "SQLGlot 的 TypeScript 移植，在浏览器/Node 解析、转换、优化 SQL",
+   "review": "sqlingo 是 SQLGlot 的 JavaScript/TypeScript 移植版，可在浏览器和 Node 中原生运行，提供跨 32 种 SQL 方言的解析、转换、优化、执行、tokenize、列级血缘分析和流式查询构建 API，纯 JavaScript 实现无需 WASM。面向需要在 JS 环境处理 SQL 的开发者。当前处于 alpha 阶段，README 明确警告可能存在未发现的缺陷。",
+   "highlights": [
+    "支持 32 种 SQL 方言的解析、转译、优化与执行",
+    "纯 JavaScript 实现，无需 WASM 或原生依赖",
+    "提供列级血缘追踪和自定义方言注册扩展机制"
+   ],
+   "use_cases": [
+    "在浏览器或 Node.js 中解析、转译和优化 SQL",
+    "跨 SQL 方言做查询转译与优化",
+    "构建需要 SQL 分析或查询构建能力的 JS/TS 应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 32 SQL dialects: Postgres, MySQL, BigQuery, Snowflake, DuckDB, ClickHouse, Redshift, Athena, Spark, and many more",
+     "lines": [
+      23
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 32 SQL dialects: Postgres, MySQL, BigQuery, Snowflake, DuckDB, ClickHouse, Redshift, Athena, Spark, and many more",
+     "lines": [
+      23
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Athena, BigQuery, ClickHouse, Databricks, Doris, Dremio, Drill, Druid, DuckDB, Dune, Exasol, Fabric, Hive, Materialize, MySQL, Oracle, Postgres, Presto, PRQL, Redshift, RisingWave, SingleStore, Snowflake, Solr, Spark, Spark2, SQLite, StarRocks, Tableau, Terada",
+     "lines": [
+      135
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Athena, BigQuery, ClickHouse, Databricks, Doris, Dremio, Drill, Druid, DuckDB, Dune, Exasol, Fabric, Hive, Materialize, MySQL, Oracle, Postgres, Presto, PRQL, Redshift, RisingWave, SingleStore, Snowflake, Solr, Spark, Spark2, SQLite, StarRocks, Tableau, Terada",
+     "lines": [
+      135
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- 32 SQL dialects: Postgres, MySQL, BigQuery, Snowflake, DuckDB, ClickHouse, Redshift, Athena, Spark, and many more",
+     "lines": [
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多 SQL 方言提供解析/转译/优化能力的 JavaScript 库，服务于数据库生态而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A JavaScript/TypeScript port of SQLGlot which is compatible with browser and Node runtimes. ／ This package allows you to parse, transpile, optimize, and execute SQL across **32 dialects** in JavaScript. ／ - 32 SQL dialects: Postgres, MySQL, BigQuery, Snowflake, DuckDB, ClickHouse, Redshift, Athena, Spark, and many more",
+   "evidence_lines": [
+    7,
+    9,
+    23
+   ]
+  },
+  "fn": "huydo862003/sqlingo",
+  "sha": "244ee7bdc471",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1f130d8f0320": {
+  "identity": {
+   "one_liner": "macOS 本地语义搜索启动器，用 EmbeddingGemma 嵌入与 SQLite FTS5 混合检索",
+   "review": "Lantern 是一个 macOS Spotlight 替代启动器，支持按语义搜索文件、代码、PDF、照片和录音内容，全部在本地运行、默认离线。它用 EmbeddingGemma 2 模型生成嵌入，结合 SQLite FTS5/BM25 做混合排序，索引存储为本地 SQLite 文件。面向 Apple Silicon Mac 用户，需 macOS 14+ 和约 1.2 GB 模型下载。目前 README 自述为在单台 Mac 上测试的原型。",
+   "highlights": [
+    "使用 EmbeddingGemma 2 嵌入与 SQLite FTS5/BM25 经 Reciprocal Rank Fusion 混合排序",
+    "索引完全本地运行，默认离线、无遥测，模型加载时禁用网络",
+    "支持代码符号（tree-sitter 22 种语言）、PDF OCR、照片与录音时间点检索"
+   ],
+   "use_cases": [
+    "在 Mac 上按含义而非文件名查找文档、代码和照片",
+    "需要本地隐私优先的桌面全盘搜索",
+    "在录音/视频中定位某句话出现的时刻"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Hybrid ranking:** meaning (embeddings) and exact words (SQLite FTS5/BM25) fused with Reciprocal Rank Fusion. ／ commit (EmbeddingGemma 2 support), `transformers`, `tokenizers`, `sqlite-vec`, `tree-sitter-language-pack`, ／ - The index is one SQLite file in `~/Library/Application Support/Lantern/` (not synced with iCloud). It contains text",
+     "lines": [
+      53,
+      83,
+      432
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是桌面搜索应用，SQLite 仅作为其本地索引存储被使用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lantern runs entirely on your Mac. It indexes your folders with Google DeepMind's open **EmbeddingGemma 2** model ／ - **Hybrid ranking:** meaning (embeddings) and exact words (SQLite FTS5/BM25) fused with Reciprocal Rank Fusion. ／ - **For the prebuilt app (`Lantern.dmg`):** a Mac with Apple Silicon (M1 or newer) and macOS 14 or newer. Python 3.12,",
+   "evidence_lines": [
+    13,
+    53,
+    67
+   ]
+  },
+  "fn": "misterekkk/lantern",
+  "sha": "1f130d8f0320",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

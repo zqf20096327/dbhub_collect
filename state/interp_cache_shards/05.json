@@ -9669,5 +9669,187 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d4235e82aacc": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的数据库安全网关与生产级 MCP Server",
+   "review": "AgentSQL（智盾）是一个 Go 编写的数据库安全网关兼 MCP Server，拦截 AI Agent 发出的 PostgreSQL/MySQL 请求，依次执行身份认证、SQL 解析、授权规则评估、受控执行、列级脱敏与审计，并内嵌 Web 控制台、审批流程和 Prometheus 指标。供需要对 AI Agent 访问数据库做管控的运维与安全团队使用；原生支持为 PostgreSQL 与 MySQL，其余数据库多为指定版本的有界只读验证。",
+   "highlights": [
+    "提供 stdio 与 Streamable HTTP 双 MCP 承载及内嵌 Web 治理控制台，支持 API Key 认证、对象/列授权、危险 SQL 拦截、人工审批与 fail-closed 错误处理",
+    "支持列级脱敏（mask/hash/block/range 四种算法）、审计导出（JSONL/CSV）、Syslog/Webhook 通知与 Prometheus 指标",
+    "控制面默认使用零配置 SQLite，可选 PostgreSQL 15+ 分库部署 metadata 与 audit，并提供 Kubernetes 双网关部署配置"
+   ],
+   "use_cases": [
+    "为通过 MCP 访问生产数据库的 AI Agent 提供鉴权、授权、脱敏与审计链路",
+    "需要人工审批、结果次数预算与 SQL 拦截的受控数据查询场景",
+    "对多款国产数据库（达梦、金仓、Vastbase 等）进行有界只读接入与安全管控"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "AgentSQL（中文品牌名：智盾，控制台显示为「AgentSQL 智盾控制台」）是面向 AI Agent 的数据库安全网关与生产级 MCP Server：让模型发出的每条 PostgreSQL/MySQL 请求在到达数据库前，经过身份认证、SQL 解析、授权与规则评估、受控执行、结果脱敏和审计。",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "AgentSQL（中文品牌名：智盾，控制台显示为「AgentSQL 智盾控制台」）是面向 AI Agent 的数据库安全网关与生产级 MCP Server：让模型发出的每条 PostgreSQL/MySQL 请求在到达数据库前，经过身份认证、SQL 解析、授权与规则评估、受控执行、结果脱敏和审计。",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 可追溯运维：默认零配置 SQLite；可选 PostgreSQL 15+ 控制面（PostgreSQL 18 为基准，metadata 与 audit 可分库）；支持审计导出（面向机器的 JSONL，以及 Excel/WPS 可直接打开、带公式注入防护的中文 CSV）、审批决策闭环、Prometheus 指标与健康/就绪探针。",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "||Oracle 23ai|🔵 已适配 · 受控只读|连接 / 元数据 / 只读查询子集|",
+     "lines": [
+      264
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "||SQL Server 2025|🔵 已适配 · 受控只读|连接 / 元数据 / 只读查询子集|",
+     "lines": [
+      267
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|OLAP|ClickHouse|🔷 已适配 · 连接级|ping / 版本 / Schema / 只读预览|",
+     "lines": [
+      286
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|TiDB|适配中|执行计划（EXPLAIN）适配实现中|",
+     "lines": [
+      54
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "|OceanBase|适配中|执行计划（EXPLAIN）适配实现中|",
+     "lines": [
+      55
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "|PolarDB for PostgreSQL|协议路径已实测|指定 PG 15 社区镜像复用 `db_type=postgres`；非商业服务认证|",
+     "lines": [
+      61
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|达梦数据库 DM|🟢 指定实例防护链路实测通过|DM8 Pack3、`COMPATIBLE_MODE=0`：v0.7.0 有界真库复验了 HTTP MCP 查询、列血缘、R010 表策略、手机号脱敏和持久化审计；R006 注释在解析阶段失败关闭，多行分页/JOIN/函数/系统目录未测，写入未放开|",
+     "lines": [
+      60
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "|openGauss 社区版|指定版本协议路径已实测|openGauss 7.0.0-RC3 社区版；GaussDB 商业版未实测，不能继承此结论|",
+     "lines": [
+      53
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "mention",
+     "quote": "|openGauss 社区版|指定版本协议路径已实测|openGauss 7.0.0-RC3 社区版；GaussDB 商业版未实测，不能继承此结论|",
+     "lines": [
+      53
+     ]
+    },
+    {
+     "db": "TDSQL",
+     "rel": "mention",
+     "quote": "|TDSQL for PostgreSQL|待目标环境验证|PG 协议候选；商业版未实测，不能用 OpenTenBase 结果替代|",
+     "lines": [
+      56
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "|崖山数据库 YashanDB|🔵 受控只读|标准 parser 与窄 SELECT 路径已接通；独立客户端 23.4.7.100 的真库流水线测试通过 SELECT、列血缘、R010、手机号脱敏和三条测试审计；HTTP/MCP 与持久化审计未测|",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为数据库安全网关/MCP Server 为数据库访问提供管控服务，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "PolarDB",
+    "Dameng",
+    "openGauss",
+    "YashanDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "v0.5.0 起代码采用 Apache-2.0，另有 Commercial License；历史 v0.4.0 发布物按原许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AgentSQL（中文品牌名：智盾，控制台显示为「AgentSQL 智盾控制台」）是面向 AI Agent 的数据库安全网关与生产级 MCP Server：让模型发出的每条 PostgreSQL/MySQL 请求在到达数据库前，经过身份认证、SQL 解析、授权与规则评估、受控执行、结果脱敏和审计。 ／ - 默认拒绝的安全链路：API Key 认证、Agent 能力档位、对象/列授权、SQL AST 规则与 fail-closed 错误处理。 ／ AgentSQL 作为数据库中立的安全网关，当前原生支持 PostgreSQL 与 MySQL。v0.6.0 新增 Vastbase G100 的指定版本只读子集；国产数据库的指定实例与协议路径验证范围见下表。",
+   "evidence_lines": [
+    12,
+    29,
+    45
+   ]
+  },
+  "fn": "cuipengdba/agentsql",
+  "sha": "d4235e82aacc",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

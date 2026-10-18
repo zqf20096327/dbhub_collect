@@ -9260,5 +9260,85 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "faed584284e8": {
+  "identity": {
+   "one_liner": "可自架的 OpenAI 兼容 AI 网关，提供美元计费与多供应商池选路",
+   "review": "Akentros Gateway 是一个自架的 OpenAI 兼容 AI 网关，提供美元计费（微美元整数结算）、多供应商池轮询与故障转移、API 密钥管理和繁体中文开发者控制台。面向需要集中管理和计费 LLM 调用的开发者/团队。数据默认存 SQLite 单文件（Node 22 内置 node:sqlite，免装外部数据库），可通过 DATABASE_URL 切换 PostgreSQL，也支持 Cloudflare Workers Durable Object 部署；仅限单实例运行。",
+   "highlights": [
+    "提供 OpenAI 兼容 API（chat/completions、embeddings、responses），支持 SSE 串流与幂等键",
+    "支持 SQLite 与 PostgreSQL 两种存储，后者自动选择 TCP pg 连接池或 Neon WebSocket 驱动",
+    "包含美元计费结算（预留/结算/退款）、API 密钥管理与 Prometheus 格式 /metrics 端点"
+   ],
+   "use_cases": [
+    "为多个应用统一代理 LLM API 调用并按用量美元计费",
+    "在 Cloudflare Workers 或 Node VPS 上自架多供应商模型池",
+    "从 LiteLLM / one-api 迁移的替代部署（README 提供 MIGRATION 指南）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **無伺服器 PostgreSQL**:`DATABASE_URL` 指向 PG 時,驅動依環境自動選擇——TCP `pg` 連線池(Node VPS、Render、Vercel/Netlify Node 函式,遠端主機自動 TLS、無伺服器環境每實例一條連線)或 Neon 相容 WebSocket 驅動(`*.neon.tech` 自動啟用;邊緣 runtime、Cloudflare Workers 直連,支援自架 `AKENTROS_PG_WS_PROXY` 閘道);Workers 另可經 Hyperdri ／ |`DATABASE_URL`|選配|設為 `postgres://…`(或 `postgresql://…`)時改用 PostgreSQL(`npm run migrate` 同樣自動切換);未設或非 PG scheme 時走 SQLite。驅動自動選擇:`*.neon.tech` 主機或設有 `AKENTROS_PG_WS_PROXY` 時走 Neon 相容 WebSocket 無伺服器驅動,其餘走 TCP `pg` 連線池(Workers 部署可改設 Hyperdrive 綁定,見 `docs/DEPLOYM",
+     "lines": [
+      28,
+      135
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`apps/gateway`|Gateway(Hono):Node server(`@hono/node-server` + `node:sqlite`)或 Cloudflare Workers(單一 Durable Object + `storage.sql`);對外暴露 OpenAI 相容 API、開發者管理面、內建帳號系統、定時對帳| ／ |`AKENTROS_DB_PATH`|建議|SQLite 資料庫檔案路徑(預設 `./akentros.db`,相對 `apps/gateway/`;相對路徑一律以此目錄為基準,不受啟動目錄影響)|",
+     "lines": [
+      20,
+      133
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite/PostgreSQL 用于存储网关自身的计费、密钥与用量数据，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README L13 声明）",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**English.** Akentros Gateway is a self-hosted, OpenAI-compatible AI gateway: USD-based billing, multi-provider pooling with automatic failover, `sk-akentros-*` API keys, and a built-in Traditional-Chinese developer console. Core (`packages/core`) is a portable TypeScript library; the gateway runs as a plain Node.js server on SQLite (no external database), on PostgreSQL — from a long-lived VPS to serverless platforms (Neon's WebSocket driver, Cloudflare Hyperdrive) — **or on Cloudflare Workers inside a Durable Object**; the console is a React + Vite app deployable to Cloudflare Pages. Full English documentation: **README.en.md**. ／ |`packages/core`|可攜行為核心:定價權威、美元計費(預留/結算/退款,微美元整數)、API 金鑰(HMAC + pepper)、供應商池選路、SSE 解析、schema 版本化遷移。v0.1.0 起亦發佈於 npm:@akentros/core| ／ |`apps/gateway`|Gateway(Hono):Node server(`@hono/node-server` + `node:sqlite`)或 Cloudflare Workers(單一 Durable Object + `storage.sql`);對外暴露 OpenAI 相容 API、開發者管理面、內建帳號系統、定時對帳|",
+   "evidence_lines": [
+    3,
+    19,
+    20
+   ]
+  },
+  "fn": "PrimordialSpirit-SANS/akentros",
+  "sha": "faed584284e8",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

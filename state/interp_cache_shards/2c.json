@@ -10523,5 +10523,149 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "721308da64bc": {
+  "identity": {
+   "one_liner": "开源职位搜索引擎，抓取公司官网 ATS 发布并聚合成可检索目录",
+   "review": "freehire 是一个开源职位聚合搜索系统，从 Workday、Greenhouse、Lever 等 ATS 平台和公司官网直接抓取职位，归一化去重后提供分面搜索、HTTP API、CLI 和浏览器扩展。使用 Go+Fiber 编写，以 PostgreSQL+pgvector 存储并做语义检索，配合 Meilisearch 做全文分面搜索。面向求职者，可自托管，MIT 许可。",
+   "highlights": [
+    "从 92 个 ATS 平台和公司官网抓取职位，归一化为单一 schema 并按稳定键去重",
+    "提供分面全文搜索、无密钥公共 HTTP API、CLI 和 Chrome 扩展",
+    "以 PostgreSQL+pgvector 存储，Meilisearch 提供全文/分面索引"
+   ],
+   "use_cases": [
+    "求职者按地区、工作方式、级别、技能分面检索职位",
+    "自托管职位搜索站点或基于其公开 API 构建二次应用",
+    "通过适配器扩展新增公司或 ATS 抓取源"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL** + pgvector — storage, filtering, semantic embeddings ／ Migrations are applied automatically on first Postgres volume init",
+     "lines": [
+      73,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL+pgvector 作为存储层，职位数据存于该库，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **PostgreSQL** + pgvector — storage, filtering, semantic embeddings ／                # api, web, postgres, meilisearch, redis, s3 ／ Migrations are applied automatically on first Postgres volume init",
+   "evidence_lines": [
+    73,
+    88,
+    93
+   ]
+  },
+  "fn": "strelov1/freehire",
+  "sha": "721308da64bc",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a3f7f2be4aef": {
+  "identity": {
+   "one_liner": "基于 pingap/Pingora 的分布式集中管控 Web 应用防火墙",
+   "review": "PingWAF 是一个 Rust 编写的开源 Web 应用防火墙，提供语义攻击检测、Cloudflare 风格规则、CC/Bot 防御、自动 TLS 和内嵌多语言控制台，面向需要自托管边缘安全防护的运维团队。控制面经 gRPC 双向流下发策略到多个边缘 agent，配置与日志持久化到 PostgreSQL，请求日志可写入 Elasticsearch；预编译二进制目前仅覆盖 Linux amd64/arm64。",
+   "highlights": [
+    "支持 SQLi/XSS/RCE 等攻击的语义检测，采用 libinjection、Aho-Corasick 签名与异常评分四阶段流水线",
+    "控制面与数据面通过 gRPC 双向流同步规则、日志与指标，策略变更无需重载",
+    "支持 ACME/Let's Encrypt 自动证书签发、mTLS 客户端证书管理与多维度限速"
+   ],
+   "use_cases": [
+    "自托管边缘站点的 WAF 防护（SQL 注入、XSS、Bot、CC 攻击）",
+    "多节点/多区域边缘集群的集中式策略管理与日志回放",
+    "需要自动 TLS 证书签发、IP/Geo 访问控制与限流的反向代理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ |`pingwaf-server`|Control plane: Axum REST + tonic gRPC + SeaORM/PostgreSQL + ES logs + embedded frontend + agent health monitoring| ／ The bundled `docker-compose.yml` starts PingWAF in `all-in-one` mode together with PostgreSQL, pulling the pre-built image from GHCR (`ghcr.io/shuaizend/pingwaf:latest`):",
+     "lines": [
+      108,
+      118,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "PostgreSQL 仅作为 PingWAF 自身的持久化存储（SeaORM），该项目并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ |`pingwaf-server`|Control plane: Axum REST + tonic gRPC + SeaORM/PostgreSQL + ES logs + embedded frontend + agent health monitoring| ／ The bundled `docker-compose.yml` starts PingWAF in `all-in-one` mode together with PostgreSQL, pulling the pre-built image from GHCR (`ghcr.io/shuaizend/pingwaf:latest`):",
+   "evidence_lines": [
+    108,
+    118,
+    130
+   ]
+  },
+  "fn": "shuaiZend/PingWAF",
+  "sha": "a3f7f2be4aef",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

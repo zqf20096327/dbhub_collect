@@ -10003,5 +10003,72 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "84d99877a9c9": {
+  "identity": {
+   "one_liner": "自托管事务邮件 API 服务，基于 Bun+Elysia+PostgreSQL",
+   "review": "BunMail 是一个供开发者在自己服务器上发送事务性邮件的应用，提供 REST API、Web 仪表盘、DKIM 签名、带重试的邮件队列、webhook、模板和入站 SMTP，以单个 Docker 容器部署。它面向需要程序化发送邮件的开发者，要求 PostgreSQL 16+ 作为数据库，生产模式下发件域名须注册并通过 DKIM 验证。",
+   "highlights": [
+    "提供 REST API 与 OpenAPI 3.0 文档，支持模板、webhook 和 API key 认证",
+    "包含基于 Postgres 的邮件队列，实现重试退避与租约式崩溃恢复",
+    "支持直接 SMTP 投递、入站 SMTP 接收和 DMARC 聚合报告解析"
+   ],
+   "use_cases": [
+    "自托管发送事务性邮件（注册验证、通知等）",
+    "接收并管理入站邮件及 DMARC 报告",
+    "为应用提供 SMTP 提交接入点以切换邮件服务商"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - **Email queue**: Postgres-backed with MTA-style retry backoff (up to 48 h for temporary failures such as greylisting), lease-based crash recovery that is safe with several replicas, and exactly-once delivery semantics ／ |Database|PostgreSQL 16+|",
+     "lines": [
+      9,
+      85,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 作为数据库存储邮件队列和邮件数据，是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL ／ |Database|PostgreSQL 16+|",
+   "evidence_lines": [
+    9,
+    169
+   ]
+  },
+  "fn": "mohamedboukari/bunmail",
+  "sha": "84d99877a9c9",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

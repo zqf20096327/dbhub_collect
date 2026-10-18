@@ -9751,5 +9751,98 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3e41f691358": {
+  "identity": {
+   "one_liner": "libuv 的 C++11 封装库，提供面向对象事件驱动 I/O 与可选数据库模块",
+   "review": "libuvcpp 将 libuv 的类型和方法封装为 C++11 类，提供事件循环、TCP/UDP、HTTP/WebSocket、SSL 等模块，并含内存池与可选数据库模块（SQLite/MySQL/PostgreSQL/ODBC 后端）。面向需要在 C++ 中使用 libuv 的开发者，通过 CMake/pkg-config 或 deb/rpm/zip 安装。",
+   "highlights": [
+    "将 libuv 封装为 RAII、std::function 回调风格的 C++11 类，支持异步/同步双模式 API",
+    "提供 HTTP/1.1、HTTP/2、WebSocket（RFC 6455）、QUIC/HTTP/3、SSL/TLS 模块，均可通过 CMake 开关启停",
+    "可选数据库模块支持 SQLite、MySQL、PostgreSQL 及 ODBC 后端，默认关闭"
+   ],
+   "use_cases": [
+    "用 C++ 开发基于事件驱动的 TCP/UDP 网络服务",
+    "构建 HTTP/WebSocket 服务端或客户端应用",
+    "在 C++ 项目中连接 SQLite/MySQL/PostgreSQL 数据库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      245,
+      310
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      245,
+      310
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      245,
+      310
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|`UVCPP_ENABLE_DB_ODBC`|`ON`|Build the ODBC backend of the db module (needs `sql.h` + a driver manager: `libodbc` on Linux, the system `odbc32` on Windows). Unlike the three above, it targets **an interface, not one database** — *what* it connects to is chosen",
+     "lines": [
+      315
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目主体是通用 C++ 网络库，数据库仅是可选模块之一，未见其为数据库生态服务的专门定位。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "libuvcpp provides a thin, idiomatic C++ layer over libuv's event loop, handles, and requests.",
+   "evidence_lines": [
+    88
+   ]
+  },
+  "fn": "Antruly/libuvcpp",
+  "sha": "e3e41f691358",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

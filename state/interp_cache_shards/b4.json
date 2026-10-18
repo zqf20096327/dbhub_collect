@@ -10287,5 +10287,138 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0706f8043dc6": {
+  "identity": {
+   "one_liner": "utPLSQL v3 的 Java 命令行客户端",
+   "review": "该项目是 utPLSQL v3 单元测试框架的 Java 命令行客户端，用于从命令行调用 Oracle 数据库中的 PL/SQL 单元测试。提供 run、info、reporters、help 子命令，支持多 reporter 同时运行、实时报告、覆盖率 HTML 输出、Oracle Wallet 凭据及 sysdba 连接。需 Java SE 17+，与同 minor 版本的数据库框架兼容。",
+   "highlights": [
+    "支持多 reporter 同时运行并分别保存输出，测试运行期间实时报告",
+    "支持 TNS、Easy Connect、SID 等多种连接格式，可通过 Oracle Wallet 免密码连接及以 sysdba 身份运行",
+    "可将项目源码文件映射到数据库对象并生成覆盖率报告（含 HTML、Sonar、Cobertura 格式）"
+   ],
+   "use_cases": [
+    "在 CI 流水线中通过命令行运行 Oracle PL/SQL 单元测试并生成 Sonar/Cobertura 覆盖率报告",
+    "开发者为指定 schema/package 执行所选 utPLSQL 测试套件",
+    "借助 Oracle Wallet 凭据存储在不暴露密码的情况下连接数据库运行测试"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "The variable is parsed according to the Oracle globalization documentation ／ - `/@<TNSName>` - credentials are taken from an Oracle Wallet (Secure External Password Store), see Oracle Wallet ／ 2. Java system property `oracle.net.tns_admin`, e.g. `export JAVA_OPTS=\"-Doracle.net.tns_admin=/path/to/network/admin\"`",
+     "lines": [
+      50,
+      99,
+      105
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 utPLSQL/Oracle 数据库的 PL/SQL 单元测试提供命令行调用工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Java command-line client for utPLSQL v3. ／ Provides an easy way of invoking utPLSQL from command-line. Main features: ／ Options 1-3 are handled by the Oracle JDBC driver. Option 4 is a fallback provided by utPLSQL-cli, used only when none of the others is set.",
+   "evidence_lines": [
+    7,
+    9,
+    109
+   ]
+  },
+  "fn": "utPLSQL/utPLSQL-cli",
+  "sha": "0706f8043dc6",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3bfd319b994b": {
+  "identity": {
+   "one_liner": "基于 WPF+OWIN+SQLite 的单机物业收费与台账管理桌面系统",
+   "review": "这是一个面向中小型住宅小区与商住项目的物业管理系统，覆盖收费、账单、设备台账、纠纷调解等模块。采用 WPF 客户端加 OWIN 自承载本地后端架构，业务数据通过 System.Data.SQLite 与 Dapper 存储于本机，后端独占访问数据库，适合内网或离线环境使用；README 注明 Win7/Win11 尚未真机验证。",
+   "highlights": [
+    "提供收费、账单、设备台账、人员组织、纠纷调解等物业业务模块，含备份恢复与审计日志",
+    "本地后端通过 System.Data.SQLite 与 Dapper 独占访问数据库，前端不直接连库",
+    "提供 Inno Setup 脚本化打包，产物为内置 .NET 离线安装器的单文件安装包"
+   ],
+   "use_cases": [
+    "中小型住宅小区或商住项目的收费与台账管理",
+    "无外网环境下的单机离线部署",
+    "需要操作留痕与软删留痕的物业数据管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库|SQLite（System.Data.SQLite + Dapper），数据库由后端独占访问，前端不直接连库| ／ |数据库|System.Data.SQLite 1.0.118、Dapper 2.1.35|",
+     "lines": [
+      46,
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明业务数据全部保存在本机 SQLite 数据库中，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License，品牌标识不随 MIT 授权",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向中小型住宅小区与商住项目的**单机部署**物业收费与台账管理桌面系统：WPF 客户端 + 本地后端服务，业务数据全部保存在本机，不依赖外部服务器与互联网，适合内网或离线环境。 ／ |数据库|SQLite（System.Data.SQLite + Dapper），数据库由后端独占访问，前端不直接连库|",
+   "evidence_lines": [
+    5,
+    46
+   ]
+  },
+  "fn": "liuma3995-dot/anyi-property-management",
+  "sha": "3bfd319b994b",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

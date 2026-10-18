@@ -11142,5 +11142,74 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f5b182049b4": {
+  "identity": {
+   "one_liner": "TeslaMate 车辆数据的自托管只读 Web 仪表盘",
+   "review": "这是一个读取 TeslaMate 所记录 PostgreSQL 数据库的自托管只读仪表盘，展示电池、行程、充电、统计等页面，支持 MQTT 实时状态与 CSV/GPX 导出。通过 Docker Compose 加装到现有 TeslaMate 栈，使用只读角色连接，无自带登录需外置认证代理。适合已运行 TeslaMate 的车主。",
+   "highlights": [
+    "读取 TeslaMate 的 PostgreSQL 数据库，以只读角色连接并拒绝 superuser",
+    "提供行程、充电、电池健康、统计等页面，支持 CSV 与 GPX 导出",
+    "可选 MQTT 数据源提供实时状态卡片，附 iOS/Android 移动端应用"
+   ],
+   "use_cases": [
+    "为已部署 TeslaMate 的用户提供车辆数据可视化查看",
+    "离线浏览与分析充电成本、能耗与电池健康趋势"
+   ],
+   "date_range": null,
+   "lsp": "Next.js/TypeScript/Bun"
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A self-hosted, read-only web dashboard for the car data that TeslaMate records. It runs next to your TeslaMate stack, reads its PostgreSQL database with a read-only role, and shows the data in a clean, fast interface that follows the Tesla visual style. ／ |PostgreSQL|The database that TeslaMate uses|",
+     "lines": [
+      15,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 PostgreSQL（经由 TeslaMate）存取数据，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "date_range": null,
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ],
+   "date_range": null
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted, read-only web dashboard for the car data that TeslaMate records. It runs next to your TeslaMate stack, reads its PostgreSQL database with a read-only role, and shows the data in a clean, fast interface that follows the Tesla visual style. ／ - **Read-only.** The app connects with a separate role that can only read. It refuses the TeslaMate superuser.",
+   "evidence_lines": [
+    15,
+    36
+   ]
+  },
+  "fn": "woosal1337/my-tesla",
+  "sha": "4f5b182049b4",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8601,5 +8601,89 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "23012f2f2d47": {
+  "identity": {
+   "one_liner": "渗透测试 TUI，将 Nessus 扫描结果导入 SQLite 并编排 nmap/NetExec 验证",
+   "review": "Cerno 是一个面向渗透测试与漏洞管理人员的终端 TUI 工具：把 .nessus 扫描文件解析进本地 SQLite 库，逐条分诊漏洞发现，并直接对受影响主机发起 nmap、NetExec、Metasploit 等命令，同时用 SQLite 持久化审查进度与会话历史。它还内置 MCP server，可由 Claude CLI 等 MCP 客户端程序化查询和驱动；Claude 助手默认关闭，需手动开启。",
+   "highlights": [
+    "将 .nessus 文件解析导入本地 SQLite 数据库，跨扫描跟踪主机风险与审查状态",
+    "支持从 TUI 一键发起 nmap NSE、NetExec、Metasploit 及自定义命令，并记录执行与产物",
+    "内置 MCP server，可由 MCP 客户端查询发现结果并生成命令"
+   ],
+   "use_cases": [
+    "Nessus 扫描结果的批量分诊与漏洞验证流程管理",
+    "结合 NetExec 凭据库定位凭据在受影响主机上的可用范围",
+    "通过 MCP 客户端程序化驱动渗透测试工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A **TUI tool** for reviewing Nessus scan findings and orchestrating security tools (**nmap**, **NetExec**, custom commands). Import `.nessus` files into a SQLite database for organized, persistent vulnerability verification and exploitation. ／ - 💾 SQLite-backed persistence — never lose review progress; track risk across scans ／ 1. **Import** — parse one or more `.nessus` files into a local SQLite database (`~/.cerno/cerno.db`).",
+     "lines": [
+      5,
+      9,
+      54
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "**Supported protocols:** SMB, SSH, LDAP, MSSQL, RDP, WinRM, FTP, NFS, VNC, WMI",
+     "lines": [
+      203
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是渗透测试 TUI 应用，使用 SQLite 作为自身数据存储而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A **TUI tool** for reviewing Nessus scan findings and orchestrating security tools (**nmap**, **NetExec**, custom commands). Import `.nessus` files into a SQLite database for organized, persistent vulnerability verification and exploitation. ／ 1. **Import** — parse one or more `.nessus` files into a local SQLite database (`~/.cerno/cerno.db`). ／ **Database:** SQLite-backed persistence at `~/.cerno/cerno.db` tracks scans, findings, sessions, tool executions, and artifacts. Cross-scan tracking enables host history queries. See docs/DATABASE.md for schema details.",
+   "evidence_lines": [
+    5,
+    54,
+    231
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "ridgebackinfosec/cerno",
+  "sha": "23012f2f2d47",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

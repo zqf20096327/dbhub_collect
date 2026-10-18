@@ -9250,5 +9250,150 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96406a3bbab8": {
+  "identity": {
+   "one_liner": "基于数据库的 Django Tasks 后端，任务队列存于现有数据库",
+   "review": "django-ox 将 Django Tasks 框架的队列直接运行在现有数据库表中，无需 Redis 或 RabbitMQ 等独立代理。任务通过 SELECT FOR UPDATE SKIP LOCKED 或原子更新领取，worker 死亡时任务由 reaper 归还队列并按指数退避重试，支持事务性入队、Django admin 管理与定时调度。面向使用 Django 5.2/6.x 且希望少维护一个中间件的团队，需 Python 3.12+，执行语义为 at-least-once。",
+   "highlights": [
+    "提供基于数据库表的 Django Tasks 后端，队列随业务数据同事务提交或回滚",
+    "支持 worker 死亡后任务由 reaper 返还队列，并按指数退避重试且保留每次 traceback",
+    "支持 PostgreSQL 与 MySQL 8+ 的 FOR UPDATE SKIP LOCKED 及 SQLite 的原子 compare-and-set 领取"
+   ],
+   "use_cases": [
+    "Django 应用需要后台任务但不想额外部署 Redis/RabbitMQ",
+    "要求入队与业务写入在同一数据库事务内一致提交或回滚",
+    "需要定时/周期任务、唯一任务去重与批量回调等队列协调能力"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ PostgreSQL 16; no-op tasks; django-ox 1.9.0 vs django-tasks-db 0.13.0; medians of five runs. ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence.",
+     "lines": [
+      41,
+      55,
+      57
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ it (PostgreSQL, MySQL 8+) and an atomic compare-and-set UPDATE elsewhere",
+     "lines": [
+      41,
+      57,
+      94
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ (including SQLite), and a reaper returns tasks whose worker died to the queue.",
+     "lines": [
+      41,
+      57,
+      95
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Django 应用提供任务队列组件，复用数据库作为队列存储，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSD 3-Clause",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stop running Redis to send an email. django-ox runs Django's Tasks framework in your existing database. When a worker dies, another worker picks up its tasks. You run one process: the worker. ／ Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks retry with exponential backoff by default, with every attempt's traceback kept. ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence.",
+   "evidence_lines": [
+    10,
+    41,
+    57
+   ]
+  },
+  "fn": "oxpull/django-ox",
+  "sha": "96406a3bbab8",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f641d3e2eda5": {
+  "identity": {
+   "one_liner": "Project SEKAI 知识库的 Windows 桌面浏览与同步客户端",
+   "review": "WinUI 3 桌面应用，用于浏览用户自行同步的 Project SEKAI 知识库，支持公告、剧情、语音、术语等内容的五语言对照阅读，可执行主数据同步与完整性检查，并通过 MCP 或本地 HTTP 将数据存储暴露给 AI 客户端。面向 Project SEKAI 内容玩家与使用者；当前界面仅提供简体中文。",
+   "highlights": [
+    "提供公告、剧情、语音、术语、原始数据表等内容的日/英/简中/繁中/韩五语言并排浏览",
+    "支持主数据与公告同步、缺失项检查、剧情文本缓存等数据操作",
+    "可通过 MCP 或本地 HTTP 将数据存储暴露给客户端"
+   ],
+   "use_cases": [
+    "以五语言对照方式本地查阅 Project SEKAI 的剧情与游戏资料",
+    "运行知识库同步并检查数据完整性",
+    "通过 MCP 或本地 HTTP 向 AI 客户端提供本地知识库数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 说明它是浏览用户自行同步的知识库数据的桌面阅读程序，数据库由主仓库的 CLI 构建。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Windows browser for the *Project SEKAI* knowledge base. The database is the one you synced ／ Running a sync, or handing the whole store to an AI assistant, happens in the same window. ／ expose everything to a client over MCP or local HTTP.",
+   "evidence_lines": [
+    11,
+    16,
+    32
+   ]
+  },
+  "fn": "omoinoki/sekaisync-winui3",
+  "sha": "f641d3e2eda5",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

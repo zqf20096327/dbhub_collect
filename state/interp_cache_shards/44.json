@@ -9662,5 +9662,77 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "347b530adcb6": {
+  "identity": {
+   "one_liner": "数字取证分析工作台，以GUI查看归档、镜像与SQLite等数据格式",
+   "review": "Crush 是一个面向取证审查人员的桌面工作台，用于打开 ZIP/TAR/7z 归档、iOS/Android 备份、磁盘镜像（E01等）及单个文件，并内置 SQLite（含WAL、SQLCipher）、LevelDB、Realm、MMKV 等专用查看器。它不先解包即浏览来源，提供完整性校验模式（打开即哈希、导出附带清单），并明确声明不是完整磁盘取证套件（无 carving、日志分析、RAID 支持）。",
+   "highlights": [
+    "提供 SQLite、LevelDB、Realm、MMKV 等数据库格式查看器，SQLite 支持 WAL 与自由块/页检查",
+    "内置完整性模式：打开来源即计算哈希，导出附带哈希清单，发布运行取证测试套件验证证据未被改动",
+    "提供 BLOB Inspector 链式解码（Base64/zlib/gzip/lzfse 等）与十六进制视图的字节来源定位"
+   ],
+   "use_cases": [
+    "取证审查人员检查移动设备备份、归档或磁盘镜像中的特定文件",
+    "查看和解码证据中的 SQLite/LevelDB/Realm 数据库及 Protobuf、Plist 等结构化数据",
+    "以只读方式浏览证据并在导出时保留来源与哈希记录"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV| ／ - **Hex provenance** — with the hex view open, selecting an entry in the SQLite, Protobuf, MMKV or Realm viewer shows exactly where its bytes are.",
+     "lines": [
+      46,
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为取证场景提供数据库格式的只读查看器，SQLite 等仅是其支持的众多证据格式之一。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Crush is a digital forensic analysis workbench.** Open archives, mobile backups, disk images, folders and single files, identify what's inside, and inspect it in dedicated viewers. Sources are opened without extracting them first. Built for examiners who need to look inside a specific file or source, not run a full processing pipeline. Every release runs a forensic test suite that checks whether Crush leaves the evidence untouched. ／ |Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV| ／ **Integrity mode** — file, ZIP and TAR sources hashed on open, exports get a hash manifest.",
+   "evidence_lines": [
+    15,
+    46,
+    66
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "kalink0/crush-forensics",
+  "sha": "347b530adcb6",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

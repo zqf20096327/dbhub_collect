@@ -10525,5 +10525,71 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b6f4d44964f6": {
+  "identity": {
+   "one_liner": "本地截图OCR全文搜索工具，离线索引截图文字",
+   "review": "gyotaku 读取用户已有截图工具保存的文件夹，用 PaddleOCR 提取图片中的文字并建立本地索引，通过快捷键唤出搜索窗口，按文字匹配截图并高亮显示，支持复制文本或图像。全部处理离线完成，支持 Linux、macOS 与 Windows。适合需要回溯历史截图内容的个人用户；依赖 OCR 模型与 ONNX Runtime，首次使用需下载约 22 MB 模型。",
+   "highlights": [
+    "对已有截图文件夹做本地 OCR 索引，搜索完全离线",
+    "支持 Linux（Wayland/X11）、macOS（Apple Silicon）与 Windows，提供脚本、deb/rpm 包安装",
+    "后台索引以空闲优先级运行，支持自定义快捷键唤起搜索窗口"
+   ],
+   "use_cases": [
+    "按记忆中的文字内容查找历史截图",
+    "从截图中复制文本片段或图像",
+    "在无网络环境下对本地截图进行全文检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**macOS**: the indexer (`gyotaku`) builds with the Xcode Command Line Tools alone, which provide the C compiler that the bundled SQLite compiles with: ／ - SQLite FTS5 with the trigram tokenizer, via `rusqlite`",
+     "lines": [
+      179,
+      261
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目用 SQLite（FTS5 via rusqlite）存储搜索索引，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "gyotaku reads the text in every screenshot you take and makes it searchable. Press a shortcut, type a few letters of anything you remember seeing, and every matching screenshot appears with the matched words highlighted in place. Open one to copy its text, a selection of lines, or the image itself. ／ **macOS**: the indexer (`gyotaku`) builds with the Xcode Command Line Tools alone, which provide the C compiler that the bundled SQLite compiles with:",
+   "evidence_lines": [
+    17,
+    179
+   ]
+  },
+  "fn": "xevrion/gyotaku",
+  "sha": "b6f4d44964f6",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

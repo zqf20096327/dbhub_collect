@@ -10489,5 +10489,73 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cd91d583d974": {
+  "identity": {
+   "one_liner": "用Rust实现的把MongoDB线协议转译为PostgreSQL查询的实验性文档存储",
+   "review": "OxideDB 是一个实验性文档存储服务器，将受支持的 MongoDB 线协议子集转译为 PostgreSQL 查询，用 Rust 编写，需要专用 PostgreSQL 实例（CI 覆盖 16/18）。附带内置 QuickJS-NG 的 JavaScript shell 和本地聚合工作台，无认证与 TLS，仅建议环回或受控开发网络使用。",
+   "highlights": [
+    "将 MongoDB 线协议子集转译为 PostgreSQL 查询，外部 MongoDB 客户端（含 mongosh）可直接连接",
+    "内嵌 QuickJS-NG 的原生 JavaScript shell，支持 find/insertOne/aggregate 等 helper 与 BSON 类型",
+    "提供本地只读聚合 pipeline 工作台，预览参数化 SQL，不接受任意 SQL"
+   ],
+   "use_cases": [
+    "让现有 MongoDB 客户端/驱动访问 PostgreSQL 中的文档数据",
+    "本地开发环境中试验文档模型与聚合管道",
+    "对 OxideDB 与真实 MongoDB 的行为做差分验证"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "OxideDB translates a supported subset of the MongoDB wire protocol into PostgreSQL queries. It is an experimental document store, written in Rust. It does not implement the complete MongoDB database contract. ／ Use the Rust toolchain pinned in `rust-toolchain.toml` and a dedicated PostgreSQL database. CI tests PostgreSQL 16; local validation also covers PostgreSQL 18. ／ export DATABASE_URL='postgresql://postgres:postgres@127.0.0.1:5432/oxide'",
+     "lines": [
+      3,
+      9,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目以 PostgreSQL 作为底层存储并为其提供 MongoDB 线协议接入能力，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OxideDB translates a supported subset of the MongoDB wire protocol into PostgreSQL queries. It is an experimental document store, written in Rust. It does not implement the complete MongoDB database contract. ／ The core server builds without a browser frontend, JavaScript engine, or MongoDB client dependency. See compatibility and operational limits before using it with an application. This storage version is incompatible with the original unversioned JSONB representation. ／ Use the Rust toolchain pinned in `rust-toolchain.toml` and a dedicated PostgreSQL database. CI tests PostgreSQL 16; local validation also covers PostgreSQL 18.",
+   "evidence_lines": [
+    3,
+    5,
+    9
+   ]
+  },
+  "fn": "fcoury/oxide",
+  "sha": "cd91d583d974",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

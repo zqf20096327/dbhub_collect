@@ -8502,5 +8502,71 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd7ce008df83": {
+  "identity": {
+   "one_liner": "自托管 TeamSpeak 网页客户端与协议网关，Rust 实现",
+   "review": "WebTS 是一个自托管的 TeamSpeak 网页客户端与协议网关，用户通过浏览器以真实 TS 身份登录并加入频道，继承原有权限；提供语音、聊天、好友 E2EE 私信、社区页面等功能。面向想为 TeamSpeak 服务器提供网页访问的部署者，使用 SQLite 持久化账号与会话，TS6 与移动语音等部分功能标注为实验支持。",
+   "highlights": [
+    "以 Rust/Tokio 网关实现 TeamSpeak TS3 协议连接，浏览器经 WebRTC/Opus 进行双向语音",
+    "支持账号体系、多身份管理、权限继承、Olm 双棘轮端到端好友私信与本地 AI 降噪",
+    "提供 Linux/Docker 一键中文引导安装与 Windows 运行包，部署与备份由中文菜单管理"
+   ],
+   "use_cases": [
+    "为现有 TeamSpeak 服务器提供浏览器端接入，成员无需安装原生客户端",
+    "自托管带账号、社区与加密私信的语音站点",
+    "通过网页对 TS 频道进行管理操作（创建/编辑频道、移动或踢出成员）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文|",
+     "lines": [
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README L149 表明使用 SQLite 通过 rusqlite 存储账号、身份密文与会话，数据库是应用自身的持久化层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文| ／ WebTS 是独立开源的 **TeamSpeak 网页客户端与协议网关**。成员登录自己的账号、创建或导入 TeamSpeak 身份，在浏览器里加入已有频道；网站以该身份连接目标服务器，继承它原有的权限。部署者掌握自己的账号数据库、密钥、邮件服务和默认服务器配置。",
+   "evidence_lines": [
+    149,
+    15
+   ]
+  },
+  "fn": "PTPHAP/WebTS",
+  "sha": "dd7ce008df83",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9849,5 +9849,83 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "83839f0ef64d": {
+  "identity": {
+   "one_liner": "Hey.com 邮箱的本地 MCP 服务器，经 stdio 暴露 37 个邮件工具",
+   "review": "一个运行在本地的 MCP 服务器，让 Claude 等 MCP 客户端读取、发送、搜索和整理 Hey.com 邮箱，通过浏览器同构请求调用 Hey 的非公开 Web 接口，Python 辅助程序经系统 webview 获取会话 Cookie，本地用 SQLite 缓存邮件与全文搜索。适合已使用 Hey.com 并希望通过 MCP 客户端操作邮箱的用户；因依赖非官方接口且解析英文界面，存在随时失效和区域限制。",
+   "highlights": [
+    "提供 37 个工具，覆盖读取、发送、草稿、分拣、标签、集合、筛选与搜索",
+    "本地运行，仅存储权限为 600 的会话 Cookie，无云端中继与遥测",
+    "本地 SQLite 缓存支持全文搜索，并遵循 x-ratelimit 退避"
+   ],
+   "use_cases": [
+    "在 Claude Code/Claude Desktop/Cursor 中通过 MCP 管理 Hey.com 邮箱",
+    "本地缓存邮件并做全文搜索与发件人分组过滤"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Cache|Local SQLite for messages, threads and full-text search|",
+     "lines": [
+      75
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为邮件消息与全文搜索的本地缓存存储使用，项目本身是邮件 MCP 客户端服务而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A local MCP server that gives Claude read/write access to your Hey.com inbox. A Bun/TypeScript server exposes the tools over stdio, and a small Python helper captures session cookies through the system webview at login. No cloud relay, no stored credentials. ／ |Cache|Local SQLite for messages, threads and full-text search| ／ > **Unofficial API.** Hey.com has no public API. mcp-hey uses its web endpoints with browser-identical requests, so things can break without notice. The current surface is in `docs/API.md`.",
+   "evidence_lines": [
+    12,
+    75,
+    14
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Sealjay/mcp-hey",
+  "sha": "83839f0ef64d",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

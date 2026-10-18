@@ -8795,5 +8795,159 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9d40353d651a": {
+  "identity": {
+   "one_liner": "开源英文词典数据集，提供 SQLite/MySQL/CSV/JSONL/Parquet 多格式",
+   "review": "该项目发布基于 OPTED 与 1913 年 Webster 词典及 Open English WordNet 的英文词典数据，v2 含 388,587 条释义，以 Parquet、JSONL、CSV、SQLite、MySQL dump 等格式分发，并附带 schema 说明、校验和与可复现构建脚本。适合需要在本地数据库或分析引擎中直接导入、查询词典数据的开发者与研究人员。",
+   "highlights": [
+    "提供 CSV、SQLite、MySQL dump、JSONL、Parquet 五种数据格式，Parquet 可在 pandas/Polars/DuckDB/Spark 中读取",
+    "构建可复现，附 SHA256SUMS 校验和及本地 CI 脚本，数据以单独的 LICENSE-DATA.md 授权",
+    "包含可导入 MySQL/MariaDB 的 SQL dump 和带索引的 SQLite 数据库文件"
+   ],
+   "use_cases": [
+    "在 DuckDB/pandas/Spark 等工具中直接查询词典数据",
+    "将词典导入 SQLite 或 MySQL/MariaDB 供应用使用",
+    "需要可追溯、带授权声明的公开词典数据再分发"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "An open source English language dictionary in CSV, SQLite, MySQL, JSONL, and Parquet. ／ |MYSQL|MySQL dump that can be imported directly inside MySQL / MariaDB|",
+     "lines": [
+      3,
+      128
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "An open source English language dictionary in CSV, SQLite, MySQL, JSONL, and Parquet. ／ |SQLITE3|A single file formatted as a SQLITE3 database|",
+     "lines": [
+      3,
+      127
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "The MariaDB import test runs only when `MYSQL_HOST` names a server. It ignores MariaDB option files, connects over TCP, and also reads `MYSQL_TCP_PORT` (default `3306`), `MYSQL_USER` (default `root`), and `MYSQL_PWD`. ／ |MYSQL|MySQL dump that can be imported directly inside MySQL / MariaDB|",
+     "lines": [
+      86,
+      128
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目本体是开放数据集分发，既非数据库生态工具，也非使用数据库存数据的应用，仅在分发包中包含 SQLite/MySQL 格式文件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT，数据另附 LICENSE-DATA.md（含署名要求）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An open source English language dictionary in CSV, SQLite, MySQL, JSONL, and Parquet. ／ |SQLITE3|A single file formatted as a SQLITE3 database| ／ |MYSQL|MySQL dump that can be imported directly inside MySQL / MariaDB|",
+   "evidence_lines": [
+    3,
+    127,
+    128
+   ]
+  },
+  "fn": "CloudBytes-Academy/English-Dictionary-Open-Source",
+  "sha": "9d40353d651a",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "958fc17ebfd0": {
+  "identity": {
+   "one_liner": "本地优先的 AI 会话与浏览历史记忆归档工具，存入 SQLite",
+   "review": "InkVault 将 Claude Code、Codex 会话和你选择的浏览器历史复制到一个本地 SQLite 文件 vault.db 中，提供 Memory Atlas 检索视图和 MCP server（search_memories 等工具）供 AI 客户端查询。面向需要保留 AI 对话上下文的个人用户；仅本地运行，屏幕截图仅限 Windows，通过 uvx 从源码安装。",
+   "highlights": [
+    "将 AI 会话与浏览器历史保存在单个本地 SQLite 文件 vault.db 中",
+    "提供 MCP server，含 search_memories、timeline、get_memory、memory_stats 工具",
+    "支持定时同步与每晚备份，可从 Pieces 归档抢救记录"
+   ],
+   "use_cases": [
+    "保留并检索 Claude Code/Codex 会话历史",
+    "为 MCP 客户端提供过往工作上下文查询",
+    "按年查看工作与浏览活动的时间线地图"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "InkVault preserves supported AI sessions and the browser history you choose in a local SQLite vault, ／ Pieces records in one local SQLite file, `vault.db`. Keep it independently of the tools that produced it.",
+     "lines": [
+      8,
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以本地 SQLite 文件作为自身存档的数据存储，是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "InkVault preserves supported AI sessions and the browser history you choose in a local SQLite vault, ／ - **Search for your AI tools**: an MCP server with `search_memories` (keyword + meaning, merged), `timeline`",
+   "evidence_lines": [
+    8,
+    63
+   ]
+  },
+  "fn": "sandoreclegane/inkvault",
+  "sha": "958fc17ebfd0",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

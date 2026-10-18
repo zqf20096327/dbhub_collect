@@ -10664,5 +10664,73 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5ed04d6d183e": {
+  "identity": {
+   "one_liner": "家庭/小型办公网络安全监控工具，Zeek 镜像流量+ detectors+AI 分诊",
+   "review": "tapwatch 在镜像端口上运行 Zeek 分析家庭或小型办公室的路由器流量，用纯 Python 检测器识别新设备、信标、DNS 隧道等异常，并结合路由器 syslog 与 osquery 端点代理；可选的小型 LLM（Jev）仅对文字描述做分诊、不能越过代码证明的事实，报警可推送到手机。数据存于本地 SQLite，适合想在无 SIEM 条件下自托管监控的家庭用户。安装依赖 Python 3.10+、PyYAML、Docker。",
+   "highlights": [
+    "提供 32 个纯 Python 检测器、34 类告警场景，含学习基线并跨重启按设备保留",
+    "AI 分诊受代码证明的事实约束，无 API key 时仅按规则运行",
+    "提供无 JavaScript 的服务端渲染案件台（队列、证据页、统计、过期抑制规则）与 selfcheck 自检命令"
+   ],
+   "use_cases": [
+    "家庭或小型办公室网络的入侵检测与异常设备发现",
+    "监控 AI 编码代理等本机进程产生的可疑网络行为",
+    "在无 SIEM、本地优先的环境下集中处置告警与误报抑制"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs",
+     "lines": [
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其依赖 SQLite 作为组件运行，属于使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Network security monitoring for a home or small office: Zeek on a mirror port, the router's ／ - **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs ／ reach your phone. One small box runs it all, with no SIEM; nothing leaves but your",
+   "evidence_lines": [
+    8,
+    86,
+    20
+   ]
+  },
+  "fn": "barnabys-drew/tapwatch",
+  "sha": "5ed04d6d183e",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

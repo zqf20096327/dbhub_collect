@@ -11102,5 +11102,79 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ec79a0ad3d8": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式三模数据库引擎，单内核融合向量、图与文档",
+   "review": "TriviumDB 是一个用纯 Rust 实现的嵌入式数据库引擎，在同一存储内核中提供向量检索、属性图谱和 JSON 文档元数据，提供 TQL 查询语言、四类持久化属性索引、内嵌图算法库及 QuIVer ANN 索引，通过 PyO3/napi-rs 提供 Python 和 Node.js 绑定。面向单机环境下的 AI Agent 记忆、RAG 等应用开发者；并发多写依赖进程级排他文件锁，正式产品形态为进程内库，HTTP server 仅为 nightly 预览。",
+   "highlights": [
+    "单节点同时持有稠密向量、稀疏文本倒排、JSON 元数据和图关系，共享同一 NodeId 与事务/WAL 生命周期",
+    "提供 TQL 查询语言，支持向量召回、BM25/AC 文本、图扩展、图算法、路径与集合代数的自由编排，由 Cascades 优化器规划",
+    "支持 Rom 单文件与 Mmap 分体双存储模式热切换，并提供 WAL、原子替换、Dry-Run 预检等持久化机制"
+   ],
+   "use_cases": [
+    "AI Agent 长期记忆：向量匹配后沿关系链扩散召回",
+    "RAG 应用中向量、文档与知识图谱的混合检索",
+    "个人知识库或小型推荐系统的语义搜索加图谱导航"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|维度|SQLite|pgvector|Kùzu|Qdrant|Neo4j|SurrealDB|LanceDB|**TriviumDB**|",
+     "lines": [
+      349
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "我们的目标是成为 **AI 应用领域的 SQLite**： ／ |维度|SQLite|pgvector|Kùzu|Qdrant|Neo4j|SurrealDB|LanceDB|**TriviumDB**|",
+     "lines": [
+      28,
+      349
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目自身是嵌入式数据库引擎/存储内核，属于数据基础设施组件，而非使用其他数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TriviumDB 是一个用纯 Rust 编写的**嵌入式三模数据库引擎**，将**向量检索（Vector）**、**属性图谱（Graph）**和**文档型元数据（Document）**原生融合在同一个存储内核中。Rom 模式保持单个 `*.tdb` 的便携性；默认 Mmap 模式使用受同一 generation 协议保护的分离 sidecar。 ／ 我们的目标是成为 **AI 应用领域的 SQLite**： ／ > 🧪 **尝鲜：HTTP 服务端版（nightly）** —— TriviumDB 的正式产品形态始终是**嵌入式数据库**（进程内 Library，即装即用，无需部署）。仓库中的 `triviumdb-server` 提供了一个可选的 HTTP 壳（多客户端并发读写、OCC、流式 NDJSON 等），目前处于 **nightly 预览状态**，仅供尝鲜和跟踪演进方向，协议随时可能变更，请勿用于生产。详见 Server 说明（nightly）；一切 API 与用法说明仍以嵌入式版本为准。",
+   "evidence_lines": [
+    26,
+    28,
+    122
+   ]
+  },
+  "fn": "YoKONCy/TriviumDB",
+  "sha": "7ec79a0ad3d8",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

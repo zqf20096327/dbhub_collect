@@ -10052,5 +10052,98 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2080828f2122": {
+  "identity": {
+   "one_liner": "面向 PostgreSQL 的 Python GraphQL 框架，基于 FastAPI 与 Rust 转换管线",
+   "review": "FraiseQL v1 是一个用 Python 装饰器声明类型与操作的 GraphQL 框架，将 PostgreSQL 视图和函数暴露为类型化 GraphQL API，借助集成的 Rust 管线把 JSONB 直接转为 HTTP 响应，仅支持 PostgreSQL 13+。适合已使用 PostgreSQL、习惯写视图与函数的 Python 团队构建 database-first API；需注意 PyPI 裸名已指向 v2，安装须固定 <2。",
+   "highlights": [
+    "通过 PostgreSQL 视图与函数（CQRS 读写分离）提供类型化 GraphQL API，无需构建步骤或代码生成",
+    "集成 Rust 管线（fraiseql_rs）在热路径处理 JSONB 转换，README 给出 3.6–5.9x 的转换基准数据",
+    "包含 pgvector 向量搜索、RLS/CSRF/审计日志等安全特性、50+ 校验标量类型及 fraiseql CLI 工具集"
+   ],
+   "use_cases": [
+    "为已有 PostgreSQL 数据库构建 database-first 的 GraphQL API",
+    "需要多租户隔离与 JSON 吞吐的场景",
+    "结合 LLM 代码生成与 pgvector 的 RAG 应用开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A Python GraphQL framework for PostgreSQL.** Declare types and operations with ／ decorators, point them at PostgreSQL views and functions, and FraiseQL serves a ／ PostgreSQL returns JSONB. An integrated Rust pipeline (`fraiseql_rs`) transforms it ／ **Requires:** Python 3.13 or 3.14 · PostgreSQL 13+ ／ |Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      9,
+      10,
+      13,
+      16,
+      64
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      64
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为基于 PostgreSQL 构建应用提供的开发框架/库，而非自身使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A Python GraphQL framework for PostgreSQL.** Declare types and operations with ／ **Requires:** Python 3.13 or 3.14 · PostgreSQL 13+ ／ |Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+   "evidence_lines": [
+    9,
+    16,
+    64
+   ]
+  },
+  "fn": "fraiseql/fraiseql-python",
+  "sha": "2080828f2122",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

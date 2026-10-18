@@ -9680,5 +9680,155 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "868d0bfce974": {
+  "identity": {
+   "one_liner": "SQLite3 的 C++ 封装库，基于 RAII 封装原生 C API",
+   "review": "SQLiteCpp 是一个为 SQLite3 提供面向对象接口的 C++ 库，用现代 C++17 类封装 SQLite 原生 C API，采用 RAII 管理资源，出错时抛出异常。面向需要在 C++ 应用中读写 SQLite 数据库的开发者。要求 C++17 编译器与 SQLite 3.38.0 以上版本，可通过源码、CMake 子目录、vcpkg 或 Meson 集成。",
+   "highlights": [
+    "以 C++17 类封装 SQLite 原生 C API，采用 RAII 与异常错误处理",
+    "支持 CMake、Meson、vcpkg、Git 子模块等多种集成方式",
+    "提供 Doxygen 文档、示例与基于 googletest 的单元测试"
+   ],
+   "use_cases": [
+    "在 C++ 应用中读写 SQLite 数据库",
+    "为依赖 SQLite 的 C++ 项目提供可集成的数据库访问层",
+    "需要 MIT 许可用于商业/专有软件的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLiteC++ (SQLiteCpp) is a lean and easy to use C++ SQLite3 wrapper. ／ SQLiteC++ offers an encapsulation around the native C APIs of SQLite,",
+     "lines": [
+      13,
+      19
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "SQLiteCpp 是为 SQLite 数据库服务的开发库，封装其 C API 供应用程序调用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可；内嵌 SQLite 源文件为公有领域",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLiteC++ (SQLiteCpp) is a lean and easy to use C++ SQLite3 wrapper. ／ SQLiteC++ offers an encapsulation around the native C APIs of SQLite, ／ - the SQLite library (3.38.0 minimum, released 2022-02-22), either by linking to it dynamically or statically",
+   "evidence_lines": [
+    13,
+    19,
+    90
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SRombauts/SQLiteCpp",
+  "sha": "868d0bfce974",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "28c66f4e7dce": {
+  "identity": {
+   "one_liner": "Go 脚手架 CLI，生成 Postgres-only 的 API 服务并接入代码",
+   "review": "一个类似 rails new 的命令行工具，用 Gin、sqlc、goose、River、Kamal 搭建仅支持 Postgres 的 Go API 服务，生成器会自动注册生成的代码。面向已有 Rails 应用、需要额外加一个 Go 服务的团队。目前为 v0.2.x，仅有单一维护者，不支持 SQLite，且生成项目不可配置。",
+   "highlights": [
+    "提供 rails 风格的 new/g/d/doctor 命令，生成并自动注册 model、scaffold、controller、job 等代码",
+    "生成应用组合 Gin、sqlc、goose、River（Postgres 后台任务）与 Kamal 2 部署配置",
+    "生成应用不依赖 Bogie 本身，附带 AGENTS.md 与本地 bin/ci 流水线"
+   ],
+   "use_cases": [
+    "Rails 团队为高并发 webhook、长连接网关或队列 worker 搭建配套 Go 服务",
+    "按 Rails 惯例生成带迁移、查询与测试数据库的 API 项目",
+    "通过 bogie app:update 将既有生成应用升级到新模板"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ You need **Docker with Compose v2** (or your own Postgres, see",
+     "lines": [
+      6,
+      47
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite is deliberately out until River's SQLite driver is stable",
+     "lines": [
+      211
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 CLI 是为生成和管理使用 Postgres 的 Go 服务而服务的脚手架工具，不是用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ out of Gin, sqlc, goose, River and Kamal, with generators that also wire the code in. ／ Bogie only builds what has no Go equivalent: `new`, generators that wire,",
+   "evidence_lines": [
+    6,
+    7,
+    184
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bogie-go/bogie",
+  "sha": "28c66f4e7dce",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

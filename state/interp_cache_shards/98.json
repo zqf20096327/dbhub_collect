@@ -9453,5 +9453,81 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d3ff8d9a6095": {
+  "identity": {
+   "one_liner": "本地运行的通用 LLM 智能体 harness，Rust+SQLite 后端",
+   "review": "KedaiAgent 是一个本地桌面运行的 LLM 智能体框架，提供 Agent 引擎（计划-执行-反思）、任务工作台、工具授权层和上下文工程，兼容 SillyTavern 角色卡/世界书生态；数据（含变量树、任务状态）以 SQLite 持久化在本地。面向角色扮演/文学创作与任务自动化用户，需 Rust 工具链构建，当前以 Windows 便携版交付。",
+   "highlights": [
+    "内置状态机驱动的 Agent 引擎（planning→executing→reflecting），支持六种任务运行模式",
+    "原生兼容 SillyTavern 生态：V2/V3 角色卡、世界书、正则脚本与输出协议",
+    "数据仅存本地 SQLite，支持 OpenAI 兼容后端与 MCP 客户端、自定义工具插件"
+   ],
+   "use_cases": [
+    "基于 SillyTavern 角色卡的长篇文本创作与沉浸式角色扮演会话",
+    "下发目标后由多模式任务工作台自动拆解、执行并汇报的智能体任务",
+    "通过本地 SQLite 存储管理会话历史、变量树与跨会话记忆"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **变量系统**：会话级 `stat_data` 变量树（SQLite 持久化），`[InitVar]` 条目初始化，支持 YAML / JSON / `_.set()` 三种初始格式 ／ - 六种运行模式（`legacy` 三段式 / `solo` / `multi` / `plan` / `team` / `custom`），状态落 SQLite 六表，全程可中断、可重跑 ／ |数据库|SQLite（rusqlite，bundled 零原生依赖）|",
+     "lines": [
+      59,
+      68,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 SQLite 为内置数据库存储会话、变量树与任务状态（rusqlite bundled），SQLite 是其数据存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，免费分发",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "KedaiAgent 是一个**本地运行的通用 LLM 智能体 harness**——把大模型从「聊天框」变成能干活的智能体运行框架。它内置 **Agent 引擎**（计划 → 执行 → 反思）、完整的**工具与授权层**、**上下文工程**（缓存感知压缩、跨会话记忆），并原生兼容 **SillyTavern 生态**（角色卡 / 世界书 / 变量与输出协议）。 ／  - 六种运行模式（`legacy` 三段式 / `solo` / `multi` / `plan` / `team` / `custom`），状态落 SQLite 六表，全程可中断、可重跑 ／ |数据库|SQLite（rusqlite，bundled 零原生依赖）|",
+   "evidence_lines": [
+    34,
+    68,
+    92
+   ]
+  },
+  "fn": "Sata1949/kedai",
+  "sha": "d3ff8d9a6095",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

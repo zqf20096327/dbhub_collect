@@ -7741,5 +7741,72 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3981ef6562bd": {
+  "identity": {
+   "one_liner": "Rails 8.1 多租户 SaaS API 后端模板，供配套 iOS/Android 客户端使用",
+   "review": "这是一个基于 Rails 8.1 的 API 后端项目，为 NativeAppTemplate 系列 iOS/Android 应用提供服务端实现，使用 PostgreSQL 存储，内置 devise_token_auth 认证、acts_as_tenant 多租户、pundit 角色授权和 JSON:API 序列化，适合开发者作为移动应用 SaaS 后端的起点模板。部署通过 Kamal 2 到 Linux 服务器。",
+   "highlights": [
+    "多租户支持（基于 URL 路径 /:account_id/）与基于角色的权限控制",
+    "令牌认证（devise_token_auth）与 JSON:API 序列化",
+    "推送通知（APNs/FCM）与可选的 Sentry 错误监控，Kamal 2 部署流程内置"
+   ],
+   "use_cases": [
+    "为配套的 iOS/Android 客户端启动 SaaS 后端",
+    "需要多租户、订阅与角色权限模型的移动应用后端参考实现",
+    "快速生成/定制三端（Rails+SwiftUI+Compose）应用的起点代码"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL** ／ * PostgreSQL 16+ ／ brew services start postgresql",
+     "lines": [
+      20,
+      65,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是用 PostgreSQL 存储数据的 Rails 应用后端，README 未提供为数据库生态服务的工具能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rails 8.1 API backend for NativeAppTemplate iOS/Android mobile applications. It's a multi-tenant SaaS application with token-based authentication, role-based authorization, and RESTful API endpoints. ／ - **PostgreSQL** ／ The API deploys with Kamal 2 to any Linux server with SSH access: `Dockerfile` builds the image, `config/deploy.yml` describes the server, and images are pushed to GitHub Container Registry (ghcr.io). PostgreSQL runs on the same server as a Kamal accessory, and Solid Queue runs inside Puma, so one small VPS is enough. The server sits behind Cloudflare: the zone's SSL/TLS mode is \"Full (strict)\", kamal-proxy serves a Cloudflare Origin Certificate, and the server firewall admits port 443 from Cloudflare's ranges only. (Without Cloudflare, switch `proxy` in `config/deploy.yml` to the Let's Encrypt variant shown in its comment.)",
+   "evidence_lines": [
+    5,
+    20,
+    115
+   ]
+  },
+  "fn": "nativeapptemplate/nativeapptemplateapi",
+  "sha": "3981ef6562bd",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

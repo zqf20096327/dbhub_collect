@@ -8450,5 +8450,127 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d16d890ff4ed": {
+  "identity": {
+   "one_liner": "面向私人教师的多租户 SaaS 教务管理平台",
+   "review": "这是一个用 Angular 和 ASP.NET Core 构建、以 PostgreSQL 存储数据的多租户家教管理平台，为私人教师、家长和学生分别提供排课、按课时计费、通知、报告等功能，支持犹太历法跳过节日、无登录公开教师目录，可选集成 LLM 生成教案，本地开发通过 Docker Compose 运行 PostgreSQL 和 Mailpit。",
+   "highlights": [
+    "实现多租户隔离的教师教务管理，含学生管理、课时日历、循环课与按课时计费",
+    "通过 Hangfire 后台任务生成课时提醒和付款提醒邮件，报告可导出 CSV",
+    "提供无登录的公开教师目录，支持按学科和城市筛选及联系表单",
+    "可选调用 Gemini 或 Anthropic API 生成教案，密钥仅存于服务端"
+   ],
+   "use_cases": [
+    "私人教师管理学生、排课、计费与家长沟通",
+    "家长和学生查看课表、笔记与学习材料",
+    "面向以色列市场的教师目录展示与联系撮合"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Background jobs|Hangfire (PostgreSQL storage) — lesson reminders, payment reminders, series generation| ／ |Database|PostgreSQL|",
+     "lines": [
+      162,
+      166
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 是该平台自身的数据存储，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|ORM|Entity Framework Core + Npgsql| ／ |Background jobs|Hangfire (PostgreSQL storage) — lesson reminders, payment reminders, series generation| ／ |Database|PostgreSQL|",
+   "evidence_lines": [
+    160,
+    162,
+    166
+   ]
+  },
+  "fn": "yt314/Talmidon",
+  "sha": "d16d890ff4ed",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a32bd5b7a354": {
+  "identity": {
+   "one_liner": "Java Swing 桌面 ATM 模拟应用，通过 MySQL 后端实现账户与交易管理",
+   "review": "这是一个用 Java 和 Swing GUI 编写的 ATM 模拟系统，提供账户注册、存取款、转账、余额查询、交易记录及 PIN 修改等功能。项目定位为教学/演示用途，供开发者在一个受控环境中学习完整的银行交易应用流程。需要 JDK 环境，通过 javac 编译后运行 login 类启动，未提供容器化或安装包部署方式。",
+   "highlights": [
+    "基于 Java Swing 提供图形化 ATM 交互界面，支持账户注册、存取款、转账、余额查询等交易操作",
+    "包含交易历史记录与 PIN 管理功能",
+    "通过 JDBC 连接 MySQL 数据库进行数据持久化（主题标签表明使用 mysql-database）"
+   ],
+   "use_cases": [
+    "用于学习 Java GUI 与数据库后端集成的教学演示",
+    "模拟银行 ATM 业务流程的编程练习项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用数据库作为后端存储的 Java 桌面应用程序，而非为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " The ATM Simulator System is a comprehensive Java application designed to emulate the functionalities of an Automated Teller Machine (ATM). With an intuitive graphical user interface (GUI), this system offers a range of features for account management and financial transactions. ／  The ATM Simulator System provides an interactive platform for users to simulate their banking transactions in a controlled environment. Leveraging Java and the Swing GUI library, this system demonstrates the flow of a real ATM application, allowing users to create accounts, manage transactions, and more.",
+   "evidence_lines": [
+    12,
+    25
+   ]
+  },
+  "fn": "shivamverma26/ATM_Simulator",
+  "sha": "a32bd5b7a354",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

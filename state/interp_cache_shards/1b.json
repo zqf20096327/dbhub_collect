@@ -11042,5 +11042,145 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6ec16bc743de": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话长期记忆插件，以 SQLite 存储实现记忆宫殿架构",
+   "review": "这是一个 dsh（DeepSeek Harness）宿主的插件，为 agent 提供跨会话长期记忆：用 SQLite 双层分库（user.db 与 project-*.db）存储记忆，结合 FTS5 关键词与本地向量嵌入做混合检索，并提供 SM-2 间隔重复、蒸馏、脱敏与 Web 管理面板。面向使用 dsh 的 agent 用户，通过 npm 安装为 dsh 插件运行，无外部进程依赖。",
+   "highlights": [
+    "提供 21 个 engram_* 工具，覆盖记忆保存、混合检索、时间线、导出与信念巩固",
+    "使用 SQLite 双层分库（user.db 与按 git origin 隔离的 project-*.db），混合检索融合 FTS5 与本地 512 维向量",
+    "内置摄取脱敏（API key、身份证号等正则清洗）与提示注入防护"
+   ],
+   "use_cases": [
+    "为 dsh agent 提供跨会话的用户画像与项目约定记忆",
+    "对历史会话进行批量回提炼与知识库化",
+    "导出 Markdown/JSON 或 Obsidian/Logseq 镜像目录用于私人知识管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|固定路线定顺序|`tour_routes` 只增不改；`engram_tour mode=fixed` 按桩位顺序走全宫|src/store/sqlite.ts| ／ 人工处理前，停止使用该目录的所有宿主，备份数据库和 SQLite sidecar，",
+     "lines": [
+      53,
+      223
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为插件自身的记忆存储后端（src/store/sqlite.ts），项目不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|固定路线定顺序|`tour_routes` 只增不改；`engram_tour mode=fixed` 按桩位顺序走全宫|src/store/sqlite.ts| ／ - **双层分库**：`user.db` 全局共享；`project-<hash>.db` 按 git origin 标识隔离（无 git 时回退 cwd 全量哈希，旧命名库自动迁移）——个人偏好跟人走，项目约定跟仓库走。**项目宫殿随工作区切换**：管理面板「项目」scope 默认跟随 GUI 当前选中的工作区（Header 显示工作区标题与路径），也可在下拉里固定到某个工作区；`engram_save/search` 等工具的 project 读写同样按当前会话 cwd 归属，与面板同一口径。 ／ dsh plugin --profile web add @kenz1117/dsh-engram",
+   "evidence_lines": [
+    53,
+    63,
+    20
+   ]
+  },
+  "fn": "kenz1117/dsh-engram",
+  "sha": "6ec16bc743de",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "99a29628e712": {
+  "identity": {
+   "one_liner": "MG 汽车自托管仪表盘与行程记录 Web 应用",
+   "review": "GarageStack 是面向 SAIC 产 MG 车型（MG4、MG5、ZS EV、HS PHEV 等）车主的自托管 Web 应用，通过登录 SAIC iSmart API 获取车辆数据，提供实时仪表盘、行程地图与日志、能耗统计、远程控制和推送通知。以 Docker 单容器或 Compose 方式部署，数据存入 PostgreSQL，并支持通过 MQTT 与 Home Assistant 集成。仅适用于支持 iSmart 的现款 MG 车。",
+   "highlights": [
+    "通过 SAIC iSmart API 读取车辆遥测数据，提供实时仪表盘、行程地图、能耗统计与维护提醒",
+    "支持远程命令（空调预冷、锁车、充电控制）、定时任务与推送通知",
+    "以 Docker 全容器方式部署，集成 MQTT/Home Assistant、OpenID Connect 单点登录与只读 API token"
+   ],
+   "use_cases": [
+    "MG 车主自托管查看车辆状态、行程记录与能耗统计",
+    "需要远程控制车辆与接收异常推送通知的场景",
+    "将车辆数据接入 Home Assistant 智能家居或行程报销记录"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A single Docker image that bundles every service -- nginx, the .NET API + worker, PostgreSQL, Mosquitto, and the SAIC gateway. No Compose file or external database needed. Ideal for Unraid and similar NAS environments where running multiple containers is incon ／ > `POSTGRES_PASSWORD` is omitted -- a strong random password is auto-generated on first start and saved to `/data/.postgres_password`. Pass `-e POSTGRES_PASSWORD=yourpassword` explicitly if you need a known value (e.g. to connect with an external DB tool).",
+     "lines": [
+      149,
+      160
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用数据库存储行程与遥测数据的车辆应用，README 描述其为自托管 web app 并将 PostgreSQL 打包进部署镜像。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GarageStack is a free, open-source web app for **modern MG cars**, the ones built by SAIC Motor such as the MG4, MG5, ZS EV and HS PHEV. It signs in to the SAIC iSmart API, the same backend the official MG iSmart app uses, and turns what your car reports into something worth opening:",
+   "evidence_lines": [
+    11
+   ]
+  },
+  "fn": "joszz/GarageStack",
+  "sha": "99a29628e712",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11188,5 +11188,149 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "52e03d0d5625": {
+  "identity": {
+   "one_liner": "SQL 数据管道转换框架，提供编译期检查、测试与安全重命名",
+   "review": "SQLBuild 是一个面向 SQL 与 Python 数据管道的开源转换框架，提供编译期引用校验、契约检查、跨模型测试、端到端场景回放，以及保留表历史的 rename/mv 迁移能力，状态以 append-only 表存放在用户自己的仓库中，无需外部状态库。面向数据工程师，通过 pip 安装，编译器由 Rust 实现，仓库执行用 Python。",
+   "highlights": [
+    "提供编译期检查：引用解析、SQL 校验、列类型推断与列血缘计算，支持用 Python 自定义规则",
+    "支持跨模型 SQL 测试、端到端场景回放、数据审计与 dev/prod 差异比较",
+    "sqb rename/mv 在迁移已有表的同时保留表历史，并通过兼容视图保持旧名可用"
+   ],
+   "use_cases": [
+    "数据仓库 SQL 转换管道的开发与重构",
+    "CI 中基于 fixture 数据的端到端管道测试",
+    "增量模型的重命名与表结构迁移"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|Supported|",
+     "lines": [
+      155
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|Beta|",
+     "lines": [
+      158
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据仓库 SQL 管道服务的转换/测试框架，通过适配器连接多种仓库而非作为应用使用某个库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，单一许可，无付费版",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "and safe renames to your SQL, so change stops being risky. It is a free, open-source framework for ／ ## Warehouses ／ |PostgreSQL|Supported|",
+   "evidence_lines": [
+    11,
+    148,
+    155
+   ]
+  },
+  "fn": "chio-labs/sqlbuild",
+  "sha": "52e03d0d5625",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "81f8ca83324a": {
+  "identity": {
+   "one_liner": "Rust 编写的通知服务，单二进制，仅依赖 PostgreSQL 存储",
+   "review": "notifyd 是一个用 Rust 实现的通知服务，通过单个 API 调用发送电子邮件、短信、WhatsApp、推送和应用内收件箱消息，内置队列、优先级、重试与提供商故障转移，并提供 MCP 服务器供 AI 代理运维。面向需要统一通知发送能力的应用开发者与运维人员；其限制是仅支持 PostgreSQL 作为存储依赖。",
+   "highlights": [
+    "提供 email、SMS、WhatsApp、push、in-app inbox 多通道发送，含队列、优先级、限速、重试与提供商故障转移",
+    "内建 Streamable HTTP MCP 服务器与 Agent Skills，运维操作（digest、任务重试、抑制列表等）可作为 MCP 工具供代理调用",
+    "单二进制部署，PostgreSQL 是唯一存储依赖，无需 Redis 或消息代理；提供 REST API、Prometheus 指标与 Webhooks"
+   ],
+   "use_cases": [
+    "应用统一发送密码重置、订单、营销活动等事务与营销通知",
+    "通过 AI 代理（Claude Code、Cursor 等）以 MCP 工具方式运维通知实例",
+    "自托管的多项目通知基础设施，含订阅偏好、退订与审计需求"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "One 12 MB Rust binary, PostgreSQL only. Queues, retries, provider failover and quiet hours are handled for you, and an AI agent can run it over MCP. ／ └───────────────────────── PostgreSQL only ──────────────────────────┘ ／ dashboard to host: PostgreSQL is the only dependency.",
+     "lines": [
+      6,
+      39,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 是其唯一存储依赖，通知状态存于 Postgres，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README L52 提到 Self-hosted, MIT）",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One 12 MB Rust binary, PostgreSQL only. Queues, retries, provider failover and quiet hours are handled for you, and an AI agent can run it over MCP. ／  dashboard to host: PostgreSQL is the only dependency.",
+   "evidence_lines": [
+    6,
+    45
+   ]
+  },
+  "fn": "rmzlb/notifyd",
+  "sha": "81f8ca83324a",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

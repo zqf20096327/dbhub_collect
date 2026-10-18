@@ -10547,5 +10547,135 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e6829bdd9c6c": {
+  "identity": {
+   "one_liner": "本地自托管 AI 编程智能体，MCP 原生带沙箱与向量记忆",
+   "review": "Spark 是一个完全在本地运行的 AI 编程助手，提供 Web、桌面、TUI、CLI 四种形态及 ACP/MCP 服务模式，内置四级沙箱权限、检查点回滚、向量长期记忆，并支持任意 OpenAI 兼容模型端点。面向希望代码与密钥不出本机的开发者，需 Python 3.11+，无 API key 时仅以演示模式运行。",
+   "highlights": [
+    "提供 Web UI、桌面窗口、终端 TUI、CLI 四种运行形态，并可作 MCP server 与 ACP agent 运行",
+    "实现四级沙箱权限体系、受保护路径列表与六种审批模式",
+    "包含向量长期记忆（embeddings + 可选 reranker）与会话检查点回滚"
+   ],
+   "use_cases": [
+    "本地隐私环境下通过 LLM 进行代码阅读、编辑与重构",
+    "通过 MCP 将内置工具暴露给其他 MCP 客户端",
+    "在 CI 或脚本中以 CLI 方式自动化执行编码任务"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未提及使用或适配任何数据库，仅描述本地运行的 AI 编程智能体功能",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Code stays with you. Keys stay with you.** A self-hosted AI coding assistant that runs entirely on your machine — zero privacy leaks, full control. ／ |MCP server|`spark mcp-serve`|Expose every built-in tool to other MCP clients| ／ |Tools|File read/write, apply_edit with AST syntax gate, grep/glob, shell, background jobs, Jupyter, web search/fetch, full Git suite, worktrees|",
+   "evidence_lines": [
+    9,
+    99,
+    106
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "badhope/spark",
+  "sha": "e6829bdd9c6c",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c69cb1eea37c": {
+  "identity": {
+   "one_liner": "自托管短链接服务，单二进制 + SQLite 存储",
+   "review": "Sani 是一个自托管短链接及文本/文件分享服务，面向单实例、单管理员的个人部署场景。使用 Go 编写为单个二进制，内嵌管理界面，用 SQLite 存储元数据与文本，本机目录存文件，重定向从内存缓存读取并聚合写回 SQLite。0.x 阶段，官方说明不支持多用户或主主副本部署。",
+   "highlights": [
+    "单个 Go 二进制内嵌管理界面，无需外部数据库或缓存服务",
+    "重定向目标使用内存缓存，点击计数聚合写入 SQLite",
+    "支持链接、文本（最大 1 MB）和文件分享，提供标签、过期时间、访问次数限制和 API token"
+   ],
+   "use_cases": [
+    "个人自托管短链接服务",
+    "文本片段和配置文件的临时分享",
+    "通过 HTTP API 或书签工具在脚本中生成短链"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required. ／ - Redirect targets live in a sharded in-memory cache in front of SQLite. Misses are cached separately and bounded, so a scan for random slugs can't evict real links, and concurrent misses for the same slug share one database read. ／ - Counting a click is an in-memory increment. Aggregated counts reach SQLite every two seconds in one transaction, and are flushed on shutdown.",
+     "lines": [
+      3,
+      131,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Sani 是使用 SQLite 存储元数据和文本的自托管链接短链应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required. ／ |`SANI_DATA_DIR`|`data`|Directory for `sani.db` and shared files (`files/`).|",
+   "evidence_lines": [
+    3,
+    67
+   ]
+  },
+  "fn": "DejavuMoe/sani",
+  "sha": "c69cb1eea37c",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9350,5 +9350,104 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8cc0e90edc24": {
+  "identity": {
+   "one_liner": "Rust 表数据迁移引擎，Python 单行 API，有限内存下整表搬移",
+   "review": "apitap 是一个通过数据库自有线协议（COPY、RowBinary、LOAD DATA、逻辑复制、MySQL binlog）在库间整表搬数据的引擎，Rust 实现，Python 包仅是绑定。支持 Postgres、MySQL/MariaDB、ClickHouse 等作为源和目标，提供 replace/append/merge/log_based 模式及批量 CDC。适合需要在低配容器中做大批量数据搬运或增量同步的数据工程人员；当前版本 0.59.0，处于 pre-1.0 阶段。",
+   "highlights": [
+    "支持整表传输与增量加载、基于日志的批量 CDC（Postgres/MySQL→Postgres、ClickHouse、MySQL、BigQuery、Iceberg）",
+    "提供 apitap.transfer 单函数 Python API，无守护进程、无本地状态文件",
+    "内存占用由管道×缓冲区规划，按容器 cgroup 限制设定，与表大小无关；可经 Arrow 协议输出 polars/pyarrow/duckdb/pandas"
+   ],
+   "use_cases": [
+    "数据库间整表迁移与批量数据装载（如 Postgres→ClickHouse）",
+    "从 Postgres/MySQL binlog 做增量 CDC 同步到分析库",
+    "在 Airflow/Kubernetes/cron 中调度的定时数据管道"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (REST catalogs with bearer auth)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "lines": [
+      44,
+      45,
+      46
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL binlog — through its own Rust wire clients, moves tables over parallel ／ |**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (REST catalogs with bearer auth)|",
+     "lines": [
+      7,
+      44,
+      45
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (REST catalogs with bearer auth)| ／ |ClickHouse|`clickhouse://user:pass@host:8123/db` · `clickhouse+https://…:8443/db`|HTTP interface; `wait_end_of_query=1` so a failed INSERT is a failed run; `session_timezone=UTC`; every request pins `limit=0`, `offset=0` and `*_overflow_mode=throw`, so a source user needs `readonly=2` (not 1)|",
+     "lines": [
+      44,
+      45,
+      115
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |MySQL / MariaDB|`mysql://user:pass@host:3306/db?ssl-mode=verify_identity`|TLS is **required for any non-loopback host** since 0.55.1; `ssl-mode` = `disabled` (send in clear, on purpose) · `required` (encrypt, no verify) · `verify_identity` (default off-loopba",
+     "lines": [
+      44,
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定义其为在数据库之间搬移表的传输引擎，为数据库生态服务而非以某库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "apitap is a transfer engine, not an API client. It speaks the databases' own ／ |**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+   "evidence_lines": [
+    5,
+    44,
+    46
+   ]
+  },
+  "fn": "apitap/apitap-lib",
+  "sha": "8cc0e90edc24",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

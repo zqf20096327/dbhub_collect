@@ -9308,5 +9308,261 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2085d9ebb6f5": {
+  "identity": {
+   "one_liner": "本地优先平台与 TypeScript 库，基于 SQLite 实现离线数据",
+   "review": "Evolu 是一个 local-first 平台和 TypeScript 库，围绕 SQLite（含 sqlite-wasm 包）为前端应用提供本地数据能力，支持 React、React Native 等框架，并包含 relay 服务器与多个示例项目。README 主要面向参与 Evolu 开发的贡献者，说明了 pnpm 环境、sqlite-wasm 下载/构建、测试与发布流程；可见内容未涉及安装为依赖的最终用户指南。",
+   "highlights": [
+    "提供 TypeScript 库与 local-first 平台，支持 React、React Native、Svelte、Vue 等示例",
+    "包含 @evolu/sqlite-wasm 包，提供带固定 sha256 校验的 SQLite WASM 构建",
+    "内置 relay 服务器，提供覆盖 unit/integration/bundle/E2E 的测试体系"
+   ],
+   "use_cases": [
+    "在 Web 或移动应用中集成 local-first 数据层",
+    "需要离线优先、基于 SQLite 的前端开发",
+    "参与 Evolu monorepo 的贡献与测试"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "E2E tests load `packages/sqlite-wasm/wasm/sqlite3.wasm`. It is never committed, ／ pnpm sqlite-wasm:download ／ It takes the wasm from the published `@evolu/sqlite-wasm` and writes it only if",
+     "lines": [
+      36,
+      40,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是基于 SQLite（sqlite-wasm/sqlite-core）为应用开发提供数据能力的服务库，而非仅使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Evolu is a local-first platform and TypeScript library. ／ E2E tests load `packages/sqlite-wasm/wasm/sqlite3.wasm`. It is never committed, ／ - `pnpm test:sqlite-core` - Run the tests of Evolu's own SQLite core, with its C tests under AddressSanitizer and UndefinedBehaviorSanitizer, once with hardware and once with software crypto",
+   "evidence_lines": [
+    3,
+    36,
+    124
+   ]
+  },
+  "fn": "evoluhq/evolu",
+  "sha": "2085d9ebb6f5",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ea9cc58ef0f4": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，允许非超级用户创建事件触发器、发布和扩展",
+   "review": "supautils 是一个 PostgreSQL 加载库扩展，通过配置的特权角色代理超级用户，让非超级用户可创建事件触发器、publication、FDW 和扩展，并提供保留角色保护、扩展版本限制等能力。面向无法向最终用户授予 SUPERUSER 的云托管部署场景。仅通过 postgresql.conf 管理，不向数据库添加表或函数。安装方式为源码 make 编译。",
+   "highlights": [
+    "提供特权角色代理机制，支持非超级用户创建 publication、FDW、事件触发器和扩展",
+    "支持保留角色保护与扩展版本限制，全部通过 postgresql.conf 配置管理",
+    "支持扩展自定义脚本和 CREATE EXTENSION 参数覆盖"
+   ],
+   "use_cases": [
+    "云托管 PostgreSQL 环境中向用户开放受限的高级功能",
+    "多租户场景下保护服务专用角色不被终端用户修改",
+    "限制非超级用户可安装的扩展版本"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL version ／ Supautils is an extension that unlocks advanced Postgres features without granting SUPERUSER access. ／ Completely managed by configuration — no tables, functions, or security labels are added to your database. This makes upgrades effortless and lets you apply settings cluster-wide solely via `postgresql.conf`.",
+     "lines": [
+      4,
+      6,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 加载库扩展，为 PostgreSQL 数据库提供权限管理能力，是服务于数据库生态的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Supautils is an extension that unlocks advanced Postgres features without granting SUPERUSER access. ／ It's a loadable library that securely allows creating event triggers, publications, extensions to non-superusers. Built for cloud deployments where giving SUPERUSER rights to end users isn’t an option. ／ Completely managed by configuration — no tables, functions, or security labels are added to your database. This makes upgrades effortless and lets you apply settings cluster-wide solely via `postgresql.conf`.",
+   "evidence_lines": [
+    6,
+    8,
+    10
+   ]
+  },
+  "fn": "supabase/supautils",
+  "sha": "ea9cc58ef0f4",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "51d9c0a0e142": {
+  "identity": {
+   "one_liner": "本地运行的 BIST/TEFAS/黄金外汇投资组合跟踪应用",
+   "review": "一个在本地通过 Docker 运行的投资组合跟踪应用，覆盖 BIST 股票、TEFAS 基金、黄金和外汇，用户手动录入交易后由后端计算平均成本、盈亏、股息并记录每日组合价值。技术栈为 Go API + PostgreSQL + Next.js，数据仅存于本地 Docker volume，价格从 TEFAS、Yahoo Finance 等公开页面抓取，项目定位为个人与教育用途。",
+   "highlights": [
+    "支持手动录入交易并计算含佣金的加权平均成本、已实现/未实现盈亏与股息",
+    "提供价格闹钟、市场行情页、TL/USD 视图及组合价值历史图表",
+    "通过 docker compose 一键启动，数据仅保存在本地 Docker volume 中"
+   ],
+   "use_cases": [
+    "个人跟踪 BIST 股票与 TEFAS 基金组合的本地记账",
+    "无需连接券商账户即可计算持仓成本与盈亏",
+    "离线/本地环境下记录每日组合价值与股息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Kullanıcılar, işlemler ve fiyat geçmişi yalnızca sizin bilgisayarınızdaki Docker volume'unda (`yarmak_postgres_data`) tutulur. Repoda veritabanı dökümü yoktur; her kurulum boş bir veritabanıyla başlar ve fiyatları aşağıdaki kaynaklardan kendisi çeker. ／ |`POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB`|`postgres` / `postgres` / `yarmak`|Veritabanı bilgileri| ／ PostgreSQL için Docker'daki veritabanını kullanmak en kolayı:",
+     "lines": [
+      68,
+      80,
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用以 PostgreSQL 存储用户、交易与价格历史数据，数据库是其存储层而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kullanıcılar, işlemler ve fiyat geçmişi yalnızca sizin bilgisayarınızdaki Docker volume'unda (`yarmak_postgres_data`) tutulur. Repoda veritabanı dökümü yoktur; her kurulum boş bir veritabanıyla başlar ve fiyatları aşağıdaki kaynaklardan kendisi çeker. ／ `docker compose up` sırasıyla PostgreSQL'i başlatır, `backend/sql/schema` altındaki migration'ları goose ile uygular, ardından API'yi ve arayüzü açar.",
+   "evidence_lines": [
+    68,
+    142
+   ]
+  },
+  "fn": "Omerli-Faruk/yarmak-portfoy",
+  "sha": "51d9c0a0e142",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b7e1864292e2": {
+  "identity": {
+   "one_liner": "Go 语言的类型安全查询缓存库，提供过期、并发请求合并与缓存失效",
+   "review": "soroi 是一个 Go 1.22+ 的进程内查询缓存与数据加载协调库，提供类型安全的共享查询、并发请求合并、批量加载、缓存更新与失效，并可通过可选的 Redis 适配器跨进程共享结果。适用于需要在后端服务、CLI/TUI 应用或后台任务中复用缓存数据、去重并发请求的开发者。核心不依赖外部库，Redis 共享缓存为可选组件。",
+   "highlights": [
+    "类型安全的进程内共享查询与缓存，支持请求合并与自动批量加载",
+    "提供缓存更新、按 key 失效与跨实例失效通知，可通过可选 Redis 适配器跨进程共享结果",
+    "提供查询可观测性与诊断事件，支持共享执行预算与 context 取消"
+   ],
+   "use_cases": [
+    "多个 handler/组件读取相同数据时复用缓存并合并并发请求",
+    "写入操作后需要协调相关查询的缓存更新与刷新",
+    "在容量受限的数据库或服务上约束并发回调与排队负载"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 表明它是应用进程内的通用查询缓存库，数据库操作由调用方提供，未声明针对特定数据库生态的服务能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A typed, dependency-free query client for Go 1.22 and later ／ provide the HTTP requests, database operations, or other loaders; soroi manages ／ shared result cache, including a separate Redis adapter.",
+   "evidence_lines": [
+    8,
+    22,
+    36
+   ]
+  },
+  "fn": "Waterkyuu/soroi",
+  "sha": "b7e1864292e2",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

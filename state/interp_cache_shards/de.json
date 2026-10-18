@@ -10063,5 +10063,71 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ababb83a282b": {
+  "identity": {
+   "one_liner": "本地运行的 Python 编码代理，单程序提供纯网页界面",
+   "review": "Tacit 是一个可在本地自行运行的编码代理：读取文件、执行命令、编写代码、搜索网页并连接外部工具，全部在浏览器中使用。它面向希望在本地掌控代理行为、关注隐私与可控性的开发者，关键机制是以单个 Python 程序直接服务纯网页，无构建步骤、无数据库安装、无账号和遥测；Windows 上沙箱隔离不可用，仅报告超时机制。",
+   "highlights": [
+    "提供 Minimal 与 Default 等配置档案，系统提示与工具 schema 的固定开销以字符/令牌计并列可复现",
+    "提供交付保证机制：回合结束前强制写出并运行任务目标文件，直至任务自检通过",
+    "支持上下文压缩（令牌预算尾部保留、廉价预清理、确定性回退摘要）与并发子代理"
+   ],
+   "use_cases": [
+    "希望在本地浏览器中运行、无账号与遥测的编码代理场景",
+    "需要控制每轮固定令牌开销与上下文压缩策略的代理使用",
+    "要求任务产物强制落盘并自检通过的自动化编码任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Retrieval is keyword based, using SQLite full-text search when the build provides it and plain",
+     "lines": [
+      403
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该程序内部检索基于 SQLite 全文搜索（可用时），属使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Tacit is a coding agent you run yourself and use in your browser. It reads your files, runs ／ The whole thing is one Python program serving plain web pages. There is no build step, no frontend",
+   "evidence_lines": [
+    5,
+    9
+   ]
+  },
+  "fn": "SebSilent/Tacit",
+  "sha": "ababb83a282b",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

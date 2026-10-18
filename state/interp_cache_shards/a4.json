@@ -8726,5 +8726,144 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0208ff5856f0": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件，基于 SQLite 的审批门控记忆层",
+   "review": "为 DeepSeek Harness 提供跨会话记忆的 DSH 插件：通过类型化 ctx.memory 能力缝读写本地 SQLite 存储（只读 MCP stdio 服务），所有写入经不可绕过的审批门控并记录审计表，记忆按 user/agent 轨道与分层预算封顶，会话内注入冻结快照。面向使用 DeepSeek Harness 的开发者，状态自 2026-10-05 起标记为 FROZEN（冻结维护）。",
+   "highlights": [
+    "写入路径（add/replace/remove/seed）全部经服务内审批瀑布，模型路径不可绕过，拒绝写入也生成 *-denied 审计行",
+    "本地 SQLite 存储（node:sqlite、WAL、0600 权限），零网络、零凭证，并支持以 readOnly 模式打开",
+    "按 user/agent 双轨道 × global/workspace 分层 × 每代理隔离，硬字符预算（默认 user 2000 / agent 4000），快照每次会话冻结一次"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 会话提供带审批与审计的持久跨会话记忆",
+    "需要对 agent 记忆写入进行人工审批与事后审计重建的场景",
+    "受字符预算约束的分层记忆管理（用户事实与环境约定分轨存储）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected int",
+     "lines": [
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将本地 SQLite 用作记忆数据的存储后端，本身不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "Apache-2.0（属 95 个全 Apache-2.0 的 DSH 插件家族）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected into the system prompt. ／ |Harness|DeepSeek Harness `dsh-v0.2.1-alpha.2` (adapted 2026-10-12; `0.2.1-alpha.1` since 2026-10-04): the `0.1.7` line replaced the whole settings registration surface (`installSettingsSection` / `SettingsProvider.installSection` / `SettingsNamespace` / `SettingsScope`) with live Config forms, so both halves follow the new contract — a form's namespace is the profile entry id (`memento`), its editable fields are the `.volatile()` ones, and an accepted edit is committed into the running plugin instead of remounting it. The browser half reads that form through `ctx.configForms.get(entryId)` (the `ctx.settingsScope` service is gone). Both halves keep their `installSection` / `settingsScope` branches for the `0.1.2-rc.1`, `0.1.5-alpha.1` and `0.1.6-0` lines the peer range still advertises, and the new `>=0.1.7-0 <0.2.0` clause is what makes the target host itself installable (the old range excluded it by semver's prerelease rule). Still no plugin event-registration surface — `KNOWN_SESSION_EVENT_TYPES` does not carry `memory/*`, and `Session.append`'s third argument only carries a `SurfaceIntent` for surface-eligible types, so the audit gate stays adaptive and skips as before (it says so once per process and in `/memory audit`). Type evidence comes from three faces: the local checkout's built types, the pinned published line in `node_modules`, and the browser half under a DOM lib. **Re-verified against `0.2.1-alpha.2`:** every plugin-facing seam this package touches is byte-identical between the two tags (`packages/settings/settings/src/**`, `packages/client/ui-settings/src/**`, `packages/client/ui-slots/src/**`, `packages/client/modules/src/**`, `packages/interaction/user-approval/**`, `vendor/loader/src/**`, `vendor/schemastery/src/**`, `packages/boot/app-boot/src/config-schema/**`), the session format is still v4 with no v4→v5 migration, and `KNOWN_SESSION_EVENT_TYPES` gained only one first-party type — so the adaptive audit gate stays closed and **no code change was needed**. What moved is the pinned dev/test line (`0.2.1-alpha.2`, plus its `pnpm-workspace.yaml` release-age allowlist entries) and the compatibility baseline; `npm test` (201 cases, including the real-Loader composition suite), `typecheck:ci`, coverage, artifact, conformance and five-language gates all pass against it. alpha.2 does add a `plugin:<name>/*`-namespaced `appendPluginRecord` writer, but the host's own `packages/core/session/README.md` forbids out-of-repo callers and the mandatory `plugin:` prefix cannot express `memory/*`, so this package does not adopt it.| ／ - **The audit gap is visible.** `/memory audit` lists the plugin audit table and appends one line when the session-log side is not written: this harness does not know the `memory/*` session event types, and appending unknown types would make the session unloadable, so writes are audited through `approval/asked` + `approval/decided` and the plugin's table instead. The gate is adaptive — the line disappears on its own once the host knows those types.",
+   "evidence_lines": [
+    69,
+    62,
+    74
+   ]
+  },
+  "fn": "PerryLink/dsh-memento",
+  "sha": "0208ff5856f0",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d7428adc2aa5": {
+  "identity": {
+   "one_liner": "本地 LLM 可观测性工具：单二进制+单 SQLite 文件接收并展示 OpenTelemetry 追踪",
+   "review": "spoor 接收 LLM 应用与编码代理发出的 OpenTelemetry 追踪，存储为单个 SQLite 文件，展示每次模型调用的上下文变化、提示缓存失效点、token 用量与成本估算，并提供只读 MCP 端点和 HTML 导出。面向本地排查 agent 行为的开发者；无账号无外呼，仅支持 OTLP/HTTP 接收，无 gRPC 与鉴权。",
+   "highlights": [
+    "接收 OTLP/HTTP 追踪并存入单个 SQLite 文件，schema 有文档",
+    "展示每次模型调用的上下文构成、缓存中断位置、token 与成本计算",
+    "提供只读 MCP 端点与单文件 HTML 导出"
+   ],
+   "use_cases": [
+    "本地检查 Claude Code 等 agent 的上下文与缓存行为",
+    "分析 LLM 应用的 token 用量与成本构成",
+    "让 agent 通过 MCP 读取追踪数据"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One binary, one SQLite file, OpenTelemetry in. No account, no key, no cloud. ／ - **One SQLite file.** It is the storage, the backup unit and the read API: open it with `sqlite3`, the schema is documented and stable. ／ docker run -d -v spoor-data:/data -e SPOOR_SQLITE_PATH=/data/spoor.db \\",
+     "lines": [
+      6,
+      35,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "spoor 使用 SQLite 作为自身存储，是为 LLM 可观测性服务的工具而非以数据库为核心的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One binary, one SQLite file, OpenTelemetry in. No account, no key, no cloud. ／ spoor receives OpenTelemetry traces from LLM applications and coding agents, stores them, and shows what each model call added to its context, where the prompt cache broke, and where the time, the tokens and the money went. Your agent can read the traces too. ／ - **One SQLite file.** It is the storage, the backup unit and the read API: open it with `sqlite3`, the schema is documented and stable.",
+   "evidence_lines": [
+    6,
+    18,
+    35
+   ]
+  },
+  "fn": "jhisse/spoor",
+  "sha": "d7428adc2aa5",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7608,5 +7608,60 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c0ef124bf7f2": {
+  "identity": {
+   "one_liner": "追踪 Hetzner 独立服务器竞价价格的应用",
+   "review": "该应用每 5 分钟从 Hetzner 抓取独立服务器竞价数据，提供筛选、价格历史与目标价提醒，用于帮助用户挑选竞价配置。架构采用 SvelteKit 静态站点加 Cloudflare Workers 后端，客户端以 DuckDB WASM 查询数据，后端用 Cloudflare D1 存储提醒数据；面向 Hetzner 竞价买家。非 Hetzner 官方项目。",
+   "highlights": [
+    "每 5 分钟从 Hetzner API 抓取竞价与云服务器可用性数据，DuckDB 数据库增量更新并保留 90 天记录",
+    "提供价格历史查询、条件筛选与目标价提醒，支持邮件与 Discord 通知通道",
+    "客户端使用 DuckDB WASM 查询数据，后端采用 Cloudflare D1 双表存储策略进行去重与告警匹配"
+   ],
+   "use_cases": [
+    "跟踪 Hetzner 独立服务器竞价的价格走势与最低价",
+    "设置目标价格，在配置达标时接收邮件或 Discord 通知",
+    "监控 Hetzner 云服务器型号的可用性变化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是使用 DuckDB 与 Cloudflare D1 存储竞价数据的应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Server Radar started as a purely static, client-side application where users could ／ statically built using SvelteKit. DuckDB is still used for querying the database ／ - **Cloudflare Worker**: Imports directly into D1 for real-time alert processing",
+   "evidence_lines": [
+    26,
+    32,
+    38
+   ]
+  },
+  "fn": "elsbrock/hetzner-radar",
+  "sha": "c0ef124bf7f2",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

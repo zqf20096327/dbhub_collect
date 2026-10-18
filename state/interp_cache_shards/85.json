@@ -10774,5 +10774,78 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "798b114de72a": {
+  "identity": {
+   "one_liner": "将网站内容转为可分享 RAG 聊天机器人的 SaaS 应用",
+   "review": "Site2Chat 提供 FastAPI 后端和 React 前端，用户提交网站 URL 后由爬取任务将页面分块存入 PostgreSQL+pgvector，经 RAG 检索生成回答，聊天机器人可分享或嵌入。使用 Supabase JWT 做认证，OpenRouter 密钥加密存储。适合想在自有网站上快速搭建基于站点内容问答机器人的用户。",
+   "highlights": [
+    "支持从网站 URL 抓取页面并分块存入 PostgreSQL+pgvector，用于 RAG 检索回答",
+    "提供认证的聊天机器人管理 API（创建/更新/删除/触发摄取/配置 LLM）",
+    "使用 Supabase JWT 鉴权，并对用户 OpenRouter API 密钥加密存储"
+   ],
+   "use_cases": [
+    "基于某网站内容构建可分享或嵌入的 AI 问答机器人",
+    "需要会话与消息持久化、按用户隔离管理聊天机器人的 SaaS 场景",
+    "基于 pgvector 向量检索的 RAG 应用参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL + pgvector",
+     "lines": [
+      94
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统将页面、分块、会话等数据存入 PostgreSQL+pgvector，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Site2Chat is a FastAPI backend and React + Vite frontend that together provide a workflow for creating chatbots from website content. The backend validates website URLs, ingests site pages into a PostgreSQL + pgvector model, stores page and chunk records, and exposes authenticated routes for chatbot management and retrieval-augmented chat. The frontend in `frontend/` provides a dashboard and chat experience for end users and chatbot owners. ／ - PostgreSQL + pgvector ／ - A PostgreSQL-compatible database with the pgvector extension",
+   "evidence_lines": [
+    11,
+    94,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "rohitnath-dev/site2chat",
+  "sha": "798b114de72a",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

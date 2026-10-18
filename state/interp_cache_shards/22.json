@@ -9839,5 +9839,110 @@
   "generated_at": "2026-10-14",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a0487e3c9f2": {
+  "identity": {
+   "one_liner": "自托管数据决策智能体：基于语义层做自然语言问数与零LLM判定",
+   "review": "Trove 是一个可自托管的数据决策智能体，用户用自然语言提问，系统沿语义编译、护栏校验的查询管线生成带证据的 SQL 答案，并提供归因分析、定时阈值判定与行动提案验收。面向需要受治理问数与指标监控的业务与数据团队；要求先经 /kb init 建立人工确认的语义模型，模型外的提问会被拒绝，且对话依赖外部 LLM 凭证。",
+   "highlights": [
+    "支持通过 /kb init 基于实时 schema 起草语义模型，模型外提问将被拒绝",
+    "生成的 SQL 经零 LLM 规则链、AST 防火墙与执行代价守卫校验，并支持反思回滚",
+    "支持八种数据源（SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery），并提供 Web UI、REST、MCP 与 CLI 接口"
+   ],
+   "use_cases": [
+    "业务人员用自然语言查询数据库并获得经校验的答案与分析",
+    "按语义模型定义阈值规则，对指标做定时异常判定与告警",
+    "通过管理台审批语义变更、行动提案与自动学习的知识入库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |一份能登录、能管理的完整部署|Docker Compose(前端 + 后端 + PostgreSQL)|15 分钟|Docker| ／ 1. **连接** —— 一个数据库 URL:`--datasource postgres://user:pass@host:5432/db`。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力|",
+     "lines": [
+      13,
+      148,
+      163,
+      205
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "服务端部署下,同一流程在管理端完成(数据源注册 → KB init → 草稿审批)。逐步指南(MySQL / Doris / PostgreSQL / ClickHouse / DuckDB,以及云仓 Snowflake / BigQuery,含管理台与本地 REPL 两条路径):接入数据源。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+     "lines": [
+      167,
+      205,
+      208
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+     "lines": [
+      205,
+      208
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "服务端部署下,同一流程在管理端完成(数据源注册 → KB init → 草稿审批)。逐步指南(MySQL / Doris / PostgreSQL / ClickHouse / DuckDB,以及云仓 Snowflake / BigQuery,含管理台与本地 REPL 两条路径):接入数据源。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+     "lines": [
+      167,
+      205,
+      208
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明八种数据源按需装驱动并提供统一查询管线，是为数据库提供问数与分析能力的工具，而非以某库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "1. **连接** —— 一个数据库 URL:`--datasource postgres://user:pass@host:5432/db`。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+   "evidence_lines": [
+    163,
+    205,
+    208
+   ]
+  },
+  "fn": "Nivane/trove",
+  "sha": "5a0487e3c9f2",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

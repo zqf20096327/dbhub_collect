@@ -8690,5 +8690,72 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f99d5b73d297": {
+  "identity": {
+   "one_liner": "PostgreSQL 备份与恢复工具，支持并行、增量与远程仓库",
+   "review": "pgBackRest 是用于 PostgreSQL 的备份、恢复与 WAL 归档工具，面向需要管理大规模 PostgreSQL 集群的运维人员。它通过自定义协议在本地或远程（TLS/SSH）执行备份与归档，支持全量/差异/增量备份、备份保留策略、校验和验证，以及 S3/Azure/GCS/SFTP 仓库与加密。",
+   "highlights": [
+    "支持全量、差异与增量备份（文件级或块级），并可设置备份保留与归档过期策略",
+    "通过自定义协议支持本地或远程（TLS/SSH）备份与恢复，并提供并行处理与流式压缩",
+    "仓库可存放于 S3、Azure、GCS 兼容对象存储或 SFTP，支持仓库加密与版本化对象存储的时间点读取",
+    "支持从 standby 备份、Delta 恢复、表空间重映射，并兼容十个 PostgreSQL 版本"
+   ],
+   "use_cases": [
+    "为生产环境 PostgreSQL 集群制定备份与 PITR 归档方案",
+    "需要在远程或对象存储上保存备份副本并控制保留策略的场景",
+    "从备库执行备份以降低主库负载，或利用快照直接拉起集群加速恢复"
+   ],
+   "verification": "identity 所述均可在 README 对应章节（Introduction、Features 各小节）中直接验证。"
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pgBackRest Reliable PostgreSQL Backup & Restore ／ pgBackRest is a reliable backup and restore solution for PostgreSQL that seamlessly scales up to the largest databases and workloads. ／ A custom protocol allows pgBackRest to backup, restore, and archive locally or remotely via TLS/SSH with minimal configuration. An interface to query PostgreSQL is also provided via the protocol layer so that remote access to PostgreSQL is never required, whic",
+     "lines": [
+      1,
+      5,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为 PostgreSQL 的备份与恢复解决方案，属于为数据库生态服务的备份工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pgBackRest is a reliable backup and restore solution for PostgreSQL that seamlessly scales up to the largest databases and workloads.",
+   "evidence_lines": [
+    5
+   ]
+  },
+  "fn": "pgbackrest/pgbackrest",
+  "sha": "f99d5b73d297",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9158,5 +9158,209 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "988a1ae06721": {
+  "identity": {
+   "one_liner": "为 AI 编码代理提供持久会话记忆的 MCP 服务器",
+   "review": "Prism Coder 是一个 MCP 服务器，为 Claude Code、Cursor、Codex 等 AI 编码工具提供跨会话的持久记忆，内置 2B–27B 开放权重模型并通过本地 Ollama/oMLX 做离线工具路由，附 savings 计量与仪表盘。面向使用 AI 代理的开发者，基础功能本地免费，云同步等需付费订阅。README 未展示数据库相关内容。",
+   "highlights": [
+    "通过 MCP 协议为 Claude Code、Cursor、Codex 等主机提供跨会话持久记忆",
+    "内置 2B–27B 开放权重模型，经 Ollama/oMLX 做本地离线工具路由",
+    "提供本地节省 token 的计量命令 prism savings 与 Mind Palace 仪表盘"
+   ],
+   "use_cases": [
+    "AI 编码代理的跨会话项目状态恢复",
+    "本地离线工具路由以减少云端 token 消耗",
+    "多 AI 工具统一接入配置（prism connect）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 AI 编码代理主机提供记忆与路由的 MCP 服务器组件，不依赖某个数据库存储数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Prism Coder is an MCP server that gives Claude, Cursor, and other AI tools long-term memory that survives across sessions. It ships with the open-weight `prism-coder` model fleet (2B–27B) for fast, offline tool-routing — no cloud required. And it keeps score: every call served locally is metered, so `prism savings` shows the token volume that never reached your cloud model — measured honestly, in tokens. ／ - **One setup for every agent** — `prism connect` configures Claude Code,",
+   "evidence_lines": [
+    12,
+    36
+   ]
+  },
+  "fn": "dcostenco/prism-coder",
+  "sha": "988a1ae06721",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d6cf65515b37": {
+  "identity": {
+   "one_liner": "C++ 单二进制自托管 BaaS，自动生成 REST API 与实时推送",
+   "review": "MantisBase 是一个单二进制运行的后端即服务平台，提供自动生成的 CRUD REST 接口、JWT 认证、SSE 实时更新、文件上传和 Web 管理面板，可作为 C++ 库嵌入应用。数据默认存 SQLite，也支持 PostgreSQL，适合需要快速搭建自托管后端的开发者。",
+   "highlights": [
+    "创建表后即时生成 CRUD REST 端点",
+    "内置 JWT 认证与表达式权限规则，支持 SSE 实时变更流",
+    "可作为 C++ 库嵌入应用，并提供 JavaScript 扩展机制"
+   ],
+   "use_cases": [
+    "自托管后端服务，为前端应用快速提供 REST API",
+    "嵌入式设备或桌面应用的后端组件",
+    "需要 SQLite/PostgreSQL 存储与实时 SSE 推送的小型应用"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Realtime updates** — SSE streams for live database changes (SQLite & PostgreSQL) → API Reference ／ MantisBase supports SQLite (default) and PostgreSQL, with all options configurable via CLI flags or environment variables:",
+     "lines": [
+      67,
+      77
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Realtime updates** — SSE streams for live database changes (SQLite & PostgreSQL) → API Reference ／ MantisBase supports SQLite (default) and PostgreSQL, with all options configurable via CLI flags or environment variables:",
+     "lines": [
+      67,
+      77
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为应用提供以 SQLite/PostgreSQL 为存储的 API 服务层，属于围绕数据库构建的服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**MantisBase is a self-hosted C++20 BaaS — one binary gives you instant REST APIs, authentication, realtime SSE, file uploads, and a web admin dashboard.** ／ MantisBase supports SQLite (default) and PostgreSQL, with all options configurable via CLI flags or environment variables:",
+   "evidence_lines": [
+    12,
+    77
+   ]
+  },
+  "fn": "allankoechke/mantisbase",
+  "sha": "d6cf65515b37",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e0eea3671e8f": {
+  "identity": {
+   "one_liner": "基于 Python 3.11 与 ClickHouse 的时间序列价格预测系统",
+   "review": "该项目是一套运行在 Windows 上的时间序列预测与熵分析代码，读取 ClickHouse 中的数据，生成价格预测点和未来价格曲线，并附带新闻 RSS 窗口与事件日志功能。作者定位其面向安全审计中的随机数生成器弱点分析场景。README 未提供依赖安装的固定指南，建议借助 DeepSeek 聊天生成安装命令，且仅支持 Python 3.11 与 ClickHouse 18.16.1 的固定版本组合。",
+   "highlights": [
+    "将全部数据存储与处理迁移至 ClickHouse 列式数据库",
+    "提供 BTC/USDT 价格图表、RSS 新闻窗口和 EVENT_JOURNAL.json 事件日志记录",
+    "严格限定运行环境：Python 3.11 与 ClickHouse 18.16.1，且仅在 Windows 上开发测试"
+   ],
+   "use_cases": [
+    "加密货币价格时间序列的预测与曲线构建",
+    "新闻与市场事件的关联记录与分析",
+    "随机数生成器弱点的熵分析场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "We are fully migrating all data storage and processing to **ClickHouse** — a columnar DBMS optimized for analytical queries. ／ **⚠️ CRITICAL: This project runs ONLY on Python 3.11 and ClickHouse 18.16.1.**",
+     "lines": [
+      16,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 ClickHouse 作为自身数据存储与处理后端来运行，README 未提供面向数据库生态的通用工具功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "We are fully migrating all data storage and processing to **ClickHouse** — a columnar DBMS optimized for analytical queries. ／ **⚠️ CRITICAL: This project runs ONLY on Python 3.11 and ClickHouse 18.16.1.** ／ This code predicts the exact time and price of a future price point, and can also construct a curve of future prices. It can be used to decipher any process that has a graph—for example, a graph of mutual understanding between artificial intelligence and a human. Notably, DeepSeek’s computing power is not used for the prediction; the data is processed on an ordinary computer. The system fully replicates Nikola Tesla’s resonator in the form of code.",
+   "evidence_lines": [
+    16,
+    27,
+    2
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ConsciousGroupMind/SKYNET-800---Collective-Intelligence-Forecasting-System",
+  "sha": "e0eea3671e8f",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

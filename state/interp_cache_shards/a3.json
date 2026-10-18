@@ -9141,5 +9141,78 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9692932cf73b": {
+  "identity": {
+   "one_liner": "单可执行文件的自托管私有云，用 Go+SQLite 存储文件元数据",
+   "review": "HomeLite 是一个用 Go 编写、编译为单个可执行文件的自托管私有云服务器，供用户在局域网内通过浏览器上传、整理和下载文件。它使用 SQLite 数据库（含 WAL）持久化用户、会话与设置等元数据，文件本体存于 data/files 目录，提供管理面板和 JSON API，无 CGO 和外部依赖。",
+   "highlights": [
+    "单可执行文件运行，仅依赖 Go 标准库和少量纯 Go 包，无 CGO",
+    "配置持久化于 SQLite 数据库 settings 表，支持环境变量与命令行标志覆盖",
+    "提供 JSON API 与管理员面板，支持用户、配额、会话管理"
+   ],
+   "use_cases": [
+    "在局域网内自建跨设备文件存取服务",
+    "需要零外部依赖的单文件部署场景"
+   ],
+   "eco": "app",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "HomeLite persists configuration in the `settings` table of the SQLite database. Most settings can be changed at runtime through the admin panel; a few require a restart. Settings are written through `PUT /api/admin/settings` and take effect immediately unless  ／ ├── homelite.db SQLite database (metadata, users, sessions, settings) ／ Use SQLite's online backup API via the `sqlite3` CLI. This works while the server is running and produces a consistent snapshot.",
+     "lines": [
+      111,
+      177,
+      384
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该程序用 SQLite 数据库存放元数据、用户、会话与设置，SQLite 是其内置数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "HomeLite persists configuration in the `settings` table of the SQLite database. Most settings can be changed at runtime through the admin panel; a few require a restart. Settings are written through `PUT /api/admin/settings` and take effect immediately unless marked otherwise. ／ ├── homelite.db          SQLite database (metadata, users, sessions, settings) ／ - Drag files onto the dashboard to upload. Progress is shown per file. Multiple files upload sequentially through the upload semaphore.",
+   "evidence_lines": [
+    111,
+    177,
+    203
+   ]
+  },
+  "fn": "atharvaphadnis-ai/HomeLite",
+  "sha": "9692932cf73b",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

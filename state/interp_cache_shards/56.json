@@ -9016,5 +9016,118 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8bab0ac91c81": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，通过 COPY 命令读写 Parquet 文件",
+   "review": "pg_parquet 是一个 PostgreSQL 扩展，基于 Apache Arrow 和 pgrx 实现，让用户在数据库内通过 COPY TO/FROM 命令读写位于 S3、Azure Blob、GCS、http(s) 或本地文件系统的 Parquet 文件，还支持从 Parquet 推断建表和查询文件 schema/元数据。适合需要在 Postgres 与 Parquet 生态间搬数据的开发者与数据工程师。需从源码用 Rust/pgrx 构建。",
+   "highlights": [
+    "通过 COPY 命令在 Postgres 表与 S3/Azure/GCS/http(s)/本地/标准流中的 Parquet 文件间读写数据",
+    "支持从 Parquet 文件推断列定义并建表（definition_from/load_from）",
+    "提供 parquet.schema、parquet.metadata、parquet.file_metadata、parquet.kv_metadata 函数查看文件 schema 与元数据"
+   ],
+   "use_cases": [
+    "将 Postgres 表或查询结果导出为 Parquet 供分析/归档",
+    "从 Parquet 文件导入数据到 Postgres 表（含类型转换与 schema 推断）",
+    "在 SQL 中检查 Parquet 文件的 schema、列统计与自定义元数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Ap",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 提供数据读写能力的扩展，属数据库生态工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Apache Arrow project to read and write Parquet files and pgrx project to extend PostgreSQL's `COPY` command. ／ 2. You can ingest data from Parquet files to Postgres tables with type coercion and schema inference,",
+   "evidence_lines": [
+    8,
+    44
+   ]
+  },
+  "fn": "CrunchyData/pg_parquet",
+  "sha": "8bab0ac91c81",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::Homomorphically Encrypted GPU Accelerated Database": {
+  "identity": {
+   "one_liner": "基于同态加密并由GPU加速的数据库",
+   "review": "该仓库实现一个在同态加密下运行、并利用 GPU 加速查询的关系型数据库，面向需要在密文数据上直接执行计算的场景，如雾计算环境中不希望解密数据的部署。仓库使用 C++ 与 CMake 构建，并使用 ANTLR4 处理查询语法解析。基于简介推断，具体安装方式、支持的操作与性能特性无法从现有信息确认。",
+   "highlights": [
+    "在同态加密数据上执行关系型数据库操作",
+    "使用 GPU 加密计算加速",
+    "使用 ANTLR4 进行语法解析，C++/CMake 构建"
+   ],
+   "use_cases": [
+    "密文数据不可解密环境下的数据查询（如雾计算节点）",
+    "加密数据的隐私保护计算研究",
+    "同态加密数据库相关实验与评估"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "它本身是一个数据库引擎，而非为既有数据库生态服务的工具或普通应用，证据不足以归入 tool/app。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Homomorphically Encrypted GPU Accelerated Database"
+  },
+  "fn": "Matrix7043/HEGA-DB",
+  "sha": "desc::Homomorphically Encrypted GPU Accelerated Database",
+  "source": "desc",
+  "generated_at": "2026-10-18",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

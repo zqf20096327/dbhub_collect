@@ -8069,5 +8069,71 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f8e157aace59": {
+  "identity": {
+   "one_liner": "基于 PocketBase 的实时群聊应用",
+   "review": "一个实时群聊应用，前后端一体：PocketBase 二进制承担认证、数据存储（SQLite）与实时推送，前端为无框架的 TypeScript（约43KB JS）。提供房间、私信、文件附件、搜索、表情反应、Telegram 桥接和 PWA 安装。适合需要自托管轻量聊天工具的小团队或社区，部署依赖 Node.js ≥22 与 PocketBase。",
+   "highlights": [
+    "后端为单个 PocketBase 二进制，数据存储于 SQLite，通过 pb_hooks 与 pb_migrations 实现服务端逻辑与访问控制",
+    "支持房间/私信、附件上传、实时消息同步、全文搜索及可选 Telegram 桥接",
+    "提供 systemd/Dokku/Docker 部署方式，支持 HTTPS、速率限制与自动备份（可存 S3）"
+   ],
+   "use_cases": [
+    "小团队或社区自托管群聊",
+    "需要私信与文件共享的轻量协作场景",
+    "通过 Telegram 桥接打通 Telegram 群组消息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+     "lines": [
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用 PocketBase/SQLite 存储聊天数据，本身不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small, fast, real-time group chat. One PocketBase binary is the whole backend ／ Open http://127.0.0.1:8090 and sign up (top right). The dev database lives in `pb_data/` — delete it to start over. ／ # All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+   "evidence_lines": [
+    3,
+    50,
+    123
+   ]
+  },
+  "fn": "border-radius/chat",
+  "sha": "f8e157aace59",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

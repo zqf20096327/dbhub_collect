@@ -10611,5 +10611,86 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f8144d5e4fc4": {
+  "identity": {
+   "one_liner": "Énóis 技术社交网络的 Spring Boot 后端 API",
+   "review": "这是巴西技术从业者社交网络 Énóis 的后端 API，承载业务规则、授权、审核、钱包（Faísca）与集成，基于 Spring Boot 4 + Java 25 并采用六边形架构（端口与适配器）。测试使用 H2 内存库，生产环境通过 Flyway 迁移运行于 MariaDB 11.4，提供 TOTP 双因素、媒体存储（ImageKit/S3）与 GIF 搜索等模块，适合作为该社交网络的服务端部署与二次开发使用。",
+   "highlights": [
+    "采用六边形架构，按功能划分模块（identity、feed、media、network 等 10 个模块）",
+    "支持 dev/hml/prd 三个 profile，分别使用 H2、MariaDB、MySQL 数据库",
+    "提供 Swagger UI/OpenAPI 文档、Actuator 健康检查与 Prometheus 指标端点"
+   ],
+   "use_cases": [
+    "部署 Énóis 社交网络的后端服务",
+    "基于六边形架构的 Spring Boot 项目参考实现",
+    "需要 H2/MariaDB/MySQL 多 profile 切换的 API 开发"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "funcionalidade, Flyway para migrações, H2 nos testes e **MariaDB 11.4** em produção. ／ - **Docker** (optional — for MariaDB/MySQL or running via docker-compose) ／ |`hml`|MariaDB|`SPRING_PROFILES_ACTIVE=hml`|",
+     "lines": [
+      8,
+      42,
+      57
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Docker** (optional — for MariaDB/MySQL or running via docker-compose) ／ |`prd`|MySQL|`SPRING_PROFILES_ACTIVE=prd`| ／ ### prd (MySQL 8+)",
+     "lines": [
+      42,
+      58,
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是社交网络的业务后端，使用 MariaDB/MySQL 存储数据，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A API do **Énóis** (enois.ia.br): a rede social brasileira para quem trabalha ／ **Spring Boot 4** (Java 25), arquitetura hexagonal (portas e adaptadores), um pacote por ／ |`hml`|MariaDB|`SPRING_PROFILES_ACTIVE=hml`| ／ |`prd`|MySQL|`SPRING_PROFILES_ACTIVE=prd`|",
+   "evidence_lines": [
+    3,
+    7,
+    57,
+    58
+   ]
+  },
+  "fn": "Rede-ENois/enois-backend",
+  "sha": "f8144d5e4fc4",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

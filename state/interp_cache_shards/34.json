@@ -9437,5 +9437,146 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "affcf8c5f3b9": {
+  "identity": {
+   "one_liner": "Java 模拟交易系统，组件经 JMS 队列/主题与 FIX 会话交互",
+   "review": "一个 Java 编写的迷你交易系统模拟器：生成随机行情与订单，通过 FIX 5.0 会话路由到撮合引擎，成交与拒单持久化到 MongoDB 和 MySQL，并以 Swing 桌面程序实时展示。适合学习消息队列、FIX 会话与撮合流程的开发者；需自建 ActiveMQ、MongoDB、MySQL，作者声明仅用于学习且已停止维护。",
+   "highlights": [
+    "包含行情/订单 feed、FIX initiator 与 acceptor、撮合引擎、订单持久化服务和 Swing 监控界面等模块",
+    "通过 ActiveMQ 的 JMS 队列与主题在组件间传递行情、订单与成交报告",
+    "撮合前经 MySQL 存储过程执行授信检查，成交与拒单写入 MongoDB 和 MySQL"
+   ],
+   "use_cases": [
+    "学习 FIX 会话与撮合引擎的消息流转",
+    "演示 JMS 队列/主题解耦的多组件系统架构",
+    "交易流程端到端的本地教学演示"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**Trading server (FIX acceptor)**|Hosts the matching engine. It subscribes to market data and executes incoming orders against it, after a credit check backed by a MySQL stored procedure.| ／ |**Orders back-end store**|Subscribes to the executed-orders topic and persists every fill and rejection to both MongoDB and MySQL.| ／ - MongoDB and MySQL (stored procedures, connection pooling via Commons DBCP2)",
+     "lines": [
+      16,
+      17,
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是一个使用 MongoDB 与 MySQL 持久化订单数据的交易模拟应用，而非为数据库生态服务的工具。",
+   "persona": "use",
+   "dbs": [
+    "MySQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Orders back-end store**|Subscribes to the executed-orders topic and persists every fill and rejection to both MongoDB and MySQL.| ／ - MongoDB and MySQL (stored procedures, connection pooling via Commons DBCP2) ／ This is a learning project, last actively developed in the Java 8 era, and is no longer maintained beyond dependency bumps. The default credentials in the properties files are for local use only.",
+   "evidence_lines": [
+    17,
+    42,
+    101
+   ]
+  },
+  "fn": "NicolaNardino/TradingMachine",
+  "sha": "affcf8c5f3b9",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8f32ebd6006c": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，用 PostgreSQL+pgvector 持久化证据与图谱",
+   "review": "Dense-Mem 是一个以 HTTP MCP 协议对外提供服务的自托管记忆服务器，为 AI 客户端/LLM 主机记录证据、生命周期、溯源和图谱关系，支持基于证据合格性的门控召回与冲突检测，要求配置外部嵌入与验证模型。部署采用 Docker Compose，PostgreSQL+pgvector 是唯一持久化权威，多实例需 Redis 协调；适合需要私有/团队记忆隔离、且能自建数据库的团队。",
+   "highlights": [
+    "以 MCP Streamable HTTP（/mcp）作为记忆自动化接口，提供用户门户与控制门户",
+    "以 PostgreSQL+pgvector 存储证据、生命周期、溯源、搜索与审计，支持慢查询日志与内嵌迁移",
+    "支持任何 OpenAI 兼容端点（含 Ollama 本地部署）作为嵌入与验证模型，提供团队/私有记忆隔离与 API 密钥、SSO 认证"
+   ],
+   "use_cases": [
+    "为需要跨会话持久记忆的 AI 客户端/代理提供自托管记忆服务",
+    "需要证据溯源、生命周期与门控召回的团队记忆场景",
+    "本地（Ollama）或自托管环境下的私有记忆部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority. ／ the process. PostgreSQL slow-query logging uses",
+     "lines": [
+      20,
+      74,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 PostgreSQL 作为自身唯一的持久化存储来提供记忆服务，而非为数据库生态提供工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dense-Mem is a standalone HTTP MCP memory server using Streamable HTTP. It ／ PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority.",
+   "evidence_lines": [
+    17,
+    20,
+    74
+   ]
+  },
+  "fn": "markhuangai/dense-mem",
+  "sha": "8f32ebd6006c",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

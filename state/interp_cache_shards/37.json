@@ -9592,5 +9592,281 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a415ca3046d6": {
+  "identity": {
+   "one_liner": "Emacs 交互式数据库客户端，支持 SQL 查询、结果浏览与行编辑",
+   "review": "Clutch 是一个 Emacs 数据库客户端，在 Emacs 内提供查询缓冲区、结果网格展示和本地暂存的行编辑预览。它为 MySQL、PostgreSQL、SQLite、MongoDB、Redis 提供原生后端，其余数据库通过 Java 17+ 的 JDBC agent 接入；行编辑仅在能定位稳定主键行时可用。面向习惯 Emacs 工作流的开发者与 DBA。",
+   "highlights": [
+    "在 Emacs 缓冲区内执行 SQL 查询并以交互式网格展示结果，支持 CSV/TSV/Org 格式导出",
+    "对可定位主键行的查询结果提供本地暂存的 INSERT/UPDATE/DELETE 编辑与执行前预览",
+    "提供 MySQL、PostgreSQL、SQLite、MongoDB、Redis 原生后端及基于 JDBC 的多数据库接入"
+   ],
+   "use_cases": [
+    "在 Emacs 中直接查询和浏览多种数据库",
+    "对单表查询结果进行受控的行级数据修改",
+    "通过 JDBC 后端访问 Oracle、SQL Server、ClickHouse 等数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |PostgreSQL native|Non-null unique keys, then `ctid` for ordinary heap tables| ／ |PostgreSQL|Core SQL support|Requires `pgsql`, available from MELPA|",
+     "lines": [
+      7,
+      39,
+      60,
+      73
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |MySQL native|Non-null unique keys; no physical row-locator fallback| ／ |MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+     "lines": [
+      7,
+      39,
+      59,
+      72
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle JDBC|Non-null unique keys, then `ROWID` for confirmed base tables| ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      7,
+      63,
+      76
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ The shortest path uses SQLite, which requires only Emacs 29.1+—no protocol package or Java runtime. ／ |SQLite native|Non-null unique keys, then `rowid` for tables not declared `WITHOUT ROWID`| ／ |SQLite|Core SQL support|Uses Emacs 29.1+ built-in `sqlite-*` functions; no external dependency|",
+     "lines": [
+      7,
+      13,
+      62,
+      75
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`| ／ |`:backend jdbc` / Oracle / SQL Server / ClickHouse / DB2 / DuckDB|None in Emacs; uses the bundled JDBC adapter|",
+     "lines": [
+      7,
+      76,
+      96
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior| ／ |`:backend jdbc` / Oracle / SQL Server / ClickHouse / DB2 / DuckDB|None in Emacs; uses the bundled JDBC adapter|",
+     "lines": [
+      7,
+      80,
+      96
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "compat",
+     "quote": "|MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11| ／ MariaDB 10.11 has been live-validated through the native `mysql` backend, including TLS with `mysql_native_password`; other MariaDB versions are expected to be broadly compatible but are not yet part of the regular test matrix. MySQL 5.6 has no native JSON col",
+     "lines": [
+      72,
+      124
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是连接多种数据库并提供查询、浏览、行编辑能力的客户端工具，为数据库操作服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracle, SQL Server, DB2, Snowflake, Redshift, ClickHouse, DuckDB, and other databases. ／ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+   "evidence_lines": [
+    7,
+    39,
+    72
+   ]
+  },
+  "fn": "LuciusChen/clutch",
+  "sha": "a415ca3046d6",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "af77195adb3a": {
+  "identity": {
+   "one_liner": "DBine：Rust+Tauri 桌面端多引擎数据库管理器",
+   "review": "DBine 是一款 Windows/macOS/Linux 桌面数据库管理应用，提供连接树、SQL 编辑器、性能 Profiler、监控、表设计器、ER 图、schema 比对与跨引擎迁移克隆同步等功能。面向需要在一个客户端内管理多种 SQL/NoSQL 引擎的开发者与 DBA。基于 Tauri 2 与 Rust 实现，迁移等功能仅在部分引擎组合上可用。",
+   "highlights": [
+    "提供多引擎连接、SQL 编辑器、虚拟化结果网格与结果导出（CSV/JSON/XLSX 等）",
+    "内置 Profiler 与服务器监控，可展示实时查询、会话、锁与 CPU/读写指标",
+    "支持 schema 比对、跨引擎迁移/克隆/同步、表设计器与 ER 图，迁移使用引擎原生批量加载"
+   ],
+   "use_cases": [
+    "在一个桌面客户端中统一管理多种 SQL 与 NoSQL 数据库连接与查询",
+    "排查数据库上客户端运行的具体查询（Profiler/会话/锁）",
+    "跨引擎迁移、同引擎克隆与表数据同步"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBine: the explorer with PostgreSQL, SQL Server, Redis and Elasticsearch connections, the SQL editor and results ／ Azure SQL, and on PostgreSQL, TimescaleDB, KingbaseES, AlloyDB, Cloud SQL,",
+     "lines": [
+      7,
+      161
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      371
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      371
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "own users don't have it, such as SQLite, DuckDB or DynamoDB. Details: ／ - The local state is a SQLite file in the app's configuration folder.",
+     "lines": [
+      249,
+      352
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "DBine: the explorer with PostgreSQL, SQL Server, Redis and Elasticsearch connections, the SQL editor and results ／ client runs on that database, live, like SQL Server's Profiler. For each one ／ - If the engine records every query (Extended Events in SQL Server,",
+     "lines": [
+      7,
+      61,
+      65
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse, Snowflake, BigQuery, Elasticsearch, Redis, among others), with ／ |Analytical|DuckDB · CSV / Parquet / JSON files · ClickHouse · Trino · Presto · Starburst · BigQuery · Athena · Snowflake · Databricks · Redshift · StarRocks · Doris · Databend · Hive · Impala · Drill · Dremio · Calcite Avatica · Flight SQL · Teradata · Vertic",
+     "lines": [
+      262,
+      372
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      371
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      371
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      371
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供连接、查询、监控与迁移等管理能力的桌面客户端工具，本身不是使用单一数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DBine** is a desktop multi-engine database manager from AddLayer. One app ／ search databases. It runs on Windows, macOS and Linux. ／ DBine: the explorer with PostgreSQL, SQL Server, Redis and Elasticsearch connections, the SQL editor and results",
+   "evidence_lines": [
+    3,
+    5,
+    7
+   ]
+  },
+  "fn": "addlayer-io/dbine",
+  "sha": "af77195adb3a",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

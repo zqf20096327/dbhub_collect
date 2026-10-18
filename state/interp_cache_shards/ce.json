@@ -10186,5 +10186,156 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e769d123ca1e": {
+  "identity": {
+   "one_liner": "AstrBot 的 QQ 群管理插件，含 AI 审核与 SQLite 词库/日志",
+   "review": "这是 AstrBot 平台的 QQ 群管理插件，提供禁言、踢人、公告等 28 项群管指令及 WebUI 面板。审核系统采用 Aho-Corasick 初筛加 LLM 二次判断，支持 OCR 识图、外置 SQLite 词库和审核日志存储。面向使用 AstrBot 的 QQ 群管理员，依赖 AstrBot >=4.24.2 与 LLM Provider。",
+   "highlights": [
+    "提供 28 项群管指令与 20 项 LLM 可调用工具",
+    "审核流程为 Aho-Corasick 初筛 + 30 条上下文 + LLM 二次判断，支持 OCR 识图与 Base 系列解码审核",
+    "使用外置 SQLite 词库（66,993 个关键词）及 SQLite 审核日志存储"
+   ],
+   "use_cases": [
+    "AstrBot 机器人的 QQ 群内容审核与违规消息撤回",
+    "群成员管理与防刷屏限速",
+    "入群申请自动审核与名片变更监控"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 外置 SQLite 词库支持（`lexicon.db`），12类违规内容，66,993 个关键词 + 24,000+ 条辱骂规则 ／ - SQLite 审核日志存储与 WebUI 迁移助手 ／ |**设置**|核心/审核/OCR/词库/功能开关、高级参数、SQLite 迁移助手、名单管理|",
+     "lines": [
+      126,
+      130,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该插件使用 SQLite 存储词库与审核日志，属于使用数据库的应用/插件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 外置 SQLite 词库支持（`lexicon.db`），12类违规内容，66,993 个关键词 + 24,000+ 条辱骂规则 ／ - SQLite 审核日志存储与 WebUI 迁移助手 ／ 在 WebUI → 插件 → 插件市场 中搜索`QQ群智能守护者`安装",
+   "evidence_lines": [
+    126,
+    130,
+    239
+   ]
+  },
+  "fn": "zcj-ui/astrbot_plugin_group_guardian",
+  "sha": "e769d123ca1e",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bfa1ef11b481": {
+  "identity": {
+   "one_liner": "本地优先求职情报平台：职位采集、简历解析与本地 LLM 分析",
+   "review": "Compust 是一个面向求职者的本地优先职业情报应用，从 Workday、Greenhouse 等雇主招聘门户采集职位，提供简历解析、匹配评分、ATS 检查和 STAR 面试准备，并配有 Chrome/Fireword 抓取扩展。默认使用本地 SQLite 存储，MySQL 不可用时可自动回退；AI 部分默认走本地 Ollama，可选接入 Google Gemini，数据不出本机。",
+   "highlights": [
+    "默认使用本地 SQLite 存储数据，MySQL 不可用时自动回退并支持引导式迁移",
+    "提供浏览器扩展实时抓取职位并计算简历匹配度",
+    "AI 分析支持本地 Ollama（离线）与可选的 Google Gemini 云端双引擎"
+   ],
+   "use_cases": [
+    "求职者集中管理与追踪多来源招聘信息",
+    "简历与目标职位的匹配度分析及 ATS 检查",
+    "STAR 面试准备练习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Get Compust up and running on Windows in less than two minutes. **No Python, Node.js, XAMPP, MySQL, Git, or command-line experience required.** ／ - **Single-Click Launch (`Compust.bat`)**: Ready to run for non-technical users without requiring Python, Node.js, npm, MySQL, XAMPP, or Git. ／ - **Automated SQLite Fallback**: If MySQL is not running on port 3306, Compust seamlessly initializes a standalone local SQLite database with an empty, ready-to-use schema.",
+     "lines": [
+      43,
+      210,
+      211
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Database (SQLite):** `%LOCALAPPDATA%\\Compust\\compust.db` (automatic default with zero configuration) ／ - **Automated SQLite Fallback**: If MySQL is not running on port 3306, Compust seamlessly initializes a standalone local SQLite database with an empty, ready-to-use schema. ／ - **Guided Source Migration**: Auto-detects legacy MySQL databases (port 3306) and workspace SQLite databases, offering preview counts and conflict-free guided migration into `%LOCALAPPDATA%\\Compust\\data\\compust.db`.",
+     "lines": [
+      112,
+      211,
+      223
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是一个使用 SQLite/MySQL 存储自身数据的求职应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database (SQLite):** `%LOCALAPPDATA%\\Compust\\compust.db` (automatic default with zero configuration) ／ **Compust** is an end-to-end career intelligence and job discovery platform built for transparency, accuracy, and performance. Unlike traditional job aggregators that suffer from stale listings, broken links, or generic indexing, Compust connects directly to verified employer career portals (Workday, SmartRecruiters, Greenhouse, Ashby, Workable, Lever, Teamtailor, custom career sites), ingests curated internships from community repositories, and empowers candidates to capture vacancies anywhere across the web through the **Compust Capture** browser extension. ／ > - **What Compust IS:** A companion career discovery and intelligence tool that helps users ingest and centralize vacancies directly from verified employer portals, evaluate transparent match scores, manage resumes, and track recruitment pipelines.",
+   "evidence_lines": [
+    112,
+    127,
+    131
+   ]
+  },
+  "fn": "putbullet/compust",
+  "sha": "bfa1ef11b481",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

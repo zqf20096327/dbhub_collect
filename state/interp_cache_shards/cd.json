@@ -9760,5 +9760,461 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d5ddfda9f5f": {
+  "identity": {
+   "one_liner": "按最低套餐价格排序的托管服务商清单",
+   "review": "该仓库是一份按最低套餐价格排序的托管服务清单，覆盖 Web 平台、BaaS、容器、Lambda、Node.js、静态站点、WordPress 与 VPS 等类别，以表格列出各服务商的套餐价格、试用、免费额度与开源属性。面向寻找托管方案的开发者，其中也包含 PostgreSQL、MySQL、SQLite、TiDB 等托管数据库服务的条目，本身不提供任何软件或工具。",
+   "highlights": [
+    "按最低套餐价格对托管服务商排序",
+    "覆盖 BaaS、容器、Lambda、静态站点、VPS 等多类托管",
+    "以表格列出各服务的价格、试用、免费额度与开源属性"
+   ],
+   "use_cases": [
+    "查找特定价格区间的托管平台",
+    "对比各托管服务商的免费额度与试用条件",
+    "查找托管数据库服务选项"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Ownkube|PostgreSQL|DB 0.5 (4 \\$/m)|No|No|| ／ |neon|PostgreSQL|Launch (5 \\$/m)|No|Yes||",
+     "lines": [
+      254,
+      257
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|freedb.tech|MySQL|PRO (5 \\$/m)|No|Yes|| ／ |PlanetScale|MySQL/PostgreSQL|PS-5 (5 \\$/m)|No|No||",
+     "lines": [
+      256,
+      258
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|Oracle Cloud ⚠️|See plans|30-day|Always Free / $300 credit||All|Yes|",
+     "lines": [
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Turso|SQLite|Developer (5 \\$/m)|No|Yes|| ／ |realm|SQLite alternative|Pay-as-you-Go|No|1M req or 500 hr||",
+     "lines": [
+      261,
+      279
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|TiDB Serverless|MySQL|Pay-as-you-Go|No|5GB & 50M req/m||",
+     "lines": [
+      278
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 是托管服务商的信息清单，本身不实现为数据库生态服务的工具，也未使用数据库存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "List of awesome hosting sorted by minimal plan price ／ |Name|Minimal plan|Trial|Free|Open Source|Type|Lambda| ／ ### BaaS",
+   "evidence_lines": [
+    3,
+    31,
+    44
+   ]
+  },
+  "fn": "dalisoft/awesome-hosting",
+  "sha": "4d5ddfda9f5f",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7ea54eff7194": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud Infrastructure 模拟器，提供 OCI 形状服务",
+   "review": "floci-oci 是一个开源的本地 OCI 模拟器，在容器内模拟对象存储、IAM、队列、Vault/KMS、OKE、PostgreSQL 数据库系统等 OCI 服务，供 OCI SDK、CLI、Terraform 无需云账号直接对接，主要用于开发、测试与 CI。基于 Quarkus 构建，需 JDK 25 源码编译或以 Docker 镜像运行；部分服务（Functions/OKE/PostgreSQL）依赖真实 Docker sidecar，未实现的服务包括身份域、对象版本控制等。",
+   "highlights": [
+    "实现 OCI 线协议（opc-request-id、分页、etag 条件请求、work requests、错误体），官方 oci-java-sdk、Python SDK、OCI CLI 与 oracle/oci Terraform provider 可不改代码直连",
+    "支持 Database with PostgreSQL 服务：每个 DB system 启动真实 postgres:{major}-alpine 容器，含 TLS 证书与持久卷",
+    "提供 in-memory、persistent、hybrid、write-ahead log 多种持久化模式，支持 GraalVM native-image"
+   ],
+   "use_cases": [
+    "本地开发与测试 OCI 集成代码，无需真实云账号与凭据",
+    "在 CI 流水线中替代真实 OCI tenancy 做自动化验证",
+    "配合 Terraform/OpenTofu 对 OCI IaC 配置做本地演练"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default configurations, work requests, real PostgreSQL sidecar| ／ |Database with PostgreSQL|Real Docker (PostgreSQL) / In-process|DB system CRUD (`/20220915`) driven by work requests, with a `DELETED` tombstone clients can poll; one `postgres:<major>-alpine` container per DB system, started in the background; connection deta ／ |Database with PostgreSQL|`postgres:{major}-alpine`|A real PostgreSQL server per DB system, of the major the DB system asks for, with TLS, a host port from `15432..15531` and a named data volume|",
+     "lines": [
+      139,
+      157,
+      171
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Light, fluffy, and always free, now for Oracle Cloud ／ floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows.",
+     "lines": [
+      5,
+      24,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 OCI 云生态服务的本地模拟器工具，供 SDK/CLI/Terraform 在开发测试中对接，而非使用数据库存业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ The official oci-java-sdk, Python SDK, OCI CLI, and the `oracle/oci` Terraform provider work unchanged, validated continuously by the compatibility suite. ／ |Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default configurations, work requests, real PostgreSQL sidecar|",
+   "evidence_lines": [
+    24,
+    104,
+    139
+   ]
+  },
+  "fn": "floci-io/floci-oci",
+  "sha": "7ea54eff7194",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ddef2c2b7c7": {
+  "identity": {
+   "one_liner": "面向编码代理的本地优先项目记忆系统，存 PostgreSQL+pgvector",
+   "review": "Codifix 为编码代理和开发者持久化项目知识（决策、修复、交接），通过词法、语义、关系和代码图检索返回带引用的答案，并提供浏览器、TUI、CLI 和 MCP 四种访问方式。数据存储于带 pgvector 的 PostgreSQL；原生安装依赖该数据库，v3.0.0-rc.1 为预发布版本，Mac/Windows 包未签名。",
+   "highlights": [
+    "存储于 PostgreSQL 并使用 pgvector 支持语义检索",
+    "通过 CLI、TUI、浏览器 UI 和 MCP 提供访问，支持编码代理集成",
+    "支持知识区路由、私有共享与离线同步工作流"
+   ],
+   "use_cases": [
+    "为编码代理和开发会话提供可引用的项目知识检索",
+    "团队内共享经审查的知识并支持离线使用",
+    "本地知识库的日常捕获、查询与恢复流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It captures and curates work, stores it in PostgreSQL with pgvector, and makes it",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其将工作数据存储于 PostgreSQL with pgvector，PostgreSQL 是其存储后端而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可（README L177 起始说明，具体条款未展示完整）",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It captures and curates work, stores it in PostgreSQL with pgvector, and makes it ／ available through a browser, TUI, CLI and MCP. ／ The reproducible demo needs only Docker; it starts PostgreSQL with pgvector,",
+   "evidence_lines": [
+    9,
+    10,
+    32
+   ]
+  },
+  "fn": "3vilM33pl3/codifix",
+  "sha": "5ddef2c2b7c7",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fed4c92ad2d9": {
+  "identity": {
+   "one_liner": "开源自托管个人 AI 助手引擎，多渠道对话并用 PostgreSQL 存储",
+   "review": "Brambit 是一个可在自己服务器上运行的个人 AI 助手引擎，为家庭/团队/公司的每个成员提供独立账号与助手，支持网页、Telegram、WhatsApp、邮件和 Slack 渠道，使用 OpenAI 兼容 API 或 Gemini 自带密钥，并包含记忆、连接器、沙盒代码执行、托管小应用和定时任务。数据由 PostgreSQL 存储。适合需要多人共享自托管助手的运维者安装使用。",
+   "highlights": [
+    "支持网页、Telegram、WhatsApp、邮件与 Slack 多渠道对话",
+    "支持任意 OpenAI 兼容 API 提供方或 Gemini，通过 modelos.yaml 配置任务到模型的映射与回退",
+    "通过插件扩展品牌、页面、消息与配额设置，包含连接器、MCP 工具与沙盒代码运行"
+   ],
+   "use_cases": [
+    "家庭/团队/公司自托管共享的多用户 AI 助手平台",
+    "通过连接器与 MCP 工具集成 Google、Microsoft、GitHub 等服务的日常助理",
+    "需要定时任务、托管小应用与代码沙盒的个人自动化场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "with it (Postgres 14 from npm); nothing else to install. ／ conversations and workers together in one service. PostgreSQL stores accounts, ／ `db.mjs` (Postgres, schema `mtr_harness`) and `auth.mjs`. ／ Database tests use the same embedded Postgres 14:",
+     "lines": [
+      138,
+      193,
+      231,
+      260
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 用于存储账号、会话、提案和执行记录，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "conversations and workers together in one service. PostgreSQL stores accounts, ／ scheduled routines. You pick the model: any provider compatible with the OpenAI API,",
+   "evidence_lines": [
+    193,
+    21
+   ]
+  },
+  "fn": "morethanrealio/brambit",
+  "sha": "fed4c92ad2d9",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e509522efe54": {
+  "identity": {
+   "one_liner": "基于 MCP 的编码代理共享项目记忆服务，可自托管于 Cloudflare",
+   "review": "StateDock 为人类与编码代理（Claude Code、Cursor、Codex 等）提供共享的项目记忆，集中存放目标、决策与交接记录，代理通过 MCP 读取上下文并写回交接。本仓库是 Cloudflare 自托管版，部署需自有 Workers、D1、KV、R2 等资源，另提供插件仓库用于记录与恢复任务状态（不执行任务代码）。",
+   "highlights": [
+    "通过 MCP 向 Claude Code、Cursor、Codex 等编码代理提供共享项目上下文",
+    "提供 Cloudflare 自托管版本，运行于用户自己的 Workers、D1、KV、R2 账户",
+    "配套 MIT 许可的插件仓库，用于保存计划、恢复任务上下文与记录进度"
+   ],
+   "use_cases": [
+    "多代理/多人协作项目中共享目标、决策与交接记录",
+    "在自有 Cloudflare 账户中自托管项目记忆服务",
+    "为编码代理配置 MCP 端点以读取和写回任务状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 说明自托管需运行用户自己的 Cloudflare D1 等资源，D1 是其数据存储而非其服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "服务本体 AGPL-3.0-only，插件仓库为 MIT 双仓库双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "This repository is the Cloudflare self-hosted edition. Deploy it in your own Cloudflare account; you operate its Workers, D1, KV, R2, domain, email delivery, and backups. It is separate from StateDock Cloud and has no Cloud subscription tiers. To run StateDock on your own computer or a Linux server with one command, use StateDock Local instead. ／ Goals, decisions and handoffs live in one place. Claude Code, Cursor and Codex read context over MCP, pick up ready work and write back handoffs, so the next agent never starts from zero. ／ These plugins record and restore project state. They do not execute task code or schedule agents. Plugin code is MIT-licensed; this self-hosted service remains AGPL-3.0-only.",
+   "evidence_lines": [
+    7,
+    5,
+    25
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "statedock/statedock",
+  "sha": "e509522efe54",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b9a06ce86312": {
+  "identity": {
+   "one_liner": "可可豆溯源与商业化 MVP，FastAPI+React+SQLAlchemy 记录批次流转",
+   "review": "一个为虚构可可协会开发的可可溯源、加工与销售 MVP（USCO 黑客松项目），记录批次接收、分阶段加工、库存防重复扣减、损耗与成本核算，并提供公开批次档案。给操作员/管理员/买家三种角色使用，默认 SQLite 存储，可通过 Docker Compose 运行 PostgreSQL 16，前端为 PWA 支持离线录入。",
+   "highlights": [
+    "提供批次接收、加工转换、库存台账（同一事务更新余额并防重复扣减）、损耗与成本计算",
+    "提供基于触发器的只增审计表，阻止 UPDATE/DELETE",
+    "PWA 支持离线接收录入，恢复网络后提交"
+   ],
+   "use_cases": [
+    "可可等农产品供应链的批次溯源与公开档案展示",
+    "需要离线采集接收记录并同步的现场作业",
+    "带角色权限和审计的库存/成本管理原型"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backend:** Python con FastAPI, SQLAlchemy 2 y Alembic. SQLite por defecto; PostgreSQL 16 con Docker Compose. ／ |Docker y Docker Compose|29.x (opcional)|Solo para PostgreSQL y para ejecutar la API en contenedor| ／ Esto levanta PostgreSQL 16 en `127.0.0.1:5433` y la API en `localhost:8000`. El contenedor aplica las migraciones antes de iniciar la API. Los datos de PostgreSQL quedan en el volumen `postgres_data`.",
+     "lines": [
+      52,
+      63,
+      138
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Backend:** Python con FastAPI, SQLAlchemy 2 y Alembic. SQLite por defecto; PostgreSQL 16 con Docker Compose. ／ |`DATABASE_URL`|`sqlite:///./cacao.db`|Base de datos. Para PostgreSQL: `postgresql+psycopg://usuario:clave@host:5432/base`|",
+     "lines": [
+      52,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是用 SQLite/PostgreSQL 存储业务数据的业务应用，而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "MVP de trazabilidad, transformación y comercialización de cacao para una asociación cacaotera ficticia del Huila. Se desarrolló para la II Hackathon de Programación USCO, reto «Cacao con historia, calidad y valor». ／ - **Backend:** Python con FastAPI, SQLAlchemy 2 y Alembic. SQLite por defecto; PostgreSQL 16 con Docker Compose. ／ Esto levanta PostgreSQL 16 en `127.0.0.1:5433` y la API en `localhost:8000`. El contenedor aplica las migraciones antes de iniciar la API. Los datos de PostgreSQL quedan en el volumen `postgres_data`.",
+   "evidence_lines": [
+    3,
+    52,
+    138
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "trbureiyan/kallpa.cacao",
+  "sha": "b9a06ce86312",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

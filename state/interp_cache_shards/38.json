@@ -10281,5 +10281,142 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2a98e66d4daf": {
+  "identity": {
+   "one_liner": "pnpm monorepo 架构的发布类 Web 应用，前后端一体，使用 PostgreSQL 存数据",
+   "review": "Esposter 是一个用于发布随机内容的 Web 应用，采用 pnpm workspaces monorepo 组织代码：前端为 Nuxt/Vue，后端为 Azure Functions 与 tRPC API，通过 Drizzle ORM 连接 PostgreSQL（L161 要求本地安装 PostgreSQL+PgAdmin，L254 声明 schema 以 PostgreSQL 为 source of truth）。适合想阅读/运行该仓库源码的开发者；README 提到发布包 API 可能随时变更。",
+   "highlights": [
+    "pnpm workspaces monorepo，包含 Nuxt 前端、tRPC API、Azure Functions 后端等多个应用与发布包（L203, L245-L270）",
+    "通过 Drizzle ORM 使用 PostgreSQL，db-schema 包以 PostgreSQL 为 source of truth（L74, L252-L254）",
+    "README 提供 symlink 配置、依赖安装、开发服务器与生产构建的本地开发流程（L129-L199）"
+   ],
+   "use_cases": [
+    "作为发布/分享内容的 Web 社区应用使用",
+    "开发者克隆仓库进行本地开发或部署（Railway/Azure）",
+    "参考其 monorepo 工程结构（含 AI 代码评审流水线）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ 3. Install PostgreSQL + PgAdmin. ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+     "lines": [
+      80,
+      161,
+      254
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示该项目是一个 Web 应用，安装 PostgreSQL 作为其数据存储（L161、L254），而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0（badge 标注）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "3. Install PostgreSQL + PgAdmin. ／ Esposter is a pnpm workspaces monorepo. See monorepo tooling for workspace script orchestration and publishing boundaries. ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+   "evidence_lines": [
+    161,
+    203,
+    254
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Esposter/Esposter",
+  "sha": "2a98e66d4daf",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2a4bcc431212": {
+  "identity": {
+   "one_liner": "DuckDB 文件系统扩展，为 TiDB Filesystem 提供只读分析读取",
+   "review": "这是一个 C++ 编写的 DuckDB 文件系统扩展，让用户在 DuckDB CLI 中直接对 TiDB Filesystem HTTP 数据面做只读分析查询，无需 Python、FUSE 或整文件下载。它通过版本固定的范围读取、presigned URL 复用和 Parquet 读优化减少传输量；需配套修改过的 fs 服务端，构建需匹配 DuckDB 版本，目前未发布到官方扩展仓库。",
+   "highlights": [
+    "提供 DuckDB CLI 内对 TiDB Filesystem 的只读 Parquet/CSV/JSON 等 seekable 文件分析读取",
+    "实现版本固定范围读取、presigned URL 复用、预读窗口和 glob 前缀匹配等读路径优化",
+    "支持通过 SECRET 配置端点与凭证，保留 DuckDB 的 Hive 分区与 row-group 剪枝"
+   ],
+   "use_cases": [
+    "在 DuckDB 中用 SQL 直接查询 TiDB Filesystem 上的 Parquet/CSV/JSON 文件",
+    "避免下载完整文件、对远端对象做按需范围读取的分析场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiDB Filesystem HTTP data plane. It works in the DuckDB CLI and does not require ／ blob bytes from TiDB while size and revision come from the same SQL statement.",
+     "lines": [
+      6,
+      73
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 DuckDB 读取 TiDB Filesystem 而实现的扩展组件，本身不用数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT，构建时下载 nlohmann/json（MIT），DuckDB 为 MIT 许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tidbfs` is a C++ DuckDB filesystem extension for read-only analytics over the ／ The build is unsigned and is not published to DuckDB's extension repository. ／ existing deployment; this repository contains the client extension only.",
+   "evidence_lines": [
+    5,
+    49,
+    78
+   ]
+  },
+  "fn": "siddontang/duckdb-tidbfs",
+  "sha": "2a4bcc431212",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9397,5 +9397,72 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8d8a6894f95b": {
+  "identity": {
+   "one_liner": "面向台湾中小学的自架式排课与调代课系统",
+   "review": "这是一个 MIT 授权的纯 Web 排课与调代课系统，面向台湾国小/国中/高中职的教学组长，涵盖学期资料、手动拖拉排课、OR-Tools CP-SAT 自动排课、请假代课调课通知与钟点统计。通过 Docker Compose 六容器单校部署，使用 PostgreSQL 16 存储数据，资料不出校，仅支持单校自架（无多租户）。",
+   "highlights": [
+    "支持基于 OR-Tools CP-SAT 引擎的自动排课，含硬/软约束加权与冲突说明",
+    "提供请假登记、代课推荐、调课验证与站内/Email 通知流程",
+    "提供 Excel/PDF/PNG 课表导出与每日自动备份、还原、RBAC 权限管理"
+   ],
+   "use_cases": [
+    "台湾 K-12 学校自架排课与调代课管理",
+    "学期中教师请假后的代课指派与通知",
+    "班级/教师/场地课表导出与全校公告列印"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+     "lines": [
+      117,
+      119
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统自身以 PostgreSQL 16 作为数据库存储排课与调代课数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+   "evidence_lines": [
+    117,
+    119
+   ]
+  },
+  "fn": "begin0808/Course_Scheduling_System",
+  "sha": "8d8a6894f95b",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

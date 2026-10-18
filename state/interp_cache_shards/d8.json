@@ -10167,5 +10167,72 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ff8c3da40b3c": {
+  "identity": {
+   "one_liner": "自托管的 RAG 文档问答平台，解析文档并向量化检索回答",
+   "review": "DocuMind 是一个可私有部署的文档智能平台：上传 PDF/DOCX 等文件后，用 Docling 做保结构解析，本地生成向量嵌入存入 Qdrant，结合 Gemini 生成带服务端引用的问答。面向需要处理技术类结构化文档的用户。持久层依赖 PostgreSQL 16 存用户、文档、任务与会话，文档 AI 生成需配置 Gemini API Key。",
+   "highlights": [
+    "Docling 保结构解析，保留表格与标题层级为 Markdown",
+    "本地嵌入（all-MiniLM-L6-v2）与 Qdrant 向量检索，强制 user_id/document_id 过滤",
+    "服务端从向量元数据构建引用，无证据时确定性拒答"
+   ],
+   "use_cases": [
+    "技术/结构化文档的私有问答与检索",
+    "需要逐用户数据隔离的多租户文档库",
+    "上传文档的解析与结构化预览导出（MD/HTML/JSON）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Durable Persistence** — PostgreSQL 16 is the single source of truth for users, documents, processing jobs, and sessions. Qdrant is treated as a rebuildable derived vector index.",
+     "lines": [
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 16 是用户、文档、任务与会话的唯一事实来源，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Durable Persistence** — PostgreSQL 16 is the single source of truth for users, documents, processing jobs, and sessions. Qdrant is treated as a rebuildable derived vector index. ／ - `postgres` — Relational database on port `5432` ／ - `qdrant` — Vector database on port `6333`",
+   "evidence_lines": [
+    68,
+    128,
+    130
+   ]
+  },
+  "fn": "yashrajagawane/documind",
+  "sha": "ff8c3da40b3c",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8897,5 +8897,74 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5f452c4b2839": {
+  "identity": {
+   "one_liner": "AI 代理共享持久记忆服务，通过 MCP 连接，SQLite 存储",
+   "review": "Qoopia 为 AI 代理提供跨会话、跨客户端的持久记忆，代理经 MCP 连接读写，SQLite 为权威存储，支持自托管安装、受控桥接和可复用技能包。面向使用 Codex、Claude Code、ChatGPT 等工具的用户，需本机安装代理并完成授权。注意其源码仓库为公开分发包，Windows/Intel Mac 暂不在 V1 支持范围。",
+   "highlights": [
+    "代理通过 MCP 连接访问共享持久记忆，访问权限可限定并撤销",
+    "支持自托管本地安装与服务器部署，提供仪表盘与受控桥接",
+    "源码基于 Bun 构建，测试含 SQLite-full 故障注入并强制在 CI 执行"
+   ],
+   "use_cases": [
+    "为多个 AI 编码代理（Codex、Claude Code）提供跨会话共享记忆",
+    "多环境间通过桥接受控共享笔记、文件与会话上下文"
+   ],
+   "use_cases_end": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite is the canonical store in the installation you select. Access is scoped and revocable. Bridges do not merge everyone's private memory. External model calls and browser connections can send authorized data outside your machine; self-hosting does not mean ／ The ordinary suite leaves one deliberate skip for the SQLite-full fault. `test:storage-full` runs it in a fresh temporary database; both commands are mandatory in CI. See the storage-full check.",
+     "lines": [
+      50,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 SQLite 为该安装的权威存储，Qoopia 是使用数据库存数据的应用而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，捆绑第三方组件保留各自许可声明",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite is the canonical store in the installation you select. Access is scoped and revocable. Bridges do not merge everyone's private memory. External model calls and browser connections can send authorized data outside your machine; self-hosting does not mean every operation stays offline. Managed HTTPS uses Cloudflare Tunnel and is not end-to-end encrypted through that intermediary. ／ Qoopia gives your agents persistent memory across sessions and clients. Use your own local installation or server, connect agents through MCP, and keep working in the tools you already use. ／ Or download the signed installer, follow the included instructions, and open Qoopia. No developer checkout is needed.",
+   "evidence_lines": [
+    50,
+    11,
+    38
+   ]
+  },
+  "fn": "qoopia/qoopia-source",
+  "sha": "5f452c4b2839",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

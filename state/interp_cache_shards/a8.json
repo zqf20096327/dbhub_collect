@@ -10473,5 +10473,72 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e309104e494c": {
+  "identity": {
+   "one_liner": "Remnawave VPN 订阅销售的 Telegram 机器人与 Mini App",
+   "review": "一个用 Go 编写的 Telegram 机器人、Mini App 和网页后台，用于销售和管理基于 Remnawave 面板的 VPN 订阅，包含套餐、试用期、支付系统、推荐与工单等功能，通过 Docker Compose 部署并使用 PostgreSQL 存储。面向自托管 VPN 服务的运营者，提供从 Bedolaga 迁移数据的脚本。",
+   "highlights": [
+    "提供 Telegram 机器人、Mini App 与网页后台三种界面，用于套餐、支付与订阅管理",
+    "包含从 Bedolaga 到 Link-Bot 的数据迁移脚本（用户、余额、推荐与订阅）",
+    "通过 Docker Compose 部署，自带更新与回滚脚本"
+   ],
+   "use_cases": [
+    "自托管 Remnawave VPN 面板的订阅销售与用户管理",
+    "需要 Telegram Stars 或第三方支付系统集成的订阅收费场景",
+    "从 Bedolaga 机器人迁移用户与订阅数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Переносятся **пользователи, баланс, рефералы и активные/пробные подписки**. Оба бота должны использовать одну панель Remnawave; база PostgreSQL Bedolaga должна быть доступна контейнеру Link-Bot. ／ export BEDOLAGA_DATABASE_URL='postgres://USER:PASSWORD@BEDOLAGA_HOST:5432/DBNAME'",
+     "lines": [
+      73,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该机器人是一个使用 PostgreSQL 存储数据的 VPN 订阅销售应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Telegram-бот, Mini App и веб-кабинет для VPN-подписок Remnawave. ／ docker compose --profile standalone up -d --build ／ Переносятся **пользователи, баланс, рефералы и активные/пробные подписки**. Оба бота должны использовать одну панель Remnawave; база PostgreSQL Bedolaga должна быть доступна контейнеру Link-Bot.",
+   "evidence_lines": [
+    5,
+    62,
+    73
+   ]
+  },
+  "fn": "bruhxax/Link-Bot",
+  "sha": "e309104e494c",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

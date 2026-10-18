@@ -7910,5 +7910,86 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "63315c365265": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 Vue 的人力资源管理系统",
+   "review": "一套前后端分离的人力资源管理系统，覆盖组织架构、员工档案、RBAC 权限、考勤、薪资与 Flowable 审批流，并内置基于 RAG 的企业知识库问答。采用双 MySQL 数据源与 PostgreSQL/pgvector 向量库存档数据，面向需要自建人事系统的企业用户，通过 Docker Compose 启动中间件后导入 SQL 初始化脚本运行。",
+   "highlights": [
+    "覆盖组织架构、员工档案、RBAC 权限、考勤、假期、薪资与五险一金管理",
+    "集成 Flowable 8.0 工作流引擎，采用业务主库与流程专库的双 MySQL 数据源设计",
+    "内置基于 PostgreSQL/pgvector 的文档向量化 ETL 流水线与知识库智能问答"
+   ],
+   "use_cases": [
+    "企业人事全流程管理（考勤、审批、薪资核算）",
+    "基于企业制度文档的员工自助政策问答",
+    "带审批流与权限体系的企业内部系统二次开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 采用 MySQL（业务）+ Redis（缓存/验证码）+ PostgreSQL/pgvector（向量数据库）+ MinIO（对象存储）的多引擎存储架构；内置文档切块、向量化 ETL 流水线，助力企业政策与制度的高精度语义召回。 ／ |**PostgreSQL**|16 (pgvector)|知识库文档分块与高维向量存储数据库（`hrm_kb`）| ／ - **PostgreSQL (pgvector)**：`localhost:5432`，`hrm/123456`，数据库 `hrm_kb`",
+     "lines": [
+      21,
+      89,
+      146
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 深度整合 Spring Boot 3.4 与 Flowable 引擎，基于双 MySQL 独立数据源设计（业务主库 + 流程引擎专库），保证核心工作流数据自治与平滑伸缩。 ／ |**MySQL**|8.1|主业务数据库（`hrm`）与流程引擎专库（`hrm_flowable`）| ／ mysql -h 127.0.0.1 -P 3306 -uroot -p123456 hrm < db/mysql/hrm.sql",
+     "lines": [
+      17,
+      88,
+      154
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 MySQL 与 PostgreSQL/pgvector 存储业务与向量数据的人力资源管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 基于 Spring Boot 3.4 与 Vue 2.6 构建的现代化全栈人力资源管理系统，深度集成 Flowable 工作流引擎、企业知识库（RAG）与智能问答。 ／  - 采用 MySQL（业务）+ Redis（缓存/验证码）+ PostgreSQL/pgvector（向量数据库）+ MinIO（对象存储）的多引擎存储架构；内置文档切块、向量化 ETL 流水线，助力企业政策与制度的高精度语义召回。 ／ |**MySQL**|8.1|主业务数据库（`hrm`）与流程引擎专库（`hrm_flowable`）|",
+   "evidence_lines": [
+    3,
+    21,
+    88
+   ]
+  },
+  "fn": "quuuuj/hrm",
+  "sha": "63315c365265",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

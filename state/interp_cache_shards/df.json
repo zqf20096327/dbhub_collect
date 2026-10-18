@@ -10305,5 +10305,167 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "487d94e0c61f": {
+  "identity": {
+   "one_liner": "自托管网页邮件客户端，多账户 IMAP/SMTP，SQLite 存储",
+   "review": "Gofer 是一个自托管的网页邮件客户端，将邮件、联系人和日历整合在一个界面中，支持 Gmail、Outlook、iCloud 及任意 IMAP/SMTP 账户，通过 Go、templ、HTMX 构建，使用 SQLite 存储数据。适合想在自己服务器上运行个人或家庭/办公邮箱的用户；目前为 pre-1.0，Gmail/Outlook 需自建 OAuth 应用。",
+   "highlights": [
+    "支持多账户邮件聚合，兼容 Gmail OAuth 与任意 IMAP/SMTP 服务器",
+    "集成联系人与日历同步（CardDAV/CalDAV/Google/Outlook）",
+    "加密凭据存储，支持 passkeys/TOTP MFA，可导出 mbox"
+   ],
+   "use_cases": [
+    "个人或家庭自托管邮件，替代第三方网页邮箱",
+    "小型办公室多用户邮件入口",
+    "跨账户邮件迁移与统一搜索"
+   ],
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明使用 SQLite（modernc.org/sqlite）存储自身数据，是使用数据库的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "signals": {
+    "status": "experimental",
+    "license_note": "",
+    "install": [
+     "binary",
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     9,
+     50
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- modernc.org/sqlite for SQLite storage",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明使用 SQLite（modernc.org/sqlite）存储自身数据，是使用数据库的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Gofer is a self-hosted webmail I'm building because I wanted one that's actually nice to use. Mail, contacts, and calendar in one place, running on your own machine or server, open in any browser. ／ - modernc.org/sqlite for SQLite storage",
+   "evidence_lines": [
+    9,
+    50
+   ]
+  },
+  "fn": "cristianadrielbraun/gofer",
+  "sha": "487d94e0c61f",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6c88b9544717": {
+  "identity": {
+   "one_liner": "Kleinanzeigen 分类广告筛选招工具，多阶段流水线用 SQLite 存进度",
+   "review": "一个 Python 命令行工具，对 Kleinanzeigen 分类广告执行六阶段流水线：抓取列表、预过滤、抓取详情、评分、在线核验、生成 Markdown 报告。各阶段进度存于 SQLite，支持断点续跑。适合个人用户按 JSON 配置文件定制搜索与过滤规则；注意自动化访问违反站点 ToS，许可为 BUSL 1.1（限非生产用途）。",
+   "highlights": [
+    "提供 lists/prefilter/details/score/verify/report 六个可独立运行的阶段命令",
+    "各阶段进度保存在 SQLite 数据库，二次运行复用已完成工作，--fresh 重新检查列表页",
+    "基于 JSON 配置文件定义搜索、价格区间、kill 规则与评分项，输出带评分原因的 Markdown 报告"
+   ],
+   "use_cases": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Stages keep progress in SQLite. A second run reuses completed work. `--fresh` checks the list pages again. Existing ad IDs keep their state; verified and killed ads are not processed again. Failed detail fetches stay `kept`. Failed verification fetches or titl ／ - `<name>.db`: SQLite listings with statuses `new`, `kept`, `killed`, `detailed`, `scored`, `verified`, and `gone`, plus `kill_reason` and integer `price_eur`.",
+     "lines": [
+      57,
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "工具使用 SQLite 存储运行进度与结果数据，本身是面向分类广告的应用而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BUSL 1.1（限非生产使用），Change Date 2031-09-21 后转为 Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stages keep progress in SQLite. A second run reuses completed work. `--fresh` checks the list pages again. Existing ad IDs keep their state; verified and killed ads are not processed again. Failed detail fetches stay `kept`. Failed verification fetches or title mismatches stay `scored`, so the next verify command can retry them. A real deleted page becomes `gone`. ／ - `<name>.db`: SQLite listings with statuses `new`, `kept`, `killed`, `detailed`, `scored`, `verified`, and `gone`, plus `kill_reason` and integer `price_eur`.",
+   "evidence_lines": [
+    57,
+    101
+   ]
+  },
+  "fn": "luisKisters/kleinscoutr",
+  "sha": "6c88b9544717",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

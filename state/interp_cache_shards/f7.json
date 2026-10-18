@@ -9939,5 +9939,152 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7922592ff696": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地代理长期记忆核，支持多主机共享",
+   "review": "Scope Recall 是为 Hermes、Codex、Claude Code 等代理提供本地长期记忆的工具，以 SQLite 为唯一事实存储、LanceDB 为可重建的向量伴随索引，通过主机适配器的 hooks 和 MCP 服务器共享同一记忆库，并提供检查、更正、删除记忆的 CLI 与卸载保留策略，面向运行上述代理的用户。",
+   "highlights": [
+    "以 SQLite 为唯一事实权威，向量索引（默认 LanceDB）可重建",
+    "通过 hooks 与 MCP 服务器为多个代理主机提供共享记忆存储",
+    "提供 plan/apply 安装与卸载流程，默认卸载保留记忆数据"
+   ],
+   "use_cases": [
+    "为多个本地代理提供共享的长期记忆",
+    "需要检查、更正或删除代理记忆的场景",
+    "无外部数据库依赖的本地记忆部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP s ／ is captured. SQLite is the only fact authority; host adapters share the same",
+     "lines": [
+      3,
+      19
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra adds the LanceDB vector companion, the default `vector.backend`; without it, configure `sqlite-bruteforce` or recall stays lexical. Postgre",
+     "lines": [
+      115
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 作为自身的事实存储、LanceDB 作为向量索引，是为代理服务的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP server (the MCP tools need the optional `codex` extra; dsh runs the hooks through a plugin). The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ is captured. SQLite is the only fact authority; host adapters share the same ／ the same isolated Python environment the host uses. The default vector store is LanceDB: without",
+   "evidence_lines": [
+    3,
+    19,
+    53
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "7922592ff696",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ec3b11fccfef": {
+  "identity": {
+   "one_liner": "面向学术圈的多人派对词猜游戏，Node.js+WebSocket 实时对战",
+   "review": "一个面向学术圈玩家的在线多人派对游戏平台，首个游戏为团队猜词对战（Double Blind），玩家用手机加入房间，由服务端权威判定。后端用 Node.js + Socket.IO，房间数据存内存，账号与反馈存 SQLite，前端为 Vue 3，支持中英双语和微信浏览器；含账号系统、战绩记录与 AI 玩家功能。适合学术社群娱乐使用。",
+   "highlights": [
+    "支持中英双语，移动端优先，可在微信浏览器运行且无需 Google 服务",
+    "服务端权威判定，玩家无法通过开发者工具看到未揭示的牌色",
+    "支持可选账号，保存头像、战绩、好友与公开主页，并记录每局游戏用于回放"
+   ],
+   "use_cases": [
+    "学术圈朋友的线上聚会娱乐",
+    "需要跨语言（中英）混合玩家群体的词类桌游",
+    "自托管部署运行自己的游戏实例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|Rooms in memory; feedback and accounts in SQLite (`node:sqlite`); avatars as files|",
+     "lines": [
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅用于存储该游戏的账号与反馈数据，README 定位为在线派对游戏站点。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Online party games for academics.** Everyone joins a room from their own phone. Nothing is needed to join; an account, which we recommend, keeps your avatar and records. ／ |Storage|Rooms in memory; feedback and accounts in SQLite (`node:sqlite`); avatars as files|",
+   "evidence_lines": [
+    5,
+    61
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "jxxsteven7/reviewer2",
+  "sha": "ec3b11fccfef",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

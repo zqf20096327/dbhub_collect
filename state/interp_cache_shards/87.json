@@ -8385,5 +8385,127 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "81865afd0ee3": {
+  "identity": {
+   "one_liner": "轻量自托管笔记应用，按时间线记录想法",
+   "review": "Memos 是一个自托管的笔记/随记应用，输入即保存，每条记录带日期，可按滚动、日历、标签或关键词检索，支持导出为纯 Markdown，可选择性分享给他人。通过 Docker 或二进制部署，数据存放在单个本地目录，适合想自托管个人笔记或轻量微博客的用户。",
+   "highlights": [
+    "按日期时间线记录随记，支持标签与关键词检索",
+    "数据以纯 Markdown 导出，保存在本地单一路径",
+    "提供 API 与 MCP server，并有浏览器扩展和 Telegram bot 等周边工具"
+   ],
+   "use_cases": [
+    "自托管个人随记与知识记录",
+    "轻量私有微博客，与家人朋友选择性分享",
+    "通过 API/MCP 将笔记接入脚本或 AI 工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "Memos 是面向终端用户的笔记应用，README 未展示其为其他数据库生态服务的组件角色",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Memos is a place for every quick thought. No title, no folder, nothing to pick: type, and the thought is kept on the day you wrote it. Your memos stay where you decide, yours alone until you share one with family and friends. ／ docker run -d \\ ／ - The API and MCP server connect Memos to your own scripts and AI tools.",
+   "evidence_lines": [
+    7,
+    28,
+    47
+   ]
+  },
+  "fn": "usememos/memos",
+  "sha": "81865afd0ee3",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "50508e4ef6f4": {
+  "identity": {
+   "one_liner": "自托管电动车充电追踪应用，Flask+SQLite 存储",
+   "review": "一个自托管的电动车充电记录追踪应用，提供仪表盘、充电历史、行驶日志、维护记录和 PDF 报告，可通过 15 个汽车品牌 API 同步车辆数据并接入 ENTSO-E 碳排放数据。面向想要本地掌控充电数据的电动车车主，基于 Flask/SQLAlchemy/SQLite 运行，支持 Docker 部署；README 声明项目大量由 AI 辅助编写，定位为业余项目。",
+   "highlights": [
+    "支持 15 个电动车品牌的车辆 API 集成，同步 SoC、里程、车辆状态等数据",
+    "本地 SQLite 存储，提供 CSV/GPX 导出、打印报告和自算电池健康证书",
+    "多语言（6 种）、多车辆/车队管理，集成 ENTSO-E 每小时电网 CO2 强度"
+   ],
+   "use_cases": [
+    "电动车车主长期本地记录充电成本、能耗与 CO2 数据",
+    "车队多车辆集中管理与 GHG 配额追踪",
+    "需 API 车辆状态同步与 OBD 电池数据读取的家用服务器场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|No privacy / data sold to third parties|**100% local** — SQLite file on your machine|",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存储在本机 SQLite 文件中，该仓库是使用 SQLite 存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Source-available",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Self-hosted dashboard for tracking your electric vehicle charges** — costs, kWh, CO2, recuperation, charging losses, live vehicle status, a self-generated **battery-health certificate**, and in-browser **OBD/ELM327** cell readout. Multi-vehicle / fleet support, connects to 15 EV brands via API. Available in 6 languages. ／ |No privacy / data sold to third parties|**100% local** — SQLite file on your machine| ／ docker exec ev-charge-tracker python tools/seed_demo.py",
+   "evidence_lines": [
+    13,
+    147,
+    136
+   ]
+  },
+  "fn": "robeertm/ev-charge-tracker",
+  "sha": "50508e4ef6f4",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9967,5 +9967,181 @@
   "generated_at": "2026-10-17",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "b92046fd4ef9": {
+  "identity": {
+   "one_liner": "WhatsApp 原生自助部署增长栈，广告到支付数据以 click id 关联",
+   "review": "一个自托管的 WhatsApp 增长/CRM 应用，将 Meta 广告点击、WhatsApp 会话、线索漏斗与 Razorpay 支付记录用 click id 串联。技术栈为 Node/Express + React + PostgreSQL 16（原生 SQL，无 ORM），含 LLM 代理与 MCP 能力。适合需要把投放与成交归因到会话层面的自托管运营团队。",
+   "highlights": [
+    "以 click id 将广告、会话、线索、支付数据本地关联，无需回查 Meta 接口",
+    "基于 Docker Compose 一键安装，含 Let's Encrypt 证书与密钥生成",
+    "内置 MCP 接口，可由 Claude 驱动应用能力，默认关闭"
+   ],
+   "use_cases": [
+    "广告投放到 WhatsApp 私域转化的归因分析",
+    "自托管 WhatsApp 收件箱与自动化跟进",
+    "线索漏斗管理与支付对账"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16, raw SQL via `pg` — no ORM|",
+     "lines": [
+      237
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 PostgreSQL 16 作为自身数据库层（raw SQL via pg），是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|PostgreSQL 16, raw SQL via `pg` — no ORM| ／ |Queues|BullMQ on Redis — sends, media downloads, agent runs| ／ |**MCP**|Drive the whole app from Claude — every capability off by default|",
+   "evidence_lines": [
+    237,
+    239,
+    214
+   ]
+  },
+  "fn": "Forgemind-git/ForgeGrowth-OSS",
+  "sha": "b92046fd4ef9",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "90428f4bed38": {
+  "identity": {
+   "one_liner": "Home Assistant recorder 数据库跨引擎迁移脚本（SQLite/MariaDB/MySQL/PostgreSQL）",
+   "review": "该脚本用于在 SQLite、MariaDB、MySQL、PostgreSQL 之间任意方向迁移 Home Assistant recorder 数据库，保留全部历史数据。它从安装的 HA 模型运行时生成目标 schema，要求源 schema 版本一致才写入，迁移期间 HA 需停止。运行需 HA 自身 Python 环境，支持 dry-run 和行数校验，失败不支持断点续传。",
+   "highlights": [
+    "支持四种数据库引擎间任意方向的迁移，迁移矩阵标注 tested/production/supported 等级",
+    "目标 schema 由已安装的 Home Assistant recorder 模型运行时生成，不随脚本内置 DDL",
+    "提供 --dry-run 预检、迁移前列级 diff、迁移后逐表行数校验"
+   ],
+   "use_cases": [
+    "Home Assistant 用户更换 recorder 数据库引擎（如 MariaDB 迁往 PostgreSQL）",
+    "同一引擎更换服务器或数据库文件",
+    "迁移前预检源库 schema 版本与列差异"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Migrate the Home Assistant **recorder** database between engines — **SQLite, MariaDB, MySQL, PostgreSQL** — in any direction, keeping the full history: states, events, long-term statistics, everything. ／ |source ↓ / target →|SQLite|MariaDB|MySQL|PostgreSQL| ／ |**PostgreSQL**|✅|☑|☑|◐|",
+     "lines": [
+      5,
+      15,
+      20
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Migrate the Home Assistant **recorder** database between engines — **SQLite, MariaDB, MySQL, PostgreSQL** — in any direction, keeping the full history: states, events, long-term statistics, everything. ／ |source ↓ / target →|SQLite|MariaDB|MySQL|PostgreSQL| ／ |**MySQL**|☑|☑|◐|☑|",
+     "lines": [
+      5,
+      15,
+      19
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Migrate the Home Assistant **recorder** database between engines — **SQLite, MariaDB, MySQL, PostgreSQL** — in any direction, keeping the full history: states, events, long-term statistics, everything. ／ |source ↓ / target →|SQLite|MariaDB|MySQL|PostgreSQL| ／ |**SQLite**|◐|✅|☑|✅|",
+     "lines": [
+      5,
+      15,
+      17
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Migrate the Home Assistant **recorder** database between engines — **SQLite, MariaDB, MySQL, PostgreSQL** — in any direction, keeping the full history: states, events, long-term statistics, everything. ／ |source ↓ / target →|SQLite|MariaDB|MySQL|PostgreSQL| ／ |**MariaDB**|☑|◐|☑|✅ **production**|",
+     "lines": [
+      5,
+      15,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该脚本为 Home Assistant 的 recorder 数据库迁移服务，直接读写四种数据库，不使用数据库存业务数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Migrate the Home Assistant **recorder** database between engines — **SQLite, MariaDB, MySQL, PostgreSQL** — in any direction, keeping the full history: states, events, long-term statistics, everything. ／ - **No DDL is shipped, no HA version is pinned.** The target schema is generated at run time from the recorder models installed in the Home Assistant you are running (`Base.metadata.create_all`), which is exactly how the recorder creates a fresh database. Whatever schema version your HA is on, that is the schema you get. ／ |DB drivers|`psycopg2` for PostgreSQL, `mysqlclient` (`MySQLdb`) or `pymysql` for MariaDB/MySQL. The official HA container image ships both.|",
+   "evidence_lines": [
+    5,
+    33,
+    47
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "alexdelprete/ha-db-universal-migrator",
+  "sha": "90428f4bed38",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

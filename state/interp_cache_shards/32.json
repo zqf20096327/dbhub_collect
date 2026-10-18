@@ -9337,5 +9337,226 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "39bd46d54a78": {
+  "identity": {
+   "one_liner": "Rust 语言的 SQLite 习惯用法绑定封装库",
+   "review": "Rusqlite 是一个让 Rust 程序使用 SQLite 的封装库，提供 Connection 查询、FromSql/ToSql 类型转换等接口，并通过 Cargo features 支持扩展加载、备份 API、虚拟表、SQLCipher 加密链接及 bundled 自动编译 SQLite。适用于需要在 Rust 应用中读写 SQLite 数据库的开发者；通过 libsqlite3-sys 链接系统或内置的 SQLite C 库。",
+   "highlights": [
+    "提供 SQLite 3.45.3+ 的 Rust 绑定，支持 bundled 特性自动编译链接 SQLite",
+    "通过 cargo features 提供备份、扩展加载、虚拟表、序列化、SQLCipher 等可选能力",
+    "通过 libsqlite3-sys 支持系统库链接或源码编译两种构建方式"
+   ],
+   "use_cases": [
+    "在 Rust 应用中读写 SQLite 数据库",
+    "需要链接 SQLCipher 加密版 SQLite 的 Rust 项目",
+    "需要编写 SQLite 虚拟表或自定义函数的 Rust 扩展开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Rusqlite is an ergonomic wrapper for using SQLite from Rust. ／ ### Supported SQLite Versions",
+     "lines": [
+      11,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 提供语言绑定，属于服务数据库生态的开发库组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rusqlite is an ergonomic wrapper for using SQLite from Rust. ／ ### Supported SQLite Versions",
+   "evidence_lines": [
+    11,
+    35
+   ]
+  },
+  "fn": "rusqlite/rusqlite",
+  "sha": "39bd46d54a78",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "04e81bdc587f": {
+  "identity": {
+   "one_liner": "PostgreSQL 主从状态探活 sidecar，提供 HTTP 查询接口",
+   "review": "pg-status 是一个部署在应用旁的 sidecar 服务，后台轮询配置的 PostgreSQL 主机，报告存活、主库身份、副本及复制延迟，并通过 /master、/replica 等端点按延迟阈值、LSN 和机房/地域偏好返回主机名，结果从内存读取。适合需要在每请求中查询主从拓扑的应用部署者；README 可见部分未包含安装方式说明。",
+   "highlights": [
+    "提供 /master、/replica、/sync_by_* 等 HTTP 端点，按 lag_ms/lag_bytes 阈值与 min_lsn 过滤返回主机",
+    "支持 read-your-writes 模式：传入 pg_current_wal_lsn() 的 LSN，仅返回已重放到该位置的副本",
+    "支持 dc/geo 就地性偏好与轮询选择，结果由内存直接返回"
+   ],
+   "use_cases": [
+    "应用每请求查询可用主库或副本的主机名",
+    "监控 PostgreSQL 主从拓扑与各副本复制延迟",
+    "实现 read-your-writes 读写分离路由"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg-status ／ your PostgreSQL hosts: whether they are alive, which host is the master, which ／ pg-status is designed to run alongside your main application. It is",
+     "lines": [
+      1,
+      4,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 PostgreSQL 集群提供状态探测与查询服务，是为数据库生态服务的组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An extremely lightweight and fast sidecar service that reports the status of ／ It polls database hosts in the background at a configurable interval and ／ exposes an HTTP API for retrieving hosts that meet specific conditions.",
+   "evidence_lines": [
+    3,
+    13,
+    14
+   ]
+  },
+  "fn": "krylosov-aa/pg-status",
+  "sha": "04e81bdc587f",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a5827f2780bc": {
+  "identity": {
+   "one_liner": "跨平台工业级 C++ 全栈后端开发库",
+   "review": "NexusForce 是一个现代 C++ 后端开发库，提供异步并发、容器、加密、文件系统、网络协议（HTTP/1.1、HTTP/2、WebSocket、DNS 等）、SQL 语句构建及 MySQL/PostgreSQL/SQLite 客户端等模块，覆盖 Windows/Linux 多架构，支持 C++14/17/20，通过 vcpkg 与 CMake 构建，面向后端开发者与底层原理学习者。",
+   "highlights": [
+    "提供基于 io_context 的异步 I/O、线程池、协程等并发组件",
+    "包含 HTTP/1.1、HTTP/2、WebSocket 服务器实现及 AES-256、ChaCha20-Poly1305 等加密算法",
+    "提供 sql_builder 方言感知 SQL 构建与 MySQL/PostgreSQL/SQLite 客户端"
+   ],
+   "use_cases": [
+    "C++ 后端服务的网络与并发开发",
+    "需要加密、序列化、配置解析等基础工具集的 C++ 项目",
+    "学习现代 C++ 底层实现原理的教学场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL 客户端",
+     "lines": [
+      208
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 客户端",
+     "lines": [
+      209
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite 客户端",
+     "lines": [
+      210
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **`sql_builder`** - 标准 SQL 语句流式构建，支持**方言感知占位符**（Generic `?` / PgSQL `$N` / Oracle `:N`）和**方言感知 DDL**（AUTO_INCREMENT / SERIAL / IDENTITY 自动适配）",
+     "lines": [
+      204
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 C++ 开发提供数据库客户端与 SQL 构建等服务数据库生态的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目旨在建立**功能健全、风格统一、可读性强、社区共建、跨平台兼容**的工业级现代 C++ 开发库。通过清晰的架构设计、规范的代码实现、丰富的设计模式应用， ／ |**SQL**|ISO/IEC 9075 (SQL-92 及后续版本)|生成符合 ANSI SQL 与支持数据库方言的语句| ／ ### 🌐 网络库 (Network)",
+   "evidence_lines": [
+    26,
+    83,
+    180
+   ]
+  },
+  "fn": "aurora250/NexusForce",
+  "sha": "a5827f2780bc",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

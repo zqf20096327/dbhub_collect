@@ -9478,5 +9478,231 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8a91c73be1cf": {
+  "identity": {
+   "one_liner": "基于 Java 的开源博客系统，用 MySQL/SQLite 存储数据",
+   "review": "ZrLog 是一款 Java 编写的博客发布系统，提供文章、分类、标签、评论、主题和插件机制，内置 Markdown 编辑器，后台基于 React 和 Ant Design。它面向自建博客的用户，支持 Docker、Native/Zip、WAR 及 AWS Lambda + Cloudflare D1 等部署形态，安装页负责检查配置、数据库连接与安装锁。",
+   "highlights": [
+    "提供文章、分类、标签、评论管理与插件、主题扩展机制",
+    "内置 Markdown 编辑器，支持页面静态化和缓存",
+    "支持 Docker、Zip/Native、WAR、FaaS 多种部署形态，并提供数据库定时备份与在线升级"
+   ],
+   "use_cases": [
+    "个人或服务器上自建博客",
+    "需要插件/主题扩展的内容站点",
+    "WAR 容器或 FaaS 环境下的 Java 应用部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "6. **部署形态**: 推荐 Native/Zip + SQLite 或 Docker Compose + MySQL；AWS Lambda + Cloudflare D1 作为高级路径，并支持 WAR 容器部署。 ／ 需要同时启动 MySQL 时，参见 Docker Compose 部署说明。 ／ - 推荐路径（服务器）：Docker Compose + MySQL。官方 Compose 配置包含 MySQL、健康检查和持久化卷。",
+     "lines": [
+      30,
+      47,
+      53
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "6. **部署形态**: 推荐 Native/Zip + SQLite 或 Docker Compose + MySQL；AWS Lambda + Cloudflare D1 作为高级路径，并支持 WAR 容器部署。 ／ - 推荐路径（个人或本机）：Native/Zip + SQLite。Native Image 发行包免装 JDK；Zip 运行需要 JDK `>= 11`。",
+     "lines": [
+      30,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 SQLite/MySQL 存数据的博客应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ZrLog 是一款基于 Java 的开源博客系统。它提供文章、分类、标签、评论、主题、插件、静态化和在线升级等功能，内置 Markdown 编辑器，管理界面基于 React 和 Ant Design 构建。 ／ 6. **部署形态**: 推荐 Native/Zip + SQLite 或 Docker Compose + MySQL；AWS Lambda + Cloudflare D1 作为高级路径，并支持 WAR 容器部署。 ／  - 推荐路径（服务器）：Docker Compose + MySQL。官方 Compose 配置包含 MySQL、健康检查和持久化卷。",
+   "evidence_lines": [
+    5,
+    30,
+    53
+   ]
+  },
+  "fn": "94fzb/zrlog",
+  "sha": "8a91c73be1cf",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "46400347d91b": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL RLS 的 Django 多租户隔离库",
+   "review": "这是一个 Python/Django 库，通过 PostgreSQL 的 Row-Level Security 在数据库层强制多租户隔离，覆盖 ORM、原生 SQL 和 dbshell 查询，并提供 Django admin、DRF、Celery 集成与审计日志。面向需要单库多租户隔离的 Django 开发者；要求 PostgreSQL 15+，且连接角色须受 RLS 约束（不能是超级用户或 BYPASSRLS 角色）。",
+   "highlights": [
+    "通过 PostgreSQL RLS 策略在数据库层过滤 ORM、原生 SQL 与 dbshell 查询",
+    "提供 Django admin、DRF、Celery 集成及跨租户外键校验",
+    "支持租户上下文审计日志与 per-tenant 管理命令"
+   ],
+   "use_cases": [
+    "Django 单数据库多租户应用的租户数据隔离",
+    "需要数据库层强制隔离、防止遗漏租户过滤的场景",
+    "多租户 API 服务（DRF）与异步任务（Celery）的租户上下文传递"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Database-enforced multitenancy for Django using PostgreSQL ／ pushes enforcement to PostgreSQL itself using Row-Level Security. Every query — ／ |PostgreSQL|15, 16, 17, 18|",
+     "lines": [
+      12,
+      21,
+      159
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Django 应用实现 PostgreSQL 数据库层租户隔离服务的库组件，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Database-enforced multitenancy for Django using PostgreSQL ／ - **Database-enforced isolation** -- RLS policies protect tenant tables across ORM ／ |PostgreSQL|15, 16, 17, 18|",
+   "evidence_lines": [
+    12,
+    29,
+    159
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "dvoraj75/django-rls-tenants",
+  "sha": "46400347d91b",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "51f49222b8e5": {
+  "identity": {
+   "one_liner": "面向开发者的免费工具清单，含数据库/后端等分类",
+   "review": "一个按类别整理免费层开发工具的资源清单仓库，收录 55 个工具并每晚通过 GitHub Actions 自动检测在线状态，覆盖 AI 编码、云托管、数据库与后端、DevOps 等分类，其中 Database & Backend 一节列出 Supabase、Neon、Cloudflare D1、Turso、DBeaver 等数据库相关服务与工具。适用于寻找免费开发工具的开发者；本身不提供工具功能，仅为索引与状态看板。",
+   "highlights": [
+    "收录 55 个工具，按 AI 编码、云托管、数据库等 16 个类别组织",
+    "通过 GitHub Actions 每晚自动检查工具在线状态并更新",
+    "标注各工具的定价模式（Free Tier/Open Source/BYOK 等）"
+   ],
+   "use_cases": [
+    "查找特定类别的免费层开发工具",
+    "查看收录工具的可用状态与许可信息",
+    "通过 PR/Issue 贡献新工具条目"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      177,
+      182
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ／ Serverless SQLite database with edge replication",
+     "lines": [
+      192,
+      197
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库是工具索引清单，既非为数据库生态服务的工具，也非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 🛠️️ Awesome Free Dev Tools ／ > 🎯 **The best free-tier tools collection** for developers and Vibe Coders. Status is automatically checked every night to keep information accurate. ／ |Total Tools|55| ／ ### Database & Backend",
+   "evidence_lines": [
+    1,
+    11,
+    19,
+    169
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "51f49222b8e5",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

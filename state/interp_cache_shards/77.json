@@ -10648,5 +10648,93 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b2294c7ec9eb": {
+  "identity": {
+   "one_liner": "Rust 流处理引擎，集成 AI 能力与多源输入输出",
+   "review": "ArkFlow 是用 Rust 和 Tokio 实现的流处理引擎，支持 Kafka、MQTT、SQL 数据库等多种输入输出组件，内置 SQL 查询、Python UDF、窗口缓冲等处理器，并可加载机器学习模型和调用 OpenAI 兼容 API 做推理与向量检索。面向需要实时数据处理与智能分析的开发者，采用 YAML 配置，需从源码构建运行。",
+   "highlights": [
+    "提供 Kafka、MQTT、HTTP、SQL 数据库等多种输入输出组件",
+    "内置 SQL 查询、Python UDF、VRL 处理器及窗口缓冲机制",
+    "支持通过 OpenAI 兼容 API 做嵌入与 LLM 调用，并支持 pgvector/Milvus/Qdrant 向量检索"
+   ],
+   "use_cases": [
+    "从多种数据源实时摄取并处理流数据",
+    "流式数据上调用 LLM/嵌入模型做智能分析",
+    "将处理结果写入 Kafka、SQL 数据库或向量库"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **SQL** (`sql`): Query data from SQL databases (MySQL, PostgreSQL, SQLite) ／ - **pgvector Search** (`pgvector_search`): Search a PostgreSQL table with the pgvector extension for top-k nearest neighbors of each row's vector ／ - **SQL** (`sql`): Write to SQL databases (MySQL, PostgreSQL) with batch inserts and UPSERT",
+     "lines": [
+      83,
+      115,
+      141
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **SQL** (`sql`): Query data from SQL databases (MySQL, PostgreSQL, SQLite) ／ - **SQL** (`sql`): Write to SQL databases (MySQL, PostgreSQL) with batch inserts and UPSERT",
+     "lines": [
+      83,
+      141
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQL** (`sql`): Query data from SQL databases (MySQL, PostgreSQL, SQLite)",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为流处理引擎连接多种数据库作为输入/输出源，为数据生态提供服务，而非以某个库为存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **SQL** (`sql`): Query data from SQL databases (MySQL, PostgreSQL, SQLite) ／ - **SQL** (`sql`): Write to SQL databases (MySQL, PostgreSQL) with batch inserts and UPSERT ／ - **Multiple Data Sources**: Support for Kafka, MQTT, HTTP, files, SQL databases, and many other input/output sources",
+   "evidence_lines": [
+    83,
+    141,
+    27
+   ]
+  },
+  "fn": "arkflow-rs/arkflow",
+  "sha": "b2294c7ec9eb",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

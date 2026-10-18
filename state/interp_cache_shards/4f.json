@@ -10621,5 +10621,329 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fbe128c279e4": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的本地 MCP 记忆服务器，SQLite 存储项目决策与规则",
+   "review": "这是一个本地运行的 MCP 服务器，提供 5 个动词工具，用于为 Claude Code、Cursor、Windsurf 等 AI 编码代理持久化存储架构决策、不变量规则和经验教训，并支持预提交 diff 审计与事实替代的时间谱系追踪。默认使用 SQLite（通过 node:sqlite 初始化 .agent/context.db），多机多代理场景可切换 STORAGE_MODE=postgres 并使用 pgvector 索引。适合需要在会话间保持项目上下文的开发团队使用。",
+   "highlights": [
+    "提供 5 个 MCP 工具（retrieve/remember/revise/nudge/health），用于存储、检索、修订项目决策与规则",
+    "默认以 SQLite 存储，支持通过 STORAGE_MODE=postgres 切换到 PostgreSQL 并使用 pgvector HNSW 索引",
+    "支持近重复检测（余弦相似度阈值 0.85）、强制失效理由、基于 SHA-256 锚点的代码漂移自愈"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨会话的持久化项目决策与规则记忆",
+    "在提交前用 nudge 工具审计 diff 是否违反项目不变量",
+    "多机多代理协作时切换 PostgreSQL 实现集中式持久化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Local MCP server: five tools to store, retrieve, and retire project decisions. SQLite by default. ／ Storage: SQLite-First-lightgrey.svg) ／ 1. Validate Node >= 22.0.0 and initialize `.agent/context.db` via `node:sqlite`.",
+     "lines": [
+      3,
+      8,
+      33
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Use PostgreSQL (`STORAGE_MODE=postgres`)**: Required only when scaling to multi-agent swarms across different machines needing centralized persistence and server-side pgvector HNSW indexing.",
+     "lines": [
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目使用 SQLite/PostgreSQL 作为自身记忆数据的存储后端，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Local MCP server: five tools to store, retrieve, and retire project decisions. SQLite by default. ／ 1. Validate Node >= 22.0.0 and initialize `.agent/context.db` via `node:sqlite`. ／ * **Use PostgreSQL (`STORAGE_MODE=postgres`)**: Required only when scaling to multi-agent swarms across different machines needing centralized persistence and server-side pgvector HNSW indexing.",
+   "evidence_lines": [
+    3,
+    33,
+    86
+   ]
+  },
+  "fn": "kruschdev/krusch-context-mcp",
+  "sha": "fbe128c279e4",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "442e943604e0": {
+  "identity": {
+   "one_liner": "本地优先的 AI 知识与 Agent 桌面工作台，基于 Markdown 笔记与向量检索",
+   "review": "Hetu 是一个本地运行的桌面应用（Tauri + ASP.NET Core + React），将 Markdown 笔记、对话与编码会话写入同一本地数据库（默认 SQLite + sqlite-vec，可切换 PostgreSQL 16+ + pgvector），并在此数据上提供语义检索、知识图谱、Wiki、记忆、看板与工作流，支持 MCP 和多模型接入。适合希望在本地管理知识并运行 Agent 的个人用户，无需账号，支持 Windows 和 Linux。",
+   "highlights": [
+    "笔记、会话、代码修改统一存储于单一 SQLite/PostgreSQL 数据库，检索、知识图谱与记忆共享同一数据源",
+    "支持 MCP 服务器、技能、Agent 预设、可视化工作流与看板任务的插件式扩展",
+    "提供语义检索（embedding + sqlite-vec/pgvector）、知识图谱、Wiki 生成与带作用域的长期记忆（含 Dream 合并/衰减/遗忘）"
+   ],
+   "use_cases": [
+    "在本地构建个人知识库并进行语义检索与知识图谱浏览",
+    "通过 Code sessions 让 Agent 在隔离 worktree 中编辑真实仓库并管理 Git/PR",
+    "用看板任务与工作流让 Agent 执行自动化任务"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Storage|SQLite + `sqlite-vec` (default) · PostgreSQL 16+ + `pgvector`| ／ PostgreSQL and desktop packaging ／ export DatabaseProvider=Postgresql",
+     "lines": [
+      115,
+      145,
+      149
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|SQLite + `sqlite-vec` (default) · PostgreSQL 16+ + `pgvector`| ／ Hetu is a desktop app with a local backend: write Markdown notes, ask an agent to work through a problem, and let Code sessions edit a real repository. All of it reads and writes the same SQLite database (or PostgreSQL), so retrieval, the knowledge graph, Wiki",
+     "lines": [
+      115,
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite/PostgreSQL 存储自身笔记与会话数据的桌面应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hetu is a desktop app with a local backend: write Markdown notes, ask an agent to work through a problem, and let Code sessions edit a real repository. All of it reads and writes the same SQLite database (or PostgreSQL), so retrieval, the knowledge graph, Wiki and long-term memory grow from the same material. No account, no telemetry, no uploads — model calls only go to the providers you configure. ／ |Storage|SQLite + `sqlite-vec` (default) · PostgreSQL 16+ + `pgvector`|",
+   "evidence_lines": [
+    19,
+    115
+   ]
+  },
+  "fn": "wosledon/Hetu",
+  "sha": "442e943604e0",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "96eb2a7fb0c8": {
+  "identity": {
+   "one_liner": "桌面 3BLD 魔方训练器，含算法库与 FSRS-5 复习调度",
+   "review": "这是一个面向三阶盲拧（3BLD）玩家的桌面训练程序，提供 3-style 打乱练习、记忆训练和计时还原，并内置覆盖 CFOP、OH、2x2 至 7x7 等多个项目的算法库。所有练习通过 FSRS-5 间隔重复算法调度，算法经模拟魔方机械验证，用户数据以 SQLite 持久化于本地用户目录，需从源码用 make 构建，以键盘操作为主。",
+   "highlights": [
+    "提供 3BLD 打乱、记忆训练与计时还原三类训练视图，全部按 FSRS-5 调度",
+    "内置覆盖多项目的算法库，每个算法经模拟魔方或事件引擎验证",
+    "用户数据持久化于用户目录下的 SQLite 数据库，支持编号迁移与一次性 JSON 导入"
+   ],
+   "use_cases": [
+    "三阶盲拧玩家进行 3-style 配对练习与记忆流训练",
+    "多项目魔方玩家按 FSRS 复习各项目算法用例",
+    "本地记录还原成绩并回放 3D 动画复盘"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "make gen-data builds data/vendor from ref_ground/, make run starts blind-trainer.exe. All user data persists in blind-trainer.db, a SQLite database in the user dir: %APPDATA%/blind-trainer on Windows, ~/.local/share/blind-trainer otherwise ($XDG_DATA_HOME/blin ／ - bt-data: SQLite storage (migrations, .bak backup, one-time JSON import), TSV corpus loader, seed pack loader and normalizer, alg verification verdicts, FSRS-5 spaced repetition, all repositories behind the Stores interface. ／ - bt-app: Bevy desktop app shipped as blind-trainer.exe, keyboard-first UI, SQLite persistence in the user dir. AppLogicPlugin carries all game flow with no rendering, PresentationPlugin owns the UI, so headless e2e drives complete flows through MinimalPlugins",
+     "lines": [
+      13,
+      202,
+      210
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确使用 SQLite 存储用户训练数据（blind-trainer.db），数据库仅为应用内持久化手段",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A desktop 3BLD trainer: 3-style drilling, memo training, and timed solves, plus a multi-event alg repository covering CFOP, OH, 2x2, big cubes 4x4 to 7x7, pyraminx, megaminx, skewb, square-1, and FTO, every case drilled under the same FSRS-5 scheduler. Every alg is mechanically verified against an emulated cube or its own event engine, so misspellings and wrong algs never contaminate muscle memory. Grounding data is the reconstructed alg sets of Tommy Cherry and Charlie Eggins plus provenance-tagged seed packs, sha-256 pinned under ref_ground/. ／ make gen-data builds data/vendor from ref_ground/, make run starts blind-trainer.exe. All user data persists in blind-trainer.db, a SQLite database in the user dir: %APPDATA%/blind-trainer on Windows, ~/.local/share/blind-trainer otherwise ($XDG_DATA_HOME/blind-trainer when the variable is set). Schema changes run as numbered migrations from db/migrations/, each step copies the database to a .bak backup first, and legacy JSON files (settings, srs, solves, user alg overlay) import once on first run and rename to .migrated. make screenshots regenerates every image below, timers and streamed counts reflect the capture run so images differ slightly between runs.",
+   "evidence_lines": [
+    7,
+    13
+   ]
+  },
+  "fn": "lavantien/blind-trainer",
+  "sha": "96eb2a7fb0c8",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "550921e9522d": {
+  "identity": {
+   "one_liner": "GaussDB 只读 MCP 服务器，供 Coding Agent 探查数据库",
+   "review": "面向 Claude Code、OpenCode 等 Coding Agent 的 GaussDB 只读 MCP 服务器，基于官方 Go 驱动通过 stdio 提供连通性测试、schema/表清单、表结构与 SELECT 执行等工具。通过 SQL 静态校验、只读事务与最小权限三层机制限制写入；使用 GaussDB 扩展协议 3.51，无法连接原生 PostgreSQL。",
+   "highlights": [
+    "通过 stdio 提供 5 个 MCP 工具：连通性测试、schema/表清单、表结构描述、单条 SELECT 执行",
+    "三层只读保障：SQL 静态校验、显式只读事务、仅 SELECT 权限账号部署建议",
+    "内置 GaussDB Go 驱动源码于 third_party，支持离线构建与多实例配置"
+   ],
+   "use_cases": [
+    "在内网非 SSL 环境让 Coding Agent 只读探查 GaussDB 数据库结构",
+    "为数据库 MCP 接入提供受限 SELECT 能力（行数/超时限制）",
+    "使用 openGauss 实例运行集成测试验证只读强制"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "无法连接原生 PostgreSQL，集成测试需要真实的 GaussDB / openGauss 实例。",
+     "lines": [
+      157
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "go test -count=1 ./... # 集成测试（需 GaussDB/openGauss 实例） ／ docker run -d --name opengauss-ro-test -e GS_PASSWORD='Gaussdb@123' \\ ／ 无法连接原生 PostgreSQL，集成测试需要真实的 GaussDB / openGauss 实例。",
+     "lines": [
+      143,
+      149,
+      157
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "面向 Coding Agent（Claude Code、OpenCode 等）的 **GaussDB 只读 MCP 服务器**。基于",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Coding Agent 提供访问 GaussDB 的 MCP 工具服务，属数据库生态组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "面向 Coding Agent（Claude Code、OpenCode 等）的 **GaussDB 只读 MCP 服务器**。基于 ／ ## 只读保障（三层纵深防御） ／ 无法连接原生 PostgreSQL，集成测试需要真实的 GaussDB / openGauss 实例。",
+   "evidence_lines": [
+    8,
+    15,
+    157
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "gxc/gaussdb-ro-mcp",
+  "sha": "550921e9522d",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

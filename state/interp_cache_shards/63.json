@@ -10402,5 +10402,154 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "33e9ae4e01b3": {
+  "identity": {
+   "one_liner": "自托管的待办/提醒/笔记应用，Flutter 多端 + Node.js/MySQL 后端",
+   "review": "一个开源自托管的生产力应用，提供任务、项目、笔记、强提醒及与 Google/Apple 日历的双向同步，基于 Flutter 覆盖 iOS/Android/Web/macOS/Windows/Linux，后端为 Node.js（Fastify + knex + MySQL），可通过 docker compose 自托管，并提供 MCP 连接器供 Claude/ChatGPT 调用；许可证为 PolyForm Noncommercial，仅限个人免费使用。",
+   "highlights": [
+    "支持 Web、Android、iOS 及 Windows/Linux 桌面端，可 docker compose 自部署",
+    "内置 MCP 远程服务器，提供 25 个工具接入 Claude/ChatGPT，采用 OAuth 2.1 + PKCE",
+    "支持 Todoist/TickTick 导入与 Google/Apple Calendar 双向同步，提醒以真实闹钟响铃"
+   ],
+   "use_cases": [
+    "个人任务与项目管理的自托管部署",
+    "需要在静音模式下强制响铃的紧急提醒场景",
+    "通过 MCP 在 Claude/ChatGPT 中查询和操作任务日程"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🔓 **Self-hosted &amp; private** — your MySQL, your server, one `docker compose up`. Free for personal use (licence). ／ |`apps/api`|Fastify backend — JavaScript only, MySQL via knex|",
+     "lines": [
+      262,
+      338
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "│ REST + WebSocket (Socket.IO) · offline-first local SQLite replica",
+     "lines": [
+      329
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明后端通过 knex 使用 MySQL 存数据，客户端本地用 SQLite 副本，MySQL 只是存储层，产品本身是待办/笔记应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial，个人使用免费",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "mahirozdin/alliswell",
+  "sha": "33e9ae4e01b3",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8190ad19397": {
+  "identity": {
+   "one_liner": "基于 Flask+SQLite 的多用户文件收集与分享 Web 应用",
+   "review": "这是一个运行在飞牛 fnOS NAS 上的文件收集与分享系统，管理员可创建带独立通行证、有效期和短链接的收集/分享页面，支持 Office/PDF/音视频等在线预览与 TUS 断点续传，数据存于 SQLite（WAL 模式）。仅提供 .fpk 原生应用包安装，不支持 Docker，适合教学作业收集、资料汇总与文件分发等场景。",
+   "highlights": [
+    "支持收集页/分享页双模式，各自独立通行证、有效期与自定义短链接",
+    "支持 TUS 协议断点续传，单文件上限 0.01-64 GB",
+    "提供 SQLite 数据库一键下载/导入与自动备份",
+    "支持 DOCX/XLSX/PPTX/CSV/PDF/图片/视频/音频/TXT 本地离线预览"
+   ],
+   "use_cases": [
+    "班级作业收集，按上传者身份分组并设独立配额",
+    "团队资料汇总与大文件传输",
+    "设置通行证与有效期后的客户文件交接或内部文件共享"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "基于 Flask + SQLite 的多用户文件收集与分享系统 | 支持 Office/PDF/图片/视频/音频/TXT 在线预览 | 专为飞牛 fnOS 打造 ／ |📦 **数据备份**|一键下载/导入 SQLite 数据库，自动验证和备份旧库| ／ |数据库|SQLite（WAL 模式 + 外键约束）|零配置、高性能并发读写|",
+     "lines": [
+      5,
+      53,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明基于 SQLite 存储数据，应用本身是文件收集分享系统而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 基于 Flask + SQLite 的多用户文件收集与分享系统 | 支持 Office/PDF/图片/视频/音频/TXT 在线预览 | 专为飞牛 fnOS 打造 ／ |数据库|SQLite（WAL 模式 + 外键约束）|零配置、高性能并发读写| ／ **适用平台：** 飞牛 fnOS **独占** Native 应用（.fpk 格式），不支持 Docker 部署（已停止更新）。支持 **x86 / ARM** 平台。",
+   "evidence_lines": [
+    5,
+    116,
+    19
+   ]
+  },
+  "fn": "Contribuv/file-collector",
+  "sha": "a8190ad19397",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

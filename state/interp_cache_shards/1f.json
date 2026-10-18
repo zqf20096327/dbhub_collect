@@ -10488,5 +10488,139 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "897ea64cf960": {
+  "identity": {
+   "one_liner": "基于官方 postgres 镜像的 PostGIS 扩展 Docker 镜像",
+   "review": "该项目提供预装 PostGIS 扩展的 PostgreSQL Docker 镜像，基于官方 postgres 镜像构建，提供 Debian 和 Alpine 两种变体，覆盖 PostgreSQL 14–18 及 19 预发布版本的多个标签。默认数据库自动安装 postgis、postgis_topology、postgis_tiger_geocoder 等扩展，适合需要在容器中运行空间数据库的开发与运维人员。使用方式与官方 postgres 镜像一致，需注意 PostgreSQL 18 起默认数据卷路径变更。",
+   "highlights": [
+    "提供覆盖 PostgreSQL 14–18 的 Debian 与 Alpine 镜像变体，并含 19 预发布及 master 开发版标签",
+    "默认数据库自动安装 postgis、postgis_topology、postgis_tiger_geocoder 扩展，并提供含 postgis 等扩展的 template_postgis 模板库",
+    "继承官方 postgres 镜像的全部环境变量（POSTGRES_PASSWORD、POSTGRES_USER、POSTGRES_DB 等）"
+   ],
+   "use_cases": [
+    "容器化运行带空间扩展的 PostgreSQL 数据库",
+    "测试 PostgreSQL 19 预发布版与 PostGIS 3.7 候选版",
+    "基于 Dockerfile 构建自定义空间数据库镜像"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The `postgis/postgis` image provides tags for running Postgres with PostGIS extensions installed. This image is based on the official `postgres` image and provides Debian and Alpine variants for PostGIS 3.6.x, compatible with PostgreSQL 14, 15, 16, 17 and 18.  ／ **⚠️ Breaking change (PostgreSQL 18+):**",
+     "lines": [
+      12,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是打包 PostgreSQL+PostGIS 数据库引擎的 Docker 镜像，为数据库部署提供服务而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The `postgis/postgis` image provides tags for running Postgres with PostGIS extensions installed. This image is based on the official `postgres` image and provides Debian and Alpine variants for PostGIS 3.6.x, compatible with PostgreSQL 14, 15, 16, 17 and 18. Test images are also provided for PostgreSQL 19 pre-releases, PostGIS 3.7 release candidates, and builds from the PostGIS/GEOS/PROJ/GDAL master branches (`*-master`). ／ In order to run a basic container capable of serving a PostGIS-enabled database, start a container as follows:",
+   "evidence_lines": [
+    12,
+    98
+   ]
+  },
+  "fn": "postgis/docker-postgis",
+  "sha": "897ea64cf960",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a57f6f2bee4": {
+  "identity": {
+   "one_liner": "面向新加坡SkillsFuture的自托管AI学习/培训管理系统",
+   "review": "基于 Next.js/TypeScript 的自托管学习与培训管理系统，覆盖课程创建、报名、考勤、评估、证书与财务流程，集成新加坡 SkillsFuture（SSG/TPGateway）API 与 QuickBooks，支持多角色与多租户部署。使用 PostgreSQL 存储数据，通过 Docker 部署于 Coolify。面向新加坡的培训机构、培训师与学员。",
+   "highlights": [
+    "提供 7 种角色的多角色系统与多租户部署（Coolify + Docker/Docker Compose）",
+    "集成 SkillsFuture Singapore API，覆盖课程、报名、评估、资助与申报流程",
+    "提供 200+ REST 外部接口及 n8n/webhook/任务调度自动化"
+   ],
+   "use_cases": [
+    "新加坡培训机构的课程运营与 SSG 合规申报",
+    "学员报名、学习进度跟踪与证书签发",
+    "与 QuickBooks 联动的发票、资助与薪资财务流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - **Modern Stack**: Next.js 16, TypeScript, Tailwind CSS, PostgreSQL, Docker, deployed on Coolify",
+     "lines": [
+      8,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其是使用 PostgreSQL 存储数据的完整 Web 应用系统，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AI-LMS-TMS is a **full-stack, enterprise-grade web application** that manages the complete training lifecycle - from course creation and scheduling to learner enrollment, progress tracking, assessments, and certification. Built with modern technologies and deep integration with Singapore's SkillsFuture ecosystem, it provides a seamless experience for training providers, trainers, and learners. ／ - **Multi-Tenant**: Same codebase deployed for multiple tenants on Coolify — Tertiary builds via **Dockerfile**, other tenants (Chariot, Intellisoft) build via **Docker Compose** ／ - **Modern Stack**: Next.js 16, TypeScript, Tailwind CSS, PostgreSQL, Docker, deployed on Coolify",
+   "evidence_lines": [
+    31,
+    38,
+    45
+   ]
+  },
+  "fn": "alfredang/AI-LMS-TMS",
+  "sha": "4a57f6f2bee4",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

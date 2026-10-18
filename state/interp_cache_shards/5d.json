@@ -9534,5 +9534,82 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dc39c3268c41": {
+  "identity": {
+   "one_liner": "Sigma 检测规则工具链：解析、评估、关联、转换、流式运行及 MCP/LSP 服务",
+   "review": "RSigma 是面向 Sigma 检测标准的 Rust 工具链，提供规则解析、校验、实时评估、有状态关联、后端查询转换、流式检测守护进程及 MCP/LSP 服务，面向安全检测工程师用于规则编写、测试、部署与威胁狩猎。支持将规则转换为 PostgreSQL/TimescaleDB 等后端原生查询并只读执行狩猎；状态可持久化到 SQLite。",
+   "highlights": [
+    "内置 90 项检查的 linter 与 LSP 服务器，支持实时诊断、补全与快速修复",
+    "流式守护进程支持 JSON/syslog/CEF/EVTX/OTLP 等多种输入格式，以及有状态关联（滑动/滚动/会话窗口）",
+    "提供 MCP 服务器与可插拔后端转换框架，含原生 PostgreSQL/TimescaleDB、LynxDB、Fibratus 后端及 30+ pySigma 后端委托"
+   ],
+   "use_cases": [
+    "在 CI 中对 Sigma 规则仓库进行 lint、验证、回测与覆盖率门禁",
+    "作为长驻检测守护进程实时评估日志事件并产生风险告警",
+    "针对 PostgreSQL/TimescaleDB 日志存档执行只读检测规则狩猎"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Rule conversion:** Converts rules into backend-native queries via a pluggable backend trait, with native PostgreSQL/TimescaleDB, LynxDB, and Fibratus backends plus sigma-cli delegation for 30+ pySigma backends (Splunk, Elasticsearch, Microsoft Sentinel, .. ／ * **Hunt execution:** Runs converted detection rules read-only against a PostgreSQL/TimescaleDB archive with `hunt run` and streams matching rows back as exemplar-shaped NDJSON that `rule draft`, `rule tune`, `rule test`, and `rule backtest` consume directly",
+     "lines": [
+      93,
+      94
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "* **State persistence:** Persists correlation, alert-pipeline, risk, and disposition state to SQLite with `--state-db` and restores it across restarts. The capture ring is not persisted.",
+     "lines": [
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是处理 Sigma 检测规则并对接数据库作为查询/狩猎后端的工具，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RSigma is a complete detection engineering toolkit for the Sigma detection standard, including a parser, evaluation engine, rule conversion, streaming runtime, linter, CLI, MCP, and LSP. ／ * **Rule conversion:** Converts rules into backend-native queries via a pluggable backend trait, with native PostgreSQL/TimescaleDB, LynxDB, and Fibratus backends plus sigma-cli delegation for 30+ pySigma backends (Splunk, Elasticsearch, Microsoft Sentinel, ...) ／ * **Hunt execution:** Runs converted detection rules read-only against a PostgreSQL/TimescaleDB archive with `hunt run` and streams matching rows back as exemplar-shaped NDJSON that `rule draft`, `rule tune`, `rule test`, and `rule backtest` consume directly",
+   "evidence_lines": [
+    18,
+    93,
+    94
+   ]
+  },
+  "fn": "timescale/rsigma",
+  "sha": "dc39c3268c41",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

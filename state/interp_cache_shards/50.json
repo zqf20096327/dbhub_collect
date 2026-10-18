@@ -10657,5 +10657,149 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "32b21c1c845f": {
+  "identity": {
+   "one_liner": "Arweave 永久网络上的 permaweb 网关节点，提供索引与数据服务",
+   "review": "ar-io-node 是构建在 Arweave 永久存储网络之上的 AR.IO 网关节点实现，用于索引和提供 permaweb 数据，支持 ANS-104 捆绑包的解包与索引、CDB64 根交易索引、索引共享、webhook 通知等能力，并提供 Docker Compose 部署、Turbo 打包器 sidecar 与 Envoy 代理等运行方式。面向希望运行 Arweave 网关的节点运营者；内部使用 SQLite 存储并支持 ClickHouse 等组件，ANS-104 索引功能标注为实验性。",
+   "highlights": [
+    "提供 ANS-104 捆绑数据的解包与索引，过滤规则可配置",
+    "内置预构建 CDB64 根交易索引与 Index Sharing 索引共享机制",
+    "支持 Docker/Compose 部署、Turbo bundler sidecar、Envoy 代理与 webhook 发射"
+   ],
+   "use_cases": [
+    "为 permaweb 应用运行自托管 Arweave 网关",
+    "对 ANS-104 捆绑数据按过滤条件解包并建立索引",
+    "通过 webhook 在交易/数据项被索引时向外部服务推送通知"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "### Initialize the SQLite DB",
+     "lines": [
+      18
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "pipeline, ClickHouse, ArNS resolution, the observer/cranker, and common",
+     "lines": [
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是 Arweave 网络的网关服务组件，SQLite 仅作为其内部存储使用，README 未面向数据库生态提供工具能力。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# AR.IO Gateway Node ／ ### Initialize the SQLite DB ／ You can run the ar.io gateway as a standalone docker container:",
+   "evidence_lines": [
+    1,
+    18,
+    71
+   ]
+  },
+  "fn": "ar-io/ar-io-node",
+  "sha": "32b21c1c845f",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c9e6a18969c7": {
+  "identity": {
+   "one_liner": "单二进制自托管 Go CMS，多站点多域名，数据存 SQLite 文件",
+   "review": "一个用 Go 编写的自托管内容管理系统，单个静态二进制加一个 SQLite 文件即可运行多个网站和域名，站点端不输出 JavaScript、不加载第三方资源，并内置商店、多语言与 MCP 接口（约 140 个工具）供 AI 助手操作后台。适合自建小型网站的个人或小组织，当前处于 beta，schema 未承诺稳定，更新前需备份数据目录。",
+   "highlights": [
+    "单静态二进制 + 单 SQLite 文件运行，多站点按 Host 路由，支持多语言",
+    "内置 MCP 服务器，提供约 140 个工具供 Claude、ChatGPT 等 MCP 客户端执行后台操作",
+    "支持 WordPress 导入、整站导出为归档或静态副本，后台与站点均可在无 JavaScript 下工作"
+   ],
+   "use_cases": [
+    "在小型 Linux 服务器上自托管多个网站/域名",
+    "需要无 JavaScript、不加载第三方资源并配合 GDPR 的站点",
+    "通过 MCP 客户端用 AI 助手编辑与管理内容"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "from one binary and one SQLite file. Its sites ship no JavaScript and load ／ - **One static binary, one SQLite file.** No database server, no PHP, no Node,",
+     "lines": [
+      9,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明系统以一个 SQLite 文件存储站点数据，SQLite 是其内嵌数据存储而非其服务的对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0 单许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "from one binary and one SQLite file. Its sites ship no JavaScript and load ／ - **One static binary, one SQLite file.** No database server, no PHP, no Node,",
+   "evidence_lines": [
+    9,
+    39
+   ]
+  },
+  "fn": "holzcloud/holzcloud-cms",
+  "sha": "c9e6a18969c7",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

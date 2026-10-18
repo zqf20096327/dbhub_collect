@@ -9752,5 +9752,70 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46428982e4ee": {
+  "identity": {
+   "one_liner": "本地 AI 会话归档工具，用 SQLite 统一存储与检索 Claude/Codex 历史",
+   "review": "Polylogue 将 Claude Code 和 Codex 的会话文件导入本地 SQLite 归档，提供命令行的列表、全文检索、分页读取、标注笔记和 JSON 导出，并可通过 MCP 供代理调用。支持凭据脱敏输出和损坏归档恢复；守护进程持有唯一写锁，Rust 重写版需使用全新归档，不支持旧格式迁移。",
+   "highlights": [
+    "提供 import/搜索/读取/导出/标注命令，并支持按 token 预算分页读取会话",
+    "通过 MCP over stdio 提供 status、search、read、note 服务",
+    "输出时对会话文本中的 API 密钥、令牌等凭据进行脱敏，支持损坏 WAL 归档的恢复复制"
+   ],
+   "use_cases": [
+    "将 Claude Code 与 Codex 会话历史集中归档并在本地全文检索",
+    "为 AI 代理提供基于 MCP 的历史会话查询与阅读接口",
+    "对会话内容添加带历史记录的注释与修正"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`import PATH --format FORMAT [--context FILE] [--wait]`|Store one file. Formats: `claude-code-jsonl`, `codex-rollout`, `codex-history-sqlite`. Claude files need `--context FILE`. `--wait` waits until the file's messages are parsed.| ／ - `crates/store`: the SQLite archive. Nothing else opens a database.",
+     "lines": [
+      69,
+      106
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身归档存储（crates/store 为 the SQLite archive），属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- `crates/store`: the SQLite archive. Nothing else opens a database. ／ The archive is `$XDG_DATA_HOME/polylogue`, or `~/.local/share/polylogue`;",
+   "evidence_lines": [
+    106,
+    58
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "46428982e4ee",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

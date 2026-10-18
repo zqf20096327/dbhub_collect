@@ -9595,5 +9595,139 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8a34ba85f332": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机运行",
+   "review": "这是一个面向求职者的桌面/自托管简历管理应用，提供岗位解析、AI 定制简历、事实台账防虚构校验、多格式导出、模拟面试、自动投递与进度统计等功能。技术栈为 FastAPI 后端、React 前端、本地 SQLite 存储，数据保存在用户本机，通过配置 OpenAI/Claude/DeepSeek/Ollama 等模型服务接入 AI 能力。适用人群是中文求职者，限制是单机运行、依赖用户自备模型 API。",
+   "highlights": [
+    "提供事实台账机制，生成结果与用户资料逐条比对并给出防虚构警告",
+    "支持 PDF/Word/Markdown/JSON/HTML 等多格式导出，带水印与一键脱敏",
+    "数据存于本机 SQLite 目录，不注册登录，可整份拷贝迁移"
+   ],
+   "use_cases": [
+    "求职期间集中管理岗位、简历版本与投递进度",
+    "按岗位 JD 由 AI 生成定制简历并离线导出",
+    "模拟面试练习与面试经验沉淀检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员| ／ 简历通架构图：React 前端 → 同源 /api → FastAPI 后端 → 本地 SQLite / 你配置的模型服务商 / 本机浏览器",
+     "lines": [
+      50,
+      359
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用本地 SQLite 存储简历与求职数据，数据库仅作其自身存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员|",
+   "evidence_lines": [
+    50
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "8a34ba85f332",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f0fcf65f452f": {
+  "identity": {
+   "one_liner": "自托管 GitHub PR AI 审查平台，代理引擎自动审查并将 issue 转为 PR",
+   "review": "Metis 是一个自托管的 GitHub App，基于 FastAPI、Redis、Celery 和 PostgreSQL 构建 agent 流水线：PR 打开时在 Daytona 沙箱中克隆分支、运行测试与 linter 并在 diff 上内联发布审查意见，同时支持在 dashboard 选择 issue 由编码代理生成 PR。依赖 GitHub App、LLM API key 与 Daytona key，需 Docker 部署。",
+   "highlights": [
+    "提供自动 PR 审查与 issue 转 PR 两条 agent 流程，审查意见带严重度和分类标签",
+    "通过 LiteLLM 支持多种 LLM（Gemini、GPT、Claude、Mistral、Azure OpenAI 等）",
+    "每个仓库可配置独立的敏感度、自定义指令和忽略规则"
+   ],
+   "use_cases": [
+    "团队自托管自动化代码审查流程",
+    "将 backlog 中的 issue 自动转化为可运行的 PR",
+    "需要自定义 LLM 与审查规则的 GitHub 仓库管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "make dev # API, worker, dashboard, PostgreSQL and Redis ／ findings, reviews and PRs ──► GitHub · PostgreSQL ──► dashboard ／ make infra-up # PostgreSQL, Redis and pgAdmin only",
+     "lines": [
+      22,
+      37,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示 PostgreSQL 是该平台自身运行依赖的存储组件，而非为其服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "make dev                               # API, worker, dashboard, PostgreSQL and Redis ／                      findings, reviews and PRs ──► GitHub · PostgreSQL ──► dashboard",
+   "evidence_lines": [
+    22,
+    37
+   ]
+  },
+  "fn": "KacemMathlouthi/metis",
+  "sha": "f0fcf65f452f",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

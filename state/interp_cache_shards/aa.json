@@ -10235,5 +10235,206 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6cfec1a72de6": {
+  "identity": {
+   "one_liner": "分布式可自托管的在线状态监控工具，单 Go 二进制，含多区域探针与状态页",
+   "review": "SolidPing 是一个多租户基础设施监控系统，用分布式 worker 执行 44 类健康检查（网络协议、数据库、消息队列等），提供状态页、事件管理与值班升级机制，面向需要自托管监控的组织。支持以 SQLite 为默认存储或外接 PostgreSQL，配置经 SP_ 前缀环境变量完成。",
+   "highlights": [
+    "提供 44 种检查类型，包括 PostgreSQL、MySQL、MSSQL、Oracle、ClickHouse 等数据库的连接与查询执行检查",
+    "支持多区域分布式 worker、私有网络 agent 与基于租约的调度",
+    "内置状态页、事件关联、值班轮换与升级策略，支持 10 种原生通知渠道"
+   ],
+   "use_cases": [
+    "基础设施与服务的可用性监控",
+    "多区域与内网环境下的分布式健康检查",
+    "自托管公开状态页与值班升级流程"
+   ],
+   "class-ification": null
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 15+ ／ |PostgreSQL|Connection + query execution| ／ - **Low footprint**: Single binary; SQLite, embedded Postgres, or external Postgres",
+     "lines": [
+      74,
+      139,
+      52
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL/MariaDB|Connection + query execution| ／ - **44 check types**: HTTP, TCP, UDP, ICMP, DNS, DNSBL, NTP, SSL/Domain, SSH, RDP, VNC, FTP/SFTP, SMTP/POP3/IMAP, Email (JMAP passive inbox), WebSocket, SIP, gRPC, Prometheus, 7 databases (Postgres, MySQL, MSSQL, Oracle, ClickHouse, MongoDB, Redis), 3 message ",
+     "lines": [
+      140,
+      48
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|Connection + query execution|",
+     "lines": [
+      142
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Low footprint**: Single binary; SQLite, embedded Postgres, or external Postgres ／ ### SQLite (the default — good for a single instance)",
+     "lines": [
+      52,
+      188
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|MSSQL|Connection + query execution|",
+     "lines": [
+      141
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Connection + query execution|",
+     "lines": [
+      143
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL/MariaDB|Connection + query execution|",
+     "lines": [
+      140
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为监控各类数据库与服务提供健康检查能力，自身用 SQLite/PostgreSQL 存储元数据，属于数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SolidPing is a multi-tenant monitoring system that enables organizations to monitor their infrastructure through distributed workers executing health checks. It's designed for low resource consumption and easy self-hosting. ／ - **44 check types**: HTTP, TCP, UDP, ICMP, DNS, DNSBL, NTP, SSL/Domain, SSH, RDP, VNC, FTP/SFTP, SMTP/POP3/IMAP, Email (JMAP passive inbox), WebSocket, SIP, gRPC, Prometheus, 7 databases (Postgres, MySQL, MSSQL, Oracle, ClickHouse, MongoDB, Redis), 3 message queues (Kafka, RabbitMQ, MQTT), Docker, Kubernetes, SNMP, Freebox line, game server (Source/A2S, Minecraft), headless browser, custom JS, website crawl, health endpoint, vendor status page, heartbeat ／ ### Databases",
+   "evidence_lines": [
+    44,
+    48,
+    136
+   ]
+  },
+  "fn": "fclairamb/solidping",
+  "sha": "6cfec1a72de6",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b94983ba1efa": {
+  "identity": {
+   "one_liner": "离线优先的学习任务规划桌面应用，Tauri+Rust+React，SQLite 存储",
+   "review": "一个离线优先的桌面学习规划器，提供科目/章节/任务的关联管理、自动或手动的进度计算，以及带心跳与幂等恢复的专注计时器。数据用内置 SQLite 存储，schema 通过 user_version 版本化迁移。面向需要本地离线管理学习任务与专注时长的个人用户。",
+   "highlights": [
+    "基于 rusqlite bundled 内嵌 SQLite 存储，schema 以 PRAGMA user_version 版本化并前向迁移",
+    "专注计时器支持心跳检测、崩溃/休眠自动暂停、部分唯一索引防重复会话",
+    "删除语义由外键加触发器在数据库层强制，Rust 核心逻辑与 Tauri 壳分离"
+   ],
+   "use_cases": [
+    "离线管理学习科目、章节与任务进度",
+    "记录专注会话并统计每日专注时长",
+    "需要单文件本地数据库的个人桌面工具场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Offline-first study workspace. Tauri 2 + Rust backend, React + TypeScript + Vite frontend, SQLite storage. ／ SQLite is compiled in (rusqlite `bundled`). ／ against SQLite, a TypeScript check against stub types, the pure formatting helpers, and the UI scenarios",
+     "lines": [
+      3,
+      21,
+      106
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是用 SQLite 存数据的学习规划桌面应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Offline-first study workspace. Tauri 2 + Rust backend, React + TypeScript + Vite frontend, SQLite storage. ／ SQLite is compiled in (rusqlite `bundled`). ／ - Database: `focusos.db` in the OS per-user app-data directory (path shown on the Dashboard).",
+   "evidence_lines": [
+    3,
+    21,
+    38
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "KairoqX/kaze-study",
+  "sha": "b94983ba1efa",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10026,5 +10026,203 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3ed16cae50bd": {
+  "identity": {
+   "one_liner": "自动化 Google Dorking 工具，用于发现暴露的网络资产并测试 SQLi/XSS",
+   "review": "DorkEye 是一个 Python 编写的 OSINT 搜索工具，通过 YAML 模板生成搜索查询以定位索引暴露的文件、目录、后台面板和敏感信息，并对结果执行 SQLi/XSS payload 测试、元数据分析和 13 步自动化流水线，还提供数据库端口扫描（15 种服务）。面向授权安全测试与教育用途，源码方式安装运行，README 要求使用者自行获得书面授权。",
+   "highlights": [
+    "提供 YAML 模板驱动的 dork 生成器，含 soft/medium/aggressive 三种模式",
+    "包含 SQL 注入（5 种方法、105 payloads）与 XSS（4 种方法、111 payloads）测试模块",
+    "支持数据库端口扫描（15 种服务）、子域名提取、PII 检测与 HTML 报告输出"
+   ],
+   "use_cases": [
+    "授权渗透测试中的资产暴露面发现",
+    "OSINT 信息收集与子域名/邮箱枚举",
+    "安全教学与自查自身站点的索引暴露"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "作为独立安全测试工具为数据库/网络环境的安全评估服务，仅扫描数据库端口，不以某数据库为存储或适配对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DorkEye** is an automated `OSINT DORKING TOOL` that discovers exposed web assets through intelligent search queries. ／ - It combines a dork generator driven by YAML templates (`soft` / `medium` / `aggressive` modes), an SQL and XSS testing module, a 13-step autonomous analysis pipeline, an adaptive recursive crawler, and a database port scanner. ／ |🚪 DB Port Scan|15 services, no-auth probes, 3 severity levels `--dbscan`|",
+   "evidence_lines": [
+    22,
+    23,
+    51
+   ]
+  },
+  "fn": "xPloits3c/DorkEye",
+  "sha": "3ed16cae50bd",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cd69cfdc6bc8": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，网关注入记忆并提供 MCP 工具",
+   "review": "这是一个为 LLM 客户端设计的长期记忆系统：AI 通过 MCP 工具写入与查询记忆，ST 网关在回复前按对话语境注入相关记录，数据存储采用 SQLite。面向使用具备 MCP 能力的模型客户端的个人部署者，支持 Windows/Linux/Android Termux 源码安装，许可证为非商业源码预览。",
+   "highlights": [
+    "提供 ST 网关与 MCP 工具两种接入方式，MCP 侧含日常 8 入口与完整 54 项目录",
+    "记忆按自我定义、情感、学习、工具、规划等模块存放，含版本历史与自写提醒",
+    "网关使用 OpenAI 兼容 Chat Completions 接口，支持换窗短期记忆交接与可选本地语义检索"
+   ],
+   "use_cases": [
+    "为具备 MCP 工具调用能力的 LLM 客户端增加跨会话长期记忆",
+    "个人在本地电脑或 Android 手机上部署 AI 记忆后端",
+    "需要按模块整理、主动整理与回看 AI 对话记忆的场景"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`0.2.1` · 正式版 · Python / SQLite · 换窗近期记忆 · 可选本地语义检索 · 日常 8 入口",
+     "lines": [
+      287
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身记忆数据的存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "非商业源码预览",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ST 是面向 LLM 的长期记忆后端。它接住 AI 自己写下的经历、理解与打算，再通过网关，在回复开始前带回与当前话题相关的记忆；MCP 工具则让 AI 随时主动查阅、保存和修改。接入以网关接口与 MCP 工具调用能力为依据，面向具备相应能力的模型与客户端。 ／ `0.2.1` · 正式版 · Python / SQLite · 换窗近期记忆 · 可选本地语义检索 · 日常 8 入口",
+   "evidence_lines": [
+    7,
+    287
+   ]
+  },
+  "fn": "AZHi-xinxin/StillerBrain",
+  "sha": "cd69cfdc6bc8",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cb9e4ea94154": {
+  "identity": {
+   "one_liner": "本地优先的 Android 音乐日记与播放记录追踪应用",
+   "review": "一款 Android 音乐记录应用，通过通知监听捕获 Spotify、YouTube Music 等播放器的收听活动，数据以 Room SQLite 存储在设备本地，支持 Last.fm/Google Takeout 历史导入、统计卡片导出、桌面小部件，并可通过 Wi-Fi 同步浏览器播放记录。面向注重数据本地的个人用户。",
+   "highlights": [
+    "通过 NotificationListenerService 捕获 50+ 音乐应用的播放事件，过滤非音乐媒体",
+    "收听数据经 Room SQLite 存储在设备本地，支持自动化本地数据库导出",
+    "可导入 Last.fm 收听历史、Google Takeout 及 Musicolet 备份",
+    "配套 Chrome/Firefox 浏览器扩展经本地 Wi-Fi 同步网页播放记录"
+   ],
+   "use_cases": [
+    "个人收听历史的本地记录与统计分析",
+    "从 Last.fm 等平台迁移收听数据",
+    "生成可分享的收听统计卡片与小部件"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Stores listening events, metadata, and computed statistics locally in Room SQLite databases. ／ |**Persistence**|Room SQLite 2.8.4, DataStore, EncryptedSharedPreferences|",
+     "lines": [
+      77,
+      138
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用以 Room SQLite 存储收听事件与统计数据，SQLite 是其本地数据存储组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "修改版 AGPLv3：个人使用与审计允许，禁止商业分发与闭源再分发",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Stores listening events, metadata, and computed statistics locally in Room SQLite databases. ／ |**Persistence**|Room SQLite 2.8.4, DataStore, EncryptedSharedPreferences| ／ Tempo is a local-first music journal and scrobbler for Android. It follows playback across Spotify, YouTube Music, and your other players and keeps the full history on your phone. You get timeline trends, heatmaps, and exportable stat cards for tracks, artists, and albums — built on device, ready to share.",
+   "evidence_lines": [
+    77,
+    138,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "avinaxhroy/Tempo",
+  "sha": "cb9e4ea94154",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

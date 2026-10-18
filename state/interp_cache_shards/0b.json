@@ -8241,5 +8241,269 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4fa0e8eb7e5d": {
+  "identity": {
+   "one_liner": ".NET 嵌入式文档存储数据库，单 DLL、线程安全、持久化键值",
+   "review": "面向 .NET 的嵌入式无模式文档存储数据库，以 NuGet 单 DLL 分发，API 类似 .NET Dictionary 并支持 async/await。提供三种持久化模式、后台压缩、LZ4 压缩与 AES 加密、LINQ 查询，每个集合存储为独立文件，不支持跨进程共享连接。适用于游戏服务器、桌面应用等需要嵌入式高并发读写的场景。",
+   "highlights": [
+    "嵌入式文档存储，线程安全 API，支持多读多写并发与后台压缩回收空间",
+    "提供 Flushed/Synced/Buffered 三种持久化模式，块级校验用于崩溃后数据完整性",
+    "支持 JSON/MessagePack 序列化格式、LZ4 压缩、AES 加密与 LINQ 查询"
+   ],
+   "use_cases": [
+    "游戏服务器的玩家数据持久化存储",
+    "桌面应用的嵌入式本地数据存储",
+    "需要高并发读写且无需安装独立数据库服务的 .NET 应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Insert 10,000 | SQLite | 687 | 444 KB | ／ Delete 10,000 | SQLite | 697 | 8 KB | ／ Upsert 10,000 | SQLite | 679 | 444 KB |",
+     "lines": [
+      51,
+      59,
+      67
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为供 .NET 应用嵌入使用的存储引擎本体，是数据库而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# FastDB - High-Performance Embedded Storage for C# (.NET) ／ - Serverless, embedded document storage. ／ - Schema-less NoSQL storage that adapts to changes.",
+   "evidence_lines": [
+    1,
+    8,
+    15
+   ]
+  },
+  "fn": "stonstad/Stellar.FastDB",
+  "sha": "4fa0e8eb7e5d",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "775a69ea3ad4": {
+  "identity": {
+   "one_liner": "Rust 编写的 MCP 服务器，为编码代理提供跨会话的本地持久记忆",
+   "review": "Engram 是一个 MCP 服务器，让编码代理在会话结束时写入结构化交接记录，下个会话按 git 分支恢复上下文，并管理项目 todos、ADR 和事实记忆。数据存储在本地单个 SQLite 文件，配合本地 ONNX 嵌入模型和 BM25 做检索，数据不出本机。适合使用 Claude Code 等 MCP 客户端的开发者；限制为单用户、单节点、无认证。",
+   "highlights": [
+    "按 git 分支组织会话交接记录，支持 handoff_resume 工具与 Claude Code 提示恢复上下文",
+    "本地 SQLite 存储加 ONNX 嵌入模型，BM25 与向量检索结合，不调用云端服务或 LLM",
+    "通过 ssh 进行两台机器间的成对同步，记忆支持 supersede 与可恢复的回收站"
+   ],
+   "use_cases": [
+    "为 Claude Code / Claude Desktop 等编码代理提供跨会话记忆",
+    "多分支并行开发时避免上下文串扰的会话交接",
+    "跨机器同步同一 git 仓库的项目记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything stays on your machine: one SQLite file and a small local embedding model. Nothing is sent to a cloud service, and storing a memory never calls an LLM.",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其本地记忆数据的存储文件，该项目是为 AI 代理服务的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Engram is an MCP server that gives a coding agent memory across sessions. At the end of a session the agent writes a handoff: what it decided, what blocks it, what it tried and abandoned. The next session on that branch starts from it, with the project's open todos alongside. ／ Everything stays on your machine: one SQLite file and a small local embedding model. Nothing is sent to a cloud service, and storing a memory never calls an LLM.",
+   "evidence_lines": [
+    11,
+    13
+   ]
+  },
+  "fn": "edg-l/engram-mcp",
+  "sha": "775a69ea3ad4",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4b51fb8d690f": {
+  "identity": {
+   "one_liner": "自托管于 AWS 的 AI 代理长期记忆 MCP 服务器，存于自有 Postgres",
+   "review": "Memrain 是一个面向开发者和小型团队的 AI 代理长期记忆服务，通过 MCP 协议向 Claude、ChatGPT、Codex 等客户端提供笔记、代码与聊天记录的混合检索，每条结果附带来源指针；数据存储在用户自己的 Postgres 中，部署于用户 AWS 账户（需 Bedrock、Terraform），并在入库前脱敏密钥，支持按人独立密钥与每日花费上限。",
+   "highlights": [
+    "作为 MCP 服务器运行，Claude Code、Codex CLI、ChatGPT 等客户端通过统一 /mcp 地址连接",
+    "提供语义与关键词混合搜索，返回带来源页码的引用片段",
+    "存储前对 API 密钥、令牌、私钥与数据库密码做脱敏，支持按人令牌与每日花费上限",
+    "支持 TypeScript、Python、Go 的代码检索，可导入 ChatGPT 与 Claude 历史"
+   ],
+   "use_cases": [
+    "AI 代理跨会话记忆：开发者让 Claude Code、Codex、ChatGPT 检索笔记与代码知识",
+    "小团队共享记忆并为每人保留私有空间与每日花费上限",
+    "需要带来源引用的知识检索：导入 ChatGPT/Claude 历史并溯源回答"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Five steps: your notes, code and chats; Memrain reads them; stored in your Postgres database; search by meaning and by words; your AI agent answers with sources.",
+     "lines": [
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Memrain 将数据存储在使用者自己的 Postgres 数据库中（L44），是为 AI 代理提供记忆服务的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP-native ／  Five steps: your notes, code and chats; Memrain reads them; stored in your Postgres database; search by meaning and by words; your AI agent answers with sources. ／ **Self-host (free software; you pay your AWS bill).** You need an AWS account",
+   "evidence_lines": [
+    9,
+    44,
+    54
+   ]
+  },
+  "fn": "timurgaleev/memrain",
+  "sha": "4b51fb8d690f",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a36449ac5d08": {
+  "identity": {
+   "one_liner": "Steam 游戏信息与评价历史采集工具，写入 SQLite",
+   "review": "这是一个命令行爬虫，通过 Steam 公开接口异步采集游戏基础信息与按日期的评价历史数据，写入本地 SQLite 数据库并支持导出 Excel/CSV，提供断点恢复、失败记录与重试命令。面向课程作业、数据分析练习与小规模研究场景；作者说明其不含代理池、动态限流或分布式调度，不建议作生产级采集系统使用。",
+   "highlights": [
+    "基于 asyncio 与 httpx 异步采集，支持断点恢复与失败任务重试",
+    "将游戏信息与评价历史写入 SQLite，并可导出 Excel/CSV",
+    "通过 config.yaml 配置语言、货币、并发与输出目录"
+   ],
+   "use_cases": [
+    "课程作业与数据分析练习的数据采集",
+    "小规模游戏评价趋势的探索性研究",
+    "采集结果供 SQL 或 Pandas 后续分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "面向数据分析与课程/研究练习场景，基于 AsyncIO、SQLite 和 Rich 构建，支持分步采集、断点恢复、失败记录与 Excel/CSV 导出。 ／ - 游戏信息与评价历史会写入 SQLite 数据库。 ／ |`steam_data.db`|SQLite 数据库，包含 `games` 和 `reviews` 两张表。|",
+     "lines": [
+      7,
+      38,
+      190
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明程序将采集的数据写入 SQLite 数据库存储，SQLite 是其数据存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 面向数据分析与课程/研究练习场景，基于 AsyncIO、SQLite 和 Rich 构建，支持分步采集、断点恢复、失败记录与 Excel/CSV 导出。 ／  - 游戏信息与评价历史会写入 SQLite 数据库。",
+   "evidence_lines": [
+    7,
+    38
+   ]
+  },
+  "fn": "SeraphinaGlacia/steam-scraper",
+  "sha": "a36449ac5d08",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11119,5 +11119,151 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd023c05f5ec": {
+  "identity": {
+   "one_liner": "本地文档检索层，为 AI 编码代理提供 MCP 检索",
+   "review": "RTFM 是面向 AI 编码代理（如 Claude Code）的本地检索层，用 24 种解析器索引代码、文档、PDF、法律文本等，存入单个 SQLite 文件，提供 FTS5 全文、语义和混合检索及知识图谱，通过 MCP 供代理查询。面向需要在大型多领域语料中查找上下文的开发者，MIT 许可，本地运行。",
+   "highlights": [
+    "提供 24 种内置解析器（Markdown、Python AST、PDF、EPUB、SQLite 等）",
+    "支持 FTS5 全文、语义（可选 FastEmbed）与混合检索，以及文件级知识图谱",
+    "以 MCP server 形式提供检索工具，也可作为 Claude Code 插件安装"
+   ],
+   "use_cases": [
+    "为 AI 编码代理检索代码与文档上下文，减少 grep/全文读取调用",
+    "索引 Obsidian vault 并解析 wikilinks 生成导航索引",
+    "跨项目索引 Claude Code 记忆文件并保留版本历史"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|`.sqlite`, `.sqlite3`, `.db`|Schema + sample rows per table; FK edges (read-only)|",
+     "lines": [
+      293
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 编码代理生态提供 MCP 检索服务的工具，SQLite 仅作为其索引存储格式与可解析文件类型之一",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**RTFM indexes everything.** One command, one SQLite file, one retrieval layer your agent queries before grepping. ／ - Creates `.rtfm/library.db` (one SQLite file) ／ Then point your MCP client at `rtfm-serve` (the entry exposed by the pip package). Optional extras via `pip install rtfm-ai[embeddings,pdf]`.",
+   "evidence_lines": [
+    31,
+    70,
+    103
+   ]
+  },
+  "fn": "roomi-fields/rtfm",
+  "sha": "dd023c05f5ec",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f72616e6a3c7": {
+  "identity": {
+   "one_liner": "跨平台开源音乐播放器，本地曲库与原生播放",
+   "review": "RITVIO 是面向 Windows 和 Android 的音乐播放器，提供本地曲库管理、播放列表、歌词、均衡器、睡眠定时和 9:16 分享图生成等功能；桌面端基于 Electron/Fastify/SQLite，Android 端使用 Capacitor 与原生 Media3。适合想在本地设备上组织和播放个人音乐库的用户。当前为公开预览版，无云同步与离线下载。",
+   "highlights": [
+    "支持 Windows 桌面与 Android（原生 Media3 播放、后台服务、系统媒体控制）双平台",
+    "支持本地曲库、播放列表、喜欢记录、历史与歌词显示",
+    "支持导出播放列表文件及生成 9:16 曲目/歌词分享图"
+   ],
+   "use_cases": [
+    "在 Windows 和 Android 设备上管理并播放本地音乐库",
+    "浏览歌词、调整音频、设置睡眠定时等听歌场景",
+    "生成曲目卡片图片用于分享"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The source uses React, TypeScript, Vite and Zustand; Electron/Fastify/SQLite on Windows; Capacitor and native Media3 on Android. Domain logic and localisation live in `packages/`.",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用 SQLite 存储本地数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "persona": "use",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A free, open-source music player for Windows and Android.** Discover something new, keep a library of your own and make room for the music you love. ／ The source uses React, TypeScript, Vite and Zustand; Electron/Fastify/SQLite on Windows; Capacitor and native Media3 on Android. Domain logic and localisation live in `packages/`.",
+   "evidence_lines": [
+    5,
+    77
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "salvo13200/RITVIO",
+  "sha": "f72616e6a3c7",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

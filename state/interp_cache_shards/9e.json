@@ -10307,5 +10307,353 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "54470a978094": {
+  "identity": {
+   "one_liner": "AI agent 的 trace 原生 CI/CD 平台，可将生产失败固化为可回放回归测试",
+   "review": "Tracely 通过 OTLP 接收 agent trace，用评估器打分、聚类失败，并把失败 trace 冻结为带 fixture 的回归用例，在 CI 中离线回放并阻断回归 PR；面向开发和运维 AI agent 的团队，自托管需运行 Docker Compose 栈（Postgres、ClickHouse、Redis、MinIO）。",
+   "highlights": [
+    "通过 OTLP/HTTP 接收 trace，评估器与失败聚类结果写入 trace 表",
+    "将失败 trace 提升为可离线回放的回归用例，并提供 tracely gate CLI 与 GitHub Action 阻断 PR",
+    "提供 MCP 端点（/mcp）与告警流、judge 校准、趋势分析"
+   ],
+   "use_cases": [
+    "AI agent 生产 trace 的质量监控与失败分诊",
+    "为 agent 建立基于真实失败用例的 CI 回归门禁",
+    "LLM judge 的人工校准与告警通知"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Self-host the whole stack in one click** — API, worker, UI, Postgres, ClickHouse, Redis and MinIO: ／ That brings up ClickHouse, Postgres, Redis and MinIO, runs every migration, seeds the default project",
+     "lines": [
+      17,
+      156
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Self-host the whole stack in one click** — API, worker, UI, Postgres, ClickHouse, Redis and MinIO: ／ That brings up ClickHouse, Postgres, Redis and MinIO, runs every migration, seeds the default project",
+     "lines": [
+      17,
+      156
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其整体栈包含 Postgres、ClickHouse、Redis、MinIO 作为自身运行与存数据的组件，而非为某数据库服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README L15 徽章标注）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Self-host the whole stack in one click** — API, worker, UI, Postgres, ClickHouse, Redis and MinIO: ／ That brings up ClickHouse, Postgres, Redis and MinIO, runs every migration, seeds the default project ／ |**MCP server**|The API doubles as an MCP endpoint (`/mcp`) so a coding agent drives the workspace with an ordinary ingest key|Docs|",
+   "evidence_lines": [
+    17,
+    156,
+    137
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "jwuthri-cloud/Tracely-ai",
+  "sha": "54470a978094",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f9a0377e796": {
+  "identity": {
+   "one_liner": "开源联盟伙伴归因与分成支付平台，事件溯源架构",
+   "review": "这是一个自托管的合作伙伴归因与支付系统，跟踪从点击到收入的完整归因链，通过 Stripe Connect 完成分成支付，支持多种归因模型与数据导出。适合需要自建联盟/推荐计划的团队使用；基于 PostgreSQL 存储（Knex 迁移），需 Node 环境通过向导完成初始化安装。",
+   "highlights": [
+    "支持 click→signup→revenue 全链路归因，提供 last_click/first_click/linear/position 四种归因模型",
+    "通过 Stripe Connect 实现分成支付，含幂等转账与欺诈审核队列",
+    "提供 JSON/CSV/SQL 三格式导出与 POST /import 导入，附 OpenAPI 3.1 规范与浏览器/服务端 SDK"
+   ],
+   "use_cases": [
+    "自托管运营联盟伙伴/创作者推荐计划并跟踪收入归因",
+    "通过 API 与 SDK 在自有应用中嵌入推荐链接与收益面板",
+    "需要将合作伙伴归因数据以 CSV/SQL 形式导出迁移的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql`",
+     "lines": [
+      119
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 Knex 迁移管理数据库，并可将 SQL 导出通过 psql 恢复到自托管实例，即以 PostgreSQL 存储业务数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- `packages/db` — shared Knex migrations and TypeScript types ／ - Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql`",
+   "evidence_lines": [
+    75,
+    119
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "getcoherence/openpartner",
+  "sha": "3f9a0377e796",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7dd5dd5bdd1a": {
+  "identity": {
+   "one_liner": "自托管数据库备份与监控工具，支持秒级恢复与 AI 代理防护",
+   "review": "Rowsafe 是一套运行在用户自己服务器上的数据库运维工具，包含 agent、CLI 和 MCP server，提供持续备份、每周恢复测试、健康评分检查与一键修复，并可在 AI 代理执行迁移等操作前保存还原点。适配 PostgreSQL、MySQL、MariaDB、MongoDB、ClickHouse、Redis、SQLite 等数据库，适用于需要自行管理数据库备份与运维的团队；部分功能（如 MySQL 的 schema 检查）尚未提供，可选商业仪表盘。",
+   "highlights": [
+    "提供持续备份，支持恢复到任意时间点（Marks 还原点、rewind 整库回退带 undo），并包含每周自动恢复测试",
+    "提供 Pulse 健康评分与检查（清理滞后、膨胀、锁、复制槽、无用索引等）及配套修复命令",
+    "包含 MCP server 与 Claude Code/Codex 插件，在迁移或破坏性 SQL 前保存 Mark，代理操作以连接者权限执行并记入审计日志"
+   ],
+   "use_cases": [
+    "自管 Linux/Docker 数据库服务器的备份、恢复演练与容灾",
+    "数据库健康巡检与问题修复（慢查询、死锁、膨胀、复制槽等）",
+    "为使用 AI 编码代理操作数据库的团队提供变更前的还原点与权限约束"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 13–18, MySQL 8.0/8.4, MariaDB 10.6–11.4, MongoDB 6.0–8.0, ClickHouse 24.8–26.8",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 13–18, MySQL 8.0/8.4, MariaDB 10.6–11.4, MongoDB 6.0–8.0, ClickHouse 24.8–26.8 ／ MySQL and MariaDB work the same way (`rowsafe add shop mysql://user@host:3306/dbname`), and so do MongoDB (`mongodb://`), Redis and Valkey (`redis://`). MySQL and MariaDB: stuck sessions and locks, long transactions, InnoDB's old row versions, the buffer pool,",
+     "lines": [
+      13,
+      48
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite (restore to any second needs WAL mode) ／ |`internal/engine`|MySQL/MariaDB, MongoDB, ClickHouse, Redis/Valkey, SQLite, Qdrant, Meilisearch.|",
+     "lines": [
+      15,
+      106
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- PostgreSQL 13–18, MySQL 8.0/8.4, MariaDB 10.6–11.4, MongoDB 6.0–8.0, ClickHouse 24.8–26.8 ／ |`internal/engine`|MySQL/MariaDB, MongoDB, ClickHouse, Redis/Valkey, SQLite, Qdrant, Meilisearch.|",
+     "lines": [
+      13,
+      106
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- PostgreSQL 13–18, MySQL 8.0/8.4, MariaDB 10.6–11.4, MongoDB 6.0–8.0, ClickHouse 24.8–26.8 ／ MySQL and MariaDB work the same way (`rowsafe add shop mysql://user@host:3306/dbname`), and so do MongoDB (`mongodb://`), Redis and Valkey (`redis://`). MySQL and MariaDB: stuck sessions and locks, long transactions, InnoDB's old row versions, the buffer pool,",
+     "lines": [
+      13,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供备份、监控与修复的工具/代理组件，数据库是其服务对象而非存储介质",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0；含可选商业仪表盘与 Rowsafe Cloud 托管服务",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The database admin you never hired.** Rowsafe looks after the databases you run on your own servers: backups you can restore to any second, a restore test every week, monitoring with one-click fixes, and a safety net for AI coding agents. ／ - PostgreSQL 13–18, MySQL 8.0/8.4, MariaDB 10.6–11.4, MongoDB 6.0–8.0, ClickHouse 24.8–26.8 ／ Every engine above, with nothing sent to Rowsafe: continuous backups to your own bucket (encrypted on the server, with a passphrase only you have), Marks, a weekly restore test, restore to any second (or rewind the whole database, with undo), a second copy, alerts, Pulse with history, logs, security fixes, file backups, standbys and Prometheus metrics. From your laptop or an AI agent, over SSH: `rowsafe add shop ssh://root@db1`. All of it: Rowsafe on your server.",
+   "evidence_lines": [
+    5,
+    13,
+    35
+   ]
+  },
+  "fn": "rowsafe/rowsafe",
+  "sha": "7dd5dd5bdd1a",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fd5a425ec28a": {
+  "identity": {
+   "one_liner": "多语言手写处方识别系统：TrOCR 读图+药物相互作用检查+翻译",
+   "review": "一个学生原型项目：上传手写处方照片，经图像清理和 TrOCR 逐行识别文字，用 RapidFuzz 模糊匹配药名，在 MySQL/MariaDB 表中查询已知相互作用，并可经 MarianMT 翻译为印地语或法语；FastAPI 单进程承载 API 与仪表盘。面向学习/演示场景，README 明确声明不是医疗工具，规则库仅含五组相互作用，无用户账户、限流或 HTTPS。",
+   "highlights": [
+    "支持手写处方图片上传，经 TrOCR 识别、RapidFuzz 药名匹配，并查询 MySQL/MariaDB 中的相互作用表",
+    "支持将识别结果翻译为印地语或法语（MarianMT），结果与请求日志写入数据库",
+    "同一 FastAPI 进程提供 /dashboard 页面，一条命令启动全部组件；模型可在 GPU 或 CPU 上运行"
+   ],
+   "use_cases": [
+    "手写处方的拍照识别与药物相互作用提示的原型演示",
+    "面向印地语/法语使用者的处方文本翻译场景",
+    "OCR/模糊匹配流程的教学或课程项目参考"
+   ],
+   "personal_notes": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "4. Every pair of medicines found is looked up in a MySQL/MariaDB table of known interactions. ／ You need Python 3.11+, a MySQL or MariaDB server, and preferably an NVIDIA GPU.",
+     "lines": [
+      14,
+      22
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "4. Every pair of medicines found is looked up in a MySQL/MariaDB table of known interactions. ／ You need Python 3.11+, a MySQL or MariaDB server, and preferably an NVIDIA GPU.",
+     "lines": [
+      14,
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统使用 MySQL/MariaDB 表存储相互作用规则并记录请求日志，数据库是被使用的存储组件而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT（仅覆盖仓库自身代码，不含所用模型）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "4. Every pair of medicines found is looked up in a MySQL/MariaDB table of known interactions. ／ 6. The page polls the server for the result, and every request is logged to the database. ／ - Every analysed image's text is saved in `prescription_logs`. Don't run real patients' prescriptions through a copy you don't control.",
+   "evidence_lines": [
+    14,
+    16,
+    65
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "laalaalaee/multilingual-prescription-intelligence",
+  "sha": "fd5a425ec28a",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9202,5 +9202,143 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aacd5325cc03": {
+  "identity": {
+   "one_liner": "C 语言嵌入式键值存储，直接操作 SQLite B-tree 引擎",
+   "review": "SNKV 是用 C 编写的嵌入式 KV 存储，跳过 SQLite 的 SQL 层，直接使用其 B-tree/pager/WAL 实现 ACID 事务。提供 TTL、逐值加密、列族、迭代器及可选的 HNSW 向量索引，以单头文件方式集成到 C 项目，适合读多写少或需要内嵌 KV 的场景；需要 SQLite schema 层的工具（如 sqlite3 CLI）不可用。",
+   "highlights": [
+    "提供 ACID 事务与 WAL 模式，支持并发读、单写者",
+    "内置逐值 XChaCha20-Poly1305 加密（Argon2id 密钥派生）与原生 TTL 过期",
+    "提供可选 HNSW 向量索引（usearch）与单头文件 C 集成"
+   ],
+   "use_cases": [
+    "需要内嵌键值存储的 C/C++ 应用",
+    "依赖原生 TTL 的会话、缓存、租约场景",
+    "嵌入式或内存受限环境的点读/存在性检查负载"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "- **Compatible with SQLite page/WAL-level tools** such as LiteFS. Tools that need SQLite's schema layer (the `sqlite3` CLI) do not work.",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明 SNKV 是直接使用 SQLite B-tree 的嵌入式键值存储引擎本身，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SNKV** is a lightweight, ACID-compliant embedded key-value store written in C. It talks directly to SQLite's B-tree storage engine and skips the SQL layer: no parser, no query planner, no VM. ／ SNKV:    Application → KV API → B-Tree → Disk ／ - **Vector search**: HNSW index via usearch (`make vector`), stored in the same `.db` file. See examples/vector.c.",
+   "evidence_lines": [
+    12,
+    16,
+    43
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "hash-anu/snkv",
+  "sha": "aacd5325cc03",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8760101059db": {
+  "identity": {
+   "one_liner": "pi 编码代理的本地长期记忆扩展，将压缩摘要索引进 SQLite FTS5",
+   "review": "为 pi 编码代理提供本地记忆：从允许清单中的来源读取 ACP 压缩摘要侧车文件，写入 SQLite FTS5 索引，并注册 memory_search/memory_get 等工具供模型调用。面向使用 pi 代理并需要检索历史会话压缩摘要的用户；依赖 Node 内置 node:sqlite（标记为实验性），仅通过 git 分发，读取上游侧车为只读且不依赖其代码。",
+   "highlights": [
+    "使用 SQLite FTS5 trigram 支持中文检索，短查询回退为 LIKE 混合模式",
+    "摄入时与返回时两道脱敏过滤，基于 mtime+size 水位线做增量索引与去重",
+    "提供 blocks/timeline/related/concepts 多种检索模式及 concept 词表扩展查询"
+   ],
+   "use_cases": [
+    "为 pi 编码代理建立可搜索的历史会话长期记忆",
+    "索引 billion-context-pi 生成的压缩侧车文件供模型按需检索",
+    "在本地对多来源压缩摘要做去重、时间线浏览与按概念检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**allow-listed ACP compression blocks → SQLite FTS5 → `memory_search`**. ／ - **Node.js >= 22.19.0** (built-in `node:sqlite`; Node 24 is recommended and ／ the SQLite store.",
+     "lines": [
+      8,
+      121,
+      227
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite（node:sqlite）作为自身记忆索引的本地存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**allow-listed ACP compression blocks → SQLite FTS5 → `memory_search`**. ／ - **Node.js >= 22.19.0** (built-in `node:sqlite`; Node 24 is recommended and ／ opencode-acp ses_*.json           ┤─ allow-list ─► scanSources() ─► ~/.pi/pi-billion-memory.db",
+   "evidence_lines": [
+    8,
+    121,
+    215
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tjp72/pi-billion-memory",
+  "sha": "8760101059db",
+  "source": "readme",
+  "generated_at": "2026-10-18",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
