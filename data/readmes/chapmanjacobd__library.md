@@ -14,7 +14,7 @@ tracking online video playlists (eg. YouTube subscriptions) and scheduling brows
 
 <details><summary>Install</summary>
 
-Linux recommended but [Windows setup instructions](./Windows.md) available.
+Linux recommended but [Windows setup instructions](https://github.com/chapmanjacobd/library/blob/main/.github/Windows.md) available.
 
     pip install library
 
@@ -59,7 +59,7 @@ new files are read by `ffprobe`.
 
     library database add filesystem tv.db ./video/folder/
 
-![termtosvg](./examples/extract.svg)
+![termtosvg](https://raw.githubusercontent.com/chapmanjacobd/library/main/.github/examples/extract.svg)
 
 ### 2. Watch / Listen from local files
 
@@ -79,7 +79,7 @@ Download playlist and channel metadata. Break free of the YouTube algo~
 
     library database add video educational.db https://www.youtube.com/c/BranchEducation/videos
 
-[![termtosvg](./examples/tubeadd.svg "library database add video example")](https://asciinema.org/a/BzplqNj9sCERH3A80GVvwsTTT)
+[![termtosvg](https://raw.githubusercontent.com/chapmanjacobd/library/main/.github/examples/tubeadd.svg "library database add video example")](https://asciinema.org/a/BzplqNj9sCERH3A80GVvwsTTT)
 
 And you can add more at any time--even from different websites.
 
@@ -96,17 +96,17 @@ two million videos. More than you could likely watch in one sitting--maybe even 
 On a high-speed connection (>500 Mbps), it can take up to five hours to download
 the metadata for 180,000 videos.
 
-TIP! If you often copy and paste many URLs you can paste line-delimited text as arguments via a subshell. For example, in `fish` shell with [cb](https://github.com/niedzielski/cb):
+TIP! If you often copy and paste many URLs you can paste line-delimited 
+
+[...截断...]
+
+text as arguments via a subshell. For example, in `fish` shell with [cb](https://github.com/niedzielski/cb):
 
     library database add video my.db (cb)
 
 Or in BASH:
 
-    library database add 
-
-[...截断...]
-
-video my.db $(xclip -selection c)
+    library database add video my.db $(xclip -selection c)
 
 #### 1a. Get new videos for saved playlists
 
@@ -125,57 +125,46 @@ To stop playing press Ctrl+C in either the terminal or mpv
 
 <details><summary>List all subcommands</summary>
 
-Commands are organized by resource. Use `database` (or `db`) for database
+Commands are organized by workflow. Use `database` (or `db`) for database
 operations, `filesystem` (or `fs`) for filesystem operations, `document` (or
 `doc`/`docs`) for document operations, and `file` (or `files`) for file
 operations. The `ls` alias can be used for nested list commands. Resource group
 names and their aliases take precedence over flat command names, so a few former
 flat commands are now only reachable through a group (for example
-`database filesystem list`, `captions`, `table markdown`, `tabs open`,
+`filesystem list`, `captions`, `table markdown`, `tabs open`,
 `links extract`, `text extract`, and `torrent info`).
 
     $ library
-    library (v4.0.0; 118 subcommands)
+    library (v4.0.0; 137 subcommands)
 
-    Create database subcommands:
-    ╭──────────────────────────┬──────────────────────────────────────────╮
-    │ database add filesystem  │ Add local media                          │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add video       │ Add online video media (yt-dlp)          │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add web         │ Add open-directory media                 │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add gallery     │ Add online gallery media (gallery-dl)    │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add tabs        │ Create a tabs database; Add URLs         │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add links       │ Create a link-scraping database          │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add site        │ Auto-scrape website data to SQLite       │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add tables      │ Add table-like data to SQLite            │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add reddit      │ Create a reddit database; Add subreddits │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add hackernews  │ Create / Update a Hacker News database   │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add getty       │ Create / Update a Getty Museum database  │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add substack    │ Backup substack articles                 │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add tildes      │ Backup tildes comments and topics        │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database import nicotine │ Import paths from nicotine+              │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database import places   │ Import places of interest (POIs)         │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add row         │ Add arbitrary data to SQLite             │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add computers   │ Add computer info to SQLite              │
-    ├──────────────────────────┼──────────────────────────────────────────┤
-    │ database add torrents    │ Add torrent info to SQLite               │
-    ╰──────────────────────────┴──────────────────────────────────────────╯
+    Media collection subcommands:
+    ╭─────────────────────────────┬───────────────────────────────────────────────────────────────────────╮
+    │ database add filesystem     │ Add local media                                                       │
+    ├─────────────────────────────┼───────────────────────────────────────────────────────────────────────┤
+    │ database add video          │ Add online video media (yt-dlp)                                       │
+    ├─────────────────────────────┼───────────────────────────────────────────────────────────────────────┤
+    │ database add gallery        │ Add online gallery media (gallery-dl)                                 │
+    ├─────────────────────────────┼───────────────────────────────────────────────────────────────────────┤
+    │ database add open-directory │ Discover media in HTTP directory listings and folder-like web indexes │
+    ├─────────────────────────────┼───────────────────────────────────────────────────────────────────────┤
+    │ database add reddit         │ Create a reddit database; Add subreddits                              │
+    ├─────────────────────────────┼───────────────────────────────────────────────────────────────────────┤
+    │ database add hackernews     │ Create / Update a Hacker News database                                │
+    ├─────────────────────────────┼───────────────────────────────────────────────────────────────────────┤
+    │ database add getty          │ Create / Update a Getty Museum database                               │
+    ├─────────────────────────────┼───────────────────────────────────────────────────────────────────────┤
+    │ database add substack       │ Backup substack articles                                              │
+    ├─────────────────────────────┼───────────────────────────────────────────────────────────────────────┤
+    │ database add tildes         │ Backup tildes comments and topics                                     │
+    ╰─────────────────────────────┴───────────────────────────────────────────────────────────────────────╯
 
-    Text subcommands:
-    ╭───────────────────────┬────────────────────────────────────────────────╮
-  
+    Playback subcommands:
+    ╭────────────────┬────────────────────────────────────────────────────────╮
+    │ play media     │ Play media of any supported type                       │
+    ├────────────────┼────────────────────────────────────────────────────────┤
+    │ play video     │ Watch / Listen                                         │
+    ├────────────────┼────────────────────────────────────────────────────────┤
+    │ play audio     │ Listen to audio                                        │
+    ├────────────────┼────────────────────────────────────────────────────────┤
+    │ play text      │ Read text                                              │
+    ├─────────

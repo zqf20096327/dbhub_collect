@@ -7,7 +7,7 @@ never sees prompts, responses or file contents.
 
 > Local · read-only · no cloud · no account · PHP + SQLite · macOS, Linux, Windows
 
-> **Beta (v0.11.0-beta).** It works well on macOS; Linux and Windows support has only been tested against sample command output.
+> **Beta (v0.12.0-beta).** It works well on macOS; Linux and Windows support has only been tested against sample command output.
 > If something misbehaves, run `php bin/diagnostics.php` and [open an issue](https://github.com/Spaksu/secaiq-watch/issues) with the output.
 > See [`CHANGELOG.md`](CHANGELOG.md) for known limitations.
 
@@ -23,7 +23,7 @@ never sees prompts, responses or file contents.
 | **Detection** | ~37 tools (Claude, Codex, Cursor, Windsurf, Copilot, Gemini, Ollama, LM Studio, Aider, OpenCode, Zed, Kiro, Warp, Goose, MCP servers, agent frameworks…) and ~33 provider domains |
 | **Network** | Live connections, destinations, bytes sent/received **per tool**, upload spike and baseline-anomaly alerts, and a **"Not classified"** list of every other process that talks to the network, so an unrecognised tool is never silently ignored |
 | **Permissions & risk** | Which tool can reach which sensitive area (SSH keys, `.env`, cloud credentials, browser data, keychain…), with one-click *Protect* presets for Claude Code and per-permission "how to remove it" guides for macOS, Linux and Windows |
-| **Findings** | Risky settings ranked critical → low: bypass modes, broad allow rules, MCP servers, hooks, hard-coded secrets, prompt-injection-style instruction files, AI browser extensions, posture score A–F |
+| **Findings** | Risky settings ranked critical → low: bypass modes, broad allow rules, MCP servers, hooks, hard-coded secrets, prompt-injection-style instruction files, AI browser extensions, posture score A–F (the grade covers **only the tools it recognises**; unrecognised network users are listed separately under *Not classified*, and every report states this) |
 | **File access** | Files and folders tools have open, classified by sensitivity |
 | **Usage** | Token usage per day, model, project and tool (Claude Code, Codex) with cost estimates |
 | **Reports** | HTML / Markdown report, **AI-BOM** (CycloneDX 1.5), CSV and JSON exports, hash-chained action log with undo |
@@ -31,14 +31,21 @@ never sees prompts, responses or file contents.
 
 ## Platform support
 
+macOS is the reference platform. Linux and Windows work, with the limits below. Please read the *Tested* row before relying on a platform.
+
 | | macOS | Linux | Windows |
 |---|---|---|---|
+| **Tested** | Daily use on real machines | Parsers tested with sample command output only; not yet run on a real Linux machine | Early real-machine testing (bugs found and fixed in 0.10.1–0.10.3); newest features still new |
 | Processes | ✅ | ✅ | ✅ |
-| Connections + bytes | ✅ | ✅ TCP | ⚠️ connections only (charts show open connections instead of bytes) |
-| Open files | ✅ | ✅ (your processes) | ⚠️ known credential files; plus audited folders if enabled |
+| Connections | ✅ | ✅ TCP only | ✅ |
+| Bytes per connection | ✅ | ✅ TCP | ❌ no per-connection counters (charts show open connections instead) |
+| Open files | ✅ | ✅ your own processes | ⚠️ known credential files; audited folders if you enable `bin\windows-file-audit.ps1` |
+| Permission "how to remove it" guides | ✅ | ✅ | ✅ |
 | System permission scan (TCC) | ✅ optional | – | – |
+| Background service | LaunchAgent | systemd user unit | Task Scheduler |
 
-Linux and Windows support is newer and has been tested with sample command output only — issues and fixes are welcome.
+A feature marked ❌ or – is not available on that platform.
+Issues and fixes are welcome — run `php bin/diagnostics.php` and attach the output.
 
 ## Quick start
 

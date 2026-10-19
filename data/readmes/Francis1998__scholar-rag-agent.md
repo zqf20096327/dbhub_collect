@@ -433,6 +433,7 @@ Existing cue illustrations remain available without interrupting the introductio
 | PrevalenceIncidenceBiasCueExtractor | [GIF](docs/assets/prevalence-incidence-bias-cues.gif) |
 | IncorporationBiasCueExtractor | [GIF](docs/assets/incorporation-bias-cues.gif) |
 | WillRogersPhenomenonCueExtractor | [GIF](docs/assets/will-rogers-phenomenon-cues.gif) |
+| ReferralBiasCueExtractor | [GIF](docs/assets/referral-bias-cues.gif) |
 | HawthorneEffectCueExtractor | [GIF](docs/assets/hawthorne-effect-cues.gif) |
 | RightCensoringCueExtractor | [GIF](docs/assets/right-censoring-cues.gif) |
 
@@ -459,6 +460,10 @@ uv run pytest tests/ -v --cov=src --cov-fail-under=70
 [CI](.github/workflows/ci.yml) runs on Python 3.11 and 3.12.
 [Security Scan](.github/workflows/security.yml) also audits dependencies and runs
 Bandit. Passing these checks is not a scientific-accuracy benchmark.
+
+| DiagnosticAccessBiasCueExtractor | [GIF](docs/assets/diagnostic-access-bias-cues.gif) |
+
+| CompetingEventBiasCueExtractor | [GIF](docs/assets/competing-event-bias-cues.gif) |
 
 ## License
 

@@ -32,6 +32,11 @@ up again later without losing anything.
 - **Tools with approvals.** File, shell, web and MCP tools pause before risky
   actions; allow / ask / deny rules per session or globally decide what asks.
   A denial with a reason goes back to the model instead of failing the run.
+- **Plan mode.** `/plan` lets the agent explore read-only and present a plan
+  for approval; approving it lets the agent carry the plan out in the same run.
+- **Edit tools per model.** GPT-5 and Codex models edit with `apply_patch`, the
+  multi-file patch format they were trained on; other models use `edit` and
+  `multiedit`.
 - **Long runs.** A native run works through many tool calls within a step,
   time and token budget, summarises its own context, runs independent tool
   calls in parallel, and keeps long commands in the background. `/continue`
@@ -175,8 +180,9 @@ visible in the other. These are client commands, not model tools.
 ```text
 /new                  create a session
 /sessions             list, select, rename or delete sessions
-/provider             provider and model for the current session
+/provider [id]        provider and model for the current session
 /permissions          permission mode and allow/ask/deny rules
+/plan                 plan mode: explore read-only, then approve the agent's plan
 /context              inspect, compact or clear the session context
 /usage                runs, steps and token usage
 /continue             continue the latest run with a fresh budget
@@ -205,11 +211,13 @@ mode) are described in [Telegram](docs/TELEGRAM.md).
 ## Feature guides
 
 **Subagents.** The `agent` tool takes `description`, `prompt`, and optional
-`background`, `isolation` (`shared` or `worktree`), `readonly`, `runtime`
-(`matrixclaw`, `codex`, `claude`, `auto`) and `model`. Children start from an
-isolated prompt, run a restricted tool set, and return only their result; their
-approval requests appear in the parent session.
-See [External Agents](docs/EXTERNAL_AGENTS.md#subagents).
+`agent_type` (`general`, `explore`, `plan`, `review`, `verify` or your own
+agent files), `background`, `isolation` (`shared` or `worktree`), `readonly`,
+`runtime`, `model` and `output_schema`. Children start from an isolated
+prompt, run a restricted tool set, and return only their result; their
+approval requests appear in the parent session. Worktree children work on
+their own branch and are merged with `worktree_merge`. See
+[Subagents](docs/SUBAGENTS.md) and [External Agents](docs/EXTERNAL_AGENTS.md#subagents).
 
 **External agents.** Codex app-server (`codex` binary) and Claude Code
 (`claude` binary) can back a whole session or a subagent. Enable them under
@@ -291,6 +299,7 @@ tool contract and API roles.
 | --- | --- |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | daemon, core, runs, modules, API, package map |
 | [docs/TELEGRAM.md](docs/TELEGRAM.md) | Telegram client, approvals, inline and guest mode, files, voice |
+| [docs/SUBAGENTS.md](docs/SUBAGENTS.md) | agent types, agent files, output schema, worktree children |
 | [docs/EXTERNAL_AGENTS.md](docs/EXTERNAL_AGENTS.md) | Codex and Claude Code runtimes, subagents |
 | [docs/MCP.md](docs/MCP.md) | MCP client and server |
 | [docs/BROWSER.md](docs/BROWSER.md) | browser tools through MCP |

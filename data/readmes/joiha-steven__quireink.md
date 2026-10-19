@@ -40,7 +40,7 @@ Colour, type, the shape of the front page and the menu are all settings in the a
 ## Highlights
 
 - **A real editor over Markdown**, with tables, footnotes, callouts, maths, galleries and video. It saves as you type, keeps versions, and schedules.
-- **Four built-in looks and any theme you install from a zip, six palettes, four reading fonts**, light and dark, and a book mode that sets a post in two columns like paper.
+- **Four built-in looks and any theme you install from a zip ([write your own](docs/themes.md)), six palettes, four reading fonts**, light and dark, and a book mode that sets a post in two columns like paper.
 - **A pen for you and for your readers**: highlight in five inks, underline, ring a word — drawn by hand, never the same stroke twice.
 - **Sign in with a passkey** (fingerprint, face or device PIN) beside the password and the code, never in place of them.
 - **Analytics without cookies**, per post and per site, and a newsletter on your own mail server.
@@ -97,9 +97,9 @@ About five minutes, and **$5 a month** for Cloudflare's Workers Paid plan, which
 2. When the form asks for a **setup code**, make one up: twelve characters or more.
 3. Open your blog's address with `/setup` on the end, type the code, and answer seven short screens.
 
-**Updating:** once, in **Settings → Server → Cloudflare**, add the update workflow to your copy (one click, then *Commit*). After that, each update is one click in your copy's **Actions** tab.
+**Updating:** once, in **Settings → Server → Advanced → Cloudflare**, add the update workflow to your copy (one click, then *Commit*). After that, each update is one click in your copy's **Actions** tab.
 
-**Already running Quire Ink on a server?** In its admin, **Settings → Server → Run on Cloudflare** moves it there, posts and pictures included. Everything else is in [the Cloudflare guide](./docs/self-host-cloudflare.md).
+**Already running Quire Ink on a server?** In its admin, **Settings → Server → Advanced → Run on Cloudflare** moves it there, posts and pictures included. Everything else is in [the Cloudflare guide](./docs/self-host-cloudflare.md).
 
 ### A rented server (VPS): one command
 
@@ -126,7 +126,7 @@ Every way installs a published release, tried on each of these paths before it s
 
 ## Let an AI agent write for you
 
-1. **Admin → Settings → Server & connections → MCP**, and create a token.
+1. **Admin → Settings → Server & connections → Advanced → MCP**, and create a token.
 2. Point your agent at `https://<your-domain>/api/mcp` with `Authorization: Bearer <token>`.
 3. Ask it for a post, a Monday traffic report or a newsletter draft. [The agent cookbook](./docs/agent-cookbook.md) has prompts that do real jobs; [how MCP works here](./docs/mcp.md).
 

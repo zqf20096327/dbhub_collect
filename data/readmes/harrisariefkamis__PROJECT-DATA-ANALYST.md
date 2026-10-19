@@ -1,28 +1,13 @@
-
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![DBeaver](https://img.shields.io/badge/DBeaver-382923?style=for-the-badge&logo=dbeaver&logoColor=white)
-![Statistics](https://img.shields.io/badge/Statistics-009688?style=for-the-badge&logo=scipy&logoColor=white)
-![Linear Algebra](https://img.shields.io/badge/Linear_Algebra-0078D4?style=for-the-badge&logo=wolframmathematica&logoColor=white)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge&logo=matplotlib&logoColor=white)
-![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
-![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
-<p>
-  <a href="https://colab.research.google.com"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Google Colab" height="28"></a>
-  <a href="https://cloud.google.com/bigquery"><img src="https://www.gstatic.com/images/branding/gcpiconscolors/bigquery/v1/32px.svg" alt="BigQuery" height="32"></a>
-  <a href="https://lookerstudio.google.com"><img src="https://www.gstatic.com/analytics-lego/svg/ic_looker_studio.svg" alt="Looker Studio" height="32"></a>
-  <a href="https://sheets.google.com"><img src="https://ssl.gstatic.com/docs/common/product/sheets_app_icon1.png" alt="Google Sheets" height="32"></a>
+[![License](https://img.shields.io/badge/license-MIT-informational.svg)]()
+[![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg?style=flat&logo=github&logoColor=white)](https://github.com/username/repo/issues)
+[![Python](https://img.shields.io/badge/Python-3.10-3776AB.svg?style=flat&logo=python&logoColor=yellow)](https://www.python.org/)
+[![Google Colab](https://img.shields.io/badge/Google%20Colab-Notebook-orange.svg?logo=google-colab&logoColor=white)](https://colab.research.google.com/)
+[![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626.svg?style=flat&logo=jupyter&logoColor=white)](https://jupyter.org/)
+[![MySQL Version](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/)
+[![Database Tool](https://img.shields.io/badge/DBeaver-Latest-orange.svg)](https://dbeaver.io/)
+<p align="left">
+  <img src="poster-design-data-analyst.jpg" alt="data-analyst-poster" width="925">
 </p>
-<p>
-  <a href="https://pandas.pydata.org"><img src="https://pandas.pydata.org/static/img/pandas.svg" alt="Pandas" height="32"></a>
-  <a href="https://numpy.org"><img src="https://raw.githubusercontent.com/numpy/numpy/main/branding/logo/primary/numpylogo.svg" alt="NumPy" height="32"></a>
-  <a href="https://seaborn.pydata.org"><img src="https://seaborn.pydata.org/_images/logo-wide-lightbg.svg" alt="Seaborn" height="32"></a>
-  <a href="https://scikit-learn.org"><img src="https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/doc/logos/scikit-learn-logo.svg" alt="scikit-learn" height="32"></a>
-  <a href="https://matplotlib.org"><img src="assets/matplotlib.svg" alt="Matplotlib" height="32"></a>
-</p>
-
-# Data Analyst Bootcamp: Modul Praktik, Studi Kasus & Persiapan Karier
-
 <p align="center">
   <a href="https://www.linkedin.com/in/harisariefkamis">
     <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
@@ -78,7 +63,7 @@ Setiap modul dirancang mengikuti **framework** pembelajaran yang konsisten:
 
 Dengan **workflow** ini, Anda dan tim dapat mengambil **data-driven decisions** serta merumuskan `data-driven policies` untuk mengelola suatu project bukan berdasarkan asumsi, melainkan berdasarkan **evidence**, **metrics**, dan **insight** yang terukur. **Curiosity** bukan sekadar sifat, tetapi **core skill** seorang Data Analyst profesional. `Analytical thinking` bukan bakat, melainkan kebiasaan yang dilatih. Dan **problem solving** bukan tujuan akhir melainkan **mindset** yang terus diasah.
 
-> **Filosofi belajar:** *"Ask better questions, get better insights."* Setiap modul dirancang untuk melatih **analytical curiosity**, **problem framing**, dan **business acumen** tiga pilar utama untuk menjadi **insight-driven analyst** yang mampu membangun **arsitektur** dan **infrastruktur** analitik yang berdampak.
+> **Filosofi belajar aku:** *"learn algorithm the Plants"* Setiap modul dirancang untuk melatih **analytical curiosity**, **problem framing**, dan **business acumen** tiga pilar utama untuk menjadi **insight-driven analyst** yang mampu membangun **arsitektur** dan **infrastruktur** analitik yang berdampak.
 
 ## Tech Stack:
 
@@ -92,47 +77,34 @@ Dengan **workflow** ini, Anda dan tim dapat mengambil **data-driven decisions** 
 </p>
 
 #### Python Data Stack
-
-<p>
-  <a href="https://pandas.pydata.org"><img src="https://pandas.pydata.org/static/img/pandas.svg" alt="Pandas" height="32"></a>
-  <a href="https://numpy.org"><img src="https://raw.githubusercontent.com/numpy/numpy/main/branding/logo/primary/numpylogo.svg" alt="NumPy" height="32"></a>
-  <a href="https://seaborn.pydata.org"><img src="https://seaborn.pydata.org/_images/logo-wide-lightbg.svg" alt="Seaborn" height="32"></a>
-  <a href="https://scikit-learn.org"><img src="https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/doc/logos/scikit-learn-logo.svg" alt="scikit-learn" height="32"></a>
-  <a href="https://matplotlib.org"><img src="assets/matplotlib.svg" alt="Matplotlib" height="32"></a>
+<p align="left">
+  <a href="https://pandas.pydata.org"><img src="https://pandas.pydata.org/static/img/pandas.svg" alt="Pandas" height="50"></a>
+  <a href="https://numpy.org"><img src="https://raw.githubusercontent.com/numpy/numpy/main/branding/logo/primary/numpylogo.svg" alt="NumPy" height="50"></a>
+  <a href="https://seaborn.pydata.org"><img src="https://seaborn.pydata.org/_images/logo-wide-lightbg.svg" alt="Seaborn" height="40"></a>
+  <a href="https://scikit-learn.org"><img src="https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/doc/logos/scikit-learn-logo.svg" alt="scikit-learn" height="90"></a>
+  <a href="assets/matplotlib.svg" download>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Matplotlib_icon.svg" alt="Matplotlib" height="32">
 </p>
 
 #### Database
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![MySQL Workbench](https://img.shields.io/badge/MySQL_Workbench-00758F?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/products/workbench/)
+[![DBeaver](https://img.shields.io/badge/DBeaver-372923?style=for-the-badge&logo=dbeaver&logoColor=white)](https://dbeaver.io/)
 
-<p>
-  <a href="https://www.mysql.com"><img src="https://labs.mysql.com/common/logos/mysql-logo.svg" alt="MySQL" height="32"></a>
-  <a href="https://www.postgresql.org"><img src="assets/postgresql.svg" alt="PostgreSQL" height="32"></a>
-  <a href="https://dbeaver.io"><img src="assets/dbeaver.svg" alt="DBeaver" height="32"></a>
-</p>
-
-#### Business Intelligence & Spreadsheet
-
-<p>
-  <a href="https://www.microsoft.com/microsoft-365/excel"><img src="assets/excel.svg" alt="Microsoft Excel" height="32"></a>
-</p>
+#### Google Spreadsheet
+[![Google Sheets](https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)](https://sheets.google.com)
 
 #### IDE & Development
-
-<p>
-  <a href="https://code.visualstudio.com"><img src="assets/vscode.svg" alt="VS Code" height="32"></a>
-  <a href="https://jupyter.org"><img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white" alt="Jupyter"></a>
-</p>
+![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
+![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 #### Mathematics & Statistics Dasar
-
-<p>
-  <img src="https://img.shields.io/badge/Statistics-009688?style=for-the-badge&logo=scipy&logoColor=white" alt="Statistics">
-  <img src="https://img.shields.io/badge/Linear_Algebra-0078D4?style=for-the-badge&logo=wolframmathematica&logoColor=white" alt="Linear Algebra">
-</p>
-
----
+![Statistics](https://img.shields.io/badge/Statistics-009688?style=for-the-badge&logo=scipy&logoColor=white)
+![Linear Algebra](https://img.shields.io/badge/Linear_Algebra-0078D4?style=for-the-badge&logo=wolframmathematica&logoColor=white)
+![Probability](https://img.shields.io/badge/Probability-E91E63?style=for-the-badge&logo=mathoverflow&logoColor=white)
 
 ## Summary Stack
-
 ```
 PROJECT-DATA-ANALYST/
 ├── 01-intro/

@@ -108,6 +108,24 @@ abc2@hotmail.com----123456----clientidxxxx----refresh_token_xxx
 
 在邮件查看页面中，还可以开启自动刷新，便于持续观察目标邮箱的新邮件。
 
+#### 对外取件接口
+
+第三方调用方可以直接用邮箱地址取件，不需要知道数据库内部 ID：
+
+```text
+GET /api/accounts/mails?email=demo@hotmail.com&folder=inbox
+GET /api/accounts/mails?email=demo@hotmail.com&folder=junk
+```
+
+参数说明：
+
+- `email`：必填，邮箱地址，大小写不敏感
+- `folder`：可选，`inbox` 收件箱（默认）、`junk` 垃圾箱
+- `limit`：可选，返回邮件数量，`1~50`，默认 `20`
+- 鉴权：支持请求头 `X-Token`，也支持查询参数 `token`（方便脚本或浏览器直接调用）
+
+后台页面仍使用原有的按 ID 取件接口 `GET /api/accounts/{account_id}/mails?folder=inbox`，两者返回结构一致。
+
 ### 5. 每日自动更新令牌
 
 项目内置后台调度器，应用启动后会自动开启。
@@ -138,6 +156,8 @@ abc2@hotmail.com----123456----clientidxxxx----refresh_token_xxx
 .
 ├─ icutool_mail.py                # FastAPI 入口与接口定义
 ├─ oauth_service.py               # OAuth token 刷新逻辑
+├─ proxy_config.py                # 邮件 HTTP 代理地址校验与协议配置
+├─ settings_service.py            # 系统设置的数据库读写
 ├─ mail_service.py                # 邮件读取与 IMAP 交互
 ├─ token_refresh_service.py       # 每日自动刷新任务与日志
 ├─ models.py                      # 数据模型
@@ -181,7 +201,13 @@ export ADMIN_PASSWORD="your_password"
 admin123
 ```
 
-### 3. 启动项目
+### 3. 配置邮件 HTTP 代理（可选）
+
+登录后台后进入“系统设置”，填写例如 `http://127.0.0.1:7890` 并保存。需要代理认证时，在“代理认证”中填写 `用户名:密码`，例如 `proxyuser:xtXT1234`。设置会持久化到 SQLite 数据库，并立即用于后续 OAuth HTTPS 请求和 Outlook IMAP SSL 连接；清空地址并保存则恢复直连，无需重启项目。
+
+IMAP SSL 通过 HTTP `CONNECT` 隧道连接 `outlook.live.com:993`，因此代理需要允许 CONNECT 到 993 端口。
+
+### 4. 启动项目
 
 ```bash
 python icutool_mail.py
@@ -196,6 +222,8 @@ http://IP:10019
 ## 数据存储说明
 
 - 默认使用本地 `SQLite` 数据库文件 `mail.db`
+- 邮件代理地址和可选的 `用户名:密码` 认证信息保存在 `app_setting` 表中，通过后台“系统设置”维护
+- 代理认证信息保存在本地数据库中；请按敏感配置保护 `mail.db` 文件
 - `mail.db` 已在 `.gitignore` 中忽略，不会默认提交到 GitHub
 - 项目会自动建表
 - 若旧数据库缺少 `remark` 字段，启动时会自动补齐

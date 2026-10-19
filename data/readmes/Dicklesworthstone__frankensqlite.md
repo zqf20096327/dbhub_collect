@@ -73,7 +73,7 @@ signature fails closed rather than silently downgrading authenticity.
 | Self-healing storage | No | Native file-backed connections can generate WAL repair symbols asynchronously; automatic FEC recovery is not wired to the compatibility WAL reader |
 | Page-level encryption | No (commercial SEE extension) | Not currently available: the XChaCha20-Poly1305 DEK/KEK implementation exists in `fsqlite-pager`, but no `PRAGMA key`/`rekey` dispatch is wired into `Connection` |
 | SQL dialect | Full | Large and growing subset; parser coverage exceeds full execution parity today |
-| Extensions | FTS3/4/5, R-tree, JSON1, etc. | Extension crates are present; some runtime wiring is still in progress |
+| Extensions | FTS3/4/5, R-tree, JSON1, etc. | FTS5, JSON1, R-tree/geopoly, ICU, and misc (`generate_series`) wired in live engine; session is a library facade; FTS3/4 are helper-level only |
 | Cross-process MVCC | No | Partial (shared-memory coordination, bounded by the measured harness scale) |
 | Embedded, zero-config | Yes | Yes |
 
@@ -99,4 +99,4 @@ Most of the workspace inherits `unsafe_code = "forbid"` from the root Cargo work
 
 ### 4. File Format Compatibility Is Non-Negotiable
 
-Compatibility with existing SQLite databases is a core goal of the current runtime. FrankenSQLite is built around standard `.db` plus rollback-journal/WAL files, and a major part of the harness exists to drive byte- and behavior-level parity against C SQLite. The runtime admits databases whose header declares encoding 1 (UTF-8) or encodings 2/3 (UTF-16le/UTF-16be) for both read
+Compatibility with existing SQLite databases is a core goal of the current runtime. FrankenSQLite is built around standard `.db` plus rollback-journal/WAL files, and a major part of the harness exists to drive byte- and behavior-level parity against C SQLite. The runtime admits databases whose header declar

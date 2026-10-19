@@ -1,20 +1,16 @@
-# SoloDB - A Document Database With Full LINQ Support
+# SoloDB
 
-**Version 1.0** - [Stable Release](https://unconcurrent.com/articles/SoloDB100.html) and **Version 1.1** - [Relational Support](https://unconcurrent.com/articles/SoloDB110.html)
+Store your C# and F# objects, query them with LINQ, and keep related documents and files together in one SQLite database. SoloDB runs inside your application, with transactions and SQL available when you need them.
 
-[SoloDB](https://solodb.org/) is a high-performance, lightweight, and robust embedded .NET database that elegantly combines the power of a NoSQL document store with the reliability of SQL. Built directly on top of SQLite and its native [JSONB](https://sqlite.org/jsonb.html) support, SoloDB offers a serverless, feature-rich experience, combining a simple [MongoDB](https://www.mongodb.com/)-like API with full LINQ support for expressive, strongly-typed queries.
-
-SoloDB includes native relational-document support via `DBRef<T>`, `DBRefMany<T>`, and `[SoloRef(...)]`, so you can model references and graph-like data while staying in a strongly-typed document API.
-
-It is designed for developers who need a fast, reliable, and easy-to-use database solution without the overhead of a separate server. It's perfect for desktop applications, mobile apps (via .NET MAUI), and web applications.
-
-I wrote a detailed comparison with a popular alternative, [LiteDB](https://github.com/litedb-org/LiteDB) — including benchmarks, API differences, and developer experience. [Read the article here](https://unconcurrent.com/articles/SoloDBvsLiteDB.html).
+> This branch documents the upcoming **SoloDB 1.4.0**. The latest published NuGet release is **1.3.0**. Generated operations, direct typed JSON, and filesystem events and references described here require 1.4 when it is released.
 
 ## Table of Contents
 
 - [Core Features](#core-features)
 - [Why SoloDB?](#why-solodb)
 - [Installation](#installation)
+- [Generated Metadata Registration](#generated-metadata-registration)
+- [Direct Typed JSON](#direct-typed-json)
 - [Getting Started: A 60-Second Guide](#getting-started-a-60-second-guide)
 - [Usage and Examples](#usage-and-examples)
   - [Initializing the Database](#initializing-the-database)
@@ -26,8 +22,10 @@ I wrote a detailed comparison with a popular alternative, [LiteDB](https://githu
   - [Storing Polymorphic Data](#storing-polymorphic-data)
   - [Custom ID Generation](#custom-id-generation)
   - [Integrated File Storage](#integrated-file-storage)
+  - [Filesystem References](#filesystem-references)
   - [Events API](#events-api)
   - [Direct SQL Access](#direct-sql-access)
+  - [ADO.NET Emulation](#adonet-emulation)
   - [F# Example](#f-example)
 - [Database Management](#database-management)
   - [Backups](#backups)
@@ -50,7 +48,7 @@ SoloDB is packed with features that provide a seamless and powerful developer ex
 - **Thread-Safe**: A built-in connection pool ensures safe, concurrent access from multiple threads.
 - **Customizable ID Generation**: Use the default long primary key, or implement your own custom ID generation strategy (e.g., string, Guid).
 - **.NET Standard 2.0 & 2.1**: Broad compatibility with .NET Framework, .NET Core, and modern .NET runtimes.
-- **Open Source**: Licensed under the permissive LGPL-3.0.
+- **Open Source**: Licensed under LGPL-3.0, with the bundling permission described below.
 - **Documentation**: See the [official documentation](https://solodb.org/docs.html) for detailed guides.
 
 ## Why SoloDB?
@@ -59,11 +57,35 @@ In a world of countless database solutions, SoloDB was created to fill a specifi
 
 ## Installation
 
-Install SoloDB directly from the NuGet Package Manager.
+Install the published stable release from NuGet:
 
 ```bash
-dotnet add package SoloDB
+dotnet add package SoloDB --version 1.3.0
 ```
+
+The 1.4 APIs below describe this development branch and are not included in that package. The [website documentation](https://solodb.org/docs.html) currently covers the earlier published API; its 1.4 update will accompany the package release.
+
+## Generated Metadata Registration
+
+C# and F# projects can register build-generated operations for their original model types. See the [registration guide](docs/generated-metadata.md) for inferred roots, explicit registration, conditional activation and current NativeAOT validation limits.
+
+## Direct Typed JSON
+
+Write typed values to UTF-8 or UTF-16 storage and read them with `ParseInto<T>`:
+
+```csharp
+using System;
+using SoloDatabase.JsonSerializator;
+
+Span<byte> destination = Span<byte>.Empty;
+int written = JsonValue.WriteJson(new[] { 1, 2, 3 }, ref destination);
+ReadOnlySpan<byte> json = destination.Slice(0, written);
+int[] values = JsonValue.ParseInto<int[]>(json);
+```
+
+An empty span grows automatically; `written` counts bytes for UTF-8 and characters for UTF-16. Writable-list overloads append and return the added count. See the [direct JSON guide](docs/generated-metadata.md#direct-typed-json) for custom growth/release callbacks, final-buffer ownership and failure behavior. NativeAOT uses the generated registration described above. `Serialize<T>` and `Parse` remain available when you need a `JsonValue` tree.
+
+Direct floating-point conversion avoids the decimal-backed tree's rounding and range limits. Output for values previously rounded or rejected can differ. Forward object readers run setters and conversions in input order: an invalid earlier duplicate fails, and user effects can remain after later malformed or trailing input. Exceptional late runtime-type selection can replay conversion and add effects. See the [direct JSON behavior and ownership guide](docs/generated-metadata.md#direct-typed-json).
 
 ## Getting Started: A 60-Second Guide
 
@@ -233,6 +255,9 @@ teams.Insert(team);
 Important constraints:
 
 - `OnOwnerDelete = Cascade` is rejected by schema/build guards.
+- Reference properties may use different policies and single-reference uniqueness settings for the same target, including mixtures of typed and untyped Single and Many references. Each property retains its own policy.
+- Independent linked `Restrict` policies are checked before the associated deletion effects. Inverse views of the same shared Many links retain their existing owner-unlink behavior. Owner deletion removes applicable links before deciding whether targets reached through `Deletion` references are orphaned. Surviving external references preserve a target; an `Unlink` reference alone does not request target deletion.
+- Multiple Many properties that resolve to the same shared relation remain invalid because their independent links cannot be distinguished.
 
 #### Loading Semantics
 
@@ -297,7 +322,8 @@ Key behavior:
 - Exclude is stricter than non-included: excluded relation `.Value` access is rejected.
 - Same path in Include and Exclude is rejected deterministically.
 - `DBRef<T>.Id` is always the persisted relation id (or `0` for empty).
-- `DBRef<T>.Value` requires materialization; excluded/unloaded access throws `InvalidOperationException`.
+- `DBRef<T>.Value` requires materialization; excluded/unloaded access throws `InvalidOperationException`. Selecting a reference alone can return an unloaded reference; check `IsLoaded` before accessing `Value`.
+- A loaded document target retains its physical row ID in its writable `long Id` property, so updating or reusing that target addresses the existing row. A typed reference also retains the target’s separate `[SoloId]` key.
 - `DBRefMany<T>` relation queries (`Any`, `Count`) are translated through relation metadata/link tables.
 
 #### UpdateMany and Relation Diffs
@@ -413,13 +439,15 @@ teamsR.Insert(teamR) |> ignore
 1. Unsupported relation query/update expression shapes are rejected with typed exceptions (`NotSupportedException`).
 2. Missing/inconsistent relation metadata is rejected where knowable (build/bootstrap), with translation-time safety net rejects for invalid metadata states.
 3. Reject paths are fail-closed: no owner/target/link/catalog mutation on rejected operations.
+4. Reference mutations that introduce a directed cycle or a path exceeding 10 reference hops throw `InvalidOperationException`. Admission checks the final stored graph, including bulk and callback effects, before the operation succeeds.
 
 **No silent fallback:** SoloDB does not silently downgrade unsupported relation operations to generic JSON scanning behavior.
 
 #### Compatibility and Migration Notes
 
 - Existing `DBRef<TTarget>` / `DBRefMany<TTarget>` persistence model remains relation-first (`SoloDBRelLink_*`, `SoloDBRelation`).
-- DBRef traversal depth is bounded: chains deeper than 10 relation hops are rejected during translation.
+- Relation query expressions support up to 10 reference hops. Write admission separately checks the final stored paths affected by newly introduced edges: a document starts at depth zero, 10 hops are allowed, and an 11th hop or directed cycle is rejected. Existing-ID `To` references count, including paths through previously stored ancestors. Shared targets and repeated CLR types on distinct rows are permitted when those paths remain within the limit and acyclic.
+- Existing deep or cyclic data remains readable with bounded loading; default `GetById` and ordinary query loading retain their existing 11-hop boundary. Saves that leave final reference adjacency unchanged or only remove edges remain permitted, allowing incremental repair. Opening a database does not scan or repair its graph. New reciprocal navigable Many links are rejected when their forward and inverse references form a cycle.
 - `DBRefMany<T>` item ordering is not a stable ordering contract unless your query/project explicitly orders results.
 - Nested DBRefMany relation predicates (e.g. `Items.Any(i => i.SubItems.Any(...))`) are supported up to 10 relation hops.
 - `option<DBRef<_>>` / `option<DBRefMany<_>>` relation-property shapes are not supported; use `DBRef<_>.None` for empty single refs.
@@ -671,7 +699,13 @@ bool exists = fs.Exists("/reports/report-2024.txt"); // true
 fs.DeleteFileAt("/reports/report-2024.txt");
 ```
 
+### Filesystem references
+
+Documents can protect existing files and directories with Single and Many references. See [Filesystem references](docs/filesystem-references.md) for C# and F# examples, loading and mutation behavior.
+
 ### Events API
+
+Filesystem changes are available through `db.FileSystem`, including typed header, metadata and logical byte-range callbacks. See [Filesystem events](docs/filesystem-events.md) for examples and callback semantics.
 
 SoloDB provides a powerful event system for reacting to collection changes. Events are implemented via SQLite triggers, ensuring they participate in the same transaction as the triggering operation.
 
@@ -720,20 +754,39 @@ A: No. `ctx.Item` is a read-only copy. To reject an operation, throw an exceptio
 
 ### Direct SQL Access
 
-For complex scenarios not easily covered by LINQ, you can execute raw SQL commands directly.
+Use raw SQL for your own tables alongside document collections. This example creates a separate SQL table; collection properties live inside JSONB and are not ordinary SQL columns.
 
 ```csharp
+using SoloDatabase;
+using static SoloDatabase.NativeSQLiteTools.IDbConnectionExtensions;
+
+using var db = new SoloDB("memory:sql-example");
 using var pooledConnection = db.Connection.Borrow();
 
-// Execute a command that doesn't return data
-pooledConnection.Execute("UPDATE Product SET Price = Price * 1.1 WHERE Category = 'Electronics'");
+pooledConnection.Execute("CREATE TABLE Inventory(Name TEXT, PriceInCents INTEGER)");
+pooledConnection.Execute("INSERT INTO Inventory VALUES(@name, @price)",
+    new { name = "Notebook", price = 500L });
+pooledConnection.Execute("UPDATE Inventory SET PriceInCents = PriceInCents + @amount",
+    new { amount = 50L });
 
-// Execute a query and map the first result to a value
-var highestPrice = pooledConnection.QueryFirst<decimal>("SELECT MAX(Price) FROM Product");
+long highestPrice = pooledConnection.QueryFirst<long>("SELECT MAX(PriceInCents) FROM Inventory");
 
-// Execute a query and map results to objects
-var cheapProducts = pooledConnection.Query<Product>("SELECT * FROM Product WHERE Price < @MaxPrice", new { MaxPrice = 10.0 });
+// Enumerate while the pooled connection remains alive.
+foreach (var item in pooledConnection.Query<(string Name, long PriceInCents)>(
+    "SELECT Name, PriceInCents FROM Inventory WHERE PriceInCents < @maximum",
+    new { maximum = 1000L }))
+{
+    Console.WriteLine($"{item.Name}: {item.PriceInCents}");
+}
 ```
+
+Typed Decimal and BigInteger document fields use the [stored numerical representation](docs/generated-metadata.md#numerical-storage-and-migration); raw SQL keeps SQLite's own value and arithmetic rules.
+
+### ADO.NET emulation
+
+SoloDB includes ADO.NET emulation for compatibility in the same project, assembly and NuGet package. `GetInternalConnection()` and pooled `Borrow()` return it automatically; no extra package or wrapper is required. Its types are in `SoloDatabase.Data.Sqlite`.
+
+This is a limited compatibility layer, not a full ADO.NET provider. Stored procedures and output parameters are unsupported; async calls perform synchronous SQLite work, and `Cancel()` does not interrupt execution. See [supported operations and ownership](docs/native-sql.md#adonet-emulation).
 
 ### F# Example
 
@@ -797,3 +850,7 @@ This project is licensed under the GNU Lesser General Public License v3.0 (LGPL-
 In addition, special permission is granted to distribute applications that incorporate an unmodified DLL of this library in Single-file deployments, Native AOT builds, and other bundling technologies that embed the library directly into the executable file. This ensures you can use modern .NET deployment strategies without violating the license.
 
 Full license details are available [here](https://solodb.org/legal.html).
+
+### Direct SQL
+
+See [Direct SQL connections](docs/native-sql.md) for named SQL execution, typed rows, parameter plans and transactions.

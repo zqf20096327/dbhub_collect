@@ -2,6 +2,10 @@
 
 A fast, local-first notes workspace in the spirit of Notion: nested pages, a block editor, full-text search, databases, plus assignments, a calendar and a file library that all link together. It has a custom title bar, a vertical sidebar and a black-and-white look with optional accent colors. Built with **Rust + Tauri 2 + TypeScript** (Svelte 5 components).
 
+## Download
+
+**Windows 10 and 11:** get the `_x64-setup.exe` installer (about 3 MB) from the [latest release](https://github.com/kusule1351-hue/thought-desk/releases/latest). The installer isn't code-signed yet, so Windows may show "Windows protected your PC": click **More info**, then **Run anyway**. A Microsoft Store version and Linux builds are coming soon.
+
 ## Why it's light
 
 | | Thought Desk | Typical Electron notes app |
@@ -168,10 +172,16 @@ src-tauri/src/
   memory.rs              WebView2 suspend/trim while minimized, idle, or after Settings
 ```
 
+## Contributing
+
+Fixes, measurements and ideas are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to set up, test and send a pull request. Contributors sign a short [Contributor License Agreement](CLA.md) once, on their first pull request. Questions, ideas or just want to chat? Join the [Discord](https://discord.gg/JEaUHwz5bP).
+
 ## License
 
 Copyright (C) 2026 Kusule
 
 Thought Desk is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](LICENSE) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. If you distribute a modified version, or let people use one over a network, you must make its source code available under the same license.
+
+The license covers the code, not the Thought Desk name or logo: forks and redistributed versions need their own name and logo.
 
 The interface uses [Inter](https://rsms.me/inter/) by Rasmus Andersson, bundled under the SIL Open Font License 1.1.

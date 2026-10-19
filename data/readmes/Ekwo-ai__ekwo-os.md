@@ -80,7 +80,7 @@ level security decides who sees what.
   Identifiers stay English; what a person reads comes from the pack, in the
   language of the company or of the reader. See
   [`docs/languages.md`](docs/languages.md).
-- **Every country a pack, out of the box.** <!-- generated:countries -->United Arab Emirates (`ae`), Antigua and Barbuda (`ag`), Albania (`al`), Հայաստան (`am`), Angola (`ao`), Argentina (`ar`), Austria (`at`), Australia (`au`), Azərbaycan (`az`), Bosna i Hercegovina (`ba`), Bangladesh (`bd`), Belgium (`be`), Burkina Faso (`bf`), България (`bg`), البحرين (`bh`), Bénin (`bj`), Bermuda (`bm`), Brunei Darussalam (`bn`), Bolivia (`bo`), The Bahamas (`bs`), Canada (`ca`), République démocratique du Congo (`cd`), Centrafrique (`cf`), Congo (`cg`), Schweiz (`ch`), Côte d’Ivoire (`ci`), Chile (`cl`), Cameroun (`cm`), 中国 (`cn`), Colombia (`co`), Costa Rica (`cr`), Cyprus (`cy`), Czechia (`cz`), Germany (`de`), Danmark (`dk`), Dominica (`dm`), Dominican Republic (`do`), Algérie (`dz`), Ecuador (`ec`), Estonia (`ee`), مصر (`eg`), España (`es`), Ethiopia (`et`), Finland (`fi`), France (`fr`), Gabon (`ga`), United Kingdom (`gb`), Grenada (`gd`), საქართველო (`ge`), Guernsey (`gg`), Ghana (`gh`), Guinée (`gn`), Guinée équatoriale (`gq`), Ελλάδα (`gr`), Guatemala (`gt`), Guinée-Bissau (`gw`), Guyana (`gy`), Hong Kong (`hk`), Honduras (`hn`), Croatia (`hr`), Magyarország (`hu`), Indonesia (`id`), Ireland (`ie`), Israel (`il`), India (`in`), Ísland (`is`), Italia (`it`), Jersey (`je`), Jamaica (`jm`), 日本 (`jp`), Kenya (`ke`), Comores (`km`), 대한민국 (`kr`), Kuwait (`kw`), Cayman Islands (`ky`), Қазақстан (`kz`), Sri Lanka (`lk`), Lietuva (`lt`), Luxembourg (`lu`), Latvija (`lv`), Maroc (`ma`), Moldova (`md`), Crna Gora (`me`), Северна Македонија (`mk`), Mali (`ml`), 澳門 (`mo`), Malta (`mt`), Mauritius (`mu`), México (`mx`), Malaysia (`my`), Moçambique (`mz`), Niger (`ne`), Nigeria (`ng`), Nicaragua (`ni`), Nederland (`nl`), Norge (`no`), New Zealand (`nz`), Oman (`om`), Panamá (`pa`), Perú (`pe`), Philippines (`ph`), Pakistan (`pk`), Polska (`pl`), Portugal (`pt`), Paraguay (`py`), Qatar (`qa`), Romania (`ro`), Srbija (`rs`), Rwanda (`rw`), Saudi Arabia (`sa`), Sverige (`se`), Singapore (`sg`), Slovenia (`si`), Slovensko (`sk`), Sénégal (`sn`), El Salvador (`sv`), Tchad (`td`), Togo (`tg`), ประเทศไทย (`th`), Tunisie (`tn`), Türkiye (`tr`), 臺灣 (`tw`), Tanzania (`tz`), Україна (`ua`), Uganda (`ug`), United States (`us`), Uruguay (`uy`), British Virgin Islands (`vg`), Việt Nam (`vn`), Kosova (`xk`), South Africa (`za`), Zambia (`zm`) and Zimbabwe (`zw`)<!-- /generated --> — each with its chart of accounts, its tax codes, its
+- **Every country a pack, out of the box.** <!-- generated:countries -->United Arab Emirates (`ae`), Antigua and Barbuda (`ag`), Albania (`al`), Հայաստան (`am`), Angola (`ao`), Argentina (`ar`), Austria (`at`), Australia (`au`), Azərbaycan (`az`), Bosna i Hercegovina (`ba`), Bangladesh (`bd`), Belgium (`be`), Burkina Faso (`bf`), България (`bg`), البحرين (`bh`), Bénin (`bj`), Bermuda (`bm`), Brunei Darussalam (`bn`), Bolivia (`bo`), The Bahamas (`bs`), Canada (`ca`), République démocratique du Congo (`cd`), Centrafrique (`cf`), Congo (`cg`), Schweiz (`ch`), Côte d’Ivoire (`ci`), Chile (`cl`), Cameroun (`cm`), 中国 (`cn`), Colombia (`co`), Costa Rica (`cr`), Cyprus (`cy`), Czechia (`cz`), Germany (`de`), Danmark (`dk`), Dominica (`dm`), Dominican Republic (`do`), Algérie (`dz`), Ecuador (`ec`), Estonia (`ee`), مصر (`eg`), España (`es`), Ethiopia (`et`), Finland (`fi`), France (`fr`), Gabon (`ga`), United Kingdom (`gb`), Grenada (`gd`), საქართველო (`ge`), Guernsey (`gg`), Ghana (`gh`), Guinée (`gn`), Guinée équatoriale (`gq`), Ελλάδα (`gr`), Guatemala (`gt`), Guinée-Bissau (`gw`), Guyana (`gy`), Hong Kong (`hk`), Honduras (`hn`), Croatia (`hr`), Magyarország (`hu`), Indonesia (`id`), Ireland (`ie`), Israel (`il`), India (`in`), Ísland (`is`), Italia (`it`), Jersey (`je`), Jamaica (`jm`), 日本 (`jp`), Kenya (`ke`), Comores (`km`), Saint Kitts and Nevis (`kn`), 대한민국 (`kr`), Kuwait (`kw`), Cayman Islands (`ky`), Қазақстан (`kz`), Saint Lucia (`lc`), Sri Lanka (`lk`), Lietuva (`lt`), Luxembourg (`lu`), Latvija (`lv`), Maroc (`ma`), Moldova (`md`), Crna Gora (`me`), Северна Македонија (`mk`), Mali (`ml`), 澳門 (`mo`), Malta (`mt`), Mauritius (`mu`), México (`mx`), Malaysia (`my`), Moçambique (`mz`), Niger (`ne`), Nigeria (`ng`), Nicaragua (`ni`), Nederland (`nl`), Norge (`no`), New Zealand (`nz`), Oman (`om`), Panamá (`pa`), Perú (`pe`), Philippines (`ph`), Pakistan (`pk`), Polska (`pl`), Portugal (`pt`), Paraguay (`py`), Qatar (`qa`), Romania (`ro`), Srbija (`rs`), Rwanda (`rw`), Saudi Arabia (`sa`), Sverige (`se`), Singapore (`sg`), Slovenia (`si`), Slovensko (`sk`), Sénégal (`sn`), El Salvador (`sv`), Tchad (`td`), Togo (`tg`), ประเทศไทย (`th`), Tunisie (`tn`), Türkiye (`tr`), 臺灣 (`tw`), Tanzania (`tz`), Україна (`ua`), Uganda (`ug`), United States (`us`), Uruguay (`uy`), British Virgin Islands (`vg`), Việt Nam (`vn`), Kosova (`xk`), South Africa (`za`), Zambia (`zm`) and Zimbabwe (`zw`)<!-- /generated --> — each with its chart of accounts, its tax codes, its
   declaration boxes and its financial statements, and all of them installed by
   `ekwo init`, so one installation keeps companies in any of these countries.
   The version and review status of each are in
@@ -234,6 +234,7 @@ psql "$DATABASE_URL" -f supabase/seed/19_pack_es.sql
 psql "$DATABASE_URL" -f supabase/seed/200_pack_jm.sql
 psql "$DATABASE_URL" -f supabase/seed/202_pack_dm.sql
 psql "$DATABASE_URL" -f supabase/seed/203_pack_gd.sql
+psql "$DATABASE_URL" -f supabase/seed/204_pack_lc.sql
 psql "$DATABASE_URL" -f supabase/seed/20_pack_sn.sql
 psql "$DATABASE_URL" -f supabase/seed/21_pack_ci.sql
 psql "$DATABASE_URL" -f supabase/seed/22_pack_bj.sql
@@ -257,6 +258,7 @@ psql "$DATABASE_URL" -f supabase/seed/39_pack_my.sql
 psql "$DATABASE_URL" -f supabase/seed/400_pack_ag.sql
 psql "$DATABASE_URL" -f supabase/seed/401_pack_bs.sql
 psql "$DATABASE_URL" -f supabase/seed/402_pack_gy.sql
+psql "$DATABASE_URL" -f supabase/seed/403_pack_kn.sql
 psql "$DATABASE_URL" -f supabase/seed/40_pack_au.sql
 psql "$DATABASE_URL" -f supabase/seed/41_pack_nz.sql
 psql "$DATABASE_URL" -f supabase/seed/42_pack_mx.sql
@@ -457,8 +459,9 @@ Three ways to get help, from the open to the dedicated:
 - **In the open, for everyone.** [Issues](https://github.com/Ekwo-ai/ekwo-os/issues)
   for a bug or a rule that is wrong for your country, with the text of law
   cited; [Discussions](https://github.com/Ekwo-ai/ekwo-os/discussions) for a
-  question or an idea. The team reads both, and a fix lands in this repository
-  for everyone.
+  question or an idea; the [Ekwo AI Discord](https://discord.gg/dhAQAVhWMG) to
+  talk it through with the people who use, build on and write Ekwo. The team
+  reads all three, and a fix lands in this repository for everyone.
 - **By e-mail, with Hosted and Pro.** A company or a firm on
   [Ekwo Cloud](https://cloud.ekwo.ai) writes from its Support page and gets a
   written answer from the people who write Ekwo. What each plan includes:

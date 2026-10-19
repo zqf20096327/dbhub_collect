@@ -92,6 +92,7 @@ Ingest options:
 | `-o, --output` | output SQLite path | `data/dictionary.db` |
 | `-b, --batch` | rows per insert transaction | `5000` |
 | `--freq` | word frequency list (a Leipzig `*-words.txt` or a Yomitan frequency `.zip`), see below | none |
+| `--ipa-db` | an optional `(word, pos) → IPA` map built by `ingest/extract_ipa.py`, to fill entries whose dump has no pronunciation, see below | none |
 | `--no-verify` | skip post-build sample lookups | off |
 
 **Word frequencies (optional).** With `--freq` the ingest adds up, for every entry, how often its
@@ -108,6 +109,25 @@ python ingest/ingest.py data/raw/kaikki.org-dictionary-German.jsonl -o data/dict
 A spelling is counted for the entries Wiktionary has a page for (the headword, or an inflected-form
 page such as *Häuser* → Haus). Only a spelling that has no page is split between the entries that
 list it in their table of forms. Without `--freq` both columns are `0` and nothing else changes.
+
+**Pronunciation enrichment (optional).** Some entries arrive without an IPA because the main dump's
+page only carried an audio file (e.g. *schleißen*, which does have a transcription on the German
+Wiktionary). To fill those gaps, `ingest/extract_ipa.py` reads the German Wiktionary edition
+published by kaikki.org and writes a compact `(word, pos) → IPA` map (see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)); `ingest.py --ipa-db` then gives those entries a
+pronunciation, leaving the ones that already have one untouched. When the part of speech differs
+between the two editions (e.g. *FSK* is a noun on en.wiktionary and an abbreviation on de.wiktionary),
+the ingest falls back to a word-only lookup, but only if that word has a single pronunciation across
+all parts of speech — nothing ambiguous is guessed:
+
+```bash
+curl -L -o data/raw/kaikki.org-dictionary-Deutsch.jsonl \
+  https://kaikki.org/dewiktionary/Deutsch/kaikki.org-dictionary-Deutsch.jsonl
+python ingest/extract_ipa.py data/raw/kaikki.org-dictionary-Deutsch.jsonl -o data/ipa_de.db
+python ingest/ingest.py data/raw/kaikki.org-dictionary-German.jsonl -o data/dictionary.db --ipa-db data/ipa_de.db
+```
+
+Without `--ipa-db` nothing changes.
 
 ### 2. Run the API
 
@@ -292,6 +312,17 @@ Returns `404` for an unknown id and `400` for a non-numeric id.
 
 ```bash
 curl "http://localhost:3000/api/entry/866"
+```
+
+### `GET /api/sitemap.xml`
+
+Sitemap index for search engines (XML), pointing at `GET /api/sitemap/page/{n}` — one file per
+50,000 URLs, each listing `https://lexikon.moe/entry/{id}/{word}`. The site is a single-page app,
+so entry pages are rendered from the API's data: `robots.txt` references this index, which is how
+crawlers discover them. A non-numeric page returns `400`, a page past the end `404`.
+
+```bash
+curl "http://localhost:3000/api/sitemap.xml"
 ```
 
 ## Configuration

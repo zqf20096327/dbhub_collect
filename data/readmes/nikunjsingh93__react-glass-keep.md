@@ -2,6 +2,12 @@
 
 A sleek, Keep-style notes app with Markdown, checklists, images, tag chips, color themes, dark mode, drag-and-drop reordering, import/export, auth, and a glassy UI — built with Vite + React and a tiny Express + SQLite API.
 
+**The Windows, macOS and Android apps are client apps only. A running Glass Keep server is required.** Deploy the server using the Docker instructions below (or connect to an existing instance), then enter its server URL in the app. The client apps do not install or run the server.
+
+The clients are built with Tauri 2 and keep offline data separate per server. See the [native app installation and build guide](docs/native-apps.md).
+
+Download Windows `.exe`, Android `.apk`, and macOS `.dmg` clients from the [GitHub release page](https://github.com/nikunjsingh93/react-glass-keep/releases/latest).
+
 ---
 **Web App Screenshots**
 
@@ -30,11 +36,12 @@ A sleek, Keep-style notes app with Markdown, checklists, images, tag chips, colo
   * **Secret recovery key** download + **Sign in with Secret Key**
   * Each user sees **only their notes**
 
-* **Private AI Assistant (Llama 3.2)** ✅ NEW
-  * **100% Local & Private** — Runs entirely on your own server. No data ever leaves your hardware.
-  * **Note-Aware (RAG)** — The AI reads your own notes to answer questions factually.
-  * **Smart Search** — Ask questions like "What are my AWS commands?" or "How old am I?" and get direct answers based on your private data.
-  * **Privacy First** — Uses an optimized Llama 3.2 (1B) model running inside your Docker container.
+* **Private AI Assistant (Qwen + llama.cpp)**
+  * **Local inference** — Questions and note excerpts stay on your server; no cloud AI key is required.
+  * **Loads on demand** — Downloads a verified 533 MB model once, starts only for questions, and stops after 60 idle seconds.
+  * **Note-aware answers** — Ranked note retrieval with query expansion, progressive answers, and clickable source-note links.
+  * **Works across clients** — Web, Windows, macOS, and Android use the same server AI. Supports English, Hindi and French; no second model or vector service.
+  * See the [local AI guide](docs/local-ai.md) for resource limits, cache location, optional settings and accuracy limitations.
 
 * **Collaboration (real-time)** ✅ NEW
 
@@ -90,7 +97,8 @@ A sleek, Keep-style notes app with Markdown, checklists, images, tag chips, colo
   * Select multiple notes at once to Download, Pin/Unpin, Delete, or Change Color.
 * **Data**
 
-  * **Export all** notes (JSON) and **Import** (merges; keeps existing notes)
+  * **Export all** notes (JSON) and **Import** JSON/ZIP (merges; keeps existing notes)
+  * **Automatic JSON exports:** download your notes every 1/7/30 days while the app is open, then sync the download folder yourself with Syncthing or another service. No cloud-provider setup is required. See the [export and restore guide](docs/automatic-exports.md).
   * Per-note **Download .md**
   * Import from Google Keep (Google Takeout) — pick multiple .json files in one go to bring your Keep notes over. ✅ NEW
   * Backend: **Express API + SQLite** (`better-sqlite3`)
@@ -436,7 +444,7 @@ This lets sign-in rate limiting identify individual users from the forwarded cli
 
 ### Web features
 
-- **Language:** choose English or हिन्दी on the sign-in screen or in Settings. The choice is remembered on this device. Notes are kept in their original language.
+- **Language:** choose English, हिन्दी, Français or Русский on the sign-in screen or in Settings (also on the native server-connection screen). The choice is remembered on this device, including offline use. Notes are kept in their original language.
 - **Grid:** recent notes start left to right, with subsequent notes filling the shortest column to avoid blank row spaces. Pinned notes remain in their own section.
 - **Tags:** existing tags appear as suggestions in the editor. Select several tags in the sidebar to show notes matching **all** selected tags. Choose Notes (All) to clear the filter.
 - **Selection:** Menu → Multi select → Select all filtered selects the current search/tag results. Changing the search or tags clears the selection. Review the confirmation before bulk deletion.
@@ -454,4 +462,4 @@ The queue survives a reload and synchronizes after reconnecting or signing in ag
 
 ### Release checks
 
-Run `npm test`, `npm run build`, then `node --test tests/browser.test.mjs tests/web-features.browser.mjs` (Microsoft Edge installed). `tests/docker-smoke.ps1` checks the final image on both architectures. Native Android apps and home-screen widgets remain outside this release.
+Run `npm test`, `npm run build`, then `node --test tests/browser.test.mjs tests/web-features.browser.mjs` (Microsoft Edge installed). `tests/docker-smoke.ps1` checks the final image on both architectures. Native clients have separate builds and checks documented in the [native app guide](docs/native-apps.md). Home-screen widgets are not included.

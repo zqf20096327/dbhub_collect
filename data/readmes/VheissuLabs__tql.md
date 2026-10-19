@@ -109,9 +109,14 @@ such as `BLPOP` or `SUBSCRIBE`.
 ClickHouse connects over its HTTP interface, port 8123, or 8443 with an
 `ssl_mode` set (`clickhouses://` in a connection string). Databases switch with
 `b`, and every type shows as itself: arrays, maps and tuples as JSON, and big
-integers and decimals exactly. Tables are read only in tql: ClickHouse changes
-rows with background mutations, which do not fit editing a cell and writing it
-with `:w`. The SQL editor runs whatever the connection allows.
+integers and decimals exactly. Tables are edited like any other, with one
+difference: ClickHouse keys need not be unique, so before each change tql
+counts the rows it would reach and changes nothing if that is more than the
+rows you edited. The change then runs as a mutation that tql waits for, so
+`:w` is done when it says so. A table with no key is matched on its values,
+leaving out floats, maps, arrays and other values that do not compare
+exactly. Key columns cannot be changed; ClickHouse does not allow it. The SQL
+editor runs whatever the connection allows.
 
 ### Snowflake
 
@@ -123,13 +128,30 @@ role fall back to the user's defaults, and with no schema set tql browses
 `PUBLIC`. Tables, columns and keys come from `SHOW` commands, which do not wake
 the warehouse. Dates, times, timestamps, variants and binary show as Snowflake
 writes them, and declared primary and foreign keys link rows even though
-Snowflake does not enforce them. Tables are read only in tql for that reason:
-with no enforced key, an edited cell cannot be traced to one row. The SQL
-editor runs whatever the role allows.
+Snowflake does not enforce them. Because it does not, tql edits a row inside
+a transaction that commits only if exactly that one row changed: a key that
+matches two rows changes neither, and tql says so. A table with no primary
+key is edited too, matching the row on its values; floats, variants and
+binary are left out of the match, since they do not compare exactly, and if
+what is left fits more than one row the edit is rolled back the same way.
+Writes wake the warehouse; browsing does not.
 
 A token from a person rather than a service user needs a network policy, or an
 authentication policy with `pat_policy = (network_policy_evaluation =
 enforced_not_required)`, before Snowflake accepts it.
+
+Leave the access token empty to sign in through the browser instead, with
+Snowflake's own sign-in page or your company's single sign-on behind it:
+`snowflake://myorg-myaccount/DATABASE?role=ROLE`. tql opens the browser
+(`$BROWSER` if set) and waits up to three minutes for you to sign in. The
+sign-in is saved with the connection, encrypted like its password, and
+renewed as it runs out, so the browser opens again only when Snowflake stops
+renewing it; how long that takes is up to your account's
+`OAUTH_REFRESH_TOKEN_VALIDITY`. This uses Snowflake
+OAuth for local applications, which needs no setup unless your account does
+not have the built-in `SNOWFLAKE$LOCAL_APPLICATION` integration yet
+(`show security integrations like 'SNOWFLAKE$LOCAL\_APPLICATION'`). A role on
+the connection is the role the sign-in asks for.
 
 ## Installing
 

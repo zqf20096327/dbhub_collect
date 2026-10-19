@@ -1,6 +1,6 @@
 # gemini-web2api-go
 
-**Gemini web → OpenAI-compatible API.** A self-hosted proxy that turns the free [gemini.google.com](https://gemini.google.com) web app into `/v1/chat/completions` — **no Google API key, no paid quota**. Single Go binary, real Chrome TLS fingerprint, cookie pool with automatic renewal, proxy pool, built-in admin dashboard, SQLite / MySQL / PostgreSQL. Image, music, canvas and video generation (`/v1/videos`) included.
+**Gemini web → OpenAI-compatible API.** A self-hosted proxy that turns the free [gemini.google.com](https://gemini.google.com) web app into `/v1/chat/completions` — **no Google API key, no paid quota**. Single Go binary, real Chrome TLS fingerprint, cookie pool with automatic renewal, proxy pool, built-in admin dashboard, SQLite / MySQL / PostgreSQL. Image, music, canvas and video generation (`/v1/videos`) included. Models track the web app, **Gemini 4 Argon** included (needs a paid-account cookie).
 
 <img src="docs/banner.svg" alt="gemini-web2api-go — Gemini web to OpenAI-compatible API proxy" width="100%">
 
@@ -166,6 +166,8 @@ Windows PowerShell 下 `curl` 是 `Invoke-WebRequest` 的别名，会把 JSON �
 curl.exe --% http://127.0.0.1:8083/v1/chat/completions -H "Content-Type: application/json" -H "Authorization: Bearer sk-gemini-..." -d "{\"model\":\"gemini-3.6-flash\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello!\"}]}"
 ```
 
+> 跑通了？顺手点个 ⭐。GitHub 的 topic 页按 star 排，这是别人找到这个项目的主要入口。有问题或想法开 issue；在 fork 里改好的功能，欢迎提 PR 回来。
+
 ## 客户端接入
 
 任何 OpenAI 兼容客户端（Cherry Studio / ChatBox / Open WebUI / dify / Cursor / …）都是同一套填法：
@@ -250,6 +252,7 @@ Gemini 网页端服务端只认三个模型（清单来自 `batchexecute?rpcids=
 | `gemini-3.1-pro-thinking` | 3.1 Pro 开扩展思考，**要配 cookie** |
 | `gemini-3.8-flash-thinking` | 3.8 Flash 开扩展思考，**要付费号 cookie**（`gemini-3.7-flash-thinking` 为别名）|
 | `gemini-4-argon-thinking` | 4 Argon 开扩展思考（上游叫 High 档），带 `reasoning_content`，**要付费/Ultra 号 cookie** |
+| `gemini-4-argon-thinking-medium` | 4 Argon 的中等思考档（上游 Medium，思考在服务端内部完成、不带 `reasoning_content`），**要付费/Ultra 号 cookie** |
 | `gemini-image` | 生图（Nano Banana），产物 base64，**要配 cookie** |
 | `gemini-music` | 音乐（Lyria，约 30 秒），产物 base64，**要配 cookie** |
 | `gemini-canvas` | 画布，生成交互 HTML 文档（内联返回 ```html 块），**要配 cookie** |
@@ -683,6 +686,15 @@ Function calling 是 prompt 级实现，模型不一定每次都按格式返回�
 有（`gemini-3.8-flash` 与 `gemini-3.8-flash-thinking`），需要付费 Gemini 账号；免费号请求它会被服务端降级成 3.5 Flash-Lite。
 `gemini-3.7-flash` 作为别名保留，老客户端不受影响。
 
+### 能用 Gemini 4 Argon 吗？怎么用？
+
+能，不需要 Gemini API key。模型名 `gemini-4-argon`；`gemini-4-argon-thinking` 是上游的 High 思考档，回复带 `reasoning_content`；
+中档是 `gemini-4-argon-thinking-medium`（见模型表）。
+条件只有一个：挂进来的 cookie 所属账号在 gemini.google.com 的模型选择器里能看到「4 Argon」。看得到就是有权限
+（Google AI Pro / Ultra 档，捆绑或学生优惠拿到的 Pro 一样算），把它的 cookie 配进管理面板、请求 `gemini-4-argon` 即可。
+免费号或没开 Argon 的号发它，上游会**静默降级成 3.5 Flash-Lite**、不报错，所以本项目没配 cookie 时不暴露这个模型，也不走匿名。
+配了 cookie 仍被降级，先去网页端确认该账号有没有「4 Argon」。
+
 ### 生图用的是哪个模型？能出 2K 吗？
 
 `gemini-image` 走的是网页端的生图工具位，不锁模型：网页端当前用什么生图后端（如 Nano Banana 2），这里就自动跟着。
@@ -697,6 +709,12 @@ Function calling 是 prompt 级实现，模型不一定每次都按格式返回�
 
 支持。设环境变量 `SQL_DSN`（`mysql://user:pass@host:3306/db` 或 `postgres://user:pass@host:5432/db?sslmode=disable`），
 不设默认 SQLite；建表自动完成，三种库共用一套 schema。单机用 SQLite 最省事，多实例共享一个池子才需要 MySQL / PG。
+
+## Star History
+
+读到这儿，说明它对你有用。点个 ⭐ 让更多人找到它；遇到问题开 issue，改好的功能提 PR。
+
+[![Star History Chart](https://api.star-history.com/svg?repos=zexadev/gemini-web2api-go&type=Date)](https://star-history.com/#zexadev/gemini-web2api-go&Date)
 
 ## 致谢
 

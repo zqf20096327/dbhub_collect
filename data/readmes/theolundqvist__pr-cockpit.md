@@ -33,7 +33,7 @@ The first sync fetches PRs involving you. **All PRs** loads on demand without ex
 
 Press <kbd>r</kbd> to filter repositories. Use arrows to highlight one, <kbd>Enter</kbd> to toggle it, or <kbd>Shift+Enter</kbd> to select only that repository.
 
-Enable **Date filters and sorting** in **Settings → Workspace** for **Opened** and **Order** controls in the main PR lists, plus **Grouping** in Your queue. Switch grouping between Status, Feature area, PR type, and Manual without leaving the queue; the choice is saved. Filter to the last 24 hours, 7 days, 30 days, or a custom local date-and-time range; custom bounds apply when you press **Apply**. Order by newest or oldest opened, or most or least recently updated. **Queue order** keeps the usual priorities. Grouped queues keep their sections, manual pin order, and stacks; the Whiteboard is unchanged. PRs with an unknown opened date appear in All time but not an active date range.
+Enable **Date filters and sorting** in **Settings → Workspace** for **Opened** and **Order** controls in the main PR lists, plus **Grouping** in Your queue. Switch grouping between Status, Feature area, PR type, and Manual without leaving the queue. Opened, Order, Grouping, and Repository selections survive refreshes and app updates; only applied custom date bounds are saved. Filter to the last 24 hours, 7 days, 30 days, or a custom local date-and-time range; custom bounds apply when you press **Apply**. Order by newest or oldest opened, or most or least recently updated. **Queue order** keeps the usual priorities. Grouped queues keep their sections, manual pin order, and stacks; the Whiteboard is unchanged. PRs with an unknown opened date appear in All time but not an active date range.
 
 ## From finding the PR to finishing the review
 
@@ -47,7 +47,7 @@ The search panel uses its own connection pool, so pending main-window requests c
 
 ### Read the change, then follow the details
 
-Diffs, threads, checks, and file history live in the same review workspace. The PR check summary uses the latest workflow run and job attempt; earlier runs remain in Actions history. Press <kbd>x</kbd> to fold tests and generated files when you want to see the implementation first; press it again to bring them back. Generated files include `.generated.` names and committed `.gitattributes` rules marked `linguist-generated`; nested rules and overrides follow the reviewed revision. The same group can be hidden by default in Settings.
+Diffs, threads, checks, and file history live in the same review workspace. The header shows Closed or Merged even if the PR retains its draft flag. The PR check summary uses the latest workflow run and job attempt; earlier runs remain in Actions history. Press <kbd>x</kbd> to fold tests and generated files when you want to see the implementation first; press it again to bring them back. Generated files include `.generated.` names and committed `.gitattributes` rules marked `linguist-generated`; nested rules and overrides follow the reviewed revision. The same group can be hidden by default in Settings.
 
 ![Folding five regression-test diffs in graphql/graphql-js#4692 to isolate the one-line implementation change](docs/screenshots/landing-hide-tests.gif)
 
@@ -135,9 +135,11 @@ pr-cockpit owner/repo#123 --logs verify --run 987 --attempt 2
 pr-cockpit listen owner/repo#123
 ```
 
-`listen` waits for substantive cached state changes—a push, check result, review, comment, or merge conflict—then prints what changed and exits. It returns at once when the PR already has failing checks, open comments, or merge conflicts. `--ci-only`, `--comments-only`, and `--conflicts-only` narrow the wake signal.
+`listen` waits for substantive cached state changes—a push, check result, review, comment, or merge conflict—then prints what changed and exits. It returns at once when the PR already has failing checks, open comments, or merge conflicts, but never from a snapshot older than known webhook activity: it waits for revalidation first. `--ci-only`, `--comments-only`, and `--conflicts-only` narrow the wake signal.
 
 `pr-cockpit listen owner/repo#123 --run 987` waits for a specific run and reconciles it about every 30 seconds at the default interval, so missed webhooks cannot leave completion unobserved. A failed reconciliation exits with an error.
+
+CI completeness is durable for the observed head; an expired Actions viewing lease does not turn settled jobs back into pending work. Checks use the latest result per job name within each workflow/App, so metadata-only workflows with different names do not erase earlier required checks on that head. Skipped and neutral jobs retain their displayed state but satisfy required checks, [as on GitHub](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks); missing checks, incomplete pages, and unobserved jobs remain pending.
 
 The CLI also supports comments, reviews, thread resolution, edits, and merges through Cockpit's mutation queue. Run **`pr-cockpit --help`** for commands and options, including `--body-file` for exact multiline text and `--json` for machine-readable status. The installer separately asks before adding Cockpit instructions to supported coding assistants.
 

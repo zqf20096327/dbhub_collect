@@ -3,13 +3,12 @@
 [![Gem Version](https://badge.fury.io/rb/plume.svg)](https://rubygems.org/gems/plume)
 [![Gem Downloads](https://img.shields.io/gem/dt/plume)](https://rubygems.org/gems/plume)
 ![Tests](https://github.com/fractaledmind/plume/actions/workflows/main.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/code%20coverage-96%25-success)
 [![Sponsors](https://img.shields.io/github/sponsors/fractaledmind?color=eb4aaa&logo=GitHub%20Sponsors)](https://github.com/sponsors/fractaledmind)
 [![Twitter Follow](https://img.shields.io/twitter/url?label=%40fractaledmind&style=social&url=https%3A%2F%2Ftwitter.com%2Ffractaledmind)](https://twitter.com/fractaledmind)
 
 <img src="/assets/logo.svg" width="100" alt="Plume logo: a blue feather quill pen" align="right" />
 
-Plume is a Ruby library for working with SQLite elegantly. Presently, this means that it provides a pure Ruby implementation of SQLite's lexer/tokenizer as well as a 100% compatible parser. This is useful for introspecting the structure of SQL queries, and for building tools that work with SQL queries.
+Plume is a Ruby library for working with SQLite elegantly. Presently, this means that it provides a pure Ruby implementation of SQLite's lexer/tokenizer as well as a 100% compatible parser. This is useful for introspecting the structure of SQL queries, and for building tools that work with SQL queries - like working out which tables and columns a query is going to read.
 
 ## Installation
 
@@ -29,8 +28,7 @@ gem install plume
 
 Parse a SQL query with the `Plume::Parser` class:
 
-> [!NOTE]
-> The parser is still work in progress. Only `CREATE TABLE` statements are supported at the moment.
+Every statement in SQLite's grammar parses, and the parser is checked against the SQL in SQLite's own test suite: of the 15,836 statements there, the ones it does not parse are those SQLite rejects as well.
 
 ```ruby
 sql = <<~SQL
@@ -49,7 +47,7 @@ sql = <<~SQL
     FOREIGN KEY (c0) REFERENCES tb1(c1) ON DELETE CASCADE ON UPDATE RESTRICT MATCH FULL DEFERRABLE INITIALLY DEFERRED
   ) WITHOUT ROWID;
 SQL
-ast = Plume.parse(sql)
+ast = Plume.parse(sql).first # one node per statement
 # => Plume::CreateTableStatement(...)
 ```
 
@@ -187,6 +185,19 @@ Plume::CreateTableStatement(
 </details>
 
 
+Turn a tree back into SQL with `to_sql`. It prints from the nodes' values rather than copying the source, so trees built by hand or changed after parsing print too:
+
+```ruby
+stmt = Plume.parse("select a from t where b = 1").first
+stmt.body.condition = Plume::BinaryExpression.new(
+  operator: :ALL,
+  left: stmt.body.condition,
+  right: Plume::BinaryExpression.new(operator: :EQUALS, left: Plume::ColumnName.new(column: "tenant_id"), right: Plume::Variable.new(name: "?")),
+)
+stmt.to_sql
+# => "SELECT a FROM t WHERE (b = 1) AND (tenant_id = ?)"
+```
+
 Tokenize a SQL query with the `Plume::Lexer` class:
 
 ```ruby
@@ -196,39 +207,96 @@ tokens = Plume.tokenize("SELECT * FROM users WHERE id = 1")
 
 SQLite works with a grammar of _167_ token types, _136_ of which are keywords. The remaining _31_ are punctuation, operators, and literals.
 
+### What does this query read?
+
+`Plume.reads` works out which tables and columns a statement would read, looking through aliases, joins, subqueries, CTEs and views:
+
+```ruby
+catalog = Plume::Catalog.from_sql(<<~SQL)
+  CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, email TEXT);
+  CREATE TABLE posts (id INTEGER PRIMARY KEY, user_id INT, title TEXT);
+SQL
+
+reads = Plume.reads(<<~SQL, catalog: catalog)
+  WITH recent AS (SELECT * FROM posts ORDER BY id DESC LIMIT 10)
+  SELECT r.title, u.name FROM recent r JOIN users u ON u.id = r.user_id
+  WHERE u.email LIKE '%@example.com'
+SQL
+
+reads.tables     # => #<Set: {"posts", "users"}>
+reads.columns    # => {"posts" => #<Set: {"id", "user_id", "title"}>, "users" => #<Set: {"id", "name", "email"}>}
+reads.projected  # columns whose values can end up in the result rows
+reads.referenced # columns only used to filter, join, sort or group
+```
+
+`Plume.access` does the same for `INSERT`, `UPDATE` and `DELETE`, and also tells you what they write:
+
+```ruby
+access = Plume.access(<<~SQL, catalog: catalog)
+  UPDATE posts SET title = upper(u.name) FROM users u WHERE u.id = posts.user_id RETURNING posts.id
+SQL
+
+access.writes.updated   # => {"posts" => #<Set: {"title"}>}
+access.reads.projected  # => {"users" => #<Set: {"name"}>, "posts" => #<Set: {"id"}>}
+access.reads.referenced # => {"users" => #<Set: {"id"}>, "posts" => #<Set: {"user_id"}>}
+```
+
+A value copied into a column being written counts as projected, just like one returned in the result rows.
+
+Both also take what you already parsed - a statement node, or the array `Plume.parse` returns - so the SQL is not parsed twice, and a tree you changed after parsing is analyzed as changed.
+
+The catalog can also come from a live database with `Plume::Catalog.from_sqlite(db)`, or be left out - then `SELECT *` is reported as a read of the column `"*"` and unqualified columns only resolve when there is a single table in scope.
+
+Anything that cannot be attributed (an unknown table or column, an ambiguous name) raises `Plume::Analysis::Error` with a pointer into the SQL. Pass `strict: false` to get the partial result and a list in `reads.unresolved` instead. Each entry of `reads.references` carries the AST node it came from, so you can point at it too - see [examples/read_guard.rb](examples/read_guard.rb) for a small column-level access check built on top.
+
+The results are tested against SQLite's own [authorizer callback](https://www.sqlite.org/c3ref/set_authorizer.html), which is also the place to enforce access rules at runtime when you have a connection. `Plume.reads` is for when you want to vet SQL ahead of time, without a database, or with good error messages. It reports one thing the authorizer does not: the right-hand join columns of `USING` and `NATURAL` joins.
+
 ## Roadmap
 
 - [x] `expression`
-- [ ] `alter_table_stmt`
-- [ ] `analyze_stmt`
-- [ ] `attach_stmt`
-- [ ] `begin_stmt`
-- [ ] `commit_stmt`
+- [x] `alter_table_stmt`
+- [x] `analyze_stmt`
+- [x] `attach_stmt`
+- [x] `begin_stmt`
+- [x] `commit_stmt`
 - [x] `create_table_stmt`
-- [ ] `create_index_stmt`
-- [ ] `create_trigger_stmt`
-- [ ] `create_view_stmt`
-- [ ] `create_virtual_table_stmt`
-- [ ] `delete_stmt`
-- [ ] `detach_stmt`
-- [ ] `drop_index_stmt`
-- [ ] `drop_table_stmt`
-- [ ] `drop_trigger_stmt`
-- [ ] `drop_view_stmt`
-- [ ] `insert_stmt`
-- [ ] `pragma_stmt`
-- [ ] `reindex_stmt`
-- [ ] `release_stmt`
-- [ ] `rollback_stmt`
-- [ ] `savepoint_stmt`
-- [ ] `select_stmt`
-- [ ] `update_stmt`
-- [ ] `vacuum_stmt`
-- [ ] `with_stmt`
+- [x] `create_index_stmt`
+- [x] `create_trigger_stmt`
+- [x] `create_view_stmt`
+- [x] `create_virtual_table_stmt`
+- [x] `delete_stmt`
+- [x] `detach_stmt`
+- [x] `drop_index_stmt`
+- [x] `drop_table_stmt`
+- [x] `drop_trigger_stmt`
+- [x] `drop_view_stmt`
+- [x] `insert_stmt`
+- [x] `pragma_stmt`
+- [x] `reindex_stmt`
+- [x] `release_stmt`
+- [x] `rollback_stmt`
+- [x] `savepoint_stmt`
+- [x] `select_stmt`
+- [x] `update_stmt`
+- [x] `vacuum_stmt`
+- [x] `with_stmt`
+
+## Performance
+
+`bin/benchmark` runs the whole fixture corpus (15,817 statements, 4.2 MB of SQL). On an Apple M-series laptop with Ruby 3.4:
+
+| Step | Statements/s | MB/s |
+| --- | ---: | ---: |
+| `Plume.tokenize` | ~13,500 | 3.7 |
+| `Plume.parse` | ~1,400 | 0.38 |
+| `Node#to_sql` | ~6,000 | 1.7 |
+| `Plume.reads` (no catalog) | ~1,000 | 0.21 |
+
+The corpus leans on very large generated expressions; a typical application query parses in well under a millisecond. About half of the parse time goes to Literal's runtime type checks on every node property.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. `bin/fixture-report` shows how much of SQLite's own test SQL parses (pass `--write` to record it as the new baseline the tests hold us to), and `bin/benchmark` times the whole pipeline. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 

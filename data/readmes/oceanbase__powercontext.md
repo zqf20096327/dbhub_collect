@@ -101,8 +101,11 @@ host-local projection.
   Experience, with optional Profile snapshots and Topic Memory, then applies a shared byte budget and returns `ready`
   content or `empty`. Recalled content is history, not an instruction authority: the receiving Agent still follows
   current instructions and checks live workspace state.
-- **Review before reuse.** Experience and Skill pass through a review decision that is terminal either way. The model
-  proposes rather than silently promoting its own output.
+- **Review before reuse.** Experience and Skill pass through a review decision that is terminal either way, and
+  approval writes an immutable Revision. With access control enforced, approval requires `scope.review`. An
+  authorized Agent can approve its own Candidate;
+  [separate submission and review](https://powercontext.oceanbase.io/en/docs/workflows/review-candidates/#separate-agent-submission-from-review)
+  with distinct identities and permissions when a person must decide.
 - **One Server, several views of the same contract.** HTTP is the complete remote application contract. The Python Client
   gives typed access, MCP is a curated Agent-facing projection, and Core protocols let an application assemble its own
   Source, Artifact, and Trigger implementations.
@@ -155,7 +158,7 @@ PowerContext keeps durable project context outside any single chat. A first run 
 Agent input → Source evidence → Memory / Topic Memory → PreparedContext → next session or Agent
 ```
 
-PowerContext 1.3.0 includes an interactive setup wizard. You need Python 3.11+, Git, and
+PowerContext 1.4.0 includes an interactive setup wizard. You need Python 3.11+, Git, and
 [uv](https://docs.astral.sh/uv/getting-started/installation/); uv can provision Python when needed. To connect an Agent,
 also install its CLI. In the wizard, choose Basic memory for explicit saves and recall without model APIs; Full memory
 requires separate Generation and Embedding API credentials. For a local Server without model APIs, see
@@ -173,7 +176,7 @@ Choose the path that matches your goal:
 ### 1. Install and run the wizard
 
 ```bash
-uv tool install --force "powercontext[cli,server]==1.3.0"
+uv tool install --force "powercontext[cli,server]==1.4.0"
 mkdir -p powercontext-config && cd powercontext-config
 powercontext config init --language en --output .env
 powercontext config validate --env-file .env
@@ -202,9 +205,15 @@ Code, Dashboard login, SSH forwarding, HTTPS prerequisites, and observable accep
 Codex installation is:
 
 ```bash
-powercontext setup codex --ref powercontext-v1.3.0
+powercontext setup codex --ref powercontext-v1.4.0
 powercontext doctor codex
 ```
+
+Before sending the first message in a new Codex session, open `/hooks` and, when prompted, trust the PowerContext
+hooks. Without an enabled `UserPromptSubmit` hook, automatic prompt capture and recall do not run, even if MCP connects.
+See [first-session checks and recovery](docs/en/docs/integrations/codex.md#first-session-hook-trust).
+After the first check below, use the [capability and trigger guide](docs/en/docs/get-started/quickstart.md#5-choose-your-next-workflow)
+to try all seven Artifact families, Source, and Tag. Basic memory needs no separate Server model API; the Agent still uses its own model.
 
 ### 2. Verify the first end-to-end result
 

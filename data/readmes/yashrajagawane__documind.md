@@ -40,21 +40,20 @@ Most document Q&A tools treat documents as unstructured blobs of text: they stri
 - **Grounded Conversational Q&A** — Generates answers with Gemini 3.8 Flash bounded by strict `<DOCUMENT_EVIDENCE>` delimiters.
 - **Server-Constructed Citations** — Chunk IDs, section titles, and relevance scores are assembled by the backend from Qdrant metadata; the LLM cannot invent citations.
 - **Strict Tenant & Document Isolation** — All vector search queries enforce mandatory `user_id` and `document_id` payload filters.
-- **Durable Job Orchestration** — Background parsing jobs are tracked in PostgreSQL with atomic `lease_token` claims, exponential backoff retries, and Celery Beat lease recovery.
 
 ---
 
 ## Product Workspace
 
-The DocuMind workspace is a dark-mode Next.js application designed for inspecting complex documents and verifying AI-generated answers.
+The DocuMind workspace is a dark-mode Next.js application featuring an interactive resizable split-pane layout designed for inspecting complex documents and verifying AI-generated answers.
 
 <div align="center">
 
 | Workspace View | Description | Key Capabilities |
 |---|---|---|
-| **Document Library** | Multi-file document manager with real-time status badges | Magic-byte upload validation, SHA-256 deduplication, progress streaming |
-| **Structural Preview** | Split-pane reader showing parsed Markdown and extracted tables | Table structure extraction, document metrics, multi-format export (MD, HTML, JSON) |
-| **Grounded Chat** | Conversational panel with verified citation cards | Evidence score thresholding (`>= 0.35`), deterministic refusal on no evidence, citation inspector |
+| **Document Library** | Multi-file document manager with real-time status badges | Instant search (`/` shortcut), status filter pills (`All`, `Ready`, `Processing`, `Failed`), skeleton loading placeholders, SHA-256 deduplication |
+| **Structural Preview** | Document reader showing parsed Markdown and extracted tables | Syntax-highlighted code blocks with 1-click copy, table structure extraction, document metrics, multi-format export (MD, HTML, JSON) |
+| **Grounded Chat & Shell** | Draggable split-pane panel with verified citation cards | Smooth mouse/keyboard resizable panes (`ArrowLeft`/`ArrowRight`), `localStorage` layout persistence, evidence score thresholding (`>= 0.35`), citation inspector |
 
 </div>
 
@@ -214,6 +213,7 @@ Detailed implementation guides, design records, and API contracts are available 
 |---|---|
 | [API Reference](docs/API.md) | Complete endpoint catalog, request/response JSON payloads, and error envelopes |
 | [Configuration Reference](docs/CONFIGURATION.md) | Full list of environment variables, defaults, and production requirements |
+| [Free Deployment Guide (Zero-Cost)](docs/DEPLOYMENT-FREE-GUIDE.md) | Step-by-step instructions to host DocuMind 100% free with zero credit card requirements |
 | [Architecture Guide](docs/ARCHITECTURE.md) | Component boundaries, ingestion flows, and service layer architecture |
 | [Architecture Decisions (ADRs)](docs/ARCHITECTURE-DECISIONS.md) | Accepted ADRs (ADR-001 through ADR-008) governing technology and design choices |
 | [Design System](docs/DESIGN.md) | Dark-mode design tokens, typography, component states, and accessibility standards |

@@ -20,6 +20,8 @@ in core dispatch, validation, or metric rendering.
 
 ## Documentation
 
+- [Web interface and automatic diagnostics](docs/web-daemon.md) - local accounts,
+  manual jobs, live output, threshold rules, shared archives and retention.
 - [PostgreSQL access best practices](https://github.com/O2eg/pg_diag/blob/main/docs/access-best-practices.md) - secure
   connection patterns, least-privilege accounts, SSH and TLS boundaries,
   pooler caveats, and Patroni/HAProxy topologies.

@@ -128,18 +128,23 @@ result = db.process_turn(user_message="what database am I using?", turn_id=1)
 for memory in result.context:            # -> prepend these to your prompt
     print(memory.content)
 
-# result.facts_extracted     -> what was learned this turn (needs an LLM)
+# result.facts_extracted     -> simple facts pulled from this turn by built in patterns
 # result.contradiction_count -> conflicting beliefs detected
 ```
 
-One call runs the full 14-step cognitive pipeline: embedding, speculative cache,
-hybrid search, pain signals, episodic storage, fact extraction, contradiction
-detection, sentiment analysis, and more. Fact extraction needs an LLM: set
+One call runs the full cognitive pipeline: embedding, speculative cache, hybrid
+search, pain signals, episodic storage with write inference, pattern based fact
+extraction, contradiction detection, sentiment analysis, and more. None of that
+needs an LLM. Richer LLM extraction (semantic facts and typed entities, through
+`db.ingest()`, `db.extract()` and the enrichment pipeline) needs one: set
 `MENTEDB_LLM_PROVIDER` and `MENTEDB_LLM_API_KEY` (or use [cloud](docs/CLOUD.md),
-where it is wired up for you). Without an LLM you still get storage and recall.
+where it is wired up for you).
 
-> **Enrichment runs automatically in the background** — semantic facts, entity graphs,
-> community summaries, and a user profile are built over time after each `process_turn`.
+> **Enrichment** builds semantic facts, entity graphs, community summaries, and a
+> user profile from accumulated turns. On [cloud](docs/CLOUD.md) it runs in the
+> background for you. Embedded in your own app, run it yourself between
+> conversations (`db.run_enrichment()` in Python, `mentedb::enrichment::run_enrichment`
+> in Rust). On `mentedb-server`, call `POST /v1/enrich` (needs `--llm-provider`).
 
 **Cloud, any language (no SDK, REST):**
 
@@ -161,10 +166,11 @@ Your assistant then calls `process_turn` automatically every turn.
 **Embed in Rust:**
 
 ```rust
+use std::path::Path;
 use mentedb::{MenteDb, process_turn::ProcessTurnInput};
 use mentedb_context::DeltaTracker;
 
-let db = MenteDb::open("./my-agent-memory")?;
+let db = MenteDb::open(Path::new("./my-agent-memory"))?;
 let mut delta = DeltaTracker::default();
 let result = db.process_turn(&ProcessTurnInput {
     user_message: "I switched from PostgreSQL to SQLite".into(),
@@ -183,7 +189,7 @@ Every database ever built assumes the consumer can compensate for bad data organ
 
 ### The Memory Quality Problem
 
-Most AI memory tools store everything and retrieve by similarity. The result: **context windows full of noise.** Studies show up to 97% of automatically stored memories are irrelevant.
+Most AI memory tools store everything and retrieve by similarity. The result: **context windows full of noise.**
 
 MenteDB solves this with **write time intelligence:**
 
@@ -192,7 +198,7 @@ MenteDB solves this with **write time intelligence:**
 3. **Quality Filtering** rejects low confidence extractions before they hit storage
 4. **Deduplication** checks embedding similarity against existing memories
 5. **Contradiction Detection** flags when new information conflicts with existing beliefs
-6. **Belief Propagation** cascades updates when facts change
+6. **Belief Propagation** lowers the confidence of memories that depend on a superseded fact
 
 The result: a clean, curated memory that actually helps the AI perform better.
 
@@ -217,21 +223,22 @@ The result: a clean, curated memory that actually helps the AI perform better.
 - **Hybrid Retrieval** Vector similarity (HNSW) fused with BM25 keyword search via reciprocal rank fusion, plus tag, temporal, and validity filtering. Optional second-pass reranking (pluggable, e.g. a cross-encoder or LLM judge) and optional MMR diversity selection so near-duplicate memories do not crowd the context budget
 - **Contextual Retrieval** An optional per-memory `context` blurb is indexed and embedded alongside the content (never stored in it), so a memory is findable by situating terms it never literally contains. The caller generates the context; the engine indexes it
 - **Project Scope Weighting** Recall can weight down memories tagged for other projects so the project you are working in ranks first, without hiding a strongly relevant cross-project memory
-- **Action Rules** Rules about how to perform a class of action (commit style, PR format) are tagged `trigger:<action>` and fetched with `recall_for_action(trigger, agent, user, k)` at the moment the action runs, not by topic similarity. Deterministic tag-index lookup, same visibility scoping as every other recall, superseded rules excluded, newest first. The Claude Code integration surfaces them through a PreToolUse hook right before `git commit` and `gh pr create`
+- **Action Rules** Rules about how to perform a class of action (commit style, PR format) are fetched at the moment the action runs with `recall_for_action(action_embedding, action_text, agent_id, user_id, k)`. It is hybrid recall over the meaning and the text of the action (no fixed action vocabulary), weighted toward memory types that govern behavior (procedures, corrections, anti patterns), with the same visibility scoping as every other recall and superseded rules excluded. The Claude Code integration surfaces them through a PreToolUse hook right before git commits and pull requests
 - **Write Time Intelligence** Quality filter, deduplication, and contradiction detection at ingest
-- **LLM Powered Cognitive Inference** CognitiveLlmService judges whether new memories invalidate, update, or are compatible with existing ones (supports Anthropic, OpenAI, Ollama)
+- **LLM Powered Cognitive Inference** CognitiveLlmService judges whether new memories invalidate, update, or are compatible with existing ones (supports Anthropic, OpenAI, Ollama, and AWS Bedrock behind the `bedrock` feature)
 - **Bi-Temporal Validity** Memories and edges carry `valid_from`/`valid_until` timestamps. Temporal invalidation instead of deletion. Point-in-time queries via `recall_similar_at(embedding, k, timestamp)` or in MQL with `RECALL ... AS OF <timestamp>`
 - **Attention Optimized Context Assembly** Respects the U curve (critical data at start/end of context)
-- **Belief Propagation** When facts change, downstream beliefs are flagged for re evaluation
-- **Delta Aware Serving** Only sends what changed since last turn (90% reduction in memory retrieval tokens over 20 turns)
+- **Belief Propagation** When a fact is superseded or corrected and its confidence drops, memories that depend on it through `Caused` or `Supports` edges lose a damped share of that drop (bounded depth and fan out, configurable, on by default)
+- **Delta Aware Serving** Only sends what changed since last turn (80 to 91 percent fewer memory retrieval tokens over 20 turns in the bundled benchmarks, see [Token Efficiency](#token-efficiency))
 - **Cognitive Memory Tiers** Working, Episodic, Semantic, Procedural, Archival
 - **Knowledge Graph** CSR/CSC graph with BFS/DFS traversal and contradiction detection
 - **Memory Spaces** Multi agent isolation with per space ACLs
 - **MQL** Mente Query Language with full boolean logic (AND, OR, NOT, and grouping), ordering (`ORDER BY salience DESC`), and point-in-time recall (`AS OF <timestamp>`)
 - **Type Safe IDs** MemoryId, AgentId, SpaceId newtypes prevent accidental mixing
-- **Binary Embeddings** Base64 encoded storage, 65% smaller than JSON arrays
 - **Local Candle Embeddings** Zero config semantic search using all-MiniLM-L6-v2 (384 dims), no API key required (Docker image includes it; source builds need `--features local-embeddings`)
-- **AWS Bedrock Embeddings** Native Amazon Titan embeddings via a lightweight SigV4 signer (no async AWS SDK); enable `mentedb-embedding`'s `bedrock` feature, credentials from the standard AWS environment variables. Also available from the Python SDK as `embedding_provider="bedrock"`
+- **Hosted Embedding APIs** OpenAI, Cohere, and Voyage over HTTP (`mentedb-embedding`'s `http` feature; Python SDK `embedding_provider="openai" | "cohere" | "voyage"`)
+- **AWS Bedrock Embeddings** Cohere Embed v3 (batches of 96) and Amazon Titan embeddings via a lightweight SigV4 signer (no async AWS SDK); enable `mentedb-embedding`'s `bedrock` feature. Credentials come from AWS environment keys or the ECS task role / EKS Pod Identity endpoint, refreshed before they expire. Also available from the Python SDK as `embedding_provider="bedrock"`
+- **Self-Hosted Server** One process serves many databases (`/v1/db/{name}/...`, one directory and lock per tenant, dotted names such as `tenant.alice.notes` as a stable contract), tokens scoped to databases by name or glob with `read`, `write` or `maintenance` scopes (verifiable with a public key, so no shared secret on the server, with `dbs` required and optionally bound to the token's subject), native HTTPS, Bedrock embeddings and extraction through the task role, and REST endpoints for hybrid search (with per request MMR, reranking and relevance first ranking), heads-up context, batch search across databases, paged memory lists, in place updates and supersession, recall for an action, pins, history, graph neighbors, conflicts, documents, consolidation, maintenance and backups. Operations: SIGTERM drain and clean close, per caller rate limits, request deadlines, liveness and readiness probes, and enrichment on its own bounded worker pool. See the [server API reference](docs/SERVER_API.md) and [self-hosting guide](docs/SELF_HOSTING.md)
 - **gRPC + REST + MCP** Three integration paths for any use case
 
 ### Entity-Centric Memory
@@ -292,32 +299,41 @@ cargo install mentedb-mcp
 mentedb-mcp setup copilot
 ```
 
-See [mentedb-mcp](https://github.com/nambok/mentedb-mcp) for setup, configuration, and the full list of 32 tools.
+See [mentedb-mcp](https://github.com/nambok/mentedb-mcp) for setup and configuration.
 
-**Key tools:** `process_turn` (the primary API — one call per turn), `store_memory`, `search_memories`, `forget_memory`, `assemble_context`, `relate_memories`, `write_inference`, `get_cognitive_state`, and 20+ more covering knowledge graph, consolidation, and cognitive systems.
+**Tools:** by default the server exposes four essential tools: `process_turn` (the primary API, one call per turn), `store_memory`, `search_memories`, and `forget_memory`. In local mode, `--full-tools` exposes all 32, adding `assemble_context`, `relate_memories`, `write_inference`, `get_cognitive_state`, and others covering the knowledge graph, consolidation, and cognitive systems.
 
-### 2. REST API
+### 4. REST API
 
 ```bash
 # Start the server
-cargo run -p mentedb-server -- --data-dir ./data --jwt-secret-file ./secret.key
+cargo run -p mentedb-server -- --data-dir ./data --jwt-secret "$MENTEDB_JWT_SECRET"
 
 # Store a memory
 curl -X POST http://localhost:6677/v1/memories \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"agent_id": "...", "content": "User prefers dark mode", "memory_type": "semantic"}'
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"agent_id": "...", "content": "User prefers dark mode", "memory_type": "semantic", "tags": ["preferences"]}'
 
-# Recall memories
+# Hybrid search (vector + keyword) with text the server embeds
+curl -X POST http://localhost:6677/v1/search/hybrid \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"query": "what theme does the user like", "k": 5}'
+
+# Recall with MQL
 curl -X POST http://localhost:6677/v1/recall \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"mql": "RECALL memories WHERE tag = \"preferences\" LIMIT 10"}'
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"query": "RECALL memories WHERE tag = \"preferences\" LIMIT 10"}'
 ```
 
-### 3. gRPC
+Every route also works per database under `/v1/db/{name}/...`. The full list of
+endpoints, fields, auth rules and error codes is in the
+[server API reference](docs/SERVER_API.md).
 
-Bidirectional streaming for real time cognition updates. Proto file at `crates/mentedb-server/proto/mentedb.proto`.
+### 5. gRPC
 
-### 4. SDKs
+Served on port 6678 (`--grpc-port`): unary Store, Recall, Search, Forget, and Relate calls, plus a bidirectional stream for live cognition alerts, on the default database with the same token, database and scope checks as REST. `--grpc-port 0` or `MENTEDB_GRPC=off` turns it off. Proto file at `crates/mentedb-server/proto/mentedb.proto`.
+
+### 6. SDKs
 
 **Python:** `pip install mentedb`
 ```python
@@ -382,7 +398,7 @@ graph TD
     end
 
     subgraph Embeddings["Embedding Providers"]
-        EMB["Candle local / OpenAI / Cohere / AWS Bedrock Titan / hash"]
+        EMB["Candle local / OpenAI / Cohere / Voyage / AWS Bedrock Titan / hash"]
     end
 
     subgraph Retrieval["Retrieval"]
@@ -465,7 +481,7 @@ graph TD
 
 ## Agent File Ingestion and Rule Delivery
 
-`ingest_agent_file` (deterministic) and `ingest_agent_file_llm` (any format, any language, via an extraction provider) break an agent instruction file into atomic, self contained memories: open vocabulary action triggers (`trigger:git-commit`, `trigger:order-refund`), section tags for cluster completion, and exemplar turns that anchor mode activation for standing directives ("longterm fixes only", "use the t function for user visible text"). Delivery runs through four channels: relevance injection, action rules at the tool moment, mode activation by activity, and cluster completion for dense rule sections. Measured on real public agent files (openai/codex, kiali, temporal, freerouting), two pass delivery (retrieve at the prompt, review against the draft) reached 100 percent rule compliance at 2 to 8 times fewer tokens than carrying the file in context, including a held out file never used during development. Re ingesting keeps memory in sync with the file, so the file stays the source of truth and the normal workflow does not change: edit it as always and ingest again, new rules are stored, unchanged rules deduplicate, edited rules replace their old version, and rules deleted from the file are forgotten (report field `removed`; opt out with `sync: false`; give each file its own `source_tag` when several files share one agent scope). The benchmark lives in this repository under [benchmarks/agent_file](benchmarks/agent_file).
+`ingest_agent_file` (deterministic) and `ingest_agent_file_llm` (any format, any language, via an extraction provider) break an agent instruction file into atomic, self contained memories: open vocabulary action triggers (`trigger:git-commit`, `trigger:order-refund`), section tags for cluster completion, and exemplar turns that anchor mode activation for standing directives ("longterm fixes only", "use the t function for user visible text"). Delivery runs through four channels: relevance injection, action rules at the tool moment, mode activation by activity, and cluster completion for dense rule sections. Measured on real public agent files (openai/codex, kiali, temporal, freerouting; results in the [write up](https://mentedb.com/blog/infinite-context-window-for-ai-with-memory)), two pass delivery (retrieve at the prompt, review against the draft) reached 100 percent rule compliance at 2 to 8 times fewer tokens than carrying the file in context, including a held out file never used during development. Re ingesting keeps memory in sync with the file, so the file stays the source of truth and the normal workflow does not change: edit it as always and ingest again, new rules are stored, unchanged rules deduplicate, edited rules replace their old version, and rules deleted from the file are forgotten (report field `removed`; opt out with `sync: false`; give each file its own `source_tag` when several files share one agent scope). The benchmark lives in this repository under [benchmarks/agent_file](benchmarks/agent_file).
 
 ## Cognitive Engine
 
@@ -482,7 +498,7 @@ Every time a memory is stored, the engine finds the 20 most similar existing mem
 | **0.6 – 0.85** | Related | Creates `Related` edge with similarity as weight |
 | **< 0.6** | No action | Memories are independent |
 
-For `Correction` type memories, the engine also halves the confidence of the corrected memory and propagates belief changes through the knowledge graph.
+When a memory is superseded (a value update, an LLM invalidation verdict, or a `Correction`), the engine also halves its confidence and propagates that drop to the memories that depend on it over `Caused` and `Supports` edges, damped per hop (0.9 and 0.5 of the change). `Contradicts` and `Supersedes` edges are not followed by default, so the winning memory is never lowered.
 
 ### Salience Decay (automatic on retrieval)
 
@@ -497,6 +513,7 @@ decayed = salience × 2^(-Δt / half_life) + boost × ln(1 + access_count)
 - **Reinforcement:** Recalling a memory refreshes its decay clock (it counts as an access), so memories you keep using stay healthy
 - **Derive-on-read:** The decayed score is computed from the last-access time on every read, never re-persisted, so a memory decays with real elapsed time regardless of how often the sweep runs
 - **Retrieval blending:** Final score = 70% similarity + 30% decayed salience
+- **Queries see the decayed value:** MQL `salience` filters and `ORDER BY salience` compare the current decayed salience, the same number shown as health, never the stored base
 - **Floor:** Memories never decay below 0.01
 - **Never destructive by decay:** Decay only reorders results. Curated (non-episodic) memories are demoted but never deleted; only stale, low-salience episodic memories are archived
 
@@ -532,7 +549,7 @@ let config = CognitiveConfig {
     archival_evaluation: true,    // memory lifecycle management
     ..Default::default()
 };
-let db = MenteDb::open_with_config("./memory", config)?;
+let db = MenteDb::open_with_config(std::path::Path::new("./memory"), config)?;
 ```
 
 ### Pain Registry
@@ -580,7 +597,7 @@ Resolve aliases to canonical names:
 
 ```rust
 db.add_entity_alias("JS", "JavaScript", 0.95);
-let resolved = db.resolve_entity("JS"); // → "javascript"
+let resolved = db.resolve_entity("JS").canonical; // "javascript"
 ```
 
 ### Memory Compression
@@ -609,7 +626,7 @@ for (id, decision) in decisions {
 
 ## Sleeptime Enrichment
 
-MenteDB includes a 4-phase background enrichment pipeline that automatically converts raw conversations into structured knowledge. It runs after `process_turn` when enough new memories accumulate — no manual trigger needed.
+MenteDB includes a 4-phase enrichment pipeline that converts raw conversations into structured knowledge. It is meant to run between conversations, not in the hot path. The engine tracks when enough new memories have accumulated (`needs_enrichment()`, opt in through `CognitiveConfig::enrichment_config`), and the caller runs the pipeline. Cloud runs it for you; on `mentedb-server`, call `POST /v1/enrich`; embedded, call `run_enrichment` yourself (Python: `db.run_enrichment()`).
 
 | Phase | What it does |
 |-------|-------------|
@@ -618,17 +635,18 @@ MenteDB includes a 4-phase background enrichment pipeline that automatically con
 | **Community Detection** | Groups related entities by category and generates LLM summaries |
 | **User Model** | Builds an always-available user profile from accumulated knowledge |
 
-Enrichment results feed back into `process_turn` context retrieval — richer semantic memories, entity graphs, community summaries, and the user profile all improve recall quality. The pipeline is idempotent and tracks provenance via `source:enrichment` tags and `Derived` edges.
+Enrichment results feed back into `process_turn` context retrieval: richer semantic memories, entity graphs, community summaries, and the user profile all improve recall quality. The pipeline is idempotent and tracks provenance via `source:enrichment` tags, `Derived` edges, and two attributes on every derived memory: `origin: "derived"` and `derived_kind` (`fact`, `entity`, `community` or `profile`). `EnrichmentConfig::copy_source_attributes` names caller attributes (a document id, a channel) copied from the source memories onto what is derived from them, and `EnrichmentConfig::candidate_types` widens the candidates beyond episodic memories. The watermark of the last run is saved in the database directory, so a reopened database continues where it left off.
 
-**Requires an LLM provider** (OpenAI, Anthropic, or Ollama). Without one, the engine works perfectly — enrichment just doesn't run. See [LLM Extraction Config](#llm-extraction-config) for setup.
+**Requires an LLM provider** (OpenAI, Anthropic, Ollama, or AWS Bedrock). Without one, the rest of the engine works as usual and enrichment does not run. See [LLM Extraction Config](#llm-extraction-configuration) for setup.
 
 ```rust
 // Enable enrichment in Cargo.toml:
-// mentedb = { version = "0.8", features = ["enrichment"] }
+// mentedb = { version = "0.39", features = ["enrichment"] }
 
 use mentedb::enrichment::{run_enrichment, EnrichmentResult};
 
-let result = run_enrichment(&db, config, &embedder, Some(&cognitive_llm), turn_id).await;
+let skip_extraction = false;
+let result = run_enrichment(&db, config, &embedder, Some(&cognitive_llm), turn_id, skip_extraction).await;
 println!("Stored {} memories, linked {} entities", result.memories_stored, result.sync_linked + result.llm_linked);
 ```
 
@@ -657,8 +675,8 @@ A request that lands on a node that does not own the user is forwarded to the on
 that does, so any node can front the fleet. Zero-copy handoff assumes the fleet
 shares storage (each user's database on a shared volume); on purely local disks
 placement still routes correctly, but a rebalanced user's data does not follow it
-automatically yet. A single well-provisioned node already serves hundreds of users;
-the fleet is for when one node's write throughput becomes the ceiling.
+automatically yet. Start with a single node; the fleet is for when one node's write
+throughput becomes the ceiling.
 
 ## Observability
 
@@ -683,7 +701,7 @@ into an existing Grafana.
 
 ## Crates
 
-MenteDB is organized as a Cargo workspace with 13 crates:
+MenteDB is organized as a Cargo workspace with 14 crates:
 
 | Crate | Description |
 |-------|-------------|
@@ -696,20 +714,23 @@ MenteDB is organized as a Cargo workspace with 13 crates:
 | `mentedb-context` | Attention aware context assembly, U curve ordering, delta tracking |
 | `mentedb-cognitive` | Write inference, belief propagation, pain signals, phantom memories, speculative cache |
 | `mentedb-consolidation` | Temporal decay, memory consolidation, salience management, archival |
-| `mentedb-embedding` | Embedding provider abstraction |
+| `mentedb-embedding` | Embedding providers: local Candle, OpenAI, Cohere, and Voyage over HTTP, AWS Bedrock Cohere and Titan, hash |
 | `mentedb-extraction` | LLM powered memory extraction pipeline |
-| `mentedb-server` | REST + gRPC server with JWT auth, space ACLs, rate limiting |
+| `mentedb-server` | REST + gRPC server with named databases, scoped JWT auth, HTTPS, space ACLs, rate limiting |
+| `mentedb-cli` | `mentedb` command line client: run MQL against a local data directory or a running server |
 | `mentedb-replication` | Raft based replication (experimental) |
 
 ## Security
 
 MenteDB includes production security features:
 
-- **JWT Authentication** on all REST and gRPC endpoints
+- **JWT Authentication** on all REST and gRPC endpoints once a verifier is configured, with a shared secret (HS256) or a public key (RS256, ES256, EdDSA) so tokens can be signed elsewhere. Without either the server warns and runs open; `--require-auth` refuses to start without one
+- **Database Scoped Tokens** `dbs` and `read_only` claims limit a token to some databases and to reads
 - **Agent Isolation** JWT claims enforce per agent data access
 - **Space ACLs** fine grained permissions for multi agent setups
-- **Admin Keys** separate admin authentication for token issuance
-- **Rate Limiting** per agent write rate enforcement
+- **Admin Keys** separate admin authentication for token issuance, database management and backups
+- **HTTPS** the server terminates TLS for REST and gRPC itself (`--tls-cert`, `--tls-key`)
+- **Rate Limiting** per client IP token bucket on every request
 - **Embedding Validation** dimension mismatch returns errors, not panics
 
 ```bash
@@ -724,17 +745,22 @@ mentedb-server --require-auth --data-dir /var/mentedb/data
 
 ## LLM Extraction Configuration
 
-Configure the extraction pipeline via environment variables:
+Configure the server's extraction pipeline (used by `POST /v1/ingest` and by auto extraction) via environment variables or the matching `--llm-*` flags:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `MENTEDB_LLM_PROVIDER` | openai, anthropic, ollama, none | none |
-| `MENTEDB_LLM_API_KEY` | API key for the provider | |
+| `MENTEDB_LLM_PROVIDER` | openai, anthropic, ollama, bedrock (server built with the `bedrock` feature, as the Docker image is), none | none |
+| `MENTEDB_LLM_API_KEY` | API key for the provider (not used by ollama or bedrock) | |
 | `MENTEDB_LLM_MODEL` | Model name | Provider default |
 | `MENTEDB_LLM_BASE_URL` | Custom base URL (Ollama, proxies) | Provider default |
+| `MENTEDB_LLM_REGION` | AWS region for bedrock (falls back to `AWS_REGION`) | |
+| `MENTEDB_AUTO_EXTRACT` | `true` to queue LLM extraction for conversation shaped `POST /v1/memories` bodies (same as `--auto-extract`) | off |
 | `MENTEDB_EXTRACTION_QUALITY_THRESHOLD` | Min confidence to store (0.0 to 1.0) | 0.7 |
 | `MENTEDB_EXTRACTION_DEDUP_THRESHOLD` | Similarity threshold for dedup (0.0 to 1.0) | 0.85 |
-| `MENTEDB_EMBEDDING_PROVIDER` | Server embeddings: candle, hash, none | candle when built with `local-embeddings`, else hash |
+| `MENTEDB_EMBEDDING_PROVIDER` | Server embeddings: candle, bedrock, hash, none | candle when built with `local-embeddings`, else hash |
+| `MENTEDB_EMBEDDING_MODEL` | Bedrock embedding model | `cohere.embed-english-v3` |
+
+Every server variable (auth, databases, TLS, Bedrock, backups) is listed in [Self-hosting](docs/SELF_HOSTING.md#environment-variable-reference).
 
 Semantic search, auto-linking, and contradiction detection all depend on real embeddings. The Docker image ships with local Candle embeddings; a plain `cargo install mentedb-server` falls back to non-semantic hash embeddings and warns loudly at startup — build with `--features local-embeddings` for full quality.
 
@@ -752,9 +778,9 @@ RECALL memories WHERE NOT tag = "archived" LIMIT 20
 RECALL memories WHERE content ~> "database migration strategies" LIMIT 10
 
 -- Point-in-time recall (bitemporal AS OF): only memories whose validity
--- window contained the timestamp. A fact superseded after t is still
--- returned when you ask "as of" a moment it was true.
-RECALL memories WHERE type = semantic AS OF 1700000000 LIMIT 10
+-- window contained the timestamp (microseconds since the Unix epoch). A fact
+-- superseded after t is still returned when you ask "as of" a moment it was true.
+RECALL memories WHERE type = semantic AS OF 1700000000000000 LIMIT 10
 
 -- Graph traversal
 TRAVERSE 550e8400-e29b-41d4-a716-446655440000 DEPTH 3 WHERE edge_type = caused
@@ -762,6 +788,65 @@ TRAVERSE 550e8400-e29b-41d4-a716-446655440000 DEPTH 3 WHERE edge_type = caused
 -- Consolidation
 CONSOLIDATE WHERE type = episodic AND accessed < "2024-01-01"
 ```
+
+### Fast MQL queries
+
+- Filter on `type`, `tag`, or `agent` and add a `LIMIT`. Equality on these
+  (`=`, and `IN [...]` lists) is answered from the bitmap index, so only
+  matching memories are loaded, and without `ORDER BY` loading stops once
+  `LIMIT` results are found. `RECALL memories WHERE type = episodic LIMIT 10`
+  loads 10 memories whatever the database size.
+- A numeric range on `created` (`>`, `>=`, `<`, `<=`) is answered from the
+  temporal index. Every other condition in the `WHERE` still applies, and so
+  do `LIMIT` and `ORDER BY`: `RECALL memories WHERE created > 1700000000000000
+  AND type = episodic LIMIT 10` returns at most 10 episodic memories.
+- Conditions on `content`, `space`, `salience`, `confidence`, `accessed`,
+  `AS OF`, and any `!=` are checked after a memory is loaded. Combine them
+  with a `type`, `tag`, `agent`, or `created` filter to keep the set of
+  loaded memories small.
+- `ORDER BY salience DESC` with a `LIMIT` loads only the memories that can
+  reach the top results. The inputs to each memory's decayed salience (base
+  salience, last access, access count, decay exemption) are cached and
+  persisted with the snapshots, so candidates are visited from the highest
+  current salience down and the scan stops once the next one cannot beat the
+  `LIMIT`th result. `RECALL memories WHERE type = episodic ORDER BY salience
+  DESC LIMIT 5` loads 5 memories once the cache is warm, more only when
+  several tie at the cutoff. The first such query on a cold cache (after an
+  upgrade, or with the cache file lost) loads every candidate once to fill
+  it, unless `MenteDb::warm_salience_bounds` filled it in the background
+  after open (see [SELF_HOSTING.md](docs/SELF_HOSTING.md)), and a memory
+  written since the last query loads once again. Results, ties included (broken by storage
+  order), are identical to sorting every candidate. Set
+  `CognitiveConfig::mql_salience_top_k` to false to always sort every
+  candidate.
+- Any other `ORDER BY` (any other field, or `ASC`) needs every candidate
+  before it can sort, so it loads every memory that passes the indexed
+  filters. Leave it out when any `LIMIT` matches will do; unordered results
+  come back in storage order.
+- A `WHERE` with `OR`, `NOT`, or parentheses, or one with no indexed filter,
+  visits every memory (still stopping at `LIMIT` when there is no
+  `ORDER BY`).
+
+Filter semantics for the owner and score fields:
+
+| Field | Compares | Operators | Value |
+|---|---|---|---|
+| `agent` | the memory's owner agent id | `=`, `!=`, `IN` | a UUID, bare or quoted |
+| `space` | the memory's space id | `=`, `!=`, `IN` | a UUID, bare or quoted |
+| `salience` | the memory's current decayed salience | `=`, `!=`, `<`, `<=`, `>`, `>=`, `IN` | a number |
+| `confidence` | the stored confidence (it does not decay) | `=`, `!=`, `<`, `<=`, `>`, `>=`, `IN` | a number |
+
+MQL `salience`, in `WHERE` and in `ORDER BY salience`, is the memory's current
+decayed salience: the same number `compute_decayed_salience` returns and
+dashboards show as health. A memory stored at `0.95` and untouched for weeks
+has decayed close to the `0.01` floor, so `WHERE salience > 0.5` leaves it
+out and `WHERE salience < 0.2` finds it. Pinned memories (a decay exempt tag
+or attribute) keep their stored value. The stored base salience is internal
+and is never what a query compares. Each query reads the clock once, so every
+condition and the sort in one query see the same values.
+
+Scores compare at `f32` precision. Any other operator or value type on these
+fields is a query error rather than a filter that matches everything.
 
 ## Docker
 
@@ -790,15 +875,21 @@ docker-compose up -d
 
 ## Benchmarks
 
-### Quality Benchmarks (5/5 passing)
+### Quality Benchmarks
+
+`python3 benchmarks/run_all.py`. The first three run without an LLM; the last two
+need `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`.
 
 | Test | Result | Key Metric |
 |------|--------|------------|
 | Stale Belief | PASS | Superseded memories correctly excluded via graph edges |
 | Delta Savings | PASS | 90.7% reduction in memory retrieval tokens over 20 turns |
-| Sustained Conversation | PASS | 100 turns, 3 projects, 0% stale returns, 0.29ms insert |
-| Attention Budget | PASS | U-curve ordering maintains 100% LLM compliance |
-| Noise Ratio | PASS | 100% useful vs 80% naive, +20pp improvement |
+| Sustained Conversation | FAIL | 100 turns, 3 projects, 0% stale returns, but average insert is 12 to 28ms across runs, over the test's 5ms gate (the full write pipeline grew; see the 10K scale test) |
+| Attention Budget | PASS (earlier run) | U-curve ordering maintains 100% LLM compliance |
+| Noise Ratio | PASS (earlier run) | 100% useful vs 80% naive, +20pp improvement |
+
+The no LLM rows were last run with the published Python package (`mentedb` 0.32.2
+on PyPI). The two LLM rows are from an earlier run and were not repeated.
 
 ### LLM Accuracy Benchmarks (62 cases)
 
@@ -895,7 +986,7 @@ MenteDB's context assembler uses purpose-built serialization formats instead of 
 | Delta serving (cumulative) | 2,004 |
 | **Savings** | **79.7%** |
 
-Delta serving only sends memories that changed since the last turn. Early turns have overhead from the delta header, but by turn 10+ savings exceed 85% per turn.
+Delta serving only sends memories that changed since the last turn. Early turns have overhead from the delta header; from turn 10 on, savings per turn range from about 75% to 94%.
 
 **Memory density** (memories that fit within a serialized output budget):
 
@@ -926,7 +1017,7 @@ cargo bench
 
 ```bash
 cargo build              # Build all crates
-cargo test               # Run 477+ tests
+cargo test --workspace   # Run the test suite (780+ tests)
 cargo clippy             # Lint
 cargo bench              # Benchmarks
 cargo doc --open         # Documentation

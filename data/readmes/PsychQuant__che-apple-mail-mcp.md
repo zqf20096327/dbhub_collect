@@ -345,6 +345,26 @@ Both tools return an **envelope object** `{ results, returned, limit, truncated 
 > [Plugin vs MCP-only](#plugin-vs-mcp-only) for what is missing, since nothing
 > at runtime will tell you).
 
+### Claude Desktop bundle version metadata
+
+New `.mcpb` bundles built by `scripts/package-mcpb.sh` include
+`server/.CheAppleMailMCP.version` beside the executable (#312). The packager
+queries the copied binary's `--version`, requires it to match the manifest,
+and writes the sidecar before zipping. A failed, malformed or timed-out query
+refuses the package; the running server does not create this file on first use.
+Both the development and signed-release paths use this shared packager.
+
+This enables the existing staleness diagnostic when a newer bundle replaces
+files at the running executable's location while an older image remains alive.
+The warning goes to the MCP server's stderr log and asks you to restart the
+host. It does not check GitHub for new releases, update an untouched old install,
+or detect a new bundle installed in a different directory. Desktop's update/
+restart lifecycle has not been verified here; matching versions remain silent.
+Older bundles without the sidecar require an update to obtain it.
+
+Use `make release-signed VERSION=vX.Y.Z` for distribution.
+`scripts/build-mcpb.sh` remains an explicitly unsigned development build.
+
 ### Requirements
 
 - macOS 13.0+
@@ -606,6 +626,19 @@ Still **not** covered by `account_id` (tracked): `get_account_info` / `list_mail
 **Cross-account move/copy is not supported via `account_id`** ([#129](https://github.com/PsychQuant/che-apple-mail-mcp/issues/129) — from #127 verify). `move_email` and `copy_email` accept a single `account_id`, which is threaded through **both** the source `msgRef` and the destination `mailboxRef`. The architectural choice is correct (movement stays within one account, because Mail.app's AppleScript verb `move msg to <mailboxRef>` requires the destination mailbox to be expressed relative to a single account context). Mail.app's UI permits cross-account move via drag-and-drop, but the AppleScript-routed `move_email` / `copy_email` tools cannot replicate that — calling `move_email` with `account_id` of one account while expecting the destination `to_mailbox` to be resolved against a different account silently picks the wrong account's mailbox of that name (if both accounts happen to have one) or raises `-1719 "Invalid mailbox index"`. If you need a copy of the message's contents under a different account, you can manually rebuild it via `save_attachment` + `compose_email` — note this is **not** a true move/copy: original metadata (Message-ID, received-date, flags, labels) and message identity are not preserved.
 
 ---
+
+## Development tests
+
+Run `make test` on macOS with Xcode Command Line Tools, Python 3 and `jq` on
+PATH. It runs the Swift suite, then the plugin suites; any failure makes the
+command fail. `make test-plugin` runs only the plugin suites for faster iteration.
+
+The plugin runner discovers `plugin/tests/test-*.sh` and `test-*.py`, checks
+that the required hook suite exists, and fails clearly if a dependency is
+missing. Each matching file must be a standalone Bash or Python suite; keep
+shared helpers under a different name or in a subdirectory. Plugin tests use
+isolated fixtures and mock processes/downloads.
+This Makefile wiring does not itself add a GitHub Actions workflow.
 
 ## Technical Details
 

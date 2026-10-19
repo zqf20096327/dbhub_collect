@@ -34,7 +34,7 @@ Parse DMARC is built and maintained by the team behind [DMARCguard](https://dmar
 
 ## What it does
 
-When your DMARC record carries a `rua=` address, mail receivers such as Google, Microsoft and Yahoo send you aggregate reports: gzip or zip XML attachments, at the interval your record asks for and daily by default, listing every IP that sent mail as your domain and whether SPF and DKIM passed ([RFC 7489 section 7.2](https://www.rfc-editor.org/rfc/rfc7489#section-7.2), carried forward by [RFC 9990](https://www.rfc-editor.org/rfc/rfc9990)). Nobody reads those by hand. Parse DMARC does:
+When your DMARC record carries a `rua=` address, mail receivers such as Google, Microsoft and Yahoo send you aggregate reports: gzip or zip XML attachments, usually once a day, listing every IP that sent mail as your domain and whether SPF and DKIM passed ([RFC 7489 section 7.2](https://www.rfc-editor.org/rfc/rfc7489#section-7.2), carried forward by [RFC 9990](https://www.rfc-editor.org/rfc/rfc9990)). Nobody reads those by hand. Parse DMARC does:
 
 - Fetches reports over IMAP from any mailbox, or from a local Maildir when the mail server is on the same host (`MAILDIR_PATH`, see [Configuration](#configuration)). Reports that Exchange or Outlook forward as `message/rfc822` attachments are unwrapped too.
 - Parses gzip, zip and raw XML, with a 16 MB decompression cap per report.
@@ -43,7 +43,7 @@ When your DMARC record carries a `rua=` address, mail receivers such as Google, 
 - Generates your `_dmarc` TXT record from a form.
 - Exposes 28 Prometheus metrics and ships a Grafana dashboard.
 - Serves an MCP server, so an AI assistant can query your reports.
-- Dark mode. One static binary. The Docker image is built `FROM scratch`.
+- Dark mode. One static binary in a minimal container image.
 
 It reads aggregate (RUA) reports only. Failure reports (RUF), TLS-RPT, alerting, login and multi-mailbox intake are not built; see [Roadmap and contributing](#roadmap-and-contributing).
 
@@ -75,7 +75,7 @@ Nix, from our [NUR-style repo](https://github.com/dmarcguardhq/nur):
 nix profile install github:dmarcguardhq/nur#parse-dmarc   # or: nix run github:dmarcguardhq/nur#parse-dmarc
 ```
 
-Or download a release archive, `parse-dmarc_<os>_<arch>.tar.gz`, from the [releases page](https://github.com/dmarcguardhq/parse-dmarc/releases).
+Or download a release archive, `parse-dmarc_<os>_<arch>.tar.gz` (`.zip` on Windows), from the [releases page](https://github.com/dmarcguardhq/parse-dmarc/releases).
 
 Open http://localhost:8080. Gmail needs an [App Password](https://support.google.com/accounts/answer/185833), not the account password. The same image is on Docker Hub as `meysam81/parse-dmarc`; both names track the same builds, and tags such as `v1` or `v1.6.0` pin a release.
 
@@ -109,12 +109,12 @@ One click on a platform, or a template for the self-hosted PaaS you already run.
 
 ### Self-hosted PaaS
 
-| Provider     | Deploy                                                                                                                                              | Notes                           |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| **CapRover** | [![Deploy to CapRover](https://img.shields.io/badge/Deploy-CapRover-0072CE?style=for-the-badge&logo=docker)](./deploy/captain-definition)           | Self-hosted PaaS                |
-| **Coolify**  | [![Deploy to Coolify](https://img.shields.io/badge/Deploy-Coolify-6B46C1?style=for-the-badge&logo=docker)](./deploy/coolify.yaml)                   | Open-source Heroku alternative  |
-| **Dokploy**  | [![Deploy to Dokploy](https://img.shields.io/badge/Deploy-Dokploy-00B4D8?style=for-the-badge&logo=docker)](./deploy/dokploy/)                       | Self-hosted deployment platform |
-| **Docker**   | [![Docker](https://img.shields.io/badge/Docker-Pull%20Image-2496ED?style=for-the-badge&logo=docker)](https://hub.docker.com/r/meysam81/parse-dmarc) | Run anywhere                    |
+| Provider     | Deploy                                                                                                                                                | Notes                           |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| **CapRover** | [![Deploy to CapRover](https://img.shields.io/badge/Deploy-CapRover-0072CE?style=for-the-badge&logo=docker)](./deploy/captain-definition)             | Self-hosted PaaS                |
+| **Coolify**  | [![Deploy to Coolify](https://img.shields.io/badge/Deploy-Coolify-6B46C1?style=for-the-badge&logo=docker)](./deploy/coolify.yaml)                     | Open-source Heroku alternative  |
+| **Dokploy**  | [![Deploy to Dokploy](https://img.shields.io/badge/Deploy-Dokploy-00B4D8?style=for-the-badge&logo=docker)](./deploy/dokploy/)                         | Self-hosted deployment platform |
+| **Docker**   | [![Docker](https://img.shields.io/badge/Docker-Pull%20Image-2496ED?style=for-the-badge&logo=docker)](https://hub.docker.com/r/dmarcguard/parse-dmarc) | Run anywhere                    |
 
 ### Infrastructure
 
@@ -124,7 +124,7 @@ One click on a platform, or a template for the self-hosted PaaS you already run.
 
 ## Configuration
 
-Every setting is an environment variable or a key in `config.json`. Environment is read first and the file overrides it.
+Every setting in this table is an environment variable or a key in `config.json`. Environment is read first and the file overrides it. The command-line flags further down take an environment variable but no `config.json` key.
 
 | Setting                        | Environment variable             | Default                                                      |
 | ------------------------------ | -------------------------------- | ------------------------------------------------------------ |
@@ -167,6 +167,8 @@ On a host that already receives the reports, point `MAILDIR_PATH` at the Maildir
 
 The HTTP API behind the dashboard is four `GET` routes: `/api/statistics`, `/api/reports`, `/api/reports/{id}` and `/api/top-sources`. None of them has authentication, so keep the port behind your reverse proxy or VPN.
 
+To serve the dashboard under a path such as `https://example.com/dmarc/`, have the proxy strip the prefix before forwarding, for example nginx's `location /dmarc/ { proxy_pass http://127.0.0.1:8080/; }` ([full example](contrib/nginx/default.conf)). The dashboard loads its assets and API relative to the page, so it needs no setting of its own.
+
 ## Parse DMARC or DMARCguard?
 
 Two products, one maker, separate codebases. Parse DMARC is the whole of this repository: no enterprise directory, nothing to unlock. DMARCguard is a hosted, proprietary service that reads the reports for you and tells you what to change.
@@ -192,7 +194,7 @@ Run Parse DMARC when you want the data on your own disk and one mailbox to watch
 
 ## Roadmap and contributing
 
-The most-asked additions, in the order people ask: TLS-RPT reports ([#154](https://github.com/dmarcguardhq/parse-dmarc/issues/154)) and whois on sending sources ([#143](https://github.com/dmarcguardhq/parse-dmarc/issues/143)). [ROADMAP.md](ROADMAP.md) has the rest. [CONTRIBUTING.md](CONTRIBUTING.md) covers the toolchain: `just build`, `just dev`, and `docker compose up` for a local Dovecot seeded with a sample report.
+The most-asked additions, in the order people ask: TLS-RPT reports ([#154](https://github.com/dmarcguardhq/parse-dmarc/issues/154)) and whois on sending sources ([#143](https://github.com/dmarcguardhq/parse-dmarc/issues/143)). Anything else: [open an issue](https://github.com/dmarcguardhq/parse-dmarc/issues/new). [CONTRIBUTING.md](CONTRIBUTING.md) covers the toolchain: `just build`, `just dev`, and `docker compose up` for a local Dovecot seeded with a sample report.
 
 ## License
 
@@ -202,4 +204,4 @@ Apache-2.0, for everything in this repository. There is no `ee/` directory and n
 
 If Parse DMARC did the job, a star helps the next person find it. If you would rather have the reports read for you, [DMARCguard](https://dmarcguard.io/?utm_source=github&utm_medium=referral&utm_campaign=parse-dmarc-readme&utm_content=footer) is the hosted product from the same team.
 
-[koyeb-1click]: https://app.koyeb.com/deploy?name=parse-dmarc&type=docker&image=docker.io%2Fmeysam81%2Fparse-dmarc%3Alatest&regions=fra&env%5BDATABASE_PATH%5D=%2Fdata%2Fdb.sqlite&env%5BIMAP_HOST%5D=&env%5BIMAP_MAILBOX%5D=INBOX&env%5BIMAP_PASSWORD%5D=&env%5BIMAP_PORT%5D=993&env%5BIMAP_USERNAME%5D=&env%5BIMAP_USE_TLS%5D=true&env%5BSERVER_PORT%5D=8080&ports=8080%3Bhttp%3B%2F&hc_protocol%5B8080%5D=http&hc_grace_period%5B8080%5D=5&hc_interval%5B8080%5D=30&hc_restart_limit%5B8080%5D=3&hc_timeout%5B8080%5D=5&hc_path%5B8080%5D=%2Fapi%2Fstatistics&hc_method%5B8080%5D=get
+[koyeb-1click]: https://app.koyeb.com/deploy?name=parse-dmarc&type=docker&image=docker.io%2Fdmarcguard%2Fparse-dmarc%3Alatest&regions=fra&env%5BDATABASE_PATH%5D=%2Fdata%2Fdb.sqlite&env%5BIMAP_HOST%5D=&env%5BIMAP_MAILBOX%5D=INBOX&env%5BIMAP_PASSWORD%5D=&env%5BIMAP_PORT%5D=993&env%5BIMAP_USERNAME%5D=&env%5BIMAP_USE_TLS%5D=true&env%5BSERVER_PORT%5D=8080&ports=8080%3Bhttp%3B%2F&hc_protocol%5B8080%5D=http&hc_grace_period%5B8080%5D=5&hc_interval%5B8080%5D=30&hc_restart_limit%5B8080%5D=3&hc_timeout%5B8080%5D=5&hc_path%5B8080%5D=%2Fapi%2Fstatistics&hc_method%5B8080%5D=get

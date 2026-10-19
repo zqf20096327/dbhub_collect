@@ -1,4 +1,4 @@
-# NewLife.XCode - 数据中间件 / 超级ORM
+# NewLife.XCode - Data Middleware / Super ORM
 
 ![GitHub top language](https://img.shields.io/github/languages/top/newlifex/newlife.xcode?logo=github)
 
@@ -8,181 +8,181 @@
 ![NuGet](https://img.shields.io/nuget/v/NewLife.XCode?logo=nuget)
 ![NuGet prerelease](https://img.shields.io/nuget/vpre/NewLife.XCode?label=dev%20nuget&logo=nuget)
 [![test](https://github.com/NewLifeX/NewLife.XCode/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/NewLifeX/NewLife.XCode/actions/workflows/test.yml)
-![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)
+[![locales](https://img.shields.io/badge/locales-31-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS%20%7C%20Android%20%7C%20iOS-blue)
+![arch](https://img.shields.io/badge/arch-x64%20%7C%20arm64%20%7C%20loongarch64%20%7C%20riscv64%20%7C%20s390x-orange)
 [![contributors](https://img.shields.io/github/contributors/NewLifeX/NewLife.XCode?logo=github)](https://github.com/NewLifeX/NewLife.XCode/graphs/contributors)
 
 <!-- lang:start -->
-🌐 [繁體中文](README.zh-TW.md) | [English](README.en.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [日本語](README.ja.md) | [Français](README.fr.md) | [Português](README.pt.md) | [Русский](README.ru.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
+🌐 [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [日本語](README.ja.md) | [Français](README.fr.md) | [Português](README.pt.md) | [Русский](README.ru.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
 <!-- lang:end -->
 
-高性能 .NET 数据中间件，聚焦"添删改查 + 极致性能 + 海量数据"，内置多级缓存、自动建模/迁移、分表分库、强类型查询、跨库迁移，支持 MySQL / SQLite / SqlServer / Oracle / PostgreSQL / TDengine / InfluxDB / 达梦 / 金仓 / 瀚高 / DB2 / ClickHouse / DuckDB / MongoDB / Hana (SAP HANA) / IRIS (InterSystems) / VastBase / Network 网络虚拟数据库 / NovaDb 自研数据库等，并提供 [SonnetDB 适配与能力验收](Doc/SonnetDB.md)。单表生产实践达百亿级，查询吞吐可达十亿级 QPS（配合缓存策略）。
+High-performance .NET data middleware focused on "CRUD + extreme performance + massive data". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL / SQLite / SqlServer / Oracle / PostgreSQL / TDengine / InfluxDB / DaMeng / KingBase / HighGo / DB2 / ClickHouse / DuckDB / MongoDB / Hana (SAP HANA) / IRIS (InterSystems) / VastBase / Network virtual database / NovaDb and more, and provides [SonnetDB adaptation and capability verification](Doc/SonnetDB.md). Production deployments reach tens of billions of rows per table, and query throughput can reach billions of QPS (with caching strategies).
 
 
-> 多语言版为精简摘要，更新可能滞后；完整内容以中文版为准。
-
-文档：https://newlifex.com/xcode   社区交流QQ群：1600800 / 1600838
+Docs: https://newlifex.com/xcode   Community QQ groups: 1600800 / 1600838
 
 ---
-## 目录
-- 1. 为什么选 XCode
-- 2. 安装与快速体验
-- 3. 架构与核心概念
-  - 3.1 模型与代码生成
-  - 3.2 实体运行时 (Meta / Session / Operate)
-  - 3.3 DAL 抽象层
-  - 3.4 查询 DSL（IQueryable LINQ / WhereExpression / 窗口函数）
-  - 3.5 多级缓存体系 (Meta.Count / EntityCache / SingleCache / 二级缓存分布式)
-  - 3.6 反向工程 & 迁移机制
-  - 3.7 分表分库 (ShardPolicy)
-  - 3.8 事务与缓存一致性
-  - 3.9 性能优化手段一览
-  - 3.10 数据权限与多租户 (DataScope / Tenant)
-- 4. 快速入门（模型→代码→CRUD）
-- 5. 高级用法示例
-- 6. 索引 / 自动方法生成
-- 7. 分表分库示例
-- 8. 多数据库配置与容器化
-- 9. Benchmarks / 实战指标
-- 10. 常见问题（FAQ 精要）
-- 11. 生态矩阵
-- 12. 参与与贡献
-- 13. 许可证
+## Contents
+- 1. Why XCode
+- 2. Installation and Quick Start
+- 3. Architecture and Core Concepts
+  - 3.1 Model and Code Generation
+  - 3.2 Entity Runtime (Meta / Session / Operate)
+  - 3.3 DAL Abstraction Layer
+  - 3.4 Query DSL (IQueryable LINQ / WhereExpression / Window Functions)
+  - 3.5 Multi-level Cache System (Meta.Count / EntityCache / SingleCache / distributed second-level cache)
+  - 3.6 Reverse Engineering & Migration
+  - 3.7 Sharding (ShardPolicy)
+  - 3.8 Transactions and Cache Consistency
+  - 3.9 Performance Optimizations at a Glance
+  - 3.10 Data Scope and Multi-Tenancy (DataScope / Tenant)
+- 4. Quick Start (Model → Code → CRUD)
+- 5. Advanced Usage Examples
+- 6. Indexes / Auto-generated Methods
+- 7. Sharding Example
+- 8. Multi-database Configuration and Containerization
+- 9. Benchmarks / Production Metrics
+- 10. FAQ Highlights
+- 11. Ecosystem Matrix
+- 12. Contributing
+- 13. License
 
 ---
-## 1. 为什么选 XCode
-- 国产原创：完全由国人开发，未引用任何第三方组件，自主可控，长期维护有保障。
-- 化繁为简：90% 业务只需单表实体操作，无需手写 SQL。
-- 兼容 Dapper：支持执行任意 SQL 查询并映射到任意实体模型，完全兼容 Dapper 用法，同时提供缓存、读写分离和链路追踪等增强能力。
-- 极致性能：核心主路径多级缓存 + 批量优化 + 内存联表，查询速度可远高于直接写 SQL。
-- 海量数据：原生分页与分表策略，正式项目单表百亿级，适配多种数据库分页算法。
-- 稳定成熟：20+ 年演进，广泛生产验证；保持对老版本 .NET Framework 的兼容（net45 起）。
-- 自动迁移：模型/实体即结构，新增字段上线自动同步，无需额外 SQL 脚本。
-- 分布式演进：原生表级 / 时间 / 主键分片策略，可平滑拆分扩容。
-- 可插拔：DAL 抽象 + Provider 分离，支持自定义数据库适配。
+## 1. Why XCode
+- **Homegrown and original**: fully developed in China with no third-party components, self-controlled and backed by long-term maintenance.
+- **Simplicity**: 90% of business scenarios need only single-table entity operations, with no hand-written SQL.
+- **Dapper compatible**: executes arbitrary SQL queries and maps them to any entity model; fully compatible with Dapper usage while adding caching, read/write splitting and tracing.
+- **Extreme performance**: multi-level caching on the core path + batch optimization + in-memory joins; query speed can be far higher than raw SQL.
+- **Massive data**: native paging and sharding strategies; production projects reach tens of billions of rows per table; paging algorithms adapt to multiple databases.
+- **Stable and mature**: 20+ years of evolution and broad production validation; keeps compatibility with older .NET Framework versions (from net45).
+- **Automatic migration**: model/entity is the schema; new fields are synchronized automatically on deployment, with no extra SQL scripts.
+- **Distributed evolution**: native table-level / time / primary-key sharding strategies for smooth splitting and scaling.
+- **Pluggable**: DAL abstraction + separated providers; custom database adapters are supported.
 
 ---
-## 2. 安装与快速体验
-NuGet 引用（任一项目）：
+## 2. Installation and Quick Start
+NuGet reference (any project):
 ```
 dotnet add package NewLife.XCode
 ```
-或使用模板脚手架：
+Or use the template scaffold:
 ```
 dotnet new install NewLife.Templates
 dotnet new xcode --name Demo.Data
 cd Demo.Data
 dotnet build
 ```
-> 强命名证书已内置（newlife.snk），可自行重编译用于企业私有框架。
+> The strong-name certificate is built in (newlife.snk); you can recompile for a private enterprise framework.
 
 ---
-## 3. 架构与核心概念
-XCode 采用“模型驱动 + 运行时元数据 + 多级缓存 + 可选分片”的分层架构。
+## 3. Architecture and Core Concepts
+XCode uses a layered architecture of "model-driven + runtime metadata + multi-level cache + optional sharding".
 
-### 3.1 模型与代码生成
-XML 模型 (Tables/Columns/Indexes) → 代码生成器（xcodetool 或 VS T4）→ 实体数据类(.cs) + 业务分部类(.Biz.cs)。
-- 数据类：每次生成覆盖，承载字段与基础查询。
-- 业务类：首次生成后不再覆盖，放置自定义逻辑。
-- 支持：索引、唯一约束、默认值、描述、扩展属性、自动方法（FindByXxx / Search）。
+### 3.1 Model and Code Generation
+XML model (Tables/Columns/Indexes) → code generator (xcodetool or VS T4) → entity data class (.cs) + business partial class (.Biz.cs).
+- Data class: overwritten on every generation; holds fields and basic queries.
+- Business class: not overwritten after the first generation; place custom logic here.
+- Supports: indexes, unique constraints, default values, descriptions, extended properties, auto-generated methods (FindByXxx / Search).
 
-### 3.2 实体运行时
-核心接口/类型：
-- IEntity / Entity：充血模型，封装字段、验证、生命周期。
-- IEntityOperate：静态操作入口（Find / FindAll / Query 等）。
-- EntityFactory：实体元数据缓存工厂。
-- EntitySession (Meta.Session)：实体在特定连接/表上的上下文，会话级缓存/统计。
-- Meta：实体静态上下文（表结构、字段、缓存、分片策略等）。
+### 3.2 Entity Runtime
+Core interfaces/types:
+- IEntity / Entity: rich domain model encapsulating fields, validation and lifecycle.
+- IEntityOperate: static operation entry point (Find / FindAll / Query, etc.).
+- EntityFactory: entity metadata cache factory.
+- EntitySession (Meta.Session): context of an entity on a specific connection/table, with session-level cache/statistics.
+- Meta: entity static context (table schema, fields, caches, sharding policy, etc.).
 
-### 3.3 DAL 抽象层
-- DAL / IDatabase / IDbSession：提供统一的数据库访问与元数据操作。
-- Migration 支持 (Off / ReadOnly / On / Full) 控制自动建库建表建字段。
-- CheckTables()：启动/首次访问按需异步或同步检查并同步结构。
+### 3.3 DAL Abstraction Layer
+- DAL / IDatabase / IDbSession: unified database access and metadata operations.
+- Migration support (Off / ReadOnly / On / Full) controls automatic creation of databases, tables and columns.
+- CheckTables(): checks and synchronizes the schema on startup/first access, asynchronously or synchronously as needed.
 
-### 3.4 查询 DSL
-- **IQueryable&lt;T&gt; LINQ 查询（v12.0 新增）**：`Entity<T>.Query` 返回 `IQueryable<T>`，支持 `Where/OrderBy/Skip/Take/Count/First/ToList` 等标准 LINQ 操作。
-- **DAL.Select&lt;T&gt;() 流式查询（v12.1 新增）**：`DAL.Select<T>()` 返回 `IQueryable<T>` 并自动绑定当前连接，支持 `WhereIf/Where/OrderBy/Skip/Take/Page/Count/FirstOrDefault/ToList` 全链式流式调用。
-- **导航属性（v12.1 新增）**：`HasOne`/`HasMany` Fluent API 配置导航关系，`Include` 路径构建 + 批量加载，`SelectBuilder` 支持导航关系 JOIN。
-- **WhereIf 内联条件**：`Query.WhereIf(condition, predicate)` 和 `FindAllWhereIf` 实现动态条件筛选。
-- WhereExpression：链式 & / | / Contains / Between / Like 等表达式组合。
-- Find / FindAll / Query / PageFindAll 分页。
-- Pager / PageParameter：携带分页、排序、统计 TotalCount、数据权限扩展。
-- **窗口函数（v12.0 新增）**：`SelectBuilder.Window` + `WindowFunction` 支持 ROW_NUMBER/RANK/DENSE_RANK 及聚合窗口函数。
+### 3.4 Query DSL
+- **IQueryable&lt;T&gt; LINQ queries (new in v12.0)**: `Entity<T>.Query` returns `IQueryable<T>`, supporting standard LINQ operations such as `Where/OrderBy/Skip/Take/Count/First/ToList`.
+- **DAL.Select&lt;T&gt;() fluent queries (new in v12.1)**: `DAL.Select<T>()` returns `IQueryable<T>` bound to the current connection, supporting fully chained fluent calls `WhereIf/Where/OrderBy/Skip/Take/Page/Count/FirstOrDefault/ToList`.
+- **Navigation properties (new in v12.1)**: `HasOne`/`HasMany` Fluent API configures navigation relationships; `Include` builds paths and batch-loads; `SelectBuilder` supports JOINs across navigation relationships.
+- **WhereIf inline conditions**: `Query.WhereIf(condition, predicate)` and `FindAllWhereIf` enable dynamic filtering.
+- WhereExpression: chainable & / | / Contains / Between / Like expression composition.
+- Find / FindAll / Query / PageFindAll paging.
+- Pager / PageParameter: carries paging, sorting, TotalCount statistics and data-scope extensions.
+- **Window functions (new in v12.0)**: `SelectBuilder.Window` + `WindowFunction` supports ROW_NUMBER/RANK/DENSE_RANK and aggregate window functions.
 
-### 3.5 多级缓存体系
-针对“读多写少”模式设计：
-- Meta.Count：快速行数缓存（>1000 时走系统索引；SQLite 有 Max(自增) + 异步精准补偿）。
-- EntityCache (Meta.Cache.Entities)：整表缓存（小表 <1000 行推荐，>10000 行禁止）。
-- SingleCache (Meta.SingleCache[key])：主键/从键字典级单对象缓存，适合频繁点查用户等。
-- 过期策略：默认 60s。过期访问立即返回旧数据 + 异步刷新。写操作即时使缓存失效 / 更新。
-- 事务支持：事务中累积修改，提交/回滚后统一处理缓存清空或回滚。
-- **二级缓存（v12.0 新增）**：`CacheInvalidator.Provider` 注入 Redis，基于版本号机制跨进程协调实体缓存失效。
+### 3.5 Multi-level Cache System
+Designed for read-heavy, write-light workloads:
+- Meta.Count: fast row-count cache (uses system indexes when >1000; SQLite uses Max(identity) plus asynchronous exact compensation).
+- EntityCache (Meta.Cache.Entities): full-table cache (recommended for small tables <1000 rows; forbidden above 10000 rows).
+- SingleCache (Meta.SingleCache[key]): dictionary-level single-object cache by primary/alternate key; suitable for frequent point lookups such as users.
+- Expiration policy: 60s by default. Expired reads return stale data immediately + refresh asynchronously. Writes invalidate/update caches immediately.
+- Transaction support: changes accumulate inside a transaction; caches are cleared or rolled back consistently after commit/rollback.
+- **Second-level cache (new in v12.0)**: `CacheInvalidator.Provider` injects Redis and coordinates entity cache invalidation across processes through a version mechanism.
 
-### 3.6 反向工程 & 迁移
-- 根据实体反向创建/修改表结构、索引，自动维持一致。
-- 支持表级 `Migration` 配置（模型 `Table` 属性 / `[BindTable]` / `TableItem` 启动覆盖），可按实体粒度控制反向工程策略（Off / ReadOnly / On / Full）。
-- 支持任意数据库间模型抽取 + 跨库数据迁移（配套工具 DataMigration）。
+### 3.6 Reverse Engineering & Migration
+- Creates/modifies table schemas and indexes from entities in reverse, keeping them consistent automatically.
+- Table-level `Migration` configuration (model `Table` attribute / `[BindTable]` / `TableItem` startup override) controls the reverse-engineering strategy per entity (Off / ReadOnly / On / Full).
+- Supports model extraction from any database + cross-database data migration (with the DataMigration companion tool).
 
-### 3.7 分表分库 (ShardPolicy)
-- ShardPolicy 抽象，TimeShardPolicy 示例（按日期生成表名 Table_yyyyMMdd）。
-- 透明路由：业务层仍调用 Find / Insert / Update，不关心实际表名。
-- 可定制主键哈希 / 时间 / 范围等策略。
+### 3.7 Sharding (ShardPolicy)
+- ShardPolicy abstraction; TimeShardPolicy example (table name Table_yyyyMMdd by date).
+- Transparent routing: business code still calls Find / Insert / Update and does not care about the actual table name.
+- Customizable primary-key hash / time / range strategies.
 
-### 3.8 事务与缓存一致性
-- 非事务：写操作立即使相关缓存过期并异步重建，同时尝试直接更新内存对象保持读写一致。
-- 事务中：暂不清空整表缓存，仅对命中对象做局部变更；提交后统一清空或刷新，回滚撤销变更。
+### 3.8 Transactions and Cache Consistency
+- Non-transactional: writes immediately expire related caches and rebuild them asynchronously, while attempting to update in-memory objects directly for read/write consistency.
+- Inside a transaction: full-table caches are not cleared; only hit objects are changed locally; after commit they are cleared or refreshed uniformly, and on rollback changes are reverted.
 
-### 3.9 性能优化手段一览
-- 多级缓存：避免热点查询落库。
-- 批量写：合并多字段与多记录操作（内部优化）。
-- 分页算法：针对不同 DB / 版本选择最优策略。
-- 惰性/异步：行数、模型检查、缓存刷新均可异步。
-- 反射缓存 / 委托加速：实体属性访问器预热。
-- 内存关联：先缓存主表，再在内存中做“伪联表”。
+### 3.9 Performance Optimizations at a Glance
+- Multi-level caching: keeps hot queries off the database.
+- Batch writes: merges multi-field and multi-record operations (internal optimization).
+- Paging algorithms: chooses the optimal strategy per database/version.
+- Lazy/asynchronous: row counts, model checks and cache refreshes can all run asynchronously.
+- Reflection cache / delegate acceleration: pre-warms entity property accessors.
+- In-memory association: caches the main table first, then performs "pseudo joins" in memory.
 
-### 3.10 数据权限与多租户
-- **数据权限（Data Scope）**：行级数据访问控制，支持“全部 / 本部门及下级 / 本部门 / 仅本人 / 自定义”五种范围，通过 `DataScopeContext` + `DataScopeInterceptor` 自动完成查询过滤、新增默认归属、修改删除校验。实体实现 `IUserScope` / `IDepartmentScope` / `IDataScope` 接口即可接入；部门管理者自动纳入可见范围，本人数据始终可访问。
-- **多租户**：实体实现 `ITenantScope` 后，`TenantInterceptor` 自动在查询时附加租户过滤、写入时校验/补充租户标识；EntityBuilder 为含 `TenantId` 列的业务类自动实现 `ITenantScope`。
-- 详细用法见 `Doc/数据权限.md`、`Doc/权限管理.md`。
+### 3.10 Data Scope and Multi-Tenancy
+- **Data Scope**: row-level data access control supporting five scopes: "All / Department and sub-departments / Department / Self only / Custom". `DataScopeContext` + `DataScopeInterceptor` automatically apply query filters, default ownership on insert, and validation on update/delete. Entities opt in by implementing `IUserScope` / `IDepartmentScope` / `IDataScope`; department managers are automatically included in the visible scope, and one's own data is always accessible.
+- **Multi-tenancy**: after an entity implements `ITenantScope`, `TenantInterceptor` automatically appends tenant filters on queries and validates/fills the tenant identifier on writes; EntityBuilder automatically implements `ITenantScope` for business classes that contain a `TenantId` column.
+- See `Doc/数据权限.md` and `Doc/权限管理.md` for details.
 
 ---
-## 4. 快速入门
-### 4.1 创建模型 (db.xml)
+## 4. Quick Start
+### 4.1 Creating a Model (db.xml)
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <Tables Version="1.0" Output="MyEntity" NameSpace="Model" BaseClass="Entity" ConnName="DB">
-  <Table Name="UserInfo" Description="用户信息">
+  <Table Name="UserInfo" Description="User information">
     <Columns>
-      <Column Name="Id" DataType="Int32" Identity="True" PrimaryKey="True" Description="会员id" />
-      <Column Name="UserName" DataType="String" Nullable="False" Description="会员名称" />
-      <Column Name="Password" DataType="String" Nullable="False" Description="会员密码" />
-      <Column Name="Age" DataType="Int32" Description="会员年龄" />
+      <Column Name="Id" DataType="Int32" Identity="True" PrimaryKey="True" Description="Member id" />
+      <Column Name="UserName" DataType="String" Nullable="False" Description="Member name" />
+      <Column Name="Password" DataType="String" Nullable="False" Description="Member password" />
+      <Column Name="Age" DataType="Int32" Description="Member age" />
     </Columns>
   </Table>
 </Tables>
 ```
-### 4.2 代码生成
-- 下载 xcodetool.exe 置于目录并双击，或：`dotnet tool install xcodetool -g --prerelease` → `xcode db.xml`。
-- 生成：用户信息.cs（数据类，可覆盖） + 用户信息.Biz.cs（业务类，不再覆盖）。
+### 4.2 Code Generation
+- Download xcodetool.exe into the directory and double-click it, or run: `dotnet tool install xcodetool -g --prerelease` → `xcode db.xml`.
+- Generates: 用户信息.cs (data class, overwritten) + 用户信息.Biz.cs (business class, not overwritten).
 
-### 4.3 CRUD 示例
+### 4.3 CRUD Example
 ```csharp
 using XCode;
 
-var user = new UserInfo { UserName="张三", Password="123456", Age=18 };
+var user = new UserInfo { UserName="Zhang San", ******, Age=18 };
 user.Insert();
 
 var u2 = UserInfo.FindById(user.Id);
 u2.Age = 19; 
 u2.Update();
 
-var list = UserInfo.FindAll(UserInfo._.Age > 10 & UserInfo._.UserName == "张三");
+var list = UserInfo.FindAll(UserInfo._.Age > 10 & UserInfo._.UserName == "Zhang San");
 UserInfo.FindById(user.Id)?.Delete();
 ```
-> 使用缓存时：实体数 <1000 → 整表缓存；否则普通查询 / 单对象缓存。
+> When using caches: fewer than 1000 entities → full-table cache; otherwise use regular queries / single-object cache.
 
 ---
-## 5. 高级用法
-### 5.1 动态条件 / 分页
+## 5. Advanced Usage
+### 5.1 Dynamic Conditions / Paging
 ```csharp
 public static IList<UserInfo> Search(String name, Int32 age, Pager p)
 {
@@ -192,120 +192,120 @@ public static IList<UserInfo> Search(String name, Int32 age, Pager p)
     return UserInfo.FindAll(exp, p);
 }
 ```
-### 5.2 指定更新字段（绕过缓存，不推荐常规使用）
+### 5.2 Updating Specified Fields (bypasses cache; not recommended for regular use)
 ```csharp
-UserInfo.Update(UserInfo._.UserName == "李四" & UserInfo._.Age == 18, UserInfo._.Id == 1);
+UserInfo.Update(UserInfo._.UserName == "Li Si" & UserInfo._.Age == 18, UserInfo._.Id == 1);
 ```
-### 5.3 自定义排序与列投影
+### 5.3 Custom Sorting and Column Projection
 ```csharp
 var list = UserInfo.FindAll(UserInfo._.Age > 10, " Age DESC,Id ASC",
     string.Join(",", UserInfo._.UserName, UserInfo._.Age), 0, 20);
 ```
 
 ---
-## 6. 索引 / 自动方法
-在模型添加：
+## 6. Indexes / Auto-generated Methods
+Add to the model:
 ```xml
 <Indexes>
   <Index Columns="UserName" Unique="True" />
   <Index Columns="UserName,Age" />
 </Indexes>
 ```
-重新生成后自动出现：`FindByUserName`、组合条件辅助方法 / Search 模板。
-实体缓存策略：`Meta.Session.Count < 1000` 使用内存集合查找。否则走数据库或单对象缓存。
+After regeneration, `FindByUserName`, combined-condition helper methods / Search templates appear automatically.
+Entity cache strategy: when `Meta.Session.Count < 1000`, use in-memory collection lookups; otherwise go to the database or single-object cache.
 
 ---
-## 7. 分表分库示例
+## 7. Sharding Example
 ```csharp
 Meta.ShardPolicy = new TimeShardPolicy(nameof(UserInfo.Id), Meta.Factory)
 {
-    ConnPolicy = "{0}",           // 可自定义库名策略
-    TablePolicy = "{0}_{1:yyyyMMdd}", // 表名模板
+    ConnPolicy = "{0}",           // customizable database name policy
+    TablePolicy = "{0}_{1:yyyyMMdd}", // table name template
     Step = TimeSpan.FromDays(1)
 };
 ```
-其余 Insert / Query 等代码保持不变，自动路由到对应日期表。
+All other code such as Insert / Query stays unchanged and is routed to the corresponding date table automatically.
 
 ---
-## 8. 多数据库配置与容器化
-- 默认开发 SQLite（零配置）。
-- 发布时在配置文件或环境变量：`XCode_{ConnName}`。
-- 连接字符串需包含 provider 标识（例：`provider=MySql;server=...;user=...;password=...;database=...;`）。
-- 支持在同一进程中混用多个数据库连接名称（ConnName）。
+## 8. Multi-database Configuration and Containerization
+- SQLite is the default for development (zero configuration).
+- At deployment, configure `XCode_{ConnName}` in the configuration file or environment variables.
+- The connection string must include the provider identifier (for example: `provider=MySql;server=...;user=...;******;database=...;`).
+- Multiple database connection names (ConnName) can be used together in the same process.
 
 ---
-## 9. Benchmarks / 实战指标（节选）
-| 能力 | 指标（典型环境） | 说明 |
+## 9. Benchmarks / Production Metrics (Excerpt)
+| Capability | Metric (typical environment) | Notes |
 | ---- | ---------------- | ---- |
-| 单机 Insert | 最高 ~89 万 TPS | 批量 / 缓存 + SQLite / 内存盘组合测试 |
-| 单机 Query | 最高 ~18 亿 QPS | 小表 + 实体缓存 / 单对象缓存场景 |
-| 单表数据量 | 生产百亿级 | 分页 + 分表策略 |
-> 实际性能取决于数据库类型 / 硬件 / 分表策略 / 缓存命中率。
+| Single-machine Insert | up to ~890k TPS | batch / cache + SQLite / RAM disk combination tests |
+| Single-machine Query | up to ~1.8 billion QPS | small tables + entity cache / single-object cache scenarios |
+| Data volume per table | tens of billions in production | paging + sharding strategies |
+> Actual performance depends on database type / hardware / sharding strategy / cache hit rate.
 
 ---
-## 10. FAQ 精要
-- 为什么第一次 Count 很快？Meta.Count 走系统索引；SQLite 首次可能取自增最大值再异步精确。
-- 数据更新后多久缓存一致？本进程写操作立即反映；跨进程需等缓存过期或主动失效策略。
-- 可否关闭自动迁移？设置 Migration=Off（全局或表级），或按需使用 ReadOnly/On/Full。
-- 复杂多表查询？推荐多次单表 + 内存关联（缓存命中更快 & 结构更清晰）。
+## 10. FAQ Highlights
+- Why is the first Count fast? Meta.Count uses system indexes; SQLite may first take the identity maximum and then refine asynchronously.
+- How soon is the cache consistent after an update? Writes in the current process are reflected immediately; across processes, wait for cache expiration or use an active invalidation strategy.
+- Can automatic migration be disabled? Set Migration=Off (globally or per table), or use ReadOnly/On/Full as needed.
+- Complex multi-table queries? Multiple single-table queries + in-memory association are recommended (faster with cache hits and clearer structure).
 
 ---
-## 11. 生态矩阵（节选）
-| 组件 | 说明 |
+## 11. Ecosystem Matrix (Excerpt)
+| Component | Description |
 | ---- | ---- |
-| NewLife.Core | 基础能力：日志 / 配置 / 缓存 / 序列化 / APM / 网络 |
-| NewLife.Cube | 快速开发平台 + 后台管理（内置代码生成 + 权限）|
-| NewLife.Redis | 高性能 Redis 客户端与多功能消息队列 |
-| Stardust | 分布式服务平台：注册 / 配置 / 追踪 / 发布中心 |
-| AntJob | 分布式任务 & 大数据离线/实时处理 |
-| ... | 详见下文项目矩阵 |
+| NewLife.Core | Foundation: logging / configuration / caching / serialization / APM / networking |
+| NewLife.Cube | Rapid development platform + admin backend (built-in code generation + permissions) |
+| NewLife.Redis | High-performance Redis client and multi-purpose message queue |
+| Stardust | Distributed service platform: registry / configuration / tracing / release center |
+| AntJob | Distributed jobs & big-data offline/real-time processing |
+| ... | See the project matrix below |
 
 ---
-## 12. 参与与贡献
-欢迎提交 Issue / PR：
-- 优化性能 / 新增数据库 Provider / 改进文档。
-- 请遵循仓库 .github/copilot-instructions 中代码规范（强命名、多 TFM、XML 注释、条件编译）。
-- 公共 API 变更需给出迁移策略（Obsolete → 移除）。
+## 12. Contributing
+Issues / PRs are welcome:
+- Performance optimization / new database providers / documentation improvements.
+- Please follow the coding standards in the repository's .github/copilot-instructions (strong naming, multi-TFM, XML comments, conditional compilation).
+- Public API changes require a migration strategy (Obsolete → removal).
 
-开发构建：
+Development build:
 ```
 dotnet restore
 dotnet build -c Release
 ```
-可在 Test / XUnitTest.XCode 中补充案例；性能相关建议附基准或说明。
+Add cases under Test / XUnitTest.XCode; performance-related suggestions should include benchmarks or explanations.
 
 ---
-## 13. 许可证
-MIT，完全开放。允许商用 / 修改 / 再发行（可替换“NewLife”为企业品牌实现私有化）。
+## 13. License
+MIT, fully open. Commercial use / modification / redistribution are allowed (you may replace "NewLife" with your enterprise brand for private deployments).
 
 ---
-## 追加：原始快速示例（保留）
+## Appendix: Original Quick Examples (Retained)
 
-### 增删改查（原示例）
+### Create, Read, Update, Delete (Original Example)
 ```csharp
 var user = new UserInfo();
-user.UserName = "张三";
+user.UserName = "Zhang San";
 user.Password = "123456";
 user.Age = 18;
 user.Insert();
-Console.WriteLine("插入一条新数据，用户id为：" + user.Id);
+Console.WriteLine("Inserted a new record, user id: " + user.Id);
 
 var u = UserInfo.FindById(1);
-u.UserName = "张三";
+u.UserName = "Zhang San";
 u.Password = "123456";
 u.Age = 19;
 u.Update();
 
 u = UserInfo.FindById(1);
-Console.WriteLine($"用户ID={u.Id}已修改岁数，岁数为：{u.Age}");
+Console.WriteLine($"User ID={u.Id} age updated to: {u.Age}");
 ```
 
-### 复杂查询（原示例）
+### Complex Query (Original Example)
 ```csharp
-var list = UserInfo.FindAll(UserInfo._.UserName == "张三" & UserInfo._.Age == 19, UserInfo._.UserName.Desc(), string.Join(",", UserInfo._.UserName, UserInfo._.Age), 0, 0);
+var list = UserInfo.FindAll(UserInfo._.UserName == "Zhang San" & UserInfo._.Age == 19, UserInfo._.UserName.Desc(), string.Join(",", UserInfo._.UserName, UserInfo._.Age), 0, 0);
 ```
 
-### 索引查询（原示例）
+### Index Query (Original Example)
 ```csharp
 public static UserInfo FindByUserName(String userName)
 {
@@ -316,52 +316,53 @@ public static UserInfo FindByUserName(String userName)
 ```
 
 ---
-# 新生命项目矩阵
+# NewLife Project Matrix
 
-各项目默认支持net8.0/netstandard2.1/netstandard2.0/net4.61/net4.5，旧版（2023.0308）支持net4.0/net2.0  
-|                               项目                               | 年份  | 说明                                                                                   |
+All projects support net8.0/netstandard2.1/netstandard2.0/net4.61/net4.5 by default; older versions (2023.0308) support net4.0/net2.0.
+
+|                               Project                               | Year  | Description                                                                                   |
 | :--------------------------------------------------------------: | :---: | -------------------------------------------------------------------------------------- |
-|                             基础组件                             |       | 支撑其它中间件以及产品项目                                                             |
-|          [NewLife.Core](https://github.com/NewLifeX/X)           | 2002  | 核心库，日志、配置、缓存、网络、序列化、APM性能追踪                                    |
-|    [NewLife.XCode](https://github.com/NewLifeX/NewLife.XCode)    | 2005  | 大数据中间件，单表百亿级，MySql/SQLite/SqlServer/Oracle/TDengine/达梦，自动分表        |
-|      [NewLife.Net](https://github.com/NewLifeX/NewLife.Net)      | 2005  | 网络库，单机千万级吞吐率（2266万tps），单机百万级连接（400万Tcp）                      |
-| [NewLife.Remoting](https://github.com/NewLifeX/NewLife.Remoting) | 2011  | RPC通信框架，内网高吞吐或物联网硬件设备场景                                            |
-|     [NewLife.Cube](https://github.com/NewLifeX/NewLife.Cube)     | 2010  | 魔方快速开发平台，集成了用户权限、SSO登录、OAuth服务端等，单表100亿级项目验证          |
-|    [NewLife.Agent](https://github.com/NewLifeX/NewLife.Agent)    | 2008  | 服务管理组件，把应用安装成为操作系统守护进程，Windows服务、Linux的Systemd              |
-|     [NewLife.Zero](https://github.com/NewLifeX/NewLife.Zero)     | 2020  | Zero零代脚手架，基于NewLife组件生态的项目模板，Web、WebApi、Service                    |
-|                              中间件                              |       | 对接知名中间件平台                                                                     |
-|    [NewLife.Redis](https://github.com/NewLifeX/NewLife.Redis)    | 2017  | Redis客户端，微秒级延迟，百万级吞吐，丰富的消息队列，百亿级数据量项目验证              |
-| [NewLife.RocketMQ](https://github.com/NewLifeX/NewLife.RocketMQ) | 2018  | RocketMQ纯托管客户端，支持Apache RocketMQ和阿里云消息队列，十亿级项目验                |
-|     [NewLife.MQTT](https://github.com/NewLifeX/NewLife.MQTT)     | 2019  | 物联网消息协议，MqttClient/MqttServer，客户端支持阿里云物联网                          |
-|      [NewLife.IoT](https://github.com/NewLifeX/NewLife.IoT)      | 2022  | IoT标准库，定义物联网领域的各种通信协议标准规范                                        |
-|   [NewLife.Modbus](https://github.com/NewLifeX/NewLife.Modbus)   | 2022  | ModbusTcp/ModbusRTU/ModbusASCII，基于IoT标准库实现，支持IoT平台和IoTEdge               |
-|  [NewLife.Siemens](https://github.com/NewLifeX/NewLife.Siemens)  | 2022  | 西门子PLC协议，基于IoT标准库实现，支持IoT平台和IoTEdge                                 |
-|      [NewLife.Map](https://github.com/NewLifeX/NewLife.Map)      | 2022  | 地图组件库，封装百度地图、高德地图和腾讯地图                                           |
-|       [NewLife.IP](https://github.com/NewLifeX/NewLife.IP)       | 2022  | IP地址库，IP地址转物理地址                                                             |
-|                             产品平台                             |       | 产品平台级，编译部署即用，个性化自定义                                                 |
-|           [AntJob](https://github.com/NewLifeX/AntJob)           | 2019  | 蚂蚁调度，分布式大数据计算平台（实时/离线），蚂蚁搬家分片思想，万亿级数据量项目验证    |
-|         [Stardust](https://github.com/NewLifeX/Stardust)         | 2018  | 星尘，分布式服务平台，节点管理、APM监控中心、配置中心、注册中心、发布中心              |
-|      [NewLife.ERP](https://github.com/NewLifeX/NewLife.ERP)      | 2021  | 企业ERP，产品管理、客户管理、销售管理、供应商管理                                      |
-|         [CrazyCoder](https://github.com/NewLifeX/XCoder)         | 2006  | 码神工具，众多开发者工具，网络、串口、加解密、正则表达式、Modbus                       |
-|           [XProxy](https://github.com/NewLifeX/XProxy)           | 2005  | 产品级反向代理，NAT代理、Http代理                                                      |
-|        [HttpMeter](https://github.com/NewLifeX/HttpMeter)        | 2022  | Http压力测试工具                                                                       |
-|         [GitCandy](https://github.com/NewLifeX/GitCandy)         | 2015  | Git源代码管理系统                                                                      |
-|          [SmartOS](https://github.com/NewLifeX/SmartOS)          | 2014  | 嵌入式操作系统，完全独立自主，支持ARM Cortex-M芯片架构                                 |
-|          [SmartA2](https://github.com/NewLifeX/SmartA2)          | 2019  | 嵌入式工业计算机，物联网边缘网关，高性能.NET6主机，应用于工业、农业、交通、医疗        |
-|                           菲凡物联FIoT                           | 2020  | 物联网整体解决方案，建筑、环保、农业，软硬件及大数据分析一体化，单机十万级点位项目验证 |
-|                           NewLife.UWB                            | 2020  | 厘米级（10~20cm）高精度室内定位，软硬件一体化，与其它系统联动，大型展厅项目验证        |
+|                             Foundation Components                             |       | Supports other middleware and product projects                                                             |
+|          [NewLife.Core](https://github.com/NewLifeX/X)           | 2002  | Core library: logging, configuration, caching, networking, serialization, APM performance tracing                                    |
+|    [NewLife.XCode](https://github.com/NewLifeX/NewLife.XCode)    | 2005  | Big-data middleware, tens of billions of rows per table, MySql/SQLite/SqlServer/Oracle/TDengine/DaMeng, automatic sharding        |
+|      [NewLife.Net](https://github.com/NewLifeX/NewLife.Net)      | 2005  | Networking library, 22.66 million tps single-machine throughput, 4 million TCP connections per machine                      |
+| [NewLife.Remoting](https://github.com/NewLifeX/NewLife.Remoting) | 2011  | RPC communication framework for high-throughput intranet or IoT hardware scenarios                                            |
+|     [NewLife.Cube](https://github.com/NewLifeX/NewLife.Cube)     | 2010  | Cube rapid development platform with user permissions, SSO login and OAuth server; validated on projects with 10 billion rows per table          |
+|    [NewLife.Agent](https://github.com/NewLifeX/NewLife.Agent)    | 2008  | Service management component that installs applications as OS daemons: Windows services, Linux Systemd              |
+|     [NewLife.Zero](https://github.com/NewLifeX/NewLife.Zero)     | 2020  | Zero-generation scaffold, project templates based on the NewLife ecosystem: Web, WebApi, Service                    |
+|                              Middleware                              |       | Integrates with well-known middleware platforms                                                                     |
+|    [NewLife.Redis](https://github.com/NewLifeX/NewLife.Redis)    | 2017  | Redis client, microsecond latency, million-level throughput, rich message queues, validated on 10-billion-scale data projects              |
+| [NewLife.RocketMQ](https://github.com/NewLifeX/NewLife.RocketMQ) | 2018  | Pure managed RocketMQ client supporting Apache RocketMQ and Alibaba Cloud Message Queue, validated on billion-scale projects                |
+|     [NewLife.MQTT](https://github.com/NewLifeX/NewLife.MQTT)     | 2019  | IoT messaging protocol, MqttClient/MqttServer, client supports Alibaba Cloud IoT                          |
+|      [NewLife.IoT](https://github.com/NewLifeX/NewLife.IoT)      | 2022  | IoT standard library defining communication protocol standards for the IoT domain                                        |
+|   [NewLife.Modbus](https://github.com/NewLifeX/NewLife.Modbus)   | 2022  | ModbusTcp/ModbusRTU/ModbusASCII based on the IoT standard library, supports IoT platforms and IoTEdge               |
+|  [NewLife.Siemens](https://github.com/NewLifeX/NewLife.Siemens)  | 2022  | Siemens PLC protocol based on the IoT standard library, supports IoT platforms and IoTEdge                                 |
+|      [NewLife.Map](https://github.com/NewLifeX/NewLife.Map)      | 2022  | Map component library wrapping Baidu Maps, Amap and Tencent Maps                                           |
+|       [NewLife.IP](https://github.com/NewLifeX/NewLife.IP)       | 2022  | IP address library, IP address to physical location                                                             |
+|                             Product Platforms                             |       | Product-platform level, ready to compile and deploy, with customization                                                 |
+|           [AntJob](https://github.com/NewLifeX/AntJob)           | 2019  | Ant scheduling, distributed big-data computing platform (real-time/offline), ant-movement sharding idea, validated on trillion-scale data projects    |
+|         [Stardust](https://github.com/NewLifeX/Stardust)         | 2018  | Stardust, distributed service platform: node management, APM monitoring center, configuration center, registry, release center              |
+|      [NewLife.ERP](https://github.com/NewLifeX/NewLife.ERP)      | 2021  | Enterprise ERP: product management, customer management, sales management, supplier management                                      |
+|         [CrazyCoder](https://github.com/NewLifeX/XCoder)         | 2006  | Code god tool, many developer utilities: network, serial port, encryption/decryption, regular expressions, Modbus                       |
+|           [XProxy](https://github.com/NewLifeX/XProxy)           | 2005  | Product-grade reverse proxy: NAT proxy, Http proxy                                                      |
+|        [HttpMeter](https://github.com/NewLifeX/HttpMeter)        | 2022  | HTTP stress testing tool                                                                       |
+|         [GitCandy](https://github.com/NewLifeX/GitCandy)         | 2015  | Git source code management system                                                                      |
+|          [SmartOS](https://github.com/NewLifeX/SmartOS)          | 2014  | Embedded operating system, fully independent, supports ARM Cortex-M chips                                 |
+|          [SmartA2](https://github.com/NewLifeX/SmartA2)          | 2019  | Embedded industrial computer, IoT edge gateway, high-performance .NET6 host, used in industry, agriculture, transportation and healthcare        |
+|                           菲凡物联FIoT                           | 2020  | Complete IoT solution for buildings, environmental protection and agriculture; integrated software, hardware and big-data analytics; validated on 100k-point single-machine projects |
+|                           NewLife.UWB                            | 2020  | Centimeter-level (10~20cm) high-precision indoor positioning, integrated hardware and software, interoperates with other systems, validated in large exhibition halls        |
 
 ---
-# 新生命开发团队
+# NewLife Development Team
 ![XCode](https://newlifex.com/logo.png)
 
-新生命团队（NewLife）成立于2002年，是新时代物联网行业解决方案提供者，致力于提供软硬件应用方案咨询、系统架构规划与开发服务。NuGet 累计下载 413万+。团队核心组件（XCode / Redis / Stardust / AntJob / IoT 等）已在电力、工业、交通、环保、医疗、文博等行业大规模应用。
+The NewLife team was founded in 2002 and is an IoT industry solution provider in the new era. We are dedicated to software/hardware application consulting, system architecture planning and development services. NuGet cumulative downloads: 4.13 million+. Core components (XCode / Redis / Stardust / AntJob / IoT, etc.) have been widely deployed at scale in power, industry, transportation, environmental protection, healthcare, cultural heritage and other industries.
 
-我们持续改进，力求成为值得长期信赖的 .NET / IoT / 分布式技术伙伴。
+We keep improving, striving to be a long-term trusted .NET / IoT / distributed technology partner.
 
-网站：https://newlifex.com   开源组织：https://github.com/NewLifeX  
-微信公众号：  
+Website: https://newlifex.com   Open-source organization: https://github.com/NewLifeX  
+WeChat official account:  
 ![智能大石头](https://newlifex.com/stone.jpg)
 
 ---
-> 如果本项目对你有帮助，欢迎 Star、分享给团队，或通过 Issue/PR 反馈改进建议。
+> If this project helps you, please Star it, share it with your team, or send improvement suggestions via Issue/PR.

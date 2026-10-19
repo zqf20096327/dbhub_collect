@@ -207,7 +207,7 @@ Prefer staying inside dbt? Install Scherlok as a dbt package for native data qua
 # packages.yml
 packages:
   - git: https://github.com/rbmuller/scherlok.git
-    revision: v1.0.4
+    revision: v1.0.5
 ```
 
 Once the dbt Package Hub listing lands ([dbt-labs/hubcap#456](https://github.com/dbt-labs/hubcap/pull/456)), this becomes `package: rbmuller/scherlok` with `version: [">=1.0.0", "<2.0.0"]`.
@@ -385,7 +385,7 @@ scherlok dbt [--project-dir .] [--output json]  Profile dbt models from manifest
 scherlok dbt-run-and-watch [--build] [--output json]  Run dbt + profile in one step
 scherlok status [--output json] Quick health dashboard
 scherlok history [--days N] [--output json]  Timeline of past anomalies
-scherlok report                 Detailed profile summary
+scherlok report [--output json] Detailed profile summary
 scherlok dashboard [--out .html] Generate self-contained HTML report
 scherlok config --store <url>   Set remote storage
 scherlok demo [--keep] [--output json]  Self-contained demo on a sample DuckDB (no database needed)

@@ -591,6 +591,13 @@ Conflict handling:
 - The conflict strategy (`server-wins` or `prompt`) governs full sync passes only. The default is `prompt`; set `server-wins` in `config.toml` under `[sync]` to adopt the server body automatically. A full pass is `sync run`, the background service, or a TUI sync. A `server-wins` pass adopts the server body, clears the dirty flag, and marks the conflict resolved as `server-auto`. A `prompt` pass records the conflict and skips that row until you resolve it.
 - A resolved conflict keeps its row. Run `chroncal sync conflicts --resolved` to list resolved conflicts. Run `chroncal sync resolve <id> --pick local` on a resolved conflict to restore the recorded local version.
 
+Stuck resources:
+
+- Sometimes the server keeps a body that chroncal cannot import for a resource that chroncal already synced. The multiget returns 404, or the body does not parse. Sync then keeps the local copy and tries again on the next run. The full snapshot of a server without `sync-collection` follows the same rule: one bad body does not stop the import of the other resources.
+- Sync stops the retries after three failed runs, when at least one hour has gone by since the first failure. A frequent background sync then cannot use up the retries on a short server problem. The calendar is then no longer marked as failing. The local copy stays, and the server changes to that resource are not imported.
+- After the stop, a new version of the resource on the server (a new ETag) gets one more attempt. When that attempt fails, the retries stay stopped, and sync does not warn again.
+- `chroncal sync status` lists each such resource on a `stuck href=...` line below its calendar. The `-o json` output lists it under `stuck_hrefs`. Correct the resource on the server. The next good fetch removes the entry.
+
 ### Google Calendar via CalDAV
 
 Google Calendar requires OAuth 2.0. It only exposes `VEVENT` over CalDAV.
@@ -882,7 +889,7 @@ chroncal --event standup-uid --at 2026-04-17T14:00:00Z
 
 **Views**: month, week, day, agenda. Switch with `m`, `w`, `d`, `a`. Press `W` to switch the first day of the week between Sunday and Monday. The TUI stores the choice, the same way it stores the view. `ui.week_start` in `config.toml` sets the default before a stored choice exists.
 
-The TUI can create, edit, view, and delete events. Event details include alarms, attendees, and attachments. Long titles wrap in the event details. Use `p` to copy event details. Use `u` to undo a delete.
+The TUI can create, edit, view, and delete events. Event details include alarms, attendees, and attachments. The new-event form selects the default calendar (see `calendar set-default`). When the default calendar is hidden or does not accept events, the form selects the first calendar by name. Long titles wrap in the event details. Use `p` to copy event details. Use `u` to undo a delete.
 
 The sidebar uses quiet, collapsible account sections. There is a separate **Local** section. Active calendars show an item-colored filled `●` circle. Hidden calendars show an outline `○` circle. Space or a click on the circle toggles visibility. Calendar colors stay on calendar rows, not on account headings.
 

@@ -30,6 +30,8 @@ after you approve them over OAuth.
   two-step verification, passkeys and an audit log.
 - **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL,
   AGPL-3.0 licensed, in 16 languages.
+- **Or on your computer**: the desktop app for macOS, Windows and Linux runs Leafdesk on its own,
+  with no server to set up, and backs your workspace up every day; it connects to a server too.
 
 Claude planning a launch in Leafdesk over MCP: a database, its tasks, a board view and a kickoff
 page, all showing up live (sped up):
@@ -50,6 +52,10 @@ docker compose up -d
 Then open http://localhost:3000 and create an account. See [Quick start](#quick-start-docker) for
 versions, upgrades and running behind a domain.
 
+Just for yourself, with no server: download the desktop app from the
+[latest release](https://github.com/esmworks/leafdesk/releases/latest) (`.dmg` for macOS, `.exe`
+for Windows, `.AppImage` for Linux) and choose *On this computer*. See [Desktop app](#desktop-app).
+
 ## Features
 
 - **Pages**: nested pages, a block editor (BlockNote) with slash menu (block text and background
@@ -60,16 +66,16 @@ versions, upgrades and running behind a domain.
   longer word, so pages show up while you type: "kond plan" finds "Kondenser planı", while the
   middle of a word doesn't match; Japanese and Chinese words also inside a sentence, which has no
   spaces between words: "会議" finds "明日の会議について", a word's characters only side by side;
-  Korean words by their start, so with a particle joined on: "회의" finds "회의를"; pages whose
+  Korean words by their start
+
+[...截断...]
+
+, so with a particle joined on: "회의" finds "회의를"; pages whose
   title has the words come first; past the first 80,000 characters of a huge page's text, words
   aren't found), and also by meaning when the server has an embeddings model
   (see [Semantic search](#semantic-search)). Full-text search also looks inside the PDFs and
   Word documents a page shows, with or without an embeddings model: a page is found when one of
-  its documents has every word, after
-
-[...截断...]
-
- the pages that have them in their own text, and the result
+  its documents has every word, after the pages that have them in their own text, and the result
   names the document, with the text around the words. Only documents the page's readers may open
   through it count, as for semantic search; a document's first 80,000 characters are searched,
   and a scan without a text layer has no words to find.
@@ -94,8 +100,10 @@ versions, upgrades and running behind a domain.
   stays at 16px, so the phone doesn't zoom in when you start typing. Restoring an older version
   keeps the current style. Databases always use the full width. With the comments panel open, a
   page moves left of it (and narrows when the window is too small) instead of running under it.
-- **Rich blocks**: callouts, LaTeX equations (block and inline, KaTeX), Mermaid diagrams with a
-  live preview, a table of contents, a breadcrumb, a list of the page's subpages (live, each reader
+- **Rich blocks**: callouts (one can be hidden when printing: it stays on screen and is left out
+  of PDFs), LaTeX equations (block and inline, KaTeX), footnotes (`/footnote` puts a number in the
+  text and the note in a popup; the page lists its notes at the end, on published pages and in PDFs
+  too, and hovering a number shows its note), Mermaid diagrams with a live preview, a table of contents, a breadcrumb, a list of the page's subpages (live, each reader
   seeing those they may open; a page with one doesn't list them again at its end when published or
   printed), and columns (2 to 5, resizable, blocks
   dragged in and out with the side menu, stacked on phones), also on published pages and in
@@ -107,13 +115,3 @@ versions, upgrades and running behind a domain.
   value, a chart, a list, or any other layout), set up in place, kept up to date as rows change,
   and worked out for each reader from the rows and values they may see; a number, bar or slice
   opens the rows behind it. A widget can take one of the option colors, as board columns do, and
-  editors move widgets by dragging their title bar. A page with a dashboard uses the full width.
-  Published pages show numbers and lists, and charts as a table of their figures. Over MCP,
-  `add_dashboard` and `update_dashboard_widget` build one.
-- **Web bookmarks and embeds**: link cards with the page's title, description and image (fetched
-  once on the server behind an SSRF guard), and YouTube, Vimeo, Loom, Figma, Google Docs, CodePen,
-  Spotify and Google Maps embeds in sandboxed iframes.
-- **Realtime collaboration**: several people can edit the same page at once (Yjs over WebSocket
-  via Hocuspocus), with live cursors. The page header shows who else has the page open, including
-  people who can only view it.
-- **

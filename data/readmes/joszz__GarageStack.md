@@ -41,22 +41,37 @@ The statistics, trip log, maintenance list and light theme are in the [screensho
 
 **Want to try it?** Read [MG iSmart account and session limits](#mg-ismart-account-and-session-limits) first, because GarageStack and the MG app cannot be signed in to the same account at once, then pick an [installation option](#installation). A single `docker run` is enough to get going.
 
+## Contents
+
+- [Features](#features)
+- [MG iSmart account and session limits](#mg-ismart-account-and-session-limits)
+- [Prerequisites](#prerequisites) and [Installation](#installation)
+- [Updating](#updating), [Monitoring](#monitoring) and [Backup and restore](#backup-and-restore)
+- [Push notifications](#push-notifications)
+- [Trip log](#trip-log), [Climate schedules](#climate-schedules) and [Maintenance](#maintenance)
+- [Dutch registration (RDW)](#dutch-registration-rdw)
+- [Homepage dashboard widget](#homepage-dashboard-widget) and [Read-only API tokens](#read-only-api-tokens)
+- [Map overlays](#map-overlays)
+- [Security defaults](#security-defaults), [HTTPS](#https) and [What leaves your network](#what-leaves-your-network)
+- [Documentation](#documentation)
+
 ## Features
 
 - **Live dashboard** -- Real-time vehicle telemetry displayed as configurable cards. Cards are automatically shown or hidden based on your vehicle type (HEV, PHEV, BEV) and can be reordered or toggled individually in the dashboard's edit mode. The car drawn on the dashboard takes your car's colour (Settings > Car colour), and the vehicle type can be set by hand under Settings > Vehicle type when detection gets it wrong.
 - **Tyre history** -- Tap a tyre's pressure on the dashboard's car to see a month of daily pressures for all four tyres, and how each one moved against the other three over the last two weeks: a tyre falling behind the others while they hold is a slow puncture, which also sends a notification.
 - **Trip history** -- Browse past journeys on an interactive map, each drawn on the roads it took and coloured by speed or by the speed limit, with a heatmap of the roads you drive most. Each trip is saved to the database a few minutes after the car parks. After upgrading from a version that did not save trips, the existing history is saved in the background on the Worker's first start.
-- **Trip log** -- Mark each trip as business, commute or private (commutes between your home and work are marked automatically), add notes, and export a month or a year as a spreadsheet with the addresses and odometer readings a tax trip log (such as the Dutch *rittenregistratie*) asks for. See [Trip log](#trip-log).
+- **Trip log** -- Mark each trip as business, commute or private (commutes between your home and work are marked automatically), add notes, hide a GPS glitch, join two trips a fuel stop split, and export a month or a year as a spreadsheet with the addresses and odometer readings a tax trip log (such as the Dutch *rittenregistratie*) asks for. See [Trip log](#trip-log).
 - **Maintenance** -- Keep the car's service items (oil, tyres, the yearly inspection, ...) with a distance interval, a time interval or both. GarageStack works out from the odometer and your service log when each one is due, shows the most urgent on the dashboard, and sends a notification when an item reaches 90 % of its interval. Log each service with its date, odometer reading and notes.
+- **Dutch registration (RDW)** -- For a car with a Dutch licence plate, a dashboard card with the date the APK runs out and the days left, open recalls with what can go wrong and what the dealer does about it, and whether the car is insured, from the [RDW's open data](https://opendata.rdw.nl). Notifications come for a new recall, the APK a month and a week ahead, and a car with no insurance on record. Off until `RDW_ENABLED=true`; the plate, entered under Settings, is the only thing sent. See [Dutch registration (RDW)](#dutch-registration-rdw).
 - **Energy statistics** -- Track daily energy consumption, efficiency (Wh/km on a plug-in car, L/100 km on a hybrid), fuel use, electric share, average driving speed, and more, for any period from a week to several years.
 - **Remote commands** -- Trigger climate pre-conditioning (normal climate, fan only or front defrost), lock or unlock the car, open the boot, and activate the horn and lights remotely from the dashboard. On a plug-in car also start or stop charging, lock or unlock the charging cable, switch battery heating on or off, set the charging and battery heating schedules, and set the charge current limit and, where the car takes one, the charge target. Opening the boot and unlocking the cable ask for a second tap. Each command reports whether the car carried it out, and if it refused, the reason the MG servers gave.
 - **Climate schedules** -- Switch climate on at a set time on chosen weekdays, or once. A schedule sets the temperature or mode, seat heating and the rear defroster, and can skip mild days by the car's outside temperature. Schedules run on the server, so no browser needs to be open, and each run sends a push notification saying whether the car started climate.
-- **Push notifications** -- Browser and in-app alerts for key events: engine started, low or high tyre pressure, a slow puncture, low EV battery, low fuel, a weak 12V battery, car left unlocked, doors or windows left open, the car moving while parked, a charge that finished or stopped early, maintenance coming due, a climate schedule that ran, the messages the official MG app receives, and data that stopped arriving because the MG sign-in failed or the car went quiet. Each device chooses which ones it gets.
-- **Homepage widget** -- A read-only API endpoint for the [gethomepage.dev](https://gethomepage.dev) Custom API widget, exposing key vehicle stats at a glance.
+- **Push notifications** -- Browser and in-app alerts for key events: engine started, low or high tyre pressure, a slow puncture, low EV battery, low fuel, a weak 12V battery, car left unlocked, doors or windows left open, the car moving while parked, arriving at or leaving home or work, a charge that finished or stopped early, maintenance coming due, the APK running out or a recall on a Dutch plate, a climate schedule that ran, the messages the official MG app receives, and data that stopped arriving because the MG sign-in failed or the car went quiet. Each device chooses which ones it gets.
+- **Homepage widget** -- A read-only API endpoint for the [gethomepage.dev](https://gethomepage.dev) Custom API widget, exposing key vehicle stats at a glance, along with the APK days left, open recalls, the maintenance due next and the last trip.
 - **Log viewer** -- The Logs page shows the entries of the API's and the Worker's log files, newest first and older ones loading as you scroll, filtered by service, level and text, with exceptions folded open on request and a live mode that adds what was written every ten seconds. The files themselves stay on the server, one per day (`LOG_RETAINED_FILES`).
 - **Full data export** -- Settings > Your data downloads everything GarageStack keeps as one zip: per car its trips, maintenance, schedules, places and every telemetry reading (as CSV), and your notifications and settings.
 - **Read-only API tokens** -- Make a token under Settings > API tokens and let a script, a dashboard or a watch read what the app shows, without signing in. A token can only read: it cannot send commands or change anything, and the full data export and the logs stay with a signed-in session.
-- **Home Assistant** -- Your car appears in Home Assistant automatically through MQTT discovery, sharing GarageStack's broker and MG session instead of needing a second integration. See [`HOME_ASSISTANT.md`](documentation/HOME_ASSISTANT.md).
+- **Home Assistant** -- Your car appears in Home Assistant automatically through MQTT discovery, sharing GarageStack's broker and MG session instead of needing a second integration. GarageStack adds sensors of its own to the car: the APK and its days left, open recalls, the maintenance due next and the last trip. See [`HOME_ASSISTANT.md`](documentation/HOME_ASSISTANT.md).
 - **Progressive Web App (PWA)** -- Installable on mobile or desktop for a native app-like experience, complete with a home screen icon and push notification support. Where the browser allows it, GarageStack offers to install itself, and the offer can be turned down for good. Installing and push need HTTPS, see [HTTPS](#https).
 - **Charging stations** -- Overlay nearby EV charging stations on the map, sourced from the [Open Charge Map](https://openchargemap.org) database. Station data is cached in the database for 7 days; on page load the map immediately shows all stations within 100 km of your car that are already cached. Markers show operational status; clicking a marker displays the station name, operator, address, and available connector types with power ratings. Requires a free OCM API key (`OPENCHARGEMAP_API_KEY`). Unlike fuel stations and service areas, charging station tiles are loaded on demand as you browse the map and are not pre-populated by the background Worker.
 - **Fuel stations** -- Overlay nearby petrol and diesel stations on the map (HEV and PHEV only; not shown for BEV). Sourced from OpenStreetMap via the Overpass API -- no API key required. POI data is cached in the database for 7 days and pre-populated by the Worker for a 100 km radius around the car's last known position so the overlay is instant on first view.
@@ -103,6 +118,7 @@ Cards are shown or hidden automatically based on vehicle type (HEV / PHEV / BEV)
 | Charging Session | OBC power, cable lock, charging type, last start and end; start or stop charging, lock or unlock the cable, set the charging schedule | PHEV, BEV |
 | Battery Heating | Pre-heating status and schedule; switch it on or off, set the schedule | PHEV, BEV |
 | Maintenance | The most urgent state of your maintenance items, linking to the Maintenance page | All |
+| APK & recalls | The APK expiry date and days left, open recalls with their risk and repair, and the insurance on record, from the RDW | All (only with `RDW_ENABLED` and a plate set) |
 | Climate Schedule | When a climate schedule starts climate next | All (off by default) |
 
 ### Statistics insights
@@ -146,7 +162,7 @@ Before installing, make sure the following are available on your host:
 - **Docker** 23.0 or later (or Podman with Docker Compose compatibility); the quick start's relative `./garagestack-data` mount needs 23.0
 - **Docker Compose** 2.20 or later (bundled with Docker Desktop; on Linux install the `docker-compose-plugin` package) -- required for Option B only
 - An **MG iSmart account** with your vehicle already linked in the official app
-- Outbound internet access on the host so the container can reach the SAIC API and (optionally) Overpass / Open Charge Map
+- Outbound internet access on the host, for the MG servers and the map and lookup services listed under [What leaves your network](#what-leaves-your-network)
 
 ---
 
@@ -195,7 +211,7 @@ git clone https://github.com/joszz/garagestack.git
 cd garagestack
 ```
 
-**2. Create your `.env` file**
+#### 2. Create your `.env` file
 
 ```bash
 cp .env.example .env
@@ -237,7 +253,7 @@ The frontend is served on port `8080` by default (configurable via `FRONTEND_POR
 
 ## Updating
 
-Read the release notes first: anything an upgrade needs from you is listed under **Upgrade Notes** at the top. Database migrations run automatically on startup and only forwards, so to go back to an older version, restore the backup you took before upgrading (see [Backup and restore](#backup-and-restore)). A new PostgreSQL major version is never installed by an update: moving from 18 to the next one means a `pg_dump` from the old version and a restore into a fresh volume on the new one.
+Read the release notes first: anything an upgrade needs from you is listed under **Upgrade Notes** at the top. Database migrations run automatically on startup and only forwards, so to go back to an older version, restore the backup you took before upgrading (see [Backup and restore](#backup-and-restore)). A new PostgreSQL major version is never installed by an update: moving from 18 to the next one means a `pg_dump` from the old version and a restore into a fresh volume on the new one, step by step in [Moving to a new PostgreSQL major version](docker/all-in-one/README.md#moving-to-a-new-postgresql-major-version).
 
 **Docker Compose** builds GarageStack from the cloned source, so update the source and rebuild. `docker compose pull` fetches the gateway, Postgres and Mosquitto images:
 
@@ -348,15 +364,21 @@ GarageStack checks your vehicle's state every 5 minutes and sends both a browser
 | Door left open | Any door, boot, or bonnet open while engine is off |
 | Window left open | Any window open while engine is off |
 | Moved while parked | The car reports a position more than 300 m from where it parked, with the engine off: towed, lifted onto a truck, or taken on a ferry. Sent once per parking, with the car's first report after the move (a sleeping car only reports now and then) |
+| Arrived home or at work | The car parks at a home or work place with **Notify on arrival and departure** switched on (Trip log > Home and work), judged by the position of the poll it parked in. Not sent for a drive that never left the place it started in |
+| Left home or work | The car drives out of such a place: sent on its first position outside the place's radius, so starting the engine to warm the car up sends nothing |
 | Charging complete | Charging stops while the cable is still connected (plug-in vehicles) |
 | Charging interrupted | Charging stops because of a fault the car names: the charger, an overheating port, a plug not fully in, or a voltage mismatch (plug-in vehicles; unplugging mid-charge sends nothing) |
 | Maintenance due | A maintenance item reaches 90 % of its interval, or passes it (checked every 6 hours, 7-day cooldown per item) |
+| Open recall | The RDW lists a recall on the car's plate that has not been repaired (once per recall; a recall later reported repaired sends nothing) |
+| APK due | The APK runs out within 30 days, and again within 7 days, of the date the RDW has (once each per APK date) |
+| APK expired | The APK's last valid day has passed (repeated monthly until the RDW has a new date) |
+| No insurance on record | The RDW has no WAM insurance on record for the car (repeated monthly while that lasts) |
 | MG app message | The official MG app receives a message, such as an alarm or a reminder (sent as it arrives, once per message) |
 | Scheduled climate | A climate schedule ran: climate started, the car refused, or it did not answer (nothing is sent for a run skipped because the car was in use or the day was mild) |
 
 Push notifications require VAPID keys to be configured (`VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY`). Without them, alerts still appear in the in-app notification panel. While GarageStack is open in a browser that allowed notifications but is not subscribed to push, the same alerts show up as system notifications too; a subscribed browser gets them through push instead, so nothing arrives twice.
 
-Settings has a push switch for the device you are on and a per-type checklist for these alerts, which offers only the types the car's drivetrain can produce: the plug-in alerts (low EV battery, charging complete, charging interrupted) are left out for a plain hybrid, and low fuel for a full electric car. Both are kept per device: a type switched off on your phone still reaches your laptop, and still shows up in the notification panel. Only the switch turns push on or off; the checklist never asks the browser for permission.
+Settings has a push switch for the device you are on and a per-type checklist for these alerts, which offers only the types the car's drivetrain can produce: the plug-in alerts (low EV battery, charging complete, charging interrupted) are left out for a plain hybrid, low fuel for a full electric car, and the RDW type (APK, recalls and insurance) wherever `RDW_ENABLED` is off. Both are kept per device: a type switched off on your phone still reaches your laptop, and still shows up in the notification panel. Only the switch turns push on or off; the checklist never asks the browser for permission.
 
 Notification texts are written by the background worker, which has no browser to take a language from, so their language is a deployment setting: `NOTIFICATION_LANGUAGE=en` (default) or `nl`. The web UI's own language toggle does not affect them.
 
@@ -388,13 +410,54 @@ Note: "keys left in the car" is not currently supported because the SAIC MQTT ga
 
 - **Purpose.** Mark a trip as business, commute or private. Choosing the same purpose again clears it. When trips in the period have no purpose yet, one button gives them all the same one; trips that already have a purpose keep it.
 - **Home and work.** Set your home and work places once (**Home and work** at the top, or click a trip's start or end address to use it). A car has one home and can have several work places. Every trip between home and a work place is marked as a commute: the trips already in the log, and each new one as soon as it is saved. A trip counts as ending at a place when it ends within its radius (250 m unless you change it), so parking down the street or in the office garage still counts. Trips you classified yourself, or deliberately left unclassified, are never changed; an automatic commute shows "Automatic", and choosing another purpose overrides it. Moving or removing a place updates the automatic ones. Business and private stay yours to choose. The places are kept per car in GarageStack's own database.
+- **Arriving and leaving.** Switch on **Notify on arrival and departure** for a place, and the car parking there, or driving away from it, sends a notification (see [Push notifications](#push-notifications)). It is off for every place until you switch it on, and each device can still leave those two types out.
 - **Notes.** Record anything a trip log should say, such as who you visited or why you took another route. Notes save when you leave the field.
+- **Hide a trip.** A trip the GPS got wrong, or one that should not count, can be hidden: it leaves the map, the statistics, the dashboard, the totals and the export, and is listed only under **Show hidden trips**, where **Show again** brings it back. Nothing is deleted.
+- **Join two trips.** A short stop, such as filling up on the way to work, splits one drive into two trips. **Join with next trip** (tap twice) makes them one, from the first one's start to the second one's end, with both notes kept. A purpose you chose for either is kept; otherwise it is labelled again from the new ends, so home to the fuel station to work becomes a commute. A join cannot be undone.
 - **Totals.** The distance per purpose for the period is shown at the top.
 - **Distance.** A trip counts for the distance on its odometer when the car reported a reading at both ends. Otherwise it counts for the distance along its GPS fixes, which is a little short because the fixes cut corners.
 - **Addresses** are looked up once through the same OpenStreetMap geocoder as the map, and then kept with the trip for good, so a log exported next year still shows them. With place names switched off (Settings > Map, or `GEOCODING__ENABLED=false`), ends show as coordinates and no lookups are made.
-- **Export CSV** saves the period as a spreadsheet: date, departure and arrival time, from and to address, odometer start and end, distance, purpose and notes. The file follows the interface language: comma-separated in English, and semicolon-separated with decimal commas in Dutch, so it opens in columns in Excel either way.
+- **Export CSV** saves the period, hidden trips left out, as a spreadsheet: date, departure and arrival time, from and to address, odometer start and end, distance, purpose and notes. The file follows the interface language: comma-separated in English, and semicolon-separated with decimal commas in Dutch, so it opens in columns in Excel either way.
 
 Only trips the Worker has saved can be logged, so the trip being driven, and one finished in the last few minutes, appear once the car has been parked for a while.
+
+---
+
+## Climate schedules
+
+**Climate schedules** in the sidebar switch the car's climate on at a time you set, so it is warm (or cool) when you leave. They run on the GarageStack server: no phone or browser has to be open.
+
+- **When.** A time on the chosen weekdays, or once, on the next day that time comes round, when no weekday is chosen. The time is kept in the time zone the browser had when the schedule was made, so 07:30 stays 07:30 across daylight saving time.
+- **What.** A temperature (16 to 28 °C), or the fan only, or the front defrost; seat heating for either front seat, and the rear defroster.
+- **Only when it is needed.** A schedule can run only below or above an outside temperature: warming the car on cold mornings only, say. The car's own outside temperature from the last three hours decides; without a recent one the schedule runs.
+- **When it does not run.** Not while the engine runs, and not when the GarageStack Worker finds it more than 10 minutes late (after a restart, say): a car warmed long after you left is no use, so that run is recorded as missed. A car that answers that it is still busy, as one woken from a long sleep can, is asked again, up to three times.
+- **What you hear.** Each run sends a notification saying whether the car started climate, refused, or did not answer. The schedule's card shows the last run and when it runs next, and the optional dashboard card the next start.
+
+Commands sent by hand at the same moment as a scheduled run share the car's one command at a time; see [`ARCHITECTURE.md`](documentation/ARCHITECTURE.md#climate-schedules) for how a run is carried out.
+
+---
+
+## Maintenance
+
+**Maintenance** in the sidebar keeps the car's service items, such as the oil, the tyres or the yearly inspection.
+
+- **Intervals.** Each item has a distance interval, a time interval, or both; with both, it is due at whichever comes first.
+- **When it is due.** From the last service you logged and the car's odometer, an item is *OK*, *due soon* once 90 % of its interval has passed, or *overdue*. One without a service logged yet is *not tracked yet*.
+- **Logging a service.** Record the date, the odometer reading (the current one is filled in) and notes. The item's interval starts again from there, and its history is kept.
+- **Where it shows.** The dashboard's maintenance card shows the most urgent item, and so do the [Homepage widget](#homepage-dashboard-widget) and [Home Assistant](documentation/HOME_ASSISTANT.md#garagestacks-own-sensors). A notification comes when an item becomes due soon or overdue (checked every 6 hours, at most once a week per item).
+
+---
+
+## Dutch registration (RDW)
+
+For a car with a Dutch licence plate, GarageStack shows what the [RDW](https://opendata.rdw.nl) has on record for it: when the APK runs out, the recalls on the car, and whether it is WAM insured. It is off until the deployment sets `RDW_ENABLED=true`; until then nothing is sent and none of the below appears.
+
+- **The plate.** Enter it under **Settings > Licence plate**, which is drawn as a Dutch plate. Type it with or without dashes: they are placed as the plate has them while you type (`HPK-98-B`, `12-ABC-3`). The plate is kept per car in GarageStack's own database, without the dashes, and **Remove** clears it along with what the RDW said about it.
+- **The lookup.** Saving the plate looks it up straight away, so the card fills at once. After that the Worker asks again every `RDW_REFRESH_HOURS` (a day by default). The plate is the only thing sent, to `opendata.rdw.nl`, together with the RDW's own reference codes for the recalls it lists; no key is needed.
+- **The card.** The **APK & recalls** card shows the days the APK has left and how many recalls are open. Clicking it shows the APK date, the insurance on record, each open recall with what can happen and what the dealer does about it, the recalls already repaired, and when the RDW was last asked. The recall texts are the RDW's own, in Dutch. A plate the RDW does not know is said so, rather than shown as an error.
+- **Notifications.** A new open recall (once per recall: one reported repaired later sends nothing), the APK a month and a week before it runs out and once it has, and a car with no WAM insurance on record. They are listed under [Push notifications](#push-notifications), and can be switched off per device like the other types.
+
+The settings, including an optional Socrata app token for a higher rate limit, are in [`CONFIGURATION.md`](documentation/CONFIGURATION.md#dutch-registration-rdw).
 
 ---
 
@@ -412,7 +475,13 @@ To read GarageStack's data from a script, a dashboard or a watch, make a token u
 curl -H "Authorization: Bearer gs_..." https://garagestack.example.com/api/vehicles
 ```
 
-A token reads as the account that made it, through the same endpoints the app uses (the API reference lists them, see [`DEMO.md`](documentation/DEMO.md#manual-start)), and it can only read: any request that would change something, send a command or make another token is refused with `403`. The full data export and the server logs are refused too: they hold the car's whole history and the services' diagnostics, so they need a signed-in session. The list under Settings shows when each token was last used; revoking one stops it at once. GarageStack keeps only a hash of each token, so a lost one cannot be shown again: revoke it and make a new one.
+A token reads as the account that made it, through the same endpoints the app uses, and it can only read: any request that would change something, send a command or make another token is refused with `403`. The full data export and the server logs are refused too: they hold the car's whole history and the services' diagnostics, so they need a signed-in session. The list under Settings shows when each token was last used; revoking one stops it at once. GarageStack keeps only a hash of each token, so a lost one cannot be shown again: revoke it and make a new one.
+
+**The API reference** is at `/api/openapi/v1.json`, readable with the token like any other endpoint: every endpoint, what it takes and what it answers, as an OpenAPI document. Load it into any OpenAPI viewer, for example:
+
+```bash
+curl -H "Authorization: Bearer gs_..." https://garagestack.example.com/api/openapi/v1.json -o garagestack-openapi.json
+```
 
 A few things to know before building on a token:
 
@@ -456,7 +525,7 @@ Sourced from OpenStreetMap via the free [Overpass API](https://overpass-api.de) 
 - Shows petrol and diesel stations from OSM data. Accuracy and completeness depend on OSM coverage in your area.
 - **Brand filter** -- select one or more brands (e.g. BP, Shell, Total) from the Filters panel. Only stations with a matching `brand` or `operator` OSM tag are shown; untagged stations are hidden when any filter is active. The filter is applied client-side with no additional API call.
 - The Worker pre-populates a 100 km radius around your car's last known position every 6 hours, so the layer loads instantly on first view without hitting Overpass.
-- If Overpass returns a 429 rate-limit response, the client backs off and retries automatically; existing cached data is shown in the meantime.
+- If Overpass answers that it is busy (429, 503 or 504), GarageStack waits as long as Overpass asks (its `Retry-After`) before asking again, and shows the cached data in the meantime. The same goes for every other service GarageStack asks.
 - Tile data is cached for 7 days. Zooming or panning to a new area triggers on-demand fetching for uncached tiles.
 - Hidden for BEV vehicles (petrol stations are not relevant).
 
@@ -524,8 +593,26 @@ A reading counts as over the limit only past 5 km/h above it: speedometers read 
 - With an identity provider, restrict who may sign in -- at the provider itself or with `OIDC_ALLOWED_GROUPS` / `OIDC_ALLOWED_EMAILS`. Without a restriction, every account the provider accepts can sign in and control the car.
 - Login endpoints are rate-limited per IP address on top of the global limit.
 - MQTT now requires credentials and ACLs, and broker exposure defaults to localhost-only in Docker Compose.
-- The optional Home Assistant broker login can only use the car's `saic/#` topics and read Home Assistant discovery, so it cannot publish fake discovery configs or reach anything else on the broker.
+- The optional Home Assistant broker login can only use the car's `saic/#` topics and read Home Assistant discovery and GarageStack's own sensor values (`garagestack/#`), so it cannot publish fake discovery configs or reach anything else on the broker.
 - The frontend sends a strict Content-Security-Policy with every response, which allows scripts only from GarageStack itself. See [Behind a reverse proxy or CDN](#behind-a-reverse-proxy-or-cdn) for keeping it intact.
+
+### What leaves your network
+
+GarageStack runs on your own hardware, but a few features ask public services for what they know. Each one is listed here with what it sends, and each one except the MG servers can be switched off.
+
+| Service | Asked by | What it receives | Switch it off |
+| ------- | -------- | ---------------- | ------------- |
+| MG / SAIC iSmart API | the gateway | Your MG login, and the commands you send the car | Cannot be: it is where the car's data comes from |
+| [Nominatim](https://nominatim.openstreetmap.org) (place names) | the API | The coordinates of a trip's ends, or of where the car is parked, and the interface language | Settings > Map > Show place names, or `GEOCODING__ENABLED=false` |
+| [Valhalla](https://valhalla1.openstreetmap.de) (snapped trips, speed limits) | the API | The GPS fixes of the trip you select on the map | The map's filter panel > Snap to roads, or `MAPMATCHING__ENABLED=false` |
+| [Overpass](https://overpass-api.de) (fuel stations, service areas, speed cameras) | the API and the Worker | The map tiles being looked at, and the ones around the car (0.5° squares, not the car's position) | Turn the layers off; `SPEEDCAMERAS__ENABLED=false` removes the camera layer |
+| [Open Charge Map](https://openchargemap.org) (charging stations) | the API and the Worker | The map tiles being looked at, and your OCM key | Leave `OPENCHARGEMAP_API_KEY` empty |
+| [RDW open data](https://opendata.rdw.nl) (APK, recalls, insurance) | the API and the Worker | The licence plate, and the RDW's own codes for the recalls it lists | Off until `RDW_ENABLED=true` |
+| [GitHub](https://github.com/joszz/GarageStack/releases) (update notice) | the API | One request a day for the latest release | `UPDATE_CHECK_ENABLED=false` |
+| [OpenFreeMap](https://openfreemap.org) and [OpenStreetMap](https://www.openstreetmap.org) tiles (the basemap) | your browser | The map tiles your browser shows | Serve your own tiles, see [Basemap](#basemap) |
+| Your browser's push service (Google, Mozilla, Apple) | the Worker | Each notification, encrypted so only your browser can read it, and `VAPID_SUBJECT` | Leave the VAPID keys empty, or switch push off per device |
+
+Requests to the map, lookup and update services identify themselves as `GarageStack/1.0 (+https://github.com/joszz/GarageStack)`, as Nominatim's usage policy asks. Apart from what the table lists, the car's telemetry, its trips, your notifications and your settings stay on your server, unless you connect something to it yourself, such as Home Assistant.
 
 ### HTTPS
 
@@ -569,6 +656,29 @@ Every proxy in front of the API (yours, and with Compose the frontend container)
 
 - **Let GarageStack's security headers through.** A proxy that sets its own `Content-Security-Policy`, `X-Frame-Options` or `Permissions-Policy` replaces GarageStack's rather than adding to them. A Traefik headers middleware does this, for example. The page then runs without its script restrictions. Leave those three headers out of whatever headers the proxy adds for GarageStack; transport headers such as HSTS are fine.
 - **On Cloudflare, switch Rocket Loader off for this host** (Speed > Optimization, or a Configuration Rule). It rewrites every script on the page and delays the one that applies the stylesheet, which wastes the stylesheet preload and fills the console with warnings. With GarageStack's policy in place it is blocked outright. Cloudflare's injected Web Analytics beacon and bot-detection script are blocked by the policy too, so switch those off for the host if you would rather not see the console reports.
+
+---
+
+## Documentation
+
+For running GarageStack:
+
+- [`CONFIGURATION.md`](documentation/CONFIGURATION.md): every setting, with its default
+- [`AUTHENTICATION.md`](documentation/AUTHENTICATION.md): single sign-on, the built-in login, and provider examples
+- [`HOME_ASSISTANT.md`](documentation/HOME_ASSISTANT.md): the car in Home Assistant, through MQTT or an API token
+- [`WIDGET.md`](documentation/WIDGET.md): the gethomepage.dev widget
+- [`docker/all-in-one/README.md`](docker/all-in-one/README.md): the all-in-one image and Unraid
+- [Screenshots](documentation/screenshots/README.md) of the main pages
+
+For working on it:
+
+- [`CONTRIBUTING.md`](.github/CONTRIBUTING.md): setting up, tests, and adding a language
+- [`ARCHITECTURE.md`](documentation/ARCHITECTURE.md): how the services fit together
+- [`DEMO.md`](documentation/DEMO.md): the app on sample data, without a car, and the API reference
+- [`RELEASING.md`](documentation/RELEASING.md): versions, tags and release notes
+- [`ACCESSIBILITY.md`](.github/ACCESSIBILITY.md) and [`SECURITY.md`](.github/SECURITY.md), which also says how to report a vulnerability
+
+What changed in each version is on the [releases page](https://github.com/joszz/GarageStack/releases).
 
 ---
 

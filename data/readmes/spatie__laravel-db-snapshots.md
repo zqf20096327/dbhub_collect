@@ -48,6 +48,8 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 ## Installation
 
+This package requires PHP 8.3 or higher and Laravel 12 or 13.
+
 > For PHP 7.x and/or Laravel 6.x, use v1.x of this package.
 
 You can install the package via Composer:
@@ -192,6 +194,8 @@ By default, `snapshot:load` will load the entire snapshot into memory which may 
 ```bash
 php artisan snapshot:load my-first-dump --stream
 ```
+
+A final SQL statement does not need a trailing semicolon. If a streamed snapshot ends inside an unterminated string literal, the load throws a `Spatie\DbSnapshots\Exceptions\CannotLoadSnapshot` exception instead of skipping the rest of the file. Statements already loaded are not rolled back.
 
 To list all the dumps run:
 

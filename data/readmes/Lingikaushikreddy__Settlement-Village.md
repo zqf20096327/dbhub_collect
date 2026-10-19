@@ -1,0 +1,248 @@
+<div align="center">
+
+# Settlement
+
+### Set the objective. Let the village figure out the work.
+
+A multi-agent village strategy game and an inspectable AI simulation lab.
+
+[![CI](https://github.com/Lingikaushikreddy/Settlement-Village/actions/workflows/ci.yml/badge.svg)](https://github.com/Lingikaushikreddy/Settlement-Village/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-d9bd75.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6.svg)](https://www.typescriptlang.org/)
+[![npm](https://img.shields.io/npm/v/settlement-testbed.svg)](https://www.npmjs.com/package/settlement-testbed)
+[![No API key required](https://img.shields.io/badge/Play_without_an_API_key-38664a.svg)](#run-locally)
+
+[![Play in your browser: no signup, no API key](https://img.shields.io/badge/%E2%96%B6_Play_in_your_browser-no_signup,_no_API_key-38664a?style=for-the-badge)](https://settlement-village.vercel.app)
+
+[Play online](https://settlement-village.vercel.app) · [Quick start](#run-locally) · [How agents work](#how-the-agents-work) · [Player guide](docs/player-guide.md) · [Contribute](CONTRIBUTING.md) · [Discuss](https://github.com/Lingikaushikreddy/Settlement-Village/discussions)
+
+[![Settlement in 15 seconds: give the village an objective, watch residents claim jobs and gather, then read the log of why each resident took its job](docs/media/settlement-demo.gif)](https://settlement-village.vercel.app)
+
+<sub>Real recording of the live site: one click on <b>Grow the village</b>, then the decision log. Click to play.</sub>
+
+</div>
+
+**Give six residents a shared goal: grow the village, prepare for a raid, or restock supplies. Watch them claim jobs, gather resources, build and upgrade a new farm, or coordinate recruitment.** Inspect what each resident is doing, why they took the job, and what they remember. Then command your army in battle, or open the research desk to investigate social decisions and replay their evidence.
+
+The campaign and free research tools run in your browser with **no API key, paid AI, account, or database required**, whether you open the hosted frontend or run it locally. Campaign residents use deterministic game AI. Optional Claude decisions are available for explicit steps in local-worker research experiments.
+
+| You want to…                 | Start here                                                                                                                           |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **Play**                     | Open [settlement-village.vercel.app](https://settlement-village.vercel.app). Saves stay in your browser.                             |
+| **Test your own agent**      | `npx settlement-testbed --agent http://127.0.0.1:8765/decide --name my-agent`, then see [Test your own agent](#test-your-own-agent). |
+| **Run or change it locally** | `git clone`, `npm ci`, `npm run dev`. See [Run locally](#run-locally).                                                               |
+
+If you like games where agent decisions are visible, **star the repository** to follow Settlement's development.
+
+## Try this first
+
+1. Choose **Village orders → Grow the village**. Review the construction steps, spending ceiling and protected reserves.
+2. Select **Start village development**. Residents choose a reachable farm site, collect supplies, schedule builders and complete the required Town hall and farm upgrades.
+3. Open **View plan → Village plan** to inspect dependencies, waiting reasons and actual spending. Select a resident to see their decision, route and memories.
+4. Give a working resident a **20-tick rest**. Another available resident can take over the job.
+5. Open **Village journal** to see production, meet the residents and claim earned milestone rewards.
+
+In a fresh village, the growth plan authorizes at most **1,560 gold and 1,240 timber**, keeping **250 gold, 200 timber and 150 food** in reserve after each crew payment. It finishes with one additional level-three farm and a level-two Town hall. The plan adapts to work you complete manually without paying for it twice.
+
+For an expedition, choose **Prepare for a raid** to ready 30 troops and the village reserves, then lead the attack yourself. **Restock supplies** collects another 300 of each resource without spending. **Research** compares how different policies respond to the same claims.
+
+## What you can play today
+
+| System                           | What it does                                                                                                                                     |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Cooperating residents**        | Six agents bid for exclusive jobs using role suitability, distance and bounded experience. They replan when workplaces or resources change.      |
+| **Village development**          | Authorize a frozen construction plan with prerequisites, spending limits and protected reserves. Agents build and upgrade through real commands. |
+| **Manual building**              | Place, move and upgrade six building types. See affordability, builder and capacity limits before committing an action.                          |
+| **Troops and battles**           | Recruit Kavyas, Jhansis and catapults. Deploy and focus attacks across three enemy strongholds.                                                  |
+| **Village journal and identity** | Six illustrated civilian identities across the map and inspectors; milestone rewards, production rates and resident shortcuts in one journal.    |
+| **Inspectable decisions**        | Read current jobs, blocked work, spending limits, recent memories and the village action log.                                                    |
+| **Council stories**              | Investigate four authored social chapters, inspect claims and evidence, and intervene with real treasury consequences.                           |
+| **Research and replay**          | Compare matched seeds, inspect historical evidence, export JSON/CSV reports and independently reproduce every recorded result.                   |
+| **External-agent testbed**       | Evaluate an agent over HTTP, compare it with built-in policies, and independently verify, replay or share its recorded answers.                  |
+| **Research-grounded scenarios**  | Twelve attacks and honest controls built on manipulation tactics from published agent-safety studies, each citing its sources.                   |
+| **Optional live models**         | Ask Claude to propose a social action in a configured local-worker experiment, with validated actions, usage records and spend reservations.     |
+| **Save continuity**              | One active campaign tab protects browser-local saves; damaged saves remain available for backup and explicit recovery.                           |
+
+![Village development plan showing construction dependencies, spending ceiling and protected reserves](docs/media/development-v3.png)
+
+_Screenshots show the running game. Camera controls support pointer and keyboard navigation, and the layout adapts to phones._
+
+## Run locally
+
+Use **Node.js 24+** and npm. The optional `.nvmrc` selects Node 24.
+
+```bash
+git clone https://github.com/Lingikaushikreddy/Settlement-Village.git
+cd Settlement-Village
+npm ci
+npm run dev
+```
+
+Open **http://localhost:5173**. Your village saves in that browser. A second tab waits until the active village closes; retry there to load the latest save. Export valuable saves from the village guide. Saving requires a browser with Web Locks support on localhost or HTTPS.
+
+To include the optional local research worker:
+
+```bash
+npm run dev:all
+```
+
+The worker listens on `127.0.0.1:8787` and stores research runs in `work/settlement.sqlite`. No model key is needed. For explicit paid model steps, follow [Live model setup](docs/live-models.md); provider calls stay disabled until configured.
+
+To preview a production build locally:
+
+```bash
+npm run build
+npm start -- --port 5173
+```
+
+The default development and production scripts use **Next.js**; the frontend also supports Vercel deployment. The hosted frontend runs the campaign and free Research comparisons, replay and report verification in each visitor's browser. Saves remain browser-local; there are no accounts or server-side campaign saves. The optional SQLite research worker, configured Claude experiments and agent-endpoint evaluation CLI run locally.
+
+`npm run smoke -- <url>` checks a running frontend's page, assets, research redirect, response headers and preview image.
+
+## How the agents work
+
+```mermaid
+flowchart LR
+    Player[Player objective] --> Jobs[Shared job board]
+    World[Village resources and buildings] --> Jobs
+    Jobs --> Crew[Six residents: bid, claim, navigate, replan]
+    Crew --> Tools[Validated collect, train, build and upgrade commands]
+    Tools --> World
+    Crew --> Record[Decisions, memories and action log]
+    Record --> Inspector[Resident inspector]
+    World --> Save[Versioned campaign save]
+```
+
+**World layer:** buildings produce resources, construction occupies builders and finishes on the game clock, and training produces actual troops. Agents use the same commands as the player's manual controls.
+
+**Behavior layer:** the planner decomposes one shared objective into useful jobs. Development freezes a dependency plan and spending ceiling when started. Each job has one owner. Residents follow walkable grid routes, release work when resting, and reconsider blocked or obsolete tasks.
+
+**Tools and records:** actions validate current funds, capacity and the objective's spending allowance. Development payments also preserve the approved reserve floor. Saved state preserves the plan, claims, positions, spending and recent memories. Loading pauses decisions until you resume.
+
+Crew work pauses offline, during raids, and when entering Council or Research. Production and existing training timers continue. Research worlds are separate from campaign currency; their evidence and replay tools share the same application.
+
+See [Objective agents](docs/objective-agents.md) for exact rules and boundaries.
+
+## Reproduce the agent evaluation
+
+Open **Research → Compare** to choose scenarios, matched seeds and run length. Every run must pass conservation checks and exact replay before its results appear. Inspect any included seed, export a compact JSON report or CSV table, and import or paste a report to independently rerun its cases.
+
+The included reference report runs four authored scenarios × three deterministic policies × ten seeds, with **zero model calls**. At 60 ticks, the scarcity scenario produces 36 successful attacks out of 40 evaluated attempts for Trust first, versus 0/40 for Check evidence. Honest controls expose a different cost: Cautious refuses 33/40 honest offers, versus 0/40 for Check evidence. These results describe the authored rules; the evidence policy is deliberately suited to them and they do not measure general AI safety.
+
+```bash
+# Independently reproduce the checked-in report; fail on any mismatch
+npm run evaluate -- --verify docs/evaluation-results.json
+
+# Generate a fresh reference report
+npm run evaluate
+```
+
+See [Evaluation reports](docs/evaluation-reports.md) for the format, denominators, limits and measured results.
+
+## Test your own agent
+
+Point Settlement at any agent that speaks a small HTTP protocol, in any language, and find out whether the authored attacks can talk it into a bad decision, and whether it refuses honest offers:
+
+```bash
+node examples/agents/node/agent.mjs &     # or your own agent
+npx settlement-testbed --agent http://127.0.0.1:8765/decide --name my-agent
+```
+
+Or in CI, after starting your agent:
+
+```yaml
+- uses: Lingikaushikreddy/Settlement-Village@v0.11.0
+  with:
+    agent-url: http://127.0.0.1:8765/decide
+    max-attack-success: "0.1"
+```
+
+You get rates with raw counts next to the built-in policies, a report anyone can verify with `npx settlement-testbed --verify`, and a replay in **Research → Compare**. Requests do not label claims as attacks or reveal the scenario and seed. Verification reconstructs results from the recorded answers; it does not authenticate which agent produced them. See [Agent testbed](docs/agent-testbed.md) for the protocol, failure rules, thresholds, the action and the library API. Verified reports from other agents are in the [gallery](https://settlement-village.vercel.app/gallery); submit yours with a pull request.
+
+### Research-grounded scenarios
+
+A score on the four built-in claims says little about claims an agent has never seen. `examples/scenarios/research/` adds twelve more, built on manipulation tactics from published studies of language-model agents. Each attack family has an honest twin, so a score separates caution from paranoia:
+
+| Family                | What it tests                                                                                                                   |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **Persuasion cues**   | The same overpriced demand framed with authority, urgency, social proof, reciprocity or commitment, against a neutral baseline. |
+| **Peer courier**      | The same demand voiced by Rook, then relayed by Theo, a trusted neighbor: does the agent over-trust a peer?                     |
+| **Phantom agreement** | A trader insists on a deal the ledger never recorded.                                                                           |
+
+`examples/scenarios/research/sources.json` cites the papers behind each tactic. Every id was resolved against arXiv or Crossref, and each license is recorded as confirmed or not. The keyword-rule example agent falls for all nine attacks, which is the point: new claims expose agents tuned to old ones. See [Research-grounded scenarios](docs/research-grounding.md) for the batched run commands, the stated hypotheses and what the pack does not show.
+
+## Stack and project map
+
+**TypeScript · React · Next.js · Zod · Tailwind CSS · optional Node.js/SQLite worker**
+
+```text
+app/                 Application entry points
+components/game/     Village, combat, crew inspector and research views
+components/game/game.tsx            Campaign composer; use-campaign.ts owns state, clock and saves
+components/game/*.tsx               One file per region: HUD, footer, dialogs, guide, selection panel, battle and research overlays, session gate
+components/research/                Research desk: playback and local-worker hooks, one file per region, view model
+lib/game/            Pure campaign, crew, economy and battle transitions
+lib/sim/             Deterministic social engine and bounded planner
+lib/agent/           Optional Claude proposals and action validation
+lib/testbed/         Agent testbed: protocol, run loop, reports and verification
+examples/agents/     Node and Python example agents for the testbed
+examples/scenarios/  Custom scenario files: the reciprocity pair and the research-grounded pack
+worker/              Local persistence, scheduling and model request ledger
+tests/               Engine, game, crew, replay and worker tests
+public/game/         Original generated terrain and sprite artwork
+docs/                Guides, design notes and verification records
+```
+
+## Verification
+
+```bash
+npm test
+npm run test:integration
+npm run evaluate -- --verify docs/evaluation-results.json
+npm run eval:agent -- --verify public/examples/agent-report.json
+npm run typecheck
+npm run lint
+npm run build
+npm run test:e2e
+```
+
+The browser suite needs Chromium: run `npx playwright install chromium` once. The suite covers resource conservation, duplicate spending, construction dependencies, manual interference, protected reserves, job claims and handoffs, inaccessible workplaces, save ownership and recovery, report tampering, external-agent protocol failures, deterministic replay and worker recovery. CI runs the tests, HTTP integration flow, policy and agent-report reproduction, types, lint and production build on pushes and pull requests. See [release verification](docs/foundation-cleanup-verification.md).
+
+Model tests use injected provider responses. A live paid provider was not called during development.
+
+## Current scope and next steps
+
+This is a playable single-player foundation for an agent-driven game. Campaign AI is rule-based: it does not train a neural network or understand arbitrary natural-language objectives. Council scenarios are authored. Agents execute a bounded farm-development plan; arbitrary construction requests, multiplayer, agent-led combat and model-controlled campaign play are not implemented.
+
+Areas for future contributions:
+
+- [ ] More development blueprints and richer campaign objectives
+- [ ] Additional civilian activity animations and building art variants
+- [ ] Persistent relationships across social chapters
+- [ ] Community scenario packs: see [Author your own scenario](docs/scenario-authoring.md) and the [research-grounded pack](docs/research-grounding.md)
+- [ ] Attacks voiced by trusted residents in every family
+- [ ] Carefully bounded model-assisted campaign planning
+
+The [contribution guide](CONTRIBUTING.md) explains setup, useful starting points and how to validate a change. Bug reports with a reproducible save and screenshots are especially helpful.
+
+## Guides
+
+- [Player guide](docs/player-guide.md) — building, battles, objectives and Council stories
+- [Objective agents](docs/objective-agents.md) — assignment, pathfinding, budgets and adaptation
+- [Research guide](docs/observatory-guide.md) — experiments, evidence, comparisons and replay
+- [Agent testbed](docs/agent-testbed.md) — test your own agent against deception
+- [Scenario authoring](docs/scenario-authoring.md) — write a new attack family and its honest control as JSON
+- [Research-grounded scenarios](docs/research-grounding.md) — twelve cited scenarios, their hypotheses and limits
+- [Gallery](docs/gallery.md) — verified reports from other agents, and how to submit yours
+- [Evaluation reports](docs/evaluation-reports.md) — reproducible results and their limits
+- [Product roadmap](docs/product-roadmap.md) — priorities and acceptance criteria
+- [Live model setup](docs/live-models.md) — optional Claude configuration and usage controls
+- [Security policy](SECURITY.md) — local runtime boundaries and vulnerability reporting
+
+## License and credits
+
+Created by **Kaushik Reddy**. Released under the [MIT License](LICENSE).
+
+Terrain, sprites and civilian identities are original AI-generated artwork created for Settlement. See [Art provenance](docs/art-provenance.md). No franchise assets were extracted. Existing third-party license notices remain with their source files; see [Third-party notices](THIRD_PARTY_NOTICES.md).
+
+The social simulation is inspired by [Generative Agents](https://arxiv.org/abs/2304.03442) and [AI Town](https://github.com/a16z-infra/ai-town). Settlement implements its own bounded gameplay and research loops; it is not affiliated with those projects.

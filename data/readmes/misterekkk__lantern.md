@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="License: Apache 2.0"></a>
-  <img src="https://img.shields.io/badge/macOS-14%2B%20·%20Apple%20Silicon-black" alt="macOS 14+ on Apple Silicon">
+  <img src="https://img.shields.io/badge/macOS-26.2%2B%20·%20Apple%20Silicon-black" alt="macOS 26.2+ on Apple Silicon">
   <img src="https://img.shields.io/badge/runs-offline%20by%20default-2ea44f" alt="Runs offline by default">
   <a href="https://github.com/misterekkk/lantern/actions/workflows/pages.yml"><img src="https://github.com/misterekkk/lantern/actions/workflows/pages.yml/badge.svg" alt="Demo site deployment"></a>
 </p>
@@ -17,7 +17,8 @@
 
 Search your Mac **by meaning**, not just by file name: text, code, documents, photos, recordings and videos.
 Lantern runs entirely on your Mac. It indexes your folders with Google DeepMind's open **EmbeddingGemma 2** model
-(Apache 2.0) on Apple Silicon through MLX, and nothing ever leaves the machine.
+(Apache 2.0) on Apple Silicon through MLX; after the one-time model download nothing leaves the machine (the opt-in
+Spotify library sync is the only exception).
 
 - *"decision tree pruning"* finds the README that explains it, even if it is written in Polish.
 - *"def add_two(x, y):"* jumps to `script.py`, line 200, in your code editor.
@@ -70,7 +71,8 @@ Lantern runs entirely on your Mac. It indexes your folders with Google DeepMind'
 
 ## Requirements
 
-- **For the prebuilt app (`Lantern.dmg`):** a Mac with Apple Silicon (M1 or newer) and macOS 14 or newer. Python 3.12,
+- **For the prebuilt app (`Lantern.dmg`):** a Mac with Apple Silicon (M1 or newer) and macOS 26.2 (Tahoe) or newer:
+  the app is made for Liquid Glass, and MLX's libraries need macOS 26.2. Python 3.12,
   all packages and the `AVFoundation` media helper are inside `Lantern.app`; no Xcode, Homebrew, `uv` or `ffmpeg` is
   needed (`brew install ffmpeg` is optional if you index `.mkv` or `.webm` videos).
 - **For building from source (`./install.sh`) and the `lantern` CLI:**
@@ -127,7 +129,7 @@ git clone https://github.com/misterekkk/lantern.git && cd lantern
 ./install.sh
 ```
 
-The script checks the Mac (Apple Silicon, macOS 14+, Command Line Tools), installs `uv` and `ffmpeg` (for MKV/WebM) with Homebrew
+The script checks the Mac (Apple Silicon, macOS 26.2+, Command Line Tools), installs `uv` and `ffmpeg` (for MKV/WebM) with Homebrew
 (with Homebrew analytics off for its own calls; if Homebrew is missing it asks before running the official
 installer), runs `uv sync`, downloads the required model and asks about the optional ones, checks that search works
 offline, and builds the app into `/Applications` when Xcode 26 is present. It can be run again at any time: finished
@@ -224,8 +226,10 @@ Certificates); otherwise it signs ad hoc and macOS may ask for folder permission
   | ⌥↩ | open from the top | the whole recording from the start, in its default app |
   | ⌘Y | preview in the panel: the passage highlighted, with context | preview in the panel from the moment |
   | ⌘↩ | show in Finder | show in Finder |
+  | ⌘C | copy the file (paste it in Finder or attach it); an app as a file, an answer as its value, a setting, song or shortcut as its name; with text selected in the field, that text | copy the file |
+  | ⌥⌘C | copy the matched text: the whole passage (code: the chunk with the definition; a photo: the text read from it) | copy the transcript at the moment |
   | ↑↓ / Esc | select / close (from a preview: back to the list) | |
-  | Tab / ⇧Tab, ⌘1…⌘6 | next / previous filter pill, pick a pill | |
+  | Tab / ⇧Tab, ⌘1…⌘0 | next / previous filter pill, pick a pill | |
   | → | accept the grey completion | |
 
   - PDFs open in their default app (Preview cannot be told to open a page); ⌘Y shows the matching page in Lantern
@@ -288,10 +292,10 @@ Keys in "Search Lantern":
 
 | Key | Action |
 |---|---|
-| ↩ | open at the line (VS Code, VSCodium, Cursor, Xcode, JetBrains), play from the moment (QuickTime), play a song |
+| ↩ | open at the line (VS Code, VSCodium, Cursor, Xcode, JetBrains), play from the moment (QuickTime), a PDF at its page (Skim; Preview through its Go to Page shortcut, which needs the Accessibility permission for Raycast), play a song |
 | ⌥↩ | open from the start (a recording from 0:00) |
 | ⌘↩ | show in Finder (a song: in Music or Spotify) |
-| ⌘Y | preview at the place: the code around the line, the whole passage with your words in bold; a video in QuickTime, paused at the moment |
+| ⌘Y | preview at the place, inside Raycast: the code around the line, the whole passage with your words in bold; a photo, or a video's frame at the moment, large, above its transcript (↩ plays it in QuickTime) |
 | ⇧⌘Y | Quick Look of the whole file |
 | ⌃1 … ⌃0 | filter by kind, the panel's digits (Raycast keeps ⌘1 … ⌘9 for opening the Nth result); the same again for all kinds |
 
@@ -343,6 +347,40 @@ uv run lantern clear-history               # delete the local search history
   `(meaning #1 · keywords #3)`. Keyword search skips stop words and matches Polish inflections by stem.
   Letters match without their accents and strokes in any language: `lodz` finds `Łódź`, `soren` finds `Søren`,
   `strasse` finds `Straße`.
+- **One folder only:** `in:` and a folder name keeps results to files under folders whose name starts with it, in the
+  panel, Raycast, Alfred and the CLI: `in:down umowa najmu`, `in:Studia`, `in:"Moje dokumenty" faktura`, or a path,
+  `in:~/Projects/lantern readme`. The folder word is never spell-checked or sent to the model; apps, settings and
+  answers are left out, since they are not in a folder.
+- **When and where** (Polish and English): a time in the query keeps results to files made then.
+  - Examples: `zdjęcia z maja 2023`, `umowa z 2024`, `faktura wczoraj`, `photos from last summer`,
+    `dokumenty w zeszłym tygodniu`, `14.05.2023`.
+  - A bare year or month (`wakacje 2023`, `sierpień`) only moves files made then higher; nothing is hidden, since the
+    word may as well be in a document's text.
+  - A time or a place alone, or with `zdjęcia`, `filmy`, `dokumenty`, lists what was made then or there, newest first.
+  - Where a date comes from: a photo's EXIF data, a video's or recording's own creation date, a date in the file or
+    folder name (`IMG_20230514_…`, `2023-05-14 Wakacje/`), and otherwise the file's dates on the disk. So for most
+    documents "from 2024" means *created or last changed in 2024*, not *mentions 2024*. Impossible dates (before 1990,
+    in the future, a camera's reset clock such as 2000-01-01 00:00) and numbers that only look like years are ignored.
+- **Places** (any language): `zdjęcia z Krakowa`, `photos in Kraków`, `Bilder aus Krakau`, `zdjęcia z Portugalii`.
+  - The city comes from the location saved in photos and videos, matched to the nearest city of 15,000+ people in a
+    table built into Lantern (GeoNames). Nothing is looked up online.
+  - A camera without GPS: a photo in a folder named after a country (`Portugalia/`, `Wakacje w Portugalii 2026/`) gets
+    that country. Screenshots and graphics never do.
+  - Photos and recordings show the date and the city in their row.
+  - Switch: Settings → File Types → Places in photos and videos, or `lantern config places false`; switching it off
+    deletes the saved locations from the index.
+- **People in photos** (Polish and English): `zdjęcia kobiet`, `mężczyzna w Krakowie`,
+  `zdjęcie kobiety z 2024 w Portugalii`, `z ludźmi`, `bez ludzi`, `grupa` (three or more people), `selfie` / `portret`,
+  `dwie osoby`, `kobieta i mężczyzna`.
+  - These words narrow the photos section only; documents containing them are found as before.
+  - macOS (Vision, on this Mac) counts the people; the photo model guesses woman or man from appearance on a crop
+    around each of the four largest. Only the numbers are stored.
+  - Measured on a public test set: people found in 97% of photos with people and never in a photo without; the exact
+    count in 80% (groups are undercounted); woman/man right in 98% of one-person photos (docs/DECISIONS.md).
+  - Switch: Settings → File Types → People in photos, or `lantern config people false`, which deletes the counts.
+- **After an update from 0.1.x** nothing is indexed again: dates and places are read from file headers in a minute or
+  two, people are counted in the background (about a quarter of a second per photo; files waiting for your approval
+  stay waiting). `lantern status` shows what is left.
 - **Indexed types:** code (Python, JS/TS, Go, Rust, Java, Kotlin, Swift, C/C++, C#, Ruby, PHP and more, split into
   functions and classes), text (Markdown, txt, JSON, YAML, HTML…; text files over 2 MB and binaries are skipped),
   PDFs, audio (mp3, m4a, wav, flac, ogg, opus, aac, aiff…), video (mp4, mov, mkv, webm, avi…: sound and frames) and
@@ -433,8 +471,18 @@ uv run lantern clear-history               # delete the local search history
   uv run lantern exclude list | remove <pattern>
   ```
 
-- **File types:** `lantern config index_photos false`, `index_audio_video false`, `index_video_frames false`,
-  `transcribe false` (also in Settings → File Types). Excluded files disappear from the index at the next scan.
+- **File types:** `lantern config index_photos false`, `index_audio_video false`, `index_video_frames false`
+  (also in Settings → File Types). Excluded files disappear from the index at the next scan.
+- **Transcription on and off:** Settings → File Types → *Transcribe speech (Whisper)*, or
+  `lantern config transcribe false` / `true`. The switch is off and greyed out until Whisper is downloaded
+  (Settings → Performance). With it off:
+  - new recordings and videos are indexed by their sound only (audio embeddings find what is talked about, not
+    single words or names), plus video frames;
+  - transcripts made earlier stay in the index and stay searchable; transcripts still waiting in the queue wait;
+  - switched on again, every recording without a transcript is queued for one automatically.
+
+  To delete transcripts made earlier, remove the folder (`lantern remove <folder>`) and add it again with
+  transcription off. For one run without the daemon, `lantern index <folder> --no-transcribe` skips Whisper.
 
 ## Background daemon
 
@@ -454,7 +502,11 @@ uv run lantern daemon stop | uninstall
   and are released when it finishes. The idle daemon uses ~490 MB. Searches run at a higher priority than the
   daemon's own scans, so they stay fast while it works (measured in DECISIONS.md, "Power and QoS").
 - **Automatic pause** on battery power, in Low Power Mode and when macOS reports the Mac is hot (thermal state
-  "serious" or worse); the current file is finished, the rest waits. `lantern status` shows what the daemon sees.
+  "serious" or worse), and when less than 2 GB is free on the disk of the index; the current file is finished, the
+  rest waits. `lantern status` shows what the daemon sees.
+- **A stuck file never stops the queue:** a file the worker spends more than 30 minutes on (90 for a transcript;
+  e.g. a hung PDF or image decoder) is skipped with the reason in `lantern status` and the warnings, and indexing
+  goes on with the next one.
 - **Settings** live in `~/Library/Application Support/Lantern/config.toml` (`lantern config` lists them).
 - **API:** Unix socket `~/Library/Application Support/Lantern/lantern.sock` (mode `0600`, folder `0700`), JSON lines.
   The menu bar app uses the same API.
@@ -521,6 +573,11 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer swift test --package-pa
 ```
 
 The website in `site/` needs Node.js (`brew install node`); see [site/README.md](site/README.md).
+
+Optional, for coding agents: a local code graph with [graphify](https://github.com/Graphify-Labs/graphify)
+(`uv tool install graphifyy==0.9.76`, then `GRAPHIFY_BACKEND=none graphify update .`: code only, parsed locally,
+nothing sent anywhere). Its output (`graphify-out/`) and personal agent files (`CLAUDE.local.md`,
+`.claude/settings.local.json`) are gitignored.
 
 ```
 README.md, LICENSE, NOTICE, CLAUDE.md, pyproject.toml
