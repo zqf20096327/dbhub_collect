@@ -11544,5 +11544,82 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "08e93b0b053a": {
+  "identity": {
+   "one_liner": "面向 AI 代理的自托管 PaaS，REST API 驱动的容器部署平台",
+   "review": "这是一个跑在裸金属服务器上的自托管 PaaS，用 Go 单二进制实现控制平面，通过 REST API 让 AI 代理注册租户、从 git 构建部署服务、管理日志和数据库。技术栈为 Docker + gVisor + Traefik + Nixpacks + SQLite（内部状态存于 ah.db 与 ah-metering.db）。要求 Linux、Docker、gVisor 运行时、Nixpacks 等完整基础设施，人类通过可选的监管面板使用。",
+   "highlights": [
+    "提供 REST API 用于租户注册、密钥管理、服务部署与 git 构建（支持 GitHub/GitLab/Bitbucket/sr.ht/Codeberg）",
+    "使用 gVisor syscall 拦截、只读根文件系统与 AES-256-GCM 加密实现多租户隔离",
+    "提供托管 Postgres/Redis 容器供给及 ah backup 备份命令（VACUUM INTO 快照）"
+   ],
+   "use_cases": [
+    "在自有裸金属服务器上搭建由 AI 代理操作的应用托管平台",
+    "为多租户应用提供带隔离与配额的容器部署环境",
+    "通过 API 为服务供给托管的 Postgres/Redis 数据库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Managed Postgres and Redis containers with encrypted connection strings.",
+     "lines": [
+      201
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stack**: Go binary + Docker + gVisor + Traefik + Nixpacks + SQLite ／ - **SQLite** — two databases: `ah.db` (state) and `ah-metering.db` (metering), WAL mode",
+     "lines": [
+      13,
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个 PaaS 平台应用，自身状态数据存储于 SQLite（ah.db、ah-metering.db），Postgres/Redis 仅作为平台向租户供给的服务而非其适配对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted PaaS for bare metal servers, designed to be operated by AI agents via REST API. Includes an optional supervisory dashboard for humans. ／ - **Stack**: Go binary + Docker + gVisor + Traefik + Nixpacks + SQLite ／ - **SQLite** — two databases: `ah.db` (state) and `ah-metering.db` (metering), WAL mode",
+   "evidence_lines": [
+    9,
+    13,
+    51
+   ]
+  },
+  "fn": "dennisonbertram/agentic-hosting",
+  "sha": "08e93b0b053a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

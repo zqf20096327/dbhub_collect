@@ -11088,5 +11088,138 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4bfbb044a12c": {
+  "identity": {
+   "one_liner": "EVE Online 虫洞星图自托管工具，用 PostgreSQL 存数据",
+   "review": "这是一个自托管的 EVE Online 虫洞地图工具，提供链路地图、签名管理、洞体滚动计算、击杀记录和企业协作功能，通过 EVE SSO 登录。使用 Docker Compose 部署，首次启动时 importer 服务下载 EVE 静态数据导出并写入 Postgres。面向 EVE 虫洞玩家和军团。",
+   "highlights": [
+    "提供实时虫洞链路地图、签名管理与洞体滚动计算",
+    "通过 EVE Online SSO 登录，支持个人/军团/联盟多范围地图",
+    "通过 Docker Compose 一键部署，importer 服务导入 EVE SDE 数据到 Postgres"
+   ],
+   "use_cases": [
+    "EVE Online 虫洞玩家的链路探索与导航",
+    "军团/联盟协作的地图共享与实时协调",
+    "虫洞质量计算与坍缩预测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Build and start the stack. On first run an `importer` service downloads the EVE Static Data Export and populates Postgres (a one-off, a few minutes) before the server boots; later runs detect the data is already there and skip straight through:",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 importer 服务将 EVE SDE 数据写入 Postgres，项目本身是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Build and start the stack. On first run an `importer` service downloads the EVE Static Data Export and populates Postgres (a one-off, a few minutes) before the server boots; later runs detect the data is already there and skip straight through: ／ docker compose build ／ Open <http://localhost> and click **Log in with EVE Online**. That's it.",
+   "evidence_lines": [
+    39,
+    42,
+    46
+   ]
+  },
+  "fn": "GQuantrill/eve-nexum",
+  "sha": "4bfbb044a12c",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c005e5382ba": {
+  "identity": {
+   "one_liner": "住在 IM 好友列表里的 AI 伴侣程序，Go 实现，SQLite 存储",
+   "review": "一个部署在 IM 好友列表中的 AI 陪伴程序，用 Go 编写并依赖大语言模型，通过状态、时序、记忆、配额等系统机制约束模型输出，支持主动消息调度、群聊插话、四层记忆与遗忘权。数据存于单文件 SQLite，无外部数据库依赖。面向想在个人 IM（如 QQ 机器人通道）中运行此类实验项目的用户，需要自行编译并配置 YAML。",
+   "highlights": [
+    "单文件 SQLite 存储，启动时幂等建表并自动迁移，升级只需替换二进制",
+    "附带仿真器 convo-sim（假模型+注入时钟）与静态校验、决策轨迹工具",
+    "提供 HTTP 管理页/观测台及约 30 个 API，owner 可查看决策理由链"
+   ],
+   "use_cases": [
+    "在 IM 中运行一个有作息、记忆与关系机制的 AI 陪伴角色",
+    "需要可复现仿真与行为轨迹审计的对话系统实验",
+    "树莓派等单机环境部署（纯 Go 无 CGO，可交叉编译）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "单文件 SQLite(`data/convo-trial.db`),**没有外部依赖**。所有表由启动时幂等建表 + 迁移创建 ——",
+     "lines": [
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目本身是使用 SQLite 存数据的 IM AI 伴侣应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "单文件 SQLite(`data/convo-trial.db`),**没有外部依赖**。所有表由启动时幂等建表 + 迁移创建 —— ／ |`convo`|主程序(引擎 + 调度 + HTTP + IM 桥)| ／ cmd/convo           主程序:配置 → 存储 → 引擎 → 调度 → HTTP → IM 桥",
+   "evidence_lines": [
+    89,
+    96,
+    114
+   ]
+  },
+  "fn": "tzhnahida/convo",
+  "sha": "9c005e5382ba",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

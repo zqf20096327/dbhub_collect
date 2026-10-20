@@ -10011,5 +10011,138 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1a58cc9e1b26": {
+  "identity": {
+   "one_liner": "OpenAlgo 网页版的单用户桌面版算法交易平台",
+   "review": "OpenAlgo Desktop 是 OpenAlgo 算法交易平台的桌面单用户版本，基于 Tauri/Rust/React 构建，在本地窗口内运行仪表盘、REST API（127.0.0.1:5000）和行情 WebSocket 服务，供个人交易者连接券商下单和运行策略，支持通过 OpenAlgo Python SDK、TradingView、Amibroker、MCP 客户端等调用其 API。README 明确它不支持 Docker、headless 或后台服务运行，窗口关闭即停止交易和策略。",
+   "highlights": [
+    "提供与 OpenAlgo web 相同的 REST API（/api/v1）与行情 WebSocket 协议，SDK、TradingView、Amibroker、MCP 客户端可不经修改接入",
+    "支持 Windows（x64）、macOS（Intel/Apple Silicon）和 Linux（x64/ARM64）安装包，含 .deb、AppImage、.dmg，附 SHA256 校验",
+    "账户、密钥等凭据在应用内录入并加密存储，无需服务器、Python 或 .env 配置"
+   ],
+   "use_cases": [
+    "个人交易者在本地桌面运行算法交易策略并连接券商下单",
+    "通过本地 REST API/WebSocket 让 TradingView、Amibroker、Excel 或自写程序调用交易接口",
+    "从 OpenAlgo web 迁移到单机桌面使用的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是面向交易者的桌面应用程序本身，未声明为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenAlgo Desktop is a single-user desktop version of ／ |Dashboard and REST API (`/api/v1`)|`http://127.0.0.1:5000`| ／ TradingView, Amibroker, Chartink, GoCharting, Excel and MCP clients work",
+   "evidence_lines": [
+    10,
+    25,
+    31
+   ]
+  },
+  "fn": "marketcalls/openalgo-desktop",
+  "sha": "1a58cc9e1b26",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c689648146b5": {
+  "identity": {
+   "one_liner": "n8n 自托管执行分析面板，ETL 读取其 PostgreSQL 生成指标",
+   "review": "为自托管 n8n 提供长期执行历史、错误指纹分组、队列延迟和 ROI 分析的面板。它每 5 分钟通过 ETL 把 n8n PostgreSQL 的执行数据复制到本地 SQLite 副本，查询只读副本以避免影响生产库；仅支持 PostgreSQL 后端的 n8n，不支持其默认 SQLite 后端。适合运维自托管 n8n 实例并需要跨时间聚合分析的用户。",
+   "highlights": [
+    "通过只读 ETL 从 n8n 的 PostgreSQL 提取执行数据，写入本地 SQLite 副本，分析查询不访问生产库",
+    "提供错误指纹分组、队列延迟 p50/p95/p99、静默停止检测、部署关联和 ROI 追踪等 21 类固定分析",
+    "支持七类告警规则（webhook/Telegram/n8n 工作流），并包含可选的基于自身分析接口的 AI 问答助手"
+   ],
+   "use_cases": [
+    "自托管 n8n 实例的长期执行历史留存与错误分组分析",
+    "监控工作流静默停止运行和队列等待延迟",
+    "在不给生产数据库增加负载的前提下做按触发类型、文件夹、标签维度的运营分析"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "n8n writes every execution to PostgreSQL already — status, timing, trigger type, ／ > 2. **PostgreSQL only** — n8n's default SQLite backend is not supported. ／ n8n PostgreSQL  ──ETL every 5 min──▶  dashboard.sqlite  ──▶  Express API  ──▶  Browser UI",
+     "lines": [
+      35,
+      101,
+      162
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Zero load on production** — every analytics and AI query runs against the SQLite replica, never your n8n database. ／ n8n PostgreSQL ──ETL every 5 min──▶ dashboard.sqlite ──▶ Express API ──▶ Browser UI",
+     "lines": [
+      135,
+      162
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 n8n 生态提供执行数据分析与告警的工具组件，以 PostgreSQL 为数据源、SQLite 为本地副本存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Analytics for **self-hosted n8n**: long-horizon execution history, error ／ > 2. **PostgreSQL only** — n8n's default SQLite backend is not supported. ／ n8n PostgreSQL  ──ETL every 5 min──▶  dashboard.sqlite  ──▶  Express API  ──▶  Browser UI",
+   "evidence_lines": [
+    3,
+    101,
+    162
+   ]
+  },
+  "fn": "giorgoskoufos/n8n-analytics",
+  "sha": "c689648146b5",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

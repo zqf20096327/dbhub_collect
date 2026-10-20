@@ -10390,5 +10390,251 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9760fbc534c4": {
+  "identity": {
+   "one_liner": "Swift 语言的 SQLite 类型安全封装库",
+   "review": "这是一个为 Swift 应用提供的 SQLite3 类型安全访问层，供 iOS/macOS/Linux 上的 Swift 开发者使用。它提供纯 Swift 接口、类型安全的 SQL 表达式构建器、可链式调用的惰性查询层，并支持全文检索、schema 迁移、WAL 模式及经 SPM 接入 SQLCipher；也可作为 C API 的轻量包装使用。",
+   "highlights": [
+    "提供类型安全的 SQL 表达式构建器与自动类型化数据访问",
+    "支持全文检索、schema 查询/迁移与 WAL 日志模式",
+    "通过 Swift Package Manager 支持 SQLCipher"
+   ],
+   "use_cases": [
+    "Swift/iOS 应用的本地数据持久化",
+    "需要编译期 SQL 类型检查的 Swift 项目",
+    "基于 SQLite 的全文检索场景"
+   ],
+   "classification": {
+    "cat": "开发库",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       1,
+       5
+      ]
+     }
+    ],
+    "eco": "tool",
+    "eco_why": "为 SQLite 提供 Swift 语言访问层的工具/组件库，本身不存储业务数据。",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "build",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "maintenance",
+    "license_note": "",
+    "install": [
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     5,
+     44
+    ]
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# SQLite.swift ／ A type-safe, [Swift][]-language layer over [SQLite3][].",
+     "lines": [
+      1,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 提供 Swift 语言访问层的工具/组件库，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A type-safe, [Swift][]-language layer over [SQLite3][]. ／ SQLite.swift also works as a lightweight, Swift-friendly wrapper over the C",
+   "evidence_lines": [
+    5,
+    44
+   ]
+  },
+  "fn": "stephencelis/SQLite.swift",
+  "sha": "9760fbc534c4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fefbe53da727": {
+  "identity": {
+   "one_liner": "自动开具巴西服务发票的应用，AI读单+确定性规则决策",
+   "review": "面向巴西会计师事务所的应用：客户端通过邮件或 WhatsApp 请求服务发票，AI（Anthropic）读取请求，代码中的确定性规则决定开票（NFE.io）、追问或转人工；Node.js 编写主程序，n8n 做消息流转，Postgres 存数据，Docker Compose 一键部署，附 Web 面板、每日备份与运行手册。",
+   "highlights": [
+    "通过 Gmail/WhatsApp 接收开票请求，经 NFE.io 开具 NFS-e 并回传 PDF/XML",
+    "AI 仅用于读取请求内容，开票/追问/转交由代码中的固定规则决定",
+    "含浏览器面板、每日自动备份（备份后恢复验证）及测试/场景脚本"
+   ],
+   "use_cases": [
+    "巴西会计师事务所自动处理客户服务发票申请",
+    "需要人工兜底的混合自动化票据流程",
+    "本地测试环境验证开票流程而不产生真实发票"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Postgres**|o banco de dados|",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 Postgres 定位为应用自身存储数据的数据库（o banco de dados），项目是使用数据库的发票应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Postgres**|o banco de dados| ／ |**motor**|o programa principal (Node.js): as regras, a conversa com a IA e com a NFE.io, e o painel|",
+   "evidence_lines": [
+    35,
+    33
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "rcngo/fluxo-nfs-e-automatico-brasil",
+  "sha": "fefbe53da727",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f6c1e7501a74": {
+  "identity": {
+   "one_liner": "达梦数据库的 NL2SQL MCP 问答工具",
+   "review": "该工具面向达梦数据库，提供基于 Excel 业务描述目录的自然语言转 SQL 问答能力，通过 MCP 协议对外暴露只读查询工具，并附带 LangChain 问答客户端。物理元数据从达梦实时读取，描述经 FAISS 向量化检索；查询仅允许受限的参数化 SELECT，不支持写操作，且一个服务进程对应一个达梦实例。适合需要在受控边界内对达梦数据做自然语言查询的团队。",
+   "highlights": [
+    "提供业务与管理两个 stdio MCP 服务，分别含 3 个只读工具和 5 个管理工具",
+    "支持 Excel 工作簿声明目录，自动核验达梦真实元数据并增量构建 FAISS 索引",
+    "查询计划编译为参数化 SELECT，限制表字段范围、JOIN 路径、行数与执行时间"
+   ],
+   "use_cases": [
+    "对达梦数据库的部分表和字段提供受限自然语言查询入口",
+    "通过 MCP 将达梦数据集接入支持该协议的智能体客户端",
+    "维护带业务语义描述、同义词和指标口径的数据目录"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "达梦的nl2sql mcp工具 ／ 物理类型、可空性和真实主键从达梦实时读取，不需要写进 Excel。程序会把工作簿转换成内部 JSON 和本体目录，再用数据库元数据逐表逐字段核验，最后增量更新 FAISS。 ／ - `DAMENG_*`：达梦只读账号；",
+     "lines": [
+      2,
+      13,
+      258
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为达梦数据库提供元数据读取、目录管理和 MCP 查询接入的组件，而非以达梦为存储的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "保留原项目 MIT 许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "达梦的nl2sql mcp工具 ／ uv run --locked --extra dameng dm-mcp ／ |`database.py`|达梦元数据与只读查询|",
+   "evidence_lines": [
+    2,
+    274,
+    383
+   ]
+  },
+  "fn": "XiaoGuangtou1ovo/dm_nl2sql_mcp",
+  "sha": "f6c1e7501a74",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

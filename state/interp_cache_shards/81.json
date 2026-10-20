@@ -9942,5 +9942,154 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "13071bd75f7c": {
+  "identity": {
+   "one_liner": "计算机使用代理研究资源的源溯源目录，含 JSONL/SQLite 数据",
+   "review": "收录计算机使用代理领域的论文、模型、数据集、基准、框架与工具，每条记录关联原始来源并含审阅状态；目录以 JSONL 与 SQLite 发布，供人、RAG 系统与代理克隆检索，内置 Python 命令行查询脚本。适用于研究调研、基准选型与语料建设者。",
+   "highlights": [
+    "提供 3,234 条资源记录，含论文、模型、数据集、基准、框架、工具等分类，每日三次定时发现",
+    "目录数据以 JSONL 与 SQLite 格式发布，附 Python 命令行查询脚本（Python 3.11+，无需依赖）",
+    "记录含审阅状态与文献元数据核验信息，并提供覆盖缺口台账"
+   ],
+   "use_cases": [
+    "检索与筛选 computer-use / GUI 代理领域的论文、基准与训练数据",
+    "为 RAG 系统或代理提供可克隆的结构化目录数据",
+    "对比基准平台、环境与版本以选择评测方案"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Use SQLite to join resources, environment/topic facets, and reviewed relations. See query examples. `data/catalog.jsonl` is committed; SQLite and JSON array exports are reproducible local build products.",
+     "lines": [
+      189
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目以 SQLite/JSONL 存储并发布自身目录数据，提供查询脚本供数据库生态外的代理与 RAG 使用，属使用数据库的应用侧目录项目",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A source-backed collection of papers, models, datasets, benchmarks and tools for agents that use computers. ／ **For people, RAG systems, and agents — clone the complete catalog:** ／ python3 scripts/catalog.py search \"grounding\" --kind paper --status curated --limit 0 --json",
+   "evidence_lines": [
+    7,
+    25,
+    54
+   ]
+  },
+  "fn": "reacher-z/Awesome-CUA",
+  "sha": "13071bd75f7c",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "60de965acf7e": {
+  "identity": {
+   "one_liner": "自托管 HEY 风格邮件服务端，基于 Next.js + PostgreSQL",
+   "review": "Kurir 1.x 是一个自托管邮件客户端服务端，通过 IMAP/SMTP 连接用户已有邮箱，提供 Screener、Imbox、Feed、Paper Trail 等整理功能，用 PostgreSQL 做存储与全文搜索，Redis 做缓存与推送。适合想自托管邮件整理服务的个人或小团队。注意：该仓库已归档，1.x 不再发布更新，2.0 转为闭源订阅制且无服务端。",
+   "highlights": [
+    "通过 IMAP/SMTP 连接任意邮件提供商，用 PostgreSQL 实现邮件全文搜索（tsvector + GIN）",
+    "提供 MCP 端点供 Claude 读写邮件、联系人与日历",
+    "支持一键安装脚本、Docker Compose 与 Kamal 部署，含备份恢复与管理面板"
+   ],
+   "use_cases": [
+    "自托管个人邮件整理客户端",
+    "通过 MCP 将邮件数据接入 Claude 等 AI 助手",
+    "多邮件账户聚合管理"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Running Kurir 1.x meant running this server: Postgres, Redis, a Next.js app, TLS, backups and updates. Most people who want a calmer inbox don't want to operate a server to get one. So 2.0 drops it. ／ - **Full-text search** — PostgreSQL-powered search across every email. ／ The installer handles Docker, PostgreSQL, Redis, TLS, and all secrets. Once running, open the URL to complete the setup wizard. Run with `--help` to see all options.",
+     "lines": [
+      9,
+      33,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该服务端使用 PostgreSQL 存储邮件数据并以 Redis 作缓存，PostgreSQL 是其运行依赖而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "O'Saasy License：开源但禁止作为竞争性托管邮件服务提供",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Running Kurir 1.x meant running this server: Postgres, Redis, a Next.js app, TLS, backups and updates. Most people who want a calmer inbox don't want to operate a server to get one. So 2.0 drops it. ／ A self-hosted email client inspired by HEY. Kurir connects to your existing email via IMAP/SMTP and gives you a calmer, more focused experience. Open source under the O'Saasy License. ／ - **Database:** PostgreSQL 16 + Prisma 7",
+   "evidence_lines": [
+    9,
+    23,
+    111
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "cfarvidson/kurir-server",
+  "sha": "60de965acf7e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9385,5 +9385,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "59e1c57b461f": {
+  "identity": {
+   "one_liner": "中小學排課與調代課系統，用 OR-Tools CP-SAT 自動排課",
+   "review": "面向台灣國小/國中/高中職的單校自架排課與調代課系統，涵蓋學期資料管理、手動拖拉排課與 OR-Tools CP-SAT 自動排課、請假代課調課流程及 Excel/PDF 課表匯出，以教學組長工作流程為中心設計，透過 Docker Compose 部署，資料儲存於 PostgreSQL 16。屬使用資料庫的應用而非資料庫生態工具。",
+   "highlights": [
+    "基於 OR-Tools CP-SAT 引擎的自動排課，含硬約束與軟約束加權與衝突說明",
+    "支援請假、代課、調課流程與 Excel/PDF/PNG 課表匯出",
+    "透過 Docker Compose 部署，包含每日自動備份與 RBAC 權限管理"
+   ],
+   "use_cases": [
+    "中小學教務處排課與配課管理",
+    "學期中教師請假、代課與調課安排",
+    "課表匯出與代課鐘點統計報表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+     "lines": [
+      117,
+      119
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系統以 PostgreSQL 作為自身儲存資料庫，是使用資料庫的完整應用，而非為資料庫生態服務的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+   "evidence_lines": [
+    117,
+    119
+   ]
+  },
+  "fn": "begin0808/Course_Scheduling_System",
+  "sha": "59e1c57b461f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

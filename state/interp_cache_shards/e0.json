@@ -9913,5 +9913,77 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "11541311d0ee": {
+  "identity": {
+   "one_liner": "SQLite 扩展，在数据库内以 SQL 定义并运行自主 AI 代理",
+   "review": "SQLite-Agent 是一个跨平台 SQLite 扩展，用 SQL 定义可执行多步任务、调用外部工具的 AI 代理，通过 sqlite-mcp 获取外部数据并写入数据库表，依赖 sqlite-ai 做本地 LLM 推理。支持 Linux/macOS/Windows/Android/iOS，提供 Swift、Android、Flutter/Dart 包安装方式。面向希望在本地 SQLite 数据库中运行代理的开发者。",
+   "highlights": [
+    "支持在 SQL 中定义并运行可规划多步任务的自主代理（agent_run 函数）",
+    "通过 sqlite-mcp 集成实现外部工具调用，支持表格抽取模式自动填充数据库表",
+    "提供 Linux/macOS/Windows/Android/iOS 的预编译二进制及 Swift、Gradle、Flutter/Dart 包"
+   ],
+   "use_cases": [
+    "在 SQLite 数据库内通过 MCP 工具抓取外部数据并写入表",
+    "在移动端（Android/iOS/Flutter）应用内本地运行 AI 代理",
+    "结合 sqlite-vector 自动生成嵌入并进行向量检索"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**SQLite Agent** is a cross-platform SQLite extension that brings autonomous AI agents to your database. It enables databases to run multi-step, tool-using agents that fetch data from external sources (web, APIs, etc.) through sqlite-mcp and populate database tables. The extracted data can then be analyzed by LLMs, displayed in UIs, or used in applications.",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQLite 数据库提供代理运行能力的扩展，属服务数据库生态的组件",
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SQLite Agent** is a cross-platform SQLite extension that brings autonomous AI agents to your database. It enables databases to run multi-step, tool-using agents that fetch data from external sources (web, APIs, etc.) through sqlite-mcp and populate database tables. The extracted data can then be analyzed by LLMs, displayed in UIs, or used in applications. ／ SELECT load_extension('./dist/mcp'); ／ - sqlite-vector — ANN vector search inside SQLite",
+   "evidence_lines": [
+    30,
+    104,
+    161
+   ]
+  },
+  "fn": "sqliteai/sqlite-agent",
+  "sha": "11541311d0ee",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

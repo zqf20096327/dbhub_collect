@@ -9538,5 +9538,152 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8e2e00a74e64": {
+  "identity": {
+   "one_liner": "自托管 AI 可见性追踪工具，单二进制内置 SQLite 存储",
+   "review": "一个用 Go 编写的自托管 AI 可见性追踪（AEO/GEO）工具，向 ChatGPT、Claude、Perplexity、Gemini 等七个引擎发起提问，检测品牌及竞争对手被提及和引用的情况，并生成可见性、份额等指标。面向需要监测品牌在 AI 回答中表现的市场与 SEO 人员。数据存于自带 keys 的本地 SQLite 文件，内置 MCP server 与导出、升级到 Limelit Cloud 的路径；11 个 provider 中 6 个已实现。",
+   "highlights": [
+    "支持七个 AI 引擎：四个走厂商 API，三个走爬虫；内置 MCP server（stdio 和 streamable HTTP）",
+    "所有数据（提示、答案、引用）存于本地拥有的单个 SQLite 文件，支持 JSON/CSV 导出",
+    "单 Go 二进制交付，内置仪表盘，无需 Docker 或 Node；提供每日/每小时调度与 runs_per_day 上限"
+   ],
+   "use_cases": [
+    "追踪品牌及竞争对手在 AI 助手回答中的提及率与引用来源",
+    "自托管环境下审计 AI 可见性指标的计算依据",
+    "通过 MCP 让 Claude 等 AI 客户端读取可见性数据并作答"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One binary.** No Docker, no Node, no Postgres. It creates and migrates its ／ |**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**| ／ Go 1.25 or newer. No other toolchain: no Node, no Docker, no Postgres.",
+     "lines": [
+      50,
+      159,
+      587
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "own SQLite database on first start and serves the dashboard at ／ SQLite file you own. Nothing leaves the box except the calls to the engines ／ |**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**|",
+     "lines": [
+      51,
+      129,
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其自身数据存于自建的 SQLite 数据库文件，SQLite 仅作为本应用的存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "open-core：Limelit Open（Apache 2.0）为 Limelit Cloud 托管产品的开源核心",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " own SQLite database on first start and serves the dashboard at ／ - **MCP.** `limelit mcp` over stdio, or streamable HTTP with a bearer token. ／ What does not work yet: five of eleven providers are unbuilt. Everything else",
+   "evidence_lines": [
+    51,
+    69,
+    88
+   ]
+  },
+  "fn": "limelit-co/open",
+  "sha": "8e2e00a74e64",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4f9465934be4": {
+  "identity": {
+   "one_liner": "Yjs CRDT 的纯 Go 移植，含 SQLite 持久化的自托管同步服务器",
+   "review": "ygo 是 Yjs CRDT 框架的纯 Go 语言移植库，逐字节兼容 Yjs V1/V2 线格式，提供 Map/Array/Text 等 CRDT 类型、UndoManager、快照与子文档，并附带单二进制 WebSocket 服务器 yserve，用 SQLite 做持久化与文档版本记录。面向需要 Go 后端或移动端离线协作编辑的开发者；移动端已手工验证但未纳入 CI。",
+   "highlights": [
+    "与 yjs@13.6.33 双向逐字节线格式兼容，经 287 个跨语言 fixture 验证并在 CI 运行",
+    "纯 Go 无 CGO，可通过 gomobile 生成 iOS xcframework 和 Android AAR",
+    "yserve 服务器内置 SQLite 持久化与周期性文档版本记录"
+   ],
+   "use_cases": [
+    "为 Go 后端或多端应用实现实时协同编辑",
+    "移动端本地优先（offline-first）文档同步",
+    "自托管 Yjs WebSocket 同步服务器并持久化到 SQLite"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Pure Go, no CGO — mobile included.** Cross-compiles freely to every Go target. The CRDT core, the sync client and the server also compile to `js/wasm` and `wasip1/wasm`; the one exception is the SQLite-backed store in `persist/sqlite`, since `modernc.org/s ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistenc",
+     "lines": [
+      20,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为 yserve 服务器与离线客户端的文档持久化存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Pure-Go port of Yjs, the CRDT framework for collaborative applications, officially listed in the Yjs documentation's ports page. ／ - **Pure Go, no CGO — mobile included.** Cross-compiles freely to every Go target. The CRDT core, the sync client and the server also compile to `js/wasm` and `wasip1/wasm`; the one exception is the SQLite-backed store in `persist/sqlite`, since `modernc.org/sqlite` is transpiled C with no wasm target — a browser build supplies its own `persist.Store` instead (it is a seven-method interface). `gomobile bind` produces an iOS xcframework and Android AAR (manually verified on 2026-06-12, not run in CI) carrying a full mobile SDK: editable Text / Map, undo, cursors, and a built-in background sync client (WebSocket + reconnect), so a Swift / Kotlin app only renders UI. No V8, no embedded JavaScript engine, no Rust FFI bridge. ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistence and periodic document versioning built in. Also embeds as a plain `http.Handler` inside an existing Go backend.",
+   "evidence_lines": [
+    13,
+    20,
+    27
+   ]
+  },
+  "fn": "Deln0r/ygo",
+  "sha": "4f9465934be4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

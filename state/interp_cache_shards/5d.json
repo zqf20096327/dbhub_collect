@@ -9611,5 +9611,134 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d1efb7c2984f": {
+  "identity": {
+   "one_liner": "基于医疗知识图谱的症状自查应用，运行于 Cloudflare Workers + D1",
+   "review": "这是一个部署在 Cloudflare Workers 上的症状自查应用，用户输入性别、年龄和身体部位症状后，系统在疾病↔症状图谱上反向遍历边并按症状解释度排序候选疾病，同时提供推理图展示。数据存于 D1（SQLite），仓库自带演示数据子集，完整知识库另行商业授权，明确声明仅供教育自查、非诊断设备。",
+   "highlights": [
+    "提供身体图主界面与症状面板，支持中文/拼音过滤与症状自动补全 API",
+    "实现在疾病↔症状图上的反向遍历与按匹配症状数排序的评分算法",
+    "提供 mysqldump 转 D1 的导入脚本及按天分批导入方案"
+   ],
+   "use_cases": [
+    "面向普通用户的教育性症状自查与健康科普",
+    "部署为 Cloudflare Workers 上的无服务器 JSON API 服务",
+    "医疗知识图谱数据的浏览与推理可视化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "node scripts/convert-mysql-dump.mjs # -> build/seed-*.sql",
+     "lines": [
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 D1/SQLite 存储知识图谱数据并对外提供自查服务，不服务于数据库生态本身",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库含专有版权声明（Copyright 2026 onblog），完整数据集以商业许可另行分发",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**医疗知识图谱 — symptom self-check on a medical knowledge graph, one page, three steps, one Worker.** ／ node scripts/convert-mysql-dump.mjs               # -> build/seed-*.sql ／ October 2026 the free plan allows 100,000 Worker requests/day with 10 ms CPU each, and D1 allows",
+   "evidence_lines": [
+    5,
+    96,
+    143
+   ]
+  },
+  "fn": "onblog/Doctor",
+  "sha": "d1efb7c2984f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7d97a02e464a": {
+  "identity": {
+   "one_liner": "better-sqlite3 的分支，基于 SQLite bedrock 分支构建",
+   "review": "该项目是 better-sqlite3 的一个分支，面向 Zero 项目使用，改动包括基于 SQLite bedrock 分支构建以启用 begin concurrent、附带 shell 调试工具、并支持 Node.js 22.x 和 24.x；移除了可加载扩展，后续可能持续修改。",
+   "highlights": [
+    "基于 SQLite bedrock 分支构建并启用 begin concurrent",
+    "提供 shell 工具用于调试其创建的数据库文件",
+    "支持 Node.js 22.x 与 24.x"
+   ],
+   "use_cases": [
+    "为 Zero 项目提供 Node.js 下的 SQLite 访问",
+    "需要 begin concurrent 特性的 Node.js SQLite 场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "This is a fork of better-sqlite3 with changes needed by Zero. ／ * Build the bedrock branch of SQLite to enable `begin concurrent`.",
+     "lines": [
+      1,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Node.js 的 SQLite 绑定库，为 Zero 项目提供数据库访问能力，属于为数据库使用服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is a fork of better-sqlite3 with changes needed by Zero. ／ * Build the bedrock branch of SQLite to enable `begin concurrent`.",
+   "evidence_lines": [
+    1,
+    5
+   ]
+  },
+  "fn": "rocicorp/zero-sqlite3",
+  "sha": "7d97a02e464a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

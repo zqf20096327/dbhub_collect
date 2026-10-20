@@ -11277,5 +11277,75 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7c5383b53256": {
+  "identity": {
+   "one_liner": "本地代码索引工具，为 AI 编码代理提供带 file:line 证据的代码检索",
+   "review": "codebase-index 是一个本地代码索引工具，用 Tree-sitter 提取符号与调用关系，存入 SQLite（FTS5）文件，提供 Find/Trace/Predict 三类查询和 MCP 服务器、CLI 输出，供 Claude Code、Codex CLI、OpenCode 等 AI 编码代理接入使用。默认无网络、无遥测，通过 pip 安装。SQLite 仅作为其内部索引存储，并非面向数据库生态的工具。",
+   "highlights": [
+    "提供 search/refs/impact/explain 等 CLI 命令，输出带 file:line 与置信度标注的排名结果",
+    "内置 MCP stdio 服务器，提供 11 个工具供任意 MCP 客户端调用",
+    "索引与查询默认本地运行，含密钥过滤与输出脱敏机制"
+   ],
+   "use_cases": [
+    "为 AI 编码代理在修改代码前定位实现、追踪引用与评估影响范围",
+    "在本地对代码库建立可查询的符号/依赖图索引",
+    "通过 MCP 将代码检索能力接入 Claude Desktop、Cursor、VS Code 等客户端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That is the whole setup. The index is a SQLite file under `.claude/cache/`, the ／ or you adopt an IDE. This is a small Python package on SQLite and Tree-sitter: ／ |**Anything with a shell**|`codebase-index --json ...`|The same payloads as plain JSON, plus a local SQLite database you can query yourself|",
+     "lines": [
+      40,
+      74,
+      127
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目仅将 SQLite 文件用作自身索引数据的存储，不面向数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "That is the whole setup. The index is a SQLite file under `.claude/cache/`, the ／  or you adopt an IDE. This is a small Python package on SQLite and Tree-sitter: ／ |**Any MCP client** (Claude Desktop, Cursor, VS Code, Zed, Windsurf, ...)|`pip install \"codebase-index[mcp]\"` then `codebase-index mcp --root /path/to/repo`|11 tools (`search_code`, `find_refs`, `impact_of`, `impact_of_diff`, `path_between`, ...) with a versioned JSON envelope|",
+   "evidence_lines": [
+    40,
+    74,
+    126
+   ]
+  },
+  "fn": "denfry/codebase-index",
+  "sha": "7c5383b53256",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10871,5 +10871,92 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "98019628edca": {
+  "identity": {
+   "one_liner": "MySQL 分片方案对比基准测试项目（TPC-C/sysbench）",
+   "review": "一个针对 Vitess、ShardingSphere、DBLE、Spider、TiDB 等 MySQL 分片方案的实测对比项目，包含 TPC-C 与 sysbench 吞吐、路由 CPU 开销、跨分片查询正确性等脚本与结果数据，并附测试环境与已知限制说明。适合数据库运维与选型人员复现分片基准测试。",
+   "highlights": [
+    "提供 TPC-C、sysbench、路由 CPU 成本与跨分片查询正确性的自动化测试脚本（chain.sh/bench.sh 等）",
+    "包含 33 项 TPC-C 不变量与 49 项 sysbench 一致性检查脚本",
+    "提供两轮完整测试结果数据及 per-query 差异样本"
+   ],
+   "use_cases": [
+    "MySQL 分片方案选型评估",
+    "分片路由性能与正确性复现测试",
+    "跨分片查询行为验证"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# MySQL sharding comparison: Vitess, ShardingSphere, DBLE, Spider, TiDB ／ Hands-on comparison of MySQL sharding solutions on 4 shards (October 2026): throughput (go-tpc TPC-C 200 warehouses, ／ - Same range layout for every MySQL router: warehouses 1-50 / 51-100 / 101-150 / 151-200, sysbench ids in 1.25M ranges,",
+     "lines": [
+      1,
+      3,
+      26
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB 12.3 Spider|10,963|227 / 127|18.3 ms (router-CPU-bound)|18 / 0 / 13|",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# MySQL sharding comparison: Vitess, ShardingSphere, DBLE, Spider, TiDB ／ |TiDB 8.5.8 (reference)|11,886|628 / 445|10.0 ms (tidb-server + PD)|not tested| ／ |`scripts/tool.sh`|Start/stop each router (vitess, ss, dble, spider, tidb)|",
+     "lines": [
+      1,
+      16,
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库分片组件提供基准测试与一致性校验脚本，服务于数据库生态而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MySQL sharding comparison: Vitess, ShardingSphere, DBLE, Spider, TiDB ／ |`scripts/chain.sh`|Per router: restore data, TPC-C, sysbench skewed, sysbench uniform (`RESULTS=` picks the output dir)| ／ |`scripts/tpcc_check.py`, `sb_check.py`|Consistency checks (33 TPC-C invariants, 49 sysbench checks per run)|",
+   "evidence_lines": [
+    1,
+    35,
+    41
+   ]
+  },
+  "fn": "Percona-Lab/mysql-sharding-testing",
+  "sha": "98019628edca",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

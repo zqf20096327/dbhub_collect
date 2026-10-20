@@ -9564,5 +9564,187 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "71580619c0fa": {
+  "identity": {
+   "one_liner": "面向数据工程的 AI 代理 CLI，提供 SQL 分析、血缘、dbt 与仓库连接工具集",
+   "review": "altimate-code 是一个开源的数据工程 AI 代理 CLI（OpenCode 的分支），为 LLM 提供 100+ 确定性工具：SQL 反模式检测、列级血缘解析、dbt manifest 解析与测试生成、FinOps 成本分析、PII 扫描和跨方言 SQL 转译。可独立运行于终端，或嵌入 Claude Code/Codex 与 CI 流水线，支持连接 13 个数据仓库并缓存 schema、查询历史与成本数据，默认通过 npm 或安装脚本获取自包含二进制。",
+   "highlights": [
+    "提供 19 条 SQL 反模式检测规则、跨方言列级血缘提取，以及 dbt manifest 解析、测试生成与模型脚手架",
+    "支持连接 Snowflake、BigQuery、PostgreSQL、MySQL 等 13 个仓库，提供 schema 索引、查询执行、元数据内省与成本分析",
+    "提供 Builder/Analyst/Plan 三种权限分级的代理模式，Analyst 模式强制只读 SELECT，并硬阻断 DROP/TRUNCATE"
+   ],
+   "use_cases": [
+    "数据团队在终端或 CI 中让 LLM 代理执行 SQL 审查、dbt PR 评审与单元测试生成",
+    "跨仓库的表级/查询结果逐行比对与迁移验证（data_diff，五种算法）",
+    "对仓库做成本分析、昂贵查询识别与 PII 列扫描"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Transpile SQL between Snowflake, BigQuery, Databricks, Redshift, PostgreSQL, MySQL, SQL Server, and DuckDB. ／ Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      133,
+      173
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Transpile SQL between Snowflake, BigQuery, Databricks, Redshift, PostgreSQL, MySQL, SQL Server, and DuckDB. ／ Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      133,
+      173
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      173
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      173
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Transpile SQL between Snowflake, BigQuery, Databricks, Redshift, PostgreSQL, MySQL, SQL Server, and DuckDB. ／ Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      133,
+      173
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB",
+     "lines": [
+      173
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为连接和操作数据仓库提供服务（schema 索引、查询执行、元数据内省），本身不以某数据库为存储介质",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## Supported Warehouses ／ Snowflake · BigQuery · Databricks · PostgreSQL · Redshift · Trino · ClickHouse · DuckDB · MySQL · SQL Server (incl. Microsoft Fabric) · Oracle · SQLite · MongoDB ／ - **SQL Intelligence Engine** — deterministic SQL parsing and analysis (not LLM pattern matching). 19 rules, 100% F1, 0 false positives. Built for data engineers who've been burned by hallucinated SQL advice.",
+   "evidence_lines": [
+    171,
+    173,
+    99
+   ]
+  },
+  "fn": "AltimateAI/altimate-code",
+  "sha": "71580619c0fa",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2c95cc80c5bc": {
+  "identity": {
+   "one_liner": "纯托管 C# 的 SQLite3 数据库文件只读解析库",
+   "review": "这是一个 C# 编写的 SQLite3 数据库文件解析器，提供对表结构与行数据的只读访问，并附带解析 schema 的 SQL 包。它直接读取数据库文件，不执行 SQL、不使用索引、不支持写入，也不读取 WAL/journal，适合需要在托管代码中读取 SQLite 文件（如取证、迁移工具开发）的开发者。通过 NuGet 分发。",
+   "highlights": [
+    "以纯托管代码直接读取 SQLite3 数据库文件的表与行数据",
+    "附带 SQL 包用于解析 SQLite3 的 schema",
+    "提供接近原始文件的类型映射与行序读取，不执行 SQL 语句"
+   ],
+   "use_cases": [
+    "在不依赖原生 SQLite 库的 .NET 环境中读取 SQLite 数据文件",
+    "解析 SQLite3 schema 的工具开发",
+    "对数据库文件做只读检查/导出场景"
+   ],
+   "eco": "unclear"
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Managed C# read-only parser for SQLite3 databases. Provides access to table and row data. ／ * Reads SQLite3 databases, in all managed code ／ * An SQL package exists to help parse the SQLite3 schemas",
+     "lines": [
+      3,
+      23,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是解析 SQLite3 数据库文件格式的解析库，为使用/读取 SQLite 数据的场景提供服务而非自身是终端应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Managed C# read-only parser for SQLite3 databases. Provides access to table and row data. ／ * Reads SQLite3 databases, in all managed code",
+   "evidence_lines": [
+    3,
+    23
+   ]
+  },
+  "fn": "LordMike/MBW.Utilities.ManagedSqlite",
+  "sha": "2c95cc80c5bc",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

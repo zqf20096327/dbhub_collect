@@ -9777,5 +9777,170 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eab914aaa270": {
+  "identity": {
+   "one_liner": "开源密钥管理平台，集中管理密钥、证书、特权访问",
+   "review": "Infisical 是一个开源安全基础设施平台，提供密钥管理、密钥扫描、证书管理、KMS、特权访问管理（PAM）和 AI Agent 凭据代理等功能，支持 PostgreSQL、MySQL 等服务的密钥轮换与动态密钥。面向需要集中管理应用密钥与基础设施凭据的开发和安全团队，可通过 Docker Compose 本地部署或使用其云服务，仓库采用 MIT 许可但 ee 目录为付费企业功能。",
+   "highlights": [
+    "提供密钥集中管理、版本控制、定时轮换和动态密钥生成（支持 PostgreSQL、MySQL、RabbitMQ 等服务）",
+    "包含证书生命周期管理、KMS、密钥扫描（CLI 与仓库扫描）和特权访问会话录制",
+    "提供 SDK（Node、Python、Go 等多语言）、CLI 和 API，支持 Docker Compose 自托管部署"
+   ],
+   "use_cases": [
+    "集中管理多环境应用配置与敏感凭据",
+    "扫描代码仓库与 git 历史中的泄漏密钥并阻断提交",
+    "为数据库和服务器提供基于审批流的特权访问与会话审计"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Secret Rotation**: Rotate secrets at regular intervals for services like PostgreSQL, MySQL, AWS IAM, and more. ／ - **Dynamic Secrets**: Generate ephemeral secrets on-demand for services like PostgreSQL, MySQL, RabbitMQ, and more. ／ - **Privileged Access Management**: Decouple user identity from infrastructure credentials. Users authenticate with their SSO identity while Infisical brokers just-in-time access to resources like PostgreSQL, SSH servers, Kubernetes, Active Directory, and more",
+     "lines": [
+      43,
+      44,
+      82
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Secret Rotation**: Rotate secrets at regular intervals for services like PostgreSQL, MySQL, AWS IAM, and more. ／ - **Dynamic Secrets**: Generate ephemeral secrets on-demand for services like PostgreSQL, MySQL, RabbitMQ, and more. ／ - **Web Access**: Connect from the browser to SSH servers, Windows servers over RDP, and databases such as PostgreSQL, MySQL, and Redis.",
+     "lines": [
+      43,
+      44,
+      85
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库等基础设施提供密钥轮换、动态密钥和特权访问代理等安全服务，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，ee 目录为企业版功能需商业许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Infisical** is the open source security infrastructure platform that teams use for secrets, certificates, privileged access management, and AI agent access. ／ - **Secret Rotation**: Rotate secrets at regular intervals for services like PostgreSQL, MySQL, AWS IAM, and more. ／ - **Self-hosting**: Deploy Infisical on-prem or cloud with ease; keep data on your own infrastructure.",
+   "evidence_lines": [
+    30,
+    43,
+    107
+   ]
+  },
+  "fn": "Infisical/infisical",
+  "sha": "eab914aaa270",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "46774ade71fd": {
+  "identity": {
+   "one_liner": "Go 编写的 Windows 原生 Web 开发环境控制面板，按需下载管理服务",
+   "review": "GoAMPP 是一个单个 exe 的 Windows 原生控制面板，按需下载并管理 Apache、Nginx、MariaDB/MySQL、PostgreSQL、Redis、PHP、Node.js 等约 29 个软件包，提供 Fyne GUI、服务启停、版本切换、虚拟主机与框架脚手架，面向 Windows 本地开发环境搭建者。PHP 通过 mod_cgi 调用，安装需一次管理员权限。",
+   "highlights": [
+    "包含 29 个软件包目录，安装时从官方源解析最新版本并支持版本切换",
+    "提供虚拟主机自动配置、17 种框架脚手架和内置配置编辑器",
+    "核心与 GUI 分离，使用 Fyne 构建界面并以系统托盘方式运行"
+   ],
+   "use_cases": [
+    "在 Windows 上无需 Docker/WSL 搭建本地 PHP/Node/Python 开发环境",
+    "集中启停、切换版本和管理 Apache/Nginx/数据库服务",
+    "快速创建带虚拟主机域名的框架项目（Laravel、Django 等）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A native Windows web-stack control panel written in Go. **One self-contained `goampp.exe`** that downloads Apache, MariaDB, PHP, PostgreSQL, Redis, RabbitMQ, Mailpit, Node.js, Python, Go, Java, and friends on demand — no installer bloat, no Docker, no WSL, no  ／ - **29 packages** in the catalog — Apache, Nginx, MariaDB (as MySQL), PostgreSQL, Redis, PHP, phpMyAdmin, Adminer, pgweb, Mailpit, RabbitMQ, Composer, and language runtimes from Node.js and Python to Go, Java, Rust, Zig and Elixir",
+     "lines": [
+      3,
+      12
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "- **29 packages** in the catalog — Apache, Nginx, MariaDB (as MySQL), PostgreSQL, Redis, PHP, phpMyAdmin, Adminer, pgweb, Mailpit, RabbitMQ, Composer, and language runtimes from Node.js and Python to Go, Java, Rust, Zig and Elixir",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A native Windows web-stack control panel written in Go. **One self-contained `goampp.exe`** that downloads Apache, MariaDB, PHP, PostgreSQL, Redis, RabbitMQ, Mailpit, Node.js, Python, Go, Java, and friends on demand — no installer bloat, no Docker, no WSL, no  ／ - **29 packages** in the catalog — Apache, Nginx, MariaDB (as MySQL), PostgreSQL, Redis, PHP, phpMyAdmin, Adminer, pgweb, Mailpit, RabbitMQ, Composer, and language runtimes from Node.js and Python to Go, Java, Rust, Zig and Elixir ／ - **Always the latest build** — every package resolves its newest release at install time from the official source (php.net, nodejs.org, MariaDB, Apache Lounge, GitHub releases, …), then falls back to the pinned URL and known archive mirrors when a link has go",
+     "lines": [
+      3,
+      12,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是管理数据库及 Web 服务进程的控制面板组件，而非以某数据库为存储的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A native Windows web-stack control panel written in Go. **One self-contained `goampp.exe`** that downloads Apache, MariaDB, PHP, PostgreSQL, Redis, RabbitMQ, Mailpit, Node.js, Python, Go, Java, and friends on demand — no installer bloat, no Docker, no WSL, no Electron. ／ - **29 packages** in the catalog — Apache, Nginx, MariaDB (as MySQL), PostgreSQL, Redis, PHP, phpMyAdmin, Adminer, pgweb, Mailpit, RabbitMQ, Composer, and language runtimes from Node.js and Python to Go, Java, Rust, Zig and Elixir ／ Every package grouped by kind, with status, version picker and one action button per row. Right-click a row for restart, config, terminal, folder, version and uninstall.",
+   "evidence_lines": [
+    3,
+    12,
+    26
+   ]
+  },
+  "fn": "imtaqin/goampp",
+  "sha": "46774ade71fd",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

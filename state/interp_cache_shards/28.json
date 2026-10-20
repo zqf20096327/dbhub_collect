@@ -10308,5 +10308,151 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a5e28d337773": {
+  "identity": {
+   "one_liner": "本地优先的科研文献 RAG 工具包与 FastAPI 服务，SQLite 持久化",
+   "review": "这是一个用于科研文献检索增强工作流的 Python 工具包和 FastAPI 服务，将文档、图数据与运行事件存入 SQLite。面向需要可审查检索证据、人工筛选与可复现离线实验的研究人员。默认使用 fake 适配器演示流程，不产出真实科学摘要；模型提供方为可选适配。",
+   "highlights": [
+    "提供 FastAPI 服务与免脚本的保存运行浏览器，支持冻结证据查看与 JSON/Markdown/离线 HTML 导出",
+    "支持混合检索与图检索、人工筛选决策记录、BibTeX 导出与逐块来源溯源",
+    "SQLite 持久化文档、图数据与运行事件，默认无模型凭证即可离线运行演示"
+   ],
+   "use_cases": [
+    "加载本地论文语料进行对比或假设问题的检索与证据审查",
+    "文献筛选（screening）与人工判读历史的管理与导出",
+    "离线复现检索基准与回归检查"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "literature workflows, with SQLite persistence and optional model-provider adapters. ／ providers; SQLite stores documents, graph data, and durable run events.",
+     "lines": [
+      10,
+      352
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 用于存储该系统自身的文档、图数据与运行事件，数据库为应用存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**local-first Python toolkit and FastAPI service** for building inspectable ／ literature workflows, with SQLite persistence and optional model-provider adapters.",
+   "evidence_lines": [
+    9,
+    10
+   ]
+  },
+  "fn": "Francis1998/scholar-rag-agent",
+  "sha": "a5e28d337773",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "098c783debd2": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Drizzle/SQLite 的双确认候选名单等待列表应用",
+   "review": "一个可直接部署的等待名单（waitlist）模板应用：访客提交邮箱后经双确认邮件验证入队，支持推荐码排队晋升、批量发布邮件发送（经 Mailtrap Bulk 流）及退订 webhook 抑制。数据存储在单个 SQLite 文件（better-sqlite3 + Drizzle ORM），适合想为产品发布搭建候选名单收集页面的开发者，部署到 Vercel 时需注意 SQLite 不持久化的限制。",
+   "highlights": [
+    "实现双确认注册流程：待确认状态、SHA-256 哈希一次性令牌（48 小时有效）、蜜罐字段与每 IP 限流",
+    "支持推荐队列与批量发布邮件：批量最多 500 封、按用户记录发送状态、--dry-run 试运行",
+    "提供 webhook 处理退订/退信/垃圾投诉事件并按 event_id 去重"
+   ],
+   "use_cases": [
+    "产品发布前收集并验证候选用户邮箱",
+    "通过推荐链接扩大等待名单传播",
+    "通过 Mailtrap Bulk 流批量发送发布通知邮件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Data|Drizzle ORM, SQLite (better-sqlite3)|",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明这是一个使用 SQLite 存储等待名单数据的 Next.js 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The app is a single Next.js project. Visitors use the web pages, you run the launch from the command line, and Mailtrap sits on the other side for both sending and events. Everything is stored in one SQLite database. ／ |Data|Drizzle ORM, SQLite (better-sqlite3)|",
+   "evidence_lines": [
+    44,
+    91
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Sid-Lais/nextjs-waitlist-double-opt-in",
+  "sha": "098c783debd2",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

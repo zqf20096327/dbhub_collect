@@ -10923,5 +10923,170 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b6f443008439": {
+  "identity": {
+   "one_liner": "基于 Tauri 的桌面数据查看器，快速浏览文件与多数据库",
+   "review": "Duckling 是一个桌面应用，用于快速浏览 parquet/csv/json 文件数据和多种数据库，内置 SQL 编辑器、透视表、列统计、单元格值查看和结果导出。DuckDB 与 SQLite 原生支持，PostgreSQL、MySQL、ClickHouse、Doris/StarRocks 为实验性支持。项目自述目标不是完整的数据库管理工具，适合需要快速查看和轻量分析数据的用户。",
+   "highlights": [
+    "提供数据浏览、SQL 编辑器、透视表、列统计分析和多格式导出（CSV/TSV/JSON/Parquet/XLSX）",
+    "原生支持 DuckDB/SQLite，实验性支持 PostgreSQL、MySQL、ClickHouse（HTTP 接口）、Doris/StarRocks（MySQL 协议）",
+    "支持 SQL 模板变量（Jinja2 语法 + @vars 块）批量执行、SSH 隧道连接和连接配置导入导出"
+   ],
+   "use_cases": [
+    "快速浏览 parquet/csv 等本地文件数据",
+    "连接数据库进行轻量查询分析与结果导出",
+    "使用 SQL 模板对多表/多值批量执行查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL ／ - **PostgreSQL** — host / port / database / user / password + SSL mode.",
+     "lines": [
+      11,
+      41
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL ／ - **MySQL** — host / port / database / user / password.",
+     "lines": [
+      12,
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It supports DuckDB / SQLite natively, and provides experimental support for the following databases (not heavily tested): ／ - **SQLite** — open a database file.",
+     "lines": [
+      9,
+      39
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- ClickHouse (HTTP interface, usually port `8123`) ／ - **ClickHouse** — host / port / database / user / password (HTTP interface).",
+     "lines": [
+      13,
+      42
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供连接和浏览多种数据库的桌面客户端工具，为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Duckling is a lightweight desktop application built using Tauri, designed for quickly browsing `parquet`/`csv`/`json` file data and various databases. Beyond browsing, it ships with a SQL editor, pivot tables, column profiling, value inspection, and data export to help you explore and analyze data without leaving the app. ／ It supports DuckDB / SQLite natively, and provides experimental support for the following databases (not heavily tested): ／ Implemented connectors:",
+   "evidence_lines": [
+    7,
+    9,
+    34
+   ]
+  },
+  "fn": "l1xnan/duckling",
+  "sha": "b6f443008439",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e7b0aea714e4": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI 智能体持久记忆与 RAG 引擎",
+   "review": "为 AI 智能体提供持久记忆：以 SQLite + FTS5 + trigram + embeddings 实现四层召回，包含睡眠式记忆整理、注入检测、凭据保管与多级分类。可作 Node.js 库、CLI 或 MCP server 运行，面向构建 24/7 多语言智能体的开发者。基于 SQLite 存储，版本 0.2.7，Apache-2.0 许可。",
+   "highlights": [
+    "四层召回机制：FTS5、trigram 模糊匹配、embeddings、合并摘要",
+    "夜间 sleep 维护进程：提取事实、合并摘要、检测矛盾、清理过期记忆",
+    "支持库形式、CLI、MCP server 及多种 agent hooks 接入"
+   ],
+   "use_cases": [
+    "为长期运行的 AI 智能体提供跨会话持久记忆",
+    "日耳曼/黏着语等多语言环境下的记忆召回",
+    "通过 MCP 为编辑器和 host 提供记忆工具服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Built for multilingual agents that run 24/7 — not a vector DB wrapper.** SQLite-backed, 4-layer recall (FTS5 + trigram + embeddings + consolidated summaries), overnight sleep maintenance, injection detection, context orchestration, and a classification syste ／ │ ├── memory.db # SQLite (messages, extracted memories, embeddings)",
+     "lines": [
+      7,
+      148
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明数据存储于 SQLite（memory.db），项目服务于 AI 智能体而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Built for multilingual agents that run 24/7 — not a vector DB wrapper.** SQLite-backed, 4-layer recall (FTS5 + trigram + embeddings + consolidated summaries), overnight sleep maintenance, injection detection, context orchestration, and a classification system inspired by NATO Admiralty Codes. ／ │   ├── memory.db          # SQLite (messages, extracted memories, embeddings) ／ |**MCP server** (`abmind mcp`)|Editors + hosts with MCP support|",
+   "evidence_lines": [
+    7,
+    148,
+    90
+   ]
+  },
+  "fn": "aksika/abmind",
+  "sha": "e7b0aea714e4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

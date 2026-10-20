@@ -9890,5 +9890,253 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "69995a41f713": {
+  "identity": {
+   "one_liner": "嵌入式 Rust 消息/数据路由库，统一收发批式接口连接消息队列与数据库",
+   "review": "一个可嵌入 Rust、Python 或 Node.js 服务的异步数据搬运库，通过统一的 receive_batch/send_batch 接口在 Kafka、NATS、MQTT、PostgreSQL、ClickHouse 等端点间路由消息，支持 CDC、变换、重试、去重等中间件；也可通过 mq-bridge-app 以零代码 CLI 方式运行。适合需要在自己服务里集成数据管道的开发者。",
+   "highlights": [
+    "提供统一 receive_batch/send_batch 批式接口，任意 source 可接任意 sink",
+    "支持 Postgres 逻辑复制 CDC 与 MongoDB change streams，及 SQL 数据库作为源或 sink",
+    "同一 Rust 核心提供 Python 与 Node.js 绑定，并支持 TLS 配置复用"
+   ],
+   "use_cases": [
+    "RAG/语义搜索索引与 Postgres 源数据保持同步（CDC）",
+    "服务需原子地更新数据库并发布事件（事务性 outbox）",
+    "将 Kafka 等消息队列数据批量写入 SQL 数据库或 ClickHouse"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CD ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      27,
+      93,
+      94
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      94
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      94
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse** bulk insert and resumable reads|`clickhouse` endpoint · `clickhouse`|ClickHouse|",
+     "lines": [
+      96
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      94
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库与消息系统间的数据搬运/同步提供服务，数据库是其所连接的端点而非仅存储自身数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object storage, files, and in-memory channels. Every endpoint sits behind the same batch-shaped `receive_batch` / `send_batch` traits, so any source can feed any sink. ／ It is a **library you embed in your own service**, not a daemon or platform you operate. If you'd rather not write code, `mq-bridge-app` runs the same engine and config as a CLI, server, desktop app, and MCP server. ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+   "evidence_lines": [
+    27,
+    31,
+    94
+   ]
+  },
+  "fn": "marcomq/mq-bridge",
+  "sha": "69995a41f713",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b01f4798bf3a": {
+  "identity": {
+   "one_liner": "面向企业技术支持的 RAG 问答与受控工单 Agent 后端",
+   "review": "这是一个基于 FastAPI 的 AI 后端应用，从 TechQA 技术支持语料中检索证据并生成带来源的回答或拒答，工单创建需预览与人工审批确认。数据使用 SQLite 与 Chroma 存储，检索默认走 Chroma Dense，可选混合检索。面向需要知识问答与工单升级流程的技术支持团队，README 明确标注部分实验功能尚未完成验收。",
+   "highlights": [
+    "提供 RAG 检索问答接口，返回带来源回答并在上下文不足时拒答",
+    "工单 Agent 实现 preview/confirm 分离与人工审批，草稿由服务端持久化",
+    "包含 TechQA 语料上的检索与生成/拒答评测框架"
+   ],
+   "use_cases": [
+    "企业技术支持知识库检索问答",
+    "需人工审批的技术工单创建流程",
+    "RAG 检索、拒答与失败归因的评测实验"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "离线集成检查：`pytest tests/test_hybrid_search.py -k ticket_hybrid_document_to_decision`。通过真实 Uvicorn 回环 HTTP、JWT、上传/索引、临时 SQLite 与 Chroma，分别验证 Hybrid 预览后的确认、拒绝和取消，以及 trace/metrics 查询、租户与角色隔离；只有显式确认会在临时库产生测试工单。外部 embedding/rerank 使用替身，不是检索质量或并发审批验收，不外发资料、不修改日常数据。 ／ 真实模式只发送脚本内固定的四篇虚构说明及两个查询，使用独立临时 SQLite、Chroma 与上传目录，经过 ASGI 路由及 Demo JWT 认证，不连接已运行的服务、不改现有数据库和开关。检查默认 Dense、Hybrid 简单排序、租户/分类隔离、删除生效、空语料零调用及检索审计；不是 HTTP 网络部署验收或准确率评测。",
+     "lines": [
+      122,
+      207
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述该系统使用 SQLite 与 Chroma 存储和检索自身业务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向**企业技术支持**场景，构建知识检索、回答 / 拒答与工单升级一体化的 **RAG + 受控工单 Agent 后端**。 ／ 离线集成检查：`pytest tests/test_hybrid_search.py -k ticket_hybrid_document_to_decision`。通过真实 Uvicorn 回环 HTTP、JWT、上传/索引、临时 SQLite 与 Chroma，分别验证 Hybrid 预览后的确认、拒绝和取消，以及 trace/metrics 查询、租户与角色隔离；只有显式确认会在临时库产生测试工单。外部 embedding/rerank 使用替身，不是检索质量或并发审批验收，不外发资料、不修改日常数据。 ／ - 只检索 SQL 文档后端标记为 `indexed`、当前版本、当前租户且匹配 category 的 chunk；两个通道共享此范围。仅存在于旧静态 Chroma 索引、未通过文档后端登记的内容不进入 Hybrid；TechQA 离线语料也不会自动导入。",
+   "evidence_lines": [
+    5,
+    122,
+    191
+   ]
+  },
+  "fn": "Air000000/Enterprise-Support-AI-Copilot-API",
+  "sha": "b01f4798bf3a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c308e960c5c2": {
+  "identity": {
+   "one_liner": "Go+Vue3+SQLite 的多用户共享记账应用",
+   "review": "一个面向个人、家庭、合租、旅行团和小团队的多用户账单应用，提供个人记账、共享账本、等额/比例/份额等多种分摊方式和最少转账结算建议，支持导入微信、支付宝账单 CSV/xlsx。数据以 SQLite 单文件存储，可通过 Docker、二进制或飞牛 fnOS 安装包自托管部署。",
+   "highlights": [
+    "支持共享账本的四种分摊方式（等额、固定金额、百分比、份额）并自动计算最少转账次数的结算建议",
+    "支持导入支付宝与微信支付账单（CSV/xlsx），自动识别编码与表头并跳过重复账单",
+    "数据以 SQLite 单文件存储于挂载目录，备份即拷贝",
+    "金额在服务端以整数分存储以避免浮点误差"
+   ],
+   "use_cases": [
+    "家庭或合租成员间的共同支出分摊与结算",
+    "旅行团队临时共同记账",
+    "个人日常收支统计与账单导入管理"
+   ],
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 默认端口 `8907`；数据默认是挂载目录下的 SQLite 单文件，备份即拷贝，恢复支持上传本地备份文件。 ／ - 后端：Go、Gin、GORM、SQLite（WAL）",
+     "lines": [
+      22,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据默认存储为挂载目录下的 SQLite 单文件，该仓库是使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向个人、家庭、合租、旅行和小团队的多用户账单应用。支持个人收支统计，以及多人共同记账、灵活分摊、余额计算和补差结算；在飞牛 fnOS 上可通过 NAS 账号一键登录。 ／ > 默认端口 `8907`；数据默认是挂载目录下的 SQLite 单文件，备份即拷贝，恢复支持上传本地备份文件。 ／ - 后端：Go、Gin、GORM、SQLite（WAL）",
+   "evidence_lines": [
+    8,
+    22,
+    87
+   ]
+  },
+  "fn": "TechFunWay/bill",
+  "sha": "c308e960c5c2",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

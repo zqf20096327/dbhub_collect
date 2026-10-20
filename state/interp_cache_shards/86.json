@@ -10285,5 +10285,103 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f80c7a0cc664": {
+  "identity": {
+   "one_liner": "游戏运营控制平台：Server/Agent/SDK 架构，用于多游戏多环境的运维管控",
+   "review": "Croupier 是面向单公司内多游戏、多环境的游戏运营与管控平台，包含控制面 Server、游戏内 Agent 代理和多语言 SDK，提供任务分发、审计、健康探测和 CDC 采集等能力，通过 Web 控制台操作；后端基于 GORM，支持 SQLite/MySQL/PostgreSQL/SQL Server 存储数据。适用于游戏公司的 liveops 与 GM 后台场景。",
+   "highlights": [
+    "支持六种官方 SDK（Go/C#/Java/C++/Python/JS/TS），基于 TCP 会话传输与 protobuf 封包",
+    "Agent 提供 sidecar、devops、capture（数据库 CDC）、synthetics 等角色",
+    "以 gameId + env 划分业务范围模型，Web 控制台由 JSON Schema 能力契约生成"
+   ],
+   "use_cases": [
+    "游戏公司内部的运营管控与 GM 后台",
+    "游戏服务端的健康探测与变更数据采集",
+    "多游戏多环境统一接入的 liveops 平台搭建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|`gorm.io/driver/postgres`|Production| ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations",
+     "lines": [
+      54,
+      92
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|`gorm.io/driver/mysql`|Production (recommended)| ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations",
+     "lines": [
+      53,
+      92
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|`glebarez/sqlite`|Development, testing, small setups| ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations",
+     "lines": [
+      52,
+      92
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`gorm.io/driver/sqlserver`|Enterprise environments| ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations",
+     "lines": [
+      55,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为控制面业务层，通过 GORM 驱动使用 MySQL/PostgreSQL/SQL Server/SQLite 存储自身数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|Driver|Typical use| ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations ／ Pre-built images bring up a minimal stack with one command (server + agent + dashboard + postgres/redis; no local build required):",
+   "evidence_lines": [
+    50,
+    92,
+    189
+   ]
+  },
+  "fn": "cuihairu/croupier",
+  "sha": "f80c7a0cc664",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

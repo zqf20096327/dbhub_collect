@@ -9681,5 +9681,155 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "69d10ce992e9": {
+  "identity": {
+   "one_liner": "Rust 编写的 AI agent 自托管记忆服务，支持分层记忆与混合检索",
+   "review": "该项目为 AI agent 提供自托管的记忆核心服务，实现 L0→L3 分层记忆、异步蒸馏流水线与 BM25+向量+RRF 混合召回，并提供多租户隔离和监控面板。存储后端可选 SQLite（默认，含 FTS5 与 sqlite-vec）或 PostgreSQL（tsvector + pgvector），LLM 可接任意 OpenAI 兼容端点或本地 CLI。适合需要为 agent 部署记忆服务的团队，通过 docker compose 或 install.sh 运行。",
+   "highlights": [
+    "提供 L0→L3 分层记忆、异步蒸馏流水线与 BM25+向量+RRF 混合召回",
+    "支持 SQLite（FTS5/sqlite-vec）与 PostgreSQL（tsvector/pgvector HNSW）两种存储后端，并提供 SQLite 迁移到 PostgreSQL 的脚本",
+    "包含 team/agent/user 级隔离、ACL 元数据、v3 RPC API 及 TypeScript 监控面板"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、Hermes 等 agent 客户端部署自托管记忆服务",
+    "多团队/多 agent 场景下按 team_id 与 agent_id 隔离记忆数据",
+    "从单机 SQLite 起步、数据增长后迁移至 PostgreSQL 的部署路径"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1. **Storage backend**: SQLite (default, nothing to install) / existing PostgreSQL (enter a URL; the connection is tested from inside the container first) / start PostgreSQL (pgvector) for me with Docker ／ ||`postgres`|One schema per department (`am_<hash>`); full-text search via tsvector + GIN, vectors via **pgvector HNSW** (exact search when dimensions > 2000)| ／ - Connection: `AGENT_MEMORY_POSTGRES_URL=postgres://user:pass@host:5432/db`.",
+     "lines": [
+      21,
+      127,
+      133
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- No dependency on any cloud vendor's proprietary services: storage uses SQLite + local files; LLM and embedding use any OpenAI-compatible endpoint (including self-hosted models) ／ |`storage.backend` (`AGENT_MEMORY_STORAGE_BACKEND`)|`sqlite` (default)|One SQLite file per department; full-text search via FTS5, vectors via **sqlite-vec** (`vec0` KNN with isolation filters applied inside the index; falls back to brute-force comparison if the extension can't load)|",
+     "lines": [
+      11,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该服务为 AI agent 提供记忆功能，SQLite/PostgreSQL 仅作为其可选存储后端使用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An agent memory core service (**memory-core**) written in Rust, with a **Monitor Panel** written in TypeScript. ／ |`storage.backend` (`AGENT_MEMORY_STORAGE_BACKEND`)|`sqlite` (default)|One SQLite file per department; full-text search via FTS5, vectors via **sqlite-vec** (`vec0` KNN with isolation filters applied inside the index; falls back to brute-force comparison if the extension can't load)| ／ ||`postgres`|One schema per department (`am_<hash>`); full-text search via tsvector + GIN, vectors via **pgvector HNSW** (exact search when dimensions > 2000)|",
+   "evidence_lines": [
+    7,
+    126,
+    127
+   ]
+  },
+  "fn": "hsuanshao/AgentMemory",
+  "sha": "69d10ce992e9",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "74a8b493c303": {
+  "identity": {
+   "one_liner": "SQLite 列式分析扩展，以虚拟表实现本地 OLAP 查询",
+   "review": "一个以可加载扩展形式为 SQLite 提供列式存储与分析查询能力的项目。应用通过加载扩展并创建 columnar 虚拟表，对分析型表执行扫描、聚合与时间序列查询，配套专用聚合函数与增量 analyze 元数据。适合在嵌入式/本地场景中做分析而无需部署独立数据库；事务型点查场景仍应使用普通行式 SQLite 表。",
+   "highlights": [
+    "以自包含可加载扩展实现，不修改 SQLite 内核（pager/btree/parser/VDBE）",
+    "提供专用聚合函数与 chunk 级 zone map/min-max 跳过扫描，支持增量 analyze",
+    "提供 Linux/macOS/Windows/Android/iOS 预编译二进制及基准与测试套件"
+   ],
+   "use_cases": [
+    "嵌入式应用对本地事件/遥测/产品分析数据的仪表盘查询",
+    "按时间戳范围过滤的时间序列 rollup 与 IoT/边缘分析",
+    "桌面/移动应用的本地报表汇总及 SaaS 租户本地分析"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite-Columnar ／ `sqlite-columnar` brings column-oriented analytics to SQLite as a self-contained",
+     "lines": [
+      5,
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 提供列式存储与分析执行路径的加载扩展，属数据库生态组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`sqlite-columnar` brings column-oriented analytics to SQLite as a self-contained ／ normal extension, load it into SQLite, and create columnar virtual tables for",
+   "evidence_lines": [
+    30,
+    36
+   ]
+  },
+  "fn": "sqliteai/sqlite-columnar",
+  "sha": "74a8b493c303",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9586,5 +9586,234 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eecaaa1d3d56": {
+  "identity": {
+   "one_liner": "PHP 开源自托管分类信息 CMS，基于 MySQL 运行列表类站点",
+   "review": "ShopClass 是一个用 PHP 编写的开源自托管列表类 CMS，用于搭建分类信息、求职板、房产、车辆市场、目录等站点，包含列表发布、自定义字段、付费方案、搜索过滤、多语言和管理后台，兼容 Osclass 插件与主题 API。要求 PHP 8.0+ 与 MySQL 5.7.5+/MariaDB 10.2+，通过发布 zip 包安装，并提供 oc-cli 命令行做迁移、修复和维护任务。",
+   "highlights": [
+    "支持分类信息、求职、房产、车辆市场、目录等多种列表站点形态",
+    "兼容 Osclass 插件与主题 API（osc_* 助手、钩子、资源路径）",
+    "提供 oc-cli 命令行，包含 db:upgrade、db:doctor、db:repair 等数据库维护命令"
+   ],
+   "use_cases": [
+    "在自有主机上运行分类信息/二手交易站点",
+    "搭建求职板、房产门户或企业目录",
+    "从 Osclass 迁移升级并保留原有插件主题"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL 5.7.5+ / MariaDB 10.2+",
+     "lines": [
+      66
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL 5.7.5+ / MariaDB 10.2+",
+     "lines": [
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 MySQL/MariaDB 存储数据的 PHP 列表站点应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShopClass is a PHP application for running a listing site on your own hosting: ／ - MySQL 5.7.5+ / MariaDB 10.2+ ／ A full local stack (PHP-FPM, MariaDB, Nginx, Valkey, Mailhog and phpMyAdmin)",
+   "evidence_lines": [
+    18,
+    66,
+    169
+   ]
+  },
+  "fn": "mindstellar/shopclass",
+  "sha": "eecaaa1d3d56",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "610c3181319d": {
+  "identity": {
+   "one_liner": "Rails 应用的标签系统 Gem，提供多态标签与查询能力",
+   "review": "no_fly_list 是一个用于 Rails 8.1+ 的标签（tagging）库，通过在模型中 include TaggableRecord 并声明 has_tags，为记录添加分类标签。支持多标签上下文、多态标签、标签数量与存在性限制、多租户 scope 隔离、counter cache、自定义 transformer，并提供 with_any_tags 等查询 scope。要求 PostgreSQL、MySQL 或 SQLite3，通过 Gemfile 引入后用生成器建表迁移。面向需要给模型加标签功能的 Rails 开发者。",
+   "highlights": [
+    "支持多态标签、模型专属标签与每租户独立的 scoped tags",
+    "提供 with_any_tags/with_all_tags 等查询 scope 及 counter cache、标签数量限制",
+    "针对 PostgreSQL、MySQL、SQLite 提供优化查询策略"
+   ],
+   "use_cases": [
+    "为 Rails 应用的模型添加分类标签功能",
+    "多租户应用中按租户隔离标签集合",
+    "基于标签组合的内容检索与筛选"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL, MySQL, or SQLite3 ／ - **Database Agnostic**: Native support for PostgreSQL, MySQL and SQLite with optimized queries",
+     "lines": [
+      13,
+      23
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- PostgreSQL, MySQL, or SQLite3 ／ - **Database Agnostic**: Native support for PostgreSQL, MySQL and SQLite with optimized queries",
+     "lines": [
+      13,
+      23
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- PostgreSQL, MySQL, or SQLite3 ／ - **Database Agnostic**: Native support for PostgreSQL, MySQL and SQLite with optimized queries",
+     "lines": [
+      13,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 Gem 通过 Active Record 为多个数据库提供标签功能扩展，属于服务数据库应用开发的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A modern, modular tagging system built specifically for Rails 8.1+ applications. ／ - PostgreSQL, MySQL, or SQLite3 ／ - **Database Agnostic**: Native support for PostgreSQL, MySQL and SQLite with optimized queries",
+   "evidence_lines": [
+    6,
+    13,
+    23
+   ]
+  },
+  "fn": "contriboss/no_fly_list",
+  "sha": "610c3181319d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1f291543d830": {
+  "identity": {
+   "one_liner": "本地AI会话归档系统，统一收集、检索与审计多种AI工具历史",
+   "review": "这是一个 Rust 编写的本地归档工具，把 Claude Code、Codex、Gemini CLI、ChatGPT 导出等 AI 会话集中到本地存档，提供查询语言、用量统计、标注、只读 SQL 和 Web 阅读器，并支持通过 MCP 供 agent 检索。存档由守护进程独占写入，基于 SQLite 存储（archive.db/index.db 等），凭据在输出中脱敏。",
+   "highlights": [
+    "提供查询语言与只读 SQL 检索，支持 JSON/Markdown/HTML 等多种导出格式",
+    "内置 MCP 服务（stdio）和 HTTP API，可供 AI agent 读取历史会话",
+    "守护进程独占写入存档，保留每个输入的全部历史版本，凭据在输出中脱敏"
+   ],
+   "use_cases": [
+    "统一归档与全文检索多个 AI 工具的会话历史",
+    "统计 token 用量、成本与订阅配额等度量分析",
+    "通过 MCP 让本地 agent 检索过往工作上下文"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- `crates/store`: every SQLite connection and write, and the blob store.",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 工具会话数据服务的本地归档与检索组件，使用 SQLite 作为自身存储层而非仅为使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The archive is `$XDG_DATA_HOME/polylogue` (`~/.local/share/polylogue`). It ／ - `crates/store`: every SQLite connection and write, and the blob store. ／ |`mcp`|Serve MCP over stdio.|",
+   "evidence_lines": [
+    41,
+    91,
+    73
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "1f291543d830",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

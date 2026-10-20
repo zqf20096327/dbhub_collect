@@ -10554,5 +10554,175 @@
   "generated_at": "2026-10-19",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4232a81dfb9d": {
+  "identity": {
+   "one_liner": "PHP 微型 ORM 框架，基于 Repository/Data Mapper 模式实现",
+   "review": "一个 PHP 编写的微型 ORM 库，用于将任意含公共属性或 getter/setter 的类映射到数据库表，提供 Repository、Data Mapper、Active Record 等企业模式实现，支持字段映射、自动数据转换、软删除、缓存等能力。数据源支持依赖 byjg/anydataset 包。面向需要在 PHP 应用中做对象-关系映射的开发者。",
+   "highlights": [
+    "支持任意 DTO/Entity/Model 类与数据库表的映射，提供 Mapper 与 FieldMapping 机制",
+    "实现 Repository、Data Mapper、Active Record 三种企业模式供选用",
+    "通过 byjg/anydataset 支持多种数据源连接，安装使用 composer"
+   ],
+   "use_cases": [
+    "PHP 应用中的对象关系映射与 CRUD 操作",
+    "简单 CRUD 场景使用 Active Record，复杂领域使用 Repository + Data Mapper",
+    "需要软删除、查询缓存、UUID 等常见 ORM 能力的项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* The repository support a variety of datasources: MySql, Sqlite, Postgres, MySQL, Oracle (see byjg/anydataset)",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* The repository support a variety of datasources: MySql, Sqlite, Postgres, MySQL, Oracle (see byjg/anydataset) ／ $dbDriver = \\ByJG\\AnyDataset\\Db\\Factory::getDbInstance('mysql://user:password@server/schema');",
+     "lines": [
+      20,
+      108
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "* The repository support a variety of datasources: MySql, Sqlite, Postgres, MySQL, Oracle (see byjg/anydataset)",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* The repository support a variety of datasources: MySql, Sqlite, Postgres, MySQL, Oracle (see byjg/anydataset)",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 ORM 库为 PHP 应用提供数据库访问层，属于服务数据库生态的开发库组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A micro framework for create a very simple decoupled ORM. ／ * The repository support a variety of datasources: MySql, Sqlite, Postgres, MySQL, Oracle (see byjg/anydataset) ／ composer require \"byjg/micro-orm\"",
+   "evidence_lines": [
+    6,
+    20,
+    183
+   ]
+  },
+  "fn": "byjg/php-micro-orm",
+  "sha": "4232a81dfb9d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2815b439908e": {
+  "identity": {
+   "one_liner": "SeekDB 的 Swift 绑定，内嵌引擎运行的 SwiftPM 包",
+   "review": "该仓库提供 SeekDB 的 Swift 语言绑定，通过 C 接口调用 SeekDB.framework 在应用进程内启动数据库引擎，iOS 上经 Unix socket 发送 MySQL 握手供客户端连接；它本身不含 SQL 客户端，应用需自行选择 MySQL 协议客户端（如 MySQLNIO）。面向在 iOS/macOS 应用中嵌入 SeekDB 的开发者，需 iOS 18+ 并依赖本地或发布的原生引擎框架。",
+   "highlights": [
+    "通过 SwiftPM 分发，可在应用进程内启动并运行 SeekDB 引擎",
+    "无第三方 Swift 依赖，不含 SQL 客户端，连接由应用自选 MySQL 协议客户端",
+    "提供 SwiftPM 与 Xcode 两种安装方式，支持设备与模拟器框架切片"
+   ],
+   "use_cases": [
+    "在 iOS/macOS 应用中内嵌运行 SeekDB 数据库",
+    "为 SeekDB 构建依赖该绑定包的其他 Swift 包",
+    "配合 MySQLNIO 等 MySQL 协议客户端进行本地数据访问"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "MySQL-protocol client; the iOS example App uses MySQLNIO. ／ `mysql_port_mode` other than `disabled`, is rejected. ／ - Open returns once the engine runs and its Unix socket sends a MySQL handshake.",
+     "lines": [
+      11,
+      115,
+      116
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "oceanbase/seekdb's `SeekDB.framework` through the `CSeekDB` module, and the framework ／ .package(url: \"https://github.com/oceanbase/seekdb-swift.git\", from: \"0.1.0\") ／ In Xcode, add `https://github.com/oceanbase/seekdb-swift` with File > Add Package",
+     "lines": [
+      5,
+      42,
+      46
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SeekDB 数据库提供 Swift 语言绑定与内嵌运行能力，是服务于数据库生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "OceanBase"
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "oceanbase/seekdb's `SeekDB.framework` through the `CSeekDB` module, and the framework ／ This directory is a SwiftPM package: `Package.swift` exposes the `SeekDB` library ／ from `Sources/SeekDB`. The engine is seekdb's",
+   "evidence_lines": [
+    5,
+    15,
+    16
+   ]
+  },
+  "fn": "oceanbase/seekdb-swift",
+  "sha": "2815b439908e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

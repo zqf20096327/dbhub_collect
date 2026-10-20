@@ -9556,5 +9556,73 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3518d85ba22d": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的开源上下文服务，提供持久化记忆与交接",
+   "review": "PowerContext 是一个为 AI Agent 提供跨会话持久上下文的服务，将决策、约束、进度等记录为可版本化、可审查的 Artifact，包含 Memory、Handoff、Experience、Skill 四类服务和 Review Inbox。它以 HTTP/MCP、Python Client、CLI 和 Dashboard 形式提供接口，支持将存储后端配置为 SQLite 等。适用于需要多会话、多 Agent 或多人交接长任务的 Agent 开发与运维场景。",
+   "highlights": [
+    "提供 Memory、Handoff、Experience、Skill 四类服务，Artifact 以 FAMILY/ARTIFACT_ID@REVISION 版本化并可读取历史快照",
+    "提供 HTTP/MCP、Python Client、CLI、Dashboard 与 Agent 插件等多种接入面",
+    "Experience 与 Skill 候选需经 Review Inbox 审查后写入不可变 Revision，召回按字节预算返回"
+   ],
+   "use_cases": [
+    "Agent 任务在多会话间延续，需保留决策与下一步",
+    "多 Agent 或人与 Agent 之间交接工作状态",
+    "对 Agent 经验与流程进行人工审查后复用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The wizard asks about storage, local or remote usage, memory capabilities, Dashboard/access, and Agent connections. SQLite is the simplest first storage choice; choose embedded seekdb only when you need it and can approve its dependency install.",
+     "lines": [
+      188
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其存储后端可选 SQLite（向导将 SQLite 作为存储选择），属于使用数据库存储数据的服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Builtin runtime|Memory, Handoff, Experience, and Skill services, scheduling, inference, and supported storage backends|Running the standard local Server| ／ PowerContext 1.4.0 includes an interactive setup wizard. You need Python 3.11+, Git, and",
+   "evidence_lines": [
+    25,
+    163
+   ]
+  },
+  "fn": "oceanbase/powercontext",
+  "sha": "3518d85ba22d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

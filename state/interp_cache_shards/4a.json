@@ -9797,5 +9797,73 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "08c167c046b7": {
+  "identity": {
+   "one_liner": "SQLite 扩展，通过 MCP 协议在 SQL 中调用 MCP 服务器工具",
+   "review": "一个将 Model Context Protocol 集成进 SQLite 的 Rust 扩展，使数据库能通过 mcp_connect 等函数连接 MCP 服务器并列出/调用其工具，支持 Streamable HTTP 与 SSE 传输。提供预编译二进制和 Flutter/Dart 包，供在 SQL 查询或应用内桥接 SQLite 与 agent 生态的开发者使用。",
+   "highlights": [
+    "提供 mcp_connect/mcp_call_tool 等 SQL 函数与虚拟表，用于连接 MCP 服务器并调用工具",
+    "支持 Streamable HTTP 与 SSE 两种 MCP 传输协议",
+    "提供 macOS/Linux/Windows/Android/iOS 预编译二进制及 Flutter/Dart 包安装方式"
+   ],
+   "use_cases": [
+    "在 SQL 查询中直接调用 MCP 服务器提供的工具",
+    "在 Flutter/Dart 应用中加载扩展使 SQLite 具备 MCP 客户端能力",
+    "作为 SQLite AI 技术栈的 MCP 组件与 sqlite-ai、sqlite-agent 等配套使用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite-MCP ／ A SQLite extension that integrates the Model Context Protocol (MCP) Rust SDK, enabling SQLite databases to connect to MCP servers and call their tools.",
+     "lines": [
+      5,
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQLite 提供扩展能力的组件，README 说明其使 SQLite 数据库能连接 MCP 服务器，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A SQLite extension that integrates the Model Context Protocol (MCP) Rust SDK, enabling SQLite databases to connect to MCP servers and call their tools. ／ .load ./dist/mcp.dylib",
+   "evidence_lines": [
+    30,
+    65
+   ]
+  },
+  "fn": "sqliteai/sqlite-mcp",
+  "sha": "08c167c046b7",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

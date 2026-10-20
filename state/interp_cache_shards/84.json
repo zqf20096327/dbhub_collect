@@ -10260,5 +10260,212 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92dd8ca291f4": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，在库内存储、索引与比对生物序列",
+   "review": "BioseqDB 是一个 PostgreSQL 扩展，通过自定义序列类型、bioseq 表访问方法（列式存储）与 mmsearch/minimap2 相关的比对函数，用 SQL 完成基因序列的存储、索引与对齐查询。面向生信/基因组学使用者；当前为 alpha 版，默认分组-MPF 索引不支持插入时自动更新，需内存 ≥2GiB。",
+   "highlights": [
+    "提供 bioseq 序列类型、列式存储表访问方法（USING bioseq）及 BioseqScan 扫描节点",
+    "在 SQL 内实现序列索引与比对查询（mmsearch，含 CIGAR 输出）",
+    "按 PostgreSQL 大版本（17-20）与多个 Linux 发行版及 macOS 提供 Docker 镜像和二进制包"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中存储与查询 DNA/RNA 序列数据",
+    "将序列比对结果与关系型元数据（如患者信息）联合查询",
+    "宏基因组/RNA-seq 场景的 SQL 化序列搜索"
+   ],
+   "cat_note": ""
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "BioseqDB is a PostgreSQL extension for storing, indexing and searching biological sequences with SQL. Combine genomic matches with relational data using compact sequence types and columnar storage! ／ The docker images depend on the Linux distribution and Postgres major version, so please check which PG version you want. ／ Ubuntu 26.04 + PostgreSQL 19 (prerelease), for amd64 or arm64. Pull the image:",
+     "lines": [
+      26,
+      30,
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是服务于 PostgreSQL 的数据库扩展，为库增加存储与索引能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BioseqDB is a PostgreSQL extension for storing, indexing and searching biological sequences with SQL. Combine genomic matches with relational data using compact sequence types and columnar storage! ／ `USING bioseq` makes sure that table is stored in columnar format using BioseqDB. ／ Custom Scan (BioseqScan) on samples (actual time=0.010..0.015 rows=3 loops=1)",
+   "evidence_lines": [
+    26,
+    155,
+    213
+   ]
+  },
+  "fn": "styczynski/bioseqdb",
+  "sha": "92dd8ca291f4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4d9ceffb56b2": {
+  "identity": {
+   "one_liner": "异步多代理 LLM 框架，内置 SQLite 会话持久化与代理间移交",
+   "review": "这是一个 Python 异步多代理框架，用于构建接入 WhatsApp、Telegram、Webhook 和 CLI 的对话型 LLM 应用。它使用 Python 标准库 sqlite3 实现会话持久化存储，支持多 LLM 提供商切换、代理间自动移交、会话并发锁以及失败回合的对话历史回滚。面向需要快速部署消息渠道机器人的开发者；外部工具副作用不在回滚范围内。",
+   "highlights": [
+    "提供 WhatsApp（Meta Cloud API）、Telegram、Webhook（FastAPI）和 CLI 四种通道连接器",
+    "基于 Python 标准 sqlite3 库实现会话持久化，无额外外部依赖",
+    "支持回合失败时将内存与 SQLite 中的对话历史回滚至上一致回合"
+   ],
+   "use_cases": [
+    "接入 WhatsApp/Telegram 的多代理客服对话机器人",
+    "使用 Ollama 本地模型运行离线对话应用",
+    "需要会话持久化与失败回滚的消息型 LLM 应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **Turn Failure Rollback:** If an LLM request times out, rate limits, or crashes mid-turn, ChatFlow automatically rolls back dialogue history to the last consistent turn in memory and SQLite (note: rollback reverts conversational history; external side effect ／ When a turn fails, ChatFlow restores the following to the last consistent turn, in memory and in SQLite: ／ import sqlite3",
+     "lines": [
+      229,
+      237,
+      274
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储会话数据的多代理对话应用框架，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Turn Failure Rollback:** If an LLM request times out, rate limits, or crashes mid-turn, ChatFlow automatically rolls back dialogue history to the last consistent turn in memory and SQLite (note: rollback reverts conversational history; external side effects of already executed tools are not rolled back), ensuring clean context without orphaned partial turns. See Tool Idempotency & Side-Effect Handling for how to design tools that are safe to retry.",
+   "evidence_lines": [
+    229
+   ]
+  },
+  "fn": "GustavoBaranda/chatflow-agent",
+  "sha": "4d9ceffb56b2",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ab19edacfcf2": {
+  "identity": {
+   "one_liner": "本地仓库搜索工具，基于 SQLite FTS5 提供带引用证据的检索",
+   "review": "Reposition 是一个本地运行的 Python 工具，提供 API 与 CLI，对已保存的 issues、pull requests、评论和变更文件建立全文索引，检索结果附带可核查的来源引用（URI、修订、摘录偏移与哈希）。默认使用 SQLite FTS5，无需模型、服务器或凭据；Python 3.10+ 且需 SQLite FTS5 支持，适合需要在本地对仓库历史工作做检索与引用的场景。",
+   "highlights": [
+    "提供基于 SQLite FTS5 的标题加权全文搜索，支持组件过滤与引用证据（来源 URI、偏移、SHA-256）",
+    "提供 cache-index/cache-query/cache-retrieve 命令，操作 triage-o-mator 的不可变证据缓存",
+    "提供 Python API（Index、load_snapshot、render）与可选 TF-IDF 对比检索及 token/字符预算控制"
+   ],
+   "use_cases": [
+    "对仓库 issues/PR/评论/变更文件建立本地可引用的搜索缓存",
+    "在代码评审或 issue 分拣流程中检索既往修复及其引用",
+    "为 TUI 或 agent 提供结构化 SearchResult/Evidence 检索接口"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "This is an early local tool with a Python API and CLI. The default uses SQLite ／ Python 3.10+ with SQLite FTS5 support is required. From a checkout, one command",
+     "lines": [
+      7,
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明默认使用 SQLite FTS5 存储与检索其索引数据，项目本身是为仓库工作流服务的应用而非数据库生态组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 为主，含 Apache-2.0 与 MIT 的改编组件（见 NOTICE）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This is an early local tool with a Python API and CLI. The default uses SQLite ／ Reposition searches saved issues, pull requests, comments, and changed files,",
+   "evidence_lines": [
+    7,
+    3
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Univeracity/reposition",
+  "sha": "ab19edacfcf2",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

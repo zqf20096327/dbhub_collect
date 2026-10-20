@@ -10083,5 +10083,78 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bc1068e70b2f": {
+  "identity": {
+   "one_liner": "单人运营公司的 AI 辅助指挥中心，基于 Next.js 与本地 SQLite",
+   "review": "FounderOS 是一个面向个人创业者/一人公司的仪表盘应用，把通讯、客户漏斗、社交增长、财务、AI agent 与知识库整合在一块看板上。所有页面读取本地 SQLite 数据库，各集成连接器未配置时显示 not configured。需 Node 22+，以 npm 安装运行，首次启动为演示模式。",
+   "highlights": [
+    "每个页面读取同一本地 SQLite 数据库，集成未配置时报告 not configured",
+    "包含连接器（IMAP 邮件、Slack、Notion、Stripe/PayPal 等）、agent 运行时和基于 gbrain CLI 的 markdown 知识库搜索",
+    "演示模式内置虚构公司数据，支持通过设置切换为空白真实数据"
+   ],
+   "use_cases": [
+    "自由职业者/单人创始人在一个仪表盘管理业务各部门",
+    "通过 agent 看板管理任务、聊天与工作流",
+    "本地部署的个人公司指挥中心（默认仅监听 127.0.0.1）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "agents on one screen. Every page reads from one local SQLite database; every ／ |v3 (this)|Next.js 14 + SQLite, GladOS|`main`| ／ |v1|Next.js 14 + SQLite|tag `v1-nextjs`|",
+     "lines": [
+      13,
+      28,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该应用每页读取一个本地 SQLite 数据库存业务数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "agents on one screen. Every page reads from one local SQLite database; every ／ - **Connectors** (`lib/connectors/`): email (IMAP), Slack, Notion, Attio, WhatsApp, Stripe/PayPal, Beehiiv, ManyChat, Zernio, Foreplay, the knowledge engine, a local-stack probe, and an LLM gateway. Each returns a `ConnectorStatus` and never fakes \"connected\".",
+   "evidence_lines": [
+    13,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Bennettxai/FounderOS",
+  "sha": "bc1068e70b2f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

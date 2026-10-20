@@ -9667,5 +9667,95 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e5fd50c8f10f": {
+  "identity": {
+   "one_liner": "Laravel 数据库安全工具包，检查迁移 SQL 的锁与停机风险",
+   "review": "SQLens for Laravel 是一个 Composer 包，读取 Laravel 迁移实际生成的 SQL，对 PostgreSQL 18+ 和 MySQL 8.4+ 上的锁与停机风险做 lint、线上 schema 审计、漂移与安全检测，并提供 CI 可用的 pass/fail/undetermined 三态结果。它只读不写，自带会话超时与最小权限要求。面向使用 Laravel 框架、需要将迁移部署风险纳入 CI 门禁的开发与运维团队。",
+   "highlights": [
+    "读取迁移实际生成的 SQL 而非解析 Blueprint 调用，同时覆盖 PostgreSQL 与 MySQL 两种引擎",
+    "以只读方式审计数据库：仅读目录与状态视图，自设会话超时，自身不取锁、不写入",
+    "结果为 pass、fail 或带命名原因的 undetermined，同一状态在本地与 CI 产出相同结果",
+    "提供八个套件（lint/audit/security/deploy/analyse/format/guard/agent），agent 套件包含 MCP 服务器"
+   ],
+   "use_cases": [
+    "在 CI 中对 Laravel 迁移做锁与停机风险 lint，作为部署门禁",
+    "对 PostgreSQL/MySQL 线上 schema 做只读审计与漂移检测",
+    "通过最小权限只读角色审计生产或客户数据库"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SQLens — database safety toolkit for Laravel. It lints pending migrations for lock and downtime risk and audits the live schema, on PostgreSQL and MySQL. ／ SQLens for Laravel is a Composer package for Laravel applications on PostgreSQL 18+ ／ the SQL the framework's grammar will actually emit — and it is PostgreSQL-only.",
+     "lines": [
+      19,
+      21,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "SQLens — database safety toolkit for Laravel. It lints pending migrations for lock and downtime risk and audits the live schema, on PostgreSQL and MySQL. ／ and MySQL 8.4+. Other projects share the SQLens name; this one is the Laravel ／ what left the Laravel-and-MySQL corner empty rather than merely crowded.",
+     "lines": [
+      19,
+      22,
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Both name a connection above because a stock Laravel install defaults to SQLite, which SQLens ／ runs, rather than against SQLite alone.",
+     "lines": [
+      95,
+      127
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Laravel 应用的 PostgreSQL/MySQL 数据库提供安全检查的 Composer 包，本身不存业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLens — database safety toolkit for Laravel. It lints pending migrations for lock and downtime risk and audits the live schema, on PostgreSQL and MySQL. ／ |**lint**|The migrations you are about to run, before they reach a database.| ／ |**agent**|The same engine, served to an agent: one prioritized fix document per run, an MCP server, and rules exported into the files your agents already read.|",
+   "evidence_lines": [
+    19,
+    67,
+    74
+   ]
+  },
+  "fn": "pushery/sqlens-for-laravel",
+  "sha": "e5fd50c8f10f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

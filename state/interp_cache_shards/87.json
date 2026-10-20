@@ -8576,5 +8576,157 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2267d09d2429": {
+  "identity": {
+   "one_liner": "按项目声明 PHP 版本的本地开发环境，无 Docker",
+   "review": "HyPHP 是面向 Windows 和 macOS 的 PHP 本地开发环境，每个项目通过 hyphp.yaml 声明自己的 PHP 版本，多个版本经 FastCGI/php-fpm 并行服务 .test 域名。它按需下载并监督 Apache/nginx、MySQL 或 MariaDB、Mailpit 和 phpMyAdmin，提供本地 HTTPS、CLI 和 --json 输出。MySQL/MariaDB 同一时间仅激活一个，切换失败自动回滚。适合本地 PHP 项目开发与测试。",
+   "highlights": [
+    "支持 PHP 7.2 至 8.5 多版本并行，版本在项目 hyphp.yaml 中声明",
+    "提供 .test 域名、本地 HTTPS（mkcert）和内置 DNS 解析器的泛域名支持",
+    "包含 CLI（hyphp status/start/logs 等），全部命令支持 --json 输出"
+   ],
+   "use_cases": [
+    "本地同时运行多个不同 PHP 版本的项目",
+    "无 Docker 的 PHP 开发环境搭建（含数据库与邮件）",
+    "供脚本和 AI 代理调用的本地环境管理"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Apache or nginx, MySQL or MariaDB.** One of each active at a time, on the same ports, ／ |MySQL Community|8.0, 8.4|GPL-2.0|dev.mysql.com|",
+     "lines": [
+      65,
+      148
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Apache or nginx, MySQL or MariaDB.** One of each active at a time, on the same ports, ／ |MariaDB Server|10.11, 11.4, 11.8, 12.3|GPL-2.0|mariadb.org|",
+     "lines": [
+      65,
+      149
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "应用按需下载、验证并监督 MySQL/MariaDB 运行时，供项目使用，属服务数据库生态的本地环境工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "HyPHP is a desktop app with its own orchestrator: several PHP versions serving different ／ - **Apache or nginx, MySQL or MariaDB.** One of each active at a time, on the same ports, ／ |MySQL Community|8.0, 8.4|GPL-2.0|dev.mysql.com|",
+   "evidence_lines": [
+    20,
+    65,
+    148
+   ]
+  },
+  "fn": "arismarioneves/hyphp",
+  "sha": "2267d09d2429",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "206976f6cdd7": {
+  "identity": {
+   "one_liner": "AI 原生桌面 CRM，AI 起草建议卡、人工确认写入，数据存本地 SQLite",
+   "review": "一个面向个人销售者与小团队的桌面 CRM（Electron + Next.js），管理线索、客户、跟进、商机并支持加密同步。首页是 agent 对话面，模型通过只读工具查数据，写操作以建议卡形式由用户确认后经同一 server action 落库；数据用 Prisma + SQLite 以单文件形式存本机。支持接入 DeepSeek 或 OpenAI 兼容接口，也可通过 MCP 用 Claude Code/Codex 连接。",
+   "highlights": [
+    "提供 agent 对话首页与建议卡确认写入机制，模型工具全部只读",
+    "支持 Excel/CSV 导入、粘贴文本 AI 切分客户，整批可撤销",
+    "提供团队版加密同步与推荐归属固化规则，支持 MCP 接入与 Docker 自部署"
+   ],
+   "use_cases": [
+    "个人销售、个体户管理客户与商机",
+    "教培/留学招生场景（内置业务预设）",
+    "数据敏感、希望数据保存在本机的小团队"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据|Prisma 6 · SQLite（一库一文件）|",
+     "lines": [
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确用 Prisma 6 + SQLite 存业务数据，是使用数据库的 CRM 应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**桌面端客户管理系统（Mac / Windows）**：线索 → 客户 → 跟进 → 商机 → 签约，推荐归属自动算。 ／ |数据|Prisma 6 · SQLite（一库一文件）| ／ 代码开源（AGPL-3.0），也可以用 Docker 自行部署：`docker compose up -d`，详见 docs/部署.md。",
+   "evidence_lines": [
+    7,
+    171,
+    235
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "BeckY824/daedalus-crm",
+  "sha": "206976f6cdd7",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

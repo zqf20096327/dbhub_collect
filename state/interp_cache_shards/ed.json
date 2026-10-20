@@ -9247,5 +9247,142 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68b1f99c89fe": {
+  "identity": {
+   "one_liner": "Rust+Tauri 本地优先笔记工作区，数据存于单文件 SQLite",
+   "review": "Thought Desk 是一款本地优先的桌面笔记工作区，提供嵌套页面、块编辑器、全文搜索、类 Notion 的数据库视图、日历和文件库。面向需要本地离线使用笔记工具的个人用户（安装示例面向学生场景）。数据全部存储在单个 SQLite 数据库（WAL 模式）加文件目录中，支持 Windows 安装包分发，Linux 与 Microsoft Store 版本在计划中。",
+   "highlights": [
+    "支持嵌套页面、块编辑器、全文搜索、多种数据库视图（表格/看板/画廊/日历/时间线等）",
+    "数据保存在单文件 SQLite 数据库（WAL 模式）和本地文件目录中",
+    "内置 LaTeX 公式编辑、闪卡、表单视图与按钮/自动化规则"
+   ],
+   "use_cases": [
+    "个人本地笔记与知识管理",
+    "课程任务、日程与闪卡学习管理",
+    "用表格/看板/时间线视图跟踪结构化数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Search:** `Ctrl+K` over pages (SQLite FTS5 with prefix matching and a substring fallback), assignments, events and files, with quick *Go to* and *Create* actions. ／ Everything lives in one SQLite database (`thoughtdesk.db`, WAL mode) plus a `files/` folder for the file library (stored under random names; the database keeps their real names). On Windows that's `%APPDATA%\\app.thoughtdesk.desktop\\`, and **Settings → Storage*",
+     "lines": [
+      86,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储自身数据的桌面笔记应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, local-first notes workspace in the spirit of Notion: nested pages, a block editor, full-text search, databases, plus assignments, a calendar and a file library that all link together. It has a custom title bar, a vertical sidebar and a black-and-white look with optional accent colors. Built with **Rust + Tauri 2 + TypeScript** (Svelte 5 components).",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "kusule1351-hue/thought-desk",
+  "sha": "68b1f99c89fe",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a7ede17da1d5": {
+  "identity": {
+   "one_liner": "本地AI代理交互日志的解析、检索与可视化工具，基于SQLite",
+   "review": "LocalAgentViewer 将 Claude Code、Codex CLI、Claude Desktop、ChatGPT 等产生的本地 JSONL 日志解析进单一 SQLite 数据库，提供 FTS5 全文检索、可选 Qdrant 语义搜索、AI 分类及 Web 仪表盘，支持多机分布式采集。核心零外部依赖（stdlib），pip 安装后 lav-parse/lav-server 即可运行，面向需要在本地保存和检索 AI 代理交互记录的个人用户。",
+   "highlights": [
+    "解析多来源 JSONL/JSON 日志到单一 SQLite 数据库（FTS5 全文检索）",
+    "可选集成 Qdrant 向量搜索、gpt-4.1-mini 分类及 MCP server",
+    "提供 Web 仪表盘，展示 tokens、成本、工具调用、活跃度等统计"
+   ],
+   "use_cases": [
+    "个人用户检索和归档本地 AI 代理历史交互",
+    "多机器日志集中汇总分析（本地解析+中央收集器）",
+    "token/成本统计与工作模式可视化分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Parse** raw JSONL/JSON logs from multiple agents into a single SQLite database ／ # Search interactions (SQLite FTS5)",
+     "lines": [
+      35,
+      138
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该工具自身存储解析后日志的内嵌数据库，工具服务于 AI 代理日志分析而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Parse** raw JSONL/JSON logs from multiple agents into a single SQLite database ／ The database is created automatically at `~/.local/share/local-agent-viewer/local_agent_viewer.db`. No configuration required for core functionality.",
+   "evidence_lines": [
+    35,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "maxturazzini/local-agent-viewer",
+  "sha": "a7ede17da1d5",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

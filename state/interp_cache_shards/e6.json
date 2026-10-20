@@ -9866,5 +9866,176 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c02e6fad654f": {
+  "identity": {
+   "one_liner": "本体驱动的多语言代码静态分析引擎，将代码解析为内嵌 SQLite 图数据库",
+   "review": "CodeExplorer 把 C#、TypeScript/JS、Java、Go、Python、SQL 等源码、清单文件与 SQL schema 解析进本地 SQLite 图库，内置 OpenCypher-to-SQL 编译器。面向三类使用者：通过 MCP 服务于 Claude Code、Cursor 等 AI 编码代理做调用链与数据血缘分析；在 CI/IDE 中以声明式规则执行架构边界门禁；以及 VS Code 插件做架构可视化。单文件二进制分发，嵌入 Tree-sitter 与 SQLite。",
+   "highlights": [
+    "解析 C#、TypeScript/JS、Java、Kotlin、Go、Python、SQL 等语言的源码、项目清单、HTTP 端点、消息拓扑与 SQL schema 到内嵌 SQLite 图（graph.db）",
+    "通过 ce mcp 以 Model Context Protocol 暴露图查询工具，支持调用链追踪、影响分析与数据血缘（READS_FROM/WRITES_TO）",
+    "提供 OpenCypher 只读查询与 Semantic Invariant Gates 架构规则门禁，支持 SHA-256 ratchet 基线"
+   ],
+   "use_cases": [
+    "AI 编码代理需要跨服务调用链、依赖与数据血缘分析时接入 MCP 客户端",
+    "在 CI 中以 OpenCypher 规则校验架构分层边界并阻止新增违规",
+    "在 VS Code 中可视化服务拓扑、项目依赖流与限界上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**SQL**|`.sql` & embedded SQL strings|T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`)|",
+     "lines": [
+      204
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**SQL**|`.sql` & embedded SQL strings|T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`)|",
+     "lines": [
+      204
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "CodeExplorer (`ce`) is a static analysis engine and embedded graph database for polyglot codebases. It parses source files, project manifests, HTTP endpoints, message broker topologies, and SQL schemas into a local SQLite graph (`graph.db`) with a built-in Ope ／ Running `ce mcp` exposes the indexed SQLite graph over the Model Context Protocol: ／ |**SQL**|`.sql` & embedded SQL strings|T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`)|",
+     "lines": [
+      10,
+      91,
+      204
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**SQL**|`.sql` & embedded SQL strings|T-SQL, PostgreSQL, MySQL, SQLite, ClickHouse, BigQuery DDL & CRUD lineage (`READS_FROM`, `WRITES_TO`)|",
+     "lines": [
+      204
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该代码分析工具的内嵌图存储（graph.db），非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CodeExplorer (`ce`) is a static analysis engine and embedded graph database for polyglot codebases. It parses source files, project manifests, HTTP endpoints, message broker topologies, and SQL schemas into a local SQLite graph (`graph.db`) with a built-in OpenCypher-to-SQL compiler. ／ Running `ce mcp` exposes the indexed SQLite graph over the Model Context Protocol:",
+   "evidence_lines": [
+    10,
+    91
+   ]
+  },
+  "fn": "vmikhailov/code-explorer",
+  "sha": "c02e6fad654f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f7178333d5e5": {
+  "identity": {
+   "one_liner": "自托管求职申请追踪器，以每职位一条记录为核心机制",
+   "review": "这是一个自托管、单用户的求职申请追踪应用，把多个招聘平台的同一职位机会归并到一条记录下管理状态、笔记与材料，并提供浏览器扩展捕获职位信息和本地 Kanban 看板。默认使用本地 SQLite 存储，可选 Turso 同步，仅支持 LinkedIn 及 Gmail 中 LinkedIn 邮件的内置集成，其他站点需手动录入。适合希望本地掌控求职数据的个人用户。",
+   "highlights": [
+    "以每个职位机会为中心保留多条 URL、状态变更、笔记、事件与材料记录",
+    "提供浏览器扩展用于在职位页面捕获详情并更新状态，含 LinkedIn Easy Apply 表单填写",
+    "默认本地 SQLite 存储，可选 Turso 同步，并通过 OpenAPI schema 向 AI 代理暴露 API"
+   ],
+   "use_cases": [
+    "集中追踪跨平台转贴的同一职位机会及其申请历史",
+    "在浏览职位页面时就地记录和更新申请状态",
+    "本地化私密管理求职数据并可选同步"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stay local and extensible.** Use SQLite by default, opt into Turso synchronization, and add new built-in or private integrations through the adapter model. ／ Job Tracker is a single-user, self-hosted application designed for localhost use. By default, records—including verified form Answers and remembered values awaiting review—stay in a local SQLite file on your own machine; Turso synchronization is optional. Data",
+     "lines": [
+      22,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是以 SQLite 为默认存储的自托管求职追踪应用，数据库仅为其存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Stay local and extensible.** Use SQLite by default, opt into Turso synchronization, and add new built-in or private integrations through the adapter model. ／ Job Tracker is a single-user, self-hosted application designed for localhost use. By default, records—including verified form Answers and remembered values awaiting review—stay in a local SQLite file on your own machine; Turso synchronization is optional. Database backups and optional Turso synchronization include those retained private values. The extension talks only to the configured Job Tracker server, uses no third-party analytics, and keeps optional search diagnostics off by default. ／ Run from source, use Docker Compose, or download a Linux/WSL2 release. Open <http://localhost:3456> and load the matching extension.",
+   "evidence_lines": [
+    22,
+    54,
+    60
+   ]
+  },
+  "fn": "Muatasim-Aswad/job-tracker",
+  "sha": "f7178333d5e5",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

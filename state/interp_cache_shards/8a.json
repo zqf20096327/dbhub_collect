@@ -9927,5 +9927,247 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "78858e84aec1": {
+  "identity": {
+   "one_liner": "现代 C++ 全栈开发库，含异步网络、加密与数据库客户端组件",
+   "review": "这是一个 C++ 开发库，提供并发异步原语、容器、AES/ChaCha20 等加密算法、HTTP/1.1 与 HTTP/2 网络实现、配置文件解析，以及 MySQL/PostgreSQL/SQLite 客户端和带方言感知的 SQL 构建器。面向 C++ 应用开发者与学习底层原理的学习者，需 C++14/17/20 编译器，支持 Windows/Linux，通过 vcpkg/CMake 集成。",
+   "highlights": [
+    "包含 MySQL、PostgreSQL、SQLite 客户端组件与支持方言感知占位符的 sql_builder（L204-L210）",
+    "实现异步 I/O 上下文、线程池、协程原语及 HTTP/2 帧层与 HPACK（L137-L145, L182）",
+    "内置 AES-256、ChaCha20-Poly1305、SHA-2 等加密与哈希算法实现（L167-L170）"
+   ],
+   "use_cases": [
+    "C++ 后端服务开发（HTTP 服务器、会话管理、中间件链）",
+    "需要 MySQL/PostgreSQL/SQLite 访问的 C++ 应用程序",
+    "学习 C++ 并发、网络协议与算法的底层实现"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 客户端",
+     "lines": [
+      209
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL 客户端",
+     "lines": [
+      208
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite 客户端",
+     "lines": [
+      210
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **`sql_builder`** - 标准 SQL 语句流式构建，支持**方言感知占位符**（Generic `?` / PgSQL `$N` / Oracle `:N`）和**方言感知 DDL**（AUTO_INCREMENT / SERIAL / IDENTITY 自动适配）",
+     "lines": [
+      204
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 C++ 应用开发提供工具集的开发库，包含数据库客户端组件，而非使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "本项目旨在建立**功能健全、风格统一、可读性强、社区共建、跨平台兼容**的工业级现代 C++ 开发库。通过清晰的架构设计、规范的代码实现、丰富的设计模式应用，",
+   "evidence_lines": [
+    26
+   ]
+  },
+  "fn": "aurora250/NexusForce",
+  "sha": "78858e84aec1",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6691fdf293f7": {
+  "identity": {
+   "one_liner": "自托管英语词典服务器：数据集+只读API+管理面板",
+   "review": "一个可自行部署的英语词典服务器，内置30万词条数据集，提供只读公开API、管理面板、Node.js与Python SDK及配套网站；支持安装/派生多数据集并保留来源与许可信息。数据存于PostgreSQL（开发时可用SQLite本地文件），通过Docker镜像或源码运行，适合需要自建词典/词汇数据服务的开发者与运维者。",
+   "highlights": [
+    "提供 /api/v1 只读API，支持纠错搜索、游标分页、批量查询（至多50词）、ETag缓存与OpenAPI文档",
+    "管理面板支持编辑词条、修改历史与撤销、读者纠错审核、数据集导入导出与安装",
+    "支持多数据集并存与派生（fork），保留来源、许可与编辑历史；提供 Prometheus 指标与健康探针"
+   ],
+   "use_cases": [
+    ""
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Under the hood** — PostgreSQL (SQLite for development), Docker images, migrations on start, ／ PostgreSQL ／ On PostgreSQL, add another dictionary from **Managing → Datasets → How to install**:",
+     "lines": [
+      88,
+      30,
+      196
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Under the hood** — PostgreSQL (SQLite for development), Docker images, migrations on start, ／ No database needed: without `DATABASE_URL` the server uses a local SQLite file, and every app",
+     "lines": [
+      88,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明服务端以 PostgreSQL 存储词典数据（SQLite 用于开发），数据库是其存储组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：代码 MIT，项目词典数据 CC BY 4.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A dictionary server you run yourself. It comes with the data, an API to read it, an admin ／ **Under the hood** — PostgreSQL (SQLite for development), Docker images, migrations on start, ／ **The API** — `/api/v1`, read-only, no keys",
+   "evidence_lines": [
+    37,
+    88,
+    63
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "Fristail27/vocab-bloom-hub",
+  "sha": "6691fdf293f7",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2e82f99815ce": {
+  "identity": {
+   "one_liner": "Flutter+Node.js 餐厅 POS 系统，用 SQLite 存储数据",
+   "review": "PaynEat 是一个餐厅点餐/收银 POS 应用，前端为 Flutter/GetX，后端为 Node.js/Express + SQLite + Socket.IO，提供桌台管理、厨房显示、PromptPay QR 支付、排班结算、库存扣减、多语言与离线模式等功能，面向餐厅经营者使用。README 未给出具体安装命令，需从源码构建。",
+   "highlights": [
+    "支持堂食点餐、厨房实时显示、分单/合单与多渠道支付（含 EMV 标准 PromptPay QR）",
+    "支持断网离线销售、泰/英/韩三语界面与 ESC/POS 热敏打印",
+    "包含班次对账（Z-report）、CSV 导出、基于服务端的 5 角色权限控制及 1100+ 自动化测试"
+   ],
+   "use_cases": [
+    "餐厅堂食点餐与厨房出餐流程管理",
+    "收银结算、分单拆账与泰式 PromptPay QR 收款",
+    "班次结账对账、销售报表与多门店运营管理"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Flutter (GetX + Clean Architecture)** + **Node.js / Express + SQLite + Socket.IO** — โค้ดชุดเดียวรันได้ทั้ง Android, iOS และ Web ／ SQLite",
+     "lines": [
+      7,
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统使用 SQLite 作为后端存储，属于使用数据库的终端应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，要求保留 NOTICE 文件",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Flutter (GetX + Clean Architecture)** + **Node.js / Express + SQLite + Socket.IO** — โค้ดชุดเดียวรันได้ทั้ง Android, iOS และ Web ／ **English overview** — A full restaurant point-of-sale system that demonstrates end-to-end product engineering: ／ with a Node.js REST + WebSocket backend. It covers the complete floor-to-cash workflow — table map, order taking with",
+   "evidence_lines": [
+    7,
+    18,
+    20
+   ]
+  },
+  "fn": "SuruchBoss/PaynEat",
+  "sha": "2e82f99815ce",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

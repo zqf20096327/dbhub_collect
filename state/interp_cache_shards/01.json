@@ -9920,5 +9920,70 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "860429161a91": {
+  "identity": {
+   "one_liner": "Postgres 兼容的短生命周期数据库运行时，单进程托管大量隔离库",
+   "review": "PGX 是一个实现 Postgres 线协议与 SQL 方言的数据库运行时，面向 agent 沙箱、CI、per-PR 和预览环境等一次性数据库场景。它通过密封模板加写时复制（如 ZFS block clone）实现毫秒级建库与高密度隔离，并内置内存/连接限制。当前为 beta，fsync 关闭、不支持 C 扩展，明确不适合生产主库或 HA/PITR。",
+   "highlights": [
+    "单进程运行时通过密封模板与写时复制存储（如 ZFS block clone）毫秒级创建隔离数据库",
+    "实现 Postgres 线协议与 SQL 方言，Rails/Django/Prisma/SQLAlchemy/node-postgres 可直接运行完整迁移与测试生命周期",
+    "提供会话/数据库/运行时多级内存与连接限制，以及 cgroups 兜底隔离"
+   ],
+   "use_cases": [
+    "编码 agent 的数据库沙箱：建库→迁移→改 schema→测试→丢弃",
+    "CI 与 per-PR 一次性数据库",
+    "测试与预览环境的短生命周期数据库"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "PGX. Postgres for agents. 🐘 ／ PGX speaks the Postgres wire protocol and SQL dialect. Rails, Django, ／ |PostgreSQL regression suite|219 / 231 byte-exact. The other 12 differ only in EXPLAIN plan text: **0 result differences**.|",
+     "lines": [
+      3,
+      29,
+      158
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "PGX 本身是数据库运行时/引擎组件，为 agent 与开发流程提供 Postgres 兼容的数据库实例服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PGX is a database runtime for short-lived Postgres databases: agent ／ PGX speaks the Postgres wire protocol and SQL dialect. Rails, Django, ／ The central idea: **share everything immutable, pay for divergence.** It",
+   "evidence_lines": [
+    21,
+    29,
+    207
+   ]
+  },
+  "fn": "pgrundev/pgx",
+  "sha": "860429161a91",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

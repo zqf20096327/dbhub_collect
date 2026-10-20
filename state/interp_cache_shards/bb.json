@@ -9479,5 +9479,291 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "938b5f3895bb": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 的定制构建层，内嵌 SQLite usage 服务与账号巡检调度",
+   "review": "该项目为 upstream CLIProxyAPI 后端与管理中心前端提供可重复应用的 patch/overlay 定制层，生成 Pro 版二进制与 Docker 镜像。功能包括请求数据 SQLite 持久化、配额缓存、账号巡检调度、代理池与 OAuth 账号策略，并提供单文件管理页面。适用于已部署 CLIProxyAPI 且需要用量统计与账号巡检能力的运维者；定制以不 fork upstream 为前提，依赖 upstream release 节奏。",
+   "highlights": [
+    "内嵌 SQLite usage service，支持 usage JSONL/NDJSON 导入导出与 WebDAV 备份恢复",
+    "后端账号巡检调度器，支持自动化启用、禁用、删除与令牌刷新",
+    "二进制内建代理池与 OAuth 账号策略，配置持久化在 usage SQLite"
+   ],
+   "use_cases": [
+    "对 CLIProxyAPI 部署进行请求数据持久化与用量统计",
+    "多 AI 提供商账号的自动化巡检与配额管理",
+    "将多个 HTTP/SOCKS 代理节点汇聚为本地 SOCKS5 地址"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 内嵌 SQLite usage service。 ／ - 支持 SQLite-backed quota cache。 ／ - 代理池与 OAuth 账号策略直接编译进所有 Pro 二进制，包括 `_no-plugin` 产物；其配置持久化在 usage SQLite，不写入 `config.yaml` 或认证文件。",
+     "lines": [
+      40,
+      44,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该代理服务的内部持久化存储使用，项目本身不面向数据库生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "本项目为 upstream 的定制层；upstream core 与 management 均为 MIT License，本仓库不声明拥有 upstream 代码版权",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 内嵌 SQLite usage service。 ／ - 代理池与 OAuth 账号策略直接编译进所有 Pro 二进制，包括 `_no-plugin` 产物；其配置持久化在 usage SQLite，不写入 `config.yaml` 或认证文件。 ／ - `cliproxyapi-pro-core/`：基于 `router-for-me/CLIProxyAPI` 的后端 Docker 构建定制。",
+   "evidence_lines": [
+    40,
+    52,
+    5
+   ]
+  },
+  "fn": "ssfun/CLIProxyAPI-Pro",
+  "sha": "938b5f3895bb",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b405467d7cb9": {
+  "identity": {
+   "one_liner": "构建于 Postgres 之上的 AI 工作流引擎与 Agent 记忆扩展",
+   "review": "Percolate 在 Postgres 内实现 AI 工作流引擎与 Agent 记忆，agents、workflows、runs、documents 及图关系均以行存储，可被 SQL 查询。仓库包含纯 SQL 扩展、Rust/pgrx 解析器扩展和 Python 进程 percolate-core（worker、Content Server、Agent Runtime）。面向需要让运行轨迹可查询的 Agent/工作流开发者。安装经 get-percolate，提供 Docker 镜像、Helm chart 与 PyPI 包；仅含公开部分，核心源码为只读镜像。",
+   "highlights": [
+    "提供纯 SQL 扩展 percolate，非超级用户即可安装并启用行级安全",
+    "提供 Rust/pgrx 编译的 percolate_parser 扩展",
+    "schema 由 specs 目录生成，并为每个已发布版本生成升级脚本"
+   ],
+   "use_cases": [
+    "在 Postgres 内存储和查询 Agent 运行轨迹与文档图",
+    "部署带 worker 与 Agent Runtime 的工作流系统"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "An AI workflow engine and agent memory inside Postgres. Agents, workflows, runs, documents and the graph over them ／ The Postgres image, with the parser compiled from this tree (Docker with at least 6 GB of memory):",
+     "lines": [
+      3,
+      22
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "以 Postgres 扩展与配套进程的形式为在该库内构建 AI 工作流能力，属服务于数据库生态的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "pypi",
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`extension/percolate`|the `percolate` extension: pure SQL, installable by a non-superuser so row-level security is real| ／ |`extension/percolate_parser`|the `percolate_parser` extension: the compiled parsers, in Rust with pgrx| ／ The Postgres image, with the parser compiled from this tree (Docker with at least 6 GB of memory):",
+   "evidence_lines": [
+    10,
+    11,
+    22
+   ]
+  },
+  "fn": "Percolation-Labs/percolate",
+  "sha": "b405467d7cb9",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8ce30ce47670": {
+  "identity": {
+   "one_liner": "跨引擎桌面数据库管理客户端，支持130+数据库与云服务",
+   "review": "DBine 是一个用 Rust + Tauri 构建的桌面端多引擎数据库管理工具，提供连接树、SQL 编辑器、Profiler、服务器监控、表设计器、ER 图、schema 比较与跨引擎迁移、notebook 等功能，面向需要同时管理多种数据库和云服务的开发与运维人员。支持 SSH 隧道、云 IAM 认证和密钥管理器集成，本地状态为 SQLite 文件，密码存于系统钥匙串。",
+   "highlights": [
+    "支持 130+ 数据库与云服务的连接管理，可从 DBeaver、DataGrip、SSMS 等工具导入连接",
+    "提供实时 Profiler、服务器监控、执行计划图形化与结果导出（CSV/JSON/XLSX 等）",
+    "包含表设计器、ER 图、schema 比较、跨引擎迁移和只读连接模式"
+   ],
+   "use_cases": [
+    "在一个客户端中统一管理多种关系型、文档型、时序等数据库的日常查询与编辑",
+    "对托管云数据库通过 AWS IAM、Azure Entra ID 等进行短期令牌认证连接",
+    "跨引擎比较 schema、迁移或同步数据库结构"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBine: the explorer with PostgreSQL, SQL Server, Redis and Elasticsearch connections, the SQL editor and results ／ - **Cloud sign-in** for managed PostgreSQL and MySQL: AWS IAM (RDS, Aurora),",
+     "lines": [
+      26,
+      58
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Cloud sign-in** for managed PostgreSQL and MySQL: AWS IAM (RDS, Aurora),",
+     "lines": [
+      58
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "DBine: the explorer with PostgreSQL, SQL Server, Redis and Elasticsearch connections, the SQL editor and results ／ client runs on that database, live, like SQL Server's Profiler. For each one ／ - If the engine records every query (Extended Events in SQL Server,",
+     "lines": [
+      26,
+      103,
+      107
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "own users don't have it, such as SQLite, DuckDB or DynamoDB. Details: ／ - The local state is a SQLite file in the app's configuration folder.",
+     "lines": [
+      291,
+      394
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      413
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse, Snowflake, BigQuery, Elasticsearch, Redis, among others), with ／ |Analytical|DuckDB · CSV / Parquet / JSON files · ClickHouse · Trino · Presto · Starburst · BigQuery · Athena · Snowflake · Databricks · Redshift · StarRocks · Doris · Databend · Hive · Impala · Drill · Dremio · Calcite Avatica · Flight SQL · Teradata · Vertic",
+     "lines": [
+      304,
+      414
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      413
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      413
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      413
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是连接和管理 130+ 数据库的桌面管理客户端，为数据库生态提供工具能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "SQLite",
+    "Oracle",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DBine** is a desktop multi-engine database manager from AddLayer. One app ／ DBine: the explorer with PostgreSQL, SQL Server, Redis and Elasticsearch connections, the SQL editor and results ／ - **Cloud sign-in** for managed PostgreSQL and MySQL: AWS IAM (RDS, Aurora),",
+   "evidence_lines": [
+    9,
+    26,
+    58
+   ]
+  },
+  "fn": "addlayer-io/dbine",
+  "sha": "8ce30ce47670",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

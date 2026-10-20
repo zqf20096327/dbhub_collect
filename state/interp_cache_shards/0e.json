@@ -10756,5 +10756,71 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ae2b19641da": {
+  "identity": {
+   "one_liner": "epoint.az 支付网关的本地 sandbox，单容器提供 API、支付页、callback 与 dashboard",
+   "review": "该项目在本地以 Docker 容器复刻 epoint.az 支付网关的行为，包含 31 个已文档化的 API endpoint、测试卡、签名工具、callback 发送与请求日志，供商户在无正式账户时构建和调试集成；内部使用 PostgreSQL 存储数据，可通过环境变量指向外部数据库，支持 volume 持久化和 dashboard 登录保护。",
+   "highlights": [
+    "实现 epoint 生产环境的 31 个 API endpoint，路径与 /api/1/ 下生产一致，并提供 OpenAPI 文档",
+    "提供 dashboard、支付页、签名诊断工具、请求日志与 callback 追踪，附带结果可控的测试卡列表",
+    "支持通过 EPOINT_DATABASE_URL 连接外部数据库，内置数据位于 /var/lib/postgresql/data，可挂载 volume 持久化"
+   ],
+   "use_cases": [
+    "在无 epoint 商户账户的情况下本地构建和调试支付集成",
+    "在测试中模拟成功、余额不足、超时等支付结果（通过卡号后三位控制）",
+    "作为共享服务部署在 staging 环境旁供团队联调 callback"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`EPOINT_DATABASE_URL`|Daxili Postgres yerinə öz baza serverinizi işlədin| ／ Daxili bazanın datası `/var/lib/postgresql/data` altındadır. Konteynerlər arasında saxlamaq üçün ora",
+     "lines": [
+      228,
+      235
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用数据库存储交易/商户数据的支付网关 mock 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "epoint.az ödəniş gateway-inin lokal versiyası. Merchant hesabı olmadan ／ |`EPOINT_DATABASE_URL`|Daxili Postgres yerinə öz baza serverinizi işlədin| ／ Daxili bazanın datası `/var/lib/postgresql/data` altındadır. Konteynerlər arasında saxlamaq üçün ora",
+   "evidence_lines": [
+    5,
+    228,
+    235
+   ]
+  },
+  "fn": "martian56/epoint-sandbox",
+  "sha": "2ae2b19641da",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

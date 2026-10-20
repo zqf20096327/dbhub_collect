@@ -8078,5 +8078,73 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e4cdd2510dcf": {
+  "identity": {
+   "one_liner": "自托管的容器应用期望态控制平面，Center 存储编排状态，Agent 执行",
+   "review": "Vastora 是一个自托管的期望态控制平面，用于跨多个 Site 和 Node 管理容器化应用：Center 存储意图与编排状态（SQLite 持久化），单个 Agent 二进制作为节点侧唯一执行器管理 Docker 工作负载。面向希望在自有 VPS/私有云上部署应用的自托管用户。项目处于 pre-alpha 阶段，README 明确不建议用于生产工作负载；通过备份/恢复命令管理状态，schema 迁移仅前向进行。",
+   "highlights": [
+    "提供 Center HTTP API 与一次性 Agent 注册、心跳认证，支持混合架构 Site 和架构感知的 Agent 更新",
+    "支持 LAN、Headscale、Cloudflare Tunnel 等多种发布路径，使用 Agent 管理的 Caddy 网关",
+    "提供加密的控制面备份与恢复命令，迁移前自动写入一致的 SQLite 快照"
+   ],
+   "use_cases": [
+    "自托管用户在多台 VPS 上编排 Docker 应用",
+    "需要私有网络内访问管理界面并经 Cloudflare Tunnel 受控发布公开服务的场景",
+    "需要带签名目录验证与审计事件的应用部署控制平面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- AES-256-GCM encrypted secrets in SQLite, multi-source catalog persistence, ／ with restrictive permissions. The archive contains SQLite, the Center root key, ／ and therefore the encrypted ACME account and certificate state stored in SQLite;",
+     "lines": [
+      23,
+      101,
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为 Vastora 自身控制面状态的存储（密文 secrets、目录持久化、备份归档内容），项目本身是容器编排应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Vastora is a self-hosted desired-state control plane for applications ／ state; one Agent binary is the only node-side executor for Docker workloads, ／ - AES-256-GCM encrypted secrets in SQLite, multi-source catalog persistence,",
+   "evidence_lines": [
+    3,
+    5,
+    23
+   ]
+  },
+  "fn": "petauron/vastora",
+  "sha": "e4cdd2510dcf",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

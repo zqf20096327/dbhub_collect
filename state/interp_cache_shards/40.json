@@ -11402,5 +11402,227 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e1c3566a983": {
+  "identity": {
+   "one_liner": "Rust 编写的单文件嵌入式双时态图数据库，支持 Datalog 查询",
+   "review": "Minigraf 是一个以单文件存储的嵌入式图数据库，提供 Datalog 查询语言、双时态时间旅行（事务时间+有效时间）、窗口函数和预编译语句。面向 AI 代理记忆、移动应用离线存储和浏览器场景，通过 crates.io/PyPI/npm/Maven 等提供 Rust 之外的多语言绑定。定位为嵌入式库而非客户端-服务器数据库，不含分布式与集群能力，设计规模在百万节点以下。",
+   "highlights": [
+    "支持 Datalog 查询与递归规则，事实采用 EAV 模型",
+    "支持双时态查询（事务时间+有效时间）实现历史回溯",
+    "以嵌入式库、REPL 二进制、WASM 等形态运行，提供 Python/Node/Java/Android/iOS/C 绑定"
+   ],
+   "use_cases": [
+    "AI 代理存储可回溯审计的知识状态",
+    "移动应用离线优先存储与追溯性修正",
+    "浏览器内嵌图数据存储（IndexedDB 后备的 WASM 构建）"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明 Minigraf 本身是一个嵌入式图数据库引擎，被 AI 代理、移动应用等作为存储组件使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "binary",
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+   "evidence_lines": [
+    14,
+    22,
+    93
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "2e1c3566a983",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5871331921ca": {
+  "identity": {
+   "one_liner": "AscEmu：多版本魔兽模拟器服务端框架，C++ 实现含自研 world 数据库",
+   "review": "AscEmu 是源自 ArcEmu 的开源 MMO 服务端模拟器框架，面向希望参与框架开发的开发者，声明仅用于教育目的。它支持从 Classic 1.12.1 到 TWW 11.2.7 等多个游戏版本，在单一代码库中同时维护服务端逻辑与配套的 world 数据库，并提供 Lua 脚本引擎；README 未给出具体安装命令，仅链接到 wiki 安装指南。",
+   "highlights": [
+    "单一代码库支持多游戏版本的服务端逻辑（Classic 至 TWW）",
+    "配套维护自有 world 数据库",
+    "基于 C++，含 Lua 脚本引擎支持"
+   ],
+   "use_cases": [
+    "搭建魔兽世界私服服务端的学习与教育用途",
+    "参与服务端框架代码开发的社区贡献",
+    "多版本服务端代码的并行研究与维护"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是游戏服务端模拟器项目，使用数据库存游戏数据，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AscEmu is derived from ArcEmu to keep up the Antrix-Ascent-Arcemu way of Framework. ／ AscEmu supports several versions as listed below. We achieved to handle different versions of the serverside code in one repo. ／ Beside our multiversion-core we developed our world database with this attitude. Compared to other projects we are still",
+   "evidence_lines": [
+    11,
+    23,
+    26
+   ]
+  },
+  "fn": "AscEmu/AscEmu",
+  "sha": "5871331921ca",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9317c5974a86": {
+  "identity": {
+   "one_liner": "SQL 数据转换框架，提供编译期检查、测试与安全重命名",
+   "review": "SQLBuild 是面向 SQL 与 Python 数据管道的开源转换框架，编译器与规划器用 Rust 实现，执行与扩展用 Python。它提供编译期引用校验、列级血缘、跨模型测试、端到端场景回放，以及保留表历史的重命名/移动命令。状态以 append-only 表存放在用户自己的仓库中，无外部状态库。适用于数据工程师在 Snowflake、DuckDB、PostgreSQL 等仓库上做 ELT 开发。",
+   "highlights": [
+    "编译期解析引用、校验 SQL、推断列类型、检查契约并计算列级血缘，支持自定义 Python 规则作为编译错误",
+    "sqb rename/mv 更新引用并迁移既有表而非重建，旧名通过兼容视图保留；支持 replay_on_change 按范围回放重处理",
+    "内置 SQL 测试源模拟、UDF 与表函数测试、端到端场景在本地 DuckDB 回放，运行历史通过 sqb recall 以 SQL 查询"
+   ],
+   "use_cases": [
+    "数据团队在数仓中重构、重命名或迁移增量模型而不重建表",
+    "在 CI 中离线校验 SQL 与契约并在本地 DuckDB 回放端到端场景",
+    "以 Python 规则落地团队建模规范（如 marts 不得直读 sources）"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|Supported|",
+     "lines": [
+      163
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "the warehouse with the same command. History stays in a SQLite file in the project, or in",
+     "lines": [
+      78
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|Beta|",
+     "lines": [
+      166
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "ClickHouse for a team.",
+     "lines": [
+      79
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 SQL 数据管道转换框架，通过适配器在 Snowflake、DuckDB、PostgreSQL 等仓库上执行，而非以某数据库为存储的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，无付费层或商业版",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "and safe renames to your SQL, so change stops being risky. It is a free, open-source framework for ／ |Warehouse|Status| ／ |PostgreSQL|Supported|",
+   "evidence_lines": [
+    11,
+    158,
+    163
+   ]
+  },
+  "fn": "chio-labs/sqlbuild",
+  "sha": "9317c5974a86",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

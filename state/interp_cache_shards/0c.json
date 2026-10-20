@@ -11277,5 +11277,91 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ab99ce5bc83d": {
+  "identity": {
+   "one_liner": "单 Node.js 进程自托管邮件服务器套件，内置 SMTP/IMAP/POP3 与 SQLite 存储",
+   "review": "OpenMail 是一个自托管邮件服务器套件，在单个 Node.js 进程中运行 SMTP/IMAP/POP3、webmail 界面和管理后台，提供 DKIM、反垃圾评分、2FA 与多租户功能。数据存储于单个 SQLite 文件，无原生依赖，适合个人邮件、小团队和 homelab 场景部署使用。",
+   "highlights": [
+    "单进程实现 SMTP/IMAP/POP3 协议及 HTTP API 与 webmail 界面",
+    "使用 Node.js 内置 node:sqlite，零原生模块，数据存于单个 SQLite 文件",
+    "提供管理后台：用户/域名/DKIM 管理、审计日志、垃圾邮件评分与 SQLite 一键备份"
+   ],
+   "use_cases": [
+    "个人或小团队自托管邮件服务",
+    "homelab 邮件环境搭建",
+    "作为可读代码库学习邮件系统实现"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Most self-hosted mail stacks glue together a dozen daemons (Postfix, Dovecot, Rspamd, Redis, MySQL…). OpenMail is a **deliberately simple, single-binary-style mail platform** written entirely in JavaScript:",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**A self-hosted, open-source mail server suite in a single Node.js process** — full-stack email with SMTP / IMAP / POP3, a modern three-pane webmail, an admin dashboard, multi-tenancy, DKIM, anti-spam and 2FA. Zero native dependencies, one SQLite file, up and  ／ - **Zero native modules** — `node:sqlite` (built into Node.js 22+), pure-JS crypto. Installs in seconds on Windows, Linux, macOS, ARM64. ／ Live stats & 14-day send/receive chart · user CRUD / ban / quota / password reset · domain & DKIM management · alias manager · outbound queue inspector · global blacklist · audit log browser · SMTP test · one-click SQLite backup. ／ 5. **Backups** — download SQLite snapshots from the admin UI and back up `files/`; see docs/DEPLOYMENT.md.",
+     "lines": [
+      3,
+      18,
+      56,
+      178
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明邮件数据存储在单个 SQLite 文件中，该仓库是使用数据库的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A self-hosted, open-source mail server suite in a single Node.js process** — full-stack email with SMTP / IMAP / POP3, a modern three-pane webmail, an admin dashboard, multi-tenancy, DKIM, anti-spam and 2FA. Zero native dependencies, one SQLite file, up and running in minutes. ／ - **One process** runs SMTP (MX + Submission + SMTPS), IMAP, IMAPS, POP3, POP3S, the HTTP API and the webmail UI. ／ - **Zero native modules** — `node:sqlite` (built into Node.js 22+), pure-JS crypto. Installs in seconds on Windows, Linux, macOS, ARM64.",
+   "evidence_lines": [
+    3,
+    17,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "chenyuwebwawa/OpenMail",
+  "sha": "ab99ce5bc83d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

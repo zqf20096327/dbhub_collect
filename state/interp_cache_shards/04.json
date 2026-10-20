@@ -9899,5 +9899,128 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8da8c0d20abc": {
+  "identity": {
+   "one_liner": "本地 Google Calendar API v3 与 OAuth 模拟服务器，用于开发与测试",
+   "review": "Calendarpit 在本地提供 Google Calendar API v3 与 OAuth 服务的模拟实现，包含事件管理、free/busy、watch 通知、fixture 重置和请求历史等能力，数据通过内置 SQLite 文件或 :memory: 保存。面向需要在不连接真实 Google 账号的情况下开发和测试日历集成功能的开发者，兼容性有意受限，不支持的功能返回明确错误。",
+   "highlights": [
+    "提供 Google Calendar API v3 兼容的本地事件、free/busy、watch 通知接口与本地 OAuth 服务端",
+    "支持通过 --database 指定 SQLite 数据库路径或 :memory: 运行，并提供 fixture 加载与重置控制",
+    "通过 Docker、Homebrew、GitHub Releases 分发，包含管理 UI 与 CLI"
+   ],
+   "use_cases": [
+    "日历集成功能的本地开发与 SDK 调试",
+    "E2E 测试中替代真实 Google Calendar 依赖",
+    "CI 中以 fixture 运行可重复的日历相关测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`.calendarpit/calendarpit.sqlite` in the directory where you start Calendarpit. ／ calendarpit serve --database ./.calendarpit/manual.sqlite ／ port stays on loopback. The named volume preserves `/data/calendarpit.sqlite`;",
+     "lines": [
+      73,
+      82,
+      179
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据保存到自带的 SQLite 文件，SQLite 仅作为自身存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local calendar service for development and repeatable tests. Build calendar ／ `.calendarpit/calendarpit.sqlite` in the directory where you start Calendarpit. ／ Point your existing Google SDK and OAuth flow at Calendarpit. See the docs for",
+   "evidence_lines": [
+    3,
+    73,
+    93
+   ]
+  },
+  "fn": "iktakahiro/calendarpit",
+  "sha": "8da8c0d20abc",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "517ff1f2ab75": {
+  "identity": {
+   "one_liner": "Tidbyt LED 点阵屏独立时钟应用，经 GitHub Actions 推送渲染帧",
+   "review": "为 Tidbyt 64×32 LED 点阵屏提供独立推送的时钟应用，附带 news、weather、closing 等自定义应用。通过 fork 仓库并配置 GitHub Actions 密钥，将 WebP 帧定时推送到设备，无需本地常驻机器；时钟应用预渲染 1fps 帧并标注实验性，官方硬件仅缓冲部分动画帧。适合持有 Tidbyt 或自托管 Tronbyt 固件的用户。",
+   "highlights": [
+    "通过 GitHub Actions 定时渲染并推送 WebP 动画到 Tidbyt 设备，无需本地常驻机器",
+    "支持 Tronbyt 自托管固件，直接放置 .star 文件即可，无需推送机制",
+    "提供 deploy.sh 直接渲染推送到设备并取消过期工作流运行"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上显示自定义时钟、天气、新闻应用",
+    "官方社区应用目录停更后自行维护和推送应用",
+    "为 Tronbyt 自托管固件部署 .star 应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未涉及任何数据库，仅为 Tidbyt LED 显示屏的像素应用，与数据库生态无直接关系。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Custom apps for a Tidbyt (64×32 LED matrix) in a warm-dark espresso ／ ## Run them on your own Tidbyt ／ The clock is harder: it pre-renders future frames at 1 fps so the display",
+   "evidence_lines": [
+    3,
+    13,
+    44
+   ]
+  },
+  "fn": "adamlee117097/tidbyt-clock",
+  "sha": "517ff1f2ab75",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

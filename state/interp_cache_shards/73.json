@@ -10234,5 +10234,212 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d97627447dad": {
+  "identity": {
+   "one_liner": "在 PostgreSQL 中查询 ClickHouse 的扩展",
+   "review": "pg_clickhouse 是一个 PostgreSQL 扩展，使用户无需改写 SQL 即可在 PostgreSQL 中运行针对 ClickHouse 的分析查询，并支持查询下推。适用于需要在 PostgreSQL 环境中访问 ClickHouse 数据的开发者和数据分析人员。要求 PostgreSQL 14+ 与 ClickHouse v23+，依赖 libcurl、libuuid 等库，提供 Docker 镜像、PGXN 与源码编译安装方式。",
+   "highlights": [
+    "支持 PostgreSQL 14 及以上和 ClickHouse v23 及以上",
+    "支持将分析查询下推到 ClickHouse 执行",
+    "提供 Docker 镜像、PGXN 包与源码编译多种安装方式"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中直接查询 ClickHouse 上的分析数据",
+    "通过查询下推减少跨库 SQL 改写成本",
+    "在 CloudNativePG 集群中加载该扩展访问 ClickHouse"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This library contains `pg_clickhouse`, a PostgreSQL extension that runs ／ SQL. It supports PostgreSQL 14 and later and ClickHouse v23 and later.",
+     "lines": [
+      5,
+      7
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "This library contains `pg_clickhouse`, a PostgreSQL extension that runs ／ analytics queries on ClickHouse right from PostgreSQL without rewriting any ／ SQL. It supports PostgreSQL 14 and later and ClickHouse v23 and later.",
+     "lines": [
+      5,
+      6,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为数据库间查询提供连接能力，服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This library contains `pg_clickhouse`, a PostgreSQL extension that runs ／ analytics queries on ClickHouse right from PostgreSQL without rewriting any ／ SQL. It supports PostgreSQL 14 and later and ClickHouse v23 and later.",
+   "evidence_lines": [
+    5,
+    6,
+    7
+   ]
+  },
+  "fn": "ClickHouse/pg_clickhouse",
+  "sha": "d97627447dad",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "be80ebda2637": {
+  "identity": {
+   "one_liner": "本地自托管的 AI 编程智能体，MCP 原生，含工具沙箱",
+   "review": "Spark 是一个在本地机器上运行的开源 AI 编程智能体，提供 Web UI、桌面、TUI 和 CLI 四种形态，通过 OpenAI 兼容接口接入任意模型，内置文件读写、shell、Git 等工具，带四级沙箱、检查点回滚、向量记忆和 MCP 客户端/服务端能力。面向希望在本地使用编程助手的开发者，无需第三方服务器参与。",
+   "highlights": [
+    "提供 Web UI、桌面窗口、终端 TUI、CLI 四种运行形态，并可作为 MCP server 或 ACP agent 运行",
+    "内置四级沙箱与六种审批模式，支持检查点回滚和向量长期记忆",
+    "支持任意 OpenAI 兼容端点（DeepSeek、Qwen、Ollama 等）与多配置切换"
+   ],
+   "use_cases": [
+    "本地隐私优先的 AI 辅助编程与代码问答",
+    "通过 CLI 在自动化/CI 流水线中执行编程任务",
+    "作为 MCP server 将内置工具暴露给其他 MCP 客户端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是面向开发者的 AI 编程助手应用，仅为自身功能使用向量记忆存储，不提供数据库管理/适配能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Code stays with you. Keys stay with you.** A self-hosted AI coding assistant that runs entirely on your machine — zero privacy leaks, full control. ／ ⚡ **Four Form Factors** — Web UI, native desktop window, terminal TUI, and scriptable CLI. ／ |MCP server|`spark mcp-serve`|Expose every built-in tool to other MCP clients|",
+   "evidence_lines": [
+    9,
+    14,
+    107
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "badhope/spark",
+  "sha": "be80ebda2637",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b695d43b0c96": {
+  "identity": {
+   "one_liner": "Windows 本地照片备份归档工具，经 AFC 读取 iPhone 并用 SQLite 建索引",
+   "review": "一款面向 Windows 的本地优先照片管理与备份工具，通过 AFC 协议从 iPhone 经 USB 无损只读归档，用本地 SQLite 清单（picharbor.db）做离线检索与 SHA-256 校验，并支持回传 iPhone、Android（FTP）及 Google Photos 同步；提供桌面 GUI 与 CLI 两种界面，需 .NET 10 构建或源码运行。",
+   "highlights": [
+    "通过 AFC 协议经 USB 只读访问 iPhone 相机胶卷，支持断点续传与原子写入",
+    "使用本地 SQLite 清单（picharbor.db）实现离线媒体检索，可按日期、机型、GPS、类型过滤",
+    "支持多目的地回传与同步：iPhone 结构化同步文件夹、Android FTP 上传、Google Photos（经 gpmc）"
+   ],
+   "use_cases": [
+    "iPhone 照片/视频向 PC 的定期增量备份与归档整理",
+    "多设备（iPhone/Android/Google Photos）间媒体恢复与同步",
+    "无设备连接时的本地照片库检索与浏览"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Atomic & Resumable**: Employs SQLite journaling and atomic writes (`.partial` → size verification → atomic rename). Interrupted transfers (unplugging, sleep, Ctrl+C) resume cleanly without duplicate writes or corrupt files. ／ - **Offline Search**: Query media using the local SQLite manifest (`picharbor.db`, with backward compatibility for legacy `get-and-see.db`) without connecting devices. Filter by capture date, camera make/model, media type, GPS coordinates, and file size.",
+     "lines": [
+      16,
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 作为本地清单/索引存储（picharbor.db），SQLite 是其使用的数据组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU GPLv3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local-first **photo management and backup tool** for Windows. It provides reliable, lossless media archiving from mobile devices via USB, offline indexing and search, and multi-destination synchronization across iPhone, Android, and Google Photos. ／ - **Atomic & Resumable**: Employs SQLite journaling and atomic writes (`.partial` → size verification → atomic rename). Interrupted transfers (unplugging, sleep, Ctrl+C) resume cleanly without duplicate writes or corrupt files. ／ - **Offline Search**: Query media using the local SQLite manifest (`picharbor.db`, with backward compatibility for legacy `get-and-see.db`) without connecting devices. Filter by capture date, camera make/model, media type, GPS coordinates, and file size.",
+   "evidence_lines": [
+    7,
+    16,
+    25
+   ]
+  },
+  "fn": "Cc-Cece/PicHarbor",
+  "sha": "b695d43b0c96",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

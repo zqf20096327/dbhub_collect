@@ -9630,5 +9630,77 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0024a160c7a8": {
+  "identity": {
+   "one_liner": "自托管 Web 分析应用，从服务器访问日志读取并统计访问数据",
+   "review": "Skald 是一个自托管的 Web 分析工具，通过解析服务器访问日志统计访问者、AI 助手和爬虫流量，无需 cookie 和浏览器脚本，并用独立审计程序对每项数字二次核对。适合需要分析含 AI 爬虫在内真实流量的网站管理员，使用 Python 编写、SQLite 存储，提供 Docker 镜像；许可为 Elastic License 2.0。",
+   "highlights": [
+    "从服务器访问日志读取数据，将请求归入五个分组且分组计数与日志总和一致",
+    "内置独立审计程序，从原始日志用独立解析器复算每项数字，不一致时当日数据不予展示",
+    "识别并按用途分类 AI 助手与爬虫（GPTBot、ClaudeBot、PerplexityBot 等），并对照所有者公布的地址验证真伪"
+   ],
+   "use_cases": [
+    "统计 JavaScript 分析工具无法覆盖的 AI 助手和爬虫流量",
+    "自托管的无 cookie 网站访问分析",
+    "分析线索、转化与来源，并通过 webhook 对接 Calendly、Stripe 等服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      608
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Which road fits your site** (a form plugin, Next.js on Vercel, a Postgres backend, no code,",
+     "lines": [
+      501
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其数据存储于 SQLite 文件，是使用数据库存数据的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0，另有 hosted beta 商业服务",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Web analytics from your server's own access log: the people, the AI assistants and the crawlers ／ Skald reads the one record that sees every visit: **your web server's access log.** Every request",
+   "evidence_lines": [
+    8,
+    43
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "0024a160c7a8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

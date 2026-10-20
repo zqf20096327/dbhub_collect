@@ -10622,5 +10622,159 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "034796020dac": {
+  "identity": {
+   "one_liner": "Rust 自托管网络收音机，内嵌 React 界面，用 SQLite 存账号与收藏",
+   "review": "meowRadio 是一个自托管的网络收音机服务，Rust 后端将 React 前端直接嵌入单一二进制，使用 SQLite 保存账号、收藏、个人电台源和录音元数据，无需外部数据库。面向想自建在线电台收听站点的个人用户，提供多主题界面、多用户登录、服务端音频中转、录制和定时关闭，支持 Docker 或二进制部署。",
+   "highlights": [
+    "提供九套主题、中英双语界面，支持列表/三维地球/星云三种电台浏览视图",
+    "支持多用户注册登录、个人电台源导入、服务端中转与录制，SQLite 启用 WAL 并自动迁移",
+    "提供 Docker 镜像与 Linux/macOS/Windows 二进制交付，前端嵌入二进制，无需外部数据库"
+   ],
+   "use_cases": [
+    "自托管个人网络收音机站点，收藏和管理自定义电台源",
+    "通过服务端中转在 HTTPS 页面收听 HTTP 电台并录制节目",
+    "使用定时关闭功能辅助睡前收听"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "把世界，调到喜欢的频道。Rust 编写的自托管网络收音机，React 界面直接嵌入二进制，使用 SQLite 保存账号与个人收藏。 ／ 本地二进制默认使用 `data/`；头像和录音目录默认位于数据库同级。录音元数据与归属保存在 SQLite，文件不通过公共静态目录暴露。头像和录音 API 需要登录，用户只能操作自己的数据。 ／ |`MEOW_DATABASE`|`data/meowradio.db`|SQLite 文件，Docker 默认 `/data/meowradio.db`|",
+     "lines": [
+      5,
+      124,
+      147
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "`radiobrowser` 0.6.1 的旧 HTTP/TLS/DNS 依赖存在已知安全问题，因此本仓库保留上游源码和 API，使用本地安全补丁更新依赖；详情见 PATCHES.md。`cargo audit` 唯一忽略项是未编译、未分发的 SQLx MySQL 可选 RSA 依赖，依据及复查时间在 `.cargo/audit.toml`。",
+     "lines": [
+      254
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目是自托管收音机应用，使用 SQLite 保存账号与收藏数据，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "把世界，调到喜欢的频道。Rust 编写的自托管网络收音机，React 界面直接嵌入二进制，使用 SQLite 保存账号与个人收藏。 ／ 无需 Node.js 或外部数据库。个人源播放及检测需要安装 FFmpeg（包含 MP3 编码器及所需协议），或用 `MEOW_FFMPEG` 指定路径；Docker 镜像已包含。默认监听 `0.0.0.0:3000`，自动创建 `data/meowradio.db`。Windows 使用 `meowradio.exe`；Linux GNU 二进制面向 Ubuntu 24.04 / glibc 2.39 或更高版本，旧发行版建议 Docker。`--version` 显示版本。 ／ SQLite 启用 WAL、外键和自动迁移。完整备份应同时保留数据库、`record/` 和 `avatar/` 目录。可停止服务后复制数据卷；在线备份应使用 SQLite `.backup`，不要只复制正在写入的 `.db` 文件。数据卷应仅由服务用户访问。当前定位为单实例自托管服务。登录限流使用连接来源 IP，每分钟 12 次；反向代理后的用户会共享代理 IP 的额度。",
+   "evidence_lines": [
+    5,
+    71,
+    178
+   ]
+  },
+  "fn": "ca-x/meowRadio",
+  "sha": "034796020dac",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ceb47e9bfc72": {
+  "identity": {
+   "one_liner": "兼容 Celery 的 Python 任务队列，支持 Postgres/SQLite 等原生 broker",
+   "review": "potatoq 是一个与 Celery API 兼容的 Python 分布式任务队列库，提供 Postgres、SQLite、Redis、RabbitMQ 等原生 broker，内置任务确认、死信、重试退避、内存回收等默认配置，并作为 Django 6 django.tasks 的 backend。面向需要后台任务/定时任务的 Python 与 Django 开发者。README 标注其为 alpha 软件，API 与默认值可能变动，不支持 Windows。",
+   "highlights": [
+    "提供 PostgreSQL、SQLite、Redis、RabbitMQ 及 memory broker，Postgres 使用 FOR UPDATE SKIP LOCKED 与 LISTEN/NOTIFY，SQLite 使用 WAL 与 BEGIN IMMEDIATE",
+    "提供 Celery 兼容接口（@shared_task、delay()、chain/group/chord），并实现 django.tasks backend 与 Flask/FastAPI 集成",
+    "支持 free-threaded Python（3.14t/3.15t）、定时任务调度、死信队列及 status/queues/dead 等运维命令"
+   ],
+   "use_cases": [
+    "Django/Flask/FastAPI 应用的后台任务与定时任务执行",
+    "从 Celery 迁移到替代实现的 Python 项目",
+    "无 Redis 场景下以 Postgres 或 SQLite 数据库作为 broker 的任务队列"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "$ pip install \"potatoq[postgres]\" # + PostgreSQL (psycopg 3) ／ |`postgresql://…`|Most apps: zero extra infrastructure, **transactional enqueue**|`FOR UPDATE SKIP LOCKED` claims, `LISTEN/NOTIFY` wake-ups, heartbeat-based recovery, results in the same transaction as the ack|",
+     "lines": [
+      69,
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "$ pip install potatoq # SQLite broker, no dependencies ／ |`sqlite:///path.db`|Development, single-host apps|WAL, `BEGIN IMMEDIATE`, `UPDATE … RETURNING` claims, `PRAGMA data_version` wake-ups|",
+     "lines": [
+      67,
+      81
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为任务队列组件原生实现 Postgres/SQLite broker（事务性入队、SKIP LOCKED 认领），为应用提供基于数据库的队列能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A Celery-compatible task queue with production-ready defaults.** ／ $ pip install \"potatoq[postgres]\"     # + PostgreSQL (psycopg 3) ／ |`postgresql://…`|Most apps: zero extra infrastructure, **transactional enqueue**|`FOR UPDATE SKIP LOCKED` claims, `LISTEN/NOTIFY` wake-ups, heartbeat-based recovery, results in the same transaction as the ack|",
+   "evidence_lines": [
+    7,
+    69,
+    80
+   ]
+  },
+  "fn": "anze3db/potatoq",
+  "sha": "ceb47e9bfc72",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

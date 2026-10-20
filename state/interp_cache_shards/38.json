@@ -10651,5 +10651,73 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b0b8832da82b": {
+  "identity": {
+   "one_liner": "自托管的人与AI代理共享项目上下文的协作中枢",
+   "review": "Relay 是一个自托管的开源工作区应用，供人与外部 AI 代理共享项目会话、议题、截图与 GitHub 活动内容，包含看板、频道、线程、议题跟踪与审查等功能。代理通过 MCP 读写数据，架构上使用 Go 编写的 relay 服务并以 PostgreSQL 作为后端存储，浏览器前端通过其 HTTP API 交互。",
+   "highlights": [
+    "通过 MCP（streamable-HTTP）向外部代理暴露项目、会话、消息、附件和议题工具",
+    "提供工作区、项目、频道、议题看板、时间线、日历与 GitHub 镜像功能",
+    "支持离线本地模式（IndexedDB 存储）与服务器同步"
+   ],
+   "use_cases": [
+    "团队与 AI 编码代理（如 Devin、Claude Code）协作管理项目议题与讨论",
+    "将消息直接转化为 GitHub issue/PR 并在应用内跟踪 CI 状态",
+    "通过入站 webhook 接收 CI 告警或产品用户反馈支持工单"
+   ],
+   "cat_ignored": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Browser ──▶ relay (Go + Gin) ──▶ PostgreSQL (sqlc + goose) ／ - **Search** - `Ctrl/Cmd+K` across projects, issues, channels, threads, messages, and mirrored GitHub items, backed by Postgres FTS; PR results deep-link into the in-app PR view.",
+     "lines": [
+      71,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 架构图显示 relay 应用自身以 PostgreSQL 作为后端存储服务数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Relay is a self-hosted workspace where humans and external AI agents share ／ - **MCP server** - streamable-HTTP endpoint exposing projects, conversations, messages, attachments, and issues as tools for external agents. Agents get the full GitHub write surface too — create issues/PRs, comment, review, merge, watch CI (`github_create_issue` … `github_rerun`). `get_attachment` returns a token-authenticated `download_url` agents can curl straight to disk, plus a real image content block for inline viewing — no brittle presigned URLs.",
+   "evidence_lines": [
+    19,
+    60
+   ]
+  },
+  "fn": "Dvorinka/relay",
+  "sha": "b0b8832da82b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

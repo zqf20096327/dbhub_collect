@@ -9709,5 +9709,82 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8fc38d874abb": {
+  "identity": {
+   "one_liner": "MariaDB/MySQL 高可用复制层：WAL 复制+自动选主+MySQL 协议代理",
+   "review": "WolfScale 是一个用 Rust 编写的单二进制工具，为 MariaDB/MySQL 提供复制、集群和负载均衡能力，机制包括自动选主、WAL 复制和 MySQL 协议兼容代理，节点通过 UDP 广播自动发现。它不负责初始数据同步，要求各节点启动前数据一致，官方推荐配合 MariaDB 使用。适合需要数据库集群高可用的运维人员部署。",
+   "highlights": [
+    "提供自动 leader 选举、确定性 failover 与基于 WAL 的复制",
+    "内置 MySQL 协议兼容代理与负载均衡器，连接不需修改应用",
+    "单 Rust 二进制运行，节点通过 UDP 广播零配置发现"
+   ],
+   "use_cases": [
+    "为 MariaDB/MySQL 集群搭建高可用复制与自动故障转移",
+    "在多节点间分发数据库连接并实现自动故障切换",
+    "向集群添加节点时通过 WAL 同步增量数据"
+   ]
+  },
+  "classification": {
+   "cat": "高可用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**WolfScale**|MariaDB/MySQL replication, clustering & load balancing|✅ Available| ／ WolfScale is a lightweight, high-availability replication layer for MariaDB/MySQL. It provides **automatic leader election** with deterministic failover, **WAL-based replication** for strong consistency, and a **MySQL-compatible proxy** for transparent routing ／ Works with MySQL, Percona, and Amazon RDS • **MariaDB recommended**",
+     "lines": [
+      18,
+      26,
+      28
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**WolfScale**|MariaDB/MySQL replication, clustering & load balancing|✅ Available| ／ WolfScale is a lightweight, high-availability replication layer for MariaDB/MySQL. It provides **automatic leader election** with deterministic failover, **WAL-based replication** for strong consistency, and a **MySQL-compatible proxy** for transparent routing ／ Works with MySQL, Percona, and Amazon RDS • **MariaDB recommended**",
+     "lines": [
+      18,
+      26,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 MariaDB/MySQL 提供复制、集群与代理服务的组件，不使用数据库存储自身业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**WolfScale**|MariaDB/MySQL replication, clustering & load balancing|✅ Available| ／ WolfScale is a lightweight, high-availability replication layer for MariaDB/MySQL. It provides **automatic leader election** with deterministic failover, **WAL-based replication** for strong consistency, and a **MySQL-compatible proxy** for transparent routing—all in a single Rust binary.",
+   "evidence_lines": [
+    18,
+    26
+   ]
+  },
+  "fn": "intelligentwolf/WolfScale",
+  "sha": "8fc38d874abb",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

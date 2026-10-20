@@ -8647,5 +8647,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8081c21ba52a": {
+  "identity": {
+   "one_liner": "SillyTavern 扩展，用 SQLite 插件管理 NPC 心智与世界观状态",
+   "review": "InnerLore 是一个 SillyTavern 客户端扩展，配套捆绑的 innerlore-storage 服务端插件（纯 SQLite）持久化每个聊天的实体、心智、时间推进和事件状态，并通过后台模型请求自动维护 World Info 条目。面向 SillyTavern 用户；依赖 SillyTavern 1.13+ 与任意 chat-completion API，状态存于单个 SQLite 数据库文件。",
+   "highlights": [
+    "状态全部存储于单个 SQLite 数据库文件，含每聊天最近 20 次修订历史",
+    "在故事回复后运行独立的后台模型请求，以 DSL 或 JSON 补丁维护世界观条目",
+    "支持编辑器定义的时间/动作触发事件及分支感知的状态重建"
+   ],
+   "use_cases": [
+    "为 SillyTavern 角色聊天添加持久化 NPC 心智与世界观",
+    "为现有聊天回溯生成心智、世界观与故事时间线",
+    "定义按时间或动作触发的离屏事件并在配置规则下揭示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "InnerLore is a SillyTavern client extension backed by its bundled `innerlore-storage` server plugin (pure SQLite) for four related jobs: ／ **State storage:** the bundled **`innerlore-storage`** server plugin keeps everything in pure SQLite (see install step 2) — this is the default and recommended mode. An *Embedded* fallback (state inside the chat file) is available in **InnerLore → State storag ／ All state — entities, minds, progression, narrative history — lives in a single SQLite database at `data/worlds/innerlore-storage.db` with per-save revision history (last 20 per chat). No chat-JSONL state, no external services.",
+     "lines": [
+      3,
+      19,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该扩展用于存储聊天状态数据的后端，而非为其服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "InnerLore is a SillyTavern client extension backed by its bundled `innerlore-storage` server plugin (pure SQLite) for four related jobs: ／ **State storage:** the bundled **`innerlore-storage`** server plugin keeps everything in pure SQLite (see install step 2) — this is the default and recommended mode. An *Embedded* fallback (state inside the chat file) is available in **InnerLore → State storage** for zero-plugin setups. ／ All state — entities, minds, progression, narrative history — lives in a single SQLite database at `data/worlds/innerlore-storage.db` with per-save revision history (last 20 per chat). No chat-JSONL state, no external services.",
+   "evidence_lines": [
+    3,
+    19,
+    39
+   ]
+  },
+  "fn": "ChrisDitfort/SillyTavern-InnerLore",
+  "sha": "8081c21ba52a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

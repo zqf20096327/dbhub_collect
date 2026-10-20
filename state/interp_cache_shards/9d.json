@@ -10337,5 +10337,77 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0fb813d53d17": {
+  "identity": {
+   "one_liner": "AI Agent 长期记忆插件，对话结束自动沉淀知识卡并以 SQLite 存储",
+   "review": "为 DSH、Claude Code、Codex、Cursor 等 Agent 提供跨会话记忆的插件/CLI：对话结束自动生成知识卡，召回时按相关性取小块以节省 token，并提供知识图谱可视化、审核中心、回收站与每日备份。数据以本地 Markdown + SQLite 存于 ~/.dsh/memory-vault，支持 MCP 接入，通过 npm 或 DSH 插件市场安装。",
+   "highlights": [
+    "对话结束自动沉淀知识卡，跨会话通过 memory_recall 工具检索召回",
+    "知识库为本地 Markdown + SQLite 存储，支持导出、git 管理与备份恢复",
+    "提供知识图谱可视化、审核中心（先审后入）与回收站机制"
+   ],
+   "use_cases": [
+    "为多 Agent（DSH/Claude Code/Codex/Cursor）共享同一份长期记忆库",
+    "需要审核 AI 生成内容、追溯来源与回滚删除的知识管理流程",
+    "不依赖 Agent、通过浏览器界面直接维护知识卡与图谱"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 全自研、零第三方记忆框架、不改 DSH 源码；一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。 ／ - **带得走**：知识库是本地 Markdown + SQLite，可 git 管理、可导出，不锁在插件里。",
+     "lines": [
+      16,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite 持久存储记忆数据，属于使用数据库的应用而非数据库服务工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 全自研、零第三方记忆框架、不改 DSH 源码；一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。 ／ - **带得走**：知识库是本地 Markdown + SQLite，可 git 管理、可导出，不锁在插件里。 ／ npm i -g memory-eternal     # 装 CLI + MCP（写 ~/.claude.json mcpServers.memory）",
+   "evidence_lines": [
+    16,
+    36,
+    78
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "EternalNight996/memory-eternal",
+  "sha": "0fb813d53d17",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

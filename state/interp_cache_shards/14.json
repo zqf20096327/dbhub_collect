@@ -9940,5 +9940,365 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f3adc6c165f8": {
+  "identity": {
+   "one_liner": "纯 Ruby 实现的 SQLite SQL 词法/语法解析与查询分析库",
+   "review": "Plume 提供 SQLite 的词法分析器与解析器的纯 Ruby 实现，可将 SQL 解析为 AST 并支持 to_sql 回写，还提供 reads/access 分析语句读写哪些表和列，可从 SQL 或活动数据库构建 catalog。面向需要在 Ruby 中内省 SQL 结构、构建 SQL 工具的开发者。要求 Ruby 3.2+，通过 gem 安装，MIT 许可。",
+   "highlights": [
+    "提供 SQLite lexer/tokenizer 与兼容 parser 的纯 Ruby 实现，解析结果经 SQLite 自身测试套件校验",
+    "支持 parse/tokenize/to_sql，并提供 reads/access 分析查询读取与写入的表和列",
+    "catalog 可从 SQL 或活动 SQLite 数据库（Catalog.from_sqlite）构建"
+   ],
+   "use_cases": [
+    "在 Ruby 程序中解析和内省 SQLite SQL 查询结构",
+    "在不连接数据库的情况下预先审查 SQL 将读取/写入的表和列",
+    "构建基于 SQL AST 的工具，如列级访问检查"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Plume is a Ruby library for working with SQLite elegantly. Presently, this means that it provides a pure Ruby implementation of SQLite's lexer/tokenizer as well as a 100% compatible parser. This is useful for introspecting the structure of SQL queries, and for ／ The catalog can also come from a live database with `Plume::Catalog.from_sqlite(db)`, or be left out - then `SELECT *` is reported as a read of the column `\"*\"` and unqualified columns only resolve when there is a single table in scope.",
+     "lines": [
+      11,
+      91
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为处理 SQLite SQL 服务的解析/分析库，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Plume is a Ruby library for working with SQLite elegantly. Presently, this means that it provides a pure Ruby implementation of SQLite's lexer/tokenizer as well as a 100% compatible parser. This is useful for introspecting the structure of SQL queries, and for building tools that work with SQL queries - like working out which tables and columns a query is going to read. ／ The catalog can also come from a live database with `Plume::Catalog.from_sqlite(db)`, or be left out - then `SELECT *` is reported as a read of the column `\"*\"` and unqualified columns only resolve when there is a single table in scope.",
+   "evidence_lines": [
+    11,
+    91
+   ]
+  },
+  "fn": "yippee-fun/plume",
+  "sha": "f3adc6c165f8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b83220600fc1": {
+  "identity": {
+   "one_liner": "可本地克隆的 ABAP 应用服务器，转译 ABAP 并以 Open SQL 操作 SQLite 等数据库",
+   "review": "open-steamgate 重实现 SAP /IWBEP/ OData v2 Gateway 运行时，将基于代码的 SEGW 服务的 ABAP 类转译后运行，通过统一的数据库接缝支持 sql.js、SQLite、DuckDB、PostgreSQL、HANA，并向 Fiori Elements、Eclipse ADT 和 SAP GUI 提供服务。面向需要在本地无 SAP 系统环境下开发/运行经典 SEGW 服务的 ABAP 开发者；README 自述为 0.3 beta，且只实现语言、字典与 Gateway 的子集。",
+   "highlights": [
+    "实现 OData v2 Gateway 运行时，含 $filter、$batch、$expand、function imports 等（README 自述范围）",
+    "Open SQL 经统一接缝支持 sql.js、SQLite（WAL）、DuckDB、PostgreSQL 与 HANA 后端",
+    "gogen 可将 ABAP 报表编译为独立 Go 原生命令行工具，不依赖服务器或数据库"
+   ],
+   "use_cases": [
+    "无 SAP 系统环境下本地运行和调试经典 SEGW/`_MPC_EXT`/`_DPC_EXT` 服务",
+    "用 Fiori Elements 前端配合本地 OData v2 服务进行开发演示",
+    "将经典 ABAP 报表编译为原生 CLI 工具"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Each release also carries `sqlite.yml`, `duckdb.yml` and `postgres.yml`; start one with `docker compose -f sqlite.yml up -d`. `./osd doctor` checks a downloaded binary. ／ PostgreSQL or HANA. So a whole system can be copied, branched, compared and ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`|",
+     "lines": [
+      17,
+      42,
+      116
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Each release also carries `sqlite.yml`, `duckdb.yml` and `postgres.yml`; start one with `docker compose -f sqlite.yml up -d`. `./osd doctor` checks a downloaded binary. ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`|",
+     "lines": [
+      17,
+      116
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目实现 ABAP/OData 运行时并通过统一接缝适配多种数据库后端，为 SAP 生态开发场景提供运行环境，而非仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "open-steamgate (OSD) cross-compiles real ABAP — `_MPC_EXT` / `_DPC_EXT` ／ and the database sits behind an eleven-method seam: sql.js, SQLite, DuckDB, ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`|",
+   "evidence_lines": [
+    28,
+    41,
+    116
+   ]
+  },
+  "fn": "oisee/open-steamgate",
+  "sha": "b83220600fc1",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "877bb703b6ff": {
+  "identity": {
+   "one_liner": "C++ ORM 风格序列化框架，基于 SQLite 等数据库保存/加载对象",
+   "review": "Savepoint 是面向 C++ 应用（如游戏）的 ORM 风格序列化框架，提供保存与加载对象的简单接口，底层构建在 SQLite 等数据库之上。支持自动事务与 schema 升级、实体 ID 与空间键、嵌套多态类型、跨平台存档及集成可视化调试器，通过 CMake 子项目方式集成。",
+   "highlights": [
+    "提供自动事务与 schema 升级，支持实体 ID 与 2D/3D 空间键",
+    "支持嵌套、多态成员、智能指针与容器等类型的序列化",
+    "内置可视化调试器，存档可跨平台移植"
+   ],
+   "use_cases": [
+    "游戏存档系统开发",
+    "需要持久化 C++ 对象的应用",
+    "需要跨平台序列化与数据迁移的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Inspired by cereal and built on databases like SQLite, it provides a simple interface for saving and loading C++ objects.",
+     "lines": [
+      4
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 C++ 应用提供对象持久化能力的序列化框架，构建于 SQLite 等数据库之上，属数据库生态服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Savepoint is a lightweight ORM-style serialization framework for C++ applications. ／ Inspired by cereal and built on databases like SQLite, it provides a simple interface for saving and loading C++ objects. ／ You can clone and add the following to your `CMakeLists.txt`:",
+   "evidence_lines": [
+    3,
+    4,
+    30
+   ]
+  },
+  "fn": "jsoulier/savepoint",
+  "sha": "877bb703b6ff",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9e01cb2ce776": {
+  "identity": {
+   "one_liner": "自托管 PDM 系统，管理 CAD 零件编号、版本、BOM 及上传下载宏",
+   "review": "EasyPDM 是一个面向小型工程团队的自托管 PDM（产品数据管理）应用，为零件与装配体提供编号、版本、状态与变更历史，生成 BOM，并通过 FreeCAD/SolidWorks/Inventor 宏在 CAD 软件内上传下载文件，浏览器端提供目录、锁定与通知等功能。数据由 PostgreSQL 存储，支持 Windows 安装向导、Docker 及 Linux 原生 systemd 部署。",
+   "highlights": [
+    "提供零件/装配体唯一编号、版本状态、变更历史与锁定机制",
+    "内置 FreeCAD、SolidWorks、Autodesk Inventor 的上传/下载宏，可导出 STEP/PDF",
+    "提供 BOM 生成、CSV 导出、物料/制造商目录与站内通知"
+   ],
+   "use_cases": [
+    "小型机械设计团队统一管理 CAD 文件版本与编号",
+    "在 CAD 软件内直接上传/下载零件与完整装配树",
+    "跨项目检索相似零件、维护物料与制造商目录"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "(the only thing it might ask about: whether you already have PostgreSQL installed, the ／ This installs PostgreSQL (if missing) and EasyPDM itself as a `systemd` service that",
+     "lines": [
+      62,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 EasyPDM 使用 PostgreSQL 存储数据，是一个使用数据库的应用而非为数据库生态服务的工具",
+   "persona": "use",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " This installs PostgreSQL (if missing) and EasyPDM itself as a `systemd` service that ／ (the only thing it might ask about: whether you already have PostgreSQL installed, the",
+   "evidence_lines": [
+    81,
+    62
+   ]
+  },
+  "fn": "pawelcel/EasyPDM",
+  "sha": "9e01cb2ce776",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8da5ddbf4543": {
+  "identity": {
+   "one_liner": "本地运行的二次元插画整理工具，用本地模型识别角色并归类",
+   "review": "Emaki 是一个在 Windows 本机运行的二次元插画整理应用：用 PixAI/WD14 识别模型认出图中角色与作品并归类，支持查重、漫画分册和标签筛选，整理数据存于本地 SQLite 文件。面向本地存有几万张插画的个人用户；仅在 Windows 10/11 上测试，需要 Node.js 22+，实验性 AI 助手默认关闭。",
+   "highlights": [
+    "本机运行 onnx 模型识别角色/画师/作品，图片默认不上传",
+    "支持查重、漫画/截图/照片自动分类、按角色移动文件夹且可撤销",
+    "整理结果存于 data/emaki.sqlite，支持数据库备份与升级时自动备份"
+   ],
+   "use_cases": [
+    "整理本地大量二次元插画并按角色/作品归类",
+    "查找重复或相似图片",
+    "为 Danbooru/Pixiv 来源图片补充角色标签信息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库（你做的所有整理）|`data/emaki.sqlite`| ／ `data/` 不会被提交到 Git。备份的话复制 `data/emaki.sqlite` 就行，缩略图和模型都能重新生成、重新下载。想换位置可以在 `.env` 里改 `EMAKI_DATA_DIR`，其他配置见 .env.example。 ／ 前端是 React + Vite + Tailwind，后端是 Node.js + Fastify + SQLite，识别用 onnxruntime-node。架构和各页面的设计说明在 docs/ARCHITECTURE.md 和 docs/FRONTEND.md，开发任务清单在 docs/TASKS.md。",
+     "lines": [
+      134,
+      139,
+      172
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明整理数据存储在本地 SQLite 文件 data/emaki.sqlite 中，SQLite 是其数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|数据库（你做的所有整理）|`data/emaki.sqlite`| ／ 前端是 React + Vite + Tailwind，后端是 Node.js + Fastify + SQLite，识别用 onnxruntime-node。架构和各页面的设计说明在 docs/ARCHITECTURE.md 和 docs/FRONTEND.md，开发任务清单在 docs/TASKS.md。",
+   "evidence_lines": [
+    134,
+    172
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nickname21kmr/emaki",
+  "sha": "8da5ddbf4543",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

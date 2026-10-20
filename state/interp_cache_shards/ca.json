@@ -9340,5 +9340,279 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9787f8aed5c1": {
+  "identity": {
+   "one_liner": "PostgreSQL 的 Conduit 连接器插件，提供 source/destination 与 CDC",
+   "review": "这是 Conduit 数据管道的 PostgreSQL 连接器插件，包含源和目标两种角色。源端先做表快照再通过逻辑复制槽和 publication 实现 CDC，目标端以 upsert 写入；配置经连接串（含 SCRAM/channel binding）设置。供使用 Conduit 构建数据管道、需要在 PostgreSQL 间同步数据的开发者使用，需 PostgreSQL 用户具备复制相关权限。",
+   "highlights": [
+    "提供 source 与 destination 两种连接器",
+    "通过逻辑复制槽与 publication 实现 CDC，支持初始快照模式",
+    "支持 SCRAM 认证与 channel binding 配置"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 表变更以 CDC 方式接入 Conduit 管道",
+    "向 PostgreSQL 目标库写入/同步记录",
+    "数据管道中 PostgreSQL 的快照+增量采集"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Conduit Connector PostgreSQL ／ The PostgreSQL connector is a Conduit ／ postgres://user:pass@host:5432/db?sslmode=require&channel_binding=require",
+     "lines": [
+      1,
+      3,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Conduit 的连接器插件，为数据库间的数据读取与写入提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Conduit Connector PostgreSQL ／ This connector implements Change Data Capture (CDC) features for PostgreSQL by ／ The Postgres Source Connector connects to a database with the provided `url` and",
+   "evidence_lines": [
+    1,
+    58,
+    40
+   ]
+  },
+  "fn": "ConduitIO/conduit-connector-postgres",
+  "sha": "9787f8aed5c1",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cd2fa4d6fdf4": {
+  "identity": {
+   "one_liner": "SQLite 编译为 WASM 并打包为 ES Module 的浏览器运行版本",
+   "review": "该项目将 SQLite 编译为 WebAssembly 并封装为 ES Module，运行时自动加载 sqlite-sync、sqlite-vector、sqlite-memory 扩展。面向需要在浏览器中使用 SQLite 的前端开发者，支持 OPFS 持久化存储和 Worker 线程运行方式；注意 sqlite-sync 在主线程下不可用，且 OPFS 需要服务器配置跨域隔离响应头。",
+   "highlights": [
+    "以 ES Module 形式提供 SQLite WASM，含 TypeScript 类型定义",
+    "运行时自动加载 sqlite-sync、sqlite-vector、sqlite-memory 扩展",
+    "支持 OPFS 持久化存储与 Worker 线程两种运行形态"
+   ],
+   "use_cases": [
+    "在浏览器中嵌入 SQLite 进行本地数据存储与查询",
+    "Web 应用中结合 sqlite-vector 实现向量数据处理",
+    "通过 Vite 等构建工具集成的前端项目"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# SQLite WASM ／ SQLite WASM conveniently wrapped as an ES Module. It includes the sqlite-sync, sqlite-vector, and sqlite-memory extensions that are automatically loaded at runtime. TypeScript types are from the official sqlite-wasm repository.",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是 SQLite 数据库本体经 WASM 编译后的运行时包，属于为 SQLite 在浏览器环境使用提供的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite WASM conveniently wrapped as an ES Module. It includes the sqlite-sync, sqlite-vector, and sqlite-memory extensions that are automatically loaded at runtime. TypeScript types are from the official sqlite-wasm repository. ／ - 🚀 SQLite WASM wrapped as an ES Module",
+   "evidence_lines": [
+    3,
+    7
+   ]
+  },
+  "fn": "sqliteai/sqlite-wasm",
+  "sha": "cd2fa4d6fdf4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1eaed10c1b63": {
+  "identity": {
+   "one_liner": "AI 代理本地持久记忆：MCP 服务器+知识图谱+语义检索",
+   "review": "MaxGraph 为 AI 编码代理（Claude Code、Cursor、VS Code、Cline、ChatGPT 兼容客户端等）提供本地项目记忆：代理自动记录决策、缺陷与会话摘要，数据以纯文本文件存于本机并离线工作，通过 MCP（streamable-http）或 REST API 连接，附带可视化仪表盘和 NDJSON 导出。安装走 shell/PowerShell 脚本，无需 Docker。注意采用 BSL-1.1 许可且为付费产品（7 天试用后停止写入新记录）。",
+   "highlights": [
+    "提供 MCP 服务器（streamable-http + Bearer）和 REST API 两种接入方式",
+    "数据以本地文本文件存储、离线可用，支持仪表盘查看与 NDJSON 导出",
+    "支持知识图谱记忆、语义搜索，并按项目划分记忆空间"
+   ],
+   "use_cases": [
+    "为 Claude Code/Cursor 等 AI 编码代理提供跨会话的项目上下文记忆",
+    "本地私有部署场景下保存代理工作记录（决策、缺陷、任务）",
+    "通过仪表盘审查、修正或删除代理记忆条目"
+   ],
+   "": null
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未声明使用任何数据库，存储为本地纯文本文件，既非数据库生态工具也无明确数据库依赖。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSL-1.1：源码公开，个人与内部使用免费，转售为服务需商业许可，每版本发布四年后转 MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "2. **Всё хранится локально.** Обычные текстовые файлы на твоём компьютере, интернет не нужен. Дашборд показывает каждую запись. ／ Все записи хранятся только на твоём компьютере и работают офлайн. Это обычные текстовые файлы в папке `data/`: их можно открыть, прочитать и скопировать в любой момент. Из дашборда всё выгружается одним файлом (экспорт в NDJSON). ／ |Cline / Continue|MCP streamable-http + Bearer|",
+   "evidence_lines": [
+    34,
+    115,
+    88
+   ]
+  },
+  "fn": "RuMemory/maxgraph",
+  "sha": "1eaed10c1b63",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f59dee837cd4": {
+  "identity": {
+   "one_liner": "校园失物招领系统，Next.js+Bun 前端配 mock API，含 MySQL/TiDB SQL 脚本",
+   "review": "这是一个 RDBMS 课程小项目的失物招领 Web 应用，前端用 Next.js 和 Bun 运行，当前全部跑在内存 mock 数据上，API 路由可逐个替换为 mysql2 真实查询。仓库提供 sql/mysql/（含触发器、存储过程的 MySQL 8/MariaDB 版）和 sql/tidb/（TiDB Cloud 版，触发器/存储过程改写为应用层规则与普通 SQL）两套建库脚本，并给出 TiDB Cloud 部署步骤与演示账号。",
+   "highlights": [
+    "提供 MySQL 8/MariaDB 版 SQL 脚本，包含触发器与存储过程",
+    "提供 TiDB Cloud 兼容版脚本，触发器/存储过程逻辑改写为应用层规则和普通 SQL",
+    "mock API 与 seed 数据一致，支持逐路由切换为 mysql2 真实查询"
+   ],
+   "use_cases": [
+    "数据库课程项目演示触发器、存储过程、视图",
+    "本地运行失物招领演示应用（mock 数据）",
+    "在 TiDB Cloud 上部署云端版数据库并接入前端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "replaced with real MySQL queries one at a time, without touching any page. ／ - `sql/mysql/` — the original MySQL 8 / MariaDB version **with triggers and",
+     "lines": [
+      6,
+      10
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- `sql/mysql/` — the original MySQL 8 / MariaDB version **with triggers and",
+     "lines": [
+      10
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- `sql/tidb/` — a **TiDB Cloud-compatible** version with identical tables and ／ 1. Create a free TiDB Cloud Starter/Basic cluster and take the connection",
+     "lines": [
+      12,
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 MySQL/TiDB 存储数据的失物招领 Web 应用，SQL 脚本为应用自身服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RDBMS mini project frontend + mock API. Next.js (App Router, plain JavaScript) ／ run with **Bun**. The whole app currently runs on **mock data** that mirrors ／ - `sql/mysql/` — the original MySQL 8 / MariaDB version **with triggers and",
+   "evidence_lines": [
+    3,
+    4,
+    10
+   ]
+  },
+  "fn": "anc25/RDBMS-mini-project",
+  "sha": "f59dee837cd4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

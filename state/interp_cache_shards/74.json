@@ -10111,5 +10111,73 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "280b096b0476": {
+  "identity": {
+   "one_liner": "自托管 AI 讲故事应用，用于运行黑暗世界编年史，含骰子与本地 LLM",
+   "review": "这是一个自托管的 Web 应用，用于运行 World of Darkness（Classic Revised 与 V5 规则）的桌面角色扮演编年史：服务器端骰子池计算、Discord 风格聊天、角色卡生成、语音朗读与 Whisper 转写。它通过 LM Studio/Ollama 调用本地 LLM，用 ChromaDB 做 RAG 记忆，后端为 Python/Flask + PostgreSQL。面向想在自己机器上跑 AI 辅助跑团的玩家和管理员，需 Linux + Docker + NVIDIA GPU 环境。",
+   "highlights": [
+    "实现 Classic（oWoD Revised）与 V5 两版规则的骰子机制，由服务器端计算骰子池",
+    "支持本地 LLM（LM Studio/Ollama）与 ChromaDB 向量嵌入实现长期记忆和规则书检索",
+    "提供语音朗读、录音转写（Whisper/Piper/TTS）及英语与希腊语的双语界面"
+   ],
+   "use_cases": [
+    "自托管运行 AI 辅助的黑暗世界线上跑团",
+    "需要角色卡生成、骰子记录与聊天存档的长期编年史管理",
+    "全流程本地化（本地模型、本地语音、数据不出本机）的隐私敏感玩法"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Edit `.env`: put your own keys in `FLASK_SECRET_KEY` and `JWT_SECRET_KEY`, and generate `POSTGRES_USER` and `POSTGRES_PASSWORD` (how). Never keep the template values. ／ |Backend|Python 3.12, Flask 3.1 on gunicorn 26, PostgreSQL 16, Redis 7, server-sent events|",
+     "lines": [
+      127,
+      178
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明这是一个用 PostgreSQL 存数据、Flask 提供服务的 Web 应用（L44、L127、L178），非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShadowRealms AI is a web app for running World of Darkness chronicles with an AI Storyteller. You host it yourself: Docker for the app, and local language models through LM Studio and Ollama, so the stories stay on your machine. Every chronicle is either Classic (oWoD Revised) or V5, and the interface and the Storyteller work in English and Greek. ／ 2. Edit `.env`: put your own keys in `FLASK_SECRET_KEY` and `JWT_SECRET_KEY`, and generate `POSTGRES_USER` and `POSTGRES_PASSWORD` (how). Never keep the template values.",
+   "evidence_lines": [
+    44,
+    127
+   ]
+  },
+  "fn": "Somnius/shadowrealms-ai",
+  "sha": "280b096b0476",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

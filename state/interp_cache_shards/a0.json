@@ -9474,5 +9474,270 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "59a5ee32258f": {
+  "identity": {
+   "one_liner": "opencode 服务器 API 的 Rust 兼容重实现，以 SQLite 存储",
+   "review": "用 Rust 重写 opencode 服务器，兼容其 1.18.x 冻结 API 与 opencode 2 API，使官方 TUI/Web 客户端可直接连接。面向需要在小型 VPS 或长期运行场景下托管服务器的用户，内置增量 vacuum、数据保留环与历史导入；通过差异回放与 A/B 对比验证兼容性。仅发布 Linux x86_64/aarch64 产物，macOS/Windows 部分功能（如 PTY）尚未完整实现。",
+   "highlights": [
+    "兼容 opencode 1.18.31 冻结 API（188 个操作全部实现）与 opencode 2 API（142/142 绑定），官方客户端无需修改即可连接",
+    "对 SQLite 数据库执行增量 vacuum 并维护保留环，读取用户既有 opencode 配置与认证文件且只读",
+    "提供差异回放、pair 检查、模糊测试等验证工具链（replay/pair/pair-v2/capdiff）"
+   ],
+   "use_cases": [
+    "在小内存 VPS 或旧笔记本上长期运行 opencode 服务器",
+    "接管已有 opencode 历史数据并回收数据库空间",
+    "为 API 兼容性验证提供差异测试基线"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "and re-runs every oracle before claiming compatibility.",
+     "lines": [
+      172
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`STORAGE.md`|SQLite pragmas, schema and blob rules, FTS5 design|",
+     "lines": [
+      228
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储会话数据的 opencode 服务器重实现，SQLite 为其内嵌存储层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A compatible reimplementation of the opencode ／ Data lives in `~/.local/share/ocserve` (`OCSERVE_DATA_DIR` overrides). It reads ／ |`STORAGE.md`|SQLite pragmas, schema and blob rules, FTS5 design|",
+   "evidence_lines": [
+    3,
+    99,
+    228
+   ]
+  },
+  "fn": "Reliary/ocserve",
+  "sha": "59a5ee32258f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "46d25dfc61e2": {
+  "identity": {
+   "one_liner": "Windows 便携 PHP+MySQL/MariaDB 本地服务器管理器，Rust 编写",
+   "review": "Servisan 是一个用 Rust 编写的 Windows 本地开发环境管理器，编排便携的 PHP 8.3 与 MySQL/MariaDB 运行时，通过 Windows Job Objects 清理子进程，提供系统托盘、Web 仪表盘、CLI 和 phpMyAdmin 集成，并支持从 Laragon/XAMPP/WAMP 一键迁移数据库。面向需要在 Windows 上做本地 PHP 开发、希望免安装便携使用的开发者。数据目录隔离在自身文件夹内，仅支持 Windows。",
+   "highlights": [
+    "通过 Windows Job Objects 在退出或崩溃时回收 PHP/MySQL 子进程",
+    "提供 servisan migrate 命令，可从 Laragon/XAMPP/WAMP 自动扫描并导入数据库，必要时在临时端口启动临时 mysqld",
+    "内置 Web 仪表盘、系统托盘与 CLI，支持一键安装配置 phpMyAdmin"
+   ],
+   "use_cases": [
+    "Windows 上的便携 PHP + MySQL/MariaDB 本地开发环境搭建",
+    "从 Laragon/XAMPP/WAMP 迁移本地数据库到新的隔离环境",
+    "将完整开发环境放入 USB 设备随身携带使用"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Ultra-lightweight, portable, and blazing-fast local PHP + MySQL server manager for Windows, crafted in Rust.** ／ **Servisan** is a modern, high-performance, and completely portable alternative to legacy local server environments like Laragon and XAMPP. Built from the ground up in **Rust**, it orchestrates native **PHP** and **MySQL/MariaDB** runtimes inside a self-contai ／ * 🖥️ **Laragon-Style Web Dashboard:** Clean, intuitive browser dashboard with real-time PHP & MySQL status monitors, in-browser log console (50-line tail), phpMyAdmin, and direct native OS triggers for Terminal shell and File Explorer. ／ * 🛡️ **Zero Zombie Processes:** Controlled via native **Windows Job Objects** (`JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE`). If Servisan exits, stops, or crashes, child PHP/MySQL processes are reaped cleanly—no lingering background instances locking ports. ／ * 🔀 **Conflict-Free Ports by Default:** Defaults to PHP **8080** and MySQL **3307** so you can run Servisan side-by-side with Laragon, Docker, or IIS without port clashes.",
+     "lines": [
+      5,
+      27,
+      34,
+      35,
+      38
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Servisan** is a modern, high-performance, and completely portable alternative to legacy local server environments like Laragon and XAMPP. Built from the ground up in **Rust**, it orchestrates native **PHP** and **MySQL/MariaDB** runtimes inside a self-contai ／ > **Zero Dependencies:** Both packages are 100% self-contained with PHP 8.3 and MariaDB 11.4 LTS runtime. Works immediately on **any Windows PC**—even if Laragon, XAMPP, or Docker was never installed. ／ *Auto-detects Laragon on `C:\\laragon` or `D:\\laragon` for instant setup. If Laragon is not installed, it automatically downloads official clean portable runtimes (PHP 8.3 & MariaDB/MySQL).*",
+     "lines": [
+      27,
+      71,
+      101
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "*Note: Reusing PHP and MySQL binaries redistributed alongside portable packages is governed by their respective licenses (PHP License and GNU GPL / Oracle MySQL FOSS License Exception).*",
+     "lines": [
+      202
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其编排并管理 PHP 与 MySQL/MariaDB 运行时进程，为本地数据库开发环境服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Servisan** is a modern, high-performance, and completely portable alternative to legacy local server environments like Laragon and XAMPP. Built from the ground up in **Rust**, it orchestrates native **PHP** and **MySQL/MariaDB** runtimes inside a self-contained directory with zero Windows registry pollution, instant startup, and foolproof process cleanup. ／ * 🛡️ **Zero Zombie Processes:** Controlled via native **Windows Job Objects** (`JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE`). If Servisan exits, stops, or crashes, child PHP/MySQL processes are reaped cleanly—no lingering background instances locking ports. ／ * 🔄 **Automated Database Migration (Zero-Touch Autopilot):** Seamlessly scan and migrate all your databases from Laragon, XAMPP, or WAMP into Servisan with 1-click. Even if Laragon/XAMPP is stopped or broken, Servisan automatically spawns an ephemeral background MySQL instance on a temporary port without requiring passwords or touching the source server!",
+   "evidence_lines": [
+    27,
+    35,
+    40
+   ]
+  },
+  "fn": "Haniel26/servisan",
+  "sha": "46d25dfc61e2",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1cba2134f84d": {
+  "identity": {
+   "one_liner": "PolarDB 与 RDS 的架构与选型对比文档",
+   "review": "一篇讲解阿里云 PolarDB 与 RDS 差异的说明性文档：介绍两者架构（主备复制 vs 存算分离）、读扩展方式、引擎支持范围、PolarDB-X 定位与计费方式，并按业务场景给出选型规则。面向需要在两者之间做选型的使用者和采购决策者，内容以产品文档口径陈述，仓库本身不含可运行代码。",
+   "highlights": [
+    "包含 RDS 与 PolarDB 两条产品线的架构、读扩展、性能基准与计费方式对比表",
+    "提供按业务场景区分的选型规则与决策建议",
+    "说明 RDS、PolarDB、PolarDB-X 三者的产品边界与引擎兼容范围"
+   ],
+   "use_cases": [
+    "需要在阿里云 RDS 与 PolarDB 之间做数据库选型的场景",
+    "需要了解 RDS 主备架构与 PolarDB 存算分离架构差异的场景",
+    "需要确认 PolarDB 对各数据库引擎兼容范围的场景"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|RDS 其他引擎（PostgreSQL / SQL Server / MariaDB）|对应引擎|全托管实例|需要 PG、SQL Server、MariaDB 生态的业务|包年包月 / 按量付费|查看当前价格| ／ |PolarDB PostgreSQL 版|PostgreSQL 兼容|存算分离|PG 生态业务|包年包月 / 按量付费|查看当前价格| ／ 引擎清单直接决定可选范围。RDS 支持四种引擎：MySQL、PostgreSQL、SQL Server、MariaDB；PolarDB 目前提供 MySQL 兼容和 PostgreSQL 兼容两类内核，MySQL 侧覆盖 8.0.1、5.7、5.6 三个版本线。结论很简单：业务跑在 SQL Server 或 MariaDB 上，PolarDB 没有对应内核，只能留在 RDS；用 MySQL 或 PostgreSQL 的，两边都能选。",
+     "lines": [
+      19,
+      21,
+      48
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "先给结论：PolarDB 和 RDS 的区别，核心在架构——**RDS 是主备架构的标准托管数据库，PolarDB 是存算分离的云原生数据库**。两者都兼容 MySQL，普通网站、小程序后端、企业管理系统这类标准业务，RDS 高可用系列就够用；等读并发上来了、数据量大了、需要弹性扩缩了，PolarDB 的优势才开始兑现。放在行业坐标里，RDS 大致对应 Amazon RDS 的定位，PolarDB 对标的是 AWS 的 Aurora。 ／ > - 常规 Web 应用、标准 OLTP → **RDS MySQL 高可用系列**：主备托管，主库故障自动切换、通常 30 秒内完成，连接地址不变。 ／ > - 读多写多、数据量大、要按需扩读能力 → **PolarDB MySQL 集群版**：存算分离，主节点加只读节点。",
+     "lines": [
+      3,
+      7,
+      8
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|RDS 其他引擎（PostgreSQL / SQL Server / MariaDB）|对应引擎|全托管实例|需要 PG、SQL Server、MariaDB 生态的业务|包年包月 / 按量付费|查看当前价格| ／ ## 引擎支持范围：SQL Server 和 MariaDB 只有 RDS 有 ／ 引擎清单直接决定可选范围。RDS 支持四种引擎：MySQL、PostgreSQL、SQL Server、MariaDB；PolarDB 目前提供 MySQL 兼容和 PostgreSQL 兼容两类内核，MySQL 侧覆盖 8.0.1、5.7、5.6 三个版本线。结论很简单：业务跑在 SQL Server 或 MariaDB 上，PolarDB 没有对应内核，只能留在 RDS；用 MySQL 或 PostgreSQL 的，两边都能选。",
+     "lines": [
+      19,
+      46,
+      48
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|RDS 其他引擎（PostgreSQL / SQL Server / MariaDB）|对应引擎|全托管实例|需要 PG、SQL Server、MariaDB 生态的业务|包年包月 / 按量付费|查看当前价格| ／ ## 引擎支持范围：SQL Server 和 MariaDB 只有 RDS 有 ／ 引擎清单直接决定可选范围。RDS 支持四种引擎：MySQL、PostgreSQL、SQL Server、MariaDB；PolarDB 目前提供 MySQL 兼容和 PostgreSQL 兼容两类内核，MySQL 侧覆盖 8.0.1、5.7、5.6 三个版本线。结论很简单：业务跑在 SQL Server 或 MariaDB 上，PolarDB 没有对应内核，只能留在 RDS；用 MySQL 或 PostgreSQL 的，两边都能选。",
+     "lines": [
+      19,
+      46,
+      48
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "mention",
+     "quote": "# PolarDB和RDS的区别是什么：架构、读扩展、性能与计费差异详解，按业务场景选对数据库 ／ 先给结论：PolarDB 和 RDS 的区别，核心在架构——**RDS 是主备架构的标准托管数据库，PolarDB 是存算分离的云原生数据库**。两者都兼容 MySQL，普通网站、小程序后端、企业管理系统这类标准业务，RDS 高可用系列就够用；等读并发上来了、数据量大了、需要弹性扩缩了，PolarDB 的优势才开始兑现。放在行业坐标里，RDS 大致对应 Amazon RDS 的定位，PolarDB 对标的是 AWS 的 Aurora。 ／ > - 读多写多、数据量大、要按需扩读能力 → **PolarDB MySQL 集群版**：存算分离，主节点加只读节点。",
+     "lines": [
+      1,
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 是选型对比说明文档，未包含可安装运行的软件，既非服务数据库的工具也非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# PolarDB和RDS的区别是什么：架构、读扩展、性能与计费差异详解，按业务场景选对数据库 ／ 先给结论：PolarDB 和 RDS 的区别，核心在架构——**RDS 是主备架构的标准托管数据库，PolarDB 是存算分离的云原生数据库**。两者都兼容 MySQL，普通网站、小程序后端、企业管理系统这类标准业务，RDS 高可用系列就够用；等读并发上来了、数据量大了、需要弹性扩缩了，PolarDB 的优势才开始兑现。放在行业坐标里，RDS 大致对应 Amazon RDS 的定位，PolarDB 对标的是 AWS 的 Aurora。",
+   "evidence_lines": [
+    1,
+    3
+   ]
+  },
+  "fn": "ejfak05/polardb-rds-comparison",
+  "sha": "1cba2134f84d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

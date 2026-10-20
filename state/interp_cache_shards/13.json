@@ -11025,5 +11025,310 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cc8b35cae1e5": {
+  "identity": {
+   "one_liner": "基于 DuckLake 与 S3 持久层的云端数据库服务，集成 LLM Gateway 与 Agent",
+   "review": "SimpleBase 是一个用 Go 构建的云端数据库服务：以 S3 为在线持久层、DuckLake（DuckDB catalog + Parquet）为存储格式，通过 HTTP API 提供逻辑数据库管理、参数化 SQL 执行、配额与审计，并集成 LLM 网关和项目级只读 Agent。适合需要在云上以 project 为单位托管 SQL 数据库的团队自建部署；部署约束包括单写实例、副本数固定为 1。",
+   "highlights": [
+    "提供 HTTP API 实现逻辑数据库管理、参数化查询、写语句执行与批量事务",
+    "以 S3 为在线持久层，节点丢失本地数据后可凭 S3 恢复",
+    "内置 LLM Gateway（OpenAI 兼容接口）与项目级只读云 Agent，按 project 划分认证、配额与审计"
+   ],
+   "use_cases": [
+    "在自建云环境中托管多租户/多项目 SQL 数据库服务",
+    "需要服务端统一管理 LLM 鉴权、配额与用量的应用后端",
+    "需要操作审计与配额控制的数据库访问场景"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "从旧版本（LessDB/ha-sqlite）迁移到新链路的工作流详见 docs/ops/migration.md。",
+     "lines": [
+      112
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是提供数据库管理、SQL 执行与配额审计的数据库服务组件，而非仅使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于 DuckLake、S3 在线持久层与 Go 构建的云端数据库服务，并集成 LLM Gateway 与云 Agent。 ／ - **单写实例**：首期固定副本数为 1，所有写请求经同一进程的 Registry 路由，保证单库唯一 writer。 ／ - **DuckLake-only**：用户库与系统库都走 DuckLake（DuckDB catalog + Parquet DATA_PATH）；历史 Turso/libSQL 引擎已退役。",
+   "evidence_lines": [
+    3,
+    17,
+    18
+   ]
+  },
+  "fn": "linkxzhou/SimpleBase",
+  "sha": "cc8b35cae1e5",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f95eeeeab6c0": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，以 PostgreSQL+pgvector 为持久存储",
+   "review": "Dense-Mem 是一个用 Go 编写的自托管 HTTP MCP 记忆服务器，通过 Streamable HTTP 端点为 AI 客户端提供证据存储、类型化声明、冲突检测、向量召回与权限治理等记忆能力，数据持久层使用 PostgreSQL 加 pgvector，多实例部署需 Redis 协调。面向需要给 LLM 智能体接入持久化、可审计记忆的开发者与团队，通过 Docker Compose 部署。",
+   "highlights": [
+    "实现 MCP 协议端点（/mcp，Streamable HTTP），供 AI 客户端提交与召回证据",
+    "以 PostgreSQL 与 pgvector 作为知识、生命周期、溯源、搜索、授权与审计的持久存储",
+    "提供用户门户与控制门户界面、API 密钥认证与团队/成员隔离"
+   ],
+   "use_cases": [
+    "为 LLM 智能体提供带溯源与生命周期管理的持久记忆服务",
+    "需要权限隔离与审计的团队级记忆/知识图谱存储",
+    "通过 Ollama 等 OpenAI 兼容端点本地部署记忆服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority. ／ pending PostgreSQL migrations under a database session lock before serving, so",
+     "lines": [
+      20,
+      74,
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 是其知识与审计的持久存储本体，该项目是使用数据库存数据的应用服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dense-Mem is a standalone HTTP MCP memory server using Streamable HTTP. It ／ PostgreSQL is the durable authority for knowledge, lifecycle, provenance, ／ The base stack uses PostgreSQL with pgvector as the only durable authority.",
+   "evidence_lines": [
+    17,
+    20,
+    74
+   ]
+  },
+  "fn": "markhuangai/dense-mem",
+  "sha": "f95eeeeab6c0",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "52450bc92de6": {
+  "identity": {
+   "one_liner": "自托管 AI 漫画/条漫/解说视频制作工作室，以 PostgreSQL 存储结构化故事状态",
+   "review": "OpenManga 是一个自托管的内容生产应用：将故事解析为结构化状态（角色、章节、分镜规格），用用户自备的 AI provider key 生成图像与解说文本，配合本地 Kokoro TTS 与确定性排版，导出 PDF、CBZ、EPUB、MP4 等。适合想批量制作漫画/条漫/解说视频的创作者，需自备 provider key 并通过 Docker 部署，依赖 PostgreSQL 存储项目数据。",
+   "highlights": [
+    "支持 BYOK 模式，文本推理与图像生成可按运行选择 provider 与模型",
+    "提供本地 Kokoro-82M 语音合成与确定性排版、导出管线",
+    "支持导出 PNG/JPG、PDF、PSD 分层文件、CBZ、EPUB、MP4 视频与 YouTube 包"
+   ],
+   "use_cases": [
+    "AI 辅助创作漫画、条漫与插画总结",
+    "制作带解说的视频内容并打包 YouTube 发布",
+    "无 API key 的离线演示（粘贴回复+上传图稿）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "cp .env.example .env # set POSTGRES_PASSWORD, SESSION_SECRET (openssl rand -hex 32), public URLs, INITIAL_ADMIN_* ／ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres redis kokoro",
+     "lines": [
+      157,
+      186
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 通过 docker compose 启动 postgres 作为应用自身的数据存储，属使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted production tool for consistent AI-generated manhwa, manga, webtoons and illustrated recaps. It is not \"story → giant prompt → comic.png\": the story becomes structured state (cast, world, chapters, scenes, pages, panel specs), canonical references pin identity, panels are generated cheaply and versioned, and lettering, layout, narration and exports are deterministic.",
+   "evidence_lines": [
+    23
+   ]
+  },
+  "fn": "pr0h0/OpenManga",
+  "sha": "52450bc92de6",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e0778a22aa77": {
+  "identity": {
+   "one_liner": "桌面 SQL 学习工作台，内置 SQLite 执行与 AI 导师",
+   "review": "PractiSQL 是一款 Electron 桌面 SQL 学习应用，集成本地 SQLite 执行、可视化 schema、课程/挑战/考试、PDF 学习手册生成与 AI 导师，可连接 ChatGPT 或 API 提供方获取讲解与生成 SQL。面向 SQL 学习者，支持从 SQLite/SQL dump/CSV 导入，也可将 PostgreSQL、MySQL、SQL Server 服务器库导入为本地 SQLite 学习副本；当前提供 Windows x64 版本，macOS 版本在准备中。",
+   "highlights": [
+    "内置本地 SQLite 执行，支持加载 SQLite 数据库、SQL dump 或 CSV，无需 AI 连接即可作为 SQL playground 使用",
+    "AI harness 提供导师问答、SQL 生成、练习生成与 AI 评分，可连接 ChatGPT 账户或 API 提供方",
+    "提供课程学习路径、挑战、考试、XP/徽章进度系统及本地生成 PDF 学习手册"
+   ],
+   "use_cases": [
+    "SQL 初学者按课程路径学习并在真实数据上练习",
+    "教师/自学者生成带答案与数据字典的 PDF 学习手册",
+    "导入现有本地或服务器数据库进行交互式查询学习"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "dba-agent",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Does an imported server database remain a live server workspace?** Supported PostgreSQL, MySQL and SQL Server imports create a local SQLite learning copy. Querying that copy is separate from querying the original server.",
+     "lines": [
+      198
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Does an imported server database remain a live server workspace?** Supported PostgreSQL, MySQL and SQL Server imports create a local SQLite learning copy. Querying that copy is separate from querying the original server.",
+     "lines": [
+      198
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A desktop SQL learning workspace that brings local SQLite, an AI tutor, visual schemas and hands-on practice together through a coordinated **AI harness**. ／ **Use it as a SQL playground without AI.** Load a SQLite database, SQL dump or CSV, write your own queries and inspect the actual results. The editor, schema viewer and local completion do not require an AI connection. Connect the tutor when you want explanati ／ **Follow the query all the way to its rows.** This example joins products, order items and orders, groups completed sales and calculates quantity and revenue. The table below comes from actual SQLite execution in the application.",
+     "lines": [
+      7,
+      21,
+      49
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Does an imported server database remain a live server workspace?** Supported PostgreSQL, MySQL and SQL Server imports create a local SQLite learning copy. Querying that copy is separate from querying the original server.",
+     "lines": [
+      198
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用内置 SQLite 存储和执行学习数据，并从其他服务器库导入学习副本，属于使用数据库的应用。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A desktop SQL learning workspace that brings local SQLite, an AI tutor, visual schemas and hands-on practice together through a coordinated **AI harness**. ／ **Use it as a SQL playground without AI.** Load a SQLite database, SQL dump or CSV, write your own queries and inspect the actual results. The editor, schema viewer and local completion do not require an AI connection. Connect the tutor when you want explanations or generated SQL. ／ Local SQLite databases and file imports can become learning workspaces. Supported server imports create a local learning copy; they are separate from ordinary query execution against that copy.",
+   "evidence_lines": [
+    7,
+    21,
+    111
+   ]
+  },
+  "fn": "canyrtcn/PractiSQL",
+  "sha": "e0778a22aa77",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

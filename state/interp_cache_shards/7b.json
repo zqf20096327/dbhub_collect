@@ -10450,5 +10450,103 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b82175fdf2f2": {
+  "identity": {
+   "one_liner": "将数据库实时渲染为 3D 数据中心的只读可视化监控工具",
+   "review": "3DDB 通过读取数据库目录和性能视图，把表、索引、会话、锁和查询以 3D 场景形式呈现，每秒轮询并实时更新。面向需要观察数据库运行状态的运维和开发人员。仅支持只读访问，不向数据库写入；部分视图需要相应性能权限（如 performance_schema、VIEW SERVER STATE）。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQL Server、MongoDB 的目录与性能数据读取",
+    "只读设计，不向被监控数据库写入",
+    "每秒轮询计数器并实时映射为 3D 场景中的表、索引、锁和会话"
+   ],
+   "use_cases": [
+    "实时观察热点表、锁等待和未使用索引",
+    "演示或教学场景下展示数据库内部活动（内置 demo）",
+    "会话与用户活动的可视化巡查"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL / MariaDB, SQL Server and MongoDB. Read-only: 3d-db never writes to your database. ／ |PostgreSQL|`pg_database`, `pg_stat_user_tables`, `pg_index` + `pg_class` + `pg_am`, `pg_proc`, `pg_roles`, `pg_auth_members`|`pg_stat_user_tables`, `pg_stat_user_indexes`, `pg_locks`, `pg_stat_user_functions`, `pg_stat_activity`|",
+     "lines": [
+      15,
+      81
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL / MariaDB, SQL Server and MongoDB. Read-only: 3d-db never writes to your database. ／ |MySQL / MariaDB|`information_schema.schemata/tables/statistics/routines`, `mysql.innodb_index_stats`, `mysql.user`, `mysql.role_edges` or `mysql.roles_mapping`|`performance_schema` (`table_io_waits_summary_by_table`, `..._by_index_usage`, `events_statements_s ／ ### MySQL / MariaDB without `performance_schema`",
+     "lines": [
+      15,
+      82,
+      90
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL / MariaDB, SQL Server and MongoDB. Read-only: 3d-db never writes to your database. ／ |SQL Server|`sys.databases`, `sys.tables`, `sys.indexes` + `sys.index_columns`, `sys.objects` + `sys.sql_modules`, `sys.server_principals`|`sys.dm_db_index_usage_stats`, `dm_exec_procedure_stats`, `dm_exec_function_stats`, `dm_tran_locks`, `dm_exec_sessions/re",
+     "lines": [
+      15,
+      83
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL / MariaDB, SQL Server and MongoDB. Read-only: 3d-db never writes to your database. ／ |MySQL / MariaDB|`information_schema.schemata/tables/statistics/routines`, `mysql.innodb_index_stats`, `mysql.user`, `mysql.role_edges` or `mysql.roles_mapping`|`performance_schema` (`table_io_waits_summary_by_table`, `..._by_index_usage`, `events_statements_s ／ ### MySQL / MariaDB without `performance_schema`",
+     "lines": [
+      15,
+      82,
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它读取数据库目录与性能视图进行可视化，是为数据库生态服务的监控工具，不是用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL, MySQL / MariaDB, SQL Server and MongoDB. Read-only: 3d-db never writes to your database. ／ |PostgreSQL|`pg_database`, `pg_stat_user_tables`, `pg_index` + `pg_class` + `pg_am`, `pg_proc`, `pg_roles`, `pg_auth_members`|`pg_stat_user_tables`, `pg_stat_user_indexes`, `pg_locks`, `pg_stat_user_functions`, `pg_stat_activity`| ／ Cumulative counters are read every second (`POLL_MS` to change it) and turned into per-second rates and events. The catalog is re-read immediately when its digest changes, and every 12 polls to refresh row counts and sizes.",
+   "evidence_lines": [
+    15,
+    81,
+    86
+   ]
+  },
+  "fn": "VincenzoManto/3DDB",
+  "sha": "b82175fdf2f2",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

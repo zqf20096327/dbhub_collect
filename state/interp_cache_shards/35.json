@@ -9399,5 +9399,277 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1124580ad28e": {
+  "identity": {
+   "one_liner": "PostgreSQL 日志分析工具，解析日志生成 HTML 性能报告",
+   "review": "pgBadger 是一个用 Perl 编写的 PostgreSQL 日志分析器，读取 syslog、stderr、jsonlog、csv 等多种格式的 PostgreSQL 日志文件，生成包含查询耗时分布、连接、锁、checkpoint、autovacuum 等内容的 HTML 图表报告，面向需要分析 PostgreSQL 运行日志的数据库管理员，支持增量解析、多进程并行与按用户/数据库/客户端过滤报告内容。",
+   "highlights": [
+    "支持 syslog、stderr、jsonlog、csv、pgbouncer、rds、redshift 等多种日志格式",
+    "支持增量模式解析与多进程并行解析日志",
+    "可按数据库、用户、应用名、客户端 IP、正则过滤或排除报告内容，输出 text/html/bin/json 格式"
+   ],
+   "use_cases": [
+    "分析 PostgreSQL 慢查询与查询耗时分布",
+    "通过 incremental 模式按日/周持续生成日志报告",
+    "从远程主机或 journalctl 获取日志进行解析"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pgBadger - a fast PostgreSQL log analysis report ／ PostgreSQL log analyzer with fully detailed reports and graphs.",
+     "lines": [
+      5,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "pgBadger 读取 PostgreSQL 日志并生成报告，是为 PostgreSQL 生态服务的分析工具而非使用其存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Usage: pgbadger \\[options\\] logfile \\[...\\] ／  PostgreSQL log analyzer with fully detailed reports and graphs. ／  logfile can be a single log file, a list of files, or a shell command",
+   "evidence_lines": [
+    9,
+    11,
+    15
+   ]
+  },
+  "fn": "darold/pgbadger",
+  "sha": "1124580ad28e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "26eee3cc9eba": {
+  "identity": {
+   "one_liner": "libuv 的 C++11 封装库，提供面向对象事件驱动 I/O 及网络/Web 模块",
+   "review": "libuvcpp 将 libuv 的事件循环、句柄和请求封装为 RAII 风格的 C++11 类，并提供 TCP/UDP、HTTP/WebSocket、SSL 及可选内存池模块，另含可选数据库模块（支持 SQLite/MySQL/PostgreSQL/ODBC 后端）。面向需要在 C++ 项目中进行事件驱动网络开发的工程师，通过 CMake/pkg-config 或预编译包集成。",
+   "highlights": [
+    "提供 TCP/UDP、HTTP/1.1、HTTP/2、WebSocket、QUIC/HTTP/3 等协议的客户端与服务端实现",
+    "可选数据库模块，通过统一客户端类连接 SQLite / MySQL / PostgreSQL / ODBC 后端",
+    "提供 deb/rpm/zip 等多平台预编译包及 apt/dnf 软件源，支持 CMake 与 pkg-config 集成"
+   ],
+   "use_cases": [
+    "在 C++ 项目中构建事件驱动的 TCP/UDP 网络服务",
+    "开发 HTTP/WebSocket 服务端与客户端应用（含 Web 应用框架层）",
+    "需要通过可选 db 模块以统一接口访问 SQLite/MySQL/PostgreSQL 的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      245,
+      310
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      245,
+      310
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      245,
+      310
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是通用 C++ 网络开发库，其可选 db 模块为连接多种数据库提供客户端封装",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "libuvcpp provides a thin, idiomatic C++ layer over libuv's event loop, handles, and requests. ／ - **Version**: `1.8.2` — **Author**: `zhuweiye` — **License**: `MIT`",
+   "evidence_lines": [
+    88,
+    15
+   ]
+  },
+  "fn": "Antruly/libuvcpp",
+  "sha": "26eee3cc9eba",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a46ab01b44f2": {
+  "identity": {
+   "one_liner": "AI 智能体本地可审计记忆控制平面，基于 SQLite 存储",
+   "review": "AtMem 是一个面向 AI 智能体的本地记忆管理组件，提供受策略治理的上下文检索、记忆注入与可验证的执行证据记录，数据以 SQLite 存储，支持 SQLCipher 加密，默认以 shadow 模式接入、经确认后激活。面向使用 OpenClaw、Pydantic AI、LangChain/LangGraph 等框架的智能体开发者，通过 pip 安装。",
+   "highlights": [
+    "提供 governed retrieval、shadow mode 激活流程与 Agent Black Box 事件记录",
+    "提供 OpenClaw、Pydantic AI、LangChain/LangGraph 适配器，支持本地嵌入索引与 Ollama 等本地模型",
+    "本地记忆不依赖外部 API，支持 SQLCipher 加密与 SQLite 完整性校验迁移"
+   ],
+   "use_cases": [
+    "为 AI 智能体添加带审计证据的长期记忆",
+    "多框架智能体的上下文注入与记忆治理",
+    "本地化/加密环境下的智能体记忆存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Canonical memory, provenance, lifecycle state, and audit evidence use SQLite.",
+     "lines": [
+      574
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 canonical memory、provenance 与 audit evidence 使用 SQLite 存储数据，项目为使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AtMem: the memory control plane under every agent. Your agent runtime perceives, plans, acts and reflects; AtMem returns governed context only when policy allows, records every model and tool event in the Agent Black Box, and admits memory candidates under its own authority, with shadow mode, activation and restore. ／ python -m pip install --upgrade atmem==2.3.9",
+   "evidence_lines": [
+    6,
+    31
+   ]
+  },
+  "fn": "aetna000/atmem",
+  "sha": "a46ab01b44f2",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0327f1fb67b3": {
+  "identity": {
+   "one_liner": "开源自托管员工运营系统（Employee Ops）",
+   "review": "Broccoli 是一个员工运营/人员管理（HRIS 类）系统，覆盖入职、离职等员工事务流程，支持自托管部署，通过 docker compose 一条命令启动后访问本地 8080 端口使用，采用 AGPL-3.0 许可证并由 Minari Limited 维护。适合希望自行托管员工运营流程的团队使用；README 未详细说明其数据库依赖与部署要求。",
+   "highlights": [
+    "提供员工运营（Employee Ops）功能，主题包含入职与离职流程",
+    "支持自托管部署，通过 docker compose 启动",
+    "采用 AGPL-3.0 许可证开源"
+   ],
+   "use_cases": [
+    "团队自托管管理员工入职/离职流程",
+    "集中管理员工运营事务（people ops）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "主题标签含 postgresql，但 README 正文未出现该库名或说明数据存储依赖，证据不足。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0 单许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " The open-source Employee Operations System. ／ docker compose up ／ Open http://localhost:8080.",
+   "evidence_lines": [
+    9,
+    21,
+    24
+   ]
+  },
+  "fn": "getbroccoli/broccoli",
+  "sha": "0327f1fb67b3",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

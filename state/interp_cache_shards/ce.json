@@ -10554,5 +10554,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "661110b818e6": {
+  "identity": {
+   "one_liner": "基于 Roslyn 将 .NET 解决方案索引进 SQLite 的代码语义地图，服务 AI 代理",
+   "review": "Lurp 用 Roslyn 把 C# 解决方案编译加载后存入 SQLite 数据库，包含符号、类型化关系、源码跨度与出处等级，提供 context/impact/diff/search 等 CLI 与 MCP 接口，供 AI 代理按需检索小范围代码上下文。适合在 Windows 上维护大型 .NET 代码库的开发团队；限制包括仅支持 Windows、需 .NET 10 运行时/SDK、保留最近 3 个快照。",
+   "highlights": [
+    "将 .NET 解决方案索引进 SQLite，存储符号、类型化关系、源码跨度和出处证据等级",
+    "提供 CLI 与 MCP 两种访问方式，支持上下文胶囊、影响分析、语义 diff、全文检索、死代码候选等命令",
+    "通过六个框架适配器（ASP.NET Core、DI、MediatR、EF Core、序列化、Test）生成类型化关系事实"
+   ],
+   "use_cases": [
+    "让 AI 编码代理获取带证据等级的精确代码上下文，替代反复 grep 全库",
+    "分析符号依赖关系与变更影响面（上下游可达性）",
+    "对比两个索引快照之间的语义差异与生成死代码候选清单"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small,",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Lurp 将 .NET 解决方案索引进 SQLite 数据库存放索引数据，SQLite 是其存储实现，项目本身是面向 AI 代理的代码分析工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small, ／ (`--mode=index`, `status --solution=`, MCP `lurp_index`, and MCP `lurp_status` with ／ dotnet tool install --global lurp --version 3.5.2",
+   "evidence_lines": [
+    10,
+    93,
+    98
+   ]
+  },
+  "fn": "t-macabee/lurp",
+  "sha": "661110b818e6",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

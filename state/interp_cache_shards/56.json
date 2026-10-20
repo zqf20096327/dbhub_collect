@@ -9186,5 +9186,254 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ac36b5343087": {
+  "identity": {
+   "one_liner": "自托管事务邮件 API 服务，基于 Bun+Elysia，用 PostgreSQL 存储邮件队列",
+   "review": "BunMail 是一个自托管的事务性邮件发送服务，面向需要通过 REST API 或 SMTP 提交程序化发送邮件的开发者，提供 DKIM 签名、SPF/DMARC 校验、Postgres 支撑的重试队列、模板、Webhook、入站 SMTP 和 Web 仪表盘，以单 Docker 容器分发。它使用 PostgreSQL 存储数据（队列基于 Postgres），生产部署要求注册并验证发信域名。",
+   "highlights": [
+    "提供 REST API 与 SMTP 提交两种发送方式，支持 DKIM 签名与 SPF/DKIM/DMARC 校验",
+    "基于 PostgreSQL 的邮件队列，带 MTA 式重试退避与幂等键",
+    "单 Docker 容器部署，包含 Web 仪表盘、模板、Webhook 与入站 SMTP"
+   ],
+   "use_cases": [
+    "从自己的服务器发送事务性邮件（注册验证、通知等）",
+    "替代按量计费的邮件 SaaS，程序化管理发信与退信",
+    "接收并管理入站邮件，配合 Webhook 做邮件事件处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Email queue**: Postgres-backed with MTA-style retry backoff (up to 48 h for temporary failures such as greylisting), lease-based crash recovery that is safe with several replicas, and no double sends between concurrent workers",
+     "lines": [
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明邮件队列基于 Postgres 存储（L85），数据库是该应用的数据存储组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted alternative to SendGrid, Resend, and Postmark: built in TypeScript on Bun + Elysia, with a REST API, web dashboard, DKIM signing, an email queue with retries, webhooks, templates, inbound SMTP, and Gmail-style trash. Ships in a single Docker container. ／ - **Email queue**: Postgres-backed with MTA-style retry backoff (up to 48 h for temporary failures such as greylisting), lease-based crash recovery that is safe with several replicas, and no double sends between concurrent workers ／ docker compose exec app bun run src/db/seed.ts",
+   "evidence_lines": [
+    13,
+    85,
+    44
+   ]
+  },
+  "fn": "mohamedboukari/bunmail",
+  "sha": "ac36b5343087",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ef4c4ff9c73": {
+  "identity": {
+   "one_liner": "自托管 CRM 应用，Go+React，内置线索捕获表单",
+   "review": "这是一个用 Go 和 React 编写的自托管 CRM 系统，管理线索、客户、公司、五阶段销售管线、工单和任务，并支持在站内构建可嵌入网站的线索捕获表单。数据可存 SQLite（无需数据库服务器）或 MySQL/MariaDB（CI 测试），通过 Docker Compose 或单个二进制部署，面向需要自主控制数据的小型销售与支持团队。",
+   "highlights": [
+    "提供线索、客户、公司、五阶段商机管线、工单和任务管理，含四种角色权限",
+    "内置可嵌入网站的线索捕获表单，支持蜜罐、时间陷阱、限流和可选 reCAPTCHA 防垃圾及双重确认",
+    "支持 SQLite（免服务器单文件）与 MySQL 8/MariaDB 10.11 存储，提供 Docker Compose 部署文件"
+   ],
+   "use_cases": [
+    "小团队自托管管理销售线索、商机与支持工单",
+    "在网站上嵌入线索捕获表单并对接 CRM",
+    "需要 GDPR 数据删除、API 密钥访问等合规与安全能力的场景"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both. ／ ## Running with Docker (MySQL) ／ - MySQL 8.0 or higher — or nothing at all, if you run on SQLite ／ `DB_DRIVER` selects the backend. It defaults to `mysql`, which is the production",
+     "lines": [
+      4,
+      20,
+      71,
+      93,
+      113
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ - **Easy to run.** A single Go API binary and a static React UI. SQLite needs no database server; ／ ## Quick start (SQLite, no database server) ／ - MySQL 8.0 or higher — or nothing at all, if you run on SQLite ／ DB_DRIVER=sqlite         # single file, no server",
+     "lines": [
+      4,
+      19,
+      26,
+      93,
+      118
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both.",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统以 SQLite 或 MySQL 作为自身业务数据存储，是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A self-hosted CRM for small teams: sales and support in one app, with lead-capture forms built in. ／ Go backend, React UI, SQLite or MySQL. ／ `DB_DRIVER` selects the backend. It defaults to `mysql`, which is the production",
+   "evidence_lines": [
+    3,
+    4,
+    113
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "florinel-chis/GopherCRM",
+  "sha": "3ef4c4ff9c73",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fd8583807ceb": {
+  "identity": {
+   "one_liner": "Go 事件流管道框架，将消息源预处理后写入目标存储",
+   "review": "这是一个 Go 语言的事件流处理框架，提供 source → map → storage 的管道构建 API，并附带可通过 YAML/HCL/TOML 场景配置运行的服务二进制。面向需要在消息源（Kafka/NATS/Redis 流）与存储（ClickHouse/Vertica 等）之间搬运、过滤、转换事件的 Go 开发者；存储驱动支持 SQL 模板、字段映射、条件过滤与 Prometheus 指标；MySQL/PostgreSQL/MongoDB 存储仍在 TODO 中。",
+   "highlights": [
+    "提供代码优先的 pipeline API 和基于文件场景配置的服务二进制两种使用方式",
+    "内置 source 驱动（Kafka、NATS、Redis stream）与 storage 驱动（ClickHouse、Vertica、Kafka、NATS、Redis、HTTP）",
+    "流级 where 条件过滤与 Prometheus counter 指标、健康检查端点"
+   ],
+   "use_cases": [
+    "将 Kafka/NATS/Redis 流中的消息按条件过滤后写入 ClickHouse 或 Vertica",
+    "以 YAML/HCL/TOML 配置方式运行事件转发与预处理服务",
+    "作为 Go 库嵌入应用构建自定义事件管道"
+   ],
+   "use_cases 提示可参考 README 场景示例（L262）": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "store, _ := clickhouse.Open(ctx, dsn, clickhouse.WithInitQuery(initSQL)) ／ (`-tags all` / `nats` / `clickhouse` / …). Library drivers under `source/*` and ／ |`driver`|all|`clickhouse`, `vertica`, `nats`, `natstream`, `kafka`, `redistream`, `redis`, `ping` / `http`|",
+     "lines": [
+      42,
+      48,
+      107
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- [ ] Add MySQL / PostgreSQL / MongoDB storage",
+     "lines": [
+      308
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- [ ] Add MySQL / PostgreSQL / MongoDB storage",
+     "lines": [
+      308
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为消息源与数据库存储之间的事件管道提供服务，是数据入库工具组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Eventstream is a Go **framework** for building event pipelines (source → map → storage), ／ |`eventstream/storage/{clickhouse,sql,…}`|DB / specialty storage drivers| ／ |`cmd/eventstream`|Service binary + tag-selected driver catalogs + scenario wiring|",
+   "evidence_lines": [
+    10,
+    298,
+    303
+   ]
+  },
+  "fn": "geniusrabbit/eventstream",
+  "sha": "fd8583807ceb",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

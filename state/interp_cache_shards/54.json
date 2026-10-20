@@ -9174,5 +9174,182 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "desc::Far Cry 3 Ultimate Trainer & Memory Editor 2026 Toolkit": {
+  "identity": {
+   "one_liner": "Far Cry 3 游戏内存修改与训练器工具包",
+   "review": "基于简介，该仓库提供针对游戏 Far Cry 3 的训练器与内存编辑功能，涉及二进制漏洞利用、缓冲区溢出等技术标签，并包含 MCP 服务器/工具相关主题。简介未说明安装方式、运行环境或目标用户，标签中出现的 sqlite3 仅来自采集通道，简介正文未出现任何数据库内容。",
+   "highlights": [
+    "提供游戏训练器与内存编辑功能（基于简介标题）",
+    "标签包含 buffer-overflow、binary-exploitation 等技术主题",
+    "标签包含 mcp-servers、mcp-tools"
+   ],
+   "use_cases": [
+    "对 Far Cry 3 进行内存参数修改（基于简介推断）",
+    "安全研究与逆向分析学习场景（基于标签推断）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "简介与标签均未表明该项目为数据库生态提供服务或使用数据库，证据不足。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Far Cry 3 Ultimate Trainer & Memory Editor 2026 Toolkit"
+  },
+  "fn": "VirtualPurser/Far-Cry-3-Value-Forge-resocket",
+  "sha": "desc::Far Cry 3 Ultimate Trainer & Memory Editor 2026 Toolkit",
+  "source": "desc",
+  "generated_at": "2026-10-20",
+  "ver": 2,
+  "prompt_ver": "3.3"
+ },
+ "a040416f60be": {
+  "identity": {
+   "one_liner": "只读 MCP 服务器，直读 Calibre 的 SQLite 库并提供全文/语义检索与阅读",
+   "review": "该项目是一个 MCP 服务器，供 Claude、ChatGPT 等 MCP 客户端检索和阅读本地 Calibre 书库：直接以只读方式打开 Calibre 的 SQLite 数据库，维护增量的 FTS5 全文与语义索引 sidecar 缓存，支持章节阅读、图片展示、扫描件 OCR，并提供 31 个只读工具。面向希望让 AI 助手访问个人电子书库的用户，Windows 优先，需 Python 3.10+ 与开启全文索引的 Calibre。",
+   "highlights": [
+    "以只读模式直接打开 Calibre 的 metadata.db，Calibre 打开时也可工作，无写入工具与 shell",
+    "自建增量 FTS5 全文索引及可选语义/插图索引，提供元数据、全文、语义三种检索方式",
+    "提供 stdio 与 Streamable HTTP（含 bearer 认证）两种 MCP 传输，支持章节阅读、图片展示与扫描 PDF 的 Tesseract OCR"
+   ],
+   "use_cases": [
+    "让 MCP 客户端按元数据、关键词或语义检索并阅读本地电子书",
+    "书库元数据质量检查、查重、从文本中提取 ISBN",
+    "通过配套 skills 将书籍内容提炼为技能、代理或跨书主题综述"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Read-only by design: SQLite connections in `mode=ro`, no write tools, no shell; the only writes are to the",
+     "lines": [
+      207
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 MCP 服务器组件直接读取 SQLite（Calibre 库）数据对外提供检索与阅读能力，为访问数据库内容服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "2. **The server reads Calibre's databases directly,** in read-only mode: no `calibredb` process to start, queries",
+   "evidence_lines": [
+    106
+   ]
+  },
+  "fn": "jumpifequal/mcp-calibre",
+  "sha": "a040416f60be",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4674850e876a": {
+  "identity": {
+   "one_liner": "本地无登录的拉美求职聚合工具，抓取职位并按个人画像匹配",
+   "review": "这是一个运行在本地的求职助手应用：抓取 GetOnBoard、Computrabajo、LinkedIn 等拉美招聘平台的职位，自动过滤重复发布空缺的企业，并根据用户 profile 目录中的技能文件为每个职位标注匹配热度。使用 Bun 或 Node 22+ 运行，数据存储在本地 SQLite，无需登录任何平台。适用于正在找技术岗位的拉美求职者；README 注明部分平台条款禁止爬取，仅供个人使用。",
+   "highlights": [
+    "聚合多个拉美求职平台的职位搜索，支持从近 3 个月增量拉取新职位",
+    "按匹配度给职位标色排序，并自动将 3 个月内重复发布同一职位的企业加入黑名单",
+    "数据存于本地 SQLite，运行时不登录任何平台账户"
+   ],
+   "use_cases": [
+    "个人求职者批量搜索和筛选拉美技术类职位",
+    "识别反复发布职位但不实际招聘的企业",
+    "依据自身技能清单查看目标职位的技术差距"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.| ／ |`bun run dev:node`|Igual, con Node (usa `better-sqlite3`).|",
+     "lines": [
+      41,
+      94,
+      95
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用将用户数据存于本地 SQLite，SQLite 仅作为其存储层，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.|",
+   "evidence_lines": [
+    41,
+    94
+   ]
+  },
+  "fn": "SebastianAsprino/jobfilter",
+  "sha": "4674850e876a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

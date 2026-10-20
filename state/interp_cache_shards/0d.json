@@ -9808,5 +9808,61 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0f271a9b5163": {
+  "identity": {
+   "one_liner": "T3 Code 服务器的 MCP 网关，聚合多机连接",
+   "review": "该项目是一个 MCP 网关，把 Grok Bot、Notion 等 MCP 客户端通过单一连接接入多台机器上的 T3 Code 服务器，负责路由任务、创建 T3 线程与 git worktree、提供 webhook 通知和仪表盘。面向使用 AI 编码代理并自托管 T3 Code 的团队。需 Node.js 24+ 且从 Git 检出运行，未发布到 npm。",
+   "highlights": [
+    "提供单一 MCP 连接路由多台机器的 T3 编码任务",
+    "支持 OAuth2 审批码与 bearer token 两种客户端接入方式及 Read/Operate 权限分级",
+    "提供 webhook 事件通知（含 PR 打开/合并事件）与专用仪表盘"
+   ],
+   "use_cases": [
+    "让一个 bot 通过网关管理多台机器上的 T3 Code 项目任务",
+    "通过 webhook 在任务回合结束或需要人工输入时唤醒 bot",
+    "在仪表盘查看机器健康、已连接 agent 与待处理任务"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 T3 Code 服务器生态服务的 MCP 网关组件，数据库仅作为其自身运行的可能依赖出现在 topic 中，README 未提及。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "T3 Fleet Gateway connects Grok Bot, Notion and other MCP clients to your T3 servers through one connection. Your agent can find projects, start work, answer worker questions and bring back the result. Each new job gets a T3 thread you can open in T3 whenever you want: a named project's job gets its own git worktree and branch, and work with no named project can run in a machine's T3 scratch workspace. ／ A bot connects to one gateway, which routes coding work to T3 projects on several machines. ／ You need an always-on machine with Node.js 24+, a running T3 Code server and its `t3` CLI. A coding agent on that machine can do the setup. The gateway runs from a Git checkout; it is not published to npm.",
+   "evidence_lines": [
+    7,
+    9,
+    18
+   ]
+  },
+  "fn": "boundsj/t3-fleet-gateway",
+  "sha": "0f271a9b5163",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

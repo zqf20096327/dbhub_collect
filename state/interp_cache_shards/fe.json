@@ -10029,5 +10029,241 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fddf272a4ab4": {
+  "identity": {
+   "one_liner": "Hermes Agent 的本地长期记忆与上下文压缩插件，基于 SQLite 存储",
+   "review": "Chronicle 是 Hermes Agent 的记忆插件，包含记忆提供器和上下文引擎两个组件，将对话中的事实、片段事件溯源式地存入本地 SQLite 库，并在压缩前持久化、需要时召回。面向 Hermes 用户，本地运行、无必依赖服务，要求 Python 3.9+，可通过插件命令或 YAML 配置启用。",
+   "highlights": [
+    "提供 ChronicleMemoryProvider 与 ChronicleContextEngine 两个可独立启用的插件槽位",
+    "使用 SQLite WAL 模式的 MemoryStore 事件溯源存储，支持 FTS5 全文检索与可选嵌入向量召回",
+    "压缩前持久化片段，chronicle_expand 可按 span_id 逐字节还原"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 提供跨会话的长期记忆持久化",
+    "长对话中做记忆感知的上下文压缩",
+    "在无外部服务的本机环境管理代理记忆（含纠正与遗忘）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "your machine in SQLite; relevant memories come back when they are useful. ／ Chronicle stores durable memory in a local SQLite database at ／ - **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections",
+     "lines": [
+      17,
+      79,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将 SQLite 用作自身的记忆存储后端，是为 Hermes Agent 服务的应用插件，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Chronicle stores durable memory in a local SQLite database at ／ - **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections ／ Chronicle gives your Hermes agent durable long-term memory and safer working-memory",
+   "evidence_lines": [
+    79,
+    120,
+    15
+   ]
+  },
+  "fn": "indigokarasu/chronicle-agent-context-and-memory",
+  "sha": "fddf272a4ab4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "abf72902ec36": {
+  "identity": {
+   "one_liner": "Oracle 数据库工具与资源的社区策展清单",
+   "review": "一个社区维护的 Oracle 数据库相关工具与资源索引，按 IDE、GUI、CLI、Schema、备份、监控、测试、安全等类别组织条目，面向 DBA、DevOps 和开发者提供检索入口。README 本身不包含安装或运行内容，仅收集第三方工具链接与简介。",
+   "highlights": [
+    "按 IDE、GUI、CLI、Schema、Backup、Monitoring、Security 等类别组织工具条目",
+    "社区驱动维护，接受提交第三方 Oracle 数据库工具",
+    "条目覆盖备份、监控（Prometheus/Zabbix）、Kubernetes 运维、报表与测试数据生成等场景"
+   ],
+   "use_cases": [
+    "查找 Oracle 数据库相关工具的开发者与 DBA",
+    "为 Oracle 生态补充收录新工具的社区贡献者",
+    "了解 Oracle 周边工具分类结构的调研参考"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- TOra - TOra is an open source SQL IDE for Oracle, MySQL and PostgreSQL dbs. ／ - usql - A universal command-line interface for PostgreSQL, MySQL, Oracle Database, SQLite3, Microsoft SQL Server, and many other databases including NoSQL and non-relational databases!",
+     "lines": [
+      18,
+      27
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- TOra - TOra is an open source SQL IDE for Oracle, MySQL and PostgreSQL dbs. ／ - usql - A universal command-line interface for PostgreSQL, MySQL, Oracle Database, SQLite3, Microsoft SQL Server, and many other databases including NoSQL and non-relational databases!",
+     "lines": [
+      18,
+      27
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "> Community driven list of Oracle database tools ／ Here we will collect information about awesome useful and awesome experimental tools that simplify working with Oracle databases for DBA, DevOps, Developers and mere mortals. ／ Feel free to add information about your own db-tools or your favorite third-party oracle db-tools.",
+     "lines": [
+      3,
+      5,
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- usql - A universal command-line interface for PostgreSQL, MySQL, Oracle Database, SQLite3, Microsoft SQL Server, and many other databases including NoSQL and non-relational databases!",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- usql - A universal command-line interface for PostgreSQL, MySQL, Oracle Database, SQLite3, Microsoft SQL Server, and many other databases including NoSQL and non-relational databases!",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为收集简化 Oracle 数据库工作的工具信息的清单，为数据库生态提供资源索引。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Community driven list of Oracle database tools ／ Here we will collect information about awesome useful and awesome experimental tools that simplify working with Oracle databases for DBA, DevOps, Developers and mere mortals. ／ Feel free to add information about your own db-tools or your favorite third-party oracle db-tools.",
+   "evidence_lines": [
+    3,
+    5,
+    7
+   ]
+  },
+  "fn": "suryadev99/awesome-oracledb",
+  "sha": "abf72902ec36",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ea368a3fc7bd": {
+  "identity": {
+   "one_liner": "自托管 Web 应用，用 git worktree 隔离并行运行 AI 编码代理",
+   "review": "iworkflow 是一个自托管的 ADE Web 应用，用于在隔离的 git worktree 中并行启动、跟踪和审查多个 AI 编码代理，任务以依赖图串联、合并后自动触发后继任务，集成 GitLab/GitHub 的 MR/PR 与 Jira。由 Rust、Leptos、Diesel 和 SQLite 构建，数据存于本地 SQLite 文件。适合在本地机器上管理代理工作流的开发者；无用户账号，仅靠可选访问令牌保护。",
+   "highlights": [
+    "每个任务在独立 git worktree 中运行代理，完成后可审查 diff 并合并或丢弃",
+    "提供任务依赖图画板，前置任务合并后自动启动后继任务",
+    "集成 GitLab/GitHub 的 MR/PR 创建、CI 状态查看与合并"
+   ],
+   "use_cases": [
+    "在本地并行运行多个 AI 编码代理并集中审查其改动",
+    "通过手机（配合 Tailscale）远程跟踪和合并代理任务",
+    "将链式任务按依赖关系自动编排执行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`IWF_DATABASE_URL`|`~/.iworkflow/workspaces.db` (SQLite, automatic migrations)|",
+     "lines": [
+      144
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确项目由 SQLite 存储本地数据（workspaces.db），SQLite 只是应用自身的存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "source-available：PolyForm Shield 1.0.0，非 OSI 开源",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**iworkflow is an ADE (Agentic Development Environment)**: a self-hosted web app to launch, follow and review several AI coding agents in parallel. Instead of editing files yourself, you manage **tasks**: each one runs an agent in its own git worktree, and you review the diff before anything reaches your branch. ／ iworkflow imposes no workflow: each agent uses the configuration and plugins you already have installed, plus the project's `AGENTS.md`. Under the hood agents are driven over RPC (or ACP / stream-json, depending on the runtime). It is built with Rust, Leptos (SSR + hydration), Diesel and SQLite.",
+   "evidence_lines": [
+    5,
+    23
+   ]
+  },
+  "fn": "plopezm/iworkflow",
+  "sha": "ea368a3fc7bd",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

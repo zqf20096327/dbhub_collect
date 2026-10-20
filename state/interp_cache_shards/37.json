@@ -10134,5 +10134,139 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96555feb867a": {
+  "identity": {
+   "one_liner": "Rust 编写的实验性文档存储，将 MongoDB 线协议转译为 PostgreSQL 查询",
+   "review": "OxideDB 是一个用 Rust 实现的实验性文档数据库，把受支持的 MongoDB 线协议子集转译成 PostgreSQL 查询，数据存放在专用 PostgreSQL 实例中，change streams 依赖逻辑复制槽。面向需要以 MongoDB 客户端协议访问 PostgreSQL 数据的开发者。它未实现完整 MongoDB 契约，wire 服务无认证与 TLS，需自建运行。",
+   "highlights": [
+    "将 MongoDB 线协议子集转译为 PostgreSQL 查询，支持 find/insert/aggregate 等命令",
+    "change streams 依赖 PostgreSQL wal_level=logical 与逻辑复制槽",
+    "内置基于 QuickJS-NG 的 JavaScript shell，并支持 mongosh 等外部 MongoDB 客户端连接"
+   ],
+   "use_cases": [
+    "用 MongoDB 客户端/驱动读写 PostgreSQL 中的文档数据",
+    "基于 PostgreSQL 逻辑复制做变更流处理",
+    "对 MongoDB 参考实现进行差分对比测试"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "OxideDB translates a supported subset of the MongoDB wire protocol into PostgreSQL queries. It is an experimental document store, written in Rust. It does not implement the complete MongoDB database contract. ／ Use the Rust toolchain pinned in `rust-toolchain.toml` and a dedicated PostgreSQL database. CI tests PostgreSQL 16; local validation also covers PostgreSQL 18. ／ Change streams require PostgreSQL `wal_level=logical` and an available logical",
+     "lines": [
+      3,
+      9,
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 PostgreSQL 作为存储后端，通过转译线协议在其上实现文档存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OxideDB translates a supported subset of the MongoDB wire protocol into PostgreSQL queries. It is an experimental document store, written in Rust. It does not implement the complete MongoDB database contract. ／ Use the Rust toolchain pinned in `rust-toolchain.toml` and a dedicated PostgreSQL database. CI tests PostgreSQL 16; local validation also covers PostgreSQL 18.",
+   "evidence_lines": [
+    3,
+    9
+   ]
+  },
+  "fn": "fcoury/oxide",
+  "sha": "96555feb867a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "432450ac618e": {
+  "identity": {
+   "one_liner": "本地 iMessage 消息历史的 MCP 检索服务器",
+   "review": "一个运行在 macOS 上的 MCP 服务器，让 Claude、Cursor、VS Code 等客户端以自然语言搜索和读取 iMessage/SMS/MMS/RCS 消息历史。只读访问 Messages 数据库（chat.db），支持全文搜索、会话阅读、附件查看与消息统计，提供隐私分级（redacted/aggregate）；需授予宿主应用完全磁盘访问权限。",
+   "highlights": [
+    "提供 search_messages、get_conversation、sync_messages、analyze_communication 等只读 MCP 工具",
+    "支持多种隐私模式（full/redacted/aggregate），附件默认移除位置数据",
+    "提供 --database 参数可读取 chat.db 副本，支持 stdio 与 HTTP 两种传输"
+   ],
+   "use_cases": [
+    "通过 MCP 客户端以自然语言检索和回顾个人消息历史",
+    "统计消息量、响应时间等沟通分析",
+    "在隔离环境中读取 chat.db 副本进行消息查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**Requirements:** macOS 14 or newer. Node.js 24.16 or newer for `npx` installs (Claude Desktop brings its own). Use Node 24 LTS for encrypted cache support. Runtimes without SQLite checkpoint APIs, including Node 25, search in memory and rebuild after a restar ／ - **Search index.** Built on your Mac and, when SQLite checkpoint APIs are available, cached encrypted in `~/Library/Caches/imessage-mcp`, with a key derived from your Messages database, so it opens only for an app that can already read your messages. Deleting",
+     "lines": [
+      18,
+      172
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是读取本机 Messages 数据库（chat.db）并使用 SQLite 做本地缓存索引的 MCP 应用，不为数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Search and read your Messages history from Claude, Codex, Cursor, VS Code, and any other MCP client. ／ |`--database <path>`|Read a copy of `chat.db` instead of this Mac's Messages. *env* `IMESSAGE_DB`| ／ - **Search index.** Built on your Mac and, when SQLite checkpoint APIs are available, cached encrypted in `~/Library/Caches/imessage-mcp`, with a key derived from your Messages database, so it opens only for an app that can already read your messages. Deleting it is always safe. `server_status` reports an unavailable or failed cache while searches continue from memory.",
+   "evidence_lines": [
+    5,
+    161,
+    172
+   ]
+  },
+  "fn": "anipotts/imessage-mcp",
+  "sha": "432450ac618e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

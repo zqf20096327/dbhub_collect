@@ -8893,5 +8893,81 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f4bbc65eaee8": {
+  "identity": {
+   "one_liner": "SQLite 扩展，用 JavaScript 编写自定义 SQL 函数",
+   "review": "SQLite-JS 是一个 SQLite 加载型扩展，让开发者用 JavaScript 编写标量、聚合、窗口函数和排序规则，并通过 js_eval 在查询中直接执行 JS，内部使用 QuickJS 沙箱运行。面向需要在 SQLite 中注入自定义逻辑而不想写 C 扩展的开发者。提供预编译二进制、Swift、Android、Node.js、Flutter 等多种安装方式；README 指出同一连接内无法更新已注册函数。",
+   "highlights": [
+    "支持用 JavaScript 创建标量函数、聚合函数、窗口函数和排序规则（js_create_scalar/js_create_aggregate/js_create_window/js_create_collation）",
+    "提供 js_eval 在 SQL 查询中直接执行 JavaScript 代码，基于 QuickJS 沙箱运行",
+    "支持多平台分发：预编译二进制、Swift Package、Android/Gradle、npm、Flutter/Dart 包，并可与 sqlite-sync 在集群间同步函数定义"
+   ],
+   "use_cases": [
+    "在 SQLite 查询中实现自定义计算、文本处理、统计聚合等逻辑",
+    "需要自然排序、区域设置排序等自定义排序规则的场景",
+    "移动端（Android/iOS/Flutter）应用中为 SQLite 扩展自定义函数"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite-JS ／ **SQLite JS** is a powerful extension that brings JavaScript capabilities to SQLite. With this extension, you can create custom SQLite functions, aggregates, window functions, and collation sequences using JavaScript code, allowing for flexible and powerful data manipulation directly within your SQLite database.",
+     "lines": [
+      5,
+      30
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Backticks (MySQL-style): `` `identifier name` ``",
+     "lines": [
+      355
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是加载到 SQLite 中的扩展，为 SQLite 增加自定义函数能力，属于服务数据库生态的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SQLite JS** is a powerful extension that brings JavaScript capabilities to SQLite. With this extension, you can create custom SQLite functions, aggregates, window functions, and collation sequences using JavaScript code, allowing for flexible and powerful data manipulation directly within your SQLite database. ／  Scalars, aggregates, window functions, and collations — directly in JS, with full QuickJS sandboxing. No more C extensions for custom logic. ／ npm install @sqliteai/sqlite-js",
+   "evidence_lines": [
+    30,
+    7,
+    91
+   ]
+  },
+  "fn": "sqliteai/sqlite-js",
+  "sha": "f4bbc65eaee8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

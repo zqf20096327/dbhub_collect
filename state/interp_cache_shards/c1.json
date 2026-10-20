@@ -10316,5 +10316,86 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1414f128eab0": {
+  "identity": {
+   "one_liner": "面向开发者的自托管个人博客系统",
+   "review": "Moonglade 是一个基于 ASP.NET Core 和 EF Core 的自托管博客系统，提供文章发布、评论、分类标签、归档、RSS/Atom 等功能，并包含认证管理后台。数据层通过独立的 provider 项目支持 PostgreSQL（默认）和 SQL Server，可用 Docker Compose 或 Azure App Service 部署，适合开发者自建个人博客。",
+   "highlights": [
+    "提供文章、评论、分类、标签、归档、定时发布等博客功能，支持 RSS/Atom/Webmention/OpenSearch",
+    "通过 EF Core 数据提供程序分别支持 PostgreSQL 与 SQL Server",
+    "支持本地账户 + TOTP 及 OpenID Connect（含 Entra ID）认证"
+   ],
+   "use_cases": [
+    "开发者自托管个人博客站点",
+    "需要基于 Docker Compose 或 Azure 部署的博客平台",
+    "需要 Markdown 写作、定时发布与评论管理的个人内容站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeD ／ |PostgreSQL|SQL Server 2025 or LocalDB| ／ PostgreSQL is the default database. SQL Server remains supported when configured explicitly.",
+     "lines": [
+      25,
+      51,
+      64,
+      68
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ |PostgreSQL|SQL Server 2025 or LocalDB| ／ PostgreSQL is the default database. SQL Server remains supported when configured explicitly. ／ |SQL Server|`Server=(local);Database=moonglade;Trusted_Connection=True;`|",
+     "lines": [
+      25,
+      64,
+      68,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用 PostgreSQL/SQL Server 存数据的博客应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Moonglade** is a personal blogging platform built for developers. It features essential blogging tools: posts, comments, categories, tags, archives, and pages. ／ |`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeDatabase` for your environment.",
+   "evidence_lines": [
+    3,
+    25,
+    51
+   ]
+  },
+  "fn": "EdiWang/Moonglade",
+  "sha": "1414f128eab0",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

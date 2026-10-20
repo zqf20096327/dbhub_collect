@@ -10772,5 +10772,144 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d87deb5ade97": {
+  "identity": {
+   "one_liner": "本地离线语义搜索引擎，混合 BM25+向量+HyDE 检索文件",
+   "review": "Soma 是一个本地优先的文件语义搜索工具，索引文档、PDF、图片、音视频并存入本地 SQLite 数据库，用本地运行的大模型生成语义向量，支持自然语言、BM25 关键词和向量三种检索模式，提供 CLI、内置 Web UI 和 HTTP API。面向需要在离线环境检索个人/团队文件的用户，单二进制运行，索引可用 sync 重建。",
+   "highlights": [
+    "提供混合检索：BM25 词法检索、向量检索与 HyDE，经 RRF 融合并由本地模型重排",
+    "支持 PDF/Office/EPUB/图片/音视频提取与 OCR、转写，全部通过本地模型运行",
+    "提供 CLI、内置 Web UI（localhost:8181）与镜像 CLI 的 HTTP JSON API，输出 text/json/csv/md/paths"
+   ],
+   "use_cases": [
+    "在离线或隐私敏感环境中对本地文档与多媒体文件做语义检索",
+    "为脚本或 AI agent 提供本地检索接口（JSON 输出与 HTTP API），用于 RAG 流水线",
+    "构建随文件夹迁移的本地知识库索引（.soma/ workspace）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It indexes documents and multimedia files from folders you choose, stores everything in a local SQLite database, and ／ D --> E[\"🗄️ Local SQLite index<br/>full-text + sqlite-vec vectors\"] ／ |Index DB (SQLite)|`$XDG_STATE_HOME/soma/<workspace>.sqlite`|",
+     "lines": [
+      17,
+      79,
+      260
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将索引数据存储在本地 SQLite 数据库中，Soma 本身是文件搜索应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It indexes documents and multimedia files from folders you choose, stores everything in a local SQLite database, and ／     D --> E[\"🗄️ Local SQLite index<br/>full-text + sqlite-vec vectors\"] ／ |Index DB (SQLite)|`$XDG_STATE_HOME/soma/<workspace>.sqlite`|",
+   "evidence_lines": [
+    17,
+    79,
+    260
+   ]
+  },
+  "fn": "AwesomeDog/soma",
+  "sha": "d87deb5ade97",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "deaf674a9be2": {
+  "identity": {
+   "one_liner": "DSH 酒馆的 SQLite 存储接管插件，服务端计算",
+   "review": "面向 DSH Tavern（SillyTavern 稳定版）的插件，把聊天记录、会话事件与 MVU 变量历史从原存储接管到 SQLite，提供增量写入、按需读取、事务回退和物理尾部回退，计算统一调用酒馆服务端执行链。供已部署酒馆、需管理长对话存档的用户使用；版本绑定上游 stable（当前 0.4.23），V1/V2 不可共装，公开源码不含作者夹具与依赖树。",
+   "highlights": [
+    "聊天头字段与消息楼层分开存储，SQLite 事务与 WAL 管理会话事件，支持增量更新与按范围读取",
+    "提供物理尾部回退与失败轮次清理，正文与变量同库同事务提交",
+    "原档保持只读，可分叉生成新 chatId/sessionId 继续对话，卸载保留原档与 SQLite 数据库"
+   ],
+   "use_cases": [
+    "为 DSH Tavern 稳定版实例接入 SQLite 存档与历史按需读取",
+    "长对话存档的局部更新、旧楼层变量归档与回退管理",
+    "Windows/Linux 环境下酒馆插件的安装、更新与卸载维护"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# DSH Tavern SQLite V2 · stable ／ 这是面向 DSH Tavern 的存储与服务端计算接线插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算调用酒馆自身的服务端执行链，浏览器只保留界面职责。插件不自带 MVU、卡脚本、Helper 或 VM 实现。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。|",
+     "lines": [
+      1,
+      12,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为酒馆应用接入 SQLite 存储能力的插件组件，围绕 SQLite 增量存档、事务与缓存机制实现，非独立使用数据库的最终应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3，基于 DSH Tavern 的独立修改版，非上游官方发行",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向 DSH Tavern 的存储与服务端计算接线插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算调用酒馆自身的服务端执行链，浏览器只保留界面职责。插件不自带 MVU、卡脚本、Helper 或 VM 实现。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。| ／ 基于 DSH Tavern 适配，保留原来源声明与 GNU AGPL v3 许可。本项目是独立修改版，不是上游官方发行；随包官方恢复字节的许可及对应源码入口也保留。",
+   "evidence_lines": [
+    12,
+    21,
+    116
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "deaf674a9be2",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

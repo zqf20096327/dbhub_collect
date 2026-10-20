@@ -9182,5 +9182,215 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e2d3774e47d1": {
+  "identity": {
+   "one_liner": "本地检索归档 AI 编程会话的 Rust CLI 工具",
+   "review": "sessionwiki 扫描本机上 Claude Code、Codex、Gemini CLI 等多种 AI 编程工具写入磁盘的会话记录，建立统一索引，支持全文检索、文件与会话的溯源、归档防丢失、在原工具中恢复会话，并提供本地 Web UI 和 MCP server。面向使用多个 AI 编程工具的开发者；单二进制离线运行，首次建索引按 GB 级耗时数分钟。",
+   "highlights": [
+    "跨多种 AI 编程工具的会话统一扫描、全文搜索（substring+CJK）与文件级溯源",
+    "支持归档被工具清理的会话、在原工具中 resume 会话、生成 markdown brief",
+    "提供本地 Web UI 与只读 MCP server，可作 Claude Code 插件实现会话召回"
+   ],
+   "use_cases": [
+    "回溯某文件或某行代码由哪次 AI 会话生成或修改",
+    "集中检索和浏览散落在多个 AI 工具目录中的历史会话",
+    "在工具清理原始记录前归档会话，保留可搜索的长期历史"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Codex CLI|`~/.codex/sessions/**/rollout-*.jsonl[.zst]`, `~/.codex/archived_sessions/`, `~/.codex/thread_history_*.sqlite`|supported|",
+     "lines": [
+      336
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "工具面向 AI 编程会话检索，SQLite 仅作为其读取的会话文件格式及索引相关实现出现，README 未明确其数据库生态定位。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**sessionwiki turns the sessions your AI coding tools already wrote to disk into one durable history you can read, search, and trace &mdash; every file back to the conversation that wrote it, and nothing lost when a tool prunes the original.** Every tool at once. No daemon, no cloud, no logging habit to build &mdash; it works retroactively over the history you already have. ／ ### MCP server (any agent) ／ - **`search_sessions`**, **`trace_file`**, **`get_session_brief`** &mdash; find a session and read a briefing of it.",
+   "evidence_lines": [
+    20,
+    107,
+    112
+   ]
+  },
+  "fn": "youdie006/sessionwiki",
+  "sha": "e2d3774e47d1",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "400ac0a59a51": {
+  "identity": {
+   "one_liner": "自托管 OpenAI 兼容推理代理，带实时仪表盘与 SQLite 历史",
+   "review": "millivolt 是一个用 Go 编写的自托管 LLM 推理代理，拦截 OpenAI 兼容客户端请求并转发至用户自配的上游 API，同时记录请求元数据、时延、token 与费用到内嵌 SQLite，提供实时仪表盘、暂停/限流等运维控制及 22 工具的 MCP 端点。面向控制主机的单人操作者或小团队，明确不支持多租户、计费或合规审计，Linux 为支持部署目标，尚处 pre-1.0。",
+   "highlights": [
+    "提供 OpenAI 兼容代理端点，客户端自带上游 URL 与密钥，代理不注册提供方或密钥",
+    "提供实时仪表盘，展示请求、token、时延、TTFT、成本等指标，历史持久化于内嵌 SQLite，可选内存环形缓冲",
+    "提供按客户端/提供方的暂停、并发与速率限制、错误风暴保护，并在 /mcp 暴露 22 个工具的 MCP 服务"
+   ],
+   "use_cases": [
+    "自托管环境中集中查看和调试 LLM API 请求的元数据、耗时与费用",
+    "对 LLM 流量执行暂停、限流与错误风暴保护等运维操作",
+    "通过 MCP 端点让 LLM 客户端查询代理记录的请求历史与指标"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-hosted, OpenAI-compatible proxy with a live dashboard, SQLite history, ／ cost. History stays in SQLite; an in-memory ring is available when you do not ／ One Go service with embedded dashboard assets and SQLite. The non-root image",
+     "lines": [
+      5,
+      123,
+      155
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该 LLM 代理自身历史记录的内嵌存储，项目是为 LLM 推理服务的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted, OpenAI-compatible proxy with a live dashboard, SQLite history, ／ One Go service with embedded dashboard assets and SQLite. The non-root image ／ millivolt is built for a single operator or small team that controls the host.",
+   "evidence_lines": [
+    5,
+    155,
+    166
+   ]
+  },
+  "fn": "LLM-4-People/millivolt",
+  "sha": "400ac0a59a51",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3757072a5d39": {
+  "identity": {
+   "one_liner": "基于 Django REST Framework 与 React 的求职招聘追踪系统",
+   "review": "一个面向大学生、毕业生与科技雇主的招聘平台，提供职位发布、申请状态流转、面试安排、录用与双向消息等功能。后端使用 Django REST Framework 与 SimpleJWT，数据存储于 PostgreSQL 14+，前端为 React + Vite。适合高校就业场景或 IT 招聘团队部署试用，README 提供完整的本地双终端安装流程与演示数据种子。",
+   "highlights": [
+    "支持 CANDIDATE、COMPANY、ADMIN 三种角色的 JWT 认证与权限控制",
+    "提供端到端申请流程：APPLIED → REVIEWING → INTERVIEW → OFFERED / REJECTED",
+    "内置幂等的演示数据种子命令 seed_demo_data 与反向清理命令 clear_demo_data"
+   ],
+   "use_cases": [
+    "高校就业指导部门搭建校园招聘平台",
+    "IT 企业发布职位并跟踪候选人申请流程",
+    "本地部署演示环境进行招聘流程测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Database**|PostgreSQL 14+, Psycopg 3| ／ 4. **PostgreSQL** (version 14 or higher): Download PostgreSQL or run via Docker. ／ ### Step 2: Database Setup (PostgreSQL)",
+     "lines": [
+      22,
+      42,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明使用 PostgreSQL 存储业务数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Database**|PostgreSQL 14+, Psycopg 3| ／ ### Step 2: Database Setup (PostgreSQL)",
+   "evidence_lines": [
+    22,
+    74
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "Laykimhoung/careerlens",
+  "sha": "3757072a5d39",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

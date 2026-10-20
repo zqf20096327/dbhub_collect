@@ -8339,5 +8339,77 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c5fb37639de0": {
+  "identity": {
+   "one_liner": "电子书/有声书自动化下载管理器，用 Go 单二进制+SQLite 存储",
+   "review": "Bindery 是一个面向 Usenet 与种子的电子书及有声书自动化管理工具，提供作者监控、索引器搜索、通过 SABnzbd/NZBGet/qBittorrent 等下载客户端抓取，并整理入库。README 说明其为单 Go 二进制、内置 UI、使用 SQLite 无需外部数据库，支持 Helm 部署与 readarr.db 迁移导入，面向家庭实验室/自托管用户。",
+   "highlights": [
+    "提供作者监控、定时新发布发现、Newznab/Torznab 并行搜索与自动抓取",
+    "支持 SABnzbd、NZBGet、qBittorrent、Transmission、Deluge、rTorrent 等下载客户端",
+    "提供 readarr.db 一键迁移导入，并以单 Go 二进制 + SQLite 运行，附带 Helm chart 与 ARM 构建"
+   ],
+   "use_cases": [
+    "家庭服务器自托管电子书/有声书库的自动化采集与整理",
+    "从已归档的 Readarr 迁移作者、索引器与下载客户端配置",
+    "多格式（电子书+有声书）双根目录库管理与发布日历追踪"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Boring to run, by design.** A single Go binary with the UI embedded, SQLite, no external database, no sidecars, no nginx. Distroless image, Helm chart, and ARM builds down to a Pi Zero.",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目使用 SQLite 作为内置存储数据库运行，数据库仅为其数据层而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Automated ebook &amp; audiobook management for Usenet &amp; torrents — monitor authors, search indexers, download, organize. ／ - **Boring to run, by design.** A single Go binary with the UI embedded, SQLite, no external database, no sidecars, no nginx. Distroless image, Helm chart, and ARM builds down to a Pi Zero. ／ > bindery migrate readarr /path/to/readarr.db",
+   "evidence_lines": [
+    6,
+    50,
+    58
+   ]
+  },
+  "fn": "vavallee/bindery",
+  "sha": "c5fb37639de0",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9830,5 +9830,84 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "181f0a83c77d": {
+  "identity": {
+   "one_liner": "本地生物识别门控的 AI 代理短期凭证中介",
+   "review": "briefcred 是一个运行在 macOS 上的本地凭证中介，为 AI 代理和开发工具发放短生命周期凭证：代理进程持有占位符令牌，由本地代理在请求出口替换为真实密钥，并支持一次性 PostgreSQL 角色铸造、Cedar 策略和只追加审计日志。适用于需要限制代理进程凭证可见面的开发场景；项目自称 alpha 阶段，配置格式与 CLI 在 1.0 前可能变更，且未经外部安全审查。",
+   "highlights": [
+    "本地 TLS 代理将合成令牌替换为真实 API 密钥，支持 HTTP/1.1、HTTP/2、SSE、WebSocket 和 gRPC",
+    "按会话铸造并可撤销的凭证：postgres-dynamic 角色、aws-sts 会话、ssh-cert 证书",
+    "提供 MCP 工具、Prometheus 指标端点与只追加 JSONL 审计日志"
+   ],
+   "use_cases": [
+    "为运行 AI 代理的子进程发放受限短期凭证",
+    "限制数据库连接生命周期，使其不超过授权期限"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Watch the 4-minute demo: creating a profile, Touch ID, a leaked token, and a Postgres role that lasts one command. ／ - **Credentials that end.** Postgres roles, AWS STS sessions and SSH ／ - **The PostgreSQL proxy.** The same handoff for databases: the subprocess",
+     "lines": [
+      11,
+      23,
+      63
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "its own memory for a digest would have a confirmation oracle for guessed",
+     "lines": [
+      1378
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 代理的数据库及 API 凭证访问提供中介与审计，属服务于数据库使用生态的安全组件",
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local, biometric-gated credential broker for AI agents and developer tooling. ／ - **The PostgreSQL proxy.** The same handoff for databases: the subprocess ／ - **Operations.** An append-only JSONL audit log, a Prometheus endpoint, a",
+   "evidence_lines": [
+    3,
+    63,
+    66
+   ]
+  },
+  "fn": "vkend/briefcred",
+  "sha": "181f0a83c77d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

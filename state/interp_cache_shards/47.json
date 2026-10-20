@@ -10098,5 +10098,157 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2962d24cf8cb": {
+  "identity": {
+   "one_liner": "基于 NestJS+Vue3+Element Plus+MySQL 的开源管理后台模板",
+   "review": "栖梧是一个 MIT 许可的管理后台模板，提供用户/角色/菜单、数据权限、代码生成、工作流、OAuth2/SSO 等功能，供开发者快速搭建后台管理系统。使用 NestJS 12 与 Vue 3.5，以 MySQL 为数据库、Redis 为共享状态，通过 pnpm workspace 组织，需先准备 MySQL 空库与 Redis 再执行 migrate/seed；当前暂不提供 Docker 部署。",
+   "highlights": [
+    "包含用户、角色、菜单、部门与五种数据权限范围，以及审计与监控模块",
+    "提供 CRUD、树形、主子表代码生成模板与 Excel 导入导出、定时任务、消息功能",
+    "支持中英文界面、OAuth2/SSO、Socket.IO 推送与基于 Redis 的多实例限流"
+   ],
+   "use_cases": [
+    "基于模板搭建新的后台管理系统",
+    "需要权限体系与工作流/审批功能的中后台项目",
+    "中文环境下快速生成业务 CRUD 代码的项目模板起步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "栖梧是一个 MIT 许可的管理后台模板，采用 NestJS 12、Vue 3.5、Element Plus、TypeScript、MySQL 和 Redis，使用 pnpm workspace 管理服务端、Web 与共享契约。品牌为「栖梧 / Qiwu」，项目名为 `qiwu-vue-admin`，内部包名为 `@qiwu/*`。 ／ 使用 Node 22（≥ 22.22.1）与 `package.json` 固定的 pnpm 11.28.3。先按 入门指南 准备 MySQL 空库、Redis ACL 与环境文件，凭据只写 `apps/server/.env.local`，然后在仓库根执行： ／ 原生 Windows 11 + Windows PowerShell 5.1（含 cmd 入口）已验证用于开发与完整本地闸门（`pnpm ci:local --serial`）；无文件 symlink 权限时，符号链接防护测试跳过；Windows 服务器部署及 App / 小程序发布未验证。用户须提供已验证的 MySQL（推荐 8.4，最低 8.0.17）与 Redis ≥ 7.0 服务，见入门指南；按入门指南的 Windows 清单准备独立数据库、ACL、浏览器与 `.env.local` 凭据。",
+     "lines": [
+      7,
+      33,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 MySQL 与 Redis 存数据的管理后台应用模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，附第三方资产（bpmn-js 标志义务等）各自许可说明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "栖梧是一个 MIT 许可的管理后台模板，采用 NestJS 12、Vue 3.5、Element Plus、TypeScript、MySQL 和 Redis，使用 pnpm workspace 管理服务端、Web 与共享契约。品牌为「栖梧 / Qiwu」，项目名为 `qiwu-vue-admin`，内部包名为 `@qiwu/*`。 ／ 使用 Node 22（≥ 22.22.1）与 `package.json` 固定的 pnpm 11.28.3。先按 入门指南 准备 MySQL 空库、Redis ACL 与环境文件，凭据只写 `apps/server/.env.local`，然后在仓库根执行： ／ `apps/server` 是后端，`apps/web` 是 Web，`packages/shared` 是共享 schema、类型与 i18n；`mobile/` 是独立于根 workspace 的可选移动端，PC 项目可按移动端文档删除。业务代码放项目域目录，保留 `@qiwu/*` 包 scope，不需要全仓替换模板内部命名。",
+   "evidence_lines": [
+    7,
+    33,
+    76
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "732124645/qiwu-vue-admin",
+  "sha": "2962d24cf8cb",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "46529eef617d": {
+  "identity": {
+   "one_liner": "本地 MCP 消息总线，用单个 SQLite 文件实现多 AI agent 会话协调",
+   "review": "agent-bus 是一个面向 AI 编程 agent 的本地消息总线，让 Claude Code、Codex、Kimi Code、Cursor 等支持 MCP 的会话通过共享消息队列互相通信、委托任务、记录交接。数据落在本地单个 SQLite 文件，无需守护进程或云端账号；另含可选的 Cloudflare Workers 云端版本。适合同时运行多个 agent 会话并需要跨会话协作的开发者。",
+   "highlights": [
+    "通过 MCP 提供 20 个工具，支持消息发送/广播、问答阻塞、任务委托、按能力路由等功能",
+    "本地模式数据持久化在单个 SQLite 文件（~/.agent-bus/bus.db），无守护进程、无账号",
+    "附带 Slack 风格的本地驾驶舱界面（team chat、Kanban、活动时间线），并可选部署 Cloudflare 云端版本"
+   ],
+   "use_cases": [
+    "多个 AI 编程 agent 会话之间的任务交接与协作",
+    "在本地查看/介入各 agent 会话的对话、任务和交接记录",
+    "跨机器团队协作时部署 Agent Bus Cloud 共享工作区"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The local bus stays the default: one SQLite file, no daemon, no account. For ／ Agent Bus Cloud uses Workers, Durable Objects with SQLite, D1, signed dashboard ／ That's the whole setup. One tiny SQLite file appears at `~/.agent-bus/bus.db`, no ／ **That's the whole reason agent-bus exists.** One SQLite file at ／ SQLite file in WAL mode. Names are addresses. MCP sessions derive a",
+     "lines": [
+      22,
+      30,
+      204,
+      251,
+      294
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Specialist routing.** Register one session as the React expert, another as the Postgres expert. Use `ask_best(capability=…)` and the bus picks.",
+     "lines": [
+      271
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明本地总线使用单个 SQLite 文件（~/.agent-bus/bus.db）持久化数据，属于使用数据库的服务组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The local bus stays the default: one SQLite file, no daemon, no account. For ／ That's the whole setup. One tiny SQLite file appears at `~/.agent-bus/bus.db`, no ／ `~/.agent-bus/bus.db` plus an MCP server every agent already speaks fluently.",
+   "evidence_lines": [
+    22,
+    204,
+    252
+   ]
+  },
+  "fn": "MustaphaSteph/agent-bus",
+  "sha": "46529eef617d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

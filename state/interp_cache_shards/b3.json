@@ -10431,5 +10431,273 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "58729321f288": {
+  "identity": {
+   "one_liner": "单二进制自托管 Wiki，用 SQLite 存储并以 Markdown 文件落盘",
+   "review": "LeafWiki 是一个自托管知识库/Wiki 应用，将页面内容以 Markdown 文件存于磁盘、元数据用 SQLite 保存，打包为单个 Go 二进制，无需外部数据库。面向工程师、小团队和自托管用户，用于文档和 runbook 管理。支持 Docker/二进制/源码部署、三种访问模式、Git 备份与快照恢复。",
+   "highlights": [
+    "单 Go 二进制运行，数据以 Markdown 文件加 SQLite 存储，无外部数据库依赖",
+    "支持 Docker、Docker Compose、Kubernetes、Linux 安装脚本、二进制与源码编译多种部署方式",
+    "提供三种访问模式（全内部、公开只读、免登录编辑）及 Git 备份、快照恢复功能"
+   ],
+   "use_cases": [
+    "个人 Wiki、工程笔记本与 runbook 管理",
+    "内部团队或 homelab 文档",
+    "已有 Markdown/Obsidian 笔记需要结构化 Wiki 界面"
+   ],
+   "cat": "应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "For engineers and self-hosters who want structured, long-lived documentation. No Node.js, no Redis, no Postgres — just a binary and a data directory.",
+     "lines": [
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Self-hosted wiki. Single Go binary. SQLite + Markdown stored on disk. ／ **Stack:** Go · React (Vite) · SQLite",
+     "lines": [
+      5,
+      248
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 SQLite 存储数据的 Wiki 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Self-hosted wiki. Single Go binary. SQLite + Markdown stored on disk. ／ - Single Go binary — no external database, no runtime dependencies ／ **Stack:** Go · React (Vite) · SQLite",
+   "evidence_lines": [
+    5,
+    30,
+    248
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "perber/leafwiki",
+  "sha": "58729321f288",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d0d681dadf21": {
+  "identity": {
+   "one_liner": "自托管多用户间隔重复记忆卡片服务，内置FSRS v6调度与MCP服务器",
+   "review": "Engram 是一个用 Go 编写的自托管多用户间隔重复（SRS）闪卡服务，实现 FSRS v6 调度算法，支持十种题型、Markdown/MathJax 卡片内容、REST API 和内置 MCP 服务器，供个人学习者或多用户部署使用；提供 Docker 部署，个人使用可跑在嵌入式 SQLite 上，多用户部署推荐 PostgreSQL，AGPL-3.0 许可。",
+   "highlights": [
+    "实现 FSRS v6 调度算法，支持自定义参数优化",
+    "内置 MCP 服务器，提供 18 个供 LLM/代理调用的卡片管理工具",
+    "支持多用户与牌组共享，OIDC/SSO 登录，复习进度按用户隔离"
+   ],
+   "use_cases": [
+    "自托管个人记忆卡片学习与复习",
+    "通过 MCP 客户端让 AI 代理搜索、创建和导出闪卡",
+    "多用户场景下共享牌组并隔离各自的复习进度"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-user deployments, PostgreSQL is recommended. ／ image: postgres:18 ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+     "lines": [
+      85,
+      92,
+      132
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Uses an embedded SQLite database suitable for personal use or testing: ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+     "lines": [
+      71,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Engram 是使用 SQLite/PostgreSQL 存储自身数据的闪卡应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Engram is an open-source, self-hosted spaced repetition flashcard service. Built with a modern Svelte 5 SPA frontend and a Go backend, it pairs the state-of-the-art **FSRS v6** scheduling algorithm with a native **Model Context Protocol (MCP)** server for AI-assisted card creation and workflow automation. ／ Uses an embedded SQLite database suitable for personal use or testing: ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+   "evidence_lines": [
+    10,
+    71,
+    132
+   ]
+  },
+  "fn": "bestnite/engram",
+  "sha": "d0d681dadf21",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3b3dea781402": {
+  "identity": {
+   "one_liner": "华为云数据库相关示例项目清单，收录 GaussDB 生态适配与应用样例",
+   "review": "这是一个 awesome 风格的样例仓库索引，以表格列出 incubating 状态的子项目：包括 GaussDB 各语言驱动与 ORM/AI 工具适配（PHP、SQLAlchemy、LangChain、Prisma、Dify 等）、SQL 审核平台适配，以及可观测性、Serverless、网络架构等华为云场景示例。面向需要在华为云上查找数据库接入与云上架构参考的开发者和运维人员，仓库本身为目录，不含可安装产物。",
+   "highlights": [
+    "收录面向 GaussDB 的驱动、ORM 与 AI 工具适配类子项目目录",
+    "包含华为云 Serverless、CCE、网络架构等场景示例条目",
+    "以表格形式提供仓库描述、所属团队与 incubating 状态"
+   ],
+   "use_cases": [
+    "查找 GaussDB 与 Python/PHP/ORM/AI 框架的适配项目入口",
+    "检索华为云数据库相关场景的参考样例",
+    "了解华为云团队公开的 incubating 样例分布"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating|",
+     "lines": [
+      18
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|enterprise-observability|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for us ／ |enterprise-serverless-todo|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for  ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb-",
+     "lines": [
+      35,
+      36,
+      40
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "compat",
+     "quote": "|database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating| ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb-",
+     "lines": [
+      20,
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|cloudoperation-resource-monitor-dashboard|HuaweiCloud Resource Monitor Dashboard 是一个面向华为云弹性云服务器（ECS）、云硬盘（EVS）和云监控（CES）的资源监控仪表盘。用户配置租户 AKSK 等鉴权信息后，后端定时或手动从华为云 API 采集资源数据与使用率指标，保存到本地 SQLite 数据库，并通过 RESTful API 为前端提供查询、筛选和导出报告功能。|public-cloud-continuous-operatio",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |database-crewai-gaussdb|开源工具CrewAI兼容GaussDB|gaussdb-drivers|incubating|",
+     "lines": [
+      18,
+      19
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库本身是样例目录，收录为 GaussDB 生态提供驱动与适配的项目清单",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# Awesome HuaweiCloud ／ |database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |database-crewai-gaussdb|开源工具CrewAI兼容GaussDB|gaussdb-drivers|incubating|",
+   "evidence_lines": [
+    1,
+    18,
+    19
+   ]
+  },
+  "fn": "huaweicloud-samples/database-awesome-huaweicloud",
+  "sha": "3b3dea781402",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

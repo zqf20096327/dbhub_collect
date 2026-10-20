@@ -11852,5 +11852,201 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2f070c3dd842": {
+  "identity": {
+   "one_liner": "《Transport Fever 3》第二屏实时仪表盘，mod 导出数据+本地程序存 SQLite 并以浏览器展示",
+   "review": "由游戏内 Lua mod 与本地配套程序组成：mod 定期把游戏状态快照写入 userdata 下的 Lua 文件，配套程序的 collector.py 读取快照并存入本地 SQLite，server.py 在 127.0.0.1:8765 提供浏览器仪表盘，可查看公司资金、线路、车辆、地图等并可选反向控制游戏。面向 Transport Fever 3 玩家，仅依赖 Python 标准库，一切在本机运行，不支持云同步文件夹存放数据库。",
+   "highlights": [
+    "mod 通过官方 TF3 脚本 API 每 5 秒写入游戏状态快照，不修改存档",
+    "collector.py 将快照历史存入本地 SQLite，server.py 以浏览器页面展示仪表盘",
+    "支持从仪表盘控制游戏：速度、镜头、车辆操作与停靠点编辑（默认关闭）"
+   ],
+   "use_cases": [
+    "在第二显示器实时监控 Transport Fever 3 公司运营状态",
+    "查看线路与车辆的历史曲线并定位异常车辆",
+    "在全屏游戏的同时调整停靠点配置与车辆控制"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Pytho ／ (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it. ／ collector/ collector.py (tf3dash_live.lua + tf3dash_slow_*.lua -> SQLite), luatable.py (Lua parser), tf3paths.py (folder detection), schema.sql",
+     "lines": [
+      36,
+      48,
+      233
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 collector.py 将游戏状态历史存入本地 SQLite 数据库，SQLite 是其数据存储组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Mod `Second Screen Dashboard`**|mod.io (in-game Mod Hub) or `mod/` in this repo|A Lua game script that writes a snapshot of the game state to `<userdata>/heightmaps/tf3dash_live.lua` every few seconds, and (if you enable it) executes commands written to `cmd.lua`. Uses only the official TF3 scripting API. Never modifies the savegame.| ／ |**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python standard library only — the Windows release zip ships a bundled Python, Linux uses the system Python (3.10+); nothing to install.| ／  (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.",
+   "evidence_lines": [
+    35,
+    36,
+    48
+   ]
+  },
+  "fn": "M1r077/tf3-dashboard",
+  "sha": "2f070c3dd842",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c186d3a60a31": {
+  "identity": {
+   "one_liner": "Node.js 框架，从 GraphQL 对象类型生成 API、关系与数据库存储",
+   "review": "一个 Node.js 框架，开发者定义 GraphQL 对象类型后自动生成查询、变更、关系解析与数据库存储，支持 MongoDB/Mongoose 与 PostgreSQL 15+ 两种门面，并提供校验、生命周期钩子、RBAC/ABAC 授权及可选 MCP 工具，通过 npm 安装，适合使用 GraphQL 后端的 Node.js 开发者。",
+   "highlights": [
+    "根据 GraphQL 对象类型自动生成查询、变更、关系解析器与数据库表/索引/外键",
+    "支持 MongoDB/Mongoose 与 PostgreSQL 15+ 两种存储门面",
+    "提供声明式校验、状态机、生命周期钩子与 RBAC/ABAC 授权，可选 MCP 传输"
+   ],
+   "use_cases": [
+    "从领域模型快速生成 GraphQL CRUD 后端",
+    "需要嵌套关系、聚合查询与外键约束的 PostgreSQL/MongoDB 应用",
+    "需为 AI Agent 暴露 MCP 工具的 GraphQL 服务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Simfinity.js — Define once. Build beyond. GraphQL, MongoDB, PostgreSQL, and optional MCP. ／ A Node.js framework that turns GraphQL object types into generated queries, mutations, relationships, and database storage. Use the established MongoDB/Mongoose facade or the PostgreSQL 15+ facade with real tables and foreign keys. ／ For a complete application, run the Barber examples: independent MongoDB and PostgreSQL backends with one shared Next.js frontend, synthetic demo data, Docker setup, and a dedicated CI workflow. Both backends consume released Simfinity 3.8.0 packages from npm. ／ > **Documentation for both databases:** The public website now covers MongoDB and PostgreSQL, including shared APIs, relationships, generated FKs, scopes, and MCP. Both adapters are available on npm and released together. Follow the quick starts for installati ／ ## PostgreSQL support ／ Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many linking entities, and references inside embedded objects. PostgreSQL install",
+     "lines": [
+      1,
+      5,
+      9,
+      20,
+      55,
+      57
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用提供 GraphQL 到数据库存储的生成框架，属于服务数据库生态的开发组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Node.js framework that turns GraphQL object types into generated queries, mutations, relationships, and database storage. Use the established MongoDB/Mongoose facade or the PostgreSQL 15+ facade with real tables and foreign keys. ／ npm install mongoose@^8.24.2 graphql@^16.11.0 @simtlix/simfinity-js@3.9.0 ／ Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many linking entities, and references inside embedded objects. PostgreSQL install",
+   "evidence_lines": [
+    5,
+    50,
+    57
+   ]
+  },
+  "fn": "simtlix/simfinity.js",
+  "sha": "c186d3a60a31",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c79b1f94aedc": {
+  "identity": {
+   "one_liner": "读取 Prometheus GPU 指标并渲染到 Tidbyt 显示屏的应用集合",
+   "review": "一组供个人使用的 Tidbyt 设备应用，通过 DCGM 从 Prometheus 读取 NVIDIA GPU 功率与温度数据，渲染成图片后经 Tidbyt 云 API 上传显示。提供 Docker Compose 部署的 daemon、预览与一次性渲染三种服务，支持健康检查与回滚备份，面向想在自己 Tidbyt 设备上展示 GPU 遥测的运维/个人用户。",
+   "highlights": [
+    "从 Prometheus 读取 DCGM 指标，渲染 GPU 总功率与最高温度图像并上传至 Tidbyt 云 API",
+    "包含 daemon、浏览器预览和一次性渲染三种 Docker Compose 服务，带健康检查与重试机制",
+    "提供仅依赖 Python 标准库的回归测试套件及更新回滚流程"
+   ],
+   "use_cases": [
+    "在 Tidbyt 硬件设备上展示局域网内 NVIDIA GPU 的功耗与温度",
+    "监控数据可视化面板的自定义渲染与定时上传",
+    "需要离线/失败兜底显示与部署回滚的展示型应用场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库仅为 Tidbyt 显示设备的应用集合，读取 Prometheus 指标用于展示，不提供面向数据库生态的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Personal Tidbyt Apps ／ Displays aggregate NVIDIA GPU power in **watts**, using DCGM metrics in Prometheus. ／ docker compose up -d --build daemonize",
+   "evidence_lines": [
+    1,
+    3,
+    17
+   ]
+  },
+  "fn": "tuttlebr/tidbyt",
+  "sha": "c79b1f94aedc",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

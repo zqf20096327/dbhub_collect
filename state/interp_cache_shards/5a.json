@@ -8317,5 +8317,75 @@
   "generated_at": "2026-10-20",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "219b2365a6f4": {
+  "identity": {
+   "one_liner": "自托管好友精选社交帖子的私有订阅应用，本地留存媒体副本",
+   "review": "ADHX 是一个 Docker 单容器运行的自托管应用，从 X、Instagram、TikTok 等 14 个网络下载朋友保存的帖子副本存到本地服务器，并提供语义搜索、频道、播放与分享功能，通过 yt-dlp 抓取下载。面向想与亲友私下分享精选内容的个人用户；数据（含 SQLite 数据库）保存在 /data 卷，需 HTTPS 反向代理与磁盘空间管理。",
+   "highlights": [
+    "支持从 14 个社交网络下载并本地留存帖子媒体，原帖删除后副本仍可播放",
+    "提供基于描述的语义搜索，支持图片、视频帧、音频转写与屏幕文字，本地推理无需外部 AI 密钥",
+    "通过 Docker Compose 单容器部署，数据集中在 /data 单卷，含数据库与搜索模型",
+    "提供邀请链接访问控制与可选邮箱一次性登录链接"
+   ],
+   "use_cases": [
+    "家庭或好友圈自建私有内容订阅与分享流",
+    "长期备份社交网络上易被删除的帖子媒体",
+    "在 NAS 或家庭服务器上私有运行多网络内容库"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Back up the `/data` volume consistently: stop ADHX before copying it, or use SQLite's backup API with a coordinated media snapshot. It holds `adhx.db` (and any SQLite WAL files), the `media/` folder and the `models/` folder. The model cache can be downloaded a",
+     "lines": [
+      236
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其数据（数据库、媒体文件）存储于自身 /data 卷中的 SQLite 数据库，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ADHX is a private feed of the best posts on X, Instagram, TikTok, YouTube, Reddit and nine more networks, picked by your closest friends and family. Each of you saves the good stuff from whatever app you're in. ADHX downloads a real copy of every post, in the best quality the network offers, onto a server you run, and plays it from there. Deleted on X? Still here. ／ The root example publishes ADHX on `127.0.0.1:3000` (`ADHX_PORT` changes the host port). Put it behind your usual host-based reverse proxy for HTTPS; sign-in needs HTTPS outside `localhost`. The `docker-compose.yml` keeps everything in one volume mounted at `/data`: the database, the search model and every kept file. Migrations run on start.",
+   "evidence_lines": [
+    11,
+    89
+   ]
+  },
+  "fn": "itsmemeworks/adhx",
+  "sha": "219b2365a6f4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

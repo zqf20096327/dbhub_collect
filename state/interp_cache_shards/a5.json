@@ -9151,5 +9151,72 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "43b5f1ed29eb": {
+  "identity": {
+   "one_liner": "基于 PHP/SQLite 的轻量扁平文件 CMS，生成纯静态 HTML 输出",
+   "review": "Clodd CMS 是一个用 PHP 编写的扁平文件内容管理系统，管理员通过基于 SQLite 的后台用 Markdown 撰写文章和页面，发布后生成静态 HTML 供 Nginx 直接服务，公共访问路径无需 PHP。它包含分类标签、定时发布、Feed 生成、Micropub/XML-RPC 接口、WordPress WXR 导入导出等能力，面向自建博客/个人站点的用户。运行要求 PHP 8.1+、SQLite 3.x 与 Nginx，支持 Docker 一键启动。",
+   "highlights": [
+    "提供 Markdown 编辑、草稿预览、定时发布及分类/标签体系的内容管理",
+    "发布时生成静态 HTML，公共页面服务阶段不需要 PHP",
+    "提供 Micropub 端点、WordPress XML-RPC 接口及 WXR 导入导出"
+   ],
+   "use_cases": [
+    "搭建以静态输出为主的个人博客或内容站点",
+    "从 WordPress/Micro.blog 导入存量文章并继续写作",
+    "通过 Micropub 客户端（iA Writer、Quill 等）远程发布内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A lightweight flat-file CMS with a PHP/SQLite admin panel and a fully static HTML output layer. Write posts and pages in Markdown, publish them, and the CMS generates clean static HTML that Nginx serves directly — no PHP in the request path for public visitors ／ |SQLite|3.x (bundled with PHP)| ／ The setup script prompts for a username and password, writes both to `config.php`, and seeds the SQLite database. Generated HTML, uploaded media, and the database are written to the project directory (not inside the container), so they persist across restarts.",
+     "lines": [
+      5,
+      57,
+      72
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储运行时设置与内容的 CMS 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A lightweight flat-file CMS with a PHP/SQLite admin panel and a fully static HTML output layer. Write posts and pages in Markdown, publish them, and the CMS generates clean static HTML that Nginx serves directly — no PHP in the request path for public visitors. ／ The setup script prompts for a username and password, writes both to `config.php`, and seeds the SQLite database. Generated HTML, uploaded media, and the database are written to the project directory (not inside the container), so they persist across restarts.",
+   "evidence_lines": [
+    5,
+    72
+   ]
+  },
+  "fn": "jimmitchell/clodd-cms",
+  "sha": "43b5f1ed29eb",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

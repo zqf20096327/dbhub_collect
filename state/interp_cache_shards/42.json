@@ -8771,5 +8771,143 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d96ba9fde77f": {
+  "identity": {
+   "one_liner": "hermes-agent 的对话记忆插件，本地 SQLite 存储加混合检索",
+   "review": "MemoHood 是 hermes-agent 的记忆插件，自动从对话中提取事实、跨会话召回，并带 SUPERSEDE 版本替换机制。数据存于本地 SQLite，检索结合 FTS5/BM25 与向量搜索（可配 Cloudflare/Cohere/Gemini API 密钥，也可纯本地）。面向使用 hermes-agent 的 AI 智能体用户，通过安装脚本一键部署，依赖 Python 3.11+。",
+   "highlights": [
+    "混合检索：FTS5/BM25 全文加向量搜索，经 RRF 融合，可选 Cohere 重排",
+    "事实生命周期管理：SUPERSEDE 版本替换、pinned 固定、基于遗忘曲线的夜间置信度衰减与整合",
+    "成本控制：Model2Vec 离线门控过滤闲聊，外部调用计入月度支出上限账本"
+   ],
+   "use_cases": [
+    "为 hermes-agent 提供跨会话的对话记忆",
+    "本地优先、不依赖云端存储的智能体记忆方案",
+    "需要俄语词干化支持的俄语对话记忆场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**1. Один командой.** Установщик сам находит venv `hermes-agent`, ставит зависимости (`sqlite-vec`, `PyStemmer`, `ftfy`, `requests`, `model2vec`), копирует папку плагина в `<HERMES_HOME>/plugins/memohood/` и включает `memory.provider: memohood` в `config.yaml`",
+     "lines": [
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存储在本地 SQLite 基础上（依赖 sqlite-vec、FTS5），SQLite 是其存储后端而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Без памяти агент помнит только то, что помещается в текущий контекст: начали новую сессию — и всё, что было вчера, исчезло. MemoHood хранит важное отдельно, в локальной базе на вашей машине, и подмешивает нужные кусочки обратно в разговор ровно тогда, когда они пригодились бы. Это провайдер памяти (`memory.provider`) для hermes-agent — устанавливается одной командой и работает полностью автономно. ／ - **Авто-вспоминание перед каждым ответом.** Перед тем как агент начнёт отвечать, MemoHood тихо ищет в памяти всё релевантное: гибридный поиск объединяет полнотекстовый FTS5/BM25 с русским стеммингом и векторный поиск (модель BGE-M3 через Cloudflare Workers AI), сливает оба списка взаимным ранжированием (RRF) и, если настроен ключ, дополнительно переранжирует топ-кандидатов моделью Cohere. ／ **1. Один командой.** Установщик сам находит venv `hermes-agent`, ставит зависимости (`sqlite-vec`, `PyStemmer`, `ftfy`, `requests`, `model2vec`), копирует папку плагина в `<HERMES_HOME>/plugins/memohood/` и включает `memory.provider: memohood` в `config.yaml` — руками копировать папку или редактировать конфиг не нужно:",
+   "evidence_lines": [
+    31,
+    43,
+    78
+   ]
+  },
+  "fn": "maximskorohod/memohood",
+  "sha": "d96ba9fde77f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e7fe9868941": {
+  "identity": {
+   "one_liner": "基于 Telegram 与 SQLite 的自托管个人助理机器人",
+   "review": "一个部署在 Telegram 上的个人管理机器人，提供目标跟踪、主动问候、日程提醒、待办、网页搜索、语音与文档处理等功能，数据存于单个 SQLite 文件，支持接入 OpenRouter 或 OpenAI 兼容 API（含 Ollama 本地模型）。适合想自托管个人助理、通过机器人管理日程与记忆的个人或小团体使用，需 Docker 与 Telegram bot token 部署。",
+   "highlights": [
+    "通过 Telegram webhook 提供消息交互，支持语音、照片、文档与多语言",
+    "数据持久化在单个 SQLite 文件中，备份为单条命令",
+    "支持 OpenRouter 或任意 OpenAI 兼容 API（含 Ollama 本地模型），可按角色切换并在面板查看账单"
+   ],
+   "use_cases": [
+    "个人日程、待办与年度目标的机器人化跟踪与提醒",
+    "需要自托管、数据留存于自有服务器的私人助理部署",
+    "小圈子邀请制使用，每用户数据隔离并可选连接 Mealie 菜谱库"
+   ],
+   "cat_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Self-hosted: one small Go binary and a SQLite file. Usually under a dollar a month per person to run. ／ - Everything lives in one SQLite file on your server. Backing it up is one command.",
+     "lines": [
+      13,
+      64
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有数据存于单个 SQLite 文件，SQLite 仅为其存储后端，项目是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted: one small Go binary and a SQLite file. Usually under a dollar a month per person to run. ／ - Everything lives in one SQLite file on your server. Backing it up is one command. ／ docker compose -f compose.example.yml up -d",
+   "evidence_lines": [
+    13,
+    64,
+    78
+   ]
+  },
+  "fn": "SergiuszN/dasyra",
+  "sha": "1e7fe9868941",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

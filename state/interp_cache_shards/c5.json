@@ -10760,5 +10760,200 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3036a882ff53": {
+  "identity": {
+   "one_liner": "Ragnarok Online 3 PC 客户端的开源服务端模拟器（C#/.NET）",
+   "review": "这是一个用 C#/.NET 10 编写的 Ragnarok Online 3 PC 客户端服务端模拟器，使用 SQLite 存储数据。面向想自行游玩、搭建小服或参与复刻原版服务端的开发者和玩家。README 声明按客户端可验证的协议实现，无法从客户端确认的规则在代码中标记为推断，并列有未完成系统清单。",
+   "highlights": [
+    "用 C#/.NET 10 实现，数据存储使用 SQLite，数据库在启动及每 6 小时自动备份",
+    "通过运行客户端自带 Lua 5.4 VM 导出游戏数据，不依赖反编译器",
+    "提供 Windows 单机运行包、Linux 服务端脚本（含 systemd 服务）及协议机器人与负载测试工具"
+   ],
+   "use_cases": [
+    "在自己电脑上运行 RO3 服务端并与 RO3 PC 客户端联机游玩",
+    "为朋友搭建小型游戏服务器（含端口转发与 GM 命令）",
+    "基于逆向的客户端协议开展服务端系统重建与研究"
+   ],
+   "persona": "build"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "An open-source server for the **Ragnarok Online 3 PC client**, written in C# (.NET 10, SQLite). Play on your own PC, ／ |`src/Ro3Emu.Server`|the server: HTTP, micro gate, game gate, game loop, services, SQLite stores|",
+     "lines": [
+      3,
+      179
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存数据的游戏服务端应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An open-source server for the **Ragnarok Online 3 PC client**, written in C# (.NET 10, SQLite). Play on your own PC, ／ |`src/Ro3Emu.Server`|the server: HTTP, micro gate, game gate, game loop, services, SQLite stores|",
+   "evidence_lines": [
+    3,
+    179
+   ]
+  },
+  "fn": "aethai/ro3emu-server",
+  "sha": "3036a882ff53",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4ae8e27d47fd": {
+  "identity": {
+   "one_liner": "基于 Postgres/Supabase 的开源复式记账核心，附 CLI 与 MCP server",
+   "review": "Ekwo OS 是一个以 Postgres schema 形式分发的复式记账核心，通过 npx 安装到用户自己的 Supabase 项目，数据留在用户控制的数据库中；包含各国税务规则数据包、CLI 工具和 MCP server，供 AI 代理、会计人员或开发者直接操作账簿，支持生成 FEC、XBRL、Factur-X 等法定文件。面向想自行记账的公司、会计事务所和需要复式记账核心的开发者；无服务器组件，依赖 Supabase 的 REST API 与行级安全。",
+   "highlights": [
+    "复式记账约束由数据库触发器强制执行，锁定期间拒绝写入",
+    "提供 MCP server 与 CLI，使 AI 代理可在用户自己的数据上记账",
+    "包含 140+ 国家税务数据包及固定资产、预算、企业所得税、电子发票模块"
+   ],
+   "use_cases": [
+    "企业或创始人用自己的 Supabase 项目管理账簿并准备增值税申报",
+    "会计事务所在一套安装中管理多家公司账目",
+    "开发者需要一个税务规则以数据形式存储的复式记账核心"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run: ／ - **Tested on real Postgres.** The test suite runs the migrations, the seeds,",
+     "lines": [
+      25,
+      64,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将记账 schema 安装到用户控制的 Postgres/Supabase 数据库中存数据，并为其提供应用层 CLI 与 MCP server。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，格式库以 MIT 许可发布",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run: ／ ## Install on your own Supabase project",
+   "evidence_lines": [
+    25,
+    64,
+    118
+   ]
+  },
+  "fn": "Ekwo-ai/ekwo-os",
+  "sha": "4ae8e27d47fd",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ad4c08b67faf": {
+  "identity": {
+   "one_liner": "通过 gRPC 扩展访问 TiKV RawKV/TxnKV API 的 PHP 客户端库",
+   "review": "这是一个 PHP 语言的 TiKV 客户端库，依赖 PECL ext-grpc（≥1.57）以 gRPC 与 TiKV 集群通信，提供 RawKV 的 CRUD、扫描、TTL、CAS 原子操作、SST 批量导入，以及 TxnKV 的快照读与两阶段提交事务。面向需要在 PHP 应用中直接读写 TiKV 键值数据的开发者，要求 PHP ≥8.2 且 TiKV 集群按 TTL/事务模式二选一部署。",
+   "highlights": [
+    "支持 RawKV API：CRUD、范围扫描、TTL、CAS/Put-If-Absent 原子操作、CRC64 校验和、SST Ingest 批量导入",
+    "支持 TxnKV API：快照读、两阶段提交、乐观/悲观事务模式、异步提交等配置项",
+    "通过 gRPC 扩展通信，支持 TLS、超时、metrics、region 缓存等选项"
+   ],
+   "use_cases": [
+    "PHP 应用直接读写 TiKV 键值数据",
+    "需要跨键事务的 PHP 服务（TxnKV）",
+    "带过期时间的会话/缓存存储（RawKV TTL）"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明这是为访问 TiKV 提供的 PHP 客户端库（驱动），属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PHP client for TiKV's RawKV and TxnKV APIs, using the gRPC extension. ／ - TiKV cluster — default (V1) mode for TxnKV, or `[storage] enable-ttl = true` ／ `TxnKvClient` speaks TiKV's TxnKV API: snapshot reads and two-phase commit",
+   "evidence_lines": [
+    5,
+    13,
+    201
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "crazy-goat/tikv-php",
+  "sha": "ad4c08b67faf",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

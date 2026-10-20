@@ -10282,5 +10282,155 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1e0ad165801e": {
+  "identity": {
+   "one_liner": "rqlite 分布式数据库的 Go 客户端库",
+   "review": "gorqlite 是为 rqlite（基于 SQLite 的分布式数据库）提供的 Go 客户端，封装 HTTP/JSON API，提供查询/写入/参数化语句、集群发现、故障重试，并附带一个 database/sql 驱动（事务与 Prepare 受限）。供使用 rqlite 的 Go 开发者接入，通过 go get 安装。",
+   "highlights": [
+    "封装 rqlite HTTP API，提供参数化语句、批量写入与队列写入",
+    "提供集群发现与故障转移，仅需指向一个节点",
+    "附带 database/sql 驱动，仅依赖标准库"
+   ],
+   "use_cases": [
+    "Go 应用接入 rqlite 集群",
+    "需要 database/sql 接口访问 rqlite 的项目",
+    "需要集群拓扑探测与请求重试的客户端场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "A method such as `Write` or `Query` returns an error if any statement in the batch fails, and each failed result's `Err` holds that statement's error as a `*gorqlite.StatementError`. It carries the server's message and, for failures inside SQLite, the SQLite r ／ if errors.As(err, &se) && se.SQLite != nil && se.SQLite.Code == 19 { ／ fmt.Printf(\"constraint violation (%d): %s\\n\", se.SQLite.ExtendedCode, se.Message)",
+     "lines": [
+      107,
+      113,
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 rqlite 数据库服务的 Go 客户端驱动，属于数据库生态组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# gorqlite — a Go client for rqlite ／ gorqlite is a Go client for rqlite. It hides the HTTP/JSON details and exposes a small API specialized for rqlite, plus a thin `database/sql` driver. ／ ## `database/sql` driver",
+   "evidence_lines": [
+    1,
+    4,
+    171
+   ]
+  },
+  "fn": "rqlite/gorqlite",
+  "sha": "1e0ad165801e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c824dedfe00": {
+  "identity": {
+   "one_liner": "VastBase/openGauss/PostgreSQL 离线数据应急恢复工具",
+   "review": "vbdul 是一款类似 Oracle ODU 的数据应急恢复工具，在数据库无法启动、误删表/数据且无备份的场景下，直接解析磁盘数据文件、空闲页和 WAL 抢救数据，支持 unload 导出、DROP/TRUNCATE 恢复、WAL logminer 与 ProBackup 时间点回退。面向 DBA 和运维人员，以 Linux 二进制发行；正式版需向供应商申请 license，仅支持 Heap 行存引擎。",
+   "highlights": [
+    "支持从磁盘数据文件离线解析并导出表数据，只读访问不修改原始数据",
+    "支持扫描文件系统空闲页面还原 DROP/TRUNCATE 后的数据，支持 WAL DML 挖掘（logminer）",
+    "支持 PostgreSQL 10~17 及 VastBase 多内核版本，生成 psql 导入脚本"
+   ],
+   "use_cases": [
+    "数据库无法启动、无备份时从数据文件抢救数据",
+    "误执行 DROP TABLE/TRUNCATE 后的页面级数据还原",
+    "通过 WAL 日志定位误操作事务并恢复被误删/误改的行"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db_type|是|`vastbase` 或 `postgresql`，按实例内核填；填错直接报错退出| ／ |postgresql|pg10 ~ pg17|对应 PostgreSQL 10 ~ 17|",
+     "lines": [
+      34,
+      58
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# vbdul - VastBase/openGauss 数据应急恢复工具 ／ vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ |vastbase|v3|G100 2215/308/309（openGauss 内核）|",
+     "lines": [
+      1,
+      3,
+      55
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 VastBase/openGauss/PostgreSQL 数据库提供离线数据恢复服务，属数据库生态工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "正式版首次运行处于受限模式，需向供应商换取 license；Beta 版无需 license",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# vbdul - VastBase/openGauss 数据应急恢复工具 ／ vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ |db_type|是|`vastbase` 或 `postgresql`，按实例内核填；填错直接报错退出|",
+   "evidence_lines": [
+    1,
+    3,
+    34
+   ]
+  },
+  "fn": "LiXiangYu0612/vbdul",
+  "sha": "9c824dedfe00",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10629,5 +10629,131 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ed378336f3d5": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的开源错误捕获系统，兼容 Airbrake/Sentry 接口",
+   "review": "Airbroke 是一个错误捕获与报告管理系统，提供 Airbrake/Sentry 兼容的 HTTP 采集端点和 React 前端，数据存储于 PostgreSQL 15+，面向需要集中收集与查看应用错误的开发团队。部署方式包括 Docker、Helm、源码构建及 Vercel/Render/Railway 等平台；README 声明项目仍处活跃开发中，尚无稳定版本。",
+   "highlights": [
+    "提供 Airbrake/Sentry 兼容的 HTTP 错误采集端点",
+    "支持 MCP API 供 LLM/agent 集成，并可对 issue 进行 AI 问答",
+    "提供 cURL 重放 HTTP 异常、发生次数图表与书签管理功能"
+   ],
+   "use_cases": [
+    "集中收集应用产生的异常与错误报告",
+    "通过兼容端点替换现有 Airbrake/Sentry 客户端上报链路",
+    "将错误事件接入 LLM/agent 进行查询分析"
+   ],
+   "category_hint": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- :floppy_disk: Based on PostgreSQL ／ - PostgreSQL 15+ database",
+     "lines": [
+      20,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Airbroke 是基于 PostgreSQL 存储数据的应用系统，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- :floppy_disk: Based on PostgreSQL ／ - :electric_plug: MCP API for LLM/agent integrations ／ Airbroke provides flexibility in deployment options. You can either deploy it from the built source code or use a multiarch Docker image. For Kubernetes deployments, a Helm chart is provided. As Airbroke is a Next.js 16 application, it can be deployed wherever a Node.js server is supported. This includes managed environments such as Vercel, Netlify, and Heroku.",
+   "evidence_lines": [
+    20,
+    31,
+    43
+   ]
+  },
+  "fn": "icoretech/airbroke",
+  "sha": "ed378336f3d5",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4044ec9cc209": {
+  "identity": {
+   "one_liner": "自然语言搜索本地 Git 提交历史的 Rust CLI",
+   "review": "NaLCoS 是一个用自然语言查询本地 Git 提交历史的命令行工具，基于嵌入模型建立语义索引，也支持词法模式；可输出 JSON 供编码代理使用，索引存放在工作树之外，仅读取本地 Git 对象、不拉取缺失历史。适用于需要在本地仓库中查找提交及补丁证据的开发者。",
+   "highlights": [
+    "支持自然语言语义搜索 Git 提交历史，并提供词法搜索模式（--mode lexical）",
+    "支持按范围、路径过滤搜索，提供 JSON 输出供编码代理使用",
+    "索引存储在工作树之外，仅读取本地 Git 对象，不获取缺失历史"
+   ],
+   "use_cases": [
+    "在本地仓库中用自然语言查找相关提交及补丁证据",
+    "为编码代理提供提交检索的 JSON 接口",
+    "排查回归问题，获取待调查的候选提交"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 Git 仓库提供提交检索的独立工具，SQLite 仅为本地索引存储介质，README 未呈现任何数据库功能。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Search local Git history with natural-language queries. Get ranked commits and verified patch evidence to inspect. ／ **Version 2 is an alpha Rust CLI.** Retrieval quality and broader platform qualification are still being evaluated. ／ Use `nalcos COMMAND --help` for options. The index is stored outside the working tree. NaLCoS reads local Git objects and does not fetch missing history.",
+   "evidence_lines": [
+    3,
+    5,
+    74
+   ]
+  },
+  "fn": "thepushkarp/nalcos",
+  "sha": "4044ec9cc209",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

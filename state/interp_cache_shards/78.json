@@ -8396,5 +8396,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5416d7320ebd": {
+  "identity": {
+   "one_liner": "PostgreSQL 迁移风险静态检查工具，解析并模拟 SQL 变更",
+   "review": "safe-migrate 是一个用于 PostgreSQL 的迁移检查工具：解析 SQL、模拟 schema 变更，并与同步的数据库快照比对，从不执行迁移 SQL。面向在 CI/CD 中审查迁移的开发与运维团队，支持 GitHub Actions 集成、规则配置与抑制管理，仅支持 PostgreSQL 14–18。提供 CLI 与 Rust 库两种使用方式。",
+   "highlights": [
+    "解析 SQL 并模拟 schema 变更，对照只读同步的数据库快照进行检查，不执行迁移 SQL",
+    "内置规则覆盖阻塞锁、表重写、约束、索引、分区、权限及超时等风险项，输出分 Tier 结果与修复建议",
+    "提供 GitHub Actions 集成生成、缓存基线、JSON/Markdown 输出及 Rust API"
+   ],
+   "use_cases": [
+    "在 CI/CD 流水线中对迁移文件做发布前风险检查",
+    "本地离线检查迁移链（lint-chain）与规则浏览",
+    "通过 GitHub Actions 生成基线刷新与 PR 检查"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "safe-migrate finds risky PostgreSQL migrations before they reach production. ／ PostgreSQL 14–18 are supported. ／ export DATABASE_URL='postgres://readonly_user@localhost:5432/app'",
+     "lines": [
+      9,
+      13,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 迁移流程提供检查服务的独立 CLI/库，不使用数据库存储自身数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Dual-licensed under MIT or Apache-2.0.",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "safe-migrate finds risky PostgreSQL migrations before they reach production. ／ PostgreSQL 14–18 are supported.",
+   "evidence_lines": [
+    9,
+    13
+   ]
+  },
+  "fn": "dsecurity49/safe-migrate",
+  "sha": "5416d7320ebd",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

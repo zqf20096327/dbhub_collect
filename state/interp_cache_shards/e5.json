@@ -8824,5 +8824,73 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06b553aeaae9": {
+  "identity": {
+   "one_liner": "本地优先的 git 仓库 issue 跟踪器，SQLite 存储 + JSONL 导出",
+   "review": "br 是 Steve Yegge 的 beads 的 Rust 移植，冻结其经典 SQLite+JSONL 架构，用于在 git 仓库内本地跟踪 issue，提供依赖管理、--json 机器可读输出、同步/恢复工具，且默认不自动 commit/push。面向使用 AI 编码代理或需要离线本地 issue 跟踪的开发者；安装脚本需下载二进制，源码构建需 Rust nightly。",
+   "highlights": [
+    "以 SQLite 做本地查询、JSONL 做 git 友好协作的混合存储",
+    "所有命令支持 --json 输出，并提供 MCP 支持与 agent 合约校验脚本",
+    "非侵入式设计：不自动 commit/push/pull，状态保存在 .beads/ 目录"
+   ],
+   "use_cases": [
+    "离线环境下在仓库内跟踪带依赖关系的任务",
+    "为 AI 编码代理提供机器可读的 issue 状态与协调输出",
+    "从经典 Go 版 beads (bd) 迁移并固定旧架构的团队"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ A Rust port of Steve Yegge's beads, frozen at the \"classic\" SQLite + JSONL architecture I built my Agent Flywheel tooling around. ／ **SQLite** for fast local queries. **JSONL** for git-friendly collaboration.",
+     "lines": [
+      7,
+      9,
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明 issue 数据存储在 SQLite 数据库中，SQLite 是其存储后端而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**br** is a local-first issue tracker that stores issues in SQLite with JSONL export for git-friendly collaboration. It provides dependency-aware issue tracking, machine-readable output, sync/recovery tooling, and agent-friendly workflows without leaving your repository. ／ # beads.db       # SQLite database ／ **SQLite** for fast local queries. **JSONL** for git-friendly collaboration.",
+   "evidence_lines": [
+    44,
+    97,
+    104
+   ]
+  },
+  "fn": "Dicklesworthstone/beads_rust",
+  "sha": "06b553aeaae9",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

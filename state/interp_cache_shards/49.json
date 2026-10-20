@@ -9896,5 +9896,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4bb1f5437487": {
+  "identity": {
+   "one_liner": "自托管站点可靠性监控服务，单二进制加单 SQLite 文件",
+   "review": "Monita 是一个自托管的可用性监控服务，用 Rust 编写为单一二进制，数据存于单个 SQLite 文件。它定期检查网站 URL、通过心跳监测定时任务、在故障时通过邮件和 webhook 发出告警，并为每个项目生成公开状态页，还内置工单与更新日志功能。适合希望在自己服务器上运行监控、替代托管服务的团队。要求 64 位 Linux 服务器（也提供 macOS/Windows 构建用于试用）。",
+   "highlights": [
+    "提供 URL 监控（30 秒至 5 分钟间隔）与 cron 心跳检测，故障时生成 incident 并通过邮件和 webhook 告警",
+    "每个项目包含公开状态页，展示 90 天可用性记录，并支持从状态页提交 bug 工单",
+    "以单一 Rust 二进制和单个 SQLite 文件运行，提供 binary 与 docker 两种安装方式"
+   ],
+   "use_cases": [
+    "团队自托管网站与定时任务的可用性监控与故障告警",
+    "面向用户公开服务状态页并收集 bug 报告",
+    "监控 cron 备份等定时作业是否按时执行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "You run it on your own server as one program, and it keeps all its data in one SQLite file.",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Monita 是使用 SQLite 存储自身数据的应用程序，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Monita checks your team's websites and scheduled jobs, alerts your team when one fails, and shows the outage on a public status page. ／ You run it on your own server as one program, and it keeps all its data in one SQLite file. ／ ## Install",
+   "evidence_lines": [
+    5,
+    6,
+    39
+   ]
+  },
+  "fn": "PT-Perkasa-Pilar-Utama/monita",
+  "sha": "4bb1f5437487",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

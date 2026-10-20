@@ -10106,5 +10106,133 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ba8268f6de8a": {
+  "identity": {
+   "one_liner": "本地代码知识图谱 MCP 服务器，为 AI 编码代理提供结构化代码上下文",
+   "review": "这是一个 MCP 服务器项目，用 C 后端将源码、文档、配置和基础设施（Docker、Kubernetes、Helm、Terraform 等）解析为本地持久化知识图谱，提供 17 个 MCP 工具供 Claude Code、Cursor 等编码代理查询调用，另带 CBM Lens 可视化组件（开放测试阶段）。索引与图查询在本地运行，无需托管服务或 API 密钥。适合需要跨服务追踪调用、评估变更影响的开发者。",
+   "highlights": [
+    "提供 17 个 MCP 工具，支持 45 种客户端自动或条件集成",
+    "以本地持久化知识图谱连接代码、文档、配置与基础设施，支持符号/文本/语义搜索",
+    "提供实验性 Smart CI，结合静态关系与逐测试覆盖率选择测试"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供仓库结构上下文，减少重复文件读取",
+    "追踪调用链与部署来源，评估代码变更影响范围",
+    "以 CBM Lens 可视化浏览架构图、调用路径与覆盖缺口"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明底层图存储使用何种数据库，也未声明为任何数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Understand your repository, from source code to the systems around it.** codebase-memory-mcp is an MCP server that connects code, documentation, configuration, and infrastructure in a persistent local knowledge graph. Use it to find an unfamiliar feature, follow a call across services, trace a deployment back to its source, or assess which parts of a project a change could affect. ／ The native C backend exposes **17 MCP tools**, parses languages and file formats with vendored grammars, and adds Hybrid LSP type resolution for supported languages. The installer supports **45 automatic or conditional client integrations**, including client configuration, skills, agent profiles, and applicable hooks. Indexing and graph queries need no hosted service or API key. Focused graph queries can reduce repeated file reads and token use; see the measured results.",
+   "evidence_lines": [
+    19,
+    23
+   ]
+  },
+  "fn": "DeusData/codebase-memory-mcp",
+  "sha": "ba8268f6de8a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "de4a40795802": {
+  "identity": {
+   "one_liner": "微信聊天记录本地归档工具，解密入 SQLite 库并提供网页浏览",
+   "review": "读取电脑版微信 4.x 的本地加密数据库与媒体，解密后写入用户自持的 SQLite 库，提供网页界面按微信排版浏览对话、全文搜索、导出 HTML/ZIP，归档后可手动删除微信原目录媒体以回收空间。适合有 Windows 环境的个人用户做聊天记录备份；仅支持微信 4.x，语音等未落盘内容无法归档。",
+   "highlights": [
+    "解密微信本地数据库并归档消息、图片、视频、文件到自持 SQLite 库",
+    "提供网页界面浏览会话、搜索消息、导出 HTML/ZIP",
+    "支持增量同步与手动回收微信原目录空间"
+   ],
+   "use_cases": [
+    "个人微信聊天记录本地备份与长期保存",
+    "换机前导出聊天记录为 HTML/ZIP",
+    "手机存储不足时归档并删除微信本地媒体"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite 库，然后用一个像微信一样的界面随时翻对话、看文件、搜索、导出。",
+     "lines": [
+      4
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "程序将微信消息存入自持 SQLite 库，数据库是其自身数据存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLite 库，然后用一个像微信一样的界面随时翻对话、看文件、搜索、导出。 ／ - **自持归档**：图片、语音封面、视频、收到的文件拷进你自己的 `library\\`，不再依赖微信目录。 ／ |`wxvault.db`|数据目录|你的库：消息、会话、联系人、媒体索引|",
+   "evidence_lines": [
+    4,
+    18,
+    78
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "lmy27711/wxlocal",
+  "sha": "de4a40795802",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

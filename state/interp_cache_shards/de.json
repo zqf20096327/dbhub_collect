@@ -10266,5 +10266,146 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ac9a18ee6026": {
+  "identity": {
+   "one_liner": "基于 WASM 组件模型的确定性工作流运行时",
+   "review": "Obelisk 是一个以单个二进制运行的工作流引擎，执行确定性工作流、活动（activities）和 webhook 端点，执行日志持久化到 SQLite 或 PostgreSQL，提供 CLI、gRPC API 和 Web UI 管理执行。面向需要周期任务、后台作业、批处理和可重放审计的开发者。注意项目处于 pre-release 阶段，CLI、gRPC、WIT 与数据库 schema 可能变动。",
+   "highlights": [
+    "提供确定性、可重放的工作流执行，持久化执行日志支持崩溃恢复",
+    "支持 WASI 活动的自动重试、持久化结果与 HTTP 请求",
+    "内置 CLI、gRPC API 和 Web UI，可查看执行轨迹、重放工作流和调试"
+   ],
+   "use_cases": [
+    "周期性任务与后台作业的自动化执行与错误重试",
+    "AI 辅助代码的沙箱化与审计",
+    "端到端测试自动化并记录每步日志"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL. ／ ### Running with Postgres ／ --name obelisk-postgres \\",
+     "lines": [
+      62,
+      167,
+      170
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL.",
+     "lines": [
+      62
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是工作流运行时组件，使用 SQLite/PostgreSQL 作为执行日志的持久化存储后端，而非以数据库存数据的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0 为主，wit/ 与 proto/ 子目录例外采用 MIT 许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A deterministic workflow runtime built on the WASM Component Model. ／ and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL. ／ > **Pre-release**: Expect changes in CLI, gRPC, WIT, and database schema.",
+   "evidence_lines": [
+    5,
+    62,
+    8
+   ]
+  },
+  "fn": "obeli-sk/obelisk",
+  "sha": "ac9a18ee6026",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0cfdb0992354": {
+  "identity": {
+   "one_liner": "Rust 编写的 AI 原生多模型数据库，统一 SQL、向量、全文、图与 Python UDF",
+   "review": "Paro 是用 Rust 实现的多模型数据库引擎，将关系、列式分析、向量、全文与图查询合并到单一 SQL 引擎中，并支持在独立进程中运行 Python UDF。它通过 PostgreSQL wire 协议提供 psql 连接，面向事务、分析与 agent 场景；目前处于 beta，驱动/ORM 兼容性与磁盘格式尚不稳定，且尚未实现认证。",
+   "highlights": [
+    "提供关系、列式、向量、全文、图多模型统一查询，支持 SQL/PGQ 图查询与 pgvector 兼容操作符",
+    "实现 MVCC 快照读与可串行化事务，列式存储配合 SIMD 向量化执行",
+    "支持在独立 worker 进程中运行 Python UDF，与引擎以 Arrow 批交换数据"
+   ],
+   "use_cases": [
+    "评估与原型场景下替代多引擎拼接的多模型数据方案",
+    "agent 工作负载中在单条 SQL 内完成图遍历、向量召回与全文重排",
+    "扫描型分析查询与混合检索实验"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- **SQL-first** — PostgreSQL wire protocol and a familiar SQL dialect; `psql` works well today, while broader driver and ORM compatibility is still being validated.",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是数据库内核本体而非为现有数据库服务的组件，README 声明 PostgreSQL wire 协议兼容但非适配 PostgreSQL 本身。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Paro is a multi-model database written in Rust. It unifies relational, vector, full-text, and graph workloads — no sidecar services, no cross-system glue code. A single SQL statement can walk a social graph, rank documents by keyword relevance, re-rank by embedding similarity, and invoke a Python UDF — served from a consistent snapshot while concurrent writers commit under serializable isolation. ／ > **Paro is currently in beta.** ／ - **SQL-first** — PostgreSQL wire protocol and a familiar SQL dialect; `psql` works well today, while broader driver and ORM compatibility is still being validated.",
+   "evidence_lines": [
+    7,
+    10,
+    18
+   ]
+  },
+  "fn": "zunor/paro",
+  "sha": "0cfdb0992354",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

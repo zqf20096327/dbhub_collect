@@ -10325,5 +10325,259 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2a37e91b2012": {
+  "identity": {
+   "one_liner": "Go+React 编写的 WordPress/PHP 托管控制面板，多租户隔离+数据库驱动收敛",
+   "review": "Jabali Panel 是一个面向 WordPress 与 PHP 托管的 Web 控制面板，提供用户隔离、PHP-FPM 池、邮件（Stalwart）、DNS（PowerDNS）、restic 备份与 CrowdSec 安全套件等模块，通过 root Unix-socket agent 执行特权操作，并以 60s reconciler 读取面板数据库收敛 nginx、PHP、DNS 等配置。面向需要在 Debian 13 上运行多租户主机的管理员，仅支持 Debian 13，AGPL-3.0 许可。",
+   "highlights": [
+    "提供 MariaDB 与 PostgreSQL 数据库的建库、下载与从文件恢复（支持 pgAdmin custom/tar 格式）",
+    "内置 restic 备份（加密、去重、SFTP/S3/B2/Azure/GCS 目的地）与 cPanel/WHM 迁移",
+    "以 root agent + NDJSON RPC 与 60s 数据库收敛器实现配置管理"
+   ],
+   "use_cases": [
+    "在 Debian 13 服务器上托管多个用户的 WordPress/PHP 站点",
+    "从 cPanel/WHM 迁移托管账户",
+    "集中管理邮件、DNS、SSL、备份与安全策略"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB 11 ／ binaries, builds the SPA with Vite, writes systemd units, provisions MariaDB + ／ migrations against MariaDB 11.x",
+     "lines": [
+      25,
+      89,
+      142
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL (chunked async upload; pgAdmin custom/tar formats accepted) ／ Adminer (Postgres) SSO + per-database Download + Restore-from-file",
+     "lines": [
+      151,
+      219
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "preserved MySQL users + password hashes",
+     "lines": [
+      131
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板安装并使用 MariaDB 作为自身数据库（database-driven reconciliation，panel DB），属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB",
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A modern hosting control panel for WordPress and PHP hosting, built with Go and React.** ／ binaries, builds the SPA with Vite, writes systemd units, provisions MariaDB + ／ - DB-as-truth model: a 60s reconciler reads the panel DB and converges nginx",
+   "evidence_lines": [
+    10,
+    89,
+    128
+   ]
+  },
+  "fn": "shukiv/jabali-panel",
+  "sha": "2a37e91b2012",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e1c82064d4b7": {
+  "identity": {
+   "one_liner": "基于 DuckDB 的本地优先可视化 SQL 工作台，支持跨源查询",
+   "review": "DuckQuery 是一个基于 DuckDB 引擎的桌面/自托管数据工作台，用于将本地文件（CSV/Excel/Parquet/JSON）与 MySQL、PostgreSQL、SQLite、DuckDB 等外部数据库在同一界面中查询、关联、可视化和导出，并提供 text-to-SQL 智能体与 MCP 服务。适合需要临时对账、跨源核查与数据探索的分析人员；应用无多用户鉴权，DuckDB 引擎固定在预发布版本。",
+   "highlights": [
+    "支持 CSV/Excel/Parquet/JSON 导入并与 MySQL/PostgreSQL/SQLite/DuckDB 跨源关联查询",
+    "提供可视化关联查询、透视表、多种图表与 CSV/Excel/JSON/Parquet 导出",
+    "内置 AI 智能体（text-to-SQL、SQL 解释与优化）并提供 MCP 服务供 Claude Code 等客户端使用"
+   ],
+   "use_cases": [
+    "用 Excel 核对业务库数据的临时对账",
+    "跨多个数据源的探索性分析与可视化",
+    "通过 MCP 让 AI 编程工具查询本地与远程数据"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。",
+     "lines": [
+      66,
+      79
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。",
+     "lines": [
+      66,
+      79
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ 1. **接入数据。** 拖入 CSV、Excel、Parquet 或 JSON，粘贴表格，或连接 MySQL、PostgreSQL、SQLite、DuckDB。",
+     "lines": [
+      66,
+      79
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工作台为基于 DuckDB 及外部数据库的查询分析提供工具能力，而非以某数据库为存储的业务应用。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "binary",
+    "docker",
+    "source",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DuckQuery 是独立开发、基于 DuckDB 的本地优先数据工作台，适合临时对账、跨源核查和数据探索。文件导入、数据库连接、SQL、可视化查询、图表和导出都在一个界面里完成，不需要为一次分析搭建数仓。 ／ |核对文件与业务库|本地表与 MySQL / PostgreSQL / SQLite / DuckDB 跨源关联，支持符合条件的远端筛选优化| ／ |接入 AI 编程工具|MCP 服务，供 Claude Code、Codex、Cursor 等客户端使用，提供三种权限模式|",
+   "evidence_lines": [
+    19,
+    66,
+    73
+   ]
+  },
+  "fn": "Chenkeliang/duckdb-query",
+  "sha": "e1c82064d4b7",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "43bf19c1272f": {
+  "identity": {
+   "one_liner": "智能家居设计方案与报价项目管理应用，基于Next.js+PostgreSQL",
+   "review": "一个面向智能家居设计师、安装服务商和小团队的开源业务应用，用于管理客户项目、设备点位图、产品库与报价单，并支持导出交付资料。技术栈为 Next.js + React + TypeScript + PostgreSQL，提供源码部署和 Docker 部署方式，需自行准备数据库与产品资料。README 注明部分验收项尚未完成，附件存储访问控制有待改造。",
+   "highlights": [
+    "支持在户型图上标注开关、窗帘、网络等设备点位，并按项目管理设备清单与报价单",
+    "提供数据库迁移、管理员引导、结构检查与写读冒烟等脚本命令",
+    "支持 Docker Compose 部署与生产模式运行，配置经 .env 文件管理"
+   ],
+   "use_cases": [
+    "智能家居设计团队做点位设计、方案报价与客户交付",
+    "安装服务商统一管理产品库与客户项目",
+    "小团队基于源码自托管部署业务系统"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "技术栈：Next.js 16、React 19、TypeScript、PostgreSQL、Vitest。 ／ 需要 Node.js 22+、pnpm 12，以及 PostgreSQL。以下本地数据库方式另需 Docker Engine / Docker Desktop 与 Compose v2。可选 CAD 工作流需要 Node.js 24+，详见下文。",
+     "lines": [
+      22,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储业务数据的智能家居设计应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个帮**智能家居设计师、安装服务商和小团队**做方案、出报价、管项目的开源工具。把客户项目、设备点位、产品清单和报价单放在一起管理。 ／ 技术栈：Next.js 16、React 19、TypeScript、PostgreSQL、Vitest。 ／ 需要 Node.js 22+、pnpm 12，以及 PostgreSQL。以下本地数据库方式另需 Docker Engine / Docker Desktop 与 Compose v2。可选 CAD 工作流需要 Node.js 24+，详见下文。",
+   "evidence_lines": [
+    3,
+    22,
+    24
+   ]
+  },
+  "fn": "lynnliuyu/fmkj-smart-design",
+  "sha": "43bf19c1272f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9161,5 +9161,139 @@
   "generated_at": "2026-10-20",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "79ebadecddc7": {
+  "identity": {
+   "one_liner": "EF Core 逆向工程与模型可视化工具，含 CLI 与 Visual Studio 扩展",
+   "review": "从现有数据库或 SQL Server .dacpac 文件生成 EF Core 实体类和 DbContext，并提供模型可视化与检查能力。面向使用 Entity Framework Core 的 .NET 开发者，提供 efcpt 命令行工具（支持 CI 脚本化流程）和 Visual Studio 2022 扩展（图形化逆向工程向导）两种形态，生成配置可提交版本控制以保证团队输出一致。",
+   "highlights": [
+    "从现有数据库或 SQL Server .dacpac 逆向工程生成 EF Core 实体类与 DbContext",
+    "提供 CLI（efcpt，支持 Windows/Linux/macOS 与 CI）和 Visual Studio 2022 扩展两种使用方式",
+    "在 Visual Studio 中对 DbContext 模型进行可视化与检查"
+   ],
+   "use_cases": [
+    "从现有数据库 schema 生成 EF Core 代码（脚手架/逆向工程）",
+    "团队与 CI 中可重复、可审查的代码生成流程",
+    "在 Visual Studio 中图形化查看与检查 DbContext 模型"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "EF Core Power Tools helps you generate EF Core entity classes and a DbContext from an existing database or SQL Server .dacpac file. It also provides tools to visualize and inspect your DbContext model in Visual Studio. ／ - ErikEJ.EntityFrameworkCore.SqlServer.Dacpac enables reverse engineering a SQL Server .dacpac with the EF Core tooling (`dotnet ef`).",
+     "lines": [
+      3,
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 EF Core 数据库开发生态服务的逆向工程与模型可视化工具，本身不是使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "EF Core Power Tools helps you generate EF Core entity classes and a DbContext from an existing database or SQL Server .dacpac file. It also provides tools to visualize and inspect your DbContext model in Visual Studio. ／ |**Command-line tool (`efcpt`)**|Scripted reverse engineering for local development, shared team workflows and CI on Windows, Linux and macOS.|Follow the CLI installation and usage guide.| ／ |**Visual Studio extension**|Model visualization and inspection in Visual Studio 2022, plus a reverse engineering wizard for those who prefer a graphical workflow.|Install from Visual Studio Marketplace. For the reverse engineering wizard, follow the Quick Start, which includes a 10 minute video.|",
+   "evidence_lines": [
+    3,
+    17,
+    18
+   ]
+  },
+  "fn": "ErikEJ/EFCorePowerTools",
+  "sha": "79ebadecddc7",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0bafa8e671ff": {
+  "identity": {
+   "one_liner": "为编码代理提供跨会话记忆的 MCP 服务器，Markdown 存储加索引",
+   "review": "Renor 是一个 MCP 服务器，编码代理（Claude Code、Codex、Cursor 等）把事实和笔记以 Markdown 文件写入本地文件夹，新会话通过 MCP 检索，实现代理间记忆共享。面向自托管使用的开发者；搜索索引由 SQLite 派生重建，默认用词面匹配，语义搜索需配置嵌入模型，且仅支持单用户（单主人）场景。",
+   "highlights": [
+    "通过 stdio 或 HTTP MCP 向多个编码代理提供记忆的保存与检索",
+    "记忆为用户拥有的本地 Markdown 文件，SQLite 索引可由 Markdown 重建",
+    "支持无嵌入模型的词面搜索，也可配置 OpenAI 或本地嵌入模型做语义搜索"
+   ],
+   "use_cases": [
+    "在不同代理会话之间保存和回忆项目决策与纠正记录",
+    "用 Obsidian vault 等已有 Markdown 文件夹作为代理共享记忆库",
+    "需要数据不出本机的本地代理记忆方案"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "npm ci && npm rebuild better-sqlite3 --ignore-scripts=false && npm run build ／ |Search index|SQLite at `$VAULT_PATH/.semantic-memory/index.db`. Derived: `node dist/cli.js index` rebuilds it from the Markdown.|",
+     "lines": [
+      20,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明搜索索引存储于 SQLite（L91），SQLite 是该应用内部使用的存储而非其服务的对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only，自上游项目导入的文件保留 ISC 许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Renor is memory for coding agents: it keeps what you tell Claude Code, Codex or Cursor in a folder of Markdown files on your machine, and serves it back to any of them over MCP.** ／ |Search index|SQLite at `$VAULT_PATH/.semantic-memory/index.db`. Derived: `node dist/cli.js index` rebuilds it from the Markdown.|",
+   "evidence_lines": [
+    8,
+    91
+   ]
+  },
+  "fn": "patrickpassosb/renor-engine",
+  "sha": "0bafa8e671ff",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

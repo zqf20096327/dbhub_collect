@@ -11265,5 +11265,184 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2d24439202e0": {
+  "identity": {
+   "one_liner": "把 Gemini 网页端反代成 OpenAI 兼容 API 的 Go 代理",
+   "review": "该项目将 gemini.google.com 网页协议反代为 OpenAI 兼容的 /v1/chat/completions 接口，供 OpenAI SDK 及兼容客户端调用，支持流式输出、生图/音乐/视频模型、MCP web_search 工具和中文管理面板。使用 cookie 池与代理池轮转，依赖 Google 账号登录态解锁部分模型；数据默认以 SQLite 持久化，可通过 SQL_DSN 切换 MySQL/PostgreSQL。",
+   "highlights": [
+    "提供 OpenAI 兼容的 /v1/chat/completions、/v1/responses、/v1/videos 接口及 /mcp 端点",
+    "支持 cookie 池自动续期轮转与代理池熔断/轮转，单二进制运行，默认 SQLite 持久化，可经 SQL_DSN 切换 MySQL/PostgreSQL",
+    "内置中文管理面板，提供请求记录、代理池、cookie 池管理与运行时配置"
+   ],
+   "use_cases": [
+    "为仅支持 OpenAI 接口的客户端（如 Cherry Studio、Cursor、dify）接入 Gemini 网页端模型",
+    "为 MCP 客户端（Claude Desktop/Claude Code）提供 web_search 联网搜索工具",
+    "需要请求明细与统计元数据持久化存储的自托管部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 想用 MySQL / PostgreSQL，设 `SQL_DSN` 环境变量即可（不设就是 SQLite，无需改动）： ／ SQL_DSN=\"postgres://user:pass@host:5432/dbname?sslmode=disable\"",
+     "lines": [
+      56,
+      74,
+      80
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 想用 MySQL / PostgreSQL，设 `SQL_DSN` 环境变量即可（不设就是 SQLite，无需改动）： ／ SQL_DSN=\"mysql://user:pass@host:3306/dbname\"",
+     "lines": [
+      56,
+      74,
+      78
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Gemini web → OpenAI-compatible API.** A self-hosted proxy that turns the free gemini.google.com web app into `/v1/chat/completions` — **no Google API key, no paid quota**. Single Go binary, real Chrome TLS fingerprint, cookie pool with automatic renewal, pro ／ 把 Google Gemini 网页端反代成 OpenAI 兼容 API。**单二进制**，**零账号**（匿名可跑），**Chrome 146 真指纹**，**SQLite 持久化**，自带**中文管理面板**。 ／ - SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ 建表自动完成，三种库共用同一套 schema。单机就用默认 SQLite 最省事，多实例共享一个池子才需要 MySQL/PG。",
+     "lines": [
+      3,
+      16,
+      56,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite/MySQL/PostgreSQL 存储自身请求明细与统计，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Gemini web → OpenAI-compatible API.** A self-hosted proxy that turns the free gemini.google.com web app into `/v1/chat/completions` — **no Google API key, no paid quota**. Single Go binary, real Chrome TLS fingerprint, cookie pool with automatic renewal, proxy pool, built-in admin dashboard, SQLite / MySQL / PostgreSQL. Image, music, canvas and video generation (`/v1/videos`) included. Models track the web app, **Gemini 4 Argon** included (needs a paid-account cookie). ／     ↓ 逆向 gemini.google.com 网页协议 ／ - SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可）",
+   "evidence_lines": [
+    3,
+    27,
+    56
+   ]
+  },
+  "fn": "zexadev/gemini-web2api-go",
+  "sha": "2d24439202e0",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "94ef0847657b": {
+  "identity": {
+   "one_liner": "Hindsight 多源数据采集同步工具，支持增量同步与 Web UI 管理",
+   "review": "该项目是一个面向 Hindsight 记忆库的自托管数据采集服务，把 Notion、思源笔记、S3、Google Drive、OneDrive、WebDAV、IMAP 邮件等多种来源的内容同步进 Hindsight。提供增量同步、检查点恢复、干运行预览和多语言 WebUI；自身配置数据可选 SQLite、PostgreSQL 或 MySQL 存储，通过 Docker Compose 部署，需要已有 Hindsight 实例。",
+   "highlights": [
+    "支持 Notion、SiYuan、S3、WebDAV、Google Drive、OneDrive、IMAP 邮件等十余种数据源的定时或手动同步",
+    "提供增量同步、持久化检查点、操作重试与 Dry-run 预览",
+    "凭据使用 AES-256-GCM 加密，WebUI 支持 14 种语言"
+   ],
+   "use_cases": [
+    "将个人笔记与文档库自动同步到 Hindsight 记忆库",
+    "从企业对象存储或网盘归档中采集文本与多模态文件",
+    "按计划定时采集 SQL 查询结果用于分析报告"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      125,
+      126
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      125,
+      126
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.| ／ |`DB_DSN`|`/data/hindsight-ingestion.db` for SQLite|SQLite file path or database connection string. Required for PostgreSQL and MySQL.|",
+     "lines": [
+      125,
+      126
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确说明该工具用于把多源内容采集进 Hindsight 记忆库，是为 Hindsight 服务的采集组件；SQLite/PostgreSQL/MySQL 仅作自身配置存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Sync **Notion, SiYuan, DeepWiki, S3, WebDAV, WebCAL, Email (IMAP), Steam, Google Drive, OneDrive and local files** into Hindsight memory banks. Self-host with Docker and manage everything from the WebUI. ／ |`DB_TYPE`|`sqlite`|Database: `sqlite`, `postgres` or `mysql`.|",
+   "evidence_lines": [
+    7,
+    125
+   ]
+  },
+  "fn": "Nyrest/hindsight-ingestion",
+  "sha": "94ef0847657b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

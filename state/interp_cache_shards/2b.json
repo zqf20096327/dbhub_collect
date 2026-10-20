@@ -11069,5 +11069,143 @@
   "generated_at": "2026-10-19",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "65095df1fb54": {
+  "identity": {
+   "one_liner": "自托管求职应用，基于个人档案生成定制简历与求职信并跟踪申请",
+   "review": "Dossier 是一个自托管的单人求职管理应用：将职业经历整理为统一档案，读取职位描述后仅基于档案事实生成定制简历和求职信（支持聊天修改与 PDF 导出），并提供申请看板跟踪。数据存储在用户自己的 PostgreSQL 数据库中，AI 模型可用 Ollama/LM Studio 本地模型或 OpenAI 兼容 API。限制为单用户、仅桌面浏览器、每数据库单实例。适合想在自有服务器上管理求职流程的个人。",
+   "highlights": [
+    "从统一档案生成定制简历与求职信，仅使用档案中的事实，并以聊天方式修改",
+    "提供申请看板、漏斗统计、日历与定时备份",
+    "支持本地模型（Ollama/LM Studio）或 OpenAI 兼容/Anthropic/Mistral API，支持 Docker、CapRover、Coolify、Dokploy 等部署方式"
+   ],
+   "use_cases": [
+    "个人求职者在自有服务器上管理简历生成与申请跟踪",
+    "需要在本地运行 LLM 以保持档案与文档数据不留出的场景",
+    "通过 JSearch/Adzuna 等职位源搜索并筛选职位"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 18 ／ It's for one person on a small server: one password, your data in your own PostgreSQL database, and an AI model of your choice. That can be a local model through Ollama or LM Studio, so your profile and documents stay on your own hardware, or a hosted one (any ／ echo \"POSTGRES_PASSWORD=$(openssl rand -hex 24)\" > .env",
+     "lines": [
+      10,
+      14,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 PostgreSQL 存储自身数据的求职应用，而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0（GNU Affero General Public License v3.0），单一许可证",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL 18 ／ Dossier keeps your career history in one profile and turns it into a clean resume. For every job you apply to, it reads the posting, shows how you match, and drafts a tailored resume and cover letter that only use facts from your profile. You refine them in a chat, download them as PDFs and track each application from draft to offer. ／ It's for one person on a small server: one password, your data in your own PostgreSQL database, and an AI model of your choice. That can be a local model through Ollama or LM Studio, so your profile and documents stay on your own hardware, or a hosted one (any OpenAI-compatible API, Anthropic or Mistral), which then receives what it writes from. Privacy says what goes where.",
+   "evidence_lines": [
+    10,
+    12,
+    14
+   ]
+  },
+  "fn": "AienTech/dossier",
+  "sha": "65095df1fb54",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "63c06cccba3c": {
+  "identity": {
+   "one_liner": "TiDB 集群的 Web 监控诊断管理界面，内嵌于 PD",
+   "review": "TiDB Dashboard 是面向 TiDB 集群的 Web UI，提供监控、诊断和管理功能，通常嵌入 PD（4.0+）通过 2379 端口访问，也可从源码构建独立版本。仓库含 Golang 编写的 HTTP API（pkg/）和 React 编写的 UI（ui/），支持基于 SQL 账号的 SSO 配置与 OIDC 单点登录。适合 TiDB 集群运维人员和开发者使用。",
+   "highlights": [
+    "提供集群监控、诊断与管理功能的 Web UI",
+    "可嵌入 PD 使用，也可从源码构建",
+    "支持基于 SQL 账号的 SSO 与 OIDC 单点登录配置"
+   ],
+   "use_cases": [
+    "查看和诊断 TiDB 集群运行状态",
+    "通过 Web 界面管理 TiDB 集群",
+    "Key Visualizer 配置恢复与管理"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# TiDB Dashboard ／ TiDB Dashboard is a Web UI for monitoring, diagnosing and managing the TiDB cluster. ／ The most easy way to use TiDB Dashboard with an existing TiDB cluster is to use the one embedded",
+     "lines": [
+      1,
+      5,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明它是为监控、诊断和管理 TiDB 集群服务的 Web UI，并可集成进 PD。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "TiDB"
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TiDB Dashboard is a Web UI for monitoring, diagnosing and managing the TiDB cluster. ／ The most easy way to use TiDB Dashboard with an existing TiDB cluster is to use the one embedded ／ This repository contains both Dashboard HTTP API and Dashboard UI. Dashboard HTTP API is placed in",
+   "evidence_lines": [
+    5,
+    25,
+    83
+   ]
+  },
+  "fn": "pingcap/tidb-dashboard",
+  "sha": "63c06cccba3c",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9876,5 +9876,153 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5565898cb4dc": {
+  "identity": {
+   "one_liner": "自托管分布式应用运行时，提供 HTTP 服务与后台任务的容器编排",
+   "review": "基于 FastAPI 控制面、Go 运行时引擎、Kubernetes 与 Next.js 控制台构建的单租户应用运行时，用于部署无状态 HTTP 服务与有限后台任务，使用 PostgreSQL 存储控制面数据并通过 alembic 管理迁移，支持事务性 outbox、NATS JetStream、Redis 租约与 Helm 部署。",
+   "highlights": [
+    "提供工作区隔离与 CPU、内存、并发任务配额管理",
+    "支持金丝雀发布、一键回滚与有限批处理作业调度",
+    "提供 Prometheus /metrics、健康检查端点及 pg_dump 灾难备份恢复"
+   ],
+   "use_cases": [
+    "在自托管 Kubernetes 集群上部署 HTTP 服务与后台作业",
+    "需要事务性 outbox 与持久化状态的后台任务场景",
+    "带配额与审计的多工作区应用托管"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Start the local infrastructure stack (PostgreSQL 16, Redis 7, NATS JetStream, MinIO, Keycloak, OCI Registry, Rootless BuildKit) and verify your local Kubernetes cluster: ／ |Disaster backup & restore (`pg_dump` + artifacts)|`RTO < 15 min` (`RPO = 0`)|`RTO = 18.68 s` (`RPO = 0.0 s`)|PASS|",
+     "lines": [
+      7,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 作为本地基础设施栈组件并包含运行数据库迁移与 pg_dump 备份恢复，属于使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Start the local infrastructure stack (PostgreSQL 16, Redis 7, NATS JetStream, MinIO, Keycloak, OCI Registry, Rootless BuildKit) and verify your local Kubernetes cluster: ／ alembic -c apps/api/alembic.ini upgrade head ／ |Disaster backup & restore (`pg_dump` + artifacts)|`RTO < 15 min` (`RPO = 0`)|`RTO = 18.68 s` (`RPO = 0.0 s`)|PASS|",
+   "evidence_lines": [
+    7,
+    19,
+    99
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "hami9/hamicloud",
+  "sha": "5565898cb4dc",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ce2862ac3cc": {
+  "identity": {
+   "one_liner": "自托管开源日程预约系统，含团队排班与日历同步",
+   "review": "OpenCalendar 是一个可自托管的开源预约/排班应用，提供预约页、可用性管理、Google/Microsoft/CalDAV 日历同步、团队排班、工作流与 webhook、嵌入组件等功能。面向需要自主掌控数据的个人与团队。技术栈为 Next.js + PostgreSQL 16 + Drizzle，单个 Docker 镜像部署，无需 Redis，迁移自动执行，健康端点与 Prometheus 指标内置。采用 AGPL-3.0 许可，以服务方式运行修改版须开放源码。",
+   "highlights": [
+    "提供预约页、可用性管理、日历同步（Google、Microsoft 365、CalDAV、ICS）与团队排班（round-robin、collective、routing forms）",
+    "单个 Docker 镜像加 PostgreSQL 部署，运行时配置、自动迁移、健康端点与 Prometheus 指标内置",
+    "支持内嵌/弹窗/邮件嵌入，并提供 postMessage 事件与自动尺寸调整"
+   ],
+   "use_cases": [
+    "自托管个人或团队的预约/排班页面",
+    "需要日历双向同步与团队轮班分配的调度场景",
+    "在网站或邮件中嵌入预约入口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Self-host first.** One Docker image plus PostgreSQL, with no Redis. Configuration is at runtime, migrations run automatically, and health endpoints and Prometheus metrics are built in. ／ - One Docker image plus PostgreSQL (no Redis), with runtime configuration. ／ cp .env.example .env # set APP_URL, AUTH_SECRET, ENCRYPTION_KEY, POSTGRES_PASSWORD and SMTP",
+     "lines": [
+      21,
+      87,
+      95
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 PostgreSQL 存储自身数据的预约应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，全部功能在 open core，无许可密钥、无遥测；修改版作为服务运行须提供源码",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Open-source scheduling you can host yourself.** ／ Booking pages, availability, calendar sync, team scheduling and embeds, all in the open core. ／ - **Self-host first.** One Docker image plus PostgreSQL, with no Redis. Configuration is at runtime, migrations run automatically, and health endpoints and Prometheus metrics are built in. ／ Tech stack: Next.js 16 (App Router) · React 19 · TypeScript · PostgreSQL 16 + Drizzle · Better Auth · pg-boss · Tailwind CSS 4 + shadcn/ui · Vitest + Playwright.",
+   "evidence_lines": [
+    3,
+    4,
+    21,
+    125
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "kudretyilmazz/opencalendar",
+  "sha": "5ce2862ac3cc",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

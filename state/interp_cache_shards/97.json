@@ -9768,5 +9768,74 @@
   "generated_at": "2026-10-19",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f33daa098cfb": {
+  "identity": {
+   "one_liner": "自托管基础设施台账与运维工作台，含机架、IPAM、监控与拓扑图",
+   "review": "Rackpad 是面向 homelab/实验室环境的自托管基础设施清单与运维平台，提供机架、设备、端口、线缆、IPAM/VLAN、WiFi、存储、发现扫描、健康监控与拓扑可视化等模块。后端为 Fastify + SQLite，Docker 单容器部署，支持 Proxmox/UniFi/Omada 等控制器集成导入。适合需要集中记录和巡检小型物理网络与计算环境的管理者。",
+   "highlights": [
+    "支持机架/设备/端口/线缆清单、IPAM/VLAN/DHCI 管理与拓扑可视化",
+    "提供 ICMP/TCP/HTTP/HTTPS/SNMP 健康检查与邮件/Discord/Telegram 告警",
+    "支持 Proxmox、UniFi、Omada、OPNsense 等控制器集成与子网发现扫描"
+   ],
+   "use_cases": [
+    "homelab 或实验室的物理/虚拟基础设施台账管理",
+    "小型机房网络的 IPAM、VLAN 与拓扑文档化",
+    "轻量设备健康监控与资产报告导出"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite persistence through `better-sqlite3` ／ - **Self-hosted** — single Docker container, SQLite persistence, session auth with admin/editor/viewer roles, optional OIDC ／ - Administration for users, settings, integrity checks, JSON export, and native SQLite snapshots",
+     "lines": [
+      44,
+      62,
+      221
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其通过 better-sqlite3 内置 SQLite 持久化自身数据，是使用数据库的应用而非数据库服务工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rackpad is a self-hosted infrastructure inventory and operations workspace for ／ - SQLite persistence through `better-sqlite3` ／ - **Monitoring** — per-device ICMP, TCP, HTTP/HTTPS, and SNMP health checks with email/Discord/Telegram alerting",
+   "evidence_lines": [
+    27,
+    44,
+    58
+   ]
+  },
+  "fn": "Kobii-git/rackpad",
+  "sha": "f33daa098cfb",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

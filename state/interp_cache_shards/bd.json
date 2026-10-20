@@ -11763,5 +11763,191 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "51296586df00": {
+  "identity": {
+   "one_liner": "Emacs 内的交互式数据库客户端，支持 SQL 查询、结果浏览与行编辑暂存",
+   "review": "Clutch 是一个运行在 Emacs 29.1+ 中的数据库客户端，提供可编辑的 SQL 查询缓冲区、结果网格展示、带预览的行级增删改暂存，以及表/列补全和外键导航等元数据功能。面向 Emacs 用户，通过原生协议包或 Java 17+ 的 JDBC agent 连接 MySQL、PostgreSQL、SQLite 等多种数据库；联合、分组等歧义结果集保持只读。",
+   "highlights": [
+    "在 Emacs 缓冲区内执行 SQL 查询并在交互式网格中展示结果",
+    "支持暂存 INSERT/UPDATE/DELETE，执行前可预览并校验",
+    "提供表/列补全、Eldoc、外键跳转和可导出为 CSV/TSV/Org 的结果集"
+   ],
+   "use_cases": [
+    "在 Emacs 内查询和浏览数据库",
+    "以带确认预览的方式编辑 SQL 表行",
+    "通过 JDBC 连接 Oracle、SQL Server、ClickHouse 等数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |PostgreSQL|Core SQL support|Requires `pgsql`, available from MELPA|",
+     "lines": [
+      39,
+      73
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+     "lines": [
+      39,
+      72
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      76
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The shortest path uses SQLite, which requires only Emacs 29.1+—no protocol package or Java runtime. ／ |SQLite|Core SQL support|Uses Emacs 29.1+ built-in `sqlite-*` functions; no external dependency|",
+     "lines": [
+      13,
+      75
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      76
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior|",
+     "lines": [
+      80
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "compat",
+     "quote": "MariaDB 10.11 has been live-validated through the native `mysql` backend, including TLS with `mysql_native_password`; other MariaDB versions are expected to be broadly compatible but are not yet part of the regular test matrix. MySQL 5.6 has no native JSON col",
+     "lines": [
+      124
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为在 Emacs 中查询、浏览和编辑多种数据库的客户端工具，为数据库操作提供服务而非自身作为使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Query and browse databases—and stage SQL row edits—without leaving Emacs. ／ Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracle, SQL Server, DB2, Snowflake, Redshift, ClickHouse, DuckDB, and other databases. ／ |MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+   "evidence_lines": [
+    5,
+    7,
+    72
+   ]
+  },
+  "fn": "LuciusChen/clutch",
+  "sha": "51296586df00",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "adbd89d9e2ee": {
+  "identity": {
+   "one_liner": "面向 WhatsApp 群组的 AI 聊天机器人，基于 Baileys 与 better-sqlite3 存储",
+   "review": "这是一个为乌拉圭朋友群定制的 WhatsApp 群机器人，基于 SawBot-MD 修改而来。它通过 Baileys 库连接 WhatsApp，提供 AI 对话、语音识别、游戏、经济系统、群管理等功能，数据用 better-sqlite3 存储，AI 调用以 Gemini 为主并配备 Groq、OpenRouter 等备选。适合想自建群聊机器人的 Node.js 用户，需自行准备 WhatsApp 号码与 Gemini API key。",
+   "highlights": [
+    "支持 Gemini 为主的多 AI 提供商，未命中配额时按 Groq、OpenRouter、NVIDIA、Cerebras 顺序回退（L14/L39）",
+    "提供群管理、经济系统、游戏、音乐下载、每日备份等功能的命令集（L20-L31/L41）",
+    "发送队列限速并支持按组配置静默（L32）"
+   ],
+   "use_cases": [
+    "自建 WhatsApp 群聊 AI 机器人",
+    "为兴趣群组提供游戏化互动与群管理",
+    "在 Android 设备上通过 Termux 运行机器人（L62-L66）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Node.js 22 o más nuevo · Baileys · better-sqlite3 · Gemini, con respaldo en Groq, OpenRouter, NVIDIA y Cerebras · yt-dlp · ffmpeg",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库存数据的应用，better-sqlite3 仅作为其存储依赖出现于 Stack 清单（L45）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Bot de WhatsApp con personalidad propia, desarrollado a medida para un grupo de amigos de Uruguay. Es mi primer proyecto de programación (@gauchitodev), en el cual me ayudaron @carlosplanchon y @nicolasgutierrezdev. Tome como punto de partida SawBot-MD, de @martinezanthony (quien también ayudó). ／ Node.js 22 o más nuevo · Baileys · better-sqlite3 · Gemini, con respaldo en Groq, OpenRouter, NVIDIA y Cerebras · yt-dlp · ffmpeg ／ npm ci",
+   "evidence_lines": [
+    7,
+    45,
+    86
+   ]
+  },
+  "fn": "gauchitodev/ClaudIA",
+  "sha": "adbd89d9e2ee",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

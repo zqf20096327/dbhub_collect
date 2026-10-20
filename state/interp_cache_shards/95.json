@@ -9253,5 +9253,74 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c453394de721": {
+  "identity": {
+   "one_liner": "本地开发者调试记忆库，记录命令与修复并存入 SQLite，经 MCP 提供给编码代理",
+   "review": "MemoryWhale 记录调试过程中的命令、输出、错误与修复方案，将证据存入本地 SQLite，通过 CLI、TUI、Web 桌面和 MCP 服务器供开发者及 19 种编码代理检索复用。面向在终端、SSH 和多机器间调试且使用 AI 代理的开发者；数据仅存本地，不上传，自动捕获依赖客户端钩子支持。",
+   "highlights": [
+    "将命令、输出、失败与修复记录存入本地 SQLite，提供 mw search 与 mw context 检索",
+    "通过 stdio/HTTP MCP 服务器（mw-mcp/mw-serve）向多种编码代理暴露六个记忆工具",
+    "提供 CLI、TUI、Web 仪表盘与桌面应用四种本地接口，无账户、数据不上传"
+   ],
+   "use_cases": [
+    "跨会话恢复调试上下文与历史修复",
+    "为多种编码代理提供共享的本地长期记忆",
+    "SSH/多机开发环境下保留可搜索的失败与修复记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "failures, and the fixes that worked. It stores that evidence in local SQLite so ／ shell / mw-run ──────► local SQLite ────────► search / context",
+     "lines": [
+      20,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明示该项目将调试证据存储在本地 SQLite 中，SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "failures, and the fixes that worked. It stores that evidence in local SQLite so ／ agent session is gone. It works with 19 coding agents through MCP, with no ／ shell / mw-run ──────► local SQLite ────────► search / context",
+   "evidence_lines": [
+    20,
+    22,
+    130
+   ]
+  },
+  "fn": "wuisabel-gif/MemWhale",
+  "sha": "c453394de721",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

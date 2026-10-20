@@ -10436,5 +10436,154 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "58096c7d6816": {
+  "identity": {
+   "one_liner": "Claude Code 插件，为代码与数据变更记录决策溯源与数据流",
+   "review": "provLedger 以 Claude Code 插件形式运行，在 agent 修改代码和数据时，将决策原因、口头说明、邮件等证据作为记录挂到项目节点上，并通过 /ledger 命令以带记录 id 的引用回答问题，删除内容保留 tombstone 历史。面向数据工程团队与使用编码 agent 的开发者。核心库可经 pip 单独安装，但完整功能依赖 Claude Code 插件机制。",
+   "highlights": [
+    "提供 Graph、Node、Task 三视图展示项目数据流与决策记录",
+    "被删除的函数/列保留历史与原因，支持 provledger why --tombstones 查询",
+    "记录分 Measured/Said/Evidenced 三类来源，无记录时输出 unstated"
+   ],
+   "use_cases": [
+    "追溯数据列或函数被移除的决策背景",
+    "新接手项目或新 agent 会话查询历史决策依据",
+    "编辑前检查变更是否触碰已记录的约束规则"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add:",
+     "lines": [
+      178
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是面向编码 agent 的决策溯源与数据流追踪插件，服务对象是数据工程工作流而非某个数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Claude Code plugin for data work. While you and your agent change code and data, it keeps the why — your words, the email behind them, the paths tried and dropped — on the things in the project they are about, and answers for the project when you are not there to. ／ The column is gone, the function that read it is gone, and whoever decided has moved on. `grep` finds nothing, because there is nothing left to find; `git log` shows the commit that took it out, not the email that asked for it. provLedger keeps the history of things that no longer exist — the words, the email and the task that removed them — and when a rule was recorded with them, it puts that rule in front of the next agent that plans to bring them back. ／ claude plugin marketplace add yizhao95/prov_ledger",
+   "evidence_lines": [
+    5,
+    17,
+    103
+   ]
+  },
+  "fn": "yizhao95/prov_ledger",
+  "sha": "58096c7d6816",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7184457f22be": {
+  "identity": {
+   "one_liner": "阿里云PolarDB计费方式说明文档，讲解按量、包年包月与Serverless三种计费",
+   "review": "一篇介绍阿里云PolarDB计费结构的中文文档，说明计算节点、存储、数据库代理的收费构成，列出MySQL、PostgreSQL、分布式版常见规格的参考价格，并给出选购建议。面向正在评估或采购PolarDB的用户，内容为价格与计费机制说明，不包含可安装运行的软件代码。",
+   "highlights": [
+    "说明计算与存储分离架构下的账单构成：计算节点、存储按量、免费数据库代理",
+    "对比按量付费、包年包月、Serverless三种计费方式的适用条件",
+    "列出PolarDB MySQL、PostgreSQL、分布式版常见规格的参考价格表"
+   ],
+   "use_cases": [
+    "评估PolarDB计费成本、选择计费方式时参考",
+    "估算存储费用与只读节点扩容成本",
+    "对比PolarDB与RDS的成本结构"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PolarDB",
+     "rel": "mention",
+     "quote": "# 阿里云PolarDB怎么计费：计算与存储分开收费，按量付费、包年包月、Serverless三种方式怎么选不花冤枉钱 ／ PolarDB的账单分两块：计算节点按规格收费，可选按量付费、包年包月、Serverless三种计费方式；存储单独按实际用量计费，不参与包年包月。另外，数据库代理（Proxy）免费，读写分离、负载均衡不额外收钱。搜“PolarDB怎么计费”的人，最后要弄清楚的无非这几件事，下面按账单结构、三种计费方式、参考价格、省钱机制的顺序讲清楚。 ／ > **选购速览**：长期运行的业务选包年包月，买的时间越长折扣越大；临时测试用按量付费，用完释放集群就停止计费；流量忽高忽低、没法预测的业务选Serverless。存储按GB实际用量另行出账。👉 去云小站查看PolarDB各规格当前价格",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "PolarDB for MySQL和PolarDB for PostgreSQL都支持Serverless计费。资源随负载自动伸缩，单个集群可以在秒级从0核扩到1000核，流量峰值来了自动加，退潮了自动缩，只为实际用量付费，没有固定月费。电商大促、开学季这种有明显峰谷的业务，用Serverless可以省掉为峰值长期付费的开销。👉 查看PolarDB各版本与计费方式的官方详情 ／ 目前PolarDB产品线下主推的是MySQL、PostgreSQL两条共享存储产品线，加上面向海量数据的分布式版（PolarDB-X）。常见规格的参考价格如下： ／ |PolarDB MySQL 标准版（入门）|1核1GB|包月|约31元/月起|个人项目、小型服务试用|查看当前价格|",
+     "lines": [
+      30,
+      34,
+      38
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PolarDB for MySQL和PolarDB for PostgreSQL都支持Serverless计费。资源随负载自动伸缩，单个集群可以在秒级从0核扩到1000核，流量峰值来了自动加，退潮了自动缩，只为实际用量付费，没有固定月费。电商大促、开学季这种有明显峰谷的业务，用Serverless可以省掉为峰值长期付费的开销。👉 查看PolarDB各版本与计费方式的官方详情 ／ 目前PolarDB产品线下主推的是MySQL、PostgreSQL两条共享存储产品线，加上面向海量数据的分布式版（PolarDB-X）。常见规格的参考价格如下： ／ |PolarDB PostgreSQL 标准版|2核4GB，20GB存储|包年|约1116元/年|PostgreSQL用户上云|查看当前价格|",
+     "lines": [
+      30,
+      34,
+      41
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库内容为PolarDB计费说明文档，不含为数据库生态服务的工具代码，也不含使用数据库的应用程序。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 阿里云PolarDB怎么计费：计算与存储分开收费，按量付费、包年包月、Serverless三种方式怎么选不花冤枉钱 ／ PolarDB的账单分两块：计算节点按规格收费，可选按量付费、包年包月、Serverless三种计费方式；存储单独按实际用量计费，不参与包年包月。另外，数据库代理（Proxy）免费，读写分离、负载均衡不额外收钱。搜“PolarDB怎么计费”的人，最后要弄清楚的无非这几件事，下面按账单结构、三种计费方式、参考价格、省钱机制的顺序讲清楚。 ／ ## 常见规格参考价格",
+   "evidence_lines": [
+    1,
+    3,
+    32
+   ]
+  },
+  "fn": "dinxi6/polarodb-billing-models",
+  "sha": "7184457f22be",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

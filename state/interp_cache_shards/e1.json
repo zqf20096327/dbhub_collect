@@ -9626,5 +9626,194 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fa5119d19042": {
+  "identity": {
+   "one_liner": "命令行数据加工工具，提供对 SQL 数据库和 CSV/Excel 的 jq 式查询",
+   "review": "sq 是一个 Go 编写的 CLI 工具，通过驱动机制连接 SQL 数据库与 CSV/Excel 等文档数据源，支持 jq 风格查询、原生 SQL、跨源连接、元数据检查、表比较与复制，并可把查询结果以多种格式输出或插入其他数据库表。面向需要在命令行处理和搬迁结构化数据的开发者与运维人员，可通过 brew、scoop、Docker、源码等方式安装。",
+   "highlights": [
+    "通过驱动机制支持 SQLite、Postgres、SQL Server、MySQL、Oracle 及 CSV/Excel 数据源",
+    "支持跨数据源 join，可将查询结果插入 SQL 数据库表",
+    "提供 inspect 元数据查看、sq diff 表/库比较、tbl copy/truncate/drop 等表操作命令，输出支持 JSON/CSV/XLSX/Markdown 等多种格式"
+   ],
+   "use_cases": [
+    "在命令行用 jq 风格语法查询 SQL 数据库或 CSV/Excel 文件",
+    "跨数据源（如 Postgres 表与 Excel 工作表）join 并迁移数据",
+    "在 Kubernetes 中执行数据库迁移或数据加工任务"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "across sources: join a CSV file to a Postgres table, or MySQL with Excel. ／ Postgres, ／ That is, you can use `sq` to insert results from a Postgres query into a MySQL table,",
+     "lines": [
+      16,
+      164,
+      282
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "across sources: join a CSV file to a Postgres table, or MySQL with Excel. ／ MySQL, Oracle etc., ／ That is, you can use `sq` to insert results from a Postgres query into a MySQL table,",
+     "lines": [
+      16,
+      166,
+      282
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "MySQL, Oracle etc.,",
+     "lines": [
+      166
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "sqlite3 SQLite ／ `go install` needs the SQLite build tags, and its binary reports version `v0.0.0-dev`; use ／ go install -tags \"sqlite_vtable sqlite_stat4 sqlite_fts5 sqlite_introspect sqlite_json sqlite_math_functions\" \\",
+     "lines": [
+      45,
+      82,
+      86
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SQL Server, ／ a SQL Server table etc.",
+     "lines": [
+      165,
+      284
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为连接和操作 SQL 数据库提供查询、检查与数据搬迁能力的 CLI 工具，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`sq` is a command line tool that provides jq-style access to ／ ## Drivers ／ Running `sq` in a Kubernetes environment is useful for DB migrations,",
+   "evidence_lines": [
+    8,
+    37,
+    109
+   ]
+  },
+  "fn": "neilotoole/sq",
+  "sha": "fa5119d19042",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9ecc45143873": {
+  "identity": {
+   "one_liner": "Tempo 链数据索引器，PostgreSQL+ClickHouse 分层存储",
+   "review": "tidx 从 Tempo 节点摄取区块、交易和日志，写入 PostgreSQL（热窗口点查）与 ClickHouse（全量归档分析）双存储，并通过 HTTP API、SQL 和 CLI 对外查询，支持按 ABI 签名解码事件与物化视图。面向需要结构化链上数据的开发者，用于区块浏览器、分析看板、余额查询等场景，依赖 Tempo 链。",
+   "highlights": [
+    "提供 PostgreSQL 与 ClickHouse 分层存储，经 engine/source 参数路由查询，含 FDW 跨层读取",
+    "提供 HTTP API 与 CLI，支持按 ABI 签名在查询时解码事件与函数调用数据",
+    "支持 ClickHouse 物化视图管理，含预计算 token/holder/DEX 分析表"
+   ],
+   "use_cases": [
+    "构建 Tempo 链区块浏览器与分析看板",
+    "钱包余额查询与 token/DEX 链上活动分析",
+    "为基于 Tempo 的应用提供结构化链数据服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**tidx** is Tempo's chain indexer. It ingests blocks, transactions, and logs from a Tempo node, then makes them queryable through SQL, an HTTP API, and a CLI. Its hybrid PostgreSQL and ClickHouse architecture supports fast point lookups (OLTP) and large analyt ／ - **Tiered Storage:** hot window in PostgreSQL (OLTP), full archive in ClickHouse (OLAP), queried as one ／ Realtime ingestion writes to both PostgreSQL and ClickHouse. With `[chains.retention]` enabled, historical backfill writes directly from RPC to ClickHouse, then a reconciler hydrates only the configured PostgreSQL hot window from checkpointed ClickHouse archiv",
+     "lines": [
+      10,
+      16,
+      32
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**tidx** is Tempo's chain indexer. It ingests blocks, transactions, and logs from a Tempo node, then makes them queryable through SQL, an HTTP API, and a CLI. Its hybrid PostgreSQL and ClickHouse architecture supports fast point lookups (OLTP) and large analyt ／ - **Tiered Storage:** hot window in PostgreSQL (OLTP), full archive in ClickHouse (OLAP), queried as one ／ Realtime ingestion writes to both PostgreSQL and ClickHouse. With `[chains.retention]` enabled, historical backfill writes directly from RPC to ClickHouse, then a reconciler hydrates only the configured PostgreSQL hot window from checkpointed ClickHouse archiv",
+     "lines": [
+      10,
+      16,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "tidx 是摄取链数据的索引服务，使用 PostgreSQL 和 ClickHouse 存储数据，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**tidx** is Tempo's chain indexer. It ingests blocks, transactions, and logs from a Tempo node, then makes them queryable through SQL, an HTTP API, and a CLI. Its hybrid PostgreSQL and ClickHouse architecture supports fast point lookups (OLTP) and large analytical queries (OLAP). ／ - **Tiered Storage:** hot window in PostgreSQL (OLTP), full archive in ClickHouse (OLAP), queried as one",
+   "evidence_lines": [
+    10,
+    16
+   ]
+  },
+  "fn": "tempoxyz/tidx",
+  "sha": "9ecc45143873",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

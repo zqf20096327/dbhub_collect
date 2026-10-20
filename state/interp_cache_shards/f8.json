@@ -9732,5 +9732,70 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d7bc357ba12e": {
+  "identity": {
+   "one_liner": "Pi 编码代理的本地桌面客户端，通过 Pi RPC 会话交互",
+   "review": "这是一个 Pi 编码代理的原生桌面客户端扩展：在项目目录中运行 /app 启动桌面应用，为该项目开启独立的 Pi RPC 会话，提供会话列表、标签分组、通知、命令发现和 JSONL 历史分页读取等功能。标签等元数据存于应用私有的 SQLite 中，不改动 Pi 的会话文件。面向使用 Pi 编码代理并需要桌面界面的开发者。",
+   "highlights": [
+    "提供原生桌面客户端，为当前项目启动独立 Pi RPC 会话",
+    "支持按标签分组会话，标签元数据存储在应用私有 SQLite 中",
+    "通过字节游标分页读取 JSONL 会话历史，提供 macOS 和 Windows 预编译包"
+   ],
+   "use_cases": [
+    "在桌面界面管理多个 Pi 代理会话并通过标签归类",
+    "在后台会话持续运行时查看输出与未读通知",
+    "通过 / 命令面板发现并执行 Pi RPC 扩展命令"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The sidebar groups sessions by one optional tag, plus the fixed **Uncategorized** group. Tags and assignments are app-private SQLite metadata keyed by canonical workspace path and Pi session ID. A tag name must be non-empty and unique. Removing a tag removes o",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用私有的标签元数据使用 SQLite 存储，桌面客户端仅作为使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pi Native App is a Pi Package, not a separate agent runtime. The `/app` extension starts a native desktop client in the current project directory. The desktop client starts its own independent Pi RPC session for that project. ／ The sidebar groups sessions by one optional tag, plus the fixed **Uncategorized** group. Tags and assignments are app-private SQLite metadata keyed by canonical workspace path and Pi session ID. A tag name must be non-empty and unique. Removing a tag removes only its metadata assignment, immediately returning its sessions to Uncategorized: Pi App never deletes, migrates, or writes Pi JSONL session files or the legacy `projects.json` catalog.",
+   "evidence_lines": [
+    7,
+    36
+   ]
+  },
+  "fn": "shengxiao20/pi-app",
+  "sha": "d7bc357ba12e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8785,5 +8785,355 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "253a5d1edb74": {
+  "identity": {
+   "one_liner": "Rust/Tauri 编写的个人财务管理应用，本地 SQLite 单文件存储",
+   "review": "Radinus 是一款 GNU GPL v3 授权的免费个人财务管理软件，支持多银行账户、交易与子交易拆分、定期操作、预算、统计视图和仪表盘，支持 OFX 银行对账单导入，数据存于单个便携 SQLite 文件，可从 USB 盘运行。面向个人用户管理收支，由 Tauri v2 + Rust 构建，Model 层为独立的 radinus-core 库。",
+   "highlights": [
+    "跟踪多银行账户、交易（含子交易与自动 Complement 拆分）、支票、定期操作、预算及六种交叉统计视图",
+    "通过 OFX 标准导入银行对账单，并支持迁移 Radinus 1.9.3 (Windows) zip 备份",
+    "全便携设计：应用、数据库、设置、附件、日志集中于单一文件夹，USB 盘可用，不在文件夹外写入"
+   ],
+   "use_cases": [
+    "个人/家庭多银行账户的收支记录与预算管理",
+    "导入银行 OFX 对账单进行账务核对",
+    "从旧版 Radinus 1.9.3 (Windows) 备份迁移数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Database:** SQLite, single file, portable ／ rules, SQLite access, import/export, backup, and repair logic. Compiles and",
+     "lines": [
+      10,
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 SQLite 存储财务数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU GPL v3 or later，单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Radinus is free software (GNU GPL v3 or later) for managing personal finances. ／ - **Database:** SQLite, single file, portable ／ - **Model** — `radinus-core`, an independent Rust library with all business",
+   "evidence_lines": [
+    3,
+    10,
+    34
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Fab2bprog/Rust-Radinus",
+  "sha": "253a5d1edb74",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "130c83e22a91": {
+  "identity": {
+   "one_liner": "PostgreSQL 的 BOSH 发布包，用于在 BOSH 上部署运行",
+   "review": "该仓库将 PostgreSQL 打包为 BOSH release，供已有 BOSH 平台的用户一键部署数据库实例。通过 manifest 属性可配置版本（15-18）、端口、角色、TLS、pg_stat_statements 及生命周期钩子，并支持通过 bbr/pg_dump 进行备份恢复。README 明确指出不直接支持高可用，未配置复制。",
+   "highlights": [
+    "提供 BOSH manifest 属性定制 PostgreSQL 版本（15/16/17/18）、端口、数据库、角色与 TLS 配置",
+    "支持通过 bbr 作业与 pg_dump 实现备份和恢复，并提供 TLS 证书生成脚本",
+    "提供 pre-start/post-start/pre-stop/post-stop 钩子与周期性 janitor 脚本机制"
+   ],
+   "use_cases": [
+    "在 Cloud Foundry/BOSH 环境中部署 PostgreSQL 实例",
+    "需要以声明式 manifest 管理 PostgreSQL 配置与 TLS 认证的平台运维",
+    "配合 BOSH Backup and Restore 对数据库执行备份恢复"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This is a BOSH release for PostgreSQL. ／ In order to deploy the postgres-release you must follow the standard steps for deploying software with BOSH. ／ databases.version | Define the used PostgreSQL major version. Default: 18. Supported versions: 15, 16, 17, 18",
+     "lines": [
+      3,
+      9,
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是为部署 PostgreSQL 数据库服务的 BOSH 发布包，属于为数据库生态服务的部署组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is a BOSH release for PostgreSQL. ／ In order to deploy the postgres-release you must follow the standard steps for deploying software with BOSH. ／ The postgres-release does not directly support high availability.",
+   "evidence_lines": [
+    3,
+    9,
+    182
+   ]
+  },
+  "fn": "cloudfoundry/postgres-release",
+  "sha": "130c83e22a91",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0dfe14789130": {
+  "identity": {
+   "one_liner": "AI 音乐发行管理工作台，用本地 SQLite 台账与浏览器自动化辅助填表",
+   "review": "这是一个从 VoxFlow 拆出的音乐发行管理工作台，面向在 Suno 等平台发布 AI 音乐的个人创作者。它维护本地 SQLite 台账（releases/listings/albums 等五张表），通过 Chrome 扩展自动填写发行表单，但提交、签署等不可逆动作由人工确认；需依赖本机运行的 VoxFlow 提供生成产物。",
+   "highlights": [
+    "提供发行台界面管理待发行/待认领/已上架/平台账号/状态流转，无构建步骤",
+    "包含 Chrome 扩展做填表自动化，并对不可逆动作（提交审核/签署）设置人工确认护栏",
+    "附脚本从网易云、QQ 音乐、汽水控制台页面抓取播放与收益数据，支持 --dry-run"
+   ],
+   "use_cases": [
+    "个人音乐创作者管理 AI 生成歌曲在多个发行平台的上架台账",
+    "辅助填写音乐平台发行表单，自动化停在人工提交前一步",
+    "登录后批量回填各平台的播放量与收益数据到本地台账"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "两个仓**不共用 sqlite 文件**。VoxFlow 的 `core/db.py` 写明它的设计前提是「本地单用户工具」，",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库用本地 SQLite 文件（core/db.py 五张表）存储自身台账数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **台账**（`core/db.py`）：releases / listings / albums / platform_accounts / publish_events 五张表。 ／ 两个仓**不共用 sqlite 文件**。VoxFlow 的 `core/db.py` 写明它的设计前提是「本地单用户工具」， ／ AI 音乐发行台 —— 把生成好的歌送进音乐平台的发行表单，**填到只差最后一下，那一下留给人**。",
+   "evidence_lines": [
+    42,
+    20,
+    3
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "webkubor/suno-publisher",
+  "sha": "0dfe14789130",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1135cd74a079": {
+  "identity": {
+   "one_liner": "自托管 Zalo 常驻 AI 代理，TypeScript + SQLite 存储会话",
+   "review": "一个部署在 Zalo（个人账号或官方 Bot 账号）中的自托管 AI 代理，单进程支持多账号，提供 15 个内置工具、外部 MCP server 接入、定时任务、知识库检索（SQLite FTS5 + bm25 + RRF）和 Web 管理面板。适用于希望在 Zalo 私人消息场景中运行个人助手的自托管用户；使用需自备 OpenAI 兼容端点或 Anthropic 的 LLM 服务。",
+   "highlights": [
+    "支持个人账号（zca-js）与官方 Bot API 双通道，单进程运行多账号",
+    "内置 15 个工具并作为 MCP client 接入外部 MCP server（仅 HTTP transport）",
+    "知识库检索基于 SQLite FTS5 + bm25，多查询结果用 RRF 合并"
+   ],
+   "use_cases": [
+    "在 Zalo 个人账号或 Bot 上运行自托管私人 AI 助手",
+    "加载 .docx/.xlsx/.pdf/.txt/.md 文档构建可检索知识库供代理问答",
+    "通过 cron/once/every 定时任务让代理主动推送消息或执行独立 AI 回合"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ - Tìm bằng **SQLite FTS5 + bm25**, hợp nhất nhiều truy vấn bằng **RRF** (chừa sẵn chỗ cho lớp vector sau) ／ - Lịch sử hội thoại trong SQLite, theo account + thread",
+     "lines": [
+      18,
+      131,
+      175
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目自身使用 SQLite 存储会话历史与数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Agent AI thường trú trên Zalo. Chạy được trên hai loại kênh : tài khoản Zalo cá nhân (qua zca-js) ／  SQLite ／ - Lịch sử hội thoại trong SQLite, theo account + thread",
+   "evidence_lines": [
+    3,
+    18,
+    175
+   ]
+  },
+  "fn": "vuhai2002/zalo-agent",
+  "sha": "1135cd74a079",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d22bc6e2fb55": {
+  "identity": {
+   "one_liner": "本地 Windows 数字取证 CLI，证据规整入 SQLite 并用本地 llama.cpp 模型分析",
+   "review": "Locard 是一个运行在本地的 Windows 取证调查 CLI，将事件确定性地提取并归一化到 SQLite 数据库，检索证据后可选调用本地 llama.cpp 服务上的 MiniCPM5-2B 模型分析记录，避免证据外发。内置引用校验、上下文限制等护栏。面向需要在本地离线开展取证的取证分析人员；README 自述仍处于未定稿的重度开发阶段，未在真实环境通过测试。",
+   "highlights": [
+    "将取证事件归一化存储到 SQLite 并保留原始证据 ID 与来源",
+    "通过本地 llama.cpp 服务调用 MiniCPM5-2B 模型，对检索到的记录进行分析，数据不出本地",
+    "实现对模型输出的引用校验、上下文限制，并阻止模型直接执行命令或查询数据库"
+   ],
+   "use_cases": [
+    "需要在本地离线分析 Windows 取证证据的场景",
+    "不希望将敏感证据发送给外部 AI 服务的调查流程",
+    "以证据来源可追溯为前提的确定性证据检索与关联分析"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|image &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明事件归一化存入 SQLite，SQLite 是该取证应用的存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|image &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Locard is a local Windows forensic investigation CLI, named after Edmond Locard and the principle that **every contact leaves a trace**. Locard was designed around a foundational principle: **A forensic investigation should never require sending sensitive evidence to an external AI service.** To ensure trust and accuracy in the investigative process, Locard improves reliability through strict systemic safeguards rather than relying on LLM scale. It preserves source provenance, normalizes events into SQLite, retrieves evidence deterministically, and optionally asks MiniCPM5 through a local llama.cpp server to analyze retrieved records. Watch Locard's introduction video| ／ The interactive CLI in V6 uses the existing V0-V5 forensic capabilities. Even though this project is its in Version 6, which is supposed to be its final form, there is still a **lot** left to be done. At this stage Locard is a solution that did not pass the test of running in a live environment. It's more like and advanced prototype.",
+   "evidence_lines": [
+    18,
+    71
+   ]
+  },
+  "fn": "jeanlucdupont/locard",
+  "sha": "d22bc6e2fb55",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

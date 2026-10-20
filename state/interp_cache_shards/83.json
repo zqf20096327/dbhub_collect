@@ -10831,5 +10831,77 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "33408e3c38fb": {
+  "identity": {
+   "one_liner": "DocForum 医疗平台的后端模块化单体，基于 Express+Prisma+PostgreSQL",
+   "review": "这是 DocForum 医疗平台的 hub 仓库，用 Node.js/TypeScript 实现挂号、转诊、问诊、处方、检验单、支付等模块的后端单体，供前端 docforum-web 及医疗参与方使用；数据模型以 Prisma schema 为唯一事实来源，用数据库级条件更新保证预约并发安全；Docker Compose 文件声明但未在作者环境中验证，集成测试依赖 embedded-postgres。",
+   "highlights": [
+    "按模块划分 routes/controllers/services/repositories，模块间仅通过 service 接口访问",
+    "预约可用性采用数据库级条件更新/事务实现，架构层面强制不变量",
+    "集成测试通过 embedded-postgres 预编译二进制自建一次性 Postgres 实例"
+   ],
+   "use_cases": [
+    "医疗预约/转诊/处方流转类平台的参考后端实现",
+    "基于 Prisma + PostgreSQL 的模块化单体架构示例",
+    "JWT 角色权限与预约并发控制的集成测试场景参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL| ／ Needs a Postgres instance — either `infra/docker/docker-compose.yml`",
+     "lines": [
+      51,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 PostgreSQL 存储业务数据的医疗平台后端应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**The backend of DocForum** — a platform that collapses a multi-visit, ／ |Database|PostgreSQL| ／ `auth` · `users` · `patients` · `doctors` · `facilities` · `availability` · `appointments` · `consultations` · `referrals` · `prescriptions` · `lab-orders` · `pharmacy-orders` · `payments` · `notifications`",
+   "evidence_lines": [
+    7,
+    51,
+    80
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "DocForum/docforum-core",
+  "sha": "33408e3c38fb",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

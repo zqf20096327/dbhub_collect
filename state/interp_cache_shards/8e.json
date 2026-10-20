@@ -8115,5 +8115,220 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c22c2bf11a5f": {
+  "identity": {
+   "one_liner": "通过 Telegram 和 WebUI 监控与管理 VPS/独立服务器的机器人",
+   "review": "该项目是一个基于 Python/Aiogram 的 Telegram 机器人，配合 WebUI/PWA 实现 VPS 与独立服务器的监控和管理，提供 CPU/RAM/磁盘/网络指标采集、systemd 服务管理、SSH Web 终端、备份与更新、计费提醒和安全审计日志等功能，面向系统管理员、DevOps 工程师和托管提供商。内部使用 SQLite (aiosqlite) 存储节点、用户和指标数据，通过 agent-client 模式管理多台远程节点。",
+   "highlights": [
+    "采集并展示 CPU/RAM/Disk/Network 实时指标，支持多节点管理与 SSH Web 终端",
+    "提供 systemd 服务管理、定时备份、自动更新与数据库迁移",
+    "包含计费提醒、Fail2Ban 集成、审计日志及 Argon2/Fernet/AES 加密"
+   ],
+   "use_cases": [
+    "从 Telegram 或 WebUI 集中监控多台服务器",
+    "远程管理 systemd 服务、执行备份与系统更新",
+    "VPN/托管提供商的客户服务器监控与租期提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "│ ├── SQLite DB (nodes, users, metrics) │ ／ - **Database:** SQLite (aiosqlite)",
+     "lines": [
+      120,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 作为自身数据存储（nodes/users/metrics），项目是使用数据库的服务器管理应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**VPS Manager Telegram Bot** — это комплексное решение enterprise-класса для управления серверной инфраструктурой через Telegram и веб-интерфейс. ／ - **Database:** SQLite (aiosqlite) ／ bash <(wget -qO- https://raw.githubusercontent.com/jatixs/tgbotvpscp/main/deploy.sh)",
+   "evidence_lines": [
+    30,
+    126,
+    160
+   ]
+  },
+  "fn": "jatixs/tgbotvpscp",
+  "sha": "c22c2bf11a5f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6adffd000185": {
+  "identity": {
+   "one_liner": "AI 代理可操作的 CRM，代理经 MCP/REST 按用户权限读写数据",
+   "review": "Margince 是一个源码可得（非开源）的 CRM 系统，可从邮件、会议和日历自动填充联系人、公司与商机记录，AI 代理通过 MCP 或 REST 以与用户相同的权限引擎访问数据，并受审批、审计日志与配额限制。面向需要自托管、以代码方式定制的销售团队。部署需 Go、Docker/Compose、Node/pnpm，依赖 Postgres 与 Redis。",
+   "highlights": [
+    "代理通过 MCP 或 REST 连接，权限不超过授权用户",
+    "每次 AI 变更可追溯来源，操作写入不可篡改日志",
+    "支持 Ollama/vLLM 本地模型或云提供商，含 sovereign 配置拒绝云出口"
+   ],
+   "use_cases": [
+    "销售团队的联系人/商机管理",
+    "让 AI 代理在权限受控下录入和更新 CRM 数据",
+    "自托管部署并要求 AI 数据不出本地环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Start the stack: `make dev`. It starts Postgres, Redis, the API and the web app, then returns.",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 Postgres 存储数据的 CRM 应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "source-available，Business Source License 1.1",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Margince is a CRM that fills its own records from mail, meetings and calendars. AI agents work in it under ／ 2. Start the stack: `make dev`. It starts Postgres, Redis, the API and the web app, then returns. ／ Margince is source-available under the Business Source License 1.1 (LICENSE). The source is",
+   "evidence_lines": [
+    3,
+    29,
+    87
+   ]
+  },
+  "fn": "margince/margince",
+  "sha": "6adffd000185",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fba28099a374": {
+  "identity": {
+   "one_liner": "原生 macOS 应用，以交互图探索 SQLite 与 PostgreSQL 数据库",
+   "review": "一款运行于 macOS 的桌面应用，将 SQLite 文件和 PostgreSQL 连接（只读）呈现为基于外键关系的交互式图，支持浏览、内联编辑 SQLite 行、运行带 explain 计划的查询并导出结果，还能打开版本化 SQL 文件查看 schema 历史。面向需要在图形界面中检视数据库结构与数据的开发者。内置 MCP 服务，可将 Codex 或 Claude Code 等编码代理接入以探索 schema。",
+   "highlights": [
+    "以交互图展示外键关系，支持搜索表、分组和备注",
+    "支持运行查询（含 explain 计划与取消）并导出行，可内联编辑 SQLite 行",
+    "内置本地 MCP 服务与三个技能，供 Codex/Claude Code 代理调用"
+   ],
+   "use_cases": [
+    "以图形方式浏览 SQLite/PostgreSQL 的表结构与行关系",
+    "从版本化 SQL 文件离线查看 schema 演进历史",
+    "让本地 AI 编码代理通过 MCP 探索数据库 schema 并展示图表"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A native macOS app to explore SQLite and PostgreSQL databases as interactive graphs. Browse rows, follow relationships, run queries, and export results. PostgreSQL browsing is read-only. ／ - **Data browsing** — Sort, filter, inspect records, and follow their relationships. Edit SQLite rows inline.",
+     "lines": [
+      5,
+      14
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A native macOS app to explore SQLite and PostgreSQL databases as interactive graphs. Browse rows, follow relationships, run queries, and export results. PostgreSQL browsing is read-only. ／ - **Flexible sources** — Open SQLite files, PostgreSQL connection documents or backups, or search an entire project folder.",
+     "lines": [
+      5,
+      16
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该应用本身不以数据库为存储，而是提供浏览、查询和管理 SQLite/PostgreSQL 数据库的功能。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A native macOS app to explore SQLite and PostgreSQL databases as interactive graphs. Browse rows, follow relationships, run queries, and export results. PostgreSQL browsing is read-only. ／ - **Schema graphs** — Explore foreign keys, search tables, and organise large models with groups and notes. ／ Connect Codex or Claude Code through **Coding Agents → Install local MCP and skills…** to explore schemas and show graphs and data inside supported chats. Review the setup, install, then restart your agent.",
+   "evidence_lines": [
+    5,
+    13,
+    21
+   ]
+  },
+  "fn": "Albertsteenstrup/SQLiteGraphStudio",
+  "sha": "fba28099a374",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

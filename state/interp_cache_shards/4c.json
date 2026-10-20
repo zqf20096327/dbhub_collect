@@ -10396,5 +10396,389 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "260fba0f8e1b": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的 Golang 全栈 Headless 内容管理平台",
+   "review": "一款使用 Go 与 go-kratos 构建的无头内容管理系统（CMS），提供 REST/gRPC 双协议接口、多租户隔离、三级权限管控与原生多语言，配套 Vue/React/Taro/Flutter 多套前端，用于企业内容管理与多端分发。数据默认存储于 PostgreSQL 或 MySQL，后台为 Vue3 管理界面，通过源码或 Docker Compose 部署。",
+   "highlights": [
+    "提供 RESTful 与 gRPC 双协议接口，并从 Protobuf 自动生成 OpenAPI 文档",
+    "支持多租户数据隔离及菜单/接口/数据三级权限管控",
+    "内置知识库 RAG、自然语言转只读 SQL、AI Agent 编排等 AI 功能模块"
+   ],
+   "use_cases": [
+    "企业官网、内容门户、博客等内容的集中管理与多端发布",
+    "需要多租户与精细化权限的内容运营平台",
+    "微信小程序与移动 App 场景下的内容分发"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库|",
+     "lines": [
+      49
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL / MySQL|关系型数据库|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL/MySQL 列为平台自身的数据库依赖，本系统是使用数据库存储内容的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "风行（GoWind HCH）是一款开箱即用的企业级 Golang 全栈 Headless 内容平台（HCH = Headless Content Hub，无头内容中枢），为企业提供灵活、可扩展的全域内容管理与分发解决方案。 ／ |数据库|PostgreSQL / MySQL|关系型数据库|",
+   "evidence_lines": [
+    14,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tx7do/go-wind-cms",
+  "sha": "260fba0f8e1b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fc8a44a81b1f": {
+  "identity": {
+   "one_liner": "本地优先的多 Agent 任务与上下文管理器，以 SQLite 为事实源，经 MCP 接入 AI Agent",
+   "review": "ATM 是一个 Windows 桌面应用，用于在多 Agent（Codex、Claude 等）开发流程中共享任务、进度、交接记录与跨项目知识库。数据全部存于本地 SQLite，通过 MCP、桌面 UI、CLI 与本地 HTTP 共用同一套应用服务，Agent 开工读取 brief 接续上下文。当前稳定版仅支持 Windows 10/11 x64，AGPL-3.0-only 许可。",
+   "highlights": [
+    "经 MCP 支持 Codex、Claude Desktop、Claude Code、Kimi Code 领取、推进与交接任务",
+    "提供本地共享知识库，支持不可变修订、摘要筛选与按需读取正文",
+    "数据全部存储于本地 SQLite，仅监听 loopback，支持在线备份恢复与导入导出"
+   ],
+   "use_cases": [
+    "多 AI Agent 协作开发中的任务拆分、进度跟踪与 Session 交接",
+    "跨项目沉淀与检索可复用的开发经验知识",
+    "本地管理项目事实、阻塞与验收证据，替代仅存于聊天记录的项目历史"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **数据换到新目录。** 3.0 的数据位于 `%LOCALAPPDATA%\\AyanamiTaskManager3`，所有项目、共享知识与设置都在一个数据库 `data\\atm.sqlite` 里。 ／ - **历史列表更轻。** SQLite 先去掉不需要的正文再返回历史；新回执引用不可变修订，避免重复保存大正文。 ／ |**完全本地**|全部数据在一个本地 SQLite 库，仅监听 loopback，令牌每次启动轮换，不需要任何云端账号|",
+     "lines": [
+      33,
+      48,
+      75
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明全部数据存储于本地 SQLite 库，SQLite 是其数据存储而非服务对象。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **数据换到新目录。** 3.0 的数据位于 `%LOCALAPPDATA%\\AyanamiTaskManager3`，所有项目、共享知识与设置都在一个数据库 `data\\atm.sqlite` 里。 ／ |**完全本地**|全部数据在一个本地 SQLite 库，仅监听 loopback，令牌每次启动轮换，不需要任何云端账号| ／  AI Agents 经 MCP 连接本地动态 bridge，与桌面 UI（WebView2）、CLI 共用同一套应用服务，写入本地 SQLite",
+   "evidence_lines": [
+    33,
+    75,
+    123
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ayanamislover/AyanamiTaskManager",
+  "sha": "fc8a44a81b1f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9a1107d7d72d": {
+  "identity": {
+   "one_liner": "纯 C 实现的 SQLite SQL 解析库，将 SQL 解析为可操作 AST",
+   "review": "liteparser 是一个面向基于 SQLite 的应用的嵌入式 SQL 解析库，用纯 C 实现完整的 SQLite 语法，把语句解析为可遍历、可变更、可序列化为 JSON 的 AST，并提供 SQL 反解与容错解析。语法提取自 SQLite 原生 parse.y，以静态库/共享库/WASM 形式分发给 C、C++ 及 FFI 项目，适合做 SQL 分析、改写、lint 类工具。",
+   "highlights": [
+    "提供完整 SQLite 语法的解析、AST 访问者遍历、AST 变更、JSON 序列化与 SQL 反解（round-trip）",
+    "以单一静态库或共享库交付，无外部依赖，并提供 WebAssembly 构建",
+    "包含容错解析与结构化错误诊断（代码、消息、行列/字节位置）"
+   ],
+   "use_cases": [
+    "在 C/C++ 或 FFI 项目中嵌入解析和改写 SQLite SQL 语句",
+    "构建 SQL linter、IDE 语法检查等需要容错解析的工具",
+    "在浏览器/Node.js 环境通过 WASM 解析 SQL 并生成 JSON AST"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**liteparser** is a highly efficient and fully complete SQLite SQL parser. It parses any SQLite SQL into a fully visitable AST, with JSON serialization, SQL unparsing (AST to SQL), tolerant/IDE parsing, and AST mutation, all in pure C with zero dependencies.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为解析 SQLite SQL 而生，为 SQLite 生态提供解析组件而非自身使用数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**liteparser** is a highly efficient and fully complete SQLite SQL parser. It parses any SQLite SQL into a fully visitable AST, with JSON serialization, SQL unparsing (AST to SQL), tolerant/IDE parsing, and AST mutation, all in pure C with zero dependencies. ／ The parser grammar is extracted from the original SQLite parser (`parse.y`) with minimal modifications. It uses the same Lemon LALR(1) parser generator and a hand-written tokenizer derived from SQLite's own lexer. This ensures complete and accurate coverage of the SQLite SQL dialect. ／ Easily embeddable: a single static library (`libliteparser.a`) or shared library, with one header file. No external dependencies, no runtime allocations outside the arena. Drop it into any C, C++, or FFI-capable project.",
+   "evidence_lines": [
+    3,
+    21,
+    5
+   ]
+  },
+  "fn": "sqliteai/liteparser",
+  "sha": "9a1107d7d72d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f46d7308d8d6": {
+  "identity": {
+   "one_liner": "开源文本转语音与声音克隆 SaaS 应用，基于 Chatterbox 模型",
+   "review": "Echonic 是一个开源的 TTS 语音生成与声音克隆 Web 应用，面向需要语音合成与团队协作的组织。它通过 Modal 上的 Chatterbox 模型做 GPU 推理，音频存 Cloudflare R2，使用 Drizzle ORM + PostgreSQL 存数据，Better Auth 做多租户认证，Polar 做按量计费，支持自行部署。",
+   "highlights": [
+    "支持文本转语音生成与浏览器录音或文件上传的声音克隆",
+    "提供基于组织（Organization）的多租户协作与按用量计费",
+    "自托管部署，依赖 PostgreSQL、Cloudflare R2、Modal GPU 与 Polar"
+   ],
+   "use_cases": [
+    "自托管语音合成与声音克隆服务",
+    "团队协作式语音资产管理",
+    "按量计费的 B2B 语音生成平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **A PostgreSQL database** – Any managed Postgres instance. ／ - PostgreSQL (local installation or a hosted provider) ／ - **PostgreSQL Database connection**: `DATABASE_URL` ／ Push the Drizzle ORM schema to your target PostgreSQL database:",
+     "lines": [
+      86,
+      115,
+      130,
+      167
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明需要 PostgreSQL 数据库存储数据，通过 Drizzle ORM 操作数据库，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " AI-powered text-to-speech and voice cloning application built with Next.js 16 and the Chatterbox model. ／ - **A PostgreSQL database** – Any managed Postgres instance. ／ Push the Drizzle ORM schema to your target PostgreSQL database:",
+   "evidence_lines": [
+    7,
+    86,
+    167
+   ]
+  },
+  "fn": "Pr1ncep5/echonic",
+  "sha": "f46d7308d8d6",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "544e58451c49": {
+  "identity": {
+   "one_liner": "Rust 异步 Microsoft SQL Server 客户端库",
+   "review": "tdsql 是一个基于 tiberius-ng TDS 驱动的 Rust 库，提供对 Microsoft SQL Server 的异步访问，同时附带 blocking 客户端。它提供类型化行读取、位置与命名参数、存储过程 RPC 调用、事务与保存点、流式读取大结果集等接口。适用于需要在 Rust 程序中连接和操作 SQL Server 的开发者；不支持 MARS，并发需外接连接池。",
+   "highlights": [
+    "提供异步与 blocking 两种客户端，查询结果读取为 Rust 类型，整数只加宽不截断，NULL 读入非 Option 类型报错",
+    "支持位置参数、命名参数、存储过程 RPC 调用、事务、隔离级别与保存点，drop 时排队回滚",
+    "支持 query_stream 流式逐行读取大结果集，内存占用不随结果集大小增长"
+   ],
+   "use_cases": [
+    "在 Rust 异步（tokio）服务中连接并查询 Microsoft SQL Server",
+    "以流式方式读取大结果集并逐行处理",
+    "在非异步 Rust 程序中使用 blocking 客户端执行事务与存储过程"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ |SQL Server|`DataValue`|Reads as|",
+     "lines": [
+      3,
+      317
+     ]
+    },
+    {
+     "db": "TDSQL",
+     "rel": "mention",
+     "quote": "# tdsql",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为连接和操作 SQL Server 提供客户端驱动的 Rust 库，属于数据库生态的开发组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ tdsql = \"0.5.0\"",
+   "evidence_lines": [
+    3,
+    20
+   ]
+  },
+  "fn": "CommonwealthPasta/tdsql",
+  "sha": "544e58451c49",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

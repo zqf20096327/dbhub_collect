@@ -10138,5 +10138,141 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e42479212a1f": {
+  "identity": {
+   "one_liner": "自托管地理空间数据目录，基于 PostGIS+pgvector 提供语义检索与地图构建",
+   "review": "GeoLens 是一个自托管的空间数据目录与地图构建平台，把文件、PostGIS 数据库、网络服务和 STAC 目录中的数据汇入统一可检索的目录，记录数据来源并检查源更新，通过 OGC API 与 STAC 对外提供访问，供 QGIS、脚本和 AI 智能体读取。数据存储在 PostgreSQL/PostGIS 中，检索可用嵌入向量（pgvector），通过 Docker Compose 部署于自有服务器。",
+   "highlights": [
+    "提供 OGC API Features/Records、STAC、DCAT 与矢量/COG 瓦片等多种标准接口",
+    "记录每个数据集的来源、刷新时间与上游 schema 变更，支持版本恢复",
+    "内置地图构建器，支持点、热力图、3D 挤出、地形等图层与空间分析操作"
+   ],
+   "use_cases": [
+    "将分散在文件共享、数据库与 STAC 目录中的空间数据统一编目与检索",
+    "团队在浏览器中构建并共享地图，公开链接或嵌入站点",
+    "为 QGIS、脚本与 AI 智能体提供统一的 OGC/STAC 数据访问入口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "replicas of the API, worker, frontend and Titiler against a managed PostgreSQL with automatic",
+     "lines": [
+      243
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "GeoLens 使用 PostgreSQL/PostGIS 存储目录与数据集数据，是一个完整的端到端应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Serve tables already in GeoLens's PostGIS database in place, import WFS, ArcGIS and OGC API ／ on your own servers with Docker Compose, sends no telemetry and is licensed under Apache 2.0.",
+   "evidence_lines": [
+    92,
+    31
+   ]
+  },
+  "fn": "geolens-io/geolens",
+  "sha": "e42479212a1f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "30e7ad5115ed": {
+  "identity": {
+   "one_liner": "SQLite 基因组学加载扩展，提供范围索引与压缩",
+   "review": "这是一个 SQLite3 可加载扩展，为基因组信息学应用扩展 SQLite：支持基因组区间索引做重叠查询与连接、SQL 内工具函数、流式压缩存储以及直接读取 HTTP(S) URL。提供 C/C++、Python、Java、Rust 等语言绑定。声明与 SQLite 官方无关联，扩展较新，文档提示需自担风险。",
+   "highlights": [
+    "提供基因组区间索引，支持重叠查询与连接",
+    "支持存储流式压缩及直接从 HTTP(S) URL 读取数据",
+    "提供 C/C++、Python、Java、Rust 多语言绑定"
+   ],
+   "use_cases": [
+    "基因组数据的重叠区间查询与连接分析",
+    "生物信息学流水线中以 SQLite 存储并压缩基因组数据",
+    "通过 SQL 直接读取远程 HTTP(S) 上的数据文件"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# Genomics Extension for SQLite ／ This SQLite3 loadable extension adds features to the ubiquitous embedded RDBMS supporting applications in genome bioinformatics: ／ **USE AT YOUR OWN RISK:** This project is not associated with the SQLite developers. The database storage extensions are designed to preserve ACID transaction safety, but they're young and unlikely to be totally bug-free.",
+     "lines": [
+      1,
+      5,
+      19
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 数据库提供可加载扩展，属服务数据库生态的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This SQLite3 loadable extension adds features to the ubiquitous embedded RDBMS supporting applications in genome bioinformatics: ／ * genomic range indexing for overlap queries & joins ／ We supply the extension prepackaged for Linux x86-64 and macOS Apple Silicon (macOS 15+). An up-to-date version of SQLite itself is also required, as specified in the docs.",
+   "evidence_lines": [
+    5,
+    7,
+    25
+   ]
+  },
+  "fn": "mlin/GenomicSQLite",
+  "sha": "30e7ad5115ed",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

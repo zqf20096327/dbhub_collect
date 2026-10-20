@@ -8767,5 +8767,144 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eae200826597": {
+  "identity": {
+   "one_liner": "AI 代理的本地设备记忆层，通过 hooks 与 MCP 服务器提供混合检索",
+   "review": "ClawMem 是面向 Claude Code、OpenClaw 和 Hermes 代理的本地记忆层，把 markdown 笔记与会话记录转为可检索的持久记忆，提供混合检索、会话引导、决策捕获与交接生成。通过 hooks、MCP 服务器或插件集成，所有数据写入本地 SQLite vault，无需 API 密钥，不支持原生 Windows（推荐 WSL2）。",
+   "highlights": [
+    "提供 hooks、MCP 服务器和 OpenClaw/Hermes 插件多种集成路径，所有模式共享同一本地 SQLite vault",
+    "实现混合检索（BM25 + 向量搜索 + 倒数排序融合 + 交叉编码器重排）与多图遍历（语义、时间、因果）",
+    "完全本地运行，使用本地 GGUF 模型做会话观察与事实抽取"
+   ],
+   "use_cases": [
+    "为 AI 编码代理跨会话保留决策、偏好与项目上下文",
+    "从 Claude Code、ChatGPT、Slack 等对话导出中挖掘并结构化记忆",
+    "为任意 MCP 兼容客户端提供本地记忆检索工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Integrates via Claude Code hooks, an MCP server (works with any MCP-compatible client), a native OpenClaw plugin, or a Hermes Agent `MemoryProvider` plugin. All paths write to the same local SQLite vault. A decision captured during a Claude Code session shows  ／ |**macOS**|Full support|Homebrew SQLite handled automatically. GPU via Metal (llama.cpp).|",
+     "lines": [
+      9,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 作为自身 vault 的内嵌存储使用，不提供面向数据库生态的服务功能。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Integrates via Claude Code hooks, an MCP server (works with any MCP-compatible client), a native OpenClaw plugin, or a Hermes Agent `MemoryProvider` plugin. All paths write to the same local SQLite vault. A decision captured during a Claude Code session shows up immediately when an OpenClaw or Hermes agent picks up the same project. ／ TypeScript on Bun. MIT License. ／ - SQLite with FTS5 — included with Bun. On macOS, install `brew install sqlite` for extension loading support (ClawMem detects and uses Homebrew SQLite automatically).",
+   "evidence_lines": [
+    9,
+    11,
+    76
+   ]
+  },
+  "fn": "yoloshii/ClawMem",
+  "sha": "eae200826597",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1af4d2be5c6e": {
+  "identity": {
+   "one_liner": "DSH 红队模式插件：智能体编排+SQLite 事实库的渗透测试指挥台",
+   "review": "这是一个 DeepSeek Harness（DSH）的红队模式插件，用一条靶标指令拉起信息收集、漏洞检测、利用与内网渗透等智能体角色，所有发现实时写入本机 SQLite 事实库并在 Web 控制台展示，包含 56 个工具与 22 张库表。仅面向已授权的攻防演练与渗透测试场景；不包含漏洞利用代码，且要求 Node.js ≥ 22.13 并依赖内置 node:sqlite。",
+   "highlights": [
+    "提供 56 个 redteam_* 工具与 16 个随包技能，按信息收集/资产梳理/漏洞发现/漏洞利用/内网渗透分工编排智能体",
+    "所有发现实时写入本机 SQLite 事实库（assets.db，22 张表），数据仅存本地、无遥测上报",
+    "内置提交前闸门与回归测试，拦截演练战绩、凭据真值等敏感信息进入公开仓库"
+   ],
+   "use_cases": [
+    "已授权的攻防演练与红蓝对抗",
+    "企业安全自检",
+    "安全教学研究"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。",
+     "lines": [
+      5,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为本仓库存储发现结果的内嵌事实库，项目本身是渗透测试应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > ⚠️ **仅限已获授权的攻防演练 / 渗透测试使用。** 本仓库是智能体编排与事实库的工程实现， ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。",
+   "evidence_lines": [
+    5,
+    7,
+    28
+   ]
+  },
+  "fn": "Jueze-2019/dsh-redteam-mode",
+  "sha": "1af4d2be5c6e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
