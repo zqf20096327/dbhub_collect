@@ -4,7 +4,7 @@
 
 Ask your bot to get something done. Let [T3 Code](https://github.com/pingdotgg/t3code) do the coding on your machines.
 
-T3 Fleet Gateway connects Grok Bot, Notion and other MCP clients to your T3 servers through one connection. Your agent can find projects, start work, answer worker questions and bring back the result. Each new job gets a T3 thread and its own git worktree and branch; you can open the thread in T3 whenever you want.
+T3 Fleet Gateway connects Grok Bot, Notion and other MCP clients to your T3 servers through one connection. Your agent can find projects, start work, answer worker questions and bring back the result. Each new job gets a T3 thread you can open in T3 whenever you want: a named project's job gets its own git worktree and branch, and work with no named project can run in a machine's T3 scratch workspace.
 
 ![A bot connects to one gateway, which routes coding work to T3 projects on several machines.](docs/images/architecture.svg)
 
@@ -121,6 +121,20 @@ Open your private dashboard to see which machines answer, which agents have conn
 
 The dashboard uses a separate loopback listener and belongs behind your private tailnet proxy. Your public MCP URL is for agents. [Dashboard setup and access](docs/operations.md#operator-dashboard).
 
+## Follow a job's pull requests
+
+Ask your bot:
+
+```text
+Which PRs came out of that job? Show me what's open and what's merged.
+```
+
+`work_status` and `work_list` include cached PR links and states, even for text-only clients. The dashboard shows a small **PR #21 open** badge beside the job. Workers need to register their PR with T3's `link_pull_request`; a coordinator should link its children's PRs too.
+
+> **What this means:** you can follow the result of a job without searching GitHub. PRs refresh about once a minute while the job is followed, on top of T3's own sync delay. Unknown means not yet readable; a finished or released job keeps its last snapshot.
+
+Want your bot to wake when a PR opens or merges? Add `pull_request_opened` and `pull_request_merged` to a [configured webhook subscription](docs/configuration.md#webhooks). These are opt-in; dashboard connections keep their existing five events.
+
 ## Discover projects and choose models
 
 Discovery is off by default: agents see the aliases you configured. To browse a machine's existing T3 projects and available models, ask your setup agent:
@@ -139,6 +153,32 @@ and the models and reasoning efforts it offers. For my next job in
 ```
 
 Browsing and launching are separate choices. To launch into projects without aliases, explicitly enable that host's discovery launch policy. Existing aliases keep their restrictions; model choices must match what T3 advertises. [Discovery settings](docs/configuration.md#discovery).
+
+## Start work with no named project
+
+Some requests name a machine but no project. A machine can have a default **scratch** destination: T3's internal "No project" workspace, with no git worktree or branch. Named projects are unchanged and still get a fresh worktree per job. Ask your setup agent:
+
+```text
+On gateway host <id>, add a scratch alias for T3's internal "No project"
+workspace and make it the host's default project. Verify that project's
+ID in T3 first; don't guess it from the title. Then restart and run
+doctor.
+```
+
+When you name a machine but no project, your bot passes `target: { host: "<id>" }` to `work_start`. An explicit project still uses its alias or project ID, and an unknown named project is resolved or reported, never sent to scratch. The scratch default needs no discovery. Enabling discovery lets agents with Read access browse that machine's T3 projects and models; launching into projects without an alias stays off unless you enable it separately. [Scratch configuration and upgrade notes](docs/configuration.md#no-named-project).
+
+## Work in a project's own folder
+
+By default every job in a named project gets a fresh git worktree and branch. Some project folders aren't git repositories, and sometimes you want a job to work in the project's own folder. Turn on workspace selection for a machine and the gateway chooses per job, when it launches: a git repository root still gets a fresh worktree, started from the freshly fetched `origin/<baseRef>`, and any other folder runs in place. Ask your setup agent:
+
+```text
+On gateway host <id>, enable workspace selection with the reference
+workspace probe (scripts/workspace-probe.js). Restart and run doctor.
+```
+
+Your bot can also ask for a workspace with `work_start`'s `workspace`: `{ "type": "root" }` for the project's own folder, or `{ "type": "worktree" }` to insist on a worktree. Only one gateway job at a time works in the same folder: another one waits in the queue, and resuming an idle job is refused with `workspace_root_busy` while the folder is taken.
+
+> **What this means:** a job in a project's own folder edits that checkout directly, with no branch of its own to review. Machines without the probe behave exactly as before. [Workspace probe settings](docs/configuration.md#workspace-probe).
 
 ## Keep a coordinator in the loop
 

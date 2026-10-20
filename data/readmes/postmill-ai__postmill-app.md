@@ -23,7 +23,7 @@
 
 # Postmill AI
 
-**Open-source, AI-native social media management and scheduling.**
+**Open-source, AI-native social media management, design and scheduling.**
 
 Postmill is a self-hostable social media scheduler for agencies and multi-brand teams: a visual publishing calendar, 45+ channels, 46 built-in media tools, and bring-your-own-key AI across 30 providers. Run it on infrastructure you control, and let every organization manage its own channels, brands, and AI keys. An open-source alternative to Buffer, Hootsuite, and Sprout Social.
 
@@ -89,6 +89,21 @@ Full setup, configuration reference, and deployment guide: [documentation](https
 Channels connect through OAuth apps registered with each platform. To offer one-click connections on your installation, configure [platform channel apps](https://docs.postmill.ai/operations-guide/platform-channel-apps.html) for the providers you want to support: register an app in the provider's developer portal, add the issued credentials to `.env`, and test with an authorized account. Some providers require app review before broader access and may ask for app details, screenshots, or a demo video.
 
 Organizations can also connect channels with their own app keys, and direct-auth channels (API tokens, self-hosted instances) need no platform app at all. On Postmill's hosted service, platform apps are already configured, so one-click OAuth is available by default for supported channels.
+
+---
+
+## 🎬 The Designer — a full image & video editor, built in
+
+A production-grade, layered editor inside your publishing workspace — no round-trips through Canva, Photoshop, or CapCut. People at home in professional design tools should feel at home here; people who aren't can start from a template or let the AI Designer drive.
+
+- **Image mode** — a Photoshop-style layered canvas: rich text, shapes, pen and path tools, brushes, gradients, marquee/lasso/object selections, crop, clone stamp, blend modes, and brand-kit colors and fonts surfaced while you work.
+- **Video mode** — a multi-track timeline (video, image, text, audio, captions) with trimming, splitting, transitions, keyframed motion (custom or one-click Ken Burns), speed ramps, reverse, freeze frames, filters and cinematic looks, fades, and volume envelopes — up to three minutes at 30 fps.
+- **AI generation without leaving the canvas** — generate images, video, music, voiceovers, and avatar clips from inside the editor. Each prompt dialog uses your organization's default model, or drops down to any configured provider — Replicate, OpenAI, OpenRouter, HeyGen, Runway, and more — with that provider's own settings embedded. Results land directly on the canvas or timeline.
+- **AI edit tools** — remove backgrounds, upscale, inpaint, expand images, auto-detect subjects, and replace images in place.
+- **Multi-format by design** — one editable file holds every channel variant (square post, portrait reel, story, and more), each with its own aspect ratio and layout. Export any variant to the media library, or attach the whole set to a multi-channel scheduled post.
+- **Templates** — save any design as a reusable, on-brand template for the team.
+
+Prefer to describe the design than draw it? The **AI Designer** drives the same production workflow through a conversational creative agent — see [46 built-in media tools](#-46-built-in-media-tools).
 
 ---
 

@@ -24,6 +24,15 @@ Spotify library sync is the only exception).
 - *"def add_two(x, y):"* jumps to `script.py`, line 200, in your code editor.
 - *"dog on the beach"* finds the photo; *"the cow on the farm"* finds the moment in a recording where it is said.
 
+## See it in action
+
+<p align="center">
+  <img src="site/public/showcase.svg" width="100%" alt="Lantern's panel finds the moment in a video where a phrase is said and previews it from there; Raycast finds a photo of a dog on the beach; the lantern command finds a function definition and, asked in English, a Polish invoice">
+</p>
+
+<sub>Drawn, not recorded: the files, paths and texts are invented. `python3 scripts/showcase/build.py` makes it,
+`scripts/showcase/video.sh` turns it into a 1080p video.</sub>
+
 > **Status:** all planned phases are done (see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)). Lantern is a working
 > prototype tested on one Mac (M4, 16 GB). This README describes only what exists today.
 
@@ -36,18 +45,20 @@ Spotify library sync is the only exception).
 - **Works with Raycast and Alfred:** keep your launcher and search with Lantern inside it ("Search Lantern" in
   Raycast with previews, thumbnails and filters; a workflow for Alfred). See [Use with Raycast or Alfred](#use-with-raycast-or-alfred).
 - **Applications and System Settings**, like Spotlight: apps by any of their names (also translated and misspelt:
-  `kalkul`, `dicsord`, `vsc`) or their App Store category (`muzyka` / `music` finds Spotify beside Music), panes and the ~560 single settings of macOS by their words (`24 godz`, `night shift`),
-  and both by what they do as a fallback (`procent baterii`, `web browser`).
+  `calcul`, `dicsord`, `vsc`) or their App Store category (`music` finds Spotify beside Music), panes and the ~560
+  single settings of macOS by their words (`24 hour`, `night shift`), and both by what they do as a fallback
+  (`battery percentage`, `web browser`). The same works in Polish (`kalkul`, `muzyka`, `24 godz`).
 - **Apple Music** (off by default; Settings → Privacy): your library's songs and playlists by title, artist or album
-  (`skeletons`, `travisa scotta`, `playlista`); ↩ plays a song or a playlist, ⌘↩ shows it in Music. Read through Apple's iTunesLibrary framework: names only, no audio, no lyrics
+  (`skeletons`, `travis scott`, `playlist`); ↩ plays a song or a playlist, ⌘↩ shows it in Music. Read through Apple's iTunesLibrary framework: names only, no audio, no lyrics
   (Apple keeps those on its servers).
 - **Spotify** (off by default; Settings → Privacy): your playlists and liked songs, searched offline like Apple Music;
   ↩ plays in the Spotify app. Spotify keeps no readable list on the Mac, so this needs your own free key (an app at
   developer.spotify.com with the redirect URI `http://127.0.0.1:8000/callback`; Spotify requires Premium for it since
   2026) and a sign-in; Lantern then fetches only names, once a day and on "Sync Now". Songs of playlists made by
   others are not available from Spotify's API.
-- **Instant answers on the Mac:** arithmetic (`2+2*20`, `15% * 200`), units (`2,5 km na mile`, `10 kg w funtach`,
-  `100 f to c`) and the time in other cities (`godzina w nowym jorku`, `time in tokyo`); definitions from the
+- **Instant answers on the Mac:** arithmetic (`2+2*20`, `15% * 200`), units (`2.5 km to miles`, `10 kg in pounds`,
+  `100 f to c`; in Polish `2,5 km na mile`) and the time in other cities (`time in new york`, `time in tokyo`; in
+  Polish `godzina w tokio`); definitions from the
   dictionaries of macOS for a single word; your shortcuts (Shortcuts app); and a last row that opens the web search
   in your default browser (Google, DuckDuckGo, Bing or Ecosia, or off); it moves to the top when nothing on the Mac
   contains the query's words. That row only opens your browser; Lantern itself sends nothing.
@@ -64,8 +75,9 @@ Spotify library sync is the only exception).
 - **Photos and video frames:** two models (EmbeddingGemma 2 vision tower and SigLIP 2) vote on what is in a picture,
   and macOS's own text recognition (Vision, on device) reads text in screenshots, scans and photos of documents.
 - **Recordings and videos:** audio embeddings plus Whisper transcripts, with the moment each phrase is spoken.
-- **Menu bar app** with a background daemon, an "ask before indexing" mode, pause on battery, in Low Power Mode and on heat, and a
-  settings window laid out like System Settings.
+- **Menu bar app** with a background daemon, an "ask before indexing" mode, pause on battery, in Low Power Mode, on heat
+  and when memory runs short, an indexing schedule (any time, when idle, at night), a welcome window, and a settings
+  window laid out like System Settings.
 - **Private by design:** offline after a one-time model download (the opt-in Spotify sync is the only exception), read-only
   access to your files, no telemetry.
 
@@ -115,10 +127,13 @@ brew install --cask misterekkk/tap/lantern
      ```bash
      xattr -cr /Applications/Lantern.app
      ```
-3. Click the Lantern icon in the menu bar and click **Download** to fetch the search model (~1.2 GB; optional checkboxes
-   add Whisper for recordings and SigLIP 2 for photos). Models can also be downloaded later in **Settings →
-   Performance**. Quick search (apps, System Settings, calculator, dictionary) works immediately while the model
-   downloads.
+3. On first launch a **welcome window** walks through the setup, in the system's language: how often you will search
+   (always ready, or when needed), which models to download (recommended for this Mac's memory: on an 8 GB Mac only
+   the search model, ~1.3 GB; with 16 GB and more also Whisper for recordings and SigLIP 2 for photos), which folders
+   to search, and whether to search from Lantern's panel, Raycast or Alfred. Closed early, it leaves one reminder
+   notification; the menu bar icon shows a download arrow until the search model is there, and the menu offers the
+   same download. Models can also be added later in **Settings → Performance**. Quick search (apps, System Settings,
+   calculator, dictionary) works immediately while the model downloads.
 
 ### From source (`./install.sh`)
 
@@ -158,11 +173,11 @@ cd lantern
 uv sync
 
 # 3. One-time model download (needs internet; models go to ~/.cache/huggingface/hub/)
-#    a) EmbeddingGemma 2, MLX 8-bit (~1.2 GB) — required
+#    a) EmbeddingGemma 2, MLX 8-bit (~1.3 GB) — required
 uv run hf download mlx-community/embeddinggemma-2-8bit --revision 7505ef2f8ddef45efef6d060865f27989b3c9cec
 #    b) Whisper for transcripts (~1.6 GB) — skip if you do not index recordings or use --no-transcribe
 uv run hf download mlx-community/whisper-large-v3-turbo --revision a4aaeec0636e6fef84abdcbe3544cb2bf7e9f6fb
-#    c) SigLIP 2 for photo search (~0.8 GB + ~0.2 GB) — optional; without it EmbeddingGemma 2 ranks photos alone
+#    c) SigLIP 2 for photo search (~1.5 GB + ~0.4 GB) — optional; without it EmbeddingGemma 2 ranks photos alone
 uv run hf download google/siglip2-base-patch16-224 --revision 75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2
 uv run hf download mlx-community/siglip2-base-patch16-224-8bit --revision 5249fc157310584fe99dae6964707278eb6df50f
 
@@ -184,8 +199,9 @@ Certificates); otherwise it signs ad hoc and macOS may ask for folder permission
 
 ## The app
 
-- **Menu bar icon:** laid out like macOS's Battery menu: a status dot in the corner in Apple's colours (green ready,
-  yellow indexing or waiting for your approval, grey paused, red not running; the word is in its tooltip), the file and fragment counts, a progress
+- **Menu bar icon:** laid out like macOS's Battery menu: a status dot in the corner, macOS's own status images (green
+  ready, amber indexing, setting up or waiting for your approval, grey paused, red not running or an index that needs
+  attention; the word is in its tooltip), the file and fragment counts, a progress
   bar while indexing, pause / resume only while it applies, and "Lantern Settings…" at the bottom. A card with Index
   Now / Later appears when new files are found in "ask" mode. Folders are added in Settings → Folders; Quit Lantern
   is in Settings → About (or ⌘Q in a Lantern window).
@@ -207,7 +223,7 @@ Certificates); otherwise it signs ad hoc and macOS may ask for folder permission
   the filter first, then closes the panel; the panel opens empty.
 - **Spelling:** after a short pause in typing, words that none of your languages knows get the spelling guesses of
   macOS (on the Mac), and Lantern searches again with the first guess its index knows (a word in your files, an app
-  or a setting): "faktrua za prad" shows "Showing results for faktura za prad · Search for “faktrua za prad”
+  or a setting): "invoce october" shows "Showing results for invoice october · Search for “invoce october”
   instead". With no known guess the query stays as typed.
 - **↩ on an answer** copies it; on a word definition it opens Dictionary; on a shortcut it runs it.
 - **Learned choices:** a query you keep answering with the same result ("sl" → Slack) puts that result first from
@@ -245,14 +261,20 @@ Certificates); otherwise it signs ad hoc and macOS may ask for folder permission
 - **Settings** (Settings… in the menu), laid out like System Settings:
   - **General:** open at login, language, search shortcut, preferred languages (the macOS ones plus any you add:
     used for app and setting names and for reading text in images), ask before indexing or index automatically,
-  - **File Types:** photos and the text in them (OCR), recordings and videos (with transcription and video frames),
-    ignored extensions,
+    Restore Defaults (your folders stay),
+  - **File Types:** photos and the text in them (OCR), places and people in photos, recordings and videos (with
+    transcription and video frames), ignored extensions,
   - **Folders:** indexed folders, *Choose What to Index* (a folder tree with checkboxes, down to single files, with
-    name search and the number of indexed files), exclusion patterns,
-  - **Battery and Heat:** pause indexing on battery power, in Low Power Mode or when the Mac is hot,
+    name search and the number of indexed files), exclusion patterns. Adding the whole disk, a system folder or
+    `~/Library` is refused (iCloud Drive and cloud folders such as Dropbox are fine); a very large folder shows how
+    many files it has and roughly how long the first indexing takes before it is added,
+  - **Indexing:** pause indexing on battery power, in Low Power Mode or when the Mac is hot, and index any
+    time, only when the Mac is idle (5 minutes without keyboard or mouse) or at night (hours of your choice); search
+    works at any hour,
   - **Performance:** live memory chart of the daemon and the indexing process, peaks, current work and speed,
     models (revision, size on disk, where they are loaded),
-  - **Privacy:** clear history, compact the index, data folder, macOS permissions; **About**.
+  - **Privacy:** clear history, compact the index, data folder, Delete All Data (the index, history, settings,
+    the Spotify sign-in and logs; never your files or the models), macOS permissions; **About**.
 - **Language:** the app follows the macOS language (English and Polish today). To choose one for Lantern only:
   Settings → General → Language (Lantern restarts), or System Settings → General → Language & Region → Applications.
 - **The app starts the daemon** as its child process, so macOS file permissions (Desktop, Documents, Downloads) are
@@ -268,8 +290,11 @@ own panel.
 
 ### Raycast, step by step
 
-The extension is not in the Raycast Store yet, so it is added once from this repository (needs Node.js:
-`brew install node`).
+The extension is in review for the Raycast Store; until it is published it is added once from this repository (needs
+Node.js: `brew install node`). It does not install Lantern itself: without the app, "Search Lantern" shows the download
+link and the Homebrew command, and while Lantern is setting up, downloading its models or indexing for the first time
+it says so instead of showing no results. Raycast keeps its hotkeys to itself (no app can read or set them), so the
+hotkey for "Search Lantern" is set in Raycast; Lantern's Settings say so instead of showing its own shortcut.
 
 1. Install and open [Raycast](https://www.raycast.com), and have the Lantern app running.
 2. Add the extension:
@@ -295,8 +320,8 @@ Keys in "Search Lantern":
 | ↩ | open at the line (VS Code, VSCodium, Cursor, Xcode, JetBrains), play from the moment (QuickTime), a PDF at its page (Skim; Preview through its Go to Page shortcut, which needs the Accessibility permission for Raycast), play a song |
 | ⌥↩ | open from the start (a recording from 0:00) |
 | ⌘↩ | show in Finder (a song: in Music or Spotify) |
-| ⌘Y | preview at the place, inside Raycast: the code around the line, the whole passage with your words in bold; a photo, or a video's frame at the moment, large, above its transcript (↩ plays it in QuickTime) |
-| ⇧⌘Y | Quick Look of the whole file |
+| ⌘Y | preview, as in the panel: the code around the line or the whole passage with your words in bold, inside Raycast; a photo in Quick Look (the whole photo); a video or recording in Lantern's own player, the same as the panel's: the whole file, started at the moment of the match, scrubbable back to the start (Raycast asks the Lantern app through `lantern://preview`); ⌘Y again closes it |
+| ⇧⌘Y | text and code: Quick Look of the whole file; a video or recording: its frame and transcript at the moment, inside Raycast |
 | ⌃1 … ⌃0 | filter by kind, the panel's digits (Raycast keeps ⌘1 … ⌘9 for opening the Nth result); the same again for all kinds |
 
 The pane beside the results shows the code around a result (its lines marked ▶), the passage with your words in bold
@@ -329,10 +354,24 @@ uv run lantern status
 uv run lantern remove ~/Projects           # remove a folder and all its data from the index
 uv run lantern compact                     # physically erase deleted data from the index file
 uv run lantern clear-history               # delete the local search history
+uv run lantern search "photos from Krakow" --json  # the whole reply as JSON (also status, pending, config, models)
+uv run lantern models                      # models: size, downloaded, recommended for this Mac; `models download`
+uv run lantern languages add de            # extra languages for app names and text in images
+uv run lantern rebuild --yes               # start the index again, keeping the folders
+uv run lantern config schedule night       # index only at night (or idle / anytime); search works at any hour
+uv run lantern restore-defaults --yes      # every setting back to its default; folders stay
+uv run lantern delete-all-data --yes       # the index, history, settings and logs; never your files or models
+uv run lantern diagnostics                 # a report for a bug report, without file names
 ```
+
+- The CLI has the same settings and actions as the app (folders, every setting through `lantern config`, models,
+  languages, rebuilding the index, restoring the defaults, deleting all data); only the menu bar app's own features (the search panel, Raycast / Alfred, the
+  clipboard, menu items and windows, Apple Music) have no command.
 
 - `index` compares the folder with the index: new and changed files are indexed, moved files are recognised by
   content (no recomputation), deleted files are removed together with their text and vectors.
+- The whole disk, system folders and `~/Library` (apart from iCloud Drive and cloud folders) are refused; a new folder
+  with 20 000 files or 50 GB and more prints its estimate and needs `--yes`, as the app asks before adding it.
 - If a folder is unavailable (unplugged disk, network share), nothing is removed. If more than half of a folder's
   files vanished, `index` refuses without `--force`. Files you excluded on purpose (still on the disk) are removed
   without it.
@@ -343,35 +382,38 @@ uv run lantern clear-history               # delete the local search history
 ## How search works
 
 - **Two lists, one ranking:** meaning (EmbeddingGemma 2: paraphrases, other languages) and exact words (FTS5/BM25:
-  function names, error messages), fused with Reciprocal Rank Fusion. Each result shows where it came from, e.g.
+  function names, error messages), fused with Reciprocal Rank Fusion: a query written as a sentence leans on meaning,
+  a query of bare keywords on the words (measured on public benchmarks and a real index: docs/DECISIONS.md, "Fusion
+  and inflections measured"). Each result shows where it came from, e.g.
   `(meaning #1 · keywords #3)`. Keyword search skips stop words and matches Polish inflections by stem.
   Letters match without their accents and strokes in any language: `lodz` finds `Łódź`, `soren` finds `Søren`,
   `strasse` finds `Straße`.
 - **One folder only:** `in:` and a folder name keeps results to files under folders whose name starts with it, in the
-  panel, Raycast, Alfred and the CLI: `in:down umowa najmu`, `in:Studia`, `in:"Moje dokumenty" faktura`, or a path,
+  panel, Raycast, Alfred and the CLI: `in:down lease agreement`, `in:Projects`, `in:"My documents" invoice`, or a path,
   `in:~/Projects/lantern readme`. The folder word is never spell-checked or sent to the model; apps, settings and
   answers are left out, since they are not in a folder.
 - **When and where** (Polish and English): a time in the query keeps results to files made then.
-  - Examples: `zdjęcia z maja 2023`, `umowa z 2024`, `faktura wczoraj`, `photos from last summer`,
-    `dokumenty w zeszłym tygodniu`, `14.05.2023`.
-  - A bare year or month (`wakacje 2023`, `sierpień`) only moves files made then higher; nothing is hidden, since the
+  - Examples: `photos from May 2023`, `contract from 2024`, `invoice yesterday`, `photos from last summer`,
+    `documents last week`, `14.05.2023`; in Polish `zdjęcia z maja 2023`, `faktura wczoraj`.
+  - A bare year or month (`holiday 2023`, `august`) only moves files made then higher; nothing is hidden, since the
     word may as well be in a document's text.
-  - A time or a place alone, or with `zdjęcia`, `filmy`, `dokumenty`, lists what was made then or there, newest first.
+  - A time or a place alone, or with `photos`, `videos`, `documents`, lists what was made then or there, newest first.
   - Where a date comes from: a photo's EXIF data, a video's or recording's own creation date, a date in the file or
-    folder name (`IMG_20230514_…`, `2023-05-14 Wakacje/`), and otherwise the file's dates on the disk. So for most
+    folder name (`IMG_20230514_…`, `2023-05-14 Holiday/`), and otherwise the file's dates on the disk. So for most
     documents "from 2024" means *created or last changed in 2024*, not *mentions 2024*. Impossible dates (before 1990,
     in the future, a camera's reset clock such as 2000-01-01 00:00) and numbers that only look like years are ignored.
-- **Places** (any language): `zdjęcia z Krakowa`, `photos in Kraków`, `Bilder aus Krakau`, `zdjęcia z Portugalii`.
+- **Places** (any language): `photos in Kraków`, `photos from Portugal`, `Bilder aus Krakau`, `zdjęcia z Krakowa`.
   - The city comes from the location saved in photos and videos, matched to the nearest city of 15,000+ people in a
     table built into Lantern (GeoNames). Nothing is looked up online.
-  - A camera without GPS: a photo in a folder named after a country (`Portugalia/`, `Wakacje w Portugalii 2026/`) gets
+  - A camera without GPS: a photo in a folder named after a country, in any language (`Portugal/`,
+    `Holiday in Portugal 2026/`, `Portugalia/`) gets
     that country. Screenshots and graphics never do.
   - Photos and recordings show the date and the city in their row.
   - Switch: Settings → File Types → Places in photos and videos, or `lantern config places false`; switching it off
     deletes the saved locations from the index.
-- **People in photos** (Polish and English): `zdjęcia kobiet`, `mężczyzna w Krakowie`,
-  `zdjęcie kobiety z 2024 w Portugalii`, `z ludźmi`, `bez ludzi`, `grupa` (three or more people), `selfie` / `portret`,
-  `dwie osoby`, `kobieta i mężczyzna`.
+- **People in photos** (English and Polish): `photos of women`, `man in Krakow`,
+  `photo of a woman from 2024 in Portugal`, `with people`, `without people`, `group` (three or more people),
+  `selfie` / `portrait`, `two people`, `a woman and a man`; in Polish `zdjęcia kobiet`, `bez ludzi`, `dwie osoby`.
   - These words narrow the photos section only; documents containing them are found as before.
   - macOS (Vision, on this Mac) counts the people; the photo model guesses woman or man from appearance on a crop
     around each of the four largest. Only the numbers are stored.
@@ -398,8 +440,8 @@ uv run lantern clear-history               # delete the local search history
 - The text becomes searchable by exact words (`0x80070002`, a VIN, an invoice number, `245,30 zł`) and by meaning;
   the photo appears in the Photos section with the matching text under it ("text in image"). Numbers and codes with
   separators (`187,15`, `FV/2025/09/0932`) must match as a whole, not as loose parts.
-- The photo models alone already find images with text by meaning ("faktura za prąd", "błąd aktualizacji
-  windows"); OCR adds exact strings and small print. Measured: DECISIONS.md, "OCR research" and Phase 11.
+- The photo models alone already find images with text by meaning ("electricity invoice", "windows update error",
+  in Polish as well: "faktura za prąd"); OCR adds exact strings and small print. Measured: DECISIONS.md, "OCR research" and Phase 11.
 - Off switch: Settings → File Types → Text in photos and screenshots, or `lantern config index_image_text false`.
 
 ### Code definitions
@@ -504,6 +546,19 @@ uv run lantern daemon stop | uninstall
 - **Automatic pause** on battery power, in Low Power Mode and when macOS reports the Mac is hot (thermal state
   "serious" or worse), and when less than 2 GB is free on the disk of the index; the current file is finished, the
   rest waits. `lantern status` shows what the daemon sees.
+- **Memory:** a busy Mac often sits at macOS's "warn" memory level for hours (it compresses idle memory); then only
+  heavy work waits (Whisper, video frames) and ordinary indexing goes on. When the Mac really runs short (critical
+  pressure, or warn with swap growing fast) the worker finishes its file and indexing waits until the Mac has been calm
+  for 3 minutes; at critical pressure it stops at once and the photo query model is released. Whisper (~1.8 GB) starts only while the Mac has room for it at that moment, whatever its total memory, so
+  a Mac busy with something heavy (training a model, a game) is left alone. The menu says why indexing waits. The
+  models' memory limit follows the free memory, at most 1 GB on an 8 GB Mac (measurements in docs/DECISIONS.md).
+- **Always ready or when needed** (Settings → Performance → Search model, `lantern config mode ready|on_demand|battery`;
+  the welcome window asks): when needed, the search model (~0.5 GB) is released after 10 minutes without a search and
+  loaded again by the next one in about half a second (apps and settings answer without it); "when needed on battery"
+  keeps it ready on the charger and releases it only on battery. An 8 GB Mac starts in this mode, with Whisper and video frames off.
+- **An index Lantern cannot use** (from a newer Lantern after going back to an older one, or a damaged file) is
+  explained in the menu with what to do: get the latest version, or rebuild the index (your folders stay, everything
+  is indexed again; your files are never touched). The daemon checks the index in the background after starting.
 - **A stuck file never stops the queue:** a file the worker spends more than 30 minutes on (90 for a transcript;
   e.g. a hung PDF or image decoder) is skipped with the reason in `lantern status` and the warnings, and indexing
   goes on with the next one.

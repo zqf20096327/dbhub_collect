@@ -252,12 +252,6 @@ See [JSON_SCHEMA.md](JSON_SCHEMA.md) for the complete JSON schema documentation.
 
 ---
 
-## License
-
-MIT License. See [LICENSE](LICENSE) file.
-
----
-
 ## Part of the SQLite AI Ecosystem
 
 This project is part of the **SQLite AI** ecosystem, a collection of extensions that bring modern AI capabilities to the world’s most widely deployed database. The goal is to make SQLite the default data and inference engine for Edge AI applications.

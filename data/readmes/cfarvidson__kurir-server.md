@@ -1,4 +1,26 @@
-# Kurir
+# Kurir server (archived)
+
+This repository is archived. Kurir 1.x, the self-hosted server and web app in this repo, gets no more releases, security fixes or reviews. The open pull requests will not be merged.
+
+## Why
+
+Kurir 2.0 is out for iPhone, and the Mac app follows once Apple has approved it. It has no server. The apps talk to your mail provider directly over IMAP and SMTP, and your screening choices, rules, snoozes and settings live in a hidden folder in that same mailbox. Sign in on another device and it picks up the same state.
+
+Running Kurir 1.x meant running this server: Postgres, Redis, a Next.js app, TLS, backups and updates. Most people who want a calmer inbox don't want to operate a server to get one. So 2.0 drops it.
+
+The mail work now lives in kurir-core, a Rust library that every Kurir app is built on. The iPhone and Mac apps run on it today. A version for the web and native apps for Linux and Windows are coming next, on the same core. Soon.
+
+kurir-core is closed source. Kurir 2.0 is sold as a subscription, and the subscription pays for the work on the core. One closed core shared by every platform is easier to fund and to keep correct than a server that every user has to run and patch.
+
+More at [kurir.io](https://kurir.io).
+
+## If you run Kurir 1.x
+
+Your install keeps running, but nothing new will ship and the updater will not find another version. The Docker images stay on ghcr.io, and the code here stays available under the [O'Saasy License](LICENSE), so you can fork it. The 1.x README follows below.
+
+---
+
+# Kurir 1.x
 
 A self-hosted email client inspired by [HEY](https://www.hey.com). Kurir connects to your existing email via IMAP/SMTP and gives you a calmer, more focused experience. Open source under the [O'Saasy License](LICENSE).
 

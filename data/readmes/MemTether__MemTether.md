@@ -1,6 +1,14 @@
 <div align="center">
 
-<img src="assets/demo.gif" width="100%" alt="MemTether — cross-client AI memory in action"/>
+<!-- PyPI does not resolve repo-relative image paths, so the primary src stays
+     relative for GitHub and an onerror fallback points at the raw GitHub URL.
+     Without this the PyPI project page shows a broken image as its first
+     screen (this fallback existed once and was lost in a later rewrite). -->
+<picture>
+  <source srcset="https://raw.githubusercontent.com/MemTether/MemTether/main/assets/demo.gif" media="(min-width: 0px)">
+  <img src="assets/demo.gif" width="100%" alt="MemTether — cross-client AI memory in action"
+       onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/MemTether/MemTether/main/assets/demo.gif'"/>
+</picture>
 
 # MemTether — The AI Memory Court
 
@@ -218,7 +226,7 @@ Every memory has `valid_from` / `valid_to` (business time) + `recorded_at` / `in
 | Local-first | ✅ | ❌ | ❌ | ⚠️ self-hosted | ✅ |
 | Zero config | ✅ | ❌ (Neo4j) | ❌ (Docker) | ⚠️ | ✅ |
 | Single file DB | ✅ | ❌ | ❌ | ❌ | ✅ |
-| REST API | ✅ (12 endpoints) | ✅ | ✅ | ✅ | ❌ |
+| REST API | ✅ (14 endpoints) | ✅ | ✅ | ✅ | ❌ |
 | MCP server | ✅ | ❌ | ✅ | ✅ | ❌ |
 | Web dashboard | ✅ | ❌ | ✅ | ✅ | ❌ |
 | Supersession chain | ✅ | ❌ | ❌ | ⚠️ | ❌ |
@@ -274,7 +282,7 @@ Gemini CLI ─────┤                  ├─── WorkBuddy
 | Governance | Supersession + bi-temporal + conflict detection | Never delete |
 | Concurrency | Hubguard (file lock + atomic write) | Cross-process safe |
 | Security | memtether_guard (OWASP LLM01/02/06) | Poisoning defense |
-| API | FastAPI REST (12 endpoints) + MCP server (9 tools) | Any language |
+| API | FastAPI REST (14 endpoints) + MCP server (10 tools) | Any language |
 | Packaging | PyPI + Docker + 23 client adapters | pip install memtether |
 
 </details>
@@ -302,20 +310,31 @@ memtether setup codex
 
 ```bash
 memtether remember "User prefers dark theme" --source claude-code
-memtether search "theme" --list        # L0: one-line + uid
-memtether search "theme"               # Full content
+memtether search "theme" --layer L0    # First sentence only
+memtether search "theme" --layer L1    # First 3 sentences
+memtether search "theme"               # Full content (L2, default)
+memtether profile --subject user       # What we know about this user
 memtether correct <uid> "Updated"      # Supersede, never delete
-memtether timeline <uid>               # Audit chain
-memtether pin <uid>                    # Keep in projection
+memtether retire <uid> --reason "..."  # Retire (content preserved)
+memtether provenance <uid>             # Full audit trail for one fact
+memtether conflicts --stats            # Review conflict candidates
+memtether court --verify               # Verify the audit hash chain
 memtether stats
 memtether export-md --out ./backup     # Export as markdown
+memtether backup                       # Point-in-time DB backup
+memtether reconcile --dry-run          # SQLite <-> vector drift report
+memtether import-docs ./docs           # Cold-start from a directory
+memtether remember-batch mems.json     # Batch write from JSON
+memtether demo                         # Generate a synthetic demo DB (no real data)
 memtether dashboard                    # Web UI
 ```
+
+Run `memtether --help` for the full list (20 subcommands).
 
 The same operations work via **MCP** — your AI agent can govern memory directly:
 
 ```bash
-# Via MCP: correct_memory / retire_memory / pin_memory / as_of_query / timeline
+# Via MCP: correct_memory / retire_memory / pin_memory / as_of_query / timeline / profile
 # Your agent calls these tools — no CLI needed:
 
 # Agent corrects a fact (supersedes old, creates new)
@@ -326,10 +345,42 @@ The same operations work via **MCP** — your AI agent can govern memory directl
 
 # Agent walks the full audit chain
 → timeline(uid="fact-xxx")
+
+# Agent asks "what do we already know about this user?"
+→ profile(subject="user")          # deterministic, no LLM, fully traceable
 ```
 
 The same operations are available via **MCP** (`correct_memory`, `retire_memory`,
-`pin_memory`, `as_of_query`, `timeline`) — agents can govern memory without CLI.
+`pin_memory`, `as_of_query`, `timeline`, `profile`) — agents can govern memory
+without CLI.
+
+### Layered recall (L0 / L1 / L2)
+
+Every search can return the same hit at three depths, so an agent scans cheap
+one-liners first and only pays for full text on the hits it actually wants:
+
+```bash
+memtether search "deploy port" --layer L0   # first sentence only (~1 line)
+memtether search "deploy port" --layer L1   # first 3 sentences
+memtether search "deploy port"              # L2 = full text (default)
+```
+
+Measured on a 2,200-fact production DB (limit=5): L0 costs **10%** of L2's
+characters, L1 **44%**. The split is a pure deterministic function — no LLM, no
+hallucination, and `L2` is byte-identical to the pre-layer behaviour.
+
+### Deterministic user profile
+
+```bash
+memtether profile --subject user           # human-readable
+memtether profile --subject user --json    # machine-readable
+```
+
+Aggregates everything known about one subject (counts by type/source, time span,
+high-confidence facts, an L0 digest you can paste straight into a system prompt).
+Unlike supermemory's `get_profile` or honcho's `get_representation`, this runs
+**zero LLM calls** — the same DB always yields the same profile, and every line
+traces back to a `uid`.
 
 ```bash
 memtether export-md --out ./backup     # Export as markdown
@@ -449,7 +500,7 @@ memtether dashboard   # starts server + opens browser
 # or: uvicorn api_server:app --port 8820
 ```
 
-12 endpoints: `/health` `/remember` `/search` `/stats` `/correct` `/retire` `/list` `/timeline/{uid}` `/absorb` `/qvalue` `/dashboard`
+14 endpoints: `/` `/health` `/remember` `/search` `/stats` `/correct` `/retire` `/list` `/timeline/{uid}` `/absorb` `/qvalue` `/dashboard` `/court/verify` `/court/{uid}`
 
 ---
 

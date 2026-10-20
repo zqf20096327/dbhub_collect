@@ -7,7 +7,9 @@ PHP client for TiKV's RawKV and TxnKV APIs, using the gRPC extension.
 ## Requirements
 
 - PHP >= 8.2
-- gRPC extension
+- **`ext-grpc`** — the PECL gRPC extension, **1.57 or newer**. It is a hard
+  requirement: Composer refuses to install the package without it. See
+  [Installation](#installation) for the per-platform instructions.
 - TiKV cluster — default (V1) mode for TxnKV, or `[storage] enable-ttl = true`
   for RawKV TTL. The two are mutually exclusive; see
   [Transactions (TxnKV)](#transactions-txnkv).
@@ -25,6 +27,73 @@ make example
 ```bash
 composer require crazy-goat/tikv-client
 ```
+
+The client speaks gRPC through the **`ext-grpc`** PHP extension, so the
+requirement is declared in `composer.json` (`"ext-grpc": ">=1.57"`). Composer
+checks it at install time and refuses to install the package on a machine
+without the extension:
+
+```
+crazy-goat/tikv-client <version> requires ext-grpc >=1.57 -> it is missing from your system. Install or enable PHP's grpc extension.
+```
+
+`<version>` is the version of the package you install.
+Contributors working on this repository see the root-package wording of the
+same error instead:
+
+```
+Root composer.json requires PHP extension ext-grpc >=1.57 but it is missing from your system. Install or enable PHP's grpc extension.
+```
+
+The minimum version (1.57) matches the `grpc/grpc` library the client depends
+on and covers every extension API it uses (`Grpc\Call::startBatch()`,
+`Grpc\Timeval`, `Grpc\Channel`, the `OP_*` call-operation constants).
+
+### Installing the extension
+
+**Debian / Ubuntu**
+
+PECL compiles the extension, so the build tools come first:
+
+```bash
+sudo apt-get install php-dev build-essential autoconf
+sudo pecl install grpc
+PHP_VERSION=$(php -r 'echo PHP_MAJOR_VERSION, ".", PHP_MINOR_VERSION;')
+echo "extension=grpc.so" | sudo tee "/etc/php/$PHP_VERSION/mods-available/grpc.ini"
+sudo phpenmod grpc
+```
+
+The `php-grpc` distribution package comes from the
+[sury.org PHP repository](https://packages.sury.org/php/), which is not part
+of stock Debian or Ubuntu. When that repository is already configured, the
+package works too:
+
+```bash
+sudo apt-get install php-grpc
+```
+
+**Alpine**
+
+```bash
+apk add php83-pecl-grpc
+```
+
+**macOS (Homebrew)**
+
+```bash
+pecl install grpc
+echo "extension=grpc.so" >> "$(brew --prefix)/etc/php.ini"
+```
+
+**Verify**
+
+```bash
+php -m | grep grpc
+php -r 'echo phpversion("grpc"), PHP_EOL;'
+```
+
+The reported version must be 1.57 or newer. Restart PHP-FPM (or your web
+server) after enabling the extension.
 
 ## Usage
 
@@ -210,6 +279,7 @@ $txnClient = TxnKvClient::create(['127.0.0.1:2379']);   // same options as RawKv
 $txn = $txnClient->begin([          // pessimistic by default
     'pessimistic' => true,          // false = optimistic (locks at commit)
     'priority'    => 0,             // 0 Normal (default), 1 Low, 2 High
+    'lockWaitTimeMs' => 1000,       // how long TiKV may wait for a contended lock
 ]);
 
 $txn->set('account:1', '100');
@@ -264,6 +334,14 @@ pessimistic read's per-key `for_update_ts` is reused by the matching write, and
 prewrite keeps `DO_CONSTRAINT_CHECK` as a safety net. The legacy deferred pass
 is available as `begin(['eagerPessimisticLocks' => false])`, which moves the
 lock pass to `commit()`.
+
+`begin(['lockWaitTimeMs' => N])` bounds how long TiKV waits for a contended
+key before it answers with a "locked" error (default 1000 ms, the timeout
+TiKV applies by default). The value sent to TiKV is
+`min(lockWaitTimeMs, remaining lock-wait budget)`: it never exceeds the budget
+and shrinks as the budget is consumed. When the budget runs out the
+transaction fails with `LockWaitTimeoutException` instead of committing
+without the lock. See [Configuration](docs/configuration.md#pessimistic-lock-wait-timeout-txnkv).
 
 #### Isolation, timestamps and status
 
@@ -445,6 +523,65 @@ $options = [
 $client = RawKvClient::create(['tikv.example.com:2379'], options: $options);
 ```
 
+The `*BaseDir` options are optional and restrict **where** the certificate
+files may live: the path is canonicalized with `realpath()` before the
+comparison, so a `..` segment or a symlink cannot pull in a file from outside
+the base directory. `caCertBaseDir` guards `caCertFile`; `clientCertBaseDir`
+guards `clientCertFile` and `clientKeyFile`.
+
+> **Deprecated:** the legacy `caCert`, `clientCert` and `clientKey` keys guess
+> between a file path and inline PEM content and cannot be restricted to a base
+> directory. They still work for backward compatibility — use the `*File` /
+> `*Pem` keys above instead.
+
+To make a misconfigured TLS setup fail instead of silently downgrading to
+plaintext, set `allowInsecure` to `false` — the client then throws
+`InvalidStateException` when it cannot open a TLS channel:
+
+```php
+$options = [
+    'tls' => ['caCertFile' => '/path/to/ca.crt'],
+    'allowInsecure' => false, // recommended for production
+];
+
+$client = RawKvClient::create(['tikv.example.com:2379'], options: $options);
+```
+
+### Connection Lifetime and Transport Ownership
+
+The gRPC transport behind a client is **long-lived and shared**: it keeps one
+open channel per address, and that cache only pays off when the same
+transport serves many requests. Create the client once (at the start of a
+worker, or in a container) and reuse it — a client per request throws the
+cache away and pays a reconnect every time.
+
+Closing is the mirror image of creating:
+
+- a client created by `RawKvClient::create()` / `TxnKvClient::create()` owns
+  the transport it built and closes it in `close()`;
+- a transport **you** build and pass in (`options['grpcClient']`) belongs to
+  your application — the client never closes it, so the same transport can
+  serve a RawKV and a transactional client. Close it yourself;
+- a client you assemble by hand (`new RawKvClient($pdClient, $grpc)`) closes
+  the transport it was **given** — pass `ownsGrpcClient: false` when your
+  application keeps the transport and wants to close it itself.
+
+```php
+use CrazyGoat\TiKV\Client\Grpc\GrpcClient;
+
+// The transport the application builds and owns.
+// $tlsConfig is your TlsConfig (null = plaintext); $logger your PSR-3 logger.
+$grpc = new GrpcClient($logger, $tlsConfig);
+$options = ['grpcClient' => $grpc];
+
+$raw = RawKvClient::create(['127.0.0.1:2379'], $logger, $options);
+$txn = TxnKvClient::create(['127.0.0.1:2379'], $logger, $options);
+
+// …use both clients…
+
+// The application owns $grpc:
+$grpc->close();
+```
 ### PSR-3 Logging
 
 ```php
@@ -701,7 +838,24 @@ $options = [
         'clientKeyFile' => '/path/to/client.key',  // Client private key (for mTLS)
         // Or inline PEM: caCertPem, clientCertPem, clientKeyPem
     ],
-];
+    'allowInsecure' => false,     // Fail closed: refuse a plaintext channel
+    'maxChannels' => 64,          // Open gRPC channels kept at the same time
+    'idleTtlMs' => 600000,        // Idle time before an unused channel is evicted
+
+    // Slow-operation logging (opt-in): a PSR-3 warning is logged when an
+    // operation takes longer than its threshold (milliseconds). Without this
+    // key, slow logging is off entirely; a threshold of 0 (or a negative one)
+    // disables that one operation type.
+    // See docs/configuration.md#slow-operation-logging.
+    'slowLog' => [
+        'readThresholdMs'        => 100,  // default 100  (get, getKeyTTL)
+        'writeThresholdMs'       => 200,  // default 200  (put, delete, CAS)
+        'batchReadThresholdMs'   => 500,  // default 500  (batchGet)
+        'batchWriteThresholdMs'  => 500,  // default 500  (batchPut, batchDelete)
+        'scanThresholdMs'        => 1000, // default 1000 (scan, batchScan)
+        'deleteRangeThresholdMs' => 2000, // default 2000 (deleteRange)
+        'checksumThresholdMs'    => 3000, // default 3000 (checksum)
+    ],];
 
 $client = RawKvClient::create(
     pdEndpoints: ['127.0.0.1:2379'],
@@ -710,6 +864,12 @@ $client = RawKvClient::create(
 );
 ```
 
+The full list of options lives in [docs/configuration.md](docs/configuration.md).
+
+The `slowLog` option logs a warning with the message `Slow TiKV operation` and
+the operation type, the redacted key, the duration and the threshold — see
+[Slow Operation Logging](docs/configuration.md#slow-operation-logging) for the
+full reference.
 ### TiKV Configuration
 
 For TTL support, enable it in tikv.toml:

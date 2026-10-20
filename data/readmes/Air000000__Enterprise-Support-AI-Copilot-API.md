@@ -183,6 +183,20 @@ create_ticket
 5. 将草稿持久化到 `approval_request.draft_json`，状态保持 `pending`；
 6. 返回预览结果，不产生真实工单写操作。
 
+预览默认仍为 Dense Top3；可显式复用冻结 Hybrid Top14 检索：
+
+```json
+{"message": "VPN 连不上", "category": "it", "retrieval_mode": "hybrid"}
+```
+
+需先批准查询及当前租户候选正文的外发与费用，并开启现有 `RAG_HYBRID_SEARCH_ENABLED`。不需要 ask 开关或 Phase B 分类配置，因为这里只检索并执行原有工单规则，不调用 v5.x 证据 gate 或答案生成模型。`other` 分类继续表示不限制检索分类，租户始终来自 JWT。响应返回 `retrieval_mode`；来源保留可空 `distance` 和独立重排/融合分数及排名，`search_kb` 与运行摘要记录模式和分数类型，Hybrid 汇总 `top_distance=null`。开关关闭或提供方失败返回脱敏 503，记录失败且不产生后续分类/审批，不自动回退 Dense。
+
+`confirm` 契约不变：只消费当前租户的 pending 审批及服务端冻结草稿，不重跑检索、不调用模型。本文新增接线仅有离线模型替身回归，不是工单真实提供方或质量验收；默认开关不变。
+
+工单描述仍限制为 2000 字符。用户原文加来源附录若超限，描述只保留完整用户原文，不截断问题；完整来源列表仍在 preview 的 `sources` 中，AgentOps 运行摘要与检索工具记录保留来源 ID。该规则同时适用于 Dense 和 Hybrid，不改变用户输入上限、审批草稿冻结或确认建单规则。
+
+离线集成检查：`pytest tests/test_hybrid_search.py -k ticket_hybrid_document_to_decision`。通过真实 Uvicorn 回环 HTTP、JWT、上传/索引、临时 SQLite 与 Chroma，分别验证 Hybrid 预览后的确认、拒绝和取消，以及 trace/metrics 查询、租户与角色隔离；只有显式确认会在临时库产生测试工单。外部 embedding/rerank 使用替身，不是检索质量或并发审批验收，不外发资料、不修改日常数据。
+
 ### Confirm
 
 `POST /agent/ticket/confirm`
@@ -216,6 +230,15 @@ request.draft == server-side approval_request.draft_json
 
 API 默认保持 **Dense Chroma 检索**；搜索和实验问答另提供默认关闭的 Hybrid 可选路径。
 
+| 方案 | API 接入状态 | 仓库默认行为 |
+| --- | --- | --- |
+| 冻结 Hybrid：Dense100 + BM25100 → RRF(k=60) Top100 → qwen3-rerank → 直接 Top14 | 已接入可选搜索和实验问答 | 两个开关均关闭，请求默认 Dense |
+| v5.3 结构化证据拒答 | 已接入 Hybrid 实验问答，策略名 `v5_3_experimental` | 不替换默认 Dense 拒答 |
+| v5.3.1 版本审计候选 | 已接入显式实验选项 `v5_3_1_experimental` | 不自动选择，不替换 v5.3 或 Dense |
+| Ticket Agent | preview 可显式选择 Hybrid 检索；confirm 不变 | 默认 Dense，不调用 v5.x 拒答 gate |
+
+以上是代码及仓库默认配置状态，不代表某台机器的实际 `.env`、运行进程或公网部署状态。启用实验问答还需两个开关、专用分类凭据及显式请求参数，见 §3.2；接入不等于质量晋级。
+
 主要能力：
 
 - `/rag/search`
@@ -226,9 +249,9 @@ API 默认保持 **Dense Chroma 检索**；搜索和实验问答另提供默认�
 - 无上下文与低相关拒答
 - 检索日志
 
-问答路径仅根据检索 上下文 生成答案，并返回对应 sources。当前低相关拒答使用 Dense Top-1 距离作为工程信号。
+问答路径仅根据检索上下文生成答案，并返回对应 sources。默认 Dense 路径的低相关拒答使用 Top-1 距离作为工程信号；实验 Hybrid 路径使用 v5.3 证据 gate，不使用该距离阈值。
 
-> **运行时边界：** Hybrid 搜索和实验问答需要显式选择并开启服务端开关，不接管默认问答或 Ticket Agent。实验问答使用尚未独立验收的 v5.3 gate，不代表稳定拒答策略已升级。代码接入不等于已部署、已开启或已证明整链质量。
+> **运行时边界：** Hybrid 搜索和实验问答需要显式选择并开启服务端开关，不接管默认问答或 Ticket Agent。实验问答可显式选择尚未独立验收的 v5.3 / v5.3.1 gate，不代表稳定拒答策略已升级。代码接入不等于已部署、已开启或已证明整链质量。
 
 ## 3.1 可选 Hybrid 搜索
 
@@ -277,18 +300,20 @@ python -m scripts.smoke_hybrid_runtime --execute --env-file .env
 {"question": "How do I resolve VPN error 809?", "category": "it", "retrieval_mode": "hybrid", "refusal_policy": "v5_3_experimental"}
 ```
 
+也可显式指定 `refusal_policy="v5_3_1_experimental"`，仅将分类提示词换为已有的版本审计澄清候选；检索、严格解析器、生成及安全检查复用原链路。响应和成功/拒答/失败审计保留所选策略名。两个策略都要求原有两个开关及专用分类凭据；没有新增默认策略或自动回退。回到 v5.3 只需显式选择原策略。新提示词更长，分类输入 tokens 会增加，未新增全局费用硬限额。v5.3.1 的已知分项错误与未独立验收状态不因接入而消失；本次仅完成离线接线回归，没有新真实模型结果。原有界冒烟脚本仍只允许原 v5.3 提示词，不能据其历史报告声称已验收 v5.3.1。
+
 Hybrid 默认 `top_k=14`，允许 1–14，显式较小值只使用该 Top14 前缀；Dense 仍默认 3、最多 10。Hybrid 必须显式声明实验策略，且**不能传 `max_distance`**（包括原默认值 0.9），否则 HTTP 422；不把任何距离或重排分数作为充分性阈值。
 
 ```text
 Hybrid 检索（同一租户/分类、已索引当前版本，最多 Top14）
 → 空语料：no_context，零模型请求
-→ v5.3 需求/适用性/版本覆盖检查 + 原文行引用校验
+→ 所选 v5.3 / v5.3.1 需求/适用性/版本覆盖检查 + 原文行引用校验
 → 不足/冲突/条件缺失/歧义：refused_insufficient_evidence，不生成
 → 充分：基于完整有序来源生成，校验 [Source N] 属于 gate 支持的来源
 → 生成器自行拒答：refused_by_generator；合法答案：ok
 ```
 
-- 固定分类模型 `qwen3.5-plus-2026-04-20`，复用原 v5.3 提示词与严格解析器，不读取评测样本、标签或 DEV；分类最多 2048 输出 tokens，生成最多 1024，两者超时各 30 秒、无 SDK 自动重试。分类及 Qwen3.5 Plus 生成（含日期版本）显式设置 `enable_thinking=false`，其他生成模型不附加该提供方参数。检索侧 embedding 仍沿用原客户端策略。
+- 固定分类模型 `qwen3.5-plus-2026-04-20`，按显式策略复用原 v5.3 或 v5.3.1 提示词和同一严格解析器，不读取评测样本、标签或 DEV；分类最多 2048 输出 tokens，生成最多 1024，两者超时各 30 秒、无 SDK 自动重试。分类及 Qwen3.5 Plus 生成（含日期版本）显式设置 `enable_thinking=false`，其他生成模型不附加该提供方参数。检索侧 embedding 仍沿用原客户端策略。
 - 问题和最多 14 条全文会额外发往分类服务；放行后再发往配置的生成服务。非空请求比搜索最多增加两次 chat 调用；没有新增全局费用硬限额。首次真实问答验收未通过，见下一节。
 - 分类格式错误、非法行引用、截断、超时、空生成或答案缺少/含未批准的 `[Source N]` 均为脱敏 HTTP 503 + `failed` 审计，不算正确拒答、不暗中放行或回退 Dense。显式选择 Dense 并移除实验策略可回退；关闭 ask 开关只禁用实验问答。
 - 发送分类/生成上下文前及返回前复查 SQL 可见性和内容，变化则终止；仍不是跨 SQL/Chroma 原子快照。返回 `top_distance=null`，sources 保留距离与重排分数的不同语义。
@@ -296,9 +321,9 @@ Hybrid 检索（同一租户/分类、已索引当前版本，最多 Top14）
 
 **校验只证明格式、引用出处和状态接线，不证明语义蕴含、逐句忠实或抗提示注入。** 不把有效引用或实验 gate 放行写成答案正确率，也不改写历史 NO_PROMOTION / FAIL。
 
-## 3.3 集成验收状态（2026-10-17）
+## 3.3 集成验收状态（更新至 2026-10-18）
 
-**当前不接受为已验收发布版。** 已补齐仓库声明的评测测试依赖，在隔离 Windows / Python 3.12.4 环境运行完整 `tests/`：最新 656 项通过、零失败/跳过；不只原重点回归集。主 pytest 进程禁止外部 socket 与读取项目私有 `data/`，测试使用临时数据；CI 包含相同完整离线检查。离线成功不是模型质量验收。
+**当前不接受为已验收发布版。** 已补齐仓库声明的评测测试依赖，在隔离 Windows / Python 3.12.4 环境运行完整 `tests/`：最新 659 项通过、零失败/跳过；不只原重点回归集。主 pytest 进程禁止外部 socket 与读取项目私有 `data/`，测试使用临时数据；CI 包含相同完整离线检查。离线成功不是模型质量验收。
 
 真实问答计划复用同一脚本，默认仍然零调用：
 
@@ -321,13 +346,21 @@ python -m scripts.smoke_hybrid_runtime --ask --execute --env-file .env
 
 复测仍有版本审计语义警示：NovaVPN 1.0 的显式版本约束仍被标成 `NOT_REQUIRED`；AcornExpense 2.0 的版本覆盖被标成 `SUPPORTED`，理由却承认来源只覆盖 1.0。后者整体因其他检查为 `MISSING` 而正确拒答，但不能据此认定每项审计可靠。保留这两项警示；该次复测未针对案例改提示词或规则，历史 NO_PROMOTION / FAIL 不变。
 
-新增离线 [v5.3.1 版本审计澄清候选](experiments/evals/refusal_version_audit_clarification.py)：只追加通用说明，区分“来源声明自己的版本范围”和“证据满足问题所需版本”，保留可见兼容性依据，不退回版本关键词/字符串匹配。没有加入上述验收案例答案，沿用原输入、状态与严格引用解析器，不修补或重标模型输出。手写边界测试只证明接线与限制；候选未接入 API，现有 `v5_3_experimental` 提示词、运行行为与历史报告均不变。
+开发阶段新增 [v5.3.1 版本审计澄清候选](experiments/evals/refusal_version_audit_clarification.py)：只追加通用说明，区分“来源声明自己的版本范围”和“证据满足问题所需版本”，保留可见兼容性依据，不退回版本关键词/字符串匹配。没有加入上述验收案例答案，沿用原输入、状态与严格引用解析器，不修补或重标模型输出。手写边界测试只证明接线与限制；当时仅为离线候选，后续显式 API 接入见 §3.2，原 `v5_3_experimental` 提示词、运行行为与历史报告均不变。
 
 随后单独授权完成一次[6 题分类配对开发检查](docs/reports/version_audit_paired_2026-10-17.json)：输入、预期与请求守卫在调用前提交冻结，新旧提示词使用相同输入/参数、交替首跑顺序。版本审计符合预期为 v5.3 **3/6**、v5.3.1 **5/6**；整体放行/拒答均 **6/6**，没有决策差异。候选在版本不符、兼容范围两题改善分项审计，但仍把“版本已匹配、功能信息缺失”的版本检查标成 `NOT_REQUIRED`。这只是少量已知虚构开发场景，不是独立验收，也不证明回答准确率提升；不改预期、不重标结果、不因局部改善切换服务策略。
 
 本次仅 12 次新加坡分类，均 HTTP 200，无重试；usage 合计 27481 tokens，请求体 119304 bytes，没有重跑检索或生成。`python -m scripts.probe_version_audit` 默认只输出零调用计划；真实执行还要求事先授权、配置专用新加坡凭据并绑定计划哈希。单次/累计请求体上限为 24/192 KiB，最多 12 次调用；发送守卫逐次比对完整请求体，预期标签不进入模型请求。任何网络、提供方或解析异常即停，不自动续跑。候选仅部分有效，下一步应先判断审计改进的收益，不自动进入新一轮付费调参。
 
-只读检查确认 Docker 引擎仍不可连接；真实运行服务 HTTP、容器重启/持久化与回退验收均未完成。本次使用临时 ASGI 应用、SQL 和 Chroma，不是部署验收；Ticket Agent 仍使用 Dense，不声明全链 Hybrid，默认开关保持关闭。下一步仍需处理版本审计一致性与运行环境验收，而不是因 8 类流程通过就晋级发布。
+2026-10-18 启动 Docker 后完成[隔离本地容器验收](docs/reports/local_container_acceptance_2026-10-18.json)：使用原 Dockerfile/Alembic/Uvicorn、假凭据、3 个独立卷和 `--network none`，通过容器内真实回环 TCP HTTP 检查迁移 head、JWT/角色/租户隔离、两篇虚构文档的元数据/原文校验和、独立 Chroma 预制向量及审计记录。在重启、删除重建保留卷、临时开启空范围 Hybrid、恢复关闭配置后均通过，最终审计 10 条，工单/Agent 执行表仍为零；没有付费模型调用。
+
+该次验收不发布宿主机端口、不加载真实 `.env`；Chroma 预制向量不是文档索引/检索质量验证，空范围 `no_context` 不是非空问答验证。其范围不含完整 Compose、宿主机访问或非空问答。固定检查入口为 `python -m scripts.smoke_local_persistence`，首次全新验收卷加 `--seed`；**只允许规定假凭据/数据库路径、Docker 无网络环境，拒绝 `-O`，不能直接针对日常服务运行**。临时容器和仅含虚构数据的卷已清理，专用镜像保留供复现。Ticket Agent 仍使用 Dense，默认 Hybrid 开关和 v5.3.1 候选接线均未改变。
+
+后续已分别补充 [Compose / 宿主机回环、重启与容器重建验收](docs/reports/compose_loopback_acceptance_2026-10-20.json)，以及 `tests/test_hybrid_search.py::test_nonempty_hybrid_over_real_uvicorn_tcp` 的非空真实 HTTP 检查（模型使用测试替身）。这两项证据本身不能拼成同一次 Docker + 真实提供方端到端通过。
+
+2026-10-20 经单独授权完成一次[容器内真实 HTTP + 真实提供方联测](docs/reports/container_real_http_acceptance_2026-10-20.json)：调用前提交固定协议，使用同一镜像的 Alembic、Uvicorn 回环 TCP、临时 SQL/上传目录与真实临时 Chroma，运行原 7 篇虚构文档、8 类用例。28 次调用全部 HTTP 200（14 embedding / 6 rerank / 6 分类 / 2 生成），8 类流程检查通过；模型 usage 合计 14507 tokens，请求体 63541 bytes，不代表账单金额。回答 2 类、证据不足拒答 4 类、空/删除范围 2 类，工单与 Agent 动作表均为零。未发布宿主机端口，临时容器和合成运行数据已清理，未重跑或改持久开关。
+
+该次使用有界验收入口，不是原 Compose 启动命令；没有把宿主机发布、持久化重启、Dense 答案或工单整链加入本次付费运行。版本 2.0 问题仍被错误标成版本覆盖 `SUPPORTED`（来源仅有 1.0），最终由其他缺证检查拒答。因此结论仍是**限定范围的集成通过，不是独立拒答质量晋级或生产发布**；v5.3.1 未采用。
 
 ---
 
@@ -670,6 +703,33 @@ docker compose up --build
 
 Docker Compose 用于本地可复现运行与核心链路验证，不作为生产部署能力声明。
 
+镜像构建排除 `.env`/其变体、开发及 Docker 的数据库/上传文件/Chroma 目录，保留公开 `.env.example`。Git 忽略不等于 Docker 构建忽略；不要把日常运行数据复制进镜像。
+
+零模型调用的隔离 Compose 启动验收（Compose ≥ 2.24.4）：
+
+```bash
+docker compose --env-file .env.example -p copilot-acceptance -f docker-compose.yml -f docker-compose.acceptance.yml up --build --pull never -d
+curl http://127.0.0.1:18080/health
+```
+
+该覆盖配置移除真实 `.env`、代理和业务目录挂载，使用假凭据、容器回环不可用模型地址与项目专属命名卷，Hybrid 两个开关保持关闭。普通桥接网络用于宿主机端口访问，不提供网络层外连阻断。它验证运行接线，不验证模型质量。不要用于正常问答或公网部署。完成后仅清理该独立项目：
+
+```bash
+docker compose --env-file .env.example -p copilot-acceptance -f docker-compose.yml -f docker-compose.acceptance.yml down --volumes
+```
+
+实际宿主机回环、重启及容器重建结果与未覆盖范围见 [Compose 验收记录](docs/reports/compose_loopback_acceptance_2026-10-20.json)。
+
+非空 Hybrid 的真实 HTTP 回归见 `tests/test_hybrid_search.py::test_nonempty_hybrid_over_real_uvicorn_tcp`：启动仅回环的 Uvicorn，使用真实 JWT、临时 SQL 和 Chroma，验证回答、证据不足、提供方错误、空范围及开关关闭的状态与审计。外部模型响应使用测试替身，不调用付费模型；这不是同次 Docker + 真实提供方端到端验证，也不证明模型语义质量或 Dense 答案质量。
+
+同一有界冒烟脚本可用 `--live-http` 将 TestClient 换成真实回环 Uvicorn/TCP；以下仍只输出零调用计划：
+
+```bash
+python -m scripts.smoke_hybrid_runtime --ask --live-http
+```
+
+真实执行另需单独授权及 `--execute`，原有固定 7 文档/8 用例、28 次调用及请求体守卫不变。该模式使用临时 Alembic 数据库和真实临时 Chroma；容器执行时可不发布任何宿主机端口。`--env-file -` 只接受标准输入中三个提供方配置的六项 JSON 字段（`DASHSCOPE` / `DASHSCOPE_RERANK` / `DASHSCOPE_PHASE_B` 的 `_API_KEY`、`_BASE_URL`），不把凭据放进 Docker 环境或命令行。它运行验收入口，不是原 Compose 启动命令或持久化/重启测试的替代。
+
 ---
 
 # 10. 测试 / CI
@@ -737,7 +797,7 @@ Workflow：
 
 - TechQA 是长期主技术支持语料与主评测基准，不再计划迁移到另一套 primary corpus；
 - 不把离线 BM25 / RRF / Hybrid 实验或默认关闭的可选搜索写成默认线上已切换或公网已部署；
-- portfolio-v1 的 Hybrid + 重排已冻结并接入可选搜索和默认关闭的实验问答，工单未接入；R4 C1 的正式结论仍为 FAIL；
+- portfolio-v1 的 Hybrid + 重排已冻结并接入可选搜索、默认关闭的实验问答及显式可选的工单预览检索；默认仍为 Dense，工单不使用 v5.x gate；R4 C1 的正式结论仍为 FAIL；
 - 直接 Top14 是 TRAIN 开发阶段的选择，不是通用最优值；
 - 局部扩展 / 结构扩展的负结果不能证明 Parent-Child 或文档结构方法普遍无效；
 - 拒答策略和最终生成验证尚未冻结；

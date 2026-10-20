@@ -1,5 +1,11 @@
 # Locard Forensics - Local AI-Assisted Digital Forensics
 
+
+# THIS PAGE IS A HOT MESS!
+# THAT'S OK. LOCARD IS UNDER _HEAVY_ DEVELOPMENT
+# I'LL CLEAN IT UP WHEN LOCARD IS IN A MORE STABLE PHASE
+
+
 Long interactive operations use a shared delayed activity line (`⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏`):
 advisory context/model waits, bounded investigation phases, guided evidence
 discovery and CSV dumps. Animation starts after 300 ms and refreshes every 100 ms;
@@ -38,13 +44,13 @@ Startup uses the remaining overall budget; it is not capped by the 45-second
 tool-operation watchdog. Fingerprints still cover all authoritative case content.
 
 `investigate-ai --max-seconds` uses one deadline, including local model calls,
-worker startup, tools, transcript finalization and analyst approval waiting.
-Cancellation/timeout has an additional maximum five-second cleanup allowance.
-Inspect the returned `termination`; command compl
+worker startup, tools, transcript finalization and analyst approval 
 
 [...截断...]
 
-etion does not mean a supported
+waiting.
+Cancellation/timeout has an additional maximum five-second cleanup allowance.
+Inspect the returned `termination`; command completion does not mean a supported
 forensic conclusion. Interrupted runs explicitly mark their transcript incomplete.
 
 Investigation transcripts default to `DATABASE.investigations`. They are sensitive
@@ -92,5 +98,3 @@ Locard does not ask the model to reconstruct an investigation from millions of r
 
 | What MiniCPM DOES Do | What MiniCPM DOES NOT Do |
 |---|---|
-| Summarize retrieved forensic evidence. | Parse raw forensic artifacts. |
-| Explain relationships between already identified records. |

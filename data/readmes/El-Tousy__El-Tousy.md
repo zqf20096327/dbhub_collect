@@ -2,9 +2,9 @@
   
 # 𝑳𝒆𝒊𝒍𝒂  
 
-### Angehende Anwendungsentwicklerin · Python · Web · Android
-
-Ich suche eine **Ausbildung als Fachinformatikerin für Anwendungsentwicklung** in Deutschland.
+### Angehende Anwendungsentwicklerin · Python · Web · Android 
+ 
+Ich suche eine **Ausbildung als Fachinformatikerin für Anwendungsentwicklung** in Deutschland.  
 
 [![English](https://img.shields.io/badge/English_version-README.md-0A66C2?style=flat-square)](README.en.md)
 [![E-Mail](https://img.shields.io/badge/E--Mail-leilaeltousy%40gmail.com-EA4335?style=flat-square&logo=gmail&logoColor=white)](mailto:leilaeltousy@gmail.com)

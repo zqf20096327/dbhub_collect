@@ -63,10 +63,10 @@ it.
 | `keep QUERY` | Keep a query's rows, to read back later as `result:<id>`. |
 | `brief`, `takeover SESSION`, `recall WORDS` | Context for a model: the session-start brief, what to take over another session with, and a search of past work with a record of how it searched. |
 | `continue [SESSION]` | Resume a session with its tool's own command; without one, the sessions in this directory that left something open. |
-| `measure usage\|cost\|sessions\|quota\|outcomes\|failing\|drift\|unanswered\|survival\|daily\|process\|rhythm` | Tokens by kind and cost, subscription quota windows, tool outcomes, commands failing now, format drift and other analyses. Unknown figures stay unknown, never 0. |
+| `measure usage\|cost\|sessions\|quota\|outcomes\|failing\|drift\|unanswered\|survival\|survival-turns\|daily\|process\|rhythm` | Tokens by kind and cost, subscription quota windows, tool outcomes, commands failing now, format drift and other analyses. Unknown figures stay unknown, never 0. |
 | `live`, `notices`, `changes`, `work` | Sessions running now, signal notices, what changed since a cursor, the work graph. |
 | `sql STATEMENT` | Read-only SQL over the stable views. |
-| `excise TARGET` | Remove a session, input or text from every file and derived product, for good. |
+| `excise TARGET` | Remove a session, input or text. [Text excision and supported representations](docs/excision.md). |
 | `embed preview\|build\|status` | Opt-in embeddings for semantic search, with a cost preview. |
 | `setting KEY [VALUE]` | Read or set a setting. |
 | `web` | Open the web reader. |
@@ -74,7 +74,7 @@ it.
 | `hooks install\|uninstall`, `hook EVENT` | Claude Code hooks: live state and the session-start brief. |
 | `install-agent chrome` | Register the browser extension's native messaging host. |
 | `completions SHELL` | Shell completions for bash, elvish, fish, PowerShell or zsh. |
-| `sinex status\|cutover` | The optional Sinex backend (built with the `sinex` feature). |
+| `sinex status\|cutover` | Not built yet, so hidden from help: the optional Sinex backend's state and the move to it. |
 
 Exit codes: 0 success, 1 an error the daemon reported or an I/O error, 2 an
 invalid request, 6 no daemon running.

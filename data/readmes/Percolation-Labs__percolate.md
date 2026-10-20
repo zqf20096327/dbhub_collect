@@ -26,16 +26,34 @@ pip install pyyaml
 REBUILD_PARSER=1 TAG=percolate-postgres:mine dev/build-image.sh
 ```
 
-The extension installed as CI installs it, in a container of its own, then the tests:
+The extension installed as CI installs it, in a container of its own, then every gate CI runs, including the
+tests, the upgrade checks and the docs' worked examples:
 
 ```bash
 IMAGE=percolate-postgres:mine CONTAINER=p8-mine DB=p8mine dev/ci-database.sh
-CONTAINER=p8-mine DB=p8mine REQUIRE_ALL=1 dev/tests/run.sh
+CONTAINER=p8-mine DB=p8mine dev/check.sh
 ```
+
+[CONTRIBUTING.md](CONTRIBUTING.md) lists what you need and how long each step takes.
 
 `extension/percolate/sql/percolate--<version>.sql` is generated. Edit `specs/`, then run
 `python3 extension/percolate/build-sql.py`. Its upgrade scripts are written for every released version, read from
 the `v*` tags.
+
+## What is not in this repository
+
+Percolate was cut out of Percolation Labs' internal repository, and these stayed there on purpose:
+
+- the work board, the decision records, postmortems and the team's working notes;
+- research notes, experiments and the evaluation fixtures built from private data;
+- the hosted application at percolationlabs.ai, its deployment and production configuration;
+- the source of percolate-core, which `core/` mirrors read-only (see the table above);
+- for now, the prose design documents behind `specs/`: only their SQL moved at the cut, and whether the prose is
+  published is being decided.
+
+Nothing here points at those: no path into the internal repository, and no prose spec that is not in this tree.
+Each was published beside its schema or replaced with the point itself, and `dev/no-private-citations.py --check`,
+one of the tree gates, refuses any that returns.
 
 ## The earlier Percolate
 

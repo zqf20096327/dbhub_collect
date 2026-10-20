@@ -151,6 +151,28 @@ A character card can pre-populate a brand-new chat's world with canon entities â
 
 Seeds are applied once, when a chat with no existing InnerLore world gets its store created â€” new chats and first loads. Existing chats, branches, and legacy stores are never retro-seeded. Seeds become ordinary entity records: the curator enriches them as play actually reaches each place, and entity types disabled in settings are respected. Entries without a summary or description are ignored, and at most 120 seeds are honored per card.
 
+## NPC whereabouts and the world map
+
+The curator records where every character and creature is with `current_location`, reusing a canonical location name and updating it whenever someone arrives, leaves, or follows the player. A place named as a recorded part of a known location (a garden or fountain in a house's spatial record) anchors to that location. Without an explicit claim, a replaced `current_state` that names a known place moves the record there. Omission never clears a location; `unknown` does.
+
+The HUD, the world map, and the scene view all place NPCs from that record. Until the curator has processed the newest reply, an NPC the scene compiler finds present in it stands at the scene's location, so the map moves the moment a reply lands. Summaries and history never place anyone. A place reached in play before it has a location record gets a provisional map node, and when the newest turn names no place, the scene settles where the present cast is recorded to be. A place named inside a longer known place name ("Highmarket" in "Highmarket Gate") is not counted as named, so the scene settles on the specific place.
+
+**The HUD** is one row under SillyTavern's top bar, placed at the top bar's real bottom edge for any theme or screen:
+- **Place and story time:** tap them to open the map around you.
+- **Portraits:** you first, then everyone in the scene, then people seen recently (dimmed). Tap a portrait to open that person's card.
+- **Buttons:** the world map, and an expand button for the drawer.
+
+**The drawer** lists who is with you and what each person is doing, plus the explored places around you, with shortcuts into the map. Whether it is open is remembered per browser.
+
+**The map** opens on the region you have explored, with you in view:
+- **Moving:** one finger pans and two fingers pinch-zoom around their midpoint. The wheel zooms around the cursor, double-click zooms in, and the buttons zoom around the centre or re-centre on you.
+- **Readable at any zoom:** markers and labels keep their screen size, so crowded places spread apart as you zoom in.
+- **Places:** tap one for a details sheet with what is known and who is there.
+- **Elsewhere:** people at unknown or unexplored places are listed here instead of on the map.
+- **Here view:** shows the current place, the place containing it, and the explored places inside it.
+
+**Fog of war:** unexplored areas stay hidden. A place is explored once a reply puts you there (by naming it or by explicit movement), when it is the current scene, or when the curator records you there; the places containing it count as explored too. Exploration is worked out from the chat itself, so swipes, edits and rebuilds never leave a stale record. Fog lifts in a circle around each explored place. Places inside that circle are shown as seen but not yet visited, and everything else stays hidden until you get there.
+
 ## Private minds
 
 Each NPC brain separates durable identity from the present reaction:
@@ -323,7 +345,12 @@ Definitions and runtime are per chat. Saving a materially changed trigger re-arm
 
 Autonomy modes range from Advisory tracking to Conservative (default), Simulation, and Director. Conservative advances established commitments and safe background processes without freely inventing surprises. Context injection remains relevance- and budget-bounded and reserves room for goals, processes, and due beats instead of letting one category monopolize the prompt.
 
-The curator and progression requests run sequentially through the selected background profile and commit independently. This avoids self-competition on provider concurrency limits. If either subsystem fails, the successful one is still committed, the failed watermark stays unchanged, and bounded backoff retries analyze the missed plus current exchanges exactly once. Errors and retry timing are preserved in chat metadata instead of disappearing after a silent background failure. Pending work also resumes when the chat is reopened. Full rebuilds use larger configurable progression batches to reduce long-context request count.
+The curator and progression requests run sequentially through the selected background profile and commit independently. This avoids self-competition on provider concurrency limits. **Requests the provider can run at once** (Background Model settings) decides how background work shares the provider with the story:
+
+- **1** (default): background work finishes first. A story request waits until running and scheduled background work is done ("Narrating - background work finishing first"), so it always carries the freshest world state, and background requests wait for a story that is being written.
+- **2**: the story takes one slot and background work the other. The story leaves at once with the last finished state, and a pass already running carries on beside it. A new pass waits until the reply is finished, so it never reads a half-written reply. Background work stays one request at a time, so the provider never sees more than two. Choose 2 when the provider serves two requests at once, or when the story and InnerLore use different providers. If a provider turns out to refuse a second simultaneous request, as a one-slot fallback profile might, that request is retried once the story finishes.
+
+If either subsystem fails, the successful one is still committed, the failed watermark stays unchanged, and bounded backoff retries analyze the missed plus current exchanges exactly once. Errors and retry timing are preserved in chat metadata instead of disappearing after a silent background failure. Pending work also resumes when the chat is reopened. Full rebuilds use larger configurable progression batches to reduce long-context request count.
 
 ## Interrupted reply recovery
 

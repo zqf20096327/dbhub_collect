@@ -34,7 +34,7 @@
 |---|---|
 | Node.js | ≥ 20 |
 | Java | 8 及以上（JDK 或 JRE）。桥接器以源码方式运行，首次运行编译一次，结果缓存在工作目录 |
-| 达梦 JDBC 驱动 | `DmJdbcDriver8.jar` 或 `DmJdbcDriver18.jar`，需自行提供，见[安装](#安装)第 2 步 |
+| 达梦 JDBC 驱动 | `DmJdbcDriver8.jar`，需自行提供，见[安装](#安装)第 2 步 |
 | DeepSeek Harness | 0.1.x |
 | plink | 仅主机侧检查需要，在 PATH 中即可，或用 `plinkPath` 指定 |
 
@@ -63,6 +63,10 @@ dsh plugin --profile web add file:/path/to/dsh-plugin-dm-security
 |---|---|
 | Windows | `%USERPROFILE%\.dsh\dm-security\drivers\` |
 | Linux | `~/.dsh/dm-security/drivers/` |
+
+插件的查找顺序是：填了配置项 `driverJar` 就用它；否则在 `drivers/` 下取第一个文件名匹配
+`DmJdbcDriver*.jar` 的 jar（即 `DmJdbcDriver` + 可选数字 + `.jar`）。所以从安装介质里拿到的驱动
+不必改名，直接放进来就能被认到。目录里没有可用驱动时，第一次调用会直接报错，并写出应该放到哪个目录。
 
 插件加载时会自动建好工作目录（`drivers/`、`java/`、`runtime/`）。工作目录可用插件配置 `home` 修改，见[配置](#配置)。
 

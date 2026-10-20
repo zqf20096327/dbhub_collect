@@ -43,14 +43,11 @@ Try it in a minute:
 ```bash
 mkdir leafdesk && cd leafdesk
 curl -fsSLO https://raw.githubusercontent.com/esmworks/leafdesk/main/docker-compose.yml
-curl -fsSL https://raw.githubusercontent.com/esmworks/leafdesk/main/.env.example -o .env
-# set BETTER_AUTH_SECRET in .env to the output of: openssl rand -base64 32
-# and POSTGRES_PASSWORD to the output of: openssl rand -hex 24
 docker compose up -d
 ```
 
-Then open http://localhost:3000 and create an account. See [Quick start](#quick-start-docker) for
-versions, upgrades and running behind a domain.
+Then open http://localhost:3000 and create an account; the first one administers the server. See
+[Quick start](#quick-start-docker) for settings, versions, upgrades and running behind a domain.
 
 Just for yourself, with no server: download the desktop app from the
 [latest release](https://github.com/esmworks/leafdesk/releases/latest) (`.dmg` for macOS, `.exe`
@@ -66,13 +63,13 @@ for Windows, `.AppImage` for Linux) and choose *On this computer*. See [Desktop 
   longer word, so pages show up while you type: "kond plan" finds "Kondenser planı", while the
   middle of a word doesn't match; Japanese and Chinese words also inside a sentence, which has no
   spaces between words: "会議" finds "明日の会議について", a word's characters only side by side;
-  Korean words by their start
+  Korean words by their start, so with a particle joined on: "회의" finds "회의를"; pages whose
+  title has the words come first; past the first 80,000 characters of a huge page's text, words
+  aren't found), and 
 
 [...截断...]
 
-, so with a particle joined on: "회의" finds "회의를"; pages whose
-  title has the words come first; past the first 80,000 characters of a huge page's text, words
-  aren't found), and also by meaning when the server has an embeddings model
+also by meaning when the server has an embeddings model
   (see [Semantic search](#semantic-search)). Full-text search also looks inside the PDFs and
   Word documents a page shows, with or without an embeddings model: a page is found when one of
   its documents has every word, after the pages that have them in their own text, and the result
@@ -115,3 +112,5 @@ for Windows, `.AppImage` for Linux) and choose *On this computer*. See [Desktop 
   value, a chart, a list, or any other layout), set up in place, kept up to date as rows change,
   and worked out for each reader from the rows and values they may see; a number, bar or slice
   opens the rows behind it. A widget can take one of the option colors, as board columns do, and
+  editors move widgets by dragging their title bar. A page with a dashboard uses the full width.
+  Published pages show numbers and lists, and charts as a table of their figures.

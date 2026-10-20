@@ -10,6 +10,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 [![npm version](https://img.shields.io/npm/v/@telemetry-tracker/core)](https://www.npmjs.com/package/@telemetry-tracker/core)
 [![npm downloads](https://img.shields.io/npm/dm/@telemetry-tracker/core)](https://www.npmjs.com/package/@telemetry-tracker/core)
+[![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/unjica/badge.svg)](https://hub.xerj.org/contributors/unjica.html)
 
 <p align="center">
   <strong>Open-source error tracking, product analytics, and session telemetry.</strong>
@@ -69,7 +70,7 @@
 | Alert rules (conditions & destinations) | ✅ |
 | Source maps | ✅ |
 
-Alert delivery is in-app notifications, email, HTTPS webhooks, Slack, Discord, Microsoft Teams and Telegram. Slack, Discord and Microsoft Teams take incoming webhook URLs (Teams uses legacy Office 365 MessageCard webhooks). Telegram takes a Bot API `sendMessage` URL plus a chat id. These are not OAuth app installs. The dashboard rule editor currently authors error-count conditions.
+Alert delivery is in-app notifications, email, HTTPS webhooks, Slack, Discord, Microsoft Teams and Telegram. Slack, Discord and Microsoft Teams take incoming webhook URLs (Teams uses legacy Office 365 MessageCard webhooks). Telegram takes a Bot API `sendMessage` URL plus a chat id. These are not OAuth app installs. The dashboard rule editor authors error-count and "no events" (business heartbeat) conditions; other condition types are API-only.
 
 Self-host setup: [DEPLOYMENT.md](DEPLOYMENT.md)
 

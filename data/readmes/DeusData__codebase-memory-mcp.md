@@ -1,4 +1,4 @@
-# codebase-memory-mcp: local MCP server for code search, lower token usage and visualization
+# codebase-memory-mcp: local code intelligence for AI agents via MCP
 
 [![GitHub Release](https://img.shields.io/github/v/release/DeusData/codebase-memory-mcp?style=flat&color=blue)](https://github.com/DeusData/codebase-memory-mcp/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -14,28 +14,23 @@
 [![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
 [![VirusTotal](https://img.shields.io/badge/VirusTotal-scanned_every_release-brightgreen?logo=virustotal)](https://github.com/DeusData/codebase-memory-mcp/releases/latest)
 [![arXiv](https://img.shields.io/badge/arXiv-2603.27277-b31b1b?logo=arxiv)](https://arxiv.org/abs/2603.27277)
+[![Join the community on Discord](https://img.shields.io/badge/Discord-Join_the_community-5865F2?logo=discord&logoColor=white)](https://discord.gg/KguGXxg2X)
 
-**Search your code, follow call graphs, and explore software architecture in your browser.** codebase-memory-mcp is a local [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that gives Claude Code, Codex, and other coding agents a persistent code knowledge graph. It indexes functions, classes, imports, HTTP routes, and their relationships across [162 languages](#language-support). [Hybrid LSP](#hybrid-lsp) adds semantic type resolution for **Python, TypeScript, JavaScript, JSX/TSX, PHP, C#, Go, C, C++, Java, Kotlin, Rust, and Perl**.
+**Understand your repository, from source code to the systems around it.** codebase-memory-mcp is an MCP server that connects code, documentation, configuration, and infrastructure in a persistent local knowledge graph. Use it to find an unfamiliar feature, follow a call across services, trace a deployment back to its source, or assess which parts of a project a change could affect.
 
-**About 120× fewer tokens** in the project's reported five-query comparison: ~3,400 vs ~412,000 with file-by-file exploration. Published backend benchmarks also report **Linux kernel indexing in ~3 minutes** (28M lines of code) and **Cypher relationship queries under 1 ms** on an Apple M3 Pro. [Benchmark details](#performance).
+Give your coding agent structural context through [Model Context Protocol](https://modelcontextprotocol.io/) (MCP), or query the graph directly from the CLI. **The MCP server is the core of the project.** Its optional visual companion, **CBM Lens, is in open beta (v0.0.1)**, with a source reader, architecture maps, the Galaxy graph, coverage diagnostics, architecture decisions, and local code chat.
 
-**CBM Lens Beta helps you understand unfamiliar code and stay in control as it grows.** Use it to get up to speed in a new codebase, tackle rescue engineering on an inherited project, or make sense of 50,000 lines of AI-generated code from a single day. Its IDE-style source reader, local code chat, 3D architecture map, and Galaxy graph let you see how the code fits together and follow dependencies and call paths back to the source. Use that context to review changes, investigate fragile areas, and keep code quality high. Architecture decisions stay alongside the project's index.
+The native C backend exposes **17 MCP tools**, parses [languages and file formats](#language-support) with vendored grammars, and adds [Hybrid LSP](#hybrid-lsp) type resolution for supported languages. The installer supports **45 automatic or conditional client integrations**, including client configuration, skills, agent profiles, and applicable hooks. Indexing and graph queries need no hosted service or API key. Focused graph queries can reduce repeated file reads and token use; see the [measured results](#performance).
 
-The native C backend exposes 17 MCP tools and supports 45 automatic or conditional client integrations. Indexing and graph queries need no hosted service or API key.
+[Quick start](#quick-start) · [Capabilities](#features) · [Documentation](#documentation-connected-to-code) · [Infrastructure](#infrastructure-and-deployment) · [Smart CI](#smart-ci-and-test-impact) · [Explore CBM Lens](#cbm-lens-beta-code-visualization-and-source-navigation) · [Agent setup](#agent-setup-skills-profiles-and-hooks) · [MCP tools](#mcp-tools)
 
-> **CBM Lens Beta is new on `main`:** it arrived with [PR #2068](https://github.com/DeusData/codebase-memory-mcp/pull/2068) and is not part of the current v0.11.0 release, whose installer still ships the previous graph UI. To run the interface shown below now, [build from source](#build-from-source).
-
-[Quick start](#quick-start) · [Explore CBM Lens](#cbm-lens-beta-code-visualization-and-source-navigation) · [Chat with your codebase locally](#chat-with-your-codebase-locally) · [MCP tools](#mcp-tools) · [Bu
+> **Local processing:** Source analysis and graph storage run on your machine. CBM Lens can optionally download a model for browser AI after you enable it; inference stays on the device. The installer writes agent configuration for the clients you select. See [Security](#security) for release verification and [SECURITY.md](SECURITY.md) for rep
 
 [...截断...]
 
-ild from source](#build-from-source)
+orting issues.
 
-> **Research:** The [preprint](https://arxiv.org/abs/2603.27277) compares agents across 31 repositories, reporting **10× lower token use** and **2.1× fewer tool calls**, with answer-quality scores of 83% for CBM versus 92% for file-by-file exploration. These backend results are separate from the five-query comparison above and from CBM Lens.
-
-> **Local processing:** Source analysis and graph storage run on your machine. CBM Lens can optionally download a model for browser AI after you enable it; inference stays on the device. The installer writes agent configuration for the clients you select. See [Security](#security) for release verification and [SECURITY.md](SECURITY.md) for reporting issues.
-
-**Architecture overview.** Folders become nested platforms, files and symbols become selectable blocks, and arrows show indexed relationships. The recording zooms into the map of this repository, selects `src/pipeline`, opens the area, selects `artifact.c` and opens its source. Height can show source size; hotspot gravity reflects static fan-in. [Still image](docs/images/lens-architecture.png).
+**See the graph with CBM Lens (open beta v0.0.1).** Folders become nested platforms, files and symbols become selectable blocks, and arrows show indexed relationships. The recording zooms into the map of this repository, selects `src/pipeline`, opens the area, selects `artifact.c` and opens its source. Height can show source size; hotspot gravity reflects static fan-in. [Still image](docs/images/lens-architecture.png).
 
 <p align="center">
   <img src="docs/images/lens-overview.gif" alt="CBM Lens Beta architecture walkthrough: zoom into the source folders of this repository, open src/pipeline, select artifact.c and open its source" width="1000">
@@ -66,7 +61,9 @@ These captures show CBM Lens Beta on 12–13 October 2026, using public source f
 
 ## Why codebase-memory-mcp
 
-- **Indexing performance**: Linux kernel (28M LOC, 75K files) in 3 minutes. RAM-first pipeline: LZ4 compression, in-memory SQLite, fused Aho-Corasick pattern matching. Memory released after indexing.
-- **Plug and play**: native executable plus authenticated release-owned assets for macOS (arm64/amd64), Linux (arm64/amd64), and Windows (arm64/amd64). The native install needs no Docker, language runtime, or API keys. Download → `install` → restart agent → done.
-- **162 languages**: vendored tree-sitter grammars compiled into the binary. No separate parser installation.
-- **About 120×
+- **Find the right code with context**: combine symbol, text, and semantic search with callers, dependencies, source snippets, and file outlines. Targeted queries and compact, paged results can reduce token use and repeated file reads; see [Performance](#performance) for scoped measurements.
+- **Connect documentation to implementation**: index document sections, PDF text pages, architecture decisions, and supported references into code. Find the explanation alongside the symbol.
+- **Follow the system beyond source files**: trace supported relationships through Docker, Kubernetes, Helm, Kustomize, Terraform/OpenTofu, Terragrunt, Ansible, scripts, Make, and CI configuration.
+- **Understand a change before running it**: inspect affected symbols, compare indexed snapshots, and find related tests. [Experimental Smart CI](#smart-ci-and-test-impact) combines static relationships and per-test coverage for supported C/C++ test harnesses, falling back to broader runs when evidence is insufficient.
+- **Explore visually with CBM Lens Beta**: read source, follow call paths, inspect architecture and coverage gaps, manage architecture decisions, and ask a local model about selected code.
+- **Equip your coding agents**: `install` sets up supported client configuration, durable guidance,

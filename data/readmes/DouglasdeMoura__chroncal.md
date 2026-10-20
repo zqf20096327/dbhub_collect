@@ -190,10 +190,16 @@ Then import the module in your home-manager configuration:
       };
       soft_delete.purge_days = 30;
       sync.conflict_strategy = "prompt";
+      calendars = [
+        { name = "Fastmail"; path = "~/calendars/fastmail"; }
+        { name = "Work"; color = "#0F766E"; }
+      ];
     };
   };
 }
 ```
+
+The `calendars` list declares the local calendars. See [Declared calendars](#declared-calendars).
 
 The module has three options:
 
@@ -509,8 +515,8 @@ A read is always permitted, so an account you added once with `--allow-plaintext
 ```
 chroncal calendar list
 chroncal calendar get     <id>
-chroncal calendar create  "<name>" [--color HEX] [--description TEXT] [--email ADDR] [--default-alarm SPEC]... [remote flags]
-chroncal calendar update  <id|name> [--name NAME] [--color HEX] [--description TEXT] [--email ADDR] [--default-alarm SPEC]... [--clear-default-alarms] [remote flags] [--disconnect-remote]
+chroncal calendar create  "<name>" [--color HEX] [--description TEXT] [--email ADDR] [--path DIR] [--default-alarm SPEC]... [remote flags]
+chroncal calendar update  <id|name> [--name NAME] [--color HEX] [--description TEXT] [--email ADDR] [--path DIR] [--default-alarm SPEC]... [--clear-default-alarms] [remote flags] [--disconnect-remote]
 chroncal calendar delete  <id>
 chroncal calendar set-default <id|name>
 chroncal calendar hide     <id|name>
@@ -540,10 +546,12 @@ Pass `--disconnect-remote` on `update` to remove the remote link of a calendar.
 `calendar create --default-alarm` and `calendar update --default-alarm` set
 the per-calendar default alarms. See [Default alarms](#default-alarms).
 
+`--path` names a directory of `.ics` files that feeds the calendar. A sync tool such as [vdirsyncer](https://vdirsyncer.pimutils.org/) or [pimsync](https://pimsync.whynothugo.nl/) writes one `.ics` file for each event there. `calendar get` shows the directory on the `path` row, and the TUI shows it on the Location row of the calendar detail. `chroncal ical import` without a path then imports the calendar from that directory. Pass `--path ""` on `update` to remove the directory. The [[calendars]] table in `config.toml` sets the same field declaratively. See [Declared calendars](#declared-calendars).
+
 ### iCal import/export
 
 ```
-chroncal ical import  <file.ics|directory> [--calendar NAME]
+chroncal ical import  [file.ics|directory] [--calendar NAME]
 chroncal ical export  [--calendar NAME] [--from DATE] [--to DATE] [--category TEXT] [--status TEXT] [-f FILE] [--events] [--todos] [--journals] [--skip-unreadable]
 ```
 
@@ -563,9 +571,27 @@ Directory rules:
 - chroncal skips every file without an `.ics` extension, for example the `displayname` and `color` files that vdirsyncer writes.
 - A file that fails to parse becomes a warning. The rest of the directory still lands.
 - chroncal reads at most 10000 `.ics` files in one run.
-- The import does not follow a symbolic link.
+- The import does not follow a symbolic link that the path names. It also skips a symbolic link inside the directory. A stored directory is an exception. See the batch rules below.
 
 Entries are matched by UID, so a second import of the same path updates the existing items.
+
+Without a path, the command imports every calendar that has a directory. Set the directory with `calendar create --path`, `calendar update --path`, or a `[[calendars]]` entry in `config.toml`. With `--calendar`, the command imports only that calendar from its directory. Run the command after each pass of the sync tool, for example from a timer.
+
+The JSON output is one object when the command names a path or a calendar. It is an array in the batch mode without both. The batch text output names each calendar.
+
+The command follows a symbolic link at the root of a stored directory. A vdirsyncer layout often links the collection directory to a mounted drive. A stored directory that holds no `.ics` file imports nothing and succeeds without a warning.
+
+In the batch mode, a stored directory that does not exist yet imports nothing and gives a warning. A timer job then does not fail before the first sync. With `--calendar`, a missing directory is an error. Another failure in one calendar becomes an error on stderr, and the other calendars still land.
+
+Examples:
+
+```bash
+# Every calendar with a directory
+chroncal ical import
+
+# One calendar from its directory
+chroncal ical import --calendar Fastmail
+```
 
 Imports have size limits to reduce resource exhaustion from untrusted calendar data. `chroncal ical import` rejects `.ics` payloads larger than 8 MiB. It also rejects inline base64 attachments larger than 1 MiB decoded. The limit applies to each file, not to a whole directory.
 
@@ -933,6 +959,7 @@ Configuration loads in this order of precedence:
 | `ui.event_list_days` | Number of days in the default forward window for `event list`. A value less than `1` stops `event list` when you do not pass `--to`. | `30` |
 | `ui.confirm_quit` | Set to `false` to make `q` and `ctrl+c` quit at once. The default `true` shows the "Quit chroncal?" prompt first. | `true` |
 | `keys.<action>` | Keys for one TUI action, as a list. See [TUI key bindings](#tui-key-bindings). Only the config file sets this table. | (built-in keys) |
+| `calendars` | Declared local calendars, as an array of tables. See [Declared calendars](#declared-calendars). Only the config file sets this table. | (empty) |
 | `soft_delete.purge_days` | Days to keep soft-deleted rows before the background purge. `0` disables automatic purge. | `30` |
 | `alarms.default` | Default alarms for events without alarms, as a list of trigger specs (`"-PT30M"`, `"AUDIO:-PT5M"`). See [Default alarms](#default-alarms). Never syncs back to the server. | (empty — off) |
 | `alarms.skip_all_day` | Exclude all-day events from default alarms. | `false` |
@@ -943,7 +970,47 @@ Configuration loads in this order of precedence:
 | `security.allow_unsafe_alarm_audio_attach` | Allow AUDIO alarms to attach arbitrary URIs. Off by default. | `false` |
 | `security.allow_unsafe_alarm_email_attendees` | Allow EMAIL alarms to send to unverified attendee addresses. Off by default. | `false` |
 
-Every key except the `[keys]` table is also available as an environment variable (`CHRONCAL_` prefix, dots become underscores). Examples: `CHRONCAL_UI_THEME`, `CHRONCAL_UI_WEEK_START`, `CHRONCAL_UI_LIST_FORMAT`, `CHRONCAL_UI_EVENT_LIST_DAYS`, `CHRONCAL_UI_CONFIRM_QUIT`, `CHRONCAL_SOFT_DELETE_PURGE_DAYS`, `CHRONCAL_SYNC_INTERVAL`.
+Every key except the `[keys]` table and the `[[calendars]]` table is also available as an environment variable (`CHRONCAL_` prefix, dots become underscores). Examples: `CHRONCAL_UI_THEME`, `CHRONCAL_UI_WEEK_START`, `CHRONCAL_UI_LIST_FORMAT`, `CHRONCAL_UI_EVENT_LIST_DAYS`, `CHRONCAL_UI_CONFIRM_QUIT`, `CHRONCAL_SOFT_DELETE_PURGE_DAYS`, `CHRONCAL_SYNC_INTERVAL`.
+
+### Declared calendars
+
+The `[[calendars]]` table in `config.toml` declares the local calendars. A tool such as home-manager can then generate the calendar list from one source. Each entry has these keys:
+
+| Key | Description |
+|-----|-------------|
+| `name` | The calendar name. Required. It ties the entry to the stored calendar. |
+| `color` | The hex color of the calendar, as `#RRGGBB`. |
+| `description` | The calendar description. |
+| `path` | The directory of `.ics` files that feeds the calendar. The value must be absolute or start with `~/`. |
+
+```toml
+[[calendars]]
+name = "Fastmail"
+path = "~/calendars/fastmail"
+
+[[calendars]]
+name = "Work"
+color = "#0F766E"
+description = "Office"
+```
+
+chroncal applies the entries on every launch:
+
+- It creates a calendar when no calendar with that name exists.
+- It updates the stored `color`, `description`, or `path` when the entry gives a different value.
+- It keeps the stored value of a key that the entry omits, so a short entry does not reset a field that you set from the CLI or the TUI.
+- It never deletes a calendar. A declared calendar returns on the next launch, so a delete, a rename, or a link to a CalDAV account refuses a declared calendar in the CLI and in the TUI. Remove the entry from the file first.
+- It matches the `name` like the `--calendar` flag: an exact match wins, then one match in another case, so `fastmail` adopts a stored `Fastmail`.
+- A declared `color`, `description`, or `path` returns on the next launch after a change from the CLI or the TUI. The launch prints a warning that names the field when it replaces a stored value. A cleared value returns without a warning. Change the value in the file.
+- Each `path` needs its own tree. The import reads a directory and its subdirectories, so a `path` inside or above the `path` of another calendar is an error.
+
+An entry without a `name`, two entries with one `name`, a `color` that is not `#RRGGBB`, or a relative `path` stops every command with an error. Fix the file, then run the command again.
+
+The table declares local calendars only. chroncal skips an entry whose `name` belongs to a calendar of a CalDAV account, or whose `name` matches several calendars in another case. The skip gives a warning on stderr and a line in the log file. A calendar with a `path` cannot take a CalDAV link. A CalDAV account holds a credential, so it stays in `chroncal account add`. To feed a calendar from a CalDAV server through the table:
+
+1. Sync the collections to a directory with a tool such as [pimsync](https://pimsync.whynothugo.nl/).
+2. Declare the directory with `path`.
+3. Run `chroncal ical import` after each sync pass.
 
 ### TUI themes
 

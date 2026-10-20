@@ -104,6 +104,7 @@ Run [mail-tester.com](https://www.mail-tester.com) to get a deliverability score
 - **DKIM signing**: auto-generates 2048-bit RSA keys per domain, under a selector you can choose, with zero-downtime key rotation
 - **SPF / DKIM / DMARC verification**: DNS checks built into the dashboard, with the records to publish per domain, the parsed DMARC policy and where the MX points, re-run daily in the background so a record that drifts is caught (`domain.verification_failed`)
 - **Email queue**: Postgres-backed with MTA-style retry backoff (up to 48 h for temporary failures such as greylisting), lease-based crash recovery that is safe with several replicas, and no double sends between concurrent workers
+- **Several recipients and batch sends**: `to` takes an array of up to 50 addresses for one message (100 recipients with cc and bcc, delivered per recipient domain, bcc never in a header), and `POST /api/v1/emails/batch` queues up to 100 distinct emails in one request, each item validated and created on its own with per-item idempotency keys ([docs/api.md](docs/api.md#post-apiv1emailsbatch))
 - **Idempotency keys**: an optional `Idempotency-Key` header on the send API makes retries safe; a repeat with the same key and body returns the first response instead of sending twice, even under concurrent retries ([docs/api.md](docs/api.md#post-apiv1emailssend))
 - **Templates**: Mustache-style `{{variable}}` substitution, HTML-escaped in the HTML body (`{{{variable}}}` inserts raw HTML)
 - **Webhooks**: HMAC-signed events with timestamp-bound replay protection: `email.queued`, `email.sent`, `email.failed`, `email.bounced`, `email.complained` (feedback-loop spam complaints, #191), `email.received`, `email.unsubscribed`, `domain.verification_failed`, `domain.verified`
@@ -114,9 +115,10 @@ Run [mail-tester.com](https://www.mail-tester.com) to get a deliverability score
 - **Suppression list**: per-API-key list of addresses we refuse to send to; gate runs at `POST /emails/send` so bounced/unsubscribed recipients can't re-tank IP reputation; a mailbox still full (`4.2.2`) when retries run out is suppressed for 24 h, and `SUPPRESSIONS_SHARED_HARD=true` also refuses addresses any key hard-bounced on or got a complaint for
 - **Sender display name and send category**: an optional `fromName` (checked so it cannot pose as an address) and `category` (`transactional` mail goes out without `List-Unsubscribe`, `marketing` mail is refused unless it can carry the one-click link); HTML-only mail gets a derived text part and fragments a document wrapper at send time
 - **Tags**: label a send with up to 10 `key: value` tags (REST `tags`, or `X-BunMail-Tag` on SMTP submission), filter the email log with `?tag=key:value` (several must all match) or the dashboard's tag filter, and route webhooks on the `tags` every `email.*` event carries
+- **Attachments**: up to 10 files per send (REST `attachments`, Resend-compatible, or the parts of an SMTP-submitted message), `ATTACHMENTS_MAX_TOTAL_MB` in total (default 5, up to 18); executables, scripts and installers refused by extension and by sniffed content, types derived from the bytes, inline `cid:` images; files kept only until the email is sent, fails or bounces, and downloadable from the dashboard as forced downloads until then ([docs/api.md](docs/api.md#post-apiv1emailssend))
 - **One-click unsubscribe**: single-recipient mail carries a per-recipient RFC 8058 `List-Unsubscribe` link (and an `unsub+` mailto when inbound SMTP is on); using it suppresses that recipient for the sending key and fires `email.unsubscribed` ([docs/suppressions.md](docs/suppressions.md#one-click-unsubscribe))
 - **DMARC aggregate report ingest**: daily `rua` reports from Microsoft / Google / Yahoo are auto-parsed (gzip / zip / raw XML) and surfaced in the dashboard so misaligned source IPs are visible at a glance
-- **Web dashboard**: server-rendered (Elysia JSX), bulk operations, real-time stats (24h sent, success rate, bounce rate with a warning above 2%, queue depth), a per-MX delivery table on each email with a badge for sessions sent without TLS; owner account login with revocable server-side sessions, invite-only teammate accounts (admin or member), a Users page to change roles, deactivate or remove accounts, issue one-time password reset links and transfer ownership, a Change password page for every account (signs out every other device), an Active sessions page for every account (device, IP, optional approximate location from an offline GeoIP database; sign out one device or all others), an email alert on sign-in from a new device (no links), optional TOTP two-factor authentication with recovery codes for every account (`REQUIRE_2FA` makes it mandatory for the owner or admins), an append-only audit log of security-relevant actions (sign-ins, account, two-factor, API key, domain, webhook and suppression changes, with actor, IP and user agent) for admins, and per-user API keys (members manage their own restricted keys; deactivating an account disables its keys)
+- **Web dashboard**: server-rendered (Elysia JSX), bulk operations, real-time stats (24h sent, success rate, bounce rate with a warning above 2%, queue depth), a per-MX delivery table on each email with a badge for sessions sent without TLS; owner account login with revocable server-side sessions, invite-only teammate accounts (admin or member), a Users page to change roles, deactivate or remove accounts, issue one-time password reset links and transfer ownership, a Change password page for every account (signs out every other device), an Active sessions page for every account (device, IP, optional approximate location from an offline GeoIP database; sign out one device or all others), an email alert on sign-in from a new device (no links), optional TOTP two-factor authentication with recovery codes for every account (`REQUIRE_2FA` makes it mandatory for the owner or admins), passkeys (WebAuthn) for a phishing-resistant passwordless sign-in or second factor (#223), an append-only audit log of security-relevant actions (sign-ins, account, two-factor, API key, domain, webhook and suppression changes, with actor, IP and user agent) for admins, and per-user API keys (members manage their own restricted keys; deactivating an account disables its keys)
 - **OpenAPI 3.0**: interactive docs at `/api/docs`
 - **Type-safe**: strict TypeScript, Drizzle ORM, no `any`
 
@@ -128,7 +130,8 @@ All endpoints (except `/health` and the public unsubscribe pages at `/u/:token`)
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/api/v1/emails/send` | Queue an email (direct or template) |
+| POST | `/api/v1/emails/send` | Queue an email (direct or template), to one address or an array of up to 50 |
+| POST | `/api/v1/emails/batch` | Queue 1 to 100 distinct emails, one result per item |
 | GET | `/api/v1/emails` | List emails (excludes trash) |
 | GET | `/api/v1/emails/trash` | List trashed emails |
 | GET | `/api/v1/emails/:id` | Get email by ID |
@@ -259,7 +262,7 @@ See [docs/](docs/) for module-level documentation:
 - [docs/emails.md](docs/emails.md): Outbound module
 - [docs/inbound.md](docs/inbound.md): Inbound module
 - [docs/dmarc-reports.md](docs/dmarc-reports.md): DMARC `rua` aggregate report ingest
-- [docs/users.md](docs/users.md): Dashboard accounts, roles, invitations, sessions, password reset links, password change and two-factor authentication
+- [docs/users.md](docs/users.md): Dashboard accounts, roles, invitations, sessions, password reset links, password change, two-factor authentication and passkeys
 - [docs/logging.md](docs/logging.md): Log format, correlation IDs and tracing a request, email or SMTP session
 - [docs/self-hosting.md](docs/self-hosting.md): Production deployment with DNS records
 - [THREAT_MODEL.md](THREAT_MODEL.md): Assets, attackers, controls, and operator responsibilities
@@ -283,7 +286,7 @@ Active issues: [github.com/mohamedboukari/bunmail/issues](https://github.com/moh
 
 Near-term highlights:
 
-- Passkeys and SSO for dashboard accounts (#223, #224)
+- SSO for dashboard accounts (#224)
 - Bun-native SMTP client (#60)
 
 ## Contributing

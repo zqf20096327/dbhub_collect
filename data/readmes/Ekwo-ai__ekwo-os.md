@@ -80,7 +80,7 @@ level security decides who sees what.
   Identifiers stay English; what a person reads comes from the pack, in the
   language of the company or of the reader. See
   [`docs/languages.md`](docs/languages.md).
-- **Every country a pack, out of the box.** <!-- generated:countries -->United Arab Emirates (`ae`), Antigua and Barbuda (`ag`), Albania (`al`), Հայաստան (`am`), Angola (`ao`), Argentina (`ar`), Austria (`at`), Australia (`au`), Azərbaycan (`az`), Bosna i Hercegovina (`ba`), Bangladesh (`bd`), Belgium (`be`), Burkina Faso (`bf`), България (`bg`), البحرين (`bh`), Bénin (`bj`), Bermuda (`bm`), Brunei Darussalam (`bn`), Bolivia (`bo`), The Bahamas (`bs`), Canada (`ca`), République démocratique du Congo (`cd`), Centrafrique (`cf`), Congo (`cg`), Schweiz (`ch`), Côte d’Ivoire (`ci`), Chile (`cl`), Cameroun (`cm`), 中国 (`cn`), Colombia (`co`), Costa Rica (`cr`), Cyprus (`cy`), Czechia (`cz`), Germany (`de`), Danmark (`dk`), Dominica (`dm`), Dominican Republic (`do`), Algérie (`dz`), Ecuador (`ec`), Estonia (`ee`), مصر (`eg`), España (`es`), Ethiopia (`et`), Finland (`fi`), France (`fr`), Gabon (`ga`), United Kingdom (`gb`), Grenada (`gd`), საქართველო (`ge`), Guernsey (`gg`), Ghana (`gh`), Guinée (`gn`), Guinée équatoriale (`gq`), Ελλάδα (`gr`), Guatemala (`gt`), Guinée-Bissau (`gw`), Guyana (`gy`), Hong Kong (`hk`), Honduras (`hn`), Croatia (`hr`), Magyarország (`hu`), Indonesia (`id`), Ireland (`ie`), Israel (`il`), India (`in`), Ísland (`is`), Italia (`it`), Jersey (`je`), Jamaica (`jm`), 日本 (`jp`), Kenya (`ke`), Comores (`km`), Saint Kitts and Nevis (`kn`), 대한민국 (`kr`), Kuwait (`kw`), Cayman Islands (`ky`), Қазақстан (`kz`), Saint Lucia (`lc`), Sri Lanka (`lk`), Lietuva (`lt`), Luxembourg (`lu`), Latvija (`lv`), Maroc (`ma`), Moldova (`md`), Crna Gora (`me`), Северна Македонија (`mk`), Mali (`ml`), 澳門 (`mo`), Malta (`mt`), Mauritius (`mu`), México (`mx`), Malaysia (`my`), Moçambique (`mz`), Niger (`ne`), Nigeria (`ng`), Nicaragua (`ni`), Nederland (`nl`), Norge (`no`), New Zealand (`nz`), Oman (`om`), Panamá (`pa`), Perú (`pe`), Philippines (`ph`), Pakistan (`pk`), Polska (`pl`), Portugal (`pt`), Paraguay (`py`), Qatar (`qa`), Romania (`ro`), Srbija (`rs`), Rwanda (`rw`), Saudi Arabia (`sa`), Sverige (`se`), Singapore (`sg`), Slovenia (`si`), Slovensko (`sk`), Sénégal (`sn`), El Salvador (`sv`), Tchad (`td`), Togo (`tg`), ประเทศไทย (`th`), Tunisie (`tn`), Türkiye (`tr`), 臺灣 (`tw`), Tanzania (`tz`), Україна (`ua`), Uganda (`ug`), United States (`us`), Uruguay (`uy`), British Virgin Islands (`vg`), Việt Nam (`vn`), Kosova (`xk`), South Africa (`za`), Zambia (`zm`) and Zimbabwe (`zw`)<!-- /generated --> — each with its chart of accounts, its tax codes, its
+- **Every country a pack, out of the box.** <!-- generated:countries -->United Arab Emirates (`ae`), Antigua and Barbuda (`ag`), Albania (`al`), Հայաստան (`am`), Angola (`ao`), Argentina (`ar`), Austria (`at`), Australia (`au`), Azərbaycan (`az`), Bosna i Hercegovina (`ba`), Barbados (`bb`), Bangladesh (`bd`), Belgium (`be`), Burkina Faso (`bf`), България (`bg`), البحرين (`bh`), Bénin (`bj`), Bermuda (`bm`), Brunei Darussalam (`bn`), Bolivia (`bo`), Brasil (`br`), The Bahamas (`bs`), Botswana (`bw`), Canada (`ca`), République démocratique du Congo (`cd`), Centrafrique (`cf`), Congo (`cg`), Schweiz (`ch`), Côte d’Ivoire (`ci`), Chile (`cl`), Cameroun (`cm`), 中国 (`cn`), Colombia (`co`), Costa Rica (`cr`), Cyprus (`cy`), Czechia (`cz`), Germany (`de`), Danmark (`dk`), Dominica (`dm`), Dominican Republic (`do`), Algérie (`dz`), Ecuador (`ec`), Estonia (`ee`), مصر (`eg`), España (`es`), Ethiopia (`et`), Finland (`fi`), France (`fr`), Gabon (`ga`), United Kingdom (`gb`), Grenada (`gd`), საქართველო (`ge`), Guernsey (`gg`), Ghana (`gh`), The Gambia (`gm`), Guinée (`gn`), Guinée équatoriale (`gq`), Ελλάδα (`gr`), Guatemala (`gt`), Guinée-Bissau (`gw`), Guyana (`gy`), Hong Kong (`hk`), Honduras (`hn`), Croatia (`hr`), Magyarország (`hu`), Indonesia (`id`), Ireland (`ie`), Israel (`il`), India (`in`), Ísland (`is`), Italia (`it`), Jersey (`je`), Jamaica (`jm`), 日本 (`jp`), Kenya (`ke`), Кыргызская Республика (`kg`), Comores (`km`), Saint Kitts and Nevis (`kn`), 대한민국 (`kr`), Kuwait (`kw`), Cayman Islands (`ky`), Қазақстан (`kz`), Saint Lucia (`lc`), Sri Lanka (`lk`), Lesotho (`ls`), Lietuva (`lt`), Luxembourg (`lu`), Latvija (`lv`), Maroc (`ma`), Moldova (`md`), Crna Gora (`me`), Северна Македонија (`mk`), Mali (`ml`), 澳門 (`mo`), Malta (`mt`), Mauritius (`mu`), México (`mx`), Malaysia (`my`), Moçambique (`mz`), Namibia (`na`), Niger (`ne`), Nigeria (`ng`), Nicaragua (`ni`), Nederland (`nl`), Norge (`no`), New Zealand (`nz`), Oman (`om`), Panamá (`pa`), Perú (`pe`), Philippines (`ph`), Pakistan (`pk`), Polska (`pl`), Portugal (`pt`), Paraguay (`py`), Qatar (`qa`), Romania (`ro`), Srbija (`rs`), Rwanda (`rw`), Saudi Arabia (`sa`), Sverige (`se`), Singapore (`sg`), Slovenia (`si`), Slovensko (`sk`), Sierra Leone (`sl`), Sénégal (`sn`), Suriname (`sr`), El Salvador (`sv`), Eswatini (`sz`), Tchad (`td`), Togo (`tg`), ประเทศไทย (`th`), Tunisie (`tn`), Türkiye (`tr`), Trinidad and Tobago (`tt`), 臺灣 (`tw`), Tanzania (`tz`), Україна (`ua`), Uganda (`ug`), United States (`us`), Uruguay (`uy`), Saint Vincent and the Grenadines (`vc`), British Virgin Islands (`vg`), Việt Nam (`vn`), Kosova (`xk`), South Africa (`za`), Zambia (`zm`) and Zimbabwe (`zw`)<!-- /generated --> — each with its chart of accounts, its tax codes, its
   declaration boxes and its financial statements, and all of them installed by
   `ekwo init`, so one installation keeps companies in any of these countries.
   The version and review status of each are in
@@ -225,6 +225,7 @@ psql "$DATABASE_URL" -f supabase/seed/144_pack_bn.sql
 psql "$DATABASE_URL" -f supabase/seed/145_pack_mo.sql
 psql "$DATABASE_URL" -f supabase/seed/146_pack_je.sql
 psql "$DATABASE_URL" -f supabase/seed/147_pack_zw.sql
+psql "$DATABASE_URL" -f supabase/seed/148_pack_br.sql
 psql "$DATABASE_URL" -f supabase/seed/14_pack_gb.sql
 psql "$DATABASE_URL" -f supabase/seed/15_pack_us.sql
 psql "$DATABASE_URL" -f supabase/seed/16_pack_ie.sql
@@ -232,9 +233,14 @@ psql "$DATABASE_URL" -f supabase/seed/17_pack_nl.sql
 psql "$DATABASE_URL" -f supabase/seed/18_pack_de.sql
 psql "$DATABASE_URL" -f supabase/seed/19_pack_es.sql
 psql "$DATABASE_URL" -f supabase/seed/200_pack_jm.sql
+psql "$DATABASE_URL" -f supabase/seed/201_pack_bb.sql
 psql "$DATABASE_URL" -f supabase/seed/202_pack_dm.sql
 psql "$DATABASE_URL" -f supabase/seed/203_pack_gd.sql
 psql "$DATABASE_URL" -f supabase/seed/204_pack_lc.sql
+psql "$DATABASE_URL" -f supabase/seed/205_pack_sr.sql
+psql "$DATABASE_URL" -f supabase/seed/206_pack_kg.sql
+psql "$DATABASE_URL" -f supabase/seed/207_pack_sz.sql
+psql "$DATABASE_URL" -f supabase/seed/208_pack_ls.sql
 psql "$DATABASE_URL" -f supabase/seed/20_pack_sn.sql
 psql "$DATABASE_URL" -f supabase/seed/21_pack_ci.sql
 psql "$DATABASE_URL" -f supabase/seed/22_pack_bj.sql
@@ -245,6 +251,10 @@ psql "$DATABASE_URL" -f supabase/seed/26_pack_km.sql
 psql "$DATABASE_URL" -f supabase/seed/27_pack_cg.sql
 psql "$DATABASE_URL" -f supabase/seed/28_pack_ga.sql
 psql "$DATABASE_URL" -f supabase/seed/29_pack_gn.sql
+psql "$DATABASE_URL" -f supabase/seed/300_pack_gm.sql
+psql "$DATABASE_URL" -f supabase/seed/301_pack_sl.sql
+psql "$DATABASE_URL" -f supabase/seed/303_pack_bw.sql
+psql "$DATABASE_URL" -f supabase/seed/304_pack_na.sql
 psql "$DATABASE_URL" -f supabase/seed/30_pack_gw.sql
 psql "$DATABASE_URL" -f supabase/seed/31_pack_gq.sql
 psql "$DATABASE_URL" -f supabase/seed/32_pack_ml.sql
@@ -259,6 +269,8 @@ psql "$DATABASE_URL" -f supabase/seed/400_pack_ag.sql
 psql "$DATABASE_URL" -f supabase/seed/401_pack_bs.sql
 psql "$DATABASE_URL" -f supabase/seed/402_pack_gy.sql
 psql "$DATABASE_URL" -f supabase/seed/403_pack_kn.sql
+psql "$DATABASE_URL" -f supabase/seed/404_pack_vc.sql
+psql "$DATABASE_URL" -f supabase/seed/405_pack_tt.sql
 psql "$DATABASE_URL" -f supabase/seed/40_pack_au.sql
 psql "$DATABASE_URL" -f supabase/seed/41_pack_nz.sql
 psql "$DATABASE_URL" -f supabase/seed/42_pack_mx.sql

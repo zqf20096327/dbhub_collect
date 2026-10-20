@@ -88,7 +88,7 @@ OpenMail ships **four install paths** — pick one:
 | Method | Command / Entry | Best for |
 | --- | --- | --- |
 | **One-click script** | `curl -fsSL https://raw.githubusercontent.com/chenyuwebwawa/OpenMail/main/install.sh \| bash` | Fresh Linux VPS (installs Node 22, source, `.env`, systemd, language packs) |
-| **Docker** | `docker compose up -d` (or one-liner below) | Any server with Docker / 1Panel |
+| **Docker** | `docker compose up -d --build` (source) · `ghcr.io/chenyuwebwawa/openmail:latest` / `chenyutech/openmail:latest` (prebuilt) | Any server with Docker / 1Panel |
 | **Manual server** | `git clone && npm install && npm start` | Development, Windows (see `start-windows.bat`), custom setups |
 | **Hosting panels** | BT Panel (宝塔) guide · 1Panel guide | Existing panel-managed servers |
 
@@ -117,22 +117,57 @@ Flags: `--domain` (mail domain), `--standard-ports` (use 25/587/… instead of d
 
 ### 2. Docker
 
+OpenMail runs as a **single container** — SQLite and attachments live in bind mounts, no sidecars. Two ways to get the image:
+
+**Option A — build from source (recommended, always works):**
+
 ```bash
 git clone https://github.com/chenyuwebwawa/OpenMail.git && cd OpenMail
-cp .env.example .env      # set domain / relay / TLS
-docker compose up -d
+cp .env.example .env                # set domain / base URL / relay / TLS
+docker compose up -d --build
 ```
 
-Or a single run (all standard ports + data persisted):
+`docker-compose.yml` reads every `OM_*` value from your `.env` (via `${VAR:-default}`) instead of hardcoding it; the database, the auto-generated `secret.key` and `admin-credentials.txt` persist in `./data`, attachments in `./files`. The admin password is printed on first launch (also written to `data/admin-credentials.txt`).
+
+**Option B — prebuilt image (published automatically to GHCR and Docker Hub):**
+
+The [`Docker Image` workflow](.github/workflows/docker-publish.yml) builds multi-arch images (`linux/amd64`, `linux/arm64`) on every push to `main`, on `v*` tags and on manual dispatch, and publishes the same tags to both registries:
+
+- **GHCR** — `ghcr.io/chenyuwebwawa/openmail:latest` (uses the built-in `GITHUB_TOKEN`, no secrets required)
+- **Docker Hub** — `chenyutech/openmail:latest` (public, anonymous pull works; pushed via the maintainer's `DOCKERHUB_USERNAME` / `DOCKERHUB_TOKEN` repo secrets)
 
 ```bash
+# if the package is private, log in first with a PAT that has read:packages:
+# docker login ghcr.io -u <github-user>
+docker pull ghcr.io/chenyuwebwawa/openmail:latest
+
+# or from Docker Hub (public, anonymous pull works):
+docker pull chenyutech/openmail:latest
+
 docker run -d --name openmail --restart unless-stopped \
   -p 3000:3000 -p 25:25 -p 587:587 -p 465:465 \
   -p 143:143 -p 993:993 -p 110:110 -p 995:995 \
   -v openmail-data:/app/data -v openmail-files:/app/files \
   -e OM_PRIMARY_DOMAIN=example.com -e OM_BASE_URL=https://mail.example.com \
-  chenyuwebwawa/openmail:latest
+  ghcr.io/chenyuwebwawa/openmail:latest   # or: chenyutech/openmail:latest
 ```
+
+> `OM_SECRET` is optional: leave it unset and the first boot generates a key, persisted to `/app/data/secret.key` inside the data volume (so recreating the container keeps saved AI keys working). If you set it explicitly, keep it fixed — changing it invalidates every saved AI API key.
+
+Or use the prebuilt image through Compose (no local build):
+
+```bash
+# use either registry — both expose the same tags
+echo "OPENMAIL_IMAGE=ghcr.io/chenyuwebwawa/openmail:latest" >> .env
+# echo "OPENMAIL_IMAGE=chenyutech/openmail:latest" >> .env
+docker compose up -d
+```
+
+> **Image not available?** Images are built by GitHub Actions and published to **GHCR**, and — when the repo secrets `DOCKERHUB_USERNAME` + `DOCKERHUB_TOKEN` are configured (as they are for this repository) — to **Docker Hub** as `docker.io/chenyutech/openmail` (public, multi-arch, anonymous pull). On a brand-new fork the packages may not exist yet: use Option A, or run **Actions → Docker Image → Run workflow** once; for anonymous GHCR pulls, set the package visibility to Public under repo → Packages → Package settings.
+>
+> **Healthcheck:** the image probes the public route `GET /` (HTTP 200) every 30 s, so `docker compose ps` shows `healthy` once the app is up. **Upgrades:** `docker compose pull && docker compose up -d` for the prebuilt image, or `git pull && docker compose up -d --build` for source builds (source installs use `scripts/update.sh` instead).
+>
+> Full Docker guide — GHCR/Docker Hub publishing, ports & firewall, reverse-proxy TLS, backups, multi-arch and troubleshooting: **[docs/DOCKER.md](docs/DOCKER.md)**.
 
 ### 3. Manual
 
@@ -185,6 +220,17 @@ npm run langpacks                               # show status
 
 or in the admin web UI (Settings → Language → Install), or by copying `langpacks/<code>.json` → `public/locales/`. Missing keys fall back to English; see [langpacks/README.md](langpacks/README.md) to write your own pack.
 
+## AI assistant (OpenAI-compatible)
+
+The AI features (write email, translate, analyze, generate HTML templates) run **server-side** and call **any OpenAI-compatible `POST {base}/chat/completions` endpoint**. Configure them per user in **Settings → AI assistant**: choose a provider preset (OpenAI / DeepSeek / Moonshot / Zhipu GLM / Ollama / custom), fill in Base URL, model and API key, then press **Test connection**. The key is encrypted with AES-256-GCM in the SQLite database and is never returned in clear text.
+
+- **Base URL formats** — either the service root / `…/v1` (`https://api.deepseek.com`, `https://api.openai.com/v1`) or the full endpoint copied from the provider docs (`https://api.deepseek.com/chat/completions`). It is normalized on save, and the server calls `{base}/chat/completions` with `Authorization: Bearer <key>` — the exact OpenAI chat-completions request shape (`stream: false`).
+- **DeepSeek example** — select the `DeepSeek` preset (Base URL `https://api.deepseek.com`, model `deepseek-chat`, or `deepseek-reasoner` for thinking), paste the API key and save. No manual URL editing is needed.
+- **Model list** — *Fetch models* queries the upstream `GET {base}/models` and lets you pick from a dropdown; manual input still works.
+- **Enable / disable** — the switch defaults to on for the first setup. While disabled, generation endpoints return `403 AI_DISABLED` with a hint, but *Test connection* still works for diagnostics.
+- **Provider differences** — reasoning/thinking models are supported: if the provider rejects `max_tokens`, it is retried as `max_completion_tokens`; unsupported `temperature` / `response_format` are dropped and retried; SSE streams, content-part arrays and `reasoning_content` responses are handled. Errors include the resolved endpoint, HTTP status and the upstream message.
+- **Secrets** — saved API keys are encrypted with `OM_SECRET`; when unset, a key is generated once and persisted to `data/secret.key` (back it up with `data/`, and never change it or saved keys stop decrypting). Keys stored by older builds that used a per-boot random secret can no longer be decrypted — re-enter the API key once after upgrading.
+
 ## Configuration
 
 Everything is configured via environment variables (or a `.env` file) — see [.env.example](.env.example). Highlights:
@@ -193,7 +239,7 @@ Everything is configured via environment variables (or a `.env` file) — see [.
 | --- | --- | --- |
 | `OM_PRIMARY_DOMAIN` | `localhost` | Domain created on first boot (with DKIM keys) |
 | `OM_BASE_URL` | `http://localhost:3000` | Public URL, used in reset links |
-| `OM_SECRET` | random | Session/secret key — **set this in production** |
+| `OM_SECRET` | auto-generated | Server-side key used to encrypt saved AI API keys. When unset, a random value is generated and persisted to `data/secret.key`; **changing it invalidates stored AI keys** (they must be re-entered) — set a fixed long random value in production |
 | `OM_REGISTRATION` | `true` | Allow self-service registration |
 | `OM_RELAY_HOST/PORT/USER/PASS` | – | Upstream SMTP relay for outbound mail |
 | `OM_TLS_CERT` / `OM_TLS_KEY` | – | PEM certificate for STARTTLS / implicit TLS |
@@ -231,6 +277,7 @@ node server/setup.js list-users
 
 ```
 openmail/
+├── .github/workflows/      # CI: build & publish multi-arch images to GHCR + Docker Hub
 ├── install.sh              # one-click installer (Node 22 + systemd + langpacks)
 ├── start-windows.bat       # Windows double-click launcher
 ├── scripts/                # update.sh (one-click updater) · doctor.sh (self-diagnosis) · install-langpacks.mjs · baota-adapt.sh (BT panel)
@@ -253,8 +300,8 @@ openmail/
 │   ├── install-langpacks.mjs
 │   ├── update.sh` — 一键更新
 │   └── baota-adapt.sh      # BT Panel (宝塔) adapter incl. BT Mail plugin handling
-├── tests/e2e.mjs           # 98-check end-to-end suite (API, SMTP, IMAP, POP3, i18n, AI…)
-├── docs/                   # DNS guide, deployment guide, panel guides, screenshots
+├── tests/e2e.mjs           # 119-check offline e2e suite (API, SMTP, IMAP, POP3, i18n, mock-AI)
+├── docs/                   # DNS guide, deployment guide, Docker guide (docs/DOCKER.md), panel guides, screenshots
 ├── Dockerfile · docker-compose.yml · .env.example
 ```
 
@@ -287,8 +334,9 @@ Network: a static public IPv4, outbound port 25 (or a relay), reverse DNS (PTR) 
 ## Development & testing
 
 ```bash
-npm test        # 77-check e2e suite against a running server (ports 3000/2525/2587/1143/1110)
-npm run dev     # node --watch auto-restart
+npm test            # 119-check offline e2e suite against a running server (mock AI upstream included)
+npm run test:secret # verify the auto-generated OM_SECRET survives restarts
+npm run dev         # node --watch auto-restart
 ```
 
 The suite covers registration/login, internal & scheduled sending, attachments, external delivery over raw SMTP, SASL submission, IMAP (fetch/store/search/append/list), POP3, folders, filters, blacklists, contacts import/export, 2FA, and every admin API including DKIM/DNS records.

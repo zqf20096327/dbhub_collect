@@ -17,19 +17,35 @@
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/memory-eternal.gif" width="880" alt="对话自动沉淀 + 图形化知识库 + 知识图谱（演示）" />
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/cards.png" width="900" alt="知识卡列表：对话结束自动沉淀成卡，可检索 / 可审核 / 可追溯来源" />
 </p>
 
-> **对话结束自动沉淀，跨会话不失忆；召回只取相关小块，省 token 少噪音。**
-> 全自研、零第三方记忆框架、不改 DSH 源码、一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。
+> **对话结束自动沉淀成知识卡，跨会话不失忆；召回只取相关小块，省 token 少噪音。**
+> 全自研、零第三方记忆框架、不改 DSH 源码；一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。
 
-<p align="center"><strong>⭐ 觉得好用就点个 Star</strong>！ <br/><sub>DSH 一条命令：<code>dsh plugin --profile web add memory-eternal</code></sub></p>
+<p align="center"><strong>⭐ 如果它帮你少解释了一遍上下文，点个 Star 就是最大的支持</strong><br/><sub>DSH 一条命令：<code>dsh plugin --profile web add memory-eternal</code></sub></p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/memory-popup.png" width="32%" alt="记忆库弹窗：知识卡 / 检索 / 知识图谱" />
-  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/memory-settings.png" width="32%" alt="DSH 设置 → 记忆：全部配置项" />
-  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/memory-sidebar.png" width="32%" alt="侧边栏一键入口" />
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/graph.png" width="32%" alt="知识图谱：897 节点 / 4257 连线，按类型着色、支持跨库聚合与导出" />
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/health.png" width="32%" alt="健康概览：知识库 / 备份 / 自动沉淀 / 版本，一眼看清有没有静默坏掉的东西" />
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/audit.png" width="32%" alt="审核中心：AI 写的卡先审后入，可批量批准 / 驳回 / 回收" />
 </p>
+
+<p align="center"><sub>▲ 知识卡列表 · 知识图谱 · 健康概览 · 审核中心 —— 全部是真实运行截图（1280×860）</sub></p>
+
+---
+
+## ✨ 它到底解决什么问题
+
+| 你遇到的 | 以前的做法 | 用了之后 |
+| --- | --- | --- |
+| 聊了 3 天的项目，新会话全忘 | 手动翻历史 / 重新解释一遍 | 每轮结束自动沉淀成卡，开工前 `memory_recall` 一句就回来 |
+| 记忆塞进 prompt，token 爆掉 | 全量粘贴、越聊越贵 | 只召回相关的一小块（可配上限），省 token 也少噪音 |
+| AI 写的东西不敢直接信 | 无法追溯、无法回滚 | 卡片带来源 / 时间 / 状态，先审后入，删除进回收站 |
+
+- **看得见**：知识卡 / 图谱 / 健康概览 / 沉淀日志，四层可视化；
+- **控得住**：审核模式（全部人工 / 仅高风险）、去重与矛盾扫描、批量合并、每日备份与一键恢复；
+- **带得走**：知识库是本地 Markdown + SQLite，可 git 管理、可导出，不锁在插件里。
 
 ---
 
@@ -70,7 +86,11 @@ node -e "console.log(require('memory-eternal/package.json').version)"
 |---|---|
 | 自动沉淀知识卡 | 每轮对话结束自动发生，无需操作 |
 | `memory_recall` 工具 | Agent 需要历史时自动调用 |
-| 图形化界面 | 侧边栏底部「记忆」按钮 / 设置 → 记忆 |
+| 图形化界面 | 侧边
+
+[...截断...]
+
+栏底部「记忆」按钮 / 设置 → 记忆 |
 
 **入口**：侧边栏底部「记忆」按钮 → 记忆库（左栏含 知识卡 / 知识图谱 / 用量 / **审核中心** / 回收中心 / **记忆配置**）；「DSH 设置 → 记忆」= 纯配置页。
 
@@ -82,11 +102,7 @@ node -e "console.log(require('memory-eternal/package.json').version)"
 
 ```bash
 npm i -g memory-eternal     # 装 CLI + MCP（写 ~/.claude.json mcpServers.memory）
-dsh-memory connec
-
-[...截断...]
-
-t claude       # 写 ~/.claude/settings.json 的 SessionEnd hook → 会话结束自动沉淀
+dsh-memory connect claude       # 写 ~/.claude/settings.json 的 SessionEnd hook → 会话结束自动沉淀
 ```
 
 装完即用：会话里说「recall 一下数据库选型」→ 自动检索记忆；会话结束 → 自动沉淀进统一 `~/.dsh/memory-vault`（新卡 `pending` 待审核）。
@@ -157,12 +173,4 @@ dsh-memory audit reject <卡片路径...> --reason "..." # 人工批量驳回
 - **web server 怎么保活**（`autoWebMode`）→ `init`=DSH 启动时拉一次（默认）；`interval`=DSH 进程内定时探活自动拉起（0 额外内存）；`manual`=全手动只从 `dsh-memory open` 起。
 - **看门狗进程**（`watchdogAutoSpawn`，默认开）→ 一个**独立** node 进程，DSH 退出了它也能拉起 web（约 +47 MB 内存）。只在要 7×24 保活时开。
 - **版本漂移自愈**（`autoRestartOnDrift`，默认开）→ 常驻 web **比 DSH 活得久**：升级只换磁盘文件，端口上那个进程仍跑着启动时加载的旧代码（「启动 dsh 后运行中还是旧版本」就是这么来的）。开着它，DSH 激活时会**问端口上真正服务的版本**，与磁盘不一致就用新代码重启常驻实例；关掉则只告警，需要时在「插件信息」点**重启常驻实例**。
-- **自动挂载 MCP**（`autoMcpSetup`，默认关）→ 是否自动把 MCP 写进 Claude Code/Codex/Cursor 配置。关 = 不碰你本机配置文件，需要时手动 `dsh-memory setup`。
-
-**改这些**：记忆库左栏「记忆配置」（或 DSH 设置 → 记忆）→ 表格里改，点「保存配置」；`autoWebMode`/`watchdogAutoSpawn` 需重启 DSH 生效。
-
-> ⚠️ **同端口不会因配置改动而自动替换（#19）**：看门狗是**独立进程且故意不杀**（多会话共用一个），所以
-> 关闭 `watchdogAutoSpawn` **不会**停掉已经在跑的那个，改 `webCheckIntervalMs`/`webMaxRestart` 也不会生效。
-> 要停止 / 换新版请显式执行 `dsh-memory stop [--port N]` 与 `dsh-memory restart [--port N]`（`stop` 会**连它拉起的 web 一起停**，不留占端口的孤儿）；
-> `dsh-memory status` 会显示常驻实例的 pid、端口、启动时间与**版本是否落后于本机安装的包**，并单独报出**端口上真正服务的版本**
-> （锁文件里的版本号只是 wa
+- **自动挂载 MCP**

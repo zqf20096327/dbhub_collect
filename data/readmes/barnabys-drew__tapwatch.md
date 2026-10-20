@@ -20,6 +20,10 @@ PC a case says whether the owner's coding agent was behind it. An optional small
 reach your phone. One small box runs it all, with no SIEM; nothing leaves but your
 notifications, list downloads and the optional AI questions, and those see words, not packets.
 
+> **Start here.** Setting it up in an office or home with UniFi and a Windows PC, and new to all of
+> this? Follow [docs/setup/office-unifi.md](docs/setup/office-unifi.md): one installer
+> (`install-windows.cmd`) and a few clicks in UniFi. Everything below is the detail.
+
 ## Why this exists
 
 - **Homes have no SOC.** Commercial NSM assumes an analyst reads alerts all day. tapwatch's job is
@@ -156,11 +160,11 @@ treat it as a sanity check, not a benchmark. The scripted self-check (`tapwatch 
 | `off_hours` | a device busy at an hour it's normally idle |
 | `tls_odd` | encrypted sessions stacking weak oddities (no name, unexplained IP, odd port, bad cert) |
 | `cleartext_auth` | HTTP basic auth, FTP logins, telnet, POP3/IMAP or MQTT without encryption |
-| `new_domain` | first contact with a rarely used domain (code-routed; log-only, kept out of the queue by default) |
+| `new_domain` | first contact with a rarely used domain, off the popular list or random-looking (code-routed; log-only, kept out of the queue by default) |
 | `scan` | one host probing many hosts or ports; a Wi-Fi client the router just moved between access points or dropped (its syslog) is held to the digest |
 | `udm_ips`, `udm_admin` | the router's own IPS verdicts, and admin logins (new source or repeated failures **always alert**), from its syslog; the feed is parsed against lines a real UniFi gateway sends |
 | `host_encoded_cmd`, `host_app_shell`, `host_temp_exec`, `host_lolbin`, `host_bad_sig`, `host_persist`, `host_destructive`, `host_recon`, `host_extension`, `host_linux_connect`, `host_linux_cmd`, `host_lsass` | on a PC with the [osquery agent](agents/README.md): an encoded or download-and-run command, a document app or browser starting a shell, a program in a temp folder, a built-in Windows tool, or a badly signed program connecting out, or a new task, service, startup item, cron job or WMI subscription that runs a script or a shell, a command that removes backups or logs, turns off Defender or adds an account, a burst of discovery commands, a program reading lsass memory, a new browser extension with sensitive access, and on Linux a temp-folder, in-memory or shell connection, a download-and-run, reverse-shell or history-clearing command, and new SSH keys or systemd units (download-and-run command combinations and the four downloader tools, certutil, bitsadmin, mshta and regsvr32, **always alert**) |
-| `ioc_match`, `ids_alert` | your threat lists (**always alert**), and Suricata alerts if you run it |
+| `ioc_match`, `ids_alert` | your threat lists (**always alert**), the downloaded AdFection / Candiru spyware list (its C&C, validation and Candiru tiers **always alert**; its ad-delivery and older-campaign tiers are graded leads), and Suricata alerts if you run it |
 
 Design notes and rule specs (Sigma and SQL) are in [docs/detections/](docs/detections/DESIGN.md).
 
@@ -175,15 +179,18 @@ You need a managed switch that can **mirror** the port your router plugs into
 git clone https://github.com/barnabys-drew/tapwatch && cd tapwatch
 python3 -m venv .venv && .venv/bin/pip install -e .
 .venv/bin/tapwatch init            # detects your router and interfaces, asks a few questions
-.venv/bin/tapwatch update-feeds    # public lists: popular domains, MAC vendors, IP-to-network, site categories, public suffixes
+.venv/bin/tapwatch update-feeds    # public lists: popular domains, MAC vendors, IP-to-network, site categories, public suffixes, AdFection IOCs
 TAP_IFACE=<mirror NIC> docker compose -f deploy/docker-compose.yml up -d --build
 ```
 
 Add `--profile syslog` for the router syslog listener, or `--profile ids` for Suricata.
 
-**Linux without Docker, or a Windows PC:** run tapwatch as systemd user services with
-`tapwatch service install --zeek-dir <dir>`. On Windows, Npcap captures and everything else runs
-in WSL (`--capture-iface` adds the capture service). See [docs/setup/windows.md](docs/setup/windows.md).
+**A Windows PC:** double-click `install-windows.cmd`. It sets up WSL, Ubuntu, Npcap, tapwatch, the
+endpoint agent and the services, restarting once, and finishes with `tapwatch doctor`
+([the guide](docs/setup/office-unifi.md); each step by hand: [docs/setup/windows.md](docs/setup/windows.md)).
+
+**Linux without Docker:** run tapwatch as systemd user services with
+`tapwatch service install --zeek-dir <dir>`.
 
 `init` writes `config.yaml`, `assets.yaml` and `.env` (secrets live only in `.env`), offers to
 download the public lists, and lists every VLAN's gateway you tell it about (one is strict, the
@@ -209,7 +216,7 @@ eval/replay.sh eval/data/synthetic.pcap eval/out/synthetic        # Zeek in Dock
 | `tapwatch ui` | the case desk at http://127.0.0.1:8765/ (set `TAPWATCH_UI_TOKEN` for other devices) |
 | `tapwatch digest` | send the pending digest now (it also goes out daily) |
 | `tapwatch mark 42 fp` | close case 42 as a false (`fp`) or true (`tp`) positive |
-| `tapwatch update-feeds` | refresh the public lists: Tranco, IEEE MAC vendors, iptoasn, UT1 site categories, the Public Suffix List (weekly is plenty) |
+| `tapwatch update-feeds` | refresh the public lists: Tranco, IEEE MAC vendors, iptoasn, UT1 site categories, the Public Suffix List, the AdFection / Candiru indicators (weekly is plenty) |
 | `tapwatch syslog` | receive the router's CEF syslog into `udm.log` |
 | `tapwatch service install` | install systemd user services (alerter, case desk, watchdog; `--capture-iface` adds capture, `--syslog` the router syslog listener) |
 | `tapwatch who 42 --zeek-dir DIR` | ask the PC (osquery and agent transcripts) who made case 42's traffic |
@@ -217,6 +224,7 @@ eval/replay.sh eval/data/synthetic.pcap eval/out/synthetic        # Zeek in Dock
 | `tapwatch replay` / `tapwatch eval` | push finished logs through the pipeline, or score rules-only vs Jev on labelled traffic |
 | `tapwatch selfcheck` | detection rate on 18 scripted attack and false-positive shapes, rules only; exit 1 on a regression |
 | `tapwatch benchmark` | week-by-week noise rate, Jev agreement and host-context accuracy from the case desk, as Markdown |
+| `tapwatch doctor [--send]` | check every part of the install (capture, mirror port, router logs, agents, alerts, AI keys, lists, disk, the Windows side) and say how to fix what isn't working; `--send` adds a test alert |
 | `tapwatch test-alert` / `tapwatch notify` | check your notification channels |
 
 Optional extras: [router syslog](docs/setup/router-syslog.md) adds the router's own IPS verdicts
@@ -290,20 +298,22 @@ adds Semgrep and Trivy on PRs into `main`.
 
 ## Status
 
-**v0.1.1**, running on a real home network, so expect rough edges. The Linux paths (a bare
-container following this README, and the Compose stack) were installed from scratch and run on
-2026-10-15. The router syslog feed is verified against a live UniFi gateway, the twelve endpoint
-rules (R17–R21, R23–R29) are in, and host context's attribution of a one-second `curl` to the agent that
-ran it was verified live on 2026-10-16. Site categories (UT1 lists, optional model) landed the
-same day. On 2026-10-17 the host-context verdicts were verified live on test shapes: the owner's
-prompt naming a destination corroborates the agent's connection, and a tampered binary's connection
-raised the bad-signature rule. The same day fixed a blind spot found by looking: the Windows agent's
-signature check had been running per socket, slowly enough that osquery banned the query for a day
-at a time, so the check now runs once per program, and a new rule watches every feed for silence
-(it caught that ban ten minutes after deploy). A scripted detection-rate check runs in CI, and the
-stats page gained a week-by-week benchmark. Next up, per the [roadmap](docs/ROADMAP.md): a
-clean-machine Windows test, Linux endpoint rules, and letting the noise rate fall as the baselines
-age. macOS waits until there's a Mac to test on.
+**v0.2.0**, running on a real home network since 2026-10-13, so expect rough edges.
+
+- **Installs verified from scratch:** the Linux paths (a bare container and the Compose stack, 2026-10-15)
+  and the Windows path on a clean Windows 11 machine (2026-10-18: capture into Zeek and an alert to
+  Discord, which found and fixed a Discord 403). The one-step Windows installer (`install-windows.cmd`)
+  and `tapwatch doctor` passed a clean Windows 11 machine on 2026-10-19.
+- **Detection:** the network rules, the router's syslog (verified against a live UniFi gateway), and
+  the endpoint rules R17–R29 on Windows and Linux (the Linux set verified live on 2026-10-18). A scripted
+  detection-rate check runs in CI; a feed-silence rule watches every log source, the router included.
+- **Measuring:** the stats page and `tapwatch benchmark` report noise rate, Jev agreement and
+  host-context accuracy week by week. The first live week ([results](eval/RESULTS.md)): about 5 alerts a day,
+  nearly all noise while the baselines learn, 2 true positives (both digest items); host context answered on
+  all 136 PC cases and named the program for 106, and its intent verdicts have not yet fired on real traffic.
+
+v0.2 (evidence outside one house) and v0.2.5 (easy install) are done. Next, per the [roadmap](docs/ROADMAP.md):
+more endpoint rules (v0.3) and learning from the owner's closed cases (v0.4). macOS waits until there's a Mac to test on.
 
 ## License
 

@@ -1,39 +1,57 @@
 # provLedger
 
-Lost in a project's decision history? Watching your coding agent walk the same wrong path again?
+**Every change, traced to the decision behind it.**
 
-Someone asks in chat why the churn model splits 70/30 — *wasn't it the other way round?* You scroll back through four months of threads, find three conversations that nearly say it, and give up.
+A Claude Code plugin for data work. While you and your agent change code and data, it keeps the why — your words, the email behind them, the paths tried and dropped — on the things in the project they are about, and answers for the project when you are not there to.
+
+[![PyPI](https://img.shields.io/pypi/v/provledger)](https://pypi.org/project/provledger/)
+![python](https://img.shields.io/badge/python-3.10%2B-blue)
+![license](https://img.shields.io/badge/license-MIT-green)
+
+![The three views in one picture: the project graph with a badge on each node that carries records, one node's timeline with the source of every record, and one task's reason, the rule it was shown before it started and the step that failed on the way](docs/media/readme-three-views.png)
+
+*Graph, Node and Task: three views of one record, one click apart. A drawing with made-up data; the screenshots further down are the real dashboard.*
+
+### "Why did we stop using that data?"
+
+The column is gone, the function that read it is gone, and whoever decided has moved on. `grep` finds nothing, because there is nothing left to find; `git log` shows the commit that took it out, not the email that asked for it. provLedger keeps the history of things that no longer exist — the words, the email and the task that removed them — and when a rule was recorded with them, it puts that rule in front of the next agent that plans to bring them back.
+
+### "Can anyone answer this while I'm away?"
+
+You go on vacation; the questions don't. Give a brand-new agent a fresh install and your ledger, and it answers them: the detail, the history, the words used at the time, each with the record it rests on. Where nothing was recorded, it says so instead of guessing. Every release is checked this way: [`scripts/release-e2e.sh`](scripts/release-e2e.sh) installs the plugin into an empty home, opens a new session for each question about a project that session has never seen, and has a model mark every answer against key points written down in advance. Handing a ledger to someone else is manual for now ([known issues](docs/KNOWN-ISSUES.md)).
+
+The first question, asked on the bundled demo (`bash examples/phantom-uplift/demo-provenance.sh`, step 3 of [§3](#3--five-minutes)):
 
 ```
-$ /ledger why is our train/test split 70/30?
+$ /ledger why did we stop using orders.discount?
 
-  70/30 has been in force since 2026-04-03. Moving to 80/20 was tried on
-  2026-08-14 and rejected: the holdout leaked week-52 promotions, so the
-  lift was the promotion and not the model.          [#94 · your own words]
-
-  The email that settled it is on the record.
-  Sarah Chen, "Q3 rollup scope", 2026-08-14 09:12    [r12 ↗ · checked 6d ago]
-
-  Raised again on 2026-09-17 and dropped without an answer.  [#i9]
-
-  Searched 3 nodes · 2026-04-03 to 2026-09-17 · nothing left out
+The function that read orders.discount, `pkg.rollup.discount_rate`, was
+removed from the project on 2026-10-19. [#e11]
+A person said why, that day: "Drop orders.discount from the rollup —
+upstream said the v2 feed no longer carries it." [#1]
+That reason links to the email it came from, "Re: orders feed v2 schema
+(demo)", which nobody has checked since. [#r1]
+The same day it was recorded as a rule on `pkg.tiles.dashboard_tile`: do
+not depend on orders.discount, because the v2 upstream feed no longer
+provides it. [#2]
+…
+Scope: 3 nodes, 2 constraints, 0 influencing records, 6 changes,
+2026-10-19 to 2026-10-19; 3 candidates, 3 chosen; nothing truncated.
 ```
 
-Every line ends in a record id. The ids are real rows, the search range is counted rather than estimated, and when nothing was recorded the answer says so instead of filling the gap.
+*What the ledger's check printed in that run, wrapped, with the absences and the record links cut (`…`). The demo writes every record on the day you run it, so all its dates are that day.*
 
-**Your project, answering for itself** — across every node, every task and every month it has existed.
+Every line ends in a record id, and the ids are real rows. The scope line counts what was searched, and when nothing was recorded the answer says so instead of filling the gap.
+
+Neither question is about remembering a conversation. provLedger hangs each record on the thing in the project it is about — a function, a column, a task — not on the session it was said in. So a record outlives the code it explains, and an agent that was never there reads the same rows you would.
+
+**Your project, answering for itself** — across every node, every task and every month since you installed it.
 
 ![A task page, the decisions it relied on, the rule behind one of them with the email that carried it, and /ledger answering a question with the record it rests on](docs/media/readme-hook.gif)
 
 *Task → "Decisions relied on" → open the node → the rule with the email → `/ledger`: "why did we stop using orders.discount?" → a cited answer.*
 
-**[Watch it happen →](https://yizhao95.github.io/prov_ledger/walkthrough.html)** — two minutes: a colleague asks why the data stops on 18 September, nobody on the team knows, and the record answers with the incident behind it.
-
-A Claude Code plugin for data work. It keeps what was decided and why — your words, the email, the agent's reading, kept apart and never blended — and puts them in front of whoever is about to change the thing again.
-
-[![PyPI](https://img.shields.io/pypi/v/provledger)](https://pypi.org/project/provledger/)
-![python](https://img.shields.io/badge/python-3.10%2B-blue)
-![license](https://img.shields.io/badge/license-MIT-green)
+**[Watch it happen →](https://yizhao95.github.io/prov_ledger/walkthrough.html)** — under two minutes: a colleague asks for a discount rate on the weekly tile, and the record shows it was built in May and taken out in June — why, what was tried instead, and how widely the call was shared — before the reply is drafted. Install is two commands: [§3](#3--five-minutes).
 
 ---
 
@@ -48,6 +66,8 @@ Three months ago someone said, in a meeting, "don't split that dataset randomly 
 ## 2 · What it does
 
 It keeps one view of a project across nodes (the whole map and what flows through it), across time (what each thing was, and what it became) and across tasks (what every piece of work read, decided and expected). Graph, Node and Task are three angles on that one view, not three pages: they share a single anchor of project, node and point in time, and switching between them keeps it — one anchor, three angles. Around each thing in the map it holds the decisions: why it changed, the rule that still constrains it, and **the paths that were tried and dropped** — the half a diff never shows.
+
+**Nothing is deleted.** A function removed from the code keeps its history and every reason recorded on it, and `provledger why` on it says when it went. A path tried and dropped stays as a rejected path; a step that failed stays in its task even when the task closed green; a prediction stays beside what was later measured; a reason found wrong is superseded, not overwritten. Each is a tombstone — what was there, when it went, and why — and `provledger why --tombstones` lists a project's, one line each, with the read that opens any one of them.
 
 ![A data-flow picture of a real repository, switching between two views: 3,568 nodes folded into modules and laid out in three bands — what is read, what processes it, what is produced — with the count of nodes that carry records changing as the view changes](docs/media/readme-graph.gif)
 
@@ -66,7 +86,7 @@ When none of them has anything to say, the record says *unstated* and stops ther
 | the question | what answers it |
 |---|---|
 | Why is it this way? | `/ledger`, and every sentence ends in the id of the record it rests on |
-| Have we tried this before? | the rejected paths on the thing you are about to change, surfaced before you edit it |
+| Have we tried this before? | the rejected paths on the thing you are about to change, surfaced before you edit it; `why --tombstones` for the whole project |
 | What would this change reach? | the computed arrows — consumers, and the metric three steps downstream |
 | Someone is asking me to justify this | `/receipts` — the same records as a timeline with their sources, for your own model to write the reply from |
 | I just inherited this project | all of the above, without having been in any of the meetings |
@@ -225,4 +245,4 @@ Issues and pull requests are welcome. Good first contributions: run `make demo` 
 
 <video src="https://yizhao95.github.io/prov_ledger/media/walkthrough.mp4" controls muted playsinline width="880" poster="https://yizhao95.github.io/prov_ledger/media/walkthrough-cover.png"></video>
 
-*Two minutes, no narration. Someone asks in chat why the rollup stops on 18 September and nobody still on the team knows. The record does: an upstream incident, the RCA that found it, the call that decided to cut the data — and that the cutoff was only ever meant to be temporary.* Chapters and captions in English or Chinese: **[the walkthrough page](https://yizhao95.github.io/prov_ledger/walkthrough.html)**.
+*Under two minutes, no narration. A colleague asks for a discount rate on the weekly tile, which sounds new. The record says it was built in May and taken out on 30 June: the email it rests on, the review that settled it, the two workarounds tried and dropped, who said so and how many later tasks were shown it. Then the session drafts the reply, with the one thing to confirm before sending it, and the film closes on one line: people forget, your agent doesn't.* Chapters and captions in English or Chinese: **[the walkthrough page](https://yizhao95.github.io/prov_ledger/walkthrough.html)**.

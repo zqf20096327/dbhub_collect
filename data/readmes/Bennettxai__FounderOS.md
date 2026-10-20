@@ -1,155 +1,130 @@
-# Founder OS
+# FounderOS
 
-**A personal operating system for a single person company: a command center
-that runs your business as a set of AI-assisted "departments."**
+**A personal operating system for a one-person company: a command center that
+runs your business as a set of AI-assisted departments.**
 
 Built for whoever is holding the whole thing together: a freelancer, a
 solopreneur, a solo founder, or a small team where one person still runs point.
 You set the direction, AI agents cover the departments, and any employees you do
 have plug into the same board.
 
-Founder OS turns the tabs, tools and mental overhead of running that business
-into one screen: unified comms, a client funnel, social growth, finances, a
-knowledge graph, and a roster of named AI agents that each own a real job.
+FounderOS puts unified comms, a client funnel, social growth, finances,
+Optimal Engine (your markdown knowledge base, searchable), and a roster of named
+agents on one screen. Every page reads from one local SQLite database; every
+integration is an honest connector that reports *not configured* until you give
+it a key.
 
 > Want to build your own, live, with guidance? That's what the cohort is for:
 > [founderos.sh](https://founderos.sh)
 
----
+## v3: FounderOS on GladOS
 
-## v2: Founder OS on BusinessOS
+v3 is the GladOS codebase with FounderOS on top: every GladOS screen, the
+FounderOS Agents board and Social pages (`founderos/`), and a demo company so a
+fresh clone shows a working business instead of an empty one.
 
-Founder OS v1 was a Next.js + SQLite app. v2 keeps the same operator UI and runs
-it on the [BusinessOS](https://github.com/Miosa-osa/BusinessOS) stack:
-
-| Layer | v1 | v2 |
-| --- | --- | --- |
-| Frontend | Next.js 14 (React) | SvelteKit 2 (Svelte 5) |
-| Backend | Next.js API routes | Go (Gin) |
-| Operational data | SQLite (better-sqlite3) | PostgreSQL + Redis |
-| Knowledge / memory | G-Brain | [Optimal Engine](https://github.com/Miosa-osa/OptimalEngine) (Elixir/OTP), bundled |
-| Desktop | — | Electron shell (optional) |
-
-The operator views live under `/os`. Everything else BusinessOS provides
-(workspaces, roles, teams, the module desktop, the terminal) comes with it.
-The last v1 release is tagged `v1-nextjs`.
-
----
+| Version | Stack | Where |
+|---|---|---|
+| v3 (this) | Next.js 14 + SQLite, GladOS | `main` |
+| v2 | Go + SvelteKit on BusinessOS | tag `v2-businessos` |
+| v1 | Next.js 14 + SQLite | tag `v1-nextjs` |
 
 ## Quick start
 
-Prerequisites (macOS shown):
+Requires Node 22 or newer.
 
 ```bash
-brew install node@22 go postgresql@17 pgvector redis elixir python
-corepack enable && corepack prepare pnpm@9.15.4 --activate
+npm install
+npm run dev                    # http://localhost:4100
 ```
 
-The schema needs the `vector` extension. Homebrew's `pgvector` bottle builds for
-its current Postgres releases (17/18), so pair it with `postgresql@17`; on another
-Postgres, build pgvector for it, or point the launcher at a matching install
-with `BUSINESSOS_PG_BIN=/path/to/pg/bin`.
+That's it. FounderOS opens on **demo mode**: a fictional company (twenty-two
+agents, their tasks and run history, a 24-journey funnel, brand deals,
+social accounts, campaigns, an Optimal Engine store of 180 pages) built into
+`demo-data/` on first start and refreshed when it is a week old. Nothing in it
+is real, and it never touches `data/`.
 
-Then:
+When you are ready for your own business, open **Settings** and turn
+**Filming mode** off (Filming is GladOS's name for the demo data). FounderOS then reads `data/`, which starts blank: six departments,
+and everything else yours to add through the UI or by wiring a connector. Set
+`GLADOS_DEFAULT_MODE=real` to start every fresh install blank instead.
+
+No login on first run: with no password set, FounderOS listens on `127.0.0.1`
+only, so nothing off this machine can reach it. Open **Settings → Security** and
+set an operator password whenever you want to reach it from another device; from
+then on every page and API route asks for it.
+
+`npm run dev` compiles each page on first visit, so switching pages there is
+slow by design. To review or time the app as it really runs, use the preview:
 
 ```bash
-BUSINESSOS_HEADLESS=1 make dev-local   # Postgres, Redis, Optimal Engine, backend, frontend
-                                       # (drop BUSINESSOS_HEADLESS=1 to also open the desktop app)
-open http://localhost:5273/register    # create your local account
-make demo OWNER=you@example.com        # Founder OS workspaces + the demo data
-open http://localhost:5273/os          # the operator console
+npm run preview                # build into .next-preview, then serve it
+npm run preview -- --no-build  # restart on the last preview build
+node scripts/nav-timing.mjs --base http://127.0.0.1:4100   # page-switch timings
 ```
 
-`make demo` creates four workspaces (HQ, Vantage, Launchpad Cohort, Personal),
-loads the demo's seeded data into Postgres and its knowledge into the Optimal
-Engine. It is idempotent; re-running it refreshes the demo and moves its dates
-to today. No credentials are needed to browse.
+The preview has its own build folder, so a `next dev` on the same checkout is
+untouched. Code changes need a new `npm run preview`. Live sources (Attio,
+Stripe, Zernio and the rest) are read through a short cache that the server
+fills once at start; set `GLADOS_WARM=0` to skip that warm-up.
 
-Ports live in `.env.dev`; `make dev-local-status` shows what is running and
-`make dev-local-stop` stops it. See [docs/BUSINESSOS.md](docs/BUSINESSOS.md) for
-the platform's own setup notes.
+## What's inside
 
----
+| Area | Pages |
+|---|---|
+| Command | `/` home · `/wizard` · `/inbox` (Comms) |
+| Revenue | `/funnel` · `/brand-deals` · `/clients` · `/finances` · `/trading` |
+| Growth | `/social` · `/adpilot` · `/creative-engine` · `/analytics` · `/lab` (Content Lab) · `/lead-magnets` |
+| Workforce | `/agents` (`/org` org chart via ⌘K) · `/chats` · `/tasks` · `/workflows` · `/skills` · `/compute` |
+| Knowledge | `/brain` (Optimal Engine) · `/database` (brain files) · `/knowledge` · `/drift` |
+| System | `/setup` (Settings) · `/integrations` · `/usage` · `/blueprint` (compiled system graph) · `/roadmap` |
 
-## What you're looking at
+- **Connectors** (`lib/connectors/`): email (IMAP), Slack, Notion, Attio, WhatsApp, Stripe/PayPal, Beehiiv, ManyChat, Zernio, Foreplay, the knowledge engine, a local-stack probe, and an LLM gateway. Each returns a `ConnectorStatus` and never fakes "connected".
+- **Agents** (`lib/agents/`): a runtime with a registry, runs, broadcasts and chat tools. The Agents page is the FounderOS board (`founderos/`): the roster, run activity, task lanes and the Conductor, read from a Paperclip board when one is configured and from the demo company in demo mode.
+- **Optimal Engine** (`lib/brain.ts`): the `/brain` page searches a markdown folder through the [gbrain](https://github.com/garrytan/gbrain) CLI, with a plain-text fallback when the CLI is absent.
+- **Demo company** (`lib/demo/`): the seed behind demo mode, the same company [founderos.sh](https://founderos.sh) shows.
+- **Blueprint** (`lib/blueprint/`): compiles the real registries (agents, connectors, skills, stores) into a graph so the map can never drift from the system.
 
-| Route | What it is |
-| --- | --- |
-| `/os` | Operator console: pulse row, what needs you, operating volume |
-| `/os/comms` | Unified inbox: email, Slack, WhatsApp, calendar and recorder lanes |
-| `/os/funnel` | Living client-journey flow and acquisition wheel |
-| `/os/workflows` | Multi-step tool workflows, as a tree and a builder |
-| `/os/social`, `/os/content` | Growth dashboard; content pipeline, calendar and lead magnets |
-| `/os/brand-deals`, `/os/finances`, `/os/trading`, `/os/adpilot` | Deals, money, brokerage monitor, paid-media planner |
-| `/os/agents`, `/os/chats`, `/os/tasks`, `/os/skills` | The agent roster, chat hub, task board and skills |
-| `/os/org`, `/os/blueprint` | Org hierarchy (operator → Conductor → pillars → workers) and the system blueprint |
-| `/os/brain`, `/os/doctor` | The knowledge core on the Optimal Engine, and its health |
-| `/os/integrations`, `/os/usage`, `/os/analytics` | Connections board, token usage, connector numbers |
-| `/os/roadmap`, `/os/reference`, `/os/personas` | Phases and quarters, the reference model, persona templates |
-
-Navigate with the sidebar or the command palette (Cmd/Ctrl + K; digits 1–9 jump
-to the first nine views).
-
----
-
-## Architecture: demo-first, real-ready
-
-The demo looks alive because of seeded data, but every view reads through the
-same path a live install uses, and every connector reports its honest state
-(`connected`, `not_configured` or `error`), never a fake green light.
-
-```
-frontend/src/routes/(founderos)/os/      SvelteKit routes, one per view
-frontend/src/lib/founderos/              views, kit (slab, charts, motion), chrome
-desktop/backend-go/internal/founderos/
-  api/          GET /api/founderos/pages/<view> and actions
-  pages/        page builders (read Postgres + connectors + the engine)
-  connectors/   24 integrations, honest status, writes behind FOUNDEROS_WRITES
-  agents/       the agent registry; every seeded agent has a real run()
-  memory/       retrieval over the Optimal Engine
-  seed/, etl/   the demo data and the loader behind `make demo`
-config/founderos/engine-topology.yaml    which engine each workspace's memory lives on
-optimal-engine/                          the bundled Elixir engine
-```
-
-Data lives in `founderos_*` Postgres tables, scoped by workspace. Knowledge
-lives in the Optimal Engine: agents write sources, signals and pending claims;
-facts are promotion-gated, so memory stays trustworthy as more agents write to it.
-
-**Safety switches.** `FOUNDEROS_WRITES=1` allows outbound writes (sends, posts,
-payments); `FOUNDEROS_CRONS=1` allows scheduled agent runs. Both are off unless
-you turn them on.
-
----
-
-## Credentials
-
-Connectors read keys from the process environment, `~/.founderos/.env`, or keys
-planted through the Connections board. Nothing else on your machine is read.
-Never commit keys. `.env*` files are gitignored.
-
----
-
-## Tests
+## Wiring Optimal Engine
 
 ```bash
-make test                                   # Go + frontend suites
-cd frontend && npx vitest run src/lib/founderos
-cd desktop/backend-go && go test ./internal/founderos/...
+bun install -g github:garrytan/gbrain    # not the npm package of the same name
+gbrain init --pglite --no-embedding
+gbrain import ~/path/to/your/notes --no-embed
 ```
 
-Go tests create throwaway databases on this checkout's dev Postgres (the
-`POSTGRES_PORT` in `.env.dev`); set `FOUNDEROS_PG_ADMIN_URL` to use another.
-Write the failing test first.
+Set `GBRAIN_BIN` to the absolute binary path and `GBRAIN_STORE` to your notes
+folder in `.env.local`. The embedded database is single-writer: run the CLI (as
+FounderOS does) *or* a long-lived `gbrain serve`, not both at once.
 
----
+## Security
 
-## Credits
+There are no accounts, just one operator password, managed in **Settings →
+Security** (set, change, remove, sign out every other device).
 
-Founder OS v2 is built on [BusinessOS](https://github.com/Miosa-osa/BusinessOS)
-and [Optimal Engine](https://github.com/Miosa-osa/OptimalEngine) by Roberto H.
-Luna and the Miosa team. If you use this stack, star their repos.
+- The password is stored as a scrypt hash in `.env.local` on the host
+  (`GLADOS_PASSWORD_HASH`) next to a random `GLADOS_SESSION_SECRET` that the
+  httpOnly session cookie carries. Neither is ever in git. Changing the
+  password rotates the secret, which signs out every other device.
+- **No password = this machine only.** `npm run dev` / `npm start` bind to
+  `127.0.0.1` and refuse any other `GLADOS_HOST` until a password exists. The
+  gate (`middleware.ts`) also answers 503 to any non-loopback Host in that
+  state, so running `next dev` by hand does not open it either.
+- **Password set = login everywhere.** Set `GLADOS_HOST` to the interface you
+  want (a Tailscale IP is the sane choice; `0.0.0.0` if you know why) and
+  restart. Mutating cross-origin requests are refused regardless of session.
+- Forgot it: delete the `GLADOS_PASSWORD_HASH` line from `.env.local`, restart,
+  and set a new one from the machine it runs on (or through
+  `ssh -L 4100:localhost:4100 <host>`).
 
-## License
+## Development
 
-MIT, see [LICENSE](LICENSE).
+```bash
+npm test          # vitest: includes a smoke test that renders every page and API route
+npm run typecheck
+npm run build
+```
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).

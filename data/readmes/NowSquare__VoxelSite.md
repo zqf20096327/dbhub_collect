@@ -38,9 +38,13 @@ VoxelSite is open source under the GNU Affero General Public License v3.0 — se
 - **Team** — invite editors and viewers with role-based access
 - **AEO** — built-in AI discoverability (`llms.txt`, schema, MCP endpoint)
 
+Site supports bounded edits to existing files. Unresolved PHP references are disclosed, and URL propagation is refused when they prevent reliable analysis. Reviewed AI plans and page mutations retain retry/recovery outcomes; incomplete recovery blocks further website writes until a verified Snapshot restore. Studio protects required recovery snapshots during cleanup and verifies file ownership, permissions and page relationships when restoring new manual and Site safety archives. Pages change in preview until Publish; shared assets can affect the published website immediately.
+
 ### Supported AI providers
 
 Anthropic Claude (recommended), OpenAI, Google Gemini, DeepSeek, or any OpenAI-compatible endpoint. You bring your own key; keys are encrypted at rest.
+
+**Output limits:** Settings shows your configured ceiling, the effective generation limit, and the model's context window. Section edits use at most 16,000 tokens. Compatible endpoints can use documented output/context overrides for each exact model ID and server URL. Empty responses report an error; responses that reach their limit after saving files report partial completion.
 
 ### AI Router
 
@@ -90,6 +94,8 @@ The websites VoxelSite generates are standard HTML, CSS, PHP, and vanilla JavaSc
 **Required PHP extensions:** `pdo_sqlite` `openssl` `json` `curl` `mbstring` `gd` `zip`
 
 Most shared hosts include all of these. The installer's system check confirms every requirement before you continue.
+
+Background prompts through the Agent API also require `exec()` and a working PHP CLI. The API checks both before accepting a job.
 
 ---
 

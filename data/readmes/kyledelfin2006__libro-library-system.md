@@ -9,19 +9,16 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
 
-Libro is a library management system built with Spring Boot. It helps manage a library's book collection and user accounts.
+Libro is a library management system built with Spring Boot. It helps manage a library's physical book copies, user accounts, and loan history.
 
 ### Features
 
-- 📚 **Books:** create, view, replace, partially update, and delete physical-copy records.
-- 🔎 **Search:** find books by title, author, genre, or exact price; combine filters, sort, paginate, and filter by price or budget.
-- 📊 **Insights:** view book counts, total and average value, the most expensive book, and genre counts.
-- 👥 **Accounts:** sign up, browse permitted listings, look up profiles, update details, change passwords, and delete accounts. Staff access follows role permissions.
-- 🔄 **Loans:** students and faculty borrow and return physical copies; staff can review permitted histories and mark lost copies.
-- 🛠️ **Built for development:** Docker, PostgreSQL 18, Flyway migrations, request validation, and consistent error responses.
-- 🩺 **Health check:** check API and database reachability.
+- **Catalog:** Manage physical copies; search and filter by title, author, genre, or replacement cost; sort and paginate results.
+- **Loans:** Students and faculty borrow and return copies. Loans last 14 days, allow up to three active loans per borrower, and block new checkouts while a loan is overdue.
+- **Accounts:** Public signup creates student accounts; librarians create faculty and library-assistant accounts. Role-based permissions protect account and staff workflows.
+- **Insights and operations:** View collection and genre statistics; run the API with PostgreSQL, Flyway, and Docker Compose. Validation, consistent errors, and a health endpoint support reliable use.
 
-Each `Book` is one physical copy; separate copies of a title have separate records. Loans use a 14-calendar-day term, allow up to three active loans per borrower, and block new checkouts while any loan is overdue. See the [Loan Implementation Guide](docs/loan.md) and [Domain Decisions](docs/domain-decisions.md).
+Each catalog record is one physical copy. Replacement cost records its value for replacement; it is not a borrower charge. See the [Loan Implementation Guide](docs/loan.md) and [Domain Decisions](docs/domain-decisions.md) for details.
 
 ### API access
 
@@ -47,24 +44,25 @@ Main Developer: **Aldrin Kyle Delfin**
 
 ## Table of Contents
 
-* [Architecture Overview](https://github.com/kyledelfin2006/library-api-system#architecture-overview)
-* [Layered Design](https://github.com/kyledelfin2006/library-api-system#layered-design)
-* [Current Authentication and Authorization Flow](https://github.com/kyledelfin2006/library-api-system#current-authentication-and-authorization-flow)
-* [Current Persistence Model](https://github.com/kyledelfin2006/library-api-system#current-persistence-model)
-* [File Structure](https://github.com/kyledelfin2006/library-api-system#file-structure)
-* [Core Design Patterns](https://github.com/kyledelfin2006/library-api-system#core-design-patterns)
-* [Key Features](https://github.com/kyledelfin2006/library-api-system#key-features)
-* [Request Lifecycle](https://github.com/kyledelfin2006/library-api-system#request-lifecycle)
-* [Code Highlights](https://github.com/kyledelfin2006/library-api-system#code-highlights)
-* [API Endpoints](https://github.com/kyledelfin2006/library-api-system#api-endpoints)
-* [Setup & Installation](https://github.com/kyledelfin2006/library-api-system#setup--installation)
-* [Troubleshooting](https://github.com/kyledelfin2006/library-api-system#troubleshooting)
-* [Data Management](https://github.com/kyledelfin2006/library-api-system#data-management)
-* [Testing](https://github.com/kyledelfin2006/library-api-system#testing)
+* [Architecture Overview](#architecture-overview)
+* [Layered Design](#layered-design)
+* [Current Authentication and Authorization Flow](#current-authentication-and-authorization-flow)
+* [Current Persistence Model](#current-persistence-model)
+* [File Structure](#file-structure)
+* [Core Design Patterns](#core-design-patterns)
+* [Features](#features)
+* [Feature Details](#feature-details)
+* [Request Lifecycle](#request-lifecycle)
+* [Code Highlights](#code-highlights)
+* [API Endpoints](#api-endpoints)
+* [Setup & Installation](#setup--installation)
+* [Troubleshooting](#troubleshooting)
+* [Data Management](#data-management)
+* [Testing](#testing)
 * [Documentation](#documentation)
 * [Problems I Solved](#problems-i-solved)
-* [Upcoming Improvements](https://github.com/kyledelfin2006/library-api-system#upcoming-improvements)
-* [License](https://github.com/kyledelfin2006/library-api-system#license)
+* [Upcoming Improvements](#upcoming-improvements)
+* [License](#license)
 
 ## Documentation
 
@@ -92,8 +90,9 @@ The system runs as a Spring Boot API alongside PostgreSQL. Book, user, and loan 
 
 ```mermaid
 flowchart LR
-    Client["API Client"] -->|HTTP / JSON + optional Basic credentials| Security["Spring Security<br/>signup public; other routes authenticated"]
-    subgraph App["Docker Compose: Spring Boot application"]
+    Client["API client"]
+    subgraph App["Spring Boot application"]
+        Security["Spring Security<br/>signup public; other routes authenticated"]
         API["BookAPI<br/>Spring MVC"] --> Service["BookService<br/>business rules · transactions"]
         Service --> BookRepo["BookRepository<br/>Spring Data JPA"]
         LoanAPI["LoanAPI<br/>checkout · return · history"] --> LoanService["LoanService<br/>loan rules · transactions"]
@@ -107,7 +106,8 @@ flowchart LR
         Security -->|load account for Basic authentication| UserDetails["LibroUserDetailsService<br/>lookup by university ID · map role"]
         UserDetails -->|findByUniversityId| UserRepo
         UserRepo --> ORM
-        Shared["Shared concerns<br/>DTOs · mappers · Jakarta validation<br/>GlobalExceptionHandler · OpenAPI"]
+        Flyway["Flyway migrations<br/>V1 books · V2 users · V3 librarian role · V4 loans · V5 catalog fields"]
+        Shared["Shared concerns<br/>DTOs · mappers · validation<br/>GlobalExceptionHandler · OpenAPI"]
         Security -->|authorized request| API
         Security -->|authorized request| UserAPI
         Security -->|authorized request| LoanAPI
@@ -117,9 +117,11 @@ flowchart LR
         Service -.-> Shared
         UserAPI -.-> Shared
         User -.-> Shared
+        Security -.-> Shared
     end
+    Client -->|HTTP and JSON with optional Basic credentials| Security
     ORM -->|JDBC| DB[("PostgreSQL 18")]
-    Flyway["Flyway migrations<br/>V1 books · V2 users · V3 librarian role · V4 loans"] -->|startup schema changes| DB
+    Flyway -->|startup schema changes| DB
     Compose["Docker Compose<br/>starts app after database is healthy"] -.-> App
     Compose -.-> DB
 
@@ -185,27 +187,28 @@ Account and loan access is checked against the authenticated user's university I
 ### Layered Design
 
 ```mermaid
-%%{init: {"flowchart": {"nodeSpacing": 12, "rankSpacing": 18}, "themeVariables": {"fontSize": "12px"}}}%%
 flowchart TD
-    C["<b>Controller Layer (BookAPI / UserAPI / LoanAPI)</b><br/>HTTP routing · Request validation<br/>Response mapping · Delegates to services"]
-    S["<b>Service Layer (BookService / UserService / LoanService)</b><br/>Business rules · Transaction boundaries<br/>Orchestrates repositories"]
-    BR["<b>BookRepository</b><br/>Spring Data JPA<br/>Book queries and persistence"]
-    UR["<b>UserRepository</b><br/>Spring Data JPA<br/>Account queries and persistence"]
-    LR["<b>LoanRepository</b><br/>Spring Data JPA<br/>Loan state and history queries"]
-    A["<b>Authentication Lookup</b><br/>LibroUserDetailsService<br/>Loads account by university ID"]
-    P["<b>Persistence Layer (JPA / Hibernate)</b><br/>Entity management · Dirty checking<br/>Flush / commit · Maps objects to tables"]
-    D["<b>Database (PostgreSQL 18)</b><br/>Tables · Indexes · Constraints<br/>Flyway migrations"]
-    X["<b>Cross-cutting Concerns</b><br/>DTOs · feature mappers<br/>GlobalExceptionHandler · SecurityConfig"]
+    C["Controller layer<br/>BookAPI, UserAPI, LoanAPI<br/>HTTP routing and request validation"]
+    S["Service layer<br/>Business rules and transactions"]
+    BR["BookRepository<br/>Book queries and persistence"]
+    UR["UserRepository<br/>Account queries and persistence"]
+    LR["LoanRepository<br/>Loan state and history queries"]
+    A["Authentication lookup<br/>LibroUserDetailsService"]
+    P["Persistence layer<br/>JPA, Hibernate, dirty checking"]
+    D["Database<br/>PostgreSQL 18; Flyway migrations"]
+    X["Shared concerns<br/>DTOs, mappers, validation, security, error handling"]
 
     C --> S
-    S --> BR --> P
-    S --> UR --> P
-    S --> LR --> P
+    S --> BR
+    S --> UR
+    S --> LR
+    BR --> P
+    UR --> P
+    LR --> P
+    P --> D
     A -->|findByUniversityId| UR
     X -.-> C
     X -.-> S
-    X -.-> BR
-    X -.-> UR
     X -.-> A
 ```
 
@@ -225,7 +228,8 @@ erDiagram
         VARCHAR title
         VARCHAR author
         VARCHAR genre
-        DECIMAL price
+        VARCHAR(2000) description
+        DECIMAL replacement_cost
         VARCHAR copy_status
         TIMESTAMP created_at
     }
@@ -256,9 +260,15 @@ Each checkout creates a new `LOAN` row for one physical copy and one borrower; `
 
 ## File Structure
 
+This is a selected map of the main application and test files. See the [engineering reference](guiding-docs/engineering-reference.md) for the fuller repository map.
+
 ```text
 AGENTS.md
 README.md
+Dockerfile
+docker-compose.yml
+envFileExample
+pom.xml
 docs/
   api-documentation-guideline.md
   development-problems-solved.md
@@ -274,6 +284,7 @@ src/main/java/app/
   LibraryApplication.java
   auth/
     SecurityConfig.java
+    LibroUserDetailsService.java
   loan/
     config/LoanTimeConfig.java
     controller/LoanAPI.java
@@ -321,6 +332,7 @@ src/main/java/app/
       ChangePasswordDTO.java
       UserCreateRequestDTO.java
       UserCreateUpdateDTO.java
+      UserReplaceRequest.java
       UserResponseDTO.java
     entity/
       User.java
@@ -342,9 +354,12 @@ src/main/resources/
       V2__create_users_table.sql
       V3__add_librarian_role.sql
       V4__add_loans_and_copy_status.sql
+      V5__describe_books_and_rename_price_to_replacement_cost.sql
 
 src/test/java/
   unit/
+    auth/
+      SecurityFlowMvcTest.java
     book/
       BookApiMvcTest.java
       BookMapperTest.java
@@ -353,6 +368,9 @@ src/test/java/
     user/
       UserApiMvcTest.java
       UserServiceTest.java
+    loan/
+      LoanSecurityMvcTest.java
+      LoanServiceTest.java
     global/
       GlobalExceptionHandlerTest.java
       OpenApiMvcTest.java
@@ -362,6 +380,8 @@ src/test/java/
       BookPersistenceIT.java
     user/
       UserPersistenceIT.java
+    loan/
+      LoanPersistenceIT.java
 
 src/test/resources/
   junit-platform.properties
@@ -388,7 +408,7 @@ The application never exposes `Book` (or future entity) objects directly to clie
 - **Never** instantiate an entity directly from client input.
 - **Never** return an entity directly in a controller response.
 - Controllers accept request DTOs (`BookRequestDTO` for create/PUT and `BookPatchRequestDTO` for PATCH) and return response DTOs.
-- `BookMapper` is the sole conversion point between entities and DTOs.
+- For book operations, `BookMapper` is the conversion point between `Book` entities and book DTOs; user and loan features use their own mappers.
 
 ### Why This Matters
 
@@ -402,7 +422,7 @@ The application never exposes `Book` (or future entity) objects directly to clie
    Response DTOs explicitly choose which fields are exposed. Sensitive or internal fields never appear in JSON unless intentionally added to the response DTO.
 
 4. **Enforces request validation at the boundary**
-   `BookRequestDTO` carries Jakarta Validation annotations (`@NotBlank`, `@Size`, `@NotNull`, `@Positive`). `@Valid` triggers them for create and PUT. PATCH uses a separate optional `BookPatchRequestDTO`; service logic validates supplied values without marking omitted fields as required in OpenAPI.
+   `BookRequestDTO` validates required title, author, genre, and positive replacement cost; description is optional and limited to 2,000 characters. `@Valid` triggers request checks for create and PUT. PATCH uses a separate optional `BookPatchRequestDTO`; service logic validates supplied values without marking omitted fields as required in OpenAPI.
 
 5. **Allows response customization**
    Response DTOs can reshape, rename, compute, or omit fields without changing the entity. For example, `LibraryStatisticsDTO` aggregates data from multiple repository calls into a single read-only snapshot.
@@ -419,23 +439,42 @@ public ResponseEntity<ApiResponse<BookResponseDTO>> addBook(@Valid @RequestBody 
 }
 ```
 
-## Key Features
+## Feature Details
 
-- CRUD operations for books.
-- Each `Book` represents one physical borrowable copy. Duplicate titles and authors are allowed because separate copies have separate generated IDs; the model does not yet include an ISBN or edition key.
-- Pagination and sorting through `GET /app/books/all` and paginated filtering through `GET /app/books/query`.
-- Advanced search by title, author, genre, or price.
-- Price range filtering through `GET /app/books/price`.
-- Budget filtering through `GET /app/books/budget`.
-- Statistics endpoints for total books, total library value, average price, and the most expensive book.
-- Genre distribution endpoint.
-- User-domain API for account creation, profile lookup and updates, password changes, and deletion; the service applies duplicate checks, academic business rules, and BCrypt password hashing.
-- OpenAPI 3 documentation through Springdoc Swagger UI and `/v3/api-docs`, with operation-specific behavior, DTO schemas, and expected error responses.
-- Validation with `@Valid` on create and replace requests.
-- Global handling for `BookNotFoundException`, validation errors, malformed JSON, number format errors, database issues, and unsupported methods.
-- Validation errors also include a `fieldErrors` map keyed by request field (or `_global` when no field is available), so clients can render precise messages without parsing the combined `details` string.
-- HTTP Basic authentication through Spring Security; signup is public and other routes require authentication.
-- Versioned database schema via Flyway.
+### Catalog and discovery
+
+Each `Book` is one physical borrowable copy. Separate copies can share a title or author and still have independent availability and loan histories. The catalog supports:
+
+- Create, view, replace, partially update, and delete copy records.
+- Search by title, author, genre, or exact replacement cost; combine text and inclusive replacement-cost filters.
+- Paginate and sort results, with supported sort fields validated by the API.
+- Filter by a replacement-cost range or a maximum budget.
+- Record an optional description and a positive replacement cost. Replacement cost is catalog information, not a fee charged to a borrower.
+
+### Collection insight
+
+Collection statistics include the number of copies, total and average replacement cost, the copy with the highest replacement cost, and counts by genre.
+
+### Loans and circulation
+
+- Students and faculty borrow and return their own copies and view their own paged loan history.
+- Loans are due 14 calendar days after checkout. A borrower can have at most three active loans; an overdue active loan blocks another checkout.
+- Library assistants and librarians can view permitted patron histories and resolve an active loan as lost. That action records who resolved it and marks the copy unavailable.
+- Returned and lost loans remain in history. Overdue loans are not automatically marked lost, and replacement cost does not create a penalty balance.
+
+### Accounts and permissions
+
+- Public signup always creates a student account. Librarians can create faculty and library-assistant accounts.
+- Students and faculty manage their own profiles, passwords, and account deletion. Administrators (library assistants) can manage student and faculty accounts; librarians can also manage library-assistant accounts.
+- The service checks account ownership and role rules. Passwords are stored as BCrypt hashes and are omitted from account responses.
+
+### API and operations
+
+- Springdoc OpenAPI 3 generates Swagger UI and `/v3/api-docs` from the API contract.
+- Request validation and shared error responses give clients structured field-level details for invalid requests and consistent responses for other expected failures.
+- Spring Security uses HTTP Basic; signup is public, and unsafe requests also require a CSRF token.
+- PostgreSQL stores the catalog, accounts, and loan history. Flyway applies versioned schema changes, while Hibernate validates mappings at startup.
+- Docker Compose runs the application with PostgreSQL, and the health endpoint reports API and database reachability.
 
 ## Request Lifecycle
 
@@ -451,8 +490,8 @@ public ResponseEntity<ApiResponse<BookResponseDTO>> addBook(@Valid @RequestBody 
 ### Update flow (`PATCH /app/books/{id}`)
 
 1. The controller passes `BookPatchRequestDTO` to `BookService.patchBook()`.
-2. The service loads the managed `Book` entity via `findBookById()`.
-3. Field changes are applied conditionally to the managed entity.
+2. The service loads the managed `Book` entity with `findBookByIdForUpdate()`, taking a row lock shared with checkout and lost-copy resolution.
+3. Field changes are applied conditionally to the locked, managed entity.
 4. Hibernate dirty checking detects the modifications.
 5. The transaction commits and flushes the update without an explicit `save()` call.
 
@@ -497,8 +536,8 @@ Separate request types make the OpenAPI schema match each contract:
 
 | PUT (replacement) | PATCH (partial update) |
 | --- | --- |
-| `BookRequestDTO`; every field is required and validated. | `BookPatchRequestDTO`; every field is optional. Omitted/null fields and blank text values are ignored. |
-| Replaces all mutable fields. | Changes only supplied fields; a supplied price must be positive. |
+| `BookRequestDTO`; title, author, genre, and replacement cost are required. Description is optional. | `BookPatchRequestDTO`; every field is optional. Omitted/null fields and blank text values are ignored. |
+| Replaces all mutable fields; optional description may be set to null. | Changes only supplied fields; a supplied replacement cost must be positive. Null or blank description values are ignored. |
 
 Both service operations update a managed entity inside a transaction; Hibernate dirty checking persists the change.
 ### Centralized API errors
@@ -530,40 +569,51 @@ public ResponseEntity<ErrorResponse> handleBookNotFound(BookNotFoundException ex
 
 ```java
 public LibraryStatisticsDTO getLibraryStatistics() {
-    LibraryAggregate aggregate = repository.getCountAndTotalValue();
-    Book mostExpensive = repository.findTopByOrderByPriceDesc();
-    BookResponseDTO mostExpensiveDTO = (mostExpensive != null) ? mapper.toResponseDTO(mostExpensive) : null;
+    LibraryAggregate aggregate = repository.getCountAndTotalReplacementCost();
+    Book highestReplacementCostBook = repository.findTopByOrderByReplacementCostDesc();
+    BookResponseDTO highestReplacementCostDTO = (highestReplacementCostBook != null)
+            ? mapper.toResponseDTO(highestReplacementCostBook) : null;
     return new LibraryStatisticsDTO(
             aggregate.totalBooks(),
-            aggregate.totalValue(),
-            mostExpensiveDTO
+            aggregate.totalReplacementCost(),
+            highestReplacementCostDTO
     );
 }
 ```
 
-`LibraryAggregate` and `GenreCount` are internal immutable repository projections. They keep count, total-value, and genre-distribution queries type-safe while `LibraryStatisticsDTO` and the genre endpoint's `Map<String, Long>` remain the public API response models.
+`LibraryAggregate` and `GenreCount` are internal immutable repository projections. They keep book counts, total replacement cost, and genre-distribution queries type-safe while `LibraryStatisticsDTO` and the genre endpoint's `Map<String, Long>` remain the public API response models.
 
 ## API Endpoints
+
+### Book API
 
 | Method | Path | Description | Example Request | Example Response |
 | --- | --- | --- | --- | --- |
 | `GET` | `/app/books/health` | Health check for the API | `GET /app/books/health` | `{"success":true,"message":"Health check","data":{"api":true,"database":true},"timestamp":172...}` |
-| `GET` | `/app/books/all` | Returns a paginated list of books | `GET /app/books/all?page=0&size=12&sort=id,asc` | `{"content":[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}],"pageable":{...}}` |
-| `GET` | `/app/books/query` | Paginates books with optional title, author, genre, and inclusive price filters | `GET /app/books/query?author=orwell&minPrice=10&sort=price,desc&page=0&size=12` | `{"content":[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}],"totalElements":1,"totalPages":1,...}` |
-| `GET` | `/app/books/{id}` | Fetches a single book by ID | `GET /app/books/1` | `{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}` |
-| `POST` | `/app/books/add` | Creates a new book using `BookRequestDTO` validation | `POST /app/books/add` with `{"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}` | `{"success":true,"message":"Book Added Successfully","data":{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99},"timestamp":172...}` |
-| `PATCH` | `/app/books/{id}` | Partially updates a book | `PATCH /app/books/1` with `{"price":15.99}` | `{"success":true,"message":"Book updated successfully","data":{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":15.99},"timestamp":172...}` |
-| `PUT` | `/app/books/{id}` | Replaces a book completely | `PUT /app/books/1` with full DTO payload | `{"success":true,"message":"Book updated successfully","data":{"id":1,"title":"Animal Farm","author":"George Orwell","genre":"Political Satire","price":12.99},"timestamp":172...}` |
+| `GET` | `/app/books/all` | Returns a paginated list of books | `GET /app/books/all?page=0&size=12&sort=id,asc` | `{"content":[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","description":"A novel about surveillance.","replacementCost":19.99}],"pageable":{...}}` |
+| `GET` | `/app/books/query` | Paginates books with optional title, author, genre, and inclusive replacement cost filters | `GET /app/books/query?author=orwell&minReplacementCost=10&sort=replacementCost,desc&page=0&size=12` | `{"content":[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","description":"A novel about surveillance.","replacementCost":19.99}],"totalElements":1,"totalPages":1,...}` |
+| `GET` | `/app/books/{id}` | Fetches a single book by ID | `GET /app/books/1` | `{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","description":"A novel about surveillance.","replacementCost":19.99}` |
+| `POST` | `/app/books/add` | Creates a new book using `BookRequestDTO` validation | `POST /app/books/add` with `{"title":"1984","author":"George Orwell","genre":"Dystopian","description":"A novel about surveillance.","replacementCost":19.99}` | `{"success":true,"message":"Book Added Successfully","data":{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","description":"A novel about surveillance.","replacementCost":19.99},"timestamp":172...}` |
+| `PATCH` | `/app/books/{id}` | Partially updates a book | `PATCH /app/books/1` with `{"replacementCost":15.99}` | `{"success":true,"message":"Book updated successfully","data":{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","replacementCost":15.99},"timestamp":172...}` |
+| `PUT` | `/app/books/{id}` | Replaces a book completely | `PUT /app/books/1` with full DTO payload | `{"success":true,"message":"Book updated successfully","data":{"id":1,"title":"Animal Farm","author":"George Orwell","genre":"Political Satire","description":"A farmyard allegory.","replacementCost":12.99},"timestamp":172...}` |
 | `DELETE` | `/app/books/{id}` | Deletes a book by ID | `DELETE /app/books/1` | `{"success":true,"message":"Book deleted successfully","timestamp":172...}` |
-| `GET` | `/app/books/search?type=title&value=orwell` | Searches by title, author, genre, or price | `GET /app/books/search?type=author&value=orwell` | `[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}]` |
-| `GET` | `/app/books/budget?maxPrice=20` | Returns books priced at or below the given value | `GET /app/books/budget?maxPrice=20` | `[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}]` |
-| `GET` | `/app/books/sorted?category=title` | Returns books sorted by title, author, genre, price, or id | `GET /app/books/sorted?category=price` | `[{"id":2,"title":"Animal Farm","author":"George Orwell","genre":"Political Satire","price":12.99}]` |
+| `GET` | `/app/books/search?type=title&value=orwell` | Searches by title, author, genre, or replacement cost | `GET /app/books/search?type=author&value=orwell` | `[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","replacementCost":19.99}]` |
+| `GET` | `/app/books/budget?maxReplacementCost=20` | Returns copies with a replacement cost at or below the given value | `GET /app/books/budget?maxReplacementCost=20` | `[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","replacementCost":19.99}]` |
+| `GET` | `/app/books/sorted?category=title` | Returns books sorted by title, author, genre, replacement cost, or id | `GET /app/books/sorted?category=replacementCost` | `[{"id":2,"title":"Animal Farm","author":"George Orwell","genre":"Political Satire","description":"A farmyard allegory.","replacementCost":12.99}]` |
 | `GET` | `/app/books/genre` | Returns genre distribution counts | `GET /app/books/genre` | `{"Fiction":3,"Fantasy":2,"Dystopian":1}` |
-| `GET` | `/app/books/price?minPrice=10&maxPrice=25` | Returns books within a price range | `GET /app/books/price?minPrice=10&maxPrice=25` | `[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}]` |
-| `GET` | `/app/books/stats` | Returns total books, total value, and the most expensive book | `GET /app/books/stats` | `{"totalBooks":6,"totalValue":123.45,"mostExpensiveBook":{"id":4,"title":"...","author":"...","genre":"...","price":49.99}}` |
-| `GET` | `/app/books/stats/average-price` | Returns the average price of all books | `GET /app/books/stats/average-price` | `{"success":true,"message":"Average Price of Collection: ","data":20.50,"timestamp":172...}` |
+| `GET` | `/app/books/replacement-cost?minReplacementCost=10&maxReplacementCost=25` | Returns books within a replacement cost range | `GET /app/books/replacement-cost?minReplacementCost=10&maxReplacementCost=25` | `[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","description":"A novel about surveillance.","replacementCost":19.99}]` |
+| `GET` | `/app/books/stats` | Returns total books, total replacement cost, and the copy with the highest replacement cost | `GET /app/books/stats` | `{"totalBooks":6,"totalReplacementCost":123.45,"highestReplacementCostBook":{"id":4,"title":"...","author":"...","genre":"...","replacementCost":49.99}}` |
+| `GET` | `/app/books/stats/average-replacement-cost` | Returns the average replacement cost of all books | `GET /app/books/stats/average-replacement-cost` | `{"success":true,"message":"Average replacement cost of collection","data":20.50,"timestamp":172...}` |
 | `GET` | `/app/books/stats/count` | Returns the total number of books | `GET /app/books/stats/count` | `{"success":true,"message":"Book Collection Count","data":6,"timestamp":172...}` |
 
+`/app/books/query` combines supplied filters with AND. Text matching is case-insensitive literal substring matching; `minReplacementCost` and `maxReplacementCost` are inclusive and either may be used alone. Without filters, it returns all books as a page. Pages start at 0, default to size 12 and `id` ascending, and are capped at size 100. Sort with `sort=property,direction` using `id`, `title`, `author`, `genre`, or `replacementCost`; invalid ranges, decimals, or sort fields return HTTP 400. The `replacementCost` JSON field is the recorded amount used to replace one physical copy; it does not trigger a charge. `description` is optional and limited to 2,000 characters. Existing list routes retain their response shapes apart from the renamed and added book fields. `BookResponseDTO` also includes `copyStatus` (`IN_COLLECTION` or `LOST`); the compact book examples above omit it for readability.
+
+### User API
+
+Signup is public and always creates a student. Only librarians can create faculty and library assistant accounts. Administrators can manage student and faculty accounts; librarians can also manage library assistant accounts. Students and faculty can manage their own profiles and passwords and delete their own accounts. Staff cannot manage another librarian account or delete their own account. All other routes require HTTP Basic authentication, and unsafe requests also require a CSRF token. See the [role permissions table](guiding-docs/security-roles-and-jwt-guide.md#role-policy) for the full policy.
+
+| Method | Path | Description | Example Request | Example Response |
+| --- | --- | --- | --- | --- |
 | `GET` | `/app/users` | Lists student/faculty accounts for administrators; librarians also see library assistants | `GET /app/users?page=0&size=12` | Spring `Page<UserResponseDTO>` |
 | `GET` | `/app/users/{universityId}` | Gets own profile or a profile visible to the caller's staff role | `GET /app/users/2025-4321` | `UserResponseDTO` |
 | `POST` | `/app/users/signup` | Creates a user account | `POST /app/users/signup` with `UserCreateRequestDTO` | `ApiResponse<UserResponseDTO>`, HTTP 201 |
@@ -583,12 +633,6 @@ public LibraryStatisticsDTO getLibraryStatistics() {
 | `PUT` | `/app/loans/{loanId}/lost` | Closes a loan as lost and marks copy unavailable | Library assistants/librarians within target-role scope |
 | `GET` | `/app/loans/me` | Reads caller's paged history | All roles |
 | `GET` | `/app/loans/users/{universityId}` | Reads another user's paged loan history | Library assistants/librarians within target-role scope |
-
-`/app/books/query` combines supplied filters with AND. Text matching is case-insensitive literal substring matching; `minPrice` and `maxPrice` are inclusive and either may be used alone. Without filters, it returns all books as a page. Pages start at 0, default to size 12 and `id` ascending, and are capped at size 100. Sort with `sort=property,direction` using `id`, `title`, `author`, `genre`, or `price`; invalid ranges, decimals, or sort fields return HTTP 400. Existing list routes retain their response shapes. `BookResponseDTO` also includes `copyStatus` (`IN_COLLECTION` or `LOST`); the compact book examples above omit it for readability.
-
-### User API
-
-User routes are available under `/app/users` for signup, staff directories, profile lookup and updates, password changes, account creation, and role-scoped deletion. STUDENT means a student patron; FACULTY means school faculty using the library as patrons; ADMINISTRATOR means a library assistant (for example, fellow faculty, student assistants, or volunteers); LIBRARIAN means the library's librarian. Signup is public and always creates a student. Only the librarian creates faculty and library assistant accounts. Students and faculty can delete their own accounts; library assistants can manage/delete student and faculty accounts; librarians can also manage/delete library assistant accounts. Neither staff role manages another librarian account. All roles can read books; administrators and librarians can add, update, and delete books. See [the role permissions table](guiding-docs/security-roles-and-jwt-guide.md#role-policy) for access rules. HTTP Basic authentication uses a university ID and password. Flyway V2 historically seeds the bootstrap administrator as `0000-0000`; V3 adds LIBRARIAN to the schema; V4 adds loans and copy status. The application does not seed a librarian. Set `LIBRO_ADMIN_PASSWORD_HASH` to a BCrypt hash before startup and protect it. Loans are live under `/app/loans`; JWT is not implemented.
 
 ## Setup & Installation
 
@@ -644,13 +688,13 @@ If you prefer to run the application directly on the host machine, start only Po
 | Symptom | Likely Cause | Fix |
 | --- | --- | --- |
 | App fails to start with datasource errors | Missing or incorrect `SPRING_DATASOURCE_*` variables | Check `.env` and Docker Compose values |
-| `400 Bad Request` on create or replace | Validation failed in `BookRequestDTO` | Make sure `title`, `author`, `genre`, and `price` are valid |
+| `400 Bad Request` on create or replace | Validation failed in `BookRequestDTO` | Make sure `title`, `author`, `genre`, and `replacement cost` are valid |
 | `Invalid JSON format in request body` | Malformed request payload | Send valid JSON and set `Content-Type: application/json` |
 | `Book not found` | The requested ID does not exist | Verify the ID with `GET /app/books/all` |
-| `Invalid Number Format` | Non-numeric values were sent to a numeric endpoint | Use numeric values for `price`, `minPrice`, `maxPrice`, and similar fields |
+| `Invalid Number Format` | Non-numeric values were sent to a numeric endpoint | Use numeric values for `replacement cost`, `minReplacementCost`, `maxReplacementCost`, and similar fields |
 | `Method not allowed` | Wrong HTTP verb was used | Match the method listed in the endpoint table |
 | Docker app container fails to start | The jar was not built before `docker compose up --build` | Run `mvn clean package` first |
-| Swagger UI loads but API calls fail, or `library-app` keeps restarting | Inspect `docker compose logs app`; the old empty development volume may have `books.id` as `INTEGER` while Hibernate expects `BIGINT` | Rebuild the jar, remove the disposable pre-release volume with `docker compose down -v`, then run `docker compose up -d --build` |
+| Swagger UI loads but API calls fail, or `library-app` keeps restarting | Inspect `docker compose logs app`; an old development volume may have `books.id` as `INTEGER` while Hibernate expects `BIGINT` | If the volume contains only disposable development data, back up anything needed and intentionally remove it with `docker compose down -v`; otherwise preserve the volume and resolve the schema through a forward migration. Then rebuild with `docker compose up -d --build` |
 | No Flyway messages or `flyway_schema_history` table | The Boot 4 Flyway starter is absent, or the container contains an old jar | Keep `spring-boot-starter-flyway`, rebuild the jar, and rebuild the image |
 
 The complete diagnosis, pre-release reset procedure, clean-install behavior, and production-data warning are in [Development Problems Solved](docs/development-problems-solved.md).
@@ -670,6 +714,7 @@ The complete diagnosis, pre-release reset procedure, clean-install behavior, and
   - `V2__create_users_table.sql` creates the users table with role, course, major, identity-format, uniqueness, and relationship constraints, then seeds the historical bootstrap library assistant from `LIBRO_ADMIN_PASSWORD_HASH`.
   - `V3__add_librarian_role.sql` adds `LIBRARIAN` to the accepted database roles and applies the staff academic-field rules.
   - `V4__add_loans_and_copy_status.sql` adds physical-copy status, loan history, state constraints, deletion restrictions, and the one-active-loan-per-copy index.
+  - `V5__describe_books_and_rename_price_to_replacement_cost.sql` adds optional descriptions and renames stored values to replacement costs without changing the amounts.
 - Compose no longer mounts SQL into PostgreSQL's init directory; Flyway is the only schema owner.
 - V1 uses `BIGSERIAL`, matching the entity's Java `Long`/SQL `BIGINT` mapping from the first migration.
 - The app uses JPA and Hibernate for entity persistence with `ddl-auto=validate`.
@@ -698,7 +743,7 @@ Tests are grouped by test scope and domain: `src/test/java/unit/auth`, `src/test
 - `OpenApiMvcTest` generates `/v3/api-docs` in an MVC slice and checks representative routes, response codes, write-only password inputs, absence of password fields in public responses, and loan-history pagination/sort documentation without Docker.
 - `GlobalExceptionHandlerTest` directly invokes the exception handlers and verifies HTTP status, public error fields, validation-message aggregation, and protection against leaking parser, database, constraint, or fallback exception details.
 - `UserServiceTest` verifies partial-update normalization, DTO and business validation, password verification and encoding, unchanged-email handling, duplicate-email rejection, and dirty-checking expectations. Academic combinations still need focused coverage; `UserPersistenceIT` covers selected real-database paths.
-- `BookPersistenceIT` runs only with the `integration` profile and Docker. It checks all four migrations/schema validation, PostgreSQL book queries and projections, committed PATCH/PUT updates, and that an edit waiting for a concurrent lost-loan resolution preserves the copy's `LOST` status.
+- `BookPersistenceIT` runs only with the `integration` profile and Docker. It checks fresh V1-to-V5 migration/schema validation, the V4-to-V5 value-preserving upgrade, PostgreSQL book queries and projections, committed PATCH/PUT updates, and that an edit waiting for a concurrent lost-loan resolution preserves the copy's `LOST` status.
 - `LoanPersistenceIT` checks returned history persistence, the one-active-loan-per-copy database index, and deletion restrictions for borrowers and copies with history.
 - `UserPersistenceIT` checks normalized user creation, stored password hashes, committed profile/password changes, and PostgreSQL uniqueness and ID-format constraints. All three integration classes share a PostgreSQL 18 container and serialize access to it; running them requires Docker and a test-only `LIBRO_ADMIN_PASSWORD_HASH`.
 
@@ -758,12 +803,12 @@ Validation failures retain the `error`, `details`, `timestamp`, and `statusCode`
 ```json
 {
   "error": "Validation failed",
-  "details": "Title cannot be empty, Price must be greater than 0",
+  "details": "Title cannot be empty, Replacement cost must be greater than 0",
   "timestamp": 1720000000000,
   "statusCode": 400,
   "fieldErrors": {
     "title": "Title cannot be empty",
-    "price": "Price must be greater than 0"
+    "replacementCost": "Replacement cost must be greater than 0"
   }
 }
 ```
@@ -776,7 +821,7 @@ I worked through problems at several boundaries of the system and fixed them whe
 - **Unreliable container startup:** added PostgreSQL health checks and made the application wait for the database to become ready.
 - **Create, replace, and partial-update validation:** separated PUT's full-replacement rules from PATCH's optional-field behavior, with service-level validation as a second boundary.
 - **Fragile aggregate results:** replaced positional query results with typed projections for collection statistics and genre counts.
-- **Unbounded filtered results:** added a paginated query that combines text and price filters while validating sort fields.
+- **Unbounded filtered results:** added a paginated query that combines text and replacement cost filters while validating sort fields.
 - **Account and credential safety:** normalized institutional IDs and emails, enforced account rules, stored BCrypt hashes, and kept password data out of response DTOs.
 
 The [Development Problems Solved](docs/development-problems-solved.md) write-up gives the symptoms, reasoning, fixes, and verification details for these problems. It also distinguishes unit/MVC evidence from PostgreSQL integration checks that still require Docker.

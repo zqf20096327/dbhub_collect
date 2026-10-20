@@ -249,6 +249,20 @@ hermes plugins install indigokarasu/chronicle-agent-context-and-memory
 
 Requires Hermes Agent with plugin support. Python 3.9+.
 
+### Optional: sqlite-vec (faster vector search)
+
+Chronicle works without it (bruteforce scan). To enable the ANN fast path:
+
+```bash
+# Install into the Hermes agent runtime venv — once per machine, not per profile:
+~/.hermes/hermes-agent/.venv/bin/pip install sqlite-vec
+# or the community fork:
+~/.hermes/hermes-agent/.venv/bin/pip install git+https://github.com/vlasky/sqlite-vec.git
+```
+
+Verify: `~/.hermes/hermes-agent/.venv/bin/python -c "import sqlite_vec; print(sqlite_vec.__version__)"`.
+Requires a sqlite3 build with loadable-extension support (Apple's macOS system Python lacks it). If unavailable, Chronicle falls back to bruteforce automatically.
+
 ## Configuration
 
 Set in `~/.hermes/config.yaml` (single bot) or `~/.hermes/profiles/<name>/config.yaml` (one file per bot in a multi-bot chat).
@@ -277,7 +291,7 @@ memory:
   embeddings:
     model: auto
   retrieval:
-    abstain_gate: focus
+    abstain_gate: focus         # retrieval abstain threshold mode
 ```
 
 Bot B (profile `support`, `~/.hermes/profiles/support/config.yaml`):
@@ -294,94 +308,90 @@ memory:
 
 Both run the same plugin; only `db_path` (and any per-bot overrides) differs, so each bot keeps separate memory.
 
+> **Where the paths land.** `~/.hermes` in any `db_path` / `git_repo` value is expanded to the **active profile's home** (`$HERMES_HOME`), so the same literal `~/.hermes/commons/db/chronicle/...` resolves to `~/.hermes/commons/...` for the default profile and to `~/.hermes/profiles/<name>/commons/...` for a named profile. Do **not** write `~/.hermes/profiles/<name>/...` by hand — it would be expanded twice and point at the wrong place. Keep the canonical `~/.hermes/...` form in every profile's config.
+
+> **Installing per profile.** The plugin is installed into the agent runtime, but each profile must register it:
+>
+> ```bash
+> hermes -p <profile> plugins install indigokarasu/chronicle-agent-context-and-memory
+> hermes -p <profile> memory setup chronicle
+> ```
+> Then restart the gateways (`hermes gateway start`, and `hermes -p <profile> gateway start` for each profile).
+
 ```yaml
 
 memory:
-  provider: chronicle    # the HOST's slot selector — Hermes reads this, not Chronicle
-  db_path: ~/.hermes/commons/db/chronicle/chronicle.db
-  git_repo: ~/.hermes/commons/db/chronicle/git
+  provider: chronicle              # Hermes slot selector: loads this plugin (host-owned key)
+  db_path: ~/.hermes/commons/db/chronicle/chronicle.db   # SQLite store path (~ expands to profile home)
+  git_repo: ~/.hermes/commons/db/chronicle/git          # git mirror for memory provenance
   embeddings:
-    model: auto          # auto-detect the local server's embedding model; or pin an id, or 'hashing'
-                         # for offline vectors. Unreachable = degraded (queued embeds), never hashed.
-                         # $CHRONICLE_EMBED_MODEL overrides this.
-    dimensions: 768
-    allow_remote: false  # permission to send memory excerpts OFF this host. See "Where memory
-                         # is allowed to go" below. Leave false unless you mean it.
+    model: auto                    # auto | hashing | <model id>; $CHRONICLE_EMBED_MODEL overrides
+    dimensions: 768                 # vector width; must match the embedder model
+    allow_remote: false            # allow sending memory excerpts off-host for embedding
   extraction:
     llm:
-      allow_remote: false  # same, for extraction.backend: llm — that path POSTs the raw excerpt
+      allow_remote: false          # allow POSTing raw excerpts to an off-host LLM extractor
   vector_index:
-    backend: bruteforce  # default: paged scan over observed_vectors — always correct, cost
-                         # grows with the corpus. 'sqlite-vec' opts into the ANN fast path,
-                         # which needs `pip install sqlite-vec` AND a sqlite3 built with
-                         # loadable-extension support (Apple's macOS system Python has
-                         # neither). The PyPI `sqlite-vec` package tracks the original
-                         # asg017/sqlite-vec, which is unmaintained; the community-maintained
-                         # fork vlasky/sqlite-vec is an alternative
-                         # (`pip install git+https://github.com/vlasky/sqlite-vec.git`).
-                         # Missing either — or a vec0 left over at a different
-                         # embedding width — falls back to the paged scan on its own. The
-                         # top-k is the same either way; only the time to get it changes.
-  maintenance:            # the in-process cadence; see "Maintenance runs on
-    enabled: true         # those hooks, not on cron" above
-    budget_ms: 5
-  reaper:
-    enabled: true        # false stops the idle-session reaper and its startup recovery
-    schedule: "*/5 * * * *"   # 5-field cron, UTC; "" disables
-    idle_threshold: "20m"
-    reap_threshold: "45m"
+    backend: bruteforce            # bruteforce (default) | sqlite-vec (ANN, optional dep)
+  maintenance:                     # in-process cadence; runs on hooks, not cron
+    enabled: true                  # master switch for maintenance
+    budget_ms: 5                   # wall-clock ceiling per hook scheduling decision (ms)
+  reaper:                          # idle-session reaper
+    enabled: true                  # false stops reaper and startup recovery
+    schedule: "*/5 * * * *"       # 5-field cron, UTC; empty string disables
+    idle_threshold: "20m"          # mark session idle after this duration
+    reap_threshold: "45m"          # finalize idle session after this duration
   retrieval:
-    fts_weight: 0.4
-    vector_weight: 0.6
-    rrf_k: 60
-    rerank_blend: 0.5
-    abstain_gate: focus
-    include_drafts: true  # drafts are rendered [DRAFT], not hidden; false shows
-                          # only confirmed truth. Read at the one _readable gate.
+    fts_weight: 0.4                # FTS5 score weight in hybrid retrieval (0-1)
+    vector_weight: 0.6             # vector score weight in hybrid retrieval (0-1)
+    rrf_k: 60                      # reciprocal rank fusion constant
+    rerank_blend: 0.5              # blend weight for the reranker (0-1)
+    abstain_gate: focus            # abstain threshold mode for weak matches
+    include_drafts: true           # show drafts as [DRAFT]; false shows only confirmed
   context:
-    breadth_floor: true          # reserve room for N sessions in the ranked fill
-    breadth_floor_sessions: 5
+    breadth_floor: true            # reserve room for N distinct sessions in ranked fill
+    breadth_floor_sessions: 5      # number of sessions to reserve
   forgetting:
-    decay_schedule: "0 3 * * *"
+    decay_schedule: "0 3 * * *"    # daily 03:00 UTC fidelity decay sweep
   identity:
-    schedule: "0 5 * * *"   # exact-name sweep: proposes merge CANDIDATES only
+    schedule: "0 5 * * *"         # daily 05:00 UTC exact-name sweep (proposes candidates only)
   health:
-    schedule: "0 4 * * *"
+    schedule: "0 4 * * *"         # daily 04:00 UTC health and self-heal run
     consistency_sweep:
-      enabled: true
-      schedule: "0 * * * *"
-    census_total_max_age_hours: 24
+      enabled: true                # hourly CSP consistency sweep
+      schedule: "0 * * * *"       # hourly
+    census_total_max_age_hours: 24  # cache age for vector count census (hours)
     self_heal:
-      embedder_mismatch_max: 500  # vectors ONE health run may requeue to re-embed
+      embedder_mismatch_max: 500  # vectors one health run may requeue to re-embed
   confidence:
     base:
-      user_direct: 0.85  # per source_type; this table decides a stored fact's confidence
+      user_direct: 0.85            # starting confidence for a directly-stated user fact
     trust_ceiling:
-      4: 1.00            # C(level) cap applied after the base
+      4: 1.00                      # confidence cap at trust level 4
   domains:
     user:
       contradiction_policy: flag_for_review   # flag_for_review | newer_wins | refetch
   curation:
     drain:
-      per_turn: 16       # split across task classes by the three share_* weights
-      share_write_path: 0.5
-      share_embed: 0.3
-      share_maintenance: 0.2
-    sweep_schedule: "0 * * * *"   # hourly session-index backfill for ended sessions
-    lease_seconds: 900   # a 'running' job older than this is treated as abandoned
-    max_attempts: 20
+      per_turn: 16                 # jobs one hook call may drain in total
+      share_write_path: 0.5        # relative weight for write-path jobs
+      share_embed: 0.3             # relative weight for deferred vector writes
+      share_maintenance: 0.2       # relative weight for sweeps and repair
+    sweep_schedule: "0 * * * *"    # hourly session-index backfill for ended sessions
+    lease_seconds: 900             # a running job older than this is abandoned (seconds)
+    max_attempts: 20               # claims before a job is failed
     retention:
-      enabled: true      # prune terminal job rows; false accepts unbounded growth
-      done_days: 7
-      max_rows: 20000
+      enabled: true                # prune terminal job rows
+      done_days: 7                 # age bound for pruning (days)
+      max_rows: 20000              # row-count bound for pruning
   sweeps:
-    row_budget: 5000     # shared per-run pace for every sweep without its own entry
-    page_rows: 1000
+    row_budget: 5000               # shared per-run row pace
+    page_rows: 1000                # memory page size for full-table folds
     budgets:
-      consistency: 2000
+      consistency: 2000            # groups per CSP consistency sweep
   learning:
-    max_active_deltas: 8
-    max_delta_magnitude: 0.15
+    max_active_deltas: 8           # max concurrent self-improvement deltas
+    max_delta_magnitude: 0.15      # max magnitude of a single delta
 ```
 
 Keys that `engine/config.py` declares but no shipped code reads are deliberately

@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/plume.svg)](https://rubygems.org/gems/plume)
 [![Gem Downloads](https://img.shields.io/gem/dt/plume)](https://rubygems.org/gems/plume)
-![Tests](https://github.com/fractaledmind/plume/actions/workflows/main.yml/badge.svg)
+![Tests](https://github.com/yippee-fun/plume/actions/workflows/main.yml/badge.svg)
 [![Sponsors](https://img.shields.io/github/sponsors/fractaledmind?color=eb4aaa&logo=GitHub%20Sponsors)](https://github.com/sponsors/fractaledmind)
 [![Twitter Follow](https://img.shields.io/twitter/url?label=%40fractaledmind&style=social&url=https%3A%2F%2Ftwitter.com%2Ffractaledmind)](https://twitter.com/fractaledmind)
 
@@ -12,7 +12,7 @@ Plume is a Ruby library for working with SQLite elegantly. Presently, this means
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
+Plume needs Ruby 3.2 or later. Install the gem and add to the application's Gemfile by executing:
 
 ```bash
 bundle add plume
@@ -26,9 +26,9 @@ gem install plume
 
 ## Usage
 
-Parse a SQL query with the `Plume::Parser` class:
+Every statement in SQLite's grammar parses, and the parser is checked against the SQL in SQLite's own test suite - both the SQL written in its test files and the SQL they build as they run. Of the 26,977 fixture files in that corpus, Plume parses 26,707 and rejects 266 that SQLite rejects too. The 4 left are deliberate: 3 that Plume parses but SQLite refuses for reasons other than syntax, and 1 expression nested 1,000 deep, past what Plume's stack allows.
 
-Every statement in SQLite's grammar parses, and the parser is checked against the SQL in SQLite's own test suite: of the 15,836 statements there, the ones it does not parse are those SQLite rejects as well.
+Parse SQL with `Plume.parse`, which returns one node per statement:
 
 ```ruby
 sql = <<~SQL
@@ -177,7 +177,6 @@ Plume::CreateTableStatement(
   options = [
     Plume::WithoutRowidTableOption(),
   ],
-  select_statement = Object(),
   strict = false,
   without_row_id = true,
 )
@@ -198,14 +197,14 @@ stmt.to_sql
 # => "SELECT a FROM t WHERE (b = 1) AND (tenant_id = ?)"
 ```
 
-Tokenize a SQL query with the `Plume::Lexer` class:
+Tokenize SQL with `Plume.tokenize`:
 
 ```ruby
 tokens = Plume.tokenize("SELECT * FROM users WHERE id = 1")
 # => [:SELECT, :STAR, :FROM, :ID, :WHERE, :ID, :EQ, :INTEGER]
 ```
 
-SQLite works with a grammar of _167_ token types, _136_ of which are keywords. The remaining _31_ are punctuation, operators, and literals.
+The lexer knows _183_ token types: _153_ keywords, and _30_ more for punctuation, operators, literals and names. Words like `rowid`, `strict` and `stored`, which SQLite reads as plain names and checks by their text, are keywords here that fall back to names wherever SQLite would take a name.
 
 ### What does this query read?
 
@@ -283,26 +282,26 @@ The results are tested against SQLite's own [authorizer callback](https://www.sq
 
 ## Performance
 
-`bin/benchmark` runs the whole fixture corpus (15,817 statements, 4.2 MB of SQL). On an Apple M-series laptop with Ruby 3.4:
+`bin/benchmark` runs every fixture that parses (26,707 files, 5.5 MB of SQL). On an Apple M5 Pro with Ruby 4.0:
 
-| Step | Statements/s | MB/s |
-| --- | ---: | ---: |
-| `Plume.tokenize` | ~13,500 | 3.7 |
-| `Plume.parse` | ~1,400 | 0.38 |
-| `Node#to_sql` | ~6,000 | 1.7 |
-| `Plume.reads` (no catalog) | ~1,000 | 0.21 |
+| Step | Fixtures/s | MB/s | MB/s with YJIT |
+| --- | ---: | ---: | ---: |
+| `Plume.tokenize` | ~30,000 | 6.4 | 18.5 |
+| `Plume.parse` | ~2,900 | 0.62 | 0.66 |
+| `Node#to_sql` | ~12,000 | 2.5 | 2.3 |
+| `Plume.reads` (no catalog, `SELECT`s only) | ~2,200 | 0.38 | 0.46 |
 
 The corpus leans on very large generated expressions; a typical application query parses in well under a millisecond. About half of the parse time goes to Literal's runtime type checks on every node property.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. `bin/fixture-report` shows how much of SQLite's own test SQL parses (pass `--write` to record it as the new baseline the tests hold us to), and `bin/benchmark` times the whole pipeline. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. `bin/fixture-report` shows how much of SQLite's own test SQL parses (pass `--write` to record it as the new baseline the tests hold us to), and `bin/benchmark` times the whole pipeline. `bin/trace-fixtures` runs SQLite's Tcl test suite and adds a fixture for each shape of statement it finds that the corpus lacks, and for each one where Plume and SQLite disagree. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/fractaledmind/plume. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/fractaledmind/plume/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/yippee-fun/plume. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/yippee-fun/plume/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -310,4 +309,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Plume project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/fractaledmind/plume/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the Plume project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/yippee-fun/plume/blob/main/CODE_OF_CONDUCT.md).

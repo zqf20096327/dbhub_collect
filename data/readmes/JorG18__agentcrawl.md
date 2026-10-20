@@ -143,7 +143,7 @@ AgentCrawl Community is the self-hosted trust layer:
 | Framework adapters | `agentcrawl.integrations.langchain.AgentCrawlLoader` and `agentcrawl.integrations.llama_index.AgentCrawlReader` yield pages or citable chunks. A zero-dependency TypeScript client for the HTTP API lives in [`sdk/typescript`](sdk/typescript). |
 | Structured extraction without an LLM | CSS schemas (`extract-css`, `/v1/extract_css`, MCP `extract_structured`): deterministic, zero tokens. `generate_css_schema(url, "what to extract")` (MCP `describe=`) has your LLM write the schema once; reuse it for free. |
 | Reading long pages in parts | `formats=["outline"]` lists sections with the tokens each returns; `section="s4"` (or heading text) returns one; `max_tokens` caps the output. The MCP keeps a page for 10 minutes, so outline then sections is one download. |
-| Firecrawl-compatible API | `/v2/scrape`, `/v2/map`, `/v2/search`, `/v2/crawl` and `/v2/batch/scrape` answer Firecrawl's v2 SDKs: point `api_url` at your server. Options AgentCrawl cannot honour are refused with the reason. |
+| Firecrawl-compatible API | `/v2/scrape`, `/v2/map`, `/v2/search`, `/v2/crawl` and `/v2/batch/scrape` answer Firecrawl's v2 SDKs: point `api_url` at your server. Options AgentCrawl cannot honour are refused with the reason; a few cosmetic ones (`blockAds`, `fastMode`, ...) are accepted without effect, and `storeInCache: false` / `zeroDataRetention: true` skip the cache. |
 | Local stealth and proxies | Real Chrome identity, native browser TLS, the `[stealth]` extra (Patchright retry), the opt-in `[cloak]` engine (CloakBrowser), and `proxy` as a comma-separated list rotated per page. |
 | Summaries | `formats=["summary"]` with your own LLM (`AGENTCRAWL_LLM_MODEL`); a failure never fails the page. |
 | Query-aware budgets | `query=` keeps the passages that matter (BM25) when a page is larger than the output budget. |
@@ -162,8 +162,8 @@ What costs money to operate belongs to AgentCrawl Enhanced, a hosted API (planne
 
 Measured in October 2026 against Crawl4AI, Scrapling and Firecrawl ([full results, method and limits](docs/BENCHMARKS.md)):
 
-- On 400 random real sites AgentCrawl gets readable content from about 64 % of pages, tied within noise with Firecrawl and Scrapling, and ahead of Crawl4AI.
-- On 23 randomly drawn pages with checked expectations it keeps 99 % of the checked text, and 8–10 % of the checked chrome strings (navigation, cookie banners, footers) leak through. On that quality it is on par with Firecrawl and Crawl4AI, and ahead of Scrapling.
+- On 400 random real sites AgentCrawl gets readable content from about 64 % of pages, with no significant difference from Firecrawl and Scrapling, and ahead of Crawl4AI.
+- On 23 randomly drawn pages with checked expectations it keeps 99 % of the checked text, and 8–11 % of the checked chrome strings (navigation, cookie banners, footers) leak through. On that quality it is on par with Firecrawl and Crawl4AI, and ahead of Scrapling.
 - On those pages its output is about a third smaller than Firecrawl's, and close to Crawl4AI's `fit_markdown` (2 % smaller live, 18 % larger offline).
 
 How the engine gets there:
@@ -256,7 +256,7 @@ JSON
 agentcrawl extract-css https://shop.example.com/catalog --schema products.json
 ```
 
-Scraping a local dev server (localhost/127.x) is refused by default by the SSRF guard. Allow it on purpose with `--allow-private-network` or `AGENTCRAWL_ALLOW_PRIVATE_NETWORK=true`; the CLI's local mode reads the same `AGENTCRAWL_*` variables as MCP (`--airgap`, `--allowlist`, `--audit`, `--timeout-ms`, `--no-robots`, `--no-browser-fallback` override them). `scrape`, `scrape-many`, `extract-css`, `map` and `crawl` exit 1 when the result has errors.
+Scraping a local dev server (localhost/127.x) is refused by default by the SSRF guard. Allow it on purpose with `--allow-private-network` or `AGENTCRAWL_ALLOW_PRIVATE_NETWORK=true`; the CLI's local mode reads the same `AGENTCRAWL_*` variables as MCP (`--airgap`, `--allowlist`, `--audit`, `--timeout-ms`, `--no-robots`, `--no-browser-fallback` override them). `scrape`, `scrape-many`, `search`, `extract-css`, `map` and `crawl` exit 1 when the result has errors.
 
 The CSS schema supports `text`, `attribute`, `html`, `regex`, `nested` and `list` fields; the selector subset is documented in `agentcrawl/css_extract.py`, and anything outside it is rejected instead of silently matching nothing.
 
@@ -390,8 +390,8 @@ if you gave several. Both browsers wait out "Just a moment…" pages and tick a
 Cloudflare Turnstile checkbox that is still showing, in your own browser
 (`AGENTCRAWL_BROWSER_CHALLENGE_CLICK=false` turns that off). No solver service is
 called and no image CAPTCHA is attempted. In the 0.6.0 benchmark, with this
-extra, AgentCrawl and Scrapling's `StealthyFetcher` were tied within noise on
-pages read ([benchmarks](docs/BENCHMARKS.md)).
+extra, AgentCrawl and Scrapling's `StealthyFetcher` showed no significant difference
+on pages read ([benchmarks](docs/BENCHMARKS.md)).
 
 ```bash
 python -m pip install "agentcrawl-ai[stealth]"

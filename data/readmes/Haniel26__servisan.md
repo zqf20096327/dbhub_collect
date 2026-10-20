@@ -6,7 +6,7 @@
 
 **Ultra-lightweight, portable, and blazing-fast local PHP + MySQL server manager for Windows, crafted in Rust.**
 
-[![Release](https://img.shields.io/badge/Release-v0.1.5-blue?logo=github)](CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v0.2.0-blue?logo=github)](CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?logo=windows&logoColor=white)](https://github.com/Haniel26/servisan)
 [![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584?logo=rust&logoColor=white)](https://www.rust-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -49,6 +49,7 @@ The name blends **Server** + Laravel's **Artisan**, while paying homage to the I
 * 🎛️ **Silent System Tray (No Window / No Black Console):** Runs unobtrusively in the Windows notification area (near the clock) with dynamic status indicators (🟢 running / ⚪ stopped). Never clutters your taskbar with open windows or black terminal popups.
 * 🔀 **Conflict-Free Ports by Default:** Defaults to PHP **8080** and MySQL **3307** so you can run Servisan side-by-side with Laragon, Docker, or IIS without port clashes.
 * 💻 **Built-in Developer Shell:** `servisan shell` immediately launches your terminal with Servisan's portable `php`, `mysql`, and `mysqladmin` injected directly into `PATH`.
+* 🔄 **Automated Database Migration (Zero-Touch Autopilot):** Seamlessly scan and migrate all your databases from Laragon, XAMPP, or WAMP into Servisan with 1-click. Even if Laragon/XAMPP is stopped or broken, Servisan automatically spawns an ephemeral background MySQL instance on a temporary port without requiring passwords or touching the source server!
 * 🗄️ **phpMyAdmin Ready:** One command (`servisan phpmyadmin install`) imports and configures a managed phpMyAdmin dashboard with automated blowfish secret generation.
 
 ---
@@ -61,6 +62,7 @@ The name blends **Server** + Laravel's **Artisan**, while paying homage to the I
 | **Startup Latency** | **Instant (< 100ms)** | Moderate (~2-4s) | Slow | Very Slow (~15-30s) |
 | **Orphan Process Cleanup** | **Windows Job Object (Guaranteed)** | Sometimes leaks | Frequently leaks | Container daemon |
 | **Portability** | **100% Isolated / Zero Registry** | Semi-portable | Hardcoded paths | Host dependencies |
+| **Migration from Other Servers** | **Automated Zero-Touch Autopilot** | Manual SQL dump/import | Manual SQL dump/import | Complex volume mapping |
 | **Installation Overhead** | **Zero (Unzip & Run)** | Installer required | Installer required | Heavy setup |
 | **Modern Open Source** | **Rust (MIT)** | Closed-source Pascal | C / Apache (Legacy) | Proprietary Client |
 
@@ -166,6 +168,9 @@ servisan [COMMAND] [OPTIONS]
 | `status` | Display running status, active ports, and datadir health |
 | `init` | Initialize directories, `config/app.toml`, `php.ini`, `my.ini`, and MySQL datadir |
 | `shell [--program cmd\|powershell]` | Launch terminal with Servisan's `php`, `mysql`, and `mysqladmin` on `PATH` |
+| `migrate scan [--from <path>]` | Auto-detect local Laragon/XAMPP/WAMP servers or scan custom folder |
+| `migrate list [--from <path>]` | Inspect discovered databases and estimated storage footprints |
+| `migrate import [DATABASES...]` | Import databases with zero-touch autopilot or overwrite options |
 | `phpmyadmin install [--force]` | Import and configure phpMyAdmin from local Laragon directory |
 | `phpmyadmin open` | Launch phpMyAdmin directly in your default browser |
 | `phpmyadmin status` | Check phpMyAdmin installation status and access URL |
@@ -203,16 +208,37 @@ source = ""
 
 ## 🗺️ Roadmap
 
-- [x] Phase 1: Core CLI & process management (`init`, `start`, `stop`, `status`, `shell`)
-- [x] Phase 1: Robust process safety via Windows Job Object (`KILL_ON_JOB_CLOSE`)
-- [x] Phase 1: Automated phpMyAdmin installer & config generation
-- [x] Phase 2: Lightweight System Tray integration (`tray-icon` + `tao`) with dynamic status icons
-- [x] Phase 2: Brand identity (app icons, logo branding, and styled home landing)
-- [x] Phase 3: Multi-worker concurrency for PHP built-in server (`PHP_CLI_SERVER_WORKERS`)
-- [ ] Phase 3: Database migration & backup tooling (seamless import from Laragon / `.sql` dumps)
-- [ ] Phase 3: Automatic Virtual Hosts & `.test` local domain mapping
-- [ ] Phase 3: One-click PHP version switcher via tray context menu
-- [ ] Phase 4: Distribution via Scoop (`scoop install servisan`) & Winget
+### Completed (v0.1.x & v0.2.0)
+- [x] Core CLI & process management (`init`, `start`, `stop`, `status`, `shell`)
+- [x] Robust Windows process safety via Job Objects (`KILL_ON_JOB_CLOSE`)
+- [x] Single-Instance enforcement with Windows named mutex (no duplicate tray icons)
+- [x] Dual-distribution packaging (portable `.zip` & Inno Setup `.exe`) with app-local VC++ runtimes
+- [x] Laragon-style desktop-window Web Dashboard (`www/index.php`) with docked action buttons
+- [x] Automatic GitHub update detection & interactive 1-click download modal
+- [x] Multi-worker concurrency for PHP built-in server (`PHP_CLI_SERVER_WORKERS`)
+- [x] App-local OPcache optimization with Windows ASLR crash resiliency
+- [x] **Automated Database Migration Engine (`servisan migrate`)**:
+  - [x] Auto-detection of local servers across all Windows drive letters (Laragon, XAMPP, WAMP, custom)
+  - [x] Zero-Touch Autopilot: Headless temporary `mysqld` background spawner for offline/stopped servers
+  - [x] Custom folder source picker (`--from <path>`) for external drives or moved installations
+  - [x] Interactive Database Migration Wizard in Web Dashboard with real-time console & storage sizing
+  - [x] Strict Zero-Emoji UI & unified 15x15 monochrome developer SVG icons
+  - [x] Dynamic environment variables injection (`SERVISAN_MYSQL_PORT`, `SERVISAN_VERSION`) & PHP 8.1+ exception safety
+
+### Phase 2: Independent Toolchain & Distribution (v0.3.0)
+- [ ] Bundled Composer (`composer.phar` / `composer.bat`) on PATH for out-of-the-box Laravel tooling
+- [ ] Official phpMyAdmin auto-download & ultra-lightweight Adminer (~500KB) support (100% decoupling from Laragon)
+- [ ] Official Winget package submission (`winget install Haniel26.Servisan`) & Scoop manifest
+
+### Phase 3: Automatic Virtual Hosts & Local Domains (v0.4.0) — *The Killer Feature*
+- [ ] Built-in lightweight Rust reverse proxy routing port 80 to project public roots (e.g. `www/blog/public`)
+- [ ] Automatic Windows `hosts` file synchronization (`*.test` domains resolved without manual configuration)
+- [ ] Zero Apache/Nginx dependency to preserve the ultra-lightweight memory footprint
+
+### Phase 4: Laravel Developer Experience & Scaffolding (v0.5.0)
+- [ ] One-command project creation: `servisan new <app>` (runs `composer create-project`, configures database, and registers `<app>.test`)
+- [ ] Background worker controls from tray context menu (`php artisan queue:work` & schedule runner)
+- [ ] One-click PHP version switcher via tray menu
 
 ---
 
