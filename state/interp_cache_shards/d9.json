@@ -10658,5 +10658,71 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d9d6f6fdc8bd": {
+  "identity": {
+   "one_liner": "EVE Online 虫洞地图自托管工具，用 PostgreSQL 存储",
+   "review": "面向 EVE Online 玩家与军团的自托管虫洞测绘应用，提供星系连接图、签名追踪、 wormhole rolling 计算和实时协作，通过 EVE SSO 登录，基于 Docker Compose 部署，首次启动时由 importer 服务将 EVE 静态数据导入 Postgres。",
+   "highlights": [
+    "提供交互式虫洞地图、签名管理与滚动计算器",
+    "支持个人/军团/联盟多范围地图与实时协作同步",
+    "使用 EVE SSO 登录并支持多语言"
+   ],
+   "use_cases": [
+    "EVE Online 虫洞链条测绘",
+    "军团/联盟成员协同规划",
+    "wormhole mass 滚动计算"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Build and start the stack. On first run an `importer` service downloads the EVE Static Data Export and populates Postgres (a one-off, a few minutes) before the server boots; later runs detect the data is already there and skip straight through: ／ |`PG_PASSWORD`|Yes|PostgreSQL password|",
+     "lines": [
+      39,
+      271
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其作为自托管应用使用 Postgres 存储数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Nexum is a free, open-source, self-hosted wormhole mapping tool for EVE Online. #1 for features and usability — an alternative to Wandered Pathfinder and Tripwire.** Track systems, signatures, structures, kills, and live activity across your chain; calculate wormhole rolls; and coordinate your corporation in J-space in real time. Logs in with EVE Online SSO and runs anywhere Docker does. ／ Build and start the stack. On first run an `importer` service downloads the EVE Static Data Export and populates Postgres (a one-off, a few minutes) before the server boots; later runs detect the data is already there and skip straight through:",
+   "evidence_lines": [
+    3,
+    39
+   ]
+  },
+  "fn": "GQuantrill/eve-nexum",
+  "sha": "d9d6f6fdc8bd",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

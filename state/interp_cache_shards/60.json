@@ -10075,5 +10075,295 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b372bf2c6ce6": {
+  "identity": {
+   "one_liner": "可在页面上直接编辑的 Svelte 网站框架，内置 CMS 能力",
+   "review": "Editable 是一个基于 Svelte 的网站构建工具，编辑者无需单独 CMS 即可在页面上直接编辑内容，而内容模型、组件、布局与样式保留在用户自己的代码库中。它使用 SQLite（db.sqlite3）存储站点内容与上传资产，通过 Svedit 引擎提供 schema、路径寻址和 TextProperty/NodeArrayProperty 等编辑原语，适合用 Git/pnpm/Node.js 自托管并部署站点的前端开发者。",
+   "highlights": [
+    "编辑者直接在页面上编辑内容，内容模型与组件保留在用户代码库中",
+    "提供 TextProperty、MediaProperty、NodeArrayProperty、CustomProperty 等编辑原语，基于 Svedit 编辑引擎",
+    "每个站点为独立 git 仓库，数据目录（data/）包含 SQLite 数据库与上传资产"
+   ],
+   "use_cases": [
+    "搭建可由非技术人员在页面上直接编辑的 Svelte 网站",
+    "自定义内容类型、组件与布局并保留代码所有权的站点开发",
+    "本地开发或部署到 Fly.io 等平台的自托管站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That folder is `data/`: an SQLite database (`db.sqlite3`) and uploaded assets (`assets/`). Locally it defaults to `./data`; on Fly.io it's a persistent volume at `/data`; on a VPS it's `/data` on the host, bind-mounted into the container at the same path. The ",
+     "lines": [
+      669
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 data/ 目录使用 SQLite 数据库存放站点内容与上传资产，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Editable lets you build and edit a Svelte website without adding a separate CMS. Editors work directly on the page, while the content model, components, layouts, and styling remain in the codebase you own. Use the included defaults and adapt the colors and fonts to deploy a beautiful site within minutes — or customize the entire layout and model your own content types. This manual explains how to build and run a site with Editable. ／ To reset your local database to the initial default site content (asks for confirmation and backs up your current database first; assets stay in place, and the fresh content appears on the next dev server start):",
+   "evidence_lines": [
+    3,
+    95
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "michael/editable",
+  "sha": "b372bf2c6ce6",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f00f903dab53": {
+  "identity": {
+   "one_liner": "Linux 服务器控制面板，集成网站、数据库与安全管理",
+   "review": "VortexPanel 是一个自托管的 Linux 服务器控制面板，提供 Nginx/Apache/OpenLiteSpeed/Caddy 网站管理、MySQL/MariaDB/PostgreSQL/MongoDB 多引擎数据库管理、防火墙/WAF/Fail2ban 安全模块及 WordPress 工具包，面向自建服务器与托管环境的管理员，通过 Web UI 和一键安装管理服务器组件。",
+   "highlights": [
+    "支持 MySQL、MariaDB、PostgreSQL、MongoDB 多引擎数据库管理与 phpMyAdmin 集成",
+    "内置防火墙（UFW/firewalld）、ModSecurity WAF、Fail2ban 与恶意软件扫描",
+    "支持服务器间网站与数据库迁移、cPanel/aaPanel/Hestia 备份导入"
+   ],
+   "use_cases": [
+    "自托管 VPS/服务器上部署和管理多个网站与 PHP/Node.js/Go 应用",
+    "统一管理多引擎数据库的安装、备份与删除回收",
+    "从 cPanel/aaPanel/HestiaCP 迁移站点到自管面板"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Move websites, MySQL/MariaDB and PostgreSQL databases (users and passwords included), SSL certificates and cron jobs to another VortexPanel server with a one-time migration key ／ - MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine ／ - **27** one-click installs: Nginx, Apache, OpenLiteSpeed, Caddy, PHP (multi-version), MySQL, MariaDB, PostgreSQL, MongoDB, Redis, **Memcached**, **FFmpeg** (multi-version, side by side), Docker, Node.js, Python, Composer, Fail2ban, ClamAV, ModSecurity, Roundc",
+     "lines": [
+      67,
+      102,
+      107
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Move websites, MySQL/MariaDB and PostgreSQL databases (users and passwords included), SSL certificates and cron jobs to another VortexPanel server with a one-time migration key ／ - **PHP 7.4 → 8.5**, **Nginx / Apache / OpenLiteSpeed / Caddy**, **MariaDB / MySQL** — pick any combination ／ - MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine",
+     "lines": [
+      67,
+      73,
+      102
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Firewall** — UFW (Debian/Ubuntu) **and** firewalld (Fedora/RHEL/AlmaLinux/Rocky/Oracle/CentOS/CloudLinux) from the same UI",
+     "lines": [
+      81
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- Move websites, MySQL/MariaDB and PostgreSQL databases (users and passwords included), SSL certificates and cron jobs to another VortexPanel server with a one-time migration key ／ - **PHP 7.4 → 8.5**, **Nginx / Apache / OpenLiteSpeed / Caddy**, **MariaDB / MySQL** — pick any combination ／ - MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine",
+     "lines": [
+      67,
+      73,
+      102
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "面板为数据库的安装、管理、备份和迁移提供服务，属于为数据库生态服务的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Free, open-source server control panel for Linux. ／ - MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine ／ - **27** one-click installs: Nginx, Apache, OpenLiteSpeed, Caddy, PHP (multi-version), MySQL, MariaDB, PostgreSQL, MongoDB, Redis, **Memcached**, **FFmpeg** (multi-version, side by side), Docker, Node.js, Python, Composer, Fail2ban, ClamAV, ModSecurity, Roundcube, Supervisor, Pure-FTPd, BIND9 DNS, and more",
+   "evidence_lines": [
+    5,
+    102,
+    107
+   ]
+  },
+  "fn": "BrowserlessAPI/VortexPanel",
+  "sha": "f00f903dab53",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8bfd421a3f37": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue的桶装水销售配送小程序系统",
+   "review": "一套前后端分离的桶装水销售配送系统，含平台管理员、商铺管理员和用户三种角色，覆盖商铺审核、商品下单、派单配送、水票核销、社区论坛等业务流程；使用 MySQL 存储数据、Redis 作缓存、UniApp 微信小程序作用户端。面向桶装水配送商家或作为计算机类毕设/课程设计项目使用。",
+   "highlights": [
+    "实现商铺入驻审核、商品管理、订单派单与配送状态跟踪的业务闭环",
+    "支持电子水票核销、空桶押金管理、上楼费计算等送水行业功能",
+    "提供 Web 管理端（Vue）与微信小程序用户端，含社区论坛与数据统计模块"
+   ],
+   "use_cases": [
+    "桶装水配送平台或社区送水服务小程序",
+    "同城订水配送系统",
+    "计算机类毕业设计/课程设计项目"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统以 MySQL 作为自身业务数据存储数据库，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库) ／ 本项目是一套基于 **Spring Boot + UniApp 微信小程序** 的桶装水销售配送系统，采用前后端分离架构，覆盖 **平台管理员、商铺管理员、用户** 三类核心角色。系统围绕\"商铺入驻审核 → 商品上架 → 用户下单 → 在线支付 → 智能派单 → 配送履约 → 空桶押金管理 → 评价互动\"的完整业务闭环设计，打通从订水到配送的全流程，构建高效便捷的智慧送水平台。",
+   "evidence_lines": [
+    26,
+    31,
+    5
+   ]
+  },
+  "fn": "Fankekeke/bottled_water_sales_cos",
+  "sha": "8bfd421a3f37",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "49ea3ec7c3ac": {
+  "identity": {
+   "one_liner": "基于Tarjan SCC的锁等待图环检测MCP技能，含最小代价牺牲者仲裁",
+   "review": "这是一个以 MCP 服务器形式集成到 Claude Desktop 或 Cursor 的代理技能，用于在锁等待图上实时运行 Tarjan SCC 算法检测死锁环，并对冲突事务进行最小代价的牺牲者仲裁。全部实现基于 Python 3 标准库，零第三方依赖。面向需要在代理工作流中检测分布式死锁的用户。",
+   "highlights": [
+    "在锁等待图上实时执行 Tarjan SCC 环检测",
+    "提供最小代价的牺牲者事务仲裁机制",
+    "仅依赖 Python 3 标准库，零第三方依赖，通过 MCP 配置集成"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 或 Cursor 中检测数据库锁等待图的死锁环",
+    "分布式系统中并发事务冲突的环检测与牺牲者选择",
+    "作为 MCP 服务器嵌入代理工作流进行实时死锁分析"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 描述其为针对锁等待图的死锁检测工具组件，服务于数据库并发控制场景，而非使用数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> Real-time Tarjan SCC cycle detection on lock Wait-For-Graphs with minimal-cost victim transaction arbitrator ／ ## Quick Installation & MCP Integration ／ Implemented entirely in Python 3 standard library.",
+   "evidence_lines": [
+    7,
+    9,
+    19
+   ]
+  },
+  "fn": "Alpha-Park/genpark-distributed-deadlock-wait-for-graph-detector-skill",
+  "sha": "49ea3ec7c3ac",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9709,5 +9709,287 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "38ce9f89a95a": {
+  "identity": {
+   "one_liner": "AI Agent 记忆的版本化管理层，提供快照、分支、合并与回滚",
+   "review": "Memoria 为 AI Agent 提供持久化记忆服务，将每次记忆变更以快照、分支、合并和时间回滚的方式管理，底层由 MatrixOne 的写时复制引擎存储，并通过 MCP 或 REST API 供 Kiro、Cursor、Claude Code 等 Agent 接入。可用于跨会话保存偏好与事实，支持本地部署（Docker + MatrixOne）或使用 Memoria Cloud。",
+   "highlights": [
+    "提供记忆的快照、分支、合并与时间点回滚等版本控制操作",
+    "支持向量与全文混合的语义检索，并提供矛盾检测与低置信记忆隔离",
+    "通过 MCP 或 REST API 接入任意兼容 Agent，支持本地嵌入模型"
+   ],
+   "use_cases": [
+    "为 MCP 兼容的 AI Agent 提供跨会话的持久记忆",
+    "对 Agent 记忆变更做审计追踪与回滚",
+    "通过分支隔离试验性记忆变更，验证后再合并"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "You: \"Let's try switching from PostgreSQL to SQLite\"",
+     "lines": [
+      209
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "You: \"Let's try switching from PostgreSQL to SQLite\" ／ AI: → memory_branch(name=\"eval_sqlite\")",
+     "lines": [
+      209,
+      211
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Memoria 使用 MatrixOne 提供数据存储与检索，本身是面向 AI Agent 的记忆服务而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Memoria is a **persistent memory layer** for AI agents with Git-level version control. ／ Every memory change is tracked, auditable, and reversible — snapshots, branches, merges, and time-travel rollback, all powered by MatrixOne's native Copy-on-Write engine. ／ > Astra runs the agent. Memoria helps it remember across sessions. MatrixOne powers the data storage and search.",
+   "evidence_lines": [
+    24,
+    25,
+    29
+   ]
+  },
+  "fn": "matrixorigin/memoria",
+  "sha": "38ce9f89a95a",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cc362e3dbde2": {
+  "identity": {
+   "one_liner": "ActivityWatch 的数据存储服务器，提供 REST API 存取个人量化数据",
+   "review": "aw-server 是 ActivityWatch 生态中的服务端组件，用于安全地存储和检索用户的 Quantified Self 数据，通过 REST API 提供访问，默认监听 5600 端口，并内置 API 浏览器。使用 Python 编写，通过 Poetry 构建安装。README 注明未来将被 aw-server-rust 取代默认地位，本仓库转为参考实现与原型用途。",
+   "highlights": [
+    "提供 REST API 存储与检索个人量化数据",
+    "内置 API 浏览器，可通过 localhost:5600 访问",
+    "支持 --testing 标志在独立端口运行开发实例并使用独立数据存储"
+   ],
+   "use_cases": [
+    "作为 ActivityWatch 的数据存储后端运行",
+    "为个人活动追踪数据提供本地 REST API 服务",
+    "开发者使用 --testing 模式进行原型与开发调试"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "作为 ActivityWatch 生态的存储服务端组件，为量化数据提供存储与 API 服务，不依赖候选数据库清单中的库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ActivityWatch server, for secure storage and retrieval of all your Quantified Self data. ／ **Note:** In the future this will no longer be the default server used by ActivityWatch, instead we will be using aw-server-rust. The fate of this repo is uncertain, but it will likely be around and maintained for a while (as a reference implementation, for prototyping, etc). ／ this by giving aw-server the `--testing` flag. This will start the server",
+   "evidence_lines": [
+    6,
+    8,
+    36
+   ]
+  },
+  "fn": "ActivityWatch/aw-server",
+  "sha": "cc362e3dbde2",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f8c2f61529dd": {
+  "identity": {
+   "one_liner": "MG 汽车自托管仪表盘，对接 SAIC iSmart API 并用 PostgreSQL 存储行程数据",
+   "review": "GarageStack 是面向 SAIC 旗下现代 MG 车型（MG4、MG5、ZS EV、HS PHEV 等）车主的自托管 Web 应用，登录 SAIC iSmart API 读取车辆遥测，提供实时仪表盘、行程地图与日志、能耗统计、远程控制、保养提醒和推送通知，并通过 MQTT 集成 Home Assistant。数据以 Docker 单容器或 Compose 方式部署，使用 PostgreSQL 存储，与官方 MG 应用不能同时登录同一账号。",
+   "highlights": [
+    "通过 SAIC iSmart API 读取车辆遥测，展示仪表盘、行程地图与能耗统计",
+    "支持远程控制（空调、锁车、充电）与定时调度，并提供浏览器/应用内推送通知",
+    "通过 MQTT discovery 集成 Home Assistant，支持 OpenID Connect 单点登录与只读 API token"
+   ],
+   "use_cases": [
+    "MG 车主自托管查看车辆状态、行程与能耗",
+    "记录行程日志并导出报表",
+    "通过 MQTT 将车辆数据接入 Home Assistant"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A single Docker image that bundles every service -- nginx, the .NET API + worker, PostgreSQL, Mosquitto, and the SAIC gateway. No Compose file or external database needed. Ideal for Unraid and similar NAS environments where running multiple containers is incon ／ > `POSTGRES_PASSWORD` is omitted -- a strong random password is auto-generated on first start and saved to `/data/.postgres_password`. Pass `-e POSTGRES_PASSWORD=yourpassword` explicitly if you need a known value (e.g. to connect with an external DB tool).",
+     "lines": [
+      153,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 GarageStack 是使用 PostgreSQL 存储行程与遥测数据的车辆 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GarageStack is a free, open-source web app for **modern MG cars**, the ones built by SAIC Motor such as the MG4, MG5, ZS EV and HS PHEV. It signs in to the SAIC iSmart API, the same backend the official MG iSmart app uses, and turns what your car reports into something worth opening: ／ - **Keep it yours.** Everything runs in Docker on your own hardware, as one all-in-one container or a Compose stack. No subscription, and no account needed beyond your MG login.",
+   "evidence_lines": [
+    11,
+    20
+   ]
+  },
+  "fn": "joszz/GarageStack",
+  "sha": "f8c2f61529dd",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c6cbe8db9d40": {
+  "identity": {
+   "one_liner": "自托管元数据治理平台，同步数据库 schema 并生成列级血缘",
+   "review": "Metaxisdata 是一个自托管的数据治理与元数据平台：它连接 MySQL/TiDB/PostgreSQL 实例，把 schema 同步到可搜索的元数据注册表，并从 SQL 定义和 OpenLineage 事件推导表级与列级血缘，附带访问控制、审计日志和 MCP 只读工具端点。面向需要统一梳理元数据与血缘的运维和数据团队，自身仅依赖 PostgreSQL 作为存储。",
+   "highlights": [
+    "同步多个 MySQL/TiDB/PostgreSQL 实例的 schema 到统一可搜索注册表，记录 DDL 与变更历史",
+    "从视图、物化视图和手工 SQL 推导精确到列级的血缘，并可摄取 OpenLineage 事件",
+    "提供 MCP 只读端点（OAuth 2.1）和 mxd CLI，支持访问控制与审计日志"
+   ],
+   "use_cases": [
+    "集中管理多个数据库实例的元数据与 DDL 变更历史",
+    "追踪表级与列级数据血缘，结合 Airflow/OpenLineage 查看任务与数据集关系",
+    "通过 MCP 将元数据注册表暴露给 AI 代理作为只读工具"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "to MySQL/TiDB and PostgreSQL instances, syncs their schemas into a searchable ／ You need Docker and a PostgreSQL database the container can reach. Images are",
+     "lines": [
+      6,
+      33
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "to MySQL/TiDB and PostgreSQL instances, syncs their schemas into a searchable",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "to MySQL/TiDB and PostgreSQL instances, syncs their schemas into a searchable",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它连接并同步数据库实例的 schema 与血缘，为数据库生态提供元数据治理服务，而非仅使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Metaxisdata is a self-hosted data governance and metadata platform. It connects ／ to MySQL/TiDB and PostgreSQL instances, syncs their schemas into a searchable ／  (docs/mcp.md).",
+   "evidence_lines": [
+    5,
+    6,
+    29
+   ]
+  },
+  "fn": "Ranxy/metaxisdata",
+  "sha": "c6cbe8db9d40",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

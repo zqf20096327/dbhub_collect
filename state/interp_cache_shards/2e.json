@@ -10852,5 +10852,79 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c715ec5e8ec5": {
+  "identity": {
+   "one_liner": "SQL 原生时序数据库，单二进制，Parquet 存储",
+   "review": "Arc 是一个开源时序分析数据库，提供摄取管线、Parquet 存储引擎、压缩、SQL 查询层与保留策略，使用 DuckDB 作为查询引擎，兼容 InfluxDB Line Protocol 和 Telegraf 写入。面向需要长期保留遥测数据并做历史查询的团队；采用 AGPL-3.0 许可，商业用途需评估或选用企业版商业许可。",
+   "highlights": [
+    "直接接受 InfluxDB Line Protocol，兼容 Telegraf 采集层写入",
+    "数据以标准 Apache Parquet 存储于本地磁盘、S3、Azure 或 S3 兼容对象存储",
+    "单二进制静态链接部署，使用 DuckDB 作为查询引擎，支持 Arrow IPC/MessagePack/JSON 三种线路格式"
+   ],
+   "use_cases": [
+    "机器与设备遥测的长期全分辨率历史存储与分析查询",
+    "从 InfluxDB 等系统经 Line Protocol 双写逐步迁移时序数据",
+    "边缘设备或单服务器上的小型化时序部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Operational overhead**: A simple workload turns into a PostgreSQL extension stack or a multi-service cluster. ／ - If your workload is primarily transactional relational data and already fits comfortably in PostgreSQL, start by evaluating TimescaleDB. ／ Arc deploys as one statically-linked executable. No JVM, no Python environment, no PostgreSQL cluster to manage, no ZooKeeper ensemble to babysit. Run it on a laptop, a factory edge box, an on-premises server, or a Kubernetes cluster. Same binary, same config ",
+     "lines": [
+      27,
+      51,
+      154
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "See the InfluxDB migration guide, or compare Arc with TimescaleDB, InfluxDB, ClickHouse, and Elasticsearch.",
+     "lines": [
+      74
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目本身是数据库内核而非服务于其他数据库的组件，也未作为使用外部数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另提供 Arc Enterprise 商业许可",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Open, SQL-native time-series database for telemetry you need to keep. Arc ingests 38M+ records/sec, stores data as standard Parquet on infrastructure you own, and lets you query recent and historical data together. InfluxDB Line Protocol and Telegraf compatible. Single binary. AGPL-3.0. ／ Arc is a complete time-series analytical database: ingestion pipeline, Parquet storage engine, compaction system, SQL query layer, retention policy manager, continuous query scheduler, and telemetry integrations — in one binary. It uses DuckDB as its query engine, while Arc adds the pieces needed to run a durable ingestion and analytics service: high-throughput writes with automatic Parquet flushing, background compaction, scheduled compute, data lifecycle management, authentication, backup and restore, and enterprise clustering. ／ Arc deploys as one statically-linked executable. No JVM, no Python environment, no PostgreSQL cluster to manage, no ZooKeeper ensemble to babysit. Run it on a laptop, a factory edge box, an on-premises server, or a Kubernetes cluster. Same binary, same config surface.",
+   "evidence_lines": [
+    13,
+    37,
+    154
+   ]
+  },
+  "fn": "Basekick-Labs/arc",
+  "sha": "c715ec5e8ec5",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

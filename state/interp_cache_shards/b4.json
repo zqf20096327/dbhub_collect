@@ -10420,5 +10420,148 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d8afc6b8189d": {
+  "identity": {
+   "one_liner": "网络犯罪调查的自托管案例系统，基于FastAPI与Postgres",
+   "review": "NocTORnal 是面向网络犯罪调查人员的 HUMINT 与社会网络分析案例平台，用 Postgres 存储断言账本，每个图谱节点与关系追溯到 WORM 锁定的证据，支持 Admiralty 分级、行级安全、TLP 分类与双人控制。适用于网络犯罪调查组、CTI 团队与金融犯罪调查。部署依赖 Docker Compose 与安装向导，README 明确指出加载真实案件前需完成法律审查。",
+   "highlights": [
+    "提供断言账本机制，每个图谱元素通过数据库触发器强制携带来源、Admiralty 分级与时间戳",
+    "包含 WORM 锁定证据保管链、行级安全、TLP 分级出口控制与双人审批控制",
+    "支持社会网络分析指标与 Leiden、Burt 约束、关键玩家等计算，以及 ACH 假设矩阵",
+    "采集适配器支持 RSS、XenForo、MyBB 论坛、Telegram 与 ingest API"
+   ],
+   "use_cases": [
+    "勒索软件附属结构与初始访问经纪关系的画像梳理",
+    "商业电子邮件欺诈与洗钱骡子网络的社会层关联分析",
+    "需要可披露溯源链的归因调查与报告产出"
+   ],
+   "cat_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres 16 ／ (mode 600), **never overwriting an existing one**; starts Postgres, Redis, ／ |**Docker**|with Compose v2|Docker Engine and its Compose plugin on Linux; Docker Desktop on Windows and macOS. Runs four containers: Postgres, Redis, MinIO, Mailpit.|",
+     "lines": [
+      12,
+      192,
+      208
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Not an attribution oracle.** There is no \"is this the same person?\"",
+     "lines": [
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 Postgres 存储数据的自托管案例系统应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres 16 ／ Every node attribute and every relationship is anchored to a row in an ／ WORM-locked exhibit with an unbroken custody log.",
+   "evidence_lines": [
+    12,
+    59,
+    64
+   ]
+  },
+  "fn": "dboudreau00/NocTORnal",
+  "sha": "d8afc6b8189d",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d264d481294c": {
+  "identity": {
+   "one_liner": "Telegram Serverless 平台资源限额的实测基准工具",
+   "review": "该项目通过可复现的 JavaScript 探针测量 Telegram Serverless 平台给机器人分配的资源上限，包括 JS 堆、ArrayBuffer 内存、CPU 时间、SQLite 存储与并发数，并发布某次快照结果。面向需要在 Telegram Serverless 上开发或评估机器人的开发者，运行需 Node.js 18+、tgcloud CLI 及已启用 Serverless 的机器人；作者注明结果来自单次测试，非官方配额。",
+   "highlights": [
+    "提供可自行运行的 JavaScript 探针与 diagnose 命令，测量 JS 堆、ArrayBuffer、CPU 时间、SQLite 存储与并发上限",
+    "以表格形式记录各项资源的测试边界值及失败报错",
+    "测试结果以 JSON/JSONL 文件保存，含快照与本地复现方法"
+   ],
+   "use_cases": [
+    "评估 Telegram Serverless 平台对机器人可用的资源边界",
+    "在自己机器人上复现或更新这些限额数据",
+    "存储与并发探测的参考测试样例"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "How much memory, CPU time and SQLite storage does **Telegram Serverless** give a bot? This project measures those limits, tests concurrent calls, and includes JavaScript probes you can run yourself. ／ |**SQLite storage**|**496 MiB** of BLOB payload stored and counted. An additional **1 MiB** failed with `database or disk is full`. Schema and indexes affect usable space.| ／ `diagnose` runs on Telegram, allocates 4 MiB, and attempts read-only SQLite metadata queries. Unavailable values remain `null`. It does not deploy modules or change webhooks. **Do not use `tgcloud push` from this folder on an existing bot:** it can delete clou",
+     "lines": [
+      3,
+      14,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目面向 Telegram Serverless 平台做限额测量，SQLite 仅是被探测的对象之一，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "How much memory, CPU time and SQLite storage does **Telegram Serverless** give a bot? This project measures those limits, tests concurrent calls, and includes JavaScript probes you can run yourself. ／ |**SQLite storage**|**496 MiB** of BLOB payload stored and counted. An additional **1 MiB** failed with `database or disk is full`. Schema and indexes affect usable space.| ／ `diagnose` runs on Telegram, allocates 4 MiB, and attempts read-only SQLite metadata queries. Unavailable values remain `null`. It does not deploy modules or change webhooks. **Do not use `tgcloud push` from this folder on an existing bot:** it can delete cloud modules absent locally.",
+   "evidence_lines": [
+    3,
+    14,
+    38
+   ]
+  },
+  "fn": "DaYzTm/telegram-serverless-limits",
+  "sha": "d264d481294c",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

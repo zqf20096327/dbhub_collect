@@ -10143,5 +10143,199 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fe1a9b7ccc1c": {
+  "identity": {
+   "one_liner": "Prometheus 的 SQL 指标导出器，通过配置驱动采集数据库指标",
+   "review": "sql_exporter 是一个面向 Prometheus 的数据库无关指标导出器，用户通过配置文件定义 SQL 采集任务，将查询结果以 Prometheus 指标格式暴露。适用于需要对任意可通过 SQL 查询的数据库做指标采集的运维场景。支持多目标作业模式、TLS/BasicAuth、配置热加载，安装提供 Docker 镜像与 Helm chart。",
+   "highlights": [
+    "以配置驱动方式定义采集指标，无需修改代码",
+    "支持多目标（jobs）模式与选择性作业抓取",
+    "支持 TLS/BasicAuth、限流及不重启的配置热加载"
+   ],
+   "use_cases": [
+    "将数据库查询结果暴露为 Prometheus 指标",
+    "对多个数据库目标统一采集自定义 SQL 指标",
+    "配合 Grafana/Prometheus 构建数据库监控告警"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为数据库生态服务的采集工具，将数据库查询结果转为 Prometheus 指标，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SQL Exporter** is a flexible database-agnostic exporter that exposes metrics gathered from databases in Prometheus ／ - Database-agnostic with broad driver support",
+   "evidence_lines": [
+    40,
+    45
+   ]
+  },
+  "fn": "burningalchemist/sql_exporter",
+  "sha": "fe1a9b7ccc1c",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0036e9de3407": {
+  "identity": {
+   "one_liner": "自托管好友推荐私有内容订阅，Docker 部署，SQLite 存储媒体档案",
+   "review": "ADHX 是一个自托管应用，用户保存 X、Instagram、TikTok 等 14 个社交网络的帖子，经 yt-dlp 下载媒体副本到自己的服务器，支持按描述语义搜索、频道分组与全屏播放，通过一次性链接登录。数据（含 adhx.db 数据库与媒体文件）存于单一 /data 卷，适合想与亲友共享私有内容档案、用 Docker 自建服务的用户。",
+   "highlights": [
+    "通过 yt-dlp 下载并保存 14 个社交网络的帖子媒体副本，原件删除后仍可播放",
+    "支持本地语义搜索（图片/视频帧采样索引），可用 Docker Compose 单容器部署",
+    "提供 MCP 式访问 key 供 Claude 等工具检索保存内容，含 iOS/Android 分享应用"
+   ],
+   "use_cases": [
+    "与亲友共建私有内容订阅流，替代算法推荐",
+    "备份社交网络帖子防止原帖删除",
+    "通过描述性语句检索已保存的图片/视频"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Back up the `/data` volume consistently: stop ADHX before copying it, or use SQLite's backup API with a coordinated media snapshot. It holds `adhx.db` (and any SQLite WAL files), the `media/` folder and the `models/` folder. The model cache can be downloaded a",
+     "lines": [
+      214
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 ADHX 是一个以 SQLite（adhx.db）存储数据、面向终端用户的内容订阅应用，而非数据库服务工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The root example publishes ADHX on `127.0.0.1:3000` (`ADHX_PORT` changes the host port). Put it behind your usual host-based reverse proxy for HTTPS; sign-in needs HTTPS outside `localhost`. The `docker-compose.yml` keeps everything in one volume mounted at `/data`: the database, the search model and every kept file. Migrations run on start.",
+   "evidence_lines": [
+    92
+   ]
+  },
+  "fn": "itsmemeworks/adhx",
+  "sha": "0036e9de3407",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5c187398e312": {
+  "identity": {
+   "one_liner": "基于达梦数据库的药品管理毕业设计演示系统",
+   "review": "一个用 Vue 3 和 Spring Boot 2.7 构建的药品管理毕业设计演示项目，后端数据存储使用达梦数据库，线上演示版运行在 Render 平台并使用 PostgreSQL 副本。README 提供本地启动脚本、演示账号说明、数据核对工具与上线部署注意事项，面向答辩演示与验收场景。",
+   "highlights": [
+    "包含本地达梦数据库启动/停止脚本与演示库初始化说明",
+    "提供数据只读核对、API 冒烟测试、重启检查等 Python 验收脚本",
+    "提供 Render 线上演示版及 Linux（Nginx/HTTPS/systemd）部署说明"
+   ],
+   "use_cases": [
+    "毕业设计答辩演示",
+    "药品/库存管理业务的功能展示与验收测试",
+    "达梦数据库应用迁移部署前的验证参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "Vue 3 + Spring Boot 2.7。保留原页面与药品业务；本机使用达梦，Render 线上版使用 PostgreSQL 演示副本，保留独立演示账号。 ／ - 停止网站：读取 `private/local-pids.json` 后停止对应的本次 Java/Python 进程；停止数据库应使用达梦正常关闭方式，不要强制结束进程。 ／ 本机达梦工具报告许可证将于2026-11-02到期；上线需要确认服务器达梦版本及有效许可。当前验证使用旧JDK和既有依赖，尚未进行完整依赖漏洞审计或真实业务认证。",
+     "lines": [
+      3,
+      21,
+      35
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Vue 3 + Spring Boot 2.7。保留原页面与药品业务；本机使用达梦，Render 线上版使用 PostgreSQL 演示副本，保留独立演示账号。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用达梦/PostgreSQL 存储药品业务数据，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Vue 3 + Spring Boot 2.7。保留原页面与药品业务；本机使用达梦，Render 线上版使用 PostgreSQL 演示副本，保留独立演示账号。 ／ 本地数据库是本次新建的 `private/DEMODB`，连接地址为127.0.0.1:5237（已设置LISTEN_IP，但系统仍报告泛地址监听，部署时必须验证防火墙隔离）；原库在5236，已仅导出表结构，已只读复制14张业务表到演示库，未复制原用户账号或修改原表。",
+   "evidence_lines": [
+    3,
+    15
+   ]
+  },
+  "fn": "Jiang-JiangYa/medicine-management-demo",
+  "sha": "5c187398e312",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

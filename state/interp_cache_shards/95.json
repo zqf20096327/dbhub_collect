@@ -9156,5 +9156,102 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3ae0b21887d8": {
+  "identity": {
+   "one_liner": "Rust 编写的对象存储 AI 数据平台，多索引混合检索引擎",
+   "review": "Loams 是一个开源数据平台，将混合检索（向量、BM25）、响应式文档、图、SQL 与 agent 运行置于同一对象存储桶上，数据以 Lance/Tantivy 等开放格式存放，计算层无状态。面向自托管运行的 AI 应用开发者，通过 Docker Compose 部署。项目处于 0.1.0 预览阶段，API 与磁盘格式在 0.x 期间可能变更。",
+   "highlights": [
+    "在同一 DataFusion 查询中融合向量、BM25 与过滤（RRF）",
+    "提供 Qdrant、Elasticsearch 兼容 API、Arrow Flight SQL 及 Postgres/MySQL wire 协议",
+    "数据保存在用户自有对象存储（S3/GCS/Azure Blob 等）的开放格式中"
+   ],
+   "use_cases": [
+    "AI 应用的混合检索（RAG 向量+全文检索）",
+    "以自有对象存储为数据源的自托管数据平台",
+    "为 agent 提供持久化任务运行（Durable）"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- **More than retrieval.** Reactive documents (Live), graphs (Graph), analytics (House), MySQL and Postgres, and durable agent runs (Durable), on the same storage. ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      23,
+      33,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "- **More than retrieval.** Reactive documents (Live), graphs (Graph), analytics (House), MySQL and Postgres, and durable agent runs (Durable), on the same storage. ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      23,
+      33,
+      37
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "compat",
+     "quote": "|**Loams House**|Experimental. ClickHouse-compatible analytics with engine-level access control (opt-in profile)|",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "Loams architecture: clients reach the retrieval engine, Live, Durable and Postgres; a stateless gateway and router tier (planned) and the runtime and jobs (planned) are shown dashed; TiKV holds metadata and transactions; object storage holds all data in open f ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket| ／ Apache License 2.0. Loams builds on DataFusion, Lance, Tantivy, Quickwit, qdrant-edge, SlateDB, openraft, TiKV, TiDB, Neon, Grafeo, chDB and Resonate; attributions are in NOTICE. Loams is fully open source: there is no open core and no paid edition. The meteri",
+     "lines": [
+      27,
+      37,
+      87
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "Loams 本身是数据库/数据平台引擎，非为既有数据库服务的工具，也非仅使用数据库存数据的应用；TiDB/Neon 仅为其内部构建组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0，README 声明无 open core、无付费版",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Loams is an open-source, AI-native data platform in Rust. It keeps your data in *your* object-storage bucket (S3, GCS, Azure Blob, RustFS or a local directory) in open formats: Lance and Tantivy today, Iceberg next. Compute is stateless and holds only caches. ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+   "evidence_lines": [
+    9,
+    33,
+    37
+   ]
+  },
+  "fn": "ostrium-labs/loams",
+  "sha": "3ae0b21887d8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

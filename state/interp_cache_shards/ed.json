@@ -9177,5 +9177,75 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c559b01b356c": {
+  "identity": {
+   "one_liner": "S3 兼容对象存储的多租户控制平面，凭据与策略管理",
+   "review": "Paladin 是面向 S3 兼容对象存储的多租户控制平面：应用以租户范围的凭据访问存储，请求经 Cedar 策略校验、配额计量并写入审计轨迹，对象字节经预签名 URL 直传、不做代理。面向需要在多租户下统一管控对象存储凭据与权限的运营方，以 Go 二进制多角色部署于 Kubernetes，依赖 PostgreSQL 16+ 存储数据。",
+   "highlights": [
+    "提供 Connect API、Web 控制台及 Go/Python SDK，并通过 MCP 向 AI 代理暴露同一组操作",
+    "实现基于 Cedar 策略的租户级访问控制、配额计量与审计轨迹",
+    "提供 Helm charts 部署，镜像经 Sigstore 签名并携带 SPDX SBOM"
+   ],
+   "use_cases": [
+    "多租户对象存储的凭据托管与权限管理",
+    "需要审计与配额控制的存储访问治理",
+    "通过 MCP 让 AI 代理执行存储管理操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ its contracts with PostgreSQL. Besides the Connect API, the ／ It needs PostgreSQL and an S3-compatible store — SeaweedFS, MinIO, Garage or",
+     "lines": [
+      13,
+      44,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Paladin 将自身数据存于 PostgreSQL（backs its contracts with PostgreSQL），数据库是其运行依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only，backend/console/proto/SDK 各组件单独标注 license",
+   "install": [
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "its contracts with PostgreSQL. Besides the Connect API, the ／ It needs PostgreSQL and an S3-compatible store — SeaweedFS, MinIO, Garage or ／ **Paladin does not proxy traffic to S3.** Object bytes move between the client",
+   "evidence_lines": [
+    44,
+    61,
+    25
+   ]
+  },
+  "fn": "oleg-tkachuk/paladin",
+  "sha": "c559b01b356c",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9704,5 +9704,267 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dfc77210ff8b": {
+  "identity": {
+   "one_liner": "纯 Ruby 实现的 SQLite SQL 词法/语法分析库",
+   "review": "Plume 是一个 Ruby gem，提供纯 Ruby 实现的 SQLite 词法分析器和解析器，可将 SQL 解析为 AST 并用 to_sql 还原，还能通过 Plume.reads/access 分析语句读写哪些表和列，支持从活跃数据库构建 catalog。适合需要在 Ruby 中内省或校验 SQL 语句结构的开发者，例如实现列级访问检查或 SQL 分析工具；不直接连接或操作数据库。",
+   "highlights": [
+    "提供纯 Ruby 实现的 SQLite 词法分析器与 100% 兼容的解析器",
+    "支持将解析树转回 SQL（to_sql），可分析语句读取/写入的表和列",
+    "解析器以 SQLite 官方测试套件中 15,836 条语句为基准进行校验"
+   ],
+   "use_cases": [
+    "内省 SQL 查询结构，确定查询将读取哪些表和列",
+    "在不连接数据库的情况下预先审查 SQL 的访问范围",
+    "构建需要解析或改写 SQLite SQL 语句的 Ruby 工具"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Plume is a Ruby library for working with SQLite elegantly. Presently, this means that it provides a pure Ruby implementation of SQLite's lexer/tokenizer as well as a 100% compatible parser. This is useful for introspecting the structure of SQL queries, and for",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 的 SQL 语句提供解析与访问分析能力，属于服务数据库生态的工具/开发库，本身不是使用 SQLite 存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Plume is a Ruby library for working with SQLite elegantly. Presently, this means that it provides a pure Ruby implementation of SQLite's lexer/tokenizer as well as a 100% compatible parser. This is useful for introspecting the structure of SQL queries, and for building tools that work with SQL queries - like working out which tables and columns a query is going to read. ／ Every statement in SQLite's grammar parses, and the parser is checked against the SQL in SQLite's own test suite: of the 15,836 statements there, the ones it does not parse are those SQLite rejects as well. ／ To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to rubygems.org.",
+   "evidence_lines": [
+    11,
+    31,
+    116
+   ]
+  },
+  "fn": "yippee-fun/plume",
+  "sha": "dfc77210ff8b",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fcb27927fcd4": {
+  "identity": {
+   "one_liner": "离线优先内存数据网格，CRDT 同步 + Rust 服务端",
+   "review": "TopGun v2 是一个离线优先的实时数据同步平台：客户端数据存于内存并持久化到 IndexedDB，通过 CRDT（LWW-Map/OR-Map）与 Merkle 增量同步与服务端合并冲突；服务端为 Rust 实现，使用嵌入式 redb 存储，无需独立数据库。面向需要离线可用与实时协同的 Web 应用开发者，提供 React hooks、TypeScript SDK 和供 AI 代理访问数据的 MCP server。v2 处于单节点稳定阶段，多节点 Raft 集群仍在路线图中。",
+   "highlights": [
+    "客户端本地读写不经网络，变更持久化到 IndexedDB，重连后通过 LWW-Map/OR-Map 与逻辑时钟自动合并冲突",
+    "服务端为 Rust（axum WebSocket），采用嵌入式 redb 存储，支持增量同步（Merkle 树比对）与单节点分区/分布式锁",
+    "内置精确+BM25 全文+语义向量的三路混合搜索（RRF 融合），并附带 MCP server 供 Claude Desktop/Cursor 等 AI 客户端读写数据"
+   ],
+   "use_cases": [
+    "需要离线工作、重连后自动同步的实时协同应用（如待办/文档协作）",
+    "自托管的实时数据后端，单节点部署并持久化到本地卷",
+    "让 AI 代理通过 MCP 直接查询和变更应用实时数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目本身是提供数据存储与同步服务的引擎/服务端组件（嵌入式 redb 存储），README 明言无需运行外部数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Build real-time apps that work offline. Local writes are instant and survive disconnects; reconnecting clients sync seamlessly with automatic conflict resolution. Self-host today: the server keeps your data in an embedded store, so there is no database to run. Apache-2.0, Rust server, TypeScript client. AI agents talk to your data natively through MCP. ／ - **Pluggable storage**: Data lives in an embedded store inside the server (redb) — no database to run; bring your own client-side adapter. ／ |`server-rust`|Rust WebSocket server (axum), clustering, embedded redb storage|",
+   "evidence_lines": [
+    7,
+    19,
+    153
+   ]
+  },
+  "fn": "TopGunBuild/topgun",
+  "sha": "fcb27927fcd4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4e0248a56b4e": {
+  "identity": {
+   "one_liner": "面向学者的多人在线派对词猜游戏平台",
+   "review": "一个面向学术界人士的在线派对游戏项目，首个游戏为团队猜词（类 Codenames 规则，翻到 Reviewer 2 即输），玩家用手机加入房间对战。技术栈为 TypeScript + Vue 3 + Socket.IO，房间存于内存，账号与反馈存 SQLite，支持中英双语、断线重连和 AI 玩家。适合想自部署或在线游玩的学术社区用户；目前处于早期开发阶段。",
+   "highlights": [
+    "支持中英双语界面，可在中国大陆直接游玩，无需 Google 服务或公共 CDN",
+    "支持可选账号系统，保存头像、战绩、好友与头衔，并记录完整对局供回放",
+    "内置 AI 玩家，可担任 PI、学生或顶替离线玩家的回合"
+   ],
+   "use_cases": [
+    "学术团队聚会或组建活动的多人猜词娱乐",
+    "自部署一个私有游戏实例供朋友联机",
+    "收集学术词库数据用于 AI 玩家训练或研究数据集"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|Rooms in memory; feedback and accounts in SQLite (`node:sqlite`); avatars as files|",
+     "lines": [
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储账号与反馈数据的游戏应用，SQLite 仅为其数据存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Storage|Rooms in memory; feedback and accounts in SQLite (`node:sqlite`); avatars as files| ／ 🚧 Early development. The first game is online at <https://playreviewer2.com>, and a short video in Chinese shows it, on Bilibili and Xiaohongshu; you can also run your own copy (Running locally).",
+   "evidence_lines": [
+    61,
+    52
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "jxxsteven7/reviewer2",
+  "sha": "4e0248a56b4e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "92a143e70a51": {
+  "identity": {
+   "one_liner": "自托管协作工作区应用，含页面与数据库及内置MCP服务器",
+   "review": "一个可自托管的开源工作区，提供页面编辑器与数据库视图（表格/看板/日历等）、实时协同与离线编辑，并内置 MCP 服务器供 Claude 等 AI 客户端经 OAuth 授权读写工作区。面向个人与团队，通过 docker compose 部署服务器版或 macOS/Windows/Linux 桌面版，数据存放在 PostgreSQL，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供块编辑器与数据库，行即页面，支持表格、看板、日历、图表等多种视图及关系、公式、汇总",
+    "内置 MCP 服务器，AI 客户端经 OAuth 2.1 授权后可搜索、读取和编辑工作区",
+    "支持 Docker Compose 自托管和 macOS/Windows/Linux 桌面应用运行"
+   ],
+   "use_cases": [
+    "团队知识库与项目管理",
+    "将 AI 助手接入工作区进行检索与编辑",
+    "从 Notion/Obsidian/Trello 导入既有内容进行迁移"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ # and POSTGRES_PASSWORD to the output of: openssl rand -hex 24",
+     "lines": [
+      23,
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL 存储数据的工作区应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL,",
+   "evidence_lines": [
+    23
+   ]
+  },
+  "fn": "esmworks/leafdesk",
+  "sha": "92a143e70a51",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

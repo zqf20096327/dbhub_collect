@@ -10323,5 +10323,73 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3c22c0593520": {
+  "identity": {
+   "one_liner": "自托管家庭事务管理应用，数据存于单一 SQLite 文件",
+   "review": "FamilyOS 是一个自托管的家庭组织应用，将共享日历、任务、购物清单、家务、菜谱和家庭档案整合到一个 Web 应用中，可运行在树莓派等自有硬件上。它内置 AI 建议流程（人工审批后生效），并作为 MCP 服务器供外部 AI 客户端连接。数据以 SQLite 文件保存，通过 Docker Compose 部署，目前为 beta 阶段，无向后兼容保证。",
+   "highlights": [
+    "提供共享日历、任务/购物清单、家务轮换、每周菜谱和家庭记录等模块",
+    "支持通过 MCP 连接 Claude Desktop、Claude Code 等外部 AI 客户端，并支持 OpenRouter、Ollama 或任意 OpenAI 兼容 API 作为 AI 提供方",
+    "内置每晚自动备份，支持加密并复制到 S3 或 WebDAV"
+   ],
+   "use_cases": [
+    "家庭在自有硬件上自托管共享日历、清单和家务管理",
+    "厨房墙面显示屏（平板/旧电视）作为家庭信息只读视图",
+    "希望 AI 仅生成建议、由家庭成员审批后生效的家庭场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Raspberry Pi is enough), with your data in one SQLite file. Share a school notice, a photo of a",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据存于单一 SQLite 文件，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Raspberry Pi is enough), with your data in one SQLite file. Share a school notice, a photo of a ／ Everything lives in the `famos-data` volume (`/data` in the container): the database, shared ／ FamilyOS is a Model Context Protocol server at `/mcp`. An admin",
+   "evidence_lines": [
+    5,
+    102,
+    169
+   ]
+  },
+  "fn": "onurceri/family-os",
+  "sha": "3c22c0593520",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

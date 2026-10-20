@@ -9449,5 +9449,142 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a097f733314": {
+  "identity": {
+   "one_liner": "营收韧性与价格回撤回测引擎，基于SEC EDGAR+Yahoo Finance数据",
+   "review": "一个五面板股票回测工作台，用于检验“营收稳定的公司股价大跌后买入”这一策略假设，支持参数扫描、3D CAGR 曲面与样本外因子搜索。FastAPI 提供服务与数据 API，JavaScript 引擎在浏览器和 API 中共用执行，行情与财报数据缓存于本地 SQLite。适合量化研究个人与学习者，仅限本地运行真实数据。",
+   "highlights": [
+    "支持任意双参数最多 20,000 次回测的 CAGR 曲面扫描，在 Web Worker 中运行",
+    "支持六参数全网格最多 100,000 次组合的样本外因子搜索，输出 η² 与 Spearman ρ",
+    "读取 SEC EDGAR 与 Yahoo Finance 数据并缓存至本地 SQLite 数据库"
+   ],
+   "use_cases": [
+    "检验价格与基本面背离类股票策略的历史表现",
+    "研究策略参数敏感性与样本外失效风险",
+    "以可回放方式逐笔检视交易执行过程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|🗄️ **Real & synthetic data**|Yahoo Finance + SEC EDGAR cached in SQLite, optional FMP connector, JSON import, labeled synthetic demo| ／ ### Real market data (2022–2025): Yahoo Finance + SEC, cached in SQLite ／ Select **Real data 2022–25** (local server only). The first time, the server builds `data/market.sqlite` (about 5 minutes); afterwards every load reads the database and backtests run in the page. Build ahead of time from the command line:",
+     "lines": [
+      32,
+      79,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它使用 SQLite 缓存自身回测所需的市场数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A five-panel backtesting workspace for stable revenue growth and price declines. FastAPI serves the application and its data APIs. A shared JavaScript engine executes identically in the browser and through the API. ／ |🗄️ **Real & synthetic data**|Yahoo Finance + SEC EDGAR cached in SQLite, optional FMP connector, JSON import, labeled synthetic demo| ／ Select **Real data 2022–25** (local server only). The first time, the server builds `data/market.sqlite` (about 5 minutes); afterwards every load reads the database and backtests run in the page. Build ahead of time from the command line:",
+   "evidence_lines": [
+    13,
+    32,
+    81
+   ]
+  },
+  "fn": "HyeonbinJung/Revenue-Dip-Lab",
+  "sha": "7a097f733314",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "796546b55939": {
+  "identity": {
+   "one_liner": "自托管的面向 Agent 的招聘看板应用，以 Postgres 存储",
+   "review": "一个可自托管的招聘看板应用，供求职者、雇主及其 Agent 通过 Web、REST API、MCP、CLI、TUI 等接口发布职位与投递申请。数据存于自带 Postgres，部署方式包括一键安装脚本、npm、Docker Compose 与 Railway；支持实例目录互发现。内置模型辅助填写职位表单功能，需另行配置 API key。",
+   "highlights": [
+    "提供 Web、PWA、REST API、MCP、CLI、TUI、桌面多种访问接口",
+    "基于 Postgres 存储，启动时运行数据库迁移",
+    "实例可通过开放目录互相发现与联合查询"
+   ],
+   "use_cases": [
+    "自托管招聘/求职看板",
+    "让 AI Agent 通过 API/MCP 代为搜索与投递职位",
+    "多实例联合招聘信息检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Self-hosted, MIT, Postgres. One person, one account, both sides of the table. ／ That is a board on http://localhost:8787 with its own Postgres. Migrations run at ／ Deploying to Railway: the repo has a `railway.json`, so add a Postgres and point a",
+     "lines": [
+      23,
+      120,
+      131
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目使用自带 Postgres 存储看板数据，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted, MIT, Postgres. One person, one account, both sides of the table. ／ docker compose up -d ／ That is a board on http://localhost:8787 with its own Postgres. Migrations run at",
+   "evidence_lines": [
+    23,
+    117,
+    120
+   ]
+  },
+  "fn": "profullstack/agenticjobs",
+  "sha": "796546b55939",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

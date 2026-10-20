@@ -9868,5 +9868,271 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd61d1e57cff": {
+  "identity": {
+   "one_liner": "无 LLM/无 API key 的本地 Agent 记忆 MCP 服务器，基于 Bun + SQLite",
+   "review": "Titen 是一个运行在 Bun 上的自托管 Agent 记忆服务，通过 stdio/HTTP 提供 MCP 接口，数据存储在本地 SQLite（FTS5 检索，嵌入为可选），每条记忆保留来源、权限范围与矛盾证据，并提供审计工具检查其他记忆存储。面向为 AI Agent 配备记忆能力的开发者；要求 Bun 1.2+，模型辅助推导功能默认未启用。",
+   "highlights": [
+    "通过 stdio、Streamable HTTP MCP、REST 或 TypeScript SDK 提供 19 个记忆工具，兼容 @modelcontextprotocol/server-memory 的九个工具接口",
+    "默认使用 SQLite FTS5 词法检索，无需 API key、LLM 或嵌入提供方，向量索引为可选项",
+    "内置 audit 命令，可只读检查自身或其他记忆存储（reference-server memory.json、Mem0 导出）中的重复、召回循环、密钥模式与过期条目"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 MCP 客户端提供本地化、带来源与权限的记忆存储",
+    "替换 @modelcontextprotocol/server-memory 并导入其既有 memory.json 数据",
+    "审计现有 Agent 记忆存储的质量问题（重复、过期、泄密模式等）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Bun and one SQLite file; everything else is the standard library and Web APIs. ／ |Growth|full-file rewrite, unbounded|SQLite, retention and eviction policies|",
+     "lines": [
+      78,
+      120
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The base service does not require Docker, Redis, Postgres, a graph database, or",
+     "lines": [
+      738
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以 npm 包/MCP 服务器形式为 Agent 生态提供记忆组件，SQLite 仅作为其内置存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "npx titen-memory mcp ／ real organization, workspace, project and owner into it, and serves MCP over ／  Bun and one SQLite file; everything else is the standard library and Web APIs.",
+   "evidence_lines": [
+    32,
+    36,
+    78
+   ]
+  },
+  "fn": "RamaAditya49/titen",
+  "sha": "dd61d1e57cff",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "90969327e0e4": {
+  "identity": {
+   "one_liner": "Praxsuite BaaS 平台的 TypeScript 客户端 SDK，提供认证、查询、文件与实时事件总线",
+   "review": "这是 Praxsuite 后端服务的 TypeScript/JavaScript SDK，为浏览器、Node、Deno、Bun 和 React Native 提供客户端库，包含认证（含 OIDC）、带过滤与聚合的数据查询、文件访问、网关自动化调用和临时实时 Event Bus。零依赖、全类型化，运行时需 fetch（Node 18+）。它面向使用 Praxsuite 平台的前端与全栈开发者，不直接连接第三方数据库。",
+   "highlights": [
+    "提供 auth、data、endpoints、schema、bus 五个模块，覆盖注册登录、过滤/分页/聚合查询、自动化调用与客户端间实时通信",
+    "零依赖，全 TypeScript 类型化，客户端拒绝在浏览器代码中使用 secret key",
+    "网络错误、超时与限流自动以指数退避重试，所有方法支持 AbortSignal 取消"
+   ],
+   "use_cases": [
+    "为 Praxsuite workspace 构建浏览器或跨端前端应用",
+    "客户端间实时状态同步（光标、在线状态、多人大厅）",
+    "以类型安全方式执行 Praxsuite 数据表查询与写入"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 Praxsuite BaaS 平台服务的客户端 SDK/组件，而非一个自身使用数据库存储数据的终端应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Praxsuite Open SDK Licence v1.0，source-available",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Auth, queries, files and server-authoritative logic for your Praxsuite workspace — in the browser, ／ npm install @praxsuite/sdk ／ |`prax.data`|Queries with filters, OR/AND groups, ordering, paging, relations and aggregates; insert, update, delete, upsert|",
+   "evidence_lines": [
+    8,
+    21,
+    49
+   ]
+  },
+  "fn": "TesseractSoftwares/Praxsuite-SDK-TypeScript",
+  "sha": "90969327e0e4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "411f32d1b348": {
+  "identity": {
+   "one_liner": "Monolog 的 PDO 日志处理器，将日志写入数据库",
+   "review": "这是一个 PHP 编写的 Monolog 日志 Handler 开发库，通过 PDO 把日志消息存入数据库表，可自动建表建索引并支持自定义字段。要求 PHP 7.1 以上，通过 Composer 安装。README 明确定位为存入 MySQL；SQLite 与 PostgreSQL 有使用上的注意事项说明。",
+   "highlights": [
+    "自动创建日志表（CREATE TABLE IF NOT EXISTS）及索引，可通过 auto_create 参数跳过",
+    "支持通过 $additional_fields/$additional_indexes 定义附加列与索引",
+    "提供默认日志字段：id、ipv4、time、level、channel、message"
+   ],
+   "use_cases": [
+    "将 PHP 应用的 Monolog 日志持久化到数据库表",
+    "需要在日志记录中携带自定义 extra 字段并落库的场景",
+    "需要控制日志表/索引创建时机的部署（如 PostgreSQL 锁竞争场景）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PDO Handler for Monolog, which allows to store log messages in a MySQL Database via PDO handler.",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Note: SQLite does not support 'USING method' for indexes;",
+     "lines": [
+      47
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "On PostgreSQL this matters: `CREATE INDEX IF NOT EXISTS` takes a SHARE lock on the table",
+     "lines": [
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库是把数据库作为日志存储后端的 Monolog 组件，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PDO Handler for Monolog, which allows to store log messages in a MySQL Database via PDO handler. ／ `karelwintersky/monolog-pdo-handler` is available via composer. ／ This tool is free software and is distributed under the MIT license. Please have a look at the LICENSE file for further information.",
+   "evidence_lines": [
+    3,
+    8,
+    73
+   ]
+  },
+  "fn": "KarelWintersky/monolog-pdo-handler",
+  "sha": "411f32d1b348",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7c5d66e71186": {
+  "identity": {
+   "one_liner": "本地离线的个人资产盘点与 FIRE 目标测算桌面应用",
+   "review": "物谱 Thingary 是面向个人用户的本地桌面应用，用于每月记录各平台账户余额与欠款，计算净资产趋势并反算每月储蓄额、财务独立时间等问题。提供账户盘点、目标规划、存钱目标、可选物品档案与备份功能，主资料库不加密，规划计算由独立 Rust 核心实现，支持 Mac 与 Windows。",
+   "highlights": [
+    "支持账户盘点、净资产趋势查看与目标/退休时间测算，含试算页面",
+    "资料本地存储，无需账号，离线可用，备份可用恢复密钥加密",
+    "支持 Mac（Apple Silicon/Intel）与 Windows 平台，安装包提供 .dmg 与 x64-setup.exe"
+   ],
+   "use_cases": [
+    "个人定期（每月/每季）盘点分散在银行卡、基金、公积金等平台的资产与负债",
+    "测算财务独立/退休所需储蓄与时间，比较消费、休息、换工作等情景影响",
+    "为特定支出设置存钱目标并跟踪进度，可选建立物品档案记录维修与保障"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为个人资产盘点桌面应用，仅本地存储资料，未声明为数据库生态服务的工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "钱分散在银行卡、余额宝、券商、基金平台、公积金和房贷里，很难看清全貌。物谱是本地使用的桌面应用：每月对照各平台录一次余额和欠款，就能看到净资产变化，并回答三个问题：**每月要存多少、什么时候能不靠工资、歇一阵能撑多久。** 无需账号，不联网也能用，资料只在你的电脑上。 ／ 它适合低频记录，不提供日常流水记账、行情交易或自动付款。 ／ Mac：已在 Apple Silicon、macOS 27 验证，安装包同时含 Intel，最低目标 macOS 14（Intel 与旧系统尚未实机验证）。Windows 10 1809+／11 x64，安装包未签名，首次运行可能出现 SmartScreen 提示。两个平台都是公开测试版，已知限制见快速上手。",
+   "evidence_lines": [
+    9,
+    33,
+    41
+   ]
+  },
+  "fn": "CoderJackZhu/Thingary",
+  "sha": "7c5d66e71186",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

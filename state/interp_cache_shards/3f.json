@@ -9764,5 +9764,286 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1b29406a2796": {
+  "identity": {
+   "one_liner": "自托管笔记应用，React 前端 + Express/SQLite 后端",
+   "review": "Glass Keep 是一个自托管的 Google Keep 风格笔记应用，支持 Markdown 文本、清单、手绘笔记、图片附件、标签、多用户认证、实时协作和管理面板，后端为 Express API 使用嵌入式 SQLite 存储数据，另含本地 AI 问答（Qwen + llama.cpp）。部署方式为 Docker 单镜像或 Node.js 源码运行，客户端有 Web/PWA、Tauri 桌面版与 Android 版，适合想私有化部署个人笔记服务的用户。",
+   "highlights": [
+    "支持 Markdown 文本、清单、手绘、图片附件与标签等多种笔记类型，含实时协作与多用户权限",
+    "后端使用 Express + better-sqlite3，SQLite 内嵌无需外部数据库",
+    "支持 Docker 单镜像部署、JSON 导入导出、Google Keep（Takeout）数据导入与本地 AI 问答"
+   ],
+   "use_cases": [
+    "自托管个人/小型团队笔记服务",
+    "从 Google Keep 迁移笔记数据",
+    "离线优先的多客户端（Web/桌面/Android）笔记访问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A sleek, Keep-style notes app with Markdown, checklists, images, tag chips, color themes, dark mode, drag-and-drop reordering, import/export, auth, and a glassy UI — built with Vite + React and a tiny Express + SQLite API. ／ * Backend: **Express API + SQLite** (`better-sqlite3`) ／ * SQLite is embedded (no external DB needed)",
+     "lines": [
+      3,
+      102,
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用嵌入式 SQLite 存数据的笔记应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " * Backend: **Express API + SQLite** (`better-sqlite3`) ／ * SQLite is embedded (no external DB needed) ／ ## 🐳 Docker Deploy to Server(single image: API + built frontend)",
+   "evidence_lines": [
+    102,
+    129,
+    143
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nikunjsingh93/react-glass-keep",
+  "sha": "1b29406a2796",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5c476588359": {
+  "identity": {
+   "one_liner": "SQLite 兼容 SQL 数据库，以列式存储与 JIT 编译加速查询",
+   "review": "musql 是一个用 Go 编写的嵌入式/服务端数据库引擎，实现 SQLite 的 SQL 方言，采用自研 .musq 列式段格式与 JIT 编译执行，支持通过 database/sql 嵌入 Go 程序、musql-convert 与 SQLite 互导、libSQL 向量检索及 CRDT/主从复制。面向需要在 Go 应用中替换 SQLite 驱动或运行独立服务端 musqld 的开发者；SQL 兼容但文件格式不兼容，SQLite 文件需先转换。",
+   "highlights": [
+    "以列式存储与 JIT 编译执行查询，过滤器与聚合直接在列上运行",
+    "提供 musql-convert 工具实现 SQLite 数据库双向导入导出",
+    "支持 libSQL 向量 SQL（vector_top_k、libsql_vector_idx）及 CRDT/leader 复制"
+   ],
+   "use_cases": [
+    "Go 应用中作为 database/sql 驱动的嵌入式数据库",
+    "以 Docker 或二进制运行 musqld 服务端，供 libSQL 客户端连接",
+    "将现有 SQLite 数据库转换到列式格式以加速读密集查询"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "**SQLite-compatible SQL, accelerated by columnar storage and a JIT compiler.** ／ musql implements SQLite's SQL dialect through its own parser, planner, and",
+     "lines": [
+      7,
+      160
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其自身是数据库引擎，并为 SQLite 生态提供兼容 SQL 方言与数据互导能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SQLite-compatible SQL, accelerated by columnar storage and a JIT compiler.** ／ musql implements SQLite's SQL dialect through its own parser, planner, and ／ Pure Go, no CGo; needs Go 1.27 or newer. The driver registers as `sqlite`",
+   "evidence_lines": [
+    7,
+    160,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "samyfodil/musql",
+  "sha": "e5c476588359",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "74db75099a13": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue+MQTT的智能家居管理平台",
+   "review": "一套基于MQTT协议的智能家居/IoT管理平台，前后端分离，含管理员端与用户端双角色，覆盖设备接入、状态监控、事件与操作审计、在线统计等功能。后端采用SpringBoot+MybatisPlus，数据存储使用MySQL，缓存与在线统计依赖Redis，设备通信经EMQX/Mosquitto等MQTT Broker。适用于智能家居、智慧办公等场景，README还包含毕业设计相关的付费部署与讲解服务信息。",
+   "highlights": [
+    "支持MQTT协议设备接入，采用EMQX/Mosquitto作为Broker，支持QoS 0/1/2与遗嘱消息",
+    "提供管理员/用户双角色体系，包含用户、设备、公告、事件与操作记录管理",
+    "基于MQTT上下线事件与Redis缓存实现设备在线统计与历史记录查询"
+   ],
+   "use_cases": [
+    "智能家居设备统一管控平台",
+    "智慧办公/智慧社区物联网管理",
+    "家庭安防告警与事件追溯"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明后端使用MySQL作为数据库、Redis作为缓存中间件存储平台数据，属于使用数据库的应用系统",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 基于 SpringBoot + Vue + MQTT 的智能家居平台 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    1,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/smart_home_cos",
+  "sha": "74db75099a13",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8750ce1c8f8d": {
+  "identity": {
+   "one_liner": "自托管的敏捷冲刺计划器，覆盖 Yandex Tracker 与 Jira",
+   "review": "Beer Tracker 是一个自托管的冲刺规划应用，在 Yandex Tracker 或 Jira 之上提供按人/按天的泳道计划视图，包含 backlog、burndown、事实时间线、回顾板与实时协作，任务数据仍保留在外部 tracker 中，通过 sync 从 tracker 拉取状态历史，并提供 MCP 接口供 AI 代理读取计划与提交修改（写入需 confirm）。适合已在用上述 tracker 的团队做冲刺排期与回顾。",
+   "highlights": [
+    "提供按人/按天泳道的冲刺计划、backlog、burndown 与回顾板",
+    "通过 sync 从 tracker 同步状态历史并在泳道上展示事实时间线",
+    "提供 MCP 接口，代理可读取 planning graph 并在确认后应用修改"
+   ],
+   "use_cases": [
+    "已使用 Yandex Tracker/Jira 的团队进行冲刺排期",
+    "需要按人/天泳道视图与 burndown 的敏捷团队",
+    "通过 MCP 让 AI 代理辅助查看与修改冲刺计划"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex)",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示该应用使用 PostgreSQL 存储数据（env 配置 POSTGRES_PASSWORD），自身是面向终端用户的冲刺规划应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Планер спринтов поверх Яндекс Трекера и Jira ／ # POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex) ／ Откройте http://localhost:3000 и подключите трекер. Опубликованные образы — `dinkimom/beer-tracker`, тег `1.17.4`.",
+   "evidence_lines": [
+    5,
+    77,
+    81
+   ]
+  },
+  "fn": "Dinkimom/beer-tracker",
+  "sha": "8750ce1c8f8d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

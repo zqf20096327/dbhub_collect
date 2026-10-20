@@ -10591,5 +10591,127 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bfc9adfc0c38": {
+  "identity": {
+   "one_liner": "印尼行政区划边界数据集，含多边形与质心坐标",
+   "review": "该仓库提供依据 Kepmendagri 300.2.2-2430/2025 编制的印尼省/县/市/区/村各级行政区划边界数据，含简化后的 multipolygon 和由质心计算的经纬度坐标，以 SQL 形式分发，并逐省列出数据完整度、标注未完成条目。供需要行政区划边界与编码对照的开发者使用；部分村/区级数据尚未补齐。",
+   "highlights": [
+    "提供印尼各级行政区划的边界 polygon 及经纬度质心坐标",
+    "按 Kepmendagri 2025 号文件编码逐省列出数据完成度",
+    "边界数据为简化版 multipolygon，高分辨率版本另建仓库"
+   ],
+   "use_cases": [
+    "需要印尼行政区划边界与编码对照的地理数据应用",
+    "基于行政区域多边形做空间查询或地图绘制",
+    "行政区划代码与数据完整性核对的参考数据源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未提及任何数据库，仅主题标签含 mysql，无法确认为数据库生态工具或应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri No 300.2.2-2430 Tahun 2025 ／ * Koordinat latitude longitude diperhitungkan dari koordinat centroid dari polygon wilayah tersebut ／ * Karena keterbatasan resources, wilayah boundaries berupa multipoliygon yang di simplified, untuk resolusi yang lebih tinggi akan dibuatkan repo tersendiri",
+   "evidence_lines": [
+    2,
+    55,
+    56
+   ]
+  },
+  "fn": "cahyadsn/wilayah_boundaries",
+  "sha": "bfc9adfc0c38",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a56a5d02f5ee": {
+  "identity": {
+   "one_liner": "S3 兼容多后端同步代理，内置 SQLite/Redis 同步队列",
+   "review": "s3syncer 是一个部署在多个 S3 兼容存储前的 HTTP 代理，客户端以标准 S3 端点访问；写入复制到所有后端，读取在主后端不可用时回退，未完成的复制进入优先级队列后台重试。队列在 single 模式用本地 SQLite，cluster 模式用共享 Redis。适用于需要在多个 S3 存储间做容灾与数据同步的运维场景；不支持分段上传等部分 S3 特性。",
+   "highlights": [
+    "提供多后端复制写入、主后端故障时回退读取、resync/bisync 双向同步任务",
+    "支持 single（本地 SQLite 队列）与 cluster（共享 Redis 队列）两种运行模式",
+    "提供 Prometheus 指标、REST API/CLI、Helm chart 与多架构容器镜像"
+   ],
+   "use_cases": [
+    "为多个 S3 兼容存储间的主备同步与故障回退提供代理入口",
+    "通过 Helm 在 Kubernetes 中以多实例模式部署实现横向扩展",
+    "对既有桶数据执行一次性或双向全量重同步"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Two run modes** — `single` (one instance, local SQLite) and `cluster` (several instances on a shared Redis). ／ |`db_path`|`s3syncer.db`|SQLite file: the sync queue in `single` mode, local scratch state in `cluster` mode| ／ By default (`mode: single`) the sync queue lives in a local SQLite file and per-object locks in process memory, so exactly one instance may run. To scale out or run highly available, set `mode: cluster` and point every instance at one Redis:",
+     "lines": [
+      12,
+      111,
+      134
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该代理为 S3 存储生态提供服务，SQLite 仅作为其内部同步队列的嵌入式存储，非为数据库生态服务的适配。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`s3syncer` is an HTTP proxy that sits in front of several S3-compatible storages and keeps them in sync. Clients talk to it as to a regular S3 endpoint. Writes go to every backend, reads fall back to a backup when the primary is unavailable or missing the object, and everything that could not be replicated immediately is queued and retried in the background. ／ - **Two run modes** — `single` (one instance, local SQLite) and `cluster` (several instances on a shared Redis). ／ |`mode`|`single`|`single`: one instance, SQLite queue. `cluster`: several instances on a shared Redis (details)|",
+   "evidence_lines": [
+    5,
+    12,
+    108
+   ]
+  },
+  "fn": "spions/s3syncer",
+  "sha": "a56a5d02f5ee",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

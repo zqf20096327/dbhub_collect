@@ -8685,5 +8685,105 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "73714cc4e377": {
+  "identity": {
+   "one_liner": "游戏运营控制平台：Server/Agent/SDK 架构实现多游戏多环境运营管控",
+   "review": "Croupier 是一个面向游戏公司的运营管控平台，由 Web 控制台、控制面 Server、游戏内 Agent 和六种语言 SDK 组成，提供函数注册调度、任务、审计、健康探测与可观测能力；通过 GORM 支持 SQLite/MySQL/PostgreSQL/SQL Server 作为后端存储，捕获类 Agent 可做数据库 CDC。适合游戏运维与 GM 后台团队使用。",
+   "highlights": [
+    "支持 go/js/python/java/csharp/cpp 六种官方 SDK 与 JSON Schema 能力契约",
+    "Server/Agent 与 SDK/Agent 链路基于 TCP+TLS 会话传输，支持双向请求、心跳重连与背压",
+    "提供侧车、devops、capture（数据库 CDC）、synthetics 等多种 Agent 角色"
+   ],
+   "use_cases": [
+    "单公司多游戏多环境的运营管控与任务下发",
+    "游戏数据库变更捕获（CDC）与规则告警",
+    "游戏服务健康探测与内外部访问审计"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|`gorm.io/driver/postgres`|Production| ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations ／ Pre-built images bring up a minimal stack with one command (server + agent + dashboard + postgres/redis; no local build required):",
+     "lines": [
+      54,
+      92,
+      189
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|`gorm.io/driver/mysql`|Production (recommended)| ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations",
+     "lines": [
+      53,
+      92
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|`glebarez/sqlite`|Development, testing, small setups| ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations",
+     "lines": [
+      52,
+      92
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`gorm.io/driver/sqlserver`|Enterprise environments| ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations",
+     "lines": [
+      55,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为控制面业务层，依赖 MySQL/PostgreSQL/SQLite/SQL Server 等数据库存储数据，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Croupier is a Server / Agent / SDK platform for game operations and control, intended by default for multiple games and multiple environments within a single game company. The architecture has converged on a unified session transport: ／ Three tiers: Console (Web) → Server (control plane, capable of multi-instance HA) → Agent (proxy inside the game VPC) → Game Server / SDK. ／ - Server: Go 1.27, Gin for HTTP, GORM as the ORM (MySQL / PostgreSQL / SQL Server / glebarez SQLite drivers), Casbin for authorization decisions, goose for numbered migrations",
+   "evidence_lines": [
+    12,
+    82,
+    92
+   ]
+  },
+  "fn": "cuihairu/croupier",
+  "sha": "73714cc4e377",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

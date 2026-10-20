@@ -10541,5 +10541,295 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b94706f975e7": {
+  "identity": {
+   "one_liner": "Apple Health 数据桥接器，通过自托管接收端与只读 MCP 服务器供 AI 读取",
+   "review": "该项目包含一个 iOS 应用和一个自托管接收端（macOS/Linux），将用户授权的 Apple Health 记录自动同步到本地计算机存储，并通过只读 MCP 服务器向 MCP 客户端提供睡眠、运动、活动等数据的查询工具。适合想在个人 AI 助手工作流中使用健康历史、且不依赖托管中间服务的用户。需要 iOS 18+ 设备和常驻在线的本地计算机。",
+   "highlights": [
+    "提供只读 MCP 工具，用于检索时间序列观测、运动、睡眠与每日摘要及数据来源",
+    "支持 iPhone 应用向自托管接收端的自动同步，无需托管中间服务",
+    "数据存储在用户控制的 macOS 或 Linux 计算机上，可选择允许哪些 MCP 客户端读取"
+   ],
+   "use_cases": [
+    "在 MCP 客户端中基于健康历史进行周期回顾与目标规划对话",
+    "本地私有化存储 Apple Health 数据并控制 AI 客户端访问权限"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Understand and build:** Architecture · Batch protocol · SQLite schema · Brand guide",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身实现 iOS 应用与接收端，仅使用 SQLite 存储健康历史，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Apple Health AI Bridge is an open-source connector for MCP-enabled assistants. The iPhone app sends the records you allow to a macOS or Linux computer you control. Automatic sync brings in new records, so you can keep the conversation going without preparing another export. ／ You need an iPhone running iOS 18 or later, a macOS or Linux computer that can stay awake and connected, and an MCP client on that computer. The computer runs the receiver and stores your health history. ／ - **Understand and build:** Architecture · Batch protocol · SQLite schema · Brand guide",
+   "evidence_lines": [
+    19,
+    52,
+    91
+   ]
+  },
+  "fn": "roian6/apple-health-ai-bridge",
+  "sha": "b94706f975e7",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e71b1d4c0297": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 SQLite 的双确认候选名单/推荐排队应用模板",
+   "review": "这是一个可直接部署的等待名单（waitlist）模板应用，实现邮箱双确认、推荐码排队、批量启动邮件发送与退订 webhook 处理，数据经 Drizzle ORM 存入单个 SQLite 文件。面向准备产品发布、需要收集并清洗邮箱列表的开发者。注意 README 明确指出 Vercel 无持久磁盘，真实部署需改用 PostgreSQL。",
+   "highlights": [
+    "实现双确认（double opt-in）注册流程：SHA-256 哈希一次性令牌，48 小时有效",
+    "支持推荐码排队机制与每日限频的 'moved up' 通知邮件",
+    "通过 Mailtrap Bulk 流批量发送启动邮件（每批最多 500 条），带逐用户发送状态与退订/退信/垃圾投诉 webhook 抑制"
+   ],
+   "use_cases": [
+    "产品发布前收集经邮箱确认的候选用户列表",
+    "需要推荐裂变机制排列等待队列的营销场景",
+    "作为 Next.js + Drizzle + Mailtrap 集成参考模板"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The app is a single Next.js project. Visitors use the web pages, you run the launch from the command line, and Mailtrap sits on the other side for both sending and events. Everything is stored in one SQLite database. ／ 7. The app checks the token against SQLite: it must exist, be unused and be less than 48 hours old.",
+     "lines": [
+      44,
+      74
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "SQLite writes to local disk, and a Vercel function's disk is not persistent, so signups would vanish between invocations. For a real deployment switch to Postgres (for example Neon): ／ 1. Install `pg` or `@neondatabase/serverless` and use `drizzle-orm/node-postgres` or `drizzle-orm/neon-http` in `src/lib/db/index.ts`.",
+     "lines": [
+      302,
+      304
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明这是一个使用 SQLite 存储数据的 Next.js 业务应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The app is a single Next.js project. Visitors use the web pages, you run the launch from the command line, and Mailtrap sits on the other side for both sending and events. Everything is stored in one SQLite database. ／ |Data|Drizzle ORM, SQLite (better-sqlite3)|",
+   "evidence_lines": [
+    44,
+    91
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Sid-Lais/nextjs-waitlist-double-opt-in",
+  "sha": "e71b1d4c0297",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "150973c4693b": {
+  "identity": {
+   "one_liner": "自托管家庭记账系统，AI截图/文本自动记账，数据自持于 SQLite",
+   "review": "家账簿是一个自托管的家庭记账应用，提供网页手动记账、AI 截图/文本识别入账、对话查账和开放 API 对接聊天机器人。账目数据存储在本机 SQLite 文件，可通过 Docker Compose 部署到 NAS 或服务器，适合希望数据留在本地的家庭用户；配置 AI Key 前有本地规则降级路径。",
+   "highlights": [
+    "支持 AI 截图/文本识别记账与对话查账，提供开放 API 与权限分层、审计日志",
+    "支持预算、订阅、周期账单管理与微信/支付宝账单导入、CSV 导出",
+    "数据存放于本机 SQLite，提供 Docker 双架构镜像与回归测试体系"
+   ],
+   "use_cases": [
+    "家庭或个人在 NAS/服务器上自托管记账",
+    "通过聊天机器人发送截图或语音自动入账",
+    "多成员家庭记账与预算、订阅管理"
+   ],
+   " ai 提示后修正为标准字段。提及的 ai 对象": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 所有数据存放在本机 `data/` 目录（SQLite + 截图附件），备份 = 拷贝该目录",
+     "lines": [
+      361
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有账目数据存放在本机 data 目录的 SQLite 文件中，该系统是以 SQLite 作为存储的记账应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**自托管的家庭记账系统**：网页手动记账 + AI 截图/文本自动记账 + 开放 API 对接聊天机器人（Hermes / OpenClaw 等），所有账目数据都留在你自己的 NAS / 服务器上。 ／ docker compose up -d",
+   "evidence_lines": [
+    5,
+    60
+   ]
+  },
+  "fn": "yibohub/homeledger",
+  "sha": "150973c4693b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "92272f699e69": {
+  "identity": {
+   "one_liner": "基于TiDB Cloud向量检索的RAG知识库问答助手",
+   "review": "这是一个使用 RAG 架构构建的 AI 问答聊天机器人项目，将文档通过 BAAI/bge-m3 模型嵌入后存入 TiDB Cloud 向量库，检索时用 vec_cosine_distance 做余弦相似度搜索，再交由本地 Ollama（Qwen/DeepSeek）生成流式回答。提供终端 CLI 和 Streamlit Web 两种界面，需自备 TiDB Cloud 凭据。适合想搭建个人/团队知识库问答、且熟悉 Python 部署流程的使用者。",
+   "highlights": [
+    "支持基于 TiDB Cloud 向量函数 vec_cosine_distance 的语义相似度检索",
+    "提供 CLI（cetbot.py）与 Streamlit Web UI 两种交互界面，支持流式响应",
+    "内置重索引时防数据重复的自动管理机制"
+   ],
+   "use_cases": [
+    "基于自有文档构建问答聊天机器人",
+    "结合本地 Ollama LLM 做私有化 RAG 检索问答",
+    "部署到 Streamlit Cloud 提供 Web 端知识库查询入口"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Proyek Chatbot AI berbasis **Retrieval-Augmented Generation (RAG)** menggunakan model embedding **BAAI/bge-m3**, database vektor **TiDB Cloud**, dan Large Language Model lokal **Ollama (Qwen / DeepSeek)** dengan antarmuka interaktif **Streamlit**. ／ 1. **Semantic Vector Search:** Pencarian dokumen berbasis kemiripan kosinus (`vec_cosine_distance`) di TiDB Cloud.",
+     "lines": [
+      9,
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 TiDB Cloud 存储向量数据的 RAG 聊天应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Proyek Chatbot AI berbasis **Retrieval-Augmented Generation (RAG)** menggunakan model embedding **BAAI/bge-m3**, database vektor **TiDB Cloud**, dan Large Language Model lokal **Ollama (Qwen / DeepSeek)** dengan antarmuka interaktif **Streamlit**. ／ 1. **Semantic Vector Search:** Pencarian dokumen berbasis kemiripan kosinus (`vec_cosine_distance`) di TiDB Cloud.",
+   "evidence_lines": [
+    9,
+    12
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "fallss/rag-tidb-knowledge-assistant",
+  "sha": "92272f699e69",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9484,5 +9484,163 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b7773bc00668": {
+  "identity": {
+   "one_liner": "GitHub PR 审查桌面应用，本地镜像缓存实现快速打开",
+   "review": "PR Cockpit 是 macOS 与 Linux 上的 GitHub 拉取请求审查桌面应用，通过 webhooks 维护本地镜像，队列、diff、检查日志从磁盘读取，提供键盘操作和供编码代理使用的 CLI。数据由本机 Bun 服务缓存于 SQLite；仅支持 GitHub，不支持 Windows。",
+   "highlights": [
+    "通过本地镜像和 webhooks 从磁盘渲染 PR 队列、diff、检查日志与评审线程",
+    "提供键盘快捷键操作与供人类和编码代理使用的 CLI",
+    "支持仓库级 quick actions 配置文件与 GitHub App 实时更新"
+   ],
+   "use_cases": [
+    "维护者集中管理多个仓库的待合并 PR 队列",
+    "在编辑器中通过快捷键快速调起并审查 PR",
+    "让编码代理通过 CLI 参与 PR 审查流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **On your machine:** a Bun server caches PR state in SQLite and serves the desktop UI and CLI. In replica mode, cached lists stay local; GitHub searches and keyed PR title lookups use the connected source.",
+     "lines": [
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明本机 Bun 服务将 PR 状态缓存于 SQLite，仅将其作本地数据存储使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PR Cockpit is a desktop app for GitHub pull requests on **macOS and Linux**. A local mirror, kept current by webhooks, holds every PR you care about, so the queue, the diff, the failed check logs and the review threads paint from disk. Keyboard for everything; GitHub stays the source of truth.",
+   "evidence_lines": [
+    5
+   ]
+  },
+  "fn": "theolundqvist/pr-cockpit",
+  "sha": "b7773bc00668",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "af38bfd33044": {
+  "identity": {
+   "one_liner": "多引擎数据库桌面客户端，内置 MCP 服务器",
+   "review": "DB Connect 是一款 Go+Wails 构建的 macOS/Windows 原生桌面数据库客户端，支持 MySQL、PostgreSQL、Redshift、DynamoDB、Redis、MongoDB、Elasticsearch/OpenSearch 七类引擎的查询、浏览、编辑与导出，并提供本地 MCP 服务器供 Claude Code 等工具只读访问，写入需按时限授权。适合需要同时操作多引擎的后端开发者。",
+   "highlights": [
+    "提供 SQL 编辑器、PartiQL 编辑器、DynamoDB 可视化 Scan/Query 构建器与 schema 浏览",
+    "内置本地 MCP 服务器，支持通过认证令牌与连接允许列表供 AI 工具执行只读查询",
+    "凭据使用 AES-256-GCM 加密并存储于操作系统钥匙串，无云同步与遥测"
+   ],
+   "use_cases": [
+    "同时使用 MySQL/PostgreSQL 与 DynamoDB、Elasticsearch 等多引擎的后端开发与查询",
+    "在 Claude Code、Cursor 等 MCP 客户端中安全查询已配置的数据库连接",
+    "执行 mysqldump 备份、EXPLAIN 分析与 CSV/JSON/Excel 导出"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch — one fast, free, native desktop IDE instead of seven separate tools and seven separate sets of saved credentials. ／ DB Connect — PostgreSQL query with results, sidebar grouped by engine ／ **Guides:** MySQL · PostgreSQL · Redshift · DynamoDB · Redis · MongoDB · Elasticsearch / OpenSearch · Case study: MySQL CPU 90% → 30%",
+     "lines": [
+      5,
+      9,
+      11
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch — one fast, free, native desktop IDE instead of seven separate tools and seven separate sets of saved credentials. ／ **Guides:** MySQL · PostgreSQL · Redshift · DynamoDB · Redis · MongoDB · Elasticsearch / OpenSearch · Case study: MySQL CPU 90% → 30%",
+     "lines": [
+      5,
+      11
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "MySQL Workbench is Oracle's official free tool and a genuinely solid choice if MySQL is the *only* engine you touch — its Visual Explain is long-standing and well-regarded. Sequel Ace (the free, open-source successor to Sequel Pro) is excellent if you're macOS",
+     "lines": [
+      109
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "MySQL Workbench is Oracle's official free tool and a genuinely solid choice if MySQL is the *only* engine you touch — its Visual Explain is long-standing and well-regarded. Sequel Ace (the free, open-source successor to Sequel Pro) is excellent if you're macOS",
+     "lines": [
+      109
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是连接并操作多种数据库的桌面客户端工具，为数据库使用与管理提供服务，而非以数据库为存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch — one fast, free, native desktop IDE instead of seven separate tools and seven separate sets of saved credentials. ／ - **Built to work with your AI coding tools.** A local MCP server lets Claude Code, Cursor, or any MCP-aware client query your already-open connections directly — schema, read-only queries, gated behind a per-install auth token, an explicit connection allow-list, and time-bounded write grants. ／ 2. **Add Connection** → choose MySQL, PostgreSQL, Redshift, DynamoDB, Redis, MongoDB, or Elasticsearch/OpenSearch",
+   "evidence_lines": [
+    5,
+    30,
+    118
+   ]
+  },
+  "fn": "shubhesh07/db-connect",
+  "sha": "af38bfd33044",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

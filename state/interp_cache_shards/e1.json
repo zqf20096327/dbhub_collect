@@ -9559,5 +9559,72 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c59e30a5867e": {
+  "identity": {
+   "one_liner": "编码会话自动归档为本地 Markdown 项目知识库并提供遗忘曲线测验",
+   "review": "llmwiki 是一个面向 Claude Code、Codex、OpenCode 用户的开发者工具：通过 /wiki-save 等命令把编码会话中的决策与上下文写入项目内 Markdown wiki（OKF v0.2 格式），供后续会话检索，并生成每日测验帮助记住自己的决策。存储与搜索用 Bun 和 SQLite 在本地运行，需手动 git clone 安装、逐项目初始化，更新为手动操作。",
+   "highlights": [
+    "提供 /wiki-save、/wiki-deep、/wiki-ask、/wiki-doctor、/wiki-quiz 等命令用于保存、检索与测验",
+    "以 Markdown（Open Knowledge Format v0.2）为存储格式，支持预览与应用格式转换",
+    "存储与搜索在本地通过 Bun 和 SQLite 运行，逐项目经 llmwiki init 启用"
+   ],
+   "use_cases": [
+    "在多次编码会话间保存并复用项目决策与上下文",
+    "通过遗忘曲线测验巩固对项目历史的记忆",
+    "在 git 中以纯 Markdown 形式维护项目知识库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stay in control:** each project is off until `llmwiki init`; storage and search run locally with Bun and SQLite.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明本地存储与搜索使用 Bun 和 SQLite，SQLite 是其运行时数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "llmwiki turns coding sessions into a wiki in `docs/wiki/`. Claude Code, Codex and OpenCode can share it, retrieve relevant context in later sessions, and quiz you on past decisions. ／ - **Stay in control:** each project is off until `llmwiki init`; storage and search run locally with Bun and SQLite. ／ Since v0.14.0, new wikis use Open Knowledge Format v0.2: typed YAML frontmatter, source provenance, relative Markdown links, folder indexes and a dated log. Your knowledge stays readable outside llmwiki. Existing wikis are converted only when you choose.",
+   "evidence_lines": [
+    9,
+    14,
+    72
+   ]
+  },
+  "fn": "suwonleee/llmwiki",
+  "sha": "c59e30a5867e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

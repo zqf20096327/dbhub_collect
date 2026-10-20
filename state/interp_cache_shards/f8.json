@@ -9584,5 +9584,153 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e27822805be4": {
+  "identity": {
+   "one_liner": "本地优先照片库应用，用 SQLite 按盘存储索引与元数据",
+   "review": "Smriti 是一款跨平台桌面照片管理应用（Rust + Tauri），直接索引硬盘上的照片原件，在本机做人脸识别、地图与搜索，并将库数据库以 SQLite 文件存放在照片所在磁盘，便于换机迁移。面向想脱离云服务/自托管方案管理本地照片的个人用户；安装为各平台安装包，部分智能功能需额外下载模型资产。",
+   "highlights": [
+    "索引原位照片不复制不移动，库数据库写于 <drive>/.photovault/photovault.db，随盘携带",
+    "设备端人脸识别与人物聚类（ONNX Runtime），支持 Google Photos Takeout 等导入流程的可视化管理",
+    "支持 HEIC 解码、地理标记地图视图、跨人物/相册/地点/日期的统一搜索"
+   ],
+   "use_cases": [
+    "在没有服务器或云账号的情况下整理外置硬盘照片库",
+    "在本地设备上进行人脸聚类与人物检索",
+    "多台电脑间通过移动硬盘共享同一份照片库索引"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite — embedded per-drive database",
+     "lines": [
+      245
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为使用内嵌 SQLite 存储库数据的桌面照片应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Smriti writes its database at `<drive>/.photovault/photovault.db` — on the ／ - Rust — the engine: services, DB, ML, indexing ／ - SQLite — embedded per-drive database",
+   "evidence_lines": [
+    90,
+    242,
+    245
+   ]
+  },
+  "fn": "ChivukulaVirinchi/photovault",
+  "sha": "e27822805be4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7f59a6b3835d": {
+  "identity": {
+   "one_liner": "跨平台多协议客户端，含SSH与多种数据库客户端",
+   "review": "EasyShell 是一个基于 Java/JavaFX 的跨平台桌面客户端，集成 SSH、SFTP、VNC、RDP 等多种协议连接能力，并内置 MySQL、Dameng、MongoDB、Redis、ZooKeeper 等客户端，支持表/视图/函数管理、查询、导入导出与传输。面向需要在一处管理远程主机和多种数据源的运维与开发人员。数据库能力均以协议客户端形式提供，README 未见许可与安装渠道说明。",
+   "highlights": [
+    "支持 SSH、FTP、SFTP、VNC、RDP、S3、SMB 等多种协议的连接与管理",
+    "内置 MySQL、Dameng、MongoDB 客户端，支持表、视图、函数、过程管理及查询、导入导出",
+    "支持连接管理、密钥管理、代码片段执行，覆盖 Windows、macOS、Linux"
+   ],
+   "use_cases": [
+    "通过 SSH/SFTP 统一管理远程服务器与文件",
+    "使用内置客户端查询和管理 MySQL、Dameng、MongoDB 数据",
+    "维护连接配置与密钥、执行常用命令片段"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Mysql 客户端**：支持 Mysql 协议的表、视图、函数、过程、事件管理、查询、导入、导出、传输等操作。",
+     "lines": [
+      26
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "### Mariadb",
+     "lines": [
+      241
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "- **Dameng 客户端**：支持 Dameng 协议的表、视图、函数、用户管理、查询、导入、导出、传输等操作。",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为连接和管理多种协议服务（含数据库客户端）提供工具能力，本身不是使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **多协议支持**：支持 SSH、FTP、SFTP、Redis、ZooKeeper、串口、VNC、Telnet、RLogin、S3、RDP、SMB、Webdav、Mysql、Mongodb、Mosh、本地终端等多种连接方式。 ／ - **Mysql 客户端**：支持 Mysql 协议的表、视图、函数、过程、事件管理、查询、导入、导出、传输等操作。 ／ - **Dameng 客户端**：支持 Dameng 协议的表、视图、函数、用户管理、查询、导入、导出、传输等操作。",
+   "evidence_lines": [
+    9,
+    26,
+    27
+   ]
+  },
+  "fn": "oyzh1994/easyshell",
+  "sha": "7f59a6b3835d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

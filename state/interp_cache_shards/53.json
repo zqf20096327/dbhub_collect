@@ -9799,5 +9799,136 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a5ae44f10717": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue前后端分离的房屋报修缴费管理系统",
+   "review": "一套面向物业管理员与业主的报修缴费系统，覆盖报修工单流转、费用账单生成、在线缴费、楼宇车位管理与公告等物业业务闭环，采用 SpringBoot+MybatisPlus+MySQL 后端与 Vue 前端分离架构。适用于住宅小区/园区物业管理和毕设项目；README 显示资源非免费，附带付费部署讲解服务。",
+   "highlights": [
+    "报修工单提交、审核、分配与状态跟踪，含维修统计图表分析",
+    "费用账单生成与在线缴费（支付宝/微信支付模拟），支持缴费单PDF下载",
+    "楼宇/房屋/车位/业主资源管理，公告发布与房屋出租信息发布"
+   ],
+   "use_cases": [
+    "住宅小区或园区写字楼的物业报修与缴费管理",
+    "社区报修、维修基金与缴费记录服务平台",
+    "计算机类毕业设计/课程设计参考项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 MySQL 作为系统数据库存数据（L16、L26、L31），系统本身是物业业务应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目是一套基于 **Spring Boot + Vue** 的房屋报修缴费系统，采用前后端分离架构，覆盖 **管理员（物业）** 与 **业主** 两类核心角色。系统围绕\"房屋/楼宇/车位资源管理 → 业主报修 → 工单分配处理 → 费用账单生成 → 在线缴费 → 公告通知 → 社区服务\"的完整物业业务闭环设计，打通物业服务全流程，构建高效便捷的智慧社区平台。 ／ Mysql 数据库 一定要把账户和密码记住 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    5,
+    16,
+    31
+   ]
+  },
+  "fn": "Fankekeke/house_repair_cos",
+  "sha": "a5ae44f10717",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5989e2bc68ea": {
+  "identity": {
+   "one_liner": ".NET 纯托管 Raft 共识算法库，存储与传输可替换",
+   "review": "raft-cs 是面向 .NET 的纯托管 Raft 共识库，提供领导者选举、日志复制、快照压缩、成员变更等能力，存储和传输通过 IRaftStorage/IRaftTransport 抽象可替换，支持 NativeAOT 与 netstandard2.0 等多目标，通过 dotnet add package 安装，适用于需要在 .NET 应用中实现复制与共识机制的开发者。",
+   "highlights": [
+    "实现 Raft 共识：pre-vote 选举、日志复制、快照压缩、joint-consensus 成员变更、leadership transfer",
+    "IRaftStorage 与 IRaftTransport 可替换，附带内存/文件 WAL 存储与 nanomsg 传输实现",
+    "通过行为对齐测试与 tikv/raft-rs 对比验证，支持 NativeAOT 与多目标框架"
+   ],
+   "use_cases": [
+    "为 .NET 应用添加复制状态机与共识能力",
+    "作为需要自定义日志存储或网络传输的分布式系统组件",
+    "作为教学/演示用的多节点 Raft 集群示例"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "`Raft` is a customizable **core consensus module** — modeled on tikv/raft-rs — with **bring-your-own log, state machine, and transport**. The deterministic state machine (`RaftCore`) is wrapped by an asynchronous `RaftNode` that owns timers, transport, and sto ／ - raft-rs behavioral parity — a Rust harness wrapping tikv/raft-rs produces golden traces that the .NET implementation must reproduce.",
+     "lines": [
+      7,
+      80
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为构建分布式共识系统服务的 .NET 开发库，仅为数据库领域提供共识组件而非数据库应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A pure-managed, **NativeAOT-ready** implementation of the **Raft consensus algorithm** for modern .NET. No native dependency. ／ `Raft` is a customizable **core consensus module** — modeled on tikv/raft-rs — with **bring-your-own log, state machine, and transport**. The deterministic state machine (`RaftCore`) is wrapped by an asynchronous `RaftNode` that owns timers, transport, and storage, so you get a working replica out of the box and can swap any piece. ／ - **Replaceable everything**: the `IRaftStorage` and `IRaftTransport` abstractions ship with an in-memory + file (WAL) store and an in-memory + NanoMsg (NNG/nanomsg) transport.",
+   "evidence_lines": [
+    5,
+    7,
+    15
+   ]
+  },
+  "fn": "marcschier/raft-cs",
+  "sha": "5989e2bc68ea",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

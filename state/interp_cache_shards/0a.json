@@ -7677,5 +7677,74 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3048d2684b6d": {
+  "identity": {
+   "one_liner": "Windows WebCacheV01.dat (ESE 库) 只读取证分析工具",
+   "review": "这是一个 Windows 桌面取证应用，用于分析 WebCacheV01.dat（IE/Edge 等 Windows 组件的活动缓存数据库）。它以只读方式打开脏状态的 ESE 数据库，从未分配页和事务日志恢复已删除记录，提供溯源标注、时间钟修正和 16 个分析视图，并导出 CSV/Excel/JSON/SQLite/PDF/HTML 报告。面向 DFIR 取证人员，安装包面向 Windows 10/11，也可从源码运行（需 Python 3.13+）。",
+   "highlights": [
+    "以只读方式读取脏关闭状态的 ESE 数据库（基于 dissect.esedb），读取时对文件做 SHA-256 哈希",
+    "从未分配页和事务日志恢复已删除/未落盘记录，记录含来源文件、字节偏移、恢复方法与置信度",
+    "支持导出 CSV、Excel、JSON、SQLite、PDF、离线 HTML 及带 SHA-256 清单的完整案例包"
+   ],
+   "use_cases": [
+    "Windows 主机 Web/应用活动痕迹的数字取证与事件响应分析",
+    "从脏状态或含删除记录的 WebCacheV01.dat 中恢复历史数据并保留证据链溯源",
+    "生成可供审查的取证报告（PDF/Excel/HTML 等，含哈希校验）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Excel workbook, JSON, SQLite, a PDF report, a self-contained offline HTML",
+     "lines": [
+      66
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是读取和分析 ESE 数据库文件（WebCacheV01.dat）的取证工具，SQLite 仅作为导出格式之一被提及",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0；依赖含 Apache-2.0、LGPL-3.0、MIT、BSD 组件",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Windows desktop application for the forensic examination of ／ - **Reads dirty databases as they are**, using dissect.esedb. No repair, no soft recovery, no ／ - **Recovers deleted and unflushed records** from unallocated pages and the",
+   "evidence_lines": [
+    3,
+    43,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "akhil-dara/WebCache-Forensic-Analyzer",
+  "sha": "3048d2684b6d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

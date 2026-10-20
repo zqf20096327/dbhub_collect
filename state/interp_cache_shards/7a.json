@@ -12456,5 +12456,60 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7dd0bbcebe63": {
+  "identity": {
+   "one_liner": "Rust 编写的本地优先 JSON 存储，每台机器全量副本，hub 排序并同步变更",
+   "review": "kharka 是一个用 Rust 写的本地优先 JSON 键值存储：每台机器持有完整副本并支持离线读写，单一 hub 通过 ssh 传输负责变更排序并以流式推送同步。它自带 CLI 与 unix socket JSON 行协议，支持 state/records 两类数据、带 schema 的 collections 和部分副本。适合管理少量互信机器间的状态与配置共享；单值上限 1 MB，1.0 前协议与磁盘格式可能变更，仅支持 macOS 和 Linux。",
+   "highlights": [
+    "每台机器保留全量副本，离线可读可写，hub 回连后同步变更",
+    "支持 state（TTL 过期）与 records（混合逻辑时钟排序）两类数据及带 schema 的 collections",
+    "守护进程通过 unix socket 提供 JSON 行协议，支持按 key 前缀 watch 与部分副本同步"
+   ],
+   "use_cases": [
+    "少量机器间共享状态报告、任务与设置等小型 JSON 文档",
+    "需要离线持续工作、恢复联网后自动同步的场景",
+    "shell 脚本或程序通过管道/套接字读写与监听数据变更"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它本身是一个自实现的 JSON 存储引擎（无底层数据库、append-only 日志加快照），不是为某个既有数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small local-first JSON store, written in Rust. Every machine keeps a full replica and keeps working when the network is ／ - **No database underneath:** an append-only log with checksums and snapshots, by hand. ssh is the transport and the ／ **Status:** young (0.x). Storage, daemon, hub and sync work and are tested; before 1.0 a minor release may still",
+   "evidence_lines": [
+    3,
+    21,
+    24
+   ]
+  },
+  "fn": "jakobbeyer/kharka",
+  "sha": "7dd0bbcebe63",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

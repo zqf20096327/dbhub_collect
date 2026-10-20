@@ -10768,5 +10768,286 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eb0b9af60a98": {
+  "identity": {
+   "one_liner": "PostgreSQL 只读数据库观测诊断工具",
+   "review": "pgbot 是一个单二进制的 PostgreSQL 诊断工具：以只读角色连接数据库，读取统计视图并输出健康报告、索引/查询/vacuum/表级分析与基线对比，支持 --json、SARIF 等格式供 CI 和 AI 代理使用，并通过 MCP 暴露发现结果。适用于运维人员与 AI 代理对 Postgres 实例做即时体检；要求 PostgreSQL 14–18 及 pg_monitor 角色，AI 层为可选，需模型密钥。",
+   "highlights": [
+    "提供 inspect、queries、indexes、tables、vacuum、activity、erd、advise 等子命令，读取 Postgres 统计视图生成发现式健康报告",
+    "通过 --json 提供版本化契约，并以 pgbot mcp 经 Model Context Protocol 向 AI 代理提供发现结果",
+    "以 pg_monitor 只读角色运行，会话固定 read_only、statement_timeout 与 BEGIN READ ONLY",
+    "use_cases 过滤"
+   ],
+   "use_cases": [
+    "对不拥有的 Postgres 数据库做即时健康诊断与回归归因",
+    "在 CI 中作为 schema/健康检查门禁（--fail-on、SARIF 上传）",
+    "为 AI 代理提供结构化 Postgres 观测发现"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "In-database observability for PostgreSQL. ／ PostgreSQL 14–18 ／ - PostgreSQL 14–18 (16–18 fully supported, 14–15 best-effort); collectors",
+     "lines": [
+      3,
+      13,
+      113
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是读取 Postgres 统计视图、为数据库运维服务的观测工具，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " In-database observability for PostgreSQL. ／  One static binary connects read-only, reads Postgres's own statistics views, ／ |**Built for agents**|`--json` is a versioned, PII-free contract; `pgbot mcp` exposes the same findings over the Model Context Protocol, with a skill and a Claude Code plugin on top.|",
+   "evidence_lines": [
+    3,
+    4,
+    100
+   ]
+  },
+  "fn": "pgrundev/pgbot",
+  "sha": "eb0b9af60a98",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0725e92c0c98": {
+  "identity": {
+   "one_liner": ".NET 实现的微秒级延迟 ACID ECS 数据库引擎，用于实时系统",
+   "review": "Typhon 是一个以实体-组件-系统（ECS）为原生数据模型的嵌入式数据库引擎，提供 ACID 事务、MVCC 快照隔离、WAL、B+Tree 索引、空间索引与订阅式复制，附带 CLI、Workbench 开发界面及 .NET/TypeScript/C 客户端 SDK，主要面向游戏服务器等实时系统开发者；当前为 1.0.0-alpha 版本，官方声明尚未达到生产可用。",
+   "highlights": [
+    "提供 ACID 事务、MVCC 快照隔离与 WAL 持久化，支持三种存储模式",
+    "支持 2D/3D 空间索引查询与基于订阅的客户端推送复制（TCP/WebSocket）",
+    "提供 CLI（new/check/repair/ui）、深追踪 Profiler 与 Workbench 开发界面"
+   ],
+   "use_cases": [
+    "游戏服务器等需要 tick 运行时与状态复制的实时系统",
+    "需要超出内存容量的持久化 ECS 世界存储",
+    "构建 .NET/Unity/TypeScript/C 多端客户端的实时应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 声明其本身即是一个数据库引擎（ACID ECS database），为实时系统提供存储与运行时组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A real-time world engine: an ACID, larger-than-RAM ECS store, a parallel tick runtime, spatial partitioning with realms, and interest-managed replication to .NET/Unity, TypeScript and native C clients — one process, one data model, from disk to screen.** ／ ### 🗄️ Store — an ACID ECS database ／ ### ⚠️ Alpha — `1.0.0-alpha.1` is out. ⚠️",
+   "evidence_lines": [
+    33,
+    59,
+    26
+   ]
+  },
+  "fn": "Log2n-io/Typhon",
+  "sha": "0725e92c0c98",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a4ea3eb50a27": {
+  "identity": {
+   "one_liner": "SQLite 后端的事件存储与文档数据库，Critter Stack 组件",
+   "review": "Fisher 是 JasperFx Critter Stack 中面向 SQLite 的事件溯源与文档存储 .NET 库，提供与 Marten 相同的 API。它以进程内文件为数据库，无需安装服务器，适合需要事件存储、文档持久化和投影的 .NET 开发者；限制包括单写者、部分 LINQ 功能未完成，且不是 Marten 的行为等价替代。",
+   "highlights": [
+    "提供事件存储与文档存储双模式，支持 LINQ 查询、投影、订阅与租户",
+    "SQLite 数据库为进程内文件，无需安装数据库服务器",
+    "通过 JasperFx.Events.ComplianceTests 59 套件 704 项测试"
+   ],
+   "use_cases": [
+    ".NET 应用中的事件溯源（Event Sourcing）持久化",
+    "无需独立数据库服务器的嵌入式文档存储",
+    "基于同一 API 在 Marten/Polecat/SQLite 间切换存储实现"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite-backed Event Store and Document Database inside the Critter Stack. ／ Fisher is Marten and Polecat for SQLite —",
+     "lines": [
+      3,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 .NET 应用提供基于 SQLite 的存储引擎组件，服务于数据持久化生态而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLite-backed Event Store and Document Database inside the Critter Stack. ／ Fisher is Marten and Polecat for SQLite — ／ > **Status: 1.0.** The event store, document storage over all four",
+   "evidence_lines": [
+    3,
+    13,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "JasperFx/fisher",
+  "sha": "a4ea3eb50a27",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ac50808c6c3b": {
+  "identity": {
+   "one_liner": "Go+Fyne 桌面 ERP，面向小型制造，用 MySQL/SQLite 存储",
+   "review": "RFERP 是一个 Windows 桌面库存与批次追溯 ERP 应用，覆盖产品、BOM、生产批次、出入库和操作日志，面向小型制造企业。数据可存于 MySQL 8（多人/多机共享）或本地 SQLite 单文件，提供数据库向导、整库备份恢复与 CSV 导出。安装仅提供 Windows exe，未开放安装包构建脚本。",
+   "highlights": [
+    "支持 MySQL 8 或本地 SQLite 两种存储后端，首次运行向导可自动检测本地 MySQL 并建库建表",
+    "提供整库备份/恢复（MySQL SQL dump、SQLite 快照）与按表 CSV 导出",
+    "内置四角色权限体系，所有增删改与库存操作记录操作人"
+   ],
+   "use_cases": [
+    "小型制造企业的库存、BOM 与生产批次管理",
+    "多人/多机共享一套库存数据的场景（MySQL 后端）",
+    "单机免安装部署场景（SQLite 后端）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Built with **Go + Fyne**; data is stored in **MySQL 8** or in a local **SQLite** file; supports one-click install and auto-update. ／ - **Backup & export**: whole-database backup and restore (MySQL SQL dump, SQLite snapshot), per-table CSV export; data directory configurable ／ |**MySQL** (default)|Several people / several machines share one database. Requires MySQL 8 on the machine.|",
+     "lines": [
+      8,
+      23,
+      43
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built with **Go + Fyne**; data is stored in **MySQL 8** or in a local **SQLite** file; supports one-click install and auto-update. ／ - **Backup & export**: whole-database backup and restore (MySQL SQL dump, SQLite snapshot), per-table CSV export; data directory configurable ／ |**SQLite**|Single machine, no extra install. The whole database is one file: `<data directory>\\rferp.db`.|",
+     "lines": [
+      8,
+      23,
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是使用 MySQL/SQLite 存储业务数据的桌面 ERP 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "All rights reserved，仓库仅用于参考与 issue 跟踪",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A desktop **inventory & batch-traceability** application for small manufacturing — covering products, parts, BOM, production batches, stock, operation logs and data backup/export. ／ Built with **Go + Fyne**; data is stored in **MySQL 8** or in a local **SQLite** file; supports one-click install and auto-update. ／ |Database|MySQL 8.0, or embedded SQLite (`modernc.org/sqlite`, pure Go, no CGO)|",
+   "evidence_lines": [
+    6,
+    8,
+    131
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "LzYita/RFERP",
+  "sha": "ac50808c6c3b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10224,5 +10224,126 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ef4459dc0e83": {
+  "identity": {
+   "one_liner": "ClickHouse 的 Go 语言数据库驱动客户端",
+   "review": "该项目提供 ClickHouse 官方仓库维护的 Go 客户端，包含原生接口（driver.Conn）和 database/sql 标准接口两套 API，支持 TCP 与 HTTP 传输、LZ4/ZSTD 等压缩、批量写入、连接池、故障转移与 JWT 认证，适用于需要在 Go 程序中读写 ClickHouse 的开发者。",
+   "highlights": [
+    "提供原生接口与 database/sql 标准接口两种 API，支持 TCP 和 HTTP 传输协议",
+    "支持 LZ4/ZSTD/LZ4HC/GZIP/Deflate/Brotli 压缩、批量写入、连接池与故障转移",
+    "支持 JWT 认证、AsyncInsert、外部数据、服务端查询参数及 OpenTelemetry 等协议特性"
+   ],
+   "use_cases": [
+    "Go 应用程序中连接并查询 ClickHouse",
+    "需要批量写入或流式读写 ClickHouse 数据的场景",
+    "复用现有 database/sql 生态工具或 ORM 访问 ClickHouse"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Golang SQL database client for ClickHouse. ／ The client works with both ClickHouse Cloud and self-hosted ClickHouse. You can start a free Cloud trial or install ClickHouse locally. ／ * Supports both native ClickHouse TCP and HTTP client-server protocols",
+     "lines": [
+      3,
+      5,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 ClickHouse 提供连接能力的 Go 语言驱动客户端，属于数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Golang SQL database client for ClickHouse. ／ go get github.com/ClickHouse/clickhouse-go/v2 ／ https://clickhouse.com/docs/integrations/language-clients/go/index",
+   "evidence_lines": [
+    3,
+    10,
+    77
+   ]
+  },
+  "fn": "ClickHouse/clickhouse-go",
+  "sha": "ef4459dc0e83",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "351eac3c3868": {
+  "identity": {
+   "one_liner": "检测 Django 项目中向后不兼容迁移的 linter 工具",
+   "review": "这是一个面向 Django 项目的迁移静态检查工具，通过 manage.py 的 lintmigrations 或 makemigrations --lint 命令分析迁移文件，识别可能导致旧代码库运行失败的向后不兼容操作，可集成到 CI 流程。以 pip 包安装并注册到 INSTALLED_APPS 使用，采用 Apache 2.0 许可证。",
+   "highlights": [
+    "提供 lintmigrations 命令检测向后不兼容的迁移操作",
+    "支持通过 makemigrations --lint 在迁移生成时检测不兼容项",
+    "可集成到 CI 流程中运行"
+   ],
+   "use_cases": [
+    "Django 项目在部署前检查迁移是否与旧代码库兼容",
+    "在 CI 流水线中自动检测不兼容迁移",
+    "开发时生成迁移的同时检测不兼容操作"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 Django 项目的数据库迁移提供检查服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Detect backward incompatible migrations for your Django project. ／ pip install django-migration-linter ／ One can either integrate the linter in the CI using its `lintmigrations` command, or detect incompatibilities during generation of migrations with",
+   "evidence_lines": [
+    3,
+    12,
+    50
+   ]
+  },
+  "fn": "David-Wobrock/django-migration-linter",
+  "sha": "351eac3c3868",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

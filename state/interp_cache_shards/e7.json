@@ -10097,5 +10097,220 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ca5921f4e9e8": {
+  "identity": {
+   "one_liner": "基于 CRDT 的 SQLite 离线优先同步扩展",
+   "review": "一个多平台 SQLite 扩展，通过 CRDT（Causal-Length Set 等算法）将任意 SQLite 数据库变为可离线写入、自动合并、无冲突的副本，可与 SQLite Cloud、PostgreSQL、Supabase 节点同步。面向离线优先应用（移动、IoT、边缘）与 AI Agent 状态共享场景；要求参与同步的各端建立相同结构的表并初始化，多租户隔离依赖服务端 RLS。",
+   "highlights": [
+    "提供 CRDT 同步（Delete-Wins、Add-Wins、Grow-Only Set 等）与文本列的 Block-Level LWW 行级合并",
+    "支持 Linux、macOS、Windows、iOS、Android、WASM 多平台，提供 Swift/Android/Flutter/React Native/npm 等安装方式",
+    "服务端强制 RLS 行级安全，单个共享数据库可支撑多租户同步"
+   ],
+   "use_cases": [
+    "离线优先应用（待办、笔记、离线 POS、外业数据采集）的本地写入与重连同步",
+    "多个 AI Agent 共享内存/知识库/分布式流水线结果的跨实例状态同步",
+    "多租户 SaaS/CRM 中基于行级安全的共享数据库同步"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**SQLite Sync** is a multi-platform extension that turns any SQLite database into a **conflict-free, offline-first replica** that syncs automatically with **SQLite Cloud** nodes, **PostgreSQL** servers, and **Supabase** instances. One function call is all it takes: no backend to build, no sync protocol to implement.",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**SQLite Sync** is a multi-platform extension that turns any SQLite database into a **conflict-free, offline-first replica** that syncs automatically with **SQLite Cloud** nodes, **PostgreSQL** servers, and **Supabase** instances. One function call is all it t ／ > **Need a sync backend?** Plug into any PostgreSQL or self-hosted Supabase instance, or use **SQLite Cloud CloudSync**",
+     "lines": [
+      32,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是 SQLite 扩展，为使用 SQLite 的应用提供同步能力，属于数据库生态组件而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SQLite Sync** is a multi-platform extension that turns any SQLite database into a **conflict-free, offline-first replica** that syncs automatically with **SQLite Cloud** nodes, **PostgreSQL** servers, and **Supabase** instances. One function call is all it takes: no backend to build, no sync protocol to implement. ／ Download a pre-built binary from the Releases page, or install a platform package (see full installation guide for platform-specific code examples): ／ |**Flutter**|`flutter pub add sqlite_sync` (pub.dev)|",
+   "evidence_lines": [
+    32,
+    83,
+    90
+   ]
+  },
+  "fn": "sqliteai/sqlite-sync",
+  "sha": "ca5921f4e9e8",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "acb92f8d150b": {
+  "identity": {
+   "one_liner": "SQL Server 数据库维护工具，以单一 T-SQL 脚本安装",
+   "review": "YourSqlDba 是面向 Microsoft SQL Server 的开源维护与自动化工具，全部用 T-SQL 编写，以单一脚本安装到专用数据库中，提供备份、完整性检查、索引与统计信息维护、清理、诊断和报表功能，并支持将部分操作委托给非 sysadmin 用户。它通过 SQL Server Agent 作业和 Database Mail 运行，适合需要自动化日常维护的 DBA 使用。",
+   "highlights": [
+    "以单一 T-SQL 脚本安装，创建专用 YourSqlDba 数据库，包含存储过程、函数和视图",
+    "通过 SQL Server Agent 作业调度备份、完整性检查、索引与统计信息维护、清理和诊断任务",
+    "支持将备份、恢复等选定操作委托给非 sysadmin 用户"
+   ],
+   "use_cases": [
+    "SQL Server 实例的日常备份与维护自动化",
+    "非 sysadmin 用户的受控数据库维护委托",
+    "维护运行报告与诊断日志生成"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "> YourSqlDba operates through SQL Server Agent jobs and Database Mail, both of ／ > creates and schedules two SQL Server Agent jobs. Future upgrades do not require ／ SQL Server. It creates a database named `YourSqlDba` containing T-SQL modules,",
+     "lines": [
+      41,
+      45,
+      57
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是为 SQL Server 提供备份与维护自动化服务的工具，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "YourSqlDba is an open-source maintenance and automation tool for Microsoft SQL ／ distributed as a single script that installs a dedicated database for backups, ／ SQL Server. It creates a database named `YourSqlDba` containing T-SQL modules,",
+   "evidence_lines": [
+    9,
+    11,
+    57
+   ]
+  },
+  "fn": "pelsql/YourSqlDba",
+  "sha": "acb92f8d150b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b81d2ec17541": {
+  "identity": {
+   "one_liner": "基于 Python/OpenCV 与 SQLite 的人脸识别考勤管理桌面应用",
+   "review": "一款用 Python、OpenCV 和 Tkinter 构建的桌面考勤应用：通过摄像头进行人脸检测与识别，识别结果写入 SQLite 存储，支持考勤记录查询、仪表盘展示、CSV 导出与报告生成。README 说明其面向教育与作品集用途，默认轻量识别实现并非为生产级生物识别安全场景设计。",
+   "highlights": [
+    "提供实时摄像头人脸检测与识别，记录签到日期与时间",
+    "考勤数据存入 SQLite，支持查询、仪表盘展示、CSV 导出与报告生成",
+    "包含人脸注册、人脸管理、演示数据模式与 GUI 设置功能"
+   ],
+   "use_cases": [
+    "教学或课程演示人脸识别与数据库管理流程",
+    "小型机构本地化记录出勤",
+    "Python 计算机视觉学习与作品集项目参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "FaceVision AI is a Python-based face recognition and attendance management system built with OpenCV, face embeddings, SQLite, and Tkinter... ／ Python • OpenCV • NumPy • Pillow • SQLite • Tkinter ／ SQLite Database",
+     "lines": [
+      3,
+      42,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 SQLite 存储考勤数据，SQLite 是其数据存储后端而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "FaceVision AI is a Python-based face recognition and attendance management system built with OpenCV, face embeddings, SQLite, and Tkinter... ／ Python • OpenCV • NumPy • Pillow • SQLite • Tkinter ／ SQLite Database",
+   "evidence_lines": [
+    3,
+    42,
+    70
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "iam-dpk/FaceVision-AI",
+  "sha": "b81d2ec17541",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

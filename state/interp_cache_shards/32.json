@@ -9558,5 +9558,211 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1b0000fdc628": {
+  "identity": {
+   "one_liner": "基于 Grafana K6 的数据库基准测试套件",
+   "review": "这是一个构建在 k6 之上的数据库基准测试框架，通过 k6/x/database 扩展提供后端驱动、自动指标采集、实时仪表盘和数据加载工具，用户编写 SQL 或 API 调用即可对不同数据库执行查询、写入和混合负载测试。适合需要对数据库做性能压测与横向对比的开发者和数据库团队。使用需自行构建，并自己编写待测查询。",
+   "highlights": [
+    "支持 constant-vus、ramping-vus、constant-arrival-rate 等多种负载生成策略，可运行查询、ingest 与 update 混合负载",
+    "提供实时浏览器仪表盘，输出 P50/P90/P95/P99 延迟、QPS、容器资源等指标，可导出 HTML 与 CSV",
+    "包含 Docker Compose profiles 与数据加载 CLI（支持自定义连接串、并行 worker、S3 拉取）"
+   ],
+   "use_cases": [
+    "对全文检索类数据库进行统一口径的查询性能对比测试",
+    "在读写混合负载下测量查询延迟退化情况",
+    "为数据库性能迭代与基准报告生成可复现的测试流程"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Compare performance across **ParadeDB**, **PostgreSQL FTS**, **Elasticsearch**, **OpenSearch**, **ClickHouse**, **MongoDB Atlas Search**, and **Turbopuffer** with consistent metrics and visualization. Docker Compose profiles are included for single-node benchm",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "Compare performance across **ParadeDB**, **PostgreSQL FTS**, **Elasticsearch**, **OpenSearch**, **ClickHouse**, **MongoDB Atlas Search**, and **Turbopuffer** with consistent metrics and visualization. Docker Compose profiles are included for single-node benchm",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为测试数据库性能服务的基准测试框架，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A k6 extension for benchmarking databases with a unified API, real-time dashboard, and comprehensive data loading tools. While the included datasets focus on full-text search, the framework works for any query workload. You write the SQL or API calls, it handles timing, metrics, and visualization. ／ The benchmarker is built on Grafana k6, an amazing load testing tool written in Go. You write a k6 JavaScript script that defines **scenarios** and **backends**. Each scenario specifies an executor (how load is generated), a duration, a number of virtual users (VUs), and which functions to run, using which backends. k6 spins up VUs as concurrent goroutines, each looping over your test function for the duration of the scenario. ／ Compare performance across **ParadeDB**, **PostgreSQL FTS**, **Elasticsearch**, **OpenSearch**, **ClickHouse**, **MongoDB Atlas Search**, and **Turbopuffer** with consistent metrics and visualization. Docker Compose profiles are included for single-node benchmarking, but you can point at any database: local installs, remote servers, or cloud services. Turbopuffer is cloud-only; see the Turbopuffer setup for credentials, loading, and a runnable benchmark.",
+   "evidence_lines": [
+    12,
+    22,
+    14
+   ]
+  },
+  "fn": "paradedb/benchmarker",
+  "sha": "1b0000fdc628",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5342d8d33fb6": {
+  "identity": {
+   "one_liner": "本地优先的自托管笔记/文档/数据库一体化工作区应用",
+   "review": "一个开源自托管的工作区应用，将笔记、文档和数据库行统一为页面模型，提供块编辑器、多种数据库视图、工单、协作聊天与桌面版。基于 Next.js + Prisma 构建，服务器部署需以 Docker 运行 PostgreSQL；桌面版则内嵌 PGlite，无需单独安装数据库。面向需要本地/私有部署知识库的个人与团队。",
+   "highlights": [
+    "支持 Table/Board/List/Gallery/Calendar/Timeline/Chart 等多种数据库视图与类型化属性、公式引擎",
+    "服务器部署通过 docker compose 运行 PostgreSQL（端口 5433），桌面版内嵌 PGlite 免安装数据库",
+    "提供公开 API（Bearer token 认证）、OAuth 授权码流程、Webhook（HMAC-SHA256 签名）与 Markdown/CSV/JSON/HTML/PDF 导入导出"
+   ],
+   "use_cases": [
+    "自托管团队/个人知识库与文档管理",
+    "轻量项目与工单跟踪（工单、项目、周期、模板）",
+    "Notion 数据迁移到本地自托管环境"
+   ],
+   "review_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma 6 · PostgreSQL (docker container `noema-db`, port **5433**) · TipTap · Tauri 2 for the desktop app ／ shell around a **bundled Node runtime** and an **embedded PostgreSQL (PGlite)**.",
+     "lines": [
+      23,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用以 PostgreSQL 存储数据（docker 容器 noema-db），桌面版内嵌 PGlite，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma 6 · PostgreSQL (docker container `noema-db`, port **5433**) · TipTap · Tauri 2 for the desktop app ／ - **Runs locally:** one `docker compose up` for the database, one `npm run dev` for the app.",
+   "evidence_lines": [
+    23,
+    24
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Guembri01/noema",
+  "sha": "5342d8d33fb6",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "96f077735775": {
+  "identity": {
+   "one_liner": "闲鱼行情采集分析 CLI，按需求/供给比计算机会分",
+   "review": "这是一个针对闲鱼（goofish.com）的行情调研工具，抓取公开在售商品数据入库，生成价格分布、供给结构等 Markdown 报告，并按需求强度/供给量计算「机会分」来指示价格带空缺。可作 CLI/Python 库，也可作为 AI Agent Skill 接入。README 明确了合规边界：只读公开数据、不采集联系方式、不绕过风控。适合做二手市场选品与定价调研的个人用户。",
+   "highlights": [
+    "提供采集、存储、多维分析与报告生成的完整 CLI 命令集（search/analyze/compare/trend/history/export/watch）",
+    "实现基于需求强度/(供给量+1) 的机会分计算，用于识别价格带空缺",
+    "符合 Agent Skills 规范，可作为 AI Agent Skill 部署使用"
+   ],
+   "use_cases": [
+    "调研某关键词在闲鱼的需求与定价空间",
+    "多关键词/多批次横向对比与价格趋势追踪",
+    "接入 AI Agent 以自然语言查询闲鱼行情"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "工具自身采集行情数据并用 SQLite 存储以支撑分析报告，属于使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "闲鱼（goofish.com）行情雷达：**采集 → 存储 → 多维分析 → 生成报告**。 ／ 一个可独立运行的 CLI / Python 库，也可以作为 AI Agent Skill 使用。 ／ |`search \"kw\" --pages N`|抓取搜索结果，自动去重入库|",
+   "evidence_lines": [
+    9,
+    11,
+    64
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "duceman495/xianyu-radar",
+  "sha": "96f077735775",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

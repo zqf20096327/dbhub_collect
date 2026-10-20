@@ -8186,5 +8186,215 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c98d3966e5b8": {
+  "identity": {
+   "one_liner": "Django+DRF API 项目模板，内置认证/Celery/文档等开箱配置",
+   "review": "这是一个基于 Django 和 DRF 的 API 项目起始模板，适合需要快速搭建 REST API 的 Python 开发者。模板内置 token 认证、Celery+Redis 后台任务、OpenAPI 文档生成、JSON 日志等功能，通过 Docker Compose 启动本地开发栈，使用 PostgreSQL 作为数据库，并提供 AI 辅助开发配置。",
+   "highlights": [
+    "提供基于 django-rest-knox 的 token 认证与自定义用户模型",
+    "通过 Docker Compose 运行本地开发栈，包含 Celery、Redis 与 PostgreSQL 服务",
+    "内置 drf-spectacular 自动生成 OpenAPI 3 schema 与 Noodle 接口测试集合"
+   ],
+   "use_cases": [
+    "新 Django/DRF API 项目的快速起步",
+    "需要后台任务队列与结构化日志的 API 开发",
+    "为 AI 编码代理提供规范的 Django 项目脚手架"
+   ],
+   "ai_assisted": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL and Redis ports bind to loopback. Production requires explicit `ALLOWED_HOSTS`,",
+     "lines": [
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "模板项目以 PostgreSQL 作为自身数据存储，运行 Django API 应用而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License（L7）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A comprehensive and easy-to-use starting point for your new API with **Django** and **DRF**. ／ PostgreSQL and Redis ports bind to loopback. Production requires explicit `ALLOWED_HOSTS`,",
+   "evidence_lines": [
+    3,
+    51
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "wilfredinni/django-starter-template",
+  "sha": "c98d3966e5b8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "187ed2d61042": {
+  "identity": {
+   "one_liner": "多智能体村庄策略游戏，浏览器内可检视的AI模拟实验室",
+   "review": "一个插画风格的多智能体村庄策略游戏，玩家设定目标后居民自动认领任务、采集、建造、升级与招募，并提供战斗与研究模式。所有战役与免费研究在浏览器本地运行，无需API密钥或服务端数据库；保存留在浏览器本地。可选的本地研究worker用SQLite存储实验记录，Claude模型调用需显式配置。适合对多智能体决策可解释性与AI代理测试感兴趣的玩家与研究者。",
+   "highlights": [
+    "多智能体系统：六名居民通过共享任务板竞价认领工作，决策过程与记忆可检视",
+    "内置外部代理测试床：通过HTTP协议评估任意自建AI代理，支持JSON/CSV报告导出与独立重放验证",
+    "可选本地研究worker将实验记录存储于SQLite，支持确定性模拟与种子级结果复现"
+   ],
+   "use_cases": [
+    "在浏览器中体验并检视多智能体策略游戏",
+    "用测试床评测自有AI代理在操纵攻击场景下的表现",
+    "教学或研究中的可复现智能体实验与结果回放"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The worker listens on `127.0.0.1:8787` and stores research runs in `work/settlement.sqlite`. No model key is needed. For explicit paid model steps, follow Live model setup; provider calls stay disabled until configured.",
+     "lines": [
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README表明项目是一个用SQLite存储研究记录的浏览器游戏应用，SQLite仅作其本地worker的数据存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，单许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The campaign and free research tools run in your browser with **no API key, paid AI, account, or database required**, whether you open the hosted frontend or run it locally. Campaign residents use deterministic game AI. Optional Claude decisions are available for explicit steps in local-worker research experiments. ／ The worker listens on `127.0.0.1:8787` and stores research runs in `work/settlement.sqlite`. No model key is needed. For explicit paid model steps, follow Live model setup; provider calls stay disabled until configured. ／ The default development and production scripts use **Next.js**; the frontend also supports Vercel deployment. The hosted frontend runs the campaign and free Research comparisons, replay and report verification in each visitor's browser. Saves remain browser-local; there are no accounts or server-side campaign saves. The optional SQLite research worker, configured Claude experiments and agent-endpoint evaluation CLI run locally.",
+   "evidence_lines": [
+    23,
+    85,
+    94
+   ]
+  },
+  "fn": "Lingikaushikreddy/Settlement-Village",
+  "sha": "187ed2d61042",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7aaaa9a67a8e": {
+  "identity": {
+   "one_liner": "基于 Expo+Supabase 的排行制脑力游戏移动/Web 应用",
+   "review": "Mindtier 是一款把脑力小游戏做成天梯排位的移动及网页应用：六局定级赛定段位，Glicko-2 按技能分别计分，含每日挑战、好友对决与月度赛季。技术栈为 Expo/React Native + Next.js + Supabase，谜题由 (seed, trial, level) 纯函数生成，服务端重放校验分数，本地离线可玩并事后同步；后端数据存于启用了行级安全与 SQL 函数的 Postgres。",
+   "highlights": [
+    "谜题为 (seed, trial, level) 纯函数，服务端从种子重放并重算评分",
+    "本地离线先玩，结果入 outbox 队列后与服务端对账",
+    "支持六种语言界面与字词类游戏，含无障碍选项"
+   ],
+   "use_cases": [
+    "移动端/浏览器每日脑力训练与排位挑战",
+    "好友同题对决与周赛比拼",
+    "按技能水平自适应出题的认知类练习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "||Data|Postgres with row-level security and SQL functions| ／ Database: `scripts/db-check.sh` applies every migration to a throwaway Postgres in Docker and runs the SQL tests.",
+     "lines": [
+      89,
+      140
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存储于 Postgres（经 Supabase），数据库仅作为应用后端存储使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "版权所有（All rights reserved），非开源许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "||Data|Postgres with row-level security and SQL functions| ／ Database: `scripts/db-check.sh` applies every migration to a throwaway Postgres in Docker and runs the SQL tests.",
+   "evidence_lines": [
+    89,
+    140
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Himkush1414/midas-engine",
+  "sha": "7aaaa9a67a8e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

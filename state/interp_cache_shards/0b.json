@@ -8505,5 +8505,147 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f57e39d3b98c": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的多模型图数据库，支持 SQL/openCypher/GQL",
+   "review": "AgensGraph 是 PostgreSQL 的一个 fork，在其内置属性图模型，使图数据与关系表共存于同一数据库并在同一事务中提交。查询支持 SQL、openCypher 和 ISO GQL 且可混用，保留 PostgreSQL 的事务、角色、行级安全、复制等能力。面向需要在同一库中处理图与表数据的开发者，提供 Docker 镜像与源码构建两种安装方式。",
+   "highlights": [
+    "在同一数据库中存储图与关系表，并支持单事务提交",
+    "支持 SQL、openCypher、ISO GQL 三种查询语言且可在同一条语句中混用",
+    "提供 MCP 服务器与 LangChain、LlamaIndex 等 AI 框架集成包"
+   ],
+   "use_cases": [
+    "图数据与关系表混合存储与查询的场景",
+    "基于知识图谱与向量的 GraphRAG / AI agent 记忆应用",
+    "需要沿用 PostgreSQL 生态工具（pg_dump、复制、扩展）的图数据库部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- PostgreSQL with the property graph model built in. A fork of PostgreSQL, not an extension. ／ - Everything PostgreSQL has works on graph data: transactions, roles, row-level security, replication, `pg_dump`, `EXPLAIN`, extensions such as `pgvector`.",
+     "lines": [
+      19,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库内核（PostgreSQL 的 fork），而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "source",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- PostgreSQL with the property graph model built in. A fork of PostgreSQL, not an extension. ／ - Graph data and relational tables live in one database and commit in one transaction. ／ |Docker|`skaiworldwide/agensgraph:v<release>-<base>`. Bases: `bookworm`, `trixie`, `alpine3.23`, `alpine3.24`, `rocky9`, `rocky10` (Docker Hub)|",
+   "evidence_lines": [
+    19,
+    21,
+    159
+   ]
+  },
+  "fn": "skaiworldwide-oss/agensgraph",
+  "sha": "f57e39d3b98c",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "95de48497b65": {
+  "identity": {
+   "one_liner": "基于 Wiktionary 数据构建 SQLite 词典的德英词典应用",
+   "review": "一个面向德语学习者的德英词典应用，从 kaikki.org 的 Wiktionary JSONL 数据通过 Python 管道构建优化过的 SQLite 词典库，用 Node.js + Hono 提供只读 REST API（查询/自动补全/句子解析），React 前端展示词条、音频和语法表。适合自托管词典服务的开发者部署使用。",
+   "highlights": [
+    "支持德语变音/ß 的多种折叠归一化查询与英语反向检索",
+    "提供 suggest、autocomplete、parse 等 REST API 接口",
+    "从 kaikki.org JSONL 数据构建包含约 10 万词条的 SQLite 词典库"
+   ],
+   "use_cases": [
+    "阅读德语文本时查词与句子成分解析",
+    "自托管无广告的德英词典站点",
+    "基于 Wiktionary 数据的离线词典查询服务部署"
+   ],
+   "install": [
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "(~1 GB dump) folding + extract optimized SQLite REST API search UI ／ |Ingest|Python 3 (stdlib only, optional `tqdm`) → SQLite| ／ |API|Node.js + Hono + `better-sqlite3` (read-only)|",
+     "lines": [
+      25,
+      32,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 用于存储该词典应用自身的词条数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "kaikki.org German JSONL  ──►  ingest/ingest.py  ──►  data/dictionary.db  ──►  server (Hono)  ──►  web (React) ／ |Ingest|Python 3 (stdlib only, optional `tqdm`) → SQLite| ／ |API|Node.js + Hono + `better-sqlite3` (read-only)|",
+   "evidence_lines": [
+    24,
+    32,
+    33
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "julianel5/Lexikon",
+  "sha": "95de48497b65",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

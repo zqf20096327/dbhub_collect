@@ -9338,5 +9338,146 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "237b1bc733d1": {
+  "identity": {
+   "one_liner": "Zig 编写的单二进制 AI Agent CLI，用 SQLite 持久化历史与任务",
+   "review": "这是一个用 Zig 编写的 AI Agent 命令行工具，编译为单个原生二进制，内置代理循环、多后端模型切换（Ollama/Claude/OpenAI 等）、20 个内置工具和定时任务，会话历史与 cron 任务通过 SQLite 持久化。面向需要在本地或边缘设备上运行命令行 AI 代理的开发者；依赖 libcurl 与 sqlite3 动态链接，Linux 预编译包要求 glibc 2.34+。",
+   "highlights": [
+    "支持多 AI 后端（Ollama、Claude、OpenAI、DeepSeek、Qwen、Gemini 等）并支持流式输出",
+    "提供 20 个内置工具与 70 个领域 skill 定义，含代理循环与子代理调度",
+    "会话历史与 cron 定时任务通过 SQLite 持久化"
+   ],
+   "use_cases": [
+    "在本地或 ARM 设备（如树莓派、Jetson）上运行命令行 AI 代理",
+    "通过 cron 调度自动执行周期性命令",
+    "通过浏览器控制、文件操作等内置工具完成多步骤自动化任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|macOS arm64|`wintermolt-macos`|6.2 MB|Mach-O, dynamic libcurl + sqlite3| ／ Schedule commands to run automatically. Jobs persist across restarts via SQLite.",
+     "lines": [
+      118,
+      262
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明会话历史与 cron 任务通过 SQLite 持久化，SQLite 是其存数据组件而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Schedule commands to run automatically. Jobs persist across restarts via SQLite. ／  An autonomous AI agent CLI written entirely in Zig. ／ curl -L -o wintermolt https://github.com/lupin4/wintermolt/raw/main/prebuilt/wintermolt-macos \\",
+   "evidence_lines": [
+    262,
+    7,
+    61
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "lupin4/wintermolt",
+  "sha": "237b1bc733d1",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a7f569d7667e": {
+  "identity": {
+   "one_liner": "基于 SQLite FTS5 的文件全文搜索索引 CLI 工具",
+   "review": "一个用 Rust 编写的命令行文件索引器，将项目文件的路径、文件名和内容写入本地 SQLite FTS5 全文索引，支持增量更新、删除检测、gitignore 过滤和 PRAGMA 性能调优，并内置 Claude Code 文件建议的 stdin/stdout JSON 协议。适合在本地代码库中快速检索文件的开发者；默认跳过超过 1MB 的文件，索引库存放在项目根目录。",
+   "highlights": [
+    "使用 SQLite FTS5 虚拟表实现全文检索，BM25 权重区分文件名、路径与内容",
+    "支持增量索引、删除文件清理与 .gitignore 感知过滤",
+    "提供 Claude Code 文件建议集成（stdin JSON 查询协议）"
+   ],
+   "use_cases": [
+    "在本地代码库中按内容或文件名快速检索文件",
+    "为 Claude Code 的 @ 文件引用提供候选文件建议",
+    "大型项目的可调优索引（缓存、mmap、page size 等 PRAGMA）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Fast full-text search file indexer using SQLite FTS5. ／ - **SQLite FTS5** full-text search with BM25 ranking",
+     "lines": [
+      9,
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "工具将 SQLite 作为内嵌存储引擎用于文件索引检索，而非为数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Fast full-text search file indexer using SQLite FTS5. ／ - **Single binary** - No external dependencies (bundled SQLite) ／ 2. Creates the SQLite database with proper schema",
+   "evidence_lines": [
+    9,
+    21,
+    97
+   ]
+  },
+  "fn": "mneves75/ffts-grep",
+  "sha": "a7f569d7667e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

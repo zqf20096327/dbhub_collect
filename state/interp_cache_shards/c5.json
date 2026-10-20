@@ -10677,5 +10677,88 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "64ed9a003e5e": {
+  "identity": {
+   "one_liner": "本地运行的 AI 品牌可见度追踪应用，数据存于单文件 SQLite",
+   "review": "这是一个本地优先的应用，向 ChatGPT/Claude/Gemini 等 LLM 发送提示并测量品牌提及率、Top3 率、引用率与份额，结果存入本地 SQLite 文件，供市场/创始人等使用者监测 AI 对品牌的表述。调用需自备各提供商 API key，依赖 Node 22.13+ 的内置 SQLite，无队列服务，应用关闭即停止。",
+   "highlights": [
+    "通过各提供商 API 调用多个 LLM 助手并强制启用 web search 采集回答",
+    "所有回答完整存入本地单个 SQLite 文件，支持备份与启动时迁移",
+    "提供提及率、Top3 率、引用率、share of voice 与竞品对比等指标",
+    "支持每日/每周/每月调度运行，中断的 run 可恢复继续"
+   ],
+   "use_cases": [
+    "追踪 AI 聊天助手对自家品牌的提及与推荐情况",
+    "监测竞品在 LLM 回答中的份额与排名",
+    "记录 LLM 对品牌的感知摘要以便调整市场策略"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It runs on your machine with your AI accounts and every answer lands in one SQLite file you ／ sqlite3 ./data/overheard.db \".backup ./backup/overheard.db\" ／ stored. SQLite ships inside Node 22.13+ and Bun, so there is",
+     "lines": [
+      20,
+      140,
+      174
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PL/pgSQL, run inside an embedded Postgres.",
+     "lines": [
+      76
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 SQLite 存储测量数据的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "It runs on your machine with your AI accounts and every answer lands in one SQLite file you ／ Everything lives in `./data/overheard.db`, next to its `-wal` and `-shm` files. ／ It's a TanStack Start app running as one process. A worker loop inside the web server sends",
+   "evidence_lines": [
+    20,
+    136,
+    166
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "TrellaceTeam/overheard-ai",
+  "sha": "64ed9a003e5e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11176,5 +11176,159 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "979903dd3cfd": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud (OCI) 模拟器，单容器提供 OCI 形状服务",
+   "review": "floci-oci 是一个开源的本地 OCI 模拟器，供开发、测试和 CI 场景在没有 Oracle Cloud 账号的情况下运行 OCI 形状的服务。它实现真实的 OCI 请求/响应协议，兼容官方 SDK、OCI CLI 和 Terraform provider，通过 Docker sidecar 运行真实的 PostgreSQL、Fn、k3s 等，MIT 许可。",
+   "highlights": [
+    "实现 OCI 线协议：opc-request-id、分页头、etag/if-match、OCIDs 与 OCI 错误体",
+    "官方 oci-java-sdk、Python SDK、OCI CLI、oracle/oci Terraform provider 可不改代码直连",
+    "支持 in-memory/持久/混合/WAL 四种存储模式，并提供 Docker sidecar 运行真实 PostgreSQL、Fn、k3s"
+   ],
+   "use_cases": [
+    "本地开发与测试 OCI 集成而无需云账号",
+    "CI 流水线中运行 OCI SDK/CLI/Terraform 测试",
+    "为含 OCI Database with PostgreSQL、OKE、Functions 的场景提供本地模拟环境"
+   ],
+   "ai": false
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default configurations, work requests, real PostgreSQL sidecar| ／ |Database with PostgreSQL|`postgres:{major}-alpine`|A real PostgreSQL server per DB system, of the major the DB system asks for, with TLS, a host port from `15432..15531` and a named data volume|",
+     "lines": [
+      139,
+      171
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Light, fluffy, and always free, now for Oracle Cloud ／ floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI.",
+     "lines": [
+      5,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 OCI 云服务开发测试提供本地模拟的工具，本身不是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（L12）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ |Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default configurations, work requests, real PostgreSQL sidecar| ／ The official oci-java-sdk, Python SDK, OCI CLI, and the `oracle/oci` Terraform provider work unchanged, validated continuously by the compatibility suite.",
+   "evidence_lines": [
+    24,
+    139,
+    104
+   ]
+  },
+  "fn": "floci-io/floci-oci",
+  "sha": "979903dd3cfd",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fc3b012c46cf": {
+  "identity": {
+   "one_liner": "大学诊所患者记录与预约管理系统，FastAPI+React Web 应用",
+   "review": "HAU-Sync 是学生毕业项目，为 Holy Angel University 诊所提供患者登记、就诊记录、预约、药品库存、报表和审计功能的 Web 系统。后端为 FastAPI + SQLAlchemy，前端为 React，通过 WebSocket 实现多站点实时同步；默认使用 SQLite 文件数据库，也支持 PostgreSQL，仅设计为在诊所内网单服务器运行。",
+   "highlights": [
+    "提供患者登记、就诊记录、预约、药品库存、医疗包借用与报表等诊所业务功能",
+    "包含基于角色的访问控制、会话管理和患者数据查看审计日志",
+    "后端 FastAPI + SQLAlchemy + Alembic 迁移，默认 SQLite、支持 PostgreSQL，前端通过 WebSocket 实时更新"
+   ],
+   "use_cases": [
+    "大学诊所前台、护士、医生在一台内网服务器上协同记录患者就诊",
+    "药品库存管理与低库存提醒",
+    "按学期生成统计报表并导出 Excel/CSV"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Database:** SQLite for development and testing; PostgreSQL is supported for the clinic",
+     "lines": [
+      93
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **Database:** SQLite for development and testing; PostgreSQL is supported for the clinic",
+     "lines": [
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是使用 SQLite/PostgreSQL 存储数据的诊所业务应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "* **Database:** SQLite for development and testing; PostgreSQL is supported for the clinic ／ The University Clinic keeps its patient log, records and medicine inventory on paper. HAU-Sync replaces that with a system that runs on the clinic's own network: the front desk logs a patient, the nurse records the visit, and the doctor sees the same record at once, with no paper handed over. Nothing leaves the clinic's computers, in keeping with the Data Privacy Act of 2012 (Republic Act No. 10173).",
+   "evidence_lines": [
+    93,
+    44
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "SeanRDC/Final-Project-Software-Engineering",
+  "sha": "fc3b012c46cf",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

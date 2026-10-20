@@ -10398,5 +10398,75 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "624c123edbb9": {
+  "identity": {
+   "one_liner": "自托管求职应用：基于档案生成定制简历与求职信并跟踪申请",
+   "review": "Dossier 是一个自托管的求职管理应用，将个人职业档案转成基础简历，针对每个职位生成定制简历与求职信（仅使用档案内事实），并提供看板、漏斗、面试日历等申请跟踪功能。面向在小型服务器上自托管的个人用户，通过 Docker Compose 以应用容器加 PostgreSQL 容器运行，支持 Ollama 本地模型或 OpenAI 兼容 API。",
+   "highlights": [
+    "从单一档案生成定制简历与求职信，输出 PDF，仅使用档案中的事实内容",
+    "通过看板、表格与漏斗仪表盘跟踪申请，支持 Gmail/Google Calendar 双向同步（可选）",
+    "以双容器（应用 + PostgreSQL）Docker Compose 部署，支持 Ollama 本地模型或 OpenAI 兼容 API"
+   ],
+   "use_cases": [
+    "个人求职者集中管理职业档案并为每个职位生成定制申请材料",
+    "跟踪求职申请从草稿到录用的全流程状态",
+    "需要数据留在自有服务器、使用本地 LLM 的隐私敏感用户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 18 ／ It's for one person on a small server: one password, your data in your own PostgreSQL database, and an AI model of your choice. That can be a local model through Ollama, so your profile and documents never leave your server, or a hosted one (any OpenAI-compati ／ Dossier keeps everything in PostgreSQL 18, which runs in its own container next to the app. Nothing outside can reach it, only the app, and its data lives in a Docker volume that survives restarts and upgrades.",
+     "lines": [
+      10,
+      14,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明数据全部存放在自带的 PostgreSQL 数据库中，Dossier 是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Your job search, on your own server: one profile, a tailored resume and cover letter for every job, and every application tracked from draft to offer. ／ Dossier runs as two containers, the app and PostgreSQL, from one Compose file. These four steps take a fresh server to Dossier on your own domain, with HTTPS. ／ Dossier keeps everything in PostgreSQL 18, which runs in its own container next to the app. Nothing outside can reach it, only the app, and its data lives in a Docker volume that survives restarts and upgrades.",
+   "evidence_lines": [
+    3,
+    55,
+    88
+   ]
+  },
+  "fn": "AienTech/dossier",
+  "sha": "624c123edbb9",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10750,5 +10750,217 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "177fc8c4ff12": {
+  "identity": {
+   "one_liner": "AI 原生 SQL 客户端，供人类与 AI 代理通过 MCP 使用",
+   "review": "Dory 是一个 AI 原生的 SQL 工作台：人类可进行多标签 SQL 编辑、schema 浏览、图表与保存查询，AI 代理通过 MCP/CLI 执行只读查询并把生成的工作转为可编辑的工作区。支持多数据库，对 ClickHouse 提供监控、用户管理等深度集成，适用数据工程师、分析师及需要数据库执行层的代理开发者。",
+   "highlights": [
+    "提供 MCP/CLI 接口，供 Claude Code、Codex CLI 等代理执行 SQL、探索 schema 并生成可编辑工作区",
+    "包含多标签 SQL 编辑器、schema 关系图、结果集过滤与图表功能",
+    "对 ClickHouse 提供查询监控、用户与角色管理等原生操作界面"
+   ],
+   "use_cases": [
+    "数据工程师/分析师的日常 SQL 查询与可视化",
+    "为 AI 代理提供数据库执行层并保留可审查的工作区",
+    "ClickHouse 运维团队的查询监控与权限管理"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse ClickHouse|✅ Deeply integrated| ／ Dory includes native ClickHouse operations surfaces for teams that need more than a generic SQL editor.",
+     "lines": [
+      137,
+      152
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL PostgreSQL|✅ Supported|",
+     "lines": [
+      138
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL MySQL|✅ Supported|",
+     "lines": [
+      142
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB MariaDB|✅ Supported|",
+     "lines": [
+      143
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite SQLite|✅ Supported|",
+     "lines": [
+      144
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server SQL Server|✅ Supported|",
+     "lines": [
+      146
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle Oracle|✅ Supported|",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为多数据库生态服务的 SQL 客户端/工作台工具，数据库是被连接的对象而非存储自身业务数据（自托管用的 PostgreSQL 是部署依赖）。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse",
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Dory is an AI-native SQL client for humans and agents.** ／ |ClickHouse ClickHouse|✅ Deeply integrated| ／ Dory includes native ClickHouse operations surfaces for teams that need more than a generic SQL editor.",
+   "evidence_lines": [
+    12,
+    137,
+    152
+   ]
+  },
+  "fn": "dorylab/dory",
+  "sha": "177fc8c4ff12",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "11999a929787": {
+  "identity": {
+   "one_liner": "VastBase/openGauss 数据应急恢复工具，离线解析数据文件抢救数据",
+   "review": "vbdul 是面向 VastBase/openGauss 及 PostgreSQL 的离线数据恢复工具，在数据库无法启动、误删表或无备份的极端场景下直接解析磁盘数据文件、空闲页面和 WAL 来抢救数据，支持 logminer 事务挖掘与 ProBackup 备份回退，导出 COPY 文本并生成 psql 导入脚本。以二进制包分发，正式版需向供应商申请 license，仅支持 Linux 平台和 Heap 行存引擎。适合 DBA 与运维人员做应急数据抢救。",
+   "highlights": [
+    "直接解析磁盘数据文件与空闲页面，支持 DROP TABLE/TRUNCATE 无备份恢复",
+    "提供 logminer 从 WAL 挖掘 INSERT/DELETE/UPDATE 并按事务恢复误删行",
+    "以只读方式访问原始数据文件，输出写入自身目录"
+   ],
+   "use_cases": [
+    "数据库无法启动且无备份时的离线数据抢救",
+    "误 DROP/TRUNCATE 后的数据页还原",
+    "通过 WAL 日志挖掘定位并恢复误删/误改的行数据"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db_type|是|`vastbase` 或 `postgresql`，按实例内核填；填错直接报错退出| ／ |wal_dir|用 logminer 必填|WAL 目录（VastBase 是 `pg_xlog`，PG 是 `pg_wal`），也可指向 WAL 归档目录| ／ |postgresql|pg10 ~ pg17|对应 PostgreSQL 10 ~ 17|",
+     "lines": [
+      34,
+      39,
+      58
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ |ora_number|否|VastBase Oracle 兼容 NUMBER 的显示方式，默认 `on`|",
+     "lines": [
+      3,
+      44
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# vbdul - VastBase/openGauss 数据应急恢复工具 ／ vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ |vastbase|v3|G100 2215/308/309（openGauss 内核）|",
+     "lines": [
+      1,
+      3,
+      55
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为数据库应急数据恢复工具，直接解析 VastBase/openGauss/PostgreSQL 的数据文件与 WAL，为数据库生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "正式版受限模式，需向供应商申请 license.dul；Beta 版无需 license",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "vbdul 是一款 VastBase/openGauss 数据库应急数据恢复工具，类似 Oracle ODU。在数据库无法启动、误删表/数据、无备份的极端场景下，直接从磁盘数据文件中抢救恢复数据。 ／ - **数据库无法启动、无备份**：系统表损坏、实例崩溃时完全离线操作，直接解析磁盘数据文件 ／ |db_type|是|`vastbase` 或 `postgresql`，按实例内核填；填错直接报错退出|",
+   "evidence_lines": [
+    3,
+    7,
+    34
+   ]
+  },
+  "fn": "LiXiangYu0612/vbdul",
+  "sha": "11999a929787",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

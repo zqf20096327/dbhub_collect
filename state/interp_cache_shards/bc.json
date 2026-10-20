@@ -8798,5 +8798,217 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "43425f9baae7": {
+  "identity": {
+   "one_liner": "自托管个人知识库工作区，文档采集整理并支持检索、RAG 与知识图谱",
+   "review": "StruInfo 是一个自托管的单所有者文档工作区：订阅 RSS/Atom、上传 Markdown/PDF 等文档，经人工或 AI 审核拆分、打标签、建立联系后入库，用于搜索、知识库问答、知识图谱与定期报告生成。数据存储依赖 PostgreSQL，可选配置 DeepSeek/OpenAI 模型，并提供 MCP 接口供外部 Agent 读写。仅支持单实例单用户，无 OCR。",
+   "highlights": [
+    "支持 RSS/Atom 订阅、Markdown/文本/HTML/带文本层 PDF 导入，原文与整理结果分别保存并可追溯",
+    "可选接入 DeepSeek/OpenAI 模型完成审核、拆分、标签、问答与报告生成，并提供 MCP 接口供外部 Agent 操作",
+    "基于 PostgreSQL 存储文档结构、条目、标签、联系和任务，支持备份与恢复流程"
+   ],
+   "use_cases": [
+    "个人文档与订阅内容的整理、检索和追溯",
+    "结合 RAG 对知识库进行问答与生成日报/周报/专题报告",
+    "通过 MCP 让外部 Agent 读写同一知识库"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "推荐使用 **Docker Compose + PostgreSQL 18**，以 `all` 单实例运行。应用、数据库和持久数据分开保存。 ／ - PostgreSQL 保存文档结构、条目、标签、联系和任务。 ／ pnpm performance:m2-p0d -- --smoke # 使用 Docker 创建临时 PostgreSQL",
+     "lines": [
+      42,
+      74,
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 保存文档结构、条目等业务数据，项目本身是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "推荐使用 **Docker Compose + PostgreSQL 18**，以 `all` 单实例运行。应用、数据库和持久数据分开保存。 ／ - PostgreSQL 保存文档结构、条目、标签、联系和任务。",
+   "evidence_lines": [
+    42,
+    74
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tntexploding/StruInfo",
+  "sha": "43425f9baae7",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "71293fabaac2": {
+  "identity": {
+   "one_liner": "自托管个人 AI 助手引擎，多账户共享一服务器，自带内存与沙箱",
+   "review": "Brambit 是一个自托管的个人 AI 助手引擎，为家庭、团队或公司每个成员提供独立账户与助手，可通过网页、Telegram、WhatsApp、邮件和 Slack 对话。用户自带 LLM 密钥（OpenAI 兼容或 Gemini），支持连接器、代码沙箱与定时任务；后端为 Node.js 模块化单体，使用 PostgreSQL 存储账户、会话等记录。适合自建 AI 助手服务的运维者与使用者。",
+   "highlights": [
+    "支持网页、Telegram、WhatsApp、邮件、Slack 多渠道对话，多账户隔离",
+    "支持任意 OpenAI 兼容模型及 Gemini，通过 models.yaml 按任务配置模型",
+    "提供代码沙箱（每账户一容器）、连接器（Google/Microsoft/GitHub/MCP）与定时任务"
+   ],
+   "use_cases": [
+    "家庭/团队/公司自托管共享 AI 助手实例",
+    "需要助手接入 Google、GitHub 等连接器或远程 MCP 服务",
+    "按任务自定义 LLM 路由与回退的自建助手部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "with it (Postgres 14 from npm); nothing else to install. ／ conversations and workers together in one service. PostgreSQL stores accounts,",
+     "lines": [
+      138,
+      193
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 用于存储账户、会话与执行记录，数据库是其数据存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另有托管服务 Brambs",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "conversations and workers together in one service. PostgreSQL stores accounts, ／ People chat with their assistants in a web app and on Telegram, WhatsApp, email and ／ or Gemini, with your own key.",
+   "evidence_lines": [
+    193,
+    18,
+    22
+   ]
+  },
+  "fn": "morethanrealio/brambit",
+  "sha": "71293fabaac2",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "860bcdf13e92": {
+  "identity": {
+   "one_liner": "本地运行的拉美求职聚合应用，抓取招聘门户并用 SQLite 存储",
+   "review": "JobFilter 是一个本地求职辅助应用：抓取 GetOnBoard、Computrabajo、LinkedIn、elempleo 等拉美招聘门户的职位，按用户 profile 里的技能与关键词做匹配度着色，并自动拉黑重复发布职位的公司。数据存于本地 SQLite（经 Drizzle ORM 访问），不登录任何平台。面向拉美地区求职者个人使用；README 提示部分平台条款禁止抓取，需自担风险。",
+   "highlights": [
+    "抓取多个拉美招聘门户（GetOnBoard、Computrabajo、LinkedIn、elempleo），支持增量搜索与无登录抓取 LinkedIn",
+    "数据保存在本地 SQLite（bun:sqlite / better-sqlite3），通过 Drizzle ORM 管理 schema 迁移",
+    "依据 profile 中的技能清单对职位生成匹配度热力图，并自动识别重复发布职位的公司"
+   ],
+   "use_cases": [
+    "拉美求职者批量检索多个门户职位并按个人技能过滤排序",
+    "自动过滤长期重复发布同一职位的公司",
+    "本地离线保存职位搜索结果，无需注册账号"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.| ／ |`bun run dev:node`|Igual, con Node (usa `better-sqlite3`).|",
+     "lines": [
+      41,
+      92,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用 SQLite 作为自身数据存储，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.|",
+   "evidence_lines": [
+    41,
+    92
+   ]
+  },
+  "fn": "SebastianAsprino/jobfilter",
+  "sha": "860bcdf13e92",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

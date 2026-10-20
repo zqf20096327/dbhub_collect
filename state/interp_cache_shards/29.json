@@ -10222,5 +10222,202 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cda98f458da7": {
+  "identity": {
+   "one_liner": "开源知识资产平台，ASP.NET Core API + React，用 SQL Server 与 EF Core 存取",
+   "review": "WorxForge 是一个用于分享和发现可复用提示、agents、技能、工作流与编码规范的知识资产平台，源于 ITWorx 四周暑期实习项目。技术栈为 ASP.NET Core 10 API、EF Core 10、SQL Server 与 React 19 前端，通过 SignalR 推送通知。默认跳过登录、以共享访客身份运行，需自备 SQL Server 实例并执行 EF 迁移后启动。",
+   "highlights": [
+    "提供资产浏览、搜索、发布、收藏、评论与站内通知功能",
+    "后端为 ASP.NET Core 10 minimal API，数据层使用 EF Core 10 与 SQL Server，通知经 SignalR 投递",
+    "README 提供源码部署方式：setup 脚本或手动执行 EF Core 数据库迁移与 dotnet run"
+   ],
+   "use_cases": [
+    "团队或社区内共享与检索提示词、工作流、编码规范等知识资产",
+    "作为 ASP.NET Core + React + EF Core 全栈应用的源码学习案例",
+    "以访客模式快速本地部署演示环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- Receive in-app notifications through SQL Server persistence and SignalR delivery. ／ |Infrastructure|`src/WorxForge.Infrastructure`|EF Core 10, SQL Server, repositories| ／ - A reachable SQL Server instance and a fresh development database. Windows users",
+     "lines": [
+      29,
+      74,
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是用 SQL Server 存储数据的知识资产平台应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WorxForge is an open-source knowledge asset platform for sharing and discovering reusable ／ |Infrastructure|`src/WorxForge.Infrastructure`|EF Core 10, SQL Server, repositories| ／ - A reachable SQL Server instance and a fresh development database. Windows users",
+   "evidence_lines": [
+    7,
+    74,
+    86
+   ]
+  },
+  "fn": "itworx/WorxForge",
+  "sha": "cda98f458da7",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::2026 OceanBase 数据库大赛——PowerContext 赛题仓库地址": {
+  "identity": {
+   "one_liner": "2026 OceanBase 数据库大赛 PowerContext 赛题仓库",
+   "review": "该仓库为 2026 年 OceanBase 数据库大赛 PowerContext 赛题的仓库地址。基于简介仅能确认其用途是承载比赛相关信息，仓库无 README，具体赛题内容、运行方式和目标用户无法验证，需进一步查阅仓库内容后补充编目。",
+   "highlights": [
+    "关联 2026 OceanBase 数据库大赛",
+    "对应 PowerContext 赛题"
+   ],
+   "use_cases": [
+    "参赛者获取 PowerContext 赛题仓库入口"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "2026 OceanBase 数据库大赛——PowerContext 赛题仓库地址"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅说明是比赛赛题仓库，无法确认其是为数据库生态服务的工具还是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "2026 OceanBase 数据库大赛——PowerContext 赛题仓库地址"
+  },
+  "fn": "02785294904/--PowerContext",
+  "sha": "desc::2026 OceanBase 数据库大赛——PowerContext 赛题仓库地址",
+  "source": "desc",
+  "generated_at": "2026-10-20",
+  "ver": 2,
+  "prompt_ver": "3.3"
+ },
+ "7747c0fde992": {
+  "identity": {
+   "one_liner": "美容沙龙业务网站，Next.js+TiDB 存储服务数据",
+   "review": "一个真实在用的美容沙龙网站，含公开页面（服务、预约跳转 Booksy）和管理后台（服务/图库/博客管理），数据存于 MySQL/TiDB。面向沙龙经营者与到店客户。采用 mysql2 参数化查询、scrypt 口令存储、最小权限数据库用户，部署在 Cloudflare Workers 并通过 Hyperdrive 连接 TiDB。",
+   "highlights": [
+    "提供公开网站与私密管理后台，服务数据存于数据库并可实时更新",
+    "使用 scrypt 加盐存储口令、httpOnly cookie 会话哈希、参数化 SQL 查询",
+    "通过 OpenNext 部署到 Cloudflare Workers，用 Hyperdrive 连接 TiDB"
+   ],
+   "use_cases": [
+    "美业门店展示服务与线上预约引流",
+    "需要非技术后台管理内容的小型网站",
+    "学习 Next.js + Cloudflare Workers + TiDB 部署流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL con la librería `mysql2` (en producción, TiDB Cloud)",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- MySQL con la librería `mysql2` (en producción, TiDB Cloud) ／ La base de datos (TiDB) se conecta a través de **Hyperdrive**, que mantiene las conexiones abiertas",
+     "lines": [
+      27,
+      112
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是沙龙业务网站，使用 MySQL/TiDB 存储服务与博客数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Es un proyecto real: la web la usa el salón para enseñar sus servicios y mandar a los clientes a reservar cita en Booksy. Además tiene un panel privado para que la dueña pueda añadir, cambiar u ocultar servicios sin tocar código. ／ - MySQL con la librería `mysql2` (en producción, TiDB Cloud) ／ La base de datos (TiDB) se conecta a través de **Hyperdrive**, que mantiene las conexiones abiertas",
+   "evidence_lines": [
+    5,
+    27,
+    112
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "cibanez93/laksmirbeautysalon",
+  "sha": "7747c0fde992",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

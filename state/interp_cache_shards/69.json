@@ -9995,5 +9995,80 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e11bfae3e14e": {
+  "identity": {
+   "one_liner": "自托管媒体观看记录中心，双向同步 Plex/Jellyfin/Emby/Trakt",
+   "review": "Plekt 是一个自托管应用，记录用户的媒体观看历史并在 Plex、Jellyfin、Emby 和 Trakt 之间双向同步观看状态与播放进度，同时从 TMDB、TheTVDB 等拉取元数据。数据存储在本地 SQLite 中，支持 Docker 部署。面向拥有多个媒体服务器、需要跨平台保持观看进度一致的个人用户。",
+   "highlights": [
+    "在 Plex、Emby、Jellyfin 与 Trakt 之间双向同步观看状态与播放进度",
+    "使用本地 SQLite 存储观看历史，支持完全自托管",
+    "提供内置每日备份及可选的 Backblaze B2 异地备份"
+   ],
+   "use_cases": [
+    "多个媒体服务器间保持观看状态一致",
+    "基于观看历史的分析与统计",
+    "通过 Overseerr/Jellyseerr 与元数据 API 整合媒体管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Remembers** every watch, once, locally in SQLite ／ - **Self-hosted & private** - Runs entirely on your own hardware with dedicated SQLite storage and full data ownership",
+     "lines": [
+      54,
+      83
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "It runs in an isolated demo mode on a dedicated Oracle Cloud Compute instance;",
+     "lines": [
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 SQLite 存储观看记录的媒体同步应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Plekt** is the brain in the middle. Your media servers, Trakt, and Seerr don't talk ／  Plekt sits between Plex, Emby, Jellyfin, and Trakt (two-way watch state sync) and TMDB, TheTVDB, Fanart.tv, OMDb, and Overseerr/Jellyseerr (metadata and requests flowing in) ／ - **Remembers** every watch, once, locally in SQLite",
+   "evidence_lines": [
+    19,
+    50,
+    54
+   ]
+  },
+  "fn": "Lasikiewicz/plekt",
+  "sha": "e11bfae3e14e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

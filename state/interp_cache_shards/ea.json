@@ -9393,5 +9393,150 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "256895504ccc": {
+  "identity": {
+   "one_liner": "Supabase 生产级自托管发行版，含只读 MCP、PITR 备份与监控",
+   "review": "该项目是一个自托管 Supabase 的发行版/部署工具，用 Ansible 一条命令在 Debian/Ubuntu/Arch 服务器上部署 Supabase 全栈，并提供只读 MCP 服务器供编码代理访问、pgBackRest 连续备份与 PITR、Grafana/Prometheus 监控、LUKS 磁盘加密、SSO 保护及从 Supabase Cloud 迁移的脚本。面向需要在自有服务器上自托管 Supabase 并让 AI 代理安全访问数据库的团队。",
+   "highlights": [
+    "通过 SSH stdio 暴露只读 MCP 服务器，提供 list_tables、describe_table 与 SELECT-only query 工具，且在数据库层以 agent_reader 角色强制只读",
+    "内置 pgBackRest 连续 WAL 归档、定时全量/差异备份、时间点恢复（PITR）与备份可恢复性验证",
+    "部署 Caddy SSO/UFW/fail2ban/LUKS 安全栈与 Grafana+Prometheus+Loki 监控栈，并提供 migrate.sh 从 Supabase Cloud 单命令迁移"
+   ],
+   "use_cases": [
+    "在自有服务器上以生产配置自托管 Supabase",
+    "让 AI 编码代理以只读方式安全访问 Supabase/Postgres 数据",
+    "替代 Supabase Cloud 并将现有 Cloud 项目迁移到自托管环境"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "filtering. The agent connects to Postgres as a dedicated **`agent_reader`** role",
+     "lines": [
+      130
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为部署、备份、监控和保护 PostgreSQL（Supabase 栈）提供服务，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This distribution closes that gap. One command deploys the stack, applies hardened ／ filtering. The agent connects to Postgres as a dedicated **`agent_reader`** role ／ |`db`|PostgreSQL 17|5432|",
+   "evidence_lines": [
+    21,
+    130,
+    193
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "ankaboot-source/supabase-selfhost-ops",
+  "sha": "256895504ccc",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2c9d6275571b": {
+  "identity": {
+   "one_liner": "TiDB 数据一致性校验工具 sync-diff-inspector 的示例集",
+   "review": "该仓库提供 sync-diff-inspector 数据一致性示例，使用 Bash 和 Docker 演示 MySQL 与 TiDB 之间数据一致与不一致两种对比场景，并自动下载对应系统和架构的工具二进制。面向需要在 TiDB 与 MySQL 间校验数据一致性的运维或迁移人员，内容为示例性质。",
+   "highlights": [
+    "演示 MySQL 与 TiDB 数据一致、不一致两种对比结果",
+    "使用 Bash 和 Docker 运行示例流程",
+    "自动下载对应系统和架构的工具"
+   ],
+   "use_cases": [
+    "学习 sync-diff-inspector 的使用方式",
+    "TiDB 迁移或同步后校验数据一致性"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- sync-diff-inspector 数据一致性示例：使用 Bash 和 Docker 演示 MySQL 与 TiDB 数据一致、不一致两种对比结果，并自动下载对应系统和架构的工具。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# tidb-sample ／ - sync-diff-inspector 数据一致性示例：使用 Bash 和 Docker 演示 MySQL 与 TiDB 数据一致、不一致两种对比结果，并自动下载对应系统和架构的工具。",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为 TiDB 生态工具 sync-diff-inspector 提供使用示例，服务于数据库一致性校验场景",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# tidb-sample ／ - sync-diff-inspector 数据一致性示例：使用 Bash 和 Docker 演示 MySQL 与 TiDB 数据一致、不一致两种对比结果，并自动下载对应系统和架构的工具。",
+   "evidence_lines": [
+    1,
+    3
+   ]
+  },
+  "fn": "tenfyzhong/tidb-sample",
+  "sha": "2c9d6275571b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10498,5 +10498,137 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c5320e894127": {
+  "identity": {
+   "one_liner": "嵌入式单文件双时态图数据库，支持 Datalog 查询",
+   "review": "Minigraf 是一个用 Rust 编写的单文件嵌入式图数据库，提供 Datalog 查询、双时态时间回溯和窗口函数，可嵌入运行于原生、WASM、移动端等环境，面向 AI agent 记忆、移动应用离线存储等场景。设计上不做分布式、客户端-服务器架构，优化目标为百万节点以内规模。",
+   "highlights": [
+    "支持 Datalog 查询语言，含递归规则、窗口函数和预编译语句",
+    "提供双时态模型（事务时间 + 有效时间），支持时间回溯查询",
+    "单文件嵌入运行，提供 Rust/Python/Node.js/Java/Android/iOS/C 及浏览器 WASM 绑定"
+   ],
+   "use_cases": [
+    "AI agent 事实存储与决策审计，记录信念的修正历史",
+    "移动应用离线优先存储，支持对已录入数据的追溯修正",
+    "浏览器端 WASM 运行（IndexedDB 后端），用于可视化演示与交互式查询"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它本身是一个嵌入式数据库引擎/存储内核，为应用（agent、移动端）提供数据存储组件，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ - ✅ An embedded library",
+   "evidence_lines": [
+    14,
+    22,
+    175
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "c5320e894127",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "688bf5317264": {
+  "identity": {
+   "one_liner": "声明式 Postgres schema 差异比对与迁移工具",
+   "review": "pgdeclare 将 Postgres 数据库 schema 维护为可读的 SQL 声明文件，通过在临时 plan 库中执行声明并经 pg_catalog 与线上库比对生成差异，配合 @migrate-before/@migrate-after 命令块和哈希账本处理重命名、回填等场景。面向使用 PostgreSQL 的开发与运维人员，要求 Python 3.12+ 和 PostgreSQL 14–18。",
+   "highlights": [
+    "通过 pg_catalog 对比声明 schema 与线上库并应用差异",
+    "以哈希账本记录命令式迁移块，每库仅执行一次",
+    "提供 diff/apply 等 CLI 命令及 Python API"
+   ],
+   "use_cases": [
+    "以声明式 SQL 文件管理 Postgres schema 变更",
+    "代码评审中查看 schema 变更差异",
+    "需要防止迁移重复执行或误改的场景"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pgdeclare is a Postgres schema differ.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是管理 PostgreSQL schema 的 CLI 工具，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pgdeclare is a Postgres schema differ. ／ With migration files, reviewers read deltas, not the schema, and an LLM reading the repository has to reconstruct the state too, getting it wrong in the same places people do. pgdeclare keeps the schema as declarations: one `CREATE TABLE` per table, in plain SQL files, always describing the database as it is now. You change a table by editing its definition. pgdeclare builds the declared schema in a scratch database, diffs it against the live one through `pg_catalog`, and applies the difference. ／ Requires Python 3.12+ and a PostgreSQL 14 to 18 server.",
+   "evidence_lines": [
+    3,
+    11,
+    32
+   ]
+  },
+  "fn": "powertime-org/pgdeclare",
+  "sha": "688bf5317264",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

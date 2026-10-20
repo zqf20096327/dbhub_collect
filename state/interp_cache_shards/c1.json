@@ -9946,5 +9946,375 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ed1d83bfd3a": {
+  "identity": {
+   "one_liner": "基于Spring Boot+Vue的人力资源管理系统，含RAG知识库问答",
+   "review": "一套前后端分离的人力资源管理系统，覆盖组织架构、员工档案、RBAC权限、考勤、假期与薪资核算，并集成Flowable工作流与基于pgvector的企业知识库RAG问答。数据存储采用MySQL（业务与流程库）加PostgreSQL/pgvector（向量库）。适合需要本地化部署人事系统并附带智能问答能力的企业或开发者。",
+   "highlights": [
+    "实现组织架构、员工档案、考勤、假期、薪资与五险一金等人事业务管理",
+    "基于Flowable 8.0实现审批流程，流程表独立存放于 hrm_flowable 库并与业务共享事务",
+    "内置基于 MySQL+PostgreSQL/pgvector+MinIO 的文档切块与向量化检索问答链路"
+   ],
+   "use_cases": [
+    "企业人事全流程管理（员工、考勤、审批、薪资）",
+    "企业内部政策制度知识库问答",
+    "基于RAG的员工上下文感知人事咨询"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 采用 MySQL（业务）+ Redis（缓存/验证码）+ PostgreSQL/pgvector（向量数据库）+ MinIO（对象存储）的多引擎存储架构；内置文档切块、向量化 ETL 流水线，助力企业政策与制度的高精度语义召回。 ／ |**PostgreSQL**|16 (pgvector)|知识库文档分块与高维向量存储数据库（`hrm_kb`）| ／ 项目本地所需的中间件（MySQL 8.1、Redis 5.0、PostgreSQL/pgvector 16、MinIO）由 `docker/local/docker-compose.yml` 统一编排，所有值直接写在 compose 文件里，无需 `.env`：",
+     "lines": [
+      21,
+      89,
+      136
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 采用 MySQL（业务）+ Redis（缓存/验证码）+ PostgreSQL/pgvector（向量数据库）+ MinIO（对象存储）的多引擎存储架构；内置文档切块、向量化 ETL 流水线，助力企业政策与制度的高精度语义召回。 ／ |**MySQL**|8.1|主业务数据库（`hrm`）与流程引擎专库（`hrm_flowable`）| ／ │ ├── mysql/",
+     "lines": [
+      21,
+      88,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统使用 MySQL 存业务数据、PostgreSQL/pgvector 存向量，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " - 采用 MySQL（业务）+ Redis（缓存/验证码）+ PostgreSQL/pgvector（向量数据库）+ MinIO（对象存储）的多引擎存储架构；内置文档切块、向量化 ETL 流水线，助力企业政策与制度的高精度语义召回。 ／ |**MySQL**|8.1|主业务数据库（`hrm`）与流程引擎专库（`hrm_flowable`）| ／ |**PostgreSQL**|16 (pgvector)|知识库文档分块与高维向量存储数据库（`hrm_kb`）|",
+   "evidence_lines": [
+    21,
+    88,
+    89
+   ]
+  },
+  "fn": "quuuuj/hrm",
+  "sha": "7ed1d83bfd3a",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "556720937c66": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 .NET 文档数据库库，支持 LINQ/IQueryable 查询",
+   "review": "SoloDB 是一个运行在应用进程内的 .NET（C#/F#）文档数据库类库，以 SQLite 为存储核心，提供 JSON 文档集合、LINQ/IQueryable 强类型查询、ACID 事务、索引、文件存储与类型化关系引用（DBRef/SoloRef）。面向需要在应用内嵌入文档数据库、同时保留 SQL 能力的 .NET 开发者；当前 NuGet 稳定版为 1.3.0，README 所述 1.4 特性尚未发布。",
+   "highlights": [
+    "以 SQLite 为核心，进程内运行，提供 ACID 事务与 SQL 降级查询能力",
+    "支持完整 LINQ/IQueryable 查询、属性索引、多态集合与集合生命周期事件（基于 SQLite 触发器）",
+    "提供类型化关系引用（DBRef/DBRefMany/SoloRef）与删除策略（Restrict/Cascade/Unlink/Deletion）",
+    "包含层级文件存储 API 与内置线程安全连接池"
+   ],
+   "use_cases": [
+    "在 .NET 应用内嵌入文档数据库，以强类型 LINQ 操作 JSON 文档",
+    "需要零配置、无独立服务器的本地持久化场景（含内存模式用于测试）",
+    "在文档模型中需要显式关系约束与级联删除策略的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Store your C# and F# objects, query them with LINQ, and keep related documents and files together in one SQLite database. SoloDB runs inside your application, with transactions and SQL available when you need them. ／ - **SQLite Core**: Leverages the world's most deployed database engine, ensuring rock-solid stability, performance, and reliability.",
+     "lines": [
+      3,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是构建在 SQLite 之上为应用提供文档数据库能力的存储引擎类库，而非仅使用数据库存数据的最终应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "LGPL-3.0，附带打包许可说明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Store your C# and F# objects, query them with LINQ, and keep related documents and files together in one SQLite database. SoloDB runs inside your application, with transactions and SQL available when you need them. ／ - **SQLite Core**: Leverages the world's most deployed database engine, ensuring rock-solid stability, performance, and reliability. ／ - **Serverless Architecture**: As a .NET library, it runs in-process with your application. No separate server or configuration is required.",
+   "evidence_lines": [
+    3,
+    13,
+    14
+   ]
+  },
+  "fn": "Unconcurrent/SoloDB",
+  "sha": "556720937c66",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bded959756d9": {
+  "identity": {
+   "one_liner": "自托管 YouTube 赛道与爆款视频研究工具，基于 YouTube API 与 PostgreSQL",
+   "review": "niche-finder 是一个自托管的 YouTube 内容研究工具，用于发现增长赛道、识别小频道的爆款视频并生成选题简报。它通过定时采集 YouTube Data API 数据留存历史，提供 Web 仪表盘、Chrome 扩展和 MCP server（100 个工具）三种使用方式，数据存储用 PostgreSQL + pgvector。面向内容创作者，需自备 YouTube API key，通过 Docker 部署运行。",
+   "highlights": [
+    "提供 MCP server（100 个工具）、HTTP API（137 条路由）与 Web 仪表盘三种访问方式",
+    "定时记录 YouTube 数据以生成播放增速、订阅增长等历史指标",
+    "后端为 Python/FastAPI，存储采用 PostgreSQL + pgvector"
+   ],
+   "use_cases": [
+    "创作者调研增长中的内容赛道与小频道爆款视频",
+    "通过 Claude Desktop 等 MCP 客户端以自然语言查询研究数据",
+    "追踪自己或竞品频道的增长与更新动态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`backend/`|MCP server, HTTP API, worker and CLI — all logic and storage (Python, FastAPI, PostgreSQL + pgvector)|",
+     "lines": [
+      161
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 backend 的逻辑与存储均由 Python/FastAPI/PostgreSQL 实现，PostgreSQL 仅作为该应用的存储组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "niche-finder is open source. With Docker and a free YouTube API key you can ／ |`backend/`|MCP server, HTTP API, worker and CLI — all logic and storage (Python, FastAPI, PostgreSQL + pgvector)| ／ - **Claude Desktop or any MCP client:** 100 tools and 7 ready-made scenarios,",
+   "evidence_lines": [
+    131,
+    161,
+    77
+   ]
+  },
+  "fn": "pandich93/youtube-niche-finder",
+  "sha": "bded959756d9",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6dac07e83755": {
+  "identity": {
+   "one_liner": "自托管敏捷项目管理与缺陷跟踪系统，Rust+PostgreSQL",
+   "review": "santi 是一个自托管的开源项目管理/缺陷跟踪应用，提供 Scrum 与 Kanban 看板、backlog、sprint 规划、报告、CSV 导入、REST API、CLI 及面向 AI 代理的 MCP 服务器。后端为 Rust (axum)，数据存于 PostgreSQL 17，通过 Docker Compose 单容器部署，适合敏捷团队自建使用；尚处 pre-1.0，API 可能变动。",
+   "highlights": [
+    "提供 Scrum/Kanban 看板、backlog、sprint、epic 与报告功能",
+    "提供 JSON API、CLI 与 MCP 服务器，支持 API token 认证",
+    "支持从 Jira/Linear 的 CSV 导入，数据可导出为 JSON"
+   ],
+   "use_cases": [
+    "敏捷团队自托管的项目与迭代管理",
+    "通过 REST API 或 CLI 将任务管理集成到脚本/自动化流程",
+    "让 AI 编码代理通过 MCP 读写项目任务"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "(axum, PostgreSQL), the UI in React, and the whole thing ships as one container image. No ／ block cross-site writes. Back up the PostgreSQL volume (`pg_dump`) on a schedule; santi does not",
+     "lines": [
+      22,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 santi 是用 PostgreSQL 存储自身数据的项目管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "(axum, PostgreSQL), the UI in React, and the whole thing ships as one container image. No ／ in the `santi-postgres` volume; migrations run every time the server starts. ／ |`DATABASE_URL`|required|PostgreSQL 17 connection string|",
+   "evidence_lines": [
+    22,
+    89,
+    119
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "emersonjds/santi",
+  "sha": "6dac07e83755",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "45ee2008060a": {
+  "identity": {
+   "one_liner": "Claude Code 等 AI 编码工具的 token 用量仪表盘，基于 Node.js 与 SQLite 存储",
+   "review": "这是一个自托管仪表盘，读取 Claude Code、OpenAI Codex、Google Antigravity 等工具的本地日志与会话数据，统计 token、成本、模型与工具调用并以图表展示，支持多用户（GitHub OAuth）与多设备同步。数据以 WAL 模式存入 SQLite（better-sqlite3），可从设置中下载数据库文件。面向使用 AI 编码工具、想查看用量与成本明细的个人或团队。",
+   "highlights": [
+    "读取本地会话日志（JSONL/SQLite）自动采集 Claude Code、Codex、Antigravity 用量数据",
+    "提供 40+ 图表、按项目/工具/模型维度的成本归因与 HTML 导出",
+    "支持多用户模式与每设备 API key，数据以 WAL 模式存储于 SQLite"
+   ],
+   "use_cases": [
+    "个人开发者追踪 AI 编码工具的 token 消耗与费用",
+    "团队内多用户/多设备用量汇总查看",
+    "生成项目级用量报告（HTML/PDF）供外部分享"
+   ],
+   "use_cases_ok": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "better-sqlite3 11.0.0 ／ SQLite in WAL mode ／ - **Database download** — download the full SQLite database from Settings for local backup or analysis",
+     "lines": [
+      42,
+      54,
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身以 SQLite 存储采集到的用量数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " better-sqlite3 11.0.0 ／  SQLite in WAL mode ／ - **Multi-Provider Tracking (Claude Code, OpenAI Codex, Google Antigravity)** — track tokens, costs, models, and sessions across all three agent platforms simultaneously. Automatic zero-dependency ingestion from `~/.codex/sessions/**/rollout-*.jsonl` and `~/.gemini/antigravity-cli/conversations/*.db`, real-time file watcher, segmented pill switcher in the header, visual share distribution bar, dynamic filter banners with quick reset, and colored badges",
+   "evidence_lines": [
+    42,
+    54,
+    95
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "pepperonas/token-tracker",
+  "sha": "45ee2008060a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

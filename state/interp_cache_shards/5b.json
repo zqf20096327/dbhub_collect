@@ -8620,5 +8620,148 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fdaa0be2c706": {
+  "identity": {
+   "one_liner": "ClickHouse 的 dbt 适配器插件，将 dbt 数据转换功能移植到 ClickHouse",
+   "review": "这是 dbt（数据构建工具）的 ClickHouse 适配器插件，供使用 dbt 进行数据转换和建模的数据工程师安装使用。它将 dbt 的 materialization、测试、文档生成等能力接入 ClickHouse，同时支持 ClickHouse Cloud 与自托管部署。限制包括部分目录集成（如 Iceberg）尚未原生支持，仅提供变通方案。",
+   "highlights": [
+    "支持表、视图、增量、物化视图等多种 materialization 及快照、种子、测试、文档生成等 dbt 功能",
+    "提供 ClickHouse 特有列配置（Codec、TTL）和表设置（索引、projection）支持",
+    "支持 ClickHouse Cloud 和自托管 ClickHouse，经 PyPI 安装"
+   ],
+   "use_cases": [
+    "在 ClickHouse 上运行 dbt 数据转换与分析工程",
+    "使用 dbt 管理 ClickHouse 的增量数据模型与物化视图",
+    "为 ClickHouse 生成 dbt 文档与数据测试"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# dbt-clickhouse ／ This plugin ports dbt functionality to Clickhouse. ／ The adapter works with both ClickHouse Cloud and self-hosted ClickHouse. You can start a free Cloud trial or install ClickHouse locally.",
+     "lines": [
+      3,
+      5,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件是 dbt 与 ClickHouse 之间的适配器，为数据库生态提供数据转换工具链组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This plugin ports dbt functionality to Clickhouse. ／ pip install dbt-core dbt-clickhouse ／ Features up to dbt-core 1.12 are supported, including the `--sample` flag, and all deprecation warnings are fixed for future releases. **Catalog integrations** (e.g., Iceberg) introduced in dbt 1.10 are not yet natively supported in the adapter, but workarounds are available. See the Catalog Support section for details.",
+   "evidence_lines": [
+    5,
+    19,
+    50
+   ]
+  },
+  "fn": "ClickHouse/dbt-clickhouse",
+  "sha": "fdaa0be2c706",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "07fd3e101d2a": {
+  "identity": {
+   "one_liner": "AI 代理共享记忆服务，以 SQLite 存储、经 REST/SDK/MCP 读写",
+   "review": "Agent Brain Hub 为多个 AI 代理提供一份共享记忆，按 13 个脑区与清醒/睡眠循环组织，代理可通过 REST API、JS/Python SDK 或 MCP 接入读取与写入。数据存于单个 SQLite 文件，含审计日志、PII 脱敏与指标看板。适合需要跨代理复用对话上下文的团队部署自用。",
+   "highlights": [
+    "代理可经 REST API、JS/Python SDK 或 MCP 读写同一份共享记忆，支持 private/shared/global 记忆范围与按代理读写权限",
+    "记录读取、写入、拦截与 API 调用的审计日志，并在写入前对电话、邮箱、卡号等 PII 做脱敏",
+    "提供实时脑区可视化界面与业务价值指标看板，支持 Claude、GPT、Gemini、DeepSeek 或本地 LLM 作为提供方"
+   ],
+   "use_cases": [
+    "多个 AI 代理共享客户上下文、避免客户重复陈述信息",
+    "通过 MCP 为 Claude Desktop、Cursor 等客户端接入共享记忆",
+    "需要记忆读写审计与 PII 脱敏的多代理部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Storage is **SQLite** via `better-sqlite3`. Prebuilt binaries exist for Linux, macOS and Windows; on other platforms `npm install` needs Python, make and a C++ compiler. Docker and an NVIDIA GPU are only needed to run a local model on vLLM. ／ ## Storage: SQLite ／ The whole brain lives in **one SQLite file**, `data/brain.db` (WAL mode), created automatically on first run.",
+     "lines": [
+      45,
+      221,
+      223
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明存储为 SQLite（better-sqlite3，brain.db），SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Storage is **SQLite** via `better-sqlite3`. Prebuilt binaries exist for Linux, macOS and Windows; on other platforms `npm install` needs Python, make and a C++ compiler. Docker and an NVIDIA GPU are only needed to run a local model on vLLM. ／ **One shared brain for all of a company's AI agents.** Create agents in the UI, or plug in agents that already run elsewhere through a REST API, an SDK or MCP. They all read and write **one** memory, so what one agent learns, every agent can use. Customers stop repeating themselves, agents hand off to each other without losing context, and the company builds up knowledge from every conversation. ／ mcp/server.mjs is a dependency-free MCP server over stdio. Each instance acts as one connected agent and exposes 6 tools: `brain_recall`, `brain_remember`, `brain_correct`, `brain_forget`, `brain_profile`, `brain_feedback`.",
+   "evidence_lines": [
+    45,
+    13,
+    108
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "leluong141996-dev/Agent-Brain-Hub",
+  "sha": "07fd3e101d2a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

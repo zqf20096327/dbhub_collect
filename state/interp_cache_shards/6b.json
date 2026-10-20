@@ -10035,5 +10035,139 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "87dc6afd4962": {
+  "identity": {
+   "one_liner": "终端日历/待办/日志管理器，本地 SQLite 存储",
+   "review": "chroncal 是一个运行在终端的日历、待办与日志管理工具，提供 TUI 交互界面和可脚本化的 CLI。数据以单个 SQLite 文件本地保存，支持 RFC 5545 iCal 导入导出和 CalDAV 同步。适合希望在命令行环境管理日程并保持数据本地化、可移植的用户。",
+   "highlights": [
+    "提供 TUI 与 CLI 双界面，支持事件、待办、日志、闹钟、free/busy 查询",
+    "实现 iCal (RFC 5545) 完整导入导出与 CalDAV 同步",
+    "使用本地 SQLite 文件存储数据并自动迁移"
+   ],
+   "use_cases": [
+    "在终端管理个人日历、待办与日志",
+    "与 CalDAV 服务器同步日程数据",
+    "通过脚本/JSON 输出自动化访问日程信息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and cale ／ - **SQLite storage** with automatic migrations",
+     "lines": [
+      14,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该程序用 SQLite 存储自身日历数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and calendars. ／ - **SQLite storage** with automatic migrations",
+   "evidence_lines": [
+    14,
+    34
+   ]
+  },
+  "fn": "DouglasdeMoura/chroncal",
+  "sha": "87dc6afd4962",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c4b101e68d3d": {
+  "identity": {
+   "one_liner": "SQLite libsqlite3 的 wasm32-unknown-unknown 绑定库",
+   "review": "这是一个 Rust crate，为 libsqlite3 提供 wasm32-unknown-unknown 目标的绑定，供在 WebAssembly 环境中调用 SQLite。支持通过 feature 启用 SQLite3MultipleCiphers 或 SQLCipher 加密后端，内置 memory 与 sahpool（OPFS）两种 VFS，允许自定义 SQLite 源码与编译标志。使用者是需要在浏览器/Wasm 中操作 SQLite 的 Rust 开发者，限制包括不支持多线程。",
+   "highlights": [
+    "提供 wasm32-unknown-unknown 目标的 libsqlite3 绑定，支持 wasm-bindgen 或无绑定自定义宿主函数两种模式",
+    "通过 feature 支持 SQLite3MultipleCiphers 与 SQLCipher 加密后端，并允许自定义 SQLite 源码目录与编译标志",
+    "实现 memory 与 sahpool（基于 OPFS）两种 VFS，并提供自定义 VFS 的示例"
+   ],
+   "use_cases": [
+    "在浏览器或 Wasm 运行时的 Rust 程序中读写 SQLite 数据库",
+    "需要 Wasm 场景下 SQLite 加密（sqlite3mc/sqlcipher feature）的项目",
+    "需要为 SQLite 实现自定义 VFS 的 Wasm 开发"
+   ],
+   "metadata": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\"] } ／ sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\", \"sqlite3mc\"] } ／ sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\", \"sqlcipher\"] }",
+     "lines": [
+      9,
+      16,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQLite 提供 Wasm 绑定、服务于 SQLite 生态的开发库，而非使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`wasm32-unknown-unknown` bindings to the libsqlite3 library. ／ sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\"] } ／ * `sahpool`: ported from sqlite-wasm, store the database in opfs.",
+   "evidence_lines": [
+    3,
+    9,
+    43
+   ]
+  },
+  "fn": "Spxg/sqlite-wasm-rs",
+  "sha": "c4b101e68d3d",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10149,5 +10149,88 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aa5e15511d0f": {
+  "identity": {
+   "one_liner": "Go 实现的列式内存 SQL 数据库，支持 MySQL 协议接入",
+   "review": "MemCP 是一个持久化列存内存数据库，采用主列/增量（main/delta）架构，支持事务、全文搜索与分析混合负载，通过 MySQL 线协议及 HTTP 端点提供 MySQL、PostgreSQL、T-SQL 方言和 SPARQL 查询。由 Go 与 Scheme 实现，当前处于 Beta 阶段，README 明确提示上线前需验证 SQL 兼容性与备份流程，适合需要自托管 OLAP/OLTP 混合引擎的团队评估使用。",
+   "highlights": [
+    "支持 MySQL 线协议接入，并提供 MySQL/PostgreSQL/T-SQL/SPARQL 多方言 HTTP 端点",
+    "列式存储支持从磁盘按需加载，完整数据库无须常驻内存",
+    "提供基于代价的查询规划器与 EXPLAIN 计划检查工具"
+   ],
+   "use_cases": [
+    "ERP 类应用的事务与列式分析混合负载",
+    "自托管替换现有 MySQL 客户端接入的 OLAP 场景评估",
+    "通过 HTTP 端点提交多方言 SQL 的查询服务"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Applications can connect through the MySQL wire protocol or submit MySQL- and ／ Existing MySQL clients and connectors can use MemCP's wire-protocol server.",
+     "lines": [
+      14,
+      64
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL-style SQL through separate HTTP endpoints. An initial T-SQL mode adds ／ - `/psql/<database>` — PostgreSQL-dialect SQL ／ - **up to 90x faster than PostgreSQL** for selected real application searches",
+     "lines": [
+      15,
+      87,
+      188
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "`mysql_import` connects to a running MySQL/MariaDB server over the wire",
+     "lines": [
+      653
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是数据库引擎本体，通过线协议与其他数据库交互而非仅使用其存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MemCP is a persistent, column-oriented SQL database built for applications that ／ Applications can connect through the MySQL wire protocol or submit MySQL- and ／ > **Status: Beta.** MemCP is suitable for evaluation and controlled beta",
+   "evidence_lines": [
+    3,
+    14,
+    19
+   ]
+  },
+  "fn": "launix-de/memcp",
+  "sha": "aa5e15511d0f",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

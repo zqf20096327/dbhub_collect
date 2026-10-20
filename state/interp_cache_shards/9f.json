@@ -11211,5 +11211,71 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d7b2e493ef56": {
+  "identity": {
+   "one_liner": "本地只读监控面板，检测本机AI工具的网络、权限与令牌用量",
+   "review": "SecAIQ Watch 是一个本地运行的只读监控面板，用于检测本机上的 AI 助手、编码代理、本地模型和 MCP 服务器，展示其网络连接、敏感文件访问权限、风险发现和 token 用量，支持生成 HTML/Markdown 报告和 CycloneDX AI-BOM 导出。面向需要了解本机 AI 工具行为的个人用户，基于 PHP 8.1+ 和 pdo_sqlite 存储数据，无云服务依赖；macOS 为主要支持平台，Linux/Windows 仍在早期测试。",
+   "highlights": [
+    "检测约 37 种 AI 工具与约 33 个 provider 域，展示每工具的网络连接与收发字节",
+    "提供权限矩阵、风险发现分级、敏感文件访问分类和 token 用量统计",
+    "支持 HTML/Markdown 报告、CycloneDX 1.5 AI-BOM、CSV/JSON 导出与可撤销的哈希链操作日志"
+   ],
+   "use_cases": [
+    "审计本机 AI 编码工具的联网行为与数据外发量",
+    "检查 AI 工具对 SSH 密钥、.env、云凭证等敏感区域的访问权限",
+    "统计 Claude Code、Codex 等工具的 token 用量与成本估算"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Local · read-only · no cloud · no account · PHP + SQLite · macOS, Linux, Windows ／ Requires **PHP 8.1+** with `pdo_sqlite`. No Composer, no build step, no database server, no account.",
+     "lines": [
+      8,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为本工具自身的本地存储后端（pdo_sqlite），工具用途是监控本机 AI 工具而非服务数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT，SecAIQ 名称与 logo 不在代码许可范围内",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**See what the AI tools on your computer are doing.** SecAIQ Watch detects AI assistants, coding agents, local models and ／ they have touched, and how many tokens they use — in a local dashboard. It is **read-only**: it never blocks traffic and ／ Requires **PHP 8.1+** with `pdo_sqlite`. No Composer, no build step, no database server, no account.",
+   "evidence_lines": [
+    3,
+    5,
+    52
+   ]
+  },
+  "fn": "Spaksu/secaiq-watch",
+  "sha": "d7b2e493ef56",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10780,5 +10780,299 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f6a26b28079": {
+  "identity": {
+   "one_liner": "基于 Proton Bridge 的本地邮件 MCP 服务器与 CLI",
+   "review": "该项目通过本地 Proton Mail Bridge 的 IMAP/SMTP 接口提供 MCP 服务器和配套 CLI，供 Claude Desktop、Cline 等 MCP 客户端或脚本读取、搜索、撰写、发送和整理 Proton 邮件；在本地用 SQLite 建立全文索引以避免每次查询都走 IMAP，支持只读模式、发送门控与多账户；依赖 Node.js 24+ 且要求 Proton Bridge 持续运行。",
+   "highlights": [
+    "提供 100 个 MCP 工具及对应的 CLI 命令，支持读写、搜索、草稿、附件与文件夹管理",
+    "在本地 SQLite 索引上做全文搜索，查询不依赖实时 IMAP 访问",
+    "支持只读模式、发送门控、破坏性操作确认与多账户配置"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 等 MCP 客户端中通过自然语言管理 Proton Mail 收件箱",
+    "用 CLI 编写脚本或 cron 任务自动化邮件处理",
+    "在无桌面环境的服务器上以 Docker 方式配合 headless Bridge 运行"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      115,
+      535
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目使用本地 SQLite 存储邮件全文索引（mail-index.sqlite），是使用数据库的应用而非数据库生态工具。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README L12）",
+   "install": [
+    "npm",
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken.",
+   "evidence_lines": [
+    115
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "3f6a26b28079",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3426e3c09e5": {
+  "identity": {
+   "one_liner": "编码代理会话中心：索引本地会话并支持检索、引用与交接",
+   "review": "Möbius 是一个面向本地编码代理（Claude Code、Codex、OpenCode、Pi、Grok、OMP）的会话管理层桌面应用，将各工具的原始会话转录以只读方式索引进本地 SQLite，提供全文检索、精确范围引用、跨代理交接和新会话继起，并输出 lineage DAG 与 mobius-connect CLI/MCP 二进制。目前仅发布 Windows 预览版，需 Rust、Node.js/pnpm、WebView2 构建或下载安装包。",
+   "highlights": [
+    "以只读适配器索引本地 harness 会话转录，构建本地 SQLite FTS/BM25 索引",
+    "提供引用式交接（references_only 包）、lineage 图和 mobius-connect CLI 与 stdio MCP",
+    "可选接入 localhost Ollama 做语义排序，未启用时保持词法检索"
+   ],
+   "use_cases": [
+    "在多个编码代理 CLI 之间检索并引用历史会话的精确消息范围",
+    "跨代理交接上下文并追踪会话血缘链路",
+    "在终端或通过 MCP 使用同一会话索引"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Yours, on this PC.** The index is local SQLite FTS/BM25. Approved transcripts stay in their harness folders and are read-only to Möbius. OpenCode is read from a read-only `opencode.db`. Model accounts stay with the CLIs you already pay for. Möbius itself has ／ |Search and cite|Local SQLite FTS/BM25; copy `@session:provider/id#mN-mM`| ／ Mome uses local SQLite FTS/BM25, prefers the current project/worktree, returns at most three citable sessions, and caps output at about 1,200 tokens. Nothing searches other sessions or injects history by default.",
+     "lines": [
+      5,
+      31,
+      76
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该应用自身的本地索引存储使用，应用面向编码代理会话管理而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT License",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Yours, on this PC.** The index is local SQLite FTS/BM25. Approved transcripts stay in their harness folders and are read-only to Möbius. OpenCode is read from a read-only `opencode.db`. Model accounts stay with the CLIs you already pay for. Möbius itself has no paid tier and phones home for nothing. ／ Download the v0.3.19 Windows preview: installer or portable EXE. Check the included SHA-256 sums and known limitations. Development builds may be unsigned and trigger SmartScreen. ／ ## Supported harnesses",
+   "evidence_lines": [
+    5,
+    145,
+    180
+   ]
+  },
+  "fn": "TardisBooo/Mobius",
+  "sha": "c3426e3c09e5",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8673002c2a72": {
+  "identity": {
+   "one_liner": "为 pi 编码代理提供基于 SQLite FTS5 的本地长期记忆检索扩展",
+   "review": "这是一个 pi 编码代理的扩展，将允许列表内 ACP 压缩摘要索引到 SQLite FTS5 中，并注册 memory_search 工具供模型调用，支持中文 trigram 检索、时间线、概念词表等模式；仅通过 git 安装，依赖 Node 22+ 的内置 node:sqlite，面向使用 pi/billion-context-pi 且需要本地检索历史会话摘要的用户。",
+   "highlights": [
+    "将 allow-list 限定来源的压缩块增量索引进 SQLite FTS5，读取为只读且入库时做脱敏",
+    "提供 blocks/timeline/related/concepts 多种检索模式，支持 3 字以上 trigram 中文查询与需求拆分查询",
+    "无第三方运行时依赖，通过 /memory 命令查看统计、重扫和按天清理记忆块"
+   ],
+   "use_cases": [
+    "为 pi/billion-context-pi 会话建立可检索的长期记忆库",
+    "在本地安全地搜索历史会话摘要（含脱敏）",
+    "维护自定义概念词表以检索领域术语"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**allow-listed ACP compression blocks → SQLite FTS5 → `memory_search`**. ／ - **Node.js >= 22.19.0** (built-in `node:sqlite`; Node 24 is recommended and",
+     "lines": [
+      8,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身记忆存储的数据库使用，而非为 SQLite 生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**allow-listed ACP compression blocks → SQLite FTS5 → `memory_search`**. ／ searchable store and registers a `memory_search` tool the model can call at any ／ The extension is distributed **through git only** — there is no npm package, so",
+   "evidence_lines": [
+    8,
+    12,
+    144
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tjp72/pi-billion-memory",
+  "sha": "8673002c2a72",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1644d834cced": {
+  "identity": {
+   "one_liner": "自托管播客/视频媒体库，订阅源聚合与队列播放",
+   "review": "Sikio 是一个自托管的媒体库应用，用于订阅播客、YouTube 频道、PeerTube 频道和德国公共电视媒体库，提供收件箱、队列、历史与连续播放功能，账号通过 passkey 与邀请制管理。它不下载音视频，仅读取公开 feed，数据可存于 SQLite 或 PostgreSQL，适合小群组自建实例使用。",
+   "highlights": [
+    "支持订阅播客、YouTube、PeerTube 与 MediathekViewWeb 媒体库源，导入导出 OPML",
+    "内置播放器与播放进度记录，下载不依赖 API key，仅读取公开 feed",
+    "支持 SQLite 或 PostgreSQL 存储，提供 Docker 与 systemd 两种安装方式"
+   ],
+   "use_cases": [
+    "自托管聚合管理播客与视频订阅队列",
+    "小群组邀请制共享的媒体收听/观看实例",
+    "通过 OPML 迁移已有播客订阅"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Sikio runs on Linux, x86_64 or arm64, with SQLite or PostgreSQL. Two guides cover installation ／ You need mise. The full check also needs PostgreSQL 18. `mise run setup`",
+     "lines": [
+      39,
+      51
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Sikio runs on Linux, x86_64 or arm64, with SQLite or PostgreSQL. Two guides cover installation",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Sikio 是使用 SQLite/PostgreSQL 存储数据的自托管媒体库应用，非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "self-hosted media library for podcasts, YouTube, PeerTube and the German public broadcasters' ／ Sikio runs on Linux, x86_64 or arm64, with SQLite or PostgreSQL. Two guides cover installation",
+   "evidence_lines": [
+    8,
+    39
+   ]
+  },
+  "fn": "oliverandrich/sikio",
+  "sha": "1644d834cced",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10858,5 +10858,231 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f53aeb6cac58": {
+  "identity": {
+   "one_liner": "Laravel 数据库快照工具，通过 Artisan 命令导出与恢复数据库转储",
+   "review": "一个 Laravel 扩展包，提供 snapshot:create/load/list/delete/cleanup 等 Artisan 命令，用于生成数据库转储快照并重新加载，支持指定连接、按表筛选与排除、压缩、流式加载大文件及保留数量清理。要求 PHP 8.3+ 和 Laravel 12/13，快照存储在名为 snapshots 的文件系统磁盘上，适用于 Laravel 开发与运维流程中的数据库快照管理。",
+   "highlights": [
+    "提供 Artisan 命令创建、加载、列出、删除快照，支持 --table/--exclude 按表筛选和 --compress 压缩",
+    "支持通过 --connection 指定数据库连接加载快照，--stream 选项逐语句流式加载大型转储文件",
+    "提供 snapshot:cleanup 按保留数量清理旧快照，并触发创建/加载/删除前后事件供扩展"
+   ],
+   "use_cases": [
+    "Laravel 应用开发中生成和恢复数据库快照",
+    "切换数据库连接加载既有转储",
+    "定期清理旧快照只保留最近若干份"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This package supports MySQL, PostgreSQL and SQLite. ／ If you need to pass extra options to the underlying db-dumper, add a `dump` key to the database **connection** with a key of `addExtraOption` and a value of the option. For example, to prevent the Postgres db dumper from setting the owner, you'd add:",
+     "lines": [
+      17,
+      162
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "This package supports MySQL, PostgreSQL and SQLite.",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "This package supports MySQL, PostgreSQL and SQLite.",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库提供转储/加载快照的工具包，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This package provides Artisan commands to quickly dump and load databases in a Laravel application. ／ This package supports MySQL, PostgreSQL and SQLite. ／ composer require spatie/laravel-db-snapshots",
+   "evidence_lines": [
+    8,
+    17,
+    40
+   ]
+  },
+  "fn": "spatie/laravel-db-snapshots",
+  "sha": "f53aeb6cac58",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fe7fd21ab66e": {
+  "identity": {
+   "one_liner": "DMARC 聚合报告解析器，单二进制，内置仪表盘与 SQLite 存储",
+   "review": "解析 DMARC RUA 聚合报告的工具：从 IMAP 邮箱或本地 Maildir 拉取 gzip/zip/XML 报告，解析后存入单个 SQLite 文件，并在内置仪表盘展示通过率、邮件量与来源。面向自托管域名管理员；还提供 Prometheus 指标、Grafana 面板和 MCP 服务器；仅读 RUA 报告，不处理 RUF/TLS-RPT。",
+   "highlights": [
+    "通过 IMAP 或 Maildir 获取报告，解析 gzip、zip 和原始 XML（单报告 16 MB 解压上限）",
+    "暴露 28 个 Prometheus 指标，附带 Grafana 仪表盘",
+    "提供 MCP 服务器，允许 AI 助手通过九个工具查询报告数据"
+   ],
+   "use_cases": [
+    "域名管理员集中查看多来源的 DMARC 聚合报告",
+    "自托管环境部署 DMARC 合规监控并结合 Grafana 出图",
+    "通过 MCP 让 AI 助手检索和统计 DMARC 报告数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Read your DMARC aggregate reports in one dashboard. One Go binary, SQLite, no Elasticsearch.** ／ - Stores everything in one SQLite file. No database server, no JVM. ／ |Database file|`DATABASE_PATH`|`~/.parse-dmarc/db.sqlite`, `/data/parse-dmarc.db` in Docker|",
+     "lines": [
+      13,
+      25,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以单个 SQLite 文件存储自身解析的报告数据，SQLite 是其内置存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Stores everything in one SQLite file. No database server, no JVM. ／ - Serves an MCP server, so an AI assistant can query your reports. ／ |Database file|`DATABASE_PATH`|`~/.parse-dmarc/db.sqlite`, `/data/parse-dmarc.db` in Docker|",
+   "evidence_lines": [
+    25,
+    29,
+    123
+   ]
+  },
+  "fn": "dmarcguardhq/parse-dmarc",
+  "sha": "fe7fd21ab66e",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "339940c27e05": {
+  "identity": {
+   "one_liner": "Express 无密码登录示例应用：邮箱 OTP/魔法链接，SQLite 存储",
+   "review": "这是一个基于 Express 和 TypeScript 的无密码登录示例应用，用户输入邮箱后通过 6 位验证码或魔法链接完成登录，验证码经 HMAC 哈希存储于 SQLite，并内置尝试次数限制、速率限制和会话管理，登录邮件通过 Mailtrap Email API 发送。适合 Node.js 开发者参考如何在自建应用中实现无密码登录流程，需配合 Mailtrap 账户使用。",
+   "highlights": [
+    "支持 6 位邮箱验证码与魔法链接两种无密码登录方式",
+    "验证码/令牌仅以 HMAC-SHA256 哈希存储，含过期、单次使用与尝试次数限制",
+    "按邮箱和 IP 实现速率限制与重发冷却，会话以 SHA-256 哈希存于服务端"
+   ],
+   "use_cases": [
+    "为 Node.js/Express 应用添加无密码邮箱登录",
+    "参考验证码哈希、防枚举、速率限制等登录安全细节的实现",
+    "基于 Mailtrap Transactional 流发送登录/交易类邮件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ The app is a single Express server that renders HTML on the server. Users sign in in the browser, you add users from the command line, and Mailtrap delivers the login emails. Everything is stored in one SQLite database. ／ |Data|SQLite via better-sqlite3, migrations on startup|",
+     "lines": [
+      10,
+      41,
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 SQLite 存储用户、挑战、会话与限流数据的 Express 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A secure passwordless login for Node.js apps: users enter their email and sign in with a 6-digit code or a magic link. Built with Express, TypeScript and SQLite, with hashed single-use codes, expiry, attempt limits and rate limiting, and login emails delivered through the Mailtrap Email API Transactional stream. ／ The app is a single Express server that renders HTML on the server. Users sign in in the browser, you add users from the command line, and Mailtrap delivers the login emails. Everything is stored in one SQLite database. ／ |Data|SQLite via better-sqlite3, migrations on startup|",
+   "evidence_lines": [
+    5,
+    41,
+    101
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "manishgupta412/express-email-otp-login",
+  "sha": "339940c27e05",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

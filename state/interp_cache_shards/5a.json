@@ -8135,5 +8135,187 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7d629bf70b25": {
+  "identity": {
+   "one_liner": "Rust/Python 库，从数据库并行加载数据到 DataFrame",
+   "review": "ConnectorX 是一个用 Rust 实现的 Python 库（pip 安装），通过 read_sql 一行代码把数据库查询结果加载为 DataFrame，支持按数值列分区多线程并行加载、零拷贝架构，并实验性支持跨库联邦查询；面向需要在 Python 中批量导入数据库数据做分析的数据使用者。需注意分区仅限无 NULL 的数值列，主要提供读取能力。",
+   "highlights": [
+    "提供 read_sql 接口，支持按分区列多线程并行加载数据（L15-L24）",
+    "支持实验性联邦查询，可在单条 SQL 中连接多个数据库的表（L27-L32）",
+    "以 Rust 实现并遵循零拷贝原则，数据只复制一次（L65-L66）"
+   ],
+   "use_cases": [
+    "将数据库表批量加载到 Pandas/Polars 等 DataFrame 进行分析（L104-L108）",
+    "大数据量场景下利用分区并行提升数据导出效率（L20-L24）",
+    "跨多个数据库做联合查询取数（L27-L32）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "cx.read_sql(\"postgresql://username:password@server:port/database\", \"SELECT * FROM lineitem\") ／ cx.read_sql(\"postgresql://username:password@server:port/database\", \"SELECT * FROM lineitem\", partition_on=\"l_orderkey\", partition_num=10) ／ db1 = \"postgresql://username1:password1@server1:port1/database1\"",
+     "lines": [
+      12,
+      20,
+      30
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- [x] Mysql",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- [x] Mariadb (through mysql protocol)",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- [x] Sqlite",
+     "lines": [
+      92
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- [x] SQL Server ／ - [x] Azure SQL Database (through mssql protocol)",
+     "lines": [
+      95,
+      96
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- [x] Clickhouse",
+     "lines": [
+      94
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- [x] Oracle",
+     "lines": [
+      97
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其功能是从数据库加载数据到 DataFrame，是为数据库生态服务的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ConnectorX enables you to load data from databases into Python in the fastest and most memory efficient way. ／ # Supported Sources & Destinations ／ - [x] Pandas",
+   "evidence_lines": [
+    5,
+    82,
+    104
+   ]
+  },
+  "fn": "sfu-db/connector-x",
+  "sha": "7d629bf70b25",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::High-performance Go WebSocket chat engine with TiDB MySQL persistence & end-to-end encryption": {
+  "identity": {
+   "one_liner": "Go WebSocket 聊天引擎，TiDB 持久化存储",
+   "review": "基于简介，这是一个用 Go 编写的 WebSocket 聊天后端引擎，消息数据持久化到 TiDB（描述称其为 MySQL 方式的持久化），并实现端到端加密。面向需要自建实时聊天服务的开发者，供其部署和二次集成。基于简介推断，具体架构、部署方式等细节无法从简介进一步确认。",
+   "highlights": [
+    "提供 WebSocket 实时聊天通信",
+    "使用 TiDB 做消息持久化存储",
+    "实现端到端加密"
+   ],
+   "use_cases": [
+    "为应用自建聊天后端服务",
+    "需要消息持久化到 TiDB 的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "High-performance Go WebSocket chat engine with TiDB MySQL persistence & end-to-end encryption"
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "High-performance Go WebSocket chat engine with TiDB MySQL persistence & end-to-end encryption"
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 TiDB 存储数据的聊天应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "High-performance Go WebSocket chat engine with TiDB MySQL persistence & end-to-end encryption"
+  },
+  "fn": "mickrathod/go-chat-backend",
+  "sha": "desc::High-performance Go WebSocket chat engine with TiDB MySQL persistence & end-to-end encryption",
+  "source": "desc",
+  "generated_at": "2026-10-20",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

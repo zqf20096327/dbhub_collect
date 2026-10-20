@@ -9899,5 +9899,75 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "58e1efedfc9c": {
+  "identity": {
+   "one_liner": "基于 RAG 的文档智能问答平台，PostgreSQL 为持久层",
+   "review": "DocuMind 是一个自托管的开源文档问答平台：用户上传 PDF/DOCX 等文档后，由 Celery 流水线调用 Docling 做版面感知解析，本地生成向量嵌入写入 Qdrant，问答时生成带服务端校验引用的回答，并以 PostgreSQL 16 作为用户、文档、任务的唯一事实源。面向需要处理结构化/技术文档并要求引用可验证的个人或团队。通过 Docker Compose 一键部署 7 个服务。",
+   "highlights": [
+    "文档处理走可恢复的状态机流水线，PostgreSQL 存储用户/文档/任务，Qdrant 作可重建的向量索引",
+    "引用由后端从向量元数据构造，LLM 不生成引用；向量检索强制 user_id/document_id 过滤实现租户隔离",
+    "支持本地嵌入（Sentence Transformers all-MiniLM-L6-v2）与 SHA-256 去重",
+    "Docker Compose 启动 postgres/redis/qdrant/backend/worker/scheduler/frontend 七服务栈"
+   ],
+   "use_cases": [
+    "私有化部署的文档知识库问答（引用可溯源）",
+    "含表格/多栏/层级结构的 PDF、DOCX 等技术文档解析与检索",
+    "多用户场景下按租户隔离文档的语义搜索"
+   ],
+   "ai.kind 应含 rag": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - **Durable Persistence** — PostgreSQL 16 is the single source of truth for users, documents, processing jobs, and sessions. Qdrant is treated as a rebuildable derived vector index.",
+     "lines": [
+      11,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 是平台自身的持久化事实源，项目是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Durable Persistence** — PostgreSQL 16 is the single source of truth for users, documents, processing jobs, and sessions. Qdrant is treated as a rebuildable derived vector index. ／ Every uploaded document moves through a recoverable, state-machine pipeline backed by PostgreSQL and Celery.",
+   "evidence_lines": [
+    67,
+    47
+   ]
+  },
+  "fn": "yashrajagawane/documind",
+  "sha": "58e1efedfc9c",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

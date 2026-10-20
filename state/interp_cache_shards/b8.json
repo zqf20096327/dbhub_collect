@@ -8083,5 +8083,290 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d0d1692178f9": {
+  "identity": {
+   "one_liner": "原生多数据库 GUI 客户端，含 SQL 编辑器与 MCP 服务器",
+   "review": "TablePro 是面向开发者的原生 macOS/iOS 数据库客户端，提供 SQL 编辑器、数据表格、SSH 隧道和插件驱动系统，并内置 AI 聊天与 MCP 服务器供 Cursor、Raycast 等调用。基于原生框架构建，不使用 Electron 或 JDBC。采用 AGPLv3，免费使用，付费许可证解锁 iCloud 同步、团队目录等附加功能。",
+   "highlights": [
+    "内置 SQL 编辑器（自动补全、多光标、Vim 模式）和可内联编辑的数据表格",
+    "提供 MCP 服务器与 URL scheme，供 Cursor、Raycast、Claude Desktop 连接数据库",
+    "支持插件系统，可用 Swift 编写数据库驱动"
+   ],
+   "use_cases": [
+    "在 macOS/iOS 上通过 GUI 管理和查询多种 SQL/NoSQL 数据库",
+    "通过 SSH 隧道与 SSL/TLS 连接远程数据库",
+    "让 AI 工具通过 MCP 服务器访问本地数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Single-database, open source**: Sequel Ace (MySQL only), Postico (PostgreSQL only). Great if you live in one engine.",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Single-database, open source**: Sequel Ace (MySQL only), Postico (PostgreSQL only). Great if you live in one engine.",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接和管理多种数据库的客户端工具，为数据库生态服务而非使用数据库存储自身数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3，免费使用，另有付费许可证解锁附加功能",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Built with native frameworks on every platform. No Electron, no JDBC, no JavaScript runtime. Connects to all major SQL and NoSQL databases through native drivers. ／ ## Supported Databases ／ - SQL editor with autocomplete, multi-cursor, Vim mode, syntax themes",
+   "evidence_lines": [
+    28,
+    51,
+    57
+   ]
+  },
+  "fn": "TableProApp/TablePro",
+  "sha": "d0d1692178f9",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ddc68c43800e": {
+  "identity": {
+   "one_liner": "PostgreSQL 日志分析器，解析日志生成 HTML 报告",
+   "review": "pgBadger 是一个用 Perl 编写的 PostgreSQL 日志分析工具，读取 syslog、stderr、jsonlog、csv 等多种日志格式，解析后生成包含查询、连接、错误、锁、checkpoint 等维度的 HTML/文本/JSON 报告，支持增量解析、并行解析和按数据库/用户/客户端过滤。适用于运维和 DBA 分析 PostgreSQL 日志、排查慢查询。它只分析日志文件，不连接数据库实例。",
+   "highlights": [
+    "支持解析 syslog、stderr、jsonlog、csv、pgbouncer、rds 等多种日志格式",
+    "提供增量解析模式与多进程并行解析日志",
+    "生成 HTML 报告，包含查询耗时直方图及连接、锁、autovacuum、checkpoint 等分类报告"
+   ],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pgBadger - a fast PostgreSQL log analysis report ／ PostgreSQL log analyzer with fully detailed reports and graphs. ／ database is added to the postgres database report.",
+     "lines": [
+      5,
+      11,
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "专门为 PostgreSQL 日志提供解析与报告能力的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pgBadger - a fast PostgreSQL log analysis report ／  PostgreSQL log analyzer with fully detailed reports and graphs.",
+   "evidence_lines": [
+    5,
+    11
+   ]
+  },
+  "fn": "darold/pgbadger",
+  "sha": "ddc68c43800e",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "49384708a3a1": {
+  "identity": {
+   "one_liner": "PostgreSQL 缓存代理，用逻辑复制保持缓存一致性",
+   "review": "pgcache 是部署在应用与 PostgreSQL 之间的 wire 协议兼容代理，缓存可缓存查询的结果，并通过订阅源库的逻辑复制流（CDC）就地应用变更或失效查询，保证缓存不返回过期数据；写请求直接转发到主库。适用于已有 PostgreSQL 读负载、希望换连接字符串即可接入的团队。限制：表需有主键才被缓存，缓存实例需安装 pgcache_pgrx 扩展，项目处于 pre-1.0 阶段。",
+   "highlights": [
+    "wire 协议兼容代理，应用无需改代码即可接入",
+    "通过逻辑复制流（CDC）维护缓存与源库一致",
+    "需缓存端 PostgreSQL 安装 pgcache_pgrx 扩展，支持 Docker/AWS AMI 部署"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 读密集负载卸载主库查询流量",
+    "需要缓存但不引入 Redis 或手动失效逻辑的场景",
+    "通过 pg_stat_statements 分析工作负载评估可缓存比例"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A PostgreSQL cache that never serves stale data.** ／ PostgreSQL 16 | 17 | 18 ／ wire-compatible PostgreSQL proxy that caches query results and keeps them consistent",
+     "lines": [
+      3,
+      6,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 数据库提供缓存代理服务，属于数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0（source-available）",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "wire-compatible PostgreSQL proxy that caches query results and keeps them consistent ／ pgcache sits between your application and PostgreSQL and speaks the same wire protocol, ／ pgcache needs three things: your **origin** database with logical replication enabled, a",
+   "evidence_lines": [
+    10,
+    22,
+    76
+   ]
+  },
+  "fn": "PgCache/pgcache",
+  "sha": "49384708a3a1",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75e7bd416ff8": {
+  "identity": {
+   "one_liner": "零依赖外置/副盘整理套件，内置 SQLite FTS5 亚10ms 文件搜索",
+   "review": "SmartDrive-OS 是一个面向外置 exFAT SSD 与内部副盘的驱动器整理工具，提供 FTS5 文件搜索、目录分区整理、缓存清理、SHA-256 快照备份与编码代理路径重链等功能，并内置 MCP 服务器供 Claude Code、Cursor 等 AI 编码代理调用；全部基于 Python 标准库本地运行，使用 SQLite FTS5 构建搜索索引。",
+   "highlights": [
+    "提供 22 个子命令的统一 CLI，覆盖索引、整理、清理、快照与备份",
+    "内置 JSON-RPC 2.0 stdio MCP 服务器，可注册到多种 AI 编码代理",
+    "基于 SQLite FTS5 unicode61 BM25 实现多条件文件搜索"
+   ],
+   "use_cases": [
+    "外置 exFAT SSD 的目录分区与 cluster slack 整理",
+    "将 C 盘开发/AI 缓存迁移到内部 NTFS 副盘",
+    "为 AI 编码代理提供本地文件搜索与路径维护"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SmartDrive-OS is a zero-dependency drive operating suite and sub-10ms SQLite FTS5 search engine for external portable SSDs (exFAT 512 KB clusters) and internal secondary workstation drives (NTFS 4 KB clusters). It is built for developers, university students,  ／ **Search (<10ms)** — Query the SQLite FTS5 index with BM25 ranking instead of recursive `find`/`grep`: ／ |**Sub-10ms FTS5 Search**|SQLite FTS5 `unicode61` BM25 search with extension, binary size, category, dir filters|`smart-drive search \"<query>\"`|Search Syntax|",
+     "lines": [
+      15,
+      56,
+      118
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- Internal secondary SSDs (`D:`, `E:` on NTFS 4 KB) face `C:` exhaustion from 50–200 GB AI/dev caches while hosting Windows apps, games, and active SQL Server databases that must never be moved or deleted. ／ |**Protected Assets**|Root manifests, scripts, 6 core taxonomies|Windows apps, game libraries, active SQL Server databases|",
+     "lines": [
+      100,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是磁盘整理应用，SQLite 仅作为其内部搜索索引的嵌入存储使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SmartDrive-OS is a zero-dependency drive operating suite and sub-10ms SQLite FTS5 search engine for external portable SSDs (exFAT 512 KB clusters) and internal secondary workstation drives (NTFS 4 KB clusters). It is built for developers, university students, and AI coding agents (Claude Code, Claude Desktop, Antigravity, Cursor, Codex, Windsurf) to organize drives without breaking agent paths, govern `.gitignore` rules, offload `C:` caches, and verify file integrity with SHA-256 snapshots. Everything runs 100% locally on the Python 3.9+ standard library (`dependencies = []`) with zero telemetry. ／ **Search (<10ms)** — Query the SQLite FTS5 index with BM25 ranking instead of recursive `find`/`grep`: ／ |**Sub-10ms FTS5 Search**|SQLite FTS5 `unicode61` BM25 search with extension, binary size, category, dir filters|`smart-drive search \"<query>\"`|Search Syntax|",
+   "evidence_lines": [
+    15,
+    56,
+    118
+   ]
+  },
+  "fn": "DuongNAD/smart-drive-os",
+  "sha": "75e7bd416ff8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

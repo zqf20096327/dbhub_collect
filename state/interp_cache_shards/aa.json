@@ -10436,5 +10436,83 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "65f094e657f8": {
+  "identity": {
+   "one_liner": "Node.js 无领导者分布式定时任务调度库，靠原子认领选执行者",
+   "review": "anarchon 是一个 Node.js 定时任务调度库，用于在多实例集群中运行 cron/间隔任务而无需领导者选举或分布式锁。它通过 Redis、Valkey、PostgreSQL、SQLite 等后端的原子认领选定每个时间槽的执行者，并配合租约与心跳实现故障接管。开发者需自行提供后端连接，且任务处理器须幂等。",
+   "highlights": [
+    "支持 Redis、Valkey、PostgreSQL、SQLite 等后端，通过原子认领为每个时间槽选出唯一执行者",
+    "通过 npm/pnpm 安装，需显式传入后端连接"
+   ],
+   "use_cases": [
+    "多实例 Node.js 集群中的定时/间隔任务去重执行",
+    "实例崩溃或滚动部署后的任务自动接管重试",
+    "无需独立调度服务、复用现有 Redis/PostgreSQL/SQLite 作为协调存储的任务调度"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pnpm add anarchon pg # PostgreSQL (or bring your own pg / postgres.js client) ／ `overlap`, `maxAttempts` and `catchUpMs`, like the scheduler's `leaseMs` and `heartbeatMs`, need a backend with leases (Redis or Valkey `lease`, PostgreSQL, SQLite). On another backend they aren't offered by the types, and a job or scheduler that sets them any",
+     "lines": [
+      60,
+      244
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Three anarchon processes on one SQLite file: one wins each run; after a graceful stop and after kill -9, another process starts the same run again as attempt 2 ／ The recording above is `examples/quick-start.ts`: three processes on one machine share a SQLite file and one job that takes 4 seconds. Run it with `npx tsx examples/quick-start.ts` in the repository. In about 23 seconds it shows:",
+     "lines": [
+      12,
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为使用数据库作为后端存储的 Node.js 调度组件，非以数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Leaderless scheduling for Node.js clusters. Run the same jobs in every instance; an atomic claim in Redis, Valkey, PostgreSQL or SQLite selects one runner for each scheduled slot. The default `lease` strategy retries after a runner stops renewing its lease. That gives at-least-once execution after failures, not exactly-once side effects: handlers should be idempotent, and a frozen runner can briefly overlap its replacement. ／ pnpm add anarchon pg                    # PostgreSQL (or bring your own pg / postgres.js client) ／ |`backend`|none: required|Where runs are stored: `new RedisBackend(...)`, `new PostgresBackend(...)`, `new SqliteBackend(...)` and the rest. See Backends|",
+   "evidence_lines": [
+    10,
+    60,
+    117
+   ],
+   "softened": [
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "fn": "aristoteliss/anarchon",
+  "sha": "65f094e657f8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

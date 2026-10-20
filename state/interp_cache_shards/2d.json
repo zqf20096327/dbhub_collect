@@ -8969,5 +8969,72 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f5fd9b763410": {
+  "identity": {
+   "one_liner": "DSH 酒馆会话存储接管插件，将聊天与变量历史交由 SQLite 管理",
+   "review": "这是一个面向 DSH Tavern 的插件，把聊天记录、会话事件和 MVU 变量历史从原存储迁移到 SQLite，支持增量写入、按需读取、事务回退，并强制调用酒馆服务端执行计算。面向使用酒馆并需要服务端存储与回退能力的用户。限制：仅适配特定上游版本，V1/V2 不可共装，公开源码不含作者夹具与依赖树。",
+   "highlights": [
+    "提供 SQLite 增量存档与 WAL 事务管理，头字段与消息楼层分开存储、局部更新",
+    "支持历史按需读取、读缓存预算控制（环境变量可配）与物理尾部回退",
+    "保留原档只读，用户可分叉新会话继续使用，卸载时保留 SQLite 数据库"
+   ],
+   "use_cases": [
+    "为酒馆长会话提供基于 SQLite 的服务端存储与增量读写",
+    "需要对剧情、变量与运行状态做一致性回退撤销的场景",
+    "在保留原档前提下创建独立分叉继续会话"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# DSH Tavern SQLite V2 · stable ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。|",
+     "lines": [
+      1,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为插件为宿主应用实现 SQLite 存储接管组件，属于围绕数据库构建的存储工具而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "基于 DSH Tavern 修改版，遵循 GNU AGPL v3，保留上游来源声明",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向 DSH Tavern 的存储与服务端计算接线插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算调用酒馆自身的服务端执行链，浏览器只保留界面职责。插件不自带 MVU、卡脚本、Helper 或 VM 实现。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。| ／ 基于 DSH Tavern 适配，保留原来源声明与 GNU AGPL v3 许可。本项目是独立修改版，不是上游官方发行；随包官方恢复字节的许可及对应源码入口也保留。",
+   "evidence_lines": [
+    12,
+    21,
+    116
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "f5fd9b763410",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

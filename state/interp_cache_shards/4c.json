@@ -10180,5 +10180,221 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4a3389f12c10": {
+  "identity": {
+   "one_liner": "本地优先的 git 仓库 issue 跟踪器，用 SQLite 存储并以 JSONL 导出协作",
+   "review": "br 是 Steve Yegge beads 的 Rust 移植，冻结其经典的 SQLite + JSONL 架构，为 git 仓库提供本地 issue 跟踪。它把任务存入 SQLite 数据库并自动导出 JSONL 便于 git 合并，支持依赖管理、--json 机器可读输出和 MCP 支持，不自动执行 git 提交/推送。适合需要离线使用、AI agent 工作流的开发者。",
+   "highlights": [
+    "将 issue 存储于本地 SQLite 数据库，并默认自动导出 JSONL 文件用于 git 协作",
+    "所有命令支持 --json 输出，提供 MCP 支持，面向 AI agent 工作流",
+    "不自动执行 git commit/push/pull，不安装后台服务，状态保存在 .beads/ 目录"
+   ],
+   "use_cases": [
+    "在离线或仓库内环境中跟踪带依赖关系的开发任务",
+    "为 AI coding agent 提供机器可读的 issue 查询与协调输出",
+    "通过 git 合并 JSONL 文件在多人/多 agent 间同步任务状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ A Rust port of Steve Yegge's beads, frozen at the \"classic\" SQLite + JSONL architecture I built my Agent Flywheel tooling around.",
+     "lines": [
+      7,
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 br 将 issue 数据存储在 SQLite 数据库中（.beads/beads.db），SQLite 是其数据存储载体而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust port of Steve Yegge's beads, frozen at the \"classic\" SQLite + JSONL architecture I built my Agent Flywheel tooling around. ／ **br** is a local-first issue tracker that stores issues in SQLite with JSONL export for git-friendly collaboration. It provides dependency-aware issue tracking, machine-readable output, sync/recovery tooling, and agent-friendly workflows without leaving your repository. ／ # beads.db       # SQLite database",
+   "evidence_lines": [
+    9,
+    44,
+    97
+   ]
+  },
+  "fn": "Dicklesworthstone/beads_rust",
+  "sha": "4a3389f12c10",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "47a02b570366": {
+  "identity": {
+   "one_liner": "本地优先的 macOS 跟单应用，读取 Discord 信号并经风控后下单到 Alpaca",
+   "review": "CopyTrading 是一款 macOS 原生应用，读取 Discord 上的股票交易信号，由模型解析帖子生成订单，经账户级风控限制检查后通过 Alpaca 账户下单。数据保存在本地 SQLite，附 CLI 与 MCP server 供脚本或编码代理读取和暂停。面向想复制他人交易的 Alpaca 个人用户，目前为开发者预览版，未验证实盘。",
+   "highlights": [
+    "将 Discord 帖子经模型解析为精确订单，并在每次买入前检查日亏损、单笔、单标的与总敞口限制",
+    "本地 Python 引擎将每笔交易记录为可追溯到帖子的 lot，崩溃或休眠后与券商对账",
+    "提供 CLI 和 MCP server，代理可读取运行状态和暂停，任何交易操作都需 Touch ID 批准"
+   ],
+   "use_cases": [
+    "在 Alpaca 模拟账户中复制 Discord 交易员的喊单",
+    "按账户设置风控上限后跟随多个交易员并行跟单",
+    "通过 CLI/MCP 让脚本或编码代理监控和暂停跟单进程"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the detai",
+     "lines": [
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用数据库的应用：SQLite 仅用于本地保存引擎数据（L92），不面向数据库生态提供工具或服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可（L9、L127），项目自述为 Developer preview",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CopyTrading is a native macOS app that reads the stock calls traders post on Discord, turns each one into an exact order, checks it against your limits, and places it with your Alpaca account. Everything runs on your Mac. ／ A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the details and the ADRs record why. ／ The engine also runs without the app, on a Mac or a Linux server, so copying continues while your Mac sleeps. `copytrading-server` reads a `copytrading.toml` file and keys from environment variables, and a Docker image is included. See Run the engine without the app.",
+   "evidence_lines": [
+    17,
+    92,
+    111
+   ]
+  },
+  "fn": "YZXBiz/copytrading",
+  "sha": "47a02b570366",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "11f2d64c0a00": {
+  "identity": {
+   "one_liner": "面向 LLM 智能体 RL 训练的可观测性工具，提供行为图与指标采集",
+   "review": "Rilldex RL Studio 用于采集强化学习训练中的 rollout 与原生 trainer 指标，生成行为单元图、训练曲线和奖励作弊检测，并提供 Python/SQL 查询工作区。面向做 LLM 智能体 RL 训练（GRPO/PPO/verl/TRL）的团队。数据存储在本地 SQLite 工作区，默认为本地单用户应用，语义地图功能需配置模型密钥。",
+   "highlights": [
+    "支持连接 TRL GRPO/PPO 回调与 verl logger 采集原生训练指标",
+    "提供行为单元图、训练概览、奖励作弊检测与可保存的调查记录",
+    "提供 Python/SQL 直接读取工作区，支持 JSONL/CSV 导出与 Docker 部署"
+   ],
+   "use_cases": [
+    "LLM 智能体 RL 训练过程的 rollout 行为分析与排查",
+    "训练指标（loss、KL、reward 等）与智能体行为的对照观察",
+    "奖励作弊（reward hacking）行为的扫描与取证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Keep your own workflow.** Files, Python and HTTP input; a live SQLite workspace; code-defined monitors with optional UI. ／ rilldex --db study.sqlite start --watch ./outputs --mode exports --experiment run-a --producer run-a/worker-0 ／ outbox = Outbox(\"trainer-outbox.sqlite\", producer=\"run-a/learner\")",
+     "lines": [
+      14,
+      61,
+      84
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 作为自身工作区存储，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Keep your own workflow.** Files, Python and HTTP input; a live SQLite workspace; code-defined monitors with optional UI. ／ |Code-first analysis|Query rollouts, graph nodes/edges, measurements and trainer logs through Python and SQL; export JSONL/CSV or use optional dataframe/graph libraries.|",
+   "evidence_lines": [
+    14,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Sheltercosmo/Rilldex-RL-Studio",
+  "sha": "11f2d64c0a00",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

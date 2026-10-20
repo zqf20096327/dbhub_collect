@@ -10540,5 +10540,213 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fbe4488ac5c7": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件，内置 SQLite 存储与写审批门",
+   "review": "这是面向 DeepSeek Harness 的 DSH 插件，为 AI agent 提供跨会话记忆：通过类型化的 ctx.memory 接口、不可绕过的写审批门和可重建的审计轨迹管理记忆条目，数据以零依赖方式存入本地 SQLite（WAL、0600 权限），并按 track/layer/agent 预设分层且设有字符预算。使用者是部署 DeepSeek Harness 的开发者，需 Node 22/24 并经 dsh plugin 命令安装。",
+   "highlights": [
+    "所有写入路径经服务层审批瀑布，拒绝的写入也会生成 *-denied 审计行",
+    "使用 node:sqlite 零依赖只读/本地存储，无网络、无原生代码",
+    "按 user/agent 两轨、user-global/workspace 两层、per-agent 键隔离，并有硬字符预算"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness agent 提供带审计的跨会话记忆",
+    "需要写操作人工审批与可重建审计轨迹的 agent 记忆管理",
+    "通过 memory 工具、/memory 命令和面板查看与配置记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected int",
+     "lines": [
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite 存储记忆数据（node:sqlite 本地库），而非为 SQLite 生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "Apache-2.0（插件家族 95 个均 Apache-2.0）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected into the system prompt. ／ **Bounded, layered, approval-gated, auditable cross-session memory for DeepSeek Harness.** ／ dsh plugin --profile <name> add dsh-memento",
+   "evidence_lines": [
+    67,
+    7,
+    24
+   ]
+  },
+  "fn": "PerryLink/dsh-memento",
+  "sha": "fbe4488ac5c7",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7746ac42867a": {
+  "identity": {
+   "one_liner": "本地常驻 AI 助手与编码代理运行时，会话状态存于 SQLite",
+   "review": "一个用 Go 编写的常驻本地守护进程 matrixclawd，将 AI 会话上下文、工具历史、审批、记忆与定时任务持久化到本地 SQLite，终端 TUI 与 Telegram 客户端共享同一会话。面向需要在终端与手机上持续运行 AI 编码/助手任务的个人用户，支持多 LLM 提供商、MCP 工具双向接入与子代理。",
+   "highlights": [
+    "会话状态、审批、记忆与定时任务持久化存储在本地 SQLite（L13、L233-234）",
+    "支持 MCP 双向：可调用 MCP 服务器工具，也可通过 mcp serve 将自身工具暴露给 MCP 宿主（L210-212）",
+    "终端 TUI、Telegram 与本地 HTTP API 客户端共享同一会话模型（L22-24）"
+   ],
+   "use_cases": [
+    "在终端与 Telegram 间接力执行长时 AI 编码任务",
+    "通过定时任务与提醒实现自动化 AI 运行",
+    "为 MCP 宿主提供工具或接入外部 MCP 工具服务"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ scheduled tasks, all stored in local SQLite. The terminal TUI, the Telegram bot ／ client, durable SQLite sessions, approvals, MCP tools, memory, scheduled tasks,",
+     "lines": [
+      4,
+      13,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目将会话与任务数据存储在本地 SQLite，SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "scheduled tasks, all stored in local SQLite. The terminal TUI, the Telegram bot ／ directory; override with `MATRIXCLAW_SETUP_PATH`). State, including the SQLite ／ client, durable SQLite sessions, approvals, MCP tools, memory, scheduled tasks,",
+   "evidence_lines": [
+    13,
+    233,
+    65
+   ]
+  },
+  "fn": "Suren878/matrixclaw",
+  "sha": "7746ac42867a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b355d1de6f59": {
+  "identity": {
+   "one_liner": "基于 Spring Boot+PostgreSQL+Kafka 的事件驱动订单管理系统",
+   "review": "这是一个事件驱动的订单管理系统，提供 REST API 与 Web 管理面板，通过 Kafka 实现订单异步确认，订单数据以 PostgreSQL 16 的 NUMERIC(9,2) 字段存储，并集成 Docker Compose、GitHub Actions CI/CD、AWS EC2 部署及 Prometheus/Grafana 监控。适合作为订单流程演示或基于 Spring Boot 的事件驱动架构参考项目。",
+   "highlights": [
+    "通过 REST API 与 Web 面板创建/查询订单，生命周期状态机 CREATED→CONFIRMED→SHIPPED",
+    "Kafka 异步订单确认事件，PostgreSQL 16 持久化订单记录",
+    "Docker Compose 部署，GitHub Actions CI/CD，Prometheus/Grafana 监控"
+   ],
+   "use_cases": [
+    "需要订单创建-确认-发货流程的业务系统",
+    "学习 Spring Boot 事件驱动架构与 Kafka 异步消息的参考项目",
+    "需要 Docker Compose 本地部署及 Prometheus/Grafana 监控的服务搭建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**An event-driven Order Management System built with Spring Boot, PostgreSQL, and Apache Kafka.** It supports order creation through a web dashboard or REST API, asynchronous order confirmation, authenticated admin operations, Docker Compose, automated CI/CD,  ／ |**PostgreSQL 16**|Persists order records.| ／ |Database|PostgreSQL 16|Order storage|",
+     "lines": [
+      16,
+      115,
+      170
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 PostgreSQL 存储订单数据，是使用数据库的业务应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**An event-driven Order Management System built with Spring Boot, PostgreSQL, and Apache Kafka.** It supports order creation through a web dashboard or REST API, asynchronous order confirmation, authenticated admin operations, Docker Compose, automated CI/CD, AWS EC2 deployment, and Prometheus/Grafana monitoring. ／ |**PostgreSQL 16**|Persists order records.| ／ |Database|PostgreSQL 16|Order storage|",
+   "evidence_lines": [
+    16,
+    115,
+    170
+   ]
+  },
+  "fn": "ankitRaj925/order-management-system",
+  "sha": "b355d1de6f59",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8310,5 +8310,72 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fe0524ae3814": {
+  "identity": {
+   "one_liner": "仓库原生的Web分析采集管道，写入ClickHouse/BigQuery",
+   "review": "这是一个开源的网站分析数据管道：接收GA4和Matomo协议的追踪请求，在后端构建会话与归因，并以扁平表结构写入BigQuery、ClickHouse或CSV/Parquet文件。面向需要自托管网站分析数据、将原始事件交给自有BI工具查询的团队。仓库本身不包含报表界面，报表功能在商业云版本中提供。",
+   "highlights": [
+    "接收GA4与Matomo追踪协议，并可提供自有web tracker",
+    "在后端构建会话，含可配置超时与归因、流量过滤规则",
+    "写入目标支持BigQuery、ClickHouse及S3/GCS/本地文件上的CSV/Parquet"
+   ],
+   "use_cases": [
+    "将GA4追踪数据复制或迁移到自有数据仓库",
+    "需要air-gapped或自托管部署的网站流量分析采集",
+    "以ClickHouse/BigQuery为存储、用自有BI工具做报表的分析场景"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "d8a.tech (pronounced \"data tech\") is an open source, warehouse-native web analytics pipeline. It receives the GA4 and Matomo tracking protocols, or its own web tracker, builds sessions on the backend, and writes clean, flat tables to BigQuery, ClickHouse or CS ／ - **Your storage.** Write directly to Google BigQuery or ClickHouse, or to CSV or Parquet files on S3, MinIO, GCS or a local filesystem.",
+     "lines": [
+      10,
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明该管道将采集数据写入ClickHouse/BigQuery作为存储目标，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "d8a.tech (pronounced \"data tech\") is an open source, warehouse-native web analytics pipeline. It receives the GA4 and Matomo tracking protocols, or its own web tracker, builds sessions on the backend, and writes clean, flat tables to BigQuery, ClickHouse or CSV/Parquet files. Run it in your own infrastructure, air-gapped if you need to, or use d8a.tech Cloud. ／ - **Your storage.** Write directly to Google BigQuery or ClickHouse, or to CSV or Parquet files on S3, MinIO, GCS or a local filesystem.",
+   "evidence_lines": [
+    10,
+    26
+   ]
+  },
+  "fn": "d8a-tech/d8a",
+  "sha": "fe0524ae3814",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

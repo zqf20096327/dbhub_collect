@@ -8937,5 +8937,161 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "606fd3754d56": {
+  "identity": {
+   "one_liner": "安全优先的SQL编辑器兼PostgreSQL-wire代理门面",
+   "review": "autodb 是一个用 Go 编写的 SQL 编辑器，提供终端、浏览器、原生窗口和 Neovim 四种前端，同时实现 PostgreSQL 线协议代理，作为生产库前的统一入口。连接凭据加密存储，按用户发放带过期与 IP 白名单的个人访问令牌，内置角色权限、危险 SQL 拦截和审计日志。支持 PostgreSQL、MySQL、SQLite，自身状态保存在 SQLite。面向需要管控开发者、外包和 AI 代理访问生产库的团队。",
+   "highlights": [
+    "提供终端 UI、浏览器 UI、原生窗口与 Neovim 插件四种前端",
+    "实现 PostgreSQL wire 协议代理，客户端经个人访问令牌连接，语句写入审计日志",
+    "内置角色访问控制、无 WHERE 的 UPDATE/DELETE 拦截与连接密码加密存储"
+   ],
+   "use_cases": [
+    "为开发者、外包和 CI 分发独立令牌以审计访问生产库",
+    "向 AI 代理发放只读令牌，由数据库事务层面阻止写入",
+    "在终端或 Neovim 中安全地编辑和执行 SQL，避免明文 DSN"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "under your passphrase. It is also a **PostgreSQL-wire proxy**. Put it in front ／ **A production front door:** `psql`, DataGrip, your app or an AI agent connects to autodb with an ordinary PostgreSQL DSN; production only has to trust one host ／ **Databases:** PostgreSQL, MySQL and SQLite",
+     "lines": [
+      18,
+      29,
+      47
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Databases:** PostgreSQL, MySQL and SQLite",
+     "lines": [
+      47
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Databases:** PostgreSQL, MySQL and SQLite ／ per-user unix socket (mode `0600`) and keeps its own data in SQLite under",
+     "lines": [
+      47,
+      148
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL/MySQL/SQLite 提供访问控制、审计与代理能力的生态工具，而非使用某库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "under your passphrase. It is also a **PostgreSQL-wire proxy**. Put it in front ／ **A production front door:** `psql`, DataGrip, your app or an AI agent connects to autodb with an ordinary PostgreSQL DSN; production only has to trust one host ／ **Guards against the classic accidents:** `UPDATE` or `DELETE` with no `WHERE` is blocked, and so is a second statement smuggled after a `;` ／ **An audit trail you can query:** who ran what, against which connection, how long it took, how many rows, and why it was refused",
+   "evidence_lines": [
+    18,
+    29,
+    37,
+    39
+   ]
+  },
+  "fn": "yongjohnlee80/autodb",
+  "sha": "606fd3754d56",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "65a8c5999c0b": {
+  "identity": {
+   "one_liner": "MAX 上的咖啡馆/烘焙店聊天机器人，用 PostgreSQL 存储用户、菜单、预订等数据",
+   "review": "面向喀山小型咖啡馆、咖啡店和烘焙店的 MAX 聊天机器人及小程序：顾客通过拍照记录饮食日记、按剩余卡路里获取附近菜品推荐，商家发布临期折扣商品并通过六位码/二维码核销预订。后端为 Fastify + PostgreSQL 18，Docker Compose 一键部署，支持 demo 模式脱离 MAX/外部服务本地运行。",
+   "highlights": [
+    "提供饮食拍照记录、按剩余卡路里的菜品推荐、折扣预订与二维码核销流程",
+    "后端 REST API（Fastify 5）含 OpenAPI 契约、Swagger UI、健康检查与 Prometheus 指标",
+    "Docker Compose 一键部署，支持 demo 模式；生产环境含 Caddy、Prometheus、Alertmanager、Grafana 监控栈"
+   ],
+   "use_cases": [
+    "餐饮店铺通过聊天机器人销售当日剩余库存并管理顾客预订",
+    "顾客在 MAX 内记录饮食并通过照片识别菜品",
+    "本地 demo 环境下的餐饮场景原型演示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 18 ／ |Фоновые задачи|`backend/src/jobs/`|истечение броней, обработка зависших импортов меню, очистка ключей обновлений MAX, проверка подписки webhook, ежедневное обновление демо-данных; каждая задача под advisory lock PostgreSQL| ／ |PostgreSQL 18.6|`backend/migrations/`|пользователи, согласия, дневник, заведения, меню, акции, показанные предложения, брони, состояние диалогов|",
+     "lines": [
+      22,
+      101,
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL 存储用户、菜单和预订数据的最终用户服务，而非服务于数据库生态系统的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（单个许可协议）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Чат-бот и мини-приложение в MAX для небольших кафе, кофеен и пекарен Казани и их гостей. ／ |PostgreSQL 18.6|`backend/migrations/`|пользователи, согласия, дневник, заведения, меню, акции, показанные предложения, брони, состояние диалогов| ／ docker compose up -d --build --wait",
+   "evidence_lines": [
+    8,
+    102,
+    123
+   ]
+  },
+  "fn": "blsssss/PPshkin",
+  "sha": "65a8c5999c0b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

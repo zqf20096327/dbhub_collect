@@ -11019,5 +11019,74 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "84dc0ce7b8f0": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理工作流平台，以 SQLite 持久化执行状态",
+   "review": "一个本地优先的桌面应用（Flutter 前端 + Go sidecar），用户用自然语言描述需求，由 AI 生成 Function、Agent、Workflow 等实体并编排为图进行持久化调度执行，支持审批节点、崩溃恢复与 cron/文件/webhook 触发。节点结果写入本地 SQLite 文件，模型可接 Ollama 或 OpenAI 兼容端点。适合希望在个人机器上运行自动化 AI 工作流的用户。",
+   "highlights": [
+    "节点结果写入 SQLite，崩溃后重走图并复用已完成结果",
+    "提供 Functions、Handlers、Agents、Workflows 四类可执行实体与审批/控制节点",
+    "支持接入 Ollama 及 OpenAI/Anthropic 兼容端点，内置 FTS5 全文搜索与嵌入"
+   ],
+   "use_cases": [
+    "本地 AI 工作流自动化与定时任务调度",
+    "需要人工审批环节的智能体流程",
+    "离线环境下通过 Ollama 运行代理工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Durable by design.** Every node result is written to SQLite as it completes. After a crash or restart the interpreter re-walks the graph, reuses what finished, and runs only what did not. Side effects are never repeated. ／ - **Local-first.** One desktop app, one Go sidecar, one SQLite file. Your workflows, run history, documents, and keys stay on your machine. Managed models work out of the box; or point it at Ollama or any OpenAI- or Anthropic-compatible endpoint, or bring your ／ The Go sidecar owns the workspace, entities, run records, attachments, and BYOK configuration; SQLite is the local truth. The desktop app is a pure client over loopback. The managed route talks to a deployed Anselm API that holds provider secrets and metering;",
+     "lines": [
+      33,
+      35,
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该桌面应用以 SQLite 作为本地数据存储（节点结果、实体与运行记录写入 SQLite）。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Durable by design.** Every node result is written to SQLite as it completes. After a crash or restart the interpreter re-walks the graph, reuses what finished, and runs only what did not. Side effects are never repeated. ／ The Go sidecar owns the workspace, entities, run records, attachments, and BYOK configuration; SQLite is the local truth. The desktop app is a pure client over loopback. The managed route talks to a deployed Anselm API that holds provider secrets and metering; the desktop never sees a provider key it did not enter itself.",
+   "evidence_lines": [
+    33,
+    142
+   ]
+  },
+  "fn": "Cookiezisg/Anselm",
+  "sha": "84dc0ce7b8f0",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

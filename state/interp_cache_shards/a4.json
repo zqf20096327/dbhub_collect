@@ -8865,5 +8865,445 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "428d1a227cda": {
+  "identity": {
+   "one_liner": "面向团队的数据库管理平台，提供权限、审计与CI/CD",
+   "review": "CloudDM 是一个面向团队使用的开源数据库管理工具，通过 Web 控制台统一查询和管理多种数据库，包含资源/功能分离的访问控制（RBAC）、SQL 审计与脱敏、SQL 审批与变更工单工作流，以及基于 Git Push/Web Hook/HttpCall 触发的数据库 CI/CD。支持单机和集群（Console+Sidecar）部署，提供 Docker、安装包、Kubernetes 方式。适合需要多人协作管理数据库的团队运维与开发角色。",
+   "highlights": [
+    "提供实例/库/schema/表级资源授权与 RBAC 功能授权，支持权限申请与临时权限",
+    "支持 SQL 审计规则（内置54条并可脚本扩展）、安全策略与数据脱敏，执行前拦截风险语句",
+    "支持 Git Push、Web Hook、HttpCall 触发数据库 CI/CD 工作流"
+   ],
+   "use_cases": [
+    "团队统一 Web 控制台查询与管理多种数据库",
+    "SQL 上线前的审计审批与风险语句拦截",
+    "数据库变更的 CI/CD 流程管理"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "- MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- SAP Hana, StarRocks, Doris, SelectDB, ClickHouse, PolarDB, TiDB, Greenplum",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- SAP Hana, StarRocks, Doris, SelectDB, ClickHouse, PolarDB, TiDB, Greenplum",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "- SAP Hana, StarRocks, Doris, SelectDB, ClickHouse, PolarDB, TiDB, Greenplum",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "- Hologres, DM (Dameng), GaussDB, AnalyticDB MySQL, MaxCompute, Redis, MongoDB",
+     "lines": [
+      38
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "- Hologres, DM (Dameng), GaussDB, AnalyticDB MySQL, MaxCompute, Redis, MongoDB",
+     "lines": [
+      38
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明支持多种数据源的 Web 控制台查询与管理，是为数据库生态服务的管理工具，而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "Oracle",
+    "SQL Server",
+    "MariaDB",
+    "OceanBase",
+    "ClickHouse",
+    "TiDB",
+    "PolarDB",
+    "Dameng",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A free and open-source database management tool designed for team use. It provides access control, data masking, SQL auditing, CI/CD, and cross-region deployment capabilities. ／  - MySQL, Oracle, MariaDB, PostgreSQL, IBM DB2, SQL Server, OceanBase ／ - Unified web console access to databases, with support for transactions, isolation levels, and execution plans",
+   "evidence_lines": [
+    3,
+    36,
+    39
+   ]
+  },
+  "fn": "ClouGence/open-cdm",
+  "sha": "428d1a227cda",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5069f1a89ba": {
+  "identity": {
+   "one_liner": "PostgreSQL 可观测性 CLI 与监控栈，为人和 AI agent 提供诊断",
+   "review": "postgresai 提供 PostgreSQL 健康检查、监控与根因分析：CLI 可即时执行 45+ 项检查并生成结构化 JSON 报告，也支持通过 Docker 部署含 Grafana、pgwatch、VictoriaMetrics 的完整监控栈；输出面向 LLM 消费，附 Claude Code 插件和 MCP server。需 Node.js 18+，连接 PostgreSQL 14-18，可离线运行或配合 console.postgres.ai 托管服务。",
+   "highlights": [
+    "提供 45+ 项健康检查（bloat、索引、查询、设置、安全）及 Active Session History",
+    "支持通过 MCP server 与 Claude Code 插件供 AI 编码工具调用诊断结果",
+    "包含 Grafana 仪表盘、pgwatch v3 与 VictoriaMetrics 组成的持续监控栈，支持 --no-upload 离线模式"
+   ],
+   "use_cases": [
+    "对 PostgreSQL 实例执行即时健康检查并定位性能问题根因",
+    "搭建带仪表盘和计划报告的持续监控环境",
+    "在 AI 编码工具中通过 MCP/skill 获取数据库诊断上下文"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### AI-native PostgreSQL observability ／ PostgreSQL ／ - **Active Session History** — Postgres's answer to Oracle ASH",
+     "lines": [
+      3,
+      7,
+      28
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Active Session History** — Postgres's answer to Oracle ASH",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 PostgreSQL 提供监控、健康检查与诊断采集，是为数据库生态服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Monitoring, health checks, and root cause analysis — built for humans and AI agents** ／ |**Metrics collection**|pgwatch v3 + VictoriaMetrics| ／ `postgresai` is designed to feed AI agents with structured PostgreSQL diagnostics.",
+   "evidence_lines": [
+    11,
+    116,
+    123
+   ]
+  },
+  "fn": "postgres-ai/postgresai",
+  "sha": "e5069f1a89ba",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bd4165b9859f": {
+  "identity": {
+   "one_liner": "在浏览器中使用 TeamSpeak 的自托管 Web 应用",
+   "review": "WebTS 是一个自托管的 Web 应用，让用户在浏览器里登录 TeamSpeak 账号并进行语音通话、频道聊天与好友互动，面向想通过网页访问 TS 服务器的个人与社区站长。网关用 Rust 实现 HTTP/WebSocket 与 TS 连接，数据经 SQLite 持久化，安装脚本与中文管理菜单完成部署运维。",
+   "highlights": [
+    "提供浏览器端 TeamSpeak 语音、聊天、频道与好友功能，支持 Linux/Docker 与 Windows 安装",
+    "使用 SQLite（rusqlite）持久化账号、身份密文、会话与后台设置",
+    "提供 webts / webts-node 中文管理命令，支持可选同机语音节点"
+   ],
+   "use_cases": [
+    "为 TeamSpeak 社区搭建网页访问入口",
+    "在浏览器中直接进行 TS 语音通话与频道聊天",
+    "为已有 TS 服务器部署同机语音节点降低语音链路延迟"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文|",
+     "lines": [
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 WebTS 是使用 TeamSpeak 的浏览器端应用，SQLite 仅作为其自身数据存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WebTS 让你在浏览器里使用 TeamSpeak：登录账号、选一个身份，就能进入熟悉的频道和朋友说话。支持电脑和手机界面，保留身份原来的 TS 权限。 ／ |持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文| ／  独立第三方开源项目，与 TeamSpeak 官方无隶属关系。TeamSpeak 及相关标识归其权利人所有。",
+   "evidence_lines": [
+    15,
+    118,
+    136
+   ]
+  },
+  "fn": "PTPHAP/WebTS",
+  "sha": "bd4165b9859f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bb37d20841a3": {
+  "identity": {
+   "one_liner": "自托管的数据库 Web 工作台，统一浏览、查询、编辑与迁移",
+   "review": "Rowsmith 是一个单 Go 二进制的自托管 Web 数据库工作台，支持 MySQL、PostgreSQL、SQL Server、Oracle、ClickHouse、SQLite 等二十种引擎，提供数据浏览、SQL 控制台、结构编辑、导入导出、跨引擎迁移、定时查询和团队权限共享，内置 SSH 隧道与加密的连接密钥保管库。面向需要统一管理多种数据库的团队；README 标注项目处于早期开发阶段。",
+   "highlights": [
+    "提供覆盖二十种数据库引擎的统一驱动接口，支持浏览、过滤、编辑、SQL 执行、EXPLAIN 计划、进程列表和用户管理",
+    "支持同引擎或跨引擎的表与行迁移，包含列类型映射和逐值校验",
+    "内置 SSH 隧道（含跳板机链）、信封加密的连接密钥保管库、操作审计记录与生产环境语句确认机制"
+   ],
+   "use_cases": [
+    "团队通过 Web 界面统一浏览和编辑多种数据库",
+    "在服务器之间或不同引擎之间迁移表数据",
+    "通过定时只读查询生成报表与告警"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A fast, self-hosted web workspace for your databases.** Browse, query, edit and administer MySQL, MariaDB, TiDB, PostgreSQL + PostGIS, CockroachDB, YugabyteDB, SQL Server, Oracle, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSe ／ |PostgreSQL 10+ with PostGIS, TimescaleDB, Supabase, Neon, Aurora, AlloyDB, Cloud SQL|✅ Working|",
+     "lines": [
+      8,
+      76
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**A fast, self-hosted web workspace for your databases.** Browse, query, edit and administer MySQL, MariaDB, TiDB, PostgreSQL + PostGIS, CockroachDB, YugabyteDB, SQL Server, Oracle, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSe ／ |MySQL 5.7 / 8.x / 9.x (incl. Percona, Aurora MySQL)|✅ Working|",
+     "lines": [
+      8,
+      73
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "**A fast, self-hosted web workspace for your databases.** Browse, query, edit and administer MySQL, MariaDB, TiDB, PostgreSQL + PostGIS, CockroachDB, YugabyteDB, SQL Server, Oracle, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSe ／ |Oracle Database 12c+|✅ Working|",
+     "lines": [
+      8,
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**A fast, self-hosted web workspace for your databases.** Browse, query, edit and administer MySQL, MariaDB, TiDB, PostgreSQL + PostGIS, CockroachDB, YugabyteDB, SQL Server, Oracle, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSe ／ |SQLite 3|✅ Working|",
+     "lines": [
+      8,
+      82
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**A fast, self-hosted web workspace for your databases.** Browse, query, edit and administer MySQL, MariaDB, TiDB, PostgreSQL + PostGIS, CockroachDB, YugabyteDB, SQL Server, Oracle, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSe ／ |Microsoft SQL Server 2012+ / Azure SQL|✅ Working|",
+     "lines": [
+      8,
+      79
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**A fast, self-hosted web workspace for your databases.** Browse, query, edit and administer MySQL, MariaDB, TiDB, PostgreSQL + PostGIS, CockroachDB, YugabyteDB, SQL Server, Oracle, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSe ／ |ClickHouse 24.8+ and ClickHouse Cloud, over the native protocol or HTTP|✅ Working|",
+     "lines": [
+      8,
+      81
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**A fast, self-hosted web workspace for your databases.** Browse, query, edit and administer MySQL, MariaDB, TiDB, PostgreSQL + PostGIS, CockroachDB, YugabyteDB, SQL Server, Oracle, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSe ／ |MariaDB 10.x / 11.x|✅ Working|",
+     "lines": [
+      8,
+      74
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "**A fast, self-hosted web workspace for your databases.** Browse, query, edit and administer MySQL, MariaDB, TiDB, PostgreSQL + PostGIS, CockroachDB, YugabyteDB, SQL Server, Oracle, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSe ／ |TiDB 7.5+ and TiDB Cloud|✅ Working|",
+     "lines": [
+      8,
+      75
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确其为连接并管理多种数据库的自托管工作台，为数据库生态提供服务而非以数据库存储自身业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A fast, self-hosted web workspace for your databases.** Browse, query, edit and administer MySQL, MariaDB, TiDB, PostgreSQL + PostGIS, CockroachDB, YugabyteDB, SQL Server, Oracle, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSearch, BigQuery, Snowflake, Trino (with Iceberg and Delta Lake tables and Parquet, ORC or CSV files) and SQLite from one place, with built-in SSH tunnels, a team vault for connection secrets, and a UI designed for both desktop and phone. ／ Rowsmith is a single Go binary with the web app embedded. It is designed to run in its own container behind your existing reverse proxy. ／ > **Status: early development.** All twenty engines, the web UI, SSH tunnels, the team vault, the structure editor, import and export, the AI assistant, scheduled queries, shared query links with comments, and database migration are working. MySQL, MariaDB, TiDB, PostgreSQL/PostGIS, CockroachDB, YugabyteDB, ClickHouse, MongoDB, Redis, Valkey, Cassandra, ScyllaDB, Elasticsearch, OpenSearch and Trino are covered by an end-to-end test; SQL Server, Oracle, SQLite, BigQuery and Snowflake have unit tests and integration tests you can run against real servers (Snowflake's against an account of your own). See Roadmap.",
+   "evidence_lines": [
+    8,
+    10,
+    12
+   ]
+  },
+  "fn": "abdulwaheedsyed/Rowsmith",
+  "sha": "bb37d20841a3",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

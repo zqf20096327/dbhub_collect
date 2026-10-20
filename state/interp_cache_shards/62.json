@@ -9811,5 +9811,141 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68d528939515": {
+  "identity": {
+   "one_liner": "NestJS 模块化单体电商 API，含 SAGA 结账、行锁库存与 CQRS 读适配",
+   "review": "这是一个基于 NestJS 的模块化单体电商后端 API，提供结账 SAGA、库存锁定、RSA JWT/RBAC 认证与 CQRS 查询适配，使用 PostgreSQL 存储数据、Redis/BullMQ 做队列，面向需要参考后端架构的开发者，可通过 npm 与 Docker 在本地运行；注意支付为 mock 适配器，且目前仅支持单实例部署。",
+   "highlights": [
+    "结账流程以 BullMQ SAGA 实现，支持补偿，库存预留使用行锁",
+    "提供单元、集成、e2e 与架构分层测试，含 CI 门禁与 Swagger/OpenAPI 文档",
+    "可选监控栈（Grafana）与 Docker 一键本地启动脚本"
+   ],
+   "use_cases": [
+    "电商后端架构参考实现（模块化单体/DDD/六边形）",
+    "本地全栈开发环境（含迁移、种子数据、监控栈）",
+    "测试实践示例（Testcontainers 集成测试与架构约束测试）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |Inventory row lock|`postgres.reservation-repository.ts`|`postgres.reservation-repository.integration.spec.ts`| ／ `npm run setup` writes `.env.development`, starts Postgres and Redis, runs migrations, and seeds fixtures.",
+     "lines": [
+      7,
+      47,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为一个使用 PostgreSQL 与 Redis 存储数据的电商 API 应用，而非服务于数据库生态的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> NestJS ecommerce API. Checkout, stock, and auth live here. Reference backend, not a hosted store. ／ `npm run setup` writes `.env.development`, starts Postgres and Redis, runs migrations, and seeds fixtures. ／ Eleven modules under `src/modules/` talk through ACL gateways and domain events, not by importing each other's internals. Checkout is a BullMQ SAGA with compensation. Inventory reservations take a row lock. Auth is RSA JWT plus RBAC. List/detail reads go through CQRS query adapters.",
+   "evidence_lines": [
+    15,
+    65,
+    19
+   ]
+  },
+  "fn": "raouf-b-dev/ecommerce-store-api",
+  "sha": "68d528939515",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4ef9c705f3b6": {
+  "identity": {
+   "one_liner": "基于 Meltano SDK 的 Singer 协议 PostgreSQL 数据加载器",
+   "review": "这是基于 Meltano SDK 实现的 Singer Target，用于将 tap 抽取的数据流写入 PostgreSQL，支持 COPY/INSERT 写入、upsert/append/overwrite 加载方式、schema 扁平化、soft/hard delete、SSL 与 SSH 隧道连接等配置。面向使用 Meltano 或 Singer 生态做数据管道的工程与数据团队，通过 pipx/uv 安装后以命令行方式运行。",
+   "highlights": [
+    "基于 Meltano SDK 实现，支持 stream-maps、schema-flattening、validate-records、hard-delete 等能力",
+    "支持 COPY 命令写入、append/upsert/overwrite 三种加载方式，及 SSL 与 SSH 隧道连接配置",
+    "测试覆盖 PostgreSQL 15–18 与 Python 3.10–3.15"
+   ],
+   "use_cases": [
+    "在 Meltano/Singer 数据管道中作为目标端将数据加载入 PostgreSQL",
+    "需要批量写入（COPY）、upsert 或软删除语义的 ELT 落库",
+    "经由 SSH 堡垒机或 SSL 连接写入远端 PostgreSQL 实例"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Singer Target for PostgreSQL databases. ／ This target is tested with all actively supported Python and PostgreSQL versions. At the time of writing, this includes Python 3.10 through 3.15 and PostgreSQL 15 through 18.",
+     "lines": [
+      8,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Singer 生态的 Target 组件，为数据管道向 PostgreSQL 写入数据服务，属数据库生态工具而非应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Singer Target for PostgreSQL databases. ／ Built with the Meltano SDK for Singer Taps and Targets. ／ ## Installation",
+   "evidence_lines": [
+    8,
+    10,
+    95
+   ]
+  },
+  "fn": "MeltanoLabs/target-postgres",
+  "sha": "4ef9c705f3b6",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

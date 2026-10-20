@@ -9872,5 +9872,231 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5fa1480fac10": {
+  "identity": {
+   "one_liner": "自托管多账号求职自动化平台，AI 评分并追踪申请",
+   "review": "一个用 Docker 自托管的求职自动化系统：抓取招聘页与职位聚合站，用 LLM 按简历对职位评分、定制简历与求职信，自动填写 ATS 申请表，并经 Telegram/Gmail 通知与追踪每个申请。面向个人或家庭（最多五账号），后端 FastAPI + PostgreSQL 16，备份依赖 pg_dump。",
+   "highlights": [
+    "支持抓取职业页面（Playwright + 12 种 ATS 处理器）及 JobSpy、Apify 等多个职位来源",
+    "支持用 Claude、OpenAI、OpenRouter、Ollama 等多个 LLM 提供方对职位评分并生成简历与求职信",
+    "提供 Chrome 扩展用于 LinkedIn 职位捕获与 ATS 表单自动填写"
+   ],
+   "use_cases": [
+    "个人/家庭集中管理多个求职账号与申请进度",
+    "自动化职位发现、评分与简历定制流程",
+    "通过 Chrome 扩展自动填写 ATS 申请表单并接收 Telegram 提醒"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16|",
+     "lines": [
+      111
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明其使用 PostgreSQL 16 作为自身数据库存储应用数据（L111），属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|PostgreSQL 16| ／ **Self-hosted, multi-account job-hunt automation.** ／ docker compose pull && docker compose up -d      # prebuilt images from GHCR",
+   "evidence_lines": [
+    111,
+    5,
+    61
+   ]
+  },
+  "fn": "vesaias/JobNavigator",
+  "sha": "5fa1480fac10",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b3cac7656230": {
+  "identity": {
+   "one_liner": "计算机使用代理（CUA）研究资源的可溯源编目库",
+   "review": "该项目维护一个关于计算机使用代理的学术资源目录，收录论文、模型、数据集、基准和工具共3,193条记录，每日定时三次自动发现并经人工审核标注来源。提供JSONL/SQLite数据文件和Python脚本供检索，面向研究人员及RAG/代理系统，克隆后无需依赖即可本地查询。",
+   "highlights": [
+    "收录3,193条资源记录，含论文、模型、数据集、基准、框架、工具等分类",
+    "每日三次定时自动发现并维护来源可审计的目录记录",
+    "提供JSONL完整数据与SQLite目录，附Python脚本支持本地检索"
+   ],
+   "use_cases": [
+    "为计算机使用代理研究文献调研和基准选型提供检索入口",
+    "为RAG系统或AI代理提供结构化目录数据源",
+    "按主题、平台等维度浏览GUI代理相关模型与数据集"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Use SQLite to join resources, environment/topic facets, and reviewed relations. See query examples. `data/catalog.jsonl` is committed; SQLite and JSON array exports are reproducible local build products.",
+     "lines": [
+      189
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库生态之外的AI代理研究资源目录服务，SQLite仅作为其数据交付格式之一，属目录工具自身组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A source-backed collection of papers, models, datasets, benchmarks and tools for agents that use computers. ／ python3 scripts/catalog.py search \"grounding\" --kind paper --status curated --limit 0 --json ／ **For people, RAG systems, and agents — clone the complete catalog:**",
+   "evidence_lines": [
+    7,
+    54,
+    25
+   ]
+  },
+  "fn": "reacher-z/Awesome-CUA",
+  "sha": "b3cac7656230",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7d63fa917a27": {
+  "identity": {
+   "one_liner": "键盘驱动的终端数据库客户端，Rust/Ratatui 实现",
+   "review": "datarig 是用 Rust 与 Ratatui 编写的终端数据库客户端，提供多连接工作区、schema 浏览器、带 vim 键位的 SQL 编辑器和分页结果网格，面向习惯终端操作的数据库使用者与开发者。当前处于 pre-1.0 阶段，PostgreSQL 已实现，MySQL 仅部分支持，配置格式与键位仍可能变动。",
+   "highlights": [
+    "提供多连接标签工作区，含 schema 树、SQL 编辑器（vim 键位）与分页结果网格",
+    "支持从 catalog 重建 DDL、SSH 隧道连接与只读 profile（服务端强制）",
+    "提供 macOS/Linux/Windows 二进制与 Homebrew formula，支持英文和韩文界面"
+   ],
+   "use_cases": [
+    "在终端中管理多个数据库连接并浏览 schema",
+    "用 vim 风格工作流编写和执行 SQL",
+    "通过只读 profile 安全查看表结构与 DDL"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "formula (Install); the latest is 0.28.0. **PostgreSQL** is implemented, and ／ Everything below works today with PostgreSQL; MySQL says which parts work with MySQL.",
+     "lines": [
+      16,
+      27
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**MySQL** in part (see MySQL for what it does and does not do yet). The configuration ／ Everything below works today with PostgreSQL; MySQL says which parts work with MySQL.",
+     "lines": [
+      17,
+      27
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "with their version. MariaDB 10.6 and newer is a best effort: it connects and runs statements, and",
+     "lines": [
+      853
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接并操作数据库的终端客户端工具，为数据库使用提供服务而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A terminal database client: a DataGrip-style workspace for your databases, in the terminal. ／ formula (Install); the latest is 0.28.0. **PostgreSQL** is implemented, and ／ **MySQL** in part (see MySQL for what it does and does not do yet). The configuration",
+   "evidence_lines": [
+    5,
+    16,
+    17
+   ]
+  },
+  "fn": "DokaDev/datarig",
+  "sha": "7d63fa917a27",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

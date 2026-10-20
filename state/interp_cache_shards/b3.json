@@ -10288,5 +10288,148 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f7b505be021e": {
+  "identity": {
+   "one_liner": "基于SpringBoot+Vue前后端分离的药房在线销售管理系统",
+   "review": "一套面向连锁/单体药房的前后端分离在线购药与进销存管理系统，覆盖电子处方流转、批次库存与效期预警、采购供应链、订单物流、数据统计等模块，提供管理员端、药店医生端和用户小程序端三类入口。后端采用SpringBoot+MybatisPlus+MySQL+Redis。适合药房信息化场景或需要完整医药业务系统源码参考的开发者使用。",
+   "highlights": [
+    "提供管理员、药店医生、终端用户三端，包含处方审核、批次库存、采购、订单、评价等业务模块",
+    "后端基于SpringBoot+MybatisPlus+MySQL+Redis，前端基于Vue+Vuex+Antd，支持前后端分离部署",
+    "内置FEFO出库、效期分级预警、采购建议生成等库存管理机制"
+   ],
+   "use_cases": [
+    "连锁/单体药房的在线销售与进销存管理",
+    "互联网药房处方药合规销售流程实现",
+    "医药O2O网订店送业务场景"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统将MySQL作为自身业务数据存储（L16要求安装MySQL并记住账户密码，L26/L31列为后端技术栈），属于使用数据库的应用而非服务数据库生态的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    16,
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/pharmacy_online_public_cos",
+  "sha": "f7b505be021e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0a6c46b4c7f9": {
+  "identity": {
+   "one_liner": "多租户、插件式 AI SaaS 单仓库平台，用于企业知识管理与 RAG",
+   "review": "该仓库是一个多租户、插件式 AI SaaS 平台，以 npm monorepo 组织，包含 Gateway、Core API、AI Orchestrator 三个平台服务、五个插件 API 和三个 Next.js 前端，面向企业知识管理、安全 RAG 与数据分析场景。本地依赖通过 Docker Compose 提供 PostgreSQL、Redis、MinIO，并使用 pgvector 做向量存储；多数集成与安全控制仍处于规划状态。",
+   "highlights": [
+    "提供 Gateway、Core API、AI Orchestrator 等多个 NestJS 服务与插件 API，以 npm monorepo 组织",
+    "本地基础设施通过 Docker Compose 提供 PostgreSQL、Redis 与 MinIO，使用 pgvector 支持向量检索",
+    "包含 RAG 流程、文档处理 worker 与基于组织的多租户权限模型设计"
+   ],
+   "use_cases": [
+    "企业知识库与文档问答（RAG）系统搭建",
+    "多租户 SaaS 平台的架构参考与开发起点",
+    "结构化数据（CSV/XLSX）上传与分析的管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`infrastructure/`|Local PostgreSQL, Redis, storage configuration; Docker, gateway, observability documentation| ／ loopback, with defaults PostgreSQL `5432`, Redis `6379`, MinIO API `9000`, MinIO ／ console `9001`. The validated local setup uses PostgreSQL `15432` and Redis `16379`",
+     "lines": [
+      46,
+      119,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL/Redis/MinIO 存储数据的应用平台，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Amani IA is a multi-tenant, plugin-based AI SaaS organized as an npm monorepo. ／ |`infrastructure/`|Local PostgreSQL, Redis, storage configuration; Docker, gateway, observability documentation| ／ On a fresh PostgreSQL volume, bootstrap prepares six service-owned schemas/logins",
+   "evidence_lines": [
+    3,
+    46,
+    136
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "AndrixNg1/amani.ia",
+  "sha": "0a6c46b4c7f9",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

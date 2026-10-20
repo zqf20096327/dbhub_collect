@@ -9340,5 +9340,139 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "77a1b9897cf1": {
+  "identity": {
+   "one_liner": "基于Spark的电影推荐系统学习项目，含爬虫、Web网站与推荐引擎",
+   "review": "这是一个历史学习性质的毕业设计项目，包含Scrapy爬虫、SSM框架电影网站、后台管理系统和Spark推荐系统四部分，使用ALS算法在Spark集群上训练模型并将推荐结果写入MySQL供前端展示。面向学习大数据处理与推荐系统搭建的开发者，README声明已进入有限维护，新版本开发转向独立的CineMatch仓库。",
+   "highlights": [
+    "实现基于Spark ALS算法的离线推荐模型训练，并通过Flume+Kafka+Spark Streaming处理实时用户点击数据",
+    "包含爬虫、Web前后端、后台管理与推荐系统四个子模块的完整数据链路",
+    "推荐结果写回MySQL数据库，由Web前端查询展示"
+   ],
+   "use_cases": [
+    "学习Hadoop/Spark/Hive/Kafka等大数据组件的集群搭建与数据处理流程",
+    "学习电影推荐系统的离线建模与实时推荐实现方式",
+    "作为SSM框架Web项目与推荐系统结合的教学参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**软件架构：** mysql + scrapy ／ **软件架构：** mysql + mybatis + spring + springmvc ／ **项目描述：** 通过在电影网站系统埋点，获取到用户的点击事件（如用户喜欢哪部电影或对某部电影的评分）并将信息传至推荐系统，推荐系统根据该信息做出相应的处理，将推荐结果存入到mysql数据库中，web前端通过查询数据库将推荐的电影展示给用户。推荐流程如下：",
+     "lines": [
+      32,
+      43,
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明推荐结果存入MySQL数据库、Web前端查询该库展示，MySQL仅作为项目存储组件使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**项目描述：** 通过在电影网站系统埋点，获取到用户的点击事件（如用户喜欢哪部电影或对某部电影的评分）并将信息传至推荐系统，推荐系统根据该信息做出相应的处理，将推荐结果存入到mysql数据库中，web前端通过查询数据库将推荐的电影展示给用户。推荐流程如下： ／ **软件架构：** mysql + scrapy",
+   "evidence_lines": [
+    71,
+    32
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "CodeRayZhang/Movie_Recommend",
+  "sha": "77a1b9897cf1",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "abf15bf48d44": {
+  "identity": {
+   "one_liner": "单节点向量数据库，以 S3 为持久存储的 ANN 检索引擎",
+   "review": "Glider 是一个用 Rust 编写的单节点向量数据库，以 S3 兼容对象存储作为唯一持久层，写入在 S3 确认后才应答，本地内存与 SSD 仅作读缓存；提供 HTTP/JSON API、元数据过滤、Python 客户端、Prometheus 指标及面向 AI 代理的 MCP 记忆服务器。适合需要数据不丢但无需复制的个人或团队部署；单节点架构限制下无复制、分片与备用节点。",
+   "highlights": [
+    "每次写入以不可变日志对象形式先落盘 S3 再确认，重启后可自动接管并重放日志",
+    "提供 HTTP/JSON API、元数据过滤、后台自动聚类 ANN、SSD 缓存、Prometheus 指标与备份恢复工具",
+    "Python 客户端内置 glider-mcp 服务器，为 AI 代理提供 remember/recall/forget 工具"
+   ],
+   "use_cases": [
+    "需要以对象存储为唯一数据副本的向量相似度检索服务",
+    "为 LLM 代理提供持久化长期记忆（通过 MCP）",
+    "本地开发或单机部署的向量检索与嵌入查询"
+   ],
+   "limits_note": "无"
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它本身是一个向量数据库引擎，为向量检索生态提供核心存储与查询能力，而非仅使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Glider is a single-node vector database. Every acknowledged write is durable ／ only speed up reads and never hold the only copy. It serves nearest-neighbor ／ - **Clustered ANN that builds itself.** The server clusters a collection in",
+   "evidence_lines": [
+    12,
+    14,
+    105
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "omerfeyzioglu/glider",
+  "sha": "abf15bf48d44",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

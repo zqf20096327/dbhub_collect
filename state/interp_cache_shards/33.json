@@ -8949,5 +8949,151 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a8246e999f0c": {
+  "identity": {
+   "one_liner": "AI 模拟面试系统：数字人提问、逐题评分与 Docker 沙箱笔试",
+   "review": "Light-Interview 是一个面向求职开发者的 AI 面试训练系统，输入岗位 JD 与简历后生成题目，通过数字人面试官提问、录制回答并生成逐题评分报告；笔试部分在一次性 Docker 容器中运行五种语言的代码题。数据层使用 PostgreSQL 16（含 pgvector）、Redis 7、Flyway 迁移和 SQLite，需配置百炼 API Key 才能启用真实转写与评分。",
+   "highlights": [
+    "提供可录制、可回放的数字人模拟面试，报告包含相关性、STAR、语速等多个评分维度",
+    "在 Docker 沙箱中运行 Java、Python、C++、JavaScript、Go 代码题，容器禁网、只读并限制 CPU/内存",
+    "AI 出题先运行参考解生成预期输出，通过用例自检后才交付；分析任务持久化并支持重试与死信队列"
+   ],
+   "use_cases": [
+    "开发者准备校招、社招、转岗面试的模拟练习与复盘",
+    "组织学习小组作业、看板与同伴互评的教学场景",
+    "需要带判题沙箱的在线笔试与简历优化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据|PostgreSQL 16 + pgvector · Redis 7 · Flyway| ／ - 已完成真实 PostgreSQL、Redis、S3 兼容存储和真实模型供应商的链路验证。",
+     "lines": [
+      188,
+      199
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|执行|Docker 隔离沙箱 · SQLite · 5 种编程语言|",
+     "lines": [
+      190
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL/Redis/SQLite 存储数据、面向终端用户的 AI 面试应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，基于 guangge 的 AI-Interview 重构而来",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|数据|PostgreSQL 16 + pgvector · Redis 7 · Flyway| ／ |执行|Docker 隔离沙箱 · SQLite · 5 种编程语言| ／ - 已完成真实 PostgreSQL、Redis、S3 兼容存储和真实模型供应商的链路验证。",
+   "evidence_lines": [
+    188,
+    190,
+    199
+   ]
+  },
+  "fn": "xgwangdl/AI-Interview",
+  "sha": "a8246e999f0c",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "431e998f4056": {
+  "identity": {
+   "one_liner": "Gufo 推理服务器的本地统计仪表盘与 HTTP/SSE/WebSocket 代理",
+   "review": "该项目为 Gufo 推理服务器提供本地统计仪表盘和 HTTP、SSE、WebSocket 代理，客户端经代理路由后可记录 token 用量、吞吐、延迟与缓存命中，并将统计数据存入 SQLite，支持保留期与每日汇总配置。面向在可信本机或私有网络中自托管 Gufo 的使用者；README 明确说明无内置认证和 TLS，且 WebSocket 会话不记录、默认不采集请求文本。",
+   "highlights": [
+    "代理 HTTP 响应、SSE 流和双向 WebSocket 消息（含文本与二进制音频）",
+    "使用 SQLite 存储统计数据，支持可配置保留期与每日汇总",
+    "可选内容捕获用于审计，默认关闭，可按保留天数与字节上限配置"
+   ],
+   "use_cases": [
+    "在本地追踪 Gufo 推理服务器的 token 用量、吞吐与延迟",
+    "为 OpenAI 兼容客户端提供经代理路由的请求统计",
+    "可选地对问答内容进行审计留存与删除管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Stores statistics in SQLite with configurable retention and daily rollups. ／ `.env`. The default database is `./data/gufo-dashboard.sqlite`. Docker Compose",
+     "lines": [
+      25,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个面向 Gufo 推理服务器的仪表盘/代理应用，SQLite 仅用于存储自身的统计数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local statistics dashboard and HTTP, SSE, and WebSocket proxy for Gufo ／ - Stores statistics in SQLite with configurable retention and daily rollups. ／ `.env`. The default database is `./data/gufo-dashboard.sqlite`. Docker Compose",
+   "evidence_lines": [
+    3,
+    25,
+    74
+   ]
+  },
+  "fn": "MiddlePathLabs/gufo-dashboard",
+  "sha": "431e998f4056",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

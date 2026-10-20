@@ -9960,5 +9960,151 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4499f23a8f32": {
+  "identity": {
+   "one_liner": "FastAPI+SQLite 的 Hotmail/Outlook 邮箱账号批量管理后台",
+   "review": "该仓库实现一个本地部署的邮箱账号管理后台，提供 Hotmail/Outlook 账号批量导入、标签与备注管理、邮件查看、每日定时刷新 OAuth 令牌及刷新日志记录，并通过 API 供第三方按邮箱地址取件。适合个人或小团队内部管理多组邮箱账号；采用 SQLite 单文件存储，安全机制较轻量，仅适合本机、内网或受控环境。",
+   "highlights": [
+    "支持批量导入 Hotmail/Outlook 账号，并提供标签与备注管理",
+    "内置每日 3:00 定时任务刷新 OAuth access_token，并记录刷新日志",
+    "提供对外取件接口 GET /api/accounts/mails，支持 inbox/junk 文件夹查询"
+   ],
+   "use_cases": [
+    "个人或小团队集中管理多组 Hotmail/Outlook 邮箱账号",
+    "定期维护 OAuth 令牌，减少令牌失效人工处理",
+    "第三方脚本通过 HTTP 接口按邮箱地址获取邮件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "一个基于 `FastAPI + SQLite` 的 Hotmail / Outlook 邮箱管理后台，适合本地部署和个人或小团队内部使用。 ／ - 数据库：`SQLite` ／ - 默认使用本地 `SQLite` 数据库文件 `mail.db`",
+     "lines": [
+      3,
+      143,
+      208
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身数据存储（mail.db），是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个基于 `FastAPI + SQLite` 的 Hotmail / Outlook 邮箱管理后台，适合本地部署和个人或小团队内部使用。 ／ - 数据库：`SQLite` ／ - 默认使用本地 `SQLite` 数据库文件 `mail.db`",
+   "evidence_lines": [
+    3,
+    143,
+    208
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "icutool/MicroSoftEmailManage",
+  "sha": "4499f23a8f32",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "19bfa3b2d7d8": {
+  "identity": {
+   "one_liner": "Home Assistant 自定义集成，通过 query/execute 动作读写 MySQL/MariaDB",
+   "review": "这是一个 Home Assistant 自定义组件（经 HACS 安装），注册 mysql_query.query 和 mysql_query.execute 两个服务：前者在只读事务中执行 SELECT 等读取语句并返回行数据，后者执行 INSERT/UPDATE/DELETE/DDL 等写操作。支持参数化语句、多连接、行数限制、查询超时和可选 TLS，面向需要在 Home Assistant 自动化中读写外部 MySQL/MariaDB 数据库的用户。",
+   "highlights": [
+    "提供 query（只读）与 execute（写入）两个分离的服务，带读写语句分类和行数限制、查询超时等防护",
+    "支持参数化查询、多连接配置和连接池，DECIMAL/DATE/TIME 等类型自动转换为 JSON 安全结果",
+    "支持可选 TLS 加密连接与只读连接开关，UI 配置、不支持 YAML 配置"
+   ],
+   "use_cases": [
+    "在 Home Assistant 自动化或模板中读取外部 MySQL/MariaDB 数据库的数据",
+    "从 Home Assistant 动作中向数据库写入或执行 DDL/维护语句",
+    "为仪表盘类用途配置只读数据库连接"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands ",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands ",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该集成专门用于连接和操作 MySQL/MariaDB 数据库，通过 aiomysql 驱动提供查询与执行能力，属于为数据库访问服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands you what it changed. Both can return their result as response data you can use straight from a template. ／ - MySQL 5.6.5 or newer, or MariaDB 10.0 or newer: ```query``` relies on read-only transactions. ／ - The ```aiomysql``` driver, which Home Assistant installs automatically.",
+   "evidence_lines": [
+    12,
+    31,
+    32
+   ]
+  },
+  "fn": "IAsDoubleYou/homeassistant-mysql_query",
+  "sha": "19bfa3b2d7d8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

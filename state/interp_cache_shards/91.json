@@ -10252,5 +10252,143 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7d8b517491bf": {
+  "identity": {
+   "one_liner": "自托管电子书库服务器，内置阅读器、KOReader 同步与阅读统计",
+   "review": "Tome 是一个以单 Docker 镜像发布的自托管电子书管理服务器，提供 EPUB/漫画/PDF 浏览器阅读器、OPDS 订阅、阅读会话统计与双向进度同步。面向自建书库、使用 KOReader 阅读器的个人用户。数据存储依赖 SQLite（WAL 模式），需配合反向代理暴露公网 URL。",
+   "highlights": [
+    "通过自定义 KOReader 插件实现阅读会话记录与双向进度同步",
+    "内置 EPUB、CBZ/CBR、PDF 浏览器阅读器，提供 OPDS 订阅源",
+    "支持 OIDC 单点登录、角色权限控制与用户级 API token"
+   ],
+   "use_cases": [
+    "自托管个人电子书/漫画库并通过 OPDS 在多设备阅读",
+    "追踪 KOReader 设备上的阅读会话与统计",
+    "与 Hardcover 同步评分和阅读进度"
+   ],
+   "cat_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built with FastAPI, React, and SQLite. Ships as a single Docker image. ／ |`/data`|SQLite database and cover cache| ／ |Database|SQLite (WAL) / SQLAlchemy 2.0|",
+     "lines": [
+      14,
+      134,
+      175
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该服务器使用 SQLite 存储自身数据（/data 卷为 SQLite database），数据库仅为内部存储组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Built with FastAPI, React, and SQLite. Ships as a single Docker image. ／ |`/data`|SQLite database and cover cache| ／ |Database|SQLite (WAL) / SQLAlchemy 2.0|",
+   "evidence_lines": [
+    14,
+    134,
+    175
+   ]
+  },
+  "fn": "bndct-devops/tome",
+  "sha": "7d8b517491bf",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3304a868bd16": {
+  "identity": {
+   "one_liner": "分布式集中管控 Web 应用防火墙，基于 pingap/Pingora",
+   "review": "PingWAF 是构建在 pingap 与 Cloudflare Pingora 之上的 Web 应用防火墙，控制面定义站点与规则、数据面代理在边缘执行，两者经 gRPC 双向流同步，提供 SQLi/XSS 等语义检测、CC/Bot 防护、自动 TLS 与内嵌管理台。持久化依赖 PostgreSQL，日志可选写入 Elasticsearch，适合需要自托管边缘防护与集中管理的团队。",
+   "highlights": [
+    "控制面与数据面经 gRPC 双向流同步规则、日志与指标，支持 all-in-one 与分布式两种部署形态",
+    "WAF 引擎实现 normalize→signatures→expression→anomaly score 四阶段检测，含 libinjection 与 Cloudflare 风格表达式规则",
+    "提供边缘 ACME/Let's Encrypt 证书自动签发、mTLS、限流与 IP/Geo 访问控制"
+   ],
+   "use_cases": [
+    "为自有基础设施提供分布式边缘 WAF 防护与集中策略管理",
+    "需要 CC/Bot 防护、限流与 IP/Geo 访问控制的站点接入层",
+    "需要自动 TLS 证书签发与多站点反向代理流量的场景"
+   ],
+   "review_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Raw request and response capture** — headers, body prefixes, real sizes and truncation flags in PostgreSQL, so a log entry can be replayed as a `curl` command from the console. Headers are stored verbatim (cookies included) to make an attack reproducible. ／ |Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ |`pingwaf-server`|Control plane: Axum REST + tonic gRPC + SeaORM/PostgreSQL + ES logs + embedded frontend + agent health monitoring|",
+     "lines": [
+      91,
+      108,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PingWAF 使用 PostgreSQL 做持久化存储、Elasticsearch 存日志，数据库是其所用组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Persistence|`SeaORM` · PostgreSQL 14+ (16 recommended)| ／ |`pingwaf-server`|Control plane: Axum REST + tonic gRPC + SeaORM/PostgreSQL + ES logs + embedded frontend + agent health monitoring|",
+   "evidence_lines": [
+    108,
+    118
+   ]
+  },
+  "fn": "shuaiZend/PingWAF",
+  "sha": "3304a868bd16",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

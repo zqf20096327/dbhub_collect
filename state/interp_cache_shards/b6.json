@@ -9012,5 +9012,219 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d92d5c0e0761": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的自托管 PaaS 平台，REST API 部署",
+   "review": "一个面向裸金属服务器的自托管 PaaS，由 AI agent 通过 REST API 操作，人工仪表盘仅为辅助监管。技术栈为 Go 单二进制 + Docker + gVisor + Traefik + Nixpacks，自身状态与计量数据存于两个 SQLite 库，并可为租户托管 Postgres/Redis 容器。要求 Linux、Docker 及 gVisor 运行时等依赖。",
+   "highlights": [
+    "通过 REST API 实现多租户部署，含 API key、速率限制与配额管理",
+    "租户容器以 gVisor 隔离，rootfs 只读并加密 secrets",
+    "内置 `ah backup` 命令，用 VACUUM INTO 生成 WAL 安全快照"
+   ],
+   "use_cases": [
+    "让 AI agent 通过 API 注册租户并从 git 构建部署服务",
+    "在单台服务器上托管带托管 Postgres/Redis 的多租户应用",
+    "需要租户隔离与计量数据的自托管平台部署"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "2. **One happy path per primitive** — One database engine per type (Postgres, Redis), one build system (Nixpacks), one router (Traefik). ／ Managed Postgres and Redis containers with encrypted connection strings.",
+     "lines": [
+      34,
+      201
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stack**: Go binary + Docker + gVisor + Traefik + Nixpacks + SQLite ／ - **SQLite** — two databases: `ah.db` (state) and `ah-metering.db` (metering), WAL mode",
+     "lines": [
+      13,
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台自身状态与计量数据存储于 SQLite（ah.db / ah-metering.db），Postgres/Redis 仅为提供给租户的托管容器",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted PaaS for bare metal servers, designed to be operated by AI agents via REST API. Includes an optional supervisory dashboard for humans. ／ - **SQLite** — two databases: `ah.db` (state) and `ah-metering.db` (metering), WAL mode ／ Managed Postgres and Redis containers with encrypted connection strings.",
+   "evidence_lines": [
+    9,
+    51,
+    201
+   ]
+  },
+  "fn": "dennisonbertram/agentic-hosting",
+  "sha": "d92d5c0e0761",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e412c77a501": {
+  "identity": {
+   "one_liner": "GitHub 个人主页 README，展示开发者技能与项目",
+   "review": "这是开发者 cheehwatang 的 GitHub 个人资料 README 仓库，用于展示个人简介、技能清单、项目（如 SoundState、Daily Quotes）与社区统计卡片。PostgreSQL 和 SQLite 仅作为其技能徽章及 SoundState 项目技术栈出现，与数据库生态工具开发无关。",
+   "highlights": [
+    "展示个人技能清单与项目链接",
+    "集成社区统计徽章（活动图、连续提交、3D 贡献图等）"
+   ],
+   "use_cases": [
+    "个人开发者资料展示",
+    "项目作品集索引"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL ／  PostgreSQL",
+     "lines": [
+      169,
+      300
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite",
+     "lines": [
+      176
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅为个人资料页，PostgreSQL/SQLite 只作为技能徽章列出，无数据库工具或适配证据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL ／  PostgreSQL",
+   "evidence_lines": [
+    169,
+    300
+   ]
+  },
+  "fn": "cheehwatang/cheehwatang",
+  "sha": "1e412c77a501",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d96232e2b5fb": {
+  "identity": {
+   "one_liner": "250M 参数边缘小语言模型，用 SQLite FTS5 NVMe 总线做事实检索",
+   "review": "一个 250M 参数的指令型小语言模型项目，将事实记忆存储在本地 SQLite FTS5（BM25）引擎中，通过特殊 token 把事实查询路由到 NVMe 上的检索、把算术路由到 AST SafeMath 确定性求值器，并支持通过 CLI/Python API 免重训注入知识。面向边缘设备使用者和复现基准的研究者，需 Python 环境从源码运行。",
+   "highlights": [
+    "使用 SQLite FTS5 在 NVMe 存储上实现本地事实检索，支持 BM25 查询",
+    "通过 <|calc|> 等 special token 将算术表达式路由到 AST SafeMath 求值器",
+    "提供 CLI 与 Python API 的知识注入接口，可将 Hugging Face 数据集转换入库"
+   ],
+   "use_cases": [
+    "边缘设备上的事实问答与知识检索",
+    "需要确定性算术结果的本地推理场景",
+    "将文档/数据集构建为本地知识库供模型查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* ⚡ **Semi-Parametric Decoupling with Native NVMe Bus:** Decouples compact parametric weights from non-parametric factual storage using an ultra-low latency (**0.002 ms** cached local lookup) SQLite FTS5 engine operating directly on high-speed NVMe flash stora ／ AviGPT-250M-Instruct introduces **Semi-Parametric Decoupling** to edge AI: decoupling **Cognitive Reasoning** (handled by 250M compact transformer weights) from **Factual Memory** (stored in a native, zero-latency NVMe SSD memory bus powered by SQLite FTS5 BM2 ／ |**AviGPT-250M (Bus ON)**|250M|Active (SQLite FTS5 + SafeMath)|**100.0%**|**100.0%**|**100.0%**|",
+     "lines": [
+      26,
+      33,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明模型将事实数据存于本地 SQLite FTS5 引擎，SQLite 是该应用的存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* ⚡ **Semi-Parametric Decoupling with Native NVMe Bus:** Decouples compact parametric weights from non-parametric factual storage using an ultra-low latency (**0.002 ms** cached local lookup) SQLite FTS5 engine operating directly on high-speed NVMe flash storage. ／ AviGPT-250M-Instruct introduces **Semi-Parametric Decoupling** to edge AI: decoupling **Cognitive Reasoning** (handled by 250M compact transformer weights) from **Factual Memory** (stored in a native, zero-latency NVMe SSD memory bus powered by SQLite FTS5 BM25). ／ python terminal_eval.py --interactive",
+   "evidence_lines": [
+    26,
+    33,
+    106
+   ]
+  },
+  "fn": "Avinashricky211/AviGPT-250M",
+  "sha": "d96232e2b5fb",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

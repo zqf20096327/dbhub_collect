@@ -10167,5 +10167,72 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e6bdbe5f3aa5": {
+  "identity": {
+   "one_liner": "macOS 本地语义搜索启动器，用 embeddings+SQLite FTS5 混合检索",
+   "review": "Lantern 是一款 macOS（Apple Silicon）上的本地启动器/搜索工具，可按语义检索文件、代码、PDF、照片与录音，并搜索应用和系统设置。索引用 EmbeddingGemma 2 生成向量，结合 SQLite FTS5/BM25 与 RRF 混合排序，模型下载后完全离线运行。面向 Mac 个人用户，通过 Homebrew、dmg 或源码脚本安装，仅支持 macOS 26.2+。",
+   "highlights": [
+    "使用 EmbeddingGemma 2 embeddings 与 SQLite FTS5/BM25 通过 Reciprocal Rank Fusion 混合排序",
+    "本地索引文本、代码（tree-sitter 22 种语言）、PDF/OCR、照片、录音转录（Whisper）",
+    "默认离线运行，不发送遥测；支持 Homebrew cask、dmg 与源码安装"
+   ],
+   "use_cases": [
+    "在 Mac 上按含义本地搜索文件、代码与媒体内容",
+    "替代 Spotlight 作为应用与系统设置启动器",
+    "离线环境中对本地资料做语义检索"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Hybrid ranking:** meaning (embeddings) and exact words (SQLite FTS5/BM25) fused with Reciprocal Rank Fusion.",
+     "lines": [
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite（FTS5 扩展与 sqlite-vec）存储索引的桌面应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Search your Mac **by meaning**, not just by file name: text, code, documents, photos, recordings and videos. ／ - **Hybrid ranking:** meaning (embeddings) and exact words (SQLite FTS5/BM25) fused with Reciprocal Rank Fusion. ／ > The python.org Python (e.g. 3.13) does not work: it cannot load SQLite extensions, which `sqlite-vec` needs. The",
+   "evidence_lines": [
+    12,
+    54,
+    89
+   ]
+  },
+  "fn": "misterekkk/lantern",
+  "sha": "e6bdbe5f3aa5",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

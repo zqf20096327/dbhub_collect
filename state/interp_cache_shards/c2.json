@@ -10205,5 +10205,148 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f2cc3aa3fe8b": {
+  "identity": {
+   "one_liner": "OpenFGA 授权模式到 PostgreSQL SQL 函数的编译器",
+   "review": "Melange 将 OpenFGA（.fga）授权模式编译为运行在 PostgreSQL 内部的专用 PL/pgSQL 函数，通过用户定义的 melange_tuples 视图直接读取业务表做权限检查，无需独立 tuple 存储与同步。面向需要在 SQL 层实现 Zanzibar 风格关系型授权的开发者；仅支持 PostgreSQL，提供 Go 与 TypeScript 客户端，Studio 控制台标注为实验性。",
+   "highlights": [
+    "将 .fga 模式编译为 SQL 函数（check_permission 等），权限检查为单次 SQL 函数调用",
+    "通过 melange_tuples 视图直接读取现有业务表，无独立 tuple 存储、无同步延迟，支持事务内检查",
+    "兼容 OpenFGA Schema 1.1，提供 Go/TypeScript 客户端生成与只读 Studio 控制台"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 应用内实现关系型细粒度授权（RBAC/ReBAC）",
+    "用触发器或 RLS 策略中可用的 SQL 函数做权限判断",
+    "迁移或检查已有 OpenFGA 模式并生成类型安全客户端"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**An OpenFGA-to-PostgreSQL authorization compiler.** ／ Melange compiles OpenFGA authorization schemas into specialized PL/pgSQL functions that run inside your PostgreSQL database. Like Protocol Buffers compiles `.proto` files into serialization code, Melange compiles `.fga` files into SQL functions for Zanzibar-st ／ melange migrate --db postgres://localhost/mydb --schema schema.fga",
+     "lines": [
+      12,
+      14,
+      97
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 生成 SQL 函数的授权编译器，属于为数据库生态服务的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source",
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**An OpenFGA-to-PostgreSQL authorization compiler.** ／ Melange compiles OpenFGA authorization schemas into specialized PL/pgSQL functions that run inside your PostgreSQL database. Like Protocol Buffers compiles `.proto` files into serialization code, Melange compiles `.fga` files into SQL functions for Zanzibar-style relationship-based access control. ／ The generated functions read a `melange_tuples` view you define over your existing domain tables. There is no separate tuple store and nothing to sync.",
+   "evidence_lines": [
+    12,
+    14,
+    16
+   ]
+  },
+  "fn": "pthm/melange",
+  "sha": "f2cc3aa3fe8b",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "227c950eafc0": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 与 Redis 的全栈餐厅预订与点餐平台",
+   "review": "Dine Luxe 是一个餐厅运营全栈应用，包含餐桌预订、点餐、厨房显示、支付与库存等业务模块。后端为 Express REST API，前端使用 Next.js，数据存于 PostgreSQL，并使用 Redis 分布式锁与 PostgreSQL 行级锁（SELECT FOR UPDATE）结合来处理并发预订。面向餐厅线上运营场景，要求 Node.js 18+ 与 PostgreSQL 16。",
+   "highlights": [
+    "使用 Redis SET NX 分布式锁配合 Lua 原子解锁脚本处理预订并发",
+    "通过 PostgreSQL SELECT FOR UPDATE 行级锁与 (table_id, time_slot) 唯一约束实现双层并发防护",
+    "包含 25 个业务模块及自动化单元与集成测试（npm test）"
+   ],
+   "use_cases": [
+    "餐厅在线桌位预订与到店点单管理",
+    "厨房出品流程（KDS）与订单状态流转",
+    "高并发预订场景下防止重复订座的示例/实践"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "#### *With Redis Distributed Mutex Locking & PostgreSQL Concurrency Defense* ／ PostgreSQL ／ * **Dual-Tier Concurrency Defense:** Enforces PostgreSQL row-level locks (`SELECT FOR UPDATE`) and composite unique constraints on `(table_id, time_slot)` to guarantee zero double-allocations even during cache failover or network partitions.",
+     "lines": [
+      11,
+      18,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统以 PostgreSQL 存储业务数据（用户、订单、预订等实体），是使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "### **Dine Luxe — Full-Stack Restaurant Operating System & Real-Time Booking Platform** ／ ## 🗄️ Relational Data Model (PostgreSQL) ／ * **PostgreSQL 16** (or Supabase project)",
+   "evidence_lines": [
+    10,
+    77,
+    131
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ronitgupta138/Dine-Luxe",
+  "sha": "227c950eafc0",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

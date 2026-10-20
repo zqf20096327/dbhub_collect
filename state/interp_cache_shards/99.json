@@ -8548,5 +8548,153 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "373ce9ccbe21": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 的 AI 代理持久记忆系统，事实可被更替",
+   "review": "Knowl 通过 MCP 或 CLI 为 AI 代理（如 Claude Code、Codex、Cursor 等）提供持久记忆：事实带类型与来源，新事实写入时将同主题旧事实标记为 superseded 而非仅追加。数据存于本地 SQLite，打包 SQLite 嵌入式运行时，无需 API key，另提供可选的 knowl.cloud 托管共享层。",
+   "highlights": [
+    "提供 28 个 MCP 工具，支持 Claude Code、Codex、Cursor、Zed 等多种代理宿主接入",
+    "同主题写入时将旧事实标记 superseded 并移出常规检索，保留于 knowl timeline 可查",
+    "本地运行打包的 SQLite 与嵌入模型，无 API key，可选 knowl.cloud 托管共享"
+   ],
+   "use_cases": [
+    "为编码代理在多会话间保留并更替项目决策记录",
+    "多代理/多终端共享同一份项目记忆",
+    "团队通过 knowl.cloud 工作区跨成员共享知识"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Claude Code answers which database the project uses from memory, records the move to Postgres and retires the MySQL decision; Codex answers the same question from that memory in a second terminal; the Claude app answers from the same store over the hosted conn ／ Most memory systems are append-only. Storing \"we moved to SQLite\" leaves \"we use PostgreSQL\"",
+     "lines": [
+      42,
+      167
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Claude Code answers which database the project uses from memory, records the move to Postgres and retires the MySQL decision; Codex answers the same question from that memory in a second terminal; the Claude app answers from the same store over the hosted conn",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "addons (SQLite, tree-sitter, the embedding runtime), so running the CLI under the Bun or Deno ／ Most memory systems are append-only. Storing \"we moved to SQLite\" leaves \"we use PostgreSQL\"",
+     "lines": [
+      72,
+      167
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 代理生态服务的记忆工具，SQLite 仅作为其内置本地存储组件而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Knowl is persistent memory for AI agents, for code, research and everyday life, over ／ addons (SQLite, tree-sitter, the embedding runtime), so running the CLI under the Bun or Deno ／ `knowl init` registers the MCP server for every host it finds. Start a new session afterwards so",
+   "evidence_lines": [
+    32,
+    72,
+    146
+   ]
+  },
+  "fn": "dat999zx/knowl",
+  "sha": "373ce9ccbe21",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fcda4eb6ee53": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Python 磁盘持久化缓存库，python-diskcache 社区分叉",
+   "review": "这是 python-diskcache 的社区维护分叉，为 Python 提供基于 SQLite 的磁盘/文件持久化键值缓存，包含 Cache、FanoutCache、DjangoCache、Deque、Index 等组件，并提供函数记忆化、跨进程锁等配方。分叉点在于上游 2023 年后停止发布且存在 CVE-2025-69872 反序列化漏洞，本分叉提供修复路径、可选 SafeDisk 安全反序列化，并与上游 5.6.3 保持缓存目录格式兼容、可并行安装，适合受该 CVE 影响或需要持续维护版本的 Python/Django 项目。",
+   "highlights": [
+    "提供 Cache、FanoutCache、DjangoCache 键值缓存及 Deque、Index 持久化容器，支持过期、标签、容量限制与 LRU/LFU 等淘汰策略",
+    "基于标准库 sqlite3 实现，纯 Python、无需服务器和编译器，线程安全且进程安全",
+    "提供可选 SafeDisk 限制反序列化类型，修复 CVE-2025-69872，缓存目录与上游 5.6.3 格式兼容"
+   ],
+   "use_cases": [
+    "Python 应用跨进程、跨重启的持久化缓存与函数记忆化",
+    "Django 项目的磁盘缓存后端",
+    "从上游 diskcache 5.6.3 迁移以获取 CVE 修复"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Disk and file backed persistent cache for Python, built on SQLite ／ - Pure Python on top of the standard library `sqlite3`; no server, no compiler",
+     "lines": [
+      5,
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库以 SQLite 作为自身缓存数据的存储层，属于使用数据库的项目而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "沿用上游 Grant Jenks 的许可证与版权，分叉修改部分另行声明（见 NOTICE）",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Disk and file backed persistent cache for Python, built on SQLite ／ - Pure Python on top of the standard library `sqlite3`; no server, no compiler",
+   "evidence_lines": [
+    5,
+    96
+   ]
+  },
+  "fn": "secondwindoss/diskcache-community",
+  "sha": "fcda4eb6ee53",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

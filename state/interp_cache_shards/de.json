@@ -10129,5 +10129,142 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c1ef7559600d": {
+  "identity": {
+   "one_liner": "本地优先的个人消息归档工具，用 SQLite 和 DuckDB 存储",
+   "review": "msgvault 将邮件、聊天、会议、日历和联系人同步或导入到本地归档，提供关键词与语义搜索、人物档案关联、SQL 查询和 MCP 接口，可通过浏览器、TUI、CLI 或 HTTP API 使用。处于 Alpha 阶段，存储格式与 API 可能变动；MIT 许可。适合想自托管完整通信历史并做检索分析的个人用户。",
+   "highlights": [
+    "同步邮件、聊天、日历、会议与联系人或导入本地导出文件",
+    "支持关键词搜索、可选语义搜索、文档提取与图片搜索，并通过 SQLite 与 DuckDB 存储",
+    "提供 SQL 查询、HTTP API、浏览器/TUI 界面及 MCP 服务器接入 AI 助手"
+   ],
+   "use_cases": [
+    "个人长期归档邮件与聊天记录并离线检索",
+    "关联同一人的多个地址与句柄，管理联系人档案",
+    "通过 MCP 接入 AI 助手对历史消息进行查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`libsqlite3-dev` for the `sqlite3.h` header used by the default `sqlite_vec`",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite（含 sqlite_vec）与 DuckDB 作为自身存储引擎，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "msgvault is a local-first, open-source archive for email, chat, meetings, ／ `libsqlite3-dev` for the `sqlite3.h` header used by the default `sqlite_vec`",
+   "evidence_lines": [
+    16,
+    77
+   ]
+  },
+  "fn": "kenn-io/msgvault",
+  "sha": "c1ef7559600d",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "89de1ca98e8d": {
+  "identity": {
+   "one_liner": "自托管单进程博客系统，Bun+Hono 运行于两个 SQLite 文件",
+   "review": "quireINK 是一个自托管博客/CMS 应用，提供前台页面、Markdown 编辑器、评论、newsletter、无 cookie 统计等功能，可部署在自有 VPS、NAS 或 Cloudflare Workers 上，并提供内置 MCP 服务器让 AI 助手代为撰写和管理。数据存于两个 SQLite 文件，无需独立数据库服务器。面向单人博客作者，不支持团队多角色协作。许可证为 PolyForm Noncommercial，属 source-available 而非开源。",
+   "highlights": [
+    "内置 MCP 服务器，AI 助手可通过同一权限规则起草、发布、读取统计",
+    "数据存储为两个 SQLite 文件，单 Bun 进程运行，无需数据库服务器",
+    "支持从 WordPress、Ghost、Substack、Medium 导入，并导出 Markdown ZIP"
+   ],
+   "use_cases": [
+    "个人作者在自有 VPS 或 Cloudflare 上托管独立博客",
+    "通过 MCP 让 AI 助手代管博客写作、发布与流量报告",
+    "从 WordPress/Ghost 等平台迁出内容并导出 Markdown"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One process. Two SQLite files. No cloud account needed, and Cloudflare if you want one. Your name on it, not ours. ／ - **Fast on a small box.** One Bun process, two SQLite files, no database server, no cloud account needed. ／ |`src/`|The whole thing: Bun, Hono, SQLite. How the pieces fit|",
+     "lines": [
+      7,
+      38,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存储于两个 SQLite 文件，SQLite 是其内部存储而非其服务的对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0 加附加许可，source-available 非开源",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One process. Two SQLite files. No cloud account needed, and Cloudflare if you want one. Your name on it, not ours. ／ A blog you write in and publish from, on a server you rent. It has the usual furniture — a front page, posts, categories, search, comments, a newsletter that goes out when you publish — and none of an algorithm deciding who sees your writing, ads across the middle of it, or a company that can change the rules next year. ／ - **An AI agent can run it.** A built-in MCP server lets an assistant draft, publish, read your numbers and tidy up, through the same rules the admin follows.",
+   "evidence_lines": [
+    7,
+    23,
+    37
+   ]
+  },
+  "fn": "joiha-steven/quireink",
+  "sha": "89de1ca98e8d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

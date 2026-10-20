@@ -9785,5 +9785,210 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b9c5b424633e": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机运行",
+   "review": "一个面向求职者的桌面自托管应用，提供岗位解析、事实台账、AI 定制简历、多格式导出、模拟面试、自动投递台与求职统计等功能链路。数据以 SQLite 存在本机，不注册登录；AI 部分需自行配置模型服务 API Key。适合希望在本地管理求职全流程、控制 AI 生成内容真实性的用户。",
+   "highlights": [
+    "基于事实台账机制，生成结果与资料库逐条比对并给出防虚构警告",
+    "支持 PDF/Word/Markdown/纯文本/JSON/HTML 多格式导出，带水印与一键脱敏",
+    "数据以 SQLite 形式存储在本机目录，可整份拷贝迁移"
+   ],
+   "use_cases": [
+    "求职期间集中管理岗位、简历版本与投递进度",
+    "使用 AI 按 JD 生成简历并核验内容来源",
+    "离线编辑简历并导出多种交付格式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员| ／ 简历通架构图：React 前端 → 同源 /api → FastAPI 后端 → 本地 SQLite / 你配置的模型服务商 / 本机浏览器",
+     "lines": [
+      50,
+      359
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 SQLite 作为本机数据存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**本地优先的 AI 简历工作台：不注册、不登录，数据只存在你自己的电脑上。** ／ |**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员|",
+   "evidence_lines": [
+    13,
+    50
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "b9c5b424633e",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1258d15ebd36": {
+  "identity": {
+   "one_liner": "Home Assistant 助手 AI 的长期记忆组件，基于 SQLite+向量相似度检索",
+   "review": "一个 Home Assistant 自定义集成，为 Assist LLM 代理提供跨会话持久的事实、偏好与上下文存储。通过自动暴露的 add_memory/search_memory/delete_memory 工具和 HA 服务进行读写，数据存于本地 SQLite（WAL 模式）文件，嵌入向量可用 Ollama、OpenAI 兼容端点或内置 TF-IDF 生成。适用于用 Home Assistant 搭建语音/对话助手的用户；分层记忆 L0/L1 的接线尚未完成。",
+   "highlights": [
+    "向 Assist 代理自动暴露 add_memory/search_memory/delete_memory 三个 LLM 工具，并提供四个带响应变量的 HA 服务",
+    "数据本地存储于 SQLite（WAL 模式），支持 private/common 作用域与 Wing→Room 分区组织",
+    "支持 Ollama、OpenAI 兼容端点和零依赖 TF-IDF 三种嵌入引擎，检索失败时回退到 LIKE 文本搜索"
+   ],
+   "use_cases": [
+    "让 Home Assistant 语音助手记住家庭成员的偏好、过敏、设备习惯等长期事实",
+    "在自动化/脚本中以服务形式写入、查询和删除记忆条目",
+    "完全本地化部署、不希望记忆数据离开 HA 实例的场景"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-first**: All data stays on your HA instance. SQLite + WAL, embeddings cached on disk. ／ |Memory DB|`<ha_config>/ai_memory.db` (SQLite, WAL mode)|",
+     "lines": [
+      33,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有数据存于 HA 实例上的 SQLite 数据库（ai_memory.db），属使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A long-term, semantic memory system for Home Assistant's Assist LLM agents. Store facts, preferences, ／ - **Local-first**: All data stays on your HA instance. SQLite + WAL, embeddings cached on disk. ／ |Memory DB|`<ha_config>/ai_memory.db` (SQLite, WAL mode)|",
+   "evidence_lines": [
+    17,
+    33,
+    105
+   ]
+  },
+  "fn": "Riscue/ha-ai-memory",
+  "sha": "1258d15ebd36",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "007e8859d710": {
+  "identity": {
+   "one_liner": "运行在服务器上的持久化 AI 代理，经 Telegram 交互，会话存于 SQLite",
+   "review": "该项目是一个部署在 Linux 服务器上的守护进程，长轮询 Telegram Bot API，让用户通过 Telegram 与服务器上的 AI 编码代理对话。基于 pi-durable 引擎实现持久化执行，崩溃或重启后可从中断处继续，会话数据存入 SQLite。提供 bash、读写文件等工具及可选插件，面向需要在服务器上随时以聊天方式操作 AI 代理的个人用户。仅支持私聊，不支持群聊。",
+   "highlights": [
+    "以 systemd 用户服务方式常驻运行，长轮询 Telegram Bot API，无需开放域名或 Web 服务器",
+    "每步操作先持久化再执行，进程崩溃或服务器重启后恢复并完成未竟任务，消息在忙碌时排队",
+    "提供 Web search、MCP、Skills、Helpers、Tasks and reminders 等可选插件，可从文件夹或 npm 加载自定义插件"
+   ],
+   "use_cases": [
+    "随时通过 Telegram 查看和操作自己的服务器，如排查宕机、磁盘占用等问题",
+    "需要长时间运行的 AI 任务在崩溃/重启后仍能继续并返回结果的场景",
+    "多用户各持独立私聊会话共享同一个服务器代理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools:",
+     "lines": [
+      167
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明会话以 SQLite 存储，SQLite 仅作为该应用的持久化存储被使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A daemon on pi-durable (`@earendil-works/pi-durable`) ／ that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools: ／ `bash`, `read`, `write`, `edit` and `telegram_send_file`. It shares pi's login and runs as a systemd user service on",
+   "evidence_lines": [
+    166,
+    167,
+    168
+   ]
+  },
+  "fn": "smixs/pi-durable-telegram",
+  "sha": "007e8859d710",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

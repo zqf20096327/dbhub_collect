@@ -9628,5 +9628,139 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bfbf2ceea6be": {
+  "identity": {
+   "one_liner": "基于 pgwire 协议的 PostgreSQL 逻辑复制 Rust 客户端库",
+   "review": "这是一个 Rust crate，直接在 PostgreSQL wire 协议上实现逻辑复制客户端，使用 pgoutput 插件做 CDC、变更流和 WAL 回放，不依赖 libpq 或 tokio-postgres。面向需要在异步系统中显式控制 LSN、检查点与背压的开发者；不提供 SQL 客户端、DDL 解析或 exactly-once 语义，这些由上层负责。",
+   "highlights": [
+    "直接实现 pgwire 协议的逻辑复制客户端，支持 pgoutput 解码传输与 TLS/SCRAM-SHA-256 认证",
+    "提供显式 LSN seek、stop_at_lsn 有界回放与用户控制的进度反馈（update_applied_lsn）",
+    "基于 tokio 的异步客户端，包含有界事件通道背压、多 publication、Unix domain socket 连接"
+   ],
+   "use_cases": [
+    "构建 CDC 变更数据捕获管道",
+    "崩溃后从指定 LSN 恢复制取或做有界 WAL 回放与离线回填",
+    "集成到需要确定性重启与显式持久化边界的流式系统中"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A low-level, high-performance PostgreSQL logical replication client implemented directly on top of the PostgreSQL wire protocol (pgwire). ／ `pgwire-replication` intentionally avoids `libpq`, `tokio-postgres`, and other higher-level PostgreSQL clients for the replication path. It interacts with a Postgres instance directly and relies on `START_REPLICATION ... LOGICAL ...` and the built-in `pgoutput ／ - PostgreSQL 15+ with logical replication enabled (older versions will probably work too)",
+     "lines": [
+      9,
+      13,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 逻辑复制/下游系统服务的客户端库，而非用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A low-level, high-performance PostgreSQL logical replication client implemented directly on top of the PostgreSQL wire protocol (pgwire). ／ This crate is designed for **CDC, change streaming, and WAL replay systems** that require explicit control over replication state, deterministic restart behavior, and minimal runtime overhead. ／ This crate was originally extracted from the Deltaforge CDC project and is maintained independently.",
+   "evidence_lines": [
+    9,
+    11,
+    22
+   ]
+  },
+  "fn": "vnvo/pgwire-replication",
+  "sha": "bfbf2ceea6be",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bf046db9761e": {
+  "identity": {
+   "one_liner": "PHP+MySQL 学生注册表单应用，含打印与 PDF 预览",
+   "review": "这是一个基于 PHP、MySQL 和 Bootstrap 的学生注册/入学登记表单项目，学生填写后可跳转预览页并打印或保存为 PDF。安装方式为下载源码压缩包、导入数据库文件夹中的表、修改 config.php 连接配置后运行。适用于需要简单学生信息登记页面的学校或教学练习场景。",
+   "highlights": [
+    "提供注册表单填写后的预览页，支持打印和保存为 PDF",
+    "使用 Bootstrap 构建响应式注册页面",
+    "安装包含数据库导入文件和 config.php 连接配置"
+   ],
+   "use_cases": [
+    "学校/college 的学生入学信息登记",
+    "需要打印或 PDF 存档的表单收集",
+    "PHP+MySQL 入门学习示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# Student registration form with printable preview in PHP with MYSQL database ／ You can create a student registration form in PHP with the MYSQL database. ／ Execute the code and enjoy the registration form in PHP with the MYSQL database.",
+     "lines": [
+      1,
+      4,
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该 PHP 程序使用 MySQL 数据库存储注册信息，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You can create a student registration form in PHP with the MYSQL database. ／ Edit the config.php file and set your connection credentials. ／ Execute the code and enjoy the registration form in PHP with the MYSQL database.",
+   "evidence_lines": [
+    4,
+    24,
+    25
+   ]
+  },
+  "fn": "technosmarter/student-registration-form-in-php-and-mysql",
+  "sha": "bf046db9761e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

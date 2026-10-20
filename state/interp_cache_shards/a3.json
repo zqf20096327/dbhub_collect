@@ -9214,5 +9214,290 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2d2230302cbc": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 Java 客户端与 JDBC/R2DBC 驱动库",
+   "review": "这是 ClickHouse 团队维护的官方 Java Client 与 JDBC 驱动仓库，供 Java 应用连接和操作 ClickHouse 数据库。Java Client 通过 HTTP 协议提供 API，JDBC 驱动基于该 API 实现 JDBC 规范，另含 R2DBC 驱动；支持压缩、HTTPS、mTLS、连接池、重试等特性，v2 版本逐步替代 v1。适用于使用 JVM 技术栈访问 ClickHouse 的开发者。",
+   "highlights": [
+    "提供 Java Client、JDBC Driver、R2DBC Driver 等多组件，经 Maven Central 发布",
+    "Java Client 通过 HTTP 协议交互，支持 LZ4 压缩、HTTPS/mTLS、连接池、重试与故障转移",
+    "支持 ClickHouse Cloud 与自托管部署，测试覆盖所有活跃 LTS 版本"
+   ],
+   "use_cases": [
+    "Java 应用通过 JDBC 访问 ClickHouse",
+    "响应式应用通过 R2DBC 连接 ClickHouse",
+    "基于 HTTP API 构建 ClickHouse 数据交互组件"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse Java Client & JDBC Driver ／ This is the repository for the Java Client and JDBC Driver for the ClickHouse database, supported by the ClickHouse team. ／ The Java Client is the core component that provides an API to interact with the database via HTTP Protocol. The JDBC driver component implements the JDBC specification and communicates with ClickHouse using the Java Client API.",
+     "lines": [
+      1,
+      8,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 数据库提供官方 Java 客户端与 JDBC 驱动，属于服务该数据库生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is the repository for the Java Client and JDBC Driver for the ClickHouse database, supported by the ClickHouse team. ／ The Java Client is the core component that provides an API to interact with the database via HTTP Protocol. The JDBC driver component implements the JDBC specification and communicates with ClickHouse using the Java Client API.",
+   "evidence_lines": [
+    8,
+    10
+   ]
+  },
+  "fn": "ClickHouse/clickhouse-java",
+  "sha": "2d2230302cbc",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e6392011ba28": {
+  "identity": {
+   "one_liner": "浏览器数据采集平台，录制操作生成 DSL 规则并调度执行",
+   "review": "AegisCrawler 是一个浏览器数据采集平台：浏览器扩展录制页面交互并生成 YAML/JSON DSL 规则，Go 服务器以租约机制调度任务，ScriptCat 用户脚本在真实浏览器标签页中执行规则并回传结果，可选 LLM 对规则做增强（需安全扫描与人工审批）。适用于需要定时、可观测网页采集的运维与数据团队；服务器内置 SQLite 存储，单二进制部署。",
+   "highlights": [
+    "录制浏览器交互生成可执行的 YAML/JSON DSL 规则，无需编码",
+    "基于租约的任务调度，含心跳续期、重试恢复与死信队列",
+    "LLM 规则增强需经安全扫描与 Admin UI diff 人工审批"
+   ],
+   "use_cases": [
+    "网页数据的定时采集与回放",
+    "浏览器操作流程的 RPA 自动化",
+    "采集规则的录制、审核与版本化管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Single-binary Go server** with SQLite (WAL, versioned migrations, pure Go, ／ - **Backups**: back up the SQLite file (`/data/opencrawler.db` inside the",
+     "lines": [
+      45,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明服务器使用 SQLite 存储自身数据，项目是采集平台应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Single-binary Go server** with SQLite (WAL, versioned migrations, pure Go, ／ Open the Admin UI at `http://localhost:8080/admin/` (log in with the Admin API ／ ScriptCat — the background",
+   "evidence_lines": [
+    45,
+    101,
+    104
+   ]
+  },
+  "fn": "singhand-labs/AegisCrawler",
+  "sha": "e6392011ba28",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ea6ef87b1ae9": {
+  "identity": {
+   "one_liner": "自托管的 agent 优先工作管理数据库，单 SQLite 文件存储",
+   "review": "weave 是一个可自托管的工作管理数据库/平台，提供表格、双向关联、公式、rollup、工作流状态、自动化与 markdown 文档，数据存于单个 SQLite 文件。它同时面向人类与 AI agent：内置 MCP server、REST API 与 CLI 提供同等操作能力，适合想让 Claude Code 等 MCP 客户端直接驱动工作数据的团队。需 Node ≥ 22.16，无 npm 安装、零第三方运行时依赖。",
+   "highlights": [
+    "内置 MCP server（默认 17 个工具，共 65 个），任何 stdio MCP 客户端可挂载，同时提供 REST API 与 CLI",
+    "数据存储为单个 SQLite 文件，使用 Node 内置 node:sqlite，零运行时依赖，基于 FTS5 提供全文搜索",
+    "支持双向关联、lookup、rollup、公式、自动化触发器、文档版本化与撤销操作"
+   ],
+   "use_cases": [
+    "AI agent 通过 MCP/REST/CLI 读写结构化工作数据（任务、表、关联）",
+    "自托管替代 SaaS 工作管理工具，数据保留在本地单文件",
+    "本地优先的项目/知识库管理，可离线运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "documents. One SQLite file. Zero dependencies. No build step. MIT. ／ weave stores structured work (tables, rows, relations, documents) in one SQLite ／ - **Local-first** — your workspace is one SQLite file next to your project.",
+     "lines": [
+      9,
+      28,
+      59
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Baserow|MIT (core; paid tiers separate)|Docker Compose + Postgres|A full Airtable-shaped product, cloud or self-hosted| ／ |Teable|AGPL-3.0 (core)|Docker + Postgres|Postgres-native scale with an Airtable UI|",
+     "lines": [
+      177,
+      179
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres|",
+     "lines": [
+      176
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "weave 使用 SQLite（node:sqlite）作为自身的数据存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "weave stores structured work (tables, rows, relations, documents) in one SQLite ／ weave is a **work platform you run yourself**: spaces hold tables, tables hold ／  `node:sqlite`; the only third-party code is vendored and pinned.",
+   "evidence_lines": [
+    28,
+    41,
+    63
+   ]
+  },
+  "fn": "grunion-ai/weave",
+  "sha": "ea6ef87b1ae9",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "34de99627488": {
+  "identity": {
+   "one_liner": "将试卷转换为分步解题书的教育类 LLM 应用",
+   "review": "AnswerBook 接收 PDF 或图片形式的试卷，经解析抽取题目结构后，用 LangGraph 求解流水线逐题作答，输出包含结构化讲解的解题书 JSON。文本 PDF 走确定性解析，图片/扫描件调用 Groq 视觉模型，两条路径输出统一数据模型，并提供 FastAPI HTTP 接口与离线测试集。面向备考学生及教育内容加工场景。",
+   "highlights": [
+    "提供试卷摄取管线：文本 PDF 用解析器、图片/扫描用 Groq 视觉模型，输出统一的 Paper/Question 规范模型",
+    "提供 HTTP API（POST /api/v1/ingest）上传试卷并返回结构化结果，含 400/413/422 错误语义",
+    "提供离线与 live 两套 pytest 测试模式，离线套件校验题目数量、分值、章节与 schema 有效性"
+   ],
+   "use_cases": [
+    "将试卷批量转换为结构化解题书 JSON",
+    "通过 API 集成试卷摄取功能",
+    "对学生扫描/拍照试卷进行 OCR 题目抽取"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该仓库是使用数据库与 LLM 服务的教育应用，不面向数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Turns a question paper into a worked solution book. ／ 2. **Solving** - each question is answered through the LangGraph solve ／ PDF   -> pypdf text layer -> structure-aware parser -> validation -> Paper",
+   "evidence_lines": [
+    3,
+    8,
+    19
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yugal072/answer-book",
+  "sha": "34de99627488",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7991,5 +7991,129 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "49f9e29a0afc": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的多源交叉验证记忆 MCP 服务器",
+   "review": "rein 是用 Rust 编写的 AI 代理记忆系统，通过 MCP 协议提供 40 个工具，实现记忆的存储、语义去重、衰减管理与自学习闭环，内置 SQLite 存储与 Tantivy 全文索引，并提供 CLI/REST/GUI 多种访问面。面向使用 Claude Code、Codex 等 AI 编码工具的开发者，采用 AGPL 许可，embedding 与 LLM 依赖外部 OpenAI 兼容供应商。",
+   "highlights": [
+    "提供 40 个 MCP 工具，同时通过 CLI / MCP / REST 三种接口暴露",
+    "内嵌 SQLite 持久化与 Tantivy 全文索引，本地优先存储",
+    "包含数据驱动的衰减曲线（Kaplan-Meier）、语义去重与自学习参数校准流程"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨会话的记忆存取与召回",
+    "需要知识图谱与时序召回的代理记忆管理",
+    "通过 Web GUI 可视化查看记忆与自适应引擎状态"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**v1.4.0** (2026-09-04) — the runway automation line. The adaptive pipeline now records every stage in SQLite (`adaptive_pipeline_last_run`, surfaced by `rein doctor`, `adaptive-status` and `rein gc`); A12 publishes a `Complete` generation even when the store  ／ A12 recall-fusion weights can now calibrate **without human feedback**, fully fail-closed: structural leave-one-evidence-out families (canonical evidence / concept / episode), a SHA-256 family-disjoint split with a permanent activation holdout, a side-effect-f ／ **Earlier hardening arc (v0.30.x → v0.31.x, 8 releases, 30 codex audit rounds)** — built-in OAuth 2.0 provider for Claude Cowork / claude.ai / mobile remote MCP (DCR + PKCE S256 + RFC 9728/8414, `[server].auth` policy, SQLite-backed clients/grants/signing keys",
+     "lines": [
+      15,
+      19,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 AI 代理生态服务的 MCP 记忆服务器组件，SQLite 仅为其内部存储介质而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Multi-source cross-validated memory for AI agents ／ rein is a self-adaptive memory system for AI coding agents. It stores, recalls, and manages memories across sessions with embedding-based semantic dedup, data-driven decay (Kaplan-Meier survival curves), and a fully closed self-learning loop that replaces fixed parameters with learned values. ／ |**40 MCP tools**|core memory ops, knowledge graph, temporal recall, adaptive maintenance, ARS feedback (Cap A mirror, Cap B synthesis, Cap C archival summary), runtime LLM judge enqueue, ARS acceleration release-gate inspection, and Trust & Measurement reporting. All authored once via `#[op]` macro (v0.21+) and exposed through CLI / MCP / REST simultaneously.|",
+   "evidence_lines": [
+    3,
+    9,
+    39
+   ]
+  },
+  "fn": "lyr1cs/rein",
+  "sha": "49f9e29a0afc",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c2e33973acd9": {
+  "identity": {
+   "one_liner": "基于 Node.js/SQLite 的桌面潮玩虚拟生命体世界服务",
+   "review": "DeskBot 是一个桌面潮玩项目，包含雾灯镇 3D 客户端和 Node.js/SQLite 世界服务，用于模拟多个虚拟角色在持续世界中的日常生活、关系演化与经历积累，需本地配置 LLM 密钥运行，当前处于开发阶段。",
+   "highlights": [
+    "提供 3D 客户端呈现持续运行的虚拟角色世界",
+    "使用 SQLite 存储世界状态与角色生活记录",
+    "支持基于真实模型对照与隔离规则样本进行验证"
+   ],
+   "use_cases": [
+    "桌面虚拟生命体/电子宠物式陪伴应用开发",
+    "LLM 驱动的多角色模拟与生活状态演化实验",
+    "持续运行的世界模拟与存档验证研究"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储世界与角色数据，属于使用数据库构建的虚构世界应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Asamana 上游组件为 Apache-2.0，项目整体许可证未在 README 声明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# DeskBot · 聚形域 ／ |个人认知|复用 Asamana 的感知、需要、目标、决策、双流记忆、反馈、反思与关系整理。Python 提出意图，Node 核验位置、条件和后果。| ／ 认知适配器使用短生命周期 Python，无需额外常驻 TCP 服务。用 `DESKBOT_COGNITION_PYTHON` 指定解释器。模型、天气及来源配置见 本地配置，实验命令见 认知适配器。新下载仓库不继承开发机密钥、正式人生或实验数据库。",
+   "evidence_lines": [
+    1,
+    31,
+    77
+   ]
+  },
+  "fn": "404-NOT-FOUND-ERROR/DeskBot",
+  "sha": "c2e33973acd9",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

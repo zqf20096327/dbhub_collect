@@ -9564,5 +9564,71 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9d5611adc4d1": {
+  "identity": {
+   "one_liner": "自托管定时任务面板，SQLite 持久化，支持 Rust/QuickJS 双运行时插件",
+   "review": "插件面板是一个跑在自有设备上的定时任务管理工具，通过浏览器界面创建和执行定时脚本与插件任务，支持 Shell、Python、JavaScript 及 QuickJS/Node/Bun 运行时。任务、账号、插件状态存放在 SQLite 文件 data/panel.db 中，无需独立数据库服务器，提供单静态二进制，适合在 ARM 盒子、树莓派等低配设备上长期运行。",
+   "highlights": [
+    "支持 5 段和 6 段 cron 表达式，可执行 Shell、Python、JavaScript 脚本任务",
+    "插件默认运行在内置 QuickJS，可切换 Node/Bun 运行时，通过 host-api 使用 SQLite、HTTP、WebSocket 等能力",
+    "单静态 musl 二进制分发，数据目录含 data/panel.db（SQLite），支持插件商城从 GitHub 安装"
+   ],
+   "use_cases": [
+    "在树莓派、旧手机、ARM 盒子上长期运行定时签到、备份、清理任务",
+    "用 JavaScript 插件把重复操作封装为按钮或定时任务",
+    "无云服务依赖的本机自动化任务管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "插件面板是一个跑在自己设备上的定时任务工具。装好以后，用浏览器打开一个网页，就能添加任务、设置执行时间、查看运行结果。它不需要云服务，也不需要数据库服务器，一个程序加一个 SQLite 文件就能工作。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板自身依赖 SQLite 文件（data/panel.db）存储任务、账号和插件状态，SQLite 是其内置持久化组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 声明仓库目前没有附带开源许可证文件，使用前需联系作者",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "插件面板是一个跑在自己设备上的定时任务工具。装好以后，用浏览器打开一个网页，就能添加任务、设置执行时间、查看运行结果。它不需要云服务，也不需要数据库服务器，一个程序加一个 SQLite 文件就能工作。 ／ data/panel.db      任务、账号、插件状态 ／ - host-api 规范：日志、SQLite、HTTP、WebSocket、SMTP、任务注册",
+   "evidence_lines": [
+    3,
+    361,
+    392
+   ]
+  },
+  "fn": "asunajs/panel",
+  "sha": "9d5611adc4d1",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10097,5 +10097,233 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9cf185dda0d6": {
+  "identity": {
+   "one_liner": "基于 Postgres 扩展的 AI 工作流引擎与 Agent 记忆库",
+   "review": "Percolate 通过两个 Postgres 扩展（纯 SQL 扩展与 Rust/pgrx 编写的解析器扩展）将 Agent、工作流、运行记录、文档及其图谱存为数据库行，使运行轨迹可直接用 SQL 查询；配套 Python 进程 percolate-core 提供 worker、Content Server 和 Agent Runtime。面向在 Postgres 上构建 AI Agent 应用的开发者，通过 get-percolate 以 Docker/Helm/PyPI 方式安装。",
+   "highlights": [
+    "提供 percolate 纯 SQL 扩展，可由非超级用户安装并支持行级安全",
+    "提供 percolate_parser 扩展，以 Rust 与 pgrx 实现编译解析器",
+    "以 specs 目录中的 SQL schema 生成扩展及各版本的升级脚本"
+   ],
+   "use_cases": [
+    "在 Postgres 中存储和查询 AI Agent 运行轨迹与文档图谱",
+    "构建需要工作流与 Agent 记忆持久化的应用",
+    "基于 schema 文件自定义并重建扩展 SQL"
+   ],
+   "use_cases补": [
+    "用 Helm chart 或 compose 在容器环境部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "An AI workflow engine and agent memory inside Postgres. Agents, workflows, runs, documents and the graph over them ／ The Postgres image, with the parser compiled from this tree (Docker with at least 6 GB of memory):",
+     "lines": [
+      3,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以 Postgres 扩展形式为数据库增加 AI 工作流与 Agent 记忆能力，属于服务数据库生态的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "pypi",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An AI workflow engine and agent memory inside Postgres. Agents, workflows, runs, documents and the graph over them ／ |`extension/percolate`|the `percolate` extension: pure SQL, installable by a non-superuser so row-level security is real| ／ |`extension/percolate_parser`|the `percolate_parser` extension: the compiled parsers, in Rust with pgrx|",
+   "evidence_lines": [
+    3,
+    10,
+    11
+   ]
+  },
+  "fn": "Percolation-Labs/percolate",
+  "sha": "9cf185dda0d6",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5c6e16b891c9": {
+  "identity": {
+   "one_liner": "本地 ABAP 应用服务器：转译 ABAP，经 SQLite 等后端执行 Open SQL，提供 OData",
+   "review": "open-steamgate (OSD) 是一个可克隆运行的 ABAP 应用服务器，交叉编译 ABAP 代码（Gateway 类、CDS 视图、报表）并在本地数据库上运行，重实现 /IWBEP/ OData v2 网关并服务 Fiori。面向需要在无 SAP 系统环境下本地开发运行 SEGW 服务的开发者，支持 sql.js、SQLite、DuckDB、PostgreSQL、HANA 等后端，定位为 ERP 之下的运行时层而非 ERP 本身。",
+   "highlights": [
+    "通过一个十一方法 seam 支持将 sql.js、SQLite（WAL 文件）、DuckDB、PostgreSQL 或 HANA 作为数据库后端",
+    "实现 OData v2 网关运行时，支持 $filter、$batch、$expand、function imports 等，并提供 SEGW Service Builder、CDS、AMDP 的子集",
+    "提供浏览器（service worker）、Docker、单二进制、VS Code 扩展、Node 源码等多种运行方式，并可将 ABAP 报表经 gogen 编译为 Go 原生命令行工具"
+   ],
+   "use_cases": [
+    "在本地环境开发、调试 classic code-based SEGW 服务并用 Fiori Elements 前端访问",
+    "基于 ABAP/CDS 的原型开发，需要可复制、分支、比较的整套本地系统",
+    "将经典 ABAP 报表编译为独立原生命令行工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Each release also carries `sqlite.yml`, `duckdb.yml` and `postgres.yml`; start one with `docker compose -f sqlite.yml up -d`. `./osd doctor` checks a downloaded binary. ／ PostgreSQL or HANA. So a whole system can be copied, branched, compared and ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`|",
+     "lines": [
+      17,
+      42,
+      116
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Each release also carries `sqlite.yml`, `duckdb.yml` and `postgres.yml`; start one with `docker compose -f sqlite.yml up -d`. `./osd doctor` checks a downloaded binary. ／ and the database sits behind an eleven-method seam: sql.js, SQLite, DuckDB, ／ Every pixel below is served by transpiled ABAP over SQLite. SAPUI5 1.120 is",
+     "lines": [
+      17,
+      41,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite/PostgreSQL 等作为后端存数据的 ABAP 应用服务器运行时，而非为某数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "and the database sits behind an eleven-method seam: sql.js, SQLite, DuckDB, ／ PostgreSQL or HANA. So a whole system can be copied, branched, compared and ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`|",
+   "evidence_lines": [
+    41,
+    42,
+    116
+   ]
+  },
+  "fn": "oisee/open-steamgate",
+  "sha": "5c6e16b891c9",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "79236def3547": {
+  "identity": {
+   "one_liner": "免费开发者工具清单，自动检查工具在线状态",
+   "review": "该项目是一个收录免费层开发者工具的清单仓库，覆盖 AI 编码、云托管、数据库、DevOps、支付、安全等类别，共 55 个工具，通过 GitHub Actions 每晚自动检查各工具的在线状态并更新表格。适合寻找免费开发资源的开发者和使用 AI 编码工具的用户，仓库本身为 MIT 许可的静态列表，不含可安装软件。",
+   "highlights": [
+    "收录 55 个免费/免费层开发者工具，按类别组织并提供链接、用途、定价与状态",
+    "通过 GitHub Actions 每晚自动检查工具在线状态",
+    "README 声明 MIT 许可，接受 PR 贡献"
+   ],
+   "use_cases": [
+    "查找特定类别（数据库、托管、监控等）的免费工具",
+    "为工具选型提供免费层定价参考"
+   ],
+   "repo_is_list": true
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      177,
+      182
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ／ Serverless SQLite database with edge replication",
+     "lines": [
+      192,
+      197
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库本身是工具清单而非使用或适配数据库的软件，数据库相关条目仅为列表收录。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 🛠️️ Awesome Free Dev Tools ／ ### Database & Backend ／ - **Status** is automatically checked every night by GitHub Actions.",
+   "evidence_lines": [
+    1,
+    169,
+    417
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "79236def3547",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

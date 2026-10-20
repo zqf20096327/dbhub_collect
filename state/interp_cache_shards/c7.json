@@ -8966,5 +8966,142 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "99ccbe073160": {
+  "identity": {
+   "one_liner": "自托管的 Linktree 替代品，用 Next.js 构建个人链接主页并内置分析",
+   "review": "LinkBreeze 是一个自托管的个人链接聚合页面应用，提供多页面支持、主题定制、二维码、邮件收集和 cookieless 访问统计，并提供从 Linktree 等服务的导入向导。它面向需要自建 link-in-bio 页面的创作者和中小站长，通过 Docker 一条命令或 Node.js 手动部署，数据存储于 SQLite，支持应用内定时备份及 S3 异地备份的 compose 方案。",
+   "highlights": [
+    "支持多页面、主题预设、链接调度、自定义域名、二维码生成与邮件收集",
+    "内置 cookieless 分析：统计浏览、点击、来源与设备，IP 哈希存储并自动清理",
+    "提供应用内定时备份与 SQLite dump sidecar 加 S3 异地备份的 compose 配置"
+   ],
+   "use_cases": [
+    "创作者在自有服务器上搭建个人链接主页替代托管服务",
+    "需要隐私友好的访问统计（无 cookie、IP 哈希）的链接页运营",
+    "从 Linktree、Bento、Hopp.bio、LittleLink 等平台迁移链接数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Scheduled SQLite backups (raw dump sidecar, S3 offsite)|`docker-compose.with-backup.yml`| ／ |`DATABASE_PATH`|`./data/linkbreeze.db`|SQLite database file path|",
+     "lines": [
+      184,
+      275
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用以 SQLite 作为自身数据存储（DATABASE_PATH 指向 linkbreeze.db），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`DATABASE_PATH`|`./data/linkbreeze.db`|SQLite database file path| ／ |Scheduled SQLite backups (raw dump sidecar, S3 offsite)|`docker-compose.with-backup.yml`|",
+   "evidence_lines": [
+    275,
+    184
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "OmniRise/LinkBreeze",
+  "sha": "99ccbe073160",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "420375e8724e": {
+  "identity": {
+   "one_liner": "多语言结构化数据序列化框架，含 SQLite 扩展",
+   "review": "Zserio 是一个序列化框架：用户用 Zserio schema 语言定义结构化数据，由编译器生成 C++/Java/Python 源码和运行时库，用于在二进制、文本或 JSON 流上读写数据。支持约束、模板、打包数组等 schema 特性，并提供 gRPC/RMI/HTTP 服务后端示例与 SQLite 扩展。适合需要在多语言间以自定义线格式交换结构化数据的开发者。",
+   "highlights": [
+    "提供 C++/Java/Python 代码生成器及配套运行时库",
+    "支持二进制线格式与 JSON 格式的序列化和反序列化",
+    "提供 SQLite 扩展及 gRPC、RMI、MQTT 等服务/Pub-Sub 后端示例"
+   ],
+   "use_cases": [
+    "跨平台跨语言的结构化数据交换",
+    "将 schema 定义的数据持久化到 SQLite",
+    "基于 schema 定义通用服务接口与 Pub/Sub 客户端"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite extension",
+     "lines": [
+      86
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架通过 SQLite 扩展支持将 schema 数据写入 SQLite，属于为数据存储提供能力的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Zserio is a framework for serializing structured data with a compact and efficient way with low overhead. ／ Zserio supports the following code generators: ／ - SQLite extension",
+   "evidence_lines": [
+    3,
+    19,
+    86
+   ]
+  },
+  "fn": "ndsev/zserio",
+  "sha": "420375e8724e",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

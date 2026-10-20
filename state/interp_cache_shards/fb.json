@@ -9563,5 +9563,375 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bf67e126c593": {
+  "identity": {
+   "one_liner": "离线漏洞数据库与包搜索库，基于 SQLite 存储 CVE 5.2 记录",
+   "review": "appthreat-vulnerability-db 是一个 Python 库和 CLI（vdb），从 vuln-list、OSV、NVD、GitHub 等上游源下载安全通告，转换为 CVE 5.2 schema 后存入普通 SQLite 数据库文件，支持按 purl、CPE 或 git URL 离线查询，扫描时无需网络访问。主要供 owasp-dep-scan 等软件成分分析工具使用，也可通过 vdb db 命令独立获取和刷新分片数据库。",
+   "highlights": [
+    "将多个上游漏洞源合并为 CVE 5.2 格式记录，存入带索引的 SQLite 文件（.vdb7）",
+    "查询完全基于本地 SQLite 文件运行，扫描期间无网络访问",
+    "提供 vdb db 命令进行分片化数据库的阶段式、校验后原子刷新"
+   ],
+   "use_cases": [
+    "为 SCA/漏洞扫描工具（如 owasp-dep-scan）提供离线漏洞查询数据源",
+    "在 CI 中自行构建和发布定制范围的漏洞数据库镜像",
+    "按 purl、CPE 或 git URL 检索包的安全通告"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Bottlerocket, Debian, Oracle Linux, RHEL/CentOS, Rocky Linux, Ubuntu, Photon, ／ Oracle Linux comes from the vuln-list `oval/oracle` tree (ELSA errata, and ／ `pkg:rpm/oracle/oracle-<N>/<name>` (module streams",
+     "lines": [
+      64,
+      96,
+      98
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "schema, and stores it in SQLite with indexes built for fast offline lookup by ／ library. The `.vdb7` files are ordinary SQLite databases. ／ Lookups run entirely against local SQLite files; there is no network access",
+     "lines": [
+      5,
+      10,
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为漏洞扫描/SCA 生态提供数据的服务性工具库，而非使用数据库支撑自身业务的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An offline vulnerability database and package search library. `vdb` downloads ／ schema, and stores it in SQLite with indexes built for fast offline lookup by ／ owasp-dep-scan. The CLI exists to",
+   "evidence_lines": [
+    3,
+    5,
+    147
+   ]
+  },
+  "fn": "AppThreat/vulnerability-db",
+  "sha": "bf67e126c593",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f1a64e5cf8b7": {
+  "identity": {
+   "one_liner": "自托管的 ASP.NET Core 个人/业务管理 Web 应用",
+   "review": "Maroik 是一个用 ASP.NET Core 构建的自托管 Web 应用，提供个人财务管理、日历、公告板和基于角色的用户管理等功能，适合需要一体化自托管站点管理的个人或小团队使用；项目自 2021 年起由单人开发，2025 年 4 月将数据库从 MariaDB 迁移到 PostgreSQL，测试中使用 Testcontainers 运行真实 PostgreSQL 与 RabbitMQ，架构采用 DDD + Clean Architecture。",
+   "highlights": [
+    "提供记账、日历、公告板、基于角色的用户管理与管理员仪表盘等模块",
+    "金额以 numeric(20,4) 存储并在行锁事务中更新资产余额",
+    "测试通过 Testcontainers 运行真实 PostgreSQL 与 RabbitMQ"
+   ],
+   "use_cases": [
+    "自托管个人财务管理与记账",
+    "团队/个人共享日历与公告板",
+    "带角色权限的内容与账户管理站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Test-first development.** Every change starts with a failing test, including the log entries it must write; real PostgreSQL and RabbitMQ run in Testcontainers instead of mocks wherever the behaviour depends on them. ／ - PostgreSQL 17",
+     "lines": [
+      62,
+      174
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|2025-04|MariaDB → PostgreSQL|",
+     "lines": [
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 PostgreSQL 存储数据的应用程序，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, calendar management, bulletin boards, and role-based user management. ／ - **Test-first development.** Every change starts with a failing test, including the log entries it must write; real PostgreSQL and RabbitMQ run in Testcontainers instead of mocks wherever the behaviour depends on them. ／ |2025-04|MariaDB → PostgreSQL|",
+   "evidence_lines": [
+    8,
+    62,
+    89
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik",
+  "sha": "f1a64e5cf8b7",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fc62b46bf3c6": {
+  "identity": {
+   "one_liner": "跨引擎桌面数据库管理器，Tauri+Rust 构建，支持 SQL 与 NoSQL",
+   "review": "DBine 是一个运行在 Windows/macOS/Linux 的桌面数据库管理客户端，提供连接树、SQL 编辑器、Profiler、服务器监控、ER 图、表设计器、schema 对比与跨引擎迁移等功能，覆盖关系型、文档、键值、图、时序等引擎。面向需要在一个界面管理多种数据库的开发者与 DBA，支持从 DBeaver 等工具导入连接，并内置 AI 助手与 MCP 服务器。",
+   "highlights": [
+    "提供 Explorer、SQL 编辑器、Profiler、服务器监控、ER 图、表设计器与查询构建器等功能模块",
+    "支持跨引擎迁移、克隆与 schema 对比，并可从 DBeaver、DataGrip、SSMS 等工具导入连接",
+    "支持 SSH 隧道、云托管数据库 IAM 登录、多种密钥管理器取密码，并提供本地 AI 助手与 MCP 服务器"
+   ],
+   "use_cases": [
+    "在同一桌面客户端中管理多种 SQL 与 NoSQL 数据库",
+    "通过 Profiler 实时查看数据库上运行的查询并诊断会话与锁",
+    "在不同引擎的数据库之间迁移表结构与数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBine: the explorer with PostgreSQL, SQL Server, Redis and Elasticsearch connections, the SQL editor and results ／ - **Cloud sign-in** for managed PostgreSQL and MySQL: AWS IAM (RDS, Aurora),",
+     "lines": [
+      7,
+      39
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Cloud sign-in** for managed PostgreSQL and MySQL: AWS IAM (RDS, Aurora), ／ |Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      39,
+      388
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      388
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "own users don't have it, such as SQLite, DuckDB or DynamoDB. Details:",
+     "lines": [
+      266
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "DBine: the explorer with PostgreSQL, SQL Server, Redis and Elasticsearch connections, the SQL editor and results ／ - If the engine records every query (Extended Events in SQL Server,",
+     "lines": [
+      7,
+      82
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse, Snowflake, BigQuery, Elasticsearch, Redis, among others), with",
+     "lines": [
+      279
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      388
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      388
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|Relational|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Cloud",
+     "lines": [
+      388
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接并管理多种数据库的桌面客户端工具，为数据库生态提供服务而非用库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DBine** is a desktop multi-engine database manager from AddLayer. One app ／ DBine: the explorer with PostgreSQL, SQL Server, Redis and Elasticsearch connections, the SQL editor and results ／ - **Migrate, clone and sync databases:** \"Migrate…\" in a database's menu moves",
+   "evidence_lines": [
+    3,
+    7,
+    169
+   ]
+  },
+  "fn": "addlayer-io/dbine",
+  "sha": "fc62b46bf3c6",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "79b76ffb3c52": {
+  "identity": {
+   "one_liner": "Python CLI，用自然语言查询对文本文件和 SQLite 字段值做重排序检索",
+   "review": "jev-rerank 是一个命令行检索工具，支持对目录中的文本文件以及 SQLite 数据库指定表的文本字段进行自然语言查询，并调用 TypeSafe 的 Jev API 对候选结果重排序。使用者需配置 TYPESAFE_API_KEY，可指定 yes/no 判据控制排序标准；数据库以只读方式打开，仅要求声明为文本类型的列。适合需要在本地文件或 SQLite 记录中按语义查找内容的用户。",
+   "highlights": [
+    "支持用 --table-field 检索多个 SQLite 表/视图的文本字段并将结果合并排序",
+    "查询可附加 yes/no 判据段落以约束排序标准，支持纯文本与 JSON 两种形式",
+    "以只读方式打开数据库，基于 BM25 检索与分数缓存，仅对变更值重建索引"
+   ],
+   "use_cases": [
+    "在本地文档目录中按自然语言查询查找文本文件",
+    "对 SQLite 表中的大段文本字段（如歌词、描述）做语义排序检索",
+    "在脚本中以 --json 输出集成检索结果"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A Python CLI for finding text files or SQLite field values that match a natural-language query, ／ Both filenames and document contents are searchable. Selected SQLite text fields ／ Requires Python 3.11+ and SQLite with FTS5 (included in most Python distributions).",
+     "lines": [
+      3,
+      5,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 CLI 工具读取 SQLite 数据库字段作为检索语料，为使用 SQLite 的场景提供检索能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Python CLI for finding text files or SQLite field values that match a natural-language query, ／ Use `--db` instead of `--dir` and repeat `--table-field TABLE_NAME.FIELD_NAME` to ／ The source database is opened read-only, and schema validation and row scans use",
+   "evidence_lines": [
+    3,
+    159,
+    188
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "anteloc/jev-rerank",
+  "sha": "79b76ffb3c52",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

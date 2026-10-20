@@ -10183,5 +10183,159 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f093335b8eb": {
+  "identity": {
+   "one_liner": "按项目声明 PHP 版本的本地开发环境桌面应用，无需 Docker",
+   "review": "HyPHP 是面向 Windows 和 macOS 的桌面应用，用于本地 PHP 开发：通过 hyphp.yaml 声明每个项目使用的 PHP 版本，可同时运行多个版本，并按需下载、校验和监管 Apache/nginx、MySQL/MariaDB、Mailpit 和 phpMyAdmin，提供 .test 域名与本地 HTTPS。它自身不重分发二进制，运行时从官方来源或 Homebrew 获取，适合需要在单机维护多 PHP 项目环境的开发者。",
+   "highlights": [
+    "每项目通过 hyphp.yaml 声明 PHP 版本，多版本经 php-cgi/php-fpm 池同时运行",
+    "按需下载并 SHA-256 校验 Apache、nginx、MySQL、MariaDB、Mailpit、phpMyAdmin 等运行时",
+    "提供 .test 域名、本地 HTTPS（mkcert）、CLI（支持 --json 输出）与就绪探针状态"
+   ],
+   "use_cases": [
+    "单机上同时开发依赖不同 PHP 版本的多个项目",
+    "不使用 Docker 的本地 PHP 环境搭建",
+    "通过 hyphp.yaml 提交使克隆项目即获得一致环境"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Apache or nginx, MySQL or MariaDB.** One of each active at a time, on the same ports, ／ - **Runtimes from official sources.** PHP 7.2 to 8.5, Apache, nginx, MySQL, MariaDB, Mailpit, ／ |MySQL Community|8.0, 8.4|GPL-2.0|dev.mysql.com|",
+     "lines": [
+      65,
+      77,
+      148
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB, Mailpit and phpMyAdmin are downloaded, verified and supervised by the app. ／ - **Apache or nginx, MySQL or MariaDB.** One of each active at a time, on the same ports, ／ |MariaDB Server|10.11, 11.4, 11.8, 12.3|GPL-2.0|mariadb.org|",
+     "lines": [
+      23,
+      65,
+      149
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PHP 本地开发下载并监管 MySQL/MariaDB 等数据库运行时的环境工具，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "HyPHP is a desktop app with its own orchestrator: several PHP versions serving different ／ MariaDB, Mailpit and phpMyAdmin are downloaded, verified and supervised by the app. ／ - **Runtimes from official sources.** PHP 7.2 to 8.5, Apache, nginx, MySQL, MariaDB, Mailpit,",
+   "evidence_lines": [
+    20,
+    23,
+    77
+   ]
+  },
+  "fn": "arismarioneves/hyphp",
+  "sha": "3f093335b8eb",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b7292209c54b": {
+  "identity": {
+   "one_liner": "数据分析师学习路线仓库，含SQL与Python课程笔记本",
+   "review": "一个面向初级数据分析师求职者的印尼语学习项目仓库，包含17个模块路线图，覆盖统计、SQL、Python（NumPy/Pandas）、数据清洗、可视化和面试准备。SQL 练习笔记本通过 Google Colab 使用 MySQL 与 PostgreSQL 执行查询，也可本地用 VS Code/Jupyter 运行。仓库附带 MySQL Workbench、DBeaver 等工具作为学习环境的一部分。",
+   "highlights": [
+    "包含17个模块的学习路线，覆盖SQL基础到窗口函数、CTE等进阶内容",
+    "提供可在 Google Colab 直接打开的 Jupyter 笔记本",
+    "含数据清洗、EDA、机器学习入门与面试案例等主题文件夹"
+   ],
+   "use_cases": [
+    "准备数据分析师岗位面试与作品集",
+    "系统学习 SQL、Python 数据分析与可视化"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`04_sql_basic.ipynb`|Query dasar SQL dengan MySQL & PostgreSQL|Open In Colab|",
+     "lines": [
+      121
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ |`04_sql_basic.ipynb`|Query dasar SQL dengan MySQL & PostgreSQL|Open In Colab|",
+     "lines": [
+      78,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是数据分析学习项目，SQL 笔记本使用 MySQL 与 PostgreSQL 存取练习数据，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 标注 MIT 徽标，但同时版权声明保留所有权利、禁止未经许可复制与商用，二者表述不一致",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Repositori ini adalah **project pembelajaran Data Analyst** yang berisi roadmap belajar terstruktur untuk membangun kemampuan dasar hingga menengah dalam analisis data, SQL, Python, visualisasi, dan persiapan karier. ／ |`04_sql_basic.ipynb`|Query dasar SQL dengan MySQL & PostgreSQL|Open In Colab| ／ MySQL",
+   "evidence_lines": [
+    27,
+    121,
+    78
+   ]
+  },
+  "fn": "harrisariefkamis/PROJECT-DATA-ANALYST",
+  "sha": "b7292209c54b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10090,5 +10090,78 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "21891c7b2dde": {
+  "identity": {
+   "one_liner": "基于 Nuxt 4 与 Supabase/PostgreSQL RLS 的多租户 SaaS 平台脚手架",
+   "review": "Burhan 是一个使用 Nuxt 4 与 Supabase 构建的多租户 SaaS 平台脚手架，面向开发者、研究者与学术机构自部署内容/知识发布站点。数据隔离依赖 PostgreSQL RLS 策略与触发器实现租户配额执行，附带 4 级 RBAC、AI 写作助手与双语本地化；README 未提供 Docker 等一键部署方式，需自备 Supabase 项目并手工执行 schema.sql。",
+   "highlights": [
+    "通过 PostgreSQL RLS 策略实现多租户数据库级隔离",
+    "提供 4 级 RBAC 角色体系与数据库触发器配额执行",
+    "内置 AES-256-GCM 加密的 BYOK 凭证管理与 SSRF 防护层"
+   ],
+   "use_cases": [
+    "自托管多租户内容发布/LMS 平台搭建",
+    "需要租户隔离与订阅分层控制的知识库部署",
+    "多语言（阿拉伯语/英语）SaaS 应用开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database-Level Isolation:** 100% data separation is enforced via native PostgreSQL Row-Level Security (RLS) policies on all core tables. ／ - **Database-Level Enforcement:** PostgreSQL triggers (`check_branch_limit`) enforce plan quotas directly on `INSERT`, preventing API-level bypasses.",
+     "lines": [
+      44,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL（经 Supabase）存储数据的 SaaS 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另提供商业许可的 Burhan Pro 版本",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Database-Level Isolation:** 100% data separation is enforced via native PostgreSQL Row-Level Security (RLS) policies on all core tables. ／ - **Database-Level Enforcement:** PostgreSQL triggers (`check_branch_limit`) enforce plan quotas directly on `INSERT`, preventing API-level bypasses. ／ - A Supabase Project (URL, Anon Key, and Service Role Key)",
+   "evidence_lines": [
+    44,
+    81,
+    113
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Ibrahem3/burhan-platform",
+  "sha": "21891c7b2dde",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

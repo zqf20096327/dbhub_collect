@@ -11137,5 +11137,145 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6ab5ce3ce785": {
+  "identity": {
+   "one_liner": "基于PostgreSQL知识图谱的AI记忆服务器，经MCP提供多租户记忆",
+   "review": "FaultLine 是一个自托管的 AI 持久记忆服务，将事实以类型化关系存入知识图谱，写入前经校验门过滤，修正时归档旧值。每个用户使用独立的 PostgreSQL schema 做物理隔离，通过 MCP 服务器向 OpenWebUI、Claude Desktop 等客户端提供同一记忆库，还支持 /expand 学习领域本体。适用于本地运行 LLM 并需要跨会话、跨模型共享记忆的个人用户；要求 Docker 与 LLM 后端。",
+   "highlights": [
+    "以类型化关系存储事实，写入前经校验门，修正时归档旧值",
+    "每用户独立 PostgreSQL schema 实现多租户隔离，请求经 SET search_path 绑定",
+    "提供 MCP 服务器，支持 OpenWebUI、Claude Desktop 等 MCP 客户端共享同一记忆库",
+    "/expand 命令可从指定 URL 文档或训练知识构建领域本体"
+   ],
+   "use_cases": [
+    "为本地 LLM 提供跨会话的持久化个人记忆",
+    "在多个 MCP 客户端之间共享统一的记忆存储",
+    "学习特定领域（如网络、Kubernetes）的结构化本体并按上下文存取事实"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Every user gets a **physically separate PostgreSQL schema** (`faultline_<user_id>`) — the sole user-memory boundary. Each request binds to the caller's schema via `SET search_path` **without `public`**, so one tenant's queries cannot even *name* another tenant ／ > Postgres and Redis are not published. There is no vector store: user memory lives in Postgres.",
+     "lines": [
+      128,
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用户记忆存于 Postgres，PostgreSQL 是其存储后端而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3，单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Every user gets a **physically separate PostgreSQL schema** (`faultline_<user_id>`) — the sole user-memory boundary. Each request binds to the caller's schema via `SET search_path` **without `public`**, so one tenant's queries cannot even *name* another tenant's tables. There is no shared `user_id` column to filter on and forget — the boundary **is** the schema, enforced by the database. (User memory is PostgreSQL-only; the vector tier is retired, so there are no per-user vector collections in the memory path.) ／ > Postgres and Redis are not published. There is no vector store: user memory lives in Postgres. ／ FaultLine exposes an MCP server. That means the same memory store is available to OpenWebUI, Claude Desktop, or any other MCP-capable endpoint. Change your server IP in one conversation, every model sees the update.",
+   "evidence_lines": [
+    128,
+    180,
+    21
+   ]
+  },
+  "fn": "tkalevra/FaultLine",
+  "sha": "6ab5ce3ce785",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0304c23ad1b4": {
+  "identity": {
+   "one_liner": "私有化部署即时通讯系统，Python服务端+Flutter三端客户端",
+   "review": "一套自研 C/S 架构即时通讯系统，含 Python 多线程服务端与 Flutter 客户端（Windows/Linux/Android），支持私聊群聊、文件传输与 WebRTC 音视频通话，采用自定义二进制协议，服务端用 SQLite 存储 18 张表。面向希望在自有服务器上部署聊天服务、掌握自己数据的个人或小团队；README 提示未内置实名机制，适合熟人小范围部署。",
+   "highlights": [
+    "服务端基于 thread-per-connection + SSL + SQLite（18 张表），包含过期清理、磁盘预警与备份等存储治理",
+    "支持 1:1 与 6 人群音视频通话，WebRTC P2P 直连，服务器仅中继信令",
+    "提供文件传输（5GB 大文件、SHA-256 校验、断点续传）与消息记录导出（TXT/JSON）"
+   ],
+   "use_cases": [
+    "在自有服务器上部署私有化聊天服务",
+    "小范围熟人团队的即时通讯与音视频沟通",
+    "即时通讯协议与客户端开发的学习研究"
+   ],
+   "license_note": "MIT，另有第三方组件许可说明"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **网络要求**：首次构建需访问 GitHub 下载原生制品（libmpv、libwebrtc、sqlite3 native assets）与 jitpack；国内环境请自备代理或使用镜像，如 `PUB_HOSTED_URL=https://pub.flutter-io.cn`、`FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn` ／ - **服务端**：thread-per-connection + SSL + SQLite（18 张表），存储治理（过期清理/磁盘预警/备份）",
+     "lines": [
+      62,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明服务端使用 SQLite 存储 18 张表数据，属使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **服务端**：thread-per-connection + SSL + SQLite（18 张表），存储治理（过期清理/磁盘预警/备份）",
+   "evidence_lines": [
+    74
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "jiandanhuoduanqiao95/Rosub",
+  "sha": "0304c23ad1b4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

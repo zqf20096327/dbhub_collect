@@ -9016,5 +9016,72 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d5b6d6b72e9c": {
+  "identity": {
+   "one_liner": "Go + SQLite + Datastar 应用的运行时框架",
+   "review": "lith 是一个面向 Go 语言的运行时框架，用于构建基于 SQLite 与 Datastar 的超媒体应用。它提供单写入者线性写、事件溯源、按 tick 渲染视图、SSE 流压缩等包，并附带项目脚手架模板、负载测试与 Prometheus 指标包。适合用 Go 开发数据驱动 Web 应用的开发者；不含 GUI，需配合 net/http、templ 等使用。",
+   "highlights": [
+    "包含 sqlite 包：单写连接与 query_only 读连接池、pragma、user_version 迁移、VACUUM INTO 备份",
+    "writer 包实现单写入者按序批量提交命令，每命令使用 savepoint",
+    "内置事件溯源、按主题标记脏视图的渲染循环、每流独立 zstd/brotli 压缩的 SSE"
+   ],
+   "use_cases": [
+    "用 Go + SQLite 构建超媒体/SSE 驱动的 Web 应用",
+    "需要对 SQLite 写入做线性化批量提交与事件溯源的场景",
+    "需要每账户独立数据库的多租户应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite: one writer, WAL ／ for Go, SQLite and Datastar apps, built by zwei und eins gmbh. ／ |`sqlite`|one write connection and a `query_only` read pool whose connections keep their statements prepared (`Uncached` for SQL built at runtime), pragmas, `user_version` migrations, read-only opens, `VACUUM INTO` backups|",
+     "lines": [
+      6,
+      11,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为基于 SQLite 的应用提供运行时与 sqlite 包，属于服务数据库使用的工具/组件而非仅使用数据库的最终应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**L**inear writes, **I**mmediate mode, **T**icks, **H**ypermedia: a runtime ／ |`sqlite`|one write connection and a `query_only` read pool whose connections keep their statements prepared (`Uncached` for SQL built at runtime), pragmas, `user_version` migrations, read-only opens, `VACUUM INTO` backups| ／ Everything is pure Go and builds with `CGO_ENABLED=0`.",
+   "evidence_lines": [
+    10,
+    28,
+    42
+   ]
+  },
+  "fn": "zweiundeins/lith",
+  "sha": "d5b6d6b72e9c",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

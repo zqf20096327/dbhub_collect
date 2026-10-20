@@ -11258,5 +11258,93 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0f1e2cc116b5": {
+  "identity": {
+   "one_liner": "MySQL/MariaDB 数据导出与迁移工具，自带协议客户端与网络传输",
+   "review": "quiver 是用 OxCaml 编写的 MySQL/MariaDB 数据导出与搬运命令行工具，提供 dump、load、copy、agent、collect、relay 等子命令，支持并行一致性快照、zstd 压缩、断点续传、跨网络中继链式转发及双向 TLS。面向需要进行数据库备份、迁移和数据流转的运维与数据工程人员。",
+   "highlights": [
+    "实现 MySQL 协议自身客户端，无需客户端库，dump/load/copy/网络流式传输",
+    "支持一致性快照（FTWRL/MariaDB BACKUP STAGE）、断点续传、帧校验与 mutual TLS 1.3",
+    "兼容 mydumper 目录布局，支持 SQL/CSV/zstd 输出与多目标链式转发"
+   ],
+   "use_cases": [
+    "MySQL/MariaDB 大数据量备份与恢复",
+    "跨服务器数据迁移与拷贝",
+    "跨网络环境的数据流式传输与多目标分发"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Postgres and other providers|🗺️ after MySQL is done|",
+     "lines": [
+      263
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A MySQL and MariaDB dumper and data mover with its own protocol client and its own network ／ MySQL 8.0 · 8.4 ／ 1. No client library. quiver implements the MySQL protocol itself and decodes binary rows from",
+     "lines": [
+      5,
+      11,
+      28
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A MySQL and MariaDB dumper and data mover with its own protocol client and its own network ／ MariaDB 10.11 · 11.4 · 11.8 ／ - One snapshot for all sessions under `FLUSH TABLES WITH READ LOCK` or MariaDB `BACKUP STAGE`.",
+     "lines": [
+      5,
+      12,
+      103
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MySQL/MariaDB 提供导出、加载、拷贝与传输服务的工具，数据库为其服务对象而非存储载体",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A MySQL and MariaDB dumper and data mover with its own protocol client and its own network ／ 1. No client library. quiver implements the MySQL protocol itself and decodes binary rows from ／ quiver dump    # MySQL to files: mydumper-compatible SQL or CSV, optional zstd, checksummed manifest",
+   "evidence_lines": [
+    5,
+    28,
+    75
+   ]
+  },
+  "fn": "jongleb/quiver",
+  "sha": "0f1e2cc116b5",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

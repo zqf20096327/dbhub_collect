@@ -10180,5 +10180,73 @@
   "generated_at": "2026-10-16",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8c953ca1bfa5": {
+  "identity": {
+   "one_liner": "本地 Google Calendar API v3 与 OAuth 模拟服务器，用于开发与测试",
+   "review": "Calendarpit 在本地实现 Google Calendar API v3 和 OAuth 服务端，提供事件管理、free/busy、watch 通知、fixture 加载与重置等功能，供开发者在不使用真实 Google 账号的情况下测试日历集成。数据存储于本地 SQLite 文件，也可用 :memory: 运行临时会话；兼容性有意受限，未支持的功能返回显式错误。",
+   "highlights": [
+    "本地实现 Google Calendar API v3 事件接口、free/busy 查询与本地 OAuth 流程",
+    "支持 fixture 加载、重置控制、masked 请求历史与测试控制 API",
+    "数据持久化到 SQLite 文件或以 :memory: 运行，通过 Docker/Homebrew/独立可执行文件分发"
+   ],
+   "use_cases": [
+    "为依赖 Google Calendar API 的应用提供本地开发与联调环境",
+    "运行 E2E 测试，无需真实 Google 凭据或外部数据库",
+    "多 worker 并行测试时使用独立内存或文件数据库隔离数据"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`.calendarpit/calendarpit.sqlite` in the directory where you start Calendarpit. ／ calendarpit serve --database ./.calendarpit/manual.sqlite ／ port stays on loopback. The named volume preserves `/data/calendarpit.sqlite`;",
+     "lines": [
+      71,
+      80,
+      177
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其将数据保存到本地 SQLite 文件（.calendarpit/calendarpit.sqlite），SQLite 是其内部存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "integrations without a real Google account, provider credentials, or an external ／ `.calendarpit/calendarpit.sqlite` in the directory where you start Calendarpit.",
+   "evidence_lines": [
+    4,
+    71
+   ]
+  },
+  "fn": "iktakahiro/calendarpit",
+  "sha": "8c953ca1bfa5",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

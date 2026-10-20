@@ -9437,5 +9437,249 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7127888c7bd3": {
+  "identity": {
+   "one_liner": "自托管一体化运维终端工作台，集成 SSH、文件、Docker、数据库与 AI 助手",
+   "review": "NexTerm 是一个可自托管的终端工作台，用 Go/Wails+React 构建，把 SSH/WinRM 终端、SFTP 文件管理、Docker 容器管理、数据库查询、设备监控和终端分享放进一个界面，并内置可执行命令的 AI 助手（支持 OpenAI 兼容接口）。适合需要集中管理多台服务器的运维人员；自身数据默认存 SQLite，也可配置为 PostgreSQL/MySQL/MariaDB。",
+   "highlights": [
+    "内置 20+ AI 工具，可在用户确认后执行命令、读写文件、查看 Docker 容器和查询 MySQL/PostgreSQL/Redis",
+    "SSH 与设备会话支持后台持续运行、多设备接管和时间轴回放",
+    "服务端支持多用户、TOTP 双因素认证、端到端加密同步、凭据保险库与审计日志"
+   ],
+   "use_cases": [
+    "集中管理多台服务器的 SSH 终端、文件传输与容器运维",
+    "让 AI 助手在授权范围内排查和修复服务器问题",
+    "通过限时链接向他人分享只读终端访问"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SFTP 与在线编辑、Docker、MySQL、PostgreSQL、Redis、端口转发和 SSH 配置导入。 ／ - **20+ 内置工具**：执行命令；读写和编辑文件；查看 Docker 容器与日志；查询 MySQL、PostgreSQL 和 Redis；派生子任务。 ／ - **数据库**：MySQL/MariaDB 与 PostgreSQL 的 SQL 编辑器和表结构浏览，Redis 键浏览。 ／ - **选择你的数据库**：默认 SQLite，服务端也支持 PostgreSQL、MySQL 和 MariaDB。",
+     "lines": [
+      33,
+      48,
+      69,
+      88
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "SFTP 与在线编辑、Docker、MySQL、PostgreSQL、Redis、端口转发和 SSH 配置导入。 ／ - **20+ 内置工具**：执行命令；读写和编辑文件；查看 Docker 容器与日志；查询 MySQL、PostgreSQL 和 Redis；派生子任务。 ／ - **数据库**：MySQL/MariaDB 与 PostgreSQL 的 SQL 编辑器和表结构浏览，Redis 键浏览。 ／ - **选择你的数据库**：默认 SQLite，服务端也支持 PostgreSQL、MySQL 和 MariaDB。",
+     "lines": [
+      33,
+      48,
+      69,
+      88
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **选择你的数据库**：默认 SQLite，服务端也支持 PostgreSQL、MySQL 和 MariaDB。 ／ - 自身数据默认存入 SQLite，也可通过 `--db postgres|mysql|mariadb` 和 `--db-dsn` 使用 PostgreSQL、MySQL 或 MariaDB；同一个数据库仅运行一个服务端实例。 ／ `NEXTERM_TEST_DB_BACKEND` 也可设为 `mysql` 或 `mariadb`，DSN 使用对应驱动格式。未设置时运行 SQLite；显式选择外部数据库必须提供可用 DSN。",
+     "lines": [
+      88,
+      141,
+      185
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **数据库**：MySQL/MariaDB 与 PostgreSQL 的 SQL 编辑器和表结构浏览，Redis 键浏览。 ／ - **选择你的数据库**：默认 SQLite，服务端也支持 PostgreSQL、MySQL 和 MariaDB。 ／ - 自身数据默认存入 SQLite，也可通过 `--db postgres|mysql|mariadb` 和 `--db-dsn` 使用 PostgreSQL、MySQL 或 MariaDB；同一个数据库仅运行一个服务端实例。",
+     "lines": [
+      69,
+      88,
+      141
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "NexTerm 是使用 SQLite/PostgreSQL/MySQL/MariaDB 存储自身数据的应用，而非为数据库生态服务的专用工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "NexTerm 把远程运维的完整流程放进一个窗口：通过 SSH、WinRM 或 NexTerm 设备 agent 连接主机，让 AI 助手在你确认后排查和修复问题，再处理文件、容器、数据库、设备监控和终端分享，全程不用切换工具。shell 在后台持续运行，关闭窗口或换一台设备都不会丢失进度。 ／ - **选择你的数据库**：默认 SQLite，服务端也支持 PostgreSQL、MySQL 和 MariaDB。 ／ - 自身数据默认存入 SQLite，也可通过 `--db postgres|mysql|mariadb` 和 `--db-dsn` 使用 PostgreSQL、MySQL 或 MariaDB；同一个数据库仅运行一个服务端实例。",
+   "evidence_lines": [
+    24,
+    88,
+    141
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Hello-CTF/NexTerm",
+  "sha": "7127888c7bd3",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "96ea7aab8385": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的知识库插件，提供检索、笔记与日报管理",
+   "review": "这是面向 DeepSeek Harness 的 DSH 插件，提供知识库（文档分组、全文检索、按权限召回与回写）、独立笔记目录和工作日报采集功能。数据可存于本地 SQLite 或远程中央知识服务，供 DSH 用户在项目和会话中挂载使用。要求 Node.js 22/24，适配 DSH 0.2.1-rc.2，通过 dsh plugin 命令安装，不修改 Agent Loop。",
+   "highlights": [
+    "提供知识库与文档分组、全文检索、按权限的召回与回写，回答后自动提取知识并支持审核与版本历史",
+    "包含独立笔记文档与工作日报模块，支持 @ 引用、补记、整理与导出",
+    "支持本地 SQLite 存储或连接认证的中央知识服务供多客户端共享"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 会话挂载项目知识库以检索与回写知识",
+    "在 AI 编码工作流中记录和整理工作日报",
+    "通过中央知识服务实现多客户端共享知识库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 本地 SQLite 或认证的中央知识服务，多个客户端可连接同一服务。",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明插件以本地 SQLite 作为自身数据存储，SQLite 只是使用手段而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向 DeepSeek Harness 的知识库、笔记与工作日报插件。支持本地使用和远程中央知识库，不修改 DSH Agent Loop。 ／ - 本地 SQLite 或认证的中央知识服务，多个客户端可连接同一服务。 ／ dsh plugin --profile web add @lemoncat7/dsh-knowledge@latest",
+   "evidence_lines": [
+    3,
+    13,
+    20
+   ]
+  },
+  "fn": "lemoncat7/dsh-knowledge",
+  "sha": "96ea7aab8385",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4de9df699f09": {
+  "identity": {
+   "one_liner": "面向 PHP/MySQL 服务端渲染应用的轻量 MVC 框架，含 ActiveRecord ORM",
+   "review": "Pair 是一个 PHP 框架，用于构建服务端渲染的中小型应用，提供显式 MVC 响应、ActiveRecord 风格 ORM、CRUD 与 OpenAPI 工具、认证/ACL 及渐进式增强能力。通过 Composer 安装，默认数据库驱动要求 MySQL 8.0+，需 PHP 8.x 与 pdo_mysql 扩展。适合希望少用前端工具链、保持代码可审阅的 PHP 开发者。",
+   "highlights": [
+    "提供 ActiveRecord 风格 ORM、CRUD 与 OpenAPI 契约工具",
+    "包含表单、验证、CSRF、认证、ACL 与会话支持",
+    "提供代码生成器（make:module/make:api/make:crud）与升级工具"
+   ],
+   "use_cases": [
+    "构建 PHP/MySQL 服务端渲染 Web 应用",
+    "生成带 OpenAPI 契约的 API 与 CRUD 模块",
+    "从 Pair 3 迁移既有应用至 Pair 4"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Pair is designed for small and medium PHP/MySQL applications where clear ／ - MySQL 8.0 or later for the default database driver ／ - PHP extensions: `curl`, `intl`, `json`, `mbstring`, `pdo`, `pdo_mysql`",
+     "lines": [
+      17,
+      105,
+      108
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PHP 框架通过数据库驱动连接 MySQL，为使用数据库的应用提供服务，本身不是数据库应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pair is designed for small and medium PHP/MySQL applications where clear ／ It combines explicit MVC responses, an ActiveRecord-style ORM, CRUD and OpenAPI ／ - MySQL 8.0 or later for the default database driver",
+   "evidence_lines": [
+    17,
+    21,
+    105
+   ]
+  },
+  "fn": "viames/pair",
+  "sha": "4de9df699f09",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

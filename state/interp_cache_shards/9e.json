@@ -10655,5 +10655,94 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e268dfe492a7": {
+  "identity": {
+   "one_liner": "零配置数据质量监控工具，通过历史基线学习检测表异常",
+   "review": "Scherlok 是一个 Python CLI 数据质量监控工具，先对数据表画像学习基线，再检测行数、NULL 率、新鲜度、schema 漂移等异常，无需编写规则或 YAML。支持 PostgreSQL、BigQuery、Snowflake、MySQL、DuckDB 适配器，可与 dbt 集成，提供 MCP server 供 AI agent 调用，告警可推送到 Slack/Discord/Teams/邮件。画像默认存于本地 SQLite，也可存 S3。",
+   "highlights": [
+    "先画像学习基线再检测异常，无需预先定义规则/阈值",
+    "支持 postgres、bigquery、snowflake、mysql、duckdb 适配器及 dbt 集成",
+    "提供 MCP server（list_tables/investigate/watch 等只读工具）与可选 AI 异常解释"
+   ],
+   "use_cases": [
+    "CI/CD 流水线中作为数据质量门禁",
+    "对数据仓库表进行异常检测与新鲜度/漂移告警",
+    "dbt 项目在 dbt run 后自动画像与异常检测"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "scherlok ci postgres://user:pass@host/db # profiles on the first run, detects anomalies on every run after ／ Works with **PostgreSQL, BigQuery, Snowflake, MySQL, DuckDB** and **dbt**. Alerts go to Slack, Discord, Teams, email, or your CI exit code. ／ |PostgreSQL|Available|",
+     "lines": [
+      19,
+      30,
+      268
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Works with **PostgreSQL, BigQuery, Snowflake, MySQL, DuckDB** and **dbt**. Alerts go to Slack, Discord, Teams, email, or your CI exit code. ／ **Supported adapters:** `postgres`, `bigquery`, `snowflake`, `mysql`, `duckdb`. For others, pass `--connection-string` explicitly. ／ |MySQL|Available|",
+     "lines": [
+      30,
+      159,
+      271
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Scherlok profiles every table: row counts, column types, NULL rates, value distributions, freshness cadence, cardinality. Stores everything locally in SQLite.",
+     "lines": [
+      82
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库表提供画像与异常检测监控能力，属于数据质量监控工具而非使用数据库存业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Zero-config anomaly detection for your database tables. ／ **Supported adapters:** `postgres`, `bigquery`, `snowflake`, `mysql`, `duckdb`. For others, pass `--connection-string` explicitly. ／ |Database|Status|",
+   "evidence_lines": [
+    14,
+    159,
+    266
+   ]
+  },
+  "fn": "rbmuller/scherlok",
+  "sha": "e268dfe492a7",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

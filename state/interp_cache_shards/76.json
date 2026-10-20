@@ -9895,5 +9895,248 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e4f3f4ce7b8": {
+  "identity": {
+   "one_liner": "Linux 服务器文件与 Docker Compose 备份及灾难恢复工具",
+   "review": "Backfort 是一个运行于 Linux 的命令行备份工具，读取 YAML 配置对文件、目录和 Docker Compose 项目（含卷、绑定挂载和数据库逻辑导出）执行全量备份，经校验和/签名验证后原子发布到本地或 rclone 目标，并支持 staged 恢复与保留策略。适合用 cron/systemd 定时保护服务器文件与 Compose 栈的运维人员；不运行常驻守护进程，调度需外接，Kubernetes 场景仅支持 PVC 文件备份而非整集群备份。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB 逻辑导出及 MS SQL、Oracle 原生导出，并提供分阶段数据库恢复导入",
+    "支持 age/GPG 加密、Minisign 签名、SHA-256 校验、多 rclone 异地目标与 GFS 保留策略",
+    "提供 Docker 镜像与 Kubernetes Helm 部署（Job/CronJob），恢复强制写入新目录且无覆盖路径"
+   ],
+   "use_cases": [
+    "Linux 服务器文件与目录的定时加密备份与异地副本",
+    "Docker Compose 项目（含数据库）的快照、迁移与分阶段恢复",
+    "Kubernetes PVC 文件备份与恢复演练"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ logical database import for PostgreSQL, MySQL and MariaDB ／ |`postgres`|Custom-format `.dump` per database and optional `globals.sql`; set `format: sql` for a portable plain SQL dump|`databases`, optional `include_globals`, optional `format` (`custom` by default or `sql`)| ／ from `postgres`, `mysql`, or `mariadb` service containers. PostgreSQL is",
+     "lines": [
+      83,
+      86,
+      490,
+      530
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ logical database import for PostgreSQL, MySQL and MariaDB ／ |`mysql`|Logical `.sql` dump with routines, events and triggers|`databases`| ／ from `postgres`, `mysql`, or `mariadb` service containers. PostgreSQL is",
+     "lines": [
+      83,
+      86,
+      491,
+      530
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ logical database import for PostgreSQL, MySQL and MariaDB ／ |`mariadb`|Logical `.sql` dump with routines, events and triggers|`databases`| ／ from `postgres`, `mysql`, or `mariadb` service containers. PostgreSQL is",
+     "lines": [
+      83,
+      86,
+      492,
+      530
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ |`oracle`|Full Oracle Data Pump `.dmp`|`connect`, Oracle directory object `directory`, and its container `path`| ／ database backup. Oracle containers must have `expdp` available, the configured",
+     "lines": [
+      83,
+      494,
+      497
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`mssql`|Native `.bak` made with `COPY_ONLY, CHECKSUM`|`databases`, `backup_directory` inside the container| ／ MS SQL Server `.bak` files, and Oracle exports always require a reviewed,",
+     "lines": [
+      493,
+      1035
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供数据库引擎感知的导出/导入功能，是为数据库生态服务的备份工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Backfort reads YAML, creates full backups, optionally compresses and encrypts ／ files, selected named volumes, explicit bind mounts and engine-aware database ／ - Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export",
+   "evidence_lines": [
+    64,
+    70,
+    83
+   ]
+  },
+  "fn": "shellharbor/backfort",
+  "sha": "2e4f3f4ce7b8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "92f0b2687623": {
+  "identity": {
+   "one_liner": "面向 AI 代理的 MCP 记忆服务器，混合检索+神经记忆图",
+   "review": "自托管的 MCP 服务器，为 AI 代理与团队提供记忆存储，实现混合检索（语义+BM25）与赫布学习式记忆图，配合 Qdrant、Redis 等构建，提供 72 个 MCP 工具与 Web 界面。面向使用 Claude、ChatGPT 等 MCP 客户端并需要跨会话记忆的用户，通过 Docker Compose 部署，需要 OpenAI API key 或自托管嵌入服务。",
+   "highlights": [
+    "提供 72 个 MCP 工具，覆盖记忆、上下文、标签、文件、密钥等操作",
+    "实现混合检索（语义+BM25）与基于赫布学习的神经记忆图遍历",
+    "支持工作区/RBAC/上下文隔离的多团队使用与 Next.js Web 界面"
+   ],
+   "use_cases": [
+    "为 Claude Code、Claude Desktop 等 MCP 客户端提供跨会话记忆",
+    "团队/组织级共享知识库与记忆管理",
+    "自主代理循环所需的记忆基板与交付模式"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Kagura Memory Cloud**|**PostgreSQL + Qdrant + Neural graph**|**Hebbian + Sleep Maintenance**|**Team / org**| ／ **Tech stack:** FastAPI (async) · PostgreSQL · Qdrant · Redis · Next.js 16 · OAuth2 · MCP over Streamable HTTP",
+     "lines": [
+      40,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明技术栈使用 PostgreSQL、Qdrant、Redis 存储数据（L99），自身是面向 AI 代理的记忆服务应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Tech stack:** FastAPI (async) · PostgreSQL · Qdrant · Redis · Next.js 16 · OAuth2 · MCP over Streamable HTTP ／  An MCP server that gets smarter every time you search: ／ |**72 MCP Tools**|Guide, Memory, Agent Substrate, Agent Control Plane, Neural edges, Contexts, Tags, Files (R2), Analyses (Memory Analysis), Resources, Secrets, Sleep Maintenance, Usage, API-Key Bindings|",
+   "evidence_lines": [
+    99,
+    10,
+    50
+   ]
+  },
+  "fn": "kagura-ai/memory-cloud",
+  "sha": "92f0b2687623",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "53d59c9e625b": {
+  "identity": {
+   "one_liner": "英语词源每日阅读应用，Hono+SQLite 提供多用户阅读与后台管理",
+   "review": "一个每天展示一个英语词源故事的 Web 应用，前端为原生 JS 的 hash SPA，后端用 Hono 提供 API，用 SQLite 存账号、阅读进度等状态数据。支持邀请码注册、阅读进度同步、每日推荐、排行榜、推送提醒，并带管理员后台和 MCP 接口供 AI 客户端提交词条草稿。适合受邀请的个人学习英语词源、自部署私有阅读站使用。",
+   "highlights": [
+    "支持多用户邀请码注册，阅读进度、收藏、推荐各自独立并跨设备同步",
+    "提供 MCP 接口，支持 AI 客户端查重、搜索词条、校验并提交草稿",
+    "基于阅读记录的每日推荐打分机制与间隔重现复习组件"
+   ],
+   "use_cases": [
+    "个人英语词源学习的私有部署阅读站",
+    "管理词条内容并进行 AI 辅助撰写的编辑后台",
+    "结合间隔重复机制的记忆复习工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储账号与阅读进度数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT 许可，backend/data/ 下的词条数据不在许可范围内且禁止商用",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "前后端分开：`frontend/` 是纯静态文件，`backend/` 只提供 `/api`。生产环境由 nginx 托管前端、把 `/api` 转发给后端，两者同一个域名，登录用 HttpOnly Cookie。 ／ |`STATE_DB`|`backend/var/app.db`|账号与阅读进度数据库|",
+   "evidence_lines": [
+    61,
+    166
+   ]
+  },
+  "fn": "kilolonion/etymology-site",
+  "sha": "53d59c9e625b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

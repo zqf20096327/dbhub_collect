@@ -9800,5 +9800,171 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cd01b6c502d0": {
+  "identity": {
+   "one_liner": "跨引擎数据库实时同步工具，基于 CDC/轮询的桥接复制",
+   "review": "SYNCLE 是一个在多个数据库之间实时同步数据的桥接工具：读取源库变更（Postgres 逻辑复制、MySQL binlog、MongoDB change streams 等）并幂等写入目标库或 HTTP 端点，支持回放、轮询、CDC 三种触发方式、列映射/过滤转换、死信队列与校验修复。面向需要在异构库间复制数据或做初始回填/迁移的开发与运维人员。MIT 许可，MariaDB CDC 路径未经验证。",
+   "highlights": [
+    "支持 replay、watch 轮询、CDC 三种触发方式，CDC 直接读取数据库变更日志",
+    "提供列映射、过滤/转换、死信队列、幂等 upsert 与数据校验修复",
+    "带可视化构建器与投递时间线，支持共享复制槽与 cron 调度"
+   ],
+   "use_cases": [
+    "异构数据库间实时数据同步与扇出",
+    "初始数据回填或一次性迁移",
+    "跨库数据校验与差异修复"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "linked. Any engine to any engine — **PostgreSQL · MySQL · SQLite · MongoDB · ／ **real time, no polling**. Postgres logical replication, MySQL binlog, MongoDB ／ - **Shared replication slots.** On PostgreSQL, bridges can share a",
+     "lines": [
+      11,
+      82,
+      118
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "linked. Any engine to any engine — **PostgreSQL · MySQL · SQLite · MongoDB · ／ **real time, no polling**. Postgres logical replication, MySQL binlog, MongoDB",
+     "lines": [
+      11,
+      82
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "linked. Any engine to any engine — **PostgreSQL · MySQL · SQLite · MongoDB · ／ MySQL → SQLite, MongoDB → Redis… mix engines freely. One bridge can fan out to",
+     "lines": [
+      11,
+      38
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "- **MariaDB is untested.** Connections, replay and watch bridges go through",
+     "lines": [
+      588
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库之间的数据复制/同步提供服务，本身不是面向终端业务的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **bridge** reads rows from a source database and writes each one to its ／  **real time, no polling**. Postgres logical replication, MySQL binlog, MongoDB ／ curl -fsSL https://syncle.dev/install | sh -s -- up",
+   "evidence_lines": [
+    34,
+    82,
+    172
+   ]
+  },
+  "fn": "osmanahmadxai/SYNCLE",
+  "sha": "cd01b6c502d0",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c4cd5d1081de": {
+  "identity": {
+   "one_liner": "自托管网站分析工具，用 Python 标准库和 SQLite 存储原始访问数据",
+   "review": "Tidesight 是一个自托管的 Web 分析应用，通过 JS 追踪脚本采集页面浏览、事件、热图、会话回放和 Web Vitals 等原始数据，由 Python 采集器逐条写入 SQLite，再用 cron 任务派生会话等维度并在仪表盘展示。适合想在共享主机上运行、只需 Python 环境的个人或团队。",
+   "highlights": [
+    "采集器仅用 Python 标准库，将原始访问数据追加写入 SQLite，可运行于 FastCGI/CGI 共享主机",
+    "支持热图、会话回放、漏斗、留存、目标转化等报表，数据可通过 JSON API 访问",
+    "提供隐私模式：IP 截断或哈希、保留窗口、Do Not Track 与 GPC 支持"
+   ],
+   "use_cases": [
+    "在廉价共享主机上自托管网站流量分析",
+    "追踪页面热图、会话回放与 Web Vitals 等细粒度行为数据",
+    "从 Google Analytics 4、Plausible 或 Matomo 导入历史数据"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Ingest** with a Python collector that uses only the standard library and appends every hit, raw, to SQLite. It runs on cheap shared hosting: FastCGI or CGI (or Passenger), cron, no daemons.",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明采集器把访问数据写入 SQLite 存储，SQLite 是其数据存储组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Ingest** with a Python collector that uses only the standard library and appends every hit, raw, to SQLite. It runs on cheap shared hosting: FastCGI or CGI (or Passenger), cron, no daemons. ／ Tidesight is web analytics you host yourself, for any number of websites. A small tracker sends every pageview, event, click, scroll, Web Vital and error to a collector that stores them **raw**, on your server. Jobs then derive sessions, places, devices, channels, bots and identities, and a dashboard as complete as the big tools shows it all: comparisons, filters, segments, goals, funnels, retention, heatmaps, session replays and visitor timelines. ／ On Dreamhost or any host with Python (FastCGI or CGI) and cron, everything lives in one folder, the website's: the code in `app/`, the data in `data/`, the configuration beside them, behind an `.htaccess` that sends every request to the app. Tidesight checks from the outside, every ten minutes, that none of its files can be downloaded.",
+   "evidence_lines": [
+    18,
+    15,
+    45
+   ]
+  },
+  "fn": "mayerwin/Tidesight",
+  "sha": "c4cd5d1081de",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

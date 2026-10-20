@@ -9040,5 +9040,139 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9397f9c8ecc4": {
+  "identity": {
+   "one_liner": "读取 Things 应用 SQLite 数据库的 Python 3 库",
+   "review": "things.py 是一个 Python 3 库，通过 SQL 查询和转换，读取 macOS 任务管理应用 Things 存储在 SQLite 文件中的待办数据，以更易读的方式暴露给使用者。面向 Things 用户和 Python 开发者，支持打印底层 SQL，依赖 PyPI 安装，仅提供读取能力，不写入数据库。",
+   "highlights": [
+    "提供 Python API 读取 Things 应用的 todos、areas、tags、tasks 等数据",
+    "内部执行 SQL joins 与转换，可通过 print_sql=True 参数查看所用 SQL",
+    "提供完整 API 文档及 Things URL Scheme 链接用法说明"
+   ],
+   "use_cases": [
+    "以编程方式访问和分析 Things 中的待办事项数据",
+    "为 Things 数据构建导出、同步或集成工具（如 CSV、Markdown、Notion 导出）",
+    "读取 Things SQLite 数据库文件供其他应用调用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The task management app Things stores all your to-dos in a SQLite database file (details here). This format is intended to be machine-readable, not human-readable. The aim of this project is to let you access all your Things data in a human-readable way. We th",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为读取 Things 应用的 SQLite 数据文件提供程序化访问接口，服务于围绕该数据源的下游工具生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "_things.py_ is a simple Python 3 library to read data from your Things app. ／ $ pip3 install things.py ／ The task management app Things stores all your to-dos in a SQLite database file (details here). This format is intended to be machine-readable, not human-readable. The aim of this project is to let you access all your Things data in a human-readable way. We thereby stay as true to the database as possible while doing SQL joins and transformations to aid understanding of the data. Note that you can print the SQL used by adding the parameter `print_sql=True` to most API calls.",
+   "evidence_lines": [
+    3,
+    19,
+    35
+   ]
+  },
+  "fn": "thingsapi/things.py",
+  "sha": "9397f9c8ecc4",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4691361d172d": {
+  "identity": {
+   "one_liner": "面向主机托管公司的自托管计费与自动化平台，用 PostgreSQL 存储数据",
+   "review": "HostPanel 是一个面向销售主机与域名业务公司的自托管计费与自动化系统，包含客户门户、管理面板和 API，提供发票、多币种、域名注册插件、自动开通/暂停服务器账户、工单与知识库等功能，支付、注册商和开通面板通过插件接口扩展并提供 SDK。以 ASP.NET Core 9 + PostgreSQL + Nuxt/Vue 实现，通过 Docker 一键安装部署。",
+   "highlights": [
+    "提供计费发票、多币种、域名注册、托管服务自动开通/暂停/终止、工单与知识库功能",
+    "支付网关、注册商和开通面板以插件形式接入，提供 Innoavse.SDK 用于编写自定义提供方",
+    "提供多架构 Docker 镜像和自动配置 HTTPS 的安装脚本"
+   ],
+   "use_cases": [
+    "主机/域名销售商需要客户门户、发票计费与自动开通账户",
+    "需要将域名注册商、支付网关以插件方式集成的托管业务系统",
+    "需要多语言（英/俄/亚美尼亚）客户支持门户的托管公司"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Modern stack.** ASP.NET Core 9 and PostgreSQL behind a Nuxt 4 storefront and a Vue 3 admin panel. ／ `POSTGRES_PASSWORD`, `RABBITMQ_PASSWORD`, `JWT_SECRET`, `ENCRYPTION_KEY` and `ALLOWED_HOSTS`. The admin panel is built for ／ |Back up the database|`docker compose -f docker-compose.hub.yml exec -T hostpanel-db sh -c 'pg_dump -U \"$POSTGRES_USER\" \"$POSTGRES_DB\"' > backup.sql`, or snapshot the `hostpanel_pgdata` volume|",
+     "lines": [
+      20,
+      110,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 PostgreSQL 存储数据的完整计费/托管业务应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hosted billing, domains and provisioning for web hosting companies. ／ - **Modern stack.** ASP.NET Core 9 and PostgreSQL behind a Nuxt 4 storefront and a Vue 3 admin panel. ／ |Back up the database|`docker compose -f docker-compose.hub.yml exec -T hostpanel-db sh -c 'pg_dump -U \"$POSTGRES_USER\" \"$POSTGRES_DB\"' > backup.sql`, or snapshot the `hostpanel_pgdata` volume|",
+   "evidence_lines": [
+    5,
+    20,
+    120
+   ]
+  },
+  "fn": "innovayse/hostpanel",
+  "sha": "4691361d172d",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

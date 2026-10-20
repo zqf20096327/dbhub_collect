@@ -10354,5 +10354,167 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "91ca567ee7e5": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 agent/人类认知记录数据库",
+   "review": "一个用于记录 agent 与人类的努力、信念和发现的知识数据库，以 Issue/Artifact 统一的 Inquiry 模型组织数据，核心三表（inquiries、edges、change_log）存储在 Postgres（或 PGlite）上，通过 FastAPI 提供 HTTP API，附带 Web UI 和 trax CLI 客户端。适合需要集中管理 agent 会话、信念图谱与实验记录的团队使用。",
+   "highlights": [
+    "以 Postgres 为存储后端，提供 FastAPI HTTP API、Web UI 和 trax CLI",
+    "Inquiry 模型统一 Issue 与 Artifact，用有向边表达产出、证明、引用等关系",
+    "支持 JSONL 图导出、语义搜索嵌入及 API token 认证"
+   ],
+   "use_cases": [
+    "集中记录和管理多 agent 协作产生的会话、信念与发现",
+    "构建可追溯的研究/自动化实验知识图谱",
+    "通过 API 或 CLI 对查询图做过滤、导出与备份切片"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "by Postgres (real or PGlite). FastAPI on top. ／ that contract over Postgres + HTTP. ／ trackinizer --engine pg --dsn ... # against real Postgres ／ Integration tests (`@pytest.mark.integration`) use a Postgres server backend",
+     "lines": [
+      28,
+      31,
+      289,
+      312
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其核心三表 backed by Postgres，是使用 Postgres 存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "by Postgres (real or PGlite). FastAPI on top.",
+   "evidence_lines": [
+    28
+   ]
+  },
+  "fn": "rekursiv-ai/trackinizer",
+  "sha": "91ca567ee7e5",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "87e6832ce93f": {
+  "identity": {
+   "one_liner": "基于 postgis/postgis 的 PostgreSQL Docker 镜像，预装大量扩展",
+   "review": "该仓库提供一个基于 postgis/postgis 的 PostgreSQL Docker 镜像，在 PostGIS 之外预装约 90 个扩展，包括 FDW 连接器（mysql_fdw、oracle_fdw、sqlite_fdw 等）、时序与队列扩展（TimescaleDB、pgmq）、路由扩展 pgrouting 及审计扩展 pgaudit 等。面向需要开箱即用多扩展 PostgreSQL 环境的开发与运维人员，通过 docker run 或 docker-compose 部署，标签格式为「Postgres 主版本-PostGIS 版本」。",
+   "highlights": [
+    "提供基于 postgis/postgis 的 Docker 镜像，标签对应 Postgres 14 起的主版本与 PostGIS 版本",
+    "预装大量扩展，包含 mysql_fdw、oracle_fdw、sqlite_fdw、ogr_fdw 等外部数据封装器",
+    "包含 pgaudit、pglogical、pgmq、pgrouting、TimescaleDB、pgvector 等扩展"
+   ],
+   "use_cases": [
+    "需要单一容器内可用多个 PostgreSQL 扩展（含 PostGIS/MobilityDB 地理空间扩展）的部署场景",
+    "需要通过 FDW 从 PostgreSQL 访问 MySQL、Oracle、SQLite 等外部数据库的场景",
+    "基于 docker-compose 组合 powa-web、pgadmin 等组件搭建 PostgreSQL 环境"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "#### PostgreSQL image based on postgis/postgis, with quite a few added extensions ／ Tag labels follow the pattern `X-Y.Z`, where `X` is the *major* Postgres version (starting from version 14) and `Y.Z` is the *major.minor* Postgis version. ／ In order to run a basic container capable of serving a Postgres database with all extensions below available:",
+     "lines": [
+      1,
+      7,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- mysql_fdw",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- oracle_fdw",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- sqlite_fdw (only up to Postgres 17)",
+     "lines": [
+      106
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该镜像打包 PostgreSQL 数据库本体及其扩展，为数据库部署提供服务而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "#### PostgreSQL image based on postgis/postgis, with quite a few added extensions ／ In order to run a basic container capable of serving a Postgres database with all extensions below available: ／ ## Available extensions",
+   "evidence_lines": [
+    1,
+    13,
+    23
+   ]
+  },
+  "fn": "ivanlonel/postgis-with-extensions",
+  "sha": "87e6832ce93f",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

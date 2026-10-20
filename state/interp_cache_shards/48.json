@@ -9069,5 +9069,211 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8022a726ae18": {
+  "identity": {
+   "one_liner": "utPLSQL 的 Java 命令行客户端，用于从命令行调用测试",
+   "review": "utPLSQL-cli 是 utPLSQL v3 的 Java 命令行客户端，面向 Oracle 数据库开发者，用于在命令行运行 PL/SQL 单元测试。支持同时使用多个 reporter、实时输出、按套件/子集执行测试，并可通过 Oracle Wallet、TNS 名称等方式连接数据库。要求 Java 17 或更新版本，CLI 与数据库端 utPLSQL 框架需匹配相同 minor 版本。",
+   "highlights": [
+    "支持多个 reporter 同时运行并将各 reporter 输出保存到独立文件",
+    "支持 Oracle Wallet 凭据存储与 sysdba 方式连接",
+    "支持执行选定的测试套件或套件子集，并将项目/测试文件映射到数据库对象用于报告"
+   ],
+   "use_cases": [
+    "在命令行或 CI 流程中运行 Oracle PL/SQL 单元测试",
+    "生成覆盖率等测试报告（如 HTML、Cobertura 格式）",
+    "通过 Sonar reporter 输出供 Sonar 使用的结果"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- `/@<TNSName>` - credentials are taken from an Oracle Wallet (Secure External Password Store), see Oracle Wallet ／ 2. Java system property `oracle.net.tns_admin`, e.g. `export JAVA_OPTS=\"-Doracle.net.tns_admin=/path/to/network/admin\"` ／ Options 1-3 are handled by the Oracle JDBC driver. Option 4 is a fallback provided by utPLSQL-cli, used only when none of the others is set.",
+     "lines": [
+      99,
+      105,
+      109
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为数据库中的 utPLSQL 测试框架提供命令行调用能力，服务于 Oracle 数据库测试流程。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Java command-line client for utPLSQL v3. ／ Provides an easy way of invoking utPLSQL from command-line. Main features: ／ - `/@<TNSName>` - credentials are taken from an Oracle Wallet (Secure External Password Store), see Oracle Wallet",
+   "evidence_lines": [
+    7,
+    9,
+    99
+   ]
+  },
+  "fn": "utPLSQL/utPLSQL-cli",
+  "sha": "8022a726ae18",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "384b062b8a7a": {
+  "identity": {
+   "one_liner": "自托管的容器应用期望状态控制平面，Center 存储编排状态",
+   "review": "Vastora 是一个自托管的期望状态控制平面，用 Go 编写的 Center 存储意图与编排状态（含 SQLite 持久化），单一 Agent 二进制负责执行 Docker 工作负载、探测与 Caddy 网关。面向管理多站点/多节点私有云的自托管用户。项目处于 pre-alpha 阶段，README 明确不建议用于生产负载。",
+   "highlights": [
+    "提供 Center HTTP API、一次性 Agent 注册与心跳认证，Center 不可用时已部署应用和路由继续运行",
+    "使用 SQLite 存储 AES-256-GCM 加密的 secrets，并在迁移前写入一致的 SQLite 快照",
+    "支持 LAN、Headscale、Cloudflare Tunnel 等多种发布路径，并包含备份/恢复与前向迁移命令"
+   ],
+   "use_cases": [
+    "跨多个站点和节点编排 Docker 工作负载的自托管私有云",
+    "需要集中管理应用发布路由与 TLS 入口（Caddy/HAProxy）的场景",
+    "需要加密备份、签名目录验证的实验性控制面部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- AES-256-GCM encrypted secrets in SQLite, multi-source catalog persistence, ／ with restrictive permissions. The archive contains SQLite, the Center root key, ／ migrations. Center writes a private, consistent SQLite snapshot before applying",
+     "lines": [
+      23,
+      101,
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 Center 用 SQLite 存储加密 secrets、目录持久化与迁移快照，Vastora 是使用该库存数据的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Vastora is a self-hosted desired-state control plane for applications ／ - AES-256-GCM encrypted secrets in SQLite, multi-source catalog persistence, ／ migrations. Center writes a private, consistent SQLite snapshot before applying",
+   "evidence_lines": [
+    3,
+    23,
+    129
+   ]
+  },
+  "fn": "petauron/vastora",
+  "sha": "384b062b8a7a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c0be9c01bbf8": {
+  "identity": {
+   "one_liner": "Windows 与 Android 双平台开源音乐播放器",
+   "review": "RITVIO 是一个运行于 Windows 和 Android 的音乐播放器，提供本地音乐库管理、原生播放（Android 使用 Media3）、歌词显示、播放列表和 9:16 分享图生成等功能。面向个人音乐听众。数据本地存储，无云同步；搜索、流媒体、歌词等依赖外部服务，其中 YouTube 访问使用非官方解析器，存在失效或限速风险。",
+   "highlights": [
+    "支持 Windows 桌面端与 Android 端（原生 Media3 播放、后台服务、系统媒体控制）",
+    "提供本地音乐库、播放列表、歌词显示、均衡器和睡眠定时器",
+    "可将曲目和歌词片段生成 9:16 分享图片导出",
+    "支持英语和意大利语界面"
+   ],
+   "use_cases": [
+    "在 Windows 桌面或 Android 设备上管理并播放本地音乐",
+    "在 Android 设备上显示同步歌词、使用系统媒体控制后台播放",
+    "将正在听的曲目制作成图片分享到社交平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The source uses React, TypeScript, Vite and Zustand; Electron/Fastify/SQLite on Windows; Capacitor and native Media3 on Android. Domain logic and localisation live in `packages/`.",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "这是一个使用 SQLite 存储本地库数据的音乐播放器应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A free, open-source music player for Windows and Android.** Discover something new, keep a library of your own and make room for the music you love. ／ The source uses React, TypeScript, Vite and Zustand; Electron/Fastify/SQLite on Windows; Capacitor and native Media3 on Android. Domain logic and localisation live in `packages/`.",
+   "evidence_lines": [
+    5,
+    77
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "salvo13200/RITVIO",
+  "sha": "c0be9c01bbf8",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

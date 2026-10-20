@@ -11002,5 +11002,72 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5da1e7648f32": {
+  "identity": {
+   "one_liner": "开源云平台，提供托管 PostgreSQL、计算、网络等服务",
+   "review": "Ubicloud 是一个可在裸金属（Hetzner、Leaseweb、AWS Bare Metal）上自建的开源云，同时提供托管平台。它提供托管 PostgreSQL（含高可用、读副本、时间点恢复、PgBouncer）、虚拟机、Kubernetes、GitHub Actions runner、网络和 AI 推理等服务；控制平面本身是一个 Ruby/Postgres 应用，通过 progs 状态机经 SSH 管理数据平面。适合想自建云或使用托管 Postgres 的开发者。",
+   "highlights": [
+    "提供托管 PostgreSQL，支持高可用（一或两个 standby）、读副本、时间点恢复和大版本升级",
+    "控制平面将资源期望状态存储在 Postgres，通过状态机（progs）经 SSH 驱动数据平面",
+    "支持云控制台、REST API（OpenAPI）、CLI 和 Terraform 四种管理方式"
+   ],
+   "use_cases": [
+    "在自有裸金属实例上构建私有云",
+    "使用托管 PostgreSQL 并选择运行位置（裸金属或 AWS）",
+    "为 GitHub Actions 提供自托管 CI runner"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Managed PostgreSQL**|The latest Postgres versions, with high availability (one or two standbys), read replicas, point-in-time restore, major version upgrades, PgBouncer, and metrics and log export. Runs on bare metal, AWS, and GCP.| ／ * You want a managed Postgres database with high availability and backups, and ／ desired state of each resource in Postgres. State machines, which we call progs",
+     "lines": [
+      15,
+      95,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明控制平面自身是 Postgres 应用，所有状态存储在一个 Postgres 数据库中，同时提供托管 Postgres 服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Managed PostgreSQL**|The latest Postgres versions, with high availability (one or two standbys), read replicas, point-in-time restore, major version upgrades, PgBouncer, and metrics and log export. Runs on bare metal, AWS, and GCP.| ／ desired state of each resource in Postgres. State machines, which we call progs ／ program, and it is a Postgres application itself: all of its state, including the",
+   "evidence_lines": [
+    15,
+    105,
+    160
+   ]
+  },
+  "fn": "ubicloud/ubicloud",
+  "sha": "5da1e7648f32",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

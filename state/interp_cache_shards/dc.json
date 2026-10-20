@@ -8805,5 +8805,182 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a84e337900d3": {
+  "identity": {
+   "one_liner": "媒体库管理 CLI 工具集，用 SQLite 索引本地与在线媒体",
+   "review": "一个面向大型媒体库的命令行工具集（137 个子命令），提供元数据抓取（ffmpeg/ffprobe、yt-dlp、gallery-dl 等）、本地/在线媒体播放与文件系统操作。使用 SQLite 数据库存放媒体索引（如 tv.db），主要给需要在本地整理、浏览大量视频/音频文件的用户。",
+   "highlights": [
+    "提供 137 个子命令，按 database/filesystem/document/file 工作流分组",
+    "支持从文件系统、YouTube、Vimeo、Reddit 等来源采集媒体元数据入库",
+    "依赖 ffmpeg/ffprobe 提取元数据，mpv 播放媒体"
+   ],
+   "use_cases": [
+    "索引并浏览数十 TB 的本地视频归档",
+    "订阅并批量下载在线播放列表/频道元数据",
+    "播放后按规则处理文件（如删除）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 显示其用数据库（如 tv.db）存储媒体索引数据，工具本身是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " library database add filesystem tv.db ./video/folder/ ／  library (v4.0.0; 137 subcommands) ／  │ database add video │ Add online video media (yt-dlp) │",
+   "evidence_lines": [
+    56,
+    130,
+    136
+   ]
+  },
+  "fn": "chapmanjacobd/library",
+  "sha": "a84e337900d3",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7a84fcf1228b": {
+  "identity": {
+   "one_liner": "PHP 敏捷开发框架，含路由与数据库读写分离插件",
+   "review": "SlightPHP 是一个 PHP Web 开发框架，通过 zone/page/entry 约定实现 URI 到类方法的映射，支持多级路由、别名、自定义分隔符及 CLI 模式（可用于 Swoole、WorkMan 项目）。数据库访问由 SDb 插件提供，支持读写分离。面向 PHP 开发者，通过 Composer 安装，采用 MIT 许可。",
+   "highlights": [
+    "支持 CLI 模式，可用于 WorkerMan、Swoole 等 PHP 服务端项目",
+    "插件 SDb 支持数据库读写分离",
+    "支持多级 URI 路由、路由别名与自定义分隔符"
+   ],
+   "use_cases": [
+    "构建 PHP Web 应用",
+    "在 Swoole/Workerman 等常驻服务环境下运行 PHP 应用",
+    "需要读写分离的数据库访问场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "通用 PHP 开发框架，README 未表明其为特定数据库生态服务的工具，仅自带 SDb 数据库插件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# SlightPHP 高效的PHP敏捷开发框架 ／ - 支持命令行(cli)模式 可以直接执行SlightPHP::run($path_info) ，可以用于WorkerMan,Swoole 等PHP 服务端项目 ／ - 插件SDb，支持数据库读写库分离",
+   "evidence_lines": [
+    1,
+    15,
+    19
+   ]
+  },
+  "fn": "hetao29/slightphp",
+  "sha": "7a84fcf1228b",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a7a10c456db4": {
+  "identity": {
+   "one_liner": "AI 代理可操作的 CRM，基于 Go+React+Postgres 自托管",
+   "review": "一个源码可得（非开源）的 CRM 应用，从邮件、会议和日历自动填充联系人、公司与交易记录；AI 代理通过 MCP 或 REST 接口在代理护照（权限、每日限额、审计日志）约束下与用户同一引擎操作数据。面向销售团队自托管使用，需 Go、Docker Compose、Node 等本地构建运行，采用 BUSL 1.1 许可。",
+   "highlights": [
+    "AI 代理经 MCP 或 REST 接入，权限继承授权用户且带审计日志与每日限额",
+    "通过 make dev 以 Docker Compose 启动含 Postgres 与 Redis 的完整技术栈",
+    "支持本地模型（Ollama/vLLM）或云模型，提供拒绝云供应商的 sovereign 配置"
+   ],
+   "use_cases": [
+    "销售团队自托管管理联系人、公司与交易数据",
+    "让 AI 代理在受控权限下辅助录入和查询 CRM 记录",
+    "单公司私有化部署，定制字段与工作流通过改代码实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Start the stack: `make dev`. It starts Postgres, Redis, the API and the web app, then returns.",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是一个用 Postgres 和 Redis 存储运行数据的 CRM 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Source-available，Business Source License 1.1，非 OSI 开源",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Margince is a CRM that fills its own records from mail, meetings and calendars. AI agents work in it under ／ 2. Start the stack: `make dev`. It starts Postgres, Redis, the API and the web app, then returns. ／ Margince is source-available under the Business Source License 1.1 (LICENSE). The source is",
+   "evidence_lines": [
+    3,
+    29,
+    86
+   ]
+  },
+  "fn": "margince/margince",
+  "sha": "a7a10c456db4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

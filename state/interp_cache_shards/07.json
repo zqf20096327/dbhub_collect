@@ -10177,5 +10177,156 @@
   "generated_at": "2026-10-17",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "087587290393": {
+  "identity": {
+   "one_liner": "Neon 开源 JS/TS SDK、CLI 与框架插件的 monorepo",
+   "review": "这是 Neon 官方的 JavaScript/TypeScript 包 monorepo，包含 Neon CLI、Config-as-Code、API SDK、实时订阅、认证与数据访问等多包，各包独立发版到 npm。面向使用 Neon（serverless Postgres）平台的 JS/TS 开发者，提供类型安全的 API 客户端与框架插件（React、Next.js、Drizzle、Kysely 等）。需 Node.js >= 20.19（发布包运行时），开发需 Node 22+ 与 pnpm。",
+   "highlights": [
+    "提供官方 TypeScript SDK @neon/sdk（基于 Fetch、由 OpenAPI 生成）与 Neon CLI",
+    "提供实时 live-query 的 React/TanStack/Drizzle/Kysely 适配包",
+    "提供含 MCP 适配的 agent 工具包与 Config-as-Code 策略引擎"
+   ],
+   "use_cases": [
+    "用 JS/TS 开发接入 Neon 平台的应用",
+    "以 Config-as-Code 方式管理 Neon 分支与环境",
+    "构建使用 Neon 数据 API 或认证的应用/agent"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`@neon/postgrest-js`|Generic PostgreSQL client for the Neon Data API without built-in authentication.|",
+     "lines": [
+      51
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为 Neon API/平台的服务端 SDK、CLI 与插件集合，服务于数据库平台而非普通业务应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The monorepo for Neon's open-source JavaScript/TypeScript SDKs, libraries, CLIs, and framework plugins. Each folder under `packages/` is an independently versioned, separately published package; they share tooling (pnpm workspaces, Biome, tsdown, Vitest, Changesets) but ship on their own cadence. ／ |`@neon/sdk`|The official TypeScript SDK for the Neon API — a modern, Fetch-based client generated from Neon's OpenAPI spec (successor to `@neondatabase/api-client`).| ／ Every package in this repository is licensed under **Apache-2.0**.",
+   "evidence_lines": [
+    3,
+    30,
+    95
+   ]
+  },
+  "fn": "neondatabase/neon-pkgs",
+  "sha": "087587290393",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7ae782aac86a": {
+  "identity": {
+   "one_liner": "Pi Durable 教程配套示例：本地模型代理，用 SQLite 持久化会话恢复",
+   "review": "Alejandro AO 教学视频的配套代码仓库，包含两个终端示例：最小化聊天与中断恢复。它通过 Pi Durable Harness 将对话状态存入 Node.js 内置 SQLite，重启后可从持久化检查点恢复未完成请求；依赖 Node.js 24+，可接 llama.cpp 本地服务或 OpenAI API。面向学习 Pi Durable 机制的开发者，明确声明非生产级代理或托管服务。",
+   "highlights": [
+    "提供 chat 与 chat-resume 两个示例，演示基于 SQLite 持久化检查点的会话恢复",
+    "支持通过适配器接入 llama.cpp 的 OpenAI 兼容 API 或 OpenAI 凭据，未配置模型时使用本地回显提供者",
+    "包含离线测试套件，使用临时数据库与 mock 模型端点，不产生真实模型调用"
+   ],
+   "use_cases": [
+    "学习 Pi Durable Harness 的持久化与恢复机制",
+    "演示本地 llama.cpp 模型与代理框架的集成",
+    "测试中断后从 SQLite 检查点恢复对话流程"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     10,
+     93,
+     123
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`chat-resume.mjs`|`npm run chat:resume`|Reopen a saved conversation and resume interrupted work from SQLite.| ／ - **Node.js 24+**, including its built-in SQLite support. With nvm: `nvm install && nvm use`. ／ |Command|Default SQLite database|",
+     "lines": [
+      10,
+      16,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库使用 SQLite 存储对话状态（data/ 下多个 .sqlite 文件），是使用数据库的应用示例而非数据库服务工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`chat-resume.mjs`|`npm run chat:resume`|Reopen a saved conversation and resume interrupted work from SQLite.| ／ |Command|Default SQLite database| ／ 3. **Storage:** open SQLite.",
+   "evidence_lines": [
+    10,
+    93,
+    123
+   ]
+  },
+  "fn": "alejandro-ao/pi-durable-demo",
+  "sha": "7ae782aac86a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

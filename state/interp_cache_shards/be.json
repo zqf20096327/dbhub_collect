@@ -9756,5 +9756,72 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "16a2080b370b": {
+  "identity": {
+   "one_liner": "自托管事务邮件 API 服务，用 PostgreSQL 存储队列与数据",
+   "review": "BunMail 是一个开发者用的自托管事务邮件发送 API，基于 Bun + Elysia + Drizzle ORM 构建，提供 REST API、Web 控制台、DKIM 签名、带重试的邮件队列、Webhook、模板和入站 SMTP，单 Docker 容器部署。它直接投递到收件方 MX，需要自备域名信誉和 SPF/DKIM/DMARC 记录，PostgreSQL 16+ 为其必需存储。",
+   "highlights": [
+    "提供 REST 发信 API、API key 认证、幂等键、模板与 HMAC 签名 Webhook",
+    "邮件队列基于 PostgreSQL，支持 MTA 式重试退避与多副本安全恢复",
+    "实现 DKIM 签名、SPF/DKIM/DMARC 校验、入站 SMTP 与 DMARC 聚合报告解析"
+   ],
+   "use_cases": [
+    "自托管应用的事务邮件（注册、验证、通知）发送",
+    "从 SendGrid/Resend 等 SaaS 迁移为自有服务器发信",
+    "需要通过 SMTP 提交或 API 调用集成发信的应用场景"
+   ],
+   "cat_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Email queue**: Postgres-backed with MTA-style retry backoff (up to 48 h for temporary failures such as greylisting), lease-based crash recovery that is safe with several replicas, and no double sends between concurrent workers ／ |Database|PostgreSQL 16+|",
+     "lines": [
+      85,
+      175
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储邮件队列和业务数据的自托管邮件发送应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted alternative to SendGrid, Resend, and Postmark: built in TypeScript on Bun + Elysia, with a REST API, web dashboard, DKIM signing, an email queue with retries, webhooks, templates, inbound SMTP, and Gmail-style trash. Ships in a single Docker container. ／ - **Email queue**: Postgres-backed with MTA-style retry backoff (up to 48 h for temporary failures such as greylisting), lease-based crash recovery that is safe with several replicas, and no double sends between concurrent workers",
+   "evidence_lines": [
+    13,
+    85
+   ]
+  },
+  "fn": "mohamedboukari/bunmail",
+  "sha": "16a2080b370b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9574,5 +9574,228 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e412ca1324b9": {
+  "identity": {
+   "one_liner": "自托管 AI 代理集成网关，通过 MCP 或 REST 执行应用动作",
+   "review": "一个面向 AI 代理的自托管集成网关，将 GitHub、Slack 等服务的动作注册为 MCP 工具或 REST 接口，供代理发现与执行。FastAPI 后端管理提供商定义、连接与凭据（AES-256-GCM 加密存储），Next.js 控制台用于配置连接和管理作用域令牌。默认以 SQLite 存储数据，可经 SQLAlchemy async 切换到 PostgreSQL。适合想自行托管和定制代理集成层的开发者。",
+   "highlights": [
+    "提供 MCP JSON-RPC 2.0 端点与 REST API，支持提供商/动作发现、schema 查看与动作执行",
+    "注册 263 个提供商、8,472 个动作 schema，支持 OAuth、API Key 等认证方式，凭据以 AES-256-GCM 加密存储",
+    "支持带作用域的可撤销运行时令牌、幂等执行、运行记录，以及 SSRF 防护等出站 HTTP 安全措施"
+   ],
+   "use_cases": [
+    "为 AI 代理提供统一的应用集成层，通过 MCP 或 REST 调用第三方服务动作",
+    "需要凭据保留在自有运行时的自托管集成部署",
+    "以自定义 HTTP 动作接入目录之外的内部 API"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provi ／ |Persistence|SQLite / PostgreSQL, SQLAlchemy async, aiosqlite / asyncpg, Alembic| ／ |`CONNECTOR_DATABASE_URL`|SQLAlchemy async database URL (SQLite or PostgreSQL)|SQLite file under `server/data/connector.db`|",
+     "lines": [
+      9,
+      47,
+      124
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provi ／ |Persistence|SQLite / PostgreSQL, SQLAlchemy async, aiosqlite / asyncpg, Alembic| ／ The API creates its SQLite database and a local encryption key on first startup if they do not exist. For a durable deployment, configure and back up a stable key before saving credentials; losing the key makes previously encrypted credentials unreadable. ／ |`CONNECTOR_DATABASE_URL`|SQLAlchemy async database URL (SQLite or PostgreSQL)|SQLite file under `server/data/connector.db`|",
+     "lines": [
+      9,
+      47,
+      93,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite/PostgreSQL 仅作为该网关自身的应用数据存储，项目不服务于数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provides screens for browsing providers and actions, managing connections and runtime tokens, and reviewing activity. SQLite stores application data locally by default, with PostgreSQL supported via SQLAlchemy async and Alembic migrations. ／ |Persistence|SQLite / PostgreSQL, SQLAlchemy async, aiosqlite / asyncpg, Alembic|",
+   "evidence_lines": [
+    9,
+    47
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "Anil-matcha/open-agent-connector",
+  "sha": "e412ca1324b9",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cf67117ebb9f": {
+  "identity": {
+   "one_liner": "本地多智能体 AI 工作区，基于 Bun/React/SQLite",
+   "review": "Jelly 是一个本地优先的多智能体系统，用户可在自有硬件（Mac/Linux/VM）上运行多个 AI agent，提供 Web/移动端 UI、浏览器控制、sudo 请求审批、子代理进度面板和 iframe 应用启动器，数据存储于本地 SQLite 与 .jelly/ 目录。面向在单台服务器上运营业务的个人开发者；需自备 ChatGPT 订阅或 OpenAI API key，非沙箱环境。",
+   "highlights": [
+    "支持在本地硬件创建多个 agent 并按项目目录分组，通过 Web UI 或 Tailscale 从手机/笔记本访问",
+    "agent 可控制本地 Chrome 浏览器并经 VNC 交接人工接管，sudo 命令通过私有认证卡审批",
+    "包含 shell 工具、子代理、MCP 连接、文件上传与 apply_patch 多文件补丁等工具"
+   ],
+   "use_cases": [
+    "在单台 VM 上以 agent 辅助运营个人业务",
+    "通过手机/笔记本远程管理本地运行的 agent 任务",
+    "需要人工审批 sudo 执行与浏览器登录接管的自动化操作"
+   ],
+   "notes": "README 声明 Jelly 是 trusted-user 工具而非沙箱，不应暴露公网；浏览器为非沙箱桌面环境，agent 可完全控制本机"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Built with Bun, React, SQLite, and the Pi agent harness.",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储本地数据，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Built with Bun, React, SQLite, and the Pi agent harness.",
+   "evidence_lines": [
+    22
+   ]
+  },
+  "fn": "dctanner/jelly",
+  "sha": "cf67117ebb9f",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5584d5173fd1": {
+  "identity": {
+   "one_liner": "Swift 编写的 Apple Mail MCP 服务器，54 个工具，SQLite 路径实现毫秒级邮件搜索",
+   "review": "这是一个面向 Claude 等 MCP 客户端的 Apple Mail 服务器，提供 54 个工具，覆盖邮件读取、搜索、邮箱 CRUD、撰写、草稿与附件导出。读取路径优先直接读 SQLite 索引（需完全磁盘访问权限），失败时回退 AppleScript；以 Claude 插件或自行编译 Swift 二进制方式安装，要求 Developer ID 签名以保持 TCC 权限。",
+   "highlights": [
+    "提供 54 个 MCP 工具，覆盖账户、邮箱、邮件、撰写、草稿等操作",
+    "读取走 SQLite 快速路径，失败时回退 AppleScript",
+    "支持批量操作（单次最多 50 封）与批量 markdown 导出"
+   ],
+   "use_cases": [
+    "在 MCP 客户端中检索和读取本地 Apple Mail 邮件",
+    "通过 AI 客户端批量归档、标记、移动邮件",
+    "以回复转草稿等方式辅助邮件撰写与人工审核"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**The most comprehensive Apple Mail MCP server** - 54 tools with SQLite-powered millisecond search across 250K+ emails. ／ |Search Speed|Seconds (AppleScript)|**Milliseconds (SQLite)**| ／ > **💡 Full Disk Access** is what makes the fast SQLite read path and ／ - `get_email_metadata` SQLite path now falls back to AppleScript on error — last read-tool gap closed; all 8 SQLite-first read tools now have parity fallback (#71)",
+     "lines": [
+      8,
+      18,
+      45,
+      92
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 MCP 服务器为 MCP 客户端生态提供 Apple Mail 访问能力，并直接读取 SQLite 数据路径",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The most comprehensive Apple Mail MCP server** - 54 tools with SQLite-powered millisecond search across 250K+ emails. ／ claude plugin marketplace add PsychQuant/che-apple-mail-mcp ／ > **💡 Full Disk Access** is what makes the fast SQLite read path and",
+   "evidence_lines": [
+    8,
+    34,
+    45
+   ]
+  },
+  "fn": "PsychQuant/che-apple-mail-mcp",
+  "sha": "5584d5173fd1",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

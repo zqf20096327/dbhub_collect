@@ -11150,5 +11150,149 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6915fc0e2412": {
+  "identity": {
+   "one_liner": "自托管家庭仪表盘，聚合日历、任务、照片等信息",
+   "review": "Prism 是一个供家庭在大屏或平板上使用的自托管仪表盘应用，用于聚合 Google Calendar、Microsoft To Do、OneDrive、iCloud (CalDAV)、Kroger 等外部服务的信息。通过 Docker Compose 或 Home Assistant add-on 安装，内部运行 Postgres 与 Redis 存储状态。采用 PolyForm Noncommercial 1.0.0 许可，仅限个人和非商业使用。",
+   "highlights": [
+    "提供 Docker Compose 与 Home Assistant add-on 两种安装方式，支持 Raspberry Pi / ARM64 镜像",
+    "连接 Google Calendar、Microsoft To Do、OneDrive、Apple iCloud (CalDAV)、Kroger 等外部服务",
+    "内置 Postgres 与 Redis，数据存于 Home Assistant 的 /data 卷以便随快照保留"
+   ],
+   "use_cases": [
+    "家庭墙面大屏或平板显示日历、任务、购物、照片等信息面板",
+    "通过 Home Assistant 环境部署并随 HA 快照备份家庭数据",
+    "需要订阅费替代方案、本地自托管家庭信息聚合的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Find **Prism** in the store, click **Install**, then **Start** on the Info tab. Postgres and Redis run inside the add-on container, and all state lives under Home Assistant's `/data` volume, so add-on updates and HA snapshots keep your family's history.",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 add-on 容器内运行 Postgres 和 Redis 存储应用状态，数据库仅作其存储后端",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0，仅限个人与非商业使用",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Find **Prism** in the store, click **Install**, then **Start** on the Info tab. Postgres and Redis run inside the add-on container, and all state lives under Home Assistant's `/data` volume, so add-on updates and HA snapshots keep your family's history. ／ Prism is open-source under the PolyForm Noncommercial 1.0.0 license. Free for personal and non-commercial use.",
+   "evidence_lines": [
+    45,
+    73
+   ]
+  },
+  "fn": "sandydargoport/prism",
+  "sha": "6915fc0e2412",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "847b3d04c27b": {
+  "identity": {
+   "one_liner": "自托管的家属照护协调应用，以 PostgreSQL 存储全部数据",
+   "review": "OpenCare 是一个面向照护失能或年长亲属家庭的照护协调 Web 应用，提供照护圈、实时日志、用药提醒、共享日历、费用分摊、紧急二维码等功能，支持魔法链接免账号写入和语音/AI 摘要。技术栈为 Node.js/Express + PostgreSQL，通过 Docker Compose 或 Windows 安装包自托管，数据全部落库于 PostgreSQL，备份即一次 dump。",
+   "highlights": [
+    "提供照护圈、实时日志、用药、共享日历、费用分摊、紧急二维码表等功能模块",
+    "支持 Docker 与 Windows 一键安装包部署，内置 PostgreSQL，schema 首次启动自动建立",
+    "附带备份/恢复脚本，全部数据存于 PostgreSQL，一次 dump 即完整备份"
+   ],
+   "use_cases": [
+    "家庭照护者协调对年长或失能亲属的日常照护分工",
+    "在自托管服务器上管理健康数据并离线访问（PWA）",
+    "通过 Home Assistant webhook 做被动活动监测与告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Self-hosted**: Docker, or a one-click **Windows installer** (Node.js and PostgreSQL bundled) ／ PostgreSQL are bundled, no Docker and no configuration required. ／ cp .env.example .env # set POSTGRES_PASSWORD and JWT_SECRET ／ Everything lives in PostgreSQL, so one dump is a full backup. Keep your `.env` ／ docker-compose up -d postgres   # or any PostgreSQL 14+ ／ **Backend**: Node.js 20 · Express · PostgreSQL 14+ (self-bootstrapping schema) · WebSocket · Web Push (VAPID) · JWT + bcrypt 12 · helmet · rate limiting",
+     "lines": [
+      61,
+      72,
+      81,
+      90,
+      115,
+      141
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 PostgreSQL 存储自身数据的端用户照护应用，而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " The open-source, self-hosted care coordination app for family caregivers ／ Everything lives in PostgreSQL, so one dump is a full backup. Keep your `.env` ／ **Backend**: Node.js 20 · Express · PostgreSQL 14+ (self-bootstrapping schema) · WebSocket · Web Push (VAPID) · JWT + bcrypt 12 · helmet · rate limiting",
+   "evidence_lines": [
+    3,
+    90,
+    141
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "NexaFlowFrance/OpenCare",
+  "sha": "847b3d04c27b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

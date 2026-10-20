@@ -8679,5 +8679,146 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "84b9021bc851": {
+  "identity": {
+   "one_liner": "带 SQLite 后端的 Discord 历史归档 CLI",
+   "review": "discrawl 是一个 Go 编写的命令行工具，将 Discord 服务器数据与本地桌面缓存消息归档到本地 SQLite 中，提供 FTS5 全文检索、SQL 只读查询和 TUI 浏览，并支持通过 Git 快照共享归档。适合需要保存服务器历史、恢复缓存私信或只读访问共享归档的用户。wiretap 仅导入桌面已缓存消息，非完整历史抓取。",
+   "highlights": [
+    "支持 bot 同步、桌面缓存导入、Git 快照订阅三种归档来源",
+    "提供 FTS5 搜索、只读 SQL 查询与终端 TUI 浏览",
+    "publish/subscribe 支持分片 Git 快照共享，无需 Discord 凭据"
+   ],
+   "use_cases": [
+    "Discord 服务器历史离线归档与检索",
+    "本地恢复桌面缓存中的私信",
+    "通过 Git 快照向他人提供只读归档访问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Discrawl archives Discord guild data and classifiable Discord Desktop cache messages in local SQLite for offline search, SQL, and terminal browsing. It is for people who need durable server history, local recovery of cached direct messages, or read-only access",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确将 Discord 数据归档存入本地 SQLite，SQLite 是其存储后端而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Discrawl archives Discord guild data and classifiable Discord Desktop cache messages in local SQLite for offline search, SQL, and terminal browsing. It is for people who need durable server history, local recovery of cached direct messages, or read-only access to a shared archive. ／ |Remote archive|Run `subscribe-cloud`|Read-only access through a configured Worker without local SQLite|",
+   "evidence_lines": [
+    12,
+    63
+   ]
+  },
+  "fn": "openclaw/discrawl",
+  "sha": "84b9021bc851",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9a4270d33b3b": {
+  "identity": {
+   "one_liner": "波斯语优先的 Telegram 群组管理机器人，基于 SQLite 存储",
+   "review": "这是一个运行于 Telegram 的群组管理机器人，面向波斯语（及英语）群组管理员，提供按回复/波斯语文本进行禁言等审核、群统计、邀请链接、Owner 面板及签名校验更新。数据存储于 SQLite，无需其他服务；支持 Python 面板、VPS(systemd)、Docker 部署，AI 助手功能需另行配置 API key 且默认关闭。",
+   "highlights": [
+    "提供 173 个命令与 163 种波斯语文本表单用于群组审核与管理",
+    "使用 SQLite 存储，运行时无需其他外部服务",
+    "更新通过 Ed25519 签名与 SHA-256 校验验证，支持自动回滚"
+   ],
+   "use_cases": [
+    "管理波斯语 Telegram 群组的审核与权限控制",
+    "在 Pterodactyl 面板、VPS 或 Docker 上自托管 Telegram 机器人",
+    "群组消息统计、邀请链接追踪与备份回滚运维"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ RayZen Pilot manages Telegram groups, and it was built for Persian first: an admin replies to someone and writes «سکوت ۲ ساعت» (mute 2 hours), and that's it. It runs on SQLite with no other services. Adding or promoting it posts nothing and changes nothing, an",
+     "lines": [
+      6,
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 SQLite 存储自身数据的 Telegram 群组管理机器人，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0（4.x 版本为 MIT）",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "RayZen Pilot manages Telegram groups, and it was built for Persian first: an admin replies to someone and writes «سکوت ۲ ساعت» (mute 2 hours), and that's it. It runs on SQLite with no other services. Adding or promoting it posts nothing and changes nothing, and every filter is off until an admin turns it on. Switch a group to English with `/lang en`. ／ |**rayzen-pilot-v5.0.0-alpha.2-omni-selfhost.zip**|**The public edition** to run your own bot: host panels, VPS and Docker. No channel requirement, no hidden calls, no telemetry.| ／ |`vps/`|The same bot plus `install.sh`, the systemd unit, the `rayzen` command and the Docker files|",
+   "evidence_lines": [
+    26,
+    32,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "matttsys/RayZen-Pilot",
+  "sha": "9a4270d33b3b",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

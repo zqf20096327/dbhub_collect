@@ -9554,5 +9554,150 @@
   "generated_at": "2026-10-15",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d21e58dc688": {
+  "identity": {
+   "one_liner": "Nessus 漏洞分诊 TUI，导入 .nessus 至 SQLite 并编排安全工具",
+   "review": "Cerno 是一个终端 TUI 工具，用于审查 Nessus 扫描结果：将 .nessus 文件解析入本地 SQLite 数据库，支持按严重性/主机过滤、CVE 提取、Metasploit 模块检索，并可一键启动 nmap、NetExec 等工具；同时通过 MCP 服务器供 MCP 客户端程序化查询。面向渗透测试与漏洞验证人员，需 Python 3.11+，Claude 助手默认关闭。",
+   "highlights": [
+    "提供交互式 TUI 浏览/过滤 Nessus 发现，进度与会话持久化于 SQLite（~/.cerno/cerno.db）",
+    "提供 MCP 服务器，允许 MCP 客户端（如 Claude CLI）查询发现并生成命令",
+    "支持读取 NetExec 数据库（只读）做凭据关联，并可编排 nmap/NetExec/Metasploit/自定义命令"
+   ],
+   "use_cases": [
+    "渗透测试中对 Nessus 扫描结果做验证与利用路径梳理",
+    "跨多次扫描跟踪主机风险状态与审查进度",
+    "通过 MCP 客户端以程序化方式驱动安全工具编排"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 💾 SQLite-backed persistence — never lose review progress; track risk across scans ／ 1. **Import** — parse one or more `.nessus` files into a local SQLite database (`~/.cerno/cerno.db`).",
+     "lines": [
+      9,
+      54
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "**Supported protocols:** SMB, SSH, LDAP, MSSQL, RDP, WinRM, FTP, NFS, VNC, WMI",
+     "lines": [
+      203
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该安全工作流应用的本地存储后端，NetExec 数据库只读引用，未为数据库生态提供工具/组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A **TUI tool** for reviewing Nessus scan findings and orchestrating security tools (**nmap**, **NetExec**, custom commands). Import `.nessus` files into a SQLite database for organized, persistent vulnerability verification and exploitation. ／ 1. **Import** — parse one or more `.nessus` files into a local SQLite database (`~/.cerno/cerno.db`). ／ The same database and tooling are also exposed over the Model Context Protocol, so an MCP client (e.g. Claude CLI) can query findings and generate commands programmatically.",
+   "evidence_lines": [
+    5,
+    54,
+    59
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "ridgebackinfosec/cerno",
+  "sha": "6d21e58dc688",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7a8aac80f8ff": {
+  "identity": {
+   "one_liner": "SOC 安全运营事件工单与自动化平台，集成 SIEM/WAF/SOAR",
+   "review": "一个多容器 Docker 部署的安全运营中心（SOC）事件工单与自动化平台，通过 n8n 工作流接收 Wazuh SIEM 告警，结合 SafeLine WAF 防护、LDAP 认证与基于角色的工单看板（FastAPI + React）。面向安全运维团队与实验室环境，需在 .env 中配置密钥后以 docker compose 启动。",
+   "highlights": [
+    "通过 n8n 管道实时接收 Wazuh SIEM 告警与 webhook 触发",
+    "提供基于 LDAP/DB 映射的 RBAC 角色权限（L1/L2/L3/经理）与工单升级流程",
+    "以 Docker Compose 编排多容器部署，支持日志查看与版本更新"
+   ],
+   "use_cases": [
+    "安全运营中心的事件分诊与工单跟踪",
+    "SIEM 告警接入与多渠道通知自动化",
+    "安全防御教学与实验室环境搭建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "平台是一个使用数据库支撑工单业务的安全运营应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "An enterprise-ready **SOC Incident Ticketing & Automation Platform**. Designed to streamline Security Operations Center workflows by bridging real-time SIEM alerts (Wazuh), automated orchestration (n8n), Web Application Firewall defense (SafeLine WAF), and role-based incident tracking (FastAPI + React). ／ |⚙️ Deployment & Setup Guide|Installation, volume persistence, and database backups.| ／ docker compose up -d --build",
+   "evidence_lines": [
+    15,
+    116,
+    62
+   ]
+  },
+  "fn": "nizarsaidi-exe/SOC-ITSM-Platform",
+  "sha": "7a8aac80f8ff",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

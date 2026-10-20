@@ -8250,5 +8250,151 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2cfeff5fb82e": {
+  "identity": {
+   "one_liner": "NativeScript 的 SQLite 插件，提供原生线程绑定的 SQLite 访问 API",
+   "review": "该仓库是一个 monorepo，为 NativeScript 应用提供 SQLite 支持，包含 sqlite-core API、Node-API 绑定、JNI/Objective-C 桥接和默认 SQLite 引擎等包。所有调用在原生线程上执行并返回 Promise，Android 默认启用 WAL，支持加载扩展、可替换引擎（如 SQLCipher），并提供 TypeORM 集成入口。面向使用 NativeScript 开发移动应用的开发者，通过 ns plugin add 安装。",
+   "highlights": [
+    "所有数据库调用运行在原生线程并以 Promise 返回，不阻塞 JS 线程",
+    "支持按数据库或全局配置替换引擎（如 SQLCipher），Android 默认引擎可加载 SQLite 扩展",
+    "提供 /typeorm 和 /nanosql 入口，支持 Android 默认开启 WAL 模式"
+   ],
+   "use_cases": [
+    "NativeScript 移动应用中的本地数据持久化",
+    "需要在 NativeScript 中使用 SQLCipher 加密数据库的场景",
+    "在 NativeScript 项目中配合 TypeORM 使用 SQLite"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite for NativeScript, everything included: native threads, Node-API and JNI / Objective-C bindings, a default SQLite on each platform. Pick the smaller packages (sqlite-core, sqlite-napi...) to bring your own.",
+     "lines": [
+      10
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "TypeORM's browser build references every database driver and a few node modules, so the webpack config needs (see `spike/nssqlite-spike/webpack.config.js` for a working one): the `browser` alias field, an alias for the `typeorm/browser` prefix, `false` fallbac",
+     "lines": [
+      387
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "TypeORM's browser build references every database driver and a few node modules, so the webpack config needs (see `spike/nssqlite-spike/webpack.config.js` for a working one): the `browser` alias field, an alias for the `typeorm/browser` prefix, `false` fallbac",
+     "lines": [
+      387
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 NativeScript 应用提供 SQLite 驱动/绑定层，是为数据库访问服务的组件而非使用数据库存储数据的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " SQLite for NativeScript, everything included: native threads, Node-API and JNI / Objective-C bindings, a default SQLite on each platform. Pick the smaller packages (sqlite-core, sqlite-napi...) to bring your own. ／ `ns plugin add @nativescript-community/sqlite` ／ This brings everything and needs no setup: `sqlite-core` (the API and the native core), `sqlite-napi` (Node-API binding, NativeScript 9.1+), `sqlite-bridge` (JNI / Objective-C, any NativeScript version) and `sqlite-default-engine` (the default SQLite):",
+   "evidence_lines": [
+    10,
+    17,
+    19
+   ]
+  },
+  "fn": "nativescript-community/sqlite",
+  "sha": "2cfeff5fb82e",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0e3a206ced03": {
+  "identity": {
+   "one_liner": "macOS 桌面宠物应用，用 CLI/Siri 记笔记和提醒，本地 SQLite 存储",
+   "review": "Rallo 是一款 macOS 桌面宠物应用，通过终端命令、Siri/Shortcuts、右键菜单保存笔记和一次性提醒，并以红熊猫形象显示在桌面上，在编码代理（Claude Code 等）或 ClickUp 消息等待时做出动作。笔记与提醒存储在本地 SQLite（~/Library/Application Support/Razlio/Rallo），无账号无服务器，仅支持 Apple Silicon、macOS 14+。",
+   "highlights": [
+    "通过 rallo CLI、Siri、Shortcuts、Services 保存笔记与提醒，全部命令支持 --json 输出",
+    "笔记数据本地存储于 SQLite，无账号、无服务器、无遥测",
+    "与 Claude Code、Codex、Grok、Gemini CLI 等编码代理集成，通过 skill/hooks 提示代理保存笔记"
+   ],
+   "use_cases": [
+    "开发者在终端快速记录待办与提醒",
+    "让编码代理在任务完成或需授权时提醒用户",
+    "离线、单机的个人笔记/提醒管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local.** Notes live in SQLite at `~/Library/Application Support/Razlio/Rallo`. There is",
+     "lines": [
+      173
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明笔记数据存储在本地 SQLite 中，SQLite 是该应用的数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT license",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rallo is a small Mac app for the thoughts you'd otherwise lose: \"call the dentist\", ／ Everything lives on your Mac. No account, no server, no telemetry.",
+   "evidence_lines": [
+    23,
+    33
+   ]
+  },
+  "fn": "Eyakub/Rallo",
+  "sha": "0e3a206ced03",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

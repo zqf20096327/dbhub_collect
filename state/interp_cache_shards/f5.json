@@ -9885,5 +9885,143 @@
   "generated_at": "2026-10-19",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f874bded7bb4": {
+  "identity": {
+   "one_liner": "AI agent 持久记忆层，markdown 存储加 SQLite 索引，经 MCP 暴露",
+   "review": "Noema 为 AI 编码代理提供本地持久记忆：每条记忆是 markdown 文件，索引为本地 SQLite（FTS5），通过 MCP server（stdio/HTTP）供 Claude Code、Cursor 等客户端读写，并支持 Cortex 间 P2P 联邦同步。需 Rust 1.88+ 自建；当前处于 v0.x，次版本间可能存在破坏性变更。",
+   "highlights": [
+    "以 markdown 文件为事实源、本地 SQLite FTS5 为索引，核心存储与词法检索无需 API key",
+    "作为 MCP server 运行（stdio + Streamable HTTP），提供单平台 Rust 二进制，内置 SQLite 与插件安装器",
+    "支持 Cortex 间 P2P 联邦、向量时钟、事件日志审计与并发编辑 divergence 追踪"
+   ],
+   "use_cases": [
+    "为编码代理（Claude Code、Codex、Cursor、OpenCode 等）提供跨会话记忆",
+    "用 Obsidian/VS Code 等编辑器直接管理记忆文件并同步变更",
+    "多节点间对代理记忆做点对点联邦与冲突追踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Noema gives AI agents — and the humans working alongside them — a persistent, structured place to record what they know, decide, observe, and intend. Every memory is a plain markdown file. The index is a local SQLite database. Core storage and lexical retrieva ／ - **Plain markdown on disk** as the source of truth; a local SQLite database with FTS5 as the index. Core memory storage requires no cloud service or API key. ／ Release archives bundle SQLite, so there is no separate database library to",
+     "lines": [
+      10,
+      15,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向 AI 代理的记忆应用，SQLite 仅作为其内置嵌入索引存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Noema gives AI agents — and the humans working alongside them — a persistent, structured place to record what they know, decide, observe, and intend. Every memory is a plain markdown file. The index is a local SQLite database. Core storage and lexical retrieval run locally without an API key. Optional model integrations process data at their configured endpoints; choosing an external endpoint sends that integration's inputs to the external service. ／ - **Local-first agent memory** exposed as an MCP server (stdio + Streamable HTTP). Works out of the box with Claude Code, GitHub Copilot, Zed, Cursor, Aider, and anything else that speaks MCP. ／ ### Database storage in iCloud Drive",
+   "evidence_lines": [
+    10,
+    14,
+    193
+   ]
+  },
+  "fn": "Fail-Safe/Noema",
+  "sha": "f874bded7bb4",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "206c408a86c3": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 PostgreSQL 的图书馆管理 REST API",
+   "review": "Libro 是一个用 Spring Boot 实现的图书馆管理系统 REST API，用于管理图书实体副本、用户账户与借阅归还流程。技术栈为 Java、Spring Boot、PostgreSQL 18、Flyway 迁移和 Docker Compose，提供 Swagger/OpenAPI 文档、HTTP Basic 认证和基于角色的权限控制。属于使用数据库存数据的应用项目，README 以个人作品集为主要定位，包含学术机构背景说明。",
+   "highlights": [
+    "提供图书增删改查、搜索过滤分页及库存统计接口",
+    "实现借阅管理：14 天借期、每人最多 3 笔在借、逾期限制续借",
+    "支持 Docker/Docker Compose 部署、Flyway 版本化 schema 迁移与健康检查端点"
+   ],
+   "use_cases": [
+    "学校图书馆的图书收藏与借阅流程管理",
+    "需要基于角色的账户与权限控制的 REST API 场景",
+    "Spring Boot + PostgreSQL + Docker 的本地开发部署参考"
+   ],
+   "doc_source": "README",
+   "confidence_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 18| ／ The system runs as a Spring Boot API alongside PostgreSQL. Book, user, and loan requests pass through their HTTP and business layers to persistence; Flyway prepares the schema at startup. Shared validation, mapping, security configuration, and error handling s",
+     "lines": [
+      36,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该系统将图书、用户和借阅数据存储于 PostgreSQL，是使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|PostgreSQL 18| ／ The system runs as a Spring Boot API alongside PostgreSQL. Book, user, and loan requests pass through their HTTP and business layers to persistence; Flyway prepares the schema at startup. Shared validation, mapping, security configuration, and error handling support the API. `UserRepository` serves account and loan use cases, plus `LibroUserDetailsService` for Spring Security's HTTP Basic account lookup.",
+   "evidence_lines": [
+    36,
+    70
+   ]
+  },
+  "fn": "kyledelfin2006/libro-library-system",
+  "sha": "206c408a86c3",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

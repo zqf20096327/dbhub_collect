@@ -7910,5 +7910,173 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96462f7a1e0a": {
+  "identity": {
+   "one_liner": "Rust+GTK4 编写的 Linux 文件管理器",
+   "review": "Flux 是用 Rust 与 GTK4/Libadwaita 编写的 Linux 桌面文件管理器，面向 GNOME/Wayland 用户，支持键盘驱动操作、压缩包浏览、SMB/SFTP 等网络位置、标签与预览面板；标签功能基于 SQLite 存储，另含内嵌终端与可编辑右键菜单，需 GTK4 与 libadwaita 1.5 以上环境。",
+   "highlights": [
+    "将 zip/7z/rar/tar/iso/deb 等压缩包作为文件夹浏览，不实际解压",
+    "支持 SMB、SFTP、FTP、WebDAV、NFS、MTP、Google Drive 及 LUKS 加密卷",
+    "标签采用 user.xdg.tags 文件属性并使用 SQLite 存储"
+   ],
+   "use_cases": [
+    "Linux 桌面日常文件管理",
+    "在文件管理器中浏览远程服务器目录",
+    "通过标签与预览整理多媒体文件库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Rust, Relm4 and GTK4, Tokio and Rayon, Nucleo for fuzzy matching, the `ignore` crate for directory walking, and SQLite for tags. There are 600+ tests (`sh tests.sh`), and the parsers are fuzzed with libFuzzer.",
+     "lines": [
+      153
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目使用 SQLite 存储标签数据，自身为文件管理器应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Flux is a GTK4/Libadwaita file manager for Linux, written in Rust. I wanted something that opens instantly, looks at home on GNOME and Wayland, and can be driven from the keyboard. It does that, and it does it faster than the other GUI file managers I tried. ／ Rust, Relm4 and GTK4, Tokio and Rayon, Nucleo for fuzzy matching, the `ignore` crate for directory walking, and SQLite for tags. There are 600+ tests (`sh tests.sh`), and the parsers are fuzzed with libFuzzer. ／ GPLv3",
+   "evidence_lines": [
+    7,
+    153,
+    158
+   ]
+  },
+  "fn": "killown/flux",
+  "sha": "96462f7a1e0a",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "34e18e385856": {
+  "identity": {
+   "one_liner": "Python 低代码框架，事件驱动生成数据库 Web 应用",
+   "review": "Jam.py v7 是一个 Python 编写的低代码 Web 应用生成框架，开发者在浏览器内的 Application builder 中构建业务应用，服务端为 Python、客户端使用 JavaScript/jQuery/Bootstrap。它支持多种数据库并自动创建和修改数据表，适合单人开发者快速搭建业务系统，也提供离线/Windows 部署方式和导出导入元数据的迁移工具。",
+   "highlights": [
+    "支持 SQLite、PostgreSQL、MySQL、Firebird、MSSQL、Oracle 等数据库，可在不更改项目的情况下切换数据库",
+    "提供浏览器内 Application builder，自动创建和修改数据库表并生成 SQL 查询",
+    "内置认证授权、会话管理、角色权限、审计记录与基于 LibreOffice 模板的报表生成"
+   ],
+   "use_cases": [
+    "单人开发者快速构建 CRM 等业务数据库 Web 应用",
+    "在离线/物理隔离网络或 Windows 环境部署业务应用",
+    "基于 MS Access 模板迁移创建 Web 应用"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* Supports SQLite, PostgreSQL, MySQL, Firebird, MSSQL and",
+     "lines": [
+      75
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* Supports SQLite, PostgreSQL, MySQL, Firebird, MSSQL and",
+     "lines": [
+      75
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Oracle databases. The concept of the framework allows you to migrate from",
+     "lines": [
+      76
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* Supports SQLite, PostgreSQL, MySQL, Firebird, MSSQL and",
+     "lines": [
+      75
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "* Supports SQLite, PostgreSQL, MySQL, Firebird, MSSQL and",
+     "lines": [
+      75
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明为开发数据库应用的开发者框架/平台，通过支持的数据库声明适配多种数据库，属于服务应用开发而非最终业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSD License（单许可）",
+   "install": [
+    "pypi",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "1. A full developer framework, not only a low-code tool. ／ * Supports SQLite, PostgreSQL, MySQL, Firebird, MSSQL and ／ * Automatic creation and modification of database tables and SQL queries generation.",
+   "evidence_lines": [
+    8,
+    75,
+    81
+   ]
+  },
+  "fn": "jam-py-v7/jam-py-v7",
+  "sha": "34e18e385856",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

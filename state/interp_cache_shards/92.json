@@ -9551,5 +9551,207 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e0d85d411224": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，用 SQLite 存储，提供 CLI/Web UI 和 AI agent 技能",
+   "review": "Pad 是一个面向开发者的本地项目管理工作项跟踪器，提供 CLI、Web UI 与可安装到 Claude Code、Cursor 等 7 种以上 AI 编码工具的 /pad 技能，数据默认存储在本机 SQLite，也可导出到 Pad Cloud。支持任务、想法、计划、文档等集合与自定义字段、约定和 playbook。适合个人开发者及与其协作的 AI agent 使用。",
+   "highlights": [
+    "提供 CLI、Web UI 与 AI agent 技能，数据由本地 SQLite 存储，支持 docker 部署多实例（Postgres + Redis）",
+    "支持任务、想法、计划、文档、约定、playbook 等集合，可自定义类型化字段，SQLite 迁移前自动快照备份",
+    "提供 /pad 技能供 Claude Code、Cursor、Windsurf、Codex 等 AI 工具通过自然语言读写项目条目，agent 操作在活动流中署名记录"
+   ],
+   "use_cases": [
+    "个人开发者在本地终端管理项目任务与计划",
+    "让 AI 编码 agent 通过约定和 playbook 按项目规范协作并留下操作痕迹",
+    "小团队需要离线可用、数据留在本机的工作项看板"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud| ／ **Automatic pre-migration snapshot (SQLite).** Whenever a SQLite-backed instance has pending migrations to apply, Pad first copies the database file to `pad.db.pre-<version>` next to it. If an upgrade ever goes wrong, stop the server and copy that snapshot bac ／ # 1. Back up first (SQLite shown; see docs/backup.md for Postgres)",
+     "lines": [
+      25,
+      56,
+      269,
+      274
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup. The compose file runs the released image; set `PAD_VERSION` in `.env` to pin it.",
+     "lines": [
+      217
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据由本地 SQLite 存储（可选 Postgres），Pad 是使用数据库存数据的项目管理应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud|",
+   "evidence_lines": [
+    25,
+    56
+   ]
+  },
+  "fn": "PerpetualSoftware/pad",
+  "sha": "e0d85d411224",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed5255c2a5ce": {
+  "identity": {
+   "one_liner": "rqlite 分布式数据库的纯 Python DB-API 2.0 客户端库",
+   "review": "pyrqlite 是用纯 Python 实现的 rqlite 客户端库，遵循 PEP 249（DB-API 2.0）接口，提供 connect/cursor/execute 等标准方法，支持 qmark 与 named 两种参数风格，需连接运行中的 rqlite Server 使用，且不支持事务。适合需要在 Python 程序中通过标准 DB-API 访问 rqlite 的开发者。",
+   "highlights": [
+    "纯 Python 实现的 rqlite 客户端库，实现 DB-API 2.0（PEP 249）接口",
+    "支持 qmark 和 named 两种参数风格",
+    "可通过 pip、源码克隆或 tarball 安装，附带基于 pytest 的测试套件"
+   ],
+   "use_cases": [
+    "Python 应用通过标准 DB-API 2.0 接口连接和操作 rqlite",
+    "执行参数化 SQL 查询并读取结果",
+    "为基于 rqlite 的 Python 项目提供数据库连接层"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "该库是为 rqlite 数据库提供 Python 客户端连接能力的组件，服务于数据库生态而非仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This package contains a pure-Python rqlite client library. ／ * rqlite Server ／ Only qmark and named paramstyles (as defined in PEP 249) are supported.",
+   "evidence_lines": [
+    6,
+    16,
+    92
+   ]
+  },
+  "fn": "rqlite/pyrqlite",
+  "sha": "ed5255c2a5ce",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e054c5d5679": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Go 语言任务队列库",
+   "review": "Swig 是一个面向 Go 开发者的任务队列库，用 PostgreSQL 的 SKIP LOCKED 和 advisory locks 实现任务分发、领导者选举与事务性入队，支持 pgx 和 database/sql 两种驱动、优先级队列、批量插入与至少一次投递。当前处于 alpha 阶段，API 可能变动。",
+   "highlights": [
+    "利用 PostgreSQL SKIP LOCKED 实现任务原子认领与多进程分发",
+    "支持事务性入队，任务可与业务数据在同一事务中提交",
+    "支持 pgx 与 database/sql 双驱动、多优先级队列与批量插入"
+   ],
+   "use_cases": [
+    "Go 应用中需要与数据库事务一致的可靠后台任务处理",
+    "需要任务重试、定时任务与崩溃恢复的队列场景",
+    "需高吞吐批量插入任务的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Swig is a robust, PostgreSQL-backed job queue system for Go applications, designed for developers who need reliable background job processing with minimal setup. ／ - **Atomic Claiming**: Each job is claimed by one worker at a time using PostgreSQL's SKIP LOCKED ／ - **PostgreSQL-Powered**: Leverages PostgreSQL's SKIP LOCK for efficient job distribution",
+     "lines": [
+      5,
+      52,
+      57
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供任务队列能力的服务组件，README 明确以 PostgreSQL 为底层存储与分发机制",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Swig is a robust, PostgreSQL-backed job queue system for Go applications, designed for developers who need reliable background job processing with minimal setup. ／ - **PostgreSQL-Powered**: Leverages PostgreSQL's SKIP LOCK for efficient job distribution ／ ⚠️ **Alpha Status**: Swig is currently in alpha and actively being developed towards v1.0.0. The API may undergo changes during this phase. For stability in production environments, we strongly recommend pinning to a specific version:",
+   "evidence_lines": [
+    5,
+    57,
+    7
+   ]
+  },
+  "fn": "glamboyosa/swig",
+  "sha": "1e054c5d5679",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

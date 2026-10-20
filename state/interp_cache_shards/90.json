@@ -9535,5 +9535,137 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9fd435675295": {
+  "identity": {
+   "one_liner": "基于 SpringBoot+Vue 的云医疗（HIS）应用系统",
+   "review": "一套前后端分离的医疗业务系统，覆盖挂号、电子处方、药品供应链与库存、多医院协同及数据看板等功能，面向患者、医生、医院管理员和平台运营四类角色，README 定位含毕业设计用途。使用 MySQL 存储数据、Redis 作缓存、MybatisPlus 作 ORM，集成支付宝沙盒支付；资源获取非免费，需联系作者。",
+   "highlights": [
+    "支持多医院入驻、医生排班与在线挂号流程",
+    "提供电子处方、药品库存预警与采购物流跟踪",
+    "包含平台/医院/医生三级数据统计看板"
+   ],
+   "use_cases": [
+    "互联网医疗平台教学与毕业设计参考",
+    "在线挂号与药品配送业务流程学习",
+    "SpringBoot+Vue 前后端分离项目学习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql 数据库 一定要把账户和密码记住 ／ 后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+     "lines": [
+      16,
+      26,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统使用 MySQL 作为数据库存储业务数据（L31），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "后端：SpringBoot、MybatisPlus、MySQL、Redis、 ／ 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)",
+   "evidence_lines": [
+    26,
+    31
+   ]
+  },
+  "fn": "Fankekeke/medical_cos",
+  "sha": "9fd435675295",
+  "source": "readme",
+  "generated_at": "2026-10-19",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b5dd32d55dd6": {
+  "identity": {
+   "one_liner": "OneKey 密钥服务的命令行客户端，按名称取用密钥",
+   "review": "该仓库是 OneKey 密钥服务的轻量客户端，提供 ls、run、curl、mcp 等命令，把项目密钥作为环境变量注入子进程，或渲染进 YAML 模板，并支持通过浏览器扩展和 MCP 工具做网站登录填充；面向开发者和 AI 代理。仓库仅含客户端，服务端（含 SQLite/PostgreSQL 存储）在完整 OneKey 发行版中；README 提到暂不支持 SSO 登录。",
+   "highlights": [
+    "提供 run/curl/mcp 等命令，将项目密钥注入子进程环境或渲染到 YAML 模板，不落盘渲染文件",
+    "内置 MCP 服务器（onekey mcp serve），提供浏览器填充等九个本地工具，不返回凭据值",
+    "支持个人/运行令牌登录、离线缓存 TTL 策略与 Chrome/Edge 浏览器扩展集成"
+   ],
+   "use_cases": [
+    "为本地进程和 CI 运行器按项目注入密钥环境变量",
+    "在 kubectl/helm 部署流程中用模板占位符渲染配置",
+    "让 AI 代理通过 MCP 工具查询密钥元数据或执行浏览器登录填充"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Wrap `-c` scripts in single quotes so `$NAME` expands in the child, not in your shell: `onekey run -c 'psql \"$DATABASE_URL\" -c \"select 1\"'`. To check a secret exists, print its length, never its value: `onekey run -c 'echo ${#NAME}'`.",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是密钥管理客户端工具，README 中的 psql 仅作为 run 命令示例出现，非数据库适配。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One small binary. People and AI agents use secrets by name ; values only reach the process that needs them. ／ This repository is the client only: no `onekey server` or `onekey admin`. The full OneKey release runs the server and also includes these client commands. Both use the same `~/.onekey` profiles, so you can switch between them freely. The CLI talks to the server's `/api/v1` REST API. ／ `onekey mcp serve` provides nine local tools: scoped project/group/secret metadata, authorized browser connection discovery, bridge status, synchronous/asynchronous fill, result lookup and cancellation. It never returns credential values. Configure it in your MCP client:",
+   "evidence_lines": [
+    6,
+    157,
+    134
+   ]
+  },
+  "fn": "panp1/onekey-cli",
+  "sha": "b5dd32d55dd6",
+  "source": "readme",
+  "generated_at": "2026-10-20",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
