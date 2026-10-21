@@ -9135,5 +9135,77 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "27be65f4463f": {
+  "identity": {
+   "one_liner": "单文件 Python 应用，用 SQLite 统一支撑知识图谱、代码智能与运维控制面",
+   "review": "Oblivion Orbital 是一个单文件 Python 应用，将知识图谱存储（含句子级溯源与 FTS 搜索）、内嵌代码编辑器（诊断/补全带回退机制）、认证审计与 Platform Store 实体表合并到同一个进程和同一个 SQLite 库中，面向需要内部知识管理与数据控制的单人/小团队。代码经 /api/run 端点以 exec() 直接执行、无沙箱，演示需邮件申请十天试用。",
+   "highlights": [
+    "知识图谱节点携带溯源标签，删除导入文件时按来源列表安全清理节点，搜索基于 SQLite FTS",
+    "pyflakes/jedi/pluggy 为可选依赖，缺失时自动回退到 stdlib 实现",
+    "内置 PBKDF2 认证、会话管理、角色权限与追加式审计表"
+   ],
+   "use_cases": [
+    "单团队内部知识图谱构建与文档溯源查询",
+    "受限/离线环境下运行带权限审计的内部工具",
+    "浏览、检索与操作图谱数据的轻量仪表盘"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A researcher importing a batch of documents, a developer debugging a script against that research, and an administrator deciding who gets to see either — these are usually treated as three different products with three different login screens. Oblivion Orbital ／ At the core sits a graph store: nodes carry a label, spatial coordinates for layout, a computed community assignment and betweenness score, and a `source_file` provenance tag; edges carry weight and the same provenance tag. Every sentence ingested during an im ／ For **Oblivion Orbital**, nothing is strictly required beyond Python's standard library — the whole app (HTTP server, SQLite storage, knowledge graph, auth, dashboard) runs out of the box with just:",
+     "lines": [
+      12,
+      16,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该系统用 SQLite 作为自身存储后端存数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A researcher importing a batch of documents, a developer debugging a script against that research, and an administrator deciding who gets to see either — these are usually treated as three different products with three different login screens. Oblivion Orbital treats them as three views onto the same underlying store. A single SQLite database backs a knowledge graph, a session/role table, and an operational registry, and a single HTTP handler routes all three. The bet is that co-location beats orchestration when the alternative is gluing together a graph database, an LSP server, and an admin panel that all need to agree on who's authenticated. ／ For **Oblivion Orbital**, nothing is strictly required beyond Python's standard library — the whole app (HTTP server, SQLite storage, knowledge graph, auth, dashboard) runs out of the box with just: ／ python oblivion_orbital.py",
+   "evidence_lines": [
+    12,
+    46,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "shokribardiya/Data-Base-with-AI-graph-Orbital-2",
+  "sha": "27be65f4463f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

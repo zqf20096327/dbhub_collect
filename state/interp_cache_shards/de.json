@@ -10407,5 +10407,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "525c77d492ee": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 的本地优先 Token 用量统计插件，数据存 SQLite",
+   "review": "该项目是 CLIProxyAPI 的用量报表插件，通过插件回调在请求完成时将 Token 用量事件写入本地 SQLite，并在管理面板提供 shadcn/ui 界面展示趋势、模型、匿名 Key 与请求明细，支持费用估算与 USD/CNY 换算。面向使用 CLIProxyAPI 的个人或团队，以动态库形式运行于 CPA 进程内，无需额外服务进程，费用为估算口径而非实际账单。",
+   "highlights": [
+    "通过 usage.handle 插件回调实时写入用量事件，无需轮询或独立进程",
+    "提供 Token 趋势、模型/匿名 Key/请求明细与筛选，支持成功率统计与费用排序",
+    "内置 LiteLLM 公开价格快照，支持自定义价格版本化与 USD/CNY 换算"
+   ],
+   "use_cases": [
+    "为 CLIProxyAPI 实例提供本地 Token 用量与费用报表",
+    "审计经过 CPA 的多客户端（如 Codex CLI、OpenCode）请求用量",
+    "离线环境下手动安装插件进行用量分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **本地优先**：用量数据保存在本机 SQLite，不上传第三方分析平台；插件仅随你的 CLIProxyAPI 运行。 ／ |`plugins.configs.usage-report.db_path`|SQLite 路径，默认 `~/.cli-proxy-api/usage-report/usage.sqlite`| ／ - 用量事件保存在 `db_path` 指向的本地 SQLite（表 `usage_events`），页面 API 在返回前将 Key 转换为稳定的匿名分组（`key-xxxxxxxxxx` 或 `未知 Key`）。",
+     "lines": [
+      5,
+      87,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "插件使用本地 SQLite 存储用量数据，服务于 CLIProxyAPI 而非数据库生态本身。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；界面组件基于 shadcn/ui（MIT）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **本地优先**：用量数据保存在本机 SQLite，不上传第三方分析平台；插件仅随你的 CLIProxyAPI 运行。 ／ - 用量事件保存在 `db_path` 指向的本地 SQLite（表 `usage_events`），页面 API 在返回前将 Key 转换为稳定的匿名分组（`key-xxxxxxxxxx` 或 `未知 Key`）。",
+   "evidence_lines": [
+    5,
+    92
+   ]
+  },
+  "fn": "andyWang1688/cpa-usage",
+  "sha": "525c77d492ee",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10268,5 +10268,77 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0ca06bca87b7": {
+  "identity": {
+   "one_liner": "自托管小团队工作台：项目、看板、考勤、请假一体化应用",
+   "review": "AyiPM 是一个面向小团队的自托管工作空间应用，提供项目、看板任务、考勤、请假和活动日志功能。后端用 Java Spring Boot 实现，数据存储于 PostgreSQL，前端为 Next.js。通过一条 Docker 命令即可启动，适合希望自托管部署的团队使用，也面向欢迎新手贡献的开源社区。",
+   "highlights": [
+    "提供项目、看板任务、考勤、请假、通知和活动日志功能",
+    "支持 Docker 一条命令启动，数据保存在 postgres-data 卷中",
+    "实现管理员、项目经理、员工三级角色权限，含邀请制账号与锁定机制"
+   ],
+   "use_cases": [
+    "小团队自托管管理人员、考勤与请假",
+    "项目管理与看板任务协作",
+    "通过活动日志记录变更用于审计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **`backend/`**: the API, built with Java 21, Spring Boot 4 and PostgreSQL. ／ Everything the team shares is stored in Postgres and served by the backend: accounts, projects, tasks, leave, notifications, the activity log and each person's preferences. Attendance check-ins are the one thing still kept in the browser until the attendance A ／ This builds and starts Postgres, the backend and the frontend. Open http://localhost:3000 and create your workspace on the **/setup** page. The first build downloads dependencies and takes a few minutes; later starts are quick.",
+     "lines": [
+      12,
+      14,
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明所有共享数据存储在 Postgres 中并由后端提供服务，应用只是使用数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Everything the team shares is stored in Postgres and served by the backend: accounts, projects, tasks, leave, notifications, the activity log and each person's preferences. Attendance check-ins are the one thing still kept in the browser until the attendance API (#103) is finished. ／ docker compose --profile app up --build",
+   "evidence_lines": [
+    14,
+    48
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mahfoos/AyiPM",
+  "sha": "0ca06bca87b7",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

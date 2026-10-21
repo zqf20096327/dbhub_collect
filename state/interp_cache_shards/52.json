@@ -10697,5 +10697,75 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7291f4a7efbe": {
+  "identity": {
+   "one_liner": "俄罗斯邮政网点数字排队叫号系统，基于 Go+React+PostgreSQL",
+   "review": "这是俄罗斯邮政黑客松 PostCode Challenge 2026 的获奖项目（季军），实现邮局网点电子排队系统：预约、QR 取号、现场叫号、ETA 预测、操作员与主管工作台。后端为 Go 模块化单体，PostgreSQL 作事务存储（含 SKIP LOCKED 叫号与 Transactional Outbox），部署用 Docker Compose/Kubernetes+ArgoCD。适合需要排队管理的营业网点场景，含 RAG 咨询、监控备份等可选组件。",
+   "highlights": [
+    "基于 due_at 的确定性叫号机制，PostgreSQL 事务保证 CallNext 原子性（FOR NO KEY UPDATE ... SKIP LOCKED）",
+    "支持预约、QR 取号、终端取号三种票据来源及 OTP/邮件链接确认",
+    "内置 Prometheus/Grafana/Loki 可观测性栈与每 6 小时的 PostgreSQL 备份"
+   ],
+   "use_cases": [
+    "邮局/银行等营业网点的排队叫号与预约管理",
+    "需要 OTP 确认的在线预约场景",
+    "作为黑客松/演示级全栈排队系统参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ * для запуска без Docker: Go 1.25+, Node.js 22.12+, npm и PostgreSQL 17; ／ |`postgres`|Основное транзакционное хранилище|`127.0.0.1:5432`|",
+     "lines": [
+      13,
+      54,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确 PostgreSQL 是应用的主要事务存储（Основное транзакционное хранилище），系统本身是排队业务应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Система управления электронной очередью для почтовых отделений: предварительная запись, QR-талон со смартфона и живая очередь с единым детерминированным механизмом вызова на базе срока обслуживания (`due_at`). ／ |`postgres`|Основное транзакционное хранилище|`127.0.0.1:5432`| ／ |PostgreSQL|`POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`|Подключение к основному хранилищу|",
+   "evidence_lines": [
+    24,
+    121,
+    152
+   ]
+  },
+  "fn": "Shoto373/russian-post-digital-queue",
+  "sha": "7291f4a7efbe",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

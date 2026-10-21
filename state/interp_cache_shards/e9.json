@@ -11346,5 +11346,157 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f10e04a1765e": {
+  "identity": {
+   "one_liner": "本地优先的跨平台桌面 AI 编程 Agent 工作台",
+   "review": "ReinAgent 是一个基于 Tauri 2 的桌面 AI 编程客户端，接入多种大模型 API，用自然语言驱动读写代码、执行命令和浏览器操作，并支持手机远程访问与 MCP 双向生态。面向开发者使用，会话、任务时间线等数据持久化在本地 SQLite 数据库，配置与密钥均留存本地。",
+   "highlights": [
+    "支持 Chat Completions、Anthropic Messages、Responses、Google Generative AI 多协议接入大模型",
+    "实现 MCP 客户端与 MCP Server 双向能力，可被外部大模型远程调用",
+    "会话与任务数据持久化在本地 SQLite 数据库，支持子代理并行与代码检查点回退"
+   ],
+   "use_cases": [
+    "开发者在本地工作区用自然语言驱动 AI 读写代码与执行命令",
+    "通过局域网或 Cloudflare 隧道用手机远程查看与控制桌面 Agent",
+    "本地 Markdown 知识库与对话整理笔记"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-First 数据自治**：所有会话历史、任务时间线、代码改动快照、模型密钥与配置均 100% 留存在本地（SQLite WAL + 本地 JSON），绝不上传云端，无任何中心化云服务依赖。 ／ - **桌面与后端**：Tauri 2 (Rust) + Axum + SQLite (rusqlite) + Tokio ／ - **对话与任务库**：任务元数据与时间线持久化在本地 SQLite 数据库 `~/.ReinAgent/conversations.db`。",
+     "lines": [
+      20,
+      178,
+      236
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为该桌面应用的本地存储（conversations.db），属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **桌面与后端**：Tauri 2 (Rust) + Axum + SQLite (rusqlite) + Tokio ／ - **对话与任务库**：任务元数据与时间线持久化在本地 SQLite 数据库 `~/.ReinAgent/conversations.db`。",
+   "evidence_lines": [
+    178,
+    236
+   ]
+  },
+  "fn": "web3claw/ReinAgent",
+  "sha": "f10e04a1765e",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "263f82ba3d0b": {
+  "identity": {
+   "one_liner": "本地运行的 AI 横幅生成应用，数据存于单个 SQLite 文件",
+   "review": "这是一个完全在本地运行的 AI 广告横幅生成应用，包含 Banner Tool、UGC Studio、品牌风格库和历史记录四个模块，数据全部存放在单个 SQLite 文件（data/app.db）中，并附带 MCP server 供 Claude Desktop 读取横幅库和生成图片。面向学员/学习者使用，需 Node.js 22.5+，也可切换到 Supabase 云模式实现多用户共享。",
+   "highlights": [
+    "数据全部存储在单个 SQLite 文件 data/app.db 中，备份即复制 data/ 目录",
+    "内置 MCP server，供 Claude Desktop / Codex 读取横幅库并生成图片",
+    "本地 server 实现 Supabase 协议（PostgREST/GoTrue），可经环境变量切换为云模式"
+   ],
+   "use_cases": [
+    "为学员本地生成广告横幅与 UGC 图片",
+    "通过 Claude Desktop 对话方式管理和创建横幅素材",
+    "积累品牌风格素材库并复用于后续图片生成"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Bản này dùng SQLite có sẵn trong Node, nên không phải cài thêm thư viện nào ／ ├── app.db ← toàn bộ database (SQLite) ／ **`SQLite is an experimental feature`**",
+     "lines": [
+      23,
+      86,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 SQLite 存储自身数据（app.db），横幅生成应用只是使用数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仅供学习用途（L162）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Dữ liệu nằm trong một file duy nhất: `data/app.db`. ／  Bản này dùng SQLite có sẵn trong Node, nên không phải cài thêm thư viện nào ／ ├── app.db          ← toàn bộ database (SQLite)",
+   "evidence_lines": [
+    5,
+    23,
+    86
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sonlovinbot/banner-studio-local",
+  "sha": "263f82ba3d0b",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9436,5 +9436,81 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9f22f4ff255c": {
+  "identity": {
+   "one_liner": "算法竞赛训练桌面工作台，SQLite 本机存储、服务端 MySQL 同步",
+   "review": "面向算法竞赛选手的桌面训练工具，提供题库、题解阅读、C++ 编辑与本地评测，并可对接 Codeforces、AtCoder、牛客、洛谷四个平台的提交与训练记录。数据分两层：本机 SQLite 保存工作副本和个人记录，服务端 MySQL 承担账号与排行榜同步。仅支持 Windows 10/11 x64。",
+   "highlights": [
+    "本地包含 C++ 编译评测，支持样例运行与编译产物复用",
+    "对接 Codeforces、AtCoder、牛客、洛谷四平台的账号提交跟踪与排行榜",
+    "本机 SQLite 保存个人数据，账号快照经 HTTPS 与服务端 MySQL 同步"
+   ],
+   "use_cases": [
+    "算法竞赛日常刷题与训练记录管理",
+    "模拟赛与重现赛组织",
+    "四平台竞赛账号数据集中查看与跨电脑同步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "TB 将题库、图文题解、C++ 编辑、本地评测和训练记录放在同一个工作台，支持 Codeforces、AtCoder、牛客和洛谷。账号数据存放在与排行榜共用的服务端 MySQL，本机 SQLite 保存工作副本和待同步记录。 ／ 账号、数据库和排行榜共用现有服务器。`005_account_state.sql`、`006_public_progress.sql` 和 `007_unique_nicknames.sql` 已在原 MySQL 上部署；2026-10-19 HTTPS 健康检查确认共享服务 1.1.2、账号与公开成长协议 1、单设备会话、昵称唯一性及快照版本恢复。客户端 v1.1.3 已发布并在本机完成升级，共享服务继续使用 1.1.2。应用保留 Python 本机 API 与 Node.js 共享服务，没有改写为 Go。服务部",
+     "lines": [
+      3,
+      86
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "TB 将题库、图文题解、C++ 编辑、本地评测和训练记录放在同一个工作台，支持 Codeforces、AtCoder、牛客和洛谷。账号数据存放在与排行榜共用的服务端 MySQL，本机 SQLite 保存工作副本和待同步记录。 ／ 公共题库以 `data/library/` 的 JSON 文本进入 git，打包时重建 `data/library.sqlite3`。个人记录、库工作副本和设置分开保存在 `state/`，安装包不会覆盖个人库。题解与配图存储在 SQLite，运行不依赖开发者的归档目录。",
+     "lines": [
+      3,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 与 MySQL 仅用于保存该训练工作台自身的个人数据、题库和账号同步，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TB 将题库、图文题解、C++ 编辑、本地评测和训练记录放在同一个工作台，支持 Codeforces、AtCoder、牛客和洛谷。账号数据存放在与排行榜共用的服务端 MySQL，本机 SQLite 保存工作副本和待同步记录。 ／ 公共题库以 `data/library/` 的 JSON 文本进入 git，打包时重建 `data/library.sqlite3`。个人记录、库工作副本和设置分开保存在 `state/`，安装包不会覆盖个人库。题解与配图存储在 SQLite，运行不依赖开发者的归档目录。",
+   "evidence_lines": [
+    3,
+    82
+   ]
+  },
+  "fn": "3097729287/acm-algo-trainer",
+  "sha": "9f22f4ff255c",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

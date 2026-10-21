@@ -10911,5 +10911,78 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "125262f5f279": {
+  "identity": {
+   "one_liner": "TypeScript Webhook 投递库，事件存储于 PostgreSQL 并由 worker 签名投递",
+   "review": "这是一个面向 TypeScript 应用的 Webhook 投递开发库：应用调用 publish() 将类型化事件写入 PostgreSQL，配套 worker 完成签名、发送、重试并记录每次投递，接收方用 parseWebhook() 验证。要求 Node.js 24+ 与 PostgreSQL 16–18，支持 Better Auth 插件管理端点，通过 npm 安装。",
+   "highlights": [
+    "提供事件发布、worker 签名投递、失败重试与投递记录的完整流程",
+    "事件与投递记录存储于用户自有的 PostgreSQL 数据库",
+    "提供 Better Auth 插件端点管理与接收方单函数验证"
+   ],
+   "use_cases": [
+    "为 TypeScript 应用内建 Webhook 投递能力",
+    "基于 Better Auth 的用户自助端点管理",
+    "搭建签名验证的 Webhook 接收端"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build"
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management wor ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tes ／ npm install good-webhooks pg zod",
+     "lines": [
+      15,
+      27,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "库以 PostgreSQL 为事件存储并为其提供迁移脚本，属于为应用与数据库间提供 Webhook 投递能力的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You publish typed events. Good Webhooks stores them in your PostgreSQL database, and a worker you run delivers signed Standard Webhooks requests, retries failures, and records every attempt. Receivers verify a request with one function. Endpoint management works standalone, through the Better Auth plugin, or with your own sender. ／ Requires Node.js 24 or later. Built-in delivery and standalone management need PostgreSQL 16, 17, or 18. Better Auth management uses your existing Better Auth database adapter. See installation for each setup's dependencies and the compatibility policy for tested versions.",
+   "evidence_lines": [
+    15,
+    27
+   ]
+  },
+  "fn": "pplytas/good-webhooks",
+  "sha": "125262f5f279",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

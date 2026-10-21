@@ -10965,5 +10965,78 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eb3cb4708090": {
+  "identity": {
+   "one_liner": "本地优先的学术论文 PDF 阅读器，含结构提取、引用问答与翻译",
+   "review": "这是一个在本地运行的学术论文 PDF 阅读应用，提供结构提取、基于引用段落的 Copilot 问答、逐段翻译、公式 LaTeX 重建与笔记功能，面向需要精读论文并使用自有模型端点的研究者。数据以 SQLite 存储于本地，模型调用需用户自行配置服务端点，翻译按内容哈希缓存，README 说明界面以中文为主。",
+   "highlights": [
+    "提供引用出处的论文问答（Copilot）与整篇/逐段翻译，翻译按内容哈希缓存",
+    "支持配置自定义模型服务 profile（聊天/解析/搜索三类），API 密钥写入系统凭据存储",
+    "支持可选的 MinerU 解析后端与 OpenAlex/Semantic Scholar 相关论文检索（默认关闭）"
+   ],
+   "use_cases": [
+    "在本地精读学术论文并按段落对照译文阅读",
+    "对论文内容提问并获得引用段落的回答",
+    "用自己的模型端点翻译整篇论文并维护术语表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "UI. A profile is a row in SQLite and now carries a **kind** — chat (`llm`), parser (`parser`), or ／ |Notes, highlights, profiles, tasks|`<data dir>/db.sqlite3`|",
+     "lines": [
+      114,
+      197
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 profile 数据以行形式存储在 SQLite 中，SQLite 是应用自身的数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "UI. A profile is a row in SQLite and now carries a **kind** — chat (`llm`), parser (`parser`), or ／ Academic Paper Copilot is a local-first reader for academic PDFs. It keeps the paper you are ／ Three things can leave this machine, and never by themselves: the model calls you press a button",
+   "evidence_lines": [
+    114,
+    14,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Marastraluster/Academic-Paper-Copilot",
+  "sha": "eb3cb4708090",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

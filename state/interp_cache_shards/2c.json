@@ -11088,5 +11088,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b24255daf7b8": {
+  "identity": {
+   "one_liner": "自托管冲刺规划器，在 Yandex Tracker/Jira 之上提供泳道计划视图",
+   "review": "Beer Tracker 是一个自托管的敏捷冲刺规划应用，为 Yandex Tracker 和 Jira 中的任务提供按人/按天泳道的计划视图，包含 backlog、burndown、事实时间线和回顾板功能，任务数据仍保留在原跟踪器中并通过 sync 同步状态历史。使用 Next.js/TypeScript 构建，依赖 PostgreSQL 存储，可选 Redis 支持多实例 realtime，并提供 MCP 接口供 AI 客户端读取与提案权限受限的修改。适合使用上述跟踪器的敏捷团队。",
+   "highlights": [
+    "提供按人与按天划分的冲刺泳道规划，支持任务卡片拖拽和时长调整",
+    "通过 sync 从跟踪器读取状态历史，在泳道上展示任务实际时间线",
+    "提供 MCP 接口，agent 可读取冲刺上下文并在确认后应用计划修改"
+   ],
+   "use_cases": [
+    "使用 Yandex Tracker 或 Jira 的团队进行可视化冲刺排期",
+    "迭代回顾会议：整理事实、cycle time 与改进约定",
+    "通过 MCP 让 AI 助手读取冲刺状态并提建议案"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex)",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示其以 PostgreSQL 作为自身存储（POSTGRES_PASSWORD 环境配置），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，另有 NOTICE 署名文件",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Планер спринтов поверх Яндекс Трекера и Jira ／ # POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex) ／ Откройте http://localhost:3000 и подключите трекер. Опубликованные образы — `dinkimom/beer-tracker`, тег `1.18.1`.",
+   "evidence_lines": [
+    5,
+    77,
+    81
+   ]
+  },
+  "fn": "Dinkimom/beer-tracker",
+  "sha": "b24255daf7b8",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10254,5 +10254,75 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9b065b432dcb": {
+  "identity": {
+   "one_liner": "Windows 单文件免安装的工作记录与周期排期工具，数据存本机 SQLite",
+   "review": "基于 Tauri 2 + Rust 的 Windows 桌面工作记录工具，把事务分为一次性、周期性、阶段性三类管理，提供看板/日历/统计视图、截图附件留痕、模板一键重建、备份恢复与便携模式，数据全部存在本机 SQLite 中，适合需要在本地管理日常周期性事务的个人用户，仅支持 64 位 Windows 10/11。",
+   "highlights": [
+    "周期排期引擎支持每天/每周多选/每月（含月末语义）/每季度锚点规则，完成后自动排下一次",
+    "提供备份（SQLite VACUUM INTO）、恢复前自动快照与校验、CSV 导出、便携模式",
+    "支持粘贴截图入库、三层子任务、模板按相对天数一键重建，含 130 个单测与冒烟自检脚本"
+   ],
+   "use_cases": [
+    "管理周报月报、例会、对账等周期性工作任务",
+    "项目/专项类阶段性工作按结束日期跟踪逾期",
+    "需要单文件便携、数据留在本机的个人待办记录"
+   ],
+   "use_cases_final": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "另外，所有数据都在本机 SQLite 里，程序不联网、不上传、不采集。 ／ - **备份数据** —— 导出成一个独立的 `.db` 文件，拷到 U 盘或网盘都行。用的是 SQLite 的 `VACUUM INTO` 而不是复制文件：库跑在 WAL 模式下，直接复制可能漏掉还留在 `-wal` 里没并回主文件的改动，而且这种缺失是**静默**的（文件能打开、表也在，等真要用的时候才发现少了最近几天）。 ／ - **rusqlite**（bundled SQLite，WAL 模式）",
+     "lines": [
+      29,
+      136,
+      241
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 说明所有数据存储在本机 SQLite（worklog.db），通过 rusqlite 读写，SQLite 是其数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ],
+   "install_final": true
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "另外，所有数据都在本机 SQLite 里，程序不联网、不上传、不采集。 ／ |`%APPDATA%\\工作记录本\\`|数据库 `worklog.db`，你的全部记录|删掉即清空数据| ／ - **rusqlite**（bundled SQLite，WAL 模式）",
+   "evidence_lines": [
+    29,
+    161,
+    241
+   ]
+  },
+  "fn": "yijigu783/WorkLuLu",
+  "sha": "9b065b432dcb",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
