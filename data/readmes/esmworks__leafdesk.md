@@ -57,19 +57,21 @@ for Windows, `.AppImage` for Linux) and choose *On this computer*. See [Desktop 
 
 - **Pages**: nested pages, a block editor (BlockNote) with slash menu (block text and background
   colors included) and markdown shortcuts, icons (beside the title), backgrounds (a color that suits the light and dark theme, or black, with an optional faint
-  pattern), favorites, duplicate, move, trash with restore (emptied after a time owners choose), export as Markdown or PDF (or, with
+  pattern), favorites, duplicate, move, trash with restore (emptied after a time owners choose), archive (an outdated page, such
+  as an old price list, leaves the sidebar, search, pickers and database views with the pages and rows under it, yet stays
+  readable, editable and linked; a banner on it says who archived it and when, and search finds it with *Include archived*), export as Markdown or PDF (or, with
   subpages, as a ZIP; owners can export the whole workspace, see [Export](#export)), and search
   over titles and content: full-text (every word of the search, each also as the start of a
   longer word, so pages show up while you type: "kond plan" finds "Kondenser planı", while the
   middle of a word doesn't match; Japanese and Chinese words also inside a sentence, which has no
-  spaces between words: "会議" finds "明日の会議について", a word's characters only side by side;
-  Korean words by their start, so with a particle joined on: "회의" finds "회의를"; pages whose
-  title has the words come first; past the first 80,000 characters of a huge page's text, words
-  aren't found), and 
+  spaces betwee
 
 [...截断...]
 
-also by meaning when the server has an embeddings model
+n words: "会議" finds "明日の会議について", a word's characters only side by side;
+  Korean words by their start, so with a particle joined on: "회의" finds "회의를"; pages whose
+  title has the words come first; past the first 80,000 characters of a huge page's text, words
+  aren't found), and also by meaning when the server has an embeddings model
   (see [Semantic search](#semantic-search)). Full-text search also looks inside the PDFs and
   Word documents a page shows, with or without an embeddings model: a page is found when one of
   its documents has every word, after the pages that have them in their own text, and the result
@@ -110,7 +112,4 @@ also by meaning when the server has an embeddings model
   workspace's databases on a page, up to 12 widgets in a grid of four columns (two on narrow pages,
   one on phones). Each widget is a database seen through its own view (a *Number* chart for one
   value, a chart, a list, or any other layout), set up in place, kept up to date as rows change,
-  and worked out for each reader from the rows and values they may see; a number, bar or slice
-  opens the rows behind it. A widget can take one of the option colors, as board columns do, and
-  editors move widgets by dragging their title bar. A page with a dashboard uses the full width.
-  Published pages show numbers and lists, and charts as a table of their figures.
+  and worked out for each reader from the rows and values they may see; a number, bar or s

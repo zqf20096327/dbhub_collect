@@ -1,22 +1,26 @@
 # DBine
 
 [![Latest release](https://img.shields.io/github/v/release/addlayer-io/dbine?label=release)](https://github.com/addlayer-io/dbine/releases/latest)
-[![License: MIT](https://img.shields.io/github/license/addlayer-io/dbine)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/github/license/addlayer-io/dbine)](LICENSE)
 ![Platforms: macOS · Windows · Linux](https://img.shields.io/badge/platforms-macOS%20%C2%B7%20Windows%20%C2%B7%20Linux-informational)
 [![Downloads](https://img.shields.io/github/downloads/addlayer-io/dbine/total)](https://github.com/addlayer-io/dbine/releases)
 [![Homebrew: brew install --cask addlayer-io/tap/dbine](https://img.shields.io/badge/homebrew-brew%20install%20--cask%20addlayer--io%2Ftap%2Fdbine-FBB040?logo=homebrew&logoColor=white)](https://github.com/addlayer-io/homebrew-tap)
+[![Security: open findings (OSV-Scanner, Trivy, CodeQL, claude-security)](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Faddlayer-io%2Fdbine%2Fsecurity-status%2Fstatus.json)](https://github.com/addlayer-io/dbine/blob/security-status/STATUS.md)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/addlayer-io/dbine/badge)](https://scorecard.dev/viewer/?uri=github.com/addlayer-io/dbine)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/15765/badge)](https://www.bestpractices.dev/projects/15765)
 
 **DBine** is a desktop multi-engine database manager from AddLayer. One app
 works with **130+ databases and cloud services**: relational, analytical,
 document, key-value, graph, time-series and search databases. It runs on
 Windows, macOS and Linux.
 
-![DBine notebooks: each cell queries its own connection, and a DataFrame SQL cell joins them with a CSV](docs/media/dbine-notebooks.gif)
+![DBine overview: an explorer with connections to many engines, a password taken from Azure Key Vault, the query editor with autocompletion and results, a notebook joining two databases into a chart, and a schema compare](docs/media/dbine-overview.gif)
 
 ## Install
 
 - **macOS (Homebrew):** `brew install --cask addlayer-io/tap/dbine`
-- **Windows (winget):** coming soon.
+- **Windows (winget):** `winget install AddLayer.DBine` (it installs the
+  version published in winget; DBine then updates itself to the latest).
 - **Linux:** `.flatpak`, `.AppImage`, `.deb` and `.rpm` packages in
   [Releases](https://github.com/addlayer-io/dbine/releases/latest).
 - **All platforms:** installers on [dbine.com](https://dbine.com/?utm_source=github&utm_medium=readme#download).
@@ -438,6 +442,15 @@ with whatever you like, once or every month, from
 [Buy Me a Coffee](https://buymeacoffee.com/addlayer). It is support, not
 a license: the app works the same.
 
+## Feedback and contributing
+
+- **Bugs and ideas:** open an [issue](https://github.com/addlayer-io/dbine/issues/new/choose)
+  (bug, enhancement, driver request or question).
+- **Contributing:** pull requests are welcome; how, and what a change needs, is
+  in [CONTRIBUTING.md](CONTRIBUTING.md).
+- **Security:** report vulnerabilities privately, as [SECURITY.md](SECURITY.md)
+  explains; the current security status is public.
+
 ## Download
 
 The installers are in
@@ -609,3 +622,11 @@ They read `DBINE_TEST_<ENGINE>_URL` and run against Docker containers.
 
 DBine is built and maintained by **Marcos Panichella** at
 [AddLayer](https://addlayer.io).
+
+## License
+
+DBine is licensed under the [Apache License 2.0](LICENSE). Anyone who
+redistributes it, modified or not, must keep the [NOTICE](NOTICE) file. The
+license doesn't grant rights to the names "DBine" and "AddLayer" or their
+logos, so a fork has to use its own name. Versions up to and including 1.0.0
+were released under the MIT license.

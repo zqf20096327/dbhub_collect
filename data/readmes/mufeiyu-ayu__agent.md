@@ -171,6 +171,10 @@ Design notes, phase write-ups, and every issue spec are written in Chinese:
 - [Pi reference notes](./docs/research/pi-reference/README.md): an architecture comparison with the open-source agent [Pi](https://github.com/earendil-works/pi)
 - [Task board](./docs/tasks/README.md) and [roadmap](./docs/roadmap.md)
 
+## License
+
+This project is licensed under the [MIT License](./LICENSE). Third-party materials retain their respective licenses; see the [admin third-party notices](./apps/admin/THIRD_PARTY_NOTICES.md).
+
 ## Support
 
 If this project helped you understand how agents really work, **a star is the best way to say so** ⭐

@@ -3,16 +3,19 @@
 # Seed
 
 **The groundwork of your SaaS, already built. A free, MIT-licensed starter: sign-in with a second
-factor, teams with roles, per-seat Stripe billing, realtime, an offline app and an admin area.
+factor, groups with roles, per-member Stripe billing, realtime, an offline app and an admin area.
 Deno, Postgres, Docker Compose. Work in progress.**
 
 [![CI](https://ci.antonshubin.com/api/badges/15/status.svg)](https://ci.antonshubin.com/repos/15)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-[**Try the live demo →**](https://app.seedsaas.com) · [Website](https://seedsaas.com) ·
-[Architecture](docs/architecture.md) · [Deploy](docs/deploy.md) · [All docs](docs/README.md)
+<!-- Seed's own site: see docs/start-a-product.md -->
 
-<img src="docs/screenshots/sign-up-flow.gif" alt="A new user signs up with an e-mail address and a password, types the code the app mailed to that address, lands on the profile page with a Get started checklist, opens Edit name, types the first name Alex and the last name Rivera, and saves; a green toast confirms the profile was updated." width="800">
+[**Try the live demo →**](https://app.seedsaas.com) · [Website](https://seedsaas.com) ·
+[Architecture](docs/architecture.md) · [Deploy](docs/deploy.md) · [All docs](docs/README.md) ·
+[Start a product](docs/start-a-product.md)
+
+<a href="https://antonshubin.com/tools/seed"><img src="media/demo/poster.webp" alt="Demo video, 1 minute: Seed is cloned into an empty folder, deno task init writes the env file, deno task dev starts the stack, then a team's notes, a new tagged note, the group's members and the admin panel's view of a teammate. Opens the video on antonshubin.com." width="800"></a>
 
 </div>
 
@@ -38,14 +41,15 @@ on the [open issues](https://github.com/spy4x/seed/issues).
   days, restored, and a person always keeps at least one.
 - **Auth that is done.** Sign-up, sign-in, sessions and an authenticator-app second factor, with
   PBKDF2-SHA-256 password hashes. Web push subscriptions are built in too.
-- **Offline-first SPA.** The SPA keeps the last notes and groups in IndexedDB (the shared data cache), opens with no
-  network, and queues note writes with their idempotency keys. It sends them on reconnect and
-  shows a stale write as a conflict to settle, never as a silent overwrite. The layer sits in one
-  folder, so a product that does not want it deletes the folder, follows the removal steps in
-  [docs/offline.md](docs/offline.md#removing-the-layer) and keeps an online SPA.
+- **Offline-first SPA.** The SPA keeps the last notes and groups in IndexedDB (the shared data
+  cache), opens with no network, and queues note writes with their idempotency keys. It sends them
+  on reconnect and shows a stale write as a conflict to settle, never as a silent overwrite. The
+  layer sits in one folder, so a product that does not want it deletes the folder, follows the
+  removal steps in [docs/offline.md](docs/offline.md#removing-the-layer) and keeps an online SPA.
 - **Mailing lists.** Visitors subscribe at `/subscribe` with double opt-in, and every list mail
   carries a one-click unsubscribe. The worker signs the links with `SUBSCRIBERS_SECRET` and sends
-  the confirm, welcome and issue mail: [docs/architecture.md](docs/architecture.md#mail-subscriptions).
+  the confirm, welcome and issue mail:
+  [docs/architecture.md](docs/architecture.md#mail-subscriptions).
 - **CQRS with an outbox.** Commands, queries and events go through one bus. Every group change
   writes its event to `outbox_events`, and the worker drains that table.
 - **Safe API defaults.** Every mutation must come from the web app's own origin, and group lists
@@ -58,33 +62,34 @@ on the [open issues](https://github.com/spy4x/seed/issues).
   Postgres, Valkey, VictoriaMetrics, VictoriaLogs and Grafana.
 
 **Use it if** you are starting a multi-user web product and want auth, tenancy and operations
-settled before the first feature. **Skip it if** you deploy to serverless functions rather than a server
-you run.
+settled before the first feature. **Skip it if** you deploy to serverless functions rather than a
+server you run.
 
 ## Quick start
 
-Requires [Deno](https://deno.com) 2, Docker and the [GitHub CLI](https://cli.github.com) (or use
-GitHub's "Use this template" button and clone the result).
+Requires [Deno](https://deno.com) 2 and Docker. The services run in Docker; the tasks that set
+them up run on Deno. The [GitHub CLI](https://cli.github.com) is optional: GitHub's "Use this
+template" button and a clone do the same as the first line.
 
 ```sh
 gh repo create my-product --template spy4x/seed --private --clone
 cd my-product
-cp infra/envs/.env.example infra/envs/.env
+deno task init
+deno task dev
 ```
 
-Before going on, fill in the secrets in `infra/envs/.env` (`KV_PASSWORD` is the Valkey password;
-Valkey and the API both refuse to start without it, `openssl rand -hex 24` makes one). It runs on
-Docker; to use Podman, set `CONTAINER_PROVIDER=podman` (`proxy:start` and `proxy:stop` still call
-Docker).
+`init` copies `infra/envs/.env.example` to `infra/envs/.env`, generates every secret and the web
+push keys, and asks for the project name. `dev` starts Traefik, unless one already runs, then
+Postgres, Valkey, the API, the worker, the SPA and the monitoring. Then open http://app.localhost.
 
-```sh
-deno task vapid-key:create   # web push keys → infra/configs/vapid.json
-deno task proxy:start        # Traefik
-deno task dev                # Postgres, Valkey, API, worker, SPA and the monitoring
+Or ask your AI agent:
+
+```text
+Create my new product "Acme" from https://github.com/spy4x/seed and run it locally
 ```
 
-Then open `http://<DOMAIN>` from the env file: http://app.localhost with the values in
-`infra/envs/.env.example`.
+To use Podman, set `CONTAINER_PROVIDER=podman` in the env file and start Traefik with
+`deno task proxy:start`, which calls Docker.
 
 To keep taking Seed's fixes and features in your product later, see
 [docs/products.md](docs/products.md).
@@ -138,6 +143,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the rules and [docs/handoff.md](docs/
 traps in this codebase.
 
 ## Built by
+
+<!-- Seed's own site: see docs/start-a-product.md -->
 
 I'm [Anton Shubin](https://antonshubin.com), a senior full-stack engineer and tech lead.
 Seed is the foundation I build client SaaS MVPs on. Need an MVP built for your product?

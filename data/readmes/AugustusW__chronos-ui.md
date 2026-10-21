@@ -1,0 +1,177 @@
+# ChronosUI
+
+> **Bring observability to native schedulers.**
+
+English | [繁體中文](./README.zh-TW.md)
+
+[![CI](https://github.com/AugustusW/chronos-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/AugustusW/chronos-ui/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/AugustusW/chronos-ui)](https://github.com/AugustusW/chronos-ui/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey.svg)](https://github.com/AugustusW/chronos-ui/releases/latest)
+
+A desktop control center for the schedulers you already use — **crontab** (macOS/Linux) and
+**Windows Task Scheduler**. No daemon. No lock-in. No migration. ChronosUI doesn't replace cron,
+launchd, or Task Scheduler; it makes them **observable** — run history, captured output,
+durations, and on-demand runs.
+
+> You already have a scheduler. What you're missing is visibility.
+
+<p align="center">
+  <img src="assets/hero.gif" alt="ChronosUI — discover, adopt, run, and review run history for your native schedulers" width="900">
+  <br>
+  <sub><a href="assets/hero.mp4">▶ Watch in higher quality (MP4)</a></sub>
+</p>
+
+## Download
+
+👉 **Download the latest release: https://github.com/AugustusW/chronos-ui/releases/latest**
+
+- **macOS** — `.dmg` (signed + notarized; Apple Silicon)
+- **Windows** — `.exe` installer (NSIS). Currently unsigned, so on first run click
+  *More info → Run anyway* past SmartScreen.
+
+Or [build from source](#develop).
+
+## Why?
+
+Every developer eventually accumulates automation: daily backups, AI agents, scrapers, device
+sync, data collectors, log cleanup. It all ends up in cron. Months later you SSH into a machine,
+open `crontab -e`, and wonder *"which job is this, and is it even still working?"*
+
+ChronosUI exists because managing automation through SSH, logs, and `crontab` is a bad workflow —
+not because the schedulers are bad. They work fine. They just have no UI.
+
+```text
+Without ChronosUI                 With ChronosUI
+─────────────────                 ──────────────
+ssh into the box                  open the app
+crontab -e                        see every job, its last run + output
+grep, tail -f, guess              run any job on demand
+vim, repeat                       read the run history
+"…which job is this?"             done
+```
+
+## Features
+
+- ✓ Dashboard home: today's stats, failures, and upcoming runs at a glance
+- ✓ Discover the cron / Task Scheduler jobs you already have
+- ✓ Adopt them without migration (no new daemon, fully reversible)
+- ✓ Run any job on demand
+- ✓ Run history with captured stdout/stderr and durations — filterable by job, result, and date
+  range, with free-text search across job name and output
+- ✓ A per-job run-duration trend at a glance on the job's detail page
+- ✓ Import/export job definitions as YAML — review a new-vs-changed-vs-unchanged preview before
+  anything is applied
+- ✓ macOS native notification (independent of Telegram) when a scheduled job fails, plus a live
+  Dashboard summary right in the menu bar
+- ✓ Telegram notifications when a scheduled job fails or times out (immediate, or batched into a digest)
+- ✓ SQLite by default, PostgreSQL optional — switch anytime from Settings, with existing data migrated for you
+- ✓ Cross-platform (macOS, Windows; Linux via cron)
+
+## Screenshot
+
+<p align="center">
+  <img src="docs/screenshot-schedules.png" alt="ChronosUI Schedules view — managed and unmanaged cron jobs grouped by category, with run, enable, and adopt actions" width="800">
+</p>
+
+## How it works
+
+ChronosUI reads your native scheduler and shows it in a clean GUI. To record the output of
+*scheduled* runs, it can "adopt" a job by wrapping its command with a small bundled binary
+(`schedmgr`) — fully transparent (same working directory, environment, and exit code) and
+one-click reversible. The exact `crontab` rewrite is documented in [docs/crontab.md](docs/crontab.md).
+
+### Using PostgreSQL
+
+No schema setup is needed — ChronosUI creates and upgrades its own tables via bundled,
+versioned migrations. Prepare three things, then fill in the connection form under
+Settings → Database:
+
+1. An **empty** database (the switch refuses a database that already contains data,
+   so nothing gets overwritten by accident).
+2. A role that can create tables in that database (e.g. the database owner).
+3. The connection details (host / port / database / user / password).
+
+The connection string is stored in the OS keychain (macOS) or a file readable only by
+your user account, and never appears in cron lines or config files. Ticking
+"Copy existing SQLite data" migrates your jobs, run history and notification settings
+in one transaction; the original `chronos.db` is left untouched as a backup, and you
+can switch back from the same panel at any time.
+
+### Importing and exporting jobs as YAML
+
+Settings → Job Definitions can export every job to a single YAML file, or (from a job's own
+detail page) just that one job. Each entry is:
+
+```yaml
+- name: Nightly backup           # required
+  scheduleExpr: "0 3 * * *"      # required — the raw cron expression / Task Scheduler trigger
+  command: /usr/local/bin/backup.sh  # required
+  workingDir: /var/backups       # optional
+  env:                           # optional
+    AWS_PROFILE: prod
+  timeoutSec: 1800                # optional
+  category: infra                # optional
+  notifyOnFailure: true           # optional, default false — per-job Telegram opt-in
+  enabled: false                  # optional, default true — omit unless the job is paused
+```
+
+Optional fields are simply omitted when at their default, so a plain job's export is just the
+first three lines. Two things are **deliberately not included**: run history (stdout/stderr/past
+results — this is a definition format, not a backup) and the global Telegram/native-notification
+settings (those live in `notify_settings`, a single app-wide row, not per job — including them here
+would mean either duplicating a bot token into every export or silently ignoring it).
+
+Importing opens a file picker, then shows a preview — every job in the file classified as **new**
+(no existing job with that name), **changed** (name matches an existing job, but ≥1 field differs —
+the preview lists which), or **unchanged** — before anything touches your database. Jobs are
+matched by `name`; nothing is ever silently overwritten, and unchanged jobs are left alone.
+Imported jobs are always created fresh (non-adopted) through the same path "New job" uses, so the
+native cron line / Task Scheduler entry is created for you — importing never re-adopts an existing
+external line.
+
+## macOS permissions
+
+### Why does macOS ask for admin-like permission?
+
+The first time you **adopt or edit a cron job**, macOS shows *"ChronosUI wants to administer this computer…"*. This is **not** dangerous — it's macOS's generic prompt for any app that touches crontab (cron files live in the protected `/var/at/tabs/` location). ChronosUI only runs `crontab -l` / `crontab -`; it never modifies passwords, network, or system settings. Click **Allow** once.
+
+Batched Telegram notifications don't trigger it (they use a per-user LaunchAgent in your home directory). If you clicked **Don't Allow** by mistake, reset it from a terminal and relaunch:
+
+```bash
+tccutil reset All com.augustusw.chronos-ui
+```
+
+## Develop
+
+```bash
+git clone https://github.com/AugustusW/chronos-ui.git
+cd chronos-ui
+npm install
+npm run dev      # launch the app
+npm test         # unit tests
+npm run lint     # lint
+npm run build    # production build
+```
+
+Requires Node 20+. Releasing is documented in [RELEASING.md](./RELEASING.md).
+
+## Status
+
+Pre-1.0 (current release: 0.7). Everything listed under [Features](#features) ships in that
+release. Known limits:
+
+- **Windows** — the installer is unsigned (SmartScreen warns on first run), and an edit made to a
+  task's *trigger* outside ChronosUI is not detected; external *command* edits are.
+- **Linux** — no packaged build; run from source against cron.
+
+Integrations beyond Telegram and macOS notifications are still being added. Issues and PRs welcome.
+
+## License
+
+Apache-2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE). Contributions require a DCO sign-off
+(`git commit -s`); see [CONTRIBUTING](./CONTRIBUTING.md).
+
+---
+
+> You don't need another scheduler. You need to understand the one you already have.

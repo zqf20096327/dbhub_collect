@@ -12,6 +12,7 @@ Your contributions are always welcome!
   - [Distributed Programming](#distributed-programming)
   - [Distributed Filesystem](#distributed-filesystem)
   - [Distributed Index](#distributed-index)
+  - [Distributed Tracing Platform](#distributed-tracing-platform)
   - [Document Data Model](#document-data-model)
   - [Key Map Data Model](#key-map-data-model)
   - [Key-value Data Model](#key-value-data-model)
@@ -152,7 +153,9 @@ Your contributions are always welcome!
 ## Distributed Index
 
 * [Pilosa](https://github.com/pilosa/pilosa) Open source distributed bitmap index that dramatically accelerates queries across multiple, massive data sets. 
+## Distributed Tracing Platform
 
+* [Jaeger](https://www.jaegertracing.io/) - Jaeger: open source, distributed tracing platform for monitor and troubleshoot workflows in complex distributed systems
 ## Document Data Model
 
 * [Actian Versant](https://www.actian.com/data-management/ingres-sql-rdbms/) - commercial object-oriented database management systems .
@@ -265,6 +268,7 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 * [Amazon Redshift](https://aws.amazon.com/redshift/) - Amazon's cloud offering, also based on a columnar datastore backend.
 * [IndexR](https://github.com/shunfei/indexr) - an open-source columnar storage format for fast & realtime analytic with big data.
 * [LocustDB](https://github.com/cswinter/LocustDB) - an experimental analytics database aiming to set a new standard for query performance on commodity hardware. 
+* [KoldStore](https://github.com/kalamdb/koldstore) - experimental PostgreSQL tiered-storage extension that moves historical rows to Parquet and queries supported hot and cold data through the original table; not production-ready.
 
 ## NewSQL Databases
 
@@ -391,6 +395,7 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 * [Apache Sqoop](http://sqoop.apache.org/) - tool to transfer data between Hadoop and a structured datastore.
 * [Bruin](https://github.com/bruin-data/bruin) - end-to-end data pipeline tool combining ingestion, transformations, and data quality checks.
 * [Census](https://getcensus.com/) - A reverse ETL product that let you sync data from your data warehouse to SaaS Applications. No engineering favors required—just SQL.
+* [Datanika](https://datanika.io) - open-source ELT platform pairing dlt extract-and-load with dbt-core transformations, plus scheduling and run history in one self-hosted UI.
 * [DataRaven](https://dataraven.io/) - managed cloud object storage transfers for data ingestion workflows.
 * [DBConvert Streams](https://streams.dbconvert.com/cdc-replication/) - self-hosted CDC replication and database migration tool.
 * [Debezium](https://debezium.io/) - open-source distributed platform for change data capture.
@@ -415,6 +420,7 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 * [Logstash](https://www.elastic.co/products/logstash) - a tool for managing events and logs.
 * [Metricbeat](https://www.elastic.co/beats/metricbeat) - lightweight shipper for system and service metrics.
 * [Netflix Suro](https://github.com/Netflix/suro) - log agregattor like Storm and Samza based on Chukwa.
+* [OLake](https://github.com/datazip-inc/olake) - Open-source replication of Postgres, MySQL, MongoDB, Oracle, SQL Server, DB2, Kafka and S3 into Apache Iceberg, with CDC and table maintenance. Written in Go.
 * [Pinterest Secor](https://github.com/pinterest/secor) - is a service implementing Kafka log persistance.
 * [Linkedin Gobblin](https://github.com/linkedin/gobblin) - linkedin's universal data ingestion framework.
 * [Skizze](https://github.com/skizzehq/skizze) - sketch data store to deal with all problems around counting and sketching using probabilistic data-structures.
@@ -521,6 +527,13 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 * [Yahoo Gridmix3](http://yahoohadoop.tumblr.com/post/98294079296/gridmix3-emulating-production-workload-for) - Hadoop cluster benchmarking from Yahoo engineer team.
 * [Deeplearning4j Benchmarks](https://github.com/deeplearning4j/dl4j-benchmark)
 * [UCSB](https://github.com/unum-cloud/ucsb) - extended Yahoo Cloud Serving Benchmark for NoSQL databases.
+* [HiBench Next](https://github.com/mgarralda/HiBench-Next) - Modernized HiBench suite for reproducible Apache Spark benchmarking, featuring 24 Scala/PySpark workloads, Web UI, REST API, and CLI.
+* [DeathStarBench](https://github.com/delimitrou/DeathStarBench) - Open-source benchmark suite for cloud microservices.
+* [CloudSuite](https://github.com/parsa-epfl/cloudsuite) - A Benchmark Suite for Cloud Services.
+* [YCSB](https://github.com/brianfrankcooper/YCSB) - Yahoo! Cloud Serving Benchmark
+* [TailBench](https://tailbench.csail.mit.edu/) - TailBench: A Benchmark Suite and Evaluation Methodology for Latency-Critical Applications
+* [SProBench](https://github.com/apurvkulkarni7/SProBench) - SProBench: Stream Processing Benchmark for High Performance Computing
+
 
 ## Security
 * [Apache Ranger](http://ranger.apache.org/) - Central security admin & fine-grained authorization for Hadoop
@@ -588,6 +601,7 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 * [Sumo Logic](https://www.sumologic.com/) - cloud based analyzer for machine-generated data.
 * [Substation](https://github.com/brexhq/substation) - Substation is a cloud native data pipeline and transformation toolkit written in Go.
 * [Talend](http://www.talend.com/products/big-data/) - unified open source environment for YARN, Hadoop, HBASE, Hive, HCatalog & Pig.
+* [TradeData](https://tradedata.io) - API for customs, shipment and international trade data, supporting supply-chain and market analysis.
 
 ## Search engine and framework
 
@@ -604,6 +618,7 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 * [LinkedIn Cleo](https://github.com/linkedin/cleo) - is a flexible software library for enabling rapid development of partial, out-of-order and real-time typeahead search.
 * [LinkedIn Galene](https://engineering.linkedin.com/search/did-you-mean-galene) - search architecture at LinkedIn.
 * [LinkedIn Zoie](https://github.com/senseidb/zoie) - is a realtime search/indexing system written in Java.
+* [Manticore Search](https://github.com/manticoresoftware/manticoresearch) - open-source search database for full-text, vector, and hybrid search with real-time indexing and SQL.
 * [MG4J](http://mg4j.di.unimi.it/) - MG4J (Managing Gigabytes for Java) is a full-text search engine for large document collections written in Java. It is highly customisable, high-performance and provides state-of-the-art features and new research algorithms.
 * [Sphinx Search Server](http://sphinxsearch.com/) - fulltext search engine.
 * [Vespa](http://vespa.ai/) - is an engine for low-latency computation over large data sets. It stores and indexes your data such that queries, selection and processing over the data can be performed at serving time.
@@ -652,10 +667,12 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 
 ## Business Intelligence
 
+* [Beekeeper Studio](https://www.beekeeperstudio.io/) - cross-platform SQL client for querying and exploring analytical databases and warehouses like ClickHouse, BigQuery, Redshift, and DuckDB.
 * [BIME Analytics](https://www.bimeanalytics.com/?lang=en) - business intelligence platform in the cloud.
 * [Blazer](https://github.com/ankane/blazer) - business intelligence made simple.
 * [Chartio](https://chartio.com) - lean business intelligence platform to visualize and explore your data.
 * [Count](https://count.co) - notebook-based anlytics and visualisation platform using SQL or drag-and-drop.
+* [DAC](https://github.com/bruin-data/dac) - dashboard-as-code tool defining dashboards in YAML and TSX, with a built-in semantic layer.
 * [datapine](https://www.datapine.com/) - self-service business intelligence tool in the cloud.
 * [Dekart](https://dekart.xyz/) - Large scale geospatial analytics for Google BigQuery based on Kepler.gl.
 * [GoodData](https://www.gooddata.com/) - platform for data products and embedded analytics.
@@ -706,6 +723,7 @@ You can read more about this distinction on Prof. Daniel Abadi's blog: [Distingu
 * [Echarts](https://github.com/ecomfe/echarts) - Baidus enterprise charts.
 * [Envisionjs](https://github.com/HumbleSoftware/envisionjs) - dynamic HTML5 visualization.
 * [Flexmonster Pivot Table & Charts](https://www.flexmonster.com/) - JavaScript component for pivot tables, charts, and web reporting.
+* [FlexViz](https://github.com/flex-analytics/flexviz) - open-source Python library for interactive cross-filter dashboards on large datasets, answering each zoom and selection with a lazy Polars aggregation instead of sending rows to the browser.
 * [FnordMetric](https://metrictools.org/) - write SQL queries that return SVG charts rather than tables
 * [Frappe Charts](https://frappe.io/charts) - GitHub-inspired simple and modern SVG charts for the web with zero dependencies.
 * [Freeboard](https://github.com/Freeboard/freeboard) - pen source real-time dashboard builder for IOT and other web mashups.

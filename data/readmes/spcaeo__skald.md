@@ -51,6 +51,28 @@
 
 ## What's new
 
+- **2.20.0: Leads & sales redone, and what visitors are doing now** ([changelog](CHANGELOG.md#2200-2026-10-21)).
+  Every lead in one list (names and emails for owners and admins), as a list, board, timeline or
+  map; one question per tab; on Overview, the newest visitors and the pages they read, live.
+- **2.19.0: a site marks its own test leads** ([changelog](CHANGELOG.md#2190-2026-10-21)): send a
+  lead with `"test": true`, or mark leads already sent with a signed call; kept and listed, never
+  counted.
+- **2.18.1:** leads show on every site of an install, not only the first
+  ([changelog](CHANGELOG.md#2181-2026-10-21)).
+- **2.18.0: Next.js pages counted, lead labels, and a lead check** ([changelog](CHANGELOG.md#2180-2026-10-21)).
+  Pages opened by a click inside a Next.js site now count, with one line in the site's nginx log
+  format. Leads can carry a label (sales, support). A signed, read-only address lets your server
+  check that Skald has every lead and resend any it missed.
+- **2.17.0: Skald checks your site** ([changelog](CHANGELOG.md#2170-2026-10-21)). Type the
+  address in Add a site and Skald works out the server, any platform in front, the framework, the
+  host names and the page assets, and suggests the way in. You confirm or change it.
+- **2.16.0: connect a site in a few guided steps** ([changelog](CHANGELOG.md#2160-2026-10-21)).
+  Settings > Connections sends a site's visits to Skald, reads your figures (API) or connects an
+  AI assistant, each as a short dialog with everything filled in and a **Test** at the end. Add a
+  site in five steps you can leave and resume. An install kit with a check script that says what
+  is wrong in plain words, and a private link to share the steps with your developer.
+- **2.15.0: shortened IP addresses and the wording for your privacy notice**
+  ([changelog](CHANGELOG.md#2150-2026-10-20)).
 - **2.14.0: AI answers** ([changelog](CHANGELOG.md#2140-2026-10-18)). What ChatGPT, Perplexity,
   Gemini and Claude answer to your customers' questions, per tracking profile (a place and a
   language): whether they name you, the pages they cite, the competitors they name, and the
@@ -177,7 +199,9 @@ counts, and counted twice.
 ### Works where your site lives
 Your own server's log, or the host's: **Vercel and Netlify log drains**, a **Cloudflare Worker**
 that reports pages served from cache on any plan, CloudFront and Fastly logs, or a small shipper
-from any server. Step by step for Vercel: [docs/VERCEL.md](docs/VERCEL.md).
+from any server. Settings > Connections walks you through each one, with an install kit and a
+**Test connection** button; step by step for Vercel: [docs/VERCEL.md](docs/VERCEL.md). A Next.js
+site adds one line to its log format so clicks inside the site count as pages.
 
 </td>
 </tr>
@@ -392,6 +416,41 @@ fix; Settings > Integrations shows the same for each hook and the script tag.
 The whole dashboard with 60 days of sample data for a made-up site, in your browser: today's Overview,
 the visitor drawer, cities, retention and crawl health, AI answers (made-up answers), Real time with its world map, AI & bots, flags, leads and bookings, the left-out leads and the removed conversions included.
 Nothing to install. Settings, saving and the person search need your own Skald.
+
+### New in 2.20.0: every lead in one list, and visitors live
+
+<p align="center">
+  <img src="docs/screenshots/leads-list.png" alt="Leads and sales, Leads: 99 leads in the last 30 days, 14% more than before, one row per lead with when, name, email (made-up example.com names), what they did, stage now, where it came from, source, first touch and landing page; view buttons for list, board, timeline and map" width="900"><br>
+  <strong>Leads.</strong> Who they are, what they did and where they came from, in one list.
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/overview-live.png" alt="Overview, today: visitors on the site now, the live world map, and under it What visitors are doing now (five visitors with city, source and their page path, now on a page seconds ago) beside Pages read in the last 30 minutes" width="900"><br>
+  <strong>What visitors are doing now.</strong> The newest visitors and the pages they read, live.
+</p>
+
+### New in 2.17.0: Skald checks your site
+
+<p align="center">
+  <img src="docs/screenshots/site-check.png" alt="Add a site, step 1: example.com typed in, and What Skald found: server nginx on Ubuntu, no platform in front, built with Next.js, host names example.com and www.example.com, page assets /_next/static/, and the suggestion: a Linux server with Docker, the log shipper kit" width="800"><br>
+  <strong>What Skald found.</strong> The server, platform, framework and host names, and the way in it suggests.
+</p>
+
+### New in 2.16.0: connect a site, step by step
+
+<p align="center">
+  <img src="docs/screenshots/connections.png" alt="Settings, Connections: three tasks, send this site's visits to Skald, read your figures (API) and connect an AI assistant (MCP), each with a Set up button; below, your tokens and shared links" width="900"><br>
+  <strong>Connections.</strong> Three tasks, each a short guided dialog with a Test at the end.
+</p>
+
+| | |
+| :---: | :---: |
+| <img src="docs/screenshots/connections-install.png" alt="Send this site's visits to Skald, step 3 of 4, Install: download the install kit (.zip), the copy-and-paste commands to unpack it and run sudo bash install.sh, and Share with your developer" width="440"><br>**Install, filled in.** The kit, the commands, and a private link for your developer. | <img src="docs/screenshots/add-site-wizard.png" alt="Add a site, step 3 of 5, how visits reach Skald: a Linux server with Docker (recommended), the same without Docker, Cloudflare, Vercel or Netlify, or only the script tag" width="440"><br>**Add a site in five steps.** Close it any time; it continues where you left off. |
+
+<p align="center">
+  <img src="docs/screenshots/setup-checklist.png" alt="Overview, Set up this site: logs arriving, visits count as people and countries shown, then the script tag, the lead hook, mail and privacy, each open line with a Set up button" width="900"><br>
+  <strong>Set up this site.</strong> Every open line has a Set up button that walks you through it.
+</p>
 
 ### New in 2.14.0: AI answers
 

@@ -22,6 +22,7 @@ A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) bin
 - Attachments: up to 10 files of 20 MB per message, with an upload progress bar; images shown as thumbnails and videos as their first frame (4 tiles, then "+N"); files are private to whoever can read the message
 - Image viewer: click a thumbnail to see it full size (or a video to play it) and step through the room's images and videos (buttons, arrow keys, swipe);
   loaded only when first used, so it adds nothing to the page's first load
+- Collections: save any image or video from the chat to collections of your own, public or private, and attach from them to messages; subscribe to other people's public collections to use theirs too, with a count of what's new and the new items highlighted; media attached from a collection link to it (or say "Private collection")
 - Select messages (up to 50): forward them to any room or DM, with "Forwarded from" and their attachments (forwards show the original, so nothing is copied), or delete them together when they are yours
 - Unread counts on every room and DM, live, and in sync across your tabs and devices; the total shows in the tab's favicon and title;
   a room with unread messages opens at the first of them, under a "New" line
@@ -33,8 +34,10 @@ A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) bin
   to a room (or reloading) doesn't download them again. All of it is cleared on logout
 - Installable as an app (PWA: Add to Home Screen, the browser's Install button); it opens offline to its shell
 - Optimistic sending with safe retries, reconnect gap-fill, light/dark themes, works on phones
+- A native Android app (Kotlin, Jetpack Compose) with the same features, push notifications and a 3 MB download — see
+  [Android app](#android-app)
 
-Design: [`docs/DESIGN.md`](docs/DESIGN.md) · QA: [`docs/QA.md`](docs/QA.md) · Refactoring plan: [`docs/REFACTOR.md`](docs/REFACTOR.md) · Archived plans: [MVP build](docs/history/BUILD_PLAN.md), [avatars, DMs, attachments](docs/history/NEXT_FEATURES_PLAN.md)
+Design: [`docs/DESIGN.md`](docs/DESIGN.md) · Android app: [`docs/ANDROID.md`](docs/ANDROID.md) · QA: [`docs/QA.md`](docs/QA.md) · Refactoring plan: [`docs/REFACTOR.md`](docs/REFACTOR.md) · Archived plans: [MVP build](docs/history/BUILD_PLAN.md), [avatars, DMs, attachments](docs/history/NEXT_FEATURES_PLAN.md)
 
 ## Requirements
 
@@ -85,6 +88,7 @@ web/src/         frontend: api.ts (the only module that talks to PocketBase, thr
 web/styles/      app.css (bundles app/*.css, one file per part) and viewer.css
 scripts/         build, dev, fetch-pocketbase, pb-types (PocketBase's types for the hooks), html-sink check
 tests/           unit/, integration/, e2e/, perf/ (scale measurements), support/ (PocketBase harness, Telegram stub, helpers)
+android/         the Android app (docs/ANDROID.md): core/data (API, realtime, database, sync), core/ui, feature/*, app
 ```
 
 ## Deploying
@@ -173,10 +177,43 @@ are part of the backups, so plan disk space for them. **Rate limits** (per IP: m
 per 10 s, reactions 30 per 10 s, forwarding and deleting several messages 20 requests per minute each, password changes 5 per minute, new rooms 5 per minute, opening DMs 10 per minute, marking rooms read 120 per minute, signups 20 per minute; PocketBase defaults for the rest)
 are set by the migrations and adjustable under *Settings → Rate limits*.
 
+## Android app
+
+**Frozen since 2026-10-21:** only the web client is being worked on. The app is not changed, built or tested until it
+is unfrozen ([`CLAUDE.md`](CLAUDE.md)).
+
+A native client for any server running the chat, with several accounts at once on one server or many (`android/`,
+design: [`docs/ANDROID.md`](docs/ANDROID.md), §17 for servers and accounts). It needs JDK 17+
+(21 recommended) and the Android SDK (`ANDROID_HOME`, or `sdk.dir` in `android/local.properties`); Gradle fetches the
+rest. Its tests start PocketBase from `bin/`, so run `npm run setup` first.
+
+```sh
+cd android
+./gradlew assembleDebug          # app/build/outputs/apk/debug: offers http://10.0.2.2:8090 (the dev server, from the emulator)
+./gradlew check                  # lint, unit tests, API tests against PocketBase, UI tests on Robolectric
+./gradlew checkApkSize -Pchat.server=https://chat.example.org -Pchat.appId=org.example.chat
+```
+
+People choose their server when they log in or sign up (Change server), and add more accounts from their profile.
+A build only sets the server offered first: `-Pchat.devServer=http://192.168.1.20:8090` for a debug build on a device,
+`chat.server` for a release (without one, the app asks for a server, and no host's links open in the app). Debug builds
+take http addresses; release builds take https only. `chat.fcm.projectId`, `chat.fcm.appId`, `chat.fcm.apiKey` and `chat.fcm.senderId`
+turn on Firebase push. On the server, push needs `FCM_SERVICE_ACCOUNT` (the service account's JSON, of the app's Firebase
+project: servers without it get no pushes, ANDROID.md §17.4), and links to rooms on the build's server open in the app with `ANDROID_APP_ID` and `ANDROID_CERT_SHA256` (`/.well-known/assetlinks.json`). An admin can set
+`min_android_version` on the site record to make older apps ask for an update. What is built and what isn't yet:
+[`docs/ANDROID.md` §16](docs/ANDROID.md#16-implementation-2026-10-18), and [`android/PARITY.md`](android/PARITY.md).
+
 ## Link previews
 
 Messages show a line under them for each link: the page's favicon and title ([`docs/DESIGN.md` §28](docs/DESIGN.md)).
 The server fetches them, only from public addresses. Set `LINK_PREVIEWS=off` to turn it off.
+
+## Media grid
+
+Each room's Media button shows its images and videos as a grid ([`docs/DESIGN.md` §30](docs/DESIGN.md)). A worker on
+the server makes their thumbnails ahead of time, and a poster frame for each video with `ffmpeg` (in the Docker
+image), which the room shows too, so browsers don't load videos just to draw their first frame. Set `FFMPEG=off` to
+go without: videos then show their first frame in the room as before, and plain tiles in the grid.
 
 ## Telegram integration
 

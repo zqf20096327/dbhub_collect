@@ -43,7 +43,7 @@ command and open http://localhost:3001 instead.
 **Docs:** [Docker](docs/DOCKER.md) · [Setup](docs/SETUP.md) · [Features](docs/FEATURES.md) ·
 [Developer guide](docs/DEVELOPMENT.md) · [Data model](docs/datamodel.md) ·
 [Screenshots](docs/SCREENSHOTS.md) · [API spec](api/swagger.yaml) · [Roadmap](docs/ROADMAP.md) ·
-[Changelog](CHANGELOG.md) · [Releases](https://github.com/florinel-chis/GopherCRM/releases) · [Validation and release workflow](docs/VALIDATION_RELEASE.md)
+[Changelog](CHANGELOG.md) · [Releases](https://github.com/florinel-chis/GopherCRM/releases) · [Validation and release workflow](docs/VALIDATION_RELEASE.md) · [Documentation maintenance](docs/DOCUMENTATION_WORKFLOW.md)
 
 If it's useful, a star helps others find it.
 
@@ -751,6 +751,11 @@ gophercrm/
   (`embed.js`, the definition and the hosted view). `DISABLE_RATE_LIMIT=true` bypasses the strict
   tier alone — the check lives inside `RateLimitStrict` — so the moderate tier still applies to
   test traffic.
+- **Rate limits are per process and per middleware instance.** Each instance tracks at most 10,000
+  client IPs; when it is full, previously unseen IPs get the ordinary 429 until idle records are
+  reclaimed (after five idle minutes, and only once the bucket has refilled). Limits are not shared
+  between replicas, and behind a proxy they depend on `TRUSTED_PROXIES`. See
+  [DEVELOPMENT.md](docs/DEVELOPMENT.md) for details.
 - **Bulk endpoints are unrouted** (see *Not currently exposed* above).
 - **Erasure does not reach logs or issued tokens.** Service logs omit email, name, title and
   search fields; shared helpers omit argument/result/response payloads, and HTTP logs omit query

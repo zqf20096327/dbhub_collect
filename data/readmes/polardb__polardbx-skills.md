@@ -15,6 +15,9 @@ skills/
 ├── polardbx-sql/          # PolarDB-X 企业版 SQL 编写与兼容性（分区设计 + GSI 核心）
 │   ├── SKILL.md
 │   └── references/
+├── polardbx-ccl/          # PolarDB-X CCL 语法、匹配与限流效果
+│   ├── SKILL.md
+│   └── references/
 ├── polardbx-online-ddl/   # PolarDB-X Online DDL 安全变更
 │   ├── SKILL.md
 │   └── references/
@@ -51,6 +54,7 @@ skills/
 | Skill | 定位 | 适用场景 | 核心能力 |
 |---|---|---|---|
 | `polardbx-sql` | 企业版 SQL 编写与兼容性 | 分区设计、GSI、Sequence、MySQL 迁移、分布式事务 | 生成和改写 PolarDB-X 企业版 SQL，处理 MySQL 兼容性差异 |
+| `polardbx-ccl` | CCL 知识与 SQL | 模板/关键词匹配、并发、排队、规则观测与解除效果 | 编写与审阅 CCL SQL，解释引擎语义及管理入口的能力边界 |
 | `polardbx-online-ddl` | Online DDL 安全变更 | DDL 锁表评估、OMC 无锁变更、长事务检查 | 使用 `EXPLAIN ONLINE_DDL` 评估风险，指导安全执行 DDL |
 | `polardbx-pagination` | 高效分页与大表遍历 | 深分页、批量导出、大表游标遍历 | 推荐 Keyset 分页，覆盖索引要求和批处理代码示例 |
 | `polardbx-cci` | CCI 列存索引（OLAP/HTAP） | 分析查询、宽表聚合、行列混存、列存快照 | 创建和使用 Clustered Columnar Index，处理分区键、排序键和管理命令 |

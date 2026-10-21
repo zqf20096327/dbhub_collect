@@ -49,9 +49,13 @@ The search panel uses its own connection pool, so pending main-window requests c
 
 Diffs, threads, checks, and file history live in the same review workspace. The header shows Closed or Merged even if the PR retains its draft flag. The PR check summary uses the latest workflow run and job attempt; earlier runs remain in Actions history. Press <kbd>x</kbd> to fold tests and generated files when you want to see the implementation first; press it again to bring them back. Generated files include `.generated.` names and committed `.gitattributes` rules marked `linguist-generated`; nested rules and overrides follow the reviewed revision. The same group can be hidden by default in Settings.
 
+PR images are prefetched into each machine's persistent cache, including SSH replicas; opening an image reuses that local download.
+
 ![Folding five regression-test diffs in graphql/graphql-js#4692 to isolate the one-line implementation change](docs/screenshots/landing-hide-tests.gif)
 
 When the review needs a change, stay in context: <kbd>e</kbd> edits the open file and commits the patch to the PR; <kbd>p</kbd> opens the PR in your configured coding agent with review context. You can also revert a focused hunk or press <kbd>h</kbd> to inspect file history. A failed merge immediately requests fresh PR details to reveal conflicts or other blockers, while keeping the original error available to retry or dismiss.
+
+Enable **Full-file finder** in **Settings → Review preferences** to read whole files from <kbd>⌘P</kbd> (files) and <kbd>⌘⇧F</kbd> (code search); use <kbd>Ctrl</kbd> on Linux. Results highlight the matched characters. Enter opens the whole file with syntax highlighting, at the matching line for a search hit, and <kbd>⌘F</kbd> finds within it. From the PR list, the same shortcuts first ask for a tracked repository and then a branch, default branch first, and search that branch's latest mirrored commit. Escape steps back one level at a time.
 
 Reviewer badges show scores explicitly posted in reviews or comments, parsed without launching a scoring agent.
 
@@ -70,6 +74,8 @@ Enable **Rename and move PRs between groups** in **Settings → Workspace** to r
 Press **⌘Z** (Ctrl+Z on Windows/Linux) to undo a title change from Rename or a group move, including while it is saving. Undo restores the exact previous title on GitHub, not revoked merge approval. Title changes and Set Aside share undo order; text fields and the whiteboard keep their own undo.
 
 Desktop notifications are off by default. In **Settings → Notifications**, choose events and combine rules for human or bot authors, comment text, repositories, and review requests. GitHub bot accounts and configured review bots count as bots; unknown authors match neither human nor bot filters.
+
+Turn on **PRs I merge** in **Settings -> Notifications** to get a desktop notification when a PR you merged lands and a **Merged by me** filter in the Kitchen Notifications list; it works whether or not the custom rules are on. A PR counts as yours when you merged it, or when a merge-queue bot merged it after you last added its `order` label. Bot merges read that label history from GitHub only while the setting or an **I merged it** rule is on.
 
 Repositories can add **quick actions** to the PR sidebar and the PR-row **Quick actions** submenu by committing `.github/pr-cockpit.json`. Each action posts a fixed comment or adds a label. Cockpit reads it from the repository's default branch and shows the actions on every open PR there:
 

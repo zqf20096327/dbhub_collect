@@ -303,11 +303,11 @@ Useful resources and dependencies that are used in Canva Clone.
 - [@paralleldrive/cuid2](https://www.npmjs.com/package/@paralleldrive/cuid2): ^3.3.0
 - [@radix-ui/react-alert-dialog](https://www.npmjs.com/package/@radix-ui/react-alert-dialog): ^1.1.15
 - [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.2.7
-- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.1.15
+- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.3.1
 - [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu): ^2.1.16
 - [@radix-ui/react-label](https://www.npmjs.com/package/@radix-ui/react-label): ^2.1.8
 - [@radix-ui/react-scroll-area](https://www.npmjs.com/package/@radix-ui/react-scroll-area): ^1.2.10
-- [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.1.8
+- [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.2.0
 - [@radix-ui/react-slider](https://www.npmjs.com/package/@radix-ui/react-slider): ^1.3.6
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.2.4
 - [@radix-ui/react-tooltip](https://www.npmjs.com/package/@radix-ui/react-tooltip): ^1.2.8
@@ -327,9 +327,9 @@ Useful resources and dependencies that are used in Canva Clone.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [date-fns](https://www.npmjs.com/package/date-fns): ^4.1.0
-- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.7
+- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.8
 - [drizzle-kit](https://www.npmjs.com/package/drizzle-kit): ^0.31.11
-- [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.0
+- [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.4
 - [drizzle-zod](https://www.npmjs.com/package/drizzle-zod): ^0.8.3
 - [eslint](https://www.npmjs.com/package/eslint): ^10
 - [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.4.0
@@ -364,7 +364,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [unsplash-js](https://www.npmjs.com/package/unsplash-js): ^8.0.0
 - [uploadthing](https://www.npmjs.com/package/uploadthing): ^7.1.0
 - [use-file-picker](https://www.npmjs.com/package/use-file-picker): ^2.1.4
-- [zod](https://www.npmjs.com/package/zod): ^4.6.5
+- [zod](https://www.npmjs.com/package/zod): ^4.6.7
 - [zustand](https://www.npmjs.com/package/zustand): ^5.0.11
 
 <!--- DEPENDENCIES_END --->

@@ -344,13 +344,13 @@ Useful resources and dependencies that are used in NewTube.
 - [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.7
 - [@eslint/compat](https://www.npmjs.com/package/@eslint/compat): ^2.1.1
 - [@eslint/eslintrc](https://www.npmjs.com/package/@eslint/eslintrc): ^3
-- [@hookform/resolvers](https://www.npmjs.com/package/@hookform/resolvers): ^5.9.1
+- [@hookform/resolvers](https://www.npmjs.com/package/@hookform/resolvers): ^5.9.2
 - [@ianvs/prettier-plugin-sort-imports](https://www.npmjs.com/package/@ianvs/prettier-plugin-sort-imports): ^4.7.1
 - [@mux/mux-node](https://www.npmjs.com/package/@mux/mux-node): ^15.3.0
-- [@mux/mux-uploader-react](https://www.npmjs.com/package/@mux/mux-uploader-react): ^1.5.0
-- [@mux/mux-video-react](https://www.npmjs.com/package/@mux/mux-video-react): ^0.31.4
+- [@mux/mux-uploader-react](https://www.npmjs.com/package/@mux/mux-uploader-react): ^1.6.0
+- [@mux/mux-video-react](https://www.npmjs.com/package/@mux/mux-video-react): ^0.31.5
 - [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless): ^1.2.0
-- [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.12
+- [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.13
 - [@t3-oss/env-nextjs](https://www.npmjs.com/package/@t3-oss/env-nextjs): ^0.13.11
 - [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.3.3
 - [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query): ^5.104.1
@@ -380,7 +380,7 @@ Useful resources and dependencies that are used in NewTube.
 - [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier): ^5.5.6
 - [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss): ^4.4.0
 - [jiti](https://www.npmjs.com/package/jiti): ^2.7.0
-- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.46.0
+- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.59.0
 - [next](https://www.npmjs.com/package/next): ^16.3.8
 - [openai](https://www.npmjs.com/package/openai): ^7.27.0
 - [player.style](https://www.npmjs.com/package/player.style): ^0.3.4

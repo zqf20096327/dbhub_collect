@@ -45,18 +45,7 @@ claude mcp add memory -- npx -y @studiomeyer/local-memory-mcp
 
 ### Claude Desktop
 
-**Easiest: one-click MCPB bundle.** v2.0.0 ships pre-built `.mcpb` bundles for every major desktop platform — download the one for your OS from the [latest release](https://github.com/studiomeyer-io/local-memory-mcp/releases/latest) and double-click. Claude Desktop walks you through the install — no JSON editing, no `npm install`, no terminal.
-
-| Platform | Bundle |
-|---|---|
-| Linux x64 | `local-memory-mcp-2.2.0-linux-x64.mcpb` |
-| macOS Apple Silicon | `local-memory-mcp-2.2.0-darwin-arm64.mcpb` |
-| macOS Intel | `local-memory-mcp-2.2.0-darwin-x64.mcpb` |
-| Windows x64 | `local-memory-mcp-2.2.0-win32-x64.mcpb` |
-
-Each bundle is platform-specific because `better-sqlite3` is a native module — the matching `.node` binary is shipped inside the bundle so you don't need a build toolchain.
-
-**Manual config** (all platforms — add to `claude_desktop_config.json`, see [Settings > Developer > Edit Config](https://modelcontextprotocol.io/quickstart/user)):
+With Node.js 22 installed, add the following to `claude_desktop_config.json`. This uses the published npm package.
 
 ```json
 {

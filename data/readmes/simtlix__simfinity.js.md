@@ -8,7 +8,7 @@ Read the [documentation website](https://simtlix.github.io/simfinity.js/): start
 
 For a complete application, run the [Barber examples](examples/barber/README.md): independent MongoDB and PostgreSQL backends with one shared Next.js frontend, synthetic demo data, Docker setup, and a dedicated CI workflow. Both backends consume released Simfinity 3.8.0 packages from npm. Their shared HTTP matrix verifies filters, aggregates, scopes and nested mutations; see the [API test commands and reference-integrity boundary](examples/barber/README.md#validate-changes).
 
-Run the documentation website locally with Node.js 22+:
+Run the documentation website locally with Node.js 22.12.0+:
 
 ```sh
 npm run docs:install
@@ -61,11 +61,11 @@ For builds and hosting, see the [website maintainer guide](docs/.vitepress/READM
   - [Permission Schema](#permission-schema)
   - [Rule Helpers](#rule-helpers)
   - [Policy Expressions (JSON AST)](#policy-expressions-json-ast)
-  - [Integration with GraphQL Yoga / Envelop](#int
+  - [Integration with GraphQL Yoga / Envelop]
 
 [...截断...]
 
-egration-with-graphql-yoga--envelop)
+(#integration-with-graphql-yoga--envelop)
   - [Legacy: Integration with graphql-middleware](#legacy-integration-with-graphql-middleware)
 - [Middlewares](#-middlewares)
   - [Adding Middlewares](#adding-middlewares)
@@ -73,6 +73,7 @@ egration-with-graphql-yoga--envelop)
   - [Common Use Cases](#common-use-cases)
 - [Advanced Features](#-advanced-features)
   - [Field Extensions](#field-extensions)
+  - [Custom Queries](#custom-queries)
   - [Custom Mutations](#custom-mutations)
   - [Working with Existing Mongoose Models](#working-with-existing-mongoose-models)
   - [Programmatic Data Access](#programmatic-data-access)
@@ -112,11 +113,11 @@ egration-with-graphql-yoga--envelop)
 ## 📦 Installation
 
 ```bash
-npm install mongoose@^8.24.2 graphql@^16.11.0 @simtlix/simfinity-js@3.9.0
+npm install mongoose@^8.24.2 graphql@^16.11.0 @simtlix/simfinity-js@3.10.0
 ```
 
 **Prerequisites**: Simfinity.js requires `mongoose` and `graphql` as peer dependencies. Keep them within the ranges above so your application and Simfinity share a single Mongoose and GraphQL instance; npm reports an out-of-range version as a peer conflict. The MCP transports need the optional peer `@modelcontextprotocol/sdk@^1.31.0`, which is not installed automatically, and `graphql-middleware` is not a Simfinity dependency.
 
 ## PostgreSQL support
 
-Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many linking entities, and references inside embedded objects. PostgreSQL install
+Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many linking entities, and references

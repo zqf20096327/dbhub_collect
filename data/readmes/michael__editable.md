@@ -33,10 +33,11 @@ pnpm install
 cp .env.example .env
 ```
 
-Set an admin password in `.env`:
+Set an admin password and your site's language in `.env`:
 
 ```sh
 ADMIN_PASSWORD='change-me'
+LANGUAGES='en'
 ```
 
 And run the development server:
@@ -756,6 +757,8 @@ fly secrets set \
   ADMIN_PASSWORD='pick-a-strong-password'
 ```
 
+Set your site's language in `fly.toml` under `[env]`, such as `LANGUAGES = "de"`. It's not a secret, so it lives with the app's configuration.
+
 `ORIGIN` should exactly match the canonical URL you use in the browser, including the scheme and subdomain (for example, `https://example.com` and `https://www.example.com` are different origins), so generated canonical and social metadata stays correct. Update this secret whenever you switch to a custom domain.
 
 Optionally set `ASSET_GRACE_PERIOD_DAYS` (default 7): unreferenced asset files are kept on disk this many days after losing their last reference. This is also the safe window for rolling back a database backup against the live assets folder without ending up with dead image references.
@@ -906,7 +909,7 @@ pnpm vps:env set ALIAS_DOMAINS="www.my-site.example.com,alias.example.com"
 
 Caddy then terminates TLS for all of them and the app redirects each to `ORIGIN`, so visitors and search engines end up on one address and you don't get a separate login per domain. Point each name's DNS at the server **before** setting it — Caddy verifies every name when it requests the certificate.
 
-**Doing it by hand instead:** the script is optional — `docker-compose.yml` runs on any docker host. Clone your site on the server, `cp .env.example .env` and set `ADMIN_PASSWORD` and `ORIGIN="https://my-site.example.com"`, then `docker compose up -d --build`. The app listens on `127.0.0.1:3000`; put a reverse proxy with TLS in front (with Caddy that's the whole config: `my-site.example.com { reverse_proxy 127.0.0.1:3000 }`). Ship updates with `git pull && docker compose up -d --build`. For the data commands, a hand-managed setup has nothing to auto-discover, so set the explicit keys alongside `DEPLOY_HOST` in your local `.env`: `RESTART_CMD="docker restart editable"`, `REMOTE_EXEC="docker exec editable"`, and `HOST_DATA_DIR` pointing at the `./data` bind mount as an absolute path (without the script, the container keeps the default name `editable`).
+**Doing it by hand instead:** the script is optional — `docker-compose.yml` runs on any docker host. Clone your site on the server, `cp .env.example .env` and set `ADMIN_PASSWORD`, `ORIGIN="https://my-site.example.com"`, and `LANGUAGES`, then `docker compose up -d --build`. The app listens on `127.0.0.1:3000`; put a reverse proxy with TLS in front (with Caddy that's the whole config: `my-site.example.com { reverse_proxy 127.0.0.1:3000 }`). Ship updates with `git pull && docker compose up -d --build`. For the data commands, a hand-managed setup has nothing to auto-discover, so set the explicit keys alongside `DEPLOY_HOST` in your local `.env`: `RESTART_CMD="docker restart editable"`, `REMOTE_EXEC="docker exec editable"`, and `HOST_DATA_DIR` pointing at the `./data` bind mount as an absolute path (without the script, the container keeps the default name `editable`).
 
 What Fly.io still does for you that a VPS doesn't: scale-to-zero with sub-second wake-ups (a VPS runs — and bills — around the clock), TLS and anycast routing without a reverse proxy, and volume snapshots. The VPS path trades that for a fixed monthly price and no platform dependency.
 
@@ -1067,37 +1070,35 @@ The app-specific Editable surface lives in `src/app`, while `src/routes` contain
 
 ## Migrations
 
-Keep stored content in step with changes to your site.
+Keep stored content and storage in step with changes to your site.
 
-Every migration lives in `src/app/migrations`, is discovered when SvelteKit builds the server, and runs automatically when it boots. Framework migrations use the `editable` namespace and project migrations use the `custom` namespace. Migrations run in id order, and an id starts with its UTC timestamp, so a migration's date is its place in the chain.
+Every migration lives in `src/app/migrations/sqlite`, the folder for the SQLite database that stores your site, is discovered when SvelteKit builds the server, and runs automatically when it boots. Framework migrations use the `editable` namespace and project migrations use the `custom` namespace. An id starts with its UTC timestamp, so a migration's date is its place in the chain.
 
-There are two kinds, with the same shape:
-
-- **Content migrations** change the site's documents. They have no `target` and run on every backend. Which ones have run is stored with the site, so it travels when the site moves to another backend. A new site starts with the current default content and never runs them.
-- **Storage migrations** change how one backend keeps its data, such as a SQLite table. They name their backend, such as `target: 'sqlite'`, receive its storage, and are recorded by the backend itself.
-
-When a site opens, its pending storage migrations run first, then its content migrations. Each is saved together with the record that it ran, as one atomic step, so a failure stops the upgrade where the last complete migration left the site.
+When a site opens, it runs the migrations it has not run yet, in id order and all in one transaction, so an upgrade happens completely or not at all. Read the chain in order, and you know the state it leaves.
 
 Create a project migration with:
 
 ```sh
-pnpm migration:create add-project-metadata
+pnpm migration:create add-redirects
 ```
 
-This creates a timestamped `custom` content migration. Its filename is its permanent ID:
+This creates a timestamped `custom` migration for the SQLite backend. Its filename is its permanent ID:
 
 ```ts
-import type { ContentContext, Migration } from '#lib/server/migrations.js';
+import type { Migration, MigrationContext } from '#lib/server/migrations.js';
+import type { SqliteStorage } from '#lib/server/backends/sqlite_backend.js';
 
 export default {
-	up({ documents, rename_property, update }: ContentContext) {
-		// Transform content with the helpers, or change `documents` directly.
-		// rename_property('hero', 'image', 'media');
+	up({ db, rename_property }: MigrationContext<SqliteStorage>) {
+		db.exec('CREATE TABLE IF NOT EXISTS redirects (path TEXT PRIMARY KEY, target TEXT NOT NULL)');
+		rename_property('hero', 'image', 'media');
 	}
 } satisfies Migration;
 ```
 
-Adding a custom content type usually needs no migration because documents are stored as they are. Write one when existing documents must be transformed.
+`up` receives its backend's storage, for SQLite the [node:sqlite](https://nodejs.org/api/sqlite.html) handle as `db`, next to the content helpers and `documents`. One migration can change both, such as a new table and the content that moves into it.
+
+Adding a custom content type usually needs no migration because documents are stored as they are. Write one when existing documents must be transformed or the storage must change.
 
 ### Content helpers
 
@@ -1134,31 +1135,9 @@ They are deliberately tolerant: a node that never had the property is left alone
 
 `ensure_document` adds a whole document unless one with its id exists, such as a new shared document every page will refer to. Its type is its root node's, and it returns whether it added the document.
 
-The helpers work on the site's documents in memory, and Editable saves the changed ones afterwards. `documents` holds the same records, for changes the helpers don't cover; to read anything else, such as slugs, make `up` asynchronous and use `backend` from the context. Migrations may only change the site's documents; filesystem, network, and other external side effects cannot be rolled back. Migrations are forward-only: never rename, delete, or edit one that has been applied. Roll back an upgrade by restoring the backup made before deployment.
+The helpers work on the site's documents in memory, as the migrations before left them, and Editable writes the changed ones back before the next migration runs. `documents` holds the same records, for changes the helpers don't cover. Change documents through the helpers or `documents`, and everything else through the storage: SQL that changes the documents table in the same migration is overwritten when the helpers' changes are written back. At the end of an upgrade, the documents it changed are saved again, which gives them new versions and rebuilds what they refer to. A new site starts with the current default content: its migrations set up its storage and find no content to change.
 
-### Storage migrations
-
-A change to how a backend stores records, such as a new table, needs a storage migration for that backend. Create one with `--target`:
-
-```sh
-pnpm migration:create redirects --target sqlite
-```
-
-The migration states its target and receives its backend's storage, for SQLite the [node:sqlite](https://nodejs.org/api/sqlite.html) handle as `db`:
-
-```ts
-import type { Migration } from '#lib/server/migrations.js';
-import type { SqliteStorage } from '#lib/server/backends/sqlite_backend.js';
-
-export default {
-	target: 'sqlite',
-	up({ db }: SqliteStorage) {
-		db.exec('CREATE TABLE IF NOT EXISTS redirects (path TEXT PRIMARY KEY, target TEXT NOT NULL)');
-	}
-} satisfies Migration;
-```
-
-A backend runs only the storage migrations that target it, and a new one replays them all in order. A backend of your own has its own storage migrations the same way.
+Migrations may only change the site's data; filesystem, network, and other external side effects cannot be rolled back. Migrations are forward-only: never rename, delete, or edit one that has been applied. Roll back an upgrade by restoring the backup made before deployment.
 
 ### Placing a migration
 
@@ -1176,7 +1155,7 @@ Editable's own migrations use the `editable` source name; `custom` migrations be
 
 Publish your website in multiple languages.
 
-`LANGUAGES` (optional) accepts a comma-separated list of BCP 47 language tags in `.env` or your deployment environment. Put the original language first; each tag is a separate content variant:
+`LANGUAGES` names your site's language as a BCP 47 tag, such as `de`, which its pages declare to browsers, screen readers, and search engines. Every site with a backend sets it. To translate, list several tags in `.env` or your deployment environment, the original language first; each tag is a separate content variant:
 
 ```dotenv
 LANGUAGES="en,de"
@@ -1188,7 +1167,7 @@ Choose a language before entering edit mode, edit its text or media, and save. T
 
 On backend deployments, language versions are included automatically in the sitemap and page metadata for search engines.
 
-Removing a language from the list hides its translations without deleting them. Leave `LANGUAGES` unset or blank for a single-language site.
+Removing a language from the list hides its translations without deleting them. A list of one, such as `LANGUAGES="de"`, is a single-language site.
 
 This feature is experimental: its behavior and storage format may change. Back up your database before upgrading.
 

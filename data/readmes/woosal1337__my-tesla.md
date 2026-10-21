@@ -31,9 +31,9 @@ A self-hosted, read-only web dashboard for the car data that [TeslaMate](https:/
 | Drives | Trips by day. A trip joins the drives of one journey across short stops and charging stops, and a row shows its distance, duration, stops, and consumption. Each trip has its own page with the legs, the stops, and the charges on the way. Each drive has a route map, speed, power, elevation, and battery charts, the energy recovered, the climb, and a GPX export. All drives export as CSV. The Report page sums any date range on one map. |
 | Charging | All charging sessions, with energy, levels, power, and cost. A price per kWh in Settings gives a cost to each charge that TeslaMate has no cost for. Each session has a cost breakdown and power, voltage, and current charts. All sessions export as CSV. An insights page shows the cost per kWh for AC and DC, the cost per 100 km, the DC curves, the charging time from one battery level to another, when the car charges, and the top places. |
 | Timeline | One day at a time: driving, charging, parked, asleep, and offline time on a 24-hour strip |
-| Battery | Estimated health, capacity from the first long charge, range at 100 %, charge cycles, AC and DC energy, time at each level, idle drain |
-| Stats | Distance, energy, cost, efficiency against temperature and speed, charging cost for each week or month, drive times, longest drives, tire pressure trend with a slow-leak warning, software updates |
-| Places | A map of visited and charging places, the most visited places, charging cost by place, the frequent routes with their typical, fastest, and slowest drive, geofences |
+| Battery | Estimated health, capacity from the first long charge, range at 100 %, charge cycles, AC and DC energy, the charge level over time, time at each level, time online, asleep, and offline, the projected range by outside temperature and by battery level, idle drain |
+| Stats | Distance, the odometer over time, energy, cost, efficiency against temperature and speed, charging cost for each week or month, drive times, longest drives, tire pressure trend with a slow-leak warning, software updates. A year in review page shows the totals, the distance per month, the records, and the top places of one calendar year. |
+| Places | A map of visited and charging places, the most visited places, charging cost by place, the frequent routes with their typical, fastest, and slowest drive, the countries, states, and cities visited, a map of every road driven, geofences |
 | Settings | Units, date and time formats, number style, currency, charging prices, place names, maps, theme, tabs, and Overview cards. Saved on the server for each user. |
 
 Other properties:
@@ -113,8 +113,8 @@ You need a running TeslaMate stack with Docker Compose.
    Add `dashboard-data:` under the `volumes:` key at the end of the file.
 
 3. Start it with `docker compose up -d dashboard`.
-4. Put an authenticating proxy in front of port 3000. The app has no login of its own. Read [Protect the dashboard](docs/authentication.md).
-5. Open the dashboard through the proxy.
+4. Serve port 3000 over HTTPS through your reverse proxy or tunnel. Read [Accounts and sign-in](docs/authentication.md).
+5. Open the setup link from `docker logs`, and create the admin account.
 
 The full guide is [Installation](docs/installation.md).
 
@@ -124,7 +124,7 @@ The full guide is [Installation](docs/installation.md).
 |---|---|
 | Install with Docker, Docker Compose, Coolify, or from source | [Installation](docs/installation.md) |
 | Create the read-only role and reach the database | [Connect to the TeslaMate database](docs/teslamate-database.md) |
-| Put a login in front of the app | [Protect the dashboard](docs/authentication.md) |
+| Accounts, sign-in, phones, and script tokens | [Accounts and sign-in](docs/authentication.md) |
 | Environment variables and user settings | [Configuration](docs/configuration.md) |
 | Show live locks, charging, and navigation from MQTT | [Live status](docs/live-status.md) |
 | Get the car status as JSON, and the CSV and GPX exports | [API](docs/api.md) |
@@ -144,7 +144,7 @@ The full guide is [Installation](docs/installation.md).
 | TeslaMate | 4.3.0 is tested. The app reads the TeslaMate schema directly, so check [Upgrading](docs/upgrading.md) after a TeslaMate upgrade. |
 | PostgreSQL | The database that TeslaMate uses |
 | Docker | Any version with Compose v2, for the container image |
-| Node.js and Bun | Node.js 24 and Bun 1.3.14, only to run from source |
+| Node.js and Bun | Node.js 24 and Bun 1.4.3, only to run from source |
 
 ## Status
 

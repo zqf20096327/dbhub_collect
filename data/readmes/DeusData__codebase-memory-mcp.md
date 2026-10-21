@@ -3,7 +3,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/DeusData/codebase-memory-mcp?style=flat&color=blue)](https://github.com/DeusData/codebase-memory-mcp/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/DeusData/codebase-memory-mcp/release.yml?branch=main&label=main%20CI)](https://github.com/DeusData/codebase-memory-mcp/actions/workflows/release.yml)
-[![C tests](https://img.shields.io/badge/C_tests-9388_cases-blue)](#tests)
+[![Native and frontend tests](https://img.shields.io/badge/tests-native_%2B_frontend-blue)](#tests)
 [![MCP tools](https://img.shields.io/badge/MCP_tools-17-blue)](#mcp-tools)
 [![Languages](https://img.shields.io/badge/languages-162-orange)](https://github.com/DeusData/codebase-memory-mcp)
 [![Hybrid LSP](https://img.shields.io/badge/Hybrid_LSP-type_resolution-blue)](#hybrid-lsp)
@@ -24,22 +24,22 @@ The native C backend exposes **17 MCP tools**, parses [languages and file format
 
 [Quick start](#quick-start) · [Capabilities](#features) · [Documentation](#documentation-connected-to-code) · [Infrastructure](#infrastructure-and-deployment) · [Smart CI](#smart-ci-and-test-impact) · [Explore CBM Lens](#cbm-lens-beta-code-visualization-and-source-navigation) · [Agent setup](#agent-setup-skills-profiles-and-hooks) · [MCP tools](#mcp-tools)
 
-> **Local processing:** Source analysis and graph storage run on your machine. CBM Lens can optionally download a model for browser AI after you enable it; inference stays on the device. The installer writes agent configuration for the clients you select. See [Security](#security) for release verification and [SECURITY.md](SECURITY.md) for rep
+> **Local processing:** Source analysis and graph storage run on your machine. CBM Lens can optionally download a model for browser AI after you enable it; inference stays on the device. The installer writes agent configuration for the clients you select. See [Security](#security) for release verification and [SECURITY
 
 [...截断...]
 
-orting issues.
+.md](SECURITY.md) for reporting issues.
 
-**See the graph with CBM Lens (open beta v0.0.1).** Folders become nested platforms, files and symbols become selectable blocks, and arrows show indexed relationships. The recording zooms into the map of this repository, selects `src/pipeline`, opens the area, selects `artifact.c` and opens its source. Height can show source size; hotspot gravity reflects static fan-in. [Still image](docs/images/lens-architecture.png).
+**See the graph with CBM Lens (open beta v0.0.1).** Folders become nested platforms, files and symbols become selectable blocks, and arrows show indexed relationships. The recording opens `src/foundation` in the map of this repository, selects `arena.c` and opens its source. Height can show source size; hotspot gravity reflects static fan-in. [Still image](docs/images/lens-architecture.png).
 
 <p align="center">
-  <img src="docs/images/lens-overview.gif" alt="CBM Lens Beta architecture walkthrough: zoom into the source folders of this repository, open src/pipeline, select artifact.c and open its source" width="1000">
+  <img src="docs/images/lens-overview.gif" alt="CBM Lens Beta architecture walkthrough: open src/foundation, select arena.c and read its source beside the map" width="1000">
 </p>
 
-**Galaxy.** Explore the code knowledge graph in 3D. The recording searches `cbm_pipeline_run`, follows its outgoing calls one layer further, switches to the hierarchy and shows the path to `cbm_store_check_integrity`. Edge pulses show relationship direction; they do not represent live execution. [Current still: two dependency layers around `cbm_max_file_bytes`](docs/images/lens-galaxy.jpg).
+**Galaxy.** Explore the code knowledge graph in 3D. The recording follows the outgoing relationships of `cbm_arena_alloc` one layer further, switches to the hierarchy and shows the two-hop call path to `cbm_alloc`. Edge pulses show relationship direction; they do not represent live execution. [Still: two dependency layers around `cbm_max_file_bytes`](docs/images/lens-galaxy.jpg).
 
 <p align="center">
-  <img src="docs/images/lens-galaxy.gif" alt="Code knowledge graph in CBM Lens Beta Galaxy: search a function, expand its outgoing calls, switch to the hierarchy and follow a path" width="1000">
+  <img src="docs/images/lens-galaxy.gif" alt="Code knowledge graph in CBM Lens Beta Galaxy: expand cbm_arena_alloc, switch to the hierarchy and follow its call path through arena_grow to cbm_alloc" width="1000">
 </p>
 
 **Explore.** Browse files in an IDE-style workspace, read syntax-highlighted source in Monaco, and keep the code graph alongside it. File impact shows what depends on the open file, and Code details shows the callers and calls of the symbol under the caret. Select code to [ask the local chat about it](#chat-with-your-codebase-locally).
@@ -57,7 +57,7 @@ orting issues.
 
 </details>
 
-These captures show CBM Lens Beta on 12–13 October 2026, using public source from this repository. See [capture details](docs/images/README.md) for each capture's build, indexed scope and recording setup.
+The high-resolution GIFs show CBM Lens Beta on 20 October 2026; the still images were captured on 12–13 October. All show public source from this repository. See [capture details](docs/images/README.md) for each capture's build, indexed scope and recording setup.
 
 ## Why codebase-memory-mcp
 
@@ -66,4 +66,4 @@ These captures show CBM Lens Beta on 12–13 October 2026, using public source f
 - **Follow the system beyond source files**: trace supported relationships through Docker, Kubernetes, Helm, Kustomize, Terraform/OpenTofu, Terragrunt, Ansible, scripts, Make, and CI configuration.
 - **Understand a change before running it**: inspect affected symbols, compare indexed snapshots, and find related tests. [Experimental Smart CI](#smart-ci-and-test-impact) combines static relationships and per-test coverage for supported C/C++ test harnesses, falling back to broader runs when evidence is insufficient.
 - **Explore visually with CBM Lens Beta**: read source, follow call paths, inspect architecture and coverage gaps, manage architecture decisions, and ask a local model about selected code.
-- **Equip your coding agents**: `install` sets up supported client configuration, durable guidance,
+- **Equip your coding agents**: `install` sets up supported client confi

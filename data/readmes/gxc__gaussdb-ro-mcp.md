@@ -4,6 +4,15 @@
 
 [![CI](https://github.com/gxc/gaussdb-ro-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/gxc/gaussdb-ro-mcp/actions/workflows/ci.yml)
 [![Glama](https://glama.ai/mcp/servers/gxc/gaussdb-ro-mcp/badges/score.svg)](https://glama.ai/mcp/servers/gxc/gaussdb-ro-mcp)
+[![Release](https://img.shields.io/github/v/release/gxc/gaussdb-ro-mcp)](https://github.com/gxc/gaussdb-ro-mcp/releases/latest)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
+
+> [!NOTE]
+> **English**: A read-only MCP server for Huawei GaussDB (centralized & distributed), built for
+> coding agents (Claude Code, OpenCode, etc.). Three layers of read-only enforcement — static SQL
+> validation, server-side `READ ONLY` transactions, and least-privilege account guidance — in a
+> single static binary designed for non-SSL intranet environments. Full documentation:
+> [README_en.md](README_en.md).
 
 面向 Coding Agent（Claude Code、OpenCode 等）的 **GaussDB 只读 MCP 服务器**。基于
 [GaussDB 官方 Go 驱动](https://github.com/huaweicloud-samples/database-gaussdb-go)
@@ -30,7 +39,25 @@
 | `describe_table` | 表结构：列（类型/可空/默认值/注释）、主键与约束、**全部索引及定义**；视图返回视图定义 SQL；分区表返回分区清单（GaussDB `pg_partition`） |
 | `execute_select` | 执行 SELECT：仅接受单条 SELECT/WITH，受 `max_rows`/超时限制，返回列名+行数据+是否截断 |
 
-所有工具均接受可选 `instance` 参数以选择数据源，缺省使用 `default_instance`。
+所有工具均接受可选 `instance` 参数以选择数据源，缺省使用 `default_instance`。全部实例名（含默认标注）会写入该参数的 schema 描述，agent 在获取工具列表阶段即可发现可选实例，无需试错。
+
+## 与同类项目对比
+
+| | gaussdb-ro-mcp（本项目） | [GaussDB-MCP](https://github.com/mengqi1436/GaussDB-MCP) | [Multi DB MCP](https://github.com/the-Rings/universal-db-mcp) | 通用 PostgreSQL MCP 服务器 |
+| --- | --- | --- | --- | --- |
+| 定位 | GaussDB 专用**只读**探查 | GaussDB 全功能访问：查询、写入、事务、诊断运维、用户权限 | 17 种数据库通用连接器（含 GaussDB/openGauss），MCP + REST API | 原生 PostgreSQL |
+| GaussDB 适配 | 官方 Go 驱动，集中式/主备/分布式均适配 | 官方 Node.js 驱动（gaussdb-node） | 走 PostgreSQL 通用协议 | 未适配 GaussDB 专有系统目录（如 `pg_partition`） |
+| 只读保障 | 三层纵深防御：SQL 静态校验 + 事务级 READ ONLY 强制 + 最小权限建议 | 无只读模式（默认 root 管理员账号，按设计支持写入） | 应用层默认只读 | 各项目实现不一 |
+| GaussDB 特有元数据 | 分区表（`pg_partition`）、外表、物化视图、视图定义 SQL、全部索引定义 | 部分支持 | 按 PG 协议探测，部分支持 | 无 |
+| 运行时依赖 | 无（静态编译单二进制，可离线部署） | Node.js ≥ 20 | Node.js（npx） | 各异 |
+| 多实例管理 | 配置文件集中管理多实例，工具按 `instance` 参数切换 | 单实例（环境变量） | 单连接（启动参数） | 一般单实例 |
+| 内网非 SSL | 默认 `sslmode=disable` | 支持（默认关闭 SSL） | 支持 | 支持 |
+| 许可证 | Apache-2.0 | 未声明 | 未声明 | 各异 |
+
+各项目定位不同：需要完整读写与运维能力时，全功能服务器是合理选择；如果目标是让
+Coding Agent **安全地**探查数据（尤其在生产库上），只读约束与纵深防御是本项目的价值所在。
+以上信息基于各项目公开 README 整理（2026-10），如有出入欢迎
+[提 Issue 指正](https://github.com/gxc/gaussdb-ro-mcp/issues)。
 
 ## 安装
 
@@ -65,7 +92,7 @@ gaussdb-ro-mcp --version
 
 ## 构建
 
-要求 Go 1.26+（与 go.mod 一致）。驱动源码已内置于 `third_party/gaussdb-go`（通过 `replace` 指令引用），
+要求 Go 1.26.10+（与 go.mod 一致）。驱动源码已内置于 `third_party/gaussdb-go`（通过 `replace` 指令引用），
 正常联网环境下 `go build` 会自动解析其余依赖；纯内网环境请先在有网环境执行 `go mod vendor`
 后携带 `vendor/` 目录，用 `go build -mod=vendor` 构建。
 

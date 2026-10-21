@@ -1,0 +1,493 @@
+# sqlite-graph-memory: persistent memory for Claude Code, Cursor and Codex over your own markdown notes
+
+<!-- mcp-name: io.github.tonydzi/sqlite-graph-memory -->
+
+[![PyPI](https://img.shields.io/pypi/v/sqlite-graph-memory)](https://pypi.org/project/sqlite-graph-memory/) [![tests](https://img.shields.io/github/actions/workflow/status/tonydzi/sqlite-graph-memory/tests.yml?label=tests)](https://github.com/tonydzi/sqlite-graph-memory/actions/workflows/tests.yml) [![MCP Registry](https://img.shields.io/badge/MCP%20Registry-io.github.tonydzi%2Fsqlite--graph--memory-blue)](https://registry.modelcontextprotocol.io/v0/servers?search=sqlite-graph-memory) [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+Long-term memory for coding agents that lives in the notes you already keep: an MCP server
+and a CLI over any folder of markdown, Obsidian vaults included. `pip install`, point it at
+the folder, and Claude Code, Cursor, Codex or any other MCP client can recall from it.
+
+**Your agent forgets everything between sessions, and plain vector search gives it back
+flat, unrelated chunks. This gives it associative recall over your own markdown notes:
+vector search finds the entry points, the `[[wikilinks]]` you already wrote are the graph.
+One SQLite file, no graph database, no ETL pass, no server.**
+
+## Three commands
+
+```bash
+pip install 'sqlite-graph-memory[embeddings]'
+sgm-index ./notes
+sgm-ask --ab "In which programming language is the tool behind Project Ouzel written?"
+```
+
+`./notes` is any folder of markdown notes. To get exactly the output below, use the
+202-note synthetic vault from this repo (it is not inside the pip package):
+
+```bash
+git clone --depth 1 https://github.com/tonydzi/sqlite-graph-memory && cp -R sqlite-graph-memory/bench/vault ./notes
+```
+
+Real output, top 5 of 12:
+
+```
+--- DIRECT memory (vector) ---
+ 1. [  1.66] project-ouzel
+ 2. [ -1.33] project-avocet
+ 3. [ -1.79] tool-cobbleset
+ 4. [ -2.44] meeting-2025-10-21-lighthouse-sync
+ 5. [ -2.70] person-severin-ibarrondo
+
+--- ASSOCIATIVE memory (vector+graph) ---
+ 1. [  1.66] project-ouzel
+ 2. [  1.14] tool-lanternfish  <== +graph
+ 3. [ -1.33] project-avocet
+ 4. [ -1.79] tool-cobbleset
+ 5. [ -2.44] meeting-2025-10-21-lighthouse-sync
+```
+
+The answer lives in `tool-lanternfish` ("Lanternfish is written in Elixir"). The question
+never names Lanternfish, so the vector pass does not find it in the top 12 at all.
+`project-ouzel` links to it, so one graph hop puts it second.
+
+If that hop found something your vector search missed, a
+[star](https://github.com/tonydzi/sqlite-graph-memory) is how other people with a notes
+folder find this repo. `sgm-ask --ab` asks the same once per machine, in a terminal only;
+`SGM_NO_STAR_PROMPT=1` turns it off.
+
+That is the idea in one query, and it is not a blanket win. On this same vault vector-only
+ranks ahead of graph mode overall; the numbers are in [`bench/`](bench/README.md). `--ab`
+exists so you can measure which one wins on your own notes.
+
+**From any MCP client** (Claude Desktop, Cursor, Zed, Windsurf): `sgm-mcp` after the install
+above, or `uvx --with 'sqlite-graph-memory[embeddings]' sqlite-graph-memory`. Set
+`BRAIN_INDEX_DIR` to the `index` folder `sgm-index` wrote. Config:
+[`examples/mcp-config.json`](examples/mcp-config.json). Claude Code:
+`claude mcp add sqlite-graph-memory -e BRAIN_INDEX_DIR=/path/to/index -- sgm-mcp`.
+Codex: a `[mcp_servers.sqlite-graph-memory]` table in `~/.codex/config.toml` with
+`command = "sgm-mcp"`. Agents that read files first: [`llms.txt`](llms.txt).
+
+## What it is
+
+Graph RAG on SQLite for AI agents — a working pilot, not a framework. It is the extracted
+memory layer of a personal "second brain" agent setup: vector search finds the entry
+points, the `[[wikilinks]]` you already wrote by hand are the graph, and a cross-encoder
+reranks what the hop dragged in.
+SQLite is the only database ([`schema.sql`](src/sqlite_graph_memory/schema.sql)).
+
+Status: **pilot**, and the word is load-bearing: it runs daily in one real setup (a ~100k-note
+Obsidian vault driven by Claude Code), but it is deliberately minimal and makes no attempt
+to be general — see [What's intentionally missing](#whats-intentionally-missing), which is
+where the uneven test coverage is described.
+Published as the companion code for an upcoming write-up on lightweight Graph RAG for agents;
+the one design note that is already written is [`docs/bitemporal.md`](docs/bitemporal.md).
+
+## Why
+
+Most Graph RAG stacks assume a graph database, an ETL pipeline, and an entity-extraction pass —
+HippoRAG ([arXiv:2405.14831](https://arxiv.org/abs/2405.14831)) derives its KG that way, and
+Graphiti/Zep maintain a temporal one.
+For a single-user agent over a markdown knowledge base, all three are overkill:
+
+- The **graph already exists** — Obsidian/Logseq/plain-markdown users hand-curate their
+  edges as `[[wikilinks]]`, and `brain_ask.py` just parses them.
+  No extraction pass, and edge quality beats anything a model would mine.
+- **SQLite is enough** — the only things worth persisting are derived state (a per-turn
+  ledger) and telemetry, and both are defined in [`schema.sql`](schema.sql).
+  One file, stdlib driver, zero ops.
+- The expensive part of RAG quality is a **reranker**, not graph infrastructure — see the
+  rerank step in `brain_ask.py`.
+
+So the pilot's bet: *vector retrieval for entry points, hand-curated wikilinks for
+association, a cross-encoder to keep serendipity honest, SQLite for everything that must
+persist.* All four steps live in one file, `brain_ask.py`, in that order.
+
+## Architecture
+
+Three layers, three failure-isolated components:
+
+```
+markdown notes (with [[wikilinks]])
+        │
+        ├── index_notes.py      chunk + embed (e5-base) → .npy/.pkl index
+        │
+        ├── brain_ask.py        recall pipeline:
+        │       1. dense retrieve  top-60 chunks, dedup by file
+        │       2. --graph         +1-hop wikilink neighbours of top-15 hits (max 40)
+        │       3. rerank          cross-encoder → top-12
+        │       4. --ab            run vector-only AND vector+graph, diff,
+        │                          log the delta to SQLite (ab_recall)
+        │
+        └── turnstate_hook.py   agent Stop-hook: after every assistant turn,
+                                parse the transcript tail and append one row
+                                (ask, summary, files, tools, commands, decisions)
+                                to SQLite (turns). 0 LLM tokens, pure stdlib.
+                                turnstate_show.py = read-only viewer.
+```
+
+[`schema.sql`](schema.sql) documents both tables. The graph is **not** materialized in SQL:
+`brain_ask.py` parses edges from the notes at query time, bounded to 1 hop / 40 neighbours.
+That keeps the graph permanently in sync with the notes at zero maintenance cost; materialize
+an edge table only when hop depth or corpus size demands it.
+
+### Design choices that survived contact with reality
+
+- **Graph expansion is candidate generation, not ranking** (`brain_ask.py`). Neighbours go
+  into the same reranker pool as vector hits, so an irrelevant linked note gets buried.
+  That is what makes 1-hop expansion safe to leave on.
+- **Entity gate** (`looks_like_entity` in `brain_ask.py`). A/B telemetry showed graph
+  expansion helps *theme* queries ("approaches to agent memory") but hurts *name/tool*
+  lookups ("NotebookLM"): a name's card links to everything, so the hop pulls in noise.
+  The heuristic in `brain_ask.py` is deliberately conservative, and switches the graph off
+  only for name-shaped queries.
+- **Crash-safety as a policy.** The graph hop (`brain_ask.py`) and the Stop-hook
+  (`turnstate_hook.py`) are both wrapped, so any failure degrades to the previous behavior:
+  vector-only recall, no ledger row.
+  A memory layer must never make the agent worse than having no memory layer.
+- **Measure, don't believe.** `--ab` runs both pipelines on every real query and logs how
+  many notes the graph promoted into the top-N, to `ab_recall` in [`schema.sql`](schema.sql).
+  Whether "associative memory" earns its keep is a weekly SQL query, not a vibe.
+
+### What's intentionally missing
+
+- No entity lane. The production setup has an extra retrieval lane over people/project
+  cards; it is too entangled with personal data to publish.
+- No incremental indexing (tracked in the issues). Packaging exists since v0.3.0 (`pip install sqlite-graph-memory`). There IS an eval suite now — see
+  [Measure before you swap](#measure-before-you-swap--eval) — but it scores retrieval on
+  wikilink-derived gold, which is weak supervision and says so out loud. Test coverage is uneven:
+  `index_notes.py`, `brain_ask.py` and `mcp_server.py` have unit tests, and
+  `turnstate_hook.py` has write-path coverage. Run `pytest -q` for the current count rather
+  than trusting a number written in prose here — that is how this file ended up claiming
+  "no tests" while seven were passing.
+  The status line above says **pilot** on purpose.
+
+## Quickstart
+
+```bash
+# Indexing and reranking need the embedding stack; the base install leaves it out
+# so that `pip install sqlite-graph-memory` stays small instead of pulling ~2 GB
+# of torch. Ask for it explicitly:
+pip install 'sqlite-graph-memory[embeddings]'
+
+# 1. index a folder of markdown notes
+sgm-index /path/to/notes
+
+# 2. ask, three ways
+sgm-ask "how do I think about agent memory"
+sgm-ask --graph "how do I think about agent memory"
+sgm-ask --ab    "how do I think about agent memory"   # logs the diff to SQLite
+
+# 3. inspect the A/B telemetry
+sqlite3 turnstate.db "select ts, query, new_in_top, promoted_via_graph from ab_recall order by id desc limit 10"
+```
+
+Run any of them on a base install and they tell you which extra is missing rather than
+raising `ModuleNotFoundError` — that path is covered by `tests/test_optional_extra.py`.
+
+To enable the per-turn ledger in Claude Code, register the Stop hook (the exact block is
+`examples/claude-code-stop-hook.json`, which calls `sgm-turnstate-hook`), then:
+
+```bash
+sgm-turnstate-show --stats
+```
+
+Working from a clone instead of an install? `pip install -e '.[embeddings]'` gives you the
+same four commands, and the modules stay importable as
+`from sqlite_graph_memory import brain_ask`.
+
+Configuration is env-only and every variable is listed in `.env.example`; everything
+defaults to the current directory. GPU is used automatically if a CUDA torch build is
+present, and CPU works fine for small corpora.
+
+### What `--ab` looks like
+
+Output of `brain_ask.py` with `--ab`, on a toy 4-note corpus (real runs use a ~100k-note vault):
+
+```
+A/B RECALL: how should agent memory work
+(Direct=4 vector / Associative=+0 graph; Associative promoted 0 new notes into top-12, 0 of them via graph)
+
+--- DIRECT memory (vector) ---
+ 1. [  4.11] agent-memory
+ 2. [ -6.50] graph-rag
+ 3. [ -8.66] sqlite-ledger
+ 4. [ -9.73] cooking
+
+--- ASSOCIATIVE memory (vector+graph) ---
+ 1. [  4.11] agent-memory
+ 2. [ -6.50] graph-rag
+ 3. [ -8.66] sqlite-ledger
+ 4. [ -9.73] cooking
+```
+
+On a corpus this small the graph adds nothing — every note is already in the candidate
+pool. The interesting deltas appear at scale, and that is exactly what the `ab_recall`
+table in [`schema.sql`](schema.sql) accumulates evidence for.
+
+## Public benchmark — `bench/`
+
+Every number in the next section comes from our private vault, so nobody outside the lab can
+check it. [`bench/`](bench/README.md) is the reproducible half: a generated 202-note vault
+about a fictional lab, 91 questions in seven classes (including 22 whose answer is *not* in
+the vault), and three metrics that matter for agent memory: recall@k on the support notes,
+verbatim citation, and abstaining when the fact is missing.
+
+```bash
+python bench/run.py --system bm25          # one command, stdlib only
+python bench/validate.py                   # what CI runs on every result file
+```
+
+Our own baseline is on the [leaderboard](bench/LEADERBOARD.md) with its weak spots written
+out: on "what is the current deadline" questions it retrieves both decisions (R@5 1.00) and
+cites the superseded one 6 times out of 6; vector-only ranks ahead of graph mode on this
+vault (R@5 0.88 vs 0.85). Other memory systems (mem0, Letta, Khoj, plain RAG) can join the
+board with one adapter file and a pull request: [bench/CONTRIBUTING.md](bench/CONTRIBUTING.md).
+CI recomputes every submitted number from the per-question outputs, so a typed-in number
+cannot get onto the board.
+
+## Health check — `sgm-stats`
+
+Four numbers about the link graph itself, no model and no index needed. It reads the notes with
+the same filter and the same `[[wikilink]]` parser as recall, so it measures the graph `--graph`
+actually walks. Thresholds follow [second-brain-os metrics](https://github.com/undefined-ui/second-brain-os/blob/main/docs/05-graphs/metrics.md);
+each is a `--threshold-*` flag. Exit code 0 ok, 1 warn, 2 fail, so it can sit in cron.
+
+```text
+$ sgm-stats bench/vault --today 2026-10-20
+202 pages in bench/vault
+
+FAIL  orphan_rate       26.2%   53 of 202 pages have no inbound link
+OK    avg_degree         4.65   940 resolved links over 202 pages
+OK    main_component   100.0%   202 of 202 pages; 1 component
+WARN  stale_concepts   100.0%   12 of 12 concept pages older than 90 days (as of 2026-10-20)
+```
+
+The synthetic bench vault fails the orphan check for a plain reason: its 40 meeting and 12 decision notes link out and nothing
+links back to them. `--json` gives the same report with the first orphan and stale page names.
+
+## Measure before you swap — `eval/`
+
+Every "obvious" upgrade to a RAG pipeline — a newer embedder, a stronger reranker, hybrid
+BM25, a different chunker — is a hypothesis. Without a number on *your* corpus, swapping one
+in is superstition with a changelog entry. `eval/` is the smallest honest ruler we could
+build, and it needs no labelling budget and no LLM calls: **the wikilinks you already wrote
+are the relevance labels.**
+
+```bash
+python eval/run_eval.py --selftest                       # metrics only: no model, no index
+python eval/build_gold.py /path/to/notes --n-per-class 60   # -> eval/gold-<today>.jsonl (freeze it)
+python eval/run_eval.py --gold eval/gold-<today>.jsonl --sqlite
+```
+
+Four question classes, each probing a different part of the pipeline: `title` (a note's own
+title should find it), `body` (its first paragraph should find it), `bridge` (its first
+paragraph should surface the notes it `[[links]]` to — this is what the graph is *for*), and
+`temporal` (an outdated note's title should surface its replacement, via a
+`superseded_by: "[[newer-note]]"` frontmatter field). Every question is scored in both modes,
+vector-only and vector+graph, so "does the graph help?" stops being a matter of taste.
+
+`run_eval.py` imports `brain_ask.py` and calls the same functions the agent calls —
+`load_index`, `retrieve_candidates`, `expand_1hop`, `rerank_candidates` — so what you measure
+is what runs. An eval that re-implements the pipeline measures the re-implementation.
+`--sqlite` appends one row per class and mode to a `gold_eval` table, which is how a run six
+weeks from now can be diffed against today's.
+
+### What it cost us to find out
+
+Numbers from the home vault (~24k chunks, RU+EN, 2026-09-16), one frozen gold set of 184
+questions (60 title / 60 body / 60 bridge / 4 temporal), vector+graph mode:
+
+| class | Recall@12 | nDCG@12 |
+|---|---|---|
+| title | 0.933 -> **0.950** | 0.890 -> **0.895** |
+| body | 0.733 -> **0.800** | 0.600 -> **0.623** |
+| bridge | 0.251 -> **0.451** | 0.176 -> **0.279** |
+| temporal (n=4 — a smoke test, not a result) | 1.000 -> 1.000 | 0.531 -> 0.531 |
+
+Those title and temporal nDCG figures are **corrected**, and the correction is the most
+useful thing on this page. An external review panel reading this module found that `ndcg_at`
+credited a gold note twice when the same filename appeared twice in the ranking — and since
+wikilinks address notes by filename, that happens whenever two folders hold a `foo.md`.
+Reproduced immediately: `ndcg_at(['foo','foo'], ['foo'])` returned **1.63**, above the
+maximum the metric can have. It affected 4 of our 184 questions, which inflated title nDCG by
+0.031 and temporal by 0.108. Recall@12 and MRR were never affected (one is set-based, the
+other stops at the first hit), and because the same four questions inflated both runs, every
+before/after delta survived to the fourth decimal: title +0.0056 became +0.0055. The merge
+and revert decisions below therefore stand — but the absolute levels we would have quoted
+were wrong, and an eval nobody attacks keeps being wrong politely.
+
+Two changes earned that. Cleaning duplicate snapshot copies out of the index (27 095 ->
+24 216 chunks) moved the metric by exactly 0.0000 — it buys nothing on the ruler and stops
+stale copies eating retrieval slots, which is worth knowing precisely *because* the number is
+zero. The change that did move it gave the graph a vote in the **ordering** rather than in the
+candidate set: personalized PageRank over the wikilink graph, fused with the reranker by RRF,
+with the reranker's top 5 positions protected. The root cause was found by measuring instead
+of guessing — 97% of the correct `bridge` answers were *already in the candidate pool* and the
+cross-encoder was dropping them, because the relation is structural, not textual. Widening
+retrieval, the obvious fix, would have done nothing at all.
+
+That lane ships in the package as `src/sqlite_graph_memory/ppr.py`, **off by default**: turn it
+on with `SGM_PPR=1` or `sgm-ask --ppr`, and score it with `python eval/run_eval.py --gold ...
+--ppr`, which adds a third mode next to `vector` and `graph`. The numbers above were measured on
+the graph pool, so the matching command is `sgm-ask --graph --ppr`; `--ppr` alone reorders the
+vector pool, and `--ab` leaves the lane out so its A/B log stays vector against graph. Any failure in it falls back to
+the reranker's order, like the graph hop. Be clear about what that reproduces: the bridge
+numbers above came from the maintainer's home vault and home pipeline on 2026-09-16, and they
+have not been re-run from the published package. The code is the same algorithm with the same
+constants (alpha 0.85, 10 PPR files, top 5 protected), but your vault will give your numbers,
+and `bench/` does not score this lane yet.
+
+Seven other changes were rejected by the same ruler, under one rule fixed in advance:
+**a regression worse than 0.01 nDCG@12 on any class reverts the change.**
+
+| tried | verdict |
+|---|---|
+| BGE-M3 embedder | +0.005…0.007 on title/body/bridge, but temporal −0.011 and Russian −0.013 (English alone +0.080) -> **rejected** |
+| Qwen3-Embedding-0.6B | body Recall 0.767 -> 0.683; reindex 2863 s vs 333 s -> **rejected** |
+| bge-reranker-v2-m3 | −0.011…−0.018 nDCG on every class except English (+0.041) -> **rejected** |
+| Qwen3-Reranker-0.6B | title −0.111 nDCG at 12x the cost -> **rejected** |
+| BM25 + RRF hybrid | temporal −0.035 -> **merged switched off** (in the home pipeline, not in this package) |
+| heading-path prefix in every chunk | body −0.023, temporal −0.035 -> **reverted** |
+| `sqlite-vec` (vec0) | full scan 11.99 s vs 0.14 s for a plain SQLite table, and its ANN missed 1.2 hits of 60 -> vectors live in SQLite, **the extension does not** |
+| bi-temporal demotion of superseded notes | temporal +0.130 nDCG on a 41-question temporal set, but title −0.012 -> **merged behind a flag, default off** (in the home pipeline, not in this package) |
+
+None of those verdicts is a claim about the models. They are claims about *this corpus with
+this ruler*, which is the only kind of claim a swap decision actually needs — and the reason
+the module is here rather than in a blog post is that your corpus will disagree with ours.
+
+### What this eval cannot tell you
+
+Wikilink gold is weak supervision: a linked neighbour is not always the note that answers the
+question. `bridge` is built *from* links, so any method that walks links is flattered there —
+it measures "can the pipeline follow a connection", not "is this the right connection". One
+run scores one version of one index, and rebuilding the gold set between two runs makes the
+two numbers incomparable, which is the quiet way an eval starts lying. On 60 questions a
+±0.02 nDCG difference is inside the noise: we learned that by watching two candidate freezes
+of the same pipeline disagree on 33 questions out of 184.
+
+The metric can be broken on purpose. `EVAL_MUTANT=1` makes nDCG return a perfect 1.000 for
+everything, and `pytest tests/test_eval.py` **must go red** under it. A suite that stays green
+while the metric is broken never tested the metric.
+
+## Roadmap
+
+**Now — [latest release](https://github.com/tonydzi/sqlite-graph-memory/releases/latest)** (v0.3.1 on PyPI and in the MCP Registry as of 2026-10-19).
+The pilot as it runs daily: retrieval pipeline, per-turn ledger and A/B telemetry, all in
+`brain_ask.py` and `turnstate_hook.py`, plus the bi-temporal design note. Known defects live in
+the [tracker](https://github.com/tonydzi/sqlite-graph-memory/issues) rather than in footnotes
+here, and this file deliberately names no issue numbers: they get closed, the prose around them
+does not notice, and that drift is the defect this paragraph used to carry twice over.
+
+**Next:**
+
+- **The public benchmark** now exists as [`bench/`](bench/README.md) (`bench-v0.1`): a
+  synthetic 202-note vault, 91 questions, a leaderboard that other systems can join, and CI that
+  reproduces the numbers. Still missing: the full ablation matrix (hops × seed caps ×
+  neighbour caps × rerank pool × gating policy). `bench/` has its first two cells, 0 hops and
+  1 hop. The interesting question was never "does graph help" but
+  *for which query classes*; `eval/` answers that per class instead of per intuition.
+- **Bi-temporal edges** — design note [`docs/bitemporal.md`](docs/bitemporal.md). When you
+  materialize the graph instead of parsing it at query time, give every edge a validity
+  window (`valid_from` / `valid_to` / `observed_at`) so a rebuild *closes* superseded facts
+  instead of deleting them: history is kept, recall prefers the present, and `as_of` queries
+  can reconstruct the past. Non-destructive aging by confidence decay. The day-1 A/B result
+  — context size ~unchanged, retrieved candidates ~60% fresher by mean age — is written up
+  with its caveats in `docs/bitemporal.md`: the volume win is longitudinal, so that is one
+  day on one corpus, not a benchmark.
+- A write-up on the pattern ("Graph RAG without graph extraction") is in progress.
+
+Every noticeable change ships as a new release, so the
+[release feed](https://github.com/tonydzi/sqlite-graph-memory/releases) — not
+the commit graph — is where you can see whether "pilot" has stopped being the right word.
+
+## Models
+
+- Embeddings: `intfloat/multilingual-e5-base` (multilingual; the home corpus is RU+EN)
+- Reranker: `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`
+
+Both are set as constants (`E5_MODEL`, `RERANK_MODEL`) in `brain_ask.py` and small enough
+to run on a laptop GPU; swap freely, since nothing in the pipeline depends on these
+specific models.
+
+## Maintainers
+
+- **Anton Dziatkovskii** ([@tonydzi](https://github.com/tonydzi)): retrieval pipeline, ledger, bench, releases.
+- **Vardhman Gupta** ([@Kaap10](https://github.com/Kaap10)): the MCP server (`sgm-mcp`, PRs #8, #10, #14) and its tests; reviews on `mcp_server.py` route to him via CODEOWNERS.
+
+## AI contributors
+
+This project is built by a human + AI team, and the git log says so: Claude
+writes most of the code, Codex and Grok review it, Gemini feeds the research.
+Each is credited on a commit **only if its output changed that commit's
+content** — no decorative credits. Lab-wide policy, one source for every repo:
+[AI-CONTRIBUTORS.md](https://github.com/tonydzi/.github/blob/main/AI-CONTRIBUTORS.md).
+
+## Cite this work
+
+The paper about this system — retrieval design, pilot telemetry, and the query-class-stratified evaluation protocol — is published: [DOI 10.5281/zenodo.22639718](https://doi.org/10.5281/zenodo.22639718) (preprint, CC BY 4.0). Machine-readable citation: [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" button). Academic identity: Anton Dzyatkovsky publishes as **Anton Dziatkovskii** ([ORCID 0000-0001-7408-3054](https://orcid.org/0000-0001-7408-3054)).
+
+## License
+
+MIT
+
+<!-- CONTACT-FOOTER -->
+## Contact
+
+Questions, war stories, or you want to run this on your own fleet:
+
+- 👤 Author: **Anton Dziatkovskii** — Telegram [@tonydzi](https://t.me/tonydzi) · WhatsApp [+1 341 222 9178](https://wa.me/13412229178) · X [@Tony_Stef_](https://x.com/Tony_Stef_)
+- 📣 Channels: [@ClawRus](https://t.me/ClawRus) (RU) · [@ClawEng](https://t.me/ClawEng) (EN)
+- 🌐 [palo-alto.ai](https://palo-alto.ai) · [Palo Alto AI Research Lab](https://github.com/tonydzi)
+- 🧪 **Engineers: want to test-drive this setup?** Message me — I hand out free starter seeds to engineers who test and report back.
+
+## Contributors welcome — and there is a queue
+
+Issues labelled [`accepted`](https://github.com/tonydzi/sqlite-graph-memory/issues?q=is%3Aissue+is%3Aopen+label%3Aaccepted)
+are scoped, free to take, and nobody is on them. Comment **"claiming this"** — no permission needed —
+and it is yours for 7 days. New here? Start with
+[`good first issue`](https://github.com/tonydzi/sqlite-graph-memory/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
+
+**You keep the copyright to your code.** No CLA, no assignment, ever — your contribution goes in
+under this repo's existing license, the same terms as ours. We answer every issue and PR within
+48 hours, including "no, and here is why"; our silence is our bug, so ping the thread.
+
+Full deal: [CONTRIBUTING.md](https://github.com/tonydzi/.github/blob/main/CONTRIBUTING.md)
+
+---
+
+<!--ecosystem-map:start-->
+
+## 🧩 One piece of a working system
+
+This repository is one piece lifted out of a live operation: one engineer running a fleet of
+machines, built with Claude as implementation collaborator; the machines reach consensus with
+each other and wake the human only for money or the irreversible. It was extracted after it
+survived production, not written as a demo — and it runs on its own: nothing here phones home
+to the rest.
+
+**See how the whole thing fits together → [SYSTEM.md](https://github.com/tonydzi/tonydzi/blob/main/SYSTEM.md)**
+
+Its closest neighbours in the **memory** layer: [`second-brain-starter-kit`](https://github.com/tonydzi/second-brain-starter-kit) · [`voice2brain`](https://github.com/tonydzi/voice2brain)
+
+<!--ecosystem-map:end-->
+
+<!-- READ-WITH-AI:START (generated by read_with_ai.py - do not hand-edit) -->
+
+### READ THIS WITH AI
+
+One click and an agent reads the repo, pulls out the patterns and helps you apply them to your own work.
+
+<a href="https://chatgpt.com/codex?prompt=Read%20this%20repo%3A%20https%3A%2F%2Fgithub.com%2Ftonydzi%2Fsqlite-graph-memory%20%28%E2%80%9Csqlite-graph-memory%E2%80%9D%20-%20Graph%20RAG%20on%20SQLite%20for%20AI%20agents%3A%20vector%20retrieval%20%2B%20hand-curated%20wikilink%20graph%20%2B%20cross-encoder%20rerank%2C%20with%20a%20zero-token%20per-turn%20memory%20ledger.%20Working%20pilot%29.%20Work%20out%20what%20problem%20it%20actually%20solves%2C%20pull%20out%20the%20reusable%20patterns%20and%20help%20me%20apply%20them%20to%20my%20own%20setup.%20Start%20by%20asking%20what%20I%20am%20working%20on."><img alt="Codex - open" src="https://img.shields.io/badge/Codex-open-000000?style=for-the-badge&logo=openai&logoColor=white"></a> <a href="https://chatgpt.com/?q=Read%20this%20repo%3A%20https%3A%2F%2Fgithub.com%2Ftonydzi%2Fsqlite-graph-memory%20%28%E2%80%9Csqlite-graph-memory%E2%80%9D%20-%20Graph%20RAG%20on%20SQLite%20for%20AI%20agents%3A%20vector%20retrieval%20%2B%20hand-curated%20wikilink%20graph%20%2B%20cross-encoder%20rerank%2C%20with%20a%20zero-token%20per-turn%20memory%20ledger.%20Working%20pilot%29.%20Work%20out%20what%20problem%20it%20actually%20solves%2C%20pull%20out%20the%20reusable%20patterns%20and%20help%20me%20apply%20them%20to%20my%20own%20setup.%20Start%20by%20asking%20what%20I%20am%20working%20on."><img alt="ChatGPT - open" src="https://img.shields.io/badge/ChatGPT-open-10a37f?style=for-the-badge&logo=openai&logoColor=white"></a> <a href="https://claude.ai/new?q=Read%20this%20repo%3A%20https%3A%2F%2Fgithub.com%2Ftonydzi%2Fsqlite-graph-memory%20%28%E2%80%9Csqlite-graph-memory%E2%80%9D%20-%20Graph%20RAG%20on%20SQLite%20for%20AI%20agents%3A%20vector%20retrieval%20%2B%20hand-curated%20wikilink%20graph%20%2B%20cross-encoder%20rerank%2C%20with%20a%20zero-token%20per-turn%20memory%20ledger.%20Working%20pilot%29.%20Work%20out%20what%20problem%20it%20actually%20solves%2C%20pull%20out%20the%20reusable%20patterns%20and%20help%20me%20apply%20them%20to%20my%20own%20setup.%20Start%20by%20asking%20what%20I%20am%20working%20on."><img alt="Claude - open" src="https://img.shields.io/badge/Claude-open-d97757?style=for-the-badge&logo=anthropic&logoColor=white"></a>
+
+<details>
+<summary>Copy the prompt (works in any agent: Gemini, Grok, a local model, your own CLI)</summary>
+
+```text
+Read this repo: https://github.com/tonydzi/sqlite-graph-memory (“sqlite-graph-memory” - Graph RAG on SQLite for AI agents: vector retrieval + hand-curated wikilink graph + cross-encoder rerank, with a zero-token per-turn memory ledger. Working pilot). Work out what problem it actually solves, pull out the reusable patterns and help me apply them to my own setup. Start by asking what I am working on.
+```
+
+</details>
+
+<sub>— TonyDzi, Palo Alto AI Research Lab · second brain, agent coordination, persistent memory: github.com/tonydzi</sub>
+
+<!-- READ-WITH-AI:END -->

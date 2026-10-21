@@ -7,7 +7,7 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-fe5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org)
 [![License](https://img.shields.io/github/license/jessechumo/Wera)](LICENSE)
 
-**Wera** (Swahili slang for a job or gig) is a self-hosted job radar. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Eightfold, and amazon.jobs) for 570+ companies across 28 industries, filters them with configurable rules, scores each one against your resume with an LLM from any OpenAI-compatible provider (presets for [Coral Bricks](https://www.coralbricks.ai) and [DeepInfra](https://deepinfra.com)), and serves the results through a REST API. Wera does not apply on your behalf. You review the matches and apply yourself.
+**Wera** (Swahili slang for a job or gig) is a self-hosted job radar. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Oracle Recruiting Cloud, Workable, Rippling, Eightfold, and amazon.jobs) for 5,100+ companies across 30 industries (tech firms, but also hospitals, schools, retailers, restaurants and nonprofits), filters them with configurable rules, scores each one against your resume with an LLM from any OpenAI-compatible provider (presets for [Coral Bricks](https://www.coralbricks.ai) and [DeepInfra](https://deepinfra.com)), and serves the results through a REST API. Wera does not apply on your behalf. You review the matches and apply yourself.
 
 The dashboard lives in [wera-frontend](https://github.com/jessechumo/Wera-Frontend), and the Chrome extension (save jobs from any page, cover letters, tailored resumes, filling applications) in [wera-extension](https://github.com/jessechumo/wera-extension).
 
@@ -33,10 +33,10 @@ Everything runs with Docker Compose on one host (see [deploy/hetzner](deploy/het
 4. **Rank locally** with TF-IDF against the user's profile. These estimates show a new user ranked matches within seconds of signing up.
 5. **Extract shared facts** once per posting with the LLM: seniority, years required, sponsorship (the quote must appear verbatim in the posting), work mode, skills and a short digest. Every user reuses them.
 6. **Exclude on facts** at no cost: jobs needing too many years, refusing sponsorship, outside the US or too senior never reach a per-user call.
-7. **Rank by embeddings**: each posting's facts and each profile are embedded once by a small local model (the `wera-embed` container, no API cost), and every remaining job is ranked by similarity.
+7. **Rank without AI**: each posting's facts and each profile are embedded once by a local model (the `wera-embed` container, no API cost). Every remaining job is ranked by a blend of that embedding similarity (counted double), word matching between the facts and the profile's roles and skills, and the share of required skills the profile names, minus a penalty when the posting asks for more years than the user accepts. Postings without facts yet are ranked by word matching on their text.
 8. **Score fit** per user, for the best-ranked jobs only: at most `SCORES_PER_DAY` per user (default 100, at most `SCORES_PER_RUN` per run once their profile has scores; users away for a week get just enough for their digest). The call sends a compact job card plus the cached profile and returns only a score, a verdict and one sentence; matched and missing skills are worked out in code. Jobs below the cut keep their estimate, and opening one scores it immediately.
 
-Measured on the development data: a new account is ready in about 5 seconds. Embedding ranking puts 83% of the jobs the LLM rates 80+ in a user's top fifth (TF-IDF: 47%), so the score limit keeps nearly all strong matches. A fit call costs about $0.00018 (it was $0.00057 before the shorter reply and cache warm-up), and with the limit a user's scoring costs roughly a tenth of scoring every candidate.
+Measured on the development data: a new account is ready in about 5 seconds. On 903 AI-scored jobs from six profiles, the blend puts 60% of the jobs the AI rates 70+ in a user's top fifth (bge-small embeddings alone: 43%), and its order agrees with the AI's (Spearman 0.66, against 0.45). The blend weights were chosen by leave-one-user-out validation. A fit call costs about $0.00018 (it was $0.00057 before the shorter reply and cache warm-up), and with the limit a user's scoring costs roughly a tenth of scoring every candidate.
 
 ## Features
 
@@ -92,7 +92,7 @@ AI_MODEL=deepseek-ai/DeepSeek-V4.1-Flash   # optional: each preset has a default
 Wera is driven by configuration and per-user profiles:
 
 - `config/companies.yaml`: the companies to watch, each tagged with an industry from `config/industries.yaml`
-- `config/roles.yaml`: the catalog of role families and seniority levels users pick from, plus location and sponsorship rules
+- `config/roles.yaml`: the catalog of role families and seniority levels users pick from, plus location and sponsorship rules. Families are grouped into career fields (technology, healthcare and nursing, business, education, creative, engineering and science, trades and services), so a nurse picks "Registered nursing (RN)" the way an engineer picks "Site reliability"
 - Each user's profile (stored in the database): the text the LLM scores against and their filter preferences
 
 New users build their profile in the dashboard: they upload a resume PDF (or paste the text), answer a short questionnaire (experience, work authorization, locations, work modes, industries, target roles) and pick role families and seniority levels. The LLM drafts the profile from the resume and answers, the user reviews and edits it, and saving it filters and ranks their jobs on the spot.
@@ -215,9 +215,10 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org) (`fea
 ## Extending
 
 - **Add a company:** run `wera discover "Name"`, add it to `config/companies.yaml`, then run `wera companies validate` and `wera pipeline`.
-- **Add a role type:** add a family and patterns to `config/roles.yaml`; users can then pick it.
+- **Companies found by users:** when someone adds a job (dashboard or extension) from a Greenhouse, Lever, Ashby, SmartRecruiters, Workday, Oracle, Workable or Rippling board that no company has, Wera checks the board once and, if it has open jobs, fetches it every run from then on. These rows have `added_at` set in the `companies` table; set `enabled = false` there to stop one. If `companies.yaml` later lists the same board, the YAML entry takes it over.
+- **Add a role type:** add a family with its `field` and title patterns to `config/roles.yaml`; users can then pick it. If a word means seniority in one career but not another ("Staff Nurse", "IV Therapy"), add it to that level's `except` list.
 - **Add an industry:** add it to `config/industries.yaml` and tag companies with it.
-- **Add a company on Workday:** its token is `tenant.wdN/site` from the career site URL, e.g. `https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite` is `nvidia.wd5/NVIDIAExternalCareerSite`. SmartRecruiters takes the company identifier, Eightfold `host/domain`.
+- **Add a company on Workday:** its token is `tenant.wdN/site` from the career site URL, e.g. `https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite` is `nvidia.wd5/NVIDIAExternalCareerSite`. SmartRecruiters takes the company identifier, Eightfold `host/domain`. Oracle Recruiting Cloud takes `host/site` from `https://<host>.oraclecloud.com/hcmUI/CandidateExperience/en/sites/<site>`, e.g. `jpmc.fa/CX_1001`; Workable and Rippling take the account or board slug from `apply.workable.com/<slug>` and `ats.rippling.com/<slug>`.
 - **Add a job board provider:** implement the `Source` interface in `internal/sources` (`ConditionalSource` when it supports ETags, `DetailSource` when the list has no descriptions) and register it.
 - **Add interview questions:** insert rows into `interview_questions` (four choices, the index of the answer, and an explanation).
 
@@ -240,7 +241,7 @@ internal/notify       Account and job emails: verification, reset, digests, the 
 internal/h1b          H-1B disclosure files: streaming reader, wage normalization, employer name matching
 internal/relevance    Local TF-IDF ranking (estimated scores)
 internal/scoring      OpenAI-compatible LLM client, prompts, facts, fit, cost accounting
-internal/sources      Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Eightfold, Amazon adapters
+internal/sources      Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Oracle, Workable, Rippling, Eightfold, Amazon adapters
 internal/store        PostgreSQL repository (pgx)
 internal/testutil     Test database and fixtures
 migrations/           Embedded SQL migrations (goose)
@@ -249,6 +250,6 @@ docs/                 Architecture and pipeline diagrams (Excalidraw sources in 
 
 ## Stack
 
-Go 1.27, chi, pgx, PostgreSQL 16, goose, any OpenAI-compatible LLM (default Coral Bricks `deepseek-v4.1-flash-fast`; DeepInfra `deepseek-ai/DeepSeek-V4.1-Flash`), a local embedding model (bge-small), Prometheus, Docker Compose, GitHub Actions, release-please.
+Go 1.27, chi, pgx, PostgreSQL 16, goose, any OpenAI-compatible LLM (default Coral Bricks `deepseek-v4.1-flash-fast`; DeepInfra `deepseek-ai/DeepSeek-V4.1-Flash`), a local embedding model (Snowflake Arctic Embed M v1.5), Prometheus, Docker Compose, GitHub Actions, release-please.
 
 See `PLAN.md` for the original design.

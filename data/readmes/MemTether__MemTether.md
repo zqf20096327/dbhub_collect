@@ -140,9 +140,9 @@ mcp-name: io.github.lanbass869-cell/memtether
 ---
 
 
-- [Reproduce MemTether](docs/site/en/reproduce.html) - Every claim has a command
-- [Founding 10 Challenge](docs/site/en/challenge.html) - 10 spots, 14 days, honest outcomes
-- [Live site](https://lanbass869-cell.github.io/MemTether/en/) (when GitHub Pages is enabled)
+- [Reproduce MemTether](https://memtether.github.io/MemTether/site/en/reproduce.html) - Every claim has a command
+- [Founding 10 Challenge](https://memtether.github.io/MemTether/site/en/challenge.html) - 10 spots, 14 days, honest outcomes
+- [Docs (zh)](https://memtether.github.io/MemTether/site/zh/) - Reproduce / Challenge in Chinese
 
 ## Quick Start
 
@@ -434,8 +434,10 @@ memtether dashboard                    # Web UI
 MemTether ranks **4/10** on token F1 — ahead of Graphiti, mem0, SimpleMem, MemU
 and Hindsight, behind proposition-indexed PropMem and chunk-based OpenClaw.
 Per-category: multi-hop 0.556, open-domain 0.820, factual 0.357, temporal 0.264,
-inferential 0.206. Reproduce: see `_dev/memeval/src/agents_memory/systems/memtether.py`
-(adapter) and `scripts/run_full_benchmark.py --systems memtether`.
+inferential 0.206. Reproduce: the MemTether adapter for the MemEval /
+LoCoMo harness ships in this repo at `scripts/bench_memtether_adapter.py` —
+it imports the published `memtether` package (no local path injection), so
+`pip install memtether` plus the MemEval harness is all that is required.
 
 </details>
 

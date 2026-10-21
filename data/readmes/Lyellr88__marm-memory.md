@@ -25,6 +25,13 @@
 
 </div>
 
+## IMPORTANT
+> Project Status: Brief Personal Pause
+>
+> I took a short personal break from active development to focus on matters outside the project. This project isn't abandoned, and I plan to return soon to keep building and refining it.
+>
+> Thank you for your patience, support, and continued interest. I’ll resume work soon and share updates as progress continues.
+
 ## Table of Contents
 
 - [Quick Start](#quick-start)
@@ -57,7 +64,11 @@ marm-memory init --g-claude --g-codex --g-antigravity
 
 > **"Use the marm-init skill to set up MARM."**
 
-1. Interact: Your agent will handle the entire setup (Python/Docker, HTTP/STDIO, keys, and client configs) interactively right inside your chat.
+1. Interact: Your agent will handle the entire setup (Python/Docker, HTTP/STDIO, keys, and client configs) interactively right inside your c
+
+[...截断...]
+
+hat.
 
 **Manual setup**
 
@@ -67,11 +78,7 @@ Prefer to wire it up yourself:
 
 | If you are... | Start the server | Connect your MCP client |
 | --------------- | ------------------ | ------------------------- |
-| **Solo devel
-
-[...截断...]
-
-oper / researcher** | `marm-memory start` | `"agent" mcp add --transport http marm-memory http://localhost:8001/mcp` |
+| **Solo developer / researcher** | `marm-memory start` | `"agent" mcp add --transport http marm-memory http://localhost:8001/mcp` |
 | **Private local STDIO user** | `marm-mcp-stdio` | `"agent" mcp add --transport stdio marm-memory-stdio marm-mcp-stdio` |
 | **Multiple agents sharing memory** | `marm-memory start --profile swarm` | `"agent" mcp add --transport http marm-memory http://localhost:8001/mcp` |
 | **Private high-throughput swarm** | `marm-memory start --profile swarm-max` | `"agent" mcp add --transport http marm-memory http://localhost:8001/mcp` |
@@ -105,5 +112,4 @@ All 16 tools work over HTTP and STDIO. Your agents share the same local memory a
 | **Intelligence layer** | FTS filter, semantic re-rank, bounded semantic fallback, auto-classification, write-time consolidation, and compaction candidates | Keeps recall useful as memory grows instead of letting duplicates pile up |
 | **Code graph layer** | Repo indexing, symbol lookup, call tracing, architecture overview, and change-impact analysis | Gives agents project structure without rereading the whole codebase |
 | **Concept graph layer** | Entity and relationship extraction from stored memories, with links back into the code graph | Connects decisions, errors, tools, and people across sessions instead of leaving them as flat text |
-| **Token layer** | Lightweight 8-tool core surface (16 total with bundled graph tools), semantic re-rank before retrieval, and write-time deduplication | Reduces tokens sent to the model on every recall and cost stays predictable as memory scales |
-| **Deployment layer** | Pip, Docker, STDIO, HTTP, and managed `swarm`, `swarm-max`, and `trusted` profiles | Lets you run private local memo
+| **Token layer** | 

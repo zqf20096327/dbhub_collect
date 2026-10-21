@@ -3,8 +3,21 @@
 [![Python](https://img.shields.io/badge/Python-3.10-3776AB.svg?style=flat&logo=python&logoColor=yellow)](https://www.python.org/)
 [![Google Colab](https://img.shields.io/badge/Google%20Colab-Notebook-orange.svg?logo=google-colab&logoColor=white)](https://colab.research.google.com/)
 [![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626.svg?style=flat&logo=jupyter&logoColor=white)](https://jupyter.org/)
+![Pandas](https://img.shields.io/badge/Pandas-2.0%2B-green)
+![NumPy](https://img.shields.io/badge/NumPy-1.24%2B-orange)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-3.7%2B-11557c)
+![Seaborn](https://img.shields.io/badge/Seaborn-0.12%2B-4c72b0)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Machine%20Learning-F7931E?labelColor=1E293B&logo=scikitlearn&logoColor=white)
+![Looker Studio](https://img.shields.io/badge/Looker%20Studio-4285F4?logo=google&logoColor=white)
 [![MySQL Version](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/)
 [![Database Tool](https://img.shields.io/badge/DBeaver-Latest-orange.svg)](https://dbeaver.io/)
+![Google Sheets](https://img.shields.io/badge/Google%20Sheets-Advanced-34A853?labelColor=1E293B&logo=googlesheets&logoColor=white)
+![Problem Solving](https://img.shields.io/badge/Problem%20Solving-Framework-F59E0B?labelColor=1E293B&logo=target&logoColor=white)
+![Statistics](https://img.shields.io/badge/Statistics-Expert-8B5CF6?labelColor=1E293B&logo=scipy&logoColor=white)
+![EDA](https://img.shields.io/badge/EDA-Exploratory-EC4899?labelColor=1E293B&logo=plotly&logoColor=white)
+![Statistics](https://img.shields.io/badge/Statistics-Expert-8B5CF6?labelColor=1E293B&logo=scipy&logoColor=white)
+![Data Cleaning](https://img.shields.io/badge/Data%20Cleaning-Advanced-10B981?labelColor=1E293B&logo=pandas&logoColor=white)
+![Metrics](https://img.shields.io/badge/Metrics-Analytics-3B82F6?labelColor=1E293B&logo=googleanalytics&logoColor=white)
 <p align="left">
   <img src="poster-design-data-analyst.jpg" alt="data-analyst-poster" width="925">
 </p>

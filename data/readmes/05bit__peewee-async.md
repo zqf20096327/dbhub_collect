@@ -11,7 +11,7 @@ ORM powered by **[asyncio](https://docs.python.org/3/library/asyncio.html)**.
 Overview
 --------
 
-* Requires Python 3.10+
+* Requires Python 3.11+
 * Has support for PostgreSQL via [aiopg](https://github.com/aio-libs/aiopg) and [psycopg3](https://github.com/psycopg/psycopg)
 * Has support for MySQL via [aiomysql](https://github.com/aio-libs/aiomysql)
 * Has support for Sqlite via [aiosqlite](https://github.com/omnilib/aiosqlite)
@@ -65,7 +65,7 @@ import peewee_async
 
 # Nothing special, just define model and database:
 
-database = peewee_async.PooledPostgresqlDatabase(
+database = peewee_async.PostgresqlDatabase(
     database="db_name",
     user="user",
     host="127.0.0.1",
@@ -83,8 +83,9 @@ class TestModel(peewee_async.AioModel):
 
 # Look, sync code is working!
 
-TestModel.create_table(True)
-TestModel.create(text="Yo, I can do it sync!")
+with database.allow_sync():
+    TestModel.create_table(True)
+    TestModel.create(text="Yo, I can do it sync!")
 database.close()
 
 # No need for sync anymore!

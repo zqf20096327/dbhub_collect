@@ -54,6 +54,17 @@ SlackerDB is aimed at teams that want DuckDB's analytical performance but need i
     #        rebuild everything from source.
 ....
 
+TIP: On a zh-CN Windows box building with **JDK 8~17**, add
+`MAVEN_OPTS=-Dfile.encoding=UTF-8` (JDK 18+ already defaults to UTF-8, nothing to do).
+Without it the d
+
+[...截断...]
+
+ocumentation PDF step prints one extra line,
+`error reading or parsing <M2_HOME>/conf/settings.xml`: it comes from the `jar-dependencies`
+gem inside JRuby reading the (UTF-8) Maven settings with the platform GBK charset.
+It is **harmless** (the PDF is produced as usual), but it reads like a build error.
+
 ==== Start db server
 
 ....
@@ -63,11 +74,7 @@ SlackerDB is aimed at teams that want DuckDB's analytical performance but need i
 ==== Stop db server
 
 ....
-    java -jar dbserver/targe
-
-[...截断...]
-
-t/slackerdb-dbserver-0.2.1-standalone.jar stop
+    java -jar dbserver/target/slackerdb-dbserver-0.2.1-standalone.jar stop
 ....
 
 ==== Check db status
@@ -191,15 +198,4 @@ max_workers=
 
 # Business processing threads (executes SQL off the Netty I/O threads)
 # Default: -1 = follow max_connections (one business thread per session)
-#   0 = disabled (run SQL on the I/O threads; a slow query will block other
-#       connections sharing the same I/O thread)
-#  >0 = explicit thread count
-# Note: connections sharing one business thread still queue behind each other.
-# The number of connections affected by a slow query is about
-# (connections / business_threads - 1), so keep this close to the number of
-# concurrently active sessions.
-business_threads=
-
-# Database engine threads
-# Default: memory_limit (GB) / 10 (minimum 1)
-# Recommenda
+#   0 = disabled (run SQL on the I/O t

@@ -73,9 +73,9 @@ You can download pre-compiled binaries for Linux from the [GitHub Releases page]
 
 1.  **Download the latest release:**
 
-    For example, to download version `v0.7.3`:
+    For example, to download version `v0.8.0`:
     ```bash
-    wget https://github.com/iamd3vil/blobasaur/releases/download/v0.7.3/blobasaur-Linux-musl-x86_64.tar.gz
+    wget https://github.com/iamd3vil/blobasaur/releases/download/v0.8.0/blobasaur-Linux-musl-x86_64.tar.gz
     ```
 
 2.  **Extract the archive:**
@@ -110,7 +110,7 @@ docker run -d \
 
 Available tags:
 - `latest` - Latest stable release
-- `x.y.z` - Specific version (e.g., `0.7.3`)
+- `x.y.z` - Specific version (e.g., `0.8.0`)
 - `x.y` - Latest patch for minor version (e.g., `0.2`)
 
 ### Prerequisites
@@ -257,6 +257,7 @@ addr = "0.0.0.0:6379"              # Server bind address
 async_write = false                 # Enable async writes
 batch_size = 1                      # Write batch size
 batch_timeout_ms = 0               # Batch timeout in milliseconds
+write_queue_capacity = 1024         # Write ops each shard can queue
 shutdown_timeout_secs = 30          # Max time to drain writes on shutdown
 max_request_size_mb = 100           # Max size of one request (command + all arguments)
 cleanup_chunk_size = 1000           # Max expired rows deleted per cleanup statement
@@ -539,17 +540,17 @@ Give the process enough time to drain before your orchestrator sends `SIGKILL`. 
 
 ### Write Batching
 
-Improves throughput by batching multiple operations:
+Each shard's writer commits queued writes together, in one transaction:
 
 ```toml
-batch_size = 50          # Operations per batch
-batch_timeout_ms = 10    # Max wait time for batch
+batch_size = 50              # Max operations per transaction
+batch_timeout_ms = 0         # Max wait for more operations after a batch's first (default 0)
+write_queue_capacity = 1024  # Operations each shard can queue (default 1024)
 ```
 
-**Benefits:**
-- Higher write throughput
-- Reduced SQLite transaction overhead
-- Better resource utilization
+With `batch_timeout_ms = 0`, the writer commits whatever is queued as soon as it's free, so batches grow by themselves under load. A non-zero timeout makes it wait up to that long after a batch's first operation for more, until the batch is full. That trades latency for fewer commits: sync writes reply up to `batch_timeout_ms` later (a client sending sync writes one at a time gets at most one per `batch_timeout_ms`), and async writes stay uncommitted that much longer, so a crash loses more of them. It pays off mainly with `synchronous = "FULL"`, where every commit fsyncs. With the default `NORMAL`, commits are cheap and a timeout rarely helps.
+
+When a shard's queue is full, writes to that shard wait for room, async ones included.
 
 ### Asynchronous Writes
 

@@ -200,6 +200,38 @@ Then put the scripts inside the path:
 
 This is useful for things like creating a dedicated role per extension, granting privileges as needed to that role, etc.
 
+### Default Extension Install Schema
+
+By default, `CREATE EXTENSION` without a `SCHEMA` clause installs the extension into the first schema on the `search_path` (usually `public`). You can change this default:
+
+```
+supautils.default_extension_install_schema = 'extensions'
+```
+
+Once set, schema-less creates land in the configured schema:
+
+```sql
+postgres=> create extension hstore;
+CREATE EXTENSION
+postgres=> \dx hstore
+                 List of installed extensions
+  Name  | Version |   Schema   |             Description
+--------+---------+------------+--------------------------------------
+ hstore | 1.8     | extensions | data type for storing sets of (key, value) pairs
+(1 row)
+```
+
+This is a default, not an enforcement — it only applies when nothing else specifies a schema. In order of precedence:
+
+1. an explicit `CREATE EXTENSION ... SCHEMA <schema>` clause always wins
+2. a `schema` pinned in the extension's control file always wins
+3. an entry in `supautils.extensions_parameter_overrides` always wins
+4. otherwise, the extension is installed into `supautils.default_extension_install_schema`
+
+The default also applies to extensions installed indirectly via `CASCADE` and to pg_tle extensions. The session's `search_path` is never affected, even if the statement errors.
+
+If the configured schema does not exist, the setting is ignored and creation behaves normally. The setting requires superuser to change.
+
 ### Extensions Parameter Overrides
 
 You can override `CREATE EXTENSION` parameters like so:
@@ -322,6 +354,23 @@ supautils.reserved_memberships = 'pg_read_server_files'
 ```
 
 This is also useful to limit memberships to the [Reserved Roles](#reserved-roles).
+
+### Supautils Version
+
+If built against postgres 17 or below the version of supautils can be accessed using the 
+`supautils.version` read-only config item. It can be seen using the SHOW command as below.
+
+```
+SHOW supautils.version;
+```
+
+For postgres versions 18 and above this config is marked as deprecated as version can be 
+accessed through postgres natively via the `pg_get_loaded_modules` function as below.
+
+```
+SELECT * 
+FROM pg_get_loaded_modules();
+```
 
 ### Enhanced hints
 

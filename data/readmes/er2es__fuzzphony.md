@@ -1,0 +1,312 @@
+# Fuzzphony
+
+[![CI](https://github.com/er2es/fuzzphony/actions/workflows/ci.yml/badge.svg)](https://github.com/er2es/fuzzphony/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/er2es/fuzzphony/graph/badge.svg)](https://codecov.io/gh/er2es/fuzzphony)
+[![PHPStan level max](https://img.shields.io/badge/PHPStan-level%20max-brightgreen)](https://github.com/er2es/fuzzphony/blob/main/phpstan.neon.dist)
+[![Mutation score](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fer2es%2Ffuzzphony%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/er2es/fuzzphony/main)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/er2es/fuzzphony/badge)](https://scorecard.dev/viewer/?uri=github.com/er2es/fuzzphony)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/14933/badge)](https://www.bestpractices.dev/projects/14933)
+
+[![Packagist Version](https://img.shields.io/packagist/v/fuzzphony/fuzzphony)](https://packagist.org/packages/fuzzphony/fuzzphony)
+[![PHP](https://img.shields.io/packagist/dependency-v/fuzzphony/fuzzphony/php)](https://packagist.org/packages/fuzzphony/fuzzphony)
+[![PostgreSQL 15 | 16 | 17 | 18](https://img.shields.io/badge/PostgreSQL-15%20%7C%2016%20%7C%2017%20%7C%2018-336791?logo=postgresql&logoColor=white)](https://github.com/er2es/fuzzphony/blob/main/.github/workflows/ci.yml)
+[![Symfony 7.4 LTS | 8.1](https://img.shields.io/badge/Symfony-7.4%20LTS%20%7C%208.1-000000?logo=symfony)](https://github.com/er2es/fuzzphony/blob/main/.github/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/er2es/fuzzphony/blob/main/LICENSE)
+
+**Fuzzy search, in perfect harmony with your database.**
+
+Fuzzphony is a PostgreSQL-native search library for PHP and Symfony: typo-tolerant,
+accent-insensitive, ranked full-text search with filters and a query language. It never alters
+your tables. The index lives in a sidecar table next to them, in the database you already run.
+There is no Elasticsearch, Meilisearch or other service to add.
+
+```php
+$result = $fuzzphony->in(Product::class)
+    ->query('wireles mouse -cable')          // typo, exclusion
+    ->where('price', '<=', 20_000)
+    ->where('in_stock', true)
+    ->highlight('name')
+    ->get();
+
+foreach ($result as $hit) {
+    echo $hit->id, ' ', $hit->score, ' ', $hit->highlights['name'];   // "<mark>Wireless</mark> mouse"
+}
+```
+
+Status: v0.8. The API may still change before 1.0. Breaking changes are listed in the
+[CHANGELOG](https://github.com/er2es/fuzzphony/blob/main/CHANGELOG.md) and explained in
+[UPGRADE.md](https://github.com/er2es/fuzzphony/blob/main/UPGRADE.md).
+
+## Try the demo
+
+A full Symfony app on a seeded product catalogue, in one command:
+
+```bash
+git clone https://github.com/er2es/fuzzphony
+cd fuzzphony/demo && docker compose up --build    # http://localhost:8000
+```
+
+On **Windows**, newer Docker Compose versions ask for a build privilege on every build; one environment variable stops that
+(`cmd`: `setx` keeps it for every new window, `set` only for the current one):
+
+```bat
+:: cmd
+setx BUILDX_BAKE_ENTITLEMENTS_FS 0
+set BUILDX_BAKE_ENTITLEMENTS_FS=0
+cd fuzzphony\demo
+docker compose up --build
+```
+
+```powershell
+# PowerShell
+$env:BUILDX_BAKE_ENTITLEMENTS_FS = "0"
+cd fuzzphony\demo
+docker compose up --build
+```
+
+The default catalogue has 500 000 products (`DEMO_ROWS`, about a minute to index); the **large profile** (1 000 000 products, needs
+8 GB for Docker) and its setup are in the [demo README](https://github.com/er2es/fuzzphony/blob/main/demo/README.md#the-large-profile-1-000-000-products):
+
+```bat
+:: cmd: a fresh volume, 1 000 000 products
+docker compose down -v
+set DEMO_ROWS=1000000
+docker compose -f docker-compose.yml -f docker-compose.large.yml up --build
+```
+
+```powershell
+# PowerShell
+docker compose down -v
+$env:DEMO_ROWS = "1000000"
+docker compose -f docker-compose.yml -f docker-compose.large.yml up --build
+```
+
+`docker compose down -v` removes the data, so the next start seeds again (the seed only runs on an empty volume). To go back to
+the default size run `docker compose -f docker-compose.yml -f docker-compose.large.yml down -v` and start the plain command.
+
+[Screenshots](https://github.com/er2es/fuzzphony/blob/main/docs/screenshots.md) of the demo's search, relevance, languages and tuning pages show what it looks like before you run it.
+
+| Page | What you see |
+|---|---|
+| Search | one search field over the catalogue: results appear in place while you type (typos, accents and half-typed words included), with the category and stock facets at the side; the Speed view puts the same search next to a plain `ILIKE` |
+| Relevance | typo tolerance by word length next to the old flat rule, the catalogue's synonyms (and their editor), and "did you mean" |
+| Languages | English, German, French, Spanish and Hungarian, what PostgreSQL made of every word, and one search over all five at once (federated) |
+| Tune | every ranking weight and threshold as a control, with a score breakdown per hit and the SQL |
+| Under the hood | the configuration wizard, the nine-query benchmark, the `fuzzphony:doctor` report, the metrics and the synonym editor, in the browser |
+
+It is a local showcase, not a production template. See
+[demo/README.md](https://github.com/er2es/fuzzphony/blob/main/demo/README.md) for the stack, the
+settings and the security defaults.
+
+## Why
+
+Behind most search boxes is a `LIKE '%…%'` that misses `hedphones`, `creme` and `drills`, reads the
+whole table and ranks nothing. The usual fix is a search cluster: one more service to run, sync,
+back up and secure, and one more copy of your data. Fuzzphony does the search inside PostgreSQL
+instead, without changing your schema.
+
+Where it comes from: a production system needed typo-tolerant search, but its database could not
+be restructured and no new infrastructure was allowed. Those constraints are common, so the
+solution was generalised, tested against PostgreSQL 15 to 18, and released as a library.
+
+A good fit when:
+
+- The database is not yours to change: a legacy system, an ERP, tables another team owns. No
+  column is added; the index is filled from your table or from a SQL query. If even a trigger is
+  too much, the `orm` and `manual` sync modes need none. With `schema: fuzzphony` not even a table
+  lands in your schema.
+- You're replacing `LIKE` in admin panels, back offices, CRMs and support tools.
+- One more service is one too many.
+- The data must stay in the database, under the same backups and roles, for compliance or privacy.
+- Search must be as fresh as the data. In `trigger` mode the index changes in the same
+  transaction as the row, so a sold-out product leaves search on commit.
+- You run a shared-schema multi-tenant SaaS. The tenant filter is enforced on every query, so a
+  forgotten `WHERE` can't leak another customer's rows; the API Platform filter and the Live
+  Component take the tenant from the logged-in user, and the console command from `--tenant` and `--user`.
+- You want to know what people search for and what they do not find: an opt-in search log (redacted, with a
+  retention) and reports of the most searched and the zero-result texts, and of who searched what (per user, with an
+  optional masked client IP), without a separate analytics service.
+- You need to protect the search: a rate limit per tenant or user (429), index-level authorization on Symfony's
+  voters (403), and fields only some viewers may search (`granted: ROLE_HR`): a hidden field is not matched,
+  ranked, highlighted or suggested for the others.
+- Your content is multilingual: stemming for 28 languages, and accent folding that finds
+  `Kávéfőző` for `kavefozo` and `Crème Brûlée` for `creme brulee`.
+
+Not the right tool when you need hundreds of millions of documents or thousands of searches a
+second on one index, analytics-style faceted aggregations, semantic or vector search (look at
+pgvector or a dedicated engine), or a database other than PostgreSQL (no other engine is planned
+before 1.0).
+
+| | `LIKE '%…%'` | Fuzzphony | External engine |
+|---|---|---|---|
+| Typos (`hedphones`) | ✘ | ✔ trigram fallback | ✔ |
+| Accents (`creme` → `crème`) | ✘ | ✔ `unaccent` | ✔ |
+| Stemming (`drills` → `drill`) | ✘ | ✔ PostgreSQL's 28 Snowball languages | ✔ |
+| Relevance ranking + field weights | ✘ | ✔ explainable | ✔ |
+| Extra service to run, sync and secure | – | none | yes |
+| Transactional consistency with your data | ✔ | ✔ (trigger mode) | eventual |
+
+## Requirements
+
+- PHP 8.4+
+- PostgreSQL 15+ with the `pg_trgm` and `unaccent` extensions. Both ship with PostgreSQL, but a
+  superuser or the database owner must enable them per database:
+  ```sql
+  CREATE EXTENSION IF NOT EXISTS pg_trgm;
+  CREATE EXTENSION IF NOT EXISTS unaccent;
+  ```
+- Optional: Symfony 7.4+ and Doctrine (DBAL 4.2+, ORM 3.3+) for the bundle. CI tests every Symfony release the
+  `^7.4 || ^8.1` constraint allows (the 7.4 LTS and 8.1 today), and the next minor (8.2) as an early warning. What the
+  constraint allows and what CI tests are the same list: a release that Symfony no longer maintains (8.0 since July
+  2026) leaves the constraint and CI together, in a minor release of Fuzzphony, with a note in the CHANGELOG.
+
+`bin/console fuzzphony:doctor` checks all of this and prints the fix for anything missing.
+
+## Install
+
+```bash
+composer require fuzzphony/fuzzphony
+```
+
+For Symfony, add `Fuzzphony\Bundle\FuzzphonyBundle::class => ['all' => true]` to
+`config/bundles.php`. The bundle uses your Doctrine DBAL connection (`fuzzphony.connection`,
+default `default`).
+
+## Quickstart (Symfony)
+
+1. Mark an entity as searchable:
+
+   ```php
+   use Fuzzphony\Core\Attribute\{Searchable, SearchField, SearchFilter};
+
+   #[ORM\Entity]
+   #[Searchable(language: 'english')]
+   class Product
+   {
+       #[ORM\Id, ORM\Column] public int $id;
+
+       #[ORM\Column, SearchField('A', fuzzy: true)]  public string $name;
+       #[ORM\Column, SearchField('C')]               public string $description;
+       #[ORM\Column, SearchFilter]                   public int $price;       // type inferred
+       #[ORM\Column, SearchFilter]                   public bool $inStock;    // filter "in_stock"
+   }
+   ```
+
+   Or let the wizard write the definition for an existing table, joins included:
+   `bin/console fuzzphony:wizard product --try`.
+
+2. Create the index and fill it:
+
+   ```bash
+   bin/console fuzzphony:schema            # review the SQL first (nothing is executed)
+   bin/console fuzzphony:schema --apply    # or: --dump-migration=migrations
+   bin/console fuzzphony:reindex           # built next to the live index, swapped in; resumable
+   bin/console fuzzphony:doctor            # verify everything, with fixes
+   bin/console fuzzphony:search products 'wireles mouse' -w "price<=20000"
+   ```
+
+3. Inject `Fuzzphony\Core\Fuzzphony` and search as in the example at the top.
+   `Fuzzphony\Bridge\Doctrine\EntityLoader` turns results into entities with one query, keeping
+   the ranking order.
+
+By default, triggers queue changed rows and `bin/console fuzzphony:worker` keeps the index
+current (see [sync modes](https://github.com/er2es/fuzzphony/blob/main/docs/sync.md)). Without
+Symfony, define indexes with `IndexDefinition::builder()` and a `PdoConnection`
+([plain PHP setup](https://github.com/er2es/fuzzphony/blob/main/docs/configuration.md#builder-plain-php)).
+
+## Query syntax
+
+Search text from end users never throws. Malformed input is repaired and reported in
+`$result->warnings`. Developer mistakes, such as an unknown filter, do throw, with a suggestion.
+
+| Syntax | Meaning |
+|---|---|
+| `wireless mouse` | both words (AND is implicit; `AND` also works) |
+| `"wireless mouse"` | exact phrase |
+| `mouse OR trackpad`, `mouse \| trackpad` | either |
+| `-cable`, `NOT cable`, `!cable` | exclude |
+| `keyb*` | prefix |
+| `brand:logitech`, `name:"mx master"` | only in that field, typos included (an unknown field searches every field, with a warning) |
+| `(mouse OR trackpad) -cable` | grouping |
+
+Typos are tolerated per word (one from 4 letters, two from 8), within the query's AND / OR / NOT. A multi-word query that finds
+nothing drops the words that match nothing and says so. Details:
+[Searching](https://github.com/er2es/fuzzphony/blob/main/docs/searching.md).
+
+## Documentation
+
+The [documentation index](https://github.com/er2es/fuzzphony/blob/main/docs/README.md) lists every page with a reading order. The main ones:
+
+- [Index definitions](https://github.com/er2es/fuzzphony/blob/main/docs/configuration.md): attributes, YAML, builder, bundle configuration, building an index.
+- [Searching](https://github.com/er2es/fuzzphony/blob/main/docs/searching.md): the search builder, controller examples, query syntax, typo tolerance, synonyms, "did you mean", search-as-you-type, facets, federated search, empty-result relaxation.
+- [Migrating from `LIKE`](https://github.com/er2es/fuzzphony/blob/main/docs/migrating-from-like.md): moving a `WHERE name ILIKE '%mouse%'` search over, step by step, and what you give up.
+- Recipes, each backed by tests: [an admin panel](https://github.com/er2es/fuzzphony/blob/main/docs/recipes/admin-panel.md) (API Platform filter), [a shop](https://github.com/er2es/fuzzphony/blob/main/docs/recipes/shop.md) (search-as-you-type, facets, synonyms, boosts) and [a multi-tenant SaaS](https://github.com/er2es/fuzzphony/blob/main/docs/recipes/multi-tenant-saas.md) (tenants, guards, search log, reports).
+- [Ranking and thresholds](https://github.com/er2es/fuzzphony/blob/main/docs/ranking.md): the score formula, profiles, per-query tuning, thresholds and their hard caps.
+- [Languages](https://github.com/er2es/fuzzphony/blob/main/docs/languages.md): stemming, stop words and accent folding for 28 languages.
+- [Keeping the index in sync](https://github.com/er2es/fuzzphony/blob/main/docs/sync.md): sync modes, triggers, `TRUNCATE`, orphan pruning, Messenger.
+- [Multi-tenancy](https://github.com/er2es/fuzzphony/blob/main/docs/multi-tenancy.md): a tenant filter enforced on every search, and the actor (tenant and user) the integrations resolve.
+- [Search log and analytics](https://github.com/er2es/fuzzphony/blob/main/docs/analytics.md): an opt-in log of every search with e-mail and pattern redaction, retention and a purge command, the most searched and the zero-result texts, and who searched what (per user, optional masked IP), as `Fuzzphony::analytics()`, `fuzzphony:analytics` and a demo page.
+- [Security](https://github.com/er2es/fuzzphony/blob/main/docs/security.md): rate limits, index- and field-level authorization, what a restricted viewer sees, the limits, and the demo's Security page.
+- [Console commands](https://github.com/er2es/fuzzphony/blob/main/docs/commands.md): every command, the doctor, the configuration wizard.
+- [Observability](https://github.com/er2es/fuzzphony/blob/main/docs/observability.md): metrics collectors, the Symfony bundle wiring, a `/metrics` endpoint, the Grafana dashboard.
+- [Integrations](https://github.com/er2es/fuzzphony/blob/main/docs/integrations.md): Doctrine, API Platform, Live Component.
+- [Screenshots](https://github.com/er2es/fuzzphony/blob/main/docs/screenshots.md): what the demo looks like.
+- [Benchmarks](https://github.com/er2es/fuzzphony/blob/main/docs/benchmarks.md): Fuzzphony against `ILIKE` on 200 000 products.
+- [Known limitations](https://github.com/er2es/fuzzphony/blob/main/docs/limitations.md): the full text of the list below.
+- [Architecture](https://github.com/er2es/fuzzphony/blob/main/docs/architecture.md) and [design decisions (ADRs)](https://github.com/er2es/fuzzphony/tree/main/docs/adr).
+- [Roadmap](https://github.com/er2es/fuzzphony/blob/main/docs/roadmap.md): released versions and the plan for 1.0.
+
+## Security
+
+- Search text is parsed by Fuzzphony and bound as a parameter. Identifiers come only from
+  validated definitions.
+- Highlights are HTML-escaped; only Fuzzphony's `<mark>` tags remain. `$result->warnings` and
+  `$result->interpretedAs` are plain text that may quote the user: escape them in HTML.
+- Query length, term count, nesting depth and candidate sets are capped. Also set a PostgreSQL
+  `statement_timeout` for the application's database role.
+- Index definitions (`fromQuery()`, `watch()` SQL, names) are trusted developer input. Never build
+  them from user input.
+- Opt-in guards protect who searches: a rate limit, index authorization and field-level `granted`
+  (see [Security](https://github.com/er2es/fuzzphony/blob/main/docs/security.md) for what they hide and
+  what they do not: row-level authorization is out of scope).
+
+Report vulnerabilities privately: see
+[SECURITY.md](https://github.com/er2es/fuzzphony/blob/main/SECURITY.md).
+
+## Known limitations
+
+Details in [docs/limitations.md](https://github.com/er2es/fuzzphony/blob/main/docs/limitations.md).
+
+- [Typo tolerance is trigram-based](https://github.com/er2es/fuzzphony/blob/main/docs/limitations.md#typo-tolerance-is-trigram-based):
+  it cannot tell a typo from a similar word (`cable` / `table`, and `mose` is as close to `monitor`
+  as to `mouse`), so a letter replaced in the middle of a 5 to 7 letter word (`mpuse`) may not be
+  tolerated; the similarity a word needs is proportional to its length, or flat if you set it.
+- [Attaching or detaching a partition is not followed](https://github.com/er2es/fuzzphony/blob/main/docs/limitations.md#attaching-or-detaching-a-partition-is-not-followed):
+  PostgreSQL fires no trigger for it; run `fuzzphony:reindex` afterwards.
+- [Ranking is approximate beyond `candidate_limit`](https://github.com/er2es/fuzzphony/blob/main/docs/limitations.md#ranking-is-approximate-beyond-candidate_limit):
+  a very common word is ranked over the first `candidate_limit` matches the index returns, not the
+  best ones (a better match can be missing), and `total` is then a lower bound; `exactCounts()` makes
+  the total and the facet counts exact.
+
+## Roadmap
+
+Current: v0.9 (identity, search log and analytics, rate limit and authorization). Milestones build in
+order, each one a foundation for the next, up to v1.0's stable API and backward-compatibility
+promise. PostgreSQL only before 1.0:
+
+- v1.0 Stable: a reviewed public API (a smaller stable surface, the rest `@internal`), the
+  backward-compatibility promise, mutation score 90% with a CI gate. The documentation (an index, the
+  "Migrating from `LIKE`" guide and three recipes, with a link check in CI) is in place since 0.9.6.
+
+After 1.0: a Laravel Scout driver, and record linkage (matching people and companies across
+records, with explainable match scores). Details in
+[docs/roadmap.md](https://github.com/er2es/fuzzphony/blob/main/docs/roadmap.md).
+
+## Contributing and license
+
+Tests need PostgreSQL; `docker compose up -d` in the repository root starts one. `composer qa`
+runs php-cs-fixer, PHPStan (level max) and the unit tests. The unit and integration suites cover
+100% of the lines in `src/`; CI fails below 90%. See
+[CONTRIBUTING.md](https://github.com/er2es/fuzzphony/blob/main/CONTRIBUTING.md).
+
+Licensed under the [MIT license](https://github.com/er2es/fuzzphony/blob/main/LICENSE).

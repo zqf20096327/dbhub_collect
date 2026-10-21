@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://github.com/emersonjds/santi/actions/workflows/ci.yml"><img src="https://github.com/emersonjds/santi/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
   <a href="https://github.com/emersonjds/santi/releases/latest"><img src="https://img.shields.io/github/v/release/emersonjds/santi?label=release" alt="Latest release"></a>
-  <a href="#license"><img src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue" alt="License: MIT OR Apache-2.0"></a>
+  <a href="#license"><img src="https://img.shields.io/badge/license-AGPL--3.0-blue" alt="License: AGPL-3.0"></a>
 </p>
 
 <p align="center">
@@ -21,6 +21,7 @@
   <a href="#cli-and-mcp">CLI and MCP</a> ·
   <a href="#api">API</a> ·
   <a href="docs/deploy/railway.md">Deploy</a> ·
+  <a href="#pricing-and-sustainability">Pricing</a> ·
   <a href="CHANGELOG.md">Changelog</a> ·
   <a href="CONTRIBUTING.md">Contributing</a>
 </p>
@@ -90,7 +91,7 @@ You need Docker with Compose ([Docker Desktop](https://www.docker.com/products/d
 ```bash
 git clone https://github.com/emersonjds/santi.git
 cd santi
-docker compose up -d        # first run builds the image, a few minutes
+docker compose up -d        # pulls the published image
 ```
 
 Open <http://localhost:8080>, choose **Create account**, then **New project**. The database lives
@@ -104,8 +105,10 @@ docker compose down -v          # stop and delete the data
 
 To host it for a team, see [Deploy on Railway](docs/deploy/railway.md).
 
-Change the ports with `SANTI_PORT` (default 8080) and `SANTI_DB_PORT` (default 5440, bound to
-localhost only), e.g. `SANTI_PORT=9000 docker compose up -d`.
+Change the ports with `SANTI_PORT` (default 8080) and `SANTI_DB_PORT` (default 5440); both are
+bound to localhost only, so a server puts an HTTPS reverse proxy in front (see below), e.g.
+`SANTI_PORT=9000 docker compose up -d`. Pin a release with `SANTI_VERSION=0.23.0`; build from the
+checkout with `docker compose -f compose.yaml -f compose.build.yaml up -d --build`.
 
 **Browsers:** the session cookie is `Secure`. Chrome, Edge and Firefox accept it on
 `http://localhost`; Safari does not, so on plain HTTP sign in with one of the others or put HTTPS
@@ -128,6 +131,11 @@ the account and every project it administers as JSON, which works as an extra co
 | `SANTI_ADDR` | `127.0.0.1:8080` (`0.0.0.0:8080` in the image) | address the server listens on |
 | `SANTI_WEB_DIR` | `web/dist` (`/srv/santi/web` in the image) | built web UI to serve at `/` |
 | `SANTI_DB_POOL` | twice the cores, 10–50 | database connections |
+| `SANTI_REQUEST_TIMEOUT_SECS` | `30` | an API request still running after this answers 503 `busy` with `Retry-After: 1`; attachment uploads and downloads, imports and restore are exempt |
+| `SANTI_DB_STATEMENT_TIMEOUT_MS` | `15000` | `statement_timeout` of every database connection; a statement cut by it answers 503 `busy`. Imports and restore raise it to 5 minutes inside their transactions; migrations run without it |
+| `SANTI_DB_ACQUIRE_TIMEOUT_MS` | `5000` | how long a request waits for a free database connection before answering 503 `busy` with `Retry-After: 1` |
+| `RUST_LOG` | `info` | log filter, e.g. `warn` or `info,santi_server=debug` |
+| `SANTI_LOG_FORMAT` | `json` | `json` writes one JSON object per line to stdout (one per request: method, route template, status, `latency_ms`, request id, user id); `pretty` writes readable lines |
 | `SANTI_ATTACHMENTS_DIR` | `./data/attachments` (`/data/attachments` in the image, the `santi-attachments` volume in compose) | where attachments are stored when no bucket is set |
 | `SANTI_S3_BUCKET`, `SANTI_S3_ENDPOINT`, `SANTI_S3_REGION`, `SANTI_S3_ACCESS_KEY_ID`, `SANTI_S3_SECRET_ACCESS_KEY` | unset | store attachments in an S3-compatible bucket (S3, R2, MinIO, Railway) with path-style requests; set all five or none, a partial set stops the server at startup. `SANTI_S3_ENDPOINT` is an origin such as `https://storage.example.com`; the web app's image policy allows it. Add a bucket lifecycle rule that aborts incomplete multipart uploads after 1 day (`AbortIncompleteMultipartUpload`) |
 
@@ -238,8 +246,28 @@ which uses the committed `.sqlx/` query data instead.
 read the [Code of Conduct](CODE_OF_CONDUCT.md); report vulnerabilities as described in
 [SECURITY.md](SECURITY.md). Changes are listed in [CHANGELOG.md](CHANGELOG.md).
 
+## Pricing and sustainability
+
+santi is free and open source, and every feature ships in the open code. What costs money is
+running it for someone else.
+
+| | Who it is for | Price |
+|---|---|---|
+| Self-host | teams with a server of their own | free, complete, no user or project limits; you pay only your own infrastructure |
+| Hosted, Free | small teams trying santi | free: up to 5 people, 1 project, 1 GB of attachments |
+| Hosted, Team | teams that would rather not run a server | one flat monthly price per workspace (planned around US$ 19), unlimited people and projects |
+| Add-ons | companies | white-label (your brand instead of santi's) and single sign-on, licensed on top of the same code |
+| Services | teams moving from another tracker | migration and support, quoted per case |
+
+The hosted plans are not open yet; self-hosting works today ([Quick start](#quick-start)). The
+public instance that runs santi's own backlog costs about US$ 20 a month (app, PostgreSQL and the
+attachments bucket). Hosting and services fund the work, never features locked out of the code.
+
 ## License
 
-Licensed under either of [Apache License 2.0](LICENSE-APACHE) or [MIT](LICENSE-MIT), at your
-option. The web UI started from [shadcn-admin](https://github.com/satnaing/shadcn-admin) (MIT);
+santi is licensed under the [GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0-only).
+Use it, change it and run it for your team freely; if you offer a modified santi to others over a
+network, publish your changes under the same license. Versions up to 0.24.1 were released under
+MIT OR Apache-2.0 and stay available under those terms. The name and logo are covered by the
+[trademark policy](TRADEMARK.md). The web UI started from [shadcn-admin](https://github.com/satnaing/shadcn-admin) (MIT);
 its notice is in [web/LICENSE-shadcn-admin](web/LICENSE-shadcn-admin).

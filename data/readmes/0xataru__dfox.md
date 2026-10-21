@@ -13,7 +13,7 @@
   <a href="https://ratatui.rs/"><img src="https://img.shields.io/badge/Built_With_Ratatui-000?logo=ratatui&logoColor=fff" alt="Built With Ratatui" /></a>
 </p>
 
-**DFox** is a Rust-based database management tool that provides a terminal user interface (TUI) for interacting with PostgreSQL, MySQL, SQLite, MongoDB and Cassandra/ScyllaDB databases.
+**DFox** is a Rust-based database management tool that provides a terminal user interface (TUI) for interacting with PostgreSQL, MySQL, SQLite, MongoDB, Cassandra/ScyllaDB and Redis/Valkey databases.
 It allows users to perform database operations easily and efficiently through a simple and intuitive interface.
 
 ## A Tour
@@ -34,12 +34,51 @@ The grid streams 50,000 rows, moves by cell, selects rows, widens columns and co
 
 ## Installation
 
+### Homebrew (macOS, Linux)
+
+```bash
+brew install 0xataru/tap/dfox
+```
+
+### Debian, Ubuntu
+
+```bash
+curl -fsSL https://0xataru.github.io/dfox/key.gpg | sudo tee /usr/share/keyrings/dfox.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/dfox.gpg] https://0xataru.github.io/dfox/apt stable main" | sudo tee /etc/apt/sources.list.d/dfox.list
+sudo apt update && sudo apt install dfox
+```
+
+### Fedora, RHEL, Rocky
+
+```bash
+sudo curl -fsSLo /etc/yum.repos.d/dfox.repo https://0xataru.github.io/dfox/rpm/dfox.repo
+sudo dnf install dfox
+```
+
+Both then upgrade dfox with the rest of the system. Each release also has the
+`.deb` and `.rpm` files to install by hand.
+
+### Install script
+
+macOS and Linux:
+
+```bash
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/0xataru/dfox/releases/latest/download/dfox-installer.sh | sh
+```
+
+Windows (PowerShell), or download the `.msi` installer from the
+[latest release](https://github.com/0xataru/dfox/releases/latest):
+
+```powershell
+powershell -ExecutionPolicy Bypass -c "irm https://github.com/0xataru/dfox/releases/latest/download/dfox-installer.ps1 | iex"
+```
+
 ### Prebuilt binaries
 
 Download the archive for your platform from the
-[latest release](https://github.com/0xataru/dfox/releases/latest) (Linux x86_64,
-macOS Intel and Apple silicon, Windows x86_64), extract it and run `dfox-tui`.
-Each release includes a `SHA256SUMS` file to verify the download.
+[latest release](https://github.com/0xataru/dfox/releases/latest) (Linux x86_64
+and ARM64, macOS Intel and Apple silicon, Windows x86_64), extract it and run
+`dfox`. Each archive has a `.sha256` file next to it to verify the download.
 
 ### From source
 
@@ -49,11 +88,11 @@ You need stable [Rust](https://www.rust-lang.org/tools/install):
 git clone https://github.com/0xataru/dfox.git
 cd dfox
 cargo build --release
-./target/release/dfox-tui
+./target/release/dfox
 ```
 
-Then `dfox-tui` opens the connection manager, or connects right away to a URL:
-`dfox-tui postgres://user@localhost:5432/shop`, `mysql://…`, `mongodb://…`, or a SQLite file.
+Then `dfox` opens the connection manager, or connects right away to a URL:
+`dfox postgres://user@localhost:5432/shop`, `mysql://…`, `mongodb://…`, or a SQLite file.
 
 ## More
 

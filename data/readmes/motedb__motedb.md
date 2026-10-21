@@ -102,6 +102,12 @@ Silicon M-series, official harness `bindings/python/bench/compete_bench.py`
 **查询内存**: 全部查询形状 RSS 增量 ≈0 (steady-state 实测 <20MB, 默认
 档约束 ≤100MB); 资源画像全套快照见 `resource_bench_*.json`。
 
+**多引擎对照** (220K×384, 同语料同 ground truth, `make bench-industry`
+一键复现): MoteDB DiskANN recall@10 **1.0000** / p50 **0.57ms** — 对照
+faiss-hnsw(ef256) 0.96/0.38ms、usearch 0.994/0.25ms、duckdb-hnsw
+0.999/0.96ms、lancedb-ivfpq(默认) 0.22-0.25/1.2-3.1ms。完整表与方法学
+(含对 MoteDB 不利的行): [docs/benchmark_report_2026-10-21.md](docs/benchmark_report_2026-10-21.md)。
+
 **执行内核**: 向量化 (VEC) + morsel 并行默认开启 (`MOTE_VEC=off` 一键
 回退旧行式路径); 无索引向量扫描为字节距离核零拷贝 (页缓存带宽地板)。
 
@@ -341,6 +347,10 @@ EXISTS]` / `DROP INDEX`, `ALTER TABLE` (`ADD COLUMN`, `AUTO_INCREMENT = N`),
   `LEAD`, `FIRST_VALUE`, `LAST_VALUE` + aggregates `OVER (PARTITION BY …
   ORDER BY …)` (RANGE peer-group default frame)
 - Scalar functions: `UPPER`/`LOWER`/`LENGTH`/`TRIM`/`SUBSTR`/`REPLACE`/`CONCAT` (skips NULL args, SQLite/Postgres semantics; `||` propagates NULL)/`INSTR`/`COALESCE`/`ROUND` (binary-exact decimal rounding)/`ABS`/arithmetic
+- Interop: `EXPORT TABLE t TO 'x.parquet'` / `IMPORT PARQUET 'x' INTO t`
+  (pyarrow/pandas/DuckDB round-trip), `EXPORT LEROBOT <episode-table> TO
+  'dir/' [FPS n] [TASKS col]` — a LeRobot v3 dataset the official
+  `LeRobotDataset` loads directly
 - Multimodal predicates: `MATCH(col) AGAINST('q')` (BM25 ranked FTS;
   multi-word default is AND, explicit `a OR b` unions — FTS5-compatible),
   vector `<->`/`<~>` ordering (DiskANN ANN), geometry `loc <-> ST_POINT(x, y)`

@@ -15,7 +15,7 @@ T3 Fleet Gateway connects Grok Bot, Notion and other MCP clients to your T3 serv
 
 ## Get going with prompts
 
-You need an always-on machine with Node.js 24+, a running T3 Code server and its `t3` CLI. A coding agent on that machine can do the setup. The gateway runs from a Git checkout; it is not published to npm.
+You need an always-on machine with Node.js 24.22.1+ on 24.x or 26.12.1+ (older releases do not block the [compromised eMudhra intermediates](docs/security.md#compromised-emudhra-intermediates)), a running T3 Code server and its `t3` CLI. A coding agent on that machine can do the setup. The gateway runs from a Git checkout; it is not published to npm.
 
 ### 1. Ask your coding agent to set up the gateway
 
@@ -67,6 +67,12 @@ review. Don't merge or deploy it.
 ```
 
 > **What happens next:** the gateway starts a T3 thread in a fresh worktree, tracks it, and lets your bot read the result. Worker questions can come back through the bot. Permission approvals still need your click in T3; [unattended projects](docs/configuration.md#approvals-and-unattended-projects) can use a different runtime mode.
+
+## Settle finished work
+
+When review is complete, your bot can call `work_settle({ jobId, requestId })` with a unique request ID. It needs Operate access. The job must be idle, cancelled, failed or released, with no running turn, queued user messages or active delegated work. The gateway checks T3 first and confirms settlement by reading it back. `work_status` reports `settled` and `settledAt`; `work_feed` emits `thread_settled`.
+
+Settling parks the thread, clears its pin, ends PR watches and detaches provider sessions. It does not archive the thread or change the job state. `work_continue` can resume a settled idle job; T3 clears settlement when it accepts the message. Terminal jobs keep their existing behavior. If the host credential cannot settle the thread, the tool returns `t3_unauthorized`; ask the operator to review its T3 access. [Settlement checks, retry rules and bounds](docs/design.md#thread-settlement).
 
 ## Give your bot a doorbell 🔔
 
@@ -129,7 +135,7 @@ Ask your bot:
 Which PRs came out of that job? Show me what's open and what's merged.
 ```
 
-`work_status` and `work_list` include cached PR links and states, even for text-only clients. The dashboard shows a small **PR #21 open** badge beside the job. Workers need to register their PR with T3's `link_pull_request`; a coordinator should link its children's PRs too.
+`work_status` and `work_list` include cached PR links and states, even for text-only clients: up to 20 per job, open ones first and then the newest. A job follows up to 200 PRs, so a merge among the others is still noticed, and the text says so when it shows only part (`20 of 35 shown`). The dashboard shows a small **PR #21 open** badge beside the job. Workers need to register their PR with T3's `link_pull_request`; a coordinator should link its children's PRs too.
 
 > **What this means:** you can follow the result of a job without searching GitHub. PRs refresh about once a minute while the job is followed, on top of T3's own sync delay. Unknown means not yet readable; a finished or released job keeps its last snapshot.
 
@@ -213,7 +219,7 @@ npm run dashboard:demo    # try the dashboard with made-up hosts and jobs
 npm run webhooks:smoke    # isolated HTTPS, retries and process-crash checks
 ```
 
-CI checks Node 24 and 26 on Linux, and Node 26 on macOS. The webhook smoke needs OpenSSL; see its [evidence and instructions](docs/evidence/webhooks.md). The optional [compatibility check](docs/operations.md#developer-compatibility-check) compares T3's MCP schemas and runs read-only probes; it installs no schedule.
+CI checks Node 24.22.1 and 26.12.1 on Linux, and Node 26.12.1 on macOS. The webhook smoke needs OpenSSL; see its [evidence and instructions](docs/evidence/webhooks.md). The optional [compatibility check](docs/operations.md#developer-compatibility-check) compares T3's MCP schemas and runs read-only probes; it installs no schedule.
 
 Contributing? Start with [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
 

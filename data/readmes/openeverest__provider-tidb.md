@@ -56,7 +56,17 @@ work is delegated to the operator.
 
 | provider-tidb | OpenEverest | TiDB Operator | Kubernetes |
 |---|---|---|---|
+| `0.2.x` | `>= 2.0.0` | `v2.0.1` | `1.30` – `1.36` |
 | `0.1.x` | `>= 2.0.0` | `v2.0.1` | `1.30` – `1.36` |
+
+Optional integrations, needed only for the features that use them:
+
+| Feature | Requires | Tested with |
+|---|---|---|
+| [Monitoring](#monitoring) → Prometheus | Prometheus Operator (`PodMonitor`, `monitoring.coreos.com/v1`) | kube-prometheus-stack |
+| [Monitoring](#monitoring) → VictoriaMetrics | VictoriaMetrics Operator (`VMPodScrape`, `operator.victoriametrics.com/v1beta1`) | `v0.54.1` |
+| [Certificates from cert-manager](#certificates-from-cert-manager) | cert-manager | `v1.20.2` |
+| [Backups and restores](#capabilities) | S3-compatible object storage | AWS S3 API, SeaweedFS |
 
 The bundled operator manages TiDB engine versions independently (see [Versions](#versions)).
 
@@ -68,13 +78,13 @@ is covered under [Installation](#installation).
 | Capability | Status | Notes |
 |---|---|---|
 | Provisioning | ✅ | PD + TiKV + TiDB, optionally TiFlash |
-| Horizontal scaling | ✅ | Per-component `replicas` |
+| Horizontal scaling | ✅ | Per-component `replicas`; TiKV can't be scaled in below PD's `max-replicas` (see below) |
 | Vertical scaling (CPU / memory) | ✅ | Per-component `resources` |
 | Custom configuration | ✅ | Inline TOML `config` per component |
 | Scheduling policy | ✅ | Per-component `schedulingPolicy` (node selector, affinity, tolerations, topology spread, scheduler) |
-| Version upgrades | ❌ | Planned — ordered rolling upgrade |
-| Monitoring | ❌ | Planned |
-| TLS | ❌ | Planned |
+| Version upgrades | ✅ | Change the version bundle; the operator rolls PD → TiFlash → TiKV → TiDB. Downgrades are rejected |
+| Monitoring | ✅ | Prometheus `PodMonitor` or VictoriaMetrics `VMPodScrape` for PD, TiKV, TiDB and TiFlash (see [Monitoring](#monitoring)) |
+| TLS | ✅ | mTLS between components and TLS for MySQL clients, with provider-issued certificates (see [Security](#security)) |
 
 Stateful components (PD, TiKV, TiFlash) additionally report:
 
@@ -95,6 +105,15 @@ See [ROADMAP.md](ROADMAP.md) for the planned work.
 > (`kubectl get storageclass <name> -o jsonpath='{.allowVolumeExpansion}'`). On a StorageClass
 > without it — e.g. the k3s/kind `local-path` default — the TiDB Operator leaves the volumes at their
 > old size. Volumes can never be shrunk; `Validate` rejects a smaller size.
+
+> [!IMPORTANT]
+> Scaling **TiKV** in takes the removed nodes offline first: the operator evicts their
+> leaders and PD moves their regions to the remaining nodes before the pods are deleted. PD keeps
+> `max-replicas` copies of every region (3 by default) and refuses to remove a node once fewer than
+> that would remain, so `Validate` rejects such a scale-in instead of leaving it stuck. The limit is
+> read from `[replication] max-replicas` in the PD `config` (as the `tidb-dev` preset sets it); PD
+> only applies that setting when the cluster is created. Creating or scaling out a smaller cluster
+> is still allowed.
 
 > [!IMPORTANT]
 > **TiFlash** runs while `spec.components.tiflash` is present with a replica count other than `0`
@@ -141,12 +160,26 @@ The chart is self-contained:
 Upgrade and uninstall:
 
 ```bash
-helm upgrade provider-tidb oci://ghcr.io/openeverest/charts/provider-tidb
+helm upgrade provider-tidb oci://ghcr.io/openeverest/charts/provider-tidb \
+  --version <chart-version> --namespace everest-system
 helm uninstall provider-tidb --namespace everest-system
 ```
 
 Uninstalling the chart does **not** delete running `Instance` resources, the TiDB CRDs, or any
 data.
+
+### Upgrading from 0.1.x
+
+- Existing Instances are left as they are: the provider does not restart their pods or change
+  their TiDB resources, and they stay plaintext. TLS ([Security](#security)) can only be chosen
+  when an Instance is created; new Instances get it by default in the UI.
+- The chart grants the provider new permissions: ServiceAccounts, Roles and RoleBindings (for the
+  account BR jobs run as), `PodMonitor`s, `VMPodScrape`s and cert-manager `Issuer`s and
+  `Certificate`s. `helm upgrade --reuse-values` works.
+- BR backup and restore jobs could not start in 0.1.x
+  ([#63](https://github.com/openeverest/provider-tidb/issues/63)). A `Backup` or `Restore` still
+  `Running` from before the upgrade keeps waiting for a job that cannot start; delete it and
+  create it again.
 
 ### Air-gapped installs
 
@@ -243,6 +276,129 @@ list itself
 live under `presets:` in [values.yaml](charts/provider-tidb/values.yaml); set `enabled: false`
 to hide one.
 
+### Monitoring
+
+PD, TiKV, TiDB and TiFlash serve Prometheus metrics natively, so no exporter is needed. The
+**Monitoring** section of the UI (`spec.topology.parameters.monitoring`) has a toggle per
+monitoring system; each makes the provider create one scrape object for every component's
+`/metrics` endpoint:
+
+| Toggle | Creates | Requires |
+|---|---|---|
+| **Prometheus** (`monitoring.prometheus`) | `PodMonitor` `<instance>-metrics` | [Prometheus Operator](https://prometheus-operator.dev/) |
+| **VictoriaMetrics** (`monitoring.victoriaMetrics`) | `VMPodScrape` `<instance>-vm-metrics` | [VictoriaMetrics Operator](https://docs.victoriametrics.com/operator/) |
+
+```yaml
+spec:
+  topology:
+    type: cluster
+    parameters:
+      monitoring:
+        prometheus:
+          enabled: true
+          interval: 30s                       # optional; defaults to the global scrape interval
+          podMonitorLabels:                   # optional; see below
+            release: kube-prometheus-stack
+        victoriaMetrics:
+          enabled: true
+          interval: 30s                       # optional
+          podScrapeLabels: {}                 # optional; see below
+```
+
+Both objects are owned by the Instance and removed when their toggle is turned off. They carry
+the `app.kubernetes.io/managed-by: everest` and `app.kubernetes.io/instance: <instance>` labels
+the [Metrics plugin](https://github.com/openeverest/plugin-metrics) finds a `PodMonitor` by, so its
+*Metrics* tab shows the built-in TiDB dashboard for Prometheus. Validation rejects turning a
+toggle on while its CRD is not installed.
+
+A monitoring system only scrapes the objects its selector matches. kube-prometheus-stack, for
+example, selects `PodMonitor`s labelled `release: <its release name>`; a `VMAgent` with
+`selectAllByDefault: true` takes every `VMPodScrape`. Set the labels once
+for every Instance with the chart's `podMonitor.labels` / `vmPodScrape.labels`, or per Instance
+with `podMonitorLabels` / `podScrapeLabels` (which win on conflicts).
+
+> [!NOTE]
+> Turn on the toggle of the monitoring system you run; the provider creates its scrape object
+> itself rather than relying on a VictoriaMetrics Operator converting the `PodMonitor`. If your
+> VictoriaMetrics Operator does convert Prometheus Operator objects, it also turns the
+> `PodMonitor` into a `VMPodScrape` named `<instance>-metrics`, so with both toggles on a
+> `VMAgent` scrapes every component twice.
+
+### Security
+
+New Instances encrypt their traffic by default. The **Security** section of the UI
+(`spec.topology.parameters.tls`) has two toggles, both on by default:
+
+| Toggle | Field | Effect |
+|---|---|---|
+| Encrypt traffic between components (mTLS) | `tls.cluster` | PD, TiKV, TiDB and TiFlash authenticate each other with certificates and encrypt their traffic |
+| Encrypt client connections (TLS) | `tls.client` | MySQL clients can connect to TiDB over TLS |
+
+```yaml
+spec:
+  topology:
+    type: cluster
+    parameters:
+      tls:
+        cluster: true
+        client: true
+```
+
+Both are chosen when the Instance is created and cannot be changed afterwards: TiDB Operator
+does not switch an existing cluster between plaintext and TLS. An Instance without the field
+(for example one created before this setting existed) stays plaintext.
+
+The provider generates a CA for each Instance (`<instance>-tls-ca`) and issues every
+certificate from it into the Secrets the operator mounts: `<instance>-{pd,tikv,tidb,tiflash}-cluster-secret`,
+`<instance>-cluster-client-secret` (used by the operator and by BR backups) and
+`<instance>-tidb-server-secret` (TiDB's MySQL certificate). They are deleted with the Instance.
+
+With client TLS, the connection Secret `<instance>-conn` carries the CA as `ca.crt`, and the
+published host is in TiDB's certificate, so clients can verify both:
+
+```bash
+kubectl get secret <instance>-conn -o jsonpath='{.data.ca\.crt}' | base64 -d > ca.crt
+mysql -h <host> -P 4000 -u root -p --ssl-mode=VERIFY_IDENTITY --ssl-ca=ca.crt
+```
+
+TiDB still accepts plaintext connections unless you require TLS, e.g. with
+`ALTER USER ... REQUIRE SSL` or by setting `require_secure_transport`.
+
+With mTLS, the [monitoring](#monitoring) `PodMonitor` and `VMPodScrape` scrape over https
+with the cluster client certificate.
+
+> [!NOTE]
+> The certificates are valid for ten years and are not rotated yet: TiDB Operator does not
+> reload its own client certificate, and TiDB only picks up a new MySQL certificate after
+> `ALTER INSTANCE RELOAD TLS`.
+
+#### Certificates from cert-manager
+
+With [cert-manager](https://cert-manager.io/) installed, the certificates can come from it
+instead (**Issue certificates with cert-manager** in the UI):
+
+```yaml
+      tls:
+        cluster: true
+        client: true
+        certManager:
+          enabled: true
+          issuerRef:                # optional
+            name: corp-ca
+            kind: ClusterIssuer     # or Issuer (default), in the Instance's namespace
+```
+
+- Without `issuerRef`, the provider sets up a CA in cert-manager for the Instance: a
+  self-signed `Issuer`, a CA `Certificate` (`<instance>-tls-ca`) and a CA `Issuer` that signs the rest.
+- With `issuerRef`, your issuer signs every certificate. It must write the CA into the Secrets
+  (`ca.crt`), as CA and Vault issuers do; ACME issuers cannot be used.
+
+The provider creates one `Certificate` per Secret listed above, valid for ten years, and makes
+each Secret cert-manager writes owned by its `Certificate`, so they are deleted with the Instance.
+The certificate source is chosen at creation, like the toggles. If your issuer caps certificates
+at a shorter lifetime, cert-manager renews them earlier; restart TiDB Operator after a renewal
+and run `ALTER INSTANCE RELOAD TLS` on each TiDB to pick up the new certificates.
+
 ## Topologies
 
 | Topology | Default | Description |
@@ -333,6 +489,20 @@ kubectl logs -n everest-system deploy/provider-tidb -f
 | Operator pod `CrashLoopBackOff` at startup | The TiDB CRDs must exist before the operator starts (see the row above) |
 | Groups created but no pods | Inspect the group/instance status (`kubectl get tidbgroup,tikvgroup,pdgroup`) — the failure is upstream in the operator |
 | Storage size raised but PVCs unchanged | The StorageClass must allow volume expansion; check `kubectl get pvc` and the operator logs |
+| `Instance` turns `Failed` right after an edit, with no message | The provider rejected the change. The reason is in the provider logs (`Validation failed`); see [Known issues](#known-issues). Typical causes: shrinking storage, downgrading or reordering versions, scaling TiKV below PD's `max-replicas`, changing TLS after creation. Revert the change to return to `Ready` |
+| `Backup` or `Restore` stays `Running` | `kubectl get jobs` in the Instance's namespace and the BR job's pod logs; the BR `Backup`/`Restore` (`backups.br.pingcap.com`) conditions carry the reason |
+| Clients cannot log in after a restore | See [Known issues](#known-issues) |
+
+## Known issues
+
+- **Rejected changes show no reason.** When `Validate` rejects a change the `Instance` turns
+  `Failed` without a message; the reason is only in the provider logs. Fixed in the OpenEverest
+  provider runtime (openeverest/openeverest#3346) and picked up once a release includes it.
+- **Root password after a restore** ([#64](https://github.com/openeverest/provider-tidb/issues/64)).
+  A restore brings back the backed-up `mysql.user`, so after restoring another Instance's backup the
+  root password is that Instance's, not the one in `<instance>-conn`.
+- **No certificate rotation** ([#66](https://github.com/openeverest/provider-tidb/issues/66)).
+  Certificates are issued for ten years and not renewed (see [Security](#security)).
 
 ## Contributing
 

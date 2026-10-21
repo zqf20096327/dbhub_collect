@@ -1,6 +1,6 @@
 # Coding2API
 
-把 **CodeBuddy**（国内站 + 国际版）、**TRAE SOLO**、**OpenCode Zen**、**Kilo Gateway**、**Qoder**、**CodeArts** 七个上游渠道封装为 OpenAI 兼容 API，提供公共凭证池、统一模型名与调度、按人用量统计。
+把 **CodeBuddy**（国内站 + 国际）、**TRAE SOLO**、**OpenCode Zen**、**Kilo**、**Qoder**、**CodeArts**、**OfficeAce** 八个上游渠道封装为 OpenAI 兼容 API，提供公共凭证池、统一模型名与调度、按人用量统计。
 
 > [!WARNING]
 > 逆向接口，仅供学习研究，未做安全审计；公网部署需反向代理 + 鉴权 + IP 白名单。
@@ -14,7 +14,7 @@
 - **公共凭证池**：admin 集中维护、全员共享、加密入库（`APP_SECRET`）；设备码登录、多账号切换、额度探测、每日签到、token 预刷新。
 - **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计。
 - **成长中心**（仅 CodeBuddy）：自动领 Buddy 旅行礼物、派 Buddy、领任务奖、断登补登、连登兑换、开盲盒；不可逆动作可用 `GROWTH_IRREVERSIBLE_ACTIONS=false` 关停；管理台可手动执行。
-- **脱敏统计**：不存对话内容；明细 90 天、小时汇总永久；按人/渠道/模型/凭证可视化；按 OpenRouter 刊例价估算成本（人民币为主）；明细面板带「实时」开关（SSE 推送刚落库的请求）。
+- **脱敏统计**：不存对话内容；明细 90 天、小时汇总永久；按人/渠道/模型/凭证可视化；按 OpenRouter 刊例价估算成本（人民币为主）；按「正文 token ÷ 生成时间总和」与「总产出 token ÷ 生成时间总和」两口径给出输出速度（tok/s，剔除批到达的不可测样本；概览卡片、分组表与逐请求明细同源）；明细面板带「实时」开关（SSE 推送刚落库的请求）。
 - **上游状态聚合**：把各模型 / 网关提供方的官方状态页（OpenCode Zen、Kilo、DeepSeek、Together、Moonshot、MiniMax、OpenAI、Anthropic）归一化后并排展示，用于区分「上游整体故障」与「本服务凭证 / 额度问题」。只做解释、不参与选号 / 熔断；快照只存内存、重启归零。
 - **侧栏数据提醒**：侧栏对应项上显示待办计数角标（凭证需重登/耗尽、未恢复告警、上次失败任务、异常上游源、待激活账号、本人将到期 Key、模型目录陈旧），不点进去也能看到；只数「待办」、按角色裁剪，见[下文](#侧栏数据提醒导航角标)。
 - **管理台安全加固**：登录限流、CSRF 校验、请求体上限、Host 白名单。
@@ -60,7 +60,7 @@ docker compose exec coding2api python scripts/create_user.py admin --role admin
 
 ```bash
 docker compose pull
-# 或指定版本：docker pull ghcr.io/robbsluo/coding2api:v0.8.1
+# 或指定版本：docker pull ghcr.io/robbsluo/coding2api:v0.9.0
 ```
 
 推送新版本：打 tag `v*` 推到 main 即触发 publish workflow（`.github/workflows/publish.yml`），同时打 `<tag>` 与 `:latest` 到 GHCR；也可在 Actions 页面手动触发。
@@ -97,11 +97,11 @@ echo "$PASSWORD" | python3 scripts/create_user.py alice --role admin --password-
 
 ## 审计
 
-「审计日志」页（仅管理员可见）记录登录与写操作，可按操作者/动作筛选、分页查看：**登录**（成败都记）、**账号变动**（新建、激活、改角色、禁用/启用、改密、重置密码、硬删）、**凭证写操作**（导入、删除、启停、指定 pin、复活、切换账号）与**告警人工处置**（标记恢复）。每条含时
+「审计日志」页（仅管理员可见）记录登录与写操作，可按操作者/动作筛选、分页查看：**登录**（成败都记）、*
 
 [...截断...]
 
-间、操作者、动作、对象、说明与来源 IP。**绝不包含密码或令牌明文**（一次性激活令牌明文只在创建响应出现一次，库里只有 SHA-256 摘要）。保留期与请求明细一致（默认 90 天），由后台清理任务裁剪。
+*账号变动**（新建、激活、改角色、禁用/启用、改密、重置密码、硬删）、**凭证写操作**（导入、删除、启停、指定 pin、复活、切换账号）与**告警人工处置**（标记恢复）。每条含时间、操作者、动作、对象、说明与来源 IP。**绝不包含密码或令牌明文**（一次性激活令牌明文只在创建响应出现一次，库里只有 SHA-256 摘要）。保留期与请求明细一致（默认 90 天），由后台清理任务裁剪。
 
 ## 服务端日志
 
@@ -115,10 +115,11 @@ echo "$PASSWORD" | python3 scripts/create_user.py alice --role admin --password-
 ## 使用
 
 1. 「凭证管理」添加凭证：
-   - **CodeBuddy**（含国际版）：设备码登录，或粘贴 `{"token":"..."}`。
+   - **CodeBuddy**（含国际）：设备码登录，或粘贴 `{"token":"..."}`。
    - **TRAE**：粘贴凭证 JSON（`accessToken`/`uid`/`refreshToken`）或回调链接（`apiHost` 只接受官方地址）。
    - **Qoder / CodeArts**：设备码 / OAuth2 授权码登录（CodeArts 授权后把打不开的本地回调链接粘回页面）。
-   - **OpenCode Zen / Kilo Gateway**：无需添加——启动时自动出现虚拟凭证（被删可在同面板点「添加」补回）。
+   - **OfficeAce**：点「登录 OfficeAce」走华为云授权（回调由云端承接，无需粘链接、无需开本地端口）。
+   - **OpenCode Zen / Kilo**：无需添加——启动时自动出现虚拟凭证（被删可在同面板点「添加」补回）。
 2. 「API Key」创建 `sk-...`（明文仅显示一次）。
 3. 调用：
 
@@ -133,13 +134,13 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 ### 模型名三字段
 
-七条渠道每个模型统一为三个字段：
+八条渠道每个模型统一为三个字段：
 
 1. **原代号**（`raw_id`）：渠道请求时真正发的 key，**永不改动**。各渠道内部代号互不相同（Qoder `kmodel_latest` = TRAE `kimi-k3-1`），也可能带命名空间前缀（Kilo 的 `kilo-auto/free`）。
 2. **归一键**：剥掉免费档标记（`-free` / 路径段 `free`）与命名空间前缀，再 slug 化——`kilo-auto`、`longcat-2.5-preview`。模型列表按它判断**哪个是同一个模型**并合并，故 Zen 的免费档能与 TRAE 的付费档并成一条。
 3. **展示名**（`name`）：清洗后的可读文本，如 `LongCat 2.5 Preview`、`Kimi K3`。上游给了可读名就用（`Qwen3.8-Max` → `Qwen3.8 Max`），没有就从原代号派生；品牌与缩写按官方写法纠正（`DeepSeek` / `MiMo` / `GLM` / `GPT`）。
 
-`GET /v1/models` 里**所有条目的 `id` 都是归一键**，转发到某渠道时自动换回该渠道原代号，`by_provider.{渠道}.raw_id` 可见。**原代号、展示名、归一键三种写法都能直接请求**（`kmodel_latest`、`Kimi K3`、`kimi-k3` 指向同一模型）。同渠道内归一键重复时退回原代号，避免撞名误并。**福利模型标记 `benefit`**：CodeArts 走每日免费 token 池的模型上游不给倍率，条目会带 `benefit: true`（单渠道在顶层、多渠道在 `by_provider.{渠道}`），Playground 据此在渠道徽章上打「福」标，与按积分计费的内置模型区分。
+`GET /v1/models` 里**所有条目的 `id` 都是归一键**，转发到某渠道时自动换回该渠道原代号，`by_provider.{渠道}.raw_id` 可见。**原代号、展示名、归一键三种写法都能直接请求**（`kmodel_latest`、`Kimi K3`、`kimi-k3` 指向同一模型）。同渠道内归一键重复时退回原代号，避免撞名误并。
 
 **价格与档位**：条目可选带 `cost {input, output, cache_read}`（USD / 百万 token，与统计侧成本估算同一份 OpenRouter 价表）与 `reasoning_efforts`（该渠道生效中的 `REASONING_EFFORT_MAP` 目标档位去重集合）。两者都是**有才给**：缺价、未配置档位映射时**不带该字段**，不填 0 也不编造。
 
@@ -156,8 +157,8 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 ### 流式超时（默认关闭）
 
-七条渠道的上游流读取都设了 `read=None`（长回答不能被读超时打断），因此「上游接了连接却一直不吐数据」只能由网关自己兜：
+八条渠道的上游流读取都设了 `read=None`（长回答不能被读超时打断），因此「上游接了连接却一直不吐数据」只能由网关自己兜：
 
 - **首事件超时**（`STREAM_FIRST_EVENT_TIMEOUT_SECONDS`，默认 `0`）：客户端还**没收到任何内容**时超时，安全地换号重试——记 `upstream_first_event_timeout`，按瞬态错误处理（短冷却、不累计）。注释帧 / 心跳**不**重置计时。
 - **流内空闲超时**（`STREAM_IDLE_TIMEOUT_SECONDS`，默认 `0`）：**已出帧**后超时只能断流并以错误帧收尾（记 `upstream_idle_timeout`），**不换号**——半截输出无法回滚，换号会把两个账号的内容拼给客户端。
-- 实现上**不能**用 `asyncio.wait_for(anext(...))`：超时会 cancel 上游生成器直接断流。这
+- 实现上**不能**用 `asyncio.wait_for(anext(...))`：超时会 cancel 上游生成器直接断

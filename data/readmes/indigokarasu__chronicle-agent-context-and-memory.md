@@ -12,7 +12,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-2ea44f.svg)](LICENSE)
 [![No required services](https://img.shields.io/badge/required_services-none-6f42c1.svg)](#why-chronicle)
 
-Version: 5.11.1.
+Version: 5.12.0.
 
 Chronicle gives your Hermes agent durable long-term memory and safer working-memory
 compression in one install. Names, preferences, decisions, and prior work stay on
@@ -54,9 +54,9 @@ Start Hermes and try this small persistence test:
 2. Start a new session and ask: `When is my project launch day?`
 3. Run `/chronicle` to see the active embedder and local store counts.
 
-The database is created automatically at
-`~/.hermes/commons/db/chronicle/chronicle.db`. Chronicle has no required Python
-dependencies and no separate database or migration step.
+The database is created automatically under the active Hermes profile. For the
+default profile it is `~/.hermes/commons/db/chronicle/chronicle.db`. Chronicle has
+no required Python dependencies and no separate database setup step.
 
 > If Chronicle earns a place in your agent setup, please
 > [star the repository](https://github.com/indigokarasu/chronicle-agent-context-and-memory)
@@ -76,16 +76,19 @@ run automatically. The agent receives memory tools including `chronicle_remember
 `chronicle_search`, `chronicle_answer`, `chronicle_explain`, `chronicle_correct`,
 and `chronicle_forget`.
 
-### Migrating memories between profiles
+### Moving memories to a new machine
 
-Chronicle stores durable memory in a local SQLite database at
-`~/.hermes/commons/db/chronicle/chronicle.db`. There is no migration step:
-a fresh install creates a new store, and equipped profiles read the same
-store. To move memories to a new machine or fresh install:
+Each Hermes profile has its own store, a local SQLite database under that
+profile's home. The default profile's store is
+`~/.hermes/commons/db/chronicle/chronicle.db`. A profile named `<name>` keeps its
+store at `~/.hermes/profiles/<name>/commons/db/chronicle/chronicle.db` unless its
+`db_path` says otherwise, so profiles do not share memories unless their
+`db_path` names the same file. A fresh install creates a new store on first use.
+To move a profile's memories to a new machine or fresh install:
 
 1. Stop the running hermes session.
-2. Copy `~/.hermes/commons/db/chronicle/chronicle.db` to the same path on
-   the new machine (keep the default location so the default profile reads it).
+2. Copy that profile's `chronicle.db` to the same path on the new machine. For
+   the default profile, the path is `~/.hermes/commons/db/chronicle/chronicle.db`.
 3. Restart hermes and verify with `/chronicle`.
 
 `SOUL.md`, `USER.md`, and `MEMORY.md` are separate files of the session and
@@ -241,6 +244,10 @@ and searchable, and never becomes memory about the user.
 text the user never wrote. It runs as a dry run with a report unless given
 `--apply`.
 
+## Extending Chronicle
+
+Chronicle learns from conversation. Companion skills feed it structured data it would never hear about in a chat (people and how they know each other, spending, tastes, calendar events, documents), and others keep the memory clean and current. [Skills that extend Chronicle](#skills-that-extend-chronicle) lists them and explains how each one connects.
+
 ## Installation
 
 ```bash
@@ -249,19 +256,40 @@ hermes plugins install indigokarasu/chronicle-agent-context-and-memory
 
 Requires Hermes Agent with plugin support. Python 3.9+.
 
-### Optional: sqlite-vec (faster vector search)
+Chronicle needs no extra Python packages: vector search uses an in-memory cache over the stored vectors. On package-managed Hermes installs, never pip-install into Hermes' environments, because Hermes' package manager owns them. If sqlite-vec was installed for an earlier version, it can be uninstalled.
 
-Chronicle works without it (bruteforce scan). To enable the ANN fast path:
+## Check that it works
+
+None of these checks needs the `sqlite3` command-line tool.
+
+### Where the store is and what is in it
 
 ```bash
-# Install into the Hermes agent runtime venv — once per machine, not per profile:
-~/.hermes/hermes-agent/.venv/bin/pip install sqlite-vec
-# or the community fork:
-~/.hermes/hermes-agent/.venv/bin/pip install git+https://github.com/vlasky/sqlite-vec.git
+python3 <profile home>/plugins/chronicle/scripts/recall_check.py --profile <name>
 ```
 
-Verify: `~/.hermes/hermes-agent/.venv/bin/python -c "import sqlite_vec; print(sqlite_vec.__version__)"`.
-Requires a sqlite3 build with loadable-extension support (Apple's macOS system Python lacks it). If unavailable, Chronicle falls back to bruteforce automatically.
+For a named profile, `<profile home>` is `~/.hermes/profiles/<name>`. For the default profile, use `~/.hermes` and `--profile default`.
+
+The check reads the profile's `config.yaml`, resolves the store the way Chronicle does, and opens the store read-only. It prints `key: value` lines: the Hermes home and profile, the config file it read, the store path from the config and the path Chronicle resolves, the git mirror, and the number of events, active beliefs and stored vectors, with the time of the last event. The last line is `PASS` when the store holds events, or `FAIL:` with the reason. The exit code is 0 for PASS and 1 for FAIL. It creates no files. `--json` prints the same values as one JSON object.
+
+### Does Chronicle recall a fact by itself
+
+```bash
+python3 <profile home>/plugins/chronicle/scripts/recall_check.py --canary
+```
+
+`--canary` works in a temporary Hermes home, so your own home is not read or written. It captures a made-up fact in one session, closes the store, starts a new session on the reopened store, and asks for the fact with `chronicle_answer` and `chronicle_search`. It uses the offline embedder (`hashing`) and opens no network connection. `PASS` means the fact came back through Chronicle. `FAIL:` names the step that did not return it.
+
+### A live check with Hermes' own memory off
+
+Hermes keeps its own `MEMORY.md` and `USER.md` unless both `memory.memory_enabled` and `memory.user_profile_enabled` are false. To check the profile without them:
+
+1. In the profile's `config.yaml`, under `memory:`, set `memory_enabled: false` and `user_profile_enabled: false`.
+2. Tell Hermes a made-up fact, for example: `The test word for this check is juniper quill.`
+3. Start a new session with `/new`.
+4. Ask: `What is the test word for this check?`
+
+If Hermes gives the fact back, Chronicle recalled it without its own memory files. Set the two keys back if you want Hermes' memory files again.
 
 ## Configuration
 
@@ -273,6 +301,7 @@ Every key **inside the `memory:` block below is Chronicle-only**. Chronicle read
 The host (Hermes Agent) owns the rest of `config.yaml`; Chronicle does not read or change host keys.
 
 - `memory.provider: chronicle` is the **host's** slot selector. Hermes reads it to load this plugin; Chronicle never reads it.
+- `memory.memory_enabled` and `memory.user_profile_enabled` are also **host** keys: they switch Hermes' own `MEMORY.md` and `USER.md`. Chronicle does not use them; `recall_check.py` only reports them.
 - Every other key under `memory:` (`db_path`, `embeddings`, `retrieval`, `curation`, …) is Chronicle's own config.
 
 ### Where this config belongs
@@ -308,9 +337,11 @@ memory:
 
 Both run the same plugin; only `db_path` (and any per-bot overrides) differs, so each bot keeps separate memory.
 
-> **Where the paths land.** `~/.hermes` in any `db_path` / `git_repo` value is expanded to the **active profile's home** (`$HERMES_HOME`), so the same literal `~/.hermes/commons/db/chronicle/...` resolves to `~/.hermes/commons/...` for the default profile and to `~/.hermes/profiles/<name>/commons/...` for a named profile. Do **not** write `~/.hermes/profiles/<name>/...` by hand — it would be expanded twice and point at the wrong place. Keep the canonical `~/.hermes/...` form in every profile's config.
-
-> **Installing per profile.** The plugin is installed into the agent runtime, but each profile must register it:
+> **Where the paths land.** `db_path` and `git_repo` are resolved against the **active profile's home** (`$HERMES_HOME`). A value that starts with `~/.hermes` means that home, so the canonical `~/.hermes/commons/db/chronicle/chronicle.db` is `~/.hermes/commons/...` for the default profile and `~/.hermes/profiles/<name>/commons/...` for a named profile. Absolute paths are used as written. A `~/.hermes/profiles/<name>/...` path written by hand also works: Chronicle drops the repeated profile part and logs one warning asking you to remove it from the config. The canonical `~/.hermes/...` form is the simplest choice.
+>
+> **Stores from earlier releases.** Releases before 5.12 sometimes wrote a profile's store or git mirror to a path the config does not name; an absolute `db_path` was ignored, for example. On its first start with 5.12, Chronicle moves such a store to the path the config names, when that is safe. The old name becomes a symlink to the new file, and each move is recorded in `chronicle-migration.json` next to the new store. When the new location is on another disk, the store is copied and checked first, and the original is kept at `<old name>.migrated-<time>`. When a move is not safe, nothing is moved and the log says why: if another process has the store open, the move is retried at the next start; if both locations hold data, Chronicle keeps opening the old location, as before, and logs one warning that says how to choose. A profile's git mirror is always its own: the profile's events are queued once for it, and the old shared mirror is left in place.
+>
+> **Installing per profile.** Each profile has its own `plugins/` directory (`~/.hermes/profiles/<name>/plugins/` for a named profile), so install the plugin into each profile that should use Chronicle:
 >
 > ```bash
 > hermes -p <profile> plugins install indigokarasu/chronicle-agent-context-and-memory
@@ -331,8 +362,6 @@ memory:
   extraction:
     llm:
       allow_remote: false          # allow POSTing raw excerpts to an off-host LLM extractor
-  vector_index:
-    backend: bruteforce            # bruteforce (default) | sqlite-vec (ANN, optional dep)
   maintenance:                     # in-process cadence; runs on hooks, not cron
     enabled: true                  # master switch for maintenance
     budget_ms: 5                   # wall-clock ceiling per hook scheduling decision (ms)
@@ -714,6 +743,48 @@ epistemic + procedures (Phase 5); git-mirror recovery + the property suite
 behind a pluggable interface — a real deployment swaps in a local model without
 touching the pipeline. Deferred per spec: the distributed CRDT tier (§24.5),
 L3 parametric adapters (§20.4), and the TLA⁺ models (§29).
+
+## Skills that extend Chronicle
+
+None of these are required. Each is an optional Hermes skill in its own repository, with its own install steps.
+
+A skill hands data to Chronicle in one of three ways:
+
+- It keeps its own SQLite database, which Chronicle searches read-only. The records stay in that file; Chronicle keeps pointers and vectors so recall can find them. List each database under `federation.local_dbs` and set `retrieval.federated_channel: true`, which is off by default.
+- It writes journal files to `~/.hermes/commons/journals/`, which Chronicle reads when `sources.ocas_journals` is enabled (the default is `auto`).
+- It records facts through Chronicle's own tools or scripts.
+
+### Structured data
+
+| Skill | What it adds | How it reaches Chronicle |
+|---|---|---|
+| [Weave](https://github.com/indigokarasu/weave) | People and relationships: contacts, how people know each other, preferences and shared experiences, each with its source | Federated database |
+| [Styx](https://github.com/indigokarasu/styx) | Spending: bank transactions, with garbled merchant names resolved to real businesses | Federated database |
+| [Taste](https://github.com/indigokarasu/taste) | Preferences learned from what you actually buy and book: reservations, deliveries, hotel stays, purchases | Federated database |
+| [Sands](https://github.com/indigokarasu/sands) | Calendar: create, find and change events across calendars in plain language | A weekly job writes travel, medical and personal events into Chronicle as facts |
+| [Bower](https://github.com/indigokarasu/bower) | Google Drive: organizes files and notes the people and things they mention | Journal entries that Chronicle reviews as candidates, each with its source; Bower never writes to the store itself |
+
+### Upkeep and recall
+
+| Skill | What it does |
+|---|---|
+| [Finch](https://github.com/indigokarasu/finch) | Mines past sessions for corrections, breakthroughs and standing rules. Findings about the user go to Chronicle instead of becoming global behaviour, and it keeps `MEMORY.md` short. |
+| [UserContext](https://github.com/indigokarasu/UserContext) | Writes a short daily block into `USER.md`: where the user is, the theme of the week, and yesterday, today and tomorrow. It draws on the calendar, recent sessions, email and Chronicle, so a new session starts with what is current instead of having to search for it. |
+
+### Declaring a federated database
+
+```yaml
+memory:
+  retrieval:
+    federated_channel: true
+  federation:
+    local_dbs:
+      - name: weave
+        path: /absolute/path/to/weave.sqlite
+        read_only: true
+```
+
+Give an absolute path. Chronicle opens the file read-only and reads its schema itself, so no database needs special support in Chronicle. Each query searches the first three declared databases unless you raise `federation.channel_max_dbs`.
 
 ## How Chronicle compares
 

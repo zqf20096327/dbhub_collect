@@ -63,60 +63,96 @@ filename fix](examples/factory-filename-fix/README.md).
   never sent to the cloud), and local/cloud usage is recorded for
   review.
 
-### Explicit on-device oMLX drafts
+### On-device oMLX coding
 
-`prism_infer` keeps Ollama's four-tier routing by default. For an explicitly
-selected text-only code or advisory reviewer draft, pass `local_backend: "omlx"`,
-`mode: "code"`, and optionally `local_model` with the exact advertised model ID.
-This path authenticates `/v1/models` before classification or any Ollama unload;
-an unavailable, unauthenticated, or mismatched model refuses without substitution.
-It reads `OMLX_API_KEY` or the local `~/.omlx/settings.json` key, and model/context
-settings from `~/.omlx/model_settings.json`; `OMLX_MODEL` and a loopback-only
-`OMLX_BASE_URL` can select local configuration. Redirects are refused.
+On Apple Silicon, choose **Settings → Local Coding** in `prism dashboard` to
+install oMLX and its model pack or use an existing server. Auto prefers configured
+oMLX for eligible coding; a saved preference or explicit task choice can select
+Ollama instead. This path requires
+Prism's oMLX integration and its separate classifier; stock oMLX is insufficient.
+See [oMLX setup, tested models, results, and failure handling](docs/omlx.md), or
+start with the [quickstart beside Ollama](#optional-omlx-for-local-coding).
+Explicit oMLX never falls back to Ollama or cloud inference; drafts still need
+host review and tests.
 
-**Requires** an oMLX build with Prism's control routes: the
-[`prism-v0.7.1rc1` branch of dcostenco/omlx](https://github.com/dcostenco/omlx/tree/prism-v0.7.1rc1), upstream oMLX
-0.7.1rc1 plus those routes ([install and settings](https://github.com/dcostenco/omlx/blob/prism-v0.7.1rc1/PRISM.md)). With stock
-oMLX every call is refused. Generation runs as an owned
-job through those routes, so a timeout or cancel is reported only once the
-server confirms the request stopped. An unconfirmed stop refuses later calls
-(`omlx_stop_unproved`, `omlx_provider_busy`).
+## Get started
 
-Before classification, Prism unloads every model Ollama has loaded
-(`keep_alive: 0`; the weights stay on disk and reload on the next Ollama call)
-and waits up to 10 seconds for Ollama to report none. A failed unload, a model
-that does not drain, or one loading meanwhile refuses the call; a newcomer is
-never unloaded. Ollama must be reachable for this step. An OS-owned loopback
-lease on port 19438 excludes other candidate MCP processes; ordinary calls within
-one process share this lease. A busy lease refuses (`omlx_resource_busy`) before
-classification or unloading, and process exit releases it without lock-file
-cleanup. In-process inference and classification wait while an oMLX call owns
-the device. Unknown Ollama state, newly loaded Ollama weights, or available
-memory below a 2 GiB reserve aborts/withholds the generation. Model caches and
-daemons remain in place. Legacy/unmodified MCP processes do not honor the lease;
-their contention is observed and rejected by the watcher.
+Memory search automatically applies ACT-R ranking: relevance plus recency,
+frequency and memory associations. No upvote or prompt instruction is required.
+To opt out, use **Account & Settings → Preferences → Automatic Memory Ranking
+(ACT-R)**, then restart your AI client. `PRISM_ACTR_ENABLED=false` also disables
+it. This ranking is separate from the neural graph's stored importance filter.
 
-**Safety screen.** The classifier on this path is the public
-`dcostenco/prism-coder-9b-mlx-8bit`, installed under the name
-`prism-coder-9b-mlx-8bit` in oMLX's model folder (about 9.2 GB while loaded).
-Layer 1's rules only refuse here; the classifier reads everything else, and a
-prompt over 4,000 characters is read whole in 3,600-character windows (the most
-severe verdict stands), never as an excerpt. A classifier failure, an unreadable
-answer, or a missing classifier refuses the call; there is no keyword or Ollama
-fallback. Each classifier read is bounded by 90 seconds and by the call's
-remaining `timeout_ms`, so a classifier that macOS paged out during a long idle
-is waited for rather than refused, and an oversize prompt read in windows
-cannot outlast the call budget; the first unrecoverable read ends the
-classification.
+```bash
+npm install -g prism-mcp-server
+prism connect
+prism dashboard
+```
 
-Configured oMLX sampling and reasoning are preserved unless `temperature` or
-`think` is explicit, including through repairs. Generic thinking-disable retries
-are disabled for oMLX, so a model with no thinking budget in oMLX's model
-settings can spend its whole answer reasoning and is refused `think_only`: give
-it a budget there, or pass `think: false`. The default 300-second budget bounds
-oMLX generation, repairs, and history answer checks; `timeout_ms` may override it
-up to 900 seconds. Context sizing uses conservative UTF-8 bytes and the
-configured window.
+Use `prism connect --dry-run` to preview changes, `prism connect --all` to
+configure every detected host, or `prism connect --refresh` to reconcile
+Prism-managed entries after an upgrade. Restart the host after connecting.
 
-The same entitlement, reserved-content, history, quality, output-safety, and
-verification
+`prism dashboard` opens the current local Mind Palace without a Synalux login.
+Prism works locally without an account, API key, or cloud subscription. Add a
+Synalux subscription when you want cloud memory, paid-tier skills, or team
+features.
+
+To check your plan, open **⚙ Account & Settings → Account** in the dashboard.
+Free users see **Start 14-day trial**; paid users see **Manage subscription**.
+During a trial, the same panel shows the paid tier and exact end date. No card
+is required to start. Add payment details before the end date to continue; if
+you do not, the subscription cancels and local Prism Free remains available.
+You can also compare plans directly at [synalux.ai/pricing#prism-plans](https://synalux.ai/pricing#prism-plans).
+
+After a few sessions, ask what it's been worth:
+
+```bash
+prism savings --period month
+```
+
+```
+💾 Local serving — LAST 30 DAYS
+  ~510K tokens kept off your cloud model
+  53 call(s) served locally of 58 routed (91%)
+```
+
+Your numbers will differ — that's the point: it reports what *your* machine
+actually served, not a projection. Full report anatomy and the honesty rules
+behind it are in the
+[`local_savings` section](#local_savings--what-local-serving-actually-displaced).
+
+### Install as a plugin
+
+Prism also ships as a plugin, which registers the MCP server and the startup
+skill for you.
+
+Both hosts install straight from this repository. There is nothing to host and
+no server to run: the catalogue is the `.claude-plugin/marketplace.json` file
+committed here, and your client clones it from GitHub.
+
+**Claude Code:**
+
+```bash
+claude plugin marketplace add dcostenco/prism-coder
+claude plugin install prism-coder@prism
+```
+
+**Codex:**
+
+```bash
+codex plugin marketplace add dcostenco/prism-coder
+codex plugin add prism-coder@prism
+```
+
+The plugin registers `prism-mcp` via `npx -y prism-mcp-server`. If you already
+configured Prism by hand — `prism connect` writes an `mcp_servers.prism-mcp`
+entry — you have that server twice under one key. Install the plugin **or**
+run `prism connect`, not both.
+
+### What `prism connect` changes about host subagents
+
+`connect` steers bounded work to `prism_infer` on your machine rather than to
+host-spawned agents. What it writes differs per host, and **it does not disable
+subagents everywhere** — Claude Code keeps them and is pointed at an economy
+model instead. Prism

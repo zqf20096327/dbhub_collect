@@ -22,7 +22,15 @@ Show the problem with a screenshot, exact text suggestion or video + session rec
 
 Feedbacks is an early 0.x release. Each application deployment serves one organization. Public registration, billing, SSO and shared-database customer tenancy are not implemented. See [architecture and deployment boundaries](docs/architecture.md).
 
-## Run locally
+## Try it with Docker
+
+```sh
+curl -fsSL https://feedbacks.softinator.ai/install.sh | bash
+```
+
+Open `http://localhost:3000` with the generated owner login. PostgreSQL and screenshots persist in Docker volumes; no S3 account or source build is required. The installer requires Docker Compose, Bash, curl and OpenSSL, and preserves existing installation directories. See the [quickstart and production guide](site-docs/guide/self-host.md).
+
+## Develop from source
 
 Requirements: Node.js 22 or 24, npm, and Docker Compose for PostgreSQL.
 
@@ -44,6 +52,17 @@ For live client edits, run `npm run dev:web` in another terminal and set `APP_OR
 Production requires HTTPS, PostgreSQL and private S3-compatible storage. Follow the [deployment guide](docs/self-hosting.md) for configuration, first-owner setup and recovery.
 
 For a registry deployment, use the [public Docker Hub image](https://hub.docker.com/r/softinator/feedbacks) and [registry Compose](compose.registry.yaml). The [illustrated storage guide](site-docs/guide/storage.md) maps the five prerequisites to their environment fields. Developers can install the bundled [Claude Code and Codex plugins](https://github.com/Softinator-TechLabs/feedbacks-plugins) in two commands, then connect their own scoped key.
+
+## Plugin directory status
+
+Checked **21 October 2026**. [Direct Claude Code and Codex installation](site-docs/guide/mcp.md#native-plugins) is available from our public marketplace.
+
+| Official directory | Current status                                                                                                                                            |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code        | Version 0.2.2 passed its security scan. Publication was requested and is waiting for an Anthropic reviewer; it is not live in the official directory.     |
+| OpenAI             | Local command/stdio MCP submission access is pending OpenAI review. Official directory submission and publication are not yet available for this package. |
+
+These reviews have no confirmed publication date. Use the direct installation instructions today; directory status does not change the self-hosted Apache-2.0 product. See [agent setup and distribution boundaries](docs/agents.md#official-directory-status).
 
 ## Browser extension
 
