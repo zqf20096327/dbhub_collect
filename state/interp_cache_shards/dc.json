@@ -9070,5 +9070,141 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e7b7daebea4": {
+  "identity": {
+   "one_liner": "AI 智能体长期记忆运行时，Markdown 为真相源、SQLite 作索引缓存",
+   "review": "agent-memory 为 AI 智能体（如 Claude Code、Codex CLI）提供本地长期记忆：Markdown 文件作为唯一真相源，旁置可随时删除重建的 SQLite 索引（BM25/FTS5，可插向量），召回以路径分级返回，写入在对话边界触发，另有独立的睡眠期整理层。需 Python 3.12 与 uv，尚无 PyPI 发布，只能源码安装，且库内不含 LLM 客户端、无需 API key。",
+   "highlights": [
+    "Markdown 文件为真相源，SQLite 索引可随时删除并重建（rm -rf .index && mem rebuild）",
+    "支持 BM25/FTS5 检索、向量插件 RRF 融合、三级读取（索引行/大纲/全文）及 recall --as-of 历史回看",
+    "提供 mem-mcp stdio MCP 服务器（memory_recall/memory_record 等）及 mem setup/doctor 对 Claude Code、Codex、Muse Code 的一键接入"
+   ],
+   "use_cases": [
+    "为跨会话的编码/非编码智能体提供可 git 化的长期记忆存储",
+    "多主机（Claude Code 与 Codex 等）共享同一记忆库",
+    "需要无人值守记忆整理但删除需人工确认的治理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "the single source of truth, the SQLite index beside them is a cache you can delete at any time, ／ Run `mem --store /path/to/store rebuild` to rebuild the SQLite cache from Markdown.",
+     "lines": [
+      7,
+      476
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该运行时自身使用 SQLite 存储可重建的检索索引缓存，而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "the single source of truth, the SQLite index beside them is a cache you can delete at any time, ／ Requires Python 3.12 or higher and uv. There is no release on ／ Pass `--mcp` to setup when the host should also receive the `agent-memory` stdio MCP server.",
+   "evidence_lines": [
+    7,
+    122,
+    199
+   ]
+  },
+  "fn": "tigerless-labs/agent-memory",
+  "sha": "0e7b7daebea4",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c8c5d6c62f27": {
+  "identity": {
+   "one_liner": "NestJS+Fastify+Nx 单体仓库生产级项目样板",
+   "review": "一个基于 NestJS 12、Fastify 5 与 Nx 23 的 monorepo 项目模板，提供 DDD/CQRS 结构、Better Auth cookie 会话、GraphQL、BullMQ 队列、OpenTelemetry 可观测性与 Docker 镜像加固，含 api/worker/scheduler/migration 四个可运行应用。面向需要快速搭建 Node 服务的开发者，默认使用 PostgreSQL 18 与 Prisma ORM。",
+   "highlights": [
+    "提供四个可运行服务：api、worker、scheduler、migration，共享同一 Nx 工作区",
+    "集成 OpenTelemetry 追踪、Sentry 错误采集与 Prometheus /metrics 指标",
+    "内置五层安全流水线（Gitleaks、OSV-Scanner、Semgrep、Trivy、Cosign）并接入 CI"
+   ],
+   "use_cases": [
+    "以此为骨架启动新的 NestJS + Fastify 后端项目",
+    "需要 DDD/CQRS 模块划分与事务性 outbox 事件的项目",
+    "需要集成测试（Testcontainers 启动真实 Postgres/Redis）与供应链签发的交付流程"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |Database|PostgreSQL 18 (native `uuidv7()`, async I/O via io_uring)|",
+     "lines": [
+      23,
+      76
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 18 作为数据库、通过 Prisma @prisma/adapter-pg 读写数据，属于使用数据库的应用样板。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Production-grade NestJS 12 + Fastify 5 + Nx 23 monorepo boilerplate. ／ |ORM|Prisma 7 (driver adapter `@prisma/adapter-pg`)| ／ |Database|PostgreSQL 18 (native `uuidv7()`, async I/O via io_uring)|",
+   "evidence_lines": [
+    5,
+    75,
+    76
+   ]
+  },
+  "fn": "chuanghiduoc/nestjs-fastify-nx",
+  "sha": "c8c5d6c62f27",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

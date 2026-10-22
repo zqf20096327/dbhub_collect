@@ -8886,5 +8886,138 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "58b57994e2c4": {
+  "identity": {
+   "one_liner": "Codex 共享工作区数据层，提供 KB/SQL/图/技能/记忆五类数据面",
+   "review": "DataMind 是一个面向 Codex 智能体的共享工作区数据层，负责存储文档、图三元组、技能与记忆，并执行工具返回证据和写入回执；Codex 负责推理、摄取与检索。通过 MCP、CLI、HTTP API 和浏览器界面暴露同一数据层，本地协调器支持 SQLite、NetworkX、Chroma/LanceDB，CI 覆盖真实 MySQL/Dolt。适合需要为智能体接入可版本化数据面的个人或企业集成方。",
+   "highlights": [
+    "提供 KB、SQL、Graph、Skills、Memory 五类数据面，工具调用支持写入回执与操作级一致性读取",
+    "同时提供 Codex 插件、官方 Codex SDK 集成、MCP 传输、CLI、HTTP API 与浏览器界面",
+    "工作区发布采用源版本校验与快照机制，支持修订回滚"
+   ],
+   "use_cases": [
+    "为 Codex 智能体搭建文档检索与语义搜索数据层",
+    "企业通过 Codex SDK 集成自有认证与租户授权的数据面",
+    "以图三元组方式管理文档实体关系并支持来源级替换与回滚"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "GitHub CI covers Python 3.11/3.12, local versioning/recovery, real MySQL/Dolt,",
+     "lines": [
+      174
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The local coordinator supports SQLite, NetworkX, and local Chroma/LanceDB.",
+     "lines": [
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite/MySQL/Dolt 等作为自身工作区数据的存储后端，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The local coordinator supports SQLite, NetworkX, and local Chroma/LanceDB. ／ GitHub CI covers Python 3.11/3.12, local versioning/recovery, real MySQL/Dolt, ／ DataMind is released under the Apache License 2.0.",
+   "evidence_lines": [
+    122,
+    174,
+    182
+   ]
+  },
+  "fn": "OpenDCAI/DataMind",
+  "sha": "58b57994e2c4",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "36410e6ed3e5": {
+  "identity": {
+   "one_liner": "Harness IDP 工作流脚手架模板，用于自动化创建微服务",
+   "review": "这是 Harness 内部开发者平台（IDP）的工作流模板仓库，提供一个“创建新微服务”的工作流：开发者填写表单后，通过 fetch:template 填充骨架代码、publish:github 创建 GitHub 仓库，并可在目录中注册服务。面向使用 Harness IDP 的平台工程师和开发者，需具备启用了 IDP 模块的 Harness 账号与 GitHub 连接器。",
+   "highlights": [
+    "提供 22 个按类别组织的工作流模板（部署、治理、基础设施等）",
+    "实现 fetch:template 与 publish:github 两个动作的链式工作流",
+    "支持工作流执行历史追踪，包含执行 ID、状态与动作日志"
+   ],
+   "use_cases": [
+    "在 Harness IDP 中一键创建微服务骨架仓库",
+    "学习 workflow action 的组合方式",
+    "将新服务自动注册进 IDP 目录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 未涉及任何数据库，仅描述基于 Harness IDP 平台的工作流自动化应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A workflow in Harness IDP is a self-service automation that developers trigger from the portal. Under the hood, every workflow is made up of **actions** — individual steps that execute in sequence. ／ **The demo:** A developer fills in a form (service name, description, owner) → clicks Execute → a GitHub repo is created automatically with a populated README, Express service starter, and `catalog-info.yaml` ready for catalog registration. ／ - A Harness account with the IDP module enabled",
+   "evidence_lines": [
+    7,
+    26,
+    39
+   ]
+  },
+  "fn": "harness-community/idp-tidbits-workflows-service-scaffold",
+  "sha": "36410e6ed3e5",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9632,5 +9632,251 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "528c4dd88aeb": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编程代理持久记忆 MCP 服务器，基于 SQLite/PostgreSQL 存储",
+   "review": "为 Claude Code、Codex、Gemini CLI 等 MCP 宿主提供跨会话持久记忆的 stdio MCP 服务器，用 SQLite（默认）或 PostgreSQL+pgvector 存储记忆，包含写入查重、引用可核验分级、更正链与预测记录机制，并提供 11 个生命周期钩子做自动捕获。适合需要在多会话间保留项目决策与修复上下文的代理用户。",
+   "highlights": [
+    "以 MCP 服务器形式为 Claude Code、Codex、Claude Desktop、Gemini CLI 等宿主提供 57 个记忆工具与 11 个生命周期钩子",
+    "默认使用本地 SQLite 存储，可选 PostgreSQL + pgvector，检索循环不调用 LLM，数据保留在本地",
+    "提供写入查重、引用可解析性分级、更正取代链和可证伪预测记录机制"
+   ],
+   "use_cases": [
+    "AI 编程代理跨会话保留项目决策、修复记录与上下文",
+    "在 Claude Code 与 Codex 之间共享同一份项目记忆",
+    "本地离线环境下管理代理记忆的写入与召回"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "default, or PostgreSQL + pgvector if you prefer. No LLM in the retrieval loop, and nothing ／ PostgreSQL server with pgvector and pg_trgm: pinned, sha256-checked binaries (about 13 MB; pgvector is ／ An existing PostgreSQL setup is kept: a configured `database_url` option (or `DATABASE_URL`),",
+     "lines": [
+      17,
+      101,
+      115
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Sovereign is what it is today.** Everything runs on your machine: a local SQLite file by ／ SQLite store. No PostgreSQL required. ／ uv tool install \"hypermnesia-mcp[sqlite]\"",
+     "lines": [
+      16,
+      65,
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MCP 宿主代理提供记忆存储服务，SQLite/PostgreSQL 是其存储后端而非业务数据，属于数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cortex — cross-platform persistent memory for AI coding agents ／ **Sovereign is what it is today.** Everything runs on your machine: a local SQLite file by ／ default, or PostgreSQL + pgvector if you prefer. No LLM in the retrieval loop, and nothing",
+   "evidence_lines": [
+    1,
+    16,
+    17
+   ]
+  },
+  "fn": "cdeust/Cortex",
+  "sha": "528c4dd88aeb",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bbbf5e1574bc": {
+  "identity": {
+   "one_liner": "用 Docker Compose 一键部署 WordPress+Traefik+Let's Encrypt+MariaDB 的模板",
+   "review": "该仓库提供一套 Docker Compose 编排，部署官方 WordPress 镜像于 Traefik 反向代理之后，自动签发 Let's Encrypt TLS 证书，后端使用 MariaDB 11.4 存储数据。内置定时备份容器（mysqldump+wp-content 打包）与交互式恢复脚本，并包含更新脚本、资源限制、容器加固配置和 CI 端到端备份恢复测试。适合希望通过 docker compose 快速自托管 WordPress 站点的运维或个人用户。",
+   "highlights": [
+    "一条 docker compose up 部署 WordPress+Traefik+Let's Encrypt+MariaDB 栈",
+    "内置定时备份容器与交互式恢复脚本，备份含数据库和 wp-content",
+    "镜像按 tag@sha256 固定，发布附带 Sigstore 签名与 SLSA 构建溯源"
+   ],
+   "use_cases": [
+    "自托管 WordPress 网站的快速部署",
+    "需要自动化备份与恢复流程的站点运维",
+    "需要 TLS 证书自动签发的 HTTPS 站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "This repository deploys WordPress (official Docker image) behind Traefik with automatic Let's Encrypt TLS, backed by MariaDB 11.4 LTS, with scheduled backups (database + wp-content) and companion restore scripts. One `docker compose up` away from a website at  ／ Three upstream images (`traefik`, `wordpress`, `mariadb`, all Docker Hub official) pinned to `tag@sha256:<digest>` as interpolation defaults in the compose `x-images` block. `git pull` alone delivers the tested combination; an `*_IMAGE_TAG` variable in `.env`  ／ - MariaDB listens only on the internal network.",
+     "lines": [
+      7,
+      43,
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库使用 MariaDB 存储 WordPress 数据，本身是部署应用栈的编排模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This repository deploys WordPress (official Docker image) behind Traefik with automatic Let's Encrypt TLS, backed by MariaDB 11.4 LTS, with scheduled backups (database + wp-content) and companion restore scripts. One `docker compose up` away from a website at `https://your-domain`. ／ The `backups` container runs a `mysqldump | gzip` + `tar.gz`-of-wp-content → prune → sleep loop (defaults: 30-minute warm-up, 24-hour interval, 30-day retention). Restore with the interactive scripts (`chmod +x *.sh` once): `./wordpress-restore-database.sh`, then `./wordpress-restore-application-data.sh`. Each lists the backups and asks, or takes a file name as its argument; both read every path and credential from the running backups container, and CI runs both on every push.",
+   "evidence_lines": [
+    7,
+    75
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "heyvaldemar/wordpress-traefik-letsencrypt-docker-compose",
+  "sha": "bbbf5e1574bc",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c705192905e7": {
+  "identity": {
+   "one_liner": "个人金融资产看板，用于记录和追踪多类资产并展示行情",
+   "review": "DollarBaan 是一个开源的个人资产看板，用于记录外汇、黄金、加密货币等资产的买卖交易，展示以土曼计的持仓价值、成本均价和盈亏。提供 Windows/macOS/Linux/Android 客户端和自托管服务器版，价格默认从 Iran Market Data 获取，服务器版以 SQLite 为默认存储，可通过 DB_DIALECT 切换到 MySQL/MariaDB。",
+   "highlights": [
+    "提供桌面端、Android 端与服务器端多种运行形态，支持本地与自托管部署",
+    "默认使用 SQLite，可通过配置切换为 MySQL/MariaDB 存储",
+    "支持 JSON 完整备份导出与 Excel (CSV) 交易导出"
+   ],
+   "use_cases": [
+    "个人记录外汇、贵金属、加密货币等资产的买卖交易",
+    "自托管服务器实现多设备通过密码访问同一资产组合",
+    "在无外网 CDN 依赖的环境下离线查看本地保存的资产数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **نصب ساده:** اجرا با Node.js، با PM2، یا با یک دستور Docker. SQLite پیش‌فرض است و MySQL/MariaDB هم پشتیبانی می‌شود. ／ |`DB_DIALECT`|`sqlite`|`sqlite` یا `mysql`| ／ |`DB_NAME`، `DB_USER`، `DB_PASSWORD`، `DB_HOST`، `DB_PORT`||تنظیمات MySQL/MariaDB|",
+     "lines": [
+      55,
+      122,
+      124
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **نصب ساده:** اجرا با Node.js، با PM2، یا با یک دستور Docker. SQLite پیش‌فرض است و MySQL/MariaDB هم پشتیبانی می‌شود. ／ |`DB_DIALECT`|`sqlite`|`sqlite` یا `mysql`| ／ |`SQLITE_PATH`|`./database.sqlite`|مسیر فایل دیتابیس SQLite|",
+     "lines": [
+      55,
+      122,
+      123
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **نصب ساده:** اجرا با Node.js، با PM2، یا با یک دستور Docker. SQLite پیش‌فرض است و MySQL/MariaDB هم پشتیبانی می‌شود. ／ |`DB_NAME`، `DB_USER`، `DB_PASSWORD`، `DB_HOST`، `DB_PORT`||تنظیمات MySQL/MariaDB|",
+     "lines": [
+      55,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个金融资产看板应用，用 SQLite/MySQL 存储自身数据，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**دلاربان** (DollarBaan) یک داشبورد مالی شخصی و متن‌باز است. خرید و فروش ارز، طلا، سکه، رمزارز و حتی دارایی‌هایی مثل سپرده بانکی، ملک یا خودرو را ثبت می‌کنید و دلاربان ارزش لحظه‌ای سبد، میانگین قیمت خرید، سود و زیان و روند دارایی‌هایتان را به **تومان** نشان می‌دهد. ／ - **نصب ساده:** اجرا با Node.js، با PM2، یا با یک دستور Docker. SQLite پیش‌فرض است و MySQL/MariaDB هم پشتیبانی می‌شود. ／ |`DB_DIALECT`|`sqlite`|`sqlite` یا `mysql`|",
+   "evidence_lines": [
+    20,
+    55,
+    122
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "MahdiGraph/DollarBaan",
+  "sha": "c705192905e7",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

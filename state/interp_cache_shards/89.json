@@ -9303,5 +9303,78 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d8976ba76f34": {
+  "identity": {
+   "one_liner": "自托管购物助手：Chrome 扩展+服务器，用 Claude 将购物清单转为 Carrefour Drive 购物车",
+   "review": "Karto 由 Chrome 扩展和可自托管服务器（Node/SQLite 或 Cloudflare Workers/D1）组成，读取用户输入的购物清单或菜谱，借助 Claude（Anthropic API 或 claude CLI 中继）在 Carrefour 网站内检索并选择商品后填入购物车，付款与选时段仍由用户完成。面向 Carrefour 法国站用户及其朋友群体的自托管部署场景，支持配对码设备绑定和偏好设置。",
+   "highlights": [
+    "支持 VPS（Node+SQLite）或 Cloudflare Workers（D1）两种部署方式",
+    "商品选择由 Claude 完成，支持 API 或 claude CLI 中继两种调用模式",
+    "按用户/设备使用一次性配对码（15分钟有效）绑定浏览器，管理员可创建用户"
+   ],
+   "use_cases": [
+    "将购物清单或菜谱自动填充为 Carrefour Drive 购物车",
+    "朋友圈小群体自托管共享购物助手",
+    "结合个人饮食偏好/预算筛选商品"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **sur un VPS**, avec Node : une base SQLite, aucun compte cloud ; ／ Choisis `LLM_RUNTIME` : `cli` (relais) ou `api` (et décommente `ANTHROPIC_API_KEY`). La base va dans `KARTO_DB` (`/var/lib/karto/karto.sqlite`). Elle est créée et migrée au démarrage.",
+     "lines": [
+      59,
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 SQLite 仅作为该应用自托管时的本地存储数据库使用，Karto 本身是面向终端用户的购物应用而非数据库生态组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Karto transforme une liste de courses ou des recettes en panier Carrefour Drive. Tu tapes « lait, 6 oeufs, de quoi faire un guacamole », Karto trouve les produits dans ton magasin selon tes préférences, tu relis, et il remplit ton panier sur carrefour.fr. Le créneau et le paiement, c'est toi qui les fais sur le site : Karto ne paie jamais et ne réserve jamais de créneau. ／ - **sur un VPS**, avec Node : une base SQLite, aucun compte cloud ; ／ - **sur Cloudflare** : un Worker avec une base D1.",
+   "evidence_lines": [
+    3,
+    59,
+    60
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "misnard/karto",
+  "sha": "d8976ba76f34",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

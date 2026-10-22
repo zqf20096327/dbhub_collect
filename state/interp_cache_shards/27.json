@@ -10007,5 +10007,147 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "20f129f45b43": {
+  "identity": {
+   "one_liner": "仓库原生的 Web 分析管道，接收 GA4/Matomo 协议并写入数仓",
+   "review": "d8a 是一个开源 Web 分析数据管道：接收 GA4 与 Matomo 埋点协议或自带 tracker，在后端构建会话与归因，将事件和会话以扁平表写入 BigQuery、ClickHouse 或 S3/GCS/本地盘上的 CSV/Parquet。仓库不含报表 UI，需自备 BI 工具；可自托管或使用其云服务，支持 --airgapped 断网运行。适合需要自持分析数据、用 SQL/BI 直接查询的团队。",
+   "highlights": [
+    "接收 GA4 与 Matomo 追踪协议，并自带可替换 gtag.js 的 web tracker",
+    "在后端构建会话（可配置超时与拆分规则），会话关闭时将事件与会话列一次性写入仓库",
+    "支持写入 BigQuery、ClickHouse 或 S3/MinIO/GCS/本地文件系统上的 CSV/Parquet"
+   ],
+   "use_cases": [
+    "自托管或隔离环境中的网站流量分析数据采集与存储",
+    "将 GA4/Matomo 埋点数据落入自有数仓，供 BI/SQL/AI 工具查询",
+    "需要扁平 schema 与点击 ID、UTM 归因字段的流量报表场景"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "d8a.tech (pronounced \"data tech\") is an open source, warehouse-native web analytics pipeline. It receives the GA4 and Matomo tracking protocols, or its own web tracker, builds sessions on the backend, and writes clean, flat tables to BigQuery, ClickHouse or CS ／ B --> C[\"BigQuery<br/>ClickHouse<br/>CSV / Parquet on S3, MinIO, GCS or disk\"] ／ - **Your storage.** Write directly to Google BigQuery or ClickHouse, or to CSV or Parquet files on S3, MinIO, GCS or a local filesystem.",
+     "lines": [
+      10,
+      15,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一条数据管道组件，接收埋点协议并将清洗后的数据写入 ClickHouse/BigQuery/文件存储，为数据仓库生态服务而非仅消费数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "d8a.tech (pronounced \"data tech\") is an open source, warehouse-native web analytics pipeline. It receives the GA4 and Matomo tracking protocols, or its own web tracker, builds sessions on the backend, and writes clean, flat tables to BigQuery, ClickHouse or CSV/Parquet files. Run it in your own infrastructure, air-gapped if you need to, or use d8a.tech Cloud. ／ - **Your storage.** Write directly to Google BigQuery or ClickHouse, or to CSV or Parquet files on S3, MinIO, GCS or a local filesystem.",
+   "evidence_lines": [
+    10,
+    26
+   ]
+  },
+  "fn": "d8a-tech/d8a",
+  "sha": "20f129f45b43",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "265b0ebd3da6": {
+  "identity": {
+   "one_liner": "离线开发者桌面工具箱，含 SQL Server 监控、Git 可视化与日志分析",
+   "review": "这是一个 Electron 桌面应用，打包了多种离线开发工具：SQL Server 实时与历史监控（阻塞树、慢查询、死锁）、可视化 Git、大日志文件分析、SQL/XML/JSON 格式化与可视化、Markdown 笔记和本地加密保险库，通过全局命令面板调用。面向使用 SQL Server 与日志排障的开发者，内置 tedious 驱动，无需额外安装；仅监控工具需 SQL Server 2016+，其余工具可无服务器运行。",
+   "highlights": [
+    "提供 SQL Server 监控：阻塞会话树、慢查询、死锁读取（system_health）与历史回放，仅读取系统视图",
+    "支持日志文件分析：自动识别多种格式、错误分组、时间线过滤与实时跟随",
+    "包含离线 SQL/XML 格式化、JSON 图形化浏览、可视化 Git（含 rebase/blame/bisect 与撤销）及 AES-256-GCM 本地保险库"
+   ],
+   "use_cases": [
+    "从 server.log 超时错误定位 SQL Server 当时被阻塞的会话与死锁源头",
+    "无需联网在本地格式化 SQL/XML、检查与转换 JSON",
+    "以可视化界面执行 Git 历史改写、冲突解决与 bisect 操作"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Toolkit desktop offline para devs: Git visual, monitoramento de SQL Server, análise de logs, ferramentas de JSON e uma palette global.** ／ - **Nada para instalar junto**: o formatador de SQL (Pyodide) e o driver do SQL Server (`tedious`) já vêm dentro do app. ／ |🗄️|**Banco**|Monitor de SQL Server: quem bloqueia quem, queries lentas, deadlocks e saúde — ao vivo e no histórico|",
+     "lines": [
+      5,
+      57,
+      120
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "包含专门针对 SQL Server 的监控组件（Banco），通过内置 tedious 驱动读取系统视图为数据库运维服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Toolkit desktop offline para devs: Git visual, monitoramento de SQL Server, análise de logs, ferramentas de JSON e uma palette global.** ／ - **Nada para instalar junto**: o formatador de SQL (Pyodide) e o driver do SQL Server (`tedious`) já vêm dentro do app. ／ |🗄️|**Banco**|Monitor de SQL Server: quem bloqueia quem, queries lentas, deadlocks e saúde — ao vivo e no histórico|",
+   "evidence_lines": [
+    5,
+    57,
+    120
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tonissx/toni-devkit",
+  "sha": "265b0ebd3da6",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

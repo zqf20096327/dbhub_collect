@@ -11347,5 +11347,164 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e23ebf03fa7f": {
+  "identity": {
+   "one_liner": "单文件嵌入式双时态图数据库，支持 Datalog 查询",
+   "review": "Minigraf 是用 Rust 编写的单文件嵌入式图数据库，核心机制是 Datalog 查询语言加双时态模型（事务时间+有效时间），每个事实携带完整历史，支持时间回溯查询。面向 AI 代理记忆、移动端离线存储和浏览器场景，提供 Python/Node/Java/Swift/C 等多语言绑定及 WASM 运行形态；设计上不做分布式和客户端-服务器架构。",
+   "highlights": [
+    "支持 Datalog 查询，含递归规则、窗口函数和预编译语句",
+    "双时态模型记录事务时间与有效时间，可回放任意历史状态",
+    "提供原生、WASM（浏览器/WASI）及移动端多语言绑定，数据存于单个 .graph 文件"
+   ],
+   "use_cases": [
+    "为 AI 代理提供可审计、可修正的信念/记忆存储",
+    "移动端离线优先存储，支持追溯修正且保留原始记录",
+    "浏览器内嵌图数据存储与可视化时间回溯演示"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其本身是嵌入式图数据库存储引擎，为应用提供数据存储与查询能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "source",
+    "pypi",
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+   "evidence_lines": [
+    14,
+    22,
+    93
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "e23ebf03fa7f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d9c283bb8543": {
+  "identity": {
+   "one_liner": "Rust 编写的开源数据平台，在对象存储上提供混合检索、文档、图、SQL 等多种引擎",
+   "review": "Loams 是一个用 Rust 实现的数据平台，把向量/BM25 混合检索、响应式文档、图、分析与 SQL 等能力放在同一个对象存储桶上，写入走日志脊柱并返回一致性令牌。它提供 Qdrant、Elasticsearch、Arrow Flight SQL、Postgres/MySQL wire 等接入方式，通过 Docker Compose 或 cargo 运行，面向用 AI agent 构建软件的开发者。项目处于 0.1.0 预览阶段，API 与磁盘格式可能在小版本间变化。",
+   "highlights": [
+    "在同一存储上提供检索引擎、响应式文档库（Live）、GQL 图（Graph）、ClickHouse 兼容分析（House）与持久化 agent 运行（Durable）",
+    "提供原生 REST、Arrow Flight SQL 以及 Qdrant 和 Elasticsearch 客户端兼容 API，另有 Postgres 与 MySQL wire",
+    "数据保存在用户自己的对象存储（S3、GCS、Azure Blob、RustFS 或本地目录）中的开放格式"
+   ],
+   "use_cases": [
+    "为 AI agent 应用提供集中式检索与数据存储，替代多个有状态集群组合",
+    "用现有 Qdrant/Elasticsearch 客户端接入混合检索场景",
+    "自托管部署（Docker Compose + Tailscale）管理自己的数据平台"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "|**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      41,
+      45
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "|**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      41,
+      45
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "compat",
+     "quote": "|**Loams House**|Experimental. ClickHouse-compatible analytics with engine-level access control (opt-in profile)|",
+     "lines": [
+      44
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket| ／ Apache License 2.0. Loams builds on DataFusion, Lance, Tantivy, Quickwit, qdrant-edge, SlateDB, openraft, TiKV, TiDB, Neon, Grafeo, chDB and Resonate; attributions are in NOTICE. Loams is fully open source: there is no open core and no paid edition. The meteri",
+     "lines": [
+      45,
+      95
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "Loams 自身是包含多个存储引擎的数据平台本体，同时其上运行 Studio 等 agent 开发产品，生态位证据混杂。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0，README 声明无 open core、无付费版",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Underneath the products is the data platform. A typical AI application runs Elasticsearch, Qdrant, a graph database, Kafka and a workflow engine: five stateful clusters, several copies of the same data, and retrieval glued together in application code. Loams replaces them with one engine on one bucket: ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+   "evidence_lines": [
+    25,
+    41,
+    45
+   ]
+  },
+  "fn": "ostrium-labs/loams",
+  "sha": "d9c283bb8543",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

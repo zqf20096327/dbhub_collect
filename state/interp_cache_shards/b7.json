@@ -9588,5 +9588,80 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "478edb37d720": {
+  "identity": {
+   "one_liner": "MCP 桥接工具，用 SQLite 队列让 Claude 派发任务给 OpenCode 执行",
+   "review": "TaskBridge 通过 MCP 服务器和 SQLite 任务队列，让 Claude 将编码任务派发给无头 OpenCode 代理执行，提供自动 worker、双向问答、git worktree 隔离和结果回传，适合同时使用 Claude 与 OpenCode 的开发者做任务编排。限制：依赖 macOS launchd 调度、Python 3.12 与 opencode CLI。",
+   "highlights": [
+    "提供 17 个 MCP 工具用于任务提交、查询、日志跟踪与队列管理",
+    "支持双向桥接：OpenCode 侧可通过反向 MCP 服务器驱动 Claude",
+    "任务队列基于 SQLite 实现，支持重试、优先级、依赖与重启恢复"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 中派发编码任务给 OpenCode 无头执行",
+    "通过 HTTP/tunnel 公开端点供任意 MCP 客户端远程提交任务",
+    "多任务批处理编排（依赖、优先级、每项模型配置）"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Claude plans. OpenCode builds.** Dispatch real coding work from Claude to headless OpenCode agents via a durable SQLite queue. ／ Python 3.12 MCP SQLite Worker License ／ - **SQLite is the durable handoff** — survives restarts, supports retries, priorities, dependencies, and two-way questions.",
+     "lines": [
+      3,
+      7,
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该项目自身任务队列的持久化存储，项目是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "  Bridge -- read/write --> DB[(tasks.db - SQLite)] ／ |`task_store.py`|Shared SQLite logic: submit/claim/complete, retries, deps, notes, heartbeat| ／ |`TASK_DB_PATH`|bridge, CLI|SQLite path (default: `<repo>/tasks.db`)|",
+   "evidence_lines": [
+    153,
+    162,
+    176
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Parithosh-Varma/TaskBridge",
+  "sha": "478edb37d720",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

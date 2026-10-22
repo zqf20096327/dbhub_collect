@@ -10312,5 +10312,226 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b7a0893c3622": {
+  "identity": {
+   "one_liner": "基于 SQLite 分片存储、兼容 Redis 协议的 Blob 存储服务器",
+   "review": "Blobasaur 是用 Rust 编写的二进制大对象（Blob）存储服务器，以多个 SQLite 数据库作为分片后端，通过一致性哈希分布数据，并实现 Redis 协议使现有 Redis 客户端可直接访问。支持 TTL、命名空间、多种压缩算法、Prometheus 指标及分片数量变更迁移（迁移需停机）。适合需要用 Redis 接口存取大对象、且希望以文件级数据库落盘的场景。",
+   "highlights": [
+    "实现 Redis 协议，支持 GET/SET/DEL/HGET/HSET 等命令及 Redis Cluster 协议",
+    "以多个 SQLite 数据库为分片后端，使用一致性哈希分布数据，支持分片迁移与校验",
+    "提供 TTL 过期、命名空间、可配置压缩（Gzip/Zstd/Lz4/Brotli）和 Prometheus 指标"
+   ],
+   "use_cases": [
+    "通过 Redis 客户端存取二进制大对象",
+    "需要以 SQLite 文件形式落盘的分片对象存储部署",
+    "需调整分片数量时的数据迁移与完整性校验"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Blobasaur is a high-performance, sharded blob storage server written in Rust. It implements the Redis protocol for client compatibility and uses SQLite as the backend for each shard, providing a simple yet robust solution for storing and retrieving binary larg",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一个为客户端提供存储服务的组件，内部以 SQLite 作为嵌入式后端存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Blobasaur is a high-performance, sharded blob storage server written in Rust. It implements the Redis protocol for client compatibility and uses SQLite as the backend for each shard, providing a simple yet robust solution for storing and retrieving binary large objects (blobs). ／ - **🚀 High Performance Sharding**: Distributes data across multiple SQLite databases using multi-probe consistent hashing for optimal concurrency and scalability ／ - **💾 SQLite Backend**: Each shard uses its own SQLite database for simple deployment and reliable storage",
+   "evidence_lines": [
+    9,
+    15,
+    19
+   ]
+  },
+  "fn": "iamd3vil/blobasaur",
+  "sha": "b7a0893c3622",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3c856f811b2f": {
+  "identity": {
+   "one_liner": "面向武汉理工校园的 AI 助手应用，含 RAG 检索与 Agent 路由",
+   "review": "这是一个以 Vue 3 + Express + Qdrant 构建的校园场景 AI 助手全栈应用，通过意图路由在普通对话、RAG 检索和 Agent 工具调用间切换。数据持久化默认使用 SQLite（WAL 模式），第三阶段提供 PostgreSQL Repository 与导入工具用于切换后端。面向武汉理工大学校园用户，不适合其他场景直接复用。",
+   "highlights": [
+    "支持 SSE 流式对话、RAG 知识库检索与 Agent 工具调用三种模式的自动意图路由",
+    "默认以 SQLite WAL 持久化存储，并提供 PostgreSQL Repository 与导入工具作为可选后端",
+    "使用 Qdrant 作为唯一向量后端，本地 ONNX BGE 模型执行 embedding 与重排"
+   ],
+   "use_cases": [
+    "高校校园知识库问答与信息检索场景",
+    "需要带来源引用和评测体系的 RAG 应用部署参考",
+    "本地化部署的对话助手（含文件对话、语音交互）"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "第三阶段已提供 PostgreSQL Repository 与导入工具。默认仍为 `DATABASE_BACKEND=sqlite`；切换前先执行 PostgreSQL schema migration 和 SQLite 导入，验证用户、会话、任务、附件元数据、反馈数量一致后，再将 `DATABASE_BACKEND=postgres` 灰度启用。",
+     "lines": [
+      234
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite WAL 持久化存储（唯一实现）。 ／ - 后台任务：质量审计、Wiki 互链、上传清理和隐私留存使用 SQLite 持久化 Job，管理员可通过 `/api/metrics/jobs` 查看失败任务并重试。",
+     "lines": [
+      30,
+      220
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite（及可选 PostgreSQL）存储用户、会话、任务等业务数据，是使用数据库的应用而非数据库生态工具",
+   "ai2": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- SQLite WAL 持久化存储（唯一实现）。 ／ 第三阶段已提供 PostgreSQL Repository 与导入工具。默认仍为 `DATABASE_BACKEND=sqlite`；切换前先执行 PostgreSQL schema migration 和 SQLite 导入，验证用户、会话、任务、附件元数据、反馈数量一致后，再将 `DATABASE_BACKEND=postgres` 灰度启用。",
+   "evidence_lines": [
+    30,
+    234
+   ]
+  },
+  "fn": "L123121/Vue3_WUT_RAG",
+  "sha": "3c856f811b2f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b09a02d2307": {
+  "identity": {
+   "one_liner": "将 psql 的 \\d 描述命令族移植为 JavaScript 库",
+   "review": "该库把 psql 的 describe.c 等源码经正则改写移植为 JS，实现 describe() 函数，用于在 JavaScript 环境中执行 \\d 等反斜杠命令，输出与 psql 一致的文本或 HTML 表格；供在 Web/Node 环境构建 SQL 客户端的开发者使用，需自行提供 runQuery 函数与服务器版本号，文本格式仅支持 psql 默认样式。",
+   "highlights": [
+    "提供 describe() 函数，支持 psql 的 \\d 命令族及 \\h SQL 帮助",
+    "导出 describeDataToString 与 describeDataToHtml 用于输出格式化",
+    "测试与 PostgreSQL 14–19 的 psql 客户端输出逐字符对比"
+   ],
+   "use_cases": [
+    "在 JS 实现的 SQL 编辑器/客户端中提供 \\d 类元命令",
+    "生成与 psql 一致的数据库对象描述文本或 HTML 表格",
+    "为不同版本 PostgreSQL 服务器分支展示特性"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "psql's `\\d` (describe) family of commands ported to JavaScript.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL psql 元命令提供可嵌入的 JavaScript 实现，服务于数据库客户端生态而非直接存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Postgres license",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "psql's `\\d` (describe) family of commands ported to JavaScript. ／ This library is on npm and powers backslash commands in the Neon SQL Editor. ／ The key export is the `describe()` function:",
+   "evidence_lines": [
+    3,
+    13,
+    17
+   ]
+  },
+  "fn": "neondatabase/psql-describe",
+  "sha": "8b09a02d2307",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

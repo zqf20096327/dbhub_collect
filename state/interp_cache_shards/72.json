@@ -10185,5 +10185,99 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "99344d01538c": {
+  "identity": {
+   "one_liner": "面向 Agent 的本地多数据库 CLI，封装连接、查询与只读控制",
+   "review": "agent-database-cli 是用 Rust 编写、经 npm 分发的本地 CLI 工具，为 AI Agent 提供可调用的数据库命令：支持 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接复用、SQL/命令执行与元信息读取，并内置只读模式、命令黑名单、密码加密存储和 SSH 隧道。通过 SKILL.md 供 Agent 调用，适合需要让 AI 受控访问数据库的场景。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、Redis（单机/集群）、Oracle（SQLcl/原生驱动）、MongoDB 的连接与查询执行",
+    "按连接配置只读模式与命令黑名单，默认只读并拦截写入语义查询",
+    "密码等敏感信息本地加密存储（secrets.json），不输出明文；支持 SSH 隧道访问"
+   ],
+   "use_cases": [
+    "让 AI Agent/Claude Code 等以受控只读方式查询本地或远程数据库",
+    "通过只读模式加黑名单限制 Agent 可执行的 SQL 与 Redis/MongoDB 命令",
+    "集中管理多数据库连接配置，配合 SSH 隧道访问内网数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`agent-database-cli` 是一个面向 Agent 的本地多数据库 CLI 工具，用 Rust 封装 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询、元信息读取、只读控制、命令黑名单和密码加密能力。 ／ |PostgreSQL|`postgres`|Rust 原生驱动 `tokio-postgres`|暂不支持切换|",
+     "lines": [
+      20,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`agent-database-cli` 是一个面向 Agent 的本地多数据库 CLI 工具，用 Rust 封装 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询、元信息读取、只读控制、命令黑名单和密码加密能力。 ／ |MySQL|`mysql`|Rust 原生驱动 `mysql_async`|暂不支持切换|",
+     "lines": [
+      20,
+      36
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "`agent-database-cli` 是一个面向 Agent 的本地多数据库 CLI 工具，用 Rust 封装 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询、元信息读取、只读控制、命令黑名单和密码加密能力。 ／ |Oracle|`oracle`|SQLcl|支持两种驱动：默认 SQLcl （需要自行安装）；可切换oracledb（需要 Oracle Instant Client）|",
+     "lines": [
+      20,
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为封装多种数据库连接、查询与权限控制能力的 CLI 工具，为数据库访问提供服务而非仅消费数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`agent-database-cli` 是一个面向 Agent 的本地多数据库 CLI 工具，用 Rust 封装 MySQL、PostgreSQL、Redis、Oracle、MongoDB 的连接、查询、元信息读取、只读控制、命令黑名单和密码加密能力。 ／ - 按单个数据库配置启用只读模式和命令黑名单 ／ |`readonly`|全部数据库|`true`|是否启用只读模式；仅在明确需要写入时才建议显式设为 `false`|",
+   "evidence_lines": [
+    20,
+    27,
+    129
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "sleepinginsummer/agent-database-cli",
+  "sha": "99344d01538c",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

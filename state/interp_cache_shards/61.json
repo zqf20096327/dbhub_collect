@@ -10213,5 +10213,127 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0c8610306b55": {
+  "identity": {
+   "one_liner": "媒体库 CLI 工具集，用 SQLite 索引并管理本地与在线媒体",
+   "review": "提供 137 个子命令的 Python CLI 工具，用于采集、索引和播放本地及在线媒体（YouTube、Vimeo、Reddit 等），通过 ffprobe 提取元数据并存入 .db 文件。面向需要管理大规模本地媒体档案的个人用户，依赖 ffmpeg，可选安装 gallery-dl、libtorrent 等额外组件。",
+   "highlights": [
+    "提供 database/filesystem/document/file 四组共 137 个子命令",
+    "支持从本地文件系统和 YouTube、Vimeo、Reddit、Hacker News 等在线来源采集元数据",
+    "提供播放子命令，可在播放后执行删除等后续动作"
+   ],
+   "use_cases": [
+    "为大规模本地视频/音频档案建立可检索索引",
+    "订阅并追踪 YouTube 等平台的播放列表更新",
+    "播放媒体并按规则自动清理已看文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目将媒体元数据存入自身的 .db 数据库文件，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " library database add filesystem tv.db ./video/folder/ ／ Commands are organized by workflow. Use `database` (or `db`) for database ／  library (v4.0.1; 137 subcommands)",
+   "evidence_lines": [
+    56,
+    120,
+    130
+   ]
+  },
+  "fn": "chapmanjacobd/library",
+  "sha": "0c8610306b55",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d2ad017ed2de": {
+  "identity": {
+   "one_liner": "自托管的求职自动化应用，采集、评分、投递追踪，用 PostgreSQL 存储",
+   "review": "一个自托管的求职自动化系统：抓取招聘页面，用 LLM 给职位打分并定制简历和求职信，自动填写申请表，通过 Telegram 提醒，并追踪每次投递状态。面向个人或家庭用户（最多五个账户），通过 Docker Compose 部署，数据存于 PostgreSQL 16，集成多个 LLM 提供商（Claude、OpenAI、Ollama 等）。限制：仅限个人使用，部分抓取器默认关闭。",
+   "highlights": [
+    "抓取职业页面与聚合器（Playwright + 12 个 ATS 处理器），用 LLM 针对简历对职位评分",
+    "每职位定制简历与求职信，支持 8 种 PDF 模板及 Word 导出，Chrome 扩展实现 ATS 表单自动填写",
+    "多账户支持（最多五个），内置 Gmail 回信分类与 Telegram 提醒，定时 pg_dump 备份"
+   ],
+   "use_cases": [
+    "个人或家庭集中管理多个求职账户与投递进度",
+    "用 LLM 定制简历和求职信并自动填充 ATS 申请表",
+    "通过 Telegram/Gmail 跟踪回复与投递漏斗统计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16|",
+     "lines": [
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 PostgreSQL 16 作为应用自身的存储后端，JobNavigator 是使用数据库的应用而非服务于数据库的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted, multi-account job-hunt automation.** ／ |Database|PostgreSQL 16| ／ |Backend|Python 3.12, FastAPI, SQLAlchemy, APScheduler, Playwright|",
+   "evidence_lines": [
+    5,
+    111,
+    109
+   ]
+  },
+  "fn": "vesaias/JobNavigator",
+  "sha": "d2ad017ed2de",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

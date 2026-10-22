@@ -9930,5 +9930,62 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d0f95c85d15a": {
+  "identity": {
+   "one_liner": "beads issue tracker 的跨平台原生 GUI 客户端",
+   "review": "Beadbox 为 beads（bd）issue tracker 提供桌面图形界面，展示 epic 树、依赖结构、pipeline 状态与实时活动。基于 Tauri v2（Rust shell + Bun sidecar），所有数据经 bd CLI 读写，支持本地 .beads/ 工作区与远程 Dolt 服务器工作区。需要 beads CLI 1.1.0+。",
+   "highlights": [
+    "提供 epic 树、时间线图表、依赖与等待门控的可视化界面",
+    "实时同步 bd CLI 的变更，本地通过文件监听、服务器工作区通过轮询 Dolt 表哈希",
+    "支持多工作区切换、过滤持久化与键盘优先操作"
+   ],
+   "use_cases": [
+    "使用 beads CLI 管理开发任务时需要图形化查看 epic 层级与依赖关系",
+    "多项目工作区之间的快速切换与状态总览"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是读取 beads 数据库 issue 数据的桌面应用，数据全部经由 bd CLI 流转",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Requires the beads CLI, version 1.1.0 or newer** (`brew install beads`). Beadbox is a GUI over `bd`; issue data lives in your beads database. `.beadtrain` files in `.beads/` are optional plans (see Beadtrains) shown on the Trains tab. ／ Beadbox is a Tauri v2 app. The Rust shell spawns a Bun sidecar process and talks to it over stdio (kkrpc) — the app itself opens no network ports. (One opt-in exception, off by default: if you enable the `bd serve` reads pilot for a local server-mode workspace, `bd` opens one token-authenticated listener on 127.0.0.1 for that workspace, which the app starts and stops with itself; see SECURITY.md for the helper process `bd` starts alongside it and the one case where that can outlive the app.) All issue data flows through the `bd` CLI; Beadbox never touches the database behind `bd`'s back. Live updates come from watching the workspace filesystem (local) or polling Dolt table hashes (server workspaces).",
+   "evidence_lines": [
+    29,
+    110
+   ]
+  },
+  "fn": "beadbox/beadbox",
+  "sha": "d0f95c85d15a",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

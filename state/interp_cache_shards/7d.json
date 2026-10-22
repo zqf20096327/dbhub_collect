@@ -10553,5 +10553,223 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9d28998c553f": {
+  "identity": {
+   "one_liner": "本地 MCP 记忆服务器，SQLite 单文件存储，混合检索+知识图谱",
+   "review": "为 Claude、Cursor、Codex 等 AI 客户端提供持久化本地记忆的 MCP 服务器，通过 npx 运行，数据存于本机单个 SQLite 文件。提供 25 个工具，包含 FTS5 BM25 与本地向量余弦经 RRF 融合的混合检索、多语言嵌入、双时间线 asOf 查询、矛盾检测与事实替代。数据不出本机、无需 API 密钥，向量扩展不可用时回退纯关键词检索。",
+   "highlights": [
+    "混合检索：FTS5 BM25 与 sqlite-vec 向量余弦经 RRF(k=60) 融合，嵌入模型 multilingual-e5-small 本地运行",
+    "提供 valid-time asOf 查询、observation supersede、archive 等记忆生命周期工具，矛盾扫描器不依赖 LLM",
+    "通过 mcpServers 配置接入 Claude Code/Claude Desktop/Cursor/VS Code/Codex"
+   ],
+   "use_cases": [
+    "为 AI 编程助手跨会话保留学习记录、决策与项目上下文",
+    "构建实体观察与知识图谱，查询某日期时点的已知事实",
+    "离线/内网环境下运行本地记忆存储（可禁用嵌入，仅用 FTS5）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Learnings, decisions, people, projects — stored in a **single SQLite file** on your machine that never leaves your computer. Built-in Knowledge Graph, duplicate detection, FTS5 keyword search, and (new in v2) **hybrid retrieval** that fuses BM25 with on-device ／ - `embeddings` (`sqlite-vec` `vec0` virtual table, float[384]) — vector recall.",
+     "lines": [
+      18,
+      115
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Zero Config** -- `npx` and done. No Docker, no Postgres, no Redis, no API keys.",
+     "lines": [
+      276
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将学习、决策、实体等数据存储在本机单个 SQLite 文件中，SQLite 是其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Learnings, decisions, people, projects — stored in a **single SQLite file** on your machine that never leaves your computer. Built-in Knowledge Graph, duplicate detection, FTS5 keyword search, and (new in v2) **hybrid retrieval** that fuses BM25 with on-device vector cosine via Reciprocal Rank Fusion. The embedding model is multilingual (DE / EN / ES / 100+ languages) and runs locally — no API keys, no cloud. ／ - `embeddings` (`sqlite-vec` `vec0` virtual table, float[384]) — vector recall.",
+   "evidence_lines": [
+    18,
+    115
+   ]
+  },
+  "fn": "studiomeyer-io/local-memory-mcp",
+  "sha": "9d28998c553f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b993b735fe3": {
+  "identity": {
+   "one_liner": "自托管 AI 代理工作区：看板任务，代理在本机执行构建",
+   "review": "pacman 是一个自托管的 AI 代理任务工作区：用户在看板上创建任务，配置了模型、MCP 服务器与技能的代理领取任务，在本机守护进程上执行构建，并通过 SSE 实时回传计划、diff 与工具调用。服务端基于 Hono + SQLite 存储，数据默认落在 ~/.pacman，适合想在自有机器上运行并人工审核代理产出的开发者团队。",
+   "highlights": [
+    "提供看板任务管理与代理执行角色（模型、技能、MCP 服务器、密钥、记忆）配置",
+    "支持通过守护进程在多台自有主机上注册并执行构建，SSE 实时流式回传",
+    "首次启动自动在 ~/.pacman 创建 SQLite 数据库并运行迁移"
+   ],
+   "use_cases": [
+    "在自有机器上以人工审核节点（计划/diff 两道闸）运行 AI 代理编码任务",
+    "通过 GitHub issue 标签将工单自动导入为代理任务",
+    "自托管托管 git 仓库并让代理在指定主机上构建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`apps/server`|Server: Hono REST + SSE + SQLite (package `@xiechimon/pacman` — directory name differs from package name)|",
+     "lines": [
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明服务端使用 SQLite 存储自身数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted, open-source **agent workspace**: a task board where you write the tasks and AI agents build them on your own machines. ／ One command: download, start, and serve on **http://127.0.0.1:8787/app**. The first boot creates the database under `~/.pacman`, runs migrations, and seeds a default team. ／ |`apps/server`|Server: Hono REST + SSE + SQLite (package `@xiechimon/pacman` — directory name differs from package name)|",
+   "evidence_lines": [
+    5,
+    33,
+    105
+   ]
+  },
+  "fn": "xiechimon/pacman",
+  "sha": "8b993b735fe3",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f7505dc66ce5": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 服务器，将代码库索引为 SQLite 符号图并提供检索工具",
+   "review": "code-atlas 是面向 AI 编码代理的 MCP 服务器：用各语言的解析器（PHP/TS/Python/T-SQL）将代码库解析为符号图并存入本地 SQLite，通过 24 个 MCP 工具以行结果形式回答调用关系、实现定位、影响范围等问题。适合维护大型陌生代码库、由代理而非人在 IDE 中阅读代码的场景；索引为只读，不修改代码，测试与开发流程仅限 POSIX 环境。",
+   "highlights": [
+    "提供 24 个 MCP 工具，支持 PHP、TypeScript/JavaScript、Python、T-SQL 四种语言的符号图索引",
+    "离线运行，核心不含 LLM，索引通过 git diff 做增量更新",
+    "支持以 Claude Code 插件、uvx/pipx 或 Docker 容器方式安装运行"
+   ],
+   "use_cases": [
+    "AI 代理在大型代码库中查询调用者、实现与影响范围等关系问题",
+    "需要可验证、可计数答案的代码导航与影响分析",
+    "通过 MCP 客户端（如 Claude Code）集成到现有代理工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "out. code-atlas parses each language with its **best** parser into a **SQLite symbol graph**, ／ MCP client talks stdio to the language-agnostic core, which drives per-language adapters over a versioned JSONL contract, stores a symbol graph in SQLite, and feeds a deterministic onboarding layer with an opt-in LLM package behind three seams. ／ exposes the MCP tools. Everything runs offline against local SQLite, with incremental updates via",
+     "lines": [
+      57,
+      74,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将代码符号图存储于本地 SQLite，SQLite 是其内部存储而非服务对象，不提供面向数据库生态的功能",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "MCP client talks stdio to the language-agnostic core, which drives per-language adapters over a versioned JSONL contract, stores a symbol graph in SQLite, and feeds a deterministic onboarding layer with an opt-in LLM package behind three seams. ／ exposes the MCP tools. Everything runs offline against local SQLite, with incremental updates via",
+   "evidence_lines": [
+    74,
+    78
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "cuongdinhngo/code-atlas",
+  "sha": "f7505dc66ce5",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10475,5 +10475,445 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3635f2c186a6": {
+  "identity": {
+   "one_liner": "基于 OpenTelemetry 的 AI Agent 可观测与工程平台",
+   "review": "OpenLIT 是一个开源的 agent harness 工程平台，通过 OpenTelemetry 采集 AI Agent 与编码 Agent 的调用链、指标与成本，提供评估、护栏、Prompt 管理、规则引擎、密钥管理与 GPU 监控，供开发与运维 AI 应用的团队使用。部署方式为 Docker Compose 自托管，SDK 提供 Python 与 TypeScript 包，遥测遵循 GenAI 语义约定，可在 Apache 2.0 下免费自托管。",
+   "highlights": [
+    "基于 OpenTelemetry（OTLP :4317/:4318）采集 LLM 调用、工具调用、检索与 Agent 步骤的追踪和指标",
+    "提供 LLM-as-a-Judge 评估、运行时护栏、Prompt Hub、Rule Engine、Vault 与 GPU 监控功能",
+    "自动插桩 70+ AI 提供商、框架与向量/数据库集成，支持 Claude Code、Cursor、Codex 等编码 Agent"
+   ],
+   "use_cases": [
+    "AI Agent 生产环境的调用链追踪、成本与延迟分析",
+    "对 LLM 输出做自动化评估并接入 CI 门禁",
+    "监控编码 Agent（Claude Code/Cursor 等）会话与 GPU 推理资源"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ChromaDB Pinecone Qdrant Milvus AstraDB PostgreSQL (psycopg3)",
+     "lines": [
+      333
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Connectors catalog with ClickHouse, Grafana Tempo, Loki, Prometheus, and Jaeger ／ Connectors — plug in ClickHouse, Tempo, Loki, Prometheus &amp; more",
+     "lines": [
+      237,
+      238
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为采集与分析 AI 应用遥测的平台，本身通过连接器对接 ClickHouse 等存储，属于为生态服务的观测工具而非用库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0，免费自托管",
+   "install": [
+    "docker",
+    "pypi",
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OpenLIT is an open-source agent harness engineering platform.** It gives teams OpenTelemetry-native tracing, evaluations, guardrails, prompt and context management, and cost and GPU monitoring for the *harness* around their AI agents and coding agents, so every agent failure can be traced, scored, and turned into a harness fix. OpenLIT is free to self-host under Apache 2.0 and works with any model, framework, or harness: Claude Code, Codex, Cursor, OpenAI Agents SDK, LangGraph, CrewAI, and 70+ more integrations. ／ Connectors catalog with ClickHouse, Grafana Tempo, Loki, Prometheus, and Jaeger ／ OpenLIT is built around **OpenTelemetry**, rather than creating a proprietary telemetry format. Traces and metrics follow OpenTelemetry GenAI semantic conventions (`gen_ai.*`).",
+   "evidence_lines": [
+    26,
+    237,
+    308
+   ]
+  },
+  "fn": "openlit/openlit",
+  "sha": "3635f2c186a6",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2da93949881c": {
+  "identity": {
+   "one_liner": "基于 rusqlite/Rustler 的 Elixir SQLite 数据库驱动库",
+   "review": "xqlite 是一个 Elixir 语言的 SQLite 库，通过 Rust 的 rusqlite 和 Rustler 提供原生 NIF 绑定，SQLite 3.53.2 直接编译进库内无需单独安装。提供连接管理、查询、流式读取、事务、备份快照、FTS5 全文检索、类型扩展和 PRAGMA 封装，面向 Elixir 开发者；pre-1.0 阶段，minor 版本含破坏性变更。",
+   "highlights": [
+    "SQLite 3.53.2 编译进库，预编译二进制覆盖 macOS/Linux/Windows，无需 Rust 工具链",
+    "支持任意进程取消查询、结构化错误字段、在线备份、变更捕获（session 扩展）与 FTS5 全文检索",
+    "内置 53 个带校验的类型化 PRAGMA（34 个可写）及 DateTime/JSON/UUID 等 9 种类型扩展"
+   ],
+   "use_cases": [
+    "Elixir 应用嵌入 SQLite 作为本地/嵌入式存储",
+    "需要在线备份、快照与变更同步的 SQLite 运维场景",
+    "利用 FTS5 做应用内全文检索与结构化类型存取"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Choose SQLite, and stay with it, instead of Postgres when you do not truly need Postgres. xqlite is an Elixir library for SQLite that gives your application what staying takes: queries any process can cancel, errors with structured fields, backups of a live da",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ Bundled SQLite 3.53.2 is compiled into the library, so there is nothing to install, and development, CI and production all run the same SQLite. The native layer is Rust, built on rusqlite and Rustler. A value that xqlite or SQLite rejects comes back as `{:erro",
+     "lines": [
+      6,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Elixir 应用提供 SQLite 驱动/绑定，属数据库生态服务组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Choose SQLite, and stay with it, instead of Postgres when you do not truly need Postgres. xqlite is an Elixir library for SQLite that gives your application what staying takes: queries any process can cancel, errors with structured fields, backups of a live database, change capture, full-text search, and messages on commits, rollbacks, row changes and lock waits. ／ Bundled SQLite 3.53.2 is compiled into the library, so there is nothing to install, and development, CI and production all run the same SQLite. The native layer is Rust, built on rusqlite and Rustler. A value that xqlite or SQLite rejects comes back as `{:error, reason}`, and a panic in the Rust code raises in the calling process instead of taking the VM down. The Security guide says where that guarantee ends. ／     {:xqlite, \"~> 0.16.0\"}",
+   "evidence_lines": [
+    11,
+    13,
+    34
+   ]
+  },
+  "fn": "dimitarvp/xqlite",
+  "sha": "2da93949881c",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5eb33e586583": {
+  "identity": {
+   "one_liner": "自托管的容器应用期望状态控制平面，Center 存储意图与编排状态",
+   "review": "Vastora 是一个自托管的私有云控制平面，用 Go CLI 的 Center 组件通过 HTTP API 管理多个 Site 和 Node 上的 Docker 工作负载，Agent 作为节点侧唯一执行器，配合 Caddy/Cloudflare Tunnel 做应用发布。状态持久化在 SQLite 中并支持加密备份、前向迁移。适合想在自有 VPS 上做声明式容器编排和发布管理的个人或小团队运维者。README 标明为 pre-alpha，不建议管理生产负载。",
+   "highlights": [
+    "提供期望状态控制平面：Center 存储/编排意图，单一 Agent 二进制执行 Docker 工作负载，Center 不可用时已应用的路由继续运行",
+    "使用 SQLite 持久化 AES-256-GCM 加密的密钥与目录数据，支持密码保护的加密备份/恢复和前向迁移快照",
+    "支持多种发布路径（LAN、Headscale、Cloudflare Tunnel、shared-443）及 Ed25519 目录签名验证"
+   ],
+   "use_cases": [
+    "在多台 VPS/节点上以声明式方式管理 Docker 应用及其发布路由",
+    "通过 Cloudflare Tunnel/Headscale 在私有网络中暴露管理入口与应用服务",
+    "对控制平面状态做加密备份、恢复与原地 schema 迁移"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- AES-256-GCM encrypted secrets in SQLite, multi-source catalog persistence, ／ with restrictive permissions. The archive contains SQLite, the Center root key, ／ and therefore the encrypted ACME account and certificate state stored in SQLite;",
+     "lines": [
+      23,
+      101,
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确将 SQLite 用于存储控制平面的加密密钥、目录与编排状态，属使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Vastora is a self-hosted desired-state control plane for applications ／ - AES-256-GCM encrypted secrets in SQLite, multi-source catalog persistence, ／ migrations. Center writes a private, consistent SQLite snapshot before applying",
+   "evidence_lines": [
+    3,
+    23,
+    129
+   ]
+  },
+  "fn": "petauron/vastora",
+  "sha": "5eb33e586583",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "56b95319023f": {
+  "identity": {
+   "one_liner": "开源跨平台原生数据库桌面客户端与 SQL 编辑器",
+   "review": "FluxDB 是基于 Rust + GPUI 构建的桌面数据库客户端，不依赖 Electron 或 WebView，支持 macOS、Windows 与 Linux。它将 MySQL、TiDB、PostgreSQL、SQLite、达梦 DM8 和 Redis 的连接管理、SQL 编辑执行、表结构管理、数据浏览编辑与备份恢复整合在一个应用中，还内置可执行 SQL 的 AI Agent 与 MCP 能力。README 自述为早期版本，兼容性尚未经广泛验证。",
+   "highlights": [
+    "提供 SQL 编辑器（语法高亮、补全、格式化、查询历史）与数据浏览编辑、表结构管理能力",
+    "支持 MySQL、TiDB、PostgreSQL、SQLite、达梦 DM8、Redis 多种数据源的连接与专项功能，并提供达梦 DM8 备份恢复与 Redis 命令终端",
+    "内置 AI Agent，支持 SQL 编写执行、MCP Client/Server、工具权限分级与写入审批"
+   ],
+   "use_cases": [
+    "在统一桌面客户端中管理多种数据库连接并编写执行 SQL",
+    "浏览与编辑表数据、查看表结构 DDL、管理用户权限",
+    "对达梦 DM8 做逻辑备份恢复，或在 Redis 中通过终端管理键值"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite、达梦 DM8 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ |MySQL / TiDB|连接管理、SQL 查询、表结构管理、数据编辑、导出与备份| ／ - **MySQL**：连接管理（TLS/SSL、SSH 隧道、代理、超时与字符集等选项）、SQL 编辑与执行、库表与数据浏览编辑、表结构管理、结果导出，以及 mysqldump 备份与恢复、mysql 客户端工具入口。",
+     "lines": [
+      5,
+      39,
+      125
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite、达梦 DM8 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ |PostgreSQL|SQL 查询、Schema 与对象浏览、表结构管理、数据编辑、用户与角色权限管理、原生客户端工具| ／ - **PostgreSQL**：SQL 查询、Schema 与对象浏览、表结构管理、数据编辑、用户与角色权限管理，以及 psql 原生客户端工具。",
+     "lines": [
+      5,
+      40,
+      127
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite、达梦 DM8 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ |SQLite|本地数据库连接、SQL 查询、表结构浏览与数据编辑| ／ - **SQLite**：本地数据库文件连接、SQL 查询、表结构浏览与数据编辑。",
+     "lines": [
+      5,
+      41,
+      128
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite、达梦 DM8 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ |MySQL / TiDB|连接管理、SQL 查询、表结构管理、数据编辑、导出与备份| ／ - **TiDB**：复用 MySQL 协议与驱动，已适配 TiDB 的 SQL 方言、补全与结构管理，与 MySQL 一同验证。",
+     "lines": [
+      5,
+      39,
+      126
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite、达梦 DM8 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ |达梦 DM8|连接管理、Schema 与对象浏览、SQL 查询、表结构管理、数据编辑、表数据导入、备份与恢复| ／ - **达梦 DM8**：实例与 Schema 连接管理、对象浏览、SQL 查询、表结构管理与设计、数据编辑、表数据导入、逻辑备份与整 Schema 恢复，以及语义补全。",
+     "lines": [
+      5,
+      42,
+      129
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "- **MariaDB**：协议兼容 MySQL，但系统表、语法与备份参数存在差异，需完成版本识别与方言适配后再作为独立数据源接入。",
+     "lines": [
+      140
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- **SQL Server**：T-SQL 方言与连接协议不同，需要接入驱动，并补齐对象浏览与数据编辑能力。",
+     "lines": [
+      141
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **更多数据库**：按社区需求排序推进候选数据源（如 Oracle、ClickHouse、DuckDB、Elasticsearch / OpenSearch 等），复用现有 Connector 分层、SQL 方言与 AI 工具抽象；每个数据源需补齐连接管理、对象浏览、数据浏览与编辑、导入导出与备份恢复等能力后，才计入「已完成」。",
+     "lines": [
+      142
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "- **更多数据库**：按社区需求排序推进候选数据源（如 Oracle、ClickHouse、DuckDB、Elasticsearch / OpenSearch 等），复用现有 Connector 分层、SQL 方言与 AI 工具抽象；每个数据源需补齐连接管理、对象浏览、数据浏览与编辑、导入导出与备份恢复等能力后，才计入「已完成」。",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为连接和管理多种数据库服务的桌面客户端工具，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite",
+    "TiDB",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0 及更新版本",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**开源、跨平台的原生数据库客户端与 SQL 编辑器。** ／ 在一个桌面应用中连接 MySQL、TiDB、PostgreSQL、SQLite、达梦 DM8 和 Redis，编写 SQL、编辑数据、管理表结构与浏览键值。 ／ 基于 Rust + GPUI 构建，不依赖 Electron 或 WebView，支持 macOS、Windows 和 Linux。",
+   "evidence_lines": [
+    3,
+    5,
+    7
+   ]
+  },
+  "fn": "fluxdb-alt/fluxDB",
+  "sha": "56b95319023f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "08270769bdf2": {
+  "identity": {
+   "one_liner": "Hermes Agent 的本地长期记忆与上下文压缩插件，基于 SQLite 存储",
+   "review": "Chronicle 是 Hermes Agent 的插件，为其提供跨会话的持久记忆和记忆感知的上下文压缩。数据以事件溯源方式存放在本地 SQLite（WAL 模式），无需账号、API 密钥或外部服务；嵌入向量可选接入本地 OpenAI 兼容服务，不可用时退回全文检索。适合本地运行 Hermes 且希望记忆留在本机的用户，需 Python 3.9+，随 Hermes 插件机制安装。",
+   "highlights": [
+    "提供 ChronicleMemoryProvider 与 ChronicleContextEngine 两个插件槽位，可独立启用",
+    "记忆以事件溯源方式存储并支持来源追溯、修正与遗忘",
+    "检索采用 FTS5 全文加结构化查询，嵌入服务不可用时仍可全文召回"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 提供跨会话持久记忆",
+    "在长对话中先归档再压缩上下文，事后可按 span 还原",
+    "在无外部服务的本地环境中管理智能体记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "your machine in SQLite; relevant memories come back when they are useful. ／ Each Hermes profile has its own store, a local SQLite database under that ／ - **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections",
+     "lines": [
+      17,
+      79,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个智能体记忆插件，使用 SQLite 作为其本地存储引擎，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Chronicle gives your Hermes agent durable long-term memory and safer working-memory ／ - **MemoryStore**: SQLite WAL mode, single-writer with thread-local connections ／ hermes plugins install indigokarasu/chronicle-agent-context-and-memory",
+   "evidence_lines": [
+    15,
+    123,
+    36
+   ]
+  },
+  "fn": "indigokarasu/chronicle-agent-context-and-memory",
+  "sha": "08270769bdf2",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10165,5 +10165,186 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3892e232a799": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的 Go 企业级前后端一体管理脚手架",
+   "review": "一个用 Go（go-kratos + Ent）实现、Vue3/React 三选一前端的企业管理后台脚手架，面向需要多租户 RBAC、审计日志、等保合规能力的私有化部署团队。以 Protobuf 作为唯一 API 契约做全栈代码生成，内置 TOTP MFA 与 180 天审计留存；数据存储使用 MySQL/PostgreSQL，等保备份脚本默认针对 PostgreSQL（pg_dump）。",
+   "highlights": [
+    "提供多租户 RBAC（Casbin/OPA 可切换）、TOTP MFA 与 180 天审计日志留存归档",
+    "提供 Protobuf 全栈代码生成：Go API 与 TypeScript 客户端、Ent Schema 到 ORM、一键 CRUD 脚手架",
+    "内置 AI 模块：OpenAI 兼容多模型接入、SSE 流式对话、基于 pgvector 的知识库 RAG 与 token 用量配额"
+   ],
+   "use_cases": [
+    "企业级私有化部署的管理后台搭建",
+    "需要等保 2.0 技术要求（审计日志、口令策略、MFA）支撑的系统建设",
+    "多租户 SaaS 管理端的快速脚手架场景"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ORM <code>Ent</code> / <code>GORM</code>（二选一，构建标签切换，默认 Ent） · <code>MySQL</code> · <code>PostgreSQL</code> ／ |**数据备份恢复**|`scripts/backup/pg_backup.sh` 定时全量备份（pg_dump，默认保留 30 份自动轮换），支持 Docker 容器 / 本地直连双模式，附恢复操作文档| ／ - **AI 能力开箱即用**：OpenAI 兼容多模型接入（云端/本地 Ollama）、SSE 流式对话、知识库 RAG（pgvector 向量检索 + 文件上传）、token 用量配额、脚本 `ai` 模块与定时 AI 任务，详见 docs/ai_module.md",
+     "lines": [
+      128,
+      150,
+      23
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "ORM <code>Ent</code> / <code>GORM</code>（二选一，构建标签切换，默认 Ent） · <code>MySQL</code> · <code>PostgreSQL</code>",
+     "lines": [
+      128
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **go-wind-toolkit / gowind-uiapp** —— 跨平台桌面端代码生成器（Go + Wails）：一键导入 SQL 或直连数据库表（MySQL / PostgreSQL / SQLite / SQL Server / Oracle），自动生成服务端与前端代码，支持 gRPC / RESTful 等多种模板与简单表单生成；另提供非交互、JSON 输出的 CLI（`gowind-cli`），便于脚本与 AI Agent 调用。",
+     "lines": [
+      271
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **go-wind-toolkit / gowind-uiapp** —— 跨平台桌面端代码生成器（Go + Wails）：一键导入 SQL 或直连数据库表（MySQL / PostgreSQL / SQLite / SQL Server / Oracle），自动生成服务端与前端代码，支持 gRPC / RESTful 等多种模板与简单表单生成；另提供非交互、JSON 输出的 CLI（`gowind-cli`），便于脚本与 AI Agent 调用。",
+     "lines": [
+      271
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **go-wind-toolkit / gowind-uiapp** —— 跨平台桌面端代码生成器（Go + Wails）：一键导入 SQL 或直连数据库表（MySQL / PostgreSQL / SQLite / SQL Server / Oracle），自动生成服务端与前端代码，支持 gRPC / RESTful 等多种模板与简单表单生成；另提供非交互、JSON 输出的 CLI（`gowind-cli`），便于脚本与 AI Agent 调用。",
+     "lines": [
+      271
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "Oracle"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为使用 MySQL/PostgreSQL 存储数据的管理系统应用，配套工具另支持直连多种数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " ORM <code>Ent</code> / <code>GORM</code>（二选一，构建标签切换，默认 Ent） · <code>MySQL</code> · <code>PostgreSQL</code> ／ |**数据备份恢复**|`scripts/backup/pg_backup.sh` 定时全量备份（pg_dump，默认保留 30 份自动轮换），支持 Docker 容器 / 本地直连双模式，附恢复操作文档| ／ - **go-wind-toolkit / gowind-uiapp** —— 跨平台桌面端代码生成器（Go + Wails）：一键导入 SQL 或直连数据库表（MySQL / PostgreSQL / SQLite / SQL Server / Oracle），自动生成服务端与前端代码，支持 gRPC / RESTful 等多种模板与简单表单生成；另提供非交互、JSON 输出的 CLI（`gowind-cli`），便于脚本与 AI Agent 调用。",
+   "evidence_lines": [
+    128,
+    150,
+    271
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tx7do/go-wind-admin",
+  "sha": "3892e232a799",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f07df2e9fd35": {
+  "identity": {
+   "one_liner": "链上市场情报采集器，监控代币/钱包并存档至 Postgres",
+   "review": "Pulse 采集 Solana 与 Robinhood Chain 的代币发布、钱包与交易数据，评分钱包、生成每日 Telegram 新闻简报，并将数据存档到 Postgres（或内嵌 PGlite），供交易机器人后续训练使用。面向个人交易者与 AI 代理，内置仪表盘、导出 API 与 MCP 服务器；需 Node 24+，可选 TimescaleDB。",
+   "highlights": [
+    "采集代币生命周期、快照、交易与钱包评分数据并存入 Postgres/PGlite",
+    "提供每日 Telegram 新闻简报、Web 仪表盘与 JSON 导出 API",
+    "内置 MCP 服务器，并为 AI 代理提供 AGENTS.md/llms.txt 上下文文件"
+   ],
+   "use_cases": [
+    "个人交易者追踪 memecoin 发布与聪明钱钱包动向",
+    "为交易机器人积累历史链上数据存档",
+    "通过 MCP 让 AI 代理查询市场情报数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "npm run db:up # Postgres on host port 5544 ／ echo 'DATABASE_URL=postgres://pulse:pulse@localhost:5544/pulse' >> .env",
+     "lines": [
+      46,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Pulse 将采集的市场数据存档在 Postgres/PGlite 中，数据库是其数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Personal market intelligence for the Solana and Robinhood Chain trenches. Pulse watches every launch, runner and death, scores wallets, labels KOLs, classifies tokens by tech versus meme, writes a daily newsletter to Telegram, and archives everything in Postgres so the history can later train a trading bot. ／ With no `DATABASE_URL`, Pulse stores data in an embedded PGlite database at `data/pglite`. For TimescaleDB: ／ npm run db:up              # Postgres on host port 5544",
+   "evidence_lines": [
+    14,
+    43,
+    46
+   ]
+  },
+  "fn": "nirholas/pulse",
+  "sha": "f07df2e9fd35",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

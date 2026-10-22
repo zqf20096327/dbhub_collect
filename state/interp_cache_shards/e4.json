@@ -10028,5 +10028,79 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2f7a7153afe": {
+  "identity": {
+   "one_liner": "通过 MCP 将个人 WhatsApp 接入 Claude Code，本地 SQLite 镜像",
+   "review": "一个运行在 macOS 上的 MCP 服务器，通过 Baileys 桥接 WhatsApp，把聊天历史镜像到本地 SQLite 文件，供 Claude Code 读取、搜索、转写语音便签并发送消息；发送受白名单和确认对话框约束。依赖 Node 24+ 和 pnpm，语音转写用 whisper.cpp 在本地完成，需自行链接手机账号。",
+   "highlights": [
+    "通过 Baileys 以链接设备方式同步 WhatsApp 历史到本地 SQLite 文件，支持全文搜索",
+    "用 whisper.cpp 在本地转写语音便签，转写文本可被搜索",
+    "发送受 allowedRecipients 白名单和 macOS 确认对话框控制"
+   ],
+   "use_cases": [
+    "在 Claude Code 中搜索和总结个人或群组聊天记录",
+    "以受控方式通过个人 WhatsApp 号码发送消息和文件",
+    "本地转写并检索语音便签内容"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Your messages stay on your Mac.** They live in a local SQLite file only your user can read, and voice ／ WhatsApp ⇄ bridge (linked device, Baileys) ──writes──▶ ~/.whatsapp-mcp/messages.db (SQLite)",
+     "lines": [
+      29,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 用于存储该项目自身同步的 WhatsApp 消息数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Your messages stay on your Mac.** They live in a local SQLite file only your user can read, and voice ／ WhatsApp ⇄ bridge (linked device, Baileys) ──writes──▶ ~/.whatsapp-mcp/messages.db (SQLite)",
+   "evidence_lines": [
+    29,
+    92
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "le-quesne/wsp-mcp",
+  "sha": "a2f7a7153afe",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

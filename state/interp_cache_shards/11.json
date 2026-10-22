@@ -10755,5 +10755,127 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9603b196f5e4": {
+  "identity": {
+   "one_liner": "JVM 上的 SQL 解析库，将 SQL 语句解析为可遍历的 Java AST",
+   "review": "JSqlParser 是一个面向 JVM 的 SQL 解析 Java 库，把 SQL 文本解析为可用 Visitor 模式遍历、改写并重新渲染为 SQL 的对象树，也支持用流式 API 构建 SQL。它面向需要在应用中处理 SQL 语句结构的 Java 开发者，一套语法覆盖十二种方言，运行时要求 JDK 8（4.9）或 JDK 11+，采用 LGPL 2.1 / Apache 2.0 双许可。",
+   "highlights": [
+    "将 SQL 语句解析为可遍历、可改写并可回渲染为 SQL 文本的 Java 类层级（AST）",
+    "一套语法覆盖 SQL 标准及多种 RDBMS 方言，含 PostgreSQL RLS、MySQL 账户管理、ClickHouse 列选择等方言语法",
+    "提供语句分类 API（StatementFeatures），以三值语义判断语句是否返回行/修改数据，可用于只读客户端防护"
+   ],
+   "use_cases": [
+    "在 Java 应用中解析、校验或改写 SQL 语句并生成 AST",
+    "在 SQL 到达数据库前进行语句分类与只读防护",
+    "以编程方式构建 SQL 语句并渲染为文本"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite` ／ |**PostgreSQL ownership**|`DROP OWNED` · `REASSIGN OWNED`| ／ |**PostgreSQL RLS**|`CREATE POLICY` · `ALTER TABLE … ENABLE`/`DISABLE`/`FORCE`/`NO FORCE ROW LEVEL SECURITY`|",
+     "lines": [
+      102,
+      111,
+      114
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite` ／ |**MySQL table maintenance**|`ANALYZE` · `CHECK` · `OPTIMIZE` · `REPAIR TABLE`| ／ |**MySQL account management**|`CREATE`/`ALTER`/`RENAME USER` · `CREATE ROLE` · `SET ROLE` · `SET DEFAULT ROLE` · `SET PASSWORD`|",
+     "lines": [
+      102,
+      112,
+      113
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "`BigQuery` · `Snowflake` · `DuckDB` · `Redshift` · `Oracle` · `MS SQL Server` · `Sybase` ／ `:name`), window and analytic functions, Oracle hints, and the T-SQL square-bracket versus",
+     "lines": [
+      101,
+      120
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite`",
+     "lines": [
+      102
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`BigQuery` · `Snowflake` · `DuckDB` · `Redshift` · `Oracle` · `MS SQL Server` · `Sybase`",
+     "lines": [
+      101
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse column selection**|`COLUMNS('regexp')` select items with chained `APPLY`, `EXCEPT`, and `REPLACE` transformers|",
+     "lines": [
+      108
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "`PostgreSQL` · `MySQL` · `MariaDB` · `DB2` · `H2` · `HSQLDB` · `Derby` · `SQLite`",
+     "lines": [
+      102
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 SQL 解析组件为数据库生态中的工具开发提供服务，本身不是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：LGPL 2.1 或 Apache License 2.0",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give it SQL. Get an AST you can walk, rewrite, and print back out. ／ JSqlParser targets the SQL standard plus all major RDBMS. One grammar covers all of them, ／ Dual licensed under **LGPL 2.1** or the **Apache License, Version 2.0**. Take your pick.",
+   "evidence_lines": [
+    22,
+    98,
+    211
+   ]
+  },
+  "fn": "JSQLParser/JSqlParser",
+  "sha": "9603b196f5e4",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9435,5 +9435,70 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "774e1ce6ad75": {
+  "identity": {
+   "one_liner": "自托管的 AI 图文漫画/视频生成工作室",
+   "review": "一个自托管的内容生产工具，将故事文本转为结构化的漫画、条漫或配音视频：故事被拆解为角色、场景、分镜等结构化状态，配合 BYOK 的 AI 提供商生成图像与旁白，支持本地 TTS（Kokoro）和确定性排版导出（PDF/PSD/EPUB/MP4 等）。数据存储依赖 PostgreSQL，通过 Docker Compose 部署，适合希望用自有 API 密钥自建漫画/视频生产流水线的个人创作者。",
+   "highlights": [
+    "支持 BYOK 接入自有 AI 提供商密钥，生成图像与文本，并内置 Kokoro 本地 TTS",
+    "支持漫画页、16:9 视频、垂直条漫三种格式及 PDF/PSD/EPUB/CBZ/MP4 等多种导出",
+    "支持无 API Key 运行模式（粘贴聊天回复作为文本步骤结果）"
+   ],
+   "use_cases": [
+    "自建 AI 漫画/条漫/解说视频生产流水线",
+    "管理角色设定、世界观与连续性检查的长篇连载制作",
+    "生成 YouTube 发布包（视频、字幕、缩略图、元数据）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "cp .env.example .env # set POSTGRES_PASSWORD, SESSION_SECRET (openssl rand -hex 32), public URLs, INITIAL_ADMIN_* ／ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres redis kokoro",
+     "lines": [
+      157,
+      186
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用数据库存储自身数据的内容生产应用，Docker Compose 中运行 postgres 服务并为数据库设置密码。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted production tool for consistent AI-generated manhwa, manga, webtoons and illustrated recaps. It is not \"story → giant prompt → comic.png\": the story becomes structured state (cast, world, chapters, scenes, pages, panel specs), canonical references pin identity, panels are generated cheaply and versioned, and lettering, layout, narration and exports are deterministic.",
+   "evidence_lines": [
+    23
+   ]
+  },
+  "fn": "pr0h0/OpenManga",
+  "sha": "774e1ce6ad75",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10042,5 +10042,161 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8f424ab4f2be": {
+  "identity": {
+   "one_liner": "Rust 后端脚手架框架，生成 Axum+SQLx 全栈 CRUD 代码",
+   "review": "Gize 是面向 Rust 的脚手架框架：一条命令生成项目骨架，再按模型生成含 handler、SQLx 查询与 SQL 迁移的完整 CRUD 资源，附带 JWT 认证、OpenAPI、React 管理后台和 WebSocket。生成物为无隐藏运行时的常规 Rust 代码，可独立于框架维护。适合用 Rust 快速搭建业务后端的开发者；要求 Rust 1.85+，运行生成应用需 PostgreSQL。",
+   "highlights": [
+    "通过 gize new/make crud/make migration 等命令生成 Axum handler、SQLx 查询与 SQL 迁移",
+    "生成代码支持 PostgreSQL、MySQL 或 SQLite 三种目标数据库",
+    "内置 Argon2id+JWT 认证、OpenAPI 文档、React 管理后台与 WebSocket 端点"
+   ],
+   "use_cases": [
+    "从空目录快速搭建带认证的 CRUD REST API",
+    "按模型批量生成完整的增删改查垂直切片与迁移文件",
+    "为生成的资源生成独立的 React 管理后台 SPA"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`gize migrate`|✅|Apply / inspect migrations (Postgres, SQLite or MySQL)| ／ Generated apps run on **PostgreSQL**, **MySQL** or **SQLite**, with paginated list routes, ／ - **PostgreSQL** for running generated apps (`gize migrate` / `gize serve`).",
+     "lines": [
+      65,
+      72,
+      100
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`gize migrate`|✅|Apply / inspect migrations (Postgres, SQLite or MySQL)| ／ Generated apps run on **PostgreSQL**, **MySQL** or **SQLite**, with paginated list routes,",
+     "lines": [
+      65,
+      72
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`gize new`|✅|Scaffold a project (built-in `users` + auth; `--database sqlite\\|mysql`, `--openapi`, `--api-version`, `--ws`)| ／ |`gize migrate`|✅|Apply / inspect migrations (Postgres, SQLite or MySQL)| ／ Generated apps run on **PostgreSQL**, **MySQL** or **SQLite**, with paginated list routes,",
+     "lines": [
+      58,
+      65,
+      72
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架通过脚手架、迁移与管理命令为基于数据库的应用开发提供服务，非仅使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Gize lets you go from an empty directory to a running, production-shaped CRUD API in ／ |`gize migrate`|✅|Apply / inspect migrations (Postgres, SQLite or MySQL)| ／ Generated apps run on **PostgreSQL**, **MySQL** or **SQLite**, with paginated list routes,",
+   "evidence_lines": [
+    14,
+    65,
+    72
+   ]
+  },
+  "fn": "robertolima-dev/gize",
+  "sha": "8f424ab4f2be",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e824d9cbb988": {
+  "identity": {
+   "one_liner": "基于 PocketBase（SQLite）的实时群聊应用",
+   "review": "一个实时群聊应用，后端由单个 PocketBase 二进制承担认证、数据存储与实时推送，前端为原生 TypeScript 打包产物，另提供 Kotlin Android 客户端。支持公开/私密房间、私信、消息搜索、附件、表情回应、Telegram 桥接等，通过 npm 构建并以 systemd 或 Dokku 部署，数据（SQLite 与上传文件）存于 pb_data 目录。",
+   "highlights": [
+    "实时消息、编辑、删除与已读计数，通过 PocketBase 的 SSE 实时推送",
+    "支持房间访问控制（Private/Public/Open Air）、私信、附件上传与 Telegram 双向桥接",
+    "提供 PWA 与 Kotlin Android 客户端，含完整单元/集成/e2e 测试脚本"
+   ],
+   "use_cases": [
+    "自托管部署小型团队或社区的群聊服务",
+    "需要私信、附件与消息搜索的实时沟通场景",
+    "与 Telegram 群组互通消息的桥接场景"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+     "lines": [
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该聊天应用的所有数据（SQLite 与上传文件）存放于 /pb_data，属使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small, fast, real-time group chat. One PocketBase binary is the whole backend ／ Open http://127.0.0.1:8090 and sign up (top right). The dev database lives in `pb_data/` — delete it to start over. ／ # All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+   "evidence_lines": [
+    3,
+    53,
+    126
+   ]
+  },
+  "fn": "border-radius/chat",
+  "sha": "e824d9cbb988",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

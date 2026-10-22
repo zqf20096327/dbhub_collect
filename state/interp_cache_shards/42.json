@@ -8909,5 +8909,188 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0410701b1eab": {
+  "identity": {
+   "one_liner": "自建知识图谱数据库平台，含图引擎与多租户服务",
+   "review": "HASH 是一个开源单体仓库，提供自构建的知识图谱数据库及多租户平台，可将原始信息整合为语义化实体与类型图谱，支持双时态记录与查询，自主智能体可用于维护数据。非技术用户可通过界面浏览管理实体和 schema；本地运行依赖 Docker Compose 启动 Postgres、Redis、Temporal 等基础设施，图引擎由 Rust 编译。",
+   "highlights": [
+    "支持双时态数据记录与查询（事件发生时间与知晓时间分开存储）",
+    "提供可视化界面管理实体（数据）与类型（schema）",
+    "支持部署自主智能体实时采集、校验并结构化公开与私有数据源"
+   ],
+   "use_cases": [
+    "构建和维护知识图谱作为关键数据的事实来源",
+    "面向流程自动化与决策支持的图建模",
+    "自托管部署多租户数据平台"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This runs the `dev` and `observability` profiles — Postgres, Redis, Kratos, Hydra, Temporal, Vault and MinIO, plus the Grafana stack (http://localhost:3001) and the Temporal UI (http://localhost:3100/namespaces/HASH). The graph layer is **not** included; you r ／ #### Postgres",
+     "lines": [
+      100,
+      230
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 自述 HASH 本身是一个数据库/平台，Postgres 等仅是其运行的基础设施依赖，非为特定数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**HASH supports turning raw information into knowledge and process graphs, helping create graph-backed _world models_ that power process automation, optimization, decision making, and AI.** In essence, HASH is a self-building, open-source database which grows, structures and checks itself. Integrating data in (near-)realtime, it provides a powerful set of interfaces so that information can be understood and used in any context. Intelligent, autonomous agents can be deployed to grow, check, and maintain the database, collating and structuring information from the public internet — as well as your own connected private sources — in a standardized semantic form. Users, including those who are non-technical, are able to visually browse and manage both entities (data) and types (schemas). HASH acts as a source of truth for critical data, no matter its source, and provides a platform for high-trust, safety-assured decision-making. Read our blog post → ／  This runs the `dev` and `observability` profiles — Postgres, Redis, Kratos, Hydra, Temporal, Vault and MinIO, plus the Grafana stack (http://localhost:3001) and the Temporal UI (http://localhost:3100/namespaces/HASH). The graph layer is **not** included; you run it as part of the app below.",
+   "evidence_lines": [
+    11,
+    100
+   ]
+  },
+  "fn": "hashintel/hash",
+  "sha": "0410701b1eab",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a6bb7cf2c57f": {
+  "identity": {
+   "one_liner": "基于 Tauri+Rust 的桌面数据库客户端，集成 SQL 编辑、迁移、监控与 MCP",
+   "review": "DataZen 是一款 GPL-3.0 的跨平台桌面数据库工作台，提供 schema 感知的 SQL 编辑器、ER 图、图表与运维看板、备份/数据同步/Schema Diff、YAML 工作流，并内置 MCP 服务端与客户端供 AI 代理调用。面向开发者和数据库使用者，支持 PostgreSQL、MySQL/MariaDB、SQLite、Redis 等驱动，凭据本地加密，无需账号和云服务。",
+   "highlights": [
+    "提供 schema 感知 SQL 编辑、自然语言生成 SQL、EXPLAIN 分析与 ER 图",
+    "支持备份、Data Sync、Data Transfer、Schema Diff 及 YAML 工作流自动化",
+    "同时实现 MCP 服务端与客户端，可无头 stdio 模式运行于代理流水线"
+   ],
+   "use_cases": [
+    "开发者在桌面端连接并查询多种数据库",
+    "通过定时备份与阈值告警进行日常运维监控",
+    "在 AI 代理流水线中通过 MCP 无头执行数据库操作"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Open a local SQLite file, or create a PostgreSQL, MySQL/MariaDB, or Redis connection. ／ Workflows describe database operations in YAML: queries, driver commands, AI steps, conditions, loops, merges, and migrations. Each step can target its own connection and database, so one workflow can read orders from PostgreSQL, pull logistics from MySQL, and",
+     "lines": [
+      44,
+      134
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "2. Open a local SQLite file, or create a PostgreSQL, MySQL/MariaDB, or Redis connection. ／ Workflows describe database operations in YAML: queries, driver commands, AI steps, conditions, loops, merges, and migrations. Each step can target its own connection and database, so one workflow can read orders from PostgreSQL, pull logistics from MySQL, and",
+     "lines": [
+      44,
+      134
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "2. Open a local SQLite file, or create a PostgreSQL, MySQL/MariaDB, or Redis connection. ／ A first-run wizard walks you through the first connection and seeds a sample SQLite database, so you can try everything before pointing DataZen at anything real. No account is required, and AI is entirely optional: browsing and querying work without an API key",
+     "lines": [
+      44,
+      47
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "2. Open a local SQLite file, or create a PostgreSQL, MySQL/MariaDB, or Redis connection.",
+     "lines": [
+      44
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`all`|T-SQL dialect, live-verified|",
+     "lines": [
+      227
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|`all`|HTTP interface, multi-database|",
+     "lines": [
+      228
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为连接和操作多种数据库提供客户端能力的工具，而非以某数据库为存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0（描述声明）；内置 Driver API 为 MIT 许可",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### The open-source database workspace for developers and AI agents ／ Doing real database work usually means stitching together five tools: one to browse the schema, one to write SQL, one to run migrations, one to build dashboards, and one to wire AI into the loop. DataZen is a single desktop app that covers the whole loop — and it speaks MCP, so your own AI agent can drive it too. ／ 2. Open a local SQLite file, or create a PostgreSQL, MySQL/MariaDB, or Redis connection.",
+   "evidence_lines": [
+    5,
+    21,
+    44
+   ]
+  },
+  "fn": "flyxl/datazen",
+  "sha": "a6bb7cf2c57f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

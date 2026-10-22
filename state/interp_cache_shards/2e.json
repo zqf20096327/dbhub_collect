@@ -10926,5 +10926,149 @@
   "generated_at": "2026-10-19",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f359211a3e84": {
+  "identity": {
+   "one_liner": "基于服务器访问日志的自托管网站分析工具，含独立复核审计",
+   "review": "Skald 读取 Web 服务器访问日志，把请求分为人、AI 助手、搜索引擎、爬虫和自有流量五组统计，并识别 ChatGPT、Claude、Perplexity 等机器人；每次数字由独立审计二次复算。适合自托管网站、想无 Cookie 无脚本统计流量的站长和管理员。数据存于 SQLite 单文件，需 Python 3.11+ 或 Docker。",
+   "highlights": [
+    "读取访问日志并按五组分类，每项数字由独立解析器二次复核，不一致则当日数据不予展示",
+    "按用途区分 AI 爬虫请求（训练/实时问答/引用点击），并对照 DNS 验证爬虫身份真伪",
+    "无需 Cookie 和浏览器脚本，支持 Vercel、Netlify 日志及 Cloudflare Worker 等多种日志来源"
+   ],
+   "use_cases": [
+    "统计 JavaScript 分析工具无法覆盖的 AI 助手与爬虫流量",
+    "无 Cookie 隐私合规场景下的自托管访问分析",
+    "追踪潜在客户、转化漏斗与来源渠道"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      635
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Which road fits your site** (a form plugin, Next.js on Vercel, a Postgres backend, no code,",
+     "lines": [
+      528
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据以 SQLite 文件存储，是使用数据库存数据的分析应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0，另有托管 beta 商业版",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Skald reads the one record that sees every visit: **your web server's access log.** Every request",
+   "evidence_lines": [
+    43
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "f359211a3e84",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b6022ed26025": {
+  "identity": {
+   "one_liner": "本地优先个人知识库 CLI，Postgres+pgvector 混合检索与 GraphRAG",
+   "review": "该仓库实现一个本地运行的 CLI 知识库，将 Markdown 笔记、Krisp 转录、Slack、Gmail 等内容摄取进 Postgres+pgvector，提供 FTS+向量混合检索、GraphRAG 实体图谱、LLM 富化，并内置 MCP 服务器供任意 AI 代理查询。面向个人知识管理用户与 AI 代理使用者；需 Docker 运行 Postgres 容器，向量检索依赖本地 Ollama 嵌入模型，最小配置可退化为纯 FTS。",
+   "highlights": [
+    "提供 brain CLI 与内置 brain-mcp MCP 服务器，供 AI 代理通过 shell 或 MCP 查询知识库",
+    "支持 FTS、FTS+向量混合检索及 GraphRAG 三种配置档（minimal/standard/full）",
+    "支持摄取 TXT/MD/PDF/DOCX 文件及 Gmail、Slack、Krisp 转录等来源，并提供本地 Web UI 读写笔记"
+   ],
+   "use_cases": [
+    "个人笔记、转录与邮件的本地集中存储与检索",
+    "让 Claude Code/Claude Desktop 等 AI 代理通过 MCP 检索个人语料",
+    "通过 brain ask/brief/recall 生成带引用的摘要与周度回顾"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat.  ／ Install the CLI, then run the offline demo — a throwaway Postgres seeded with a synthetic *Larkspur* compliance corpus. No Ollama, no personal data, no model downloads: ／ Full install — the `brain` CLI plus the runtime (Postgres, and optionally Ollama / graph):",
+     "lines": [
+      12,
+      46,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将笔记、转录等数据存储于 Postgres+pgvector，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stores career docs, interview prep, Krisp transcripts, Slack threads, Gmail, and authored Markdown notes in Postgres + pgvector. Any agent reaches all of it through the `brain` CLI or the bundled `brain-mcp` MCP server — no re-pasting context into every chat. You read it through the CLI or the local web UI, and the vault is plain Markdown you can open in any editor. ／ Install the CLI, then run the offline demo — a throwaway Postgres seeded with a synthetic *Larkspur* compliance corpus. No Ollama, no personal data, no model downloads: ／ **Prerequisites (core):** Git, Python 3.11+, and a running Docker (Desktop or Engine) — the Postgres + pgvector database runs in a container on port 55432.",
+   "evidence_lines": [
+    12,
+    46,
+    94
+   ]
+  },
+  "fn": "mshtawythug/second-brain",
+  "sha": "b6022ed26025",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

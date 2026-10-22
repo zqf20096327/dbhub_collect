@@ -9757,5 +9757,142 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "847cceaf1154": {
+  "identity": {
+   "one_liner": "CLI 生成器：读取 API 文档并生成面向 AI Agent 的 Go CLI 与 MCP 服务器",
+   "review": "该项目读取官方 API 文档和网页流量，为任意 API 或网站生成令牌开销更低的 Go CLI、Claude Code 技能和 MCP 服务器，生成的 CLI 内置本地 SQLite 数据层、FTS5 全文检索与离线搜索，支持复合命令和管道自动 JSON 输出，安装需 Go 1.26+ 与 Node/npm，主要面向使用 Claude Code 或 Codex 的 AI Agent 开发者。",
+   "highlights": [
+    "为任意 API 或网站生成 Go CLI、MCP 服务器和 Claude Code 技能，支持 REST、GraphQL 或嗅探的浏览器流量",
+    "生成的 CLI 包含本地 SQLite 数据层、FTS5 全文索引、增量同步与离线 search/sql 命令",
+    "生成的 CLI 默认面向 Agent：管道时自动 JSON、--compact 压缩输出、类型化退出码"
+   ],
+   "use_cases": [
+    "为缺少官方 CLI 的 API 或网站生成供 AI Agent 调用的命令行工具",
+    "构建带本地镜像与离线搜索的复合查询 CLI",
+    "为现有生成 CLI 做修复（polish）、发布到公共库或从会话记录生成补丁 PR"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It reads the official API docs, studies every popular community CLI and MCP server, sniffs the web for the APIs nobody published (think Google Flights or Dominos), and applies the power-user playbook Peter Steinberger proved with discrawl and gogcli - local SQ ／ - linear-pp-cli (50ms against a local SQLite mirror). _\"Every blocked issue whose blocker has been stuck for a week.\"_ Compound queries the API can't answer. ／ Local-first data layer. High-gravity resources get domain-specific SQLite tables (not JSON blobs), FTS5 full-text search indexes, and incremental sync with cursor tracking. `sync` pulls data down. `search` finds it in milliseconds. `sql` lets power users query",
+     "lines": [
+      11,
+      17,
+      183
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为开发者和 AI Agent 生成 CLI/MCP 工具的生成器组件，SQLite 是其生成产物的内置数据层而非业务数据存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "It reads the official API docs, studies every popular community CLI and MCP server, sniffs the web for the APIs nobody published (think Google Flights or Dominos), and applies the power-user playbook Peter Steinberger proved with discrawl and gogcli - local SQLite, compound commands, agent-native flags. It fuses all of that and prints a token-efficient Go CLI plus a Claude Code skill plus an MCP server for any API or any website. ／ One command. Lean loop. Produces a Go CLI plus an MCP server that absorbs every feature from every competing tool, then transcends with compound use cases only possible with local data. REST, GraphQL, or browser-sniffed traffic. No OpenAPI spec required. ／ Local-first data layer. High-gravity resources get domain-specific SQLite tables (not JSON blobs), FTS5 full-text search indexes, and incremental sync with cursor tracking. `sync` pulls data down. `search` finds it in milliseconds. `sql` lets power users query directly. All offline, all local.",
+   "evidence_lines": [
+    11,
+    130,
+    183
+   ]
+  },
+  "fn": "mvanhorn/cli-printing-press",
+  "sha": "847cceaf1154",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1f3a7c4fa1e0": {
+  "identity": {
+   "one_liner": "本地优先任务管理器，基于自研 HyperDB 层与 SQLite 同步服务器",
+   "review": "一个离线优先的任务规划应用，围绕可视化周时间线组织任务，支持浏览器本地存储、跨设备同步与 Docker 一条命令自托管。面向个人用户，默认用 SQLite 存数据，API 可选 Turso Cloud 或 tursod；商业化为云端付费计划，自托管免费。",
+   "highlights": [
+    "自托管同步服务器默认以 SQLite 存储数据，可选用 Turso Cloud 或本地 Rust tursod 服务",
+    "浏览器端保留完整本地数据库，支持离线读写与多标签/多设备实时同步",
+    "提供 HTTP API（含 Bearer 令牌鉴权与 /api/docs 文档），并支持 Todoist/TickTick 导入"
+   ],
+   "use_cases": [
+    "个人周计划与任务管理，需离线可用",
+    "自托管私有任务数据",
+    "从 Todoist 或 TickTick 迁移任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Own the data.** Self-host the sync server with Docker, store data in SQLite, and avoid handing your task history to a third-party task app. ／ The Docker server hosts the web app, stores server-side data under `/var/lib/will-be-done`, and syncs browser, PWA, and desktop clients. SQLite is the default; the API can optionally use Turso Cloud or the local Rust tursod service. See the API database config",
+     "lines": [
+      23,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用 SQLite 存数据的任务管理应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Own the data.** Self-host the sync server with Docker, store data in SQLite, and avoid handing your task history to a third-party task app. ／ The Docker server hosts the web app, stores server-side data under `/var/lib/will-be-done`, and syncs browser, PWA, and desktop clients. SQLite is the default; the API can optionally use Turso Cloud or the local Rust tursod service. See the API database configuration for setup instructions. ／ - Self-hosted server in one Docker command.",
+   "evidence_lines": [
+    23,
+    85,
+    164
+   ]
+  },
+  "fn": "will-be-done/will-be-done",
+  "sha": "1f3a7c4fa1e0",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

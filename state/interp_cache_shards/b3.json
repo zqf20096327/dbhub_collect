@@ -10699,5 +10699,209 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e0084eaa9661": {
+  "identity": {
+   "one_liner": "AI 代理长期记忆库，基于单 SQLite 文件，提供 MCP/CLI/HTTP 服务",
+   "review": "Mnemosyne 为 AI 代理提供本地优先的长期记忆：将代理学到的内容连同证据存入单个 SQLite 文件，支持证据溯源、纠错后自动退役旧记忆和时间历史。开发者可通过 TypeScript SDK、MCP 服务器、CLI 或带认证的 HTTP 服务接入 Claude Code、Cursor 等宿主。当前为 2.0.0-rc.10 候选版本，需 Node.js ≥22.16，双引擎 schema 不互通、需手动迁移。",
+   "highlights": [
+    "以单个 SQLite 文件存储记忆及证据，提供 16 个 memory_* MCP 工具，支持 --read-only 与 --allow-destructive 启动选项",
+    "纠错机制可级联退役依赖该来源的旧记忆，支持代理间显式交接（handoff）与恢复",
+    "本地引擎提供 exact/auto/sqlite-vec/hnsw 四种密集索引模式，均可重新授权与重打分"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP 客户端宿主添加持久长期记忆",
+    "多代理协作场景下的记忆交接、私有作用域共享与技能试验记录",
+    "需要证据可追溯、纠错可级联生效的代理记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Mnemosyne is local-first, long-term memory for AI agents: one SQLite file that keeps what an agent learned together with the evidence it came from, served to any host over TypeScript, MCP, CLI or HTTP.** When a source is corrected, every memory that depended",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 代理生态提供记忆服务组件（MCP 服务器、SDK、CLI），SQLite 是其存储实现而非使用目的",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Mnemosyne is local-first, long-term memory for AI agents: one SQLite file that keeps what an agent learned together with the evidence it came from, served to any host over TypeScript, MCP, CLI or HTTP.** When a source is corrected, every memory that depended on it is retired, so the next agent starts from what is still true instead of repeating a stale lesson. ／ The server exposes 16 `memory_*` tools (`memory_store`, `memory_recall`, `memory_context`, `memory_correct`, `memory_checkpoint`, `memory_resume`, `memory_observe`, `memory_skill`, …); `memory_forget` is added only when the server is launched with `--allow-destructive`. Add `--read-only` to omit every mutation tool. A model cannot switch workspace, raise its own trust or report its own skill trials through MCP. Agent-readable summaries of this repository are in `llms.txt` and `AGENTS.md`; the full MCP contract is in Connect through MCP. ／ |**Local Engine**|A self-contained SQLite memory store with evidence, corrections and agent lifecycle tools.|`createLocalMemory` from `mnemosy-ai/local`|Local API · Agent lifecycle|",
+   "evidence_lines": [
+    11,
+    41,
+    60
+   ]
+  },
+  "fn": "28naem-del/mnemosyne",
+  "sha": "e0084eaa9661",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5fbe19bc9fbb": {
+  "identity": {
+   "one_liner": "自托管 AI 代理语义记忆服务，单二进制跑在 SQLite 上经 MCP 提供记忆",
+   "review": "OmniMem 为 AI 编码代理提供跨会话的持久语义记忆：用 Rust 单二进制实现 MCP 服务器、记忆引擎、本地嵌入模型和 RSS 摄取，数据存于单个 SQLite 文件。支持情景记忆、项目上下文、偏好、RSS 知识和编译技能五类记忆，带矛盾检测、经验评分与记忆生命周期。面向使用 Claude Code、Cursor 等 MCP 代理的开发者，可作桌面托盘应用或无头服务器运行。",
+   "highlights": [
+    "单进程包含 MCP 服务器、记忆引擎、ONNX 本地嵌入模型（all-MiniLM-L6-v2）和 RSS 摄取，记忆存于单个 SQLite 文件",
+    "提供 48 个 MCP 工具，支持矛盾检测、语义去重、经验评分、记忆生命周期（ACTIVE→DEPRIORITISED→ARCHIVED→DELETED）与技能编译",
+    "支持 claude.ai、Claude Code、Cursor、GitHub Copilot 等 MCP 代理，通过共享 token 或 OAuth 2.1 认证，支持 JSON 导出备份"
+   ],
+   "use_cases": [
+    "为编码代理（Claude Code 等）注入项目历史与失败教训，避免重复踩坑",
+    "将 RSS 订阅文章嵌入为知识库供代理检索",
+    "在多台机器间通过反向代理共享同一份代理记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "OmniMem 7 is a single binary. The MCP server, the memory engine, the embedding model, RSS ingestion and the database all live in one process, with your memories in one SQLite file. No containers to wrangle, no database server to babysit.",
+     "lines": [
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "OmniMem 使用 SQLite 作为自身存储引擎的终端应用程序，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OmniMem 7 is a single binary. The MCP server, the memory engine, the embedding model, RSS ingestion and the database all live in one process, with your memories in one SQLite file. No containers to wrangle, no database server to babysit. ／ - **MIT licensed**: fork it, extend it, run it wherever you like.",
+   "evidence_lines": [
+    31,
+    119
+   ]
+  },
+  "fn": "richarvey/OmniMem",
+  "sha": "5fbe19bc9fbb",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "29dbfc806543": {
+  "identity": {
+   "one_liner": "Go 编写的命令行 RSS 聚合器，抓取订阅源并存入 PostgreSQL",
+   "review": "一个基于 Go 的命令行 RSS 订阅聚合工具，通过 HTTP 抓取订阅源并将文章存储在 PostgreSQL 中，支持定时抓取、去重、多用户配置切换和文章浏览。面向需要在本地终端管理 RSS 订阅的用户。要求自备 PostgreSQL 实例，并使用 Goose 执行数据库迁移。",
+   "highlights": [
+    "定时抓取 RSS 订阅源并跳过重复文章，文章存储于 PostgreSQL",
+    "支持多本地用户配置，各用户独立管理订阅与浏览文章",
+    "提供 register/addfeed/follow/agg/browse 等子命令的命令行界面"
+   ],
+   "use_cases": [
+    "在终端集中抓取并阅读多个 RSS 订阅源",
+    "多用户各自维护订阅列表的本地部署",
+    "需要将订阅文章持久化到 PostgreSQL 做后续查询的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Requires Go 1.26.1 or later and PostgreSQL installed and running. ／ Connect to PostgreSQL as an administrator: ／ Your users, feeds, subscriptions, and collected posts are stored in PostgreSQL and persist when you exit.",
+     "lines": [
+      7,
+      33,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它是使用 PostgreSQL 存储数据的 RSS 聚合应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A command-line RSS feed aggregator built in Go that uses HTTP requests to fetch feeds and stores posts in PostgreSQL. Add feeds, manage your subscriptions, switch between local user profiles, and browse the latest posts from the feeds you follow. A collection command fetches feeds at a configurable interval and skips duplicate posts. ／ Requires Go 1.26.1 or later and PostgreSQL installed and running. ／ Your users, feeds, subscriptions, and collected posts are stored in PostgreSQL and persist when you exit.",
+   "evidence_lines": [
+    3,
+    7,
+    132
+   ]
+  },
+  "fn": "andrefetch/gator",
+  "sha": "29dbfc806543",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

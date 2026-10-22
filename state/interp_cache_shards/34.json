@@ -9777,5 +9777,140 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ee95f468980b": {
+  "identity": {
+   "one_liner": "PHP Web 开发的 Docker Compose 环境，含多版本 PHP 与数据库",
+   "review": "该仓库提供基于 Docker Compose 的 PHP 本地开发环境，包含 PHP-FPM 与 Apache 多版本容器、Nginx、Adminer、Mailpit 及 MySQL 数据库容器，并通过 manage.py 脚本自动生成 docker-compose.yml、Nginx 配置与 SSL 证书。适合需要在本机搭建多站点 PHP 开发环境的开发者使用；MySQL 凭据经 mysql.env 配置。",
+   "highlights": [
+    "支持 PHP-FPM 7.4–8.5 与 Apache mod_php 多版本容器，可在 docker-compose.yml 中切换",
+    "提供 manage.py 脚本，自动生成 docker-compose.yml、Nginx 配置、SSL 证书与项目目录",
+    "支持 HTTPS、域名别名、Unix socket 模式连接 PHP-FPM，并通过 Makefile 提供常用管理命令"
+   ],
+   "use_cases": [
+    "在本地搭建多域名、多 PHP 版本的 Web 开发环境",
+    "需要数据库、邮件（Mailpit）与管理界面（Adminer）配套的 PHP 项目开发",
+    "为生产单机环境配置 Nginx 与 PHP-FPM 的 Unix socket 通信"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "cp mysql.env.example mysql.env ／ mysql -uroot -hdb -pMYSQL_ROOT_PASSWORD",
+     "lines": [
+      80,
+      234
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是包含 MySQL 容器用于站点数据存储的 PHP 开发环境，数据库是其组成部分而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Generate `docker-compose.yml` with the required PHP versions ／ cp mysql.env.example mysql.env",
+   "evidence_lines": [
+    55,
+    80
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "rhamdeew/docker-compose-php",
+  "sha": "ee95f468980b",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3a9542cd7600": {
+  "identity": {
+   "one_liner": "本地优先的 Granola 笔记归档工具，写入 SQLite 并支持 Markdown 导出",
+   "review": "graincrawl 用 Go 编写，将 Granola 会议笔记、转录、面板等数据采集为本地私有 SQLite 归档，提供搜索、SQL 查询、Markdown 导出和 TUI 浏览，还支持快照在机器间迁移归档。适合希望在本地保存和检索 Granola 会议数据而不写入 Granola 档案的用户。对 Granola 的所有来源均为只读，依赖其私有桌面 API 时受桌面缓存可读性限制。",
+   "highlights": [
+    "从 Granola 私有 API、桌面缓存或官方公共 API 采集笔记、转录等数据写入本地 SQLite 归档",
+    "支持 Markdown 导出、JSON 输出、只读 SQL 查询与 TUI 浏览",
+    "提供快照创建与导入，可在机器间迁移或精确恢复归档"
+   ],
+   "use_cases": [
+    "本地备份与检索 Granola 会议笔记和转录",
+    "导出 Markdown 笔记用于其他工作流",
+    "对归档数据运行只读 SQL 统计与自动化查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`graincrawl` creates a private, local SQLite archive of Granola notes, transcripts, panels, people, workspaces, and sync metadata. It is for people who want searchable, exportable meeting data without writing to their Granola profile.",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该工具自身归档的存储载体，grancrawl 的服务对象是 Granola 而非数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`graincrawl` creates a private, local SQLite archive of Granola notes, transcripts, panels, people, workspaces, and sync metadata. It is for people who want searchable, exportable meeting data without writing to their Granola profile. ／ The default private API source archives notes, transcripts, panels, people, workspaces, and retained source payloads. The desktop cache provides an offline fallback when `cache-v6.json` is readable. The official public API archives available notes, summaries, and transcripts, but does not expose panels or deletion events. All sources are read-only against Granola; graincrawl writes only to its own config, cache, and SQLite archive.",
+   "evidence_lines": [
+    11,
+    54
+   ]
+  },
+  "fn": "openclaw/graincrawl",
+  "sha": "3a9542cd7600",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

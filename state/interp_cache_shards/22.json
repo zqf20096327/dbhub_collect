@@ -10144,5 +10144,198 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "82769758fa77": {
+  "identity": {
+   "one_liner": "MySQL 官方 C++ 连接器，用于 C/C++ 应用连接 MySQL Server",
+   "review": "MySQL Connector/C++ 提供 C++ 接口，用于开发连接 MySQL Server 的 C/C++ 应用，含 X DevAPI（示例使用 mysqlx/xdevapi.h 头文件）。安装支持预编译二进制包（RPM 等）与源码构建两种方式。注意当前 RPM 不再包含 ABI 9 兼容包，依赖旧 ABI 的应用需保留旧版本或重新构建。适合在 C++ 程序中直接访问 MySQL 的开发者使用。",
+   "highlights": [
+    "提供 C++/C 接口用于连接 MySQL Server，含 X DevAPI（mysqlx/xdevapi.h）",
+    "支持从 MySQL 下载页安装预编译二进制包，或从源码构建",
+    "仓库内容与最新发布版本保持一致"
+   ],
+   "use_cases": [
+    "C/C++ 应用程序直连并操作 MySQL Server",
+    "需要 X DevAPI 编程接口的 MySQL 应用开发",
+    "需要源码级集成或自定义构建连接器的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# MySQL Connector/C++ ／ This is a release of MySQL Connector/C++, the C++ interface for communicating with MySQL servers.",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MySQL 服务的官方连接器/驱动，属数据库生态工具而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "MySQL"
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MySQL Connector/C++ ／ This is a release of MySQL Connector/C++, the C++ interface for communicating with MySQL servers. ／ MySQL Connector/C++ can be installed from pre-compiled packages that can be downloaded from the MySQL downloads page.",
+   "evidence_lines": [
+    1,
+    3,
+    15
+   ]
+  },
+  "fn": "mysql/mysql-connector-cpp",
+  "sha": "82769758fa77",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c862aef765c0": {
+  "identity": {
+   "one_liner": "给开发运维与 Agent 的数据库迁移工具，CLI+本机 GUI 共用引擎",
+   "review": "Flydb 是面向开发、运维与实施人员的数据库版本迁移工具，提供 GUI、CLI 与 Java/Spring Boot starter 三种入口，共用同一配置与迁移引擎，支持 checksum 校验、并发锁、预览执行与记录留痕，并可通过 Skill 与 MCP 接入 AI Agent。数据库覆盖 MySQL、PostgreSQL、Oracle 及达梦、人大金仓、openGauss、OceanBase、TiDB 等国产库，验证层级不等；驱动需用户自备，不自动翻译厂商 SQL 方言。",
+   "highlights": [
+    "支持 GUI、CLI、Java API 与 Spring Boot starter 三种入口共用同一迁移引擎与执行记录",
+    "内置多数据库方言与 DatabaseType SPI 扩展机制，支持版本化迁移、checksum 校验、并发锁与失败阻断",
+    "提供 AGENTS.md、flydb-cli Skill 与 MCP 工具接入方式，输出结构化 JSON 与 Plan Artifact"
+   ],
+   "use_cases": [
+    "开发/测试/生产多环境配置管理与升级前 SQL 预览核对",
+    "CI/流水线中自动化数据库 schema 迁移",
+    "让 AI Agent 基于执行记录与脱敏配置接续处理迁移任务"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "支持 MySQL、PostgreSQL、Oracle 及多种国产数据库；**Java 8+ 即可运行，GUI 无需 Node.js、外网或大模型**。 ／ |PostgreSQL|是|自动化兼容测试|",
+     "lines": [
+      18,
+      79
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "支持 MySQL、PostgreSQL、Oracle 及多种国产数据库；**Java 8+ 即可运行，GUI 无需 Node.js、外网或大模型**。 ／ 以下以已创建的 MySQL 数据库为例：",
+     "lines": [
+      18,
+      54
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "支持 MySQL、PostgreSQL、Oracle 及多种国产数据库；**Java 8+ 即可运行，GUI 无需 Node.js、外网或大模型**。 ／ |Oracle|是|自动化契约测试；已在授权真实实例完成 validate、clean、migrate 端到端验证|",
+     "lines": [
+      18,
+      80
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|TiDB|复用 MySQL 家族|轻量兼容测试；真实环境覆盖持续补充|",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|OceanBase|复用 Oracle/MySQL 家族|Oracle 租户已在授权真实实例完成端到端验证；MySQL 租户为轻量兼容测试|",
+     "lines": [
+      84
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|达梦 DM8|是|DM8 8.1.3.62 授权实例端到端验证（大小写不敏感）；0.3.8 修复重复迁移，见实测记录|",
+     "lines": [
+      81
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "|openGauss|是|方言与驱动元数据契约测试；真实环境认证待补|",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库生态提供 schema 迁移服务的工具，自身不存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "TiDB",
+    "OceanBase",
+    "Dameng",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Flydb 是给开发、运维和实施人员使用的数据库版本迁移工具。用本机 GUI 管理多套配置、核对 SQL 和查看执行进度；用 CLI 接入脚本与 CI；有 Agent 时，一键复制上下文继续处理。三种入口使用同一份配置与迁移引擎，GUI 和同机 CLI 共用执行记录。 ／ ## 迁移能力，贯穿三种入口 ／ |MySQL|是|自动化兼容测试；CLI 发行包端到端验证|",
+   "evidence_lines": [
+    16,
+    65,
+    78
+   ]
+  },
+  "fn": "zzxCoding/Flydb",
+  "sha": "c862aef765c0",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

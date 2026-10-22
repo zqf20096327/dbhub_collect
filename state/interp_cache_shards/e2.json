@@ -8411,5 +8411,145 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "57b431288cf5": {
+  "identity": {
+   "one_liner": "本地优先的持久化 AI 代理工作区，基于 Bun/React/SQLite 构建",
+   "review": "Jelly 是一个在自有硬件上运行的多代理系统，用户可创建多个持久化 AI 代理并分组管理，代理可执行 shell、sudo 请求、操作本地 Chrome 浏览器，并提供 Web/移动端 UI。面向在单台 VM 或个人机器上经营业务的用户；需 Bun 1.3.9+ 与 Node.js 24+，代理运行需 ChatGPT 订阅或 OpenAI API key。",
+   "highlights": [
+    "支持创建多个代理并按项目目录分组，通过 Web UI 本地或经 Tailscale 远程访问",
+    "代理可使用本地 Chrome 浏览器执行浏览任务，并可通过专用认证卡请求 sudo 执行 root 命令",
+    "支持 MCP 连接、子代理、文件上传、内联图片及 apply_patch 多文件补丁工具"
+   ],
+   "use_cases": [
+    "在个人服务器或 VM 上运行持久化 AI 代理处理日常业务任务",
+    "需要代理代为操作本地浏览器（如登录网站执行操作）的场景",
+    "通过手机/Tailscale 远程监控和管理代理运行的运维场景"
+   ],
+   "db_verdicts_json_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Built with Bun, React, SQLite, and the Pi agent harness.",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明系统基于 Bun、React、SQLite 构建并持久化会话等数据于本地 .jelly/ 目录，是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Jelly is a local multi-bot agent system** ／ - Built with Bun, React, SQLite, and the Pi agent harness. ／ Conversations, credentials, browser profiles, and artifacts live in `.jelly/` by default. User-wide MCP configuration and OAuth caches live in `~/.jelly/`. Neither belongs in source control. Stop Jelly before backing up its instance data. Model conversations are sent to your chosen provider; local storage does not mean local inference.",
+   "evidence_lines": [
+    3,
+    22,
+    159
+   ]
+  },
+  "fn": "dctanner/jelly",
+  "sha": "57b431288cf5",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bcc3221d1652": {
+  "identity": {
+   "one_liner": "自托管小型群组聊天与语音服务器，FastAPI+SQLite+LiveKit 单进程架构",
+   "review": "Gomex 是面向小圈子的自托管聊天/语音系统，提供文字频道、私聊群聊、语音房、屏幕共享和按键说话，通过 LiveKit 做通话中继并在受限网络下回退 TURN 443。整个栈运行在一个 Python 进程加 SQLite 上，约 120 MB 内存，提供一键安装脚本和桌面客户端，适合想在廉价 VPS 上为朋友小群自建服务的用户。",
+   "highlights": [
+    "单 Python 进程 + SQLite + LiveKit + Caddy 架构，约 120 MB 内存",
+    "支持文字频道、私聊群聊、语音房、屏幕共享、push-to-talk 与客户端 RNNoise 降噪",
+    "提供一键安装脚本、每夜备份（保留 14 天）与一键恢复"
+   ],
+   "use_cases": [
+    "在个人 VPS 上为朋友小群搭建私有聊天/语音服务器",
+    "需要邀请制、封闭注册的私密社区沟通",
+    "网络受限环境下需要 TURN 443 回退的语音通话场景"
+   ],
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "120 MB of memory: one Python app with SQLite, LiveKit and Caddy. The interface is in English and Russian. ／ - Constraints kept: SQLite, one Python process, no new services. Files live on disk.",
+     "lines": [
+      14,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 SQLite 存储数据的聊天/语音应用程序，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Gomex is a closed Discord for a small group: text and voice channels, DMs and group chats, video, screen share, ／ 120 MB of memory: one Python app with SQLite, LiveKit and Caddy. The interface is in English and Russian. ／ - Constraints kept: SQLite, one Python process, no new services. Files live on disk.",
+   "evidence_lines": [
+    11,
+    14,
+    67
+   ]
+  },
+  "fn": "gomex-inc/gomex",
+  "sha": "bcc3221d1652",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

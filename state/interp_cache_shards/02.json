@@ -10094,5 +10094,150 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "99be6545e80b": {
+  "identity": {
+   "one_liner": "本地优先的 LLM 知识库应用，基于 Marimo 与 SQLite/FTS5 构建可引用 wiki",
+   "review": "这是一个运行在本机的 wiki 类应用：读取用户文档生成带引用的概念页面，并支持与知识库对话，SQLite/FTS5 承担索引与引用图谱存储，LLM 走任意 OpenAI 兼容接口。适合想在本地管理个人文档知识、不依赖云服务的用户；每个 wiki 是独立 git 仓库，回答可配置引用校验模式。",
+   "highlights": [
+    "以 SQLite 记录页面与来源间的引用边，溯源可查询（L89）",
+    "检索链路为 index.md → wiki FTS5 → 原始文档分块回退（L69）",
+    "支持任何 OpenAI 兼容端点，可按聊天/摄取拆分模型配置（L75）"
+   ],
+   "use_cases": [
+    "将个人文档整理为可阅读、可检索的本地知识库",
+    "基于本地数据集进行带引用的问答与顾问式计算",
+    "对摄取与对话质量进行 LLM-as-judge 评测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "(Apache-2.0); the rest is an independent local-first build on FastAPI, HTMX and SQLite. See `NOTICE`. ／ - **Citation graph in SQLite** — every page→source and page→page edge is recorded and rebuilt deterministically, so provenance is queryable. ／ > Filing cabinet (SQLite + FTS5) vs. encyclopedia (human-readable markdown) —",
+     "lines": [
+      16,
+      89,
+      106
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 SQLite 存储引用图谱与数据的本地知识库应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A personal, local-first wiki that ingests your documents, builds a structured knowledge base, and lets you read and chat with it — all on your machine, no cloud required. ／ (Apache-2.0); the rest is an independent local-first build on FastAPI, HTMX and SQLite. See `NOTICE`. ／ - **Citation graph in SQLite** — every page→source and page→page edge is recorded and rebuilt deterministically, so provenance is queryable.",
+   "evidence_lines": [
+    12,
+    16,
+    89
+   ]
+  },
+  "fn": "Clod/llmwiki-marimo",
+  "sha": "99be6545e80b",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "88df7c412b8f": {
+  "identity": {
+   "one_liner": "团队协作收件箱应用，将 Gmail/IMAP 邮箱转为共享收件箱",
+   "review": "Dispatch 是一个开源的团队共享收件箱应用，把 Gmail、Outlook 或任意 IMAP/SMTP 邮箱转化为可协作的共享收件箱，提供内部评论、任务分配、自动化规则与分析统计，可通过 Docker Compose 或 Coolify 自托管，也可使用其 $50/月的云服务。数据层使用 PostgreSQL 17 配合 Drizzle ORM，实时功能基于 Postgres LISTEN/NOTIFY 而非 Redis。适合需要共用邮箱的客服或运营团队。",
+   "highlights": [
+    "支持通过 OAuth 接入 Gmail/Google Workspace 与 Outlook/Microsoft 365，或任意 IMAP/SMTP 邮箱",
+    "提供内部评论、会话分配、实时在线状态、团队聊天与任务关联等协作功能",
+    "支持规则自动化、REST API、API 密钥与签名 webhook，实时流基于 Postgres LISTEN/NOTIFY 实现"
+   ],
+   "use_cases": [
+    "团队共用客服/支持邮箱，需要分配会话与内部讨论",
+    "需要自托管协作收件箱以掌控邮件数据的组织",
+    "基于规则自动标记、分配、归档邮件的运营场景"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This starts the app, worker and PostgreSQL. The compose file publishes no ports, so put your reverse proxy in front of `app:3000`. Or download the override with a bundled Caddy for automatic HTTPS: ／ - **Data:** PostgreSQL 17 with Drizzle ORM, TanStack Query ／ - **Realtime:** Server-Sent Events over Postgres `LISTEN/NOTIFY`, with no Redis",
+     "lines": [
+      91,
+      129,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储数据的协作收件箱应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This starts the app, worker and PostgreSQL. The compose file publishes no ports, so put your reverse proxy in front of `app:3000`. Or download the override with a bundled Caddy for automatic HTTPS: ／ - **Data:** PostgreSQL 17 with Drizzle ORM, TanStack Query ／ The **app** serves the UI, API and realtime stream. The **worker** syncs mailboxes, sends mail and runs rules, webhooks and scheduled jobs. **PostgreSQL** is the database, the job queue and the event bus. Details: docs/architecture.md.",
+   "evidence_lines": [
+    91,
+    129,
+    143
+   ]
+  },
+  "fn": "codextde/dispatch",
+  "sha": "88df7c412b8f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

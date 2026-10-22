@@ -10479,5 +10479,248 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4821da389ac4": {
+  "identity": {
+   "one_liner": "Go 编写的自托管 OAuth 2.0/OIDC 身份提供方，单二进制内嵌 SQLite",
+   "review": "这是一个用 Go 实现的 OAuth 2.0/OpenID Connect 身份提供方（IdP），处理登录、MFA、passkey、会话、令牌签发与用户/客户端管理，全部状态存于单个 SQLite 文件，以单二进制部署，无需外部数据库或消息队列。适合小团队、内部工具、自托管应用以及需要真实 OIDC 测试桩的 CI 场景；README 明确说明因 SQLite 写串行化，不适合需要横向扩展或多区域部署的组织。",
+   "highlights": [
+    "实现 OAuth2/OIDC 标准流程：Authorization Code + PKCE、刷新令牌、令牌内省/撤销、OIDC Discovery、RS256 签名 JWT",
+    "支持 WebAuthn passkey、TOTP 与邮件 OTP 等 MFA 方式，内置用户与 OAuth2 客户端管理及 Admin UI",
+    "单二进制内嵌 SQLite（modernc.org/sqlite，无 CGo）运行，状态保存于单个文件"
+   ],
+   "use_cases": [
+    "为产品或内部工具提供自托管 OAuth2/OIDC 认证",
+    "为 CI/测试套件提供快速启动的真实 OIDC 提供方",
+    "替代 Keycloak 等身份服务的轻量部署（提供兼容路径便于迁移）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **No external infrastructure** — no Redis, no Postgres, no message queues",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Embedded SQLite** — no separate database server; the entire state lives in one file ／ |Database|SQLite (`modernc.org/sqlite`)|No CGo, no external server, sufficient for IdP write patterns|",
+     "lines": [
+      45,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 SQLite 存储自身状态的身份提供方应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Auténtico is a self-contained OAuth 2.0 / OpenID Connect (OIDC) Identity Provider built with Go. It handles the full authentication lifecycle — login, MFA, passkeys, sessions, token issuance, and admin — in a single binary backed by SQLite. No external database, no infrastructure dependencies, no ceremony.** ／ - **Embedded SQLite** — no separate database server; the entire state lives in one file ／ |Database|SQLite (`modernc.org/sqlite`)|No CGo, no external server, sufficient for IdP write patterns|",
+   "evidence_lines": [
+    9,
+    45,
+    123
+   ]
+  },
+  "fn": "eugenioenko/autentico",
+  "sha": "4821da389ac4",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9bc24fea5b44": {
+  "identity": {
+   "one_liner": "中小學排課與調代課自架系統，含 OR-Tools 自動排課引擎",
+   "review": "面向台灣國小、國中、高中職教務單位的網頁版排課與調代課系統，涵蓋學期資料建置、手動拖拉排課、OR-Tools CP-SAT 自動排課、請假代課、通知與鐘點統計。設計為單校自架（非多租戶 SaaS），透過 Docker Compose 部署，以 PostgreSQL 16 儲存資料，Redis 支撐背景排課任務。",
+   "highlights": [
+    "提供 OR-Tools CP-SAT 自動排課，含 H1–H10 硬約束與 S1–S8 軟約束加權，無解時以教務語言定位衝突",
+    "支援請假登記、代課推薦、調課驗證、站內與 Email 通知、月結鐘點統計",
+    "透過 Docker Compose 部署六個容器，資料以 PostgreSQL 16 儲存，支援每日自動備份與還原"
+   ],
+   "use_cases": [
+    "台灣 K-12 學校學期初的配課與手動/自動排課",
+    "學期中教師請假、代課指派與調課作業管理",
+    "校內單機自架部署，課表與鐘點統計匯出 Excel/PDF/PNG"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+     "lines": [
+      117,
+      119
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系統以 PostgreSQL 作為自身資料儲存層（技術棧列明 PostgreSQL 16、部署含 postgres 容器），屬使用資料庫的應用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+   "evidence_lines": [
+    117,
+    119
+   ]
+  },
+  "fn": "begin0808/Course_Scheduling_System",
+  "sha": "9bc24fea5b44",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3280a13040ed": {
+  "identity": {
+   "one_liner": "Go 版 YCSB 基准测试工具，支持多数据库与 RawKV 操作",
+   "review": "go-ycsb 是 YCSB 的 Go 语言移植版，用于对 MySQL、TiDB、TiKV、PostgreSQL 等多种数据库执行 CRUD 基准测试，支持全部 YCSB 生成器与 Core 工作负载，并提供 rawkv 命令直接操作 TiKV RawKV 键。面向需要做数据库基准测试的开发与运维人员，可输出 Prometheus 指标。本仓库为 fork，新增 mysql.cas 事务性读改写支持。",
+   "highlights": [
+    "支持 MySQL/TiDB、TiKV、PostgreSQL 等多种数据库作为基准测试后端",
+    "提供 rawkv 命令直接操作 TiKV RawKV 键，含 scan、delete_range、checksum",
+    "支持通过 metrics.addr 暴露 Prometheus 指标端点"
+   ],
+   "use_cases": [
+    "对多种数据库执行 YCSB 标准 CRUD 基准测试",
+    "对 TiKV RawKV 键空间进行 put/get/scan/checksum 操作",
+    "基准测试期间通过 Prometheus 端点采集运行指标"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL / CockroachDB / AlloyDB / Yugabyte ／ ### PostgreSQL & CockroachDB & AlloyDB & Yugabyte ／ |pg.host|\"127.0.0.1\"|PostgreSQL Host|",
+     "lines": [
+      101,
+      182,
+      186
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL / TiDB ／ ### MySQL & TiDB ／ |mysql.host|\"127.0.0.1\"|MySQL Host|",
+     "lines": [
+      94,
+      142,
+      146
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Sqlite ／ ### Sqlite ／ |sqlite.db|\"/tmp/sqlite.db\"|Database path|",
+     "lines": [
+      104,
+      266,
+      270
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- MySQL / TiDB ／ |tidb.cluster_index|true|Whether to use cluster index, for TiDB only| ／ |tidb.instances|\"\"|Comma-seperated address list of tidb instances (eg: `tidb-0:4000,tidb-1:4000`)|",
+     "lines": [
+      94,
+      151,
+      152
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 YCSB 的 Go 移植，用于对多种数据库执行基准测试，属测试工具而非数据存储应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "go-ycsb is a Go port of YCSB. It fully supports all YCSB generators and the Core workload so we can do the basic CRUD benchmarks with Go. ／ ## Supported Database ／ |mysql.cas|false|Wrap each workloadF read-modify-write in a transaction (`SELECT ... FOR UPDATE` + UPDATE + COMMIT) so it is atomic per key, matching the semantics of `tikv.cas` for RawKV. Off: RMW is two independent autocommit statements.|",
+   "evidence_lines": [
+    3,
+    92,
+    153
+   ]
+  },
+  "fn": "windtalkerbj/go-ycsb",
+  "sha": "3280a13040ed",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

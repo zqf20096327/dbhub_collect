@@ -9218,5 +9218,229 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d6acdb47c552": {
+  "identity": {
+   "one_liner": "SQLite 兼容的 Go 嵌入式数据库，列式存储+JIT 编译执行",
+   "review": "musql 是一个纯 Go 实现的 SQLite SQL 方言兼容数据库引擎，用列式 .musq 存储格式和 JIT 编译执行查询，支持 joins、窗口函数、触发器、JSON、全文检索、R-tree 索引及 libSQL 向量函数。可通过 database/sql 嵌入 Go 程序、用 musqld 以服务器模式运行（ speaks Turso 协议），并提供 musql-convert 在 SQLite 文件间双向导入导出；注意 SQLite 文件需先转换才能打开，部分 PRAGMA 行为不同。",
+   "highlights": [
+    "提供 SQLite 兼容 SQL 方言，自有解析器、计划器与执行引擎",
+    "支持 libSQL 向量函数（vector_top_k、F32_BLOB 等）与 SQLite vec1 扩展",
+    "提供 CRDT 复制与 leader 模式，支持节点间数据库复制"
+   ],
+   "use_cases": [
+    "Go 程序中作为嵌入式数据库替换现有 SQLite 驱动",
+    "导入既有 SQLite 数据库以加速读密集型查询",
+    "需要向量检索能力的本地/嵌入式场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Use it as an embedded database through `database/sql`, import existing SQLite ／ ./musql-convert import app.db app.musq   # SQLite -> musql ／ musql implements SQLite's SQL dialect through its own parser, planner, and",
+     "lines": [
+      17,
+      91,
+      186
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 生态提供兼容引擎、数据导入导出工具和 Turso 协议服务端，属于数据库生态组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SQLite-compatible SQL, accelerated by columnar storage and a JIT compiler.** ／ musql implements SQLite's SQL dialect through its own parser, planner, and ／ Run `musqld` with Docker; the database lives in the `musql` volume:",
+   "evidence_lines": [
+    7,
+    186,
+    60
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "samyfodil/musql",
+  "sha": "d6acdb47c552",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a3a2aec627a0": {
+  "identity": {
+   "one_liner": "Oracle AI 数据平台的官方 SDK 与 CLI 客户端工具集",
+   "review": "这是 Oracle AI Data Platform 公共 API 的生成式客户端仓库，包含 Java、Python、TypeScript 三种语言的 SDK 和对应命令行工具，覆盖 workspace、cluster、notebook、workflow 等操作并提供可运行示例。使用者需先配置 OCI 认证并安装 OCI CLI。安装方式为从 GitHub release 下载包文件本地安装，支持校验签名与 checksum。",
+   "highlights": [
+    "提供 Java、Python、TypeScript 三语言 SDK 客户端与对应 CLI",
+    "SDK 实现 OCI 请求签名、分页、重试与结构化服务错误处理",
+    "支持通过 checksum、签名或 provenance 校验发布工件"
+   ],
+   "use_cases": [
+    "通过命令行管理 AI Data Platform 的 workspace、集群、notebook 与 workflow",
+    "在 Java/Python/TypeScript 应用中集成 AIDP 公共 API",
+    "在 CI 与运行时工作负载中使用短期作用域凭证调用 AIDP"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "# Oracle AI Data Platform SDK and CLI",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库为 Oracle AI Data Platform 平台提供客户端 SDK 与 CLI，属于为该数据平台服务的工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "Oracle"
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仅含 Oracle 版权声明，未见开源许可证文本",
+   "install": [
+    "pypi",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Oracle AI Data Platform SDK and CLI provide generated clients and command line ／ - AIDP CLI packages for command line access. ／ - A Java SDK client.",
+   "evidence_lines": [
+    7,
+    12,
+    13
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "oracle/aidataplatform-sdk",
+  "sha": "a3a2aec627a0",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "91f0dcab2e1f": {
+  "identity": {
+   "one_liner": "PHP/MySQL 自托管预约系统，支持时段、资源、容量、活动四种预订模式",
+   "review": "VoxelBooking 是一个面向小型商户（如沙龙、酒店、餐厅、活动组织方）的自托管预约系统，通过一个安装即可同时运营多个业务，每个业务使用时段、资源、容量或活动中的一种预订模式。部署仅需 PHP 8.3+ 与 MySQL 8.0+，安装向导自动执行迁移和配置，邮件通知与 webhook 由 cron 后台投递，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供时段、资源、容量、活动四种预订模式，多业务多租户，共享同一预订表与管理后台",
+    "安装包含预构建资源和 vendor 依赖，服务器仅需 PHP 与 MySQL，首次访问启动五步安装向导并自动运行迁移",
+    "通过 cron 投递队列邮件与签名 webhook，管理后台提供 Git 或发布包两条更新路径并自动应用迁移"
+   ],
+   "use_cases": [
+    "沙龙、诊所、咨询等按时间段预约服务的商户",
+    "酒店、短租、共享办公等按资源单位管理可订性的场景",
+    "餐厅、团体课、工作坊等按人数容量或报名位限制的预订"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Your production server needs only PHP and MySQL — never Composer, Node.js, or npm. ／ |MySQL|8.0+| ／ |Database|Connects to MySQL, runs every migration, and seeds initial settings|",
+     "lines": [
+      42,
+      49,
+      116
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Demo SQLite database|For demo mode (optional)|",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 描述这是一个使用 MySQL 存储数据的自托管预约系统，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open-source booking infrastructure for small businesses. Four booking patterns: timeslots, resources, capacity, events, in one self-hosted installation. No SaaS dependency, no vendor lock-in, and no mandatory AI-provider dependency. ／ Your production server needs only PHP and MySQL — never Composer, Node.js, or npm. ／ |Database|Connects to MySQL, runs every migration, and seeds initial settings|",
+   "evidence_lines": [
+    3,
+    42,
+    116
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "NowSquare/VoxelBooking",
+  "sha": "91f0dcab2e1f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

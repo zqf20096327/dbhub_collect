@@ -11621,5 +11621,264 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "44f5982a7fc9": {
+  "identity": {
+   "one_liner": "自托管深度链接引擎，提供设备识别、延迟深链与点击分析",
+   "review": "LinkForty Core 是一个用 TypeScript 编写的自托管深度链接服务，提供短链生成、按设备路由、点击分析、UTM 跟踪、QR 码生成和延迟深链归因等 REST API。面向需要自建移动链接基础设施的移动应用团队，数据存储于用户自己的 PostgreSQL，可选 Redis 缓存；鉴权需自行接入。",
+   "highlights": [
+    "提供链接创建、重定向、点击分析与 Webhook 的 REST API，含 iOS Universal Links 与 Android App Links 的 .well-known 文件服务",
+    "数据存储于用户自有的 PostgreSQL，可选 Redis 缓存，支持 Docker 与 npm 部署",
+    "实现延迟深链的安装归因（可配置归因窗口）及移动中间页/桌面 Launchpad 页面逻辑"
+   ],
+   "use_cases": [
+    "移动应用的短链分发与按平台（iOS/Android/web）路由",
+    "安装归因与点击数据分析的自托管方案",
+    "为已下线的 Firebase Dynamic Links 场景提供同类功能部署"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Self-hosted deep linking engine with device detection, analytics, deferred deep linking, and smart routing. No per-click pricing, no vendor lock-in, full data ownership — runs on your own PostgreSQL. Firebase Dynamic Links shut down in August 2025; LinkForty i ／ - **Full data ownership** — All click data, analytics, and attribution stored in your PostgreSQL database ／ - **PostgreSQL Storage** - Reliable data persistence with full SQL capabilities",
+     "lines": [
+      7,
+      20,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明点击、分析与归因数据存储在用户自己的 PostgreSQL 数据库中，该库为存储依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "npm",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hosted deep linking engine with device detection, analytics, deferred deep linking, and smart routing. No per-click pricing, no vendor lock-in, full data ownership — runs on your own PostgreSQL. Firebase Dynamic Links shut down in August 2025; LinkForty is a production-ready, open-source replacement you can deploy today. ／ - **PostgreSQL Storage** - Reliable data persistence with full SQL capabilities",
+   "evidence_lines": [
+    7,
+    57
+   ]
+  },
+  "fn": "LinkForty/core",
+  "sha": "44f5982a7fc9",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e2766753cbf9": {
+  "identity": {
+   "one_liner": "护照领取状态查询网站，解析 PDF 入库存档",
+   "review": "一个用于查询埃塞俄比亚护照是否可领取及建议领取星期的 Laravel 网站应用，通过后台队列解析 PDF 并写入 SQLite（生产环境用 MariaDB），依赖 Redis 做队列/缓存，并集成 Chapa 支付。README 主要内容为基于 GitHub Actions 的 VPS 容器化部署流程与回滚约束，适合需要自托管部署该站点并用 Docker Compose 运维的开发者。",
+   "highlights": [
+    "PDF 解析入 SQLite，生产环境使用 MariaDB，后台队列处理解析任务",
+    "集成 Chapa 支付网关，含定价与限流功能",
+    "提供基于 GitHub Actions CI 的 Docker Compose 生产部署流程与回归检查脚本"
+   ],
+   "use_cases": [
+    "查询护照是否可领取及建议领取日期",
+    "管理员按权限录入和检索护照数据",
+    "在共享 VPS 上以 Docker Compose 方式自托管部署"
+   ],
+   "classification": {
+    "cat": "应用",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       4
+      ]
+     },
+     {
+      "db": "MariaDB",
+      "rel": "support",
+      "lines": [
+       55,
+       71
+      ]
+     }
+    ],
+    "eco": "app",
+    "eco_why": "README 描述的是使用 SQLite/MariaDB 存数据、Redis 做队列的护照查询网站，数据库仅作为应用存储。",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "",
+    "install": [
+     "docker",
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     4,
+     55
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A simple way to look if your passport is ready to collect and which day of the week you should collect. It is Role & Permission based site with PDF to SQLite(MarianaDB for prod) parsing, Queued jubs for PDF parsing in the background, Automated daily updates, P",
+     "lines": [
+      4
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "network. It never restarts Nginx Proxy Manager, other projects, MariaDB, or Redis. ／ - The existing app, PHP, MariaDB, and Redis containers must be running and have",
+     "lines": [
+      55,
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是使用 SQLite/MariaDB 存数据、Redis 做队列的护照查询网站，数据库仅作为应用存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A simple way to look if your passport is ready to collect and which day of the week you should collect. It is Role & Permission based site with PDF to SQLite(MarianaDB for prod) parsing, Queued jubs for PDF parsing in the background, Automated daily updates, Payment integration with Chapa payment gateway! ／ network. It never restarts Nginx Proxy Manager, other projects, MariaDB, or Redis.",
+   "evidence_lines": [
+    4,
+    55
+   ]
+  },
+  "fn": "NegusNati/passport.et",
+  "sha": "e2766753cbf9",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c1f7f32069ab": {
+  "identity": {
+   "one_liner": "宋词择律游戏机制的蒙特卡洛模拟器，用 PostgreSQL 存储数据并输出统计报告",
+   "review": "针对《无悔华夏》宋词择律玩法编写的 Python 蒙特卡洛模拟工具，供该游戏的数值研究者使用。它将游戏配置 JSON 导入 PostgreSQL（21 张表 + 14 个视图），提供 GUI 与命令行两种方式批量模拟，输出 summary.md、CSV 明细与图表，可用 --seed 复现；仓库仅含代码，游戏数据需使用者自备。",
+   "highlights": [
+    "提供 GUI（tkinter 四标签页）与命令行两种运行方式，参数含 --runs/--seed 等，可复现",
+    "用 PostgreSQL 建库导入 8 个游戏配置 JSON，规范化为 21 张表和 14 个视图，查询走 SQL",
+    "每局输出独立目录：summary.md、raw/*.csv、charts/*.png 与配置快照"
+   ],
+   "use_cases": [
+    "比较《无悔华夏》宋词玩法不同开局配置的期望收益",
+    "以 SQL 查询词句、词人、政策等规范化游戏数据",
+    "以固定种子复现大规模概率模拟并生成统计报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **PostgreSQL 13+**（开发环境：PostgreSQL 18）",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 PostgreSQL 存储其游戏配置与模拟数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "《无悔华夏》宋词择律系统的**蒙特卡洛模拟器**：把游戏里\"选题 → 择律 → 结算\"的黑箱拆成 ／ * **PostgreSQL 13+**（开发环境：PostgreSQL 18） ／ 模拟**不读游戏原始文件**，但建库（`src/ingest.py`）需要 8 个游戏配置 JSON，",
+   "evidence_lines": [
+    3,
+    27,
+    41
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "2233-123/songci-simulation",
+  "sha": "c1f7f32069ab",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

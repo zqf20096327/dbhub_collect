@@ -10984,5 +10984,77 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7412f56244a0": {
+  "identity": {
+   "one_liner": "自托管单企业项目管理系统 PMS 的 Vue 浏览器前端",
+   "review": "PMS Front 是配套 pms-backend 的浏览器端应用，提供工作台、需求/项目/迭代管理、组织架构、权限配置和审计日志等页面与前端路由，账号权限和数据均由后端 API 提供，后端使用 MySQL 存储数据。面向想本地自部署整套系统的单企业用户；本仓库仅用于前端开发，最终用户需使用 pms-distribution 预构建镜像，不支持独立作为 SaaS 运行。",
+   "highlights": [
+    "提供需求、项目、专题故事、迭代计划、系统版本、人员权限、组织架构等研发管理页面",
+    "开发服务器将 /api 请求代理到后端，支持中英文切换与 VITE_PROXY_TARGET 配置",
+    "提供 pnpm test/typecheck/build 脚本与 Dockerfile（非 root Nginx，仅静态页面和 /api 代理）"
+   ],
+   "use_cases": [
+    "配合 pms-backend 本地开发调试 PMS 前端页面",
+    "通过 pms-distribution 的 Compose 脚本自托管部署完整项目管理系统",
+    "企业内部研发流程中的需求排期、迭代计划与组织权限管理操作界面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "在兄弟仓库 `pms-backend` 中完成 MySQL 配置并启动 API。后端默认地址： ／ |页面提示 `Request failed with status code 500`|查看后端日志；先确认 MySQL 迁移已到当前基线，再访问 `/api/health/ready`|",
+     "lines": [
+      18,
+      172
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明账号、权限、项目数据由 pms-backend 提供，后端通过 MySQL 配置存数据，本仓库为使用数据库的前端应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PMS Front 是 PMS 的浏览器端应用，负责页面展示、交互和前端路由；账号、权限、组织关系、项目数据和文件上传都由 `pms-backend` 提供。项目面向单个企业本地部署，不是独立 SaaS 前端。 ／ 在兄弟仓库 `pms-backend` 中完成 MySQL 配置并启动 API。后端默认地址：",
+   "evidence_lines": [
+    6,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "xiebinJava/pms-front",
+  "sha": "7412f56244a0",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

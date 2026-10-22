@@ -8807,5 +8807,149 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d019634cd92": {
+  "identity": {
+   "one_liner": "SQLite 只读取证分析 GUI：浏览、解码 BLOB 并恢复已删记录",
+   "review": "这是一个面向桌面平台的 SQLite 数据库浏览器与取证分析工具，面向 DFIR、移动取证、CTF 等场景。它以 immutable 模式只读打开文件，在内存中合并 WAL，可从 WAL、空闲页和回滚日志中恢复已删除记录，并解码 bplist、protobuf 等 BLOB；提供 Windows 安装包/便携版，macOS 和 Linux 需以 Python 3.8+ 从源码运行。",
+   "highlights": [
+    "以 immutable 模式只读打开数据库，在内存中合并 WAL，不向证据文件写入任何内容，并在打开和关闭时计算 SHA-256",
+    "从 WAL、空闲页、freeblock 和索引条目中恢复已删除记录及历史行版本",
+    "解码 bplist、NSKeyedArchiver、protobuf、gzip/zstd 等 BLOB 及多种时间戳格式，单文件 Python 实现、仅用标准库"
+   ],
+   "use_cases": [
+    "DFIR 与移动取证中对手机提取目录里的 SQLite 文件做只读证据分析",
+    "恢复和检视 WhatsApp、浏览器历史等应用数据库中的已删除记录",
+    "无需写 SQL 地浏览、过滤、关联和导出大型 SQLite 数据库（如 5GB、数百万行）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite GUI Analyzer logo ／ SQLite GUI Analyzer ／ Free, open-source SQLite viewer and forensic analyzer.",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是直接读取和分析 SQLite 数据库文件本身的查看/取证工具，为数据库文件的分析服务，而非以数据库为存储的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Free, open-source SQLite viewer and forensic analyzer. ／ SQLite GUI Analyzer is a desktop **SQLite database browser and forensic tool** for Windows, ／ It is built for **digital forensics and incident response (DFIR)**, mobile forensics, CTF",
+   "evidence_lines": [
+    5,
+    27,
+    33
+   ]
+  },
+  "fn": "akhil-dara/sqlite-gui-analyzer",
+  "sha": "3d019634cd92",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8d8a38207c7e": {
+  "identity": {
+   "one_liner": "面向 AI agent 的自托管 PaaS，REST API 驱动容器部署",
+   "review": "一个可自托管的 PaaS 平台，通过 REST API 供 AI agent 注册租户、从 git 构建并部署服务，也提供可选的人工监督面板。它用单个 Go 二进制做控制平面，容器以 gVisor 隔离，Traefik 做路由，Nixpacks 构建，自身状态存于两个 SQLite 数据库，并可为租户托管 Postgres/Redis 容器。部署需 Linux 服务器、Docker 与 gVisor 等依赖，通过脚本或源码安装。",
+   "highlights": [
+    "提供 REST API 用于租户注册、API 密钥管理、服务部署与日志读取",
+    "使用 gVisor 容器运行时与多租户 API 密钥隔离租户工作负载",
+    "提供托管 Postgres 与 Redis 数据库容器，连接字符串经 AES-256-GCM 加密"
+   ],
+   "use_cases": [
+    "让 AI agent 通过 API 在自有服务器上部署和管理应用服务",
+    "在裸金属服务器上运行多租户应用托管平台",
+    "为部署的服务按需开通 Postgres/Redis 数据库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stack**: Go binary + Docker + gVisor + Traefik + Nixpacks + SQLite ／ - **SQLite** — two databases: `ah.db` (state) and `ah-metering.db` (metering), WAL mode",
+     "lines": [
+      13,
+      62
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Managed Postgres and Redis containers with encrypted connection strings. ／ |`/ah-db <service> <postgres\\|redis> [name]`|Provision a database and wire it to a service| ／ /ah-db web postgres",
+     "lines": [
+      215,
+      307,
+      316
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "控制平面自身状态与计量数据存储于两个 SQLite 数据库，Postgres/Redis 仅是向租户提供的托管容器",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted PaaS for bare metal servers, designed to be operated by AI agents via REST API. Includes an optional supervisory dashboard for humans. ／ - **SQLite** — two databases: `ah.db` (state) and `ah-metering.db` (metering), WAL mode ／ Managed Postgres and Redis containers with encrypted connection strings.",
+   "evidence_lines": [
+    9,
+    62,
+    215
+   ]
+  },
+  "fn": "dennisonbertram/agentic-hosting",
+  "sha": "8d8a38207c7e",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

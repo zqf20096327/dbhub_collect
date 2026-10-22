@@ -12048,5 +12048,149 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dc142c1621cd": {
+  "identity": {
+   "one_liner": "单二进制、YAML 声明式 schema 的自托管 Supabase 替代后端",
+   "review": "instancez 用单个 YAML 文件定义表、RLS、存储和 RPC，运行时与 live 数据库做增量 diff 应用 schema，并提供兼容 supabase-js 的 auth、REST、RPC 与存储接口，依赖 Postgres 存数据。面向希望自托管 BaaS、或让 LLM/编码代理读写后端 schema 的开发者，支持 Docker、Kubernetes、AWS Lambda 等部署方式；Realtime 暂未支持，存储图片格式受限。",
+   "highlights": [
+    "单个 YAML 文件声明 schema，运行时对比 live 数据库自动应用增量迁移",
+    "兼容 Supabase 客户端（supabase-js 等）的 auth、PostgREST 风格 REST、RPC、存储",
+    "提供 agent skill 与 inz CLI，可安装到 Claude Code、Codex、Cursor 等编码代理"
+   ],
+   "use_cases": [
+    "以单二进制 + Postgres 自托管 BaaS 后端",
+    "由 LLM/编码代理读取和维护后端 schema 与 RLS 策略",
+    "从 Supabase 客户端应用切换到自托管后端而不改前端代码"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "inz dev --embedded-pg # no Postgres to install; or drop the flag and set INSTANCEZ_DATABASE_URL to use your own ／ `inz dev` provisions the Postgres roles, applies the schema, and serves the API at `http://localhost:8080`. Editing `instancez.yaml` re-applies the schema automatically. ／ |Self-host footprint|One binary + Postgres|Multi-container stack|",
+     "lines": [
+      49,
+      55,
+      134
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用提供基于 Postgres 的后端服务与 schema 管理工具链，而非仅使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，贡献需签署 CLA",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**An LLM-friendly, single-binary, drop-in replacement to Supabase.** ／ `inz dev` provisions the Postgres roles, applies the schema, and serves the API at `http://localhost:8080`. Editing `instancez.yaml` re-applies the schema automatically. ／ |Self-host footprint|One binary + Postgres|Multi-container stack|",
+   "evidence_lines": [
+    5,
+    55,
+    134
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "instancez/instancez",
+  "sha": "dc142c1621cd",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "483befe65d33": {
+  "identity": {
+   "one_liner": "基于 Rocket+Datastar 的 Web 组件库，Go/SQLite 单二进制站点",
+   "review": "这是一个为 Rocket 框架提供的 Datastar Web 组件社区展示站点，包含 51 个组件、代码 Playground 与提交流程，使用 Go、templ 和 SQLite 构建，架构采用 CQRS 与 SSE 实时渲染。它面向 Datastar/Rocket 开发者，供其浏览、试用组件或提交自研组件；SQLite 用于存储状态、目录与组件文件，以单二进制方式分发。",
+   "highlights": [
+    "包含 51 个 Web 组件，每个组件提供在线演示、从 Rocket manifest 生成的 API 表和 Playground",
+    "以单个静态二进制分发，内嵌资产、组件与迁移，SQLite 为纯 Go 实现",
+    "采用 CQRS 架构，每个标签页通过一条压缩 SSE 流保持实时同步，支持组件提交流水线（GitHub issue 表单 + 机器人校验）"
+   ],
+   "use_cases": [
+    "为 Datastar + Rocket 项目挑选、试用和按版本锁定（pin）组件",
+    "通过 Playground 编辑并分享组件代码，或提交自研组件到目录",
+    "自托管运行组件目录站点（二进制/Docker 部署）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`. ／ - **Per-tab UI state** (filters, sort, preview theme) is stored in SQLite, in `tab_state`. The stream keeps the URL in sync.",
+     "lines": [
+      10,
+      32,
+      137
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite 存储状态、目录与组件文件的 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（其中 7 个来自 derekr PD rockets 的组件保留 Beer-Ware 许可）",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Community Components for Rocket.** A community gallery of Rocket web components for Datastar, in the spirit of shoelace.style. ／ Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ - Themes, pixel-art design system, zero Node, single static binary with embedded assets and SQLite.",
+   "evidence_lines": [
+    8,
+    10,
+    22
+   ]
+  },
+  "fn": "zweiundeins/starbase",
+  "sha": "483befe65d33",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

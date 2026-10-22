@@ -9392,5 +9392,269 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "af4753db2801": {
+  "identity": {
+   "one_liner": "面向数据库的开源 MCP 服务器，连接 AI 代理与数据库",
+   "review": "该项目是一个 Model Context Protocol 服务器，提供预构建工具（如列出表、执行 SQL）以及基于 tools.yaml 的自定义工具框架，用于将 AI 代理、IDE 和 CLI 客户端连接到数据库。它处理连接池、IAM 认证并支持 OpenTelemetry 观测。开发人员可以通过 npx、二进制文件、容器镜像、Homebrew 或 go install 进行安装，它支持多种数据库，包括 PostgreSQL、MySQL、BigQuery 等。",
+   "highlights": [
+    "提供预构建 MCP 服务器与自定义工具框架（tools.yaml 定义 sources/tools/toolsets）",
+    "支持通过 --prebuilt=<database> 参数加载多数据库标准工具集",
+    "内置连接池、IAM 认证集成与 OpenTelemetry 指标和追踪"
+   ],
+   "use_cases": [
+    "通过 MCP 客户端（如 Gemini CLI、Claude Code）探索数据库 schema 与查询数据",
+    "为生产环境的 AI 代理构建定制化数据库工具",
+    "为代理框架（如 ADK、LangChain、LlamaIndex）集成数据库访问工具"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Google Cloud:** AlloyDB, BigQuery, Cloud SQL (PostgreSQL, MySQL, SQL Server), Spanner, Firestore, Knowledge Catalog (formerly known as Dataplex). ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      68,
+      69
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Google Cloud:** AlloyDB, BigQuery, Cloud SQL (PostgreSQL, MySQL, SQL Server), Spanner, Firestore, Knowledge Catalog (formerly known as Dataplex). ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      68,
+      69
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Google Cloud:** AlloyDB, BigQuery, Cloud SQL (PostgreSQL, MySQL, SQL Server), Spanner, Firestore, Knowledge Catalog (formerly known as Dataplex). ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      68,
+      69
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      69
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      69
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      69
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为数据库生态服务的 MCP 服务器组件，提供数据库连接与工具框架，而非仅使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "Oracle",
+    "MariaDB",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "MCP Toolbox for Databases is an open source Model Context Protocol (MCP) server that connects your AI agents, IDEs, and applications directly to your enterprise databases. ／ It serves a **dual purpose**: ／ Supported databases currently include: ／ The primary way to configure Toolbox is through the `tools.yaml` file. If you",
+   "evidence_lines": [
+    18,
+    22,
+    67,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "googleapis/mcp-toolbox",
+  "sha": "af4753db2801",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "459a77fa85f1": {
+  "identity": {
+   "one_liner": "开源 AI 跨境电商运营平台，提供商品采集到刊登的全流程工作流",
+   "review": "TradeMind 是一个面向跨境卖家与品牌团队的运营平台，把商品采集、AI 内容生成、草稿协同、平台刊登、订单与库存协同串成工作流，并提供 ERP 采购、售后与结算模块。后端 Go + Gin，数据层默认使用 PostgreSQL 与 Redis，支持 Docker Compose 私有化部署，适合需要自托管运营工作台的团队。",
+   "highlights": [
+    "提供商品采集、AI 标题/描述生成、图片处理、草稿管理与多平台刊登的工作流",
+    "包含店铺授权、订单同步、库存镜像、采购退货、售后与结算等业务模块",
+    "默认使用 PostgreSQL + Redis 存储，支持 Docker Compose 部署与 Provider 扩展架构"
+   ],
+   "use_cases": [
+    "跨境电商团队私有化部署商品运营与刊登工作台",
+    "订单、库存、采购与售后的协同管理",
+    "基于 Provider 架构接入自有 AI、存储或平台渠道"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 自部署友好：默认 PostgreSQL + Redis，支持本地开发和 Docker Compose 完整部署。 ／ |Data|PostgreSQL + Redis| ／ 开发环境默认连接隔离的 PostgreSQL 与 Redis；完整自动化回归由 GitHub Actions 持续执行。",
+     "lines": [
+      80,
+      91,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明默认使用 PostgreSQL + Redis 作为数据层，数据库仅为平台存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "TradeMind 是面向跨境卖家、品牌团队与开发者的开源 AI 运营平台。它把商品采集、信息整理、内容生成、图片处理、草稿协同、平台刊登、订单与库存协同串成一条可观测的工作流，让团队从“重复搬运商品”升级为“持续经营商品资产”。 ／ - 自部署友好：默认 PostgreSQL + Redis，支持本地开发和 Docker Compose 完整部署。 ／ |Data|PostgreSQL + Redis|",
+   "evidence_lines": [
+    24,
+    80,
+    91
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "lien0219/trademind-ai",
+  "sha": "459a77fa85f1",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "233b5e7dfeb6": {
+  "identity": {
+   "one_liner": "面向 .NET 开发者的 Oracle 数据库浏览器",
+   "review": "FerretSharp 是一个面向 .NET 开发者的 Oracle 数据库浏览器，提供多连接工作区、外键导航、沙箱式编辑（显式事务、生产连接默认只读）、SQL 编辑器、执行计划、schema 比对和 EF Core 模型联动（LINQ 控制台、模型漂移检查）。供日常使用 Oracle 的 .NET 开发者使用，仅支持 Oracle，界面为英文/德文。",
+   "highlights": [
+    "按连接划分工作区，每个工作区拥有独立数据库会话与事务，支持撤销/重做和沙箱编辑",
+    "加载 EF Core 编译模型，展示实体/属性/枚举名，提供 LINQ 控制台与模型与数据库的漂移对比",
+    "内置 SQL 编辑器（Monaco）、绑定变量、执行计划查看以及跨连接的 schema 比对与 DDL 建议"
+   ],
+   "use_cases": [
+    "开发者日常查看与安全编辑 Oracle 表数据",
+    "通过 LINQ 控制台查看 EF Core 生成的 SQL 并检查模型漂移",
+    "Dev/Test/Prod 环境间 schema 结构比对"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ／ developer works with an Oracle database day to day: ／ read-only by default, enforced by Oracle itself.",
+     "lines": [
+      5,
+      24,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接并操作 Oracle 数据库的桌面客户端工具，为开发者管理/浏览数据库服务，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT license",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ／ General-purpose database tools know your schema, but not your application. FerretSharp is built around the way a .NET ／ - **Workspaces** per connection – \"Bug 3711\", \"Export Q3\" – each with its own tabs, filters and its **own database session**,",
+   "evidence_lines": [
+    5,
+    23,
+    26
+   ]
+  },
+  "fn": "JuliusFo/FerretSharp",
+  "sha": "233b5e7dfeb6",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

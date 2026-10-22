@@ -10468,5 +10468,79 @@
   "generated_at": "2026-10-19",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2f484aa90d34": {
+  "identity": {
+   "one_liner": "将 OpenFGA 授权 schema 编译为 PostgreSQL 内 PL/pgSQL 函数的编译器",
+   "review": "Melange 是一个命令行编译器，读取 .fga 授权 schema，为 PostgreSQL 生成按关系展开的 SQL 权限检查函数，直接查询用户现有表的 melange_tuples 视图，无需独立元组存储或同步服务。面向需要在数据库内实现 Zanzibar 风格关系型鉴权的开发者，提供 Go 与 TypeScript 客户端及本地 Studio 控制台；Schema 1.1 中 conditions 特性暂不支持。",
+   "highlights": [
+    "将 .fga schema 编译为 PL/pgSQL 函数，运行时权限检查为单个 SQL 函数调用",
+    "通过用户定义的 melange_tuples 视图直接读取现有表，无需独立元组存储与同步",
+    "兼容 OpenFGA Schema 1.1（conditions 除外），并提供 Go/TypeScript 客户端与 melange studio 本地控制台"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内实现基于关系的细粒度权限检查（RBAC/ReBAC）",
+    "希望在触发器和 RLS 策略中做事务内一致鉴权的应用",
+    "用任意可执行 SQL 的语言检查权限，或生成类型安全的 Go/TypeScript 客户端"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**An OpenFGA-to-PostgreSQL authorization compiler.** ／ Melange compiles OpenFGA authorization schemas into specialized PL/pgSQL functions that run inside your PostgreSQL database. Like Protocol Buffers compiles `.proto` files into serialization code, Melange compiles `.fga` files into SQL functions for Zanzibar-st ／ npm install @pthm/melange pg # TypeScript, Node.js 18+, pg is a peer dependency",
+     "lines": [
+      12,
+      14,
+      74
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供授权函数编译、迁移与检查工具，属数据库生态服务组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**An OpenFGA-to-PostgreSQL authorization compiler.** ／ Melange compiles OpenFGA authorization schemas into specialized PL/pgSQL functions that run inside your PostgreSQL database. Like Protocol Buffers compiles `.proto` files into serialization code, Melange compiles `.fga` files into SQL functions for Zanzibar-style relationship-based access control. ／ The generated functions read a `melange_tuples` view you define over your existing domain tables. There is no separate tuple store and nothing to sync.",
+   "evidence_lines": [
+    12,
+    14,
+    16
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "pthm/melange",
+  "sha": "2f484aa90d34",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

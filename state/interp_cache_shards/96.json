@@ -11514,5 +11514,224 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "edd5108580ce": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions 临时运行器队列控制器",
+   "review": "Zoomies 是一个自托管的 GitHub Actions runner 编排控制器：监听 workflow_job webhook，为每个任务启动一次性临时 runner，用完后销毁，支持多主机 agent、弹性 CPU/内存分配和实时 Web UI。状态存储用内嵌 SQLite，无需独立数据库服务器和 Kubernetes。面向需要自建 CI runner 队列的团队或个人，通过脚本或 Docker Compose 安装，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "为每个任务创建临时 runner，基于 workflow_job webhook 事件驱动扩缩容",
+    "使用 SQLite 存储状态，提供 Prometheus 指标、结构化日志和实时 Web UI",
+    "内置夜间数据库备份，可推送至多个 S3 兼容目标并支持恢复"
+   ],
+   "use_cases": [
+    "为 GitHub 组织或仓库自托管弹性 runner 队列",
+    "将私有内网主机（NAT 后）接入 GitHub Actions 运行资源池",
+    "以一次性 runner 满足任务间环境隔离需求"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      16,
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该控制器自身的状态存储，项目本身是 GitHub Actions runner 编排应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+   "evidence_lines": [
+    16,
+    101
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "edd5108580ce",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed53a6c80b51": {
+  "identity": {
+   "one_liner": "将 Apple Health 数据同步至自建接收端并通过只读 MCP 供 AI 助手查询",
+   "review": "开源 iPhone 应用配合自托管接收端（macOS/Linux），自动同步 Apple Health 的睡眠、活动、锻炼等记录并本地存储，通过只读 MCP server 向任意 MCP 客户端提供查询工具；面向想在个人 AI 工作流中使用健康数据且不依赖托管中间服务的用户。要求 iOS 18+，数据模型基于 SQLite。",
+   "highlights": [
+    "iPhone 应用自动同步 Apple Health 记录到用户自有的 macOS/Linux 计算机",
+    "提供只读 MCP 工具，可检索时间序列、锻炼、睡眠和每日摘要",
+    "数据存储在用户自有设备上，用户可选择哪些 MCP 客户端可读取"
+   ],
+   "use_cases": [
+    "在支持 MCP 的 AI 助手中回顾和分析个人睡眠、活动与锻炼记录",
+    "结合健康历史与目标讨论训练计划",
+    "本地化存储健康数据、避免托管中间服务"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Understand and build:** Architecture · Batch protocol · SQLite schema · Brand guide",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储健康历史记录，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Apple Health AI Bridge is an open-source connector for MCP-enabled assistants. The iPhone app sends the records you allow to a macOS or Linux computer you control. Automatic sync brings in new records, so you can keep the conversation going without preparing another export. ／ - Store the data on your Mac or Linux computer, with read-only tools for sleep, workouts, daily summaries, and individual measurements. ／ - **Understand and build:** Architecture · Batch protocol · SQLite schema · Brand guide",
+   "evidence_lines": [
+    19,
+    47,
+    91
+   ]
+  },
+  "fn": "roian6/apple-health-ai-bridge",
+  "sha": "ed53a6c80b51",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e35c19a5e79b": {
+  "identity": {
+   "one_liner": "自托管图床/媒体库应用，支持标签、相册与语义搜索",
+   "review": "Photoly 是一个自托管的图片/视频管理应用，提供上传、文件夹/标签/相册分类、分享链接与二维码、EXIF 记录、地图定位及 REST API。数据存储于 PostgreSQL 17 并使用 pgvector 支持语义搜索，可选用多种 AI 运行时（CUDA/CPU/MPS）与 Tesseract OCR。通过 Docker Compose 部署，适合想自建媒体库的用户。",
+   "highlights": [
+    "支持照片/视频上传，按文件夹、标签、相册分类，并提供分享链接与二维码",
+    "使用 PostgreSQL + pgvector 实现结合语义搜索的 Smart Search 与相似媒体推荐",
+    "提供 REST API、Swagger UI 与 OpenAPI 文档，支持 Docker Compose 与多种 AI 运行时配置"
+   ],
+   "use_cases": [
+    "个人或团队自托管图片/视频媒体库",
+    "需要基于语义或视觉内容检索照片的场景",
+    "需要通过 REST API 将媒体管理集成到其他应用"
+   ],
+   "use_cases_pad": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DB: PostgreSQL 17 + pgvector 0.8.7 + Redis ／ 1. Copy `.env.example` to `.env` and set database, Redis, administrator and both internal AI token values. Use separate PostgreSQL administrator, migration and application passwords. The Redis password must be URL-safe because it enters a connection URL. ／ PostgreSQL bootstrap installs pgvector and creates separate schema-owner and application roles. The one-shot `migrate` service runs Alembic and seeds settings/admin before Gunicorn starts. The Web process only checks the schema and cannot execute DDL. Repeated",
+     "lines": [
+      25,
+      37,
+      42
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "PostgreSQL bootstrap installs pgvector and creates separate schema-owner and application roles. The one-shot `migrate` service runs Alembic and seeds settings/admin before Gunicorn starts. The Web process only checks the schema and cannot execute DDL. Repeated",
+     "lines": [
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是一个使用 PostgreSQL 存储数据的图床/媒体管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Photoly is a self-hosted photo and video library. Organize media with folders, tags and galleries, share selected items, and search names, metadata and visual content. A documented REST API supports integrations. ／ DB: PostgreSQL 17 + pgvector 0.8.7 + Redis ／ PostgreSQL bootstrap installs pgvector and creates separate schema-owner and application roles. The one-shot `migrate` service runs Alembic and seeds settings/admin before Gunicorn starts. The Web process only checks the schema and cannot execute DDL. Repeated startup preserves records, passwords and settings. PostgreSQL uses `postgres_data`; media remains in `./upload_data`. This is a fresh deployment, with no MySQL data import tool.",
+   "evidence_lines": [
+    4,
+    25,
+    42
+   ]
+  },
+  "fn": "WiscWebGroup/photoly",
+  "sha": "e35c19a5e79b",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

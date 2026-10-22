@@ -8718,5 +8718,226 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ca952043932f": {
+  "identity": {
+   "one_liner": "Supabase 的 Kotlin 多平台客户端库",
+   "review": "该项目提供 Kotlin Multiplatform 客户端，用于在 Android、iOS、JVM、JS 等目标上访问 Supabase 服务，包含认证、Postgrest、Storage、Realtime、Edge Functions 等模块，依赖 Ktor 引擎，并提供 Compose 插件与 BOM 依赖方式，面向使用 Supabase 开发应用的 Kotlin 开发者。",
+   "highlights": [
+    "提供 auth-kt、postgrest-kt、storage-kt、realtime-kt、functions-kt 等多平台模块（L42-44）",
+    "通过 Ktor Client Engine 支持多 Kotlin target，Realtime 需引擎支持 WebSocket（L64-67）",
+    "包含 Apollo GraphQL、Compose Auth、Coil3 等插件扩展（L104-109）"
+   ],
+   "use_cases": [
+    "在 Android/iOS/Desktop/Web 的 Kotlin 多平台应用中接入 Supabase 认证与数据",
+    "通过 Compose 插件实现原生 Google/Apple 登录界面（L107）",
+    "结合 Supabase Storage 实现文件上传与图片展示（L109、L123）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- Postgres Syntax inspired by https://github.com/supabase-community/postgrest-kt",
+     "lines": [
+      165
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为访问 Supabase（基于 Postgres 的后端平台）服务的客户端库，属于生态工具/组件而非仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Kotlin Multiplatform Client for Supabase. ／ **Available modules**: `auth-kt`*, `postgrest-kt`, `functions-kt`, ／ - Database/Postgrest",
+   "evidence_lines": [
+    8,
+    42,
+    95
+   ]
+  },
+  "fn": "supabase-community/supabase-kt",
+  "sha": "ca952043932f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24ee461a8a73": {
+  "identity": {
+   "one_liner": "运行 Laravel/PHP 应用的 Docker PHP-FPM 镜像，内置数据库等扩展",
+   "review": "一个预配置的 Docker PHP-FPM 镜像，用于运行 Laravel 或其他 PHP 应用，内置 MySQL、PostgreSQL、SQLite 的 PDO 扩展及 Redis、Memcached、Kafka 支持，通过 Supervisord 自动启动 Laravel 调度器和队列 worker，参数可经环境变量调整。适合用容器部署 PHP 微服务的开发者，Debian 与 Alpine 双变体，支持 amd64/arm64 多架构。",
+   "highlights": [
+    "内置 PDO（MySQL/PostgreSQL/SQLite）、Redis、Memcached、Kafka 等 PHP 扩展",
+    "经 Supervisord 自动启动 Laravel Scheduler 与 Queue Worker，支持环境变量配置",
+    "提供 Debian 与 Alpine 变体，支持 linux/amd64 与 linux/arm64 多架构，含 healthcheck 与 OPcache 配置"
+   ],
+   "use_cases": [
+    "以容器方式部署 Laravel 应用或 PHP 微服务",
+    "运行需要队列 worker 与定时任务的 PHP 后台服务",
+    "作为基础镜像自定义构建 PHP 应用容器"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database**: MySQL and PostgreSQL. ／ - PDO (MySQL, PostgreSQL and SQLite)",
+     "lines": [
+      18,
+      55
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Database**: MySQL and PostgreSQL. ／ - PDO (MySQL, PostgreSQL and SQLite) ／ make test # Integration test (Laravel + MySQL + Nginx)",
+     "lines": [
+      18,
+      55,
+      254
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- PDO (MySQL, PostgreSQL and SQLite) ／ - Git, Zip/Unzip, SQLite CLI",
+     "lines": [
+      55,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是运行 PHP/Laravel 应用的 Docker 镜像，数据库仅作为其应用的存储依赖，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **ready-to-use container** designed for running PHP-based applications, including Laravel microservices. ／  - **Database**: MySQL and PostgreSQL. ／ - PDO (MySQL, PostgreSQL and SQLite)",
+   "evidence_lines": [
+    3,
+    18,
+    55
+   ]
+  },
+  "fn": "jkaninda/laravel-php-fpm",
+  "sha": "24ee461a8a73",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e544289cec0": {
+  "identity": {
+   "one_liner": "开源音乐播放器，Windows/Android 双端本地曲库与原生播放",
+   "review": "RITVIO 是面向 Windows 与 Android 的本地音乐播放器，提供搜索、播放列表、歌词、均衡器、9:16 分享图导出等功能；桌面端基于 Electron/Fastify/SQLite，Android 端用 Capacitor 与 Media3 原生播放，曲库数据存储在本地。适合希望离线管理个人音乐库的个人用户；目前为公开预览版，依赖非官方解析器访问 YouTube，设备覆盖有限。",
+   "highlights": [
+    "支持 Windows 安装器/便携包与 Android APK，本地存储个人曲库、播放列表与历史",
+    "提供歌词显示、睡眠定时、队列编辑、均衡器及歌词/曲目 9:16 图片导出",
+    "Android 端使用原生 Media3 播放并提供系统媒体控制与后台服务"
+   ],
+   "use_cases": [
+    "在 Windows 桌面管理并播放本地音乐库",
+    "在 Android 设备上离线收听个人曲库与播放列表",
+    "生成曲目/歌词分享卡片图片导出或分享"
+   ],
+   "use_cases_done": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The source uses React, TypeScript, Vite and Zustand; Electron/Fastify/SQLite on Windows; Capacitor and native Media3 on Android. Domain logic and localisation live in `packages/`.",
+     "lines": [
+      82
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用 SQLite 存储本地曲库，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A free, open-source music player for Windows and Android.** Discover something new, keep a library of your own and make room for the music you love. ／ The source uses React, TypeScript, Vite and Zustand; Electron/Fastify/SQLite on Windows; Capacitor and native Media3 on Android. Domain logic and localisation live in `packages/`.",
+   "evidence_lines": [
+    5,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "salvo13200/RITVIO",
+  "sha": "1e544289cec0",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11227,5 +11227,71 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8f473422f0dc": {
+  "identity": {
+   "one_liner": "单机自托管控制面板，管理 Claude Code 会话、容器与主机负载",
+   "review": "一个面向单台主机的自托管控制面板，用 Go 单二进制加 PWA 前端实现，可从手机或显示器查看和操作容器、系统负载、tmux 会话及 Claude Code 对话，支持往会话写消息、发文件、答问与推送告警。架构上分三个权限互斥的进程（面板容器、只读采集 agent、可执行 executor），用 passkey 登录、无密码，数据存于独立容器中的 Postgres。适合同时跑多个 Claude Code 会话的 Linux homelab/个人服务器用户。",
+   "highlights": [
+    "分三个权限互斥的进程运行：面板容器只读访问 docker（经 socket-proxy）、agent 只读主机、executor 持 docker.sock 执行操作",
+    "提供会话、终端、容器、机器指标、用量、告警、日志等屏幕，支持 WebAuthn passkey 登录与 Web Push 推送",
+    "以独立容器中的 Postgres 存储数据，指标按分区写入并通过分离分区做保留清理"
+   ],
+   "use_cases": [
+    "从手机远程查看和操控单台 Linux 主机上的 Claude Code 会话与容器",
+    "多 Claude Code 账号/项目的用量统计与额度查看",
+    "对容器与外部服务设阈值告警并通过推送确认"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres does not have to be installed, it arrives as a container, and neither ／ **The database** — Postgres in its own container. Metrics are partitioned,",
+     "lines": [
+      116,
+      144
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板是控制主机与会话的应用，Postgres 用于自身存数据（指标分区、journal），并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres does not have to be installed, it arrives as a container, and neither ／ **The database** — Postgres in its own container. Metrics are partitioned, ／ |`aacpanel`|container, distroless|nothing on the host; docker read-only through socket-proxy|",
+   "evidence_lines": [
+    116,
+    144,
+    65
+   ]
+  },
+  "fn": "BeMySlaveDarlin/aacpanel",
+  "sha": "8f473422f0dc",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10217,5 +10217,206 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ece4ba8640fa": {
+  "identity": {
+   "one_liner": "纯 Go 实现的 SQL 解析器/格式化/lint/安全扫描 SDK，支持 8 种方言",
+   "review": "GoSQLX 是面向 Go 开发者的 SQL 解析 SDK：词法分析、递归下降解析并生成 AST，附带格式化、30 条 lint 规则、SQL 注入扫描、LSP 与 MCP 服务器，提供 CLI、VS Code 扩展、GitHub Action 和 WASM playground。覆盖 PostgreSQL、MySQL 等 8 种方言的语法支持；不提供 ORM 功能，BigQuery/Redshift 仅关键字级识别。Apache-2.0 许可。",
+   "highlights": [
+    "提供 tokenizer、解析器和 AST 生成，采用零拷贝与对象池设计",
+    "支持 8 种 SQL 方言的专用语法解析，并包含格式化、lint、注入扫描、transpile 与指纹功能",
+    "提供 CLI、VS Code 扩展、GitHub Action、LSP 及含 7 个工具的 MCP 服务器"
+   ],
+   "use_cases": [
+    "在 Go 程序中解析 SQL 并基于 AST 做自定义分析",
+    "CI 中对 SQL 文件做校验、格式化与 lint（GitHub Action）",
+    "通过 MCP 在 AI 助手中进行 SQL 分析与审查"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ - **Multi-dialect** - 8 dialects with dedicated grammar support: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. The `--dialect` flag and `WithDialect` accept 11 names: those 8 (`postgresql`, `mysql`, `mariadb`, `sqlserver`, `ora",
+     "lines": [
+      30,
+      112
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ - **Multi-dialect** - 8 dialects with dedicated grammar support: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. The `--dialect` flag and `WithDialect` accept 11 names: those 8 (`postgresql`, `mysql`, `mariadb`, `sqlserver`, `ora",
+     "lines": [
+      30,
+      112
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ - **Multi-dialect** - 8 dialects with dedicated grammar support: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. The `--dialect` flag and `WithDialect` accept 11 names: those 8 (`postgresql`, `mysql`, `mariadb`, `sqlserver`, `ora",
+     "lines": [
+      30,
+      112
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ - **Multi-dialect** - 8 dialects with dedicated grammar support: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. The `--dialect` flag and `WithDialect` accept 11 names: those 8 (`postgresql`, `mysql`, `mariadb`, `sqlserver`, `ora",
+     "lines": [
+      30,
+      112
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ - **Multi-dialect** - 8 dialects with dedicated grammar support: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. The `--dialect` flag and `WithDialect` accept 11 names: those 8 (`postgresql`, `mysql`, `mariadb`, `sqlserver`, `ora",
+     "lines": [
+      30,
+      112
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ - **Multi-dialect** - 8 dialects with dedicated grammar support: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. The `--dialect` flag and `WithDialect` accept 11 names: those 8 (`postgresql`, `mysql`, `mariadb`, `sqlserver`, `ora",
+     "lines": [
+      30,
+      112
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ - **Multi-dialect** - 8 dialects with dedicated grammar support: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. The `--dialect` flag and `WithDialect` accept 11 names: those 8 (`postgresql`, `mysql`, `mariadb`, `sqlserver`, `ora",
+     "lines": [
+      30,
+      112
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL 处理提供解析/lint/安全扫描工具链，服务数据库生态而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQL Server",
+    "Oracle",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GoSQLX is a **production-ready SQL parsing SDK** for Go. It tokenizes, parses, and generates ASTs from SQL with zero-copy optimizations and intelligent object pooling - parsing a simple SELECT in about **318 ns (~3.1M parses/sec)** . ／ - **Not limited** - PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. CTEs, window functions, MERGE, set operations. ／ - **Multi-dialect** - 8 dialects with dedicated grammar support: PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite, Snowflake, ClickHouse. The `--dialect` flag and `WithDialect` accept 11 names: those 8 (`postgresql`, `mysql`, `mariadb`, `sqlserver`, `oracle`, `sqlite`, `snowflake`, `clickhouse`) plus `generic`, and `bigquery` and `redshift`, which have keyword recognition and basic parsing only.",
+   "evidence_lines": [
+    24,
+    30,
+    112
+   ]
+  },
+  "fn": "ajitpratap0/GoSQLX",
+  "sha": "ece4ba8640fa",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "26ae45d49fa2": {
+  "identity": {
+   "one_liner": "Flask+SQLite 学生请假两级审批系统原型及设计包",
+   "review": "该项目包含三部分：Flask+SQLite 的可运行学生请假审批原型、面向 HKUST(GZ) 的企业级设计提案包（含 PostgreSQL DDL）以及个人创意作业。系统实现两级审批流程、CSRF 防护、附件权限控制、基于课表的受影响课程预览，并通过 python app.py 在本地 5055 端口运行，适合作为课程作业与流程系统原型参考。",
+   "highlights": [
+    "实现学生请假两级审批流程（advisor → faculty）及多级超期流转",
+    "登录限流持久化于 SQLite，支持重启后保留与多 worker 部署",
+    "包含 93 项检查的 CI 冒烟测试套件"
+   ],
+   "use_cases": [
+    "高校学生请假与学业调整的审批管理",
+    "Flask Web 应用审批流程的开发示例",
+    "企业级系统设计文档教学参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite (survives restarts and multi-worker deployments), password resets invalidate every ／ |`leave-system/`|Flask + SQLite prototype (**v0.8.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control, timetable-based affected-course preview, DB-persisted login throttle, session invalidation on password c",
+     "lines": [
+      20,
+      27
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`saas/`|Enterprise design package for HKUST(GZ): PRD, architecture & API, data & security, UI design, roadmap & cost, plus full PostgreSQL DDL|企業級設計提案包（6 頁中英對照）＋完整資料庫 DDL|",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "原型使用 SQLite 存储请假与审批业务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`leave-system/`|Flask + SQLite prototype (**v0.8.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control, timetable-based affected-course preview, DB-persisted login throttle, session invalidation on password change, 93-check smoke suite. Runs at `http://127.0.0.1:5055`|可執行原型：學生請假、兩級審批、CSRF 防護、附件權限、課表受影響課程、限流持久化、改密碼登出所有 session| ／ python app.py            # http://127.0.0.1:5055",
+   "evidence_lines": [
+    27,
+    36
+   ]
+  },
+  "fn": "Jeng-linLi/student-absence-system",
+  "sha": "26ae45d49fa2",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

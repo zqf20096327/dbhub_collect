@@ -9864,5 +9864,66 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bd51d80fb4d1": {
+  "identity": {
+   "one_liner": "UFC/MMA 比赛数据的 SQLite 数据库，自动抓取并按版本发布",
+   "review": "该项目抓取 UFC Stats、Sherdog、PFL、Oktagon、Sofascore 等来源的 MMA 赛事、对局与逐回合计数，整理为带 schema 的 SQLite 数据库，通过 GitHub Action 每日更新并以 Release 发布 canon.db，供其他仓库直接下载使用，也提供静态网站与 JSON 接口。适合 MMA 数据分析者或研究者作为数据层使用；数据覆盖范围与统计口径差异需通过表内 source 字段区分。",
+   "highlights": [
+    "提供含 15 张表的 SQLite 数据库，覆盖 1993 年以来 UFC 等赛事的对局与逐回合统计",
+    "GitHub Action 每日自动抓取更新，每次更新发布为独立 Release 版本",
+    "提供 JSON 文件接口和基于 sql.js-httpvfs 的浏览器内 SQL 查询网站"
+   ],
+   "use_cases": [
+    "为 MMA 数据分析项目提供赛事与选手统计数据层",
+    "通过版本化 Release 下载快照，在其他仓库中离线查询比赛数据",
+    "通过配套网站按赛事/选手浏览逐回合统计与排行榜"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库以 SQLite 作为数据存储载体发布数据集，属使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A SQLite database of MMA events, fights and round-by-round stats (UFC, PRIDE and more), ／ curl -L -o canon.db https://github.com/jadevit/fight-canon-db/releases/latest/download/canon.db ／ A GitHub Action runs daily. It fetches any new events from UFC Stats, reloads the",
+   "evidence_lines": [
+    3,
+    19,
+    98
+   ],
+   "softened": []
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Jadevit/fight-canon-db",
+  "sha": "bd51d80fb4d1",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

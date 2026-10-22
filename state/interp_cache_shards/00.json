@@ -9591,5 +9591,122 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b2304d067e37": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 Python 任务队列，作业即行、无外部 broker",
+   "review": "PGWerk 是一个 Python 任务队列库，将作业存为 Postgres 表行，worker 通过 SELECT … FOR UPDATE SKIP LOCKED 轮询领取任务，借助 LISTEN/NOTIFY 实现即时唤醒，并提供重试、依赖、Cron 调度、CLI 及带 SPA 仪表盘的观测 API。面向需要后台任务/定时任务且已有 Postgres 的 Python 3.11+ 团队；要求 Postgres 14+，无内置连接池，事务池模式下的 PgBouncer 需关闭 listen。",
+   "highlights": [
+    "支持 asyncio、线程、进程、fork 多种 worker 类型，提供重试、重复、依赖等任务机制",
+    "内置 Cron 调度器，多实例通过 SKIP LOCKED 共享负载，无需主选举",
+    "提供 CLI、Prometheus 指标与 SPA 仪表盘，表结构自动迁移并支持独立 migrate 命令"
+   ],
+   "use_cases": [
+    "Python 应用中的后台/异步任务执行",
+    "基于 Postgres 的定时任务（Cron）调度",
+    "需要任务观测、重试与依赖编排的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A Postgres-backed job queue. Durable, visible, transactional. ／ Jobs are rows. Workers poll with `SELECT … FOR UPDATE SKIP LOCKED`. No external broker, no sidecar, just your existing Postgres instance. The schema is created automatically on first connect. ／ Requires Python 3.11+ and a Postgres 14+ database.",
+     "lines": [
+      9,
+      11,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 提供任务队列能力的 Python 库，服务于数据库生态而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Postgres-backed job queue. Durable, visible, transactional. ／ Jobs are rows. Workers poll with `SELECT … FOR UPDATE SKIP LOCKED`. No external broker, no sidecar, just your existing Postgres instance. The schema is created automatically on first connect. ／ pip install pgwerk",
+   "evidence_lines": [
+    9,
+    11,
+    20
+   ]
+  },
+  "fn": "pgwerk/pgwerk",
+  "sha": "b2304d067e37",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fa55849523a0": {
+  "identity": {
+   "one_liner": "Dataiku 端到端项目：汇率 API 摄取与分析",
+   "review": "README 仅含标题，内容不足。根据仓库描述，这是一个 Dataiku 平台项目，通过 Frankfurter API 摄取汇率数据，进行 JSON 处理、分析、仪表盘展示、机器学习与自动化，面向数据科学/分析使用者。因 README 未展示安装与运行说明，具体实现细节无法核实。",
+   "highlights": [
+    "提供汇率数据的 API 摄取管道",
+    "包含 analytics、dashboard 与机器学习环节"
+   ],
+   "use_cases": [
+    "汇率数据摄取与分析",
+    "数据可视化与仪表盘展示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 无内容，仅凭描述判断其为使用数据库的分析应用，证据不足。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "dataiku-fx-api-analytics-ml",
+   "evidence_lines": [
+    1
+   ]
+  },
+  "fn": "datasifaw/dataiku-fx-api-analytics-ml",
+  "sha": "fa55849523a0",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

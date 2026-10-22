@@ -10037,5 +10037,164 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "30b66d4dca1c": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 AI 代理记忆层与 MCP 服务器",
+   "review": "为 Claude Code、Codex、Cursor 等 AI 编码代理提供本地记忆服务的 MCP 服务器，用 SQLite 存储会话历史、代码索引图与概念图，共 16 个工具，支持 HTTP/STDIO 两种传输方式及多代理共享内存的 swarm 模式，通过 pip 安装并提供 Web 控制台；面向希望在无云环境下保留跨会话上下文的开发者。",
+   "highlights": [
+    "提供 16 个 MCP 工具，覆盖核心记忆、代码图与概念图三类能力，支持 HTTP 和 STDIO 传输",
+    "使用 SQLite WAL 模式、连接池与序列化写入队列支撑多代理共享内存",
+    "通过 pip 安装，提供 Web 控制台与后台守护进程生命周期管理命令"
+   ],
+   "use_cases": [
+    "为多个 AI 编码代理提供跨会话共享的本地长期记忆",
+    "对代码仓库建立索引图供代理进行符号查找与变更影响分析",
+    "在不依赖云服务的本地环境中管理代理的项目知识图谱"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Scale layer**|SQLite WAL mode, connection pooling, serialized write queue, and HTTP rate-limit presets|Lets one server support solo use, multi-agent work, and swarm-style bursts|",
+     "lines": [
+      92
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为为 AI 编码代理服务的记忆层与 MCP 服务器，SQLite 是其底层存储引擎而非业务数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Scale layer**|SQLite WAL mode, connection pooling, serialized write queue, and HTTP rate-limit presets|Lets one server support solo use, multi-agent work, and swarm-style bursts| ／ pip install marm-mcp-server ／ All 16 tools work over HTTP and STDIO. Your agents share the same local memory across sessions instead of starting from scratch each time. The bundled Console App provides a local control plane for memory, graphs, code context, distillation, runtime controls, and the integrated terminal. Indexing a repository creates its independent Code Graph, which you can explore from Knowledge Graph → Code Explorer even before storing any memories.",
+   "evidence_lines": [
+    92,
+    38,
+    85
+   ]
+  },
+  "fn": "Lyellr88/marm-memory",
+  "sha": "30b66d4dca1c",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "01d01f51ba80": {
+  "identity": {
+   "one_liner": "面向 Crystal 的 PostgreSQL 专用 ORM 与 SQL 构建器",
+   "review": "Lustra 是 Crystal 语言的 ORM 和 SQL 构建器，提供 Active Record 风格模型、可链式查询集合、迁移、关联、校验和生命周期回调，并直接暴露 JSONB、数组、CTE、全文搜索、几何类型等 PostgreSQL 特性。仅支持 PostgreSQL，不支持 MySQL/MariaDB/SQLite；通过 shards 安装，需 Crystal 1.21+。",
+   "highlights": [
+    "提供 Active Record 风格模型层、可组合 SQL 构建器、迁移、关联、校验与生命周期回调",
+    "直接支持 JSONB、数组、CTE、游标、全文搜索、枚举、UUID、几何类型等 PostgreSQL 特性",
+    "支持连接池配置与 eager loading 避免 N+1 查询"
+   ],
+   "use_cases": [
+    "用 Crystal 开发并以 PostgreSQL 为后端的应用数据层",
+    "需要利用 PostgreSQL 特有类型与查询能力的项目",
+    "需要类型化模型字段与显式可空性声明的 Crystal 应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Lustra is a PostgreSQL-focused ORM and SQL builder for Crystal. ／ PostgreSQL features such as JSONB, arrays, CTEs, cursors, full-text search,",
+     "lines": [
+      9,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Lustra is PostgreSQL-only. It is not designed for MySQL, MariaDB, or SQLite.",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Lustra is PostgreSQL-only. It is not designed for MySQL, MariaDB, or SQLite.",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "Lustra is PostgreSQL-only. It is not designed for MySQL, MariaDB, or SQLite.",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用访问 PostgreSQL 提供服务的 Crystal 语言库，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lustra is a PostgreSQL-focused ORM and SQL builder for Crystal. ／ Lustra is PostgreSQL-only. It is not designed for MySQL, MariaDB, or SQLite. ／     version: \">= 0.18.1\"",
+   "evidence_lines": [
+    9,
+    30,
+    42
+   ]
+  },
+  "fn": "crystal-garage/lustra",
+  "sha": "01d01f51ba80",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

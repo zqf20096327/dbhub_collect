@@ -10852,5 +10852,79 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ef4a6706d7f": {
+  "identity": {
+   "one_liner": "AI 代理人类反馈规则引擎，以 SQLite 持久化规则",
+   "review": "BossAlign 是一个 Python SDK/CLI，把人对 AI 代理的纠正转化为带证据、作用域与排除边界的规则提案，经人工确认后持久存储，并支持版本生命周期与基于人工判定的校准闭环。规则与反馈数据存于本地 SQLite 文件。面向构建 AI 代理/代理记忆系统并需要人工在环规则治理的开发者。",
+   "highlights": [
+    "将反馈转为带作用域、排除边界与生命周期（draft/confirmed/inactive）的规则，存储于 SQLite 并支持版本历史",
+    "提供 CLI（ingest/rules/check/export/replay/sanitize/calibrate）与 OpenAI 兼容 provider 适配器",
+    "内置校准与基准套件，包含精度/召回等指标与策略升级门控"
+   ],
+   "use_cases": [
+    "为 AI 代理构建需人工确认的持久化偏好/规则记忆",
+    "按项目、任务类型等作用域匹配规则，避免纠正被过度泛化",
+    "对代理决策记录人工判定并做校准与回归评估"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Try the local synthetic demo. It uses the real SDK and a temporary SQLite database; it makes no model call and does not simulate a person's approval. ／ with BossAlign(\"bossalign.sqlite3\") as align: ／ Feedback events, rule records, and version snapshots are stored in SQLite. A new `BossAlign(\"bossalign.sqlite3\")` instance can retrieve the same confirmed rules after restart. A material `update_rule()` creates another version and returns a confirmed rule to `",
+     "lines": [
+      32,
+      43,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明反馈事件、规则记录与版本快照存储在 SQLite 中，该项目是使用 SQLite 存数据的 AI 代理层，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Feedback events, rule records, and version snapshots are stored in SQLite. A new `BossAlign(\"bossalign.sqlite3\")` instance can retrieve the same confirmed rules after restart. A material `update_rule()` creates another version and returns a confirmed rule to `draft`; it must be confirmed again. `revoke_rule()`/`deactivate_rule()` stops retrieval while retaining history. `delete_rule()` removes the rule, its source events, and version snapshots. ／ BossAlign (蛔虫引擎) is a small, framework-independent layer between agent memory and agent behavior. It stores corrections as **proposed rules with evidence, scope, and exclusions**, then retrieves and checks only the rules that fit a new task. The same API can hold programming, workplace, writing, design, and interpersonal preferences; the core does not assign meaning to roles such as manager, partner, or employee. ／ The database path is selected with `--db` before the command, or with `BOSSALIGN_DB`.",
+   "evidence_lines": [
+    47,
+    10,
+    97
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "davidmercer0620-ai/bossalign",
+  "sha": "7ef4a6706d7f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

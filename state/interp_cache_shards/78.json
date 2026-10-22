@@ -8463,5 +8463,73 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cbec65a67f9c": {
+  "identity": {
+   "one_liner": "自托管地理空间数据目录，含语义搜索与地图构建器",
+   "review": "GeoLens 是一个自托管的地理空间数据目录与地图构建工具，用于把分散在文件、PostGIS 数据库、网络服务和 STAC 目录中的空间数据汇集为可搜索目录，并记录数据来源与更新状态。面向需要统一管理空间数据的团队，通过 Docker Compose 部署，提供 OGC API 与 STAC 接口供 QGIS、脚本及 AI 代理读取，内置 MCP 服务器支持代理搜索目录。",
+   "highlights": [
+    "提供 OGC API Features/Records、STAC 与 DCAT 等标准 API 及每图层的矢量/COG 瓦片 URL",
+    "支持上传多种矢量与栅格格式并转换为 Cloud-Optimized GeoTIFF，记录数据集来源并检测上游 schema 变更",
+    "内置地图构建器（含 3D 地形、热力图等图层类型）与 CLI、Python/TypeScript SDK 及只读 MCP 服务器"
+   ],
+   "use_cases": [
+    "团队将分散的地理空间数据统一编目并追踪来源与新鲜度",
+    "在浏览器中构建、分享与嵌入交互式地图",
+    "通过 OGC API/STAC 向 QGIS、脚本和 AI 代理开放目录数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "replicas of the API, worker, frontend and Titiler against a managed PostgreSQL with automatic",
+     "lines": [
+      244
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "GeoLens 使用 PostGIS/PostgreSQL 数据库存放其目录数据，是为终端用户提供目录与地图功能的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "on your own servers with Docker Compose, sends no telemetry and is licensed under Apache 2.0. ／ - Serve tables already in GeoLens's PostGIS database in place, import WFS, ArcGIS and OGC API ／ also lists what an external database needs. Docker Compose is the supported path, and",
+   "evidence_lines": [
+    32,
+    93,
+    197
+   ]
+  },
+  "fn": "geolens-io/geolens",
+  "sha": "cbec65a67f9c",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

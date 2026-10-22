@@ -10156,5 +10156,142 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "80553b3a8b95": {
+  "identity": {
+   "one_liner": "Electron 桌面端本地多媒体资源管理器，附游戏化功能",
+   "review": "这是一款面向个人收藏者（自称“仓鼠症”用户）的本地多媒体资源管理器，用于统一管理游戏、漫画、视频、音频、小说、网站等资源，内置播放器/阅读器、标签筛选、时长记录和成就系统等游戏化功能。技术栈为 Vue 3 + Electron 29 + TypeScript，数据层使用 better-sqlite3 原生模块；README 未提供安装包渠道之外的部署方式，资源刮削等功能仍在规划中。",
+   "highlights": [
+    "统一界面管理游戏、漫画、视频、音频、小说、网站等多类本地资源",
+    "内置游戏启动器、漫画阅读器、视频/音频播放器和小说阅读器",
+    "包含成就系统、桌宠、放置养成等游戏化功能，并记录时长、进度等数据"
+   ],
+   "use_cases": [
+    "个人大容量本地媒体与游戏收藏的分类、筛选和检索",
+    "记录游戏时长、阅读次数、观看进度等使用数据",
+    "通过内置阅读器/播放器直接消费已收藏的资源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "#### 3. 原生模块（better-sqlite3）与 Electron 一致",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "这是一个面向最终用户的桌面资源管理应用，better-sqlite3 仅作为其构建依赖中的原生模块出现，README 未声明面向数据库生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "- **🎯 一站式多媒体管理**：统一界面管理游戏、漫画、视频、音频、小说、网站等各类资源 ／ - **桌面框架**: Electron ／ #### 3. 原生模块（better-sqlite3）与 Electron 一致",
+   "evidence_lines": [
+    36,
+    50,
+    90
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "klsdf/GreenResourcesManager",
+  "sha": "80553b3a8b95",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0cff8e2abc2f": {
+  "identity": {
+   "one_liner": "本地开发者调试记忆层，将调试证据存入 SQLite 并经 MCP 提供",
+   "review": "MemoryWhale 是一个本地优先的开发调试记忆工具：捕获 shell 命令、输出、错误及有效修复方案，存入本地 SQLite，供开发者和编程代理事后检索。通过 mw-mcp 提供 stdio MCP 服务，也可经 mw-serve 提供 HTTP MCP 与 Web 界面，支持约 19 种编码代理客户端，无需账号、数据不上传。Rust 编写，提供 CLI、TUI、Web 与桌面界面，安装方式包括二进制脚本、Cargo 与 Homebrew。",
+   "highlights": [
+    "将命令、输出、失败与修复记录存入本地 SQLite，支持 mw search / mw context 检索",
+    "提供 stdio 与 HTTP 两种 MCP 接入（mw-mcp / mw-serve），供编程代理读写同一记忆",
+    "本地运行、无需账号、数据不上传，提供 mw doctor 自检与集成引导"
+   ],
+   "use_cases": [
+    "跨会话/跨机器调试构建、依赖、Git、环境问题时找回历史失败与修复",
+    "为 Claude Code、Cursor 等编程代理提供持久共享的本地调试记忆",
+    "SSH 或多机开发场景中保持可搜索的开发故障历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "failures, and the fixes that worked. It stores that evidence in local SQLite so ／ shell / mw-run ──────► local SQLite ────────► search / context",
+     "lines": [
+      20,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明将调试证据存储在本地 SQLite 中，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "failures, and the fixes that worked. It stores that evidence in local SQLite so ／ agent session is gone. It works with 19 coding agents through MCP, with no ／ `mw-mcp` is the common integration seam: a local stdio MCP server exposing six",
+   "evidence_lines": [
+    20,
+    22,
+    144
+   ]
+  },
+  "fn": "wuisabel-gif/MemWhale",
+  "sha": "0cff8e2abc2f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

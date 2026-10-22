@@ -10101,5 +10101,295 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "704cea875875": {
+  "identity": {
+   "one_liner": "基于 Web 的复式记账与 ERP 系统，数据存于 PostgreSQL",
+   "review": "LedgerSMB 是一个免费的 Web 端复式记账与 ERP 系统，提供报价、订单、开票、项目、工时、库存、发货等功能，支持模板定制及 PDF/CSV/HTML/ODF 输出。面向中小企业，数据存储在 PostgreSQL 14+，需 Perl 5.38+，官方提供 Docker Compose 快速部署方式。",
+   "highlights": [
+    "提供报价、订单、开票、库存管理、发货等会计与 ERP 功能",
+    "数据存储于 PostgreSQL，支持每周数千笔交易量级的使用（README 陈述）",
+    "客户可见输出通过模板自定义，支持 PDF、CSV、HTML、ODF 等输出格式"
+   ],
+   "use_cases": [
+    "中小企业复式记账与总账管理",
+    "开票、订单与库存管理",
+    "基于模板的自定义业务单据输出"
+   ],
+   "cite_block_end": 1
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "With its data stored in the enterprise-strength `PostgreSQL` open source ／ * `PostgreSQL 14+`",
+     "lines": [
+      40,
+      56
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据存储在 PostgreSQL 中，属使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPLv2",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LedgerSMB is a free web-based double-entry accounting system, featuring ／ With its data stored in the enterprise-strength `PostgreSQL` open source ／ * `PostgreSQL 14+`",
+   "evidence_lines": [
+    25,
+    40,
+    56
+   ]
+  },
+  "fn": "ledgersmb/LedgerSMB",
+  "sha": "704cea875875",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "425bb72edd37": {
+  "identity": {
+   "one_liner": "GitHub Action，在 CI 中下载并启动 MySQL/MariaDB",
+   "review": "这是一个 GitHub Actions，用于在工作流中下载指定版本的 MySQL 或 MariaDB 并启动 mysqld，提供版本、发行版、my.cnf、root 密码、用户创建及 SSL 证书等配置项。面向需要在 GitHub 托管 Runner（尤其非 Linux 环境）上运行 MySQL 的开发者与 CI 测试流程。",
+   "highlights": [
+    "支持下载并启动 MySQL 与 MariaDB 的多个版本（含 LTS）",
+    "提供 my.cnf、root 密码、自建用户与 SSL/TLS 证书等配置输出",
+    "可通过 auto-start 参数控制是否自动启动 mysqld"
+   ],
+   "use_cases": [
+    "在 GitHub Actions 工作流中为集成测试准备 MySQL/MariaDB 环境",
+    "在 Windows/macOS Runner 上安装本地 MySQL（托管 Runner 仅 Linux 预装）",
+    "为依赖本地 MySQL 的测试工具提供运行环境"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "This action sets up a MySQL database for use in actions by: ／ - download a version of MySQL or MariaDB ／ - MySQL",
+     "lines": [
+      3,
+      5,
+      33
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- download a version of MySQL or MariaDB ／ - MariaDB",
+     "lines": [
+      5,
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为在 CI 中安装和运行 MySQL/MariaDB 服务的工具组件，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This action sets up a MySQL database for use in actions by: ／ - download a version of MySQL or MariaDB ／ - Some utils for MySQL (such as MySQL::Partition, App::Prove::Plugin::MySQLPool, Test::mysqld) requires MySQL installed on the local host.",
+   "evidence_lines": [
+    3,
+    5,
+    12
+   ]
+  },
+  "fn": "shogo82148/actions-setup-mysql",
+  "sha": "425bb72edd37",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "467d3fa6b2b3": {
+  "identity": {
+   "one_liner": "Rust 嵌入式多模态数据库，单库提供向量/全文/空间/时序 SQL 引擎",
+   "review": "MoteDB 是一个用 Rust 编写的嵌入式列式数据库库，通过 cargo add 引入应用进程内运行，无需守护进程；提供向量检索（DiskANN）、BM25 全文检索、空间索引与 ACID 事务，支持 MCAP 机器人数据导入和 Python/Node/Go 绑定。适合具身智能、机器人与边缘设备的开发者在其应用中嵌入使用；当前为 pre-1.0，SQL 表面与多语言 FFI 仍在演进。",
+   "highlights": [
+    "嵌入式库形式运行，无守护进程，提供 MVCC 快照隔离的 ACID 事务",
+    "多模态索引：DiskANN 向量索引、FTS 倒排索引、i-Octree 空间索引与 B-tree 列值索引",
+    "提供 Rust/Python/Node.js/Go 多语言 SDK，支持 MCAP 文件导入"
+   ],
+   "use_cases": [
+    "机器人/具身智能应用的本地多模态数据存储与检索",
+    "边缘设备上的嵌入式 SQL 数据库（低内存/紧凑存储预设）",
+    "MCAP 录制数据的结构化导入与轨迹检索"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "(SQLite 参照同形状; 详细方法学与历史曲线见 `bindings/python/bench/README.md`). ／ |Operation|MoteDB|SQLite|倍数| ／ |批量导入 `insert_arrays` (GroupCommit 耐久档)|197K rows/s|2.4M rows/s*|*SQLite 无向量列|",
+     "lines": [
+      55,
+      57,
+      59
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- Scalar functions: `UPPER`/`LOWER`/`LENGTH`/`TRIM`/`SUBSTR`/`REPLACE`/`CONCAT` (skips NULL args, SQLite/Postgres semantics; `||` propagates NULL)/`INSTR`/`COALESCE`/`ROUND` (binary-exact decimal rounding)/`ABS`/arithmetic",
+     "lines": [
+      286
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它本身是数据库引擎/存储内核，为应用提供数据存储能力，而非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Columnar storage engine with ACID transactions, vector search, full-text search, and spatial indexing — in a single embedded library. ／ - **Storage**: Columnar SSTable, mmap zero-copy access, optional page-level zstd compression (`compact_storage`, ~40-50% smaller disk; on by default in `for_edge`) ／ - **No daemon**: Single library, embedded directly",
+   "evidence_lines": [
+    4,
+    91,
+    206
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "motedb/motedb",
+  "sha": "467d3fa6b2b3",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7795be858bcd": {
+  "identity": {
+   "one_liner": "自托管定时任务面板，用浏览器管理 Cron 脚本与插件任务",
+   "review": "这是一个跑在自有设备上的定时任务控制面板：用户通过浏览器添加脚本或插件任务、设置 Cron 时间、查看运行日志。面向想在旧手机、树莓派等低配 ARM 设备上挂轻量自动化任务的人。支持 Shell/Python/JavaScript 脚本和 QuickJS/Node/Bun 插件运行时，任务、账号、插件状态持久化在单个 SQLite 文件（data/panel.db），无许可证文件，使用前需联系作者。",
+   "highlights": [
+    "支持 5 段和 6 段 Cron 表达式，可运行 Shell、Python、JavaScript 脚本任务",
+    "插件默认运行在内置 QuickJS，可切换 Node/Bun 运行时，并提供 host-api（日志、SQLite、HTTP、WebSocket、SMTP）",
+    "单静态 musl 二进制分发，支持 aarch64/armv7/x86_64，任务与状态持久化到 SQLite 文件"
+   ],
+   "use_cases": [
+    "在树莓派、旧手机或低配盒子上长期运行定时签到、备份、清理类任务",
+    "用 JavaScript 编写带配置页的插件并从插件商城安装分发",
+    "任务失败或熔断时通过企业微信、Telegram、钉钉等渠道接收推送通知"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "插件面板是一个跑在自己设备上的定时任务工具。装好以后，用浏览器打开一个网页，就能添加任务、设置执行时间、查看运行结果。它不需要云服务，也不需要数据库服务器，一个程序加一个 SQLite 文件就能工作。 ／ `@runtime` 可以写 `node` 或 `bun`。JS 脚本还能 `import 'host-api'`，使用日志、SQLite、HTTP、WebSocket 等能力。 ／ - host-api 规范：日志、SQLite、HTTP、WebSocket、SMTP、任务注册",
+     "lines": [
+      3,
+      231,
+      425
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明任务、账号、插件状态存放在 SQLite 文件 panel.db 中，SQLite 是其内置持久化方式而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库无开源许可证文件，使用、分发或修改前需联系作者",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "插件面板是一个跑在自己设备上的定时任务工具。装好以后，用浏览器打开一个网页，就能添加任务、设置执行时间、查看运行结果。它不需要云服务，也不需要数据库服务器，一个程序加一个 SQLite 文件就能工作。 ／ data/panel.db      任务、账号、插件状态",
+   "evidence_lines": [
+    3,
+    362
+   ]
+  },
+  "fn": "asunajs/panel",
+  "sha": "7795be858bcd",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

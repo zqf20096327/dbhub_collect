@@ -9624,5 +9624,199 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c63ad816e4e4": {
+  "identity": {
+   "one_liner": "自动化 Google Dorking 工具，生成并执行搜索查询定位暴露资产",
+   "review": "DorkEye 是一个 Python 编写的 OSINT 自动化 dorking 工具，通过 YAML 模板生成搜索查询（soft/medium/aggressive 三档），定位暴露的敏感文件、目录和管理面板，并内置 SQLi/XSS 测试模块与 13 步自动分析流水线，还包含 15 种服务的数据库端口扫描（--dbscan）。面向授权安全测试人员，仅声明用于教育与授权测试用途，依赖 Python3 运行。",
+   "highlights": [
+    "提供 YAML 模板驱动的 dork 生成器，支持 soft/medium/aggressive 三种模式",
+    "包含 SQLi（5 种方法 105 payloads）与 XSS（4 种方法 111 payloads）测试模块",
+    "提供 --dbscan 数据库端口扫描（15 种服务、3 个严重级别）及 HTML 报告输出"
+   ],
+   "use_cases": [
+    "授权渗透测试中定位目标暴露的敏感文件、目录与配置",
+    "对 URL 进行 SQLi/XSS 漏洞检测",
+    "对目标主机执行数据库服务端口探测与元数据分析"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为安全测试服务的扫描工具，本身不依赖任何数据库存数据，其 DB 端口扫描仅探测目标服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DorkEye** is an automated `OSINT DORKING TOOL` that discovers exposed web assets through intelligent search queries. ／ - It combines a dork generator driven by YAML templates (`soft` / `medium` / `aggressive` modes), an SQL and XSS testing module, a 13-step autonomous analysis pipeline, an adaptive recursive crawler, and a database port scanner. ／ |🚪 DB Port Scan|15 services, no-auth probes, 3 severity levels `--dbscan`|",
+   "evidence_lines": [
+    22,
+    23,
+    51
+   ]
+  },
+  "fn": "xPloits3c/DorkEye",
+  "sha": "c63ad816e4e4",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6818d8a808c3": {
+  "identity": {
+   "one_liner": "Rust 实现的 DefraDB 点对点文档数据库，基于 CRDT 与内嵌 LSM 存储引擎",
+   "review": "该项目用 Rust 重写 DefraDB，提供 GraphQL 查询引擎、libp2p P2P 复制、访问控制和 BM25 全文检索，目标是嵌入式、边缘、浏览器（WASM）与服务器部署，并与 Go 版 DefraDB v1.0.0-rc1 网络互通。存储使用自研纯 Rust LSM 引擎 Regolith，还提供实验性的 Postgres 协议兼容接入。适合需要在离线/分布式场景嵌入文档数据库并做 P2P 同步的开发者。",
+   "highlights": [
+    "提供 GraphQL 查询引擎与 P2P 复制，可与 Go 版 DefraDB 节点连接并复制数据",
+    "内置纯 Rust ACID LSM-tree 存储引擎 Regolith，支持嵌入式、浏览器 WASM 与服务器部署",
+    "提供 C 兼容 FFI 静态库、Docker 多架构镜像及可编译开启的 OpenTelemetry 遥测"
+   ],
+   "use_cases": [
+    "边缘/嵌入式设备上的离线优先文档存储与 P2P 数据同步",
+    "浏览器 WASM 环境中运行的数据库客户端",
+    "通过 FFI 将文档数据库嵌入 Go 等其他语言的应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- **Postgres compatibility** — connect with `psql` or any Postgres client/ORM (experimental!)",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库实现与存储引擎，为使用数据库的应用提供存储与同步能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rust implementation of DefraDB — a peer-to-peer document database with content-addressed CRDTs, access control, and GraphQL. ／ Storage is Regolith, an ACID, ／ Compatible with Go DefraDB v1.0.0-rc1. Full feature parity across CLI, HTTP API, GraphQL query engine, and P2P replication. Go and Rust nodes can connect and replicate data.",
+   "evidence_lines": [
+    3,
+    7,
+    16
+   ]
+  },
+  "fn": "sourcenetwork/defradb.rs",
+  "sha": "6818d8a808c3",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a81adca9675e": {
+  "identity": {
+   "one_liner": "基于 PHP/Apache/MariaDB 的内部 IT 工单与支持管理平台",
+   "review": "TicketFlow 是一个自托管的内部 IT 工单平台，供企业员工提交请求、IT 支持团队处理工单，支持经理审批与 SLA 跟踪。技术栈为 PHP + Apache + MariaDB，提供安装与更新脚本、CSV/Excel 用户导入、服务告警与维护通知，含管理员/支持/经理/员工四种角色。",
+   "highlights": [
+    "提供工单创建、分类（事件/请求/变更）、分派、评论与附件功能",
+    "支持两级经理审批、SLA 跟踪、CSV/Excel 批量导入用户及 Excel 导出",
+    "安装与更新脚本自动配置 Apache、MariaDB、PHP，并自动备份数据库"
+   ],
+   "use_cases": [
+    "企业内部 IT 帮助台/服务台的工单集中管理",
+    "需要经理审批流程的访问申请与变更请求处理",
+    "IT 支持团队的服务告警与维护公告发布"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB ／ apt install apache2 mariadb-server php php-mysql php-mbstring php-zip php-xml php-curl curl sudo ／ - préparation de MariaDB ;",
+     "lines": [
+      9,
+      68,
+      82
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "apt install apache2 mariadb-server php php-mysql php-mbstring php-zip php-xml php-curl curl sudo",
+     "lines": [
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 TicketFlow 使用 MariaDB 存储自身业务数据，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TicketFlow est un outil de **support informatique interne**. ／ apt install apache2 mariadb-server php php-mysql php-mbstring php-zip php-xml php-curl curl sudo ／ - préparation de MariaDB ;",
+   "evidence_lines": [
+    14,
+    68,
+    82
+   ]
+  },
+  "fn": "blueGameTV/TicketFlow",
+  "sha": "a81adca9675e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

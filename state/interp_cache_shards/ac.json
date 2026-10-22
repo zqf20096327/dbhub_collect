@@ -10324,5 +10324,139 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "89c1a30abf2c": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的银行与金融聚合 REST 平台，含离线 UPI 网状结算引擎",
+   "review": "这是一个用 Java 17 与 Spring Boot 3.3 构建的金融聚合 REST 服务，提供认证、分类、交易记录与月度分析端点，并将数据存入 PostgreSQL 16；特色是离线 UPI 网状支付结算子系统（BLE 中继、混合加密、CAS 去重）。面向需要银行类 API 与离线支付模拟的开发者，通过 Docker Compose 部署，MIT 许可。",
+   "highlights": [
+    "提供认证、分类、交易、月度分析等 REST API 端点，使用 JWT 鉴权",
+    "实现离线 UPI 网状结算子系统：BLE 中继转发、RSA-OAEP+AES-256-GCM 加密、SHA-256 CAS 去重",
+    "后台定时任务执行汇率轮询与市场基准数据采集"
+   ],
+   "use_cases": [
+    "个人财务交易记录与月度收支分析",
+    "离线/弱网环境下的点对点支付结算模拟",
+    "JWT 安全认证与多租户数据隔离的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ > 🚀 **Live Production Deployment**: **`https://finflow-core.onrender.com`** — Spring Boot 3.3.5 web service connected to managed PostgreSQL 16 on Render with automated health monitoring.",
+     "lines": [
+      17,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该平台自身将交易与用户数据存储于 PostgreSQL 16，是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 🚀 **Live Production Deployment**: **`https://finflow-core.onrender.com`** — Spring Boot 3.3.5 web service connected to managed PostgreSQL 16 on Render with automated health monitoring. ／ * **Offline UPI Mesh Settlement Engine:** Full store-and-forward peer-to-peer payment settlement over Bluetooth Low Energy (BLE) gossip relays for zero-connectivity environments (basements, remote flights, disaster zones). ／ ## 🚀 Quick Start (Docker Compose)",
+   "evidence_lines": [
+    23,
+    29,
+    96
+   ]
+  },
+  "fn": "ronitgupta138/FinFlow-Core",
+  "sha": "89c1a30abf2c",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c0be088b42ae": {
+  "identity": {
+   "one_liner": "自托管车队视频与GPS平台，用PostgreSQL RLS实现租户隔离",
+   "review": "OpenMDVR 是一个自托管的车队视频与 GPS 追踪平台，接收 MDVR、行车记录仪和 GPS 追踪器的视频流与位置数据，提供实时地图、地理围栏、报警取证和录像回放，面向希望自有车队能与位置数据的个人车队或多方运营者。系统由 Go 设备服务器、FastAPI、ZLMediaKit 媒体节点组成，租户隔离依赖 PostgreSQL 的 Row Level Security，README 标注项目处于早期阶段。",
+   "highlights": [
+    "支持 JT/T 808/1078 MDVR、GT06 追踪器与 RTMP 行车记录仪三类设备协议",
+    "所有业务表通过 PostgreSQL Row Level Security 强制租户隔离",
+    "视频播放使用一次性票据机制，绑定租户、设备、通道与流命名空间"
+   ],
+   "use_cases": [
+    "自托管管理车队实时视频与位置数据",
+    "为多租户运营者提供按租户隔离与计量的车队平台",
+    "报警事件自动检索并匹配对应录像片段作为证据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Isolation is enforced inside PostgreSQL.** ／ MDVR, dashcam, tracker ──TCP──▶ device server (Go) ──▶ PostgreSQL + TimescaleDB (RLS)",
+     "lines": [
+      55,
+      210
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL 和 TimescaleDB 存储数据的车队管理应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " MDVR, dashcam, tracker ──TCP──▶ device server (Go) ──▶ PostgreSQL + TimescaleDB (RLS) ／ OpenMDVR is for anyone who wants to **own their fleet video and location ／  Status: early stage",
+   "evidence_lines": [
+    210,
+    111,
+    11
+   ]
+  },
+  "fn": "openmdvr/openmdvr",
+  "sha": "c0be088b42ae",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

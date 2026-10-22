@@ -10022,5 +10022,74 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ed977964fccd": {
+  "identity": {
+   "one_liner": "自托管 AI 支出归因系统，按供应商与人员统计账单",
+   "review": "Costura 通过各 AI 供应商的只读管理/分析 API 导入账单数据，存为每日台账并按 API key、工作区或人员归因支出，每月与供应商报告对账。面向需要在自有基础设施上管理多供应商 API 与席位支出的团队，使用 Docker Compose 运行，数据存储于 PostgreSQL，目前处于 beta 阶段，接口在 1.0 前可能变更。",
+   "highlights": [
+    "提供 Anthropic、Claude.ai、OpenAI、Codex、OpenRouter、Cursor 及 GitHub Copilot（实验性）的只读账单连接器",
+    "支持按供应商和月份的对账，以及异常检测、预算与信号提醒（含 Slack 兼容 webhook）",
+    "提供按模型、key、工作区、人员或团队的支出分析与 CSV 导出",
+    "通过 Docker Compose 在自有基础设施运行，无托管服务"
+   ],
+   "use_cases": [
+    "团队按人员统计跨供应商的 API 与席位支出",
+    "每月核对存储数据与供应商报告及发票总额",
+    "在自有基础设施上保管供应商管理密钥并设置支出预算与告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`next dev` from this checkout still running. Then it starts PostgreSQL, runs the migrations, ／ and that `.env` without printing a secret. `just prod::up` starts PostgreSQL, a ／ |Install, including an external PostgreSQL|docs/operations/install.md|",
+     "lines": [
+      86,
+      106,
+      112
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 PostgreSQL 存储台账数据并运行 API/worker/前端，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`next dev` from this checkout still running. Then it starts PostgreSQL, runs the migrations, ／ one-shot migration, the API, the worker, the scheduler, the web app and a Caddy proxy, one ／ The scheduler queues one sync per organization and provider account each day. The worker",
+   "evidence_lines": [
+    86,
+    107,
+    125
+   ]
+  },
+  "fn": "CosturaAI/costura",
+  "sha": "ed977964fccd",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

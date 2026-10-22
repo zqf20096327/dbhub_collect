@@ -10621,5 +10621,71 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1f3f27a11eb2": {
+  "identity": {
+   "one_liner": "基于 Go + PostgreSQL 航班预订 API 的生产故障排查演练实验室",
+   "review": "一个用 Go 和 PostgreSQL 构建的航班预订示例应用，内置可开关的 CPU 与延迟故障注入，并暴露 Prometheus 指标，配套十个步骤的事故演练手册。面向 DevOps、初级 SRE 和运维支持工程师，用于练习从症状到根因的排查流程；默认故障关闭，仅支持 Docker Compose/k3s 本地运行虚构数据。",
+   "highlights": [
+    "提供可开关的 CPU 与延迟故障注入，默认关闭",
+    "导出 Prometheus 指标：HTTP 请求计数、时长直方图、pgx 连接池统计",
+    "包含 5 个分步事故演练（CPU、座位锁延迟、容器崩溃循环等）"
+   ],
+   "use_cases": [
+    "DevOps/SRE 工程师练习生产故障排查流程",
+    "练习读取 Prometheus 指标并关联 PostgreSQL 会话与日志",
+    "演练 Docker 端口绑定与主机-容器网络问题排查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A real Go + PostgreSQL airline-booking API with switchable, intentional faults, built for practicing production troubleshooting the way it actually happens: a vague complaint, a dashboard that looks fine, and a request you have to follow from the client all th",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是一个使用 PostgreSQL 存数据的 Go 航空预订 API 应用，仅用于演练而非为数据库生态提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A real Go + PostgreSQL airline-booking API with switchable, intentional faults, built for practicing production troubleshooting the way it actually happens: a vague complaint, a dashboard that looks fine, and a request you have to follow from the client all the way to the database. ／     API -->|pgx pool| PG[(PostgreSQL 17)] ／ - The local Compose file runs `api`, `worker`, and `postgres`. PostgreSQL is published only on `127.0.0.1:5433`.",
+   "evidence_lines": [
+    3,
+    59,
+    69
+   ]
+  },
+  "fn": "mazenessam77/devops-troubleshooting-lab",
+  "sha": "1f3f27a11eb2",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

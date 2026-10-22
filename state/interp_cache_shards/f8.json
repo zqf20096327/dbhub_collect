@@ -9797,5 +9797,145 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ae0d918832bd": {
+  "identity": {
+   "one_liner": "自托管 MCP 记忆服务器，提供混合检索与神经记忆图谱",
+   "review": "面向 AI 代理和团队的自托管记忆服务，通过 MCP 协议向 Claude、ChatGPT 等客户端提供 72 个工具，实现混合检索、Hebbian 图谱和记忆巩固机制。技术栈为 FastAPI + PostgreSQL + Qdrant + Redis + Next.js，需 Docker、Python 3.11+ 与嵌入服务（OpenAI 或自托管）部署运行。",
+   "highlights": [
+    "实现 recall() 精确检索与 explore() 图遍历发现两条独立检索路径",
+    "提供 72 个 MCP 工具，覆盖记忆、代理控制面、文件、密钥管理等域",
+    "支持 OpenAI 或自托管（Ollama/vLLM）嵌入后端，及 Qdrant/LanceDB 向量后端"
+   ],
+   "use_cases": [
+    "为 MCP 兼容客户端（Claude、ChatGPT 等）提供跨会话记忆",
+    "团队/组织共享知识库，按 workspace/context/user 隔离数据",
+    "自主代理的记忆基板（投递模式、信任边界、状态通道）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Kagura Memory Cloud**|**PostgreSQL + Qdrant + Neural graph**|**Hebbian + Sleep Maintenance**|**Team / org**| ／ **Tech stack:** FastAPI (async) · PostgreSQL · Qdrant · Redis · Next.js 16 · OAuth2 · MCP over Streamable HTTP",
+     "lines": [
+      40,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确列 PostgreSQL、Qdrant、Redis 为自身技术栈存储组件，项目是使用这些数据库的 AI 应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Tech stack:** FastAPI (async) · PostgreSQL · Qdrant · Redis · Next.js 16 · OAuth2 · MCP over Streamable HTTP ／ |**Kagura Memory Cloud**|**PostgreSQL + Qdrant + Neural graph**|**Hebbian + Sleep Maintenance**|**Team / org**|",
+   "evidence_lines": [
+    99,
+    40
+   ]
+  },
+  "fn": "kagura-ai/memory-cloud",
+  "sha": "ae0d918832bd",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0e1b1a35be75": {
+  "identity": {
+   "one_liner": "尼日利亚 NDAPS 邮编的多语言校验/查找工具库，含 MCP 服务器与数据库扩展",
+   "review": "这是针对尼日利亚 NIPOST 数字邮编体系（NDAPS，11 字符五段格式）的开发者工具集，提供 Rust、Python、JavaScript、Java 四种语言的解析与离线校验库，外加 PostgreSQL 扩展/SQL 域、DuckDB 扩展、Polars 表达式和面向 AI 助手的 MCP 服务器。面向需要校验、格式化或反查尼日利亚邮评的开发者与集成方；在线查询类工具需 NIPOST 开发者密钥，地址解析器处于 pre-release。",
+   "highlights": [
+    "提供 Rust/Python/JavaScript/Java 四语言库及 PostgreSQL 原生扩展、DuckDB 社区扩展、Polars 表达式包",
+    "提供 MCP 服务器（PyPI 与 npm 两版），支持校验、查找、自动补全、按位置查找和地址解析",
+    "离线解析与校验无需网络和密钥；四语言共享同一 spec 测试用例"
+   ],
+   "use_cases": [
+    "电商/表单在结账时校验和规范尼日利亚邮编",
+    "在 PostgreSQL/DuckDB 数据库内以原生类型存储并约束邮编字段",
+    "为 AI 助手/编码代理提供邮编校验与地址解析工具"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`ng_postcode` (PostgreSQL)|The postcode as native 8-byte types with index support, compiled from the Rust core|Package from Releases, then `CREATE EXTENSION ng_postcode`|`native/pg`| ／ For databases, `sql/` holds the postcode as a PostgreSQL domain and as DuckDB macros, in plain SQL that runs the same shared cases. ／ **PostgreSQL**",
+     "lines": [
+      25,
+      31,
+      94
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供数据库扩展、库和 MCP 服务器等服务数据库与应用开发场景的组件，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Developer tools for Nigeria's National Digital Alphanumeric Postcode System (NDAPS), the building-level postcode NIPOST launched in October 2026: libraries for Rust and Python (`ng-postcode`), JavaScript (`ng-postcode-js` on npm), and Java (`ng-postcode-api`), MCP servers for AI assistants on PyPI and npm, and a resolver that turns described addresses into postcodes. ／ |`ng_postcode` (PostgreSQL)|The postcode as native 8-byte types with index support, compiled from the Rust core|Package from Releases, then `CREATE EXTENSION ng_postcode`|`native/pg`| ／ |`ng-postcode-mcp`|MCP server: validate, look up, autocomplete, find by location, resolve addresses|`uvx ng-postcode-mcp`|`mcp/`|",
+   "evidence_lines": [
+    10,
+    25,
+    22
+   ]
+  },
+  "fn": "Adeniyikayodee/ng-postcode",
+  "sha": "0e1b1a35be75",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

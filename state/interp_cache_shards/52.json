@@ -10767,5 +10767,198 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d3e60a0398b": {
+  "identity": {
+   "one_liner": "数据库与API访问治理代理，查询经审批与审计后执行",
+   "review": "AccessFlow 以查询代理形式部署在用户与生产数据库之间，提供 SQL/API 提交、审查队列、多级审批、策略路由、脱敏与防篡改审计日志，支持 JWT/SAML/OIDC 认证和 SCIM 供应，可自托管。面向需要对生产数据访问做审批与审计的团队，通过声明式连接器目录接入多种关系型、NoSQL 与数仓引擎。",
+   "highlights": [
+    "以代理方式持有并加密数据库凭据，查询经解析、分类与审批工作流后才到达生产数据",
+    "支持基于属性的策略路由、确定性 SQL 审查规则与外部策略决策钩子（OPA 等）",
+    "记录防篡改审计日志，支持行级安全、脱敏、副本读负载均衡与结果缓存"
+   ],
+   "use_cases": [
+    "替代共享生产凭据，对生产库读写实施自助式审批流",
+    "为 CI/CD 部署和外部 API 调用接入审查与审计门禁",
+    "在提交前对 SQL 做风险分析与违规规则检查"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它作为代理/治理层为多种数据库提供访问控制与审计服务，而非使用数据库构建的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0 单一开源许可",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A SQL, NoSQL, and API proxy — plus a CI/CD deployment gate — that puts review, approval, and audit between your team and production data, services, and releases. ／ AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse install with one click), any other JDBC-compatible engine can be added by uploading its driver JAR, the NoSQL document engines **MongoDB** and **Couchbase** (SQL++), the NoSQL key-value engine **Redis**, the NoSQL wide-column engines **Apache Cassandra** (CQL) and **ScyllaDB** (CQL-compatible), the NoSQL search engines **Elasticsearch** and **OpenSearch**, the NoSQL key-value engine **Amazon DynamoDB** (PartiQL), the NoSQL graph engine **Neo4j** (Cypher over Bolt), and the cloud data warehouses **Snowflake**, **Google BigQuery** (GoogleSQL), and **Databricks SQL** install the same way through on-demand native engine plugins. The catalog separates the **SQL** (relational) family, the cloud **data-warehouse** family, and the **NoSQL** umbrella of native engine-managed connectors. Every query a user submits — SQL, a MongoDB shell / JSON command, a Couchbase SQL++ statement, a Redis command, a Cassandra/ScyllaDB CQL statement, an Elasticsearch/OpenSearch query, a DynamoDB PartiQL statement, a Neo4j Cypher statement, or a Snowflake / BigQuery / Databricks warehouse SQL statement — is parsed, classified, optionally analyzed by AI, and routed through a configurable human-approval workflow before it ever reaches live data. The same governance extends beyond databases: outbound **REST, SOAP, GraphQL, and gRPC** calls against registered API connectors run through that identical pipeline — AI risk scoring, attribute-based routing, multi-stage approval — with response masking and immutable, downloadable response snapshots. Every request, decision, and execution is captured in a tamper-evident metadata audit log. Authentication is JWT (RS256) with optional SAML 2.0 SSO and OAuth 2.0 / OIDC sign-in (built-in templates for Google, GitHub, GitHub Enterprise Server, Microsoft, GitLab, and self-managed GitLab), and SCIM 2.0 provisioning lets the identity provider drive user & group lifecycle end to end. AccessFlow ships as a single open-source product under Apache 2.0 and is designed to run entirely inside your own infrastructure. ／ - **Proxy-first execution** — no user ever holds production credentials; the proxy holds them encrypted and opens connections only after approval. Single SQL statements run with autocommit; multi-statement INSERT/UPDATE/DELETE batches wrapped in `BEGIN; … COMMIT;` execute atomically inside one JDBC transaction (mixed SELECT/DML batches are rejected at parse time), with homogeneous INSERT runs collapsed into JDBC `executeBatch()` for bulk-load throughput. Optional **multi-replica read load balancing**: attach any number of replica endpoints to a datasource and SELECT traffic round-robins across the healthy ones — per-node health checks with circuit-breaker failover skip downed replicas, and only full replica-set exhaustion falls back to the primary (with an audit row). Optional **SELECT result caching**: opt a datasource into a Redis-backed result cache (per-datasource TTL) keyed over the security-rewritten query — masking and row-level security still apply — and invalidated on any proxied write to a referenced table.",
+   "evidence_lines": [
+    6,
+    19,
+    54
+   ]
+  },
+  "fn": "bablsoft/accessflow",
+  "sha": "4d3e60a0398b",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f0e2a1c92d31": {
+  "identity": {
+   "one_liner": "将 Git 与网页文档增量索引并嵌入存入 TiDB Cloud 的同步工具",
+   "review": "该项目定时（GitHub Actions 或本地运行）从 Git 仓库和网站抓取 Markdown/文本，生成向量嵌入后写入 TiDB Cloud 的向量存储，支持 Cloudflare Workers AI 与 TiDB 原生 Auto Embedding 两种嵌入方式，并提供 #confidential 隐私过滤与 TLS 强制连接。适用于想把个人笔记或文档建成可检索知识库的 TiDB Cloud 用户；要求 Node.js 22.x 运行环境。",
+   "highlights": [
+    "支持 Git 增量索引（基于 commit diff）与网页递归抓取两类数据源",
+    "支持 Cloudflare Workers AI（bge-m3）与 TiDB Cloud 原生 Auto Embedding 两种嵌入提供方",
+    "提供 #confidential 隐私过滤、日志脱敏与 TLS 1.2+ 强制连接"
+   ],
+   "use_cases": [
+    "将个人笔记仓库定时同步为 TiDB 向量知识库",
+    "抓取网站/博客内容构建可检索文档库",
+    "通过 GitHub Actions 免费额度实现零成本定时数据同步"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# tidb-knowbase-indexer ／ Automated incremental knowledge base indexer supporting Cloudflare Workers AI embedding and TiDB Cloud native Auto Embedding with vector storage. ／ `tidb-knowbase-indexer` synchronizes documents periodically via GitHub Actions (or locally) from multiple sources directly into TiDB Cloud:",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|`TIDB_DATABASE_URL`|**Yes**|Connection string for TiDB Cloud Starter. TLS 1.2+ is enforced automatically.|`mysql://<user>:<password>@gateway.tidbcloud.com:4000/test?ssl={\"minVersion\":\"TLSv1.2\"}`| ／ TIDB_DATABASE_URL=\"mysql://user:pass@gateway.tidbcloud.com:4000/test\" \\ ／ TIDB_DATABASE_URL=\"mysql://...\" pnpm clear -- personal-notes",
+     "lines": [
+      63,
+      138,
+      148
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 TiDB Cloud 提供数据索引/同步能力，是服务于数据库的组件而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tidb-knowbase-indexer` synchronizes documents periodically via GitHub Actions (or locally) from multiple sources directly into TiDB Cloud: ／ Automated incremental knowledge base indexer supporting Cloudflare Workers AI embedding and TiDB Cloud native Auto Embedding with vector storage.",
+   "evidence_lines": [
+    7,
+    3
+   ]
+  },
+  "fn": "tenfyzhong/tidb-knowbase-indexer",
+  "sha": "f0e2a1c92d31",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10359,5 +10359,150 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d82df1b50d4": {
+  "identity": {
+   "one_liner": "自托管日志平台，基于 PostgreSQL 实现全文检索与 OTLP 日志摄入",
+   "review": "Logwell 是一个自托管日志聚合平台，提供实时流式查看、全文搜索，以及 OTLP 兼容和简单 JSON 两种摄入 API，并附带 TypeScript、Python、Go SDK。它使用 PostgreSQL 的 tsvector 做全文检索，无需独立搜索集群，面向需要简单日志后端和完全数据自主的个人与团队；README 声明其为 Alpha 阶段，不建议生产使用，且不支持每秒万条以上的高吞吐场景。",
+   "highlights": [
+    "提供 OTLP 协议和简单 JSON 两种日志摄入 API，支持批量提交",
+    "基于 PostgreSQL tsvector 实现日志全文搜索，无需独立搜索集群",
+    "提供 TypeScript、Python、Go 三种语言的官方 SDK，含自动批处理与重试"
+   ],
+   "use_cases": [
+    "个人项目或初创团队需要简单日志后端与全文搜索",
+    "开发调试阶段实时查看日志流",
+    "应用已使用 OpenTelemetry，可直接接入 OTLP 日志导出器"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL backend** — Full-text search via tsvector, no separate search cluster needed ／ |Database|PostgreSQL| ／ - Docker (for PostgreSQL)",
+     "lines": [
+      47,
+      85,
+      96
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "- High-volume production systems (10k+ logs/second) — use Loki or Clickhouse",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Logwell 使用 PostgreSQL 作为存储后端来保存日志数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Alpha Software — Expect breaking changes. Not recommended for production workloads. ／ - **PostgreSQL backend** — Full-text search via tsvector, no separate search cluster needed ／ |Database|PostgreSQL|",
+   "evidence_lines": [
+    5,
+    47,
+    85
+   ]
+  },
+  "fn": "Divkix/Logwell",
+  "sha": "4d82df1b50d4",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7428781d3c79": {
+  "identity": {
+   "one_liner": "Robinhood Chain 开发工具包，含实时流、缓存、批处理与本地 SQLite 索引器",
+   "review": "hoodkit 是面向 Robinhood Chain（链 ID 4663）的 TypeScript 开发工具包，提供断线补齐的实时事件流、读穿缓存、multicall 批量读取，以及基于 better-sqlite3 的本地增量索引器（同步 Transfer/Swap 事件、查询 OHLCV 与持有人数据）。面向在该链上构建交易机器人、仪表盘和分析服务的开发者，需 Node ≥ 20 并以 hoodchain 与 viem 为必需 peer 依赖。",
+   "highlights": [
+    "提供带回连补齐（gap-fill）的实时事件流，覆盖价格、Uniswap v3 交换、代币发行与钱包组合变更",
+    "包含本地增量 SQLite 索引器，查询时零 RPC，依赖可选 peer 包 better-sqlite3",
+    "提供读穿缓存与 Multicall3 批处理，支持可插拔 CacheStore 与请求合并"
+   ],
+   "use_cases": [
+    "构建监控 Robinhood Chain 价格与交易事件的实时仪表盘",
+    "为交易机器人提供组合变更追踪与 TWAP 执行原语",
+    "本地索引链上事件以离线查询持有人、OHLCV 与 24 小时交易量"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **A local SQLite indexer** — holders, OHLCV candles, and rolling 24h volume, computed from ／ |`better-sqlite3` `>=11 <14`|`Indexer`/`createIndexer` only|optional| ／ A local, incremental SQLite indexer: syncs `Transfer` and Uniswap v3 `Swap` events for a token",
+     "lines": [
+      17,
+      47,
+      189
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其 Indexer 模块通过 better-sqlite3 peer 依赖使用 SQLite 存储本地索引数据，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **A local SQLite indexer** — holders, OHLCV candles, and rolling 24h volume, computed from ／ npm install hoodkit hoodchain viem ／ A local, incremental SQLite indexer: syncs `Transfer` and Uniswap v3 `Swap` events for a token",
+   "evidence_lines": [
+    17,
+    31,
+    189
+   ]
+  },
+  "fn": "nirholas/robinhood-chain-kit",
+  "sha": "7428781d3c79",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

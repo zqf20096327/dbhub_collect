@@ -9817,5 +9817,74 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "24842c3c044e": {
+  "identity": {
+   "one_liner": "本地优先的多租户 RAG 引擎，基于 pgvector+BM25 混合检索",
+   "review": "这是一个可在本地运行的企业检索增强生成（RAG）引擎，通过 pgvector 与 BM25 混合检索、CPU 交叉编码器重排序和可插拔 LLM 后端（Ollama、OpenAI、Anthropic 等）提供问答服务，并依赖 PostgreSQL 实现行级多租户隔离与 RBAC。适合需要在离线/私有环境自建知识库检索问答的团队，提供 Docker Compose 与 pip CLI 两种运行方式。",
+   "highlights": [
+    "支持 pgvector 稠密向量与 BM25 全文的混合检索（RRF 融合）及内置交叉编码器重排序",
+    "提供 Org→Dept→Team→User 层级多租户隔离，基于 PostgreSQL 行级安全实现",
+    "支持可插拔 LLM/嵌入后端（Ollama、OpenAI、Anthropic、Gemini 等）与语义缓存、评估 CLI"
+   ],
+   "use_cases": [
+    "企业内部知识库的私有化检索问答",
+    "需要部门级数据隔离与 RBAC 的多租户搜索场景",
+    "无外网/无云依赖的本地 RAG 部署与评测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Hybrid Search (pgvector + BM25) • Cross-Encoder Reranking • Pluggable LLMs • Hierarchical Multi-Tenancy**",
+     "lines": [
+      4
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用 PostgreSQL/pgvector 存储文档与缓存的 RAG 应用系统，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Hybrid Search (pgvector + BM25) • Cross-Encoder Reranking • Pluggable LLMs • Hierarchical Multi-Tenancy** ／ Production RAG provides true hierarchical data isolation directly at the database layer: ／ - **Row-Level Security**: Every document, chunk, cache entry, and audit event carries an `org_id` and `unit_id`.",
+   "evidence_lines": [
+    4,
+    112,
+    121
+   ]
+  },
+  "fn": "njNagaraj/RAG-production",
+  "sha": "24842c3c044e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

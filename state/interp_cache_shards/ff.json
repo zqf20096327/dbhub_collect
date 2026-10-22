@@ -10411,5 +10411,70 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2598fd49e089": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地共享记忆层，基于知识图谱文件存储",
+   "review": "MeMesh 为 Claude Code 和 Codex 等本地编码代理提供跨会话共享记忆：记忆以单个知识图谱数据库文件存于本机，提供 remember/recall/briefing 等 12 个工具和 10 个 hooks，并支持本地代理间的持久化消息收件箱。面向在多会话、多代理工作流中需要保留决策与上下文的开发者；原生消息投递仅支持 macOS 和 Linux。",
+   "highlights": [
+    "提供 remember、recall、forget、briefing、task_state 等 12 个记忆与协调 MCP 工具",
+    "记忆保存在本地单个文件 ~/.memesh/knowledge-graph.db，无云服务依赖",
+    "支持本地代理间消息交换，单条不可信载荷上限 64 KiB，支持持久收件箱与游标恢复"
+   ],
+   "use_cases": [
+    "让编码代理跨会话记住项目决策、用户偏好与经验教训",
+    "多个本地代理（Claude Code 与 Codex）之间共享上下文与交接工作",
+    "备份与导入记忆数据（JSON 导出/导入）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> Remember that this project uses SQLite.",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "MeMesh 为编码代理提供记忆与消息协调服务，自身使用本地 SQLite 数据库文件存储，属于服务于 AI 代理生态的工具组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Shared local memory for Claude Code and Codex.** ／ Memories live in one file on your computer: `~/.memesh/knowledge-graph.db`. MeMesh needs no cloud memory service or separate AI model. Automatic reminders depend on the host integration; a handoff is context, not a guarantee that a task will restart itself. ／ ## All 12 Memory and Coordination Tools",
+   "evidence_lines": [
+    5,
+    14,
+    63
+   ]
+  },
+  "fn": "PCIRCLE-AI/memesh",
+  "sha": "2598fd49e089",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

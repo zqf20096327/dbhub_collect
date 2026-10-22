@@ -11322,5 +11322,223 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1d1f0aa4f37b": {
+  "identity": {
+   "one_liner": "自托管任务管理应用，任务数据存于 PostgreSQL，内置 MCP 服务器",
+   "review": "Conatus 是一个受 Todoist 启发的自托管项目/任务管理系统，用 Docker Compose 部署，任务数据存于 PostgreSQL，附件存于 S3 兼容的 Silo 存储；提供 REST API、签名 webhooks、iCal 订阅和供 AI agent 读写任务的 MCP 服务器，并支持从 Todoist 导入。适用于想在自己服务器上管理项目、周期任务与协作的个人或团队，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供项目、子任务、周期任务、提醒、看板/列表/日历视图与共享协作功能",
+    "通过 MCP 服务器允许 AI agent 读取、创建、重排和完成任务",
+    "提供 REST API（含 OpenAPI 3.1 描述）、签名 webhooks，并从首次启动起每日备份数据库"
+   ],
+   "use_cases": [
+    "自托管个人/团队项目管理与周期任务管理",
+    "从 Todoist 导入数据迁移到自有服务器",
+    "让 AI agent 通过 MCP 读写和管理任务"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Conatus is a self-hosted task manager inspired by Todoist. It runs on your own server with Docker Compose, with tasks in PostgreSQL and files in S3 storage you control. AI agents can read, create, reschedule and complete your tasks through the MCP server, and  ／ Docker Compose pulls the Conatus application, operations, PostgreSQL and Silo images. Silo stores attachments and is a maintained fork of MinIO. Open http://localhost:4399 and sign in with the administrator credentials from `.env`, then remove `CONATUS_ADMIN_U",
+     "lines": [
+      15,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明任务数据存于 PostgreSQL，Compose 拉取 PostgreSQL 镜像作为其存储，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later 单许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Conatus is a self-hosted task manager inspired by Todoist. It runs on your own server with Docker Compose, with tasks in PostgreSQL and files in S3 storage you control. AI agents can read, create, reschedule and complete your tasks through the MCP server, and your own scripts can use the REST API and webhooks. Conatus is free and open source under the AGPL. ／ Docker Compose pulls the Conatus application, operations, PostgreSQL and Silo images. Silo stores attachments and is a maintained fork of MinIO. Open http://localhost:4399 and sign in with the administrator credentials from `.env`, then remove `CONATUS_ADMIN_USERNAME` and `CONATUS_ADMIN_PASSWORD` from `.env`.",
+   "evidence_lines": [
+    15,
+    63
+   ]
+  },
+  "fn": "nojusmorkunas/conatus",
+  "sha": "1d1f0aa4f37b",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0cddd5ab49ed": {
+  "identity": {
+   "one_liner": "自托管的本地优先笔记/文档/数据库一体化工作区应用",
+   "review": "Noema 是一个自托管、local-first 的笔记与文档工作区，所有内容（页面、文件夹、数据库行）共享同一页面模型，提供块编辑器、七种数据库视图、工单/项目/周期、聊天、版本历史与公共 API。技术上基于 Next.js 15 与 PostgreSQL（Docker 容器，端口 5433），桌面版通过 Tauri 打包并内嵌 PGlite 免去单独安装数据库，面向需要在本地运行工作区的团队与个人。",
+   "highlights": [
+    "所有内容以统一页面模型组织，数据库支持多种类型化属性、七种视图及筛选/排序/分组",
+    "支持 Docker 部署（PostgreSQL 容器）与 Tauri 桌面安装包两种运行方式，桌面版内嵌 PGlite",
+    "提供带作用域的 Bearer API 令牌、OAuth 授权码流程、HMAC 签名 Webhook、2FA 与速率限制"
+   ],
+   "use_cases": [
+    "团队或个人自托管搭建笔记、文档与结构化数据库工作区",
+    "从 Notion 或 Trello、Markdown、Word 等来源导入数据",
+    "离线/本地优先场景下作为桌面应用运行，无需单独安装数据库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma 6 · PostgreSQL (docker container `noema-db`, port **5433**) · TipTap · Tauri 2 for the desktop app ／ - **Runs as an app:** one installer — no Postgres, no Docker, no account. See Desktop app.",
+     "lines": [
+      23,
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用通过 Docker 容器使用 PostgreSQL 存储数据，桌面版内嵌 PGlite，数据库仅为其后端存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma 6 · PostgreSQL (docker container `noema-db`, port **5433**) · TipTap · Tauri 2 for the desktop app ／ - **Runs locally:** one `docker compose up` for the database, one `npm run dev` for the app.",
+   "evidence_lines": [
+    23,
+    24
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Guembri01/noema",
+  "sha": "0cddd5ab49ed",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a7c3cb894647": {
+  "identity": {
+   "one_liner": "基于 React+Express+MySQL 的个人账单导入分析与财务管理系统",
+   "review": "一个 Web 全栈个人财务应用，支持批量导入微信 Excel 与支付宝 CSV 账单，实现重复检测、分类统计、资产趋势跟踪和 ECharts 可视化报表。使用 Node.js/Express 后端与 MySQL 存储，通过 JWT 做多用户认证；需自备 MySQL 5.7+ 并执行 schema.sql 初始化，适合想在本地自建记账系统的个人用户。",
+   "highlights": [
+    "支持微信 Excel 与支付宝 CSV 账单批量导入并自动识别字段与编码",
+    "提供导入阶段重复记账检测与基于关键词规则的自定义分类",
+    "基于 ECharts 提供收支汇总、分类占比与资产趋势可视化"
+   ],
+   "use_cases": [
+    "聚合分析微信、支付宝等分散渠道的个人消费记录",
+    "维护银行卡、现金、理财等资产账户并跟踪月度资产走势",
+    "生成月度明细与年度收支结构报表用于财务复盘"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL**：5.7+ 或 8.0+ ／ 在 MySQL 中创建数据库并执行建表脚本： ／ mysql -u root -p < backend/database/schema.sql",
+     "lines": [
+      68,
+      81,
+      84
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个以 MySQL 存储数据的全栈财务应用，使用 MySQL2 驱动而非为数据库生态提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**个人账单管理系统** 是一个面向个人记账、消费复盘和资产跟踪的 Web 全栈应用。 ／ - **数据库驱动**：MySQL2 ／ - **MySQL**：5.7+ 或 8.0+",
+   "evidence_lines": [
+    7,
+    49,
+    68
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "zhu123279/Personal-Bill",
+  "sha": "a7c3cb894647",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

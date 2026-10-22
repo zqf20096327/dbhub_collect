@@ -8396,5 +8396,231 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a188d4cfca59": {
+  "identity": {
+   "one_liner": "从 CSV/SQLite/JSON/Parquet 生成并校验 ISO 20022 支付文件的 Python 工具",
+   "review": "Pain001 是一个 Python 库和 CLI，用于将 CSV、SQLite、JSON、JSONL、Parquet 等表格数据生成 pain.001、pain.008 支付 XML，并基于官方 XSD 和 SEPA scheme 规则进行校验，同时提供 pain.002/camt.053 解析构建、REST API、MCP 与 LSP 服务。面向需要生成银行支付文件的开发和支付流水线场景；README 明确说明其校验不保证银行受理，不提供真实结算、EBICS/SWIFT 连接，且插件不受沙箱隔离。",
+   "highlights": [
+    "支持从 CSV、SQLite、JSON、JSONL、Python records 读取输入（可选 Parquet 与插件），生成经 XSD 校验的 pain.001.001.03–13 与 pain.008 XML",
+    "提供 CLI、REST API、MCP 服务器和 CSV LSP 服务器，支持 SFTP 上传与 CEL 规则校验",
+    "包含 pain.002 状态报告与 camt.053 对账单的解析器及合成 pain.002 构建器"
+   ],
+   "use_cases": [
+    "从业务系统导出的表格数据批量生成符合 ISO 20022 的支付/直接借记文件",
+    "在编辑器或 Agent 工作流中校验、诊断支付文件数据（LSP/MCP 集成）",
+    "以 mockbank 合成服务测试 pain.002 回执流程"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> from CSV, SQLite, JSON, JSON Lines and Parquet and validated against the ／ |Input|CSV, SQLite, JSON, JSONL, Python records; optional Parquet and plugins|Tested loaders|",
+     "lines": [
+      27,
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明 SQLite 仅作为 pain001 的可选输入数据格式之一（L27、L90），项目本体是支付文件生成与校验工具，为数据处理管道服务，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：Apache-2.0 OR MIT（L11、L241）",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Generate and validate ISO 20022 payment files from tabular data. ／ |Input|CSV, SQLite, JSON, JSONL, Python records; optional Parquet and plugins|Tested loaders|",
+   "evidence_lines": [
+    5,
+    90
+   ]
+  },
+  "fn": "sebastienrousseau/pain001",
+  "sha": "a188d4cfca59",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c8183396b34e": {
+  "identity": {
+   "one_liner": "自托管职位雷达：抓取职位并按简历用 LLM 打分匹配",
+   "review": "Wera 是一个自托管求职雷达应用，从 Greenhouse、Workday 等公开职位板抓取 5100+ 公司的职位，先按规则和本地嵌入模型排序，再对少量候选职位调用 OpenAI 兼容 LLM 打出匹配分，并通过 REST API 和仪表盘展示结果，附带简历定制、求职信和 H-1B 赞助数据查询等功能。数据存储在 PostgreSQL，单机 Docker Compose 部署，面向希望自主筛选职位的求职者，不含自动投递功能。",
+   "highlights": [
+    "采集 5100+ 公司公开职位板，按内容哈希增量存储，支持 ETag 减少请求",
+    "本地嵌入与 TF-IDF 先排序，每日限额内对最优候选调用 LLM 打分（每次约 $0.00018）",
+    "提供简历导入与多模板渲染、AI 审核社区、H-1B LCA 数据导入、Prometheus 指标"
+   ],
+   "use_cases": [
+    "个人求职者按简历筛选并跟踪新职位机会",
+    "自托管单机部署的职位聚合与匹配服务",
+    "结合美国劳工部 LCA 数据分析雇主 H-1B 赞助记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Wera system architecture on one Hetzner VM: Caddy routes /api to wera-api and pages to wera-web; wera-api and wera-worker (one Go binary) use wera-embed and PostgreSQL and call the LLM API; the worker polls job boards, the API sends email; wera-admin is reache ／ Everything runs with Docker Compose on one host (see deploy/hetzner). Caddy is the only public service: it terminates TLS and sends `/api/*` to `wera-api` and everything else to `wera-web` (nginx serving the dashboard). `wera-api` and `wera-worker` are the sam",
+     "lines": [
+      16,
+      18
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "**Wera** (Swahili slang for a job or gig) is a self-hosted job radar. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Oracle Recruiting Cloud, Workable, Rippling, Eightfold, and amazon.jobs) for 5,100+ comp",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它用 PostgreSQL 存储自身业务数据，是使用数据库的求职应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Wera** (Swahili slang for a job or gig) is a self-hosted job radar. It collects postings from public job-board feeds (Greenhouse, Lever, Ashby, Workday, SmartRecruiters, Oracle Recruiting Cloud, Workable, Rippling, Eightfold, and amazon.jobs) for 5,100+ companies across 30 industries (tech firms, but also hospitals, schools, retailers, restaurants and nonprofits), filters them with configurable rules, scores each one against your resume with an LLM from any OpenAI-compatible provider (presets for Coral Bricks and DeepInfra), and serves the results through a REST API. Wera does not apply on your behalf. You review the matches and apply yourself. ／ Everything runs with Docker Compose on one host (see deploy/hetzner). Caddy is the only public service: it terminates TLS and sends `/api/*` to `wera-api` and everything else to `wera-web` (nginx serving the dashboard). `wera-api` and `wera-worker` are the same Go binary: the API serves requests and sends queued email, the worker runs the matching pipeline on a schedule. Both rank jobs with `wera-embed`, a small local embedding model, and keep everything in PostgreSQL. `wera-admin` listens on 127.0.0.1 only and is reached through an SSH tunnel.",
+   "evidence_lines": [
+    10,
+    18
+   ]
+  },
+  "fn": "jessechumo/Wera",
+  "sha": "c8183396b34e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75f3e11c3be9": {
+  "identity": {
+   "one_liner": "MySQL 与 openGauss 间的离线 SQL 文件转换桌面工具",
+   "review": "这是一个 Windows 桌面端 SQL 文件转换工具，在 MySQL 与 openGauss 之间双向转换 .sql 文件，无需连接数据库或远程后端，采用保守子集策略，无法安全转换的语句在 JSON 报告中标记为 BLOCKER 并输出 _review.sql。适合需要在两种库间手工迁移表结构与基础 DML 的开发/运维人员；不承诺完整方言兼容，转换结果需在测试库人工验证。",
+   "highlights": [
+    "支持 MySQL ↔ openGauss 双向转换，覆盖 CREATE TABLE、索引、约束、简单 ALTER 与基础 DML",
+    "转换不连接数据库、不上传文件，全部在本地处理",
+    "输出 JSON 报告按行号列出 INFO/WARNING/BLOCKER，阻断语句生成 _review.sql 供人工处理"
+   ],
+   "use_cases": [
+    "MySQL 与 openGauss 之间的离线 SQL 脚本迁移前转换",
+    "无法连接生产库环境下的表结构与数据语句格式调整",
+    "需要逐语句审查迁移风险的场景（报告标记阻断项）"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# SQL Converter | MySQL ↔ openGauss 桌面转换工具 ／ - MySQL → openGauss / openGauss → MySQL 双向转换。 ／ - 旧版 MySQL 整数显示宽度、自增列、常见数据类型及参数 `VARCHAR(n)`、`DECIMAL(p,s)`、`DATETIME(p)`。",
+     "lines": [
+      1,
+      9,
+      12
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# SQL Converter | MySQL ↔ openGauss 桌面转换工具 ／ - MySQL → openGauss / openGauss → MySQL 双向转换。",
+     "lines": [
+      1,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确说明程序不连接数据库，是离线 SQL 文件转换工具，为数据库间迁移服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# SQL Converter | MySQL ↔ openGauss 桌面转换工具 ／ 一个无需数据库连接、无需远程后端的 **Windows 离线 SQL 文件转换工具**。桌面界面使用 PySide6，SQL 转换核心仅依赖 Python 标准库。支持 MySQL 与 openGauss 的**保守子集**转换，无法安全转换的语句会在报告中明确标记，不能视为完整迁移成功。 ／ - MySQL → openGauss / openGauss → MySQL 双向转换。",
+   "evidence_lines": [
+    1,
+    3,
+    9
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "lhuat/sql-converter",
+  "sha": "75f3e11c3be9",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

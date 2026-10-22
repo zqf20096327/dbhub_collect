@@ -8714,5 +8714,309 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4c3d5a5fd370": {
+  "identity": {
+   "one_liner": "自托管 PaaS 平台，推送仓库即部署应用并托管数据库",
+   "review": "Deplo 是一个开源的应用托管平台，用户选择自己的服务器，通过脚本安装后连接 GitHub/GitLab/Bitbucket/Gitea 仓库实现推送部署，同时提供域名、证书、回滚及 Postgres、MySQL、MongoDB、Redis、ClickHouse 等数据库的加密定时备份。面向希望自助托管应用的团队与开发者，当前处于 beta 阶段，安装需以 root 运行脚本。",
+   "highlights": [
+    "支持从 GitHub、GitLab、Bitbucket、Gitea 或镜像、Compose 文件、上传方式部署",
+    "提供 Postgres、MySQL、MariaDB、MongoDB、Redis、ClickHouse 数据库及加密定时备份",
+    "提供团队权限、活动日志、2FA 与 API token"
+   ],
+   "use_cases": [
+    "在自有服务器上自托管应用部署平台",
+    "为团队提供带权限管理的应用与数据库托管",
+    "托管服务商基于它向客户提供部署服务"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Databases** (Postgres, MySQL, MariaDB, MongoDB, Redis, ClickHouse) with encrypted, scheduled backups.",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Databases** (Postgres, MySQL, MariaDB, MongoDB, Redis, ClickHouse) with encrypted, scheduled backups.",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Databases** (Postgres, MySQL, MariaDB, MongoDB, Redis, ClickHouse) with encrypted, scheduled backups.",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Databases** (Postgres, MySQL, MariaDB, MongoDB, Redis, ClickHouse) with encrypted, scheduled backups.",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明平台为用户提供数据库托管及加密定时备份，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GNU AGPL v3",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Databases** (Postgres, MySQL, MariaDB, MongoDB, Redis, ClickHouse) with encrypted, scheduled backups. ／ Open source and self-hosted: builds, domains, certificates, databases, backups and rollbacks are handled for you. You pay your host, not Deplo. ／ Deplo is open source software, licensed under the GNU AGPL v3. See the LICENSE file for the full license terms.",
+   "evidence_lines": [
+    39,
+    18,
+    65
+   ]
+  },
+  "fn": "DeploCloud/deplo",
+  "sha": "4c3d5a5fd370",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "af001d56dcd7": {
+  "identity": {
+   "one_liner": "SMB 财务 AI 代理控制平面，用确定性策略引擎+PostgreSQL RLS 治理代理行为",
+   "review": "ClawKeeper 是面向中小企业财务场景的多代理控制平面：代理提议记账/发票/对账等工作，由 TypeScript 确定性策略引擎、审批门、租户隔离和不可篡改审计日志决定能否执行，LLM 不参与安全决策。使用 PostgreSQL 行级安全和 append-only 触发器，后端 Bun+Hono，前端 React 仪表盘，通过 bun 安装运行。",
+   "highlights": [
+    "确定性策略引擎在每次 LLM 调用前执行，代理不越过审批门",
+    "PostgreSQL 行级安全实现租户隔离，append-only 触发器保障审计日志不可改",
+    "包含 110 个分层代理（1 CEO + 9 领域负责人 + 100 worker）覆盖应付/应收/对账/报表等域"
+   ],
+   "use_cases": [
+    "中小企业财务代理的记账、发票处理、对账与报表自动化",
+    "多租户会计场景下限制代理权限与跨租户访问",
+    "评估面向财务代理的护栏/治理模式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**What it does.** ClawKeeper is a control plane for finance agents in small and medium businesses. Agents propose accounts payable, accounts receivable, reconciliation, and reporting work; a deterministic policy engine (`src/openclaw/policy.ts`), PostgreSQL ro ／ **Real-world use case (2025–2026 evidence).** **Verified in this repository.** An SMB finance operator onboards a tenant, uploads supplier invoices for OCR, and asks agents to schedule payments. Viewer roles are rejected before OCR runs, cross-tenant reads are",
+     "lines": [
+      23,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 PostgreSQL 存储业务与审计数据，是使用数据库的财务代理应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**What it does.** ClawKeeper is a control plane for finance agents in small and medium businesses. Agents propose accounts payable, accounts receivable, reconciliation, and reporting work; a deterministic policy engine (`src/openclaw/policy.ts`), PostgreSQL row-level security, approval gates, and a redacted append-only audit log decide what is allowed to run. ／ |**No cross-tenant data sharing**|Agents are tenant-scoped. The policy engine denies any request where the agent's tenant context does not match the target resource. RLS enforcement in PostgreSQL provides a second boundary at the data layer.| ／ DATABASE_URL=postgresql://clawkeeper:password@localhost:5432/clawkeeper",
+   "evidence_lines": [
+    23,
+    93,
+    111
+   ]
+  },
+  "fn": "Alexi5000/ClawKeeper",
+  "sha": "af001d56dcd7",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "575ba136033f": {
+  "identity": {
+   "one_liner": "PowerShell 编写的 SQL Server 安全评估采集器，生成本地 HTML 报告",
+   "review": "Get-SqlSafe Community Edition 是一个独立的 PowerShell 脚本，从 SQL Server 实例采集安全指标（认证暴露、审计缺口、过高权限、风险配置、孤立账户、所有者漂移等）并生成本地 HTML 报告，供审查与整改讨论使用。支持本地 SQL Server、Amazon RDS（兼容模式）及 Azure SQL Database（需可选模块）；作者注明其只识别风险指标，不是完整安全审计或渗透测试。",
+   "highlights": [
+    "以最小权限原则运行，输出本地 HTML 报告，脚本为内嵌 T-SQL 的纯文本 PowerShell",
+    "支持 GUI 与控制台两种运行方式，控制台模式适合自动化与受限环境",
+    "针对 SQL Server、Amazon RDS、Azure SQL Database 提供平台专属的认证、加密与兼容选项"
+   ],
+   "use_cases": [
+    "SQL Server 实例的安全基线指标采集与整改讨论",
+    "Amazon RDS 上 SQL Server 的安全姿态检查",
+    "Azure SQL Database 的安全评估（含 Entra 交互式登录）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "﻿# Get-SqlSafe Community Edition - SQL Server Security Assessment ／ Get-SqlSafe Community Edition is a standalone PowerShell-based SQL Server security assessment collector. It gathers selected high-level security indicators from a SQL Server instance and generates a local HTML report for review and remediation discussions. ／ - Run SQL Server and Amazon RDS assessments without external PowerShell modules. Azure SQL Database uses one optional module and separately installed Microsoft prerequisites.",
+     "lines": [
+      1,
+      6,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL Server 实例提供安全指标采集与报告的工具组件，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Get-SqlSafe Community Edition is a standalone PowerShell-based SQL Server security assessment collector. It gathers selected high-level security indicators from a SQL Server instance and generates a local HTML report for review and remediation discussions. ／ The Community Edition is designed as a practical first look at SQL Server security posture. It focuses on baseline indicators such as authentication exposure, auditing gaps, excessive privileges, risky configuration settings, orphaned or dependent accounts, and database ownership drift. ／ `Get-SqlSafe.ps1` is a simple, reviewable PowerShell script that helps identify high-level SQL Server security posture indicators. It focuses on common security-relevant areas such as authentication, privileged access, server-level permissions, risky configuration, audit visibility, ownership risks, and orphaned accounts.",
+   "evidence_lines": [
+    6,
+    8,
+    16
+   ]
+  },
+  "fn": "Sarpedon-Quality-Lab/sql-security-community-scripts",
+  "sha": "575ba136033f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9e49f9c64253": {
+  "identity": {
+   "one_liner": "tdsql：基于 tiberius-ng 驱动的 Rust 异步 SQL Server 客户端库",
+   "review": "tdsql 是一个 Rust 客户端库，基于 tiberius-ng TDS 驱动连接 Microsoft SQL Server，提供连接管理、位置与命名参数、流式读取、事务与保存点、存储过程 RPC 调用及取消查询等能力，另有 blocking 特性供非异步程序使用。适合需要在 Rust 中访问 SQL Server 的开发者；不支持 MARS，并发需自行配合连接池。",
+   "highlights": [
+    "提供异步与 blocking 两种客户端，支持流式读取大结果集",
+    "支持命名参数、存储过程 RPC 调用、事务与保存点",
+    "支持取消查询并释放服务器锁，Debug 输出隐藏密码"
+   ],
+   "use_cases": [
+    "在 Rust 异步应用中读写 Microsoft SQL Server",
+    "需要流式处理大型查询结果或中途取消查询的场景"
+   ],
+   "cat 裁决规则": "专用场景优先于通用场景（带 GUI 的备份工具归备份不归管理）；数据库本体/存储引擎/raft 共识/执行器归内核/引擎；ER 图/schema 设计归建模/设计；脱敏/SQL 审计/防火墙/权限/加密归安全/审计；fuzz/基准/测试数据归测试/质量；schema 文档生成归管理；BI/报表暂归管理；eco=app 的项目 cat 固定填『应用』，不再判其他任务类"
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ |SQL Server|`DataValue`|Reads as|",
+     "lines": [
+      3,
+      346
+     ]
+    },
+    {
+     "db": "TDSQL",
+     "rel": "mention",
+     "quote": "# tdsql ／ `tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ use tdsql::{Client, Config};",
+     "lines": [
+      1,
+      3,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库生态服务的客户端库，专用于连接 SQL Server。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ tdsql = \"0.5.0\"",
+   "evidence_lines": [
+    3,
+    20
+   ]
+  },
+  "fn": "CommonwealthPasta/tdsql",
+  "sha": "9e49f9c64253",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

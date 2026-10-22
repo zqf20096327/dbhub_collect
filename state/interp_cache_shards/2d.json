@@ -9036,5 +9036,214 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cf4b11f143c8": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 用量追踪器，SQLite 持久化并内置仪表盘",
+   "review": "为 CLIProxyAPI（CPA）提供用量记录、成本估算、请求诊断与凭据配额跟踪的独立部署仪表盘，数据以 SQLite 持久化并支持定时备份。面向运行 CPA 的使用者，可对单个 API Key 开放只读视图；要求 CPA v8.0.12+ 并开启 usage statistics。",
+   "highlights": [
+    "将 CPA 用量持久化到 SQLite 并支持定时备份",
+    "按模型、API Key 和提供商分析用量、缓存与估算成本",
+    "检查并导出请求详情，查看成功率、TTFT 与总延迟"
+   ],
+   "use_cases": [
+    "跟踪 CLIProxyAPI 的模型调用成本与用量历史",
+    "监控凭据健康度、剩余配额与配额历史",
+    "排查请求成功率与延迟问题"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Keep your history**: persist CPA usage in SQLite with scheduled backups. ／ Scheduled Auth Files quota refresh is configured from the gear button in the Auth Files inspection dialog. The setting is stored in the local SQLite database and does not require the page to stay open.",
+     "lines": [
+      50,
+      429
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目将自身数据存储在本地 SQLite 数据库中，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Keep usage history for CLIProxyAPI (CPA), understand model costs, and track request performance and credential quotas. CPA Usage Keeper brings overviews, realtime diagnostics, request details, and quota history into one independently deployed dashboard. ／ - **Keep your history**: persist CPA usage in SQLite with scheduled backups. ／ CPA data is stored under `./cpa`, and Keeper data is stored under `./keeper`.",
+   "evidence_lines": [
+    18,
+    50,
+    219
+   ]
+  },
+  "fn": "Willxup/cpa-usage-keeper",
+  "sha": "cf4b11f143c8",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4190e64c53f9": {
+  "identity": {
+   "one_liner": "基于 ClickHouse 的 ADS-B 空域数据聚合可视化网站",
+   "review": "一个托管在 ClickHouse 之上的数据可视化与查询网站，用户可对约 500 亿条 ADS-B 航迹记录执行聚合与自定义 SQL 下钻，并附带 OSM、GBIF、气象等多个大型开放地理数据集的加载脚本（*_setup.sql 与 prepare-*.sh）。适合想复现或扩展大规模轨迹/地理数据探索站点的开发者与数据爱好者；仓库不含服务端后端，前端为单 HTML 页面。",
+   "highlights": [
+    "支持在页面上自定义 SQL 查询，对 500 亿条记录做聚合与下钻",
+    "提供 OSM、GBIF、气象、出租车等多个数据集的建表与加载脚本（*_setup.sql、prepare-*.sh）",
+    "前端为单个 HTML 页面，不使用 JavaScript 框架，源码未压缩"
+   ],
+   "use_cases": [
+    "ADS-B 航空轨迹数据的可视化探索与分析",
+    "大规模开放地理数据集（OSM、GBIF 等）的加载与展示",
+    "通过自定义 SQL 对海量记录做即席查询"
+   ],
+   "review_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "This website (technology demo) allows you to aggregate and visualize massive amounts of air traffic data. The data is hosted in a ClickHouse database and queried on the fly. You can tune the visualizations with custom SQL queries and drill-down from 50 billion",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Population** comes as a GeoPackage (a SQLite database of H3 hexagon polygons); population_convert.py reads it with the standard library, takes each hexagon's envelope centre, and converts from Web Mercator to lat/lon.",
+     "lines": [
+      220
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 ClickHouse 存储并查询数据的可视化网站，README 提供 build 表与加载流水线供站点自用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This website (technology demo) allows you to aggregate and visualize massive amounts of air traffic data. The data is hosted in a ClickHouse database and queried on the fly. You can tune the visualizations with custom SQL queries and drill-down from 50 billion records to individual data records. ／ Beyond ADS-B, the site now hosts a family of large open geospatial datasets, each following the same recipe: a `*_mercator` table with materialized Web-Mercator coordinates and a Morton-ordered primary key, `_sample10`/`_sample100` companion tables for progressive tile loading, and a per-dataset entry in `config.js`. Each has a `*-setup.sql` (schema + grants) and a `prepare-*.sh` (loading pipeline) in this repo. Where possible the read is entirely server-side — ClickHouse pulls the source directly from S3, nothing is staged on a client. ／ The website is implemented as a single HTML page. It does not use JavaScript frameworks and the source code is not minified, so you can easily read it.",
+   "evidence_lines": [
+    3,
+    199,
+    240
+   ]
+  },
+  "fn": "ClickHouse/adsb.exposed",
+  "sha": "4190e64c53f9",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d1fd6b235b6e": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展：免 SUPERUSER 解锁高级功能",
+   "review": "supautils 是一个 PostgreSQL 加载库（扩展），通过配置化的特权角色代理，让非超级用户创建事件触发器、发布、FDW 和扩展，并提供保留角色保护、扩展版本限制、RLS 策略管理授权等能力。面向云部署等不能向终端用户授予 SUPERUSER 的场景，通过 postgresql.conf 全集群配置，不向数据库添加表或安全标签。",
+   "highlights": [
+    "以 shared_preload_libraries/session_preload_libraries 方式加载，通过 postgresql.conf 配置管理，不向数据库添加表、函数或安全标签",
+    "允许特权角色创建 publications、FDW、事件触发器和扩展，并对事件触发器做防提权保护（对超级用户跳过/限制）",
+    "支持保留角色保护、允许配置的特权配置项（如 session_replication_role）、扩展版本限制与表属主绕过（RLS 策略/删触发器授权）"
+   ],
+   "use_cases": [
+    "云数据库服务中向终端用户开放高级 Postgres 功能而不授予 SUPERUSER",
+    "多租户/托管 Postgres 环境中保护服务角色免受终端用户变更",
+    "非属主角色管理 RLS 策略或删除触发器等受限 DDL 操作"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL version ／ Supautils is an extension that unlocks advanced Postgres features without granting SUPERUSER access. ／ Completely managed by configuration — no tables, functions, or security labels are added to your database. This makes upgrades effortless and lets you apply settings cluster-wide solely via `postgresql.conf`.",
+     "lines": [
+      4,
+      6,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是 PostgreSQL 的加载扩展/库，为 Postgres 提供权限管理能力，属数据库生态组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Supautils is an extension that unlocks advanced Postgres features without granting SUPERUSER access. ／ It's a loadable library that securely allows creating event triggers, publications, extensions to non-superusers. Built for cloud deployments where giving SUPERUSER rights to end users isn’t an option. ／ Completely managed by configuration — no tables, functions, or security labels are added to your database. This makes upgrades effortless and lets you apply settings cluster-wide solely via `postgresql.conf`.",
+   "evidence_lines": [
+    6,
+    8,
+    10
+   ]
+  },
+  "fn": "supabase/supautils",
+  "sha": "d1fd6b235b6e",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10013,5 +10013,160 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "abf4742d606a": {
+  "identity": {
+   "one_liner": "本地运行 three.ws AI agent 的 Node 运行时，SQLite 存会话",
+   "review": "一个在本地机器或 VPS 上运行 three.ws agent 的 Node.js 运行时包，提供本地文件/shell 工具沙箱、three.ws MCP 远程工具、审批门控、SQLite 会话存储（含 FTS5 全文检索）、并行子代理与 cron 调度。面向想在自己机器上托管该平台 agent 的用户。注意：终端 UI 与 CLI 尚未实现，包未发布到 npm，目前只能从仓库按路径引用模块。",
+   "highlights": [
+    "会话、转录、FTS5 索引、cron 调度与 token 用量存储于单个 SQLite 文件（WAL 模式）",
+    "工具调用按 read/write/shell/network/financial 分类，经 GuardChain 与审批门控；financial 类不可设为 allow",
+    "shell 在资源受限沙箱中运行，含超时、CPU、文件大小、输出量限制与凭证环境变量清洗"
+   ],
+   "use_cases": [
+    "在本机或 VPS 上以沙箱与审批机制运行 three.ws agent",
+    "通过 OpenAI 兼容端点（Ollama/llama.cpp/vLLM）接入本地模型驱动 agent",
+    "需要会话全文检索、cron 定时任务与 Telegram 网关模式的 agent 场景（UI/cron 部分尚未落地）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Node **22.13+**: the session store uses the built-in `node:sqlite`, so there is ／ One SQLite file (WAL mode, so a UI, a scheduler and a gateway can share it)",
+     "lines": [
+      37,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "使用 Node 内置 node:sqlite 存储自身会话数据，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This package is the local runtime behind `three-ws-agent`. It runs the same ／ Node **22.13+**: the session store uses the built-in `node:sqlite`, so there is ／ One SQLite file (WAL mode, so a UI, a scheduler and a gateway can share it)",
+   "evidence_lines": [
+    7,
+    37,
+    134
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nirholas/three-ws-agent",
+  "sha": "abf4742d606a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "073e7185f131": {
+  "identity": {
+   "one_liner": "PostgreSQL 与 MySQL 的数据库设计/调优 Agent Skill",
+   "review": "一个面向 Claude Code 等 Agent Skill 体系的技能包，用于在 PostgreSQL 和 MySQL/InnoDB 上做 schema 设计、索引策略、EXPLAIN 计划诊断、锁与并发分析及零停机迁移指导；通过 npx 或 git clone 安装到 skills 目录，附带标准库 Python 审计脚本可作 CI 门禁；不覆盖 NoSQL，且不自动执行 DDL。适合 DBA 与后端开发者使用。",
+   "highlights": [
+    "覆盖 schema 设计、索引策略、查询调优、事务与并发、零停机迁移五类工作流",
+    "内置标准库 Python 审计脚本，无需额外安装或网络，可作为 CI 门禁（退出码 0/1/2）",
+    "通过 npx 或 git clone 安装到 ~/.claude/skills/ 或项目目录"
+   ],
+   "use_cases": [
+    "Claude Code 中进行 PostgreSQL/MySQL schema 设计与索引优化咨询",
+    "分析慢查询的 EXPLAIN 计划与锁等待问题",
+    "在 CI 中对 DDL 迁移文件做结构性审计"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "designing-databases — an Agent Skill for PostgreSQL and MySQL/InnoDB ／ PostgreSQL 13+ ／ and tuning relational databases on **PostgreSQL** and **MySQL/InnoDB**.",
+     "lines": [
+      1,
+      5,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "designing-databases — an Agent Skill for PostgreSQL and MySQL/InnoDB ／ MySQL 8.0+ ／ and tuning relational databases on **PostgreSQL** and **MySQL/InnoDB**.",
+     "lines": [
+      1,
+      6,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL/MySQL 数据库的设计与调优提供知识型技能包与审计脚本，服务数据库生态而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "designing-databases — an Agent Skill for PostgreSQL and MySQL/InnoDB ／ An Agent Skill for designing, auditing ／ npx @vstlmkh/designing-databases install            # ~/.claude/skills/",
+   "evidence_lines": [
+    1,
+    12,
+    41
+   ]
+  },
+  "fn": "vstlmkh/designing-databases",
+  "sha": "073e7185f131",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

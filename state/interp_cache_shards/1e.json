@@ -9321,5 +9321,141 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6db83f8e8048": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话长期记忆插件，以 SQLite 存储、记忆宫殿结构组织 agent 记忆",
+   "review": "dsh 平台的插件，把会话历史提炼为带宫殿坐标的记忆条目，提供混合检索、间隔重复复习、蒸馏与信念巩固，附 Web 管理面板。面向使用 DeepSeek Harness 的 agent 用户；数据落 SQLite 分库，纯 TypeScript 无外部进程依赖。",
+   "highlights": [
+    "提供 21 个 engram_* 工具，覆盖保存、混合检索（FTS5 + 本地向量 RRF）、复习与导出",
+    "支持按 user/project 双层分库（SQLite），并做入库前密钥与个人信息脱敏",
+    "内置 Web 管理面板，含今日、陈展、日志、信念、裁决等九个视图"
+   ],
+   "use_cases": [
+    "为 dsh 宿主中的会话 agent 提供跨会话长期记忆",
+    "历史会话批量回填进记忆库",
+    "个人知识/偏好的结构化沉淀与检索练习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|固定路线定顺序|`tour_routes` 只增不改；`engram_tour mode=fixed` 按桩位顺序走全宫|src/store/sqlite.ts| ／ 人工处理前，停止使用该目录的所有宿主，备份数据库和 SQLite sidecar，",
+     "lines": [
+      53,
+      223
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明数据以 SQLite 分库存储，SQLite 是其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|固定路线定顺序|`tour_routes` 只增不改；`engram_tour mode=fixed` 按桩位顺序走全宫|src/store/sqlite.ts| ／ - **双层分库**：`user.db` 全局共享；`project-<hash>.db` 按 git origin 标识隔离（无 git 时回退 cwd 全量哈希，旧命名库自动迁移）——个人偏好跟人走，项目约定跟仓库走。**项目宫殿随工作区切换**：管理面板「项目」scope 默认跟随 GUI 当前选中的工作区（Header 显示工作区标题与路径），也可在下拉里固定到某个工作区；`engram_save/search` 等工具的 project 读写同样按当前会话 cwd 归属，与面板同一口径。",
+   "evidence_lines": [
+    53,
+    63
+   ]
+  },
+  "fn": "kenz1117/dsh-engram",
+  "sha": "6db83f8e8048",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2c14c143adc1": {
+  "identity": {
+   "one_liner": "面向单企业的自托管项目管理系统后端，Spring Boot + MySQL 8",
+   "review": "PMS 的 Spring Boot 后端，实现登录会话、RBAC 权限、组织架构、项目任务管理、Excel/CSV 导入校验、审计日志与 Prometheus 指标，并提供 pms-cli/Work Helper 的 AI 按需查询接口。运行时仅使用 MySQL 8，通过 Flyway 管理迁移（V1–V73），面向想在本地或企业内部署单实例项目管理系统的用户。",
+   "highlights": [
+    "提供 REST API 覆盖登录、组织、项目、任务、导入、反馈等模块，OpenAPI 合同定义接口",
+    "使用 Flyway 管理 V1–V73 数据库迁移，支持已有 MySQL 库的就地升级",
+    "提供 pms-cli 与 pms.task.query 等工具的 AI 按需查询边界，写操作需确认且幂等执行"
+   ],
+   "use_cases": [
+    "单个企业本地部署项目管理与组织架构管理",
+    "员工与组织的 Excel/CSV 批量导入与校验",
+    "通过外部 AI 工作台按需查询项目任务数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PMS 是一个面向单个企业、本地部署的项目管理系统。一个部署实例只服务一家企业，不使用 `tenant_id`，也不拆分成微服务。运行时和测试都只使用 MySQL 8。 ／ - 至少 2 GB 可用内存（本地 MySQL 8 与后端）",
+     "lines": [
+      6,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 MySQL 8 存储业务数据的项目管理应用后端，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PMS 是一个面向单个企业、本地部署的项目管理系统。一个部署实例只服务一家企业，不使用 `tenant_id`，也不拆分成微服务。运行时和测试都只使用 MySQL 8。 ／ 运行时只使用 MySQL 8 数据库 `pms`。Compose 会创建 `MYSQL_USER` 应用账号；Flyway 在后端启动时执行迁移，不再使用独立的 migrator 镜像。",
+   "evidence_lines": [
+    6,
+    116
+   ]
+  },
+  "fn": "xiebinJava/pms-backend",
+  "sha": "2c14c143adc1",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

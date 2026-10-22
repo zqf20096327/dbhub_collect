@@ -11444,5 +11444,147 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b32ead72eadb": {
+  "identity": {
+   "one_liner": "AI Agent 推理链审计与执行前防护平台",
+   "review": "AgentWatch（现名 Panopti）是一个面向 AI Agent 的可观测与执行前防护工具：用独立的第二模型在动作执行前审计推理步骤，低于阈值即拦截，并提供 git 快照回滚、成本预算、Slack/PagerDuty 告警与实时仪表盘。通过适配器包装 LangChain、CrewAI、AutoGen 等框架，提供 CLI 与 REST API。后端以 PostgreSQL 作为 v3 证据存储，部署依赖 Docker Compose。",
+   "highlights": [
+    "提供执行前（pre-execution）的动作拦截与独立模型推理评分，内置 40+ 危险命令模式",
+    "支持包装 LangChain、LangGraph、CrewAI、AutoGen、AutoGPT、smolagents、Claude Code 等框架的适配器",
+    "提供 git 快照回滚、会话级 token 预算控制、Slack/PagerDuty 告警及 REST API 与实时仪表盘"
+   ],
+   "use_cases": [
+    "为生产环境中的 AI Agent 提供危险动作执行前拦截",
+    "对 Agent 运行过程进行推理链审计与事后回放分析",
+    "对 Agent 会话进行 token 成本控制与异常告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "That's it. Set `AGENTWATCH_API_KEY` in `.env` (compose refuses to start without it); everything else has working defaults, customizable via .env.example. The v3 evidence store lives on the Postgres service, so it survives container restarts. ／ |**Backend**|FastAPI · PostgreSQL · Redis · Celery|",
+     "lines": [
+      148,
+      253
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 第148/253行表明 PostgreSQL 是该项目自身后端的证据存储服务，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "That's it. Set `AGENTWATCH_API_KEY` in `.env` (compose refuses to start without it); everything else has working defaults, customizable via .env.example. The v3 evidence store lives on the Postgres service, so it survives container restarts. ／ |**Backend**|FastAPI · PostgreSQL · Redis · Celery|",
+   "evidence_lines": [
+    148,
+    253
+   ]
+  },
+  "fn": "Shinraya-Tech-Labs/AgentWatch",
+  "sha": "b32ead72eadb",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "18c7b8c404e0": {
+  "identity": {
+   "one_liner": "e-SUS APS PEC 5.5.28 的 PostgreSQL 数据库结构图谱与 SQL 查询集",
+   "review": "该项目为巴西公共卫生系统 e-SUS APS PEC 5.5.28 的 PostgreSQL 数据库提供表结构地图（1180 张表、列与外键描述）和 41 条按类别组织的即用 SQL 查询，面向公共卫生领域 IT 人员和第三方系统开发者，用于搭建报表、BI 和指标。附带 3D 关系图查看器和基于 EXPLAIN 的只读查询验证脚本；地图绑定 PEC 5.5.28 版本，其他版本需重新提取验证。",
+   "highlights": [
+    "提供 PEC 5.5.28 数据库 1180 张表的结构说明、10648 个列描述与 1668 个外键关系",
+    "包含 41 条分 5 类的 SQL 查询，覆盖指标核算、主动搜索、免疫、登记与数仓建模",
+    "提供只读 schema 提取、SQL 验证（EXPLAIN）与 3D 关系图查看器脚本"
+   ],
+   "use_cases": [
+    "为 e-SUS APS PEC 数据库搭建 BI 看板与公共卫生指标报表",
+    "查阅 PEC 表结构和表间关系以开发集成系统",
+    "核验查询 SQL 在自身安装的 PostgreSQL 上是否可执行"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "esus-mapeamento-sql: mapa do banco PostgreSQL do e-SUS APS PEC 5.5.28 e catálogo de consultas SQL ／ PostgreSQL 9.6 a 16 ／ |Banco|PostgreSQL 9.6 a 16|É o banco do e-SUS PEC. Daqui saem a estrutura (`pg_catalog`, `information_schema`) e os testes com `EXPLAIN`| ／ |Driver|psycopg 3|Conectar no PostgreSQL só para leitura|",
+     "lines": [
+      1,
+      4,
+      91,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 e-SUS PEC 所用的 PostgreSQL 数据库提供结构文档、查询与验证脚本，属于服务数据库生态的工具而非存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "esus-mapeamento-sql: mapa do banco PostgreSQL do e-SUS APS PEC 5.5.28 e catálogo de consultas SQL ／ |Tabelas do PEC 5.5.28|1.180|`schema/tables/`| ／ .venv\\Scripts\\python.exe scripts\\extract_schema.py   # lê só a estrutura do banco",
+   "evidence_lines": [
+    1,
+    27,
+    145
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "weesrnp/esus-mapeamento-sql",
+  "sha": "18c7b8c404e0",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

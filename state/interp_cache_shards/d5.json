@@ -9815,5 +9815,136 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a457d56851a": {
+  "identity": {
+   "one_ler": "computer-use agent 资源目录：来源可溯的论文/模型/数据集/基准/工具编目",
+   "one_liner": "计算机使用代理（CUA）资源的来源可溯编目，含 JSONL/SQLite 数据",
+   "review": "该项目对计算机使用代理领域的论文、模型、数据集、基准、框架和工具进行带来源溯源的编目，每日三次定时发现新资源，并克隆后即可用 Python 脚本检索目录记录。面向研究者、RAG 系统和代理使用，数据以 JSONL 与 SQLite 形式发布，支持按主题、平台筛选；项目自述覆盖完整性是目标而非已验证声明。",
+   "highlights": [
+    "收录 3,245 条资源记录，含论文、模型、数据集、基准、框架、工具等类别，均带原始来源链接",
+    "每日三次定时（UTC 00:17/08:17/16:17）执行发现扫描，提供覆盖率账本与审核状态",
+    "目录数据以 JSONL 与 SQLite 提交，克隆后用 Python 3.11+ 无依赖脚本检索"
+   ],
+   "use_cases": [
+    "查找计算机使用代理领域按年份与主题整理的论文及原始来源",
+    "对比选择代理评测基准（平台、任务、评测器、版本）",
+    "为 RAG 系统或代理克隆完整目录数据做检索"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Use SQLite to join resources, environment/topic facets, and reviewed relations. See query examples. `data/catalog.jsonl` is committed; SQLite and JSON array exports are reproducible local build products.",
+     "lines": [
+      189
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明目录数据以 SQLite 形式提交供查询，SQLite 为其存储数据的组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT license（README L17 提及 Catalog checks MIT license）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**For people, RAG systems, and agents — clone the complete catalog:** ／ A source-backed collection of papers, models, datasets, benchmarks and tools for agents that use computers.",
+   "evidence_lines": [
+    25,
+    7
+   ]
+  },
+  "fn": "reacher-z/Awesome-CUA",
+  "sha": "9a457d56851a",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9574d917e126": {
+  "identity": {
+   "one_liner": "Swift 嵌入式加密数据库库，进程内读写 .blazedb 加密文件",
+   "review": "BlazeDB 是一个嵌入在 Swift 应用进程内运行的加密数据库库，数据以 .blazedb 文件形式存储在设备本地，通过密码派生加密密钥，支持保存/查询 Codable 结构体，并提供事务 API、WAL 崩溃恢复和 SwiftUI 实时查询。面向需要本地结构化存储的 Swift 开发者；不含 SQL、网络服务或多端同步，单写者模型限制文件只能由一个进程持有写入。",
+   "highlights": [
+    "嵌入应用进程运行，无需独立数据库服务，数据以加密 .blazedb 文件存储",
+    "提供事务 API 与基于磁盘恢复日志的崩溃恢复机制",
+    "支持 macOS/Linux（CI 运行时测试）、Apple 各平台编译测试，Android/KMM 为实验性"
+   ],
+   "use_cases": [
+    "笔记/日记类应用的本地加密结构化存储",
+    "离线目录/清单类应用在无网络时保存记录",
+    "单写者进程的本地任务或状态持久化"
+   ],
+   "cat_rule": null
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Swift app, local encrypted storage, document-style records|SQL, spreadsheets, or heavy ad hoc reporting → SQLite or GRDB| ／ Factual comparison with SQLite-style stores: Why not SQLite? · Compare embedded options.",
+     "lines": [
+      76,
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "BlazeDB 本身是嵌入数据库库，为应用程序提供存储能力，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BlazeDB keeps your app’s data in an encrypted file on the device and lets you read and write it with Swift types—no separate database server to install or host. ／ - **Embedded** — No separate database daemon; your app links the library. ／ - **Encrypted files** — Page encryption by default; password required at open (details and limits).",
+   "evidence_lines": [
+    3,
+    92,
+    94
+   ]
+  },
+  "fn": "Mikedan37/BlazeDB",
+  "sha": "9574d917e126",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

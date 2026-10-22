@@ -9985,5 +9985,141 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bb91009439d7": {
+  "identity": {
+   "one_liner": "从 GraphQL 类型定义生成查询、变更与数据库存储的 Node.js 框架",
+   "review": "Simfinity.js 是一个 Node.js 框架，开发者只需定义 GraphQL 对象类型，即可自动生成查询、变更、关系解析与数据库存储，后端可选 MongoDB/Mongoose 或 PostgreSQL 15+ 门面（生成真实表与外键）。内置校验、状态机、RBAC/ABAC 授权钩子及可选 MCP 工具，通过 npm 安装，适合用 JavaScript 构建数据驱动 API 的后端开发者。",
+   "highlights": [
+    "从 GraphQL 对象类型自动生成查询、变更、关系与数据库存储",
+    "提供 MongoDB/Mongoose 与 PostgreSQL 15+ 两种数据库门面，支持真实表、外键与索引生成",
+    "内置自定义校验、声明式状态机、RBAC/ABAC 授权及可选 MCP 工具"
+   ],
+   "use_cases": [
+    "用 GraphQL 快速搭建带 CRUD 与关系管理的后端 API",
+    "需要 MongoDB 与 PostgreSQL 双后端共享同一套模型定义的应用",
+    "需要声明式业务校验、状态机与授权规则的业务系统"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Simfinity.js — Define once. Build beyond. GraphQL, MongoDB, PostgreSQL, and optional MCP. ／ A Node.js framework that turns GraphQL object types into generated queries, mutations, relationships, and database storage. Use the established MongoDB/Mongoose facade or the PostgreSQL 15+ facade with real tables and foreign keys. ／ For a complete application, run the Barber examples: independent MongoDB and PostgreSQL backends with one shared Next.js frontend, synthetic demo data, Docker setup, and a dedicated CI workflow. Both backends consume released Simfinity 3.8.0 packages from npm. ／ ## PostgreSQL support ／ Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many linking entities, and references",
+     "lines": [
+      1,
+      5,
+      9,
+      55,
+      57
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用生成数据库存储层的框架组件，自身不充当数据库应用，属为数据库生态服务的开发工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Node.js framework that turns GraphQL object types into generated queries, mutations, relationships, and database storage. Use the established MongoDB/Mongoose facade or the PostgreSQL 15+ facade with real tables and foreign keys. ／ Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many linking entities, and references",
+   "evidence_lines": [
+    5,
+    57
+   ]
+  },
+  "fn": "simtlix/simfinity.js",
+  "sha": "bb91009439d7",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "da4bc74809aa": {
+  "identity": {
+   "one_liner": "面向 AI 的达梦 DM8 与 Redis 命令行客户端，统一 JSON 输出，默认只读",
+   "review": "ai-db-cli 是一个独立 Java CLI，按连接名对达梦 DM8 和 Redis 执行 SQL 或命令，面向 AI 代理等程序化调用方。它统一输出 JSON、默认只读，写入需同时满足连接开关、表/命令允许列表和 --allow-write 参数，并提供行数、超时与字节预算限制；macOS 分发包内置 OpenJDK 与驱动，无需另装 Java。首版不支持 TLS、Redis Cluster/Sentinel 及 SSH 隧道。",
+   "highlights": [
+    "统一 JSON 输出协议，所有命令（含错误与 --help）均返回 JSON 对象",
+    "默认只读，写入需连接开关、写允许列表与 --allow-write 三重条件，DML 在事务中执行并受 maxRows 回滚约束",
+    "SQL 使用 ? 参数绑定，提供每连接行数、超时和字节预算限制"
+   ],
+   "use_cases": [
+    "AI 代理或脚本以受控权限查询达梦数据库与 Redis",
+    "需要强制只读访问、按表/命令白名单授权的受限数据访问",
+    "macOS 环境下免安装 Java 和数据库客户端的独立部署"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "面向 AI 的多数据源命令行工具。首版支持 **达梦 DM8 + Redis**，按连接名调用，非交互执行，统一 JSON 输出，默认只读。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为操作达梦与 Redis 提供服务的命令行工具，本身不存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "项目代码 MIT，依赖许可见 THIRD_PARTY_NOTICES.md",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向 AI 的多数据源命令行工具。首版支持 **达梦 DM8 + Redis**，按连接名调用，非交互执行，统一 JSON 输出，默认只读。 ／ 独立 Java 17+ 项目，不依赖公司框架、Spring、数据库客户端或 `disql`。macOS 分发包内置裁剪后的 OpenJDK、JDBC 驱动和 Redis 客户端；使用者无需另装 Java。 ／ 默认配置只读。SQL 写入需要三个条件：连接开启写入、目标表在写允许列表、调用带 `--allow-write`。",
+   "evidence_lines": [
+    3,
+    5,
+    64
+   ]
+  },
+  "fn": "FREDdjdjfkk/ai-db-cli",
+  "sha": "da4bc74809aa",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

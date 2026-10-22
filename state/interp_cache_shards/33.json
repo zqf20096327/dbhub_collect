@@ -9293,5 +9293,137 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "847c660e06a1": {
+  "identity": {
+   "one_liner": "本地优先的科学文献 RAG 工具包与 FastAPI 服务，SQLite 持久化",
+   "review": "这是一个用于文献检索增强工作流的本地 Python 工具包和 FastAPI 服务：加载论文语料后可提问、检索证据片段、保存运行历史，并支持人工筛选、标注、导出 JSON/Markdown/BibTeX 及离线静态阅读。数据存储于 SQLite，默认提供无需模型凭证的 fake 适配器演示。适合需要在本地审查证据与复现流程的研究者。",
+   "highlights": [
+    "提供 FastAPI 服务与脚本免依赖的浏览器界面，用于浏览文献、段落与保存的运行记录",
+    "使用 SQLite 持久化文档、图数据与运行事件，支持冻结证据的离线阅读与导出（JSON/Markdown/BibTeX/静态 HTML）",
+    "支持人工筛选决策、证据标注、运行对比及检索质量基准测试"
+   ],
+   "use_cases": [
+    "本地文献语料的比较型/假设型问题检索与证据审查",
+    "论文筛选（screening）流程中的人工决策记录与结果导出",
+    "保存运行历史后离线复核答案及其引用来源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "literature workflows, with SQLite persistence and optional model-provider adapters.",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统用 SQLite 存储文档、图数据与运行事件，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**local-first Python toolkit and FastAPI service** for building inspectable ／ literature workflows, with SQLite persistence and optional model-provider adapters.",
+   "evidence_lines": [
+    9,
+    10
+   ]
+  },
+  "fn": "Francis1998/scholar-rag-agent",
+  "sha": "847c660e06a1",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fc66b652090b": {
+  "identity": {
+   "one_liner": "基于 Oracle AQ 的 TUI 应用，实时发送与查看数据库事件和调试消息",
+   "review": "OmniView 是一个 Go 编写的终端 TUI 应用，配合 PL/SQL 包 OMNI_TRACER_API，通过 Oracle Advanced Queuing 队列接收并实时显示来自 Oracle 数据库的跟踪消息与调试信息，支持全局跟踪、指定订阅者、webhook 转发及多数据库配置切换。面向使用 Oracle 数据库、需要在 TUI 中集中查看 trace 消息的开发与运维人员。运行需 Go 1.24+、Oracle Instant Client 23.7+ 及 CGO 编译环境。",
+   "highlights": [
+    "通过 Oracle Advanced Queuing 队列实时接收并显示跟踪消息，采用阻塞消费者模式",
+    "提供全局跟踪、按订阅者自动生成专属 PL/SQL 过程、webhook 转发三类消息发送方式",
+    "首次运行时自动部署 OMNI_TRACER_API 包、初始化队列并注册订阅者，支持 TUI 内动态切换数据库配置"
+   ],
+   "use_cases": [
+    "在 Oracle 数据库应用中集中查看实时 trace 与调试消息",
+    "将数据库侧跟踪消息转发到外部监控系统或日志聚合管道",
+    "面向多个命名订阅者的定向消息追踪"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "OmniView (also known as OmniInspect) is a Message Passing TUI (Text User Interface) application that enables sending event messages and debug traces from Oracle Database. It provides real-time tracing capabilities through Oracle Advanced Queuing (AQ) with a bl ／ 1. **Go Desktop Application** - A TUI application that connects to Oracle Database and listens for trace messages ／ 2. **PL/SQL Package (OMNI_TRACER_API)** - Oracle database objects that handle message enqueueing and dequeuing",
+     "lines": [
+      62,
+      66,
+      67
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Oracle 数据库提供事件/跟踪消息的观测组件，通过 Oracle AQ 与 PL/SQL 包与数据库交互，属于数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OmniView (also known as OmniInspect) is a Message Passing TUI (Text User Interface) application that enables sending event messages and debug traces from Oracle Database. It provides real-time tracing capabilities through Oracle Advanced Queuing (AQ) with a blocking consumer pattern for reliable message delivery. ／ 1. **Go Desktop Application** - A TUI application that connects to Oracle Database and listens for trace messages ／ 2. **PL/SQL Package (OMNI_TRACER_API)** - Oracle database objects that handle message enqueueing and dequeuing",
+   "evidence_lines": [
+    62,
+    66,
+    67
+   ]
+  },
+  "fn": "BasuruK/OmniInspect",
+  "sha": "fc66b652090b",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

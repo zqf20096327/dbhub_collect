@@ -10337,5 +10337,88 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "535891cfc6a1": {
+  "identity": {
+   "one_liner": "SQLite 时序 ETL 基准工具，比较三种加载策略的正确性与性能",
+   "review": "该项目提供可复现的金融时序 ETL 基准，通过确定性合成数据、独立逻辑状态校验（SHA-256 校验和）与中断恢复测试，比较原子全量替换、事务增量 upsert、追加历史三种 SQLite 加载策略。面向数据工程与基准测试使用者，仅覆盖单机、单进程、单写者的 SQLite 场景，不含分布式评估。",
+   "highlights": [
+    "内置确定性合成时序生成器与独立逻辑状态 oracle，用 SHA-256 校验和验证各策略结果一致",
+    "提供 100k 与 1m 两档可复现基准队列，含五组固定查询负载、预热与计时采样",
+    "包含中断与事务恢复测试、GitHub Actions CI（Python 3.11/3.12）与 Docker 运行方式"
+   ],
+   "use_cases": [
+    "比较不同 SQLite 加载策略在有状态更新、重复与冲突场景下的行为",
+    "为 ETL 流水线构建可复现的正确性与性能证据",
+    "演示带恢复测试与 CI 的基准实验流程"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "All three strategies are validated against the same independent logical-state oracle before performance results are summarized. ／ - Independent logical-state oracle with stable SHA-256 checksums ／ - validates every accepted state against the independent oracle",
+     "lines": [
+      27,
+      33,
+      143
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A correctness-first, reproducible time-series ETL and SQLite benchmark for comparing three loading strategies under stateful updates, duplicates, conflicts, stale revisions, and interruption recovery. ／ > How do different SQLite loading strategies behave when they must preserve the same logical state under reruns, updates, duplicates, stale revisions, conflicts, and failures? ／ - SQLite supplied by Python",
+     "lines": [
+      5,
+      19,
+      82
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为评估 SQLite 加载策略服务的基准测试工具，而非使用数据库提供业务功能的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A correctness-first, reproducible time-series ETL and SQLite benchmark for comparing three loading strategies under stateful updates, duplicates, conflicts, stale revisions, and interruption recovery. ／ scripts/benchmark.py ／ - freezes SQLite WAL and `synchronous=FULL`",
+   "evidence_lines": [
+    5,
+    135,
+    140
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SoheilGtex/finance-data-pipelines",
+  "sha": "535891cfc6a1",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

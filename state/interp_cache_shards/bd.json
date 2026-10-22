@@ -11949,5 +11949,145 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ef9efd276d9f": {
+  "identity": {
+   "one_liner": "MG 车辆自托管仪表盘，通过 SAIC iSmart API 读取车辆数据",
+   "review": "GarageStack 是一个面向现代 MG（SAIC 造）汽车的开源自托管 Web 应用，登录 SAIC iSmart API 后提供实时仪表盘、行程记录与地图、能耗统计、远程控制、气候预约和推送通知等功能。行程与遥测数据存入 PostgreSQL，整体以 Docker 单容器或 Compose 运行，适合自建 homelab 的 MG 车主。",
+   "highlights": [
+    "登录 SAIC iSmart API，实时展示电池、胎压、车门、气候等车辆遥测数据，支持远程控制与气候预约",
+    "自动保存行程并绘制地图与热力图，可导出报税用途的行程表格（CSV/电子表格）",
+    "通过 MQTT discovery 集成 Home Assistant，支持 OpenID Connect 单点登录，全部组件可在 Docker 中运行"
+   ],
+   "use_cases": [
+    "MG iSmart 车主自托管车辆状态监控与行程记录",
+    "需要留存商务/通勤/私人行程日志用于报税的场景",
+    "将车辆数据接入 Home Assistant 等 homelab 生态"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A single Docker image that bundles every service -- nginx, the .NET API + worker, PostgreSQL, Mosquitto, and the SAIC gateway. No Compose file or external database needed. Ideal for Unraid and similar NAS environments where running multiple containers is incon ／ > `POSTGRES_PASSWORD` is omitted -- a strong random password is auto-generated on first start and saved to `/data/.postgres_password`. Pass `-e POSTGRES_PASSWORD=yourpassword` explicitly if you need a known value (e.g. to connect with an external DB tool).",
+     "lines": [
+      153,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用数据库存储行程与遥测数据的车辆应用，PostgreSQL 打包于其 Docker 镜像内。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GarageStack is a free, open-source web app for **modern MG cars**, the ones built by SAIC Motor such as the MG4, MG5, ZS EV and HS PHEV. It signs in to the SAIC iSmart API, the same backend the official MG iSmart app uses, and turns what your car reports into something worth opening: ／ - **Keep it yours.** Everything runs in Docker on your own hardware, as one all-in-one container or a Compose stack. No subscription, and no account needed beyond your MG login.",
+   "evidence_lines": [
+    11,
+    20
+   ]
+  },
+  "fn": "joszz/GarageStack",
+  "sha": "ef9efd276d9f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "64c82ed50229": {
+  "identity": {
+   "one_liner": "schema 驱动的 TypeScript 全栈框架 monorepo",
+   "review": "一个 TypeScript monorepo，提供 schema 定义、校验、对象映射、HTTP 端点契约、类型化客户端、OpenAPI 生成、React 表单、DI、ORM、任务调度等一组 npm 包，面向用 TypeScript 构建全栈 Web 应用的开发者。持久层基于 Knex，含 ClickHouse 方言包和 PostgreSQL 任务持久化包；通过 npm 发布，采用 BSD-3-Clause 许可。",
+   "highlights": [
+    "单一 schema 驱动运行时校验、类型推断、JSON Schema 生成与 Standard Schema v1 集成",
+    "提供 Knex-backed ORM、迁移 CLI 及 ClickHouse 方言支持包",
+    "提供 PostgreSQL 任务持久化、事务入队与租约机制"
+   ],
+   "use_cases": [
+    "用共享 schema 构建类型安全的全栈 TypeScript Web 应用",
+    "在 Knex 项目中接入 ClickHouse 方言",
+    "在 PostgreSQL 上实现持久化任务调度"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`@cleverbrush/scheduler-postgres`|PostgreSQL job persistence, transactional enqueue and fenced leases.|",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|`@cleverbrush/knex-clickhouse`|ClickHouse dialect support for Knex.|",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用开发提供持久化助手、ORM、方言包和任务持久化等数据库相关组件，自身不依赖某库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSD-3-Clause",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cleverbrush is a schema-first TypeScript framework monorepo. It provides the ／ |`@cleverbrush/orm`|Knex-backed ORM layer with typed entity maps and query helpers.| ／ |`@cleverbrush/knex-clickhouse`|ClickHouse dialect support for Knex.|",
+   "evidence_lines": [
+    9,
+    33,
+    36
+   ]
+  },
+  "fn": "cleverbrush/framework",
+  "sha": "64c82ed50229",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

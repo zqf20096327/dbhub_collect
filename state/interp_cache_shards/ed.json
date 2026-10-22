@@ -9384,5 +9384,59 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f4f504db87e5": {
+  "identity": {
+   "one_liner": "2.5D 俯视角动作 RPG，Godot 客户端 + Flask/SQLite 服务端",
+   "review": "Elusion 是一款可在桌面浏览器游玩的多人在线 2.5D 动作 RPG，包含四个职业、元素怪物、交易经济、组队与语音等功能。存档由服务端权威管理，后端使用 Flask 与 SQLite，附带 API 安全审计与 8500+ 自动化检查。适合作为独立游戏与游戏服务端架构的参考项目。",
+   "highlights": [
+    "提供实时多人游玩，含组队、聊天、玩家交易与浏览器内置语音（经 Cloudflare TURN 中继）",
+    "采用服务端权威架构：服务端持有等级、XP、掉落等数据，客户端通过 Flask API 读写",
+    "包含 GM 面板，可配置世界事件、区域激活等服务器行为"
+   ],
+   "use_cases": [
+    "在浏览器中游玩的多人动作 RPG",
+    "参考 Godot 客户端与 Flask/SQLite 服务端的存档与经济实现",
+    "学习客户端-服务端存档迁移与 API 安全审计流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 Flask + SQLite 存储数据的游戏应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A top-down 2.5D action RPG built in Godot 4.7 with GDScript, backed by a Flask account service. Four playable classes, six enemy families in forty-three elemental variants, collectable combat pets, fishing and cooking, player-to-player trading over a taxed economy, other players drawn live wherever you are and fighting the same monsters, and a complete run from town to final boss. ／ Elusion is a PC game, played with a keyboard and mouse in a desktop browser at play.elusionrpg.com. It is not made for phones. ／ `CharacterData` holds a `SaveStorage` and never asks which implementation it has. That seam is what let the game move from a local file to the Flask service without touching the twenty-nine places that call `save_data()`. The server is the authority now — it owns level, XP, the derived stat maxima and every loot roll — so the anti-tamper passes that existed to defend a local file against a text editor are skipped rather than run against data they can no longer say anything useful about. Writes are still debounced: saving on every stat change was firing about twenty times a second in normal play.",
+   "evidence_lines": [
+    3,
+    17,
+    68
+   ]
+  },
+  "fn": "Tunacanman2EZ/Elusion_RPG",
+  "sha": "f4f504db87e5",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9932,5 +9932,139 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "922a5ca641cf": {
+  "identity": {
+   "one_liner": "DSH 酒馆的 SQLite 存档接管插件，服务端计算版",
+   "review": "这是一个面向 DSH Tavern（酒馆）的插件，把聊天记录、会话事件和 MVU 变量历史交给 SQLite 增量存档与管理，支持历史按需读取、物理尾部回退和同事务提交，并通过安装脚本一键装卸。面向使用酒馆并希望改用 SQLite 存档的玩家；仅适配特定上游版本（当前 Tavern 2.7.0），不带 MVU 或卡脚本实现。",
+   "highlights": [
+    "使用 SQLite 增量存档，消息楼层与头字段分开存储，局部更新只处理变化部分，会话事件由事务与 WAL 管理",
+    "支持历史按需读取、读缓存预算控制（环境变量配置），以及正文与变量同库同事务提交和物理尾部回退",
+    "提供 Windows 菜单与 Linux CLI 一键安装/卸载，卸载保留原档与 SQLite 数据库"
+   ],
+   "use_cases": [
+    "为 DSH Tavern 酒馆会话提供 SQLite 增量存档与按需读取",
+    "需要对酒馆存档做精确回退与失败轮清理的玩家",
+    "保留原始 JSON 存档、在新 SQLite 分叉中继续游玩"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "这是面向 DSH Tavern 的存储与服务端计算接线插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算调用酒馆自身的服务端执行链，浏览器只保留界面职责。插件不自带 MVU、卡脚本、Helper 或 VM 实现。",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "插件为酒馆应用接管会话数据存储，SQLite 是其存数据所用的数据库，非为数据库生态服务的通用工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "基于 DSH Tavern 修改版，保留原来源声明，GNU AGPL v3",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向 DSH Tavern 的存储与服务端计算接线插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算调用酒馆自身的服务端执行链，浏览器只保留界面职责。插件不自带 MVU、卡脚本、Helper 或 VM 实现。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。| ／ 基于 DSH Tavern 适配，保留原来源声明与 GNU AGPL v3 许可。本项目是独立修改版，不是上游官方发行；随包官方恢复字节的许可及对应源码入口也保留。",
+   "evidence_lines": [
+    12,
+    21,
+    116
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "922a5ca641cf",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "578073579bb7": {
+  "identity": {
+   "one_liner": "自托管发布说明工具：从 PR/issue 生成多受众发布说明",
+   "review": "ReleaseFlow 是一个自托管的发布说明生成工具，通过 webhook 或轮询收集 GitHub、GitLab、Linear、Jira 的变更，规则分类后可选用 AI 起草摘要，经人工审核批准后按受众生成多语言说明并发布到多个渠道。使用 Java 21/Spring Boot 和 PostgreSQL 构建，适合需要多人审核发布流程的软件团队。AI 生成和翻译功能为可选项。",
+   "highlights": [
+    "通过签名 webhook 或定时轮询收集 GitHub、GitLab、Linear、Jira 的合并 PR 与已完成 issue，可导入近 90 天历史",
+    "规则分类优先于 AI 摘要，破坏性变更和敏感文件变更强制人工审核，发布说明冻结后经自动化规则分发",
+    "按受众（运维、贡献者、最终用户等）用 Mustache 模板生成最多五种语言的说明，由 DeepL 翻译"
+   ],
+   "use_cases": [
+    "团队需要将多个代码托管/项目管理系统的变更汇总为面向不同读者的发布说明",
+    "发布流程要求每条变更经人工审核与批准后方可发布",
+    "需要将发布说明自动分发到 GitHub Releases、Slack、Notion、Confluence 等渠道"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It is self-hosted: one Java 21 / Spring Boot application and PostgreSQL, with an ／ The quickest way to try a released version: the published image and PostgreSQL on one",
+     "lines": [
+      62,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为一个使用 PostgreSQL 存储数据的 Java/Spring Boot 应用，不提供数据库生态服务功能",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It is self-hosted: one Java 21 / Spring Boot application and PostgreSQL, with an ／ Getting started. The bundle is for one machine, not",
+   "evidence_lines": [
+    62,
+    103
+   ]
+  },
+  "fn": "hoangluongtran0309/ReleaseFlow",
+  "sha": "578073579bb7",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

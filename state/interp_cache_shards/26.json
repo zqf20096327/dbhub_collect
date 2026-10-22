@@ -9771,5 +9771,140 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b577db2f3364": {
+  "identity": {
+   "one_liner": "将多种编码代理会话历史索引到本地 SQLite 并统一搜索的 CLI 工具",
+   "review": "ai-hist 读取 Claude Code、Codex、Cursor、Grok、Muse Code、OpenCode、Devin CLI 等工具的本地会话记录，索引进一个 SQLite 库，提供全文搜索、原生 resume 命令输出、上下文打包交接，并附带 MCP 服务器（ai-hist-mcp）让代理查询自身历史。面向同时使用多个编码 CLI 的开发者；本地优先，远程采集需安装插件，OpenCode 与 Devin 会话不支持原生 resume。",
+   "highlights": [
+    "将 7 种编码代理工具的会话索引到统一本地 SQLite 库，支持全文搜索与恢复命令输出",
+    "提供 MCP 服务器，暴露搜索、会话事件、工具调用、文件编辑等查询工具",
+    "提供 Rust crate（ai-hist）供 Rust 程序嵌入读取会话数据，并支持 NDJSON 导出"
+   ],
+   "use_cases": [
+    "在本机跨多个编码代理工具统一检索历史会话",
+    "在不同代理（如 Claude 与 Codex）之间打包交接任务上下文",
+    "通过 MCP 让运行中的代理查询自身的过往会话与工具调用记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Local memory for **Claude Code**, **Codex**, **Cursor**, **Grok**, **Muse Code**, **OpenCode**, and **Devin CLI**. Your agent sessions are indexed into one local SQLite database. Search them all at once, jump back into a session with its harness's native resum",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明会话被索引进工具自身使用的本地 SQLite 数据库，SQLite 是其存储依赖而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Local memory for **Claude Code**, **Codex**, **Cursor**, **Grok**, **Muse Code**, **OpenCode**, and **Devin CLI**. Your agent sessions are indexed into one local SQLite database. Search them all at once, jump back into a session with its harness's native resume command, and hand a compact context pack to another agent — or to a teammate's agent — to continue the work. ／ npm install -g ai-hist ／ npx -y ai-hist-mcp",
+   "evidence_lines": [
+    5,
+    24,
+    63
+   ]
+  },
+  "fn": "AgentWorkforce/relayhistory",
+  "sha": "b577db2f3364",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b5e277a872b3": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 Spring AI 的员工反馈管理平台",
+   "review": "FeedbackHub 是一个面向组织内部的员工反馈管理系统，支持实名或匿名发帖、回复、投票、话题组织与管理员审核，并通过 Spring AI 集成 Ollama/OpenAI 做情感分析、话题识别与垃圾回复检测。数据层使用 Spring Data JPA、Hibernate、PostgreSQL 和 Flyway，可通过 Docker Compose 或 Kubernetes 部署。适合希望在企业内部署反馈收集平台的团队参考使用。",
+   "highlights": [
+    "使用 Spring AI 支持 Ollama 和 OpenAI 两种聊天模型提供者，可通过环境变量切换",
+    "支持实名或匿名发帖、投票、回复，以及管理员对用户和内容的管理",
+    "提供 Docker Compose 与 Kind Kubernetes 部署方式，并内置 Agent Skills 用于需求与代码工作流"
+   ],
+   "use_cases": [
+    "组织内部员工匿名或实名提交意见与建议",
+    "对反馈内容做 AI 情感分析与话题归类",
+    "需要管理员审核管理消息与用户的社区场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Data:** Spring Data JPA, Hibernate, PostgreSQL, and Flyway",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确其为反馈管理平台，使用 PostgreSQL 存储数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A feedback management platform where an organization can provide their employees with a private space to: ／ * **Data:** Spring Data JPA, Hibernate, PostgreSQL, and Flyway",
+   "evidence_lines": [
+    7,
+    27
+   ]
+  },
+  "fn": "sivaprasadreddy/feedback-hub",
+  "sha": "b5e277a872b3",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

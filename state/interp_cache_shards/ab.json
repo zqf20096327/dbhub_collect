@@ -10170,5 +10170,408 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aa17f35de2a2": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机运行",
+   "review": "ResumeForge 是一个本地优先的自托管求职工作台，提供岗位管理、事实台账、AI 定制简历生成、多格式导出、模拟面试、自动投递与求职统计等功能，数据存储在本机 SQLite，不注册账号。面向求职者用户，AI 部分需自行配置模型服务商的 API Key。",
+   "highlights": [
+    "事实台账机制：只有确认过的事实参与 AI 生成，生成结果与资料库逐条比对并给出防虚构警告",
+    "支持 PDF/Word/Markdown/纯文本/JSON/HTML 多格式导出，可加水印与一键脱敏",
+    "本地优先：数据存于本机 SQLite 数据目录，解析、检查、预览、导出可离线使用"
+   ],
+   "use_cases": [
+    "求职期间集中管理岗位、简历版本与投递进度",
+    "按岗位 JD 生成并核对定制简历，防止 AI 编造经历",
+    "模拟面试练习与面试经验沉淀"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员| ／ 简历通架构图：React 前端 → 同源 /api → FastAPI 后端 → 本地 SQLite / 你配置的模型服务商 / 本机浏览器",
+     "lines": [
+      50,
+      359
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明使用本地 SQLite 存储简历与资料数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员|",
+   "evidence_lines": [
+    50
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "aa17f35de2a2",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6061926912bb": {
+  "identity": {
+   "one_liner": "基于 SQLite 与 APCu 的 WordPress 持久对象缓存插件",
+   "review": "该插件为 WordPress 提供以 SQLite 为存储后端的持久对象缓存，可选用 APCu 共享内存加速，并支持 igbinary 序列化与 WP-CLI 管理命令。适用于单机部署、且无法使用 Redis/Memcached 缓存服务器的站点；README 明确说明其不适用于多 Web 服务器负载均衡环境，且不会替换站点原有的 MySQL/MariaDB 数据库。",
+   "highlights": [
+    "使用 PHP 的 SQLite3 扩展存储缓存对象，可选 APCu 内存加速",
+    "提供 WP-CLI 命令进行安装、激活与缓存大小配置",
+    "支持多站点（multisite）安装及可配置的 SQLite journal 模式、缓存文件路径等参数"
+   ],
+   "use_cases": [
+    "单机 WordPress 站点需要持久对象缓存且无 Redis/Memcached 服务器时",
+    "使用 WP-CLI 的站点需要跨进程一致的缓存",
+    "希望降低 MariaDB/MySQL 数据库查询负载的场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "It's about making your site's web server perform better. An object cache does that by reducing the workload on your MariaDB or MySQL database. This is not a page cache; these persistent objects go into a different kind of cache. These objects aren't chunks of  ／ Without a persistent object cache, every WordPress page view must use your MariaDB or MySQL database server to retrieve everything about your site. When a user requests a page, WordPress starts from scratch and loads everything it needs from your database serv ／ **No.** Your MariaDB or MySQL database SQL server still holds all your content. All your site's imports, exports, backups and other database operations continue to function normally. This plugin uses SQLite simply to hold named values. For example, a value nam",
+     "lines": [
+      27,
+      31,
+      156
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "It's about making your site's web server perform better. An object cache does that by reducing the workload on your MariaDB or MySQL database. This is not a page cache; these persistent objects go into a different kind of cache. These objects aren't chunks of  ／ Without a persistent object cache, every WordPress page view must use your MariaDB or MySQL database server to retrieve everything about your site. When a user requests a page, WordPress starts from scratch and loads everything it needs from your database serv ／ **No.** Your MariaDB or MySQL database SQL server still holds all your content. All your site's imports, exports, backups and other database operations continue to function normally. This plugin uses SQLite simply to hold named values. For example, a value nam",
+     "lines": [
+      27,
+      31,
+      156
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# SQLite Object Cache ／ **Tags:** cache, object cache, sqlite, performance, apcu \\ ／ Github Plugin URI: https://github.com/OllieJones/sqlite-object-cache \\",
+     "lines": [
+      1,
+      5,
+      13
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "**No.** Your MariaDB or MySQL database SQL server still holds all your content. All your site's imports, exports, backups and other database operations continue to function normally. This plugin uses SQLite simply to hold named values. For example, a value nam",
+     "lines": [
+      156
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 WordPress 生态服务，通过减少对 MariaDB/MySQL 数据库的查询负载为数据库生态提供缓存组件功能。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A persistent object cache helps your site perform well. This one uses the widely available SQLite3 extension, and optionally the igbinary and APCu extensions to php. Many hosting services offer those extensions, and they are easy to install on a server you control. ／ It's about making your site's web server perform better. An object cache does that by reducing the workload on your MariaDB or MySQL database. This is not a page cache; these persistent objects go into a different kind of cache. These objects aren't chunks of web pages ready for people to view in their browsers, they are data objects for use by the WordPress software. ／ A fast persistent object cache backend for the rest of us, powered by SQLite and accelerated by APCu",
+   "evidence_lines": [
+    23,
+    27,
+    19
+   ]
+  },
+  "fn": "OllieJones/sqlite-object-cache",
+  "sha": "6061926912bb",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "56cf7da59662": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的数据库安全网关与 MCP Server",
+   "review": "AgentSQL（智盾）是一个用 Go 编写的数据库安全网关，拦截 AI Agent 经 MCP 发出的 SQL 请求，依次执行身份认证、SQL 解析、授权规则评估、受控执行、结果脱敏与审计。原生支持 PostgreSQL 与 MySQL，另对 Oracle、SQL Server、达梦、金仓、openGauss 等多款数据库提供指定版本的受控只读路径。内置 Web 控制台，适合需要将大模型 Agent 接入生产数据库并做权限与审计管控的运维与安全团队。注意多数数据库仅验证了指定版本、合成实例的只读子集。",
+   "highlights": [
+    "提供 stdio 与 Streamable HTTP 双 MCP 承载，包含 12 个基础数据库工具",
+    "实现认证、授权、SQL AST 规则、危险 SQL 拦截、人工审批与 fail-closed 错误处理",
+    "提供列级脱敏（mask/hash/block/range 四种算法）、审计导出、Prometheus 指标与 Web 控制台"
+   ],
+   "use_cases": [
+    "让 AI Agent 通过 MCP 受控访问生产数据库",
+    "对 Agent 发出的 SQL 做授权、脱敏与审计合规",
+    "多款国产及商业数据库的指定版本受控只读接入"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "AgentSQL（中文品牌名：智盾，控制台显示为「AgentSQL 智盾控制台」）是面向 AI Agent 的数据库安全网关与生产级 MCP Server：让模型发出的每条 PostgreSQL/MySQL 请求在到达数据库前，经过身份认证、SQL 解析、授权与规则评估、受控执行、结果脱敏和审计。",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "AgentSQL（中文品牌名：智盾，控制台显示为「AgentSQL 智盾控制台」）是面向 AI Agent 的数据库安全网关与生产级 MCP Server：让模型发出的每条 PostgreSQL/MySQL 请求在到达数据库前，经过身份认证、SQL 解析、授权与规则评估、受控执行、结果脱敏和审计。",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "v2.2.0 在 Oracle AI Database 26ai Free、`FREEPDB1`、服务端 `23.26.3.0.0` 指定合成实例中，把原生驱动的窄 SELECT 路径接入真实 HTTP MCP、最小权限账号、R010、脱敏和持久审计；双客户端、权限撤销及业务库/独立审计库断线恢复也通过。运行账号未验证 `PLAN_TABLE` 写权限，本版 Oracle 路径不预执行计划；商业版、TCPS、主备及完整生产支持未验证，见发布说明与候选验收。",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 可追溯运维：默认零配置 SQLite；可选 PostgreSQL 15+ 控制面（PostgreSQL 18 为基准，metadata 与 audit 可分库）；支持审计导出（面向机器的 JSONL，以及 Excel/WPS 可直接打开、带公式注入防护的中文 CSV）、审批决策闭环、Prometheus 指标与健康/就绪探针。",
+     "lines": [
+      52
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "v2.3.0 在 SQL Server 2025 Developer 指定 Linux x86_64 合成实例中，使用校验证书的严格 TLS 和仅获目标表 `SELECT`、数据库级 `SHOWPLAN` 的临时账号，完成真实 HTTP MCP、R010、手机号脱敏、持久审计、双客户端及撤权和断线恢复验证。其他 SQL Server 版本、Windows、Always On、生产证书轮换、复杂 T-SQL 和完整生产支持未验证；公开 Live Demo 仍使用合成 PostgreSQL 数据。见发布说明、候选验收与",
+     "lines": [
+      22
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "v2.7.0 为 ClickHouse 26.8.31.2 指定严格 TLS 单节点增加 Agent MCP `query_analytics`：只接收表名、显式列、String 等值条件及 1–100 行限制。网关逐次核验精确表列授权，服务端生成参数化查询并限制资源，在来源脱敏和持久预检、终态审计成功后交付。真实 HTTP MCP、MCP Inspector 0.16.8、Dify MCPClient 1.17.1、权限撤销及断库恢复已在合成数据上验证；集群、其他版本和完整生产支持未验证。见发布说明与候选验收。",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|TiDB|适配中|执行计划（EXPLAIN）适配实现中|",
+     "lines": [
+      84
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "|OceanBase|适配中|执行计划（EXPLAIN）适配实现中|",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "|PolarDB for PostgreSQL|协议路径已实测|指定 PG 15 社区镜像复用 `db_type=postgres`；非商业服务认证|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "v1.5.0 对达梦、金仓和 Vastbase 的指定实例深入验证真实 MCP 客户端、权限撤销、断库恢复及审计。v1.6.0 在相同指定实例和受控只读子集内补齐故障关闭。v1.7.0 为瀚高 9.0.10 企业版 PG 模式增加独立 `highgo` 类型及有界只读路径，并为金仓 V9R1C10 PG 模式补充证书校验与凭据轮换。v1.8.0 在指定 Vastbase G100 Build 9 PG 模式实例验证 `verify-full`、证书和账号轮换、MCP 双客户端、脱敏与审计；主备高可用和完整生产支持仍",
+     "lines": [
+      16
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "v2.4.0 为 openGauss 社区版 7.0.0 LTS 指定构建增加独立 `opengauss` 类型，强制校验证书和只读会话，仅开放明确 schema、`FROM ONLY` 物理单表、有界直接列 SELECT。在最小权限合成实例中验证真实 MCP、R010、手机号脱敏、审批、持久审计、双客户端、权限撤销、断线恢复和 `gs_dump`/`gs_restore`。GaussDB 商业版、其他构建、主备、写入、B2/B5 和完整生产支持未验证。见发布说明与候选验收。",
+     "lines": [
+      24
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "mention",
+     "quote": "v2.4.0 为 openGauss 社区版 7.0.0 LTS 指定构建增加独立 `opengauss` 类型，强制校验证书和只读会话，仅开放明确 schema、`FROM ONLY` 物理单表、有界直接列 SELECT。在最小权限合成实例中验证真实 MCP、R010、手机号脱敏、审批、持久审计、双客户端、权限撤销、断线恢复和 `gs_dump`/`gs_restore`。GaussDB 商业版、其他构建、主备、写入、B2/B5 和完整生产支持未验证。见发布说明与候选验收。",
+     "lines": [
+      24
+     ]
+    },
+    {
+     "db": "TDSQL",
+     "rel": "mention",
+     "quote": "|TDSQL for PostgreSQL|待目标环境验证|PG 协议候选；商业版未实测，不能用 OpenTenBase 结果替代|",
+     "lines": [
+      86
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "v2.1.0 在 YashanDB 23.4.1.109 指定实例、独立客户端 23.4.7.100 和受限只读 SQL 子集内，验证最小权限账号的真实 HTTP MCP、R010、脱敏、独立持久审计、MCP Inspector/Dify 以及断库恢复；并补齐已认证 SQL 工具的数据源可见性预检拒绝审计。其他崖山版本、TLS、主备和完整生产支持未验证，见发布说明与候选验收。",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是位于 AI Agent 与数据库之间的安全网关/MCP Server 组件，为数据库访问提供认证、授权、脱敏与审计服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "PolarDB",
+    "Dameng",
+    "openGauss",
+    "YashanDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "自 v0.5.0 起代码采用 Apache-2.0，另有 Commercial License；历史 v0.4.0 发布物按原许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AgentSQL（中文品牌名：智盾，控制台显示为「AgentSQL 智盾控制台」）是面向 AI Agent 的数据库安全网关与生产级 MCP Server：让模型发出的每条 PostgreSQL/MySQL 请求在到达数据库前，经过身份认证、SQL 解析、授权与规则评估、受控执行、结果脱敏和审计。 ／ AI Agent → LLM / MCP Client → AgentSQL 网关 → PostgreSQL / MySQL ／ - 默认拒绝的安全链路：API Key 认证、Agent 能力档位、对象/列授权、SQL AST 规则与 fail-closed 错误处理。",
+   "evidence_lines": [
+    12,
+    41,
+    49
+   ]
+  },
+  "fn": "cuipengdba/agentsql",
+  "sha": "56cf7da59662",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6d72634a1c20": {
+  "identity": {
+   "one_liner": "通过 MCP 将 AI agent 连接到多台 T3 Code 服务器的网关",
+   "review": "该项目是一个 MCP 网关，让 Grok Bot、Notion 等 MCP 客户端通过单一连接访问多台机器上的 T3 Code 服务器，支持分配 Read/Operate 权限、跟踪任务状态、通过 webhook 接收事件以及查看 PR 变更。它面向使用 AI 编码代理管理多机项目的开发者，以 Git checkout 源码方式运行，需要 Node.js 24.x/26.x 及已运行的 T3 Code 服务器。",
+   "highlights": [
+    "通过单一 MCP 连接将 agent 接入多台机器上的 T3 项目",
+    "提供 Read/Operate 两级访问控制及按机器/项目粒度的授权",
+    "支持 webhook 事件推送、任务状态跟踪与 PR 缓存查询",
+    "提供私有操作仪表盘，并支持项目与模型发现"
+   ],
+   "use_cases": [
+    "让 MCP 客户端（如 Grok Bot、Notion）远程驱动多台机器上的编码任务",
+    "通过 webhook 在任务完成或需要人工输入时唤醒机器人",
+    "通过仪表盘查看各机器健康状态、已连接 agent 与待处理任务"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "该网关为 AI agent 生态提供服务，路由编码任务至 T3 服务器，不依赖目标候选库存数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "T3 Fleet Gateway connects Grok Bot, Notion and other MCP clients to your T3 servers through one connection. Your agent can find projects, start work, answer worker questions and bring back the result. Each new job gets a T3 thread you can open in T3 whenever you want: a named project's job gets its own git worktree and branch, and work with no named project can run in a machine's T3 scratch workspace. ／ A bot connects to one gateway, which routes coding work to T3 projects on several machines. ／ You need an always-on machine with Node.js 24.22.1+ on 24.x or 26.12.1+ (older releases do not block the compromised eMudhra intermediates), a running T3 Code server and its `t3` CLI. A coding agent on that machine can do the setup. The gateway runs from a Git checkout; it is not published to npm.",
+   "evidence_lines": [
+    7,
+    9,
+    18
+   ]
+  },
+  "fn": "boundsj/t3-fleet-gateway",
+  "sha": "6d72634a1c20",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

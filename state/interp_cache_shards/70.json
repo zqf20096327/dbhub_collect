@@ -10012,5 +10012,274 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "394c8b28965e": {
+  "identity": {
+   "one_liner": "DuckDB 的 WebAssembly 版本，在浏览器中运行 OLAP SQL 数据库",
+   "review": "该仓库将 DuckDB 编译为 WebAssembly，使这个进程内 SQL OLAP 数据库可以在浏览器和 Node.js 中运行。它面向需要在浏览器内做 SQL 分析的开发者，支持读取 Parquet、CSV、JSON 文件，与 Arrow 交互，并提供 npm 包分发；多线程模式仍属实验性，扩展采用运行时按需加载。",
+   "highlights": [
+    "提供 npm 包 @duckdb/duckdb-wasm，经 WebAssembly 在 Chrome、Firefox、Safari 和 Node.js 中运行",
+    "可读取 Parquet、CSV、JSON 文件（经由 Filesystem API 或 HTTP 请求），并通过 ATTACH 加载 DuckDB 数据库文件",
+    "支持核心、社区及第三方扩展的运行时按需加载，包括 sqlite_scanner、h3、icu、parquet 等"
+   ],
+   "use_cases": [
+    "在浏览器中直接执行 SQL 分析查询",
+    "在前端读取 Parquet/CSV/JSON 数据并进行分析",
+    "在 Web 应用中嵌入 DuckDB 作为进程内分析引擎"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Will show that h3, icu, parquet, quack and sqlite_scanner have been loaded.",
+     "lines": [
+      67
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是 DuckDB 数据库的 WebAssembly 构建/移植，为在浏览器环境中运行数据库提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DuckDB-Wasm brings DuckDB to every browser thanks to WebAssembly. ／ Duckdb-Wasm speaks Arrow fluently, reads Parquet, CSV and JSON files backed by Filesystem APIs or HTTP requests and has been tested with Chrome, Firefox, Safari and Node.js. Learn more about DuckDB-Wasm from our VLDB publication or the recorded talk. ／ DuckDB-Wasm is currently based on DuckDB v1.5.6.",
+   "evidence_lines": [
+    23,
+    25,
+    32
+   ]
+  },
+  "fn": "duckdb/duckdb-wasm",
+  "sha": "394c8b28965e",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5740bb77ad7": {
+  "identity": {
+   "one_liner": "可在页面上直接编辑的 Svelte 建站系统，内置 SQLite 存储",
+   "review": "Editable 是一个基于 Svelte 的网站项目，允许编辑者直接在页面上修改内容，而内容模型、组件、布局与样式保留在用户自己的代码仓库中。站点数据存储在 SQLite 数据库（data/db.sqlite3）与上传资产目录中，通过 Git 模板方式安装，用 pnpm 运行开发服务器，适合希望自托管、自有代码且无需独立 CMS 的开发者。",
+   "highlights": [
+    "编辑者可直接在页面上编辑站点内容，无需单独的 CMS",
+    "站点以 Git 仓库模板形式分发，代码归用户所有，可拉取上游更新",
+    "提供 Node、TextProperty、MediaProperty、NodeArrayProperty、CustomProperty 等编辑原语，基于 Svedit 编辑引擎"
+   ],
+   "use_cases": [
+    "开发者搭建自有代码、可直接在页面编辑内容的网站",
+    "需要无独立 CMS 的内容编辑流程",
+    "基于 Svelte 组件定制内容模型与布局的项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That folder is `data/`: an SQLite database (`db.sqlite3`) and uploaded assets (`assets/`). Locally it defaults to `./data`; on Fly.io it's a persistent volume at `/data`; on a VPS it's `/data` on the host, bind-mounted into the container at the same path. The ",
+     "lines": [
+      672
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明站点数据存储于自身的 SQLite 数据库文件（data/db.sqlite3），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Editable lets you build and edit a Svelte website without adding a separate CMS. Editors work directly on the page, while the content model, components, layouts, and styling remain in the codebase you own. Use the included defaults and adapt the colors and fonts to deploy a beautiful site within minutes — or customize the entire layout and model your own content types. This manual explains how to build and run a site with Editable.",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "michael/editable",
+  "sha": "e5740bb77ad7",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "73bf2f10405f": {
+  "identity": {
+   "one_liner": "八日轮转制学校课表 Web 应用，支持账号/纯本地双模式",
+   "review": "一个面向轮转制课表学校学生的课表应用：输入课程或上传课表 PDF，即生成每周实际课表。它提供账号模式（课表存于服务器 SQLite）与本地模式（存于浏览器 localStorage，数据不出本机）两种运行方式，由 Flask 实现后端 API，支持 PDF 和 .ics 导入。适合该校学生使用，也可供同类学校自行部署参考。",
+   "highlights": [
+    "支持账号模式与本地模式两种运行方式，课表可存于服务器 SQLite 或浏览器 localStorage",
+    "支持从学生信息系统导出的 PDF 文件和 .ics（RFC 5545）文件导入课表",
+    "课表采用纯文本格式，可手工编辑，按锚点日期推算轮转日，可通过添加一行修正停课影响"
+   ],
+   "use_cases": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Where the schedule lives|a row in the server's SQLite database|the browser's `localStorage`|",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用 SQLite 存储用户课表数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Where the schedule lives|a row in the server's SQLite database|the browser's `localStorage`| ／ app.py                  Flask app: auth, admin, the API, both modes",
+   "evidence_lines": [
+    19,
+    83
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Larryzpl123/smart-schedule",
+  "sha": "73bf2f10405f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7372b730faf2": {
+  "identity": {
+   "one_liner": "语音优先、本地优先的个人语音记账应用，账单写入本地 SQLite",
+   "review": "面向中国内地 18-35 岁学生与年轻职场人的语音记账应用：按住说话后经火山流式 ASR 转写、DeepSeek 结构化提取，多笔账单自动写入本地 SQLite 并支持 8 秒撤销。采用 Expo/React Native 客户端加 Fastify 语音网关，本地优先、首启无需登录；当前处于 M5 内测阶段，未正式上架。",
+   "highlights": [
+    "语音链路：手机 PCM 经 Fastify WebSocket 到火山双向流式 ASR，再由 DeepSeek 做结构化提取",
+    "本地优先：账单首先写入本地 SQLite，网络、登录和云备份不是记账前置条件",
+    "共享领域模型：金额统一使用整数分，客户端、服务端和测试共用 Zod 契约，仓库含 53 项自动化测试"
+   ],
+   "use_cases": [
+    "个人日常语音快速记账（一句话生成多笔账单）",
+    "手动记账、分类管理与月度统计下钻",
+    "自部署语音记账服务（需自行配置 ASR/LLM 供应商密钥）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "4. 多笔账单自动写入本地 SQLite，并展示合并结果。 ／ |本地 SQLite 与删除撤销|✅ 已完成| ／ - **本地优先**：账单首先写入 SQLite，网络、登录和云备份不是记账前置条件。",
+     "lines": [
+      49,
+      64,
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为应用本地账单存储使用，项目本身是记账应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 开源，但名称、Logo 与官方视觉不随代码授权（TRADEMARK.md 约定）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "4. 多笔账单自动写入本地 SQLite，并展示合并结果。 ／ - **本地优先**：账单首先写入 SQLite，网络、登录和云备份不是记账前置条件。 ／   A[Expo / React Native] -->|本地数据| B[(SQLite)]",
+   "evidence_lines": [
+    49,
+    77,
+    87
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "zhixiang-luo/shengzhang",
+  "sha": "7372b730faf2",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

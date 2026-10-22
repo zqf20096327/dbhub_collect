@@ -10165,5 +10165,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68ec42fb8eb6": {
+  "identity": {
+   "one_liner": "Conduit 的 PostgreSQL 连接器，提供 source/destination 与 CDC",
+   "review": "Conduit 平台的 PostgreSQL 连接器插件，实现 source 与 destination 两端。source 先对表做快照读取，再通过创建逻辑复制槽和 publication 进入 CDC 模式捕获变更；destination 写入数据并按主键 upsert。需要复制权限和 REPLICA IDENTITY 配置，用于在 Conduit 数据管道中读取或写入 PostgreSQL。安装为 Conduit 插件使用。",
+   "highlights": [
+    "提供 source 和 destination 两种连接器",
+    "支持快照加 CDC（逻辑复制槽 + publication）捕获表变更",
+    "支持 SCRAM 认证与 channel binding 配置"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 表数据经 Conduit 管道同步到其他目的地",
+    "基于逻辑复制的变更数据捕获（CDC）管道",
+    "向 PostgreSQL 目标库写入管道记录"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Conduit Connector PostgreSQL ／ The PostgreSQL connector is a Conduit ／ This connector implements Change Data Capture (CDC) features for PostgreSQL by",
+     "lines": [
+      1,
+      3,
+      58
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 Conduit 数据管道平台服务的 PostgreSQL 连接器插件，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The PostgreSQL connector is a Conduit ／ This connector implements Change Data Capture (CDC) features for PostgreSQL by ／ Upon starting, the source takes a snapshot of the provided tables in the database,",
+   "evidence_lines": [
+    3,
+    58,
+    43
+   ]
+  },
+  "fn": "ConduitIO/conduit-connector-postgres",
+  "sha": "68ec42fb8eb6",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

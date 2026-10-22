@@ -10284,5 +10284,289 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c73512c7e9c1": {
+  "identity": {
+   "one_liner": "对 CSV/JSON/Parquet/Excel 等文件执行 SQL 的 CLI，加载进内存 SQLite",
+   "review": "sqly 是一个 Go 编写的命令行工具，将 CSV、TSV、LTSV、JSON、Parquet、Excel、ACH、Fedwire 等文件加载进内存 SQLite3 数据库后执行 SQL，支持跨格式 join、格式转换、回写源文件、交互式 shell 以及 MySQL/PostgreSQL/BigQuery 语法翻译（--dialect）。面向需要在 shell 中查询处理本地文件数据的开发者与运维人员。",
+   "highlights": [
+    "将多格式文件加载进内存 SQLite3 数据库，支持 join、CTE、窗口函数等完整查询语言",
+    "支持 --dialect 以 MySQL、PostgreSQL、BigQuery 语法书写查询（翻译而非模拟）",
+    "提供 .save 回写源文件、REPL shell、压缩文件透明读取与 URL/stdin 输入"
+   ],
+   "use_cases": [
+    "对本地 CSV/JSON/Excel 等文件做 SQL 查询与分析",
+    "不同格式文件间的数据 join 与格式转换",
+    "通过 UPDATE 加 .save --in-place 直接修改 CSV/Excel 文件内容"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Against DuckDB, which is faster and has the richer SQL, sqly's ground is narrower: `UPDATE` a CSV or Excel file and `.save --in-place` it, read ACH, Fedwire and LTSV, keep a Shift-JIS or EUC-JP file in its encoding when it is saved, and write queries in MySQL, ／ ### Write MySQL, PostgreSQL, or BigQuery syntax ／ sqly --dialect postgresql --sql \"SELECT user_name, identifier::text FROM \\\"user\\\" WHERE user_name ILIKE 'b%'\" user.csv",
+     "lines": [
+      56,
+      224,
+      227
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Against DuckDB, which is faster and has the richer SQL, sqly's ground is narrower: `UPDATE` a CSV or Excel file and `.save --in-place` it, read ACH, Fedwire and LTSV, keep a Shift-JIS or EUC-JP file in its encoding when it is saved, and write queries in MySQL, ／ ### Write MySQL, PostgreSQL, or BigQuery syntax",
+     "lines": [
+      56,
+      224
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "sqly runs SQL against CSV, TSV, LTSV, JSON, JSONL, Parquet, Excel, ACH, and Fedwire files. It loads them into an in-memory SQLite3 database, so joins, CTEs, window functions, and aggregates all work — across formats, in one query. Compressed files (`.gz`, `.bz ／ A JSON file becomes one table with a `data` column; SQLite's `json_extract()` reaches into it. ／ SQLite is the engine, so its whole query language is available — window functions, CTEs, `json_*`, and the rest.",
+     "lines": [
+      15,
+      145,
+      209
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为查询和处理本地数据文件提供服务，SQLite 仅作为其内部查询引擎被嵌入使用，不面向数据库本身提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "sqly runs SQL against CSV, TSV, LTSV, JSON, JSONL, Parquet, Excel, ACH, and Fedwire files. It loads them into an in-memory SQLite3 database, so joins, CTEs, window functions, and aggregates all work — across formats, in one query. Compressed files (`.gz`, `.bz2`, `.xz`, `.zst`, `.z`, `.snappy`, `.s2`, `.lz4`) are read transparently. ／ SQLite is the engine, so its whole query language is available — window functions, CTEs, `json_*`, and the rest.",
+   "evidence_lines": [
+    15,
+    209
+   ]
+  },
+  "fn": "nao1215/sqly",
+  "sha": "c73512c7e9c1",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7a72ade8a872": {
+  "identity": {
+   "one_liner": "社工超市家庭申请排名管理 PHP+MySQL 后台应用",
+   "review": "一个供社工超市志愿者使用的后台 Web 应用，用于登记家庭申请、按评估网格自动打分、生成排名并管理购物卡。无框架的原生 PHP+MySQL 实现，含 Docker Compose 本地运行、PHPUnit 测试、CI 和登录防爆破、参数化查询等安全措施，仓库内均为演示数据。",
+   "highlights": [
+    "实现申请表单自动评分与按标准分解的排名",
+    "提供购物卡的分配、撤销、管理与历史记录",
+    "表单令牌、password_hash、参数化查询与登录防爆破等安全措施"
+   ],
+   "use_cases": [
+    "社工超市/公益机构管理家庭申请与购物卡发放",
+    "需要离线部署的轻量级 PHP 后台应用场景",
+    "PHP/MySQL 教学或遗留代码改造参考"
+   ],
+   "": "是"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PHP 8.5 on Apache, MySQL 8.0, plain HTML/CSS/JavaScript. Docker Compose for ／ docs/deploy.md has the steps for a host with PHP and MySQL.",
+     "lines": [
+      23,
+      151
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 MySQL 存储数据的后台应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Back-office web application for the volunteer who manages the ranking of the ／ PHP 8.5 on Apache, MySQL 8.0, plain HTML/CSS/JavaScript. Docker Compose for ／ |`db/`|Schema, configuration rows and demo data, loaded in order|",
+   "evidence_lines": [
+    3,
+    23,
+    64
+   ]
+  },
+  "fn": "CieriS/social-supermarket_il-sole",
+  "sha": "7a72ade8a872",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ac237567877c": {
+  "identity": {
+   "one_liner": "C# 编写的 Albion Online 教育用途本地服务器模拟器",
+   "review": "用 C#/.NET 10 实现的 MMO 客户端/服务端协议学习项目，在本地模拟登录、游戏与聊天服务器，支持 Photon UDP 传输、加密握手、世界模拟与 SQLite 持久化。面向个人或少数玩家的协议研究与学习，需自备客户端 GameData 文件，仅支持特定客户端版本，处于开发中状态。",
+   "highlights": [
+    "实现 Photon UDP 传输、Protocol18 序列化与 DH/AES 加密握手",
+    "使用 SQLite 做账号/角色持久化并带 schema 迁移",
+    "包含离线自测试与自有会话的抓包解码工具"
+   ],
+   "use_cases": [
+    "学习 MMO 客户端/服务端网络协议与游戏服务器架构",
+    "本地或局域网内单人/小规模 PvE 游戏体验",
+    "基于自有抓包数据进行协议分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "with PBKDF2 passwords, several characters per account, GM levels and a chat command system, SQLite persistence with",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "服务器模拟器使用 SQLite 存储账号与角色数据，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An educational server emulator, written in C# (.NET 10), for studying how an MMO client and server talk to each other ／  with PBKDF2 passwords, several characters per account, GM levels and a chat command system, SQLite persistence with ／ The server implements a large part of what a PvE player meets in the game, as a local, self-contained emulation:",
+   "evidence_lines": [
+    3,
+    30,
+    27
+   ]
+  },
+  "fn": "MrGreenCheezz/albion-local-server",
+  "sha": "ac237567877c",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "914ee258781e": {
+  "identity": {
+   "one_liner": "TiDB Link 平台的开发者工具包，含 AI 编码技能与 API 文档",
+   "review": "该仓库为 TiDB Link 平台的 Customer API 提供开发资料：以 SKILL.md 形式供 AI 编码助手按 OpenAPI 契约生成调用代码，也可作为纯文档阅读，涵盖架构、五阶段开发路径、设备连接器、语音协议与安全模型。面向要在 TiDB Link 上构建 AI 代理（文本/语音/硬件控制）的应用开发者。注意它针对的是 TiDB Link 云服务，而非 TiDB 数据库本身。",
+   "highlights": [
+    "打包为 AI 编码助手技能（SKILL.md），以捆绑的 OpenAPI 契约为准生成 raw-HTTP 调用",
+    "包含架构说明、五阶段开发路径、OpenAPI 契约及渲染版 API 参考文档",
+    "提供 SSE 恢复、幂等、重试等可靠性说明与语音实时协议规范"
+   ],
+   "use_cases": [
+    "为应用集成 TiDB Link 的文本/语音 AI 代理",
+    "开发设备服务器并注册为平台 Connector 连接硬件",
+    "供 AI 编码助手按 API 契约自动生成集成代码"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "# TiDB Link Developer Kit ／ Everything you need to build on **TiDB Link** — AI agents for your application's users, reachable by text and voice and able to drive your hardware — through the **TiDB Link Customer API** (`/api/v1`). Connector attachment to a Template currently also requires ／ 1. **With an AI coding assistant (recommended).** The kit is packaged as a skill: point your assistant at `SKILL.md` and ask it to integrate TiDB Link into your project. It follows the development path, treats the bundled OpenAPI contract as the source of trut",
+     "lines": [
+      1,
+      5,
+      9
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "面向 TiDB Link 云服务的开发文档/技能包，README 未表明其为 TiDB 数据库生态的独立工具或数据库应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# TiDB Link Developer Kit ／ Everything you need to build on **TiDB Link** — AI agents for your application's users, reachable by text and voice and able to drive your hardware — through the **TiDB Link Customer API** (`/api/v1`). Connector attachment to a Template currently also requires Console access. ／ |`references/openapi.yaml`|The upstream TiDB Link Customer API contract; see source revision and compatibility.|",
+   "evidence_lines": [
+    1,
+    5,
+    43
+   ]
+  },
+  "fn": "mem9-ai/tidblink-dev-guide",
+  "sha": "914ee258781e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10073,5 +10073,233 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a9f82d295acb": {
+  "identity": {
+   "one_liner": "开源数据质量工具：剖析表结构生成测试并按调度监控",
+   "review": "DataOps TestGen 是一款开源数据质量工具，对表做列级剖析，从剖析结果自动生成数据质量测试，并按调度在数据库内以 SQL 运行，同时提供新鲜度、数据量和 schema 监控。提供 Web UI、REST API、CLI 和 MCP server，适合数据工程师与数据团队在 14 种数据库及 CSV/Parquet/JSON 文件上管理数据质量；开源版单用户、单连接，企业版为商业许可。",
+   "highlights": [
+    "从表剖析结果自动生成数据质量测试，支持自定义 SQL 测试",
+    "按调度运行测试并提供新鲜度、数据量、schema 监控",
+    "内置 Web UI、REST API 和 MCP server，可连接 AI 客户端操作"
+   ],
+   "use_cases": [
+    "数据入生产前的质量审查",
+    "表级新鲜度/数据量/schema 持续监控",
+    "通过 AI 助手以自然语言剖析和排查测试失败"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Amazon Aurora PostgreSQL ／ - PostgreSQL",
+     "lines": [
+      38,
+      41
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- Oracle Database 12c and later",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- Microsoft SQL Server",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明测试以 SQL 在用户自己的数据库内运行，工具本身为数据质量服务而非以某数据库存储自身数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "开源版 Apache 2.0，另有商业许可的 Enterprise 版",
+   "install": [
+    "docker",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DataOps TestGen is an open-source data quality tool that profiles tables, generates tests from the profiling results, and runs them on a schedule with freshness, volume, and schema monitoring. ／ ## Supported databases ／ As of TestGen 5.134.0, TestGen connects to 14 databases:",
+   "evidence_lines": [
+    4,
+    25,
+    27
+   ]
+  },
+  "fn": "DataKitchen/dataops-testgen",
+  "sha": "a9f82d295acb",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "582801434dd9": {
+  "identity": {
+   "one_liner": "生成 Bun+Elysia+SQLite+JWT API 的脚手架 CLI",
+   "review": "该项目提供一条命令即可生成可运行的 Bun + Elysia HTTP API 脚手架，内置 SQLite 存储、JWT 认证、OpenAPI 文档及验证脚本，并附带 AGENTS.md 与 Agent Skills 供 AI 编码代理使用。适合用 Bun 开发 API、并希望 AI 代理遵循统一约定的开发者；目前处于早期发布阶段，依赖 Bun 1.4+，无需独立数据库服务器。",
+   "highlights": [
+    "提供非交互式 CLI（bun create bun-api），支持 --json、--dry-run、doctor 等子命令与退出码约定",
+    "生成包含 bun:sqlite、JWT（jose/argon2id）、OpenAPI 文档与 verify 脚本的项目模板",
+    "附带 AGENTS.md 与 .agents/.claude skills，供编码代理遵循统一规范"
+   ],
+   "use_cases": [
+    "快速生成带认证与 OpenAPI 文档的 Bun HTTP API 起步项目",
+    "为 AI 编码代理提供约定一致的 API 项目模板",
+    "离线可验证的 API 原型与测试环境（无需数据库服务器）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**An agent-ready starter for Bun HTTP APIs.** One command creates a working Elysia + SQLite + JWT API ／ |Stack|Bun, Elysia 1.4, `bun:sqlite`, `jose` (JWT), OpenAPI docs via `@elysiajs/openapi`|",
+     "lines": [
+      5,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "生成的是使用 bun:sqlite 存储数据的 HTTP API 应用脚手架，README 未声明为数据库生态服务工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可（Apache License 2.0 或其他，README L70 起）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**An agent-ready starter for Bun HTTP APIs.** One command creates a working Elysia + SQLite + JWT API ／ |Stack|Bun, Elysia 1.4, `bun:sqlite`, `jose` (JWT), OpenAPI docs via `@elysiajs/openapi`| ／ It needs no database server or credentials, so tests and `verify` run offline once dependencies are installed.",
+   "evidence_lines": [
+    5,
+    29,
+    35
+   ]
+  },
+  "fn": "KevinArce/create-bun-api",
+  "sha": "582801434dd9",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3f086bbc15f": {
+  "identity": {
+   "one_liner": "three.ws 本地智能体运行时：MCP 工具+沙箱 shell+SQLite 会话存储",
+   "review": "这是 three.ws 平台智能体的本地运行时/CLI 底座，在本机或 VPS 上运行 agent 循环：本地文件与 shell 工具跑在资源受限沙箱内，远程工具经 MCP 挂载，配合审批门控、FTS5 全文搜索会话、并行子代理与自然语言 cron。注意 README 声明终端 UI 与 CLI 入口尚未提交、包未发布到 npm，目前只能从仓库按路径使用模块。",
+   "highlights": [
+    "本地工具在资源受限沙箱中运行，每类工具调用受审批门控约束（financial 类不可设为 allow）",
+    "会话、FTS5 全文索引、cron 调度与子代理运行记录存于单个 SQLite 文件（WAL 模式）",
+    "支持 three.ws 计量端点或任意 OpenAI 兼容 base URL（如 Ollama、vLLM）作为模型来源"
+   ],
+   "use_cases": [
+    "在自己机器或 VPS 上运行 three.ws 智能体并接入其 MCP 工具与钱包",
+    "以沙箱方式让模型执行本地文件与 shell 操作并经人工审批",
+    "通过 Telegram 网关/自然语言 cron 调度智能体任务（设计稿已列出，CLI 尚未落地）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Node **22.13+**: the session store uses the built-in `node:sqlite`, so there is ／ One SQLite file (WAL mode, so a UI, a scheduler and a gateway can share it)",
+     "lines": [
+      42,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是运行智能体应用并使用内置 node:sqlite 存储会话数据，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This package is the local runtime behind `three-ws-agent`. It runs the same ／ One SQLite file (WAL mode, so a UI, a scheduler and a gateway can share it) ／ directory are not in the tree yet, so the package is not publishable and is not",
+   "evidence_lines": [
+    12,
+    139,
+    30
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nirholas/three-ws-agent-cli",
+  "sha": "c3f086bbc15f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

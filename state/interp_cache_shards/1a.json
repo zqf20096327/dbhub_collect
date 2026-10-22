@@ -9311,5 +9311,270 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fdf9404dcc51": {
+  "identity": {
+   "one_liner": "基于 SQLite 本地存档的 Discord 历史消息 CLI 工具",
+   "review": "discrawl 是一个 Go 编写的命令行工具，将 Discord 服务器数据与桌面缓存消息归档到本地 SQLite，供离线搜索、SQL 查询和终端浏览。支持 bot 同步、桌面缓存导入、Git 快照分享三种来源，内置 FTS5 全文检索，可选嵌入向量实现语义搜索。适合需要长期保存服务器历史或本地恢复缓存私信的用户。",
+   "highlights": [
+    "提供 bot 同步、桌面缓存导入、Git 快照订阅三种归档来源",
+    "内置 FTS5 全文搜索与只读 SQL 查询，支持可选的语义/混合搜索",
+    "支持将归档发布为分片 Git 快照供他人只读订阅"
+   ],
+   "use_cases": [
+    "离线检索与浏览 Discord 服务器历史消息",
+    "本地恢复 Discord 桌面端缓存的直接消息",
+    "通过 Git 快照向无 Discord 凭据的读者共享归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Discrawl archives Discord guild data and classifiable Discord Desktop cache messages in local SQLite for offline search, SQL, and terminal browsing. It is for people who need durable server history, local recovery of cached direct messages, or read-only access",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存储在本地 SQLite 中，SQLite 是其存储后端",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Discrawl archives Discord guild data and classifiable Discord Desktop cache messages in local SQLite for offline search, SQL, and terminal browsing. It is for people who need durable server history, local recovery of cached direct messages, or read-only access to a shared archive. ／ |Remote archive|Run `subscribe-cloud`|Read-only access through a configured Worker without local SQLite|",
+   "evidence_lines": [
+    12,
+    63
+   ]
+  },
+  "fn": "openclaw/discrawl",
+  "sha": "fdf9404dcc51",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0bcc342f617f": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式三模数据库引擎，单内核融合向量、图与文档",
+   "review": "TriviumDB 是用 Rust 实现的嵌入式数据库引擎，节点同时携带向量、稀疏文本、JSON 元数据和图关系，通过 TQL 查询语言编排向量召回、属性索引、图扩展与图算法，提供 Python/Node.js/Rust 绑定及 Rom 单文件与 Mmap 双存储模式。面向构建 Agent 记忆、RAG 与知识图谱的单机应用开发者；写路径依赖进程级排他锁，高并发多写场景被 README 明确列为短板。",
+   "highlights": [
+    "单节点同时包含向量、稀疏倒排、JSON 元数据与图关系，支持 TQL 统一查询管线与 Prepared 参数化查询",
+    "提供 Rom 单文件与 Mmap 分体两种存储模式，配 WAL、原子替换与不可变代际切换机制",
+    "通过 PyO3 和 napi-rs 提供 pip/npm 安装包，另提供 cargo 依赖接入与 nightly HTTP Server 壳"
+   ],
+   "use_cases": [
+    "AI Agent 长期记忆：对话存为带向量节点并建边，向量匹配后沿关系链扩散召回",
+    "个人知识库：笔记切片入库，语义搜索与知识图谱导航双模式浏览",
+    "游戏 NPC 认知引擎：事件存为向量节点，对话时检索相关记忆生成回应"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "我们的目标是成为 **AI 应用领域的 SQLite**： ／ |② 存数据|调 SQLite 写入时间、场景|↑ 同一步，payload 里就是 JSON| ／ |💾 **双模式存储**|Mmap（大模型极速分体冷启动） / Rom（传统 SQLite 级单文件打包携带），无缝热切换|",
+     "lines": [
+      28,
+      67,
+      210
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它本身是数据库引擎而非服务于既有数据库生态的工具，也不只是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TriviumDB 是一个用纯 Rust 编写的**嵌入式三模数据库引擎**，将**向量检索（Vector）**、**属性图谱（Graph）**和**文档型元数据（Document）**原生融合在同一个存储内核中。Rom 模式保持单个 `*.tdb` 的便携性；默认 Mmap 模式使用受同一 generation 协议保护的分离 sidecar。 ／ - 🐍 **Python / Node.js 原生** —— `pip install` 或 `npm install` 后直接使用，类 MongoDB 查询语法 ／ > 🧪 **尝鲜：HTTP 服务端版（nightly）** —— TriviumDB 的正式产品形态始终是**嵌入式数据库**（进程内 Library，即装即用，无需部署）。仓库中的 `triviumdb-server` 提供了一个可选的 HTTP 壳（多客户端并发读写、OCC、流式 NDJSON 等），目前处于 **nightly 预览状态**，仅供尝鲜和跟踪演进方向，协议随时可能变更，请勿用于生产。详见 Server 说明（nightly）；一切 API 与用法说明仍以嵌入式版本为准。",
+   "evidence_lines": [
+    26,
+    38,
+    122
+   ]
+  },
+  "fn": "YoKONCy/TriviumDB",
+  "sha": "0bcc342f617f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0aa7289e64c9": {
+  "identity": {
+   "one_liner": "Oracle 数据库的纯 Go 原生驱动，实现 database/sql 接口",
+   "review": "这是 Oracle Database 的 Go 语言驱动，供 Go 开发者在应用中通过 database/sql API 连接和操作 Oracle 数据库（19c 及以上）。README 说明其为纯 Go 实现，支持 EZConnect 与 TNS 连接串、TCP/TCPS 协议、事务、PL/SQL 参数绑定，并提供数据类型映射表、配置优先级（DSN/环境变量/CLI/Connector）与日志配置等机制。安装通过 go get 获取模块。",
+   "highlights": [
+    "纯 Go 实现 Go database/sql/driver 接口，支持 Oracle Database 19c 及以上版本",
+    "支持 EZConnect 与 TNS Connect Descriptor 连接串、TCP/TCPS 协议、事务与 PL/SQL In/Out 参数",
+    "提供多来源配置（DSN、环境变量、CLI 标志、Connector）及驱动日志配置"
+   ],
+   "use_cases": [
+    "Go 应用程序连接和读写 Oracle 数据库",
+    "通过 database/sql 统一接口执行事务与 PL/SQL 调用",
+    "绑定和读取 Oracle JSON、LOB、NUMBER 等 Oracle 数据类型"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "# Oracle Database Driver for Go ／ Oracle Database Driver for Go is a native Go driver for Go's database/sql package. It supports Oracle Database versions ／ - Supports Oracle Database versions: 19c and higher",
+     "lines": [
+      1,
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为连接 Oracle 数据库提供驱动，是服务于数据库生态的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "Oracle"
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Oracle Database Driver for Go ／ Oracle Database Driver for Go is a native Go driver for Go's database/sql package. It supports Oracle Database versions",
+   "evidence_lines": [
+    1,
+    3
+   ]
+  },
+  "fn": "oracle/go-oracledb",
+  "sha": "0aa7289e64c9",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3d1ef093a140": {
+  "identity": {
+   "one_liner": "opencode 服务端 API 的 Rust 兼容重实现，内嵌调优 SQLite",
+   "review": "ocserve 用 Rust 重写 opencode 服务端的 HTTP/SSE 接口，覆盖冻结的 1.18.x API 与 opencode 2 API，使官方 TUI 和 Web UI 可直接连接。面向需要长期运行服务器的场景（小型 VPS、多并发会话），通过增量 vacuum 和保留策略回收 SQLite 空间，并用差分测试对齐上游行为。未实现托管分享链接、OAuth 登录等功能。",
+   "highlights": [
+    "兼容 opencode 1.18.31 服务端 API（188 个操作）与 opencode 2 API（142 个操作），官方客户端可直连",
+    "通过差分回放、A/B 对照等测试手段验证线路兼容性",
+    "对 SQLite 执行增量 vacuum 并保留数据环形留存，读取上游配置但不写入"
+   ],
+   "use_cases": [
+    "在小型 VPS 或旧设备上长期运行 opencode 服务端",
+    "承载多并发会话与长期积累的会话历史",
+    "从上游 opencode 迁移历史数据（import 命令）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`STORAGE.md`|SQLite pragmas, schema and blob rules, FTS5 design|",
+     "lines": [
+      230
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该服务器应用使用 SQLite 存储会话数据并对其进行 schema 设计与 vacuum 调优，而非为 SQLite 生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，保留上游 opencode 的 MIT 声明",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`STORAGE.md`|SQLite pragmas, schema and blob rules, FTS5 design| ／ ocserve import --source ~/.local/share/opencode/opencode.db ／ A compatible reimplementation of the opencode",
+   "evidence_lines": [
+    230,
+    104,
+    3
+   ]
+  },
+  "fn": "Reliary/ocserve",
+  "sha": "3d1ef093a140",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

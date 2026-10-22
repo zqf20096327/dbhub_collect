@@ -9275,5 +9275,74 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d110ae43d8c": {
+  "identity": {
+   "one_liner": "本地优先的跨客户端 AI 代理记忆中心，基于单文件 SQLite 与 MCP",
+   "review": "MemTether 为多个 AI 客户端提供共享记忆存储：所有客户端通过文件级指针共用一个 SQLite 数据库，支持 REST API、Web 仪表盘和 MCP 服务器，并提供带哈希链审计日志、双时间戳与冲突裁决的记忆治理机制，修正记录不删除。面向需要审计和共享多代理记忆的开发者，通过 pip 安装并自动检测本机 AI 客户端。",
+   "highlights": [
+    "支持通过文件级指针让多个 AI 客户端共享同一个 SQLite 数据库，并提供 23 个客户端适配器",
+    "提供双时间戳、超链修正（不删除）与哈希链审计日志，可验证记录是否被篡改",
+    "提供 REST API（14 个端点）、MCP 服务器（10 个工具）、Web 仪表盘与 CLI（20 个子命令）"
+   ],
+   "use_cases": [
+    "多个 AI 客户端（Claude Code、Cursor 等）共享并治理代理记忆",
+    "需要对 AI 代理写入的记忆做审计、纠错与历史时点查询",
+    "从 mem0 等 JSON 导出迁移记忆数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One physical SQLite database, shared by every AI client via file-level ／ |Database|SQLite (WAL mode)|Single-file, zero-config, cross-platform|",
+     "lines": [
+      68,
+      196
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目使用 SQLite 作为自身存储数据库（WAL 模式），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One physical SQLite database, shared by every AI client via file-level ／ |Database|SQLite (WAL mode)|Single-file, zero-config, cross-platform| ／ |API|FastAPI REST (14 endpoints) + MCP server (10 tools)|Any language|",
+   "evidence_lines": [
+    68,
+    196,
+    204
+   ]
+  },
+  "fn": "MemTether/MemTether",
+  "sha": "6d110ae43d8c",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

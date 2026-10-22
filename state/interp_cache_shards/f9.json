@@ -8640,5 +8640,128 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9e235b986dd9": {
+  "identity": {
+   "one_liner": "Node.js 的 PostgreSQL 连接池实现库",
+   "review": "一个为 node-postgres (pg) 提供的连接池实现，兼容 pg-pool 的选项与语法，提供自动释放连接、AWS RDS TLS 配置、集群故障转移时的自动重连、超时与重试阈值设置等能力，供 Node.js/TypeScript 开发者在应用中管理数据库连接使用。",
+   "highlights": [
+    "提供兼容 pg-pool 选项与语法的连接池，支持查询后自动释放连接",
+    "提供 ssl='aws-rds' 选项，配置 AWS RDS 与 Amazon Trust Services 根证书并强制 TLSv1.2 起始版本",
+    "支持集群故障转移时自动重连（最长 90 秒）及池大小、重试、超时阈值配置"
+   ],
+   "use_cases": [
+    "Node.js 应用中管理 PostgreSQL 连接复用",
+    "连接 AWS RDS 或 RDS Proxy 时需要 TLS 证书配置的场景",
+    "读写分离集群发生主从切换时需要连接自动恢复的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# postgres-pool ／ Connection pool implementation for pg. Compatible with pg-pool options and syntax.",
+     "lines": [
+      1,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其为 pg 的连接池实现，是服务于 PostgreSQL 的组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# postgres-pool ／ Connection pool implementation for pg. Compatible with pg-pool options and syntax.",
+   "evidence_lines": [
+    1,
+    7
+   ]
+  },
+  "fn": "postgres-pool/postgres-pool",
+  "sha": "9e235b986dd9",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "aaf330422ff7": {
+  "identity": {
+   "one_liner": "每天一篇英语词源故事的自托管阅读站点，Hono+SQLite 存储",
+   "review": "一个自托管的英语词源学习网站：每天推送一篇词源故事，支持多用户阅读进度、收藏、复习重现、排行榜和邮件日报，后端用 Hono 提供 API，账号与阅读进度存于 SQLite 数据库，支持邀请码注册、AI 辅助录入词条及 MCP 接口供 AI 客户端提交草稿。适合个人或小圈子邀请制使用，代码 MIT 许可，词条数据另有版权限制。",
+   "highlights": [
+    "提供多用户阅读进度、收藏、复习重现、每日目标与排行榜等功能",
+    "提供 MCP 接口，供支持 MCP 的 AI 客户端查重、搜词条并提交草稿",
+    "支持 Docker 或 systemd 部署，提供数据库快照备份与一键部署脚本"
+   ],
+   "use_cases": [
+    "个人或受邀小群体每日英语词源学习",
+    "自托管部署的内容阅读与邮件订阅站点",
+    "通过 MCP 让 AI 客户端参与词条整理与校验"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "dbs": [],
+   "eco": "app",
+   "eco_why": "README 表明账号与阅读进度数据存于 SQLite 数据库文件（app.db），SQLite 仅作为存储层使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT，backend/data/ 下词条数据不适用 MIT 且禁止商用",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`STATE_DB`|`backend/var/app.db`|账号与阅读进度数据库| ／ 前后端分开：`frontend/` 是纯静态文件，`backend/` 只提供 `/api`。生产环境由 nginx 托管前端、把 `/api` 转发给后端，两者同一个域名，登录用 HttpOnly Cookie。 ／ |`npm run admin -- backup [目录]`|给数据库拍一份快照（默认 `backend/var/backups/`，留最近 10 份）|",
+   "evidence_lines": [
+    169,
+    63,
+    103
+   ]
+  },
+  "fn": "kilolonion/etymology-site",
+  "sha": "aaf330422ff7",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

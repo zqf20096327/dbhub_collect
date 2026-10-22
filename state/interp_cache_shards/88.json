@@ -9405,5 +9405,145 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "16c2095b7a08": {
+  "identity": {
+   "one_liner": "支持 MTProto 的 Telegram 命令行工具，用本地 SQLite 缓存实现离线搜索与 SQL",
+   "review": "这是一个 Telegram 命令行客户端，包含只读同步守护进程，将消息、联系人等数据缓存到本地 SQLite，支持全文搜索（FTS5）、只读 SQL 查询和完整 MTProto API 调用，输出 JSON 并提供稳定的退出码与技能清单，面向终端用户和需要脚本化访问 Telegram 数据的 AI 代理。通过 Homebrew、bun/npm 或源码安装。",
+   "highlights": [
+    "将 Telegram 数据同步到本地 SQLite 缓存，支持 FTS5 全文搜索和只读 SQL 查询",
+    "提供只读同步守护进程，支持实时同步、重启后追赶和历史回填",
+    "默认 JSON 输出、固定退出码并提供 skill manifest，供脚本与 AI 代理集成"
+   ],
+   "use_cases": [
+    "离线检索和 SQL 分析本地缓存的 Telegram 消息",
+    "为脚本或 AI 代理提供结构化的 Telegram 数据读取接口",
+    "通过守护进程保持多个账号的消息实时同步"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`tg` keeps your Telegram in a local SQLite cache for offline search and SQL; ／ |Local cache, offline queries|✅ SQLite, cache-first, `--fresh`|❌ live calls only|",
+     "lines": [
+      70,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该 CLI 使用 SQLite 存储本地缓存数据，SQLite 是其内部存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tg` keeps your Telegram in a local SQLite cache for offline search and SQL; ／ - Read-only SQL over the cache (`tg sql`) with an annotated schema",
+   "evidence_lines": [
+    70,
+    64
+   ]
+  },
+  "fn": "neoromantic/telegram-sync-cli",
+  "sha": "16c2095b7a08",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "790e7cd6db00": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 服务器，用 SQLite 为多个 AI 应用提供共享项目记忆",
+   "review": "FlowState 是一个运行在本机的 MCP 服务器，将 todos、决策、变更、问题等记录存入单个本地 SQLite 文件，供 Claude、ChatGPT、Cursor、Grok 等多个 MCP 客户端同时读写，实现跨应用、跨设备的上下文延续。提供任务认领、审查队列、硬性规则、交接笔记、撤销与操作审计等功能，适合在多个 AI 工具间协作开发的个人开发者使用。",
+   "highlights": [
+    "以 MCP 服务器形式向多个 AI 客户端提供共享项目记忆，数据存储在本机单个 SQLite 文件",
+    "支持多 agent 并发任务认领、审查队列、硬性规则、交接笔记、撤销与变更历史",
+    "提供 setup_flowstate.py 一键安装脚本，并支持本地定时备份与可选的 GitHub 异地备份"
+   ],
+   "use_cases": [
+    "在多个 AI 应用（Claude、ChatGPT、Cursor、Grok 等）之间延续项目上下文",
+    "多个 AI agent 并行开发同一项目时协调任务分配",
+    "对 AI 写入内容进行人工审核与操作追溯"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in one SQLite file on your computer. Nothing is sent anywhere unless you turn",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为本项目的本地存储后端，服务对象是 AI 应用的记忆管理，而非为数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "FlowState is a local MCP server. It gives every AI app you ／ Everything lives in one SQLite file on your computer. Nothing is sent anywhere unless you turn ／ 2. creates `.venv` in the repo folder and runs `pip install -e mcp-server` into it (skip with `--skip-install`);",
+   "evidence_lines": [
+    5,
+    10,
+    63
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "dialectforge/FlowState",
+  "sha": "790e7cd6db00",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

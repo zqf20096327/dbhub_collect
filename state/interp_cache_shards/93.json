@@ -10128,5 +10128,91 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c3130aa0267f": {
+  "identity": {
+   "one_liner": "面向不可信 AI Agent 的受治理 SQL 访问网关",
+   "review": "该项目是一个 MCP 形式的 SQL 网关，供 AI Agent 通过实体定义、关系代数 IR 和参数化 codegen 访问关系数据，不接受任意 SQL、不提供 DDL，并叠加 RBAC、字段 ACL、行策略、脱敏、EXPLAIN 预筛与预算限制等治理控制。可信操作者可使用默认关闭的 execute_sql 逃生通道。适用于需要向 AI Agent 开放数据查询但要求策略约束的团队。",
+   "highlights": [
+    "通过 MCP 协议向 AI Agent 提供参数化 codegen 的受控 SQL 访问，不接受任意 SQL，不提供 DDL",
+    "提供 RBAC、字段 ACL、row policy、mask、EXPLAIN 预筛、结果上限、超时与 session/tenant 预算等治理与成本控制",
+    "支持 Docker Compose 快速部署、配置热重载、异步审计与 OpenTelemetry hook"
+   ],
+   "use_cases": [
+    "让 AI Agent 安全查询 PostgreSQL/MySQL/OceanBase 关系数据并施加策略约束",
+    "多租户场景下的字段脱敏与行级权限隔离访问",
+    "为可信操作者提供带审计约束与硬上限的 SQL 逃生通道"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为数据库访问提供治理网关/代理组件，为数据库生态服务而非自身业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向不可信 AI Agent 的受控 SQL 数据访问网关。通过显式 Entity、关系代数 IR 和 ／ 参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供 ／ - **成本可控**：EXPLAIN 预筛、结果上限、超时和 session/tenant 预算；",
+   "evidence_lines": [
+    5,
+    6,
+    15
+   ]
+  },
+  "fn": "nethinwei/sql-mcp-server",
+  "sha": "c3130aa0267f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

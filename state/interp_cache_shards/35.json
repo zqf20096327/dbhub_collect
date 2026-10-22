@@ -9738,5 +9738,153 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c93e363f04a6": {
+  "identity": {
+   "one_liner": ".NET + Vue + PostgreSQL 的全栈预约管理系统",
+   "review": "这是一个面向场地/服务预约业务的 Web 应用，用 .NET 10 ASP.NET Core 提供 RESTful API，数据存储使用 PostgreSQL（经 Entity Framework Core），前端为 Vue 3 + Vite，实时通知基于 SignalR，部署通过 docker-compose 拆分 API、数据库与前端容器。目标用户是出租场地或提供预约服务的企业与个人，核心机制包括无账号公开预约落地页、邮箱 6 位验证码确认，以及 JWT 认证和 Admin/Vendedor 角色控制。需要注意 Gmail 发信有每日限额，大用量需更换事务性邮件服务商。",
+   "highlights": [
+    "提供公开落地页，客户无需注册即可预约，通过邮箱 6 位验证码确认（码与令牌以 HMAC 哈希存储、可过期、限尝试次数）",
+    "后端为 .NET 10 ASP.NET Core RESTful API，使用 Entity Framework Core 访问 PostgreSQL，集成 JWT 认证、限流（每 IP 每 10 秒 10 次请求）与 SignalR 实时通知",
+    "包含 docker-compose.yaml 配置，将后端 API、PostgreSQL 数据库和 Vue 前端分别运行在隔离容器中"
+   ],
+   "use_cases": [
+    "场地出租类业务（球场、会议室、诊室、餐桌等）的在线预约与日程管理",
+    "spa、餐厅、诊所、活动厅等需预约确认与到时提醒的企业",
+    "作为预约系统起点的代码基础供开发者二次开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Base de datos robusta**|PostgreSQL para fiabilidad y rendimiento| ／ |**Base de datos**|PostgreSQL| ／ - **Backend (.NET 10)**: Expone una API RESTful con controladores, servicios layer y Entity Framework Core con PostgreSQL. Incluye autenticación JWT, rate limiting, y integración con SignalR para comunicaciones en tiempo real. ／ El proyecto incluye configuración `docker-compose.yaml` para despliegue con Docker, separando el backend API, la base de datos PostgreSQL y el frontend Vue en contenedores aislados.",
+     "lines": [
+      21,
+      125,
+      146,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统使用 PostgreSQL 作为数据库存储预约业务数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Base de datos**|PostgreSQL| ／ - **Backend (.NET 10)**: Expone una API RESTful con controladores, servicios layer y Entity Framework Core con PostgreSQL. Incluye autenticación JWT, rate limiting, y integración con SignalR para comunicaciones en tiempo real. ／ El proyecto incluye configuración `docker-compose.yaml` para despliegue con Docker, separando el backend API, la base de datos PostgreSQL y el frontend Vue en contenedores aislados.",
+   "evidence_lines": [
+    125,
+    146,
+    169
+   ]
+  },
+  "fn": "devHaniel/R.reservas",
+  "sha": "c93e363f04a6",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "962d13887ef7": {
+  "identity": {
+   "one_liner": "three.ws 本地智能体运行时，MCP 工具+沙箱+SQLite 会话",
+   "review": "这是 three.ws 平台的本地智能体运行时，在用户机器上运行智能体循环：本地文件/shell 工具运行在资源受限沙箱中，经审批门控执行，并通过 MCP 挂载 three.ws 的远程工具与钱包；会话存于单个 SQLite 文件（WAL 模式，含 FTS5 全文检索）。面向需要在本地或 VPS 运行 three.ws 智能体的用户。注意终端 UI 与 CLI 入口尚未入库，包未发布 npm，目前只能按路径引用模块。",
+   "highlights": [
+    "通过 MCP 以 Streamable HTTP 挂载 three.ws 远程工具，并按相关性选择每轮提供的工具",
+    "本地 shell 工具运行在带超时、CPU/文件大小/输出限额与凭据变量清除的沙箱中",
+    "会话存储于单个 SQLite 文件（WAL 模式），含 FTS5 全文索引与可导出的会话 JSON"
+   ],
+   "use_cases": [
+    "在本地或 VPS 运行带审批门控的 three.ws 智能体",
+    "接入自有 OpenAI 兼容模型端点（llama.cpp/Ollama/vLLM）运行智能体循环",
+    "以自然语言 cron 和子代理方式执行定时与并行任务"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Node **22.13+**: the session store uses the built-in `node:sqlite`, so there is ／ One SQLite file (WAL mode, so a UI, a scheduler and a gateway can share it)",
+     "lines": [
+      42,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它用内置 node:sqlite 存储自身的会话与调度数据，属使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Node **22.13+**: the session store uses the built-in `node:sqlite`, so there is ／ One SQLite file (WAL mode, so a UI, a scheduler and a gateway can share it) ／ - **remote**: every tool on the three.ws MCP servers (`/api/mcp-agent` and",
+   "evidence_lines": [
+    42,
+    139,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nirholas/agent-cli",
+  "sha": "962d13887ef7",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

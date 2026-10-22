@@ -9963,5 +9963,194 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2f337f2c3a46": {
+  "identity": {
+   "one_liner": "MySQL Server 官方配置工具，用于 Windows 上的初始/重新配置",
+   "review": "MySQL Configurator 是随 MySQL Server 一起分发的独立配置程序，用于在 Windows 上对 MySQL 服务器执行初始配置、重新配置，并参与卸载流程。面向 Windows 平台的 MySQL 用户/运维人员，随 MSI 与 Zip 包分发，无需安装即可运行；源码需 Visual Studio 2022 与 .NET Framework 4.8 构建。",
+   "highlights": [
+    "对 MySQL Server 执行初始配置与重新配置，并作为卸载流程的一部分",
+    "以独立 exe 形式随 MySQL Server（MSI 与 Zip 包）分发，无需安装",
+    "提供源码构建方式，需 Visual Studio 2022 与 .NET Framework 4.8"
+   ],
+   "use_cases": [
+    "Windows 上安装 MySQL Server 后进行初始化配置",
+    "更改现有 MySQL Server 的配置",
+    "卸载 MySQL Server 时配合完成清理流程"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL Configurator is a standalone application designed to ease the complexity of configuring a MySQL server to run MySQL on Microsoft Windows. It is bundled with the MySQL server, in both the MSI and standalone Zip archive. ／ MySQL Configurator is distributed as part of the MySQL Server and can be found in the bin folder located in the folder where MySQL Server was extracted to or installed.",
+     "lines": [
+      3,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为配置 MySQL Server 服务的官方工具，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "MySQL"
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MySQL Configurator is a standalone application designed to ease the complexity of configuring a MySQL server to run MySQL on Microsoft Windows. It is bundled with the MySQL server, in both the MSI and standalone Zip archive. ／ MySQL Configurator is distributed as part of the MySQL Server and can be found in the bin folder located in the folder where MySQL Server was extracted to or installed.",
+   "evidence_lines": [
+    3,
+    14
+   ]
+  },
+  "fn": "mysql/mysql-configurator",
+  "sha": "2f337f2c3a46",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c053f3d32246": {
+  "identity": {
+   "one_liner": "Claude Code 的 ERP 集成知识插件集，以厂商文档为参考",
+   "review": "为 Claude Code 提供 Sage 300、Sage 200 Evolution、SAP Business One 等 ERP 系统的参考型助手技能，内容打包自厂商文档、数据字典与 SDK 参考，面向顾问、开发者和集成商。技能仅由 SKILL.md 和打包参考文件构成，无 MCP 服务器、后端或遥测；通过 /plugin marketplace 命令或 skills CLI 安装。参考材料源自 Sage 文档，使用须遵循相应条款。",
+   "highlights": [
+    "提供针对 Sage 300、Sage 200 Evolution、Sage X3、SAP Business One、Acumatica、QuickBooks Desktop、Sage Intacct、Cin7 Core 的参考型助手技能",
+    "技能内容包含打包的数据字典、SDK 类与枚举参考、API 端点目录及常见错误清单",
+    "仅由文档文件构成，不包含 MCP 服务器、钩子、遥测或后端，并支持查询部分厂商公开文档"
+   ],
+   "use_cases": [
+    "在 Claude Code 中编写 ERP 集成代码（如 .NET SDK 调用、REST API 集成）时查询表结构、字段与对象定义",
+    "顾问与集成商查阅 ERP 版本升级路径、发布说明与配置规则"
+   ],
+   "eco_why": "技能服务于 ERP 系统的集成开发，README 未声明与任何具体数据库产品的适配或依赖关系"
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可；源自 Sage 文档的参考材料仍受 Sage 自身条款约束",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Reference-backed Agent Skills for real ERP work — built for consultants, developers, and integrators. ／ These skills give Claude the references it needs to work with real ERP systems — Sage 300, Sage 200 Evolution, Sage X3, SAP Business One, Acumatica, and more. No plausible guessing. No invented fields. No hallucinated APIs. ／ The skills are documentation only: a `SKILL.md` and bundled reference files, with no MCP server, hook, telemetry",
+   "evidence_lines": [
+    7,
+    11,
+    83
+   ]
+  },
+  "fn": "fdtaljaard/claude-skills",
+  "sha": "c053f3d32246",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8c2bf65fce66": {
+  "identity": {
+   "one_liner": "将策略文件编译为 Postgres 行级安全的应用授权工具",
+   "review": "rowstile 是面向 Postgres 应用的授权工具：用户在一个策略文件里声明谁可对哪些行做何操作，命令将其编译为视图、触发器维护的表、RLS 策略和 authz.* 函数，并以 Alembic、Prisma、Drizzle Kit 等迁移形式发布，无需额外授权服务。适用于数据在单一 Postgres 库、行级权限依赖行间关系的应用；要求 Postgres 16-18，目前处于 beta，未经外部审计。",
+   "highlights": [
+    "提供策略文件到 SQL（视图、触发器、RLS 策略、authz 函数）的编译",
+    "支持以 Alembic、Prisma、Drizzle Kit 或纯 SQL 迁移形式发布策略变更",
+    "提供 Python 与 TypeScript SDK，并含审计、review、权限查询等函数"
+   ],
+   "use_cases": [
+    "为单 Postgres 库的应用实现基于所有者、团队、租户的行级访问控制",
+    "替代难以测试和演进的手写 RLS 规则",
+    "在 CI 中对策略变更做 review（GitHub Action/GitLab CI 模板）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# rowstile: access rules in a policy file, enforced by Postgres",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "rowstile 是为 Postgres 数据库生成 RLS 策略与 SQL 的授权组件，服务于数据库生态而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# rowstile: access rules in a policy file, enforced by Postgres ／ command compiles it into plain SQL: views, trigger-maintained tables for inheritance, row-level ／ and nothing has to run next to it: any Postgres 16, 17 or 18 works, managed or not, and the owner of",
+   "evidence_lines": [
+    1,
+    10,
+    14
+   ]
+  },
+  "fn": "rowstile/rowstile",
+  "sha": "8c2bf65fce66",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

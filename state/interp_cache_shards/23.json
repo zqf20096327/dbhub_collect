@@ -10781,5 +10781,153 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "448470a93e12": {
+  "identity": {
+   "one_liner": "网络犯罪调查的自托管案件系统，基于断言账本溯源的社交网络分析平台",
+   "review": "NocTORnal 是面向网络犯罪调查人员的自托管 HUMINT 与社交网络分析平台，用于构建人物、身份、组织及其信任关系的图谱。每条节点与关系都锚定到带来源、Admiralty 分级和时间戳的断言账本，由数据库触发器强制执行，可回溯至 WORM 锁定的证据链。技术栈为 FastAPI 与 Postgres 16，使用行级安全、TLP 分级和双人控制。要求法律审查后才可加载真实案件数据。",
+   "highlights": [
+    "每个图谱元素经数据库触发器强制关联到带来源与分级的断言账本，可追溯至 WORM 锁定的证据与监管链日志",
+    "提供身份/人物分离建模、中心性与 key-player 分析、ACH 矩阵等社交网络分析功能",
+    "内置 TLP 分级门控、行级安全、双人控制与单一出口代理等访问控制机制"
+   ],
+   "use_cases": [
+    "勒索软件附属结构与初始访问代理的网络关系梳理",
+    "商业邮件诈骗调查中的证据溯源与报告出具",
+    "洗钱/骡马网络的社交层关系分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres 16",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 FastAPI 和 Postgres 16 实现案件系统，Postgres 是其存数据的组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**HUMINT and social network analysis toolkit platform for cybercrime investigation.** ／ Postgres 16 ／ Every node attribute and every relationship is anchored to a row in an",
+   "evidence_lines": [
+    5,
+    12,
+    59
+   ]
+  },
+  "fn": "dboudreau00/NocTORnal",
+  "sha": "448470a93e12",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "57afa8c13022": {
+  "identity": {
+   "one_liner": "AI 代码库智能平台，内置 MCP Server、AST 分析、知识图谱与 SQLite 语义记忆",
+   "review": "该项目是一个代码库分析服务端，提供 MCP Server（30+ 工具，stdio/SSE 传输）、AST 解析、知识图谱和基于 SQLite + sqlite-vec 的语义记忆存储，配套 React 管理面板。面向希望搭建 AI 代码分析服务的开发者；需 Node.js 20+、pnpm、Firebase 凭证与 NVIDIA NIM API key，数据默认存于本地 SQLite 文件，PostgreSQL 为可选后端。",
+   "highlights": [
+    "提供 MCP Server，支持 stdio 与 SSE 两种传输，含 30+ 工具（记忆、代码搜索、架构文档生成等）",
+    "语义记忆基于本地 SQLite 文件与 sqlite-vec 向量检索，无需外部数据库服务器；PostgreSQL 可作为可选后端",
+    "支持多租户隔离（Firebase auth）、LLM 多供应商（Anthropic/OpenAI/Ollama）架构文档生成与漏洞扫描工具"
+   ],
+   "use_cases": [
+    "在 Claude/Cursor/VSCode 等 AI IDE 中通过 MCP 查询代码库结构与语义记忆",
+    "为代码库自动生成架构文档（DeepWiki）并提供问答",
+    "搭建多租户的代码分析后端服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Data**|SQLite + `sqlite-vec` (PostgreSQL optional), Firebase Firestore, NVIDIA NIM embeddings|",
+     "lines": [
+      40
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "AI-powered codebase intelligence platform — MCP Server, AST analysis, Knowledge Graph, and semantic memory with SQLite + sqlite-vec as the default database. ／ |**Semantic memory**|Dream memory store with SQLite + sqlite-vec vector search| ／ - **SQLite dependency**: Data lives in a local SQLite file (default `./data/codeatlas.db`) with `sqlite-vec` for vector search. Postgres is available as an opt-in backend.",
+     "lines": [
+      9,
+      21,
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存储于本地 SQLite 文件，平台本身是用数据库存数据的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "AI-powered codebase intelligence platform — MCP Server, AST analysis, Knowledge Graph, and semantic memory with SQLite + sqlite-vec as the default database. ／ AI IDE (Claude/Cursor) → MCP (stdio/SSE) → Platform :3381 → SQLite + sqlite-vec + Firebase + NVIDIA ／ - **SQLite dependency**: Data lives in a local SQLite file (default `./data/codeatlas.db`) with `sqlite-vec` for vector search. Postgres is available as an opt-in backend.",
+   "evidence_lines": [
+    9,
+    33,
+    159
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "giauphan/codeatlas-platform",
+  "sha": "57afa8c13022",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

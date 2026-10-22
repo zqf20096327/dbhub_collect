@@ -10023,5 +10023,75 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cc66a1e5dd19": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI agent 持久记忆与 RAG 引擎",
+   "review": "abmind 为 AI agent 提供持久记忆：消息与记忆存入 SQLite，通过 FTS5、trigram、embedding、摘要四层召回，并有夜间 sleep 维护做记忆整理与冲突检测。以 npm 库、CLI、MCP server 及多 CLI hook 形式使用，凭据用 AES-256-GCM 加密，仅支持 Node.js 环境。",
+   "highlights": [
+    "四层召回：FTS5 全文、trigram 模糊、embeddings、合并摘要",
+    "提供 MCP server 与 CLI，兼容 kiro-cli/Claude Code/Codex 等宿主",
+    "凭据以 AES-256-GCM 加密存储并从对话历史脱除"
+   ],
+   "use_cases": [
+    "为长期运行的 AI agent 构建持久化记忆",
+    "通过 MCP 或 hook 为各类 CLI agent 接入记忆能力",
+    "多语言（黏着语）场景下的记忆存储与召回"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Built for multilingual agents that run 24/7 — not a vector DB wrapper.** SQLite-backed, 4-layer recall (FTS5 + trigram + embeddings + consolidated summaries), overnight sleep maintenance, injection detection, context orchestration, and a classification syste ／ │ ├── memory.db # SQLite (messages, extracted memories, embeddings)",
+     "lines": [
+      7,
+      148
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI agent 提供记忆服务的基础组件，SQLite 是其内部存储而非服务对象，属数据库生态工具之外的 agent 基础设施，故按使用 SQLite 的工具定位为开发库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Persistent memory system for AI agents — store, recall, consolidate, and forget. ／ **Built for multilingual agents that run 24/7 — not a vector DB wrapper.** SQLite-backed, 4-layer recall (FTS5 + trigram + embeddings + consolidated summaries), overnight sleep maintenance, injection detection, context orchestration, and a classification system inspired by NATO Admiralty Codes. ／ |**MCP server** (`abmind mcp`)|Editors + hosts with MCP support|",
+   "evidence_lines": [
+    5,
+    7,
+    90
+   ]
+  },
+  "fn": "aksika/abmind",
+  "sha": "cc66a1e5dd19",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

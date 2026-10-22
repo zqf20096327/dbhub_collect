@@ -9935,5 +9935,140 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d23bea0762c2": {
+  "identity": {
+   "one_liner": "自托管会议预约调度平台，基于 Elixir/Phoenix LiveView 构建",
+   "review": "Tymeslot 是一个开源会议预约调度系统，提供预约页面、日历双向同步、视频会议房间、自动化邮件与 Stripe 付费预约功能，支持自托管或使用其托管云。数据存储依赖 PostgreSQL（Docker 单容器内置），集成 Google/Outlook/CalDAV 日历与多种视频服务，采用 AGPLv3 许可，首个注册用户成为管理员。",
+   "highlights": [
+    "提供预约页面、日历双向同步（Google、Outlook、CalDAV 等）与自动创建的视频会议房间",
+    "支持自定义可用性日程、嵌入组件、Webhook（Slack/Telegram/n8n 等）与 Stripe Connect 付费预约",
+    "支持 Docker 单容器部署（内置 PostgreSQL 14+）及外部 Postgres，凭据静态加密，支持 OAuth/OIDC SSO"
+   ],
+   "use_cases": [
+    "个人或团队自托管预约调度服务，替代闭源 SaaS",
+    "需要日历防冲突同步与多视频服务集成的会议安排",
+    "通过 Stripe 向预约者收费的付费咨询/课程预约场景"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "One command. Postgres is bundled, so there is nothing else to install. ／ PostgreSQL 14+&nbsp;",
+     "lines": [
+      32,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 PostgreSQL 存储数据的调度应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One command. Postgres is bundled, so there is nothing else to install. ／ |**Docker**|README-Docker.md|Single container, Postgres included — recommended| ／ PostgreSQL 14+&nbsp;",
+   "evidence_lines": [
+    32,
+    117,
+    164
+   ]
+  },
+  "fn": "Tymeslot/tymeslot",
+  "sha": "d23bea0762c2",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2ee055e21b5d": {
+  "identity": {
+   "one_liner": "纯托管 C# 的 SQLite3 数据库文件只读解析库",
+   "review": "这是一个用 C# 编写的 SQLite3 数据库文件解析器，提供对表结构和行数据的只读访问，通过 NuGet 包分发，供 .NET 开发者在托管代码中直接读取 SQLite 文件。它不执行 SQL 语句、不使用索引、不支持写入，也看不到 WAL/日志文件中的数据，属于绕过 SQLite 本体直接解析文件格式的开发库。",
+   "highlights": [
+    "以纯托管代码读取 SQLite3 数据库文件的表和行数据",
+    "提供接近原始结构的访问方式，另含解析 SQLite3 schema 的 SQL 包",
+    "实现 SQLite 存储类到 C# 类型的亲和性映射规则"
+   ],
+   "use_cases": [
+    "在无法依赖原生 SQLite 库的环境中读取 SQLite 数据库文件",
+    "需要直接访问数据库文件结构化数据的工具开发",
+    "解析 SQLite3 的建表 schema 语句"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Managed C# read-only parser for SQLite3 databases. Provides access to table and row data. ／ * Reads SQLite3 databases, in all managed code ／ * An SQL package exists to help parse the SQLite3 schemas",
+     "lines": [
+      3,
+      23,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为读取 SQLite 数据库文件提供解析能力，是服务于 SQLite 生态的开发库而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Managed C# read-only parser for SQLite3 databases. Provides access to table and row data. ／ * Reads SQLite3 databases, in all managed code ／ * **Read-only.** There is no way to write, update or delete data.",
+   "evidence_lines": [
+    3,
+    23,
+    39
+   ]
+  },
+  "fn": "LordMike/MBW.Utilities.ManagedSqlite",
+  "sha": "2ee055e21b5d",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

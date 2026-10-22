@@ -10323,5 +10323,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7095c58652fb": {
+  "identity": {
+   "one_liner": "自托管家庭藏书编目应用，条码/照片扫描配元数据抓取，单容器 SQLite 存储",
+   "review": "Shelf 是一个面向家庭用户的自托管媒体收藏管理应用，通过条码扫描或整架照片的 AI 识别录入书籍、DVD、CD、漫画和游戏，并自动从 Open Library、TMDb、IGDB、MusicBrainz 等来源抓取元数据与封面，支持借出跟踪、库存盘点和估值报告。技术上基于 FastAPI、SQLite（WAL 模式）和 HTMX，以单个 Docker 容器部署，数据保留在本地网络内。许可证为 AGPL-3.0。",
+   "highlights": [
+    "支持相机/USB/蓝牙条码扫描和 8 种扫描模式（添加、愿望单、借出、归还、移动、盘点、查询、评分）",
+    "支持用视觉模型对整架照片批量识别录入，可接入 Anthropic API、OpenAI 兼容端点或本地 Ollama",
+    "提供借出跟踪、书架盘点审计、系列管理和基于 ISBNdb 的估值报告"
+   ],
+   "use_cases": [
+    "家庭书籍及多媒体藏品的编目与检索",
+    "向亲友借出/归还物品的登记跟踪",
+    "为保险文档生成收藏估值报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "shelf.db — SQLite database",
+     "lines": [
+      100
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 SQLite 存储自身数据的面向终端用户的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted home library catalog with barcode scanning, multi-mode scanning workflows, automatic metadata lookup, cover art, and collection management — all in a single Docker container. ／ - **Zero cloud dependency** — runs entirely on your network in a single Docker container with a SQLite database. Your data never leaves your home ／   shelf.db        — SQLite database",
+   "evidence_lines": [
+    10,
+    26,
+    100
+   ]
+  },
+  "fn": "dgahagan/shelf",
+  "sha": "7095c58652fb",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

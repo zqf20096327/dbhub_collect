@@ -8434,5 +8434,121 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5e739401885c": {
+  "identity": {
+   "one_liner": "GaussDB 数据面 MCP 服务，AI 客户端经三层防护执行 SQL",
+   "review": "这是面向 GaussDB 的数据面 MCP 服务器，让 Dify、Claude Code 等 AI 客户端以工具调用方式查询、写入和浏览数据库元数据。它内置 SQL 白名单、工具通道风险分级、只读默认、Bearer 鉴权与审计脱敏，凭证仅存服务端；支持 Linux 官方驱动与 Windows pyodbc 双轨。适合需要让大模型安全访问 GaussDB 数据的团队使用。",
+   "highlights": [
+    "提供 7 个工具：查询、写入、DDL、EXPLAIN、元数据浏览，按三档风险分级并受通道锁约束",
+    "实现三层 SQL 防护（应用层白名单、guardrails、只读会话+最小权限）及 JSONL 审计与脱敏管线",
+    "支持 stdio 与 streamable HTTP 传输、Bearer 鉴权、凭证文件 0600 热轮换，驱动含 psycopg2/pyodbc 双轨"
+   ],
+   "use_cases": [
+    "让 AI 客户端（Dify、Claude Code）安全查询与操作 GaussDB 业务数据",
+    "Oracle 兼容（A/ORA）形态库的 SQL 读写与元数据浏览",
+    "本地开发环境（Windows/开源 psycopg2）连本地 GaussDB 容器调试"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Oracle 兼容（A/ORA）库是第一优先场景**：MERGE INTO、DUAL、层次查询、MINUS、序列、DECODE 等 Oracle 系语法在词法层与真库（集中式 + 分布式）均已验证（实测备忘见§4.1）。A 库的 upsert 用 MERGE 表达，而非 PG 的 ON CONFLICT（A 库不支持）： ／ |`GAUSSDB_DATA_MCP_APPLICATION_NAME`|`gaussdb_data_mcp`|连接 `application_name`，便于 `pg_stat_activity` 区分流量|",
+     "lines": [
+      5,
+      245
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "> 诚实声明（沿用 AWS mysql-mcp 的话术）：词法白名单不是安全边界，它会保守误拒个别合法语句；真正的边界是只读会话 + 最小权限账号。 ／ |维度|polardb-mcp|AWS mysql-mcp|openGauss 官方 mcp-opengauss|**本服务**|",
+     "lines": [
+      46,
+      50
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "**Oracle 兼容（A/ORA）库是第一优先场景**：MERGE INTO、DUAL、层次查询、MINUS、序列、DECODE 等 Oracle 系语法在词法层与真库（集中式 + 分布式）均已验证（实测备忘见§4.1）。A 库的 upsert 用 MERGE 表达，而非 PG 的 ON CONFLICT（A 库不支持）：",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "mention",
+     "quote": "|维度|polardb-mcp|AWS mysql-mcp|openGauss 官方 mcp-opengauss|**本服务**|",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "mention",
+     "quote": "|维度|polardb-mcp|AWS mysql-mcp|openGauss 官方 mcp-opengauss|**本服务**|",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB Data MCP Server ／ GaussDB 507 **数据面 MCP 服务**。AI 客户端（Dify、Claude Code 等）通过它在三层安全防护下查询与操作 GaussDB 里的业务数据；数据库凭证只保存在服务端，不经过 LLM。 ／ gaussdb-mcp（管控面，已有） gaussdb-data-mcp（本服务，数据面）",
+     "lines": [
+      1,
+      3,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该服务为 GaussDB 提供 AI 客户端到数据库协议的 MCP 中间层，属服务数据库生态的工具组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "GaussDB 507 **数据面 MCP 服务**。AI 客户端（Dify、Claude Code 等）通过它在三层安全防护下查询与操作 GaussDB 里的业务数据；数据库凭证只保存在服务端，不经过 LLM。 ／ gaussdb-mcp（管控面，已有）                      gaussdb-data-mcp（本服务，数据面） ／ - 安全底座：`huaweicloud-mcp-core` 1.1.1（Apache 2.0）的 guardrails / 审计 / 脱敏管线",
+   "evidence_lines": [
+    3,
+    24,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "plafaithing/huawei-gaussdb-data-mcp",
+  "sha": "5e739401885c",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

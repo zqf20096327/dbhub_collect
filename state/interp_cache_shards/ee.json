@@ -9083,5 +9083,221 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1509829d3d78": {
+  "identity": {
+   "one_liner": "开源低代码开发平台，将脚本转为工作流、Webhook 和 UI",
+   "review": "Windmill 是一个自托管的开发者平台，用户编写 Python/TypeScript/Go/Bash 等脚本，平台自动生成可分享的 UI 并组合成流程，通过 Webhook、定时任务等触发。后端为 Rust 无状态服务，以 Postgres 作为任务队列和存储，支持 Docker compose 与 Helm 部署，社区版采用 AGPLv3 许可。",
+   "highlights": [
+    "支持 Python、TypeScript、Go、Bash、SQL 等多种语言编写脚本并自动生成前端 UI",
+    "以 Postgres 作为任务队列，提供 nsjail 沙箱隔离与按工作区加密的密钥存储",
+    "支持 Docker compose、Helm 部署及 Git 双向同步、CLI、VS Code 扩展等本地开发方式"
+   ],
+   "use_cases": [
+    "构建内部工具和管理后台，将脚本快速封装为可触发的 Web 应用",
+    "编排定时任务、Webhook 触发的后台作业和工作流",
+    "自托管环境中替代人工执行的运维/数据脚本流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database**: Postgres (compatible with Aurora, Cloud SQL, Neon, Azure PostgreSQL) ／ - **Backend**: Rust - stateless API servers and workers pulling jobs from a Postgres queue ／ **Using an external database**: Set `DATABASE_URL` in `.env` to point to your managed Postgres (AWS RDS, GCP Cloud SQL, Azure, Neon, etc.) and set db replicas to 0.",
+     "lines": [
+      86,
+      87,
+      144
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|NATIVE_MODE|false|Enable native mode: sets NUM_WORKERS=8, rejects non-native jobs (nativets, postgresql, mysql, etc.)|Worker|",
+     "lines": [
+      184
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 Postgres 作为自身的任务队列和数据库（L86/L87），Windmill 是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "社区版 AGPLv3，商业再分发/托管服务需联系商业许可（open-core 模式）",
+   "install": [
+    "docker",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database**: Postgres (compatible with Aurora, Cloud SQL, Neon, Azure PostgreSQL) ／ - **Backend**: Rust - stateless API servers and workers pulling jobs from a Postgres queue ／ The Community Edition is free to use internally. For commercial redistribution or managed services, contact <sales@windmill.dev>. See LICENSE and Pricing for details.",
+   "evidence_lines": [
+    86,
+    87,
+    164
+   ]
+  },
+  "fn": "windmill-labs/windmill",
+  "sha": "1509829d3d78",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "070d7a01b432": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 原生能力的 PHP/Symfony 模糊全文搜索库",
+   "review": "Fuzzphony 是面向 PHP 8.4+ 与 Symfony 应用的搜索库，在 PostgreSQL 内部通过 sidecar 索引表实现容错、重音不敏感、带排序的全文搜索，提供查询语言、过滤、同义词与多租户过滤，不引入外部搜索引擎且不改动原表。要求 PostgreSQL 15+ 及 pg_trgm、unaccent 扩展，仅支持 PostgreSQL。",
+   "highlights": [
+    "通过 sidecar 索引表实现搜索，不修改原有表结构，提供 trigger/orm/manual 同步模式",
+    "提供查询语言（短语、OR、排除、前缀、字段限定）、按词长容错、28 种语言词干化与重音折叠",
+    "要求 PostgreSQL 15+ 与 pg_trgm、unaccent 扩展，通过 composer 安装，含 Symfony Bundle 与无 Symfony 的纯 PHP 用法"
+   ],
+   "use_cases": [
+    "为 legacy 系统或不可改表的数据库在管理后台、CRM 等场景替换 LIKE 搜索",
+    "数据须留在数据库内受同一备份与权限管控的合规场景",
+    "共享 schema 的多租户 SaaS 中带租户过滤的搜索"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 15 | 16 | 17 | 18 ／ Fuzzphony is a PostgreSQL-native search library for PHP and Symfony: typo-tolerant, ／ - PostgreSQL 15+ with the `pg_trgm` and `unaccent` extensions. Both ship with PostgreSQL, but a",
+     "lines": [
+      12,
+      18,
+      146
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 PostgreSQL 提供搜索能力扩展，是服务于数据库生态的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Fuzzphony is a PostgreSQL-native search library for PHP and Symfony: typo-tolerant, ／ your tables. The index lives in a sidecar table next to them, in the database you already run. ／ composer require fuzzphony/fuzzphony",
+   "evidence_lines": [
+    18,
+    20,
+    162
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "er2es/fuzzphony",
+  "sha": "070d7a01b432",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ca14ee9a3625": {
+  "identity": {
+   "one_liner": "Pi 编码代理的原生桌面客户端，通过 Pi RPC 会话交互",
+   "review": "这是一个为 Pi 编码代理 harness 提供的桌面客户端，以 Pi Package 形式通过 /app 扩展启动，为当前项目开启独立的 Pi RPC 会话。它读取 Pi 持久化的 JSONL 会话历史，用本地 SQLite 存储应用私有的标签元数据，不修改 Pi 的会话文件。适用于在桌面端查看和管理 Pi 会话的开发者。",
+   "highlights": [
+    "通过 /app 扩展启动桌面客户端并建立独立 Pi RPC 会话",
+    "读取工作区持久化的 JSONL 会话历史，支持分页加载更早消息",
+    "用 SQLite 存储应用私有的标签与会话分组元数据"
+   ],
+   "use_cases": [
+    "在桌面客户端中浏览和继续 Pi 代理会话",
+    "按标签对多个工作区的会话进行分组管理",
+    "从桌面端发现并执行 Pi 扩展命令与提示模板"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Tags and assignments are app-private SQLite metadata keyed by canonical workspace path and Pi session ID.",
+     "lines": [
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库的桌面客户端应用，SQLite 仅用于其应用私有的标签元数据存储",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pi Native App is a Pi Package, not a separate agent runtime. ／ The desktop client starts its own independent Pi RPC session for that project. ／ Tags and assignments are app-private SQLite metadata keyed by canonical workspace path and Pi session ID.",
+   "evidence_lines": [
+    9,
+    11,
+    46
+   ]
+  },
+  "fn": "shengxiao20/pi-app",
+  "sha": "ca14ee9a3625",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

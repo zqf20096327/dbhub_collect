@@ -10409,5 +10409,70 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c48c992b2892": {
+  "identity": {
+   "one_liner": "基于 Supabase/Postgres 的 Flutter 聊天后端库，含可选聊天 UI",
+   "review": "该仓库为 Flutter 应用提供聊天功能的后端实现，依托 Supabase 平台：用 Postgres 表与 RLS 策略存储数据并控制访问，通过 Supabase Realtime 的 Broadcast/Presence 实现实时消息与在线状态，消息表按周分区。需要 Dart/Flutter 与一个 Supabase 项目，通过 SQL 脚本或 CLI/psql 完成数据库初始化，面向想在应用内添加聊天的 Flutter 开发者。",
+   "highlights": [
+    "提供房间、成员、消息、附件、已读回执、表情回应、输入指示器和在线状态的完整数据模型",
+    "所有表、存储桶和 Realtime 通道由 Postgres Row Level Security 保护",
+    "chats.messages 按周使用 pg_partman 分区，ID 采用时间有序 UUIDv7"
+   ],
+   "use_cases": [
+    "在 Flutter 移动应用中添加私聊和群聊功能",
+    "基于 Supabase 自建实时消息后端并复用其 SQL 脚本"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A Supabase backend for flutter_chat_core and flutter_chat_ui 2.x: rooms, members, messages, attachments, read receipts, reactions, typing indicators and online status, over Postgres + RLS and Supabase Realtime. ／ - **Scales with history**: `chats.messages` is partitioned by week with `pg_partman`, ids are time-ordered UUIDv7. ／ * **Secure by default**. Every table, storage bucket and Realtime channel is protected by Postgres Row Level Security. Check our documentation for the details.",
+     "lines": [
+      31,
+      68,
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 Postgres/Supabase 存储聊天数据的应用层库，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A Supabase backend for flutter_chat_core and flutter_chat_ui 2.x: rooms, members, messages, attachments, read receipts, reactions, typing indicators and online status, over Postgres + RLS and Supabase Realtime. ／  Actively maintained, community-driven Supabase BaaS for chat applications with an optional chat UI.",
+   "evidence_lines": [
+    31,
+    35
+   ]
+  },
+  "fn": "insideapp-srl/flutter_supabase_chat_core",
+  "sha": "c48c992b2892",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

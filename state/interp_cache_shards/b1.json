@@ -10266,5 +10266,196 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f2082919af55": {
+  "identity": {
+   "one_liner": ".NET 数据中间件/ORM，含自动建模、迁移、多级缓存与分表分库",
+   "review": "NewLife.XCode 是一个 .NET 数据访问中间件，以 XML 模型为单一事实来源生成强类型实体类，提供 CRUD、LINQ 查询、多级缓存、schema 自动同步迁移和分表策略，内置数据权限与多租户拦截器，供 .NET 开发者在应用中做数据访问层使用，通过 NuGet 安装并配合 xcodetool 工具生成代码。",
+   "highlights": [
+    "通过 XML 模型与 xcodetool 生成实体类（数据类与业务类分离），模型即 schema，启动时自动检查并同步表结构",
+    "提供多级缓存（全表缓存、单对象缓存、二级缓存）与事务感知的缓存一致性机制",
+    "支持 TimeShardPolicy 等分表策略实现透明路由，内置行级数据权限与多租户拦截器"
+   ],
+   "use_cases": [
+    ".NET 应用的数据访问层开发（免手写 SQL 的单表实体操作）",
+    "多数据库环境下需要自动建模/自动迁移 schema 的项目",
+    "读多写少场景的多级缓存加速与海量数据分表"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**NewLife.XCode** is a high-performance .NET data middleware focused on \"CRUD + extreme performance + massive data\". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**NewLife.XCode** is a high-performance .NET data middleware focused on \"CRUD + extreme performance + massive data\". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "**NewLife.XCode** is a high-performance .NET data middleware focused on \"CRUD + extreme performance + massive data\". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**NewLife.XCode** is a high-performance .NET data middleware focused on \"CRUD + extreme performance + massive data\". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**NewLife.XCode** is a high-performance .NET data middleware focused on \"CRUD + extreme performance + massive data\". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**NewLife.XCode** is a high-performance .NET data middleware focused on \"CRUD + extreme performance + massive data\". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "**NewLife.XCode** is a high-performance .NET data middleware focused on \"CRUD + extreme performance + massive data\". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用提供数据库访问、建模与迁移能力的数据中间件，为数据库生态服务的组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**NewLife.XCode** is a high-performance .NET data middleware focused on \"CRUD + extreme performance + massive data\". It includes multi-level caching, automatic modeling/migration, sharding, strongly-typed queries and cross-database migration. It supports MySQL / SQLite / SqlServer / Oracle / PostgreSQL / TDengine / InfluxDB / DaMeng / KingBase / HighGo / DB2 / ClickHouse / DuckDB / MongoDB / Hana (SAP HANA) / IRIS (InterSystems) / VastBase / Network virtual database / NovaDb and more. Production deployments reach tens of billions of rows per table, and query throughput can reach billions of QPS (with caching strategies). ／ dotnet add package NewLife.XCode",
+   "evidence_lines": [
+    17,
+    30
+   ]
+  },
+  "fn": "NewLifeX/NewLife.XCode",
+  "sha": "f2082919af55",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed8ffedaebcb": {
+  "identity": {
+   "one_liner": "自托管的多人文档与数据库协作工作区，内置 MCP 服务器",
+   "review": "一个可自托管的开源工作区，提供页面编辑与类数据库表格（含看板、日历、公式、仪表盘等视图），支持实时协作与离线编辑，并内置 MCP 服务器供 Claude 等 AI 助手经 OAuth 授权后读写工作区。数据存于用户自有的 PostgreSQL，通过 docker compose 部署，另有 macOS/Windows/Linux 桌面版，采用 AGPL-3.0 许可。适合团队或个人做知识库与项目协作。",
+   "highlights": [
+    "提供页面与数据库编辑，支持表格、看板、日历、时间线、图表等多种视图及关联、公式、rollup",
+    "内置 MCP 服务器，AI 客户端可通过 OAuth 2.1 授权后搜索、读取和编辑工作区",
+    "支持实时协作与离线编辑，可导入 Notion、Obsidian、Trello、Markdown/CSV 等来源"
+   ],
+   "use_cases": [
+    "团队知识库与项目协作（任务看板、仪表盘）",
+    "个人笔记与文档管理（桌面版本地运行）",
+    "让 AI 助手通过 MCP 授权读写工作区内容"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL,",
+     "lines": [
+      23
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存于用户自有的 PostgreSQL 中，该项目是使用数据库存储数据的应用。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An open-source, self-hostable workspace of pages and databases with realtime collaboration and a ／ - **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ docker compose up -d",
+   "evidence_lines": [
+    3,
+    23,
+    38
+   ]
+  },
+  "fn": "esmworks/leafdesk",
+  "sha": "ed8ffedaebcb",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

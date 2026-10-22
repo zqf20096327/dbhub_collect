@@ -9831,5 +9831,71 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e208aefccd09": {
+  "identity": {
+   "one_liner": "将 Notion 工作区镜像到本地 SQLite 与规范化 Markdown 的工具",
+   "review": "notcrawl 把 Notion 工作区同步为本地 SQLite 归档和规范化 Markdown 导出，提供 FTS5 全文检索、TUI 浏览、只读 SQL 查询、CSV 导出以及基于 git 快照的分享/订阅，供需要在脱离 Notion UI 的情况下搜索、查询、对比或共享工作区历史的人和 agent 使用。支持 desktop 缓存快照、官方 API 和实验性 MCP 三种数据源，desktop 模式只读，不回写 Notion。",
+   "highlights": [
+    "提供 sync/search/export-md/tui/sql/publish 等命令，基于 SQLite FTS5 建立全文检索索引",
+    "支持 desktop 缓存快照、官方 Notion API、notion-mcp 三种同步来源，desktop 模式为只读快照",
+    "支持将 SQLite 表与 Markdown 发布为 git 共享快照，其他机器可无凭据订阅检索"
+   ],
+   "use_cases": [
+    "在本地离线搜索和查询 Notion 工作区内容",
+    "将 Notion 数据库导出为 CSV 或归档为 Markdown",
+    "通过 git 快照在多台机器间共享归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`notcrawl` mirrors a Notion workspace into local SQLite and normalized Markdown. It is for people and agents that need to search, query, diff, or share workspace history without depending on the Notion UI. ／ SQLite is the canonical archive. Markdown is the durable human-readable export. ／ The sync reads a snapshot of Notion's local cache. Search uses the SQLite FTS5 index, and `export-md` writes the normalized archive under `~/.notcrawl/pages`.",
+     "lines": [
+      11,
+      13,
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以本地 SQLite 作为归档存储数据，属于使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`notcrawl` mirrors a Notion workspace into local SQLite and normalized Markdown. It is for people and agents that need to search, query, diff, or share workspace history without depending on the Notion UI. ／ SQLite is the canonical archive. Markdown is the durable human-readable export.",
+   "evidence_lines": [
+    11,
+    13
+   ]
+  },
+  "fn": "openclaw/notcrawl",
+  "sha": "e208aefccd09",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

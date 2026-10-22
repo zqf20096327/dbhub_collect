@@ -10302,5 +10302,80 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1e9b63153737": {
+  "identity": {
+   "one_liner": "OpenShift 应用快速部署模板，含示例应用栈与 CI/CD 流水线",
+   "review": "该仓库提供一个面向 OpenShift 的项目模板，通过 GitHub Actions 将包含前端、后端和 PostgreSQL 数据库的示例应用栈部署到 DEV/TEST/PROD 命名空间，并集成 Flyway 数据库迁移、Prometheus 指标、安全扫描等流水线组件。适合需要在 OpenShift 上搭建带 CI/CD 的 Web 应用团队，需自备 OpenShift 命名空间与 GitHub 账号，通过 scripts/setup.sh 等脚本完成初始化。",
+   "highlights": [
+    "提供基于 Pull Request 的 CI/CD 流水线模板与 OpenShift 部署模板",
+    "示例应用栈包含 PostgreSQL 数据库、Flyway 迁移、Nest.js 后端与 Caddy 前端",
+    "包含安全扫描、依赖自动更新、Prometheus 指标导出与自动扩缩容配置"
+   ],
+   "use_cases": [
+    "在 OpenShift 上快速初始化带 DEV/TEST/PROD 环境的应用项目",
+    "为团队搭建含数据库迁移与安全扫描的 GitHub Actions 流水线",
+    "作为 BC Government OpenShift 平台项目的起始模板使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* Database: Postgres, Flyway ／ `DB_PASSWORD` is generated separately for each environment. Don't change it after the first deploy: PostgreSQL keeps its first password. ／ The password used for the PostgreSQL database. This **MUST** be a strong, unique password and **DISTINCT** across all environments (pr, test, prod). Reusing the same password in development/PRs as in production is a critical security risk.",
+     "lines": [
+      30,
+      87,
+      166
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Teams will receive a set of project namespaces, usually DEV (for PRs), TEST and PROD. TOOLS namespaces (e.g. Jenkins, shared Oracle resources) are not used here. Provided by your OpenShift platform team.",
+     "lines": [
+      153
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是部署到 OpenShift 的应用模板，示例栈使用 PostgreSQL 存储数据，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository provides a template to rapidly deploy a modern web application stack to OpenShift using GitHub Actions, incorporating best practices for CI/CD, security, and observability. By hitting the ground running we can save weeks‑to‑months of development time, receive regular updates, and built‑in **Maintenance Mode Automation**, which allows an app to go on autopilot for security and dependency updates. This limits developmer involvement to critical issues only, drastically reducing labor costs and freeing up resources for higher priority work. ／ * **Sample application stack:** ／  * Database: Postgres, Flyway",
+   "evidence_lines": [
+    10,
+    29,
+    30
+   ]
+  },
+  "fn": "bcgov/quickstart-openshift",
+  "sha": "1e9b63153737",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

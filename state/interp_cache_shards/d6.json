@@ -10210,5 +10210,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0a4272c30a82": {
+  "identity": {
+   "one_liner": "Go 实现的 9Router LLM 路由代理网关，单二进制，兼容其 SQLite 数据",
+   "review": "该项目用单个 Go 二进制实现 9Router 的 LLM 代理网关，提供 OpenAI/Claude/Gemini 等兼容端点、组合路由（fallback、round-robin、sticky）、用量统计与内嵌 Svelte 仪表盘，并通过 SQLite WAL 与上游 9Router 共享同一数据文件。面向使用 Claude Code、Cursor 等 CLI 工具的开发者，用于接入多家 AI 提供商。",
+   "highlights": [
+    "单二进制提供代理 API 与内嵌 Svelte 5 仪表盘，运行时无需 Node.js",
+    "支持 OpenAI Chat、Claude Messages、Gemini、Ollama 兼容端点及 embeddings",
+    "使用 SQLite WAL 持久化，可与上游 9Router 打开同一 data.sqlite 数据目录"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、Cursor、Cline 等 CLI 工具提供统一本地 LLM 端点",
+    "在多个 AI 提供商与账户间做 fallback、轮询等组合路由",
+    "在无 Node.js 环境运行与 9Router 共享数据的网关"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation ／ |macOS / Linux|`~/.9router/db/data.sqlite`|",
+     "lines": [
+      143,
+      153
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 LLM 路由生态服务的代理网关组件，SQLite 仅作其内置持久化存储而非业务数据应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Same idea as 9Router, minus the Node.js runtime: **one Go binary** serves the proxy APIs + an embedded Svelte dashboard. ／ - 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation",
+   "evidence_lines": [
+    18,
+    143
+   ]
+  },
+  "fn": "luqman-v1/9router-go",
+  "sha": "0a4272c30a82",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

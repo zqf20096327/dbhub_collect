@@ -10700,5 +10700,187 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e01b51e3be8": {
+  "identity": {
+   "one_liner": "MAC 地址厂商查询数据库，合并 IEEE/Nmap/Wireshark/HDM 四源",
+   "review": "该项目是 MAC 前缀（OUI）到厂商的查询数据集，合并四个来源共 59,134 条去重记录，每月经 GitHub Actions 自动更新。提供 TXT/CSV/JSON/XML/SQLite 等 10 种格式下载，含 SQL 导入脚本和浏览器查询页，供网络设备识别、MAC 欺骗检测等场景使用。",
+   "highlights": [
+    "提供 10 种数据格式下载，包括可索引的 SQLite 文件和 Postgres/MySQL/D1 导入脚本",
+    "按 IEEE 键合并四来源并去重，含厂商名归一化、注销状态与注册历史字段",
+    "通过 GitHub Actions 每月自动更新，提供跨平台 Node.js CLI 查询工具"
+   ],
+   "use_cases": [
+    "网络设备识别：按 MAC 地址查找制造商与设备类型",
+    "检测未授权设备或 MAC 欺骗",
+    "Kismet 等无线工具的厂商列表数据源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**File Formats**|`10`|TXT to SQLite| ／ |SQLite|indexed|Ready-to-query DB|master_oui.db| ／ ### `sqlite3`",
+     "lines": [
+      41,
+      157,
+      212
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|SQL|script|Postgres/MySQL/D1 import|import-to-d1.sql|",
+     "lines": [
+      158
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|SQL|script|Postgres/MySQL/D1 import|import-to-d1.sql|",
+     "lines": [
+      158
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|`registrant_history`|string|`TEKELEC \\|PRIVATE \\|TEKELEC \\|Oracle` (every registrant the block has had, oldest first; only when it changed)|",
+     "lines": [
+      186
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目本身是数据集，仅将 SQLite/SQL 作为发布格式之一，不面向数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|SQLite|indexed|Ready-to-query DB|master_oui.db| ／ |SQL|script|Postgres/MySQL/D1 import|import-to-d1.sql| ／ The repo auto-updates on a **monthly cron** via GitHub Actions:",
+   "evidence_lines": [
+    157,
+    158,
+    264
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Ringmast4r/OUI-Master-Database",
+  "sha": "2e01b51e3be8",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "06efa6a9666f": {
+  "identity": {
+   "one_liner": "自托管可用性监控工具，含状态页、值班与多区域探测",
+   "review": "这是一个集可用性监控、公开状态页与 on-call 值班于一体的工具，提供 HTTP/TCP/ICMP/DNS/TLS/浏览器流程等 8 种检查类型与 14+ 告警渠道。面向小型 SaaS 团队、平台/SRE 及自托管用户，通过 REST API、Terraform provider 和 MCP server 实现",
+   "highlights": [
+    "支持 HTTP、TCP、ICMP、DNS、TLS 证书、域名到期、心跳及无头浏览器登录流程等 8 种检查类型，最短间隔 10 秒",
+    "内置公开状态页（HTML/JSON/RSS），支持组件、订阅者与事件叙述",
+    "提供 REST API、官方 Terraform provider 与 MCP server，支持多区域探测代理"
+   ],
+   "use_cases": [
+    "为面向客户的服务维护公开状态页",
+    "对网站、端口、证书与定时任务进行多区域可用性监控并告警",
+    "管理 on-call 轮换与逐级升级的分页通知"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up. ／ Anything reachable from the internet should run this stack, not the one above. It adds a Caddy edge with automatic TLS, internal-only Postgres and ClickHouse, per-IP rate limits, and blue/green restarts. The operator host is guarded by the app's own sign-in, n ／ Bring your own Postgres 18 and ClickHouse; the chart ships neither. A second chart, `uptimepage-agent`, runs a probe on its own in another region or inside a private network, against this or the hosted service. Details in docs/kubernetes.md and `charts/`.",
+     "lines": [
+      78,
+      180,
+      233,
+      244
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up. ／ **ClickHouse system logs are off.** Stock ClickHouse keeps two dozen `system.*_log` tables that grow without bound and use CPU at idle. Uptimepage reads none of them, so `config/clickhouse-quiet.xml` turns them all off; to get one back for debugging, delete it ／ Anything reachable from the internet should run this stack, not the one above. It adds a Caddy edge with automatic TLS, internal-only Postgres and ClickHouse, per-IP rate limits, and blue/green restarts. The operator host is guarded by the app's own sign-in, n",
+     "lines": [
+      78,
+      180,
+      204,
+      233
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为监控可用性服务的工具，使用 Postgres 与 ClickHouse 作为自身存储，非以数据库产品为核心",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另有托管服务（free tier + hosted）",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Uptime monitoring, status pages and on-call. Open source, free to start. Live in 5 minutes.** ／ |**Checks**|HTTP, TCP, ICMP ping, heartbeat (inbound dead-man's-switch), DNS, TLS-cert expiry, domain expiry, browser login flow with per-step timings, manual (state set by an operator); a circuit breaker per monitor, designed for ~50k concurrent in-flight| ／ |**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary|",
+   "evidence_lines": [
+    5,
+    71,
+    78
+   ]
+  },
+  "fn": "uptimepage/uptimepage",
+  "sha": "06efa6a9666f",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

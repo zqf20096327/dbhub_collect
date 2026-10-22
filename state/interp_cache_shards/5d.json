@@ -9740,5 +9740,73 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ce839ea1bc93": {
+  "identity": {
+   "one_liner": "全栈动漫发现/追番/本地弹幕播放平台，自托管",
+   "review": "一个自托管的动漫发现与追番平台，提供季度番剧浏览、订阅进度管理、本地视频播放与弹幕匹配，数据管道从 AniList 拉取并经 Bangumi 富化。技术栈为 Next.js RSC + Go（pgx/sqlc）+ PostgreSQL 16 单一主存储，配独立 Socket.IO ws-server。适合想自建追番站点并用 PostgreSQL 存储数据的用户；README 声明弹幕匹配不追求 100% 准确、WebSocket 为单实例。",
+   "highlights": [
+    "季度番剧浏览、订阅/进度追踪、本地视频播放与三阶段弹幕匹配（hash→关键词→逐文件回退）",
+    "PostgreSQL 16 作为唯一主存储，pg_cron 处理弹幕 TTL 清理，river queue 驱动 Bangumi 富化管道",
+    "支持 Docker Compose 部署，含 Next.js SSR 前端、Go API 与独立 Node ws-server 三个服务"
+   ],
+   "use_cases": [
+    "自托管个人追番站，管理观看列表与季度日程",
+    "本地视频文件播放并自动加载匹配弹幕与内嵌字幕",
+    "面向中英双语的番剧信息站，含 SEO 与管理后台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Production stack:** Next.js 16 + Bun + Go 1.26 (chi + pgx + sqlc) + PostgreSQL 16 + Node ws-server (Socket.IO) ／ |Database|PostgreSQL 16 · pg_cron · pg_trgm| ／ 2. **PostgreSQL** — single primary datastore; pg_cron handles danmaku TTL cleanup",
+     "lines": [
+      17,
+      90,
+      184
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 是唯一主存储，该项目是使用数据库存数据的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A full-stack anime discovery, tracking, and local playback platform. Browse seasonal anime, manage your watchlist, play local video files with matched danmaku (bullet comments), and connect with other fans. ／ **Production stack:** Next.js 16 + Bun + Go 1.26 (chi + pgx + sqlc) + PostgreSQL 16 + Node ws-server (Socket.IO) ／ |Database|PostgreSQL 16 · pg_cron · pg_trgm|",
+   "evidence_lines": [
+    5,
+    17,
+    90
+   ]
+  },
+  "fn": "lawrenceli0228/animego",
+  "sha": "ce839ea1bc93",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

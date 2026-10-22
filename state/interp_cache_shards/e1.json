@@ -9815,5 +9815,90 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8c7d2a8eaec3": {
+  "identity": {
+   "one_liner": "本地 ABAP 应用服务器，转译 ABAP 并经 OData v2 提供 SEGW 服务",
+   "review": "open-steamgate 将经典 code-based SEGW 的 /IWBEP/ Gateway 运行时在本地重实现：把 ABAP（含 CDS、AMDP）交叉编译/转译后对本地数据库执行 Open SQL，向 Fiori、Eclipse ADT 与 SAP GUI 提供 OData/ADT/DIAG 接口，不连接真实 SAP 系统。数据库位于十一方法的接缝之后，可选 sql.js、SQLite、DuckDB、PostgreSQL 或 HANA。适合需要在无 SAP 系统环境下运行与开发 SEGW 服务的 ABAP 开发者。",
+   "highlights": [
+    "重实现 /IWBEP/ OData v2 Gateway 运行时，支持 $filter、$batch、$expand、deep insert、function imports 等",
+    "数据库后端通过统一接缝支持 sql.js、SQLite、DuckDB、PostgreSQL 和 HANA",
+    "提供 gogen 将 ABAP 编译为 Go，可把报表构建为无服务器的原生命令行二进制"
+   ],
+   "use_cases": [
+    "在本地（浏览器/Docker/单二进制）运行和开发经典 SEGW OData 服务",
+    "用 Eclipse ADT 或 VS Code 以 RFC/HTTPS 方式编辑、激活并调试 ABAP 对象",
+    "将 ABAP 报表编译为独立 Go 命令行工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL or HANA. So a whole system can be copied, branched, compared and",
+     "lines": [
+      53
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Each release also carries `sqlite.yml`, `duckdb.yml` and `postgres.yml`; start one with `docker compose -f sqlite.yml up -d`. `./osd doctor` checks a downloaded binary.",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **open-rfc-go**: pure-Go NI / RFC / CPIC transport, used as an external oracle.",
+     "lines": [
+      332
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是运行 ABAP 应用的本地服务器，数据库只是其存储后端（PostgreSQL/SQLite 等位于接缝之后）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL or HANA. So a whole system can be copied, branched, compared and ／ answers SAP GUI on the DIAG port. No SAP system is attached. ／ It is the layer under an ERP, not an ERP. The language runtime, the",
+   "evidence_lines": [
+    53,
+    42,
+    44
+   ]
+  },
+  "fn": "oisee/open-steamgate",
+  "sha": "8c7d2a8eaec3",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

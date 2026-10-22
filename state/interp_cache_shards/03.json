@@ -11221,5 +11221,171 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "83e702190332": {
+  "identity": {
+   "one_liner": "自托管 AI Agent 运行时，基于 Claude Agent SDK 构建持久记忆与任务执行",
+   "review": "Nerve 是一个自托管的 AI Agent 运行时，基于 Claude Agent SDK 提供 personal 与 worker 两种模式，包含双层记忆（Markdown 热记忆 + SQLite 持久化语义检索）、APScheduler 定时任务、技能文件自演化，以及 Web UI、Telegram、Slack、cron 等通道。适合想在自有服务器上运行个人助理或自治工作代理的用户。安装依赖 Python 3.13+、Node.js 22+ 与 uv。",
+   "highlights": [
+    "提供双层持久记忆：Markdown 热记忆与 SQLite 持久化的语义检索记忆（memU）",
+    "支持 Web UI、Telegram、Slack、cron 四种交互通道，共享同一 Agent 引擎",
+    "任务管理使用 Markdown 文件并以 SQLite FTS5 实现全文检索"
+   ],
+   "use_cases": [
+    "自托管运行长期记忆的个人 AI 助理，接入邮箱、Telegram、GitHub 等信息源",
+    "部署带人工审批与审计记录的自治工作代理，如监控 CI、审阅 PR",
+    "通过 cron 定时执行隔离或持久会话的自动化 AI 任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only. ／ Markdown files backed by SQLite FTS5 full-text search.",
+     "lines": [
+      171,
+      184
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "curl -fsSL https://raw.githubusercontent.com/ClickHouse/nerve/main/install.sh | bash",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 SQLite 做记忆与任务持久化的 AI Agent 应用，不面向数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Nerve is a self-hosted runtime for AI agents, built around the Claude Agent SDK. It gives agents everything they need to be useful long-term: persistent memory, scheduled execution, task management, learnable skills, and channels to reach you through — web UI, Telegram, Slack, or autonomous cron jobs. ／ Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only. ／ Markdown files backed by SQLite FTS5 full-text search.",
+   "evidence_lines": [
+    13,
+    171,
+    184
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "ClickHouse/nerve",
+  "sha": "83e702190332",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "914440ff5a34": {
+  "identity": {
+   "one_liner": "redb 生态的 OAuth 2.1/OIDC 认证服务器，基于 OpenIddict 与 redb 存储",
+   "review": "这是一个面向 redb 生态的 OAuth 2.1 / OpenID Connect 身份服务器，构建于 OpenIddict 之上，所有端点注册为 direct-vm:// 路由，可通过 HTTP、gRPC、RabbitMQ、SignalR 或进程内调用访问。面向需要在 .NET 应用中嵌入认证授权能力的开发者，提供 MFA、WebAuthn、联邦认证、SCIM 2.0 等能力，存储支持 PostgreSQL、MSSQL 与 SQLite 三种引擎，通过 NuGet 包安装。",
+   "highlights": [
+    "所有端点为 direct-vm:// 路由，支持 HTTP/gRPC/RabbitMQ/SignalR/进程内多种传输方式",
+    "内置 MFA（TOTP、SMS/Email OTP、WebAuthn/FIDO2）、联邦认证、SCIM 2.0、DPoP 与 Backchannel Logout",
+    "通过 redb.Postgres.Pro / redb.MSSql.Pro / redb.SQLite.Pro 提供者包支持三种存储引擎，代码优先无需迁移"
+   ],
+   "use_cases": [
+    "在 .NET/Tsak worker 中以进程内方式嵌入 OIDC/OAuth 2.1 认证授权服务",
+    "需要多传输（HTTP/gRPC/消息队列）暴露 token、introspect、userinfo 等端点的服务间认证",
+    "需要 MFA、WebAuthn、SCIM 2.0 供给与多实例集群部署的身份管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "dotnet add package redb.Postgres.Pro # or redb.MSSql.Pro / redb.SQLite.Pro ／ |**Storage engines**|Postgres, MSSQL **and** SQLite from one codebase — swap by changing the provider package the host loads|One provider per build; switching requires re-writing the EF model + migrations|",
+     "lines": [
+      49,
+      438
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "dotnet add package redb.Postgres.Pro # or redb.MSSql.Pro / redb.SQLite.Pro ／ |**Storage engines**|Postgres, MSSQL **and** SQLite from one codebase — swap by changing the provider package the host loads|One provider per build; switching requires re-writing the EF model + migrations|",
+     "lines": [
+      49,
+      438
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "dotnet add package redb.Postgres.Pro # or redb.MSSql.Pro / redb.SQLite.Pro ／ |**Storage engines**|Postgres, MSSQL **and** SQLite from one codebase — swap by changing the provider package the host loads|One provider per build; switching requires re-writing the EF model + migrations|",
+     "lines": [
+      49,
+      438
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 redb 生态的身份服务组件，通过 redb 提供者包使用 Postgres/MSSQL/SQLite 作为存储引擎。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dotnet add package redb.Postgres.Pro      # or redb.MSSql.Pro / redb.SQLite.Pro ／ |`redb.Identity.Core`|OAuth 2.1 / OIDC engine — OpenIddict pipeline, redb stores, MFA, WebAuthn, federation, signing keys|",
+   "evidence_lines": [
+    49,
+    55
+   ]
+  },
+  "fn": "redbase-app/redb-identity",
+  "sha": "914440ff5a34",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

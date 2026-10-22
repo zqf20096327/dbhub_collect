@@ -10086,5 +10086,136 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d611ce2cead8": {
+  "identity": {
+   "one_liner": "MCP 服务器/技能/规则打包工具，一条命令跨 AI IDE 安装",
+   "review": "VibeBasket 将可信目录中的 MCP 服务器、agent skills 和项目规则打包成一个可分享的 npx 安装命令，可应用到 Cursor、VS Code、Claude Code 等 30 个 AI IDE 和 CLI 工具，提供托管站点、CLI 和自托管 Docker 部署。面向需要在多 IDE 间统一 MCP 配置的开发者与团队；自托管默认单节点、使用 SQLite 存储，不支持多节点共享状态。",
+   "highlights": [
+    "一条 npx 命令将 bundle 应用到 30 个 AI IDE/CLI 目标，写入幂等且带备份回滚",
+    "目录同步自官方 MCP Registry 与 skills.sh，提供 FTS5 全文搜索和信任分级",
+    "支持 6 种备份后端（本地/S3/R2/Spaces/Azure/GCS），凭据以 AES-256-GCM 加密存储于 SQLite"
+   ],
+   "use_cases": [
+    "团队在多个 AI IDE 间标准化 MCP 服务器与 skills 配置",
+    "通过一条可分享链接为项目重复安装同一套 agent 工具栈",
+    "自托管部署以管理目录、备份与配置回滚"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- Letting self-hosters run the whole stack on a single VPS without adding Redis, Postgres, or extra infra",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Encrypted credentials stored in SQLite, never in environment files ／ VibeBasket is currently optimized for **single-node deployments**: one app instance, one SQLite database, and no Redis or shared cache by default. ／ Shared schemas, SQLite bootstrap, and database access",
+     "lines": [
+      130,
+      242,
+      262
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身是托管/自托管应用，使用 SQLite 存储加密凭据与目录数据，而非为某数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "VibeBasket is currently optimized for **single-node deployments**: one app instance, one SQLite database, and no Redis or shared cache by default. ／  Shared schemas, SQLite bootstrap, and database access",
+   "evidence_lines": [
+    242,
+    262
+   ]
+  },
+  "fn": "mhmtayberk/VibeBasket",
+  "sha": "d611ce2cead8",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "16b37689370e": {
+  "identity": {
+   "one_liner": "Tidbyt LED 矩阵的独立时钟表盘应用，经 GitHub Actions 推送",
+   "review": "这是一个为 Tidbyt 64×32 LED 显示屏编写的独立表盘应用仓库，包含 clock、news、weather、closing 等多款 app，通过 GitHub Actions 定时渲染并推送到设备，无需家用常驻机器。使用者需 fork 仓库并配置设备 ID 与 API token；原生硬件仅缓冲部分动画帧，时钟秒针表现为实验性，Tronbyt 自托管固件下可正常连续渲染。",
+   "highlights": [
+    "包含 clock、news、weather、closing 多个 Tidbyt app，clock 提供 gold digits、日期与秒条",
+    "通过 GitHub Actions 定时渲染并推送 WebP 到设备，无需家用常驻机器",
+    "提供 deploy.sh 与 pixlet 本地开发/预览/删除命令"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上运行独立时钟与新闻/天气卡片",
+    "使用 Tronbyt 自托管固件时直接部署 .star 文件",
+    "通过 GitHub Actions 免机器定时推送屏幕内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库是使用 Tidbyt 设备与 pixlet 渲染的自定义 app 集合，README 未涉及任何数据库组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Custom apps for a Tidbyt (64×32 LED matrix) in a warm-dark espresso ／ palette, pushed standalone by GitHub Actions — no home machine involved.",
+   "evidence_lines": [
+    3,
+    4
+   ]
+  },
+  "fn": "adamlee117097/tidbyt-clock",
+  "sha": "16b37689370e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

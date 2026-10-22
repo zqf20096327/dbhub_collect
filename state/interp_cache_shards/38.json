@@ -10719,5 +10719,144 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c2d77321f4fe": {
+  "identity": {
+   "one_liner": "GitHub PR 评审桌面应用，本地镜像缓存 PR 数据",
+   "review": "PR Cockpit 是一款面向 GitHub 拉取请求评审的桌面应用，支持 macOS 与 Linux，提供 CLI 供人和编码代理使用。它通过 webhooks 维护本地 PR 镜像，队列、diff、检查日志与评审线程从磁盘读取；Bun 服务器将 PR 状态缓存在 SQLite 中，GitHub 仍为数据源。不提供 Windows 支持。",
+   "highlights": [
+    "通过本地镜像与 webhooks 从磁盘渲染 PR 队列、diff、失败检查日志与评审线程",
+    "提供键盘驱动的全局搜索面板与 CLI，供人类和编码代理调用",
+    "支持 pending reviews、分组/过滤/排序、桌面通知规则等评审工作流功能"
+   ],
+   "use_cases": [
+    "需要快速浏览和评审大量 GitHub PR 的开发者",
+    "维护 stacked PR 或需要分组管理评审队列的团队",
+    "在编辑器外用全局快捷键调起 PR 查看的场景"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **On your machine:** a Bun server caches PR state in SQLite and serves the desktop UI and CLI. In replica mode, cached lists stay local; GitHub searches and keyed PR title lookups use the connected source.",
+     "lines": [
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用用 SQLite 缓存 PR 状态，SQLite 是该应用的数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PR Cockpit is a desktop app for GitHub pull requests on **macOS and Linux**. A local mirror, kept current by webhooks, holds every PR you care about, so the queue, the diff, the failed check logs and the review threads paint from disk. Keyboard for everything; GitHub stays the source of truth.",
+   "evidence_lines": [
+    5
+   ]
+  },
+  "fn": "theolundqvist/pr-cockpit",
+  "sha": "c2d77321f4fe",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f3d04fb7f04c": {
+  "identity": {
+   "one_liner": "医疗问诊平台的 Node.js/Express 后端单体，使用 PostgreSQL + Prisma 存储数据",
+   "review": "这是 DocForum 医疗平台的模块化单体后端，实现预约、转诊、问诊、处方、检查单和支付等模块，采用 Express + Prisma + PostgreSQL，通过数据库级条件更新保证预约并发安全。供平台前后端开发者使用；README 注明 Docker Compose 文件未在开发环境中实际验证过，集成测试依赖 embedded-postgres。",
+   "highlights": [
+    "按模块组织的后端单体，包含 auth/users/appointments/referrals/prescriptions/payments 等 14 个模块",
+    "以 backend/prisma/schema.prisma 作为数据模型的唯一事实来源",
+    "预约使用数据库层条件更新事务实现并发保证，集成测试可用 embedded-postgres 自动拉起一次性 Postgres"
+   ],
+   "use_cases": [
+    "医疗问诊/预约类系统的后端开发参考",
+    "需要预约并发安全、处方不可变等不变式实现的场景",
+    "基于 Prisma + Express 的模块化单体架构示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL| ／ Needs a Postgres instance — either `infra/docker/docker-compose.yml` ／ where this was built; developed and tested against a local Postgres via",
+     "lines": [
+      51,
+      108,
+      110
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个医疗平台的后端应用，直接使用 PostgreSQL 存储业务数据而非为数据库生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Database|PostgreSQL| ／ Needs a Postgres instance — either `infra/docker/docker-compose.yml`",
+   "evidence_lines": [
+    51,
+    108
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "DocForum/docforum-core",
+  "sha": "f3d04fb7f04c",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

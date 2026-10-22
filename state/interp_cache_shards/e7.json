@@ -10392,5 +10392,289 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3e5ab676439e": {
+  "identity": {
+   "one_liner": "开源自托管 CRM，Go+React 实现，支持 SQLite 或 MySQL 存储",
+   "review": "GopherCRM 是一个面向小型销售与支持团队的自托管 CRM 系统，提供线索、商机、工单、任务管理和嵌入式获客表单，表单提交可经垃圾防护与可选双重确认后转为线索。后端为 Go 单二进制，前端为 React，数据库默认 MySQL，也可用免服务器的 SQLite；AI 可见性（AEO）报告为附加功能。",
+   "highlights": [
+    "提供线索、商机（五阶段管道）、工单、任务和四种角色的权限管理",
+    "内置可嵌入网站的获客表单，含多层垃圾防护与可选双重确认",
+    "支持 SQLite 与 MySQL 两种存储，附 Docker Compose 部署文件"
+   ],
+   "use_cases": [
+    "小型团队自托管管理销售线索与支持工单",
+    "在网站上嵌入表单收集线索并双重确认订阅",
+    "开发/演示环境用单文件 SQLite 快速运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both. ／ ## Running with Docker (MySQL)",
+     "lines": [
+      4,
+      20,
+      71
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ - **Easy to run.** A single Go API binary and a static React UI. SQLite needs no database server; ／ ## Quick start (SQLite, no database server)",
+     "lines": [
+      4,
+      19,
+      26
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both.",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该系统使用 SQLite/MySQL 存储自身业务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Go backend, React UI, SQLite or MySQL. ／ **Who it's for:** small sales and support teams that want leads, deals and tickets in one place, on ／  MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both.",
+   "evidence_lines": [
+    4,
+    10,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "florinel-chis/GopherCRM",
+  "sha": "3e5ab676439e",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c03fcdde58d4": {
+  "identity": {
+   "one_liner": "基于 aiogram 与 yt-dlp 的 Telegram 媒体下载机器人",
+   "review": "一个以 SaaS 核心形态构建的 Telegram 媒体下载机器人，通过 yt-dlp 下载 YouTube、TikTok 等平台媒体，使用子进程隔离阻塞下载、Redis pub/sub 推送进度、自托管 Bot API 突破 50 MB 上传限制（至 2 GB）。数据存于 PostgreSQL，任务队列用 arq，面向需要通过 Telegram 机器人获取视频或 MP3 的用户，采用 Docker Compose 部署。",
+   "highlights": [
+    "每个下载在独立 OS 进程中运行，超时通过 terminate() 终止，进度经队列与 Redis pub/sub 实时推送",
+    "支持两步确认流程：先预览标题/时长/缩略图，用户选择格式（MP4/MP3）与画质后再入队下载",
+    "提供 Redis 滑动窗口限速、域名白名单校验、本地化错误分类（七类）及 ru/en 双语界面"
+   ],
+   "use_cases": [
+    "在 Telegram 中通过机器人下载视频或提取 MP3 音频",
+    "下载超过 Bot API 50 MB 限制的大文件（最高 2000 MB）",
+    "作为 Clean Architecture + DDD 分层的 Python 异步机器人项目参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16|Via SQLAlchemy 2 (async) + asyncpg| ／ Postgres and Redis are published on non-standard host ports (`5433` and `6380`) to avoid clashing with locally installed instances. Change `HOST_POSTGRES_PORT` / `HOST_REDIS_PORT` if needed.",
+     "lines": [
+      53,
+      142
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Testing|pytest, pytest-asyncio, pytest-cov, aiosqlite|343 tests; repositories tested against SQLite; coverage gate on core layers|",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 PostgreSQL/Redis 存储数据的 Telegram 下载机器人应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A production-grade Telegram bot that downloads media from YouTube, TikTok, Instagram, X/Twitter and VK via `yt-dlp` — built as the core of a future SaaS platform rather than as a single-file script. ／ |Database|PostgreSQL 16|Via SQLAlchemy 2 (async) + asyncpg| ／ |Cache / broker / pub-sub|Redis 7|FSM storage, arq broker, rate limiter, progress channel, preview context|",
+   "evidence_lines": [
+    10,
+    53,
+    55
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "IvanSytnik/Universal-Media-Downloader",
+  "sha": "c03fcdde58d4",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::Oceanbase competition, seekdb part.": {
+  "identity": {
+   "one_liner": "OceanBase 竞赛项目的 seekdb 部分",
+   "review": "基于简介：该仓库内容为 OceanBase 竞赛相关的 seekdb 部分，除简介外无其他说明。仓库无 README，无法确认其具体功能、目标用户、安装或运行方式，编目仅能依据简介字面信息，实际用途待补充文档后复核。",
+   "highlights": [
+    "与 OceanBase 竞赛相关",
+    "包含 seekdb 部分"
+   ],
+   "use_cases": [
+    "参赛者查阅或复用该竞赛项目代码",
+    "了解 OceanBase 竞赛相关实现参考"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "Oceanbase competition, seekdb part."
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介未说明该项目是为数据库生态服务的工具还是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Oceanbase competition, seekdb part."
+  },
+  "fn": "CYXC11/seekdb",
+  "sha": "desc::Oceanbase competition, seekdb part.",
+  "source": "desc",
+  "generated_at": "2026-10-22",
+  "ver": 2,
+  "prompt_ver": "3.3"
+ },
+ "28ec7c3f4887": {
+  "identity": {
+   "one_liner": "基于 PowerContext 框架的 AI Agent 上下文管理应用",
+   "review": "该仓库是 OceanBase 第六届数据库大赛 PowerContext 赛道的参赛项目（哈基米队），基于 PowerContext 框架实现 AI Agent 的上下文管理应用。README 仅两行，未提供安装方式、运行步骤或与 OceanBase 的具体集成细节，功能细节无法进一步核实。",
+   "highlights": [
+    "基于 PowerContext 框架开发",
+    "实现 AI Agent 上下文管理功能",
+    "为 OceanBase 数据库大赛 PowerContext 赛道参赛作品"
+   ],
+   "use_cases": [
+    "AI Agent 上下文管理场景",
+    "PowerContext 框架的应用示例/参赛参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "OceanBase 第六届数据库大赛 PowerContext 赛道参赛仓库，哈基米队。基于PowerContext框架开发AI Agent上下文管理应用。",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为基于 PowerContext 框架开发的应用，仅在赛事名称中提及 OceanBase，未声明提供数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "OceanBase 第六届数据库大赛 PowerContext 赛道参赛仓库，哈基米队。基于PowerContext框架开发AI Agent上下文管理应用。",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "RHLCX/hajimi-powercontext-scau",
+  "sha": "28ec7c3f4887",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11207,5 +11207,140 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7656ce172ba2": {
+  "identity": {
+   "one_liner": "macOS 本地优先日记笔记应用，笔记存于 SQLite 文件",
+   "review": "Note Repo 是一款面向 macOS 的本地优先日记类笔记应用，笔记以 SQLite 文件存储在本地，无账户和云同步。它随附 noterepo 命令行工具，直接读写同一 SQLite 文件，供编码代理或用户以 JSON 输出方式增删改查笔记，并支持备份/恢复与源码构建。",
+   "highlights": [
+    "笔记数据存储在本地 SQLite 文件中，应用与 CLI 共用同一文件并实时同步",
+    "随附 noterepo 命令行工具，读取/添加/编辑/移动/删除条目并备份笔记本，输出 JSON",
+    "支持为 coding agents 提供 capabilities 清单，列表、图片、链接预览与搜索功能包含于应用内"
+   ],
+   "use_cases": [
+    "在 macOS 上进行本地日记式笔记记录",
+    "通过命令行或编码代理读写日常笔记",
+    "演示前重置并事后恢复笔记数据"
+   ],
+   "ai": {}
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "There are no accounts, AI tools, or calendar integrations. Your notes live in a SQLite file on your Mac. ／ The tool writes to the same SQLite file as the app. The app notices within a second and updates the open window, so you see the changes as they happen. If you're typing in the same day at that moment, your edits and the tool's are merged instead of one overwri",
+     "lines": [
+      5,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明笔记数据存储在本地 SQLite 文件中，SQLite 是应用的数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "There are no accounts, AI tools, or calendar integrations. Your notes live in a SQLite file on your Mac. ／ Note Repo is a native Mac app written in Swift. The changelog lists what changed in each release. ／ The tool writes to the same SQLite file as the app. The app notices within a second and updates the open window, so you see the changes as they happen. If you're typing in the same day at that moment, your edits and the tool's are merged instead of one overwriting the other.",
+   "evidence_lines": [
+    5,
+    11,
+    79
+   ]
+  },
+  "fn": "flaviocopes/note-repo",
+  "sha": "7656ce172ba2",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c8f413cc8622": {
+  "identity": {
+   "one_liner": "openGauss 社区打造的开源多主关系型数据库，采用存算分离 RAC 架构",
+   "review": "oGRAC 是 openGauss 社区发布的开源多主关系型数据库，使用存算分离架构，通过全局分布式缓存、分布式 MVCC、分布式锁等机制实现集群多读多写和高可用，由 CMS 集群管理、SQL 引擎、共享存储引擎和 DSS 分布式存储服务等组件构成，用 C 编写、cmake/make 构建。README 提供单节点源码编译部署与容器化构建流程，单节点模式不支持多写，仅用于开发验证。适合需要部署或参与开发该数据库内核的用户。",
+   "highlights": [
+    "支持存算分离的多主集群架构，任一存活节点均可提供服务和读写操作",
+    "提供 CMS 集群管理、DSS 分布式存储服务等组件，支持集中式和分布式存储",
+    "包含 SQL 回归测试框架，提供 28 个 smoke 用例集和 201 个全量回归用例"
+   ],
+   "use_cases": [
+    "构建多写多读的数据库集群部署环境",
+    "数据库内核源码开发与功能验证",
+    "基于 SQL 回归用例的功能测试与持续集成"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "oGRAC是openGauss社区经过多年的技术沉淀和探索，秉承着做最具创新力的技术根社区的精神，以做高性能、高安全、高可用、高智能的满足客户诉求的数据库为初心，在架构、事务、优化器和存储引擎上从零自主创新，打造的业界首个开源的多主关系型数据库。 ／ 查看openGauss是如何实现开放治理。",
+     "lines": [
+      5,
+      303
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "oGRAC 本身是数据库内核/引擎项目，为 openGauss 社区服务的技术根社区组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MulanPSL-2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "oGRAC是openGauss社区经过多年的技术沉淀和探索，秉承着做最具创新力的技术根社区的精神，以做高性能、高安全、高可用、高智能的满足客户诉求的数据库为初心，在架构、事务、优化器和存储引擎上从零自主创新，打造的业界首个开源的多主关系型数据库。 ／ oGRAC使用存算分离架构，实现计算、内存、存储三层池化。通过全局分布式缓存技术、分布式MVCC、分布式锁、多主集群高可用等关键技术，支持集群多读多写能力。 ／ - 编程语言：C",
+   "evidence_lines": [
+    5,
+    9,
+    25
+   ]
+  },
+  "fn": "opengauss-mirror/oGRAC",
+  "sha": "c8f413cc8622",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

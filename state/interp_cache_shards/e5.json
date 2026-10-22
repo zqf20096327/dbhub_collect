@@ -8892,5 +8892,151 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b2096a97f740": {
+  "identity": {
+   "one_liner": "家庭/小型办公室网络安全监控工具，Zeek 镜像流量+规则检测+护栏内 AI 分诊",
+   "review": "tapwatch 在镜像端口运行 Zeek 读取流量日志，结合路由器 syslog 和可选 osquery 端点代理，用纯 Python 检测器识别新设备、信标、DNS 隧道等异常，并可选地由小型 LLM（Jev）做告警分诊，代码事实为其设上下限。面向家庭和小型办公室用户，提供无 JavaScript 的案例台和手机推送告警，本地运行，依赖 SQLite 存储。",
+   "highlights": [
+    "提供 34 类案例、32 个带测试与规格说明的纯 Python 检测器，基线学习可跨重启并跟随设备",
+    "AI 分诊受代码护栏约束：always-alert 规则不进入模型，代码证明的事实设定模型不可跨越的上下限，无 API key 时仅运行规则",
+    "自带 selfcheck 命令，可通过 18 个脚本化攻击与误报形状回放检测器并报告检出率"
+   ],
+   "use_cases": [
+    "家庭或小型办公室网络的入侵与异常监控",
+    "对 AI 编码代理产生的流量做主机上下文甄别",
+    "无 SIEM 条件下的本地化安全告警分诊与案例管理"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为网络生态服务的监控工具，SQLite 仅作为其自身存储依赖列出，非为其服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Network security monitoring for a home or small office: Zeek on a mirror port, the router's ／ - **34 case types from 32 detectors** tuned for homes (table below). Each is plain Python with ／ - **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs",
+   "evidence_lines": [
+    8,
+    54,
+    90
+   ]
+  },
+  "fn": "barnabys-drew/tapwatch",
+  "sha": "b2096a97f740",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e1bb74e3d7ad": {
+  "identity": {
+   "one_liner": "单进程 .NET 知识平台，内置 MCP 服务器与 RAG 管道",
+   "review": "Knowledge MCP Hub 是一个以单个 Kestrel 进程运行的知识平台，包含 Blazor WASM 管理界面、REST API、原生 MCP 服务器（Streamable HTTP + SSE）和摄取管道。数据默认存于 SQLite，可选 Postgres/pgvector。面向需要构建知识库问答与代理检索的团队，通过 EF Core 使用数据库存储，属使用数据库的应用。",
+   "highlights": [
+    "单 Kestrel 进程内运行管理界面、REST API、MCP 服务器与摄取管道",
+    "提供混合检索：FTS5、向量 KNN 与知识图谱，经倒数排名融合及纠错环节",
+    "支持 MCP（Streamable HTTP + SSE）与 A2A v1.0 协议，提供 HITL 审批的代理工具调用"
+   ],
+   "use_cases": [
+    "搭建带管理界面的知识库问答/RAG 服务",
+    "为 MCP 或 A2A 客户端提供知识检索与问答工具",
+    "从 Obsidian、Web、S3、Git 等来源异步摄取并检索文档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Persistence|SQLite by default, Postgres/pgvector opt-in|External DB required|SQLite/Postgres|External DB|",
+     "lines": [
+      63
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "All-in-one standalone knowledge platform: Blazor WebAssembly admin UI, REST API, native MCP server (Streamable HTTP + legacy SSE), SQLite persistence, pluggable embeddings and vector stores, hybrid retrieval (FTS5 + vector RRF + corrective loop), GraphRAG enti ／ |Persistence|SQLite by default, Postgres/pgvector opt-in|External DB required|SQLite/Postgres|External DB|",
+     "lines": [
+      17,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目通过 EF Core 使用 SQLite/Postgres 存储自身目录与向量数据，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "All-in-one standalone knowledge platform: Blazor WebAssembly admin UI, REST API, native MCP server (Streamable HTTP + legacy SSE), SQLite persistence, pluggable embeddings and vector stores, hybrid retrieval (FTS5 + vector RRF + corrective loop), GraphRAG entity/relation extraction, agentic chat with HITL approvals, prompt-injection defense, partitioned rate limiting, async ingestion queue, cloud-storage connectors, and OpenTelemetry observability — all in a single Kestrel-hosted .NET 10 process. ／ Everything runs in **one Kestrel process**: the Blazor WebAssembly admin SPA, the REST management API, the native MCP server and the ingestion pipeline share the same EF Core database. ／ |Persistence|SQLite by default, Postgres/pgvector opt-in|External DB required|SQLite/Postgres|External DB|",
+   "evidence_lines": [
+    17,
+    34,
+    63
+   ]
+  },
+  "fn": "afonsoft/KnowledgeRAG",
+  "sha": "e1bb74e3d7ad",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

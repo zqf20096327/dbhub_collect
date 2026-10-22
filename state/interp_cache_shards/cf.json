@@ -10521,5 +10521,151 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "537a6a611f6c": {
+  "identity": {
+   "one_liner": "面向 Dokploy 的 WordPress 生产部署模板栈",
+   "review": "该仓库提供一套基于 Docker Compose 的 WordPress 部署模板，组合 MariaDB、Redis、Nginx 与 phpMyAdmin，面向使用 Dokploy 平台的用户，支持一键模板或手动 Compose 两种部署方式，内置 WP-CLI 与 Redis 对象缓存插件安装。README 重点说明 PHP 安全补丁构建流程，未提供数据库高可用或多节点方案。",
+   "highlights": [
+    "组合 WordPress、MariaDB 10.6、Redis、Nginx、phpMyAdmin 五个服务的 Compose 模板",
+    "自动安装 Redis Object Cache 插件并预装 WP-CLI",
+    "通过 GitHub Actions 定期重建 amd64/arm64 双架构镜像并发布安全版本标签"
+   ],
+   "use_cases": [
+    "在 Dokploy 平台上一键或手动部署 WordPress 站点",
+    "为 WordPress 配置 Redis 对象缓存与 Nginx 反向代理",
+    "以环境变量方式管理 PHP、Nginx、Redis 与资源限制配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MYSQL_ROOT_PASSWORD=YourSecureRootPass123! ／ MYSQL_PASSWORD=YourSecureDbPass456! ／ |wordpress|(your `MYSQL_PASSWORD`)|",
+     "lines": [
+      75,
+      76,
+      99
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**MariaDB 10.6**|Database server with health checks| ／ |`MYSQL_ROOT_PASSWORD`|-|**Required.** MariaDB root password| ／ |`DB_CPU_LIMIT`|1.0|MariaDB CPU limit|",
+     "lines": [
+      11,
+      115,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库为 WordPress 应用部署模板，使用 MariaDB 作为站点数据存储，而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Production-ready WordPress deployment stack optimized for Dokploy with Redis caching, Nginx, and management tools. ／ |**MariaDB 10.6**|Database server with health checks|",
+   "evidence_lines": [
+    3,
+    11
+   ]
+  },
+  "fn": "itsmereal/dokploy-wp",
+  "sha": "537a6a611f6c",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "898dc3d5efc7": {
+  "identity": {
+   "one_liner": "自托管开源 CRM，内置 SQLite 备份与校验恢复",
+   "review": "一个面向小型销售团队的自托管 CRM 应用，提供销售管道、联系人、公司、任务管理与 CSV 导入导出，并内置 SQLite 数据库与附件的备份、校验和恢复流程。通过 npm 或 Docker Compose 部署，提供 API 与 webhook。定位为早期版本，权限模型较简单，界面当前为俄文。",
+   "highlights": [
+    "内置 SQLite 数据库与附件的备份、校验和、恢复到独立目录",
+    "提供销售管道看板、联系人/公司/任务管理与 CSV 导入导出",
+    "支持 API 密钥与带签名的 webhook 集成外部系统"
+   ],
+   "use_cases": [
+    "小型销售团队自托管管理线索与销售管道",
+    "需要将 CRM 数据备份恢复流程内置到运维中的场景",
+    "通过 API 和 webhook 对接其他内部系统"
+   ],
+   "ecosystem_placeholder": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Back up the SQLite database and attachments, verify checksums, and restore into a separate directory. ／ For a persistent installation, run `npm start` after building and open http://127.0.0.1:3001. The first visit asks you to create an administrator. SQLite data and uploads live under `data/` by default. Use `.env.example` to configure paths, host, or port. For ",
+     "lines": [
+      20,
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是使用 SQLite 存储数据的 CRM 应用，备份功能针对自身数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted, open-source CRM for small sales teams.** Track a lead from the first request to a won or lost deal, with contacts, companies, tasks, and a customizable pipeline in one place. ／ - Back up the SQLite database and attachments, verify checksums, and restore into a separate directory. ／ For a persistent installation, run `npm start` after building and open http://127.0.0.1:3001. The first visit asks you to create an administrator. SQLite data and uploads live under `data/` by default. Use `.env.example` to configure paths, host, or port. For development, run `npm run dev` and open http://127.0.0.1:5173.",
+   "evidence_lines": [
+    3,
+    20,
+    41
+   ]
+  },
+  "fn": "nickerhov89/opencrm",
+  "sha": "898dc3d5efc7",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

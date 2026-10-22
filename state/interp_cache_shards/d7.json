@@ -10570,5 +10570,83 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4bf86ea48958": {
+  "identity": {
+   "one_liner": "面向小团队的自托管 OIDC/SAML 身份认证服务",
+   "review": "Burrow 是一个用 Go 和 React 实现的单组织、单实例身份提供者，提供 OIDC 授权码（默认强制 PKCE）和签名的 SAML IdP 能力，并内置用户/组/角色/权限管理与共享 SSO 门户。部署为单个二进制或 Docker Compose，生产环境用 PostgreSQL，开发测试用 SQLite，MFA 默认关闭。适合需要为多个 Web/SPA 应用集中接入登录的小型自托管团队。",
+   "highlights": [
+    "提供 OIDC Authorization Code（默认要求 PKCE S256）与签名 SAML IdP 两种认证协议",
+    "内置用户、组、自定义角色与权限管理，以及按协议分组的应用门户",
+    "单二进制部署（内嵌 UI），支持 PostgreSQL（生产）与 SQLite（开发/测试）"
+   ],
+   "use_cases": [
+    "为多个自托管 Web/SPA 应用集中接入 OIDC 单点登录",
+    "通过 SAML IdP 接入 Jenkins 等服务提供方",
+    "小团队的账户、角色与应用访问权限统一管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "as one binary, or run with PostgreSQL through Docker Compose. ／ - **Simple deployment:** one binary with an embedded UI; PostgreSQL in production and SQLite for development and tests, without Redis or a queue. ／ independent master-key and administrator-password values, and set the PostgreSQL",
+     "lines": [
+      15,
+      28,
+      68
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Simple deployment:** one binary with an embedded UI; PostgreSQL in production and SQLite for development and tests, without Redis or a queue.",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其生产环境使用 PostgreSQL、开发测试使用 SQLite 存储数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "single-organization, single-instance service. Its Go backend and React UI ship ／ as one binary, or run with PostgreSQL through Docker Compose. ／ - **Simple deployment:** one binary with an embedded UI; PostgreSQL in production and SQLite for development and tests, without Redis or a queue.",
+   "evidence_lines": [
+    14,
+    15,
+    28
+   ]
+  },
+  "fn": "ArkGravity/burrow",
+  "sha": "4bf86ea48958",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10382,5 +10382,77 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1b2921018b69": {
+  "identity": {
+   "one_liner": "Go 知识文库与多作者 Markdown 发布平台，CMS 基于 SQLite",
+   "review": "GopherAtlas 是一个面向 Go 开发者的策展内容平台，包含私有 CMS（Go/Fiber + 内嵌 React Admin）、基于 SQLite 的内容存储，以及通过 R2 快照与 Astro 静态构建发布到 Cloudflare Workers 的公开站。README 详述 OAuth 登录、审核工作流、快照版本兼容（v1/v2/v3）与本地迁移命令，适合自行部署的私有写作团队。",
+   "highlights": [
+    "提供私有 CMS 与公开静态站分离的发布链路，支持 snapshot v1/v2/v3 兼容读取",
+    "包含 GitHub OAuth 登录、角色审批（Admin/Reviewer/Editor）、同事务 Audit 与会话/CSRF 机制",
+    "使用 goose migrations 与 sqlc 管理 SQLite Schema，提供 make db-up/db-status 等本地初始化命令"
+   ],
+   "use_cases": [
+    "搭建多作者 Markdown 技术内容发布站",
+    "Go + SQLite + Astro 技术栈的 CMS 实现参考",
+    "需要审核工作流与发布快照版本管理的内容团队"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "当前 dev 的 Public 兼容读取 snapshot v1/v2/v3，通过统一模型构建阅读页面、静态 redirects、RSS/sitemap/SEO 与 Pagefind 搜索；开发版 CMS 统一导出 v3，要求 SQLite Schema 5 及显式本地化初始化。 ／ `ad73db37c70946c8f8b5087103b462f53822a6c3`，SQLite Schema 4、`taxonomy_state.ready=1`、 ／ 当前私有 CMS：Go / Fiber v3 + 内嵌 React Admin → SQLite / sqlc / goose",
+     "lines": [
+      10,
+      18,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统使用 SQLite 存储内容、会话与审计数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "当前私有 CMS：Go / Fiber v3 + 内嵌 React Admin → SQLite / sqlc / goose ／ 当前 dev 的 Public 兼容读取 snapshot v1/v2/v3，通过统一模型构建阅读页面、静态 redirects、RSS/sitemap/SEO 与 Pagefind 搜索；开发版 CMS 统一导出 v3，要求 SQLite Schema 5 及显式本地化初始化。 ／ 需要 Git、GNU Make、Node **24.15.0**、pnpm **12.3.4**、Go **1.26.8**。",
+   "evidence_lines": [
+    30,
+    10,
+    59
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "deepfurry/gopher-atlas",
+  "sha": "1b2921018b69",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10265,5 +10265,70 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bfcd7f786739": {
+  "identity": {
+   "one_liner": "基于FUSE和SQLite的AI代理可写文件系统层，支持分支、提交与合并",
+   "review": "LayerFS 为 AI 代理提供挂载在共享提交历史之上的可写文件系统 Workspace：代理并行工作、将变更作为去重检查点提交，并可分支、回退或合并。其 Store 由单个 SQLite 文件承载全部 Branch、Commit 与内容对象，无需数据库服务器。面向运行多代理工作流的开发者，当前仅提供源码发布，Store 的 Disposable 配置不具备崩溃/断电持久性。",
+   "highlights": [
+    "通过 FUSE 挂载提供完整可写 Workspace，写入进入独立 overlay 直到 Commit 保存",
+    "单个 SQLite 文件存储所有 Branch、Commit 与内容分块对象，无数据库服务器",
+    "支持 Branch 递归 fork、Conflict 拒绝规则与 .lww 最新编辑获胜规则"
+   ],
+   "use_cases": [
+    "多代理并行工作时的文件系统隔离与变更合并",
+    "代理执行步骤的自动检查点与历史回退",
+    "依赖预装的即时启动沙箱环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Store.** One SQLite file holds every Branch, Commit and content object. Each",
+     "lines": [
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其 Store 使用单个 SQLite 文件保存 Branch、Commit 与内容对象，属于使用数据库存数据的项目",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Store.** One SQLite file holds every Branch, Commit and content object. Each ／ LayerFS runs today through **LayerFS × DSH**, the `dsh-layerfs` plugin for ／  LayerFS is the substrate under your agents. Each one mounts a complete, writable",
+   "evidence_lines": [
+    117,
+    36,
+    7
+   ]
+  },
+  "fn": "Ephemeral-AI-Lab/layerfs",
+  "sha": "bfcd7f786739",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

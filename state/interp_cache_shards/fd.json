@@ -11418,5 +11418,192 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a6ef61686db4": {
+  "identity": {
+   "one_liner": "WhatsApp 群聊机器人，基于 SawBot-MD 定制，集成多 AI 提供商与游戏经济系统",
+   "review": "这是一个面向乌拉圭 WhatsApp 群组的个性化聊天机器人，从 SawBot-MD 改造而来。它接入 Gemini 及多个备用 AI 提供商处理对话、音频和事实核查，内置经济货币、游戏、赌场、群管理与记忆存储等功能，数据使用 better-sqlite3 存储，每日备份到 database/backups。适合想要自建群组娱乐机器人的 Node.js 使用者。",
+   "highlights": [
+    "支持多 AI 提供商级联调用：以 Gemini 为主，备用 Groq、OpenRouter、NVIDIA、Cerebras",
+    "提供经济系统（UruCoins）、游戏、赌场、月度排行等群组互动功能",
+    "通过 better-sqlite3 持久化数据，并提供每日备份机制（保留最近 7 份）"
+   ],
+   "use_cases": [
+    "为 WhatsApp 群组部署带个性化人格的聊天机器人",
+    "群组游戏化互动：问答、赌场、货币与商店系统",
+    "群组管理：权限分级、不活跃成员清理、警告与黑名单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Node.js 22 o más nuevo · Baileys · better-sqlite3 · Gemini, con respaldo en Groq, OpenRouter, NVIDIA y Cerebras · yt-dlp · ffmpeg",
+     "lines": [
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述这是一个使用 better-sqlite3 存储群组数据的 WhatsApp 聊天应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Bot de WhatsApp con personalidad propia, desarrollado a medida para un grupo de amigos de Uruguay. Es mi primer proyecto de programación (@gauchitodev), en el cual me ayudaron @carlosplanchon y @nicolasgutierrezdev. Tome como punto de partida SawBot-MD, de @martinezanthony (quien también ayudó). ／ - **Qué va a la base**: lo que aprende de cada uno (por grupo, y se borra con `.memoria olvidame`); lo que se manda a propósito (las notas de `.recordá`, los recordatorios, las entradas de los hashtags, las publicaciones de compraventa y las calificaciones), que se queda aunque después se borre el mensaje; y, durante 90 días, lo que dice Claudia en cada grupo: sus respuestas y lo que hace por iniciativa, con a quién le reaccionó o respondió y el motivo que dio la IA, que puede resumir lo que se habló. La base pisa con ceros lo que se borra, así que no queda escondido en el archivo. El motivo de cada vistazo de la iniciativa también va al log (`~/claudia.log`, si se arranca como dice abajo).",
+   "evidence_lines": [
+    7,
+    42
+   ]
+  },
+  "fn": "gauchitodev/ClaudIA",
+  "sha": "a6ef61686db4",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9d22e5b95025": {
+  "identity": {
+   "one_liner": "自托管文件浏览器与局域网传输平台，Python/Tornado 构建",
+   "review": "Aird 是用 Python 和 Tornado 实现的自托管文件管理、编辑与共享平台，面向局域网场景，提供并行 Content-Range 分片上传下载、WebSocket 日志流、内容搜索、令牌分享、可选多用户隔离与管理控制台。设置、审计日志等数据用 SQLite 存储，支持 LDAP 登录与 ABAC 策略，通过 pip 安装后以 python -m aird 运行。",
+   "highlights": [
+    "提供并行 HTTP Content-Range 分块上传下载，支持断点续传与取消",
+    "管理控制台支持 feature flags、上传限制、审计日志，改动持久化到 SQLite 且无需重启",
+    "支持令牌分享、WebSocket 实时日志流、内容搜索、可选 LDAP 与 ABAC 策略"
+   ],
+   "use_cases": [
+    "局域网内大文件高速传输与共享",
+    "团队内部文件的浏览、编辑与权限隔离管理",
+    "通过令牌向外部提供受控的文件访问入口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Ops**|SQLite-backed settings, audit log, feature flags, transfer rate limits, health endpoint|",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明设置、审计日志等数据由 SQLite 存储，数据库仅作为其自身数据的存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSL 1.1",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Aird** is a self-hosted file browser, editor, and sharing platform built on **Python** and **Tornado**. It targets fast local and LAN use: parallel HTTP transfers for large files, real-time log streaming, content search, secure shares, optional multi-user isolation, direct messages between users, and an admin console that applies settings without restarts. ／ |**Ops**|SQLite-backed settings, audit log, feature flags, transfer rate limits, health endpoint| ／ - **Free-threaded Python:** SQLite access is wrapped (`aird/db/sync.py`); upload chunk writes use `asyncio.to_thread` / `os.pwrite` so parallel range PUTs do not block the loop.",
+   "evidence_lines": [
+    13,
+    27,
+    223
+   ]
+  },
+  "fn": "blinkerbit/aird",
+  "sha": "9d22e5b95025",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fd961966f2e6": {
+  "identity": {
+   "one_liner": "NEAR 代币经济学可复现审计与 TEE 见证的链上记录工具",
+   "review": "该项目对 NEAR Intents 的收入、回购与增发数据做可复现审计：Python 流水线从原始链上数据重建指标，OutLayer Intel TDX enclave 中的 WASM worker 每日读取主网并将见证快照写入 nearbooks.near 合约，附带浏览器仪表盘、MCP 服务器和 make 驱动的验证/测试命令。适合 NEAR 生态研究者与持有人自行核验代币经济学论断；注意合约仍持有 full-access key，worker 不带状态证明。",
+   "highlights": [
+    "提供离线可复跑的 Python 审计流水线，含 make verify/test/verify-deploy 等验证入口",
+    "通过 OutLayer Intel TDX enclave 中的 WASM worker 每日生成链上见证快照并存入 NEAR 合约",
+    "内置 MCP 服务器与浏览器仪表盘，用于复核每条记录的 worker hash、pin、attestation 与交易"
+   ],
+   "use_cases": [
+    "核验 NEAR 代币经济学相关公开论断（回购、增发、收入）",
+    "在链上跟踪与解析预设的预测条目",
+    "通过 MCP 服务器在本地或 Claude Code 中查询审计记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是使用 NEAR 区块链存取自身审计数据的应用，不提供面向数据库生态的工具或组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Daily attested record.** A pinned WASM worker runs in OutLayer's Intel TDX enclave. It reads mainnet at the first block of each UTC day and returns the numbers to `nearbooks.near` through yield/resume. ／ - **An audit you can re-run.** A standard-library Python pipeline rebuilds Intents revenue, buybacks and issuance from committed raw data. It reconciles them with DefiLlama, revenue.near.org and HSP-029. ／ To add the MCP server to Claude Code: `claude mcp add nearbooks -- python3 /path/to/nearbooks/mcp/server.py`.",
+   "evidence_lines": [
+    18,
+    19,
+    121
+   ]
+  },
+  "fn": "IhorMuliar/nearbooks",
+  "sha": "fd961966f2e6",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

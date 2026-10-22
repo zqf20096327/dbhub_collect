@@ -10081,5 +10081,73 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6a3d8f42964a": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件，本地 SQLite+Markdown 存储",
+   "review": "dsh-mneme 是面向 DeepSeek Harness 宿主的跨会话记忆插件，把对话偏好与决策写入本地 SQLite 并镜像为可手工编辑的 Markdown 文件；提供关键词/向量/BM25/实体四路召回、autoDream 后台巩固、冲突挂起人工裁决，并内置 stdio MCP server 供 Claude Code、Cursor 等客户端挂载。主要面向使用 DSH 或 MCP 客户端的 AI agent 用户；核心限制是依托 DSH 宿主，巩固/蒸馏依赖宿主模型调用。",
+   "highlights": [
+    "提供 memory_save/search/list/get/update/delete 六件套工具，并内置零依赖 stdio MCP server（npm 包 mneme-memory）",
+    "记忆落盘为本地 SQLite 加可编辑 Markdown 镜像，人工改动优先，含冲突冻结待审与决策凭证回放",
+    "支持四路召回（关键词/向量/BM25/实体）与本地 Embedding 离线检索，autoDream 空闲分层归档"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 宿主的 AI agent 提供跨会话长期记忆",
+    "通过 MCP 将记忆库接入 Claude Code、Cursor、Codex 等客户端",
+    "以独立 daemon（dsh-mneme-serve）为第三方集成提供常驻记忆数据面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 记忆只落在本机：SQLite 存储 + 可手工编辑的 Markdown 镜像，不经过任何 mneme 服务器",
+     "lines": [
+      160
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向 LLM agent 的记忆应用，仅以 SQLite 作为本地存储底座，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**dsh-mneme** 是 DeepSeek Harness (DSH) 的跨会话记忆插件。它不只「存得下」，更「管得好」：后台自动去重合并、矛盾先冻结等你裁决、全程可回放审计、记忆只落在本机，还支持导出成人可读的 Markdown。 ／ - 记忆只落在本机：SQLite 存储 + 可手工编辑的 Markdown 镜像，不经过任何 mneme 服务器 ／ 插件自带零依赖 stdio MCP server（独立 npm 包 **`mneme-memory`**，bin 名 `mneme-mcp`），任何 MCP 客户端都能挂载记忆六件套（`memory_save` / `memory_search` / `memory_list` / `memory_get` / `memory_update` / `memory_delete`）。",
+   "evidence_lines": [
+    18,
+    160,
+    168
+   ]
+  },
+  "fn": "slow-stack/mneme",
+  "sha": "6a3d8f42964a",
+  "source": "readme",
+  "generated_at": "2026-10-21",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
