@@ -74,6 +74,7 @@ For builds and hosting, see the [website maintainer guide](docs/.vitepress/READM
 - [Advanced Features](#-advanced-features)
   - [Field Extensions](#field-extensions)
   - [Custom Queries](#custom-queries)
+  - [Named Views](#named-views)
   - [Custom Mutations](#custom-mutations)
   - [Working with Existing Mongoose Models](#working-with-existing-mongoose-models)
   - [Programmatic Data Access](#programmatic-data-access)
@@ -113,11 +114,11 @@ For builds and hosting, see the [website maintainer guide](docs/.vitepress/READM
 ## 📦 Installation
 
 ```bash
-npm install mongoose@^8.24.2 graphql@^16.11.0 @simtlix/simfinity-js@3.10.0
+npm install mongoose@^8.24.2 graphql@^16.11.0 @simtlix/simfinity-js@3.12.0
 ```
 
 **Prerequisites**: Simfinity.js requires `mongoose` and `graphql` as peer dependencies. Keep them within the ranges above so your application and Simfinity share a single Mongoose and GraphQL instance; npm reports an out-of-range version as a peer conflict. The MCP transports need the optional peer `@modelcontextprotocol/sdk@^1.31.0`, which is not installed automatically, and `graphql-middleware` is not a Simfinity dependency.
 
 ## PostgreSQL support
 
-Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many linking entities, and references
+Simfinity releases `@simtlix/simfinity-core`, `@simtlix/simfinity-sql`, `@simtlix/simfinity-mcp`, `@simtlix/simfinity-postgres`, and the MongoDB facade in lockstep. Install the selected adapter from npm; shared dependencies resolve automatically. PostgreSQL runs the shared GraphQL query/mutation engine, including scopes, controllers, validators, state transitions and nested writes. It generates and validates tables, indexes, and **real foreign keys**, including inverse relations, explicit many-to-many 

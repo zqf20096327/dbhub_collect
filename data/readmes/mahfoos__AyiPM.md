@@ -13,7 +13,7 @@ AyiPM has two parts:
 - **`frontend/`**: the web app, built with Next.js 16, React and TypeScript.
 - **`backend/`**: the API, built with Java 21, Spring Boot 4 and PostgreSQL.
 
-Everything the team shares is stored in Postgres and served by the backend: accounts, projects, tasks, leave, notifications, the activity log and each person's preferences. Attendance check-ins are the one thing still kept in the browser until the attendance API (#103) is finished.
+Everything the team shares is stored in Postgres and served by the backend: accounts, projects, tasks, attendance, leave, notifications, the activity log and each person's preferences.
 
 ## Features
 
@@ -25,6 +25,17 @@ Everything the team shares is stored in Postgres and served by the backend: acco
 - **Tasks**: Kanban board with drag and drop, a filterable list view, comments, and a change history for every task.
 - **Notifications and activity log**: notifications go to the people involved in a change; the activity log records every change for auditing.
 - **Profile and settings**: profile photo, personal details, password changes, theme, date and time formats, notification preferences, and (for admins) workspace rules such as working hours and leave allowance.
+
+## Screenshots
+
+A sample workspace with made-up people and projects, in light and dark mode.
+
+| | Light | Dark |
+| --- | --- | --- |
+| Dashboard | ![Dashboard in light mode: counts of active projects, open tasks, today's attendance and pending leave approvals, with project progress, a task breakdown and upcoming deadlines](docs/screenshots/dashboard-light.webp) | ![Dashboard in dark mode: counts of active projects, open tasks, today's attendance and pending leave approvals, with project progress, a task breakdown and upcoming deadlines](docs/screenshots/dashboard-dark.webp) |
+| Kanban board | ![Kanban board in light mode with To Do, In Progress, Review and Completed columns; each task card shows its project, priority, assignee and due date](docs/screenshots/kanban-board-light.webp) | ![Kanban board in dark mode with To Do, In Progress, Review and Completed columns; each task card shows its project, priority, assignee and due date](docs/screenshots/kanban-board-dark.webp) |
+| Team | ![Team page in light mode: member counts by status, role and project allocation, search and filters, and a card for each member with their role, department and email](docs/screenshots/team-light.webp) | ![Team page in dark mode: member counts by status, role and project allocation, search and filters, and a card for each member with their role, department and email](docs/screenshots/team-dark.webp) |
+| Attendance | ![Attendance page in light mode: today's check-in with the workday rules, and a monthly summary of days present, late, half days and leave for each person](docs/screenshots/attendance-light.webp) | ![Attendance page in dark mode: today's check-in with the workday rules, and a monthly summary of days present, late, half days and leave for each person](docs/screenshots/attendance-dark.webp) |
 
 ## Roles
 
@@ -68,7 +79,9 @@ Other useful commands:
 | `docker compose --profile app down -v` | Stop everything and delete the database |
 | `FRONTEND_PORT=3005 docker compose --profile app up` | Use another port if 3000 is taken |
 
-Data is stored in the `postgres-data` Docker volume, so it survives restarts and rebuilds. Only the frontend is published on your machine; the backend is reachable only from the frontend inside Docker. Before running it for real users, change the database password in `compose.yaml` and put it behind HTTPS.
+Data is stored in the `postgres-data` Docker volume, so it survives restarts and rebuilds. Only the frontend is published on your machine; the backend is reachable only from the frontend inside Docker.
+
+These defaults are for trying AyiPM out: the database password is `ayipm` and there is no HTTPS. To run it on a server for real users, follow the [self-hosting guide](docs/self-hosting.md). It sets your own database password in a `.env` file, turns on the backend's `prod` profile, puts AyiPM behind HTTPS with Caddy or nginx, and covers backups and upgrades. The HTTPS proxy should pass on the original `Host` and set `X-Forwarded-Proto`; if it can't, set `ALLOWED_ORIGINS=https://your-domain`, or saving anything fails with "Requests from other sites are not allowed." Also read [Client addresses behind a proxy](#client-addresses-behind-a-proxy), so the sign-in limits still apply to each client separately.
 
 ## Getting started
 
@@ -106,6 +119,8 @@ cd backend
 ```
 
 The API runs on http://localhost:8080. It creates and updates the database tables itself on startup. The `demo` profile adds the demo accounts below; leave out `-Dspring-boot.run.profiles=demo` to start with an empty workspace instead.
+
+To see every endpoint and try them in the browser, open Swagger UI at http://localhost:8080/swagger-ui.html. The OpenAPI spec it reads is at http://localhost:8080/v3/api-docs. Most endpoints need a session, so first run `POST /api/auth/login` with **Try it out**: the backend sets the session cookie and your browser sends it with the requests that follow, so there is nothing to enter under **Authorize**. Swagger UI is served by the backend, so it isn't reachable through the frontend on port 3000 or with Docker Compose.
 
 ### 3. Start the frontend
 
@@ -146,7 +161,15 @@ Frontend (run in `frontend/`):
 | `npm run dev` | Start the development server |
 | `npm run build` | Create a production build (also type-checks) |
 | `npm run start` | Serve the production build |
+| `npm run lint` | Check the code with ESLint |
+| `npm run format` | Format the code with Prettier |
+| `npm run format:check` | Check the formatting without changing files; this is what CI runs |
 | `npx tsc --noEmit` | Type-check without building |
+| `npm run generate:api` | Regenerate `src/types/api.generated.ts` from the backend's OpenAPI spec (`backend/openapi.json`) |
+| `npm test` | Run the unit tests once |
+| `npm run test:watch` | Re-run the unit tests as you change files |
+
+The frontend unit tests use [Vitest](https://vitest.dev) and sit next to the code they cover, for example `src/lib/date.test.ts`. They test pure helpers, so they don't need the backend.
 
 Backend (run in `backend/`):
 
@@ -157,9 +180,9 @@ Backend (run in `backend/`):
 | `./mvnw verify` | Compile, test and package; this is what CI runs |
 | `./mvnw package` | Build `target/ayipm-backend-*.jar`, which runs with `java -jar` |
 
-The backend tests start their own temporary Postgres, so you don't need Docker or a running database to run them.
+The backend tests start their own temporary Postgres, so you don't need Docker or a running database to run them. They also save the OpenAPI spec to `backend/openapi.json`, which the frontend's API types are generated from; see [API types](CONTRIBUTING.md#api-types) after changing the API.
 
-No linter is set up for the frontend yet. Next.js 16 removed `next lint`, so ESLint needs its own configuration when it is added.
+ESLint uses the Next.js core web vitals and TypeScript rules from `eslint-config-next`, configured in `frontend/eslint.config.mjs`. CI runs `npm run lint` and fails on errors.
 
 The frontend keeps both `package-lock.json` and `pnpm-lock.yaml`. If you change dependencies, update both: run `npm install`, then `pnpm install --lockfile-only`.
 
@@ -168,17 +191,40 @@ The frontend keeps both `package-lock.json` and `pnpm-lock.yaml`. If you change 
 | Variable | Used by | Default | What it is |
 | --- | --- | --- | --- |
 | `DATABASE_URL` | backend | `jdbc:postgresql://localhost:5432/ayipm` | JDBC URL of the Postgres database |
-| `DATABASE_USERNAME` | backend | `ayipm` | Database user |
-| `DATABASE_PASSWORD` | backend | `ayipm` | Database password |
+| `DATABASE_USERNAME` | backend | `ayipm` (none with the `prod` profile) | Database user |
+| `DATABASE_PASSWORD` | backend | `ayipm` (none with the `prod` profile) | Database password |
 | `PORT` | backend | `8080` | Port the API listens on |
+| `PUBLIC_URL` | backend | `http://localhost:3000` | The address people open AyiPM at. Links in invitation and reset emails point here, and Google sends people back to `PUBLIC_URL/api/auth/google/callback` after they sign in with Google. |
+| `SPRING_MAIL_HOST` | backend | not set | SMTP server for invitation and reset emails, such as `smtp.example.com`. Without it, no email is sent and each email is written to the backend log instead. |
+| `SPRING_MAIL_PORT` | backend | `25` | SMTP port, usually `587`. For port `465`, also set `SPRING_MAIL_SSL_ENABLED=true`. |
+| `SPRING_MAIL_USERNAME` | backend | not set | SMTP login, if the server needs one |
+| `SPRING_MAIL_PASSWORD` | backend | not set | SMTP password |
+| `MAIL_FROM` | backend | `AyiPM <no-reply@localhost>` | Sender of the emails. Use an address your SMTP server is allowed to send from. |
+| `RATE_LIMIT_MAX_REQUESTS` | backend | `10` | Requests one client address may make to each sign-in endpoint per window (`ayipm.rate-limit.max-requests`). After that it gets `429 Too Many Requests` with a `Retry-After` header. |
+| `RATE_LIMIT_WINDOW` | backend | `1m` | Length of that window, such as `30s`, `1m` or `15m` (`ayipm.rate-limit.window`) |
+| `TRUSTED_PROXIES` | backend | empty (`frontend` in Docker Compose) | Proxies whose `X-Forwarded-For` header is believed, as comma-separated IP addresses, CIDR ranges or hostnames (`ayipm.trusted-proxies`). Read [Client addresses behind a proxy](#client-addresses-behind-a-proxy) before changing it. |
+| `ALLOWED_ORIGINS` | backend | `http://localhost:3000` | Comma-separated sites, such as `https://pm.example.com`, that may send requests that change data (the `ayipm.allowed-origins` property). The address the frontend is opened at is recognised through its proxy, so you only need this when a proxy in front of AyiPM doesn't pass on the original `Host` and `X-Forwarded-Proto` headers. |
+| `SPRINGDOC_APIDOCS_ENABLED` | backend | `true` | Whether the OpenAPI spec is served at `/v3/api-docs` (`springdoc.api-docs.enabled`). Set to `false` in production. |
+| `SPRINGDOC_SWAGGERUI_ENABLED` | backend | `true` | Whether Swagger UI is served at `/swagger-ui.html` (`springdoc.swagger-ui.enabled`). Set to `false` in production. |
+| `TWO_FACTOR_ENCRYPTION_KEY` | backend | empty | Sets `ayipm.two-factor.encryption-key`: 32 random bytes in base64 that encrypt the authenticator secrets of two-factor authentication. Generate one with `openssl rand -base64 32` and keep it secret, like a database password. While it is empty, two-factor authentication can't be turned on and everything else works as usual; if it is set but isn't a valid key, the backend refuses to start. Don't change or remove it once people use two-factor authentication: their authenticator codes stop working and they can only sign in with a recovery code. |
+| `GOOGLE_CLIENT_ID` | backend | not set | The client ID of a Google OAuth web client, such as `1234-abc.apps.googleusercontent.com` (`ayipm.google.client-id`). Together with `GOOGLE_CLIENT_SECRET`, it turns on **Continue with Google**; see [Sign in with Google](#sign-in-with-google). While both are unset, the button isn't shown and everything else works as usual. Setting only one of the two stops the backend from starting. |
+| `GOOGLE_CLIENT_SECRET` | backend | not set | That client's secret (`ayipm.google.client-secret`). Keep it secret, like a database password. |
+| `GOOGLE_ISSUER` | backend | `https://accounts.google.com` | The OpenID Connect provider behind **Continue with Google** (`ayipm.google.issuer`). Leave it unset; only the tests point it at a fake provider. It must be an `https` address, or `http` on `localhost`. |
 | `BACKEND_URL` | frontend | `http://localhost:8080` | Where `/api` requests are forwarded. Read when the frontend is built, so set it before `npm run build`. |
+
+The mail settings are Spring Boot's standard `spring.mail.*` settings, so any other one can be set the same way. The backend uses STARTTLS when the server offers it and gives up on a server that doesn't answer within 10 seconds. Emails are sent in the background after the change is saved; if sending fails, the error is in the backend log, and the admin can still copy the link from the app. In Docker, add these variables to the `backend` service's `environment` in `compose.yaml`.
+
+Without `SPRING_MAIL_HOST`, the backend log contains working invitation and reset links, so keep it private. To see the emails as real messages while developing, run a local mail catcher such as [Mailpit](https://mailpit.axllent.org/) (`docker run -p 8025:8025 -p 1025:1025 axllent/mailpit`), start the backend with `SPRING_MAIL_HOST=localhost SPRING_MAIL_PORT=1025`, and open http://localhost:8025.
 
 ### If you can't sign in locally
 
 - **Each developer has their own database.** Accounts created on someone else's machine don't exist on yours. Start the backend with the `demo` profile or go through `/setup`.
 - **The backend isn't running.** The login page loads from the frontend, but signing in needs the backend on port 8080. Check the backend terminal for errors, such as Postgres not running.
 - **The account may be locked.** After 5 failed attempts the account is locked for 15 minutes, and even the correct password is refused until then. To unlock it straight away, run `psql ayipm -c "delete from login_attempts"`.
+- **Your address may be rate limited.** "Too many attempts. Try again in ..." means 10 sign-in requests from your address within a minute. Wait for the time in the message, or restart the backend to clear the counts.
 - **Invited members need to accept their invitation first.** Until they set a password through the invite link, their login is refused. Invite links expire after 7 days; an admin can send a new one from the member's profile.
+- **Continue with Google says the sign-in expired or was started in another browser.** Open AyiPM at the address in `PUBLIC_URL` (by default http://localhost:3000, not http://127.0.0.1:3000). Google sends the browser back to that address, and the cookie set when the sign-in started only reaches it there.
+- **Two-factor authentication is on and the phone and recovery codes are gone.** Turn it off for that account in the database: `psql ayipm -c "update users set two_factor_secret = null, two_factor_last_step = null where email = 'name@company.com'"`, and turn it on again from My Profile after signing in.
 
 To start over with an empty database, run `docker compose down -v` and `docker compose up -d` (Docker), or `dropdb ayipm && createdb -O ayipm ayipm` (Homebrew).
 
@@ -186,15 +232,64 @@ To start over with an empty database, run `docker compose down -v` and `docker c
 
 There is no public sign-up. The only account anyone creates themselves is the workspace owner, once, on `/setup`. After that, accounts work the way they do in tools like ClickUp or Jira:
 
-1. An admin adds a person from **Team → Add member**. AyiPM creates an Employee ID and an invitation link that is valid for 7 days. The person shows as **Invited** until they accept it.
-2. The person opens the link (`/accept-invite`), chooses a password and lands in the workspace.
-3. After that, they sign in with their work email and password. "Keep me signed in" extends the session from 12 hours to 30 days.
+1. An admin adds a person from **Team → Add member**. AyiPM creates an Employee ID and emails them an invitation link that is valid for 7 days. The admin also sees the link and can copy it, which is the only way to share it when email isn't set up (see [Configuration](#configuration)). The person shows as **Invited** until they accept it.
+2. The person opens the link (`/accept-invite`), chooses a password and lands in the workspace. If the server offers [sign-in with Google](#sign-in-with-google), they can join with Google instead and don't need a password.
+3. After that, they sign in with their work email and password, or with Google. "Keep me signed in" extends the session from 12 hours to 30 days.
 
-If someone can't sign in, they use **Can't log in?** on the login page. Their profile on the Team page is then marked **Reset requested**, and an admin sends them a one-time reset link (valid for 30 minutes) from that profile.
+If someone can't sign in, they use **Can't log in?** on the login page. Their profile on the Team page is then marked **Reset requested**, and an admin sends them a one-time reset link (valid for 30 minutes) from that profile. The link is emailed to them and shown to the admin, like an invitation.
 
 After 5 failed attempts within 15 minutes, an account is locked for 15 minutes. Login errors never say whether an account exists.
 
+Separately, each client address can make 10 requests a minute to each sign-in endpoint (`/api/setup`, `/api/auth/login`, the two-factor code steps under `/api/auth/login/two-factor`, `/api/auth/forgot`, `/api/auth/invite`, `/api/auth/reset` and `/api/auth/google/start`), so one address can't work through many accounts. Further requests get `429 Too Many Requests` with a `Retry-After` header. The counts are kept in memory, so they start over when the backend restarts. IPv6 clients are counted per /64 network, because one subscriber usually gets a whole /64.
+
 Passwords are hashed with Argon2. Sessions are random tokens kept in an `httpOnly` cookie and stored hashed in the database, so signing out or deactivating someone ends their session everywhere.
+
+So that a page on another site can't use someone's session cookie, the backend refuses `POST`, `PUT`, `PATCH` and `DELETE` requests with `403` when they come from another site. It compares the `Origin` header (or `Referer`, if there is no `Origin`) with its own address and with `ALLOWED_ORIGINS`. Behind the frontend's proxy, its own address is the one in the browser's address bar, because the proxy passes it on in `X-Forwarded-Host`. `Origin: null`, which sandboxed pages and local files send, is refused. Requests with neither header, such as from `curl` or another server, are allowed: browsers always send `Origin` with these methods, and a client outside the browser only has the cookies it signed in for itself.
+
+### Client addresses behind a proxy
+
+The backend only sees connections from the frontend. So that it can still tell clients apart, the frontend's production server (the Docker image and `npm start`) adds the address each request came from to the end of the `X-Forwarded-For` header (`frontend/scripts/client-address.cjs`). The backend reads that header from right to left, skips the proxies listed in `TRUSTED_PROXIES`, and counts the request against the first other address. Anything further left was written by the client, so it is never used.
+
+Docker Compose sets `TRUSTED_PROXIES=frontend`, so each client gets its own limit without any setup. Outside Docker the setting is empty: the backend ignores `X-Forwarded-For`, and every request counts against the frontend's address. To trust a frontend on the same machine, set `TRUSTED_PROXIES=127.0.0.1,::1`, but only with `npm start`: `next dev` doesn't add the address, so a client could choose its own.
+
+If a reverse proxy such as Caddy or nginx sits in front of the frontend, the frontend sees the proxy's address instead of the client's. Then:
+
+1. Make sure the proxy sets `X-Forwarded-For`. Caddy does by default; with nginx, add `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;`.
+2. Add the proxy to `TRUSTED_PROXIES`, as the frontend sees it. With Docker and the proxy on the same machine, that is the Docker network's gateway, for example `TRUSTED_PROXIES=frontend,172.16.0.0/12`. Add any proxies in front of yours, such as a CDN, too.
+3. Make the frontend reachable only through the proxy, for example with `FRONTEND_PORT=127.0.0.1:3000`. A client that connects from a trusted address can name any address it likes.
+
+### Two-factor authentication
+
+Anyone can turn on two-factor authentication in **My Profile** once the server has `TWO_FACTOR_ENCRYPTION_KEY` set (see [Configuration](#configuration)). They scan a QR code with an authenticator app such as Google Authenticator, Microsoft Authenticator or 1Password, and it only takes effect once they confirm a code from the app. They then get 10 one-time recovery codes, shown once, for when they can't use their phone.
+
+After that, signing in takes a third step: after the email and password, AyiPM asks for the 6-digit code from the app, or a recovery code. Each code works only once, and wrong codes count toward the same lockout as wrong passwords. Turning two-factor authentication off, or creating new recovery codes, also needs a current code or a recovery code.
+
+Admins can require two-factor authentication for every admin under **Settings → Workspace → Security**. They can only turn it on once they use it themselves, so the workspace always keeps an admin who can sign in. Other admins without it are signed out, and set it up the next time they sign in, before they get a session; so do people who become admins later. While it is required, admins can't turn it off. The authenticator secrets are encrypted with AES-GCM, and recovery codes are stored only as hashes.
+
+### Sign in with Google
+
+Once the server has `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` (see [Setting up Google](#setting-up-google) below), the login page shows **Continue with Google** and the invitation page shows **Join with Google**. They are for people who already have an account or an invitation; signing in with Google never creates an account. Someone whose Google address doesn't belong to anyone in the workspace is sent back to the login page and asked to get an invitation from their admin.
+
+- **Which account.** AyiPM signs the person in to the account whose work email is the Google account's address, and only when Google has verified that address. The first time, it links the account to that Google account, so a different Google account that later gets the same address (for example after someone leaves the company) can't sign in to it. Deactivated accounts are refused, as with a password.
+- **Invitations.** **Join with Google** accepts the invitation without a password, and only with the Google account of the address the invitation was sent to. **Continue with Google** on the login page also accepts an invitation that hasn't expired. Someone who joined with Google has no password; to get one, they use **Can't log in?** and an admin sends them a reset link. A reset also removes the link to their Google account, so an admin can use it when someone's account is linked to the wrong Google account; their next sign-in with Google links it again.
+- **Two-factor authentication** still applies: Google takes the place of the password, and AyiPM then asks for the code from the authenticator app. Admins who have to set up two-factor authentication do that first.
+- **Limiting it to your domain.** Under **Settings → Workspace → Security**, an admin can enter the domain of the company's Google Workspace, such as `example.com`. Then only accounts of that Google Workspace (Google's `hd` claim) can sign in with Google, and Google's page suggests accounts of that domain. While it is empty, any Google account whose verified address belongs to a member can sign in, including personal Gmail accounts. Signing in with a password isn't affected.
+- **Sessions** last 12 hours, like a password sign-in without "Keep me signed in".
+
+Under the hood, AyiPM uses OpenID Connect's authorization code flow with PKCE. The backend talks to Google itself, and checks the ID token's signature against Google's published keys, its issuer, audience, expiry and nonce. Each sign-in works once, within 10 minutes, and only in the browser that started it: that browser gets a random token in an `httpOnly` cookie, the state, nonce and PKCE verifier are derived from it, and the database stores only its hash. So nobody can send their own Google sign-in to someone else's browser to sign them in to the wrong account. Starting a sign-in counts toward the sign-in rate limit.
+
+#### Setting up Google
+
+You need a Google account that can create projects in [Google Cloud](https://console.cloud.google.com). With Google Workspace, use an account in your organisation.
+
+1. In the Google Cloud console, create a project for AyiPM, or pick one.
+2. Open **Google Auth Platform** (in older consoles, **APIs & Services → OAuth consent screen**) and set up the consent screen. Under **Branding**, enter the app name people see on Google's page, such as your company's name and "AyiPM", a support email, and your domain under **Authorised domains**. Under **Audience**, choose:
+   - **Internal** if everyone signs in with an account of your Google Workspace. Only those accounts can use it, and Google doesn't need to review the app.
+   - **External** if some people use other Google accounts. While the app is in **Testing**, only the test users you list can sign in, so **Publish** it when you're ready. AyiPM only asks for the `openid` and `email` scopes, which don't need Google's verification.
+3. Under **Clients** (in older consoles, **Credentials → Create credentials → OAuth client ID**), create a client with the application type **Web application**. Add one **Authorised redirect URI**: your `PUBLIC_URL` followed by `/api/auth/google/callback`, such as `https://ayipm.example.com/api/auth/google/callback`. For local development, add `http://localhost:3000/api/auth/google/callback` too. You don't need any authorised JavaScript origins.
+4. Copy the client ID and client secret into `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, check that `PUBLIC_URL` is the address people open AyiPM at, and restart the backend. On startup it logs `Sign-in with Google is on. Its authorised redirect URI is ...`; that URI must match the one in the console exactly, or Google shows `Error 400: redirect_uri_mismatch`.
+
+When a sign-in with Google fails for a reason other than the person's account, the login page says so and the backend log has the details.
 
 ## Database
 
@@ -204,15 +299,17 @@ To change the schema, add a new file such as `V2__add_projects.sql` next to the 
 
 ## Known limitations
 
-- **Attendance is still per browser.** Check-ins and check-outs are saved in the browser until the attendance API (#103) lands, so managers don't see them yet. Approved leave is already written to the server.
+- **Sign-in rate limits are kept per backend instance.** The counts live in memory, so they start over when the backend restarts and aren't shared if you run several backends.
 - **No live updates.** Changes made by other people appear when you reload or switch back to the tab; notifications are checked every minute.
-- **No email delivery.** Invitation and reset links are shown to the admin, who shares them manually.
-- **No single sign-on.** Google and Microsoft sign-in are not available yet.
+- **Password resets go through an admin.** **Can't log in?** flags the account for an admin, who sends the reset link; it doesn't email a link by itself.
+- **Google is the only single sign-on.** Microsoft sign-in isn't available yet.
 
 ## Project structure
 
 ```text
 compose.yaml                 Postgres for development; the full app with --profile app
+compose.prod.yaml            Production settings on top of compose.yaml (see docs/self-hosting.md)
+docs/                        Guides (self-hosting.md) and the README's screenshots (screenshots/)
 frontend/                    Next.js web app
 ├── Dockerfile               Production image (standalone Next.js server)
 ├── public/                  Static files (logo, icons)
@@ -228,25 +325,28 @@ frontend/                    Next.js web app
     ├── hooks/               Generic React hooks
     ├── lib/                 Framework-free helpers (API client, store engine, dates, CSV, validation)
     ├── constants/           Roles and permissions, status labels, navigation, defaults
-    └── types/               Domain types, one file per domain
+    └── types/               Domain types, one file per domain, mostly derived from api.generated.ts
 backend/                     Spring Boot API
 ├── Dockerfile               Production image (builds and runs the jar)
+├── openapi.json             The OpenAPI spec, saved by the tests; the frontend's API types are generated from it
 └── src/
     ├── main/java/com/ayitrix/ayipm/
-    │   ├── auth/            Setup, sign-in, sessions, invites, password resets
+    │   ├── auth/            Setup, sign-in, sessions, invites, password resets, two-factor authentication, sign-in with Google
     │   ├── employee/        Users, roles and the /api/employees endpoints
     │   ├── workspace/       Workspace settings and /api/workspace
     │   ├── project/         Projects and their members
     │   ├── task/            Tasks, comments, history and Kanban order
     │   ├── leave/           Leave requests, reviews and balances
-    │   ├── attendance/      Attendance records (approved leave for now; check-in comes with #103)
+    │   ├── attendance/      Check-in, check-out, and late and half-day rules
     │   ├── preferences/     Each person's language, formats and notification settings
     │   ├── activity/        The activity log, written by the other services
+    │   ├── mail/            Sending email, or writing it to the log when SMTP isn't set up
     │   ├── notification/    Notifications, created by the other services
     │   ├── seed/            Demo accounts and sample data for the `demo` profile
     │   └── common/          Response format, error handling, shared helpers
     ├── main/resources/
     │   ├── application.yml  Configuration
+    │   ├── application-prod.yml  Overrides for the `prod` profile
     │   └── db/migration/    Flyway SQL migrations
     └── test/                Integration tests against a temporary Postgres
 ```
@@ -264,8 +364,9 @@ Backend:
 
 - Code is grouped by feature (`auth`, `employee`, `workspace`), not by layer. Each feature has its entities, repositories, a service and a controller.
 - Controllers stay thin: check the session with `SessionService.requireUser(request, permission)`, call a service, and return `ApiResponse.ok(...)`.
+- If an endpoint's method name and path don't say what it does, add `@Operation(summary = "...")`. Swagger UI shows it next to the endpoint.
 - Every response is `{ "data": ... }` on success or `{ "error": "message" }` on failure. Throw `ApiException` for errors the user should see; anything else becomes a generic 500.
-- Response records must match the TypeScript types in `frontend/src/types`. Never return entities directly, and never send password hashes or tokens other than the one-time invite or reset link.
+- The frontend's TypeScript types are generated from the response records, so regenerate them when you change one (see [API types](CONTRIBUTING.md#api-types)). Never return entities directly, and never send password hashes or tokens other than the one-time invite or reset link.
 
 ## Contributing
 

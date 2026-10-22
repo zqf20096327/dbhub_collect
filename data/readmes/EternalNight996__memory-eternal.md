@@ -6,32 +6,61 @@
      两份是**独立文件**、标题层级一一对应；改一处请同步另一处（新增一节要两边都加）。
      npm / DSH 插件市场默认展示本文件（中文）。 -->
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/icon.png" width="84" alt="memory-eternal" />
+</p>
+
+<p align="center">
+  <b style="font-size:20px">Memory Atlas · 本地优先的 AI 记忆库</b><br/>
+  <sub>自动沉淀 · 先审后入 · 知识星图 · 全 Agent 共享</sub>
+</p>
+
 <p align="center"><b>简体中文（默认）</b> · <a href="README.en.md">English</a></p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-3B82F6" alt="DSH plugin" />
   <img src="https://img.shields.io/npm/v/memory-eternal" alt="npm version" />
+  <img src="https://img.shields.io/badge/release-v0.12.0-FF7A45" alt="v0.12.0" />
+  <a href="https://eternalnight996.github.io/memory-eternal/"><img src="https://img.shields.io/badge/Live%20Demo-online-FF7A45" alt="Live demo" /></a>
   <img src="https://img.shields.io/github/stars/EternalNight996/memory-eternal?style=flat" alt="GitHub stars" />
   <img src="https://img.shields.io/github/license/EternalNight996/memory-eternal" alt="license" />
-  <a href="https://dsh.market/"><img src="https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-listed-zh.svg" alt="DSH Market 收录" /></a>
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/cards.png" width="900" alt="知识卡列表：对话结束自动沉淀成卡，可检索 / 可审核 / 可追溯来源" />
+  <a href="https://eternalnight996.github.io/memory-eternal/demo/"><img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/library.png" width="920" alt="Memory Atlas：记忆库、今日回看、知识卡与连接星图" /></a>
 </p>
+<p align="center"><sub>▲ Memory Atlas · 在线 Demo（示例数据）· <a href="https://eternalnight996.github.io/memory-eternal/demo/">点此打开</a></sub></p>
 
 > **对话结束自动沉淀成知识卡，跨会话不失忆；召回只取相关小块，省 token 少噪音。**
 > 全自研、零第三方记忆框架、不改 DSH 源码；一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。
 
-<p align="center"><strong>⭐ 如果它帮你少解释了一遍上下文，点个 Star 就是最大的支持</strong><br/><sub>DSH 一条命令：<code>dsh plugin --profile web add memory-eternal</code></sub></p>
+<p align="center"><strong>⭐ 如果它帮你少解释了一遍上下文，点个 Star 就是最大的支持</strong><br/><sub>DSH 一条命令：<code>dsh plugin --profile desktop add memory-eternal</code></sub></p>
+
+<p align="center"><a href="https://eternalnight996.github.io/memory-eternal/"><b>🌐 在线体验</b></a> · <a href="https://eternalnight996.github.io/memory-eternal/demo/"><b>打开记忆库 Demo</b></a> <sub>（示例数据，不用安装）</sub></p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/graph.png" width="32%" alt="知识图谱：897 节点 / 4257 连线，按类型着色、支持跨库聚合与导出" />
-  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/health.png" width="32%" alt="健康概览：知识库 / 备份 / 自动沉淀 / 版本，一眼看清有没有静默坏掉的东西" />
-  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/audit.png" width="32%" alt="审核中心：AI 写的卡先审后入，可批量批准 / 驳回 / 回收" />
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/audit.png" width="32%" alt="待审：顶部类型条 + 队列 + 右侧判词栏" />
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/graph.png" width="32%" alt="知识星图：按类型着色、连接簇图例、跨库聚合" />
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/reader.png" width="32%" alt="读卡器：正文 + 右侧目录、标签与相关记忆" />
 </p>
 
-<p align="center"><sub>▲ 知识卡列表 · 知识图谱 · 健康概览 · 审核中心 —— 全部是真实运行截图（1280×860）</sub></p>
+<p align="center"><sub>▲ 真实运行截图：待审判词 · 知识星图 · 读卡器</sub></p>
+
+---
+
+## 🧩 支持平台
+
+| 平台 / 宿主 | Memory Atlas UI | 待审 / 批驳 | 知识星图 | 入口与状态 |
+|---|---|---|---|---|
+| **DSH 桌面版 / Web** | 完整内嵌 | ✅ | ✅ | 左栏「记忆」，已支持 |
+| **Orca** | 侧栏启动器 | Web 内完成 | Web 内完成 | 右栏「记忆」，[本版新增](orca-plugin/README.md) |
+| **dsh-tui** | 浏览器打开 | Web 内完成 | Web 内完成 | `/memory`，[本版新增](dsh-tui-plugin/README.md) |
+| **Codex** | 浏览器打开 | Web 内完成 | Web 内完成 | [`memory-open` skill](skills/memory-open/SKILL.md)，本版新增 |
+| **Claude Code** | 浏览器打开 / Pane | Web 内完成 | Web 内完成 | `/memory-eternal:memory-open`，本版新增 |
+| **Cursor** | Webview 内嵌 | ✅ | ✅ | [扩展 Webview](cursor-extension/README.md)，本版新增 |
+| **纯 Web** | 主实现 | ✅ | ✅ | `http://127.0.0.1:7999/` |
+
+> 原则：**一套 Web UI 作为唯一真源**；能内嵌的宿主用 Webview，不能内嵌的宿主只做轻量启动器，不复制第二套 UI。所有入口打开同一版本，避免 DSH / Web 版本漂移。
 
 ---
 
@@ -45,7 +74,11 @@
 
 - **看得见**：知识卡 / 图谱 / 健康概览 / 沉淀日志，四层可视化；
 - **控得住**：审核模式（全部人工 / 仅高风险）、去重与矛盾扫描、批量合并、每日备份与一键恢复；
-- **带得走**：知识库是本地 Markdown + SQLite，可 git 管理、可导出，不锁在插件里。
+- **带得走**：知识库是本地 Markdown + SQLite，可 git 管理、可导出，不锁在插
+
+[...截断...]
+
+件里。
 
 ---
 
@@ -68,7 +101,7 @@ cd ~/.dsh/profiles/web && pnpm add memory-eternal@latest
 
 # 刚发新版时 @latest 可能被 pnpm 的最小发布年龄门槛/元数据缓存挡住（静默停在旧版）：
 # 直接指定版本号最快，pnpm 会自动把它加进 workspace 的 minimumReleaseAgeExclude
-cd ~/.dsh/profiles/web && pnpm add memory-eternal@0.9.6
+cd ~/.dsh/profiles/web && pnpm add memory-eternal@0.12.0
 
 # 验版本（应等于上面装的号），然后重启对应宿主生效
 node -e "console.log(require('memory-eternal/package.json').version)"
@@ -86,11 +119,7 @@ node -e "console.log(require('memory-eternal/package.json').version)"
 |---|---|
 | 自动沉淀知识卡 | 每轮对话结束自动发生，无需操作 |
 | `memory_recall` 工具 | Agent 需要历史时自动调用 |
-| 图形化界面 | 侧边
-
-[...截断...]
-
-栏底部「记忆」按钮 / 设置 → 记忆 |
+| 图形化界面 | 侧边栏底部「记忆」按钮 / 设置 → 记忆 |
 
 **入口**：侧边栏底部「记忆」按钮 → 记忆库（左栏含 知识卡 / 知识图谱 / 用量 / **审核中心** / 回收中心 / **记忆配置**）；「DSH 设置 → 记忆」= 纯配置页。
 
@@ -146,31 +175,4 @@ dsh-memory sweep ~/.claude/projects  # 挖掘已有会话记录
 dsh-memory setup [--dry-run]         # 重跑/预览自动挂载（幂等）
 dsh-memory connect <claude|codex|cursor>  # 写会话结束自动沉淀 hook（用户级 hooks.json，含 Codex Desktop）
 dsh-memory mcp                       # MCP stdio（挂任意 MCP 客户端）
-dsh-memory serve [--port 7999]       # 前台跑 web
-dsh-memory open                      # ensure web 存活 + 开浏览器
-dsh-memory watchdog [--port 7799]    # 看门狗保活 web（独立进程）
-dsh-memory status [--json]           # 看常驻 watchdog：pid / 端口 / 版本 / 是否存活
-                                     # 以及**端口上真正在服务的版本**（锁里的版本号只是 watchdog 自述）
-dsh-memory stop [--port 7799]        # 停止常驻 watchdog（配置改动不会自动停；连它拉起的 web 一起停）
-                                     # 停完会再问一次端口占用者，仍被占着就明确告警
-dsh-memory restart [--port 7799]     # 停止并重起 watchdog（升级后换新版）
-                                     # 按端口占用者兜底收掉锁里没登记的旧 web，起完自检端口上服务的版本
-dsh-memory audit list [--status pending|rejected|approved|deleted|all] [--limit N] [--json]
-                                     # 列出卡片；总数不受 --limit 影响，--limit 只限制显示条数（默认全部）
-                                     # all = 审核队列（pending + rejected），不含 approved / deleted
-dsh-memory audit approve <卡片路径...>              # 人工批量批准
-dsh-memory audit reject <卡片路径...> --reason "..." # 人工批量驳回
-```
-
-单独装（不发 DSH）时 `dsh-memory` 命令来自 `npm i -g`。
-
----
-
-## ⚙️ 服务自管理（白话）
-
-**三个概念**，别搞混：
-
-- **web server 怎么保活**（`autoWebMode`）→ `init`=DSH 启动时拉一次（默认）；`interval`=DSH 进程内定时探活自动拉起（0 额外内存）；`manual`=全手动只从 `dsh-memory open` 起。
-- **看门狗进程**（`watchdogAutoSpawn`，默认开）→ 一个**独立** node 进程，DSH 退出了它也能拉起 web（约 +47 MB 内存）。只在要 7×24 保活时开。
-- **版本漂移自愈**（`autoRestartOnDrift`，默认开）→ 常驻 web **比 DSH 活得久**：升级只换磁盘文件，端口上那个进程仍跑着启动时加载的旧代码（「启动 dsh 后运行中还是旧版本」就是这么来的）。开着它，DSH 激活时会**问端口上真正服务的版本**，与磁盘不一致就用新代码重启常驻实例；关掉则只告警，需要时在「插件信息」点**重启常驻实例**。
-- **自动挂载 MCP**
+dsh-memory serve [--port 7999]       

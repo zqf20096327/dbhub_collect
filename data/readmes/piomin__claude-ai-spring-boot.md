@@ -4,12 +4,17 @@ A Claude Code plugin with production-ready skills and agents for building Spring
 
 ## Installation
 
-```bash
-# Install from Anthropic marketplace
-claude plugin install spring-boot-template@piomin
+Install from Anthropic marketplace
 
-# Or install directly from repository
-claude plugin install --url https://github.com/piomin/claude-ai-spring-boot
+```bash
+claude plugin install spring-boot-template@piomin
+```
+
+Or install directly from repository
+
+``` 
+claude plugin marketplace add https://github.com/piomin/claude-ai-spring-boot.git
+claude plugin install spring-boot-template@piomin
 ```
 
 To test locally during development:

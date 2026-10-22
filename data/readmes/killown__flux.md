@@ -7,7 +7,7 @@
 Flux is a GTK4/Libadwaita file manager for Linux, written in Rust. I wanted something that opens instantly, looks at home on GNOME and Wayland, and can be driven from the keyboard. It does that, and it does it faster than the other GUI file managers I tried.
 
 <p align="center">
-  <a href="https://youtu.be/78IHL8aA8Jo">
+  <a href="https://youtu.be/dG7eZXcwW9c">
     <img src="https://github.com/killown/flux/raw/main/screenshots/flux.png" alt="Flux, a GTK4 Libadwaita file manager for Linux, with the preview panel and embedded terminal" width="100%">
   </a>
 </p>
@@ -32,6 +32,7 @@ Cold start on a Ryzen 5 5600X, mean of 10 runs:
 - **Search that's already there.** Type to filter the folder, press `Ctrl+F` for a search panel on the right, or start with `:` to search inside files. There is no index to build and no background service.
 - **Your servers and drives.** SMB, SFTP, FTP, WebDAV, NFS, MTP and Google Drive, plus encrypted LUKS volumes.
 - **A terminal that follows you.** Press `F4`, `cd` somewhere, and the file view goes with you.
+- Show and hide from a keybind. `flux-fm --toggle` shows or hides the running window, `--show` brings it to the front and `--hide` tucks it away. With no window running, `--toggle` and `--show` start Flux and `--hide` does nothing, so one compositor shortcut is enough.
 - **Tags.** Label files and find them again with `#tag` or `Ctrl+Shift+T`. Tags use the standard `user.xdg.tags` file attribute, so they stay with the file.
 - **A preview panel that keeps up.** Images, video, audio and PDFs show as you move through files. `F11` goes wide, and videos even play right in the grid. Code (with syntax highlighting), Markdown, CSV tables, Office documents and fonts preview too. Previews only show what's inside a file, editing is left to your preferred app.
 
@@ -44,6 +45,26 @@ Cold start on a Ryzen 5 5600X, mean of 10 runs:
 <p align="center">
   <img src="https://github.com/killown/flux/raw/main/screenshots/covers.png" alt="Flux grid view with custom cover art set as folder icons for a game library" width="100%">
 </p>
+
+## Grid mode vs list mode
+
+Grid mode renders each item as a card. It is best for folders with a moderate number of items. Flux automatically switches to list mode for folders with more items than the **Auto List Mode Threshold** (default 300), which stays responsive with several thousand items.
+
+The threshold is configured in **Settings → Behavior → Auto List Mode Threshold**. Set it to `0` to disable the auto-switch and always use the mode chosen in the header.
+
+### Reference numbers
+
+Same folder, same hardware, same session, 13,209 items (50 GB of images).
+
+| File manager         | Behavior                                                                    |
+| -------------------- | --------------------------------------------------------------------------- |
+| Flux (grid mode)     | Scrollbar fine, ~50% of one core on drag, hover slightly slow               |
+| Flux (list mode)     | No lag, ~30% of one CPU core on scrollbar drag                              |
+| Nautilus (grid mode) | Crashes: `VK_ERROR_OUT_OF_HOST_MEMORY` and file-descriptor exhaustion       |
+| Nautilus (list mode) | Uses more than 3 CPU cores to drag the scrollbar                            |
+| Thunar (grid mode)   | Laggy scrollbar, ~60% CPU on drag alone, saturates all cores on a full drag |
+| Thunar (grid mode)   | Scrollbar thumb desyncs and stops tracking position at large item counts    |
+| Thunar (list mode)   | Laggy scrollbar, ~40% CPU on drag alone                                     |
 
 ## Install
 
@@ -105,6 +126,29 @@ The default right-click menu is a starting point. Some entries call tools such a
 The menu editor uses Nerd Font icons. Arch gets the font from the package above. On Debian, Ubuntu and Fedora, download [SymbolsNerdFont-Regular.ttf](https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf) into `~/.local/share/fonts` and run `fc-cache -f`.
 
 Network browsing needs `gvfs` plus a backend such as `gvfs-smb` or `gvfs-sftp`. LUKS needs `cryptsetup` and `udisks2`.
+
+## Themes
+
+Flux includes a built-in theme engine. You can switch the GTK UI, the embedded terminal colors, and the Papirus folder icons simultaneously.
+
+Available themes:
+
+- `blue` (Classic)
+- `frost` (Pastel Blue)
+- `forge` (Warm Orange)
+- `cyan` (Neon)
+- `obsidian` (Stealth Black)
+- `monolith` (High-Contrast Greyscale)
+- `crimson` (Deep Burgundy)
+- `smoke` (Industrial Grey)
+
+### Usage (Fish Shell)
+
+To use the Fish shell theme switcher, symlink or copy the script to your Fish functions folder:
+`cp scripts/flux-theme.fish ~/.config/fish/functions/`
+
+Then run:
+`flux-theme blue`
 
 ## Shortcuts
 

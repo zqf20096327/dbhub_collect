@@ -1,7 +1,7 @@
 # tdsql
 
 `tdsql` is an async Microsoft SQL Server client for Rust, built on the
-[tiberius-ng](https://github.com/MattJackson/tiberius-ng) TDS driver.
+[tds-driver](https://github.com/CommonwealthPasta/tds-driver) TDS driver.
 
 You connect once and run statements on that connection. Queries return rows,
 and you read values out of them as ordinary Rust types:
@@ -39,7 +39,7 @@ async fn main() -> tdsql::Result<()> {
 
 ```toml
 [dependencies]
-tdsql = "0.5.0"
+tdsql = "0.7.0"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 
@@ -72,6 +72,12 @@ let mut client = Client::connect_str(
 
 [`Config::from_jdbc_string`] parses JDBC-style strings too. A config's `Debug`
 output hides the password, so it's safe to log.
+
+Connecting gives up after 15 seconds unless the config says otherwise: use
+`Config::connect_timeout`, or `Connect Timeout` in a connection string, where 0
+means no limit. A named instance without a port, such as `Server=host\SQLEXPRESS`,
+is found through SQL Server Browser. If the server redirects the login, as Azure
+SQL's gateway does, `connect` follows it.
 
 A `Client` is one connection, reused for every statement. The driver doesn't
 support MARS, so a connection runs one request at a time. For concurrency, use a
@@ -209,13 +215,8 @@ if report.is_err() {
 ```
 
 A request still waiting its turn behind another never runs. One that's running
-stops at the next row or result set to come back. Two things can't be stopped
-partway:
-
-- A statement that hasn't sent anything back yet, because it's still sorting,
-  aggregating or waiting on a lock, runs until it does and is cancelled then.
-- `execute`, and `execute_command` with a text command, run to completion once
-  sent, because the driver reads their whole response in one go.
+stops where it is, even if it hasn't sent anything back yet because it's still
+sorting, aggregating or waiting on a lock.
 
 Transaction control (begin, commit, rollback, savepoints) always runs, whatever
 became of its future. Cancelling stops a statement, not the transaction around
@@ -319,9 +320,9 @@ tx.commit().await?;
 # }
 ```
 
-You can also choose an isolation level and use savepoints. A savepoint works
-like a nested transaction. Rolling it back undoes its own work and leaves the
-outer transaction open.
+You can also choose an isolation level, which lasts until the transaction
+ends, and use savepoints. A savepoint works like a nested transaction.
+Rolling it back undoes its own work and leaves the outer transaction open.
 
 ```rust,no_run
 # use tdsql::{Client, IsolationLevel};
@@ -509,7 +510,7 @@ If your program isn't async, turn on the `blocking` feature:
 
 ```toml
 [dependencies]
-tdsql = { version = "0.5.0", features = ["blocking"] }
+tdsql = { version = "0.7.0", features = ["blocking"] }
 ```
 
 `tdsql::blocking::Client` is the async client without the `async` and `.await`.

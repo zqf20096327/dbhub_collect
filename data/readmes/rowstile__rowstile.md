@@ -24,8 +24,10 @@ type folder = app.folders
   can edit = owner or editor or parent.edit     -- inherited down the tree
   can view = edit
 rules app.folders
-  select : view
-  update : edit
+  select                 : view
+  update                 : edit
+  update owner_id        : owner                -- only the owner gives it away
+  update parent_id after : parent.edit          -- moved only under a folder they may edit
 ```
 
 The app says who is asking in each transaction and queries its tables as usual; RLS
@@ -67,8 +69,8 @@ it shows a need. Until 1.0, a minor release may change the language, the `authz.
 file formats; from the beta on, each release upgrades a database from the one before it, and the changelog
 says what to do. [What a 0.x release promises](docs/reference/limits.md#what-a-0x-release-promises).
 
-rowstile was called rowfence until 0.1.0-alpha.1; another product had the name first. The
-[changelog](CHANGELOG.md) says what to change.
+rowstile was called rowfence until 0.1.0-alpha.1; another product had the name first. The changelog says
+what the alphas were: [Before the beta](CHANGELOG.md#before-the-beta).
 
 ## Installing
 
@@ -76,15 +78,16 @@ Only pre-releases are published so far: ask for the newest.
 
     npm i -D rowstile@next         # the command with its own Python: a TypeScript app needs none
     pip install --pre rowstile     # the command and the Python SDK: rowstile[fastapi], [sqlalchemy], ...
-    docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/work" ghcr.io/rowstile/rowstile:0.1.0-alpha.9 migrate
+    docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/work" ghcr.io/rowstile/rowstile:0.1.0-beta.1 migrate
 
 `npm` brings the Python for Linux (glibc and musl, x64 and arm64), macOS (x64 and arm64) and Windows x64. The
-image runs as root unless told otherwise: `-u` makes the files it writes yours. [Installing](docs/installing.md)
+image is for Linux on x64 and arm64, and runs as root unless told otherwise: `-u` makes the files it writes
+yours. [Installing](docs/installing.md)
 has the rest: pre-releases, the extras, the repository.
 
 From this repository, put `core/cli` on `PATH`. `rowstile init` then finds the stack (Next.js, Prisma,
-Drizzle, FastAPI, SQLAlchemy, Alembic), writes `rowstile.toml` for its migration tool, adds the SDK's
-packages to `package.json` (for Python, names the one to add) and says which line to change.
+Drizzle, FastAPI, SQLAlchemy, Alembic, goose, dbmate, Flyway), writes `rowstile.toml` for its migration tool,
+adds the SDK's packages to `package.json` (for Python, names the one to add) and says which line to change.
 
 ## Docs
 
@@ -116,9 +119,11 @@ packages to `package.json` (for Python, names the one to add) and says which lin
 | [`examples/`](examples/README.md) | complete apps built on rowstile: a file manager and a messenger |
 | [`editor/`](editor/README.md) | the VS Code and Zed extensions, a Tree-sitter grammar (Helix, Neovim); other editors start `rowstile lsp` |
 | `review-ci/` | the policy review for pull requests: a GitHub action and a GitLab CI template |
-| `docs/` | the guides and the reference, as Markdown; `site/` builds them into the docs site |
+| `docs/` | the guides and the reference, as Markdown |
+| `site/` | the docs site, rowstile.dev (VitePress): it builds the pages from `docs/` |
 | [`playground/`](playground/README.md) | rowstile in the browser (Pyodide and PGlite) |
 | `packaging/` | how rowstile is installed: npm, PyPI and a Docker image |
+| [`demo/`](demo/README.md) | the recording at the top of this page: `record.sh` runs `demo.tape` on the guide's own app |
 
 ## Contributing
 

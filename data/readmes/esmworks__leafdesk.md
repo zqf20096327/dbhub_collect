@@ -17,7 +17,7 @@ after you approve them over OAuth.
 </picture>
 
 - **Pages and databases**: a block editor with slash commands, and databases whose rows are pages,
-  shown as table, board, calendar, gallery, list, timeline, chart or form, with relations,
+  shown as table, board, calendar, gallery, list, timeline, chart, dashboard or form, with relations,
   formulas and rollups; dashboards put numbers, charts and lists from several databases on a page.
 - **Realtime and offline**: edit together with live cursors, keep working without a connection.
 - **Built for AI assistants**: connect Claude or any other MCP client over OAuth 2.1 and approve
@@ -64,11 +64,11 @@ for Windows, `.AppImage` for Linux) and choose *On this computer*. See [Desktop 
   over titles and content: full-text (every word of the search, each also as the start of a
   longer word, so pages show up while you type: "kond plan" finds "Kondenser planı", while the
   middle of a word doesn't match; Japanese and Chinese words also inside a sentence, which has no
-  spaces betwee
+  sp
 
 [...截断...]
 
-n words: "会議" finds "明日の会議について", a word's characters only side by side;
+aces between words: "会議" finds "明日の会議について", a word's characters only side by side;
   Korean words by their start, so with a particle joined on: "회의" finds "회의를"; pages whose
   title has the words come first; past the first 80,000 characters of a huge page's text, words
   aren't found), and also by meaning when the server has an embeddings model
@@ -112,4 +112,4 @@ n words: "会議" finds "明日の会議について", a word's characters only 
   workspace's databases on a page, up to 12 widgets in a grid of four columns (two on narrow pages,
   one on phones). Each widget is a database seen through its own view (a *Number* chart for one
   value, a chart, a list, or any other layout), set up in place, kept up to date as rows change,
-  and worked out for each reader from the rows and values they may see; a number, bar or s
+  and worked out for each reader from the rows and values they may see; a numbe

@@ -15,7 +15,8 @@
   <a href="https://arxiv.org/abs/2410.10813"><img src="https://img.shields.io/badge/LongMemEval_R%405-96.0%25-brightgreen?style=for-the-badge" alt="LongMemEval R@5 96.0%" /></a>
   <a href="https://awareness.market/"><img src="https://img.shields.io/badge/Website-awareness.market-0EA5E9?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website" /></a>
   <a href="https://awareness.market/docs"><img src="https://img.shields.io/badge/Docs-awareness.market%2Fdocs-14B8A6?style=for-the-badge&logo=readthedocs&logoColor=white" alt="Docs" /></a>
-  <a href="https://discord.com/invite/nMDrT538Qa"><img src="https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
+  <a href="https://discord.com/invite/BMjkCKeqnJ"><img src="https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
+  <a href="https://t.me/awarenessmarket"><img src="https://img.shields.io/badge/Telegram-Join%20Chat-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-2563EB?style=for-the-badge" alt="License MIT" /></a>
 </p>
 
@@ -23,9 +24,15 @@
   <img src="assets/branding/local-20s.gif" alt="Awareness Local" style="width:min(1200px,100%);height:auto;" />
 </p>
 
-**Give your AI agent persistent memory. One command. No account. Works offline.**
+**Your AI agent forgets everything when the session ends. Awareness fixes that.**
 
-Awareness Local is a local-first MCP memory server for AI coding agents. It gives Cursor, Claude Code, Copilot, Cline, and other MCP IDEs persistent memory, hybrid semantic + keyword retrieval, and reusable knowledge cards for long-running software projects.
+Awareness is a memory plugin for AI coding agents — Cursor, Claude Code, Copilot, Cline, OpenCode, and any MCP client. It stores what you decided and what you learned as plain Markdown on your machine, then recalls it in the next session: hybrid keyword + semantic retrieval, 96% R@5 on LongMemEval, zero LLM calls at retrieval. Works offline, no account required.
+
+Install with one command:
+
+```bash
+npx @awareness.market/setup
+```
 
 It runs a lightweight daemon on your machine, stores memory as Markdown, indexes recall with SQLite FTS5 + embeddings, and keeps your AI workflow fast, explainable, and offline-ready.
 

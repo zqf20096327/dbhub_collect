@@ -95,6 +95,102 @@ php -r 'echo phpversion("grpc"), PHP_EOL;'
 The reported version must be 1.57 or newer. Restart PHP-FPM (or your web
 server) after enabling the extension.
 
+## Stability and versioning
+
+The library is **pre-1.0**. It follows
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html), but before `1.0.0`
+a breaking change bumps the **minor** version — so a `0.x` release may break
+your code, and `0.9.0 → 0.10.0` is not a safe upgrade on its own.
+
+[`CHANGELOG.md`](CHANGELOG.md) marks every breaking change of the public API
+below with a **BREAKING** prefix and a migration note. A change that breaks a
+class outside that surface is announced as **Breaking change:** with a
+migration note and needs no version bump of its own.
+
+### Which version to require
+
+The current release is **v0.9.0**. Require the exact version, or allow patch
+releases inside the current minor line only:
+
+```json
+{
+    "require": {
+        "crazy-goat/tikv-client": "~0.9.0"
+    }
+}
+```
+
+`~0.9.0` (equivalently `^0.9.0` or `0.9.*`) resolves to `>=0.9.0 <0.10.0`, so
+it never pulls `0.10.0` — and therefore never pulls a breaking change. Use
+`"0.9.0"` instead when you want a reproducible build.
+
+Avoid the constraints that *do* admit the next minor: `^0`, `0.*`, `*` and
+`~0.9` all resolve to a range that includes `0.10.0` and every later release.
+
+The versions above follow the releases: every one of them is updated in the
+same pull request as the changelog section of the release, because the guard
+test reads the latest released version from `CHANGELOG.md` and fails until
+every version of this section names the current release or the one that
+follows it. The step is on the
+[release checklist](docs/release-workflow.md#checklist).
+
+### Public API
+
+These are covered by the stability promise: they may only change in a way
+that keeps existing, correct code working.
+
+| Surface | What it covers |
+|---|---|
+| `RawKv\RawKvClient` | every public method — the RawKV entry point |
+| `TxnKv\TxnKvClient` | every public method — `create()`, `begin()` (with its `pessimistic`, `priority`, `enable1Pc`, `enableAsyncCommit` and `eagerPessimisticLocks` options), `beginOptimistic()`, `beginPessimistic()`, `holdGcSafePoint()`, `releaseGcSafePoint()`, `getClusterId()`, `healthCheck()`, `getMetrics()`, `close()` — the TxnKV entry point |
+| `TxnKv\Transaction` | every public method — the transaction handle |
+| `RawKv\CasResult`, `RawKv\ChecksumResult` | the result DTOs of `compareAndSwap()` and `checksum()` |
+| `RawKv\ScanIterator` | the iterator returned by `scanIterator()` and `scanPrefixIterator()` |
+| `TxnKv\TransactionStatus` | the enum returned by `Transaction::getStatus()` |
+| `Exception\*` | `TiKvException` and every subclass, plus `InvalidArgumentException` (which extends PHP's `\InvalidArgumentException`, not `TiKvException`) |
+| `TxnKv\Exception\*` | the six transaction exceptions: `DeadlockException`, `LockWaitTimeoutException`, `TransactionConflictException`, `TxnAbortedByGcException`, `TxnRetryableException`, `UndeterminedCommitException` |
+| `Retry\RetryBudgetExhaustedException` | thrown when the internal retry budget is exhausted |
+| `Retry\ErrorKind` | the enum behind `RegionException::$errorKind` — the typed variant of a region error |
+| `Observability\MetricsInterface` | the metrics backend you implement and pass as `options['metrics']` |
+| `Observability\InMemoryMetrics` | the ready-made in-process backend, for tests and benchmarks |
+| `Region\ReplicaReadMode`, `Region\ReplicaReadPolicy` | the values you pass as `options['replicaRead']` |
+| the documented `options[]` keys | every key documented in the [configuration guide](docs/configuration.md) — `tls`, `timeout`, `metrics`, `apiVersion`, `keyspace`, `replicaRead`, `batchCommands`, `maxScanRows`, `maxConcurrency`, `tsoPoolSize`, … |
+
+The namespaces above are relative to `CrazyGoat\TiKV\Client\`. One class
+outside that namespace is part of the promise as well:
+`CrazyGoat\Proto\Errorpb\NotLeader`, the message behind
+`RegionException::$notLeader`.
+
+### Internal
+
+Every other class of `src/Client/` is internal: it may change in **any**
+release, with no version bump and no `BREAKING` note, because it is not part
+of the contract.
+
+- the namespaces `Batch\`, `Cache\`, `Codec\`, `Connection\`, `Grpc\`,
+  `Tls\`, `Util\`;
+- `Region\` — except `Region\ReplicaReadMode` and `Region\ReplicaReadPolicy`,
+  which the table above covers;
+- `Observability\NoOpMetrics` — the default backend `getMetrics()` returns
+- `Observability\DebugLogging` — the internal probe that decides whether a logger can emit a `debug` record
+  when no `options['metrics']` is configured; write against
+  `Observability\MetricsInterface`, which is covered;
+- `RawKv\Dto\` (the `RegionInfoMapper` helper) and `RawKv\RawKvSplitter`;
+- the collaborators behind the entry points: `RawKv\RawKvCrud`,
+  `RawKv\RawKvAtomic`, `RawKv\RawKvBatch`, `RawKv\RawKvScanner`,
+  `RawKv\RawKvRangeOps`, `RawKv\SstIngestor`, `TxnKv\TxnReader`,
+  `TxnKv\TwoPhaseCommitter`, `TxnKv\LockResolver`, `TxnKv\TransactionState`,
+  `TxnKv\RollbackRegroupSignal`;
+- `Retry\` — except `Retry\RetryBudgetExhaustedException` and
+  `Retry\ErrorKind`, which the table above covers: `Retry\Backoff`,
+  `Retry\BackoffType`, `Retry\ErrorClassifier` and `Retry\RetryExecutor`;
+- the generated protobuf and gRPC classes under `src/Proto/` — except
+  `Errorpb\NotLeader`, which the promise covers.
+
+The advanced extension points — `Retry\RetryExecutor` and `Retry\BackoffType`
+in [Custom Retry (Advanced)](docs/configuration.md#custom-retry-advanced), and
+`Tls\TlsConfigBuilder` — are documented, but they are internal like the
+rest: they change whenever the internals they wrap change.
 ## Usage
 
 ### Basic CRUD Operations
@@ -143,6 +239,11 @@ foreach ($client->scanIterator('a', 'b', batchSize: 256, keyOnly: true) as $key 
 // For an unbounded scan that matches more than options['maxScanRows'] rows
 // (default 100000) the client throws ScanLimitExceededException rather than
 // silently truncating; the iterators above have no such limit.
+//
+// A scan never truncates silently: an unbounded scan that hits its cap
+// throws, and a bounded scan (limit > 0) returns at most `limit` rows —
+// compare the returned count with the limit to see whether the range may
+// hold more.
 
 // Reverse scan (descending order)
 // Note the order: startKey = UPPER bound (exclusive), endKey = LOWER bound
@@ -282,6 +383,10 @@ $txn = $txnClient->begin([          // pessimistic by default
     'lockWaitTimeMs' => 1000,       // how long TiKV may wait for a contended lock
 ]);
 
+// ... or state the mode explicitly (recommended):
+// $txn = $txnClient->beginPessimistic();
+// $txn = $txnClient->beginOptimistic();
+
 $txn->set('account:1', '100');
 $txn->commit();                     // prewrite + commit; or $txn->rollback()
 
@@ -295,7 +400,10 @@ second `commit()` throws `InvalidStateException`. Start a new one instead.
 options as `RawKvClient`, plus `retryDeadlineMs` (the wall-clock bound on one
 transaction's internal retry loop, default
 `Transaction::DEFAULT_RETRY_DEADLINE_MS`), `gcSafePointValidation`,
-`replicaRead`, `enable1Pc`, `enableAsyncCommit` and `tsoPoolSize`.
+`replicaRead` and `tsoPoolSize`. The per-transaction options
+(`pessimistic`, `priority`, `enable1Pc`, `enableAsyncCommit`,
+`eagerPessimisticLocks` and `lockWaitTimeMs`) belong to
+`TxnKvClient::begin()`, not to `create()`.
 
 #### Reads and writes
 
@@ -313,12 +421,34 @@ writes, so `get()` after `set()` returns the new value without a round trip.
 They do *not* see other transactions' uncommitted data.
 
 > `Transaction::scan()` differs from `RawKvClient::scan()`: `limit: 0` means
-> "up to 10240 rows", not "the whole range" — a transactional scan does not
-> page internally. Pass an explicit `limit` when you need one.
+> "the whole range, up to 10240 rows" — a transactional scan does not page
+> internally. A range with more rows than that does **not** come back
+> truncated: the scan throws `ScanLimitExceededException` instead, so a
+> partial range is never mistaken for a complete one. Pass an explicit
+> `limit` when you need one.
 
 #### Optimistic vs pessimistic
 
-`pessimistic` defaults to **true**.
+`pessimistic` defaults to **true** — a transaction started with `begin()` is a
+**pessimistic** one. That is the opposite of the TiKV documentation and of
+client-go and client-rust, where optimistic is the default; the difference is
+tracked in issue #439. The default is kept for now (changing it is a breaking
+change that belongs in a major release), so state the mode explicitly in new
+code:
+
+```php
+// pessimistic — the physical lock is taken inside set()/delete()
+$txn = $txnClient->beginPessimistic();
+
+// optimistic — the physical lock is taken during the prewrite at commit()
+$txn = $txnClient->beginOptimistic();
+```
+
+Both are thin wrappers over `begin()`: they accept the same options
+(`priority`, `enable1Pc`, `enableAsyncCommit`, `eagerPessimisticLocks`,
+`lockWaitTimeMs`) and go through the same option handling. `lockWaitTimeMs`
+matters in the pessimistic mode only — an optimistic transaction takes no
+pessimistic lock, so it never waits for one.
 
 | | Pessimistic (default) | Optimistic |
 |---|---|---|
@@ -582,6 +712,41 @@ $txn = TxnKvClient::create(['127.0.0.1:2379'], $logger, $options);
 // The application owns $grpc:
 $grpc->close();
 ```
+
+`options['metrics']` stays a client-side option: it backs the client-side
+counters (region cache, retries) of every client, injected transport or not.
+The transport's own RPC counters follow the transport — pass the same backend
+to it (`new GrpcClient(metrics: $metrics)`) to get them everywhere.
+
+#### What closing a transport really does
+
+ext-grpc keeps a **process-global** table of persistent channels, keyed by the
+target, a hash of the channel arguments and a hash of the credentials. Two
+`Grpc\Channel` objects built from the same key therefore share **one**
+underlying `grpc_channel` — as long as the key is in that table. The table is
+bounded **per target** (one persisted channel per target by default), so a
+channel created beyond that bound is private to its handle: ext-grpc logs "The
+number of channel for the target is maxed out bounded" and does not persist
+it. A private channel is never shared, so it is never at risk either.
+
+`Channel::close()` is a **reference-count decrement**
+(`php_grpc_channel_unref()`), not a destroy: the underlying channel survives
+until its last holder releases it, and the persistent table is one of those
+holders. So closing one client never invalidates a channel another client
+holds — it only drops that client's own reference to it. Verified against the
+deployed extension (grpc 1.83.0; the persistent-channel code is unchanged in
+the oldest supported release, 1.57).
+
+Two consequences for the API:
+
+- `close()` releases this client's handles; the TCP connection stays warm in
+  the process (until the process ends or the per-target persist bound drops
+  the entry). It does not tear the connection down.
+- `closeChannel()` drops the cached handle but does **not** force a
+  reconnect: the persistent entry survives, so the next call reuses the same
+  underlying channel and the same TCP connection. Forcing a real reconnect
+  needs a new persistent entry.
+
 ### PSR-3 Logging
 
 ```php
@@ -663,6 +828,13 @@ try {
 
 ## Implemented Operations
 
+Every public capability of the library, taken from `src/Client/` — the
+`RawKvClient`, the `TxnKvClient` (including its explicit
+`beginOptimistic()` / `beginPessimistic()` entry points), the `Transaction` and
+the client options.
+The list is cross-checked against `CHANGELOG.md` at release time, see
+[docs/release-workflow.md](docs/release-workflow.md).
+
 ### Core CRUD
 - ✅ **Get** / **Put** / **Delete** — Single key operations
 - ✅ **BatchGet** / **BatchPut** / **BatchDelete** — Batch operations with parallel execution
@@ -685,89 +857,143 @@ try {
 ### Atomic Operations
 - ✅ **CompareAndSwap** — Atomic CAS with `CasResult` (swapped + previousValue)
 - ✅ **PutIfAbsent** — Conditional insert (returns existing value or null)
+- ✅ **Atomic mode** — `setAtomicForCAS(true)` / `isAtomicForCAS()` switch the write path to TiKV's atomic code path
 
 ### Data Integrity
 - ✅ **Checksum** — CRC64-XOR checksum over key range with `ChecksumResult`
 
-### Transactions
+### Bulk Import
+- ✅ **Ingest** — SST bulk import: the key/value pairs are sorted and written straight into the regions, bypassing the Raft write path (optional TTL)
+
+### Transaction Capabilities
 - ✅ **TxnKvClient / Transaction** — ACID transactions with snapshot reads and two-phase commit
 - ✅ **Pessimistic & Optimistic** — pessimistic locks by default; lock heartbeat for long transactions
 - ✅ **Conflict retry** — typed `TransactionConflictException`, `DeadlockException`, `LockWaitTimeoutException`
 - ✅ **GC safe points** — `holdGcSafePoint()` / `releaseGcSafePoint()` for reads that outlive `gc_life_time`
-- ✅ **Replica reads** — `options['replicaRead']` for follower reads inside a transaction
+- ✅ **Replica reads** — `options['replicaRead']` picks the replica that serves a read — `ReplicaReadMode::Leader`, `::Follower`, `::Mixed` or `::PreferLeader` — on both clients
+- ✅ **One-phase and async commit** — the `begin()` options `enable1Pc` and `enableAsyncCommit`
+- ✅ **Transaction state** — `getTxnId()`, `getStartTs()`, `getCommitTs()`, `getStatus()`, `isPessimistic()`, `getPriority()`, `getWriteSet()`, `getReadSet()`
+
+### Observability
+- ✅ **Metrics** — `options['metrics']` injects a `MetricsInterface` backend (`InMemoryMetrics` ships with the library for tests and benchmarks); `getMetrics()` returns the backend in use
+- ✅ **Health check** — `healthCheck()` probes PD with a lightweight `GetMembers` RPC and returns the cluster ID
+- ✅ **Cluster ID** — `getClusterId()` returns the cluster ID learned from PD
+- ✅ **Slow log** — `options['slowLog']` logs the RawKV operations that are slower than their per-operation threshold
+- ✅ **PSR-3 Logging** — Structured logging with any PSR-3 logger
+
+### API Versions and Codec
+- ✅ **API V1 and V2** — `options['apiVersion']` and `options['keyspace']`; V2 prefixes the keys with the mode and the keyspace ID
+- ✅ **Memory-comparable encoding** — `MemComparableCodec` encodes the PD region boundaries (TiDB-compatible `EncodeBytes`)
+
+### Configuration Options
+
+Everything in the table is passed in the `options` array of
+`RawKvClient::create()` / `TxnKvClient::create()`. The per-transaction
+options of `TxnKvClient::begin()` are listed below the table. The full
+reference, with the defaults, is in [Configuration](docs/configuration.md).
+
+| Option | What it does |
+|---|---|
+| `tls` | Server or mutual TLS, from file paths or inline PEM |
+| `allowInsecure` | `false` refuses to open a channel without usable TLS credentials |
+| `timeout` | A gRPC deadline per operation class — read, write, batch, scan, delete-range, checksum, ingest, PD, TSO, lock resolution |
+| `slowLog` | Thresholds above which an operation is logged as slow |
+| `metrics` | A `MetricsInterface` backend for the RPC, retry and region-cache counters |
+| `retryDeadlineMs` | Wall-clock bound on one retry loop |
+| `maxConcurrency` | Maximum number of in-flight requests in the batch and range fan-outs |
+| `maxScanRows` | Row cap for an unbounded (`limit: 0`) scan |
+| `replicaRead` | A `ReplicaReadPolicy` object — `ReplicaReadMode::Leader`, `::Follower`, `::Mixed` or `::PreferLeader` ([Replica Reads](docs/configuration.md#replica-reads)) |
+| `batchCommands` | RawKV experimental RPC multiplexing over the `BatchCommands` stream |
+| `apiVersion` / `keyspace` | API V2 with a named keyspace |
+| `grpc` | gRPC channel arguments (keepalive, message sizes) |
+| `maxChannels` / `idleTtlMs` | The channel pool — how many gRPC channels the transport keeps open and after how long an unused one is evicted ([Channel Pool](docs/configuration.md#channel-pool-maxchannels-idlettlms)) |
+| `grpcClient` | A transport the application built — the client uses it as it is and never closes it ([Sharing One Transport](docs/configuration.md#sharing-one-transport-between-clients)) |
+| `tsoPoolSize` / `lowResTimestampMaxStalenessMs` | TSO batching and the low-resolution timestamp cache of the TxnKV timestamp oracle |
+| `allowedStoreHosts` / `storeHostPolicy` / `allowedStorePorts` | Which store addresses the client is allowed to talk to |
+| `gcSafePointValidation` / `gcSafePointRefreshMs` | TxnKV GC safe-point validation and its refresh interval |
+
+The transport options (`tls`, `allowInsecure`, `maxChannels`, `idleTtlMs`,
+`grpc`) cannot be combined with `grpcClient` — they configure a transport the
+client does not build, so they are rejected instead of being ignored.
+
+`TxnKvClient::begin()` takes its own options per transaction: `pessimistic`
+(the default is `true`), `priority` (0 Normal, 1 Low, 2 High), `enable1Pc`
+(one-phase commit), `enableAsyncCommit`, `eagerPessimisticLocks` (pessimistic
+locking at write time — the default — or at commit time) and `lockWaitTimeMs`
+(how long TiKV may wait for a contended lock).
+
+Two settings are methods on the client rather than options:
+`setAtomicForCAS()` / `isAtomicForCAS()` (see
+[Atomic Operations](#atomic-operations)) and `setColumnFamily()` /
+`getColumnFamily()`, which selects the column family of the RawKV requests.
+
+### Error Handling
+- ✅ **Typed exceptions** — a dedicated exception class per failure mode; all of them but `InvalidArgumentException` (which extends PHP's `\InvalidArgumentException`) extend `TiKvException`; the most common exceptions and their retryability verdict are listed in [Error Handling](docs/error-handling.md)
 
 ### Infrastructure
 - ✅ **PD Region Discovery** — With RegionEpoch support
 - ✅ **Region Routing** — Direct to correct TiKV node
-- ✅ **Region Cache** — In-memory caching of region metadata
+- ✅ **Region Cache** — In-memory caching of region metadata; a custom `RegionCacheInterface` can be injected through the constructor
 - ✅ **Store Cache** — In-memory caching of store addresses
-- ✅ **Retry Logic** — Automatic retry with exponential backoff
+- ✅ **Retry Logic** — Automatic retry with exponential backoff; the wall-clock bound of one retry loop is `options['retryDeadlineMs']` (see [Retry System](docs/architecture.md#8-retry-system))
 - ✅ **NotLeader Handling** — Automatic leader redirection
 - ✅ **Batch Async Execution** — Parallel execution across regions
 - ✅ **TLS/SSL Support** — Server and mutual TLS authentication
-- ✅ **PSR-3 Logging** — Structured logging with any PSR-3 logger
+- ✅ **Lifecycle** — `close()` clears the region cache and closes the PD connection; the gRPC transport is closed with it only when the client owns it — a transport passed in through `options['grpcClient']` belongs to the application and is never closed by the client (see [Connection Lifetime and Transport Ownership](#connection-lifetime-and-transport-ownership))
 
 ## Project Structure
+
+The tree below is verified against the filesystem by
+`tests/Unit/Docs/ReadmeProjectStructureTest.php`: every directory under
+`src/Client/`, every test suite and every example script has to appear in it,
+and every file, directory or class it names has to exist. A new package
+therefore fails the unit suite until the tree names it.
+
+The tree is a map, not a file inventory. It names the test suites and not the
+directories below `tests/Unit/`, and it names the generated protobuf packages
+the library uses most and not all of them — the rest come with the proto
+submodule and change with it, so they are not checked for completeness.
 
 ```
 src/
 ├── Client/
-│   ├── Batch/
-│   │   ├── BatchAsyncExecutor.php   # Concurrent fan-out with deadline-bounded collection
-│   │   ├── CheckedGrpcFuture.php    # Lazy region-error check around dispatch futures
-│   │   └── GrpcFuture.php           # Async gRPC operations
-│   ├── Cache/
-│   │   ├── RegionCache.php          # Region metadata cache
-│   │   └── StoreCache.php           # Store address cache
-│   ├── Connection/
-│   │   └── PdClient.php             # PD discovery & region routing
-│   ├── Grpc/
-│   │   └── GrpcClient.php           # Low-level gRPC wrapper
-│   ├── RawKv/
-│   │   ├── RawKvClient.php          # Main client (20+ operations)
-│   │   ├── CasResult.php            # CompareAndSwap result
-│   │   ├── ChecksumResult.php       # Checksum result
-│   │   ├── ScanIterator.php         # Lazy auto-paginating scan iterator
-│   │   └── Dto/                     # Shared DTOs (KeyValue)
-│   ├── Region/
-│   │   ├── RegionResolver.php       # Region resolution & caching
-│   │   ├── RegionContextFactory.php  # Region context factory
-│   │   ├── RegionRangeClipper.php   # Range clipping
-│   │   ├── RegionGrouper.php        # Group keys by region
-│   │   ├── RegionErrorHandler.php   # Region error checking
-│   │   └── Dto/                     # Region DTOs (RegionInfo, PeerInfo)
-│   ├── Retry/
-│   │   └── BackoffType.php          # Retry backoff strategies
-│   ├── TxnKv/
-│   │   ├── TxnKvClient.php          # Transactional client (create/begin)
-│   │   ├── Transaction.php          # Transaction (get/set/commit/rollback)
-│   │   ├── TxnReader.php            # Snapshot reads at startTs
-│   │   ├── TwoPhaseCommitter.php    # Prewrite, commit, locks, heartbeat
-│   │   ├── LockResolver.php         # Conflict/lock resolution
-│   │   ├── TransactionState.php     # Mutable transaction state machine
-│   │   ├── TransactionStatus.php    # Active/Committed/RolledBack/Undetermined
-│   │   └── Exception/               # Conflict, deadlock, lock-wait, GC, undetermined
-│   └── Tls/
-│       ├── TlsConfig.php            # TLS configuration
-│       └── TlsConfigBuilder.php     # TLS builder
-└── Proto/                           # Generated protobuf classes
-    ├── Kvrpcpb/                     # TiKV request/response
-    ├── Pdpb/                        # PD request/response
-    └── Tikvpb/                      # gRPC service stubs
+│   ├── Batch/                         # Concurrent fan-out across regions
+│   │   └── BatchCommands/             # BatchCommands multiplexing over a bidi stream
+│   ├── Cache/                         # Region and store metadata caches
+│   ├── Codec/                         # Key encoding (CodecV1, CodecV2, MemComparableCodec)
+│   ├── Connection/                    # PD client, keyspace resolver, TSO oracle
+│   ├── Exception/                     # Exception hierarchy (TiKvException, GrpcException, RegionException)
+│   ├── Grpc/                          # Low-level gRPC transport, deadlines, timeouts
+│   ├── Observability/                 # Metrics collection (MetricsInterface, NoOpMetrics)
+│   ├── RawKv/                         # RawKV API (RawKvClient, RawKvCrud, RawKvBatch, RawKvScanner)
+│   │   └── Dto/                       # RawKV DTOs (RegionInfoMapper)
+│   ├── Region/                        # Region resolution, grouping, range clipping
+│   │   └── Dto/                       # Region DTOs (RegionInfo, PeerInfo, ReplicaReadTarget)
+│   ├── Retry/                         # Retry executor (RetryExecutor, Backoff, ErrorClassifier)
+│   ├── Tls/                           # TLS configuration
+│   ├── TxnKv/                         # Transactional API (TxnKvClient, Transaction, TwoPhaseCommitter)
+│   │   └── Exception/                 # Transaction exceptions (TransactionConflictException, DeadlockException)
+│   └── Util/                          # Key ordering and redaction (KeyOrder, KeyRedactor)
+└── Proto/                             # Generated protobuf classes (Kvrpcpb, Pdpb, Tikvpb, …)
+    ├── Kvrpcpb/                       # TiKV request/response
+    ├── Pdpb/                          # PD request/response
+    └── Tikvpb/                        # gRPC service stubs
 
 tests/
-├── Unit/                            # Unit tests
-└── E2E/                             # End-to-end tests
+├── Unit/                              # Unit tests
+├── Integration/                       # Integration tests
+├── E2E/                               # End-to-end tests
+└── phpstan/                           # PHPStan bootstrap (protobuf class alias)
 
 examples/
-├── basic.php                        # Basic CRUD example
-├── batch.php                        # Batch operations example
-├── scan.php                         # Scanning examples
-├── txn.php                          # Transactions with conflict retry
-├── ttl.php                          # TTL operations example
-├── atomic.php                       # Atomic operations example
-├── tls.php                          # TLS configuration example
-└── logging.php                      # PSR-3 logging example
+├── basic.php                          # Basic CRUD example
+├── batch.php                          # Batch operations example
+├── scan.php                           # Scanning examples
+├── txn.php                            # Transactions with conflict retry
+├── ttl.php                            # TTL operations example
+├── atomic.php                         # Atomic operations example
+├── tls.php                            # TLS configuration example
+└── logging.php                        # PSR-3 logging example
 ```
 
 ## Available Commands (Makefile)
@@ -884,16 +1110,53 @@ enable-ttl = true
 
 ## Roadmap
 
-### Recently Completed
-- ✅ TLS/SSL Support
-- ✅ PSR-3 Logging
-- ✅ Region & Store Caching
-- ✅ Connection Pooling
-- ✅ Batch Async Execution
-- ✅ Retry with Exponential Backoff
-- ✅ Per-key TTL in BatchPut
-- ✅ Scan limit enforcement (MAX 10240 per RPC; `limit: 0` auto-paginates)
-- ✅ Batch auto-splitting by size/count
+### Completed
+
+Shipped in the released versions — `CHANGELOG.md` has the details of each one.
+
+- ✅ **RawKV core** — CRUD, batch operations, scans, range operations, TTL and compare-and-swap
+- ✅ **Transactions (TxnKV)** — snapshot reads, two-phase commit, pessimistic and optimistic locking, GC safe points
+- ✅ **API V2 and keyspaces** — V2 key encoding and PD keyspace resolution
+- ✅ **Multi-endpoint PD** — leader discovery and failover
+- ✅ **GC safe-point awareness** — service safe points for long-running reads
+- ✅ **Replica reads** — stale reads, follower reads and the replica read modes
+- ✅ **Fast commit modes** — one-phase commit and async commit
+- ✅ **TSO batching** — batched TSO requests and a low-resolution timestamp cache
+- ✅ **Memory-comparable region encoding** — the TiDB-compatible `EncodeBytes` scheme for TxnKV region lookups
+- ✅ **Experimental RPC multiplexing** — the `BatchCommands` bidirectional stream (opt-in)
+- ✅ **TLS/SSL Support**
+- ✅ **PSR-3 Logging**
+- ✅ **Region & Store Caching**
+- ✅ **Connection Pooling**
+- ✅ **Batch Async Execution**
+- ✅ **Retry with Exponential Backoff**
+- ✅ **Per-key TTL in BatchPut**
+- ✅ **Scan limit enforcement** — MAX 10240 rows per RPC; `limit: 0` returns the whole range, bounded by `options['maxScanRows']`
+- ✅ **Batch auto-splitting by size/count**
+
+### Planned
+
+Not shipped yet. Every item is an open issue in the repository, and the issue
+is the source of truth — a feature moves to **Completed** when its issue is
+closed. The list holds the open feature-gap issues whose work is still to be
+done; the other open issues of the repository (API additions, quality fixes)
+are tracked in their own issues and are not part of the roadmap. A
+feature-gap issue whose work already shipped stays out of the list even while
+the issue is still open.
+
+- ⬜ **The remaining gRPC channel parameters** — compression, the HTTP/2 initial window size and `keepalive_permit_without_calls` are still hard-coded (the message sizes and the keepalive times are configurable already) ([#423](https://github.com/crazy-goat/tikv-php/issues/423))
+- ⬜ **Automatic transaction lock keepalive** — the primary lock is kept alive on its own for long-running transactions; today `heartbeat()` has to be called by hand ([#429](https://github.com/crazy-goat/tikv-php/issues/429))
+- ⬜ **Prometheus exporter and tracing hooks** — a ready-made metrics backend and request tracing ([#434](https://github.com/crazy-goat/tikv-php/issues/434))
+- ⬜ **Resource control and resource groups** — per-request resource-group tags ([#427](https://github.com/crazy-goat/tikv-php/issues/427))
+- ⬜ **Background region-cache refresh and region preloading** ([#425](https://github.com/crazy-goat/tikv-php/issues/425))
+- ⬜ **Store health checking and failover to healthy replicas** ([#424](https://github.com/crazy-goat/tikv-php/issues/424))
+- ⬜ **Transaction reverse scan and range deletion** ([#435](https://github.com/crazy-goat/tikv-php/issues/435))
+- ⬜ **`RawBatchScan` RPC for multi-range scans** — `batchScan()` is a client-side loop today ([#433](https://github.com/crazy-goat/tikv-php/issues/433))
+- ⬜ **Batch lock resolution and a resolved-transaction-status cache** ([#428](https://github.com/crazy-goat/tikv-php/issues/428))
+- ⬜ **Transaction size and memory limits** ([#430](https://github.com/crazy-goat/tikv-php/issues/430))
+- ⬜ **Explicit key-locking API for pessimistic transactions** ([#436](https://github.com/crazy-goat/tikv-php/issues/436))
+- ⬜ **Read-through locks for snapshot reads** ([#432](https://github.com/crazy-goat/tikv-php/issues/432))
+- ⬜ **The remaining `kvrpcpb.Context` control fields** — isolation level, not-fill-cache, request source ([#426](https://github.com/crazy-goat/tikv-php/issues/426))
 
 ## Contributing
 

@@ -2,7 +2,7 @@
 
 **Sistema Informativo per la Gestione dell'Illuminazione Pubblica**
 
-<sub>IlluminaGIS v1.0.2 · Made with ❤️ in Italia</sub>
+<sub>IlluminaGIS v1.0.3 · Made with ❤️ in Italia</sub>
 
 [![Release](https://img.shields.io/github/v/release/maxsassano/illuminagis?color=blue)](https://github.com/maxsassano/illuminagis/releases)
 [![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11%20(64--bit)-informational)](https://github.com/maxsassano/illuminagis)
@@ -23,7 +23,7 @@ Scarica l'ultima versione dalla pagina [**Releases**](https://github.com/maxsass
 | **Spazio disco** | ~500 MB (inclusi DB, foto e backup) |
 | **Privilegi** | Nessun admin richiesto (installazione per-utente) |
 
-> ℹ️ L'installer verifica automaticamente i prerequisiti e ti guida al download se mancanti.
+> ℹ️ L'installer ora installa automaticamente i prerequisiti mancanti (.NET 10 e WebView2).
 
 ---
 
@@ -33,7 +33,8 @@ Scarica l'ultima versione dalla pagina [**Releases**](https://github.com/maxsass
 - ☀️ **Pali fotovoltaici** — rilevamento automatico + calcolo risparmio energetico
 - 📊 **Statistiche avanzate** — 6 tab con perdite di carico e conto economico
 - 🔧 **Lavori a 5 stati** — assegnazione, consegna, verifica, accettazione
-- 💬 **Segnalazioni** — dai Responsabili Tecnici all'Admin con GPS e foto
+- 💬 **Segnalazioni bidirezionali** — Admin ↔ RT con gestione parallela, chiusura con nota e tracciamento PEC
+- 📥 **Lavoro da Segnalazione** — pre-compilazione automatica da segnalazioni esistenti
 - 📋 **Preventivi** — con righe e conversione automatica in pali reali
 - 📄 **Report PDF / Excel / CSV** — con logo aziendale personalizzabile
 - 👥 **Multi-utente** — Admin / Responsabile Tecnico / SuperUser su NAS o PC-server
@@ -89,7 +90,7 @@ Scarica l'ultima versione dalla pagina [**Releases**](https://github.com/maxsass
 
 ## 🚀 Installazione
 
-1. **Scarica** il file `IlluminaGIS_Setup_v1.0.2.exe` dalla pagina [**Releases**](https://github.com/maxsassano/illuminagis/releases)
+1. **Scarica** il file `IlluminaGIS_Setup_v1.0.3.exe` dalla pagina [**Releases**](https://github.com/maxsassano/illuminagis/releases)
 2. **Esegui** l'installer (doppio click — nessun privilegio admin richiesto)
 3. **Al primo avvio** configura il percorso dati:
    - Cartella locale (singolo PC)
@@ -124,21 +125,18 @@ Per uso con più postazioni sulla stessa cartella dati:
 
 ---
 
-## 🆕 Novità v1.0.2
+## 🆕 Novità v1.0.3
 
-- 🔄 **Refactor nomenclatura**: ruolo "Operaio" rinominato in **"Responsabile Tecnico"** in tutta l'interfaccia (login, menu, Home, gestione utenti, Help)
-- ✏️ **Apri scheda / Vedi scheda** — il pulsante nella Home del Responsabile Tecnico cambia automaticamente in base allo stato del lavoro (editabile solo se Assegnato/Rifiutato, sola lettura se Consegnato/Accettato)
-- 🖱️ **Doppio click** sullo storico lavori per aprire il dettaglio in sola lettura
-- 🗑️ **Soft-delete Lavori e Manutenzioni** (Annulla / Ripristina)
-- 👤 **Campo Manutentore** nella scheda lavoro
-- 📋 **Protocollo PEC** strutturato e ricercabile (Lavori + Manutenzioni)
-- ➕ **Pulsante rapido Manutenzione** in Home Admin
-- 🚫 **Gating Responsabile Tecnico** — pulsanti nascosti in Palo/Cabina
-- 🔍 **Filtro Stato** nello storico lavori del Responsabile Tecnico
-- 🧹 **Clean DB**: eliminazione definitiva righe annullate
-- ⚡ Ottimizzazione gestione foto in NuovaManutenzioneWindow
-- 🐛 **Fix** pulsante "Nuovo Progetto" in StartupWindow
-- 🐛 Bugfix vari
+- 👔 **Segnalazioni Admin ↔ RT**: l'Admin ora può creare segnalazioni, scegliere il destinatario (se stesso o un Responsabile Tecnico) e gestirle in parallelo.
+- 📣 **Campi Segnalazioni**: aggiunti Origine (Cittadino/Uff. Tecnico/Vista diretta), Protocollo PEC (ricercabile), Segnalante, Telefono e Riferimenti.
+- 📥 **Da Segnalazione a Lavoro**: in Nuovo Lavoro c'è il pulsante "Da segnalazione ricevuta" per importare i dati da una segnalazione aperta.
+- 🔐 **Password minime**: ridotte a 5 caratteri per facilitare l'accesso.
+- 📦 **Installer intelligente**: installa automaticamente .NET 10 e WebView2 se mancanti.
+- 🎨 **Badge colorati**: in SegnalazioniView per distinguere visivamente segnalazioni Admin (blu) e RT (viola).
+- 📚 **Help aggiornati**: riscritte le guide per Segnalazioni, Tabella, Palo, Cabine e Nuovo Lavoro.
+- 🐛 **Bugfix** vari e miglioramenti di stabilità.
+
+*(Inclusi anche i fix e le feature della v1.0.2: Soft-delete, Manutentore in scheda, Gating RT, Refactor Responsabile Tecnico, ecc.)*
 
 ---
 
@@ -170,5 +168,5 @@ Ogni contributo aiuta a mantenere il progetto attivo e senza pubblicità. Grazie
 ---
 
 <p align="center">
-  <sub>IlluminaGIS v1.0.2 · Made with ❤️ in Italia</sub>
+  <sub>IlluminaGIS v1.0.3 · Made with ❤️ in Italia</sub>
 </p>

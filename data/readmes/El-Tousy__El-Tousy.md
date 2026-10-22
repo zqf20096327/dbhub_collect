@@ -1,6 +1,6 @@
 <div align="center">
-  
-# 𝑳𝒆𝒊𝒍𝒂  
+    
+# 𝑳𝒆𝒊𝒍𝒂    
 
 ### Angehende Anwendungsentwicklerin · Python · Web · Android 
  
@@ -14,7 +14,7 @@ Ich suche eine **Ausbildung als Fachinformatikerin für Anwendungsentwicklung** 
 Marokko 🇲🇦 · Bereit für einen Umzug nach Deutschland
 
 </div>
-
+      
 --- 
 
 ## Über mich

@@ -34,6 +34,7 @@ goes away.
 - **Dockable workspace** — unlimited tabs of drag-to-split panels, saved and restored per project.
 - **Sub-workspaces** — tear tabs or panels off into their own windows that move as one group.
 - **Terminal panels** — your real installed shells, owned by a background service so they survive a restart and reattach.
+- **Attention marks** — a panel, tab or project that needs you says so, with an optional notification and taskbar count, and one chord jumps to the next.
 - **Editor panels** — a fast code editor with syntax highlighting for 55 languages, crash recovery and one buffer per file across every window.
 - **File explorer** — a live, project-scoped file tree with undoable rename, move, copy and delete, and cut, copy and paste between projects.
 - **Find across files and Quick Open** — search and replace the whole project, or jump to any file by name.
@@ -50,8 +51,9 @@ goes away.
 throng runs on **Windows 11** today; macOS ([#22](https://github.com/Bidthedog/throng/issues/22)) and
 Linux ([#23](https://github.com/Bidthedog/throng/issues/23)) are planned.
 
-1. **Install it** — download the installer, a portable build or a zip from the
-   [Releases page](https://github.com/Bidthedog/throng/releases). No admin rights and no prerequisites;
+1. **Install it** — download the installer, an MSI, a portable build or a zip from the
+   [Releases page](https://github.com/Bidthedog/throng/releases), for just you or for everyone on the
+   machine. No prerequisites, and no admin rights unless you install for everyone;
    [installation](docs/installation.md) covers every option, verifying the download, and running from
    source.
 2. **Take the tour** — the [quick start](docs/quick-start.md) goes from first launch to a working

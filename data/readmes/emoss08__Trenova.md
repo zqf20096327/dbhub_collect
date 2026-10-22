@@ -70,12 +70,12 @@ i18n/                     Translation catalogs and the extraction tooling
 dev/                      Local environment: compose.yml, its configs, Samsara and EDI partner simulators
 deploy/                   Dockerfiles, self-host compose, Caddy, GTC routing, observability, PgBouncer example
 tools/                    Tooling that is not shipped: extraction fine-tuning (Python), screenshots, load tests, release
-docs/                     Engineering guides referenced by CLAUDE.md, product guide, self-hosting
+docs/                     Engineering guides (indexed in docs/engineering/README.md), product guide, self-hosting
 ```
 
 ## Quick start (local development)
 
-Prerequisites: Go 1.26+, Node.js with pnpm, Docker, and [Task](https://taskfile.dev/).
+Prerequisites: Go 1.26+, Node.js 26 (`client/.nvmrc`) with pnpm, Docker, and [Task](https://taskfile.dev/).
 
 ```bash
 git clone https://github.com/emoss08/trenova.git
@@ -110,6 +110,29 @@ On Windows, `setx LOW_RESOURCE true` sets it for every new terminal.
 `LOW_RESOURCE_JOBS=2` allows two packages at a time with two threads each; that is a sensible
 setting on a 16 GB machine. Run only the client app you are working on
 (`pnpm --filter @trenova/web dev`) rather than `pnpm dev`, which starts both.
+
+### Malware scanning locally
+
+ClamAV is in the local stack behind a profile, since it holds about 2 GB of signatures in
+memory. Start it, wait for it to report healthy (the first start downloads its signatures, which
+takes several minutes), and point the TMS at it:
+
+```bash
+docker compose -f dev/compose.yml --profile clamav up -d clamav
+docker compose -f dev/compose.yml ps clamav          # wait for "healthy"
+```
+
+```yaml
+# services/tms/config/config.yaml
+contentScan:
+  clamav:
+    address: localhost:3310
+```
+
+Restart the API and worker. An upload then reads "Checking for viruses..." once it is sent. The
+EICAR test file (`X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*`, saved
+as a `.txt`) is refused and shows as blocked. See "Malware scanning" in the
+[self-hosting guide](./docs/self-hosting/README.md#malware-scanning).
 
 Run `task list` to see every available task. Agent-facing engineering guides live in [`docs/engineering`](./docs/engineering). Operations runbooks, design notes, roadmaps and research live in [trenova-documentation](https://github.com/emoss08/trenova-documentation).
 

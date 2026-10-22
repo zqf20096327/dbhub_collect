@@ -8,22 +8,21 @@
 <p align="center">
   <img alt="Postgres 18.6" src="https://img.shields.io/badge/Postgres-18.6-336791">
   <img alt="Version: v0.1" src="https://img.shields.io/badge/version-v0.1-blue">
-  <img alt="Regression suite: 0 result differences" src="https://img.shields.io/badge/regression_suite-0_result_differences-brightgreen">
+  <img alt="PostgreSQL regression suite: 219 of 231 byte-exact, 0 result differences" src="https://img.shields.io/badge/src%2Ftest%2Fregress-219%2F231_byte--exact%2C_0_result_diffs-green">
   <a href="LICENSE"><img alt="License: AGPL-3.0" src="https://img.shields.io/badge/license-AGPL--3.0-blue"></a>
 </p>
 
 ```bash
-curl -fsSL https://pgx.dev/install | sh
-pgx run
-pgx clone app agent-001 --ttl 5m
+npx pgxdb@latest
 ```
 
 <p align="center">
+  One command: PGX installed, database running, connection URL printed.<br>
   No Docker required · Native Mac &amp; Linux · Automatic cleanup
 </p>
 
 <p align="center">
-  <sub>Open source · Free · Beta · Built for disposable development databases</sub>
+  <sub>Open source · Free · v0.1.0 · For disposable databases, not production data</sub>
 </p>
 
 PGX is a database runtime for short-lived Postgres databases: agent
@@ -81,12 +80,14 @@ different.
 ~674 ms      copy-on-write branch ready
 ~13.6 MB     initial additional physical storage
 
-219 / 231    PostgreSQL regression tests byte-exact
-0            result differences (the other 12 differ in EXPLAIN text only)
+219 / 231    PostgreSQL src/test/regress byte-exact against PG 18.6 expected output
+0            result differences (the other 12 differ in EXPLAIN plan text only)
 ```
 
 These describe measured configurations and workloads, not a claim that
-PGX is faster than PostgreSQL in general. The detail and the scripts are
+PGX is faster than PostgreSQL in general. The regression figure is
+PostgreSQL's own test suite on one platform under the regress profile
+(see Benchmarks), not a compatibility percentage for arbitrary SQL. The detail and the scripts are
 under Benchmarks.
 
 ## Disposable Postgres
@@ -175,7 +176,7 @@ hundreds of times less physical storage than a full copy.
 
 | | Result |
 |---|---|
-| PostgreSQL regression suite | 219 / 231 byte-exact. The other 12 differ only in EXPLAIN plan text: **0 result differences**. |
+| PostgreSQL regression suite (`src/test/regress`, PG 18.6 expected output) | 219 / 231 byte-exact; 12 differ only in EXPLAIN plan text; **0 result differences**. Measured under the PGX profile with parallel workers and `synchronous_commit` restored (`configs/pgx-regress-overlay.conf`), the two settings the suite asserts on; under the shipped ephemeral profile those two settings alone make `select_parallel` and `stats` differ. One suite, one platform: not a compatibility score. |
 | Real Rails 8.1 app (migrations, fixtures, model tests, schema change, `db:schema:load`) | passes; within 0–5 % of PostgreSQL 18 per phase |
 | Django 5.2, Prisma 6, SQLAlchemy 2, node-postgres, Rails-shaped SQL | pass |
 | All framework runs | **36 / 36** |
@@ -266,8 +267,9 @@ applies to memory and to storage alike.
 
 ## Status
 
-PGX is **beta software**. It already powers PGX branches in PGRun's
-friendly beta. The current focus is PostgreSQL compatibility,
+PGX is at **v0.1.0**, an early release with known limitations listed in the
+[release notes](https://github.com/pgrundev/pgx/releases/tag/v0.1.0). It
+already powers PGX branches in PGRun. The current focus is PostgreSQL compatibility,
 Rails/application compatibility, concurrency semantics, lifecycle
 correctness, predictable resource containment and real agent workloads.
 Correctness and reproducibility come before benchmark marketing: if PGX
@@ -317,17 +319,40 @@ branch management. PGX is the runtime. They are separate projects.
 
 ## Quickstart
 
-Install PGX and create your first database. No system PostgreSQL required; the
-distribution is self-contained and relocatable.
+One command installs PGX, starts it, creates an `app` database and prints its
+connection URL. No Docker, Rust or system PostgreSQL; the native distribution
+is self-contained and relocatable.
+
+```bash
+npx pgxdb@latest
+```
+
+```console
+PGX is ready.
+
+  postgres://postgres:…@127.0.0.1:5432/app
+```
+
+Point `DATABASE_URL` at that URL. `npx pgxdb` with no arguments is `pgx run`;
+every other `pgx` command works the same way through npx:
+
+```bash
+npx pgxdb url app                      # its connection URL
+npx pgxdb ls                           # databases, TTL, expiry, size
+npx pgxdb clone app agent-001 --ttl 5m # a 5-minute copy-on-write branch
+npx pgxdb --json ls                    # machine-readable output for agents
+npx pgxdb stop
+```
+
+The binary is downloaded once (SHA-256 verified) into `~/.pgx/dist/<version>`
+and reused. `npm install -g pgxdb` puts `pgx` on your PATH for good. Supported:
+Apple silicon Macs and Linux (arm64, x86-64). Intel Macs are not supported yet.
+
+Without Node, the shell installer does the same install:
 
 ```bash
 curl -fsSL https://pgx.dev/install | sh
-
-pgx run              # start the runtime with a ready `app` database
-pgx url app          # its connection URL — point DATABASE_URL at this
-pgx ls               # databases, TTL, expiry, memory
-pgx clone app test_1 # fast clone (copy-on-write where the backend supports it)
-pgx stop
+pgx run
 ```
 
 Any PostgreSQL client or ORM works against `pgx url <db>`. The full CLI,
@@ -445,8 +470,11 @@ every headline number above to its step, script and raw result.
 
 The regression suite is PostgreSQL's own `src/test/regress`, vendored
 unmodified at `crates/postgres-18.6-reference/src/test/regress`. It runs
-with stock `pg_regress` (`benchmarks/pgx/regress-baseline.py`), and each
-difference is classified as plan-only or semantic.
+with stock `pg_regress` (`benchmarks/pgx/regress-baseline.py`) under the
+PGX profile plus `configs/pgx-regress-overlay.conf` (parallel workers and
+`synchronous_commit` back on, because the suite asserts on them), and each
+difference is classified as plan-only or semantic. The nightly run fails on
+any semantic difference (`classify-regress-diffs.py --fail-on-semantic`).
 
 ## Documentation
 

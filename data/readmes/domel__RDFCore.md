@@ -111,8 +111,19 @@ version parameters and conflicts with an explicit `rdf_version` raise
 `ValueError`. `auto` is an API option, not a media version label. Other
 syntactically valid parameters do not select the RDF version or change decoding.
 
-For HTTP input, `Graph.parse()` uses a versioned `Content-Type` when no
-`format` is supplied. An explicit format takes precedence. RDF/XML MIME
+For HTTP input, `Graph.parse()` and `Dataset.parse()` select a registered
+`Content-Type`, including its version, ahead of a URL suffix when no
+`format` is supplied. An explicit format takes precedence, including over
+an invalid version header. Exact registered MIME names with parameters take
+precedence; otherwise custom registered base types also accept headers with
+parameters such as `charset`. Redirects use the final URL as the base unless
+`publicID` overrides it. As in RDFLib, an explicit empty `publicID` instead
+uses the original request URL as the base. Responses close after success or failure.
+Shared legacy short names send RDFLib 7.6.0's corresponding `Accept` value;
+explicit RDF 1.2 names request the versioned media type. An explicit
+`http_accept="text/turtle; version=1.2-basic"` overrides that request header.
+This is client-side selection, not a server-side negotiation service.
+RDF/XML MIME
 version dispatch is an RDFCore extension: it does not replace the required
 in-document `rdf:version` announcement for RDF 1.2 constructs.
 
@@ -208,13 +219,34 @@ For `xml`, caller-supplied output streams must accept bytes, as in RDFLib.
 Text streams raise `TypeError`; sink exceptions propagate without a text retry. File
 paths are opened in binary mode. The low-level XML11 writer also follows
 RDFLib's replacement policy if its `encoding` attribute is changed to ASCII.
+The `xml12` writer selects text output for standard `io.TextIOBase` streams
+(including `StringIO`) before writing. Other sinks receive bytes by default;
+use `text_output=True` for a custom text sink or `text_output=False` to
+require bytes. The option accepts a boolean or `None` for automatic selection.
+Sink errors, including `TypeError` after a partial write, propagate without a
+retry or closing the caller's stream. Text wrappers must use an encoding
+consistent with the XML encoding requested from the serializer.
 Direct serializer calls use the graph's base when `base=None`, as in RDFLib;
 an explicit empty base suppresses it. Writer round-trip tests cover shared
 blank nodes, XMLLiteral lexical forms, Unicode, directional literals, nested
-triple terms and multiple reifiers. UTF-8 and UTF-16 output can be parsed
-directly. UTF-32 output must be decoded to text before parsing because the
-current XML parser does not accept UTF-32 byte input. Namespace prefixes and
+triple terms and multiple reifiers. The `xml12` parser accepts UTF-8,
+UTF-16 and UTF-32 bytes, including short reads and UTF-32 byte-order variants.
+The legacy `xml` parser retains RDFLib's UTF-32 byte-input limitation:
+decode that input to text or select `xml12`. Namespace prefixes and
 statement order are not promised to match RDFLib byte for byte.
+The `xml12` parser validates IRI references after XML character-reference expansion and
+before URL resolution, which could otherwise strip invalid control characters.
+This does not change XML11's RDFLib-compatible permissive IRI handling.
+An inherited text direction cannot produce a directional literal inside a
+local `rdf:version="1.1"` scope: the parser raises an error rather than
+silently dropping the direction or emitting a term from the wrong profile.
+For predicates in the reserved XMLNS namespace, `xml12` selects a legal
+QName split or raises `ValueError` before writing. Legacy `xml` retains
+RDFLib 7.6.0's namespace behavior, including its invalid XMLNS binding;
+use `safe_iris=True` to select the corrected writer explicitly.
+An XML12 writer with `rdf_version="1.1"` accepts the RDF 1.1 vocabulary,
+including ordinary `rdf:version`, `rdf:annotation` and `rdf:annotationNodeID`
+predicates. This does not enable RDF 1.2 terms in that profile.
 
 The `xml` parser follows RDFLib's XMLLiteral handling, including CDATA,
 omission of comments and processing instructions, CR text normalization,
@@ -225,10 +257,29 @@ Outside XML literals, `xml12` accepts only XML whitespace between RDF
 elements; `xml` preserves RDFLib's broader Unicode whitespace handling.
 The XML12 event mapping ignores reserved `xml*` element and attribute names,
 except inside XML literals. XML11 retains the reference's legacy handling.
+Its default mode also preserves RDFLib 7.6.0's unqualified attributes,
+ignored `rdf:RDF` root attributes, ignored text on resource properties,
+relative datatype IRIs and position-dependent `rdf:type` resolution.
+Use `strict=True` with `xml` for the existing stricter RDF grammar checks;
+`xml12` always applies its separate grammar checks. Neither option is a
+claim of complete W3C conformance.
+
+With an XML 1.1 declaration, `xml12` normalizes XML 1.1 line ends and accepts
+restricted characters through character references, not raw characters.
+XML literals preserve those references where needed to retain their infoset.
+Detected UTF-16/32 byte-order and encoding-declaration mismatches raise
+`SAXParseException`. An unsupported
+UTF-32 byte transport in legacy `xml` has an explicit unsupported-input
+message, not a claim that the XML document is malformed. XML12 serialization
+still rejects literal characters forbidden in XML 1.0 with `ValueError`;
+it does not yet produce XML 1.1 documents for those literals.
 
 Both parsers reject DTD declarations before processing RDF or accessing
 external entities, including declarations split across input chunks or
-encoded as UTF-16. XML nesting is limited to 256 elements, including the
+encoded as UTF-16, and UTF-32 in `xml12`. XML12 buffers and adapts the
+document transport before the DTD/depth guard and DOM parsing; it emits no
+RDF statements before the guard succeeds. XML nesting is limited to 256
+elements, including the
 RDF wrapper and XML literal content. The XML12 writer rejects more than
 126 nested triple terms so that its output stays within the parser's limit.
 Input streams supplied by the caller remain open after success or failure.
@@ -257,10 +308,58 @@ in `.rdf` or `.xml` select the RDF 1.1 parser unless a format is supplied.
 `rdfcore.semantics.entails()` decides simple graph entailment, including
 blank nodes inside triple terms. The `rdf` and `rdfs` regimes can prove a
 subset of entailments using finite vocabulary axioms and forward rules.
-When they cannot prove a conclusion, they raise `UnsupportedEntailment`;
-this does not mean the conclusion is false. Datatype reasoning and
-inconsistency detection are not implemented. Graph operations never infer
-additional triples automatically.
+The default `mode="proof"` raises `UnsupportedEntailment` when RDF/RDFS
+rules cannot prove a conclusion. Graph operations never infer additional
+triples automatically.
+
+Explicit `mode="decide"` adds datatype value matching and detection of
+ill-typed recognized literals, including those inside triple terms. Supply
+`datatypes={XSD.integer, RDF.JSON}` to recognize additional types;
+RDF/RDFS always recognize `xsd:string`, `rdf:langString` and
+`rdf:dirLangString`. Other literal types remain opaque. An unknown requested
+datatype raises `UnsupportedEntailment`. HTML value mapping requires the
+optional HTML extra described above, also when the RDF/RDFS evaluator builds
+value witnesses for an explicitly recognized `rdf:HTML`.
+Malformed RDF literal components, including missing language/direction or
+non-scalar Unicode, raise `TypeError` in this mode. They are not datatype
+inconsistency proofs; RDFLib-compatible literal constructors remain unchanged.
+
+In decision mode, `conclusion=False` asks whether the premise is
+inconsistent; an empty graph is a different conclusion. A recognized
+ill-typed premise entails any conclusion, without asserting embedded
+triples. RDF/RDFS also check recognized value-space membership, compatible
+datatype inclusions, disjoint type constraints and domain/range clashes.
+Membership uses value identity, not Python coercion: boolean is not integer,
+and a JSON number is an `xsd:double`, not an `xsd:integer`. HTML and XMLLiteral
+share the DOM fragment value space but have different lexical mappings.
+Space inclusion can imply instance typing; it does not automatically assert
+an `rdfs:subClassOf` triple.
+
+Negative decisions require a checked countermodel. The supported datatype
+schema fragment allows ordinary edges, type assertions to recognized
+datatypes or `rdf:Property`, domain/range constraints to recognized datatypes,
+subproperty links between ordinary properties and subclass assertions between
+recognized datatypes. It excludes proposition constraints and fixed-vocabulary
+aliasing. The earlier ordinary-ground certificate remains available. Simple-D
+negatives also support transparent nested triple terms, provided recognized
+datatype IRIs do not themselves occur in subject/predicate/object positions
+or as triple-term components. Other undecided cases
+raise `UnsupportedEntailment`, never an assumed `False`. General RDF/RDFS
+reasoning remains incomplete. Dataset inputs are rejected; select a graph.
+
+Boolean domains and integer intervals of at most 4096 values can be checked
+exhaustively. Larger spaces use witnesses for consistency/countermodels only;
+a few samples never prove a universal conclusion. Evaluation stops with
+`EntailmentResourceLimit` after 4096 assignment combinations. Aliasing that
+introduces unresolved constraints cannot certify a countermodel.
+
+Both `entails()` and `entailment_closure()` accept `max_steps=None` (the
+default) or a non-negative integer work budget. Exhaustion raises
+`EntailmentResourceLimit`, a subclass of `UnsupportedEntailment`; it never
+returns `False`. Python recursion exhaustion raises the same exception.
+The budget counts internal validation, matching and rule-join work, not
+seconds or bytes. It cannot interrupt a blocked input iterator or bound the
+size of an individual term. Exact step counts may change between releases.
 
 ```python
 from rdfcore import Graph, RDF, URIRef
@@ -269,6 +368,18 @@ from rdfcore.semantics import entails
 premise = Graph().add((URIRef("urn:s"), URIRef("urn:p"), URIRef("urn:o")))
 conclusion = [(URIRef("urn:p"), RDF.type, RDF.Property)]
 assert entails(premise, conclusion, regime="rdf")
+
+from rdfcore import Literal, RDFS, XSD
+
+source = [(URIRef("urn:s"), URIRef("urn:p"),
+           Literal("01", datatype=XSD.integer, normalize=False))]
+target = [(URIRef("urn:s"), URIRef("urn:p"),
+           Literal("1", datatype=XSD.integer, normalize=False))]
+assert entails(source, target, datatypes={XSD.integer}, mode="decide")
+assert entails(source, False, datatypes={XSD.integer}, mode="decide") is False
+
+clash = source + [(URIRef("urn:p"), RDFS.range, XSD.string)]
+assert entails(clash, False, regime="rdfs", datatypes={XSD.integer}, mode="decide")
 ```
 
 ## Graphs and datasets
@@ -345,6 +456,11 @@ number_of_triples = count("large.nt", "nt")
 is_valid = validate("large.nt", "nt")
 ```
 
+`count()` and `validate()` close files they open and any decompression wrappers
+they create, including after a parse error. A stream supplied by the caller
+remains open; closing an internally created wrapper does not transfer ownership
+of that stream.
+
 `parse_stream()` and `convert()` are streamable for N-Triples and N-Quads.
 Bounded reads do not impose a fixed bound on total memory. A parser may
 buffer a whole record or token; its blank-node label map grows with the
@@ -372,7 +488,27 @@ graph.serialize("output.ttl", format="turtle12", mode="stream")
 
 Streaming serializers write statements as they are processed. They do not
 provide the prefix grouping, complete-graph sorting, or formatting used by
-the default pretty serializers.
+the default pretty serializers. For an existing graph or dataset, the RDF 1.2
+serializer scans the required profile before starting `mode="stream"`, so
+mixed RDF 1.1/1.2 statements do not depend on iteration order. Direct push
+writers cannot look ahead; select `rdf_version="1.2"` before feeding mixed data.
+`canonical=True` in Turtle12/TriG12 stream mode suppresses version directives
+and lowercases language tags; it does not sort statements or canonicalize
+blank nodes.
+Binary Turtle/TriG streaming uses one incremental encoder per document,
+including UTF-16/UTF-32 BOM handling and stateful-codec finalization. It does
+not close the caller's sink. Non-UTF-8 output is an API encoding option;
+it must be decoded before passing it to UTF-8 RDF syntax parsers.
+
+NT12, NQ12, Turtle12 and TriG12 serializers select standard text/binary sinks
+before writing and propagate sink errors without a retry or stream closure.
+For custom sinks, `text_output=True` or `False` selects the protocol explicitly;
+otherwise the default follows whether `encoding` was supplied. Direct Turtle
+and TriG push writers also accept `text_output`; leaving it unset preserves
+their older text-first fallback behavior. NT12/NQ12 input accepts CR, LF and
+CRLF records and Unicode blank-node labels, with incremental UTF-8 decoding.
+Records and blank-node maps can still grow with the input; this is not a hard
+bound on total memory.
 
 Convert N-Triples and N-Quads through a streaming pipeline:
 
@@ -471,10 +607,22 @@ Serialization uses `Graph.base` when `base` is omitted. Turtle and TriG pretty
 and streaming output emit the base declaration and relativize eligible IRIs;
 RDF/XML emits `xml:base`. An explicit `base` overrides the graph's base.
 
+Turtle/TriG 1.2 writers only shorten an IRI when resolving the shortened
+form against the base reproduces the original IRI exactly. This applies to
+pretty and streaming output, graph names and nested triple terms. Legacy
+`turtle`/`trig` keep RDFLib-compatible prefix stripping by default, including
+its known round-trip defect when the base is a partial path prefix. Select
+the corrected behavior with `graph.serialize(format="turtle", safe_iris=True)`
+(also available for `trig`). Direct `TurtleStreamingWriter` and
+`TriGStreamingWriter` calls use safe handling by default. `safe_iris=False`
+explicitly selects the older behavior; the option requires a boolean.
+
 `Graph.isomorphic()` follows RDFLib's approximate RDF 1.1 check and can return
 false positives when blank nodes occur. Use `rdfcore.compare.isomorphic()`
 for exact graph/dataset comparison. It includes nested triple terms and empty
 named graphs, with one blank-node mapping across data and graph names.
+Comparison reads dataset contexts without changing graph bases, namespace
+bindings or the graph-view cache, including when comparison fails.
 Graphs without blank nodes use set comparison; blank-node matching uses an
 iterative search, though symmetric graphs can still be expensive.
 For RDF 1.2 data, the graph method uses this exact comparison as an extension.
@@ -609,14 +757,16 @@ status or fixture bytes; no test is removed.
 
 | Snapshot | Passed | Failed | Unsupported | Error |
 |---|---:|---:|---:|---:|
-| Previous, default profile | 2345 | 23 | 79 | 0 |
-| Current, default profile | 2350 | 23 | 79 | 0 |
+| Previous, before T37 | 2345 | 23 | 79 | 0 |
+| Current, before T37 | 2350 | 23 | 79 | 0 |
+| Current, explicit decision mode (T37) | 2401 | 23 | 28 | 0 |
+| Current, datatype constraints (T38) | 2411 | 23 | 18 | 0 |
 
 These totals count executions across suites, including repeated RDF 1.1
 cases. The current snapshot contains 2452 executions and 1411 unique test IDs.
 
 The reviewed snapshot still has RDF/XML failures (including XMLLiteral
-lexical-form expectations) and unsupported datatype/inconsistency reasoning
+lexical-form expectations) and unsupported general schema/reification reasoning
 cases. These remain visible failures or unsupported results, not successful
 conformance checks. The RDFLib-compatible XMLLiteral behavior has separate
 differential tests; expected W3C fixtures are not rewritten to hide the gap.
@@ -632,15 +782,28 @@ python -m tests.w3c.audit --before .w3c/previous.json --current conformance-resu
 The audit explains reviewed issues and identifies unreviewed ones. It does
 not alter test statuses and returns a nonzero exit status while issues remain.
 Comparison retains repeated executions, format and RDF-version distinctions,
-and reports added, removed and changed cases, including changed fixture bytes.
+and reports added, removed and changed cases, including changed fixture bytes,
+action/result IRIs, entailment regimes, test types and recognized datatypes.
+The comparison also checks `result_is_false` and records before/after
+`entailment_options`; changing those options marks matching entailment
+executions as changed, without marking syntax executions as changed.
+Reordering a set of types or recognized datatypes alone is not a semantic change.
 Default and archived-recovery profiles cannot be compared as equivalent runs.
 
-The reviewed issues comprise 79 unsupported semantic executions, 17 XML
+The historical reviewed backlog comprises 79 semantic executions, 17 XML
 announcement conflicts, four XMLLiteral lexical conflicts with the pinned
 RDFLib behavior, and two disputed XML fixtures. The four lexical executions
 reuse two test IDs across XML11 and XML12. Fixture-conflict explanations for
 the two disputed cases require matching reviewed input and result hashes;
 an unknown snapshot or changed disputed fixture remains unreviewed.
+
+T37 resolves 51 of the historical 79 semantic executions; T38 resolves ten
+more. The remaining 18 executions concern general RDF/RDFS reasoning. The
+report records `entailment_options` and a `semantic_plan`
+for each historical execution, linking its requirement to an offline minimal
+regression and implementation route. Passing an unsupported-boundary
+regression does not count as passing that W3C test. Boolean false conclusions
+are recorded separately from missing conclusions.
 
 The XML conflict regressions run offline, independently of the official checkout.
 They cover each of the 17 annotation constructions with separate default,
@@ -686,7 +849,8 @@ Two XML 1.2 failures remain: `rdf12-xml-tt-01` has an empty expected file,
 and `rdf12-xml-dir-02` expects a literal without the input's direction.
 Recovery does not discard either triple terms or direction to match those
 expectations. Results in this mode are archived-fixture compatibility evidence,
-not current RDF 1.2 conformance. The 79 unsupported reasoning cases remain.
+not current RDF 1.2 conformance. The reasoning limits above also apply in
+this recovery profile.
 
 The separate **W3C conformance** workflow runs weekly, on relevant pull
 requests and `v*` release tags, and can be started manually. It fetches or

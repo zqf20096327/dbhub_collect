@@ -193,6 +193,14 @@ AI_BASE_URL="https://api.deepseek.com"
 AI_MODEL="deepseek-flash"
 ```
 
+An OpenCode Go subscription works the same way — the endpoint is Go's OpenAI-compatible surface:
+
+```bash
+AI_API_KEY="go-…"
+AI_BASE_URL="https://opencode.ai/inference/go/openai/v1"
+AI_MODEL="glm-5.3-flash"
+```
+
 | Surface | Route | Notes |
 | --- | --- | --- |
 | Ask / grounded ask | `POST /api/ai` | `{ prompt, workspaceId? }` — the workspace is searched with keyword extraction + relevance scoring, so answers are grounded in your pages |
@@ -369,9 +377,14 @@ guard leaves prices (`$5 and $6`) alone.
 | OpenAI | `https://api.openai.com/v1` | GPT-4o family, o-series |
 | DeepSeek | `https://api.deepseek.com` | deepseek-chat / reasoner |
 | Google Gemini | `…/v1beta/openai` | Gemini's OpenAI-compatible surface |
+| OpenCode Go | `https://opencode.ai/inference/go/openai/v1` | Go subscription; the models behind Go's OpenAI-compatible surface |
 | Custom | your URL | Ollama, vLLM, LiteLLM, Azure proxy… |
 
 Pick a model from the curated list or press **Fetch models** to pull the provider's live `GET /models`, then **Test connection** before saving. Environment variables (`AI_API_KEY` / `AI_BASE_URL` / `AI_MODEL`) stay as the fallback for workspaces without their own configuration.
+
+Every provider request carries the product's own user agent (`noema/<version>`), so a provider's log says which application is talking to it. **OpenCode Go** additionally gets a stable session id (`x-opencode-session`): the discussion's own id for a chat, the workspace's id for the one-shot surfaces. Go asks its clients for exactly that — an agent that identifies itself, and a session that stays the same for a conversation.
+
+Go serves some of its models over other surfaces (Anthropic, Google, OpenAI's *Responses* API); those need a transport Noema does not speak, so the curated list holds only the models behind Go's OpenAI-compatible surface. **Fetch models** returns Go's complete list — the curated ids are the ones that work.
 
 A workspace's own endpoint and key are used only for requests from members of that workspace. Anyone else gets the environment configuration, so a workspace id alone never spends another workspace's key or budget.
 
@@ -391,11 +404,11 @@ Requirements: **Node.js 24** (the toolchain is typed against Node 24 —
 `@types/node ^24`), **npm**, **Docker**.
 
 ```bash
-# 1. Database — Postgres 16 in the `noema-db` container, mapped to localhost:5433
-docker compose up -d
+# 1. Environment — required keys: POSTGRES_PASSWORD, DATABASE_URL (already points at :5433), AUTH_SECRET
+cp .env.example .env        # then set POSTGRES_PASSWORD and a real AUTH_SECRET (see .env.example for the generators)
 
-# 2. Environment — required keys: DATABASE_URL (already points at :5433), AUTH_SECRET
-cp .env.example .env        # then set a real AUTH_SECRET (see .env.example for the generator)
+# 2. Database — Postgres 16 in the `noema-db` container, mapped to 127.0.0.1:5433
+docker compose up -d        # refuses to start without POSTGRES_PASSWORD
 
 # 3. Install dependencies (postinstall runs `prisma generate`)
 npm install
@@ -421,6 +434,7 @@ npm run dev                 # http://localhost:3000 (Next.js default port)
 | Notion importer (optional) | `NOTION_API_BASE` | defaults to `https://api.notion.com/v1`; checks point it at a local mock (`http://localhost:4322/v1`) |
 | Misc (optional) | `APP_URL`, `APP_ORIGINS`, `CRON_SECRET`, `NEXT_PUBLIC_COLLAB_URL` | canonical email links, Server-Action origin allow-list, cron guard, realtime collab |
 | Reverse proxy (optional) | `TRUSTED_PROXY_HOPS` | how many reverse-proxy hops may set `X-Forwarded-For` / `X-Real-IP` (1 for a single nginx/Caddy). Unset = the forwarding headers are ignored; see [OPERATIONS §1.1](./docs/OPERATIONS.md#11-reverse-proxy-in-front-of-the-app-trusted_proxy_hops) |
+| HTTPS (optional) | `HSTS_MAX_AGE`, `HSTS_INCLUDE_SUBDOMAINS` | the `Strict-Transport-Security` header is sent by default (`max-age=31536000`, one year). `HSTS_MAX_AGE` sets the max-age in seconds, `0` = no header. The value is read when the app is **built**; see [OPERATIONS §1.2](./docs/OPERATIONS.md#12-https-and-hsts-hsts_max_age) |
 
 **Production:** `npm run build` then `npm start`. Note that dev and prod share
 the same `.next` directory — never run them at the same time.
@@ -491,6 +505,7 @@ password: password123
 | `npm run check:a11y` | WCAG structural + contrast audit of the rendered shell |
 | `npm run check:sso` | OIDC SSO + teamspaces + transcription checks (uses a local mock IdP) |
 | `npm run check:ui` | Home gallery, sidebar tabs, discussions and calendar checks (uses a local mock ICS feed) |
+| `npm run check:public-ui` | Landing, auth and 404 at 390/1440 light/dark: HTTP, overflow, h1, accessible names, text and control-border contrast (no DB needed) |
 | `npm run check:ai` | Full AI suite against the configured provider (ask, grounded ask, summarize, autofill, all 7 skills) |
 | `npm run check:routes` | Probes every rendered route and fails on any 5xx |
 | `npm run check:mail` | SMTP end-to-end check against a throwaway SMTP server (invitation received, link inside, hashed storage, delivery log) |

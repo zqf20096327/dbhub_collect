@@ -83,6 +83,54 @@ Sales work spans customer profiles, business documents, conversation history, an
 
 The illustrated [KaCRM User Guide](docs/user-guide.en.md) covers initial setup, chat, CRM, dashboards, agents, tasks, and administration, and can be read directly on GitHub. Markdown is the primary maintained version. The [Chinese HTML print edition](docs/user-guide.html) preserves a layout snapshot for browser printing or PDF export after cloning the repository.
 
+## Single-container installation
+
+Docker is the only prerequisite. One container includes KaCRM Web, Hermes, PostgreSQL 15/pgvector, Redis and background workers. First startup initializes the database and generates administrator credentials. No model API keys or customer data are embedded.
+
+### 1. Choose a registry
+
+Both public registries provide the same **v0.1.1 image for linux/amd64**, with no login required.
+
+| Registry | Image |
+| --- | --- |
+| Mainland China · Tencent Cloud Guangzhou | `ccr.ccs.tencentyun.com/kacrm/kacrm:v0.1.1` |
+| International · GitHub GHCR | `ghcr.io/dfar2008/kacrm:v0.1.1` |
+
+### 2. Pull and start
+
+GitHub GHCR:
+
+```bash
+docker pull ghcr.io/dfar2008/kacrm:v0.1.1
+docker run -d --name kacrm --restart unless-stopped --stop-timeout 120 \
+  -p 127.0.0.1:8765:8765 -v kacrm-data:/var/lib/kacrm \
+  ghcr.io/dfar2008/kacrm:v0.1.1
+```
+
+Tencent Cloud (choose one registry; do not start both):
+
+```bash
+docker pull ccr.ccs.tencentyun.com/kacrm/kacrm:v0.1.1
+docker run -d --name kacrm --restart unless-stopped --stop-timeout 120 \
+  -p 127.0.0.1:8765:8765 -v kacrm-data:/var/lib/kacrm \
+  ccr.ccs.tencentyun.com/kacrm/kacrm:v0.1.1
+```
+
+### 3. Sign in and configure a model
+
+Initialization takes some time. Wait for `healthy`, then retrieve the generated administrator email and initial password:
+
+```bash
+docker inspect --format '{{.State.Health.Status}}' kacrm
+docker exec kacrm python -m deploy.container.kacrm_all_in_one credentials
+```
+
+Open `http://127.0.0.1:8765/app/` and sign in. In **Models**, select your provider, enter your API key, required Base URL and model, test the connection, and set a default model. Feishu requires separate app and channel configuration. See the [user guide](docs/user-guide.en.md).
+
+Keep the `kacrm-data` volume when recreating or upgrading the container: it contains the database and user configuration. The commands bind only to localhost; use SSH forwarding or an HTTPS reverse proxy for a remote server. Both registries also offer `latest`; use `v0.1.1` to pin the version. ARM64 is not yet verified.
+
+See the [container guide](deploy/container/README.md) for Compose, logs, backups, upgrades and source builds, or use the [offline release assets](https://github.com/dfar2008/kacrm/releases/tag/v0.1.1).
+
 ## Getting Started
 
 ### Requirements
@@ -116,7 +164,7 @@ Follow [sections 2–4 of the Deployment Guide](docs/deployment.en.md#2-clone-an
 3. Apply the Hermes patches, run Alembic migrations, and initialize the database with the seed command.
 4. Install frontend dependencies and build the interface.
 
-The current database migration head is **0115**. The Deployment Guide includes complete commands, configuration examples, and verification steps. This version supports source deployment only; Docker deployment is not supported.
+The current database migration head is **0118**. The Deployment Guide includes complete commands, configuration examples, and verification steps. Source deployment remains available. A public **all-in-one image** and Compose example are now provided; model API keys and runtime data are not included in the image. See the [container instructions](deploy/container/README.md).
 
 ### 3. Start the web interface
 

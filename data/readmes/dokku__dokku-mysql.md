@@ -18,17 +18,17 @@ sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git --name mysql
 
 ```
 mysql:app-links [<app>]                            # list all MySQL service links for a given app
-mysql:backup <service> <bucket-name> [-u|--use-iam] # create a backup of the MySQL service to an existing s3 bucket
-mysql:backup-auth <service> <aws-access-key-id> <aws-secret-access-key> <aws-default-region> <aws-signature-version> <endpoint-url> # set up authentication for backups on the MySQL service
-mysql:backup-deauth <service>                      # remove backup authentication for the MySQL service
+mysql:backup <service> <bucket-name> [--id <id>] [-u|--use-iam] # create a backup of the MySQL service to an existing s3 bucket
+mysql:backup-auth <service> <aws-access-key-id> <aws-secret-access-key> <aws-default-region> <aws-signature-version> <endpoint-url> [--id <id>] # set up authentication for backups on the MySQL service
+mysql:backup-deauth <service> [--id <id>]          # remove backup authentication for the MySQL service
 mysql:backup-logs <service> [-t|--tail [<tail-num>]] # print the most recent output of the scheduled backups of the service
-mysql:backup-schedule <service> <schedule> <bucket-name> [-u|--use-iam] # schedule a backup of the MySQL service
-mysql:backup-schedule-cat <service>                # cat the crontab line of the scheduled backup for the service
-mysql:backup-set-encryption <service> <passphrase> # set encryption for all future backups of MySQL service
-mysql:backup-set-public-key-encryption <service> <public-key-id> # set GPG Public Key encryption for all future backups of MySQL service
-mysql:backup-unschedule <service>                  # unschedule the backup of the MySQL service
-mysql:backup-unset-encryption <service>            # unset encryption for future backups of the MySQL service
-mysql:backup-unset-public-key-encryption <service> # unset GPG Public Key encryption for future backups of the MySQL service
+mysql:backup-schedule <service> <schedule> <bucket-name> [--id <id>] [-u|--use-iam] # schedule a backup of the MySQL service
+mysql:backup-schedule-cat <service> [--id <id>]    # cat the crontab line of a scheduled backup for the service
+mysql:backup-set-encryption <service> <passphrase> [--id <id>] # set encryption for all future backups of MySQL service
+mysql:backup-set-public-key-encryption <service> <public-key-id> [--id <id>] # set GPG Public Key encryption for all future backups of MySQL service
+mysql:backup-unschedule <service> [--id <id>|--all] # unschedule the backup of the MySQL service
+mysql:backup-unset-encryption <service> [--id <id>] # unset encryption for future backups of the MySQL service
+mysql:backup-unset-public-key-encryption <service> [--id <id>] # unset GPG Public Key encryption for future backups of the MySQL service
 mysql:clone <service> <new-service> [--clone-flags...] # create container <new-name> then copy data from <name> into <new-name>
 mysql:connect <service>                            # connect to the service via the mysql connection tool
 mysql:create <service> [--create-flags...]         # create a MySQL service
@@ -50,7 +50,7 @@ mysql:promote <service> [<app>]                    # promote service <service> a
 mysql:reexpose <service>                           # reexpose a MySQL service, applying its expose settings
 mysql:reset <service> [-f|--force]                 # delete all data in the MySQL service, keeping the service and its links
 mysql:restart <service>                            # graceful shutdown and restart of the MySQL service container
-mysql:set <service> <key> <value>                  # set or clear a property for a service
+mysql:set <service> <key> [<value>] [--id <id>]    # set or clear a property for a service
 mysql:start <service>                              # start a previously stopped MySQL service
 mysql:stop <service>                               # stop a running MySQL service
 mysql:unexpose <service>                           # unexpose a previously exposed MySQL service
@@ -199,6 +199,7 @@ flags:
 - `--backup-object-name`: show the name backups are uploaded under in place of the default
 - `--backup-public-key-id`: show the gpg public key id backups are encrypted with
 - `--backup-schedule`: show the cron schedule backups run on
+- `--backup-schedules`: show every scheduled backup, as id, schedule, bucket and use-iam
 - `--backup-secret-access-key-fingerprint`: show a sha256 fingerprint of the stored backup secret access key
 - `--backup-signature-version`: show the signature version backups authenticate with
 - `--backup-storage-class`: show the s3 storage class backups are uploaded with
@@ -227,11 +228,13 @@ flags:
 - `--log-opt`: show the docker log options the service container is run with
 - `--memory`: show the memory limit the service container is run with
 - `--mounts`: show the host paths and docker volumes mounted into the service container
+- `--password-fingerprint`: show a sha256 fingerprint of the service password
 - `--port-bind-address`: show the address exposed ports without one of their own are bound on
 - `--port-source-range`: show the only range of client addresses the exposed ports accept
 - `--post-create-network`: show the networks to attach to after service container creation
 - `--post-start-network`: show the networks to attach to after service container start
 - `--restart-policy`: show the restart policy the service container is run with
+- `--root-password-fingerprint`: show a sha256 fingerprint of the service root password
 - `--service`: show the name of the service
 - `--service-root`: show the service root directory
 - `--shm-size`: show the shared memory size the service container is run with
@@ -295,6 +298,13 @@ A fingerprint is empty when that value is not stored. The access key id and the 
 dokku mysql:info lollipop --backup-auth-fingerprint
 ```
 
+The service's passwords are reported the same way, and are empty for a password the datastore does not have:
+
+```shell
+dokku mysql:info lollipop --password-fingerprint
+dokku mysql:info lollipop --root-password-fingerprint
+```
+
 The same fingerprints can be computed from the values that were passed to set, backup-auth and backup-set-encryption:
 
 ```
@@ -302,6 +312,7 @@ printf '%s' "$AWS_ACCESS_KEY_ID" | sha256sum
 printf '%s' "$AWS_SECRET_ACCESS_KEY" | sha256sum
 printf '%s\n%s' "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" | sha256sum
 printf '%s' "$PASSPHRASE" | sha256sum
+printf '%s' "$PASSWORD" | sha256sum
 ```
 
 ### list all MySQL services
@@ -465,8 +476,14 @@ An app is still linked after its `DATABASE_URL` is changed to point elsewhere, a
 
 ```shell
 # usage
-dokku mysql:set <service> <key> <value>
+dokku mysql:set <service> <key> [<value>] [--id <id>]
 ```
+
+flags:
+
+- `--allow-restart`: restart or reexpose the service when the property only takes effect that way and its value changed
+- `--id <string>`: record the property on this backup schedule instead of on the service
+- `--no-restart`: do not restart the linked apps when a password change updates the url they hold
 
 Set the network to attach after the service container is started:
 
@@ -516,6 +533,24 @@ Go back to running the process with the datastore's own arguments alone:
 dokku mysql:set lollipop config-options
 ```
 
+Change the password in the datastore and in the url every linked app holds, restarting the apps. The value is never printed back, and info reports a fingerprint of it:
+
+```shell
+dokku mysql:set lollipop password "<new-password>"
+```
+
+Give the linked apps the new url without restarting them:
+
+```shell
+dokku mysql:set --no-restart lollipop password "<new-password>"
+```
+
+Change the root password in the datastore:
+
+```shell
+dokku mysql:set lollipop root-password "<new-root-password>"
+```
+
 Change one of the settings backup-auth stores, such as the endpoint of an s3 compatible service, without passing the rest again:
 
 ```shell
@@ -536,11 +571,23 @@ dokku mysql:set lollipop backup-encryption-passphrase "<passphrase>"
 dokku mysql:set lollipop backup-public-key-id "<public-key-id>"
 ```
 
-Ship a scheduled backup to another bucket, or have it authenticate with an instance role. Both rewrite the crontab entry, and need a schedule made with backup-schedule:
+Ship the default scheduled backup to another bucket, or have it authenticate with an instance role, when that is the only schedule. Both rewrite the crontab entry. With more than one schedule, change a schedule with backup-schedule --id:
 
 ```shell
 dokku mysql:set lollipop backup-bucket other-bucket
 dokku mysql:set lollipop backup-use-iam true
+```
+
+Record a backup setting on one schedule. An empty value clears that schedule's own value and leaves the service's. The bucket and the instance role cannot be set this way:
+
+```shell
+dokku mysql:set lollipop backup-storage-class STANDARD_IA --id monthly
+```
+
+Give one schedule its own endpoint. The access key and the secret are set with backup-auth --id, and set rotates one of them once both are stored:
+
+```shell
+dokku mysql:set lollipop backup-endpoint-url https://nyc3.digitaloceanspaces.com --id monthly
 ```
 
 Set the keyserver a public key for backup encryption is fetched from:
@@ -1318,15 +1365,19 @@ You may skip the `backup-auth` step if your dokku install is running within EC2 
 
 If both passphrase and public key forms of encryption are set, the public key encryption will take precedence.
 
-Each setting `backup-auth`, `backup-set-encryption` and `backup-set-public-key-encryption` store can also be changed on its own with the `set` command, as can the bucket and IAM setting of a scheduled backup. The keys are listed under Service properties.
+Each setting `backup-auth`, `backup-set-encryption` and `backup-set-public-key-encryption` store can also be changed on its own with the `set` command, as can the bucket and IAM setting of the schedule made without `--id`, when that is the only schedule. The keys are listed under Service properties.
 
-Backups are uploaded with the bucket's default storage class unless the service sets the `backup-storage-class` property with the `set` command.
+Backups are uploaded with the bucket's default storage class unless the service sets the `backup-storage-class` property with the `set` command. A schedule may set its own value with `set <key> <value> --id <id>`.
 
-Backups are uploaded to `<prefix>-<service>-<timestamp>.tgz`. The service may name the key with the `backup-object-name` property and drop the timestamp by setting the `backup-timestamp` property to `false`, so that every backup is uploaded to the same key and bucket versioning and lifecycle rules can keep and rotate them. The bucket name may end in a path to upload under, such as `my-s3-bucket/backups`.
+Backups are uploaded to `<prefix>-<service>-<timestamp>.tgz`. The service may name the key with the `backup-object-name` property and drop the timestamp by setting the `backup-timestamp` property to `false`, so that every backup is uploaded to the same key and bucket versioning and lifecycle rules can keep and rotate them. The bucket name may end in a path to upload under, such as `my-s3-bucket/backups`. A schedule may set either for itself.
 
 The underlying core backup script is present [here](https://github.com/dokku/docker-s3backup/blob/main/backup.sh).
 
-Scheduled backups are added to the dokku crontab, and are listed by `dokku cron:list --global`. Each service's scheduled backups append their output to a log of its own, `/var/log/dokku/<prefix>.<service>.backup.log`, which the `backup-logs` command shows. The output of a service's scheduled backups can be mailed to specific recipients by setting the `backup-mailto` property with the `set` command, on dokku versions that support a per-entry `MAILTO`.
+A service has one scheduled backup, made with `backup-schedule` and replaced by calling it again. Further schedules are added with `--id <name>`, each with its own cron expression and bucket, so a service can ship a frequent backup and a monthly backup to different buckets. `backup-schedule-cat` lists every schedule. `backup-unschedule` removes the only schedule; with several it removes the one named by `--id`, or every schedule with `--all`.
+
+`backup-auth` and `backup-deauth` take the same `--id`. A schedule is created first, then given its own access key and secret. A schedule with both uses that pair. A schedule with neither uses the service's credentials, unless the backup is run with `--use-iam`. A region, signature version or endpoint set on the schedule is used for that schedule, and one left unset is the service's.
+
+Scheduled backups are added to the dokku crontab, and are listed by `dokku cron:list --global`. Each service's scheduled backups append their output to a log of its own, `/var/log/dokku/<prefix>.<service>.backup.log`, which the `backup-logs` command shows. The output of a service's scheduled backups can be mailed to specific recipients by setting the `backup-mailto` property with the `set` command, on dokku versions that support a per-entry `MAILTO`. The service value applies to every schedule that has not set its own.
 
 Backups can be performed using the backup commands:
 
@@ -1334,8 +1385,12 @@ Backups can be performed using the backup commands:
 
 ```shell
 # usage
-dokku mysql:backup-auth <service> <aws-access-key-id> <aws-secret-access-key> <aws-default-region> <aws-signature-version> <endpoint-url>
+dokku mysql:backup-auth <service> <aws-access-key-id> <aws-secret-access-key> <aws-default-region> <aws-signature-version> <endpoint-url> [--id <id>]
 ```
+
+flags:
+
+- `--id <string>`: record the credentials on this backup schedule
 
 Setup s3 backup authentication:
 
@@ -1369,12 +1424,22 @@ More specific example for digitalocean spaces auth, where the endpoint does not 
 dokku mysql:backup-auth lollipop SPACES_ACCESS_KEY SPACES_SECRET_KEY nyc3 s3v4 https://nyc3.digitaloceanspaces.com
 ```
 
+Record credentials on one schedule. The schedule is created first with backup-schedule --id. A region, signature version or endpoint url that is not passed is cleared on that schedule, so it inherits the service's value:
+
+```shell
+dokku mysql:backup-auth lollipop AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY us-east-1 --id monthly
+```
+
 ### remove backup authentication for the MySQL service
 
 ```shell
 # usage
-dokku mysql:backup-deauth <service>
+dokku mysql:backup-deauth <service> [--id <id>]
 ```
+
+flags:
+
+- `--id <string>`: clear the credentials recorded on this backup schedule
 
 Remove s3 authentication:
 
@@ -1382,15 +1447,22 @@ Remove s3 authentication:
 dokku mysql:backup-deauth lollipop
 ```
 
+Remove the credentials recorded on one schedule. The service's credentials stay, and that schedule uses them again:
+
+```shell
+dokku mysql:backup-deauth lollipop --id monthly
+```
+
 ### create a backup of the MySQL service to an existing s3 bucket
 
 ```shell
 # usage
-dokku mysql:backup <service> <bucket-name> [-u|--use-iam]
+dokku mysql:backup <service> <bucket-name> [--id <id>] [-u|--use-iam]
 ```
 
 flags:
 
+- `--id <string>`: run with the settings of this schedule
 - `-u|--use-iam`: use the IAM profile associated with the current server
 
 Backup the `lollipop` service to the `my-s3-bucket` bucket on `AWS`:
@@ -1399,6 +1471,12 @@ Backup the `lollipop` service to the `my-s3-bucket` bucket on `AWS`:
 
 ```shell
 dokku mysql:backup lollipop my-s3-bucket --use-iam
+```
+
+Backup with the settings recorded on one schedule. The bucket and --use-iam still come from this command:
+
+```shell
+dokku mysql:backup lollipop my-s3-bucket --id monthly
 ```
 
 Backup the `lollipop` service under a path in the bucket:
@@ -1423,8 +1501,12 @@ dokku mysql:import lollipop < backup-folder/export
 
 ```shell
 # usage
-dokku mysql:backup-set-encryption <service> <passphrase>
+dokku mysql:backup-set-encryption <service> <passphrase> [--id <id>]
 ```
+
+flags:
+
+- `--id <string>`: record the passphrase on this backup schedule
 
 Set the GPG-compatible passphrase for encrypting backups for backups:
 
@@ -1432,14 +1514,22 @@ Set the GPG-compatible passphrase for encrypting backups for backups:
 dokku mysql:backup-set-encryption lollipop
 ```
 
-Public key encryption will take precendence over the passphrase encryption if both types are set.
+Public key encryption will take precendence over the passphrase encryption if both types are set. Record the passphrase on one schedule. It replaces the service's passphrase and public key for that schedule:
+
+```shell
+dokku mysql:backup-set-encryption lollipop --id monthly
+```
 
 ### set GPG Public Key encryption for all future backups of MySQL service
 
 ```shell
 # usage
-dokku mysql:backup-set-public-key-encryption <service> <public-key-id>
+dokku mysql:backup-set-public-key-encryption <service> <public-key-id> [--id <id>]
 ```
+
+flags:
+
+- `--id <string>`: record the public key on this backup schedule
 
 Set the `GPG` Public Key for encrypting backups:
 
@@ -1453,12 +1543,22 @@ The <public-key-id> is fetched from `keyserver.ubuntu.com`, unless the service n
 dokku mysql:set lollipop backup-keyserver hkp://keys.example.com
 ```
 
+Record the public key on one schedule:
+
+```shell
+dokku mysql:backup-set-public-key-encryption lollipop --id monthly
+```
+
 ### unset encryption for future backups of the MySQL service
 
 ```shell
 # usage
-dokku mysql:backup-unset-encryption <service>
+dokku mysql:backup-unset-encryption <service> [--id <id>]
 ```
+
+flags:
+
+- `--id <string>`: clear the passphrase recorded on this backup schedule
 
 Unset the `GPG` encryption passphrase for backups:
 
@@ -1466,12 +1566,22 @@ Unset the `GPG` encryption passphrase for backups:
 dokku mysql:backup-unset-encryption lollipop
 ```
 
+Clear the passphrase recorded on one schedule, so that schedule inherits the service's encryption again:
+
+```shell
+dokku mysql:backup-unset-encryption lollipop --id monthly
+```
+
 ### unset GPG Public Key encryption for future backups of the MySQL service
 
 ```shell
 # usage
-dokku mysql:backup-unset-public-key-encryption <service>
+dokku mysql:backup-unset-public-key-encryption <service> [--id <id>]
 ```
+
+flags:
+
+- `--id <string>`: clear the public key recorded on this backup schedule
 
 Unset the `GPG` Public Key encryption for backups:
 
@@ -1479,15 +1589,22 @@ Unset the `GPG` Public Key encryption for backups:
 dokku mysql:backup-unset-public-key-encryption lollipop
 ```
 
+Clear the public key recorded on one schedule:
+
+```shell
+dokku mysql:backup-unset-public-key-encryption lollipop --id monthly
+```
+
 ### schedule a backup of the MySQL service
 
 ```shell
 # usage
-dokku mysql:backup-schedule <service> <schedule> <bucket-name> [-u|--use-iam]
+dokku mysql:backup-schedule <service> <schedule> <bucket-name> [--id <id>] [-u|--use-iam]
 ```
 
 flags:
 
+- `--id <string>`: the schedule to record, in place of the default schedule
 - `-u|--use-iam`: use the IAM profile associated with the current server
 
 Schedule a backup:
@@ -1496,6 +1613,8 @@ Schedule a backup:
 > the backup is added to the dokku crontab through the cron-entries plugin trigger, so it is listed by "dokku cron:list --global" and its output is appended to /var/log/dokku/mysql.<service>.backup.log, which "dokku mysql:backup-logs <service>" prints
 > each scheduled backup fires the same service-action post-backup trigger as "dokku mysql:backup", so a plugin can report whether it succeeded
 > NOTE: dokku only writes a crontab when the global scheduler or at least one app uses the docker-local scheduler, so a scheduled backup does not run on a host that only uses k3s or null
+> calling it again without --id replaces that schedule's cron expression, bucket and instance role, and leaves every other schedule in place
+> --id names another schedule, or replaces the one that id already names. --id default is the schedule made without --id
 
 ```shell
 dokku mysql:backup-schedule lollipop "0 3 * * *" my-s3-bucket
@@ -1507,30 +1626,63 @@ Schedule a backup and authenticate via iam:
 dokku mysql:backup-schedule lollipop "0 3 * * *" my-s3-bucket --use-iam
 ```
 
-### cat the crontab line of the scheduled backup for the service
+Schedule a second backup under its own id:
+
+```shell
+dokku mysql:backup-schedule lollipop "0 3 1 * *" my-s3-bucket --id monthly
+```
+
+### cat the crontab line of a scheduled backup for the service
 
 ```shell
 # usage
-dokku mysql:backup-schedule-cat <service>
+dokku mysql:backup-schedule-cat <service> [--id <id>]
 ```
 
-Cat the crontab line of the scheduled backup for the service:
+flags:
+
+- `--id <string>`: the schedule to print
+
+Cat the crontab line of the scheduled backup for the service. With more than one schedule, each line is preceded by its id:
 
 ```shell
 dokku mysql:backup-schedule-cat lollipop
+```
+
+Cat one schedule:
+
+```shell
+dokku mysql:backup-schedule-cat lollipop --id monthly
 ```
 
 ### unschedule the backup of the MySQL service
 
 ```shell
 # usage
-dokku mysql:backup-unschedule <service>
+dokku mysql:backup-unschedule <service> [--id <id>|--all]
 ```
 
-Remove the scheduled backup from the dokku crontab:
+flags:
+
+- `--all`: remove every scheduled backup
+- `--id <string>`: the schedule to remove
+
+Remove the scheduled backup from the dokku crontab. With one schedule, that schedule is removed. With several, name one with --id, or pass --all:
 
 ```shell
 dokku mysql:backup-unschedule lollipop
+```
+
+Remove one schedule:
+
+```shell
+dokku mysql:backup-unschedule lollipop --id monthly
+```
+
+Remove every schedule:
+
+```shell
+dokku mysql:backup-unschedule lollipop --all
 ```
 
 ### print the most recent output of the scheduled backups of the service
@@ -1566,7 +1718,7 @@ dokku mysql:backup-logs lollipop --tail=5
 
 ### Service properties
 
-Every setting a service has after it is created, other than its image, its passwords, its mounts and its backup schedule, each of which has a command of its own, is changed with `dokku mysql:set lollipop <key> <value>`, and cleared by giving no value. `dokku mysql:info lollipop` reports each of them, with a credential reported as a fingerprint rather than its value. A setting the container is made with only reaches it once the container is built again, and `set` warns when that is the case: `dokku mysql:restart` keeps the container the service has, so use `dokku mysql:stop` and then `dokku mysql:start`.
+Every setting a service has after it is created, other than its image, its mounts and its backup schedule, each of which has a command of its own, is changed with `dokku mysql:set lollipop <key> <value>`, and cleared by giving no value. `dokku mysql:info lollipop` reports each of them, with a credential reported as a fingerprint rather than its value. A setting the container is made with only reaches it once the container is built again, and `set` warns when that is the case: `dokku mysql:restart` keeps the container the service has, so use `dokku mysql:stop` and then `dokku mysql:start`. Passing `--allow-restart` to `set` does that, or the `reexpose` an expose setting takes, whenever the value changed, and leaves the service alone when it did not.
 
 | Property | Description | Takes effect |
 | --- | --- | --- |
@@ -1602,6 +1754,10 @@ Every setting a service has after it is created, other than its image, its passw
 | `custom-env` | semicolon-delimited environment variables the container is run with | after `mysql:stop` and `mysql:start` |
 | `memory` | the container memory limit in megabytes, `0` for no limit | after `mysql:stop` and `mysql:start` |
 | `shm-size` | the shared memory size of the container, such as `64m` | after `mysql:stop` and `mysql:start` |
+| `password` | the password the service and its linked apps use, changed in the datastore and in the url every linked app holds | immediately |
+| `root-password` | the password of the datastore's own administrator, changed in the datastore | immediately |
+
+The `password` and `root-password` keys are changed in the datastore as well as on disk, and every linked app is given the new url and restarted, unless `--no-restart` is passed. The datastore is told the new password while it runs, so the service has to be running. A password cannot be cleared, may only hold letters, digits, `.`, `_`, `~` and `-`, and is never printed back: `info` reports a fingerprint of it.
 
 ### Limiting where and to whom a service is exposed
 

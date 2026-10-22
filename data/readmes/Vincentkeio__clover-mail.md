@@ -26,6 +26,8 @@ Run your own mail service on a server you control, and manage domains, mailboxes
 
 The installer can install Docker for you. If the host already runs a supported Caddy or Nginx, Clover can share that web entry point.
 
+Fresh installs require Docker Buildx and Compose with support for a separate builder. Each install uses a temporary builder and removes its build cache on success or failure. Shared caches, other projects' images, and application data volumes are preserved, as are service images and shared build tooling images.
+
 ## Quick install
 
 The one-line installer is recommended:
@@ -89,6 +91,8 @@ clover admin list   # list administrators
 ```
 
 “Backups and account reconciliation” on the settings page lets you download the panel database and the mail configuration separately, and import either file. A database backup contains only panel management data; a mail configuration backup contains the mail service's account configuration, keys and similar files. Neither includes mail bodies, the Roundcube address book or preferences.
+
+Server-side automatic backups are stored in the project directory's `backups/` folder. After a complete backup succeeds, only the latest database and mail-configuration set is retained. A panel update first creates a database rollback snapshot; it removes that duplicate after the complete backup succeeds and keeps the newest rollback snapshot if the backup fails. Legacy update entry points also trigger the refreshed backup retention and cleanup on the first upgrade. Before pulling, Clover records both its container images and current Compose image references. Once services pass health checks, it removes unused recorded images and old previews carrying Clover source labels. Cache removal is limited to its dedicated builder or individually identifiable private Clover records. Shared layers, other-project tags, images with unknown ownership and all data volumes are preserved.
 
 To migrate a whole Clover instance, use the separate “One-click migration” module on the settings page: export an encrypted migration package on the source VPS with a passphrase of at least 12 characters; on the target VPS upload that file, enter the same passphrase and type `RESTORE` to confirm the overwrite. The package covers the mail and Roundcube data volumes, the panel database, the mail configuration and the project deployment configuration. Mail and WebMail pause briefly during export to keep the data consistent; restoring overwrites the target instance's Clover data volumes and configuration and restarts the services, so run it on a new VPS or one you have confirmed may be overwritten.
 

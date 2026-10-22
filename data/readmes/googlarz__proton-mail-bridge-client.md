@@ -24,7 +24,7 @@
 
 ---
 
-Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 108 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required.
+Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 116 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required.
 
 > **Using Proton Drive too?** See [**proton-drive-mcp**](https://github.com/googlarz/proton-drive-mcp), the companion MCP server and CLI for Proton Drive (upload, download, share and manage your encrypted files from Claude). Run both side by side to handle mail and files in one conversation, for example save an attachment from here, then upload it to Drive. More in [Related projects](#related-projects).
 
@@ -44,7 +44,8 @@ Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mai
    - "Find the last email from `alice@example.com` and draft a reply for me to review." (nothing is sent until you say so)
    - "Which of my emails have attachments from this month?"
    - "Show me my drafts and tighten the oldest one."
-5. **Optional:** `PROTONMAIL_READ_ONLY=true` to browse without being able to change anything, `PROTONMAIL_TOOL_TIER=core` for a smaller tool set (25 instead of 108), and more accounts under [Multi-account support](#multi-account-support-v210). More recipes below in [Try it](#try-it-example-claude-prompts).
+5. **Not sure about handing over control?** Start with `PROTONMAIL_MODE=drafts`: Claude can read, search and prepare drafts, but nothing is sent or deleted until you change the mode. The server also tells the client how to behave (ids, accounts, never obeying instructions found inside a message).
+6. **Optional:** `PROTONMAIL_READ_ONLY=true` to browse without being able to change anything, `PROTONMAIL_TOOL_TIER=core` for a smaller tool set (25 instead of 116), and more accounts under [Multi-account support](#multi-account-support-v210). More recipes below in [Try it](#try-it-example-claude-prompts).
 
 ---
 
@@ -56,7 +57,7 @@ Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mai
 - **Fast local search** — full-text search across your inbox from a local index that keeps its read state in step with the server
 - **Rules that suggest themselves** — a scan proposes filters and cleanup from your own mail, applies them to existing mail after a preview, and can forward by condition; see [Mailbox rules](#mailbox-rules-suggestions-filters-cleanup-forwarding)
 - **Automatic reply, per address, with rules** — off by default, with a preview of what it would do, draft-for-approval mode and working-hours; see [Autoresponder](#autoresponder-automatic-reply-per-address) (Proton's own auto-reply may be all you need)
-- **Full CLI** — a dedicated command for every one of the 108 tools (plus a generic `tool <name>` passthrough), scriptable and pipeable; `doctor` checks every account and `report` prints a diagnostic summary for a bug report
+- **Full CLI** — a dedicated command for every one of the 116 tools (plus a generic `tool <name>` passthrough), scriptable and pipeable; `doctor` checks every account and `report` prints a diagnostic summary for a bug report
 - **Runs where you do** — Claude Desktop bundle, npm, Homebrew, or a [Docker image](#running-in-docker-headless-machines) for a headless machine
 - **Privacy-native** — no third-party email service involved; your mail stays on your machine
 
@@ -297,7 +298,7 @@ Reload the Cline extension after saving. Proton Mail tools will appear in Cline'
 For a server with no desktop, next to a headless Bridge. The image installs the published npm package and is published for each release to `ghcr.io/googlarz/proton-mail-bridge-client` (`:<version>` and `:latest`, linux/amd64 and linux/arm64). To build it yourself from this repo:
 
 ```bash
-docker build -f docker/Dockerfile --build-arg VERSION=2.15.0 -t proton-mail-bridge-client .
+docker build -f docker/Dockerfile --build-arg VERSION=2.15.2 -t proton-mail-bridge-client .
 docker run -i --rm --network host \
   -e PROTONMAIL_USERNAME=you@proton.me -e PROTONMAIL_PASSWORD_FILE=/run/secrets/bridge \
   -v /path/to/bridge-password:/run/secrets/bridge:ro -v bridge-client-data:/data \
@@ -332,6 +333,38 @@ get_autoresponder  account=work@example.com                      # state, counts
 ```
 
 `outgoingNote` is appended, after the signature, to every mail sent from that address while the rule is active (a send with `appendSignature: false` opts out). On the command line: `set-autoresponder`, `autoresponder` and `preview-autoresponder`. The rule, the log and the memory of who was answered live in `autoresponder.json` in the account's data directory; every account (every address Bridge exposes) has its own.
+
+## Mail firewall (prompt-injection guard)
+
+Mail is untrusted text that a model reads. `get_email_by_id` and `get_emails_by_ids` add a `risk` note (`caution` or `high`, with the reasons) when a message looks written to steer an AI or to deceive you: instructions addressed to an assistant (English, Polish, German), text hidden by markup or zero-width characters, a link that reads one address and goes to another, a Reply-To on another domain, a sender name that shows a different address, a failed SPF/DKIM/DMARC check. Normal mail carries no note. The instruction patterns are also checked wherever else text reaches the model: attachment text, thread reads, lists with previews and reading a message as an MCP resource.
+
+After a **high** message has been read, the tools that reach outside (`send_email`, replies, `forward_email`, `send_draft`, `schedule_draft`, `delete_email`, `delete_thread`, `bulk_delete`, `empty_folder`, `unsubscribe_sender`, `respond_to_invite`, and switching on `set_rule` or `set_autoresponder`) ask for `confirmed: true` and quote the reason, even when `PROTONMAIL_CONFIRM_DESTRUCTIVE` is off. Previews (`dryRun`) and switching things off pass. Rules and the autoresponder never act by themselves on a high-risk message. This narrows what a persuaded model can do; it cannot read intent (see the [threat model](docs/threat-model.md)).
+
+## Brief (what changed since you last looked)
+
+`get_brief` (CLI: `brief`) reports from the local index how much mail came since the last brief, split into people and automatic mail, what waits for your reply, replies you are waiting for that are overdue, and suspicious mail (see the mail firewall above). `markSeen` moves the "since" mark, so a daily run reports only the day. To get it without opening anything, run it from your system's scheduler:
+
+```bash
+proton-mail-bridge-client brief --sync --mark-seen --notify
+```
+
+`--notify` shows the few lines as a system notification (macOS and Linux with `notify-send`). `schedule --job brief` prints the launchd, systemd, cron or Windows task definition that runs it every day (it installs nothing).
+
+## Tidy in one approval (`plan_inbox`)
+
+Ask Claude to tidy the inbox and it prepares a **plan**: a numbered list of changes that can all be taken back (archive, move, mark read, label), from its own proposals and from a scan for automatic mail nobody reads (unread for 3 days, or read and over 14 days old). Nothing changes until you approve. `approve_plan` applies everything, only some numbers, or everything except some; each change goes through the same runtime policy as the single tools. `undo_plan` puts the applied changes back (mail returns to its folder, read marks and labels are reverted). Senders of scanned items you left out are not proposed again. A plan never contains delete or trash.
+
+## Commitments ("I'll send it by Friday")
+
+A local ledger of what you promised and what was promised to you. `find_commitments` reads recent sent mail (and, if you ask, mail from people) and returns sentences that look like promises, in English, Polish and German, with the date each names ("by Friday", "do piątku", "bis Freitag", `05.11.`). They are only candidates: Claude confirms with you, then `set_commitment` records the real ones. `list_commitments` shows each open entry as overdue, due today, open or probably done (the person who owed it wrote again in the thread). Overdue and due-today entries appear in the brief. Closing an entry is `set_commitment` with `id` and `status`. Nothing in the mailbox changes.
+
+## Style profile (drafts that sound like you)
+
+`get_style_profile` works out how you write from your own sent mail, on your machine: language, how you open and close ("Dzień dobry {name},", "Cheers"), tone, typical length. It returns a few plain hints for drafting, overall and for a given recipient or company ("to pat@client.example you write in Polish, formally"), and the server tells Claude to call it before drafting. The profile is cached for a week in `style-profile.json` and holds patterns and counts only: no sentences, no names.
+
+## Search by meaning (several wordings)
+
+`search_indexed_emails` takes `queries`: several wordings of one question, up to 8. Claude supplies the variants (synonyms, other languages: `["deposit", "kaucja", "Kaution", "rental agreement"]`), the server searches each in the local index and fuses the results, so a message found by several wordings ranks first and every hit says which wordings found it (`matchedBy`). There is no model and no download: the meaning comes from the model you already use. What it cannot find is mail that uses none of the words tried.
 
 ## Mailbox rules (suggestions, filters, cleanup, forwarding)
 
@@ -496,7 +529,7 @@ All commands support `--json` for machine-readable output, and any MCP tool is d
 
 `<command> --help` prints that command's usage without running it. Flags accept `--flag value` or `--flag=value` (a value starting with `--` needs the `=` form, or must come after a bare `--`); unknown flags are an error. Exit codes: `0` success, `1` failure (including a failed `doctor` or `connection-status` check, or a failed item in a `batch`/`bulk-*` run), `2` usage error.
 
-**Full command reference: [docs/cli.md](docs/cli.md)** (a named command for every one of the 108 tools, across read, triage, compose, mailbox actions, folders, drafts, templates, analytics, and diagnostics).
+**Full command reference: [docs/cli.md](docs/cli.md)** (a named command for every one of the 116 tools, across read, triage, compose, mailbox actions, folders, drafts, templates, analytics, and diagnostics).
 
 ---
 
@@ -518,7 +551,7 @@ A mode is a floor: the individual flags below can make things stricter (`PROTONM
 All flags work in both the MCP server and CLI:
 
 ```bash
-PROTONMAIL_TOOL_TIER=core            # expose 25 core tools instead of all 108 — saves context window
+PROTONMAIL_TOOL_TIER=core            # expose 25 core tools instead of all 116 — saves context window
 PROTONMAIL_READ_ONLY=true            # disable all write operations
 PROTONMAIL_ALLOW_SEND=false          # disable SMTP sends only (other writes still work)
 PROTONMAIL_CONFIRM_DESTRUCTIVE=true  # require confirmed:true on send, reply, forward, delete
@@ -741,7 +774,7 @@ Measured in October 2026 (v2.7.0) on a copy of the same ~57,000-message index. "
 - Defaults are bounded: `search_emails`/`search_indexed_emails` return 50 (pass `limit` for more), `list_drafts` 20, `list_scheduled_sends` 50 newest first. Each reports `hasMore`; page with `offset`.
 - Draft and queued-message bodies are shortened to a preview in list and update responses (`bodyTruncated`, `bodyLength`); use `get_draft` for one full draft. Attachment content is never inlined in a listing.
 - Large attachments: set `PROTONMAIL_ALLOW_FILE_DOWNLOAD_DIR` and pass `saveTo`, rather than raising `PROTONMAIL_MAX_INLINE_KB`.
-- **`PROTONMAIL_TOOL_TIER=core`** exposes 25 tools instead of 108: about 7k tokens of tool definitions instead of about 21k (roughly 67% less; the earlier measurement with a reference tokenizer, 7k against 20k for 96 tools, scaled by the 3.7% the four newest tool definitions add), paid on every conversation that loads the server.
+- **`PROTONMAIL_TOOL_TIER=core`** exposes 25 tools instead of 116: about 7k tokens of tool definitions instead of about 21k (roughly 67% less; the earlier measurement with a reference tokenizer, 7k against 20k for 96 tools, scaled by the 3.7% the four newest tool definitions add), paid on every conversation that loads the server.
 - Repeating an `update_draft` that changes nothing on a draft whose remote copy is already in sync does no store write and no IMAP upload. (A draft whose last sync failed, or that was edited with `syncToRemote:false`, still syncs.)
 
 **Working with drafts**

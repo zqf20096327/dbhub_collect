@@ -27,8 +27,8 @@ The WSLC backend is built directly against the `Microsoft.WSL.Containers` NuGet 
 > [Consumer Requirements](docs/wiki/Consumer-Requirements.md) before adopting it.
 
 > **Status: preview.** Backend-neutral abstractions, two backends (WSL Containers and Docker), wait
-> strategies, the `Image`/`Tag` parser, registry auth, observability, hardening, and **seven service
-> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL). On WSLC, **images are shared
+> strategies, the `Image`/`Tag` parser, registry auth, observability, hardening, and **eight service
+> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator). On WSLC, **images are shared
 > by default** (`StorageMode.Shared`): sessions reuse a stable image store
 > (`%LOCALAPPDATA%\Purview\WslContainers\images`) so images are pulled once, not per session;
 > `StorageMode.PerSession` provides isolation. Move the store with `PURVIEW_CONTAINERS_STORAGE_PATH` or
@@ -43,7 +43,8 @@ want to fix the runtime.
 
 **WSL Containers backend**
 
-- Windows 10/11 with **WSL Containers**, installed via `wsl --install --no-distribution` (verified against
+- Windows 11 (22H2 or later) or Windows Server 2025 with **WSL Containers**, installed via
+  `wsl --install --no-distribution` (verified against
   WSL 3.0.1.0).
 - A consuming project that is **.NET 10 or later**. A platform-neutral `net10.0` project binds the
   portable facade and gets automatic WSLC-or-Docker selection; a Windows target framework
@@ -146,7 +147,7 @@ src/
     Docker/       Docker backend (Purview.Containers.Docker)
     Containers/   umbrella package (Purview.Containers): Core + both backends
     PostgreSql/   Redis/    MsSql/    MySql/
-    RabbitMq/     Azurite/  Nats/     service modules
+    RabbitMq/     Azurite/  Nats/     AzureKeyVaultEmulator/   service modules
   tests/          TUnit unit + integration projects (WSLC and Docker suites)
 samples/
   getting-started/    runnable samples (WslSample, DockerSample, AutoSample)
@@ -176,7 +177,7 @@ The project documentation lives in [`docs/wiki`](docs/wiki/Home.md) and is publi
 Every package also ships its own `README.md` (from `src/src/<Project>/Sdk/README.md`), so
 `dotnet add package Purview.Containers.<Module>` brings documentation specific to that package.
 
-All seven service modules work today:
+All eight service modules work today:
 
 ```csharp
 await using var postgres = new PostgreSqlBuilder()
@@ -234,6 +235,16 @@ string connectionString = azurite.GetConnectionString();
 Uri blob = azurite.GetBlobEndpoint();
 ```
 
+```csharp
+await using var keyVault = new AzureKeyVaultEmulatorBuilder().Build();
+
+await keyVault.StartAsync();   // waits for the HTTPS listener
+
+// Clients are already wired for the emulator (pinned certificate, emulated credential).
+var secrets = keyVault.GetSecretClient();
+await secrets.SetSecretAsync("mySecret", "myValue");
+```
+
 ## Running the tests
 
 Every test process owns a single shared WSLC session and, by default, uses the shared image store
@@ -245,16 +256,25 @@ in parallel makes the losers fail with `0x80070020`:
 The process cannot access the file because it is being used by another process.
 ```
 
-The runtime now verifies the store on first use and transparently falls back to an isolated
+The runtime verifies the store on first use and transparently falls back to an isolated
 per-process store (removed when that process's session terminates), but running test modules serially
-keeps the warm shared image cache (no per-process re-pull) and is the fastest option:
+keeps the warm shared image cache (no per-process re-pull) and is the fastest option. Test projects run
+one at a time (`.config/purview-build.json` sets `Build:MaxTestParallelism` to `1`); inside a project the
+container suites also cap their own parallelism so they do not stampede Testcontainers' resource reaper
+or the WSLC session VM.
 
 ```powershell
-just test                     # dotnet test, one test module at a time
+just test                     # dotnet test, one test module at a time, retrying failed tests twice
 
 # Visual Studio: Test > Options > untick "Run Tests in Parallel" (or set
 # "Maximum Parallel Test Projects" to 1) before running the WSLC integration tests.
 ```
+
+Failures are retried at the **test-project** level by Microsoft.Testing.Platform's retry extension: a retry
+restarts the test host, so WSLC gets a fresh session. There is no per-assembly retry attribute. In CI, the
+Docker suites run on every pull request, the WSLC contract suite runs on a hosted `windows-2025` runner, and
+the full WSLC service-module matrix runs nightly. Set `PURVIEW_CONTAINERS_REQUIRE_BACKEND=wsl|docker` to make
+a missing runtime fail instead of skip.
 
 To watch a container start end to end, run a sample — the same code, on either backend:
 

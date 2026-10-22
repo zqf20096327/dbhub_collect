@@ -25,10 +25,10 @@ The main solution file is `src/Moonglade.slnx`.
 | `src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer` | PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior. |
 | `src/Moonglade.Configuration` | Persisted blog settings models, defaults, loading, and update commands. |
 | `src/Moonglade.Auth` | Local account and standards-based OpenID Connect authentication support. |
-| `src/Moonglade.BackgroundServices` | Scheduled publishing, update checks, and fire-and-forget background work. |
+| `src/Moonglade.BackgroundServices` | Scheduled publishing and fire-and-forget background work. |
 | `src/Moonglade.*` | Supporting projects for image storage, email, IndexNow, moderation, Webmention, syndication, themes, widgets, setup, utilities, and middleware. |
 | `src/Tests/Moonglade.*.Tests` | xUnit test projects aligned with the production projects. |
-| `Deployment`, `Dockerfile`, `compose.yaml` | Azure and Docker deployment assets. |
+| `Dockerfile`, `compose.yaml` | Docker deployment assets. |
 
 ## 🚀 Deployment
 
@@ -51,10 +51,6 @@ The supplied Compose file maps separate writable named volumes to `/app/images` 
 Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeDatabase` for your environment.
 
 Email notifications are optional. The supplied default Email section intentionally contains no SMTP credentials; the application still starts, logs a warning, and serves the blog with email notification inactive. Open `/admin/settings/notification` to see the setup guidance after signing in. Add SMTP configuration through deployment secrets only when email delivery is required.
-
-### Quick Azure Deployment (App Service on Linux)
-
-The optional [automated deployment script](https://github.com/EdiWang/Moonglade/wiki/Quick-Deploy-on-Azure) provisions Azure SQL and sets `ConnectionStrings__DatabaseProvider=SqlServer`. It also mounts separate writable Azure Files shares at `/app/images` and `/app/images-origin`. It does not provision a CDN or migrate images from an older Blob container.
 
 ## 🛠️ Development
 
@@ -98,6 +94,20 @@ dotnet run --project src/Moonglade.Web/Moonglade.Web.csproj
 ## ⚙️ Configuration
 
 > These settings are managed in `appsettings.json`. For blog settings, use the `/admin/settings` UI.
+
+### Default Post Editor
+
+Choose HTML or Markdown under **Settings > Content > Default editor** (`/admin/settings/content`). The default is HTML. Changes are stored in the database and apply immediately when creating a new post; existing posts retain their own content type. The former `DefaultEditor` application configuration key is no longer used or imported. Startup no longer fills empty content types on historical posts.
+
+### Content Cache Invalidation
+
+Successful article saves, publication changes (including scheduled publishing), and article recycle-bin operations clear all article caches, RSS/Atom feeds (including category feeds), and the sitemap in the current process. Category and tag updates or deletions use the same rule. This deliberately favors simple, reliable invalidation for infrequent personal-blog writes. View and request counters do not trigger invalidation.
+
+Article, feed, and sitemap cache keys include a process-local version so a query started before invalidation cannot repopulate the active cache with old content. Feeds and the sitemap expire after one hour; article expiration continues to use `PostCacheMinutes`. Page-specific sitemap invalidation preserves article and feed caches. Deployments with multiple application instances must coordinate cache invalidation separately.
+
+### Saving Blog Settings
+
+Admin settings are saved to the database before the running configuration is replaced. A failed save keeps the active settings unchanged and prevents success actions such as completing authenticator setup. Related CDN image settings and the avatar address are saved together in one database transaction. Settings updates are serialized within the current process; other application instances must reload or synchronize their configuration separately.
 
 ### Authentication
 
@@ -145,7 +155,7 @@ For Microsoft Entra ID, use the tenant-specific authority `https://login.microso
 
 ### Comment Markdown Links
 
-Comment Markdown links are disabled by default. Set `CommentMarkdown:EnableLinks` to `true` in `appsettings.json` (or `CommentMarkdown__EnableLinks=true` through an environment variable) to enable hyperlinks. When disabled, links retain their original Markdown syntax and URL as plain text; other Markdown formatting still renders. This setting applies to comments and replies in public pages, the admin portal, and generated email notifications. Stored content and post Markdown are unchanged. Enabled links retain protocol validation and `rel="nofollow ugc noopener noreferrer"`.
+Comment Markdown links are disabled by default. Enable **Settings > Comments > Enable Markdown links in comments and replies** (`/admin/settings/comment`) to allow hyperlinks. The setting is stored in the database and takes effect without a restart. The former `CommentMarkdown:EnableLinks` application configuration key is no longer used or imported. When disabled, links retain their original Markdown syntax and URL as plain text; other Markdown formatting still renders. This setting applies to comments and replies in public pages, the admin portal, and newly generated email notifications; emails already queued retain their generated content. Stored comments and post Markdown are unchanged. Enabled links retain protocol validation and `rel="nofollow ugc noopener noreferrer"`.
 
 ### Comment Rate Limiting
 
@@ -227,15 +237,13 @@ Email notifications for new comments, replies, and Webmentions are optional. Whe
 
 ```json
 "Email": {
+  "Enabled": true,
   "SmtpServer": "",
   "SmtpUserName": "",
   "SmtpSenderAddress": "",
   "SmtpPassword": "",
   "SmtpPort": 25,
-  "EnableSsl": false,
-  "OutboxWorker": {
-    "Enabled": true
-  }
+  "EnableSsl": false
 }
 ```
 
@@ -249,7 +257,9 @@ Email configuration never controls application liveness or database readiness:
 
 - Missing required SMTP values leave email inactive, produce one startup warning, and show setup guidance in `/admin/settings/notification`. The application continues to start normally.
 - Malformed, out-of-range, or inconsistent values leave email inactive, produce a startup error log, and show secret-safe validation details on the Notification settings page. They do not stop application startup.
-- Setting `Email:OutboxWorker:Enabled` to `false` deliberately disables email notification and is shown as a separate non-error state in the admin portal.
+- Setting `Email:Enabled` to `false` deliberately disables email notification and is shown as a separate non-error state in the admin portal. It defaults to `true`; delivery always uses the outbox.
+
+Replace the former `Email:OutboxWorker:Enabled` deployment override with `Email:Enabled` (or `Email__Enabled` for environment variables), then restart the application. The old key is no longer read.
 
 While email is unavailable, the worker does not poll or send and notification handlers do not enqueue new messages. Existing pending outbox messages are retained and can be processed after valid configuration is supplied and the application is restarted. The test-email action is disabled while delivery is unavailable.
 

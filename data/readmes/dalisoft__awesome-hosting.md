@@ -126,6 +126,7 @@ List of all Container-as-a-Service platform (likely Docker and Podman containers
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ----------- | ---------------------- | ----------- |
 | [Google Run](https://cloud.google.com/run)                            | [Pay-as-you-Go](https://cloud.google.com/run/pricing) (0.4 \$/m req)           | No          | 2M invocations / month |             |
 | [Northflank](https://northflank.com)                                  | [Pay-as-you-Go](https://northflank.com/pricing) (2.7 \$/m)                     | No          | Developer Sandbox      |             |
+| [Hostim.dev](https://hostim.dev)                                      | [sa-1-1](https://hostim.dev/pricing/) (€ 2.5/m)                                | 5-Day       | No                     |             |
 | [The Vibe Hosting](https://thevibehosting.com)                        | [Pay-as-you-Go](https://thevibehosting.com/pricing) (3.6 \$/m per GB RAM)      | No          | 512 MB 24/7, 1 GB disk |             |
 | [podway](https://podway.io)                                           | [Mini](https://podway.io/apps) (4 \$/m)                                        | No          | 1 app                  |             |
 | [Cloudflare Containers](https://developers.cloudflare.com/containers) | [Pay-as-you-Go](https://developers.cloudflare.com/containers/pricing) (5 \$/m) | No          | No                     |             |
@@ -188,6 +189,7 @@ List of all static site hosting platform <sup>[1](#status)</sup>
 | [MyVibe](https://myvibe.so)                                      | -                                                        | No          | Yes       |                   | Static | No     |
 | [Rollout](https://rollout.run)                                   | -                                                        | No          | Yes       |                   | Static | No     |
 | [Sevalla Static Sites](https://sevalla.com/static-site-hosting)  | -                                                        | No          | Yes       |                   | Static | No     |
+| [deed.page](https://deed.page)                                   | [Hobby](https://deed.page/pricing) (3 \$/m)              | No          | Yes       |                   | Static | No     |
 | [DigitalOcean Platform][do-ref]                                  | [Pay-as-you-Go][do-ref] (5 \$/m)                         | $200 credit | Yes       |                   | Static | No     |
 | [harvis.dev](https://harvis.dev)                                 | [Usage-based](https://harvis.dev/pricing) (5 \$/m)       | No          | Yes       |                   | Static | No     |
 | [tiiny.host](https://tiiny.host)                                 | [Tiny](https://tiiny.host) (5 \$/m)                      | No          | No        |                   | Static | No     |

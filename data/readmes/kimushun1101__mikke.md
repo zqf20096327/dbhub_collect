@@ -43,6 +43,7 @@ cargo install --git https://github.com/kimushun1101/mikke --locked
 cd <ノートフォルダ>
 mikke index               # index 生成 (初回は検索時に自動生成される)
 mikke find 検索 語        # 全文検索 (BM25 順)
+mikke find 検索 --top 5   # 件数を絞る (find / tag / title)
 mikke tag タグ名         # タグ検索
 mikke title キーワード     # タイトル検索
 mikke recent 10           # 最近のノート
@@ -68,6 +69,8 @@ mikke hybrid クエリ        # BM25 + semantic の RRF 融合
 [semantic]
 enabled = true   # semantic / hybrid の意味検索を使う場合のみ (既定 false。mikke embed の前提)
 ```
+
+走査から外す `exclude_dirs` / `exclude_files` は名前の完全一致で、どの深さにも効く。パスや glob は効かない。root 相対のパスで 1 か所だけ外すには `exclude_paths` (例: `exclude_paths = ["state"]`)、`.gitignore` に従うには `respect_gitignore = true` を使う (既定では `.gitignore` を見ない)。未知のキーや効かない値は stderr に警告し、型の違いはエラー (exit 2) にする。
 
 全キーの注釈付きサンプルは [docs/SPEC.md](docs/SPEC.md) の「設定スキーマ」を参照。
 

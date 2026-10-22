@@ -2,7 +2,7 @@
 
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
-A curated list of awesome big data frameworks, resources and other awesomeness. Inspired by <b><code>&nbsp;32757⭐</code></b> <b><code>&nbsp;&nbsp;5227🍴</code></b> [awesome-php](https://github.com/ziadoz/awesome-php)), <b><code>328825⭐</code></b> <b><code>&nbsp;28973🍴</code></b> [awesome-python](https://github.com/vinta/awesome-python)), <b><code>&nbsp;&nbsp;1266⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;174🍴</code></b> [awesome-ruby](https://github.com/Sdogruyol/awesome-ruby)), [hadoopecosystemtable](http://hadoopecosystemtable.github.io/) & [big-data](http://usefulstuff.io/big-data/).
+A curated list of awesome big data frameworks, resources and other awesomeness. Inspired by <b><code>&nbsp;32759⭐</code></b> <b><code>&nbsp;&nbsp;5135🍴</code></b> [awesome-php](https://github.com/ziadoz/awesome-php)), <b><code>329331⭐</code></b> <b><code>&nbsp;28974🍴</code></b> [awesome-python](https://github.com/vinta/awesome-python)), <b><code>&nbsp;&nbsp;1265⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;174🍴</code></b> [awesome-ruby](https://github.com/Sdogruyol/awesome-ruby)), [hadoopecosystemtable](http://hadoopecosystemtable.github.io/) & [big-data](http://usefulstuff.io/big-data/).
 
 Your contributions are always welcome!
 
@@ -12,6 +12,7 @@ Your contributions are always welcome!
   - [Distributed Programming](#distributed-programming)
   - [Distributed Filesystem](#distributed-filesystem)
   - [Distributed Index](#distributed-index)
+  - [Distributed Tracing Platform](#distributed-tracing-platform)
   - [Document Data Model](#document-data-model)
   - [Key Map Data Model](#key-map-data-model)
   - [Key-value Data Model](#key-value-data-model)
@@ -62,17 +63,17 @@ Your contributions are always welcome!
 ## Frameworks
 
 * <b><code>&nbsp;&nbsp;1027⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;135🍴</code></b> [Bistro](https://github.com/facebook/bistro)) - general-purpose data processing engine for both batch and stream analytics. It is based on a novel data model, which represents data via *functions* and processes data via *column operations* as opposed to having only set operations in conventional approaches like MapReduce or SQL.
-* 🌎 [IBM Streams](www.ibm.com/analytics/us/en/technology/stream-computing/) - platform for distributed processing and real-time analytics.  Integrates with many of the popular technologies in the Big Data ecosystem (Kafka, HDFS, Spark, etc.)
-* [Ap
+* 🌎 [IBM Streams](www.ibm.com/analytics/us/en/technology/stream-computing/) - platform for distributed processing and real-time analytics.  Integrates with many of the popular techn
 
 [...截断...]
 
-ache Hadoop](http://hadoop.apache.org/) - framework for distributed processing. Integrates MapReduce (parallel processing), YARN (job scheduling) and HDFS (distributed file system).
+ologies in the Big Data ecosystem (Kafka, HDFS, Spark, etc.)
+* [Apache Hadoop](http://hadoop.apache.org/) - framework for distributed processing. Integrates MapReduce (parallel processing), YARN (job scheduling) and HDFS (distributed file system).
 * <b><code>&nbsp;&nbsp;&nbsp;284⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;&nbsp;33🍴</code></b> [Tigon](https://github.com/caskdata/tigon)) - High Throughput Real-time Stream Processing Framework.
-* <b><code>&nbsp;&nbsp;2835⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;185🍴</code></b> [Numaflow](https://github.com/numaproj/numaflow)) - Kubernetes-native stream processing platform.
+* <b><code>&nbsp;&nbsp;2835⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;184🍴</code></b> [Numaflow](https://github.com/numaproj/numaflow)) - Kubernetes-native stream processing platform.
 * [Pachyderm](http://pachyderm.io/) - Pachyderm is a data storage platform built on Docker and Kubernetes to provide reproducible data processing and analysis.
-* <b><code>&nbsp;&nbsp;3746⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;330🍴</code></b> [Polyaxon](https://github.com/polyaxon/polyaxon)) - A platform for reproducible and scalable machine learning and deep learning.
-* <b><code>&nbsp;&nbsp;&nbsp;422⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;355🍴</code></b> [Smooks](https://github.com/smooks/smooks)) - An extensible Java framework for building XML and non-XML (CSV, EDI, Java, etc...) streaming applications.
+* <b><code>&nbsp;&nbsp;3748⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;330🍴</code></b> [Polyaxon](https://github.com/polyaxon/polyaxon)) - A platform for reproducible and scalable machine learning and deep learning.
+* <b><code>&nbsp;&nbsp;&nbsp;423⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;355🍴</code></b> [Smooks](https://github.com/smooks/smooks)) - An extensible Java framework for building XML and non-XML (CSV, EDI, Java, etc...) streaming applications.
 
 ## Distributed Programming
 
@@ -96,5 +97,4 @@ ache Hadoop](http://hadoop.apache.org/) - framework for distributed processing. 
 * [Apache Samza](http://samza.apache.org/) - stream processing framework, based on Kafka and YARN.
 * [Apache Tez](http://tez.apache.org/) - application framework for executing a complex DAG (directed acyclic graph) of tasks, built on YARN.
 * 🌎 [Apache Twill](incubator.apache.org/projects/twill.html) - abstraction over YARN that reduces the complexity of developing distributed applications.
-* [Baidu Bigflow](http://bigflow.cloud/en/index.html) - an interface that allows for writing distributed computing programs providing lots of simple, flexible, powerful APIs to easily handle data of any scale.
-* [Cascalog](http://cascalog.org/) - data processing and queryin
+* [Baidu Bigflow](http://bigflow.cloud/en/index.html) - an interface that allows for writing distributed computing programs providing lots of simple, flexible, powerful APIs to easily handle data of any scale

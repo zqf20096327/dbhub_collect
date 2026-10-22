@@ -259,6 +259,11 @@ instead of depending on a vendor's closed firmware, only works because
 OpenWrt exists. If NetPulse is useful to you, the real credit goes to the
 OpenWrt community.
 
+This project is also shaped by its community: every issue, pull request and
+real-hardware test makes it better. Thanks to everyone who has contributed so
+far - the people and the work behind each release are named in the
+[CHANGELOG](CHANGELOG.md) and in every release's notes.
+
 ## Star history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=gnacho/netpulse&type=date)](https://www.star-history.com/#gnacho/netpulse&date)

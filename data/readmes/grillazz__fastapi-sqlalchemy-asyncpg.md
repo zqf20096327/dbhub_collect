@@ -33,6 +33,7 @@
         <li><a href="#testing-strategy">Testing Strategy</a></li>
         <li><a href="#uv-knowledge-and-inspirations">UV knowledge and inspirations</a></li> 
         <li><a href="#large-language-model">Integration with local LLM</a></li>  
+        <li><a href="#websocket-ai-chat-service">Websocket AI chat service</a></li>
         <li><a href="#ha-sample-with-nginx-as-load-balancer">High Availability sample with nginx as load balancer</a></li>
         <li><a href="#performance-profiling-with-pyinstrument">Performance Profiling with Pyinstrument</a></li>
       </ul>
@@ -46,7 +47,9 @@
     
 ## About The Project
 
-This demonstration application showcases the powerful integration of [FastAPI](https://fastapi.tiangolo.com/)—a modern, high-performance web framework—with [Pydantic 2.0](https://github.com/pydantic/pydantic) for robust data validation. The backend architecture is further reinforced by leveraging the [SQLAlchemy ORM](https://www.sqlalchemy.org/) along with an asynchronous connection to a [PostgreSQL 17](https://www.postgresql.org/docs/17/release.html) relational database. High-throughput communication across the stack is achieved using the [asyncpg](https://github.com/MagicStack/asyncpg) database client library, delivering an efficient, non-blocking interface to process database transactions seamlessly within Python's asyncio event loop.
+This demonstration application showcases the powerful integration of [FastAPI](https://fastapi.tiangolo.com/)—a modern, high-performance web framework—with [Pydantic 2.0](https://github.com/pydantic/pydantic) for robust data validation. The backend architecture is further reinforced by leveraging the [SQLAlchemy ORM](https://www.sqlalchemy.org/) along with an asynchronous connection to a [PostgreSQL 18](https://www.postgresql.org/docs/18/release.html) relational database. High-throughput communication across the stack is achieved using the [asyncpg](https://github.com/MagicStack/asyncpg) database client library, delivering an efficient, non-blocking interface to process database transactions seamlessly within Python's asyncio event loop.
+
+PostgreSQL 18 uses `/var/lib/postgresql` for its persistent data volume. Existing PostgreSQL 17 data must be migrated with `pg_upgrade` or a dump and restore before using the updated Compose configurations.
 
 ### Built With
 [![FastAPI][fastapi.tiangolo.com]][fastapi-url]
@@ -127,11 +130,13 @@ In `pl.read_excel()` “calamine” engine can be used for reading all major typ
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Worker aware async scheduler
-The project uses the APScheduler library to schedule tasks in the background.
-The APScheduler library is a powerful and flexible in-process task scheduler with Cron-like capabilities.
-It allows you to schedule jobs to run at specific times or intervals, and it supports multiple job stores, triggers, and executors.
-The library is designed to be easy to use and highly configurable, making it suitable for a wide range of use cases.
-It was added to project in version 4.0.0a5 with Redis as event broker and SQLAlchemy as data store.
+The app starts an `AsyncScheduler` as part of FastAPI's lifespan. Each worker shares
+the persistent SQLAlchemy data store in the `scheduler` schema and uses Redis as the
+event broker, allowing APScheduler to coordinate scheduling across workers. The
+`tick-sql-25` schedule runs `app.services.scheduler.tick` every 25 seconds and is
+replaced on startup so its definition stays current. The project uses APScheduler
+4.0.0a6, a pre-release; see the
+[ASGI/FastAPI integration example](https://github.com/agronholm/apscheduler/blob/4.0.0a6/examples/web/asgi_fastapi.py).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -176,6 +181,71 @@ Install ollama and run the server
 ```shell
 ollama run llama3.2
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Websocket AI chat service
+A general-purpose, websocket-based chat service lives at `/v1/chat/ws`, built with FastAPI 0.159.1
+and Pydantic models for every message shape exchanged over the wire. It follows the
+[Pydantic AI chat-app](https://github.com/pydantic/pydantic-ai/blob/main/docs/web.md) interaction
+pattern - a session id, role-labeled messages, and streamed assistant chunks - so a UI can be wired
+up later without changing the backend contract.
+
+**Module layout**
+- `app/schemas/chat.py` — Pydantic `BaseModel`s for `ChatMessage` (role/content) and the
+  client/server websocket event envelopes (discriminated on a `type` field).
+- `app/services/chat_agent.py` — the pluggable async `ChatAgent` adapter `Protocol`, a
+  dependency-free `LocalEchoAgent` stub (default, no API keys/network required), and an
+  `OllamaChatAgent` example that streams from an OpenAI-compatible `/chat/completions` endpoint.
+- `app/services/chat_session.py` — a small in-memory `ChatSessionManager` tracking one
+  `ChatSession` (id + message history) per open websocket connection.
+- `app/api/chat.py` (re-exported as `app/ws.py`) — the `/ws` websocket route implementing the
+  chat flow.
+
+**Lifespan wiring**: `app/main.py`'s `lifespan` builds the configured `ChatAgent` via
+`build_chat_agent(settings.chat)` and a fresh `ChatSessionManager` on startup. The agent is stored
+on `app.chat_agent`, and the session manager on `app.state.chat_sessions`; the websocket route
+uses that manager to track active sessions. On shutdown, `chat_agent.aclose()` releases any held
+connections.
+
+The WebSocket integration tests use HTTPX2's async `ASGIWebSocketTransport`
+(`httpx2[ws]`) to exercise the application without starting a server. They manage
+the app lifespan explicitly because the transport does not start it.
+
+**Configuration** (`ChatConfig` in `app/config.py`, all overridable via environment variables):
+
+| Env var | Default | Description |
+| --- | --- | --- |
+| `CHAT_BACKEND` | `stub` | `stub` (local echo, no network) or `ollama` (OpenAI-compatible streaming) |
+| `CHAT_BASE_URL` | `http://localhost:11434/v1` | Base URL used by the `ollama` backend |
+| `CHAT_MODEL` | `llama3.2` | Model name sent to the `ollama` backend |
+| `CHAT_STREAM_DELAY` | `0.02` | Per-word delay (seconds) the stub uses to emulate token streaming |
+
+**Example websocket flow** (one JSON object per text frame):
+```
+-> (connect to ws://localhost:8080/v1/chat/ws)
+<- {"type": "connected", "session_id": "..."}
+-> {"type": "start", "system_prompt": "You are a helpful assistant."}
+<- {"type": "started", "session_id": "..."}
+-> {"type": "user_message", "content": "Hello there"}
+<- {"type": "assistant_chunk", "index": 0, "content": "Hello "}
+<- {"type": "assistant_chunk", "index": 1, "content": "there! "}
+<- {"type": "assistant_message", "message": {"role": "assistant", "content": "Hello there! "}}
+-> {"type": "history_request"}
+<- {"type": "history", "messages": [...]}
+-> {"type": "end"}
+```
+
+**Swapping in a real model**: implement the `ChatAgent` protocol (an async `stream_reply(messages)`
+generator yielding text chunks, plus `aclose()`) in a new class - e.g. wrapping the OpenAI SDK - and
+return it from `build_chat_agent` for a new `backend` value. No changes are needed in
+`app/api/chat.py` or the session manager.
+
+Run the full test suite locally with:
+```shell
+make test
+```
+This starts PostgreSQL and Redis with Docker Compose, then points host-side tests at their published localhost ports.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -317,27 +387,27 @@ I've included a few of my favorites to kick things off!
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/ordinary-hobbit/
 
-[fastapi.tiangolo.com]: https://img.shields.io/badge/FastAPI-0.124.4-009485?style=for-the-badge&logo=fastapi&logoColor=white
+[fastapi.tiangolo.com]: https://img.shields.io/badge/FastAPI-0.159.1-009485?style=for-the-badge&logo=fastapi&logoColor=white
 [fastapi-url]: https://fastapi.tiangolo.com/
-[pydantic.com]: https://img.shields.io/badge/Pydantic-2.12.5-e92063?style=for-the-badge&logo=pydantic&logoColor=white
+[pydantic.com]: https://img.shields.io/badge/Pydantic-2.14.1-e92063?style=for-the-badge&logo=pydantic&logoColor=white
 [pydantic-url]: https://docs.pydantic.dev/latest/
-[sqlalchemy.org]: https://img.shields.io/badge/SQLAlchemy-2.0.45-bb0000?color=bb0000&style=for-the-badge&logo=python&logoColor=white
+[sqlalchemy.org]: https://img.shields.io/badge/SQLAlchemy-2.1.6-bb0000?color=bb0000&style=for-the-badge&logo=python&logoColor=white
 [sqlalchemy-url]: https://docs.sqlalchemy.org/en/20/
-[uvicorn.org]: https://img.shields.io/badge/Uvicorn-0.38.0-2094f3?style=for-the-badge&logo=python&logoColor=white
+[uvicorn.org]: https://img.shields.io/badge/Uvicorn-0.54.0-2094f3?style=for-the-badge&logo=python&logoColor=white
 [uvicorn-url]: https://www.uvicorn.org/
-[asyncpg.github.io]: https://img.shields.io/badge/asyncpg-0.31.0-2e6fce?style=for-the-badge&logo=postgresql&logoColor=white
+[asyncpg.github.io]: https://img.shields.io/badge/asyncpg-0.32.0-2e6fce?style=for-the-badge&logo=postgresql&logoColor=white
 [asyncpg-url]: https://magicstack.github.io/asyncpg/current/
-[pytest.org]: https://img.shields.io/badge/pytest-9.0.2-fff?style=for-the-badge&logo=pytest&logoColor=white
+[pytest.org]: https://img.shields.io/badge/pytest-9.1.1-fff?style=for-the-badge&logo=pytest&logoColor=white
 [pytest-url]: https://docs.pytest.org/en/9.0.x/
-[alembic.sqlalchemy.org]: https://img.shields.io/badge/alembic-1.17.2-6BA81E?style=for-the-badge&logo=python&logoColor=white
+[alembic.sqlalchemy.org]: https://img.shields.io/badge/alembic-1.20.1-6BA81E?style=for-the-badge&logo=python&logoColor=white
 [alembic-url]: https://alembic.sqlalchemy.org/en/latest/
-[rich.readthedocs.io]: https://img.shields.io/badge/rich-14.2.0-009485?style=for-the-badge&logo=rich&logoColor=white
+[rich.readthedocs.io]: https://img.shields.io/badge/rich-15.0.0-009485?style=for-the-badge&logo=rich&logoColor=white
 [rich-url]: https://rich.readthedocs.io/en/latest/
-[redis.io]: https://img.shields.io/badge/redis-7.1.0-dc382d?style=for-the-badge&logo=redis&logoColor=white
+[redis.io]: https://img.shields.io/badge/redis-8.1.0-dc382d?style=for-the-badge&logo=redis&logoColor=white
 [redis-url]: https://redis.io/
-[structlog.org]: https://img.shields.io/badge/structlog-25.5.0-000000?style=for-the-badge&logo=python&logoColor=white
+[structlog.org]: https://img.shields.io/badge/structlog-26.1.0-000000?style=for-the-badge&logo=python&logoColor=white
 [structlog-url]: https://www.structlog.org/en/stable/
 [rotoger]: https://img.shields.io/badge/rotoger-0.3.0-00bfff?style=for-the-badge&logo=python&logoColor=white
 [rotoger-url]: https://github.com/tinyplugins/rotoger
-[granian]: https://img.shields.io/badge/granian-2.6.0-4f6cb4?style=for-the-badge&logo=rust&logoColor=white
+[granian]: https://img.shields.io/badge/granian-2.8.5-4f6cb4?style=for-the-badge&logo=rust&logoColor=white
 [granian-url]:  https://github.com/emmett-framework/granian

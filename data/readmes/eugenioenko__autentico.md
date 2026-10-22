@@ -114,6 +114,13 @@ It is not designed for organizations that require horizontal scaling of the auth
 - **RS256 JWT Signing** — asymmetric signing; the private key never leaves the IdP
 - **Authorization Code Flow + PKCE** (RFC 7636, S256 enforced by default) — the right default for web and native apps; federation validates registered clients, redirect URIs, scopes, and PKCE before issuing codes
 - **Authorization request validation** — signed continuation parameters are checked against the current client, callback URI, scopes, and PKCE before signup, email verification, magic-link login, and passkey authentication.
+- **Code-only authorization responses** — authorization and client registration support only `response_type=code`; implicit and hybrid response types are rejected.
+- **Federation login CSRF protection** — short-lived browser bindings and atomic single-use state survive restarts; independent upstream nonces prevent response injection.
+- **Authorization response modes** — discovery advertises query encoding; unsupported modes are rejected before login or SSO.
+- **Authorization request objects** — discovery explicitly disables `request_uri`; unsupported request objects are rejected before login or SSO.
+- **PKCE validation** — authorization rejects unsupported methods and methods without a challenge before login or SSO code issuance; all browser flows share the same PKCE policy. An omitted method means `plain`, rejected by default S256 enforcement.
+- **Token grant errors** — unsupported grants return `unsupported_grant_type`; missing grants remain `invalid_request`, and client grant restrictions remain `unauthorized_client`.
+- **OAuth client authentication** — confidential device clients authenticate at issuance and polling. Protocol endpoints accept one Basic or body credential set, decode OAuth Basic correctly, reject URI/ambiguous credentials, and return matching authentication challenges.
 - **Atomic grant redemption** — authorization codes, device codes and refresh tokens have one winning exchange. Credential consumption and token/session storage commit together; failed storage leaves the credential available for retry.
 - **Refresh client authentication** — every refresh identifies the issuing client; confidential clients authenticate with their secret. Inactive clients, disallowed refresh grants, mismatched clients and unbound historical tokens are rejected.
 - **Resource Owner Password Credentials** — supported for legacy client compatibility (see [ROPC note](#on-ropc-support))
@@ -130,6 +137,7 @@ It is not designed for organizations that require horizontal scaling of the auth
 - **Passkey signup policy** — self-signup and client overrides apply at ceremony start and completion. Required email verification precedes sessions and authorization codes; registration is rate-limited and bound to the initiating browser.
 - **TOTP MFA** — time-based one-time passwords with in-browser QR code enrollment (no out-of-band enrollment link required)
 - **TOTP attempt budget** — five failed verifications lock enrolled TOTP across browser login, password grants and removal. Fresh challenges and successful password checks do not reset the budget.
+- **Single-use recovery and MFA** — concurrent requests can redeem a password reset link or browser MFA challenge only once. Password reset commits the new password and OAuth/SSO session invalidation together.
 - **Email OTP MFA** — one-time codes delivered via SMTP
 - **Trusted Devices** — after MFA, users can mark a device as trusted for a configurable period, skipping MFA on return visits
 - **Account Lockout** — configurable failed-attempt threshold and lockout duration, with admin unlock capability
@@ -137,7 +145,7 @@ It is not designed for organizations that require horizontal scaling of the auth
 
 ### User & Client Management
 
-- **Dynamic client registration** — register and manage OAuth2 clients (confidential and public) via REST API or Admin UI
+- **Dynamic client registration** — register and manage OAuth2 clients (confidential and public) via REST API or Admin UI. Authentication method `none` infers a public client when type is omitted; contradictory authentication metadata is rejected. Existing confidential clients keep their secrets.
 - **Per-client configuration overrides** — token TTLs, allowed audiences, self-signup, session idle timeout, and trusted device settings can be tuned per client without touching global defaults
 - **Self-signup** — optionally allow end users to register accounts on the login page, globally or per client
 - **User CRUD** — full user lifecycle management with role support (`user`, `admin`)
@@ -150,7 +158,7 @@ It is not designed for organizations that require horizontal scaling of the auth
 
 - **Built-in Admin UI** — a React/Ant Design dashboard embedded into the binary at build time; zero separate deployments
 - **Runtime settings** — most configuration lives in the database and can be updated via the Admin UI without restarting the server
-- **Background cleanup** — a configurable background goroutine purges expired tokens, sessions, auth codes, MFA challenges, and passkey challenges; the retention window is tunable
+- **Background cleanup** — a configurable background goroutine purges expired tokens, sessions, auth codes, MFA challenges, and passkey challenges; the retention window is tunable, and OAuth token/session rows survive through both token lifetimes for refresh and replay detection
 - **Graceful shutdown** — SIGTERM handling drains in-flight requests before exit
 - **Guided onboarding** — first-run setup flow that bootstraps the admin account; the server surfaces the onboarding URL at startup until complete
 - **Docker-ready** — multi-stage Dockerfile produces a minimal Alpine image with nginx for TLS termination
@@ -402,9 +410,9 @@ Each registered client can override a subset of global settings. Unset fields fa
 | `refresh_token_expiration`      | Refresh token lifetime for this client                          |
 | `authorization_code_expiration` | Auth code TTL                                                   |
 | `allowed_audiences`             | Additional `aud` values in tokens for this client               |
-| `allow_self_signup`             | Override self-signup for this client's login page               |
+| `allow_self_signup`             | Override self-signup in both the login page and signup submission |
 | `sso_session_idle_timeout`      | Override idle timeout for this client's login page (not enforced by the background cleanup sweep, which uses the global value) |
-| `trust_device_enabled`          | Enable or disable trusted devices for this client               |
+| `trust_device_enabled`          | Override password/magic-link MFA bypass and device creation for this client |
 | `trust_device_expiration`       | Trust duration for this client's users                          |
 
 ---
@@ -794,11 +802,20 @@ As an identity provider, Auténtico is a critical trust boundary. The following 
 - **TLS** — always deploy behind a reverse proxy with TLS. Tokens must never travel over plaintext. Set all `*_SECURE` bootstrap flags to `true`.
 - **Secrets** — the `.env` secrets (`AUTENTICO_PRIVATE_KEY`, `*_SECRET`, `*_KEY`) must be generated fresh per deployment and stored with appropriate access controls (environment injection, secrets manager).
 - **CSRF** — `gorilla/csrf` protects all browser-facing form endpoints. The CSRF secret must be stable across restarts (so set `AUTENTICO_CSRF_SECRET_KEY` explicitly in production rather than regenerating it).
-- **Redirect URI validation** — redirect URIs are strictly matched against registered client URIs. Wildcards are not supported.
+- **Redirect URI validation** — exact registered URIs use byte-for-byte matching. A compatibility wildcard can match one plain path segment for test callbacks; host, surrounding path and query remain fixed.
 - **Client secrets** — stored as bcrypt hashes. The plaintext is only available at registration time.
+- **Verification resend privacy** — accepted resend requests use one generic response and delay policy; SMTP delivery runs in the background with bounded concurrency and operation timeouts.
+- **Opaque redirect state** — authorization and logout callbacks URL-encode state and preserve existing callback query parameters.
+- **Token introspection** — confidential clients authenticate to inspect their own tokens; admin bearer callers need the admin API audience and current admin role. Access and refresh tokens are checked against their own expiry, and `exp` reports the submitted token's lifetime. `aud` reports the submitted JWT's audiences as an array; `jti` reports its JWT identifier. Missing optional claims are omitted.
+- **Magic-link limits**: One email per account per minute. Resends share five incorrect-code attempts and the original expiry across clients; exhausted windows stay blocked until expiry.
+- **Administrator access**: The last active admin cannot be demoted, deactivated or deleted, including through self-service or approved deletion. Create or promote another active admin first.
+- **Account deletion**: Immediate deletion requires current-password confirmation, rechecks live credentials and the caller session in its transaction, and records an audit event. Passwordless accounts use admin review.
 - **Password hashing** — user passwords are bcrypt-hashed.
-- **Account lockout** — configure `account_lockout_max_attempts` and `account_lockout_duration` to limit single-account brute-force exposure.
-- **Rate limiting** — built-in two-tier per-IP rate limiter on `/oauth2/login`, `/oauth2/mfa`, `/oauth2/token`, and `/oauth2/passkey/login/finish`. A per-second limit (default 5 rps / burst 10) stops rapid bursts; a per-minute limit (default 20 rpm / burst 20) caps sustained enumeration. Set `AUTENTICO_RATE_LIMIT_RPS=0` to disable both.
+- **Account lockout** — configure `account_lockout_max_attempts` and `account_lockout_duration` to limit single-account brute-force exposure. Password attempts share an atomic account-level budget across login and confirmation.
+- **Consistent browser MFA and consent** — password, signup, email verification, magic links, passkeys and federation share current-client MFA and consent checks. Passkeys and upstream logins do not replace configured local MFA. Routine schema 18 preserves sessions and records completed MFA evidence for SSO; older sessions need fresh authentication when MFA is required.
+- **Bound consent and authentication time** — consent requires a short-lived continuation bound to the browser and original request, and rechecks current client, MFA and session freshness on display and approval. Signed `prompt`/`max_age` controls survive all browser login paths; token rotation preserves original `auth_time`.
+- **Rate limiting** — built-in two-tier per-IP rate limiter on `/oauth2/login`, `/oauth2/mfa`, `/oauth2/token`, `/oauth2/passkey/login/finish`, and `POST /account/api/deletion-request`. A per-second limit (default 5 rps / burst 10) stops rapid bursts; a per-minute limit (default 20 rpm / burst 20) caps sustained enumeration. Set `AUTENTICO_RATE_LIMIT_RPS=0` to disable both.
+- **Federation network protection**: Discovery, token and signing-key requests reject private and metadata addresses at connection time, including redirects and DNS changes. Providers need public endpoints.
 - **Trusted proxy IPs** — forwarding headers are ignored unless the connecting peer matches `AUTENTICO_TRUSTED_PROXIES`. Trusted chains are read from right to left for rate limits, audit logs and session IPs. After upgrading a proxied deployment, configure the proxy CIDRs to retain per-client limits; otherwise clients share the proxy IP and budget.
 - **Anti-timing delay** — auth endpoints add a random delay (default 50–150 ms) to prevent user enumeration via response timing. A bcrypt dummy hash is also computed on unknown usernames so the CPU cost is indistinguishable from a wrong-password attempt. Configurable via `AUTENTICO_ANTI_TIMING_MIN_MS` / `AUTENTICO_ANTI_TIMING_MAX_MS`; set both to `0` to disable (e.g. for profiling).
 - **RS256 signing** — the RSA private key never leaves the server. Relying parties verify tokens using the public JWKS.
@@ -897,7 +914,7 @@ autentico migrate
 
 The command shows the current and target schema versions and asks you to type the target number to confirm. Routine migrations run automatically at startup; major migrations require an explicit migration command and create a protected backup automatically, restoring it if migration fails.
 
-**Upgrading to v3 (schemas 15 and 17):** schema 15 invalidates all existing tokens and OAuth/SSO sessions; schema 17 encrypts existing TOTP enrollments without resetting them. Stop the application and prepare a persistent `AUTENTICO_TOTP_ENCRYPTION_KEY` first (run `autentico init` on an existing `.env`, or supply the key through the environment). Run `autentico migrate`, read the warnings, and type the target schema shown (`17`). For unattended deployments, use `autentico migrate --approve-major=15,17` (or `--approve-major=17` from schema 15 or 16). These are database schema numbers, not release numbers. Restart only after migration succeeds, and keep the encryption key for future restarts and restores. Docker users should run migration as a one-off container against the existing database volume. See the [v3 migration guide](https://getautentico.dev/deployment/migrations/#upgrading-to-v3-schemas-15-and-17) for key setup, Docker Compose commands, backup behavior, and recovery.
+**Upgrading to v3 (schemas 15 and 17):** schema 15 invalidates all existing tokens and OAuth/SSO sessions; schema 17 encrypts existing TOTP enrollments without resetting them. Stop the application and prepare a persistent `AUTENTICO_TOTP_ENCRYPTION_KEY` first (run `autentico init` on an existing `.env`, or supply the key through the environment). Run `autentico migrate`, read the warnings, and type the target schema shown (`19`). For unattended deployments, use `autentico migrate --approve-major=15,17` (or `--approve-major=17` from schema 15 or 16). These are database schema numbers, not release numbers. Restart only after migration succeeds, and keep the encryption key for future restarts and restores. Docker users should run migration as a one-off container against the existing database volume. See the [v3 migration guide](https://getautentico.dev/deployment/migrations/#upgrading-to-v3-schemas-15-and-17) for key setup, Docker Compose commands, backup behavior, and recovery.
 
 Routine migrations are applied automatically on startup by default. A pending major migration stops startup before any migrations are applied. To disable automatic routine migrations too, use `--no-auto-migrate`:
 
