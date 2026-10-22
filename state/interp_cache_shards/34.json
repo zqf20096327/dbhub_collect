@@ -9912,5 +9912,73 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b9bf902543cf": {
+  "identity": {
+   "one_liner": "Gufo 推理服务器的本地统计看板与 HTTP/SSE/WebSocket 代理",
+   "review": "该项目是一个面向 Gufo 推理服务器的本地仪表盘和代理：客户端经其转发请求，从而记录 token 用量、吞吐、延迟、缓存命中与投机解码指标，统计存入 SQLite 并支持可配置保留期。通过 Docker Compose 或 Python/uv 运行；项目声明无内置认证与 TLS，仅面向可信本机或内网部署。",
+   "highlights": [
+    "代理 HTTP、SSE 与双向 WebSocket 流量并逐请求记录指标",
+    "统计与可选问答文本存入 SQLite，支持保留期与删除控制",
+    "提供 Docker Compose、pip、uv 多种运行方式，前端无构建步骤"
+   ],
+   "use_cases": [
+    "本地或内网部署时追踪 Gufo 推理请求的用量与时延",
+    "为 OpenAI 兼容客户端改写 base URL 以收集逐请求统计",
+    "可选开启问答文本捕获用于审计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Stores statistics in SQLite with configurable retention and daily rollups. ／ `.env`. The default database is `./data/gufo-dashboard.sqlite`. Docker Compose",
+     "lines": [
+      28,
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该看板/代理使用 SQLite 存储自身统计数据，服务对象是 Gufo 推理服务器而非数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，捆绑的 Chart.js 有独立许可",
+   "install": [
+    "docker",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local statistics dashboard and HTTP, SSE, and WebSocket proxy for Gufo ／ - Stores statistics in SQLite with configurable retention and daily rollups. ／ **Deployment scope:** trusted local machines and private networks. There is no",
+   "evidence_lines": [
+    3,
+    28,
+    38
+   ]
+  },
+  "fn": "MiddlePathLabs/gufo-dashboard",
+  "sha": "b9bf902543cf",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10232,5 +10232,353 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4b7a5502f578": {
+  "identity": {
+   "one_liner": "dokku 的 MySQL 服务插件，以容器方式创建和管理 MySQL 服务",
+   "review": "dokku-mysql 是 PaaS 工具 dokku 的官方 MySQL 插件，用于在 dokku 主机上以 Docker 容器形式创建、销毁、链接 MySQL 服务实例，并提供备份到 S3、端口暴露、网络挂载、密码与环境变量配置等命令。面向使用 dokku 部署应用并需要托管 MySQL 服务的运维/开发者。要求 dokku 0.35.x+ 与 docker 1.8.x。",
+   "highlights": [
+    "提供 mysql:create/destroy/info/backup 等命令管理 MySQL 服务容器",
+    "支持将服务备份到 S3 兼容端点并配置定时备份与加密",
+    "支持自定义镜像、版本、内存限制、挂载卷与网络配置"
+   ],
+   "use_cases": [
+    "在 dokku 平台上为应用创建并链接 MySQL 数据库服务",
+    "通过 cron 定时将 MySQL 数据备份到 S3 存储",
+    "以命令行方式管理多个 MySQL 服务实例的生命周期"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Official mysql plugin for dokku. Currently defaults to installing mysql 26.7.0. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git --name mysql ／ mysql:app-links [<app>] # list all MySQL service links for a given app ／ mysql:backup <service> <bucket-name> [--id <id>] [-u|--use-iam] # create a backup of the MySQL service to an existing s3 bucket",
+     "lines": [
+      3,
+      14,
+      20,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为数据库生态服务的工具：它不存储自身业务数据，而是为 dokku 平台部署、管理和运维 MySQL 服务实例提供命令行能力（创建、销毁、备份、链接）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official mysql plugin for dokku. Currently defaults to installing mysql 26.7.0. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git --name mysql ／ mysql:backup <service> <bucket-name> [--id <id>] [-u|--use-iam] # create a backup of the MySQL service to an existing s3 bucket",
+   "evidence_lines": [
+    3,
+    14,
+    21
+   ]
+  },
+  "fn": "dokku/dokku-mysql",
+  "sha": "4b7a5502f578",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f7deb4fcd108": {
+  "identity": {
+   "one_liner": "MySQL/MariaDB 并行一致性导出、加载、复制与流式传输工具",
+   "review": "quiver 是一个用 OxCaml 编写的命令行工具，用于对 MySQL 和 MariaDB 做一致性快照的导出（dump）、加载（load）、服务器间复制（copy）与网络流式传输（agent/collect/relay）。它自带 MySQL 协议客户端，不依赖客户端库，以列式批次并行读取，支持 zstd 压缩、断点续传和 mydumper 兼容目录布局。适用于需要在服务器间搬运大量数据或生成一致性备份的运维与迁移场景；当前仅支持 MySQL/MariaDB，PostgreSQL 在路线图中。",
+   "highlights": [
+    "自带 MySQL 协议实现，从快照一致性读取并支持 dump/load/copy/stream 五种子命令",
+    "并行分块读取、列式批次传输、zstd 压缩与断流恢复，输出兼容 mydumper 布局",
+    "支持 --ingest tablespace 在客户端直接构建 InnoDB 表空间文件"
+   ],
+   "use_cases": [
+    "对 MySQL/MariaDB 服务器做一致性快照备份",
+    "MySQL 到 MySQL 的服务器间数据迁移与复制",
+    "跨网络链路的多目标流式数据分发"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ MySQL 8.0 · 8.4 ／ **No client library.** quiver speaks the MySQL protocol itself and decodes binary rows from the",
+     "lines": [
+      5,
+      12,
+      30
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ MariaDB 10.11 · 11.4 · 11.8 ／ - **One snapshot.** `FLUSH TABLES WITH READ LOCK` or MariaDB `BACKUP STAGE`; every session opens",
+     "lines": [
+      5,
+      13,
+      73
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Postgres and other providers|after MySQL is done|",
+     "lines": [
+      360
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 MySQL/MariaDB 数据库提供导出、加载、复制与流式传输服务，属于数据库生态工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Dump, load, copy and stream MySQL and MariaDB from one consistent snapshot, at the speed of the server.** ／ **No client library.** quiver speaks the MySQL protocol itself and decodes binary rows from the ／ quiver dump    # MySQL to files: mydumper-compatible SQL or CSV, optional zstd, checksummed manifest",
+   "evidence_lines": [
+    5,
+    30,
+    161
+   ]
+  },
+  "fn": "jongleb/quiver",
+  "sha": "f7deb4fcd108",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "95ebcfae84a3": {
+  "identity": {
+   "one_liner": "开源自托管员工运营系统，基于 PostgreSQL 存储",
+   "review": "Broccoli 是一个开源（AGPL-3.0）的员工运营系统，覆盖 HRIS、入职、离职等 People Ops 功能，提供 GraphQL 接口与 MCP 支持，通过 docker compose 一键部署并自托管运行。面向需要在自己工作环境中管理员工运营流程的团队。README 信息较少，功能细节需参考其自托管指南与官网。",
+   "highlights": [
+    "提供 HRIS、入职、离职等员工运营功能",
+    "支持 MCP 与 AI agents 集成（主题标签声明）",
+    "通过 docker compose 快速自托管部署"
+   ],
+   "use_cases": [
+    "团队员工信息与 People Ops 流程自托管管理",
+    "员工入职/离职流程管理",
+    "需要与 AI agents 集成的 HR 运营场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明其是使用 PostgreSQL 存储数据的员工运营应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0 单许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " The open-source Employee Operations System. ／  Licence: AGPL-3.0 ／ docker compose up",
+   "evidence_lines": [
+    9,
+    15,
+    21
+   ]
+  },
+  "fn": "getbroccoli/broccoli",
+  "sha": "95ebcfae84a3",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "874071e69ca3": {
+  "identity": {
+   "one_liner": "自托管的 SQLite 记忆存储，供多个 AI 代理经 MCP 与 REST 共享",
+   "review": "OneMemory 是一个自托管的 AI 代理共享记忆库：数据存在单个 SQLite 文件中，通过 MCP 与 REST API 提供 CRUD、关键词/语义检索和变更摘要，带 dashboard，支持从桌面、Web、手机访问。面向使用 Claude Code、Cursor 等多个 AI 代理的个人用户。内置秘密与注入内容的写入检查、作用域 token 和 Markdown 导出/三方合并导入；数据目录在 ~/.onememory，备份靠复制单文件。",
+   "highlights": [
+    "提供 MCP（stdio 与 HTTP）和 REST API 两种访问方式，多代理共享同一存储",
+    "写入时扫描并拦截秘密信息与提示注入内容，支持 read/write/admin 作用域 token",
+    "支持 Markdown 导出与三方合并导入、变更摘要、可选语义/混合搜索"
+   ],
+   "use_cases": [
+    "为 Claude Code、Claude Desktop、Cursor、Copilot 等多个 AI 代理提供共享持久记忆",
+    "通过手机或 claude.ai 远程读写本地记忆",
+    "通过 Git 或 Syncthing 进行基于 Markdown 的跨机器同步"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> `node:sqlite`, which does not exist in Node 22 or older. Check with ／ - **Lightweight.** One Node process, one SQLite file, **2 direct runtime ／ |Storage|one SQLite file|SQLite-vec, Cloudflare, Milvus, or hybrid|Markdown files + index|local Docker service|JSONL knowledge graph|",
+     "lines": [
+      18,
+      78,
+      132
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它本身是服务于数据库使用的 MCP/REST 中间件工具，而非只使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**One small, self-hosted memory store that every AI agent you use can share — over MCP or plain REST, from your desktop, the web, or your phone.** ／ npm install -g onememory-mcp                     # 1. install (or skip and use npx below) ／ - **Lightweight.** One Node process, one SQLite file, **2 direct runtime",
+   "evidence_lines": [
+    3,
+    22,
+    78
+   ]
+  },
+  "fn": "calasdan-sketch/onememory",
+  "sha": "874071e69ca3",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a432d763e53e": {
+  "identity": {
+   "one_liner": "基于 TypeScript 和 Bun 的终端编码 agent，支持本地 LLM、MCP 与技能",
+   "review": "S42 Agent 是一个用 TypeScript 与 Bun 实现的编码 agent，提供 QBasic 风格终端界面和无头 CLI，支持本地 llama.cpp 及 Chat Completions 兼容服务、MCP 服务器、技能和可复用提示词，面向使用 AI 辅助编码的开发者。配置、会话历史与 API 密钥以原生 SQLite 持久化，当前为 v0.1.2 预览版本。",
+   "highlights": [
+    "提供 QBasic 风格 TUI 与 headless CLI 两种运行方式，支持多项目标签页",
+    "支持本地 llama.cpp 及 Chat Completions 兼容的远程 LLM 服务，内置 17 个原生工具",
+    "配置、历史与 API 密钥使用原生 SQLite 持久化，运行时零外部包依赖"
+   ],
+   "use_cases": [
+    "在终端中使用本地或远程 LLM 进行 AI 辅助编码",
+    "通过 MCP 服务器与技能扩展 agent 能力",
+    "静态 Web 项目的本地预览与验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Persistence:** OS-specific global configuration, history and LLM API keys in native SQLite; works on servers without an OS keychain.",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该 agent 自身配置与历史的存储，README 未提供面向数据库生态的工具能力。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Persistence:** OS-specific global configuration, history and LLM API keys in native SQLite; works on servers without an OS keychain. ／ The harness has **no external runtime package dependencies**. Your LLM server,",
+   "evidence_lines": [
+    43,
+    46
+   ]
+  },
+  "fn": "stock42/s42-agent",
+  "sha": "a432d763e53e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

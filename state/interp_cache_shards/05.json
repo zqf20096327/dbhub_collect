@@ -9988,5 +9988,145 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "451a2f291587": {
+  "identity": {
+   "one_liner": "本地优先的 Android Markdown 笔记应用，SQLite+FTS 全文检索",
+   "review": "Markleaf 是一款面向 Android 用户的本地优先 Markdown 笔记应用，笔记以单个 .md/.txt 文件存储在用户自选文件夹，通过 SAF 做文件夹镜像同步，自身不上传数据。数据层使用 Room（SQLite）加 FTS4 虚拟表实现全文检索。适合注重离线使用、文件可移植性和隐私的笔记用户。可通过 F-Droid、GitHub Releases APK 或从源码构建安装，Google Play 更新目前暂停。",
+   "highlights": [
+    "使用 Room（SQLite）本地持久化，FTS4 虚拟表实现正文全文检索（L68、L106）",
+    "文件夹镜像同步：笔记以 .md/.txt 文件镜像到用户选定文件夹，自身不执行网络同步（L72）",
+    "支持 Wikilinks、反链面板、#标签自动索引、GFM 表格/任务列表等 Markdown 能力（L65-L66、L90）"
+   ],
+   "use_cases": [
+    "在 Android 设备上离线记录和整理 Markdown 笔记",
+    "将已有 Obsidian/Logseq 风格的 Markdown 文件夹作为只读或收件箱目录使用",
+    "通过 Syncthing/网盘等外部应用同步的纯文本笔记工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite FTS full-text search** — fast, down to the body text ／ - **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search",
+     "lines": [
+      68,
+      106
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明示数据库层为 Room/SQLite 本地持久化，应用本身使用数据库存数据而非为数据库生态服务（L106）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A local-first, minimal Markdown note app for Android ／ - **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search ／ ├── data          # Room DB, entities, repository implementations (data source)",
+   "evidence_lines": [
+    6,
+    106,
+    123
+   ]
+  },
+  "fn": "jeiel85/markleaf-android",
+  "sha": "451a2f291587",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6109baac6fca": {
+  "identity": {
+   "one_liner": "自托管 AI 原生社交媒体管理与发布排程平台",
+   "review": "Postmill 是一个可自托管的开源社交媒体管理平台，面向代理机构和多品牌团队，提供可视化发布日历、45+ 渠道发布、46 个内置媒体工具、BYOK 多提供商 AI、跨渠道评论收件箱和分析数据持久化。技术栈为 NestJS/Next.js，依赖 PostgreSQL 与 Redis，支持 Docker 部署与公共 API/SDK。",
+   "highlights": [
+    "支持 45+ 渠道的发布排程与跨渠道评论收件箱",
+    "提供 BYOK AI 层，支持 30 个提供商配置及按组织的支出上限与审计日志",
+    "内置图像/视频分层编辑器与分析指标每日快照持久化"
+   ],
+   "use_cases": [
+    "代理机构和多品牌团队的统一社交媒体发布与排程",
+    "自托管环境下以自有 AI 密钥生成和管理媒体内容",
+    "跨渠道数据汇总分析与客户活动报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose -f docker/docker-compose.dev.yaml up -d # postgres + redis ／ - Prisma + PostgreSQL",
+     "lines": [
+      50,
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是一个使用 PostgreSQL 存数据的社交媒体管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "docker compose -f docker/docker-compose.dev.yaml up -d        # postgres + redis",
+   "evidence_lines": [
+    50
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "postmill-ai/postmill-app",
+  "sha": "6109baac6fca",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

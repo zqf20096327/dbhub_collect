@@ -10926,5 +10926,169 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "be5f6b6593db": {
+  "identity": {
+   "one_liner": "MySQL/MariaDB/PostgreSQL 配置与性能诊断 Agent，采集指标并应用推荐配置",
+   "review": "Releem Agent 是开源的 Go 守护进程，部署在数据库所在服务器上采集 MySQL、MariaDB、PostgreSQL 的系统变量、性能指标、慢查询统计等信息，发送到 Relem Cloud 平台分析并生成配置建议，可一键应用配置。面向需要持续监控和调优数据库的 DBA 与运维人员，支持 AWS RDS/Aurora 及 Google Cloud SQL，云平台服务需注册账号。",
+   "highlights": [
+    "采集主机内存/CPU/磁盘与数据库系统变量、状态指标、performance_schema 查询统计并上传云端分析",
+    "支持一键或单命令应用推荐的 MySQL 配置，提供健康检查与 Releem Score 指标",
+    "支持 Amazon Aurora MySQL/PostgreSQL、RDS、Google Cloud SQL 等托管数据库"
+   ],
+   "use_cases": [
+    "持续监控 MySQL/MariaDB/PostgreSQL 服务器并获取配置优化建议",
+    "托管云数据库（RDS/Aurora/Cloud SQL）实例的性能诊断与参数组调优",
+    "定期接收数据库健康检查周报与低效查询、缺失索引建议"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Releem is a database advisor for MySQL, MariaDB & PostgreSQL that provides automatic metrics analysis, actionable insights, and safe automation. It helps detect issues quickly, optimize performance continuously, and reduce manual work at scale. ／ Releem supports Amazon Aurora MySQL and Aurora PostgreSQL. Configure one Agent ／ - PostgreSQL 12, 13, 14, 15, 16, 17 or 18",
+     "lines": [
+      19,
+      48,
+      88
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Releem is a database advisor for MySQL, MariaDB & PostgreSQL that provides automatic metrics analysis, actionable insights, and safe automation. It helps detect issues quickly, optimize performance continuously, and reduce manual work at scale. ／ - **Hassle free**: Simple one-step Installation on most popular Linux platforms and Support of all MySQL/MariaDB/Percona versions. ／ - MySQL 5.5, 5.6, 5.7, 8.0, 8.4 or 9",
+     "lines": [
+      19,
+      25,
+      85
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Releem is a database advisor for MySQL, MariaDB & PostgreSQL that provides automatic metrics analysis, actionable insights, and safe automation. It helps detect issues quickly, optimize performance continuously, and reduce manual work at scale. ／ - **Hassle free**: Simple one-step Installation on most popular Linux platforms and Support of all MySQL/MariaDB/Percona versions. ／ - MariaDB 10, 11, 12, or 13",
+     "lines": [
+      19,
+      25,
+      86
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MySQL/MariaDB/PostgreSQL 提供指标采集、监控与配置优化服务的 Agent，属数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Releem is a database advisor for MySQL, MariaDB & PostgreSQL that provides automatic metrics analysis, actionable insights, and safe automation. It helps detect issues quickly, optimize performance continuously, and reduce manual work at scale. ／ **Releem Agent** - Has been installed on servers, collects MySQL metrics, sends them to Cloud Platforms, and applies MySQL configurations. Open Source daemon built on Go. ／ - MySQL system variables & status information",
+   "evidence_lines": [
+    19,
+    35,
+    76
+   ]
+  },
+  "fn": "Releem/releem-agent",
+  "sha": "be5f6b6593db",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9beb7015c86e": {
+  "identity": {
+   "one_liner": "本地化招投标RAG工作台，用SQLite统一存储全文、事实与向量",
+   "review": "面向投标审阅与模板填写的本地应用：解析PDF/Word/Excel材料，提取招标要求并绑定原文证据，生成可人工复核的填写建议。数据全文、事实与向量统一存于SQLite（WAL+Alembic），模型经OpenAI-compatible接口配置，默认关闭真实调用，MIT许可。",
+   "highlights": [
+    "证据事实按字段绑定原文页，支持人工校正与逐项核验，硬性要求缺证据进入 needs_review",
+    "全文、事实与向量记录统一存储在 SQLite 中，使用 WAL 与 Alembic 迁移",
+    "基于模板原页生成标注 PNG 并导出含检查报告与来源清单的 ZIP 资料包"
+   ],
+   "use_cases": [
+    "投标文件要求提取与资质对标",
+    "投标模板原页标注与填写建议复核",
+    "企业资质材料库集中管理与跨项目复用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite WAL、Alembic 迁移和 API Key 本地加密。 ／ - 独立向量数据库或知识图谱服务。当前全文、事实与向量记录统一存储在 SQLite 中。 ／ |数据|SQLite WAL、Alembic|",
+     "lines": [
+      41,
+      46,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明示全文、事实与向量记录统一存储在 SQLite 中，SQLite 是该应用的存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- 独立向量数据库或知识图谱服务。当前全文、事实与向量记录统一存储在 SQLite 中。 ／ |数据|SQLite WAL、Alembic|",
+   "evidence_lines": [
+    46,
+    63
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "HunterLzap/rag-tender",
+  "sha": "9beb7015c86e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

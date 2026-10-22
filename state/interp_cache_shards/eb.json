@@ -9836,5 +9836,155 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "75b521858be6": {
+  "identity": {
+   "one_liner": "Elixir 持久化工作流执行引擎库",
+   "review": "这是一个面向 Elixir 的 durable workflow 执行引擎，以 Mix/Hex 包形式发布，将工作流步骤持久化到 PostgreSQL，支持崩溃或部署后恢复运行。配套提供 LiveView 编写的 durable_dashboard 监控面板和 Phoenix 示例应用，开发与测试需通过 docker-compose 启动 Postgres 实例。适合需要在 Elixir 应用中实现可恢复工作流开发的开发者使用。",
+   "highlights": [
+    "工作流以普通步骤编写，每步保存状态，运行可在崩溃、部署或长时间等待后恢复",
+    "核心引擎使用 PostgreSQL 作为持久化存储",
+    "附带 LiveView web dashboard 用于查看和管理工作流"
+   ],
+   "use_cases": [
+    "长事务/多步骤业务流程编排",
+    "跨部署与重启仍需继续执行的异步任务",
+    "基于 LiveView 的工作流可视化管理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`durable/`|`:durable`|Hex|HexDocs|Core workflow engine — resumable, reliable workflows with PostgreSQL persistence.|",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Elixir 应用提供工作流执行能力的库，使用 PostgreSQL 做持久化存储而非仅消费数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`durable/`|`:durable`|Hex|HexDocs|Core workflow engine — resumable, reliable workflows with PostgreSQL persistence.| ／ A shared `docker-compose.yml` at the workspace root brings up the Postgres",
+   "evidence_lines": [
+    27,
+    92
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "wavezync/durable",
+  "sha": "75b521858be6",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bdb28929dc43": {
+  "identity": {
+   "one_liner": "S3 存储编排层，将多个 S3 后端聚合为单端点并提供多副本与故障转移",
+   "review": "s3-orchestrator 用一个 S3 端点代理任意数量的 S3 兼容后端（B2、S3、MinIO、R2 等），以元数据库记录对象位置，实现按后端配额、N 副本复制、读故障转移与不中断摘除后端，另提供 zstd 压缩与信封加密。面向家庭实验室用户、自托管 MinIO 使用者与需要多云冗余的小团队。元数据可存内嵌 SQLite 或 PostgreSQL（多实例需 PostgreSQL）。",
+   "highlights": [
+    "支持跨多个 S3 兼容后端的可配置副本数复制与读故障转移",
+    "提供按后端的字节、请求、入站与出站限额，以及信封加密（AES-256-GCM）和 zstd 分块压缩",
+    "支持 Terraform/OpenTofu Provider 管理桶、用户、凭据与授权，并包含 cordon/drain、rebalance、完整性校验等运维工具"
+   ],
+   "use_cases": [
+    "组合多家云厂商免费额度形成可用存储",
+    "为本地 MinIO 实例增加自动云端备份",
+    "以单一 S3 端点实现多云冗余与加密"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database.** Embedded SQLite with no external dependencies, single-node PostgreSQL, or many instances with Redis-backed shared counters so quotas hold across the fleet. ／ **Database:** SQLite is embedded - no external dependencies for single-instance use. PostgreSQL 14+ is also an option and is required for multi-instance deployments (`database.driver: postgres`); the schema migrates on boot. ／ Metadata (object locations, quota counters, multipart state, cleanup queue) lives in PostgreSQL or SQLite. Backends only ever see plain S3 calls - no orchestrator-specific protocol, no schema requirements. Any provider that speaks the AWS SDK works.",
+     "lines": [
+      39,
+      88,
+      112
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Database.** Embedded SQLite with no external dependencies, single-node PostgreSQL, or many instances with Redis-backed shared counters so quotas hold across the fleet. ／ Starts three MinIO backends via Docker Compose, embedded SQLite as the metadata store, and the orchestrator on `localhost:9000`. ／ **Database:** SQLite is embedded - no external dependencies for single-instance use. PostgreSQL 14+ is also an option and is required for multi-instance deployments (`database.driver: postgres`); the schema migrates on boot.",
+     "lines": [
+      39,
+      67,
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为对象存储后端提供编排/代理能力的组件，SQLite 与 PostgreSQL 仅作为其自身元数据存储选项。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Most applications talk to one S3 backend, which ties them to that provider's uptime, pricing, and limits. s3-orchestrator puts a single S3 endpoint in front of any number of S3-compatible backends - OCI Object Storage, Backblaze B2, AWS S3, MinIO, Wasabi, Cloudflare R2, anything that speaks S3 - and presents them as one or more virtual buckets. It tracks where every object lives in its own database, which is what lets it enforce per-backend byte quotas, keep N copies across providers, fail reads over when one goes dark, and take a backend out of the fleet without downtime. ／ - **Replication.** Set a factor and every object lands on that many distinct backends. A background replicator makes the copies, or `write_path.parallel_copies` has the write claim its targets and upload to all of them at once, answering the client on the first copy committed - which spares the replicator a full GET of the object and the source backend's egress for every copy it would have made. Reads fail over to a surviving copy, a scrubber checks stored bytes against recorded hashes, and an over-replication worker trims the set when a recovered backend brings its copies back. ／ - **Database.** Embedded SQLite with no external dependencies, single-node PostgreSQL, or many instances with Redis-backed shared counters so quotas hold across the fleet.",
+   "evidence_lines": [
+    12,
+    34,
+    39
+   ]
+  },
+  "fn": "afreidah/s3-orchestrator",
+  "sha": "bdb28929dc43",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

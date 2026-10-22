@@ -11363,5 +11363,61 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b684e3476b64": {
+  "identity": {
+   "one_liner": "MCP 网关，让 AI 代理经单一连接接入多台 T3 Code 服务器",
+   "review": "t3-fleet-gateway 是一个 MCP 网关，将 Grok Bot、Notion 等 MCP 客户端通过单一连接路由到多台机器上的 T3 Code 服务器。提供 OAuth2/bearer token 认证、读写权限分级、webhook 事件通知、PR 跟踪和项目/模型发现。从 Git checkout 运行，未发布到 npm，需要 Node.js 24/26 与已运行的 T3 Code 服务器。适合使用 T3 Code 并希望通过聊天机器人远程管理编码任务的运维者。",
+   "highlights": [
+    "将多个 MCP 客户端经单一连接路由到多台机器上的 T3 服务器",
+    "提供 Read/Operate 两级访问控制和基于项目的规则",
+    "支持 webhook 事件推送、PR 状态缓存跟踪和任务结算确认"
+   ],
+   "use_cases": [
+    "通过聊天机器人集中管理分布在多台机器上的 T3 编码任务",
+    "为仅支持 bearer token 的 MCP 客户端（如 Notion）提供接入",
+    "跟踪任务产生的 pull request 状态并在任务需要输入时接收通知"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明其为连接 MCP 客户端与 T3 Code 服务器的网关组件，sqlite 仅为 topic 提示且全文未出现数据库使用声明",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "T3 Fleet Gateway connects Grok Bot, Notion and other MCP clients to your T3 servers through one connection. Your agent can find projects, start work, answer worker questions and bring back the result. Each new job gets a T3 thread you can open in T3 whenever you want: a named project's job gets its own git worktree and branch, and work with no named project can run in a machine's T3 scratch workspace. ／ A bot connects to one gateway, which routes coding work to T3 projects on several machines. ／ You need an always-on machine with Node.js 24.22.1+ on 24.x or 26.12.1+ (older releases do not block the compromised eMudhra intermediates), a running T3 Code server and its `t3` CLI. A coding agent on that machine can do the setup. The gateway runs from a Git checkout; it is not published to npm.",
+   "evidence_lines": [
+    7,
+    9,
+    18
+   ]
+  },
+  "fn": "boundsj/t3-fleet-gateway",
+  "sha": "b684e3476b64",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

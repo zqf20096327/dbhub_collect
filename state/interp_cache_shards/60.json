@@ -10365,5 +10365,203 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a56e15665d94": {
+  "identity": {
+   "one_liner": "Java 面试八股文与企业级项目实战知识合集",
+   "review": "该项目以文章列表形式整理 Java 后端面试题与实战经验，覆盖 Spring、JVM、并发、MySQL、Redis、消息队列、分布式与微服务等主题，并提供配套学习网站与知识星球入口。面向准备面试及进阶学习的 Java 开发者，内容以链接和目录为主，不包含可安装运行的软件。",
+   "highlights": [
+    "提供按主题分类的面试题与实战文章目录，涵盖高并发、分布式、数据库、中间件、缓存等系列",
+    "附带外部网站链接，包含题库、场景设计与项目源码入口",
+    "包含 MySQL 优化、索引、事务、锁等数据库专题文章"
+   ],
+   "use_cases": [
+    "Java 后端面试准备与八股文复习",
+    "MySQL、Redis、消息队列等主题的性能优化与踩坑经验查阅",
+    "Java 后端学习路线参考"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Spring Boot、Spring Cloud、MySQL、Redis、消息队列、分库分表、高并发、 ／ - MySQL如何优化？ ／ - mysql的这几个坑你踩过没？",
+     "lines": [
+      4,
+      112,
+      117
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 为文章目录与学习资源合集，未声明开发为数据库生态服务的工具或组件，也未构建使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Java 面试八股文与企业级项目实战（持续更新） ／ Spring Boot、Spring Cloud、MySQL、Redis、消息队列、分库分表、高并发、 ／ ## 数据库系列",
+   "evidence_lines": [
+    1,
+    4,
+    108
+   ]
+  },
+  "fn": "dvsusan/susanSayJava",
+  "sha": "a56e15665d94",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f672374637b6": {
+  "identity": {
+   "one_liner": "自托管多账号求职自动化平台，用 PostgreSQL 存储应用数据",
+   "review": "一个自托管的求职自动化系统：抓取招聘页面与聚合站，用 LLM 对职位打分、生成简历和求职信，自动填写申请并跟踪进度，提供 Chrome 扩展和 Telegram 通知。面向个人或家庭使用（最多五个账号），通过 Docker Compose 部署，数据存于 PostgreSQL 16，MIT 许可。",
+   "highlights": [
+    "抓取职位并按简历进行 LLM 评分与简历/求职信定制",
+    "支持多账号（最多五个）及 Chrome 扩展 ATS 表单自动填写",
+    "通过 Docker Compose 部署，定时 pg_dump 备份至 backups/ 目录"
+   ],
+   "use_cases": [
+    "个人或家庭集中管理多个求职账号的职位发现与申请跟踪",
+    "利用 LLM 生成定制简历和求职信并自动填写申请表",
+    "通过 Telegram 接收新职位提醒和每日摘要"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16| ／ Scheduled `pg_dump`s land in `backups/` (five kept). They contain the settings table, API keys included: treat them like `.env`. The folder is git-ignored.",
+     "lines": [
+      111,
+      118
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明使用 PostgreSQL 16 存储数据，项目是使用数据库的求职应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|PostgreSQL 16| ／ docker compose pull && docker compose up -d      # prebuilt images from GHCR",
+   "evidence_lines": [
+    111,
+    61
+   ]
+  },
+  "fn": "vesaias/JobNavigator",
+  "sha": "f672374637b6",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e4efe9a3ccff": {
+  "identity": {
+   "one_liner": "TKGm 集群 Kasten K10 备份实验自动化脚本",
+   "review": "该项目是一组 shell 脚本，用于在 AWS 上的 VMware Tanzu TKGm 集群中自动部署 Kasten K10、示例 PostgreSQL 数据库、S3 位置档案和备份策略，并运行按需备份任务；面向想学习 Kubernetes 数据管理（备份/恢复、灾备、应用迁移）的用户，需已有 TKGm 集群并可通过 kubectl 访问，附带的 k10-destroy.sh 可反向清理实验室环境。",
+   "highlights": [
+    "提供 k10-deploy.sh 一键安装 Kasten K10、部署 PostgreSQL、创建备份策略并运行按需备份",
+    "提供 k10-destroy.sh 清理数据库、K10、磁盘、快照及 bucket 对象",
+    "可通过 setenv.sh 自定义 region、bucket 名和对象存储配置"
+   ],
+   "use_cases": [
+    "学习 Kubernetes 环境下 PostgreSQL 的备份/恢复与灾备演练",
+    "快速搭建 Kasten K10 实验环境以验证应用迁移"
+   ],
+   "note": "已含超字数风险，修正后见下"
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. Deploy a Postgresql database ／ 1. Remove Postgresql Database",
+     "lines": [
+      32,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "脚本为 Kubernetes 数据管理学习环境服务，PostgreSQL 仅作为被备份的示例数据库部署。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "1. Install Kasten K10 ／ 2. Deploy a Postgresql database ／ 4. Create a backup policy",
+   "evidence_lines": [
+    31,
+    32,
+    34
+   ]
+  },
+  "fn": "yongkanghe/tkg-k10",
+  "sha": "e4efe9a3ccff",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

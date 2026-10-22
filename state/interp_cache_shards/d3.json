@@ -10203,5 +10203,82 @@
   "generated_at": "2026-10-22",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "b1bd071455df": {
+  "identity": {
+   "one_liner": "通过 SQL 函数调用 FastTransfer 工具的 PostgreSQL 扩展",
+   "review": "pg_fasttransfer 是一个 PostgreSQL 扩展，提供 SQL 函数 xp_RunFastTransfer_secure 来执行需单独安装的 FastTransfer 工具，实现数据库间数据传输；密码可经 pg_fasttransfer_encrypt 加密存储。面向需要在 SQL 层发起数据传输的 PostgreSQL 运维/开发人员；支持 PostgreSQL 15–18，需配置 FastTransfer 二进制与许可证的执行权限。",
+   "highlights": [
+    "提供 SQL 函数 xp_RunFastTransfer_secure 调用 FastTransfer 执行数据传输",
+    "提供 pg_fasttransfer_encrypt 函数基于 pgp_sym_encrypt 加密密码参数",
+    "支持多种源/目标连接类型（clickhousebulk、duckdb、mysqlbulk、pgcopy 等）及多种并行切分方法"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中通过 SQL 发起跨库数据迁移/传输",
+    "需要密码加密存储的传输任务自动化",
+    "按表分区或时间分区并行抽取数据"
+   ],
+   "cat_note": null
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_fasttransfer ／ A PostgreSQL extension to run the FastTransfer tool from an SQL function, enabling fast data transfer between databases. ／ * Sudo/Administrator privileges on Linux/Windows to copy files to the PostgreSQL installation directory.",
+     "lines": [
+      1,
+      3,
+      11
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "sourceconnectiontype := 'mssql',",
+     "lines": [
+      237
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "扩展为 PostgreSQL 提供调用外部数据传输工具的能力，属服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PostgreSQL extension to run the FastTransfer tool from an SQL function, enabling fast data transfer between databases. ／ This extension requires the **FastTransfer tool** to be installed separately. ／ * `targetconnectiontype` accepts `clickhousebulk`, `duckdb`, `hanabulk`, `msbulk`, `mysqlbulk`, `nzbulk`, `orabulk`, `oradirect`, `pgcopy`, `teradata`.",
+   "evidence_lines": [
+    3,
+    16,
+    222
+   ]
+  },
+  "fn": "arpe-io/pg_fasttransfer",
+  "sha": "b1bd071455df",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

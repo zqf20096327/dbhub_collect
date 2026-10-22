@@ -11880,5 +11880,140 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "21dea50ab600": {
+  "identity": {
+   "one_liner": "个人 GitHub 主页 README，展示开发者技能与项目",
+   "review": "这是开发者 cheehwatang 的 GitHub 个人资料 README，包含个人简介、技术栈列表、项目展示（SoundState、Daily Quotes 等）及社区统计组件。README 提及使用 PostgreSQL 和 SQLite 作为工具箱技能标签，但该仓库本身不是数据库工具，与数据库生态无直接工具关系。",
+   "highlights": [
+    "展示个人技术栈标签（含 Ruby、Java、PostgreSQL、SQLite 等）",
+    "列出个人项目 SoundState 与 Github Readme Daily Quotes",
+    "集成社区贡献的统计徽章组件"
+   ],
+   "use_cases": [
+    "个人开发者主页展示",
+    "项目与技术栈索引"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL",
+     "lines": [
+      169
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite",
+     "lines": [
+      176
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 为个人资料页，未提供任何数据库相关工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## 👨🏻‍💻 What's Happening? ／ ## 🧰 My Toolbox ／ ## 💡 Projects",
+   "evidence_lines": [
+    22,
+    54,
+    255
+   ]
+  },
+  "fn": "cheehwatang/cheehwatang",
+  "sha": "21dea50ab600",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a27d03becc2a": {
+  "identity": {
+   "one_liner": "自托管车队视频与 GPS 平台，用 PostgreSQL RLS 做租户隔离",
+   "review": "OpenMDVR 是一个自托管的车队视频与 GPS 追踪平台，处理 4G 行车记录仪、GPS 追踪器和 JT808 设备，提供实时 WebRTC 视频、报警取证、地理围栏和报表，面向想自主掌控数据的车队或运营商。它依赖 PostgreSQL（含 TimescaleDB 和 RLS 行级安全），部署方式为 docker compose 单体，README 标注项目处于早期阶段。",
+   "highlights": [
+    "支持 GT06、JT/T 808/1078 等设备协议，实时视频经 WebRTC 播放",
+    "租户隔离由 PostgreSQL 行级安全（RLS）在数据库层强制执行",
+    "报警自动检索对应录像片段，视频访问使用一次性票据授权"
+   ],
+   "use_cases": [
+    "小型车队自托管管理车辆视频与位置数据",
+    "多租户运营商提供按租户隔离的车队视频服务",
+    "基于设备报警自动取证与审计的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Isolation is enforced inside PostgreSQL.** ／ one machine, no video. PostgreSQL ran separately and used about 6 cores in ／ Dashcam, tracker, MDVR ──TCP──▶ device server (Go) ──▶ PostgreSQL + TimescaleDB (RLS)",
+     "lines": [
+      56,
+      173,
+      214
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该平台以 PostgreSQL + TimescaleDB 作为自身数据库存储业务与位置数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Isolation is enforced inside PostgreSQL.** ／  Dashcam, tracker, MDVR ──TCP──▶ device server (Go) ──▶ PostgreSQL + TimescaleDB (RLS)",
+   "evidence_lines": [
+    56,
+    214
+   ]
+  },
+  "fn": "openmdvr/openmdvr",
+  "sha": "a27d03becc2a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

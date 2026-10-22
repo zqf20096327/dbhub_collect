@@ -9739,5 +9739,79 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3882121873e8": {
+  "identity": {
+   "one_liner": "本地优先的消息收件箱，聚合 Google Messages/WhatsApp/Signal 并存 SQLite",
+   "review": "一个 Go 编写的本地消息工作区，将 Android 手机配对的 Google Messages（SMS/RCS）与 WhatsApp、Signal 桥接为统一本地收件箱，消息、会话与联系人数据存储在本机 SQLite 中，通过 Web UI、macOS 原生应用和 MCP 接口供人及 Claude 等 MCP 客户端读取与发送。需手机配对，MCP 传输需显式开启。适合需要在 Mac 上集中管理多平台短信与消息的个人用户。",
+   "highlights": [
+    "通过 mautrix/gmessages 配对 Android 手机，本地收发 SMS/RCS",
+    "提供 MCP server，支持 stdio、Streamable HTTP、SSE 传输供 MCP 客户端调用",
+    "消息、会话、联系人存储于本地 SQLite（WAL 模式）"
+   ],
+   "use_cases": [
+    "在 Mac/浏览器中集中查看和回复 SMS/RCS、WhatsApp、Signal 消息",
+    "通过 Claude Code 等 MCP 客户端检索、统计、发送本地消息",
+    "导入 Google Chat、iMessage、WhatsApp 导出或 Signal Desktop 历史记录"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local storage** — SQLite database, your data stays on your machine ／ - **SQLite** (WAL mode, pure Go) stores messages, conversations, and contacts locally ／ - Real-time events from the phone are written to SQLite as they arrive",
+     "lines": [
+      121,
+      243,
+      244
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 SQLite 用于存储消息、会话与联系人数据，本项目是使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Local storage** — SQLite database, your data stays on your machine ／ Built on mautrix/gmessages (libgm) for the Google Messages protocol and mcp-go for the MCP server.",
+   "evidence_lines": [
+    121,
+    5
+   ]
+  },
+  "fn": "MaxGhenis/openmessage",
+  "sha": "3882121873e8",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

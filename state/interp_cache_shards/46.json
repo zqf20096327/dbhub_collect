@@ -9730,5 +9730,185 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "feaddd05ae02": {
+  "identity": {
+   "one_liner": "多模型 DBMS，支持图、文档、键值、时序、向量等多种模型与查询语言",
+   "review": "ArcadeDB 是一个多模型数据库管理系统，由 OrientDB 创始人从零重写，支持图、文档、键值、搜索引擎、时序、向量和地理空间模型，可使用 SQL、Cypher、Gremlin、GraphQL、MongoDB 查询语言访问。可通过嵌入式 JVM/Python 绑定或 HTTP/JSON、Postgres Wire 协议、Redis/MongoDB 驱动远程使用，内置 MCP Server，提供 Docker/Kubernetes 部署和 Maven 依赖方式，面向需要多模型数据处理能力的开发与运维人员。",
+   "highlights": [
+    "支持图、文档、键值、搜索引擎、时序、向量嵌入、地理空间七种数据模型",
+    "支持 SQL、Cypher、Gremlin、GraphQL、MongoDB 查询语言，并提供 Postgres Wire 协议及 MongoDB/Redis 驱动接入",
+    "内置 MCP Server 与 70+ 图算法，提供 ACID 事务、物化视图和并行查询执行"
+   ],
+   "use_cases": [
+    "推荐引擎、知识图谱、图 RAG 等结合图遍历与向量相似度的场景",
+    "需要单一数据库同时处理多模型数据的物联网与服务监控分析",
+    "作为嵌入式库嵌入 JVM 或 Python 应用中运行"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- Remotely by using a Postgres driver (ArcadeDB implements Postgres Wire protocol) ／ - **Supply Chain** — multi-tier visibility with PostgreSQL protocol and JavaScript",
+     "lines": [
+      124,
+      144
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是 DBMS 存储引擎，为数据库使用场景提供服务而非使用其他数据库存数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ArcadeDB is a Multi-Model DBMS created by Luca Garulli, the same founder ／ ArcadeDB supports the following models: ／ - Remotely by using a Postgres driver (ArcadeDB implements Postgres Wire protocol)",
+   "evidence_lines": [
+    74,
+    85,
+    124
+   ]
+  },
+  "fn": "ArcadeData/arcadedb",
+  "sha": "feaddd05ae02",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c6a58e91d206": {
+  "identity": {
+   "one_liner": "原生 macOS 数据库客户端，内置 PostgreSQL/MySQL 协议，支持 SQL 编辑、ER 图与查询计划",
+   "review": "Foxlume Query 是一个用 Swift/AppKit 编写的原生 macOS 数据库客户端，无需安装驱动，内置 PostgreSQL、MySQL、MongoDB、Redis 协议，提供智能补全、安全数据编辑、ER 图、查询计划可视化、导入导出与备份恢复，并含默认关闭的 AI 补全。面向 Mac 上的开发与运维人员，当前为早期 alpha 版（0.1.0），采用 AGPL-3.0 许可。",
+   "highlights": [
+    "内置 PostgreSQL、MySQL、MongoDB、Redis 协议实现，无需安装驱动",
+    "提供 ER 图、查询计划图（Explain/Explain Analyze）、表结构编辑与视图管理",
+    "支持 CSV/JSON/NDJSON/Excel 导入导出，以及 pg_dump/mysqldump/mariadb-dump 备份恢复",
+    "AI 补全默认关闭，支持 OpenAI 兼容 API、Claude 与 GitHub Copilot"
+   ],
+   "use_cases": [
+    "在 macOS 上浏览、编辑 PostgreSQL/MySQL 数据",
+    "通过 ER 图查看 schema 并进行结构变更",
+    "分析查询计划并执行数据库维护与备份恢复"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A fast, native macOS database client for PostgreSQL and MySQL.** ／ - **No drivers to install.** The PostgreSQL, MySQL, MongoDB and Redis protocols are built into the app in Swift. ／ - **Views** for PostgreSQL, MySQL, MariaDB, SQLite and DuckDB: **New View** opens a `CREATE VIEW` template, **Edit View** opens the current definition ready to replace, and **Save View** runs it and selects the view in the sidebar. PostgreSQL materialized views can be edited and refreshed too.",
+     "lines": [
+      5,
+      21,
+      78
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**A fast, native macOS database client for PostgreSQL and MySQL.** ／ - **No drivers to install.** The PostgreSQL, MySQL, MongoDB and Redis protocols are built into the app in Swift. ／ - **Views** for PostgreSQL, MySQL, MariaDB, SQLite and DuckDB: **New View** opens a `CREATE VIEW` template, **Edit View** opens the current definition ready to replace, and **Save View** runs it and selects the view in the sidebar. PostgreSQL materialized views can be edited and refreshed too.",
+     "lines": [
+      5,
+      21,
+      78
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Editors that know the column type:** booleans are check boxes (Space or a click toggles them), dates and times open a date picker with Now and NULL, enum columns (PostgreSQL enum types, MySQL and MariaDB `ENUM`) list their values, and foreign key columns o ／ - **Maintenance** from the sidebar (Shift-click to select several tables) or Database › Maintenance: Vacuum, Vacuum Analyze, Analyze, Vacuum Full and Reindex on PostgreSQL; Optimize, Analyze, Check and (MyISAM and Aria) Repair Table on MySQL and MariaDB; Analy ／ - **Views** for PostgreSQL, MySQL, MariaDB, SQLite and DuckDB: **New View** opens a `CREATE VIEW` template, **Edit View** opens the current definition ready to replace, and **Save View** runs it and selects the view in the sidebar. PostgreSQL materialized view",
+     "lines": [
+      55,
+      76,
+      78
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Maintenance** from the sidebar (Shift-click to select several tables) or Database › Maintenance: Vacuum, Vacuum Analyze, Analyze, Vacuum Full and Reindex on PostgreSQL; Optimize, Analyze, Check and (MyISAM and Aria) Repair Table on MySQL and MariaDB; Analy ／ - **Views** for PostgreSQL, MySQL, MariaDB, SQLite and DuckDB: **New View** opens a `CREATE VIEW` template, **Edit View** opens the current definition ready to replace, and **Save View** runs it and selects the view in the sidebar. PostgreSQL materialized view",
+     "lines": [
+      76,
+      78
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SQL Server and other engines, plan comparison, MongoDB X.509 authentication and certificate revocation checks. See the CHANGELOG for what is new.",
+     "lines": [
+      258
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为数据库客户端工具，为连接和管理多种数据库服务，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A fast, native macOS database client for PostgreSQL and MySQL.** ／ - **No drivers to install.** The PostgreSQL, MySQL, MongoDB and Redis protocols are built into the app in Swift. ／ - **A structure editor** for PostgreSQL and MySQL: add or change columns, indexes, foreign keys and comments, drag columns into a new order, review the generated `ALTER` statements, then save. MySQL moves columns in place; PostgreSQL rebuilds the table in one transaction when nothing depends on it. **New Table** builds a `CREATE TABLE` with a live preview.",
+   "evidence_lines": [
+    5,
+    21,
+    73
+   ]
+  },
+  "fn": "dannymaster1995-developer/foxlume-query",
+  "sha": "c6a58e91d206",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

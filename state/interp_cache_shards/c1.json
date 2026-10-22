@@ -10474,5 +10474,153 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c6690d3b9c58": {
+  "identity": {
+   "one_liner": "面向开发者的自托管个人博客系统，基于 ASP.NET Core 与 EF Core",
+   "review": "Moonglade 是一个用 ASP.NET Core 编写的个人博客系统，提供文章发布、评论、归档、RSS、管理后台等博客功能，供开发者自托管部署。数据层基于 EF Core，默认使用 PostgreSQL，也支持配置切换到 SQL Server；支持 Docker Compose 部署、本地账号 TOTP 与 OpenID Connect 认证。",
+   "highlights": [
+    "基于 ASP.NET Core 与 EF Core，提供独立的 PostgreSQL 和 SQL Server 数据提供程序项目",
+    "支持 Docker Compose 一键部署，PostgreSQL 为默认数据库，可配置切换 SQL Server",
+    "支持本地账号 TOTP 认证和 OpenID Connect 单一外部身份提供商登录"
+   ],
+   "use_cases": [
+    "开发者自托管个人博客",
+    "需要定时发布、评论、RSS/Atom 等博客功能的站点",
+    "使用 PostgreSQL 或 SQL Server 作为后端存储的内容发布平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeD ／ |PostgreSQL|SQL Server 2025 or LocalDB| ／ PostgreSQL is the default database. SQL Server remains supported when configured explicitly.",
+     "lines": [
+      25,
+      51,
+      60,
+      64
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ |PostgreSQL|SQL Server 2025 or LocalDB| ／ PostgreSQL is the default database. SQL Server remains supported when configured explicitly.",
+     "lines": [
+      25,
+      60,
+      64
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 PostgreSQL/SQL Server 存储数据的博客应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeDatabase` for your environment. ／ PostgreSQL is the default database. SQL Server remains supported when configured explicitly.",
+   "evidence_lines": [
+    25,
+    51,
+    64
+   ]
+  },
+  "fn": "EdiWang/Moonglade",
+  "sha": "c6690d3b9c58",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "990ae1673c28": {
+  "identity": {
+   "one_liner": "自托管站点可靠性监控，单二进制+SQLite存储",
+   "review": "Monita 是一个自托管的运行时间监控服务，用 Rust 单二进制实现，数据存于单个 SQLite 文件。它定期检查 URL/TCP/DNS/ping，接收 cron 心跳，故障时通过邮件和 webhook（Slack/Discord/Telegram/ntfy/PagerDuty）告警，并为每个项目生成公开状态页，还含缺陷工单与更新日志功能。适合希望自行掌控监控基础设施的团队；README 说明需 64 位 Linux 服务器或 Docker 运行。",
+   "highlights": [
+    "支持每 30 秒到 5 分钟对 URL、TCP 端口、DNS、ping 的检查，HTTPS 证书到期前可发出警告",
+    "支持 cron 心跳监控、事件告警（邮件与 Slack/Discord/Telegram/ntfy/PagerDuty webhook）、维护窗口和多地点一致性判定",
+    "每个项目提供公开状态页（90 天可用性）、事件时间线、状态页 bug 工单与更新日志功能"
+   ],
+   "use_cases": [
+    "团队自托管网站与定时任务的可用性监控与宕机告警",
+    "cron/定时作业的心跳监控与失败捕获",
+    "对外发布服务状态页并收集用户报告的 bug 工单"
+   ],
+   "cat_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "You run it on your own server as one program, and it keeps all its data in one SQLite file.",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Monita 是网站/任务监控服务，仅以 SQLite 文件存储自身数据，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Monita checks your team's websites and scheduled jobs, alerts your team when one fails, and shows the outage on a public status page. ／ You run it on your own server as one program, and it keeps all its data in one SQLite file. ／ - A monitor checks a URL, a TCP port, a DNS name or a host by ping, every 30 seconds to 5 minutes.",
+   "evidence_lines": [
+    5,
+    6,
+    21
+   ]
+  },
+  "fn": "PT-Perkasa-Pilar-Utama/monita",
+  "sha": "990ae1673c28",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

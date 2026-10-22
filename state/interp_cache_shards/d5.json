@@ -9946,5 +9946,82 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d45984a7dbbe": {
+  "identity": {
+   "one_liner": "Rust 单二进制 MCP 记忆服务器，提供混合检索与时序知识图谱",
+   "review": "MemoryPilot 是一个为 AI 编码助手提供持久化记忆的 MCP 服务器，面向 Cursor、Claude Desktop、VS Code 等客户端用户。它以单个 Rust 二进制运行，实现 BM25 与 jina 嵌入的 RRF 混合检索、交叉编码器重排、时序知识图谱、GraphRAG、AAAK 压缩与自动分类，并提供 HTTP API。README 以 LongMemEval 等基准数据为主，未展示配置与存储后端细节。",
+   "highlights": [
+    "提供 BM25 + jina-embeddings-v5 RRF 混合检索与交叉编码器自适应重排，支持 100+ 语言",
+    "实现时序知识图谱、GraphRAG、记忆胶囊与 AAAK 压缩，自动分类与自动压缩（auto-compaction）",
+    "单二进制、零运行时依赖、零 API 调用，附带 `--benchmark-longmemeval` 与 `--benchmark-fr` 基准命令"
+   ],
+   "use_cases": [
+    "为 Cursor、Claude Code、Codex 等 AI 编码助手在会话间提供持久化、可检索的项目记忆",
+    "在本地离线环境运行记忆服务，避免调用云端 embedding API",
+    "需要时序推理、多会话聚合与弃答（abstention）信号的记忆检索场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Dependencies**|0 (single binary, ONNX bundled)|Python + ChromaDB + SQLite|Python + ONNX|",
+     "lines": [
+      127
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Storage|SQLite WAL + FTS5 + 16-conn read pool|ChromaDB|SQLite + iii-engine|Cloud DB|Neo4j + Postgres|",
+     "lines": [
+      170
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向 AI 助手的记忆服务器，使用 SQLite 作为存储，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Source Available（L14），非标准 OSI 许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " One-liner install for Cursor, Claude Desktop, VS Code, Windsurf, Claude Code, Codex and ChatGPT. Single Rust binary, zero runtime dependencies. ／ AI coding assistants forget everything between sessions. MemoryPilot gives them persistent, searchable memory with project awareness, semantic understanding, and automatic knowledge organization. Built-in AAAK compression and memory capsules reduce token consumption by 5-10x when loading context. Every memory is auto-classified with the right importance, kind, and TTL on insert. The database compacts itself automatically — zero maintenance. ／  Hybrid search (BM25 + jina-embeddings-v5 RRF + cross-encoder rerank) · 100+ languages · Temporal Knowledge Graph · Query-aware ranking · Corpus origin detection · Agent/persona disambiguation · Topic tunnels · AAAK compression (5-10x token savings) · GraphRAG · Chunked RAG · Auto-Compaction · Auto-Classification · Memory Capsules · HTTP API · Single binary · Zero API calls",
+   "evidence_lines": [
+    24,
+    20,
+    6
+   ]
+  },
+  "fn": "Soflutionltd/MemoryPilot",
+  "sha": "d45984a7dbbe",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

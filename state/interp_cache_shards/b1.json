@@ -10457,5 +10457,379 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0478b76aaf7a": {
+  "identity": {
+   "one_liner": "预装 PHP 扩展的 Docker PHP-FPM 镜像，用于运行 Laravel/PHP 应用",
+   "review": "这是一个 Docker PHP-FPM 镜像，内置 MySQL、PostgreSQL、SQLite 的 PDO 扩展及 Redis、Memcached、Kafka 等常用 PHP 扩展，并通过 Supervisord 自动启动 Laravel Scheduler 与 Queue Worker，支持环境变量配置 PHP/OPcache/FPM 参数、自定义 supervisor 进程和 PHP 配置文件。面向需要容器化部署 Laravel 或其他 PHP 应用、微服务的开发者。",
+   "highlights": [
+    "内置 PDO 扩展，支持 MySQL、PostgreSQL、SQLite 连接（L51）",
+    "通过 Supervisord 自动运行 Laravel Scheduler 和 Queue Worker，可用环境变量开关（L21、L133-L134）",
+    "提供 Debian 和 Alpine 变体，多架构镜像，支持通过环境变量调整 PHP、OPcache、FPM 配置（L23、L22）"
+   ],
+   "use_cases": [
+    "容器化部署 Laravel 应用（配合 Nginx 与数据库）",
+    "运行 PHP 微服务，需要队列与定时任务自动启动",
+    "作为基础镜像构建自定义 PHP 应用镜像"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Database**: MySQL and PostgreSQL. ／ - PDO (MySQL, PostgreSQL and SQLite)",
+     "lines": [
+      18,
+      51
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database**: MySQL and PostgreSQL. ／ - PDO (MySQL, PostgreSQL and SQLite)",
+     "lines": [
+      18,
+      51
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- PDO (MySQL, PostgreSQL and SQLite)",
+     "lines": [
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该镜像本身是运行 PHP/Laravel 应用的运行环境，数据库仅作为其支持的连接扩展，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### 🐳 **Docker Image: Laravel PHP-FPM** ／ A **ready-to-use container** designed for running PHP-based applications, including Laravel microservices. ／ - PDO (MySQL, PostgreSQL and SQLite)",
+   "evidence_lines": [
+    1,
+    3,
+    51
+   ]
+  },
+  "fn": "jkaninda/laravel-php-fpm",
+  "sha": "0478b76aaf7a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "87f2d1a4b753": {
+  "identity": {
+   "one_liner": "AI 记忆库 DSH 插件，用 SQLite 持久化知识卡并跨会话召回",
+   "review": "memory-eternal 是一个为 AI Agent 提供长期记忆的插件，支持 DeepSeek Harness、Claude Code、Codex、Cursor 等宿主。对话结束自动沉淀知识卡，新卡进入待审队列，召回时只取相关小块；数据以本地 Markdown + SQLite 存储，提供 Web UI 展示知识图谱、审核中心与回收站，通过 MCP 或 hooks 挂载。",
+   "highlights": [
+    "支持会话结束自动沉淀知识卡，跨会话通过 memory_recall 检索召回",
+    "数据以本地 Markdown + SQLite 存储，提供每日备份与一键恢复",
+    "提供 Web UI，包含知识图谱可视化、审核中心与回收中心"
+   ],
+   "use_cases": [
+    "为多个 AI 编码助手（Claude Code、Codex、Cursor 等）共享同一套项目记忆",
+    "对 AI 生成记忆卡进行先审后入与去重矛盾扫描",
+    "在浏览器中独立管理、搜索和导入导出知识库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 全自研、零第三方记忆框架、不改 DSH 源码；一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。 ／ - **带得走**：知识库是本地 Markdown + SQLite，可 git 管理、可导出，不锁在插",
+     "lines": [
+      24,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目仅将 SQLite 作为自身记忆库的持久存储使用，未为数据库生态提供工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 全自研、零第三方记忆框架、不改 DSH 源码；一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。 ／ - **带得走**：知识库是本地 Markdown + SQLite，可 git 管理、可导出，不锁在插 ／ npm i -g memory-eternal     # 装 CLI + MCP（写 ~/.claude.json mcpServers.memory）",
+   "evidence_lines": [
+    24,
+    60,
+    102
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "EternalNight996/memory-eternal",
+  "sha": "87f2d1a4b753",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "79846edb3946": {
+  "identity": {
+   "one_liner": "可克隆的本地 ABAP 应用服务器，转译 ABAP 并通过统一数据库接口运行 Open SQL",
+   "review": "open-steamgate 重实现 SAP /IWBEP/ Gateway 的 OData v2 运行时：将 _MPC_EXT/_DPC_EXT 类、CDS、AMDP 等 ABAP 代码交叉编译后运行于本地数据库，向 Fiori Elements 提供 OData，并支持 ADT 与 SAP GUI DIAG 接入。面向需要本地运行经典 SEGW 服务的 SAP 开发者。数据库通过十一个方法的接缝层切换 sql.js、SQLite、DuckDB、PostgreSQL 或 HANA，系统目前为 0.3 beta 子集实现。",
+   "highlights": [
+    "提供 OData v2 网关运行时，支持 $filter、$batch、$expand、深插入、函数导入等操作",
+    "通过统一接缝层支持 sql.js、SQLite、DuckDB、PostgreSQL、HANA 多种数据库后端",
+    "内置 gogen 编译器，可将 ABAP 报表编译为独立 Go 原生命令行工具"
+   ],
+   "use_cases": [
+    "本地运行和调试经典代码式 SEGW 服务而无 SAP 系统",
+    "以 Fiori 应用形式浏览和编辑 SEGW 项目树与 CDS 数据",
+    "将 ABAP 报表编译为无服务器的原生 CLI 工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Each release also carries `sqlite.yml`, `duckdb.yml` and `postgres.yml`; start one with `docker compose -f sqlite.yml up -d`. `./osd doctor` checks a downloaded binary. ／ PostgreSQL or HANA. So a whole system can be copied, branched, compared and ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`|",
+     "lines": [
+      25,
+      61,
+      135
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **open-rfc-go**: pure-Go NI / RFC / CPIC transport, used as an external oracle.",
+     "lines": [
+      340
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Portainer**|Stacks → Add stack → Web editor, paste one YAML block from `docs/spin.md` (SQLite, DuckDB, PostgreSQL or HANA Express)|`http://<host>:8011/app/flp.html`| ／ Each release also carries `sqlite.yml`, `duckdb.yml` and `postgres.yml`; start one with `docker compose -f sqlite.yml up -d`. `./osd doctor` checks a downloaded binary. ／ and the database sits behind an eleven-method seam: sql.js, SQLite, DuckDB,",
+     "lines": [
+      19,
+      25,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite、PostgreSQL 等作为其运行时背后的数据存储后端使用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Gateway classes, CDS views, AMDP methods, reports — and runs it against a local ／ and the database sits behind an eleven-method seam: sql.js, SQLite, DuckDB, ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`|",
+   "evidence_lines": [
+    48,
+    60,
+    135
+   ]
+  },
+  "fn": "oisee/open-steamgate",
+  "sha": "79846edb3946",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7974d721ed6b": {
+  "identity": {
+   "one_liner": "Mojo 语言的 SQLite 绑定库，含 ORM 层",
+   "review": "这是为 Mojo 编程语言提供的 SQLite 绑定库，提供 FFI、安全的 Database/Statement/Row API 和基于 morph 编译期反射的 ORM 三层结构，支持 Python 风格的事务上下文管理器。面向使用 Mojo 并需要读写 SQLite 数据的开发者，通过 pixi 从 Git 仓库安装。",
+   "highlights": [
+    "提供 FFI、安全 API 与基于编译期反射的 ORM 三层设计",
+    "事务支持 with 语句的自动提交/回滚语义",
+    "包含单元、边界与基于性质的 fuzz 测试"
+   ],
+   "use_cases": [
+    "在 Mojo 项目中读写 SQLite 数据",
+    "无需手写 SQL 进行基础 CRUD 操作",
+    "需要事务保障的批量数据写入"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# sqlite ／ SQLite bindings for Mojo with a safe API, Pythonic context-manager ／ from sqlite import Database, create_table, insert, query",
+     "lines": [
+      1,
+      7,
+      29
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 SQLite 提供语言绑定的开发库，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite bindings for Mojo with a safe API, Pythonic context-manager ／  `morph`-based ORM",
+   "evidence_lines": [
+    7,
+    14
+   ]
+  },
+  "fn": "ehsanmok/sqlite",
+  "sha": "7974d721ed6b",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "640abed98a01": {
+  "identity": {
+   "one_liner": "OceanBase 竞赛 seekdb 赛道的代码与解题文档仓库",
+   "review": "该仓库收录 OceanBase 竞赛 seekdb 赛道的代码与解决方案文档，用于记录参赛者的解题过程与实现。面向竞赛参与者或希望了解该赛道做法的读者。README 仅含一句说明，未提供安装步骤、运行方式或依赖信息，具体内容需进入仓库查阅。",
+   "highlights": [
+    "包含 seekdb 赛道的解题代码",
+    "包含解决方案文档"
+   ],
+   "use_cases": [
+    "查阅 seekdb 赛道的解题思路与实现",
+    "作为 OceanBase 竞赛参考资料"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "# OceanBase_Seekdb ／ Code and solution documentation for the seekdb track of the OceanBase competition.",
+     "lines": [
+      1,
+      2
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅说明是竞赛赛道的代码与文档，未表明是数据库生态工具还是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Code and solution documentation for the seekdb track of the OceanBase competition.",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "Betterblue77/OceanBase_Seekdb",
+  "sha": "640abed98a01",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

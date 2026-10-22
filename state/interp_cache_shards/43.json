@@ -9615,5 +9615,71 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ddd71c02892a": {
+  "identity": {
+   "one_liner": "家庭/小型办公室网络安全监控工具，Zeek 镜像流量检测加护栏 LLM 分诊",
+   "review": "tapwatch 通过镜像端口上的 Zeek 日志、路由器 syslog 和可选 osquery 端点代理监测家庭或小型办公网络中的异常行为，如新设备接入、信标、DNS 隧道等。检测逻辑为纯 Python 规则，可选 LLM 只对已证实事实做告警分诊且不能越过代码设定的事实边界。适合无专职安全人员的家庭/lab 用户，依赖 SQLite 存储，可经 Docker Compose 或 systemd 运行。",
+   "highlights": [
+    "包含 32 个带测试和规格说明的 Python 检测器，覆盖 34 种案例类型",
+    "LLM 分诊受代码级护栏约束，无 API key 时可仅以规则运行",
+    "内置无 JavaScript 的案例处理界面，支持自检命令重放 18 种攻击/误报形态"
+   ],
+   "use_cases": [
+    "家庭或小型办公室的网络入侵检测",
+    "监测 IoT 设备行为漂移与外联异常",
+    "对 AI 编码代理产生的网络流量做主机侧上下文区分"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为依赖用于本地存储数据，项目本身是网络安全监控应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Network security monitoring for a home or small office: Zeek on a mirror port, the router's ／ - **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs ／  under Docker Compose or as systemd user services, on Linux or a Windows PC with WSL.",
+   "evidence_lines": [
+    8,
+    90,
+    91
+   ]
+  },
+  "fn": "barnabys-drew/tapwatch",
+  "sha": "ddd71c02892a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10217,5 +10217,143 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2a2d97eed68b": {
+  "identity": {
+   "one_liner": "Rails 异步优先全文搜索抽象库，多后端适配",
+   "review": "这是一个面向 Ruby/Rails 的搜索抽象 gem，提供链式 DSL 与异步执行，支持 OpenSearch、Elasticsearch、Typesense、PostgreSQL 四种后端适配器，并含连接池、分页、多模型搜索与 VCR 测试辅助。面向使用 Rails 构建搜索功能的开发者，要求 Ruby >= 4.0 且 Rails >= 8.1。",
+   "highlights": [
+    "提供链式 DSL 查询构建器，执行返回 Async::Task，支持并发搜索",
+    "包含 OpenSearch、Elasticsearch、Typesense、PostgreSQL 四种适配器，按需懒加载",
+    "内置 HTTP/2 连接池、分页、multi-search 与 Rails Railtie 集成"
+   ],
+   "use_cases": [
+    "Rails 应用统一封装多个搜索后端",
+    "需要异步并发执行搜索查询的场景",
+    "基于 PostgreSQL/pgvector 的搜索功能开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multi-backend** — OpenSearch, Elasticsearch, Typesense, PostgreSQL adapters",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为为数据库/搜索引擎后端服务的查询抽象 gem，属于生态服务组件而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSD 3-Clause",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Async-first search abstraction for Rails with multi-backend support (OpenSearch, Elasticsearch, Typesense, PostgreSQL). ／ - **Multi-backend** — OpenSearch, Elasticsearch, Typesense, PostgreSQL adapters ／ `noiseless` is a Rails gem. It requires Ruby >= 4.0 and Rails >= 8.1.",
+   "evidence_lines": [
+    3,
+    8,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "seuros/noiseless",
+  "sha": "2a2d97eed68b",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "611231085970": {
+  "identity": {
+   "one_liner": "AI Agent 执行前护栏与推理审计观测平台",
+   "review": "AgentWatch（现名 Panopti）是一个面向 AI Agent 的运行时观测与护栏工具，在动作执行前拦截工具调用，用独立模型审计推理并阻断危险命令，提供回滚、仪表盘与 REST API；面向构建/运维 AI Agent 的开发者。后端采用 FastAPI + PostgreSQL + Redis/Celery，v3 证据数据存于 Postgres 服务。",
+   "highlights": [
+    "提供执行前工具调用拦截，内置 40+ 危险命令模式阻断",
+    "支持 LangChain、LangGraph、CrewAI、AutoGen 等框架适配器",
+    "提供 CLI 的 observe/inspect/compare/replay 命令及 REST API 与实时仪表盘"
+   ],
+   "use_cases": [
+    "AI Agent 上线前的推理链审计与危险动作拦截",
+    "Agent 运行行为录制、回放与差异比较",
+    "多 Agent 系统的会话回滚与告警（Slack/PagerDuty）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "That's it. Set `AGENTWATCH_API_KEY` in `.env` (compose refuses to start without it); everything else has working defaults, customizable via .env.example. The v3 evidence store lives on the Postgres service, so it survives container restarts. ／ |**Backend**|FastAPI · PostgreSQL · Redis · Celery|",
+     "lines": [
+      151,
+      256
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明后端栈为 FastAPI/PostgreSQL/Redis/Celery，v3 证据存储运行在 Postgres 服务上，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "That's it. Set `AGENTWATCH_API_KEY` in `.env` (compose refuses to start without it); everything else has working defaults, customizable via .env.example. The v3 evidence store lives on the Postgres service, so it survives container restarts. ／ |**Backend**|FastAPI · PostgreSQL · Redis · Celery|",
+   "evidence_lines": [
+    151,
+    256
+   ]
+  },
+  "fn": "Shinraya-Tech-Labs/AgentWatch",
+  "sha": "611231085970",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

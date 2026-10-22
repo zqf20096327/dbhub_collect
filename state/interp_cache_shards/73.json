@@ -10640,5 +10640,91 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1c5e612769fe": {
+  "identity": {
+   "one_liner": "定时数据库备份工具，age 加密后传输至云存储",
+   "review": "Ogion 是一个 Python 编写的定时备份工具，用于对 PostgreSQL、MariaDB、MySQL 数据库执行计划备份，经 lzip 压缩和 age 加密后上传至 GCS、S3 兼容存储或 Azure Blob，并支持 Discord/邮件/Slack 通知。面向 home lab、个人项目等场景，提供 docker 与 kubernetes 部署方式，支持 amd64/arm64 架构。",
+   "highlights": [
+    "支持 PostgreSQL 14-18、MariaDB、MySQL 定时备份，使用 pg_dump/mariadb-dump 等客户端",
+    "备份经 lzip 压缩和 age 加密，可上传至 GCS、S3 兼容存储、Azure Blob",
+    "提供 docker 镜像与 kubernetes 部署方式，支持 linux/amd64 和 linux/arm64"
+   ],
+   "use_cases": [
+    "home lab 与个人项目的定时数据库备份",
+    "将加密备份传输到公有云对象存储",
+    "在 k8s/docker 环境中以容器方式运行备份任务"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL: `18`, `17`, `16`, `15`, `14`. ／ Everyday 5am backup of PostgreSQL database defined in the same file and running in docker container.",
+     "lines": [
+      28,
+      61
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MariaDB: `13.0`, `12.3`, `11.8`, `11.4`, `10.11`.",
+     "lines": [
+      29
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL: `26.7`, `9.7`, `8.4`.",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为数据库执行备份并上传加密数据，是为数据库生态服务的备份工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tool for performing scheduled database backups and transferring encrypted data to secure public clouds, for home labs, hobby projects, etc., in environments such as k8s, docker, vms. ／ - PostgreSQL: `18`, `17`, `16`, `15`, `14`. ／ Using docker image: `rafsaf/ogion:latest`, see all tags on dockerhub",
+   "evidence_lines": [
+    12,
+    28,
+    49
+   ]
+  },
+  "fn": "rafsaf/ogion",
+  "sha": "1c5e612769fe",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8939,5 +8939,79 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92e668f132cc": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的开源数据库与工作区，写入走变更请求审核",
+   "review": "Busabase 是一个开源的数据库与工作区，供 Claude Code、Codex、Cursor 等 Agent 与人共享结构化记录、文档、技能和应用；Agent 的写入以带字段级 diff 的 Change Request 形式提交，由权限决定合并或等待人工审核。它本身运行在 Postgres 或内嵌 PGlite 上，支持本地优先、离线使用和自托管，通过 npm、Docker 或桌面版安装。",
+   "highlights": [
+    "支持 MCP、OpenAPI、CLI、SDK（TypeScript/Python）和 Agent Skill 等多种 Agent 接入方式",
+    "Agent 写入以 Change Request 形式提交，包含字段级 diff、作者与历史，可配置自动合并或人工审核",
+    "本地优先，内嵌 PGlite 运行，可切换到外部 Postgres 或 S3 兼容存储"
+   ],
+   "use_cases": [
+    "团队记忆：记录决策与上下文，供后续 Agent 会话读取",
+    "软件交付：将反馈转为任务并保留规范与发布记录",
+    "CRM/内容管理：在共享工作区中维护客户与内容数据并接受审核"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Local data lives in `~/.busabase/data/` (`pgdata/` for the embedded PGlite database, `storage/` for files). Set `BUSABASE_DATA_DIR`, `PG_DATABASE_URL`, or `STORAGE_URL` to use another location, external Postgres, or S3-compatible storage. Only one process can  ／ Busabase runs on Postgres (or embedded PGlite) itself; it is the workspace on top, not a replacement for your app's database.",
+     "lines": [
+      70,
+      157
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确 Busabase 运行在 Postgres 或内嵌 PGlite 之上，是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，另有托管版 Busabase Cloud",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> Busabase is an open-source database and workspace for AI agents — agents and people share the same structured data, docs, skills, and apps, and writes that matter become reviewed, trusted records. ／ Local data lives in `~/.busabase/data/` (`pgdata/` for the embedded PGlite database, `storage/` for files). Set `BUSABASE_DATA_DIR`, `PG_DATABASE_URL`, or `STORAGE_URL` to use another location, external Postgres, or S3-compatible storage. Only one process can hold the same PGlite database at a time. ／ Busabase runs on Postgres (or embedded PGlite) itself; it is the workspace on top, not a replacement for your app's database.",
+   "evidence_lines": [
+    34,
+    70,
+    157
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "busabase/busabase",
+  "sha": "92e668f132cc",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

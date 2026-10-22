@@ -10822,5 +10822,166 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "afd21e4e853e": {
+  "identity": {
+   "one_liner": "汉语方言地理语言学研究领域的 FastAPI 后端服务",
+   "review": "为汉语方言读音查询、音系分析、地图绘制与声学计算提供 REST API 的 FastAPI 后端，供其配套 Vue 前端及外部 API 客户端使用。业务数据存于 SQLite（含 SQLAlchemy），辅以 Redis 缓存、Gunicorn 多进程部署与 SQLite backup API 定时备份；业务数据库与前端构建产物需自行准备，不随仓库提交。",
+   "highlights": [
+    "提供多方言点读音查询、音系矩阵、调类比较等查询与统计 API",
+    "支持 Praat 声学分析、方言聚类计算等任务型工具接口，含任务队列与产物清理",
+    "通过 SQLite backup API 定时备份 vocabulary、auth、supplements 数据库"
+   ],
+   "use_cases": [
+    "为方言地图与读音查询前端提供数据接口",
+    "方言字表检查、合并与声学分析的计算服务",
+    "村名/词汇的机器学习分析与空间统计 API"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "│ 原始 SQL：app/sql/db_pool.py → 每进程 SQLite 连接池 │ ／ app/schemas/及模块内模型定义请求、响应与校验；app/service/承载主要业务逻辑。Tools、GIS 和 VillagesML 也有自己的计算、数据访问和模型实现，当前并非所有业务都经过统一的 service 抽象。SQLite 连接池主要服务原始 SQL 查询，认证、日志、个人数据和词表还使用 SQLAlchemy；数据库读写权限由认证依赖、数据库选择和业务检查共同控制。 ／ 单进程退出时，lifespan 先停止自己启动的后台服务，再关闭 Redis 与 SQLite 连接池。Gunicorn 下，worker 退出清理本进程连接池，master 退出调用后台服务停止逻辑。日志 writer 在限定时间内尝试排空队列，强制终止不能保证所有缓冲记录落盘。",
+     "lines": [
+      117,
+      153,
+      168
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明业务数据（读音、词表、用户、日志）存储于 SQLite 数据库，后端仅是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "│ 原始 SQL：app/sql/db_pool.py → 每进程 SQLite 连接池                                                  │ ／ app/schemas/及模块内模型定义请求、响应与校验；app/service/承载主要业务逻辑。Tools、GIS 和 VillagesML 也有自己的计算、数据访问和模型实现，当前并非所有业务都经过统一的 service 抽象。SQLite 连接池主要服务原始 SQL 查询，认证、日志、个人数据和词表还使用 SQLAlchemy；数据库读写权限由认证依赖、数据库选择和业务检查共同控制。 ／ |数据库备份线程|通过 SQLite backup API 备份 vocabulary、auth、supplements 到 `data/backups/` 下的对应子目录，并清理过期备份。当前 vocabulary 间隔 3 小时，auth/supplements 间隔 24 小时，保留 7 天。|",
+   "evidence_lines": [
+    117,
+    153,
+    180
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "jengzang/dialects-backend",
+  "sha": "afd21e4e853e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "33d9720dae4b": {
+  "identity": {
+   "one_liner": ".NET 集成测试一次性容器库，支持 WSLC/Docker 双后端",
+   "review": "这是一个面向 .NET 开发者的 Testcontainers 风格测试库，用于在集成测试中运行一次性 Linux 容器。通过后端无关的 Core 抽象在 Windows 上走 WSL Containers、在 Linux CI 上走 Docker，测试代码无需修改；内置 PostgreSQL、MySQL、SQL Server 等 8 个服务模块的 Builder，提供等待策略与镜像共享存储。README 标注为实验性/预览，API 与打包规则可能在预发布版本间变更。",
+   "highlights": [
+    "提供后端中立 API，同一测试代码可运行在 WSLC 或 Docker 后端",
+    "提供 PostgreSQL、Redis、SQL Server、RabbitMQ、Azurite、NATS、MySQL、Azure Key Vault Emulator 八个服务模块",
+    "WSLC 后端默认共享镜像存储，镜像按存储路径复用，避免每个会话重复拉取"
+   ],
+   "use_cases": [
+    ".NET 项目在 Windows 开发机与 Linux CI 上运行数据库等服务的集成测试",
+    "不安装 Docker、通过 WSL Containers 运行一次性测试容器",
+    "为集成测试提供自动选择端口、等待就绪的容器生命周期管理"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator). On WSLC, **images are shared ／ PostgreSQL: ／ await using var postgres = new PostgreSqlBuilder() ／ await using var postgres = new PostgreSqlBuilder()",
+     "lines": [
+      31,
+      91,
+      94,
+      152
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator). On WSLC, **images are shared",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator). On WSLC, **images are shared ／ SQL Server / Redis / RabbitMQ: ／ await using var sqlServer = new MsSqlBuilder().WithPassword(\"SomeStrong!Password1\").AcceptLicense().Build(); ／ await using var sqlServer = new MsSqlBuilder()",
+     "lines": [
+      31,
+      100,
+      103,
+      168
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库本身不存储业务数据，为集成测试环境提供数据库等服务的临时容器，属于服务于数据库生态的测试工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Testcontainers-style library for .NET that runs throwaway Linux containers for integration testing — on **Microsoft WSL Containers (WSLC)** with no Docker installation, or on **Docker** through Testcontainers. ／ > **Experimental.** This project is an experiment in running throwaway containers through Microsoft ／ > modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator). On WSLC, **images are shared",
+   "evidence_lines": [
+    6,
+    24,
+    31
+   ]
+  },
+  "fn": "purview-dev/containers",
+  "sha": "33d9720dae4b",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

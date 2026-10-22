@@ -10392,5 +10392,86 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22c0ed08e40f": {
+  "identity": {
+   "one_liner": "Flask + PostgreSQL 的动漫社网站，含论坛/萌战/AI 看板娘",
+   "review": "一个基于 Python/Flask 和 SQLAlchemy 的社团官网应用，数据存储在 PostgreSQL（Supabase），支持本地 SQLite 内存库演示模式，可部署到 Vercel。包含社员论坛、番剧资源与百科、萌战赛事系统和 AI 虚拟好友等模块，面向动漫社团自建站使用者，仅社员登录、不开放注册。",
+   "highlights": [
+    "包含社员论坛、番剧资源与百科、萌战赛事系统（提名/海选/小组赛/淘汰赛/决赛）等模块",
+    "萌战引擎含禁赛、轮空、复活赛等规则并覆盖 500+ pytest 用例和 Playwright 端到端测试",
+    "支持 Vercel 部署，提供零配置 SQLite 内存库演示模式"
+   ],
+   "use_cases": [
+    "动漫社团自建成员制网站",
+    "部署于 Vercel + Supabase 的小型社区站点",
+    "学习 Flask 应用工厂/Blueprint 组织与全栈项目结构"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|ORM / 数据库|SQLAlchemy 2.0 / PostgreSQL（Supabase；测试用 SQLite 内存库）|",
+     "lines": [
+      127
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "$env:TESTING = \"1\"; $env:DATABASE_URL = \"sqlite:///:memory:\"; python run.py ／ TESTING=1 DATABASE_URL=sqlite:///:memory: python run.py ／ |ORM / 数据库|SQLAlchemy 2.0 / PostgreSQL（Supabase；测试用 SQLite 内存库）|",
+     "lines": [
+      95,
+      97,
+      127
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 PostgreSQL（Supabase）存数据的社团网站应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "动漫社网站：社团展示、社员论坛、番剧资源与百科、动漫资讯、线上萌战、AI 看板娘 ／ 需要连真实数据库时：在 Supabase 建库后填好 `.env` 的 `DATABASE_URL`，执行 `python init.py` 再 `python run.py`。 ／ |ORM / 数据库|SQLAlchemy 2.0 / PostgreSQL（Supabase；测试用 SQLite 内存库）|",
+   "evidence_lines": [
+    15,
+    109,
+    127
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "N-zihan/anime-club-website",
+  "sha": "22c0ed08e40f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

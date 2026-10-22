@@ -10158,5 +10158,146 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5c1780d7b26f": {
+  "identity": {
+   "one_liner": "自治代理身份管理系统，签发可验证凭证并管理委派链",
+   "review": "ZeroID 是面向 AI 代理的身份基础设施，基于 OAuth 2.1、WIMSE/SPIFFE 与 RFC 8693 实现代理注册、短时凭证签发、代理间委派（范围逐跳收窄）、认证与实时级联吊销，供安全与合规团队为自治代理工作流建立可审计的代理身份。部署上通过 docker compose 启动 Postgres 作为其后端存储。",
+   "highlights": [
+    "支持 OAuth 2.1 多种授权流程（client_credentials、jwt_bearer、token_exchange、CIBA 等）与 RFC 9449 DPoP 发送方约束令牌",
+    "实现 RFC 8693 OBO 委派链，含逐跳 scope 收窄、委派深度追踪与级联吊销",
+    "支持 WIMSE/SPIFFE 身份 URI、RFC 7591 动态客户端注册与 CIMD 零预注册接入"
+   ],
+   "use_cases": [
+    "为自治 AI 代理签发独立身份与短时凭证，替代共享服务账户",
+    "多代理编排场景中记录并校验 on-behalf-of 委派链",
+    "对代理凭证执行实时吊销与级联失效"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up -d # starts Postgres + ZeroID ／ docker compose up -d postgres",
+     "lines": [
+      171,
+      182
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 的 docker compose 指令显示系统启动 Postgres 作为自身后端存储，属于使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ZeroID is identity infrastructure for autonomous agents: a system that issues cryptographically verifiable credentials, enforces delegated authority through chains of agents, and revokes access in real time. Built on OAuth 2.1, WIMSE/SPIFFE, and RFC 8693, it implements the industry's emerging standards for agent identity before they become requirements.",
+   "evidence_lines": [
+    41
+   ]
+  },
+  "fn": "highflame-ai/zeroid",
+  "sha": "5c1780d7b26f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ae7fa5dbb5a3": {
+  "identity": {
+   "one_liner": "大数据相关框架与资源的 awesome 清单，附 star/fork 数据",
+   "review": "这是一个收录大数据领域框架、工具和资源链接的清单仓库，覆盖 RDBMS、数据处理框架、分布式编程等分类，并在条目旁标注 star 和 fork 数。面向需要查找大数据生态工具的开发者和数据工程师，本身不提供软件功能，仅作目录导航使用。",
+   "highlights": [
+    "收录 RDBMS、数据处理框架、分布式编程等分类的条目链接",
+    "条目附带仓库 star 与 fork 数量标注"
+   ],
+   "use_cases": [
+    "检索大数据生态中的框架与工具",
+    "按分类浏览相关开源资源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "* 🌎 MySQL The world's most popular open source database.",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "* 🌎 PostgreSQL The world's most advanced open source database.",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "* Oracle Database - object-relational database management system.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库是资源链接清单，不提供为数据库服务的工具功能，也不构成存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A curated list of awesome big data frameworks, resources and other awesomeness. Inspired by <code>&nbsp;32759⭐</code> <code>&nbsp;&nbsp;5135🍴</code> awesome-php), <code>329331⭐</code> <code>&nbsp;28974🍴</code> awesome-python), <code>&nbsp;&nbsp;1265⭐</code> <code>&nbsp;&nbsp;&nbsp;174🍴</code> awesome-ruby), hadoopecosystemtable & big-data. ／ ## RDBMS",
+   "evidence_lines": [
+    5,
+    11
+   ]
+  },
+  "fn": "Correia-jpv/fucking-awesome-bigdata",
+  "sha": "ae7fa5dbb5a3",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

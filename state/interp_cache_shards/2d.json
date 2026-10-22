@@ -9245,5 +9245,149 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c57df400649d": {
+  "identity": {
+   "one_liner": "面向项目管理的终端工作区桌面应用，含持久化终端、文件树与编辑器",
+   "review": "throng 是一个 Electron 桌面终端工作区，将多个项目的终端（PowerShell/Git Bash/CMD）、代码编辑器、文件树和 Markdown 预览整合到一个可停靠、可分离的窗口中；终端由后台服务托管，关闭窗口后仍存活、重开可恢复。适用于需要在多个项目目录间切换、并同时在多个仓库运行任务的命令行重度用户；目前仅支持 Windows 11。",
+   "highlights": [
+    "终端运行于后台服务，关闭窗口后任务继续运行并可重新附着",
+    "提供可停靠的多标签/分栏工作区布局，按项目保存并恢复",
+    "内置代码编辑器、项目级文件树、全项目搜索替换与 Markdown 实时预览"
+   ],
+   "use_cases": [
+    "为多个开发项目分别管理持久化终端会话",
+    "在同一窗口同时运行多个 AI agent 或长时间构建任务",
+    "项目内代码快速查看、编辑与 Markdown 文档预览"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为应用自身的存储（主题含 sqlite），README 未提及其用途，项目主体是使用数据库的开发者桌面应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，版权归 Christopher Sebok",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "throng is a desktop workspace for people who live in the command line. Give each project its own ／ - **Terminal panels** — your real installed shells, owned by a background service so they survive a restart and reattach. ／ throng runs on **Windows 11** today; macOS (#22) and",
+   "evidence_lines": [
+    12,
+    34,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Bidthedog/throng",
+  "sha": "c57df400649d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "82238e2f9d67": {
+  "identity": {
+   "one_liner": "海得拉巴农产品集市预订平台，Laravel+React+MySQL行锁结算",
+   "review": "基于 Laravel 12 与 React 19（Inertia SSR）构建的农贸市场预售系统：农户发布每周库存与取货时段，顾客在线预订并以 Easypaisa、JazzCash、银行卡或到摊现金支付，管理员负责审核与报表。结算用 MySQL 行锁防止库存超卖，支持 8 种语言（含 RTL）、PWA 与审计日志；限自提无配送。适合需要完整电商参考实现（SRS 驱动）的 PHP 开发者。",
+   "highlights": [
+    "结算时以数据库行锁预留库存，处理并发竞争",
+    "支持 8 种语言含从右到左书写，提供 PWA 与浅/深主题",
+    "内置在线支付、自动退款、评价体系与带 CSV 导出的管理报表"
+   ],
+   "use_cases": [
+    "农贸市场线上预订与摊位自提",
+    "需要库存行锁结算示例的 Laravel 项目参考",
+    "多语言（含 RTL）电商应用实现参考"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Database|**MySQL 8 / MariaDB 10.4+** (XAMPP)|Relational integrity, CHECK constraints, views|",
+     "lines": [
+      126
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "A complete, step-by-step guide for a **free Oracle Cloud server** (Nginx, PHP-FPM, MySQL 8, the SSR process, the queue worker, the scheduler, Cloudflare HTTPS and DDoS protection, backups and a one-command deploy script) is in the wiki: **Deployment**. The sho",
+     "lines": [
+      328
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Database|**MySQL 8 / MariaDB 10.4+** (XAMPP)|Relational integrity, CHECK constraints, views|",
+     "lines": [
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统以 MySQL 8/MariaDB 存储业务数据，是使用数据库的电商平台而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|**MySQL 8 / MariaDB 10.4+** (XAMPP)|Relational integrity, CHECK constraints, views|",
+   "evidence_lines": [
+    126
+   ]
+  },
+  "fn": "ahmershahdev/GleanGrid",
+  "sha": "82238e2f9d67",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

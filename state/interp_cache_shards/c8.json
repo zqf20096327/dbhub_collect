@@ -9661,5 +9661,72 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a3175f960164": {
+  "identity": {
+   "one_liner": "AI代理本地可审计记忆控制平面，管理上下文注入与证据记录",
+   "review": "AtMem 是面向 AI 代理的本地长期记忆控制平面：代理的每个模型/工具事件被记录到 'Agent Black Box'，记忆候选项经影子模式审查后受控注入。为 OpenClaw、Pydantic AI、LangChain/LangGraph 提供适配器，本地存储使用 SQLite（可选 SQLCipher 加密），通过 pip 安装，无需外部 API 即可运行本地记忆。",
+   "highlights": [
+    "提供 Pydantic AI、LangChain/LangGraph、OpenClaw 的适配器/中间件，代理集成默认以影子模式启动",
+    "本地使用 SQLite 存储，支持 SQLCipher 加密迁移与完整性校验，含 CLI 仪表盘与离线基准测试命令"
+   ],
+   "use_cases": [
+    "为代理框架添加受治理的长期记忆与可审计执行证据",
+    "需要本地优先、不依赖托管模型的代理记忆方案",
+    "多代理间共享项目记忆（AtMem Code）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Stop every writer before migration. AtMem validates SQLite integrity, ／ - Canonical memory, provenance, lifecycle state, and audit evidence use SQLite.",
+     "lines": [
+      60,
+      580
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明规范记忆、审计证据等数据使用 SQLite 存储，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stop every writer before migration. AtMem validates SQLite integrity, ／ AtMem: the memory control plane under every agent. Your agent runtime perceives, plans, acts and reflects; AtMem returns governed context only when policy allows, records every model and tool event in the Agent Black Box, and admits memory candidates under its own authority, with shadow mode, activation and restore.",
+   "evidence_lines": [
+    60,
+    12
+   ]
+  },
+  "fn": "aetna000/atmem",
+  "sha": "a3175f960164",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

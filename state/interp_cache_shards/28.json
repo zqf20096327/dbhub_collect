@@ -10454,5 +10454,237 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e01965c44b15": {
+  "identity": {
+   "one_liner": "自托管好友精选内容订阅源，下载并本地播放社交平台帖子",
+   "review": "ADHX 是一个自托管应用，用户保存来自 X、Instagram、TikTok 等 14 个网络的帖子链接，服务器通过 yt-dlp 下载完整媒体文件到本地并支持全文、画面、语音等多模态搜索，好友之间互相分享形成私人信息流。面向想要家人朋友共同维护内容收藏的小团体，通过 Docker 容器运行，需要持久化存储卷存放媒体和搜索模型。",
+   "highlights": [
+    "通过 yt-dlp 下载并本地保存 14 个社交网络的帖子媒体（最高 4K）",
+    "支持按文字、画面内容、视频语音、屏幕文字进行多模态搜索",
+    "提供 Web 应用、iPhone/Android 手机应用和浏览器扩展多种保存入口"
+   ],
+   "use_cases": [
+    "家庭朋友圈私下分享和保存社交媒体内容",
+    "备份可能被删除的社交平台帖子媒体文件",
+    "在自有服务器上建立不依赖推荐算法的内容流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是使用数据库存储帖子数据的自托管内容订阅应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ADHX is a private feed of the best posts from X, Instagram, TikTok, YouTube, Reddit and nine more networks, picked by your closest friends and family instead of a recommendation engine with quarterly targets. ／ Downloads run through yt-dlp, plus each network's public link-preview data for picture posts. ADHX never asks for your passwords on any of these networks. Posts that are private, blocked or protected by DRM may not download. ／ ADHX isn't a hosted service: you run it. You need somewhere to run a container with a persistent folder (a home server, a NAS, a small VPS or Fly.io), and some disk space (1,000 mixed saves come to roughly 10–30 GB). ／ ADHX listens on `127.0.0.1:3000` (`ADHX_PORT` changes it). Everything lives in one volume at `/data`: the database, the search models and every kept file. Migrations run on start. To use a published image instead of building one, pin `ADHX_IMAGE=ghcr.io/itsmemeworks/adhx@sha256:<digest>` from a release.",
+   "evidence_lines": [
+    9,
+    72,
+    87,
+    119
+   ]
+  },
+  "fn": "itsmemeworks/adhx",
+  "sha": "e01965c44b15",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6c63ed81a7dc": {
+  "identity": {
+   "one_liner": "本地文件语义搜索引擎，BM25+向量混合检索，全离线单二进制",
+   "review": "Soma 是一个本地优先的知识库/文件语义搜索工具：扫描用户指定文件夹，将文档、PDF、图片、音视频提取并索引到本地 SQLite 库（全文 + sqlite-vec 向量），结合本地 LLM 实现混合检索，通过 CLI、Web UI 或 HTTP API 查询。面向希望在不上传文件的前提下对本地资料做自然语言搜索的个人用户，需 8GB 以上内存，HTTP 端点无鉴权仅监听本机。",
+   "highlights": [
+    "支持混合检索：BM25 词法 + 稠密向量 + HyDE，经 RRF 融合与本地 LLM 重排",
+    "支持 PDF/Office/EPUB/图片/音视频等多格式提取与索引，全部模型本地运行",
+    "提供 CLI、内置 Web UI 与 HTTP API 三种访问方式，输出 text/json/csv/md/paths 格式"
+   ],
+   "use_cases": [
+    "个人笔记/文档库的离线自然语言搜索",
+    "本地代码与资料库供 AI agent / RAG 管道检索",
+    "气隙环境部署：模型与工具可 ZIP 导出导入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It indexes documents and multimedia files from folders you choose, stores everything in a local SQLite database, and ／ D --> E[\"🗄️ Local SQLite index<br/>full-text + sqlite-vec vectors\"] ／ |Index DB (SQLite)|`$XDG_STATE_HOME/soma/<workspace>.sqlite`|",
+     "lines": [
+      17,
+      79,
+      265
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "使用 SQLite 作为自身索引存储的应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "It indexes documents and multimedia files from folders you choose, stores everything in a local SQLite database, and ／     D --> E[\"🗄️ Local SQLite index<br/>full-text + sqlite-vec vectors\"] ／ |Index DB (SQLite)|`$XDG_STATE_HOME/soma/<workspace>.sqlite`|",
+   "evidence_lines": [
+    17,
+    79,
+    265
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "AwesomeDog/soma",
+  "sha": "6c63ed81a7dc",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3136cbc606ea": {
+  "identity": {
+   "one_liner": "npm 安装的嵌入式客服工单与 CRM 库，挂载进 Next.js 应用",
+   "review": "Better Helpdesk 是一个以 npm 包形式分发的帮助台组件库，提供共享收件箱、工单 SLA、轻量 CRM 和嵌入式客户聊天挂件，运行在开发者自己的 Next.js 应用中，数据写入应用自有的 PostgreSQL、MySQL、SQL Server 或 SQLite 数据库，并通过宿主应用的会话做身份识别，适合希望在自有产品内集成客服工单功能而不引入独立部署系统的团队。",
+   "highlights": [
+    "提供共享收件箱、SLA 策略、轻量 CRM（联系人与公司）及可嵌入的 <helpdesk-widget> 网页组件",
+    "数据存储于宿主应用自有数据库（PostgreSQL 14、MySQL 8.4、SQL Server 2022 或 SQLite），身份复用宿主应用会话",
+    "对话历史以 JSON Lines 导入导出，文件存储、AI 建议等能力通过适配器接口可选实现"
+   ],
+   "use_cases": [
+    "在现有 Next.js（或 Hono、SvelteKit 等）应用内嵌入客服工单系统",
+    "在自有数据库上存储客户对话、联系人与公司数据",
+    "通过 web component 挂件为非 React 站点接入客户咨询入口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "database you already run (Postgres, MySQL, SQL Server or SQLite), and your ／ - A database: PostgreSQL 14, MySQL 8.4 or SQL Server 2022 or newer, or SQLite through Node's own `node:sqlite` ／ npm install better-helpdesk pg",
+     "lines": [
+      28,
+      118,
+      33
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "database you already run (Postgres, MySQL, SQL Server or SQLite), and your ／ - A database: PostgreSQL 14, MySQL 8.4 or SQL Server 2022 or newer, or SQLite through Node's own `node:sqlite` ／ also reads `APP_DATABASE_URL`. The steps here use Postgres; on MySQL, SQL",
+     "lines": [
+      28,
+      118,
+      176
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "database you already run (Postgres, MySQL, SQL Server or SQLite), and your ／ - A database: PostgreSQL 14, MySQL 8.4 or SQL Server 2022 or newer, or SQLite through Node's own `node:sqlite` ／ `mailparser` and `mailauth`. Peer dependencies are React 19 and the driver of the host's database (`pg`, `mysql2`, or `tedious` and `tarn`; SQLite needs none).",
+     "lines": [
+      28,
+      118,
+      89
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "database you already run (Postgres, MySQL, SQL Server or SQLite), and your ／ - A database: PostgreSQL 14, MySQL 8.4 or SQL Server 2022 or newer, or SQLite through Node's own `node:sqlite` ／ Server or SQLite the URL starts with `mysql://`, `mssql://` or `file:`. For",
+     "lines": [
+      28,
+      118,
+      177
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将对话、联系人等业务数据存入宿主应用已有的 PostgreSQL、MySQL、SQL Server 或 SQLite 数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Better Helpdesk is an npm package, not a service. You mount one route ／ database you already run (Postgres, MySQL, SQL Server or SQLite), and your ／ - A database: PostgreSQL 14, MySQL 8.4 or SQL Server 2022 or newer, or SQLite through Node's own `node:sqlite`",
+   "evidence_lines": [
+    25,
+    28,
+    118
+   ]
+  },
+  "fn": "better-helpdesk/better-helpdesk",
+  "sha": "3136cbc606ea",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

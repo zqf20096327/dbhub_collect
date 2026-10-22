@@ -11506,5 +11506,149 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1eb0afe45031": {
+  "identity": {
+   "one_liner": "基于 Proton Bridge 的 Proton Mail MCP 服务器与 CLI，提供 116 个邮件操作工具",
+   "review": "该项目通过本地 IMAP/SMTP 连接 Proton Mail Bridge，为 Claude Desktop、Claude Code 等 MCP 客户端及命令行提供邮件读取、搜索、草拟、发送和整理能力，包含本地全文索引、只读/草稿等安全模式和多账户支持，面向希望在 AI 客户端中管理 Proton 邮箱的用户；依赖 Proton Bridge 运行，非 Bridge 的替代品。",
+   "highlights": [
+    "提供 116 个 MCP 工具及对应的完整 CLI 命令，覆盖邮件搜索、草拟、发送、归档等操作",
+    "支持 read-only、drafts 等模式预设、发送门控和破坏性操作确认",
+    "维护本地全文索引（SQLite），支持多账户隔离与后台同步"
+   ],
+   "use_cases": [
+    "通过 Claude Desktop/Claude Code 等 MCP 客户端管理 Proton Mail 邮箱",
+    "用脚本或 cron 以 CLI 方式自动化邮件处理（草拟、分类、搜索）",
+    "离线/本机全文搜索邮件并批量整理线程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ |`search_indexed_emails` (local SQLite index)|~10 ms| ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      120,
+      546,
+      616
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目通过 Proton Bridge 收发邮件并使用本地 SQLite 索引存储数据，是为用户提供邮件管理功能的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**How this relates to Proton Bridge.** This is a layer on top of Proton Mail Bridge, not a replacement for it. Bridge is Proton's official, local IMAP/SMTP gateway and the only supported way to reach a Proton mailbox from other software; this project talks to it. Bridge's own `--cli` mode manages Bridge itself (signing in, account details and the Bridge password, ports and other settings), it is not a mail client. Proton does not publish a terminal mail client, so reading, searching, drafting and sending from Claude or a script is what this adds on top, together with the safety controls above. Bridge has to be running and signed in. ／ Nothing goes through a third-party email relay. Proton Bridge decrypts your mail locally; this server reads it over a local IMAP connection on `127.0.0.1`. The AI model (Claude Desktop, Cline, etc.) sees the email content you ask it to act on — that's the whole point — but no email leaves your machine except through your own Proton account when you send. ／ The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken.",
+   "evidence_lines": [
+    56,
+    62,
+    120
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "1eb0afe45031",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e91033c97975": {
+  "identity": {
+   "one_liner": "自托管 Web 分析与安全监控工具，从服务器访问日志读取流量数据",
+   "review": "Skald 解析 Web 服务器访问日志，统计真实访客、AI 助手、爬虫与扫描器流量，并提供安全探测监控（暴露探测、暴力破解、假浏览器识别），每次统计由独立审计二次复核，无需 cookie 与第三方脚本。面向自托管网站管理员，支持 Docker 部署，不阻断流量、非 WAF。",
+   "highlights": [
+    "从访问日志将请求分为五组（真人、AI 助手、搜索引擎、爬虫扫描器、自有流量），五组之和等于日志总量",
+    "内置独立审计机制，用另一套解析规则复核每个统计数字，不一致时当天数据不展示",
+    "提供安全分析：扫描器识别、攻击尝试检测、假浏览器识别、针对 nginx/Cloudflare/fail2ban 的封禁清单"
+   ],
+   "use_cases": [
+    "分析 AI 助手与爬虫对网站的抓取情况（训练、问答、引用三类分流）",
+    "监控针对服务器的扫描与攻击探测",
+    "自托管替代脚本式统计方案（无需 cookie 与访客端脚本）"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      691
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Which road fits your site** (a form plugin, Next.js on Vercel, a Postgres backend, no code,",
+     "lines": [
+      578
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为分析数据库生态提供日志采集与统计能力，属于监控工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Skald reads the one record that sees every visit: **your web server's access log.** Every request ／  Licence: Elastic License 2.0",
+   "evidence_lines": [
+    43,
+    12
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "e91033c97975",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

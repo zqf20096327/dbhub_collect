@@ -10239,5 +10239,215 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f4408afab9bc": {
+  "identity": {
+   "one_liner": "KubeBlocks 的数据库插件集，提供多种数据库的 Helm 部署配置",
+   "review": "该仓库包含 KubeBlocks 的 add-ons 集合，以 Helm chart 形式为 Kubernetes 上运行 MySQL、PostgreSQL、Redis、Kafka、MongoDB、ClickHouse 等数据库及中间件提供集群定义，含主备/分片/MGR 等拓扑变体。面向在 Kubernetes 上通过 KubeBlocks 管理数据服务的运维与平台团队，使用需配合 KubeBlocks 环境。",
+   "highlights": [
+    "提供 apecloud-mysql、mysql、postgresql、redis、mongodb、clickhouse、kafka 等多种数据库与中间件的 add-on",
+    "包含 mysql-mgr、mysql-orc、redis-cluster、redis-sentinel、mongodb-shard、pulsar 多组件等拓扑形态",
+    "postgresql add-on 基于 Patroni 实现集群定义，orchestrator 提供 MySQL 高可用与复制管理组件"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上通过 KubeBlocks 部署和管理多种数据库集群",
+    "为 MySQL/PostgreSQL/Redis 等配置高可用或集群拓扑",
+    "统一纳管消息队列与搜索引擎等中间件的运行环境"
+   ],
+   "cat_note": ""
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|neon|neon-broker-1.0.0 neon-compute-1.0.0 neon-pageserver-1.0.0 neon-safekeeper-1.0.0|Neon is a serverless open-source alternative to AWS Aurora Postgres. It separates storage and compute and substitutes the PostgreSQL storage layer by redistributing data acr ／ |orioledb|orioledb-16.4.0|OrioleDB is a new storage engine for PostgreSQL, bringing a modern approach to database capacity, capabilities and performance to the world's most-loved database platform.|ApeCloud| ／ |postgresql|postgresql-12.14.0 postgresql-12.14.1 postgresql-12.15.0 postgresql-12.22.0 postgresql-13.23.0 postgresql-14.18.0 postgresql-14.23.0 postgresql-14.7.2 postgresql-14.8.0 postgresql-15.13.0 postgresql-15.18.0 postgresql-15.7.0 postgresql-16.14.0 post ／ |vanilla-postgresql|supabase-15.6.1-138 anilla-postgresql-12.15.0 anilla-postgresql-14.7.0 anilla-postgresql-15.7.0|Vanilla-PostgreSQL is compatible with the native PostgreSQL kernel, enabling it to quickly provide HA solutions for various variants based on th",
+     "lines": [
+      27,
+      32,
+      34,
+      45
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|apecloud-mysql|apecloud-mysql-8.0.30 wescale-0.2.7|ApeCloud MySQL is a database that is compatible with MySQL syntax and achieves high availability through the utilization of the RAFT consensus protocol.|xuriwuyun| ／ |mysql|mysql-5.7.44 mysql-8.0.45 mysql-8.0.46 mysql-8.4.10 mysql-8.4.9 mysql-mgr-8.0.45 mysql-mgr-8.0.46 mysql-mgr-8.4.10 mysql-mgr-8.4.9 mysql-orc-5.7.44 mysql-orc-8.0.45 mysql-orc-8.0.46 mysql-proxysql-2.4.4|MySQL is a widely used, open-source relational dat ／ |orchestrator|orchestrator-3.2.6|Orchestrator is a MySQL high availability and replication management tool, runs as a service and provides command line access, HTTP API and Web interface.|ApeCloud| ／ |tidb|tidb-6.5.12 tidb-7.1.5 tidb-7.1.6-enterprise tidb-7.5.2 tidb-8.4.0 tidb-pd-6.5.12 tidb-pd-7.1.5 tidb-pd-7.1.6-enterprise tidb-pd-7.5.2 tidb-pd-8.4.0 tikv-6.5.12 tikv-7.1.5 tikv-7.1.6-enterprise tikv-7.5.2 tikv-8.4.0|TiDB is an open-source, cloud-native, ",
+     "lines": [
+      9,
+      24,
+      31,
+      43
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|clickhouse|clickhouse-22.3.18 clickhouse-22.3.20 clickhouse-22.6.1 clickhouse-22.8.21 clickhouse-22.9.4 clickhouse-24.12.2 clickhouse-24.7.2 clickhouse-24.8.3 clickhouse-25.4.4 clickhouse-25.9.7|ClickHouse is an open-source column-oriented OLAP database manag",
+     "lines": [
+      10
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|mariadb|mariadb-10.6.15 mariadb-11.4.10 mariadb-11.4.5 mariadb-11.4.8 mariadb-11.8.4 mariadb-12.0.2|MariaDB is a high performance open source relational database management system that is widely used for web and application servers|ApeCloud yinmin|",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|tidb|tidb-6.5.12 tidb-7.1.5 tidb-7.1.6-enterprise tidb-7.5.2 tidb-8.4.0 tidb-pd-6.5.12 tidb-pd-7.1.5 tidb-pd-7.1.6-enterprise tidb-pd-7.5.2 tidb-pd-8.4.0 tikv-6.5.12 tikv-7.1.5 tikv-7.1.6-enterprise tikv-7.5.2 tikv-8.4.0|TiDB is an open-source, cloud-native, ",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|oceanbase-ce|oceanbase-ce-4.2.1 oceanbase-ce-4.2.5 oceanbase-ce-4.3.5|OceanBase has served over 400 customers across the globe and has been supporting all mission critical systems in Alipay.|Powerfooi shanshanying|",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "|polardbx|polardbx-cdc-2.3.0 polardbx-cn-2.3.0 polardbx-dn-2.3.0 polardbx-gms-2.3.0|PolarDB-X is a cloud native distributed SQL Database designed for high concurrency, massive storage, complex querying scenarios.|ApeCloud Vettal Wu|",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "|yashandb|yashandb-23.1.1-100|YashanDB is a new database system completely independently designed and developed by SICS. Based on classical database theories, it incorporates original Bounded Evaluation theory, Approximation theory, Parallel Scalability theory",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为多种数据库提供 Helm add-on 部署配置，属于为数据库生态服务的部署工具集",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase",
+    "PolarDB",
+    "YashanDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## Supported Add-ons ／ |mysql|mysql-5.7.44 mysql-8.0.45 mysql-8.0.46 mysql-8.4.10 mysql-8.4.9 mysql-mgr-8.0.45 mysql-mgr-8.0.46 mysql-mgr-8.4.10 mysql-mgr-8.4.9 mysql-orc-5.7.44 mysql-orc-8.0.45 mysql-orc-8.0.46 mysql-proxysql-2.4.4|MySQL is a widely used, open-source relational database management system (RDBMS)|xuriwuyun| ／ |postgresql|postgresql-12.14.0 postgresql-12.14.1 postgresql-12.15.0 postgresql-12.22.0 postgresql-13.23.0 postgresql-14.18.0 postgresql-14.23.0 postgresql-14.7.2 postgresql-14.8.0 postgresql-15.13.0 postgresql-15.18.0 postgresql-15.7.0 postgresql-16.14.0 postgresql-16.4.0 postgresql-16.9.0 postgresql-17.10.0 postgresql-17.5.0 postgresql-18.1.0 postgresql-18.4.0|A PostgreSQL (with Patroni HA) cluster definition Helm chart for Kubernetes|ldming dingshun-cmss|",
+   "evidence_lines": [
+    6,
+    24,
+    34
+   ]
+  },
+  "fn": "apecloud/kubeblocks-addons",
+  "sha": "f4408afab9bc",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eecd5903dd4d": {
+  "identity": {
+   "one_liner": "开源自托管项目与任务跟踪系统，NestJS+Nuxt3+PostgreSQL 单体应用",
+   "review": "这是一个面向团队与代理机构的项目/任务管理系统，包含看板、时间跟踪、聊天与音视频通话、知识库、内置邮件、自托管 git 等模块，提供 Docker Compose 或 pnpm 源码两种部署方式。使用 PostgreSQL 存储数据，采用 AGPL v3 许可，支持通过环境变量指定测试数据库运行集成测试。",
+   "highlights": [
+    "提供看板任务管理、时间跟踪、负载规划、报表导出 XLSX、CRM、聊天与 WebRTC 音视频、知识库、内置邮件与自托管 git 托管",
+    "基于 NestJS、TypeORM、PostgreSQL、Nuxt 3 构建，提供 OpenAPI/Swagger 文档化 API",
+    "支持 Docker Compose 一键部署与无 Docker 的 pnpm 源码运行，含数据库自动迁移机制"
+   ],
+   "use_cases": [
+    "工作室与代理机构管理客户项目、工时与团队负载",
+    "产品团队进行看板/冲刺管理与知识库协作",
+    "需要数据留在自有服务器的自托管部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ Интеграционные проверки запускаются с `CRM_TEST_DATABASE_URL`, указывающим **только на отдельную тестовую PostgreSQL-базу с `crm_test` в имени**: `pnpm --filter backend exec jest --runInBand crm.integration.spec`. Проверки применяют миграции и создают тестовые ／ - **Backend:** NestJS, TypeORM, PostgreSQL, WebRTC (mediasoup), WebSockets.",
+     "lines": [
+      13,
+      57,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明技术栈为 NestJS/Nuxt/PostgreSQL，是使用 PostgreSQL 存储数据的项目管理应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Backend: NestJS ／ PostgreSQL ／ Полный комплект (PostgreSQL + API + веб-приложение) одной командой: ／ docker compose up --build",
+   "evidence_lines": [
+    10,
+    13,
+    132,
+    136
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ar-webcetera/nervion",
+  "sha": "eecd5903dd4d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

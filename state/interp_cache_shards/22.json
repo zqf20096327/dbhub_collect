@@ -10337,5 +10337,102 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3ab6141e18a2": {
+  "identity": {
+   "one_liner": "Django 数据库任务队列后端，将任务与状态存于数据库",
+   "review": "dj_queue 是面向 django.tasks 框架的数据库任务队列后端，供 Django 应用在无需 Redis/RabbitMQ 的情况下运行后台任务。它把队列、执行状态与结果存入 Django 管理的表，PostgreSQL 为一等后端（支持 SKIP LOCKED 与 LISTEN/NOTIFY），SQLite 有限制。提供 admin 运维仪表盘与 worker/dispatcher/scheduler 运行时。",
+   "highlights": [
+    "提供基于 django.tasks API 的任务队列后端，支持即时、定时、周期与并发受限任务",
+    "将任务与结果持久化在数据库表中，PostgreSQL 可用 LISTEN/NOTIFY 与 SKIP LOCKED 优化",
+    "内置 Django admin 运维仪表盘，支持暂停/恢复队列、重试与丢弃失败任务"
+   ],
+   "use_cases": [
+    "Django 应用的后台任务与定时作业调度",
+    "不引入独立消息中间件、复用现有数据库作为任务存储的场景",
+    "通过 admin 仪表盘进行队列运维与失败任务排查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL is the first-class production backend ／ - PostgreSQL can use `LISTEN/NOTIFY` and `SKIP LOCKED` as optimizations ／ pip install \"dj-queue[postgres]\" # psycopg for PostgreSQL + LISTEN/NOTIFY",
+     "lines": [
+      15,
+      32,
+      57
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL, MariaDB, and SQLite are supported at Django's version floors ／ |MySQL|supported|polling plus `SKIP LOCKED`|",
+     "lines": [
+      16,
+      312
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- MySQL, MariaDB, and SQLite are supported at Django's version floors ／ |SQLite|supported with limits|polling only, serialized writes, no `SKIP LOCKED`, no `LISTEN/NOTIFY`; practical for development, CI, and smaller deployments|",
+     "lines": [
+      16,
+      314
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL, MariaDB, and SQLite are supported at Django's version floors ／ |MariaDB|supported|polling plus `SKIP LOCKED`|",
+     "lines": [
+      16,
+      313
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用数据库存储任务队列与结果数据，属于使用数据库的组件而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dj_queue` is a database-backed task queue backend for the `django.tasks` framework. ／ It keeps the queue, live execution state, runtime metadata, and task results in your database. ／ - `DjQueueBackend` stores jobs and results in Django-managed tables",
+   "evidence_lines": [
+    10,
+    12,
+    30
+   ]
+  },
+  "fn": "coriocactus/dj_queue",
+  "sha": "3ab6141e18a2",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

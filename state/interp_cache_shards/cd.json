@@ -10500,5 +10500,294 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "350fa967e803": {
+  "identity": {
+   "one_liner": "基于 git 的 AI 代理故障记忆库，经 MCP 提供检索服务",
+   "review": "MisakaNet 将已验证的故障修复经验以 Markdown 文件形式存于 git 仓库，按 E0–E4 证据分级，通过 BM25 检索，以 MCP server（8 个工具）、Claude Code/DSH 插件及公共 HTTP 端点对外提供查询。面向 AI 编码代理及其使用者，检索不到时返回 no_match 并生成 intake 表单。检索为关键词 BM25，不使用向量数据库。",
+   "highlights": [
+    "提供 MCP server（8 个工具）、WebMCP、llms.txt、A2A discovery 等代理接口",
+    "经验条目以 Markdown 存储并按 E0–E4 证据等级分级，检索采用 Python 标准库 BM25",
+    "支持 10 个 MCP 客户端安装器、Claude Code 插件、GitHub Action 等多种使用方式"
+   ],
+   "use_cases": [
+    "AI 编码代理在调试时检索已有的故障修复经验",
+    "CI 工作流失败时通过 GitHub Action 检索并评论最接近的修复方案",
+    "提交新的故障报告（intake）以扩充经验库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 AI 编码代理提供故障经验检索的知识库服务，属数据库生态外的一般工具；README 声明不使用向量数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> MisakaNet is that place: a git-backed **failure memory**. Every lesson is a Markdown file in this ／ Agent-native interfaces: MCP server (8 tools), WebMCP, `llms.txt`, ／ Every lesson is a Markdown file: reviewed like code, graded by evidence, retrieved with BM25 over the",
+   "evidence_lines": [
+    13,
+    17,
+    87
+   ]
+  },
+  "fn": "Ikalus1988/MisakaNet",
+  "sha": "350fa967e803",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e758958a4633": {
+  "identity": {
+   "one_liner": "自托管家庭网络实时监控仪表盘，Go+React，SSE 推送",
+   "review": "NetPulse 是一个面向 OpenWrt/GL.iNet 家庭网络的自托管监控应用，提供路由器健康评分、拓扑图、设备清单、WireGuard 与 AdGuard Home 统计和告警，通过 SSE 实时更新，并内置只读 MCP 服务器供 AI 助手查询。面向家庭/小型网络自托管用户，数据存储使用 SQLite，以单二进制部署，支持 ES/EN 多语言与 PWA 安装。",
+   "highlights": [
+    "通过 SSE 每 5 秒实时更新路由器健康、流量、WireGuard 对端与 AdGuard Home 统计",
+    "从桥接 FDB 和 LLDP 实时推断网络拓扑，支持 SNMP 管理的交换机",
+    "内置只读 MCP 服务器（默认关闭），供 AI 助手以 API token 查询网络状态"
+   ],
+   "use_cases": [
+    "监控 OpenWrt/GL.iNet 路由器家庭网络的运行状态与设备接入",
+    "通过内置固件升级流程从 UI 管理 OpenWrt 设备集群",
+    "将网络状态经 MQTT 发布到 Home Assistant（可选开启）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是一个家庭网络监控应用，SQLite 仅作为其自身的数据存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " The pulse of your home network. Real time. No cloud. ／ **Fleet overview and a health score that means something.** One 0-100 score ／ **An MCP server for your AI assistant.** NetPulse embeds a read-only",
+   "evidence_lines": [
+    12,
+    34,
+    99
+   ]
+  },
+  "fn": "gnacho/netpulse",
+  "sha": "e758958a4633",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eff75f0e0d30": {
+  "identity": {
+   "one_liner": "自托管的 AI 任务与习惯管理应用，单容器内置 SQLite",
+   "review": "OpenTask 是一个自托管任务与习惯管理器，提供 Web（PWA）、iOS、Apple Watch、Mac 客户端及完整 REST API 与 Webhooks；以单个 Docker 容器运行，数据存储在内置 SQLite（WAL 模式），无需外部数据库。可选 AI 功能默认关闭，需自行配置 Claude/GPT 等供应商密钥。适合希望个人自建任务管理的用户。",
+   "highlights": [
+    "单 Docker 容器运行，使用 SQLite（WAL 模式），支持通过 sqlite3 .backup 备份单文件数据",
+    "提供完整 REST API（含 OpenAPI 3.1 规范）、Bearer token 认证与 HMAC 签名 Webhooks",
+    "可选 AI 功能：自然语言输入任务、任务评分与洞察，支持 Claude、GPT、Ollama 等多种供应商"
+   ],
+   "use_cases": [
+    "个人自托管任务与习惯追踪（Web/iOS/Apple Watch/Mac）",
+    "通过 REST API 或 Webhooks 集成到自动化流程（n8n、Home Assistant、Apple Shortcuts）",
+    "依赖反向代理认证（Authelia/Authentik）的自建服务环境"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single container. SQLite. Your data, your server. ／ It runs as a single Docker container with SQLite — no Postgres, no Redis, no external services to manage. Your data lives in one file on your server. ／ - **Single container** — SQLite with WAL mode. No external database, no message queue, no cache layer. Back up your data by copying one file. ／ |Database|SQLite with WAL mode (better-sqlite3)|",
+     "lines": [
+      6,
+      25,
+      40,
+      228
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "It runs as a single Docker container with SQLite — no Postgres, no Redis, no external services to manage. Your data lives in one file on your server.",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用内置 SQLite 存储任务数据，而非为数据库生态提供工具或组件",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai_placeholder": null,
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Single container. SQLite. Your data, your server. ／ It runs as a single Docker container with SQLite — no Postgres, no Redis, no external services to manage. Your data lives in one file on your server. ／ |Database|SQLite with WAL mode (better-sqlite3)|",
+   "evidence_lines": [
+    6,
+    25,
+    228
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "trentmcnitt/opentask",
+  "sha": "eff75f0e0d30",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bda71fc12cda": {
+  "identity": {
+   "one_liner": "MySQL 与 openGauss 双向 SQL 文件离线转换的 Windows 桌面工具",
+   "review": "这是一个离线运行的 Windows 桌面 SQL 文件转换工具，用于在 MySQL 与 openGauss 之间双向转换 .sql 文件，无需连接数据库。核心采用保守子集策略：无法安全转换的语句在 JSON 报告中标记为 BLOCKER 并输出 _review.sql，单文件上限 500 MiB、单条语句 32 MiB。转换结果须经目标库人工执行验证。适合需要在两种库间迁移表结构与数据脚本、又能接受人工处理阻断语句的开发/运维人员。",
+   "highlights": [
+    "支持 MySQL 与 openGauss 双向 .sql 文件转换，无需数据库连接，本地离线处理",
+    "按行号输出 INFO/WARNING/BLOCKER 的 JSON 报告，无法安全转换的语句生成 *_review.sql 并阻断",
+    "支持最大 500 MiB 文件的流式解析与增量输出，单条 SQL 超 32 MiB 阻断，支持进度与取消"
+   ],
+   "use_cases": [
+    "MySQL 与 openGauss 之间的离线 SQL 脚本迁移准备",
+    "无法直连生产库环境下的表结构与数据脚本转换",
+    "需逐条审查转换结果并人工处理阻断语句的迁移流程"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# SQL Converter | MySQL ↔ OpenGauss 桌面转换工具 ／ - MySQL → openGauss / openGauss → MySQL 双向转换。 ／ 一个无需数据库连接、无需远程后端的 **Windows 离线 SQL 文件转换工具**。桌面界面使用 PySide6，SQL 转换核心仅依赖 Python 标准库。支持 MySQL 与 OpenGauss 的**保守子集**转换，无法安全转换的语句会在报告中明确标记，不能视为完整迁移成功。",
+     "lines": [
+      1,
+      9,
+      3
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# SQL Converter | MySQL ↔ OpenGauss 桌面转换工具 ／ - MySQL → openGauss / openGauss → MySQL 双向转换。 ／ 一个无需数据库连接、无需远程后端的 **Windows 离线 SQL 文件转换工具**。桌面界面使用 PySide6，SQL 转换核心仅依赖 Python 标准库。支持 MySQL 与 OpenGauss 的**保守子集**转换，无法安全转换的语句会在报告中明确标记，不能视为完整迁移成功。",
+     "lines": [
+      1,
+      9,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具本身不存储数据，专门为 MySQL/openGauss 之间的 SQL 文件转换服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# SQL Converter | MySQL ↔ OpenGauss 桌面转换工具 ／ 一个无需数据库连接、无需远程后端的 **Windows 离线 SQL 文件转换工具**。桌面界面使用 PySide6，SQL 转换核心仅依赖 Python 标准库。支持 MySQL 与 OpenGauss 的**保守子集**转换，无法安全转换的语句会在报告中明确标记，不能视为完整迁移成功。 ／ - MySQL → openGauss / openGauss → MySQL 双向转换。",
+   "evidence_lines": [
+    1,
+    3,
+    9
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "lhuat/sql-converter",
+  "sha": "bda71fc12cda",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

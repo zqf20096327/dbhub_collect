@@ -10648,5 +10648,77 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6656ec3e647e": {
+  "identity": {
+   "one_liner": "Windows 无头 HTTP/HTTPS 抓包脚本，经共享内存驱动 HTTPDebugger 服务并可选存入 SQLite",
+   "review": "一个 PowerShell 脚本，在 Windows 上无 GUI 安装并驱动 HTTPDebugger 抓包服务，通过内核命名内存映射环缓冲读取请求/响应事务，并借助系统信任 CA 解密 TLS；可选将捕获流式上传到纯 Python 标准库实现的 collector，数据存储于 SQLite 并提供带图表与全文搜索的 Web UI。面向需要headless抓包与集中收集的 Windows 环境使用者。",
+   "highlights": [
+    "通过命名内存映射对象模拟 GUI 无头驱动抓包服务，解密 HTTPS 明文输出",
+    "支持后台常驻、开机持久化任务与有界缓冲的连续采集",
+    "可选 collector 以纯 Python 标准库运行，捕获存入 SQLite 并提供分页/搜索/图表的 Web UI 与 JSON API"
+   ],
+   "use_cases": [
+    "Windows 上无 GUI 环境的 HTTP/HTTPS 流量捕获与 TLS 解密",
+    "多机代理集中收集与 Web 界面浏览、检索捕获记录",
+    "通过 JSON API 对捕获事务做程序化查询"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**SQLite**. ／ |`--data`|`captures.db`|SQLite database file (created if missing)|",
+     "lines": [
+      69,
+      83
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为 collector 的内置存储使用，项目本身是抓包应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "## Central collector (`server.py`) ／ **SQLite**. ／ `HTTPDebuggerSvc.exe` normally only captures while its GUI is running. The GUI and",
+   "evidence_lines": [
+    64,
+    69,
+    131
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "portbuster1337/NetSnitch",
+  "sha": "6656ec3e647e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

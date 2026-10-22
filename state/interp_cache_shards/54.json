@@ -9351,5 +9351,134 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9d09bae36a11": {
+  "identity": {
+   "one_liner": "面向 AI 编程客户端的 MCP 数据库查询服务器",
+   "review": "OmniSQL 是一个 MCP 服务器，为 Claude Code、Codex、OpenCode 等客户端提供数据库查询能力。它通过原生驱动支持 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、Oracle、DuckDB、ClickHouse 等引擎，可复用 DBeaver 已保存的连接配置，默认只读，支持连接白名单、工具禁用、多实例和事务。适合想让 AI 客户端安全查询自有数据库的开发者。",
+   "highlights": [
+    "通过 pg、mysql2、mssql、oracledb 等原生驱动跨引擎执行查询，可复用 DBeaver 连接配置",
+    "默认只读模式，支持连接白名单、工具禁用、SSH 隧道和 RDS IAM 认证",
+    "提供模式浏览、查询解释、CSV/JSON 导出、分页读取与显式事务工具"
+   ],
+   "use_cases": [
+    "在 Claude Code/Codex/OpenCode 中让 AI 查询和分析现有数据库",
+    "以只读受控方式向 AI 客户端开放生产或开发库访问",
+    "多数据库实例统一注册，按调用切换连接与数据库"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Query across engines**|PostgreSQL, MySQL/MariaDB, SQLite, SQL Server, Oracle, DuckDB, and ClickHouse.| ／ - PostgreSQL (via `pg`)",
+     "lines": [
+      26,
+      35
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**Query across engines**|PostgreSQL, MySQL/MariaDB, SQLite, SQL Server, Oracle, DuckDB, and ClickHouse.| ／ - MySQL / MariaDB (via `mysql2`)",
+     "lines": [
+      26,
+      36
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Query across engines**|PostgreSQL, MySQL/MariaDB, SQLite, SQL Server, Oracle, DuckDB, and ClickHouse.| ／ - MySQL / MariaDB (via `mysql2`)",
+     "lines": [
+      26,
+      36
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Query across engines**|PostgreSQL, MySQL/MariaDB, SQLite, SQL Server, Oracle, DuckDB, and ClickHouse.| ／ - SQLite (via `sqlite3` CLI)",
+     "lines": [
+      26,
+      38
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**Query across engines**|PostgreSQL, MySQL/MariaDB, SQLite, SQL Server, Oracle, DuckDB, and ClickHouse.| ／ - SQL Server / MSSQL (via `mssql`)",
+     "lines": [
+      26,
+      37
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|**Query across engines**|PostgreSQL, MySQL/MariaDB, SQLite, SQL Server, Oracle, DuckDB, and ClickHouse.| ／ - Oracle (via `oracledb`)",
+     "lines": [
+      26,
+      41
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Query across engines**|PostgreSQL, MySQL/MariaDB, SQLite, SQL Server, Oracle, DuckDB, and ClickHouse.| ／ - ClickHouse (HTTP/HTTPS with keep-alive and zstd/gzip; no external client)",
+     "lines": [
+      26,
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 AI 客户端提供数据库查询服务的 MCP 服务器组件，而非使用数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server",
+    "Oracle",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Give Claude Code, Codex, and OpenCode access to the databases you already use. ／ **Supported execution paths**: ／ |**Control access**|Choose read-only mode, restrict connections, or disable tools.|",
+   "evidence_lines": [
+    3,
+    34,
+    29
+   ]
+  },
+  "fn": "srthkdev/omnisql-mcp",
+  "sha": "9d09bae36a11",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

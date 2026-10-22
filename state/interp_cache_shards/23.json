@@ -10929,5 +10929,77 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "605fb5e2bd29": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 PHP/Symfony 容错全文搜索库",
+   "review": "Fuzzphony 是一个面向 PHP 8.4+ 与 Symfony 的搜索开发库，在 PostgreSQL 内部实现容错、重音不敏感、可排序的全文搜索，索引存于不改动原表的旁路表中，依赖 pg_trgm 与 unaccent 扩展，无需额外搜索服务。仅支持 PostgreSQL 15+，通过 composer 安装，提供 Symfony bundle 与纯 PHP 两种接入方式。",
+   "highlights": [
+    "在 PostgreSQL 内实现 typo 容错、重音折叠、相关性排序的全文搜索，索引存于 sidecar 表，不改动原表",
+    "提供查询语言（AND/OR/NOT、短语、前缀、字段限定）及触发器/ORM/手动同步模式",
+    "支持 28 种语言词干提取、多租户过滤、搜索日志与限流"
+   ],
+   "use_cases": [
+    "为无法改表或不能新增搜索服务的系统替换 LIKE 查询",
+    "多租户 SaaS 中需强制租户过滤的搜索场景",
+    "后台管理面板、CRM 等需要即输即搜和分面筛选的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 15 | 16 | 17 | 18 ／ Fuzzphony is a PostgreSQL-native search library for PHP and Symfony: typo-tolerant, ／ solution was generalised, tested against PostgreSQL 15 to 18, and released as a library.",
+     "lines": [
+      12,
+      18,
+      104
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 提供搜索能力的 PHP 开发库，属于数据库生态服务组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Fuzzphony is a PostgreSQL-native search library for PHP and Symfony: typo-tolerant, ／ your tables. The index lives in a sidecar table next to them, in the database you already run. ／ - PostgreSQL 15+ with the `pg_trgm` and `unaccent` extensions. Both ship with PostgreSQL, but a",
+   "evidence_lines": [
+    18,
+    20,
+    146
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "er2es/fuzzphony",
+  "sha": "605fb5e2bd29",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

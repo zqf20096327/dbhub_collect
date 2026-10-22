@@ -8146,5 +8146,71 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bd769d53b2e7": {
+  "identity": {
+   "one_liner": "Rust 库，进程内实现 Litestream 兼容的 SQLite WAL 复制到 S3",
+   "review": "以 Rust 库和 CLI 两种形态提供 SQLite 复制：读取 WAL 帧生成 Litestream v0.5+ 兼容的 LTX 文件并流式写入 S3 或本地目录，支持按时间点恢复与互操作还原。面向在应用进程内需要灾难恢复备份、又不想部署 sidecar 的 Rust 开发者。限制包括每次启动需全量快照、不支持故障切换。",
+   "highlights": [
+    "以库或 CLI 方式将 SQLite WAL 流式复制为 LTX 文件至 S3 及兼容存储",
+    "文件格式与 Litestream v0.5+ 兼容，可与 litestream 双向恢复副本",
+    "支持按 TXID 时间点恢复、k-way 压实与基于条件 PUT 的租约机制"
+   ],
+   "use_cases": [
+    "Rust 应用的进程内 SQLite 灾难恢复备份",
+    "需要与现有 Litestream 副本互操作或迁移的备份管道",
+    "基于 S3 的按时间点恢复与异地副本存储"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Litestream-compatible SQLite replication as a Rust library. It runs inside your ／ use sqlite_rs_stream::{Options, Replica, Replicator};",
+     "lines": [
+      3,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 数据库提供复制备份能力的库/工具，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Litestream-compatible SQLite replication as a Rust library. It runs inside your ／ S3 (or any S3-compatible store, or a local directory) and restores from them. The ／ > This is a disaster-recovery tool, not a distributed database. A standby only",
+   "evidence_lines": [
+    3,
+    7,
+    11
+   ]
+  },
+  "fn": "dawsbot/sqlite-rs-stream",
+  "sha": "bd769d53b2e7",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11586,5 +11586,71 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "94850cd6f038": {
+  "identity": {
+   "one_liner": "Rust/GTK4 编写的 Linux 键盘优先文件管理器",
+   "review": "Flux 是一个面向 Linux/GNOME 的 GTK4 文件管理器，支持压缩包浏览、文件内搜索、SMB/SFTP 等网络位置、标签、预览面板与内嵌终端；SQLite 仅用于存储文件标签，不是数据库工具。适合需要键盘操作和快速启动的桌面用户，通过 Flatpak、AUR 或源码安装，需 GTK4 与 libadwaita 1.5+。",
+   "highlights": [
+    "多线程目录加载（Rayon）与异步 I/O（Tokio），支持 zip/7z/rar/tar/iso/deb 压缩包直接浏览",
+    "支持 SMB、SFTP、FTP、WebDAV、NFS、MTP、Google Drive 及 LUKS 加密卷",
+    "标签存储使用 SQLite，基于 xdg.tags 文件属性；内置主题引擎与快捷键编辑"
+   ],
+   "use_cases": [
+    "Linux 桌面（GNOME/Wayland）日常文件管理",
+    "通过 SMB/SFTP/FTP 等协议浏览远程服务器文件",
+    "压缩包内容预览与文件标签管理"
+   ],
+   "use_cases_ok": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Rust, Relm4 and GTK4, Tokio and Rayon, Nucleo for fuzzy matching, the `ignore` crate for directory walking, and SQLite for tags. There are 600+ tests (`sh tests.sh`), and the parsers are fuzzed with libFuzzer.",
+     "lines": [
+      197
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "文件管理器应用仅将 SQLite 用于存储文件标签，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPLv3",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Flux is a GTK4/Libadwaita file manager for Linux, written in Rust. I wanted something that opens instantly, looks at home on GNOME and Wayland, and can be driven from the keyboard. It does that, and it does it faster than the other GUI file managers I tried. ／ Rust, Relm4 and GTK4, Tokio and Rayon, Nucleo for fuzzy matching, the `ignore` crate for directory walking, and SQLite for tags. There are 600+ tests (`sh tests.sh`), and the parsers are fuzzed with libFuzzer.",
+   "evidence_lines": [
+    7,
+    197
+   ]
+  },
+  "fn": "killown/flux",
+  "sha": "94850cd6f038",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

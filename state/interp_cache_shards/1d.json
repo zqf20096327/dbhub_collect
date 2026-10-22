@@ -7815,5 +7815,155 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "37cc445b46cd": {
+  "identity": {
+   "one_liner": "聚合 Ashby/Lever/Greenhouse 职位的招聘信息板，数据存 PostgreSQL",
+   "review": "一个职位聚合系统，通过各 ATS 平台适配器抓取公开招聘列表，存入 PostgreSQL 并跟踪职位增删变化，前端为 Next.js 应用，支持每日定时爬取、自动发现新公司招聘板和 CLI/网页添加公司。面向求职者提供筛选浏览，面向自托管用户以 Docker Compose 部署。注意数据库部署依赖 Cloudflare Tunnel 访问。",
+   "highlights": [
+    "支持 Ashby、Lever、Greenhouse 三种 ATS 的抓取适配器，通过内容哈希检测职位新增/更新/移除",
+    "提供基于 Common Crawl CDX API 的自动公司发现，以及网页 UI 和 CLI 添加公司",
+    "内置 node-cron 定时调度与 Docker Compose 部署，生成 Markdown 报告"
+   ],
+   "use_cases": [
+    "自托管个人职位聚合板，按角色/地点/远程筛选职位",
+    "定期跟踪目标公司招聘页变化并生成日报",
+    "批量发现使用 Ashby/Greenhouse 的公司招聘板并入库"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A production-grade system that scrapes public job listings across **Ashby, Lever, and Greenhouse** — hundreds of companies and counting — persists them in PostgreSQL, tracks changes over time, and surfaces actionable opportunities through a Next.js frontend wi ／ - **Database** — Postgres 17 runs on the same Oracle ARM server as the frontend (`db` in `deploy/web/docker-compose.yml`), with no published port. The web app reaches it on the compose network; everything else comes in through the Cloudflare Tunnel at `db.what ／ |Database|PostgreSQL 17, self-hosted, SSL, multi-URL failover|",
+     "lines": [
+      3,
+      32,
+      110
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Self-hosted Database** — Postgres next to the web app on the Oracle server (see Deployment), with no public port: the scraper and GitHub Actions reach it through a Cloudflare Tunnel with an Access service token ／ - **Frontend** — https://jobs.whatrunsindia.com. A Next.js standalone container on an Oracle ARM server, reached through a Cloudflare Tunnel (no open ports); Cloudflare provides DNS, edge caching and the firewall. `.github/workflows/deploy-web.yml` builds the  ／ - **Database** — Postgres 17 runs on the same Oracle ARM server as the frontend (`db` in `deploy/web/docker-compose.yml`), with no published port. The web app reaches it on the compose network; everything else comes in through the Cloudflare Tunnel at `db.what",
+     "lines": [
+      13,
+      31,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统以 PostgreSQL 存储抓取的职位数据，属使用数据库的终端应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A production-grade system that scrapes public job listings across **Ashby, Lever, and Greenhouse** — hundreds of companies and counting — persists them in PostgreSQL, tracks changes over time, and surfaces actionable opportunities through a Next.js frontend with intelligent scoring. ／ - **Database** — Postgres 17 runs on the same Oracle ARM server as the frontend (`db` in `deploy/web/docker-compose.yml`), with no published port. The web app reaches it on the compose network; everything else comes in through the Cloudflare Tunnel at `db.whatrunsindia.com`, which only lets through the Access service token `jobs-db` (`cloudflared access tcp` on the client side). Nightly backups: `deploy/db/backup.sh`.",
+   "evidence_lines": [
+    3,
+    32
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "rishilahoti/ashby-job-scraper",
+  "sha": "37cc445b46cd",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c6dc0b61aa6c": {
+  "identity": {
+   "one_liner": "将 EduVulcan 电子成绩册接入 Home Assistant 的附加组件",
+   "review": "Vultron 是一个 Home Assistant 附加组件，通过 headless Chromium/Selenium 登录 EduVulcan 电子成绩册，抓取成绩、考勤、消息、课程表等数据并生成 Lovelace 卡片展示，内置随机请求间隔等反检测机制。数据存储于本地 SQLite 库（vultron.db）。面向使用 EduVulcan 的家长和学生，部署为 HA 附加组件或 Docker 容器。README 明示使用该项目违反 EduVulcan 服务条款。",
+   "highlights": [
+    "以 Home Assistant 附加组件或 Docker 容器运行，通过 Selenium Headless 登录并抓取 EduVulcan 数据",
+    "将成绩、消息、考勤、课程表等数据写入本地 SQLite 数据库（vultron.db）",
+    "自动注册 Lovelace 卡片资源，支持多学生账户及幼儿园账户的独立数据路径"
+   ],
+   "use_cases": [
+    "家长在 Home Assistant 中查看子女的 EduVulcan 成绩、消息与课程表",
+    "基于成绩或消息变化配置 HA 自动化通知",
+    "幼儿园账户的出勤、餐单与消息查看"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`vultron.py`|🔑 Logowanie 📝 Oceny 💬 Uwagi ✉️ Wiadomości 📅 Plan lekcji 🎒 Zadania ✔️ Frekwencja 🏆 Osiągnięcia 📊 Monitoring 🎨 UI Setup ⚙️ Orkiestrator 👩‍🏫 Zebrania 🧸 Przedszkole|Główny silnik aplikacji. Obsługuje logowanie **Selenium Headless** (Panel Rodzica + P",
+     "lines": [
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储抓取的成绩册数据，SQLite 仅为其数据存储层，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Vultron** to **totalnieNIEzaawansowana** integracja Home Assistant z systemem dziennika elektronicznego **EduVulcan.pl**. Dodatek został zaprojektowany, aby dostarczać rodzicom i uczniom kluczowe informacje o edukacji w sposób przejrzysty, zautomatyzowany i bezpieczny. ／ |`vultron.py`|🔑 Logowanie 📝 Oceny 💬 Uwagi ✉️ Wiadomości 📅 Plan lekcji 🎒 Zadania ✔️ Frekwencja 🏆 Osiągnięcia 📊 Monitoring 🎨 UI Setup ⚙️ Orkiestrator 👩‍🏫 Zebrania 🧸 Przedszkole|Główny silnik aplikacji. Obsługuje logowanie **Selenium Headless** (Panel Rodzica + Panel Wiadomości), ekstrakcję kluczy sesji (`key`), pobieranie ocen, uwag, wiadomości, planu lekcji, zadań, frekwencji i osiągnięć. Automatycznie rozpoznaje konta przedszkolne i przetwarza je osobną ścieżką (plan zajęć, ewidencja obecności, jadłospis, zebrania, opłaty, informacje o placówce, nauczyciele). Zarządza bazą **SQLite** (`vultron.db`), monitoringiem zasobów, automatyczną rejestracją kart w Home Assistant oraz pętlą czasową z mechanizmem anty-detekcji.| ／ Vultron jest dostępny jako standardowe repozytorium Home Assistant.",
+   "evidence_lines": [
+    45,
+    104,
+    131
+   ]
+  },
+  "fn": "htomasz/vultron",
+  "sha": "c6dc0b61aa6c",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10454,5 +10454,76 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ae3eab8b63d9": {
+  "identity": {
+   "one_liner": "PHP Web 开发的 Docker Compose 环境，多版本 PHP-FPM/Apache 加 Nginx 与数据库容器",
+   "review": "该项目提供基于 Docker Compose 的 PHP Web 开发环境，包含 PHP-FPM 7.4–8.5 与 Apache mod_php 多版本容器、Nginx、Mailpit、Adminer 及 MySQL 数据库容器，并通过 manage.py 脚本生成配置、SSL 证书和多主机 Nginx 配置。适合需要在本机并行运行多个 PHP 版本站点的开发者，数据库密码与连接通过 mysql.env 配置。",
+   "highlights": [
+    "提供 PHP-FPM 7.4 至 8.5 及 Apache mod_php 多版本容器",
+    "manage.py 脚本可生成 docker-compose.yml、Nginx 配置与自签名 SSL 证书",
+    "包含 MySQL 容器及 mysql/mycli/mysqltuner 等数据库控制台访问方式"
+   ],
+   "use_cases": [
+    "本地同时开发多个不同 PHP 版本的站点",
+    "需要 HTTPS/SSL 证书与多域名虚拟主机的本地开发环境",
+    "通过容器内 mysql 客户端导入 SQL dump 进行调试"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "cp mysql.env.example mysql.env ／ mysql -uroot -hdb -pMYSQL_ROOT_PASSWORD",
+     "lines": [
+      83,
+      237
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PHP Web 开发提供包含 MySQL 容器在内的 Docker 运行环境，数据库作为环境组成部分被配置和连接",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "cp mysql.env.example mysql.env ／ mysql -uroot -hdb -pMYSQL_ROOT_PASSWORD ／ - **Multi-host support**: Configure multiple domains with different PHP versions",
+   "evidence_lines": [
+    83,
+    237,
+    119
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "rhamdeew/docker-compose-php",
+  "sha": "ae3eab8b63d9",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

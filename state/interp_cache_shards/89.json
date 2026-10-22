@@ -9376,5 +9376,313 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d25ab61bb83f": {
+  "identity": {
+   "one_liner": "Supabase 的 Dart/Flutter 客户端库集合",
+   "review": "该仓库托管 Supabase 官方的 Dart 与 Flutter 客户端库，包含 supabase_flutter、supabase、supabase_typegen、supabase_test 等包，用于在 Flutter 应用或 Dart 服务端/命令行程序中查询 Postgrest、实时订阅、认证与存储。开发者可通过 flutter pub add 安装，用 Supabase CLI 生成类型化数据库 schema。注意 v3 与 v2 API 不兼容，需按 MIGRATION.md 升级。",
+   "highlights": [
+    "提供 supabase_flutter、supabase、supabase_typegen、supabase_test 等多包，覆盖 Flutter 应用、Dart 服务端、类型生成与测试场景",
+    "支持通过 Supabase CLI 生成类型化数据库 schema 并以生成类型执行查询",
+    "包含 supabase_test 包，可用 stub 与内存 socket 在无需运行完整栈的情况下测试代码"
+   ],
+   "use_cases": [
+    "开发使用 Supabase 后端的 Flutter 移动应用",
+    "在 Dart 服务端或命令行工具中访问 Supabase 服务",
+    "为使用 Supabase 的代码编写不依赖在线栈的单元测试"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "作为客户端库为开发者访问 Supabase/Postgres 后端服务提供 SDK，而非自身用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Flutter client library for Supabase. ／ This repository holds the Supabase client libraries for Dart and Flutter. ／ |`supabase_flutter`|Flutter apps. Start here.|",
+   "evidence_lines": [
+    9,
+    21,
+    30
+   ]
+  },
+  "fn": "supabase/supabase-flutter",
+  "sha": "d25ab61bb83f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b0c6531c41be": {
+  "identity": {
+   "one_liner": "AI 编程代理的本地记忆守护进程，Markdown 存储 + SQLite 混合检索",
+   "review": "Awareness Local 是为 AI 编程代理提供跨会话记忆的本地守护进程，通过 MCP 协议向 Cursor、Claude Code 等 IDE 提供 recall/record 等工具；记忆以 Markdown 文件保存并用 SQLite FTS5 加 embeddings 混合索引，可离线运行、无需账号，检索阶段零 LLM 调用，另提供 Web 仪表盘和可选云同步。",
+   "highlights": [
+    "通过 MCP 协议为多种 IDE/代理提供会话记忆工具（init/recall/record/lookup）",
+    "记忆以 Markdown 文件存储，使用 SQLite FTS5 + embeddings 做混合检索",
+    "支持离线运行、本地部署，提供 Web 仪表盘与可选云同步"
+   ],
+   "use_cases": [
+    "跨多会话的长期代码库迁移中保持上下文",
+    "团队交接时让 AI 保留既有实现决策",
+    "多代理共享决策历史与任务记忆"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It runs a lightweight daemon on your machine, stores memory as Markdown, indexes recall with SQLite FTS5 + embeddings, and keeps your AI workflow fast, explainable, and offline-ready. ／ Memory is stored as Markdown in `.awareness/`, with a local SQLite index for retrieval.",
+     "lines": [
+      26,
+      66
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**After:** Your agent says *\"I remember you were migrating from MySQL to PostgreSQL. Last session you completed the schema changes and had 2 TODOs remaining...\"* ／ │ ├── 2026-03-22_decided-to-use-postgresql.md",
+     "lines": [
+      111,
+      155
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "**After:** Your agent says *\"I remember you were migrating from MySQL to PostgreSQL. Last session you completed the schema changes and had 2 TODOs remaining...\"*",
+     "lines": [
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 Markdown 文件和本地 SQLite 索引存储其自身记忆数据，SQLite 是其数据存储组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Awareness is a memory plugin for AI coding agents — Cursor, Claude Code, Copilot, Cline, OpenCode, and any MCP client. It stores what you decided and what you learned as plain Markdown on your machine, then recalls it in the next session: hybrid keyword + semantic retrieval, 96% R@5 on LongMemEval, zero LLM calls at retrieval. Works offline, no account required. ／ It runs a lightweight daemon on your machine, stores memory as Markdown, indexes recall with SQLite FTS5 + embeddings, and keeps your AI workflow fast, explainable, and offline-ready. ／ Memory is stored as Markdown in `.awareness/`, with a local SQLite index for retrieval.",
+   "evidence_lines": [
+    18,
+    26,
+    66
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "everest-an/Awareness-Market",
+  "sha": "b0c6531c41be",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "67d155b3c45c": {
+  "identity": {
+   "one_liner": "dbt 插件，按代码与上游数据变更决定复用或重建节点",
+   "review": "dbt-hodor 是运行在 dbt 内部的状态复用工具：对每个选中节点做逻辑哈希并检查上游数据版本，未变更则复用仓库中已有对象，否则重建。状态可存于 Databricks Delta、Postgres 或本地 DuckDB 文件。面向使用 dbt 做数据转换的工程团队，无需 dbt 平台账号。当前处于早期开发阶段，尚未在大规模生产项目验证。",
+   "highlights": [
+    "对每个节点比较逻辑哈希与上游数据版本，输出 reuse/build 决定及原因码",
+    "提供 off/shadow/on 三种模式，默认 shadow，所有失败路径均回退为 build",
+    "状态存储支持 delta、duckdb、postgres 三种后端"
+   ],
+   "use_cases": [
+    "减少 dbt 调度运行中无变更节点的重复构建",
+    "CI 流水线中对未变更模型复用已有表",
+    "无 dbt 平台账号时自托管实现类 State 的变更检测"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. ／ > **Status: early development.** hodor runs inside dbt and passes end-to-end tests on dbt-duckdb. Tested live on a Databricks Unity Catalog workspace with a SQL warehouse and dbt-databricks 1.12.7 (2026-10-20 and 2026-10-21): reuse of tables, incremental model ／ |`hodor_store`|`HODOR_STORE`|`delta`|`delta`, `duckdb`, `postgres` (alias `lakebase`)| ／ |`postgres` (alias `lakebase`)|`<hodor_schema>.<hodor_table>` in the Postgres database `hodor_database`|the schema and the table|",
+     "lines": [
+      15,
+      17,
+      104,
+      120
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 dbt 数据转换流程服务的插件工具，数据库仅作为其状态存储后端而非业务数据载体",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dbt-hodor is a free, self-hosted alternative to dbt Labs' dbt State. It runs inside dbt. For every selected node it decides whether to reuse the object that is already in the warehouse or to build it again. A node is reused when its logic has not changed and its upstream data has not changed since the last build. ／ It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. ／ Supported: models materialized as `table`, `incremental` (append, merge, delete+insert, insert_overwrite, replace_where; an unset strategy counts as merge) and `view`, seeds, snapshots, and data tests (generic and singular), on `dbt-databricks` 1.12.7 and `dbt-duckdb`, with dbt-core 1.12.x.",
+   "evidence_lines": [
+    13,
+    15,
+    135
+   ]
+  },
+  "fn": "alaturqua/dbt-hodor",
+  "sha": "67d155b3c45c",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b11790c274fa": {
+  "identity": {
+   "one_liner": "AI Agent 分层记忆引擎，本地运行于 SQLite/Postgres",
+   "review": "InfinityDB 是一个面向 AI Agent 的记忆引擎，提供 L0-L6 分层记忆结构：原始日志落盘存储、规则化事实抽取、带 SHA-256 溯源的证据链，并提供 LangChain/CrewAI 适配器和 MCP server。数据存储依赖 SQLite 至 Postgres，通过 pip/npm 安装，附带本地 Dashboard 供检索与审计查看，适合为多轮对话 Agent 添加可验证的长期记忆。",
+   "highlights": [
+    "支持 L0-L6 分层记忆结构，原始日志存于磁盘/SQLite 并提供 SHA-256 溯源哈希",
+    "提供 LangChain、CrewAI 适配器与 MCP server（stdio），兼容 Claude Desktop/Cursor",
+    "提供本地 Dashboard（端口 8080）用于查询测试、因果图可视化与证据链审计"
+   ],
+   "use_cases": [
+    "为多轮对话 Agent 添加长期记忆与用户偏好管理",
+    "多 Agent 团队（CrewAI）间共享带角色分区的记忆",
+    "需要可溯源、可审计记忆记录的合规场景"
+   ],
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Symbolic short-term memory + layered long-term memory. Zero external API dependencies. Runs locally on SQLite to Postgres. ／ |**Scale**|**SQLite to Postgres**|SQLite only|Cloud only|Needs Neo4j|",
+     "lines": [
+      6,
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Symbolic short-term memory + layered long-term memory. Zero external API dependencies. Runs locally on SQLite to Postgres. ／ |**Scale**|**SQLite to Postgres**|SQLite only|Cloud only|Needs Neo4j| ／ L0 RAW LOGS -> Verbatim conversation & tool logs stored on disk/SQLite (offloaded from context)",
+     "lines": [
+      6,
+      55,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite/Postgres 作为自身记忆数据的存储后端，属于使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Symbolic short-term memory + layered long-term memory. Zero external API dependencies. Runs locally on SQLite to Postgres. ／ L0 RAW LOGS       -> Verbatim conversation & tool logs stored on disk/SQLite (offloaded from context) ／ |**Scale**|**SQLite to Postgres**|SQLite only|Cloud only|Needs Neo4j|",
+   "evidence_lines": [
+    6,
+    63,
+    55
+   ]
+  },
+  "fn": "infinitydb-ai/infinitydb",
+  "sha": "b11790c274fa",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

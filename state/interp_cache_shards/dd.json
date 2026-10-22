@@ -9886,5 +9886,73 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7e3297e6c055": {
+  "identity": {
+   "one_liner": "基于 Go/PostgreSQL/GraphQL/React 的公路货运运输管理系统（TMS）",
+   "review": "Trenova 是面向美国中小资产型公路承运人的运输管理系统，覆盖调度、计价、开票、结算、会计与 FMCSA 合规等订单到收款全流程。后端为 Go + PostgreSQL（含 PostGIS、pg_cron、pgvector），通过 GTC 逻辑复制连接器将变更投影到 Meilisearch 与 Redis。以 Docker Compose 单机自托管，采用 FSL-1.1-ALv2 许可，目前处于预发布阶段，尚不适合生产使用。",
+   "highlights": [
+    "覆盖调度、计价、开票、结算、会计与 FMCSA 合规的完整订单到收款流程",
+    "支持 EDI 204/210/214/990/997 工作流及 Samsara、PC*MILER 集成",
+    "使用 GTC（PostgreSQL 逻辑复制连接器）将行变更投影到 Meilisearch 与 Redis"
+   ],
+   "use_cases": [
+    "中小公路承运人的货运调度与开票结算",
+    "车队 FMCSA 合规记录与司机认证跟踪",
+    "企业本地自托管的 TMS 部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Source-available trucking TMS written in Go, PostgreSQL, GraphQL, and React. ／ |Database|PostgreSQL via pgx, SQL-first migrations| ／ |Change data capture|GTC: a Go PostgreSQL logical-replication connector that projects rows into Meilisearch and Redis (runs as the `ghcr.io/emoss08/gtc` image; routing in `deploy/gtc/sinks.yaml`)|",
+     "lines": [
+      4,
+      48,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Trenova 是使用 PostgreSQL 存储业务数据的运输管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-ALv2（Fair Source），每次发布两年后转 Apache 2.0，禁止托管服务与竞品用途",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Trenova is a transportation management system (TMS) for small and mid-sized over-the-road carriers in the United States. Enterprise TMS platforms often cost more than $50,000 a year, which puts them out of reach for the carriers that make up most of the industry. Trenova aims to close that gap with a flat-priced, self-hostable TMS that covers the full order-to-cash cycle: shipment entry, dispatch, driver assignment, rating, billing, settlement, accounting, and compliance. ／ |Database|PostgreSQL via pgx, SQL-first migrations| ／ Trenova runs on a single Linux host with Docker Compose. The production stack in `deploy/selfhost` runs the released images with everything they need (PostgreSQL, Redis, MinIO, Meilisearch, Temporal, Gotenberg, docling-serve, change data capture) and Caddy for automatic HTTPS:",
+   "evidence_lines": [
+    25,
+    48,
+    121
+   ]
+  },
+  "fn": "emoss08/Trenova",
+  "sha": "7e3297e6c055",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

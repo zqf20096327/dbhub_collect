@@ -10391,5 +10391,176 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "41c13b8d299e": {
+  "identity": {
+   "one_liner": "Spring Boot 的 Claude Code 插件模板，提供技能与代理生成应用",
+   "review": "这是一个 Claude Code 插件，内置多个 agent 与 skill，用于引导 Claude 生成遵循预设规范的 Spring Boot 4.x/Java 21 应用，覆盖 REST API、JPA、测试、云原生部署等主题。面向使用 Claude Code 开发 Spring Boot 应用的开发者。数据库仅出现在示例提示词与 Testcontainers/JPA 技能说明中，并非专门服务某数据库的工具。",
+   "highlights": [
+    "提供 spring-boot-engineer、code-reviewer、kubernetes-specialist 等多个 agent 供 Claude Code 调用",
+    "包含 conventions、jpa-patterns、testing-patterns 等技能，约定 Testcontainers、构造器注入、无 Lombok 等规则",
+    "支持通过 Anthropic marketplace 或仓库地址安装，也可本地目录加载"
+   ],
+   "use_cases": [
+    "用 Claude Code 生成符合特定规范的 Spring Boot 应用",
+    "为现有 Spring Boot 项目做代码评审与测试补充",
+    "生成 Kubernetes/Docker 云原生部署配置"
+   ],
+   "ai_kind_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "> \"Build a REST API for managing orders with PostgreSQL\"",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "tool",
+   "eco_why": "它是一个 Claude Code 插件模板，用于生成 Spring Boot 应用代码，数据库仅作为示例提示出现，并非为某数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Claude Code plugin with production-ready skills and agents for building Spring Boot 4.x / Java 21+ applications. Install the plugin and start generating your app — the skills and agents guide Claude to follow best practices for REST APIs, JPA, security, testing, cloud-native deployment, and Kubernetes. ／ > \"Build a REST API for managing orders with PostgreSQL\"",
+   "evidence_lines": [
+    3,
+    90
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "piomin/claude-ai-spring-boot",
+  "sha": "41c13b8d299e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "68aca6b1f9ed": {
+  "identity": {
+   "one_liner": "Delphi 流式 SQL 查询构建库，SqlKata 移植版",
+   "review": "QueryBuilder4Delphi 是 SqlKata 查询构建器的 Delphi 12+ 移植，核心生成参数化 SQL 与绑定列表，支持 MSSql、MySql、PostgreSql、Sqlite、Oracle、Firebird 六种方言，并提供可选的 FireDAC 执行器（基于调用方的 TFDConnection）。面向 Windows Win32/Win64 上的 Delphi 开发者，通过源码引入，不依赖额外运行时库。",
+   "highlights": [
+    "提供 MSSql、MySql、PostgreSql、Sqlite、Oracle、Firebird 六种方言编译器",
+    "生成参数化 SQL 与绑定值，核心仅依赖 Delphi RTL",
+    "查询、编译器与结果使用引用计数接口，可选 FireDAC 执行器"
+   ],
+   "use_cases": [
+    "在 Delphi 应用中以流式 API 生成 SQL 预览与绑定参数",
+    "通过 FireDAC 提供者执行单结果集查询与命令",
+    "需要自定义方言编译器的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`MySql`, `PostgreSql`, `Sqlite`, `Oracle`, and `Firebird`. It uses the selected",
+     "lines": [
+      77
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`MySql`, `PostgreSql`, `Sqlite`, `Oracle`, and `Firebird`. It uses the selected",
+     "lines": [
+      77
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "`MySql`, `PostgreSql`, `Sqlite`, `Oracle`, and `Firebird`. It uses the selected",
+     "lines": [
+      77
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`MySql`, `PostgreSql`, `Sqlite`, `Oracle`, and `Firebird`. It uses the selected",
+     "lines": [
+      77
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`Compile(Dialect: TSqlDialect = TSqlDialect.MSSql): string` supports `MSSql`,",
+     "lines": [
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是生成 SQL 语句的开发库，为使用各类数据库的应用提供构建能力，而非以某数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Delphi port of the SqlKata query builder, based on local C# commit ／ SQL Server is the default; no compiler unit imports or manual cleanup are ／ `MySql`, `PostgreSql`, `Sqlite`, `Oracle`, and `Firebird`. It uses the selected",
+   "evidence_lines": [
+    3,
+    66,
+    77
+   ]
+  },
+  "fn": "auchri/QueryBuilder4Delphi",
+  "sha": "68aca6b1f9ed",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

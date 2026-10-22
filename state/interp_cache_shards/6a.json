@@ -10364,5 +10364,81 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1502b28c7370": {
+  "identity": {
+   "one_liner": "基于 WASM 组件模型的确定性工作流运行时",
+   "review": "Obelisk 是一个以 WASM 组件模型和 WIT 接口为基础的确定性工作流引擎，单个二进制运行工作流、活动与 webhook 端点，将执行步骤持久化到 SQLite 或 PostgreSQL，并提供 CLI、REST API 与 Web UI 用于提交、追踪和重放执行。面向需要可重放后台任务、定时任务与批量作业的开发者；README 标注为 pre-release，CLI/API 与 schema 可能变动。",
+   "highlights": [
+    "支持将工作流执行日志持久化到 SQLite 或 PostgreSQL",
+    "提供 CLI、REST API 与内置 Web UI，可查看执行轨迹并重放工作流",
+    "基于 WASI 的活动支持自动重试，工作流保证确定性并可完整重放"
+   ],
+   "use_cases": [
+    "周期性任务的自动化编排",
+    "带重试与错误处理的后台/批量作业",
+    "AI 辅助代码的沙箱执行与审计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL. ／ ### Running with Postgres",
+     "lines": [
+      62,
+      166
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL.",
+     "lines": [
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 SQLite 或 PostgreSQL 持久化执行日志，数据库仅作存储后端，非为其服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0 为主，wit/ 子目录采用 MIT 双许可",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "and webhook endpoints, persisting steps in execution log using SQLite or PostgreSQL. ／ > **Pre-release**: Expect changes in CLI, REST API, WIT, and database schema.",
+   "evidence_lines": [
+    62,
+    8
+   ]
+  },
+  "fn": "obeli-sk/obelisk",
+  "sha": "1502b28c7370",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

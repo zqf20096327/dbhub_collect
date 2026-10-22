@@ -10260,5 +10260,147 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5e5a609b854b": {
+  "identity": {
+   "one_liner": "自托管家庭事务规划应用，Node.js 单容器，数据存于单个 SQLite 文件",
+   "review": "一个自托管的家庭规划应用，包含任务、日历、预算、膳食、健康等二十个模块，模块间互通（如膳食计划导入购物清单），面向家庭、伴侣或个人用户。数据以单个 SQLite 文件存储在用户自己的服务器上，支持 Docker/Podman 部署、WebDAV 备份、可选 AES-256 数据库加密，并内置 OpenAPI 3.1 规范与 MCP 端点供 AI 代理调用。",
+   "highlights": [
+    "提供任务、日历、膳食、购物、预算、健康等二十个可独立开关的模块，模块间支持数据联动",
+    "数据存储为单个 SQLite 文件，支持手动与定时备份、可选 WebDAV 上传及恢复前回滚",
+    "提供 OpenAPI 3.1 规范、内置 MCP 端点供 AI 代理使用，支持 OIDC 单点登录与 TOTP 双因素认证"
+   ],
+   "use_cases": [
+    "家庭或个人在自有服务器/NAS 上集中管理任务、日程与预算",
+    "在厨房平板或手机上以 PWA 形式查看今日计划与共享购物清单",
+    "需要将全部数据保留在本地 SQLite 文件中并自行备份迁移的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**What if you want your data somewhere else?** Everything lives in one SQLite file on your own ／ - **Your data** - one SQLite file at `/data/yuvomi.db`, plus the folder, WebDAV or Drive if you moved documents there.",
+     "lines": [
+      105,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其数据存储于单个 SQLite 文件，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**What if you want your data somewhere else?** Everything lives in one SQLite file on your own ／ - **Your data** - one SQLite file at `/data/yuvomi.db`, plus the folder, WebDAV or Drive if you moved documents there.",
+   "evidence_lines": [
+    105,
+    134
+   ]
+  },
+  "fn": "ulsklyc/yuvomi",
+  "sha": "5e5a609b854b",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6540c7c1219e": {
+  "identity": {
+   "one_liner": "自托管地理空间数据目录，含语义搜索、OGC/STAC API 与地图构建器",
+   "review": "GeoLens 是一个自托管的地理空间数据目录与地图构建工具，把分散在文件、PostGIS 库、Web 服务和 STAC 目录中的数据汇入统一可搜索目录，记录数据来源并检查时效，用户可在浏览器中构建分享地图，并通过 OGC API、STAC、CLI/SDK 供 QGIS、脚本和 AI 代理读取。适合需要在自有服务器上管理空间数据并用地图发布的团队；可选 AI 功能默认关闭，需管理员配置。",
+   "highlights": [
+    "提供 OGC API Features/Records、STAC、DCAT 标准接口及矢量/COG 瓦片服务，支持 QGIS 插件与 Python/TypeScript SDK",
+    "记录每个数据集的来源、刷新时间与上游 schema 变更，支持版本历史与恢复",
+    "提供浏览器地图构建器，含多种图层类型、空间分析操作与 3D 地形渲染"
+   ],
+   "use_cases": [
+    "整合分散在文件共享、PostGIS、Web 服务和 STAC 目录中的空间数据到统一目录",
+    "在浏览器中构建并分享地图（公开链接、团队可见或 iframe 嵌入）",
+    "通过 OGC API/STAC 向 QGIS、脚本和 AI 代理提供数据访问"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "replicas of the API, worker, frontend and Titiler against a managed PostgreSQL with automatic ／ - PostgreSQL and PostGIS hold the catalog and every vector dataset, and",
+     "lines": [
+      244,
+      263
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 PostgreSQL/PostGIS 存储目录与矢量数据集，本身是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "GeoLens is for teams whose spatial data is spread across file shares, PostGIS databases, web ／ on your own servers with Docker Compose, sends no telemetry and is licensed under Apache 2.0.",
+   "evidence_lines": [
+    28,
+    32
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "geolens-io/geolens",
+  "sha": "6540c7c1219e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10176,5 +10176,144 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0bc3134b92f8": {
+  "identity": {
+   "one_liner": "dokku 的官方 PostgreSQL 服务插件，用于在 PaaS 中管理 Postgres 实例",
+   "review": "该仓库是 dokku PaaS 的官方 postgres 插件，提供 postgres:create、destroy、info、link、backup 等命令，用于在 dokku 主机上以容器方式创建、配置、备份和销毁 PostgreSQL 服务，支持指定镜像版本及 pgvector、postgis、timescaledb 等扩展镜像。面向使用 dokku 部署应用的开发者/运维人员；要求 dokku 0.35.x+ 与 docker 1.8.x。",
+   "highlights": [
+    "提供 postgres:create/info/destroy/expose/link/backup 等服务生命周期命令",
+    "支持 pgvector、postgis、timescaledb 等扩展镜像及多 PostgreSQL 版本定义",
+    "支持基于 S3 的服务备份与定时备份配置"
+   ],
+   "use_cases": [
+    "在 dokku PaaS 上为应用创建并链接 PostgreSQL 服务",
+    "为 dokku 管理的 Postgres 服务配置 S3 定时备份",
+    "部署带 PostGIS/pgvector/TimescaleDB 扩展的 Postgres 实例"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# dokku postgres Build Status IRC Network ／ Official postgres plugin for dokku. Currently defaults to installing postgres 18.6. ／ sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git --name postgres",
+     "lines": [
+      1,
+      3,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 dokku 平台提供 PostgreSQL 服务的部署、配置、备份等管理功能，是为数据库生态服务的工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official postgres plugin for dokku. Currently defaults to installing postgres 18.6. ／ sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git --name postgres ／ postgres:backup <service> <bucket-name> [--id <id>] [-u|--use-iam] # create a backup of the Postgres service to an existing s3 bucket",
+   "evidence_lines": [
+    3,
+    14,
+    21
+   ]
+  },
+  "fn": "dokku/dokku-postgres",
+  "sha": "0bc3134b92f8",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f434f03c6665": {
+  "identity": {
+   "one_liner": "基于 Qt 的 Lua 跨平台桌面 GUI 框架，内置 SQLite 支持",
+   "review": "Limekit 是一个用纯 Lua 编写 Windows/macOS/Linux 桌面应用的 GUI 框架，底层由 Qt/PySide6 提供控件与渲染，通过 lupa 桥接生成 Lua API。面向用 Lua 开发原生桌面应用的开发者，最终用户通常通过 Limer 分发工具使用；2.0 目前处于 alpha 阶段，暂无 canvas、拖放和 HTTP 客户端。",
+   "highlights": [
+    "提供约 90 个类，包含控件、五种布局管理器、对话框、图表、表格等，内置 SQLite 访问模块",
+    "支持 Material、亮色、暗色主题，可在运行时切换",
+    "生成 LSP stubs，提供编辑器补全与签名支持"
+   ],
+   "use_cases": [
+    "用 Lua 开发跨平台桌面 GUI 应用",
+    "通过内置 db 模块在应用中读写 SQLite 数据",
+    "配合 Limer 的可视化 Designer 生成 Lua 界面代码"
+   ],
+   "review_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "trees, docks, system tray, timers, threads, SQLite, filesystem ／ pixel editor, CSV explorer, SQLite browser, file explorer, charts, a widget",
+     "lines": [
+      54,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明框架内置 SQLite 访问（db 模块与 SQLite browser 示例），但未以数据库生态服务为定位",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPLv3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Limekit is a Lua GUI framework. Qt supplies the widgets and the rendering, ／  trees, docks, system tray, timers, threads, SQLite, filesystem ／ **2.0 is in alpha.** The 2.0 engine is a rewrite: a declarative kernel,",
+   "evidence_lines": [
+    41,
+    54,
+    122
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "mitosisX/Limekit",
+  "sha": "f434f03c6665",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

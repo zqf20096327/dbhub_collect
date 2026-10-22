@@ -10585,5 +10585,230 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c67d1c4a1f00": {
+  "identity": {
+   "one_liner": "自托管端到端加密 Web 即时通讯，Node.js 服务器 + SQLite 存储",
+   "review": "一个自托管、波斯语优先的类 Telegram Web 即时通讯，含私聊 E2EE、频道、群组与贴纸，弱网离线优先设计。服务器为单个 Node.js 进程，数据存于一个 SQLite 文件，支持脚本安装与完全离线部署；README 明确声明安全性不及 Signal 且服务器运营者存在解密可能，适合依赖自己网络与服务器、非高保密需求的用户。",
+   "highlights": [
+    "支持端到端加密私聊（P-256 ECDH + AES-256-GCM），服务器仅存储密文",
+    "支持弱网设计：可恢复同步、离线缓存、WebSocket 重连",
+    "支持完全离线自托管，含本地 CA 内置 HTTPS 与 TOTP/WebAuthn 认证"
+   ],
+   "use_cases": [
+    "国际互联网受限环境下的局域网/自托管消息通信",
+    "波斯语用户群体的自托管即时通讯",
+    "弱网或离线优先场景的消息同步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-hostable, Telegram-style web messenger built for bad networks. One small Node.js server, one SQLite file, a Persian/RTL-first progressive web app. It runs entirely on your own machine with no international internet at runtime: no CDNs, no external fonts",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目是一个用 SQLite 存储消息数据的即时通讯应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hostable, Telegram-style web messenger built for bad networks. One small Node.js server, one SQLite file, a Persian/RTL-first progressive web app. It runs entirely on your own machine with no international internet at runtime: no CDNs, no external fonts, no third-party push or analytics services. ／  Self-hosted end-to-end encrypted messenger. Persian-first, with groups, channels and stickers. Runs on your own server, no international internet needed. ／ - **End-to-end encrypted direct chats.** Messages and attachments are encrypted in the browser (P-256 ECDH + HKDF + AES-256-GCM); the server stores only ciphertext. The identity key is backed up automatically, locked with the user's login password (default \"Auto\" mode, so a new browser just works; the operator could in principle decrypt it, see SECURITY.md); a \"more security\" mode keeps the key off the server and uses a recovery key instead.",
+   "evidence_lines": [
+    9,
+    3,
+    15
+   ]
+  },
+  "fn": "DragonCuds/nosignal",
+  "sha": "c67d1c4a1f00",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b83132d92d0": {
+  "identity": {
+   "one_liner": "本地优先的 Windows 桌面陪伴型 AI Agent，长期记忆+主动触达",
+   "review": "一个本地优先的陪伴型 Agent 桌面应用，提供长期记忆、主动联系、到点提醒、语音输入输出与图像理解/生成等能力，用户自带任意 OpenAI 兼容模型的 API Key。基于 Tauri 2 + Node.js 构建，聊天记录、记忆与密钥保存在本机 data/ 目录，通过 node:sqlite 存储数据。适合希望在 Windows 桌面端自托管个人 AI 伴侣的用户，需注意 API 接口默认无鉴权。",
+   "highlights": [
+    "支持接入任何 OpenAI 兼容模型服务，各能力（图片理解、图像生成、语音识别/合成、记忆整理）可分别配置模型",
+    "聊天记录、记忆、媒体与密钥保存在本机 data/ 目录，使用 node:sqlite 存储",
+    "提供局域网二维码访问与内网穿透配合方案，访问经六位访问码门控"
+   ],
+   "use_cases": [
+    "个人桌面 AI 陪伴与聊天助手",
+    "本地记忆管理与到点提醒",
+    "同一 Wi-Fi 下通过手机浏览器访问同一份数据"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Node.js ≥ 22.18**（用到 `node:sqlite` 与原生 TypeScript 类型擦除，后端脚本一律带 `--experimental-sqlite`）",
+     "lines": [
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用数据库（node:sqlite 存聊天记录/记忆）的桌面 Agent 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 记得住事，也会主动找你的陪伴型 Agent。 ／ - **Node.js ≥ 22.18**（用到 `node:sqlite` 与原生 TypeScript 类型擦除，后端脚本一律带 `--experimental-sqlite`） ／ data/           运行时数据（聊天记录 / 记忆 / 媒体 / 密钥），不入库",
+   "evidence_lines": [
+    5,
+    121,
+    143
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "dmw-net/xiaomoAgent",
+  "sha": "8b83132d92d0",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e28d0bee0875": {
+  "identity": {
+   "one_liner": "1С:Предприятие 信息库自动备份工具，导出 DT 文件并管理副本",
+   "review": "这是一个面向 1С:Предприятие 服务器管理员的跨平台备份工具，通过 ibcmd 将信息库导出为 .dt 文件，支持文件库、PostgreSQL 与 MSSQL 后端，提供日/周/月调度、过期副本清理与副本校验，凭据独立存放于 secrets.yaml，依赖系统计划任务实现自动运行。",
+   "highlights": [
+    "支持文件库、网络文件库及 PostgreSQL/MSSQL 后端的信息库备份为 .dt 文件",
+    "提供 daily/weekly/monthly 三种调度并按优先级合并，自动删除过期副本",
+    "导出后可校验副本有效性，凭据独立存放并强制文件权限 0600"
+   ],
+   "use_cases": [
+    "1С 服务器管理员对文件库或 DBMS 后端信息库进行定时自动备份",
+    "需要按日/周/月策略分层保存副本并自动清理过期备份",
+    "Linux/Windows 混合环境下通过 cron 或计划任务集中管理 1С 备份"
+   ],
+   "cat": "备份"
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL; ／ - доступ к PostgreSQL или MSSQL, если используются базы соответствующего типа; ／ PostgreSQL",
+     "lines": [
+      28,
+      145,
+      197
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- Microsoft SQL Server (MSSQL); ／ - доступ к PostgreSQL или MSSQL, если используются базы соответствующего типа; ／ MSSQL",
+     "lines": [
+      29,
+      145,
+      198
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具通过 1С 平台的 ibcmd 及 DBMS 访问为 1С 信息库提供备份服务，属于数据库生态服务工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Кроссплатформенная утилита для резервного копирования информационных баз **1С:Предприятие**. ／ - автоматическое резервное копирование баз 1С в формат `.dt`; ／ - доступ к PostgreSQL или MSSQL, если используются базы соответствующего типа; ／ Проект находится в разработке.",
+   "evidence_lines": [
+    3,
+    24,
+    145,
+    389
+   ]
+  },
+  "fn": "Dr-Mikegreen/maintenance_1C",
+  "sha": "e28d0bee0875",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

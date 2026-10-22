@@ -11156,5 +11156,143 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "99f906b34054": {
+  "identity": {
+   "one_liner": "自托管的 SolaX 逆变器监控，采集遥测并存储于 SQLite",
+   "review": "这是一个用 Rust 编写的自托管 SolaX 逆变器监控系统，通过本地网络轮询逆变器遥测数据，将历史读数存入 SQLite，并提供 API 与网页仪表盘展示实时功率、发电量、电网用量等。面向拥有 SolaX 逆变器（已验证 X1 Mini G4）的用户，通过 Docker Compose 部署运行，README 还记录了基于监测数据的外置主动散热改造案例。",
+   "highlights": [
+    "轮询本地网络中的 SolaX 逆变器遥测数据并存入 SQLite",
+    "提供 /api/v1 API 和包含 Home/Month/Year 屏幕的 Web 仪表盘",
+    "Rust workspace 结构，前端用 TypeScript/Vite/uPlot 构建"
+   ],
+   "use_cases": [
+    "家用 SolaX 逆变器实时功率与发电量监控",
+    "历史发电趋势与温度-功率关联分析",
+    "逆变器热降频等硬件问题的诊断与验证"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-hosted SolaX inverter monitor. It polls the inverter over the local network, stores readings in SQLite, and serves a web dashboard for live power, energy generation, and historical trends. ／ |`server/`|The poller, SQLite store, `/api/v1`, and the built screens it serves|",
+     "lines": [
+      3,
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该监控系统自身存储读数的内置组件，项目为使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted SolaX inverter monitor. It polls the inverter over the local network, stores readings in SQLite, and serves a web dashboard for live power, energy generation, and historical trends. ／ |`server/`|The poller, SQLite store, `/api/v1`, and the built screens it serves|",
+   "evidence_lines": [
+    3,
+    11
+   ]
+  },
+  "fn": "MohanaManikandan/solax-monitor",
+  "sha": "99f906b34054",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2a922a354055": {
+  "identity": {
+   "one_liner": "基于 Python+SQLite+Streamlit 的离线学业压力追踪应用",
+   "review": "Cram Jam 是一个单机离线运行的个人学业管理应用，用于登记课程、记录作业/测验截止日期、安排每周课表和学习日志，并通过规则逻辑（截止紧急度、优先级等）对待办任务排序。数据存储在本地 SQLite 数据库，界面由 Streamlit 构建，面向单用户场景，不需要云服务或认证。",
+   "highlights": [
+    "支持课程登记、任务/考核追踪与学习时长记录",
+    "使用规则逻辑按截止日期紧急度与优先级对任务排序",
+    "数据存储于本地 SQLite，支持离线单用户使用"
+   ],
+   "use_cases": [
+    "学生管理学期课程与作业截止日期",
+    "离线环境下的个人学习时间记录",
+    "无云服务需求的本地课业工作量总览"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "An offline academic-demand monitor built with Python, SQLite, and Streamlit. ／ - **SQLite** — Local database ／ Cram Jam stores its data in a local SQLite database. It is designed for single-user, offline use and does not require cloud storage, authentication, or an online service.",
+     "lines": [
+      3,
+      20,
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用将自身数据存储在本地 SQLite 数据库，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "An offline academic-demand monitor built with Python, SQLite, and Streamlit. ／ - **SQLite** — Local database ／ Cram Jam stores its data in a local SQLite database. It is designed for single-user, offline use and does not require cloud storage, authentication, or an online service.",
+   "evidence_lines": [
+    3,
+    20,
+    41
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "realityuncompiled/cram-jam",
+  "sha": "2a922a354055",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

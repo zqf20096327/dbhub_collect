@@ -10281,5 +10281,187 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8c1836d06742": {
+  "identity": {
+   "one_liner": "C# 强类型 SQL 查询构建器，含语法树与多方言导出",
+   "review": "SqExpress 是一个 .NET 库，用 C# 代码以强类型方式构建 SQL 表达式，可将语法树导出为 T-SQL、PostgreSQL、MySQL、SQLite 方言文本，附带 T-SQL 解析器、ADO.Net 封装、表描述符与 DTO 代码生成。面向需要在 C# 中精细控制 SQL 形状的 .NET 开发者；解析器只覆盖可移植的 T-SQL 子集，不追求完整语言覆盖。",
+   "highlights": [
+    "提供通用 SQL 语法树，可导出为 MS T-SQL、PostgreSQL、MySQL、SQLite 文本，并为缺失特性（如 MERGE）提供 polyfill",
+    "包含 T-SQL 解析器（SqTSqlParser），可将现有 SQL 文本解析为 AST 并用于校验、改写",
+    "支持 code-first/database-first 表描述符声明，可生成建表脚本与 DTO 代码"
+   ],
+   "use_cases": [
+    "在 .NET 项目中用强类型代码构建包含 CTE、窗口函数、MERGE 等特性的复杂查询",
+    "从既有 T-SQL 迁移到 C# 查询代码（配套 Web 转译工具）",
+    "对 AI 生成的 T-SQL 做基于表模型的校验与安全谓词改写后再执行"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The library provides a generic SQL syntax tree with export to MS T-SQL, PostgreSQL, MySQL, and SQLite text. It includes polyfills to compensate for features lacking in certain databases, such as the \"MERGE\" command, and unifies functionality that differs subst ／ You can use SqExpress with a code-first approach by declaring SQL tables as C# classes and generating table-creation scripts for Microsoft SQL Server, PostgreSQL, MySQL, or SQLite. If your database structure is already defined by an Entity Framework Core SQL S ／ 3. PostgreSQL",
+     "lines": [
+      7,
+      13,
+      82
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "The library provides a generic SQL syntax tree with export to MS T-SQL, PostgreSQL, MySQL, and SQLite text. It includes polyfills to compensate for features lacking in certain databases, such as the \"MERGE\" command, and unifies functionality that differs subst ／ SqExpress comes with a simple but efficient data access mechanism that wraps ADO.Net DbConnection and can be used with MS SQL Client, Npgsql, MySQL Connector, or Sqlite. ／ You can use SqExpress with a code-first approach by declaring SQL tables as C# classes and generating table-creation scripts for Microsoft SQL Server, PostgreSQL, MySQL, or SQLite. If your database structure is already defined by an Entity Framework Core SQL S",
+     "lines": [
+      7,
+      11,
+      13
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The library provides a generic SQL syntax tree with export to MS T-SQL, PostgreSQL, MySQL, and SQLite text. It includes polyfills to compensate for features lacking in certain databases, such as the \"MERGE\" command, and unifies functionality that differs subst ／ SqExpress comes with a simple but efficient data access mechanism that wraps ADO.Net DbConnection and can be used with MS SQL Client, Npgsql, MySQL Connector, or Sqlite. ／ You can use SqExpress with a code-first approach by declaring SQL tables as C# classes and generating table-creation scripts for Microsoft SQL Server, PostgreSQL, MySQL, or SQLite. If your database structure is already defined by an Entity Framework Core SQL S",
+     "lines": [
+      7,
+      11,
+      13
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "You can use SqExpress with a code-first approach by declaring SQL tables as C# classes and generating table-creation scripts for Microsoft SQL Server, PostgreSQL, MySQL, or SQLite. If your database structure is already defined by an Entity Framework Core SQL S ／ `SqDbAiAgent` shows how SqExpress can act as a fail-closed safety layer for AI-generated T-SQL: the SQL is parsed, validated against the allowed schema, optionally rewritten with security predicates, and only then executed against SQL Server. ／ And finally, here is how to execute the query against SQL Server: ／ Gen-Tables mssql -ConnectionString \"Server=(local);Database=YourDatabase;Integrated Security=True;TrustServerCertificate=True\" -UseTableDeclarationAttributes ／ SqExpress provides portable JSON reading, construction, mutation, array expansion, and relational output for SQL Server 2022+, PostgreSQL 12+, MySQL 8.0+, MariaDB 10.6+, and SQLite with JSON1.",
+     "lines": [
+      13,
+      121,
+      184,
+      307,
+      713
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "SqExpress provides portable JSON reading, construction, mutation, array expansion, and relational output for SQL Server 2022+, PostgreSQL 12+, MySQL 8.0+, MariaDB 10.6+, and SQLite with JSON1.",
+     "lines": [
+      713
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为多个数据库提供查询构建/解析/代码生成能力的 .NET 库，属于为数据库生态服务的开发组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The library provides a generic SQL syntax tree with export to MS T-SQL, PostgreSQL, MySQL, and SQLite text. It includes polyfills to compensate for features lacking in certain databases, such as the \"MERGE\" command, and unifies functionality that differs substantially between dialects, such as working with JSON. It also provides a set of builders and operators that will help you build complex SQL expressions. It also includes a T-SQL parser (`SqTSqlParser`) for converting existing SQL text into SqExpress AST. ／ SqExpress comes with a simple but efficient data access mechanism that wraps ADO.Net DbConnection and can be used with MS SQL Client, Npgsql, MySQL Connector, or Sqlite. ／ You can use SqExpress with a code-first approach by declaring SQL tables as C# classes and generating table-creation scripts for Microsoft SQL Server, PostgreSQL, MySQL, or SQLite. If your database structure is already defined by an Entity Framework Core SQL Server model, SqExpress can automatically generate the corresponding Table Descriptors during the project build.",
+   "evidence_lines": [
+    7,
+    11,
+    13
+   ]
+  },
+  "fn": "0x1000000/SqExpress",
+  "sha": "8c1836d06742",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bbc9d4fb9bd1": {
+  "identity": {
+   "one_liner": "自托管社交媒体自动化平台，集成 Facebook/Instagram 发布、收件箱与 CRM",
+   "review": "PostStack 是一个自托管、源码可得的社交媒体管理应用，提供帖子发布与排程、DM/评论自动回复、drip 序列和联系人 CRM，面向希望自主掌控自动化流程的个人、代理机构和开发者。应用基于 Hono 框架，使用 PostgreSQL 存储数据（限流、会话黑名单等均依赖 Postgres），通过 Docker Compose 一键启动，无需通过 Meta App Review 即可在自己的账号上运行。",
+   "highlights": [
+    "支持 Facebook、Instagram、YouTube、Telegram、Gmail 多渠道收件箱与自动回复",
+    "提供发布排程、drip 消息序列和联系人 CRM（全文搜索、标签、订阅管理）",
+    "提供 REST API、Bearer 密钥鉴权，可选 OpenAI 兼容端点的 AI 改写与草稿回复"
+   ],
+   "use_cases": [
+    "个人或代理机构自托管替代 ManyChat/Buffer 的社媒自动回复与营销自动化",
+    "通过 REST API 与 n8n/Zapier 集成的自定义社媒运营流程",
+    "在自己服务器上管理多平台 DM/评论收件箱与联系人"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rate limiting** on auth endpoints (Postgres-backed) ／ - **JWT session invalidation** on logout (Postgres denylist) ／ - **Contact search & non-ASCII case-folding** — the dashboard contact search uses `ILIKE`, whose case-insensitivity for non-ASCII letters (e.g. Polish `Ó`/`ó`) depends on the database locale. The bundled `postgres:alpine` initializes with the `C` locale, where ／ Builds and starts everything -- PostgreSQL, the Hono web server, graphile-worker: ／ docker compose up postgres # database only",
+     "lines": [
+      56,
+      57,
+      71,
+      110,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储自身数据的社交媒体自动化应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0（source-available，非 OSI 开源）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Self-hosted social media management for Facebook, Instagram, YouTube, Telegram & Gmail -- publish & schedule posts, auto-reply to DMs, comments and emails, and run drip sequences, all from one place. ／ - **Rate limiting** on auth endpoints (Postgres-backed)",
+   "evidence_lines": [
+    3,
+    56
+   ]
+  },
+  "fn": "jurczykpawel/poststack",
+  "sha": "bbc9d4fb9bd1",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9869,5 +9869,144 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "10e1a73b3319": {
+  "identity": {
+   "one_liner": "汽修车间预约与工单管理的全栈 Web 应用",
+   "review": "ARSM 是面向汽修店的预约与运营应用，供技师和管理员认领工单、跟踪维修进度并生成报价 PDF。后端为 .NET 10 + EF Core + PostgreSQL，前端 React 19，通过 .NET Aspire 编排 PostgreSQL、RustFS 对象存储等本地容器，README 中未见数据库相关高可用或备份能力。",
+   "highlights": [
+    "提供预约认领、实时状态更新、月历视图及带 VAT 的配件/工时报价 PDF 导出",
+    "使用 .NET Aspire 编排 PostgreSQL 与 RustFS 容器的本地开发栈",
+    "支持按角色区分技师与管理员行为，包含公司经营按年月的报表"
+   ],
+   "use_cases": [
+    "汽修店的日常维修预约与工单调度",
+    "按车辆生成配件/工时报价单并导出 PDF",
+    "按年月汇总公司经营数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL|",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储业务数据的汽修管理应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ARSM is a workshop scheduling and operations app for auto service teams. It helps mechanics and admins organize appointments, claim work, and track repair progress in one responsive dashboard. ／ |Database|PostgreSQL| ／ - `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + RustFS + ApiService + WebUI)",
+   "evidence_lines": [
+    12,
+    36,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "hajdu-patrik/ARSM",
+  "sha": "10e1a73b3319",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5dff056e8e5f": {
+  "identity": {
+   "one_liner": "本地优先的编码代理记忆 MCP 服务器，单 SQLite 文件存储",
+   "review": "Palace 是一个为编码代理提供跨会话记忆的 MCP 服务器：把决策、命令、偏好等原文存入单个本地 SQLite 文件，并用 ONNX 本地嵌入做 BM25+向量混合检索，通过 hooks 在会话开始、提交提示等时机自动注入记忆并要求代理写回日记。面向使用 Claude Code、Cursor、Codex 等客户端的开发者，支持 cargo 源码编译，macOS Intel 平台不支持。",
+   "highlights": [
+    "提供 9 个 MCP 工具和自动召回 hooks，在会话开始、提示提交、工具使用后注入相关记忆",
+    "检索融合 BM25 关键词评分与本地嵌入余弦相似度，可选本地 cross-encoder 重排",
+    "以单二进制和单个 palace.db 文件运行，嵌入由 all-MiniLM-L6-v2 在本地 CPU 生成"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、Cursor 等代理客户端提供跨会话的项目决策与偏好记忆",
+    "在本地离线环境存储和检索编码代理的会话日记与知识图谱事实",
+    "用于创作、教练、笔记等非软件项目的主题记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One binary, one SQLite file, no API keys, no cloud. ／ Inside a palace: a project wing my_api with rooms backend, decisions, and testing full of drawers; a topic wing sales_notes; a knowledge graph fact my_api uses_queue SQLite; and agent diaries from claude and codex",
+     "lines": [
+      13,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目仅将 SQLite 作为自身记忆数据的本地存储，不面向数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Local-first memory for coding agents. ／  One binary, one SQLite file, no API keys, no cloud. ／ - **Shipping as one binary.** No Python, no vector database, no Docker. One",
+   "evidence_lines": [
+    11,
+    13,
+    53
+   ]
+  },
+  "fn": "AncientiCe/palace-rs",
+  "sha": "5dff056e8e5f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

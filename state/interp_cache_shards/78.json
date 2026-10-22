@@ -8531,5 +8531,178 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f11372a68d2a": {
+  "identity": {
+   "one_liner": "Linux QQ 群聊 Agent，经 OneBot v11 协议端收发消息",
+   "review": "这是一个运行在 Linux 服务器上的 QQ 群聊机器人程序，连接外部 OneBot v11 协议端获取消息，调用 OpenAI Chat Completions 兼容的模型服务生成回复，支持分条发言、表情包、语音转写、多人游戏与主动发言；数据使用 SQLite（WAL）持久化，提供 Docker 与 systemd 安装脚本及运维命令。适合想在自建服务器上部署 LLM 群聊机器人的用户。",
+   "highlights": [
+    "通过 OneBot v11 WebSocket/HTTP 连接协议端，按会话串行入库，SQLite/WAL 消息状态机保证未发送批次自动重试",
+    "支持 OpenAI Chat Completions 兼容模型接入、语音转写/合成（含本地 whisper.cpp）、插件子进程机制与内置运维命令 src/ops.js",
+    "提供 install.sh/deploy-all.sh 一键安装、Docker 镜像、控制台与部署快照回滚"
+   ],
+   "use_cases": [
+    "在 Linux 服务器自托管 LLM 驱动的 QQ 群聊机器人",
+    "群聊自动化提醒、多人游戏主持与主动话题",
+    "已有 OneBot v11 协议端时仅部署 Agent（deploy.sh）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "-> SQLite/WAL 消息状态机 ／ |磁盘|10GB 空闲，本机盘；SQLite 不支持 NFS/SMB| ／ - 校验参数、源码与 Node.js 的 `node:sqlite` 能力； ／ - `messages.sqlite`：消息、租约与出站状态； ／ - `identity-pilot.sqlite`：统一 QQ 身份索引与好友请求审批台账；",
+     "lines": [
+      85,
+      139,
+      261,
+      419,
+      422
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **预期可用**：Debian 12/13、Ubuntu 26.04、Rocky Linux 9、AlmaLinux 9、Fedora、CentOS Stream、RHEL、Oracle Linux、Amazon Linux、Arch/Manjaro、openSUSE Leap/Tumbleweed、SLES、openEuler、Anolis、麒麟/UOS（按 dnf/yum/zypper/pacman 尝试）。Debian 12 官方仓库只有 Compose v1，需先按 Docker 官方文档配置 apt ",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该程序自身以 SQLite 存储消息、租约等业务数据，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向 Linux 服务器的 QQ 群聊 Agent，支持分条发言、表情包收发、长期记忆与内置运维命令。 ／ QQ Agent Plus 是面向 Linux 服务器的 QQ 群聊 Agent。它连接外部 OneBot v11 协议端，每次触发使用 ／   -> SQLite/WAL 消息状态机",
+   "evidence_lines": [
+    5,
+    20,
+    85
+   ]
+  },
+  "fn": "sakurawwwxh/qq-agent-plus",
+  "sha": "f11372a68d2a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7c42cdbabb06": {
+  "identity": {
+   "one_liner": "跨平台工业级 C++ 全栈后端开发库",
+   "review": "一个面向 C++ 后端开发的功能库集合，提供并发异步、容器、加密、文件系统、网络协议（HTTP/1.1、HTTP/2、WebSocket、DNS、SMTP）及 SQL 语句构建等组件，支持 C++14/17/20 与多架构编译。为 C++ 后端开发者与底层原理学习者服务，通过 vcpkg/CMake 集成；数据库方面包含 MySQL/PostgreSQL/SQLite 客户端与方言感知的 SQL 构建器。",
+   "highlights": [
+    "提供线程池、协程、异步 I/O 与同步原语等并发组件",
+    "实现 HTTP/1.1、HTTP/2、WebSocket、DNS、SMTP 等网络协议客户端与服务器",
+    "包含 AES-256、ChaCha20-Poly1305 等加密算法与 MySQL/PostgreSQL/SQLite 客户端、方言感知 SQL 构建器"
+   ],
+   "use_cases": [
+    "构建 C++ 后端网络服务",
+    "需要在应用中集成数据库访问与 SQL 构建的场景",
+    "学习并发、网络协议与加密算法的底层实现"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 客户端 ／ |📦 可选依赖(vcpkg)|libpq|16.0|",
+     "lines": [
+      209,
+      357
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL 客户端",
+     "lines": [
+      208
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **`sql_builder`** - 标准 SQL 语句流式构建，支持**方言感知占位符**（Generic `?` / PgSQL `$N` / Oracle `:N`）和**方言感知 DDL**（AUTO_INCREMENT / SERIAL / IDENTITY 自动适配）",
+     "lines": [
+      204
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite 客户端 ／ ||sqlite3|3.0|",
+     "lines": [
+      210,
+      359
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 C++ 开发库提供数据库客户端与 SQL 构建组件，为使用数据库的应用服务而非存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目旨在建立**功能健全、风格统一、可读性强、社区共建、跨平台兼容**的工业级现代 C++ 开发库。通过清晰的架构设计、规范的代码实现、丰富的设计模式应用，",
+   "evidence_lines": [
+    26
+   ]
+  },
+  "fn": "aurora250/NexusForce",
+  "sha": "7c42cdbabb06",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

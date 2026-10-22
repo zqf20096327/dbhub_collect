@@ -10924,5 +10924,162 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5d98bd165a97": {
+  "identity": {
+   "one_liner": "HTTP 反向代理缓存与时序数据库查询加速器",
+   "review": "Trickster 是一个 HTTP 反向代理缓存，同时为时序数据库提供仪表盘查询加速，通过 Delta Proxy 缓存增量数据点、步长对齐和 Fast Forward 减少对后端 TSDB 的重复查询。支持 Prometheus、ClickHouse、InfluxDB、PostgreSQL、MySQL 等后端。适用于有大量仪表盘读取场景的运维团队，可通过 Docker、Helm、Kubernetes 部署或源码构建。",
+   "highlights": [
+    "提供 Delta Proxy 缓存，仅向后端 TSDB 请求缺失的增量数据点",
+    "支持 Prometheus、ClickHouse、InfluxDB、PostgreSQL、MySQL 等时序后端的查询加速",
+    "内置 Prometheus 指标、健康检查端点、分布式追踪（OpenTelemetry OTLP）与请求路由规则引擎"
+   ],
+   "use_cases": [
+    "仪表盘高刷新频率下的时序数据查询加速",
+    "为 HTTP 应用和 REST API 提供反向代理缓存",
+    "在 Kubernetes 中作为缓存代理或 Ingress/Gateway Controller 部署"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "TimescaleDB / PostgreSQL",
+     "lines": [
+      57
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL",
+     "lines": [
+      61
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse"
+   ],
+   "eco": "tool",
+   "eco_why": "作为反向代理/缓存层为时序数据库提供查询加速服务，属数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Trickster is an HTTP reverse proxy/cache for http applications and a dashboard query accelerator for time series databases. ／ ## Time Series Database Accelerator ／ Trickster works with virtually any Dashboard application that makes queries to any of these TSDBs:",
+   "evidence_lines": [
+    10,
+    41,
+    47
+   ]
+  },
+  "fn": "trickstercache/trickster",
+  "sha": "5d98bd165a97",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0841a5c7755f": {
+  "identity": {
+   "one_liner": "本地持久化记忆 MCP 服务器与自托管 AI 工作区",
+   "review": "SynaBun 为 Claude Code、Codex CLI、OpenCode 等 AI 编码工具提供跨会话的本地长期记忆，数据存于单个 SQLite 文件并通过 MCP 协议暴露 remember/recall 等工具，附带本地 Web 界面（Neural Interface）用于浏览、编辑记忆和运行编码代理，需 Node.js 22.19+，无云服务依赖。",
+   "highlights": [
+    "通过 MCP 服务器向任意 MCP 客户端提供 remember、recall、reflect、forget、restore 等记忆工具",
+    "记忆存储于本地单个 SQLite 文件，支持关键词检索与本地模型语义检索",
+    "提供本地 Web 工作区，含 3D 记忆地图、代理侧边面板、终端与任务自动化"
+   ],
+   "use_cases": [
+    "为 AI 编码工具保存和跨会话复用项目上下文",
+    "在本地界面中查看、检索、编辑和删除代理记忆",
+    "通过任务模板按计划或循环运行自动化代理任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your AI tool ── MCP ──▶ SynaBun MCP server ──▶ memory.db (SQLite) ◀── Neural Interface (localhost:3344) ／ - **A local database.** Memories live in one SQLite file on your disk. Each one is indexed for keyword search and for search by meaning, using a model that runs on your machine.",
+     "lines": [
+      67,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明记忆数据存于本机单个 SQLite 文件（memory.db），SQLite 是其自身数据存储而非被服务的数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your AI tool ── MCP ──▶ SynaBun MCP server ──▶ memory.db (SQLite) ◀── Neural Interface (localhost:3344) ／ - **A local database.** Memories live in one SQLite file on your disk. Each one is indexed for keyword search and for search by meaning, using a model that runs on your machine. ／ - **An MCP server.** It gives your AI tool the memory tools: `remember`, `recall`, `reflect`, `forget`, `restore` and a few more. Any MCP client can use it.",
+   "evidence_lines": [
+    67,
+    70,
+    71
+   ]
+  },
+  "fn": "danilokhury/Synabun",
+  "sha": "0841a5c7755f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10883,5 +10883,74 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c175aa123d7a": {
+  "identity": {
+   "one_liner": "多模态数据库，表内集成媒体存储、模型调用编排与服务",
+   "review": "Pixeltable 是一个面向 AI 应用的多模态数据库，用户在单文件 app.py 中定义表结构，将视频/图像/音频等文件引用与计算列（模型调用、转写、嵌入索引）放在一起，插入行时自动执行计算并增量重算受影响列，表变更带版本可回滚；底层通过本地守护进程运行其自带的 Postgres 存数据，提供 pip 安装、CLI、HTTP 服务和 Cloud 版本，适合构建 RAG、媒体管线和带工具调用记录的智能体后端的开发者。",
+   "highlights": [
+    "支持视频、图像、音频、文档列类型及嵌入索引，插入行时自动运行模型调用并存储结果",
+    "表级版本化，提供 history/revert 与 recompute 增量重算",
+    "内置 FastAPI 路由声明与本地/云端 MCP server，供编码代理操作表和查询"
+   ],
+   "use_cases": [
+    "对文档构建 RAG，增删文档无需重写嵌入脚本",
+    "视频/图像管线：抽帧、转写、检测",
+    "将智能体工具调用作为可查询行存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# the first pxt command starts a local daemon that runs Pixeltable's Postgres and reads your environment once ／ If you don't want a schema, Pixeltable is the wrong tool. Coming from Pinecone, Postgres, LangGraph or Airflow?",
+     "lines": [
+      45,
+      101
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "自身是一个数据库引擎，内部运行其自带的 Postgres 守护进程作为存储层，为 AI 应用提供数据基础设施",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Multimodal database, orchestration, and serving in one file ／ # the first pxt command starts a local daemon that runs Pixeltable's Postgres and reads your environment once ／ We're database people (Pixeltable comes from the creators of Apache Parquet and Impala), so our answer was to move",
+   "evidence_lines": [
+    4,
+    45,
+    83
+   ]
+  },
+  "fn": "pixeltable/pixeltable",
+  "sha": "c175aa123d7a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

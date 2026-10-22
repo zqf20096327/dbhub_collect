@@ -10680,5 +10680,210 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "65d60f717b01": {
+  "identity": {
+   "one_liner": "用 Rust 重写的 PostgreSQL 兼容数据库引擎",
+   "review": "pgrust 是以 Rust 重写的 Postgres 实现，提供与 Postgres 线路协议和 SQL 方言的兼容，内置向量化 push-based JIT 查询引擎 Gravity、线程并发模型和统一内存管理器，并提供 pgrcolumnar 列存表访问方法。通过浏览器 WebAssembly 版、二进制 tarball、Docker 镜像分发。面向想体验 2026 风格 Postgres 架构的开发者；官方明确建议暂不用于生产，PostgreSQL 扩展无稳定 ABI 但附带 pgvector 等一批扩展。",
+   "highlights": [
+    "实现与 Postgres 线路协议及 SQL 方言兼容的数据库服务端，附带 bin/postgres、initdb、psql",
+    "内置 Gravity 向量化 push-based JIT 查询引擎与 pgrcolumnar 列存表访问方法",
+    "提供浏览器 WebAssembly 版本、多平台二进制 tarball 与 Docker 镜像三种运行方式"
+   ],
+   "use_cases": [
+    "在浏览器中零安装体验 Postgres 兼容数据库",
+    "在测试/开发环境中评估 Rust 实现的查询引擎与列存表",
+    "基于 ClickBench 类分析负载做查询引擎对比实验"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "engine and runs analytical queries as much as 3x faster than ClickHouse. Its JIT",
+     "lines": [
+      296
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该项目本身是一个数据库内核实现而非为现有数据库服务的工具或使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pgrust is a re-implementation of Postgres meant to show what Postgres would ／ - Gravity, a new vectorized push-based, JIT compiled query engine ／ Columnar storage (`pgrcolumnar`) is a table access method. Register it once in",
+   "evidence_lines": [
+    23,
+    30,
+    145
+   ],
+   "softened": []
+  },
+  "fn": "malisper/pgrust",
+  "sha": "65d60f717b01",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "71d8119e3ac6": {
+  "identity": {
+   "one_liner": "基于 Supabase/Postgres 的 Flutter 聊天后端包",
+   "review": "为 Flutter 应用提供聊天功能后端的 Dart 包，实现 flutter_chat_core 接口，数据存储于 Postgres（含 RLS、按周分区、pg_partman/pg_cron），实时能力依赖 Supabase Realtime。面向需要在应用中集成聊天、并已有或新建 Supabase 项目的开发者；需 Dart ≥3.8、Flutter ≥3.32，且需执行仓库提供的 SQL 脚本完成 schema、策略与存储桶配置。",
+   "highlights": [
+    "实现房间、成员、消息、附件、已读回执、表情回应、输入状态与在线状态等聊天数据模型，基于 Postgres + RLS 与 Supabase Realtime（L31）",
+    "chats.messages 表按周分区（pg_partman），id 使用按时间排序的 UUIDv7（L69）",
+    "所有表、存储桶与 Realtime 通道默认受 Postgres Row Level Security 保护（L53）"
+   ],
+   "use_cases": [
+    "为 Flutter 应用添加单聊与群聊",
+    "基于 Supabase 云端或自托管实例搭建实时消息后端",
+    "需要行级安全与按周分区消息表的多租户聊天场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A Supabase backend for flutter_chat_core and flutter_chat_ui 2.x: rooms, members, messages, attachments, read receipts, reactions, typing indicators and online status, over Postgres + RLS and Supabase Realtime. ／ * **Secure by default**. Every table, storage bucket and Realtime channel is protected by Postgres Row Level Security. Check our documentation for the details. ／ - **Scales with history**: `chats.messages` is partitioned by week with `pg_partman`, ids are time-ordered UUIDv7.",
+     "lines": [
+      31,
+      53,
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明聊天数据存储于 Postgres 并通过 SQL 脚本建表，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A Supabase backend for flutter_chat_core and flutter_chat_ui 2.x: rooms, members, messages, attachments, read receipts, reactions, typing indicators and online status, over Postgres + RLS and Supabase Realtime. ／  Actively maintained, community-driven Supabase BaaS for chat applications with an optional chat UI. ／ - **Scales with history**: `chats.messages` is partitioned by week with `pg_partman`, ids are time-ordered UUIDv7.",
+   "evidence_lines": [
+    31,
+    35,
+    69
+   ]
+  },
+  "fn": "insideapp-srl/flutter_supabase_chat_core",
+  "sha": "71d8119e3ac6",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "618e4d3c1cc6": {
+  "identity": {
+   "one_liner": "开源音乐播放器，本地媒体库+歌词+可分享音乐卡片",
+   "review": "面向 Windows 与 Android 的免费开源音乐播放器，提供本地曲库管理、歌词显示、队列/均衡器控制，并可将曲目与歌词片段导出为 9:16 分享图片。Windows 端基于 Electron/Fastify/SQLite 存储本地数据，Android 端使用 Capacitor 与 Media3；搜索、流媒体与元数据依赖外部非官方解析服务，稳定性可能受限。",
+   "highlights": [
+    "支持 Windows 与 Android 双平台，共享核心逻辑并各自提供定制界面",
+    "提供本地曲库、播放列表、歌词阅读、均衡器/睡眠定时器与 9:16 音乐卡片导出",
+    "曲库数据存储在本地，无云账号与跨设备同步"
+   ],
+   "use_cases": [
+    "在 Windows 或 Android 本地管理和播放个人音乐收藏",
+    "阅读同步歌词并调整播放参数（队列、均衡器、睡眠定时器）",
+    "生成可分享的曲目/歌词卡片图片"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The source uses React, TypeScript, Vite and Zustand; Electron/Fastify/SQLite on Windows; Capacitor and native Media3 on Android. Domain logic and localisation live in `packages/`.",
+     "lines": [
+      84
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Windows 端使用 SQLite 存储本地曲库数据，应用本身为音乐播放器。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A free, open-source music player for Windows and Android.** Discover something new, keep a library of your own and make room for the music you love. ／ The source uses React, TypeScript, Vite and Zustand; Electron/Fastify/SQLite on Windows; Capacitor and native Media3 on Android. Domain logic and localisation live in `packages/`. ／ Your library is stored locally. Search, streaming, artwork, metadata and lyrics contact external services, which receive the relevant requests and network address. Details are in **Settings → Sources and attribution** and PRIVACY.md.",
+   "evidence_lines": [
+    5,
+    84,
+    96
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "salvo13200/RITVIO",
+  "sha": "618e4d3c1cc6",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

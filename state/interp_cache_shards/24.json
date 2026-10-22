@@ -8622,5 +8622,150 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f62401209dbd": {
+  "identity": {
+   "one_liner": "单容器自托管基础设施监控工具，固定规则告警并内置 MCP 服务器",
+   "review": "maintenant 是一个自托管的基础设施监控工具，用单个 Go 二进制监控 Docker、Docker Swarm、Kubernetes 工作负载、uptime、TLS 证书、cron/心跳、容器日志、镜像更新与 CVE。告警由固定规则触发，可通过 webhook 推送，内置 51 个工具的 MCP 服务器供 AI 助手只读排查。给需要一体化监控的个人或团队使用，数据默认存 SQLite。",
+   "highlights": [
+    "提供 Docker/Swarm/Kubernetes 零配置自动发现、端点检查、TLS 证书与 cron/心跳监控",
+    "内置 Model Context Protocol 服务器（51 个工具），支持 stdio 与 Streamable HTTP 传输及 OAuth2",
+    "支持多主机架构：轻量只读 agent 经 mTLS gRPC 流回传数据，告警路由至 Discord/Slack/Telegram/邮件/webhook"
+   ],
+   "use_cases": [
+    "自托管服务器与容器的统一状态、日志与资源监控",
+    "用固定规则产生告警并让 AI agent 经 MCP 只读排查故障",
+    "对外发布带事件与订阅者的公开状态页"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Zero dependencies.** SQLite is the only datastore. No Redis, no queue, nothing to administer. A fleet operator may back the server on a PostgreSQL they already run; agents always stay on SQLite.",
+     "lines": [
+      280
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **One binary, three modes.** Go backend, Vue 3 frontend embedded via `embed.FS`, SQLite inside. The same file runs `embedded` (single host, default), `server` (central ingestion) and `agent` (remote host). ／ - **Zero dependencies.** SQLite is the only datastore. No Redis, no queue, nothing to administer. A fleet operator may back the server on a PostgreSQL they already run; agents always stay on SQLite.",
+     "lines": [
+      279,
+      280
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为基础设施监控服务的工具，SQLite 仅是其内置数据存储，非以数据库为核心的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "maintenant, infrastructure monitoring in one container ／  from a single Go binary that fits in a few tens of MB of RAM when freshly started (about 100 MB after several days on a busy host). No PromQL, no exporters, no dashboards to build. ／ Built-in Model Context Protocol server with 51 tools. Ask your AI assistant what is burning, read a container's logs, check the alert queue, acknowledge an alert, open an incident. stdio and Streamable HTTP transports, OAuth2 with a client id and secret for remote clients (Claude web, mobile and Desktop).",
+   "evidence_lines": [
+    1,
+    8,
+    181
+   ]
+  },
+  "fn": "kOlapsis/maintenant",
+  "sha": "f62401209dbd",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cfec6a365aab": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 网关的自托管管理与用量观测控制台",
+   "review": "Oh My CPA 是为 CLIProxyAPI（CPA）网关设计的 Web 控制台，以单个 Go 二进制运行，内嵌 React 界面并用本地 SQLite 存储数据。它管理网关的 AI 提供商、凭证与配置，记录每次请求的用量与成本，并提供仪表盘、请求记录与审计日志。使用前需单独安装 CPA v8.0.0 以上版本。",
+   "highlights": [
+    "管理 AI 提供商、OAuth 凭证与网关客户端密钥",
+    "记录每请求的用量、延迟、token 与成本，仪表盘支持 15 分钟至 90 天及自定义时间范围",
+    "单一 Go 二进制内嵌 React 控制台与本地 SQLite 数据库，可离线运行"
+   ],
+   "use_cases": [
+    "为自托管的 CLIProxyAPI 网关提供配置管理与用量观测",
+    "追踪多提供商 AI 请求的成本与配额",
+    "通过控制台集中管理 OAuth 凭证与客户端密钥"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "binary with the React console embedded and a local SQLite database, runs offline, and ／ |`OMCPA_DATA_DIR`|`./data`|Directory of the SQLite database; the Compose files set `/data`| ／ ├─ SQLite WAL (/data)",
+     "lines": [
+      34,
+      308,
+      321
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 SQLite 仅作为该控制台自身的本地存储数据库，项目服务对象是 CLIProxyAPI 网关而非数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CLIProxyAPI (CPA) is an API gateway: it ／ records the usage and cost of every request. It is a single Go ／ binary with the React console embedded and a local SQLite database, runs offline, and",
+   "evidence_lines": [
+    30,
+    33,
+    34
+   ]
+  },
+  "fn": "WizisCool/oh-my-cpa",
+  "sha": "cfec6a365aab",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10691,5 +10691,212 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c2df0e73ad1a": {
+  "identity": {
+   "one_liner": "基于 MySQL 与 Spring Boot 的闲鱼虚拟商品多租户自动化运营系统",
+   "review": "一个面向闲鱼虚拟商品卖家的全流程自动化系统，覆盖商品发布、卡密/固定内容自动发货、AI 客服回复与评价售后，采用多租户数据隔离，核心链路仅依赖 MySQL 并用行级锁实现卡密原子预占与幂等交付，通过 Docker Compose 自部署。适合需要自动化运营闲鱼虚拟商品店铺的商家（非商业用途授权）。",
+   "highlights": [
+    "通过 MySQL 行级锁实现卡密原子预占、发送后核销、失败释放或转人工复核",
+    "支持多账号、多租户隔离，AI 客服带独立向量库与人工接管机制",
+    "订单与回复任务持久化，支持租约恢复、退避重试与 Docker 自部署"
+   ],
+   "use_cases": [
+    "虚拟商品（卡密、激活码、固定资源）自动发货",
+    "闲鱼店铺自动客服回复与人工接管",
+    "多商家共用平台的多租户运营管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ 它不只是在收到订单后发送一段文本，而是把 **订单发现、幂等入队、库存预占、双通道交付、失败重试和人工复核** 串成可恢复的完整链路。固定内容与卡密两种交付模式严格互斥，账号、商品、消息、订单、库存、任务和 AI 知识库按租户隔离。核心任务链路只依赖 MySQL，不强制引入 Redis 或消息队列，兼顾部署成本与后续扩展。 ／ |原子卡密交付|MySQL 行级锁整单预占，发送成功后核销，失败释放或转人工复核|避免并发订单导致重复发卡、少发和超卖|",
+     "lines": [
+      12,
+      19,
+      66
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- 全新环境使用 MySQL，不提供 SQLite 历史数据自动迁移。",
+     "lines": [
+      386
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统使用 MySQL 存储业务数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial License 1.0.0，仅限非商业用途",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "XianYuSmart 是一个面向多租户场景的闲鱼虚拟商品运营系统。买家下单后，平台可以按商品自动交付固定资源或卡密，通过发货凭证、私聊或两种通道完成触达；成交前后的常见咨询、收货引导和评价跟进也能按规则自动处理。商家只需关注低库存、账号掉线、发送失败和待复核等真正需要介入的事项。 ／ 它不只是在收到订单后发送一段文本，而是把 **订单发现、幂等入队、库存预占、双通道交付、失败重试和人工复核** 串成可恢复的完整链路。固定内容与卡密两种交付模式严格互斥，账号、商品、消息、订单、库存、任务和 AI 知识库按租户隔离。核心任务链路只依赖 MySQL，不强制引入 Redis 或消息队列，兼顾部署成本与后续扩展。 ／ - MySQL 5.7+",
+   "evidence_lines": [
+    17,
+    19,
+    176
+   ]
+  },
+  "fn": "Evvvvvvvan/XianYuSmart",
+  "sha": "c2df0e73ad1a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a87e0c8c5c1a": {
+  "identity": {
+   "one_liner": "自托管 AI 代理语义记忆服务，通过 MCP 提供持久记忆",
+   "review": "OmniMem 为 AI 编码代理提供跨会话、跨项目的持久记忆：以 MCP 服务形式暴露 30+ 工具，存储情景记忆、项目上下文、RSS 知识、偏好和编译生成的技能，并实现经验评分、矛盾检测、语义去重与生命周期管理。面向 Claude Code、Cursor 等代理用户；数据实际存于 Valkey，需 Docker 部署，README 未见 SQLite 相关内容。",
+   "highlights": [
+    "通过 MCP 协议向 AI 代理提供五种命名空间的记忆检索与写入，支持 30+ 工具",
+    "实现经验评分、矛盾检测、语义去重和 ACTIVE→DEPRIORITISED→ARCHIVED→DELETED 生命周期管理",
+    "本地运行 sentence-transformers 嵌入，存储于 Valkey，提供 Web 管理界面和 Prometheus /metrics 端点"
+   ],
+   "use_cases": [
+    "让 AI 编码代理跨会话记住项目决策、失败尝试和解决方案",
+    "通过 RSS 订阅定期摄取并嵌入外部知识供代理召回",
+    "自托管部署，通过反向代理在多台机器间共享同一记忆层"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 明确数据存储在 Valkey 中，OmniMem 本身是使用数据库存储记忆数据的应用服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可，README 明确无企业版和托管版",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Four containers. Nothing leaves your machine. Local embeddings via sentence-transformers, storage in Valkey with vector search, and both front doors share the same memory engine. ／ - **Valkey** is an open source Redis fork. All your data stays in a named Docker volume on your own machine. ／ OmniMem fixes that. It is a self-hosted MCP server that gives your AI agent persistent memory across sessions, projects, and machines. It runs on your own hardware and it is free forever.",
+   "evidence_lines": [
+    79,
+    94,
+    15
+   ]
+  },
+  "fn": "richarvey/OmniMem",
+  "sha": "a87e0c8c5c1a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4f34c473830c": {
+  "identity": {
+   "one_liner": "macOS 桌面应用，将讲座/会议/文档转为可问答的本地 Markdown wiki",
+   "review": "SKAZ 是运行在 macOS（Apple Silicon）上的 Electron+Python 桌面应用：录制讲座或会议做实时语音转写（Soniox 云端或本机 Whisper），也支持 PDF、网页、视频等来源，构建由 Markdown 文件组成的 wiki，并用带引注脚的对话回答问题，附带闪卡与测验。面向需要记录讲座与会议并检索内容的学生和职场用户；目前为 Alpha 阶段，仅验证 Apple Silicon 平台。",
+   "highlights": [
+    "支持实时语音转写（Soniox 云端流式或本机 Whisper 离线）",
+    "以本地 Markdown 文件夹存储库，可在 Obsidian 打开或导出",
+    "回答带脚注引证，可跳转到录音的精确时间点或文档页码"
+   ],
+   "use_cases": [
+    "记录讲座或会议并生成带时间戳引证的笔记",
+    "将 PDF、文章、视频等资料整合为可问答的个人 wiki",
+    "从讲座内容生成闪卡和测验进行复习"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Local backend|Python, FastAPI, an SQLite index over the Markdown files|",
+     "lines": [
+      146
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为应用本地索引存储 Markdown 库，属于使用数据库的应用而非数据库生态工具。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SKAZ is a macOS app for what you listen to and read. Record a lecture or a meeting, or add a PDF, ／ |Local backend|Python, FastAPI, an SQLite index over the Markdown files|",
+   "evidence_lines": [
+    22,
+    146
+   ]
+  },
+  "fn": "all0b0y/SKAZ",
+  "sha": "4f34c473830c",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

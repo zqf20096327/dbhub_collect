@@ -11733,5 +11733,186 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "19c67a597562": {
+  "identity": {
+   "one_liner": "后端基础设施编排平台，SDK 声明资源并自动供给",
+   "review": "Encore 提供 SDK、CLI 与云平台，开发者通过 SDK 声明服务与基础设施（如 SQL 数据库、Pub/Sub），本地运行真实 Postgres 等资源，部署时在自有 AWS/GCP 账户中自动供给对应资源；支持 TypeScript 与 Go，内置 MCP 服务器供 AI 编码代理使用。面向构建和部署后端应用的开发者与 AI 代理。",
+   "highlights": [
+    "SDK 声明式定义服务与基础设施资源，本地与云端供给对应实现",
+    "支持 TypeScript 与 Go SDK，本地 CLI 附带仪表盘用于查看服务、API、追踪与数据库",
+    "提供 MCP 服务器配置，支持 AI 编码代理检视应用内服务、API 与数据库"
+   ],
+   "use_cases": [
+    "在本地与自有云环境中构建、测试和部署后端应用",
+    "为每个 PR 创建含数据库分支的预览环境",
+    "结合 AI 编码代理实现变更的端到端验证"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|SQL Database|Postgres|RDS|Cloud SQL| ／ 1. **Local:** `encore run` starts the whole system locally: real Postgres, real Pub/Sub semantics, type-safe service-to-service calls, plus a local dashboard with distributed tracing. Infrastructure namespaces let multiple branches or agents work in parallel w",
+     "lines": [
+      33,
+      67
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为后端应用供给和管理数据库等基础设施资源，属于数据库生态服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MPL 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Encore combines an open source SDK, CLI, and cloud platform into one workflow for building and deploying apps. ／ |SQL Database|Postgres|RDS|Cloud SQL| ／ Encore is built for AI-assisted development. When you run `encore app create`, you can pick your AI tool (Cursor, Claude Code, etc.) and Encore generates the right rules files for it, plus configures an MCP server that lets agents introspect your app: services, APIs, databases, traces. Combined with the fast local-to-preview-env iteration loop above, agents can validate their own changes end-to-end against real infrastructure instead of guessing.",
+   "evidence_lines": [
+    14,
+    33,
+    122
+   ]
+  },
+  "fn": "encoredev/encore",
+  "sha": "19c67a597562",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f476bab69bb9": {
+  "identity": {
+   "one_liner": "dsh 宿主的跨会话长期记忆插件，用 SQLite + 记忆宫殿信息架构组织记忆",
+   "review": "为 DeepSeek Harness（dsh）宿主提供跨会话长期记忆的插件：将记忆按「房间#桩位」坐标组织为记忆宫殿结构，数据存于 SQLite（含 FTS5 与本地向量混合检索），支持 SM-2 间隔重复复习、知识蒸馏与信念巩固，附 Web 管理面板。适用于使用 dsh 宿主的 agent 用户，通过 dsh plugin 命令安装，纯 TypeScript、无外部进程依赖。",
+   "highlights": [
+    "提供 21 个 engram_* 工具，覆盖记忆保存、混合检索、复习调度、导出等操作",
+    "SQLite 存储，FTS5 关键词与本地向量嵌入做 RRF 融合检索，嵌入模型可离线运行",
+    "支持双层分库（个人库与按 git origin 隔离的项目库）、脱敏写入与来源审计日志"
+   ],
+   "use_cases": [
+    "为 dsh 宿主的 agent 会话提供跨会话记忆与用户画像注入",
+    "对 agent 记忆做间隔重复复习与检索练习",
+    "将历史会话回填提炼为可检索、可导出的长期记忆库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|固定路线定顺序|`tour_routes` 只增不改；`engram_tour mode=fixed` 按桩位顺序走全宫|src/store/sqlite.ts|",
+     "lines": [
+      53
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为 dsh 宿主的插件组件，为 agent 会话提供记忆服务而非独立业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dsh-engram · 记忆宫殿 — DeepSeek Harness 跨会话长期记忆插件（位置当索引 · 固定路线定顺序 · 骨架长期复用 · 标记独一无二） ／  DeepSeek Harness 跨会话长期记忆插件 — 把记忆宫殿的 信息架构 （而不是它的神经科学隐喻）真正落进 agent： 位置当索引 （每条记忆钉在「房间#桩位」坐标上）、 固定路线定顺序 （巡游路线只增不改）、 骨架长期复用 （同主题永远同房同序）、 标记独一无二 （门牌纪律：唯一 · 差异化 · 带日期）。配套间隔重复的检索练习（只给线索、不给正文）与知识飞轮（摄取 → 强化 → 蒸馏 → 衰减）。纯 TypeScript，零外部进程、零 Python 依赖。 ／ |固定路线定顺序|`tour_routes` 只增不改；`engram_tour mode=fixed` 按桩位顺序走全宫|src/store/sqlite.ts|",
+   "evidence_lines": [
+    1,
+    5,
+    53
+   ]
+  },
+  "fn": "kenz1117/dsh-engram",
+  "sha": "f476bab69bb9",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::OpenPLi download feed": {
+  "identity": {
+   "one_liner": "OpenPLi 下载 feed 仓库",
+   "review": "基于简介，该仓库为 OpenPLi（一套机顶盒开源镜像项目）的 download feed，即用于分发软件包或镜像文件的下载源目录。简介未说明包含哪些软件包、支持哪些设备型号、如何安装或运行，也未提及与任何数据库相关的内容，具体用途与维护状态无法从现有信息确认。",
+   "highlights": [
+    "提供 OpenPLi 的下载 feed（基于简介）"
+   ],
+   "use_cases": [
+    "为 OpenPLi 用户分发软件包的下载源（基于简介推测，信息有限）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "简介仅称 'OpenPLi download feed'，未说明是否与数据库生态相关。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "OpenPLi download feed"
+  },
+  "fn": "frank087234/OpenPLi-dm800se-feed",
+  "sha": "desc::OpenPLi download feed",
+  "source": "desc",
+  "generated_at": "2026-10-22",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

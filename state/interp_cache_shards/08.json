@@ -10070,5 +10070,280 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06f79667fcc0": {
+  "identity": {
+   "one_liner": "多范式数据库 MCP 服务器，统一网关连接多种数据源",
+   "review": "SmartDB 是实现 MCP 协议的通用数据基础设施网关，通过连接池统一接入关系库、Redis、MongoDB、Milvus、Elasticsearch、Kafka 等数据源，按范式动态暴露 26 个工具，提供 SQL 执行、健康检查、SQL 优化、索引检测及 OAuth 2.0 认证与角色权限控制。面向使用 MCP 客户端进行数据库管理与运维的 DBA 和开发者，通过 pip 或 Docker 安装运行。",
+   "highlights": [
+    "支持 6 种数据范式共 10 类数据源，提供 26 个按连接池范式动态过滤的 MCP 工具",
+    "提供 readonly/writer/admin 三级角色权限控制及 OAuth 2.0 认证",
+    "内置数据库健康诊断、SQL 性能优化建议与索引信息查询工具"
+   ],
+   "use_cases": [
+    "通过 MCP 兼容客户端统一查询和管理多种数据库",
+    "数据库健康状态检查与 SQL 性能优化诊断",
+    "对数据库访问实施角色权限管控的场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It currently covers **6 data paradigms and 10 data sources**: 5 relational databases (MySQL, PostgreSQL, Oracle, SQL Server, Dameng), KV store (Redis), document store (MongoDB), vector database (Milvus), search engine (Elasticsearch), and message queue (Apache ／ |PostgreSQL|Relational|√|Supports PostgreSQL 9.6+, YMatrix| ／ |type|Yes|string|Database type: \"mysql\", \"postgresql\", \"oracle\", \"mssqlserver\", \"dameng\", \"redis\", \"mongodb\", \"milvus\", \"elasticsearch\", \"kafka\"|",
+     "lines": [
+      11,
+      21,
+      132
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "It currently covers **6 data paradigms and 10 data sources**: 5 relational databases (MySQL, PostgreSQL, Oracle, SQL Server, Dameng), KV store (Redis), document store (MongoDB), vector database (Milvus), search engine (Elasticsearch), and message queue (Apache ／ |MySQL|Relational|√|Supports MySQL 5.6+, MariaDB 10+| ／ |type|Yes|string|Database type: \"mysql\", \"postgresql\", \"oracle\", \"mssqlserver\", \"dameng\", \"redis\", \"mongodb\", \"milvus\", \"elasticsearch\", \"kafka\"|",
+     "lines": [
+      11,
+      20,
+      132
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "It currently covers **6 data paradigms and 10 data sources**: 5 relational databases (MySQL, PostgreSQL, Oracle, SQL Server, Dameng), KV store (Redis), document store (MongoDB), vector database (Milvus), search engine (Elasticsearch), and message queue (Apache ／ |Oracle|Relational|√|Oracle 12+| ／ |type|Yes|string|Database type: \"mysql\", \"postgresql\", \"oracle\", \"mssqlserver\", \"dameng\", \"redis\", \"mongodb\", \"milvus\", \"elasticsearch\", \"kafka\"|",
+     "lines": [
+      11,
+      22,
+      132
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "It currently covers **6 data paradigms and 10 data sources**: 5 relational databases (MySQL, PostgreSQL, Oracle, SQL Server, Dameng), KV store (Redis), document store (MongoDB), vector database (Milvus), search engine (Elasticsearch), and message queue (Apache ／ |SQL Server|Relational|√|Microsoft SQL Server 2012+| ／ |schema|PostgreSQL, SQL Server|No|string|Database schema|",
+     "lines": [
+      11,
+      23,
+      138
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|Relational|√|Supports MySQL 5.6+, MariaDB 10+|",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "It currently covers **6 data paradigms and 10 data sources**: 5 relational databases (MySQL, PostgreSQL, Oracle, SQL Server, Dameng), KV store (Redis), document store (MongoDB), vector database (Milvus), search engine (Elasticsearch), and message queue (Apache ／ |Dameng|Relational|√|Dameng 8.0+| ／ |type|Yes|string|Database type: \"mysql\", \"postgresql\", \"oracle\", \"mssqlserver\", \"dameng\", \"redis\", \"mongodb\", \"milvus\", \"elasticsearch\", \"kafka\"|",
+     "lines": [
+      11,
+      24,
+      132
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为连接和管理多种数据库服务的 MCP 网关工具，不是使用数据库存储业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "MariaDB",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SmartDB is a universal multi-paradigm data-infrastructure gateway that implements the Model Context Protocol (MCP) server interface. This gateway allows MCP-compatible clients to connect and explore different data sources in a unified way. ／ It currently covers **6 data paradigms and 10 data sources**: 5 relational databases (MySQL, PostgreSQL, Oracle, SQL Server, Dameng), KV store (Redis), document store (MongoDB), vector database (Milvus), search engine (Elasticsearch), and message queue (Apache Kafka), with 26 MCP tools in total. Tools are dynamically filtered and exposed according to the paradigm of each connection pool. ／ There are 26 tools in total. `get_db_health` and `get_db_version` are universal tools available for every data source; the other tools are exposed according to the paradigm of the connection pool.",
+   "evidence_lines": [
+    9,
+    11,
+    33
+   ]
+  },
+  "fn": "wenb1n-dev/SmartDB_MCP",
+  "sha": "06f79667fcc0",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3e2401f3640a": {
+  "identity": {
+   "one_liner": "自托管的多人文档与数据库协作工作区，内置 MCP 服务器",
+   "review": "Leafdesk 是一个可自托管的开源知识库/工作区应用，提供页面块编辑器与多种视图的数据库、实时协作与离线编辑，并通过内置 MCP 服务器让 Claude 等 AI 助手经 OAuth 授权读写工作区。数据存储在用户自己的 PostgreSQL 中，支持 Docker Compose 部署或桌面应用本机运行，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供页面与数据库工作区，数据库行即页面，支持表格、看板、日历、时间线、仪表盘等视图及关联、公式、rollup",
+    "支持实时协作编辑与离线工作，内置 MCP 服务器，经 OAuth 2.1 授权 AI 助手读取与编辑",
+    "支持 Docker Compose 自托管部署（数据存于 PostgreSQL）及 macOS/Windows/Linux 桌面应用，可导入 Notion、Obsidian、Trello 等数据"
+   ],
+   "use_cases": [
+    "团队自托管的知识库与项目协作工作区",
+    "让 AI 助手通过 MCP 安全地检索与编辑团队文档和数据库行",
+    "从 Notion/Obsidian/Trello 迁移并整合现有笔记与看板数据"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL,",
+     "lines": [
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用将数据存储在用户自己的 PostgreSQL 中，属于使用数据库的应用",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An open-source, self-hostable workspace of pages and databases with realtime collaboration and a ／ - **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ docker compose up -d",
+   "evidence_lines": [
+    3,
+    23,
+    38
+   ]
+  },
+  "fn": "esmworks/leafdesk",
+  "sha": "3e2401f3640a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f5ee8ee8f4d": {
+  "identity": {
+   "one_liner": "本地优先桌面游戏发布追踪应用，SQLite 存储本地库",
+   "review": "一个面向重度游戏玩家的本地优先桌面应用：从 IGDB 公共 API 同步游戏发布数据到本地 SQLite 数据库，提供发布倒计时、通关日志、随机选游戏和年度回顾图。架构为 Electron + React 窗口、Fastify 引擎、SQLite 文件三进程，本地 API 用每次启动生成的 token 限制访问。供 Windows 和 Linux 桌面用户使用。",
+   "highlights": [
+    "从 IGDB API 同步发布数据到本地 SQLite 库，无账号、无云端",
+    "提供通关日志、随机选游戏和可分享图片的年度回顾",
+    "538 个自动化测试，含打包后烟囱测试，提供 Windows 安装包与 Linux .deb/AppImage"
+   ],
+   "use_cases": [
+    "追踪关注的发行商即将发布的游戏",
+    "记录已通关游戏及个人评分笔记",
+    "生成年度游戏回顾图"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Built with**|Electron, React, TypeScript, Fastify, SQLite, Vitest, GitHub Actions| ／ E --> D[(\"Library<br/>SQLite file\")]",
+     "lines": [
+      21,
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储本地数据的桌面应用，而非为数据库生态服务的工具",
+   "persona": "use",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**What**|A local-first desktop app: syncs release data from a public API (IGDB) into a local database, keeps a personal journal, and turns it into a yearly analytics recap| ／     E --> D[(\"Library<br/>SQLite file\")] ／ - **The engine** syncs from IGDB, applies the user's rules, and is the only part that reads or writes the library.",
+   "evidence_lines": [
+    19,
+    102,
+    109
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "hachi23/game-release-tracker",
+  "sha": "3f5ee8ee8f4d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10543,5 +10543,70 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ee2ed00d72c7": {
+  "identity": {
+   "one_liner": "读写 TiDB 文件系统的 DuckDB C++ 扩展",
+   "review": "duckdb-tidbfs 是一个 DuckDB 文件系统扩展，通过 TiDB Filesystem 的 HTTP 数据面读写 Parquet/CSV/JSON 等分析文件，并提供实验性的原生 .duckdb 存储（WAL、checkpoint、恢复）。面向需要在 DuckDB CLI 中直接查询远端 TiDB 文件系统数据的用户，需从源码构建，未发布到官方扩展仓库。",
+   "highlights": [
+    "支持读 Parquet/CSV/JSON 及 glob/Hive 分区裁剪，COPY TO 写出，无需下载整个文件",
+    "提供实验性原生数据库模式 tidbfs+db:///，在既有 extent 存储上运行 DuckDB 存储引擎与 WAL",
+    "以 C++ 扩展实现，链接 Go extent 运行时，构建后运行时不依赖 Python/fsspec/FUSE"
+   ],
+   "use_cases": [
+    "在 DuckDB 中直接对 TiDB 文件系统上的远端分析文件做查询与裁剪读取",
+    "多个进程通过共享存储交接 DuckDB 数据库状态（含故障接管演示）",
+    "通过 Quack 扩展让多个远程客户端在同一 worker 上并发执行事务"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiDB Filesystem HTTP data plane, with experimental native `.duckdb` storage. It works in the DuckDB CLI and does not require",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该扩展为 DuckDB 提供访问 TiDB Filesystem 数据面的连接能力，是为数据库生态服务的组件而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tidbfs` is a C++ DuckDB filesystem extension for reading and writing analytics files over the ／ TiDB Filesystem HTTP data plane, with experimental native `.duckdb` storage. It works in the DuckDB CLI and does not require ／ |Writable `ATTACH 'tidbfs+db:///database.duckdb'`|Experimental: native database, WAL, checkpoint and recovery over existing extent storage|",
+   "evidence_lines": [
+    5,
+    6,
+    76
+   ]
+  },
+  "fn": "siddontang/duckdb-tidbfs",
+  "sha": "ee2ed00d72c7",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

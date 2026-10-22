@@ -10722,5 +10722,216 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "687ae0c28d28": {
+  "identity": {
+   "one_liner": "Python 版 UnbelievaBoat 风格 Discord 经济与小游戏机器人",
+   "review": "一个用 Python 编写的 Discord 机器人，实现经济系统和小游戏命令，并提供了从旧版 JSON 数据库到 SQLite 的自动迁移脚本（L54-L55）。它面向想自行修改代码、定制命令的 Discord 服务器管理员，README 要求使用者开启特定 Intent 并自行配置 botmaster 角色，数据库可直接用 SQLite Browser 浏览（L49），但直接编辑需注意可能干扰机器人运行。",
+   "highlights": [
+    "提供经济系统与小游戏的 Discord 命令集合，具体见 command-list.md",
+    "支持从旧版 JSON 数据库到 v2.0 的自动迁移脚本",
+    "代码可自由使用和修改，README 提示可用 SQLite Browser 浏览数据库"
+   ],
+   "use_cases": [
+    "为自己的 Discord 服务器部署经济/小游戏机器人",
+    "作为可定制的 Python Discord bot 模板进行修改扩展"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "You can browse the database by using a tool like SQLite Browser, but be careful when editing ／ variables directly through a SQLite browser, since it may interfere with the bot usage (especially for JSON strings in the database).",
+     "lines": [
+      49,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用数据库（v2.0 迁移自 JSON，可被 SQLite Browser 浏览）存数据的 Discord 机器人应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Skender emerged from the problem of UB having a balance ceiling and no automated role-income increasing to user's balances, so I rewrote it in python and fixed that. ／ You can browse the database by using a tool like SQLite Browser, but be careful when editing ／ A migration script is provided for the switch from the legacy version (json database) to v2.0.",
+   "evidence_lines": [
+    28,
+    49,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "NoNameSpecified/UnbelievaBoat-Python-Bot",
+  "sha": "687ae0c28d28",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9be7ffecbdfa": {
+  "identity": {
+   "one_liner": "将 Google Sheet 转换生成 SQLite 数据库的 Apps Script 项目",
+   "review": "sheets-db 是一个 Google Apps Script 项目，附加到 Google Sheet 后通过侧边栏将表格内容生成 .sqlite3 数据库文件，并可选上传到 Backblaze 存储。适合需要把在线表格数据导出为本地 SQLite 文件、再在其他客户端中查询的用户；部署依赖 Google Sheets 与 GAS 环境，Backblaze 上传为可选功能。",
+   "highlights": [
+    "通过附加到 Google Sheet 的 GAS 项目生成 SQLite 数据库文件",
+    "提供侧边栏界面操作生成与上传流程",
+    "支持将 .sqlite3 文件直接上传到 Backblaze 存储桶（可选配置）"
+   ],
+   "use_cases": [
+    "将 Google Sheet 数据导出为 SQLite 文件供本地客户端查询",
+    "把表格数据备份到 Backblaze 对象存储",
+    "在 Google Sheets 环境内生成可移植的数据库文件"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Minimal Google Apps Script (GAS) project intended to quickly transform a Google Sheet into a SQLite database. ／ If you use Backblaze as a storage provider, you can use the \"Upload .sqlite3 file to Backblaze\" button to upload the SQLite database directly to Backblaze.",
+     "lines": [
+      5,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为生成 SQLite 数据库文件提供转换工具，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Minimal Google Apps Script (GAS) project intended to quickly transform a Google Sheet into a SQLite database. ／ If you use Backblaze as a storage provider, you can use the \"Upload .sqlite3 file to Backblaze\" button to upload the SQLite database directly to Backblaze.",
+   "evidence_lines": [
+    5,
+    26
+   ]
+  },
+  "fn": "ardislu/sheets-db",
+  "sha": "9be7ffecbdfa",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6134a550b517": {
+  "identity": {
+   "one_liner": "基于 PHP PDO 与 TiDB Cloud 的三层架构企业官网应用",
+   "review": "一个为 Grandis 公司构建的云计算业务展示网站，采用 HTML/CSS/JS 前端、PHP 8.x PDO 后端、TiDB Cloud 数据库的三层架构，通过环境变量配置连接并导入 schema.sql 建库，可部署在 XAMPP 或 Render 等 PHP 服务器上，适合学习 TiDB Cloud 接入 PHP 应用的开发者参考。",
+   "highlights": [
+    "使用 PHP 8.x PDO 扩展连接 TiDB Cloud（MySQL 兼容）",
+    "提供 schema.sql 导入与环境变量配置的部署流程",
+    "前后端分离的三层架构：HTML5/CSS3/Vanilla JS + PHP + TiDB"
+   ],
+   "use_cases": [
+    "部署 Grandis 公司业务官网",
+    "学习 PHP PDO 连接 TiDB Cloud 的实践示例",
+    "在 XAMPP 或 Render 等 PHP 托管环境部署 Web 应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# Grandis Business Website (TiDB Cloud Integration) ／ This is my updated full-stack web application for Grandis (\"Build. Scale. Evolve.\"), featuring a 3-tier architecture with **PHP PDO** and **TiDB Cloud** (distributed MySQL engine). ／ - **Database**: TiDB Cloud (MySQL compatible)",
+     "lines": [
+      1,
+      4,
+      9
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "This is my updated full-stack web application for Grandis (\"Build. Scale. Evolve.\"), featuring a 3-tier architecture with **PHP PDO** and **TiDB Cloud** (distributed MySQL engine). ／ - **Database**: TiDB Cloud (MySQL compatible)",
+     "lines": [
+      4,
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 TiDB Cloud 存数据的业务网站应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is my updated full-stack web application for Grandis (\"Build. Scale. Evolve.\"), featuring a 3-tier architecture with **PHP PDO** and **TiDB Cloud** (distributed MySQL engine). ／ - **Database**: TiDB Cloud (MySQL compatible)",
+   "evidence_lines": [
+    4,
+    9
+   ]
+  },
+  "fn": "ayd-jamesjr/grandis-tidb-website",
+  "sha": "6134a550b517",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

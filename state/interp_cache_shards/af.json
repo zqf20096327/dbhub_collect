@@ -11219,5 +11219,208 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "461bac06e676": {
+  "identity": {
+   "one_liner": "终端日历/待办/日志管理器，本地 SQLite 存储，支持 iCal 与 CalDAV 同步",
+   "review": "chroncal 是一个运行于终端的日历、待办与日志管理工具，通过 CLI 和 TUI 两种方式操作，数据以本地 SQLite 单文件存储并自动迁移。它支持 RFC 5545 的 iCal 导入导出、CalDAV 同步、重复事件、提醒和全文检索，适合在终端环境管理个人日程的用户。",
+   "highlights": [
+    "提供 TUI 交互界面与可脚本化的 CLI，输出文本与 JSON 两种格式",
+    "支持 RFC 5545 的 iCal 导入导出及 CalDAV 同步（含集合发现与冲突处理）",
+    "以单个 SQLite 文件本地存储数据，支持自动迁移"
+   ],
+   "use_cases": [
+    "在终端管理个人日历、待办与日志",
+    "与 CalDAV 服务器同步日程数据",
+    "通过脚本/JSON 输出自动化访问日程与待办数据"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and cale ／ - **SQLite storage** with automatic migrations",
+     "lines": [
+      14,
+      34
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该程序将日历/待办/日志数据存入 SQLite，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chroncal is a terminal calendar. SQLite stores the data. The program supports full iCal import and export, and CalDAV sync. Launch the TUI for an interactive calendar. Use the CLI to script access to events, todos, journals, alarms, free/busy queries, and calendars. ／ - **SQLite storage** with automatic migrations",
+   "evidence_lines": [
+    14,
+    34
+   ]
+  },
+  "fn": "DouglasdeMoura/chroncal",
+  "sha": "461bac06e676",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9edb7f403a69": {
+  "identity": {
+   "one_liner": "为 ConnectStats 应用实现的 Web 服务后端，使用 PHP 和 MySQL 存储数据",
+   "review": "该仓库为 ConnectStats 应用提供服务器端实现，接收 Garmin Health API 的注册与回调，将活动数据存入 MySQL 数据库并提供查询接口。部署方式为将代码放入 Web 服务器目录，配置 config.php 后首次调用 API 时自动建表。面向 ConnectStats 应用用户及需要自建后端的开发者，依赖 Apache 及 PHP 环境。",
+   "highlights": [
+    "接收 Garmin Health API 的 Activities、Activity Files、Deregistration 等端点回调",
+    "提供活动列表查询与 FIT 文件获取的 API 端点",
+    "首次调用 API 时自动创建所需的数据库表",
+    "使用 oauth 1.0 进行用户与回调认证"
+   ],
+   "use_cases": [
+    "为 ConnectStats 应用自托管数据服务",
+    "接收并存储 Garmin Health API 推送的活动数据",
+    "通过 API 查询用户活动列表和获取 FIT 文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "This is an implementation of a server for ConnectStats using php and mysql ／ You'll need to setup a mysql database and enter the database name, host, user and password in the `config.php` file. When the api is called it will automatically setup the tables it needs.",
+     "lines": [
+      4,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是为 ConnectStats 应用实现的服务器，使用 MySQL 存储其业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is an implementation of a server for ConnectStats using php and mysql ／ This is used by the app ConnectStats and is open source. ／ You'll need to setup a mysql database and enter the database name, host, user and password in the `config.php` file. When the api is called it will automatically setup the tables it needs.",
+   "evidence_lines": [
+    4,
+    8,
+    24
+   ]
+  },
+  "fn": "roznet/connectstats_server",
+  "sha": "9edb7f403a69",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f3c83f7383c2": {
+  "identity": {
+   "one_liner": "PS3 文件传输管理 Web 应用，PHP+SQLite+Python worker",
+   "review": "CTPS3 是一个自托管的 Web 应用，用于管理家庭服务器与 PlayStation 3 之间的文件传输，包含传输队列、游戏目录、库存存储、遥测和审计功能。PHP 界面与 Python worker 通过 SQLite 解耦，长任务在 HTTP 循环外执行，由 systemd 单元运行。适用于有 PS3 且通过 FTP 管理游戏文件的 homelab 用户。",
+   "highlights": [
+    "PHP Web 界面与 Python worker 解耦，通过 SQLite 实现持久化传输队列与断点恢复",
+    "提供库存、存储分类、FTP 遥测（会话、速度、传输量）与操作审计功能",
+    "通过 systemd units 运行 worker、目录与库存任务，CI 使用 GitHub Actions 验证 schema 重建"
+   ],
+   "use_cases": [
+    "家庭服务器与 PS3 之间通过 FTP 传输游戏文件的自动化管理",
+    "PS3 游戏目录与本地库存的对比和补缺发送",
+    "自托管环境下的传输任务监控与操作审计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "W --> DB[(SQLite)] ／ 2. La aplicación consulta o registra estado en SQLite.",
+     "lines": [
+      58,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 SQLite 作为自身状态持久化存储（L58、L79），而非为数据库生态提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    W --> DB[(SQLite)] ／ 2. La aplicación consulta o registra estado en SQLite. ／ - **Estado:** funcional y derivado de un despliegue real de homelab.",
+   "evidence_lines": [
+    58,
+    79,
+    107
+   ]
+  },
+  "fn": "ProgDeveloperr/centro-transferencias-ps3",
+  "sha": "f3c83f7383c2",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9937,5 +9937,146 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b66b98dd711e": {
+  "identity": {
+   "one_liner": "Crystal 语言的 PostgreSQL 原生非阻塞数据库驱动",
+   "review": "crystal-pg 是 Crystal 语言的 PostgreSQL 驱动，基于 crystal-db 接口实现连接、查询与连接池，支持 Listen/Notify、数组及多种数据类型、TLS（sslmode）与 scram-sha-256/md5 等认证方式。供 Crystal 开发者在应用中接入 PostgreSQL 使用，通过 shards 安装，UNIX 套接字暂不支持 SSL。",
+   "highlights": [
+    "实现原生非阻塞的 PostgreSQL 协议（版本 3）连接，通过 crystal-db 提供 DB.open 接口",
+    "支持 Listen/Notify 通知机制，提供 PG.connect_listen 专用监听连接",
+    "支持 text、jsonb、数组、地理类型、interval 等多种数据类型及 sslmode 各级 TLS 连接",
+    "支持 scram-sha-256、md5、trust 认证方式，可配置 auth_methods 参数"
+   ],
+   "use_cases": [
+    "在 Crystal 项目中连接和查询 PostgreSQL 数据库",
+    "需要 PostgreSQL LISTEN/NOTIFY 实时通知的应用",
+    "需要 TLS 加密连接或多认证方式的数据库接入"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# crystal-pg ／ A native, non-blocking Postgres driver for Crystal ／ pg:",
+     "lines": [
+      1,
+      2,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 的 Crystal 语言驱动，是为数据库生态服务的组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A native, non-blocking Postgres driver for Crystal ／ This driver now uses the `crystal-db` project. Documentation on connecting, ／ Crystal-pg is regularly tested on",
+   "evidence_lines": [
+    2,
+    8,
+    81
+   ]
+  },
+  "fn": "will/crystal-pg",
+  "sha": "b66b98dd711e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c020be77b30a": {
+  "identity": {
+   "one_liner": "NestJS+Vue 全栈管理后台模板，含 RBAC、代码生成与 BPMN 工作流",
+   "review": "一个 MIT 许可的管理后台模板，提供用户/角色/部门权限、数据权限、CRUD 与树表代码生成、BPMN 流程审批、多租户等模块，数据存于 MySQL 并依赖 Redis 做队列与限流。适合以前端 Vue、后端 NestJS 技术栈搭建内部管理系统的开发者；需自备 MySQL 8.0.17+ 与 Redis 7.0+，目前通过源码与 pnpm 运行，暂无 Docker 支持。",
+   "highlights": [
+    "提供 RBAC、五种数据权限范围、多租户（默认关闭）与审计监控模块",
+    "提供前后端代码生成器，可生成 CRUD、树形、主子表代码与端到端测试",
+    "包含 BPMN 流程设计、审批中心，以及基于 Redis 的任务队列与共享限流"
+   ],
+   "use_cases": [
+    "以模板方式搭建企业内部管理后台",
+    "需要权限、工作流与多租户能力的业务系统起点",
+    "基于 pnpm monorepo 结构扩展前后端一体的项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "栖梧是一个 MIT 许可的管理后台模板，采用 NestJS 12、Vue 3.5、Element Plus、TypeScript、MySQL 和 Redis，使用 pnpm workspace 管理服务端、Web 与共享契约。品牌为「栖梧 / Qiwu」，项目名为 `qiwu-vue-admin`，内部包名为 `@qiwu/*`。 ／ 使用 Node 22（≥ 22.22.1）与 `package.json` 固定的 pnpm 11.28.3。先按 入门指南 准备 MySQL 空库、Redis ACL 与环境文件，凭据只写 `apps/server/.env.local`，然后在仓库根执行：",
+     "lines": [
+      18,
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明采用 MySQL 和 Redis 作为模板的存储组件，项目本身是使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "栖梧是一个 MIT 许可的管理后台模板，采用 NestJS 12、Vue 3.5、Element Plus、TypeScript、MySQL 和 Redis，使用 pnpm workspace 管理服务端、Web 与共享契约。品牌为「栖梧 / Qiwu」，项目名为 `qiwu-vue-admin`，内部包名为 `@qiwu/*`。 ／ 使用 Node 22（≥ 22.22.1）与 `package.json` 固定的 pnpm 11.28.3。先按 入门指南 准备 MySQL 空库、Redis ACL 与环境文件，凭据只写 `apps/server/.env.local`，然后在仓库根执行：",
+   "evidence_lines": [
+    18,
+    59
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "732124645/qiwu-vue-admin",
+  "sha": "c020be77b30a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

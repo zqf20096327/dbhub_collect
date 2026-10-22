@@ -10547,5 +10547,236 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "69444a4a58d4": {
+  "identity": {
+   "one_linger": "语言学习平台 Lingo，基于 Next.js 与 PostgreSQL 的应用",
+   "one_liner": "基于 Next.js 和 PostgreSQL 的语言学习平台应用",
+   "review": "这是一个克隆 Duolingo 的语言学习 Web 应用，提供课程挑战、任务、商店等交互学习功能，面向语言学习者。技术栈为 Next.js/React/TypeScript，使用 Drizzle ORM 连接 Neon 提供的 PostgreSQL 数据库存储数据，并集成 Clerk 认证与 Stripe 支付；需自行配置数据库连接串并运行种子脚本初始化数据。",
+   "highlights": [
+    "使用 Drizzle ORM 与 PostgreSQL（Neon 服务端驱动）存取课程与挑战数据",
+    "集成 Clerk 认证与 Stripe 支付 Webhook",
+    "提供种子脚本（db:push + db:prod）初始化挑战数据"
+   ],
+   "use_cases": [
+    "语言学习练习平台的自部署使用",
+    "Next.js + Drizzle + PostgreSQL 全栈开发参考"
+   ],
+   "other": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1. **Source**: Database Provider (e.g., Neon, PostgreSQL) ／ React JS Next JS Typescript Tailwind CSS Vercel Postgresql",
+     "lines": [
+      52,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 PostgreSQL 存储数据的语言学习应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 1. **Source**: Database Provider (e.g., Neon, PostgreSQL) ／ React JS Next JS Typescript Tailwind CSS Vercel Postgresql ／ - @neondatabase/serverless: ^1.2.0",
+   "evidence_lines": [
+    52,
+    120,
+    141
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanidhyy/duolingo-clone",
+  "sha": "69444a4a58d4",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "118d44d94b86": {
+  "identity": {
+   "one_liner": "Énóis 社交网络的 Spring Boot 后端 API，六边形架构",
+   "review": "这是巴西技术人群社交网络 Énóis 的后端 API，基于 Spring Boot 4 与 Java 25，采用六边形架构，用 Flyway 做迁移，测试用 H2 内存库，生产环境运行于 MariaDB 11.4 或 MySQL 8+。面向该社交网络的用户与贡献者，包含身份、动态、消息、搜索等模块，支持 TOTP 双因素认证和 ImageKit/S3 媒体存储切换。",
+   "highlights": [
+    "实现六边形架构，按功能划分模块（identity、feed、media、network 等 10 个模块）",
+    "支持 dev/hml/prd 三套环境配置，分别使用 H2、MariaDB、MySQL",
+    "实现 TOTP 双因素认证（AES-256-GCM 加密密钥）与 ImageKit/S3 可切换的媒体存储",
+    "暴露 Swagger UI、OpenAPI JSON 及 Actuator 健康/指标/Prometheus 端点"
+   ],
+   "use_cases": [
+    "为 Énóis 社交网络的前端提供业务规则与 API",
+    "需要社交网络后端参考实现（Spring Boot + 六边形架构）的开发者",
+    "基于 Docker/Compose 部署自托管社交平台的团队"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Docker** (optional — for MariaDB/MySQL or running via docker-compose) ／ |`prd`|MySQL|`SPRING_PROFILES_ACTIVE=prd`| ／ ### prd (MySQL 8+)",
+     "lines": [
+      58,
+      74,
+      85
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "funcionalidade, Flyway para migrações, H2 nos testes e **MariaDB 11.4** em produção. ／ - **Docker** (optional — for MariaDB/MySQL or running via docker-compose) ／ |`hml`|MariaDB|`SPRING_PROFILES_ACTIVE=hml`|",
+     "lines": [
+      8,
+      58,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 MariaDB/MySQL 存储数据的社交网络后端应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A API do **Énóis** (enois.ia.br): a rede social brasileira para quem trabalha ／ funcionalidade, Flyway para migrações, H2 nos testes e **MariaDB 11.4** em produção. ／ |`hml`|MariaDB|`SPRING_PROFILES_ACTIVE=hml`|",
+   "evidence_lines": [
+    3,
+    8,
+    73
+   ]
+  },
+  "fn": "Rede-ENois/enois-backend",
+  "sha": "118d44d94b86",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "65a7f043e660": {
+  "identity": {
+   "one_liner": "AI 语音销售代理：Vapi 外呼+Gemini 线索分级+WhatsApp 跟进",
+   "review": "一个 Spring Boot 应用，通过 Vapi/Twilio 拨打销售电话，实时对话并用 Gemini Flash 对线索做 HOT/WARM/COLD 分级、摘要与回调提取，通话中/通话后经 Meta WhatsApp Cloud API 发送跟进消息。通话结果（非转录文本）经 Spring Data JPA 存入 TiDB Cloud (MySQL) 或本地 H2。供需要自动化外呼线索筛选的团队使用，以 Docker 部署在 Render，电话外呼路径当前未实际复验。",
+   "highlights": [
+    "通过 Vapi webhook 接收通话事件，一次 Gemini 结构化调用返回分级、摘要、WhatsApp 复述与回调请求，含重试与模型回退",
+    "通话结果（评级、理由、摘要、回调请求）存储于数据库，不存转录文本",
+    "提供公共演示端点（仅分析不发送/不存储）与需 API 密钥的线索仪表盘"
+   ],
+   "use_cases": [
+    "外呼销售线索的自动分级与即时 WhatsApp 跟进",
+    "粘贴通话转录离线分析线索质量",
+    "通话记录评级与汇总的内部仪表盘查看"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "|Storage|Spring Data JPA: TiDB Cloud (MySQL) in production, H2 for local runs and tests| ／ The repo has a `Dockerfile`, so Render builds it directly: create a **Web Service** from this repo with runtime **Docker**, set the health check path to `/api/call/health`, and add the environment variables from `.env.example`. `DB_URL`, `DB_USERNAME` and `DB_",
+     "lines": [
+      54,
+      135
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Storage|Spring Data JPA: TiDB Cloud (MySQL) in production, H2 for local runs and tests| ／ - Calls are stored in a database: the outcome only (rating, reason, summary, callback request, failed steps), never the transcript. Without `DB_URL` a local H2 file in `./data` is used; for TiDB Cloud or MySQL set `DB_URL`, `DB_USERNAME` and `DB_PASSWORD`. A r ／ - Calls are stored in TiDB Cloud (the outcome only, never the transcript). The leads API and page need the API key. The public demo endpoint can only analyse and is rate limited.",
+     "lines": [
+      54,
+      110,
+      144
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明通话结果数据由该系统存储于 TiDB Cloud/MySQL，数据库是其自身的数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Storage|Spring Data JPA: TiDB Cloud (MySQL) in production, H2 for local runs and tests| ／ - Calls are stored in a database: the outcome only (rating, reason, summary, callback request, failed steps), never the transcript. Without `DB_URL` a local H2 file in `./data` is used; for TiDB Cloud or MySQL set `DB_URL`, `DB_USERNAME` and `DB_PASSWORD`. A repeated end-of-call report is ignored even after a restart. ／ The repo has a `Dockerfile`, so Render builds it directly: create a **Web Service** from this repo with runtime **Docker**, set the health check path to `/api/call/health`, and add the environment variables from `.env.example`. `DB_URL`, `DB_USERNAME` and `DB_PASSWORD` should point at a MySQL-compatible database such as TiDB Cloud. Render supplies `PORT`, which the app picks up.",
+   "evidence_lines": [
+    54,
+    110,
+    135
+   ]
+  },
+  "fn": "RojanFrancis/elevatebox-agent",
+  "sha": "65a7f043e660",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

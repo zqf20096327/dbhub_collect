@@ -8517,5 +8517,69 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3fea76e47f06": {
+  "identity": {
+   "one_liner": "港股逐笔行情采集器，写入按日切分的 SQLite WAL",
+   "review": "该工具从 Futu OpenD 接收港股逐笔 tick 行情，经内存队列批量写入每日一个的 SQLite WAL 数据库，并提供数据质量校验、日终一致性备份归档、systemd 部署与 Telegram 通知。面向需要长期留存港股 tick 数据的个人量化与运维使用者。运行依赖 Futu OpenD 账户及行情权限，队列位于内存，断线期间可能缺数据。",
+   "highlights": [
+    "支持从 Futu OpenD push 采集并可选 poll 备援，按香港交易日写入每日一个 SQLite DB",
+    "提供数据质量报告、经校验的日终归档（zstd + SHA-256 + manifest）与保留策略",
+    "提供 systemd 安装脚本与 Telegram 健康摘要、异常通知等运维工具"
+   ],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "futu_tick_downloader: 24/7 HK tick capture into SQLite WAL ／ 從 Futu OpenD 接收港股逐筆行情，按香港交易日寫入 SQLite WAL。專案包含佇列與批次寫入、資料品質報告、經校驗的日終歸檔，以及 systemd 和 Telegram 維運工具。 ／ 正式採集由 OpenD push 與可選 poll 備援進入映射器、記憶體佇列、寫入執行緒，再落入每日一個 SQLite DB。Mock 回放會**直接寫入測試 DB**，用來體驗查詢和檢查工具。主機監控與 watchdog 觀察執行狀態，Telegram 可發送健康摘要和異常通知。",
+     "lines": [
+      1,
+      9,
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite 存储自身采集的行情数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "futu_tick_downloader: 24/7 HK tick capture into SQLite WAL ／ 從 Futu OpenD 接收港股逐筆行情，按香港交易日寫入 SQLite WAL。專案包含佇列與批次寫入、資料品質報告、經校驗的日終歸檔，以及 systemd 和 Telegram 維運工具。 ／ 正式採集由 OpenD push 與可選 poll 備援進入映射器、記憶體佇列、寫入執行緒，再落入每日一個 SQLite DB。Mock 回放會**直接寫入測試 DB**，用來體驗查詢和檢查工具。主機監控與 watchdog 觀察執行狀態，Telegram 可發送健康摘要和異常通知。",
+   "evidence_lines": [
+    1,
+    9,
+    17
+   ]
+  },
+  "fn": "billpwchan/futu_tick_downloader",
+  "sha": "3fea76e47f06",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10377,5 +10377,97 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3f16158bd18": {
+  "identity": {
+   "one_liner": "单二进制 PHP 应用服务器，内嵌 PHP 引擎、Web 服务器与数据库代理",
+   "review": "ePHPm 用 Rust 编写，通过 FFI 内嵌 Zend PHP 引擎，捆绑 Web 服务器、进程管理、KV 缓存、连接池 SQL 代理与内嵌 SQLite 兼容数据库（Turso），供 PHP 开发者在开发到生产中以单进程运行应用。支持 MySQL/PostgreSQL 代理转发，PHP 侧无需改代码；Windows 下 Postgres 驱动与集群模式存在限制。",
+   "highlights": [
+    "通过 FFI 内嵌真实 Zend PHP 引擎，并捆绑 Web 服务器与 PHP 进程池",
+    "提供带连接池、读写分离与健康检查的 SQL 代理，支持 MySQL 与 PostgreSQL 后端",
+    "内嵌 SQLite 兼容的 Turso 数据库与 DashMap KV 缓存，支持集群同步"
+   ],
+   "use_cases": [
+    "以单二进制方式在本地开发、CI/CD 与生产环境运行同一 PHP 应用",
+    "为现有 MySQL/PostgreSQL 后端提供连接池与读写分离代理",
+    "无需外部数据库的小型站点，直接使用内嵌嵌入式数据库"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. Th ／ > **Postgres caveat.** `pdo_pgsql` and `pgsql` are compiled into the released Linux and macOS binaries, but **not** into the Windows binary, so on Windows \"no code changes\" holds for MySQL apps out of the box but not for a stock Postgres app. The PostgreSQL fr",
+     "lines": [
+      127,
+      129
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. The PostgreSQL proxy supports trust, md5, and SCRAM-SHA-256 authentication. SQL Server (TDS) proxying is not implemented.",
+     "lines": [
+      127
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "* **Database:** Replaces external MySQL with the embedded, zero-dependency Turso engine — a pure-Rust SQLite-compatible database compiled into the binary (supports clustering)",
+     "lines": [
+      20
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. Th",
+     "lines": [
+      127
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库生态提供 SQL 代理、连接池与嵌入式数据库引擎等组件，而非仅作为使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Database:** Replaces external MySQL with the embedded, zero-dependency Turso engine — a pure-Rust SQLite-compatible database compiled into the binary (supports clustering) ／ ePHPm has also packed a highly robust and cloud-native feature set by drawing direct inspiration from other modern runtimes. This includes automatic ACME TLS certificate management and server-level middleware handlers (similar to RoadRunner and FrankenPHP), alongside an in-process SQL proxy with connection pooling and slow query logging inspired directly by ProxySQL. Combined with native cluster synchronization, OpenTelemetry tracing (OTLP), and container-aware runtime autotuning, ePHPm is fully prepared for modern cloud environments. ／ If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. The PostgreSQL proxy supports trust, md5, and SCRAM-SHA-256 authentication. SQL Server (TDS) proxying is not implemented.",
+   "evidence_lines": [
+    20,
+    22,
+    127
+   ]
+  },
+  "fn": "ephpm/ephpm",
+  "sha": "e3f16158bd18",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

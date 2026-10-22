@@ -12881,5 +12881,309 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2b6f5afb68fc": {
+  "identity": {
+   "one_liner": "本地开发者调试记忆工具，记录命令与修复存入 SQLite 并经 MCP 提供",
+   "review": "MemoryWhale 是面向开发者及其编码代理的本地调试记忆工具：用 mw-run、shell 捕获和 agent hooks 记录命令、输出、失败与修复方案，存入本地 SQLite，并通过 mw-mcp（stdio）/mw-serve（HTTP）以 MCP 接口提供搜索与上下文检索。支持 CLI、TUI、Web 与桌面端界面，数据不上传、无需账号。适合在多机器、SSH 或多个编码代理间需要留存可检索调试经验的开发者。",
+   "highlights": [
+    "通过 MCP（stdio 与 HTTP）向兼容客户端提供六个记忆工具，README 列出 Claude Code、Cursor、Zed 等接入指南",
+    "以本地 SQLite 存储，提供搜索与上下文检索命令（mw search / mw context），无账号且不上传数据",
+    "提供 CLI、TUI、Web dashboard 和桌面应用多种本地界面，并含只读 JSON API"
+   ],
+   "use_cases": [
+    "开发者在终端、SSH 或多个编码代理会话间留存并检索调试经验",
+    "为编码代理提供跨会话的持久调试记忆",
+    "排查反复出现的构建、依赖、环境类故障并复用历史修复方案"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "failures, and the fixes that worked. It stores that evidence in local SQLite so ／ shell / mw-run ──────► local SQLite ────────► search / context",
+     "lines": [
+      20,
+      135
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目仅将 SQLite 作为本地存储使用，功能定位是给开发者与编码代理提供记忆服务，而非为数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "failures, and the fixes that worked. It stores that evidence in local SQLite so ／ agent session is gone. It works with 19 coding agents through MCP, with no ／ shell / mw-run ──────► local SQLite ────────► search / context",
+   "evidence_lines": [
+    20,
+    22,
+    135
+   ]
+  },
+  "fn": "wuisabel-gif/MemWhale",
+  "sha": "2b6f5afb68fc",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "84dfe2bd7b1d": {
+  "identity": {
+   "one_liner": "自托管费用分摊应用，内置 PostgreSQL 单容器部署",
+   "review": "ShareTab 是一个自托管的开源费用分摊应用，功能类似 Splitwise，支持拍照小票由 AI 提取条目并分摊税费、多币种换算、Venmo 支付链接、多语言界面和访客分摊。它通过 Docker Compose 部署，镜像内置 PostgreSQL，无需外部数据库，并提供 Unraid 模板与 pg_dump 备份说明，适合个人或小组自行部署使用。",
+   "highlights": [
+    "内置 AI 小票扫描，可接入 OpenAI、Claude、Ollama 等多种 AI 提供方",
+    "单 Docker 容器内置 PostgreSQL，无需外部数据库，支持 Docker Compose 与 Unraid 模板部署",
+    "支持多币种换算、9 种界面语言、OIDC 单点登录与访客分摊链接"
+   ],
+   "use_cases": [
+    "室友、朋友或旅行团之间记录和分摊共同开支",
+    "在自有服务器（含 Unraid）上自托管部署费用分摊服务",
+    "无需注册账号的访客临时分摊场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo: ／ docker exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql ／ docker compose exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql",
+     "lines": [
+      102,
+      155,
+      158
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用以内置 PostgreSQL 存储数据（L102、L161），数据库仅作为其存储组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README L13）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo: ／ ShareTab is a free, self-hosted alternative to Splitwise for tracking shared expenses with roommates, friends, and travel groups. Snap a photo of a receipt, let AI extract the line items, and assign them to group members. Taxes and tips split proportionally. Deploy on your own server with Docker Compose. ／ - **Self-hosted** -- Docker Compose deployment, designed for Unraid",
+   "evidence_lines": [
+    102,
+    17,
+    98
+   ]
+  },
+  "fn": "sw-carlos-cristobal/sharetab",
+  "sha": "84dfe2bd7b1d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed30db1885f8": {
+  "identity": {
+   "one_liner": "Python GraphQL 框架，专为 PostgreSQL，经 Rust 管线输出 JSON",
+   "review": "FraiseQL v1 是一个基于 FastAPI 的 Python GraphQL 框架，通过装饰器将 PostgreSQL 视图和函数暴露为类型化 GraphQL API，数据库返回 JSONB 后由集成 Rust 管线完成字段裁剪与响应生成。仅支持 PostgreSQL 13+，适合已有 PostgreSQL 积累、愿意编写视图和函数的 Python 团队；多数据库需求需转向 v2 项目。",
+   "highlights": [
+    "读写经由 v_* 视图与 fn_* 函数（CQRS），视图即数据契约",
+    "集成 Rust 管线（fraiseql_rs）处理 JSONB 转换，热路径不经 Python 序列化",
+    "内置 pgvector 向量搜索、RLS、审计日志、持久化查询等特性"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 数据库构建 database-first 的 GraphQL API",
+    "需要多租户隔离与 JSON 吞吐的 Python 后端服务",
+    "结合 LLM/rag 场景生成 SQL 与 Python 代码的 API 开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A Python GraphQL framework for PostgreSQL.** Declare types and operations with ／ decorators, point them at PostgreSQL views and functions, and FraiseQL serves a ／ PostgreSQL returns JSONB. An integrated Rust pipeline (`fraiseql_rs`) transforms it",
+     "lines": [
+      9,
+      10,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      64
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 自述为『A Python GraphQL framework for PostgreSQL』，是围绕 PostgreSQL 提供开发能力的框架而非使用它存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A Python GraphQL framework for PostgreSQL.** Declare types and operations with ／ **Requires:** Python 3.13 or 3.14 · PostgreSQL 13+ ／ |Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+   "evidence_lines": [
+    9,
+    16,
+    64
+   ]
+  },
+  "fn": "fraiseql/fraiseql-python",
+  "sha": "ed30db1885f8",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "01a37a409ec1": {
+  "identity": {
+   "one_liner": "语音优先、本地优先的个人记账应用",
+   "review": "一款面向中国内地年轻个人用户的语音记账应用，按住说话后经火山流式 ASR 转写、DeepSeek 结构化提取金额与分类，账单写入本地 SQLite 并支持撤销与月度统计。基于 Expo/React Native 与 Fastify 语音网关构建，适合不想手动录入、偏好本地数据的个人用户；目前处于内测阶段，未上架应用商店，云备份等功能尚未上线。",
+   "highlights": [
+    "一句话语音经流式 ASR 与 LLM 结构化提取后自动生成多笔账单",
+    "账单本地优先写入 SQLite，记账不依赖登录与网络",
+    "提供手动记账、分类管理、月度统计与 8 秒整批撤销"
+   ],
+   "use_cases": [
+    "日常消费后一句话快速记多笔账",
+    "无网络或未登录时本地记账并同步撤销",
+    "月度消费统计与分类下钻查看明细"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "4. 多笔账单自动写入本地 SQLite，并展示合并结果。 ／ |本地 SQLite 与删除撤销|✅ 已完成| ／ - **本地优先**：账单首先写入 SQLite，网络、登录和云备份不是记账前置条件。",
+     "lines": [
+      49,
+      64,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用本地 SQLite 存储账单数据的记账应用，SQLite 为其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，品牌名称与视觉资产不随代码授权",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 一款面向中国内地年轻个人用户的语音优先记账应用。 ／ 4. 多笔账单自动写入本地 SQLite，并展示合并结果。 ／   A[Expo / React Native] -->|本地数据| B[(SQLite)]",
+   "evidence_lines": [
+    10,
+    49,
+    90
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "zhixiang-luo/shengzhang",
+  "sha": "01a37a409ec1",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

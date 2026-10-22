@@ -10877,5 +10877,74 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c8a134fc35f0": {
+  "identity": {
+   "one_liner": "面向 agent 追踪的受控调查层，编译权限策略到 ClickHouse 查询",
+   "review": "LightShip 是一个让领域专家在没有数据库凭证的情况下调查生产环境 agent 追踪数据的工具：管理员将其绑定到 ClickHouse 中的 OpenTelemetry span 表，系统将调用者的角色与属性编译进 ClickHouse 查询，同一策略约束 Web UI、REST API 和 MCP 访问。项目处于实验性 alpha 阶段，无稳定版本，不检测 PII、不脱敏。",
+   "highlights": [
+    "通过将角色和属性编译进 ClickHouse 查询来控制追踪数据访问",
+    "同一授权策略适用于 Web UI、REST API 和 MCP 接口",
+    "本地 MCP 伴侣将授权导出写入 agent 工作区，只返回路径和计数"
+   ],
+   "use_cases": [
+    "领域专家自助调查生产环境 agent 对话与工具调用",
+    "AI 编码代理（Codex、Claude 等 MCP 客户端）访问追踪数据时的权限治理",
+    "在不复制追踪数据的前提下复用已有 OpenTelemetry 存储表"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "front of your existing OpenTelemetry data in ClickHouse, so humans and AI coding agents can ／ 1. An administrator binds LightShip to an existing OpenTelemetry span table in ClickHouse. ／ 3. LightShip compiles each caller’s roles and attributes into the ClickHouse query before returning",
+     "lines": [
+      11,
+      33,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 中存储的 OpenTelemetry 追踪数据提供受控访问与查询治理，是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LightShip gives domain experts governed, self-serve access to production agent traces. It sits in ／ 3. LightShip compiles each caller’s roles and attributes into the ClickHouse query before returning ／ LightShip never gives restricted users direct ClickHouse credentials.",
+   "evidence_lines": [
+    10,
+    35,
+    39
+   ]
+  },
+  "fn": "lightshipHQ/lightship",
+  "sha": "c8a134fc35f0",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

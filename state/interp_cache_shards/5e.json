@@ -10557,5 +10557,339 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "be4fe63867fc": {
+  "identity": {
+   "one_liner": "基于 MCP 的 AI 编码代理本地持久记忆库，默认以 SQLite+FTS5 存储",
+   "review": "Yggdrasil 为 Claude Code、Codex 等 MCP 宿主提供跨会话、跨项目的共享记忆：守护进程通过 MCP 工具（ygg_search/ygg_remember 等）读写本地数据，默认零依赖运行于 SQLite+FTS5，可选本地 embedding 模型与小 LLM 做语义检索和后台去重。面向使用 AI 编码助手的开发者，数据全部留在本机。当前为 alpha 阶段，AGPL-3.0 许可。",
+   "highlights": [
+    "默认以 SQLite + FTS5 提供关键词检索，零依赖运行，数据留在本地",
+    "通过 MCP 工具向 Claude Code、Codex、OpenCode 等 Agent 宿主提供记忆读写接口",
+    "支持可选本地 embedding 模型（Ollama/LM Studio/llama.cpp）实现语义检索，以及小 LLM 做后台记忆合并"
+   ],
+   "use_cases": [
+    "让 AI 编码助手在新会话中自动获得项目决策与历史上下文",
+    "跨项目复用相似问题的既有解决记录",
+    "从已有 Claude Code/Codex 会话记录、Obsidian 笔记导入并整理记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Try it with nothing installed and a throwaway DB: `uvx --from yggdrasil-memory ygg serve --reset --db /tmp/ygg.sqlite`. ／ Out of the box, Yggdrasil runs on **SQLite + FTS5 with zero dependencies** — instant keyword search, no models, nothing to download. Optional **local** models add two independent tiers: ／ |**0 · default**|nothing — SQLite + FTS5|keyword search, zero deps, instant — recall@1 = **0.77**| ／ |**Zero dependencies** (stdlib + SQLite)|✅|—|❌ Node + Bun + worker daemon|❌ Docker + Qdrant + LLM key|❌|",
+     "lines": [
+      82,
+      116,
+      120,
+      280
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目为 AI 编码代理提供记忆服务，SQLite 仅作为其本地存储后端使用，并非服务于数据库生态的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0，README 标注为 alpha 版本",
+   "install": [
+    "pypi",
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One local memory for Claude Code, Codex, and every MCP agent — shared across sessions, tools, and projects. Zero dependencies. Nothing leaves your machine. ／ - 🛎️ **Always-on daemon** — a tiny local service (~21 MB RAM) your agents reach over MCP tools (`ygg_search`, `ygg_recall`, `ygg_remember` …). ／ Out of the box, Yggdrasil runs on **SQLite + FTS5 with zero dependencies** — instant keyword search, no models, nothing to download. Optional **local** models add two independent tiers:",
+   "evidence_lines": [
+    4,
+    108,
+    116
+   ]
+  },
+  "fn": "VonderVuflya/Yggdrasil",
+  "sha": "be4fe63867fc",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "043b5d957f53": {
+  "identity": {
+   "one_liner": "自托管 AI 数字商品市场与 OpenAI 兼容 API 网关",
+   "review": "Node2Mint 是一个自托管的全栈平台，用于售卖数字产品与 AI token 套餐，并提供 OpenAI 兼容的转发网关。技术栈为 Next.js 15 + Go 1.22 + PostgreSQL 16 + Redis 7，通过 SELECT FOR UPDATE 行级锁实现余额扣减的原子性，含托管结算、推荐返佣与上游 provider 故障切换。适合想自建 AI 转售/token 市场的用户自行部署。",
+   "highlights": [
+    "提供 OpenAI 兼容的 /v1/chat/completions 端点，带上游 provider 健康检查与故障切换",
+    "余额与订单通过行级锁（SELECT FOR UPDATE）在事务边界内实现原子记账",
+    "支持 Stripe、DOKU、手动 QRIS/银行转账等多种支付渠道与托管结算流程"
+   ],
+   "use_cases": [
+    "搭建自托管的数字产品/token 套餐销售市场",
+    "搭建面向客户端应用的 OpenAI 兼容 API 转发与计费网关",
+    "运营带推荐返佣与托管结算的分销体系"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A production-ready full-stack platform built with Next.js 15, Go 1.22, PostgreSQL 16, Redis 7, and Caddy 2 for selling digital products, token packs, and routing AI model access. ／ PostgreSQL 16 ／ Start backend services (PostgreSQL, Redis, Go Gateway, Uptime Kuma):",
+     "lines": [
+      5,
+      19,
+      101
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "项目是以 PostgreSQL 作为余额/订单/账务存储的全栈市场与网关应用，而非为数据库生态服务的工具。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A production-ready full-stack platform built with Next.js 15, Go 1.22, PostgreSQL 16, Redis 7, and Caddy 2 for selling digital products, token packs, and routing AI model access. ／ Running an AI model reselling service or token marketplace requires robust ledger safety. Distributed billing often suffers from race conditions, double-spending, and provider outages. **Node2Mint** addresses these challenges by combining a high-performance Go API gateway with an atomic database transaction model: ／ Start backend services (PostgreSQL, Redis, Go Gateway, Uptime Kuma):",
+   "evidence_lines": [
+    5,
+    27,
+    101
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yanstd888/node2mint",
+  "sha": "043b5d957f53",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d418e8be5970": {
+  "identity": {
+   "one_liner": "数据库性能诊断工具，提供桌面应用、CLI 和 MCP 服务器",
+   "review": "Culprit SQL Studio 是一个用于数据库性能诊断的桌面应用、CLI 和 MCP 服务器，读取数据库已保留的统计信息（Query Store、等待统计、执行计划缓存等）生成慢查询、索引、阻塞与死锁方面的发现。面向 DBA 和使用 Claude Code、Cursor 等编码代理的开发者，内置 68 项检查，扫描只读统计、不执行用户查询，支持按连接审批代理操作并记录本地审计日志。",
+   "highlights": [
+    "提供桌面应用、CLI 和 MCP 服务器三种形态，CLI 可输出 JSON 和 SARIF 2.1.0",
+    "包含 68 项性能检查与 35 条执行计划规则，覆盖慢查询、计划回归、索引建议、阻塞与死锁分析",
+    "设计为只读扫描，不运行用户查询，代理工具调用需逐条审批并写入本地审计日志"
+   ],
+   "use_cases": [
+    "排查生产数据库慢查询、执行计划回归与索引问题",
+    "将culprit lint-sql 接入 CI/PR 流程，离线检查迁移文件的锁与外键风险",
+    "让 Claude Code、Cursor、Codex 等编码代理通过 MCP 工具参与数据库性能调查"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      58
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      58
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      58
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      58
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      58
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具连接多种数据库读取其统计与目录视图做性能诊断，是为数据库生态服务的工具而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast desktop app and CLI for SQL Server, PostgreSQL, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ An MCP server, JSON output everywhere and per-connection permissions let Claude Code, Cursor or Codex investigate with you. Every call is approved and audited. ／ 68 checks look for what actually costs time: runaway loops in plans, plan regressions, missing and unused indexes, N+1 query loops, type mismatches that block indexes, parameter-sensitive plans, queries that fail or time out, spills to disk, hot rows, statements that lock a whole table, unindexed foreign keys, sequence and transaction-ID exhaustion, partition hazards, page checksum corruption, slow storage, connection storms, replication lag, stale statistics, risky settings and more. Each finding names the queries involved, shows their share of database time, and ends with a fix you copy (Culprit never applies it for you) and a way to verify it.",
+   "evidence_lines": [
+    7,
+    50,
+    120
+   ]
+  },
+  "fn": "cristipufu/culprit-sql-studio",
+  "sha": "d418e8be5970",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "21f1400302d0": {
+  "identity": {
+   "one_liner": "PingCAP 官方 Homebrew tap，提供 tidb-server 与 tiup 的 macOS 安装",
+   "review": "该仓库是 PingCAP 维护的 Homebrew formula 集合，用于在 macOS 上安装 tidb-server 和 tiup。tidb-server 以单节点内置 unistore 引擎运行，无需 TiKV/PD，默认监听 loopback 并通过 auth_socket 插件保护 root 账户；tiup 则预置经 SHA-256 校验的 TUF root manifest。适合在 macOS 上本地运行或试用 TiDB 的开发者。",
+   "highlights": [
+    "提供 tidb-server formula，以单节点内置 unistore 引擎运行，无需 TiKV 或 PD",
+    "服务默认绑定 loopback，socket 位于 Homebrew var 目录，root 使用 auth_socket 插件认证",
+    "tiup 首次使用时植入 SHA-256 校验的 TUF root manifest，信任锚不经网络获取"
+   ],
+   "use_cases": [
+    "在 macOS 上通过 brew 安装并运行单节点 TiDB",
+    "本地开发环境以最小权限账户连接 TiDB 实例",
+    "通过 tiup 管理 TiDB 相关组件的信任引导"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Homebrew formulae for TiDB. ／ brew install tidb-server ／ ## tidb-server",
+     "lines": [
+      3,
+      9,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "mysql -S \"$(brew --prefix)/var/tidb.sock\" -uroot",
+     "lines": [
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为 TiDB 数据库本体提供 Homebrew 打包分发，属于为数据库生态服务的分发工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "TiDB"
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Homebrew formulae for TiDB. ／ brew install tidb-server ／ ## tidb-server",
+   "evidence_lines": [
+    3,
+    9,
+    13
+   ]
+  },
+  "fn": "pingcap/homebrew-brew",
+  "sha": "21f1400302d0",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

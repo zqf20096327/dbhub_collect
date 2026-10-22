@@ -10258,5 +10258,143 @@
   "generated_at": "2026-10-17",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ed4ddbc36cd": {
+  "identity": {
+   "one_liner": "开源项目管理工具，基于 PostgreSQL 存储",
+   "review": "Worklenz 是一个开源项目管理平台，提供任务管理、资源规划、时间跟踪、分析报表和项目模板等功能。面向需要项目协作的团队，支持云端和自托管两种方式。技术栈为 React/Express/TypeScript，使用 PostgreSQL 存储数据，可通过 Docker 或手动安装部署，要求 PostgreSQL v15 及以上。",
+   "highlights": [
+    "提供任务管理、资源规划、时间跟踪与分析报表等功能",
+    "支持 Docker 一键部署与手动开发环境安装两种方式",
+    "支持 CSV 导入导出与项目模板"
+   ],
+   "use_cases": [
+    "团队项目计划与任务协作",
+    "团队资源与工时管理",
+    "项目成本与绩效追踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |**Database**|PostgreSQL| ／ - PostgreSQL version v15 or newer",
+     "lines": [
+      100,
+      107,
+      115
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 为其 Database 层，Worklenz 是使用数据库存储数据的项目管理应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Database**|PostgreSQL| ／ - PostgreSQL version v15 or newer ／ # Create a PostgreSQL database named worklenz_db",
+   "evidence_lines": [
+    107,
+    115,
+    231
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Worklenz/worklenz",
+  "sha": "4ed4ddbc36cd",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1b71409b9834": {
+  "identity": {
+   "one_liner": "基于FUSE的AI智能体文件系统工作区，以单个SQLite文件存储全部历史",
+   "review": "LayerFS 为 AI 智能体提供可写的临时文件系统 Workspace，每次工具调用以去重 Checkpoint 形式提交，支持 Branch、回滚与合并；全部 Branch、Commit 与内容对象存于一个 SQLite 文件，无数据库服务端。目前 Store 仅以 Disposable 模式运行，无掉电持久化，不适用于唯一数据副本；通过 LayerFS × DSH 插件在 DeepSeek Harness 中使用。",
+   "highlights": [
+    "以单个 SQLite 文件作为 Store，无数据库服务端，daemon 与 SDK 进程直接打开",
+    "基于 FUSE 挂载 Workspace，写入进入 overlay，Commit 后成为不可变快照，支持分支、合并与冲突规则（.lww 最新编辑胜出）",
+    "内容分块去重存储，只追加不重写对象；提供 JavaScript SDK"
+   ],
+   "use_cases": [
+    "多个 AI 智能体并行工作于同一共享历史并进行分支/合并协调",
+    "智能体执行环境的一次性文件系统快照与自动检查点回滚",
+    "依赖随挂载即用的即时引导（无需重复安装依赖）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Store.** One SQLite file holds every Branch, Commit and content object. Each",
+     "lines": [
+      119
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明全部数据存于一个 SQLite 文件，SQLite 是其自身存储实现而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Store.** One SQLite file holds every Branch, Commit and content object. Each ／  daemon and SDK process opens it directly; there is no database server. ／ - **Workspace.** A mount binds the whole committed tree without copying it. Writes",
+   "evidence_lines": [
+    119,
+    120,
+    123
+   ]
+  },
+  "fn": "Ephemeral-AI-Lab/layerfs",
+  "sha": "1b71409b9834",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

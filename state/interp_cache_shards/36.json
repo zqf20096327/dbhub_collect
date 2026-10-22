@@ -10447,5 +10447,89 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8b5b4e1a0d78": {
+  "identity": {
+   "one_liner": "基于 DuckDB/SQLite 与 Arrow Flight SQL 的 SQL 服务器",
+   "review": "GizmoSQL 是一个 SQL 服务器，以 DuckDB 或 SQLite 作为查询执行后端，通过 Apache Arrow Flight SQL 协议对外提供服务，内置 TLS 与 JWT 认证，运行时可切换后端。面向需要通过 JDBC/ADBC/CLI 等接口访问分析型 SQL 的使用者，可通过 Docker、Homebrew、MSI、iOS App 或源码构建部署。注意 README 声明项目已进入维护模式，建议转向 Hardcharger。",
+   "highlights": [
+    "支持 DuckDB 与 SQLite 双后端，可在运行时切换",
+    "通过 Apache Arrow Flight SQL 协议提供连接，提供 JDBC、ADBC、CLI 客户端",
+    "内置基于中间件的认证，支持 TLS/mTLS 与 JWT"
+   ],
+   "use_cases": [
+    "以容器或原生二进制部署远程 SQL 分析服务",
+    "在 iPhone/iPad 本地运行 SQL 服务器用于开发与演示",
+    "通过 JDBC/ADBC/SQLAlchemy 等驱动连接分析查询"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "GizmoSQL ships with an interactive SQL shell inspired by `psql` and the DuckDB CLI:",
+     "lines": [
+      192
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🦆 DuckDB or 🗃️ SQLite for query execution ／ |DuckDB & SQLite backends|✅|✅| ／ - ⚙️ **Dual Backends** — Switch between DuckDB and SQLite at runtime",
+     "lines": [
+      24,
+      36,
+      63
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为建立在 DuckDB/SQLite 执行引擎之上的 SQL 服务器，为客户端提供 Arrow Flight SQL 连接服务，而非仅使用数据库的业务应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "open-core：Core 为 Apache 2.0，Enterprise 目录专有需商业许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**GizmoSQL** is a lightweight, high-performance SQL server built on: ／ - 🦆 DuckDB or 🗃️ SQLite for query execution ／ - 🚀 Apache Arrow Flight SQL for fast, modern connectivity",
+   "evidence_lines": [
+    22,
+    24,
+    25
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "gizmodata/gizmosql",
+  "sha": "8b5b4e1a0d78",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

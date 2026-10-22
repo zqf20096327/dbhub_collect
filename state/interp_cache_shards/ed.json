@@ -9438,5 +9438,149 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1ee1f81ea225": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的搜索数据库，统一向量、全文与结构化数据于单引擎",
+   "review": "seekdb 是 OceanBase 团队发布的数据库，将向量、全文、结构化与半结构化数据统一在单个引擎中，提供混合检索 SQL、异步索引流水线和内核级 COW 的 FORK/MERGE 沙箱机制。它以 MySQL 协议兼容，支持嵌入式库、单机服务和分布式集群三种形态，提供 Python/Node.js/Go SDK。主要面向构建 AI Agent 记忆与状态存储的开发者，也可用于 RAG、语义搜索等场景。",
+   "highlights": [
+    "提供向量 + 全文 + 标量过滤的单条 SQL 混合检索，基于两级 HNSW 增量索引",
+    "实现内核级 Copy-on-Write，支持 FORK DATABASE 快照与 MERGE/DROP 回滚",
+    "兼容 MySQL 协议，支持嵌入式、单机服务器与 OceanBase 分布式集群部署，提供 Python/JS/Go SDK"
+   ],
+   "use_cases": [
+    "AI Agent 的记忆写入、状态存储与沙箱探索回滚",
+    "RAG 与知识检索、语义搜索应用",
+    "边缘设备与本地嵌入式 AI 场景的本地数据存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "MySQL-compatible · Embedded or Server · Hybrid Vector + Full-text Search · COW Sandbox ／ 🐬 Full ACID, MySQL protocol, works with LangChain/LlamaIndex/Dify",
+     "lines": [
+      42,
+      47
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "a single-node server, or in the OceanBase distributed cluster. Full ACID,",
+     "lines": [
+      128
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该项目本身是数据库引擎（基于 OceanBase SQL 引擎构建），既非为数据库生态服务的工具也不是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "MySQL-compatible · Embedded or Server · Hybrid Vector + Full-text Search · COW Sandbox ／ commits the work back, or `DROP DATABASE` discards it. Kernel-level COW, ／ Built on the proven OceanBase SQL engine. Works as an embedded library,",
+   "evidence_lines": [
+    42,
+    99,
+    127
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "oceanbase/seekdb",
+  "sha": "1ee1f81ea225",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2a64303d985d": {
+  "identity": {
+   "one_liner": "本地优先零知识桌面密码管理器，加密 SQLite 保险库",
+   "review": "跨平台密码管理器，用 Argon2id 派生密钥、AES-256-GCM 逐条加密，将密码条目存于加密 SQLite 文件（.aegis），支持 TOTP、密码生成、自动锁定与 Bitwarden CSV 导入，通过 NativeAOT 单文件发布于 Windows/Linux/macOS。面向希望在本地保管凭据、不接受云同步的个人用户；限制为主密码遗忘不可恢复。",
+   "highlights": [
+    "使用 Argon2id 派生 KEK、AES-256-GCM 逐条认证加密，库文件为加密 SQLite 文件（.aegis）",
+    "支持 TOTP（RFC 6238）、密码生成器、安全健康检测与 Bitwarden CSV 导入",
+    "通过 NativeAOT 以单文件原生可执行发布，无需 .NET 运行时"
+   ],
+   "use_cases": [
+    "个人本地凭据保管（无云同步、无遥测）",
+    "从 Bitwarden 或通用 CSV 导入既有密码条目",
+    "跨 Windows/Linux/macOS 桌面使用同一 .aegis 密码库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|存储|SQLite（Microsoft.Data.Sqlite 10.0.12 + SQLitePCLRaw 2.1.12 / SQLite 3.53.3）|",
+     "lines": [
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明密码库数据以加密 SQLite 文件存储，SQLite 为其存储组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|存储|SQLite（Microsoft.Data.Sqlite 10.0.12 + SQLitePCLRaw 2.1.12 / SQLite 3.53.3）| ／ - 密码库为加密 SQLite 文件（`.aegis`），元数据不含秘密",
+   "evidence_lines": [
+    73,
+    110
+   ]
+  },
+  "fn": "AtomUICommunity/AegisVault",
+  "sha": "2a64303d985d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

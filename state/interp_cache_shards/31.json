@@ -8816,5 +8816,219 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a80573d5f367": {
+  "identity": {
+   "one_liner": "计算机使用代理资源目录，附可复用 JSONL/SQLite 数据",
+   "review": "收录计算机使用代理领域的论文、模型、数据集、基准、框架与工具的溯源目录，提供检索脚本与完整 JSONL/SQLite 目录数据，供研究者、RAG 系统和代理克隆使用。数据每日三次定时扫描更新，附带来源核验状态与覆盖台账。",
+   "highlights": [
+    "提供 3,251 条资源记录的目录，含论文、基准、数据集、模型、框架、代理等分类",
+    "提供 Python 脚本按关键词、类型、状态检索目录，输出 JSON",
+    "以 JSONL 和 SQLite 格式发布目录数据，供克隆与检索文档使用"
+   ],
+   "use_cases": [
+    "为计算机使用代理研究挑选基准与训练数据",
+    "为 RAG 系统或代理提供可检索的资源目录数据",
+    "追踪 GUI 代理领域的综述、模型与框架发布"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Use SQLite to join resources, environment/topic facets, and reviewed relations. See query examples. `data/catalog.jsonl` is committed; SQLite and JSON array exports are reproducible local build products.",
+     "lines": [
+      189
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库用 SQLite 存储目录数据并供用户查询，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可（README L17）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**For people, RAG systems, and agents — clone the complete catalog:**",
+   "evidence_lines": [
+    25
+   ]
+  },
+  "fn": "reacher-z/Awesome-CUA",
+  "sha": "a80573d5f367",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "14d1567571bb": {
+  "identity": {
+   "one_liner": "自托管阅读笔记写作应用，集成图书管理、摘录与写作",
+   "review": "Nostos 是一个自托管的阅读/写作一体化应用，管理实体书、EPUB、PDF、有声书，支持阅读标注、主题笔记和 Markdown 写作。面向个人读者与写作者，后端为 .NET + EF Core + SQLite，支持 Docker 部署、本地备份和 .nostos 导档，另有可选 AI 助手和 Nostos Cloud 托管版。",
+   "highlights": [
+    "支持 EPUB、PDF、TXT、MOBI 及有声书（MP3/M4A/M4B）的阅读与播放",
+    "提供主题笔记、摘录管理和 Markdown 写作工作室",
+    "支持 Docker 部署、本地备份和 .nostos 全库导出/导入"
+   ],
+   "use_cases": [
+    "个人自托管数字图书馆与阅读管理",
+    "跨书籍的笔记摘录与写作整理",
+    "通过 OPDS 在兼容阅读器上访问自己的书库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Nostos is one product with two deployments. **SelfHosted** (this repository) runs on its own with SQLite, local files, local backups and your own AI provider. **Nostos Cloud** adds private hosting pieces (sign-in, managed storage, billing, managed AI) around t ／ ├── Nostos.Backend/ # the SelfHosted host: SQLite, local files, backups, your own AI keys ／ **Stack:** .NET 10 Minimal APIs, EF Core 10 and SQLite · Angular 22 with Signals · epub.js · ngx-extended-pdf-viewer · Howler.js · Sigma.js and Graphology · TipTap with marked and Turndown · Phosphor icons · Newsreader and Hanken Grotesk.",
+     "lines": [
+      143,
+      148,
+      154
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **For developers and agents:** REST API · Library skill for agents · Deployment capabilities · PostgreSQL compatibility",
+     "lines": [
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是使用 SQLite 存储数据的阅读写作应用本体，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Nostos is one product with two deployments. **SelfHosted** (this repository) runs on its own with SQLite, local files, local backups and your own AI provider. **Nostos Cloud** adds private hosting pieces (sign-in, managed storage, billing, managed AI) around the same product and the same app. See the public/private boundary. ／ **Stack:** .NET 10 Minimal APIs, EF Core 10 and SQLite · Angular 22 with Signals · epub.js · ngx-extended-pdf-viewer · Howler.js · Sigma.js and Graphology · TipTap with marked and Turndown · Phosphor icons · Newsreader and Hanken Grotesk. ／ Nostos is licensed under the **GNU Affero General Public License v3.0 or later**. You may run, study, modify, and redistribute the software under those terms. If you run a modified version as a network service, you must offer its source code to the people who use it.",
+   "evidence_lines": [
+    143,
+    154,
+    169
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Christian-Gennari/Nostos",
+  "sha": "14d1567571bb",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f4764db2ee61": {
+  "identity": {
+   "one_liner": "PostgreSQL 14–19 简繁体中文消息翻译目录集",
+   "review": "该仓库为 PostgreSQL 14–19 六个分支提供完整的 zh_CN 与 zh_TW PO 翻译目录（324 个文件、135,040 条消息），并提供校对工作台、发布归档下载、msgfmt 校验和 MO 编译流程。供需要中文界面的 PostgreSQL 部署者和上游翻译贡献者使用，基于 GNU gettext 工具链，以源码方式构建。",
+   "highlights": [
+    "提供 PostgreSQL 14–19 全部六个分支的 zh_CN/zh_TW PO 目录，共 324 个文件、135,040 条消息",
+    "提供 make check/make mo/make dist 工作流，支持 msgfmt 校验与 MO 编译",
+    "提供双语校对工作台网页，支持按目录过滤与全文检索"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 14–19 部署安装中文消息目录",
+    "参与或复核 zh_CN/zh_TW 翻译条目",
+    "从源码构建可复现的翻译发布归档"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# PostgreSQL Chinese Message Catalogs ／ **Complete `zh_CN` and `zh_TW` translations for PostgreSQL 14 – 19**",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库内容是为 PostgreSQL 本体提供中文消息翻译目录的本地化组件，服务于 PostgreSQL 生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "采用 PostgreSQL License（取自 postgres.git）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# PostgreSQL Chinese Message Catalogs ／ **162 files and 67,520 messages per language; 324 files and 135,040 messages in total.** Both languages are 100% translated, with zero fuzzy and zero untranslated entries — every file clean under `msgfmt --check --check-format`. ／ bin/                              standalone tools; Python 3, GNU gettext, GNU tar, gzip",
+   "evidence_lines": [
+    1,
+    14,
+    111
+   ]
+  },
+  "fn": "pgsty/pgnls",
+  "sha": "f4764db2ee61",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

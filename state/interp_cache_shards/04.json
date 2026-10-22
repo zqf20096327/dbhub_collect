@@ -10091,5 +10091,223 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "77af0b2ebd31": {
+  "identity": {
+   "one_liner": "FastAPI+SQLAlchemy+asyncpg 连接 PostgreSQL 18 的异步示例应用",
+   "review": "一个演示项目，展示 FastAPI、Pydantic、SQLAlchemy ORM 通过 asyncpg 驱动异步访问 PostgreSQL 18 的完整集成，附带 Alembic 迁移、Redis 令牌认证、调度、日志、xlsx 导入、测试策略等示例。面向学习 FastAPI 异步技术栈的开发者，以 Docker Compose 部署 PostgreSQL 与 Redis，本地测试通过 Makefile 驱动。",
+   "highlights": [
+    "通过 asyncpg 驱动以异步方式连接 PostgreSQL 18",
+    "包含 Alembic 迁移、Makefile 构建运行命令与 Docker Compose 配置",
+    "提供 JWT/Redis 认证、APScheduler 调度、WebSocket 聊天等示例模块"
+   ],
+   "use_cases": [
+    "学习 FastAPI+SQLAlchemy 异步开发模式的参考工程",
+    "作为新项目的技术栈脚手架起点",
+    "了解数据库测试隔离与迁移流程示例"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This demonstration application showcases the powerful integration of FastAPI—a modern, high-performance web framework—with Pydantic 2.0 for robust data validation. The backend architecture is further reinforced by leveraging the SQLAlchemy ORM along with an as ／ PostgreSQL 18 uses `/var/lib/postgresql` for its persistent data volume. Existing PostgreSQL 17 data must be migrated with `pg_upgrade` or a dump and restore before using the updated Compose configurations. ／ This starts PostgreSQL and Redis with Docker Compose, then points host-side tests at their published localhost ports.",
+     "lines": [
+      38,
+      40,
+      225
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储数据的 FastAPI 演示应用，并非为数据库生态服务的独立工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This demonstration application showcases the powerful integration of FastAPI—a modern, high-performance web framework—with Pydantic 2.0 for robust data validation. The backend architecture is further reinforced by leveraging the SQLAlchemy ORM along with an asynchronous connection to a PostgreSQL 18 relational database. High-throughput communication across the stack is achieved using the asyncpg database client library, delivering an efficient, non-blocking interface to process database transactions seamlessly within Python's asyncio event loop. ／ PostgreSQL 18 uses `/var/lib/postgresql` for its persistent data volume. Existing PostgreSQL 17 data must be migrated with `pg_upgrade` or a dump and restore before using the updated Compose configurations. ／ 1. make docker-build ／ 3. make docker-apply-db-migrations",
+   "evidence_lines": [
+    38,
+    40,
+    63,
+    65
+   ]
+  },
+  "fn": "grillazz/fastapi-sqlalchemy-asyncpg",
+  "sha": "77af0b2ebd31",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4d9cd247d0a3": {
+  "identity": {
+   "one_liner": "本地优先项目管理桌面应用，数据存于单个 SQLite 库",
+   "review": "Fjord 是一个本地优先的桌面项目管理应用，提供看板、任务、markdown 笔记（支持 [[链接]] 与反链）、文件附件和全文搜索，并附带 CLI 和暴露 28 个工具的 MCP 服务器供 AI 代理操作。面向偏好键盘操作的个人/小团队用户，无需账号与云端，全部数据保存在本机单个 SQLite 数据库中，支持 Linux/Windows/macOS。",
+   "highlights": [
+    "提供看板、任务、子任务、markdown 笔记、内容寻址文件附件与全文搜索",
+    "提供 CLI 与 MCP 服务器（28 个工具）供用户与 AI 代理操作同一数据",
+    "无需账号与云端，数据保存在本机单个 SQLite 数据库中"
+   ],
+   "use_cases": [
+    "个人或小团队在本地管理项目与任务看板",
+    "用 AI 代理（如 Claude Code、Cursor）通过 MCP 操作项目任务",
+    "离线/隐私场景下保存项目、笔记与文件"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Fjord keeps your projects, kanban boards, files and notes in a single SQLite database on your own",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明项目、看板、文件和笔记保存在单个 SQLite 数据库中，属于使用数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Fjord keeps your projects, kanban boards, files and notes in a single SQLite database on your own ／ CLI, and an MCP server — so you and your AI assistant can work in ／ - **AI-agent ready** — `fjord mcp` exposes 28 tools to MCP clients such as Claude Code and Cursor, and an Agent Skill teaches agents how to use them. Agents can create, edit, move and archive but never hard-delete, and every change is tagged with its author.",
+   "evidence_lines": [
+    17,
+    19,
+    37
+   ]
+  },
+  "fn": "jhtjernsmo/fjord",
+  "sha": "4d9cd247d0a3",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "897c26d631eb": {
+  "identity": {
+   "one_liner": "Python RDF 1.1/1.2 处理库，提供 RDFLib 兼容 API 与 SQLite 存储",
+   "review": "RDFCore 是一个 Python 库，用于解析、序列化和操作 RDF 1.1 及部分 RDF 1.2 数据，支持 N-Triples、N-Quads、Turtle、TriG、RDF/XML 等格式，提供 RDFLib 兼容的 Graph/Dataset API、流式读写、外部排序和基于 SQLite 的存储。不实现 SPARQL 和 JSON-LD，面向需要处理 RDF/语义网数据的 Python 开发者。",
+   "highlights": [
+    "实现 RDFLib 兼容的 Graph、Dataset、URIRef、BNode、Literal 等类和图操作",
+    "支持 RDF 1.1 与 RDF 1.2 的多种格式解析与序列化，含流式 parser/writer",
+    "提供 SQLite 后端存储、外部排序和有界 I/O 辅助；无运行时依赖"
+   ],
+   "use_cases": [
+    "在 Python 中解析和生成 Turtle、N-Quads、TriG、RDF/XML 等 RDF 数据",
+    "需要流式处理大规模 RDF 文件或使用 SQLite 持久化三元组",
+    "从 RDFLib 项目迁移使用 Graph/term 公共 API 的代码"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite-backed store, external sorting, and bounded I/O helpers. ／ store = SQLiteStore(\"data.sqlite3\") ／ The built-in bulk path feeds records lazily to SQLite's `executemany()`;",
+     "lines": [
+      5,
+      511,
+      520
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 是该库自身的存储后端，项目是使用数据库存数据的 RDF 处理库而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RDFCore is a Python library for RDF 1.1 and selected RDF 1.2 features. It ／ SQLite-backed store, external sorting, and bounded I/O helpers. ／ The package has no runtime dependencies and requires Python 3.10 or newer.",
+   "evidence_lines": [
+    3,
+    5,
+    7
+   ]
+  },
+  "fn": "domel/RDFCore",
+  "sha": "897c26d631eb",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

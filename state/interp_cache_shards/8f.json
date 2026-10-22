@@ -9565,5 +9565,82 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5ef4a4b60406": {
+  "identity": {
+   "one_liner": "基于 Codex 的共享工作区数据层，提供 KB/SQL/图/技能/记忆五类表面",
+   "review": "DataMind 是为 Codex 代理提供的共享数据层插件，代理负责推理、摄取与检索，DataMind 负责存储数据、执行工具并返回证据和写回凭据。它以 MCP 和官方 Codex SDK 集成方式接入，面向需要在本地或企业环境中为代理提供文档、SQL、图谱、技能与记忆数据的开发者。图后端使用 NetworkX+JSON，存储涉及 SQLite、LanceDB 与 Dolt；SQL 面由 Codex 生成只读 SQL。",
+   "highlights": [
+    "提供 KB 语义检索、SQL 只读查询、类型化实体图谱、版本化 Skills 与用户 Memory 五类数据表面",
+    "通过 Codex 插件、官方 Codex SDK、CLI、HTTP API 与浏览器 UI 共享同一数据层，并提供独立 MCP 传输（python -m datamind.mcp）",
+    "工作区支持基于 SHA-256 源版本、不可变修订与 compare-and-swap 发布的一致读"
+   ],
+   "use_cases": [
+    "为 Codex 代理提供本地文档摄取与语义检索的数据工作区",
+    "企业侧通过 Codex SDK 集成，由应用自行管理认证、租户授权与调度",
+    "以 Python 直接调用数据工具，执行校验、钩子并记录写回凭据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "GitHub CI covers Python 3.11/3.12, local versioning/recovery, real MySQL/Dolt,",
+     "lines": [
+      175
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Incremental workspaces share immutable sources, source-scoped SQLite graph assertions, ／ python -m datamind.scripts.verify_sqlite_demo",
+     "lines": [
+      122,
+      172
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite/LanceDB/Dolt 等存储数据，是为 Codex 代理服务的应用层数据层，而非为某数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The shared workspace data layer for Codex.** Codex reasons, ingests and retrieves; ／ the same data layer. Codex is the main agent for ingestion and retrieval. ／ LanceDB vector versions and Dolt table trees across revisions. New workspaces keep",
+   "evidence_lines": [
+    3,
+    18,
+    123
+   ]
+  },
+  "fn": "OpenDCAI/DataMind",
+  "sha": "5ef4a4b60406",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

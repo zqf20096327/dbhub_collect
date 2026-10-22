@@ -9833,5 +9833,219 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "80ea4db1f0cc": {
+  "identity": {
+   "one_liner": "为 PostgreSQL 提供自然语言转 SQL 与语义算子的工具",
+   "review": "jev4pg 为 PostgreSQL 提供 41 个 JEV 语义算子（过滤、抽取、排序、匹配、验证），通过 Python 应用或运行于 PostgreSQL 17 的 Rust 原生扩展执行自然语言查询与语义 SQL。支持证据缓存、并行执行和可解释的概率嵌入，普通 SQL 无需模型密钥。面向在现有 PostgreSQL 数据上构建语义搜索与分析工具的开发者。",
+   "highlights": [
+    "提供 41 个 JEV 语义算子，支持过滤、抽取、排序、匹配和验证",
+    "提供 Python 应用与 PostgreSQL 17 原生 Rust 扩展两种部署方式",
+    "支持证据缓存、并行执行和基于命名问题的可解释概率嵌入"
+   ],
+   "use_cases": [
+    "对现有 PostgreSQL 数据进行自然语言查询和语义过滤",
+    "构建语义搜索、文档处理流程和分析师工具",
+    "通过可复核的语义层在团队间复用语义定义"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Natural language to SQL and semantic operators for PostgreSQL ／ jev4pg brings semantic intelligence to PostgreSQL with **41 JEV operators** for filtering, extraction, ranking, matching and verification. Build semantic search, document workflows and analyst tools on your existing data, with natural-language queries in Engli",
+     "lines": [
+      5,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 PostgreSQL 数据库提供语义算子和自然语言查询扩展，是服务于数据库生态的工具组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "jev4pg brings semantic intelligence to PostgreSQL with **41 JEV operators** for filtering, extraction, ranking, matching and verification. Build semantic search, document workflows and analyst tools on your existing data, with natural-language queries in English and Simplified Chinese. ／ PostgreSQL stores your data and executes relational SQL in every setup. jev4pg adds two complementary components: ／ |**Native Rust extension**|Synchronous semantic SQL, parallel stage plans, repeated-context reuse and explainable embeddings|Inside PostgreSQL 17 on Linux; works directly from SQL without Python.|",
+   "evidence_lines": [
+    24,
+    97,
+    102
+   ]
+  },
+  "fn": "Sheltercosmo/jev4pg",
+  "sha": "80ea4db1f0cc",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f54eccc212f0": {
+  "identity": {
+   "one_liner": "将 Telegram 数据同步到本地 SQLite 缓存的 CLI 工具",
+   "review": "这是一个面向命令行的 Telegram 客户端，通过只读守护进程把消息、联系人等同步到本地 SQLite 缓存，提供全文检索（FTS5）、只读 SQL 查询和 JSON 输出，并默认 JSON 格式与固定退出码以方便脚本和 AI 代理调用。安装支持 Homebrew、bun/npm 和源码编译，需自备 Telegram API 凭据。适合需要在本地离线检索 Telegram 数据的用户或代理集成场景。",
+   "highlights": [
+    "只读守护进程实时同步与历史回填，缓存优先读取并支持 --fresh 绕过缓存",
+    "基于 FTS5 的全文搜索和只读 SQL 查询（tg sql）",
+    "JSON 输出、稳定错误模式和固定退出码，面向脚本与 AI 代理"
+   ],
+   "use_cases": [
+    "离线检索本地缓存的 Telegram 消息",
+    "供脚本或 AI 代理通过 JSON CLI 查询 Telegram 数据",
+    "多账号管理与只读后台同步"
+   ],
+   "use_cases_add": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`tg` keeps your Telegram in a local SQLite cache for offline search and SQL; ／ |Local cache, offline queries|✅ SQLite, cache-first, `--fresh`|❌ live calls only|",
+     "lines": [
+      71,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该 CLI 存储本地 Telegram 缓存的数据库，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tg` keeps your Telegram in a local SQLite cache for offline search and SQL; ／ - Read-only SQL over the cache (`tg sql`) with an annotated schema",
+   "evidence_lines": [
+    71,
+    65
+   ]
+  },
+  "fn": "neoromantic/telegram-sync-cli",
+  "sha": "f54eccc212f0",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7c5ffe24ab79": {
+  "identity": {
+   "one_liner": "自托管视频转码与加密 HLS 交付系统，用 Postgres 做状态与队列",
+   "review": "这是一个 Node.js 实现的自托管视频系统：上传视频后用 FFmpeg 生成自适应码率 HLS，内容密钥经 AWS KMS 信封加密，播放依赖短期令牌，并配套 REST 控制台、API 密钥、Webhook、审计日志与用量统计。它使用 PostgreSQL 16 同时作为状态存储与工作队列，通过 Terraform 部署到 AWS，也可借助本地 AWS 模拟器在无 AWS 账号的笔记本上运行。适合需要在自有云账号内搭建视频点播管线的开发运维团队。",
+   "highlights": [
+    "用 FFmpeg 实现单解码多编码的自适应码率转码，生成 AES-128 加密 HLS",
+    "使用 PostgreSQL 16 同时承担系统状态存储与工作队列（FOR UPDATE SKIP LOCKED）",
+    "提供 REST API（OpenAPI 3.1）、操作控制台、签名 Webhook、追加式审计日志与用量计量"
+   ],
+   "use_cases": [
+    "在自有 AWS 账号内自建视频点播转码与加密分发管线",
+    "需要按播放令牌控制访问、限流会话并记录审计的点播平台",
+    "本地以 AWS 模拟器运行演示或开发环境"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 ／ |🛡️ **Correctness under failure**|Postgres is the queue (`FOR UPDATE SKIP LOCKED`). Every write is guarded by ownership, a reaper recovers dead workers, and Spot interruptions hand work back without burning a retry.| ／ |Postgres 16|RDS, private subnets|All state **and** the work queues|",
+     "lines": [
+      7,
+      64,
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 PostgreSQL 16 存储全部状态并作为工作队列，属于使用数据库的应用系统",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Postgres 16|RDS, private subnets|All state **and** the work queues| ／ |**Data**|PostgreSQL 16, as both the system of record and the work queue| ／ **Euron Video System (EVS)** is an open-source, MIT-licensed project, part of the",
+   "evidence_lines": [
+    143,
+    218,
+    29
+   ]
+  },
+  "fn": "euron-sde-team/euron-video-system",
+  "sha": "7c5ffe24ab79",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

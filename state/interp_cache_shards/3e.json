@@ -10542,5 +10542,79 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "02fc61d73de5": {
+  "identity": {
+   "one_liner": "内置 SQLite 集成插件的 WordPress Docker 镜像",
+   "review": "该项目将 WordPress 与 sqlite-database-integration 插件打包为开箱即用的 Docker 镜像，用 SQLite 替代 MySQL/MariaDB 存储数据，并附带原生解析器扩展、诊断页面、ID 大小写修正插件与 SMTP 邮件集成。适合想以容器方式快速运行单机 WordPress、且不需要外部数据库服务的人员。README 明确说明它不是 MySQL/MariaDB 迁移工具。",
+   "highlights": [
+    "镜像捆绑 WordPress 与 sqlite-database-integration 插件，用 SQLite 存储数据，开箱即用",
+    "内置只读 SQLite 诊断页面，读取 PRAGMA 值与存储分布，不写入线上数据库",
+    "提供可选的原生 wp_mysql_parser PHP 扩展与 SMTP/OwlMail 集成"
+   ],
+   "use_cases": [
+    "以 Docker 单容器运行基于 SQLite 的 WordPress 站点",
+    "需要在无外部数据库服务的环境中部署 WordPress",
+    "需要查看 WordPress 所用 SQLite 运行状态与存储占用"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "WordPress with SQLite, ready to use out of the box.",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "MariaDB may be more appropriate for workloads with sustained concurrent writes.",
+     "lines": [
+      230
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "镜像是使用 SQLite 存储数据的 WordPress 应用打包，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WordPress with SQLite, ready to use out of the box. ／ The image bundles WordPress `7.1.3` on PHP 8.5/Apache and `sqlite-database-integration` `v3.1.0` together with its optional native Rust extension `wp_mysql_parser`. The extension is compiled and enabled on `amd64` and `arm64`; published 32-bit ARM variants use the plugin's pure-PHP fallback. The SQLite driver detects the available implementation automatically (the upstream project reports roughly 4.8x faster lexing and 15.5x faster parsing for the native path).",
+   "evidence_lines": [
+    3,
+    18
+   ],
+   "softened": []
+  },
+  "fn": "soulteary/docker-sqlite-wordpress",
+  "sha": "02fc61d73de5",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

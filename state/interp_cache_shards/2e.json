@@ -11070,5 +11070,102 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "971a446296bb": {
+  "identity": {
+   "one_liner": "将 DuckDB 2.0 发布到网络的 SQL 服务器，使用 Warp SQL 协议传输 Arrow 数据",
+   "review": "Hardcharger 是 GizmoData 开源的分析服务器，把 DuckDB 2.0 内嵌其中，客户端通过基于 HTTP 的 Warp SQL 协议以 Apache Arrow 批次收发查询结果，支持流式返回、批量导入、TLS/mTLS、RBAC、行策略、审计日志和内置 Web UI，并可运行在 iPhone/iPad 上。适合需要远程访问 DuckDB 的开发者与数据团队；性能数据为自测，非官方 TPC-H 结果。",
+   "highlights": [
+    "通过 Warp SQL（HTTP）协议流式返回 Apache Arrow IPC 数据，支持 LZ4/zstd 压缩与断点续传",
+    "内置令牌登录、TLS/mTLS、基于角色的访问控制、行列脱敏、SSO (OIDC/JWKS) 与防篡改审计日志",
+    "服务器二进制内置 Web UI，提供 SQL 编辑器、结果表格、schema 浏览器与文件上传导入"
+   ],
+   "use_cases": [
+    "为 DuckDB 提供远程网络访问，供多客户端并发查询",
+    "通过 Web UI 或 iOS 应用进行交互式 SQL 分析与数据文件导入",
+    "以 Arrow 格式向应用流式交付大结果集"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- 🔭 **Observable.** Instrumentation into a DuckDB file or PostgreSQL, catalog logging (also",
+     "lines": [
+      44
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "SQL Server, MySQL, PostgreSQL, Redshift, Snowflake, Trino, GizmoSQL, Oracle, Db2,",
+     "lines": [
+      227
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "SQL Server, MySQL, PostgreSQL, Redshift, Snowflake, Trino, GizmoSQL, Oracle, Db2,",
+     "lines": [
+      227
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "(`sqlite_scanner`) does not go through it: `ATTACH '<path>' (TYPE sqlite)`, the `sqlite:`",
+     "lines": [
+      901
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "SQL Server, MySQL, PostgreSQL, Redshift, Snowflake, Trino, GizmoSQL, Oracle, Db2,",
+     "lines": [
+      227
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 DuckDB 服务的网络服务器组件，本身不存储业务数据，为数据库生态提供远程访问能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0，README 声明无版本区分、无许可证密钥",
+   "install": [
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Hardcharger™** puts DuckDB 2.0 on the network. Clients connect over ／ **Warp SQL**, an open HTTP protocol that moves ／ - 🦆 **DuckDB 2.0 inside.** A standalone server on DuckDB's v2 C API, not an extension.",
+   "evidence_lines": [
+    28,
+    29,
+    37
+   ]
+  },
+  "fn": "gizmodata/hardcharger",
+  "sha": "971a446296bb",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

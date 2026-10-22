@@ -9778,5 +9778,142 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aa029404a311": {
+  "identity": {
+   "one_liner": "运行在自有 Cloudflare 账户上的类型安全实时后端框架",
+   "review": "Lunora 是一个部署到 Cloudflare Workers 的后端框架，用 TypeScript 编写类型安全的查询、变更与动作，实时状态由 Durable Objects 持有，SQL 走 D1，blob 存 R2。面向在自己 Cloudflare 账户上构建全栈应用的开发者，提供 Vite 插件、多前端适配器、多语言 SDK 生成与本地管理 UI。README 标注处于 Alpha 阶段，可能有破坏性变更。",
+   "highlights": [
+    "通过 WebSocket 订阅实现查询的实时推送更新",
+    "支持 .shardBy() 分片与 .global() 地理复制扩展 Durable Objects",
+    "提供 React/Vue/Solid/Svelte/Angular/React Native 适配器及多语言 SDK 生成"
+   ],
+   "use_cases": [
+    "在自有 Cloudflare 账户上构建类型安全的实时全栈应用",
+    "需要跨多客户端实时同步状态的 BaaS 类后端",
+    "基于 D1/Durable Objects/R2 组合后端能力的 Vite 项目"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`@lunora/hyperdrive`|npm|Bring-your-own Postgres/MySQL for Lunora via Cloudflare Hyperdrive: a driver-agnostic, action-only ctx.sql|",
+     "lines": [
+      192
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|`@lunora/hyperdrive`|npm|Bring-your-own Postgres/MySQL for Lunora via Cloudflare Hyperdrive: a driver-agnostic, action-only ctx.sql|",
+     "lines": [
+      192
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|`@lunora/do`|npm|Lunora Durable Objects: ShardDO (SQLite, OCC, hibernated WebSocket subscriptions) and SessionDO| ／ |`@lunora/agent`|npm|Durable AI agents for Lunora: defineAgent compiles a replay-safe tool-loop onto Cloudflare Workflows, with DO SQLite threads and live message subscriptions| ／ |`@lunora/replica`|npm|Local-first replica runtime + local SQLite mirror for Lunora|",
+     "lines": [
+      123,
+      184,
+      199
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "tool",
+   "eco_why": "Lunora 是为在 Cloudflare 数据服务（D1、Durable Objects、R2）之上构建应用提供服务能力的框架与工具集，而非仅消费数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-Apache-2.0 许可证",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lunora gives you Convex-style DX on your own Cloudflare account. You write type-safe queries, mutations, and actions in TypeScript, and Lunora deploys them as Cloudflare Workers. Durable Objects hold real-time state, D1 handles SQL, R2 stores blobs, and Queues run jobs. Nothing runs on servers we operate; everything lives in the Cloudflare account you already pay for. ／ |`@lunora/do`|npm|Lunora Durable Objects: ShardDO (SQLite, OCC, hibernated WebSocket subscriptions) and SessionDO| ／ |`@lunora/sql-store`|npm|Internal dialect-parameterized SQL store core for Lunora .global() backends (D1, PlanetScale)|",
+   "evidence_lines": [
+    21,
+    123,
+    128
+   ]
+  },
+  "fn": "anolilab/lunora",
+  "sha": "aa029404a311",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3e760b84b6f3": {
+  "identity": {
+   "one_liner": "企业能力规划编译器，将业务架构编译为可执行计划",
+   "review": "ORCHADYN 将业务目标、能力、权限与约束编译为可在执行前验证并投射到多种运行时的计划，覆盖代理图、持久化工作流等编译目标，本身不执行工作。面向需要治理化业务架构与可审计授权链的企业团队。开放仓库含文档、SDK、API 定义与二进制发布清单，规划内核以 AGPL 另行维护。",
+   "highlights": [
+    "将业务架构转化为可验证的计划并投射到异构运行时",
+    "提供 OpenAPI 契约与无依赖 Go SDK",
+    "开放仓库包含文档、示例、API 定义与二进制发布清单"
+   ],
+   "use_cases": [
+    "企业业务架构治理与计划编排",
+    "多智能体与工作流系统的上游规划层",
+    "需要可追溯授权与证据留存的自动化决策"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 未提供任何数据库适配或服务能力，仅 topic 标签含 postgresql 且正文未出现该库名。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "开放仓库 Apache-2.0，AGPL 规划内核另存于 ORCHADYN，企业能力在 ORCHADYN-ee",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ORCHADYN is an Enterprise Capability Planning Compiler for Executable Business ／ This repository contains Apache-2.0 licensed documentation, SDKs, examples, ／ public API definitions, and binary release manifests. The AGPL planning kernel",
+   "evidence_lines": [
+    7,
+    37,
+    38
+   ]
+  },
+  "fn": "axisvela/orchadyn-open",
+  "sha": "3e760b84b6f3",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

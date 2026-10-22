@@ -11569,5 +11569,261 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "09a69ae784d8": {
+  "identity": {
+   "one_liner": "打包 XAMPP（PHP+MySQL+phpMyAdmin+SSH）的 Docker 镜像",
+   "review": "该仓库提供基于 Debian 的 Docker 镜像，内置 XAMPP 环境（Apache、PHP 多版本、MySQL/MariaDB、phpMyAdmin 与 SSH 服务），通过 docker run 挂载 /www 目录运行 PHP+MySQL Web 应用，并提供 Docker Compose 示例与自定义 Apache 配置挂载方法。README 已声明镜像弃用且存在已知安全漏洞，建议迁移至 tomsik68/lamp。",
+   "highlights": [
+    "提供 PHP 5.6/7.4/8.2 三个版本标签的镜像",
+    "镜像内置 MySQL、phpMyAdmin 与 SSH 服务器",
+    "支持挂载自定义 Apache 配置与 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "本地运行 PHP+MySQL 开发/测试环境",
+    "通过 SSH 与浏览器访问容器内应用与 phpMyAdmin"
+   ],
+   "use_cases_end": 0
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "This image is intended for PHP+MySQL development. For convenience, it also runs SSH server to connect to. __Both MySQL and phpmyadmin use default XAMPP password__. ／ You can then use `mysql` and friends installed in `/opt/lampp/bin` in your current bash session. If you want this to persist, you need to add it to your user or system-wide `.bashrc` (inside container).",
+     "lines": [
+      25,
+      82
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "> **This image is deprecated and no longer receives security updates.** Its PHP, MariaDB and Apache versions have known vulnerabilities.",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "镜像内置 MySQL/MariaDB 供 PHP 应用存数并附 phpMyAdmin，属于使用数据库的打包环境",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "deprecated",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **This image is deprecated and no longer receives security updates.** Its PHP, MariaDB and Apache versions have known vulnerabilities. ／ This image is intended for PHP+MySQL development. For convenience, it also runs SSH server to connect to. __Both MySQL and phpmyadmin use default XAMPP password__. ／ If you used the flag `-p 41062:80` with `docker run`, just browse to http://localhost:41062/phpmyadmin/ .",
+   "evidence_lines": [
+    6,
+    25,
+    101
+   ]
+  },
+  "fn": "tomsik68/docker-xampp",
+  "sha": "09a69ae784d8",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d02db271748d": {
+  "identity": {
+   "one_liner": "本地 Go CLI，为 AI 代理提供基于 SQLite 的混合检索记忆存储",
+   "review": "Mnemoteca 是一个用 Go 编写的本地文档存储与检索 CLI，用于为 AI 代理保存和召回记忆。它将文档存入 SQLite，结合 sqlite-vec 向量相似度、FTS5 BM25 词法加权和可选的本地 ONNX 交叉编码器重排实现混合检索，全部推理在本地运行、无需云端 API。面向使用 Claude Code、OpenCode 等代理的用户，通过 Homebrew、安装脚本或 Windows ZIP 分发。",
+   "highlights": [
+    "使用 SQLite 存储文档，提供 FTS5 全文检索与 sqlite-vec 向量检索，支持向量-BM25 混合搜索与可选重排",
+    "嵌入与重排推理通过 ONNX Runtime 在本地运行，无云端依赖",
+    "支持 JSONL 导出/导入用于备份和迁移，并提供面向代理的 memory_* 工具集成"
+   ],
+   "use_cases": [
+    "为 AI 编码代理或 IDE 助手提供跨会话的本地长期记忆",
+    "需要本地化、离线运行的语义检索与记忆召回场景",
+    "通过 JSONL 导出/导入进行记忆数据备份与迁移"
+   ],
+   "classification": {
+    "cat": "应用",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       15,
+       17,
+       18
+      ]
+     }
+    ],
+    "eco": "app",
+    "eco_why": "SQLite 仅作为其文档存储后端，项目本身是面向 AI 代理的记忆应用而非为数据库生态服务的工具",
+    "ai": {
+     "flag": true,
+     "kind": [
+      "other"
+     ]
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "",
+    "install": [
+     "binary",
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     7,
+     15,
+     105
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite document storage with metadata support. ／ - SQLite FTS5 full-text search with BM25 ranking. ／ - sqlite-vec vector search with cosine similarity.",
+     "lines": [
+      15,
+      17,
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其文档存储后端，项目本身是面向 AI 代理的记忆应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Mnemoteca is a local document storage and retrieval CLI built in Go. Store short ／ - SQLite document storage with metadata support. ／ ## Connect Mnemoteca to your agent",
+   "evidence_lines": [
+    7,
+    15,
+    105
+   ]
+  },
+  "fn": "RunWield/mnemoteca",
+  "sha": "d02db271748d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "907993af85a0": {
+  "identity": {
+   "one_liner": "Node.js 框架：由 GraphQL 对象类型生成 API 与数据库存储",
+   "review": "Simfinity.js 是一个 Node.js 框架，开发者定义 GraphQL 对象类型后，框架自动生成查询、变更、关系解析器，并写入 MongoDB/Mongoose 或 PostgreSQL 15+（真实表与外键）。面向需要快速搭建 GraphQL 后端的 JavaScript 开发者，提供验证、RBAC/ABAC 授权钩子、状态机及可选 MCP 工具；依赖 mongoose 与 graphql 作为 peer dependencies。",
+   "highlights": [
+    "从 GraphQL 对象类型自动生成查询、变更、关系与数据库存储",
+    "提供 MongoDB/Mongoose 与 PostgreSQL 15+ 两种 facade，PostgreSQL 生成真实表、索引与外键",
+    "内置验证、RBAC/ABAC 授权、状态机与可选 MCP 传输"
+   ],
+   "use_cases": [
+    "快速生成 GraphQL CRUD 后端服务",
+    "以声明式方式实现业务校验与状态机工作流",
+    "同时使用 MongoDB 与 PostgreSQL 后端共享同一前端的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Simfinity.js — Define once. Build beyond. GraphQL, MongoDB, PostgreSQL, and optional MCP. ／ A Node.js framework that turns GraphQL object types into generated queries, mutations, relationships, and database storage. Use the established MongoDB/Mongoose facade or the PostgreSQL 15+ facade with real tables and foreign keys. ／ ## PostgreSQL support",
+     "lines": [
+      1,
+      5,
+      55
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用提供数据库存储与 GraphQL API 生成的框架组件，服务于数据库之上的开发流程",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Node.js framework that turns GraphQL object types into generated queries, mutations, relationships, and database storage. Use the established MongoDB/Mongoose facade or the PostgreSQL 15+ facade with real tables and foreign keys. ／ - **MongoDB or PostgreSQL**: Choose the database facade once during application startup ／ ## PostgreSQL support",
+   "evidence_lines": [
+    5,
+    35,
+    55
+   ]
+  },
+  "fn": "simtlix/simfinity.js",
+  "sha": "907993af85a0",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

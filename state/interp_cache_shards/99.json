@@ -8834,5 +8834,117 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7b0a6815cc3d": {
+  "identity": {
+   "one_liner": "基于 Godot 与 Flask/SQLite 的 2.5D 多人动作 RPG 游戏",
+   "review": "这是一个 Godot 客户端 + Flask 服务端的 2.5D 动作 RPG，支持多人在线、组队、交易与服务器权威的经济系统。数据经 SaveStorage 抽象层由服务端持有（服务端使用 SQLite），包含 GM 面板、世界事件与 8500+ 自动化检查。面向 PC 玩家与独立游戏开发者参考。",
+   "highlights": [
+    "客户端与服务端分离，服务端持有角色存档与经济结算（Flask + SQLite）",
+    "包含 GM 面板，可配置世界事件、搅动之地等玩法参数",
+    "包含对自身 API 的安全审计记录与 8500+ 自动化检查"
+   ],
+   "use_cases": [
+    "PC 浏览器端多人动作 RPG 游戏",
+    "独立游戏服务端架构与存档抽象的参考实现",
+    "Godot/Flask 多人游戏开发学习示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是一个使用 SQLite 存数据的游戏应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A top-down 2.5D action RPG built in Godot 4.7 with GDScript, backed by a Flask account service. Four playable classes, six enemy families in forty-three elemental variants, collectable combat pets, fishing and cooking with recipes, a smith who tempers gear, player-to-player trading over a taxed economy, other players drawn live wherever you are and fighting the same monsters, and a complete run from town to final boss. ／ `CharacterData` holds a `SaveStorage` and never asks which implementation it has. That seam is what let the game move from a local file to the Flask service without touching the twenty-nine places that call `save_data()`. The server is the authority now — it owns level, XP, the derived stat maxima and every loot roll — so the anti-tamper passes that existed to defend a local file against a text editor are skipped rather than run against data they can no longer say anything useful about. Writes are still debounced: saving on every stat change was firing about twenty times a second in normal play.",
+   "evidence_lines": [
+    3,
+    68
+   ]
+  },
+  "fn": "Tunacanman2EZ/Elusion_RPG",
+  "sha": "7b0a6815cc3d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c2b3e01f887d": {
+  "identity": {
+   "one_liner": "TiKV 的 PHP 客户端库，基于 gRPC 扩展访问 RawKV/TxnKV API",
+   "review": "crazy-goat/tikv-php 是一个 PHP 库，通过 PECL ext-grpc 扩展以 gRPC 协议连接 TiKV 集群，提供 RawKV 的 CRUD、批量操作、范围扫描、TTL、CAS 原子操作与校验和，以及 TxnKV 事务接口。面向需要在 PHP 中读写 TiKV 的开发者，要求 PHP >= 8.2 与 gRPC 扩展 >=1.57；当前版本 pre-1.0，破坏性变更较频繁。",
+   "highlights": [
+    "提供 RawKV 客户端：CRUD、批量操作、前缀/范围扫描、TTL、CAS 与 CRC64 校验和",
+    "提供 TxnKV 事务客户端：乐观/悲观事务、死锁与重试异常类型、GC safe point 管理",
+    "支持 TLS、region 缓存、副本读取策略与可插拔 metrics 后端"
+   ],
+   "use_cases": [
+    "PHP 应用直接读写 TiKV 键值数据",
+    "需要为存储数据设置过期时间（TTL）的键值场景",
+    "PHP 中执行 TiKV 分布式事务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 定位为访问 TiKV API 的客户端库，是为该数据库生态服务的组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# TiKV PHP Client ／ PHP client for TiKV's RawKV and TxnKV APIs, using the gRPC extension. ／ - TiKV cluster — default (V1) mode for TxnKV, or `[storage] enable-ttl = true`",
+   "evidence_lines": [
+    1,
+    5,
+    13
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "crazy-goat/tikv-php",
+  "sha": "c2b3e01f887d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

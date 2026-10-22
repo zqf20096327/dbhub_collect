@@ -9452,5 +9452,75 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9d5084974339": {
+  "identity": {
+   "one_liner": "自托管 AI agent 工作区，看板任务由 agent 在本机执行",
+   "review": "pacman 是一个自托管的开源 agent 工作区：用户在看板上建任务，AI agent 领取任务后在注册的机器上以 git worktree 执行，过程通过 SSE 实时回传，并在计划和 diff 两个环节暂停等待人工审查。后端为 Hono 服务，数据存储于 SQLite（~/.pacman 下），支持 MCP 服务器配置与 GitHub issue 导入。适合想在本地机器上运行并监督 AI 编码任务的个人或团队。",
+   "highlights": [
+    "看板任务由配置了模型、技能、MCP 服务器与密钥的 agent 在注册机器上执行",
+    "每次运行在计划与 diff 阶段暂停等待人工决定，AI reviewer 可阻止合并",
+    "支持 GitHub issue 打标签自动导入为任务，以及每轮构建的 token 用量统计"
+   ],
+   "use_cases": [
+    "在自有机器上编排 AI agent 执行代码构建任务",
+    "通过 GitHub issue 标签驱动 agent 自动处理需求",
+    "团队需要人工审核 AI 生成的代码变更后再合并"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Requirements: Node.js 22 or 24 (LTS lines ship prebuilt `better-sqlite3` binaries; other versions may fall back to source compilation and need a build toolchain). ／ |`apps/server`|Server: Hono REST + SSE + SQLite (package `@xiechimon/pacman` — directory name differs from package name)|",
+     "lines": [
+      27,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明首启在 ~/.pacman 下创建数据库并运行迁移，SQLite 是其自身存储数据的组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted, open-source **agent workspace**: a task board where you write the tasks and AI agents build them on your own machines. ／ One command: download, start, and serve on **http://127.0.0.1:8787/app**. The first boot creates the database under `~/.pacman`, runs migrations, and seeds a default team.",
+   "evidence_lines": [
+    5,
+    33
+   ]
+  },
+  "fn": "xiechimon/pacman",
+  "sha": "9d5084974339",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

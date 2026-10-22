@@ -10967,5 +10967,76 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6067ff568c9d": {
+  "identity": {
+   "one_liner": "基于 Go+SQLite 私有 CMS 的多作者 Markdown 发布平台",
+   "review": "GopherAtlas 是一个面向 Go 开发者的内容发布平台，包含私有 CMS（Go/Fiber + 内嵌 React Admin）与 Astro 静态公开站点两部分。CMS 用 SQLite 通过 sqlc/goose 存储内容、用户、会话与审计数据，发布时生成快照经 R2/Cloudflare Workers 构建为静态站点，支持 GitHub OAuth 登录与多角色审核工作流。",
+   "highlights": [
+    "CMS 使用 SQLite 作为存储，通过 sqlc 生成查询、goose 管理迁移，支持 Schema 版本升级演练",
+    "提供草稿/审核/发布工作流、同事务审计、Revision History 与 keyset 分页的 Admin API",
+    "发布链路将内容导出为快照，经 Astro 静态构建后由 Cloudflare Workers/R2 提供公开访问"
+   ],
+   "use_cases": [
+    "多作者协作的 Markdown 技术内容编辑与审核发布",
+    "需要私有 CMS 与静态公开站点分离的发布场景",
+    "Go 技术文章与学习路径的策展组织"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "当前私有 CMS：Go / Fiber v3 + 内嵌 React Admin → SQLite / sqlc / goose",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 CMS 使用 SQLite 存储内容、会话与审计数据，SQLite 是其数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "当前私有 CMS：Go / Fiber v3 + 内嵌 React Admin → SQLite / sqlc / goose ／ |`internal/database`, `db`|SQLite 连接池、真实 goose migrations 和 sqlc queries| ／ Publish **表示 SQLite 选定 Revision 并原子排队 generation/job**，并不表示公共网站已重建。路由历史永久",
+   "evidence_lines": [
+    30,
+    48,
+    209
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "deepfurry/gopher-atlas",
+  "sha": "6067ff568c9d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

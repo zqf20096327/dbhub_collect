@@ -10780,5 +10780,162 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bcad42d03fe8": {
+  "identity": {
+   "one_liner": "开源 F1 赛车数据集，提供 CSV/JSON/SQL 多格式发布",
+   "review": "F1DB 是包含 1950 年至今 Formula 1 全部赛车数据与统计的开源数据集，按 CalVer 在每场比赛后发布新版本。数据以 CSV、JSON、Smile 及 SQL dump（MySQL/PostgreSQL/SQLite）和 SQLite 数据库文件分发，适合开发者、数据分析师和 F1 相关网站/应用构建者直接导入查询。",
+   "highlights": [
+    "提供 CSV、JSON、Smile、SQL dump 及 SQLite 数据库多种发布格式",
+    "数据覆盖 1950 年至今的车手、车队、引擎、轮胎、赛道与各赛季比赛数据",
+    "SQL 工件提供可直接导入 MySQL、PostgreSQL 和 SQLite 的 schema 与数据"
+   ],
+   "use_cases": [
+    "为 F1 相关网站或移动应用提供数据源",
+    "导入关系型数据库后用 SQL 直接查询赛车数据",
+    "基于 JSON Schema 做数据分析与处理"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite ／ PostgreSQL .sql dump file is your best option.\\",
+     "lines": [
+      39,
+      74,
+      78
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      39,
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ - SQLite database ／ ## F1DB SQL / SQLite Database ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      39,
+      41,
+      69,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目本身是开放的 F1 数据集，SQL dump 仅为分发格式，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "CC BY（Creative Commons，README L197 徽标所示）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ The SQLite database artifact contains all data in a relational database format ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+   "evidence_lines": [
+    39,
+    71,
+    74
+   ]
+  },
+  "fn": "f1db/f1db",
+  "sha": "bcad42d03fe8",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cdc0e9b5158b": {
+  "identity": {
+   "one_liner": "自托管家庭 AI 健康管家，多模态 LLM 结构化健康画像",
+   "review": "一个可私有化部署的开源家庭健康管理应用：拍照上传体检报告后由多模态大模型抽取指标，生成个人健康画像、趋势图表与危急值预警，并提供基于画像数据的 AI 咨询与 RAG 语义检索历史报告。面向注重数据自持的家庭用户，通过 Docker 部署，后端 FastAPI，数据存于自建 PostgreSQL 16 + pgvector，支持手机端配对码绑定访问。",
+   "highlights": [
+    "多模态报告导入，AI 自动结构化抽取体检指标，画像数据用于 AI 咨询与 RAG 语义检索（pgvector）",
+    "支持 OpenAI 兼容 API（DeepSeek/GPT-4o）与 Ollama 本地模型，Docker 一键部署",
+    "Capacitor 打包 iOS/Android 移动端，配对码绑定，支持 Cloudflare Tunnel/Caddy/Tailscale 公网方案"
+   ],
+   "use_cases": [
+    "家庭多成员健康档案与体检报告长期管理",
+    "基于个人画像的健康咨询与个性化体检方案生成",
+    "数据本地自持、不经第三方云的健康数据管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|数据库|PostgreSQL 16 + pgvector|支持 RAG 向量检索，健康报告语义搜索|",
+     "lines": [
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 PostgreSQL 16 + pgvector 作为自身存储数据库构建健康应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|数据库|PostgreSQL 16 + pgvector|支持 RAG 向量检索，健康报告语义搜索| ／ **前置要求**：Docker 20.10+ · 模型 API Key（OpenAI 兼容，如 DeepSeek/GPT-4o）· 2 核 2GB 即可",
+   "evidence_lines": [
+    57,
+    33
+   ]
+  },
+  "fn": "wangzhengpengjay/AI-Health-Steward",
+  "sha": "cdc0e9b5158b",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

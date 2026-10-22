@@ -9500,5 +9500,225 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fc333cd8dbf3": {
+  "identity": {
+   "one_liner": "Local-first 平台与 TypeScript 库，基于 SQLite 实现离线优先数据",
+   "review": "Evolu 提供一个 local-first 平台和 TypeScript 库，供前端开发者（React、Svelte、Vue、React Native 等）在应用中实现离线优先的数据存储与同步。仓库包含 sqlite-wasm 包、自有 SQLite core，并提供基于 pnpm 的开发、测试（Playwright、Vitest、C 层 sanitizer 测试）与 npm 发布流程。",
+   "highlights": [
+    "提供 TypeScript 库与 @evolu/sqlite-wasm 包，将 SQLite 编译为 wasm 供浏览器等环境使用",
+    "支持 React、React Native、Svelte、Vue 等多框架示例（Next.js、Vite PWA 等）",
+    "内置覆盖 C 与 TypeScript 的测试体系，含 AddressSanitizer/UndefinedBehaviorSanitizer 及随机顺序测试"
+   ],
+   "use_cases": [
+    "在 Web 或移动应用中构建离线优先、本地存储数据的功能",
+    "在浏览器中通过 wasm 运行 SQLite",
+    "基于 CRDT 实现多端数据同步的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "E2E tests load `packages/sqlite-wasm/wasm/sqlite3.wasm`. It is never committed, ／ pnpm sqlite-wasm:download ／ It takes the wasm from the published `@evolu/sqlite-wasm` and writes it only if",
+     "lines": [
+      36,
+      40,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目自身实现并分发 SQLite wasm/core 组件，为应用提供本地数据库能力，而非仅使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Evolu is a local-first platform and TypeScript library. ／ E2E tests load `packages/sqlite-wasm/wasm/sqlite3.wasm`. It is never committed, ／ - `pnpm test:sqlite-core` - Run the tests of Evolu's own SQLite core, with its C tests under AddressSanitizer and UndefinedBehaviorSanitizer, once with hardware and once with software crypto, failing below 100% line, branch or function coverage of its TypeScript and of the C its host compiles",
+   "evidence_lines": [
+    3,
+    36,
+    124
+   ]
+  },
+  "fn": "evoluhq/evolu",
+  "sha": "fc333cd8dbf3",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7d684098e80e": {
+  "identity": {
+   "one_liner": "PostgreSQL 基准测试工具包，含可重复负载与结果库",
+   "review": "pgbent 是一套面向 PostgreSQL 的基准测试工具包，提供可重复的工作负载、秒级系统与数据库指标采集，并将结果写入专门的 results 数据库，用于回归测试与调优研究。内置 pgbench 网格、osm2pgsql 导入等负载，通过脚本运行并生成 Web 报告，适合需要做性能基线与调优对比的数据库运维和研究人员。",
+   "highlights": [
+    "提供可重复的基准测试负载（pgbench 网格、osm2pgsql 导入、CBC 负载）",
+    "以一秒为粒度采集系统与数据库指标并存入 results 结果数据库",
+    "通过 webreport 生成结果报告，并发布 PostgreSQL 18/19 基准结果表"
+   ],
+   "use_cases": [
+    "PostgreSQL 版本升级前后的性能回归测试",
+    "参数调优研究中的基线对比",
+    "OpenStreetMap 数据导入等特定负载的基准评估"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Benchmarking toolkit for PostgreSQL: repeatable workloads, one-second system and database metrics, and a results database for regression testing and tuning studies. ／ - **PostgreSQL 19 results** — initial 19rc1 report (OSM ranking, OSM power, pgbench SELECT) ／ - **PostgreSQL 18 results** — published benchmark study tables (Streamlit explorer — down between releases)",
+     "lines": [
+      3,
+      6,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为 PostgreSQL 提供基准测试服务的工具集，而非使用数据库存储数据的最终应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Benchmarking toolkit for PostgreSQL: repeatable workloads, one-second system and database metrics, and a results database for regression testing and tuning studies. ／ createdb results && psql -f init/resultdb.sql -d results",
+   "evidence_lines": [
+    3,
+    15
+   ]
+  },
+  "fn": "gregs1104/pgbent",
+  "sha": "7d684098e80e",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1d3401311088": {
+  "identity": {
+   "one_liner": "纯 Rust 库与 CLI，用于读取 Microsoft Access 数据库文件",
+   "review": "jetdb 是一个读取 .mdb/.accdb 文件的 Rust 库和 CLI 工具，无 C/C++ 依赖，支持 Access 97 至 2019 的文件格式。提供读取表结构、行数据、宏、窗体、VBA 源码，导出 CSV，以及为 SQLite、PostgreSQL、MySQL 生成 DDL。仅支持只读访问，无写入能力，无索引查找（仅全表扫描）。面向需要在 macOS、Windows、Linux 或 WASM 环境中读取 Access 数据的开发者。",
+   "highlights": [
+    "读取 .mdb/.accdb 的表元数据、行数据、复杂列、宏、窗体/报表设计与 VBA 源码",
+    "支持 Jet3（Access 97）至 ACE17（Access 2019）格式，可解密 RC4/AES 加密数据库",
+    "提供 CLI（cargo install jetdb-cli）、Rust crate 及 jetdb-wasm 浏览器/Node.js 包",
+    "可生成 SQLite、PostgreSQL、MySQL 及 Access SQL 的 DDL，可导出 CSV"
+   ],
+   "use_cases": [
+    "跨平台读取/迁移 Microsoft Access 数据库内容",
+    "从 Access 表结构与查询恢复 SQL，向其他数据库迁移 schema",
+    "在 Rust 应用或浏览器（WASM）中以库方式解析 Access 文件"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- Generate DDL for SQLite, PostgreSQL, MySQL, and Access SQL",
+     "lines": [
+      70
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Generate DDL for SQLite, PostgreSQL, MySQL, and Access SQL",
+     "lines": [
+      70
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- Generate DDL for SQLite, PostgreSQL, MySQL, and Access SQL",
+     "lines": [
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "读取 Access 文件格式的库/CLI 工具，为数据库文件处理提供能力，DDL 生成仅为输出目标。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust library and CLI tool for reading Microsoft Access database files (.mdb / .accdb). ／ - Generate DDL for SQLite, PostgreSQL, MySQL, and Access SQL ／ - Read-only (no write support)",
+   "evidence_lines": [
+    11,
+    70,
+    83
+   ]
+  },
+  "fn": "dominion525/jetdb",
+  "sha": "1d3401311088",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

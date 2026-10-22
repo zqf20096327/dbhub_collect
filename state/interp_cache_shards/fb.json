@@ -10006,5 +10006,144 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7cd72f31f9a6": {
+  "identity": {
+   "one_liner": "纯 V 编写的单文件事务性 SQL 数据库引擎",
+   "review": "vsql 是一个以纯 V 语言实现、无外部依赖的 SQL 数据库，数据保存在单个文件或内存中，支持 MVCC 事务与写前日志，并提供 vsql CLI 和兼容 PostgreSQL 线协议的 server 模式，可作为库嵌入 V 程序。面向需要嵌入式单文件数据库或用 psql/GUI 连接的 V 开发者；README 明确列出 DISTINCT、HAVING、子查询等特性尚未支持。",
+   "highlights": [
+    "数据库保存为单个文件或使用 :memory: 内存模式",
+    "通过 MVCC 与写前日志实现跨连接、跨进程的事务",
+    "vsql server 实现 PostgreSQL 线协议，可用 psql 等客户端连接"
+   ],
+   "use_cases": [
+    "V 程序的嵌入式 SQL 数据库（含 V ORM 驱动）",
+    "使用 psql 或 GUI 客户端操作本地单文件数据库",
+    "遵循 SQL:2016 标准的教学或实验环境"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "from any PostgreSQL client, or embedded in your own V ／ - **Talks to PostgreSQL clients.** `vsql server` speaks the PostgreSQL wire",
+     "lines": [
+      8,
+      31
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite. Use `:memory:` for a database that only lives in memory.",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 实现的是数据库引擎本体，而非为现有数据库生态服务的工具或仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**vsql is a small SQL database that follows the SQL standard.** It keeps a whole ／ program. It's written in pure V with no dependencies. ／ - **Talks to PostgreSQL clients.** `vsql server` speaks the PostgreSQL wire",
+   "evidence_lines": [
+    6,
+    9,
+    31
+   ]
+  },
+  "fn": "elliotchance/vsql",
+  "sha": "7cd72f31f9a6",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ea8aef3b4259": {
+  "identity": {
+   "one_liner": "自托管 Discord 风格聊天与语音应用，FastAPI+SQLite 单进程架构",
+   "review": "一个自托管的 Discord 风格聊天与语音服务，提供文字频道、语音房间、屏幕共享和按键说话等功能。面向想在便宜 VPS 上为小型朋友群体搭建私有聊天服务器的用户。采用 FastAPI 后端、SQLite 存储和 LiveKit 音视频，单条命令安装，内存占用约 120 MB，并内置每日备份与恢复机制。",
+   "highlights": [
+    "提供文字频道、私信群聊、语音房间、屏幕共享与按住说话功能",
+    "SQLite+单 Python 进程架构，一键安装脚本部署于 Ubuntu/Debian VPS",
+    "包含夜间自动备份（保留 14 天）与一键恢复能力"
+   ],
+   "use_cases": [
+    "小型朋友群体自建私有聊天与语音服务器",
+    "低配置 VPS 上的自托管即时通讯部署",
+    "需要邀请制、本地数据存储的私有社区沟通"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "120 MB of memory: one Python app with SQLite, LiveKit and Caddy. The interface is in English and Russian. ／ - Constraints kept: SQLite, one Python process, no new services. Files live on disk.",
+     "lines": [
+      14,
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 SQLite 存储数据的聊天应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "120 MB of memory: one Python app with SQLite, LiveKit and Caddy. The interface is in English and Russian. ／ - Constraints kept: SQLite, one Python process, no new services. Files live on disk.",
+   "evidence_lines": [
+    14,
+    68
+   ]
+  },
+  "fn": "atriumchat/atrium",
+  "sha": "ea8aef3b4259",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

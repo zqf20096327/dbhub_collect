@@ -10653,5 +10653,92 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7c68e645e6eb": {
+  "identity": {
+   "one_liner": "基于 Kubernetes 交付的 GaussDB/openGauss 诊断智能体平台",
+   "review": "该仓库将 opencode 与 DBA 技能集容器化部署到 Kubernetes，每个用户一个 Agent Pod，状态持久化在 NAS 上的 SQLite 文件，知识库导入与诊断运行拆分为独立镜像，并提供网关、前端大盘与离线交付包。面向 GaussDB/openGauss 数据库的实施、运维与售前人员，用于 SQL 诊断、WDR 分析、时段体检与知识库检索；要求环境提供 RWX PVC（NAS/NFSv4.1）。",
+   "highlights": [
+    "每个用户对应一个无状态 Agent Pod，状态经 NAS 持久化",
+    "提供 WDR 分析、时段体检、死锁日志解析、历史执行计划还原等诊断 skill",
+    "支持 SM2/SM3 签名中间件对接与离线镜像交付包"
+   ],
+   "use_cases": [
+    "GaussDB/openGauss 实例的 SQL 与性能诊断",
+    "企业内以 K8s 多租户方式向 DBA 团队交付智能体服务",
+    "知识库文档标准化导入与检索问答"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户一个 Agent Pod，Pod 无状态，状态全部在 NAS 上；知识库导入与诊断运行分成两个镜像。 ／ |镜像|`gaussdb-agent-runtime`（诊断 skill + 知识库查询）、`gaussdb-agent-kb-import`（知识库导入）、`gaussdb-agent-frontend`（deepseek-harness 前端改造，无状态）|",
+     "lines": [
+      3,
+      21
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户一个 Agent Pod，Pod 无状态，状态全部在 NAS 上；知识库导入与诊断运行分成两个镜像。 ／ |`从源码构建到K8s运行-完整手册.md`|实施 / 开发|从 GitHub 拉代码、自己构建五个镜像（含用 openGauss 官方二进制包打向量库镜像）、推仓库、部署到浏览器里用起来，图文、每步带实测输出|",
+     "lines": [
+      3,
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|SQLite|在 runtime Pod 内运行，`opencode.db` 直接位于 NAS 挂载路径；NFSv4.1 + `local_lock=all` + 单 Pod 独占 + 优雅停机 + 启动自检 + 退出备份|",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 GaussDB/openGauss 提供诊断与管理能力的智能体工具平台，非使用数据库存数据的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "把 opencode + gh_skill 的 GaussDB/openGauss DBA 技能集放进 Kubernetes：每个用户一个 Agent Pod，Pod 无状态，状态全部在 NAS 上；知识库导入与诊断运行分成两个镜像。 ／ |镜像|`gaussdb-agent-runtime`（诊断 skill + 知识库查询）、`gaussdb-agent-kb-import`（知识库导入）、`gaussdb-agent-frontend`（deepseek-harness 前端改造，无状态）| ／ |接入网关 Pod|1 个 Deployment，2 副本|无状态|平台（或本仓库出 `gaussdb-agent-gateway`）|",
+   "evidence_lines": [
+    3,
+    21,
+    29
+   ]
+  },
+  "fn": "sqlrush/gh_agent_k8s",
+  "sha": "7c68e645e6eb",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

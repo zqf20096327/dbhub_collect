@@ -10613,5 +10613,146 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fe196010d3f1": {
+  "identity": {
+   "one_liner": "五个预测市场对2026世界杯定价的只读对比校准仪表盘",
+   "review": "pm-watcher 是一个只读数据可视化项目，实时采集 Polymarket、Kalshi 等 5 个预测市场对 2026 世界杯的赔率并存入 SQLite，用于赛后对比市场定价与实际结果的校准分析；面向对预测市场与世界杯数据感兴趣的访客。赛事已结束，现为静态归档站点，浏览器内重算历史任意时刻行情，不含下单等交易功能。",
+   "highlights": [
+    "每 30 秒轮询 5 个预测市场，以变更驱动方式将约 20 万条赔率变化持久化到 SQLite",
+    "提供冠军看板、赛事对比、校准分析（Brier 评分）、新闻×赔率关联等只读视图",
+    "支持中英双语界面与任意历史时刻的浏览器端回放重算"
+   ],
+   "use_cases": [
+    "对比多个预测市场在同一赛事上的定价差异与事后校准",
+    "回放世界杯期间任意时刻的实时行情看板",
+    "基于公开导出的赔率数据做后续分析"
+   ],
+   "install": [
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Persisted history** — every odds change was written to SQLite (change-driven: nothing is stored while a price holds steady). The result is a complete record of how five markets priced 104 matches — the dataset the archive replays",
+     "lines": [
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 SQLite 持久化赔率数据，是一个使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Persisted history** — every odds change was written to SQLite (change-driven: nothing is stored while a price holds steady). The result is a complete record of how five markets priced 104 matches — the dataset the archive replays ／ The live service polled five platforms every 30 seconds. After the final it became a static site: no server, no database, no API token. ／ > A **read-only analysis tool.** It places no orders, connects no wallet, and needs no platform account. It answers *\"what does the market think,\"* not *\"how do I bet.\"*",
+   "evidence_lines": [
+    60,
+    43,
+    15
+   ]
+  },
+  "fn": "yixuuuan/pm-watcher",
+  "sha": "fe196010d3f1",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8eb6da7a5a9f": {
+  "identity": {
+   "one_liner": "Flask+SQLite 学生请假审批系统原型及企业设计提案包",
+   "review": "一个包含三部分的学生请假与学术 accommodtaion 项目：可运行的 Flask+SQLite 请假原型（两级审批、CSRF 防护、附件权限控制、课表受影响课程预览、139 项冒烟测试）、面向港科大广州的企业级设计提案包（含 PostgreSQL DDL）以及创意作业文档。适合作为课程作业参考或高校请假流程原型，部署需设置 LEAVE_SECRET。",
+   "highlights": [
+    "提供两级审批的请假流程原型，支持课表受影响课程预览与通知分页",
+    "实现 CSRF 防护、附件访问控制、内容嗅探、登录限流持久化等安全机制",
+    "包含面向 PostgreSQL 的完整数据库 DDL 设计文档"
+   ],
+   "use_cases": [
+    "高校学生请假与学术活动审批流程管理",
+    "教学示例：Flask Web 应用安全加固与审批流实现",
+    "企业级 SaaS 系统的设计提案参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite (survives restarts and multi-worker deployments), password resets invalidate every ／ |`leave-system/`|Flask + SQLite prototype (**v1.0.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control + content sniffing, timetable-based affected-course preview, DB-persisted login throttle (IP+account and ",
+     "lines": [
+      20,
+      41
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`saas/`|Enterprise design package for HKUST(GZ): PRD, architecture & API, data & security, UI design, roadmap & cost, plus full PostgreSQL DDL|企業級設計提案包（6 頁中英對照）＋完整資料庫 DDL|",
+     "lines": [
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 SQLite 存数据的请假审批应用原型，SQLite 是其运行时依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`leave-system/`|Flask + SQLite prototype (**v1.0.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control + content sniffing, timetable-based affected-course preview, DB-persisted login throttle (IP+account and account-only keys), session invalidation on password change, common-weak-password blocklist, paginated notifications, scope isolation on approvals/detail/dashboard, admin audit-log page, leave-type administration, 139-check smoke suite. Runs at `http://127.0.0.1:5055`|可執行原型：學生請假、兩級審批、CSRF 防護、附件權限＋內容嗅探、課表受影響課程、限流持久化、改密碼登出所有 session、弱密碼擋鎖、通知分頁、範圍隔離（審批／詳情／儀表板）、後台稽核日誌| ／ python app.py            # http://127.0.0.1:5055",
+   "evidence_lines": [
+    41,
+    50
+   ]
+  },
+  "fn": "Jeng-linLi/student-absence-system",
+  "sha": "8eb6da7a5a9f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

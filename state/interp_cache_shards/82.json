@@ -10093,5 +10093,150 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b4668b4fa747": {
+  "identity": {
+   "one_liner": "面向 AI 代理的自托管 PaaS，REST API 驱动部署",
+   "review": "这是一个部署在裸金属服务器上的自托管 PaaS 平台，通过 REST API 供 AI 代理注册租户、从 git 构建部署服务、查看日志，人类可通过可选仪表盘监督。控制面为单个 Go 二进制，用 SQLite 存储状态与计量数据，可通过命令为服务开通 Postgres/Redis 数据库并注入连接串。",
+   "highlights": [
+    "提供 REST API 支持租户注册、服务部署、构建与日志读取，并附 llms.txt 与 operator skill 供 AI 代理使用",
+    "使用 gVisor (runsc) 容器运行时实现租户隔离，配合 API key、命名空间资源与租户级限流实现多租户",
+    "内置数据库开通命令，可为服务配置 Postgres/Redis 并自动注入加密连接字符串"
+   ],
+   "use_cases": [
+    "在裸金属/自有服务器上搭建由 AI 代理运维的应用托管平台",
+    "需要多租户隔离与 API 驱动部署流程的团队",
+    "为代理工作流提供一键开通数据库与应用服务的环境"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`ahc` wraps `POST /v1/tenants/register` (`name`, `email` → `tenant_id`, `api_key`), `POST /v1/services` with `image: \"pending\"` (route port defaults to **8000**; pass `--port` if the app listens elsewhere), then `POST /v1/services/{id}/builds` with `source_typ ／ 2. **One happy path per primitive** — One database engine per type (Postgres, Redis), one build system (Nixpacks), one router (Traefik). ／ Managed Postgres and Redis containers with encrypted connection strings. ／ |`/ah-db <service> <postgres\\|redis> [name]`|Provision a database and wire it to a service|",
+     "lines": [
+      30,
+      60,
+      230,
+      322
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stack**: Go binary + Docker + gVisor + Traefik + Nixpacks + SQLite ／ - **Language**: Go 1.25 (requires CGO for SQLite) ／ - **SQLite** — two databases: `ah.db` (state) and `ah-metering.db` (metering), WAL mode",
+     "lines": [
+      13,
+      14,
+      77
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为部署应用服务的 PaaS 平台工具，内置数据库开通功能并为自身状态存储使用 SQLite。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted PaaS for bare metal servers, designed to be operated by AI agents via REST API. Includes an optional supervisory dashboard for humans. ／ - **Stack**: Go binary + Docker + gVisor + Traefik + Nixpacks + SQLite ／ - **SQLite** — two databases: `ah.db` (state) and `ah-metering.db` (metering), WAL mode",
+   "evidence_lines": [
+    9,
+    13,
+    77
+   ]
+  },
+  "fn": "dennisonbertram/agentic-hosting",
+  "sha": "b4668b4fa747",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cdfb2f45366d": {
+  "identity": {
+   "one_liner": "一键 Compose 编排电商三件套的演示平台",
+   "review": "这是一个仅含配置的 docker compose 编排仓库，将 API、管理后台和店面以 GHCR 固定版本镜像一键启动，并附带演示数据、演示账号及可选 Grafana/Prometheus 可观测性配置。面向想在本地运行完整电商演示的贡献者和运维者；仓库不包含应用源码，降级需重置数据。",
+   "highlights": [
+    "通过单个 docker compose 命令启动 API、admin dashboard、storefront 三个镜像",
+    "提供演示种子数据、内置演示账号及首次强制改密流程",
+    "可选 observability profile 提供 Grafana 与 Prometheus"
+   ],
+   "use_cases": [
+    "本地一键运行完整电商演示环境",
+    "部署托管版演示（VM hosted API-tier）",
+    "为各子应用做版本固定与升级验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Startup: postgres + redis + jwt-keygen → migrate → seed → api (healthy) → admin + web. Browsers use `http://localhost:3000`; storefront SSR uses `http://api:3000` inside Compose.",
+     "lines": [
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示 Postgres 与 Redis 作为栈的存储服务随 Compose 启动，仓库是使用数据库的应用演示平台而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One Compose file. Three published apps. A working ecommerce demo on your laptop. ／ This repo is **configuration only** (a compose platform). The API, admin dashboard, and storefront ship as versioned GHCR images. Design notes: docs/DESIGN.md. Hybrid hosted demo (optional): docs/HOSTED-DEMO.md. ／ Startup: postgres + redis + jwt-keygen → migrate → seed → api (healthy) → admin + web. Browsers use `http://localhost:3000`; storefront SSR uses `http://api:3000` inside Compose.",
+   "evidence_lines": [
+    6,
+    8,
+    99
+   ]
+  },
+  "fn": "raouf-b-dev/ecommerce-platform",
+  "sha": "cdfb2f45366d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

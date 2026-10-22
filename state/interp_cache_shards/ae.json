@@ -9990,5 +9990,102 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5d9d032c73f1": {
+  "identity": {
+   "one_liner": "ClickHouse 的 Web 管理控制台，内置 RBAC、集群监控与 AI 诊断",
+   "review": "CHouse UI 是面向自建 ClickHouse 集群的团队运维控制台，提供多连接管理、SQL 工作台、RBAC 与审计日志、加密凭证存储、多集群监控及数据可观测性功能。运维团队可用它管理用户权限、查看查询日志与系统表指标、配置告警，并通过内置 AI 助手做查询优化与根因诊断。RBAC 数据默认存于单副本 SQLite，生产环境可切换外部 PostgreSQL。",
+   "highlights": [
+    "提供 RBAC、审计日志与 AES-256-GCM 加密凭证，经后端代理访问 ClickHouse",
+    "基于 system 系统表提供查询日志、指标、parts/merges、副本延迟等监控，无需 exporter",
+    "提供多集群 Fleet 监控、数据血缘、事故根因分析及经审批的修复操作目录"
+   ],
+   "use_cases": [
+    "团队需要对自建 ClickHouse 做统一的访问控制与凭证管理",
+    "运维人员监控多个 ClickHouse 集群并排查查询性能与数据新鲜度问题",
+    "通过 MCP/令牌会话治理与预算策略管控 AI 代理对数据的访问"
+   ],
+   "personas": "ops"
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL**: Version 18 (for RBAC database) ／ For production, we recommend using an external highly-available PostgreSQL database for RBAC storage. See the Configuration section for details on how to configure `RBAC_POSTGRES_URL`.",
+     "lines": [
+      131,
+      171
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite**: Version 3.51.0 (via Bun, for RBAC database) ／ The default install is single-replica SQLite on a PersistentVolumeClaim. For",
+     "lines": [
+      132,
+      184
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "A web interface for ClickHouse with built-in RBAC, fleet monitoring, and an AI SRE ／ CHouse UI is the team operator's console for on-prem ClickHouse. Most tools nail one piece — a query workspace, a dashboard, an AI assistant, a cluster monitor; this is the **combination**: a team access layer (app-level **RBAC**, audit logging, and encrypted  ／ |**Architecture**|Secure backend proxy (no direct browser-to-ClickHouse)|",
+     "lines": [
+      5,
+      28,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Pipelines** — materialized and refreshable views, Kafka, RabbitMQ, NATS, S3Queue, AzureQueue, MaterializedPostgreSQL/MySQL, external tables, Distributed inserts, dictionaries, async inserts, writers and scheduled jobs in one status vocabulary (healthy, lag",
+     "lines": [
+      95
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 提供管理界面、监控与访问控制，是服务于数据库生态的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A web interface for ClickHouse with built-in RBAC, fleet monitoring, and an AI SRE ／ CHouse UI is the team operator's console for on-prem ClickHouse. Most tools nail one piece — a query workspace, a dashboard, an AI assistant, a cluster monitor; this is the **combination**: a team access layer (app-level **RBAC**, audit logging, and encrypted server-side credentials so the browser never sees a password), **multi-cluster fleet monitoring** with Slack/email alerts, and **Chouse AI** — an autonomous, read-only SRE that runs root-cause scans, optimizes queries and diagnoses errors right in the monitoring tabs, writes fixes with before→after `EXPLAIN` proof, and delivers RCA to Slack on a breach. On top of that sits **data observability**: every table watched from day one, every ingestion source in one status vocabulary, lineage without instrumentation, root cause traced from a stale table down to the engine, and fixes that run only after approval. Open-source and Apache 2.0 — so you never copy-paste an error into a chatbot or hunt for a rewrite; the diagnosis and the fix live next to the problem.",
+   "evidence_lines": [
+    5,
+    28
+   ]
+  },
+  "fn": "daun-gatal/chouse-ui",
+  "sha": "5d9d032c73f1",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

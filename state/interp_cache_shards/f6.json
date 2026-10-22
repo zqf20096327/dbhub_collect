@@ -10913,5 +10913,295 @@
   "generated_at": "2026-10-18",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "38fd6daa99c8": {
+  "identity": {
+   "one_liner": "Node.js 的 Microsoft SQL Server 客户端驱动库",
+   "review": "node-mssql 是为 Node.js 提供 SQL Server 访问能力的客户端库，封装 Tedious（纯 JS）与 MSNodeSQLv8（原生 ODBC）两种 TDS 驱动，提供连接字符串/配置对象连接、连接池管理、事务、预编译语句、流式读取等 API，面向在 Node.js 应用中读写 SQL Server 的开发者。要求 SQL Server 开启 TCP/IP 连接，参数以预编译语句渲染以自动处理 SQL 注入。",
+   "highlights": [
+    "支持 Tedious 与 MSNodeSQLv8 两种 TDS 驱动，可通过 npm 安装",
+    "内置连接池管理，支持全局连接池与自定义多池管理",
+    "提供事务、预编译语句、流式读取、连接校验（validateConnection）等能力"
+   ],
+   "use_cases": [
+    "Node.js 后端应用连接并查询 SQL Server 数据库",
+    "需要处理大量查询结果行的流式读取场景",
+    "需要管理多个数据库连接池（如读写分离池）的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Microsoft SQL Server client for Node.js** ／ - [MSNodeSQLv8][msnodesqlv8-url] (Microsoft / Contributors Node V8 Driver for Node.js for SQL Server, v2-v5 native - Windows or Linux/macOS 64 bits only)",
+     "lines": [
+      3,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 Node.js 应用提供访问 SQL Server 的驱动/客户端能力，属于为数据库生态服务的组件而非使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Microsoft SQL Server client for Node.js** ／ - [Tedious][tedious-url] (pure JavaScript - Windows/macOS/Linux, default) ／ An important concept to understand when using this library is Connection Pooling as this library uses connection pooling extensively. As one Node JS process is able to handle multiple requests at once, we can take advantage of this long running process to create a pool of database connections for reuse; this saves overhead of connecting to the database for each request",
+   "evidence_lines": [
+    3,
+    9,
+    202
+   ]
+  },
+  "fn": "tediousjs/node-mssql",
+  "sha": "38fd6daa99c8",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dbe8fffe4394": {
+  "identity": {
+   "one_liner": "预装 PostGIS 扩展的 PostgreSQL 官方 Docker 镜像",
+   "review": "该仓库提供 postgis/postgis Docker 镜像，基于官方 postgres 镜像构建，默认初始化 postgis、postgis_topology、postgis_tiger_geocoder 等空间扩展，提供 Debian 与 Alpine 两种变体，覆盖 PostgreSQL 14–18 及测试版本。适合需要在容器中运行空间数据库的开发与运维人员，使用方式与官方 postgres 镜像一致，需注意 PG 18 起默认数据卷路径变更。",
+   "highlights": [
+    "基于官方 postgres 镜像，默认安装并初始化 postgis、postgis_topology、postgis_tiger_geocoder 扩展",
+    "提供 Debian 与 Alpine 变体，标签覆盖 PostgreSQL 14–18 稳定版及 19 预发布、PostGIS master 测试版",
+    "沿用官方 postgres 镜像的环境变量（POSTGRES_PASSWORD、POSTGRES_USER、POSTGRES_DB 等）与使用方式"
+   ],
+   "use_cases": [
+    "在 Docker 中快速运行启用空间扩展的 PostgreSQL 数据库",
+    "为 GIS 应用部署带 PostGIS 的容器化数据库环境",
+    "测试 PostGIS/PostgreSQL 预发布版本与开发分支"
+   ],
+   "official_note": "postgis 官方组织下的 Docker 镜像仓库"
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The `postgis/postgis` image provides tags for running Postgres with PostGIS extensions installed. This image is based on the official `postgres` image and provides Debian and Alpine variants for PostGIS 3.6.x, compatible with PostgreSQL 14, 15, 16, 17 and 18. ",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是 PostGIS 官方维护的 Docker 镜像，为 PostgreSQL/PostGIS 数据库的分发与运行提供服务，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The `postgis/postgis` image provides tags for running Postgres with PostGIS extensions installed. This image is based on the official `postgres` image and provides Debian and Alpine variants for PostGIS 3.6.x, compatible with PostgreSQL 14, 15, 16, 17 and 18. Test images are also provided for PostgreSQL 19 pre-releases, PostGIS 3.7 release candidates, and builds from the PostGIS/GEOS/PROJ/GDAL master branches (`*-master`). ／ docker run --name some-postgis -e POSTGRES_PASSWORD=mysecretpassword -d postgis/postgis",
+   "evidence_lines": [
+    13,
+    102
+   ]
+  },
+  "fn": "postgis/docker-postgis",
+  "sha": "dbe8fffe4394",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bfc73bfcdc9d": {
+  "identity": {
+   "one_liner": "基于 Codex 的论文深读技能，用本地脚本与 SQLite 存储证据",
+   "review": "该项目是一个面向 Codex 环境的论文阅读与研究技能，将论文解析为带出处的证据、问题与写作模式，本地脚本负责页面定位、证据存储与讨论记录，记录以 SQLite 保存并可导出为 Markdown/JSON；面向做文献综述、学术写作迁移与研究讨论的研究者，需 Python 3.10+，不依赖原 MCP 服务器或独立模型 API。",
+   "highlights": [
+    "以 SQLite 存储本地记录，支持检索、续读、追加来源，并导出为 Markdown 和 JSON（L12、L39）",
+    "将论文中的论断与 PDF 页码、图表、公式建立证据链接（L34）",
+    "提供可安装的 Codex skill 安装器，含文件哈希校验与版本备份（L50、L53）"
+   ],
+   "use_cases": [
+    "论文精读并生成带出处的证据地图",
+    "跨论文文献综合与学术写作模式提取",
+    "与研究者进行可记录、可验证的研究讨论"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite storage ／ |**Reusable local records**|Search, resume, add later sources, and export SQLite-backed records to Markdown and JSON.|",
+     "lines": [
+      12,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该技能存储阅读记录与证据的后端，项目本身不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " SQLite storage ／ Codex does the reading and analysis. Small local scripts preserve page locations, store evidence, check references, and keep discussion history. The skill connects those pieces into a repeatable research workflow. ／ |**Reusable local records**|Search, resume, add later sources, and export SQLite-backed records to Markdown and JSON.|",
+   "evidence_lines": [
+    12,
+    24,
+    39
+   ]
+  },
+  "fn": "Lxy-hqu/-mcp-for-paper-read-based-on-AI-IDE",
+  "sha": "bfc73bfcdc9d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3b89a7f812b": {
+  "identity": {
+   "one_liner": "多Agent电商推荐与营销系统，Supervisor编排四Agent链路",
+   "review": "一个用于学习演示 Multi-Agent 架构的电商推荐与营销系统，由 Supervisor 编排画像、召回/重排、库存决策和文案生成四类 Agent，包含 A/B 实验引擎与分层记忆系统，提供 Python/FastAPI 与 Java/Spring Boot 双实现，可经 pip 或 Docker Compose 运行。长期记忆默认用 SQLite 持久化；Redis/Milvus/MySQL 为可插拔预留，未接入时走降级路径，商品目录仍是 Mock 数据。",
+   "highlights": [
+    "Supervisor 并行编排用户画像、商品召回/重排、库存决策与营销文案生成四类 Agent",
+    "分层记忆系统：Redis Sorted Set 实时行为记忆、SQLite 长期画像记忆、可选 Milvus 语义记忆",
+    "内含 A/B 实验引擎：一致性哈希分桶、Thompson Sampling 后验更新与指标统计"
+   ],
+   "use_cases": [
+    "学习和演示 Multi-Agent 编排架构",
+    "电商推荐与营销文案生成的原型验证",
+    "A/B 实验分桶与指标统计机制的学习参考"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "> 当前实现定位：可运行的架构演示项目。商品目录默认使用 Mock 数据；Redis / Milvus / MySQL 等外部依赖以可插拔方式预留，未连接时会走降级路径。 ／ - Lombok / Jackson / H2 / MySQL Connector ／ - MySQL：业务数据预留",
+     "lines": [
+      5,
+      71,
+      79
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "3. **长期画像记忆**：SQLite 持久化画像快照、行为事件流水和长期记忆片段。 ／ 4. **长期语义记忆**：可选 Milvus 向量检索；未开启或未连接时降级为 SQLite 关键词检索。 ／ - Redis / SQLite 长期记忆 / pymilvus 可选语义记忆",
+     "lines": [
+      40,
+      41,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite/Redis 等存储数据并向外提供推荐 API 的应用系统，而非服务于数据库生态的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 声明计划以 MIT License 开源，正式 LICENSE 文件尚未确认添加",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个用于学习和演示 Multi-Agent 架构的电商推荐项目。系统用 1 个 Supervisor 编排 4 个专业 Agent，完成从用户理解、商品召回/重排、库存校验到个性化营销文案生成的完整链路。 ／ 3. **长期画像记忆**：SQLite 持久化画像快照、行为事件流水和长期记忆片段。 ／ - MySQL：业务数据预留",
+   "evidence_lines": [
+    3,
+    40,
+    79
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Yx3966/multi-agent-ecommerce-recommender",
+  "sha": "c3b89a7f812b",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

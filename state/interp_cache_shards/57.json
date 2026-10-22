@@ -8941,5 +8941,163 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "872da4ae0622": {
+  "identity": {
+   "one_liner": "本地运行的代理式表格数据分析引擎，LLM 生成 SQL 经沙箱校验执行",
+   "review": "一个本地运行的 Python 工具，对本地数据集做自然语言问答式 SQL 分析，并对触及 SQL/迁移的 GitHub PR 做列级漂移、PII 识别与迁移审计。LLM 仅提议 SQL，所有语句经语义防火墙、AST 沙箱和 EXPLAIN 成本闸门校验后才执行，结果经 PII 脱敏输出；未发布到 PyPI，需从仓库源码安装。",
+   "highlights": [
+    "支持 SQLite、DuckDB、PostgreSQL、Parquet、JSONL 等多种数据源，只读方式打开",
+    "模型生成的 SQL 经语义防火墙、AST 沙箱与 EXPLAIN 成本闸门三层校验后执行",
+    "内置 PII 检测与脱敏（hash/mask/tokenize/redact 四种模式），并可离线模板合成 SQL"
+   ],
+   "use_cases": [
+    "对本地数据集做自然语言数据问答与分析",
+    "在 GitHub CI 中审计涉及 SQL/迁移/数据文件的 PR",
+    "对 LLM 生成 SQL 做离线安全校验与成本评估"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It runs locally, works across SQLite, DuckDB, PostgreSQL, Parquet and JSONL, and treats the language model as untrusted: the model proposes SQL, while validation, cost limits and data masking stay in code you can read. ／ > Honest trade-off: for Parquet/JSONL sources the engine registers a DuckDB view, which is evaluated lazily, so DuckDB filesystem access cannot be globally disabled without materializing the file. Zero-trust is enforced one level up: user SQL never reaches a f ／ |`postgres://…`|`psycopg` extra|postgres|read-only transaction, server-side timeout|",
+     "lines": [
+      5,
+      94,
+      105
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "The model is treated as an untrusted component, not an oracle. It may propose SQL, but nothing runs until the statement passes the AST sandbox, the planner budget and the scrubber. The same constraint shapes schema retrieval: rather than hoping a large prompt ",
+     "lines": [
+      228
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It runs locally, works across SQLite, DuckDB, PostgreSQL, Parquet and JSONL, and treats the language model as untrusted: the model proposes SQL, while validation, cost limits and data masking stay in code you can read. ／ > Honest trade-off: for Parquet/JSONL sources the engine registers a DuckDB view, which is evaluated lazily, so DuckDB filesystem access cannot be globally disabled without materializing the file. Zero-trust is enforced one level up: user SQL never reaches a f ／ |`.sqlite`, `.db`, `.sqlite3`|stdlib `sqlite3`|sqlite|`mode=ro` + `query_only`|",
+     "lines": [
+      5,
+      94,
+      100
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具通过专用驱动只读连接 SQLite/PostgreSQL/DuckDB 等数据源做分析与 SQL 审计，为数据访问环节服务而非使用数据库构建自身应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "DataWhisper answers questions about your data and reviews database changes in pull requests. ／ It runs locally, works across SQLite, DuckDB, PostgreSQL, Parquet and JSONL, and treats the language model as untrusted: the model proposes SQL, while validation, cost limits and data masking stay in code you can read. ／ ## Supported engines",
+   "evidence_lines": [
+    3,
+    5,
+    96
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Green-tero/datawhisper",
+  "sha": "872da4ae0622",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d662e840478a": {
+  "identity": {
+   "one_liner": "基于 PocketBase 的实时群聊应用，前后端一体",
+   "review": "一个自托管的实时群聊系统，后端整体由 PocketBase 单二进制承担（认证、数据、实时推送），前端为原生 TypeScript 经 esbuild 打包，含房间、私信、文件附件、表情回应、Telegram 桥接、PWA 与 Android 客户端。面向需要自部署聊天服务的个人或小团队，数据存于 PocketBase 内嵌的 SQLite，部署依赖 Linux/macOS 服务器。",
+   "highlights": [
+    "后端由单个 PocketBase 二进制提供认证、数据存储与实时推送，数据存于内嵌 SQLite（pb_data）",
+    "支持房间/私信、消息编辑删除、附件（10×20MB）、表情回应、全文搜索与 Telegram 双向桥接",
+    "提供 PWA 与 Kotlin 原生 Android 客户端，部署支持 systemd、反向代理与 Dokku/Docker"
+   ],
+   "use_cases": [
+    "自托管团队或社群的实时群聊与私信",
+    "需要与 Telegram 群双向同步消息的场景",
+    "轻量部署的单服务器聊天服务（含自动备份与限流）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+     "lines": [
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据（SQLite + uploads）存于 PocketBase 内嵌 SQLite，项目是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small, fast, real-time group chat. One PocketBase binary is the whole backend ／ Open http://127.0.0.1:8090 and sign up (top right). The dev database lives in `pb_data/` — delete it to start over. ／ # All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+   "evidence_lines": [
+    3,
+    53,
+    126
+   ]
+  },
+  "fn": "border-radius/chat",
+  "sha": "d662e840478a",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

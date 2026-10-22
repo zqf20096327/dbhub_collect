@@ -10960,5 +10960,96 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b02a8f4f91e6": {
+  "identity": {
+   "one_liner": "基于 Bun/SQLite/PostgreSQL 的任务队列，内置 MCP",
+   "review": "bunqueue 是一个面向 Bun 运行时的任务队列库与服务，默认使用内存或单个 SQLite 文件持久化，扩展时可切换为 PostgreSQL 多 broker 模式，提供 DLQ、cron、S3 备份及内置 MCP 服务器。适合需要在应用内嵌入队列、或以 Docker/独立可执行文件部署队列服务并从多语言客户端接入的开发团队；README 明确声明不支持 MySQL 作为队列存储。",
+   "highlights": [
+    "支持内嵌模式（内存/单 SQLite 文件）与独立 TCP 服务器两种运行模式，提供 Node.js、Deno、Python、PHP、Go、Rust、Elixir 客户端",
+    "支持 PostgreSQL 15–18 多 broker 模式，CI 验证 PostgreSQL 15、16、17、18.6",
+    "内置 MCP 服务器（79 个工具）、DLQ、cron 调度与 SQLite S3 备份"
+   ],
+   "use_cases": [
+    "在 Bun/Node.js 应用内嵌入后台任务队列，无需部署 Redis",
+    "基于 PostgreSQL 多 broker 部署的分布式任务队列集群",
+    "为 AI agent 提供调度与队列控制（通过 MCP）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ PostgreSQL 18.6: ／ is not supported. CI validates PostgreSQL 15, 16, 17, and the pinned/recommended ／ - **PostgreSQL 15–18 multi-broker mode** — PostgreSQL 18.6 is recommended;",
+     "lines": [
+      11,
+      81,
+      92,
+      240
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "password changes, percent-encoding reserved characters in the URL only. MySQL ／ **Not ideal for:** multi-region consensus or deployments that require MySQL as",
+     "lines": [
+      91,
+      258
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ SQLite file. `msgpackr` is the only runtime dependency; cron, SQLite, S3, HTTP and",
+     "lines": [
+      11,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供基于 SQLite/PostgreSQL 存储的任务队列工具与服务，属为数据存储之上提供队列能力的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／  DLQ, cron, SQLite S3 backups, and native MCP. Built for AI agents and automation. No Redis. ／ It starts two brokers against one database/namespace. PostgreSQL is server-only;",
+   "evidence_lines": [
+    11,
+    12,
+    89
+   ]
+  },
+  "fn": "egeominotti/bunqueue",
+  "sha": "b02a8f4f91e6",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

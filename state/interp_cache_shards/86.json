@@ -10445,5 +10445,143 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "13c8f9a9fd26": {
+  "identity": {
+   "one_liner": "基于 FastAPI+React 与本地 SQLite 的中小学 AI 教学平台",
+   "review": "这是一个覆盖备课出题、课堂互动、考试练习、学情分析等环节的 AI 教学应用，供学校、教研组和任课教师直接部署使用。数据存储在两个本地 SQLite 库与本地目录中，AI 能力经统一调用服务接入 DashScope 与 DeepSeek，并支持知识库检索增强（RAG）模式，可完全离线部署。",
+   "highlights": [
+    "数据全部落在双 SQLite 库与本地目录，可完全离线部署",
+    "AI 调用支持 RAG、智能体应用、直接调用大模型三种模式并自动降级",
+    "提供 Windows 桌面版一键安装、源码包、Git 克隆三种部署方式"
+   ],
+   "use_cases": [
+    "学校或教研组搭建学科无关的在线教学与考试平台",
+    "教师进行题库管理、智能组卷与 AI 辅助批改",
+    "需要在离线环境中运行的教学系统部署"
+   ],
+   "use_cases_ok": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 基于 **FastAPI + React** 构建，接入阿里云 DashScope（通义千问 / 通义万相）与 DeepSeek；SSE 流式输出与 WebSocket 实时链路支撑课堂并发，数据全部落在本地 SQLite 与本地目录，可完全离线部署。 ／ |🔒 本地化优先|双 SQLite 库 + 本地目录存数据，可完全离线部署；AI 走国内可达通道，pip 有镜像方案，学生数据不出校|",
+     "lines": [
+      16,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台自身使用双 SQLite 库存储用户、试题、考试等业务数据，而非为数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 基于 **FastAPI + React** 构建，接入阿里云 DashScope（通义千问 / 通义万相）与 DeepSeek；SSE 流式输出与 WebSocket 实时链路支撑课堂并发，数据全部落在本地 SQLite 与本地目录，可完全离线部署。 ／ |🔒 本地化优先|双 SQLite 库 + 本地目录存数据，可完全离线部署；AI 走国内可达通道，pip 有镜像方案，学生数据不出校|",
+   "evidence_lines": [
+    16,
+    60
+   ]
+  },
+  "fn": "youufis/SmartKBS",
+  "sha": "13c8f9a9fd26",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7a3005c9a404": {
+  "identity": {
+   "one_liner": "把策略文件编译为 Postgres 行级安全的授权工具",
+   "review": "rowstile 是一个面向 Postgres 应用的授权工具：用户在单个策略文件里描述谁能访问哪些数据，命令行将其编译为视图、RLS 策略、触发器表和 SQL 函数，变更以迁移形式通过 Alembic、Prisma、Drizzle Kit 等现有迁移工具下发，无需独立的授权服务。适配 Postgres 16-18（含托管实例），提供 Python 与 TypeScript SDK 及编辑器、CI 集成，适合数据都在单个 Postgres 库中的应用开发者。项目处于 beta，未经外部审计。",
+   "highlights": [
+    "将策略文件编译为 SQL（视图、RLS 策略、触发器表、authz.* 函数），变更以迁移输出，兼容 Alembic/Prisma/Drizzle Kit/plain SQL",
+    "提供 Python（FastAPI、SQLAlchemy、psycopg、asyncpg）与 TypeScript（Next.js、Prisma、Drizzle、pg、postgres.js）SDK，并含 LSP、编辑器扩展和 PR 审查 CI 集成",
+    "支持托管 Postgres（Neon、Supabase），无需 superuser，无独立授权服务"
+   ],
+   "use_cases": [
+    "为单 Postgres 数据库的应用添加行级访问控制（所有者、团队、文件夹继承、租户、分享）",
+    "替代手写且难以测试的 RLS 策略，用带测试的策略文件管理授权",
+    "在 PR 流程中审查授权策略变更"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# rowstile: access rules in a policy file, enforced by Postgres ／ and nothing has to run next to it: any Postgres 16, 17 or 18 works, managed or not, and the owner of ／ - your app's data is in one Postgres database;",
+     "lines": [
+      1,
+      14,
+      38
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 数据库生成 RLS 策略与迁移的服务组件，不使用数据库存自身数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# rowstile: access rules in a policy file, enforced by Postgres ／ command compiles it into plain SQL: views, trigger-maintained tables for inheritance, row-level ／ and nothing has to run next to it: any Postgres 16, 17 or 18 works, managed or not, and the owner of",
+   "evidence_lines": [
+    1,
+    10,
+    14
+   ]
+  },
+  "fn": "rowstile/rowstile",
+  "sha": "7a3005c9a404",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

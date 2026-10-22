@@ -10768,5 +10768,129 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "desc::Centralized web platform for ENISO Auto Crew: members, projects, events and announcements. Built by ": {
+  "identity": {
+   "one_liner": "社团信息集中管理网站，Flask + SQLite 构建",
+   "review": "这是一个为 ENISO Auto Crew 社团构建的集中式 Web 平台，用于管理成员、项目、活动和公告。由社团团队自行开发，技术栈为 Flask、SQLite 和 HTML/CSS/JS，属于使用数据库的 Web 应用而非数据库生态工具，仅提供基础的社团信息管理功能。",
+   "highlights": [
+    "管理社团成员、项目、活动与公告",
+    "使用 Flask 和 SQLite 作为后端",
+    "前端采用 HTML/CSS/JS"
+   ],
+   "use_cases": [
+    "社团成员信息集中管理",
+    "发布和管理社团活动与公告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built by the club team with Flask, SQLite and HTML/CSS/JS."
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该社团网站的自身存储，网站不服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Centralized web platform for ENISO Auto Crew: members, projects, events and announcements. Built by the club team with Flask, SQLite and HTML/CSS/JS."
+  },
+  "fn": "issramrabet/club-site",
+  "sha": "desc::Centralized web platform for ENISO Auto Crew: members, projects, events and announcements. Built by ",
+  "source": "desc",
+  "generated_at": "2026-10-22",
+  "ver": 2,
+  "prompt_ver": "3.3"
+ },
+ "38ff56001232": {
+  "identity": {
+   "one_liner": "自托管控制面板，为单二进制Web应用提供域名、TLS、PostgreSQL与备份",
+   "review": "Setu 是一个部署在自有 Linux 服务器上的控制面板，用于部署和运维编译型 Web 应用。每个站点获得域名、自动 HTTPS（经 Caddy）、独立 PostgreSQL 数据库、cgroups 资源限制、健康检查更新与回滚，应用以 systemd 硬化服务运行，无容器运行时。适合管理自有服务器上少量到小型机群的静态二进制应用的运维者，当前仅支持 Ubuntu/Debian。",
+   "highlights": [
+    "每个站点以独立用户运行 hardened systemd 服务，通过 cgroups 实施内存与 CPU 限制",
+    "更新前自动备份，新版本不健康时回滚二进制、环境变量并恢复数据库与数据目录",
+    "通过 Caddy admin socket 实现 ACME 自动 HTTPS，控制面与 agent 间使用幂等命令队列"
+   ],
+   "use_cases": [
+    "在自有服务器上部署 Rust/Go 等编译型 Web 应用并绑定域名与 TLS",
+    "为每个应用站点提供独立数据库、夜间备份和资源限额",
+    "需要更新失败自动回滚（含数据库恢复）的小型服务器机群运维"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL database, backups, health-checked updates and resource ／ Per-app PostgreSQL ／ PostgreSQL 16 or 17 depending on the distribution, and Caddy itself.",
+     "lines": [
+      9,
+      16,
+      54
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Setu 为部署的应用自动化配置 PostgreSQL 数据库、备份与 systemd 服务，是为数据库生态服务的部署管理工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Setu — a control panel for single-binary web apps ／ PostgreSQL database, backups, health-checked updates and resource ／ PostgreSQL 16 or 17 depending on the distribution, and Caddy itself.",
+   "evidence_lines": [
+    1,
+    9,
+    54
+   ]
+  },
+  "fn": "setucp/setu",
+  "sha": "38ff56001232",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

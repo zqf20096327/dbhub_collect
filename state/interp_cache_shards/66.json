@@ -10757,5 +10757,226 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f8cd23e41be4": {
+  "identity": {
+   "one_liner": "Rust+egui 编写的 PostgreSQL/MySQL/SQLite 桌面 GUI 客户端",
+   "review": "Tabletist 是一个用 Rust 和 egui 编写的跨平台桌面数据库客户端，面向需要连接管理 PostgreSQL、MySQL 和 SQLite 的开发者与运维人员。提供连接保存与分组、TLS 与 SSH 隧道、系统钥匙环存密、只读会话、数据网格编辑（事务保存与冲突提示）、SQL 编辑器（事务执行、格式化、自动补全）等机制；版本 0.1.0，AUR 包尚未发布，安装依赖 release 二进制或源码构建。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 直连，提供 TLS 与 SSH 隧道，密码存于系统钥匙环",
+    "数据网格编辑在单个事务中保存，保存前可查看将执行的 SQL，并检测行冲突",
+    "SQL 编辑器支持只读事务回滚执行、行数限制、超时取消、查询格式化与关键字/表/列补全"
+   ],
+   "use_cases": [
+    "开发与运维人员在桌面端浏览和编辑 PostgreSQL/MySQL/SQLite 数据",
+    "生产库默认只读打开，需安全查看与受限写入的场景",
+    "通过 SSH 隧道连接内网数据库并按 dev/staging/production 分组管理连接"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ **SQLite**. Written in Rust with egui; runs on",
+     "lines": [
+      11,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为连接多种数据库的客户端工具，为数据库生态服务而非使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and ／ **SQLite**. Written in Rust with egui; runs on",
+   "evidence_lines": [
+    11,
+    13,
+    14
+   ]
+  },
+  "fn": "igor-alexandrov/tabletist",
+  "sha": "f8cd23e41be4",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eb139c8c1b1d": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地离线编码智能体项目上下文与任务管理 CLI",
+   "review": "CarryCtx 是一个 Rust 编写的命令行工具，用本地 SQLite 数据库记录编码智能体项目的契约、任务、会话、检查点、团队交接与审计历史，供人类协作者与 Claude Code、Codex 等 CLI 智能体通过统一命令面读写。它只做状态持久化与控制层，不内置智能体运行时，无云服务与遥测。",
+   "highlights": [
+    "以 <git-common-dir>/carryctx/state.sqlite 存储项目状态，跨 Git worktree 共享，完全本地离线运行",
+    "提供任务依赖、团队角色、交接状态机、事件日志、全文检索与 stats 报告等命令面，支持 --format json 稳定输出",
+    "不依赖特定智能体框架，Claude Code、OpenCode、Copilot、Codex 或人类可复用同一 CLI 接口"
+   ],
+   "use_cases": [
+    "多智能体/多 worktree 开发流程中的任务与进度追踪",
+    "人与智能体协作时的责任归属与审计交接记录",
+    "项目全生命周期的本地化决策、检查点与发布证据留存"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-first and offline.** CarryCtx uses SQLite and local Git/filesystem integration. The authoritative project state is `<git-common-dir>/carryctx/state.sqlite`, shared by linked worktrees. `.carryctx/` contains project configuration and versioned guidanc ／ - **SQLite** — for embedded ACID reliability, zero-configuration local persistence, and self-contained transactional state without server daemons.",
+     "lines": [
+      29,
+      120
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它以 SQLite 作为本地状态存储来为编码智能体工作流提供持久化服务，而非仅把 SQLite 当作某个终端应用的后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Local-first and offline.** CarryCtx uses SQLite and local Git/filesystem integration. The authoritative project state is `<git-common-dir>/carryctx/state.sqlite`, shared by linked worktrees. `.carryctx/` contains project configuration and versioned guidance; it is not a universal state location. ／ CarryCtx keeps a project coherent from initialization to release. It turns the project contract, plan, ownership, execution state, decisions, handoffs, Git evidence, and audit history into durable, queryable local state. Agents and people can change tools, sessions, windows, and worktrees without losing the project picture. ／ cargo install carryctx",
+   "evidence_lines": [
+    29,
+    5,
+    39
+   ]
+  },
+  "fn": "Xuepoo/carryctx",
+  "sha": "eb139c8c1b1d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4b64f8e0a438": {
+  "identity": {
+   "one_liner": "按《阿里巴巴 Java 开发手册》审查、生成与重构 Java 代码的 Agent Skill",
+   "review": "该仓库是一个遵循 Agent Skills 规范的 AI 编程技能包，让 Claude Code、Codex 等支持该规范的工具按阿里巴巴 Java 开发手册进行代码审查、生成与重构，覆盖 SQL、数据库建模等场景。核心由 SKILL.md 与规范摘要文件组成，并附 Python/Node/Go 三种本地校验脚本。",
+   "highlights": [
+    "提供 SKILL.md 入口与阿里巴巴 Java 编码规范中文摘要（references/alibaba-java-rules.md）",
+    "提供 Python、Node.js、Go 三种本地校验入口及一次性验证脚本",
+    "兼容 Claude Code、Codex 等支持 Agent Skills 规范的工具"
+   ],
+   "use_cases": [
+    "在 AI 编程工具中按阿里巴巴规范审查 Java 代码改动",
+    "按规范生成或重构 Java、SQL、数据库建模相关代码"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "适用场景包括 Java、Spring、MyBatis、Maven、MySQL、SQL、日志、异常处理、安全校验和数据库建模等代码工作。规则摘要来自官方页面：",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 未表明其为数据库生态服务，仅在适用场景中提及 MySQL、SQL 等代码工作主题。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是一个通用 Agent Skill，用于让支持 Agent Skills 规范的 AI 编程工具按《阿里巴巴 Java 开发手册》审查、生成和重构 Java 相关代码。 ／ 适用场景包括 Java、Spring、MyBatis、Maven、MySQL、SQL、日志、异常处理、安全校验和数据库建模等代码工作。规则摘要来自官方页面： ／ 本项目不绑定单个应用或运行器。核心能力只依赖 `SKILL.md` 和 `references/`，因此 Claude Code、Codex 以及其他支持 Agent Skills 的工具都可以使用。",
+   "evidence_lines": [
+    3,
+    5,
+    56
+   ]
+  },
+  "fn": "ns3154/alibaba-java-coding-guidelines-skill",
+  "sha": "4b64f8e0a438",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

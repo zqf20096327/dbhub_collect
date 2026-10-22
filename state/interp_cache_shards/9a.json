@@ -11176,5 +11176,149 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8711a9981889": {
+  "identity": {
+   "one_liner": "本地优先的 AI 记账 CLI，数据存于 SQLite",
+   "review": "一个终端里的记账助手，可导入银行 CSV、用 LLM 对交易分类、检测重复扣费与异常支出、管理预算与储蓄目标，并提供 Web 仪表盘。全部数据存于本地 ~/.openaccountant/data.db（SQLite），仪表盘离线镜像基于 wa-sqlite/OPFS。适合希望财务数据不出本机的个人用户。",
+   "highlights": [
+    "导入 Chase、American Express 及通用格式银行 CSV，并支持 Monarch Money 同步",
+    "通过 9 家 LLM 提供商（含本地 Ollama）对交易进行 18 类支出分类",
+    "支持 MCP 服务器扩展工具、自定义 Skills 工作流与无头模式运行",
+    "仪表盘通过 wa-sqlite/OPFS 在浏览器本地保存交易镜像，支持离线浏览、搜索与筛选"
+   ],
+   "use_cases": [
+    "个人本地银行账单导入与支出分类分析",
+    "预算跟踪、储蓄目标管理与异常扣费检测",
+    "基于本地数据生成财务报告与消费摘要"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Offline dashboard transactions** — the dashboard keeps a sync-fed local mirror (wa-sqlite on OPFS, inlined in the single-file build); when the server is unreachable you can still browse, search, and filter transactions with the same results, and entity ass ／ The React dashboard stores a read-only mirror of the active profile's transactions, entities, budgets, and categories in the browser (wa-sqlite on OPFS, keyed per profile). While the server is reachable the mirror stays fresh via a periodic full pull; when the ／ All data is stored locally in `~/.openaccountant/data.db` (SQLite).",
+     "lines": [
+      83,
+      88,
+      199
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有数据存于本地 SQLite 文件（data.db），该项目是使用数据库存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Import bank statements, categorize transactions with AI, surface spending anomalies, and get actionable advice — all without your financial data leaving your machine. ／ All data is stored locally in `~/.openaccountant/data.db` (SQLite).",
+   "evidence_lines": [
+    13,
+    199
+   ]
+  },
+  "fn": "openaccountant/wilson",
+  "sha": "8711a9981889",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "64137453a776": {
+  "identity": {
+   "one_liner": "SSMS 22 的开源扩展套件，提供 schema 检索、T-SQL 格式化与监控面板",
+   "review": "SQLExtended 是面向 SQL Server Management Studio 22 的免费开源扩展，提供 schema 浏览与搜索、T-SQL 格式化、IntelliSense 补全、四个实时监控面板、schema 导出及结果网格工具。供使用 SSMS 的数据库开发者和管理员安装使用，仅支持 SSMS 22，需 Windows 与 .NET Framework 4.8，通过 VSIX 安装。",
+   "highlights": [
+    "提供 schema 浏览、SQL 搜索、T-SQL 格式化、列限定与 IntelliSense 补全",
+    "提供 Performance、Agent Jobs、Always On、Replication 四个实时监控面板",
+    "支持将数据库脚本导出为单文件或按对象的文件夹树以便对比"
+   ],
+   "use_cases": [
+    "在 SSMS 中浏览、搜索和理解数据库对象结构",
+    "实时查看 SQL Server 性能、作业、Always On 与复制状态",
+    "格式化 T-SQL 代码并导出 schema 用于服务器间差异比较"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**SSMS, extended.** A free, open-source suite of tools for SQL Server Management Studio 22 — ／ - **SQL Server Management Studio 22** (built on the Visual Studio 2026 shell)",
+     "lines": [
+      6,
+      16
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|**Search**|SQL Search — object names, columns, and module definitions via a SQLite full-text index; optionally SQL Agent job step commands, which live outside the cache.|",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQL Server/SSMS 服务的扩展工具，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SSMS, extended.** A free, open-source suite of tools for SQL Server Management Studio 22 — ／ schema browsing and search, T-SQL formatting, IntelliSense, four live monitoring dashboards, ／ |**Monitoring**|Four dockable dashboards, each pinned to the server it was opened from: Performance (`Ctrl+Alt+P`), Agent Jobs (`Ctrl+Alt+J`), Always On (`Ctrl+Alt+A`), Replication (`Ctrl+Alt+R`). Live only — nothing is persisted.|",
+   "evidence_lines": [
+    6,
+    7,
+    28
+   ]
+  },
+  "fn": "jamtheradar/SQLExtended",
+  "sha": "64137453a776",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

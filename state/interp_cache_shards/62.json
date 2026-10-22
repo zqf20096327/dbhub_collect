@@ -10094,5 +10094,157 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ea4c1251a6f4": {
+  "identity": {
+   "one_liner": "Django+React 全栈框架，为 AI 编码代理提供统一脚手架与规则",
+   "review": "Karni 是一个 Django + React 全栈脚手架框架，面向使用 Claude Code、Cursor、Copilot 等 AI 编码代理的开发者。它将 REST API、admin、权限、React 组件等通用代码放在可升级的版本化包中，通过 karni new/make/check/upgrade 等命令生成和管理项目，并强制代理只编写业务域代码。默认数据库为 PostgreSQL，也可用 SQLite 运行。",
+   "highlights": [
+    "通过版本化包（karni、@karni/ui、karni-cli）提供 API、admin、权限与 React 界面，用 karni upgrade 应用上游变更",
+    "提供 karni check、ESLint 预设和架构测试，在代理手写框架自带代码时使构建失败",
+    "karni mcp 将 context、rules、check、explain 等能力作为 MCP 工具提供"
+   ],
+   "use_cases": [
+    "用 AI 编码代理初始化 Django + React 全栈项目",
+    "以模型声明加 access 规则生成 REST API、admin 与前端表格表单",
+    "在多个项目间统一代理规则并复用可升级的通用代码"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You need Python 3.12 or later, Node 20.19 or later (24 LTS recommended) and Docker, which runs PostgreSQL. ／ PostgreSQL is Karni's default database. To try Karni without Docker, leave out the `docker compose` line and use `DATABASE_URL=sqlite:///data/db.sqlite3`: SQLite works, without the guarantees only PostgreSQL gives (range columns, `EXCLUDE` constraints, trigram",
+     "lines": [
+      70,
+      89
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "PostgreSQL is Karni's default database. To try Karni without Docker, leave out the `docker compose` line and use `DATABASE_URL=sqlite:///data/db.sqlite3`: SQLite works, without the guarantees only PostgreSQL gives (range columns, `EXCLUDE` constraints, trigram",
+     "lines": [
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 是 Karni 的默认数据库，项目自身依赖它存储数据，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL is Karni's default database. To try Karni without Docker, leave out the `docker compose` line and use `DATABASE_URL=sqlite:///data/db.sqlite3`: SQLite works, without the guarantees only PostgreSQL gives (range columns, `EXCLUDE` constraints, trigram search). ／ |`karni mcp`|Serve context, rules, check, explain_text and queries as MCP tools (needs karni-cli[mcp])|",
+   "evidence_lines": [
+    89,
+    180
+   ]
+  },
+  "fn": "cbsshekhawat18-lab/karni",
+  "sha": "ea4c1251a6f4",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fd0feedfff7f": {
+  "identity": {
+   "one_liner": "数据中心全生命周期决策支持系统，用 PostgreSQL 存储与 RLS 隔离",
+   "review": "面向数据中心运营者的开源决策支持系统，整合设施、能耗、容量、维护、经济与证据数据，提供 13 个浏览器操作视图和只读 API。核心机制为可移植的 PostgreSQL schema（35+ 表、强制 RLS 多租户隔离、哈希链证据）、只读适配器和回环限定 API；设施控制、厂商适配器等未交付，本地服务无认证不可远程暴露。",
+   "highlights": [
+    "提供 13 个操作视图与 27 条 /v2 API 路由，覆盖能耗、容量、可靠性、经济性与证据审计",
+    "包含 35+ 表的 PostgreSQL schema，支持强制行级安全（RLS）与哈希链证据事件",
+    "实现版本化只读适配器（云定价、EPMS、CMMS、BMS、Modbus、Redfish 等），不做设施控制"
+   ],
+   "use_cases": [
+    "数据中心能耗、容量与 TCO 的分析决策",
+    "多租户设施与资产运营数据整合查询",
+    "运维工作流与证据留痕管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- The OSS core uses portable PostgreSQL SQL and can be adapted to Supabase. Supabase Auth/RLS is a deployment adapter, not a dependency of the domain model. ／ Requires Python 3.11+ and PostgreSQL 14+. Do not point the demo at a production database.",
+     "lines": [
+      56,
+      162
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "oracle. `DCC_ALLOW_ANONYMOUS=true` disables enforcement for local development and logs",
+     "lines": [
+      220
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 PostgreSQL 作为自身数据存储（schema.sql 建库、DCC_DATABASE_URL 连接），不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Data Center Commander is a standalone, vendor-neutral operations and decision-support project. It joins facility, energy, environmental, asset, workload, capacity, maintenance, incident, change, and evidence data under one tenant-scoped operational model. It is not a BMS, EPMS, CMMS, hypervisor, scheduler, or safety controller; those systems remain authoritative for their domains. ／ - The OSS core uses portable PostgreSQL SQL and can be adapted to Supabase. Supabase Auth/RLS is a deployment adapter, not a dependency of the domain model. ／ psql \"$DCC_DATABASE_URL\" -v ON_ERROR_STOP=1 -f database/schema.sql",
+   "evidence_lines": [
+    47,
+    56,
+    169
+   ]
+  },
+  "fn": "AAH20/data-center-commander",
+  "sha": "fd0feedfff7f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9925,5 +9925,287 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ebf61878630d": {
+  "identity": {
+   "one_liner": "基于 Postgres 的智能体认知记录数据库应用",
+   "review": "这是一个以 Postgres 为后端、FastAPI 为服务层的应用，用三类核心表（inquiries、edges、change_log）记录智能体与人的工作、信念和发现，提供 HTTP API、CLI（trax）和内置 Web 界面查看图结构与智能体会话。适合需要追踪 AI 智能体研究过程与知识演化的团队；依赖真实 Postgres 或 PGlite，Apache-2.0 许可，Python 3.12+。",
+   "highlights": [
+    "以 inquiries/edges/change_log 三张核心表在 Postgres 上存储有向图模型，提供 JSONL 导出",
+    "内置 FastAPI HTTP 服务与打包的 Web 界面，支持单机 --no-auth 模式与 API token 认证",
+    "提供 trax CLI 与独立 Python 客户端 SDK，支持智能体会话记录与语义检索嵌入"
+   ],
+   "use_cases": [
+    "记录与查询智能体工作流：Issue/Artifact/Belief/Experiment 构成的图结构",
+    "多智能体会话的实时控制台查看与消息下发",
+    "研究知识图谱的 JSONL 备份与子图导出"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "by Postgres (real or PGlite). FastAPI on top. ／ that contract over Postgres + HTTP. ／ trackinizer --engine pg --dsn ... # against real Postgres ／ Integration tests (`@pytest.mark.integration`) use a Postgres server backend",
+     "lines": [
+      28,
+      31,
+      278,
+      301
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目用 Postgres 存储自身数据（三张核心表由 Postgres 支撑），是使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "knowledge. Three core tables (`inquiries`, `edges`, `change_log`) backed ／ by Postgres (real or PGlite). FastAPI on top. ／ that contract over Postgres + HTTP.",
+   "evidence_lines": [
+    27,
+    28,
+    31
+   ]
+  },
+  "fn": "rekursiv-ai/trackinizer",
+  "sha": "ebf61878630d",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "89682f680d44": {
+  "identity": {
+   "one_liner": "开源复式记账核心，以 Postgres/Supabase schema 实现",
+   "review": "Ekwo OS 是一个面向 Postgres/Supabase 的开源复式记账核心，包含数据库 schema、按国家打包的税务规则数据、CLI（npx ekwo-os）和 MCP 服务器，供企业自助记账、会计事务所和开发者使用；需自建 Supabase 项目，通过 REST API 与行级安全访问数据。",
+   "highlights": [
+    "以 Postgres schema 与触发器强制复式平衡与期间锁定，税务规则以数据行实现",
+    "提供 CLI 与 MCP 服务器，支持 AI 代理在同一账簿上操作",
+    "内置 160+ 国家包与 FEC、XBRL、Peppol UBL、Factur-X 等法定格式库"
+   ],
+   "use_cases": [
+    "企业通过 CLI 或 AI 代理在自有 Supabase 项目中维护账簿并生成增值税申报",
+    "会计事务所在单一安装中管理多家公司账套",
+    "开发者需要一个税务规则即数据的复式记账核心"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run: ／ - **Tested on real Postgres.** The test suite runs the migrations, the seeds,",
+     "lines": [
+      25,
+      64,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 Postgres/Supabase 存储账簿数据，是为记账业务服务的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0（格式库为 MIT）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A double-entry accounting core for Postgres. There is no server to run: ／ designed for machines as much as for people. Supabase gives the schema a REST",
+   "evidence_lines": [
+    64,
+    26
+   ]
+  },
+  "fn": "Ekwo-ai/ekwo-os",
+  "sha": "89682f680d44",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2dd7fb5a1143": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的容错竞争消费者任务队列服务",
+   "review": "EntroQ 是一个用 Go 编写的任务队列服务，以 claim-modify 事务循环提供强一致性语义，任务被认领后不会因 worker 崩溃丢失。它提供 Go、Python、TypeScript、Elixir 客户端及 HTTP/gRPC 接口，后端支持 PostgreSQL、Redis、内存与实验性 SQLite。适合需要在分布式环境中实现 exactly-once 任务处理的开发者与运维团队。",
+   "highlights": [
+    "提供 claim-modify 原子事务操作与版本锁定的 Commit Once 语义",
+    "支持 PostgreSQL、Redis、内存及实验性 SQLite 四种后端，Kubernetes 可通过 Helm 部署",
+    "附带键值文档存储，与任务共享同一事务空间；提供 Go/Python/TypeScript/Elixir 客户端"
+   ],
+   "use_cases": [
+    "构建需要任务不丢失、结果不重复提交的分布式异步任务处理系统",
+    "微服务间异步解耦，包括通过 sidecar 将普通 HTTP 调用转为队列化调用",
+    "Shell 脚本或任意语言通过 work 网关接入任务处理流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Go, Python, TypeScript, and Elixir clients. PostgreSQL, Redis, in-memory, and ／ The sandbox provides a complete environment: PostgreSQL, the EntroQ service, Prometheus, and Grafana for monitoring.",
+     "lines": [
+      13,
+      54
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "experimental embedded SQLite backends. Kubernetes deployment via Helm. ／ `PG*` variables and the `EQ_REDIS_*` and `EQ_SQLITE_PATH` aliases are also",
+     "lines": [
+      14,
+      82
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "EntroQ 以 PostgreSQL/Redis 作为自身任务数据的持久化后端，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source",
+    "pypi",
+    "npm",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Go, Python, TypeScript, and Elixir clients. PostgreSQL, Redis, in-memory, and ／ The sandbox provides a complete environment: PostgreSQL, the EntroQ service, Prometheus, and Grafana for monitoring.",
+   "evidence_lines": [
+    13,
+    54
+   ]
+  },
+  "fn": "shiblon/entroq",
+  "sha": "2dd7fb5a1143",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4f2e4f4ebf5b": {
+  "identity": {
+   "one_liner": "面向学者的在线聚会猜词游戏，Node.js+Vue+WebSocket 实现",
+   "review": "这是一个面向学术界人士的多人在线派对游戏站，包含团队猜词（Double Blind）和找出卧底 Reviewer 2 两个游戏模块，玩家用手机加入房间即玩。使用 node:sqlite 存储房间、反馈和账号数据，头像存为文件，支持中英双语、微信浏览器和断线重连。第二游戏仍在 beta，规则与词对在 1.0 前可能变动并清空其记录。",
+   "highlights": [
+    "提供两个游戏模块：keywords（团队猜词）与 impostor（寻找 Reviewer 2，处于 beta）",
+    "房间、反馈与账号数据存于 SQLite（node:sqlite），头像以文件存储",
+    "支持可选账号、好友、战绩记录、回放与 AI 玩家"
+   ],
+   "use_cases": [
+    "学术团队线上聚会娱乐",
+    "需要双语（中/英）界面的多人文字游戏场合",
+    "在中国大陆可直接游玩的 Web 聚类游戏（不依赖 Google 服务与公共 CDN）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|Rooms in memory; feedback and accounts in SQLite (`node:sqlite`); avatars as files|",
+     "lines": [
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 SQLite 存储房间、反馈和账号数据，属使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "jxxsteven7/reviewer2",
+  "sha": "4f2e4f4ebf5b",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

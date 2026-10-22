@@ -11224,5 +11224,239 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8e43b2828865": {
+  "identity": {
+   "one_liner": "容器化电商样板应用，Angular+Spring Boot+MySQL+Kafka",
+   "review": "ShopEasy 是一个电商应用样板，前端 Angular、后端 Spring Boot（JWT 认证），使用 MySQL 8.0 存储订单/商品/用户数据，Kafka 处理订单事件，并集成 ELK 日志栈。提供 Docker Compose 本地编排与 Kubernetes/Minikube 两种部署方式，含 JUnit/JaCoCo 与 Karma 前后端测试。适合作为全栈容器的参考模板。",
+   "highlights": [
+    "提供用户/商品/订单 CRUD 与 JWT 认证，订单事件经 Kafka 处理",
+    "支持 Docker Compose 本地编排与 Kubernetes (Minikube) 部署",
+    "集成 Spring Actuator 观测、ELK 日志栈与 JUnit/Karma 测试体系"
+   ],
+   "use_cases": [
+    "电商全栈应用的开发起步模板",
+    "Docker Compose 与 Kubernetes 部署的学习/验证环境",
+    "Spring Boot + Angular + Kafka + MySQL 集成参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Database**: **MySQL 8.0**. ／ - MySQL ／ - MySQL: localhost:3306",
+     "lines": [
+      9,
+      43,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 MySQL 作为自身业务数据库存储数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This repository contains a simple **E-commerce Application**, composed of: ／ - **Database**: **MySQL 8.0**. ／ - **Infrastructure**: **Docker Compose** for local orchestration and **Kubernetes (K8s)** for deployment in cloud or local clusters.",
+   "evidence_lines": [
+    5,
+    9,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "VictorMoni/ShopEasy",
+  "sha": "8e43b2828865",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c7ed77a461f": {
+  "identity": {
+   "one_liner": "将课件 PDF/PPTX 抽取为闪卡的本地间隔重复学习工具",
+   "review": "一个 Electron 桌面应用，把 PDF/PPTX 课件解析成知识卡，提供四档自评、SM-2 简化版间隔重复、模拟卷与机制图生成，数据存于本地单个 SQLite 文件，可离线使用。面向需要背诵大量课件的学生（主题标签含兽医），AI 术语精修为可选功能，需自配 OpenAI 兼容接口的 API Key。仅支持 Windows。",
+   "highlights": [
+    "支持 PDF/PPTX 课件导入并自动抽取术语生成卡片，记录章节页码出处",
+    "实现四档自评与简化版 SM-2 间隔重复排期，含模拟卷、错题本、复习清单导出",
+    "全部数据存储于本地 SQLite 文件（Node 内置 node:sqlite），离线可用"
+   ],
+   "use_cases": [
+    "整理数百页课件生成可背诵的知识卡",
+    "考前生成复习清单与模拟卷、按考试日期倒推每日复习量",
+    "无网络环境下本机管理与复习卡片"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "课件、卡片、复习记录、API Key 全在 `data/` 文件夹，一个 SQLite 文件。没有账号系统，没有云端同步，没有\"隐私政策\"要读。 ／ |数据库|Node 内置 `node:sqlite`|不需要编译原生模块，拷走就能用|",
+     "lines": [
+      134,
+      221
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 Node 内置 node:sqlite 存储卡片与复习数据，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0（因打包 PyMuPDF）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "课件、卡片、复习记录、API Key 全在 `data/` 文件夹，一个 SQLite 文件。没有账号系统，没有云端同步，没有\"隐私政策\"要读。 ／ build/老郑荡的妙妙小工具/data/ ／ |数据库|Node 内置 `node:sqlite`|不需要编译原生模块，拷走就能用|",
+   "evidence_lines": [
+    134,
+    186,
+    221
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "laozhengdang/miaomiao-study",
+  "sha": "9c7ed77a461f",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1c3e6bfd01db": {
+  "identity": {
+   "one_liner": "面向小店商户的记账/赊账管理移动应用，基于 React Native 与 MySQL",
+   "review": "HANOT+ 是一个为临近商户（杂货店、小店、手工艺人）数字化管理日常经营的移动与 Web 应用，记录客户赊账、还款与财务指标。技术栈为 React Native/Expo 前端加 Express/Node 后端，使用 MySQL/MariaDB 存储数据并内置离线 fallback 层，通过 JWT 做认证，依赖 Node.js 18+ 以 npm 运行。",
+   "highlights": [
+    "提供客户赊账登记、还款跟踪与余额实时更新",
+    "提供财务仪表盘与近期交易活动历史",
+    "支持 Android、iOS 及 Web 多平台运行，含离线演示数据与本地缓存 fallback"
+   ],
+   "use_cases": [
+    "小店商户替代纸质赊账本管理客户欠款",
+    "跟踪还款与财务收支状况",
+    "离线或弱网环境下继续记账"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ |**Base de données**|MySQL / MariaDB (avec couche de fallback intégrée)|",
+     "lines": [
+      8,
+      43
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Base de données**|MySQL / MariaDB (avec couche de fallback intégrée)|",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其是用 MySQL 存储数据的商户管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**HANOT+** est une application moderne conçue pour digitaliser et simplifier la gestion quotidienne des commerçants de proximité (épiceries, supérettes, artisans). ／ ├── backend/                  # Serveur API REST (Node.js / Express) ／ |**Base de données**|MySQL / MariaDB (avec couche de fallback intégrée)|",
+   "evidence_lines": [
+    13,
+    30,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "salouaulk3/Hanout-Plus",
+  "sha": "1c3e6bfd01db",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

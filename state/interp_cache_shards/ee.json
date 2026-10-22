@@ -9299,5 +9299,185 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "543314030cfc": {
+  "identity": {
+   "one_liner": "自托管任务看板，人与AI代理通过MCP/HTTP协作管理任务卡",
+   "review": "Retinue是一个自托管、本地优先的任务看板与协调中枢，供人类监督者与AI代理在同一任务卡上协作：每卡单一持有者、仅持有者可写、追加式回执链记录认领/交接/验收，代理经MCP或HTTP+令牌API认领并回写。服务端模式以SQLite存储状态，支持Docker Compose部署及Lark/Telegram适配器。适合运行AI代理集群的个人与小团队。",
+   "highlights": [
+    "提供 MCP 服务器与 HTTP + bearer-token API 供代理读写任务卡",
+    "每卡单一持有者写入，配合追加式回执链记录认领、进度、交接与验收",
+    "服务端模式以 retinue.db（SQLite）存储状态，支持文件模式与 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "协调多个人与 AI 代理共用的任务分派与验收",
+    "记录代理任务的回执链与使用情况审计",
+    "个人/小团队在单机、家庭服务器或 NAS 上自托管代理协调面板"
+   ],
+   "classification": {
+    "cat": "应用",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       108,
+       236
+      ]
+     }
+    ],
+    "eco": "app",
+    "eco_why": "README 说明服务端使用 retinue.db（SQLite）存储看板状态，数据库是其存储组件而非服务对象",
+    "ai": {
+     "flag": true,
+     "kind": [
+      "mcp"
+     ]
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "experimental",
+    "license_note": "AGPL-3.0-only（README 注明 0.3.0a5 起为首个 AGPL-3.0-only 版本）",
+    "install": [
+     "docker",
+     "pypi",
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     86,
+     100,
+     108
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The server stores canonical state in `retinue.db`; use a consistent SQLite ／ before copying it. Server mode uses `retinue.db` and needs a consistent SQLite",
+     "lines": [
+      108,
+      236
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明服务端使用 retinue.db（SQLite）存储看板状态，数据库是其存储组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only（README 注明 0.3.0a5 起为首个 AGPL-3.0-only 版本）",
+   "install": [
+    "docker",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Retinue is a **self-hosted, local-first task board for AI agents and the ／ - **MCP-native coordination.** `retinue-server mcp` exposes the board to any ／  The server stores canonical state in `retinue.db`; use a consistent SQLite",
+   "evidence_lines": [
+    86,
+    100,
+    108
+   ]
+  },
+  "fn": "jklthinking/retinue",
+  "sha": "543314030cfc",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e3d256370547": {
+  "identity": {
+   "one_liner": "跨 TiDB/TiKV/TiFlash 共享的正确舍入 sin 函数库 PoC",
+   "review": "该项目是面向 TiDB 生态的概念验证库，提供带版本号、结果逐位一致的 sin() 实现（基于 CORE-MATH），以 Rust crate、C ABI 和 Go 包三种接口分别供 TiFlash、TiKV、TiDB 链接调用，并通过冻结语料与 MPFR 交叉验证保证结果不变。仓库还附带集群对比实验结果。目前仅覆盖 sin 函数，属于 PoC 阶段，COS/POW 等函数未包含。",
+   "highlights": [
+    "提供 Rust、C ABI 和 Go 包三种接口，同一实现分别链接进 TiKV、TiFlash 和 TiDB",
+    "函数按版本固定入口（v1/v2），配套冻结语料与 SHA256 校验防止结果漂移",
+    "基于 CORE-MATH 固定提交 vendor 编译，并与 MPFR 在千万级输入上交叉验证"
+   ],
+   "use_cases": [
+    "为 TiDB 系多引擎下推计算提供逐位一致的数学函数结果",
+    "作为跨语言确定性函数库链接方案的参考实现",
+    "验证引擎间数值计算差异（ULP 级）的实验基础"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A minimal proof of concept for pingcap/tidb#72218 ／ correctly rounded, versioned `sin`, linked into TiDB, TiKV and TiFlash, so `SIN(x)` returns the ／ - **TiDB (Go)** imports `github.com/mjonss/samefn-poc/go/samefn`: `SinV1` for row evaluation,",
+     "lines": [
+      3,
+      5,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 TiDB/TiKV/TiFlash 引擎提供被链接的共享函数实现，是服务数据库内核的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0 双许可（README L156 起，另一许可名未在可见范围内）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "correctly rounded, versioned `sin`, linked into TiDB, TiKV and TiFlash, so `SIN(x)` returns the ／ - **TiKV (Rust)** depends on this crate as a git dependency pinned to a commit and calls ／ - **TiDB (Go)** imports `github.com/mjonss/samefn-poc/go/samefn`: `SinV1` for row evaluation,",
+   "evidence_lines": [
+    5,
+    23,
+    26
+   ]
+  },
+  "fn": "mjonss/samefn-poc",
+  "sha": "e3d256370547",
+  "source": "readme",
+  "generated_at": "2026-10-22",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
