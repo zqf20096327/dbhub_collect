@@ -364,6 +364,7 @@ run before trusting a new database or driver.
 | `SCHEMAGATE_VALUES=1` | MCP server: read column values at startup, like `--values` (`SCHEMAGATE_VALUES_BUDGET` = seconds, default 30) |
 | `SCHEMAGATE_RESTRICT_FROM_GRANTS=1` | MCP server: take visibility from the database's GRANTs, like `--restrict-from-grants` (PostgreSQL, MySQL, Oracle) |
 | `SCHEMAGATE_CATALOG_MAX_AGE` | MCP server: seconds a catalogue may be used before it is re-read; if the re-read fails, the scoping tools refuse until one succeeds (see below) |
+| `SCHEMAGATE_REREAD_TIMEOUT` | MCP server: seconds a call waits for that re-read before it is refused as stale (default 30); the re-read keeps running and is served if it returns |
 | `SCHEMAGATE_MCP_RERANK=1` | MCP server: `select_schema` lets the server's model (`SCHEMAGATE_MCP_PROVIDER` + `SCHEMAGATE_MCP_MODEL`) reorder the top 20, like `--rerank`; one model call per question; set without a model, the server will not start |
 
 ## How it picks
@@ -409,6 +410,20 @@ PostgreSQL itself allowed. With claude-sonnet-5-5, all 19,624:
 The paper's systems are 2024-25 models; details and limits in
 [BENCHMARKS.md](BENCHMARKS.md#access-control-a-second-benchmark-spider-acl), and both results in one
 [technical report (PDF)](docs/papers/schemagate_access_control.pdf), [DOI 10.5281/zenodo.23446210](https://doi.org/10.5281/zenodo.23446210).
+
+**On execution accuracy, scored by the benchmarks' own evaluators.** One model
+call per question, about 2,100 prompt tokens, no candidates, no voting, no agent loop:
+
+| | Model | EX | Best published, 2026-10-19 |
+|---|---|---|---|
+| BIRD dev, all 1,534 questions | Claude Opus 5.5 | **77.12** | test-set submission sent 2026-10-22 |
+| BIRD Mini-Dev, SQLite / PostgreSQL / MySQL | Claude Opus 5.5 | **81.0 / 72.6 / 72.4** | 75.6 / 65.8 / 49.2 |
+| UniQL, Oracle dialect, first try | Gemini 2.5 Flash | **64.47** | 49.61 (Claude Sonnet 4.5) |
+
+Opus varies about ±1 run to run; the Mini-Dev rows are self-reported until BIRD merges
+[PR #251](https://github.com/bird-bench/bird-bench.github.io/pull/251). Files and commands:
+[`benchmarks/results/`](benchmarks/results/); the context is in
+[BENCHMARKS.md](BENCHMARKS.md#execution-accuracy-scored-by-each-benchmarks-own-evaluator).
 
 **On public benchmarks, so you can check them without trusting me:**
 [BENCHMARKS.md](BENCHMARKS.md) has schemagate on Spider and BIRD, with the
@@ -1146,7 +1161,11 @@ REVOKE takes effect **within** that window, not on the next call. If the
 re-read fails, the server does not keep answering from the old permissions:
 `select_schema`, `list_objects`, `describe_object`, `run_query` and `answer`
 refuse with "permissions are stale" until a re-read succeeds (retried at most
-every 5 seconds), and `health` shows `catalog_stale` and the reason. Caller
+every 5 seconds), and `health` shows `catalog_stale` and the reason. A re-read
+that neither fails nor returns, a database that took the connection and went
+quiet, is bounded too: callers wait at most `SCHEMAGATE_REREAD_TIMEOUT` seconds
+(default 30) and are then refused the same way, while the re-read runs on; if it
+returns, the next call is served from what it brought. Caller
 roles from a `groups` resolver have their own bound, its `ttl`. Every tool catches everything and returns
 `{"error": ...}`; a bad request cannot end the session for other clients.
 `health` tells a load balancer what state it's in. A test throws 125 kinds of

@@ -11,6 +11,10 @@ then lets you use that data through a browser UI, a REST API, and an **MCP serve
 that plugs straight into AI coding agents like **Claude Code** and **Cursor** —
 so your assistant can search your activity, ask natural-language questions, and
 run auto-generated reports (see [MCP server](#-mcp-server-use-deskmate-from-ai-agents)).
+DeskMate can also read what is on your screen and **suggest the next step** — start a
+learning session, start a meeting recording, reply to an email, book a meeting room —
+which you confirm with one click (see
+[Decision routing](#-decision-routing-suggestions-you-confirm)).
 
 > **All your data stays on your own computer — nothing is uploaded to the cloud.**
 
@@ -84,6 +88,7 @@ pip install -e ".[module1,module2]"      # install several (comma-separated, NO 
 | `semantic` | Semantic (vector) search | Search by meaning, not just keywords |
 | `pipes` | Scheduled tasks (YAML) | Run reports automatically on a schedule |
 | `mcp` | MCP server | Integrate with AI agents / Claude, etc. |
+| `route` | Decision routing (local kev-0.8b model) | Suggests starting a learning session / meeting, replying to an email, or booking a room; see [Decision routing](#-decision-routing-suggestions-you-confirm) |
 | `training` | Local LoRA fine-tuning | Fine-tune a small model on your own data, see [training docs](docs/16-learning-training.md) |
 | `full` | Most common extras at once | = tesseract + audio + vad + redact + semantic + pipes. **Excludes** OpenVINO & training |
 | `dev` | Dev tools (pytest, ruff) | Only needed to modify code / run tests |
@@ -225,8 +230,9 @@ come back when needed:
 |---------|-----------|------|
 | OpenVINO-accelerated transcription | Run Whisper faster on Intel NPU/GPU | [docs/04-audio.md](docs/04-audio.md#whisper-backends) |
 | Live speech translation | Translate as you speak, shown in the UI | [docs/18-live-translation.md](docs/18-live-translation.md) |
-| Learning sessions | Start/end a study block, recap, review queue, knowledge graph | — |
-| Meetings | Hand-declared sessions: transcript, screen text, recap video, summary | [docs/09-meeting-workflow.md](docs/09-meeting-workflow.md) |
+| Decision routing | A local model reads what is on screen and suggests the next step (learn / meeting / reply / book a room); you confirm in one click | [below](#-decision-routing-suggestions-you-confirm) |
+| Learning sessions | Start/end a study block (by hand, or confirm a suggestion), recap, review queue, knowledge graph | — |
+| Meetings | Sessions you start by hand or confirm from a suggestion: transcript, screen text, recap video, summary | [docs/09-meeting-workflow.md](docs/09-meeting-workflow.md) |
 | Gmail / Outlook integration | Search real mailboxes in Ask and apps | [docs/11-connections.md](docs/11-connections.md) |
 | Battery Saver | On battery, move background AI work and user-selected apps onto efficient cores; the SPA view and live status text are localized in Chinese/English | [docs/22-power-manager.md](docs/22-power-manager.md) |
 | Local LoRA fine-tuning | Train a small model on your data (incl. Intel iGPU) | [docs/16-learning-training.md](docs/16-learning-training.md) |
@@ -250,6 +256,95 @@ load, it automatically falls back to CPU.
 
 ---
 
+## 🧭 Decision routing (suggestions you confirm)
+
+DeskMate can watch what is happening — the foreground window, on-screen text, audio
+transcripts, key text, and whether you are in a meeting or a study session — and
+suggest what to do next. A **small local model** (`kev-0.8b`, run in-process; no
+cloud, no extra service) judges four things:
+
+| Suggestion | When it shows up | What *Confirm* does |
+|------------|------------------|---------------------|
+| **Start learning** | A course / lecture / tutorial is in the foreground | Opens a learning session. You end it yourself |
+| **Start meeting** | A live call UI is in the foreground (Meet, Teams, Zoom, Tencent Meeting, Feishu, DingTalk, …) | Opens a meeting recording. You end it yourself from the Meetings page |
+| **Reply to email** | The email you are reading asks you a question or a favour | Records your confirmation only (nothing is sent) |
+| **Book a meeting room** | A mail, chat, or call asks you to book a room | Records your confirmation only (nothing is booked); keeps a time / size hint |
+
+> **Nothing runs without your click.** Booking a room and replying to an email are not
+> automated yet — the confirmation is stored so a future executor can pick it up
+> (`GET /route/executions?status=confirmed`).
+
+### How it works
+1. You open a course page → a Windows notification appears (*"Looks like you are
+   studying — start a learning session?"*). Email / room notifications show the mail
+   subject (basic redaction applied; see `toast_show_subject`).
+2. Click **Open** → the **Suggestions** page highlights the card.
+3. Click **Confirm** (or **Not this**). Your answer is saved as feedback for later
+   threshold tuning. Sessions you start this way are marked *From Suggestions*.
+
+It stays quiet on purpose: quiet hours (`[habits] quiet_hours`) are honoured, the same
+page or mail is only suggested once (2 h; 8 h after you said *Not this*), nothing is
+suggested while a learning session or meeting is already open, and terminals, editors,
+and the desktop / taskbar are never scored. Outside a meeting, audio is **not** used
+to decide on room booking, so a video playing in the background cannot trigger it.
+
+### Turn it on
+Off by default. Install the extra, then enable it and restart DeskMate:
+```powershell
+pip install -e ".[route]"
+```
+If you already run a tuned PyTorch (for example an Intel XPU build), install `kev`
+without dependencies so it does not replace it — see the note above the `route`
+extra in `pyproject.toml`.
+```toml
+[route]
+enabled = true                  # default: false
+# kev_device = "xpu"            # Intel GPU; falls back to "cpu" automatically
+# executor_actions = ["start_learning", "start_meeting", "reply_email", "book_room"]
+# toast_show_subject = true     # false: notifications stay generic, subjects only on the page
+# screen_excluded_apps = [...]  # windows that are never scored (terminals, desktop, ...)
+
+[meeting]
+nudge_minutes = 15              # remind you that a meeting you started is still open (0 = off)
+```
+The model loads on the first judgment (about 12 s, ~6 GB RAM on XPU; roughly 0.5 s per
+judgment afterwards; on CPU it is several times slower). Model files are read from
+your Hugging Face cache — set `HF_HUB_OFFLINE=1` to forbid downloads.
+
+### Privacy
+Everything stays on your machine. Routing reads the same text DeskMate already stores
+(the redacted version when `[redact]` is enabled), and mail subjects are additionally
+masked for e-mail addresses and phone numbers before they are shown — also only when
+`[redact]` is enabled; names and project names are never masked. Pausing capture stops
+routing, and `/capture/forget` also removes routing data (and any session or meeting
+that was started from a suggestion in the forgotten span).
+
+### Inspect it
+```powershell
+deskmate route tail --follow    # watch suggestions arrive
+```
+```
+GET  /route/live                          POST /route/suggestions/{id}/execute
+GET  /route/suggestions                   POST /route/suggestions/{id}/dismiss
+GET  /route/executions?status=pending     POST /route/suggestions/{id}/ack
+GET  /route/intents                       GET  /route/scores
+POST /route/feedback                      GET  /route/segments
+```
+### Known limits
+- A **live webinar or livestream** can look exactly like a meeting on screen; you get
+  one extra notification, never an automatic meeting.
+- The *reply to email* threshold is not calibrated yet and can miss a plain question.
+- Tested end to end on Chrome / Gmail and Google Meet; other call apps are covered by
+  offline samples only.
+- Pages whose title keeps changing (live counters, progress in the title) may be
+  suggested more than once.
+- Windows toasts appear under the PowerShell app name.
+
+Run the tests with `pytest tests/test_route_*.py`; the real-model contract tests are
+opt-in (`RUN_KEV_TESTS=1`).
+
+---
+
 ## Requirements
 
 - **Windows 10 / 11**
@@ -262,6 +357,8 @@ load, it automatically falls back to CPU.
     unlocks NPU/GPU inference
   - **Q&A & apps**: a local [Ollama](http://127.0.0.1:11434) server
   - **LoRA training**: a GPU is recommended (CPU works but is slow)
+  - **Decision routing**: the `route` extra; an Intel GPU (XPU) is recommended, CPU
+    works but is several times slower; the local model needs about 6 GB of RAM
 
 ---
 
@@ -282,9 +379,10 @@ deskmate ui --no-run-daemon  # view existing data only, don't start new recordin
 | Transcripts | Audio transcriptions |
 | Translate | Live speech translation controls and translated transcript stream |
 | Events | Keyboard / mouse / clipboard / window-focus events |
-| Learning | Start/end a study session; recap, review queue, knowledge graph |
+| Suggestions | Decision routing: live status, items waiting for your confirmation, intents, scores, correct / not-this feedback |
+| Learning | Start/end a study session (or confirm one from Suggestions); recap, review queue, knowledge graph |
 | Todos | Action items extracted from email + meetings |
-| Meetings | Start/end a session; audio + screen text, recap video, summary |
+| Meetings | Start/end a session (or confirm one from Suggestions); audio + screen text, recap video, summary |
 | Capture | Capture-control view for recording sources and runtime toggles |
 | Training | Local LoRA fine-tuning |
 | Model Service | Start/stop local model backends and inspect service logs |
@@ -298,6 +396,7 @@ deskmate ui --no-run-daemon  # view existing data only, don't start new recordin
 deskmate serve          # HTTP API only (records by default)
 deskmate record         # recorder only
 deskmate capture-once   # capture one frame manually
+deskmate route tail     # latest decision-routing suggestions (add --follow / --intents)
 deskmate search "query" # keyword search via the API
 deskmate mcp            # MCP server for AI agents (see "MCP server" below; API must be running)
 ```
@@ -332,7 +431,7 @@ page or the CLI. Full list, examples, and how to write your own in
 Config file: `C:\Users\<your-username>\.deskmate\config.toml` (auto-created on first run).
 
 Main sections: `[capture]`, `[a11y]`, `[ocr]`, `[audio]`, `[ollama]`, `[redact]`,
-`[filters]`, `[server]`
+`[filters]`, `[server]`, `[route]`, `[learning]`, `[meeting]`
 
 Override with environment variables (prefix `DESKMATE_`):
 ```powershell
@@ -345,7 +444,7 @@ $env:DESKMATE_AUDIO__ENABLED = "true"
 ```
 C:\Users\<your-username>\.deskmate\
 ├── config.toml      # configuration
-├── data.db          # SQLite database (with full-text search)
+├── data.db          # SQLite database (full-text search; also routing suggestions and feedback)
 ├── frames\          # screenshots
 ├── audio\           # audio chunks (when enabled)
 ├── videos\          # video chunks
@@ -363,7 +462,9 @@ server's `/docs` (OpenAPI). Common ones:
 GET  /health        GET  /search?q=...      POST /ask
 GET  /frames        POST /capture           GET  /meetings
 GET  /todos         POST /todos             PATCH /todos/{id}
+GET  /route/live    GET  /route/suggestions POST /route/suggestions/{id}/execute
 ```
+Decision-routing endpoints are listed in [Decision routing](#-decision-routing-suggestions-you-confirm).
 
 ---
 
@@ -502,6 +603,12 @@ claude mcp add deskmate -e DESKMATE_API=http://127.0.0.1:3030 \
   name `qwen3_8b_ov:v1` is meant for it).
 - **`deskmate` not found in a new terminal?** You didn't activate the virtual
   environment. `cd` into the project folder, then run `.\.venv\Scripts\Activate.ps1`.
+- **Decision routing never suggests anything?** Check that the `route` extra is
+  installed, that `[route] enabled = true` is set in `config.toml`, and that you
+  restarted DeskMate. `GET /route/live` shows whether the model loaded, and
+  `deskmate route tail --follow` shows suggestions as they arrive. It stays silent in
+  quiet hours, in terminals / editors / the desktop, and while a session or meeting is
+  already open.
 - **Want the internals / finer config of a feature?** It's all in [docs/](docs/README.md),
   numbered by module.
 

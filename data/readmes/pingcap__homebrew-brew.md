@@ -33,10 +33,13 @@ version uses its own `var/tidb-26` directory, so the old accounts are not
 reachable. `brew install` warns when an old store is present, and
 `brew info tidb-server` has the SQL for migrating it deliberately.
 
-Give applications their own least-privileged account:
+Give applications their own least-privileged account. Connect with
+`mysql -S "$(brew --prefix)/var/tidb.sock" -uroot` and type the SQL at the
+prompt, replacing the placeholder with a password you choose (never put it on a
+command line, where `ps` can see it):
 
 ```sql
-CREATE USER 'app'@'127.0.0.1' IDENTIFIED BY 'choose-a-strong-password';
+CREATE USER 'app'@'127.0.0.1' IDENTIFIED BY '<app-password>';
 GRANT SELECT, INSERT, UPDATE, DELETE ON yourdb.* TO 'app'@'127.0.0.1';
 ```
 
@@ -48,4 +51,5 @@ job at login; use `brew services run tidb-server` for a one-session start.
 
 The `tiup` command seeds the pinned, SHA-256-verified TUF root manifest into
 `${TIUP_HOME:-~/.tiup}/bin/root.json` on first use, so the trust anchor is never
-fetched over the network.
+fetched over the network. It re-verifies that anchor on every run; for a private
+mirror, run `tiup mirror set <url>` and export `TIUP_ALLOW_CUSTOM_ROOT=1`.

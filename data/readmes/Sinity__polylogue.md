@@ -46,10 +46,16 @@ changes), `embeddings.db` and `blobs/`.
 
 ## Commands
 
-`polylogue --help` lists them all; each takes `--json`. One command table
+`polylogue --help` lists CLI commands; each takes `--json`. One command table
 (`crates/polylogue/src/commands.rs`) declares them; the CLI, its
 completions, the MCP tools and the HTTP API under `/api/v1/` are built from
 it.
+
+The browser action commands are HTTP-only table entries: JSON enqueue at
+`/api/v1/browser-actions` and binary upload at `/api/v1/browser-actions/attachments`.
+They retain token/origin checks and a 2 MiB body limit. The daemon owns enqueue
+permission and idempotence; the extension still cannot enqueue. Uploads remain
+binary through the HTTP adapter, and neither operation is offered through CLI or MCP.
 
 | Command | What it does |
 |---|---|
@@ -64,7 +70,8 @@ it.
 | `brief`, `takeover SESSION`, `recall WORDS` | Context for a model: the session-start brief, what to take over another session with, and a search of past work with a record of how it searched. |
 | `continue [SESSION]` | Resume a session with its tool's own command; without one, the sessions in this directory that left something open. |
 | `measure usage\|cost\|sessions\|quota\|outcomes\|failing\|drift\|unanswered\|survival\|survival-turns\|daily\|process\|rhythm` | Tokens by kind and cost, subscription quota windows, tool outcomes, commands failing now, format drift and other analyses. Unknown figures stay unknown, never 0. |
-| `live`, `notices`, `changes`, `work` | Sessions running now, signal notices, what changed since a cursor, the work graph. |
+| `live`, `notices`, `work` | Sessions running now, signal notices and the work graph. |
+| `changes [--since POSITION]` | A finite JSON-lines batch of session/note/removal references and excision selections. Apply the complete batch before persisting its final position. |
 | `sql STATEMENT` | Read-only SQL over the stable views. |
 | `excise TARGET` | Remove a session, input or text. [Text excision and supported representations](docs/excision.md). |
 | `embed preview\|build\|status` | Opt-in embeddings for semantic search, with a cost preview. |
@@ -81,6 +88,16 @@ invalid request, 6 no daemon running.
 
 Credentials in session text (API keys, tokens, private keys) are masked in
 every output; the stored bytes are not changed.
+
+Budgeted session reads (`read SESSION --budget N`) return a continuation in `next`.
+Pass it as `--cursor`; the budget may change between pages. Changed selected
+content returns `stale_cursor` and requires starting again. See
+[session paging](docs/architecture.md) for cursor binding, masking and memory costs.
+
+Session reads and query rows use the stored display title: the recorded title
+when present, otherwise the derived first-prompt title. JSON reads carry this
+as `display_title`, separate from the recorded `session` metadata. Importable
+exports retain source fields.
 
 ## Repository layout
 
@@ -110,3 +127,17 @@ shared with Sinex.
 [docs/development.md](docs/development.md) describes the development checks
 and [docs/REPLACEMENT.md](docs/REPLACEMENT.md) says what replaced the Python
 version.
+
+## Sinex startup failures
+
+With the `sinex` feature, `sinex.toml` selects the backing. A missing file uses
+standalone. Malformed configuration, an unreadable local publication inventory,
+or a failed required restore pauses startup work without choosing another
+backing. `status.backing` shows `state: blocked`, the configuration path and the
+error. Existing reads, queries, exports, notes, read-only settings and context
+without a delivery sender remain available. Archive mutations return
+`backing_unavailable`; collection, signals and publishing do not start.
+
+Correct the configuration or restore failure and restart the daemon. Source
+capture spools remain pending until collection can run. An existing nonempty
+primary archive can start and serve reads while Sinex is offline.

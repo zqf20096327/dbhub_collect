@@ -51,19 +51,15 @@
 
 ## What's new
 
+- **2.30.0: set up in one step** ([changelog](CHANGELOG.md#2300-2026-10-23)). One command connects a
+  server's logs, with or without Docker; leads in one file or a WordPress plugin; the whole set-up
+  in one zip by mail, ready for a person or Claude Code.
+- **2.29.0: keep leads for good** ([changelog](CHANGELOG.md#2290-2026-10-22)). Leads and the pages
+  they read are never deleted when you choose so; visitors' pages before a sign-up up to 400 days.
 - **2.28.0: Leads' 7 days include today** ([changelog](CHANGELOG.md#2280-2026-10-22)). Today so
   far plus the 6 days before, with the exact dates from and to, compared up to the same hour.
 - **2.27.0: share the visitor ID across subdomains from Skald** ([changelog](CHANGELOG.md#2270-2026-10-22)).
   One setting per site links a sign-up on app.example.com to the visits before it, with the script tag unchanged.
-- **2.26.0: page groups fill their past days, and leads found by their reference** ([changelog](CHANGELOG.md#2260-2026-10-22)).
-  Save a page group and its past days are counted from the raw log, audited; a lead is found by
-  the sender's own ID; one sign-up is one lead even when it also sends paid; MCP switch for Docker.
-- **2.25.0: a lead's reference, and Mark as test on screen** ([changelog](CHANGELOG.md#2250-2026-10-22)).
-  The sender's own ID in Leads and every drawer; owners and admins mark test leads in one click.
-- **2.24.0: the script tag just works** ([changelog](CHANGELOG.md#2240-2026-10-22)). No change on
-  your web server; the setup Test now says what's wrong when nothing arrives.
-- **2.23.0: Leads & sales opens on 7 days, and a sturdier morning run** ([changelog](CHANGELOG.md#2230-2026-10-22)).
-  All time, "Today so far", one filter row with five fixes; the kit zip with or without its token.
 
 Earlier releases: [CHANGELOG.md](CHANGELOG.md).
 
@@ -167,8 +163,8 @@ counts, and counted twice.
 ### Works where your site lives
 Your own server's log, or the host's: **Vercel and Netlify log drains**, a **Cloudflare Worker**
 that reports pages served from cache on any plan, CloudFront and Fastly logs, or a small shipper
-from any server. Settings > Connections walks you through each one, with an install kit and a
-**Test connection** button; step by step for Vercel: [docs/VERCEL.md](docs/VERCEL.md). A Next.js
+from any server: **one command** (`curl … | sudo bash`, with or without Docker; it finds the log
+by itself). Settings > Connections walks you through each one, with a **Test** that starts by itself; step by step for Vercel: [docs/VERCEL.md](docs/VERCEL.md). A Next.js
 site adds one line to its log format so clicks inside the site count as pages.
 
 </td>
@@ -373,8 +369,13 @@ your firewall, not instead of it.
   the end ("Connected: 1,240 lines received, the last at 10:42", or what is wrong and the fix).
 - **Skald checks your site** from outside: the web server, any platform in front, the framework,
   the host names and page assets, and suggests the way in. You confirm or change it.
-- **Add a site** in five steps you can leave and resume; an install kit whose `check.sh` says what
-  is wrong in plain words; a private link to share the steps with your developer.
+- **Add a site** in five steps you can leave and resume; one command on the server (or one file),
+  with `skald-ship-check` to say what is wrong in plain words; a private link to share the steps
+  with your developer.
+- **Send set-up to someone:** one zip by mail with every way in, the keys, and a `CLAUDE.md`, so a
+  client gives the folder to Claude Code and says "Set up Skald from CLAUDE.md".
+- **Leads in one file:** PHP, Node or Python, one function to call; a WordPress plugin with no
+  code; or a plain key for Zapier and form tools.
 - **Set up this site** on Overview, and always in Settings › Connections: each open line one plain
   sentence and a Set up button.
 - **Next.js:** one field in the site's log format and every click inside the site counts as a
@@ -487,8 +488,9 @@ person search and the other Settings pages need your own Skald. Every image belo
 
 | | |
 | :---: | :---: |
-| <img src="docs/screenshots/site-check.png" alt="Add a site, step 1: example.com typed in, and What Skald found: server nginx on Ubuntu, no platform in front, built with Next.js, host names example.com and www.example.com, page assets /_next/static/, and the suggestion: a Linux server with Docker" width="440"><br>**Skald checks your site** (your own Skald). And suggests the way in. | <img src="docs/screenshots/add-site-wizard.png" alt="Add a site, step 3 of 5, how visits reach Skald: a Linux server with Docker (recommended), the same without Docker, Cloudflare, Vercel or Netlify, or only the script tag" width="440"><br>**Add a site in five steps.** Close it any time; it continues. |
-| <img src="docs/screenshots/connections-install.png" alt="Send this site's visits to Skald, step 3 of 4, Install: download the install kit (.zip), the commands to unpack it and run sudo bash install.sh, and Share with your developer" width="440"><br>**Install, filled in.** The kit, the commands, a link for your developer. | <img src="docs/screenshots/setup-checklist.png" alt="Set up example.com: six lines ticked and one open, Mail recipient confirmed: 'Nobody gets the daily mail yet', with a Set up button" width="440"><br>**Set up this site.** Each open line has a Set up button. |
+| <img src="docs/screenshots/site-check.png" alt="Add a site, step 1: example.com typed in, and What Skald found: server nginx on Ubuntu, no platform in front, built with Next.js, host names example.com and www.example.com, page assets /_next/static/, and the suggestion: a Linux server with Docker" width="440"><br>**Skald checks your site** (your own Skald). And suggests the way in. | <img src="docs/screenshots/add-site-wizard.png" alt="Set up example.com, step 3 of 5, how visits reach Skald: my own server, nginx or Apache, with or without Docker (recommended), Cloudflare, Vercel or Netlify, or only the script tag" width="440"><br>**Add a site in five steps.** Close it any time; it continues. |
+| <img src="docs/screenshots/connections-install.png" alt="Send this site's visits to Skald, step 2 of 3, Run one command: curl -fsSL https://stats.example.com/traffic-kit/ and a one-time code, piped to sudo bash, with Copy, Download as one file, Email it to your server admin and Make a new command" width="440"><br>**One command** (2.30). With or without Docker; the token is made for you. | <img src="docs/screenshots/setup-checklist.png" alt="Set up example.com: six lines ticked and one open, Mail recipient confirmed: 'Nobody gets the daily mail yet', with a Set up button" width="440"><br>**Set up this site.** Each open line has a Set up button. |
+| <img src="docs/screenshots/lead-setup-file.png" alt="Connect your leads, step 3 of 4: choose PHP, Node or Python, Download skald-lead.php, then require it and call skald_lead with the lead's ID, the action and the email; the secret goes in SKALD_LEAD_SECRET" width="440"><br>**Leads in one file** (2.30). One function to call; WordPress needs no code. | <img src="docs/screenshots/setup-pack.png" alt="Send set-up to someone: up to three email addresses, a note, Include the keys ticked, Send by email and Download (.zip), and the line: give the folder to Claude Code and say Set up Skald from CLAUDE.md" width="440"><br>**Send set-up to someone** (2.30). One zip a person or Claude Code can follow. |
 
 <p align="center">
   <img src="docs/screenshots/links-copy-open.png" alt="Traffic, Pages: pointing at /pricing/ shows a copy button and an open-in-a-new-tab button at the end of the path" width="900"><br>

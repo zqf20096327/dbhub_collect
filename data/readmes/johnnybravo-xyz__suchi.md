@@ -56,7 +56,7 @@ for freelancers and smaller teams.
   to the documents used.
 
 > [!NOTE]
-> Suchi is early (v0.3.0). Back up the data
+> Suchi is early (v0.4.0). Back up the data
 > directory, test a restore before relying on it, and read the
 > [database compatibility policy](docs/release-process.mdx#stable-v1-database-compatibility)
 > before upgrading.
@@ -74,18 +74,20 @@ access.
   QR-label scan splitting, version notes, typed custom fields, named
   exact-document links, saved Views, and folder layouts.
 - Filing systems with permanent codes, direct membership plus document ACLs,
-  and `SYS.AC.documentID` addresses using installation-wide document IDs.
+  and `SYS.AC` category addresses after introduction; a single archive shows
+  category codes. Numeric document IDs remain separate.
 - Browser, watched-folder, IMAP, and mobile intake; takeout exports, supported
   third-party imports, document versions, backups, and restore tooling.
 - Automations, approvals, selective rescans, optional model classification, Ask
   your documents, and suggested dates. Model use is optional and hosted egress
   requires acknowledgement.
-- Groups, object ACLs, OIDC, scoped tokens, Network-only and Public share links,
-  audit events, MCP, and the Android/iOS Suchi Companion.
+- Groups, object ACLs, OIDC, local authenticator/recovery-code 2FA, scoped
+  tokens, Network-only and Public share links, audit events, MCP, and the
+  Android/iOS Suchi Companion.
 
 Reproducible binary-size and startup measurements live under
 [`hack/bench/latest-published/`](hack/bench/latest-published/). See the
-[feature comparison](docs/comparison.mdx) and
+[comparison](docs/comparison.mdx) and
 [architecture](docs/architecture.mdx) for scope and tradeoffs.
 
 [Container images](https://github.com/johnnybravo-xyz/suchi/pkgs/container/suchi) ·
@@ -102,7 +104,7 @@ docker run -d --name suchi --restart unless-stopped \
   -p 127.0.0.1:8000:8000 \
   -e PUBLIC_URL=http://127.0.0.1:8000 \
   -v suchi-data:/data \
-  ghcr.io/johnnybravo-xyz/suchi:v0.3.0
+  ghcr.io/johnnybravo-xyz/suchi:v0.4.0
 docker logs suchi 2>&1 | grep token_minted
 ```
 
@@ -119,15 +121,15 @@ configuration > Filing tree**. This is the only required archive setup step;
 the reminder remains until a preset, imported tree, or explicit Blank choice is
 saved.
 
-This quick start is bound to loopback and pins the v0.3.0 image. A production
+This quick start is bound to loopback and pins the v0.4.0 image. A production
 server, including one reached by the mobile app, must use HTTPS and pin the
 selected release by its published image digest.
 
 ## Images
 
-- `v0.3.0` / `latest`: Alpine. Supports all listed formats and indexes scanned
+- `v0.4.0` / `latest`: Alpine. Supports all listed formats and indexes scanned
   PDFs with Tesseract.
-- `v0.3.0-full` / `latest-full`: Debian. Adds OCRmyPDF so downloaded scanned
+- `v0.4.0-full` / `latest-full`: Debian. Adds OCRmyPDF so downloaded scanned
   PDFs can retain a searchable text layer.
 
 Both images include anydoc, DjVu, HEIC/HEIF, and Outlook MSG support. The full
@@ -136,7 +138,7 @@ types](docs/formats.mdx) for the exact routing and bare-metal dependencies.
 
 ## Development
 
-The workspace requires Go 1.27.2 or newer; `plugin-api` remains compatible
+The workspace requires Go 1.27.3 or newer; `plugin-api` remains compatible
 with Go 1.24.
 SPA and documentation development require Bun.
 

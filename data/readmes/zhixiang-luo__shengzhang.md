@@ -7,7 +7,7 @@
   <img alt="Expo 58" src="https://img.shields.io/badge/Expo-58-292624?logo=expo&logoColor=white" />
   <img alt="React Native 0.88" src="https://img.shields.io/badge/React_Native-0.88-61DAFB?logo=react&logoColor=111111" />
   <img alt="TypeScript 6" src="https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white" />
-  <img alt="Tests 53" src="https://img.shields.io/badge/tests-53_passed-63795E" />
+  <img alt="Tests 58" src="https://img.shields.io/badge/tests-58_passed-63795E" />
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-E89A96" /></a>
 </p>
 
@@ -69,7 +69,7 @@
 | 月度统计、分类下钻、每日明细 | ✅ 已完成 |
 | 本地 SQLite 与删除撤销 | ✅ 已完成 |
 | Android 内测 APK | ✅ 已通过 EAS Build |
-| OTA 增量更新 | ✅ 已接入 EAS Update，需安装 0.1.3+ |
+| OTA 增量更新 | ✅ 已接入 EAS Update，需安装含更新客户端的版本 |
 | 官网首版与移动端下载入口 | ✅ 已完成，等待域名发布 |
 | 匿名产品统计与用户开关 | ✅ 已完成 |
 | 30–50 条真人语音与双端真机矩阵 | 🚧 进行中 |
@@ -87,7 +87,7 @@
 - **持续更新**：JS/TS 修复通过 EAS Update OTA 发布，原生变化再走 APK、TestFlight 或商店版本。
 - **隐私边界明确**：录音仅用于本次识别，服务端不长期保存音频；语音模型不接收历史账单。
 - **隐私优先产品观测**：匿名统计激活、留存、功能渗透、语音时延与失败原因，不含金额、分类、备注、录音和转写正文。
-- **可验证质量**：200 条中文 TTS 语音基线全部通过，当前仓库包含 53 项自动化测试。
+- **可验证质量**：200 条中文 TTS 语音基线全部通过，当前仓库包含 58 项自动化测试。
 
 ### 架构概览
 
@@ -110,7 +110,7 @@ flowchart LR
 | --- | --- |
 | TypeScript 严格检查 | 通过 |
 | ESLint | 通过 |
-| 自动化测试 | 53 / 53 通过 |
+| 自动化测试 | 58 / 58 通过 |
 | Expo Doctor | 20 / 20 通过 |
 | 中文 TTS 语音评测 | 200 / 200 通过 |
 | 松手到结构化完成 | P50 1.68s / P95 2.20s |
@@ -218,7 +218,9 @@ python3 -m http.server 4173
 
 ## 下载与发布
 
-Android 内测版 `0.1.3` 可从[声账官网下载](http://8.152.201.57/#download)，无需 Expo 或 GitHub 账户。该版本首次支持 EAS OTA；已安装 `0.1.2` 的设备需要覆盖安装一次。GitHub 提供 [v0.1.3 Release 与 APK 附件](https://github.com/zhixiang-luo/shengzhang/releases/tag/v0.1.3-preview.1)，版本说明和 SHA-256 见 [App 更新与发布文档](docs/30-app-updates.md)。APK 不直接提交到 Git 仓库，避免仓库体积膨胀并保留版本记录。
+最新 Android 内测版可从[声账官网稳定入口下载](http://8.152.201.57/#download)，无需 Expo 或 GitHub 账户。官网不把版本号写进标题或下载链接，日常纯 JS 更新通过 EAS OTA 推送；只有原生依赖、权限、启动图或 runtime 变化时才要求重新下载安装包。
+
+GitHub Releases 仍保留每个版本的 Tag 和更新说明作为可追溯记录。需要重新安装的原生版本会附 APK；仅 OTA 的更新不需要重复上传 APK。当前原生安装包为 `0.1.4 (14)`，可从 [v0.1.4 Release](https://github.com/zhixiang-luo/shengzhang/releases/tag/v0.1.4-preview.1) 下载，文件大小、SHA-256 和完整构建记录见 [App 更新与发布文档](docs/30-app-updates.md)。APK 不直接提交到 Git 仓库，避免仓库体积膨胀。
 
 当前尚未在 App Store 或国内 Android 应用商店正式上架。
 

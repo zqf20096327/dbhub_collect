@@ -39,7 +39,7 @@ async fn main() -> tdsql::Result<()> {
 
 ```toml
 [dependencies]
-tdsql = "0.7.0"
+tdsql = "0.8.0"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 
@@ -183,7 +183,9 @@ open on the server until you're done with it, and keeps any locks it has taken.
 
 You can drop the stream early. That cancels the query on the server, and the
 connection is ready for the next statement as soon as the server has confirmed.
-Statements after the `SELECT` in the same batch don't run.
+A query still producing rows stops there, along with whatever follows it in the
+batch. A small result was over before the cancel arrived, so the rest of its
+batch ran.
 
 In the blocking client, `query_stream` returns an `Iterator`.
 
@@ -218,11 +220,12 @@ A request still waiting its turn behind another never runs. One that's running
 stops where it is, even if it hasn't sent anything back yet because it's still
 sorting, aggregating or waiting on a lock.
 
-Transaction control (begin, commit, rollback, savepoints) always runs, whatever
-became of its future. Cancelling stops a statement, not the transaction around
-it: work that finished before the cancel stays done, just as it would if the
-statement had failed. Put statements that must stand or fall together in a
-transaction.
+Commits and rollbacks always run, whatever became of their futures. Cancelling
+stops a statement, not the transaction around it: work that finished before the
+cancel stays done, just as it would if the statement had failed. Put statements
+that must stand or fall together in a transaction. The exception is a session
+with `SET XACT_ABORT ON`, where the server treats a cancel like any other
+statement failure and rolls the whole transaction back.
 
 ## Named parameters and stored procedures
 
@@ -244,7 +247,8 @@ let affected = client.execute_command(&cmd).await?;
 ```
 
 Text queries can use named parameters too. They're rewritten into the
-positional form the protocol expects:
+positional form the protocol expects. Names match whatever their case, so
+`@Id` in the SQL finds a parameter bound as `id`:
 
 ```rust,no_run
 # use tdsql::{Client, Command};
@@ -286,6 +290,12 @@ tx.commit().await?;   // or tx.rollback().await?
 # Ok(())
 # }
 ```
+
+Sometimes the server ends a transaction itself: a deadlock, an error with
+`SET XACT_ABORT ON`, or a `ROLLBACK` inside a procedure you called. The handle
+notices. Any further statement on it fails with `Error::TransactionAborted`
+rather than running outside the transaction, `commit()` fails the same way,
+and `rollback()` succeeds, since there is nothing left to undo.
 
 Nothing commits unless you ask it to, so returning early with `?` is safe. Here
 the second insert fails, and the first one is rolled back with it:
@@ -412,10 +422,13 @@ implement it. It isn't dyn-compatible either: write `&mut impl Executor` or
 
 ## DDL and raw batches
 
-Parameterised statements are sent as RPC calls. Some statements, like
-`CREATE PROCEDURE`, `CREATE VIEW` and `CREATE TRIGGER`, have to come first in a
-batch of their own, so they can't be sent that way. `batch` sends SQL exactly as
-you wrote it:
+A statement with parameters is sent through `sp_executesql`, which runs it in a
+scope of its own: a `SET` option it changes is undone when it returns. One with
+no parameters is sent as a plain batch, as SqlClient does, so
+`execute("SET XACT_ABORT ON", &[])` applies to the session. Some statements,
+like `CREATE PROCEDURE`, `CREATE VIEW` and `CREATE TRIGGER`, have to come first
+in a batch of their own, so they can't take parameters at all. `batch` sends SQL
+exactly as you wrote it and returns every row of every result set:
 
 ```rust,no_run
 # use tdsql::Client;
@@ -510,7 +523,7 @@ If your program isn't async, turn on the `blocking` feature:
 
 ```toml
 [dependencies]
-tdsql = { version = "0.7.0", features = ["blocking"] }
+tdsql = { version = "0.8.0", features = ["blocking"] }
 ```
 
 `tdsql::blocking::Client` is the async client without the `async` and `.await`.
@@ -544,9 +557,13 @@ fn main() -> tdsql::Result<()> {
 ```
 
 Each blocking client runs its own small runtime, so don't use one from async
-code. Starting a runtime inside another one panics. `Client::connect` checks for
-this and returns `Error::BlockingInAsync`, so you find out when you connect, not
-on some later call. In async code, use `tdsql::Client`.
+code. Driving a runtime from a thread that is running another one panics.
+`Client::connect` refuses when a Tokio runtime is current on the calling thread
+and returns `Error::BlockingInAsync`; that includes `spawn_blocking` closures,
+where the client would in fact work, so connect on a thread of your own and move
+it in. The check is made at connect only: a client *used* inside async code
+panics as Tokio does, though dropping one there is fine. In async code, use
+`tdsql::Client`.
 
 ## Type mapping
 
@@ -556,7 +573,7 @@ on some later call. In async code, use `tdsql::Client`.
 | `smallint` | `SmallInt` | `i16`, `i32`, `i64` |
 | `int` | `Int` | `i32`, `i64` |
 | `bigint` | `BigInt` | `i64` |
-| `real`, `float` | `Float` | `f64` |
+| `real`, `float` | `Float` | `f64`, `f32` |
 | `decimal`, `numeric`, `money` | `Decimal` | `rust_decimal::Decimal` |
 | `bit` | `Bool` | `bool` |
 | `char`, `varchar`, `nchar`, `nvarchar`, `text`, `xml` | `Text` | `String` |
@@ -568,7 +585,9 @@ on some later call. In async code, use `tdsql::Client`.
 | `datetimeoffset` | `DateTimeOffset` | `chrono::DateTime<FixedOffset>`, `DateTime<Utc>`, `DateTime<Local>` |
 | any `NULL` | `Null` | `Option<T>` |
 
-You can also read any column as a `DataValue` and match on it yourself.
+You can also read any column as a `DataValue` and match on it yourself. The
+enum is non-exhaustive, so give the `match` a `_` arm; a variant can then be
+added without a breaking release.
 
 ### Getting at `chrono`, `uuid` and `rust_decimal`
 
@@ -621,13 +640,62 @@ server sent, and both name the same instant.
 directions. They don't store an offset, so treating one as UTC would be a
 guess. Those columns bind from and read as `NaiveDateTime`, and you handle the
 zone yourself: `.naive_utc()` on the way out, `.and_utc()` on the way back in.
+Bind a `DateTime<Local>` or `DateTime<FixedOffset>` into one of them and the
+server stores its wall-clock time in that zone, then compares the column with
+the parameter as UTC, so `WHERE at >= @P1` can miss the row you just wrote.
 
-### Known limitation: untyped NULLs
+### `datetime` columns
 
-Binding `DataValue::Null` or `None` sends an untyped `NULL`, which goes over the
-wire as a `NULL int`. That's true of `None` for any `Option<T>`, because the `T`
-isn't sent. SQL Server converts a `NULL int` for most targets, but a column that
-needs a specific type may reject it.
+A `NaiveDateTime` parameter is sent as `datetime2(7)`, which holds any value it
+can carry. The old `datetime` type keeps time to 1/300 of a second, so a column
+showing `10:00:00.003` really holds `10:00:00.0033333`, and since database
+compatibility level 130 SQL Server converts the column to `datetime2` exactly
+before comparing. A value read from a `datetime` column and bound straight back
+then fails to match its own row, which turns an optimistic-concurrency `UPDATE
+... WHERE updated_at = @P2` into "0 rows affected". Roughly two thirds of
+`GETDATE()` values are affected.
+
+For a schema built on `datetime`, send such parameters as `datetime` instead:
+
+```rust
+use tdsql::{Config, DateTimeParameterType};
+
+let config = Config::new()
+    .host("localhost")
+    .auth("sa", "YourStrong!Passw0rd")
+    .datetime_parameter_type(DateTimeParameterType::DateTime);
+```
+
+They are then rounded to 1/300 s as the column is, and compare as expected. The
+trade is that a `datetime2` column written through such a connection gets
+1/300 s values too, which is why `datetime2` stays the default.
+
+### NULL parameters
+
+A `NULL` parameter still has a type, and SQL Server checks it against the
+column. `None` binds as a `NULL` of its `T`, so `None::<NaiveDate>` goes as a
+`date` and `None::<String>` as an `nvarchar`. To bind a `NULL` of a type you
+choose, use `DataValue::TypedNull`, such as `DataValue::TypedNull(SqlType::Xml)`.
+
+`DataValue::Null` has no type, so it goes as an `nvarchar`, which SQL Server
+converts to every column type except the binary ones. Bind `None::<Vec<u8>>`
+for those. A `None` of your own `ToSql` type is untyped too, unless you
+implement `ToSql::null_type`.
+
+### Parameter types and query plans
+
+A string parameter is always `nvarchar`. Compared with an indexed `varchar`
+column under one of the `SQL_*` collations, which is SQL Server's default on
+many installations, that makes the server convert the column rather than the
+parameter, and the index is scanned instead of sought. On 300,000 rows that
+was 20 ms a query instead of 0.4 ms. Cast the parameter in the SQL to get the
+seek back: `WHERE code = CAST(@P1 AS varchar(20))`. Windows collations such as
+`Latin1_General_CI_AS` are not affected.
+
+A `Decimal` parameter is declared as `numeric(38, s)` with the value's own
+scale, so each distinct scale compiles its own plan for the same SQL, and the
+server sizes arithmetic on it for 38 digits, which cuts a product's scale to 6
+places. Round to a fixed scale before binding where that matters.
 
 ## Examples
 

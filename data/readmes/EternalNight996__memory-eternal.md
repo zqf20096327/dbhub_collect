@@ -20,7 +20,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-3B82F6" alt="DSH plugin" />
   <img src="https://img.shields.io/npm/v/memory-eternal" alt="npm version" />
-  <img src="https://img.shields.io/badge/release-v0.12.0-FF7A45" alt="v0.12.0" />
+  <img src="https://img.shields.io/badge/release-v0.15.0-FF7A45" alt="v0.15.0" />
   <a href="https://eternalnight996.github.io/memory-eternal/"><img src="https://img.shields.io/badge/Live%20Demo-online-FF7A45" alt="Live demo" /></a>
   <img src="https://img.shields.io/github/stars/EternalNight996/memory-eternal?style=flat" alt="GitHub stars" />
   <img src="https://img.shields.io/github/license/EternalNight996/memory-eternal" alt="license" />
@@ -46,6 +46,15 @@
 
 <p align="center"><sub>▲ 真实运行截图：待审判词 · 知识星图 · 读卡器</sub></p>
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/terminal.png" width="49%" alt="Web 内「终端版」：复制命令，进入完整 TUI 或 dsh-tui 原生 /audit" />
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/tui-audit.png" width="49%" alt="终端原生待审：全选、批量批准/驳回、判词双栏" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/EternalNight996/memory-eternal/main/assets/screen/tui-reader.png" width="72%" alt="终端原生长文读卡器：目录、正文、相关记忆与滚动" />
+</p>
+<p align="center"><sub>▲ v0.14 新增：Web 内终端引导 · 终端原生审核（全选/批驳）· 长文读卡器</sub></p>
+
 ---
 
 ## 🧩 支持平台
@@ -53,14 +62,89 @@
 | 平台 / 宿主 | Memory Atlas UI | 待审 / 批驳 | 知识星图 | 入口与状态 |
 |---|---|---|---|---|
 | **DSH 桌面版 / Web** | 完整内嵌 | ✅ | ✅ | 左栏「记忆」，已支持 |
+| **任意终端（TUI）** | 终端原生 | ✅ 全选 / 批量批驳 | 连接簇 / 邻接表 | [`dsh-memory tui`](#-终端版tui)，免绝对路径 |
 | **Orca** | 侧栏启动器 | Web 内完成 | Web 内完成 | 右栏「记忆」，[本版新增](orca-plugin/README.md) |
-| **dsh-tui** | 浏览器打开 | Web 内完成 | Web 内完成 | `/memory`，[本版新增](dsh-tui-plugin/README.md) |
+| **dsh-tui** | 原生 `/audit` + 完整 TUI | 原生场景 | 原生场景 | [本版新增](dsh-tui-plugin/README.md) |
 | **Codex** | 浏览器打开 | Web 内完成 | Web 内完成 | [`memory-open` skill](skills/memory-open/SKILL.md)，本版新增 |
-| **Claude Code** | 浏览器打开 / Pane | Web 内完成 | Web 内完成 | `/memory-eternal:memory-open`，本版新增 |
+| **Claude Code** | 浏览器打开 / Pane | Web 内完成
+
+[...截断...]
+
+ | Web 内完成 | `/memory-eternal:memory-open`，本版新增 |
 | **Cursor** | Webview 内嵌 | ✅ | ✅ | [扩展 Webview](cursor-extension/README.md)，本版新增 |
 | **纯 Web** | 主实现 | ✅ | ✅ | `http://127.0.0.1:7999/` |
 
 > 原则：**一套 Web UI 作为唯一真源**；能内嵌的宿主用 Webview，不能内嵌的宿主只做轻量启动器，不复制第二套 UI。所有入口打开同一版本，避免 DSH / Web 版本漂移。
+
+---
+
+## 🖥️ 终端版（TUI）
+
+Web 不是唯一入口。终端版是同一套记忆库的**原生 TUI**，适合快速批卡、全选、长文阅读和低干扰工作流。
+
+### 任意用户，一条命令
+
+不需要克隆仓库、不需要 `cd`、不需要填写本机绝对路径：
+
+```bash
+npx -y -p memory-eternal dsh-memory tui
+```
+
+已经安装 `memory-eternal` 的机器：
+
+```bash
+dsh-memory tui          # 默认实时：记忆库/待审/星图/状态/回收站
+dsh-memory tui --write  # 写入：允许真实批准/驳回
+dsh-memory tui --demo   # 示例数据（无 API 时也可看效果）
+```
+
+`dsh-memory` 不在 PATH 时，直接用上面的 `npx` 命令；它会临时下载并运行当前 npm 版本。
+
+> `tui` 子命令从 **0.14.1** 开始提供。旧版 `dsh-memory` 会显示帮助；升级：`npm i -g --force memory-eternal@0.15.0`。
+
+### 终端版包含
+
+| 页面 | 能力 |
+|---|---|
+| 记忆库 | 搜索、类型筛选、今日回看、读卡 |
+| 待审 | 全选 / 反选、批量批准、批量驳回、判词 |
+| 知识星图 | 连接簇、邻接表、相关卡片 |
+| 运行状态 | 知识库、备份、版本、沉淀日志 |
+| 回收站 | 恢复、彻底删除 |
+| 设置 | 自动沉淀、失败提醒、审核、回收站保留、主题 |
+| 读卡器 | 长文换行、目录、相关记忆、滚动 |
+
+### 终端键位
+
+| 键 | 作用 |
+|---|---|
+| `1–6` | 切换主页面 |
+| `Tab` | 循环页面 |
+| `↑↓` / `j k` | 移动 |
+| `←→` / `t` | 切换类型 |
+| `Space` | 多选 / 切换设置 |
+| `s` / `Ctrl+A` | 全选 / 反选 |
+| `a` | 批准当前或批量 |
+| `r` | 驳回当前或批量；回收站里是恢复 |
+| `d` | 回收站彻底删除 |
+| `Enter` | 读卡 / 切换设置 |
+| `L` | 直接打开长文读卡器 |
+| `j k` / `PgUp` `PgDn` / `g G` | 读卡器滚动 / 翻页 / 首尾 |
+| `/` | 搜索 |
+| `Esc` | 返回 / 清空 |
+| `?` | 帮助 |
+| `q` | 退出 |
+
+### 为什么 Web 不直接嵌 TUI
+
+终端 TUI 依赖 alternate screen、原始键盘事件和字符网格，无法用 iframe 忠实嵌入。  
+所以 Web 的「终端版」页面提供可复制命令和预览，真正运行时进入终端；dsh-tui 里则使用原生 `/audit` 场景。
+
+### 限制
+
+- 终端不渲染图片 / 二维码 / Canvas 星图；星图使用连接簇和邻接表。
+- 长文、颜色和边框依赖终端字体；Windows 建议 Windows Terminal / VS Code 集成终端。
+- 默认只读；真实批驳必须显式加 `--write`；示例数据用 `--demo`。
 
 ---
 
@@ -74,11 +158,7 @@
 
 - **看得见**：知识卡 / 图谱 / 健康概览 / 沉淀日志，四层可视化；
 - **控得住**：审核模式（全部人工 / 仅高风险）、去重与矛盾扫描、批量合并、每日备份与一键恢复；
-- **带得走**：知识库是本地 Markdown + SQLite，可 git 管理、可导出，不锁在插
-
-[...截断...]
-
-件里。
+- **带得走**：知识库是本地 Markdown + SQLite，可 git 管理、可导出，不锁在插件里。
 
 ---
 
@@ -101,7 +181,7 @@ cd ~/.dsh/profiles/web && pnpm add memory-eternal@latest
 
 # 刚发新版时 @latest 可能被 pnpm 的最小发布年龄门槛/元数据缓存挡住（静默停在旧版）：
 # 直接指定版本号最快，pnpm 会自动把它加进 workspace 的 minimumReleaseAgeExclude
-cd ~/.dsh/profiles/web && pnpm add memory-eternal@0.12.0
+cd ~/.dsh/profiles/web && pnpm add memory-eternal@0.15.0
 
 # 验版本（应等于上面装的号），然后重启对应宿主生效
 node -e "console.log(require('memory-eternal/package.json').version)"
@@ -127,52 +207,4 @@ node -e "console.log(require('memory-eternal/package.json').version)"
 
 **改配置**：记忆库左栏「记忆配置」（或 DSH 设置 → 记忆）→ DSH 记忆配置 / 成本控制 / 自动审核配置 / 服务自管理，点「保存配置」即写入。`autoWebMode`/`watchdogAutoSpawn` 的改动需重启 DSH 生效；注意**已常驻的 watchdog 不会被配置改动自动停掉**，要停止或换新版请执行 `dsh-memory stop` / `dsh-memory restart`（见「服务自管理」）。
 
-### 🟨 Claude Code
-
-```bash
-npm i -g memory-eternal     # 装 CLI + MCP（写 ~/.claude.json mcpServers.memory）
-dsh-memory connect claude       # 写 ~/.claude/settings.json 的 SessionEnd hook → 会话结束自动沉淀
-```
-
-装完即用：会话里说「recall 一下数据库选型」→ 自动检索记忆；会话结束 → 自动沉淀进统一 `~/.dsh/memory-vault`（新卡 `pending` 待审核）。
-
-### 🟧 Codex CLI / Cursor
-
-```bash
-npm i -g memory-eternal     # 装完自动写 Codex config.toml / Cursor mcp.json 的 mcpServers.memory
-dsh-memory connect codex        # 写用户级 ~/.codex/hooks.json 的 Stop hook → 会话结束自动沉淀（含 Codex Desktop）
-dsh-memory connect cursor       # 写 ~/.cursor/hooks.json 的 stop/sessionEnd hook → 自动沉淀
-```
-
-重启工具 → MCP 已在列表，会话里直接：`用 memory_recall 查一下项目历史决策`；会话结束自动沉淀进统一 `~/.dsh/memory-vault`（新卡 `pending` 待审核）。
-
-> **三种 agent 同一套库**：全部写入 `~/.dsh/memory-vault`，每卡 `submittedBy` 区分作者（DeepSeek Harness / claude-code / codex / cursor），主库只显已审核、审核中心管新卡。
-
-> **原生插件（可选，平台 Marketplace）**：仓库含 `.claude-plugin` / `.codex-plugin` / `.cursor-plugin` 清单，可 `claude /plugin marketplace add EternalNight996/memory-eternal` + `/plugin install`、`codex plugin marketplace add EternalNight996/memory-eternal` + `codex plugin add`、Cursor Settings→Plugins。`connect` 走用户级 hooks.json（更稳，不依赖 Marketplace 审核；Codex Desktop 也走这条）。
-
-> **只保留本插件（卸载其它记忆插件，如 agentmemory）**：`dsh-memory` 只写自己的键（`mcpServers.memory` / 含 `capture.mjs` 的 hooks），不依赖、也不冲突任何其它记忆插件。卸载其它插件需在其自身配置层删除对应条目（如 Codex 的 `[marketplaces.*]` 与 `hooks.state.*`、其 `hooks.json` 事件、`~/.agentmemory` 数据目录）。
-
-
-
-### 🟩 浏览器（不依赖任何 Agent）
-
-```bash
-dsh-memory open    # 起 web + 开浏览器（默认 http://127.0.0.1:7999）
-```
-
-统计 / 搜索 / 知识卡（增删改合并导入导出）/ 知识图谱，全在此。与 DSH 内嵌页同一份 UI，数据同步。
-
-> **zcode（智谱）**：暂无原生 MCP，经社区 [zcode-open-bridge](https://github.com/tizerluo/zcode-open-bridge) 转 MCP 或用 CLI。
-
----
-
-## 📖 命令速查
-
-```bash
-dsh-memory recall "数据库选型"       # 检索
-dsh-memory capture "重要结论..."     # 手动沉淀（- 读 stdin）
-dsh-memory sweep ~/.claude/projects  # 挖掘已有会话记录
-dsh-memory setup [--dry-run]         # 重跑/预览自动挂载（幂等）
-dsh-memory connect <claude|codex|cursor>  # 写会话结束自动沉淀 hook（用户级 hooks.json，含 Codex Desktop）
-dsh-memory mcp                       # MCP stdio（挂任意 MCP 客户端）
-dsh-memory serve [--port 7999]       
+#

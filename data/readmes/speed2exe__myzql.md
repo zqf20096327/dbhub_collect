@@ -12,23 +12,33 @@
 | 0.14.0      | 0.14.0                    |
 | 0.15.1      | 0.15.1                    |
 | 0.16.1      | 0.16.0                    |
-| main        | v0.17.0-dev.1978+c961124d9|
+| 0.17.0      | 0.17.0                    |
+| main        | 0.17.0                    |
 
 ## Features
 - Native Zig code, no external dependencies
 - TCP and Unix socket connections
+- TLS for TCP connections (server certificate verification, custom CA)
 - Prepared Statement
 - Structs from query result
 - Data insertion
 - MySQL DateTime and Time support
 - Thread-safe connection pool
+- Custom log handler per config, every message bound to the config that emitted it
 
 ## Requirements
 - MySQL/MariaDB 5.7.5 and up
-
-## TODOs
-- Config from URL
-- TLS support
+- For TLS connections only: a Zig standard library whose TLS client handles the
+  `certificate_request` message. MySQL and MariaDB always ask for a client
+  certificate (with an empty list of acceptable CA names), which the standard
+  library of Zig 0.17.0 and the current master answer with
+  `error.TlsUnexpectedMessage`. Until a fix is released upstream, apply
+  [`contrib/zig-std-tls-client-certificate-request.patch`](contrib/zig-std-tls-client-certificate-request.patch)
+  to the source tree of your Zig installation and rebuild:
+```bash
+patch -p1 -d /path/to/zig --input path/to/myzql/contrib/zig-std-tls-client-certificate-request.patch
+```
+- Connections without TLS, and every other feature, work with an unpatched Zig.
 
 ## Add as dependency to your Zig project
 ### Fetch dependency
@@ -89,7 +99,7 @@ pub fn main() !void {
     );
     defer client.deinit(allocator, io);
 
-    try client.ping();
+    try client.ping(io);
 }
 ```
 
@@ -111,9 +121,122 @@ pub fn main() !void {
     );
     defer client.deinit(allocator, io);
 
-    try client.ping();
+    try client.ping(io);
 }
 ```
+
+### TLS Connection
+- TLS encrypts TCP connections. Enable it with `ssl` on the config, or with the
+`ssl=true` (`tls=true`) URL parameter, see [Connection from URL](#connection-from-url).
+- The standard library of Zig 0.17.0 and of the current master cannot answer
+the `certificate_request` message that MySQL and MariaDB send during the TLS
+handshake, so TLS needs the patch of [Requirements](#requirements).
+```zig
+pub fn main() !void {
+    var threaded: std.Io.Threaded = .init(std.heap.page_allocator, .{});
+    defer threaded.deinit();
+    const io: std.Io = threaded.io();
+    const allocator = std.heap.page_allocator;
+
+    var client = try Conn.init(
+        allocator,
+        io,
+        &.{
+            .username = "some-user",
+            .password = "password123",
+            .database = "customers",
+            .address = .{ .host = .{ .name = try std.Io.net.HostName.init("db.example.com"), .port = 3306 } },
+
+            .ssl = true,                          // default: false
+            .ssl_verify = true,                   // default: true
+            .ssl_ca = "/etc/ssl/certs/db-ca.pem", // default: null (CA certificates of the system)
+        },
+    );
+    defer client.deinit(allocator, io);
+
+    try client.ping(io);
+}
+```
+- The same connection as a URL:
+```zig
+var url_config = try Config.fromUrl(allocator, "mysql://some-user:password123@db.example.com:3306/customers?ssl=true&sslCa=%2Fetc%2Fssl%2Fcerts%2Fdb-ca.pem");
+```
+- A connection is either encrypted from the start or not encrypted at all:
+`ssl=true` never falls back to cleartext, a server without TLS support fails the
+connection with `error.ServerDoesNotSupportTls`.
+- With `ssl_verify` enabled (the default) the certificate must be signed by a
+trusted CA and be issued for the host name or IP address of the connection
+(the same name is sent as SNI). `ssl_ca` replaces the CA certificates of the
+system with the certificates of a PEM file, which is what self-signed servers
+need.
+- `ssl_verify=false` still encrypts the traffic, but the server is not
+authenticated, which makes the connection vulnerable to man-in-the-middle
+attacks. It is meant for servers whose certificate cannot be fixed, not for
+production.
+- Unix domain sockets are already a local channel, so `ssl` is ignored for them
+(a warning is logged) and the connection stays unencrypted.
+- Accounts with `REQUIRE SSL` work, and authentication works with every
+supported auth plugin: over a secure channel `caching_sha2_password` and
+`sha256_password` send the password instead of requesting the RSA public key of
+the server, and `mysql_native_password` works unchanged.
+- Closing a connection sends the TLS `close_notify` alert before the socket is
+closed.
+- Connections of a pool are established and reused like plain ones; the pool
+copies `ssl_ca` into memory owned by the pool, so it does not need to outlive
+`Pool.init`.
+
+### Connection from URL
+- `Config.fromUrl` parses a MySQL connection URL and returns a `UrlConfig`.
+- `UrlConfig` owns the decoded strings that the `Config` refers to, so it must be kept alive for the whole lifetime of the connection.
+- `Pool.init` copies the config into pool-owned memory, so a pool created from a `UrlConfig` no longer depends on it.
+```zig
+const myzql = @import("myzql");
+const Config = myzql.config.Config;
+const Conn = myzql.conn.Conn;
+
+pub fn main() !void {
+    var threaded: std.Io.Threaded = .init(std.heap.page_allocator, .{});
+    defer threaded.deinit();
+    const io: std.Io = threaded.io();
+    const allocator = std.heap.page_allocator;
+
+    // mysql://[user[:password]@][host[:port]][/database][?parameter=value&...]
+    var url_config = try Config.fromUrl(allocator, "mysql://some-user:password123@localhost:3306/customers?charset=utf8mb4");
+    defer url_config.deinit(allocator);
+
+    var client = try Conn.init(allocator, io, &url_config.value);
+    defer client.deinit(allocator, io);
+
+    try client.ping(io);
+}
+```
+- `mysql://` and `mariadb://` are accepted.
+- Every component may be percent-encoded, e.g. `mysql://us%40r:p%40ss@localhost/db`.
+- Host names such as `localhost` are resolved when the connection is established,
+while IP addresses (including bracketed IPv6 literals like `[::1]`) are used directly.
+- Leave the host empty and add a `socket` parameter to connect over a unix domain socket:
+```zig
+var url_config = try Config.fromUrl(allocator, "mysql://root:password123@/customers?socket=/var/run/mysqld/mysqld.sock");
+```
+- Supported parameters (keys are case-insensitive):
+
+| Parameter | Config field | Value |
+|-----------|--------------|-------|
+| `socket`, `unix_socket` | `address` | unix domain socket path |
+| `charset` | `collation` | character set (e.g. `utf8mb4`) or collation (e.g. `utf8mb4_bin`) name |
+| `clientFoundRows`, `client_found_rows` | `client_found_rows` | `true`, `false`, `1` or `0` |
+| `multiStatements`, `multi_statements` | `multi_statements` | `true`, `false`, `1` or `0` |
+| `ssl`, `tls` | `ssl` | `true`, `false`, `1` or `0` |
+| `sslVerify`, `ssl_verify` | `ssl_verify` | `true`, `false`, `1` or `0` |
+| `sslCa`, `ssl_ca` | `ssl_ca` | path to a PEM file with CA certificates |
+
+- A parameter with an empty value keeps the default, so `?charset=` placeholders can be left in URL templates.
+- Unknown parameters and invalid values are rejected (`error.UnknownUrlParameter`,
+`error.InvalidUrlParameterValue`, `error.UnknownCharset`) instead of being silently ignored.
+- TLS is enabled with `ssl=true` (or `tls=true`), e.g.
+`mysql://user:password123@db.example.com/customers?ssl=true`. Verification,
+`sslCa` and the other parameters are described in
+[TLS Connection](#tls-connection).
 
 ## Querying
 ```zig
@@ -457,6 +580,103 @@ pub fn main() !void {
 }
 ```
 
+## Logging
+- The logger is a field of `Config`, so logging is configured per config rather
+  than per connection: every message the library emits on behalf of a connection
+  is handed to the logger of the config that connection was created with,
+  together with that config.
+- If you do not set a logger, `myzql.logger.default_logger` is used, which writes
+  every message with `std.log`, so nothing changes if you do not opt in.
+- Set `logger` to `null` (`myzql.logger.silent`) to turn logging off: nothing is
+  emitted for connections created from that config, and messages are not even
+  formatted.
+- Set `logger` to route the messages of a config somewhere else. The handler
+  receives the config that emitted the message, so messages of configs sharing
+  one sink can still be told apart.
+```zig
+const std = @import("std");
+const myzql = @import("myzql");
+const Conn = myzql.conn.Conn;
+const Config = myzql.config.Config;
+
+const LogSink = struct {
+    messages: std.atomic.Value(usize) = .init(0),
+
+    fn logFn(
+        context: ?*anyopaque,
+        config: ?*const Config,
+        level: std.log.Level,
+        message: []const u8,
+    ) void {
+        const sink: *LogSink = @ptrCast(@alignCast(context.?));
+        _ = sink.messages.fetchAdd(1, .monotonic);
+
+        // `config` is the config the message was emitted for. Its fields (e.g.
+        // the database) tell the clients apart, so one sink serves many of them.
+        // It is null only for a message that has no config behind it, e.g. one
+        // emitted by a value that was built by hand.
+        const database = if (config) |c| c.database else "";
+
+        switch (level) {
+            .err => std.log.scoped(.myzql).err("[{s}] {s}", .{ database, message }),
+            .warn => std.log.scoped(.myzql).warn("[{s}] {s}", .{ database, message }),
+            .info => std.log.scoped(.myzql).info("[{s}] {s}", .{ database, message }),
+            .debug => std.log.scoped(.myzql).debug("[{s}] {s}", .{ database, message }),
+        }
+    }
+};
+
+pub fn main() !void {
+    var threaded: std.Io.Threaded = .init(std.heap.page_allocator, .{});
+    defer threaded.deinit();
+    const io: std.Io = threaded.io();
+    const allocator = std.heap.page_allocator;
+
+    var sink: LogSink = .{};
+
+    var config: Config = .{
+        .database = "customers",
+        .password = "password123",
+        .logger = .{ .context = &sink, .logFn = LogSink.logFn },
+    };
+
+    // messages of this connection go to `sink`
+    var client = try Conn.init(allocator, io, &config);
+    defer client.deinit(allocator, io);
+
+    // a copy of the config with logging turned off: connections created from it
+    // stay quiet
+    var quiet_config = config;
+    quiet_config.logger = myzql.logger.silent;
+    var quiet_client = try Conn.init(allocator, io, &quiet_config);
+    defer quiet_client.deinit(allocator, io);
+}
+```
+- The handler type is `myzql.logger.Logger`:
+  - `logFn: fn (context: ?*anyopaque, config: ?*const Config, level: std.log.Level, message: []const u8) void`.
+  - `context` is passed back unchanged, which is how one sink serves many configs.
+  - `config` is the config the message belongs to, so its fields identify the
+    client that emitted it. It is `null` only when a message has no config behind
+    it, e.g. one emitted by a value that was built by hand.
+  - `logFn` defaults to `myzql.logger.defaultLogFn`, so `logger = .{}` (a
+    `Logger` with only a `context`, or with no fields at all) still writes with
+    `std.log`. Leaving the field alone already gives you
+    `myzql.logger.default_logger`, i.e. `Config{}.logger.?.logFn == myzql.logger.defaultLogFn`.
+- `null` is not "unset", it is the way to disable logging; leaving the field out
+  is "unset" and keeps the default logger.
+- `message` is already formatted and has no trailing newline.
+- Messages are formatted in a fixed stack buffer: anything longer than
+  `myzql.logger.max_message_len` (1024 bytes) is truncated, never dropped.
+- The handler is called synchronously on the thread that emitted the message,
+  so it must be thread-safe when connections are shared (see
+  [Connection Pool](#connection-pool)).
+- The config must outlive the connections created from it, since a connection
+  logs through the config it was created with.
+- Connections created by a `Pool` log through the pool's own copy of the config,
+  so `config` is the copy owned by the pool, not the one passed to `Pool.init`.
+- Only the messages of this library are routed, `std.log` calls of your own code
+  are untouched; the default handler (`std.log`) keeps the previous behavior.
+
 ## Unit Tests
 - `zig build unit_test`
 
@@ -491,6 +711,31 @@ zig build integration_test -Dunix-socket-path=/tmp/mysql/mysqld.sock -Dtest-filt
 ```bash
 zig build integration_test -Dskip-stress=true --summary all
 ```
+- Run the TLS tests. The script needs `docker` and `openssl`: it generates a CA
+  and the server certificates into a temporary directory, builds the image of
+  `integration_tests/tls/Dockerfile` and starts three servers (MySQL with TLS,
+  MySQL with a certificate for another host name and MariaDB without TLS):
+```bash
+./integration_tests/tls/docker-test.sh --summary all
+```
+The ports of the servers can be changed with `MYZQL_TLS_PORT` (default `3306`),
+`MYZQL_WRONG_HOST_PORT` (default `3308`) and `MYZQL_NOTLS_PORT` (default
+`3307`). With an unpatched Zig the TLS connections fail with
+`error.TlsUnexpectedMessage`, see [Requirements](#requirements).
+- To run the TLS tests against servers that are already running:
+```bash
+zig build integration_test -Dskip-stress=true \
+    -Dtls-ca-path=/path/to/ca.pem \
+    -Dtls-wrong-host-port=3308 \
+    -Dnotls-port=3307 \
+    -Dtest-filter="tls - " --summary all
+```
+`-Dtls-ca-path` is the CA that signed the certificate of the server on `3306`,
+`-Dtls-wrong-host-port` is a TLS server whose certificate is not valid for
+`127.0.0.1` and `-Dnotls-port` is a server without TLS support. Without
+`-Dtls-ca-path` the TLS tests are skipped, so the servers are only needed for
+the two commands above. The test of the unix socket behaviour additionally
+needs `-Dunix-socket-path`.
 
 ## Philosophy
 ### Correctness

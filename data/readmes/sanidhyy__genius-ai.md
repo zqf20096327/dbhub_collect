@@ -263,11 +263,11 @@ Useful resources and dependencies that are used in Genius.
 - Thanks to CodeWithAntonio: https://codewithantonio.com/
 <!--- DEPENDENCIES_START --->
 - [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.11
-- [@hookform/resolvers](https://www.npmjs.com/package/@hookform/resolvers): ^5.9.1
+- [@hookform/resolvers](https://www.npmjs.com/package/@hookform/resolvers): ^6.0.0
 - [@prisma/adapter-mariadb](https://www.npmjs.com/package/@prisma/adapter-mariadb): ^7.10.0
-- [@prisma/client](https://www.npmjs.com/package/@prisma/client): ^7.10.0
+- [@prisma/client](https://www.npmjs.com/package/@prisma/client): ^7.10.1
 - [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.3.1
-- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.2.0
+- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.3.1
 - [@radix-ui/react-label](https://www.npmjs.com/package/@radix-ui/react-label): ^2.1.8
 - [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.1.8
 - [@radix-ui/react-select](https://www.npmjs.com/package/@radix-ui/react-select): ^2.3.8
@@ -281,9 +281,9 @@ Useful resources and dependencies that are used in Genius.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [crisp-sdk-web](https://www.npmjs.com/package/crisp-sdk-web): ^1.2.1
-- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.4
+- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.8
 - [eslint](https://www.npmjs.com/package/eslint): 9.39.5
-- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.3.7
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.4.2
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.47.0
 - [next](https://www.npmjs.com/package/next): 16.4.0
 - [openai](https://www.npmjs.com/package/openai): ^7.8.0

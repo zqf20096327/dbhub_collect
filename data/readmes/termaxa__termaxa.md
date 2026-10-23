@@ -276,7 +276,7 @@ Every line is a fact with a source in the audit log. The report reads the local 
 |---|---|---|---|---|
 | **Claude Code** | `termaxa init --claude-code` → `.claude/settings.json` (`PreToolUse` on `Bash` and the write tools) | an ask prompts inside the agent; a deny carries the reason and the preview | 2.1.283 (the recording above) | every Bash call arrives wrapped in a preamble, which the gate reads as scaffolding |
 | **Codex CLI** | `termaxa init --codex` → `.codex/hooks.json` (`Bash` and `apply_patch`) | **deny only**: Codex rejects an explicit allow and has no ask, so an ask is a refusal with its reason; `apply_patch` is judged as the files it writes | 0.155.1 (Sep 19, 2026) | the agent reads the refusal and decides; nothing prompts you |
-| **Cursor** | `termaxa init --cursor` → `.cursor/hooks.json` (shell and file tools; `Delete` is a delete) | an ask shows "Hook requested approval" in Allowlist and Run Everything; a deny is blocked everywhere | 3.21.16 (Oct 4, 2026) | **in Auto-review mode, Cursor's reviewer overrides a hook's ask and runs the command.** Confirmed by Cursor's support, Oct 6, 2026, and flagged to their team. Use Allowlist or Run Everything with Termaxa; `doctor` says so |
+| **Cursor** | `termaxa init --cursor` → `.cursor/hooks.json` (shell and file tools; `Delete` is a delete) | an ask shows "Hook requested approval" in Allowlist and Run Everything; a deny is blocked everywhere | 3.21.16 (Oct 4, 2026) | **in Auto-review mode, Cursor's reviewer overrides a hook's ask and runs the command.** Confirmed by Cursor's support, Oct 5, 2026, and flagged to their team. Use Allowlist or Run Everything with Termaxa; `doctor` says so |
 | **Copilot CLI** | `termaxa init --copilot` → `.github/hooks/hooks.json` | an ask prompts even under Allow All; a deny is blocked | 1.0.83 and 1.0.91 (Oct 4, 2026) | Copilot treats a hook's *allow* as an approval and skips its own prompt. In enforce mode that is the gate approving; in observe mode the gate stays silent, so Copilot's prompts are unchanged (v0.20.1 fixed the version that didn't) |
 | **Herdr** | `herdr plugin install termaxa/termaxa` | a pane starts the agent under the gate; the sidebar shows a refusal; the record opens beside it | see [`herdr-plugin/`](herdr-plugin/) | the plugin wires the harness it starts |
 | **Anything else** | `termaxa run -- <cmd>`, or `termaxa wrap -- <agent>` (Unix) | `run` gates one command; `wrap` shims the shells an agent resolves by name | Claude Code under `wrap`, Linux, with and without zsh | a harness that names `/bin/sh` by absolute path stays outside `wrap`; hooks are the way in |
@@ -414,11 +414,11 @@ Termaxa is pre-1.0. It's real and tested, and it is not magic.
 - **The format may still change.** Pin a release.
 - **Windows PowerShell 5.1 mangles redirected Unicode.** `termaxa report > out.txt` writes UTF-16 and garbles the box-drawing glyphs. Use PowerShell 7, or `termaxa report --md | Out-File -Encoding utf8 report.md`.
 
-Every bug found in real use, with how it was found and where it was fixed, is in [docs/found-in-the-wild.md](docs/found-in-the-wild.md): 34 so far. The threat model and the published advisories are in [SECURITY.md](SECURITY.md).
+Every bug found in real use, with how it was found and where it was fixed, is in [docs/found-in-the-wild.md](docs/found-in-the-wild.md): 48 so far. The threat model and the published advisories are in [SECURITY.md](SECURITY.md).
 
 ## Contributing
 
-Rust 2021, ~18,000 lines of production code and ~18,400 of tests, 583 tests on Linux, CI on Linux, macOS and Windows. `cargo fmt`, `cargo clippy -- -D warnings` and `cargo test` are the gate, and the gate's rules apply to the gate. Measurements beat opinions here: a change that alters a verdict comes with the fixture that shows it.
+Rust 2021, ~18,400 lines of production code and ~18,800 of tests, 589 tests on Linux, CI on Linux, macOS and Windows. `cargo fmt`, `cargo clippy -- -D warnings` and `cargo test` are the gate, and the gate's rules apply to the gate. Measurements beat opinions here: a change that alters a verdict comes with the fixture that shows it.
 
 ## Security
 

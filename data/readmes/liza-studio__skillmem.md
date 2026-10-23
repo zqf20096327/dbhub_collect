@@ -2,7 +2,7 @@
 
 <!-- mcp-name: io.github.liza-studio/skillmem -->
 
-[![CI](https://github.com/liza-studio/skillmem/actions/workflows/ci.yml/badge.svg)](https://github.com/liza-studio/skillmem/actions/workflows/ci.yml)
+[![CI](https://github.com/liza-studio/skillmem/actions/workflows/ci.yml/badge.svg)](https://github.com/liza-studio/skillmem/actions/workflows/ci.yml) [![Glama score](https://glama.ai/mcp/servers/liza-studio/skillmem/badge)](https://glama.ai/mcp/servers/liza-studio/skillmem) [![Listed on mcp.so](https://img.shields.io/badge/mcp.so-listed-3D5AE0)](https://mcp.so/servers/skillmem)
 
 **Self-improving skills for Claude Code and Codex — your agents learn, recall, reinforce, and forget.**
 
@@ -72,6 +72,14 @@ a hosted tier. skillmem is narrower on purpose and different on four axes:
 Retrieval quality is measured, not asserted: **hit@5 0.871 / MRR 0.622** on the full LongMemEval
 oracle set, hybrid retrieval, k=5, CPU only, reproducible from this repo — see
 [Benchmarks](#benchmarks) for the per-type table and the reporting rules we hold ourselves to.
+
+Does a new session actually remember the last one? Measured on a real database, agent-level
+(see [Benchmarks](#does-the-agent-remember)):
+
+| | no memory | skillmem |
+|---|---|---|
+| A fact told in session 1, asked in a fresh session 2 (5 scenarios × 2 runs) | **0 / 10** | **10 / 10** |
+| Questions about a real project, file access blocked (15 × 2 runs) | **0 / 30** | **28 / 30** |
 
 ## Quickstart
 
@@ -261,9 +269,17 @@ The frame makes the boundary legible; it is not a guarantee that a model ignores
 sitting inside data. That guarantee comes from the reader having no tools — which is why the
 summariser has none.
 
+**Approve in chat.** When a session saves a new rule, the Stop hook `pending-rules` shows it to you
+in full at the end of the reply (read from the database, not from the agent's text). Reply with just
+`одобряю` (or `approve`) and that exact text becomes your rule; any other reply leaves it unapproved.
+Rules too long to show there are left for `skillmem trust`.
+
 **Who can approve.** `skillmem trust <slug>` (and `--untrust`) refuses to run without a terminal,
-so an agent calling it from Bash gets an error, not an approval. So do the other owner-only
-commands: `rm`, `skills-archive` (and `--restore`), `skills-restore`, `skills rm`, `import-vault`
+so an agent calling it from Bash gets an error, not an approval. To clear the backlog in one go,
+run `skillmem review`: it shows every unapproved `user`/`feedback` memory in full (`--types` for
+other kinds) and asks y / n / q for each. The session briefing counts them and asks the agent to
+point you here. The other owner-only commands refuse without a terminal
+the same way: `review`, `rm`, `skills-archive` (and `--restore`), `skills-restore`, `skills rm`, `import-vault`
 and `uninstall --purge-db`. The MCP and HTTP servers never count as you, even when they run in
 your terminal. A TTY check is accident protection, not a wall — `script -q /dev/null skillmem trust x` forges one — so
 `init --claude-code` also adds deny rules for those commands to `permissions.deny` in
@@ -334,6 +350,25 @@ Retrieval quality on [LongMemEval](https://github.com/xiaowu0162/LongMemEval) (W
 | temporal-reasoning | 132 | 0.780 | 0.579 |
 
 Median 0.76 s per query on a laptop CPU, no LLM calls, no network. The pipeline is deterministic: repeated runs produce identical numbers. Reproduce with `python bench/longmemeval.py --sample 0 -k 5` (see [bench/README.md](bench/README.md) for the oracle file and reporting rules — we don't publish bare percentages without stating the retrieval mode and embedding model, and we encourage other tools to do the same).
+
+### Does the agent remember?
+
+LongMemEval measures retrieval. This measures answers: `claude -p` with clean settings (no
+`CLAUDE.md`, Claude Code's own auto-memory off), the same model and prompt in both arms, only
+skillmem's hooks and MCP server toggled.
+
+| Test | no memory | skillmem |
+|---|---|---|
+| **Cross-session recall.** Session 1 is told a decision ("release moves to Nov 14, codename Falcon, owner Timur"), session 2 is a new process asked about it. 5 scenarios × 2 runs | 0 / 10 | **10 / 10** |
+| **Real-project questions.** 15 questions whose answers are in a ~9,300-entry working database, agent forbidden to read files. × 2 runs | 0 / 30 | **28 / 30** |
+| Retrieval on the same database: correct entry in the top 3, 30 queries (0.12 → 0.13) | — | 18 → **26 / 30** |
+
+The 0.13 change behind the last row — session recaps ranked at half weight so they stop
+outranking short curated rules — left LongMemEval at hit@5 **0.889** (the table above is the
+0.12 run). Caveats we'd rather state than have pointed out: the samples are small, the database
+and questions are the author's own, and the cross-session facts are stated explicitly, which is
+easier than a decision smeared across an hour of discussion. Without memory the agent answered
+"I don't know" every time rather than guessing.
 
 ## License
 

@@ -17,7 +17,7 @@ DM版本|V8、V9
 
 # 三、架构图
 ## 1、离线（数据库宕机）抽取
-![HS](https://github.com/lxgczg/HappySunshine/blob/main/Photo/HsPgUnload1.png)
+![HS](https://github.com/lxgczg/HappySunshine/blob/main/Photo/HsPgUnload2.png)
 PG数据离线抽取功能是一个多线程程序，解析流程如下：
 
 1、读取 pg_filenode.map
@@ -36,7 +36,7 @@ PG数据离线抽取功能是一个多线程程序，解析流程如下：
 
 8、解析 pg_sequence
 
-9、并行解析用户表
+9、单用户表并行解析
 
 10、数据落地成 CSV文件，并生成序列定义、表定义、COPY语句
 

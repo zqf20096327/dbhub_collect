@@ -6,8 +6,11 @@ T-Lift is a T-SQL precompiler that lets developers use directive-based meta-code
 
 Written entirely in T-SQL. Ships as a single stored procedure (`sp_tlift`).
 
+Also accepts annotated SQL text to generate standalone batches for DBA scripts.
+
 ---
 ![T-Lift renders a catch-all procedure into parameterized dynamic SQL](media/tlift.gif)
+
 ---
 
 ## Table of Contents
@@ -19,6 +22,7 @@ Written entirely in T-SQL. Ships as a single stored procedure (`sp_tlift`).
 - [Business Context Demos](#business-context-demos)
 - [Basic Usage](#basic-usage)
 - [Quick Start](#quick-start)
+- [Standalone Batches from SQL Text](#standalone-batches-from-sql-text)
 - [Directive Reference](#directive-reference)
   - [Dynamic SQL Sections](#dynamic-sql-sections)
   - [Single-Line Conditionals](#single-line-conditionals)
@@ -141,7 +145,7 @@ The repository includes a small SQL Server regression harness under `intern_stuf
 
 The demo script in `demos/` assumes the same split: `TLift_Engine` hosts `sp_tlift`, and `TLift_TestDB` hosts the procedures being rendered.
 
-In addition, `integration_tests/` contains an independent harness (117 assertions covering every directive plus the lifecycle features) that runs on every push via GitHub Actions against SQL Server 2017, 2019, 2022, and 2025 containers. Run it locally with:
+In addition, `integration_tests/` contains the legacy harness (117 assertions covering every directive plus the lifecycle features) and a batch suite (38 additional assertions). Both run on every push via GitHub Actions against SQL Server 2017, 2019, 2022, and 2025 containers. Run them locally with:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\integration_tests\run_integration_tests.ps1 -Server localhost -User sa -Password '...'
@@ -253,6 +257,60 @@ Now each combination of parameters gets its own optimized plan. Call it with `@C
 Review the rendered output, then execute it in your target database to create the optimized procedure. You can customize the output procedure name with the `@ProcedureNameNew` parameter.
 
 ---
+
+## Standalone Batches from SQL Text
+
+Since version 1.11, pass annotated SQL directly with `@SourceText` to get a
+standalone T-SQL batch in `@Result`. No source procedure needs to exist, and
+the returned batch does not need T-Lift installed on the target server.
+Existing procedure-based calls keep their original behavior. The new parameter
+is appended after `@Result`, preserving existing positional calls as well.
+
+```sql
+DECLARE @source NVARCHAR(MAX) = N'
+USE master;
+SET NOCOUNT ON;
+--#[
+SELECT d.name, d.create_date
+--#{if EXISTS (SELECT 1 FROM sys.all_columns WHERE object_id = OBJECT_ID(N''sys.databases'') AND name = N''is_query_store_on'')
+    , d.is_query_store_on AS is_query_store_on
+--#else
+    , CAST(NULL AS bit) AS is_query_store_on
+--#}
+FROM sys.databases AS d;
+--#]';
+DECLARE @batch NVARCHAR(MAX);
+
+EXEC dbo.sp_tlift @SourceText = @source, @Result = @batch OUTPUT;
+SELECT @batch AS BatchSql; -- PRINT truncates long nvarchar output
+```
+
+Copy the returned batch into an SSMS server-group query window. The capability
+condition runs on each target at execution time, so only the available column
+expression reaches `sp_executesql`. Both branches keep the same result columns
+and types. `NULL` indicates an unavailable column; `0` indicates Query Store is
+available but off. A file version of the annotated source is in
+[`demos/database_inventory.sql`](demos/database_inventory.sql).
+
+Text mode accepts one T-SQL batch, not a SQLCMD script: remove `GO` separators.
+Use `--#var` and `--#usevar` for local variables crossing a dynamic section;
+there is no `sys.parameters` adapter or automatic inference of undeclared
+parameters. The generated variable names `@sql` and `@debug` are reserved,
+just as in procedure mode. `@validateOnly = 1` validates text without rendering.
+
+Rendering never executes the supplied SQL. Execute the result separately after
+review. Combining text with `@DatabaseName`, `@ProcedureName`, `@execute`,
+`@checkDrift`, or `@suggest` is rejected. Wrapper and branch directives require
+procedure input. Batch metadata uses a separate `T-Lift:batch` stamp; it does
+not participate in procedure drift scans.
+
+The annotated source above is an input to T-Lift. Running it unrendered treats
+the directives as comments and includes both projection alternatives. Execute
+the rendered output on targets. T-Lift does not automatically discover every
+SQL Server version difference or downlevel arbitrary SQL syntax. The generator
+still requires SQL Server 2017+; older output targets need separate validation.
+The regression suite exercises the real Query Store projection and a missing
+column on a synthetic target schema; the latter is not an old-engine test.
 
 ## Directive Reference
 
@@ -878,7 +936,8 @@ This is a property of dynamic SQL in SQL Server, not of T-Lift — but it belong
 | `@execute` | `BIT` | `0` | Deploy the rendered procedure(s) directly into the target database (drop + create, wrapper-aware). |
 | `@checkDrift` | `BIT` | `0` | Scan the target database for rendered procedures whose source changed since rendering. Returns a report; no rendering. `@ProcedureName` is not required in this mode. |
 | `@suggest` | `BIT` | `0` | Scan the procedure for catch-all patterns and return annotation suggestions. No rendering. |
-| `@Result` | `NVARCHAR(MAX) OUTPUT` | — | The rendered procedure as a string. |
+| `@Result` | `NVARCHAR(MAX) OUTPUT` | — | The rendered procedure or standalone batch as a string. |
+| `@SourceText` | `NVARCHAR(MAX)` | `NULL` | Annotated SQL text instead of procedure metadata; returns a standalone batch in `@Result`. Do not combine with procedure/deployment options. |
 
 ---
 
@@ -907,6 +966,7 @@ Feedback and contributions via GitHub issues are welcome.
 
 ## Version Log
 
+- **1.11** — Text-to-batch mode: `@SourceText` uses the existing directive pipeline and returns a standalone batch without a source procedure or deployment. Deterministic text line ordering, separate batch metadata, explicit validation for incompatible procedure options and GO separators. Shared directive scanning respects ordinary comments, nested block comments and quoted identifiers; generated SQL fragments preserve Unicode. Added batch execution and input-error regression tests alongside the unchanged legacy suite.
 - **1.10** — Lifecycle package: `@execute` (direct deployment incl. wrapper mode, quote-aware batch splitter), render metadata stamp (`T-Lift:render` block with source hash), `@checkDrift` (stale-render report: OK / DRIFT / SOURCE_MISSING). New `--#sort` directive for whitelist-based safe dynamic ORDER BY. New `@suggest` mode that detects catch-all patterns (`IS NULL OR`, `ISNULL`, `COALESCE`) and proposes annotations. Internal: parameter metadata is no longer fetched via `INSERT ... EXEC`, so sp_tlift result sets (`@suggest`, `@checkDrift`) can be captured with `INSERT ... EXEC`. GitHub Actions CI running the integration suite against SQL Server 2017/2019/2022/2025 containers.
 - **1.02** - Fixed output parameter propagation from generated `sp_executesql` calls, directive scanning for `--#` tokens inside multiline string literals, and unknown directive validation so typos now fail instead of warning.
 - **1.01** — Named conditions (`--#define`), block removal (`--#{-` / `--#-}`), `--#{if` blocks inside dynamic SQL sections (empty line guard fix), improved condition handling in `--#if` / `--#{if` / `--#{elseif` with named condition resolution, unused condition warnings, removal block bracket validation

@@ -27,17 +27,17 @@ A Home Assistant custom component that talks to a MySQL or MariaDB database thro
 
 ## Requirements
 
-- Home Assistant 2026.3.0 or newer (it runs on Python 3.14, which this integration uses). HACS will not install it on anything older.
+- Home Assistant 2026.9.0 or newer (it validates with probatio, which Home Assistant uses since that release). HACS will not install it on anything older.
 - MySQL 5.6.5 or newer, or MariaDB 10.0 or newer: ```query``` relies on read-only transactions.
 - The ```aiomysql``` driver, which Home Assistant installs automatically.
+
+Note: This integration closely follows the latest Home Assistant releases. Keeping Home Assistant up-to-date is recommended to receive the newest updates and features of this component.
 
 ## Installation
 
 ### Using HACS (recommended)
 
 Open HACS, search for "MySQL Query", open **MySQL Query Service**, select **Download** and restart Home Assistant.
-
-If it does not show up yet, HACS may still be updating its index. Until it does, add this repository as a custom repository: in HACS open the **⋮** menu > **Custom repositories**, add ```https://github.com/IAsDoubleYou/homeassistant-mysql_query``` as type **Integration**, then search and download as above.
 
 ### Manual installation
 
@@ -339,6 +339,12 @@ With ```false```, a SQL error (syntax, permissions, …), a statement that runs 
 Refusals to run always raise, on both services, as a validation error: no connection is loaded, the statement belongs to the other service or carries several statements, ```execute``` on a [read-only connection](#read-only-connections), or ```execute``` by a user who is not an [administrator](#who-may-call-what). The actions stay listed while no connection is loaded, so a call can tell you why it cannot run.
 
 ---
+
+## Diagnostics
+
+When you report a problem, download the diagnostics of the connection: **Settings** > **Devices & services** > **MySQL Query** > the **⋮** menu of the connection > **Download diagnostics**. The file holds the settings of the connection, the size of the connection pool and the state of the entry.
+
+The host, port, username, password and database name are masked, and so are the title and the unique ID of the connection, which are built from them. The integration keeps no statements and no rows, so none are included.
 
 ## Breaking changes in v4.0
 

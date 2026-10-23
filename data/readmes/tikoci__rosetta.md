@@ -1,6 +1,6 @@
 # rosetta
 
-MCP server that gives AI assistants searchable access to MikroTik RouterOS documentation — 363 pages extracted live from MikroTik's official Docusaurus manual (<https://manual.mikrotik.com>), 4,587 properties, a 40,000-entry command tree, hardware specs for 156 current products (part of a wider 255-device overlay also covering legacy/EOL gear and accessories), 746 YouTube video transcripts, and direct links to source docs.
+MCP server that gives AI assistants searchable access to MikroTik RouterOS documentation, CLI Reference fields, versioned command trees, hardware specs, YouTube transcripts, and direct links to source docs. See the dated corpus snapshot below; `routeros_stats` reports the database you're running.
 
 If you need MikroTik docs, you likely have a MikroTik. Install rosetta once as a container on your router using [RouterOS /app](#install-on-mikrotik-app), and any AI assistant on the network can use it. Or [run it locally](#install-locally-with-bun) on your workstation. **No AI required** — rosetta includes a [terminal browser](#browse-without-ai) for searching the database directly.
 
@@ -12,17 +12,19 @@ Instead of vector embeddings, rosetta uses **SQLite [FTS5](https://www.sqlite.or
 
 | Data Source | Coverage |
 |-------------|----------|
-| Documentation pages | 363 pages (~653K words) from MikroTik's live Docusaurus manual |
-| Property definitions | 4,587 with types, defaults, descriptions |
-| Command tree | 5,114 commands, 551 dirs, 34K arguments |
-| Version history | 46 RouterOS versions tracked (7.9–7.23beta2) |
-| Hardware products | 156 current matrix devices — specs, pricing, block diagrams |
-| Hardware overlay | 255 devices (matrix + legacy/EOL + accessories), resolved via ~750 curated alias mappings for cross-source device lookup |
-| Performance benchmarks | 2,874 tests across 125 devices (ethernet + IPSec) |
-| YouTube transcripts | 746 videos, ~2,374 transcript segments |
-| Callout blocks | 943 warnings, notes, and tips |
+| Documentation pages | 369 pages (~641K words) from MikroTik's live Docusaurus manual |
+| Property definitions | 2,799 from manual tables, plus 10,833 fields from the CLI Reference (1,062 menus and commands) |
+| Command tree | 5,333 commands, 576 dirs, 37K arguments |
+| Version history | 67 RouterOS versions with command data (7.9–7.25rc1) |
+| Hardware products | 155 current matrix devices — specs, pricing, block diagrams |
+| Hardware overlay | 258 devices (matrix + legacy/EOL + accessories), resolved via ~1,280 curated alias mappings for cross-source device lookup |
+| Performance benchmarks | 3,162 tests across 143 devices (ethernet + IPSec) |
+| YouTube transcripts | 746 videos, ~2,479 transcript segments |
+| Callout blocks | 880 warnings, notes, and tips |
 
-Documentation covers RouterOS **v7 only**, tracking the current long-term release (~7.22). Prose is extracted live from <https://manual.mikrotik.com> on each release build — no more stale export to keep in sync. The site's Docusaurus CLI Reference (`/console/inspect`-derived command menus) isn't ingested yet; the command tree instead comes directly from inspect.json (see `DESIGN.md`).
+Counts are from the 0.11.3-next.114 release DB; `routeros_stats` reports the live numbers for the DB you're running.
+
+Documentation covers RouterOS **v7 only**. Prose is extracted live from <https://manual.mikrotik.com> on each release build — no more stale export to keep in sync. MikroTik is moving property tables from the manual pages into its CLI Reference, which rosetta also ingests: property lookups and command explanations use the CLI Reference entry for a menu when it has the better answer, and say which source each answer came from (see `DESIGN.md`). The command tree itself comes from inspect.json.
 
 ---
 
@@ -107,7 +109,7 @@ Point any HTTP-capable MCP client at the URL from the previous step:
 
 ## Install Locally (with Bun)
 
-Run rosetta on your workstation using [Bun](https://bun.sh/). The MCP server runs over stdio — no network configuration needed. The database downloads automatically on first launch (~50 MB compressed).
+Run rosetta on your workstation using [Bun](https://bun.sh/). The MCP server runs over stdio — no network configuration needed. The database downloads automatically on first launch; its size varies by release.
 
 ### Quick setup
 
@@ -116,6 +118,21 @@ bunx @tikoci/rosetta --setup
 ```
 
 This downloads the database and prints config snippets for all supported MCP clients. Copy-paste the config for your client and you're done.
+
+Run setup before starting your MCP client: the initial download happens before
+Rosetta answers the MCP handshake, and some clients time out while it downloads.
+For a pinned install, use the same exact package version as the client's config:
+
+```sh
+bunx @tikoci/rosetta@0.11.3 --setup
+```
+
+Replace `0.11.3` with your configured version and use the same `--db` / `DB_PATH`
+if overridden. Each package version has its own default DB, so setting up one
+version does not prepare another. Setup still prints floating stable config
+snippets: for a pinned or prerelease install, edit the package argument to retain
+your exact version and carry any DB override into the client configuration.
+This avoids the first-download delay; it does not change startup behavior (tracked in [#167](https://github.com/tikoci/rosetta/issues/167)).
 
 To force a database reload, stop clients using that DB first. For the stable default install, use:
 
@@ -245,7 +262,7 @@ curl -fsSL https://bun.sh/install | bash
 powershell -c "irm bun.sh/install.ps1 | iex"
 ```
 
-> **Auto-update:** `bunx` checks the npm registry each session and uses the latest published version automatically. Each exact package version uses its own `~/.rosetta/ros-help-<version>.db`, so different versions can run side by side. Rosetta cleans up after itself: on startup it keeps the versions currently in use plus the most recently used idle one, and deletes older copies. The pre-0.11.3 shared `ros-help.db` is never deleted automatically, because a long-running older client may still be using it. Once it looks unused, rosetta logs a hint: stop any rosetta ≤0.11.2 clients first, then delete `~/.rosetta/ros-help.db*` by hand. `DB_PATH` and `--db` remain explicit, caller-managed overrides; use absolute paths in MCP environment settings because `~` is not shell-expanded.
+> **Auto-update:** bare `bunx @tikoci/rosetta` can reuse a cached package between registry checks. Use `bunx @tikoci/rosetta@latest` when you want a fresh stable-version check on launch; exact version pins stay pinned. Each exact package version uses its own `~/.rosetta/ros-help-<version>.db`, so different versions can run side by side. Rosetta cleans up after itself: on startup it keeps the versions currently in use plus the most recently used idle one, and deletes older copies. The pre-0.11.3 shared `ros-help.db` is never deleted automatically, because a long-running older client may still be using it. Once it looks unused, rosetta logs a hint: stop any rosetta ≤0.11.2 clients first, then delete `~/.rosetta/ros-help.db*` by hand. `DB_PATH` and `--db` remain explicit, caller-managed overrides; use absolute paths in MCP environment settings because `~` is not shell-expanded.
 
 ---
 

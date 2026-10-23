@@ -170,6 +170,7 @@ Where next:
 | Use UGREEN's Docker interface                                                                                  | [UGOS Pro walkthrough](deploy/nas/ugreen.md)                                     |
 | Move video understanding and conversion to an Apple Silicon Mac                                                | [Mac helper](deploy/mac/README.md) and [how it works](docs/remote-processing.md) |
 | Know what's in a release and how images, the Android APK and TestFlight builds are made                        | [Build and release flow](docs/releasing.md)                                      |
+| Understand database indexes, query performance and growth limits                                               | [Database performance](docs/database-performance.md)                             |
 | Know exactly what your server stores and who can see it                                                        | [Privacy](PRIVACY.md)                                                            |
 
 Kept media and shared post previews can be opened by anyone who can reach your server and knows the address. Invites and the email allowlist protect accounts, not playback, so put it on a private network or VPN if that's the boundary you want.
@@ -253,14 +254,15 @@ pnpm typecheck && pnpm lint && pnpm test && pnpm format:check
 
 ## Documentation map
 
-| Doc                                               | For                                                    |
-| ------------------------------------------------- | ------------------------------------------------------ |
-| [docs/README.md](docs/README.md)                  | Every other doc, sorted by what you're trying to do    |
-| [ARCHITECTURE.md](ARCHITECTURE.md)                | How the pieces fit together, with diagrams             |
-| [CONTRIBUTING.md](CONTRIBUTING.md)                | Setting up, testing, and getting a pull request merged |
-| [AGENTS.md](AGENTS.md) and [CLAUDE.md](CLAUDE.md) | Coding agents: read these first                        |
-| [PRIVACY.md](PRIVACY.md)                          | What your server stores and who can see it             |
-| [SECURITY.md](SECURITY.md)                        | How to report a vulnerability privately                |
+| Doc                                               | For                                                            |
+| ------------------------------------------------- | -------------------------------------------------------------- |
+| [docs/README.md](docs/README.md)                  | Every other doc, sorted by what you're trying to do            |
+| [ARCHITECTURE.md](ARCHITECTURE.md)                | How the pieces fit together, with diagrams                     |
+| [Live updates and presence](docs/realtime.md)     | Streaming, reconnect recovery, packages and polling boundaries |
+| [CONTRIBUTING.md](CONTRIBUTING.md)                | Setting up, testing, and getting a pull request merged         |
+| [AGENTS.md](AGENTS.md) and [CLAUDE.md](CLAUDE.md) | Coding agents: read these first                                |
+| [PRIVACY.md](PRIVACY.md)                          | What your server stores and who can see it                     |
+| [SECURITY.md](SECURITY.md)                        | How to report a vulnerability privately                        |
 
 ## Use it kindly
 

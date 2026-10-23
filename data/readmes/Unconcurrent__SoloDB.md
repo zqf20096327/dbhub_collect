@@ -2,9 +2,27 @@
 
 Store your C# and F# objects, query them with LINQ, and keep related documents and files together in one SQLite database. SoloDB runs inside your application, with transactions and SQL available when you need them.
 
+## Core Features
+
+SoloDB is packed with features that provide a seamless and powerful developer experience.
+
+- **SQLite Core**: Leverages the world's most deployed database engine, ensuring rock-solid stability, performance, and reliability.
+- **Serverless Architecture**: As a .NET library, it runs in-process with your application. No separate server or configuration is required.
+- **Hybrid NoSQL & SQL**: Store and query schemaless JSON documents with a familiar object-oriented API, or drop down to raw SQL for complex queries.
+- **Full LINQ Support**: Use the full power of LINQ and IQueryable<T> to build expressive, strongly-typed queries against your data.
+- **ACID Transactions**: Guarantees atomicity, consistency, isolation, and durability for all operations, thanks to SQLite's transactional nature.
+- **Expressive Indexing**: Create unique or non-unique indexes on document properties for lightning-fast queries, using simple attributes.
+- **Integrated File Storage**: A robust, hierarchical file system API (similar to System.IO) for storing and managing large files and binary data directly within the database.
+- **Polymorphic Collections**: Store objects of different derived types within a single collection and query them by their base or concrete type.
+- **Events API**: Subscribe to collection lifecycle events (`OnInserting`, `OnInserted`, `OnUpdating`, `OnUpdated`, `OnDeleting`, `OnDeleted`) with full transactional guarantees via SQLite triggers.
+- **Thread-Safe**: A built-in connection pool ensures safe, concurrent access from multiple threads.
+- **Customizable ID Generation**: Use the default long primary key, or implement your own custom ID generation strategy (e.g., string, Guid).
+- **.NET Standard 2.0 & 2.1**: Broad compatibility with .NET Framework, .NET Core, and modern .NET runtimes.
+- **Open Source**: Licensed under LGPL-3.0, with the bundling permission described below.
+- **Documentation**: See the [official documentation](https://solodb.org/docs.html) for detailed guides.
+
 ## Table of Contents
 
-- [Core Features](#core-features)
 - [Why SoloDB?](#why-solodb)
 - [Installation](#installation)
 - [Generated Metadata Registration](#generated-metadata-registration)
@@ -29,25 +47,6 @@ Store your C# and F# objects, query them with LINQ, and keep related documents a
   - [Backups](#backups)
   - [Optimization](#optimization)
 - [License](#license)
-
-## Core Features
-
-SoloDB is packed with features that provide a seamless and powerful developer experience.
-
-- **SQLite Core**: Leverages the world's most deployed database engine, ensuring rock-solid stability, performance, and reliability.
-- **Serverless Architecture**: As a .NET library, it runs in-process with your application. No separate server or configuration is required.
-- **Hybrid NoSQL & SQL**: Store and query schemaless JSON documents with a familiar object-oriented API, or drop down to raw SQL for complex queries.
-- **Full LINQ Support**: Use the full power of LINQ and IQueryable<T> to build expressive, strongly-typed queries against your data.
-- **ACID Transactions**: Guarantees atomicity, consistency, isolation, and durability for all operations, thanks to SQLite's transactional nature.
-- **Expressive Indexing**: Create unique or non-unique indexes on document properties for lightning-fast queries, using simple attributes.
-- **Integrated File Storage**: A robust, hierarchical file system API (similar to System.IO) for storing and managing large files and binary data directly within the database.
-- **Polymorphic Collections**: Store objects of different derived types within a single collection and query them by their base or concrete type.
-- **Events API**: Subscribe to collection lifecycle events (`OnInserting`, `OnInserted`, `OnUpdating`, `OnUpdated`, `OnDeleting`, `OnDeleted`) with full transactional guarantees via SQLite triggers.
-- **Thread-Safe**: A built-in connection pool ensures safe, concurrent access from multiple threads.
-- **Customizable ID Generation**: Use the default long primary key, or implement your own custom ID generation strategy (e.g., string, Guid).
-- **.NET Standard 2.0 & 2.1**: Broad compatibility with .NET Framework, .NET Core, and modern .NET runtimes.
-- **Open Source**: Licensed under LGPL-3.0, with the bundling permission described below.
-- **Documentation**: See the [official documentation](https://solodb.org/docs.html) for detailed guides.
 
 ## Why SoloDB?
 
@@ -76,14 +75,15 @@ using System;
 using SoloDatabase.JsonSerializator;
 
 Span<byte> destination = Span<byte>.Empty;
-int written = JsonValue.WriteJson(new[] { 1, 2, 3 }, ref destination);
+int[] source = { 1, 2, 3 };
+int written = JsonValue.WriteJson(ref source, ref destination);
 ReadOnlySpan<byte> json = destination.Slice(0, written);
 int[] values = JsonValue.ParseInto<int[]>(json);
 ```
 
 An empty span grows automatically; `written` counts bytes for UTF-8 and characters for UTF-16. Writable-list overloads append and return the added count. See the [direct JSON guide](docs/generated-metadata.md#direct-typed-json) for custom growth/release callbacks, final-buffer ownership and failure behavior. NativeAOT uses the generated registration described above. `Serialize<T>` and `Parse` remain available when you need a `JsonValue` tree.
 
-Direct floating-point conversion avoids the decimal-backed tree's rounding and range limits. Output for values previously rounded or rejected can differ. Forward object readers run setters and conversions in input order: an invalid earlier duplicate fails, and user effects can remain after later malformed or trailing input. Exceptional late runtime-type selection can replay conversion and add effects. See the [direct JSON behavior and ownership guide](docs/generated-metadata.md#direct-typed-json).
+Direct floating-point conversion avoids the decimal-backed tree's rounding and range limits. Direct and tree output can differ for values outside Decimal precision or range. Forward object readers run setters and conversions in input order: an invalid earlier duplicate fails, and user effects can remain after later malformed or trailing input. Exceptional late runtime-type selection can replay conversion and add effects. See the [direct JSON behavior and ownership guide](docs/generated-metadata.md#direct-typed-json).
 
 ## Getting Started: A 60-Second Guide
 
@@ -811,7 +811,7 @@ let data = { Id = 0L; Name = "F# Document"; Data = "Some data" }
 collection.Insert(data) |> ignore
 printfn "Inserted document with ID: %d" data.Id
         
-// Query all documents into an F# list
+// Materialize the query
 let documents = collection.ToList()
 printfn "Found %d documents" documents.Count
         
@@ -857,4 +857,4 @@ Full license details are available [here](https://solodb.org/legal.html).
 
 ### Direct SQL
 
-See [Direct SQL connections](docs/native-sql.md) for named SQL execution, typed rows, parameter plans and transactions.
+See [Direct SQL connections](docs/native-sql.md) for named SQL execution, typed rows, named parameters and transactions.

@@ -1,4 +1,4 @@
-# Bilikha
+[![Bilikha — Every creative in Biliran, in one place. Search the registry by craft, name, or town.](./docs/readme/hero.jpg)](https://bilikha.vercel.app)
 
 **Biliran Creative Industries Registry** — a directory and inquiry platform
 connecting creative talent across Biliran with the clients, LGUs, and
@@ -7,7 +7,7 @@ organisations that hire them.
 Built around the nine creative domains defined by RA 11904 (Philippine Creative
 Industries Development Act).
 
----
+[Open the registry](https://bilikha.vercel.app) · [Staging](https://bilikha-staging.vercel.app) · [Run it locally](./docs/getting-started/local-setup.md)
 
 ## Quick start
 
@@ -100,14 +100,17 @@ Live on production since 2026-10-03, with staging running ahead of it on
 
 - **Accounts.** Username and password registration with admin moderation; one
   account that adds a creative role, and a client or creative mode
-- **Creative profiles.** Crafts from the nine-domain taxonomy (81 sub-domains),
-  one of eight municipalities, a bio, an avatar and portfolio images
+- **Creative profiles.** Crafts from the nine-domain taxonomy, one of eight
+  municipalities, a bio, an avatar and portfolio images
 - **Offers and the directory.** Creatives publish offers; the directory lists
   offers and creatives, nearby first, and searches them by craft, name or town
   — including everyday words for a craft that administrators add, in Waray,
   Cebuano, Tagalog or English
 - **Client postings**, which creatives browse in the directory in creative mode
-- **Conversations**, sign-in only, with **work agreements** made in the thread
+- **Conversations**, sign-in only, with **work agreements** made in the thread,
+  and photos, audio, video and PDFs sent in a message — private to the two
+  people, with all but PDFs deleted after 30 days. Off in production until its
+  storage is ready ([ADR 0060](./docs/decisions/0060-message-files-are-private-and-photos-audio-video-expire.md))
 - **Ratings**, earned by a completed agreement
 - **Organisations**: teams of creatives with one reviewed public page, joined
   only by accepting an invitation; a client's message reaches the founder

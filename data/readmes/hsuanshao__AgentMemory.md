@@ -80,15 +80,14 @@ docker run --rm -p 8420:8420 -e AGENT_MEMORY_API_KEY=change-me \
   -e AGENT_MEMORY_LLM_API_KEY=sk-... -v memory-core-data:/data memory-core:local
 
 docker build -t memory-panel:local panel
-docker run --rm -p 8125:8125 -e CORE_URL=http://host.docker.internal:8420 \
-  -e CORE_API_KEY=change-me memory-panel:local
+docker run --rm -p 8125:8125 -e CORE_URL=http://host.docker.internal:8420 memory-panel:local
 ```
 
 ## Users, Teams and Access
 
 Sign in to the Panel with the admin user key. Under **Metadata**, a system admin creates users (each gets a user key, shown once), creates teams, assigns users to teams with a role, and creates agents. Everyone else gets a read-only Panel.
 
-Clients (agents on any machine) authenticate with their **user key only**; they never need `AGENT_MEMORY_API_KEY`. Every memory call names a `team_id` and an `agent_id` the user belongs to, and members only read and write their own conversations and facts; the scenes and persona of an agent are shared by the people who use it. [docs/COLLABORATION.md](docs/COLLABORATION.md) explains departments, teams, users and agents, from choosing a layout to how isolation is enforced. See [docs/API.md](docs/API.md) for the exact rules and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how it fits together.
+Clients (agents on any machine) authenticate with their **user key only**; they never need `AGENT_MEMORY_API_KEY`. Every memory call names a `team_id` and an `agent_id` the user belongs to, and members only read and write their own conversations and facts; the scenes and persona of an agent are shared by the people who use it. [docs/COLLABORATION.md](docs/COLLABORATION.md) explains departments, teams, users and agents, from choosing a layout to how isolation is enforced. A department exists once `init-admin` has run for it; requests that name any other department are refused. See [docs/API.md](docs/API.md) for the exact rules and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how it fits together.
 
 **Server and agents on different machines?** Follow [docs/REMOTE-CLIENTS.md](docs/REMOTE-CLIENTS.md). It covers TLS, issuing keys, installing the `amem` client and the Claude Code, Codex, Antigravity and Hermes integrations, and the client side of an upgrade.
 
@@ -103,7 +102,7 @@ Clients (agents on any machine) authenticate with their **user key only**; they 
 ```bash
 cargo test --workspace                 # unit + integration + end-to-end tests (Postgres/Redis tests skipped by default)
 # Run integration tests against real Postgres and Redis:
-docker run -d --rm --name amem-pg -e POSTGRES_PASSWORD=test -p 25432:5432 pgvector/pgvector:pg16
+docker run -d --rm --name amem-pg -e POSTGRES_PASSWORD=test -p 25432:5432 pgvector/pgvector:pg17
 docker run -d --rm --name amem-redis -p 26379:6379 redis:8.4.0
 AGENT_MEMORY_TEST_POSTGRES_URL=postgres://postgres:test@127.0.0.1:25432/postgres \
 AGENT_MEMORY_TEST_REDIS_URL=redis://127.0.0.1:26379 cargo test --workspace
@@ -165,7 +164,7 @@ Config file keys (`server`, `data`, `llm`, `memory.pipeline`, `memory.recall`, `
 | --- | --- | --- |
 | `AGENT_MEMORY_CONFIG` | Auto-discover `memory-core.yaml` | Config file path |
 | `AGENT_MEMORY_HOST` / `AGENT_MEMORY_PORT` | `127.0.0.1` / `8420` | Bind address; an API key is required for non-loopback addresses |
-| `AGENT_MEMORY_API_KEY` | Unset | Bearer token |
+| `AGENT_MEMORY_API_KEY` | Unset | Server API key (Bearer) for the operator routes only: `internal/*` (init-admin, upgrades) and `department/destroy`. Clients, department admins and the Panel use user keys. Treat it as a root credential ([ARCHITECTURE](docs/ARCHITECTURE.md#three-trust-zones)) |
 | `AGENT_MEMORY_STORAGE_BACKEND` / `AGENT_MEMORY_POSTGRES_URL` | `sqlite` / unset | Storage backend (see "Storage and Coordination Backends") |
 | `AGENT_MEMORY_COORDINATION_BACKEND` / `AGENT_MEMORY_REDIS_URL` | `local` / unset | Coordination backend |
 | `AGENT_MEMORY_DATA_DIR` | `~/.agent-memory` | Data directory (one SQLite per department) |
@@ -220,9 +219,10 @@ llm:
     maxConcurrency: 2
 ```
 
-Equivalent environment variables: `AGENT_MEMORY_LLM_PROVIDER=cli`, `AGENT_MEMORY_LLM_CLI_COMMAND`, `AGENT_MEMORY_LLM_CLI_ARGS` (JSON array or whitespace-separated), `AGENT_MEMORY_LLM_CLI_PROMPT_MODE`, `AGENT_MEMORY_LLM_CLI_WORKDIR`.
+Equivalent environment variables: `AGENT_MEMORY_LLM_PROVIDER=cli`, `AGENT_MEMORY_LLM_CLI_COMMAND`, `AGENT_MEMORY_LLM_CLI_ARGS` (JSON array or whitespace-separated), `AGENT_MEMORY_LLM_CLI_PROMPT_MODE`, `AGENT_MEMORY_LLM_CLI_WORKDIR`, `AGENT_MEMORY_LLM_CLI_PASS_ENV`.
 
 - No shell is involved: the child process is spawned directly with an argument array; the prompt goes through stdin by default and never shows up in the process list.
+- The tool does not inherit memory-core's environment: it gets `PATH`, `HOME`, locale, certificate and proxy variables, its own settings (`ANTHROPIC_*`/`CLAUDE_*` for claude, `OPENAI_*`/`CODEX_*` for codex, `GEMINI_*`/`GOOGLE_*` for agy), `llm.cli.env`, and what `llm.cli.passEnv` names; never `AGENT_MEMORY_*` ([DISTILLATION §6](docs/ops/DISTILLATION.md#what-the-cli-inherits)).
 - Each call is bounded by `timeoutMs`, and the child process is killed on timeout; a non-zero exit code or empty output is treated as the LLM being unavailable and left to the pipeline to retry.
 - Refer to each tool's own documentation for its flags; the tool must print the complete answer to stdout.
 

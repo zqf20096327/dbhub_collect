@@ -1,13 +1,17 @@
 # TypeSQL
 
+[![PostgreSQL 18 regression suite: 49,999 of 49,999 checkable statements agree](https://img.shields.io/badge/PostgreSQL%2018%20regression%20suite-100%25%20agreement-336791?logo=postgresql&logoColor=white)](#tested-against-postgresqls-own-test-suite)
+
 Type-level Postgres SQL for TypeScript. You write a SQL string literal; the compiler parses
 it **inside the type system** and gives you the exact row type, the parameter types, and
-(for DDL) the resulting schema. No codegen, no database connection, no build step.
+(for DDL) the resulting schema. No codegen, no database connection, no build step. The parser
+agrees with Postgres on [every checkable statement of PostgreSQL's own regression tests](#tested-against-postgresqls-own-test-suite).
 
-![TypeSQL demo: hovering a query shows its inferred row type, and a misspelled column is a compile error](assets/demo.gif)
+![TypeSQL demo: table and column completions inside a query, hovering a query shows its inferred row type, and a misspelled column is a compile error](assets/demo.gif)
 
 **[Try it in the TypeScript Playground](https://www.typescriptlang.org/play/#code/PTAEBUE8AcFMGUCKAZAXKACgewM4BcBzAJ1h1CWQBpRoBDInWAE1ACNIIYEBjIgS2h4A5GTxdQOSPlgBbAHSgAokz55QeABaxyKULQB2LDVgBusIuq3quOVACgQoIlgDuZAyzpFaM2HnNkAGZYADYhrtQeoDJ8+LQA1qR6JKDcWDLQfCHa5s4MoFj6ltr4-PoEcnZ8GVhEagDeqSS0-vAAjiHUYnCgAMKhXeIA4rD65i3Mgz0AcgCuYbSs2VPaGPQ+OFBwK6AASq5b2gC+oIHOMqAARAAC3aQdwGkklwDcdlX6-kSBtNzaACIAIVA9TsoFAs0YDHQoPB4L4THQIzG3n8TAAPJc+J8ACyXAB8L1Ajg0tHcoCYsB+8zw6Cwgj4hVoIQKRQAktN4IpduAwXDZLQsuh+iFMf4AB54AlvOEU2LQEK0SAAfX0Plg6DmCyWsDFsEl0r54N4sAmTGVLSRo3GaLF1VIeB8ggAXobwUcZTRcHhbCCjaAEVaUWbMdi8AAON1w2izTS1ZWBvqhUO4qPgvCqbLC5OXCVSwn+1hYJiQTXzRU6vUGgvut5Hd5pfT4CQdUAAXiaptaHXRQPxAAoAJRvBxgZCKABi4FAACkAPIc6IJJKabT8AgaNQ4BHafTlxbZIkAEgAjOpl2RVKJxGd0hC5AjKo3m212y2Qv2AAZc8e9aezB8mGoACBSyahoDkDM8Gyf1ZTg8EJ12OcAFkIShMhZlAccp1nBdpi9fAyGgUA53wiCYzjIgExYDsAIRWD4NlAB1AAJblFHvBE31PT9qAAdmHOw7j2Vw332FxDnRO4sECUA2gLRxwQAPQAfiE8Q1m8GQyA7TSNkk6TZPkt5FNAVT3kcABBAhiFgAgJncQxUlCWYZCKNVfCCUJwhcTBvVs300lmT5+wAKkHANL0+cNIgkPAygICFDHMUB9GLWAAFpoH8kgcCfQpmziH03xwDovx-RQ-z0WNjCohFqCCkLwuoGRaHFfsoOyCLLPgUBFX8ZtEJQgjiqGJCAFUMFAQEAE1qso6jP0E4T4EdYqO3EgyuBkuKWhwBSwGUtTR1ANl9BCbFtBMZlZiSegSlGNQyVAI8ii8dUvkclhuC0bhEhYWh7OxZsXC0FJVw4e60OYfKmzUUCWQ7S5aCYWhrn1J1sjkNIZFeOxnzUE0zRKsrPw5LkeVO6ZwDnaH8n7BGIoANUs5BxsUXr+yPepSpCOR3pkBnWqyQcjgi3ZFHAcbdmmDkhgDIDOzNC08CWt5hN6Zo0TEg4uCk7bZKJtEDrhcyTuQ2JHUSdwUhxzJslAXJajIQpih0ZA4oShQJz4cVihkexefKxRf2nfRfFAIbUMhAI1eJMAnaIdA0hCVyikucPYEuCksCSNL4fFS27CDsnOW5acORpkayA6zNYGZ1n2c509B14q4WNgMIsEuYd48dog8nQCjauoyLQGmOdp2mcbkA9qJSTINKKSpGMQjwOwgA)** <!-- playground:core -->: edit the SQL and hover the types,
-with nothing to install. The Playground runs TypeScript 6; TypeSQL is built for TypeScript 7.
+with nothing to install. The Playground runs TypeScript 6, which TypeSQL does not support, so treat
+it as a demo; TypeSQL requires TypeScript 7.1.
 
 ```ts
 import { createSql, type Col, type Generated, type Nullable } from "@typesql/core";
@@ -59,6 +63,26 @@ await sql.transaction(async (tx) => {                // tx: sql bound to one tra
 });
 ```
 
+## Editor completions
+
+The TypeSQL extension for VS Code
+([Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=typesql.typesql),
+[Open VSX](https://open-vsx.org/extension/typesql/typesql)) suggests what can come next inside
+`sql()` strings: tables, views and schemas after `FROM`, `JOIN`, `INTO` and `UPDATE`, and
+columns with their Postgres types after `alias.` and in expressions. It is an optional
+companion: TypeSQL checks statements and infers row types without it, so install it only if you
+want completions.
+
+```ts
+sql("SELECT * FROM |");          // users, posts
+sql("SELECT u.| FROM users u");  // id: int4, email: text, display_name: text | null
+```
+
+The names come from the `DB` type of the `sql` you call, unsaved edits included. Errors, hovers
+and row types stay TypeScript's own. It needs `@typesql/core` 0.4.0 or later and a language
+server on TypeScript 7.1; [Editor completions](packages/docs/guide/editor.md) covers the setup.
+The source is in [`packages/vscode`](packages/vscode).
+
 ## Packages
 
 | Package | Role | Peer dependency | Playground |
@@ -78,13 +102,15 @@ documentation site) and `@typesql/bench` (compile-time budget and runtime benchm
 | Feature | Status |
 |---|---|
 | SELECT: joins (nullability per join kind, USING/NATURAL), aliases, `*`/`t.*`, WHERE, GROUP BY/HAVING, ORDER BY, LIMIT/OFFSET/FETCH, DISTINCT [ON], FOR UPDATE | ✓ |
-| Subqueries (scalar, EXISTS, IN, ANY/ALL), derived tables, LATERAL, CTEs incl. RECURSIVE, UNION/INTERSECT/EXCEPT, VALUES, set-returning functions in FROM | ✓ |
-| Expressions: operators with numeric/date/JSON/array rules, casts, CASE, COALESCE/NULLIF/GREATEST/LEAST, IS, BETWEEN, IN, LIKE, arrays, subscripts, EXTRACT and friends, window functions | ✓ |
+| Subqueries (scalar, EXISTS, IN, ANY/ALL), derived tables, LATERAL, CTEs incl. RECURSIVE (with SEARCH/CYCLE), UNION/INTERSECT/EXCEPT, VALUES, set-returning functions and ROWS FROM in FROM, TABLESAMPLE | ✓ |
+| Expressions: operators with numeric/date/JSON/array rules, casts and typed literals (`timestamp with time zone '…'`), CASE, COALESCE/NULLIF/GREATEST/LEAST, IS [NORMALIZED], BETWEEN, IN, LIKE, `op ANY/ALL`, OVERLAPS, AT TIME ZONE / AT LOCAL, arrays, subscripts, EXTRACT and friends, named and VARIADIC arguments, window functions, SQL/XML (`XMLELEMENT`, `XMLSERIALIZE`, `XMLTABLE`, …) | ✓ |
+| SQL/JSON: `JSON_OBJECT`, `JSON_ARRAY`, `JSON_OBJECTAGG`/`JSON_ARRAYAGG`, `JSON_VALUE`/`JSON_QUERY`/`JSON_EXISTS`, `IS JSON`, `JSON_TABLE` in FROM | ✓ |
 | Function catalog (string, numeric, date/time, JSON, arrays, aggregates, window) with Postgres nullability; every other `pg_catalog` function known by return type; unknown functions are errors; app functions declared in `$functions` or via `FunctionCatalog` augmentation | ✓ |
 | Parameters: `$n` typed from context (`WHERE id = $1` → `number`), `:name` sugar, inline `${sql.param(value)}` with value type checks | ✓ |
 | Nullability narrowing: `WHERE c IS NOT NULL` / comparisons / inner-join conditions make `c` non-null | ✓ |
 | Errors with token positions and "Perhaps you meant …" hints for unknown columns, relations and functions | ✓ |
-| INSERT/UPDATE/DELETE with RETURNING, required-column checks, ON CONFLICT, `EXCLUDED` | ✓ |
+| INSERT/UPDATE/DELETE/MERGE with RETURNING (incl. `old` / `new`), required-column checks, ON CONFLICT, `EXCLUDED`, array / field assignment targets | ✓ |
+| Cursors: `DECLARE … CURSOR FOR query` is checked and its parameters typed; `FETCH` / `MOVE` / `CLOSE` parse (no row type: the query is another statement) | ✓ |
 | Write helpers: `sql.valueOrDefault(x)` (`DEFAULT` for `undefined`), typed `sql.set(table, partial)` and `sql.values(table, rows)` | ✓ |
 | DDL → schema: `ApplyDdl<DB, "ALTER TABLE …">`, `migrations()` builder, views, enums, schemas | ✓ |
 | Fragments: `{slot}` splicing with `$n` renumbering, `sql.fragment`, `sql.id`, `sql.join`, `sql.list` (runtime arrays of typed elements), `sql.raw`; dynamic text falls back to `sql.as<Row>()` | ✓ |
@@ -92,6 +118,23 @@ documentation site) and `@typesql/bench` (compile-time budget and runtime benchm
 
 Unsupported syntax is a compile error with a Postgres-style message and a token position,
 never a silent `any`.
+
+## Tested against PostgreSQL's own test suite
+
+The parser is checked against the regression tests PostgreSQL runs on itself
+(`src/test/regress` of PostgreSQL 18.6, vendored as a submodule in `vendor/postgres` and never
+edited): about 50,000 statements, from everyday queries to `MERGE`, SQL/JSON, `TABLESAMPLE`,
+recursive CTEs with `SEARCH` / `CYCLE` and hundreds of deliberate syntax errors. For each one, the
+expected output that ships with the tests says what Postgres did, and TypeSQL must do the same:
+parse what Postgres parses, reject what it rejects.
+
+| Statements | Agree with Postgres | Disagree | Not checkable statically |
+|---|---|---|---|
+| 50,235 | 49,999 | 0 | 236 (psql variables with unknown values, `standard_conforming_strings = off`) |
+
+CI runs the whole suite on every change and fails on a single disagreement
+(`pnpm pg-regress:setup && pnpm test:pg-regress`). What the comparison covers and what it does not
+is in [Postgres compatibility](packages/docs/guide/postgres-compatibility.md).
 
 ## Schema
 
@@ -134,20 +177,34 @@ in `tsc`. At runtime nothing is parsed: `sql(…)` builds `{ text, values }` and
 ### Compile time
 
 `packages/bench` type-checks generated files of distinct, realistic queries (joins, aggregates,
-parameters) with `tsc --extendedDiagnostics`. On a 4-core Xeon Platinum 8488C:
+parameters) with `tsc --extendedDiagnostics`, on a 4-core Xeon Platinum 8488C with TypeScript
+7.1.0-beta. Compiled against the built package with `skipLibCheck`, as an application is:
 
-| File | Instantiations | Check time, TS 7.0.2 | Check time, TS 6.0.3 |
+| File | Instantiations | Check time | With the [type cache](packages/docs/guide/caching.md) |
 |---|---|---|---|
-| 1 query (mostly loading the library) | 156K | 0.26 s | 1.48 s |
-| 50 queries | 655K | 0.55 s | 2.47 s |
-| 500 queries | 4.8M | 3.2 s | 10.3 s |
-| 50 queries with `:name` and inline parameters and a shared fragment | 431K | 0.38 s | |
-| one statement each of 0.5, 1, 2, 4 and 8 KB | 6.6M | 1.3 s | |
+| 1 query | 18K | 0.04 s | |
+| 50 queries | 517K | 0.31 s | 20K, 0.02 s |
+| 500 queries | 4.6M | 2.6 s | 123K, 0.13 s |
 
-Each additional query costs about 9.2K instantiations, or about 6 ms of check time on
-TypeScript 7 (about 170 queries per second) and about 18 ms on TypeScript 6. TypeSQL is built
-for the native compiler and its recursion budgets. CI fails a change that takes a bench file
-over its instantiation or check-time budget (`packages/bench/thresholds.json`).
+Each additional query costs about 9.2K instantiations, or about 5 ms of check time (about 190
+queries per second). TypeScript keeps a result only for the life of one program, so the editor
+computes it again after every edit and `tsc` on every run. The optional type cache keeps the
+results in a file the checker reads instead: a cached query costs about 230 instantiations, and an
+entry is used only while everything it was computed from is unchanged.
+
+Against TypeSQL's own sources, which `skipLibCheck` does not skip, the bench also covers the other
+call forms and long statements:
+
+| File | Instantiations | Check time |
+|---|---|---|
+| 1 query (mostly checking TypeSQL's sources) | 149K | 0.22 s |
+| 500 queries | 4.7M | 2.8 s |
+| 50 queries with `:name` and inline parameters and a shared fragment | 422K | 0.43 s |
+| one statement each of 0.5, 1, 2, 4 and 8 KB | 6.6M | 0.95 s |
+
+TypeSQL is built for the native compiler and its recursion budgets. CI fails a change that takes
+a bench file over its instantiation or check-time budget, or a cache hit over 250 instantiations
+(`packages/bench/thresholds.json`).
 
 ### Runtime
 
@@ -156,19 +213,19 @@ Building a query (Node 26, same machine; `pnpm build && node packages/bench/runt
 | Call | Time |
 |---|---|
 | `sql("… WHERE id = $1", 7)` | 1.1 µs |
-| `:name` parameters | 2.4 µs |
-| inline `${sql.param(…)}` values | 3.9 µs |
-| a `{slot}` fragment | 2.5 µs |
+| `:name` parameters | 1.3 µs |
+| inline `${sql.param(…)}` values | 4.0 µs |
+| a `{slot}` fragment | 1.6 µs |
 
 The text goes to the driver as written, and `execute*` returns the driver's rows unchanged (or
 with top-level keys renamed, with `rowKeys: "camelCase"`). `@typesql/core` has no dependencies
-and is 10 KB minified, 3.8 KB gzipped.
+and is 10 KB minified, 4.0 KB gzipped.
 
-To reproduce the compile-time numbers: `node packages/bench/gen.mjs && node packages/bench/run.mjs`.
+To reproduce the compile-time numbers: `node packages/bench/gen.mjs && pnpm --filter @typesql/core build && node packages/bench/run.mjs`.
 
 ## Toolchain and limits
 
-Requires TypeScript ≥ 7.0 (the native compiler) and Node ≥ 26.
+Requires TypeScript ≥ 7.1 (the native compiler; `7.1.0-beta` works) and Node ≥ 26.
 
 Known ceilings: statements up to 4096 tokens; left-nested `||` or `+` chains of ~100 terms
 (`AND`/`OR` chains are balanced by the parser and are fine at 200+ terms). Past a ceiling,
@@ -181,7 +238,9 @@ The documentation site lives in `packages/docs` (VitePress): run `pnpm docs:dev`
 locally. Its pages pull their code examples from type-checked files, so they read best on the
 site; the Markdown sources are the [guide](packages/docs/guide/getting-started.md),
 the [API reference](packages/docs/reference/api.md), [DDL support](packages/docs/reference/ddl.md),
-[adapters](packages/docs/adapters/index.md) and the [type engine](packages/docs/internals/engine.md).
+[Postgres compatibility](packages/docs/guide/postgres-compatibility.md),
+[adapters](packages/docs/adapters/index.md), [editor completions](packages/docs/guide/editor.md)
+and the [type engine](packages/docs/internals/engine.md).
 
 ## Development
 
@@ -190,6 +249,7 @@ pnpm install
 pnpm typecheck         # tsc per package
 pnpm test              # vitest: runtime + type tests; conformance runs against docker postgres:17 when available
 pnpm build && pnpm smoke:dist   # import the built packages with plain Node
+pnpm pg-regress:setup && pnpm test:pg-regress   # the parser against PostgreSQL 18's regression tests
 pnpm docs:dev                   # the documentation site (packages/docs)
 node packages/bench/gen.mjs && node packages/bench/run.mjs   # compile-time budget (thresholds.json)
 node packages/bench/runtime.mjs                               # cost of building a query, after pnpm build

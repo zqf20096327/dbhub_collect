@@ -19,7 +19,8 @@
   <a href="#features">Features</a> ·
   <a href="#screenshots">Screenshots</a> ·
   <a href="#architecture">Architecture</a> ·
-  <a href="#getting-started">Getting started</a> ·
+  <a href="#using-holidayops">Using it</a> ·
+  <a href="#getting-started-developers">Getting started</a> ·
   <a href="#api">API</a> ·
   <a href="docs/">Docs</a> ·
   <a href="https://ahmershah.dev">Author</a>
@@ -81,8 +82,18 @@ around it.
 
 **Accounts and security**
 
+- Email confirmation at sign-up by a 6-digit code; sign-up never reveals which addresses are
+  registered.
 - Two-factor sign-in (authenticator app, recovery codes), sign in with Google or Microsoft.
-- Password reset by a one-time emailed code (Resend), self-serve data export and account deletion.
+- Password reset by a one-time emailed code, self-serve data export and account deletion.
+- A list of signed-in devices with "sign out other devices".
+- Email notices for every security change, sent through [Resend](https://resend.com).
+- Google reCAPTCHA v3 with a v2 checkbox fallback, plus a honeypot, on sign-up and reset forms.
+
+**Plans**
+
+- Free: 120 requests a minute per key, 10,000 a month, 3 keys. Pro: US$19 a month, 1,200 a
+  minute, 1,000,000 a month, 20 keys. Every plan has every feature; see `/pricing/`.
 
 **SDKs**
 
@@ -260,7 +271,24 @@ erDiagram
 
 Field-level detail: [docs/architecture.md](docs/architecture.md).
 
-## Getting started
+## Using HolidayOps
+
+New to it? The site has a step-by-step guide at `/guide/` (in English, Urdu and Arabic). In short:
+
+1. **Check a date.** Open the playground, choose a country (type to search the list) and click a
+   day. No account needed.
+2. **Sign up.** Enter your name, email and a password of 10 or more characters, then type the
+   6-digit code we email you.
+3. **Make an organization.** It's your company's shared space; invite colleagues as owner, admin,
+   member or viewer.
+4. **Add a calendar.** Pick the country and region; the weekend comes from the country.
+5. **Mark your own days.** Click a day to add a closure, a half day or an extra working day.
+6. **Share it.** Copy the private iCal link into Google Calendar or Outlook, or turn on the
+   monthly digest email.
+7. **Connect software (optional).** Create an API key in the organization's settings and call the
+   API below.
+
+## Getting started (developers)
 
 Requirements: [uv](https://docs.astral.sh/uv/), Node.js 22.22 or newer, and Docker Desktop
 (running).
@@ -268,7 +296,7 @@ Requirements: [uv](https://docs.astral.sh/uv/), Node.js 22.22 or newer, and Dock
 ```bash
 git clone https://github.com/ahmershahdev/holidayops.git
 cd holidayops
-cp .env.example .env    # set DJANGO_SECRET_KEY, the MySQL passwords and DEMO_PASSWORD
+cp .env.example .env    # set DJANGO_SECRET_KEY, FIELD_ENCRYPTION_KEYS, MySQL passwords, DEMO_PASSWORD
 npm install             # root tools
 npm run setup           # frontend packages and Python packages
 npm run dev             # MySQL and Redis in Docker; Django :8000, Vite :5173, Celery
@@ -281,7 +309,67 @@ and the web app from Vite. API docs: <http://localhost:5173/api/v1/docs/>.
 To run everything in containers instead: `docker compose up -d`. To try the production image:
 `docker compose -f docker-compose.prod.yml up --build` (serves on port 8080).
 
+### Configuration and API keys
+
+Everything is read from `.env` (never committed; `.env.example` lists every variable). Only the
+first block is required; every service below is optional and stays off while its keys are empty.
+Restart `npm run dev` after changing `.env`. Values with spaces or `<` `>` need quotes.
+
+| Variable | Required | What it is |
+|---|---|---|
+| `DJANGO_SECRET_KEY` | yes | long random string |
+| `FIELD_ENCRYPTION_KEYS` | yes | encrypts two-factor and webhook secrets; make one with `uv run python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"` and keep a copy somewhere safe |
+| `MYSQL_*`, `REDIS_URL` | yes | database and cache (the Docker defaults work locally) |
+| `EMAIL_BACKEND`, `RESEND_API_KEY`, `DEFAULT_FROM_EMAIL` | no | real email through [Resend](https://resend.com); without them emails, including sign-up codes, are printed in the `api` and `worker` terminal output |
+| `RECAPTCHA_V3_*`, `RECAPTCHA_V2_*` | no | the bot check on sign-up and password reset; without them only the honeypot runs |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | no | "Continue with Google" |
+| `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET` | no | "Continue with Microsoft" (hidden while empty) |
+| `PLAN_PRO_PRICE` | no | the Pro price shown on `/pricing/` (default 19) |
+
+**Resend:** add your domain at resend.com/domains and create its DNS records (SPF, DKIM), then
+create an API key and set:
+
+```env
+EMAIL_BACKEND=apps.notifications.resend.ResendEmailBackend
+RESEND_API_KEY=re_...
+DEFAULT_FROM_EMAIL="HolidayOps <support@your-domain>"
+```
+
+**Google reCAPTCHA:** at <https://www.google.com/recaptcha/admin> create two keys, one
+"Score based (v3)" and one "Challenge (v2), I'm not a robot checkbox". Add `localhost` and your
+live domain to both. v3 is invisible (forms show a short Google notice instead of the badge); the
+v2 checkbox only appears when v3 isn't sure the visitor is a person.
+
+**Sign in with Google:** in [Google Cloud Console](https://console.cloud.google.com/apis/credentials),
+open (or create) an OAuth client of type "Web application" and add every address the app runs on
+under **Authorized redirect URIs**, exactly, with the trailing slash:
+
+```text
+http://localhost:5173/sso/google/callback/
+https://holidayops.ahmershah.dev/sso/google/callback/
+```
+
+The address is `APP_URL` + `/sso/google/callback/`. A missing or different one makes Google answer
+`redirect_uri_mismatch`. While the consent screen is in "Testing", add yourself under Test users.
+
+### Troubleshooting
+
+| You see | Cause and fix |
+|---|---|
+| `502 (Bad Gateway)` on `/api/...` or `manifest.webmanifest` at `localhost:5173` | Vite is up but Django on port 8000 isn't, usually while `npm run dev` is still starting or the database container is restarting. Check the `api` lines in the terminal for an error, make sure Docker Desktop is running, then restart `npm run dev`. `curl http://127.0.0.1:8000/healthz` should answer `"status": "ok"`. |
+| No "Continue with Google" button | `GOOGLE_CLIENT_ID` or `GOOGLE_CLIENT_SECRET` is empty, or Django isn't running (see 502). |
+| Google says `redirect_uri_mismatch` | Add the redirect URI above in Google Cloud Console. |
+| No reCAPTCHA visible | Normal: v3 is invisible. The notice under the form confirms it's on. The checkbox appears only on a low score. |
+| `ERROR for site owner: Invalid domain` in the checkbox | Add the domain you're on (for example `localhost`) to the reCAPTCHA key. |
+| No sign-up code email | Without Resend, the code is in the terminal output; with Resend, check its dashboard logs. |
+| `Failed to parse environment file` | A value in `.env` with spaces or `<` `>` isn't quoted. |
+
 ## API
+
+```bash
+curl -H "Authorization: Bearer hops_<prefix>_<secret>" \
+  "https://<your-host>/api/v1/business-days/check/?country=PK&date=2027-03-23"
+```
 
 ```http
 GET /api/v1/countries/
@@ -323,7 +411,7 @@ backend/
   config/            settings (base, dev, test, prod), URLs, CSP, Celery, health check
   apps/core/         pure date logic: calendars, business days, merging, iCal
   apps/api/          public API: views, serializers, throttles, API keys, usage
-  apps/accounts/     users and session auth
+  apps/accounts/     users, sessions, email codes, bot check, two-factor, SSO, account emails
   apps/orgs/         organizations, roles, invites, audit log, limits
   apps/calendars/    company calendars, sources and custom days
   apps/feeds/        private iCal feeds
@@ -337,12 +425,24 @@ docs/                architecture, security, SEO, deployment, roadmap, design no
 
 ## Security
 
-- Passwords hashed with Argon2; API keys, feed links and invite tokens stored only as hashes.
+- Passwords hashed with Argon2; API keys, feed links, invite tokens and emailed codes stored only
+  as hashes; authenticator and webhook secrets encrypted (Fernet, a key separate from
+  `SECRET_KEY`).
+- An attack simulation against the production image (`scripts/attack_simulation.py`): roles,
+  cross-org access, SSRF, races, replayed 2FA codes, key abuse, rate limits, enumeration.
+- Email confirmation before an account can sign in; sign-up and reset never reveal whether an
+  address is registered, in the answer or in its timing.
+- Honeypot plus Google reCAPTCHA v3 (v2 checkbox fallback) on sign-up and the forms that send email.
+- CSRF tokens on every session write, including anonymous login and sign-up (login CSRF).
 - Strict tenant isolation, tested on every organization endpoint.
 - Rate limits per IP, per key and per organization, with correct client IPs behind proxies.
 - Count-then-create limits taken under a database lock, so parallel requests can't exceed them.
 - Webhooks: HMAC-SHA256 signatures, HTTPS only, SSRF guard that pins the vetted IP address.
-- Content Security Policy on every response; the public pages allow no script at all.
+- Content Security Policy on every response: the public pages allow no script at all, and the web
+  app runs only scripts carrying a per-response nonce (`'strict-dynamic'`).
+- SQL only through the Django ORM (parameterised); templates and React escape output.
+- Request bodies over 512 KB refused before parsing; Gunicorn limits on headers and slow workers;
+  login locks per account as well as per IP.
 - Security events logged without secrets; exact-pinned dependencies, Dependabot, CodeQL.
 
 Details: [docs/security.md](docs/security.md). To report a vulnerability, see

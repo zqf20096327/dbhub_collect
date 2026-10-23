@@ -158,6 +158,8 @@ Did click? **Don't run it on your laptop long-term.** Move `~/Tome` to an always
 | `TOME_SCAN_WORKERS` | No | `1` | Parallel scan workers (>1 = multi-process; ~60–80 MB each) |
 | `TOME_KOSYNC_POSITION_BRIDGE` | No | `false` | Experimental: let TomeSync plugin devices pick up progress pushed by third-party KOSync clients (read-only bridge) |
 
+Secrets can also be read from a file (Docker/Kubernetes secrets): `TOME_SECRET_KEY`, `TOME_HARDCOVER_TOKEN`, `TOME_GOOGLE_BOOKS_KEY`, `TOME_SMTP_USER`, `TOME_SMTP_PASSWORD` and `TOME_OIDC_CLIENT_SECRET` each accept a `_FILE` variant, e.g. `TOME_SECRET_KEY_FILE=/run/secrets/tome_secret_key`. Set one or the other, not both.
+
 ### Supported Formats
 
 | Format | Reader | Notes |
@@ -209,6 +211,8 @@ KOReader plugin and this website stay English for now.
 ## Telemetry
 
 Off by default. Admins are asked once whether Tome may send one small anonymous report a month, and the question shows the exact report before you can say yes. Never a title, a name or a hostname. `TOME_TELEMETRY=false` hides the question entirely. What is in the report, how consent works and where it goes: [tome.bndct.sh/docs/telemetry](https://tome.bndct.sh/docs/telemetry). The numbers it produces are public at [tome.bndct.sh/stats](https://tome.bndct.sh/stats).
+
+Separately from telemetry, Tome checks upgrades.bndct.dev once a day for a newer version. Only the version number is sent. `TOME_UPDATE_CHECK=false` turns it off.
 
 ## Questions and feedback
 

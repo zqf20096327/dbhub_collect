@@ -51,6 +51,7 @@ Username login memakai identitas generik, sedangkan nama yang tampil di antarmuk
 ### 1. Katalog & Pencarian Multi-Filter Instan (< 2 Detik)
 - Mesin pencari cepat berbasis kata kunci: Nomor Surat, Nomor Agenda, Asal/Tujuan Instansi, Perihal, Ringkasan, dan Kode Klasifikasi.
 - Filter berdasarkan rentang tanggal surat/diterima dan status sifat surat (*Biasa, Penting, Segera, Kilat*).
+- Nomor surat, tanggal, asal/tujuan instansi, dan perihal diisi dari isi berkas PDF asli (bukan nilai contoh). Rincian metode dan cakupannya ada di `docs/METADATA_DARI_PDF.md`.
 
 ### 2. Built-in In-Browser PDF Streaming Viewer
 - Membaca dokumen PDF pindaian langsung di layar peramban tanpa wajib mengunduh file fisik.
@@ -83,12 +84,20 @@ Username login memakai identitas generik, sedangkan nama yang tampil di antarmuk
 - Tabel 241 surat keluar TA 2026 dengan modal form "Catat Distribusi".
 - Ekspor Buku Ekspedisi ke Excel untuk laporan kedinasan.
 
-### 7. Ekspor Buku Agenda Otomatis (Format Excel .xlsx)
+### 7. 5 Tombol Aksi Dokumen Tabel & Fitur Edit Arsip
+- Setiap baris tabel arsip memiliki 5 tombol aksi dokumen: **Lihat PDF** (streaming CDN), **Unduh** (unduh langsung file fisik), **Disposisi** (cetak lembar disposisi), **Edit** (ubah metadata & disposisi), dan **Hapus**.
+- Modal pengeditan metadata naskah (`EditLetterModal.tsx`) terhubung langsung ke endpoint `PUT /api/letters` dan mutasi TiDB Cloud secara real-time.
+
+### 8. Filter Tahun Cerdas & Maxx Mode Responsif
+- Dropdown tahun fleksibel: Tahun Berjalan (2026, 2025, 2024), Tahun Masa Depan (2027-2200), Rentang Historis (2000-2020, < 2000), dan input kustom bebas.
+- Maxx Mode pada ponsel pintar (< 768px) dan iPad/tablet (768px - 1024px) dengan breakpoint drawer 992px, 100vw x 100dvh PDF viewer, dan proteksi 0 overflow horizontal.
+
+### 9. Ekspor Buku Agenda Otomatis (Format Excel .xlsx)
 - Ekspor rekapitulasi Buku Agenda Surat Masuk dan Surat Keluar ke format spreadsheet Microsoft Excel resmi sesuai format baku laporan pertanggungjawaban dinas.
 - 11 kolom standar: No. Agenda, Jenis, Nomor Surat, Tanggal, Asal/Tujuan, Perihal, Sifat, Venue, Bidang, Instruksi Disposisi, Catatan.
 - Header hijau Dispora, freeze pane row 1, auto-filter aktif.
 
-### 8. Backup Otomatis Ganda (Cloudinary + Google Drive)
+### 10. Backup Otomatis Ganda (Cloudinary + Google Drive)
 - **Cloudinary CDN**: Storage primer untuk streaming preview PDF instan (signed URL anti-401).
 - **Google Drive**: Backup sekunder via OAuth 2.0 ke folder dinas (Surat Masuk: 420+ file, Surat Keluar: 241 file).
 - Retry logic 2x dengan exponential backoff untuk reliability 99%.

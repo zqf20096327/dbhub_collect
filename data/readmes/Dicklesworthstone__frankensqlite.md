@@ -9,7 +9,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Dicklesworthstone/frankensqlite/actions/workflows/verification-gates.yml"><img src="https://img.shields.io/github/actions/workflow/status/Dicklesworthstone/frankensqlite/verification-gates.yml?branch=main&label=CI" alt="CI"></a>
   <a href="https://github.com/Dicklesworthstone/frankensqlite/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT%2BOpenAI%2FAnthropic%20Rider-blue.svg" alt="License: MIT+Rider"></a>
   <a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/rust-nightly%20%7C%20edition%202024-orange.svg" alt="Rust"></a>
   <a href="https://github.com/Dicklesworthstone/frankensqlite"><img src="https://img.shields.io/badge/unsafe-only%20in%20VFS%20%2B%20C%20ABI-blue.svg" alt="unsafe only in VFS + C ABI"></a>
@@ -49,15 +48,15 @@ run exact-version plus SQL smoke tests before reporting success. The Linux
 artifacts are fully static so the same downloads work on glibc- and musl-based
 distributions. Exact-version, air-gapped, custom-destination, source-build, and
 post-install verification controls are documented by `install.sh --help` and
-`Get-Help ./install.ps1 -Detailed`. Rust users can instead install the CLI
-
-[...截断...]
-
- with
+`Get-Help ./install.ps1 -Detailed`. Rust users can instead install the CLI with
 `cargo +nightly install fsqlite-cli --locked` (the workspace builds on the
 dated nightly toolchain pinned in `rust-toolchain.toml`). Prebuilt installer support covers
 v0.1.16-v0.1.17 and resumes with v0.2.0; v0.1.18-v0.1.19 did not publish native
-signed artifact sets. When `minisign` is present, a missing or invalid
+signed
+
+[...截断...]
+
+ artifact sets. When `minisign` is present, a missing or invalid
 signature fails closed rather than silently downgrading authenticity.
 
 ### Why FrankenSQLite?
@@ -99,4 +98,4 @@ Most of the workspace inherits `unsafe_code = "forbid"` from the root Cargo work
 
 ### 4. File Format Compatibility Is Non-Negotiable
 
-Compatibility with existing SQLite databases is a core goal of the current runtime. FrankenSQLite is built around standard `.db` plus rollback-journal/WAL files, and a major part of the harness exists to drive byte- and behavior-level parity against C SQLite. The runtime admits databases whose header declar
+Compatibility with existing SQLite databases is a core goal of the current runtime. FrankenSQLite is built around standard `.db` plus rollback-journal/WAL files, and a major part of the harness exists to drive byte- and behavior-level parity against C SQLite. The runtime admits databases whose header declares encoding 1 (UTF-8) or encodings 2/3 (UTF-16le/UTF-16be) for both reads and writes. Parity verification is deepest on the UTF-8 surface; UTF-16 coverage is newer and remains an active verification track rather than a claim that every edge is already finishe

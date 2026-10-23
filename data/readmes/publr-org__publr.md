@@ -1,0 +1,117 @@
+# Publr
+
+**The content platform that fits in one file.**
+
+Publr is an agentic-first CMS: a complete content platform compiled into a
+single small binary that runs anywhere, natively on a server or entirely
+inside your browser, and is as easy for an automated agent to drive as for a
+person.
+
+- **Everything you expect**: content types with every field type, records,
+  media, users and roles, a visual editor when you want one.
+- **One contract**: every capability is an operation; the admin, the CLI, the
+  REST API and plugins all use the same ones, with permissions decided once.
+- **Tiny core, plugins for the rest**: workflows, revisions, releases,
+  integrations and other enterprise features are plugins on the same SDK.
+- **Owned top to bottom**: pure Zig, three vendored libraries, one SQLite
+  file, no npm, no frameworks. `zig build` and you have it.
+- **Runs in the browser**: the same binary as WebAssembly, no server at all.
+
+Status: **v0.2, pre-release.** Nothing is stable yet.
+
+## Install
+
+The installer downloads the build for your OS and CPU, verifies its checksum and
+puts the `publr` command in `~/.local/bin`. That is all an agent needs to work on a
+site that runs elsewhere, such as on Cloud:
+
+```
+curl -fsSL https://publr.dev/install.sh | sh
+```
+
+To run sites on this computer, add `sites`: it also makes a folder for them, with its
+own copy of the binary so updating the command never changes them, and offers to make
+your first site:
+
+```
+curl -fsSL https://publr.dev/install.sh | sh -s sites
+```
+
+If you would rather not pipe a script into your shell, fetch it, check it
+against the hash published here, and only then run it:
+
+```
+curl -fsSL https://raw.githubusercontent.com/publr-org/publr/v0.2.0/install.sh -o install.sh
+echo "<sha256 of install.sh, published with each release>  install.sh" | shasum -a 256 -c -
+sh install.sh          # or: sh install.sh sites
+```
+
+Or pick a build by hand from the [releases page](https://github.com/publr-org/publr/releases)
+(macOS and Linux, Apple Silicon and x86_64). Every build ships with its
+SHA-256 next to it, and the installer refuses a mismatch.
+
+## Run it
+
+```
+sites/
+  publr          the binary
+  blog/          a site: publr.zon, apps/, plugins/, data/
+```
+
+Make a site beside the binary, then run it from its folder:
+
+```
+./publr new blog && cd blog
+../publr serve                               # prints its address; its admin asks for the first account
+```
+
+Every command below means the site's own binary (`../publr` there, `./zig-out/bin/publr`
+in a Publr checkout), run from the site's folder:
+
+```
+publr serve                                  # http://127.0.0.1:8080
+publr init --email you@example.com --display_name You   # first admin; the password is generated and shown once
+publr build                                  # the apps as files, into ./output/<app> (served by `serve`)
+publr --help                                 # every command; publr <namespace> <verb> --help for details
+publr agents                                 # for an agent building plugins on this Publr
+publr skill install                          # the build-on-publr skill, into this project
+publr login https://example.com              # this machine as a device of a Publr elsewhere
+publr --site https://example.com <command>   # any command, sent there
+```
+
+The database lives in `data/publr.db` next to where you run it (`--db <path>`
+to choose another).
+
+## Develop
+
+Requires Zig 0.16.0.
+
+```
+zig build run -- serve             # build and serve natively
+zig build run -- serve --browser   # the same, running in your browser tab (after: zig build browser)
+zig build test                     # tests
+zig build verify                   # core tests + formatting + tidy rules; after every change
+zig build verify-full              # every check: wasm, smoke, parity, two-mode, browser; before a commit
+```
+
+## Docs
+
+- [Philosophy](docs/philosophy.md): why Publr is shaped the way it is.
+- [Architecture](docs/architecture.md): how Publr works, in plain terms.
+- [Content](docs/content.md): types, records, documents, statuses, media.
+- [Queries](docs/queries.md): reading content with GROQ, nested records in one read.
+- [Admin](docs/admin.md): the plain HTML admin at `/admin`.
+- [Apps](docs/apps.md): the apps of a project, `.publr` templates, islands, the static build.
+- [Streaming islands](docs/streaming.md): a proposal for islands in the page's own response, and hosting it anywhere.
+- [Authentication](docs/auth.md): accounts, sessions, passwords, setup.
+- [SDK](docs/sdk.md): the plugin surface: operations, hooks, UI.
+- [Plugins](docs/plugins.md): built-in plugins, compiled in, and installed ones, run in a WebAssembly sandbox.
+- [Plugin API reference](docs/plugin-api.md): every declaration a plugin can make, and its shape.
+- [Agents](docs/agents.md): building on Publr with an agent; the guide `publr agents` prints.
+- [CLI reference](docs/cli.md): flags and every command, one page per namespace.
+- [REST API](docs/rest.md): the server and the `/api/` routes.
+- [Publr in the browser](docs/browser.md): the same binary as WebAssembly, no server.
+- [Database schema](docs/schema.md): every table, column and index, and why.
+- [Updates](docs/updates.md): what a version promises, backups, updating and going back, migrations.
+- [Dependencies](docs/dependencies.md): the three libraries, and the decision tree for any more.
+- [Build reference](docs/build.md): every build step and rule.

@@ -59,15 +59,20 @@ Download a release (no toolchain, checksum-verified) from
 <https://github.com/Reliary/ocserve/releases>. Linux x86_64 and aarch64
 tarballs, each with a `.sha256` and a combined `SHA256SUMS`.
 
-From source:
+From source (this is the supported path for current releases):
 
 ```sh
-cargo install ocserve          # needs Rust 1.98+
+git clone https://github.com/Reliary/ocserve && cd ocserve
+cargo build --release          # needs Rust 1.98+
 ```
 
-`cargo install ocserve` currently gives **0.3.1**. The 0.4.x crates are not on
-crates.io yet because the registry caps crate size and one crate carries the
-embedded web UI. Use a release tarball for 0.4.x.
+**crates.io is stale on purpose.** `cargo install ocserve` resolves to
+**0.3.1**; the 0.4.x and later crates are not published because `ocserve-http`
+embeds the version-matched web UI and its packed payload exceeds crates.io's
+10 MiB per-crate limit. A size-increase request is with the registry, and
+nothing is shipped that would silently drop the air-gapped web UI just to fit.
+Use a release tarball (above) or build from the tag. This note will be removed
+the release the limit is raised.
 
 From a clone, including an optional systemd user service (never installed
 implicitly):
@@ -224,24 +229,45 @@ vendored binary for the version under test. Each has its own README under
 
 ## Documentation map
 
-| Doc | Contents |
+The full, categorised index is in `docs-README.md`. The short version:
+
+| You want to | Read |
 |---|---|
-| `AGENTS.md` | binding rules, commit and branch policy, working agreement |
-| `PLAN.md` | scope, contract freeze, architecture, API surface, divergences |
-| `V2-PLAN.md` | opencode 2 engine: inbox, claims, union wire, dual events, log replay |
-| `GAPS-PLAN.md` | gap closure: what was built, what stays diverged and why |
-| `crates/ocserve-plugin/src/host/README-v2.md` | v2 plugin capability matrix |
-| `STORAGE.md` | SQLite pragmas, schema and blob rules, FTS5 design |
-| `MEMORY.md` | memory budget lines, allocator settings, allocation rules |
-| `SRE.md` | boot checks, metrics, config knobs, service and rollback |
-| `TESTING.md` | test levels, traceability, anti-theater rules |
-| `COMPACTION.md` | auto-compaction: upstream algorithm, wire surfaces, design |
-| `SNAPSHOT.md` | snapshots, revert/unrevert, session diff, `/vcs/apply` |
-| `PERF-10X.md` | performance program: target, acceptance, evidence |
-| `bench/load/`, `bench/parity/`, `bench/pair/`, `bench/capdiff/` | benchmark harnesses and their results |
-| `DIFFERENTIATION.md` | what is built differently from upstream, and what was killed |
-| `TRACEABILITY.md` | requirement to test to evidence matrix |
-| `THIRD-PARTY.md` | upstream MIT attribution and compatibility framing |
+| install, or decide whether this fits | `README.md`, `CHANGELOG.md` |
+| expose it beyond loopback | `SECURITY.md` |
+| understand the wire contract and what differs | `PLAN.md` (divergence ledger in section 17) |
+| work on storage, memory, or the service | `STORAGE.md`, `MEMORY.md`, `SRE.md` |
+| change behaviour without breaking something | `TESTING.md`, `TRACEABILITY.md`, `AGENTS.md` |
+| work on a subsystem | `COMPACTION.md`, `SNAPSHOT.md`, `PLATFORM.md`, `V2-PLAN.md` |
+| run the compatibility or load harnesses | `bench/plugins/README.md`, `bench/load/README.md` |
+
+## Heavy builds
+
+A build inside the agent is an external workload: the service contains it but
+does not schedule it. Run heavy Rust work in a scope the machine governs:
+
+```sh
+systemd-run --user --scope --collect \
+  -p MemoryHigh=4G -p MemoryMax=6G -p CPUQuota=800% -p Nice=10 \
+  --working-directory="$PWD" \
+  cargo build --release
+```
+
+That scope is outside `ocserve.service`, so it does not count against the
+service's memory and the service cannot kill it. For a standing policy, put
+those properties in `~/.config/systemd/user/ocserve-build.slice` and pass
+`--slice=ocserve-build.slice`. Do not background a build inside a tool call
+(`nohup cargo build &`): it stays in the tool class and is capped with it.
+
+The service itself weights CPU so the API wins over its child classes and
+caps each class separately (see `SRE.md` section 5.5). It does not set
+`CARGO_BUILD_JOBS`, `RAYON_NUM_THREADS` or a build CPU quota.
+
+## Unmanaged resource policy
+
+`scripts/install.sh --no-resource-limits` installs the unit without memory
+caps and turns off the child partition and sidecar recycle, leaving the
+operator to own memory policy. The default install is managed.
 
 ## Repository hygiene
 

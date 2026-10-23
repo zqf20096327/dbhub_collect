@@ -8,6 +8,8 @@ Postgres-to-Iceberg CDC engine. Offload analytical queries from your production 
 
 streambed streams WAL changes via logical replication, writes Parquet files to S3, and commits Iceberg metadata. Query the result with any Iceberg-compatible engine -- or use the built-in query server, which speaks the Postgres wire protocol so you can connect with `psql`.
 
+**[Try the live Hacker News analytics demo →](https://demo.streambed.dev)**
+
 ## See It In Action
 
 Same analytical query on pgbench (1M accounts, 500K history rows). Postgres on the left, Streambed on the right.
@@ -17,6 +19,28 @@ Same analytical query on pgbench (1M accounts, 500K history rows). Postgres on t
 ![Demo](docs/demo.gif)
 
 No ETL. No Spark. Just Postgres + S3.
+
+## Installation
+
+### Docker image (recommended)
+
+Streambed publishes a Linux `amd64` image to the GitHub Container Registry.
+Use a version tag in production; `latest` tracks the newest stable release.
+
+```bash
+docker pull ghcr.io/viggy28/streambed:latest
+docker run --rm ghcr.io/viggy28/streambed:latest --version
+```
+
+### GitHub Release binary (Docker-free)
+
+Each [GitHub Release](https://github.com/viggy28/streambed/releases) includes a
+Linux `amd64` binary archive and checksums. Download and extract the archive,
+then run Streambed directly or supervise it with systemd.
+
+See [Deploy Streambed](docs/deployment.md) for production `docker run` and
+systemd examples. Building from source is the contributor and development path;
+see [Development](#development).
 
 ## Quick Start
 
