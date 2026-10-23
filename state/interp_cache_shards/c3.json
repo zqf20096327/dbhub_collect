@@ -10335,5 +10335,77 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8beaf22d053e": {
+  "identity": {
+   "one_liner": "Telegram 自助售货+抢单派单机器人，基于 SQLite 存储",
+   "review": "这是一个运行在 Telegram 上的自助售货与派单机器人，包含买家下单、库存池售卖、抢单派单、佣金冻结提现等功能，支持 OkPay/KKPay/TRON/TON 四种 USDT 充值通道。面向需要 Telegram 内售货和派单管理的运营者。数据存于 SQLite，首启自动建表，可用 SHOP_DB_PATH 自定义库路径。",
+   "highlights": [
+    "库存池一件一卖，条件更新原子操作防止超卖与双抢",
+    "支持 OkPay/KKPay/TRON TRC20/TON 四种 USDT 充值通道",
+    "佣金冻结解冻走 CAS，含自动备份与并发压测脚本"
+   ],
+   "use_cases": [
+    "Telegram 内商品自动发货与积分商城运营",
+    "报单类需求的匿名派单与接单员佣金管理",
+    "USDT 冷钱包/支付平台收款自动对账"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "版本 `v2.6.7` · Python 3.10+ · SQLite · python-telegram-bot 22.8 ／ SQLite 3 ／ |连接复用|每线程一条持久 SQLite 连接，WAL 只设一次；1000 次读写 14 → 249 次/秒|",
+     "lines": [
+      5,
+      72,
+      186
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其使用 SQLite 存储订单、库存、设置等业务数据，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单一许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "版本 `v2.6.7` · Python 3.10+ · SQLite · python-telegram-bot 22.8 ／ 一个跑在 Telegram 上的完整自助售货 + 派单系统。买家下单，系统把需求匿名派到接单群，接单员抢单回单赚佣金，管理员只管审核提现。 ／ |`SHOP_DB_PATH`|可选，自定义数据库路径，默认 `data/shop.db`|",
+   "evidence_lines": [
+    5,
+    15,
+    97
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "danielburtonn844-ai/GShopBot",
+  "sha": "8beaf22d053e",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
