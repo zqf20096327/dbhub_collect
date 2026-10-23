@@ -9642,5 +9642,69 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ac5fcfbf40d1": {
+  "identity": {
+   "one_liner": "基于 ESP8266 与 PHP/MySQL 服务器的 IoT 远程控制、自动化与环境数据记录系统",
+   "review": "这是一个客户端-服务器架构的 IoT 系统：ESP8266 设备定期轮询 PHP/MySQL 服务器，记录传感器数据并获取引脚控制指令，支持 OTA 固件更新、太阳能逆变器数据采集和 Meshtastic 集成。面向希望完全掌控自建后端代码的个人用户（如离网住宅场景）。服务端依赖 PHP、MySQL、APCu 与 Chart.js，无前后端框架，代码全部包含于仓库内。",
+   "highlights": [
+    "支持通过 web 端编辑数据库记录，远程控制 ESP8266 引脚与继电器，无需重新烧录即可变更引脚配置",
+    "支持 OTA 固件更新、多传感器数据绘图、太阳能逆变器数据记录及 Meshtastic 集成",
+    "服务端采用无框架的 PHP/MySQL，登录、数据库访问与网页渲染代码自包含于仓库内"
+   ],
+   "use_cases": [
+    "离网住宅的远程设备控制与自动化（锅炉、电热水器、充电插座等）",
+    "多点温湿度/气象传感器的数据采集与多时间尺度绘图",
+    "基于传感器数值和天气预报的云端自动化决策"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "But the main feature in this system is that it allows you to remotely control devices across the internet and also supports automation based on the values of sensors known to the central database. It does this using a server reachable via the internet running  ／ Note that all the databases referred to are MySQL databases that exist entirely on a server somewhere on the internet (or locally in your local network, if you choose to work that way). No databases are implemented on actual microcontrollers or in web browsers",
+     "lines": [
+      11,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 MySQL 存储设备指令与传感器数据，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "But the main feature in this system is that it allows you to remotely control devices across the internet and also supports automation based on the values of sensors known to the central database. It does this using a server reachable via the internet running PHP/MySQL. There is no server-side or Javascript compilation and relatively few dependencies: PHP, MySQL, APCu, the Chart.js 3.7 graphing library, and a variety of Arduino sensor libraries, so this is not much trouble to get working on just about any server where you have a reasonable amount of control. (There is also some Python code to support a Meshtastic integration.)",
+   "evidence_lines": [
+    11
+   ]
+  },
+  "fn": "judasgutenberg/Esp8266_RemoteControl",
+  "sha": "ac5fcfbf40d1",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

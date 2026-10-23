@@ -11203,5 +11203,100 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a68d1e7c949": {
+  "identity": {
+   "one_liner": "Rust 数据平台：对象存储上的混合检索引擎，含文档/图/SQL",
+   "review": "Loams 是用 Rust 编写的开源数据平台，将向量、BM25 等混合检索、响应式文档（Live）、图（Graph）、分析（House）、MySQL/Postgres 线协议和持久化 agent 运行构建在同一个对象存储桶上，通过日志作为写入主干。面向用 AI agent 构建软件的开发者，通过 Docker Compose 自托管运行。当前为 0.1.1 预览版，0.x 版本间 API 和磁盘格式可能变化。",
+   "highlights": [
+    "提供混合检索引擎：向量、BM25 与过滤在单个 DataFusion 查询中经 RRF 融合",
+    "兼容 Qdrant 与 Elasticsearch 客户端 API，并提供 Postgres 和 MySQL 线协议及 Arrow Flight SQL",
+    "数据保存在用户自己的对象存储（S3、GCS、Azure Blob 等），以开放格式存放"
+   ],
+   "use_cases": [
+    "为 AI 应用整合检索、文档、图、分析等多种数据能力到单一存储桶",
+    "自托管部署整套 agent 开发环境与配套数据平台",
+    "用现有 Qdrant/Elasticsearch 客户端接入而无需修改代码"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- **More than retrieval.** Reactive documents (Live), graphs (Graph), analytics (House), MySQL and Postgres, and durable agent runs (Durable), on the same storage. ／ Loams architecture: clients reach the retrieval engine, Live, Durable and Postgres; a stateless gateway and router tier (planned) and the runtime and jobs (planned) are shown dashed; TiKV holds metadata and transactions; object storage holds all data in open f ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      31,
+      35,
+      41,
+      45
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "- **More than retrieval.** Reactive documents (Live), graphs (Graph), analytics (House), MySQL and Postgres, and durable agent runs (Durable), on the same storage. ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+     "lines": [
+      31,
+      41,
+      45
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "compat",
+     "quote": "|**Loams House**|Experimental. ClickHouse-compatible analytics with engine-level access control (opt-in profile)|",
+     "lines": [
+      44
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "Loams architecture: clients reach the retrieval engine, Live, Durable and Postgres; a stateless gateway and router tier (planned) and the runtime and jobs (planned) are shown dashed; TiKV holds metadata and transactions; object storage holds all data in open f ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket| ／ Apache License 2.0. Loams builds on DataFusion, Lance, Tantivy, Quickwit, qdrant-edge, SlateDB, openraft, TiKV, TiDB, Neon, Grafeo, chDB and Resonate; attributions are in NOTICE. Loams is fully open source: there is no open core and no paid edition. The meteri",
+     "lines": [
+      35,
+      45,
+      95
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据平台/存储引擎，为构建 AI 应用提供数据库能力，而非仅使用某个数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0，README 声明完全开源、无 open core、无付费版本",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Underneath the products is the data platform. A typical AI application runs Elasticsearch, Qdrant, a graph database, Kafka and a workflow engine: five stateful clusters, several copies of the same data, and retrieval glued together in application code. Loams replaces them with one engine on one bucket: ／ |**Retrieval engine**|Collections, hybrid search, SQL, streams and links; native REST, Arrow Flight SQL, Qdrant and Elasticsearch APIs; Postgres and MySQL wire| ／ |**Loams SQL / Postgres**|MySQL on a patched TiDB; Postgres on our Neon fork, storage on the bucket|",
+   "evidence_lines": [
+    25,
+    41,
+    45
+   ]
+  },
+  "fn": "ostrium-labs/loams",
+  "sha": "7a68d1e7c949",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8739,5 +8739,72 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6102a07d0d29": {
+  "identity": {
+   "one_liner": "Hermes Agent 的本地长期记忆与上下文压缩插件，基于 SQLite 存储",
+   "review": "Chronicle 是为 Hermes Agent 设计的记忆插件，将对话中的偏好、决策和历史持久化到本机 SQLite 数据库，并在上下文压缩前先归档、之后按需恢复，检索在证据不足时可选择不回答。它以 Hermes 插件形式安装，无需额外服务或必需的 Python 依赖，要求 Python 3.9+，MIT 许可，面向使用 Hermes 的本地用户。",
+   "highlights": [
+    "提供记忆提供者与上下文引擎两个插件槽位，可分别独立启用",
+    "内存以事件溯源方式记录，带来源、历史、更正、遗忘与访问控制工具",
+    "无需嵌入模型即可通过全文检索召回记忆，无强制外部服务依赖"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 会话提供跨会话的长期记忆持久化",
+    "在长对话上下文压缩时保留并恢复关键信息",
+    "本地环境下的用户偏好与历史工作记录管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "your machine in SQLite; relevant memories come back when they are useful.",
+     "lines": [
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身将记忆数据存储在本地 SQLite 数据库中，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "your machine in SQLite; relevant memories come back when they are useful. ／ > default profile it is `~/.hermes/commons/db/chronicle/chronicle.db`. Chronicle has ／ Two Hermes plugin slots share one in-process core. Either slot can run without the",
+   "evidence_lines": [
+    17,
+    59,
+    65
+   ]
+  },
+  "fn": "indigokarasu/chronicle-agent-context-and-memory",
+  "sha": "6102a07d0d29",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10228,5 +10228,112 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22ab56ba6418": {
+  "identity": {
+   "one_liner": "代码优先的反向 ETL 工具，YAML 定义从仓库到外部系统的数据同步",
+   "review": "drt 是一个 CLI 反向 ETL（Reverse ETL）工具，用于把数据仓库中的数据同步回 Slack、HubSpot 等 SaaS 工具或数据库。以 YAML 在自有仓库中声明同步任务，提供 plan/apply 评审写入、删除保护、Dagster 集成与内置 MCP 服务器。面向数据工程师，需要通过 pip 安装并自托管运行，plan 功能目前仅支持可回读的 SQL 数据库与仓库。",
+   "highlights": [
+    "提供 dlt→dbt→drt 流程中的反向同步，支持源/目标连接器矩阵与 extras 安装（如 drt-core[postgres]）",
+    "提供 drt plan/drt apply 评审式写入、write_policy 与 max_delete_pct 删除保护",
+    "内置 MCP 服务器与 Claude Code 技能，可用 AI 客户端生成、运行和校验同步配置"
+   ],
+   "use_cases": [
+    "将仓库数据定期同步到 CRM、Slack、Google Sheets 等业务工具",
+    "在 GitHub Actions/Airflow/Dagster 等以 CI 方式运行数据激活管道",
+    "通过 MCP 让 AI 工具编写与执行同步任务"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|✅ v0.1|`pip install drt-core[postgres]`|Password (env var)| ／ drt init --template postgres_to_slack",
+     "lines": [
+      236,
+      74
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|✅ v0.5|`pip install drt-core[mysql]`|Password (env var)| ／ Sheets, GitHub Actions, MySQL, ClickHouse, BigQuery, …) and",
+     "lines": [
+      241,
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|✅ v0.4.2|(core)|File path|",
+     "lines": [
+      238
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|✅ v0.6|`pip install drt-core[sqlserver]`|Password (env var)|",
+     "lines": [
+      245
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|✅ v0.4.3|`pip install drt-core[clickhouse]`|Password (env var)| ／ Sheets, GitHub Actions, MySQL, ClickHouse, BigQuery, …) and",
+     "lines": [
+      240,
+      80
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "drt 为数据仓库与各数据库/外部系统间提供同步连接器，是为数据库生态服务的工具而非使用某库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0，README 提及 open core 边界（OPEN_CORE.md）",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dlt loads data in, dbt transforms it, and **drt** activates it back out — reverse ETL from your warehouse to the tools your team works in, as YAML in your own repo. No dashboard to babysit, no audience builder duplicating what dbt already does, no hosted runtime billing you per row. Your data goes straight from your warehouse to the destination — never through a drt-hosted intermediary. ／ |PostgreSQL|✅ v0.1|`pip install drt-core[postgres]`|Password (env var)| ／ |ClickHouse|✅ v0.4.3|`pip install drt-core[clickhouse]`|Password (env var)|",
+   "evidence_lines": [
+    7,
+    236,
+    240
+   ]
+  },
+  "fn": "drt-hub/drt",
+  "sha": "22ab56ba6418",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9454,5 +9454,132 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8069d411d131": {
+  "identity": {
+   "one_liner": "数据库版本迁移工具，CLI+本机 GUI 共用配置与迁移引擎",
+   "review": "Flydb 面向开发、运维与实施人员，提供数据库 schema 版本迁移能力，含本机 GUI、CLI、Java API 与 Spring Boot starter 四种入口，支持 checksum 校验、并发锁、SQL 预览与执行记录，并通过 Skill/MCP 供 AI Agent 调用。基于 Java 8 零第三方依赖内核，需使用者自备 JDBC 驱动；覆盖 MySQL、PostgreSQL、Oracle 及达梦、人大金仓等国产数据库。",
+   "highlights": [
+    "提供 GUI、CLI、Java API 与 Spring Boot 2/3 starter，共用同一配置与迁移引擎",
+    "支持 checksum 校验、并发锁、事务处理、SQL 预览与撤销脚本（U 版本）",
+    "通过 Skill、JSON 与 MCP 接入 AI Agent，写入工具默认不注册"
+   ],
+   "use_cases": [
+    "多环境（开发/测试/生产）数据库结构版本管理与升级",
+    "CI 流水线中的应用数据库 schema 自动迁移",
+    "信创/国产数据库环境下的迁移实施与核验"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "支持 MySQL、PostgreSQL、Oracle 及多种国产数据库；**Java 8+ 即可运行，GUI 无需 Node.js、外网或大模型**。 ／ 以下以已创建的 MySQL 数据库为例： ／ cp /path/to/mysql-connector-j.jar drivers/ ／ |MySQL|是|自动化兼容测试；CLI 发行包端到端验证|",
+     "lines": [
+      18,
+      54,
+      57,
+      78
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "支持 MySQL、PostgreSQL、Oracle 及多种国产数据库；**Java 8+ 即可运行，GUI 无需 Node.js、外网或大模型**。 ／ |PostgreSQL|是|自动化兼容测试|",
+     "lines": [
+      18,
+      79
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "支持 MySQL、PostgreSQL、Oracle 及多种国产数据库；**Java 8+ 即可运行，GUI 无需 Node.js、外网或大模型**。 ／ |Oracle|是|自动化契约测试；已在授权真实实例完成 validate、clean、migrate 端到端验证|",
+     "lines": [
+      18,
+      80
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|TiDB|复用 MySQL 家族|轻量兼容测试；真实环境覆盖持续补充|",
+     "lines": [
+      85
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|OceanBase|复用 Oracle/MySQL 家族|Oracle 租户已在授权真实实例完成端到端验证；MySQL 租户为轻量兼容测试|",
+     "lines": [
+      84
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|达梦 DM8|是|DM8 8.1.3.62 授权实例端到端验证（大小写不敏感）；0.3.8 修复重复迁移，见实测记录|",
+     "lines": [
+      81
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "|openGauss|是|openGauss 5.0.0 真实实例验证（A 兼容模式）：迁移、重复执行、锁互斥与 DDL 回滚，见实测记录|",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为数据库迁移服务的工具/组件，通过 JDBC 连接各数据库执行迁移，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "Oracle",
+    "TiDB",
+    "OceanBase",
+    "Dameng",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0；JDBC 驱动由使用者按各厂商许可自行获取",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Flydb 是给开发、运维和实施人员使用的数据库版本迁移工具。用本机 GUI 管理多套配置、核对 SQL 和查看执行进度；用 CLI 接入脚本与 CI；有 Agent 时，一键复制上下文继续处理。三种入口使用同一份配置与迁移引擎，GUI 和同机 CLI 共用执行记录。 ／ |数据库家族|内置方言|当前验证层级| ／ |其他 JDBC 数据库|可扩展|需提供 JDBC 驱动及 `DatabaseType` SPI 方言实现|",
+   "evidence_lines": [
+    16,
+    76,
+    86
+   ]
+  },
+  "fn": "zzxCoding/Flydb",
+  "sha": "8069d411d131",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

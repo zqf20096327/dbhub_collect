@@ -10933,5 +10933,79 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e4c46e848808": {
+  "identity": {
+   "one_liner": "去中心化预言机网络节点，连接链上与链下计算",
+   "review": "Chainlink 核心节点与合约代码仓库，供参与去中心化预言机网络的节点运营商运行。节点用 Go 构建，需连接 PostgreSQL 数据库存储数据，并通过 WebSocket 访问以太坊节点；提供 CLI 与 Web UI 管理任务，通过 REST API 扩展外部适配器。",
+   "highlights": [
+    "节点以 PostgreSQL 为后端数据库，要求 Postgres >= 15.x 并建议配置 SSL 连接",
+    "支持多种以太坊执行客户端（Geth、Besu、Nethermind、Erigon 等）",
+    "提供 CLI、Web UI、环境变量/TOML 配置及外部适配器 REST 扩展机制"
+   ],
+   "use_cases": [
+    "节点运营商部署运行 Chainlink 预言机节点",
+    "开发者从源码构建节点并搭建本地测试环境",
+    "通过外部适配器为智能合约接入自定义数据源与链下计算"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "3. Install Postgres (>= 15.x). It is recommended to run the latest major version of postgres. ／ The tests require a postgres database. In turn, the environment variable",
+     "lines": [
+      28,
+      218
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "This repo contains the Chainlink core node and contracts. The core node is the bundled binary available to be run by node operators participating in a decentralized oracle network.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "节点使用 Postgres 存储自身数据，PostgreSQL 是运行依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repo contains the Chainlink core node and contracts. The core node is the bundled binary available to be run by node operators participating in a decentralized oracle network. ／ 3. Install Postgres (>= 15.x). It is recommended to run the latest major version of postgres.",
+   "evidence_lines": [
+    14,
+    28
+   ]
+  },
+  "fn": "smartcontractkit/chainlink",
+  "sha": "e4c46e848808",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10921,5 +10921,85 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c4234d78bc40": {
+  "identity": {
+   "one_liner": "基于 Next.js + Drizzle + SQLite 的候补名单应用，含双重确认与批量发信",
+   "review": "这是一个完整的 Next.js 候补名单模板应用：访客提交邮箱后经双重确认入队，附带推荐排位、批量启动邮件和退订 webhook 处理，数据存于单个 SQLite 文件，邮件经 Mailtrap Email API 的 Transactional/Bulk 流发送。适合需要在产品发布前收集邮箱、部署到 Vercel 的开发者直接使用或改造。注意 README 提示 SQLite 在 Vercel 上不持久，正式部署需切换 Postgres。",
+   "highlights": [
+    "实现双重确认（hashed 单次 token，48 小时有效）与蜜罐、IP 限流防垃圾注册",
+    "通过 Mailtrap Email API 批量发送启动邮件（每批最多 500 封）并记录每用户发送状态",
+    "提供退订、bounce、spam 投诉的签名 webhook，后续发送自动跳过已标记用户"
+   ],
+   "use_cases": [
+    "产品发布前收集候补邮箱名单",
+    "需要推荐裂变排位的预售邮件列表",
+    "作为 Next.js 候补名单模板复制到自有项目"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The app is a single Next.js project. Visitors use the web pages, you run the launch from the command line, and Mailtrap sits on the other side for both sending and events. Everything is stored in one SQLite database. ／ 7. The app checks the token against SQLite: it must exist, be unused and be less than 48 hours old. ／ |`DATABASE_URL`|SQLite file path. Default `./data/waitlist.db`.|",
+     "lines": [
+      44,
+      74,
+      259
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "SQLite writes to local disk, and a Vercel function's disk is not persistent, so signups would vanish between invocations. For a real deployment switch to Postgres (for example Neon):",
+     "lines": [
+      302
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明数据存储在单个 SQLite 数据库中，该仓库是使用数据库的候补名单应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The app is a single Next.js project. Visitors use the web pages, you run the launch from the command line, and Mailtrap sits on the other side for both sending and events. Everything is stored in one SQLite database. ／ |Data|Drizzle ORM, SQLite (better-sqlite3)|",
+   "evidence_lines": [
+    44,
+    91
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Sid-Lais/nextjs-waitlist-double-opt-in",
+  "sha": "c4234d78bc40",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

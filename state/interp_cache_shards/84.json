@@ -10467,5 +10467,90 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f4ae8f1c2f9d": {
+  "identity": {
+   "one_liner": "Prisma ORM 的 TypeScript 重写版，用可读查询替代 SQL",
+   "review": "Prisma ORM 的 TypeScript 重写版本，面向 Node.js/TypeScript 开发者，通过声明式查询替代手写 SQL。内置 AI agent skills（Claude Code、Cursor 等运行时目录），核心通过公共 SPI 扩展，PostgreSQL 与 MongoDB 为一级支持，SQLite 为概念验证，MySQL 排在其后。当前 8.0.0 为发布候选版。",
+   "highlights": [
+    "提供 CLI 脚手架与 `orm init`，将 Prisma 接入 Next.js、Hono、Nuxt 等应用模板",
+    "安装面向 AI agent 的 SKILL.md 文件，支持 Claude Code、Cursor、Copilot Agent、Devin 等运行时",
+    "通过公共 SPI 支持扩展，已提供 pgvector、PostGIS、ParadeDB、Supabase 等扩展"
+   ],
+   "use_cases": [
+    "TypeScript 应用中以人类可读查询访问 PostgreSQL/MongoDB",
+    "在 AI agent 辅助的开发流程中管理数据模型与查询",
+    "为自有数据库或工具编写 Prisma 扩展"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The interactive scaffolder picks an app template (Next.js, Hono, Nuxt, Astro, NestJS, SvelteKit, TanStack Start, or Elysia) and wires Prisma 8 in with your chosen database (PostgreSQL or MongoDB): ／ - **PostgreSQL** — the primary target, first-class support",
+     "lines": [
+      26,
+      90
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "MySQL follows after SQLite. See the feature scoreboard for what each database supports today.",
+     "lines": [
+      94
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** — planned next, a proof of concept today",
+     "lines": [
+      92
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用与数据库之间提供 ORM 层及数据库连接，属于数据库生态工具而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Prisma 8** is a TypeScript rewrite of Prisma ORM, designed to be **extensible**, **composable**, and **AI-agent friendly** by default. Read the announcement or start with the docs. ／ ## Supported databases ／ Prisma 8 has a minimal core. Everything around it, including Postgres support itself, is built on the same public SPI that's available to any author. If you've wanted to integrate your tool, your database, or your library with Prisma, this is the way in.",
+   "evidence_lines": [
+    15,
+    88,
+    75
+   ]
+  },
+  "fn": "prisma/orm",
+  "sha": "f4ae8f1c2f9d",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
