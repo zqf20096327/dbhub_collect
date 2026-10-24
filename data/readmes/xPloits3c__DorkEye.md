@@ -127,36 +127,35 @@
 
 ---
 
-🔹 # WIZARD Mode
+🔹 # WIZARD Mode &nbsp;[![Docs](https://img.shields.io/badge/📖_Docs-2088FF?style=flat-square)](Docs/wizard.md)
 ```bash
   python3 dorkeye.py --wizard
 ```
-🔹 # Basic search
+🔹 # Basic search &nbsp;[![Docs](https://img.shields.io/badge/📖_Docs-2088FF?style=flat-square)](Docs/cli.md)
 ```bash
   python3 dorkeye.py -d "inurl:admin" -o results.txt
 ```
-🔹 # Dork Generator + Detection
+🔹 # Dork Generator + Detection &nbsp;[![Docs](https://img.shields.io/badge/📖_Docs-2088FF?style=flat-square)](Docs/dork_generator.md)
 ```bash
   python3 dorkeye.py --dg=sqli --mode=aggressive --sqli --stealth -o report.json
 ```
-🔹 # SQLi + stealth
+🔹 # SQLi + stealth &nbsp;[![Docs](https://img.shields.io/badge/📖_Docs-2088FF?style=flat-square)](Docs/sqli.md)
 ```bash
   python3 dorkeye.py -d "site:example.com .php?id=" --sqli --stealth -o scan.html
 ```
-🔹 # Fast scan
+🔹 # Fast scan &nbsp;[![Docs](https://img.shields.io/badge/📖_Docs-2088FF?style=flat-square)](Docs/cli.md)
 ```bash
   python3 dorkeye.py -d dorks.txt --no-analyze -c 200 -o fast_results.csv
 ```
-🔹 # Direct SQLi test on a URL
+🔹 # Direct SQLi test on a URL &nbsp;[![Docs](https://img.shields.io/badge/📖_Docs-2088FF?style=flat-square)](Docs/sqli.md)
 ```bash
   python3 dorkeye.py -u "https://target.com/page.php?id=1" --sqli --stealth -o result.json
 ```
-🔹 # Re-process a saved result file
+🔹 # Re-process a saved result file &nbsp;[![Docs](https://img.shields.io/badge/📖_Docs-2088FF?style=flat-square)](Docs/cli.md)
 ```bash
   python3 dorkeye.py -f Dump/results.json --sqli --xss --dbscan --analyze -o retest.html
 ```
-
-🔹 # Web Console
+🔹 # Web Console &nbsp;[![Docs](https://img.shields.io/badge/📖_Docs-2088FF?style=flat-square)](Docs/webconsole.md)
 ```bash
   python3 dorkeye.py --ui
 ```
@@ -172,55 +171,74 @@
 ## 📁 Project Structure
 ```
 DorkEye/
-│ ├── dorkeye.py               ← DorkEye Engine
-│ ├── requirements.txt
-│ ├── http_fingerprints.json
-│ ├── README.md
+│ ├── dorkeye.py                      ← DorkEye Engine
+│ ├── requirements.txt                ← Python dependencies
+│ ├── http_fingerprints.json          ← 22 browser/OS HTTP profiles
+│ ├── README.md                       ← This file (you are here)
+│ ├── LICENSE                         ← MIT license
+│ ├── .gitignore                      ← Git ignore rules
 │ /Tools/
-│    ├── dork_generator.py     ← Dork Generator Queries
-│    ├── dorkeye_agents.py     ← Agents v3.1 pipeline
-│    ├── dorkeye_patterns.py   ← Shared pattern library
-│    ├── dorkeye_analyze.py    ← Standalone analysis CLI
-│    ├── db_portscan.py   ← Scans exposed database ports
-│    ├── dorkeye_web.py   ← Local web interface
-│    ├── sqli.py     ← 5 Method sqli injection (105 payloads)
-│    └── xss.py     ← 4 Method xss injection (111 payloads)
+│    ├── __init__.py                  ← Package initializer
+│    ├── dork_generator.py            ← Dork Generator Queries
+│    ├── dorkeye_agents.py            ← Agents pipeline
+│    ├── dorkeye_patterns.py          ← Shared pattern library
+│    ├── dorkeye_analyze.py           ← Standalone analysis CLI
+│    ├── db_portscan.py               ← Scans exposed database ports
+│    ├── dorkeye_web.py               ← Local web interface
+│    ├── sqli.py                      ← 5 Method sqli injection (105 payloads)
+│    └── xss.py                       ← 4 Method xss injection (111 payloads)
 │ /Templates/
-│    ├── dorks_templates.yaml
-│    ├── sql.yaml
-│    └── example.yaml
+│    ├── dorks_templates.yaml         ← Default template 
+│    ├── example.yaml                 ← Example template
+│    └── sql.yaml                     ← SQLi dork template
 │ /.github/
-│    ├── CODE_OF_CONDUCT.md
-│    ├── CONTRIBUTING.md
-│    ├── SECURITY.md
-│    ├── pull_request_template.md
+│    ├── CODE_OF_CONDUCT.md           ← Community guidelines
+│    ├── CONTRIBUTING.md              ← Contribution guide
+│    ├── SECURITY.md                  ← Security policy
+│    ├── FUNDING.yml                  ← Sponsor configuration
+│    ├── pull_request_template.md     ← PR template
 │     /ISSUE_TEMPLATE/
-│        ├── bug_report.md
-│        └── feature_request.md
-│     /workflows
-│        └── claude-dorkeye.yml
-│ /Dump/
+│        ├── bug_report.md            ← Bug report template
+│        └── feature_request.md       ← Feature request template
+│     /workflows/
+│        └── claude-dorkeye.yml       ← GitHub Actions AI agent
+│ /Docs/
+│    ├── cli.md                       ← Full CLI reference (38 flags)
+│    ├── wizard.md                    ← Interactive wizard guide
+│    ├── sqli.md                      ← SQL injection reference
+│    ├── xss.md                       ← XSS injection reference
+│    ├── agents.md                    ← Agents pipeline guide
+│    ├── crawler.md                   ← Adaptive crawler guide
+│    ├── dbscan.md                    ← DB port scan guide
+│    ├── fingerprinting.md            ← HTTP fingerprinting guide
+│    ├── http_fingerprints.md         ← Fingerprint profiles reference
+│    ├── webconsole.md                ← Web Console guide
+│    ├── termux.md                    ← Termux / Android setup
+│    ├── output_formats.md            ← Output formats guide
+│    ├── file_categories.md           ← File categories guide
+│    ├── dork_generator.md            ← Dork generator guide
+│    ├── INSTALL.md                   ← Installation guide
+│    ├── REPORT_HTML.md               ← HTML report guide
+│    ├── USAGE.md                     ← Usage examples
+│    ├── DDGSEE.md                    ← DuckDuckGo engine notes
+│     /Dorks/
+│        ├── Dorks_Collection_List.txt ← Curated dork collection
+│        ├── JSON_exposure_dork.txt   ← JSON exposure dorks
+│        └── sql_dorks.txt            ← SQLi-oriented dorks
+│ /Screenshots/
+│    ├── dev_logo_0.png
+│    ├── dev_logo_1.png
+│    ├── dev5_menu_h0.png
+│    ├── dev5_menu_h1.png
+│    ├── directsqltest.png
+│    ├── directsqltesthtml.png
+│    ├── sqlmultipletestfromfile.png
+│    └── sqlmultipletestfromfilehtml.png
+│ /Dump/                              ← runtime output, not versioned (see .gitignore)
 │    ├── *.csv
 │    ├── *.json
 │    ├── *.txt
 │    └── *.html
-│ /Docs/
-│    ├── cli.md
-│    ├── wizard.md
-│    ├── sqli.md
-│    ├── agents.md
-│    ├── crawler.md
-│    ├── fingerprinting.md
-│    ├── output_formats.md
-│    ├── file_categories.md
-│    ├── dork_generator.md
-│    ├── INSTALL.md
-│    ├── REPORT_HTML.md
-│    ├── USAGE.md
-│    └── DDGSEE.md
-│ /Screenshots/
-│    ├── img0
-│    └── img1
 ```
 ---
 

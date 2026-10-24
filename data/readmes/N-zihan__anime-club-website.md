@@ -37,9 +37,11 @@
 | 动漫新闻 | 聚合资讯、全文阅读、机器翻译（译文优先 / 仅原文 / 双语对照）、视频嵌入提取、RSS 订阅 |
 | 站内搜索 | 番剧 / 新闻 / 资源关键词搜索，搜索历史本地保存 |
 | 照片墙 | 活动照片分类展示，存储于 Supabase Storage；照片可举报 |
-| 萌战系统 | 提名 → 审核 → 海选 → 小组赛 → 淘汰赛 → 决赛，内置禁赛 / 轮空 / 复活赛守则；**实时票数 + 对抗进度条**、一键生成分享海报 |
+| 萌战系统 | 提名 → 审核 → 海选 → 小组赛 → 淘汰赛 → 决赛，内置禁赛 / 轮空 / 复活赛守则；**实时票数 + 对抗进度条**、对阵图、一键生成分享海报 |
 | AI 虚拟好友 | 免费模型池聊天 + 自定义角色人格（仅自己 / 公开），限额 + FAQ 兜底，不产生付费调用 |
 | 通知中心 | 回复 / 审核 / 赛事 / 系统通知，分页、清空已读、按类型静音、关闭红点轮询、邮件提醒开关 |
+| 分享卡片 | 公开分享页 `/share`、`/share/contest/<id>`，微信/QQ 分享可显示封面缩略图 |
+| 邮件周报 | 每周一自动汇总番剧新闻（摘要+配图）+ 赛事阶段/截止时间发到社员邮箱，带一键退订 |
 | 站点设置 | 主题、字号、动效、新闻显示语言、通知免打扰、本机数据清理 |
 | PWA / 离线 | 可添加到主屏幕；断网时回落到品牌离线页，静态资源走 Service Worker 缓存 |
 | 管理后台 | 用户 / 帖子 / 活动 / 照片 / 赛事 / 通知 / AI 人设审核、成员数据导出、举报审核队列、**操作日志留痕** |
@@ -130,6 +132,8 @@ TESTING=1 DATABASE_URL=sqlite:///:memory: python run.py
 
 打开 <http://localhost:5000>，用演示账号 `testuser` / `password123` 登录（含管理后台权限），数据随进程销毁。
 
+> ⚠️ 演示账号与演示数据只在 **SQLite 库**上生成（v4.31.8 起强制校验：`TESTING=1` + 非 Vercel + SQLite 三条缺一不可）。本地 `.env` 的 `DATABASE_URL` 若指向线上库，起服务时务必显式覆盖成 `DATABASE_URL=sqlite:///:memory:`，否则演示数据会被拒绝写入（保护生产库）。
+
 **测试**：
 
 ```bash
@@ -159,7 +163,7 @@ Vercel 导入仓库即可（仓库自带 `vercel.json`），环境变量照着 `
 | ORM / 数据库 | SQLAlchemy 2.0 / PostgreSQL（Supabase；测试用 SQLite 内存库） |
 | 文件存储 | Supabase Storage（头像 / 照片 / 赛事图） |
 | 前端 | Jinja2 + 原生 JS + 单文件 `style.css`（深浅色主题、无前端框架） |
-| 测试 | pytest（500+ 用例）+ Playwright（端到端） |
+| 测试 | pytest（690+ 用例）+ Playwright（端到端） |
 | 部署 | Vercel（Python Serverless，香港区） |
 | 认证 / 安全 | Session + Werkzeug 密码哈希 / CSRFProtect、SSRF 防护、上传体积限制 |
 | 外部数据 | Bangumi API（番剧百科）、AniNewsAPI（新闻）、阿里云机器翻译、SiliconFlow（AI 解说 + 免费模型） |
@@ -168,7 +172,7 @@ Vercel 导入仓库即可（仓库自带 `vercel.json`），环境变量照着 `
 ## 项目状态
 
 - 已部署生产环境（站点仅社员可访问）
-- 后端测试 **566 passed**；端到端 Playwright **71 passed / 4 skipped**（75 条用例，按环境跳过 4 条）
+- 后端测试 **703 passed**；端到端 Playwright **71 passed / 4 skipped**（75 条用例，按环境跳过 4 条）
 - CI 全绿：pytest + flake8、Playwright、Pylint、CodeQL、Docs（文档站自动部署）
 - 文档站：<https://n-zihan.github.io/anime-club-website/>
 

@@ -417,6 +417,14 @@ chroncal todo purge-deleted  [--older-than DURATION] [--yes]
 
 Todo flags: `--due`, `--start`, `--duration`, `--location`, `--description`, `--calendar`, `--status`, `--progress`, `--class`, `--priority`, `--url`, `--categories`, `--geo`, `--rrule`, `--exdate`, `--rdate`, `--attach`, `--alarm`, `--attendee`, `--organizer`, `--contact`, `--resource`, `--comment`, `--related-to`
 
+`--recurrence-id <RFC3339 or YYYY-MM-DD>` with the UID of a recurring todo names one occurrence:
+
+- `todo update` edits that occurrence. `todo complete` completes it. When the occurrence has no override yet, chroncal creates one from the occurrence. The series and the other occurrences do not change.
+- `todo delete` deletes that occurrence. chroncal writes an EXDATE on the master and puts the override in the trash. `todo restore <id>` brings the occurrence back.
+- An occurrence stays in the calendar of its series. `--recurrence-rule`, `--exception-date-times`, and `--recurrence-date-times` apply to the series, so `todo update` refuses them on a new override.
+- A new override takes the alarms, the attendees, and the other child rows of the series. A flag such as `--alarm` then replaces them on the override only.
+- A time that is not an occurrence of the series gives an error that says so. A todo that does not recur gives an error too.
+
 ### Journals
 
 ```
@@ -454,7 +462,9 @@ An account stores one credential. It discovers every CalDAV calendar collection 
 
 `account calendars set` replaces the exact local selection. After confirmation, Chroncal deletes deselected calendars and their downloaded data. It never deletes the remote collections. If you deselect the current default calendar, pass `--default` with a retained local calendar or a new remote collection. The command syncs new collections before it returns.
 
-If you select none, the command also removes the empty account and credential. `account remove` deletes the credential and remote links. It keeps downloaded calendars as local copies.
+One remote collection links to one local calendar only. `account calendars list` shows a collection that another local calendar links as `linked by <calendar>`. `account add` and `--all` skip such a collection. When other calendars link each usable collection, `account add` stops with an error and removes the new account. `--calendar` refuses such a collection with an error. Remove the other link first, for example with `calendar update <calendar> --disconnect-remote`. The check compares the collection URL and the user name of the account. It ignores the case of the user name.
+
+If you select none, the command also removes the empty account and credential. `account remove` deletes the credential and remote links. It keeps downloaded calendars as local copies. A later `account add` of the same server links these calendars again. An edit, a delete, or a restore of a synced item in that time goes to the server on the first sync after the link. Until these changes are on the server, sync uses the `prompt` strategy for the calendar, also when it is otherwise `server-wins`. When the server changed the item too, the sync records an open conflict and keeps your edit. Resolve it with `chroncal sync resolve`. A read-only collection cannot take the edit, so the server version replaces it.
 
 `account credentials` rotates the stored secret of a basic or bearer account. It reads the new value from `CHRONCAL_PASSWORD` (basic) or `CHRONCAL_BEARER_TOKEN` (bearer). For a basic account, `--password-cmd` stores a command instead of a password. See [Command-retrieved passwords](#command-retrieved-passwords). `account reauth` repeats the Google OAuth consent flow for an oauth2 account; the client secret comes from `GOOGLE_CLIENT_SECRET` or the stored value, and `--oauth-client-id` replaces the stored client ID. Neither command accepts a secret as a CLI flag.
 
@@ -529,7 +539,7 @@ chroncal calendar show     <id|name>
 
 `set-default` makes a calendar the default. New events, todos, and journals without an explicit `--calendar` go there. Exactly one calendar is the default at any time.
 
-`calendar hide` opts a calendar out of the TUI sidebar without deleting it: events stay in the database and still sync. `calendar show` reverses it. Calendar JSON (`--output json`) carries the link and sync state per calendar: `account_id`, `account_name`, `remote_url`, `remote_access`, `last_sync_at`, `last_sync_error`, and `hidden`.
+`calendar hide` opts a calendar out of the TUI sidebar without deleting it: events stay in the database and still sync. `calendar show` reverses it. Calendar JSON (`--output json`) carries the link and sync state per calendar: `account_id`, `account_name`, `remote_url`, `remote_access`, `last_sync_at`, `last_sync_error`, `last_sync_ok`, and `hidden`.
 
 You can still use remote flags with `create` or `update` to attach one local calendar to a known CalDAV collection. Prefer `chroncal account` when one credential exposes multiple collections:
 
@@ -546,6 +556,8 @@ For script setup, the commands read credentials from environment variables, not 
 A basic account also accepts `--password-cmd` or `CHRONCAL_PASSWORD_CMD`. The value is a command, not a secret, so a flag is safe. See [Command-retrieved passwords](#command-retrieved-passwords).
 
 Pass `--disconnect-remote` on `update` to remove the remote link of a calendar.
+
+`--remote-url` refuses a collection that another local calendar links with the same user. Two links of one collection show each item twice. The link makes a new account for the calendar. It does not reuse the account of the other calendar.
 
 `calendar create --default-alarm` and `calendar update --default-alarm` set
 the per-calendar default alarms. See [Default alarms](#default-alarms).
@@ -577,7 +589,12 @@ Directory rules:
 - chroncal reads at most 10000 `.ics` files in one run.
 - The import does not follow a symbolic link that the path names. It also skips a symbolic link inside the directory. A stored directory is an exception. See the batch rules below.
 
-Entries are matched by UID, so a second import of the same path updates the existing items.
+Entries are matched by UID, so a second import of the same path updates the existing items. An item that did not change keeps its row as it is. Its SEQUENCE stays, and the summary counts it as unchanged, not as updated. The comparison ignores DTSTAMP, CREATED, LAST-MODIFIED, and the order of the alarms. It also ignores the UID of an alarm in two cases:
+
+- The file gives the alarm no UID, so the store gives one.
+- Another alarm already holds the UID of the file. Alarm UIDs are unique, so the store keeps a different UID for the alarm.
+
+A change of any other alarm UID counts as a change of the item.
 
 Without a path, the command imports every calendar that has a directory. Set the directory with `calendar create --path`, `calendar update --path`, or a `[[calendars]]` entry in `config.toml`. With `--calendar`, the command imports only that calendar from its directory. Run the command after each pass of the sync tool, for example from a timer.
 
@@ -596,6 +613,12 @@ chroncal ical import
 # One calendar from its directory
 chroncal ical import --calendar Fastmail
 ```
+
+An event UID that another calendar holds gets its own copy in the import calendar. A todo or a journal cannot have a copy, because its UID is unique across all calendars. The import never moves such an item and never writes it into another calendar:
+
+- When the UID lives in another local calendar, the import skips the item. A warning names both calendars, and the summary prints `Skipped N item(s) that live in another calendar.` The JSON output has `skipped_todos` and `skipped_journals`. A skipped item is not a failure, so a directory import from a timer does not fail. After `todo update --calendar`, the old directory still holds the file, and each run skips it.
+- When the UID lives in another synced calendar, live or in the trash, the import refuses the item, and the item counts as failed. The warning names the calendar. The other items of the file still land.
+- The rules take any row of the UID: an override of a series, or a master with overrides, follows the calendar of the other rows. The import then never splits a series.
 
 Imports have size limits to reduce resource exhaustion from untrusted calendar data. `chroncal ical import` rejects `.ics` payloads larger than 8 MiB. It also rejects inline base64 attachments larger than 1 MiB decoded. The limit applies to each file, not to a whole directory.
 
@@ -619,11 +642,13 @@ When you attach a local calendar, the next sync uploads its items. Some items st
 - A collection that does not support a component (for example `VTODO`) gets no item of that component.
 - An override without its series stays local.
 
+`sync status` shows one line for each connected calendar. `last_sync` is the time of the last clean sync. `last_attempt` is the time of the last sync, clean or not. `last_error` is the error of the last sync, or `-` when it was clean. A failed sync keeps `last_sync`, so you can see when the last clean sync was. The TUI calendar detail shows that time below the error. In JSON, a value in `last_sync_at` does not mean that the last sync was clean. Read `last_sync_ok` for that: it is `true` only when a clean sync happened and no error followed it. A local calendar has no `last_sync_ok`. A link to another account, collection, server, user, or authentication type clears `last_sync_at`, `last_attempt`, and `last_error`.
+
 Narrow a run with `--calendar NAME` (one local calendar) or `--account NAME` (every calendar linked to one CalDAV account). The two flags are mutually exclusive. An account with no linked calendars is a clean no-op.
 
 Conflict handling:
 
-- Every write fires an opportunistic push. When the server answers 412, chroncal records a conflict and keeps the local edit. The edit stays dirty. The command prints a note on stderr. The note tells you to run `chroncal sync conflicts`.
+- Every write fires an opportunistic push. A delete and a restore are writes too. When the server answers 412, chroncal records a conflict and keeps the local edit. The edit stays dirty. The command prints a note on stderr. The note tells you to run `chroncal sync conflicts`.
 - The conflict strategy (`server-wins` or `prompt`) governs full sync passes only. The default is `prompt`; set `server-wins` in `config.toml` under `[sync]` to adopt the server body automatically. A full pass is `sync run`, the background service, or a TUI sync. A `server-wins` pass adopts the server body, clears the dirty flag, and marks the conflict resolved as `server-auto`. A `prompt` pass records the conflict and skips that row until you resolve it.
 - A resolved conflict keeps its row. Run `chroncal sync conflicts --resolved` to list resolved conflicts. Run `chroncal sync resolve <id> --pick local` on a resolved conflict to restore the recorded local version.
 - One exception applies to a move conflict. A new move of the item drops the resolved move conflicts of the earlier move in the same account. Their recorded versions describe a move that no longer exists.
@@ -661,7 +686,14 @@ Failed pushes:
 
 - `chroncal sync status` lists each resource whose last push failed on a `push failed uid=...` line below its calendar. The line gives the count of failed attempts and the last error. The `-o json` output lists it under `push_failures`.
 - An edit of an occurrence that no series owns stays local. This occurs when two calendars hold a live master of its UID. `chroncal sync status` lists each such UID on an `edit not pushed uid=...` line, and the `-o json` output lists it under `unowned_edits`. The reason is "the item belongs to no series because two calendars hold its master; use the row ID of one series". Delete or move one of the two masters. The next edit of the occurrence then goes to the other series.
-- `chroncal sync doctor` lists the same two kinds of resources. A failed push shows on a `failed push attempt(s); last error: ...` line, and an unowned edit shows on a `the edit stays local: ...` line. Its `-o json` items have `"state": "push_failure"` (with `push_fail_count`) or `"state": "unowned"`, and a `reason`. A wedged resource shows only as wedged.
+- `chroncal sync doctor` lists the same two kinds of resources. A failed push shows on a `failed push attempt(s); last error: ...` line, and an unowned edit shows on a `the edit stays local: ...` line. It also lists each legacy override: an override in a calendar with no master of its UID, which an older version made on a calendar change. The doctor shows one line for each UID. The line gives the count of rows, with the rows in the trash. It also gives the calendar of the series that owns them, and the reason that the rows stay. When a move can pass, the line gives the `chroncal event update <id> --calendar <name>` command that moves all the rows there. When a move refuses, the line names the rule that refuses it. Examples are a row of the owner calendar at the same occurrence, a read-only calendar, and an open conflict of the UID. Its `-o json` items have `"state": "push_failure"` (with `push_fail_count`), `"state": "unowned"`, or `"state": "legacy_override"`, and a `reason`. A `legacy_override` item also has `id`, `rows`, `owner_calendar_name`, and `movable`. A movable item has `kept_reason` and `move_command`. Another item has `move_refusal`. A wedged resource shows only as wedged. When the doctor lists no wedged resource, the last line starts with `No wedged resources.` When it lists other items, that line also says that `--push` does not apply to them. When it lists wedged resources and other items, the hint says that `--push` applies to the wedged resources only.
+- On each start, chroncal can move the legacy overrides of a calendar with no account link into the calendar of their series. The move occurs only when all of these conditions are true:
+  - Neither calendar has an account link or read-only access.
+  - Neither calendar has sync state of the UID: a sync row, a tombstone, an open conflict, or an open move conflict.
+  - One live master owns the rows.
+  - The calendar of the series holds no row at the same occurrence.
+
+  This move makes no server write. The other legacy overrides stay. `chroncal sync doctor` lists each UID with at least one live legacy override and a live owner master. It does not list a UID whose master is in the trash, because no series can take its rows then. Restore the series first.
 Resources that wait:
 
 - A push can wait for another step. For example, an open move conflict on a third calendar names the source of a move. Sync then keeps the source delete until you resolve that conflict.
@@ -790,8 +822,10 @@ skip_all_day = true
 
 Each entry is a trigger duration, or an action-prefixed trigger. The action
 prefix is `DISPLAY` (default) or `AUDIO`. `skip_all_day` excludes all-day
-events. All-day events start at midnight, so a `-PT15M` trigger fires the
-evening before.
+events. An all-day event starts at local midnight of its date, so a `-PT15M`
+trigger fires at 23:45 local time on the day before. A date-only todo DUE
+uses the same rule. A date-only value is a floating date (RFC 5545), so the
+rule is the same in every time zone.
 
 Set a per-calendar default with `--default-alarm` on `calendar create` or
 `calendar update`. This replaces the global list for one calendar. The special
@@ -900,6 +934,10 @@ The CLI is for shells and language models, not only for hand input. The agent-fr
 
   Codes are `not_found`, `invalid_input`, `aborted`, or `error` (catch-all). The `error` field is the user-facing message. The output strips internal call-chain prefixes (for example `get event:`). Dispatch on `code` and show `error` directly.
 - References accept either the numeric `id` or the string `uid`. Commands take `--recurrence-id <RFC3339>` to address one instance of a recurring series. On `event delete`, the flag deletes that occurrence.
+- A list with a date range expands each recurring series. In the JSON of `event list`, `todo list`, and `journal list`, each occurrence and each override of the series then has `instance_time`. The value is the time of the occurrence in UTC RFC 3339. For an event you can pass it to `--recurrence-id`. To address a stored override of a todo or a journal, use its `recurrence_id`. Another item has no `instance_time`.
+- With `--include-deleted`, a row in the trash has `deleted_at` in the JSON of `event list`, `todo list`, and `journal list`. The text output puts `[trash]` before its title.
+- `alarm missed -o json` gives the age of each alarm in `age_seconds`. The older `age` field stays, and it gives the same age in nanoseconds.
+- `service status -o json` prints one object with `os`, `command`, `exit_code`, and `output`. The exit code has the meaning of the service manager. For `systemctl`, `0` is active and `3` is not active.
 - Dates are `YYYY-MM-DD`. These date flags also accept a relative date word:
   - `event add` and `event update`: `--date`, `--end-date`
   - `todo add` and `todo update`: `--due`, `--start`
@@ -940,11 +978,21 @@ chroncal todo    purge-deleted [--older-than DURATION] [--yes]
 chroncal journal purge-deleted [--older-than DURATION] [--yes]
 ```
 
-List soft-deleted candidates with `--include-deleted` on the related `list` command. In the TUI, press `D` to open the mixed "Recently deleted" dialog. The dialog covers all three resource types. `r` restores the cursor row. `x` purges it. Space toggles multi-select so you can restore or purge many rows.
+List soft-deleted candidates with `--include-deleted` on the related `list` command. The list puts `[trash]` before the title of each row in the trash. A restore of a live row fails with "is not in the trash". A restore by UID reverses a delete of the UID. When the item is live but one row of it is in the trash, restore that row by its ID. In the TUI, press `D` to open the mixed "Recently deleted" dialog. The dialog covers all three resource types. `r` restores the cursor row. `x` purges it. Space toggles multi-select so you can restore or purge many rows.
+
+A series can have two or more truncations ("This and following") in the trash. Restore the newest truncation first. An older truncation refuses the restore until then, because the newer truncation recorded the rule that the older one wrote. The detail pane of an older truncation shows a "Restore" line with the cutoff of the truncation to restore first. To restore them all, mark each one and restore them together. A restore of marked entries restores them in the order that they need, for example a master before its occurrences. When it stops at an entry, the message gives the count of restored entries.
 
 ## TUI
 
 Run `chroncal` with no arguments to launch the interactive terminal UI.
+
+The TUI needs a window of at least 80 columns by 24 rows. A smaller window shows a notice with the minimum size. In a smaller window:
+
+- Keys and clicks do nothing.
+- `esc` stops a running sync.
+- `ctrl+c` opens the quit prompt. A second `ctrl+c` quits.
+
+Make the window larger to see the calendar again.
 
 <p align="center">
   <img src="assets/chroncal-tui.png" alt="The chroncal TUI">
@@ -957,11 +1005,11 @@ chroncal --event 42
 chroncal --event standup-uid --at 2026-04-17T14:00:00Z
 ```
 
-`--at` accepts an RFC 3339 timestamp, `YYYY-MM-DD`, or a relative date word such as `tomorrow`. It selects a generated occurrence of a recurring series. The details show the times of that occurrence, not the series start. Stored overrides take `--recurrence-id` with the series UID. `--at` requires `--event` and excludes `--recurrence-id`.
+`--at` accepts an RFC 3339 timestamp, `YYYY-MM-DD`, or a relative date word such as `tomorrow`. It selects an occurrence of a recurring series. A date selects the first occurrence that starts on that date, or else an occurrence that runs over that date. A date or a timestamp with no occurrence of the series gives an error. A timestamp selects the occurrence that starts at that time. The details show the times of that occurrence, not the series start. When an override replaces the occurrence, the TUI opens the override with its own fields. `--recurrence-id` also opens a stored override by the series UID. `--at` requires `--event` and excludes `--recurrence-id`.
 
 **Views**: month, week, day, agenda. Switch with `m`, `w`, `d`, `a`. Press `W` to switch the first day of the week between Sunday and Monday. The TUI stores the choice, the same way it stores the view. `ui.week_start` in `config.toml` sets the default before a stored choice exists.
 
-The TUI can create, edit, view, and delete events. Event details include alarms, attendees, and attachments. The new-event form selects the default calendar (see `calendar set-default`). When the default calendar is hidden or does not accept events, the form selects the first calendar by name. Long titles wrap in the event details. Use `p` to copy event details. Use `u` to undo a delete.
+The TUI can create, edit, view, and delete events. Event details include alarms, attendees, and attachments. The detail pane of the day dialog also lists the alarms of the selected event. The new-event form selects the default calendar (see `calendar set-default`). When the default calendar is hidden or does not accept events, the form selects the first calendar by name. Long titles wrap in the event details. Use `p` to copy event details. Use `u` to undo a delete, in the main view or in the day dialog.
 
 The sidebar uses quiet, collapsible account sections. There is a separate **Local** section. Active calendars show an item-colored filled `●` circle. Hidden calendars show an outline `○` circle. Space or a click on the circle toggles visibility. Calendar colors stay on calendar rows, not on account headings.
 
@@ -983,7 +1031,7 @@ A calendar whose last sync failed shows a `⚠` next to it in the sidebar. Open 
 chroncal service install --sync-interval 15m
 ```
 
-See [Service (alarm background service)](#service-alarm-background-service). The TUI does not reload rows on a timer. Rows that the background service wrote appear when you press `s` or when you reopen the TUI.
+See [Service (alarm background service)](#service-alarm-background-service). The TUI does not reload rows on a timer. Rows that the background service or the CLI wrote appear when you press `s` or when you reopen the TUI. `s` reloads the rows also when no calendar has a connection.
 
 ## Configuration
 

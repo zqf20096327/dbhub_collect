@@ -58,6 +58,25 @@ v. Also, to get analytics for roles which users are mostly looking for
 
 vi. To improve this tool by getting feedbacks
 
+## ✨ Try a Live AI Resume & Career Toolkit
+
+Want to explore AI-powered resume analysis without setting up this project locally?
+
+<a href="https://www.cvinsight.me/?utm_source=github&utm_medium=affiliate&utm_campaign=deepak">
+  <img src="https://img.shields.io/badge/Try_CVInsight-AI_Resume_%26_Career_Toolkit-6C63FF?style=for-the-badge" alt="Try CVInsight" />
+</a>
+
+**[CVInsight](https://www.cvinsight.me/?utm_source=github&utm_medium=affiliate&utm_campaign=deepak)** is an independent platform offering tools to help you with your career, including:
+
+- 📄 AI-powered resume analysis and feedback
+- 🛠️ Resume creation and customization with Resume Studio
+- 🔥 Resume Roast for resume feedback
+- 🎯 Interview practice and job preparation
+
+**🎁 Offer:** Use code `DEEPAK10` for 10% off eligible paid plans.
+
+<sub>Disclosure: CVInsight is an independent platform. This is an optional partner recommendation and does not affect the availability of this open-source project.</sub>
+
 <!-- TechStack -->
 ## Tech Stack 🍻
 <details>

@@ -11,7 +11,7 @@ Browse, search, and play across any number of external drives - offline, portabl
 ![GitHub all releases](https://img.shields.io/github/downloads/aungkokomm/CineLibraryCS/total?style=for-the-badge)
 ![License](https://img.shields.io/github/license/aungkokomm/CineLibraryCS?style=for-the-badge)
 
-<img width="1898" height="1018" alt="image" src="https://github.com/user-attachments/assets/93a1e34d-aff6-4aee-8a03-ebeb6d7d62cf" />
+
 
 
 
@@ -48,9 +48,9 @@ Your whole collection at a glance: the sidebar, the search, and every filter and
 
 <img width="960" height="457" alt="CineLibrary - movie detail view" src="https://github.com/user-attachments/assets/bc89a995-5aea-4bc1-864e-6188b9df28ff" />
 
-📺 **TV shows get a page of their own**: the fanart, the cast with photos, the drive the show is on, and Fetch missing info from TMDB.
+📺 **TV shows get a page of their own**: the fanart, the cast with photos, the drive the show is on, and every episode in a list with Favorite and Watched buttons.
 
-<img width="760" alt="A TV show page in CineLibrary: The Family Man fanart banner with IMDb and TMDb buttons, the poster, details, the drive it is on, Play next and the other buttons, and cast photo cards" src="docs/images/cinelibrary-tv-show.png" />
+<img width="760" alt="A TV show page in CineLibrary: the Game of Thrones fanart banner, the poster with its IMDb and TMDb ratings under it, details, Play next and the other buttons, the cast, the season buttons and the first episode" src="docs/images/cinelibrary-tv-show.png" />
 
 ---
 

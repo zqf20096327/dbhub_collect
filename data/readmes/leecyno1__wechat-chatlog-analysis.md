@@ -1,0 +1,123 @@
+<p align="center">
+  <img src="static/assets/deepsee-brand-logo.webp" alt="Deepsee 深瞳 logo" width="520">
+</p>
+
+<h1 align="center">Deepsee</h1>
+
+<p align="center">
+  <strong>深瞳：全领域个人信息流 API 平台</strong>
+</p>
+
+<p align="center">
+  面向 Agent 接入的个人信息流底座，把微信、邮件、会议、新闻、自媒体、公众号与联系人观点统一沉淀为可查询、可推理、可验证的 API 数据层。
+</p>
+
+<p align="center">
+  <a href="#核心定位">核心定位</a> ·
+  <a href="#功能模块">功能模块</a> ·
+  <a href="#agent-api">Agent API</a> ·
+  <a href="#安装">安装</a>
+</p>
+
+<p align="center">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white">
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-Agent%20API-009688?style=flat-square&logo=fastapi&logoColor=white">
+  <img alt="SQLite" src="https://img.shields.io/badge/SQLite-Local%20First-003B57?style=flat-square&logo=sqlite&logoColor=white">
+  <img alt="Agent Ready" src="https://img.shields.io/badge/Agent-Ready-0A84FF?style=flat-square">
+</p>
+
+## 核心定位
+
+Deepsee / 深瞳不是单一消息工具，而是一套面向个人与团队 Agent 的信息流操作系统：
+
+- **统一接入**：汇聚微信、邮件、会议纪要、新闻、自媒体、公众号等高频信息源。
+- **结构化沉淀**：将分散内容转为消息、联系人、主题、观点、资产、摘要、评分等可复用数据。
+- **Agent 友好**：通过 API 暴露搜索、摘要、评分、趋势、联系人画像与一页通生成能力。
+- **推理闭环**：支持 AI 分析、情感洞察、趋势预测、观点验证与联系人价值评分。
+- **本地优先**：默认 SQLite 本地存储，适合个人私有部署，也可迁移到云服务器。
+
+## 功能模块
+
+| 模块 | 说明 |
+|------|------|
+| 数据看板 | 聚合趋势、关键词、热度、情绪、机会/风险信号与运行状态 |
+| 微信引擎 | 微信消息接入、清洗去重、黑白名单、摘要与触发规则 |
+| 邮件引擎 | 多账户同步、邮件摘要、问答/顶踩与回复链路 |
+| 会议引擎 | 会议原文接入、纪要抽取、主题归档与分析注入 |
+| 新闻引擎 | 内置新闻采集、热度评分、中文化摘要与趋势排序 |
+| 自媒体引擎 | 小红书、抖音、微博、B站等轻量采集与关键词热点搜索 |
+| 公众号引擎 | 公众号文章检索、去重、摘要与主题沉淀 |
+| 联系人评分 | 基于观点命中、服务价值、风险提示、交流密度的联系人评分卡 |
+| 消息群发 | 活动编辑、敬语规则、发送管理与多对象群发 |
+| AI 分析 | 多模型路由、一页通、提示词、摘要缓存与增量生成 |
+
+## Agent API
+
+Deepsee 适合作为 Agent 的个人信息流工具层。Agent 可以围绕这些能力构建自动化工作流：
+
+| 能力 | 示例用途 |
+|------|----------|
+| 消息检索 | 查找某联系人、主题、关键词、时间段内的历史信息 |
+| 摘要提炼 | 对微信、邮件、新闻、公众号、会议原文生成要点与一句话评论 |
+| 趋势洞察 | 识别高频主题、情绪变化、热点上升、风险信号 |
+| 联系人画像 | 读取联系人评分卡、观点历史、命中验证和服务价值 |
+| 一页通生成 | 将多模块内容重组为结构化报告或图文材料 |
+| 自动触发 | 基于网关规则、黑白名单、时间任务和模型路由执行动作 |
+
+常用接口示例：
+
+| 端点 | 用途 |
+|------|------|
+| `GET /api/messages` | 消息列表与搜索 |
+| `GET /api/messages/mp` | 公众号消息 |
+| `GET /api/contact-scoring/contacts` | 联系人评分列表 |
+| `GET /api/contact-scoring/contacts/{contact_id}/scorecard` | 联系人评分卡 |
+| `GET /api/background/runtime` | 后台任务与模块运行状态 |
+| `GET /api/wechat-gateway/config` | 微信网关配置 |
+| `POST /api/wechat-gateway/callback` | 微信回调入口 |
+| `POST /api/wechat-gateway/trigger-rules` | 触发规则配置 |
+
+## 安装
+
+```bash
+git clone https://github.com/leecyno1/Deepsee.git
+cd Deepsee
+bash scripts/manage.sh install
+bash scripts/manage.sh start
+```
+
+本地访问：
+
+```bash
+uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+打开浏览器访问 `http://127.0.0.1:8000/`。
+
+## WeChat API 对接
+
+Deepsee 可通过 wechatapi.net 的 iPad 协议接入微信，也可在云服务器侧与 Hermes 等服务组合部署。配置要求：
+
+1. wechatapi token + app_id（从 [wechatapi 控制台](https://wechatapi.net/) 获取）
+2. 回调公网 URL（云服务器直接 IP 或域名，无需隧道）
+3. AI 模型路由配置（用于自动摘要、分析与回复）
+4. Agent 端配置（见下方 wx-auto 配套包）
+
+### Agent 配套包
+
+**https://github.com/leecyno1/wx-auto** 提供 Hermes/Agent 侧的：
+- 完整 WeChatAPI 协议文档（7 个模块，100+ 端点）
+- 云服务器一键部署脚本
+- Hermes Skill 模板
+- 新环境安装指引
+
+## 开发
+
+```bash
+python -m pytest -q
+bash scripts/manage.sh dev
+```
+
+## 许可证
+
+Apache-2.0 — see `LICENSE`.

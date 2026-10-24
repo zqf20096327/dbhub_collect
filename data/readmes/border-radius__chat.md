@@ -32,6 +32,9 @@ A small, fast, real-time group chat. One [PocketBase](https://pocketbase.io) bin
 - Fast room switching: each room's latest messages are kept in the browser (IndexedDB) and shown at once while the
   server answers; unread rooms are fetched ahead. Attachment thumbnails are kept by the service worker, so going back
   to a room (or reloading) doesn't download them again. All of it is cleared on logout
+- Notifications of DMs and replies to you, with a pop-up and/or a sound, turned on in your profile, and of every
+  message in the rooms you choose from their menu: they come from the open tab's live connection (even in the
+  background), so no push service (Google, Mozilla, Apple) is involved
 - Installable as an app (PWA: Add to Home Screen, the browser's Install button); it opens offline to its shell
 - Optimistic sending with safe retries, reconnect gap-fill, light/dark themes, works on phones
 - A native Android app (Kotlin, Jetpack Compose) with the same features, push notifications and a 3 MB download — see
@@ -197,9 +200,9 @@ cd android
 People choose their server when they log in or sign up (Change server), and add more accounts from their profile.
 A build only sets the server offered first: `-Pchat.devServer=http://192.168.1.20:8090` for a debug build on a device,
 `chat.server` for a release (without one, the app asks for a server, and no host's links open in the app). Debug builds
-take http addresses; release builds take https only. `chat.fcm.projectId`, `chat.fcm.appId`, `chat.fcm.apiKey` and `chat.fcm.senderId`
-turn on Firebase push. On the server, push needs `FCM_SERVICE_ACCOUNT` (the service account's JSON, of the app's Firebase
-project: servers without it get no pushes, ANDROID.md §17.4), and links to rooms on the build's server open in the app with `ANDROID_APP_ID` and `ANDROID_CERT_SHA256` (`/.well-known/assetlinks.json`). An admin can set
+take http addresses; release builds take https only. The app notifies of DMs and replies to you by checking each
+account's server about every 15 minutes (WorkManager), with no Google services and nothing to set up on the server
+(ANDROID.md §21). Links to rooms on the build's server open in the app with `ANDROID_APP_ID` and `ANDROID_CERT_SHA256` (`/.well-known/assetlinks.json`). An admin can set
 `min_android_version` on the site record to make older apps ask for an update. What is built and what isn't yet:
 [`docs/ANDROID.md` §16](docs/ANDROID.md#16-implementation-2026-10-18), and [`android/PARITY.md`](android/PARITY.md).
 
@@ -238,6 +241,36 @@ the bot posts chat messages with the author's name above them.
 
 The bridge is self-contained: `pb_hooks/telegram.pb.js`, `pb_hooks/telegram/` and its own `tg_*` collections. Delete
 the first two to remove it.
+
+## Linked instances
+
+Two or more servers running this app can share rooms and let their people write DMs to each other
+([`docs/DESIGN.md` §33](docs/DESIGN.md)). Each room has a home server; the others keep a copy, and messages, edits,
+replies, reactions and files go both ways. People from the other server show under stand-in users named after them
+("Ann (B)"). Only the admins of both servers pair them and choose which rooms to share.
+
+**Setup** (on each server)
+
+1. Turn it on: in the admin UI, set *Settings → Application → Application URL* to the server's public address, e.g.
+   `https://chat.example.com`, then tick `federation` on the record under *Collections → site*. Peers are reached over
+   https, on public addresses only. The address is part of the ids the peers keep, so it can't be changed while any
+   peer is listed. (A server set up with the old `FEDERATION_ORIGIN` variable gets both done by its next start's
+   migration; the variable is no longer read after that.)
+2. Pair: on server A, under *Collections → fed_peers*, add a row with B's address and a short label for its people
+   (`B`); tick `dms` to let people write DMs across. A sends B the request, and it shows on B as a row with status
+   `requested` (B checks with A that it really asked). B's admin accepts by setting its status to `active`, choosing
+   a label for A's people (and `dms`); both rows are then `active`. Deleting the request declines it. A request B
+   can't be reached for is sent again every minute; one nobody accepts expires after 7 days. If both admins add
+   each other, they pair at once.
+3. Share a room: on its home, add a row under *fed_shares* with the room and the peer. The peer's admin finds it under
+   *fed_shares* there and ticks `accepted`; the room then appears there, named "general (A)", with its latest 200
+   messages. Private rooms too: each side's admins add their own people (on the copy, by editing its members), and the
+   room's creator can add people from the other server by their address, `ann@b.example`.
+4. DMs: with `dms` ticked on both sides, people type `name@b.example` in "New message".
+
+Suspend a peer by setting its `status` to `suspended`; delete its row to unpair (the copies are archived, DMs become
+read-only). The feature is self-contained: `pb_hooks/federation.pb.js`, `pb_hooks/federation/` and the `fed_*`
+collections; while `federation` isn't ticked, its routes answer 404 and nothing is sent.
 
 ## License
 

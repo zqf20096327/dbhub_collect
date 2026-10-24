@@ -64,7 +64,7 @@ You can use the hosted service, [Nostos Cloud](https://nostos.page), or run it y
 - **Passages:** save a long stretch of a book, a range of PDF pages or a clip of an audiobook, and read or play it again on its own.
 - **Switch between ebook and audiobook:** if you have both editions, continue in the other one near where you are.
 - **Read aloud:** listen to any EPUB or PDF with your device's voice or a natural voice from a speech server.
-- **Bring your e-reader highlights:** import highlights from Kobo and KOReader, review them, then add them to the right books.
+- **Bring your highlights:** import highlights and notes from Kobo, KOReader, a Kindle's `My Clippings.txt` or a Readwise CSV export, review them, then add them to the right books.
 
 <div align="center">
   <img width="2880" height="1800" alt="Nostos EPUB reader open at the first chapter of Moby-Dick" src="docs/screenshots/reader.png" />
@@ -126,6 +126,7 @@ On SelfHosted, you connect your own AI provider in **Settings → AI connections
 ### Your library stays yours
 
 - **Portable:** export your whole library as a `.nostos` archive and import it into any Nostos, hosted or self-hosted.
+- **Your notes in plain Markdown:** download your notes, highlights, passages and topics as a .zip of Markdown files, one per book and one per topic, with `[[Topic]]` links kept. Open it in Obsidian or any text editor.
 - **Use the files you already have (SelfHosted):** point Nostos at a folder of books on your server. It reads them in place and never changes them.
 - **Backups:** SelfHosted has local backup and restore. Nostos Cloud makes daily managed backups, which you can see in Settings.
 - **OPDS:** browse and download your library from compatible e-reader apps.
@@ -154,6 +155,8 @@ Or use the included Compose file: `docker compose up -d`. Then open **http://loc
 
 Everything Nostos keeps lives in the `/data` volume: the database, your books, local backups and the key ring in `/data/keys` that protects AI keys saved in Settings. Back up the whole volume, and keep it when you replace the container.
 
+- **Hardware:** the image runs on 64-bit Intel and AMD machines (`linux/amd64`) and on 64-bit Arm (`linux/arm64`): a Raspberry Pi 4 or 5 with a 64-bit OS, an Apple Silicon Mac, or an Arm NAS. Docker picks the right one for you. 32-bit systems are not supported.
+- **Memory:** Nostos uses about 110–125 MB when idle and about 220–330 MB with a small library (50 ebooks with covers and 5 audiobooks). Give it at least 512 MB; 1 GB leaves room for large imports and backups.
 - **Update:** `docker compose pull && docker compose up -d`. `latest` is published only after the full CI passes on `main` and that exact image has passed its start-up and persistence check; it never moves back to an older revision. To pin a build, set `NOSTOS_IMAGE_TAG=selfhosted-sha-<commit>`; a commit that only changes documentation shares its parent's image. Older `sha-*` tags are not SelfHosted builds.
 - **Books already on your server:** mount the folder at `/external/media` (read-only), then open **Settings → This server → External media**. See the [External media guide](docs/external-media.md).
 - **Coming from an older image?** Older images kept the key ring inside the container. Copy it into `/data/keys` before you replace the container, or re-enter your AI keys afterwards.

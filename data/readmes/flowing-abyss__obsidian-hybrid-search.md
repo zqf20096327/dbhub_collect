@@ -488,16 +488,17 @@ Set `OBSIDIAN_PREFIX` to add a prefix to every tool name. For example, `myvault_
 
 ## Configuration
 
-| Environment variable         | Default                              | Description                                                                        |
-| ---------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------- |
-| `OBSIDIAN_VAULT_PATH`        | Required for MCP; CLI auto-detects   | Absolute path to your vault                                                        |
-| `OBSIDIAN_PREFIX`            | `""`                                 | Optional MCP tool prefix, e.g. `myvault_` → `myvault_search`, `myvault_read`       |
-| `OBSIDIAN_IGNORE_PATTERNS`   | `.obsidian/**,templates/**,*.canvas` | Comma-separated ignore patterns                                                    |
-| `OBSIDIAN_RESPECT_GITIGNORE` | `true`                               | Read root and nested `.gitignore` files; set to `false` to disable                 |
-| `OBSIDIAN_INCLUDE_PATTERNS`  | `""`                                 | Comma-separated patterns to re-include notes ignored only by `.gitignore`          |
-| `OPENAI_API_KEY`             | None                                 | API key; omit to use local model embeddings or keyless servers (Ollama, LM Studio) |
-| `OPENAI_BASE_URL`            | `https://api.openai.com/v1`          | API base URL                                                                       |
-| `OPENAI_EMBEDDING_MODEL`     | `text-embedding-3-small`             | Embedding model name                                                               |
+| Environment variable               | Default                              | Description                                                                                                                              |
+| ---------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `OBSIDIAN_VAULT_PATH`              | Required for MCP; CLI auto-detects   | Absolute path to your vault                                                                                                              |
+| `OBSIDIAN_PREFIX`                  | `""`                                 | Optional MCP tool prefix, e.g. `myvault_` → `myvault_search`, `myvault_read`                                                             |
+| `OBSIDIAN_IGNORE_PATTERNS`         | `.obsidian/**,templates/**,*.canvas` | Comma-separated ignore patterns                                                                                                          |
+| `OBSIDIAN_RESPECT_GITIGNORE`       | `true`                               | Read root and nested `.gitignore` files; set to `false` to disable                                                                       |
+| `OBSIDIAN_INCLUDE_PATTERNS`        | `""`                                 | Comma-separated patterns to re-include notes ignored only by `.gitignore`                                                                |
+| `OBSIDIAN_CONTENT_IGNORE_PATTERNS` | `""`                                 | Comma-separated regex rules for note body text to leave out of search, e.g. `/%%[\s\S]*?%%/g`. Original files and `read` stay unchanged. |
+| `OPENAI_API_KEY`                   | None                                 | API key; omit to use local model embeddings or keyless servers (Ollama, LM Studio)                                                       |
+| `OPENAI_BASE_URL`                  | `https://api.openai.com/v1`          | API base URL                                                                                                                             |
+| `OPENAI_EMBEDDING_MODEL`           | `text-embedding-3-small`             | Embedding model name                                                                                                                     |
 
 ### Ignore patterns
 
@@ -516,26 +517,6 @@ The database stores the ignore configuration and restores it when the server res
 2. **Search** runs BM25, fuzzy trigram title and alias search, and vector KNN search in parallel. BM25 uses weights of 10× for titles, 5× for aliases, and 1× for content. RRF then gives semantic and BM25 results a weight of 1.5× each, exact alias matches 2×, and partial fuzzy matches 0.25×. The final scores range from 0 to 1, where higher scores mean greater relevance.
 3. **Links** are resolved from wikilinks such as `[[note]]`, mapped to note paths, and stored. Every search result includes `links` and `backlinks` arrays.
 4. **Watcher** uses `chokidar` to detect file changes and update the index in the background.
-
-## Contributing
-
-Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and project checks.
-
-### Dependency releases and recovery
-
-The weekly dependency update runs on Monday at 00:00 UTC. It updates dependencies with npm 12, bumps the patch version only when the dependency manifests change, and opens a PR containing only `package.json`, `package-lock.json`, and `server.json`. A GitHub App creates the PR and enables native auto-merge, so ordinary PR CI runs and the required `lint-and-test` check gates the merge.
-
-Install the release App on this repository only, with **Contents: write** and **Pull requests: write** repository permissions. Set the repository Actions variable `RELEASE_APP_CLIENT_ID` to the App's client ID and the Actions secret `RELEASE_APP_PRIVATE_KEY` to its PEM private key. Enable repository auto-merge and keep `lint-and-test` required in branch protection. No personal access token or fabricated commit status is needed.
-
-After successful push CI on master, the release guard verifies the merged dependency PR, its exact merge SHA, manifest-only changes, synchronized versions, and an exact patch increment. It creates an immutable tag and directly calls the reusable release workflow. A newer master tip is allowed when the checked commit is still in master history. Repeated creation of the same tag is safe; a tag pointing to another commit fails without moving it.
-
-Manual tag pushes still start releases. Publication requires successful same-repository CI on master for the **resolved tag commit**; push CI and manually dispatched CI are accepted for recovery. A tag pushed before that CI succeeds fails with a rerun message. After CI passes, recover an existing tag with:
-
-```bash
-gh workflow run release.yml --ref master -f release_tag=vX.Y.Z
-```
-
-Recovery uses the requested tag's commit and manifests, even if master has advanced or the older tag lacks the current release helpers. Runs for the same tag are serialized without cancellation. Already-visible npm versions and identical active MCP Registry records are verified and skipped, then the GitHub Release is created or updated. Any publication failure fails the release job.
 
 ## License
 

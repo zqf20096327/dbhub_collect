@@ -60,6 +60,7 @@ Read: [Stop using Knex.js](https://medium.com/@gajus/bf410349856c)
     - [`postgres` vs `slonik`](#postgres-vs-slonik)
   - [Type parsers](#type-parsers)
     - [Built-in type parsers](#built-in-type-parsers)
+    - [Overriding type parsers for a `sql` tag](#overriding-type-parsers-for-a-sql-tag)
   - [Interceptors](#interceptors)
     - [Interceptor methods](#interceptor-methods)
     - [Community interceptors](#community-interceptors)
@@ -80,12 +81,12 @@ Read: [Stop using Knex.js](https://medium.com/@gajus/bf410349856c)
   - [`sql` tag](#sql-tag)
     - [Type aliases](#type-aliases)
     - [Typing `sql` tag](#typing-sql-tag)
-  - [Value placeholders](#value-placeholders)
-    - [Tagged template literals](#tagged-template-l
+  - [Valu
 
 [...截断...]
 
-iterals)
+e placeholders](#value-placeholders)
+    - [Tagged template literals](#tagged-template-literals)
     - [Manually constructing the query](#manually-constructing-the-query)
     - [Nesting `sql`](#nesting-sql)
   - [Query building](#query-building)
@@ -158,8 +159,4 @@ iterals)
 
 Slonik began as a collection of utilities designed for working with [`node-postgres`](https://github.com/brianc/node-postgres). It continues to use `node-postgres` driver as it provides a robust foundation for interacting with PostgreSQL. However, what once was a collection of utilities has since grown into a framework that abstracts repeating code patterns, protects against unsafe connection handling and value interpolation, and provides a rich debugging experience.
 
-Slonik has been [battle-tested](https://medium.com/@gajus/lessons-learned-scaling-postgresql-database-to-1-2bn-records-month-edc5449b3067) with large data volumes and queries ranging from simple CRUD operations to data-warehousing needs.
-
-### Origin of the name
-
-![Slonik](./.README/postgresql-e
+Slonik has been [battle-tested](https://medium.com/@gajus/lessons-learned-scaling-postgresql-database-to-1-2bn-records-month-edc5449b3067) with large data volumes and queries ranging from simple CRUD operati

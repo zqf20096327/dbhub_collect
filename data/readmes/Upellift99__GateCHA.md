@@ -9,7 +9,7 @@
 
 🌐 **[Website](https://gatecha.org)** · 📖 **[Documentation](https://gatecha.org/docs)** · 🧩 **[WordPress plugin](https://github.com/Upellift99/GateCHA-WordPress)**
 
-GateCHA is an open-source alternative to [ALTCHA Sentinel](https://altcha.org/docs/v2/sentinel/). It wraps the [ALTCHA](https://altcha.org/) proof-of-work CAPTCHA protocol with a management layer: API key management, per-site configuration, replay protection, and a dashboard with statistics.
+GateCHA is a free, open-source alternative to [ALTCHA Sentinel](https://altcha.org/docs/sentinel/), ALTCHA's commercial self-hosted server. It wraps the [ALTCHA](https://altcha.org/) proof-of-work CAPTCHA protocol with a management layer: API key management, per-site configuration, replay protection, and a dashboard with statistics. GateCHA is not affiliated with ALTCHA.
 
 ## Features
 
@@ -278,6 +278,18 @@ Four things worth knowing before you switch it on:
 | `GET` | `/api/v1/challenge` | Generate a PoW challenge |
 | `POST` | `/api/v1/verify` | Verify a solution |
 
+### Key statistics (stats token auth via `Authorization: Bearer gs_xxx`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/v1/stats?days=30` | One key's statistics, read-only: totals, one row per day (zero-filled, oldest first) and the top 10 countries. `days` from 1 to 90, default 30 |
+
+The key ID cannot guard this endpoint: it is public, in the HTML of every protected page. Each key gets its own stats token instead, issued from the key's page in the dashboard (or `POST /api/admin/keys/:id/stats-token`) and shown once. Keep it server-side; the WordPress plugin uses it to show the site owner their numbers. A disabled key still answers, with `"enabled": false`.
+
+```bash
+curl -H "Authorization: Bearer gs_your_stats_token" https://your-gatecha-host/api/v1/stats?days=7
+```
+
 ### Public (no auth)
 
 | Method | Endpoint | Description |
@@ -293,6 +305,7 @@ Four things worth knowing before you switch it on:
 | `POST` | `/api/admin/keys` | Create API key |
 | `GET/PUT/DELETE` | `/api/admin/keys/:id` | Manage API key |
 | `POST` | `/api/admin/keys/:id/rotate-secret` | Rotate HMAC secret |
+| `POST/DELETE` | `/api/admin/keys/:id/stats-token` | Issue (or replace) / revoke the key's stats token |
 | `GET` | `/api/admin/stats/overview` | Global statistics |
 | `GET` | `/api/admin/stats/keys/:id` | Per-key statistics |
 | `GET` | `/healthz` | Health check |
@@ -434,7 +447,7 @@ The compose file pulls `latest-mysql`. Set `GATECHA_IMAGE` to run another image,
 | `GATECHA_MAX_BODY_BYTES` | `1048576` | Maximum accepted request body size, in bytes |
 | `GATECHA_RATE_LIMIT_ENABLED` | `true` | Enable per-IP rate limiting |
 | `GATECHA_RATE_LIMIT_LOGIN` | `5` | Admin login requests per minute, per IP |
-| `GATECHA_RATE_LIMIT_API` | `60` | Public API (`/api/v1/*`) requests per minute, per IP |
+| `GATECHA_RATE_LIMIT_API` | `60` | Public API requests per minute: per IP on `/api/v1/challenge` and `/api/v1/stats`, per IP **and API key** on `/api/v1/verify`, so sites sharing a hosting provider's outbound IP each get the full budget |
 
 > ⚠️ **Behind a reverse proxy, set `GATECHA_TRUST_PROXY=true`.**
 > Per-IP rate limiting keys off the connecting IP. With `GATECHA_TRUST_PROXY=false`

@@ -47,6 +47,10 @@ Want a customized backend generated for you? [nativeapptemplate-agent](https://g
 - Optional Error Monitoring with Sentry (no personal data sent)
 - And more!
 
+## Deleting a shopkeeper
+
+A shopkeeper who deletes their account (`DELETE /shopkeeper_auth`) also deletes every organization they own, with all its shops, item tags and invitations. The organization's other members stay signed up but lose that organization. Say so in the apps' delete confirmation.
+
 ## Related Repositories
 
 ### Paid Clients
@@ -95,6 +99,8 @@ Push notifications (used by the paid iOS/Android clients) need APNs and FCM cred
 `config/settings.yml` has two kinds of app name. `display_name` (`Native App Template`) is the name people read: mails (sender name, invitation text, footer) and the HTML pages use it. `site.name` and `business.name` (`NativeAppTemplate`) are the one-word identifier-like names; keep them for code that needs one.
 
 The invitation mail links the App Store and Google Play only when `mobile_app.app_store_url` / `mobile_app.play_store_url` are set. Both are blank by default, so no placeholder link is sent; fill them in once the apps are published.
+
+The mails use the apps' colors (Light Blue accent, Cool Grey text and ground) and follow the reader's dark mode. To use your app's colors, change the hex values in `app/views/layouts/mailer.html.erb`, `app/views/shopkeeper/notification_mailer/_button.html.erb` and the code box in `invited.html.erb`. Look at the three mails at `/rails/mailers` in development (`?locale=ja` for Japanese).
 
 The icons in `public/` (`favicon.ico`, `icon.svg`, `icon.png`, `icon-192.png`, `icon-512.png`, `apple-touch-icon.png`) are the template's and only appear as browser favicons; replace them with your app's icons. The HTML pages (password reset, email confirmation, error pages) name the app in text with `display_name` instead of showing a logo.
 

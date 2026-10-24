@@ -402,7 +402,7 @@ directory for `claude-code`, and an `[mcp_servers.pad]` table in
 project-scoped, it's install-on-request only — `--all` and `pad mcp status` cover
 the per-user clients (including Codex) and skip it.
 
-**Tool catalog (v0.101)** — ten resource × action tools plus `pad_set_workspace`. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
+**Tool catalog (v0.103)** — eleven resource × action tools plus `pad_set_workspace`. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
 
 | Tool | Actions |
 |---|---|
@@ -415,6 +415,7 @@ the per-user clients (including Codex) and skip it.
 | `pad_playbook` | `list`, `get`, `run`, `match` |
 | `pad_library` | `list`, `get`, `activate` |
 | `pad_attachment` | `list`, `show` |
+| `pad_chat` | `list`, `inbox`, `show`, `send`, `delete`, `read` (global agent chat; excluded from ChatGPT) |
 | `pad_meta` | `server-info`, `version`, `tool-surface`, `bootstrap` |
 | `pad_set_workspace` | session-default workspace pinning (response embeds the bootstrap blob) |
 
@@ -426,7 +427,7 @@ Plus resources at `pad://workspaces`, `pad://workspace/{ws}/dashboard`,
 and `pad://_meta/version`.
 
 **Stability contract.** The catalog is versioned
-(`tool_surface_version: "0.101"`) and advertised in the initialize handshake and at
+(`tool_surface_version: "0.103"`) and advertised in the initialize handshake and at
 `pad://_meta/version`, so external agents can pin against it; the per-version
 changelog lives in [`internal/mcp/version.go`](internal/mcp/version.go). Errors
 come back as structured envelopes (`{error: {code, message, hint, ...}}`) from a
@@ -677,6 +678,26 @@ See [SECURITY.md](SECURITY.md) for reporting vulnerabilities.
 - **Self-addressed only.** The server forces every push's target to the caller's own sessions; nobody can push into a session that isn't theirs. Delivery is filtered to armed sessions, and the surfaces are honest about it: the web composer shows the split ("2 connected, 0 accepting pushes") and withholds a send it knows nobody would accept; a CLI broadcast still publishes and reports `delivered_sessions` (in JSON output), and a targeted push to a session that is not accepting skips the publish rather than pretending.
 - **No grandfathering.** Updating the plugin replaces the v0.14 always-on monitor with the gated one for everyone. Sessions that used to receive pushes receive none until they connect; the web composer's counts make that visible rather than silent.
 - **The accepted caveat.** An agent can run the arm command from inside its own session. That is visible in the transcript, within the operator's sight: the gate protects sessions from the outside and does not police the inside. A push can inject text; it cannot click a permission prompt.
+
+The plugin's Claude Code hooks report activity through `pad session activity`:
+the hook returns immediately and sends the report in a detached background
+process, so a prompt never waits on the network. `UserPromptSubmit` sets busy
+and `Stop` clears it. Client timestamps keep a late busy report from overwriting
+a newer idle report within a 10-second reorder window; larger gaps apply as
+clock steps. Claude Code fires no `Stop` when the user interrupts a turn
+with Esc, so an interrupted session reads busy until its record expires 30
+minutes after the prompt report reaches the server. Nothing refreshes the record
+mid-turn: a single turn longer than 30 minutes reads `online` or
+`connected_not_accepting` for the rest of the turn, according to its armed state.
+For `pad session activity`, argument errors, flag errors, configuration failures,
+network failures and spawn failures are silent and exit 0. `--help` prints help
+to stdout; the shipped hooks never pass it. An OS-level kill cannot be converted
+to exit 0. If session identity cannot be resolved within 500ms, that report is
+sent without a worker id and the server drops it with `400 invalid_worker_id`.
+The next prompt or stop retries resolution and corrects activity once identity
+resolves. The hooks discard output because `UserPromptSubmit` stdout reaches
+the model. Activity reporting does not change push consent.
+A hook running with a read-only API token cannot report activity and silently does nothing.
 
 ## License
 

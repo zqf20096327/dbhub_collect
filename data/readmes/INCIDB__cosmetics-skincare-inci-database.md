@@ -1,0 +1,283 @@
+<div align="center">
+
+![INCIDB — Skincare & Cosmetics INCI Database: products, ingredients and INCI name normalisation](assets/kaggle-cover.png)
+
+</div>
+
+# INCIDB — The Skincare & Cosmetics INCI Database
+
+[![Live Portal](https://img.shields.io/badge/Live_Portal-incidb.dataengineered.io-0080d0?style=flat-square)](https://incidb.dataengineered.io/)
+[![License](https://img.shields.io/badge/License-ODbL_v1.0-008080?style=flat-square)](https://opendatacommons.org/licenses/odbl/1-0/)
+[![Products](https://img.shields.io/badge/Products-20,435-0080d0?style=flat-square)](https://incidb.dataengineered.io/schema)
+[![INCI names](https://img.shields.io/badge/INCI_names-46,013-d03030?style=flat-square)](https://incidb.dataengineered.io/schema)
+[![Brands](https://img.shields.io/badge/Brands-6,542-800080?style=flat-square)](https://incidb.dataengineered.io/schema)
+[![Composition links](https://img.shields.io/badge/Composition_links-382,797-60a020?style=flat-square)](https://incidb.dataengineered.io/schema)
+[![Name map rows](https://img.shields.io/badge/Name_map_rows-79,047-e06020?style=flat-square)](https://incidb.dataengineered.io/schema)
+[![Snapshot](https://img.shields.io/badge/Snapshot-2026.10-7020d0?style=flat-square)](https://incidb.dataengineered.io/)
+
+> **Live portal, interactive schema & free sample:** [https://incidb.dataengineered.io/](https://incidb.dataengineered.io/)
+>
+> **Free sample:** [`samples/incidb_free_samples.zip`](samples/incidb_free_samples.zip) (200 products, 1,123 ingredients) · **INCIDB Complete: $79 one-time, CSV + Parquet** → [Buy on Stripe](https://buy.stripe.com/3cIfZi5t6fzwazV1E43840g?client_reference_id=incidb_en_github) · **INCIDB Korea (Complete + South Korea MFDS overlay): $149 one-time** → [Buy on Stripe](https://buy.stripe.com/eVq6oIg7K1IG4bxeqQ3840k?client_reference_id=incidb_en_github)
+> **Same sample on [Hugging Face](https://huggingface.co/datasets/Ichlibitiche/incidb-skincare-free-sample)** · **[Kaggle](https://www.kaggle.com/datasets/dataengineered/incidb-skincare-and-cosmetics-inci-formulations)**
+
+**For ML/NLP teams training ingredient-normalisation models and compliance
+analysts running bulk EU Annex audits:** INCIDB ships the **79,047-row
+`ingredient_name_map`** — every raw label token resolved to a canonical INCI
+name, with the resolution `method` and a `confidence` on each row — as one
+offline, auditable artifact that no free source or live API provides.
+
+Underneath it, a normalised, relational snapshot of what is actually printed on cosmetic
+ingredient labels: **20,435 products**, **6,542 brands**, **46,013 distinct
+canonical INCI names**, **382,797 ordered product→ingredient links**, and the
+**79,047-row `ingredient_name_map`** that shows how every raw label token was
+resolved to a canonical name.
+
+Product, brand and composition data come from **Open Beauty Facts** (ODbL).
+Ingredient enrichment — functions, CAS/EC numbers, chemical descriptions,
+Annex II–VI membership, restrictions — comes from the **European Commission
+CosIng** inventory, joined on exact canonical name. Nothing is inferred,
+filled in, or defaulted: where a source has no value, the column is `NULL`.
+
+Shipped as pipe-delimited UTF-8 CSV (`|`) and Apache Parquet.
+
+---
+
+## What is measured (snapshot 2026.10)
+
+| Table | Rows | What it is |
+| :--- | ---: | :--- |
+| `products` | 20,435 | One row per Open Beauty Facts product: name, brand FK, EAN, the source's own tag list, raw label text |
+| `brands` | 6,542 | Canonical brand identities |
+| `ingredients` | 46,013 | Distinct canonical INCI names, plus their CosIng enrichment where CosIng lists them |
+| `product_ingredients` | 382,797 | Ordered composition links (`position_index` = label order) |
+| `ingredient_name_map` | 79,047 | Raw label token → canonical name, with the resolution `method` and a confidence |
+| `fragrance_allergens` | 277 | EU Annex III fragrance-allergen labelling entries, one row per legal name × INCIDB match (review rows and unmatched names included) |
+| `regulatory_status` | 641 | EU Annex II–VI status per ingredient × list entry; a row exists only where a list says something |
+
+### Enrichment coverage — stated two ways, honestly
+
+CosIng is a finite regulatory inventory; a real-world label corpus contains
+far more distinct strings than any inventory lists (botanical variants,
+multilingual spellings, marketing tokens, one-off blends). So coverage looks
+very different depending on what you count:
+
+| Column | Share of the 46,013 distinct names | Share of the 382,797 label occurrences |
+| :--- | ---: | ---: |
+| CosIng match (any) | 12.2% | **85.4%** |
+| `functions` | 12.0% | **84.3%** |
+| `cas_number` | 9.0% | **78.8%** |
+| `chemical_description` | 9.5% (4,322 distinct values) | — |
+
+Read it like this: **most distinct names in the long tail are not in CosIng,
+but most of the ingredient slots on an actual product label are.** If you are
+building an ingredient scanner or a formulation model, the second column is
+the one that governs what your users see. If you are building a chemical
+reference, the first column is the honest ceiling. Both are printed here so
+you can decide before you pay.
+
+### Flags and ratings — small, cited, and `NULL` everywhere else
+
+* **EU fragrance allergens (`is_common_allergen`, `fragrance_allergens`).**
+  The 81 labelling entries of Annex III to Regulation (EC) 1223/2009, as
+  amended by Regulation (EU) 2023/1545 (consolidated text of 18.05.2026), are
+  matched to INCIDB by exact INCI name, then by the collective label name the
+  Regulation prescribes (e.g. "Rose Ketones"), then by CAS number for
+  chemically defined substances only. Botanical CAS hits are shipped as review
+  rows, never flags. 120 names are flagged; 47.3% of products contain at least
+  one. About 2.3% of products list ingredients as unsplit text that the
+  allergen flags do not reach. The US FDA has not yet published its MoCRA
+  fragrance-allergen list, so this dataset carries no US flag.
+  `allergen_source` records the list on each flagged ingredient; the
+  `fragrance_allergens` table carries the Annex reference, thresholds,
+  transition dates, match method and source for every row.
+* **EU regulatory status (`regulatory_status`).** Annex II–VI entries from
+  the European Commission CosIng exports — `PROHIBITED` (Annex II),
+  `RESTRICTED` (Annex III), `ALLOWED_WITH_CONDITIONS` (Annexes IV–VI) — with
+  product type, maximum concentration and conditions verbatim. Matched by the
+  CosIng glossary name or the CosIng "Identified INGREDIENTS" name only; there
+  is no CAS route. Absence of a row is not a status, and nothing here is legal
+  advice.
+* **`comedogenic_rating` — 142 ingredients rated 0–5.** Transcribed from
+  Fulton JE Jr., *Comedogenicity and irritancy of commonly used ingredients
+  in skin care products*, J Soc Cosmet Chem 1989;40:321–333 (Table I).
+  `NULL` for every ingredient the paper does not cover.
+* **`is_fungal_acne_trigger` — 277 flags.** A rule-derived heuristic, not a
+  measured property: C11–C24 fatty acids and their esters, and polysorbates
+  20/40/60/80, applied only to CosIng-matched ingredients. Basis: Saunte et
+  al. 2020 (DOI 10.3389/fcimb.2020.00112) and Liebregts et al. 2025 (DOI
+  10.1093/femsyr/foaf043). Treat it as a filter, never as a finding.
+
+`rating_source` carries the per-row citation, so every non-`NULL` value is
+traceable to the work it came from.
+
+---
+
+## Canonicalisation, and why the name map ships with the data
+
+Raw label text is messy: HTML entities, stray punctuation, percentages,
+parenthetical synonyms, slash variants, run-together fragments. Every raw
+token is resolved to a canonical INCI name by an explicit, ordered method,
+and the method used is recorded per row in `ingredient_name_map.method`:
+
+| `method` | What it means |
+| :--- | :--- |
+| `exact` | The cleaned token is already a CosIng inventory name |
+| `cleaned` | Resolved after entity decoding / character stripping / whitespace collapse |
+| `typo_map` | Resolved via a small, explicit typo table |
+| `percent_stripped` | A declared percentage was removed (`GLYCERIN 5%`) |
+| `paren_stripped` | A parenthetical was removed (`AQUA (WATER)`) |
+| `synonym_map` | Resolved via an explicit synonym table |
+| `slash_variant` | A slash-joined multilingual variant (`WATER/EAU/AQUA`) |
+| `split` | A run-together token split into two names, both of which matched |
+| `slash_same_cas` | Two slash-joined CosIng names sharing a CAS number (`CI 77891 / TITANIUM DIOXIDE`): one ingredient, the first-listed name |
+| `unresolved_residual` | Unmatched text left between names recovered by the re-split, kept in label order |
+| `unresolved` | No canonical match — kept verbatim, flagged, never guessed |
+
+A token that no method resolves is re-split by explicit rules (brackets,
+`(and)`, bullets, colons, `. ` separators, line breaks), never fuzzily: every
+recovered name must match the inventory or the cited maps exactly.
+`part_index` and `split_rule` record each cut; the rules are listed in
+[DATA_DICTIONARY.md](DATA_DICTIONARY.md).
+
+`unresolved` is the largest bucket by distinct name and a small one by label
+occurrence — the same long-tail effect as the coverage table above. Shipping
+the map means you can audit or override any decision the pipeline made
+instead of taking it on trust.
+
+---
+
+## Statistics page (`/stats/`)
+
+[incidb.dataengineered.io/stats/](https://incidb.dataengineered.io/stats/) publishes aggregate statistics computed from the **full** corpus — the most common INCI names, the share of products with fragrance, parabens, silicones and sulfates, skincare actives, ingredient counts by product type, EU Annex III ingredients, CosIng functions and the enrichment coverage stated two ways — as a citable page with embeddable SVG charts and a machine-readable `stats/data.json`. The figures and charts are **CC BY 4.0** with the Open Beauty Facts attribution; only aggregates are published, the row-level tables stay in INCIDB Complete.
+
+`scripts/generate_stats.py` regenerates `stats/` from `data/incidb.sqlite` after each edition build (see `RELEASING.md`); follow it with `scripts/generate_seo_pages.py` (sitemap) and the i18n `build` + `check`.
+
+## Free sample
+
+[`samples/incidb_free_samples.zip`](samples/incidb_free_samples.zip) — the
+same seven tables, the same columns, as CSV and Parquet:
+
+* **200 products**, with their brands, their **1,123** referenced
+  ingredients, all their composition links, and the name-map rows for the
+  sampled products' own label tokens.
+* Selection is disclosed and reproducible
+  ([`scripts/make_sample.py`](scripts/make_sample.py)): a product is
+  *eligible* when at least 80% of its linked ingredients are CosIng-matched;
+  the draw is then a seeded uniform random sample of that eligible pool.
+* That rule biases the sample toward products with longer, better-resolved
+  ingredient lists — i.e. **the sample looks better than the corpus average**.
+  The corpus-wide numbers in the table above are the ones to plan against.
+
+---
+
+## Pricing: INCIDB Complete $79 · INCIDB Korea $149
+
+Everything measured above, both formats, instant download. INCIDB Korea is INCIDB Complete plus the
+South Korea MFDS overlay, delivered as two archives from the same edition.
+
+| | INCIDB Complete | INCIDB Korea |
+| :--- | :--- | :--- |
+| Price | **$79** one-time | **$149** one-time |
+| Tables | All 7 (`products`, `brands`, `ingredients`, `product_ingredients`, `ingredient_name_map`, `fragrance_allergens`, `regulatory_status`) | The same 7, plus `kr_mfds_entries`, `kr_mfds_substances`, `kr_mfds_links` |
+| Formats | Pipe-delimited CSV (`\|`) **and** Apache Parquet | Pipe-delimited CSV (`\|`) **and** Apache Parquet |
+| Enrichment | Every CosIng column, allergen flags, authored ratings — at the coverage stated above | As Complete, plus Annexes 1 and 2 of MFDS Notice 2026-19 in full (1,077 Annex 1 and 248 Annex 2 entries, 1,784 CAS sub-rows) with 191 INCIDB names linked by exact CAS and hand-checked; 73.4% of products contain at least one |
+| Extras | `build_report.json` (per-column fill rates and source hashes), data dictionary, licence | As Complete, plus Korean text as printed, parsed limit fields and CosIng English names by CAS where CosIng lists the number |
+| Delivery | Stripe checkout, instant download | Stripe checkout, instant download of both archives |
+| Updates | One-time snapshot (2026.10) | One-time snapshot of the same edition |
+
+👉 [Buy INCIDB Complete](https://buy.stripe.com/3cIfZi5t6fzwazV1E43840g?client_reference_id=incidb_en_github) ·
+[Buy INCIDB Korea](https://buy.stripe.com/eVq6oIg7K1IG4bxeqQ3840k?client_reference_id=incidb_en_github) ·
+[pricing details](docs/pricing_plan.md)
+
+INCIDB Korea links are positive listings by exact CAS number. The notice gives its CAS numbers as examples, so an ingredient without a link has no status in this data, and many Annex 1 entries apply only as limited by a condition or exception written in the entry. Not legal advice.
+
+What you are paying for is the engineering: a corpus of raw label strings
+turned into normalised, canonicalised, joined, measured tables, delivered
+ready to query. **You are not paying for exclusive rights to the data** — the
+product data is ODbL and stays ODbL (see *Licence* below).
+
+---
+
+## Quick start
+
+```python
+import pandas as pd
+import pyarrow.parquet as pq
+
+ingredients = pq.read_table("ingredients.parquet").to_pandas()
+links = pq.read_table("product_ingredients.parquet").to_pandas()
+
+# Coverage on YOUR slice, weighted the way it actually matters:
+merged = links.merge(ingredients, on="ingredient_id", how="left")
+print(merged["functions"].notna().mean())   # share of label slots with a CosIng function
+
+# EU Annex III fragrance allergens
+allergens = ingredients[ingredients["is_common_allergen"] == 1]
+
+# Audit how a raw label token was resolved
+name_map = pd.read_csv("ingredient_name_map.csv", sep="|", dtype=str)
+print(name_map[name_map["raw_name"].str.contains("AQUA", na=False)][["raw_name", "canonical_name", "method"]])
+```
+
+```python
+import duckdb
+
+duckdb.query("""
+    SELECT f.function, COUNT(*) AS label_slots
+    FROM 'product_ingredients.parquet' pi
+    JOIN 'ingredients.parquet' i USING (ingredient_id)
+    CROSS JOIN UNNEST(string_split(i.functions, ';')) AS f(function)
+    WHERE i.functions IS NOT NULL
+    GROUP BY 1 ORDER BY 2 DESC LIMIT 10
+""").show()
+```
+
+---
+
+## Use cases
+
+* **Ingredient scanner apps** — resolve a scanned label to canonical names via
+  `ingredient_name_map`, then surface CosIng functions and EU Annex III
+  allergen flags for the slots you can resolve.
+* **Formulation and recommender models** — 382,797 ordered links give you
+  position-weighted composition vectors across 20,435 products.
+* **Retail and marketplace enrichment** — attach functions and restrictions to
+  product pages, with `NULL` where nothing is known rather than a guess.
+* **Regulatory and research work** — Annex II–VI status rows per ingredient
+  with their conditions, plus the raw→canonical audit trail the join was built
+  on.
+
+---
+
+## Documentation
+
+* [DATA_DICTIONARY.md](DATA_DICTIONARY.md) — every column, its source, its
+  measured fill rate, and the method notes.
+* [Live schema](https://incidb.dataengineered.io/schema) — the same reference on the web.
+* [docs/pricing_plan.md](docs/pricing_plan.md) — what the $79 and $149 cover.
+* [claims.json](claims.json) — the numbers on this page, generated from the
+  build report by [`scripts/render_claims.py`](scripts/render_claims.py) and
+  enforced by a test. If the copy and the corpus ever disagree, the build fails.
+
+---
+
+## Licence & attribution
+
+* **Product, brand and composition data:** derived from
+  [Open Beauty Facts](https://world.openbeautyfacts.org/) under the
+  [Open Database License (ODbL) v1.0](https://opendatacommons.org/licenses/odbl/1-0/).
+  Free to use and redistribute, including commercially, with **attribution**
+  ("Product data © Open Beauty Facts contributors") and **share-alike**.
+* **Ingredient enrichment:** contains data from the European Commission
+  CosIng database, reused under the Commission's public-sector information
+  reuse policy, with attribution.
+* **EU regulatory overlay:** Annex III to Regulation (EC) No 1223/2009 as
+  amended by Regulation (EU) 2023/1545 (EUR-Lex, © European Union) and the
+  CosIng Annex II–VI exports, reused on the same terms, with attribution.
+  Not legal advice.
+* **South Korea overlay (INCIDB Korea only):** Annexes 1 and 2 of MFDS Notice 2026-19
+  (Regulation on Safety Standards etc. of Cosmetics), from law.go.kr. Our reading is that
+  Korean Copyright Act Art. 7(2) excludes such public notices from protection; not legal advice.
+* **Schema & documentation:** CC BY 4.0.
+* Provided **as-is, without warranty**. The flags and ratings are
+  informational; they are not medical, safety or regulatory-compliance advice.

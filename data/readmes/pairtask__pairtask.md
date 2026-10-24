@@ -18,36 +18,34 @@ Provisioning runs OpenTofu in a disposable container; no host Terraform/OpenTofu
 install is needed. Dev has network access; optional
 control stays offline. Host credentials and conversations are not imported.
 
-**Host prerequisites:** Python, Git, OpenSSH and Incus; macOS also needs Colima.
-[Install commands](docs/sandbox.md#1-install-the-host-tools). No `gh` or browser download needed.
+**Host prerequisites:** Python, Git, OpenSSH and Incus; macOS also needs Colima
+(`brew install colima incus python git`). No `gh` or browser download needed.
+Every host command, by task: [host commands](docs/host-commands.md).
 
 ```sh
-# First install or upgrade (Incus must be running; upgrades end active sessions)
-python3 scripts/sandbox-provision.py rollout
-# Pin a version: add --release workspace-vX.Y.Z
+# Install, and later upgrade (Incus must be running; upgrades end active sessions)
+curl -fsSL https://raw.githubusercontent.com/pairtask/pairtask/main/install.sh | sh
+# From a checkout instead: python3 scripts/pairtask.py install   (later: upgrade)
+# Pin a version: sh -s -- --version workspace-vX.Y.Z, or --release workspace-vX.Y.Z
 ```
 
-Run host commands from your provisioning checkout. On Linux, skip Colima commands
-and use `local:` / `--remote local`. For host mounts, see the
+`pairtask` is the installed host command; from a checkout instead, write
+`python3 scripts/pairtask.py` for it. On Linux the remote is `local`
+(`--remote local`) and there is no Colima. For host mounts, see the
 [`mounts.json` example](docs/sandbox-mounts.md#choose-directories).
 
 ```sh
-# HOST: run from your provisioning checkout
-# Start the Mac VM, then the containers
-python3 scripts/sandbox-host.py apply
-incus --project pairtask start colima-pairtask:secured   # if secured_runtime = true
-incus --project pairtask start colima-pairtask:workspace
-
-# Check: expect workspace (and secured, if enabled) to show RUNNING
-incus --project pairtask list colima-pairtask:
+# HOST
+# Start the Mac VM and the containers; expect workspace (and secured, if enabled) RUNNING
+pairtask start
+pairtask status
 
 # Optional: preview host mounts; uncomment with your file (does not apply)
-# python3 scripts/sandbox-host.py mounts-plan --mounts-file /path/to/mounts.json
+# pairtask mounts plan --mounts-file /path/to/mounts.json
 
-# Configure SSH once, check the broker, then enter dev
-python3 scripts/sandbox-ssh.py --remote colima-pairtask
-ssh -F infra/incus/ssh/config workspace pairtask status
-ssh -F infra/incus/ssh/config workspace
+# Check the broker, then enter dev (SSH was configured by the install)
+pairtask shell pairtask status
+pairtask shell
 
 # CONTAINER: all commands below until exit run inside your SSH session
 # First use only: uncomment to sign in before starting agents
@@ -64,7 +62,9 @@ tmux new -A -s collab
 # In each tmux window: enter the project, then choose one agent or dashboard
 # Ctrl+B then C opens another window
 cd /workspace/collab-ai
-codex                         # new managed Codex conversation
+codex                         # new managed Codex conversation (codex-1)
+# pairtask start codex --id codex-2        # another Codex session with its own ID
+# pairtask start claude --id claude-2       # likewise for Claude (--model, --effort, -- native args)
 # codex resume                # choose a saved sandbox conversation
 # codex resume SESSION_ID     # resume a specific sandbox conversation
 # claude                      # Claude with collaboration channels enabled
@@ -78,13 +78,13 @@ codex                         # new managed Codex conversation
 exit
 
 # HOST AGAIN: optional shutdown; stops agents, keeps persistent files
-# incus --project pairtask stop colima-pairtask:workspace
-# incus --project pairtask stop colima-pairtask:secured   # if secured_runtime = true
-# colima stop pairtask
+# pairtask stop        # add --vm to stop the Mac VM too
 ```
 
 Expect `Broker: ready`. Run one Codex and one Claude session; additional sessions
-need distinct agent IDs. [Login help](docs/sandbox.md#sign-in-and-network-access).
+need distinct agent IDs: `pairtask start codex --id codex-2` or
+`pairtask start claude --id claude-2` inside the sandbox generates the launcher
+arguments or the MCP config, so nobody edits JSON. [Login help](docs/sandbox.md#sign-in-and-network-access).
 Both agents should read `/usr/local/share/pairtask/SKILL.md`.
 
 [Mount directories](docs/sandbox-mounts.md) ·
@@ -101,7 +101,7 @@ Run on your host:
 
 ```sh
 # Agent connections and pending messages (terminal UI)
-ssh -t -F infra/incus/ssh/config workspace pairtask dashboard
+pairtask shell --tty pairtask dashboard
 
 # Containers, resources and logs (browser UI)
 incus webui colima-pairtask:  # Linux: incus webui local:

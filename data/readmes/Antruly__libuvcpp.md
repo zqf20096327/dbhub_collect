@@ -2,7 +2,7 @@
   <img src="./uvcpp.svg" alt="libuvcpp logo" width="160" height="160">
 </p>
 
-[![version](https://img.shields.io/badge/version-1.8.2-blue.svg)](./RELEASE.md)
+[![version](https://img.shields.io/badge/version-1.8.3-blue.svg)](./RELEASE.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![CI · Linux · Ubuntu](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-linux-ubuntu.yml)
 [![CI · Windows · MSVC](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml/badge.svg)](https://github.com/Antruly/libuvcpp/actions/workflows/ci-windows-msvc.yml)
@@ -14,30 +14,47 @@
 🔧 Modern C++11 wrapper for [libuv](https://github.com/libuv/libuv) — event-driven I/O with
 object-oriented APIs, dual-mode async/sync support, HTTP/1.1, WebSocket (RFC 6455), and SSL/TLS.
 
-- **Version**: `1.8.2` — **Author**: `zhuweiye` — **License**: `MIT`
+- **Version**: `1.8.3` — **Author**: `zhuweiye` — **License**: `MIT`
 - **Languages**: [English](./README.md) · [中文](./README.zh.md)
 
 ## Download
 
 <!-- downloads:start -->
-The newest release is **v1.8.2**. Six prebuilt packages, each one self-contained — the
+The newest release is **v1.8.3**. Six prebuilt packages, each one self-contained — the
 Release and Debug builds of the library, all the public headers, `uvcpp.pc` and the CMake
 package files, and no extra DLLs or `.so` files to ship alongside. Which modules a given
 package enables is recorded per version in [CHANGELOG.md](./CHANGELOG.md).
 
 | Platform | Toolchain | Package |
 |---|---|---|
-| Windows x64 | MSVC 2022 | [libuvcpp-1.8.2-msvc-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.2/libuvcpp-1.8.2-msvc-x64.zip) · 23.3 MB |
-| Windows arm64 | MSVC 2022 | [libuvcpp-1.8.2-msvc-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.2/libuvcpp-1.8.2-msvc-arm64.zip) · 24.3 MB |
-| Windows x64 | MinGW-w64 (GCC) | [libuvcpp-1.8.2-mingw-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.2/libuvcpp-1.8.2-mingw-x64.zip) · 28.8 MB |
-| Windows arm64 | MinGW-w64 (clang + libc++) | [libuvcpp-1.8.2-mingw-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.2/libuvcpp-1.8.2-mingw-arm64.zip) · 22.2 MB |
-| Linux x64 | GCC | [libuvcpp-1.8.2-linux-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.2/libuvcpp-1.8.2-linux-x64.zip) · 26.6 MB |
-| Linux arm64 | GCC | [libuvcpp-1.8.2-linux-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.2/libuvcpp-1.8.2-linux-arm64.zip) · 26.8 MB |
+| Windows x64 | MSVC 2022 | [libuvcpp-1.8.3-msvc-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/libuvcpp-1.8.3-msvc-x64.zip) · 23.5 MB |
+| Windows arm64 | MSVC 2022 | [libuvcpp-1.8.3-msvc-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/libuvcpp-1.8.3-msvc-arm64.zip) · 24.4 MB |
+| Windows x64 | MinGW-w64 (GCC) | [libuvcpp-1.8.3-mingw-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/libuvcpp-1.8.3-mingw-x64.zip) · 29.1 MB |
+| Windows arm64 | MinGW-w64 (clang + libc++) | [libuvcpp-1.8.3-mingw-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/libuvcpp-1.8.3-mingw-arm64.zip) · 22.3 MB |
+| Linux x64 | GCC | [libuvcpp-1.8.3-linux-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/libuvcpp-1.8.3-linux-x64.zip) · 26.7 MB |
+| Linux arm64 | GCC | [libuvcpp-1.8.3-linux-arm64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/libuvcpp-1.8.3-linux-arm64.zip) · 26.9 MB |
 
 Every earlier release is on the **[Releases page](https://github.com/Antruly/libuvcpp/releases)**.
 What a package contains, and why it is laid out that way:
 [doc/release-process.md](doc/release-process.md).
 <!-- downloads:end -->
+
+### Windows 7 (VS2015 / MinGW kits)
+
+Old toolchains cannot build a 2011-era OpenSSL and libuv from scratch, so this line ships
+**portable build kits** instead of plain binaries: the source tree plus a prebuilt dependency
+prefix (OpenSSL 1.1.1w, libuv 1.40, zlib, llhttp — and GCC 8.1 for the MinGW kits) and
+`build-kit\build.cmd`. Extract, run the script for your target, and you have the library;
+VS2013 users build the `net-ssl` / `web-lite` profiles this way. See
+[doc/compatibility.md](doc/compatibility.md).
+
+| Target | Compiler | Kit |
+|---|---|---|
+| Windows 7 x86 | VS2015 Update 3 (v140) | [uvcpp-kit-1.8.3-vs2015-x86.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/uvcpp-kit-1.8.3-vs2015-x86.zip) · 137.2 MB |
+| Windows 7 x64 | VS2015 Update 3 (v140) | [uvcpp-kit-1.8.3-vs2015-x64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/uvcpp-kit-1.8.3-vs2015-x64.zip) · 145.8 MB |
+| Windows 7 x86 | GCC 8.1 (carried in the kit) | [uvcpp-kit-1.8.3-mingw32.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/uvcpp-kit-1.8.3-mingw32.zip) · 187.9 MB |
+| Windows 7 x64 | GCC 8.1 (carried in the kit) | [uvcpp-kit-1.8.3-mingw64.zip](https://github.com/Antruly/libuvcpp/releases/download/v1.8.3/uvcpp-kit-1.8.3-mingw64.zip) · 193.2 MB |
+
 
 ## Install
 
@@ -349,6 +366,13 @@ OpenSSL ≥ 3.2 with the QUIC API for QUIC and HTTP/3), and how the switches int
 | `UVCPP_BUILD_EXPAND` | `OFF` | Build expand module (memory pool) |
 | `UVCPP_BUILD_NET` | `ON` | Build net module (TCP/UDP client/server) |
 | `UVCPP_BUILD_WEB` | `OFF` | Build web module (HTTP + WebSocket) |
+| `UVCPP_WEB_SERVER` | `ON` | Build the HTTP/1.1 server part of the web module. Only meaningful with `UVCPP_BUILD_WEB=ON` |
+| `UVCPP_WEB_CLIENT` | `ON` | Build the HTTP/1.1 client part of the web module. Only meaningful with `UVCPP_BUILD_WEB=ON` |
+| `UVCPP_WEB_WS` | `ON` | Build the WebSocket part of the web module (needs a non-trivial thread-local; auto-disabled on VS2013) |
+| `UVCPP_WEB_STATIC` | `ON` | Build the static-file server (requires `UVCPP_WEB_SERVER=ON`) |
+| `UVCPP_FEATURES` | empty | Feature profile: `net` / `net-ssl` / `web-lite` / `web` / `full`. Empty means "use the individual `UVCPP_*` options". See [`doc/compatibility.md`](doc/compatibility.md) |
+| `UVCPP_REQUIRE_FEATURES` | empty | Semicolon-separated features that must be enabled; configure fails if any is disabled (used by the official binary CI) |
+| `UVCPP_WINVER` | `0x000000` | Minimum Windows version targeted (`_WIN32_WINNT` / `WINVER`); `0x000000` = toolchain default, Win7 = `0x0601`, Windows only |
 | `UVCPP_BUILD_WEBAPP` | `OFF` | Build web app framework (router/middleware/static/upload/log). Requires `UVCPP_BUILD_WEB=ON` |
 | `UVCPP_BUILD_EXAMPLES` | `OFF` | Build the examples in `examples/` |
 | `UVCPP_BUILD_BENCH` | `OFF` | Build the benchmark range in `bench/` — see [`doc/benchmark-rig.md`](doc/benchmark-rig.md) |

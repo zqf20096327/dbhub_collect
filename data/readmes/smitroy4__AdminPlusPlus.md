@@ -113,6 +113,7 @@ src/main/java/com/smit/taskportal
 │   ├── TaskSubmissionController /api/task/{id}/associate-submission[s]
 │   ├── AssociateSubmissionController  alias at /api/task/{id}/submissions (unused by the UI)
 │   ├── NotificationController /api/notifications (navbar bell feed)
+│   ├── SearchController       /api/search (global navbar search)
 │   ├── ClientController       /api/clients[/id] (details: MANAGER, ADMIN)
 │   ├── ManagerController      /api/manager/**   (MANAGER, ADMIN)
 │   └── AdminUserController    /api/admin/**     (ADMIN)
@@ -127,7 +128,7 @@ src/main/java/com/smit/taskportal
 │   ├── AppUserPrincipal       record implementing UserDetails
 │   ├── CurrentUserHolder      resolves the principal from the security context
 │   └── RestAware{AuthenticationEntryPoint,AccessDeniedHandler}
-└── service/                   UserService, TaskService, TaskMessageService, ClientService, NotificationService, AssociateSubmissionService, TaskNoGenerator
+└── service/                   UserService, TaskService, TaskMessageService, ClientService, NotificationService, AssociateSubmissionService, SearchService, TaskNoGenerator
 
 src/main/resources
 ├── application.yml
@@ -141,6 +142,10 @@ src/main/resources
     ├── profile.html           own details + password change
     ├── users.html             admin-only account management (staff roles only)
     ├── clients.html           manager/admin directory of client companies
+    ├── offline.html           PWA offline fallback
+    ├── manifest.json          installable web-app manifest
+    ├── sw.js                  service worker (static shell cache only)
+    ├── icons/                 PWA / apple-touch icons
     ├── css/style.css          the single stylesheet (light default, dark toggle)
     └── js/
         ├── app.js             fetch + CSRF + escaping + formatting + theme
@@ -243,6 +248,7 @@ All responses share one envelope:
 | GET    | `/api/csrf`                       | public            | Issues the CSRF token/cookie          |
 | GET    | `/api/me`                         | authenticated     | Current user                         |
 | GET    | `/api/notifications`              | authenticated     | Activity feed for the navbar bell (role-scoped; a task's status move drops every entry about it) |
+| GET    | `/api/search?q=`                  | authenticated     | Grouped global search: tasks (number/title), messages, staff users, clients. CLIENT scoped to its own customer; internal notes/escalations follow thread visibility |
 | PUT    | `/api/me/profile`                 | authenticated     | Change own email                     |
 | POST   | `/api/auth/change-password`       | authenticated     | Change own password                  |
 | GET    | `/api/dashboard/stats`            | authenticated     | Role-scoped tile counters + breakdowns |
@@ -267,6 +273,9 @@ All responses share one envelope:
 | POST   | `/api/task/{id}/associate-submission/{sid}/review` | COORDINATOR, MANAGER, ADMIN | API-only reply path (the UI replies through the composer): appends the answer, marks the submission `REVIEWED`, sets `SUBMITTED` |
 | GET    | `/api/clients`                    | authenticated     | Client list (CLIENT: own customer only; contact block: MANAGER, ADMIN) |
 | GET    | `/api/clients/{id}`               | authenticated     | One client (CLIENT: own customer only, else 404; same detail rule) |
+| PUT    | `/api/clients/{id}`               | ADMIN             | Edit all client info (contact, billing, notes, …) |
+| POST   | `/api/clients`                    | ADMIN             | Create a new client record |
+| DELETE | `/api/clients/{id}`               | ADMIN             | Delete a client record |
 | GET    | `/api/manager/users`              | MANAGER, ADMIN    | Users for the assign dropdown (clients excluded) |
 | GET    | `/api/manager/tasks`              | MANAGER, ADMIN    | Filtered backlog                    |
 | GET    | `/api/admin/users`                | ADMIN             | List accounts                        |
@@ -324,6 +333,7 @@ curl -b cookies.txt -X POST http://localhost:8080/api/task \
 | Sign in, view own tasks                 | ✅ | ✅ | ✅ | ✅ | ✅ |
 | See the open / all tasks backlog        | own customer's | ✅ | ✅ | ✅ | ✅ |
 | Open any task detail + thread           | own customer's | ✅ | ✅ | ✅ | ✅ |
+| Global search (navbar)                  | own customer + own company (no staff directory) | ✅ | ✅ | ✅ | ✅ |
 | Create a task                           | ❌ | ❌ | ❌ | ✅ | ✅ |
 | Comment on a task                       | own customer's | ❌ (submit an update instead) | ✅ | ✅ | ✅ |
 | Submit an update for review             | ❌ | ✅ | ❌ | ❌ | ❌ |
@@ -336,7 +346,8 @@ curl -b cookies.txt -X POST http://localhost:8080/api/task \
 | Delete a message                        | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Unassign a task                         | ❌ | ❌ | ❌ | ✅ | ✅ |
 | See associate workload metrics          | ❌ | ❌ | ✅ | ✅ | ✅ |
-| See client contact details              | ❌ | ❌ | ❌ | ✅ | ✅ |
+| View client info                        | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Edit client info                        | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Edit own email / password               | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Manage accounts                         | ❌ | ❌ | ❌ | ❌ | ✅ |
 
@@ -445,6 +456,9 @@ anybody's bell (see *Frontend notes*).
 ## 6. Frontend notes
 
 * One stylesheet (`/css/style.css`) with CSS custom properties for the palette.
+* The app is installable as a PWA: `/manifest.json` declares the standalone
+  shell and icons, and `sw.js` caches only CSS / JS / icons plus
+  `/offline.html`. API responses and authenticated pages are never cached.
 * **Light is the default**; the moon/sun button in the header (or the login
   card) flips to dark mode. The choice is stored in `localStorage`
   (`admin++-theme`) and applied before first paint by a tiny inline script,

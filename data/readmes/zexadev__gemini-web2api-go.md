@@ -23,7 +23,7 @@
 - [功能](#功能)
 - [快速开始](#快速开始)
 - [客户端接入](#客户端接入)
-- [MCP（web_search 工具）](#mcpweb_search-工具)
+- [MCP 工具](#mcp-工具)
 - [管理面板](#管理面板)
 - [模型](#模型)
 - [配置](#配置)
@@ -59,6 +59,12 @@
 **接口**
 - OpenAI 兼容：`/v1/chat/completions`、`/v1/models`、`/v1/responses`
 - `/v1/videos`：OpenAI(Sora) 形状的异步视频生成——`POST` 建任务、`GET /v1/videos/{id}` 轮询、`GET /v1/videos/{id}/content` 下 MP4（要登录态 Pro 号）
+  - 图生视频：`input_reference`（首帧），可以是 data/http(s) URL、`{"image_url": …}`，或 multipart 文件（OpenAI SDK 的形状）
+  - `size`（`1280x720` / `720x1280`）或 `aspect_ratio`（`16:9` / `9:16`）
+  - `POST /v1/videos/{id}/extend` `{"prompt": "接下来发生什么"}`：在原视频所在的 Gemini 会话里续写（同一账号），返回加长后的完整 MP4。需要 `temporary_chat` 和 `auto_delete_conversation` 都关着（会话要留在账号里）
+  - 失败立即给出原因：`video_quota_exhausted`（所有账号的视频额度都用完了，见下）、`video_refused: <Gemini 的回复>`（Gemini 用文字回答而不是生成视频）
+  - 视频额度换号：某个账号视频额度用完后，新视频会跳过它直到额度重置；任务落到这样的账号时会在同一个任务里换下一个账号。所有账号都在冷却时，`POST /v1/videos` 直接回 `429`（`code: video_quota_exhausted`，带 `Retry-After`），进行中的任务以 `retry_after=N`（距最早重置的秒数）失败
+  - `GET /admin/api/video-quota`（管理接口）：每个账号滚动 5 小时窗口内的视频用量、状态和重置时间，读取各账号自己的 Gemini 历史（只读；拒绝消息里带 Google 的重置时间时用它，否则按首个视频 + 5 小时估算）。每次刷新每个号约 2 + N 次上游请求（N = 近几小时有更新的会话数，没变的走缓存），走代理池、计入单 IP 预算，别频繁轮询。开着 `temporary_chat` 或 `auto_delete_conversation` 时本服务生成的视频不在历史里，计数会偏少（响应里有 `history_incomplete` 提示）
 - 普通对话真流式：上游每出一帧就转发增量（带 `tools` 的请求和 `/v1/responses` 是收完再发）
 - Bearer token / `x-api-key` 鉴权，key 可在面板轮换
 - `usage` 用 tiktoken 算，`reasoning_tokens` 单列不计入 `completion_tokens`
@@ -214,14 +220,14 @@ OpenAI 形状的接口，没做 `/v1beta`。
 
 另有一个不鉴权的健康检查 `GET /`，返回 `{"status":"ok","version":…,"models":[…]}`，给探活用。
 
-## MCP（web_search 工具）
+## MCP 工具
 
 除了 OpenAI 接口，同一个进程、同一个端口还挂了一个 **MCP server**，在 `/mcp` 上，
-把 Gemini 网页端的**联网搜索**暴露成一个 `web_search` 工具。让 Claude Desktop /
-Claude Code / Cursor 这类 MCP 客户端能「用 Gemini 去搜网」，返回**合成答案 + 来源链接**。
+把 Gemini 网页端的**联网搜索**、**生图**、**音乐**、**视频**暴露成工具，让 Claude Desktop /
+Claude Code / Cursor 这类 MCP 客户端直接调用。
 
 不用单独起进程、不用额外部署——起了后端就有。传输是 HTTP（Streamable HTTP），
-所以远程客户端连 URL 就能用，复用后端的账号池 / 代理池 / 限流。匿名即可搜，不必挂 cookie。
+所以远程客户端连 URL 就能用，复用后端的账号池 / 代理池 / 限流。搜索匿名即可，生图 / 音乐 / 视频要配 cookie（视频要付费号）。
 
 **客户端配置**（以 Claude Desktop 的 `claude_desktop_config.json` 为例）：
 
@@ -240,8 +246,16 @@ Claude Code / Cursor 这类 MCP 客户端能「用 Gemini 去搜网」，返回*
 - `Authorization` 填 OpenAI 接口那把同样的 API key（面板「设置」页里看）。
 - Claude Code：`claude mcp add --transport http gemini-search http://localhost:8083/mcp --header "Authorization: Bearer sk-gemini-你的key"`。
 
-工具 `web_search(query)`：传一个查询/问题，返回 Gemini 联网查证后的答案，末尾附
-`Sources:` 来源清单。当前只有这一个工具（读取指定 URL 的 `url_context` 暂未做）。
+| 工具 | 参数 | 返回 |
+|---|---|---|
+| `web_search` | `query` | Gemini 联网查证后的答案，末尾附 `Sources:` 来源清单 |
+| `generate_image` | `prompt`，可选 `image_urls`（参考图，data: 或 http(s) 链接） | 图片（MCP `image` 内容） |
+| `generate_music` | `prompt` | 约 30 秒音乐（MCP `audio` 内容；上游给的不是 `audio/*` 时用 embedded resource） |
+| `create_video_task` | `prompt`，可选 `size`（`1280x720` / `720x1280`）、`input_reference`（首帧） | 任务 id，跟 `/v1/videos` 是同一套任务 |
+| `get_video_status` | `id`，可选 `include_video` | 任务状态；完成且 `include_video=true` 时附上 MP4（embedded resource，几 MB） |
+
+产物用 MCP 原生的媒体内容类型返回（base64 在 `data` / `blob` 字段，带 `mimeType`），不写进文本，
+支持的客户端会当附件渲染。读取指定 URL 的 `url_context` 暂未做。
 
 ## 管理面板
 
@@ -388,6 +402,8 @@ curl http://127.0.0.1:8083/v1/chat/completions \
 | 自动删会话（`auto_delete_conversation`） | 默认关。开启后每次出完结果自动删掉 gemini.google.com 上留下的这条会话，免得登录账号里堆一堆。只登录态生效，异步 best-effort、删失败不影响响应。 |
 | 临时对话（`temporary_chat`） | 默认关。开启后走 Gemini 网页端原生「临时对话」：会话压根不进账号的会话列表、不用于模型训练，比「自动删会话」更干净，还省掉那次删除请求。只登录态有意义；开了「服务端多轮续接」时自动不生效（临时对话不留列表，多轮要靠服务端留会话）。 |
 | 匿名优先（`anon_first`） | 默认关。开启后不需要登录态能力的请求（纯文本、非思考、无工具、不带图）走匿名、不占用 cookie 账号，省账号额度；用到 3.1 Pro / 3.8 Flash / 扩展思考 / 生图 / 传文件这些才挑号。关掉则只要池里有号就一律用号。 |
+| 严格模型校验（`strict_model`） | 默认关。账号某一档额度用完时，上游不报错，而是静默换成更弱的模型照样回 200。开启后，服务端自报的模型跟请求的不一致就不把降级回答当成功：换下一个号重试，全池都被降级就回 `429 insufficient_quota`（`code: model_downgraded`，带 `Retry-After`）。流式在吐出第一个字之前就判断，不会先吐一半再报错。媒体模型（生图/音乐/视频/画布）不参与判断。 |
+| 降级冷却（`strict_model_cooldown_min`） | 配合严格模型校验：被降级的号在这个模型上歇多久再用，默认 300 分钟（网页端用量按 5 小时窗口算）。0 = 不记，每次请求都重新试。 |
 | 重试次数 / 重试间隔 / 上游超时 | |
 | 明细保留天数 | 过期只删明细，聚合数据永久保留 |
 | TLS 指纹 | `chrome_146`（默认）/ `chrome_144` / `chrome_133` / `firefox_147` / `safari_16_0` / `safari_ios_17_0` |
@@ -673,7 +689,7 @@ Docker 用默认 bridge 网络时上游可能返回空内容（Google 拒绝某�
 
 本仓是独立的 Go 实现，早期摸网页协议时参考过 Python 版的思路（见文末友情链接），**不是移植版**；
 其它同名的 Go 项目与本仓无关。本仓自己的特点：单二进制、utls 模拟 Chrome 真 TLS 指纹、代理池 + Cookie 池（自动续期、
-账号粘住出口）、带管理面板、SQLite / MySQL / PostgreSQL、`/v1/videos` 异步视频接口、MCP `web_search` 工具。
+账号粘住出口）、带管理面板、SQLite / MySQL / PostgreSQL、`/v1/videos` 异步视频接口、MCP 工具（搜索 / 生图 / 音乐 / 视频）。
 
 ### Cookie 为什么大约半小时就失效？怎么长期用？
 

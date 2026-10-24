@@ -12,6 +12,9 @@
 [![Docker image](https://img.shields.io/badge/ghcr.io-agentmemory--core-2496ED?logo=docker&logoColor=white)](https://github.com/hsuanshao/AgentMemory/pkgs/container/agentmemory-core)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org)
 [![Last commit](https://img.shields.io/github/last-commit/hsuanshao/AgentMemory)](https://github.com/hsuanshao/AgentMemory/commits/main)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/github/all-contributors/hsuanshao/AgentMemory?color=ee8449)](#contributors)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 English | [繁體中文](./README.zh-tw.md)
 
@@ -47,6 +50,10 @@ The installer asks, in order:
 2. **Coordination backend**: single node (default) / existing Redis / start Redis for me with Docker
 3. **LLM**: OpenAI-compatible API / Claude Code CLI / Antigravity CLI / Codex CLI
 4. Project directory for the CLI and the exposed ports
+5. **Who reaches it**: this machine only (default, ports on `127.0.0.1`) / other machines over plain HTTP / other machines over HTTPS with Caddy ([TLS](docs/ops/TLS.md))
+
+> [!IMPORTANT]
+> **Rootless Docker:** memory-core sees every client as one address, so 20 wrong keys from anyone in 15 minutes lock everyone out for 15 minutes. Either set `AGENT_MEMORY_THROTTLE_LOCK_AFTER=0` in `.env` (delays and the audit log stay), or put a reverse proxy on the host that sees the real address and list it in `AGENT_MEMORY_TRUSTED_PROXIES` ([UPGRADE](docs/UPGRADE.md#rootless-docker-every-client-shows-one-address)).
 
 It then generates a Gateway API key and database password, writes `.env` with mode 600 (including `COMPOSE_PROFILES`), starts the services and waits for the health checks, and finally creates the first admin and shows a one-time login user key.
 
@@ -173,6 +180,11 @@ Config file keys (`server`, `data`, `llm`, `memory.pipeline`, `memory.recall`, `
 | `AGENT_MEMORY_LLM_CLI_*` | Unset | Used when provider=cli; see "Using a Local CLI as the LLM" |
 | `AGENT_MEMORY_EMBEDDING_PROVIDER` etc. | `none` | Enables vector retrieval |
 | `AGENT_MEMORY_CORS_ORIGINS` | Empty | Allowed origins (comma-separated) |
+| `AGENT_MEMORY_TRUSTED_PROXIES` | Unset (Compose: `memory-panel,caddy`) | Proxies whose `X-Forwarded-For` names the client; refused keys are counted and locked out per client address ([UPGRADE](docs/UPGRADE.md#refused-keys-are-throttled-and-audited)) |
+| `AGENT_MEMORY_THROTTLE_DELAY_AFTER` / `_LOCK_AFTER` / `_LOCK_MINUTES` | `5` / `20` / `15` | Refused credentials per client address: delays from this refusal, a lockout at this one, its length; 0 turns delays or the lockout off (rootless Docker: [UPGRADE](docs/UPGRADE.md#rootless-docker-every-client-shows-one-address)) |
+| `AGENT_MEMORY_AUDIT_RETENTION_DAYS` | `90` | Days the credential audit log keeps an event |
+| `AGENT_MEMORY_ALLOW_KEY_RECOVERY` | `false` | Lets `internal/upgrade` issue an admin key without legacy data to move |
+| `BIND_ADDR` (Compose) | `127.0.0.1` from `install.sh` | Where ports 8420 and 8125 listen; `0.0.0.0` for every network |
 
 ## Storage and Coordination Backends
 
@@ -256,6 +268,27 @@ See [docs/API.md](docs/API.md) for details. Highlights:
 ## Contributing
 
 Issues and pull requests are welcome. See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for the development setup, checks and conventions, the [Code of Conduct](.github/CODE_OF_CONDUCT.md), and [SECURITY.md](.github/SECURITY.md) to report a vulnerability privately.
+
+### Contributors
+
+Thanks to everyone who has contributed ([emoji key](https://allcontributors.org/docs/en/emoji-key)). To credit someone, comment on their issue or pull request: `@all-contributors please add <github-user> for code, doc`, and the bot opens a pull request that updates this list.
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/hsuan-shao-chang-59412894/"><img src="https://avatars.githubusercontent.com/u/5172404?v=4?s=100" width="100px;" alt="William Chang"/><br /><sub><b>William Chang</b></sub></a><br /><a href="https://github.com/hsuanshao/AgentMemory/commits?author=hsuanshao" title="Code">💻</a> <a href="https://github.com/hsuanshao/AgentMemory/commits?author=hsuanshao" title="Documentation">📖</a> <a href="#maintenance-hsuanshao" title="Maintenance">🚧</a> <a href="#infra-hsuanshao" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#security-hsuanshao" title="Security">🛡️</a> <a href="https://github.com/hsuanshao/AgentMemory/commits?author=hsuanshao" title="Tests">⚠️</a> <a href="https://github.com/hsuanshao/AgentMemory/pulls?q=is%3Apr+reviewed-by%3Ahsuanshao" title="Reviewed Pull Requests">👀</a> <a href="#projectManagement-hsuanshao" title="Project Management">📆</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://blog.seancheng.space"><img src="https://avatars.githubusercontent.com/u/29519438?v=4?s=100" width="100px;" alt="Sean Zheng"/><br /><sub><b>Sean Zheng</b></sub></a><br /><a href="https://github.com/hsuanshao/AgentMemory/commits?author=blackhorseya" title="Code">💻</a> <a href="https://github.com/hsuanshao/AgentMemory/commits?author=blackhorseya" title="Tests">⚠️</a> <a href="https://github.com/hsuanshao/AgentMemory/pulls?q=is%3Apr+reviewed-by%3Ablackhorseya" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/hsuanshao/AgentMemory/issues?q=author%3Ablackhorseya" title="Bug reports">🐛</a> <a href="#ideas-blackhorseya" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
 

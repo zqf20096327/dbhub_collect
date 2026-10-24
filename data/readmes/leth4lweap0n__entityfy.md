@@ -267,12 +267,14 @@ returning `false` stops further consumer calls, not the network read.
 - Bulk operations: `query().remove_all()`, `query().assign(...).update_all()`.
 - `db_context_pool`: lease-based context reuse; when the lease is released the change tracker is
   cleared.
-- `save_changes_async()`: returns `entityfy::task<save_result>` and runs the save on a lazily
-  created single-worker executor; retry delays elapse there. A save gate rejects overlapping
-  sync/async saves with `logic_error`, and destroying a context drains an in-flight save. The
-  tracked sets must stay untouched until the task completes; cancelling the task does not stop
-  the save, and `get()` still returns its result. This is a thread offload, not native I/O
-  asynchrony.
+- `save_changes_async()`: returns `entityfy::task<save_result>`. The default `automatic` strategy
+  uses native `BEGIN`/`INSERT`/`UPDATE`/`DELETE`/`COMMIT` through `execute_async` on PostgreSQL
+  when the tracked models have no generated key or concurrency token; otherwise it runs the save
+  on a single-worker executor. `set_async_save_strategy(offload|native)` pins a path, and
+  `save_changes_once_async()` is the native one-shot. The native path does not retry. A save gate
+  rejects overlapping saves with `logic_error`, and destroying a context drains an in-flight
+  save. The tracked sets must stay untouched until the task completes; cancelling the task does
+  not stop the save, and `get()` still returns its result.
 
 ## entityfy-migrate
 
@@ -397,10 +399,10 @@ GCC 16.2 fails to link Debug binaries against the static libstdc++ (a duplicate
 `std::runtime_error` definition that is only pulled in without optimization), so Debug binaries use
 the MinGW DLLs and need `<mingw>/bin` on `PATH` to run.
 
-CI: [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs four parallel jobs in the
-official `gcc:16` container - SQLite, PostgreSQL 18, MariaDB 11.4 and SQL Server 2022 - and each
-job asserts that its backend was enabled before building. A skipped PostgreSQL, MySQL or SQL
-Server run is a failure there (see the `ENTITYFY_REQUIRE_*` variables).
+CI: [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs five parallel jobs - SQLite,
+PostgreSQL 18, MariaDB 11.4, SQL Server 2022 (in the official `gcc:16` container) and Windows
+SQLite - and each backend job asserts that its backend was enabled before building. A skipped
+PostgreSQL, MySQL or SQL Server run is a failure there (see the `ENTITYFY_REQUIRE_*` variables).
 
 ```bash
 cmake --preset release
@@ -421,8 +423,30 @@ Options: `ENTITYFY_ENABLE_SQLITE`, `ENTITYFY_ENABLE_POSTGRESQL`, `ENTITYFY_ENABL
 
 ### Using it in your project
 
-There is no `install()`/`find_package()` export yet, so consume the sources as a subdirectory.
-This is the exact setup that was built and run while writing this section:
+Install the library once, then consume the exported targets:
+
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DENTITYFY_BUILD_TESTS=OFF -DENTITYFY_BUILD_EXAMPLES=OFF -DENTITYFY_BUILD_DEMO=OFF \
+  -DCMAKE_INSTALL_PREFIX=<prefix>
+cmake --build build
+cmake --install build
+```
+
+```cmake
+find_package(entityfy CONFIG REQUIRED)
+
+add_executable(app main.cpp)
+target_link_libraries(app PRIVATE entityfy::core)   # or entityfy::db_context, entityfy::migrate
+```
+
+Put `<prefix>` on `CMAKE_PREFIX_PATH`, or pass `-DCMAKE_PREFIX_PATH=<prefix>` when configuring the
+consumer. The installed config finds the enabled backend dependencies: `sl3` for SQLite, the
+system `PostgreSQL` package for libpq, `ODBC` for SQL Server, and MariaDB Connector/C for MySQL.
+The `ENTITYFY_ENABLE_*` compile definitions and the C++26/`-freflection` compile feature travel
+with the exported targets.
+
+The source tree still supports `add_subdirectory` and `FetchContent_MakeAvailable`:
 
 ```cmake
 cmake_minimum_required(VERSION 3.30)
@@ -439,21 +463,23 @@ add_executable(app main.cpp)
 target_link_libraries(app PRIVATE entityfy::core)          # or entityfy::db_context, entityfy::migrate
 ```
 
-`add_subdirectory` and `FetchContent_MakeAvailable` both work - both were built and run while
-writing this section. The dependencies are fetched during the first configure, so that step needs
-network access; which ones are pulled follows the options:
+Both paths are covered in CI: the SQLite job installs the package and builds
+`cmake/package-consumer` with `find_package(entityfy CONFIG REQUIRED)`.
+
+The dependencies are fetched during the first configure, so that step needs network access; which
+ones are pulled follows the options:
 
 | Option | Fetches |
 |---|---|
 | `ENTITYFY_ENABLE_SQLITE=ON` (default) | `sl3` (with an embedded SQLite) |
-| always | `nlohmann_json` |
-| `ENTITYFY_ENABLE_POSTGRESQL=ON` and libpq found | `taocpp::pq` |
+| always | `nlohmann_json` (migration implementation only; not part of the consumer link interface) |
+| `ENTITYFY_ENABLE_POSTGRESQL=ON` and libpq found | nothing; uses the system libpq |
 | `ENTITYFY_BUILD_TESTS=ON` (default) | `Catch2` |
 | `ENTITYFY_BUILD_EXAMPLES=ON` (default) | `spdlog` |
 
-So the four `OFF` switches above fetch only `sl3` and `nlohmann_json`. The `-freflection` flag and
-the C++26 standard level travel with the `entityfy::core` interface, so the consumer does not set
-them.
+With tests, examples, demo and the non-SQLite backends off, configure fetches only `sl3` and
+`nlohmann_json`. The `-freflection` flag and the C++26 standard level travel with the
+`entityfy::core` interface, so the consumer does not set them.
 
 Per-target use:
 
@@ -469,7 +495,7 @@ Per-target use:
 entityfy/
 ├── CMakeLists.txt              superbuild
 ├── CMakePresets.json           dev / release / release-no-pg
-├── cmake/Dependencies.cmake    sl3, taocpp::pq, nlohmann_json, Catch2, spdlog
+├── cmake/Dependencies.cmake    sl3, nlohmann_json, Catch2, spdlog
 ├── docs/                       architecture, core, context, migration, benchmark, roadmap
 └── modules/
     ├── entityfy-core/
@@ -483,7 +509,7 @@ through `sl3`, and there is no second copy of SQLite.
 
 ## Limitations
 
-- `save_changes_async()` is a thread offload, not I/O asynchrony.
+- The native async save path is limited to models without a generated key or concurrency token; generated-key and token models stay on the offload path.
 - The core does not perform dirty-column updates; partial UPDATE lives in the context layer.
 - TPH inheritance supports single-table hierarchies (`migrate_tph`, discriminator-scoped CRUD,
   `find_all_types`), but no tracked or eager-loaded polymorphic reads, and a hierarchy has one base
@@ -494,11 +520,13 @@ through `sl3`, and there is no second copy of SQLite.
   providers write a SQL dump (`CREATE TABLE` + `INSERT`) instead of a native dump, which can take
   a while on large databases; `[[= entityfy::json]]` maps to `LONGTEXT` on MySQL because MariaDB
   reports its JSON alias that way; the SQL Server migrate provider rebuilds dependent indexes
-  around `ALTER COLUMN` and refuses primary-key/identity changes.
+  around `ALTER COLUMN` and refuses primary-key/identity changes. SQL Server accepts `mssql://`
+  and `sqlserver://`, escapes braced credentials, supports opt-in MARS (`?mars=1`) and the five
+  isolation levels, and maps 1205/Azure-transient native errors to typed retryable errors. The
+  engine's backup remains a portable `.sql` dump; `provider::backup_native()` is the opt-in
+  server-side `BACKUP DATABASE` for operators that supply a writable server path.
 - Row reading is costly through `vector<vector<sql_value>>`; single-row reads need a separate
   path.
-- No `install()` / `find_package()` export yet: consume the project with `add_subdirectory` or
-  `FetchContent`.
 
 Roadmap: [docs/roadmap.md](docs/roadmap.md).
 

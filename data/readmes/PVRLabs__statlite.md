@@ -157,6 +157,10 @@ configuration. See [`examples/`](examples/) for complete configurations.
 > [server and access guidance](docs/configuration.md#server) before exposing it
 > remotely.
 
+For applications behind Caddy, configure [native Caddy HTTP monitoring](docs/targets/caddy.md)
+with an exact metrics URL and host. It observes HTTP traffic without application
+instrumentation.
+
 ## Supported metric sources
 
 When a target has no health signal, the dashboard reports whether StatLite is
@@ -197,6 +201,7 @@ application's environment.
 - [Installation](docs/install.md)
 - [Docker](docs/docker.md)
 - [Configuration](docs/configuration.md)
+- [Metric vocabulary](docs/metrics.md)
 - [External API v1](docs/api.md)
 - [Deprecations and compatibility](docs/deprecations.md)
 - [Supported integrations](docs/integrations.md)

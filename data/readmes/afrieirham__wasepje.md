@@ -30,15 +30,18 @@ For more information on the frameworks used for this project, checkout the follo
 
 **1. You need these environment variables, see `.env.example` for more information on the required format.**
 
+- `APP_URL`
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `NEXT_PUBLIC_UMAMI_WEBSITE_ID`
+- `NEXT_PUBLIC_BILLING_PORTAL_URL`
 - `CLERK_SECRET_KEY`
+- `CLERK_WEBHOOK_SECRET`
 - `CRON_SECRET`
 - `DATABASE_URL`
-- `NEXT_PUBLIC_PRO_MONTHLY_URL`
-- `NEXT_PUBLIC_PRO_ANNUALLY_URL`
-- `NEXT_PUBLIC_BILLING_PORTAL_URL`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
+- `STRIPE_PRO_MONTHLY_PRICE_ID`
+- `STRIPE_PRO_ANNUALLY_PRICE_ID`
 
 **2. Create a PostgreSQL database and get the database URL (this project uses Supabase).**
 
@@ -66,14 +69,15 @@ This URL should be used for the `DATABASE_URL` environment variable.
 
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - `CLERK_SECRET_KEY`
+- `CLERK_WEBHOOK_SECRET` (signing secret of the Clerk webhook endpoint pointing at `/api/clerk/webhook`)
 
 **4. Create a Stripe account to get these value.**
 
-- `NEXT_PUBLIC_PRO_MONTHLY_URL`
-- `NEXT_PUBLIC_PRO_ANNUALLY_URL`
 - `NEXT_PUBLIC_BILLING_PORTAL_URL`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
+- `STRIPE_PRO_MONTHLY_PRICE_ID`
+- `STRIPE_PRO_ANNUALLY_PRICE_ID`
 
 **5. Create a `.env` file and add all the required variables.**
 
@@ -107,3 +111,14 @@ bun install
 **4. Run `bun db:push` to setup the database.**
 
 **5. Run `bun dev` to start the app on `localhost:3000`**
+
+## Scheduled jobs
+
+**Purge deleted users** runs daily. It removes users whose Clerk account was deleted more than 14 days ago. Schedule it as a `POST` with the `CRON_SECRET` bearer token:
+
+```bash
+curl -X POST https://<APP_URL>/api/purge-deleted-users \
+  -H "Authorization: Bearer <CRON_SECRET>"
+```
+
+The response is `{"purged": <count>}`. A `401` means the secret does not match.

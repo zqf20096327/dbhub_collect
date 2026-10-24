@@ -22,13 +22,13 @@
 </p>
 
 <p align="center">
-  <a href="https://lens.codedb.com.br/demo/report.html"><img src="assets/screenshots/report-summary.png" width="760" alt="codeDB Lens report summary: A-F grade, coverage seal and top risks"></a><br>
-  <sub>Report summary (demo data). <a href="https://lens.codedb.com.br/demo/report.html">Open the full demo report</a>.</sub>
+  <a href="https://lens.codedb.com.br/demo/report.html"><img src="assets/screenshots/demo.gif" width="860" alt="codeDB Lens demo: running check, the A-F report with evidence and next actions, and the record timeline"></a><br>
+  <sub>Real run against a test SQL Server (host renamed). <a href="https://lens.codedb.com.br/demo/report.html">Open a demo report</a>.</sub>
 </p>
 
 ---
 
-> **v0.6:** `check` (with an executive summary and `--redact` for sharing) and `compare`, 26 rules. FAQ and more on the [website](https://app.codedb.com.br/lens?utm_source=lens&utm_medium=github).
+> **v0.8:** `check` (with an executive summary and `--redact` for sharing), `compare`, and `record` + `report` to watch an instance for up to 24 hours ([how](https://lens.codedb.com.br/record/)). 26 rules plus 8 for recordings. FAQ and more on the [website](https://app.codedb.com.br/lens?utm_source=lens&utm_medium=github).
 
 codeDB Lens connects to your instance with a **read-only** login, runs a catalog of evidence-based
 rules and writes a self-contained HTML + JSON report with an **A–F grade** and a **coverage seal**

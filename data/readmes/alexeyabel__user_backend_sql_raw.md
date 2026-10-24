@@ -1,3 +1,15 @@
+> [!IMPORTANT]
+> This repository is archived and currently has no maintainer. If you're interested in continuing
+> development, please contact me over sqlrawmaintainer@abelonline.de to discuss taking over
+> maintenance. I am willing to help out in the transition, but you would take over most of the work
+> immediately.
+> 
+> Of course, anyone is free to fork this app and add it to the Nextcloud App store under a new name.
+> 
+> Background: I have recently switched over to Authentik as my authentication backend and no longer
+> store user data in a SQL database directly. Additionally, I am trying to move away from Nextcloud
+> and therefore have no interest in being involved in the project and especially PHP anymore.
+
 # User Backend SQL Raw
 
 [![Latest Release by Semantic Version)](https://img.shields.io/github/v/release/PanCakeConnaisseur/user_backend_sql_raw?sort=semver)](https://github.com/PanCakeConnaisseur/user_backend_sql_raw/releases)

@@ -1,0 +1,61 @@
+# <img src="_assets/icon.png" width="20"> vault
+
+> authentication and authorization system developed to provide a secure, single sign-on experience </h4>
+
+The idea behind **vault** is a "double OAuth2" flow, where `vault-auth` is the OAuth2 provider \
+for `vault-proxy` and Google is the OAuth2 provider for `vault-auth`.
+
+[vault](https://github.com/andikaleonardo/vault) is built on top of Bitly’s open source [oauth2_proxy](https://github.com/bitly/oauth2_proxy)
+
+## Running the Project
+
+### Prerequisites
+
+Ensure Redis is running locally or on a server. You can use Docker to run Redis locally:
+```sh
+docker run --name redis -p 6379:6379 -d redis
+```
+
+Set up the .env file with the necessary environment variables:
+```env
+REDIS_URL=redis://127.0.0.1/
+SECRET_KEY=your_secret_key
+```
+
+### Build and Run
+
+Clone the repository:
+```sh
+git clone https://github.com/andikaleonardo/kage.git
+cd kage
+```
+
+Build the project:
+```sh
+cargo build
+```
+
+Run the project:
+```sh
+cargo run
+```
+
+## Contributing
+
+🎈 Thanks for your help improving the project! We are so happy to have
+you! We have a [contributing guide][contributing] to help you get involved in the
+`vault` project.
+
+## License
+
+This project is licensed under the [MIT license][license].
+
+### Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in `futr` by you, shall be licensed as MIT, without any
+additional terms or conditions.
+
+
+[contributing]: https://github.com/aarsxx/vault/blob/main/CONTRIBUTING.md
+[license]: https://github.com/aarsxx/vault/blob/main//LICENSE

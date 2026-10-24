@@ -2,8 +2,8 @@
 
 Polylogue keeps every AI conversation and agent session your tools leave
 behind (Claude Code, Codex, Gemini CLI, Grok CLI, Hermes, and exports from
-ChatGPT, claude.ai, AI Studio, the Gemini app and others) in one local
-archive, exactly as written, and lets you and your agents search, read,
+ChatGPT, claude.ai, AI Studio, the Gemini app, Grok account exports and others)
+in one local archive, exactly as written, and lets you and your agents search, read,
 measure and annotate it from the command line, over MCP or in a web reader.
 
 This repository is the Rust rewrite. The Python predecessor is kept for
@@ -38,6 +38,14 @@ The daemon reads each tool's files where the tool writes them
 exports come in only by `import`. Every version of every input is kept, so
 a file the tool deletes or rewrites stays in the archive.
 
+Grok account JSON exports retain native conversation and response IDs when
+supplied. Without a conversation ID, complete conversation content determines
+a marked derived ID: filenames and response ordering do not change it, while
+an append or edit can create another session because continuity is unproved.
+Repeated identical turns remain distinct. Unknown authors or structured message
+shapes remain in the retained input with import diagnostics, rather than being
+coerced into text messages.
+
 The archive is `$XDG_DATA_HOME/polylogue` (`~/.local/share/polylogue`). It
 holds `archive.db` (what cannot be recomputed: inputs and their revisions,
 notes, excisions, settings, delivery records), `index.db` (everything parsed
@@ -59,13 +67,15 @@ binary through the HTTP adapter, and neither operation is offered through CLI or
 
 | Command | What it does |
 |---|---|
-| `QUERY` | Run a query: sessions, messages, blocks, tool calls, files, events, notes, links, turns, runs, deliveries, processes, work and changes, with conditions, `\| sort by`, `\| group by`, `\| matches` and `\| measure`. `--why` explains an empty result; `--fields` picks columns; `@N` names row N of the last list. |
+| `QUERY` | Run a query: sessions, messages, documents, blocks, tool calls, files, events, notes, links, turns, runs, deliveries, processes, work and changes, with conditions, `\| sort by`, `\| group by`, `\| matches` and `\| measure`. `--why` explains an empty result; `--fields` picks columns; `@N` names row N of the last list. |
 | `status` | What the archive holds and what the daemon is doing. |
 | `daemon` | Run the daemon in the foreground. |
 | `list`, `read SESSION` | List sessions; read one in a view (`full`, `dialogue`, `prompts`, `actions`). |
-| `import PATH` | Bring in an export or a directory of them. |
-| `export SESSION…` | Write sessions out as JSON (read back by `import`), Markdown, HTML or terminal text. |
-| `note add\|tag\|withdraw\|list` | Notes and tags on sessions, messages, tool calls, repositories and directories, with revisions. |
+| `read document:ID` | Read retained instructions, supplied context or memory without conversation roles. `full` and `dialogue` views, all formats and budgeted pages are available. |
+| `import PATH` | Retain files or export members and interpret recognized formats. `unrecognized` paths may also be `imported` or `already_stored`: retention and interpretation are separate. |
+| `attachment MESSAGE BLOCK` | Describe a message attachment and retained export candidates. The [interactive CLI](docs/attachments.md) can install verified bytes with `--reveal --out FILE`. |
+| `export SESSION…` | Write sessions or `document:ID` references as JSON (read back by `import`), Markdown, HTML or terminal text. |
+| `note add\|tag\|withdraw\|list` | Notes and tags on sessions, messages, documents, tool calls, repositories and directories, with revisions. |
 | `keep QUERY` | Keep a query's rows, to read back later as `result:<id>`. |
 | `brief`, `takeover SESSION`, `recall WORDS` | Context for a model: the session-start brief, what to take over another session with, and a search of past work with a record of how it searched. |
 | `continue [SESSION]` | Resume a session with its tool's own command; without one, the sessions in this directory that left something open. |
@@ -83,6 +93,10 @@ binary through the HTTP adapter, and neither operation is offered through CLI or
 | `completions SHELL` | Shell completions for bash, elvish, fish, PowerShell or zsh. |
 | `sinex status\|cutover` | Not built yet, so hidden from help: the optional Sinex backend's state and the move to it. |
 
+Work attempt totals distinguish `checks_passed`, `checks_failed` and
+`checks_unknown`. `polylogue 'work where checks_unknown:>0'` finds attempts
+with checks whose outcome is unknown.
+
 Exit codes: 0 success, 1 an error the daemon reported or an I/O error, 2 an
 invalid request, 6 no daemon running.
 
@@ -94,10 +108,56 @@ Pass it as `--cursor`; the budget may change between pages. Changed selected
 content returns `stale_cursor` and requires starting again. See
 [session paging](docs/architecture.md) for cursor binding, masking and memory costs.
 
+Claude.ai account `memories.json`, project `projects/*.json` and older
+`projects.json` exports retain textual memories, instructions and supplied
+project documents as `documents`. Search them with
+`polylogue 'documents where origin:claude-ai "phrase"'`, then use
+`polylogue read document:ID` (or `document:@N` after a terminal list).
+Their authorship stays unknown unless the source establishes it; they add no
+conversation turns or model usage. Missing document IDs are scoped to the
+retained input and physical record position. A different input cannot prove
+continuity for these records. Binary and unresolved references remain in raw
+inputs with interpretation diagnostics.
+
+JSON exports containing documents use `polylogue-export` version 2; session-only
+exports retain version 1. Both can be imported. Document removals use
+`excise document:ID --yes`, keep unaffected sibling values readable and retain a
+standing exclusion through rebuild and Sinex restore. Archive format 7 stores
+that policy; older local readers refuse it. The derived index rebuilds at
+version 34 without changing existing message hashes or authored references.
+
+Logical reads (`read SESSION --logical`) include only proven inherited prefixes.
+A fork's anchor is resolved in its parent's composed history, including that
+parent's inherited messages. Missing parents or anchors and session cycles keep
+available content readable with `lineage.complete: false` and typed `issues`.
+Every model page carries that status; prose formats show a notice. Continuation
+identity includes lineage status, so a changed missing link invalidates a page.
+Takeover context lists missing ancestry in its omissions. Logical totals refuse
+incomplete ancestry instead of presenting the available subset as complete.
+
 Session reads and query rows use the stored display title: the recorded title
 when present, otherwise the derived first-prompt title. JSON reads carry this
 as `display_title`, separate from the recorded `session` metadata. Importable
 exports retain source fields.
+
+The web reader links Document search results to `/d/ID`, with `full` and
+`dialogue` views, copied CLI commands, and masked source metadata including
+retained input ranges and versions. **Browse Documents** opens the document
+query from the overview. Query column descriptors identify supported reader
+links; message, note and untyped values remain text.
+
+The web reader's `/cost` page runs the same physical usage report as
+`measure usage`, including unknown usage, unpriced responses, independent
+recorded observations and the price catalog. Enter a session query to narrow
+its scope, or follow **Session cost and usage** from a session. **Browse selected
+sessions** returns to the query reader. API-equivalent cost and tool-reported
+cost are separate figures.
+
+Session pages show logical ancestry completeness, unresolved ancestry issues,
+and links to related sessions with the retained relationship evidence and branch
+point when available. Missing ancestry remains explicit. These are session
+relationships; the reader does not yet expose exact retained input versions and
+raw source ranges.
 
 ## Repository layout
 
@@ -141,3 +201,19 @@ without a delivery sender remain available. Archive mutations return
 Correct the configuration or restore failure and restart the daemon. Source
 capture spools remain pending until collection can run. An existing nonempty
 primary archive can start and serve reads while Sinex is offline.
+
+Hermes imports ATIF 1.7 trajectories as Transcript Documents and ATOF 0.1
+records as input-owned observations. Its native verification database uses the
+shared logical SQLite exporter; row history, schema transitions and deletion
+markers remain observations, not chat turns or run counts. Native run IDs do
+not create conversations. `read event:ID` and `export event:ID` use the ordinary
+reader/export paths. Transcript documents and input events require export
+wire version 3; ordinary text documents retain version 2.
+
+Hermes native activity flags distinguish an explicitly empty active path from
+unknown activity. When every positive message is explicitly inactive and not
+compacted, its messages stay readable and active-path queries return none.
+Missing flags remain unknown.
+The last complete logical record identifies each folded retained-prefix view;
+message and event citations keep their original row ranges. A later view with
+unreadable activity marks it unknown instead of reusing an older known leaf.

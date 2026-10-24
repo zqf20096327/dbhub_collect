@@ -123,11 +123,11 @@
 
 | Repository  | License | Star  |CreatedAt | UpdatedAt  | Description |
 |:-:|:-:|:-:|:-:|:-:|:-:|
-| [jeessy2/backup-x](https://github.com/jeessy2/backup-x) | MIT|476|2021-11-13|2025-10-23 | 带Web界面的数据库/文件备份增强工具 |
+| [jeessy2/backup-x](https://github.com/jeessy2/backup-x) | MIT|480|2021-11-13|2025-10-23 | 带Web界面的数据库/文件备份增强工具 |
 | [noovertime7/gin-mysqlbak](https://github.com/noovertime7/gin-mysqlbak) | MIT|45|2022-06-21|2023-02-06 | 一款分布式高性能的备份系统，支持 MySQL、ElasticSearch 备份，多集群任务统一，数据集中存储 |
-| [gobackup/gobackup](https://github.com/gobackup/gobackup) | MIT|2767|2017-09-06|2026-07-06 | 一款专为应用服务器设计的备份工具，用于定期将您的数据库、文件备份到云存储 |
-| [Hellager/mission-backup](https://github.com/Hellager/mission-backup) | Apache-2.0|116|2021-10-28|2025-02-18 | 简单好用的备份软件 |
-| [restic/restic](https://github.com/restic/restic) | BSD-2-Clause|35232|2014-04-27|2026-07-22 | Restic 是一款快速、高效且安全的备份程序。它支持多系统。 |
+| [gobackup/gobackup](https://github.com/gobackup/gobackup) | MIT|3082|2017-09-06|2026-08-14 | 一款专为应用服务器设计的备份工具，用于定期将您的数据库、文件备份到云存储 |
+| [Hellager/mission-backup](https://github.com/Hellager/mission-backup) | Apache-2.0|117|2021-10-28|2025-02-18 | 简单好用的备份软件 |
+| [restic/restic](https://github.com/restic/restic) | BSD-2-Clause|36777|2014-04-27|2026-10-18 | Restic 是一款快速、高效且安全的备份程序。它支持多系统。 |
 
 <div align="right">
 
@@ -144,19 +144,19 @@
 
 | Repository  | License | Star  |CreatedAt | UpdatedAt  | Description |
 |:-:|:-:|:-:|:-:|:-:|:-:|
-| [dromara/Jpom](https://github.com/dromara/Jpom) | NOASSERTION|1927|2019-01-04|2026-02-06 | 简而轻的低侵入式在线构建、自动部署、日常运维、项目监控软件 |
-| [nektos/act](https://github.com/nektos/act) | MIT|71253|2019-01-02|2026-07-10 | 本地运行 GitHub Actions |
-| [agola-io/agola](https://github.com/agola-io/agola) | Apache-2.0|1620|2019-05-24|2025-09-24 | 以容器化形式运行的 CI/CD 工具 |
-| [argoproj/argo-cd](https://github.com/argoproj/argo-cd) | Apache-2.0|23778|2018-02-09|2026-07-29 | 针对 Kubernetes 的声明式持续部署 |
-| [concourse/concourse](https://github.com/concourse/concourse) | Apache-2.0|7874|2014-04-19|2026-07-29 | Concourse 是一个用 Go 编写的基于容器的自动化系统。它最常用于 CI/CD，并且可以扩展到从简单到复杂的任何类型的自动化管道。 |
-| [dagger/dagger](https://github.com/dagger/dagger) | Apache-2.0|16109|2019-11-20|2026-07-29 | 代码形式的应用交付，可在任何地方运行 |
-| [earthly/earthly](https://github.com/earthly/earthly) | MPL-2.0|12047|2020-03-12|2025-10-23 | 超级简单的构建框架，具有快速、可重复的构建和即时熟悉的语法 - 就像 Dockerfile 和 Makefile 的结合体。 |
-| [gocd/gocd](https://github.com/gocd/gocd) | Apache-2.0|7420|2013-12-13|2026-07-29 | GoCD 主要仓库 - 持续交付服务器 |
-| [jenkinsci/jenkins](https://github.com/jenkinsci/jenkins) | MIT|26197|2010-11-22|2026-07-28 | Jenkins 是领先的开源自动化服务器。它使用 Java 构建，提供超过 1800 个插件来支持几乎所有事情的自动化，以便人类可以将时间花在机器无法完成的事情上。 |
+| [dromara/Jpom](https://github.com/dromara/Jpom) | NOASSERTION|1949|2019-01-04|2026-02-06 | 简而轻的低侵入式在线构建、自动部署、日常运维、项目监控软件 |
+| [nektos/act](https://github.com/nektos/act) | MIT|72440|2019-01-02|2026-08-09 | 本地运行 GitHub Actions |
+| [agola-io/agola](https://github.com/agola-io/agola) | Apache-2.0|1630|2019-05-24|2025-09-24 | 以容器化形式运行的 CI/CD 工具 |
+| [argoproj/argo-cd](https://github.com/argoproj/argo-cd) | Apache-2.0|24461|2018-02-09|2026-10-24 | 针对 Kubernetes 的声明式持续部署 |
+| [concourse/concourse](https://github.com/concourse/concourse) | Apache-2.0|7927|2014-04-19|2026-10-23 | Concourse 是一个用 Go 编写的基于容器的自动化系统。它最常用于 CI/CD，并且可以扩展到从简单到复杂的任何类型的自动化管道。 |
+| [dagger/dagger](https://github.com/dagger/dagger) | Apache-2.0|16469|2019-11-20|2026-10-24 | 代码形式的应用交付，可在任何地方运行 |
+| [earthly/earthly](https://github.com/earthly/earthly) | MPL-2.0|12054|2020-03-12|2026-10-23 | 超级简单的构建框架，具有快速、可重复的构建和即时熟悉的语法 - 就像 Dockerfile 和 Makefile 的结合体。 |
+| [gocd/gocd](https://github.com/gocd/gocd) | Apache-2.0|7432|2013-12-13|2026-10-23 | GoCD 主要仓库 - 持续交付服务器 |
+| [jenkinsci/jenkins](https://github.com/jenkinsci/jenkins) | MIT|26681|2010-11-22|2026-10-24 | Jenkins 是领先的开源自动化服务器。它使用 Java 构建，提供超过 1800 个插件来支持几乎所有事情的自动化，以便人类可以将时间花在机器无法完成的事情上。 |
 | [box/kube-applier](https://github.com/box/kube-applier) | Apache-2.0|641|2017-03-09|2026-05-13 | kube-applier 能为您的 Kubernetes 集群提供自动化部署和声明式配置的功能。 |
-| [pipe-cd/pipecd](https://github.com/pipe-cd/pipecd) | Apache-2.0|1333|2020-06-12|2026-07-28 | 一个 CD 适用于所有 {应用程序、平台、操作} |
-| [huangchengsir/pipewright](https://github.com/huangchengsir/pipewright) | MIT|20|2026-05-30|2026-07-26 | 轻量自托管 CI/CD·部署·运维一体化平台，单 Go 二进制零依赖，提供可视化 DAG 流水线、SSH 免 Agent 多服务器部署、容器管理、Web 终端与一键自更新 |
-| [spinnaker/spinnaker](https://github.com/spinnaker/spinnaker) | Apache-2.0|9758|2014-07-02|2026-07-29 | Spinnaker 是一个开源、多云持续交付平台，用于高速、自信地发布软件变更。 |
-| [tektoncd/pipeline](https://github.com/tektoncd/pipeline) | Apache-2.0|9020|2018-08-29|2026-07-29 | Tekton是一个强大而灵活的开源框架，用于创建CI/CD系统，允许开发人员跨云提供商和本地系统构建、测试和部署。 |
-| [kbst/terraform-kubestack](https://github.com/kbst/terraform-kubestack) | Apache-2.0|712|2018-12-15|2026-03-05 | Kubestack 是一个面向 Kubernetes 平台工程团队的框架，它允许在一个 Terraform 代码库中定义完整的云原生技术栈，并通过 GitOps 实现平台的安全持续发展。 |
-| [woodpecker-ci/woodpecker](https://github.com/woodpecker-ci/woodpecker) | Apache-2.0|7594|2019-0
+| [pipe-cd/pipecd](https://github.com/pipe-cd/pipecd) | Apache-2.0|1366|2020-06-12|2026-10-23 | 一个 CD 适用于所有 {应用程序、平台、操作} |
+| [huangchengsir/pipewright](https://github.com/huangchengsir/pipewright) | MIT|129|2026-05-30|2026-10-23 | 轻量自托管 CI/CD·部署·运维一体化平台，单 Go 二进制零依赖，提供可视化 DAG 流水线、SSH 免 Agent 多服务器部署、容器管理、Web 终端与一键自更新 |
+| [spinnaker/spinnaker](https://github.com/spinnaker/spinnaker) | Apache-2.0|9814|2014-07-02|2026-10-24 | Spinnaker 是一个开源、多云持续交付平台，用于高速、自信地发布软件变更。 |
+| [tektoncd/pipeline](https://github.com/tektoncd/pipeline) | Apache-2.0|9086|2018-08-29|2026-10-23 | Tekton是一个强大而灵活的开源框架，用于创建CI/CD系统，允许开发人员跨云提供商和本地系统构建、测试和部署。 |
+| [kbst/terraform-kubestack](https://github.com/kbst/terraform-kubestack) | Apache-2.0|713|2018-12-15|2026-10-05 | Kubestack 是一个面向 Kubernetes 平台工程团队的框架，它允许在一个 Terraform 代码库中定义完整的云原生技术栈，并通过 GitOps 实现平台的安全持续发展。 |
+| [woodpecker-ci/woodpecker](https://github.com/woodpecker-ci/woodpecker) | Apache-2.0|8044|2019-
