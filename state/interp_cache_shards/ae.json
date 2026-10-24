@@ -10257,5 +10257,82 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "05be2649b745": {
+  "identity": {
+   "one_liner": "终端运行的 MySQL/MariaDB 监控 bash 脚本仪表盘",
+   "review": "一个单文件 bash 脚本，供系统管理员和 DBA 在终端实时查看 MySQL 或 MariaDB 服务器的吞吐、连接、InnoDB 缓冲池、临时表、表缓存和系统负载等运行指标，并提供健康检查、进程列表和基于 performance_schema 的 top 查询视图。依赖 bash 4.2+、mysqladmin/mariadb-admin 和 POSIX awk，通过 mysqladmin 客户端工具读取状态。",
+   "highlights": [
+    "终端仪表盘展示吞吐、连接、InnoDB 缓冲池、临时表、表缓存与系统负载的每秒速率与告警",
+    "提供健康检查调优建议、进程列表（排序/过滤/kill）和基于 performance_schema 的精确 top 查询统计",
+    "单文件 bash 脚本，仅依赖 bash 4.2+、awk 和 MySQL 客户端工具，支持 --once 快照、SSH 和 cron 使用"
+   ],
+   "use_cases": [
+    "DBA 日常巡检 MySQL/MariaDB 运行与性能指标",
+    "排查慢查询与活动进程（含 kill 与最近查询历史）",
+    "通过 SSH 或 cron 做一次性快照采集与告警排查"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "## MySQL Monitor Script ／ MySQL Monitor dashboard ／ A lightweight bash script that gives sysadmins and DBAs a live view of a MySQL or MariaDB server from the terminal: throughput, connections, InnoDB buffer pool, temp tables, table cache and system load with per-second rates, sparklines and plain-English alerts",
+     "lines": [
+      1,
+      2,
+      4
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A lightweight bash script that gives sysadmins and DBAs a live view of a MySQL or MariaDB server from the terminal: throughput, connections, InnoDB buffer pool, temp tables, table cache and system load with per-second rates, sparklines and plain-English alerts ／ `bash` 4.2+, `mysqladmin` (or `mariadb-admin`) and any POSIX `awk` (gawk, mawk or busybox awk). CPU, load and memory are read from `/proc`.",
+     "lines": [
+      4,
+      86
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为为 MySQL/MariaDB 服务器提供终端监控视图的脚本工具，属数据库生态的监控组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A lightweight bash script that gives sysadmins and DBAs a live view of a MySQL or MariaDB server from the terminal: throughput, connections, InnoDB buffer pool, temp tables, table cache and system load with per-second rates, sparklines and plain-English alerts, plus health checks with tuning advice, the process list, and the server's top queries. One file, no dependencies beyond `bash`, `awk` and the MySQL client tools. ／ ## How to Install and Use ／ `bash` 4.2+, `mysqladmin` (or `mariadb-admin`) and any POSIX `awk` (gawk, mawk or busybox awk). CPU, load and memory are read from `/proc`.",
+   "evidence_lines": [
+    4,
+    6,
+    86
+   ]
+  },
+  "fn": "haydenjames/mysqlmonitor-script",
+  "sha": "05be2649b745",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

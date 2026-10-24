@@ -10669,5 +10669,74 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "15332f90e408": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地消息协作工具，经 MCP 服务器与 SQLite 消息代理联通",
+   "review": "pairtask 是一个用 Go 编写的本地工具，将一个 Claude 代理和一个 Codex 代理组成结对，通过 MCP 服务器、Unix socket 和 SQLite 支撑的 broker 共享任务与消息，并在 Incus 容器沙箱中运行，提供持久化项目、代理记忆和 token 用量上限。面向同时使用 Claude Code 与 Codex 的开发者；要求宿主具备 Python、Git、OpenSSH 和 Incus（macOS 需 Colima）。",
+   "highlights": [
+    "通过 MCP 服务器、Unix socket 和 SQLite-backed broker 实现 Codex 与 Claude 之间的持久化消息与自动投递",
+    "提供基于 Incus 的隔离沙箱 workspace，支持持久化项目与代理记忆，secured 模式下 broker 与 SQLite 运行于独立容器",
+    "提供终端只读仪表盘查看代理连接与待处理消息，支持 Codex token 软上限设置"
+   ],
+   "use_cases": [
+    "在同一沙箱中让 Claude 与 Codex 结对协作完成编码任务",
+    "需要隔离运行 AI 代理并限制其对宿主文件写入权限的场景",
+    "为受管的 Codex 会话设置 token 用量预算与监控"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**workspace**; **secured** owns one broker and SQLite database. ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+     "lines": [
+      77,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为 broker 的内置存储使用，README 未提供任何面向数据库生态的服务或适配能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT or Apache 2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**workspace**; **secured** owns one broker and SQLite database. ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured. ／ **Codex and Claude, working together in a sandbox.** pairtask pairs a Claude and",
+   "evidence_lines": [
+    77,
+    81,
+    3
+   ]
+  },
+  "fn": "pairtask/pairtask",
+  "sha": "15332f90e408",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

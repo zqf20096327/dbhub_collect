@@ -10530,5 +10530,203 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9f3cfa4599ef": {
+  "identity": {
+   "one_liner": "阿拉伯语优先（RTL）的文章发布平台，Rails 8 + MySQL 构建",
+   "review": "Nameem 是一个以阿拉伯语为第一语言、从右到左排版的开源文章发布平台，作者可发布长文，读者可关注、点赞、收藏并进行楼层化评论，并提供用户、文章、评论、标签的管理后台。技术栈为 Rails 8、Hotwire、Lexical 编辑器与 MySQL 8.0，通过 Kamal 部署，使用 Resend 发送邮件。适合想自建阿拉伯语内容社区的团队；运行需自备 MySQL 与邮件等第三方配置。",
+   "highlights": [
+    "提供长文发布、关注、点赞、收藏、楼层化评论、通知与邮件摘要等功能",
+    "包含面向用户、文章、评论与标签的管理后台，以及每篇文章的作者分析",
+    "基于 Rails 8、Hotwire、Lexical 编辑器与 MySQL 8.0，支持 Kamal 部署与 MIT 许可"
+   ],
+   "use_cases": [
+    "阿拉伯语内容社区的搭建与自托管",
+    "多作者长文发布与评论互动平台",
+    "Rails/Hotwire/MySQL 技术栈的实际项目参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL 8.0 ／ - MySQL 8.0 ／ cp .env.example .env.development # then fill in your MySQL credentials ／ Specs need a MySQL database; set `MYSQL_USERNAME`, `MYSQL_ROOT_PASSWORD`, `DATABASE_HOST` and `DB_PORT` as needed.",
+     "lines": [
+      23,
+      34,
+      42,
+      94
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 MySQL 存储数据的发布平台应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Nameem is an Arabic-first, right-to-left article publishing platform. Writers publish long-form articles; readers follow authors and topics, like, bookmark, and discuss them in threaded comments. ／ - Ruby 4.0 / Rails 8.2 (edge) ／ - MySQL 8.0",
+   "evidence_lines": [
+    7,
+    22,
+    23
+   ]
+  },
+  "fn": "ahyield/nameem",
+  "sha": "9f3cfa4599ef",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3ee69f5f7e51": {
+  "identity": {
+   "one_liner": "面向欧洲四国的自托管开票应用，含 QR-bill 与电子发票",
+   "review": "Rhinvoice 是一个为瑞士、列支敦士登、德国和奥地利的小企业设计的开票系统，支持报价单、发票、催款、定期发票，并生成 Swiss QR-bill、ZUGFeRD/Factur-X 和 XRechnung 电子发票，内置各国增值税规则。数据存储于 PostgreSQL（桌面版自带），通过 Docker 或 Windows/Mac 应用自托管部署，项目处于 beta 阶段，以 AGPL-3.0 许可发布。",
+   "highlights": [
+    "提供 Swiss QR-bill、EPC QR、ZUGFeRD/Factur-X 及 XRechnung 3.0 电子发票生成，经 KoSIT 与 Mustang 校验",
+    "包含 CH/LI/DE/AT 四国的增值税率与税务处理规则，自动判定境内、反向征收、出口等税务待遇",
+    "提供 restic 加密备份（S3/SFTP/网盘等目标）、双因素登录及 docker compose 一键部署"
+   ],
+   "use_cases": [
+    "上述四国小企业自托管开具合规发票与电子发票",
+    "需要按国别增值税规则（如德国小型企业条款、瑞士 5 分钱舍入）处理账务的场景",
+    "从其他开票程序经 CSV/XLSX 导入历史发票数据并迁移 PDF"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# edit .env: POSTGRES_PASSWORD, and RHINVOICE_VERSION to pin a version ／ |Backend|ruff (ALL), mypy --strict, pyright strict, import-linter, pytest with 100 % line and branch coverage, hypothesis, real PostgreSQL, schemathesis, mutmut (≥ 90 %), pip-audit|",
+     "lines": [
+      104,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 部署配置中设置 POSTGRES_PASSWORD 且测试使用 real PostgreSQL，该系统以 PostgreSQL 存储其发票数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0 或更高版本，另提供商业许可洽谈",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# edit .env: POSTGRES_PASSWORD, and RHINVOICE_VERSION to pin a version ／ **Open-source invoicing for small businesses in Switzerland, Liechtenstein, Germany and Austria.**",
+   "evidence_lines": [
+    104,
+    10
+   ]
+  },
+  "fn": "rhinvoice/rhinvoice",
+  "sha": "3ee69f5f7e51",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a643e95dcd75": {
+  "identity": {
+   "one_liner": "基于 OceanBase 社区项目的数据库内核学习与比赛代码库",
+   "review": "MiniOB 是面向数据库内核学习与比赛的教学用数据库实现，包含 SQL 解析、执行、存储、索引与事务等模块，源自 OceanBase 社区项目并保留原项目文档与版权说明。使用者可通过源码构建 observer 进程，以 CLI 或 TCP 模式输入 SQL，README 明确说明其非生产数据库用途。",
+   "highlights": [
+    "包含 SQL 解析、执行、存储、索引与事务等内核模块",
+    "提供 CLI 与 TCP（obclient 连接）两种运行模式",
+    "附带 unittest 与 benchmark 目录用于测试和基准"
+   ],
+   "use_cases": [
+    "数据库内核原理学习与教学",
+    "参加 OceanBase 数据库大赛",
+    "内核功能的修改与验证练习"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "MiniOB 数据库内核学习与比赛代码，基于 OceanBase 社区项目，包含 SQL 解析、执行、存储、索引与事务等模块。保留原项目文档、贡献者和版权说明。",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库内核实现，属数据库生态中的引擎组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MiniOB 数据库内核学习与比赛代码，基于 OceanBase 社区项目，包含 SQL 解析、执行、存储、索引与事务等模块。保留原项目文档、贡献者和版权说明。 ／ 进入实际构建目录后运行 ./bin/observer -f ../etc/observer.ini -P cli 可直接输入 SQL；TCP 模式可用 -p 6789 启动并通过同目录的 obclient 连接。更多模式见运行文档。 ／ 先执行小规模建表、插入与查询，再按 unittest/ 和比赛文档运行对应测试。并发和事务能力取决于构建选项与实现，不将教学数据库作为生产数据库使用。",
+   "evidence_lines": [
+    5,
+    33,
+    50
+   ]
+  },
+  "fn": "RoxyXu151/Miniob",
+  "sha": "a643e95dcd75",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

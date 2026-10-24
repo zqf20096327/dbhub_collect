@@ -11119,5 +11119,76 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "502faa8b01bd": {
+  "identity": {
+   "one_liner": "分享趣味知识的社交小应用，以 Supabase/Postgres 存储数据",
+   "review": "Tidbit 是一个社区趣味事实分享 Web 应用：发布带来源和分类的事实，浏览、筛选、搜索并投票（有趣/震撼/虚假），票数判定争议标记。前端 React+TypeScript，数据存于 Supabase（Postgres），通过 supabase-js 访问自动生成的 REST API。适合个人或小团队本地部署体验，README 自述投票去重仅由浏览器实现，非生产级。",
+   "highlights": [
+    "提供事实发布、分类筛选、排序与搜索功能",
+    "支持三种投票（有趣/震撼/虚假）并标记争议事实，使用乐观 UI 更新",
+    "支持明暗主题、移动端原生分享面板，响应式布局自 320px 起"
+   ],
+   "use_cases": [
+    "朋友间分享和互相核实趣味知识",
+    "作为 React + Supabase 应用开发的参考实现"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Backend|Supabase (Postgres + auto-generated REST API) via `@supabase/supabase-js`| ／ - **One vote per fact** is enforced in the browser, which stops casual repeat voting. A production version would enforce it on the server, for example with Supabase Auth and a `votes` table keyed by user. Increments would also move into a Postgres function so ",
+     "lines": [
+      28,
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该 Web 应用将事实数据存储于 Supabase（Postgres）并经 supabase-js 读写",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Tidbit is a small social web app for sharing interesting facts. Post a fact with a source and a category, browse what others have shared, and vote on each one as 👍 interesting, 🤯 mind-blowing or ⛔ false. When more people vote a fact false than interesting, it's flagged as **disputed**, so the community fact-checks itself. ／ |Backend|Supabase (Postgres + auto-generated REST API) via `@supabase/supabase-js`| ／ 2. Create the `facts` table in the Supabase SQL editor:",
+   "evidence_lines": [
+    6,
+    28,
+    53
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "purnimakumarr/tidbit",
+  "sha": "502faa8b01bd",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

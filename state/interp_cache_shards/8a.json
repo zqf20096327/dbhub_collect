@@ -10299,5 +10299,149 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3ef88ef48c56": {
+  "identity": {
+   "one_liner": "基于单个 SQLite 文件的 AI agent 认知记忆系统",
+   "review": "brainctl 用一个内置的 SQLite 文件为 AI agent 提供跨会话持久记忆，包含事实、决策、实体跟踪和状态交接，支持 FTS5 全文检索、sqlite-vec 向量检索、知识图谱、信念修正和 Ed25519 签名导出，并通过 MCP server 暴露约 100 个工具供 Claude Desktop、Cursor 等客户端调用。面向需要为 agent 添加持久记忆的开发者。可选扩展支持 Solana 链上铸造记忆包。",
+   "highlights": [
+    "提供单文件 SQLite 存储的持久记忆，支持 FTS5 全文、sqlite-vec 向量和混合检索",
+    "内置 MCP server，为 Claude Desktop/Cursor/VS Code 提供 100 个可见工具",
+    "支持知识图谱、信念修正、Ed25519 签名导出及 Solana 链上锚定/铸造"
+   ],
+   "use_cases": [
+    "为 AI agent 添加跨会话持久记忆",
+    "通过 MCP 在 Claude Desktop/Cursor 等客户端中调用记忆工具",
+    "签名导出/验证记忆包，或参与 agent 间记忆交易市场"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Forgetful agents, fixed by a SQLite file.** ／ Requires Python 3.11+. SQLite is built-in. No other mandatory dependencies. ／ pip install 'brainctl[vec]' # vector similarity search (sqlite-vec + Ollama)",
+     "lines": [
+      3,
+      26,
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是其内置的本地数据存储引擎，README 未宣称其为数据库生态提供工具或适配服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Forgetful agents, fixed by a SQLite file.** ／ Requires Python 3.11+. SQLite is built-in. No other mandatory dependencies. ／ ## MCP server (100 visible tools, v2 surface)",
+   "evidence_lines": [
+    3,
+    26,
+    168
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "TSchonleber/brainctl",
+  "sha": "3ef88ef48c56",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a3a2256b647f": {
+  "identity": {
+   "one_liner": "基于 Flask 和 SQLite 的天猫单店经营分析与商品运营工作台",
+   "review": "一个面向天猫单店运营团队的本地数据分析工作台，用 Flask 与 SQLite 构建，支持生意参谋、推广工具与 DMP 数据的导入、字段映射、质量校验、批次审计与血缘追溯，并提供经营分析、商品运营和复盘看板。通过 pip 安装依赖后本地运行，另有 Electron 桌面安装包；README 未声明开源许可证。",
+   "highlights": [
+    "支持 Excel、旧版 HTML .xls、CSV、ZIP 手动导入与受控目录定时扫描导入",
+    "提供字段映射、质量门禁、批次审计、来源 observation/lineage 与冲突撤销的数据治理流程",
+    "提供 Web 与 Windows/macOS Electron 桌面两种运行形态，桌面包内置 PyInstaller 打包的后端"
+   ],
+   "use_cases": [
+    "天猫单店经营数据（生意参谋、推广工具、DMP 报表）的本地汇总与分析",
+    "需要字段映射、质量校验和批次审计的商品运营数据治理",
+    "带目标管理和周期复盘的经营决策看板使用"
+   ],
+   "restrict_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "面向单店铺运营团队的经营分析与商品运营工作台。系统以 Flask、SQLite 和原生 HTML/CSS/JavaScript 构建，把经营结果、商品表现、推广投放、生命周期、行动复盘和数据治理放在同一套可追溯流程中。",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明系统以 Flask 和 SQLite 构建，用 SQLite 存储经营数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "面向单店铺运营团队的经营分析与商品运营工作台。系统以 Flask、SQLite 和原生 HTML/CSS/JavaScript 构建，把经营结果、商品表现、推广投放、生命周期、行动复盘和数据治理放在同一套可追溯流程中。 ／ 本机生产运行使用 Waitress。先备份 SQLite 数据库并配置 Basic Auth，再启动服务：",
+   "evidence_lines": [
+    7,
+    125
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "owen891/tmall-dashboard",
+  "sha": "a3a2256b647f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10473,5 +10473,70 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a7df41efc6db": {
+  "identity": {
+   "one_liner": "化妆品/护肤品 INCI 成分数据库，含名称归一映射",
+   "review": "提供化妆品与护肤品成分的结构化数据集，包含 2 万余产品、4.6 万规范 INCI 成分名及 7.9 万行原始标签到规范名的解析映射，附带欧盟 CosIng 法规状态、致敏原标记等富化表；面向训练成分归一模型的 ML/NLP 团队与合规分析人员。数据以管道分隔 CSV 和 Parquet 发行，完整版为付费数据包，仓库含统计页面生成脚本。",
+   "highlights": [
+    "提供 ingredient_name_map 表（79,047 行），记录每个原始标签 token 到规范 INCI 名的解析方法与置信度",
+    "数据以管道分隔 UTF-8 CSV 和 Apache Parquet 两种格式发布，含 7 张核心表",
+    "提供 scripts/generate_stats.py 与 make_sample.py，用于再生成统计页与可复现的抽样"
+   ],
+   "use_cases": [
+    "训练成分名称归一/标准化模型（ML/NLP）",
+    "化妆品成分合规审计（EU Annex II–VI、致敏原标注核查）",
+    "构建成分扫描器或配方分析工具的数据底座"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`scripts/generate_stats.py` regenerates `stats/` from `data/incidb.sqlite` after each edition build (see `RELEASING.md`); follow it with `scripts/generate_seo_pages.py` (sitemap) and the i18n `build` + `check`.",
+     "lines": [
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是化妆品成分数据集/数据产品，仅将 SQLite 用于内部统计生成的数据源，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "数据含 ODbL/CC BY 4.0 来源与引用；完整版通过 Stripe 一次性付费（$79/$149），附免费样本",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`scripts/generate_stats.py` regenerates `stats/` from `data/incidb.sqlite` after each edition build (see `RELEASING.md`); follow it with `scripts/generate_seo_pages.py` (sitemap) and the i18n `build` + `check`. ／ Shipped as pipe-delimited UTF-8 CSV (`|`) and Apache Parquet. ／ ## Pricing: INCIDB Complete $79 · INCIDB Korea $149",
+   "evidence_lines": [
+    143,
+    37,
+    161
+   ]
+  },
+  "fn": "INCIDB/cosmetics-skincare-inci-database",
+  "sha": "a7df41efc6db",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

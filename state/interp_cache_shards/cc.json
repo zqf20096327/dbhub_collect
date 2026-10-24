@@ -10616,5 +10616,143 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "62973807c9d3": {
+  "identity": {
+   "one_liner": "生产库 SQL 逐条审批与审计网关，分角色执行并脱敏结果",
+   "review": "QueryHub 是一个自托管的 SQL 审批网关：开发者通过 Slack 或 Web IDE 提交 SQL，DBA 逐条审批后由系统按只读/读写/DDL 三级凭证执行，结果做 PII 脱敏并写入审计日志。适用于需要收窄生产库访问、以审批流替代长期凭证的团队。项目状态为实验性，仅单进程单主机无高可用，支持 PostgreSQL、SQL Server（读写/DDL）及 Athena、ClickHouse（只读）。",
+   "highlights": [
+    "提供逐条 SQL 审批工作流，按 RO/RW/DDL 三级凭证执行语句",
+    "对查询结果进行 PII 列脱敏，并将所有决策记录到审计日志",
+    "通过 Slack /sql 命令与 Web IDE 两种界面提交查询，结果以 CSV 返回"
+   ],
+   "use_cases": [
+    "开发者需要临时查询生产数据而无需持有生产凭证",
+    "DBA 团队需要集中审计所有生产库 SQL 执行记录",
+    "需要将 Athena、ClickHouse 等只读引擎纳入统一审批流程"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PostgreSQL**, **SQL Server**, **Amazon Athena** and **ClickHouse**. Athena and ／ - **Four engines.** PostgreSQL, SQL Server, and Athena and ClickHouse (both read-only). ／ |**PostgreSQL**|**Executes**|Full three-tier model: RO / RW / DDL, per-tier credentials, streamed results, EXPLAIN pre-flight, PII lineage from the planner. It is the reference engine.|",
+     "lines": [
+      18,
+      80,
+      123
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**PostgreSQL**, **SQL Server**, **Amazon Athena** and **ClickHouse**. Athena and ／ - **Four engines.** PostgreSQL, SQL Server, and Athena and ClickHouse (both read-only). ／ |**SQL Server**|**Executes**|Same model. T-SQL safety dialect. QueryHub refuses cross-catalog and linked-server references. AG read-routing for RO.|",
+     "lines": [
+      18,
+      80,
+      124
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**PostgreSQL**, **SQL Server**, **Amazon Athena** and **ClickHouse**. Athena and ／ - **Four engines.** PostgreSQL, SQL Server, and Athena and ClickHouse (both read-only). ／ |**ClickHouse**|**Executes, read-only**|Native protocol over TLS, as a login that the server holds at `readonly=1`. `readonly=1` refuses every setting, so the gateway sends none. The gateway enforces the time limit itself: it closes the connection at the deadl",
+     "lines": [
+      18,
+      80,
+      126
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库访问提供审批、脱敏与审计的工具层，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，README 声明无企业付费层",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Per-query approval for production databases.** Developers never hold a ／ classification: RO, RW or DDL. It masks the result, delivers it, and audits ／ |**PostgreSQL**|**Executes**|Full three-tier model: RO / RW / DDL, per-tier credentials, streamed results, EXPLAIN pre-flight, PII lineage from the planner. It is the reference engine.|",
+   "evidence_lines": [
+    5,
+    8,
+    123
+   ]
+  },
+  "fn": "ahmetrende/database-queryhub",
+  "sha": "62973807c9d3",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::oceanbase-competition-2026": {
+  "identity": {
+   "one_liner": "OceanBase 竞赛相关仓库（信息不足，定位不明）",
+   "review": "该仓库简介仅包含「oceanbase-competition-2026」字样，无 README，无法确认其功能、目标用户与运行方式。从名称推断可能与 2026 年 OceanBase 相关竞赛参赛项目有关，面向竞赛参与者。所有判断均基于简介，实际用途需待补充文档后重新编目。",
+   "highlights": [
+    "简介中出现 oceanbase-competition-2026 标识"
+   ],
+   "use_cases": [
+    "可能用于 OceanBase 2026 竞赛相关用途（基于简介推断，待验证）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "oceanbase-competition-2026"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅含竞赛名称字样，无法判断其为数据库生态工具还是普通应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "oceanbase-competition-2026"
+  },
+  "fn": "FB521/FB-PowerContext",
+  "sha": "desc::oceanbase-competition-2026",
+  "source": "desc",
+  "generated_at": "2026-10-24",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

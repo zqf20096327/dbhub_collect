@@ -10847,5 +10847,74 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "71bbc47552df": {
+  "identity": {
+   "one_liner": "本地 AI 影像创作台：任务队列与剪辑编排应用，SQLite 存状态",
+   "review": "这是一个以视频制作为中心的本地工作台应用，用 Next.js/React 提供界面，TypeScript 服务端管理素材上传、用户轮转调度、自动剪辑计划与交付版本，数据状态保存在 SQLite，媒体处理依赖独立的 Python/FFmpeg 媒体底座，适合单机多人共用场景组织短视频制作任务。",
+   "highlights": [
+    "提供按用户轮转的任务队列与 FFmpeg/模型进程容量控制",
+    "实现分片上传会话管理与取消恢复、生成失败重试校验",
+    "本地剪辑输出剪辑单，渲染后读取文件做技术 QA 与人工复核记录"
+   ],
+   "use_cases": [
+    "多人共用一台机器时的短视频制作任务排队与素材管理",
+    "需要追踪素材、指令与处理过程的交付版本管理",
+    "结合本地 FFmpeg 流水线的自动剪辑与质量检查"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "这个仓库展示的是一个以实际制作流程为中心的应用：Next.js / React 界面、TypeScript 服务逻辑、SQLite 数据、Codex 创作编排，以及 Python / FFmpeg 媒体底座共同工作。比较值得看的是任务背后的调度、上传恢复、生成输出校验和成片复核。 ／ React 页面处理交互，服务端通过 `lib/` 中的业务模块管理任务。SQLite 保存用户、任务和上传会话等状态；任务过程文件由专门的存储模块组织。本地媒体能力由独立的 Codex Auto Video Lab 提供，工作台不把全部音视频逻辑塞进页面接口。",
+     "lines": [
+      9,
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 SQLite 保存用户、任务和上传会话等状态，该仓库是使用数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这个仓库展示的是一个以实际制作流程为中心的应用：Next.js / React 界面、TypeScript 服务逻辑、SQLite 数据、Codex 创作编排，以及 Python / FFmpeg 媒体底座共同工作。比较值得看的是任务背后的调度、上传恢复、生成输出校验和成片复核。 ／ React 页面处理交互，服务端通过 `lib/` 中的业务模块管理任务。SQLite 保存用户、任务和上传会话等状态；任务过程文件由专门的存储模块组织。本地媒体能力由独立的 Codex Auto Video Lab 提供，工作台不把全部音视频逻辑塞进页面接口。 ／ 当前调度器在单个应用进程的内存中运行。SQLite 中有任务记录，不代表已经实现多机器的分布式队列；如果要扩展成多实例服务，还需要持久化领取、租约和跨进程资源协调。",
+   "evidence_lines": [
+    9,
+    56,
+    76
+   ]
+  },
+  "fn": "h296025733-sys/jingxu-director-workbench",
+  "sha": "71bbc47552df",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

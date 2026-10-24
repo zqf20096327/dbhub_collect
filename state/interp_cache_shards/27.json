@@ -10221,5 +10221,102 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2b273948bfca": {
+  "identity": {
+   "one_liner": "为 AI agent 提供通往客户内网数据的只读授权访问中继层",
+   "review": "tunr 是一个 CLI 与可自托管中继组成的网络层，核心 Agent Bridge 让 AI agent 经客户侧出站 connector 只读、限时、可审计地访问其内网 PostgreSQL 或 SQL Server 资源，含授权、掩码、审计日志等机制，另提供隧道与应用托管。面向需要访问客户本地数据的 AI 软件厂商及客户的 IT 团队。Bridge 处于 preview 阶段，仅支持只读数据库与原始 TCP 资源，MySQL 尚未支持。",
+   "highlights": [
+    "Agent Bridge 提供只读数据库访问（PostgreSQL 与 SQL Server），含 SELECT-only 登录、语句分类器与每授权的行/字节/速率限制",
+    "提供授权管理（agent×资源×模式×时长）、列掩码、审计日志 CSV 导出与毫秒级断开",
+    "同一中继提供 HTTPS 隧道、TCP/UDP/TLS 原始隧道（实验性）与应用托管，中继可自托管"
+   ],
+   "use_cases": [
+    "AI 软件厂商的 agent 需只读访问客户内网 ERP/数据库时，经客户审批与审计接入",
+    "客户 IT 团队对 agent 访问做授权、掩码、审计与一键切断",
+    "开发者将本地服务以隧道形式展示给客户或部署 agent 应用"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Read-only databases**|PostgreSQL and SQL Server. A `SELECT`-only login (`pg-role` / `mssql-role`), read-only sessions or always-rolled-back transactions, and a statement classifier; writes are refused. `resource verify` tells the customer if the login could ／ |**Masking**|Hide columns in results — SQL Server's Dynamic Data Masking via `mssql-role --mask`, or the connector's masking for Postgres (`--mask cari.vergi_no=partial:4`), which follows aliases and refuses expressions over masked columns.|",
+     "lines": [
+      91,
+      94
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**Read-only databases**|PostgreSQL and SQL Server. A `SELECT`-only login (`pg-role` / `mssql-role`), read-only sessions or always-rolled-back transactions, and a statement classifier; writes are refused. `resource verify` tells the customer if the login could ／ |**SQL Server ERPs**|`mssql` resources run in query mode: the connector executes each statement and returns rows as JSON (`tunr_query`, or `POST /query` on `tunr access`'s port). Built for Nebim, Logo and Netsis, which mostly run on SQL Server.| ／ |**Masking**|Hide columns in results — SQL Server's Dynamic Data Masking via `mssql-role --mask`, or the connector's masking for Postgres (`--mask cari.vergi_no=partial:4`), which follows aliases and refuses expressions over masked columns.|",
+     "lines": [
+      91,
+      92,
+      94
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "> raw TCP resources today; MySQL later.",
+     "lines": [
+      110
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> Role-based sharing, per-app SQLite and `tunr rollback` are **not built yet** —",
+     "lines": [
+      266
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为承载 agent 与数据库间连接、授权与审计的中继/连接器工具，数据库是其在客户侧接入的对象而非存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "CLI 为 Apache 2.0，Relay 为 PolyForm Shield 双许可",
+   "install": [
+    "binary",
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Reach your customers' on-prem data, show what you build, keep it running — through one relay that your machines only ever dial out to. ／ ## Agent Bridge — reach in ／ |**Read-only databases**|PostgreSQL and SQL Server. A `SELECT`-only login (`pg-role` / `mssql-role`), read-only sessions or always-rolled-back transactions, and a statement classifier; writes are refused. `resource verify` tells the customer if the login could write. Row, byte and rate limits per grant.|",
+   "evidence_lines": [
+    4,
+    80,
+    91
+   ]
+  },
+  "fn": "tunr-dev/tunr",
+  "sha": "2b273948bfca",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

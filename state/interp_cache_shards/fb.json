@@ -10219,5 +10219,138 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5e752f879918": {
+  "identity": {
+   "one_liner": "埃及药品开放数据集，提供 CSV/JSON 双格式下载",
+   "review": "一个包含 25,070 种埃及市场注册药品的机器可读数据集，字段含英/阿文商品名、科学成分、厂商、药物分类、给药途径与 EGP 价格，按 CC0-1.0 公共领域许可发布。面向药房/诊所软件、处方工具、药物交互服务、医疗搜索、RAG 数据源及学术研究。README 提供 pandas、Node.js、DuckDB/SQLite、curl 的读取示例，数据以 CSV 与 JSON 文件形式分发，非数据库软件。",
+   "highlights": [
+    "提供 25,070 条药品记录的 CSV（UTF-8, 3.6 MB）与 JSON 文件，二者 schema 相同",
+    "字段覆盖英/阿双语商品名、科学成分、厂商、药物分类、给药途径与 EGP 价格",
+    "以 CC0-1.0 公共领域许可发布，并给出 Python/Node.js/DuckDB/SQLite/curl 的读取示例"
+   ],
+   "use_cases": [
+    "药房与诊所软件中的药品自动补全、处方书写与销售点系统",
+    "药物交互检查中的品牌名到有效成分解析",
+    "医疗搜索与 RAG/LLM 的阿拉伯语+英语药品数据源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "### SQL (DuckDB / SQLite)",
+     "lines": [
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库本体是分发的数据集（用 CSV/JSON 文件存数据），SQLite/DuckDB 仅作为读取数据的示例方式出现。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "CC0-1.0（公共领域贡献）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A clean, machine-readable dataset of medicines available in the Egyptian pharmaceutical market. Useful for pharmacy software, clinic management apps, prescription writing tools, drug-interaction services, medical search engines, RAG / LLM grounding, and academic research on pharmaceutical pricing. ／ ├── egyptian-drugs.csv     # 3.6 MB, UTF-8, 25,070 rows ／ └── egyptian-drugs.json    # 7.6 MB, pretty-printed JSON array",
+   "evidence_lines": [
+    20,
+    52,
+    53
+   ]
+  },
+  "fn": "karem505/egyptian-drug-database",
+  "sha": "5e752f879918",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f491d738e31f": {
+  "identity": {
+   "one_liner": "日语 Markdown 笔记本地全文检索 CLI，基于 SQLite FTS5 BM25",
+   "review": "这是一个面向日语 Markdown 笔记的本地检索 CLI，对包含 YAML frontmatter 和 wikilink 的笔记文件夹建立索引，提供 BM25 全文检索、标签/标题检索，可选启用本地 embedding 的语义与混合检索，输出 JSON Lines 供脚本解析。主要设计目标是被 Claude Code、Codex CLI 等 AI 编码代理调用以检索笔记资产，单二进制运行，索引数据内嵌于 SQLite（FTS5），不使用外部 API。",
+   "highlights": [
+    "基于 SQLite FTS5 (trigram tokenizer) 提供 BM25 日英混排全文检索，无需形态素解析",
+    "支持 --json 输出 JSON Lines，按 grep 惯例返回 exit code 0/1/2",
+    "可选本地 embedding 语义检索与 BM25+RRF 混合检索，不调用外部 API"
+   ],
+   "use_cases": [
+    "让 AI 编码代理通过指示文件或 skill 检索个人/团队 Markdown 笔记资产",
+    "在终端对本地笔记文件夹执行全文、标签、语义检索",
+    "在 CI 中用 index --check 检查 frontmatter 完整性并生成确定性报告"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **日本語対応の BM25 全文検索** — SQLite FTS5 (trigram tokenizer)。形態素解析なしで日本語・英語混在ノートを検索できる ／ システムに C コンパイラ (`cc`) が必要 (rusqlite の bundled SQLite ビルド用)。",
+     "lines": [
+      7,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为面向 Markdown 笔记的检索 CLI，SQLite 仅作为内置索引存储（rusqlite bundled 构建），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "日本語 Markdown ノートのためのローカル検索 CLI。「みっけ👀」 ／ Markdown ノートの入ったフォルダ (YAML frontmatter + wikilink、Obsidian 互換) を対象に、BM25 全文検索・タグ/タイトル検索・semantic 検索を単一バイナリで提供する。Claude Code / Codex CLI / Cursor 等の **AI コーディングエージェントに、人のノート資産を検索させる**ことを主眼に設計している (人間が直接叩いてもよい)。 ／ - **日本語対応の BM25 全文検索** — SQLite FTS5 (trigram tokenizer)。形態素解析なしで日本語・英語混在ノートを検索できる",
+   "evidence_lines": [
+    3,
+    5,
+    7
+   ]
+  },
+  "fn": "kimushun1101/mikke",
+  "sha": "f491d738e31f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

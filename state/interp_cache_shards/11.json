@@ -11165,5 +11165,151 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "796fa2dfdf54": {
+  "identity": {
+   "one_liner": "为 WordPress 提供 SQLite 支持的 Feature Plugin，含 MySQL 兼容层",
+   "review": "该项目是一个 monorepo，包含 MySQL lexer/parser、基于 SQLite 的 MySQL 模拟层、MySQL 二进制协议代理及 WordPress 插件，通过将 MySQL 语句经词法/语法解析后翻译模拟到 SQLite 上执行，使基于 MySQL 的 PHP 项目可运行在 SQLite 上。面向 WordPress 用户及 PHP 生态开发者，描述标注仍在开发中。",
+   "highlights": [
+    "提供 MySQL on SQLite 模拟层，带 PDO 兼容 API",
+    "包含 MySQL 词法器与解析器，支持 MySQL 5.7 及以上语法",
+    "纯 PHP 实现、零依赖，支持 PHP 7.2–8.5"
+   ],
+   "use_cases": [
+    "让 WordPress 站点使用 SQLite 作为数据库运行",
+    "在 PHP 生态之外通过 MySQL 协议代理接入该兼容层",
+    "对 MySQL 语法兼容性进行测试"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "This project implements SQLite database support for MySQL-based projects. ／ - **MySQL lexer** — A fast MySQL lexer with multi-version support. ／ - **MySQL parser** — An exhaustive MySQL parser with multi-version support. ／ - **MySQL proxy** — A MySQL binary protocol implementation to support MySQL-based projects beyond PHP.",
+     "lines": [
+      2,
+      5,
+      6,
+      8
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# SQLite database integration ／ This project implements SQLite database support for MySQL-based projects. ／ - **MySQL on SQLite** — A MySQL emulation layer on top of SQLite with a PDO-compatible API.",
+     "lines": [
+      1,
+      2,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为基于 MySQL 的项目提供数据库兼容层与代理组件，是为数据库生态服务的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "SQLite"
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **MySQL on SQLite** — A MySQL emulation layer on top of SQLite with a PDO-compatible API. ／ - **MySQL proxy** — A MySQL binary protocol implementation to support MySQL-based projects beyond PHP. ／ - **WordPress plugin** — A plugin that adds SQLite support to WordPress.",
+   "evidence_lines": [
+    7,
+    8,
+    9
+   ]
+  },
+  "fn": "WordPress/sqlite-database-integration",
+  "sha": "796fa2dfdf54",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f871aebaf33c": {
+  "identity": {
+   "one_liner": "异步多代理框架，内置 SQLite 持久化与消息渠道连接器",
+   "review": "这是一个 Python 异步多代理框架，面向需要在 WhatsApp、Telegram、Webhook 和 CLI 上构建对话代理的开发者。它提供会话并发锁、失败回滚（含 SQLite 持久化）与 HMAC webhook 安全机制，支持 Gemini、OpenAI、Claude、Grok 及本地 Ollama 模型；并发保证仅限单进程单 store 实例。",
+   "highlights": [
+    "提供 WhatsApp (Meta Cloud API)、Telegram、Webhook (FastAPI) 和 CLI 四种渠道连接器",
+    "支持 Google Gemini、OpenAI、Claude、xAI Grok 及本地 Ollama 多家 LLM 提供方",
+    "内置 per-session 并发锁、LLM 失败回滚与 HMAC webhook 安全校验"
+   ],
+   "use_cases": [
+    "为 WhatsApp/Telegram 构建多代理客服或对话机器人",
+    "用 Ollama 本地模型离线运行代理应用",
+    "需要会话状态持久化与失败恢复的消息代理服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **Turn Failure Rollback:** If an LLM request times out, rate limits, or crashes mid-turn, ChatFlow automatically rolls back dialogue history to the last consistent turn in memory and SQLite (note: rollback reverts conversational history; external side effect ／ When a turn fails, ChatFlow restores the following to the last consistent turn, in memory and in SQLite:",
+     "lines": [
+      234,
+      243
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明框架使用 SQLiteSessionStore 将对话历史与会话元数据持久化到 SQLite，SQLite 是其存数据的组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Per-Session Concurrency Lock (`asyncio.Lock`):** When a user sends multiple messages in rapid succession (e.g., three WhatsApp voice transcriptions or quick texts in 2 seconds), turns of the same session run one at a time, preventing race conditions, overlapping tool executions, or corrupted conversation histories. They run in the order they start waiting for the session (`asyncio.Lock` is fair); that is the order in which the channel starts the turns, which is usually, but not necessarily, the order the messages were sent. With `SQLiteSessionStore`, each queued turn reloads the history, active agent and metadata committed by the previous turn before it starts. ／ * **Turn Failure Rollback:** If an LLM request times out, rate limits, or crashes mid-turn, ChatFlow automatically rolls back dialogue history to the last consistent turn in memory and SQLite (note: rollback reverts conversational history; external side effects of already executed tools are not rolled back), ensuring clean context without orphaned partial turns. See Tool Idempotency & Side-Effect Handling for how to design tools that are safe to retry.",
+   "evidence_lines": [
+    223,
+    234
+   ]
+  },
+  "fn": "GustavoBaranda/chatflow-agent",
+  "sha": "f871aebaf33c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

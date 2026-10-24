@@ -10921,5 +10921,75 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22af87e3538c": {
+  "identity": {
+   "one_liner": "编码代理协调协议，基于Git与SQLite检测意图冲突",
+   "review": "Foremerge 是为 AI 编码代理提供的协调工具：各代理在独立 worktree 工作前先声明意图，工具用 SQLite 存储声明并通过确定性冲突检测器发现语义冲突，还提供 MCP server 接入 Claude Code、Codex、Cursor 等客户端。适用于多代理并行开发同一仓库的团队；目前为 pre-1.0 本地 MVP，跨机器协调不在范围内，公开 schema 仍可能变化。",
+   "highlights": [
+    "提供 MCP server 与 CLI（foremerge/fmg 同一二进制），支持 Claude Code、Codex、Cursor 客户端接入",
+    "使用 SQLite 存储意图、ChangeSet 等声明，冲突检测为确定性而非模型判断",
+    "验收经 verification-gated 机制，由工具自身运行注册的检查命令并记录审计轨迹"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理并行修改同一仓库时的意图冲突预警",
+    "在代码写入前发现跨文件的语义性计划冲突",
+    "为代理工作记录可审计的验证与决策轨迹"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> MCP server, SQLite store, deterministic conflict detector, and ／ Mutations update typed SQLite projections, materialize graph edges, and append a",
+     "lines": [
+      19,
+      236
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目内置 SQLite 作为本地协调状态存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Foremerge is the open-source coordination protocol for coding agents, built ／ > MCP server, SQLite store, deterministic conflict detector, and ／ Mutations update typed SQLite projections, materialize graph edges, and append a",
+   "evidence_lines": [
+    9,
+    19,
+    236
+   ]
+  },
+  "fn": "naw103/foremerge",
+  "sha": "22af87e3538c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10014,5 +10014,71 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d7bef171329a": {
+  "identity": {
+   "one_liner": "以单个 SQLite 库汇集 2,466 个 BMW ECU 的诊断参考数据",
+   "review": "该仓库将多个开源数据源抽取整合为一个约 653 MB 的 SQLite 数据库，包含诊断作业、故障码、编码标签、路由、零件号、实时信号等 47 张表和 8 个视图，并以 ecu_alias 解析器统一关联各层。供 BMW 车辆诊断、维修与编码参考使用，可下载预构建文件或自行构建；BMW 衍生数据层版权属 BMW，非官方认证来源。",
+   "highlights": [
+    "提供 47 张表、8 个视图及 FTS5 全文搜索，覆盖诊断、故障码、编码、路由、识别、实时数据等层",
+    "以 sgbd 作为统一关联键，提供 ecu_alias 解析器将任意标识符解析到 ECU 记录",
+    "随附 JSON 镜像（dist/json/）与 SHA256 校验文件，支持 Node 22 无依赖直接读取"
+   ],
+   "use_cases": [
+    "BMW 车辆 ECU 诊断与故障码查询",
+    "编码与刷写前的参考数据核对（right-to-repair）",
+    "基于 SQL/JSON 的 ECU 标识符与零件号交叉检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "BMW Unified Database. 2,466 BMW ECUs in one SQLite database, every layer joined on a single key.",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为数据载体分发 BMW ECU 参考数据，SQLite 是存储介质而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "工具与编译层为 MIT；BMW 衍生数据层为 BMW 版权（按请求移除）；外部层含 CC-BY-SA-4.0、CC-BY-SA、GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BMW Unified Database. 2,466 BMW ECUs in one SQLite database, every layer joined on a single key. ／ The database uses SQLite. Node 22 reads it with no dependencies (`node --experimental-sqlite`). Any ／ BMW-derived data separate from the MIT tooling. Download the prebuilt `bmw.sqlite.gz` (about 130 MB) from",
+   "evidence_lines": [
+    1,
+    84,
+    101
+   ]
+  },
+  "fn": "gediz/bmw-unified-db",
+  "sha": "d7bef171329a",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

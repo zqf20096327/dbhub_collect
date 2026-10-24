@@ -10374,5 +10374,190 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b096bc57108a": {
+  "identity": {
+   "one_liner": "libuv 的 C++11 封装库，提供事件驱动 I/O 与网络/Web 模块",
+   "review": "libuvcpp 将 libuv 的类型与方法封装为 C++11 风格类，保留事件循环机制，并附带 Net、Web（HTTP/WebSocket）、SSL 及可选内存池模块。面向需要在 C++ 中使用 libuv 开发事件驱动网络应用的开发者；数据库模块（支持 SQLite/MySQL/PostgreSQL/ODBC）默认关闭，需经编译选项开启。",
+   "highlights": [
+    "将 libuv 的事件循环、句柄、请求封装为 RAII C++11 类",
+    "提供 TCP/UDP/HTTP/WebSocket 客户端与服务端类，支持 HTTP/2、QUIC、HTTP/3 等可选特性",
+    "提供可选 db 模块，以统一客户端接口连接 SQLite/MySQL/PostgreSQL 及 ODBC 后端"
+   ],
+   "use_cases": [
+    "用 C++ 开发事件驱动的 TCP/UDP 网络服务",
+    "构建 HTTP/WebSocket 服务端与客户端应用",
+    "需要 libuv 的面向对象封装以简化 C++ 项目开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      261,
+      333
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      261,
+      333
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|db (SQLite / MySQL / PostgreSQL)|doc/db-guide.md|One `uvcpp_db_client` per connection over three backends, the URL grammar, the status codes, the one cross-backend contract the shared suite enforces (and the three places the backends genuinely differ), parame ／ |`UVCPP_ENABLE_DB`|`OFF`|Enable the **database module** (`src/db/`): one `uvcpp_db_client` per connection over SQLite / MySQL / PostgreSQL / ODBC, with table-style access to the result rows. It is the only module that **requires a third-party client library** ",
+     "lines": [
+      261,
+      333
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`UVCPP_ENABLE_DB_ODBC`|`ON`|Build the ODBC backend of the db module (needs `sql.h` + a driver manager: `libodbc` on Linux, the system `odbc32` on Windows). Unlike the three above, it targets **an interface, not one database** — *what* it connects to is chosen",
+     "lines": [
+      338
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是 C++ 网络开发库，附带可选 db 模块为多种数据库提供客户端连接层，属服务数据库使用场景的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "libuvcpp provides a thin, idiomatic C++ layer over libuv's event loop, handles, and requests.",
+   "evidence_lines": [
+    104
+   ]
+  },
+  "fn": "Antruly/libuvcpp",
+  "sha": "b096bc57108a",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3c4b6a95e2de": {
+  "identity": {
+   "one_liner": "自托管 WhatsApp REST API 网关，基于 PHP/Node.js(Baileys) 与 MySQL",
+   "review": "一个自托管的 WhatsApp 消息网关与管理面板，用 PHP 提供带 API Key 认证的 REST 接口和 Web 界面，用 Node.js 运行 Baileys WebSocket worker 连接 WhatsApp 号码，支持媒体发送、自动回复、队列重试和 HMAC 签名 webhook。面向需要免费消息通知通道的个人与开发团队，需自备 MySQL 8.0+/MariaDB 10.4+/TiDB 数据库，通过 Baileys 非官方协议连接。",
+   "highlights": [
+    "通过扫描二维码绑定自有 WhatsApp 号码，提供 REST API 发送消息与媒体",
+    "内置异步投递队列，支持退避重试、死信跟踪与 HMAC-SHA256 签名 webhook",
+    "提供基于触发规则匹配的自动回复聊天机器人与联系人广播功能"
+   ],
+   "use_cases": [
+    "为业务系统发送 WhatsApp 通知消息",
+    "搭建基于规则匹配的自动回复客服/聊天机器人",
+    "批量联系人导入与个性化模板群发"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Database:** MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless (SSL-encrypted on port 4000). ／ |**Database**|MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless|UTF8MB4 collation required|",
+     "lines": [
+      59,
+      95
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Database:** MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless (SSL-encrypted on port 4000). ／ |**Database**|MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless|UTF8MB4 collation required|",
+     "lines": [
+      59,
+      95
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- **Database:** MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless (SSL-encrypted on port 4000). ／ |**Database**|MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless|UTF8MB4 collation required|",
+     "lines": [
+      59,
+      95
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 MySQL/MariaDB/TiDB 存储自身数据的 WhatsApp 消息网关应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **A 100% free, self-hosted WhatsApp REST API Gateway and Web Management Dashboard built with PHP 8.2+, Node.js (Baileys), and MySQL/TiDB.** ／ - **Database:** MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless (SSL-encrypted on port 4000).",
+   "evidence_lines": [
+    12,
+    59
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "navneetyadav-code/whatsapp-api",
+  "sha": "3c4b6a95e2de",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

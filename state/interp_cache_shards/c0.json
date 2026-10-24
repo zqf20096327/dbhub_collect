@@ -11602,5 +11602,214 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "70220c805212": {
+  "identity": {
+   "one_liner": "基于NLP的简历解析分析工具，用MySQL存储数据",
+   "review": "一个用 Streamlit 构建的简历分析应用，通过 NLP（pyresparser/NLTK）解析简历 PDF，提取技能与关键词并给出推荐、预测和评分；求职者上传简历查看结果，管理员可导出数据为 CSV 并查看饼图分析。数据存于 MySQL（需自建 cv 库），为毕业设计项目，安装需修改配置文件并替换 pyresparser 内文件。",
+   "highlights": [
+    "解析简历 PDF，提取基本信息、技能与关键词，输出推荐、预测职位与评分",
+    "管理端支持数据表格查看、CSV 导出、上传文件管理与多维度饼图分析",
+    "技术栈为 Streamlit + Python + MySQL，包含用户反馈与评分功能"
+   ],
+   "use_cases": [
+    "求职者上传简历获取技能建议与岗位预测",
+    "组织或院校批量解析简历为结构化数据用于分析",
+    "收集用户反馈评分并做可视化统计"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ 2) MySQL https://www.mysql.com/downloads/",
+     "lines": [
+      87,
+      139
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 将 MySQL 列为其数据库并要求用户安装 MySQL 创建 cv 库，应用只是用 MySQL 存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " MySQL ／ 2) MySQL https://www.mysql.com/downloads/ ／ After installation is finished create a Database ```cv```",
+   "evidence_lines": [
+    87,
+    139,
+    172
+   ]
+  },
+  "fn": "deepakpadhi986/AI-Resume-Analyzer",
+  "sha": "70220c805212",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "443b4544f200": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 与 PostgreSQL 的图书馆管理系统 REST API",
+   "review": "这是一个用 Spring Boot 构建的图书馆管理 REST API，管理物理藏书副本、用户账户与借阅记录，含基于角色的权限和 HTTP Basic 认证。面向学校图书馆的图书管理员、教师和学生。数据存储在 PostgreSQL，通过 Flyway 管理版本化 schema 迁移，并使用 Docker Compose 运行。",
+   "highlights": [
+    "提供藏书目录、借阅（14 天期限、每人最多 3 笔在借、逾期限制）与角色权限账户管理功能",
+    "使用 Flyway 在启动时执行版本化 schema 迁移，JPA/Hibernate 验证映射",
+    "提供 Swagger UI API 文档、健康端点与 Docker Compose 部署方式"
+   ],
+   "use_cases": [
+    "学校图书馆的图书、用户与借阅管理",
+    "需要 REST API 集成的图书馆业务系统开发",
+    "Spring Boot 分层架构与 JPA 持久化实践参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |Database|PostgreSQL 18| ／ The system runs as a Spring Boot API alongside PostgreSQL. Book, user, and loan requests pass through their HTTP and business layers to persistence; Flyway prepares the schema at startup. Shared validation, mapping, security configuration, and error handling s",
+     "lines": [
+      7,
+      33,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明系统将图书目录、账户和借阅历史存储于 PostgreSQL，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Libro is a library management system built with Spring Boot. It helps manage a library's physical book copies, user accounts, and loan history. ／ |Database|PostgreSQL 18| ／ The system runs as a Spring Boot API alongside PostgreSQL. Book, user, and loan requests pass through their HTTP and business layers to persistence; Flyway prepares the schema at startup. Shared validation, mapping, security configuration, and error handling support the API. `UserRepository` serves account and loan use cases, plus `LibroUserDetailsService` for Spring Security's HTTP Basic account lookup.",
+   "evidence_lines": [
+    10,
+    33,
+    67
+   ]
+  },
+  "fn": "kyledelfin2006/libro-library-system",
+  "sha": "443b4544f200",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6d50793e335c": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 学习模式插件，本地SQLite存储持续学习循环",
+   "review": "dsh-explain 是 DeepSeek Harness（DSH）的插件，将已完成工作中的概念转为结构化解释并安排间隔复习，允许用户查看、更正或遗忘模型对用户的推断；数据存储在本地 SQLite（schema 4），通过 npx dsh plugin 命令安装，使用辅助模型调用评估答案；要求特定 DSH 版本（0.1.6-alpha.2 或 main 分支支持 0.2.1-rc.3）。",
+   "highlights": [
+    "提供捕获、复习、修正三段学习循环，支持 /explain、/review 等命令入口",
+    "学习线程存储于本地 SQLite 文件，支持版本化导出备份并可原子清除",
+    "主 agent 不被修改，通过 DSH 第一方扩展点集成，含 24 个 DSH 版本的自动化测试"
+   ],
+   "use_cases": [
+    "在 DSH Web 中对日常工作内容进行私有持续学习和间隔复习",
+    "检查并修正模型对个人解释偏好的推断",
+    "本地导出学习数据前审查并过滤凭据/路径信息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+     "lines": [
+      18,
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用本地 SQLite 数据库存储学习线程数据，SQLite 是其数据存储依赖而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`dsh-explain` is a learning-mode plugin for DeepSeek Harness. It turns useful concepts from completed work into structured explanations, schedules lightweight reviews, and lets you inspect or correct what it learns about you. ／ The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+   "evidence_lines": [
+    16,
+    18,
+    86
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yuezengwu/dsh-explain",
+  "sha": "6d50793e335c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

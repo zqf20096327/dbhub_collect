@@ -9658,5 +9658,61 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fbb7c693e390": {
+  "identity": {
+   "one_liner": "《造梦西游4》生存大冒险小游戏的 C99 动态规划求解内核",
+   "review": "用 C99 编写的动态规划精确求解内核，为《造梦西游4》内置小游戏「生存大冒险」计算每个选项的达标概率，支持最大化均分、单局目标分数和 7 局冲 620 分三种模式；可编译为控制台程序、静态/动态库或 WebAssembly（已在网页与微信小程序环境运行）。供该游戏玩家及需要嵌入计算能力的宿主前端使用；题库与规则数据内嵌于源码，状态表打表耗时且吃内存。",
+   "highlights": [
+    "以动态规划精确求解选项达标概率，含帕累托支配与必死分支剪枝，memo 状态经哈希表记忆化并可落盘复用",
+    "支持编译为控制台程序、静态/动态库及 WebAssembly，提供 C API 与 wasm 导出接口，内核可重入无全局可变状态",
+    "概率表支持 OpenMP 并行离线预计算，固化后运行时查表零 DP 开销"
+   ],
+   "use_cases": [
+    "为该小游戏玩家逐题给出最优选项与达标概率",
+    "作为静态库或 wasm 模块嵌入网页/小程序等宿主前端",
+    "修改游戏规则后通过 PRE_CAL 流程重新离线打表"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 通篇未涉及任何数据库，仓库仅为游戏求解内核及其宿主前端，未声明使用数据库存数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个用 C99 写的纯计算内核，无第三方依赖，可编译为： ／ - **WebAssembly**（Emscripten），已在微信小程序与网页中跑通 ／ 仓库只包含源码，共 12 个源文件加一份 `Makefile`，平铺在同一目录即可编译（互相只通过头文件依赖）：",
+   "evidence_lines": [
+    8,
+    12,
+    162
+   ]
+  },
+  "fn": "RocketFly28/Zm4AdventureAssist",
+  "sha": "fbb7c693e390",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

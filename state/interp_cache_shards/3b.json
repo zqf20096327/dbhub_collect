@@ -10203,5 +10203,223 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5acba4c0bd44": {
+  "identity": {
+   "one_liner": "纯托管 C# 的 SQLite3 数据库文件只读解析库",
+   "review": "一个用纯 C# 实现的 SQLite3 数据库文件只读解析库，可直接读取表结构和行数据，支持 WAL、DELETE 等全部 journal 模式，能识别并回放 hot journal，提供 Strict/Lenient 两级校验。面向需要在无 SQLite 原生依赖的 .NET 环境中读取数据库文件的开发者；限制为只读、不执行 SQL、不能读虚拟表。",
+   "highlights": [
+    "以纯托管代码读取 SQLite3 数据库文件，提供表结构与行数据的访问",
+    "支持读取全部 journal 模式，包括 WAL 帧回放与 hot journal 回放",
+    "内置 Strict/Lenient 校验模式，并通过 SqliteException 派生类报告文件损坏位置"
+   ],
+   "use_cases": [
+    "在 .NET 应用中不依赖 SQLite 原生库直接读取 .db 文件内容",
+    "数据库文件格式分析或一致性检查工具的开发",
+    "需要读取 WAL/-journal 侧文件中已提交数据的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Managed C# read-only parser for SQLite3 databases. Provides access to table and row data.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为读取 SQLite 数据库文件提供解析能力，是为数据库生态服务的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Managed C# read-only parser for SQLite3 databases. Provides access to table and row data. ／ * Reads SQLite3 databases, in all managed code ／ * **Read-only.** There is no way to write, update or delete data.",
+   "evidence_lines": [
+    3,
+    77,
+    91
+   ]
+  },
+  "fn": "LordMike/MBW.Utilities.ManagedSqlite",
+  "sha": "5acba4c0bd44",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c05af277940d": {
+  "identity": {
+   "one_liner": "Delphi 12+ 的流式 SQL 查询构建库，支持多方言参数化查询",
+   "review": "一个用 Delphi 编写的流式、类型安全 SQL 查询构建库，提供多方言编译器、参数绑定与对象映射，可通过 FireDAC 提供程序执行查询，也可仅构建 SQL 不连库。面向 Delphi 12 及以上版本的 Windows Win32/Win64 开发者。限制包括不管理连接与事务、执行 API 最多返回一个结果集。",
+   "highlights": [
+    "提供 MSSql、MySql、PostgreSql、Sqlite、Oracle、Firebird 六种 SQL 方言编译器，生成参数化 SQL",
+    "通过可扩展 provider 执行查询，内置可选 FireDAC 集成，调用方持有连接与事务",
+    "提供流式对象映射，支持 [Column]/[Ignore] 特性、TNullable<T> 与多种 Delphi 类型转换"
+   ],
+   "use_cases": [
+    "在 Delphi 12+ 项目中以数据库无关方式构建和组合 SQL 查询",
+    "通过 FireDAC 提供程序执行参数化查询并映射结果到对象",
+    "在不连接数据库的情况下生成带绑定值的 SQL 预览用于诊断"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`TSqlDialect.PostgreSql`|`TPostgresCompiler`|`@p0`, `@p1`, …|",
+     "lines": [
+      110
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`TSqlDialect.MySql`|`TMySqlCompiler`|`@p0`, `@p1`, …|",
+     "lines": [
+      109
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|`TSqlDialect.Oracle`|`TOracleCompiler`|`:p0`, `:p1`, …|",
+     "lines": [
+      112
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`TSqlDialect.Sqlite`|`TSqliteCompiler`|`@p0`, `@p1`, …| ／ `test/QueryBuilder.FireDAC.Tests.dproj` for SQLite in-memory integration tests.",
+     "lines": [
+      111,
+      143
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Generated parameterized MSSQL SQL (compiler default `@p` prefix):** ／ |`TSqlDialect.MSSql`|`TSqlServerCompiler`|`@p0`, `@p1`, …|",
+     "lines": [
+      27,
+      108
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明支持多种 SQL 方言并为其提供专门编译器，是为数据库生态服务的构建工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "QueryBuilder4Delphi is a fluent SQL query builder for Delphi 12 and later. It supports multiple SQL dialects, parameterized queries, and database-independent query execution through extensible providers. ／ |`TSqlDialect.MSSql`|`TSqlServerCompiler`|`@p0`, `@p1`, …| ／ (default: MSSql). No factory instance is needed. Individual compiler classes",
+   "evidence_lines": [
+    3,
+    108,
+    116
+   ]
+  },
+  "fn": "auchri/QueryBuilder4Delphi",
+  "sha": "c05af277940d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::OceanBase 数据库大赛 seekdb 赛题仓库": {
+  "identity": {
+   "one_liner": "OceanBase 数据库大赛 seekdb 赛题仓库",
+   "review": "该仓库为 OceanBase 数据库大赛中 seekdb 赛题的代码仓库，具体实现内容、目标用户和使用方式在简介中均未说明。仅能确认其与 OceanBase 组织的数据库赛事相关，安装与运行方法无从得知，需查阅仓库内文档确认。",
+   "highlights": [
+    "属于 OceanBase 数据库大赛的赛题仓库",
+    "赛题名称为 seekdb"
+   ],
+   "use_cases": [
+    "参赛者获取 seekdb 赛题相关内容"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "OceanBase 数据库大赛 seekdb 赛题仓库"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅说明是赛题仓库，无法判断其为数据库生态工具还是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "OceanBase 数据库大赛 seekdb 赛题仓库"
+  },
+  "fn": "zn-08/seekdb",
+  "sha": "desc::OceanBase 数据库大赛 seekdb 赛题仓库",
+  "source": "desc",
+  "generated_at": "2026-10-24",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

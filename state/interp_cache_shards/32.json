@@ -10108,5 +10108,121 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3dd924b72938": {
+  "identity": {
+   "one_liner": "自托管 DMARC 报告监控应用，从邮箱收取并解析报告",
+   "review": "一个自托管的 DMARC 监控应用，用户将 rua= 报告到达的邮箱配置给它，后台 worker 轮询收取、解析并以图表展示 DMARC 报告。基于 ASP.NET Core API 与 React 前端，使用 PostgreSQL 存储，以 Docker 镜像和 Compose 部署，支持外部 Postgres、一键部署到 Render/Railway 等。适合需要自行托管 DMARC 数据的机构运维人员，数据不出自建基础设施。",
+   "highlights": [
+    "从配置的邮箱轮询收取并解析 DMARC 聚合报告，提供 dashboard 与按域名来源的分析 API",
+    "单镜像多模式运行（api/worker/all/migrate），提供 Compose、Helm 及 Render/Railway/Coolify/Dokploy 部署路径",
+    "邮箱凭据使用 DMARC_ENCRYPTION_KEY 加密存储，支持 OIDC 认证与外部 PostgreSQL（含 AWS RDS IAM）"
+   ],
+   "use_cases": [
+    "机构自托管收取 rua= 邮箱中的 DMARC 报告并查看域名发送源的 pass/fail 情况",
+    "运维团队按运行手册升级实例、迁移 PostgreSQL 大版本或配置告警规则"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL (for local/dev and container deployments) ／ PostgreSQL. Two containers. ／ |Use a Postgres you already run|`-f compose.yml -f compose.external-db.yml`|",
+     "lines": [
+      23,
+      43,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 为自身数据存储组件（local/dev 与容器部署），数据库为其内部依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open-source, self-hosted DMARC monitoring for agencies. Point it at the mailbox ／ - ASP.NET Core + Carter (`src/api`) ／ - PostgreSQL (for local/dev and container deployments)",
+   "evidence_lines": [
+    9,
+    21,
+    23
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "dmarc-analyzer-net/DmarcAnalyzerApp",
+  "sha": "3dd924b72938",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::Oceanbase seekdb仓库": {
+  "identity": {
+   "one_liner": "OceanBase 相关的 seekdb 仓库（简介未说明具体功能）",
+   "review": "该仓库简介仅包含名称与描述「Oceanbase seekdb仓库」，基于现有简介无法确认其具体功能、目标用户或运行方式。仅能确认其与 OceanBase 存在关联，关键词采集通道为 oceanbase。如需编目其实际定位，需补充 README 或文档内容。",
+   "highlights": [],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "Oceanbase seekdb仓库"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅含仓库名称，未说明该项目是为数据库服务的工具还是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Oceanbase seekdb仓库"
+  },
+  "fn": "singer-civilization/seekdb",
+  "sha": "desc::Oceanbase seekdb仓库",
+  "source": "desc",
+  "generated_at": "2026-10-24",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

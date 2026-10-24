@@ -10238,5 +10238,203 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a547e866b9ae": {
+  "identity": {
+   "one_liner": "Adminer 数据库管理工具的 Docker 镜像集合，多数据库单文件管理",
+   "review": "该项目为 Adminer（单 PHP 文件数据库管理工具）提供多种 Docker 镜像变体，支持 MySQL、PostgreSQL、MongoDB、SQLite、SQL Server、Oracle 等，基于 Alpine 或 Debian 构建，提供 autologin、服务器列表插件和环境变量主题配置，面向需要快速部署数据库管理界面的开发者与运维人员。",
+   "highlights": [
+    "提供 full/mysql/pgsql/mongo/mssql/oracle/dg 等多种镜像变体",
+    "支持通过环境变量启用 autologin、服务器列表插件及主题",
+    "提供 DSN 连接串配置与运行参数（内存、上传大小、端口、并发）"
+   ],
+   "use_cases": [
+    "通过 Docker 快速运行数据库 Web 管理界面",
+    "为多环境数据库服务器配置预置登录列表",
+    "按需选择仅含单一数据库驱动的轻量镜像"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "🎁 Tiniest boxed dockerized Adminer (MySQL, PostgreSQL, SQLite, Mongo, Oracle, MSSQL) Dockerfiles. Database management in a single PHP file. ／ - Alpine Linux (full, editor, dg, mongo, mysql, postgres) ／ |dockette/adminer|MySQL / PostgreSQL / MongoDB / Sqlite|12mb|link| ／ |dockette/adminer:pgsql|PostgreSQL|8mb|link|",
+     "lines": [
+      3,
+      28,
+      59,
+      62
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "🎁 Tiniest boxed dockerized Adminer (MySQL, PostgreSQL, SQLite, Mongo, Oracle, MSSQL) Dockerfiles. Database management in a single PHP file. ／ - full (mysql, pgsql, sqlite, mongo) ／ - mysql (only) ／ |dockette/adminer:mysql|MySQL|9mb|link|",
+     "lines": [
+      3,
+      18,
+      19,
+      61
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "🎁 Tiniest boxed dockerized Adminer (MySQL, PostgreSQL, SQLite, Mongo, Oracle, MSSQL) Dockerfiles. Database management in a single PHP file. ／ - oracle-11 / oracle-12 / oracle-19 (only) ／ - Debian Bookworm (mssql, oracle-11, oracle-12, oracle-19)",
+     "lines": [
+      3,
+      23,
+      29
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "🎁 Tiniest boxed dockerized Adminer (MySQL, PostgreSQL, SQLite, Mongo, Oracle, MSSQL) Dockerfiles. Database management in a single PHP file. ／ - full (mysql, pgsql, sqlite, mongo) ／ |dockette/adminer|MySQL / PostgreSQL / MongoDB / Sqlite|12mb|link|",
+     "lines": [
+      3,
+      18,
+      59
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "🎁 Tiniest boxed dockerized Adminer (MySQL, PostgreSQL, SQLite, Mongo, Oracle, MSSQL) Dockerfiles. Database management in a single PHP file. ／ - mssql (only) ／ - Debian Bookworm (mssql, oracle-11, oracle-12, oracle-19) ／ |dockette/adminer:mssql|MS SQL Server|-|link|",
+     "lines": [
+      3,
+      22,
+      29,
+      64
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Supported drivers: `server` (MySQL/MariaDB), `pgsql`, `sqlite`, `mongo`, `oracle`, `elastic`.",
+     "lines": [
+      118
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为多种数据库提供管理界面的 Adminer Docker 镜像，服务于数据库生态而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 🎁 Tiniest boxed dockerized Adminer (MySQL, PostgreSQL, SQLite, Mongo, Oracle, MSSQL) Dockerfiles. Database management in a single PHP file. ／ |dockette/adminer|MySQL / PostgreSQL / MongoDB / Sqlite|12mb|link| ／ Supported drivers: `server` (MySQL/MariaDB), `pgsql`, `sqlite`, `mongo`, `oracle`, `elastic`.",
+   "evidence_lines": [
+    3,
+    59,
+    118
+   ]
+  },
+  "fn": "dockette/adminer",
+  "sha": "a547e866b9ae",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f3d97e20c0a1": {
+  "identity": {
+   "one_liner": "数据中心全生命周期决策支持系统，基于 PostgreSQL 存储",
+   "review": "一个面向数据中心运营者的开源决策支持系统，将设施、能源、资产、容量、维护、成本与审计证据数据整合到统一租户模型中，提供只读适配器、KPI、经济性与预测分析。核心依赖 PostgreSQL 存储，使用 psycopg3 访问，通过 RLS 实现租户隔离；README 声明不含设施控制路径，预测精度未经验证。",
+   "highlights": [
+    "提供 53 张表的 PostgreSQL schema，含强制行级安全与哈希链证据事件",
+    "内置九类版本化只读适配器（云定价、EPMS、CMMS、BMS、Modbus/BACnet/SNMP、Redfish、公用事业、天气、虚拟化）",
+    "提供单位经济学、TCO 分析、费率计算与负荷/价格/故障预测模块"
+   ],
+   "use_cases": [
+    "数据中心能耗、容量与可靠性指标的统一查看与分析",
+    "本地部署与云部署的 TCO 与选址权衡比较",
+    "多租户环境下的运维工作流与证据审计管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- The OSS core uses portable PostgreSQL SQL and can be adapted to Supabase. Supabase Auth/RLS is a deployment adapter, not a dependency of the domain model. ／ Served by FastAPI on uvicorn (`dcc.api_async:app`), with psycopg3 for PostgreSQL ／ PostgreSQL RLS. See API Reference for full details.",
+     "lines": [
+      57,
+      89,
+      91
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "oracle. `DCC_ALLOW_ANONYMOUS=true` disables enforcement for local development and logs",
+     "lines": [
+      272
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统自身以 PostgreSQL 作为其存储数据库，数据库是其运行依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- The OSS core uses portable PostgreSQL SQL and can be adapted to Supabase. Supabase Auth/RLS is a deployment adapter, not a dependency of the domain model. ／ Served by FastAPI on uvicorn (`dcc.api_async:app`), with psycopg3 for PostgreSQL ／ Requires Python 3.11+ and PostgreSQL 14+. Do not point the demo at a production database.",
+   "evidence_lines": [
+    57,
+    89,
+    173
+   ]
+  },
+  "fn": "AAH20/data-center-commander",
+  "sha": "f3d97e20c0a1",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

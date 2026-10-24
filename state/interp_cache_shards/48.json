@@ -9676,5 +9676,137 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "712ab90664fa": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的纯本地 SQLite 跨会话长期记忆插件",
+   "review": "dsh-engram 是为 DeepSeek Harness 编码 agent 提供跨会话长期记忆的插件，用本地 SQLite 存储，实现 FTS5 与本地向量混合检索、证据门、来源审计、SM-2 间隔复习等功能，含 Web 管理面板，通过 npm 一条命令安装。适合使用 DeepSeek Harness 且需要本地记忆、不愿部署外部服务的开发者。",
+   "highlights": [
+    "提供 23 个窄参数工具，覆盖保存、混合检索（FTS5 + 本地向量 RRF）、事实链、时间线、审计、导出、蒸馏、信念与 SM-2 复习",
+    "纯本地运行：数据存 SQLite，嵌入模型离线推理，无外部服务与 API Key 依赖，失败自动降级纯关键词检索",
+    "内置摄取脱敏（密钥/身份证等替换为 REDACTED 标记）、协议标签防提示注入与召回占位防回声机制"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness agent 提供跨会话记忆注入与历史事实召回",
+    "基于历史会话日志回填构建个人/项目分库的长期记忆",
+    "导出 Markdown/JSON 或 Obsidian/Logseq 镜像，作为可人读的私人知识库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "||**dsh-engram**|服务端型（Postgres/pgvector/Milvus/Python 服务）|文件型（纯 Markdown 记忆）|",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 DeepSeek Harness agent 提供记忆服务的插件工具，SQLite 仅作为其本地存储后端，README 未将其归为数据库本身。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Local-first long-term memory for your coding agent. ／ 纯本地 SQLite 的跨会话长期记忆： 零外部服务 · 零 API Key · 零 Docker ，一条命令装完即用。 ／ dsh plugin --profile web add @kenz1117/dsh-engram",
+   "evidence_lines": [
+    5,
+    6,
+    27
+   ]
+  },
+  "fn": "kenz1117/dsh-engram",
+  "sha": "712ab90664fa",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "17578eb0cb8f": {
+  "identity": {
+   "one_liner": "数字企业孪生/运维世界模型平台，双时态证据图",
+   "review": "ONTOVELA Open 是 ONTOVELA 的 Apache-2.0 公共开发者面，将物理、组织、代理、机器人等状态融合为带证据的双时态图，区分观察/推断/预测/模拟等六类状态。提供 OpenAPI 契约、Go/Python/TypeScript SDK、本地开发二进制及约 32 种协议适配器；时态状态内核与多租户控制面等在闭源核心仓库中，不在本仓库内。",
+   "highlights": [
+    "提供版本化 OpenAPI/event 契约及 Go、Python、TypeScript 三种 SDK，SDK 由契约漂移守卫保障一致性",
+    "包含 HTTP/Kafka/MQTT/ROS 2/OPC UA/Modbus 等约 32 种协议适配器，统一断言载荷契约",
+    "支持双时态历史（as_of/as_known）、签名快照、变更订阅与因果谱系查询"
+   ],
+   "use_cases": [
+    "企业/机器人运营状态的时态图建模与查询",
+    "规划、仿真与 sim-to-real 对比场景的状态数据面",
+    "需要审计与证据溯源的运营状态接入"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Go backend, PostgreSQL persistence**: append-only bitemporal ledger with",
+     "lines": [
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明 Go 后端以 PostgreSQL 持久化双时态账本，PostgreSQL 是其存储组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Go backend, PostgreSQL persistence**: append-only bitemporal ledger with ／ Apache-2.0 licensed public developer surface for ／ - Versioned public schemas and OpenAPI/event contracts",
+   "evidence_lines": [
+    48,
+    53,
+    60
+   ]
+  },
+  "fn": "axisvela/ontovela-open",
+  "sha": "17578eb0cb8f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9797,5 +9797,176 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "00227a3711b7": {
+  "identity": {
+   "one_liner": "基于C++26反射的ORM与迁移工具包，模型注解驱动编译期生成SQL",
+   "review": "entityfy 是一个使用 C++26 std::meta 反射实现的 ORM 与数据库迁移工具包，模型为普通 C++ 结构体，表结构、SQL、迁移文件在编译期生成。提供 db_context/db_set 变更追踪、预编译语句缓存、异步 I/O 与 CLI 控制台，支持 SQLite、PostgreSQL、MySQL/MariaDB 和 SQL Server 后端。面向需要在 C++ 中使用 EF Core 风格数据访问的开发者；MySQL 后端默认关闭，需 MariaDB Connector/C。",
+   "highlights": [
+    "通过 C++26 反射在编译期从注解模型生成表结构、SQL 与迁移文件",
+    "提供身份映射、快照变更追踪、乐观并发控制与预加载等上下文功能",
+    "各后端内置 LRU 预编译语句缓存，并提供基于 task 的异步 I/O 接口"
+   ],
+   "use_cases": [
+    "C++ 项目中以声明式模型进行数据库 CRUD 与变更追踪",
+    "对现有表生成 schema 漂移报告并执行增量或回滚迁移",
+    "构建无需工作单元的一批处理或 CLI 工具（client 层）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "statement --> backend[\"backend<br/>SQLite · PostgreSQL · MySQL · SQL Server\"] ／ |`entityfy-core`|Model/annotation system, DDL generation, query DSL, SQLite + PostgreSQL + MySQL/MariaDB + SQL Server backends, statement cache, value converter|docs/core.md|",
+     "lines": [
+      27,
+      135
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "statement --> backend[\"backend<br/>SQLite · PostgreSQL · MySQL · SQL Server\"] ／ |`entityfy-core`|Model/annotation system, DDL generation, query DSL, SQLite + PostgreSQL + MySQL/MariaDB + SQL Server backends, statement cache, value converter|docs/core.md|",
+     "lines": [
+      27,
+      135
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "statement --> backend[\"backend<br/>SQLite · PostgreSQL · MySQL · SQL Server\"] ／ entityfy::client db{\"sqlite://app.db\"};",
+     "lines": [
+      27,
+      101
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "statement --> backend[\"backend<br/>SQLite · PostgreSQL · MySQL · SQL Server\"] ／ |`entityfy-core`|Model/annotation system, DDL generation, query DSL, SQLite + PostgreSQL + MySQL/MariaDB + SQL Server backends, statement cache, value converter|docs/core.md|",
+     "lines": [
+      27,
+      135
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|`entityfy-core`|Model/annotation system, DDL generation, query DSL, SQLite + PostgreSQL + MySQL/MariaDB + SQL Server backends, statement cache, value converter|docs/core.md|",
+     "lines": [
+      135
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为数据库访问与迁移服务的 ORM 工具包，自身不是存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An ORM and migration toolkit built on C++26 `std::meta`. Models are plain C++ structs; the table ／     statement --> backend[\"backend<br/>SQLite · PostgreSQL · MySQL · SQL Server\"] ／ |`entityfy-core`|Model/annotation system, DDL generation, query DSL, SQLite + PostgreSQL + MySQL/MariaDB + SQL Server backends, statement cache, value converter|docs/core.md|",
+   "evidence_lines": [
+    3,
+    27,
+    135
+   ]
+  },
+  "fn": "leth4lweap0n/entityfy",
+  "sha": "00227a3711b7",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ca9d0988a96": {
+  "identity": {
+   "one_liner": "基于 LangGraph 智能体与混合 RAG 的视觉智能引擎",
+   "review": "EAVIE 是一个企业级 Agentic AI 平台，集成 LangGraph 智能体、BM25+稠密检索+RRF 重排的混合 RAG、PyTorch CNN 视觉模型与 FastAPI 网关，使用 Postgres、Redis、Celery、Prometheus 等组件，通过 Docker Compose 部署，聊天机器人使用 Groq API 密钥。面向需要搭建视觉+检索智能体应用的开发者。",
+   "highlights": [
+    "包含 LangGraph 智能体与混合 RAG（BM25+稠密检索+RRF+重排）管道",
+    "提供 FastAPI 异步网关与 PyTorch CNN 视觉能力",
+    "通过 Docker Compose 一键部署，集成 Prometheus 监控"
+   ],
+   "use_cases": [
+    "构建基于自有数据的检索增强问答应用",
+    "需要图像识别能力的智能体场景",
+    "本地/企业内快速部署 AI 助手平台"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Backend: FastAPI, LangGraph, hybrid RAG, PyTorch CNN, Celery, Redis, Postgres, Prometheus (`docker compose up --build` after `cp .env.example .env`)",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 Postgres 列为其后端技术栈组件，用于存数据，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Backend: FastAPI, LangGraph, hybrid RAG, PyTorch CNN, Celery, Redis, Postgres, Prometheus (`docker compose up --build` after `cp .env.example .env`)",
+   "evidence_lines": [
+    5
+   ]
+  },
+  "fn": "Nikhil-creat/eavie",
+  "sha": "5ca9d0988a96",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

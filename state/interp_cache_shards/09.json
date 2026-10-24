@@ -10596,5 +10596,86 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9cd2f40d139b": {
+  "identity": {
+   "one_liner": "Laravel 数据库查询遥测库，实时检测 N+1 与慢查询并给出索引建议",
+   "review": "一个 PHP/Laravel 软件包，在运行时拦截 PDO 查询，提供查询遥测、N+1 检测、EXPLAIN 计划分析与索引建议，并将告警输出到 Slack、Datadog、Prometheus 或 Laravel 日志。面向使用 Laravel 开发和运维应用的工程师，支持 MySQL、PostgreSQL 与 SQLite，经 Composer 包形式集成。",
+   "highlights": [
+    "运行时拦截 PDO 查询并生成参数化 SQL 指纹，检测单请求内的 N+1 查询",
+    "读取 EXPLAIN 执行计划并生成 CREATE INDEX 复合索引 DDL 建议",
+    "支持向 Slack、Datadog、Prometheus 或 Laravel 日志输出告警"
+   ],
+   "use_cases": [
+    "Laravel 应用上线前发现 N+1 查询级联",
+    "排查生产环境慢查询与缺失索引导致的表扫描",
+    "将数据库查询指标接入 Prometheus/Datadog 监控体系"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Laravel Query Sentinel** is a zero-overhead, real-time database query telemetry and intelligence engine for MySQL, PostgreSQL, and SQLite.",
+     "lines": [
+      7
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Laravel Query Sentinel** is a zero-overhead, real-time database query telemetry and intelligence engine for MySQL, PostgreSQL, and SQLite.",
+     "lines": [
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Laravel Query Sentinel** is a zero-overhead, real-time database query telemetry and intelligence engine for MySQL, PostgreSQL, and SQLite.",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为数据库查询提供遥测与诊断能力的 Laravel 软件包，本身不以数据库为存储",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Laravel Query Sentinel** is a zero-overhead, real-time database query telemetry and intelligence engine for MySQL, PostgreSQL, and SQLite. ／ **Query Sentinel** intercepts all PDO queries at runtime with sub-microsecond overhead, analyzes query ASTs, and issues actionable recommendations directly to Slack, Datadog, Prometheus, or Laravel logs. ／ - **EXPLAIN Plan Automated Advisor**: Inspects query execution plans and recommends exact DDL compound indexes (`CREATE INDEX ...`).",
+   "evidence_lines": [
+    7,
+    17,
+    22
+   ]
+  },
+  "fn": "sihabsantydwi/laravel-query-sentinel",
+  "sha": "9cd2f40d139b",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

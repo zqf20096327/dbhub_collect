@@ -10559,5 +10559,145 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c0051c2ce81e": {
+  "identity": {
+   "one_liner": "Conduit 的 PostgreSQL 连接器插件，提供源与目的端",
+   "review": "该项目是 Conduit 数据管道框架的 PostgreSQL 连接器插件，用 Go 编写，提供 source 和 destination 两种角色。作为 source 时先对表做快照，再通过逻辑复制槽和 publication 进入 CDC 模式捕获变更；还实现了复制槽丢失/被替换后的校验机制。适用于需要把 PostgreSQL 变更数据接入 Conduit 管道的数据同步场景，需要用户具备复制权限。",
+   "highlights": [
+    "提供 source 与 destination 两种连接器",
+    "支持快照读取与基于逻辑复制槽的 CDC",
+    "实现复制槽替换与 WAL 历史变更的校验机制"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 表数据接入 Conduit 数据管道",
+    "捕获 PostgreSQL 表变更并写入下游目标",
+    "需要快照+CDC 的数据集成流水线"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Conduit Connector PostgreSQL ／ The PostgreSQL connector is a Conduit ／ This connector implements Change Data Capture (CDC) features for PostgreSQL by",
+     "lines": [
+      1,
+      3,
+      58
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确这是为 Conduit 框架服务、读写 PostgreSQL 数据的连接器插件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The PostgreSQL connector is a Conduit ／ This connector implements Change Data Capture (CDC) features for PostgreSQL by",
+   "evidence_lines": [
+    3,
+    58
+   ]
+  },
+  "fn": "ConduitIO/conduit-connector-postgres",
+  "sha": "c0051c2ce81e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3d09b38c7bbf": {
+  "identity": {
+   "one_liner": "TiDB 的 Homebrew 官方 formula 仓库，提供 macOS 安装",
+   "review": "PingCap 维护的 Homebrew tap，包含 tidb-server 与 tiup 两个 formula。tidb-server 以单节点内置 unistore 引擎运行（无需 TiKV/PD），socket 置于 Homebrew var 目录并以 --initialize-secure 启动；tiup 编译时内置固定 TUF root 作为信任锚。供 macOS 用户通过 brew 安装、以 brew services 管理本地 TiDB。",
+   "highlights": [
+    "提供 tidb-server formula：单节点内置 unistore 引擎，无需 TiKV 或 PD",
+    "服务经 brew services 启停，socket 位于 Homebrew var 目录并以 --initialize-secure 启动",
+    "提供 tiup formula，编译时写入固定 TUF root，信任锚不经网络获取"
+   ],
+   "use_cases": [
+    "macOS 上通过 brew 安装运行本地单节点 TiDB",
+    "通过 brew services 将 tidb-server 注册为登录时启动的服务",
+    "安装与管理 TiUP 工具"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "mysql -S \"$(brew --prefix)/var/tidb.sock\" -uroot ／ `mysql -S \"$(brew --prefix)/var/tidb.sock\" -uroot` and type the SQL at the",
+     "lines": [
+      23,
+      37
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Homebrew formulae for TiDB. ／ brew install tidb-server",
+     "lines": [
+      3,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为 TiDB 提供 Homebrew 打包与安装分发，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "TiDB"
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Homebrew formulae for TiDB. ／ brew install tidb-server",
+   "evidence_lines": [
+    3,
+    9
+   ]
+  },
+  "fn": "pingcap/homebrew-brew",
+  "sha": "3d09b38c7bbf",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

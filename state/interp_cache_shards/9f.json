@@ -11797,5 +11797,76 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "905b1a3aa5a9": {
+  "identity": {
+   "one_liner": "离线 CVE 情报工具：将多个漏洞数据源索引进本地 SQLite+FTS5，提供 CLI 与 MCP 查询",
+   "review": "crowbar 从 NVD、CISA KEV、EPSS、Exploit-DB 等公开数据源拉取漏洞与利用信息，写入本地 SQLite+FTS5 索引，通过 CLI、只读 SQL 或 MCP 服务器供终端、CI 和 AI agent 离线查询，支持 lite 到 extreme 四档索引规模，无需 API key，不运行任何漏洞代码。面向需要漏洞分诊与利用情报的安全研究/防御人员。",
+   "highlights": [
+    "聚合 NVD/CISA KEV/EPSS/SSVC/CVE List/Exploit-DB/Nuclei/Metasploit/OSV/MSRC 等数据源，构建本地离线索引",
+    "提供 CLI、只读 SQL 与 MCP 工具（cb_cve/cb_product/cb_search 等）三种查询方式，索引构建后零网络调用",
+    "支持 lite/medium/heavy/extreme 四档索引体量（约150MB至全量）与每日自动刷新"
+   ],
+   "use_cases": [
+    "在终端或 CI 中离线分诊 CVE 并匹配自身产品版本的可利用漏洞",
+    "为 Claude Code/Cursor 等 MCP 宿主提供本地漏洞与 PoC 检索能力",
+    "按 KEV/SSVC/EPSS/CVSS 排序排查在野利用风险"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite + FTS5 database you query from your terminal, your CI or your agent. It",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其将数据写入本地 SQLite+FTS5 数据库并以该索引存储和查询数据（L31-L32）",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Metasploit, OSV, Debian, MSRC and Apple advisories, and writes them into a local ／ SQLite + FTS5 database you query from your terminal, your CI or your agent. It ／ MCP server",
+   "evidence_lines": [
+    31,
+    32,
+    10
+   ]
+  },
+  "fn": "kushvinth/crowbar",
+  "sha": "905b1a3aa5a9",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

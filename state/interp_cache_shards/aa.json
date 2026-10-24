@@ -11075,5 +11075,140 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "66eaec9bc8ee": {
+  "identity": {
+   "one_liner": "ClickHouse 运维监控仪表盘与建议器，读取 system.* 表",
+   "review": "chmonitor 是面向 ClickHouse 集群的监控与运维建议工具，读取 system.* 表展示查询、合并、复制、存储等状态并给出优化建议（不代为执行 DDL）。支持多主机、TUI CLI 与只读 SQL 控制台，内置 AI agent 和 MCP 供 Claude/Cursor 调用。适合 ClickHouse 集群运维者；GPL-3.0 可自托管，另有付费商业许可。",
+   "highlights": [
+    "读取 ClickHouse system.* 表，提供拓扑、健康检查、30+ 图表与查询/复制/存储视图",
+    "提供 AI 建议（projections、skip indexes、PREWHERE、物化视图），不自动执行 DDL",
+    "支持多 ClickHouse 主机、chm CLI（TUI 与 chm doctor）及只读 SQL 控制台"
+   ],
+   "use_cases": [
+    "ClickHouse 集群实时监控与健康检查",
+    "慢查询、失败查询与历史查询排查",
+    "通过 AI agent/MCP 获取索引、分区、物化视图建议"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "The operational advisor for ClickHouse ／ **chmonitor** is a dashboard and advisor for ClickHouse. It reads `system.*` ／ Runs the same way on Docker, Kubernetes, bare metal, or ClickHouse Cloud.",
+     "lines": [
+      4,
+      22,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 集群提供监控与运维建议的服务工具，读取 system.* 表而非用数据库存自身业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 自托管免费，另提供可选商业许可（双许可）",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**chmonitor** is a dashboard and advisor for ClickHouse. It reads `system.*` ／ Runs the same way on Docker, Kubernetes, bare metal, or ClickHouse Cloud. ／ |Ask in English|Built-in AI agent + MCP for Claude / Cursor|",
+   "evidence_lines": [
+    22,
+    28,
+    43
+   ]
+  },
+  "fn": "chmonitor/chmonitor",
+  "sha": "66eaec9bc8ee",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "31e8ae1b95f3": {
+  "identity": {
+   "one_liner": "本地AI对话归档系统，聚合多工具会话为可检索档案",
+   "review": "Polylogue 用 Rust 实现，将 Claude Code、Codex、Gemini CLI、ChatGPT 导出等多个 AI 工具的会话记录统一归档到本地 SQLite 数据库中，提供命令行查询、全文/语义检索、用量统计、注释标注，并可通过 MCP 或 Web 阅读器访问。适合需要长期保留和审计 AI 会话历史的个人用户与 Agent 工作流；归档由常驻 daemon 单写入者管理。",
+   "highlights": [
+    "从各工具自身存储位置收集会话文件，保留全部输入版本",
+    "提供 CLI 查询、MCP 服务、HTTP API 与 Web 阅读器多种访问方式",
+    "输出中对凭据类文本做掩码处理，并支持会话删除/文本切除"
+   ],
+   "use_cases": [
+    "统一检索和审计多个 AI 工具的会话历史",
+    "统计 AI 使用的 token 与费用",
+    "通过 MCP 让 Agent 查询历史会话上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- `crates/store`: every SQLite connection and write, and the blob store.",
+     "lines": [
+      168
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其自身归档存储（archive.db/index.db 等），项目不为数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Polylogue keeps every AI conversation and agent session your tools leave ／ The archive is `$XDG_DATA_HOME/polylogue` (`~/.local/share/polylogue`). It",
+   "evidence_lines": [
+    3,
+    49
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "31e8ae1b95f3",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

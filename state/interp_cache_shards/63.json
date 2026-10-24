@@ -10882,5 +10882,145 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b6817eb7f51e": {
+  "identity": {
+   "one_liner": "自托管家庭网络监控仪表盘，Go 单二进制后端，实时呈现路由器与设备状态",
+   "review": "NetPulse 是一个自托管的 PWA 仪表盘，用于监控 OpenWrt/GL.iNet 家庭网络：展示路由器健康、设备清单、拓扑图、WireGuard 对端与 AdGuard Home 统计，通过 SSE 实时更新并推送告警。面向在家自建网络并使用 OpenWrt 系路由器的用户；后端为单个 Go 静态二进制，默认使用 SQLite 存储，内置多用户与双语（西/英）支持，并提供只读 MCP 服务器供 AI 助手查询。",
+   "highlights": [
+    "提供实时车队总览、健康评分、拓扑图与逐路由器健康指标，通过 SSE 每 5 秒更新",
+    "支持多平台采集：OpenWrt 原生 ipk/apk 代理、Asuswrt 静态二进制、SNMP 轮询与 SSH 服务端轮询",
+    "内置只读 MCP 服务器（默认关闭），供 AI 助手以 API token 查询网络状态"
+   ],
+   "use_cases": [
+    "家庭局域网内自托管监控 OpenWrt/GL.iNet 路由器集群状态",
+    "可视化网络拓扑、设备接入记录与 Wi-Fi 信道占用情况",
+    "通过 Web Push/ntfy/Telegram 等渠道接收温度、新设备、WAN 断开等告警"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明该项目以 SQLite 作为自身数据存储来运行监控应用，而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**What it runs on.** The server is one static Go binary on any Linux box. ／ **An MCP server for your AI assistant.** NetPulse embeds a read-only ／ You need a Linux box with systemd (x86_64, arm64 or armv7; a small LXC or VM",
+   "evidence_lines": [
+    65,
+    111,
+    125
+   ]
+  },
+  "fn": "gnacho/netpulse",
+  "sha": "b6817eb7f51e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7c28b3d9e3ba": {
+  "identity": {
+   "one_liner": "Flask+SQLite/PostgreSQL 的个人游戏收藏追踪应用",
+   "review": "这是一个基于 Python Flask 和 Jinja 服务端渲染的个人游戏收藏追踪 Web 应用，支持用 SQLite 本地存储或通过 Psycopg 3 可选切换到 PostgreSQL/Supabase 托管数据库，并集成 IGDB 目录做游戏搜索与封面展示。面向想记录游戏进度、评分和评论的个人用户；README 注明 Flask 开发服务器仅供本地使用，公开部署需另行参考配置指南。",
+   "highlights": [
+    "支持 SQLite 本地持久化，可选通过 Psycopg 3 使用 PostgreSQL/Supabase 托管数据库",
+    "集成 IGDB 目录进行游戏搜索、封面与元数据获取，并提供 JSON 备份导入导出",
+    "包含评分评论、列表过滤、随机选取等功能，附带 pytest 自动化测试套件"
+   ],
+   "use_cases": [
+    "个人游戏收藏与游戏进度记录",
+    "使用 IGDB 目录维护带封面的游戏库",
+    "部署到 Supabase/PostgreSQL 的私人收藏站"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A personal video game tracker built with Python, Flask, and SQLite or PostgreSQL. Keep track of ／ - **PostgreSQL / Supabase** as an opt-in hosted database through Psycopg 3. ／ ## PostgreSQL and Supabase",
+     "lines": [
+      9,
+      60,
+      143
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A personal video game tracker built with Python, Flask, and SQLite or PostgreSQL. Keep track of ／ - Store the collection locally in SQLite, including across server restarts. ／ - **SQLite** for persistence through Python's built-in `sqlite3` module.",
+     "lines": [
+      9,
+      51,
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 SQLite/PostgreSQL 存储数据的个人游戏追踪 Web 应用，数据库仅作为其持久层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A personal video game tracker built with Python, Flask, and SQLite or PostgreSQL. Keep track of ／ - **SQLite** for persistence through Python's built-in `sqlite3` module. ／ - **PostgreSQL / Supabase** as an opt-in hosted database through Psycopg 3.",
+   "evidence_lines": [
+    9,
+    59,
+    60
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "PerdonPs3/game-backlog",
+  "sha": "7c28b3d9e3ba",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

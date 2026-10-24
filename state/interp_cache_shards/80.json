@@ -10047,5 +10047,224 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6472c4171631": {
+  "identity": {
+   "one_liner": "面向编码代理的分析工程工具包，围绕数据仓库与 dbt 项目提供探索、转换与漂移维护",
+   "review": "dex 是一套供 Claude Code、Codex 等 AI 编码代理调用的分析工程工具集，通过安装 skills 与 exmergo-dex-core 引擎，对数据仓库进行只读探索（含列画像、PII 标记、连接推断、ER 图）、以可审查计划方式编写 dbt 模型与语义层，并在 schema 漂移时提出修正。提供 Snowflake、BigQuery、ClickHouse、Postgres、DuckDB 等连接器，内置费用估算与查询防火墙。适合分析工程师与数据工程师。",
+   "highlights": [
+    "以 skills+引擎架构运行，支持 Claude Code 插件、Codex 插件及任意加载 Agent Skills 的代理",
+    "对数据仓库只读访问，提供 PII 防火墙、费用预估与本地费用账本",
+    "支持 dbt 与多种语义层（dbt/MetricFlow、Ossie、SLayer），以存储计划方式提交变更"
+   ],
+   "use_cases": [
+    "探索不熟悉的数据仓库：生成表清单、列画像、连接验证与 Mermaid ER 图",
+    "在代理辅助下编写和重构 dbt 模型、测试与语义层定义",
+    "对比快照检测 schema、体量、粒度与指标定义漂移并生成修正提案"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile| ／ scan on a production Postgres primary is a real cost too.",
+     "lines": [
+      211,
+      217
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse**|Analytical database|✅|`clickhouse`|Compute-seconds on Cloud, database-seconds self-hosted|`CLICKHOUSE_URL`, `CLICKHOUSE_*` env, or a dbt profile|",
+     "lines": [
+      208
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其连接器适配多种数据库/仓库并为 dbt 项目与语义层服务，本身不以这些库为存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dex is analytics engineering for Claude Code and any agent: data warehouse ／ The skills are thin. All the logic, and every guardrail, lives in one engine ／ |**ClickHouse**|Analytical database|✅|`clickhouse`|Compute-seconds on Cloud, database-seconds self-hosted|`CLICKHOUSE_URL`, `CLICKHOUSE_*` env, or a dbt profile| ／ |**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile|",
+   "evidence_lines": [
+    7,
+    160,
+    208,
+    211
+   ]
+  },
+  "fn": "exmergo/dex",
+  "sha": "6472c4171631",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "89383d02429b": {
+  "identity": {
+   "one_liner": "自托管 AI 漫画/视频制作工作室，用 PostgreSQL 存储项目状态",
+   "review": "一个自托管的内容生产应用，把故事拆为结构化状态（角色、场景、分页、分镜规格），调用用户自备的 AI 提供商密钥生成图像与文本，本地 Kokoro 做语音合成，最终导出漫画、条漫或配音视频。面向想自行部署做 AI 漫画/视频创作的用户；通过 docker compose 部署，使用 PostgreSQL 存储数据，Redis 为依赖之一。",
+   "highlights": [
+    "支持 BYOK 接入自选 AI 提供商，文本与图像生成可按运行选择模型",
+    "内置 Kokoro-82M 本地语音合成，无需外部 TTS API",
+    "支持导出 PNG/JPG、PDF（含 KDP 尺寸）、PSD 分层文件、CBZ、EPUB、MP4 视频与 YouTube 包"
+   ],
+   "use_cases": [
+    "自托管生成保持角色一致性的漫画/条漫",
+    "制作带 AI 旁白与配音的叙事视频",
+    "打印出版级 PDF（KDP 裁切尺寸）导出"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "cp .env.example .env # set POSTGRES_PASSWORD, SESSION_SECRET (openssl rand -hex 32), public URLs, INITIAL_ADMIN_* ／ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres redis kokoro",
+     "lines": [
+      157,
+      186
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用通过 docker compose 运行 postgres 并配置 POSTGRES_PASSWORD 存储自身数据",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai_kind": [
+    "other"
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "pr0h0/OpenManga",
+  "sha": "89383d02429b",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f1e8307179c8": {
+  "identity": {
+   "one_liner": "为 .NET AI 代理提供可验证经验记忆的库",
+   "review": "一个 .NET 库，为基于 Microsoft Agent Framework 的代理存储跨运行复用的经验教训：仅当用户自己的检查（如测试通过）验证运行成功后才保存记录，并在相似任务的下一次运行中注入该教训。开发用内存存储，生产可选用 PostgreSQL 存储包并自行执行 schema 迁移。适用于构建 .NET AI 代理的开发者。",
+   "highlights": [
+    "支持以自定义检查验证运行结果后才存储经验记录，注入时对内容做脱敏和不可信标记",
+    "提供 PostgreSQL 存储包（含向量检索扩展），需自行运行 schema 迁移",
+    "支持注册 IEmbeddingGenerator 实现语义检索，失败时回退为文本检索"
+   ],
+   "use_cases": [
+    "为 Microsoft Agent Framework 代理添加跨运行的经验记忆",
+    "生产环境中以 PostgreSQL 持久化经验记录并支持向量语义检索",
+    "通过 HTML 页面查看代理已学习的教训及其证据状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**With PostgreSQL**, add the `AgentExperience.Storage.Postgres` package. You also supply two connection strings: ／ // PostgreSQL: .UsePostgres(appConnectionString).WithPostgresVectors(), package AgentExperience.Storage.Postgres.Vectors,",
+     "lines": [
+      107,
+      135
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该库使用 PostgreSQL 作为可选存储后端存取自身数据，而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**With PostgreSQL**, add the `AgentExperience.Storage.Postgres` package. You also supply two connection strings: ／ library keeps what the agent tried as a lesson and hands it to the next run on a similar task. A preview, not ／ Needs `0.1.0-preview.11` or later. Add `AgentExperience.MicrosoftAgentFramework`, `AgentExperience.Storage.InMemory`",
+   "evidence_lines": [
+    107,
+    8,
+    13
+   ]
+  },
+  "fn": "fabbrik/AgentExperience.NET",
+  "sha": "f1e8307179c8",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

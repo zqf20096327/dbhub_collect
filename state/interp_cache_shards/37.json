@@ -10916,5 +10916,112 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "775cce2b507f": {
+  "identity": {
+   "one_liner": "Rust 编写的桌面数据库客户端，支持多库连接与本地文件 SQL 查询",
+   "review": "Kuery 是一个用 Rust 与 GPUI 构建的原生桌面工作台，将数据库管理与本地文件分析合并：可连接 PostgreSQL、MySQL、MariaDB、SQL Server、SQLite、Redis，并用 Polars SQL 对 CSV/JSON/Parquet 做无连接查询，提供 SQL 编辑、模式图、查询计划、Profile 图表与受控写入。面向需要同时查询数据库与本地数据文件的用户。项目自述为早期原型，file SQL 当前为只读临时工作区。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQL Server、SQLite、Redis 的浏览与 SQL 查询，包含查询计划查看与模式图（L92-L96、L41-L42）",
+    "使用 Polars SQL 对 CSV/TSV、JSON/JSONL、Parquet 本地文件执行 SELECT、聚合、联接（L38-L39）",
+    "提供只读起步的受控写入模式、事务提交/回滚与影响预览，密码存于操作系统凭据库（L43、L46）"
+   ],
+   "use_cases": [
+    "在同一桌面工作台中连接并浏览多种数据库的 schema、表与数据（L37）",
+    "无数据库连接时对本地 CSV/JSON/Parquet 文件运行 SQL 分析（L16-L17、L39）",
+    "查看 PostgreSQL 等的 EXPLAIN 查询计划并比较执行步骤（L41）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**PostgreSQL**|Schemas, tables, views, routines, triggers, enums and definitions|SQL editor, read-only reads, explicit write modes|Streaming results, plan inspection, TLS and SSH.|",
+     "lines": [
+      16,
+      92
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**MySQL / MariaDB**|Databases presented as schemas, tables, views and routines|SQL editor, read-only reads, explicit write modes|DDL that commits implicitly is refused wherever rollback is promised.|",
+     "lines": [
+      16,
+      93
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**SQLite**|Local database files, tables, views and definitions|SQL editor, query-only reads, explicit write modes|Existing files only; missing paths do not create an empty database.|",
+     "lines": [
+      16,
+      95
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**SQL Server**|Databases, schemas, tables, views and routines|SQL editor with `GO` batches, read-only reads, explicit write modes|Query plans and server activity. SQL Server logins only; see the guide for the read-only guarantee.|",
+     "lines": [
+      16,
+      94
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**MySQL / MariaDB**|Databases presented as schemas, tables, views and routines|SQL editor, read-only reads, explicit write modes|DDL that commits implicitly is refused wherever rollback is promised.|",
+     "lines": [
+      16,
+      93
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为数据库管理与文件分析的桌面客户端，为多种数据库提供连接、浏览与查询能力（L15-L16）",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kuery brings database administration and file analytics into one desktop app. ／ Work with PostgreSQL, MySQL, MariaDB, SQL Server, SQLite and Redis, or open CSV, JSON and ／ |**PostgreSQL**|Schemas, tables, views, routines, triggers, enums and definitions|SQL editor, read-only reads, explicit write modes|Streaming results, plan inspection, TLS and SSH.|",
+   "evidence_lines": [
+    15,
+    16,
+    92
+   ]
+  },
+  "fn": "angel-afonso/kuery",
+  "sha": "775cce2b507f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

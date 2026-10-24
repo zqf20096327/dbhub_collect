@@ -9205,5 +9205,76 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ec5a72d7046c": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的本地项目记忆与证据层，数据存于 SQLite",
+   "review": "该项目为 AI 编码代理提供本地优先的项目记忆：将 Git 仓库索引进项目级 SQLite，记录符号、证据、时间状态与会话快照，并通过 CLI 与 stdio MCP 输出经验证、带信任标签的上下文包，支持 Codex、Claude Code 等宿主。读取走只读连接、写入走单队列，可选加密联邦共享；MIT 许可，需 Python 3.11+，当前为 Windows/macOS/Linux 的 alpha 预发布版。",
+   "highlights": [
+    "将 Git 仓库与代理会话索引为项目级 SQLite，记录内容哈希、符号、证据与双时间线状态",
+    "提供 CLI 与 stdio MCP 接口，上下文检索使用经过验证的只读 SQLite 连接",
+    "支持证据来源标注、上下文编译回执，以及默认关闭的加密联邦同步"
+   ],
+   "use_cases": [
+    "AI 编码代理跨会话恢复项目上下文与决策",
+    "对代理记忆做证据分级与漂移/矛盾检测",
+    "本地私有环境下多项目记忆的托管与受控共享"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Keep project data private|Local SQLite, no telemetry, no cloud database, explicit capture grants| ／ Rta-Smriti indexes the canonical Git checkout into project-scoped SQLite. It records ／ CLI and MCP context retrieval use validated query-only SQLite connections. Watcher,",
+     "lines": [
+      64,
+      96,
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身项目记忆的本地存储介质，属使用数据库存数据的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rta-Smriti indexes the canonical Git checkout into project-scoped SQLite. It records ／ CLI and MCP context retrieval use validated query-only SQLite connections. Watcher, ／ |Use multiple AI coding hosts|Local stdio MCP plus recipes for Codex, Claude Code, Cursor, Zed, OpenCode, and Gemini CLI|",
+   "evidence_lines": [
+    96,
+    122,
+    63
+   ]
+  },
+  "fn": "sulabhdubey/rta-smriti-brain",
+  "sha": "ec5a72d7046c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

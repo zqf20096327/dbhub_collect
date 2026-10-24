@@ -10700,5 +10700,80 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f1022a4202ec": {
+  "identity": {
+   "one_liner": "零依赖校园招聘信息聚合站，Node 22 原生 node:sqlite 存储",
+   "review": "一个用 Node.js 22 内置 node:sqlite 运行的校招岗位聚合网站，提供岗位检索、企业档案、练习与账号体系，git clone 后无需安装依赖即可启动；同时内置只读 MCP Server 供 Claude、Cursor 等 AI 助手查询岗位数据。适合应届生求职检索与高校/社团自建招聘信息站，要求 Node ≥ 22.5，且仓库仅含脱敏演示数据。",
+   "highlights": [
+    "使用 Node 22 原生 node:sqlite，无第三方包，无需数据库服务",
+    "内置只读 MCP Server，支持 Cursor、Claude、Gemini CLI 等客户端接入",
+    "支持 CSV 导入、fingerprint 去重及脱敏数据集发布"
+   ],
+   "use_cases": [
+    "自建校园招聘信息聚合站点",
+    "为 AI 助手提供校招岗位检索的 MCP 数据源",
+    "基于脱敏数据集做检索研究或可视化"
+   ],
+   "ai_note": "MCP Server 提供 text2sql 类岗位查询能力"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|🚀 **零依赖**|Node 22 原生 `node:sqlite`，无任何第三方包| ／ 要求：**Node.js ≥ 22.5**（Node 22 自带 `node:sqlite`，无需任何安装步骤）。 ／ - **Node.js 22 + node:sqlite**（原生 SQLite，零外部依赖）",
+     "lines": [
+      22,
+      43,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 node:sqlite 存储岗位数据并对外提供招聘网站服务，SQLite 仅作其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**零依赖的校园招聘信息聚合站** —— `git clone` 一条命令即可跑起来，无需 npm install、无需构建、无需数据库服务。 ／ - **Node.js 22 + node:sqlite**（原生 SQLite，零外部依赖） ／ 1. **直接灌库**：向 `jobs` 表写入岗位行即可（参考 `examples/gen_seed.js` 的字段）；重复岗位通过 `fingerprint`（company|position|batch|education|city 的 MD5）自动去重。",
+   "evidence_lines": [
+    8,
+    67,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "kknee-dev/recruit-hub",
+  "sha": "f1022a4202ec",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

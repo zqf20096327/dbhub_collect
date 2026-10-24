@@ -11199,5 +11199,71 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f4d84d2b8cb": {
+  "identity": {
+   "one_liner": "自托管家庭规划应用，包含任务、日历、预算、膳食等模块",
+   "review": "一个自托管的中文家庭规划 Web 应用，提供任务、日历、购物、膳食、预算等 20 个模块，供家庭或个人在自己的服务器/NAS 上运行。数据存储在单个 SQLite 文件中，以 Docker/Podman 容器方式部署，并可作为 PWA 安装到手机，包含 MCP 接口、备份与 TOTP 两步验证等机制。",
+   "highlights": [
+    "包含 20 个模块，覆盖任务、日历、膳食、购物、预算、健康等功能",
+    "数据存储于单个 SQLite 文件（/data/yuvomi.db），支持手动与定时备份",
+    "提供 OpenAPI 3.1 规范与内置 MCP 端点，支持 AI agent 接入"
+   ],
+   "use_cases": [
+    "家庭或个人在自有服务器/NAS 上集中管理任务、日程与预算",
+    "需要离线可读的共享购物清单与膳食计划的家庭",
+    "希望数据以单文件形式自主保管的自托管用户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**What if you want your data somewhere else?** Everything lives in one SQLite file on your own ／ - **Your data** - one SQLite file at `/data/yuvomi.db`, plus the folder, WebDAV or Drive if you moved documents there.",
+     "lines": [
+      106,
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用数据存储在单个 SQLite 文件（/data/yuvomi.db）中，SQLite 是其数据存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**What if you want your data somewhere else?** Everything lives in one SQLite file on your own ／ - **Docker or Podman** - Compose on your own server, for full control. ／ - **Image** - `ghcr.io/ulsklyc/yuvomi:latest`, about 500 MB, for amd64 and arm64 (Raspberry Pi 4/5).",
+   "evidence_lines": [
+    106,
+    129,
+    134
+   ]
+  },
+  "fn": "ulsklyc/yuvomi",
+  "sha": "3f4d84d2b8cb",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

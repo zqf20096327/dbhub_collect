@@ -8976,5 +8976,207 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8558d840bc71": {
+  "identity": {
+   "one_liner": "Rust 编写的仓库地图 CLI/MCP 服务器，用 SQLite 存储索引供编码代理检索",
+   "review": "ProjectAtlas 是面向编码代理（Codex、Claude Code、OpenCode 等）的本地仓库索引工具，以 MCP 服务器和 CLI 形式运行，将文件夹用途、符号、图关系、摘要写入项目本地的 SQLite 数据库，并提供 worktree 联邦与 token 用量 TUI。适合维护大型代码库、想让代理先查索引再读源码的团队；索引数据存于仓库旁的 .projectatlas 目录。",
+   "highlights": [
+    "提供 MCP 服务器接口与 CLI，包含会话简报、符号、图关系、源码切片等工具调用",
+    "使用 SQLite 持久化项目地图，支持 .gitignore 感知扫描、BLAKE3 哈希与文件系统监听",
+    "支持 Git worktree 注册、短别名路由与只读联邦查询"
+   ],
+   "use_cases": [
+    "为 MCP 兼容编码代理提供仓库导航与上下文压缩",
+    "多 worktree 开发中跨检出共享和同步索引数据",
+    "本地统计与展示代理导航的 token 消耗对比"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A persistent SQLite map guides Codex, Claude Code, OpenCode, and other MCP-capable agents to the right code before they spend context reading the wrong files. ／ ProjectAtlas is a native Rust CLI and MCP server that keeps a project-local map of folders, files, reviewed purposes, deterministic summaries, symbols, graph relationships, searchable text, health findings, and token telemetry. `.gitignore`-aware scanning, BLA",
+     "lines": [
+      8,
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该工具自身的本地存储依赖，不是为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A persistent SQLite map guides Codex, Claude Code, OpenCode, and other MCP-capable agents to the right code before they spend context reading the wrong files. ／ ProjectAtlas is a native Rust CLI and MCP server that keeps a project-local map of folders, files, reviewed purposes, deterministic summaries, symbols, graph relationships, searchable text, health findings, and token telemetry. `.gitignore`-aware scanning, BLAKE3 hashing, SQLite storage, filesystem watching, and compact TOON output keep repeated repository orientation local and fast.",
+   "evidence_lines": [
+    8,
+    21
+   ]
+  },
+  "fn": "styler-ai/ProjectAtlas",
+  "sha": "8558d840bc71",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b8978a78eaa0": {
+  "identity": {
+   "one_liner": "计算机使用代理（CUA）资源目录，含 JSONL/SQLite 数据",
+   "review": "该项目收集整理计算机使用代理领域的论文、模型、数据集、基准、框架和工具，并以可检索的目录形式发布，配有 Python 脚本供本地查询，同时提供完整 JSONL/SQLite 数据供 RAG 系统与 agent 读取。适合做 agent 研究综述、选基准、找训练数据的研究者与智能体开发者。",
+   "highlights": [
+    "提供 3,260 条带来源可查的资源记录，每日三次定时扫描发现新资源",
+    "提交包含 JSONL/SQLite 目录数据，附 Python 3.11+ 无依赖查询脚本",
+    "提供面向 RAG 与 agent 的检索文档和克隆使用指南"
+   ],
+   "use_cases": [
+    "检索计算机使用代理领域的论文、基准与训练数据",
+    "为 RAG 系统或 agent 提供带来源标注的目录数据",
+    "梳理 benchmark 平台、评测器与版本信息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Use SQLite to join resources, environment/topic facets, and reviewed relations. See query examples. `data/catalog.jsonl` is committed; SQLite and JSON array exports are reproducible local build products.",
+     "lines": [
+      189
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite 与 JSONL 存储目录数据，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT license（目录校验部分说明）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**For people, RAG systems, and agents — clone the complete catalog:** ／ python3 scripts/catalog.py search \"grounding\" --kind paper --status curated --limit 0 --json",
+   "evidence_lines": [
+    25,
+    54
+   ]
+  },
+  "fn": "reacher-z/Awesome-CUA",
+  "sha": "b8978a78eaa0",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dab906beaa2d": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的开源 BaaS，单个 Rust 二进制提供 REST、认证与存储",
+   "review": "Nelcota 是一个围绕 PostgreSQL 构建的后端即服务平台，提供 REST API、认证（JWT/OAuth）、文件存储、webhook 和管理面板，数据访问由 Postgres 的 RLS 策略强制执行。面向希望在自有 VPS 上部署后端、保留 SQL schema 控制权的开发者；需 Linux/Docker 环境，版本仍为 0.x，Realtime、Edge Functions 等功能未实现。",
+   "highlights": [
+    "单个 Rust 二进制提供 REST API、认证、文件存储、webhook 和管理面板",
+    "依赖 PostgreSQL 行级安全（RLS）实施数据访问控制，schema 与策略可导出",
+    "支持 Docker/systemd 部署、备份与数据库 PITR，提供 TypeScript 与 Rust SDK"
+   ],
+   "use_cases": [
+    "在自有 VPS 上自托管应用后端",
+    "以 PostgreSQL RLS 为核心的数据访问控制场景",
+    "需要 REST API、认证与文件存储一体化的应用开发"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open source backend-as-a-service for applications that use PostgreSQL. ／ can export. PostgreSQL enforces data access; you do not need a separate Node",
+     "lines": [
+      5,
+      19
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为使用 PostgreSQL 的应用提供后端服务组件（REST、认证、存储、面板），本身不是使用数据库存数据的终端应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Open source backend-as-a-service for applications that use PostgreSQL. ／ One Rust binary provides REST, authentication, file storage, webhooks and an admin panel. ／ |Docker/systemd deployment, isolated projects, backups and database PITR|Deploy, Backup|",
+   "evidence_lines": [
+    5,
+    6,
+    62
+   ]
+  },
+  "fn": "Nelcota/Nelcota",
+  "sha": "dab906beaa2d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

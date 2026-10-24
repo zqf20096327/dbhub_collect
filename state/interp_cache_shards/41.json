@@ -8643,5 +8643,172 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eb70a3d7b9a7": {
+  "identity": {
+   "one_liner": "数据仓库课程仓库：BI/DW 教学大纲与配套实验",
+   "review": "这是圣克拉拉大学 MSIS-2419 商业智能与数据仓库课程的仓库，包含大纲、每周讲义/实验（Marimo notebook）、评分规则与项目说明。学生用 Python + DuckDB 构建 Medallion（Bronze→Silver→Gold）数仓与星型模型，并用 Tableau 做仪表盘。限制：面向选课学生的教学资料，不是可复用的数据仓库工具。",
+   "highlights": [
+    "提供 10 周 20 次课的大纲与 20 个随堂实验（Marimo notebook）",
+    "使用 DuckDB 作为分析引擎，覆盖星型模型设计与 Medallion（Bronze/Silver/Gold）管道实验",
+    "包含评分政策、先修要求、软件安装步骤等课程资料"
+   ],
+   "use_cases": [
+    "研究生数据仓库/BI 课程教学参考",
+    "学习 SQL 分析、星型模型与 ETL/ELT 管道设计",
+    "按 Medallion 架构组织数仓项目练习"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 表明这是使用数据库（DuckDB）存取数据的教学课程资料，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# MSIS-2419 · Business Intelligence and Data Warehousing ／ SQL engine: DuckDB Notebooks: Marimo Language: Python BI: Tableau ／    pip install duckdb pandas matplotlib seaborn marimo",
+   "evidence_lines": [
+    1,
+    9,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "mahmoudparsian/data-warehousing",
+  "sha": "eb70a3d7b9a7",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0f58f10548b7": {
+  "identity": {
+   "one_liner": "Linux 桌面 Access 式数据库应用，单文件存储、表格/表单/报表，支持 MCP",
+   "review": "Jubako 是一个面向 Omarchy Linux 的桌面数据库应用，将 CSV/Excel 导入为单文件 .jubadb（普通 SQLite 文件），提供网格编辑、表单录入、筛选视图、打印与 PDF 报表、CSV/Excel/PDF 导出，并通过命令行和 MCP 服务器提供相同功能。默认使用本地 SQLite 文件，也可连接已有的 PostgreSQL 或 MySQL/MariaDB 服务器作为后端。适合在本地桌面管理表格数据的个人用户。",
+   "highlights": [
+    "提供网格与表单两种数据编辑方式，支持字段定义、lookup 关联、筛选规则与保存视图",
+    "支持导入 CSV/Excel，导出 CSV/Excel/PDF，内置带实时预览的报表设计器",
+    "提供命令行工具与 MCP 服务器，允许 MCP 客户端（如 Claude Code）执行相同操作"
+   ],
+   "use_cases": [
+    "将 CSV/Excel 表格转为本地单文件数据库进行浏览、编辑和打印",
+    "在 Omarchy/Arch 等 Linux 桌面上用 GUI 管理联系人、库存等小型数据",
+    "通过 MCP 让代理客户端代为执行建库、导入等操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A PostgreSQL server|A server you already run.|`psycopg`| ／ PDF reports, printing and the PostgreSQL / MySQL backends all work from it. ／ uv pip install -e '.[postgres]' # PostgreSQL",
+     "lines": [
+      96,
+      103,
+      139,
+      190
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A MySQL or MariaDB server|A server you already run.|`PyMySQL`| ／ PDF reports, printing and the PostgreSQL / MySQL backends all work from it. ／ uv pip install -e '.[mysql]' # MySQL / MariaDB",
+     "lines": [
+      96,
+      104,
+      139,
+      191
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A MySQL or MariaDB server|A server you already run.|`PyMySQL`| ／ uv pip install -e '.[mysql]' # MySQL / MariaDB",
+     "lines": [
+      96,
+      104,
+      191
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`.jubadb`. It is an ordinary SQLite file, so nothing is locked away.",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 SQLite/PostgreSQL/MySQL 作为存储后端的桌面数据库应用，本身不服务其他数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**The app**|A Qt Quick / QML desktop window. A small PySide6 host starts it and hands it a bridge to the library. Nothing about databases is written in QML.|`jubako-app`| ／ `.jubadb`. It is an ordinary SQLite file, so nothing is locked away. ／ |A PostgreSQL server|A server you already run.|`psycopg`|",
+   "evidence_lines": [
+    79,
+    91,
+    103
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ninepointlabs/jubako",
+  "sha": "0f58f10548b7",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

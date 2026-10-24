@@ -9817,5 +9817,131 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ab5921566627": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机运行",
+   "review": "ResumeForge 是一个面向求职者的本地优先简历工作台，提供岗位管理、事实台账防虚构校验、AI 定制简历生成、多格式导出、模拟面试、自动投递与求职进度看板。数据以 SQLite 存储在本机，AI 生成时用事实台账比对以防虚构内容。适合中文求职者个人使用，AI 功能需自行配置模型服务商。",
+   "highlights": [
+    "提供事实台账机制，AI 生成内容与资料库逐条比对并给出防虚构警告",
+    "支持 PDF/Word/Markdown/文本/JSON/HTML 多格式导出与一键脱敏",
+    "包含岗位解析、匹配度分析、模拟面试、自动投递台与求职统计看板"
+   ],
+   "use_cases": [
+    "求职者集中管理岗位、简历版本与投递进度",
+    "按岗位 JD 生成定制简历并核查内容来源",
+    "本地填写招聘网站的网申表单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员| ／ 简历通架构图：React 前端 → 同源 /api → FastAPI 后端 → 本地 SQLite / 你配置的模型服务商 / 本机浏览器",
+     "lines": [
+      50,
+      373
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 SQLite 作为本地数据存储，属使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**本地优先的 AI 简历工作台：不注册、不登录，数据只存在你自己的电脑上。** ／ |**简历和资料存在哪**|你自己电脑上的本地数据目录（SQLite + 附件），可随时整份拷走|对方的服务器，导出要走会员|",
+   "evidence_lines": [
+    13,
+    50
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "ab5921566627",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9591867cb957": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的长期记忆插件，自动沉淀对话到本地 SQLite",
+   "review": "一个为 DeepSeek Harness（DSH）设计的记忆插件：每轮对话结束后由模型判定并连同原话一起存入本机 SQLite，按话/事/版本/阶段四层结构组织，提供 memory_search、memory_event、memory_write 三个模型可调用工具和侧边栏管理面板。适合 DSH 用户的对话记忆留存；仅在 DSH 运行时沉淀，库只增不减，判错需人工纠正。",
+   "highlights": [
+    "原话存储叠加事/版本/阶段/决定四层结构，每条话带分数、七情、门类",
+    "挂载 agent/turn-stopping 钩子自动沉淀，提供三个模型可调用的记忆查询/写入工具",
+    "内置 Web 面板（记忆库、知识星图、时间等十一页），数据接口为只读 GET"
+   ],
+   "use_cases": [
+    "DeepSeek Harness 会话的长期记忆留存与检索",
+    "按话题、日期、情绪等条件查询历史对话内容",
+    "通过面板手动纠正记忆分类与查看沉淀流水"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 说明数据存入本机 SQLite 文件，SQLite 仅作为插件的本地存储被使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT，界面部分来自 memory-eternal（MIT）并在 NOTICE 中说明",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "给 DeepSeek Harness 的一个记忆插件。 ／ 它做的事很简单：**你们聊完一轮，它把这一轮的话判一遍、存进本地 SQLite**，下次要用的时候能翻出来。 ／ 数据全在本机一个 `.db` 文件里，不联网、不上传。",
+   "evidence_lines": [
+    3,
+    5,
+    8
+   ],
+   "softened": []
+  },
+  "fn": "SQHLnb666/mindsea",
+  "sha": "9591867cb957",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

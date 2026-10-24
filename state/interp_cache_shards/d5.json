@@ -10023,5 +10023,148 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7514125b941f": {
+  "identity": {
+   "one_liner": "本地AI编程会话历史索引与检索CLI，Rust单二进制实现",
+   "review": "sessionwiki 读取 Claude Code、Codex、Cline、OpenCode、Gemini CLI 等多种 AI 编程工具已写入磁盘的会话文件，建立本地全文索引，支持文件到会话的溯源、跨工具搜索、归档、网页浏览和 resume。面向使用多种 AI 编码工具的开发者；基于 FTS5 分词器（trigram/unicode61），无守护进程、无云端依赖，另有 Claude Code 插件与只读 MCP server。",
+   "highlights": [
+    "支持对多工具会话记录的跨工具全文搜索，含子串与 CJK 检索，分词器可配置",
+    "提供文件/行到生成它的会话的 trace 与 blame 溯源，及工具剪除前的会话归档",
+    "提供 Claude Code 插件与只读本地 stdio MCP server，暴露 search/trace/brief 等工具"
+   ],
+   "use_cases": [
+    "检索数月前某文件或某问题对应的 AI 编码会话",
+    "在工具清理原始会话前归档，保留可搜索的历史",
+    "通过 MCP 让本地 Agent 查询跨工具会话历史"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Codex CLI|`~/.codex/sessions/**/rollout-*.jsonl[.zst]`, `~/.codex/archived_sessions/`, `~/.codex/thread_history_*.sqlite`|supported|",
+     "lines": [
+      336
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为开发者检索与归档 AI 编码工具的会话历史，索引使用 SQLite FTS5，属服务于开发流程的工具而非数据库本体",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**sessionwiki turns the sessions your AI coding tools already wrote to disk into one durable history you can read, search, and trace &mdash; every file back to the conversation that wrote it, and nothing lost when a tool prunes the original.** Every tool at once. No daemon, no cloud, no logging habit to build &mdash; it works retroactively over the history you already have. ／ Expose your cross-tool session history as tools any MCP client can call, all ／ |`tokenizer [SPEC]`|Show the current FTS5 tokenizer, or set one and rebuild only the search index.|",
+   "evidence_lines": [
+    20,
+    109,
+    145
+   ]
+  },
+  "fn": "youdie006/sessionwiki",
+  "sha": "7514125b941f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f06aaa3159b0": {
+  "identity": {
+   "one_liner": "本地优先的 AI 科研工作台，LangGraph 流水线生成论文",
+   "review": "SciFlow 是一个基于 Electron + NestJS 的本地 AI 科研辅助应用，覆盖文献调研、大纲生成、分章起草、质量评分、引用格式化到投稿跟踪的全流程，面向科研写作者。数据与文献全部存于本地 SQLite 单文件（better-sqlite3 + WAL，sqlite-vec 向量检索），支持任意 OpenAI 兼容端点接入大模型，提供 CLI 与 MCP 接口，无需云端服务。",
+   "highlights": [
+    "提供 LangGraph 编排的全自动流水线，含人工确认点、7 维质量门与断点续跑",
+    "知识库基于本地 sqlite-vec 向量检索 + FTS5 全文混合检索，数据全部留在本地 SQLite",
+    "支持 MCP 工具协议与 CLI headless 运行，兼容任意 OpenAI 兼容端点（含 Ollama）"
+   ],
+   "use_cases": [
+    "科研人员从研究主题生成分章论文草稿并管理引用文献",
+    "本地知识库文献问答与 PRISMA 式文献筛选",
+    "无 Key 环境下用 mock 网关进行离线演示与回归测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 本地 **sqlite-vec 向量 ANN + FTS5 trigram 全文**混合检索（嵌入模型不可用时自动回退全文；中文查询 3-gram OR 展开）；知识库资料与文献双向绑定，命中块带来源作者/年份卡片。 ／ |部署形态|**本地单机**（SQLite 单文件 / Docker / 桌面端）|云服务 + 开源库|云 SaaS|自托管 / 云|云（Google）| ／ |后端 `apps/server`|NestJS 11 · TypeScript（strict）· Drizzle ORM · better-sqlite3（WAL）· Vercel AI SDK（OpenAI 兼容）· LangGraph（编排 / 断点续跑 / 人工确认）· MCP 官方 SDK · zod · helmet + pino · MSW 进程内 mock 网关| ／ > SQLite 首次启动自动建表（默认 `apps/server/data/sciflow.db`），零配置开箱即跑。",
+     "lines": [
+      90,
+      125,
+      140,
+      174
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目数据、文献、记忆等全部存于本地 SQLite 文件，属于使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|后端 `apps/server`|NestJS 11 · TypeScript（strict）· Drizzle ORM · better-sqlite3（WAL）· Vercel AI SDK（OpenAI 兼容）· LangGraph（编排 / 断点续跑 / 人工确认）· MCP 官方 SDK · zod · helmet + pino · MSW 进程内 mock 网关| ／ > SQLite 首次启动自动建表（默认 `apps/server/data/sciflow.db`），零配置开箱即跑。",
+   "evidence_lines": [
+    140,
+    174
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "badhope/sciflow",
+  "sha": "f06aaa3159b0",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

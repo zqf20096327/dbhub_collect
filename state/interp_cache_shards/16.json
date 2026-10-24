@@ -12336,5 +12336,123 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b5c0c5e768e": {
+  "identity": {
+   "one_liner": "Rust+GPUI 构建的键盘优先桌面数据库客户端",
+   "review": "DBFlux 是一个开源桌面数据客户端，内置多种关系与非关系数据库驱动，并通过 RPC 协议接入外部驱动。提供 SQL 编辑、可视化查询构建、图表与仪表盘、MCP 集成、审计日志和键盘导航，面向需要多数据库连接管理与查询开发的使用者。安装提供脚本、多平台包及源码构建。",
+   "highlights": [
+    "内置 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、MongoDB、Redis、ClickHouse 等数据库驱动，并支持通过 Driver RPC 协议注册外部驱动",
+    "提供可视化 SELECT/UPDATE/DELETE 构建器、图表与仪表盘、只读实例指标概览",
+    "内置 MCP 服务器与治理层（操作分类、角色策略、写操作审批），并以 SQLite 记录审计日志"
+   ],
+   "use_cases": [
+    "开发者在桌面端连接并查询多种关系型与非关系型数据库",
+    "通过 MCP 集成让 AI 客户端在治理与审计约束下访问数据库",
+    "将查询结果绘制为图表并组织成仪表盘进行数据浏览"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL** with SSL/TLS modes (Disable, Prefer, Require) ／ - Schema-level metadata: indexes, foreign keys, constraints, custom types (PostgreSQL)",
+     "lines": [
+      81,
+      105
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL** / MariaDB ／ - SQL drivers only (SQLite, PostgreSQL, MySQL/MariaDB, SQL Server); driver-agnostic by construction",
+     "lines": [
+      83,
+      127
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** for local database files ／ - SQL drivers only (SQLite, PostgreSQL, MySQL/MariaDB, SQL Server); driver-agnostic by construction",
+     "lines": [
+      84,
+      127
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Microsoft SQL Server** (TDS) with TLS, SQL Browser named-instance routing, and multi-schema introspection ／ - SQL drivers only (SQLite, PostgreSQL, MySQL/MariaDB, SQL Server); driver-agnostic by construction",
+     "lines": [
+      85,
+      127
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **ClickHouse** and ClickHouse Cloud over HTTP(S), with database/table discovery, visual SELECTs, and explicit raw SQL execution",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MySQL** / MariaDB ／ - SQL drivers only (SQLite, PostgreSQL, MySQL/MariaDB, SQL Server); driver-agnostic by construction",
+     "lines": [
+      83,
+      127
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该客户端为连接和管理多种数据库提供服务，不是以某数据库为存储的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DBFlux is an open-source desktop client with built-in drivers for relational and non-relational databases. Its core contracts are driver-neutral, and external drivers can integrate over RPC. ／ - **PostgreSQL** with SSL/TLS modes (Disable, Prefer, Require) ／ - Built-in Model Context Protocol (MCP) server (`dbflux mcp`) for AI clients",
+   "evidence_lines": [
+    11,
+    81,
+    149
+   ]
+  },
+  "fn": "0xErwin1/dbflux",
+  "sha": "0b5c0c5e768e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8862,5 +8862,71 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0749784a16f6": {
+  "identity": {
+   "one_liner": "社保/电子政务后端参考实现：Spring MVC+MyBatis 多模块，Oracle 多 schema",
+   "review": "这是中国省级社保与在线政务服务平台的后端参考架构，包含 5 个 Spring MVC + MyBatis 模块、358 个 HTTP 端点，实现社保查询、社保卡、就业、医院挂号、人脸核身等业务流。面向需要构建或维护同类系统的 Java 工程师；使用 Oracle 多 schema 存数据、Redis 管会话缓存、Axis SOAP 对接遗留政务接口，其中三个模块依赖未公开的内部 jar，无法公开构建。",
+   "highlights": [
+    "5 个 Spring MVC + MyBatis 模块，358 个 @RequestMapping 端点，统一 Result 响应封装",
+    "多数据源 c3p0 + MyBatis 接入 Oracle 多 schema，Redis(Jedis) 承担字典缓存与会话",
+    "Axis SOAP 适配遗留政务/HIS 系统，并附带带 token 心跳续期的客户端 SDK jar"
+   ],
+   "use_cases": [
+    "作为社保/政务类 Java 后端系统的参考架构",
+    "学习多数据源、SOAP 桥接、token 客户端 SDK 等集成模式",
+    "需要对接 Oracle 多 schema 与遗留政务接口的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "MyBatis mappers against Oracle, Redis-backed sessions, SOAP bridges to legacy ／ |Database|Oracle 10g/11g|Multiple schemas per module| ／ - Oracle and Redis instances if you want the application to actually start",
+     "lines": [
+      23,
+      92,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确其为社保/政务业务平台后端，使用 Oracle 存储业务数据而非为数据库生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|Oracle 10g/11g|Multiple schemas per module| ／ - Oracle and Redis instances if you want the application to actually start",
+   "evidence_lines": [
+    92,
+    108
+   ]
+  },
+  "fn": "zengyunhua/Mestudy",
+  "sha": "0749784a16f6",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

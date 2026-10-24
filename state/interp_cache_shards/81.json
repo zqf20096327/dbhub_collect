@@ -10287,5 +10287,137 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7699b479166d": {
+  "identity": {
+   "one_liner": "MariaDB 的 Kubernetes Operator，以 CRD 声明式管理集群",
+   "review": "该项目是一个 Kubernetes Operator，通过 CRD 声明式地在 Kubernetes 上部署和运维 MariaDB，支持异步复制、Galera 多主、跨集群复制、备份恢复（含 PITR）、TLS 证书轮换、Prometheus 指标及 MaxScale 代理等能力，面向在 Kubernetes 中运行 MariaDB 的运维人员。仅兼容官方 MariaDB 镜像，要求 MariaDB >= 10.6、Kubernetes >= 1.31。",
+   "highlights": [
+    "支持异步复制、Galera 同步多主及跨集群复制等多种高可用拓扑",
+    "提供物理/逻辑备份、S3 与 Azure Blob 等多种备份存储及时间点恢复（PITR）",
+    "通过 mysqld-exporter 与 maxscale-exporter 提供 Prometheus 指标，并集成 cert-manager 与 prometheus-operator"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上声明式部署与运维 MariaDB 集群",
+    "为云原生 MariaDB 配置定时备份、加密与灾难恢复",
+    "结合 MaxScale 实现请求负载均衡与故障切换"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "# 🦭 mariadb-operator ／ Run and operate MariaDB in a cloud native way. Declaratively manage your MariaDB using Kubernetes CRDs rather than imperative commands. ／ - Easily provision standalone MariaDB servers in Kubernetes.",
+     "lines": [
+      14,
+      16,
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 MariaDB 在 Kubernetes 上提供部署与运维能力的 Operator，属于服务于数据库生态的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 🦭 mariadb-operator ／ Run and operate MariaDB in a cloud native way. Declaratively manage your MariaDB using Kubernetes CRDs rather than imperative commands. ／ `mariadb-operator` is only compatible with official MariaDB images. Refer to the images documentation for further detail.",
+   "evidence_lines": [
+    14,
+    16,
+    86
+   ]
+  },
+  "fn": "mariadb-operator/mariadb-operator",
+  "sha": "7699b479166d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b697b30f96cd": {
+  "identity": {
+   "one_liner": "基于 PocketBase+SQLite 的实时群聊应用",
+   "review": "一个实时群聊应用，前端为原生 TypeScript（约 47 KB JS），后端由单个 PocketBase 二进制提供认证、数据存储和实时推送，数据存于 SQLite。支持房间、私信、附件、表情回应、Telegram 桥接、PWA 及 Android 客户端，面向需要自托管聊天的小团队或个人部署者。",
+   "highlights": [
+    "后端为单个 PocketBase 二进制，数据存储使用 SQLite（pb_data 目录）",
+    "支持公开/私密房间、私信、附件（每条消息最多 10 个 20 MB 文件）、表情回应与消息转发",
+    "提供可选 Telegram 桥接、PWA 安装及 Kotlin 原生 Android 客户端"
+   ],
+   "use_cases": [
+    "自托管的小型团队/社群实时聊天",
+    "需要与 Telegram 群双向互通消息的场景",
+    "轻量私有部署（Dokku/Docker/systemd）聊天服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+     "lines": [
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有数据（SQLite + uploads）存于 /pb_data，项目是用 SQLite 存数据的聊天应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small, fast, real-time group chat. One PocketBase binary is the whole backend ／ # All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+   "evidence_lines": [
+    3,
+    129
+   ]
+  },
+  "fn": "border-radius/chat",
+  "sha": "b697b30f96cd",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

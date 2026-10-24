@@ -11124,5 +11124,70 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "13f77ee6dffc": {
+  "identity": {
+   "one_liner": "X/Twitter 数据归档的命令行全文搜索工具，基于 Tantivy 与 SQLite 索引",
+   "review": "xf 是一个 Rust 编写的 CLI 工具，用于解析 X（Twitter）官方数据导出包（window.YTD.* 格式的 js 文件），在本地建立 Tantivy 全文索引与向量索引，提供 BM25、向量相似及混合搜索，支持 JSON/CSV 输出和自然语言日期过滤。数据全部存于本地，可选下载 MiniLM 模型启用语义检索。适合需要离线检索自己推文、点赞、私信和 Grok 对话记录的用户。",
+   "highlights": [
+    "提供基于 Tantivy 的 BM25 关键词搜索与短语、通配符、布尔运算符查询语法",
+    "支持可选语义向量索引（MiniLM/Model2Vec）及关键词+向量混合搜索（RRF 融合）",
+    "支持 JSON、CSV、compact 等输出格式及 tweets、likes、DMs、Grok 对话等多种数据类型检索"
+   ],
+   "use_cases": [
+    "在命令行中检索和分析个人 X/Twitter 归档数据（推文、私信、点赞）",
+    "为 AI agent 提供 JSON 格式的归档查询接口（--format json）",
+    "本地离线统计归档数据的互动指标、时间分布等信息"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Run archive, SQLite, FTS5, Tantivy, and vector index diagnostics. ／ │ SQLite │ │ Tantivy │ │ Vector Index │",
+     "lines": [
+      426,
+      569
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 X 数据归档提供本地索引与搜索能力，内部使用 SQLite 存储索引数据，而非面向数据库生态的管理工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Ultra-fast CLI for searching and querying your X data archive with sub-millisecond latency. ／ - Database: ~/.local/share/xf/xf.db (override: XF_DB env) ／ Ultra-fast local search for X (Twitter) data archives. Parses `window.YTD.*` JavaScript format from X data exports. Hybrid search combining keyword (BM25) + vector similarity (hash by default; ML when indexed with `--semantic`) via RRF fusion.",
+   "evidence_lines": [
+    7,
+    136,
+    74
+   ]
+  },
+  "fn": "Dicklesworthstone/xf",
+  "sha": "13f77ee6dffc",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9059,5 +9059,135 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f8ef02f209e": {
+  "identity": {
+   "one_liner": "读本机 LINE 聊天记录并生成摘要的 MCP server",
+   "review": "这是一个运行在 Windows 上的 Python MCP server，通过提取 LINE 程序内存中的密钥，以只读方式解密 LINE 本机加密数据库（wxSQLite3/aes128cbc），供 Codex 或 Claude Code 查询指定聊天室的历史与未读消息并生成摘要。面向希望在 AI 编码工具中整理本机 LINE 聊天记录的个人用户；默认权限关闭、设有消息数与字节额度限制，且仅支持本机已同步的数据，不保证云端完整。",
+   "highlights": [
+    "以只读方式解密并分页读取 LINE 本机加密数据库（wxSQLite3 aes128cbc）",
+    "通过 stdio MCP server 向 Codex/Claude Code 提供历史、未读、聊天室发现等四个工具",
+    "内置权限设置（聊天室允许清单、联系人查询开关）与消息数/字节输出额度限制"
+   ],
+   "use_cases": [
+    "用 Claude Code/Codex 生成指定聊天室与日期范围的 LINE 对话摘要",
+    "整理获准聊天室的近日本机未读消息要点",
+    "用随附脚本按明确参数导出聊天数据集"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "歷史分頁按時間與唯一訊息 ID 排序，在資料庫不變時可穩定遍歷。首次呼叫的 rowid 上界可減少一般新增資料混入，但 SQLite 刪除後可能重用 rowid，修改／刪除也會影響分頁；因此 `consistency: \"live_keyset_scan\"`、`database_changes_may_affect_pagination: true`、`coverage: \"local_rows_only\"` 不代表完整快照、完全排除新訊息或同步完成。工具的時間字串以 `+08:00` 顯示，摘要應換算成使用者指定",
+     "lines": [
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述它读取 LINE 应用的本机 SQLite 数据库文件，SQLite 是 LINE 的存储而非该项目服务的数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "用 Codex 或 Claude Code 讀取本機 LINE 電腦版已儲存的聊天記錄，整理指定聊天室與時間範圍的摘要。兩者使用同一個本機 stdio MCP server。適用於 Windows；不是完整聊天備份，也不能證明 LINE 雲端訊息已全部同步。 ／ - 對本機資料庫的讀取權限，以及可用的 SQLite3MultipleCiphers 引擎。 ／ 1. 填入自己帳號資料庫的 `db_path`，建議使用絕對路徑。Server 不再從多個 `.edb` 中自動挑選最大檔案，以免讀錯帳號。",
+   "evidence_lines": [
+    3,
+    24,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yung13yubabie/line-summary",
+  "sha": "3f8ef02f209e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d19d39e0e651": {
+  "identity": {
+   "one_liner": "自托管 Steam 账号运维控制台，Docker 界面管理多账号",
+   "review": "SteamBee 是一个自托管、单用户的 Steam 账号运维控制台，通过 Docker Compose 或 GHCR 镜像部署，提供二维码登录、加密刷新令牌存储、会话调度、自动恢复、通知与备份导出等功能，面向希望在自有环境管理 Steam 账号的 homelab 用户；README 明确提示挂机刷时长属高风险功能，可能违反 Steam 条款。",
+   "highlights": [
+    "支持通过 Docker Compose 或 GHCR 镜像部署，单容器管理多个自有 Steam 账号",
+    "支持二维码登录与一次性凭证回退，不存储 Steam 密码或 Steam Guard 共享密钥",
+    "提供预设、日程、会话历史、恢复健康状态、加密恢复导出与本地/WebView 通知"
+   ],
+   "use_cases": [
+    "自托管 homelab 环境中集中管理多个 Steam 账号的登录与状态",
+    "需要对会话日程、重试策略与故障恢复进行控制的运维场景",
+    "需要在暴露到局域网外前评估安全边界与备份恢复方案的个人部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述为管理 Steam 账号的应用程序，sqlite 仅作为其自身数据存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SteamBee is a self-hosted operations console for managing your own Steam ／ accounts through a Docker-friendly, single-user interface. ／ - Docker Compose setup for a VPS, Unraid, or any generic Docker host.",
+   "evidence_lines": [
+    7,
+    8,
+    67
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ill-yes/steam-bee",
+  "sha": "d19d39e0e651",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10066,5 +10066,70 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d6e6a556956e": {
+  "identity": {
+   "one_liner": "PHP+SQLite 自托管列表式文件上传站程序",
+   "review": "受 uploader.jp 服务终止影响而开发的非官方自托管列表式上传器，供个人或社团在自己服务器上搭建编号列表式文件发布站。仅靠 PHP 运行、无需独立数据库服务器，使用 SQLite 存储，支持 S3 兼容存储、删除密钥/下载密码、Cloudflare Turnstile、SMTP 通知，并附 uploader.jp 数据迁移工具。",
+   "highlights": [
+    "以编号列表形式管理文件，支持排序、检索、分页、MD5 显示与下载密码/删除密钥",
+    "支持将文件保存到 S3 兼容存储（Backblaze B2、Cloudflare R2 等），并附 uploader.jp 迁移脚本",
+    "管理画面支持文件修正/非公开/删除、上传禁止、通知与 ads.txt 编辑"
+   ],
+   "use_cases": [
+    "为游戏 MOD、社团素材等单一用途搭建自托管的编号列表文件分享站",
+    "uploader.jp 用户在其服务终止前备份并迁移既有上传数据"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- PHP 8.1 以上（拡張: pdo_sqlite, fileinfo, mbstring, curl, openssl） ／ 5. **`https://あなたのサイト/data/uploader.sqlite` を開いて 403 になることを必ず確認**（中身が見えたらサーバー設定の誤りです）",
+     "lines": [
+      47,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个用 pdo_sqlite 存数据的自托管上传器应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "「ゲームのMOD・シナリオ置き場」「サークルの素材置き場」のように、**1つの目的のためのファイルを番号付きの一覧で並べる**アップローダーを、自分のサーバーに設置できます。PHP だけで動き、データベースサーバーは要りません。 ／ - PHP 8.1 以上（拡張: pdo_sqlite, fileinfo, mbstring, curl, openssl）",
+   "evidence_lines": [
+    7,
+    47
+   ]
+  },
+  "fn": "PYU224/likegetuploader",
+  "sha": "d6e6a556956e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

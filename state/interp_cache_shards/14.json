@@ -10582,5 +10582,147 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "158a6cc16503": {
+  "identity": {
+   "one_liner": "仙境传说Online 3 开源服务端模拟器，C#/.NET 单文件运行",
+   "review": "RO3Emu 是一个用 C#/.NET 10 编写的《Ragnarok Online 3》私服服务端模拟器，玩家在本地下载单个 exe 即可定位游戏客户端、启动服务器并登录游玩，也可在 Windows 或 Linux/VPS 上开服供朋友联机（需转发 TCP 5380/20000/33100 端口）。项目按 GPL-3.0 发布，当前世界、战斗、副本、公会等已实现，公会战等内容仍在开发中。README 未描述任何数据库相关功能。",
+   "highlights": [
+    "提供单个 RO3Emu.exe，可自动定位/下载游戏文件并启动服务端与客户端",
+    "支持 Windows 及 Linux/VPS 多人联机，需转发 TCP 5380、20000、33100 端口",
+    "已实现世界探索、战斗与 Boss、剧情副本、角色成长与公会系统"
+   ],
+   "use_cases": [
+    "本地搭建 RO3 私服供个人或朋友游玩",
+    "在 Linux/VPS 上部署多人游戏服务器",
+    "参与开源游戏服务端开发与测试"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 仅描述游戏服务端模拟器的功能与部署方式，未描述为数据库生态服务的组件，项目本身是使用存储的游戏应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RO3Emu: play Ragnarok Online 3 on your own server ／  One click to play A single <code>RO3Emu.exe</code>, nothing to install. It finds your game, prepares it and starts both the server and the game. ／  Play together Host for your friends from Windows or a Linux box, with party voice chat. Built for hundreds of players on two cores.",
+   "evidence_lines": [
+    1,
+    25,
+    28
+   ]
+  },
+  "fn": "aethai/ro3emu-server",
+  "sha": "158a6cc16503",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "750796fbca49": {
+  "identity": {
+   "one_liner": "多云控制平面，用 OpenTofu 描述并部署环境",
+   "review": "OrkStage 是面向平台团队的多云控制平面：用版本化模板描述一套应用环境，按资源粒度分配到不同云、账号与区域，通过 OpenTofu（tofu plan/apply）执行部署，并提供健康检查、漂移检测、成本估算和审计日志。核心仓库为 AGPL-3.0 开放核心，企业功能（如审计导出）需许可证，Azure 等多家云适配器处于 Preview 状态。",
+   "highlights": [
+    "提供 provider 中立的版本化环境模板（YAML 或可视化编辑），支持按资源绑定云目标与区域",
+    "基于 OpenTofu 执行部署，每资源独立状态、并行依赖图、失败资源重试，应用前生成 tofu plan 与成本估算",
+    "提供健康检查、漂移检测、审计日志、API 密钥、webhook 及 ork CLI 模板转换"
+   ],
+   "use_cases": [
+    "平台团队为多客户/多团队/多环境批量复制部署同一应用栈",
+    "跨多个云厂商与账号按资源粒度放置 API、数据库、存储等组件",
+    "在应用前审查部署计划与月度成本，生产变更需审批"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "environment (API, workers, Postgres, cache, queue, object storage, ingress, DNS), and every ／ a VPC, an ALB, RDS Postgres, Valkey, SQS and ECS services in MiniStack.",
+     "lines": [
+      20,
+      97
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pnpm local:up # Postgres, Redis and Mailpit in Docker",
+     "lines": [
+      112
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是多云部署控制平面，自身依赖 Postgres 作为运行栈组件（L112），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "开放核心：本仓库 AGPL-3.0，ee/ 目录含企业功能（如审计导出需许可证），子仓库另有 Apache-2.0、MIT 许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "OrkStage is an open source multicloud control plane for platform teams that run many copies of ／ - **OpenTofu underneath.** One isolated state per resource, runs in throwaway containers, a ／ pnpm local:up                  # Postgres, Redis and Mailpit in Docker",
+   "evidence_lines": [
+    18,
+    31,
+    112
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "orkstage/orkstage",
+  "sha": "750796fbca49",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

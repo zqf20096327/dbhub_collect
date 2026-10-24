@@ -10814,5 +10814,148 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "24e6e98c663f": {
+  "identity": {
+   "one_liner": "DuckDB 扩展，提供域名/URI/路径解析与 IP 分析的 SQL 函数",
+   "review": "这是一个 DuckDB 社区扩展，通过 INSTALL/LOAD 即可在 SQL 中使用域名提取（TLD/SLD/子域）、URI 组件解析、Tranco 排名查询及 IPv4/IPv6 校验与换算等函数，内置 Mozilla Public Suffix List 编译的哈希查找。面向需要在 SQL 内处理 URL 数据的数据工程师、分析师和开发者；部分函数（如 ipcalc）标注为实验性，且不同版本与 DuckDB 版本存在兼容对应关系。",
+   "highlights": [
+    "提供 extract_domain/extract_tld/extract_sld 等 URI 与域名解析函数，基于编译期内置的 Mozilla Public Suffix List 查找",
+    "提供 Tranco 域名排名查询函数（update_tranco/get_tranco_rank/tranco_list），支持本地缓存列表文件",
+    "提供 IP 地址函数：ipcalc、is_valid_ip、is_private_ip、ip_version、ip_to_int 等"
+   ],
+   "use_cases": [
+    "在 SQL 查询中解析和提取 URL 的域名、路径、查询参数等组件",
+    "对域名数据补充 Tranco 排名与排名类别",
+    "对 IP 地址做校验、私网判断与整数转换"
+   ],
+   "affiliation": "topic 通道 database"
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "NetQuack uses ClickHouse-inspired character-by-character parsing and gperf-generated perfect hash functions for optimal performance.",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 DuckDB 提供扩展函数的社区扩展，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This extension is designed to simplify working with domains, URIs, and web paths directly within your database queries. Whether you're extracting top-level domains (TLDs), parsing URI components, or analyzing web paths, Netquack provides a suite of intuitive functions to handle all your network tasks efficiently. Built for data engineers, analysts, and developers. ／ **netquack** is distributed as a DuckDB Community Extension and can be installed using SQL: ／ NetQuack uses ClickHouse-inspired character-by-character parsing and gperf-generated perfect hash functions for optimal performance.",
+   "evidence_lines": [
+    7,
+    19,
+    11
+   ]
+  },
+  "fn": "hatamiarash7/duckdb-netquack",
+  "sha": "24e6e98c663f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bb6a5083321d": {
+  "identity": {
+   "one_liner": "SQL Server 与 PostgreSQL 只读健康检查工具，输出 A-F 评级报告",
+   "review": "一个免费开源的命令行/GUI 健康检查工具，用只读登录连接 SQL Server 或 PostgreSQL 实例，运行基于目录的规则集（26 条规则加录制规则），生成含 A-F 评级、证据和覆盖率的 HTML+JSON 报告，数据不出本机。面向 DBA 和运维人员做实例诊断，规则以 YAML+SQL 形式组织，支持录制实例最长 24 小时。",
+   "highlights": [
+    "以只读方式连接实例运行规则检查，生成自包含 HTML+JSON 报告",
+    "规则以 YAML 文件加 SQL 查询实现，可通过贡献规则扩展",
+    "支持 record/report 记录模式，可对实例持续观察最长 24 小时"
+   ],
+   "use_cases": [
+    "SQL Server/PostgreSQL 实例的健康快照诊断与备份、索引、阻塞等检查",
+    "运维交接前生成可分享（含 --redact 脱敏）的诊断报告",
+    "短期记录实例行为，对比 compare 检查变化"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Free, read-only health check for SQL Server and PostgreSQL . ／ |SQL Server|PostgreSQL|",
+     "lines": [
+      6,
+      48
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Free, read-only health check for SQL Server and PostgreSQL . ／ |SQL Server|PostgreSQL|",
+     "lines": [
+      6,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL Server 和 PostgreSQL 实例提供健康检查诊断的独立工具，数据库仅是被检查对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 Apache-2.0；关联的 codeDB SaaS 为闭源商业产品",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "codeDB Lens connects to your instance with a **read-only** login, runs a catalog of evidence-based ／ rules and writes a self-contained HTML + JSON report with an **A–F grade** and a **coverage seal** ／ |SQL Server|PostgreSQL|",
+   "evidence_lines": [
+    21,
+    22,
+    48
+   ]
+  },
+  "fn": "codedb-io/codedb-lens",
+  "sha": "bb6a5083321d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

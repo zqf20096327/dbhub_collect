@@ -10271,5 +10271,134 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ac88314d1cae": {
+  "identity": {
+   "one_liner": "单机自托管 Cloudflare Workers 兼容平台，单二进制实现运行时与控制面",
+   "review": "open-compute 是一个用 Rust 编写的自托管平台，在自有硬件上运行与 Cloudflare Workers 兼容的编程模型，提供 KV、R2、D1、Durable Objects、Queues 等产品绑定，兼容性按请求级对照测试。它面向希望在单机上部署 Workers 的开发者，内嵌 SQLite 作为平台元数据的本地权威状态存储，不要求外部数据库或缓存 sidecar，提供二进制安装脚本和 ocd 命令行管理。",
+   "highlights": [
+    "以单二进制提供 Workers 运行时、控制面、调度器及全部产品绑定，基于固定校验的 workerd fork 运行 Worker 代码",
+    "通过 rusqlite 内嵌 SQLite 存储平台元数据，本地文件系统为默认对象存储，S3 兼容存储可选",
+    "提供 ocd 命令行与 Dashboard 管理界面，并公开本地 /client/v4 API 与 cf 部署工作流"
+   ],
+   "use_cases": [
+    "在自有单机服务器上运行 Cloudflare Workers 风格的应用",
+    "需要 KV、R2、D1、Durable Objects 等 Workers 绑定的本地开发与自托管部署",
+    "离线或单节点环境下运行经过兼容性度量的 Workers 工作负载"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Nothing else to run.** SQLite owns platform metadata and Local storage owns object bytes by default. S3-compatible storage is optional; neither mode needs a database or cache sidecar. ／ |SQLite|Local authoritative state — no external database, no eventual consistency|",
+     "lines": [
+      47,
+      176
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 作为其内部元数据存储被嵌入使用，项目本身并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Nothing else to run.** SQLite owns platform metadata and Local storage owns object bytes by default. S3-compatible storage is optional; neither mode needs a database or cache sidecar. ／ |SQLite|Local authoritative state — no external database, no eventual consistency|",
+   "evidence_lines": [
+    47,
+    176
+   ]
+  },
+  "fn": "elliothux/open-compute",
+  "sha": "ac88314d1cae",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a5f44f6f888": {
+  "identity": {
+   "one_liner": "自托管的本地优先编码代理，单 Python 程序提供网页界面",
+   "review": "Tacit 是一个用户自运行的编码代理：读取文件、执行命令、编辑代码、搜索网页并连接外部工具（含 MCP 服务器），请求发往用户自行配置的模型提供商。适合希望在本地浏览器中使用编码代理、关注每轮提示固定开销并自主开关各项能力的开发者。它明确不使用数据库，安装仅需 Python 3.10+，通过安装脚本或源码运行。",
+   "highlights": [
+    "以单 Python 程序提供网页界面，无构建步骤、无数据库、无账号与遥测",
+    "按配置实时计算并展示每轮请求的固定 token 开销，提供六个内置档位",
+    "每轮在独立子进程中运行，支持两阶段停止与会话隔离；MCP 工具描述按需加载"
+   ],
+   "use_cases": [
+    "在本地浏览器中运行编码代理进行代码读写与命令执行",
+    "配置自选模型提供商且不依赖托管服务",
+    "按档位控制并观测每轮提示的固定 token 成本"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 明确声明不使用数据库，也无为数据库服务的功能，数据库生态位证据不足。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The application is one Python program serving plain web pages: no build step, no frontend toolchain, no ／ only. No database, no build pipeline, and no other agent harness is required, referenced or contacted at ／ name and fetched only when the agent asks (`backend/skills.py:50`). An MCP server's tool descriptions stay",
+   "evidence_lines": [
+    9,
+    47,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SebSilent/Tacit",
+  "sha": "5a5f44f6f888",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10623,5 +10623,80 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fbd19414a7cf": {
+  "identity": {
+   "one_liner": "容器化 FreePBX 17 + Asterisk 21 VoIP PBX，内置 MariaDB 与数据持久化",
+   "review": "这是一个以 Docker Compose 编排的开箱即用 VoIP 电话系统镜像栈，打包 FreePBX 17、Asterisk 21、PHP 8.2、MariaDB 10.11，并提供 Fail2ban、日志轮转、TLS 证书等预配置，通过 run.sh 处理 iptables 与 RTP 端口。适用于需要自建 SIP 通话 PBX 的运维或集成场景；README 自述为 MVP，且不支持 DAHDI 通道。",
+   "highlights": [
+    "以 Docker Compose 打包 FreePBX 17、Asterisk 21 与独立 MariaDB 实例",
+    "预配置 Fail2ban、logrotate、邮件通知与 Let's Encrypt TLS 支持",
+    "提供镜像构建或 Docker Hub 预构建镜像两种部署方式，支持数据持久化"
+   ],
+   "use_cases": [
+    "自托管 SIP 语音电话 PBX 系统",
+    "容器化部署并持久化 FreePBX/Asterisk 环境",
+    "需要通话记录（CDR）与 Fail2ban 防护的 PBX 场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* MariaDB 10.11.14",
+     "lines": [
+      10
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# for MySQL root user ／ printf \"your-mysql-root-password\" > mysql_root_password.txt",
+     "lines": [
+      57,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的 FreePBX VoIP 系统以 MariaDB 存储数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is MVP Docker Compose application for having FreePBX - A Voice over IP manager for Asterisk, running in containers. ／ * MariaDB 10.11.14",
+   "evidence_lines": [
+    3,
+    10
+   ]
+  },
+  "fn": "escomputers/freepbx-docker",
+  "sha": "fbd19414a7cf",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

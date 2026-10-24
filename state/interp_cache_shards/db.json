@@ -10161,5 +10161,279 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bb7b62de604f": {
+  "identity": {
+   "one_liner": "Comic Market 漫展地图与目录 iOS 应用",
+   "review": "CiRCLES 是面向 Comic Market 漫展参观者的配套应用，提供活动地图和目录功能，含 iOS、Android 客户端及用于共享 Buys 的 Relay 服务器。使用需要 Comike Web catalog 的 Gold Member 订阅。仓库主题标签显示使用 SQLite 和 SwiftData 存储数据，属于使用数据库的终端应用。",
+   "highlights": [
+    "提供 iOS 与 Android 双平台客户端",
+    "包含用于共享 Buys 功能的 Relay 服务器",
+    "支持活动地图与目录浏览"
+   ],
+   "use_cases": [
+    "Comic Market 参展者查询摊位地图与社团目录",
+    "多设备间共享购买清单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是面向漫展参观者的移动应用，SQLite/SwiftData 仅作为其本地存储手段。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A companion app for the Comic Market event, that happens twice a year at Tokyo Big Sight. ／ |Relay|Relay server for shared Buys, used by both apps|",
+   "evidence_lines": [
+    3,
+    9
+   ]
+  },
+  "fn": "katagaki/CirclesApp",
+  "sha": "bb7b62de604f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6938e0526fcd": {
+  "identity": {
+   "one_liner": "数据库性能诊断桌面应用/CLI/MCP服务器，读取数据库统计定位慢查询",
+   "review": "该项目提供桌面应用、CLI 和 MCP 服务器，读取数据库自带的 Query Store、等待统计、执行计划缓存等统计信息，生成慢查询、执行计划、索引、阻塞与死锁方面的诊断报告，并支持迁移 lint 与 SARIF 输出。面向 DBA 和使用 Claude Code、Cursor 等编码代理的开发者；扫描默认只读统计，不执行用户查询。基于 Rust 内核，MIT 许可。",
+   "highlights": [
+    "提供 68 项性能检查，覆盖计划回归、缺失/未用索引、N+1、阻塞、死锁、复制延迟等",
+    "通过 MCP 提供 27 个工具，供编码代理调用，支持逐连接权限控制和本地审计日志",
+    "支持比较执行计划、迁移文件离线 lint、CI 中输出 SARIF 2.1.0"
+   ],
+   "use_cases": [
+    "排查生产数据库慢查询与执行计划回归",
+    "在 CI/PR 流水线中离线检查迁移文件的锁与索引风险",
+    "让编码代理通过 MCP 以受限只读方式调查数据库性能问题"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      60
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      60
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      60
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      60
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      60
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是连接并诊断多种数据库性能的工具，数据库是被读取分析的对象而非存储自身数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ Culprit does the digging in seconds. It reads the statistics your database already keeps, works out where the time goes, and tells you in one sentence what is wrong, what it costs and what to change: ／ `culprit mcp` serves 27 tools over the Model Context Protocol: dashboard, findings, plans, plan insights, migration linting, schema drift, what changed, blocking, waits, index advice, verification and more. When queries carry `file:line` comments (Marginalia, SqlCommenter or `/* app/models/order.rb:42 */`), each finding's brief points straight to the call site in your repository.",
+   "evidence_lines": [
+    7,
+    37,
+    72
+   ]
+  },
+  "fn": "cristipufu/culprit-sql-studio",
+  "sha": "6938e0526fcd",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e89c54170f5a": {
+  "identity": {
+   "one_liner": ".NET SQL-to-MCP 工具工厂与受控 SQL 执行网关",
+   "review": "这是一个 .NET 实现的 MCP 服务器，将工程师在 Admin UI 中定义的参数化 SQL 发布为类型化 MCP 工具供 AI Agent 调用，并提供 fail-closed SQL 编译器、逐 key 数据库/表策略、DML 审批流、审计记录与限流。支持嵌入现有 ASP.NET Core 应用，适合需要为 Agent 提供受治理 SQL 访问的团队。",
+   "highlights": [
+    "提供 Admin UI 定义 SQL 模板并发布为带 JSON schema 的 MCP 工具",
+    "实现 fail-closed SQL 编译器、DML 预览-审批-提交流程与审计记录",
+    "支持 PostgreSQL、MySQL、SQL Server、Oracle、SQLite、Firebird 六种数据库"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供参数受限的受治理 SQL 查询/写入工具",
+    "需要 DML 人工审批与审计留存的生产数据库访问场景",
+    "将 SQL 工具嵌入现有 ASP.NET Core 应用"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      50
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      50
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      50
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      50
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 SQL-to-MCP 工具工厂与受控 SQL 执行边界，为数据库访问提供治理服务，而非使用数据库构建业务应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`hs-sql-agent` is an open-source **SQL-to-MCP tool factory and governed SQL execution boundary**. Define parameterized SQL in the Admin UI, publish it as a typed MCP tool, and let AI agents supply only the arguments — without writing a new C# method or redeploying your MCP server for every database operation. ／ Every published tool still runs through the same fail-closed SQL compiler, per-key database/table policy, runtime limits, audit trail, and Safe DML approval controls. Raw SQL tools remain available for cases where an agent genuinely needs flexible ad-hoc querying. ／ It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application.",
+   "evidence_lines": [
+    9,
+    11,
+    13
+   ]
+  },
+  "fn": "tse-wei-chen/hs-sql-agent",
+  "sha": "e89c54170f5a",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

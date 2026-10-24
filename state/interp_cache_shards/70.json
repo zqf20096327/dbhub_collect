@@ -10672,5 +10672,123 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d3aebd50a61a": {
+  "identity": {
+   "one_liner": "自托管短链接服务，单二进制内嵌管理界面，SQLite 存储",
+   "review": "Sani 是一个用 Go 编写的自托管短链接服务，同时支持文本和文件分享，面向单一管理员使用。重定向目标缓存在内存中，点击计数先在内存累加，每两秒以一个事务批量写入 SQLite。提供 Docker 镜像和多平台二进制分发，不支持多实例或多用户部署。",
+   "highlights": [
+    "提供短链接、文本（≤1 MB）和文件（默认≤99 MB）分享，支持过期时间、访问次数限制和临时/永久重定向",
+    "重定向目标常驻内存缓存，点击计数在内存累加，聚合结果每两秒以单个事务写入 SQLite，并在关闭时刷出",
+    "提供 HTTP API、书签工具、Android 分享面板接入，支持从 Shlink 或 Sani 的 CSV/JSON 导入"
+   ],
+   "use_cases": [
+    "个人或小团队自托管短链接服务",
+    "临时分享代码片段、配置和文件并查看访问统计",
+    "通过 API token 在脚本或快捷指令中批量生成短链"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required. ／ - Redirect targets live in a sharded in-memory cache in front of SQLite. Misses are cached separately and bounded, so a scan for random slugs can't evict real links, and concurrent misses for the same slug share one database read. ／ - Counting a click is an in-memory increment. Aggregated counts reach SQLite every two seconds in one transaction, and are flushed on shutdown.",
+     "lines": [
+      3,
+      131,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 存储元数据和文本，该项目是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required.",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "DejavuMoe/sani",
+  "sha": "d3aebd50a61a",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "129b73402467": {
+  "identity": {
+   "one_liner": "README 信息不足，无法确定定位",
+   "review": "仓库 README 仅含项目名称 OceanBasePowerContext，无功能、用途、安装方式等可验证内容。从名称推断可能与 OceanBase 相关，但缺乏文本证据，无法判断其具体机制、目标用户与限制，需等待 README 补充后再行编目。",
+   "highlights": [],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "# oceanbase-powercontext",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅有项目名称，无任何功能描述可支撑 tool 或 app 判断",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "# oceanbase-powercontext",
+   "evidence_lines": [
+    1
+   ]
+  },
+  "fn": "yayajing1/oceanbase-powercontext",
+  "sha": "129b73402467",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

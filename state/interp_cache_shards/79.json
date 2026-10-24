@@ -11819,5 +11819,100 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c8d982855c80": {
+  "identity": {
+   "one_liner": "Go+Scheme 实现的列式内存 SQL 数据库，兼容 MySQL 线协议",
+   "review": "MemCP 是一个持久化的列式内存 SQL 数据库，采用列存主/delta 架构，用于同时承载事务、搜索与分析负载。应用可通过 MySQL 线协议或 HTTP 端点提交 MySQL/PostgreSQL/T-SQL 方言查询，并内置 RDF/SPARQL 引擎。存储引擎用 Go 实现，SQL 解析与查询计划用 Scheme 实现。README 标注为 Beta 状态，建议在生产切换前验证查询、持久化与备份配置。",
+   "highlights": [
+    "支持 MySQL 线协议服务器，现有 MySQL 客户端和连接器可连接",
+    "提供 MySQL、PostgreSQL、T-SQL 方言的 HTTP SQL 端点及 SPARQL 端点",
+    "列存主/delta 存储架构，支持基于代价的查询规划与可选 JIT"
+   ],
+   "use_cases": [
+    "需要同时处理事务与列式分析查询的 OLTP/OLAP 混合负载",
+    "使用现有 MySQL 客户端/连接器的应用接入",
+    "自托管服务器上运行 SQL 与全文搜索、分页列表、分析混合负载"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL-style SQL through separate HTTP endpoints. An initial T-SQL mode adds ／ - `/psql/<database>` — PostgreSQL-dialect SQL ／ - **up to 90x faster than PostgreSQL** for selected real application searches",
+     "lines": [
+      15,
+      87,
+      188
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Applications can connect through the MySQL wire protocol or submit MySQL- and ／ Existing MySQL clients and connectors can use MemCP's wire-protocol server.",
+     "lines": [
+      14,
+      64
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "and retains node logs, a write oracle and the seed in its printed artifact path.",
+     "lines": [
+      386
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "`mysql_import` connects to a running MySQL/MariaDB server over the wire",
+     "lines": [
+      726
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库引擎（内核/引擎），README 提供协议兼容接入而非为特定数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0-or-later",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MemCP is a persistent, column-oriented SQL database built for applications that ／ Applications can connect through the MySQL wire protocol or submit MySQL- and ／ Existing MySQL clients and connectors can use MemCP's wire-protocol server.",
+   "evidence_lines": [
+    3,
+    14,
+    64
+   ]
+  },
+  "fn": "launix-de/memcp",
+  "sha": "c8d982855c80",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

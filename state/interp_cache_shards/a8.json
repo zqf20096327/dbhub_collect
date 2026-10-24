@@ -11018,5 +11018,214 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2c86fe96162": {
+  "identity": {
+   "one_liner": "基于 ClickHouse 的自托管开源 SIEM 平台",
+   "review": "Bifract 是一个部署在自有基础设施上的 SIEM 系统，日志存入 ClickHouse 并以 Parquet/Iceberg 归档到对象存储，提供管道式查询语言 BQL、进程溯源图、行为基线、Sigma 告警和协作调查功能，通过安装脚本部署在单台 Linux 主机（Docker Compose）。适合自建日志安全分析与威胁调查的团队；README 注明由单人维护，Iceberg 归档部分仍在演进。",
+   "highlights": [
+    "提供管道式查询语言 BQL，支持过滤、聚合及 pgr() 溯源图等源命令",
+    "支持 Sigma 规则从 Git 同步并转换为基于游标的告警评估",
+    "日志以 Parquet + Iceberg 元数据写入对象存储归档，可原位搜索并还原进 ClickHouse"
+   ],
+   "use_cases": [
+    "自托管安全日志管理与检索",
+    "终端进程溯源图分析与行为基线检测",
+    "基于 Sigma 规则的告警与团队协作调查"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Self-hosted, open source SIEM built on ClickHouse ／ Bifract is an open source SIEM you run on your own infrastructure. Logs are stored and searched in ClickHouse and archived to your object storage as Parquet. On top of that it adds what generic log tools leave out: process provenance graphs, behavioral baselin ／ - **Archive:** every log written to object storage as Parquet with Iceberg metadata, searchable in place, restorable into ClickHouse.",
+     "lines": [
+      3,
+      11,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Bifract 以 ClickHouse 作为日志存储与检索后端构建自身产品，而非为数据库生态提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Self-hosted, open source SIEM built on ClickHouse ／ Bifract is an open source SIEM you run on your own infrastructure. Logs are stored and searched in ClickHouse and archived to your object storage as Parquet. On top of that it adds what generic log tools leave out: process provenance graphs, behavioral baselines, and collaborative investigation, all driven by a pipe-based query language built for analysts. There are no license keys or feature gates. ／ The setup wizard installs Bifract on a single Linux host, handling SSL, passwords, Docker Compose, and database initialization:",
+   "evidence_lines": [
+    3,
+    11,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "zaneGittins/bifract",
+  "sha": "a2c86fe96162",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "09676e7044ab": {
+  "identity": {
+   "one_liner": "dbt 插件，按代码哈希与上游数据版本决定复用或重建节点",
+   "review": "dbt-hodor 是一个运行在 dbt 内部的状态管理插件，对每个选中节点计算逻辑哈希并检查上游数据版本，返回复用或重建的判定及原因码，状态可存于 Delta 表、Postgres 或本地 DuckDB 文件。面向使用 dbt 做数据工程、希望跳过未变更节点的团队。README 注明处于早期开发阶段，默认 shadow 模式，所有失败路径都回退为重建。",
+   "highlights": [
+    "支持 off/shadow/on 三种模式，默认 shadow 且安装后不跳过任何节点",
+    "每次判定返回 reason code，可用 explain 命令查看单节点的哈希与数据版本对比",
+    "状态存储支持 delta、duckdb、postgres 三种后端"
+   ],
+   "use_cases": [
+    "dbt 项目的增量构建与 Slim CI，跳过代码和上游数据均未变化的节点",
+    "在生产启用前以 shadow 模式观察判定结果",
+    "无 dbt 平台账号时的自托管状态方案"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. ／ |`hodor_store`|`HODOR_STORE`|`delta`|`delta`, `duckdb`, `postgres` (alias `lakebase`)| ／ |`postgres` (alias `lakebase`)|`<hodor_schema>.<hodor_table>` in the Postgres database `hodor_database`|the schema and the table|",
+     "lines": [
+      15,
+      105,
+      121
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是在 dbt 内运行、把状态写入 Postgres/DuckDB/Delta 的数据工程工具，为数据库之上的转换流程服务而非以某库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dbt-hodor is a free, self-hosted alternative to dbt Labs' dbt State. It runs inside dbt. For every selected node it decides whether to reuse the object that is already in the warehouse or to build it again. A node is reused when its logic has not changed and its upstream data has not changed since the last build. ／ It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. ／ |`hodor_store`|`HODOR_STORE`|`delta`|`delta`, `duckdb`, `postgres` (alias `lakebase`)|",
+   "evidence_lines": [
+    13,
+    15,
+    105
+   ]
+  },
+  "fn": "alaturqua/dbt-hodor",
+  "sha": "09676e7044ab",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eede5dadace7": {
+  "identity": {
+   "one_liner": "PHP 内容管理系统，默认使用 SQLite 存储",
+   "review": "Mova 是一个用 PHP 编写的 CMS，默认以 SQLite 作为存储引擎，无需独立数据库服务器，可在共享主机、VPS 或通过 Docker/Coolify 部署。提供多站点、主题插件、PWA 生成、站点导出导入（.movapack 包）及内置 AI 网关接入。适合需要轻量部署并直接使用 SQLite 存内容的建站用户；要求 PHP 8.1+ 与 pdo_sqlite。",
+   "highlights": [
+    "默认使用 SQLite，无需数据库服务器",
+    "支持 Docker/Coolify 部署与共享主机平面布局",
+    "提供 .movapack 格式的站点导出导入与 CLI 工具"
+   ],
+   "use_cases": [
+    "在共享主机或 VPS 上搭建内容网站",
+    "需要多站点管理的内容运营",
+    "通过打包文件在站点间迁移或外包设计内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite by default (no database server required) ／ Requirements: PHP 8.1+, SQLite (pdo_sqlite), GD, Apache mod_rewrite (or Nginx equivalent).",
+     "lines": [
+      9,
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个内容管理系统，使用 SQLite 存储站点数据，而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Mova CMS ／ - SQLite by default (no database server required) ／ Requirements: PHP 8.1+, SQLite (pdo_sqlite), GD, Apache mod_rewrite (or Nginx equivalent).",
+   "evidence_lines": [
+    1,
+    9,
+    48
+   ]
+  },
+  "fn": "oluebubeogb/mova",
+  "sha": "eede5dadace7",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

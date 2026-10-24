@@ -10426,5 +10426,128 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "503abc685f0b": {
+  "identity": {
+   "one_liner": "本地优先的跨平台桌面 AI 编程客户端，接入多模型驱动本地工作区",
+   "review": "ReinAgent 是基于 Tauri 2 的桌面 AI 编程工作台，让开发者通过自然语言调用多个大模型读写代码、执行命令和操作浏览器。它把会话历史、任务时间线等数据持久化在本地 SQLite 数据库（~/.ReinAgent/conversations.db），并提供手机远程访问、MCP 服务端/客户端、子代理派发与四档审批模式。普通用户可直接下载绿色单文件运行，开发者可用 Bun 和 Rust 构建打包。",
+   "highlights": [
+    "使用本地 SQLite (rusqlite) 持久化会话历史、任务时间线与配置数据",
+    "内置 MCP 客户端与服务端，可接入外部 MCP 服务器或被 Claude Desktop、Cursor 等远程调用",
+    "提供子代理派发、四档审批模式、代码改动检查点回退与本地长期记忆系统"
+   ],
+   "use_cases": [
+    "开发者在本地工作区用自然语言驱动大模型进行编码、调试与重构",
+    "通过局域网或 Cloudflare 隧道从手机远程查看与控制桌面 Agent",
+    "需要会话数据与 API Key 完全留存在本地不出网的 AI 编程场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-First 数据自治**：所有会话历史、任务时间线、代码改动快照、模型密钥与配置均 100% 留存在本地（SQLite WAL + 本地 JSON），绝不上传云端，无任何中心化云服务依赖。 ／ - **桌面与后端**：Tauri 2 (Rust) + Axum + SQLite (rusqlite) + Tokio ／ - **对话与任务库**：任务元数据与时间线持久化在本地 SQLite 数据库 `~/.ReinAgent/conversations.db`。",
+     "lines": [
+      20,
+      186,
+      244
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 SQLite 存储自身会话与任务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License，单一许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **桌面与后端**：Tauri 2 (Rust) + Axum + SQLite (rusqlite) + Tokio ／ - **对话与任务库**：任务元数据与时间线持久化在本地 SQLite 数据库 `~/.ReinAgent/conversations.db`。",
+   "evidence_lines": [
+    186,
+    244
+   ]
+  },
+  "fn": "web3claw/ReinAgent",
+  "sha": "503abc685f0b",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f0d070397c8e": {
+  "identity": {
+   "one_liner": "自托管代理网络控制面板，编排 VLESS 节点与订阅",
+   "review": "apsp 是一个自托管的代理网络控制平面，用于把多台 VPS 组织为入口、中转、落地节点，自动生成并下发 sing-box 配置，管理用户订阅、套餐和流量账本，并提供服务器状态、告警、费用记录等运维功能。面向自建代理节点、管理 5–50 台服务器并需让用户自助查看订阅的个人使用者；不支持公开注册、支付等售卖功能。",
+   "highlights": [
+    "面板保存期望状态，编译为 sing-box 配置包，由 Agent 主动拉取并应用，服务器无需开放入站管理端口",
+    "sing-box 作为独立系统服务运行，面板或 Agent 离线不影响节点工作；流量计量在重启后不重复、不丢失",
+    "支持 VLESS+Reality、Hysteria2、Shadowsocks 2022、TUIC v5 等协议，提供用户自助门户与 Passkey 登录"
+   ],
+   "use_cases": [
+    "跨多家厂商管理 5–50 台 VPS 组成的入口/中转/落地代理线路",
+    "为自己和亲友自建节点，管理订阅、套餐与逐用户流量统计",
+    "集中记录服务器、域名、机场订阅等周期费用并提醒续费（规划中）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是面向代理节点管理的完整自托管应用，数据库（如 topic 提示的 sqlite/postgresql）仅为其内部存储组件，README 未以服务数据库生态为定位。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**自托管的代理网络控制平面。** ／ apsp 把你分散在各家的 VPS 编成一张可靠的代理网络：入口、中转、落地一处配置，节点和订阅自动下发，流量按用户精确记账；面板离线时，已应用的节点照常工作。你分享给的每个人都可以自己登录，查看订阅、用量、套餐与到期。 ／ apsp 不是通用探针、通用运维面板或机场售卖系统：不做公开注册、支付和工单，通知只提醒、不自动处置。完整边界见功能地图。",
+   "evidence_lines": [
+    3,
+    5,
+    15
+   ]
+  },
+  "fn": "theLucius7/apsp",
+  "sha": "f0d070397c8e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

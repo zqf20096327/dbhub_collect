@@ -11303,5 +11303,141 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "357eb219d738": {
+  "identity": {
+   "one_liner": ".NET 平台的 LSM-tree 有序键值持久化存储引擎",
+   "review": "ZoneTree 是面向 .NET 的持久化有序键值存储引擎，基于 LSM-tree，提供 WAL、乐观事务、原子读改写、正反向迭代器、压缩与后台维护等能力，支持数据集大于内存的场景。它既可当嵌入式键值数据库用，也可作为自研数据库、索引层、事件存储等的存储底座，通过 NuGet 安装使用。",
+   "highlights": [
+    "提供有序键值存储、写前日志（WAL）多种模式、正反向迭代器和可 seek 的范围扫描",
+    "支持原子读改写操作与跨多键的事务，删除基于删除标记并在 compaction 中回收",
+    "内置后台维护协调器（maintainer）与 live backup/restore，可配置持久性与性能权衡"
+   ],
+   "use_cases": [
+    "作为嵌入式有序键值数据库直接使用",
+    "为自研数据库、索引层、全文检索、事件存储、时序存储等构建存储底座",
+    "需要在 .NET 中持久化大于内存数据集的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "In a live Windows P16 benchmark with 2M profiles, individual writes, secondary indexes, point reads, ordered scans, queries, and updates, ZoneTree completes the measured workload phases substantially faster than RocksDB and SQLite. See the full benchmark expla",
+     "lines": [
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是供构建数据库/索引/存储系统使用的存储引擎组件，为 .NET 数据生态提供底层能力而非某个数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ZoneTree is a high-performance storage engine for ordered, persistent data. It is built for teams creating databases, indexes, search systems, queues, event stores, local-first applications, and custom data platforms in the .NET ecosystem. ／ ZoneTree gives you the core pieces expected from a serious storage engine: ／ ZoneTree can be used directly as an ordered key-value database, or as the storage foundation for higher-level systems.",
+   "evidence_lines": [
+    7,
+    33,
+    52
+   ]
+  },
+  "fn": "ZoneTree/ZoneTree",
+  "sha": "357eb219d738",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2838c72c5963": {
+  "identity": {
+   "one_liner": "自托管Web分析工具，从服务器访问日志解析真实访客与AI爬虫",
+   "review": "Skald 读取网站服务器访问日志（含 Vercel、Netlify、Cloudflare 等来源），将请求分为真人、AI 助手、搜索引擎、扫描器和自有流量五类，并提供安全扫描与线索转化视图，数据以 SQLite 单文件存储，每项指标由独立审计程序二次核对。适合需要无 Cookie、无第三方脚本的站点运营者自托管使用；它不拦截流量，不能替代防火墙或 WAF。",
+   "highlights": [
+    "从访问日志识别并分类 AI 助手、爬虫与扫描器，无需浏览器端脚本或 Cookie",
+    "每项统计由独立审计解析器二次计数，不一致时 withheld 该日数据",
+    "内置安全分析：暴露探测、扫描来源、攻击尝试、假浏览器与 block list 输出"
+   ],
+   "use_cases": [
+    "自托管网站的无 Cookie 访问统计分析",
+    "监测 AI 助手与训练爬虫对站点的抓取行为与成本",
+    "从日志排查针对 .env、凭据配置等资源的扫描与攻击尝试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Which road fits your site** (a form plugin, Next.js on Vercel, a Postgres backend, no code,",
+     "lines": [
+      588
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      701
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据存储于 SQLite 文件（history.sqlite 等），SQLite 仅是内嵌存储，项目本身为日志分析应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0，并提供托管 beta 商业服务",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Web analytics from your server's own access log: the people, the AI assistants and the crawlers ／ What it is not: Skald does not block traffic, is not a WAF or intrusion prevention system, and",
+   "evidence_lines": [
+    8,
+    144
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "2838c72c5963",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

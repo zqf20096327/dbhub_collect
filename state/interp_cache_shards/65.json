@@ -10086,5 +10086,144 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f0a020d77422": {
+  "identity": {
+   "one_liner": "多平台自托管动漫播放与聚合应用，本地 SQLite 存储数据",
+   "review": "Tatap 是一个运行于 Android、Windows、Linux 和 Web 的动漫播放与源聚合应用，提供印尼语字幕、片头片尾检测与多平台观看进度同步；后端基于 Python/FastAPI，自托管部署时通过 install.sh 初始化本地 SQLite 数据库保存数据。面向想在本地或 VPS 自建动漫观看服务的用户。",
+   "highlights": [
+    "支持 Android 手机/TV、Windows、Linux 与 Web 多平台运行",
+    "聚合多个动漫流目录，支持 DoH 与 TLS 连接处理",
+    "自托管模式使用本地 SQLite 存储数据并提供后台守护脚本"
+   ],
+   "use_cases": [
+    "自托管个人动漫流媒体观看服务",
+    "Android TV 上的遥控器操作观看",
+    "多设备续播同一观看进度"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "*Skrip `./install.sh` akan menyiapkan virtual environment Python (`venv/`), memasang seluruh pustaka dependensi (`requirements.txt`), serta menginisialisasi basis data SQLite lokal.*",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用自托管时初始化本地 SQLite 数据库存储自身数据，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Aplikasi pemutar anime mandiri multiplatform (Android Mobile, Android TV, Windows, Linux, Web) yang berfokus pada kemudahan penggunaan dan penyimpanan data lokal. ／  *Skrip `./install.sh` akan menyiapkan virtual environment Python (`venv/`), memasang seluruh pustaka dependensi (`requirements.txt`), serta menginisialisasi basis data SQLite lokal.* ／ - Aplikasi bertindak sebagai agregator konten publik dan tidak menyimpan berkas video pada server tersendiri.",
+   "evidence_lines": [
+    3,
+    83,
+    175
+   ]
+  },
+  "fn": "asfaraguest/tatap",
+  "sha": "f0a020d77422",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fe8312beee6b": {
+  "identity": {
+   "one_liner": "开源联盟营销伙伴归因与分成支付平台，事件溯源架构",
+   "review": "OpenPartner 是一个自托管的伙伴/创作者联盟平台，跟踪从点击到收入的完整归因链，并通过 Stripe Connect 向伙伴付款，支持 CSV/JSON/SQL 导出数据。面向需要自建联盟计划、掌握自身归因数据的团队，采用事件溯源设计，归因模型可从原始数据重算。",
+   "highlights": [
+    "支持四种归因模型（last_click/first_click/linear/position），可基于原始表重新推导",
+    "提供伙伴端仪表盘、管理后台、欺诈审核与漏斗分析，暴露 Prometheus /metrics",
+    "支持按表的 JSON/CSV/SQL 导出，并可通过 /import 或 psql 恢复 SQL 转储实现托管与自托管间迁移"
+   ],
+   "use_cases": [
+    "自托管运行联盟/推荐伙伴计划并跟踪点击到收入的归因",
+    "通过 Stripe Connect 自动计算佣金并向伙伴付款",
+    "通过 OpenAPI 与嵌入式 SDK 在自有应用中展示推荐链接与收益"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql`",
+     "lines": [
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述这是一个使用数据库存储归因/佣金数据的业务应用（packages/db 为共享 Knex 迁移），非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；商业托管分层收费（open-core 模式：同一代码的自托管与付费托管层）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- `packages/db` — shared Knex migrations and TypeScript types ／ - Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql` ／ - Deployment: DigitalOcean App Platform spec + single-host `docker-compose.prod.yml` behind Caddy",
+   "evidence_lines": [
+    75,
+    120,
+    126
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "getcoherence/openpartner",
+  "sha": "fe8312beee6b",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9306,5 +9306,283 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5e5174ee1744": {
+  "identity": {
+   "one_liner": "本机 AI 编码代理工作台：tmux 会话、审批、成本集中于一个桌面窗口",
+   "review": "agentglass 是一个运行在本机的桌面应用，把 Claude Code、Codex、Gemini CLI、OpenCode 等 AI 编码代理的终端、diff、PR、浏览器和权限审批集中到一个窗口，附带成本/token 统计与手机远程审批，数据存于本地 SQLite 文件。适合同时运行多个编码代理、需要集中审批与观测的开发者；依赖 git、Claude Code CLI、Python 3，按功能还需 tmux、gh、Docker。",
+   "highlights": [
+    "集中查看并管理多个 AI 编码代理的会话、审批、diff 与成本/token 用量",
+    "工具调用可设门禁（gate），由桌面或配对 Android 手机批准，队列落盘",
+    "本地运行，数据存于本机 SQLite 文件，无账号、无云、无遥测"
+   ],
+   "use_cases": [
+    "在同一窗口管理多台 tmux 中运行的 AI 编码代理",
+    "对代理的危险操作执行审批门禁并跟踪费用",
+    "通过 Android 配对在手机上查看代理状态并批准请求"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your machine holds everything: a SQLite file on your own disk, no account, no ／ No account, no cloud, no telemetry. Everything lives in a SQLite file on your",
+     "lines": [
+      124,
+      145
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将自身状态存于本机 SQLite 文件，属于使用数据库的应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AGENTGLASS_STATE_DIR=~/.local/state/agentglass-dev bun run dev   # http://localhost:4000, its own database ／ Your machine holds everything: a SQLite file on your own disk, no account, no ／ No account, no cloud, no telemetry. Everything lives in a SQLite file on your",
+   "evidence_lines": [
+    115,
+    124,
+    145
+   ]
+  },
+  "fn": "SirAllap/agentglass",
+  "sha": "5e5174ee1744",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c59059ee3441": {
+  "identity": {
+   "one_liner": "单二进制自托管文档归档系统，SQLite 存储 + 内容寻址",
+   "review": "Suchi 是一个自托管文档管理系统，以单个 Go 二进制文件运行，用 SQLite 存元数据、以 SHA-256 内容寻址方式不可变地保存文件原件，提供 OCR、全文检索、IMAP/移动端采集和规则化自动归档。面向个人、家庭及小型团队的文件归档场景。README 标注版本早期（v0.4.1），要求用户备份数据目录并测试恢复。",
+   "highlights": [
+    "单静态 Go 二进制，SQLite 元数据 + SHA-256 内容寻址不可变存储原件",
+    "支持 OCR、全文搜索、条码、加密 PDF、ZUGFeRD、Office/邮件/归档等格式",
+    "提供 IMAP、监视文件夹、浏览器与 iOS/Android 采集，及 MCP、OIDC、2FA、审计事件"
+   ],
+   "use_cases": [
+    "个人/家庭文档（账单、税单、证件扫描件）自动归档与检索",
+    "自由职业者与小型团队的文件分类管理与随访日历",
+    "将归档导出为普通文件夹树进行物理归档管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or ／ Suchi combines SQLite, content-addressed storage, a Svelte interface, and a ／ immutably by SHA-256; SQLite metadata and the API—not the content store—enforce",
+     "lines": [
+      28,
+      53,
+      55
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Suchi 是使用 SQLite 存元数据、文件盘存储内容的文档管理应用，数据库是其内部存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可（AGPL-3.0 等两种许可，L8/L189）",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or ／ Suchi combines SQLite, content-addressed storage, a Svelte interface, and a ／ Copyright (c) 2026 Ritesh Shrivastav. Suchi is available under two licenses:",
+   "evidence_lines": [
+    28,
+    53,
+    189
+   ]
+  },
+  "fn": "johnnybravo-xyz/suchi",
+  "sha": "c59059ee3441",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75fcfcb0fa43": {
+  "identity": {
+   "one_liner": "原生 Rust + GPUI 跨平台数据库 GUI 客户端与 SQL 编辑器",
+   "review": "FluxDB 是一个基于 Rust 与 GPUI 构建、不依赖 Electron 的桌面数据库客户端，提供 SQL 编辑补全、数据编辑回写、表结构管理、ER 图、数据导入导出、备份恢复和 Redis 工作台。它面向需要在一个桌面应用内管理 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 的开发者与运维人员；支持表级筛选、方言适配和带审批边界的内置 AI Agent，备份恢复依赖本机 mysqldump/pg_dump 客户端。",
+   "highlights": [
+    "支持 MySQL、TiDB、PostgreSQL、SQL Server、SQLite、达梦 DM8、Redis 的连接、SQL 查询、表结构管理与数据编辑，各数据源按方言处理",
+    "提供 ER 图、数据导入导出（CSV/JSON/XML 等）与基于 mysqldump/pg_dump 的逻辑备份恢复",
+    "内置 AI Agent，支持 MCP Client/Server，写入类工具需审批；使用 Rust + GPUI 原生构建"
+   ],
+   "use_cases": [
+    "在单一桌面客户端中跨多种数据库进行查询、数据编辑与结构管理",
+    "基于外键生成 ER 图并导出 DBML/Mermaid 等格式用于数据建模沟通",
+    "Redis 键空间调试、命令执行与 Pub/Sub 消息观察"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |MySQL|SQL 查询、对象浏览、表结构管理、数据编辑、导入导出、原生客户端工具入口|`mysqldump` 逻辑备份，SQL 恢复|TLS / SSL、SSH 隧道、代理、超时、字符集|-|",
+     "lines": [
+      5,
+      23,
+      94
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |PostgreSQL|SQL 查询、Schema / 对象浏览、表结构管理、数据编辑、用户与角色管理、psql 工具入口|`pg_dump` plain SQL 备份，`psql` 恢复|TLS、SSH、代理、Schema 作用域、超时|-|",
+     "lines": [
+      5,
+      23,
+      96
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |SQLite|本地文件连接、SQL 查询、对象浏览、表结构管理、数据编辑|`VACUUM INTO` 完整一致快照；恢复到新文件并检查完整性与外键|本地文件路径|-|",
+     "lines": [
+      5,
+      23,
+      98
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |SQL Server|T-SQL 查询、数据库 / Schema / 对象浏览、表结构管理与数据编辑、表数据导入导出、登录名 / 数据库用户 / 角色成员 / 显式权限管理、对象级逻辑备份恢复、AI 页面上下文与受控执行|对象级逻辑 SQL 备份与恢复|SQL Server 认证、TLS、显式端口；命名实例需填写实际端口|Windows 集成认证、Azure AD、包含数据库用户、列级权限编辑、用户自定义服务器角色、SQL Browser / 命名实例自动解析、数据库级物理备份（`BACKUP DATABASE`",
+     "lines": [
+      5,
+      23,
+      97
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |TiDB|复用 MySQL 协议链路，适配 SQL 方言、补全与表结构管理|复用 MySQL 逻辑备份能力|连接能力与 MySQL 一致|-|",
+     "lines": [
+      5,
+      23,
+      95
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **覆盖所有 SQL 数据源**：MySQL、TiDB、PostgreSQL、SQL Server、SQLite 和达梦 DM8 分别按方言处理类型、运算符、标识符和 `LIKE` 通配符转义。 ／ |达梦 DM8|Schema / 对象浏览、SQL 查询、表结构管理与设计、数据编辑、表数据导入|逻辑备份与 SQL 恢复；当前恢复面向单 Schema|实例与 Schema 连接配置|-|",
+     "lines": [
+      5,
+      23,
+      99
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "MongoDB 和 MariaDB 尚未支持。它们只出现在规划中，不应被视为当前能力。",
+     "lines": [
+      102
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为连接和管理多种数据库提供 GUI 客户端能力的工具，本身不依赖某一数据库存储应用数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite",
+    "SQL Server",
+    "TiDB",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 或更新版本",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |MySQL|SQL 查询、对象浏览、表结构管理、数据编辑、导入导出、原生客户端工具入口|`mysqldump` 逻辑备份，SQL 恢复|TLS / SSL、SSH 隧道、代理、超时、字符集|-| ／ |PostgreSQL|SQL 查询、Schema / 对象浏览、表结构管理、数据编辑、用户与角色管理、psql 工具入口|`pg_dump` plain SQL 备份，`psql` 恢复|TLS、SSH、代理、Schema 作用域、超时|-|",
+   "evidence_lines": [
+    5,
+    94,
+    96
+   ]
+  },
+  "fn": "fluxdb-alt/fluxDB",
+  "sha": "75fcfcb0fa43",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

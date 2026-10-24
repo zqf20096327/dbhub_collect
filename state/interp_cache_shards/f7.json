@@ -10567,5 +10567,152 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1c103f9f2c2b": {
+  "identity": {
+   "one_liner": "自托管 AA 记账分账应用，内置 PostgreSQL 的单容器部署",
+   "review": "ShareTab 是一个自托管的开源共享支出分账应用，提供 AI 票据扫描、多币种换算、多种分摊模式、债务简化结算等功能。面向室友、朋友、旅行群体等需要分摊开销的用户，通过 Docker Compose 单容器部署，容器内捆绑 PostgreSQL，无需外部数据库。支持 OIDC/Google 登录、PWA、9 种语言界面。",
+   "highlights": [
+    "支持 AI 票据扫描提取行项并按比例分摊税费",
+    "支持多币种记账与按汇率自动换算",
+    "单容器捆绑 PostgreSQL，Docker Compose 部署并内置 Unraid 模板"
+   ],
+   "use_cases": [
+    "室友/朋友/旅行群体的共享支出追踪与结算",
+    "无需注册账号的访客分账（链接分享票据扫描）",
+    "个人服务器上自托管替代商业分账服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo: ／ docker exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql ／ docker compose exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql",
+     "lines": [
+      104,
+      157,
+      160
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "ShareTab 是使用内置 PostgreSQL 存储数据的应用本身，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShareTab is a free, self-hosted alternative to Splitwise for tracking shared expenses with roommates, friends, and travel groups. Snap a photo of a receipt, let AI extract the line items, and assign them to group members. Taxes and tips split proportionally. Deploy on your own server with Docker Compose. ／ ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo:",
+   "evidence_lines": [
+    17,
+    104
+   ]
+  },
+  "fn": "sw-carlos-cristobal/sharetab",
+  "sha": "1c103f9f2c2b",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f69647ca3cf": {
+  "identity": {
+   "one_liner": "离线优先安卓应用，手机照片本地TFLite推理诊断咖啡/可可/香蕉病害",
+   "review": "HealthyCropping 是面向中美洲小农户的离线作物病害诊断安卓应用，用 expo-sqlite 在本地存储扫描记录、农场和地块数据，通过每作物一个的 float16 MobileNetV3 TFLite 模型在端侧推理；FastAPI 后端同步与 Gemini RAG 咨询层仍在开发中，当前尚无可安装 APK，需从源码构建。",
+   "highlights": [
+    "离线端侧推理：每作物一个 float16 TFLite 模型（224x224 输入，6.06 MB），无网络亦可诊断",
+    "使用 expo-sqlite 在本地持久化扫描、农场与地块记录（客户端生成 UUID）",
+    "monorepo 包含 Expo React Native 应用、FastAPI 后端与 TensorFlow 训练/导出流水线"
+   ],
+   "use_cases": [
+    "无蜂窝网络的山区/农村田间作物病害初筛",
+    "咖啡、可可、香蕉病害的拍照识别与处置分级（healthy/watch/act now）",
+    "离线记录农场、地块与扫描历史，联网后可选同步"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite Offline ／ 4. **Local Persistence & Optional Sync**: Scans, farms, and plots are stored locally in `expo-sqlite` with client-generated UUIDs. Optional accounts and idempotent sync through the FastAPI backend (`api/`) are in progress (Phase 6).",
+     "lines": [
+      9,
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为应用本地存储扫描/农场/地块数据，README 无面向数据库生态的工具功能",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "源代码 MIT；训练数据集保留各自上游许可；分发限非商业",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**HealthyCropping** (`com.keylorpineda.healthycropping`) is an open-source, non-commercial, offline-first Android application. It runs float16 TensorFlow Lite models directly on the phone and stores scans, farms and plots locally in SQLite, so diagnosis works without a signal. Optional sync through a FastAPI backend and a Gemini RAG advisory layer grounded in official agronomy manuals (ICAFE, CATIE, CORBANA) are being built. ／ 4. **Local Persistence & Optional Sync**: Scans, farms, and plots are stored locally in `expo-sqlite` with client-generated UUIDs. Optional accounts and idempotent sync through the FastAPI backend (`api/`) are in progress (Phase 6).",
+   "evidence_lines": [
+    17,
+    51
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "keylorpineda/healthycropping",
+  "sha": "3f69647ca3cf",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

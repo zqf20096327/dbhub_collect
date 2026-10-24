@@ -9851,5 +9851,73 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4566375c3a77": {
+  "identity": {
+   "one_liner": "PostgreSQL 迁移风险检查工具，静态解析 SQL 并对照数据库快照",
+   "review": "safe-migrate 是一个面向 PostgreSQL 的迁移 SQL 检查 CLI 与 Rust 库：解析迁移 SQL、模拟 schema 变更，并对照同步的只读数据库基线快照检查锁阻塞、破坏性变更、权限等风险，本身不执行迁移 SQL。适合在 CI/CD 中于上线前审查迁移的开发与运维团队使用；支持 PostgreSQL 14–18，远程直连被拒绝，需经 localhost/Unix socket/隧道。",
+   "highlights": [
+    "提供 lint/lint-chain/sync/rules 等命令，检查阻塞锁、表重写、约束、索引、破坏性变更、权限等风险并输出分级结果",
+    "支持 GitHub Actions 集成生成、--json/--markdown 输出、TOML 配置与内联抑制管理",
+    "同时提供 Rust 库 safe_migrate::api，暴露基线加载、同步与类型化检查结果"
+   ],
+   "use_cases": [
+    "在 CI 流水线中对迁移文件做上线前风险检查",
+    "基于只读快照离线审查迁移链的状态演进",
+    "嵌入 Rust 程序做迁移风险分析"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "safe-migrate finds risky PostgreSQL migrations before they reach production. ／ PostgreSQL 14–18 are supported. ／ `sync` reads PostgreSQL catalogs in a read-only, repeatable-read transaction.",
+     "lines": [
+      9,
+      13,
+      116
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 迁移流程提供检查服务的独立工具，README 未将其作为使用某库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可 MIT 或 Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "safe-migrate finds risky PostgreSQL migrations before they reach production. ／ It parses SQL, simulates schema changes, and checks the result against a ／ Dual-licensed under MIT or Apache-2.0.",
+   "evidence_lines": [
+    9,
+    10,
+    224
+   ]
+  },
+  "fn": "dsecurity49/safe-migrate",
+  "sha": "4566375c3a77",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10993,5 +10993,143 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96eb84fa7670": {
+  "identity": {
+   "one_liner": "本地优先 macOS 跟单应用，读取 Discord 交易信号并经风控后下单至 Alpaca",
+   "review": "CopyTrading 是一款原生 macOS 应用，读取 Discord 上交易员发布的股票信号，由所选模型解析为具体订单，经每账户的每日亏损、单笔、单标的等限额检查后通过 Alpaca 账户下单。面向希望跟随交易员的个人用户，提供中文界面、CLI 与 MCP 服务器访问，当前为开发者预览版，建议先用 paper 账户。",
+   "highlights": [
+    "本地 Python 引擎负责决策并存入 SQLite，崩溃或休眠后与券商对账",
+    "每笔买入前检查每日亏损、单笔、单标的与总敞口限额，每笔持仓可溯源到原始帖子",
+    "提供 CLI 与 MCP 服务器供脚本或 agent 读取运行状态并暂停，交易类操作需 Touch ID 批准"
+   ],
+   "use_cases": [
+    "跟随 Discord 交易员信号自动下单的个人投资者",
+    "需要风控限额与持仓溯源的 Alpaca 模拟/实盘跟单",
+    "通过 CLI/MCP 让脚本或 agent 查看与暂停应用的自动化管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the detai",
+     "lines": [
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明引擎将决策数据保存在 SQLite 中，数据库仅作为应用的本地存储使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CopyTrading is a native macOS app that reads the stock calls traders post on Discord, turns each one into an exact order, checks it against your limits, and places it with your Alpaca account. Everything runs on your Mac. ／ A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the details and the ADRs record why. ／ The engine also runs without the app, on a Mac or a Linux server, so copying continues while your Mac sleeps. `copytrading-server` reads a `copytrading.toml` file and keys from environment variables, and a Docker image is included. See Run the engine without the app.",
+   "evidence_lines": [
+    17,
+    92,
+    120
+   ]
+  },
+  "fn": "YZXBiz/copytrading",
+  "sha": "96eb84fa7670",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "db1dc37f6ec4": {
+  "identity": {
+   "one_liner": "全栈 TypeScript 脚手架，按需生成模块化 Next.js/TanStack 应用",
+   "review": "这是一个项目生成器脚手架，通过 create-clubedge-app CLI 生成包含 Next.js/TanStack Start 前端与 Hono/FastAPI API 的 monorepo 项目。使用 Drizzle ORM 操作 PostgreSQL 存储数据，模块化提供认证、存储、邮件、支付、后台任务等可选组件。适合 TypeScript 全栈开发者快速搭建带数据库的应用项目。",
+   "highlights": [
+    "提供 CLI 按需生成项目，模块可通过 pnpm clubedge add/remove 增删",
+    "使用 Drizzle ORM 生成并执行 PostgreSQL schema、迁移与 seed 命令",
+    "后台任务可存储于 PostgreSQL（pg-boss）或 Redis（BullMQ）"
+   ],
+   "use_cases": [
+    "快速初始化 Next.js/TanStack Start + PostgreSQL 的全栈项目",
+    "需要可插拔认证（Supabase/Better Auth/Firebase/Appwrite）的应用开发",
+    "需要内置 CI、迁移与部署配置的项目模板"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Next.js or TanStack Start on PostgreSQL, with optional auth, storage, email, payments, ／ - Drizzle ORM and PostgreSQL schema, migrations, and seed commands. ／ - Better Auth with users and sessions in your own PostgreSQL, secure session cookies, a protected dashboard, and rate-limited sign-in.",
+     "lines": [
+      7,
+      43,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 PostgreSQL 作为应用的数据存储，属于使用数据库的应用脚手架而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Next.js or TanStack Start on PostgreSQL, with optional auth, storage, email, payments, ／ - Drizzle ORM and PostgreSQL schema, migrations, and seed commands. ／ - PostgreSQL when using database features.",
+   "evidence_lines": [
+    7,
+    43,
+    119
+   ]
+  },
+  "fn": "Clubedge/clubedge-starter",
+  "sha": "db1dc37f6ec4",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

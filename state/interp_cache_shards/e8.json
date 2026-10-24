@@ -9274,5 +9274,149 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1dc6ff8bee28": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，以 SQLite 为后端并内置 AI agent 技能",
+   "review": "Pad 是一个本地优先的项目管理应用，提供 CLI、Web UI（localhost:7777）和面向 Claude Code、Cursor 等 7 种以上 AI 编码工具的 /pad 技能，用 SQLite 在本机存储任务、计划、约定与 playbook，支持多实例部署时切换 Postgres + Redis，并可通过 Pad Cloud 同步。适合在个人机器上与 AI agent 协作管理项目的开发者。",
+   "highlights": [
+    "提供 CLI、Web UI 与 AI agent 技能，数据默认以本地 SQLite 存储",
+    "支持 Claude Code、Cursor、Codex、Windsurf、OpenCode 等工具的 /pad 技能安装",
+    "提供任务/想法/计划等集合与自定义类型字段，多实例部署支持 Postgres + Redis"
+   ],
+   "use_cases": [
+    "开发者在本地管理项目任务、计划与文档",
+    "让 AI 编码代理通过自然语言读写项目工作项",
+    "多实例自托管部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup. The compose file runs the released image; set `PAD_VERSION` in `.env` to pin it.",
+     "lines": [
+      217
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud.",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Pad 使用 SQLite/Postgres 存储自身项目数据，是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud.",
+   "evidence_lines": [
+    25
+   ]
+  },
+  "fn": "PerpetualSoftware/pad",
+  "sha": "1dc6ff8bee28",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d7f9fe4acb13": {
+  "identity": {
+   "one_liner": "TiKV 的 PHP 客户端，经 gRPC 扩展读写 RawKV/TxnKV API",
+   "review": "该项目提供一个 PHP 编写的 TiKV 客户端库，通过 PECL ext-grpc 扩展以 gRPC 协议访问 TiKV 的 RawKV 和 TxnKV 两套 API，支持 CRUD、批量操作、范围扫描、TTL、CAS 原子操作、TLS 与 region 缓存等能力。面向需要在 PHP 应用中直接读写 TiKV 键值数据的开发者。注意库处于 pre-1.0 阶段，0.x 小版本升级可能包含破坏性变更。",
+   "highlights": [
+    "提供 RawKV 与 TxnKV 两套 API 客户端，支持 CRUD、批量、范围扫描、TTL 及 CAS/putIfAbsent 原子操作",
+    "支持 TLS、region 缓存、副本读策略与可插拔 metrics 后端（MetricsInterface）",
+    "通过 Composer 安装，强制要求 ext-grpc >= 1.57 与 PHP >= 8.2"
+   ],
+   "use_cases": [
+    "在 PHP 应用中直接读写 TiKV 键值数据",
+    "需要键值 TTL 过期或 CAS 原子语义的场景",
+    "构建访问 TiKV 的事务性（TxnKV）读写逻辑"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|`tsoPoolSize` / `lowResTimestampMaxStalenessMs`|TSO batching and the low-resolution timestamp cache of the TxnKV timestamp oracle|",
+     "lines": [
+      691
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为连接 TiKV 提供的 PHP 客户端驱动，属于为数据库生态服务的组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PHP client for TiKV's RawKV and TxnKV APIs, using the gRPC extension. ／ composer require crazy-goat/tikv-client ／ |`RawKv\\RawKvClient`|every public method — the RawKV entry point|",
+   "evidence_lines": [
+    5,
+    28,
+    144
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "crazy-goat/tikv-php",
+  "sha": "d7f9fe4acb13",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

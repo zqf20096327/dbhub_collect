@@ -9759,5 +9759,76 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d0a657322de4": {
+  "identity": {
+   "one_liner": "自托管的单用户个人项目/任务/习惯管理中心，Next.js+SQLite 实现",
+   "review": "DailyHub 是一个面向同时处理多个项目的个人用户的自托管工作台，用于集中查看任务、项目里程碑、习惯打卡与近30天统计。数据以 SQLite 文件存储在本地，无需账号；内置 MCP 端点供 Claude、Cursor 等 AI 客户端读写任务，支持 npx 一键启动、Docker 多架构镜像和 macOS 启动器。README 明确说明无登录机制，建议仅在本机或受信网络使用。",
+   "highlights": [
+    "数据存储为本机 SQLite 文件，通过 npx 一条命令启动，无需账号和云服务",
+    "内置本地 MCP 服务器，供 Claude、Cursor 等 AI 客户端读取和更新项目、任务、习惯",
+    "提供 Docker 多架构镜像（linux/amd64 与 linux/arm64）、macOS 应用启动器和 ⌘K 命令面板"
+   ],
+   "use_cases": [
+    "个人开发者/自由职业者在一个界面集中管理多个项目的任务、里程碑与收件箱",
+    "通过 MCP 让 AI 助手代为添加任务、查询待办、记录习惯完成情况",
+    "在家庭服务器或 NAS 上以 Docker 容器自托管运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One command, no account, no cloud. Your data stays in a SQLite file on your own machine. ／ - **Local by default**: SQLite on disk, light and dark themes, no accounts ／ - **Where it lives**: `~/.daily-hub/`, which holds `data.db` (SQLite) and `uploads/` (project logos). Use `--data-dir` to move it. Under Docker it is the `/app/data` volume.",
+     "lines": [
+      30,
+      78,
+      208
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存储在本地 SQLite 文件（经 Prisma），项目是使用数据库存储自身数据的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One command, no account, no cloud. Your data stays in a SQLite file on your own machine. ／ - **Where it lives**: `~/.daily-hub/`, which holds `data.db` (SQLite) and `uploads/` (project logos). Use `--data-dir` to move it. Under Docker it is the `/app/data` volume. ／ Next.js 15 (App Router), TypeScript, SQLite with Prisma, Tailwind CSS v4, shadcn/ui, Motion, and Recharts. There is no separate API server: reads go through Server Components and writes go through Server Actions.",
+   "evidence_lines": [
+    30,
+    208,
+    216
+   ]
+  },
+  "fn": "baselhusam/daily-hub",
+  "sha": "d0a657322de4",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

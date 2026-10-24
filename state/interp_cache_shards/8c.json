@@ -8958,5 +8958,143 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ed1cbd4a144c": {
+  "identity": {
+   "one_liner": "为 Obsidian 笔记库提供混合检索的插件/CLI/MCP 服务器",
+   "review": "该项目为 Obsidian 笔记库提供统一检索引擎，通过 Obsidian 插件、CLI 和 MCP 服务器三种入口使用，结合 BM25 全文、语义向量、模糊标题匹配并以 RRF 融合排序，索引与数据存储在本地 SQLite（FTS5 与 sqlite-vec）。面向个人知识管理用户及需要检索本地笔记的 AI 助手场景。",
+   "highlights": [
+    "支持 hybrid、semantic、fulltext、title 四种搜索模式，以 RRF 融合 BM25 与向量结果",
+    "提供增量索引、标签/目录过滤、相似笔记查找和链接图遍历",
+    "内置 MCP 服务器，使 AI 助手可通过工具调用检索并读取笔记"
+   ],
+   "use_cases": [
+    "在 Obsidian 笔记库内按语义或关键词检索笔记",
+    "让 MCP 兼容的 AI 助手检索并引用本地笔记内容",
+    "通过脚本对笔记库进行索引、过滤与批量查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That turns Obsidian into a stronger personal knowledge system and a better starting point for AI work. Agents can begin from your own notes, pull cited context from source files, follow related material, and work with knowledge you already trust. OHS runs loca",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储笔记索引，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "That turns Obsidian into a stronger personal knowledge system and a better starting point for AI work. Agents can begin from your own notes, pull cited context from source files, follow related material, and work with knowledge you already trust. OHS runs locally by default with SQLite, FTS5, sqlite-vec, RRF ranking, and optional OpenAI-compatible embedding APIs.",
+   "evidence_lines": [
+    15
+   ]
+  },
+  "fn": "flowing-abyss/obsidian-hybrid-search",
+  "sha": "ed1cbd4a144c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e7871ef958ad": {
+  "identity": {
+   "one_liner": "技术书籍阅读器，内置上下文释义、SRS 复习与 MCP AI 助手集成",
+   "review": "TextStack 是一个用于精读技术书籍的阅读器应用，支持 EPUB/PDF/FB2 阅读、选词上下文解释、间隔重复词汇复习与离线阅读，并提供 MCP 服务器让 Claude、ChatGPT 等外部 AI 助手搜索书库并回写笔记。面向想边读边学的读者，提供 Web、Android 与自托管方式，后端依赖 PostgreSQL（通过 Docker 环境变量配置），采用 AGPL v3 许可。",
+   "highlights": [
+    "支持 EPUB/PDF/FB2 阅读与离线下载，阅读进度跨设备同步",
+    "实现基于查询记录的间隔重复（SRS）词汇复习",
+    "提供 MCP 服务器，外部 AI 助手可搜索书库并回写 insights/highlights/章节评论"
+   ],
+   "use_cases": [
+    "精读英文技术书籍时查词并生成上下文解释",
+    "结合个人 AI 助手对章节内容提问并保存笔记",
+    "在 Web 与 Android 间同步阅读进度的自托管阅读环境"
+   ],
+   "ai_flag_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "cp .env.example .env # fill POSTGRES_PASSWORD and JWT_SECRET (32+ chars); OPENAI_API_KEY enables AI features",
+     "lines": [
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 为书籍阅读器应用，通过 .env 配置 PostgreSQL 作为自身存储（L46），属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3（网络服务运行修改版须开源）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "cp .env.example .env     # fill POSTGRES_PASSWORD and JWT_SECRET (32+ chars); OPENAI_API_KEY enables AI features ／ TextStack is a Model Context Protocol server, so an assistant you already use (Claude, ChatGPT, Cursor) can work with your books:",
+   "evidence_lines": [
+    46,
+    31
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mrviduus/textstack",
+  "sha": "e7871ef958ad",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

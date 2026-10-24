@@ -10370,5 +10370,82 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46971d75ff0e": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 AI Agent 长期记忆核心，支持多主机共享",
+   "review": "Scope Recall 是为 Hermes、Codex、Claude Code、WorkBuddy 和 dsh 等 AI Agent 提供本地长期记忆的 Python 组件，以 SQLite 作为唯一事实存储，配合 LanceDB 向量伴生库做检索，并通过 MCP 服务器和 hooks 适配器接入各主机。提供本地管理 UI、事实纠正/删除、隐私模式与导出功能，适合需要多 Agent 共享可审计记忆的个人用户。",
+   "highlights": [
+    "以 SQLite 为唯一事实存储，多个 Agent 主机可通过共享存储条目共用同一记忆库",
+    "提供本地管理页面与 CLI，用于浏览、检索、纠正、静默、删除记忆及导出为可移植包",
+    "支持隐私模式（full/read-only）按会话、目录或整库停止采集，规则按发生时间执行"
+   ],
+   "use_cases": [
+    "为 Hermes/Codex/Claude Code 等 Agent 主机安装共享的本地长期记忆",
+    "本地检查、修正或删除 Agent 已记住的内容",
+    "按会话/目录/时段启用隐私模式以拒绝记忆采集"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP s ／ is captured. SQLite is the only fact authority; host adapters share the same ／ `sqlite-bruteforce` backend needs no extra):",
+     "lines": [
+      3,
+      21,
+      80
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra adds the LanceDB vector companion, the default `vector.backend`; without it, configure `sqlite-bruteforce` or recall stays lexical. Postgre",
+     "lines": [
+      140
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI Agent 主机提供记忆存储组件，SQLite 是其内置存储后端而非业务数据的应用载体",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP server (the MCP tools need the optional `codex` extra; dsh runs the hooks through a plugin). The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ the same isolated Python environment the host uses. The default vector store is LanceDB: without",
+   "evidence_lines": [
+    3,
+    78
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "46971d75ff0e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

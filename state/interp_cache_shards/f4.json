@@ -10554,5 +10554,74 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46eca7b6dd2d": {
+  "identity": {
+   "one_liner": "基于 NestJS 与 Angular SSR 的全栈电商应用，数据存于 PostgreSQL",
+   "review": "一个全栈电商系统，前端为 Angular SSR 店面，后端为 NestJS API，数据存储于 PostgreSQL，通过 Drizzle ORM 访问，启动时执行 SQL 迁移；集成 Stripe 支付、Cloudinary 图片与可选的 AI 商品草稿（DeepSeek/Gemini/Claude）。适合需要多语言店面与后台管理的电商搭建者，以单个 Docker 镜像部署。",
+   "highlights": [
+    "Angular SSR 店面与 NestJS API 单进程单 Docker 镜像部署",
+    "PostgreSQL 18 + Drizzle ORM，容器启动时自动执行向后兼容的 SQL 迁移",
+    "AI 商品草稿功能，经 Provider 接口支持 DeepSeek/Gemini/Claude，输出经 DTO 校验"
+   ],
+   "use_cases": [
+    "搭建多语言电商店面与后台管理",
+    "需要 Stripe 支付与订单/退款管理",
+    "利用 AI 从商品照片生成多语言商品文案草稿"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Angular SSR storefront, NestJS API, PostgreSQL and Stripe. A product photo and a few words become a ／ |Database|PostgreSQL 18, Drizzle ORM, SQL migrations applied at startup|",
+     "lines": [
+      4,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是使用 PostgreSQL 存储商品与订单数据的电商应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|PostgreSQL 18, Drizzle ORM, SQL migrations applied at startup| ／ One Node.js process serves both the server-rendered Angular app and the NestJS API, so the whole ／ shop ships as a single Docker image. Database migrations run when the container starts. More in",
+   "evidence_lines": [
+    87,
+    102,
+    103
+   ]
+  },
+  "fn": "pararell/eshop_mean",
+  "sha": "46eca7b6dd2d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11287,5 +11287,150 @@
   "generated_at": "2026-10-24",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "59b13f124e76": {
+  "identity": {
+   "one_liner": ".NET 企业后端服务框架，含数据库访问与 outbox 抽象层",
+   "review": "CoreEx 是一个模块化的 .NET 框架，用于构建企业后端服务，提供语义异常映射、领域事件、验证框架、执行上下文等公共组件。数据库方面通过 IDatabase 抽象提供 PostgreSQL（Npgsql）和 SQL Server（SqlClient）实现，配套事务性 outbox 中继与 Entity Framework Core 集成层。面向使用 .NET 构建业务服务的团队，按包按需引入；README 中 AI 辅助（skills、专家 agent）是其宣传重点之一。",
+   "highlights": [
+    "提供 IDatabase/DatabaseCommand ADO.NET 抽象及 SQL Server 与 PostgreSQL 实现，附带 OpenTelemetry 指标与事务性 outbox 中继基础设施",
+    "提供 Entity Framework Core 集成层、Azure Cosmos DB 类型化访问及统一的 IUnitOfWork 事务编排",
+    "以独立 NuGet 包形式组织，包含 ASP.NET Core 集成、验证框架、映射、混合缓存与事件发布订阅等能力层"
+   ],
+   "use_cases": [
+    "使用 .NET 构建微服务/事件驱动后端，需要统一的数据访问与 outbox 模式",
+    "需要将 PostgreSQL 或 SQL Server 作为持久化并实现事务性事件发布的业务服务",
+    "希望以模块化包方式引入验证、映射、缓存、错误响应等公共组件的团队"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🗄️ **Database & ORM** — `IDatabase` / `DatabaseCommand` ADO.NET abstraction with multi-result-set support, transactional outbox relay infrastructure, SQL Server and PostgreSQL implementations with OpenTelemetry metrics, and an Entity Framework Core integrati ／ `CoreEx.Database.Postgres` &nbsp; NuGet version | Provides the PostgreSQL (Npgsql) implementation of `IDatabase`: `PostgresDatabase`, `PostgresUnitOfWork`, outbox relay, Postgres-specific parameter extensions, and OpenTelemetry metrics for outbox operations. |",
+     "lines": [
+      77,
+      129
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- 🗄️ **Database & ORM** — `IDatabase` / `DatabaseCommand` ADO.NET abstraction with multi-result-set support, transactional outbox relay infrastructure, SQL Server and PostgreSQL implementations with OpenTelemetry metrics, and an Entity Framework Core integrati ／ `CoreEx.Database.SqlServer` &nbsp; NuGet version | Provides the SQL Server (`Microsoft.Data.SqlClient`) implementation of `IDatabase`: `SqlServerDatabase`, `SqlServerUnitOfWork`, session-context stamping, outbox relay, SQL Server-specific parameter extensions,",
+     "lines": [
+      77,
+      130
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对 PostgreSQL 和 SQL Server 的 IDatabase 实现包及数据库访问抽象层，为数据库使用提供框架组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🗄️ **Database & ORM** — `IDatabase` / `DatabaseCommand` ADO.NET abstraction with multi-result-set support, transactional outbox relay infrastructure, SQL Server and PostgreSQL implementations with OpenTelemetry metrics, and an Entity Framework Core integration layer with typed CRUD operations and `ValueConverter` bridges.",
+   "evidence_lines": [
+    77
+   ]
+  },
+  "fn": "Avanade/CoreEx",
+  "sha": "59b13f124e76",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fb2e577af330": {
+  "identity": {
+   "one_liner": "基于 pi-durable 的常驻 AI 代理，经 Telegram 交互，状态存 SQLite",
+   "review": "在 Linux 服务器上运行一个持久化 AI 代理守护进程，通过 Telegram Bot API 长轮询接收用户消息，每步操作先落盘，崩溃或重启后从断点恢复并保证答案只送达一次。给需要在手机上远程管理服务器、随时下达指令的个人/小团队使用，需 Node.js 22.19+，仅支持私聊，通过 systemd 用户服务运行。",
+   "highlights": [
+    "每步执行先持久化，崩溃/重启后从断点恢复且答案不重复送达",
+    "提供 bash、read、write、edit、telegram_send_file 等工具，支持 MCP 服务器、网页搜索、提醒等插件",
+    "按允许的私聊各自维护一条持久会话，历史存储于 SQLite"
+   ],
+   "use_cases": [
+    "通过 Telegram 远程检查和管理自己的服务器",
+    "需要断电/崩溃后仍能完成的长时间 AI 任务",
+    "个人或小团队共享的服务器运维助手"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools:",
+     "lines": [
+      168
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储持久会话历史，本身是 Telegram AI 代理应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools: ／ `bash`, `read`, `write`, `edit` and `telegram_send_file`. It shares pi's login and runs as a systemd user service on ／ **Your own AI agent that lives on your server and answers you in Telegram.**",
+   "evidence_lines": [
+    168,
+    169,
+    7
+   ]
+  },
+  "fn": "smixs/pi-durable-telegram",
+  "sha": "fb2e577af330",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

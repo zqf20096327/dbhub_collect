@@ -9575,5 +9575,138 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e6f4f0c8af0": {
+  "identity": {
+   "one_liner": "Go 编写的开源业务平台，用 DSL 在 SQLite/PostgreSQL 上运行配置",
+   "review": "OneBase 是一个用 Go 实现的单二进制业务平台，配置用 YAML 描述、业务逻辑用内置 DSL 编写，提供单据、登记簿、报表等记账模型，数据存储于 SQLite 或 PostgreSQL。面向需要记账/ERP 类应用的用户，支持表单设计器、REST API、MCP 服务器和 AI 助手，配置可存放于 git 文件或数据库内。",
+   "highlights": [
+    "单二进制运行时，同一配置可在 SQLite 和 PostgreSQL 上运行",
+    "提供登记簿、复式记账会计科目表、FIFO 批次核销等记账能力",
+    "内置 MCP 服务器与 AI 助手，支持以文件（git）或数据库两种方式管理配置"
+   ],
+   "use_cases": [
+    "构建贸易与库存管理类记账应用",
+    "会计核算（复式记账、科目表）场景",
+    "让 AI 代理生成和维护业务配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ PostgreSQL, запуск, конфигуратор, остановка:",
+     "lines": [
+      5,
+      22,
+      48
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются",
+     "lines": [
+      5,
+      22
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其信息库数据存储于 SQLite 或 PostgreSQL，平台本身是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ Одна «информационная база» = конфигурация (справочники, документы, регистры, ／ |Платформа|`onebase.exe`|Go-бинарник: рантайм, DSL, REST API, лаунчер|",
+   "evidence_lines": [
+    5,
+    21,
+    219
+   ]
+  },
+  "fn": "ivanarama/onebase",
+  "sha": "2e6f4f0c8af0",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2ca175be207c": {
+  "identity": {
+   "one_liner": "为 Turso 无驱动与 LibSQL 客户端提供 Kysely 方言的 TypeScript 库",
+   "review": "kysely-turso 为 Kysely 查询构建器实现针对 Turso serverless 驱动和 @libsql/client 的方言，使 TypeScript 开发者能以类型安全方式通过这些客户端查询 LibSQL/SQLite 数据。通过 npm/pnpm/yarn/deno/bun 安装；README 注明 serverless 驱动当前版本不支持交互式事务，其 compat 层签名已定义但功能不可用。",
+   "highlights": [
+    "提供 TursoServerlessDialect 和 LibSQLialect 两种 Kysely 方言",
+    "支持 Node.js、Deno、Bun 等运行时安装使用"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中用 Kysely 类型安全地访问 Turso/LibSQL 数据库",
+    "Serverless 环境下通过官方无服务器驱动连接 LibSQL"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 Kysely 提供 Turso/LibSQL 方言的组件，服务于数据库生态而非直接使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`kysely-turso` offers Kysely dialects for Turso's serverless driver and LibSQL client. ／ npm install kysely-turso @tursodatabase/serverless kysely ／ import { TursoServerlessDialect } from 'kysely-turso/serverless'",
+   "evidence_lines": [
+    16,
+    23,
+    53
+   ]
+  },
+  "fn": "kysely-org/kysely-turso",
+  "sha": "2ca175be207c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

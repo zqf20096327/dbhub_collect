@@ -10892,5 +10892,74 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "30e497268912": {
+  "identity": {
+   "one_liner": "自托管开源个人代理，每个代理运行于 Docker Linux 桌面",
+   "review": "Xiryn 是一个开源个人 AI 代理系统，在本地运行：每个代理拥有独立的 Docker Linux 桌面容器，支持多模型（本地或云端）、Telegram 远程控制、加密保险库与多代理协作。会话、记忆和设置存储在本地 SQLite 文件中。面向希望在本地机器运行个人代理并保留数据控制权的用户。",
+   "highlights": [
+    "每个代理拥有独立的 Docker 沙箱 Linux 桌面，可在后台执行浏览器和终端任务",
+    "会话、记忆、设置和密钥存储在本地单个 SQLite 文件中，登录和卡片信息以 AES-256-GCM 加密存于保险库",
+    "支持 11 家模型提供商及任何 OpenAI 兼容端点，可通过 Ollama 运行本地模型，并支持 Telegram 远程控制"
+   ],
+   "use_cases": [
+    "在本地机器上运行浏览器自动化与编码代理任务，同时保留数据主权",
+    "通过 Telegram 远程下达和监控代理任务",
+    "多代理团队协作与定时例程任务（如每日简报）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**🔒 Private by design.** No account, no sign-up. Conversations, memory, settings and keys live in a single SQLite file on your disk; logins and cards, if you choose to save them, live in an encrypted vault whose key your operating system holds — and agents nev ／ One process, one file. The Next.js server serves the UI, runs agent turns in-process through the AI SDK, and owns the SQLite database — no queue, no worker, no backend of ours. Details in **docs/architecture.md**.",
+     "lines": [
+      57,
+      319
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其数据（会话、记忆、设置）存储在本地 SQLite 文件中，SQLite 仅作为其应用自身的存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**🔒 Private by design.** No account, no sign-up. Conversations, memory, settings and keys live in a single SQLite file on your disk; logins and cards, if you choose to save them, live in an encrypted vault whose key your operating system holds — and agents never see them. Even the agents' machines run on your computer. The only things that leave it are the calls you configure (your model provider, plus Firecrawl or Telegram if you turn them on). Run a local model through Ollama and not even your prompts leave. ／ **Xiryn is the same idea as an open-source personal agent you run yourself.** Clone it, add your API keys, and you have a team of agents that each own a Linux desktop in Docker — working in the background while you keep using your laptop — remember what matters, browse and research the web, write and run code, and hand work to one another. Nothing is stored anywhere but your computer, and you can message them from your phone. ／  Each agent gets its own Linux desktop in Docker, so it works in the background and never interrupts what you're doing on your laptop.",
+   "evidence_lines": [
+    57,
+    29,
+    6
+   ]
+  },
+  "fn": "SouravBeraAkaSpeed/xiryn",
+  "sha": "30e497268912",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

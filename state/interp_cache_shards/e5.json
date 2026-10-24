@@ -9154,5 +9154,143 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "377640c9089c": {
+  "identity": {
+   "one_liner": "把 QQ 群通知自动提取为待办和日历的自托管工具",
+   "review": "该工具通过 NapCat（OneBot v11）只读接收指定 QQ 群消息，用规则或可选大模型提取通知、行动项和截止时间，汇聚为网页待办台、月历和 .ics 日历订阅，并可推送至微信、钉钉、飞书等通道；数据经 SQLite 存于本机。面向需要在多个 QQ 群中跟踪作业与考试安排的学生用户，支持 Windows 出货包与 Linux/macOS 源码部署。",
+   "highlights": [
+    "通过 NapCat/OneBot v11 只读接收 QQ 群消息，提取通知、行动项和截止时间并生成待办",
+    "提供网页待办台、月历与 .ics 手机日历订阅，支持推送至微信、钉钉、企业微信、飞书、QQ 私聊",
+    "数据默认仅存本机（SQLite），支持一键备份数据库和 Windows 安装包、安卓 App 扫码配对"
+   ],
+   "use_cases": [
+    "学生集中管理散布在多个 QQ 群的作业、实验、报名和考试通知",
+    "将群通知订阅到手机日历并接收截止提醒推送",
+    "自托管运行，消息与待办数据保留在本机"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 设置页可一键备份数据库；ZIP 只包含 SQLite 数据库，不包含配置、令牌或日志。 ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复|",
+     "lines": [
+      37,
+      138
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明使用 SQLite 存储消息、待办等业务数据（store.py 负责 SQLite 存储），数据库仅为应用自身存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：上游 qq-live-digest 部分适用 MIT，新增部分适用 PolyForm Noncommercial 1.0.0，商业使用需联系作者授权",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "从指定 QQ 群读取消息，过滤闲聊，提取通知、行动项和截止时间，集中到网页待办台，也可订阅手机日历。 ／ - 设置页可一键备份数据库；ZIP 只包含 SQLite 数据库，不包含配置、令牌或日志。 ／ |`qq_live_digest/store.py`|SQLite 存储、去重和恢复|",
+   "evidence_lines": [
+    5,
+    37,
+    138
+   ]
+  },
+  "fn": "ExpertKT/notice-hub",
+  "sha": "377640c9089c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a226527bc5aa": {
+  "identity": {
+   "one_liner": "将 Apple Health 数据同步到本机并通过 MCP 供 AI 助手查询的 iOS 应用",
+   "review": "这是一个 iOS 应用加本机接收端：iPhone 端同步用户允许的 Apple Health 记录到自己的 macOS/Linux 电脑，本地以 SQLite 存储健康历史，并内置 MCP server 供 Claude、Cursor 等 AI 助手只读查询睡眠、锻炼、心率等数据。适合量化自我用户和自托管 AI 工作流使用者；要求 iOS 18+，云模型下查询结果会发给模型提供商。",
+   "highlights": [
+    "iPhone 应用通过自动同步将 Apple Health 记录同步到用户自己的电脑本地存储",
+    "提供 MCP server，供多种 MCP 兼容 AI 助手只读查询健康数据",
+    "本地接收端支持 macOS 与 Linux，数据存储与客户端查询权限由用户控制"
+   ],
+   "use_cases": [
+    "向 AI 助手提问个人睡眠、锻炼、活动等健康历史",
+    "自托管场景下构建个人健康数据的 agent 工作流",
+    "量化自我用户集中管理并本地保存 Apple Health 记录"
+   ],
+   "eco_why": "该应用使用 SQLite 存储同步的健康记录数据，数据库仅为其数据层。",
+   "ai_kind": [
+    "mcp"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Understand and build:** Architecture · Compatibility · Batch protocol · SQLite schema · Brand guide",
+     "lines": [
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Apple Health AI Bridge connects Apple Health to MCP-compatible assistants. The iPhone app syncs the records you allow to your own computer, where your AI can query sleep, workouts, activity, and more. ／ Health access and MCP queries are **read-only**. The receiver stores your records on your computer, and you decide which clients can query them. ／ - **Understand and build:** Architecture · Compatibility · Batch protocol · SQLite schema · Brand guide",
+   "evidence_lines": [
+    16,
+    56,
+    65
+   ]
+  },
+  "fn": "roian6/apple-health-ai-bridge",
+  "sha": "a226527bc5aa",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

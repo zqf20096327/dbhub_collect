@@ -11001,5 +11001,62 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d3b56eee150": {
+  "identity": {
+   "one_liner": "git 托管的 AI 编码代理故障记忆库，经 MCP 检索修复教训",
+   "review": "MisakaNet 是一个面向 AI 编码代理的故障记忆库：将失败修复经验以 Markdown 教训形式存入 git 仓库，按 E0–E4 证据分级，用 Python 标准库实现的 BM25 关键词检索（无向量数据库），并通过 MCP server、Claude Code/DSH 插件、GitHub Action 等方式供代理查询和提交新教训。适合让多个代理会话复用已验证的排错经验，检索仅按词匹配、不涉及语义。",
+   "highlights": [
+    "提供 MCP server（8 个工具）、WebMCP、llms.txt、A2A 发现等多种代理接入接口",
+    "教训以 Markdown 文件存储并按 E0–E4 证据分级，检索使用纯 Python 标准库 BM25",
+    "支持 GitHub Action 在工作流失败时检索教训并评论到 PR，另提供 PyPI 库与 stdio server 双包"
+   ],
+   "use_cases": [
+    "AI 编码代理在排错前检索已验证的同类故障修复教训",
+    "CI 工作流失败时自动检索最接近的教训并留言到 PR",
+    "通过 intake 流程提交语料库缺失的故障报告供后续沉淀"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 明确说明检索为纯标准库 BM25、无向量数据库，未使用或适配任何数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Every lesson is a Markdown file: reviewed like code, graded by evidence, retrieved with BM25 over the ／ |❌ a vector database / RAG stack|✅ BM25 keyword search, stdlib only (Python ≥ 3.10 still required)| ／ Agent-native interfaces: MCP server (8 tools), WebMCP, `llms.txt`,",
+   "evidence_lines": [
+    87,
+    100,
+    17
+   ]
+  },
+  "fn": "Ikalus1988/MisakaNet",
+  "sha": "6d3b56eee150",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

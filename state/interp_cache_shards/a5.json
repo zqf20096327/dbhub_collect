@@ -9551,5 +9551,83 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "07b330b740fa": {
+  "identity": {
+   "one_liner": "自主运行的 AI 社区报纸应用，用 SQLite/Turso 存储队列与内容",
+   "review": "一个读者投稿、AI（NVIDIA 上的 MiniMax 模型）改写并自动发布的社区报纸系统，面向 Discord 社区，含 Next.js 网站、Fastify API、任务队列和管理后台。数据存储依赖 Turso（libSQL/SQLite 兼容），队列基于 SQLite 实现，本地无需 Docker 或 Postgres，MIT 许可，可跑在免费额度上。",
+   "highlights": [
+    "队列基于 SQLite 实现，包含租约、心跳、指数退避与幂等键，可同时由进程内 worker 和外部 cron 驱动",
+    "AI 编辑台负责改写文案、生成标题/标签/分类并识别垃圾投稿，AI 不可用时使用确定性回退版面",
+    "每日 23:00 IST 由 AI 组装次日版面，已审核故事即时发布，不等待版面构建"
+   ],
+   "use_cases": [
+    "为 Discord 等社区运营读者投稿型内容站点",
+    "在免费云额度（Vercel/Render/Turso）上部署轻量自治发布系统",
+    "需要人在环审核与紧急停用开关的自动化内容流水线"
+   ],
+   "cat_use": "见 classification"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The queue lives in SQLite, so there is no Redis and no extra service. Leases, ／ Leave `TURSO_DATABASE_URL=file:../../data/duggal.db` for local SQLite and ／ Free tiers change. The code only assumes: HTTP, SQLite-compatible SQL, and a",
+     "lines": [
+      47,
+      112,
+      598
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- No Docker, no Redis, no Postgres.",
+     "lines": [
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统用 SQLite/Turso 存储队列与内容数据（L47、L112、L187），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The queue lives in SQLite, so there is no Redis and no extra service. Leases, ／ Leave `TURSO_DATABASE_URL=file:../../data/duggal.db` for local SQLite and ／ |`TURSO_DATABASE_URL`|yes|`libsql://…` in production|",
+   "evidence_lines": [
+    47,
+    112,
+    187
+   ]
+  },
+  "fn": "itsmobsys/duggal_newspaper",
+  "sha": "07b330b740fa",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

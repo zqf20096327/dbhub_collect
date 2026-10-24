@@ -8282,5 +8282,84 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9babad5d1a56": {
+  "identity": {
+   "one_liner": "自托管 AI 智能体团队记忆服务，L0→L3 分层记忆加 BM25+向量混合召回",
+   "review": "一个用 Rust 编写的自托管记忆服务，为 Claude Code、Codex 等 MCP 客户端跨会话保存对话记忆：原始对话蒸馏为事实、场景和画像，召回时混合 BM25 与向量检索。支持部门/团队/成员隔离，存储可用 SQLite 或 PostgreSQL，LLM 可接任意 OpenAI 兼容端点。适合需要在本地部署智能体记忆的团队。",
+   "highlights": [
+    "提供 L0→L3 分层记忆：对话蒸馏为事实、场景和 persona",
+    "召回结合 BM25 与向量搜索并进行秩融合，中文分词采用 CJK bigram",
+    "支持 SQLite/PostgreSQL 存储后端、部门-团队-成员三级隔离与 MCP 接入"
+   ],
+   "use_cases": [
+    "为多智能体团队部署跨会话长期记忆",
+    "数据需留在内网的自托管记忆服务",
+    "多个成员共享智能体但对话相互隔离的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1. **Storage backend**: SQLite (default, nothing to install) / existing PostgreSQL (enter a URL; the connection is tested from inside the container first) / start PostgreSQL (pgvector) for me with Docker ／ **Outgrowing SQLite?** `./migrate-to-postgres.sh` moves an existing install to PostgreSQL: users, keys, memories and skills come along, and clients need no change. docs/MIGRATE-TO-POSTGRES.md covers when to move, the manual steps and how to go back.",
+     "lines": [
+      43,
+      97
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "1. **Storage backend**: SQLite (default, nothing to install) / existing PostgreSQL (enter a URL; the connection is tested from inside the container first) / start PostgreSQL (pgvector) for me with Docker ／ /v3/conversation/add ──► L0 conversation (SQLite + FTS5)",
+     "lines": [
+      43,
+      113
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite/PostgreSQL 作为自身存储后端，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BUSL-1.1",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted, team-aware long-term memory for AI agents.** AgentMemory gives Claude Code, Codex, Antigravity, Hermes and any MCP client a memory that persists across sessions. It captures each conversation, distils it into facts, scenes and a persona in the background, and recalls what is relevant before every prompt. It all runs on your own servers. ／ 1. **Storage backend**: SQLite (default, nothing to install) / existing PostgreSQL (enter a URL; the connection is tested from inside the container first) / start PostgreSQL (pgvector) for me with Docker ／ /v3/conversation/add ──► L0 conversation (SQLite + FTS5)",
+   "evidence_lines": [
+    15,
+    43,
+    113
+   ]
+  },
+  "fn": "hsuanshao/AgentMemory",
+  "sha": "9babad5d1a56",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

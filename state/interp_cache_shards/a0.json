@@ -9887,5 +9887,163 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e5ba07b735d5": {
+  "identity": {
+   "one_liner": "Linux服务器Web管理面板，以插件方式管理数据库等服务",
+   "review": "mdserver-web 是一款运行在 Linux 上的 Web 面板，通过插件机制安装和管理 OpenResty、PHP、MySQL、MariaDB、PostgreSQL、Redis 等服务，并提供 SSH 终端、网站备份等功能。面向需要在服务器上部署网站和数据库的运维人员，支持脚本安装与在线更新，采用 Apache 许可证。",
+   "highlights": [
+    "通过插件方式管理 MySQL、MariaDB、PostgreSQL、Redis、Memcached 等服务",
+    "提供 SSH 终端工具与网站备份功能",
+    "提供安装、更新、卸载脚本及 Docker 镜像部署方式"
+   ],
+   "use_cases": [
+    "在 Linux 服务器上通过 Web 界面部署和管理网站环境",
+    "以插件形式安装和管理 MySQL/PostgreSQL 等数据库",
+    "通过面板进行服务器日常运维操作"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* MySQL - 一种关系数据库管理系统。 ／ * MySQL[community] - 一种关系数据库管理系统。",
+     "lines": [
+      46,
+      48
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* MariaDB - 是MySQL的一个重要分支。",
+     "lines": [
+      47
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* PostgreSQL - 功能强大的开源数据库。",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "面板以插件形式为 MySQL、PostgreSQL 等数据库提供安装与管理能力，属于服务数据库生态的运维工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 许可证",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 一款简单Linux面板服务 ／ * 插件方式管理 ／ * MySQL - 一种关系数据库管理系统。",
+   "evidence_lines": [
+    3,
+    23,
+    46
+   ]
+  },
+  "fn": "midoks/mdserver-web",
+  "sha": "e5ba07b735d5",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4c279b8da60b": {
+  "identity": {
+   "one_liner": "OceanBase 大赛 PowerContext 赛题仓库，用于上下文工程与 Agent 记忆交接。",
+   "review": "该仓库是第六届 OceanBase 数据库大赛 PowerContext 赛道（上下文工程/Agent 记忆与交接）的参赛私有仓库，README 记录官方环境要求：Python 3.11+、uv 安装 powercontext CLI/server，提供 MCP 端点 /mcp，存储后端可选 SQLite 或嵌入式 SeekDB。它不是面向公众的工具发行仓库，受众为参赛者。",
+   "highlights": [
+    "提供 powercontext CLI/server，包含 MCP 端点（/mcp）",
+    "存储后端支持 SQLite 与嵌入式 SeekDB",
+    "记忆能力分 Basic（无需模型 API）与 Full（需 Generation+Embedding 凭据）"
+   ],
+   "use_cases": [
+    "OceanBase 数据库大赛 PowerContext 赛题开发与提交",
+    "本地搭建 powercontext server 供 Agent 使用"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- 存储后端：SQLite（上手）/ 嵌入式 SeekDB（更强）",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "第六届 OceanBase 数据库大赛 **PowerContext 赛题方向**仓库（上下文工程 / Agent 记忆与交接）。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅记录赛题环境与提交要求，未见项目本身为数据库生态提供工具或组件的说明。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "第六届 OceanBase 数据库大赛 **PowerContext 赛题方向**仓库（上下文工程 / Agent 记忆与交接）。 ／ - 启动：`powercontext server run --env-file .env`（默认 `http://127.0.0.1:8000`，MCP 端点 `/mcp`） ／ - 存储后端：SQLite（上手）/ 嵌入式 SeekDB（更强）",
+   "evidence_lines": [
+    3,
+    13,
+    14
+   ]
+  },
+  "fn": "Jefferry-z/oceanbase-powercontext-2026",
+  "sha": "4c279b8da60b",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9808,5 +9808,156 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ca94ad62215": {
+  "identity": {
+   "one_liner": "开源 Next.js SaaS 脚手架，基于 Prisma + PostgreSQL",
+   "review": "一个 MIT 许可的 Next.js SaaS 应用模板，集成 Better Auth 认证、Stripe 支付、管理面板、事务邮件、i18n 等功能，数据层用 Prisma ORM 运行在 PostgreSQL 上。面向想快速搭建 SaaS 产品的开发者，需 Node 24+ 并自备 PostgreSQL 数据库，通过 npm 安装并执行 prisma migrate 初始化表结构。",
+   "highlights": [
+    "包含认证（OAuth、magic link、双因素）、Stripe 支付、管理面板、邮件、i18n、博客等 SaaS 功能模块",
+    "数据层使用 Prisma 7 连接 PostgreSQL，会话数据存于自建数据库",
+    "提供 demo 模式、CI 流水线（lint/测试/构建）及 Playwright 端到端测试"
+   ],
+   "use_cases": [
+    "快速搭建带认证与订阅支付的 SaaS 产品",
+    "作为 Next.js + Prisma + PostgreSQL 项目起点模板",
+    "自托管部署 SaaS 应用（Vercel 一键部署或自建）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - 🔓 **It is plain Next.js**: no compiler, no config DSL, no proprietary CLI. The App Router, Server Actions and Prisma behave exactly as their own docs say, with plain PostgreSQL underneath: host it anywhere, own your data. ／ - **Database**: Prisma 7 on PostgreSQL. Plain Postgres underneath keeps your data portable, and Neon has a free managed tier if you would rather not run one yourself. ／ **You need:** Node 24 or newer, git, and a PostgreSQL database (Neon has a free tier). ／ Create a PostgreSQL database and copy the connection string it gives you. On Neon that is the pooled one, and it ends with `?sslmode=require`: change that to `?sslmode=verify-full`, the stricter mode, or Node prints an SSL warning at every start.",
+     "lines": [
+      16,
+      37,
+      73,
+      98,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储数据的 SaaS 应用模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " PostgreSQL ／ - **Database**: Prisma 7 on PostgreSQL. Plain Postgres underneath keeps your data portable, and Neon has a free managed tier if you would rather not run one yourself. ／ **You need:** Node 24 or newer, git, and a PostgreSQL database (Neon has a free tier).",
+   "evidence_lines": [
+    16,
+    73,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "openstarterkit/nextjs-saas-starter-kit",
+  "sha": "7ca94ad62215",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "525a9311f868": {
+  "identity": {
+   "one_liner": "Spring Boot 任务管理门户，基于 PostgreSQL 存储的内部任务系统",
+   "review": "一个面向中小企业的内部任务管理门户应用，提供认证、任务 CRUD、分配、评论线程、角色权限控制、客户管理和上报流程，并暴露 REST API。后端采用 Spring Boot 4 + Java 21，数据存于 PostgreSQL（默认指向托管 Neon，也可连本地库），通过环境变量配置数据源，前端为原生 HTML/CSS/JS，README 展示了部署在 Oracle Cloud VM 上的实例。适合需要现成内部任务/工单系统的团队直接运行使用。",
+   "highlights": [
+    "提供角色分级访问控制（CLIENT/ASSOCIATE/COORDINATOR/MANAGER/ADMIN）与任务状态生命周期流转",
+    "使用 PostgreSQL 专用序列 task_no_seq 生成任务编号，数据源经环境变量 TASKPORTAL_DB_URL 等配置",
+    "提供 REST API，含 CSRF 防护、BCrypt 密码存储与服务端会话"
+   ],
+   "use_cases": [
+    "中小企业内部任务分配与审批流转",
+    "客户任务的隔离访问与上报沟通",
+    "基于现有代码二次开发内部管理门户"
+   ],
+   "license_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Database** — PostgreSQL (Neon by default, local Postgres works too) ／ |PostgreSQL|14+ (optional — the default config points at a hosted Neon database)| ／ TASKPORTAL_DB_URL=jdbc:postgresql://localhost:5432/taskportal_db",
+     "lines": [
+      7,
+      22,
+      63
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "**Deployed** to an Oracle Cloud VM — Canonical Ubuntu 24.04, 1 OCPU, 1 GB RAM —",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 PostgreSQL 作为存储数据库的 Spring Boot 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Backend** — Spring Boot 4.0.8, Java 21, Spring Data JPA, Spring Security 7 ／ * **Database** — PostgreSQL (Neon by default, local Postgres works too) ／ **Deployed** to an Oracle Cloud VM — Canonical Ubuntu 24.04, 1 OCPU, 1 GB RAM —",
+   "evidence_lines": [
+    6,
+    7,
+    10
+   ]
+  },
+  "fn": "smitroy4/AdminPlusPlus",
+  "sha": "525a9311f868",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

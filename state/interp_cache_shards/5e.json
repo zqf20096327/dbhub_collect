@@ -11115,5 +11115,141 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0d3166683335": {
+  "identity": {
+   "one_liner": "为 AI Agent 提供可写工作区与共享提交历史的分层文件系统",
+   "review": "LayerFS 是一个 FUSE 文件系统，为每个 Agent 挂载完整可写的工作区，写操作以内容去重的 Commit 形式保存到共享 Store，支持分支、回退、合并与冲突拒绝。数据存于单个 SQLite 文件，无需数据库服务器；当前 Store 仅支持 Disposable 配置，无崩溃/断电持久化，README 明确不建议作为唯一数据副本。适用于多 Agent 并行文件操作场景，运行于 Linux/macOS（经 DSH）与 Windows WSL2。",
+   "highlights": [
+    "每个 Agent 挂载完整可写工作区，写操作以去重 Checkpoint 提交为 Commit",
+    "所有 Branch、Commit 与内容对象存于单个 SQLite 文件，各进程直接打开、无数据库服务器",
+    "同一文件冲突提交默认拒绝，可用 .lww 规则设为最新编辑胜出"
+   ],
+   "use_cases": [
+    "多 Agent 并行工作并共享提交历史",
+    "Agent 工具调用过程的自动检查点与递归分支",
+    "依赖随挂载携带的即时引导环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Store.** One SQLite file holds every Branch, Commit and content object. Each",
+     "lines": [
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明以单个 SQLite 文件作为 Store 存储全部对象，SQLite 为其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Store.** One SQLite file holds every Branch, Commit and content object. Each ／  daemon and SDK process opens it directly; there is no database server. ／  LayerFS is the substrate under your agents. Each one mounts a complete, writable",
+   "evidence_lines": [
+    121,
+    122,
+    7
+   ]
+  },
+  "fn": "Ephemeral-AI-Lab/layerfs",
+  "sha": "0d3166683335",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "afa59a7ae52d": {
+  "identity": {
+   "one_liner": "Oracle 数据库的 Python DB API 2.0 驱动",
+   "review": "python-oracledb 是让 Python 程序直连 Oracle Database 的驱动模块，遵循 Python DB API 2.0 规范，由 Oracle 维护，是 cx_Oracle 的后继者。提供 Thin（无需客户端库）与 Thick（加载 Oracle Client 库）两种模式，支持 SQL/PL-SQL 执行、数据帧处理、快速数据摄取、文档 API、消息队列、通知及 OpenTelemetry 插件，供 Python 开发者接入 Oracle 数据库使用。",
+   "highlights": [
+    "支持 Thin 模式直连（无需 Oracle Client 库）与 Thick 模式（需 Client 19+）",
+    "实现 Python DB API 2.0 规范，支持 SQL/PL-SQL 执行、数据摄取、文档 API、消息队列与通知",
+    "提供可选的 OpenTelemetry 插件用于导出 span 与指标"
+   ],
+   "use_cases": [
+    "Python 应用连接并操作 Oracle Database",
+    "通过 ORM/框架访问 Oracle 数据",
+    "对数据库操作进行 OpenTelemetry 可观测性采集"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "extension module allowing Python programs to connect directly to [Oracle ／ module is maintained by Oracle. ／ Python-oracledb is the successor to the now obsolete cx_Oracle driver.",
+     "lines": [
+      4,
+      8,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定义其为连接 Oracle Database 的 Python 驱动扩展模块，属为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "Oracle"
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The python-oracledb driver is the widely used, open-source [Python][python] ／ extension module allowing Python programs to connect directly to [Oracle ／ module is maintained by Oracle.",
+   "evidence_lines": [
+    3,
+    4,
+    8
+   ]
+  },
+  "fn": "oracle/python-oracledb",
+  "sha": "afa59a7ae52d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

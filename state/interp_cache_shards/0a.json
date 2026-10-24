@@ -7969,5 +7969,202 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a36c3d5b5de": {
+  "identity": {
+   "one_liner": "开源自托管笔记应用，以类型化对象组织笔记、任务与日记，本地优先",
+   "review": "Vasta 是一个开源、可自托管的个人知识管理应用，将笔记、任务、每日笔记等组织为类型化对象，支持离线使用与多设备同步，面向个人及小团队用户。数据以 SQLite 存储，桌面版无需服务器即可运行，也可通过 Docker 部署服务器；并通过 MCP 端点供外部代理读写笔记。目前处于 alpha 阶段。",
+   "highlights": [
+    "支持自定义类型及属性，可切换列表、表格、看板、画廊等视图",
+    "每台设备保留 SQLite 数据副本，离线编辑可通过服务器同步合并",
+    "提供 MCP 端点与 vasta 命令行，供 Claude Code 等代理搜索、查询和创建对象"
+   ],
+   "use_cases": [
+    "个人笔记、任务管理与每日记录",
+    "自托管的多设备笔记同步与共享空间",
+    "通过 MCP 让 AI 代理读写个人笔记"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Offline first**: each device keeps a copy in SQLite. Edits made offline on two devices merge. ／ and one SQLite file, and it focuses on daily notes, typed objects and quick capture: Telegram, ／ core/ data model, SQLite schema, sync, media store",
+     "lines": [
+      116,
+      142,
+      205
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "self-hosted servers run on Postgres and Redis, next to their own services. Vasta's server is one container",
+     "lines": [
+      141
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储笔记数据的知识管理应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Vasta is an open-source, self-hosted alternative to Capacities and Notion. It keeps everything as ／ - **Offline first**: each device keeps a copy in SQLite. Edits made offline on two devices merge. ／  self-hosted servers run on Postgres and Redis, next to their own services. Vasta's server is one container",
+   "evidence_lines": [
+    23,
+    116,
+    141
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ariedotme/vasta",
+  "sha": "7a36c3d5b5de",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5374d886de47": {
+  "identity": {
+   "one_liner": "自托管定时任务面板，Rust+QuickJS 插件运行时，SQLite 持久化",
+   "review": "一个跑在自己设备上的定时任务控制面板：浏览器 Web 界面管理脚本与插件任务，支持 Shell/Python/JS 脚本和 QuickJS/Node/Bun 插件运行时，毫秒级 cron 触发，任务、账号、插件状态存于单个 SQLite 文件，编译为静态 musl 二进制，面向树莓派、旧手机、ARM 盒子等低配设备用户。",
+   "highlights": [
+    "支持 5/6 段 cron 定时脚本任务（Shell/Python/JavaScript）",
+    "插件系统基于内置 QuickJS，可切换 Node/Bun 运行时，通过 host-api 提供日志、SQLite、HTTP、WebSocket、SMTP 能力",
+    "单静态 musl 二进制部署，数据集中在本地目录，支持自更新与 10 个推送渠道"
+   ],
+   "use_cases": [
+    "在树莓派、旧手机或低配 ARM 设备上长期运行定时签到、备份、清理任务",
+    "用 JavaScript 插件封装带配置页的重复操作",
+    "无云服务的本机任务调度与日志管理"
+   ],
+   "classification": {
+    "cat": "应用",
+    "db_verdicts": [
+     {
+      "db": "SQLite",
+      "rel": "support",
+      "lines": [
+       3,
+       233,
+       436
+      ]
+     }
+    ],
+    "eco": "app",
+    "eco_why": "README 说明面板自身的数据（任务、账号、插件状态）存储在 data/panel.db 即 SQLite 文件中",
+    "ai": {
+     "flag": false,
+     "kind": []
+    },
+    "persona": "use",
+    "official": {
+     "flag": false,
+     "of": null
+    }
+   },
+   "signals": {
+    "status": "active",
+    "license_note": "仓库未附带开源许可证文件，README 声明使用/分发/修改前需联系作者",
+    "install": [
+     "binary",
+     "source"
+    ]
+   },
+   "audit": {
+    "confidence": "high",
+    "evidence_lines": [
+     3,
+     371
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "插件面板是一个跑在自己设备上的定时任务工具。装好以后，用浏览器打开一个网页，就能添加任务、设置执行时间、查看运行结果。它不需要云服务，也不需要数据库服务器，一个程序加一个 SQLite 文件就能工作。 ／ `@runtime` 可以写 `node` 或 `bun`。JS 脚本还能 `import 'host-api'`，使用日志、SQLite、HTTP、WebSocket 等能力。 ／ - host-api 规范：日志、SQLite、HTTP、WebSocket、SMTP、任务注册",
+     "lines": [
+      3,
+      233,
+      436
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明面板自身的数据（任务、账号、插件状态）存储在 data/panel.db 即 SQLite 文件中",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库未附带开源许可证文件，README 声明使用/分发/修改前需联系作者",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "插件面板是一个跑在自己设备上的定时任务工具。装好以后，用浏览器打开一个网页，就能添加任务、设置执行时间、查看运行结果。它不需要云服务，也不需要数据库服务器，一个程序加一个 SQLite 文件就能工作。 ／ data/panel.db      任务、账号、插件状态",
+   "evidence_lines": [
+    3,
+    371
+   ]
+  },
+  "fn": "asunajs/panel",
+  "sha": "5374d886de47",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10407,5 +10407,85 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e54d0d44300a": {
+  "identity": {
+   "one_liner": "终端原生的个人生活管理 CLI，支持 SQLite/PostgreSQL 存储",
+   "review": "lifeos-cli 是一个基于 Python 的终端 LifeOS 工具，用于管理任务、笔记、习惯、日程、时间记录、关系与财务等量化自我数据，提供类型化命令行接口和可选的本地 FastAPI Web API。面向个人量化自我用户及可在终端执行命令的 AI 代理。支持 SQLite 与 PostgreSQL 双后端，Web API 默认无鉴权且仅绑定本机地址。",
+   "highlights": [
+    "提供覆盖任务、习惯、日程、时间记录、笔记、关系、财务、健康数据的 CLI 命令体系",
+    "支持 SQLite 和 PostgreSQL 后端，含 Alembic 迁移和 JSON/JSONL 导入导出",
+    "内置本地 FastAPI Web API，支持 AI 代理以稳定命令语法调用"
+   ],
+   "use_cases": [
+    "个人量化自我数据的统一记录与复盘",
+    "通过 AI 代理自动化执行个人管理工作流",
+    "本地或托管部署的多端浏览器访问（需搭配 lifeos-web）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Install PostgreSQL support only when you need it: ／ uv tool install --upgrade \"lifeos-cli[postgres]\" ／ `lifeos-cli` supports SQLite and PostgreSQL. ／ - PostgreSQL remains the schema-capable backend for managed deployments.",
+     "lines": [
+      89,
+      92,
+      103,
+      106
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`lifeos-cli` supports SQLite and PostgreSQL. ／ - SQLite is the low-friction option for local, single-user setups.",
+     "lines": [
+      103,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite/PostgreSQL 存储个人生活数据的终端应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The product surface is already broad and deep: a typed Python CLI as the primary interface, SQLite and PostgreSQL backends, Alembic migrations, a local FastAPI service, and a first-party React Web UI (in the separate `lifeos-web` repository) for human browser workflows over the same configured LifeOS database. The CLI is designed to be both human-usable and agent-friendly, with stable command grammar, help-first documentation, identifier-driven flows, and predictable text output. ／ `lifeos-cli` supports SQLite and PostgreSQL.",
+   "evidence_lines": [
+    16,
+    103
+   ]
+  },
+  "fn": "lifeos-plus/lifeos-cli",
+  "sha": "e54d0d44300a",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

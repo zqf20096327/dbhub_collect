@@ -11458,5 +11458,76 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f513ba3d99cd": {
+  "identity": {
+   "one_liner": "基于 Groq 的 ReAct 智能体，通过 MCP 提供日历/笔记/图像管理",
+   "review": "一个个人助理项目：用 Groq 大模型驱动 ReAct 智能体，管理日历、笔记和扫描图像，通过 Model Context Protocol 暴露工具；数据存于 Postgres/pgvector，使用 pgvector+tsvector+RRF 做混合检索，另含 CNN/OCR 视觉 worker 和 Next.js 界面，Docker Compose 一键部署。适合个人使用者或想参考 MCP+RAG 架构的开发者。作者注明首次构建可能需自行修补类型错误。",
+   "highlights": [
+    "提供 MCP 工具集：日程增改、冲突检测、混合检索笔记、文档图像入库、长期记忆等 12 个工具",
+    "支持 pgvector + tsvector + RRF 的混合检索（RAG）与 CNN/OCR 视觉处理",
+    "提供 GitHub Pages 静态版、Docker 全栈版和 CLI 三种运行方式"
+   ],
+   "use_cases": [
+    "通过 MCP 客户端（如 Claude Desktop）管理个人日历与笔记",
+    "扫描图像的文字识别与可视化文档入库检索",
+    "作为 MCP + RAG + ReAct 架构的参考实现阅读部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Full stack (Docker):** TypeScript MCP server + Postgres/pgvector + Python CNN worker, below. ／ - The schema is applied automatically on first Postgres start from `scripts/init_db.sql`.",
+     "lines": [
+      9,
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 Postgres/pgvector 存储自身数据（schema 自动初始化），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Groq-powered ReAct agent over your calendar, notes and scanned images, exposed through the Model Context Protocol. Hybrid RAG (pgvector + tsvector + RRF), CNN/OCR vision worker, Next.js UI with a 3D context graph, all in Docker Compose. ／ - **Full stack (Docker):** TypeScript MCP server + Postgres/pgvector + Python CNN worker, below. ／ - The schema is applied automatically on first Postgres start from `scripts/init_db.sql`.",
+   "evidence_lines": [
+    5,
+    9,
+    17
+   ]
+  },
+  "fn": "Nikhil-creat/personal-mcp-assistant",
+  "sha": "f513ba3d99cd",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

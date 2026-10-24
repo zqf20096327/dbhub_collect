@@ -9581,5 +9581,90 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f2d3de57cb8b": {
+  "identity": {
+   "one_liner": "redb 生态的传输无关 OAuth 2.1/OIDC 认证服务器",
+   "review": "这是运行在 redb 之上的 OAuth 2.1/OpenID Connect 认证授权服务器，基于 OpenIddict 构建，端点以 direct-vm 路由形式提供，可通过 HTTP、gRPC、RabbitMQ、SignalR 等多种传输调用；支持 MFA、WebAuthn、联邦认证、SCIM、DPoP 等，存储引擎可选用 PostgreSQL、MSSQL 或 SQLite（One provider per build）。适合需要在 .NET 应用中内嵌认证能力的开发与运维团队。",
+   "highlights": [
+    "提供 OAuth 2.1 / OIDC 全套端点（token、authorize、userinfo、introspect、PAR、JAR、DCR、Device Code 等）并声明多项 RFC 合规",
+    "支持 MFA：TOTP、SMS/Email OTP、WebAuthn (FIDO2) 与恢复码，并提供 SCIM 2.0 供应",
+    "存储引擎经 provider 包选用 PostgreSQL、MSSQL 或 SQLite，每构建对应一个 provider"
+   ],
+   "use_cases": [
+    "为 .NET/多传输架构的应用提供 OIDC/OAuth 认证授权服务",
+    "需要 MFA/WebAuthn、SCIM 用户供应与企业身份联邦的场景",
+    "以 Docker 镜像或 .tpkg 模块形式在集群中部署认证服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "dotnet add package redb.Postgres.Pro # or redb.MSSql.Pro / redb.SQLite.Pro",
+     "lines": [
+      51
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "dotnet add package redb.Postgres.Pro # or redb.MSSql.Pro / redb.SQLite.Pro ／ The image runs on SQLite with a bundled self-signed certificate for `localhost`, so call it with `curl -k`. For a",
+     "lines": [
+      51,
+      101
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "dotnet add package redb.Postgres.Pro # or redb.MSSql.Pro / redb.SQLite.Pro",
+     "lines": [
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该服务器以 PostgreSQL、MSSQL、SQLite 作为自身存储引擎（redb 之上的 provider 包），属使用数据库存数据的服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dotnet add package redb.Postgres.Pro      # or redb.MSSql.Pro / redb.SQLite.Pro ／ The image runs on SQLite with a bundled self-signed certificate for `localhost`, so call it with `curl -k`. For a",
+   "evidence_lines": [
+    51,
+    101
+   ]
+  },
+  "fn": "redbase-app/redb-identity",
+  "sha": "f2d3de57cb8b",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

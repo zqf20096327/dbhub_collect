@@ -11569,5 +11569,60 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f589530f3e41": {
+  "identity": {
+   "one_liner": "把个人 CLI 登录态转为本机 OpenAI 兼容 API 的代理网关",
+   "review": "CLI2API 是一个用 Go 编写的自托管网关，把用户在 Qoder、WorkBuddy、Trae 等工具中的登录态封装为 OpenAI 兼容 API（Chat Completions、Responses、Anthropic Messages），提供多账号调度、会话粘性和 Web 控制台管理，账号数据用 SQLite 持久化。面向想在自建客户端中复用自己账号额度的个人用户；README 明确多处真账号验收未完成，且默认仅绑定本机端口。",
+   "highlights": [
+    "提供 Chat Completions、Responses、Anthropic Messages 与模型列表接口，支持流式回复和函数工具调用",
+    "实现多账号自动选号、会话粘性、并发限制、冷却与故障切换调度",
+    "提供 Web 控制台管理账号、模型、客户端密钥、代理设置与请求日志，通过 Docker 部署运行"
+   ],
+   "use_cases": [
+    "在支持 OpenAI 兼容 API 的本地客户端中接入自己的 Qoder/WorkBuddy 等账号",
+    "多账号额度管理与自动选号、故障切换调度",
+    "本机私有部署并集中记录请求日志"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 说明账号数据通过 Docker 持久化、依赖 SQLite 存储，SQLite 只是其存储组件，该项目本身是面向 AI CLI 登录态的 API 应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT（L92），另提示使用上游账号需遵守对应平台服务条款",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Docker 运维**：持久化账号数据；可选安装宿主机更新器，在控制台下载更新、确认升级和回滚。 ／ 用 Docker 部署，在 Web 控制台管理账号，再通过兼容 API 接入客户端。 ／ - **兼容接口**：Chat Completions、Responses、Anthropic Messages 和模型列表，支持流式回复与函数工具调用。",
+   "evidence_lines": [
+    21,
+    7,
+    18
+   ]
+  },
+  "fn": "caigee-cmd/cli2api",
+  "sha": "f589530f3e41",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

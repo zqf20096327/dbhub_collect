@@ -9939,5 +9939,180 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5aa624f198a2": {
+  "identity": {
+   "one_liner": "把 Gemini 网页端反代成 OpenAI 兼容 API 的自托管代理",
+   "review": "一个用 Go 编写的单二进制代理服务，将 gemini.google.com 网页协议转换为 /v1/chat/completions 等 OpenAI 兼容接口，并提供 /mcp 端点暴露联网搜索、生图、生视频等工具。面向希望在本地把 Gemini 网页能力接入 OpenAI 兼容客户端或 MCP 客户端的用户。内置 Cookie 池、代理池、中文管理面板，请求明细与统计默认持久化到 SQLite，可通过 SQL_DSN 切换为 MySQL 或 PostgreSQL；部分模型和视频生成需要付费账号的 cookie。",
+   "highlights": [
+    "提供 OpenAI 兼容的 /v1/chat/completions、/v1/models、/v1/responses、/v1/videos 接口及 HTTP 传输的 MCP server",
+    "支持 SQLite 持久化，可通过 SQL_DSN 环境变量切换到 MySQL 或 PostgreSQL，三种库共用同一套 schema",
+    "内置多账号 Cookie 池与代理池，含自动续期保活、按最久未用轮转、失败熔断和分 IP 限流"
+   ],
+   "use_cases": [
+    "将 Gemini 网页端能力接入 Cherry Studio、Cursor、dify 等 OpenAI 兼容客户端",
+    "在 Claude Desktop / Claude Code 等 MCP 客户端中调用联网搜索、生图、生视频工具",
+    "自托管部署并集中管理多账号池、代理池与请求统计"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可）",
+     "lines": [
+      62
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可）",
+     "lines": [
+      62
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可）",
+     "lines": [
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 SQLite/MySQL/PostgreSQL 仅用于持久化请求明细与统计元数据（L62、L64），数据库是存储组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- SQLite 持久化：30 天请求明细 + 永久聚合统计（可选 MySQL / PostgreSQL，设 `SQL_DSN` 即可） ／ - **prompt 和回复内容永不入库**，只存元数据（长度、耗时、模型、状态） ／ 把 Google Gemini 网页端反代成 OpenAI 兼容 API。**单二进制**，**零账号**（匿名可跑），**Chrome 146 真指纹**，**SQLite 持久化**，自带**中文管理面板**。",
+   "evidence_lines": [
+    62,
+    64,
+    16
+   ]
+  },
+  "fn": "zexadev/gemini-web2api-go",
+  "sha": "5aa624f198a2",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4b5e403c4dd6": {
+  "identity": {
+   "one_liner": "自托管职位爬取+LLM评估器，用PostgreSQL存储",
+   "review": "Vacancely 是一个自托管的求职工具：爬取招聘板职位、用 LLM 按用户简历打分并保存到本地数据库，提供多用户 Flask 仪表盘查看结果和技能差距。面向求职者个人使用，依赖 Postgres、Redis、Celery 运行，需自备 OpenAI 兼容 API 密钥，MIT 许可。",
+   "highlights": [
+    "支持 JSON API、HTML 页面与 Playwright 渲染页面的多策略爬取",
+    "通过 OpenAI 兼容 API（默认 DeepSeek）对职位与简历做 LLM 评分",
+    "使用 PostgreSQL 存储、Celery+Redis 异步任务，提供多用户仪表盘"
+   ],
+   "use_cases": [
+    "个人求职者自动化筛选职位与简历匹配度",
+    "分析市场技能需求与自身简历差距",
+    "自托管多用户职位数据收集与标注"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`POSTGRES_*`|DB credentials used by `docker-compose.yml`| ／ - Postgres and Redis are **not** published on the host by default; use",
+     "lines": [
+      56,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 存储职位数据（docker-compose 提供 DB credentials、storage/ SQLAlchemy 模型），Vacancely 本身是使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`POSTGRES_*`|DB credentials used by `docker-compose.yml`| ／ storage/   SQLAlchemy models, repositories, schema bootstrap ／ - Postgres and Redis are **not** published on the host by default; use",
+   "evidence_lines": [
+    56,
+    97,
+    130
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Blaums/vacancely",
+  "sha": "4b5e403c4dd6",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

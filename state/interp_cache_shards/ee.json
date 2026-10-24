@@ -9479,5 +9479,169 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "552fd66164d2": {
+  "identity": {
+   "one_liner": "自托管 CRM 应用，Go+React，支持 SQLite/MySQL 存储",
+   "review": "GopherCRM 是一个面向小型销售与支持团队的自托管 CRM，提供线索、商机、工单、任务管理与内嵌获客表单，另有跟踪 LLM 品牌提及的 AEO 报表功能。后端为 Go、前端为 React，默认使用 MySQL（含 migrations/ SQL），也可切换 SQLite 单文件运行，并提供两种 Docker Compose 部署方式。",
+   "highlights": [
+    "提供线索、商机五阶段流水线、工单、任务与客户/公司管理，含四类角色与 RBAC",
+    "内置可嵌入网站的获客表单，含垃圾提交防护与可选双选确认",
+    "通过 DB_DRIVER 支持 MySQL（生产方言、migrations SQL）与 SQLite（单文件、启动自动迁移）两种存储"
+   ],
+   "use_cases": [
+    "小团队自托管管理销售线索、商机与支持工单",
+    "在网站上嵌入表单采集线索",
+    "生成品牌在 LLM 答案引擎中的提及报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both. ／ ## Running with Docker (MySQL)",
+     "lines": [
+      4,
+      20,
+      71
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go backend, React UI, SQLite or MySQL. ／ - **Easy to run.** A single Go API binary and a static React UI. SQLite needs no database server; ／ ## Quick start (SQLite, no database server)",
+     "lines": [
+      4,
+      19,
+      26
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both.",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统以 MySQL 或 SQLite 存储业务数据，CRM 是使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A self-hosted CRM for small teams: sales and support in one app, with lead-capture forms built in. ／ Go backend, React UI, SQLite or MySQL. ／  MySQL 8 and MariaDB 10.11 are tested in CI. Docker Compose files ship for both.",
+   "evidence_lines": [
+    3,
+    4,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "florinel-chis/GopherCRM",
+  "sha": "552fd66164d2",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c77a8fffe983": {
+  "identity": {
+   "one_liner": "采集X公开帖子存入SQLite并支持关键词/正则搜索的Python CLI",
+   "review": "该工具通过twifork库收集X（Twitter）公开用户的帖子，存入本地SQLite数据库，支持日语关键词、正则表达式搜索及CSV导出。面向需要本地检索X帖文的个人用户，提供断点续采、ID去重和已有JSON/CSV导入；仅读取帖子文本，不采集图片视频，且为非官方Web客户端方式，可用性受X限制政策影响。",
+   "highlights": [
+    "通过twifork以登录会话采集公开用户帖子，无需X官方API密钥",
+    "搜索支持多关键词AND/OR组合、正则表达式及大小写忽略，结果可导出CSV",
+    "支持采集中断后续传、按投稿ID去重，以及JSON/JSONL/CSV/X存档tweets.js导入"
+   ],
+   "use_cases": [
+    "本地检索特定用户的历史帖子内容",
+    "无需官方API付费读取的帖子收集与归档",
+    "将已有JSON/CSV帖子数据导入后进行关键词/正则检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**twiforkで公開ユーザーの投稿を収集し、SQLiteで日本語・キーワード・正規表現検索するPython CLI。**",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README说明该工具将采集的帖子数据存入SQLite数据库，SQLite是其存储组件而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**twiforkで公開ユーザーの投稿を収集し、SQLiteで日本語・キーワード・正規表現検索するPython CLI。** ／ - 日本語の単語分割に依存しない全件走査です。SQLite FTSのトークン検索ではありません。大量データでは時間がかかります。",
+   "evidence_lines": [
+    3,
+    63
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SHIMA-R7/x-post-search",
+  "sha": "c77a8fffe983",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

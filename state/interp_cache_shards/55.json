@@ -11525,5 +11525,88 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6bb397ff6ce3": {
+  "identity": {
+   "one_liner": "自托管图床/图库应用，用文件夹/标签/图库管理照片视频并提供REST API",
+   "review": "Photoly 是一个自托管的照片与视频管理应用，支持上传、分类、分享链接、EXIF 记录、OCR 文本提取及可选的 AI 语义搜索与智能标签。后端为 Python/Flask，前端 Vue 3，以 Docker Compose 部署，数据存于 PostgreSQL 17 + pgvector 与 Redis。适合想自建媒体库的个人或小团队；注意这是全新部署版本，不提供 MySQL 旧数据导入。",
+   "highlights": [
+    "支持照片/视频上传、文件夹与标签/图库分类、分享链接与二维码分享",
+    "自动记录 EXIF（GPS、相机、镜头等）并在地图上展示拍摄位置",
+    "提供 REST API 与 OpenAPI 文档，可选 AI 语义搜索与 Tesseract OCR"
+   ],
+   "use_cases": [
+    "自托管个人或团队图片/视频库",
+    "基于 EXIF 与地点整理和检索照片",
+    "通过 REST API 集成到其他应用"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "text2sql"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DB: PostgreSQL 17 + pgvector 0.8.7 + Redis ／ PostgreSQL bootstrap installs pgvector and creates separate schema-owner and application roles. The one-shot `migrate` service runs Alembic and seeds settings/admin before Gunicorn starts. The Web process only checks the schema and cannot execute DDL. Repeated ／ The administrator dashboard displays PostgreSQL, pgvector and the schema revision using `/admin/pingDatabase` and `/admin/databaseInfo`.",
+     "lines": [
+      26,
+      43,
+      45
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "PostgreSQL bootstrap installs pgvector and creates separate schema-owner and application roles. The one-shot `migrate` service runs Alembic and seeds settings/admin before Gunicorn starts. The Web process only checks the schema and cannot execute DDL. Repeated",
+     "lines": [
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其数据存储于 PostgreSQL 17 + pgvector 与 Redis，属于使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DB: PostgreSQL 17 + pgvector 0.8.7 + Redis ／ PostgreSQL bootstrap installs pgvector and creates separate schema-owner and application roles. The one-shot `migrate` service runs Alembic and seeds settings/admin before Gunicorn starts. The Web process only checks the schema and cannot execute DDL. Repeated startup preserves records, passwords and settings. PostgreSQL uses `postgres_data`; media remains in `./upload_data`. This is a fresh deployment, with no MySQL data import tool.",
+   "evidence_lines": [
+    26,
+    43
+   ]
+  },
+  "fn": "WiscWebGroup/photoly",
+  "sha": "6bb397ff6ce3",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

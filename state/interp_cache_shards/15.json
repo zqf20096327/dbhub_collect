@@ -11526,5 +11526,81 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "728ad73ae393": {
+  "identity": {
+   "one_liner": "面向 CLI Agent 的上下文生命周期管理引擎",
+   "review": "ContextEngine 为 CLI Agent 提供上下文全生命周期管理：在 Agent 循环的六个阶段拦截读写，按七类上下文类型以不同写入策略存储，采用 L0/L1/L2 三级检索、Outbox 异步索引和 ContextFS 文件系统抽象。开发模式用 InMemory + PostgreSQL，生产用 pgvector 并通过 RLS 实现多租户隔离，也提供本地 OpenGauss 模式。面向构建 Agent 系统的开发者。",
+   "highlights": [
+    "提供七类上下文类型与四种写入策略（Merge/Aggregate/Append/Cumulative）",
+    "实现 L0/L1/L2 三级检索与 Outbox 模式异步索引",
+    "通过 ContextFS 将上下文操作映射为 ctx:// 文件操作，并在文件系统层强制租户隔离"
+   ],
+   "use_cases": [
+    "为 CLI Agent 管理令牌预算与上下文持久化",
+    "跨会话保留经验与用户画像",
+    "多 Agent 场景下的多租户上下文共享与隔离"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Dev mode**: InMemory vectors + PostgreSQL — install `postgresql` and `pgvector` extension. ／ **Production**: pgvector + PostgreSQL RLS — horizontally scalable with row-level tenant isolation.",
+     "lines": [
+      159,
+      160
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "git clone https://gitcode.com/opengauss/oGMemory.git ／ Option A: Local OpenGauss mode (default)",
+     "lines": [
+      252,
+      257
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为为 Agent 系统提供上下文生命周期管理的基础设施组件，PostgreSQL/openGauss 仅作为其向量与持久化存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ContextEngine provides the missing infrastructure: a full-stack context lifecycle management system that intercepts the Agent loop at six defined stages, treating the context window as a **managed resource** — not an unbounded buffer.",
+   "evidence_lines": [
+    23
+   ]
+  },
+  "fn": "opengauss-mirror/oGMemory",
+  "sha": "728ad73ae393",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

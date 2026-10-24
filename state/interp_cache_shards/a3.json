@@ -10098,5 +10098,161 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d1dce0e49d1b": {
+  "identity": {
+   "one_liner": "本地优先的科研文献 RAG 工具包与 FastAPI 服务，SQLite 持久化",
+   "review": "这是一个本地优先的 Python 工具包和 FastAPI 服务，用于构建可审查的文献 RAG 工作流：摄取论文语料、混合/图检索、保存运行记录并冻结证据，支持人工筛选、批注、复核与 BibTeX 导出，默认使用假模型适配器可离线运行。面向需要可追溯、可复现文献问答流程的研究人员；数据存储在 SQLite。",
+   "highlights": [
+    "提供 FastAPI 服务与脚本-free 的浏览器界面，用于浏览论文、段落和已保存的运行",
+    "保存的运行冻结证据与来源出处（SHA-256、偏移量），可导出 JSON/Markdown/BibTeX/静态 HTML",
+    "支持人工筛选决策、批注与评审历史，并保持可审计的追加记录"
+   ],
+   "use_cases": [
+    "离线对比或假设类文献问题的检索与证据审查",
+    "论文筛选（screening）与人工判读结果的可审计管理",
+    "检索质量回归测试与证据策略比较"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "literature workflows, with SQLite persistence and optional model-provider adapters.",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该服务使用 SQLite 存储文档、图数据和运行事件，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**local-first Python toolkit and FastAPI service** for building inspectable ／ literature workflows, with SQLite persistence and optional model-provider adapters. ／ The default setup works without model credentials. Its fake adapter demonstrates",
+   "evidence_lines": [
+    27,
+    28,
+    30
+   ]
+  },
+  "fn": "Francis1998/scholar-rag-agent",
+  "sha": "d1dce0e49d1b",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9e5a55d46e54": {
+  "identity": {
+   "one_liner": "Rust+egui 编写的 PostgreSQL/MySQL/SQLite 桌面数据库 GUI 客户端",
+   "review": "Tabletist 是一个用 Rust 和 egui 编写的跨平台桌面数据库客户端，供需要在本地连接管理 PostgreSQL、MySQL、SQLite 数据库的开发者或 DBA 使用。它提供连接管理（含 TLS、SSH 隧道、系统钥匙串存密码）、只读会话控制、数据网格编辑（事务提交与冲突检测）、SQL 编辑器（只读回滚、格式化、补全）等能力。安装方式为下载各平台二进制或从源码构建。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 直连，TLS 加密与 SSH 隧道，密码存于系统钥匙串",
+    "提供数据网格编辑，保存时以单事务写入并检测行冲突，生产连接默认只读",
+    "包含 SQL 编辑器，支持逐语句执行、超时与取消、只读事务回滚、查询格式化与自动补全"
+   ],
+   "use_cases": [
+    "开发/运维人员在桌面端浏览与编辑多环境数据库数据",
+    "在只读模式下安全查询生产库并审查 SQL",
+    "通过 SSH 隧道管理远程数据库连接"
+   ],
+   "cat_note": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ A fast, native database client for **PostgreSQL**, **MySQL** and",
+     "lines": [
+      11,
+      13
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Databases: PostgreSQL, MySQL, SQLite ／ **SQLite**. Written in Rust with egui; runs on",
+     "lines": [
+      11,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是连接 PostgreSQL、MySQL、SQLite 的数据库客户端工具，为数据库操作服务而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, native database client for **PostgreSQL**, **MySQL** and ／ - Saved connections grouped in a picker, each tagged with its environment ／ - A SQL editor per connection (Cmd/Ctrl+T): run the statement at the cursor",
+   "evidence_lines": [
+    13,
+    26,
+    61
+   ]
+  },
+  "fn": "igor-alexandrov/tabletist",
+  "sha": "9e5a55d46e54",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
