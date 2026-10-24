@@ -10065,5 +10065,81 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a97c39bef3da": {
+  "identity": {
+   "one_liner": "Java Spring Boot 微服务电商平台，用 Saga 编排分布式事务",
+   "review": "一个基于 Java 21 与 Spring Boot 的电商微服务示例平台，包含订单、库存、支付、认证等服务，通过 Kafka 事件驱动 Saga 模式与事务性 Outbox 处理分布式事务，各服务独立持有 PostgreSQL 数据库，配 Angular 前端。适合学习微服务架构模式与本地部署实践的开发者；运行依赖 Docker Compose、Kafka、Redis 等基础设施。",
+   "highlights": [
+    "各有状态服务独立拥有 PostgreSQL 数据库，通过 Kafka 实现 Saga 编排与事务性 Outbox",
+    "网关层集中处理 JWT 认证、RBAC、限流与熔断",
+    "提供 Docker Compose 一键启动脚本，自动初始化数据库与演示数据"
+   ],
+   "use_cases": [
+    "学习 Saga、Outbox、六边形架构等微服务模式的参考实现",
+    "本地或 homelab 环境部署电商微服务演示系统",
+    "集成测试实践中使用 Testcontainers 验证 PostgreSQL + Kafka 场景"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Each stateful service owns its PostgreSQL database (authdb, orderdb, inventorydb, paymentdb, auditdb). Redis serves the ／ |PostgreSQL|17|Database per service| ／ |Testcontainers|1.21.4|Integration tests — real PostgreSQL + Kafka|",
+     "lines": [
+      22,
+      79,
+      87
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- Java 21 (via SDKMAN: sdk install java 21.0.9-oracle)",
+     "lines": [
+      168
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "各服务使用 PostgreSQL 存储业务数据（authdb、orderdb 等），README 未提供为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Each stateful service owns its PostgreSQL database (authdb, orderdb, inventorydb, paymentdb, auditdb). Redis serves the ／ |PostgreSQL|17|Database per service|",
+   "evidence_lines": [
+    22,
+    79
+   ]
+  },
+  "fn": "daniellaera/spring-microservices-saga",
+  "sha": "a97c39bef3da",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

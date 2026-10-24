@@ -11235,5 +11235,73 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c5dd06c1c3c5": {
+  "identity": {
+   "one_liner": "基于 Deno 的开源 SaaS 起始模板，内置认证、多租户与计费",
+   "review": "这是一个 SaaS 起始模板仓库，用 Deno 2 构建，通过 GitHub 模板克隆后以 deno task init/dev 启动 Docker Compose 栈。内置 TOTP 二次认证、组角色多租户、按成员 Stripe 计费、CQRS outbox、离线 SPA（IndexedDB）与监控组件（VictoriaMetrics/Grafana），数据以 Postgres 为权威存储。适合要在自有服务器上启动多用户 Web 产品的开发者，不支持 serverless 部署。",
+   "highlights": [
+    "提供注册登录、TOTP 二次认证、组角色与所有权转移等账户基础能力",
+    "CQRS 总线加 outbox 事件表，由后台 worker 消费",
+    "SPA 使用 IndexedDB 缓存，支持离线写入并在重连后以冲突方式处理"
+   ],
+   "use_cases": [
+    "启动多用户 SaaS 产品的 MVP",
+    "需要多租户与计费脚手架的团队",
+    "单节点自有服务器部署场景"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Deno, Postgres, Docker Compose. Work in progress.** ／ Postgres, Valkey, VictoriaMetrics, VictoriaLogs and Grafana. ／ Postgres, Valkey, the API, the worker, the SPA and the monitoring. Then open http://app.localhost.",
+     "lines": [
+      5,
+      56,
+      77
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 Postgres 为权威数据存储，项目是使用数据库的 SaaS 应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Deno, Postgres, Docker Compose. Work in progress.** ／ Architecture diagram. Clients: apps/spa, a Preact and Vite PWA with sign-up, sign-in, TOTP and profile, talks to apps/api over REST and WebSocket; an IndexedDB offline store keeps the last notes and groups and queues writes made offline. apps/mpa is the public website on Fresh, server-rendered, calling the API only for the newsletter. Servers: apps/api on Hono (auth, groups, CQRS dispatch, web push) and apps/worker, which drains outbox_events. Data: Postgres is authoritative and Valkey is the API cache; Docker Compose also runs Traefik, VictoriaMetrics, VictoriaLogs and Grafana. Shared code: libs/domain, libs/server, libs/ui and the @spy4x packages on JSR.",
+   "evidence_lines": [
+    5,
+    112
+   ]
+  },
+  "fn": "spy4x/seed",
+  "sha": "c5dd06c1c3c5",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9831,5 +9831,83 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "01871adfc8f5": {
+  "identity": {
+   "one_liner": "本地优先的 Markdown 仓库自动管理守护进程，用本地 LLM 与向量检索",
+   "review": "Grimore 是一个运行在本机的文档仓库（Markdown、PDF、EPUB、DOCX 等）自动化管理工具：通过本地 LLM 自动打标签、摘要、归类，并构建 BM25+向量混合检索，支持问答引用、MCP 接口、HTTP API 和 Obsidian 插件。面向需要本地知识库管理的个人用户，依赖 Ollama 与 Python 3.11+，使用 SQLite (WAL+FTS5) 做存储，默认拒绝非回环地址的 LLM 调用。",
+   "highlights": [
+    "支持 Markdown、PDF、EPUB、DOCX、ODT、RTF、HTML、TXT 格式的扫描、自动打标与摘要",
+    "提供混合检索（BM25 与余弦相似度经 RRF 融合）及带引用的问答",
+    "提供 MCP 只读接口、HTTP API + 浏览器 UI、Obsidian 插件和链接图导出"
+   ],
+   "use_cases": [
+    "个人 Markdown/PDF 知识库的自动分类与语义检索",
+    "基于自有笔记的本地问答（RAG）",
+    "通过 MCP 或 HTTP API 向其他工具提供仓库检索能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Type a question, the Oracle streams back an answer with citations into your own notes. ／ cited answer from the Oracle ／ searched at all — so the Oracle can only cite from what survives them. The same",
+     "lines": [
+      26,
+      29,
+      81
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Memory** — SQLite in WAL mode with FTS5 alongside per-chunk vectors keyed by `sha256(model ‖ chunk)`, so swapping embedders invalidates cleanly. ／ Python 3.11+ · Ollama · SQLite (WAL + FTS5) · Typer + Rich · prompt-toolkit · pypdf · beautifulsoup4 · striprtf · watchdog · structlog · GitPython",
+     "lines": [
+      112,
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 SQLite (WAL + FTS5) 作为自身的记忆存储组件，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Memory** — SQLite in WAL mode with FTS5 alongside per-chunk vectors keyed by `sha256(model ‖ chunk)`, so swapping embedders invalidates cleanly. ／ Python 3.11+ · Ollama · SQLite (WAL + FTS5) · Typer + Rich · prompt-toolkit · pypdf · beautifulsoup4 · striprtf · watchdog · structlog · GitPython ／ Grimore watches your vault — **Markdown, PDF, EPUB, DOCX, ODT, RTF, HTML, TXT** — auto-tags every document, builds a hybrid semantic index, and answers questions against it. Entirely through local LLMs. Nothing leaves your machine, and no API keys are required.",
+   "evidence_lines": [
+    112,
+    129,
+    14
+   ]
+  },
+  "fn": "kahz12/Grimore-MD",
+  "sha": "01871adfc8f5",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

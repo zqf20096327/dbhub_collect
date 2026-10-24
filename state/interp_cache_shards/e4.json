@@ -10170,5 +10170,79 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7964b1be72b9": {
+  "identity": {
+   "one_liner": "学生组织成员与身份管理系统，提供 OAuth2 SSO 与目录服务",
+   "review": "Gamma 是 Chalmers IT 学生部门使用的成员与身份管理系统，作为成员、群组、OAuth2 客户端和 API 密钥的中央目录。基于 Java/Spring Boot 构建，依赖 PostgreSQL 存储数据、Redis 做会话/缓存，通过 Flyway 管理 schema 迁移，支持环境变量配置、Docker 构建与 Playwright E2E 测试。",
+   "highlights": [
+    "提供 OAuth2 授权服务器与作用域 API 密钥（pre-shared 方案）认证",
+    "使用 PostgreSQL 16+ 存储数据，Flyway 管理 schema 迁移，Redis 7+ 做会话/缓存",
+    "采用 DDD 与六边形架构，提供 Thymeleaf + HTMX Web UI 与 REST API"
+   ],
+   "use_cases": [
+    "需要 OAuth2 SSO 与成员/群组目录的组织身份管理",
+    "通过 API 密钥进行服务间访问的集成场景",
+    "作为 Spring Boot 六边形架构的参考实现阅读"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database:** PostgreSQL 16+ with Flyway migrations ／ # Starts Spring Boot with auto-started PostgreSQL and Redis via Testcontainers ／ |`DB_HOST`|`db`|PostgreSQL host|",
+     "lines": [
+      8,
+      26,
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Gamma 是以 PostgreSQL 为数据库存储数据的成员与身份管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Gamma is a **membership and identity management system** built for Chalmers IT student division. It serves as the central directory for members, groups, OAuth2 clients, and API keys. ／ - **Database:** PostgreSQL 16+ with Flyway migrations ／ # Starts Spring Boot with auto-started PostgreSQL and Redis via Testcontainers",
+   "evidence_lines": [
+    3,
+    8,
+    26
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "cthit/Gamma",
+  "sha": "7964b1be72b9",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

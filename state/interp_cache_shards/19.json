@@ -11305,5 +11305,137 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d390e5b342d5": {
+  "identity": {
+   "one_liner": "Rust+GPUI 原生跨平台数据库 GUI 客户端与 SQL 编辑器",
+   "review": "FluxDB 是一款用 Rust + GPUI 构建的桌面数据库客户端与 SQL 编辑器，面向需要在同一窗口内管理多种数据库的开发者和运维人员。它提供 SQL 编辑补全、数据编辑回写、表结构设计、ER 图、备份恢复与 Redis 工作台，内置带权限边界的 AI Agent（含 MCP 支持）。支持 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis；MariaDB 与 MongoDB 仅在规划中。提供 macOS/Windows/Linux 安装包，也可从源码构建。",
+   "highlights": [
+    "原生 Rust + GPUI 桌面应用，不依赖 Electron 或 WebView，支持 macOS / Windows / Linux",
+    "提供 SQL 编辑补全、数据编辑回写、表结构设计、ER 图（可导出 JSON/DBML/Mermaid/SVG）、逻辑备份恢复与 Redis 工作台（CLI、Pub/Sub、Sentinel、Cluster）",
+    "内置 AI Agent，支持结构发现、有界数据读取、受控 SQL/Redis 执行与 MCP Client/Server"
+   ],
+   "use_cases": [
+    "在同一桌面工作台中管理 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦、Redis 等多类数据源",
+    "需要表结构设计、ER 图绘制与 DDL 生成的数据库开发场景",
+    "通过 mysqldump/pg_dump 等客户端工具执行逻辑备份与 SQL 恢复"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **表设计优化**：按数据库方言扩充类型与适配列选项，支持枚举 / 自定义类型按需编辑、长度与精度校验，统一 PostgreSQL / MySQL 类型展示。 ／ |PostgreSQL|SQL 查询、Schema / 对象浏览、表结构管理、数据编辑、用户与角色管理、psql 工具入口|`pg_dump` plain SQL 备份，`psql` 恢复|TLS、SSH、代理、Schema 作用域、超时|-|",
+     "lines": [
+      5,
+      25,
+      86
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **表设计优化**：按数据库方言扩充类型与适配列选项，支持枚举 / 自定义类型按需编辑、长度与精度校验，统一 PostgreSQL / MySQL 类型展示。 ／ |MySQL|SQL 查询、对象浏览、表结构管理、数据编辑、导入导出、原生客户端工具入口|`mysqldump` 逻辑备份，SQL 恢复|TLS / SSL、SSH 隧道、代理、超时、字符集|-|",
+     "lines": [
+      5,
+      25,
+      84
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |SQLite|本地文件连接、SQL 查询、对象浏览、表结构管理、数据编辑|`VACUUM INTO` 完整一致快照；恢复到新文件并检查完整性与外键|本地文件路径|-|",
+     "lines": [
+      5,
+      88
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ - **新增 SQL Server 数据源**：SQL 认证、TLS、数据库 / Schema / 对象浏览、T-SQL 查询、表结构管理与数据编辑、表数据导入导出、登录名 / 数据库用户 / 角色成员 / 显式权限管理、对象级逻辑备份恢复，以及 AI 页面上下文与受控执行。 ／ |SQL Server|T-SQL 查询、数据库 / Schema / 对象浏览、表结构管理与数据编辑、表数据导入导出、登录名 / 数据库用户 / 角色成员 / 显式权限管理、对象级逻辑备份恢复、AI 页面上下文与受控执行|对象级逻辑 SQL 备份与恢复|SQL Server 认证、TLS、显式端口；命名实例需填写实际端口|Windows 集成认证、Azure AD、包含数据库用户、列级权限编辑、用户自定义服务器角色、SQL Browser / 命名实例自动解析、数据库级物理备份（`BACKUP DATABASE`",
+     "lines": [
+      5,
+      22,
+      87
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |TiDB|复用 MySQL 协议链路，适配 SQL 方言、补全与表结构管理|复用 MySQL 逻辑备份能力|连接能力与 MySQL 一致|-|",
+     "lines": [
+      5,
+      85
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "FluxDB 使用 Rust + GPUI 构建，不依赖 Electron 或 WebView。它把 MySQL、PostgreSQL、SQL Server、SQLite、TiDB、达梦 DM8 和 Redis 放进同一套桌面工作流，并提供有明确权限边界的 AI Agent。 ／ |达梦 DM8|Schema / 对象浏览、SQL 查询、表结构管理与设计、数据编辑、表数据导入|逻辑备份与 SQL 恢复；当前恢复面向单 Schema|实例与 Schema 连接配置|-|",
+     "lines": [
+      5,
+      89
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "MongoDB 和 MariaDB 尚未支持。它们只出现在规划中，不应被视为当前能力。",
+     "lines": [
+      92
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接和管理多种数据库的桌面客户端工具，本身不依赖某一数据库存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "TiDB",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 或更新版本",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**原生跨平台数据库客户端与 SQL 编辑器，面向高性能、低开销的桌面体验设计：在一个窗口中完成查询、数据编辑、结构管理和 Redis 调试。** ／ ## 数据库支持 ／ |Redis|键空间浏览、键值编辑、TTL、Workbench、CLI、Pub/Sub|不提供数据库级备份恢复|TLS、SSH、Sentinel、Cluster、URI / Cloud；Cluster 仅支持 DB 0|-|",
+   "evidence_lines": [
+    3,
+    78,
+    90
+   ]
+  },
+  "fn": "fluxdb-alt/fluxDB",
+  "sha": "d390e5b342d5",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

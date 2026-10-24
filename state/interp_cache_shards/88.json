@@ -9695,5 +9695,87 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d488d0cd7bd9": {
+  "identity": {
+   "one_liner": "自托管的服务可用性监控、状态页与值班告警一体化工具",
+   "review": "uptimepage 提供 HTTP、TCP、ICMP、心跳、DNS、TLS 证书等 8 类检查、多区域探测、公共状态页、事件管理与值班升级策略，通过 REST API、Terraform 与 MCP 服务器驱动。支持 Docker 单二进制自托管或使用托管服务，适合需要对外状态页和故障呼叫的中小团队与自托管用户。",
+   "highlights": [
+    "支持 8 种检查类型与多区域探测代理",
+    "内置公共状态页（HTML + JSON + RSS）与事件管理",
+    "提供 REST API、Terraform provider 与 MCP server，检查与告警频道等功能包含在免费层"
+   ],
+   "use_cases": [
+    "为 SaaS 产品搭建面向客户的公共状态页",
+    "多区域网站/服务可用性监控与故障告警",
+    "通过 API/Terraform 以代码方式管理监控目标与值班排班"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up. ／ Anything reachable from the internet should run this stack, not the one above. It adds a Caddy edge with automatic TLS, internal-only Postgres and ClickHouse, per-IP rate limits, and blue/green restarts. The operator host is guarded by the app's own sign-in, n ／ Bring your own Postgres 18 and ClickHouse; the chart ships neither. A second chart, `uptimepage-agent`, runs a probe on its own in another region or inside a private network, against this or the hosted service. Details in docs/kubernetes.md and `charts/`.",
+     "lines": [
+      78,
+      180,
+      233,
+      244
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up. ／ **ClickHouse system logs are off.** Stock ClickHouse keeps two dozen `system.*_log` tables that grow without bound and use CPU at idle. Uptimepage reads none of them, so `config/clickhouse-quiet.xml` turns them all off; to get one back for debugging, delete it ／ Anything reachable from the internet should run this stack, not the one above. It adds a Caddy edge with automatic TLS, internal-only Postgres and ClickHouse, per-IP rate limits, and blue/green restarts. The operator host is guarded by the app's own sign-in, n",
+     "lines": [
+      78,
+      180,
+      204,
+      233
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为通用服务可用性监控工具，使用 Postgres 与 ClickHouse 作为自身存储后端，为数据库生态提供服务组件而非数据库应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，提供托管服务与自托管双形态",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Monitor HTTP, TCP, ICMP ping, cron-job heartbeats, DNS, TLS-certificate and ／ |**Checks**|HTTP, TCP, ICMP ping, heartbeat (inbound dead-man's-switch), DNS, TLS-cert expiry, domain expiry, browser login flow with per-step timings, manual (state set by an operator); a circuit breaker per monitor, designed for ~50k concurrent in-flight| ／ |**Built on**|Rust 1.95 / Tokio / Axum, Postgres + ClickHouse, one ~23 MB self-contained binary| ／ Pulls `ghcr.io/uptimepage/uptimepage:latest` and starts Postgres 18, ClickHouse 26.3, and the monitor. Both databases run their own migrations at startup, so there is nothing to wire up.",
+   "evidence_lines": [
+    7,
+    71,
+    78,
+    180
+   ]
+  },
+  "fn": "uptimepage/uptimepage",
+  "sha": "d488d0cd7bd9",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
