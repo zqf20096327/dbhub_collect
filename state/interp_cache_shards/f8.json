@@ -10147,5 +10147,76 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "98b73e2e97e0": {
+  "identity": {
+   "one_liner": "DMARC 聚合报告解析器，内置仪表盘，单 Go 二进制+SQLite 存储",
+   "review": "读取邮箱中 DMARC 聚合（RUA）报告的 XML 附件，解析后存入单个 SQLite 文件，并提供仪表盘、28 项 Prometheus 指标、Grafana 面板与 MCP 服务器。适合需要集中查看域名 DMARC 报告的自托管用户；仅支持聚合报告，不支持 RUF 失败报告、TLS-RPT 与多邮箱接入。",
+   "highlights": [
+    "通过 IMAP 或 Maildir 获取 gzip/zip/raw XML 报告并解析存储到单个 SQLite 文件",
+    "提供仪表盘、28 项 Prometheus 指标、Grafana 面板与 HTTP API",
+    "内置 MCP 服务器，支持 AI 助手通过 stdio 或 HTTP 查询报告数据"
+   ],
+   "use_cases": [
+    "集中查看域名 DMARC 聚合报告与 SPF/DKIM 通过情况",
+    "用 Prometheus/Grafana 监控邮件合规率",
+    "通过 MCP 让 AI 助手查询 DMARC 报告数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Read your DMARC aggregate reports in one dashboard. One Go binary, SQLite, no Elasticsearch.** ／ - Stores everything in one SQLite file. No database server, no JVM. ／ |Database file|`DATABASE_PATH`|`~/.parse-dmarc/db.sqlite`, `/data/parse-dmarc.db` in Docker|",
+     "lines": [
+      13,
+      25,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有数据存储于单个 SQLite 文件，SQLite 是其自身的数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Stores everything in one SQLite file. No database server, no JVM. ／ - Serves an MCP server, so an AI assistant can query your reports. ／ `/metrics` is on by default: 28 metrics covering fetch cycles, IMAP connections, parse and store errors, compliance rate overall and per domain, SPF and DKIM result counts, and HTTP latency. `grafana/dashboard.json` is a ready dashboard for them. The full list, a Prometheus Operator `ServiceMonitor`, alert rules and a compose stack with Prometheus and Grafana are in docs/METRICS.md.",
+   "evidence_lines": [
+    25,
+    29,
+    147
+   ]
+  },
+  "fn": "dmarcguardhq/parse-dmarc",
+  "sha": "98b73e2e97e0",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

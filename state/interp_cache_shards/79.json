@@ -11699,5 +11699,125 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "db031a3a818d": {
+  "identity": {
+   "one_liner": "面向数据库的开源 MCP 服务器，连接 AI 代理与企业数据库",
+   "review": "这是 googleapis 开源的 MCP 服务器，通过预置通用工具（如 list_tables、execute_sql）和自定义工具框架（tools.yaml 配置 sources/tools/prompts），把 Gemini CLI、Claude Code 等 MCP 客户端连接到数据库，支持 NL2SQL、语义搜索、连接池、IAM 认证与 OpenTelemetry 可观测性。适合为 AI 代理/IDE 开发数据访问工具的开发者，安装方式含二进制、容器镜像、Homebrew、npm 与 Go 源码编译。",
+   "highlights": [
+    "提供预置通用工具与自定义工具框架，通过 tools.yaml 定义 sources、tools、toolsets、prompts 和 resources",
+    "支持通过 --prebuilt=<database> 加载对应数据库的标准工具集",
+    "内置连接池、IAM 集成认证及 OpenTelemetry 指标与追踪"
+   ],
+   "use_cases": [
+    "在 IDE 或 CLI 中通过 MCP 客户端以自然语言查询和探索数据库 schema 与数据",
+    "为生产环境的 AI 代理构建自定义数据库工具（结构化查询、语义搜索、NL2SQL）",
+    "通过 SDK（Python/JS/TS/Go/Java）将数据库工具集成到 ADK、LangChain、LlamaIndex 等代理框架"
+   ],
+   "cat_note": ""
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Google Cloud:** AlloyDB, BigQuery, Cloud SQL (PostgreSQL, MySQL, SQL Server), Spanner, Firestore, Knowledge Catalog (formerly known as Dataplex). ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      68,
+      69
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Google Cloud:** AlloyDB, BigQuery, Cloud SQL (PostgreSQL, MySQL, SQL Server), Spanner, Firestore, Knowledge Catalog (formerly known as Dataplex). ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      68,
+      69
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      69
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Google Cloud:** AlloyDB, BigQuery, Cloud SQL (PostgreSQL, MySQL, SQL Server), Spanner, Firestore, Knowledge Catalog (formerly known as Dataplex). ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      68,
+      69
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      69
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      69
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为连接 AI 代理与数据库的 MCP 服务器，为数据库生态提供工具服务而非使用数据库构建应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP Toolbox for Databases is an open source Model Context Protocol (MCP) server that connects your AI agents, IDEs, and applications directly to your enterprise databases. ／ When you run Toolbox with a `--prebuilt=<database>` flag, you instantly get access to standard tools to interact with that database. You can also specify a specific toolset using the `--prebuilt=<database>/<toolset>` syntax (e.g., `--prebuilt=postgres/data` to only load SQL tools). ／ Supported databases currently include:",
+   "evidence_lines": [
+    18,
+    65,
+    67
+   ]
+  },
+  "fn": "googleapis/mcp-toolbox",
+  "sha": "db031a3a818d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

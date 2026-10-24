@@ -10971,5 +10971,75 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "44567c545bb2": {
+  "identity": {
+   "one_liner": "自托管 Cloudflare Workers 兼容平台，单 Rust 二进制实现 Workers/KV/D1/R2 等",
+   "review": "open-compute 用一个 Rust 二进制在自有单机上运行兼容 Cloudflare Workers 的编程模型，提供 KV、D1、R2、Durable Objects、Queues 等绑定及 /client/v4 管理 API，面向想在自有基础设施上部署 Workers 的开发者。平台元数据内嵌 SQLite 存储，默认本地文件系统，可选 S3 兼容存储；兼容性以与真实 Cloudflare 的对比测试度量，项目自述仍处早期阶段。",
+   "highlights": [
+    "单个 Rust 二进制包含运行时、控制平面、调度器及产品绑定，基于固定校验的 workerd fork 运行 Worker 代码",
+    "以同一测试集与真实 Cloudflare 逐请求对比，追踪 2256 个稳定 API 成员，覆盖 Workers/KV/D1/R2 等 10 个产品面",
+    "平台状态由内嵌 SQLite（rusqlite）承载，默认本地文件系统，可选 S3 兼容对象存储"
+   ],
+   "use_cases": [
+    "在自有单机上运行兼容 Cloudflare Workers API 的应用而无需依赖 Cloudflare 托管",
+    "本地开发与部署使用 cf 及 Vite 插件 v2 工作流的 Workers 项目",
+    "通过 /client/v4 API 和 Dashboard 对单节点部署进行运维管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Nothing else to run.** SQLite owns platform metadata and Local storage owns object bytes by default. S3-compatible storage is optional; neither mode needs a database or cache sidecar. ／ |**90%+**|required line coverage, with real processes, SQLite, and the pinned workerd runtime in acceptance tests| ／ |SQLite|Local authoritative state — no external database, no eventual consistency| ／ - **In-process state.** `rusqlite` embeds SQLite in `ocd`; transactions are function calls, not network round-trips. Foreign keys stay enabled and WAL remains locally owned.",
+     "lines": [
+      47,
+      59,
+      176,
+      188
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台自身使用内嵌 SQLite 存储平台元数据与权威状态，SQLite 是其内部存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Nothing else to run.** SQLite owns platform metadata and Local storage owns object bytes by default. S3-compatible storage is optional; neither mode needs a database or cache sidecar. ／ |SQLite|Local authoritative state — no external database, no eventual consistency| ／ - **In-process state.** `rusqlite` embeds SQLite in `ocd`; transactions are function calls, not network round-trips. Foreign keys stay enabled and WAL remains locally owned.",
+   "evidence_lines": [
+    47,
+    176,
+    188
+   ]
+  },
+  "fn": "elliothux/open-compute",
+  "sha": "44567c545bb2",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

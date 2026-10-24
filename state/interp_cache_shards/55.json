@@ -11448,5 +11448,82 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "83accefbdef2": {
+  "identity": {
+   "one_liner": "本地优先单机部署的科研全流程 AI 助手应用",
+   "review": "这是一个面向科研人员的本地优先 AI 助手桌面/Web 应用，输入研究主题后自动执行文献调研、大纲生成、分章起草（Agentic RAG）、质量评分、引用格式化等流程。数据全部存于本地 SQLite（better-sqlite3，WAL），AI 通过 OpenAI 兼容协议对接用户自配的模型端点，支持 Electron 桌面端与 Docker 部署；单用户设计，不建多租户。",
+   "highlights": [
+    "支持 LangGraph 编排的全自动科研流水线：文献调研、大纲生成、分章起草、质量门评分与 Reflexion 回炉",
+    "本地知识库 RAG 基于 sqlite-vec 向量检索与 FTS5 trigram 全文混合检索",
+    "支持 8 种引用样式与 BibTeX/RIS 导入导出，导出 Markdown/Word"
+   ],
+   "use_cases": [
+    "科研论文写作的文献调研与分章起草辅助",
+    "本地知识库管理与资料问答",
+    "投稿流程辅助：期刊匹配、Cover Letter 生成与状态跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **本地优先**：SQLite 单文件开箱即跑，你的文献、笔记、记忆、Key 全部落本地，不建多租户、不上传第三方云。 ／ - 本地 **sqlite-vec 向量 ANN + FTS5 trigram 全文**混合检索（嵌入模型不可用时自动回退全文；中文查询 3-gram OR 展开）；知识库资料与文献双向绑定，命中块带来源作者/年份卡片。 ／ |后端 `apps/server`|NestJS 11 · TypeScript（strict）· Drizzle ORM · better-sqlite3（WAL）· Vercel AI SDK（OpenAI 兼容）· LangGraph（编排 / 断点续跑 / 人工确认）· MCP 官方 SDK · zod · helmet + pino · MSW 进程内 mock 网关|",
+     "lines": [
+      20,
+      82,
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明项目数据（文献、笔记、文档、记忆）全部存于本地 SQLite，数据库仅作为应用自身存储使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **本地优先**：SQLite 单文件开箱即跑，你的文献、笔记、记忆、Key 全部落本地，不建多租户、不上传第三方云。 ／ |后端 `apps/server`|NestJS 11 · TypeScript（strict）· Drizzle ORM · better-sqlite3（WAL）· Vercel AI SDK（OpenAI 兼容）· LangGraph（编排 / 断点续跑 / 人工确认）· MCP 官方 SDK · zod · helmet + pino · MSW 进程内 mock 网关| ／ |桌面端 `apps/desktop`|Electron 41（内嵌 Node 24，原生支持 require(ESM)）· 内嵌后端（`ELECTRON_RUN_AS_NODE`）· 本地 SQLite（userData 隔离，打包时自动按 Electron ABI 重编原生模块）· electron-builder 三平台打包 · electron-updater 自动更新（opt-in）|",
+   "evidence_lines": [
+    20,
+    110,
+    112
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "badhope/sciflow",
+  "sha": "83accefbdef2",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
