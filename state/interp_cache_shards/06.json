@@ -10601,5 +10601,158 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e1d41aee75c": {
+  "identity": {
+   "one_liner": "Postgres 到 Iceberg 的 CDC 引擎，经逻辑复制落 Parquet 到 S3",
+   "review": "Streambed 通过 Postgres 逻辑复制订阅读取 WAL 变更，写入 Parquet 文件到 S3 并提交 Iceberg 元数据，内置基于 DuckDB 的查询服务器以 Postgres 线协议对外提供查询，支持时间旅行快照与快照维护命令。面向需要将生产 Postgres 分析负载卸载到 lakehouse 的运维/数据团队；要求 Postgres 16+，目标存储为 S3。",
+   "highlights": [
+    "通过逻辑复制流式解码 Postgres WAL，增量写入 Parquet 到 S3 并提交 Iceberg 元数据",
+    "内置查询服务器经 Postgres 线协议暴露 lakehouse 表，可用 psql 连接",
+    "提供 resync、snapshots、cleanup、maintenance/compact 等命令及基于时间戳的快照查询"
+   ],
+   "use_cases": [
+    "将生产 Postgres 的分析查询卸载到 Iceberg lakehouse",
+    "基于历史快照的时间旅行查询与历史 join",
+    "Iceberg 小文件合并与快照过期维护"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres-to-Iceberg CDC engine. Offload analytical queries from your production database without changing your application. ／ streambed streams WAL changes via logical replication, writes Parquet files to S3, and commits Iceberg metadata. Query the result with any Iceberg-compatible engine -- or use the built-in query server, which speaks the Postgres wire protocol so you can connect ／ Streambed connects to Postgres as a logical replication subscriber. It decodes WAL messages (inserts, updates, deletes), buffers rows per table, and periodically flushes them as Parquet files to S3 with Iceberg metadata commits. Updates and deletes use copy-on-write merging against existing Parquet data.",
+     "lines": [
+      7,
+      9,
+      113
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The container runs as a non-root user and stores its SQLite state and default ／ SQLite catalogs remain supported with `--ducklake-catalog-store=sqlite`.",
+     "lines": [
+      54,
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 生态提供 CDC 到 Iceberg 的数据管道工具，内嵌 DuckDB 作为查询引擎而非仅为用库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres-to-Iceberg CDC engine. Offload analytical queries from your production database without changing your application. ／ streambed streams WAL changes via logical replication, writes Parquet files to S3, and commits Iceberg metadata. Query the result with any Iceberg-compatible engine -- or use the built-in query server, which speaks the Postgres wire protocol so you can connect with `psql`. ／ Streambed connects to Postgres as a logical replication subscriber. It decodes WAL messages (inserts, updates, deletes), buffers rows per table, and periodically flushes them as Parquet files to S3 with Iceberg metadata commits. Updates and deletes use copy-on-write merging against existing Parquet data.",
+   "evidence_lines": [
+    7,
+    9,
+    113
+   ]
+  },
+  "fn": "viggy28/streambed",
+  "sha": "0e1d41aee75c",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e357cd3bdab1": {
+  "identity": {
+   "one_liner": "数据中心全生命周期决策支持系统，基于 PostgreSQL 存储",
+   "review": "这是一个开源的数据中心运营与决策支持项目，将设施、能源、资产、容量、维护与证据数据纳入租户隔离的统一模型，通过 FastAPI 只读 API 和浏览器 UI 提供 KPI、TCO、预测等分析。面向数据中心运营者，数据以 PostgreSQL 35+ 张表存储并依赖 RLS 做租户隔离；厂商适配器与设施控制尚未交付，推荐仅为咨询性质。",
+   "highlights": [
+    "提供只读 API 与 14 个视图段的浏览器控制台，覆盖能源、容量、可靠性、经济性与审计",
+    "使用 35+ 张可移植 PostgreSQL 表实现多租户 RLS、哈希链证据事件与 KPI 溯源",
+    "内置经济学引擎（TCO、单价、电价计算）与负荷/价格预测、异常检测等统计模块"
+   ],
+   "use_cases": [
+    "数据中心能耗、PUE 与碳强度的度量与报表分析",
+    "本地与云部署的 TCO 对比及容量规划决策",
+    "设备资产、维护工作流与证据链的统一运营视图"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- The OSS core uses portable PostgreSQL SQL and can be adapted to Supabase. Supabase Auth/RLS is a deployment adapter, not a dependency of the domain model. ／ Served by FastAPI on uvicorn (`dcc.api_async:app`), with psycopg3 for PostgreSQL ／ PostgreSQL RLS. See API Reference for full details.",
+     "lines": [
+      56,
+      85,
+      87
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "oracle. `DCC_ALLOW_ANONYMOUS=true` disables enforcement for local development and logs",
+     "lines": [
+      238
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 PostgreSQL 作为自身数据存储（psycopg3 访问、35+ 表、RLS），PostgreSQL 是其运行依赖而非被服务的对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- The OSS core uses portable PostgreSQL SQL and can be adapted to Supabase. Supabase Auth/RLS is a deployment adapter, not a dependency of the domain model. ／ Served by FastAPI on uvicorn (`dcc.api_async:app`), with psycopg3 for PostgreSQL ／ 35+ tables covering the full data-center lifecycle with:",
+   "evidence_lines": [
+    56,
+    85,
+    91
+   ]
+  },
+  "fn": "AAH20/data-center-commander",
+  "sha": "e357cd3bdab1",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

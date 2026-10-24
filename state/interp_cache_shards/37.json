@@ -10778,5 +10778,143 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9caa79f8a8cf": {
+  "identity": {
+   "one_liner": "Tiger Cloud 的命令行管理工具，内置面向 AI 助手的 MCP 服务器",
+   "review": "Tiger CLI 是 Tiger Cloud（Timescale 旗下云数据库平台）的命令行界面，提供服务生命周期管理、指标查询、psql/SQL 连接、schema 与扩展查看等命令，并内置 MCP 服务器供 Claude Code 等 AI 助手调用这些能力，还支持为编码代理安装 PostgreSQL/TimescaleDB 技能包。适用于使用 Tiger Cloud 的运维与开发人员；仅管理 Tiger Cloud 服务。",
+   "highlights": [
+    "提供服务创建/启停/伸缩/删除/日志/指标等服务生命周期管理命令",
+    "内置 MCP 服务器，向 AI 助手暴露服务管理与数据库操作工具",
+    "支持通过 psql 连接、执行 SQL、查看 schema 与已安装的 PostgreSQL 扩展"
+   ],
+   "use_cases": [
+    "通过命令行管理 Tiger Cloud 数据库服务的运维操作",
+    "为编码代理配置 MCP 服务器以查询和操作数据库服务",
+    "通过 MCP 工具检索 PostgreSQL 与 TimescaleDB 文档"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- `psql` - Connect to a database with psql (in an interactive terminal, if the service has read replicas, offers to connect to one of them; use `--no-replica-prompt` to skip) (alias: `connect`) ／ - `extensions list` - List the PostgreSQL extensions installed in a database, with their versions and schemas (aliases: `ext ls`)",
+     "lines": [
+      105,
+      110
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Tiger Cloud/TimescaleDB 数据库生态提供管理 CLI 与 MCP 工具，属为数据库生态服务的工具/组件",
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tiger CLI is the command-line interface for Tiger Cloud. It provides commands for managing and querying database services, as well as an integrated Model Context Protocol (MCP) server for use with AI assistants. ／ - `tiger db` - Database operations ／ - `tiger mcp` - MCP server setup and management",
+   "evidence_lines": [
+    3,
+    104,
+    118
+   ]
+  },
+  "fn": "timescale/tiger-cli",
+  "sha": "9caa79f8a8cf",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d557102b7983": {
+  "identity": {
+   "one_liner": "红队攻防演练智能体编排插件，战果落本地 SQLite 事实库",
+   "review": "DeepSeek Harness 的红队模式插件：输入靶标名称后由主会话编排信息收集、漏洞发现、利用、内网渗透等执行角色，56 个工具与 16 个技能随包提供，资产与战果实时写入本机 SQLite 事实库并在 Web 控制台展示，数据不外传。面向已获书面授权的攻防演练人员，明确声明不含漏洞利用代码，需 Node.js ≥ 22.13 并依赖 node:sqlite。",
+   "highlights": [
+    "包含 56 个 redteam_* 工具、16 个随包技能与 22 张事实库表",
+    "所有发现写入本机 SQLite 事实库，无遥测、无上报、无云端同步",
+    "提供提交前闸门与回归测试，防止敏感战果数据进入仓库"
+   ],
+   "use_cases": [
+    "已授权的攻防演练与红蓝对抗",
+    "企业授权范围内的安全自检",
+    "渗透测试教学研究"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。",
+     "lines": [
+      5,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该系统使用本机 SQLite 作为事实库存放资产与战果数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。",
+   "evidence_lines": [
+    5,
+    28
+   ]
+  },
+  "fn": "Jueze-2019/dsh-redteam-mode",
+  "sha": "d557102b7983",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

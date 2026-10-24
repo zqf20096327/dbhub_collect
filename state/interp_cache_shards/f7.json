@@ -10355,5 +10355,217 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6324c474188c": {
+  "identity": {
+   "one_liner": "守望先锋电竞赛事多租户运营平台，从报名到赛后分析全流程",
+   "review": "OWT 是一个用于运营守望先锋赛事的 monorepo 平台，覆盖报名、签到、对阵图、选图禁图、队伍平衡、比赛日志解析与赛后分析。技术上前端用 Next.js，Go 网关经 RabbitMQ RPC 路由请求，后端为多个 Python FastStream 微服务，数据存于 PostgreSQL 16，辅以 Redis 与 RabbitMQ，通过 Docker Compose 一键启动。适合赛事主办方和玩家社区自行部署使用。",
+   "highlights": [
+    "多租户工作区，支持自定义品牌、域名、RBAC 与 API key",
+    "集成 Discord 机器人、Challonge/Google Sheets 同步与 Twitch 直播状态",
+    "内置 Rust 队伍平衡求解器、比赛日志解析与 ML 分析任务",
+    "提供 Docker Compose 启动、Alembic 迁移与备份/恢复命令"
+   ],
+   "use_cases": [
+    "赛事主办方在线管理报名、签到、对阵与选图流程",
+    "玩家与观众浏览赛事数据、注册战队并追踪比赛进展",
+    "部署带赛后统计与 ML 分析的赛事平台实例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Gateway|Go 1.25, `net/http`, RabbitMQ, Redis, PostgreSQL/pgx, OpenTelemetry| ／ |Data and messaging|PostgreSQL 16, Redis Stack, RabbitMQ 3.13, S3-compatible object storage| ／ The RabbitMQ and PostgreSQL values must match `backend/env/common.env`. Replace `JWT_SECRET_KEY` in `backend/env/auth.env` with at least 32 random characters. OAuth, Challonge, Twitch, Discord, Battle.net, S3, analytics, and observability credentials are featu",
+     "lines": [
+      76,
+      79,
+      126
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是用 PostgreSQL/Redis/RabbitMQ 存储和通信的电竞赛事运营应用，而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OWT is a multi-tenant platform for running Overwatch tournaments from registration to post-tournament analytics. It combines public tournament history and player statistics with organizer tooling for workspaces, brackets, live drafts, map vetoes, match-log processing, achievements, streams, and access control. ／ |Data and messaging|PostgreSQL 16, Redis Stack, RabbitMQ 3.13, S3-compatible object storage| ／ make dev-up",
+   "evidence_lines": [
+    10,
+    79,
+    131
+   ]
+  },
+  "fn": "CraazzzyyFoxx/overwatch-tournaments",
+  "sha": "6324c474188c",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "56b49cd6edd5": {
+  "identity": {
+   "one_liner": "MySQL NDB Cluster 的 Kubernetes Operator，实现集群在 K8s 上的部署管理",
+   "review": "这是一个用于在 Kubernetes 集群内管理 MySQL NDB Cluster 的 Operator，通过 NdbCluster 自定义资源声明集群配置（如 2 数据节点 + 2 MySQL Server），由 Operator 完成部署并提供 webhook 准入控制。提供 Helm chart 和 kubectl manifest 两种安装方式，支持命名空间级监控范围与安全加固选项，面向在 K8s 上运维 NDB Cluster 的运维人员。",
+   "highlights": [
+    "通过 NdbCluster CRD 在 Kubernetes 中定义并部署 MySQL NDB Cluster",
+    "提供 Helm chart 与 kubectl manifest 两种安装方式，并含 webhook 准入控制器",
+    "支持命名空间级监视范围（-watch-namespace）与非 root 只读根文件系统等安全加固选项"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群中部署和管理 MySQL NDB Cluster",
+    "为 NDB Cluster 配置 NetworkPolicy 与安全上下文",
+    "按需在指定命名空间内运行 Operator 管理集群资源"
+   ]
+  },
+  "classification": {
+   "cat": "高可用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# MySQL NDB Operator ／ The MySQL NDB Operator is a Kubernetes operator for managing a MySQL NDB Cluster setup inside a Kubernetes Cluster.",
+     "lines": [
+      1,
+      3
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Copyright (c) 2021, 2026, Oracle and/or its affiliates.",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是 Oracle 官方为 MySQL NDB Cluster 服务的 Kubernetes Operator，属于数据库生态运维工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "MySQL"
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Oracle 许可声明（Copyright 2021, 2026 Oracle and/or its affiliates），未在 README 中给出具体开源许可证文本",
+   "install": [
+    "helm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The MySQL NDB Operator is a Kubernetes operator for managing a MySQL NDB Cluster setup inside a Kubernetes Cluster. ／ Ndb operator comes with a Helm chart that can install the NdbCluster CRD, deploy the operator and the webhook server in the K8s cluster. ／ The configuration of the MySQL Cluster to be deployed in the K8s Cluster can be defined using the NdbCluster Custom resource. The example at docs/examples/example-ndb.yaml defines a simple MySQL Cluster with 2 data nodes and 2 MySQL Servers. To create this object in the default namespace of the K8s Cluster, run :",
+   "evidence_lines": [
+    3,
+    15,
+    83
+   ]
+  },
+  "fn": "mysql/mysql-ndb-operator",
+  "sha": "56b49cd6edd5",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8ca19fc38c42": {
+  "identity": {
+   "one_liner": "基于 Flask+SQLite 的多用户文件收集与分享 Web 应用",
+   "review": "这是一个运行在飞牛 fnOS NAS 上的文件收集与分享应用，以 .fpk 原生包安装，管理员创建收集/分享双模式链接，支持通行证、有效期、TUS 断点续传大文件上传及 Office/PDF/媒体在线预览；数据存储使用 SQLite（WAL 模式），并提供一键备份导入数据库的功能，仅限 fnOS 平台使用。",
+   "highlights": [
+    "使用 SQLite（WAL 模式+外键约束）存储数据，支持一键下载/导入数据库备份",
+    "支持 TUS 协议断点续传，单文件上限 0.01-64 GB",
+    "支持 DOCX/XLSX/PPTX/CSV、PDF、图片/视频/音频/TXT 在线预览"
+   ],
+   "use_cases": [
+    "作业/资料收集与汇总",
+    "文件分发与客户交接",
+    "内部文件共享与活动照片墙"
+   ],
+   "persona": "use"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "基于 Flask + SQLite 的多用户文件收集与分享系统 | 支持 Office/PDF/图片/视频/音频/TXT 在线预览 | 专为飞牛 fnOS 打造 ／ |📦 **数据备份**|一键下载/导入 SQLite 数据库，自动验证和备份旧库| ／ |数据库|SQLite（WAL 模式 + 外键约束）|零配置、高性能并发读写|",
+     "lines": [
+      5,
+      53,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 SQLite 作为存储的文件收集分享应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 基于 Flask + SQLite 的多用户文件收集与分享系统 | 支持 Office/PDF/图片/视频/音频/TXT 在线预览 | 专为飞牛 fnOS 打造 ／ **适用平台：** 飞牛 fnOS **独占** Native 应用（.fpk 格式），不支持 Docker 部署（已停止更新）。支持 **x86 / ARM** 平台。 ／ |数据库|SQLite（WAL 模式 + 外键约束）|零配置、高性能并发读写|",
+   "evidence_lines": [
+    5,
+    19,
+    116
+   ]
+  },
+  "fn": "Contribuv/file-collector",
+  "sha": "8ca19fc38c42",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

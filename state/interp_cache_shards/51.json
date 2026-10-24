@@ -10838,5 +10838,241 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b61d873aae6": {
+  "identity": {
+   "one_liner": "内嵌 Zend 引擎与 SQLite 兼容数据库的 PHP 单二进制运行时",
+   "review": "ePHPm 用 Rust 将真实 PHP（Zend，经 FFI 链接）、Web 服务器、进程管理、KV 缓存、SQL 代理和内嵌 Turso（SQLite 兼容）数据库打包为单一二进制，PHP 应用无需改代码即可从开发到生产运行。面向 PHP 开发者与运维；代理支持 MySQL/PostgreSQL 协议，Windows 不含 pgsql 扩展，集群 CDC 复制在 Windows 上为实验性。",
+   "highlights": [
+    "内嵌真实 Zend PHP 引擎（FFI 链接）并捆绑 Web 服务器、进程管理器与 KV 缓存",
+    "内嵌纯 Rust 的 SQLite 兼容数据库（Turso 引擎），并内置支持连接池、读写分离的 SQL 代理",
+    "支持 gossip 集群、ACME 自动 TLS、OpenTelemetry 追踪，安装为单个自管理二进制"
+   ],
+   "use_cases": [
+    "无需独立 MySQL/Redis/PHP-FPM 等守护进程的单进程部署 PHP 应用",
+    "为既有 PHP 应用添加数据库连接池与读写分离代理",
+    "本地开发到 CI/CD 到生产使用同一二进制与代码路径"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. Th ／ > **Postgres caveat.** `pdo_pgsql` and `pgsql` are compiled into the released Linux and macOS binaries, but **not** into the Windows binary, so on Windows \"no code changes\" holds for MySQL apps out of the box but not for a stock Postgres app. The PostgreSQL fr",
+     "lines": [
+      127,
+      129
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. The PostgreSQL proxy supports trust, md5, and SCRAM-SHA-256 authentication. SQL Server (TDS) proxying is not implemented.",
+     "lines": [
+      127
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "* **Database:** Replaces external MySQL with the embedded, zero-dependency Turso engine — a pure-Rust SQLite-compatible database compiled into the binary (supports clustering) ／ No external database needed. ePHPm embeds SQLite and exposes it via MySQL wire protocol through **litewire**. Your PHP app thinks it's talking to MySQL — it's actually talking to SQLite. One binary, one `.db` file, done.",
+     "lines": [
+      20,
+      142
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. Th",
+     "lines": [
+      127
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目内置数据库引擎与 SQL 代理，为 PHP 应用提供数据库连接与存储能力，属于服务数据库访问链路的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（README 声明所有仓库保持 100% MIT）",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Database:** Replaces external MySQL with the embedded, zero-dependency Turso engine — a pure-Rust SQLite-compatible database compiled into the binary (supports clustering) ／ ePHPm has also packed a highly robust and cloud-native feature set by drawing direct inspiration from other modern runtimes. This includes automatic ACME TLS certificate management and server-level middleware handlers (similar to RoadRunner and FrankenPHP), alongside an in-process SQL proxy with connection pooling and slow query logging inspired directly by ProxySQL. Combined with native cluster synchronization, OpenTelemetry tracing (OTLP), and container-aware runtime autotuning, ePHPm is fully prepared for modern cloud environments. ／ If you have a MySQL or PostgreSQL server, ePHPm's DB proxy sits between PHP and your database with connection pooling, read/write splitting, and health checks. PHP connects to `localhost:3306` (or `localhost:5432` for Postgres) — the proxy handles the rest. The PostgreSQL proxy supports trust, md5, and SCRAM-SHA-256 authentication. SQL Server (TDS) proxying is not implemented.",
+   "evidence_lines": [
+    20,
+    22,
+    127
+   ]
+  },
+  "fn": "ephpm/ephpm",
+  "sha": "0b61d873aae6",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bd5ccc5da974": {
+  "identity": {
+   "one_liner": "Rust 编写的 PII/敏感信息检测与脱敏引擎，含 CLI、网关与扫描器",
+   "review": "该仓库提供一个 Rust 实现的检测与脱敏引擎，包含 CLI 工具、OpenAI 兼容网关、Postgres PII 扫描器、REST API 和 WASM 模块，用于在 CI、提示词和数据库中发现并遮蔽 PII 与密钥，并生成可离线验证的证据包。面向需要在 CI 门禁敏感信息、盘点 Postgres 中 PII 的团队。扫描为只读，推荐连副本库。",
+   "highlights": [
+    "提供 redact-scan 对 Postgres 做只读 PII 发现，只输出位置与计数",
+    "提供 CLI、网关、REST API、WASM 四种形态的同一检测引擎",
+    "提供 redact-verify 对哈希链证据包做离线第三方校验"
+   ],
+   "use_cases": [
+    "CI/预提交中检测并阻断代码里的密钥与 PII",
+    "对 Postgres 数据库做 PII 盘点，用于 GDPR 数据处理记录",
+    "在提示词送往模型提供方前做脱敏并留存可验证审计证据"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Postgres PII discovery** — `redact-scan`. Read-only (replica/staging preferred). Locations and counts only; sample values never leave the host. `--report-url` is an explicit opt-in POST of that findings JSON. An input to a records-of-processing inventory ( ／ ### Postgres PII discovery ／ redact-scan --url postgres://reader@localhost/app --schema public --out report.json",
+     "lines": [
+      23,
+      82,
+      89
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供专门的 redact-scan 扫描器连接 Postgres 做只读 PII 发现，是为数据库生态服务的工具而非使用库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Postgres PII discovery** — `redact-scan`. Read-only (replica/staging preferred). Locations and counts only; sample values never leave the host. `--report-url` is an explicit opt-in POST of that findings JSON. An input to a records-of-processing inventory (GDPR Art. 30), not a certification. ／ ### Postgres PII discovery ／ One Rust engine: CLI, gateway, scanner, WASM. Apache-2.0.",
+   "evidence_lines": [
+    23,
+    82,
+    13
+   ]
+  },
+  "fn": "censgate/redact",
+  "sha": "bd5ccc5da974",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "96866995a38e": {
+  "identity": {
+   "one_liner": "单 Go 二进制的自托管全栈平台：网站、博客、PGP 邮件、加密聊天与 Tor",
+   "review": "VayuPress 是一个用 Go 编写的单进程自托管平台，把网站、博客、自有域名的 PGP 邮件服务器、端到端加密聊天、cookieless 分析和 Tor .onion 服务打包在一个二进制里，数据存于用户自己 VPS 上的 SQLite 文件。面向想自主掌控内容与基础设施的个人或企业，通过一条安装命令部署，附手机/桌面控制台 VayuOS；采用 Apache-2.0 许可，无付费层。",
+   "highlights": [
+    "在单个 Go 二进制中提供网站、博客、SMTP/IMAP/POP3 邮件服务器、端到端加密聊天与 cookieless 分析",
+    "为每个域名自动签发 Let's Encrypt 证书并生成 Tor .onion 服务",
+    "数据存储在用户自己 VPS 上的单个 SQLite 文件中，无遥测、无 SaaS 依赖"
+   ],
+   "use_cases": [
+    "个人或小团队在一台 VPS 上自托管网站、博客与自有域名邮箱",
+    "需要端到端加密邮件与聊天、不依赖第三方服务的私有通信部署",
+    "通过 Tor .onion 提供抗审查访问入口的发布场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Fourteen sites on one box.** The same VPS terminates TLS for fourteen hostnames, runs the mail server and serves the blog — from one binary and one database. No managed Postgres, no Redis, no separate mail provider, no CDN origin shield, and no second proces",
+     "lines": [
+      285
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One VPS. One process. One SQLite file. One console. No telemetry, no SaaS, no SDKs. ／ Pageviews, sessions, top pages, referrers, UTM campaigns, custom events, funnels, retention, revenue and a live visitor panel — stored in your own SQLite. A visitor is a **server-side hash with a salt that rotates daily**, so visits cannot be linked across day",
+     "lines": [
+      6,
+      135
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储自身数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，声明不会改用其他许可或推出付费版",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One VPS. One process. One SQLite file. One console. No telemetry, no SaaS, no SDKs. ／ VayuPress began as a publishing engine. It is now a **complete sovereign platform in one Go binary**:",
+   "evidence_lines": [
+    6,
+    26
+   ]
+  },
+  "fn": "johalputt/VayuPress",
+  "sha": "96866995a38e",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

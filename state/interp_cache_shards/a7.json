@@ -8970,5 +8970,240 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "74fc823f7ec5": {
+  "identity": {
+   "one_liner": "Rust ORM，基于字段声明关系与流式查询构建器",
+   "review": "TideORM 是一个 Rust ORM 库，提供模型宏、关系声明、预加载、迁移、加密字段等功能。面向使用 PostgreSQL、MySQL、SQLite 的 Rust 开发者，通过 Cargo feature 选择后端，默认启用 PostgreSQL，可按需关闭以减少编译依赖。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQLite 三种数据库后端，通过 Cargo feature flags 选择",
+    "提供关系声明、预加载、迁移、种子、事务与软删除等 ORM 能力",
+    "可选 encrypted-fields 特性实现模型字段的自动加密写入与解密读取"
+   ],
+   "use_cases": [
+    "Rust 后端应用的数据库访问层开发",
+    "需要在模型层对敏感字段做加密存储的场景",
+    "使用异步运行时（Tokio/async-std）的 Rust 项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL, and SQLite support ／ |`postgres`|PostgreSQL support (default)|",
+     "lines": [
+      20,
+      105
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL, and SQLite support ／ |`mysql`|MySQL/MariaDB support|",
+     "lines": [
+      20,
+      106
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL, and SQLite support ／ |`sqlite`|SQLite support|",
+     "lines": [
+      20,
+      107
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|`mysql`|MySQL/MariaDB support|",
+     "lines": [
+      106
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 ORM 库为应用程序提供数据库访问能力，属于数据库生态的开发库组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust ORM with field-declared relations and a fluent query builder. ／ - **Multi-Database** - PostgreSQL, MySQL, and SQLite support ／ |`mysql`|MySQL/MariaDB support|",
+   "evidence_lines": [
+    3,
+    20,
+    106
+   ]
+  },
+  "fn": "mohamadzoh/tideorm",
+  "sha": "74fc823f7ec5",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "445fe6f88985": {
+  "identity": {
+   "one_liner": "基于 Go+React+PostgreSQL 的闪动校园代跑自动化平台",
+   "review": "EasyRun 是一个面向闪动校园的代跑平台，用 Go 实现协议适配、任务调度与路线规划，React+TypeScript 提供管理后台和可选客户前台，数据集中存于 PostgreSQL 17（含 L2 路线缓存）。适合需要自行部署代跑工作台的个人或商业运营者；依赖指定客户端版本 8.7.9，其他版本未经验证。",
+   "highlights": [
+    "支持多账号管理、自动任务调度（固定时间/计划时段随机）与多 Worker 并发执行",
+    "基于地图步行路径服务构建路网并生成候选路线，支持多 API Key 令牌桶与公平调度",
+    "L1 进程内 LRU 与 L2 PostgreSQL 持久化缓存协同，提供 OpenAPI 描述与结构化日志"
+   ],
+   "use_cases": [
+    "为闪动校园账号自动执行跑步计划并持久化记录",
+    "个人或商业模式的代跑服务运营与客户计费管理"
+   ],
+   "use_cases_extra_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 17 ／ **EasyRun** 是面向 **闪动校园**的**智能代跑平台**。基于 Go、React 与 PostgreSQL，将账号、计划、路线、任务和记录集中到一个可自行部署的工作台中，支持个人使用与可选客户前台。 ／ - L1 进程内 LRU 与 L2 PostgreSQL 持久化缓存协同工作。",
+     "lines": [
+      9,
+      34,
+      102
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明基于 PostgreSQL 存储账号、计划、任务与记录等平台数据，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "自有代码 MIT；随附第三方人脸模型保留上游非商业研究用途限制",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**EasyRun** 是面向 **闪动校园**的**智能代跑平台**。基于 Go、React 与 PostgreSQL，将账号、计划、路线、任务和记录集中到一个可自行部署的工作台中，支持个人使用与可选客户前台。 ／ |数据库|PostgreSQL 17| ／ |Docker Compose|新部署，同时启动应用和数据库|下方快速开始|",
+   "evidence_lines": [
+    34,
+    125,
+    154
+   ]
+  },
+  "fn": "Zolohacker/EasyRun",
+  "sha": "445fe6f88985",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bdf1be1d5144": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的员工反馈管理平台，用 PostgreSQL 存储数据并集成 AI 情感分析",
+   "review": "这是一个供组织内部员工发布反馈、匿名或实名讨论、投票的应用系统，使用 Spring Boot + Spring Modulith 构建，数据层为 Spring Data JPA + PostgreSQL，并用 Flyway 管理迁移，AI 部分通过 Spring AI 接入 Ollama 或 OpenAI 做情感分析、话题识别与垃圾回复检测，支持 Docker Compose 与 Kubernetes 部署。适合作为内部反馈收集工具或 Spring 全栈参考项目使用。",
+   "highlights": [
+    "使用 Spring AI 接入 Ollama 和 OpenAI，实现消息情感分析、自动话题识别与垃圾回复检测",
+    "数据层使用 Spring Data JPA、Hibernate、PostgreSQL，并用 Flyway 管理 schema 迁移",
+    "提供 Docker Compose 与 Kind/Kubernetes 部署方式，支持通过环境变量切换 AI 模型提供方"
+   ],
+   "use_cases": [
+    "企业内部员工反馈与匿名讨论的收集管理",
+    "需要集成 AI 情感分析/内容审核的 Spring Boot 应用开发参考",
+    "学习 Spring Modulith、Testcontainers、K8s 部署的工程实践"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Data:** Spring Data JPA, Hibernate, PostgreSQL, and Flyway",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是一个使用 PostgreSQL 存储数据的反馈管理系统，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A feedback management platform where an organization can provide their employees with a private space to: ／ * **Data:** Spring Data JPA, Hibernate, PostgreSQL, and Flyway",
+   "evidence_lines": [
+    7,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "sivaprasadreddy/feedback-hub",
+  "sha": "bdf1be1d5144",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

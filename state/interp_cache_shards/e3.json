@@ -9886,5 +9886,257 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "76c5b6f9e79a": {
+  "identity": {
+   "one_liner": "自托管 PaaS：单二进制 Rust 面板，部署容器/Compose/数据库服务",
+   "review": "Pier 是一个自托管 PaaS 平台，用于在自己的服务器上部署容器、Docker Compose 栈和 Git 仓库，并提供反向代理、自动 SSL、多服务器管理与实时监控。面向个人开发者和 homelab/小团队用户。面板本身以嵌入式 SQLite 存储数据、无需外部数据库，内置数据编辑器可查询 PostgreSQL、MySQL/MariaDB、MongoDB、Redis 等部署服务。",
+   "highlights": [
+    "单二进制实现容器/Compose 部署、Git webhook 构建与回滚、Traefik 反向代理与 Let's Encrypt SSL",
+    "内置数据编辑器，可在面板中浏览表结构并对 PostgreSQL、MySQL/MariaDB、MongoDB、Redis 运行查询",
+    "内置私有+代理 npm registry，支持 npm/yarn/pnpm/bun 客户端"
+   ],
+   "use_cases": [
+    "在低配置 VPS 上部署和管理容器化应用",
+    "通过 Git webhook 自动构建部署源码仓库",
+    "为团队提供私有 npm 包托管与上游代理缓存"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Running containers**|6+ (Laravel, PostgreSQL, Redis, Soketi, Horizon, Traefik)|1 binary + Traefik| ／ |**PostgreSQL** (incl. PostGIS, TimescaleDB)|native `sqlx`|schemas · tables · views · structure · rows|arbitrary SQL| ／ - **SQL Runner** — run any statement against PostgreSQL or MySQL/MariaDB. Reads return a grid (capped at 1,000 rows); writes report the affected-row count. A 15-second statement timeout keeps a runaway query from pinning the database.",
+     "lines": [
+      91,
+      232,
+      245
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**MySQL / MariaDB**|native `sqlx`|databases · tables · views · structure · rows|arbitrary SQL| ／ - **SQL Runner** — run any statement against PostgreSQL or MySQL/MariaDB. Reads return a grid (capped at 1,000 rows); writes report the affected-row count. A 15-second statement timeout keeps a runaway query from pinning the database.",
+     "lines": [
+      233,
+      245
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Database**|External PostgreSQL|Embedded SQLite| ／ - 🗃 Embedded SQLite — no external database required ／ |Database|SQLite|Embedded persistence|",
+     "lines": [
+      93,
+      124,
+      276
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "**Databases** — PostgreSQL, MySQL, MariaDB, MongoDB, Redis, Valkey, ClickHouse, Cassandra, ScyllaDB",
+     "lines": [
+      257
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**MySQL / MariaDB**|native `sqlx`|databases · tables · views · structure · rows|arbitrary SQL| ／ - **SQL Runner** — run any statement against PostgreSQL or MySQL/MariaDB. Reads return a grid (capped at 1,000 rows); writes report the affected-row count. A 15-second statement timeout keeps a runaway query from pinning the database.",
+     "lines": [
+      233,
+      245
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为部署和管理数据库服务及容器应用服务的平台组件，数据库（如 SQLite）仅作为其自身存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Deploy containers, Docker Compose stacks, and Git repositories with automatic SSL, reverse proxy, and a modern web dashboard — all from a single Rust binary using **20–40 MB of RAM**. ／ |**Database**|External PostgreSQL|Embedded SQLite| ／ - 🗄 Built-in **data editor** — browse tables/collections and run SQL/Mongo/Redis queries from the dashboard (PostgreSQL, MySQL/MariaDB, MongoDB, Redis)",
+   "evidence_lines": [
+    21,
+    93,
+    119
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "joveptesg/Pier",
+  "sha": "76c5b6f9e79a",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "deff5c06bebc": {
+  "identity": {
+   "one_liner": "自托管车队视频与GPS平台，基于PostgreSQL RLS实现多租户隔离",
+   "review": "OpenMDVR 是一个自托管的车队视频与GPS追踪平台，整合行车记录仪实时视频（WebRTC/RTMP）、GT06/JT808/JT1078 设备接入、轨迹、围栏与告警取证，面向想自有数据的小车队和多租户运营商。核心机制是所有业务表带租户ID并由 PostgreSQL 行级安全强制隔离，设备服务用 Go 编写，docker compose 一键部署；JT/T 808/1078 仅经模拟器测试，未在物理设备上验证。",
+   "highlights": [
+    "支持 GT06、RTMP 行车记录仪与 JT/T 808+1078 设备接入，实时视频经 WebRTC 播放",
+    "租户隔离由 PostgreSQL 行级安全（RLS）在数据库层强制执行",
+    "提供告警自动取证片段、一次性视频访问票据、用量计量与配额"
+   ],
+   "use_cases": [
+    "自托管管理小型车队的位置与视频数据",
+    "多租户运营商为多个客户提供车队监控服务",
+    "对供应商视频/定位数据进行告警取证与轨迹回放"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Isolation is enforced inside PostgreSQL.** ／ one machine, no video. PostgreSQL ran separately and used about 6 cores in",
+     "lines": [
+      62,
+      179
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 PostgreSQL 存储业务与时序数据的车队平台应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Isolation is enforced inside PostgreSQL.** ／ modular monolith (one Go binary, one API, one database, `docker compose up`): ／ docker compose -f infra/docker-compose.yml up -d --build",
+   "evidence_lines": [
+    62,
+    122,
+    210
+   ]
+  },
+  "fn": "openmdvr/openmdvr",
+  "sha": "deff5c06bebc",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c9cf97af069e": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 与 BullMQ 的 Webhook 可靠投递平台",
+   "review": "Relay 是一个接收签名 Webhook 事件并异步投递的服务，提供 HMAC 签名校验、幂等去重、事务性 outbox、指数退避重试、死信队列与手动重试，并暴露 Prometheus 指标和前端控制台。面向需要可靠消费 Webhook 的后端系统，README 注明为单租户、单一投递目标，仅保证 at-least-once 投递。",
+   "highlights": [
+    "提供 HMAC-SHA256 入站/出站签名校验与幂等事件接入",
+    "实现事务性 outbox、独立重试队列与死信队列手动重试",
+    "暴露 Prometheus /metrics 端点及带投递历史的前端控制台"
+   ],
+   "use_cases": [
+    "需要可靠消费并重试 Webhook 的后端事件接入",
+    "对下游不可用场景做死信恢复与重放",
+    "对事件投递做监控与审计追踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Persistent event storage in PostgreSQL. ／ |PostgreSQL|Durable event, attempt, and dead-letter storage| ／ |Docker|Reproducible local infrastructure with PostgreSQL and Redis|",
+     "lines": [
+      22,
+      50,
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL 存储事件、Redis/BullMQ 做队列的 Webhook 投递服务，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Persistent event storage in PostgreSQL. ／ |PostgreSQL|Durable event, attempt, and dead-letter storage|",
+   "evidence_lines": [
+    22,
+    50
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Dieu-Merci-Ndenga/relay",
+  "sha": "c9cf97af069e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

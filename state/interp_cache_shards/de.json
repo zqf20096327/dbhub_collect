@@ -10885,5 +10885,212 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fdf4e9e7ab37": {
+  "identity": {
+   "one_liner": "TypeScript 版 ClickHouse schema 管理与迁移 CLI",
+   "review": "chkit 是面向 TypeScript 项目的 ClickHouse schema 管理命令行工具，用代码定义表、视图、物化视图和字典，生成可审查的 SQL 迁移并检测线上 schema 漂移，可在终端或 CI 中运行。适合负责 ClickHouse schema 演进的开发者，提供代码生成、存量库采纳和数据保全迁移流程。",
+   "highlights": [
+    "以 TypeScript DSL 定义表、视图、物化视图与字典，生成可审查的 SQL 迁移",
+    "检测线上 schema 漂移，check 命令可作为 CI 失败门槛",
+    "提供代码生成插件（TypeScript 类型与 Zod schema）及数据保全迁移流程"
+   ],
+   "use_cases": [
+    "ClickHouse 项目的 schema 版本化迁移管理",
+    "在 CI 中强制校验迁移状态与线上 schema 一致性",
+    "为存量 ClickHouse 表建立迁移历史或回填数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**ClickHouse schema management in TypeScript.** ／ Define ClickHouse schemas in code, generate reviewable SQL migrations, and detect live schema drift from the terminal or CI. chkit manages tables, views, materialized views and dictionaries alongside your application. ／ Supply your actual development database connection through `CLICKHOUSE_URL` (HTTP/HTTPS endpoint and port), `CLICKHOUSE_USER`, `CLICKHOUSE_PASSWORD`, and `CLICKHOUSE_DB`. An intentionally blank password is allowed; an absent password is missing information. Ke",
+     "lines": [
+      3,
+      9,
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 提供 schema 管理与迁移的 CLI 工具，属于数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Define ClickHouse schemas in code, generate reviewable SQL migrations, and detect live schema drift from the terminal or CI. chkit manages tables, views, materialized views and dictionaries alongside your application. ／ |`chkit`|Schema and migration CLI| ／ The ObsessionDB team builds chkit. Use schema management with self-hosted ClickHouse, ClickHouse Cloud or ObsessionDB. We're also building **chkit Sync**, a separate beta workflow for syncing business applications into ClickHouse; see the Sync documentation.",
+   "evidence_lines": [
+    9,
+    110,
+    121
+   ]
+  },
+  "fn": "obsessiondb/chkit",
+  "sha": "fdf4e9e7ab37",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cc8513d08cc5": {
+  "identity": {
+   "one_liner": "为编码代理提供本地持久化技能与记忆层",
+   "review": "为 Claude Code、Codex CLI 等编码代理提供本地技能/记忆存储：任务后记录操作过程为技能，任务前召回，并按外部证据（如通过测试）调整强度、按遗忘曲线衰减未用技能。数据存于本地 SQLite，含来源标记、哈希链防篡改历史，通过 hooks 与 9 个 MCP 工具接入代理。适合使用 AI 编码代理并希望跨会话留存操作经验的开发者。",
+   "highlights": [
+    "本地 SQLite + FTS5 BM25 与本地 ONNX 嵌入模型实现双语混合检索，离线运行，无需 API key 或云端服务",
+    "每条记忆记录来源（owner/agent/imported/derived），仅所有者可批准为规则，编辑历史以 SHA256 哈希链防篡改",
+    "提供 hooks（五个事件）与 9 个 MCP 工具，一条命令接入 Claude Code、Codex、Cursor 等六个代理，多代理共享单一数据库并记录写入者"
+   ],
+   "use_cases": [
+    "编码代理跨会话保留操作技能与经验教训",
+    "多代理（Claude Code 与 Codex 等）共享同一记忆库并区分各自写入记录",
+    "需要本地离线运行、不依赖云端记忆服务的代理工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **$0 per write and per read** — no LLM calls, no cloud, no API keys. Plain SQLite on your disk. ／ |**Where it runs**|your disk. SQLite + FTS5 + a local ONNX embedding model. No API key, no cloud, no Docker, no graph database|",
+     "lines": [
+      17,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 作为本地存储引擎使用，本身是为 AI 代理服务的记忆工具而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "skillmem gives Claude Code and the Codex CLI a local, persistent skill & memory layer. After every non-trivial task the agent can record *how it was done* as a skill; before the next task it recalls the relevant ones; skills that keep proving useful get stronger, and skills nobody uses fade away — the way human memory works. ／ - **$0 per write and per read** — no LLM calls, no cloud, no API keys. Plain SQLite on your disk. ／ - **Deep Claude Code integration** — hooks on five events + 9 MCP tools installed with one command.",
+   "evidence_lines": [
+    15,
+    17,
+    22
+   ]
+  },
+  "fn": "liza-studio/skillmem",
+  "sha": "cc8513d08cc5",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "17dd25e3ba3d": {
+  "identity": {
+   "one_liner": "开源自托管多租户 HRMS，Next.js+PostgreSQL 构建的人力资源管理平台",
+   "review": "Euron Open HRMS 是一个 MIT 许可的开源人力资源管理系统，提供员工档案、考勤、请假、覆盖 24 国的薪酬、入职、文档、离职、绩效及运营者控制台。面向需要自托管 HR 系统的企业，采用 Next.js 15 + Node.js 22 + PostgreSQL 16，通过仓库层实现工作区隔离，敏感字段用 KMS 包裹密钥的 AES-256-GCM 加密，支持本地 AWS 模拟器运行或 Terraform 部署至 AWS。",
+   "highlights": [
+    "多租户架构，仓库层为每个查询添加工作区范围限定，并有集成测试验证隔离",
+    "内置 24 个国家的薪酬规则包，另有通用引擎支持 119 国可选",
+    "提供 Terraform 模块，可在本地 AWS 模拟器运行或一键部署至 AWS"
+   ],
+   "use_cases": [
+    "企业自托管人力资源与薪酬管理",
+    "SaaS 运营方以多租户方式向多家公司提供 HR 服务",
+    "需要工作区数据隔离与敏感字段加密的 HR 数据管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 ／ The API also runs the background job worker. It is a Postgres queue (`FOR UPDATE SKIP LOCKED`) ／ sealed with AES-256-GCM before they reach Postgres. Each workspace has its own data key, ／ |Data|PostgreSQL 16, Kysely, plain SQL migrations|Hot columns for queries, `jsonb` for evolving HR records (ADR 0001)| ／ |Jobs|Postgres queue, `SKIP LOCKED`, advisory-lock leaders|No broker to run; transactional with the data it acts on (ADR 0003)|",
+     "lines": [
+      8,
+      151,
+      185,
+      215,
+      216
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是用 PostgreSQL 16 存储员工、考勤、薪酬等业务数据的 HRMS 应用，Postgres 队列亦用于其后台任务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Euron Open HRMS** is an open-source, MIT-licensed human resources platform, part of the ／ - Every database query is scoped to the caller's workspace by the repository layer. ／ The API also runs the background job worker. It is a Postgres queue (`FOR UPDATE SKIP LOCKED`)",
+   "evidence_lines": [
+    31,
+    40,
+    151
+   ]
+  },
+  "fn": "euron-sde-team/euron-open-hrms",
+  "sha": "17dd25e3ba3d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

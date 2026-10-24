@@ -11118,5 +11118,125 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "390697fe13af": {
+  "identity": {
+   "one_liner": "自托管家庭网络实时监控 PWA 看板",
+   "review": "NetPulse 是一个面向 OpenWrt/GL.iNet 路由器的自托管监控面板，用 Go 单二进制后端加 React 前端实现，通过路由器上的 agent 或 SSH/SNMP 采集状态，提供设备清单、拓扑图、健康评分、WireGuard 与 AdGuard Home 统计及告警，数据存储使用 SQLite，适合在家用局域网内自建网络监控的用户。",
+   "highlights": [
+    "通过 SSE 实时更新路由器健康、设备、WireGuard 对端与 AdGuard Home 统计",
+    "支持 OpenWrt 原生 .ipk/.apk agent、Asuswrt 静态二进制、SNMP 与 SSH 轮询多种采集方式",
+    "内嵌只读 MCP 服务器（默认关闭），供 AI 助手以 API token 查询网络状态"
+   ],
+   "use_cases": [
+    "家庭局域网中监控 OpenWrt/GL.iNet 路由器集群健康与设备接入",
+    "绘制网络拓扑并接收温度、WAN 断线、新设备等告警",
+    "通过 MQTT 将网络状态发布到 Home Assistant"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身数据，是为家庭网络监控服务的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " The pulse of your home network. Real time. No cloud. ／ **What it runs on.** The server is one static Go binary on any Linux box. ／ |OpenWrt (incl. GL.iNet)|Native `netpulse-agent` package (`.ipk`/`.apk`)|procd, UCI config, `luci-app-netpulse`, in-app install and upgrade|",
+   "evidence_lines": [
+    12,
+    65,
+    71
+   ]
+  },
+  "fn": "gnacho/netpulse",
+  "sha": "390697fe13af",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9a763f06fd9f": {
+  "identity": {
+   "one_liner": "本地单用户算法交易桌面应用，Tauri+Rust 实现",
+   "review": "OpenAlgo Desktop 是 OpenAlgo web 的单机桌面版，为个人交易者提供经纪商连接、REST API、行情 WebSocket、策略模块、图表/剥皮交易终端和期权工具，通过 MCP 对接 AI 客户端。基于 Tauri 2 和 Rust 后端构建，本地用 SQLite 存储主库、日志和沙箱三组数据；不支持无桌面环境和 Docker 运行。",
+   "highlights": [
+    "连接 37 家经纪商，提供与 OpenAlgo web 相同的 REST API（/api/v1）和 WebSocket 行情协议",
+    "本地以 SQLite 维护 main、logs、sandbox 三个数据库，凭据以密码锁定的密钥加密存储",
+    "内置沙箱模式（analyzer），可将应用、API、webhook 与 MCP 客户端的订单重定向到沙箱"
+   ],
+   "use_cases": [
+    "个人在本地桌面运行算法交易并连接多经纪商",
+    "通过 REST API/SDK 对接 TradingView、Amibroker、Excel 等外部平台",
+    "用沙箱模式先回测与验证策略再实盘下单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** (WAL, r2d2 pool): 3 databases (main, logs, sandbox)",
+     "lines": [
+      487
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 SQLite 作为本地存储（main/logs/sandbox 三库），属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 未标注许可证；依赖清单中列有 MIT 等组件许可",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "mode), and the Telegram, WhatsApp and MCP connections. It is built with",
+   "evidence_lines": [
+    25
+   ]
+  },
+  "fn": "marketcalls/openalgo-desktop",
+  "sha": "9a763f06fd9f",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

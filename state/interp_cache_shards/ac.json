@@ -10532,5 +10532,140 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22ab72339cdd": {
+  "identity": {
+   "one_liner": "TypeScript 应用层可搜索加密 SDK，密文上直接查询",
+   "review": "CipherStash Stack 是面向 TypeScript 应用的字段级可搜索加密 SDK，在应用内完成加解密，密文以 EQL 类型存入 PostgreSQL 并支持等值、范围、模糊与 JSON 查询。内置基于 ZeroKMS 的密钥管理与审计日志，提供 Supabase、Prisma、Drizzle 及原生 pg 的接入指南，适合需要在 Postgres 上加密敏感字段的应用开发者。",
+   "highlights": [
+    "支持在密文上执行等值、范围、模糊文本与 JSON 包含查询",
+    "内置密钥管理（ZeroKMS），提供自动轮换与解密审计日志",
+    "提供 Supabase.js、Prisma Next、Drizzle 与原生 pg 的集成方式"
+   ],
+   "use_cases": [
+    "对 Postgres 数据库中的敏感字段做应用层加密",
+    "多租户场景下按租户隔离加密密钥（keysets）",
+    "基于用户身份绑定加密密钥的身份锁定访问控制"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* Searchable Encryption for any Postgres including Supabase, RDS, Aurora, Prisma Postgres and Neon ／ |**Raw PostgreSQL (`pg`)**|[PostgreSQL quickstart →][encryption]| ／ Encrypt individual fields and still run real queries against them — all on ciphertext, in PostgreSQL:",
+     "lines": [
+      23,
+      46,
+      55
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供面向 PostgreSQL 的加密 SDK 与 CLI，为数据库生态提供安全能力而非仅消费数据库的应用。",
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* Searchable Encryption for any Postgres including Supabase, RDS, Aurora, Prisma Postgres and Neon ／ Encrypt individual fields and still run real queries against them — all on ciphertext, in PostgreSQL:",
+   "evidence_lines": [
+    23,
+    55
+   ]
+  },
+  "fn": "cipherstash/stack",
+  "sha": "22ab72339cdd",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ceb5330df58f": {
+  "identity": {
+   "one_liner": "纯 Zig 单二进制 CMS，内嵌 SQLite 存储内容",
+   "review": "Publr 是一个用 Zig 编写的内容管理系统，编译为单一二进制文件，可在服务器原生运行或编译为 WebAssembly 在浏览器运行。它使用内嵌 SQLite 文件（data/publr.db）存储数据，通过 CLI、REST API、管理界面提供同一套操作，支持插件扩展。面向想搭建内容网站的个人或自动化 agent，需 Zig 0.16 构建，目前为 v0.2 预发布版本。",
+   "highlights": [
+    "单一二进制包含完整内容平台，无 npm 与框架依赖，`zig build` 即可构建",
+    "支持以 WebAssembly 形式在浏览器中运行同一二进制，无需服务器",
+    "管理端、CLI、REST API 与插件共用同一套操作契约，插件经 WebAssembly 沙箱运行"
+   ],
+   "use_cases": [
+    "搭建静态或服务器渲染的内容站点/博客",
+    "由自动化 agent 驱动的内容管理流程",
+    "在无服务器环境中于浏览器内运行 CMS"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Owned top to bottom**: pure Zig, three vendored libraries, one SQLite",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 为其内嵌数据存储文件，Publr 是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Owned top to bottom**: pure Zig, three vendored libraries, one SQLite ／ The database lives in `data/publr.db` next to where you run it (`--db <path>`",
+   "evidence_lines": [
+    16,
+    78
+   ]
+  },
+  "fn": "publr-org/publr",
+  "sha": "ceb5330df58f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

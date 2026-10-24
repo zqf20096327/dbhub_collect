@@ -11411,5 +11411,293 @@
   "generated_at": "2026-10-19",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3664f2ba3c2c": {
+  "identity": {
+   "one_liner": "本地优先的多 Agent 任务与上下文管理器，以本地 SQLite 为事实源",
+   "review": "面向 Windows 上的多 Agent 开发工作流，把计划、任务、进度、阻塞、长期记录和 Session 交接存进一个本地 SQLite 库（data\\atm.sqlite）。桌面 UI、MCP、CLI 和本地 HTTP 读写同一数据库；3.0 用 Rust 重写为单进程，仅监听 loopback。数据目录在 %LOCALAPPDATA%\\AyanamiTaskManager3。",
+   "highlights": [
+    "桌面 UI、MCP、CLI 与本地 HTTP 共用同一本地 SQLite 数据库，仅监听 loopback（L141）",
+    "提供 MCP 工具面（atm_begin/atm_brief 等 13 个工具），支持 Codex、Claude Desktop、Claude Code、Kimi Code 四客户端接入（L43-L50）",
+    "包含在线备份与恢复、导入导出，数据库损坏时进入恢复页（L97）"
+   ],
+   "use_cases": [
+    "多个 AI Agent 在同一项目上交接 Session 时共享任务与上下文",
+    "跨项目共享知识库的存储与检索",
+    "Windows 本地任务管理与项目健康度追踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **数据在哪**：3.0 的数据在 `%LOCALAPPDATA%\\AyanamiTaskManager3`，项目、共享知识和设置都在 `data\\atm.sqlite` 一个库里。`%LOCALAPPDATA%\\AyanamiTaskManager` 留着 2.x 的数据（3.0 只读不写），还有 ATM 同步过去的 Agent Guide、文档与 Skills。 ／ AI Agents 经 MCP 连接本地动态 bridge，与桌面 UI（WebView2）、CLI 共用同一套应用服务，写入本地 SQLite ／ 截至 2026-08-29，本机 SQLite 里的真实计数：",
+     "lines": [
+      123,
+      141,
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 作为自身数据存储，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " AI Agents 经 MCP 连接本地动态 bridge，与桌面 UI（WebView2）、CLI 共用同一套应用服务，写入本地 SQLite ／ - **数据在哪**：3.0 的数据在 `%LOCALAPPDATA%\\AyanamiTaskManager3`，项目、共享知识和设置都在 `data\\atm.sqlite` 一个库里。`%LOCALAPPDATA%\\AyanamiTaskManager` 留着 2.x 的数据（3.0 只读不写），还有 ATM 同步过去的 Agent Guide、文档与 Skills。 ／ AyanamiTaskManager（ATM）把计划、任务、进度、阻塞、长期记录、证据和 Session 交接放进一个本地事实源。Agent 开工时读一份 brief 就能接着做。它不保存整段对话，只留下会影响项目推进的结构化事实。桌面界面、MCP、CLI 和本地 HTTP 读写的是同一个数据库，你在界面上看到的就是 Agent 读到的。",
+   "evidence_lines": [
+    141,
+    123,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ayanamislover/AyanamiTaskManager",
+  "sha": "3664f2ba3c2c",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "db7ddebc293b": {
+  "identity": {
+   "one_liner": "基于 FastAPI+React 的多学段 AI 教学平台，本地 SQLite 存储",
+   "review": "一个覆盖小学到高中的 AI 智慧教学平台，功能包含题库组卷、在线考试、作业批改、课堂互动、学情分析与积分激励。AI 能力通过 DashScope 与 DeepSeek 接入，支持 RAG 检索增强，数据存于双 SQLite 库和本地目录，可完全离线部署，适合学校、教研组或教师个人直接使用。",
+   "highlights": [
+    "提供题库管理、智能组卷、在线考试与 AI 自动批改",
+    "接入 DashScope 与 DeepSeek，支持 RAG 知识库检索增强与 SSE 流式输出",
+    "数据落在本地双 SQLite 库与本地目录，支持离线部署与 Windows 桌面一键安装"
+   ],
+   "use_cases": [
+    "学校或教师开展在线考试、题库组卷与作业批改",
+    "课堂互动教学：抢答、投票、分组讨论、点名考勤",
+    "需要本地化离线部署的教学数据管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 基于 **FastAPI + React** 构建，接入阿里云 DashScope（通义千问 / 通义万相）与 DeepSeek；SSE 流式输出与 WebSocket 实时链路支撑课堂并发，数据全部落在本地 SQLite 与本地目录，可完全离线部署。 ／ |🔒 本地化优先|双 SQLite 库 + 本地目录存数据，可完全离线部署；AI 走国内可达通道，pip 有镜像方案，学生数据不出校|",
+     "lines": [
+      16,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明业务数据全部存储于本地 SQLite 库，SQLite 是该教学应用的数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 基于 **FastAPI + React** 构建，接入阿里云 DashScope（通义千问 / 通义万相）与 DeepSeek；SSE 流式输出与 WebSocket 实时链路支撑课堂并发，数据全部落在本地 SQLite 与本地目录，可完全离线部署。 ／ |🔒 本地化优先|双 SQLite 库 + 本地目录存数据，可完全离线部署；AI 走国内可达通道，pip 有镜像方案，学生数据不出校|",
+   "evidence_lines": [
+    16,
+    60
+   ]
+  },
+  "fn": "youufis/SmartKBS",
+  "sha": "db7ddebc293b",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cf6c59d1b006": {
+  "identity": {
+   "one_liner": "基于 Nuxt 与 Drizzle ORM 的 PostgreSQL 社区发帖应用",
+   "review": "Esposter 是一个用于发布和分享内容的 Web 社区应用，采用 pnpm monorepo 架构，前端为 Nuxt/Vue/Pinia，后端为 tRPC 与 Drizzle ORM，数据存于 PostgreSQL（db-schema 包以 PostgreSQL 为 source of truth），基础设施用 Pulumi 部署到 Azure，并配有基于 Claude 会话的 AI 代码审查流程。适合想参考其技术栈组合与工程实践的开发者。",
+   "highlights": [
+    "使用 Drizzle ORM 管理 PostgreSQL schema 与迁移，以 PostgreSQL 作为数据源（L256）",
+    "pnpm workspaces monorepo，含 web 应用、Azure Functions 后端与多个可发布包",
+    "通过 GitHub Actions 工作流以 Claude 会话对 ai/queue 分支的提交做自动审查（L222-L228）"
+   ],
+   "use_cases": [
+    "需要多人实时协作的团队",
+    "基于网页的远程办公场景",
+    "需要集成聊天与任务管理的项目团队"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "3. Install PostgreSQL + PgAdmin. ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+     "lines": [
+      163,
+      256
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 作为应用的技术栈组件列出，并在本地开发与 db-schema 包中使用 PostgreSQL 存储数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " PostgreSQL is a powerful, open source object-relational database system with over 35 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance. ／ 3. Install PostgreSQL + PgAdmin. ／ |`packages/db-schema`|Drizzle ORM schemas and migrations (PostgreSQL source of truth)|—|",
+   "evidence_lines": [
+    84,
+    163,
+    256
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Esposter/Esposter",
+  "sha": "cf6c59d1b006",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "90983ea9a864": {
+  "identity": {
+   "one_liner": "本地优先的 macOS 思维导图应用，数据存于单个 SQLite 文件",
+   "review": "Mindscape 是一个纯本地运行的 macOS 思维导图应用，基于 SwiftUI/AppKit 自绘画布，所有导图、目录、快照保存在一个本地 SQLite 文件中，无账号、无云同步、无网络请求，零第三方依赖。适合需要离线使用、注重数据本地的个人用户。当前为 0.5.3 早期版本，采用 ad-hoc 签名，导入格式仅支持 Markdown/OPML/JSON。",
+   "highlights": [
+    "所有数据保存在单个本地 SQLite 文件（系统 libsqlite3，WAL 模式），不登录、不上传",
+    "支持 8 种布局、8 套主题、大纲视图、演示模式、快照与历史版本回滚",
+    "支持导出 PNG/PDF/Markdown/OPML/JSON，并导入 Markdown/OPML/JSON"
+   ],
+   "use_cases": [
+    "离线环境下创建和管理思维导图",
+    "需要导图数据完全保存在本地的个人知识整理",
+    "从 Markdown/OPML 大纲生成导图并导出分享"
+   ],
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SwiftUI · AppKit · SQLite · 零第三方依赖 ／ > A local-first mind map app for macOS. All data lives in a local SQLite file — no account, no cloud, no telemetry. ／ - **本地优先**：所有导图在一个 SQLite 文件里，断网可用，不登录，不上传。",
+     "lines": [
+      6,
+      16,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有导图数据保存在本地 SQLite 文件中，SQLite 是其存储层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> A local-first mind map app for macOS. All data lives in a local SQLite file — no account, no cloud, no telemetry. ／ - **本地优先**：所有导图在一个 SQLite 文件里，断网可用，不登录，不上传。 ／ - SQLite 自动保存（600ms 防抖）",
+   "evidence_lines": [
+    16,
+    38,
+    120
+   ]
+  },
+  "fn": "jiuxianzai/Mindscape",
+  "sha": "90983ea9a864",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

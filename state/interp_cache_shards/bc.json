@@ -9196,5 +9196,100 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "73540a779670": {
+  "identity": {
+   "one_liner": "MySQL 与 openGauss 双向 SQL 文件离线转换桌面工具",
+   "review": "这是一个运行在 Windows 上的离线 SQL 文件转换工具，用于在 MySQL 与 openGauss 之间双向转换 .sql 文件，采用 PySide6 桌面界面，转换核心仅依赖 Python 标准库，无需数据库连接。工具采用保守子集策略，无法安全转换的语句会标记为 BLOCKER 并生成 JSON 报告，仅支持部分 DDL/DML 语法，单文件上限 500 MiB，转换结果需在测试库人工验证。适合需要在两种数据库间迁移表结构与数据的开发或运维人员。",
+   "highlights": [
+    "支持 MySQL 与 openGauss 双向 SQL 文件转换，覆盖 CREATE TABLE、索引、唯一约束、简单 ALTER/INSERT/UPDATE/DELETE 等语法子集",
+    "生成按行号列出 INFO/WARNING/BLOCKER 的 JSON 报告，阻断语句输出为 *_review.sql 文件",
+    "支持最大 500 MiB 文件的流式解析与增量输出，单条 SQL 超过 32 MiB 阻断，转换过程可取消"
+   ],
+   "use_cases": [
+    "将 MySQL 导出的 .sql 文件转换为 openGauss 可用的 SQL 脚本，或反向转换",
+    "在不连接数据库、不上传文件的离线环境中处理 SQL 迁移文件",
+    "对含中文/特殊编码的大体积 SQL 导出文件做转换并获取逐语句诊断报告"
+   ],
+   "db_verdicts_lines_note": ""
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# SQL Converter | MySQL ↔ OpenGauss 桌面转换工具 ／ 一个无需数据库连接、无需远程后端的 **Windows 离线 SQL 文件转换工具**。桌面界面使用 PySide6，SQL 转换核心仅依赖 Python 标准库。支持 MySQL 与 OpenGauss 的**保守子集**转换，无法安全转换的语句会在报告中明确标记，不能视为完整迁移成功。 ／ - MySQL → openGauss / openGauss → MySQL 双向转换。",
+     "lines": [
+      1,
+      3,
+      9
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# SQL Converter | MySQL ↔ OpenGauss 桌面转换工具 ／ 一个无需数据库连接、无需远程后端的 **Windows 离线 SQL 文件转换工具**。桌面界面使用 PySide6，SQL 转换核心仅依赖 Python 标准库。支持 MySQL 与 OpenGauss 的**保守子集**转换，无法安全转换的语句会在报告中明确标记，不能视为完整迁移成功。 ／ > ⚠️ **请勿将转换结果未经测试就直接导入生产数据库。** `READY_FOR_TESTING` 表示本工具没有检测到已知阻断项，**不表示已通过目标数据库执行验证**。数据库版本、openGauss 兼容模式、Dolphin 插件、字符集、权限以及实际数据可能影响结果。 ／ - MySQL → openGauss / openGauss → MySQL 双向转换。",
+     "lines": [
+      1,
+      3,
+      5,
+      9
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "### v2.5 · PostgreSQL/OpenGauss UNIQUE 语法修复 ／ - 具备新的语法回归测试与 `samples/postgres_constraint_smoke.sql`；参阅 `UPDATE_V2_5.md`。",
+     "lines": [
+      169,
+      173
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为数据库之间的 SQL 语法转换提供服务，本身不使用数据库存储数据，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# SQL Converter | MySQL ↔ OpenGauss 桌面转换工具 ／ 一个无需数据库连接、无需远程后端的 **Windows 离线 SQL 文件转换工具**。桌面界面使用 PySide6，SQL 转换核心仅依赖 Python 标准库。支持 MySQL 与 OpenGauss 的**保守子集**转换，无法安全转换的语句会在报告中明确标记，不能视为完整迁移成功。 ／ - MySQL → openGauss / openGauss → MySQL 双向转换。",
+   "evidence_lines": [
+    1,
+    3,
+    9
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "lhuat/sql-converter",
+  "sha": "73540a779670",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

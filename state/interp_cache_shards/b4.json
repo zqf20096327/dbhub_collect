@@ -10954,5 +10954,81 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "798591cd6b5e": {
+  "identity": {
+   "one_liner": "AI Agent 本地记忆控制平面，带审计与治理检索",
+   "review": "AtMem 是为 AI Agent 提供长期记忆的本地控制平面：记录模型与工具事件（Agent Black Box），按策略管控上下文注入，默认以 shadow 模式运行、显式激活后生效。通过适配器接入 OpenClaw、Pydantic AI、LangChain/LangGraph，支持 Ollama 或 OpenAI 兼容模型，规范化记忆、溯源与审计证据使用 SQLite 存储，可选 SQLCipher 加密。pip 安装，面向需要可审计 Agent 记忆的开发者。",
+   "highlights": [
+    "提供 OpenClaw、Pydantic AI、LangChain/LangGraph 的适配器/中间件，从 shadow 模式起步并显式激活注入",
+    "本地化运行：内置向量索引，支持 Ollama 或 OpenAI 兼容模型，API 密钥仅存环境变量",
+    "包含离线基准命令（atmem benchmark）与 CLI/仪表盘，规范记忆与审计证据以 SQLite 存储，可选 SQLCipher 加密"
+   ],
+   "use_cases": [
+    "为 AI Agent 增加受治理的长期记忆与上下文注入",
+    "对 Agent 的模型与工具调用进行本地审计记录",
+    "多个编码 Agent 之间共享项目记忆（AtMem Code）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Stop every writer before migration. AtMem validates SQLite integrity, ／ - Canonical memory, provenance, lifecycle state, and audit evidence use SQLite.",
+     "lines": [
+      59,
+      579
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "are not readable by opening the file as SQLite. Other historical or external",
+     "lines": [
+      464
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储自身规范记忆与审计证据（L579），是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stop every writer before migration. AtMem validates SQLite integrity, ／ AtMem: the memory control plane under every agent. Your agent runtime perceives, plans, acts and reflects; AtMem returns governed context only when policy allows, records every model and tool event in the Agent Black Box, and admits memory candidates under its own authority, with shadow mode, activation and restore.",
+   "evidence_lines": [
+    59,
+    11
+   ]
+  },
+  "fn": "aetna000/atmem",
+  "sha": "798591cd6b5e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8806,5 +8806,79 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "555cbe1a41b2": {
+  "identity": {
+   "one_liner": "把 PDF/PPTX 课件抽成本地知识卡的间隔重复学习应用",
+   "review": "一个 Windows 桌面应用（Electron + Python/PyMuPDF），导入课件后抽取术语生成闪卡，提供四档自评、SM-2 简化版间隔重复、机制图、模拟卷与复习清单，可选接入 DeepSeek 等 OpenAI 兼容接口做 AI 精修。数据全部存在本地 SQLite 文件中，仅面向需要背记课程考点的学生（README 以兽医等医学课程为例）。仅提供 Windows 版。",
+   "highlights": [
+    "支持 PDF/PPTX 导入并提供四种解析方式，AI 精修可降级为纯本地排版抽取",
+    "实现简化版 SM-2 间隔重复、四档自评、待审队列与卡片归档（不硬删）",
+    "支持导出 Markdown/CSV 及整库备份，所有数据存储于本地 SQLite 文件"
+   ],
+   "use_cases": [
+    "医学/兽医等需要背诵大量术语的课程复习",
+    "考前生成模拟卷、复习清单与机制图",
+    "无网络环境下本机管理卡片与复习记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "课件、卡片、复习记录、API Key 全在 `data/` 文件夹，一个 SQLite 文件。没有账号系统，没有云端同步，没有\"隐私政策\"要读。 ／ |数据库|Node 内置 `node:sqlite`|不需要编译原生模块，拷走就能用|",
+     "lines": [
+      138,
+      225
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用 SQLite（node:sqlite）存储卡片、复习记录与设置，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0（因打包 AGPL 的 PyMuPDF）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "课件、卡片、复习记录、API Key 全在 `data/` 文件夹，一个 SQLite 文件。没有账号系统，没有云端同步，没有\"隐私政策\"要读。 ／ |数据库|Node 内置 `node:sqlite`|不需要编译原生模块，拷走就能用|",
+   "evidence_lines": [
+    138,
+    225
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "laozhengdang/kedaoka",
+  "sha": "555cbe1a41b2",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11320,5 +11320,79 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9e7b08268e0c": {
+  "identity": {
+   "one_liner": "AI 学习伴侣：LLM Agent 将资料消化为卡片并按遗忘曲线复习",
+   "review": "Inwit 是一个 AI-first 的间隔重复学习应用：用户投递文档，后台 Agent 基于大模型切分原子卡片、出题并生成知识地图，复习采用 SM-2 算法。后端为 Fastify + drizzle + PostgreSQL 的独立 worker，检索用 Qdrant 与 Meili 混合召回，模型密钥由用户自带（BYOK）。适合想自部署个人学习系统的用户；基础卡片功能不依赖模型。",
+   "highlights": [
+    "Agent 在独立 worker 进程处理消化、问答、周报等任务，任务状态落在 PostgreSQL 支持重启恢复",
+    "复习使用 SM-2 算法，卡片基础层可在无模型时运行",
+    "通过 HTTP API 与 Skills 支持外部编码 Agent 投喂笔记与查看复习队列"
+   ],
+   "use_cases": [
+    "个人学习资料整理与间隔重复复习",
+    "将 PDF、剪藏、截图等资料自动转为问答卡片",
+    "通过编码 Agent CLI/API 投喂笔记和查询今日复习任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Agent 跑在独立 worker 进程里，状态不在进程内存：领取、超时回收、失败重试都落在 PostgreSQL，进程重启也能接着跑。 ／ |`PG_HOST` `PG_PORT` `PG_USER` `PG_PASSWORD` `PG_DATABASE` `PG_SSL`|PostgreSQL|",
+     "lines": [
+      253,
+      273
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL、Qdrant、Meili 存取数据的学习应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另提供商用授权渠道（双许可）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Agent 跑在独立 worker 进程里，状态不在进程内存：领取、超时回收、失败重试都落在 PostgreSQL，进程重启也能接着跑。 ／ ├── apps/server       Fastify + drizzle + worker（:3020） ／ |`PG_HOST` `PG_PORT` `PG_USER` `PG_PASSWORD` `PG_DATABASE` `PG_SSL`|PostgreSQL|",
+   "evidence_lines": [
+    253,
+    259,
+    273
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ximing/inwit",
+  "sha": "9e7b08268e0c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

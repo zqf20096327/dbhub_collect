@@ -10015,5 +10015,150 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "da5dfae58ddd": {
+  "identity": {
+   "one_liner": "本地优先的 Rust+Tauri 桌面笔记工作区，数据存于单个 SQLite 库",
+   "review": "这是一个用 Rust、Tauri 2 和 Svelte 构建的 Windows 桌面笔记应用，提供嵌套页面、块编辑器、全文搜索、数据库视图、日历、任务和闪卡等功能。它面向需要本地离线笔记管理的个人用户（如学生）。所有数据保存在一个 WAL 模式的 SQLite 数据库文件加文件目录中，安装包约 3 MB，目前仅提供 Windows 安装版，未代码签名。",
+   "highlights": [
+    "支持块编辑器、嵌套页面、全文搜索（SQLite FTS5）、多种数据库视图（表格、看板、画廊、日历等）",
+    "全部数据存储在单一 SQLite 数据库（WAL 模式）加 files 目录中，本地优先",
+    "提供数学公式（KaTeX/LaTeX）、Markdown 导入导出、Word 导出与分屏视图"
+   ],
+   "use_cases": [
+    "个人本地笔记与知识管理（页面、待办、标签、反向链接）",
+    "课程/学期事务管理（作业、日程、课程表导入）",
+    "结构化数据追踪（表格、看板、时间线视图管理条目）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in one SQLite database (`thoughtdesk.db`, WAL mode) plus a `files/` folder for the file library (stored under random names; the database keeps their real names). On Windows that's `%APPDATA%\\app.thoughtdesk.desktop\\`, and **Settings → Storage*",
+     "lines": [
+      138
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用将全部笔记数据存入单个 SQLite 数据库文件（thoughtdesk.db，WAL 模式），属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, local-first notes workspace in the spirit of Notion: nested pages, a block editor, full-text search, databases, plus assignments, a calendar and a file library that all link together. It has a custom title bar, a vertical sidebar and a black-and-white look with optional accent colors. Built with **Rust + Tauri 2 + TypeScript** (Svelte 5 components).",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "kusule1351-hue/thought-desk",
+  "sha": "da5dfae58ddd",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a9399a9dfd26": {
+  "identity": {
+   "one_liner": "PHP 社区 CMS，内置论坛、新闻、下载等模块",
+   "review": "JohnCMS 是一个用 PHP 编写的开源社区内容管理系统，包含论坛、新闻、文库、下载、私信、相册等模块，面向需要搭建社区网站的用户。它要求 MySQL 或 MariaDB 作为数据库，提供发行包安装、源码安装和 Docker 三种部署方式，并内置定时调度和数据库备份/恢复命令。",
+   "highlights": [
+    "包含论坛、新闻、文库、下载、私信、相册等模块",
+    "支持通过发行包、源码（Composer/npm）和 Docker 三种方式安装",
+    "提供 make backup-db/restore-db 命令用于数据库备份与恢复"
+   ],
+   "use_cases": [
+    "搭建社区论坛网站",
+    "搭建包含新闻和下载目录的内容站点",
+    "使用 Docker 部署 PHP 社区站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL **5.7** or MariaDB **10.2** or higher (MySQL Native Driver `mysqlnd` required)",
+     "lines": [
+      29
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL **5.7** or MariaDB **10.2** or higher (MySQL Native Driver `mysqlnd` required) ／ The Docker setup includes Nginx, PHP-FPM, MariaDB, and Ofelia for running the scheduler automatically every minute.",
+     "lines": [
+      29,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该 CMS 使用 MySQL/MariaDB 存储数据运行，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "JohnCMS is an open-source PHP community CMS. It includes a forum, news, library, downloads, private messages, photo albums, and more — all in one package. ／ - MySQL **5.7** or MariaDB **10.2** or higher (MySQL Native Driver `mysqlnd` required) ／ The Docker setup includes Nginx, PHP-FPM, MariaDB, and Ofelia for running the scheduler automatically every minute.",
+   "evidence_lines": [
+    10,
+    29,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "johncms/johncms",
+  "sha": "a9399a9dfd26",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

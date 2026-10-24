@@ -9522,5 +9522,89 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e956f9213fba": {
+  "identity": {
+   "one_liner": "Celery 兼容的任务队列库，支持 Postgres/SQLite 等原生 broker",
+   "review": "potatoq 是一个与 Celery API 兼容的 Python 分布式任务队列库，提供 Postgres、SQLite、Redis、RabbitMQ 等原生 broker 实现，并内置 Django/Flask/FastAPI 集成、定时任务和 dead-letter 管理。面向需要从 Celery 迁移或用数据库作 broker 的 Python/Django 开发者；README 声明其为 alpha 软件，API 与默认值可能变化，且不支持 Windows。",
+   "highlights": [
+    "提供 Celery 兼容 API（delay/apply_async/chain/group/chord），并支持 Python 自由线程构建",
+    "内置 PostgreSQL、SQLite、Redis、RabbitMQ 原生 broker 及 memory 测试 broker",
+    "包含 Django INSTALLED_APPS 集成与 django.tasks 后端，支持任务结果与死信队列管理命令"
+   ],
+   "use_cases": [
+    "Django/Flask/FastAPI 应用的后台任务与定时任务处理",
+    "以 PostgreSQL 或 SQLite 作为 broker、免额外消息中间件的部署",
+    "从 Celery 迁移现有项目（查找替换式迁移）"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "$ pip install \"potatoq[postgres]\" # + PostgreSQL (psycopg 3) ／ |`postgresql://…`|Most apps: zero extra infrastructure, **transactional enqueue**|`FOR UPDATE SKIP LOCKED` claims, `LISTEN/NOTIFY` wake-ups, heartbeat-based recovery, results in the same transaction as the ack|",
+     "lines": [
+      69,
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "$ pip install potatoq # SQLite broker, no dependencies ／ |`sqlite:///path.db`|Development, single-host apps|WAL, `BEGIN IMMEDIATE`, `UPDATE … RETURNING` claims, `PRAGMA data_version` wake-ups|",
+     "lines": [
+      67,
+      81
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "该库本身是任务队列基础设施，数据库（Postgres/SQLite）被用作其 broker/结果存储后端，README 提供对应的适配安装项与支持说明。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "$ pip install \"potatoq[postgres]\"     # + PostgreSQL (psycopg 3) ／ |`postgresql://…`|Most apps: zero extra infrastructure, **transactional enqueue**|`FOR UPDATE SKIP LOCKED` claims, `LISTEN/NOTIFY` wake-ups, heartbeat-based recovery, results in the same transaction as the ack| ／ broker setting **your default database is the broker**. Postgres and SQLite both work, so",
+   "evidence_lines": [
+    69,
+    80,
+    126
+   ]
+  },
+  "fn": "anze3db/potatoq",
+  "sha": "e956f9213fba",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

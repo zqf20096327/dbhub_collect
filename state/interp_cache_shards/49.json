@@ -10339,5 +10339,139 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fc593265e5d2": {
+  "identity": {
+   "one_liner": "单文件嵌入式双时态图数据库，支持 Datalog 查询",
+   "review": "Minigraf 是一个用 Rust 编写的单文件嵌入式图数据库，提供 Datalog 查询语言和双时态时间旅行（事务时间+有效时间）能力，支持窗口函数和预处理语句。它以库、REPL 二进制、WASM 及 Python/Node/Java/移动端绑定形式运行，面向 AI 代理记忆存储、移动端离线应用和浏览器场景；按设计不提供分布式、客户端-服务器架构和超大规模。",
+   "highlights": [
+    "支持 Datalog 查询，包含递归规则和窗口函数（sum/count/min/max/avg/rank 等）",
+    "实现双时态模型（transaction time + valid time），支持时间旅行查询和状态回放",
+    "单文件嵌入运行，支持 native、WASM、移动端等多平台绑定（crates.io/PyPI/npm/Maven/SPM）"
+   ],
+   "use_cases": [
+    "AI 代理的知识/信念存储：记录、修正事实并回放审计历史状态",
+    "移动端离线优先存储：支持对已录入值做追溯性更正并保留原始记录",
+    "浏览器内嵌图数据存储与可视化（IndexedDB-backed WASM）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是数据库引擎本体（嵌入式存储+查询引擎），而非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "source",
+    "pypi",
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ |**Query Language**|Datalog|Datalog|Datalog|Cypher|SQL|",
+   "evidence_lines": [
+    14,
+    22,
+    95
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "fc593265e5d2",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "02dd1651ca1c": {
+  "identity": {
+   "one_liner": "本地优先、隐私导向的 Vanilla JS AI 助手，用 SQLite 存储数据",
+   "review": "Aru AI 是一个在用户本地设备运行的开源 AI 聊天助手，提供 Gemini/OpenRouter/本地 Ollama 三种 LLM 接入方式，聊天、设置等数据存于本地 SQLite 数据库，并支持 WebDAV/Google Drive 同步。面向注重隐私的个人用户，含分级安全模式与插件系统；非数据库管理工具。",
+   "highlights": [
+    "支持 Gemini API、OpenRouter、本地 Ollama/LM Studio 三类 LLM 接入方式",
+    "聊天记录、设置、事实等数据存储于本地 SQLite 数据库",
+    "提供临时聊天模式、分级内容过滤及 PIN/生物识别保护"
+   ],
+   "use_cases": [
+    "个人本地 AI 聊天助手",
+    "通过 WebDAV/Google Drive 跨设备同步聊天数据",
+    "儿童/青少年/成人的分级 AI 使用场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite Engine**: All chats, history, settings, facts, and library items are stored in a local SQLite database.",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有聊天、设置等数据存储在本地 SQLite 数据库中，SQLite 是其应用数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU GPLv3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Aru** (from Kazakh — *beauty*) is a cute fox mascot and an autonomous chatbot operating entirely on the user's local device. ／ - **SQLite Engine**: All chats, history, settings, facts, and library items are stored in a local SQLite database.",
+   "evidence_lines": [
+    25,
+    50
+   ]
+  },
+  "fn": "Anvar-Khaliulin/aru-ai",
+  "sha": "02dd1651ca1c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

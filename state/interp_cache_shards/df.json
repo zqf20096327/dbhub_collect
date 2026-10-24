@@ -10750,5 +10750,102 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1eca9e69df67": {
+  "identity": {
+   "one_liner": "AI 原生数据决策智能体：语义层约束下的自然语言问数与分析",
+   "review": "Trove 是一个自托管的自然语言数据问答与分析智能体：用户以自然语言提问，系统基于人工确认的语义模型生成 SQL，经规则链、AST 防火墙与代价守卫校验后执行，并支持阈值判定、归因分析与行动提案。面向需要自建问数/决策链路的数据团队，仅支持语义模型声明范围内的查询，LLM 凭证需另行配置。",
+   "highlights": [
+    "基于语义模型（semantics.yml）编译查询计划，模型外提问将被拒绝而非猜测作答",
+    "生成的 SQL 经零 LLM 规则链、AST 防火墙与 EXPLAIN 代价守卫执行前验证，并带反思回滚闭环",
+    "支持阈值判定、贡献分解归因与行动提案效果验收，判定过程零 LLM 并带证据 SQL"
+   ],
+   "use_cases": [
+    "业务人员用自然语言查询数据库并获得带校验的 SQL 支撑答案",
+    "对业务指标做定时阈值监控与归因分析，触发后走人工审批外送",
+    "导入既有 dbt Semantic Layer 或 Cube 的口径，统一语义建模管理"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|一份能登录、能管理的完整部署|Docker Compose(前端 + 后端 + PostgreSQL)|15 分钟|Docker| ／ 1. **连接** —— 一个数据库 URL:`--datasource postgres://user:pass@host:5432/db`。",
+     "lines": [
+      149,
+      164
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "服务端部署下,同一流程在管理端完成(数据源注册 → KB init → 草稿审批)。逐步指南(MySQL / Doris / PostgreSQL / ClickHouse / DuckDB,以及云仓 Snowflake / BigQuery,含管理台与本地 REPL 两条路径):接入数据源。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力|",
+     "lines": [
+      168,
+      217
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力|",
+     "lines": [
+      217
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "服务端部署下,同一流程在管理端完成(数据源注册 → KB init → 草稿审批)。逐步指南(MySQL / Doris / PostgreSQL / ClickHouse / DuckDB,以及云仓 Snowflake / BigQuery,含管理台与本地 REPL 两条路径):接入数据源。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力|",
+     "lines": [
+      168,
+      217
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目连接外部数据库作为数据源提供问数与分析服务，README 明言数据源在 Trove 之外且对业务数据保持只读。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "1. **连接** —— 一个数据库 URL:`--datasource postgres://user:pass@host:5432/db`。",
+   "evidence_lines": [
+    164
+   ]
+  },
+  "fn": "Nivane/trove",
+  "sha": "1eca9e69df67",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

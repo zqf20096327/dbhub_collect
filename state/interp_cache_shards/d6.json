@@ -10352,5 +10352,214 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7eeaa0468079": {
+  "identity": {
+   "one_liner": "游戏第二屏实时仪表盘，配套程序将游戏状态快照存入 SQLite",
+   "review": "这是《Transport Fever 3》的第二屏仪表盘，由游戏内 Lua 模组与本地配套程序组成：模组周期性导出游戏状态快照文件，collector.py 读取后写入本地 SQLite 数据库存储历史，server.py 在浏览器中提供仪表盘页面。供该游戏玩家本机使用；仅依赖 Python 标准库，无需安装。",
+   "highlights": [
+    "配套程序读取模组导出的 Lua 快照文件并写入本地 SQLite 数据库保存历史",
+    "通过本地文件通道（tf3dash_cmd.lua）实现从仪表盘控制游戏速度、镜头与载具",
+    "本机运行，仅使用 Python 标准库，Windows 与 Linux 提供 Release 包"
+   ],
+   "use_cases": [
+    "在第二显示器上实时查看游戏公司财务、线路、载具与车站状态",
+    "从仪表盘对游戏执行暂停/速度/镜头/停靠点配置等操作",
+    "查看线路与载具的历史曲线与告警"
+   ],
+   "use_cases_ok": true
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Pytho ／ (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it. ／ collector/ collector.py (tf3dash_live.lua + tf3dash_slow_*.lua -> SQLite), luatable.py (Lua parser), tf3paths.py (folder detection), schema.sql",
+     "lines": [
+      36,
+      48,
+      234
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为本仪表盘存储历史数据的本地数据库，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Mod `Second Screen Dashboard`**|mod.io (in-game Mod Hub) or `mod/` in this repo|A Lua game script that writes a snapshot of the game state to `<userdata>/heightmaps/tf3dash_live.lua` every few seconds, and (if you enable it) executes commands written to `cmd.lua`. Uses only the official TF3 scripting API. Never modifies the savegame.| ／ |**Companion program (this repo)**|Your PC, Windows or Linux|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python standard library only — the Windows release zip ships a bundled Python, Linux uses the system Python (3.10+); nothing to install.| ／  (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.",
+   "evidence_lines": [
+    35,
+    36,
+    48
+   ]
+  },
+  "fn": "M1r077/tf3-dashboard",
+  "sha": "7eeaa0468079",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "55d5d4b591cd": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的自托管后台任务持久化执行服务器",
+   "review": "Runcoil 是一个用 Go 编写的自托管持久化执行服务器，为应用程序运行后台任务，通过 PostgreSQL 存储每次 Run 的状态，支持 Step 重放、重试、cron/interval 计划、幂等调用和 worker 租约。任务代码在应用自身进程中运行，通过 Go SDK 连接服务器，调用方经 ConnectRPC API 触发任务。当前为 pre-release，仅支持单服务器进程、无 TLS、无 Web 界面。",
+   "highlights": [
+    "提供 Step 重放、按 Task/Step 配置的重试策略与 cron/interval/每日时间调度",
+    "通过 worker 租约处理失联 worker，将 Run 转交给其他 worker；Invoke/Rerun 支持幂等键",
+    "状态存储在 PostgreSQL，提供 ConnectRPC API（RunService/WorkerService）与 Go SDK worker 模式"
+   ],
+   "use_cases": [
+    "为应用提供可重试、可重放的后台任务执行基础设施",
+    "需要 cron 调度且在 worker 宕机后任务可转移的场景",
+    "需要幂等调用与任务重跑（从头或从指定 Step）的场景"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "over PostgreSQL. ／ - Docker, for the local PostgreSQL 18 ／ Clone this repository, start PostgreSQL, create the tables, and start the server:",
+     "lines": [
+      5,
+      35,
+      42
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以 PostgreSQL 为存储后端、为应用程序提供后台任务执行服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Runcoil runs background Tasks for an application and keeps the state of every ／ over PostgreSQL. ／ **Status: pre-release.** The API and the schema may change before version 1.0.",
+   "evidence_lines": [
+    3,
+    5,
+    12
+   ]
+  },
+  "fn": "tuanvumaihuynh/runcoil",
+  "sha": "55d5d4b591cd",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7459140b793a": {
+  "identity": {
+   "one_liner": "面向 Emby 的一体化运营与观影门户，React+Express+SQLite 实现",
+   "review": "该项目为 Emby 媒体服务器提供用户端与管理端门户，包含追剧订阅、媒体库同步、线路管理、设备访问控制、Telegram Bot 通知等功能，配置与业务数据存储在 SQLite（WAL 模式）中，通过 Docker Compose 或 npm 部署，面向自托管 Emby 的运营者与用户。",
+   "highlights": [
+    "提供用户端、管理端、API 三个独立端口，接入 Emby / TMDB / Telegram / Webhook",
+    "配置与业务数据保存在 SQLite 主库（WAL 模式），数据目录由 DATA_DIR 指定",
+    "支持 Docker Compose 镜像部署与本地 npm 运行两种方式"
+   ],
+   "use_cases": [
+    "自托管 Emby 服务器的用户运营与会员管理",
+    "媒体库统计、缺集比对与入库通知",
+    "通过 Telegram Bot 与 Webhook 实现订阅与求片通知"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "所有配置保存在 SQLite 的 `settings` 表中，管理端保存后立即生效。密钥在读取接口中只返回掩码。 ／ |`DATA_DIR`|`./data`|SQLite 与运行数据目录| ／ └── orbit.db # SQLite 主库（WAL 模式）",
+     "lines": [
+      151,
+      227,
+      263
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身配置与业务数据的应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "所有配置保存在 SQLite 的 `settings` 表中，管理端保存后立即生效。密钥在读取接口中只返回掩码。 ／ └── orbit.db        # SQLite 主库（WAL 模式）",
+   "evidence_lines": [
+    151,
+    263
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "xiguazhu1998/orbit-emby-suite",
+  "sha": "7459140b793a",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

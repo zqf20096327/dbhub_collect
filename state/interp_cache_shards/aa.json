@@ -11001,5 +11001,79 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "972fd8fb8cdf": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，通过 DuckDB C API 让 PG 查询 DuckDB 与数据湖",
+   "review": "duckdb_fdw 是一个 PostgreSQL 外部数据包装器扩展，在 PG 内通过 DuckDB C API 读取和写入 DuckDB 数据，支持 Parquet、Iceberg、S3 Tables、DuckLake、MotherDuck 及 Quack 客户端-服务器协议，并提供 pg_duckdb 共存检测。需要 PostgreSQL 13-18 和 libduckdb 1.5.x/2.0.x，从源码构建，适合需要在 PG 中访问 DuckDB/数据湖数据的用户。",
+   "highlights": [
+    "以 PostgreSQL 扩展形式实现，提供外部表扫描、参数绑定、Appender 写入及 PG14 批量插入钩子",
+    "支持 Parquet、Iceberg、S3 Tables、DuckLake、MotherDuck 及 Quack 客户端-服务器协议",
+    "提供 S3 凭证 USER MAPPING、secret helper 函数及 pg_duckdb 共存运行时守卫"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中以外部表方式查询本地 DuckDB 数据文件",
+    "通过 FDW 直接扫描 S3 上的 Parquet/Iceberg/DuckLake 数据湖数据集",
+    "经 Quack 协议让多个 PG 后端并发读写同一 DuckDB 数据库"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# DuckDB Foreign Data Wrapper for PostgreSQL (v2.0.1+) ／ **`duckdb_fdw`** v2.0+ is a high-performance PostgreSQL extension that bridges PostgreSQL's ecosystem with DuckDB's vectorized analytical power. Built natively on the **DuckDB C API**, it supports modern Lakehouse workflows including Parquet, Iceberg, S3 Table",
+     "lines": [
+      1,
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|**Kernel Interface**|SQLite Compatibility|**Native DuckDB C API**|",
+     "lines": [
+      253
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 生态服务的扩展组件，通过 DuckDB C API 桥接两个数据库而非作为使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**`duckdb_fdw`** v2.0+ is a high-performance PostgreSQL extension that bridges PostgreSQL's ecosystem with DuckDB's vectorized analytical power. Built natively on the **DuckDB C API**, it supports modern Lakehouse workflows including Parquet, Iceberg, S3 Tables, DuckLake, MotherDuck, and the Quack client-server protocol. ／ CREATE EXTENSION duckdb_fdw; ／ * PostgreSQL 13 - 18 (headers required)",
+   "evidence_lines": [
+    7,
+    62,
+    53
+   ]
+  },
+  "fn": "alitrack/duckdb_fdw",
+  "sha": "972fd8fb8cdf",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

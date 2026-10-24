@@ -11294,5 +11294,76 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5e88a3566ce3": {
+  "identity": {
+   "one_liner": "ClickHouse 集群监控仪表盘与运维建议工具，读取 system.* 表",
+   "review": "chmonitor 为 ClickHouse 提供实时监控面板与建议：读取 system.* 表展示查询、合并、复制、存储与健康状态，并给出索引、分区、物化视图等建议但不自动执行 DDL。面向 ClickHouse 运维人员，支持 Docker/Kubernetes 部署、多主机、AI agent 与 MCP，GPL-3.0 可自托管。",
+   "highlights": [
+    "读取 system.* 表，提供 30+ 图表的集群监控面板，覆盖查询、合并、复制、存储与健康检查",
+    "提供 AI advisor 与内置 AI agent 及 MCP，可生成 projections、skip indexes、物化视图等建议，但不自动执行 DDL",
+    "支持从单一仪表盘监控多个 ClickHouse 主机，附带 chm CLI（TUI 与 chm doctor）与只读 SQL 控制台"
+   ],
+   "use_cases": [
+    "自托管监控 ClickHouse 集群的查询、复制与存储状态",
+    "获取索引、分区、物化视图等优化建议作为人工决策参考",
+    "通过 MCP 在 Claude / Cursor 中查询集群健康与性能问题"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "The operational advisor for ClickHouse ／ **chmonitor** is a dashboard and advisor for ClickHouse. It reads `system.*` ／ Runs the same way on Docker, Kubernetes, bare metal, or ClickHouse Cloud.",
+     "lines": [
+      4,
+      22,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其读取 ClickHouse 的 system.* 表为该库提供监控与建议，属为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 自托管免费，另有可选商业许可（支持服务，不增加功能）",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**chmonitor** is a dashboard and advisor for ClickHouse. It reads `system.*` ／ It does **not** apply DDL for you. Recommendations stay recommendations. ／ Works with **multiple ClickHouse hosts** from one dashboard (`?host=0`).",
+   "evidence_lines": [
+    22,
+    26,
+    46
+   ]
+  },
+  "fn": "chmonitor/chmonitor",
+  "sha": "5e88a3566ce3",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

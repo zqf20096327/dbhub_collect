@@ -10946,5 +10946,224 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3a61091e6ace": {
+  "identity": {
+   "one_liner": "单二进制的 Supabase 兼容本地后端，内嵌真实 Postgres 与 RLS",
+   "review": "tinbase 是一个无需 Docker 的本地 Supabase 兼容后端运行时，通过 PGlite（WASM）、嵌入式原生 Postgres 17 或纯 JS pgmem 三种引擎提供 REST、Auth、Storage、Edge Functions 与 Realtime 服务，supabase-js 可不改代码直连。面向本地开发、原型与嵌入式/浏览器场景，README 明确标注 Alpha，不适用于生产环境。",
+   "highlights": [
+    "提供三种引擎：嵌入式原生 Postgres 17、PGlite（WASM）与纯 JS 的 @tinbase/pg-mem",
+    "实现 PostgREST 风格 REST、GoTrue 风格 Auth、Storage、Edge Functions、Realtime 及 pgmq/pg_cron/pg_net 的 SQL 接口",
+    "读取 supabase/migrations 与 supabase/seed.sql，遵循 Supabase CLI 迁移约定"
+   ],
+   "use_cases": [
+    "本地开发 Supabase 项目而无需 Docker",
+    "在浏览器或嵌入式环境运行整个后端（PGlite/pgmem）",
+    "对真实迁移集做本地应用与查询验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Local Supabase dev without Docker — one process, real Postgres, and it even runs in the browser. It speaks the same wire protocols as hosted Supabase, so the **official `@supabase/supabase-js` SDK works unchanged** - REST, Auth, Storage, and Realtime. ／ A pure-JS backend built on PGlite (Postgres compiled to WASM), with an embedded-native-Postgres and an ultralight pure-JS (`@tinbase/pg-mem`) engine too. One command, real Row Level Security, and 1:1 with Supabase's APIs and migration conventions. ／ - **Real Postgres semantics.** RLS policies, `auth.uid()`, triggers, FKs - it is Postgres.",
+     "lines": [
+      5,
+      7,
+      17
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Database|real Postgres 17 + RLS|real Postgres 17 + RLS|in-memory, pure-JS¹|real Postgres (PGlite) + RLS|SQLite|Postgres 17|",
+     "lines": [
+      231
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 Postgres/PGlite 作为自身后端的数据引擎来提供 BaaS 服务，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Local Supabase dev without Docker — one process, real Postgres, and it even runs in the browser. It speaks the same wire protocols as hosted Supabase, so the **official `@supabase/supabase-js` SDK works unchanged** - REST, Auth, Storage, and Realtime. ／ A pure-JS backend built on PGlite (Postgres compiled to WASM), with an embedded-native-Postgres and an ultralight pure-JS (`@tinbase/pg-mem`) engine too. One command, real Row Level Security, and 1:1 with Supabase's APIs and migration conventions. ／ > **Alpha — not production-ready yet.** Great for local development, prototypes, and embedded/browser use.",
+   "evidence_lines": [
+    5,
+    7,
+    10
+   ]
+  },
+  "fn": "tinbase/tinbase",
+  "sha": "3a61091e6ace",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a156bbfcf9a1": {
+  "identity": {
+   "one_liner": "基于 SQLite FTS5 的 RouterOS 文档 MCP 检索服务器",
+   "review": "rosetta 是一个 MCP 服务器，将 MikroTik RouterOS 文档、CLI 命令树、硬件规格、YouTube 字幕等语料装入单个 SQLite 数据库，用 FTS5 全文检索（SQL-as-RAG）替代向量检索，供 MCP 客户端或内置 TUI 浏览器查询；可部署在 RouterOS /app 容器中或本地用 Bun 运行。仅覆盖 RouterOS v7 文档，本地 stdio 运行需 Bun。",
+   "highlights": [
+    "用 SQLite FTS5 全文检索（BM25+porter 词干化）作为 RAG 检索层，无需向量数据库或 API 密钥",
+    "提供 MCP 端点（HTTP/stdio），支持 VS Code Copilot、Claude、Cursor、Codex 等客户端接入",
+    "内置终端 TUI 浏览器，可在不接入 AI 的情况下直接检索数据库"
+   ],
+   "use_cases": [
+    "为使用 RouterOS 的网络管理员提供 AI 可检索的官方文档与命令参考",
+    "在 MikroTik 路由器 /app 容器内运行，供局域网内 AI 助手共享访问",
+    "离线或无 API 密钥环境下用终端浏览器查询 RouterOS 命令与硬件规格"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Instead of vector embeddings, rosetta uses **SQLite FTS5 full-text search** as the retrieval layer — SQL-as-RAG. For structured technical docs, BM25 ranking with porter stemming beats vector similarity: terms like `dhcp-snooping` and `/ip/firewall/filter` are ",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目用 SQLite 存储和检索自身语料，是为 RouterOS 文档查询服务的 MCP 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP server that gives AI assistants searchable access to MikroTik RouterOS documentation, CLI Reference fields, versioned command trees, hardware specs, YouTube transcripts, and direct links to source docs. See the dated corpus snapshot below; `routeros_stats` reports the database you're running. ／ Instead of vector embeddings, rosetta uses **SQLite FTS5 full-text search** as the retrieval layer — SQL-as-RAG. For structured technical docs, BM25 ranking with porter stemming beats vector similarity: terms like `dhcp-snooping` and `/ip/firewall/filter` are exact tokens, not fuzzy embeddings. No API keys, no vector database — just a single SQLite file that searches in milliseconds. ／ RouterOS 7.22+ includes the /app feature for running containers directly on the router. This is the simplest way to deploy rosetta — install once, and any AI assistant on your network can connect to the MCP endpoint URL shown in the router UI.",
+   "evidence_lines": [
+    3,
+    9,
+    31
+   ]
+  },
+  "fn": "tikoci/rosetta",
+  "sha": "a156bbfcf9a1",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c9d522ce47bd": {
+  "identity": {
+   "one_liner": "1С:Предприятие 信息库 .dt 备份工具，支持文件库及 PostgreSQL/MSSQL",
+   "review": "跨平台命令行工具，通过 1С 平台的 ibcmd 将 1С 信息库导出为 .dt 备份文件，提供日/周/月调度、过期副本清理、副本有效性检查及异常小文件告警。面向 1С 服务器管理员，需安装 1С:Предприятие 平台和 ibcmd；单一配置只能搭配一种外部 DBMS（PostgreSQL 或 MSSQL）加文件库。项目仍在开发中，配置格式可能变动。",
+   "highlights": [
+    "支持文件库、网络文件库及 PostgreSQL/MSSQL 上的 1С 库备份为 .dt",
+    "提供 daily/weekly/monthly 调度与按小时计的过期副本自动删除",
+    "导出后检查副本有效性，并对体积缩小 30% 以上的副本记录警告"
+   ],
+   "use_cases": [
+    "1С 服务器管理员定期自动备份信息库",
+    "需要按日/周/月分级管理备份目录与保留期",
+    "Linux/Windows 环境下用 cron 或任务计划程序自动执行导出"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL;",
+     "lines": [
+      36
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- Microsoft SQL Server (MSSQL);",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明支持对存于 PostgreSQL/MSSQL 的 1С 库执行备份（『支持的数据库』能力清单）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Кроссплатформенная утилита для резервного копирования информационных баз **1С:Предприятие**. ／ - PostgreSQL; ／ Проект находится в разработке.",
+   "evidence_lines": [
+    3,
+    36,
+    397
+   ]
+  },
+  "fn": "Dr-Mikegreen/maintenance_1C",
+  "sha": "c9d522ce47bd",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

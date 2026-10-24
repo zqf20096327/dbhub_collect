@@ -11038,5 +11038,86 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9bb84a1954f2": {
+  "identity": {
+   "one_liner": "业务应用开发平台：元数据描述转数据库表、表单与报表",
+   "review": "OES 是一个用 C++17 编写的业务应用开发平台，开发者以元数据描述业务（目录、单据、登记簿、科目表等），用内置脚本语言写规则，平台将其转换为数据库表、表单和报表。自带设计器、编译器、调试器、应用服务器、集群、瘦客户端和内置 MCP 服务器，支持 Firebird（内置随发行版）、PostgreSQL（生产）、ODBC 和 SQLite（测试与日志）。适合需要构建库存、会计、薪资类业务系统的开发者。",
+   "highlights": [
+    "提供元数据驱动的开发方式，将业务描述编译为数据库表、表单与报表，并以 diff 方式管理 schema 变更",
+    "内置 MCP 服务器提供 127 个工具，AI 助手可读写元数据、运行代码、驱动调试器",
+    "附带应用服务器与集群组件，支持 Firebird 与 PostgreSQL 并行服务多个库，查询语言可在服务器端转译为 SQL 或内存执行"
+   ],
+   "use_cases": [
+    "开发库存、会计、薪资、销售等记账类业务应用",
+    "通过元数据与配置的版本化管理维护多语言业务系统",
+    "让 AI 助手通过 MCP 工具参与配置的读取、构建与检查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Firebird and PostgreSQL side by side, one worker pool for all, and each base with its own ／ - **Databases** — Firebird (embedded, shipped with the distribution) and PostgreSQL for production; ／ The top-level `CMakeLists.txt` (CMake ≥ 3.20) builds every target. DB drivers opt in — `OES_USE_FIREBIRD`, `OES_USE_POSTGRESQL`, `OES_USE_ODBC` (all default OFF); SQLite is always embedded, no flag: ／ |Production alternative|PostgreSQL|",
+     "lines": [
+      71,
+      86,
+      161,
+      197
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "ODBC; SQLite for tests and logging. ／ The top-level `CMakeLists.txt` (CMake ≥ 3.20) builds every target. DB drivers opt in — `OES_USE_FIREBIRD`, `OES_USE_POSTGRESQL`, `OES_USE_ODBC` (all default OFF); SQLite is always embedded, no flag: ／ |Other databases|ODBC; SQLite (tests + logging)|",
+     "lines": [
+      87,
+      161,
+      198
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明平台将业务描述转为数据库表并存取数据，Firebird/PostgreSQL/SQLite 是其数据存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "source-available（README 未给出具体许可证名称）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "composer**. The platform turns the description into database tables, forms and reports, and keeps ／ - **Databases** — Firebird (embedded, shipped with the distribution) and PostgreSQL for production; ／ The top-level `CMakeLists.txt` (CMake ≥ 3.20) builds every target. DB drivers opt in — `OES_USE_FIREBIRD`, `OES_USE_POSTGRESQL`, `OES_USE_ODBC` (all default OFF); SQLite is always embedded, no flag:",
+   "evidence_lines": [
+    7,
+    86,
+    161
+   ]
+  },
+  "fn": "open-enterprise-solutions/enterprise",
+  "sha": "9bb84a1954f2",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

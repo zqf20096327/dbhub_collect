@@ -10028,5 +10028,225 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e5a2299a6fd2": {
+  "identity": {
+   "one_liner": "Yjs CRDT 的纯 Go 移植，含 Hocuspocus 兼容服务器与 SQLite 持久化",
+   "review": "将 Yjs 协同编辑 CRDT 框架移植为纯 Go 库，通过 287 个跨语言 fixture 验证与 yjs@13.6.33 的 V1/V2 线格式字节兼容；提供 UndoManager、快照、子文档、内嵌同步客户端及单二进制 yserve 服务器。面向 Go 后端开发者、移动端（iOS/Android）应用及自托管协同服务场景；SQLite 持久化部分无 wasm 目标。",
+   "highlights": [
+    "V1/V2 线格式与 yjs@13.6.33 字节兼容，双向经 287 个跨语言 fixture 在 CI 中验证",
+    "提供 yserve 单静态二进制服务器，内置 SQLite 持久化与周期性文档版本化，与 Hocuspocus/y-websocket 客户端互通",
+    "通过 gomobile 生成 iOS xcframework 与 Android AAR，携带可编辑类型与后台同步客户端的移动 SDK"
+   ],
+   "use_cases": [
+    "Go 后端为 Yjs 前端提供 WebSocket 同步服务",
+    "移动端（iOS/Android）本地优先应用嵌入 CRDT 与离线同步能力",
+    "自托管协同编辑服务器，替代 Node.js 运行时方案"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Pure Go, no CGO — mobile included.** Cross-compiles freely to every Go target. The CRDT core, the sync client and the server also compile to `js/wasm` and `wasip1/wasm`; the one exception is the SQLite-backed store in `persist/sqlite`, since `modernc.org/s ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistenc ／ |Persistence (`Store` interface + `modernc.org/sqlite` reference impl)|done; append-only update log, Flush compaction, LoadDoc / GetStateVector / GetDiff helpers; pure-Go (no CGO). The sqlite backend runs in WAL mode with a busy timeout for concurrency-safe wr",
+     "lines": [
+      20,
+      27,
+      136
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为协同编辑生态提供 CRDT 库与同步服务器组件，SQLite 仅是其内置持久化选项而非服务的对象数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pure-Go port of Yjs, the CRDT framework for collaborative applications, officially listed in the Yjs documentation's ports page. ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistence and periodic document versioning built in. Also embeds as a plain `http.Handler` inside an existing Go backend.",
+   "evidence_lines": [
+    13,
+    27
+   ]
+  },
+  "fn": "Deln0r/ygo",
+  "sha": "e5a2299a6fd2",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f833b90771d6": {
+  "identity": {
+   "one_liner": "集 AI 编码代理、Git、数据库、Kubernetes 与隧道于一体的桌面开发工作台",
+   "review": "DevCat 是基于 Tauri 2 + React 的跨平台桌面开发工作台，把 AI 编码代理终端、Git、SQL/NoSQL 数据库客户端、SQL 编辑器、Kubernetes、Docker、RabbitMQ 和 VPN/SSH 隧道整合在同一窗口，并按项目分组；支持手机远程访问与无窗口的 devcat serve 模式。适合需要同时管理代理会话和多种开发基础设施的开发者。",
+   "highlights": [
+    "提供 SQL 编辑器（schema 感知自动补全、explain、导出）、数据网格、表设计器、ER 图与 schema 比较/同步",
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、MongoDB、Redis 的浏览与编辑",
+    "支持通过手机应用或浏览器配对远程访问，可经 devcat serve 在无窗口服务器上运行"
+   ],
+   "use_cases": [
+    "开发者在同一桌面工具中管理 AI 编码代理会话与 Git 提交审查",
+    "浏览和编辑多种 SQL/NoSQL 数据库、执行查询与数据传输",
+    "通过 SSH 隧道/VPN 与 Kubernetes/Docker 管理开发基础设施，并用手机远程监控代理任务"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server|",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其数据库区域支持连接多种数据库并提供 SQL 编辑、数据网格等数据库客户端功能，属于服务数据库生态的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DevCat is a cross-platform developer workbench. It runs your AI coding agent (Claude Code, Codex, Gemini CLI and ／ |SQL databases|PostgreSQL, MySQL / MariaDB, SQLite, SQL Server| ／  Data grid Databases : browse and edit tables; filter any column by typing in its header.",
+   "evidence_lines": [
+    19,
+    30,
+    62
+   ]
+  },
+  "fn": "devcathq/DevCat",
+  "sha": "f833b90771d6",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::oceanbase-competition-2026 PowerContext": {
+  "identity": {
+   "one_liner": "OceanBase 竞赛相关项目，具体功能不明",
+   "review": "该仓库描述仅有 'oceanbase-competition-2026 PowerContext'，基于简介无法确认其具体功能、目标用户和运行方式。仅能判断其与 OceanBase 及 oceanbase-competition-2026 竞赛相关，可能为竞赛参赛作品或配套组件。安装与运行方式在简介中未提供，编目时保守处理为信息不足。",
+   "highlights": [
+    "与 oceanbase-competition-2026 竞赛关联",
+    "名称含 PowerContext 组件标识"
+   ],
+   "use_cases": [
+    "oceanbase-competition-2026 竞赛相关场景"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "oceanbase-competition-2026 PowerContext"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅含竞赛名称与项目名，无任何功能描述，无法判断其为数据库生态工具还是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "oceanbase-competition-2026 PowerContext"
+  },
+  "fn": "SummerEndingFire/OBpowercontext",
+  "sha": "desc::oceanbase-competition-2026 PowerContext",
+  "source": "desc",
+  "generated_at": "2026-10-24",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

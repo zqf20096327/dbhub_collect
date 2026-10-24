@@ -10469,5 +10469,152 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7e92d6129dcc": {
+  "identity": {
+   "one_liner": "LLM 无限画布工作台，模型输出类型化挂件，本地 SQLite 存储记忆",
+   "review": "一个基于无限画布的 AI 聊天工作台：模型通过 place_widget 工具调用在画布上放置图表、看板、代码等类型化挂件，支持 Anthropic/OpenAI/Gemini/Ollama 等多种模型及 MCP 服务器，对话索引存入本地 SQLite + sqlite-vec 实现跨会话检索。提供 REST API、桌面安装器和 Docker 部署，面向需要在画布上组织模型输出的个人用户。",
+   "highlights": [
+    "通过工具调用在画布放置 15 种类型化挂件（Vega-Lite 图表、看板、代码块等）",
+    "对话索引存入本地 SQLite + sqlite-vec，支持 ⌘K 跨会话检索挂件",
+    "MCP 原生集成，并提供 REST API 和 SSE 供脚本/外部代理驱动画布"
+   ],
+   "use_cases": [
+    "需要图表、表格、看板并排展示而非纯文本流的 AI 对话",
+    "本地离线模型（Ollama）配合 MCP 文件系统/GitHub/Jira 的代理工作台",
+    "通过 REST API 让定时任务或脚本向画布推送挂件"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Memory that compounds.** Every conversation indexes into a local SQLite + sqlite-vec store. `⌘K` finds any widget from any chat, weeks later. ／ MIT · built with tldraw, Hono, SQLite and the Vercel AI SDK",
+     "lines": [
+      62,
+      103
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是其本地存储对话索引的内置依赖，项目本身是面向终端用户的画布应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Memory that compounds.** Every conversation indexes into a local SQLite + sqlite-vec store. `⌘K` finds any widget from any chat, weeks later. ／ npx @ashark/opencanvas      # Node 24+. Installs to ~/.opencanvas/app and opens http://127.0.0.1:3457 ／ One process, one port, no `.env` needed. **Already have a model?** On first run OpenCanvas picks it up automatically: an `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GEMINI_API_KEY`, `GROQ_API_KEY` or `OPENROUTER_API_KEY` in your environment, or a running Ollama. Otherwise connect one later in **Settings** (Pick a model). Prefer the desktop app? `pnpm electron:dev`. Hacking on the UI with hot reload? `pnpm dev`.",
+   "evidence_lines": [
+    62,
+    39,
+    48
+   ]
+  },
+  "fn": "ashark-ai-05/opencanvas",
+  "sha": "7e92d6129dcc",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1810d0360faf": {
+  "identity": {
+   "one_liner": "本地AI会话归档工具，统一收集并索引各AI工具的对话历史",
+   "review": "Polylogue 是一个 Rust 编写的本地归档系统，将 Claude Code、Codex、Gemini CLI、ChatGPT 导出等 AI 会话收集到本地存档，支持 CLI 查询、全文检索、用量统计、MCP 访问和 Web 阅读，并提供凭据掩码。适合需要检索和管理 AI 工作历史的个人开发者或团队；数据由常驻 daemon 写入基于 SQLite 的存档。",
+   "highlights": [
+    "从 Claude Code、Codex、Gemini CLI、ChatGPT 导出等多种来源收集会话并保留每个版本",
+    "提供 CLI 查询语言（编译为 SQL）、全文检索、可选语义嵌入搜索和用量/成本度量",
+    "通过 MCP over stdio 和 HTTP API 供代理或程序读取，输出中的凭据自动掩码"
+   ],
+   "use_cases": [
+    "统一检索和审计散落在多个 AI 工具中的会话历史",
+    "统计 AI 使用的 token、成本与配额消耗",
+    "为 AI 代理通过 MCP 提供历史会话上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- `crates/store`: every SQLite connection and write, and the blob store.",
+     "lines": [
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库以 SQLite 作为自身存档的存储实现（store crate），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- `crates/store`: every SQLite connection and write, and the blob store. ／ The archive is `$XDG_DATA_HOME/polylogue` (`~/.local/share/polylogue`). It ／ |`mcp`|Serve MCP over stdio.|",
+   "evidence_lines": [
+    108,
+    41,
+    80
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "1810d0360faf",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

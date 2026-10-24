@@ -10449,5 +10449,179 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "555282f66989": {
+  "identity": {
+   "one_liner": "C语言编写的多进程多线程数据库迁移与PG离线抽取工具",
+   "review": "HappySunshine 是用 C 语言编写的数据库迁移工具，由管理者进程和多个执行者进程组成，支持 Gbase8a 到 Gbase8a、PostgreSQL 到 Gbase8a、PostgreSQL 到达梦的在线迁移，以及 PostgreSQL 底层数据文件的离线抽取（落地为 CSV/COPY 文本）。面向需要在 PG、达梦、GBase 之间做数据搬迁的使用者，当前功能仍在逐步补充中。",
+   "highlights": [
+    "实现在线迁移：Gbase8a→Gbase8a、PG→Gbase8a、PG→DM，支持 INSERT 与 LOAD 两种方式",
+    "实现 PG 数据离线抽取，直接解析数据文件与 pg_class 等字典表，支持 47 种数据类型",
+    "采用管理者进程加多执行者进程/线程池架构，支持单表多线程与多进程并发加载"
+   ],
+   "use_cases": [
+    "PostgreSQL 数据库宕机后的离线数据抽取",
+    "PG、达梦、GBase8a 之间的批量数据迁移",
+    "单表大批量数据的多进程/多线程并发加载"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Pg版本|PostgreSQL 14.5、14.24 ／ |2||PG 到 Gbase8a 数据迁移|INSERT 方式迁移，表定义及其他暂不支持。| ／ |6|离线抽取|PG 数据离线抽取支持表、模式、单库级|抽取底层数据文件数据落地为 COPY 文本。|",
+     "lines": [
+      11,
+      106,
+      110
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "2|支持Oracle数据迁移",
+     "lines": [
+      243
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "9 |插入大字段到达梦时，内存泄漏BUG修复。 |在线迁移功能。",
+     "lines": [
+      97
+     ]
+    },
+    {
+     "db": "GBase",
+     "rel": "support",
+     "quote": "gbase> DESC ZXJ.TESTTAB;",
+     "lines": [
+      384
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确说明这是一个为多种数据库之间提供数据同步与离线抽取服务的迁移工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "Dameng",
+    "GBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " HappySunshine数据库迁移工具是由C语言编写的多进程多线程程序，支持多种数据库之间的高效数据同步、数据离线（数据库宕机）抽取等，安装简便、简单配置即可使用，功能还在逐步完善中（其实是还在陆续补充新知识），有什么好的建议，大家可以在评论或私信告知。 ／ |1|在线迁移|Gbase8a 到 8a 数据迁移|INSERT、LOAD 方式迁移，表定义及其他暂不支持。| ／ |6|离线抽取|PG 数据离线抽取支持表、模式、单库级|抽取底层数据文件数据落地为 COPY 文本。|",
+   "evidence_lines": [
+    16,
+    105,
+    110
+   ]
+  },
+  "fn": "lxgczg/HappySunshine",
+  "sha": "555282f66989",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fcea0a87ac6c": {
+  "identity": {
+   "one_liner": "本地优先的雅思风格听力练习应用，FastAPI+Vue3+本地ASR+LLM",
+   "review": "一个在本机运行的雅思风格听力练习应用：导入音频后用本地 Whisper/Parakeet 转写，可用 LLM 从转写稿生成六种题型的完整试卷并服务端判分，另含双语句精听与错词本。面向备考听力的个人用户；成绩与配置存于本地 SQLite，生成试卷需自备 LLM 密钥，仅支持 Windows/macOS（Linux 可用 CPU 转写）。",
+   "highlights": [
+    "支持本地（faster_whisper/parakeet）与云端 OpenAI 兼容端点两种转写方式，均带词级时间戳",
+    "支持 LLM 生成六种题型试卷，含后端硬校验与 SVG 地图场景渲染",
+    "练习记录、逐题结果与 API 密钥持久化在本地 SQLite 数据库"
+   ],
+   "use_cases": [
+    "雅思听力的个人备考与刷题练习",
+    "利用已有音频材料生成可判分的完整试卷",
+    "双语句级精听与跟读训练"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "alternatives). Attempts and per-item results persist in SQLite — no score is ／ local SQLite database and never returned by the API (only a masked hint). ／ |`DATA_DIR`|`<repo>/data`|SQLite DB and audio storage|",
+     "lines": [
+      53,
+      89,
+      204
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个用 SQLite 存练习记录与配置的听力练习应用，SQLite 仅为其存储层。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "EchoPaper is a local-first IELTS-style listening practice app for Windows and ／  alternatives). Attempts and per-item results persist in SQLite — no score is ／ |`DATA_DIR`|`<repo>/data`|SQLite DB and audio storage|",
+   "evidence_lines": [
+    5,
+    53,
+    204
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "WJBF1213/echopaper",
+  "sha": "fcea0a87ac6c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

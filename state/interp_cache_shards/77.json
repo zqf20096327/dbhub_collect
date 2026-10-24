@@ -10956,5 +10956,152 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e4d94b09fc91": {
+  "identity": {
+   "one_liner": "Rust 编写的混沌工程平台，含 CLI/守护进程与 DuckDB 分析存储",
+   "review": "Tumult 是一个用 Rust 实现的混沌工程平台，用户通过 CLI 或 MCP 客户端提交可重复的韧性实验，tumultd 守护进程负责审批、执行、OTLP 遥测采集与 DuckDB/Parquet 存储，并提供 Web UI、合规证据报告（DORA/NIS2/ISO 27001/SOC 2）。适合需要对 Kubernetes、Docker、数据库、Kafka 等注入故障并留存审计记录的运维与平台团队；需 Rust 1.92+ 与 Docker。",
+   "highlights": [
+    "提供 CLI 与 tumultd 守护进程，执行故障注入实验并写入 TOON 日志、DuckDB 存储或 ClickHouse 后端（L53-54、L176-177）",
+    "内置 40 工具 MCP 服务器，支持 OTLP/gRPC 与 OTLP/HTTP 遥测接入（L208-209、L133-135）",
+    "包含风险分级审批工作流、RBAC、哈希链审计与 DORA/NIS2/ISO 27001/SOC 2 合规证据报告（L92-94、L146-149）"
+   ],
+   "use_cases": [
+    "对 Redis、容器、Kubernetes、Kafka、数据库等运行稳态探测与故障注入实验（L49-50、L63-64）",
+    "通过守护进程集中治理实验审批、执行与遥测分析（L105-108）",
+    "生成游戏日（GameDay）报告与合规证据包（L146-149）"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose -f docker/docker-compose.yml up -d --wait postgres redis kafka mysql sshd",
+     "lines": [
+      48
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "docker compose -f docker/docker-compose.yml up -d --wait postgres redis kafka mysql sshd",
+     "lines": [
+      48
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "DuckDB store, a configured daemon, or the configured ClickHouse backend. Follow ／ through a running daemon instead, unless `TUMULT_CLICKHOUSE_URL` selects the ／ ClickHouse backend. If you",
+     "lines": [
+      54,
+      176,
+      177
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是面向基础设施的混沌工程工具，DuckDB/ClickHouse 仅作为其内部实验数据存储后端，而非它所服务的数据库产品。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tumult is a Rust-native chaos engineering platform for running observable, ／ DuckDB store, a configured daemon, or the configured ClickHouse backend. Follow ／ This is the analytics half of Tumult: the `tumultd` daemon, the unified",
+   "evidence_lines": [
+    9,
+    54,
+    105
+   ]
+  },
+  "fn": "mwigge/tumult",
+  "sha": "e4d94b09fc91",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3e22622d51d1": {
+  "identity": {
+   "one_liner": "OceanBase 2026 竞赛相关仓库",
+   "review": "该仓库标题与描述均为 oceanbase-competition-2026，README 仅含两行文字，未说明项目功能、使用方式或目标用户。从命名推断与 OceanBase 竞赛相关，但缺乏可验证细节，具体用途需查看代码或后续文档。",
+   "highlights": [
+    "仓库名称与描述标注为 oceanbase-competition-2026"
+   ],
+   "use_cases": [
+    "参与 OceanBase 相关竞赛时作为仓库使用"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "oceanbase-competition-2026",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 未说明项目是为数据库服务的工具还是使用数据库的应用，仅从命名可见与 OceanBase 竞赛相关。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "# oceanbase2026 ／ oceanbase-competition-2026",
+   "evidence_lines": [
+    1,
+    2
+   ]
+  },
+  "fn": "SummerEndingFire/oceanbase2026",
+  "sha": "3e22622d51d1",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

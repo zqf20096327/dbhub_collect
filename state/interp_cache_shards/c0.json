@@ -11464,5 +11464,143 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "10356f526ad5": {
+  "identity": {
+   "one_liner": "Go 实现的 SQL 随机生成模糊测试工具，基于 BNF 范式",
+   "review": "go-randgen 用 yy（语法）与 zz（表结构和数据，Lua 脚本）文件按 BNF 模式随机生成 SQL，支持不连库纯生成 SQL，也可通过 exec 在两个 DSN 上执行同一批 SQL 并对比结果差异，用于数据库 QA 测试。面向数据库开发与测试人员，语法兼容 mysql randgen（不支持嵌入 perl 代码），纯 Go 实现，可作为库调用。",
+   "highlights": [
+    "提供 gentest/gendata/gensql/exec 子命令，支持生成 DDL/DML 与 SQL 并在双 DSN 上执行对比结果",
+    "yy 语法兼容 mysql randgen（不含嵌入式 perl 代码时），支持嵌入式 lua 代码块",
+    "所有导出函数无状态，可脱离命令行作为 Go 库调用"
+   ],
+   "use_cases": [
+    "为数据库内核或 SQL 兼容层生成随机 SQL 做模糊测试",
+    "通过 exec 在两个数据库实例间比对同一 SQL 的执行结果一致性",
+    "按自定义 zz/yy 文法批量生成表结构与测试数据"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "3. yy syntax is mysql randgen compatible, as long as it doesn't contain embedded perl code",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "go version of mysql rangen for db fuzz test ／ 4. go-randgen supports embedded lua code blocks, just as mysql randgen supports perl code blocks",
+     "lines": [
+      5,
+      38
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 自述为 db fuzz test 工具，用于随机生成 SQL 测试数据库，属于为数据库生态服务的测试组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "go version of mysql rangen for db fuzz test ／  3. yy syntax is mysql randgen compatible, as long as it doesn't contain embedded perl code ／ generate table structrue and data in user specified dsns",
+   "evidence_lines": [
+    5,
+    37,
+    74
+   ]
+  },
+  "fn": "pingcap/go-randgen",
+  "sha": "10356f526ad5",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6d505225012f": {
+  "identity": {
+   "one_liner": "自托管多人实时白板应用，基于 CRDT 协同，数据存于 SQLite",
+   "review": "nexcanvas 是一个自托管的多方实时协作白板应用，支持便签、形状、绘图、照片与 PDF，多人可同时编辑并看到彼此指针，支持模板、形状库、版本回溯与 JSON Canvas 导入导出，数据（含 SQLite 数据库与媒体文件）统一存放在 /data 目录。适合个人、家庭或小团队自建使用；部署通过 Docker Compose，建议置于带 TLS 的反向代理之后。",
+   "highlights": [
+    "支持多人实时协作编辑，含他人指针显示与各自的撤销",
+    "提供 350+ 形状库、30+ 模板及 JSON Canvas 格式导入导出",
+    "数据（SQLite 数据库、照片与文件）集中存放于 /data 并支持备份与版本恢复"
+   ],
+   "use_cases": [
+    "自托管家庭/小团队协作画板",
+    "流程图、平面图、网络拓扑等模板化绘制",
+    "与 Obsidian 等 JSON Canvas 生态交换画板文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in `/data`: the SQLite database `nexcanvas.db` (accounts, spaces, boards and their versions), ／ Mount it from a local disk, never from an SMB or NFS share: SQLite's locking does not work reliably over network",
+     "lines": [
+      149,
+      151
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确 SQLite 数据库 nexcanvas.db 用于存储账户、空间、画板等应用数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    image: ghcr.io/derkezorm/nexcanvas:latest ／ Everything lives in `/data`: the SQLite database `nexcanvas.db` (accounts, spaces, boards and their versions),",
+   "evidence_lines": [
+    100,
+    149
+   ]
+  },
+  "fn": "DerKezorm/nexcanvas",
+  "sha": "6d505225012f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

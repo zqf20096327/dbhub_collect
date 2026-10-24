@@ -9642,5 +9642,142 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4fa500db3185": {
+  "identity": {
+   "one_liner": "Cursor 历史记录的统一 CLI 与 Node.js 库，读取本地 SQLite 存储实现搜索、导出、备份与迁移",
+   "review": "cursor-history 是面向 Cursor IDE/Agent CLI 用户的命令行工具与 Node.js 库，用于发现并读取散布在本地的 Composer、Agent 转录、Store/ACP 等历史来源，提供跨工作区搜索、Markdown/JSON 导出、Composer 数据库备份恢复及会话跨工作区迁移。备份与迁移仅覆盖 Composer 数据库，Store 会话仅可导出。",
+   "highlights": [
+    "支持读取 Composer、Agent transcripts、Store/CLI、ACP 四类本地历史来源",
+    "提供关键词搜索、Markdown/JSON 导出、Composer 备份恢复与 --dry-run 迁移预览",
+    "自动在 node:sqlite 与 better-sqlite3 两个驱动间按操作能力选择"
+   ],
+   "use_cases": [
+    "跨工作区检索历史 Cursor 会话内容",
+    "备份与恢复 Composer 聊天数据库",
+    "项目重命名或迁移时移动支持的 Composer 会话"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "## SQLite Driver Configuration ／ cursor-history supports two SQLite drivers for maximum compatibility: ／ |`node:sqlite`|Built-in module; selected only when it provides every API required by the operation|Import/read support starts in 22.5; online backup starts in 22.16.0 and 23.8.0| ／ |`better-sqlite3`|Native binding and automatic fallback when capable|Supported project majors: 20 and 22–26|",
+     "lines": [
+      178,
+      180,
+      184,
+      185
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供读取 Cursor 本地 SQLite 存储文件的 CLI/库工具，为使用 SQLite 的历史数据服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The numbers in `show` and `export` refer to the list from the same data source and workspace scope; use the session UUID for saved commands. The `backup` command archives Composer databases, not Store databases or transcripts. ／ - **Backup & Restore** - Back up Composer databases and restore them when needed ／ cursor-history supports two SQLite drivers for maximum compatibility:",
+   "evidence_lines": [
+    34,
+    130,
+    180
+   ]
+  },
+  "fn": "S2thend/cursor-history",
+  "sha": "4fa500db3185",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ceac36871660": {
+  "identity": {
+   "one_liner": "基于 PocketBase/SQLite 的实时群聊应用",
+   "review": "一个自托管的实时群聊应用，前端为原生 TypeScript，后端由单个 PocketBase 二进制提供认证、数据存储与实时推送，数据落盘在 SQLite。提供房间、私信、附件、emoji、Telegram 桥接、PWA 与 Android 客户端。适合想自建轻量聊天服务的小团队或个人，部署要求 Node.js ≥22 并可运行于 systemd 或 Dokku。",
+   "highlights": [
+    "支持公开/私有/开放房间、私信、回复、转发、emoji 反应与文件附件（单条最多 10 个 20 MB 文件）",
+    "实时消息同步与未读计数，支持 Telegram 群组双向桥接（可选）",
+    "前端体积受构建预算约束（JS 约 47 KB、CSS 约 7 KB gzipped），提供 PWA 与原生 Android 客户端"
+   ],
+   "use_cases": [
+    "自托管的小型团队或社区实时聊天",
+    "需要与 Telegram 群组互通消息的场景",
+    "基于 PocketBase 学习实时应用架构与测试实践的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+     "lines": [
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明全部数据（SQLite + 上传文件）存于 PocketBase 的 pb_data，该项目是使用数据库存数据的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small, fast, real-time group chat. One PocketBase binary is the whole backend ／ Open http://127.0.0.1:8090 and sign up (top right). The dev database lives in `pb_data/` — delete it to start over. ／ # All data (SQLite + uploads) lives in /pb_data: keep it on the host. The directory is owned by uid 32767, the",
+   "evidence_lines": [
+    3,
+    53,
+    126
+   ]
+  },
+  "fn": "border-radius/chat",
+  "sha": "ceac36871660",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

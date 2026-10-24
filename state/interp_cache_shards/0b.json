@@ -9018,5 +9018,169 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "11e3c310633a": {
+  "identity": {
+   "one_liner": "自托管 PHP 网站生成器，用 AI Studio 生成并发布源码文件",
+   "review": "VoxelSite 是一个开源的 AI 网站生成器：用户用自然语言描述业务，由内置的 AI Studio 或通过 Studio MCP 接入的外部 AI 工具生成多页面网站，支持可视化编辑、代码编辑、快照与发布。数据存储使用 PHP 自带的 SQLite，无需数据库服务器。面向想自托管、拥有完整源码文件的个人或客户建站者。",
+   "highlights": [
+    "内置 AI Studio 聊天界面生成与编辑多页面网站，并可通过 Studio MCP 连接外部 AI 工具检查草稿、应用修改",
+    "使用 PHP 自带的 SQLite 存储，安装器自动建库并执行迁移，无需独立数据库服务器",
+    "生成的网站为标准 HTML/CSS/PHP/JavaScript 源文件，发布后删除 Studio 仍可运行"
+   ],
+   "use_cases": [
+    "自托管环境（VPS 或共享主机）上由 AI 辅助生成多页面网站",
+    "通过 MCP 将 Claude Code、Codex 等外部 AI 工具接入站点草稿进行审查与编辑",
+    "向客户交付完整源码文件的网站建设项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite database|Created by the installer — no database server to set up| ／ |Database|SQLite — bundled with PHP, nothing to install| ／ |Database|SQLite 3 (via PDO)|",
+     "lines": [
+      86,
+      97,
+      204
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 存储站点与业务数据，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open-source AI website builder. Build in Studio with your own provider key, or connect an external AI tool through private Studio MCP. Describe your business and turn the result into a complete, self-hosted website — pages, layout, copy, styling, and forms. Plain PHP and SQLite, no framework, no SaaS, no vendor lock-in. You own every file. ／ |SQLite database|Created by the installer — no database server to set up| ／ |Database|SQLite — bundled with PHP, nothing to install|",
+   "evidence_lines": [
+    3,
+    86,
+    97
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "NowSquare/VoxelSite",
+  "sha": "11e3c310633a",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "58f88867446c": {
+  "identity": {
+   "one_liner": "异步 Python ORM，支持 PostgreSQL/SQLite/ClickHouse，方言可插拔",
+   "review": "hare-orm 是一个面向 asyncio 的 Python ORM，模型为普通类，查询通过 QuerySet 懒构建，迁移从模型变更生成；支持复合主键、select_related/prefetch_related、软删除、多租户、乐观锁与事务性 outbox 等 Meta 选项，并内置 mypy 插件和 pytest 插件。通过可插拔方言适配 PostgreSQL、SQLite 和 ClickHouse，适合用这些数据库开发异步 Python 应用的开发者，要求 Python 3.12+，完整支持仅限 Linux。",
+   "highlights": [
+    "内置从模型生成的迁移体系，含 hare makemigrations/migrate/drift/inspectdb 命令",
+    "PostgreSQL 方言支持复合主键、PostGIS、pgvector、LISTEN/NOTIFY、行级安全与分区",
+    "提供 OpenTelemetry、N+1 检测、读写副本路由、PgBouncer 支持及 FastAPI/Litestar 集成"
+   ],
+   "use_cases": [
+    "异步 Python 应用（FastAPI/Litestar）中替代 Django/tortoise 风格 ORM 的数据访问层",
+    "需要以模型声明并迁移 schema 约束、索引、触发器、视图、分区等数据库对象的场景",
+    "需要复合主键、递归树查询、多租户与事务性 outbox 等应用模式的 PostgreSQL/SQLite/ClickHouse 项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "An async Python ORM for PostgreSQL, SQLite and ClickHouse, built with relations in mind. Models are ／ - **Fast.** A Rust PostgreSQL driver decodes rows and converts values outside Python, and every ／ |PostgreSQL|14+|",
+     "lines": [
+      10,
+      14,
+      139
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "An async Python ORM for PostgreSQL, SQLite and ClickHouse, built with relations in mind. Models are ／ |SQLite|3.35.5+|",
+     "lines": [
+      10,
+      138
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "An async Python ORM for PostgreSQL, SQLite and ClickHouse, built with relations in mind. Models are ／ - **Every database on its own terms.** SQLite, PostgreSQL and ClickHouse are dialects built on the ／ |ClickHouse|25.8+|",
+     "lines": [
+      10,
+      31,
+      141
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是操作数据库的开发库（ORM），为使用数据库的应用提供服务，而非以数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；README 末尾注明始于 Tortoise ORM 的 fork",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An async Python ORM for PostgreSQL, SQLite and ClickHouse, built with relations in mind. Models are ／ - **Every database on its own terms.** SQLite, PostgreSQL and ClickHouse are dialects built on the ／ pip install hare-orm[asyncpg]        # the pure-Python PostgreSQL driver, instead of the Rust one",
+   "evidence_lines": [
+    10,
+    31,
+    75
+   ]
+  },
+  "fn": "hare-orm/hare-orm",
+  "sha": "58f88867446c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10681,5 +10681,210 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "11a896ab68f3": {
+  "identity": {
+   "one_liner": "Go+Svelte 编写的 JAV 元数据抓取与文件整理工具",
+   "review": "该项目用 Go 和 Svelte 重写原 Javinizer，提供 CLI、TUI、REST API、Web UI 和桌面应用多种形态，从 R18.dev、DMM 等 14 个来源抓取元数据，按模板重命名整理本地影片文件并生成 Kodi/Plex 兼容的 NFO。适合自托管管理本地影片库的用户；通过静态链接 SQLite 作为内嵌存储，支持 Docker、Homebrew、Scoop 等多种安装方式。",
+   "highlights": [
+    "支持 14 个元数据抓取来源（r18dev 默认启用，DMM、JavDB、JavBus 等可选），支持多语言字段",
+    "提供 CLI、TUI、REST API、Web UI 和桌面应用五种使用形态",
+    "支持模板化文件重命名、dry-run 预览、NFO 生成及封面/海报/剧照/预告片下载"
+   ],
+   "use_cases": [
+    "自托管整理和重命名本地 JAV 影片库",
+    "为 Kodi/Plex 等媒体中心生成 NFO 元数据文件",
+    "通过 REST API 或 CLI 批量自动化抓取与整理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Windows builds are CLI/TUI/API + embedded web UI, same as the other platforms. CGO/SQLite is statically linked, so no separate runtime is required.",
+     "lines": [
+      245
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用内嵌 SQLite 静态链接作为存储的媒体整理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A metadata scraper and file organizer for Japanese Adult Videos (JAV), with CLI, TUI, REST API, and a web UI. A Go recreation of the original Javinizer.",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "javinizer/javinizer-go",
+  "sha": "11a896ab68f3",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7d7395294f78": {
+  "identity": {
+   "one_liner": "Go 编写的 MySQL 表数据快速导入/复制命令行工具",
+   "review": "Swoof 是一个用 Go 实现的 MySQL 表导入与复制工具，通过 SQL 查询读取源表并写入目标库，支持多目标并行分发、通配符表名、WHERE 行过滤、函数/视图/存储过程同步，以及导出到 SQL 文件或剪贴板。面向需要在开发与生产环境间拉取表数据的开发者，也可用于本地备份。",
+   "highlights": [
+    "支持一次读取源数据并行分发到多个目标（数据库、file: 路径、clipboard）",
+    "支持通配符表名、-w WHERE 子句行过滤，以及函数/视图/存储过程与 DDL 同步",
+    "写入临时表完成后 drop/rename 替换，避免长导入干扰现有表；亦可写 *.sql 文件用于本地备份"
+   ],
+   "use_cases": [
+    "从生产库向开发/测试库拉取指定表或行切片",
+    "向多个目标库同时复制表结构与数据",
+    "导出表结构或数据为本地 SQL 备份文件"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Just swoof it in. Ultra fast MySQL table importer. ／ This still uses MySQL commands to do the importing, so it wont be as quick as, say, the Percona xtra-backup tool, but because it uses queries, this will work across a broad range of MySQL versions. ／ You can read more about DSNs here <https://github.com/go-sql-driver/mysql#dsn-data-source-name>.",
+     "lines": [
+      8,
+      12,
+      226
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MySQL 数据库之间的表导入/复制/备份提供服务的独立命令行工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Just swoof it in. Ultra fast MySQL table importer. ／ Also, `swoof` doesn't import tables over top of existing tables like `mysqldump` does, but instead writes to a temp table, and once completed, drops and renames the temp table to match the original, so long imports don't interfere with working on your dev system. ／ Swoof can also be used as a local backup tool by writing `*.sql` files to a specified directory instead of exporting data to another database. This is particularly useful for creating backups that can be stored locally or transferred to external storage.",
+   "evidence_lines": [
+    8,
+    14,
+    246
+   ]
+  },
+  "fn": "StirlingMarketingGroup/swoof",
+  "sha": "7d7395294f78",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a1d3e937ac6f": {
+  "identity": {
+   "one_liner": "自托管健康教练系统，单 Node 服务含 PWA/REST/MCP，SQLite 存储",
+   "review": "Cairn 是一个自托管的个人健康管理应用，读取用户的举重、跑步、饮食、睡眠和体检数据，由多个\"专家\"代理生成每日建议并支持一键撤销。部署方式为一条安装脚本或 Docker，可跑在 Railway、树莓派或 VPS 上；所有数据存于本地 SQLite 文件，并通过内置 MCP 服务器（300+ 工具）供 MCP 客户端读写。适合关注自身训练与健康数据的个人用户。",
+   "highlights": [
+    "单 Node 进程同时提供 PWA、REST API（/api/*）与 MCP 服务器（/mcp），存储使用 Node 内置 node:sqlite",
+    "内置 300+ 工具的 MCP 服务器，MCP 客户端可读写全部数据",
+    "支持 Garmin 双向同步与 Railway 一键部署模板"
+   ],
+   "use_cases": [
+    "个人自托管健康与训练数据管理",
+    "通过 MCP 客户端以对话方式查询和调整训练/饮食计划",
+    "在家用服务器或 VPS 上私有化运行健康记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "hardware, keeps everything in a SQLite file you own, and never scores you or nags you. ／ background scheduler. Storage is SQLite via Node's built-in `node:sqlite`. The north star is ／ non-container run — that's where `node:sqlite` is unflagged. The container image bundles it. ／ Everything Cairn knows about you lives in one SQLite file on your own machine — there's no",
+     "lines": [
+      13,
+      161,
+      223,
+      347
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 SQLite 作为自身数据存储（node:sqlite），是为终端用户的健康应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "behind it, makes the small calls, and gives you a one-tap Undo for each one. It runs on your own ／ One Node service serves the PWA (`/`), the REST API (`/api/*`), the MCP server (`/mcp`), and a ／ background scheduler. Storage is SQLite via Node's built-in `node:sqlite`. The north star is",
+   "evidence_lines": [
+    12,
+    160,
+    161
+   ]
+  },
+  "fn": "zilet/cairn",
+  "sha": "a1d3e937ac6f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

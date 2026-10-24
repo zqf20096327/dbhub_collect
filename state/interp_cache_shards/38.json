@@ -10972,5 +10972,80 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a411ff23a1fa": {
+  "identity": {
+   "one_liner": "开源 agentic SDLC 平台，多智能体日常产出 PR 并经人工审批上线",
+   "review": "一个运行智能体软件开发生命周期的平台：cron 定时触发 Planner/Coder/Reviewer 等智能体在真实仓库上完成规格、编码、部署到 dev、缺陷扫描，生成每日摘要并由人工决定是否进入生产。基于 NestJS 四服务 + Next.js，数据存于 Postgres 16（pgvector+RLS）与 Redis（BullMQ），支持多租户隔离与可插拔 LLM 提供商。当前为 alpha 状态。",
+   "highlights": [
+    "多租户架构，按组织隔离 Postgres（RLS）、预算与 provider 密钥",
+    "生产上线强制人工审批，状态为 alpha",
+    "支持 Anthropic、OpenAI、AWS Bedrock、Ollama 等 LLM 提供商，runner 可插拔"
+   ],
+   "use_cases": [
+    "希望定时自动生成 PR 并人工把关上线的开发团队",
+    "多组织 SaaS 形式的自托管智能体研发平台部署",
+    "用本地 Ollama 在无 API key 环境体验完整智能体流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multi-tenant by design.** One workspace per org, tenant-isolated Postgres (RLS), per-org budgets, per-org provider keys, per-org runner profile (BYO) so a hosted deployment never runs other tenants' containers on the operator's VM. Self-host privately or r ／ - **Data.** Postgres 16 (pgvector + RLS) and Redis (BullMQ + pubsub). ／ This brings up `mergecrew-postgres` (pgvector/pg16) on `:5432` and `mergecrew-redis` on `:6379`. The Postgres init script creates the `mergecrew`, `mergecrew_app`, and `mergecrew_migrator` roles, the `mergecrew` database, and the `pgvector` / `uuid-ossp` / `pgcrypto` extensions.",
+     "lines": [
+      63,
+      93,
+      170
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 Postgres 与 Redis 作为自身存储依赖运行 NestJS/Next.js 平台，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0，状态标注 alpha",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Mergecrew is a pnpm-workspace monorepo. Four NestJS services (`api`, `orchestrator`, `runner`, `worker-cron`) plus a Next.js web app share a Postgres database with row-level security, a Redis instance for BullMQ queues, and an S3-compatible blob store for artifacts. Agents run as LangGraph state graphs over a pluggable LLM router. Deploy and VCS are behind adapter interfaces — GitHub Actions and Vercel ship by default. The full spec lives in `docs/`. ／ - **Data.** Postgres 16 (pgvector + RLS) and Redis (BullMQ + pubsub). ／ - **Multi-tenant by design.** One workspace per org, tenant-isolated Postgres (RLS), per-org budgets, per-org provider keys, per-org runner profile (BYO) so a hosted deployment never runs other tenants' containers on the operator's VM. Self-host privately or run as a service.",
+   "evidence_lines": [
+    83,
+    93,
+    63
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mergecrew/mergecrew",
+  "sha": "a411ff23a1fa",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

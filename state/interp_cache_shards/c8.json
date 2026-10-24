@@ -9728,5 +9728,79 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e5e7dbfae5f4": {
+  "identity": {
+   "one_liner": "Rust 从零重写的 SQLite 兼容引擎，支持页级 MVCC 并发写入",
+   "review": "FrankenSQLite 是一个用 Rust 从零实现的嵌入式数据库引擎，文件格式兼容 SQLite 3.x，可读写标准 .db 与 WAL 文件。它以页级 MVCC（SSI 隔离）替代单写者锁，支持多写者并发，引擎核心使用安全 Rust。适合需要嵌入式存储且关注写并发的开发者实验使用；原生模式与 RaptorQ 持久化仍为部分实现，当前主路径为兼容模式。",
+   "highlights": [
+    "文件格式兼容 SQLite 3.x，可读写标准 .db 及回滚日志/WAL 文件",
+    "页级 MVCC 并发写入，默认串行化快照隔离（SSI）",
+    "引擎核心为安全 Rust，unsafe 仅限 VFS 与可选 C ABI 边界"
+   ],
+   "use_cases": [
+    "需要嵌入式、零配置存储引擎且写并发较高的场景",
+    "对现有 SQLite 数据库文件进行兼容读写的 Rust 项目",
+    "多版本并发控制与存储引擎研究参考"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "An independent ground-up Rust reimplementation of SQLite with page-level MVCC concurrent-writer support. ／ **The Problem:** SQLite allows only one writer at a time. A single lock byte (`WAL_WRITE_LOCK` at `wal.c:3698`) serializes all writers. For write-heavy workloads, this bottleneck caps throughput regardless of how many cores you have. Torn writes and bit-flips  ／ **The Solution:** FrankenSQLite reimplements SQLite from scratch in Rust, with a safe engine core and two architectural innovations:",
+     "lines": [
+      5,
+      13,
+      15
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Row-level** (PostgreSQL-style) would break the file format and require VACUUM",
+     "lines": [
+      81
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为重新实现的数据库存储引擎本体，而非使用某个数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT+Rider 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An independent ground-up Rust reimplementation of SQLite with page-level MVCC concurrent-writer support. ／ **The Solution:** FrankenSQLite reimplements SQLite from scratch in Rust, with a safe engine core and two architectural innovations: ／ The current runnable engine is already real, but still hybrid. Compatibility mode over standard SQLite files is the live runtime path today. Database text encodings UTF-8 (encoding 1) and UTF-16le/UTF-16be (encodings 2/3) are admitted for both reads and writes; UTF-16 support is newer than the long-verified UTF-8 surface, and attaching databases with mismatched encodings is rejected. Native mode / ECS sections below describe the longer-term design plus partial implementation work. See \"Current Implementation Status\" before treating every section as present-day behavior.",
+   "evidence_lines": [
+    5,
+    15,
+    21
+   ]
+  },
+  "fn": "Dicklesworthstone/frankensqlite",
+  "sha": "e5e7dbfae5f4",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

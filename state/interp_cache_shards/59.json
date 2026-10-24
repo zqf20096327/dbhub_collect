@@ -9101,5 +9101,152 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "04d7b8241c45": {
+  "identity": {
+   "one_liner": "自托管短链接服务，单二进制+内嵌 SQLite 存储",
+   "review": "Sani 是一个供单一管理员自托管使用的短链接服务，同时支持文本与文件分享。它以单个 Go 二进制分发，内嵌管理界面，元数据和文本存于 SQLite，重定向由内存缓存提供，点击计数在内存中聚合后定期批量写入 SQLite。适合个人或小团队自建链接分享与点击统计场景，当前处于 0.x 阶段。",
+   "highlights": [
+    "单二进制部署，元数据与文本使用 SQLite 存储，文件存本地目录",
+    "重定向目标保存在内存缓存中，点击计数每两秒聚合成一次事务写入 SQLite",
+    "提供 HTTP API、书签小工具、Android 分享接入，并支持从 Shlink 导入 CSV/JSON"
+   ],
+   "use_cases": [
+    "自托管短链接生成与跳转管理",
+    "短文本片段与文件的临时分享（支持过期时间与访问次数限制）",
+    "个人链接点击统计（总览、按日、来源统计）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required. ／ - Redirect targets live in a sharded in-memory cache in front of SQLite. Misses are cached separately and bounded, so a scan for random slugs can't evict real links, and concurrent misses for the same slug share one database read. ／ - Counting a click is an in-memory increment. Aggregated counts reach SQLite every two seconds in one transaction, and are flushed on shutdown.",
+     "lines": [
+      3,
+      131,
+      132
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目是一个用 SQLite 存储元数据与文本数据的自托管短链接服务，SQLite 是其内部存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required.",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "DejavuMoe/sani",
+  "sha": "04d7b8241c45",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4d273e8546a0": {
+  "identity": {
+   "one_liner": "TiDB 官方 Homebrew tap，分发 tidb-server 与 tiup",
+   "review": "PingCAP 维护的 Homebrew formula 仓库，通过 brew tap 安装 tidb-server（内置 unistore 单机引擎，无 TiKV/PD）和 tiup 工具。README 给出 brew services 启动方式、本地 socket 连接命令、root 账户安全初始化说明与旧数据目录迁移 SQL。面向在 macOS 上用 Homebrew 部署 TiDB 的用户。",
+   "highlights": [
+    "提供 tidb-server formula，以内置 unistore 引擎单节点运行，无需 TiKV 或 PD",
+    "通过 brew services 注册服务，socket 置于 Homebrew var 目录并以 --initialize-secure 启动",
+    "tiup 首次使用时植入 SHA-256 校验的固定 TUF root manifest，并在每次运行时重新校验"
+   ],
+   "use_cases": [
+    "macOS 上通过 Homebrew 安装运行单节点 TiDB",
+    "安装 tiup 工具链并配置私有镜像仓库",
+    "升级旧版本数据目录时按 README 提供的 SQL 迁移账户"
+   ],
+   "official": {
+    "flag": true,
+    "of": "TiDB"
+   }
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "mysql -S \"$(brew --prefix)/var/tidb.sock\" -uroot ／ `mysql -S \"$(brew --prefix)/var/tidb.sock\" -uroot` and type the SQL at the",
+     "lines": [
+      23,
+      37
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Homebrew formulae for TiDB. ／ brew install tidb-server ／ ## tidb-server",
+     "lines": [
+      3,
+      9,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是 TiDB 官方 Homebrew 分发渠道，为 TiDB 数据库提供安装与运行支持",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "TiDB"
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Homebrew formulae for TiDB. ／ brew install tidb-server ／ ## tidb-server",
+   "evidence_lines": [
+    3,
+    9,
+    13
+   ]
+  },
+  "fn": "pingcap/homebrew-brew",
+  "sha": "4d273e8546a0",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

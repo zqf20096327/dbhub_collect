@@ -9681,5 +9681,184 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f3087726f82b": {
+  "identity": {
+   "one_liner": "SQLAlchemy 模型历史审计扩展库，追踪数据变更版本",
+   "review": "SQLAlchemy-History 是 SQLAlchemy-Continuum 的分支，作为审计扩展为 SQLAlchemy 模型记录插入、删除、更新的历史，支持事务查询、数据回滚、时间点关系反映和异步用法，兼容 Alembic 迁移。面向需要在 Python 应用中实现数据版本化的 SQLAlchemy 开发者。安装方式为 pip/uv 安装，通过 make_versioned() 和 __versioned__ 标记启用。",
+   "highlights": [
+    "支持 SQLAlchemy 2+ 与 Python 3.10+，含异步 SQLAlchemy",
+    "记录 insert/delete/update 历史，可通过 select 语法查询事务并回滚对象及关系",
+    "支持 Alembic 迁移"
+   ],
+   "use_cases": [
+    "为 Python 应用中的 ORM 模型添加变更历史审计",
+    "需要将数据回滚到指定事务或查询历史记录的场景",
+    "基于 SQLAlchemy 的异步应用的时间版本追踪"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- https://wiki.postgresql.org/wiki/Audit_trigger ／ - https://wiki.postgresql.org/wiki/Audit_trigger_91plus ／ - Support multiple databases (sqlite, mysql, postgres, mssql, oracle)",
+     "lines": [
+      73,
+      74,
+      83
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Support multiple databases (sqlite, mysql, postgres, mssql, oracle)",
+     "lines": [
+      83
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- Support multiple databases (sqlite, mysql, postgres, mssql, oracle)",
+     "lines": [
+      83
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Support multiple databases (sqlite, mysql, postgres, mssql, oracle)",
+     "lines": [
+      83
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- Support multiple databases (sqlite, mysql, postgres, mssql, oracle)",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLAlchemy ORM 提供历史追踪扩展，是服务于数据库生态的开发库而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLAlchemy-History is a fork of SQLAlchemy-Continuum. It is an auditing ／ - Support multiple databases (sqlite, mysql, postgres, mssql, oracle) ／ uv pip install sqlalchemy-history",
+   "evidence_lines": [
+    8,
+    83,
+    26
+   ]
+  },
+  "fn": "corridor/sqlalchemy-history",
+  "sha": "f3087726f82b",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9e13865503da": {
+  "identity": {
+   "one_liner": "Rust 异步 Microsoft SQL Server 客户端库，基于 tds-driver",
+   "review": "tdsql 是一个基于 tds-driver TDS 协议驱动的 Rust 异步客户端库，用于连接和操作 Microsoft SQL Server，支持命名参数、存储过程 RPC 调用、事务与 savepoint、流式读取大结果集、请求取消及 JDBC 连接串解析，也提供阻塞版客户端；面向需要在 Rust 应用中访问 SQL Server 的开发者，通过 crates.io 安装。",
+   "highlights": [
+    "提供异步与阻塞两种客户端，支持事务、savepoint、隔离级别设置",
+    "支持流式读取结果集与在服务端取消查询",
+    "支持命名参数与通过 RPC 调用存储过程"
+   ],
+   "use_cases": [
+    "Rust 应用中执行 SQL Server 查询与事务",
+    "流式处理大批量查询结果",
+    "调用 SQL Server 存储过程与执行 DDL 批处理"
+   ],
+   "install": [
+    "source"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ is found through SQL Server Browser. If the server redirects the login, as Azure",
+     "lines": [
+      3,
+      41
+     ]
+    },
+    {
+     "db": "TDSQL",
+     "rel": "mention",
+     "quote": "# tdsql ／ `tdsql` is an async Microsoft SQL Server client for Rust, built on the",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQL Server 提供客户端驱动能力的 Rust 库，服务于数据库生态而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`tdsql` is an async Microsoft SQL Server client for Rust, built on the ／ tdsql = \"0.8.0\"",
+   "evidence_lines": [
+    3,
+    20
+   ]
+  },
+  "fn": "CommonwealthPasta/tdsql",
+  "sha": "9e13865503da",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

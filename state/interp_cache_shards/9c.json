@@ -11007,5 +11007,214 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3920d38573d": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的图式长期记忆框架，基于知识图谱按需检索上下文",
+   "review": "Engrama 是一个为 AI Agent 提供持久化结构化记忆的 Python 框架，用实体、观察、关系构成知识图谱，Agent 通过图遍历按需检索上下文而非将全部内容塞入提示词；默认后端为 SQLite + sqlite-vec（单文件、零外部服务），可选 Neo4j 5.26。支持 MCP 接入、多租户身份隔离与 GDPR 删除，适合为 Claude 等 Agent 客户端构建记忆层的开发者使用。",
+   "highlights": [
+    "提供实体/观察/关系的知识图谱数据模型，支持图遍历与全文/向量检索",
+    "支持 SQLite + sqlite-vec 默认后端与 Neo4j 5.26 可选后端，数据模型一致",
+    "实现 (org_id, user_id) 身份隔离、fail-closed 读取及 engrama_gdpr_forget 删除工具"
+   ],
+   "use_cases": [
+    "为 AI Agent 添加持久化长期记忆与关联检索",
+    "通过 MCP 集成到 Claude Desktop 等 Agent 客户端",
+    "多租户场景下需要身份隔离与 GDPR 删除能力的记忆服务部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite + `sqlite-vec`** (default since 0.9) — single file, zero ／ |Zero external services|✅|❌|✅ (SQLite)|",
+     "lines": [
+      19,
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Engrama 将 SQLite 作为自身记忆数据的默认存储后端，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **SQLite + `sqlite-vec`** (default since 0.9) — single file, zero ／ - **Neo4j 5.26 LTS** (opt-in) — for multi-process production setups,",
+   "evidence_lines": [
+    19,
+    21
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "scops/engrama",
+  "sha": "e3920d38573d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1cea97cb2a99": {
+  "identity": {
+   "one_liner": "校园问题上报系统，Flutter+Dart Shelf+PostgreSQL 分层架构",
+   "review": "一个用于课程场景的校园问题上报系统：学生用照片加位置提交校园问题，工作人员认领并上传结果照片解决后系统通知学生。技术栈为 Flutter 客户端、Dart Shelf 服务端、PostgreSQL 16 数据库，采用分层架构与手写 SQL migration，集成测试使用真实 PostgreSQL 容器。定位为课程演示项目，非生产系统，首个版本功能仍在规划中。",
+   "highlights": [
+    "支持学生拍照加位置提交问题、工作人员认领与解决、解决后应用内通知的完整状态流转",
+    "基础设施层实现 PostgreSQL 持久化、参数化查询与 V1-V4 SQL migration",
+    "集成测试使用真实 PostgreSQL 容器运行"
+   ],
+   "use_cases": [
+    "校园设施问题（如灯具、门窗损坏）的上报与处理跟踪",
+    "需要单责任人认领与状态留痕的工单类流程",
+    "分层架构与 TDD 教学参考场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Veritabanı|PostgreSQL 16| ／ |Infrastructure|PostgreSQL ve dosya sistemi gerçeklemeleri| ／ |Veritabanı erişimi|`postgres` paketi, parametreli sorgu|Öneri|",
+     "lines": [
+      55,
+      124,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明系统使用 PostgreSQL 16 存储数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Veritabanı|PostgreSQL 16| ／ |Infrastructure|PostgreSQL ve dosya sistemi gerçeklemeleri| ／ |Veritabanı|PostgreSQL 16|Kabul|",
+   "evidence_lines": [
+    55,
+    124,
+    135
+   ]
+  },
+  "fn": "HuseyinEmreTech/kampus-bildirim-sistemi",
+  "sha": "1cea97cb2a99",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "62bd3423aed7": {
+  "identity": {
+   "one_liner": "自托管团队知识库，以 MCP 服务器形式提供混合语义检索",
+   "review": "这是一个自托管的团队知识库服务器，将项目设计、runbook、API 契约、事故 findings 等知识通过 MCP 协议暴露给 Claude 等 MCP 客户端读写。所有写入均为提案并需人工审核；检索基于 Postgres 全文与嵌入相似度的混合排序，嵌入用本地小模型，数据存于 Postgres/pgvector。适合用 AI 代理协作并需要共享、可审校知识沉淀的团队。",
+   "highlights": [
+    "提供 search_knowledge 等约 20 个 MCP 工具，覆盖检索、提案写入、影响通知与仓库文档流程",
+    "所有写入走人工审核提案流程，写入时对密钥和个人数据进行脱敏",
+    "支持本地磁盘或 S3 兼容存储（R2/MinIO/Garage）保存附件，文件经 AWS Signature V4 签名访问"
+   ],
+   "use_cases": [
+    "团队共享项目设计、契约与事故根因，供 Claude 等 MCP 客户端会话时上下文加载",
+    "AI 代理生成内容的入库审核与版本检查",
+    "跨项目复用 UI 组件规格、设计 token 与共享契约，并在变更时向依赖方发送影响通知"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Search is hybrid. Postgres full-text relevance and embedding similarity are each normalized against the query's best hit and combined, then boosted for published and current-project items. Unlike rank-only fusion, this keeps how much better a hit is, so a boos ／ Requirements: Node 22, pnpm 9, and either Docker or Postgres 16 with pgvector.",
+     "lines": [
+      111,
+      242
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 Postgres/pgvector 存储自身知识库数据（含 pgvector 依赖与 POSTGRES_PASSWORD 配置），属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A shared team knowledge base exposed as a remote MCP server. Every Claude client on a team reads and writes the same knowledge: systems, metrics, runbooks, project design docs, API contracts and UI/UX specs, plus the findings from past investigations. ／ Search is hybrid. Postgres full-text relevance and embedding similarity are each normalized against the query's best hit and combined, then boosted for published and current-project items. Unlike rank-only fusion, this keeps how much better a hit is, so a boost can't lift a weak match over a much stronger one. Embeddings come from a small model (`bge-small-en-v1.5`, int8) that runs in-process on CPU. It is not an LLM, needs no API key, and is downloaded once (~35 MB). New text is embedded in the background, so writes stay fast.",
+   "evidence_lines": [
+    5,
+    111
+   ]
+  },
+  "fn": "ramith27/thaliyola",
+  "sha": "62bd3423aed7",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

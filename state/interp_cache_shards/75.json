@@ -10792,5 +10792,131 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd453302ddec": {
+  "identity": {
+   "one_liner": "自托管家庭财务引擎：类型化Python计算器+私有SQLite账本+AI代理",
+   "review": "一个自托管的家庭财务引擎，提供20个Pydantic验证的风险/回报/期权等CLI计算器，将经纪商和银行数据同步到本地私有SQLite账本（family_office.db），并通过Claude Code/Codex中的专业代理调用CLI产出分析。面向希望在本地管理个人投资组合与风险的家庭用户；采用'代理提案、类型化代码计算'的分工，守门检查缺数据即阻断。AGPL-3.0许可，open-core模式。",
+   "highlights": [
+    "提供20个Pydantic输入、带CLI包装的类型化计算器，覆盖风险、动量、波动率、回测、期权、对冲等指标",
+    "通过refresh_all将SnapTrade（经纪）与SimpleFIN（银行/卡）数据写入本地SQLite，账本数据存于仓库外的私有实例目录",
+    "可作为Claude Code插件安装，包含11个专业代理与技能；买票等不可逆操作经fail-closed守门检查"
+   ],
+   "use_cases": [
+    "在本地机器上汇总经纪商/银行账户并计算VaR、CVaR、Sharpe等风险指标",
+    "通过AI代理（Claude Code/Codex）驱动计算器生成带数据来源的可追溯分析",
+    "定时核对保证金利率等关键参数（基于swamp调度的自动检查）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "_A self-hosted family office engine: typed Python calculators, a private SQLite ledger, and specialist agents that run inside Claude Code or Codex. Your data never leaves your machine unless you point it somewhere._ ／ |**Sync layer** (`src/integrations/`)|`refresh_all` pulls SnapTrade (brokerage) and SimpleFIN (bank and card) into SQLite with your own read-only credentials.|Partial provider responses raise before any write. You get an error instead of a coverage ratio compu ／ Finance Guru architecture: providers sync through refresh_all into a private SQLite instance, typed calculators read the store and market data, skills and specialists drive the calculators from Claude Code or Codex, and artifacts land back in the instance.",
+     "lines": [
+      7,
+      85,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README表明SQLite是该应用的私有账本存储，项目是用数据库的财务应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，open-core（Keepfolio商业引擎的开源核心）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "_A self-hosted family office engine: typed Python calculators, a private SQLite ledger, and specialist agents that run inside Claude Code or Codex. Your data never leaves your machine unless you point it somewhere._ ／ |**Sync layer** (`src/integrations/`)|`refresh_all` pulls SnapTrade (brokerage) and SimpleFIN (bank and card) into SQLite with your own read-only credentials.|Partial provider responses raise before any write. You get an error instead of a coverage ratio computed on half your accounts.| ／ Finance Guru architecture: providers sync through refresh_all into a private SQLite instance, typed calculators read the store and market data, skills and specialists drive the calculators from Claude Code or Codex, and artifacts land back in the instance.",
+   "evidence_lines": [
+    7,
+    85,
+    90
+   ]
+  },
+  "fn": "AojdevStudio/Finance-Guru",
+  "sha": "dd453302ddec",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "59cf4850000b": {
+  "identity": {
+   "one_liner": "AI 编码代理的持久会话记忆 MCP 服务器，本地推理与联想召回",
+   "review": "Prism Coder 是一个 MCP 服务器，为 Claude Code、Cursor、Codex 等 AI 编码工具提供跨会话持久记忆、知识图谱与本地模型路由（Ollama/oMLX），并记录本地推理节省的 token 量。面向 AI 编码代理用户，通过 npm 或插件安装；本地免费使用，云同步与团队功能需 Synalux 订阅。",
+   "highlights": [
+    "实现跨会话持久会话记忆，包含交接摘要、TODO 与 ACT-R 记忆排序",
+    "支持本地 Ollama/oMLX 模型路由与离线工具调用，并提供可审计的本地 token 节省统计",
+    "提供 prism connect 一键配置 Claude Code、Cursor、Codex 等主机，也可作为插件安装"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 AI 编码代理添加跨会话记忆",
+    "在无云端环境下用本地模型执行工具路由与部分编码任务",
+    "统计与审计本地推理替代云端模型调用的 token 量"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 AI 编码代理提供记忆服务的 MCP 服务器组件，而非以数据库为核心存储的终端应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Prism Coder is an MCP server that gives Claude, Cursor, and other AI tools long-term memory that survives across sessions. It ships with the open-weight `prism-coder` model fleet (2B–27B) for fast, offline tool-routing — no cloud required. And it keeps score: every call served locally is metered, so `prism savings` shows the token volume that never reached your cloud model — measured honestly, in tokens. ／ npm install -g prism-mcp-server ／ - **One setup for every agent** — `prism connect` configures Claude Code,",
+   "evidence_lines": [
+    17,
+    89,
+    42
+   ]
+  },
+  "fn": "dcostenco/prism-coder",
+  "sha": "59cf4850000b",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

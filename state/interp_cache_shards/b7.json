@@ -9726,5 +9726,190 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "19680ac15c19": {
+  "identity": {
+   "one_liner": "AI代理连接客户内网数据的只读审计型连接器CLI",
+   "review": "tunr 是一个 Go 编写的 CLI/连接器，用于让 AI 代理在客户审批、限时、只读、留审计日志的前提下访问客户内网数据库等资源，同时提供隧道和应用托管功能。它通过 outbound-only 连接器暴露命名资源，代理通过 MCP 工具申请访问授权。当前为 preview 状态，数据库资源仅支持 Postgres 与原始 TCP，MySQL/MSSQL 尚未支持。",
+   "highlights": [
+    "通过 MCP 工具（tunr_list_resources、tunr_request_access、tunr_open_access）供 AI 代理申请数据库资源访问",
+    "提供 SELECT-only 角色、语句分类器、行/字节/速率限制与审计日志导出（CSV）",
+    "代理不接触数据库凭据，连接器自行登录，访问端到端 TLS 加密"
+   ],
+   "use_cases": [
+    "AI 供应商的代理需要读取客户本地 ERP/账簿数据时的安全接入",
+    "客户方 IT 对代理访问做逐次审批、限时与审计留痕",
+    "开发者本地应用的隧道分享与云部署"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "$ tunr connect resource add erp-db --kind postgres --target 10.0.0.5:5432 --database logo ／ > suites in CI); expect sharp edges. Postgres and raw TCP resources today;",
+     "lines": [
+      18,
+      87
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "> MySQL/MSSQL later.",
+     "lines": [
+      88
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> Role-based sharing, per-app SQLite and `tunr rollback` are **not built yet** —",
+     "lines": [
+      115
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "> MySQL/MSSQL later.",
+     "lines": [
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它作为连接器/代理为外部工具访问数据库资源提供服务，本身不依赖某数据库存储自身数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "CLI 采用 Apache 2.0，Relay 采用 PolyForm Shield，双组件双许可",
+   "install": [
+    "binary",
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Connector**|`tunr connect` runs inside the customer's network as a service, dials out only, and serves named resources. Their addresses never leave the machine.| ／ |**Read-only databases**|A `SELECT`-only role, read-only sessions and a statement classifier; writes fail with SQLSTATE 42501. Row, byte and rate limits per grant.| ／ > suites in CI); expect sharp edges. Postgres and raw TCP resources today;",
+   "evidence_lines": [
+    73,
+    75,
+    87
+   ]
+  },
+  "fn": "tunr-dev/tunr",
+  "sha": "19680ac15c19",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2cd3decf8bd7": {
+  "identity": {
+   "one_liner": "SQL 数据仓库转换框架，带编译期检查、端到端测试与安全重命名",
+   "review": "SQLBuild 是面向 SQL 与 Python 数据管道的开源转换框架，供数据工程师在数仓上开发与重构模型。编译器与规划器用 Rust 实现，执行与扩展用 Python；提供编译期引用解析、类型推断、跨模型测试、数据 diff，以及 sqb mv/rename 在迁移既有表而非重建的前提下重命名模型，状态以追加表保存在用户自己的数仓中。",
+   "highlights": [
+    "提供编译期检查：离线解析引用、校验 SQL、推断列类型并计算列血缘",
+    "支持 sqb rename/mv 重命名模型与列，构建时迁移既有表并通过兼容视图保留旧名",
+    "运行历史经 sqb recall 以 SQL 查询，历史存于项目内 SQLite 文件或 ClickHouse"
+   ],
+   "use_cases": [
+    "数仓 SQL 模型的重构与重命名，避免重建表",
+    "数据管道的编译期错误捕获与跨模型端到端测试",
+    "在 CI 中基于 fixture 数据于本地 DuckDB 回放构建场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|Supported|",
+     "lines": [
+      164
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|Beta|",
+     "lines": [
+      167
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "the warehouse with the same command. History stays in a SQLite file in the project, or in",
+     "lines": [
+      78
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "ClickHouse for a team.",
+     "lines": [
+      79
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据仓库上的 SQL 转换与测试提供服务，通过适配器连接各数仓而非以某库为应用后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，README 声明无付费层或商业版",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "and safe renames to your SQL, so change stops being risky. It is a free, open-source framework for ／ |Warehouse|Status| ／ |PostgreSQL|Supported|",
+   "evidence_lines": [
+    11,
+    159,
+    164
+   ]
+  },
+  "fn": "chio-labs/sqlbuild",
+  "sha": "2cd3decf8bd7",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

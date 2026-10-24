@@ -10563,5 +10563,104 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6acfb0999f86": {
+  "identity": {
+   "one_liner": "Go 编写的实时单向数据库同步/备份工具，支持 PII 脱敏加密",
+   "review": "Sync 是一个用 Go 编写的实时单向数据库备份/同步工具，可将 MongoDB、MySQL、MariaDB、PostgreSQL、Redis 的数据同步到独立实例，支持初始批量同步与基于 change stream/binlog/WAL 的增量同步，并可对指定字段做脱敏或加密。提供 Web UI，面向需要将生产数据供给数据分析等场景、又需避免直接访问生产库的团队。",
+   "highlights": [
+    "支持 MongoDB、MySQL、MariaDB、PostgreSQL、Redis 的初始同步与实时增量同步",
+    "提供字段级脱敏（masking）与加密（encryption）能力",
+    "内置 Web UI 与断点续传（存储 resume token/binlog 位点/复制槽位点）"
+   ],
+   "use_cases": [
+    "生产数据单向同步到副实例供数据团队分析",
+    "冷/热存储分层策略",
+    "含 PII 字段的脱敏/加密数据同步"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> - Sync now supports MongoDB, MySQL, PostgreSQL, MariaDB, and Redis. Next, `Sync` will support Elasticsearch. ／ - PostgreSQL (PostgreSQL version 10+ with logical replication enabled) ／ - PostgreSQL: Initial synchronization using batch inserts (default batch size: 100 rows) from the source to the target using logical replication slots and the pgoutput plugin.",
+     "lines": [
+      12,
+      27,
+      50
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> - Sync now supports MongoDB, MySQL, PostgreSQL, MariaDB, and Redis. Next, `Sync` will support Elasticsearch. ／ - MySQL ／ ### MySQL or MariaDB",
+     "lines": [
+      12,
+      25,
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Task definitions, users, sync history, backup jobs|One local **SQLite** file at `SYNC_DB_PATH`|The filesystem holding it goes away|",
+     "lines": [
+      173
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "> - Sync now supports MongoDB, MySQL, PostgreSQL, MariaDB, and Redis. Next, `Sync` will support Elasticsearch. ／ - MariaDB ／ ### MySQL or MariaDB",
+     "lines": [
+      12,
+      26,
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为多种数据库提供同步/备份服务，数据库仅作为其服务对象与内置控制库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Sync** is a real-time, one-way, and PII-proof database backup tool written in **Golang** to synchronize NOSQL and SQL data to standalone instances, GCS, using a UI and workflow engine for Data scientists, auditing, and various other purposes. **Sync** can synchronize MongoDB or SQL data from a **MongoDB replica set** or **sharded cluster**, or production SQL instance to a **standalone instance**, supports initial and incremental synchronization, including **indexes** with change stream monitoring. ／ ## Supported Databases ／  - PostgreSQL: Initial synchronization using batch inserts (default batch size: 100 rows) from the source to the target using logical replication slots and the pgoutput plugin.",
+   "evidence_lines": [
+    9,
+    22,
+    50
+   ]
+  },
+  "fn": "retail-ai-inc/sync",
+  "sha": "6acfb0999f86",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

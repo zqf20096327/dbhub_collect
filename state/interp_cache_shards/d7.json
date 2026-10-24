@@ -10720,5 +10720,81 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d212caf51b69": {
+  "identity": {
+   "one_liner": "纯 SQL 实现的 PostgreSQL DDL 提取扩展（ddlx）",
+   "review": "一个仅由 SQL 编写的 PostgreSQL 扩展，通过 ddlx_create/ddlx_drop/ddlx_script 等函数读取系统目录，生成建表、删除及依赖树重建的 DDL 脚本，供 DBA 用任意支持 SQL 的客户端提取对象定义、编写升级脚本；需 make 编译安装，在 9.1 及以上版本测试，目前未覆盖全部对象与选项。",
+   "highlights": [
+    "提供三个公开函数（ddlx_create/ddlx_drop/ddlx_script），用于生成对象 DDL 及依赖树脚本",
+    "完全由普通 SQL 函数实现，无需安装 PL/PgSQL 等额外语言",
+    "支持通过文本数组选项控制输出，如 ine、noowner、nogrants、lite 等"
+   ],
+   "use_cases": [
+    "在无 shell 访问权限时通过 SQL 查询提取数据库对象 DDL",
+    "生成包含依赖对象的重建脚本，用于编写数据库升级脚本",
+    "以幂等 DDL（优先 ALTER）形式输出对象定义供人工检查执行"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DDL eXtractor functions for PostgreSQL ／ This is an SQL-only extension for PostgreSQL that provides uniform functions for generating ／ It contains a bunch of SQL functions to convert PostgreSQL system catalogs",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "* `lite` - move defaults and constraints into `create table` statement, omit some other Postgres specific stuff (SQLite compatibility)",
+     "lines": [
+      150
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该扩展为 PostgreSQL 提供系统目录到 DDL 脚本的转换函数，是为数据库生态服务的工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is an SQL-only extension for PostgreSQL that provides uniform functions for generating ／ It contains a bunch of SQL functions to convert PostgreSQL system catalogs ／  CREATE EXTENSION ddlx;",
+   "evidence_lines": [
+    3,
+    5,
+    87
+   ]
+  },
+  "fn": "lacanoid/pgddl",
+  "sha": "d212caf51b69",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

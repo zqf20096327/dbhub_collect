@@ -9958,5 +9958,174 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f0aaab1530e1": {
+  "identity": {
+   "one_liner": "Linux 服务器备份与灾难恢复工具，基于 YAML 驱动 Bash 引擎执行加密备份与恢复",
+   "review": "Backfort 是一个运行在 Linux 上的备份与灾难恢复脚本工具，通过 YAML 配置对文件、目录和 Docker Compose 项目执行一次性全量备份，支持 age/GPG 加密、rclone 多目的地发布、保留策略和分阶段恢复；面向需要可验证备份流程的服务器管理员，不含守护进程，调度依赖 cron/systemd/Kubernetes。",
+   "highlights": [
+    "提供 PostgreSQL、MySQL、MariaDB 逻辑转储及 MS SQL、Oracle 原生导出，并支持分阶段恢复导入",
+    "支持 age/GPG 加密、Minisign 签名、SHA-256 校验及 .complete 原子发布标记",
+    "提供 pip/pipx、Docker 镜像和 Helm Chart 多种分发方式，支持 GFS 保留策略"
+   ],
+   "use_cases": [
+    "为 Linux 服务器文件和目录配置 cron/systemd 定时备份",
+    "备份含数据库容器的 Docker Compose 项目并迁移到新服务器",
+    "通过 rclone 将备份副本发送至 S3 兼容存储等异地目标"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ logical database import for PostgreSQL, MySQL and MariaDB",
+     "lines": [
+      89,
+      92
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ logical database import for PostgreSQL, MySQL and MariaDB",
+     "lines": [
+      89,
+      92
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export ／ logical database import for PostgreSQL, MySQL and MariaDB",
+     "lines": [
+      89,
+      92
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export",
+     "lines": [
+      89
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`mssql`|Native `.bak` made with `COPY_ONLY, CHECKSUM`|`databases`, `backup_directory` inside the container|",
+     "lines": [
+      565
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为对文件和 Compose 项目中的数据库执行转储与恢复的备份工具，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Backfort is a recovery-first backup tool for Linux servers. It creates an ／ files, selected named volumes, explicit bind mounts and engine-aware database ／ - Logical PostgreSQL, MySQL and MariaDB dumps; native MS SQL and Oracle export",
+   "evidence_lines": [
+    8,
+    74,
+    89
+   ]
+  },
+  "fn": "shellharbor/backfort",
+  "sha": "f0aaab1530e1",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7754b704e88b": {
+  "identity": {
+   "one_liner": "C#/.NET 编写的 SQL 分布式数据库，Raft 复制+事务性 KV 存储",
+   "review": "CamusDB 是一个用 C#/.NET 实现的分布式 SQL 数据库，默认可串行化隔离，基于 Raft 共识复制，支持 copy-on-write 数据库分支、已删除对象的恢复读取（AS OF SYSTEM TIME 时态查询）、可选查询结果缓存，底层使用 RocksDB 持久化，提供 JSON/HTTP 与 gRPC 接口，并可编译为 WebAssembly 在浏览器中运行单节点或三节点集群。README 自述部分功能处于 alpha 阶段，API 与存储格式可能随版本变化。适合希望研究或以 .NET 集成方式使用分布式 SQL 数据库的开发者。",
+   "highlights": [
+    "默认可串行化隔离与强一致性，跨分区写入采用基于 Raft 的两阶段提交",
+    "支持数据库 copy-on-write 分支、`AS OF SYSTEM TIME` 时态读取及已删除对象保留窗口内恢复",
+    "同一引擎可编译为 WebAssembly 在浏览器中运行，支持单标签页内启动三节点集群演示"
+   ],
+   "use_cases": [
+    "需要串行化隔离与强一致性的分布式 SQL 场景",
+    "为生产库创建瞬时分支用于 staging 克隆、schema 迁移演练或按 PR 的临时数据库",
+    "误删数据后在其历史保留期内读取并恢复行数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **SQL dialect** — SELECT (including `FROM`-less `SELECT <expr>`), INSERT, UPDATE, DELETE, TRUNCATE, CREATE/DROP/ALTER TABLE, transactions (BEGIN / COMMIT / ROLLBACK), parameterized placeholders, prepared statements, table aliases, derived tables, inner, left",
+     "lines": [
+      74
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库即数据库本体（SQL 引擎与存储节点），非为其他数据库生态服务的工具或普通应用，生态位归类为 unclear 由程序按 build/内核处理口径裁决",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CamusDB is a SQL distributed database written in C# on .NET. It provides a SQL interface with a Raft-replicated, transactional key-value storage layer, and makes a few opinionated choices: **serializable isolation/strong consistency are the default**; databases can be **branched copy-on-write like code**; and **dropped objects are recoverable** instead of instantly destroyed. It can auto-scale based on traffic. Development is driven by performance, Jepsen-style testing, chaos engineering, fault injection, and degraded-state testing. ／ CamusDB's engine is written in modern C# on .NET: the SQL parser, the query planner and operators, the transaction layer, and the embedded Kahuna storage node all run in a single .NET process (with RocksDB underneath for persistence). Because the engine itself is pure .NET, extending it means writing ordinary C#: bring your own NuGet libraries and custom business logic directly into the database layer without crossing a language boundary or fighting a foreign extension API. Reading and debugging the engine is equally direct, and it runs on any platform .NET 10 supports. Clients talk to it over a JSON/HTTP API or a gRPC API with a .NET client library.",
+   "evidence_lines": [
+    3,
+    67
+   ]
+  },
+  "fn": "camusdb/camusdb",
+  "sha": "7754b704e88b",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

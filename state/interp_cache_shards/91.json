@@ -10863,5 +10863,80 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fcab87d6ad51": {
+  "identity": {
+   "one_liner": "本地优先的自然语言数据处理 Agent，生成 SQL 并确认执行",
+   "review": "归墟是一个 Windows 桌面端的数据处理 Agent，用户拖入 Excel 后用中文提问、增删改、导入导出和生成报表；它把请求转成 SQL，经确认卡片和白名单闸门后才在 SQLite 单文件库上执行，支持软删除、快照回滚与审计。面向想在本地用自然语言整理表格数据的个人用户，需自行配置 LLM API Key。",
+   "highlights": [
+    "用自然语言生成 SQL 执行查询、增删改和结构变更，执行前需用户确认",
+    "数据存于 SQLite 单文件，提供软删除、操作快照、审计表和只读 SQL 闸门",
+    "支持上传 PDF/Word/txt/md 文档并向量化，可在对话中检索；可导出 Excel、PDF、Word 等产物"
+   ],
+   "use_cases": [
+    "用中文查询和分析本地 Excel 数据并生成统计报表",
+    "对本地数据表做批量修改、结构变更和 Excel 导入导出",
+    "将制度手册等文档入库后用对话检索"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**数据层**：SQLite 单文件。业务表通过视图 + `INSTEAD OF` 触发器做软删除隔离；审计写进 `_gx_audit`，和业务写入同一个事务；破坏性操作前落快照，可回滚。 ／ **文档库**：切片原文和向量存 SQLite（唯一真源），FAISS 只是内存派生索引，数据变更后重建。扫描件 PDF 没有文字层时，页面转 PNG 交给当前多模态模型识别；模型不支持图片会明确报错。 ／ |`%LOCALAPPDATA%\\GuiXu\\data\\guixu.db`|数据库（SQLite 单文件）|",
+     "lines": [
+      88,
+      90,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据以 SQLite 单文件存储于本机，该工具是使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**数据层**：SQLite 单文件。业务表通过视图 + `INSTEAD OF` 触发器做软删除隔离；审计写进 `_gx_audit`，和业务写入同一个事务；破坏性操作前落快照，可回滚。 ／ |`%LOCALAPPDATA%\\GuiXu\\data\\guixu.db`|数据库（SQLite 单文件）|",
+   "evidence_lines": [
+    88,
+    116
+   ]
+  },
+  "fn": "niannian-Gzh/GuiXu-DataPilot",
+  "sha": "fcab87d6ad51",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

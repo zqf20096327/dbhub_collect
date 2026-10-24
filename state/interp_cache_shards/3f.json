@@ -10391,5 +10391,144 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c1af24412902": {
+  "identity": {
+   "one_liner": "面向编码代理的仓库本地知识库，JSON 记录随 Git 存储，SQLite 全文索引支持搜索",
+   "review": "Encephalon 是一个 npm 包，为编码代理提供随仓库持久化的知识记录：JSON 记录随 Git 提交，配一个可重建的 SQLite 全文索引，通过 CLI 和同步 JavaScript API 增查记录，支持 supersedes 换代、冲突校验与缓存恢复。无账户、无遥测、无网络访问。适合需要把决策、架构约定等上下文沉淀进代码库的开发团队。",
+   "highlights": [
+    "知识记录为规范 JSON 文件，随 Git 合并流转，支持 validate 校验与冲突解决",
+    "提供 CLI 与同步 JavaScript API（search/show/gather 等），并自动准备可丢弃的 SQLite 缓存",
+    "零运行时依赖、无安装生命周期脚本、无运行时网络访问"
+   ],
+   "use_cases": [
+    "在仓库中沉淀决策、架构、约定与工作流知识供编码代理读取",
+    "通过 Git 分支合并多来源知识并处理记录冲突",
+    "以编程方式（JS API）集成代理的知识检索流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Encephalon gives coding agents durable, repository-local knowledge. Small JSON records travel with your code in Git; a disposable SQLite full-text index makes them searchable through a CLI and synchronous JavaScript API. ／ The root package exports `initEncephalon`, `addRecord`, `prepare`, `hydrate`, `validateRecords`, `listRecords`, `showRecord`, `searchRecords`, `searchCompactRecords`, `gatherRecords`, `EncephalonError` and their public TypeScript types. Importing it does not d",
+     "lines": [
+      5,
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅用作工具内部可丢弃的全文索引缓存，项目本身服务于编码代理而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Encephalon gives coding agents durable, repository-local knowledge. Small JSON records travel with your code in Git; a disposable SQLite full-text index makes them searchable through a CLI and synchronous JavaScript API. ／ The root package exports `initEncephalon`, `addRecord`, `prepare`, `hydrate`, `validateRecords`, `listRecords`, `showRecord`, `searchRecords`, `searchCompactRecords`, `gatherRecords`, `EncephalonError` and their public TypeScript types. Importing it does not discover a repository, touch the filesystem or open SQLite. Calls return values and never print or exit; expected failures throw `EncephalonError` with a stable `code` and bounded `details`.",
+   "evidence_lines": [
+    5,
+    110
+   ]
+  },
+  "fn": "isaachinman/encephalon",
+  "sha": "c1af24412902",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "730a9168154a": {
+  "identity": {
+   "one_liner": "Windows 本地桌面活动记录器，采集数据写入本地 SQLite 并提供 REST API/MCP",
+   "review": "DeskMate 是面向 Windows 的本地优先桌面活动记录应用，采集截图、OCR/无障碍文本、键鼠剪贴板事件和可选语音转写，全部存入本机 SQLite 数据库，并通过浏览器 UI、REST API 和 MCP 服务器供 AI 编码代理查询与生成报告；支持 pip 安装可选模块（OCR、音频、语义检索、本地 LoRA 微调等），数据不上云。",
+   "highlights": [
+    "采集截图、OCR/无障碍文本、键鼠/剪贴板事件与音频转写并写入本地 SQLite 数据库",
+    "提供浏览器 UI、REST API 与 MCP 服务器接入 AI 代理",
+    "以 pip extras 形式提供 OCR、音频、语义检索、PII 脱敏、本地微调等可选模块"
+   ],
+   "use_cases": [
+    "个人桌面活动检索与回溯（全文/语义搜索）",
+    "为 Claude Code、Cursor 等 AI 代理提供本地活动数据的 MCP 查询",
+    "本地会议/学习内容记录与自动报告生成"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "events, and optional audio transcription into a SQLite database **on your own machine**,",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其将采集的桌面活动数据存入本地 SQLite 数据库，SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "events, and optional audio transcription into a SQLite database **on your own machine**, ／ then lets you use that data through a browser UI, a REST API, and an **MCP server**",
+   "evidence_lines": [
+    7,
+    8
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "zhaohb/deskmate",
+  "sha": "730a9168154a",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10248,5 +10248,182 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "699fbe5f0945": {
+  "identity": {
+   "one_liner": "面向 AI 代理的代码搜索 MCP 服务器，以 SQLite 索引提供查询",
+   "review": "这是一个 MCP 服务器，通过 tree-sitter 将源代码解析为语法树，把符号、函数体、调用关系和元数据写入 SQLite 索引，再以 32 个（含 1C 构建为 42 个）MCP 工具向 Claude Code、Cursor 等 AI 客户端提供代码搜索、调用图与文件读取能力，并提供单二进制发行。面向使用 AI 代理浏览大型代码库（尤其 1C:Предприятие 导出配置）的开发者；索引由后台 daemon 构建，serve 进程只读索引。",
+   "highlights": [
+    "提供 32 个 MCP 工具，覆盖函数/类搜索、调用图、文件内容与 git 历史，另提供面向 1C 配置的专用构建 bsl-indexer",
+    "使用 tree-sitter 解析 14 种语言的 AST，将符号、函数体、调用与元数据写入 SQLite 索引",
+    "以单个二进制分发，内置 HTTP 服务器（默认仅监听 127.0.0.1），支持 HTTP 与 stdio 两种接入方式"
+   ],
+   "use_cases": [
+    "让 AI 代理在大型代码库中查询符号、调用者与调用链，替代逐文件遍历",
+    "索引和检索 1C:Предприятие（Конфигуратор/EDT）导出配置的元数据、表单与数据链路",
+    "为多个代码仓库提供统一代码索引并通过 MCP 客户端接入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый",
+     "lines": [
+      11,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内部索引存储，项目本身是面向 AI 代理的代码搜索应用，不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый ／ Работает с Claude Code, Cursor, VS Code, LibreChat — с любым клиентом MCP.",
+   "evidence_lines": [
+    11,
+    149,
+    119
+   ]
+  },
+  "fn": "Regsorm/code-index-mcp",
+  "sha": "699fbe5f0945",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bad87012be8a": {
+  "identity": {
+   "one_liner": "基于 Next.js 的开源 CMS 与可视化页面构建器",
+   "review": "Nextly 是一个运行在 Next.js 应用内的开源内容平台，开发者可用 TypeScript 或管理界面的可视化 Schema Builder 定义内容模型，提供页面构建、多语言、版本历史与定时发布。它通过 PostgreSQL/MySQL/SQLite 适配器存数据，自托管、MIT 许可，适合希望在自己技术栈中运行 CMS 的 Next.js 团队；当前处于 alpha 阶段。",
+   "highlights": [
+    "提供 TypeScript 代码定义与可视化 Schema Builder 两种内容建模方式",
+    "提供 PostgreSQL、MySQL、SQLite 三个官方数据库适配器",
+    "支持多语言草稿/发布状态、版本比较与恢复、按字段的角色权限"
+   ],
+   "use_cases": [
+    "在 Next.js 应用中构建自托管内容站点",
+    "需要代码级内容模型定义与类型生成的内容平台",
+    "多语言站点的可视化页面搭建与定时发布"
+   ],
+   "use_cases_backup": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Your database, your storage.** PostgreSQL, MySQL, or SQLite. Local disk by default; S3 (and R2, MinIO), Vercel Blob, or UploadThing for production. ／ |**@nextlyhq/adapter-postgres**|PostgreSQL adapter (recommended for production)| ／ |PostgreSQL|15.0+|Standard PG, Neon (also reachable via Vercel Marketplace), Supabase, RDS, Aurora PG, Railway, Cloud SQL.|",
+     "lines": [
+      41,
+      93,
+      141
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Your database, your storage.** PostgreSQL, MySQL, or SQLite. Local disk by default; S3 (and R2, MinIO), Vercel Blob, or UploadThing for production. ／ |**@nextlyhq/adapter-mysql**|MySQL adapter| ／ |MySQL|8.0+|MariaDB, TiDB, Aurora MySQL, PlanetScale, Vitess on best-effort.|",
+     "lines": [
+      41,
+      94,
+      142
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Your database, your storage.** PostgreSQL, MySQL, or SQLite. Local disk by default; S3 (and R2, MinIO), Vercel Blob, or UploadThing for production. ／ |**@nextlyhq/adapter-sqlite**|SQLite adapter (local demos only)| ／ |SQLite|3.38+|Bundled with `better-sqlite3`. Local demos only.|",
+     "lines": [
+      41,
+      95,
+      143
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|MySQL|8.0+|MariaDB, TiDB, Aurora MySQL, PlanetScale, Vitess on best-effort.|",
+     "lines": [
+      142
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|MySQL|8.0+|MariaDB, TiDB, Aurora MySQL, PlanetScale, Vitess on best-effort.|",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Nextly 是在自身应用内使用 PostgreSQL/MySQL/SQLite 存储内容数据的 CMS，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Nextly is an open-source content platform for Next.js. ／ - **Your database, your storage.** PostgreSQL, MySQL, or SQLite. Local disk by default; S3 (and R2, MinIO), Vercel Blob, or UploadThing for production. ／ |**@nextlyhq/adapter-postgres**|PostgreSQL adapter (recommended for production)|",
+   "evidence_lines": [
+    26,
+    41,
+    93
+   ]
+  },
+  "fn": "nextlyhq/nextly",
+  "sha": "bad87012be8a",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

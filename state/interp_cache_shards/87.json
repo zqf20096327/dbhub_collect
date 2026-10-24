@@ -8728,5 +8728,236 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f64fd8b3adc6": {
+  "identity": {
+   "one_liner": "自托管的 AI Agent 团队长期记忆服务，分层记忆+混合检索",
+   "review": "用 Rust 编写的自托管记忆服务，为 Claude Code、Codex 等 MCP 客户端提供跨会话持久记忆：将对话蒸馏为事实、场景与画像（L0→L3），召回采用 BM25+向量融合。支持按部门/团队/成员隔离，存储后端可选 SQLite（默认）或 PostgreSQL+pgvector，需自备 OpenAI 兼容 LLM 做蒸馏。",
+   "highlights": [
+    "提供 L0→L3 分层记忆与 BM25+向量混合召回（RRF 融合）",
+    "支持 SQLite（FTS5+sqlite-vec）与 PostgreSQL（tsvector+pgvector HNSW）两种存储后端",
+    "提供部门/团队/成员三级隔离与 MCP recall 接入，支持中文 CJK 二元分词全文检索"
+   ],
+   "use_cases": [
+    "为团队内的 AI Agent 提供跨会话持久记忆",
+    "需要在内网自托管记忆与数据、使用自建 LLM 的场景",
+    "多团队多成员共享 Agent 但需隔离个人对话与事实的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite to start, PostgreSQL with pgvector and Redis to scale. ／ 1. **Storage backend**: SQLite (default, nothing to install) / existing PostgreSQL (enter a URL; the connection is tested from inside the container first) / start PostgreSQL (pgvector) for me with Docker ／ ||`postgres`|One schema per department (`am_<hash>`); full-text search via tsvector + GIN, vectors via **pgvector HNSW** (exact search when dimensions > 2000)|",
+     "lines": [
+      26,
+      41,
+      149
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite to start, PostgreSQL with pgvector and Redis to scale. ／ 1. **Storage backend**: SQLite (default, nothing to install) / existing PostgreSQL (enter a URL; the connection is tested from inside the container first) / start PostgreSQL (pgvector) for me with Docker ／ /v3/conversation/add ──► L0 conversation (SQLite + FTS5)",
+     "lines": [
+      26,
+      41,
+      107
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite/PostgreSQL 作为其记忆数据的存储后端，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BUSL-1.1",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted, team-aware long-term memory for AI agents.** AgentMemory gives Claude Code, Codex, Antigravity, Hermes and any MCP client a memory that persists across sessions. It captures each conversation, distils it into facts, scenes and a persona in the background, and recalls what is relevant before every prompt. It all runs on your own servers. ／  - SQLite to start, PostgreSQL with pgvector and Redis to scale. ／ |`storage.backend` (`AGENT_MEMORY_STORAGE_BACKEND`)|`sqlite` (default)|One SQLite file per department; full-text search via FTS5, vectors via **sqlite-vec** (`vec0` KNN with isolation filters applied inside the index; falls back to brute-force comparison if the extension can't load)|",
+   "evidence_lines": [
+    13,
+    26,
+    148
+   ]
+  },
+  "fn": "hsuanshao/AgentMemory",
+  "sha": "f64fd8b3adc6",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0bb3b2b64250": {
+  "identity": {
+   "one_liner": "自托管应用交付平台：表定义生成 PostgreSQL 后端 REST API 与前端部署",
+   "review": "Zeep Orbit 是一个自托管平台，团队可在同一仪表盘中创建后端应用（定义表即生成 CRUD REST API）、部署前端（GitHub 模板 + Render）、管理用户与自定义域名。后端数据存于 PostgreSQL schema，行级权限依赖原生 Postgres RLS。安装方式含 docker compose、go install 二进制与 Helm chart。适合希望在自己基础设施上搭建和管理小型应用的技术团队。",
+   "highlights": [
+    "表定义自动生成 CRUD REST API，支持外键、索引与原生 Postgres RLS 行级策略",
+    "Web 仪表盘集成数据浏览、用户管理、审计日志、Prometheus 指标与 MCP Server",
+    "提供 Docker Compose、二进制和 Helm/Kubernetes 三种部署方式"
+   ],
+   "use_cases": [
+    "自托管后端 API 快速搭建与数据管理",
+    "前端应用模板化部署与自定义域名配置",
+    "带角色权限与审计要求的团队内部平台使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Row-Level Security**|Auto-filter data by owner (`rls: owner`/`rls: enabled`), with an optional \"require RLS by default\" for new tables; `rls: policy` opts a table out of the automatic owner filter entirely, delegating visibility and write permission 100% to ／ > **Note:** If PostgreSQL is running on the host machine (not in another container), use `host.docker.internal` instead of `localhost` in `DATABASE_URL`. ／ Backend apps give you a PostgreSQL schema + instant REST API from a table definition.",
+     "lines": [
+      39,
+      102,
+      140
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明后端应用以 PostgreSQL schema 存储数据，平台本身使用 PostgreSQL 而非为其服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Zeep Orbit** is an open-source, self-hosted platform that gives your team everything to build and ship apps — backend APIs, frontend deployment, custom domains, and user management — all from one dashboard. No external services, no lock-in. Your infrastructure, your data. ／ Backend apps give you a PostgreSQL schema + instant REST API from a table definition.",
+   "evidence_lines": [
+    14,
+    140
+   ]
+  },
+  "fn": "zeeplabs/zeep-orbit",
+  "sha": "0bb3b2b64250",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5b4b2dbaa3b0": {
+  "identity": {
+   "one_liner": "内部 IT 工单与服务台管理平台，PHP+Apache+MariaDB 自托管",
+   "review": "TicketFlow 是一个内部 IT 支持工单平台，员工提交请求、IT 团队处理并可在工单内沟通，支持经理审批、SLA 跟踪、附件、通知和 CSV/Excel 批量导入用户；基于 PHP/Apache/MariaDB 构建，面向需要自托管服务台的中小企业 IT 团队，通过脚本在 Debian/Ubuntu 上安装。",
+   "highlights": [
+    "提供工单创建、分类（事件/请求/变更）、指派与工单内沟通",
+    "支持两级经理审批、SLA 时限跟踪、服务告警与维护计划",
+    "提供 CSV/Excel 用户批量导入和 Excel 数据导出，含法/英界面"
+   ],
+   "use_cases": [
+    "企业内部 IT 支持与工单集中管理",
+    "需经理多级审批的请求处理流程",
+    "自托管服务台，替代邮件/电话分散报修"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "apt install apache2 mariadb-server php php-mysql php-mbstring php-zip php-xml php-curl curl sudo",
+     "lines": [
+      82
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB ／ apt install apache2 mariadb-server php php-mysql php-mbstring php-zip php-xml php-curl curl sudo ／ - préparation de MariaDB ;",
+     "lines": [
+      9,
+      82,
+      96
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MariaDB 存储数据的 PHP 工单应用，安装脚本会创建 TicketFlow 数据库和 SQL 账户",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Une plateforme simple pour créer, suivre et gérer les demandes informatiques d'une entreprise. ／ curl -fsSL https://raw.githubusercontent.com/blueGameTV/TicketFlow/main/install.sh | sudo bash ／ - préparation de MariaDB ; ／ - création de la base TicketFlow ;",
+   "evidence_lines": [
+    4,
+    90,
+    96,
+    97
+   ]
+  },
+  "fn": "blueGameTV/TicketFlow",
+  "sha": "5b4b2dbaa3b0",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

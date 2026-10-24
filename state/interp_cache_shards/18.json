@@ -9274,5 +9274,74 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "034e2ccfc551": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 MCP 任务管理服务器，流水线驱动，用 SQLite 存储",
+   "review": "agent-tasks 是一个 MCP 服务器加 REST API，为 Claude Code、Codex CLI 等 AI 编码代理提供带阶段门、依赖追踪和多代理协作的任务流水线。数据存于本地 SQLite 文件，2.0 版移除了浏览器界面，改为 Claude Code 内的 /pipeline 面板，仅限回环地址访问 REST 接口。",
+   "highlights": [
+    "提供 8 个 MCP 工具和 8 个 REST 端点，支持任务 CRUD、阶段流转、工件版本管理",
+    "支持可配置流水线阶段、任务依赖 DAG 及自动环检测",
+    "使用 SQLite（better-sqlite3）持久化，含 FTS5 全文搜索"
+   ],
+   "use_cases": [
+    "多个 AI 代理协作同一代码库时共享任务流水线",
+    "在 Claude Code 中以 /pipeline 面板管理任务阶段流转",
+    "记录任务决策与经验工件并跨任务传播"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`AGENT_TASKS_DB`|`~/.agent-tasks/agent-tasks.db`|SQLite database file path| ／ **Required**: Node.js >= 20.11, better-sqlite3 (bundled)",
+     "lines": [
+      135,
+      148
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为任务数据的本地存储依赖（AGENT_TASKS_DB），项目本身是为 AI 代理服务的任务管理应用，不为数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Pipeline-driven task management for AI coding agents.** An MCP server with stage-gated pipelines, multi-agent collaboration, and a native Claude Code `/pipeline` pane. Tasks flow through configurable stages — `backlog`, `spec`, `plan`, `implement`, `test`, `review`, `done` — with dependency tracking, stage gates, artifact versioning, and threaded comments. ／ |`AGENT_TASKS_DB`|`~/.agent-tasks/agent-tasks.db`|SQLite database file path| ／ **Required**: Node.js >= 20.11, better-sqlite3 (bundled)",
+   "evidence_lines": [
+    9,
+    135,
+    148
+   ]
+  },
+  "fn": "keshrath/agent-tasks",
+  "sha": "034e2ccfc551",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

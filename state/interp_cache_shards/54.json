@@ -9480,5 +9480,87 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "be04f0c18221": {
+  "identity": {
+   "one_liner": "中间件离线部署打包器：本地 Web 选型打包，服务器零交互部署",
+   "review": "这是一个离线环境中间件部署工具：本地通过 Python Web 界面勾选 MySQL、Redis、Kafka、PostgreSQL 等中间件并配置端口、密码、备份策略，生成含镜像与二进制的离线压缩包，服务器端执行 deploy.sh 完成零交互安装。内置 MySQL 主从复制、Redis 哨兵、定时备份与恢复脚本。适合需要在无公网内网交付和部署中间件的运维/交付人员。",
+   "highlights": [
+    "支持本地 Web 打包生成含 Docker/Compose/K8s 物料的离线包，服务器端单脚本零交互部署",
+    "支持 MySQL 单机/主从复制（GTID 自动同步）与 Redis 哨兵高可用形态的自动编排",
+    "为 MySQL/PostgreSQL/MongoDB 生成 crontab 定时备份计划及 restore.sh 一键恢复脚本"
+   ],
+   "use_cases": [
+    "内网/隔离机房/无公网服务器的中间件离线交付与部署",
+    "多台服务器间的 MySQL 主从、Redis 哨兵、Kafka 集群拓扑部署",
+    "离线环境数据库定时备份与恢复运维"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ - **集群形态**：MySQL 单机 / **主从复制**(一主一从 · GTID 自动同步 · 部署时自动配置复制，8.0 与 5.7 均支持)； ／ - **MySQL 参数可定制**：自动挂载 `conf/<svc>/my.cnf`（内置 sql_mode 严格模式声明），改参数不用进容器",
+     "lines": [
+      46,
+      49,
+      51
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ |PostgreSQL|15.19|15432|compose 自带 `pg_isready` 健康检查|",
+     "lines": [
+      46,
+      214
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为部署和管理 MySQL/PostgreSQL 等数据库及中间件服务的部署打包工具，而非使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "在本地 Web 界面上选好中间件、端口、密码、数据库、备份策略，一键打出**只含本次所需物料**的离线包； ／ - **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ - **插件化扩展**：新增中间件只需一个插件文件 + 镜像 tar，页面勾选/端口/密码表单/编排生成全自动纳入",
+   "evidence_lines": [
+    5,
+    46,
+    48
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "litianyanaa-pixel/middleware-offline-deploy",
+  "sha": "be04f0c18221",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

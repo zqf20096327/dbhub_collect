@@ -9401,5 +9401,179 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8fffa47cbdda": {
+  "identity": {
+   "one_liner": "自托管的 Yandex Tracker/Jira 冲刺规划器，用 PostgreSQL 存储",
+   "review": "一个自托管的敏捷冲刺规划应用，在 Yandex Tracker 和 Jira 之上提供按天/按人分泳道的冲刺规划板、待办池、燃尽图、实际进度时间线和回顾板，任务数据仍留在原跟踪器中，通过 sync 从跟踪器拉取状态历史；使用 Docker Compose 部署，依赖 PostgreSQL 存储，多实例需 Redis。适合以这两个跟踪器为团队的敏捷协作场景。",
+   "highlights": [
+    "提供冲刺规划泳道、待办、burndown、实际进度时间线与回顾板功能",
+    "支持与 Yandex Tracker 和 Jira 进行同步，并提供供 AI 客户端调用的 MCP 接口",
+    "提供 Docker Hub 镜像，通过 docker compose 部署"
+   ],
+   "use_cases": [
+    "团队在 Yandex Tracker/Jira 中管理任务、需要可视化冲刺规划的场景",
+    "回顾会协作与燃尽图跟踪",
+    "通过 MCP 让 AI 客户端读取并提出冲刺计划修改"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex)",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 的快速启动配置包含 POSTGRES_PASSWORD 等环境变量，应用以 PostgreSQL 存储数据，跟踪器仅作数据源。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Планер спринтов поверх Яндекс Трекера и Jira ／ Sync забирает из трекера историю статусов. На свимлейне это **таймлайн факта**: когда задача была в работе, на ревью и в тесте — рядом с планом, а не вместо него. ／ # POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex)",
+   "evidence_lines": [
+    5,
+    43,
+    77
+   ]
+  },
+  "fn": "Dinkimom/beer-tracker",
+  "sha": "8fffa47cbdda",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7728afabfefb": {
+  "identity": {
+   "one_liner": "面向 Omarchy Linux 的单文件类 Access 桌面数据库应用",
+   "review": "Jubako 是一个桌面数据库应用，用户可新建单文件数据库、导入 CSV/Excel、以表格或表单浏览编辑数据、设置筛选视图并打印或导出 PDF 报表，默认存储为普通 SQLite 文件，也可连接已有的 PostgreSQL 或 MySQL/MariaDB 服务器作为后端；面向 Linux 桌面个人用户，提供 GUI、命令行和 MCP server 三种操作方式，当前仅支持 x86_64 Linux。",
+   "highlights": [
+    "支持导入 CSV/Excel、编辑网格/表单、保存筛选视图、导出 CSV/Excel/PDF 及打印报表",
+    "数据库为单个本地文件（普通 SQLite 文件），可选指向已有 PostgreSQL 或 MySQL/MariaDB 服务器",
+    "提供 GUI、命令行（jubako）与 MCP server（jubako-mcp）三种操作入口"
+   ],
+   "use_cases": [
+    "个人在 Linux 桌面上管理联系人、库存、任务等小型数据",
+    "将电子表格转为带表单、视图和打印报表的本地数据库",
+    "通过 MCP 让代理客户端执行建库、导入等操作"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A PostgreSQL server|A server you already run.|`psycopg`| ／ uv pip install -e '.[postgres]' # PostgreSQL",
+     "lines": [
+      94,
+      101,
+      188
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A MySQL or MariaDB server|A server you already run.|`PyMySQL`| ／ uv pip install -e '.[mysql]' # MySQL / MariaDB",
+     "lines": [
+      94,
+      102,
+      189
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`.jubadb`. It is an ordinary SQLite file, so nothing is locked away.",
+     "lines": [
+      89
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A MySQL or MariaDB server|A server you already run.|`PyMySQL`| ／ uv pip install -e '.[mysql]' # MySQL / MariaDB",
+     "lines": [
+      94,
+      102,
+      189
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个用 SQLite/PostgreSQL/MySQL 存储数据的桌面数据库应用，而非为某个数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`.jubadb`. It is an ordinary SQLite file, so nothing is locked away. ／ If you already run a **PostgreSQL** or **MySQL / MariaDB** server, you can point ／ |A PostgreSQL server|A server you already run.|`psycopg`|",
+   "evidence_lines": [
+    89,
+    94,
+    101
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ninepointlabs/jubako",
+  "sha": "7728afabfefb",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

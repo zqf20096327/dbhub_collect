@@ -10835,5 +10835,145 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "389d97362e78": {
+  "identity": {
+   "one_liner": "Perga 个人工作区的 FastAPI 后端服务",
+   "review": "这是 Perga（个人笔记与日常规划工作区）的后端 API 仓库，提供日程规划、月度/自定义议程、笔记管理（含文件夹、导入导出、全文检索）及用户认证（含 Google 登录）等接口。技术栈为 Python 3.11/FastAPI/SQLAlchemy，数据存储于 PostgreSQL 16，通过 Docker Compose 与 nginx 部署，面向自托管用户；浏览器客户端在独立的 perga-web 仓库。",
+   "highlights": [
+    "提供日常规划、月度与自定义议程、笔记管理及导入导出功能",
+    "实现用户认证，包括 Google 登录",
+    "基于 Python 3.11、FastAPI、PostgreSQL 16，支持 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "自托管个人笔记与日程规划工作区",
+    "为 Perga 前端（perga-web）提供后端 API",
+    "需要 Google 登录认证的个人信息管理部署"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 16 and SQLAlchemy 2",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其为 Perga 个人工作区的后端，使用 PostgreSQL 存储数据，属使用数据库的应用。",
+   "persona": "use",
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The backend for Perga — a personal workspace for notes, plans, and ideas. The browser client lives in the perga-web repository. ／ - PostgreSQL 16 and SQLAlchemy 2 ／ - Docker Compose and nginx",
+   "evidence_lines": [
+    7,
+    30,
+    31
+   ]
+  },
+  "fn": "getperga/perga-api",
+  "sha": "389d97362e78",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9d74ee681095": {
+  "identity": {
+   "one_liner": "本地优先的 AI Agent 路线图应用，经 MCP 读写、SQLite 存储",
+   "review": "一个本地优先的路线图（roadmap）桌面/服务器应用，用单个 Rust 二进制实现，数据存于 SQLite，通过 MCP 让 Claude Code、Codex 等 Agent 提议并标记任务进度，用户在蓝图页面审核后应用。面向与编码 Agent 协作管理计划的开发者；主要面向 Windows，也可作为纯本地 Web 服务器运行。",
+   "highlights": [
+    "通过 MCP（stdio）提供 listar_blueprints、registrar_progresso 等工具，供 Claude Code、Codex 等 Agent 读取和更新路线图",
+    "单二进制运行，数据本地存储于 SQLite（blueprint.db），提供导入/导出 JSON 命令",
+    "Agent 的所有改动均为提案，需用户在界面应用；完成计划须附执行证据",
+    "支持 Windows 窗口模式（含托盘、安装器）与跨平台 serve 模式"
+   ],
+   "use_cases": [
+    "与 Claude Code / Codex 协作管理项目路线图与任务计划",
+    "本地团队或个人以提案-审核流程跟踪 Agent 完成的工作及其证据",
+    "作为本地 Web 服务器在任意系统上运行路线图应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **English, in short:** a local-first roadmap app (single Rust binary, SQLite, web UI in a native WebView2 window) that your own coding agent drives over MCP. Workspace → Blueprint → Action → Plan/Checkpoint. Agents *propose* changes (you review and apply the ／ Os dados ficam em `%APPDATA%\\Blueprint\\` (banco SQLite `blueprint.db` e `prototipos\\`). Para começar com dados de exemplo: `blueprint importar data.exemplo.json %APPDATA%\\Blueprint\\blueprint.db`.",
+     "lines": [
+      7,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据以 SQLite 数据库存储，SQLite 仅作为其自身的数据存储，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **English, in short:** a local-first roadmap app (single Rust binary, SQLite, web UI in a native WebView2 window) that your own coding agent drives over MCP. Workspace → Blueprint → Action → Plan/Checkpoint. Agents *propose* changes (you review and apply them) and *mark* work done only with evidence. The app does not manage agent sessions; the explicit `blueprint claude` command starts Claude Code in the current terminal. Windows is the primary target (window + tray + installer); `blueprint serve` runs the same app as a plain local web server. ／ Os dados ficam em `%APPDATA%\\Blueprint\\` (banco SQLite `blueprint.db` e `prototipos\\`). Para começar com dados de exemplo: `blueprint importar data.exemplo.json %APPDATA%\\Blueprint\\blueprint.db`. ／ claude mcp add blueprint -- <caminho>\\blueprint.exe --mcp",
+   "evidence_lines": [
+    7,
+    34,
+    84
+   ]
+  },
+  "fn": "hugorolimf/the-blueprint",
+  "sha": "9d74ee681095",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

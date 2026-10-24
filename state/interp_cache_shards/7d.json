@@ -10771,5 +10771,133 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9f788bf16d98": {
+  "identity": {
+   "one_liner": "基于 GitHub issue/PR 的开源互助信用账本系统",
+   "review": "Overflow 是一个开源贡献互助记账系统：维护者用空闲的 LLM 订阅额度为他人仓库修 issue 赚取信用积分，再用积分支付自己 backlog 的工作，全程不涉及金钱。项目基于 Next.js 和 PostgreSQL 构建，通过 GitHub OAuth 登录和 webhook 驱动结算，面向开源维护者和小团队。README 还提供 MCP 端点供 agent 使用，并给出 API 与自部署文档。",
+   "highlights": [
+    "提供基于 GitHub issue 定价与 PR 合并结算的共享信用账本机制",
+    "包含账户审计与结算记录功能，记录标签事件、评论、合并提交与 diff 指纹",
+    "提供 API 令牌、编程化注册接口和面向 agent 的 MCP 端点"
+   ],
+   "use_cases": [
+    "开源维护者以劳动互换方式处理积压 issue，无需金钱结算",
+    "小团队在产能波动时互相借调开发力量",
+    "需要可审计、可复现结算记录的社区协作场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该仓库是一个基于 Next.js 与 PostgreSQL 构建的业务应用系统，使用数据库存储账本数据，而非为数据库生态提供工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Let your spare weeks pay for the dry ones.** Overflow is a shared ledger for open-source work, for people and small teams whose capacity comes and goes. When you have leftover LLM subscription usage that you won't burn on your own projects, work on others' issues and earn credit. Spend it on your own backlog when you're depleted. No money changes hands. There is no token. ／ - API.md — API tokens, programmatic registration and catalog changes with every error message, the ledger read endpoints, and the MCP endpoint for agent harnesses. ／ MIT — see LICENSE.",
+   "evidence_lines": [
+    7,
+    46,
+    55
+   ]
+  },
+  "fn": "Nitjsefnie/Overflow",
+  "sha": "9f788bf16d98",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "40c692f087ef": {
+  "identity": {
+   "one_liner": "基于 Bun+Elysia+Drizzle+PostgreSQL 的单店零售/餐饮 POS 系统",
+   "review": "一个面向泰国单店单分店零售、咖啡与餐饮场景的门店销售系统，整合收银、商品与库存、桌台订单、会员促销、班次现金管理与销售报表，界面支持泰/英双语。后端采用 Hexagonal Architecture 与 CQRS 组织代码，通过 Drizzle 操作 PostgreSQL 17，部署路径为 Windows 11 + WSL2 + Podman，附安装、备份与恢复脚本，采用 Apache-2.0 许可。",
+   "highlights": [
+    "整合收银、桌台订单、库存、会员促销、班次现金与销售报表于单一系统，界面支持泰语和英语",
+    "后端按 Hexagonal Architecture 与 CQRS 组织，使用 Bun/Elysia/Drizzle 访问 PostgreSQL，附数据库迁移目录",
+    "提供 Podman 一键安装、备份/恢复脚本，支持 SCB QR 与静态 PromptPay 收款，商品图可选存盘或 Cloudflare R2"
+   ],
+   "use_cases": [
+    "泰国单店零售/咖啡/餐饮门店的日常收银与班次管理",
+    "需要商品库存、会员促销与销售报表一体化管理的店主",
+    "开发者基于 Apache-2.0 二次开发自有 POS"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 17 ／ API --> DB[(\"PostgreSQL · Drizzle\")] ／ |`server/`|Bun, Elysia, Drizzle, PostgreSQL, tsyringe และ Zod; จัดโค้ดตาม Hexagonal Architecture และ CQRS|",
+     "lines": [
+      8,
+      58,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该系统用 PostgreSQL 存业务数据，POS 是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "TillumiPOS รวมงานขาย การจัดการสินค้าและสต็อก ออเดอร์สำหรับร้านอาหาร และการดูแลกะไว้ในระบบเดียว หน้าจอรองรับภาษาไทยและอังกฤษ ส่วน API แยกกฎธุรกิจออกจากฐานข้อมูลและเว็บไคลเอนต์ ／ |`server/`|Bun, Elysia, Drizzle, PostgreSQL, tsyringe และ Zod; จัดโค้ดตาม Hexagonal Architecture และ CQRS| ／ เส้นทางติดตั้งใน main คือ **Windows 11 + WSL2 + Podman** แล้วเปิดใช้ผ่านเว็บ ไม่ต้องใช้ Docker Desktop สคริปต์พยายามเตรียม Podman และ Compose provider ให้เมื่อยังไม่มี บางเครื่องต้องเปิด WSL2 รีสตาร์ต หรือตั้งค่าเครือข่ายด้วยสิทธิ์ผู้ดูแลก่อน ดูขั้นตอนและการแก้ปัญหาใน คู่มือติดตั้ง ไฟล์ Compose ยังใช้ชื่อ `docker-compose.yml` ตามเดิม",
+   "evidence_lines": [
+    11,
+    67,
+    78
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "ohmattapon/TillumiPOS",
+  "sha": "40c692f087ef",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

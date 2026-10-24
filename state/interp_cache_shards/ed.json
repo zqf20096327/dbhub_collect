@@ -9582,5 +9582,72 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dab150cd1fc5": {
+  "identity": {
+   "one_liner": "AI API 配额实时监控后台守护进程，SQLite 存储历史用量",
+   "review": "onWatch 是一个运行在本地后台的轻量守护进程，轮询多家 AI API 提供商的配额接口，把历史用量写入 SQLite 并提供本地 Web 仪表盘与 VS Code 扩展查看。面向使用多家 AI 编码配额的开发者，通过配置各提供商的 API 密钥/凭据工作；README 标注为 Beta，功能与接口可能变化。",
+   "highlights": [
+    "后台轮询多家 AI API 提供商配额，历史数据存储于 SQLite，提供本地 Web 仪表盘",
+    "支持从 Claude Code、Codex、Cursor 等工具的本地凭据自动检测令牌",
+    "以单一二进制分发，也可通过 Homebrew、Docker 部署"
+   ],
+   "use_cases": [
+    "开发者集中跟踪多家 AI API 的配额、用量与费用",
+    "配额告警与历史周期用量分析",
+    "在编辑器内通过 VS Code 扩展查看配额状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "onWatch fills the gap between \"current usage snapshot\" and the historical, per-cycle, cross-session view that developers actually need. It runs as a lightweight background agent (<50 MB RAM with all providers polling in parallel), stores historical data in SQL ／ **Single binary** -- No runtime dependencies. All templates and static assets embedded via `embed.FS`. SQLite via pure Go driver (no CGO).",
+     "lines": [
+      28,
+      222
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 onWatch 将自身历史数据存入 SQLite，属使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "onWatch fills the gap between \"current usage snapshot\" and the historical, per-cycle, cross-session view that developers actually need. It runs as a lightweight background agent (<50 MB RAM with all providers polling in parallel), stores historical data in SQLite, and serves a Material Design 3 web dashboard with dark/light mode. ／ **Beta:** onWatch is currently in active development. Features and APIs may change as we refine the product.",
+   "evidence_lines": [
+    28,
+    34
+   ]
+  },
+  "fn": "onllm-dev/onWatch",
+  "sha": "dab150cd1fc5",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

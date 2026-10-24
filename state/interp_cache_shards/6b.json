@@ -10557,5 +10557,74 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "74ac90a27ed5": {
+  "identity": {
+   "one_liner": "自托管求职应用，基于个人档案生成定制简历与求职信并追踪申请",
+   "review": "Dossier 是一个自托管的求职管理系统：用户维护一份职业档案，应用读取职位描述后据此生成定制简历和求职信（仅使用档案中的事实），并以看板追踪从草稿到录用的申请流程。面向在小型服务器上自托管的个人用户（单用户、单密码），支持 Docker 部署，数据存储于用户自己的 PostgreSQL 数据库，AI 模型可选本地 Ollama/LM Studio 或托管的 OpenAI 兼容 API。",
+   "highlights": [
+    "从个人档案生成定制简历与求职信，仅使用档案中已有的事实，缺失项以 gap 呈现",
+    "支持通过 JSearch、Adzuna、YC/Hacker News 等来源搜索职位并按档案匹配评分，含每日运行的可选职位代理",
+    "数据完全存储于用户自己的 PostgreSQL 数据库，支持夜间备份、全量导出导入，可选本地 LLM 使数据不出本机"
+   ],
+   "use_cases": [
+    "在个人服务器上自托管管理整个求职流程",
+    "针对具体职位生成定制化简历和求职信并输出 PDF",
+    "以看板和漏斗图表追踪求职申请进度与面试安排"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 18 ／ It's for one person on a small server: one password, your data in your own PostgreSQL database, and an AI model of your choice. That can be a local model through Ollama or LM Studio, so your profile and documents stay on your own hardware, or a hosted one (any ／ echo \"POSTGRES_PASSWORD=$(openssl rand -hex 24)\" > .env",
+     "lines": [
+      10,
+      14,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存储在用户自己的 PostgreSQL 数据库中，PostgreSQL 是该应用的存储后端而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Your job search, on your own server: one profile, a tailored resume and cover letter for every job, and every application tracked from draft to offer. ／ Dossier keeps your career history in one profile and turns it into a clean resume. For every job you apply to, it reads the posting, shows how you match, and drafts a tailored resume and cover letter that only use facts from your profile. You refine them in a chat, download them as PDFs and track each application from draft to offer. ／ It's for one person on a small server: one password, your data in your own PostgreSQL database, and an AI model of your choice. That can be a local model through Ollama or LM Studio, so your profile and documents stay on your own hardware, or a hosted one (any OpenAI-compatible API, Anthropic or Mistral), which then receives what it writes from. Privacy says what goes where.",
+   "evidence_lines": [
+    3,
+    12,
+    14
+   ]
+  },
+  "fn": "AienTech/dossier",
+  "sha": "74ac90a27ed5",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

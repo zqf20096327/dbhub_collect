@@ -9706,5 +9706,147 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "59e3a2161af2": {
+  "identity": {
+   "one_liner": "自托管个人档案/作品集平台，基于 PocketBase 与 SQLite 存储",
+   "review": "Facet 是一个自托管的个人职业档案与作品集平台，支持多视图（面向招聘者/会议等不同受众）、隐私控制、分享链接、GitHub 项目导入和博客/演讲内容管理。后端为 Go + PocketBase，数据存于嵌入式单文件 SQLite，通过 Docker 单容器部署，适合希望自主掌控个人职业数据的用户。",
+   "highlights": [
+    "支持多视图档案，每个视图可独立设置内容、隐私级别（公开/未列出/密码/私有）与分享链接",
+    "使用嵌入式单文件 SQLite 存储，数据目录便于备份",
+    "提供 Docker 镜像部署，含 GitHub 导入、RSS/ical 导出、AI 简历解析与写作助手"
+   ],
+   "use_cases": [
+    "求职者面向不同受众（招聘者/会议/客户）发布不同版本的职业档案",
+    "希望自托管且不依赖云服务的个人主页与博客",
+    "将 GitHub 项目、简历自动汇总为个人作品集"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Your data in SQLite, your uploads in a folder, both easy to backup ／ - SQLite database you own (no cloud dependency) ／ - **Database**: SQLite (embedded, single file)",
+     "lines": [
+      57,
+      66,
+      174
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身存储数据的应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted personal profile platform that puts you in control. Own your data, choose what each audience sees, and skip the tracking. ／ - **Database**: SQLite (embedded, single file) ／ - **Backend**: Go 1.27 with PocketBase (a lightweight backend framework)",
+   "evidence_lines": [
+    16,
+    174,
+    172
+   ]
+  },
+  "fn": "jesposito/Facet",
+  "sha": "59e3a2161af2",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "261a1da04477": {
+  "identity": {
+   "one_liner": "自托管网站分析工具，从服务器访问日志解析访客、AI 爬虫与扫描器",
+   "review": "Skald 读取 Web 服务器访问日志，将请求分为真人、AI 助手、搜索引擎、爬虫/扫描器、自有流量五组，并提供安全监控（扫描探测、攻击尝试、封禁列表）。面向自建站点的站长与运维人员，用 SQLite 存储，支持 Docker 部署与 Vercel/Netlify/Cloudflare 等日志接入，不拦截流量、非 WAF。",
+   "highlights": [
+    "从访问日志识别 AI 爬虫（GPTBot、ClaudeBot 等）并按用途分类",
+    "独立审计程序用第二套解析器重算所有数字，不一致则当日数据不予展示",
+    "安全板块展示扫描器、攻击尝试、暴露探测及 nginx/Cloudflare/fail2ban 封禁列表"
+   ],
+   "use_cases": [
+    "无 cookie、无第三方脚本的自托管网站流量统计",
+    "分析 AI 助手与爬虫对站点的抓取行为及来源",
+    "从访问日志发现针对网站的扫描与入侵尝试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      697
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**Which road fits your site** (a form plugin, Next.js on Vercel, a Postgres backend, no code,",
+     "lines": [
+      584
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储自身数据的网站分析应用，而非为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0，另有托管商业版 beta",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Web analytics from your server's own access log: the people, the AI assistants and the crawlers",
+   "evidence_lines": [
+    8
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "261a1da04477",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

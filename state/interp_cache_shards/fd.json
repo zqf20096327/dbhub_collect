@@ -11605,5 +11605,150 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9c8690f6c0c4": {
+  "identity": {
+   "one_liner": "ASP.NET Core 自托管个人/企业管理应用，含财务、日历、看板与用户管理",
+   "review": "Maroik 是一个由单人开发的 ASP.NET Core MVC 自托管 Web 应用，提供个人财务记账、日历日程、公告板和基于角色的用户管理，并有管理后台。2025 年 4 月起数据层使用 PostgreSQL，架构采用 DDD + Clean Architecture，测试用 Testcontainers 运行真实 PostgreSQL 和 RabbitMQ。适合需要自托管财务/日程/论坛一体化站点的人。",
+   "highlights": [
+    "提供费用追踪、日历、公告板与基于角色的用户管理等模块，支持英文/韩文本地化",
+    "采用 DDD + Clean Architecture 分层，依赖方向由测试规则约束",
+    "测试使用 Testcontainers 运行真实 PostgreSQL 与 RabbitMQ，CI 构建镜像发布至 GHCR"
+   ],
+   "use_cases": [
+    "自托管个人或小企业的记账与财务报表管理",
+    "内部日历共享与公告板（含附件与评论）",
+    "需要角色权限和审计日志的用户/账号管理后台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Test-first development.** Every change starts with a failing test, including the log entries it must write; real PostgreSQL and RabbitMQ run in Testcontainers instead of mocks wherever the behaviour depends on them. ／ |2025-12|Project split into Core layers (Repository, Service, Client, PostgreSQL)|",
+     "lines": [
+      62,
+      96
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|2025-04|MariaDB → PostgreSQL|",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储数据的自托管 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, calendar management, bulletin boards, and role-based user management. ／ - **Test-first development.** Every change starts with a failing test, including the log entries it must write; real PostgreSQL and RabbitMQ run in Testcontainers instead of mocks wherever the behaviour depends on them. ／ |2025-12|Project split into Core layers (Repository, Service, Client, PostgreSQL)|",
+   "evidence_lines": [
+    8,
+    62,
+    96
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik",
+  "sha": "9c8690f6c0c4",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0ad70a252f56": {
+  "identity": {
+   "one_liner": "自托管一次性加密消息分享服务",
+   "review": "这是一个自托管的阅后即焚消息分享服务：用户写入消息后生成含随机解密密钥的链接，消息以 AES-128-GCM 加密存储，被查看一次后记录即删除。基于 PHP 编写，支持 JSON 文件或 MySQL 两种存储方式，适合需要通过链接安全传递敏感文本的个人或团队自行部署。",
+   "highlights": [
+    "支持 AES-128-GCM 加密存储，消息查看一次后删除记录",
+    "支持 json 文件与 MySQL 两种存储方式（mysqli）",
+    "提供多语言界面（基于 Google Translate 的语言列表）"
+   ],
+   "use_cases": [
+    "通过一次性链接向他人传递密码或敏感文本",
+    "自托管部署的阅后即焚消息服务",
+    "单服务器或已有 MySQL 环境的轻量部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- For MySQL storage only: PHP `mysqli` and a MySQL-compatible database. ／ 5. For MySQL, create the `local/database.json` file and specify the connection details:",
+     "lines": [
+      32,
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 MySQL 仅作为消息记录的存储后端（local/database.json 连接配置、oneview_records 表），该仓库是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Write a message and OneView creates a link containing a randomly generated decryption key. Messages are encrypted with AES-128-GCM before storage. The message is returned when the recipient opens it, then its stored record is deleted. Messages are limited to **10,000 bytes**. ／ - For MySQL storage only: PHP `mysqli` and a MySQL-compatible database. ／ |`mysql`|The `oneview_records` database table|Installations already using MySQL|",
+   "evidence_lines": [
+    20,
+    32,
+    75
+   ]
+  },
+  "fn": "arizon-dev/oneview",
+  "sha": "0ad70a252f56",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

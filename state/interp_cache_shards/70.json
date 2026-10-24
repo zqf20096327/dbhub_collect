@@ -10463,5 +10463,214 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8450ca1040bc": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理项目记忆与证据层，基于 SQLite 存储",
+   "review": "为 AI 编码代理（Codex、Claude Code 等）提供本地项目记忆：将 Git 仓库与代理会话索引进项目级 SQLite，记录证据来源、时间状态与决策，通过 CLI 和 stdio MCP 提供上下文检索与续作检查点。数据全部留在本地，默认不上传；当前为 alpha 版本，主要面向 Windows/macOS/Linux 的早期使用者。",
+   "highlights": [
+    "将 Git 仓库索引到项目级 SQLite，记录哈希、符号、导入与证据，无需托管服务",
+    "通过 CLI 与 stdio MCP 提供 query-only 只读连接和上下文编译，带 token 预算与隐私授权",
+    "可选的加密联邦同步，默认关闭，支持作用域、设备权限与离线事件"
+   ],
+   "use_cases": [
+    "AI 编码代理跨会话恢复项目上下文",
+    "团队间以加密作用域共享项目记忆",
+    "对代码、记忆与证据关系进行本地图谱检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Keep project data private|Local SQLite, no telemetry, no cloud database, explicit capture grants| ／ Rta-Smriti indexes the canonical Git checkout into project-scoped SQLite. It records ／ CLI and MCP context retrieval use validated query-only SQLite connections. Watcher,",
+     "lines": [
+      63,
+      95,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是面向 AI 编码代理的记忆应用，SQLite 仅作为其本地数据存储被使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Rta-Smriti indexes the canonical Git checkout into project-scoped SQLite. It records ／ |Use multiple AI coding hosts|Local stdio MCP plus recipes for Codex, Claude Code, Cursor, Zed, OpenCode, and Gemini CLI| ／ Rta-Smriti is deliberately an evidence and continuity layer. It does **not** execute",
+   "evidence_lines": [
+    95,
+    62,
+    233
+   ]
+  },
+  "fn": "sulabhdubey/rta-smriti-brain",
+  "sha": "8450ca1040bc",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "917fa6408993": {
+  "identity": {
+   "one_liner": "ClickHouse 数据库备份与恢复工具，支持备份到 S3 兼容存储",
+   "review": "ch-backup 是 Yandex 开发的 Python 编写的 ClickHouse 备份工具，可将 MergeTree 引擎表的备份写入 S3 兼容存储，并在数据损坏时恢复。支持 part 级别去重（默认启用）、备份在存储间复制、加密与压缩配置，以及通过 ZooKeeper 锁协调多进程操作。面向需要为 ClickHouse 集群做备份管理的运维人员。",
+   "highlights": [
+    "备份 MergeTree 引擎族表到 S3 兼容存储并支持恢复",
+    "支持 part 级别去重，可通过配置文件设置并可设定起始时间排除早期备份",
+    "支持备份在 S3 存储/桶之间复制，含断点续传与 JSON 报告输出"
+   ],
+   "use_cases": [
+    "ClickHouse 数据损坏后从备份恢复",
+    "为 ClickHouse 集群制定周期性备份策略",
+    "在不同 S3 存储桶或端点间迁移/复制备份以做容灾"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Backup tool for ClickHouse DBMS. ／ Tool for managing ClickHouse backups.",
+     "lines": [
+      7,
+      47
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "专为 ClickHouse 提供备份/恢复功能的工具，服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Backup tool for ClickHouse DBMS. ／ It allows to perform backups to S3 compatible storage and restore from backup ／ The tool also supports deduplication at part-level granularity. It's set up",
+   "evidence_lines": [
+    7,
+    9,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yandex/ch-backup",
+  "sha": "917fa6408993",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1da672e79f90": {
+  "identity": {
+   "one_liner": "T-SQL 预编译器，用注释指令生成受控动态 SQL 存储过程",
+   "review": "T-Lift 是用 T-SQL 编写的存储过程预编译器，以单个 sp_tlift 过程形式安装在独立数据库中。开发者在被注释指令标注的存储过程上运行它，生成基于 sp_executesql 的动态 SQL 版本，用于解决 catch-all 查询的参数嗅探与计划缓存问题，同时保持源过程可调试执行，也可从带注释 SQL 文本生成独立批处理。",
+   "highlights": [
+    "以注释指令标注源过程，生成基于 sp_executesql 的参数化动态 SQL 存储过程",
+    "支持通过 @SourceText 从带注释的 SQL 文本生成独立 T-SQL 批处理，无需在目标服务器安装 T-Lift",
+    "提供 @checkDrift 检测过期渲染结果，并附带覆盖各指令的集成测试套件"
+   ],
+   "use_cases": [
+    "优化含多个可选参数的 catch-all 存储过程，缓解参数嗅探导致的执行计划不稳定",
+    "为 DBA 脚本从 SQL 文本生成可部署的动态 SQL 批处理",
+    "为高频固定查询形态的业务工作负载保留计划缓存并避免每次执行重复编译"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "T-Lift is a T-SQL precompiler that lets developers use directive-based meta-code within stored procedures to generate controlled, dynamic T-SQL. It is designed for teams that understand when and why dynamic SQL helps SQL Server build more *predictable* executi ／ Consider to get an idea how T-Lift works this common pattern in SQL Server stored procedures: ／ This is a classic \"catch-all\" or \"one-size-fits-all\" query. It works correctly, but the SQL Server query optimizer cannot produce an optimal plan for it. The optimizer must account for every possible NULL/non-NULL combination at once, which typically means a f",
+     "lines": [
+      5,
+      17,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "T-Lift 是为 SQL Server 生态服务的预编译工具，读取 sys.sql_modules/sys.parameters 元数据并生成 T-SQL 过程，自身不使用数据库存储应用数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "T-Lift is a T-SQL precompiler that lets developers use directive-based meta-code within stored procedures to generate controlled, dynamic T-SQL. It is designed for teams that understand when and why dynamic SQL helps SQL Server build more *predictable* execution plans, but want a cleaner, safer, and more comfortable way to apply it without hand-crafting dynamic SQL everywhere. ／ T-Lift reads your existing stored procedure, looks for directives you place inside T-SQL comments, and generates a new version of that procedure using dynamic SQL and `sp_executesql`. ／ T-Lift reads metadata from other databases via `sys.sql_modules` and `sys.parameters`, so the executing user needs appropriate read permissions on the target database.",
+   "evidence_lines": [
+    5,
+    44,
+    70
+   ]
+  },
+  "fn": "sasloz/T-Lift",
+  "sha": "1da672e79f90",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

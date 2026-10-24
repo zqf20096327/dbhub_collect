@@ -10777,5 +10777,75 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "203e77324005": {
+  "identity": {
+   "one_liner": "自托管的 AI 代理共享记忆存储，基于单文件 SQLite，经 MCP 与 REST 访问",
+   "review": "OneMemory 是一个用 Node 实现的自托管记忆存储，供 Claude Code、Cursor 等多种 AI 代理通过 MCP 或 REST API 共享笔记类记忆。数据落在一个 SQLite 文件中，提供变更订阅、写入时的密钥/注入检查、作用域令牌、Markdown 导入导出等机制；可选语义搜索依赖用户自备的嵌入端点。适合需要在多设备多代理间维护同一份记忆的个人用户。",
+   "highlights": [
+    "同时提供 MCP（stdio 与 HTTP）和 REST API 访问同一存储，附小面板",
+    "写入时扫描密钥与提示注入内容，密钥拦截、注入内容隔离待审",
+    "支持 read/write/admin 作用域令牌，并可流式导出 JSON 与按文件导出 Markdown"
+   ],
+   "use_cases": [
+    "多个 AI 代理（Claude、Cursor、n8n 等）共享同一份记忆",
+    "通过隧道从手机或网页读写桌面代理写入的笔记",
+    "以 Markdown 文件做 git 友好的同步与三方合并"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> `node:sqlite`, which does not exist in Node 22 or older. Check with ／ - **Lightweight.** One Node process, one SQLite file, **2 direct runtime",
+     "lines": [
+      18,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将数据存储于单个 SQLite 文件，是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> `node:sqlite`, which does not exist in Node 22 or older. Check with ／ - **Lightweight.** One Node process, one SQLite file, **2 direct runtime ／ **One small, self-hosted memory store that every AI agent you use can share — over MCP or plain REST, from your desktop, the web, or your phone.**",
+   "evidence_lines": [
+    18,
+    108,
+    3
+   ]
+  },
+  "fn": "calasdan-sketch/onememory",
+  "sha": "203e77324005",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

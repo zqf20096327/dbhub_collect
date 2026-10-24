@@ -9030,5 +9030,277 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a8b5f393c373": {
+  "identity": {
+   "one_liner": "开源自托管聊天/语音/屏幕共享平台，类 Discord",
+   "review": "Voxpery 是一个开源自托管社区聊天平台，提供文字频道、私信、语音、视频与屏幕共享。面向需要自控部署的社区用户，可用托管版、桌面客户端或 Docker Compose 自托管；服务端用 Rust/Axum，依赖 PostgreSQL、Redis 和 LiveKit，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "支持文字频道、私信、语音频道、屏幕共享与社区管理功能",
+    "提供 Windows/macOS/Linux 桌面客户端（Tauri）和浏览器访问",
+    "可通过 Docker Compose 完整自托管部署，支持数据导出与账户删除"
+   ],
+   "use_cases": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Self-host:** Start the web app, server, LiveKit, PostgreSQL, and Redis with Docker Compose: ／ Voxpery uses Rust and Axum, React and TypeScript, PostgreSQL, Redis, LiveKit, and Tauri. The contributing guide covers local development and pull requests; the architecture guide explains how the pieces fit together.",
+     "lines": [
+      32,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 PostgreSQL、Redis 等存数据/组件，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-host:** Start the web app, server, LiveKit, PostgreSQL, and Redis with Docker Compose: ／ Voxpery uses Rust and Axum, React and TypeScript, PostgreSQL, Redis, LiveKit, and Tauri. The contributing guide covers local development and pull requests; the architecture guide explains how the pieces fit together.",
+   "evidence_lines": [
+    32,
+    47
+   ]
+  },
+  "fn": "emircanagac/voxpery",
+  "sha": "a8b5f393c373",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "77095183b7c8": {
+  "identity": {
+   "one_liner": "自托管视频转码与加密 HLS 交付系统，用 PostgreSQL 存状态和队列",
+   "review": "该项目将上传的视频用 FFmpeg 转为多码率 HLS，按视频生成 AES-128 密钥并用 AWS KMS 包装，通过短期令牌控制播放，附带 API、控制台、审计日志与用量统计。它是一个使用数据库的应用，所有状态与工作队列都存放在 PostgreSQL 16（FOR UPDATE SKIP LOCKED），可本地以 AWS 模拟器运行，也可用同一套 Terraform 部署到 AWS。",
+   "highlights": [
+    "提供 FFmpeg 单解码多编码转码、AES-128 HLS 加密与 KMS 信封加密",
+    "使用 PostgreSQL 16 同时作为系统记录存储和工作队列（FOR UPDATE SKIP LOCKED）",
+    "提供 REST API、OpenAPI 3.1 文档、操作员控制台与 append-only 审计日志"
+   ],
+   "use_cases": [
+    "在自有 AWS 账户内搭建视频点播转码与加密分发",
+    "需要按视频密钥、播放令牌与并发会话控制的流媒体交付",
+    "本地（AWS 模拟器/Docker Compose）开发测试视频流水线"
+   ],
+   "class_placeholder": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 ／ |🛡️ **Correctness under failure**|Postgres is the queue (`FOR UPDATE SKIP LOCKED`). Every write is guarded by ownership, a reaper recovers dead workers, and Spot interruptions hand work back without burning a retry.| ／ |Postgres 16|RDS, private subnets|All state **and** the work queues| ／ |**Data**|PostgreSQL 16, as both the system of record and the work queue|",
+     "lines": [
+      7,
+      80,
+      159,
+      234
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明所有状态与工作队列存于 PostgreSQL，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Postgres 16|RDS, private subnets|All state **and** the work queues| ／ |**Data**|PostgreSQL 16, as both the system of record and the work queue| ／ uploaded video file and turns it into adaptive, encrypted HLS that only viewers your",
+   "evidence_lines": [
+    159,
+    234,
+    33
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "euron-sde-team/euron-video-system",
+  "sha": "77095183b7c8",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "44d11d4b9699": {
+  "identity": {
+   "one_liner": "自托管多用户预约排期应用，Quarkus 构建，状态存于 Postgres",
+   "review": "一个基于 Quarkus 的自托管排期/预约应用，为每个用户提供独立预约页，支持 Google Calendar/Meet 同步、审批流程、OIDC 登录和 GDPR 工具，适合想自主掌控排期数据而非使用 SaaS 的个人或团队。所有共享状态存在 PostgreSQL 中，后者是唯一支持的数据库，无嵌入式回退；运行需配置 SMTP 服务器。",
+   "highlights": [
+    "每用户独立预约页，多用户租户隔离，支持 N 个无状态副本加负载均衡",
+    "支持 Google Calendar 同步（自动 Meet 链接）、审批流程、OIDC/SSO 登录",
+    "内置 GDPR 工具：邀请人数据下载/删除、账户导出与删除、可选保留期"
+   ],
+   "use_cases": [
+    "自托管替代 SaaS 排期工具的预约页",
+    "需要审批流的自定义预约表单",
+    "多用户独立排期站点部署"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "balancer with all shared state in Postgres. ／ - **PostgreSQL** — the only supported database. No embedded fallback. ／ provision a throwaway Postgres). Not needed to run a release image.",
+     "lines": [
+      17,
+      45,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它是使用 PostgreSQL 存储共享状态的排期应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**calit** is a self-hosted, multi-user scheduling app — a Calendly alternative built on Quarkus. Every ／ balancer with all shared state in Postgres. ／ - **PostgreSQL** — the only supported database. No embedded fallback.",
+   "evidence_lines": [
+    12,
+    17,
+    45
+   ]
+  },
+  "fn": "asm0dey/calit",
+  "sha": "44d11d4b9699",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e2bd4e86713e": {
+  "identity": {
+   "one_liner": "Windows 本地 Web 环境管理器，一体化安装运行 Apache/PHP/MariaDB",
+   "review": "Runqora 是一个 Windows 桌面应用，用于在单一窗口中安装、启动、更新本地 Web 开发栈，包含 Apache、PHP、MariaDB、phpMyAdmin 等模块。它提供模块启停、Windows 服务、phpMyAdmin 联动启动、MariaDB 调参表单、一键 WordPress 建站和 `rq` 命令行，面向需要在 Windows 本机搭建 PHP/MariaDB 开发环境的开发者。采用 MIT 许可，使用 Rust 和 Tauri 实现。",
+   "highlights": [
+    "安装并校验发布方 checksum 后运行 Apache、PHP、MariaDB、phpMyAdmin 等模块，支持逐模块启停与 Windows 服务",
+    "提供表单化的 PHP/MariaDB/Apache 设置、配置导出导入、端口占用排查与每日自动更新及回滚",
+    "包含系统托盘常驻和完整的 `rq` 命令行，可执行与窗口相同的全部操作"
+   ],
+   "use_cases": [
+    "在 Windows 上搭建 PHP + MariaDB 本地开发环境",
+    "一键创建并配置本地 WordPress 站点（含建库和写 wp-config.php）",
+    "通过托盘或命令行统一管理多个本地服务器的启停、端口与更新"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A local web stack for Windows: Apache, PHP, MariaDB and more, installed, run and updated from one clean window. ／ - Installs Apache, PHP, MariaDB and phpMyAdmin, each checked against the publisher's checksum before it is unpacked ／ - **Open** on any module starts what it needs first: Open on phpMyAdmin starts MariaDB and Apache if they are stopped, then opens the page (`rq open phpmyadmin` does the same)",
+     "lines": [
+      5,
+      16,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为本地 Web 栈安装、运行和管理 MariaDB 等数据库组件，属于为数据库使用提供支撑的工具而非存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A local web stack for Windows: Apache, PHP, MariaDB and more, installed, run and updated from one clean window. ／ - Installs Apache, PHP, MariaDB and phpMyAdmin, each checked against the publisher's checksum before it is unpacked ／ - Optional Windows service for Apache and MariaDB",
+   "evidence_lines": [
+    5,
+    16,
+    21
+   ]
+  },
+  "fn": "ShoaibAhmedSoomro/runqora",
+  "sha": "e2bd4e86713e",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

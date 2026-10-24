@@ -10983,5 +10983,212 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "abbd6c358f84": {
+  "identity": {
+   "one_liner": "自托管电子书库服务器，内置阅读器与 KOReader 阅读会话同步",
+   "review": "Tome 是一个自托管电子书/漫画媒体服务器，提供浏览器内置阅读器、阅读统计、日历、OPDS 订阅和双向进度同步，通过自研 KOReader 插件记录页级阅读会话；面向自建家庭服务器管理个人书库的用户，后端为 FastAPI，数据存于单文件 SQLite（WAL），以单个 Docker 镜像分发。",
+   "highlights": [
+    "通过自定义 KOReader 插件记录阅读会话并在设备与浏览器间双向同步进度",
+    "支持 EPUB、CBZ/CBR、PDF 的浏览器内阅读及 OPDS 客户端访问",
+    "支持 OIDC 单点登录、角色访问控制、用户级 API token 与审计日志"
+   ],
+   "use_cases": [
+    "自托管电子书与漫画库管理",
+    "电子书阅读进度跨设备同步与阅读统计",
+    "通过 OPDS 向 KOReader 等客户端提供书库订阅"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built with FastAPI, React, and SQLite. Ships as a single Docker image. ／ |`/data`|SQLite database and cover cache| ／ |Database|SQLite (WAL) / SQLAlchemy 2.0|",
+     "lines": [
+      14,
+      134,
+      177
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 SQLite 作为自身数据库存储书库与阅读数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Built with FastAPI, React, and SQLite. Ships as a single Docker image. ／ |`/data`|SQLite database and cover cache|",
+   "evidence_lines": [
+    14,
+    134
+   ]
+  },
+  "fn": "bndct-devops/tome",
+  "sha": "abbd6c358f84",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dce5bc9516e8": {
+  "identity": {
+   "one_liner": "SSMS 22 的开源扩展套件，提供 schema 浏览、格式化、监控面板等工具",
+   "review": "这是一个面向 SQL Server Management Studio 22 的 VSIX 扩展，为数据库管理员和开发者提供 schema 浏览/搜索、T-SQL 格式化、IntelliSense、四个实时监控面板、可 diff 的 schema 导出及结果网格工具。要求 Windows 和 .NET Framework 4.8，仅支持 SSMS 22，部分功能通过反射访问 SSMS 内部实现。",
+   "highlights": [
+    "提供 schema 浏览、SQL Search（基于 SQLite 全文索引）、T-SQL 格式化和 IntelliSense 补全",
+    "包含四个实时监控面板：Performance、Agent Jobs、Always On、Replication，仅实时显示不持久化",
+    "支持将数据库导出为单文件或按对象分文件的文件夹树，输出去除时间戳以便文件夹对比"
+   ],
+   "use_cases": [
+    "SQL Server 日常管理与查询开发，需要 schema 搜索、格式化和补全",
+    "实时查看实例性能、Agent 作业、Always On 与复制状态",
+    "跨服务器数据库 schema 导出与文件夹级 diff 对比"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**SSMS, extended.** A free, open-source suite of tools for SQL Server Management Studio 22 — ／ - **SQL Server Management Studio 22** (built on the Visual Studio 2026 shell) ／ SSMS assemblies (`SqlWorkbench.Interfaces.dll`, `SQLEditors.dll`, `Microsoft.SqlServer.GridControl.dll`)",
+     "lines": [
+      6,
+      16,
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|**Search**|SQL Search (`Ctrl+Alt+F`) — object names, columns, and module definitions via a SQLite full-text index; optionally SQL Agent job step commands, which live outside the cache.|",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQL Server Management Studio 服务的扩展工具集，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SSMS, extended.** A free, open-source suite of tools for SQL Server Management Studio 22 — ／ |**Monitoring**|Four dockable dashboards, each pinned to the server it was opened from: Performance (`Ctrl+Alt+P`), Agent Jobs (`Ctrl+Alt+J`), Always On (`Ctrl+Alt+A`), Replication (menu only). Also opened from a server's right-click menu in Object Explorer, no query window needed. Live only — nothing is persisted.|",
+   "evidence_lines": [
+    6,
+    30
+   ]
+  },
+  "fn": "jamtheradar/SQLExtended",
+  "sha": "dce5bc9516e8",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1bd50f8365b7": {
+  "identity": {
+   "one_liner": "Claude Code 门控流水线插件，AI 代理按阶段推进开发任务",
+   "review": "这是一个 Claude Code 插件，将 AI 代理组织为含 31 个角色子代理的开发流水线，按 plan、implement、test、review、done 等固定阶段推进，各阶段以用户配置的真实构建/测试/lint 命令通过作为门控条件，用户审批计划与提交。安装方式为 claude plugin marketplace 命令，要求 Python 3.12+ 和 git；内部以 run.db、events.db、memory.db 等 SQLite 文件记录状态。适合使用 Claude Code 的开发者管理代理编码任务。",
+   "highlights": [
+    "提供 plan/implement/test/review/done 门控阶段，阶段推进以命令退出码为条件",
+    "包含 31 个角色子代理与 43 个技能，支持手动/辅助/自动三种审批级别",
+    "通过 PreToolUse、Stop 等 hooks 拦截代理操作，并以 SQLite 文件记录任务状态与流转"
+   ],
+   "use_cases": [
+    "用 Claude Code 执行多阶段编码任务并要求命令门控验收",
+    "需要代理任务的计划审批、交接记录与跨任务记忆",
+    "并行运行多个代理 epic（swarm 模式）处理大型任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 显示其为开发流程插件，仅以 SQLite 文件（run.db、events.db、memory.db）记录内部状态，并非为数据库生态服务的工具（L69）。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可（L5、L93）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Architecture: you talk to the Orchestrator session. The Orchestrator goes through the plugin hooks (PreToolUse, Stop, SubagentStart, SubagentStop) to the pipeline tools (advance.py, approve.py and the gate scripts); the plugin also holds 43 skills and commands. The tools read gates from the .agentry config (pipeline.json, tasks, plans) and record transitions in run.db, events.db and memory.db. The Orchestrator dispatches the 31 agents and rules in your project ／ - **Gated stages.** `plan`, `implement`, `test`, `review`, `ready`, `done`, where `implement`, `test` and `review` each end on a command you configure.",
+   "evidence_lines": [
+    69,
+    21
+   ]
+  },
+  "fn": "AlexWaha/agentry",
+  "sha": "1bd50f8365b7",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

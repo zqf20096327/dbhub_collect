@@ -9426,5 +9426,307 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b07931a65e14": {
+  "identity": {
+   "one_liner": "基于 Bun 的任务队列，默认 SQLite/内存，可切 PostgreSQL 多代理",
+   "review": "bunqueue 是一个面向 Bun 运行时的任务队列库与服务，提供内嵌模式（内存或单文件 SQLite 持久化）和 TCP 服务器模式，支持 DLQ、cron 调度、SQLite S3 备份，并内置 MCP 服务器供 AI 代理控制队列；扩展到多代理部署时使用 PostgreSQL 15–18 作为共享存储，明确不支持 MySQL。面向 Bun/Node.js/Deno/Python 等多语言开发者与需要调度能力的自动化场景。",
+   "highlights": [
+    "提供内嵌（Bun 库）与独立 TCP 服务器两种运行模式，客户端覆盖 Node.js、Deno、Python、PHP、Go、Rust、Elixir",
+    "默认内存或单文件 SQLite 存储，支持 PostgreSQL 15–18 多代理拓扑、DLQ、cron、S3 备份",
+    "内置 MCP 服务器（79 个工具）与 BullMQ/BullMQ Pro 兼容 API"
+   ],
+   "use_cases": [
+    "Bun/Node.js 应用内嵌后台任务与定时任务处理",
+    "PostgreSQL 后端的多代理队列集群部署",
+    "AI 代理与自动化流水线中作为调度器使用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ PostgreSQL 18.6: ／ is not supported. CI validates PostgreSQL 15, 16, 17, and the pinned/recommended",
+     "lines": [
+      11,
+      81,
+      92
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ SQLite file. `msgpackr` is the only runtime dependency; cron, SQLite, S3, HTTP and",
+     "lines": [
+      11,
+      44
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "password changes, percent-encoding reserved characters in the URL only. MySQL ／ **Not ideal for:** multi-region consensus or deployments that require MySQL as",
+     "lines": [
+      91,
+      258
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目以 SQLite/PostgreSQL 作为队列存储后端并明确声明版本适配，是为数据库生态服务的队列工具而非存数据的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ It starts two brokers against one database/namespace. PostgreSQL is server-only; ／ is not supported. CI validates PostgreSQL 15, 16, 17, and the pinned/recommended",
+   "evidence_lines": [
+    11,
+    89,
+    92
+   ]
+  },
+  "fn": "egeominotti/bunqueue",
+  "sha": "b07931a65e14",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "76f8a152c28a": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 服务器，为多个 AI 应用提供共享项目记忆",
+   "review": "FlowState 是一个本地运行的 MCP 服务器，用单个 SQLite 文件在用户机器上存储项目的待办、决策、变更与经验，供 Claude、ChatGPT、Cursor、Grok 等 MCP 客户端共享读取和写入，并提供多代理并发认领、审阅队列、可选 GitHub 离站备份等机制。适合同时使用多个 AI 编程工具、需要跨会话保留项目上下文的开发者。",
+   "highlights": [
+    "实现 MCP 服务器，支持 Claude Desktop、Cursor、Claude Code、Codex、Grok 等客户端接入",
+    "数据以单个 SQLite 文件存储在本地，支持多代理并发 todo 认领与写回执",
+    "提供自动会话记录、审阅队列、可选定时备份与 GitHub 离站备份"
+   ],
+   "use_cases": [
+    "多个 AI 应用共享同一项目上下文，跨会话接续工作",
+    "多个 AI 代理并行工作时协调 todo 认领，避免重复劳动",
+    "需要本地存储、可审阅 AI 记录内容的个人项目管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in one SQLite file on your computer. Your memory is not sent anywhere unless you",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其本地存储数据的方式，项目本身为 AI 应用服务的 MCP 服务器，不面向数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "FlowState is a local MCP server. It gives every AI app you ／ Everything lives in one SQLite file on your computer. Your memory is not sent anywhere unless you ／ Claude, ChatGPT, Cursor and Grok can all use FlowState at once, on your computer, across your network, or from your phone (through the optional relay or your own tunnel). When one AI logs a decision or a change, the others see it the next time they check. Hard rules and handoff notes reach every AI, and every change records which AI made it, so you always know who did what. Work across projects is linked too, so a change to something shared shows up in every project that uses it.",
+   "evidence_lines": [
+    5,
+    10,
+    20
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "dialectforge/FlowState",
+  "sha": "76f8a152c28a",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b1c715ee8932": {
+  "identity": {
+   "one_liner": "Home Assistant 的 MySQL/MariaDB 查询与执行集成组件",
+   "review": "这是一个 Home Assistant 自定义组件，通过 mysql_query.query 和 mysql_query.execute 两个动作对 MySQL/MariaDB 数据库执行读和写操作，支持参数化语句、多连接配置、行数限制、查询超时、只读连接和 TLS。需要 MySQL 5.6.5+ 或 MariaDB 10.0+，依赖 aiomysql 驱动，通过 HACS 或手动方式安装，面向需要在 HA 自动化中读写外部数据库的用户。",
+   "highlights": [
+    "提供 query 与 execute 两个分离的读/写动作，query 在只读事务内运行并校验语句类型",
+    "支持参数化查询、多连接配置、行数限制、查询超时与可选 TLS 加密",
+    "提供 UI 配置方式，连接池化并支持断线自动重试"
+   ],
+   "use_cases": [
+    "在 Home Assistant 自动化中读取外部 MySQL/MariaDB 数据库数据并用于模板",
+    "通过自动化动作向数据库写入记录或执行 DDL/维护语句",
+    "为仪表盘配置只读数据库连接"
+   ],
+   "use_casesNote": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# MySQL Query Service for Home Assistant ／ A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands  ／ - MySQL 5.6.5 or newer, or MariaDB 10.0 or newer: ```query``` relies on read-only transactions.",
+     "lines": [
+      1,
+      12,
+      31
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands  ／ - MySQL 5.6.5 or newer, or MariaDB 10.0 or newer: ```query``` relies on read-only transactions.",
+     "lines": [
+      12,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是 Home Assistant 自定义组件，用于从 MySQL/MariaDB 数据库读取和写入数据（L12），属于使用数据库的应用集成。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands you what it changed. Both can return their result as response data you can use straight from a template. ／ - MySQL 5.6.5 or newer, or MariaDB 10.0 or newer: ```query``` relies on read-only transactions.",
+   "evidence_lines": [
+    12,
+    31
+   ]
+  },
+  "fn": "IAsDoubleYou/homeassistant-mysql_query",
+  "sha": "b1c715ee8932",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e318a7581aaa": {
+  "identity": {
+   "one_liner": "后端×AI 生产级知识库，以可验证源码笔记组织",
+   "review": "一个按工程项目治理的后端与 AI 知识库，包含 369 篇文章、7 个轨道（后端内核、架构、业务、AI 工程、算法、前端、云原生），每篇文章从生产代码回写并引用真实类名，配套 kb-upkeep 巡检脚本、自测清单和 VitePress 电子书形态。面向面试备考者、系统学习者和招聘方验证使用。",
+   "highlights": [
+    "包含 7 个轨道共 369 篇文章，覆盖 Java、MySQL、Redis、Kafka、分布式、DDD、金融信贷、AI 工程等领域",
+    "提供 110 题自测清单与追问链式深度标注，用于面试备考与知识定位",
+    "内置 kb-upkeep 巡检脚本与敏感词断言，支持零空壳零死链的内容治理和 VitePress 电子书构建"
+   ],
+   "use_cases": [
+    "后端工程师面试备考，按自测题索引定位答案",
+    "按轨道系统学习某一领域（如 MySQL、分布式、AI 工程）",
+    "招聘方通过验证类名引用与 commit 记录核实内容真实性"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|A-后端内核|234 篇|**语言层**：Java（并发/JVM/Spring/集合源码级）× Python（工程化对照学习）；**中间件层**：MySQL / Redis 体系（含 Redis 8·Valkey）/ Kafka·MQ（含 Kafka 4 KRaft·Queues）/ Spring Boot 4 / Netty；计算机基础（网络/OS/Linux）；cheatsheet 速查 + 面经复盘|",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库是知识库/电子书内容工程，仅将 MySQL 作为知识内容主题提及，并非为数据库服务的工具也未声明用其存数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MUYI · 后端工程师的生产级知识体系 ／ ## 📚 知识体系（7 轨道 · 369 篇） ／ |A-后端内核|234 篇|**语言层**：Java（并发/JVM/Spring/集合源码级）× Python（工程化对照学习）；**中间件层**：MySQL / Redis 体系（含 Redis 8·Valkey）/ Kafka·MQ（含 Kafka 4 KRaft·Queues）/ Spring Boot 4 / Netty；计算机基础（网络/OS/Linux）；cheatsheet 速查 + 面经复盘|",
+   "evidence_lines": [
+    1,
+    46,
+    50
+   ]
+  },
+  "fn": "Mein-Augenstern/MUYI",
+  "sha": "e318a7581aaa",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

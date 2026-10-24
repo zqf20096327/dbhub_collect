@@ -10141,5 +10141,153 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "65f22f7afe7b": {
+  "identity": {
+   "one_liner": "自托管 MCP 服务器，以 MariaDB 为后端的 AI 编码知识库",
+   "review": "mxLore 是一个自托管的 MCP 服务器，为 Claude Code、Cursor、claude.ai 等 AI 编码助手提供持久化知识记忆，包含 46 个 MCP 工具、12 个 Claude Code 技能、多项目检索与跨代理消息功能。技术栈为 Delphi + FireDAC + MariaDB，需 Windows x64 与 MariaDB 10.6+（语义检索需 11.6+ 的 VECTOR 支持），服务端运行于本机或局域网。",
+   "highlights": [
+    "实现 MCP 2024-11-05 协议（JSON-RPC 2.0 over HTTP+SSE），提供 46 个知识管理工具",
+    "使用 MariaDB 11.6+ VECTOR 实现向量与全文混合语义检索，schema 由服务端自动创建",
+    "通过本地代理桥接 stdio 与 HTTP，服务器可保持在 localhost/LAN，无需公网端点"
+   ],
+   "use_cases": [
+    "为 AI 编码会话持久化架构决策、规格、经验教训等团队知识",
+    "多项目、多代理之间的知识共享与跨项目检索",
+    "团队通过 Admin UI 与 API key 管理成员与项目接入"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|**2**|Create database|`mysql -u root -p -e \"CREATE DATABASE mxai_knowledge CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\"`|",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Semantic Search** — hybrid vector + full-text search (MariaDB 11.6+ with VECTOR support) ／ **Prerequisites:** Windows x64, MariaDB 10.6+, Node.js (7 of the 9 hooks are Node scripts — without it the server still runs, but state tracking and Recall-Gate stay silent). ／ |**1**|Install MariaDB|mariadb.org/download (Windows MSI)| ／ |Specs, ADRs, lessons, recall, graph|Outside the feature's scope|Outside the feature's scope|Your MariaDB, per project and developer| ／ - **Stack:** Delphi (RAD Studio) + TMS Sparkle + FireDAC + MariaDB",
+     "lines": [
+      17,
+      23,
+      27,
+      97,
+      120
+     ]
+    }
+   ],
+   "dbs": [
+    "MariaDB"
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 MariaDB 存储知识库数据（L120 技术栈、L97 存储于用户的 MariaDB），依赖该库存数据而非为其提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "skills 组件 MIT 许可（L128），主程序许可未在可见范围说明",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted MCP server for AI-assisted software development. Stores architectural decisions, specs, plans, findings, and lessons learned — accessed via Model Context Protocol tools from AI coding assistants. Works with claude.ai, Claude Code, Cursor, Windsurf, and any MCP client. ／ |Specs, ADRs, lessons, recall, graph|Outside the feature's scope|Outside the feature's scope|Your MariaDB, per project and developer| ／ - **Stack:** Delphi (RAD Studio) + TMS Sparkle + FireDAC + MariaDB",
+   "evidence_lines": [
+    3,
+    97,
+    120
+   ]
+  },
+  "fn": "MicrotronX/mxLore",
+  "sha": "65f22f7afe7b",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3096df772220": {
+  "identity": {
+   "one_liner": "面向 MCP 客户端的 PostgreSQL 只读优先查询/诊断服务器",
+   "review": "这是一个为 PostgreSQL 提供的 MCP 服务器，供 Claude Code、Cursor 等 MCP 客户端查询数据库、内省 schema、执行 EXPLAIN、做性能诊断与健康检查。默认只读，通过 ALLOW_WRITES 环境变量开启写入，并推荐用最小权限 Postgres 角色作为主访问控制。包含 pg_index_advisor（基于 HypoPG 假想索引）、pg_top_queries、pg_health 等工具，通过 npm 安装，要求 Node 22+。",
+   "highlights": [
+    "提供 schema 内省、参数化查询、EXPLAIN 分析与 pg_stat_statements 等性能诊断工具",
+    "默认只读，基于 BEGIN READ ONLY 事务与扩展查询协议限制单语句执行，写入需显式开启",
+    "可选审计日志（每条语句一行 JSON）与结构化工具输出（outputSchema）"
+   ],
+   "use_cases": [
+    "让 AI 编码代理/LLM 客户端安全查询和分析 PostgreSQL 数据库",
+    "DBA 日常诊断：慢查询、未用索引、表膨胀、锁与复制状态检查",
+    "工作负载索引建议评估（HypoPG 假想索引，不落盘）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Query a PostgreSQL database from Claude Code, Cursor, and any MCP client.** Read-only by default - writes opt in via a single env var - so an agent can't silently drop your tables. ／ - **`pg_index_advisor`** recommends indexes for a workload and keeps only the ones that measurably lower estimated cost. Candidates are costed with HypoPG hypothetical indexes, never created on disk, and the search knows that PostgreSQL 18's skip scan changes ",
+     "lines": [
+      10,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 数据库提供 MCP 协议接入、查询与诊断能力，是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Query a PostgreSQL database from Claude Code, Cursor, and any MCP client.** Read-only by default - writes opt in via a single env var - so an agent can't silently drop your tables. ／ - **`pg_index_advisor`** recommends indexes for a workload and keeps only the ones that measurably lower estimated cost. Candidates are costed with HypoPG hypothetical indexes, never created on disk, and the search knows that PostgreSQL 18's skip scan changes which multi-column indexes are useful. ／ - **Perf diagnostics the deprecated server never had** - `pg_top_queries` (from `pg_stat_statements`), `pg_seq_scan_tables`, `pg_unused_indexes`, `pg_table_bloat`, `pg_inspect_locks`, `pg_replication_status`. Answer \"why is this slow?\" in one tool call.",
+   "evidence_lines": [
+    10,
+    18,
+    50
+   ]
+  },
+  "fn": "YawLabs/postgres-mcp",
+  "sha": "3096df772220",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

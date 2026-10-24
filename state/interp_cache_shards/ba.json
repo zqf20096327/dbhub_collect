@@ -10272,5 +10272,140 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e5bd640b1f9a": {
+  "identity": {
+   "one_liner": "本地桌面 AI 聊天应用，集成 QQ、记忆与知识库",
+   "review": "Superstring 是运行在 Windows/macOS/Linux 的本地 AI 聊天工作区，用于网页对话和 QQ 群聊/私聊，提供长期记忆、知识库、MCP 工具扩展与技能管理；数据保存在本机，模型需接入 LM Studio 或 OpenAI 兼容服务，QQ 接入依赖外部 OneBot 11 实现（如 NapCat）。适合想在本地部署陪伴型聊天 Agent 的个人用户。当前为 alpha 版本，不提供云同步。",
+   "highlights": [
+    "支持网页对话、QQ 群聊与私聊的统一会话管理，含记忆与知识库授权",
+    "支持通过 stdio、HTTP、SSE 连接外部 MCP 服务，并内置 6 个系统技能",
+    "会话记录、配置与密钥保存在本机，无需云端账号，数据目录含数据库迁移机制"
+   ],
+   "use_cases": [
+    "本地部署个人陪伴/聊天 Agent",
+    "通过 OneBot 11（NapCat）接入 QQ 群聊与私聊自动化对话",
+    "导入 Markdown/文本资料构建本地知识库供 Agent 检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它是使用数据库保存本地会话与配置数据的桌面应用，未声称服务于某个数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 许可证",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本地 Agent 工作区，主要用于日常陪伴与聊天，支持网页对话、QQ 群聊与私聊、记忆、知识库、MCP 工具扩展与技能管理。 ／ Superstring 运行在本地，支持 Windows、macOS 与 Linux。会话记录、配置、长期记忆与密钥保存在本机，不提供云端数据同步服务，也不要求注册云端账号；调用已配置的模型服务商或工具服务时，仅按已授予的权限将必要的上下文与参数发送至对应端点。 ／ 升级前请完全退出程序并备份整个数据目录。切勿使用旧版程序打开已迁移的数据库。当前 main 分支源码数据库结构版本为 72（新增迁移 0055–0072；已发布的 v0.4.0-alpha-2 安装包仍为 54，未重新打包发布）。版本差异、数据位置与回退步骤见 UPGRADING.md。",
+   "evidence_lines": [
+    7,
+    20,
+    129
+   ]
+  },
+  "fn": "Verdspair/superstring",
+  "sha": "e5bd640b1f9a",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "76e2e2fad5ac": {
+  "identity": {
+   "one_liner": "TiDB 的 CRUD 封装库，提供统一 JSON 接口与多租户状态路由",
+   "review": "这是 CoCreate 生态的 TiDB CRUD 封装客户端库，把 NoSQL 风格的 JSON 操作（object.create/object.read 等）翻译为 MySQL 兼容查询在 TiDB 上执行，支持单次调用并行写入多个后端（如 MongoDB、Qdrant），并注入租户元数据实现多租户隔离。面向使用 CoCreate 协作生态并需要 TiDB 作为分布式 SQL 存储的开发者，通过 npm/yarn 安装。",
+   "highlights": [
+    "将 JSON CRUD 操作翻译为 MySQL 兼容查询，在 TiDB 分布式引擎上执行",
+    "支持单次 API 调用并行写入多个目标数据库（示例含 MongoDB、Qdrant、TiDB）",
+    "路由层自动注入租户元数据，实现多租户查询边界隔离"
+   ],
+   "use_cases": [
+    "协作应用中把 TiDB 作为实时分布式 SQL 存储后端",
+    "需要多租户隔离的关系型数据读写场景",
+    "事务数据同时写入 SQL、文档与向量库的多后端写入"
+   ],
+   "use_cases_extra": []
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A highly efficient, enterprise-grade TiDB distributed SQL database CRUD wrapper and state-routing backend client for the collaborative CoCreate ecosystem. This wrapper maps TiDB's advanced HTAP (Hybrid Transactional and Analytical Processing), cloud-native sca ／ For a complete guide and working integration examples, refer to the CoCreate TiDB Documentation. ／ * **Parallel Multi-Database Writing:** Write to many target databases simultaneously with a single API call. You can stream transactional data to MongoDB (for instant operational state), vectorize it into Qdrant (for real-time semantic search), and persist it in TiDB (for elastic distributed SQL scaling and real-time HTAP metrics) in perfect parallel harmony:",
+     "lines": [
+      3,
+      7,
+      16
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "* **Unified JSON Interface (MongoDB-like Syntax):** You don't need to write manual relational SQL strings or manage massive sharding keys. CoCreate translates standard NoSQL JSON CRUD operations (such as `object.create` or `object.read`) transparently into hig ／ TiDB is an advanced, open-source distributed SQL database designed for elastic scalability and multi-cloud readiness. Built with absolute MySQL compatibility, TiDB separates compute from storage, allowing you to scale out processing power and database capacity",
+     "lines": [
+      15,
+      24
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 CoCreate 生态服务的数据库封装库，而非直接面向最终用户的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A highly efficient, enterprise-grade TiDB distributed SQL database CRUD wrapper and state-routing backend client for the collaborative CoCreate ecosystem. This wrapper maps TiDB's advanced HTAP (Hybrid Transactional and Analytical Processing), cloud-native scale, and MySQL-compatible database engines into CoCreate's unified JSON interface. ／ * **Unified JSON Interface (MongoDB-like Syntax):** You don't need to write manual relational SQL strings or manage massive sharding keys. CoCreate translates standard NoSQL JSON CRUD operations (such as `object.create` or `object.read`) transparently into highly optimized MySQL-compatible queries executed over TiDB's distributed engine layer. ／ npm i @cocreate/tidb",
+   "evidence_lines": [
+    3,
+    15,
+    33
+   ]
+  },
+  "fn": "CoCreate-app/CoCreate-tidb",
+  "sha": "76e2e2fad5ac",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

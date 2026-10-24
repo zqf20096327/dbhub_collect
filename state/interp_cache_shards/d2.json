@@ -10290,5 +10290,88 @@
   "generated_at": "2026-10-22",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "395dd5f99c80": {
+  "identity": {
+   "one_liner": "可可豆溯源与商业化 MVP，FastAPI+React 模块单体应用",
+   "review": "这是一个为虚构可可协会开发的可可豆溯源、加工与销售管理系统（hackathon MVP），提供批次接收、库存变动账本、防超耗/幂等扣减、损耗与成本计算、审计锁定和离线 PWA 采集。面向操作员、管理员与买家三种角色，默认用 SQLite，也可经 Docker Compose 运行 PostgreSQL 16。",
+   "highlights": [
+    "批次接收、库存变动账本与同事务扣减，防止重复消耗",
+    "损耗（merma）计算与阈值告警、单位成本与毛利计算",
+    "支持 PWA 离线采集并在恢复网络后上传，审计表只增不可改"
+   ],
+   "use_cases": [
+    "农产品溯源与批次公开档案发布",
+    "带离线采集需求的库存与加工过程记录",
+    "演示/教学用途的全栈 FastAPI+React 模块单体项目"
+   ],
+   "cat": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backend:** Python con FastAPI, SQLAlchemy 2 y Alembic. SQLite por defecto; PostgreSQL 16 con Docker Compose. ／ Esto levanta PostgreSQL 16 en `127.0.0.1:5433` y la API en `localhost:8000`. El contenedor aplica las migraciones antes de iniciar la API. Los datos de PostgreSQL quedan en el volumen `postgres_data`.",
+     "lines": [
+      52,
+      138
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Backend:** Python con FastAPI, SQLAlchemy 2 y Alembic. SQLite por defecto; PostgreSQL 16 con Docker Compose. ／ |`DATABASE_URL`|`sqlite:///./cacao.db`|Base de datos. Para PostgreSQL: `postgresql+psycopg://usuario:clave@host:5432/base`|",
+     "lines": [
+      52,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 FastAPI/SQLAlchemy 开发、以 SQLite/PostgreSQL 存储业务数据的可可溯源应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Backend:** Python con FastAPI, SQLAlchemy 2 y Alembic. SQLite por defecto; PostgreSQL 16 con Docker Compose. ／ Esto levanta PostgreSQL 16 en `127.0.0.1:5433` y la API en `localhost:8000`. El contenedor aplica las migraciones antes de iniciar la API. Los datos de PostgreSQL quedan en el volumen `postgres_data`. ／ |`DATABASE_URL`|`sqlite:///./cacao.db`|Base de datos. Para PostgreSQL: `postgresql+psycopg://usuario:clave@host:5432/base`|",
+   "evidence_lines": [
+    52,
+    138,
+    150
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "trbureiyan/kallpa.cacao",
+  "sha": "395dd5f99c80",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

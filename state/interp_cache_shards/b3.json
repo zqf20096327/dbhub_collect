@@ -10903,5 +10903,149 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d7621ca6c559": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL/PostGIS 的移动对象时空轨迹数据库扩展",
+   "review": "MobilityDB 是一个开源的移动对象轨迹数据库管理系统，通过向 PostgreSQL 及其空间扩展 PostGIS 添加时间和时空对象类型来实现轨迹数据的存储与分析。面向处理 GPS 轨迹等移动数据的开发者与数据分析人员，需自行从源码构建（要求 PostgreSQL 16–19、PostGIS ≥ 3.0），也提供 Docker 镜像，安装后以 CREATE EXTENSION 方式在数据库中启用。",
+   "highlights": [
+    "向 PostgreSQL/PostGIS 添加时态与时空对象类型的支持",
+    "提供完整 SQL 接口，并兼容 PostgreSQL 生态",
+    "提供 Docker 镜像以及 Python 适配包 PyMEOS（基于 psycopg 和 asyncpg）"
+   ],
+   "use_cases": [
+    "GPS 轨迹等移动对象时空数据的存储与查询",
+    "基于 OGC Moving Features 标准的移动数据处理",
+    "配合 QGIS、deck.gl 等工具进行轨迹可视化分析"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "MobilityDB is a database management system for moving object geospatial trajectories, such as GPS traces. It adds support for temporal and spatio-temporal objects to the PostgreSQL database and its spatial extension PostGIS. ／ * PostgreSQL 16 to 19 (the build stops with an explicit error outside that range) ／ psql mobility -c \"CREATE EXTENSION MobilityDB\"",
+     "lines": [
+      10,
+      108,
+      163
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目实现为 PostgreSQL 扩展，为 PostgreSQL 提供时空轨迹数据管理能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码采用 PostgreSQL License，文档采用 CC BY-SA 3.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MobilityDB is a database management system for moving object geospatial trajectories, such as GPS traces. It adds support for temporal and spatio-temporal objects to the PostgreSQL database and its spatial extension PostGIS. ／ * PostgreSQL 16 to 19 (the build stops with an explicit error outside that range) ／ psql mobility -c \"CREATE EXTENSION MobilityDB\"",
+   "evidence_lines": [
+    10,
+    108,
+    163
+   ]
+  },
+  "fn": "MobilityDB/MobilityDB",
+  "sha": "d7621ca6c559",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f7eb65e70625": {
+  "identity": {
+   "one_liner": "开源自托管的笔记、文档与数据库一体化工作区应用",
+   "review": "Noema 是一个本地优先的自托管工作区，将文档、嵌套页面和数据库行统一为页面模型，支持多种数据库视图、AI 辅助、MCP 接口、实时协作与桌面版。面向团队与个人用户；服务端通过 Docker 运行 PostgreSQL 存储，桌面版则内嵌 PGlite 免去外部数据库，需以 MIT 许可自行部署。",
+   "highlights": [
+    "提供七种数据库视图（Table/Board/List/Gallery/Calendar/Timeline/Chart）及类型化属性、公式、关联、汇总",
+    "提供 MCP 端点（/api/mcp）含 43 个工具，并暴露带令牌鉴权的公共 REST API",
+    "支持 Docker 部署的 PostgreSQL 存储与内嵌 PGlite 的桌面安装两种运行方式"
+   ],
+   "use_cases": [
+    "团队或个人自托管搭建笔记与文档协作工作区",
+    "用数据库视图管理任务、项目与工单并跟踪周期",
+    "通过 API/MCP 将页面与数据库接入自动化或 AI 客户端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma 6 · PostgreSQL (docker container `noema-db`, port **5433**) · TipTap · Tauri 2 for the desktop app ／ shell around a **bundled Node runtime** and an **embedded PostgreSQL (PGlite)**.",
+     "lines": [
+      23,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用以 Docker 容器方式运行 PostgreSQL（L23）并在桌面版内嵌 PGlite 存储数据（L118），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma 6 · PostgreSQL (docker container `noema-db`, port **5433**) · TipTap · Tauri 2 for the desktop app ／ An original, open-source, self-hosted alternative to Notion — for teams and",
+   "evidence_lines": [
+    23,
+    5
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Guembri01/noema",
+  "sha": "f7eb65e70625",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

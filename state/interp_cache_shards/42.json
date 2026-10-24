@@ -9228,5 +9228,81 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a2bc53c03b2": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的开源数据库与工作区，写入经变更请求评审",
+   "review": "Busabase 是一个供 AI Agent 与人共享的开源工作区，包含类型化记录（Bases）、文档、技能、应用等节点，Agent 写入以带 diff 的 Change Request 形式提交并可配置人工审核。通过 Agent Skill、MCP、OpenAPI、CLI 和 SDK 连接 Claude Code、Codex、Cursor 等工具。底层运行在 Postgres 或内嵌 PGlite 上，支持 npm、Docker、桌面版本地部署，MIT 许可，官方建议仅用于可信本地或内网环境。",
+   "highlights": [
+    "提供 Bases、Docs、Skills、AirApps 等节点类型，Agent 写入以 Change Request 呈现字段级 diff 和历史",
+    "支持通过 Agent Skill、MCP、OpenAPI/CLI、TypeScript/Python SDK 连接各类 Agent",
+    "本地优先，内嵌 PGlite 运行，可切换外部 Postgres 与 S3 兼容存储"
+   ],
+   "use_cases": [
+    "多 Agent 共享项目任务、规范与发布记录的软件交付工作区",
+    "团队知识库与 CRM 等场景中让人审核 Agent 写入的结构化数据",
+    "标注与评审训练/评估数据集"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Busabase runs on Postgres (or embedded PGlite) itself; it is the workspace on top, not a replacement for your app's database.",
+     "lines": [
+      158
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Busabase 自身运行在 Postgres（或内嵌 PGlite）之上，是该数据库之上的工作区应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 开源版与托管 Busabase Cloud 双形态（open-core 式发行）",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Busabase runs on Postgres (or embedded PGlite) itself; it is the workspace on top, not a replacement for your app's database. ／ > Busabase is an open-source database and workspace for AI agents — agents and people share the same structured data, docs, skills, and apps, and writes that matter become reviewed, trusted records. ／ Open **http://localhost:15419/dashboard/local** — no database, account, or config. It starts with embedded PGlite, local file storage, and a demo workspace.",
+   "evidence_lines": [
+    158,
+    34,
+    46
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "busabase/busabase",
+  "sha": "9a2bc53c03b2",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

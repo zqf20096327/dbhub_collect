@@ -10437,5 +10437,150 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b1eecc41c46f": {
+  "identity": {
+   "one_liner": "本地优先求职情报平台，采集职位、解析简历并用本地 LLM 做 ATS 匹配",
+   "review": "Compust 是一个面向求职者的本地优先应用，整合职位采集（支持 Workday、Greenhouse 等招聘门户）、浏览器扩展捕获、基于 RenderCV/Typst 的简历编辑、六维度 ATS 检查、差距分析与 STAR 面试准备。数据默认存 SQLite（自动回退），也可连接本机 MySQL，并提供迁移引导。面向 Windows 终端用户，通过安装包/便携版分发，AI 部分默认走本地 Ollama，可选 Google Gemini。",
+   "highlights": [
+    "支持从 Workday、SmartRecruiters、Greenhouse、Ashby、Workable、Lever、Teamtailor 等招聘门户采集职位，并提供 Chrome/Fireword 浏览器扩展实时捕获",
+    "内置 AI 网关，默认使用本地 Ollama（100% 离线推理），可选配置 Google Gemini，且发送前自动本地脱敏 PII",
+    "数据默认以 SQLite 存储于用户目录，MySQL 不可用时自动回退，并提供旧库引导式迁移与自动时间戳备份"
+   ],
+   "use_cases": [
+    "求职者集中采集、跟踪与匹配职位",
+    "离线环境下进行简历 ATS 兼容检查与差距分析",
+    "基于本地 LLM 的 STAR 面试问答准备"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Automated SQLite Fallback**: If MySQL is not running on port 3306, Compust seamlessly initializes a standalone local SQLite database with an empty, ready-to-use schema.",
+     "lines": [
+      209
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Database (SQLite):** `%LOCALAPPDATA%\\Compust\\compust.db` (automatic default with zero configuration) ／ - **Automated SQLite Fallback**: If MySQL is not running on port 3306, Compust seamlessly initializes a standalone local SQLite database with an empty, ready-to-use schema.",
+     "lines": [
+      110,
+      209
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该平台以 SQLite 为默认数据库、MySQL 为可选后端存储自身业务数据，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database (SQLite):** `%LOCALAPPDATA%\\Compust\\compust.db` (automatic default with zero configuration) ／ **Compust** is an end-to-end career intelligence and job discovery platform built for transparency, accuracy, and performance. Unlike traditional job aggregators that suffer from stale listings, broken links, or generic indexing, Compust connects directly to verified employer career portals (Workday, SmartRecruiters, Greenhouse, Ashby, Workable, Lever, Teamtailor, custom career sites), ingests curated internships from community repositories, and empowers candidates to capture vacancies anywhere across the web through the **Compust Capture** browser extension.",
+   "evidence_lines": [
+    110,
+    125
+   ]
+  },
+  "fn": "putbullet/compust",
+  "sha": "b1eecc41c46f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "52b2582bb873": {
+  "identity": {
+   "one_liner": "微信本地聊天记录查询工具：解密 SQLCipher 加密 SQLite 库，提供 CLI 与 MCP 服务",
+   "review": "wxq 是一个纯 Python 命令行工具，用于解密并查询微信桌面端在本机存储的 SQLCipher 4 加密数据库：先扫描微信进程内存提取密钥，再以只读方式解密出消息、联系人、会话等数据，通过 11 个 CLI 子命令或 MCP 服务器的 8 个只读工具对外提供查询，可接入 Claude 等 AI Agent。数据全部在本地处理。要求 Python 3.10+ 且本机已登录过微信。",
+   "highlights": [
+    "支持 SQLCipher 4 解密（AES-256-CBC + HMAC-SHA512 校验、WAL 处理），密钥通过扫描微信进程内存自动提取",
+    "提供 11 个 CLI 子命令和包含 8 个只读工具的 MCP 服务器模式，输出 JSON 或文本",
+    "解密库基于 mtime 缓存增量刷新，支持时间范围与消息类型过滤"
+   ],
+   "use_cases": [
+    "在本地检索、导出和分析微信聊天记录（含群聊统计）",
+    "通过 MCP 服务器让 Claude 等 AI Agent 以只读方式查询微信消息",
+    "嵌入 Python agent 框架作为可 import 的库使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`wxq` reads the encrypted WeChat SQLite databases on your machine, decrypts them locally, and ／ WeChat stores its data in SQLCipher 4 encrypted SQLite databases. The decryption process:",
+     "lines": [
+      10,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用微信本地 SQLite 数据库作为数据源的聊天记录查询应用，SQLite 仅为其存储格式而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`wxq` reads the encrypted WeChat SQLite databases on your machine, decrypts them locally, and ／ - **MCP server mode** — expose WeChat data as 8 read-only tools for AI agents (Claude, etc.) ／ The MCP server exposes WeChat data as read-only tools, allowing AI agents to query your messages",
+   "evidence_lines": [
+    10,
+    22,
+    89
+   ]
+  },
+  "fn": "vpcoderli/wxq",
+  "sha": "52b2582bb873",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

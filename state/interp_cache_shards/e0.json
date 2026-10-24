@@ -10279,5 +10279,212 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f2830f19056e": {
+  "identity": {
+   "one_liner": "基于 Electron 的豆包多账号隔离登录与本地视频生成 API 服务",
+   "review": "这是一个 Electron 桌面应用，管理多个相互隔离的豆包登录账号，提供账号池调度、每日额度记账，并通过本地 HTTP API（默认 127.0.0.1:17888）向无限画布等工作流返回已验证的视频 MP4。数据（含 SQLite 账本、Cookie、登录状态）仅存本地用户目录。适合需要多账号管理豆包视频生成额度的个人用户；项目声明不提供自动注册或风控规避。",
+   "highlights": [
+    "提供多账号隔离登录，每个账号使用固定 persist: partition 保存 Cookie 与登录状态",
+    "提供本地 HTTP API 与 API Key 认证，支持任务提交、轮询查询和回调地址",
+    "实现本地每日额度账本、自动换号调度与幂等退款"
+   ],
+   "use_cases": [
+    "管理多个豆包账号并调度每日生成额度",
+    "为无限画布或本地工作流提供视频生成接口",
+    "在 macOS/Windows 本地持久化多账号登录环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite 数据库、账号 partition、Cookie、缓存、上传参考图和登录状态均保存在对应系统用户目录。 ／ - SQLite / better-sqlite3",
+     "lines": [
+      136,
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 保存本地额度账本与数据的桌面应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "豆包账号池是一款基于 Electron 的本地桌面工具，用于管理多个相互隔离的豆包登录环境，并通过本地 HTTP API 为无限画布或其他工作流提供视频生成能力。 ／ SQLite 数据库、账号 partition、Cookie、缓存、上传参考图和登录状态均保存在对应系统用户目录。 ／ - SQLite / better-sqlite3",
+   "evidence_lines": [
+    3,
+    136,
+    163
+   ]
+  },
+  "fn": "yaonieyo/doubao-account-pool",
+  "sha": "f2830f19056e",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "238bf55c57dc": {
+  "identity": {
+   "one_liner": "自托管分账应用，内置 PostgreSQL 单容器部署",
+   "review": "ShareTab 是一个自托管的共享开支分账应用，用于室友、朋友、旅行群组的账单拆分与结算，支持拍照后由 AI 提取收据明细并分摊税费。面向想自建 Splitwise 替代方案的用户，通过 Docker Compose 以单容器部署，内部捆绑 PostgreSQL 存储，无需外部数据库，另提供 Unraid 模板和 pg_dump 备份流程。",
+   "highlights": [
+    "单 Docker 容器部署，内置 PostgreSQL，无需外部数据库",
+    "支持 AI 收据扫描（可插拔 OpenAI、Claude、Ollama 等提供商）提取账单明细",
+    "支持多币种换算、OIDC/Google 登录、9 种界面语言及 PWA"
+   ],
+   "use_cases": [
+    "室友/朋友/旅行群组共享开支的记录、分摊与结算",
+    "拍照收据由 AI 自动提取明细并按比例分摊税费",
+    "自托管服务器（含 Unraid）上部署个人分账服务，无需管理外部数据库"
+   ],
+   "dbs": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo: ／ docker exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql ／ docker compose exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql",
+     "lines": [
+      103,
+      156,
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用以内置 PostgreSQL 存储数据，并提供 pg_dump 备份该数据库的命令。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed. The bundled Compose file builds the image from your checkout of this repo: ／ docker exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql",
+   "evidence_lines": [
+    103,
+    156
+   ]
+  },
+  "fn": "sw-carlos-cristobal/sharetab",
+  "sha": "238bf55c57dc",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "591bf0765351": {
+  "identity": {
+   "one_liner": "PostgreSQL 无代码工作站，本地 Web UI 浏览、编辑与查询数据库",
+   "review": "pglens 是一个面向 PostgreSQL 的本地 Web 管理客户端，提供表格浏览、行内编辑、导入导出与备份、ER 图与 schema diff 迁移、EXPLAIN 计划可视化等功能。操作通过服务端将结构化参数转为参数化 SQL 执行；AI 模式（Beta）支持以自然语言生成 SQL，可接入 Anthropic、OpenAI 或本地 Ollama。默认绑定 127.0.0.1 并使用认证令牌，README 明确面向本地开发使用，不应暴露端口到公网。",
+   "highlights": [
+    "支持多连接管理、数据网格浏览与行内编辑、CSV/JSON/SQL 导入导出及流式备份",
+    "提供 ER 图可视化、schema diff 生成前后向迁移、EXPLAIN 计划可视化和慢查询视图",
+    "AI 模式将自然语言转为 SQL，生成前经 EXPLAIN 校验，支持 Anthropic/OpenAI/Ollama"
+   ],
+   "use_cases": [
+    "开发者本地通过 Web UI 浏览、编辑和查询 PostgreSQL 数据",
+    "通过 schema diff 与迁移生成功能管理数据库结构变更",
+    "以自然语言生成并审查只读 SQL 查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A no-code PostgreSQL workstation. Browse, filter, edit, visualize, and query your ／ - **Connection URL**: Paste a standard PostgreSQL connection string (e.g., `postgresql://user:pass@localhost:5432/db`). ／ - **AI mode (Beta)** — ask a question in plain English and get PostgreSQL",
+     "lines": [
+      3,
+      100,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供浏览、编辑、迁移与运维管理的专用客户端工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A no-code PostgreSQL workstation. Browse, filter, edit, visualize, and query your ／  dry-run, schema export/import, streaming database backup with progress. ／ - **Schema diff & migrate** — compare two connections and get forward and",
+   "evidence_lines": [
+    3,
+    21,
+    25
+   ]
+  },
+  "fn": "tsvillain/pglens",
+  "sha": "591bf0765351",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

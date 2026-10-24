@@ -10464,5 +10464,95 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bde01245df7f": {
+  "identity": {
+   "one_liner": "用 Rust 而非 SQL 编写 SQLX 数据库迁移的 Rust 库",
+   "review": "sqlx_migrator 是一个 Rust 库，让开发者以 Rust 代码而非 SQL 字符串编写 sqlx 数据库迁移，支持 Postgres、SQLite、MySQL 三种数据库。提供 apply/revert/redo/list/repair/prune 等 CLI 子命令，含锁定、失败迁移跟踪、hooks 及从其他迁移工具同步的能力，通过 Cargo crates 引入并按数据库启用 feature。",
+   "highlights": [
+    "迁移可用 Rust 值表达，支持 parents、replaces、run_before",
+    "提供 CLI（apply、revert、redo、list、repair、prune）与 RunReport",
+    "包含锁定、失败迁移跟踪、hooks 及从其他迁移工具同步"
+   ],
+   "use_cases": [
+    "在 Rust 项目中用代码方式管理 sqlx 数据库 schema 迁移",
+    "需要迁移回滚、修复与失败跟踪的团队",
+    "从其他迁移工具迁移到 Rust 代码式迁移"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Supported databases: PostgreSQL, SQLite and MySQL. ／ Enable `postgres`, `mysql` or `sqlite` (and `json` for CLI JSON output):",
+     "lines": [
+      9,
+      21
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Supported databases: PostgreSQL, SQLite and MySQL. ／ Enable `postgres`, `mysql` or `sqlite` (and `json` for CLI JSON output):",
+     "lines": [
+      9,
+      21
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Supported databases: PostgreSQL, SQLite and MySQL. ／ Enable `postgres`, `mysql` or `sqlite` (and `json` for CLI JSON output):",
+     "lines": [
+      9,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库 schema 迁移服务的 Rust 库/CLI，不是使用数据库存储数据的应用。",
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可（README License 徽章）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust library for writing SQLX migrations using Rust instead of SQL. ／ Supported databases: PostgreSQL, SQLite and MySQL. ／ - CLI (`apply`, `revert`, `redo`, `list`, `repair`, `prune`) and `RunReport`.",
+   "evidence_lines": [
+    3,
+    9,
+    15
+   ]
+  },
+  "fn": "iamsauravsharma/sqlx_migrator",
+  "sha": "bde01245df7f",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

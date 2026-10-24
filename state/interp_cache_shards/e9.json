@@ -11825,5 +11825,73 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "afe4e9a9a483": {
+  "identity": {
+   "one_liner": "将 PostgreSQL 变更流式写入 Apache Iceberg 表的 Rust CDC 服务",
+   "review": "Flow 是一个用 Rust 编写的数据管道服务，先做初始快照 COPY，再通过逻辑复制持续把 PostgreSQL 的插入、更新、删除写入标准 Iceberg 表（Parquet + v2/v3 删除向量），并内置后台压实与事务日志恢复机制。面向需要把 PostgreSQL 数据落到数据湖供 Trino、Spark 等引擎查询的数据团队。目前为 beta，不支持分区表、跨表查询原子性和高可用。",
+   "highlights": [
+    "在同一 Rust 进程内实现初始 COPY、逻辑复制与后台数据压实",
+    "支持插入、更新、删除及主键变更的复制，无主键表支持 append-only 摄取",
+    "通过事务日志、持久化行索引与发布账本支持重放、重连和中断引导恢复"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 业务库变更持续同步到 Iceberg 数据湖表",
+    "通过兼容 Iceberg 的查询引擎（如 Trino、Spark）直接分析复制的表",
+    "使用 Docker Compose 本地演示环境搭建 PostgreSQL 到 Iceberg 的端到端管道"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Stream PostgreSQL changes into Apache Iceberg. Written in Rust. ／ Flow copies existing PostgreSQL rows, then continuously replicates inserts, ／ - PostgreSQL 14–18 sources, with inserts, updates, deletes and primary-key",
+     "lines": [
+      7,
+      21,
+      149
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 数据库提供 CDC 复制到 Iceberg 的管道服务，属于数据生态组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Stream PostgreSQL changes into Apache Iceberg. Written in Rust. ／ - **Postgres to Iceberg in one service.** Initial COPY and ongoing logical ／ - PostgreSQL 14–18 sources, with inserts, updates, deletes and primary-key",
+   "evidence_lines": [
+    7,
+    27,
+    149
+   ]
+  },
+  "fn": "EmbrasureAI/flow",
+  "sha": "afe4e9a9a483",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

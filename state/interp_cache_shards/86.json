@@ -10583,5 +10583,137 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd9a6d54cb7d": {
+  "identity": {
+   "one_liner": "Qt 示例代码集合，含 SQLite WAL 多线程操作示例",
+   "review": "该仓库提供一系列独立的 Qt/C++ 示例项目，覆盖自定义 UI 控件、数据可视化、日志、开机自启、HTTP/WebDAV 客户端和数据库操作等模块，供 Qt 开发者学习和在项目中复用。其中 SqliteWAL 示例实现了 SQLite WAL 模式下的多线程安全读写。内容以示例教学为主，非独立数据库工具。",
+   "highlights": [
+    "提供自定义控件、异步日志、HTTP/WebDAV 客户端等多个独立示例项目",
+    "SqliteWAL 示例实现 SQLite WAL 模式与线程安全写入",
+    "每个示例可独立运行，附 QtQuick 版本组件"
+   ],
+   "use_cases": [
+    "Qt 开发者学习控件与网络编程实现",
+    "参考 SQLite WAL 多线程读写方案",
+    "作为 Qt 项目的组件开发起点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 多线程 SQLite 数据库操作",
+     "lines": [
+      220
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是 Qt 示例集合，其中 SqliteWAL 示例使用 SQLite 进行数据库操作演示，不服务于数据库生态本身",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这个仓库包含了丰富的 Qt 示例项目，覆盖了从基础 UI 组件到高级网络编程和系统工具的各种功能。每个示例都是独立完整的，可以作为您 Qt 项目的参考或开发起点。 ／ ### SqliteWAL - SQLite 预写式日志 ／ - 多线程 SQLite 数据库操作",
+   "evidence_lines": [
+    8,
+    218,
+    220
+   ]
+  },
+  "fn": "RealChuan/Qt-Examples",
+  "sha": "dd9a6d54cb7d",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a45eba41bae": {
+  "identity": {
+   "one_liner": "基于 ESP8266 与 PHP/MySQL 服务器的物联网远程控制与监控系统",
+   "review": "这是一个客户端-服务器形态的物联网系统：ESP8266 设备定期轮询自建服务器，上报传感器数据并从 device_feature 表读取指令以控制继电器等负载，支持天气/逆变器数据记录、OTA 更新和 Meshtastic 集成。服务端用 PHP/MySQL/APCu 无框架实现，适合愿意自管服务器与固件、希望完全掌控代码的离网或家庭自动化使用者；需自行部署 PHP 服务器并创建 MySQL 数据库。",
+   "highlights": [
+    "ESP8266 客户端定期轮询服务器，写入传感器数据并获取引脚控制指令，可通过继电器远程控制负载",
+    "服务端以 PHP/MySQL/APCu 与 Chart.js 实现，无前后端框架，无需编译 JS/PHP",
+    "支持 OTA 固件更新、多租户模型、太阳能逆变器数据记录及 Meshtastic 集成（含 Python 代码）"
+   ],
+   "use_cases": [
+    "离网/偏远场所的设备远程控制与能源监测（如太阳能逆变器、供暖设备）",
+    "多传感器环境与气象数据记录与多时间尺度图表展示",
+    "自建多租户物联网后端，完全掌控数据与代码"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "But the main feature in this system is that it allows you to remotely control devices across the internet and also supports automation based on the values of sensors known to the central database. It does this using a server reachable via the internet running  ／ Note that all the databases referred to are MySQL databases that exist entirely on a server somewhere on the internet (or locally in your local network, if you choose to work that way). No databases are implemented on actual microcontrollers or in web browsers ／ The rest of the code needs to be placed on a server that can process PHP pages and communicate with a MySQL database that you create and control. (It's not an elegant language, but I like PHP because it runs pretty well and doesn't require compilation or setup",
+     "lines": [
+      11,
+      43,
+      72
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL"
+   ],
+   "eco": "app",
+   "eco_why": "系统通过 PHP 服务器将传感器数据写入并从 MySQL 数据库读取指令，MySQL 是其数据存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "But the main feature in this system is that it allows you to remotely control devices across the internet and also supports automation based on the values of sensors known to the central database. It does this using a server reachable via the internet running PHP/MySQL. There is no server-side or Javascript compilation and relatively few dependencies: PHP, MySQL, APCu, the Chart.js 3.7 graphing library, and a variety of Arduino sensor libraries, so this is not much trouble to get working on just about any server where you have a reasonable amount of control. (There is also some Python code to support a Meshtastic integration.) ／ A web-based tool (tool.php) allows you to edit the value column of a table called device_feature, where device_id is equal to ci[DEVICE_ID] specified in config.cpp in the Arduino-compiled code (the files in firmware/esp8266) uploaded to your ESP8266 device. Once installed on the ESP8266, it regularly polls the server (make sure to set host_get in config.cpp before compiling) to look for information in those device_feature records, and it automatically copies data from the value column to the pins they're connected to (which is specified in device_type_feature). These pins can then be used to turn on relays, which allow you to control potentially large loads in remote locations. I'm using this system to remotely turn on the boiler, hot water heater, a 240 volt EV outlet, a 240 volt dual-zone minisplit, and three different 120 volt outlets connected to electric space heaters in my off-grid cabin. Obviously, this involves working with dangerous voltage, so if you don't know anything about electrical wiring and basic safety with such things, you should instead use this to control low-voltage gizmos like battery-powered radios, toy motors, or LEDs.",
+   "evidence_lines": [
+    11,
+    13
+   ]
+  },
+  "fn": "judasgutenberg/Esp8266_RemoteControl",
+  "sha": "5a45eba41bae",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

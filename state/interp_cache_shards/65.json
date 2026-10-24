@@ -10006,5 +10006,85 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fb295a03df8e": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，单二进制，CLI+Web UI+AI agent skill，基于 SQLite",
+   "review": "Pad 是一个面向开发者和 AI 编码代理的项目管理/任务跟踪系统，提供 CLI、Web UI 和可安装到 Claude Code、Cursor 等 7+ 工具的 /pad 技能。数据默认存于本地 SQLite，也支持 Postgres 部署或云端托管；通过 collections、conventions、playbooks 组织工作项并记录代理操作归属。安装提供 Homebrew、源码构建（Go 1.26+/Node 22+）与 Docker。",
+   "highlights": [
+    "单二进制本地运行，CLI 与 Web UI（localhost:7777）共存，数据存于本地 SQLite",
+    "提供 /pad agent skill，支持 Claude Code、Cursor、Windsurf、Codex、OpenCode 等 7+ AI 工具，支持 MCP-only 代理",
+    "内置 Tasks/Ideas/Plans/Docs/Conventions/Playbooks 六类集合，支持自定义类型化字段与代理操作归属记录"
+   ],
+   "use_cases": [
+    "开发者在本机管理项目任务、计划与文档（local-first，支持离线）",
+    "让 AI 编码代理读取、创建、更新项目工作项并遵循项目约定与 playbook",
+    "多实例部署场景用 docker-compose 以 Postgres + Redis 运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup. The compose file runs the released image; set `PAD_VERSION` in `.env` to pin it.",
+     "lines": [
+      217
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud| ／ **Automatic pre-migration snapshot (SQLite).** Whenever a SQLite-backed instance has pending migrations to apply, Pad first copies the database file to `pad.db.pre-<version>` next to it. If an upgrade ever goes wrong, stop the server and copy that snapshot bac",
+     "lines": [
+      25,
+      56,
+      269
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Pad 使用 SQLite/Postgres 存储自身项目数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud|",
+   "evidence_lines": [
+    25,
+    56
+   ]
+  },
+  "fn": "PerpetualSoftware/pad",
+  "sha": "fb295a03df8e",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

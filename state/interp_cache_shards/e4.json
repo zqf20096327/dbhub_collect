@@ -10102,5 +10102,73 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eedbd0ceed0f": {
+  "identity": {
+   "one_liner": "dbt 增量构建插件，按代码哈希与上游数据版本决定复用或重建节点",
+   "review": "dbt-hodor 是一个运行在 dbt 内部的自托管插件，为每个选中节点计算逻辑哈希并检查上游数据版本，据此返回 reuse 或 build 决策并写入状态表；状态可存于 Databricks Delta 表、Postgres 或本地 DuckDB 文件。面向使用 dbt 的数据工程团队，提供 off/shadow/on 三种模式，失败时回退为普通构建。目前处于早期开发阶段，仅在 dbt-databricks 与 dbt-duckdb 适配器上验证。",
+   "highlights": [
+    "对每个节点生成逻辑哈希并检查上游数据版本，输出带原因码的 reuse/build 决策，状态记录写入状态表",
+    "状态存储支持 Databricks Delta 表、Postgres 数据库和本地 DuckDB 文件，无需外部服务",
+    "提供 off/shadow/on 三种模式，默认 shadow；任何决策失败均回退为普通 dbt 构建"
+   ],
+   "use_cases": [
+    "dbt 项目 Slim CI 中仅重建代码或上游数据变更的节点",
+    "在启用复用前以 shadow 模式观察并审查跳过决策",
+    "无 dbt 平台账户时自托管维护节点构建状态"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. ／ |`hodor_store`|`HODOR_STORE`|`delta`|`delta`, `duckdb`, `postgres` (alias `lakebase`)| ／ |`postgres` (alias `lakebase`)|`<hodor_schema>.<hodor_table>` in the Postgres database `hodor_database`|the schema and the table|",
+     "lines": [
+      15,
+      105,
+      121
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 dbt 构建流程服务的插件，Postgres/DuckDB/Delta 仅作为其状态存储后端，本身不使用数据库支撑业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dbt-hodor is a free, self-hosted alternative to dbt Labs' dbt State. It runs inside dbt. For every selected node it decides whether to reuse the object that is already in the warehouse or to build it again. A node is reused when its logic has not changed and its upstream data has not changed since the last build. ／ It needs no dbt platform account and sends nothing to external services. State lives in a Delta table on Databricks, in a Postgres database such as Databricks Lakebase, or in a local DuckDB file. ／ Supported: models materialized as `table`, `incremental` (append, merge, delete+insert, insert_overwrite, replace_where; an unset strategy counts as merge) and `view`, seeds, snapshots, and data tests (generic and singular), on `dbt-databricks` 1.12.7 and `dbt-duckdb`, with dbt-core 1.12.x.",
+   "evidence_lines": [
+    13,
+    15,
+    136
+   ]
+  },
+  "fn": "alaturqua/dbt-hodor",
+  "sha": "eedbd0ceed0f",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

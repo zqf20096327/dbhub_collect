@@ -10937,5 +10937,158 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "845c9038edaa": {
+  "identity": {
+   "one_liner": "SQL Server 监控工具，用于日常检查、性能监控与变更跟踪",
+   "review": "DBA Dash 是面向 SQL Server DBA 的监控工具，提供每日检查（备份、DBCC、磁盘、Agent 作业等）、性能采集、慢查询与死锁捕获、执行计划/死锁查看器、配置变更跟踪与告警。通过 Windows 上的代理采集数据，支持 Azure DB 与 RDS，还可经 SSMS 扩展查看计划，并提供 AI 分析选项。",
+   "highlights": [
+    "提供日常检查、性能计数、等待、阻塞、死锁收集与慢查询（Extended Events）捕获",
+    "包含查询计划/死锁查看器、计划对比，并随附 Visualizer 独立应用与 SSMS 扩展",
+    "支持配置变更跟踪、自定义采集与报表、通过 S3 bucket 监控隔离环境实例"
+   ],
+   "use_cases": [
+    "SQL Server 实例群的每日健康检查与集中性能监控",
+    "慢查询、阻塞与死锁的采集、签名归类与事后分析",
+    "跟踪实例配置（patching、trace flags、数据库选项等）的历史变更并配置告警"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "# DBA Dash - SQL Server Monitoring Tool ／ DBA Dash is a tool for SQL Server DBAs to assist with daily checks, performance monitoring and change tracking. You can be up and running within minutes and it will provide you with a wealth of information that will make your life as a DBA easier. ／ - SQL Server 2016 SP1 or later required for DBADashDB repository database. RDS & Azure DB is supported. ／ - SQL 2008-SQL 2022 supported for monitored instances - including Azure and RDS (SQL Server).",
+     "lines": [
+      1,
+      48,
+      128,
+      129
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为监控 SQL Server 实例而构建的采集/查看工具，而非使用数据库存储自身业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# DBA Dash - SQL Server Monitoring Tool ／ DBA Dash is a tool for SQL Server DBAs to assist with daily checks, performance monitoring and change tracking. You can be up and running within minutes and it will provide you with a wealth of information that will make your life as a DBA easier. ／ - Windows machine to run agent. Agent can monitor multiple SQL instances.",
+   "evidence_lines": [
+    1,
+    48,
+    130
+   ]
+  },
+  "fn": "trimble-oss/dba-dash",
+  "sha": "845c9038edaa",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7bec0d2d267c": {
+  "identity": {
+   "one_liner": "自托管 AI 代理运行时，基于 Claude Agent SDK 构建",
+   "review": "Nerve 是一个自托管的 AI 代理运行时，用于运行个人助理型与自主工作型代理，内置持久记忆（双层记忆与语义搜索）、定时任务、技能学习，并通过 Web UI、Telegram、Slunk 等…通过 Web UI、Telegram、Slack 及 cron 渠道交互。安装通过脚本克隆仓库后运行 nerve init 完成，需 Python 3.13+、Node.js 22.12+ 等依赖，可用 Docker 或单进程方式运行。",
+   "highlights": [
+    "提供双层持久记忆：MEMORY.md 热记忆加 SQLite 持久化的深层记忆与语义检索",
+    "支持个人助理与 Worker 两种代理模式，计划需人工审批后执行",
+    "提供 Web UI、Telegram Bot、Slack Bot 及 APScheduler 定时会话等多种交互渠道"
+   ],
+   "use_cases": [
+    "自托管长期记忆型个人助理",
+    "监控 CI/代码仓库并在人工审批后执行修复的自动化 worker",
+    "通过 cron 定时生成简报或报告的调度式 AI 会话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only.",
+     "lines": [
+      177
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "curl -fsSL https://raw.githubusercontent.com/ClickHouse/nerve/main/install.sh | bash ／ git clone https://github.com/ClickHouse/nerve.git && cd nerve",
+     "lines": [
+      20,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用 SQLite 持久化自身记忆数据的 AI 代理应用，不为数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Self-hosted AI agent runtime — personal assistants, autonomous workers, and everything in between. ／ Nerve is a self-hosted runtime for AI agents, built around the Claude Agent SDK. It gives agents everything they need to be useful long-term: persistent memory, scheduled execution, task management, learnable skills, and channels to reach you through — web UI, Telegram, Slack, or autonomous cron jobs. ／ Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only.",
+   "evidence_lines": [
+    5,
+    13,
+    177
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "ClickHouse/nerve",
+  "sha": "7bec0d2d267c",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

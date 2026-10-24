@@ -13185,5 +13185,148 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "67e5d7250b7d": {
+  "identity": {
+   "one_liner": "基于 Flask 和 SQLite 的个人博客应用",
+   "review": "Orange Blog 是一个使用 Python Flask 和 SQLite 构建的个人博客系统，提供文章与项目展示、后台编辑、读者账号、点赞评论、访问统计和 LaTeX 文档工作区等功能，适合希望自建个人博客与展示站点的开发者使用。它以单文件 SQLite 数据库存内容与用户数据，首次请求时自动初始化数据库；完整 LaTeX/PDF 功能需额外依赖 Pandoc、TeX 和 Linux 环境，部署配置需自行完成。",
+   "highlights": [
+    "提供文章/项目管理、后台编辑、读者账号与点赞评论功能",
+    "使用 SQLite 存储内容、设置、读者互动及会话数据",
+    "支持 Markdown 渲染与 LaTeX 转 HTML/PDF 编译（需额外依赖）"
+   ],
+   "use_cases": [
+    "搭建个人博客与项目展示站点",
+    "需要读者互动（账号、评论、点赞）的个人内容网站",
+    "本地试运行与内容管理练习环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Orange Blog 是基于 Flask 和 SQLite 的个人博客，包含文章与项目展示、后台编辑、读者账号、点赞评论、访问统计及 LaTeX 文档工作区。前端使用 Jinja 模板、CSS 和原生 JavaScript。 ／ - SQLite：内容、设置、读者互动及会话等数据。",
+     "lines": [
+      3,
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 SQLite 存储内容的博客应用本身，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码采用 MIT License（除第三方内容及衍生修改外）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Orange Blog 是基于 Flask 和 SQLite 的个人博客，包含文章与项目展示、后台编辑、读者账号、点赞评论、访问统计及 LaTeX 文档工作区。前端使用 Jinja 模板、CSS 和原生 JavaScript。 ／ - SQLite：内容、设置、读者互动及会话等数据。",
+   "evidence_lines": [
+    3,
+    10
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "chengzi101/orange-blog",
+  "sha": "67e5d7250b7d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bbf07d6ffea3": {
+  "identity": {
+   "one_liner": "本地优先的陪伴型桌面 Agent，内置长期记忆与主动触达机制",
+   "review": "小茉是一个 Windows 桌面陪伴型 AI Agent 应用，用户自带任意 OpenAI 兼容模型的 API Key 即可使用；它把对话内容整理成「关系事件」实现长期记忆，并可按可查、可取消的计划主动发起联系，还提供提醒、语音、图像生成等能力。聊天记录与密钥保存在本机 data/ 目录，后端用 Node.js 的 node:sqlite 存储运行时数据。适合想要私人陪伴/助理 Agent、关注数据留在本地的个人用户。",
+   "highlights": [
+    "提供长期记忆功能，将对话内容整理为「关系事件」，支持配置独立的记忆整理模型",
+    "支持基于可查、可取消的计划在用户未开口时主动发起联系，含夜间免打扰与每日上限",
+    "支持局域网/隧道手机访问、访问码门控，聊天记录、记忆与密钥均存于本机 data/ 目录"
+   ],
+   "use_cases": [
+    "个人陪伴型 AI 助理，需跨会话记住用户偏好与约定",
+    "到点提醒与主动性消息场景（如用药提醒）",
+    "希望聊天数据仅存本地、自带模型 API 的隐私敏感用户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Node.js ≥ 22.18**（用到 `node:sqlite` 与原生 TypeScript 类型擦除，后端脚本一律带 `--experimental-sqlite`）",
+     "lines": [
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明运行时聊天记录、记忆、媒体、密钥存于本机 data/ 目录，后端使用 node:sqlite，是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Node.js ≥ 22.18**（用到 `node:sqlite` 与原生 TypeScript 类型擦除，后端脚本一律带 `--experimental-sqlite`） ／ data/           运行时数据（聊天记录 / 记忆 / 媒体 / 密钥），不入库 ／ 不会。聊天记录、记忆、媒体都保存在你电脑上的 `data/` 目录里，只有调用模型时把当前对话发给你配置的服务商。",
+   "evidence_lines": [
+    121,
+    143,
+    91
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "dmw-net/xiaomoAgent",
+  "sha": "bbf07d6ffea3",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10345,5 +10345,96 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8cdf603f0610": {
+  "identity": {
+   "one_liner": "Rust 后端框架，脚手架生成 CRUD 与 SQL 迁移",
+   "review": "Gize 是一个面向 Rust 的后端开发框架，通过 CLI 命令脚手架项目并生成完整的 CRUD 资源（Axum handler、SQLx 查询、SQL 迁移），内置认证、OpenAPI、React 管理界面和 WebSocket。生成的代码运行在 PostgreSQL、MySQL 或 SQLite 上。适合希望快速搭建生产形态 API 的 Rust 开发者；当前为 1.0.0-rc.2 发布候选，要求 Rust 1.85+。",
+   "highlights": [
+    "提供 gize new/make crud/migrate 等命令，生成含 model、migration、handler、routes 的完整 CRUD 代码",
+    "生成应用支持 PostgreSQL、MySQL、SQLite 三种数据库，并内置 Argon2id + JWT 认证",
+    "支持生成 OpenAPI 文档、React 管理 SPA 和 WebSocket 端点"
+   ],
+   "use_cases": [
+    "从零快速搭建带数据库的 Rust CRUD API 项目",
+    "为数据模型生成 SQL 迁移并通过 gize migrate 应用",
+    "生成带认证的管理后台与 API 文档"
+   ],
+   "ai": false
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`gize migrate`|✅|Apply / inspect migrations (Postgres, SQLite or MySQL)| ／ Generated apps run on **PostgreSQL**, **MySQL** or **SQLite**, with paginated list routes, ／ - **PostgreSQL** for running generated apps (`gize migrate` / `gize serve`).",
+     "lines": [
+      67,
+      74,
+      102
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`gize migrate`|✅|Apply / inspect migrations (Postgres, SQLite or MySQL)| ／ Generated apps run on **PostgreSQL**, **MySQL** or **SQLite**, with paginated list routes, ／ |`--database <db>`|Target database: `postgres` (default), `sqlite` or `mysql` (ADR-015).|",
+     "lines": [
+      67,
+      74,
+      155
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`gize migrate`|✅|Apply / inspect migrations (Postgres, SQLite or MySQL)| ／ Generated apps run on **PostgreSQL**, **MySQL** or **SQLite**, with paginated list routes, ／ |`--database <db>`|Target database: `postgres` (default), `sqlite` or `mysql` (ADR-015).|",
+     "lines": [
+      67,
+      74,
+      155
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该框架为使用数据库的应用生成代码，其 migrate/createadmin 等命令直接操作 PostgreSQL/MySQL/SQLite，属于服务数据库开发的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Gize lets you go from an empty directory to a running, production-shaped CRUD API in ／ |`gize migrate`|✅|Apply / inspect migrations (Postgres, SQLite or MySQL)| ／ - **PostgreSQL** for running generated apps (`gize migrate` / `gize serve`).",
+   "evidence_lines": [
+    14,
+    67,
+    102
+   ]
+  },
+  "fn": "robertolima-dev/gize",
+  "sha": "8cdf603f0610",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

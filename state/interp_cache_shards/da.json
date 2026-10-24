@@ -9365,5 +9365,243 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "14af116155bf": {
+  "identity": {
+   "one_liner": "将 Claude Code 会话历史索引为本地可检索知识库的 MCP 服务器",
+   "review": "该项目读取 ~/.claude/projects 下的会话转录，用 Python 标准库与 SQLite FTS5 构建全文索引，向 Claude 提供 13 个 MCP 检索工具，并附带凭据脱敏与 vault 存取机制。面向 Claude Code 用户；仅支持 Claude Code 转录，代码索引仅覆盖 Python/JS/TS，且索引含敏感凭据需注意目录权限。",
+   "highlights": [
+    "提供 13 个 MCP 工具，支持会话全文搜索、时间线重建、工具调用检索与凭据查询",
+    "纯 Python 标准库实现，无第三方依赖、无 embeddings、无外部 API 调用",
+    "内置凭据脱敏写入全文索引，明文凭据存于 0600 权限的 vault.db"
+   ],
+   "use_cases": [
+    "跨项目检索历史会话中的决策、命令与实现代码",
+    "查询历史会话中出现过的环境变量与凭据候选值",
+    "识别重复实现并声明规范实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "redaction. The index directory is restricted to mode 0700; every generated SQLite ／ - **Python 3.10+**, with FTS5 compiled into the bundled sqlite3. The system Python on macOS",
+     "lines": [
+      46,
+      196
+     ]
+    }
+   ],
+   "eco": "app",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "eco_why": "项目以 SQLite 作为自身索引存储并面向 Claude Code 会话检索，不服务于数据库生态。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This indexes all of it and hands Claude 13 MCP tools to search it. You just ask normally. ／ Pure Python standard library. No third-party dependencies, no embeddings, no API calls, ／ redaction. The index directory is restricted to mode 0700; every generated SQLite",
+   "evidence_lines": [
+    14,
+    20,
+    46
+   ]
+  },
+  "fn": "nameforjt-afk/session-knowledge",
+  "sha": "14af116155bf",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "66a48ccf69b7": {
+  "identity": {
+   "one_liner": "SQLite 软件与服务资源的 awesome 清单",
+   "review": "该仓库是一份围绕 SQLite 的资源目录，收录基于 SQLite 构建的应用、GUI/CLI 工具、扩展、可扩展 SQLite 方案及相关文章链接，用于帮助开发者查找 SQLite 生态中的软件与资料。本身不提供可安装的软件，仅以列表形式组织链接与条目。",
+   "highlights": [
+    "收录 SQLite 相关应用、工具、扩展、网站与可扩展部署方案等分类条目",
+    "包含大量按日期整理的 SQLite 技术文章链接",
+    "覆盖从 GUI 浏览器、向量搜索扩展到 Raft 高可用方案的多类资源"
+   ],
+   "use_cases": [
+    "为项目查找 SQLite 相关工具、扩展或 GUI 客户端",
+    "检索 SQLite 生产实践与性能优化的文章资料",
+    "了解基于 SQLite 构建的应用与高可用方案"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "# SQLite ／ - Many Small Queries Are Efficient In SQLite ／ - SQLite is a Recommended Storage Format for datasets according to the US Library of Congress (https://www.sqlite.org/locrsf.html)",
+     "lines": [
+      1,
+      7,
+      9
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Cross-platform SQL editor and database GUI for SQLite, PostgreSQL, and more. ／ - omni_sqlite - Omnigres extension that embeds full SQLite databases as a first-class data type inside PostgreSQL. ／ - PgFreshCache - Read-only caching layer that mirrors selected PostgreSQL tables into a local SQLite database via logical replication.",
+     "lines": [
+      39,
+      48,
+      49
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- sqlit - User-friendly Python TUI for SQL databases, supporting SQLite, SQL Server, MySQL, PostgreSQL, Turso, and more.",
+     "lines": [
+      53
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- GizmoSQL - Arrow Flight SQL server with TLS/auth that can run on top of SQLite (or DuckDB), exposing JDBC/ADBC access via Docker or binary. ／ - sqlit - User-friendly Python TUI for SQL databases, supporting SQLite, SQL Server, MySQL, PostgreSQL, Turso, and more.",
+     "lines": [
+      42,
+      53
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQLite 生态组织的资源目录，服务 SQLite 用户而非仅使用 SQLite 的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# SQLite ／ ## Tools ／ ## Extensions",
+   "evidence_lines": [
+    1,
+    35,
+    62
+   ]
+  },
+  "fn": "Airsequel/awesome-sqlite",
+  "sha": "66a48ccf69b7",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4ee617a89308": {
+  "identity": {
+   "one_liner": "rails new 风格的 Go CLI，生成基于 Postgres 的 API 服务骨架",
+   "review": "Bogie 是一个面向 Rails 团队的命令行脚手架，用于生成 API-only、仅支持 Postgres 的 Go 服务，组合 Gin、sqlc、goose、River 和 Kamal，并提供类似 rails g 的生成器，写入代码时同步完成注册。生成的应用不依赖 Bogie 本身，删除工具后应用仍可运行。仅支持 Postgres 和 Gin，SQLite 被明确排除。",
+   "highlights": [
+    "提供 rails new/rails g 风格的 new、generate、destroy、doctor 命令，生成并注册 model、scaffold、controller、job、config 等代码",
+    "生成的服务基于 Gin + sqlc + pgx/v5 + goose，后台任务使用 River（Postgres-backed），部署配置使用 Kamal 2 与 Dockerfile",
+    "支持生成加密 credentials 文件、测试数据库隔离配置（BLOG_TEST_DATABASE_URL）与本地 bin/ci 流水线"
+   ],
+   "use_cases": [
+    "Rails 团队需要在 Rails 应用旁新增一个 Go 编写的 API 服务（如 webhook 接收器、socket 网关、队列 worker）",
+    "希望用约定式生成器快速搭建带迁移、查询和后台任务的 Go API 项目",
+    "需要生成器写入代码时自动完成注册（Go 无 autoload）并保持工具与应用解耦"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ You need **Docker with Compose v2** (or your own Postgres, see ／ requires it. The generated app runs its Postgres in Compose on port 5440, so it",
+     "lines": [
+      6,
+      47,
+      50
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite is deliberately out until River's SQLite driver is stable",
+     "lines": [
+      213
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Bogie 是为生成基于 Postgres 的 Go 服务服务的脚手架 CLI，本身不是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ out of Gin, sqlc, goose, River and Kamal, with generators that also wire the code in. ／ - **Not a framework.** No `bogie.Application`, no base classes, no DSL.",
+   "evidence_lines": [
+    6,
+    7,
+    209
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bogie-go/bogie",
+  "sha": "4ee617a89308",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

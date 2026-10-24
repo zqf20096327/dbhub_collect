@@ -11056,5 +11056,73 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bb293ef9b50a": {
+  "identity": {
+   "one_liner": "本地运行的多智能体AI代理工作区，基于Bun/React/SQLite构建",
+   "review": "Jelly 是一个本地优先的多智能体系统，用户可在自有硬件上创建和运行多个 AI 代理，用于托管个人业务任务。代理具备 shell 工具、子代理、MCP 连接和本地 Chrome 浏览器控制能力，支持 sudo 权限申请与私有浏览器登录交接。需 Bun 1.3.9+ 与 Node.js 24+，并要求 ChatGPT 订阅或 OpenAI API key；README 明确其非沙箱环境，建议仅通过回环或 Tailscale 访问。",
+   "highlights": [
+    "支持本地或 Tailscale 网络访问 Web UI，可从手机或笔记本使用",
+    "代理可控制本地 Chrome 浏览器、执行 shell 命令并通过私有认证卡片申请 sudo 权限",
+    "内置子代理进度卡片、apply_patch 多文件补丁工具及 MCP 连接支持"
+   ],
+   "use_cases": [
+    "在单台 VM 或个人硬件上运行 AI 代理托管日常业务任务",
+    "通过 Tailscale 在移动设备上以近似原生应用的界面管理代理",
+    "需要代理操作本地浏览器（如已登录网站）的自动化场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Built with Bun, React, SQLite, and the Pi agent harness.",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目用 SQLite 构建，SQLite 是其数据存储组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Jelly is a local multi-bot agent system** ／ - Built with Bun, React, SQLite, and the Pi agent harness. ／ Requires Bun **1.3.9+** and **Node.js 24+** (for subagent runners and CLI dependencies). Connected Chrome supports Linux and macOS; sudo handoffs require Linux.",
+   "evidence_lines": [
+    3,
+    22,
+    74
+   ]
+  },
+  "fn": "dctanner/jelly",
+  "sha": "bb293ef9b50a",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

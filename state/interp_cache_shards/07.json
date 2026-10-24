@@ -10533,5 +10533,142 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "41ee5ebdf2d4": {
+  "identity": {
+   "one_liner": "本地记账桌面应用，用 Python/CustomTkinter 开发并以 SQLite 存储账本",
+   "review": "一款面向个人用户的 Windows 桌面记账软件，提供收支记录、CSV/XLSX 账单导入、标签管理、月度统计柱状图和 zip 备份，数据保存在本地 AppData 目录的 SQLite 中，并内置后台检查更新与升级前备份回退机制。README 列出导入性能与对账未完成等已知问题。",
+   "highlights": [
+    "支持 CSV/XLSX 账单导入预览、批次撤销与 CSV 导出",
+    "账本与偏好存储于本地 SQLite，并提供一键 zip 备份与升级前自动备份回退",
+    "按月统计收支并生成可视化柱状图，支持标签聚合"
+   ],
+   "use_cases": [
+    "个人日常收支记录与月度可视化统计",
+    "导入外部 CSV/XLSX 账单并分类打标签管理",
+    "本地备份账本数据文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite (数据库)",
+     "lines": [
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储账本数据的桌面记账应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# AccountKeeper 本地记账软件 ／ - SQLite (数据库) ／ 账本和偏好保存在 Windows 用户本地数据目录（AppData）中，通常位于：",
+   "evidence_lines": [
+    3,
+    82,
+    59
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SpringU26325/AcountKeeper",
+  "sha": "41ee5ebdf2d4",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "286ee2cf484d": {
+  "identity": {
+   "one_liner": "自托管气象站展示面板，基于 Laravel+SQLite 存储观测数据",
+   "review": "这是一个面向 Ambient Weather 气象站用户的自托管天气展示应用，采集站内观测和 Open-Meteo 预报写入本地 SQLite，由 Laravel 调度器每分钟轮询采集，渲染雷达图、趋势和可自定义的磁贴仪表盘，支持 PWA。适合拥有 Ambient Weather 设备并想在自己服务器上展示家庭天气数据的用户；限制为单站点安装、仅英制单位。",
+   "highlights": [
+    "通过 Ambient Weather API 采集观测数据并存入本地 SQLite，采集与浏览器展示独立运行",
+    "提供可自定义的磁贴布局编辑器、季节主题、QUIP 消息库，支持响应式移动端与 PWA 安装",
+    "内置 /admin 认证管理界面，含数据源健康诊断、调度心跳与历史保留策略"
+   ],
+   "use_cases": [
+    "用 Raspberry Pi 或其他屏幕搭建家庭/厨房天气展示面板",
+    "自托管部署并接入自己的 Ambient Weather 气象站",
+    "本地演示探索：通过 demo 命令写入合成数据无需真实气象站账户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validati ／ You need **PHP 8.3+**, **Composer 2**, the PHP extensions required by the locked dependencies, and **PDO SQLite / SQLite3**. The PHP runtime must also support Laravel's usual extensions, including mbstring, DOM/XML, cURL, and OpenSSL. Composer validates depend",
+     "lines": [
+      61,
+      68,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用 SQLite 存储观测与预报数据（L61、L68），SQLite 是其存储组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "                                                                      ├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validation during development and CI.",
+   "evidence_lines": [
+    61,
+    68
+   ]
+  },
+  "fn": "thenumber3/midway-weather",
+  "sha": "286ee2cf484d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

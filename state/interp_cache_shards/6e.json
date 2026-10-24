@@ -8989,5 +8989,75 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c5960c71c490": {
+  "identity": {
+   "one_liner": "Btrieve v5/v6 的 WBTRV32.DLL 替换驱动，将数据转存 SQLite",
+   "review": "这是一个开源的 Pervasive Btrieve WBTRV32.DLL 替换库，通过模拟原 DLL 接口，让依赖 Btrieve v5/v6 的旧应用在无需修改代码的情况下改用 SQLite 存储数据；首次访问时自动将 .DAT 文件转换为 SQLite 数据库，原文件保留不动。适用于维护遗留 Btrieve 应用的开发者与运维人员，支持 Windows/Linux/macOS，用 Bazel 构建，提供 NuGet 包。",
+   "highlights": [
+    "模拟原 WBTRV32.DLL 接口，应用无需修改代码即可切换到 SQLite 后端",
+    "首次访问时自动将 Btrieve .DAT 文件转换为 SQLite 数据库，原文件保留不修改",
+    "支持 Btrieve v5/v6，提供 Windows/Linux/macOS 构建与 NuGet 包，包含单元测试与日志诊断"
+   ],
+   "use_cases": [
+    "让依赖 Btrieve v5/v6 的遗留应用在无源码修改的情况下迁移到 SQLite 存储",
+    "将原绑定 Windows 的 Btrieve 应用运行到 Linux/macOS 等 SQLite 支持的平台",
+    "作为 The Major BBS 仿真项目等场景的 Btrieve 接口替代层"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# WBTRV32.DLL: A Drop-in Replacement for Pervasive Btrieve Using SQLite ／ Instead of interfacing directly with Btrieve `.DAT` files, this replacement DLL converts the data to a SQLite backend. This approach offers several advantages: ／ - **SQLite Backend**: Converts Btrieve `.DAT` files to a SQLite database, leveraging a modern and widely supported database engine. ／  - The DLL automatically converts existing Btrieve `.DAT` files to a SQLite database on first access.",
+     "lines": [
+      1,
+      7,
+      18,
+      52
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是把 Btrieve 数据转换为 SQLite 后端的替换驱动，为数据库生态服务的组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**WBTRV32.DLL** is an open-source, drop-in replacement for the Pervasive Btrieve `WBTRV32.DLL` library, providing a modern solution for legacy applications that rely on antiquated versions of Btrieve (versions 5 and 6). By emulating the exact DLL signature of the original Btrieve library, this replacement allows existing applications to operate without modification. ／ Instead of interfacing directly with Btrieve `.DAT` files, this replacement DLL converts the data to a SQLite backend. This approach offers several advantages: ／ - **SQLite Backend**: Converts Btrieve `.DAT` files to a SQLite database, leveraging a modern and widely supported database engine.",
+   "evidence_lines": [
+    5,
+    7,
+    18
+   ]
+  },
+  "fn": "mbbsemu/wbtrv32",
+  "sha": "c5960c71c490",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

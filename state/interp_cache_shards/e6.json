@@ -10196,5 +10196,185 @@
   "generated_at": "2026-10-21",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b55a665d4327": {
+  "identity": {
+   "one_liner": "通过 Proton Bridge 提供 Proton Mail 的 MCP 服务器与 CLI",
+   "review": "该项目在 Proton Mail Bridge 之上提供一个 MCP 服务器和全功能 CLI，让 Claude Desktop、Claude Code 等 MCP 客户端或脚本读取、搜索、起草和发送 Proton 邮件，共 116 个工具，并支持 read-only、drafts 等安全模式。本地索引用 SQLite 存储（better-sqlite3），需先安装并登录 Proton Bridge，支持 npm、Homebrew、mcpb 包和源码安装。",
+   "highlights": [
+    "提供 116 个 MCP 工具，并附对应 CLI 命令，用于邮件读取、搜索、起草、发送和文件夹管理",
+    "支持 read-only、drafts 等模式预设、发送门控和破坏性操作确认",
+    "基于本地 SQLite 索引实现全文本搜索，通过本地 IMAP (127.0.0.1) 与 Bridge 通信"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 或 Claude Code 中用自然语言管理 Proton Mail 收件箱",
+    "用 CLI 脚本、cron 和管道自动化处理邮件（无需 Claude）",
+    "多 Proton 账户/地址的本地隔离索引与草稿管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ |`search_indexed_emails` (local SQLite index)|~10 ms| ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      120,
+      546,
+      616
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储本地邮件索引数据，自身是邮件客户端/MCP 应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken. ／ Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 116 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ **How this relates to Proton Bridge.** This is a layer on top of Proton Mail Bridge, not a replacement for it. Bridge is Proton's official, local IMAP/SMTP gateway and the only supported way to reach a Proton mailbox from other software; this project talks to it. Bridge's own `--cli` mode manages Bridge itself (signing in, account details and the Bridge password, ports and other settings), it is not a mail client. Proton does not publish a terminal mail client, so reading, searching, drafting and sending from Claude or a script is what this adds on top, together with the safety controls above. Bridge has to be running and signed in.",
+   "evidence_lines": [
+    120,
+    21,
+    56
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "b55a665d4327",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4ffff894dde4": {
+  "identity": {
+   "one_liner": "将 SQL 定义发布为受治理 MCP 工具的 .NET 执行边界服务",
+   "review": "hs-sql-agent 是一个 .NET 实现的 SQL-to-MCP 工具工厂：管理员在 Admin UI 中定义参数化 SQL 模板，发布为带 JSON schema 的 MCP 工具供 AI Agent 调用，所有执行经过 fail-closed SQL 编译器、按 key 的库/表白名单、运行时限、审计日志和 DML 审批流程。支持作为独立服务运行或嵌入 ASP.NET Core 应用，面向需要让 AI Agent 受控访问数据库的团队。",
+   "highlights": [
+    "支持将工程师定义的 SQL 模板发布为带 JSON 输入 schema 的 MCP 工具，含草稿/测试/发布/回滚生命周期",
+    "所有 SQL 执行经过 fail-closed AST 编译器、按 key 的数据库/表策略、速率与执行限制及审计记录",
+    "DML 操作提供影响预览、一次性审批挑战、提交时行集重验证的审批协议"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供受治理的数据库查询与 DML 执行入口",
+    "在企业内对 LLM 可执行的 SQL 范围、表和速率施加策略控制",
+    "将参数化 SQL 工具嵌入现有 ASP.NET Core 应用而无需为每个操作重写代码"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      48
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      48
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      48
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      48
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "It supports **PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird** and can run as the complete first-party server with its Admin UI or be embedded into an existing ASP.NET Core application. ／ - **Six database providers** — PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and Firebird with provider-aware validation and lowering.",
+     "lines": [
+      13,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位其为 SQL-to-MCP 工具工厂与受治理 SQL 执行边界，为数据库访问提供服务而非使用数据库存数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`hs-sql-agent` is an open-source **SQL-to-MCP tool factory and governed SQL execution boundary**. Define parameterized SQL in the Admin UI, publish it as a typed MCP tool, and let AI agents supply only the arguments — without writing a new C# method or redeploying your MCP server for every database operation. ／ Every published tool still runs through the same fail-closed SQL compiler, per-key database/table policy, runtime limits, audit trail, and Safe DML approval controls. Raw SQL tools remain available for cases where an agent genuinely needs flexible ad-hoc querying. ／ - **Governed access** — Per-key database binding, table whitelisting, rate limits, execution limits, roles, policies, and audit records.",
+   "evidence_lines": [
+    9,
+    11,
+    50
+   ]
+  },
+  "fn": "tse-wei-chen/hs-sql-agent",
+  "sha": "4ffff894dde4",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11352,5 +11352,101 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1867d418a770": {
+  "identity": {
+   "one_liner": "3D 地球仪世界事件图谱，含 Parquet 数据管道",
+   "review": "一个交互式 3D 世界事件图谱应用，从 GDELT、RSS、Reddit 等多源采集新闻，经 bronze/silver/gold 分层的 Parquet 数据管道处理后在 React+WebGL 地球仪上展示。读者账号默认用 SQLite 存储（SQLite FTS5 做全文检索），可切换到 TiDB/MySQL 用于 Render Free 部署；需 Python 3.12+ 与 Node 20+。",
+   "highlights": [
+    "提供 bronze/silver/gold 分层、按日期分区的 Parquet 数据湖，并镜像到 Hugging Face 仓库",
+    "提供 FastAPI 只读 API，含事件、检索、关系弧、引用等端点及 SSE 更新通知",
+    "支持可选读者账号体系（Argon2id、TOTF 两步验证、Google OIDC），账号后端默认 SQLite，可切换 TiDB/MySQL"
+   ],
+   "use_cases": [
+    "多来源世界事件的地图化浏览与国家简报阅读",
+    "需要可复现 medallion 数据管道的新闻媒体分析场景",
+    "带读者账号与全文检索的新闻图谱部署（本地或 Render）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Auth works out of the box in development. Open `http://127.0.0.1:8000/signup`; with no mail provider configured, the browser shows the local confirmation link, and the same message is written to the `app.auth.email.dev` log. Accounts are stored in `data/auth/` ／ |`AUTH_DB_BACKEND`|Optional|`sqlite` locally; `mysql` for TiDB Cloud Starter / MySQL 8| ／ |`AUTH_DB_HOST`, `AUTH_DB_PORT`, `AUTH_DB_NAME`, `AUTH_DB_USER`, `AUTH_DB_PASSWORD`|For MySQL auth|TiDB **Connect** values; password stays server-side.|",
+     "lines": [
+      62,
+      113,
+      114
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Bounded article crawler + full-text index** — visits article pages belonging to configured outlets (including news sitemaps), honours robots.txt and per-host pacing, skips paywalled publishers, and caps each run at 120 URLs / 180 seconds. Extracted text im ／ |`AUTH_DB_BACKEND`|Optional|`sqlite` locally; `mysql` for TiDB Cloud Starter / MySQL 8| ／ Reader accounts are separate from pipeline data. SQLite is the local default and needs `data/auth/` on a persistent volume. For Render Free, set `AUTH_DB_BACKEND=mysql` with TiDB Cloud Starter credentials so accounts and watchlines survive restarts without a p",
+     "lines": [
+      16,
+      113,
+      157
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Auth works out of the box in development. Open `http://127.0.0.1:8000/signup`; with no mail provider configured, the browser shows the local confirmation link, and the same message is written to the `app.auth.email.dev` log. Accounts are stored in `data/auth/` ／ |`AUTH_DB_BACKEND`|Optional|`sqlite` locally; `mysql` for TiDB Cloud Starter / MySQL 8| ／ |`AUTH_DB_HOST`, `AUTH_DB_PORT`, `AUTH_DB_NAME`, `AUTH_DB_USER`, `AUTH_DB_PASSWORD`|For MySQL auth|TiDB **Connect** values; password stays server-side.| ／ Reader accounts are separate from pipeline data. SQLite is the local default and needs `data/auth/` on a persistent volume. For Render Free, set `AUTH_DB_BACKEND=mysql` with TiDB Cloud Starter credentials so accounts and watchlines survive restarts without a p",
+     "lines": [
+      62,
+      113,
+      114,
+      157
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是用 SQLite/TiDB/MySQL 存储账号数据、用 Parquet 存储主数据的新闻图谱应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Bounded article crawler + full-text index** — visits article pages belonging to configured outlets (including news sitemaps), honours robots.txt and per-host pacing, skips paywalled publishers, and caps each run at 120 URLs / 180 seconds. Extracted text improves clustering, classification, summaries and search. A SQLite FTS5 index powers body-text search; the UI returns summaries and source links, never article bodies.. ／ Auth works out of the box in development. Open `http://127.0.0.1:8000/signup`; with no mail provider configured, the browser shows the local confirmation link, and the same message is written to the `app.auth.email.dev` log. Accounts are stored in `data/auth/` by default; set `AUTH_DB_BACKEND=mysql` to use TiDB/MySQL for a persistent Render Free deployment. ／ |`AUTH_DB_BACKEND`|Optional|`sqlite` locally; `mysql` for TiDB Cloud Starter / MySQL 8|",
+   "evidence_lines": [
+    16,
+    62,
+    113
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "aayusbhat26/globe_news_atlas",
+  "sha": "1867d418a770",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

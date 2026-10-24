@@ -8212,5 +8212,75 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "279157d9583d": {
+  "identity": {
+   "one_liner": "AI 编码代理的 shell 命令防护门，执行前预览后果并备份",
+   "review": "Termaxa 是一个 Rust 单二进制工具，作为 AI 编码代理（Claude Code、Codex、Cursor、Copilot CLI）的 shell 命令防护门：按仓库内策略决定允许/询问/拒绝，预览命令破坏范围，执行前生成可回滚备份，并以哈希链日志记录每次决策。面向运行 AI 代理的个人开发者与无人值守场景；对 PostgreSQL 命令可预览 DROP 等语句影响的行数，但预览依赖规划器统计信息且不执行用户 SQL。",
+   "highlights": [
+    "按仓库内 YAML 策略判定命令，支持复合命令逐段分析、跨 shell 的破坏意图熔断",
+    "执行前备份（文件、git ref、数据库表 dump），可通过 termaxa rollback 回滚",
+    "以 append-only、哈希链日志记录决策，无网络调用与遥测"
+   ],
+   "use_cases": [
+    "为运行 Claude Code/Codex 等代理的项目部署命令防护门，先用 observe 模式观察再 enforce",
+    "审计代理历史命令：replay 读取代理 transcript 回放判定风险",
+    "对包含 DROP/TRUNCATE 等语句的数据库命令进行影响预览与备份"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "$ termaxa check \"psql -d shop -c 'DROP TABLE users'\" ／ Row estimates come from the planner (`pg_class.reltuples`, stale between `ANALYZE`s); Termaxa never scans your tables, and the preview never executes anything of yours. It did once: the Postgres preview could run the SQL file it was analysing (GHSA-gxg4-5fmj-5 ／ |`DROP`, `TRUNCATE`, `DELETE` through `psql`|rows, dependents, whether the statement even succeeds|`pg_dump` of the tables (schema and data for `DROP`, data only otherwise)|replays the dump|",
+     "lines": [
+      106,
+      112,
+      227
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库及 shell 操作提供代理命令安全防护的工具组件，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A gate between an AI coding agent and your shell.** Before a command runs, Termaxa shows what it would destroy, takes a backup it can restore, and asks or refuses by a policy you can read. For people running Claude Code, Codex, Cursor or Copilot CLI, alone or unattended. ／ Termaxa is a single Rust binary that sits in the agent's hook path, with no model, no service and no account. For every command: ／ Row estimates come from the planner (`pg_class.reltuples`, stale between `ANALYZE`s); Termaxa never scans your tables, and the preview never executes anything of yours. It did once: the Postgres preview could run the SQL file it was analysing (GHSA-gxg4-5fmj-534m, fixed in v0.14.1), which is why \"the preview runs nothing on a denied command\" is now a rule with tests.",
+   "evidence_lines": [
+    3,
+    23,
+    112
+   ]
+  },
+  "fn": "termaxa/termaxa",
+  "sha": "279157d9583d",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

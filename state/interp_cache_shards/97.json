@@ -10299,5 +10299,135 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dc9dd410e313": {
+  "identity": {
+   "one_liner": "单二进制 Go 实现的自托管 OAuth2/OIDC 身份提供者，内嵌 SQLite 存储",
+   "review": "Autentico 用 Go 实现 OAuth 2.0 / OIDC 身份提供者，提供登录、MFA、passkey、会话与令牌签发及管理 UI，面向需要自托管认证的小团队、内部工具和独立开发者。全部状态存于单个 SQLite 文件，以单二进制运行，无需外部数据库或基础设施；README 同时说明 SQLite 写串行化带来的规模上限，不支持多主机水平扩展。",
+   "highlights": [
+    "实现 OAuth2/OIDC 标准流程：Authorization Code + PKCE、refresh token、token introspection、RS256 JWT、OIDC Discovery",
+    "支持 WebAuthn passkey、TOTP、Email OTP 等多种认证方式及受信设备、账户锁定机制",
+    "内置管理 UI 与动态客户端注册，整个状态存储于单个 SQLite 文件"
+   ],
+   "use_cases": [
+    "为小型产品或内部工具提供自托管 OAuth2/OIDC 认证",
+    "作为 CI/测试套件中的真实 OIDC provider 测试装置",
+    "从 Keycloak 迁移的替代部署"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **No external infrastructure** — no Redis, no Postgres, no message queues",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Auténtico is a self-contained OAuth 2.0 / OpenID Connect (OIDC) Identity Provider built with Go. It handles the full authentication lifecycle — login, MFA, passkeys, sessions, token issuance, and admin — in a single binary backed by SQLite. No external datab ／ - **Embedded SQLite** — no separate database server; the entire state lives in one file",
+     "lines": [
+      9,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储自身状态的身份认证应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Auténtico is a self-contained OAuth 2.0 / OpenID Connect (OIDC) Identity Provider built with Go. It handles the full authentication lifecycle — login, MFA, passkeys, sessions, token issuance, and admin — in a single binary backed by SQLite. No external database, no infrastructure dependencies, no ceremony.** ／ - **Embedded SQLite** — no separate database server; the entire state lives in one file ／ - **No external infrastructure** — no Redis, no Postgres, no message queues",
+   "evidence_lines": [
+    9,
+    45,
+    46
+   ]
+  },
+  "fn": "eugenioenko/autentico",
+  "sha": "dc9dd410e313",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "22f2fde47321": {
+  "identity": {
+   "one_liner": "自托管私人内容订阅源，下载并本地存储社交网络帖子",
+   "review": "ADHX 是一个自托管应用，通过 yt-dlp 从 X、Instagram、TikTok、YouTube 等十余个社交网络下载帖子到自有服务器，支持全屏播放、表情反应、频道分组、基于图像/语音/屏幕文字的多模态搜索，并提供 iPhone/Android 应用和浏览器扩展。部署方式为单个 Docker 容器加 /data 卷，使用 MIT 许可证，面向想与亲友分享收藏内容的自托管用户。",
+   "highlights": [
+    "支持从 X、Instagram、TikTok、YouTube、Reddit 等 14 个网络下载并保存帖子内容（最高 4K）",
+    "提供按文字、图片内容、视频帧、语音和屏幕文字的多模态搜索，全部在本地服务器运行",
+    "提供 iPhone/Android 应用、Web 界面和浏览器扩展，支持分享菜单保存与文件直接发送"
+   ],
+   "use_cases": [
+    "在自有服务器上长期保存社交网络的视频与图片，防止原帖被删除",
+    "与家人朋友建立私人共享内容流，互相保存和反应对方推荐的内容",
+    "按记忆中的描述搜索已保存的媒体文件（如字幕、画面内容、语音内容）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明其为一个用数据库存储数据的自托管应用，使用 Docker 部署并包含数据库与搜索模型",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ADHX is a private feed of the best posts from X, Instagram, TikTok, YouTube, Reddit and nine more networks, picked by your closest friends and family instead of a recommendation engine with quarterly targets. ／ ADHX isn't a hosted service: you run it. You need somewhere to run a container with a persistent folder (a home server, a NAS, a small VPS or Fly.io), and some disk space (1,000 mixed saves come to roughly 10–30 GB). ／ ADHX listens on `127.0.0.1:3000` (`ADHX_PORT` changes it). Everything lives in one volume at `/data`: the database, the search models and every kept file. Migrations run on start. To use a published image instead of building one, pin `ADHX_IMAGE=ghcr.io/itsmemeworks/adhx@sha256:<digest>` from a release.",
+   "evidence_lines": [
+    9,
+    87,
+    119
+   ]
+  },
+  "fn": "itsmemeworks/adhx",
+  "sha": "22f2fde47321",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

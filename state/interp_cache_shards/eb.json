@@ -9986,5 +9986,85 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "80e728719469": {
+  "identity": {
+   "one_liner": "自托管团队知识库，AI 编辑以可审核变更形式提交",
+   "review": "Stuga 是一个自托管的团队 wiki 应用，提供页面与类型化表格，AI 代理通过 MCP 客户端写入，变更以 tracked changes 形式供人逐条接受或拒绝，支持三种审核级别、MCP 作用域登录和审计日志。面向需要人机协作维护知识库的团队，用 Mac 应用或 Docker 部署，底层依赖 Postgres 与 pgvector。",
+   "highlights": [
+    "AI 代理经 MCP 写入的变更以卡片形式供人批准、修改或拒绝，支持三级审核设置",
+    "提供 BM25 关键词与 pgvector 语义搜索，权限检查在 SQL 语句内完成",
+    "每个 MCP 调用（含读取）记录在审计日志，支持事件流和签名 webhook"
+   ],
+   "use_cases": [
+    "团队用 Claude Code 等 MCP 客户端共同维护 wiki 与表格",
+    "需要人对 AI 编辑进行审核批准的知识管理流程",
+    "从 Notion 导出或 Obsidian/Markdown 文件夹导入已有笔记"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Search that follows permissions.** Keyword (BM25 over Postgres full-text search) and semantic ／ Postgres and Node.js (docs/install/macos.md). ／ A node is one Node.js process and Postgres with pgvector; people open it in a browser.",
+     "lines": [
+      49,
+      89,
+      97
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Tables beside the pages.** Typed tables, each database its own SQLite file, with saved views,",
+     "lines": [
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是一个使用 Postgres 和 SQLite 存储数据的自托管知识库应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only，integrations/ 目录为 MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Tables beside the pages.** Typed tables, each database its own SQLite file, with saved views, ／ - **Search that follows permissions.** Keyword (BM25 over Postgres full-text search) and semantic ／ Agents connect over MCP. **Settings → Your AI agents** gives the setup for Claude Code,",
+   "evidence_lines": [
+    47,
+    49,
+    63
+   ]
+  },
+  "fn": "stuga-dev/stuga",
+  "sha": "80e728719469",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

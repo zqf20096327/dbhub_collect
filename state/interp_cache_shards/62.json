@@ -10246,5 +10246,143 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "91b24be0beef": {
+  "identity": {
+   "one_liner": "基于 Go Fiber v3 + PostgreSQL 的 REST API 脚手架",
+   "review": "这是一个 REST API 项目模板，提供 JWT 与 Google OAuth 认证、用户/文件/管理端接口、golang-migrate 迁移、Prometheus 指标和 Swagger 文档，数据存储使用 PostgreSQL 17（pgxpool）并内置基于 PostgreSQL 的后台任务队列。适合用 Go 快速创建新 API 项目的开发者，通过 GitHub 模板克隆后以 Docker Compose 或 make 运行。",
+   "highlights": [
+    "内置认证、用户、文件上传、管理端等 REST 接口，含 Swagger/OpenAPI 文档",
+    "通过 cmd/migrate 统一管理 schema 迁移，API 与 seed 进程不执行 DDL",
+    "提供 PostgreSQL 后台的持久化任务队列，支持重试、死信与租约恢复"
+   ],
+   "use_cases": [
+    "作为 Go 新项目脚手架快速搭建 REST API",
+    "需要基于 PostgreSQL 的后台任务队列场景",
+    "需要认证、文件管理与管理端接口的应用起点"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Production-minded REST API boilerplate built with Go Fiber v3, PostgreSQL, and sqlc. ／ - **Database**: PostgreSQL 17 with pgxpool",
+     "lines": [
+      15,
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 17 作为数据库存储数据，项目是使用数据库的应用而非为数据库服务的工具",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Production-minded REST API boilerplate built with Go Fiber v3, PostgreSQL, and sqlc. ／ - **Database**: PostgreSQL 17 with pgxpool",
+   "evidence_lines": [
+    15,
+    20
+   ]
+  },
+  "fn": "chuanghiduoc/fiber-golang-boilerplate",
+  "sha": "91b24be0beef",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c85471cc129d": {
+  "identity": {
+   "one_liner": "自托管定时任务面板，内置 QuickJS/Node 双运行时插件与 SQLite 持久化",
+   "review": "这是一个可部署在树莓派、旧手机等低配 ARM 设备上的自托管任务调度面板，通过浏览器网页管理脚本任务和 JS 插件任务。插件默认运行在内置 QuickJS 中，也可切换到 Node/Bun；任务、账号、插件状态持久化在单个 SQLite 文件（data/panel.db），无需外部数据库服务器。适合想在自己的小设备上长期挂定时脚本、且希望单二进制部署的用户。当前仓库未附带开源许可证，使用分发前需联系作者。",
+   "highlights": [
+    "支持 5 段和 6 段 cron 表达式，可通过网页界面添加、执行、暂停和修改定时任务",
+    "插件默认运行在内置 QuickJS 引擎，可切换 Node.js 或 Bun 运行时，插件可通过 host-api 使用日志、SQLite、HTTP、WebSocket、SMTP 等能力",
+    "以单个静态 musl 二进制分发，数据持久化在 SQLite 文件，支持从插件商城或上传 zip 安装插件"
+   ],
+   "use_cases": [
+    "在树莓派、旧手机或低配 ARM 盒子上长期运行定时签到、备份文件、清理临时目录等脚本任务",
+    "用 JavaScript 编写带配置页的插件并从插件商城或上传安装，无需额外 Node 进程",
+    "需要单二进制、无外部依赖的轻量自托管定时任务部署场景"
+   ],
+   "cat": "应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "插件面板是一个跑在自己设备上的定时任务工具。装好以后，用浏览器打开一个网页，就能添加任务、设置执行时间、查看运行结果。它不需要云服务，也不需要数据库服务器，一个程序加一个 SQLite 文件就能工作。 ／ `@runtime` 可以写 `node` 或 `bun`。JS 脚本还能 `import 'host-api'`，使用日志、SQLite、HTTP、WebSocket 等能力。 ／ - host-api 规范：日志、SQLite、HTTP、WebSocket、SMTP、任务注册",
+     "lines": [
+      3,
+      231,
+      427
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板使用 SQLite 文件存储任务、账号和插件状态（data/panel.db），属于使用数据库存数据的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库未附带开源许可证，使用、分发或修改前需联系仓库作者",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "插件面板是一个跑在自己设备上的定时任务工具。装好以后，用浏览器打开一个网页，就能添加任务、设置执行时间、查看运行结果。它不需要云服务，也不需要数据库服务器，一个程序加一个 SQLite 文件就能工作。 ／ data/panel.db      任务、账号、插件状态",
+   "evidence_lines": [
+    3,
+    364
+   ]
+  },
+  "fn": "asunajs/panel",
+  "sha": "c85471cc129d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

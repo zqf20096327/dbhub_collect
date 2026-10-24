@@ -10952,5 +10952,71 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c6559e4a4763": {
+  "identity": {
+   "one_liner": "本地 iMessage 历史检索的 MCP 服务器",
+   "review": "一个在 macOS 本地运行的 MCP 服务器，让 Claude、Codex、Cursor、VS Code 等任意 MCP 客户端以自然语言搜索和读取 iMessage/SMS/MMS/RCS 消息历史。只读访问 Messages 数据库（chat.db），提供搜索、会话读取、同步、通信分析等工具，支持隐私模式与 HTTP 传输；需要 Full Disk Access 权限。",
+   "highlights": [
+    "提供 search_messages、get_conversation、sync_messages、analyze_communication 等 MCP 工具，全部只读并标记 readOnlyHint",
+    "支持 --privacy 分级（full/redacted/aggregate）与 --database 读取 chat.db 副本",
+    "可通过 stdio 或 HTTP（127.0.0.1，需 API token）运行，适配多种 MCP 客户端安装方式"
+   ],
+   "use_cases": [
+    "在 AI 客户端中用自然语言查询和回顾个人消息历史",
+    "统计消息量、回复时长等通信分析",
+    "以隐私受限模式（脱敏或仅计数）向模型暴露消息数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**Requirements:** macOS 14 or newer. Node.js 24.16 or newer for `npx` installs (Claude Desktop brings its own). Use Node 24 LTS for encrypted cache support. Runtimes without SQLite checkpoint APIs, including Node 25, search in memory and rebuild after a restar ／ - **Search index.** Built on your Mac and, when SQLite checkpoint APIs are available, cached encrypted in `~/Library/Caches/imessage-mcp`, with a key derived from your Messages database, so it opens only for an app that can already read your messages. Deleting",
+     "lines": [
+      18,
+      178
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目读取本机 Messages 数据库（chat.db，SQLite 格式）构建搜索索引，为 AI 客户端提供消息检索服务，而非为数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（单许可）",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Search and read your Messages history from Claude, Codex, Cursor, VS Code, and any other MCP client. ／ |`--database <path>`|Read a copy of `chat.db` instead of this Mac's Messages. *env* `IMESSAGE_DB`| ／ - **Read-only.** The server opens the Messages database read-only and has no tool that sends, edits, reacts, or marks anything read.",
+   "evidence_lines": [
+    5,
+    167,
+    175
+   ]
+  },
+  "fn": "anipotts/imessage-mcp",
+  "sha": "c6559e4a4763",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

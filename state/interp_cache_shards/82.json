@@ -10238,5 +10238,334 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5135f6f5b68c": {
+  "identity": {
+   "one_liner": "本地优先的科研文献 RAG 工具包与 FastAPI 服务，SQLite 持久化",
+   "review": "这是一个 Python 工具包加 FastAPI 服务，用于构建可检视的文献研究流程：导入本地文献语料、做混合/图谱检索、保存运行历史与冻结证据，并支持人工筛查、标注与离线浏览导出。默认无模型凭证即可用假适配器跑通流程；数据存储使用 SQLite。适合需要可追溯证据与离线可复现文献工作流的研究者。",
+   "highlights": [
+    "提供 FastAPI 服务与脚本无关的浏览器界面，用于文献/段落浏览与保存运行检查",
+    "以 SQLite 持久化文档、图数据与运行事件，支持冻结证据与 JSON/Markdown/BibTeX 导出",
+    "支持混合检索与图谱检索、人工筛查/评审记录及离线基准质量门"
+   ],
+   "use_cases": [
+    "本地文献语料的比较/假设型问题检索与证据检视",
+    "系统性综述中的人工筛选、去重检查与结果导出",
+    "离线复现与检索回归基准测试"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "literature workflows, with SQLite persistence and optional model-provider adapters. ／ separate SQLite table. `GET /runs/{run_id}/reviews` reads retry-safe, paginated ／ providers; SQLite stores documents, graph data, and durable run events.",
+     "lines": [
+      10,
+      372,
+      390
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite 持久化文档、图数据与运行事件，属使用数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**local-first Python toolkit and FastAPI service** for building inspectable ／ literature workflows, with SQLite persistence and optional model-provider adapters. ／ The demo explicitly uses the fake model, ingests a synthetic fixture into a",
+   "evidence_lines": [
+    9,
+    10,
+    26
+   ]
+  },
+  "fn": "Francis1998/scholar-rag-agent",
+  "sha": "5135f6f5b68c",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "885c1a41aa14": {
+  "identity": {
+   "one_liner": "基于 Flask+SQLite 的学生请假两级审批原型系统",
+   "review": "一个包含可运行请假审批原型、企业级设计提案包与个人创意作业三部分的学生缺勤与学业请假系统仓库。原型用 Flask + SQLite 实现 advisor→faculty 两级审批、CSRF 防护、附件访问控制、课表受影响课程预览与 165 项冒烟测试，面向 HKUST(GZ) 的教学与请假管理场景，通过 python app.py 本地运行。",
+   "highlights": [
+    "Flask + SQLite 原型实现学生请假、两级审批（advisor→faculty）、CSRF 防护与附件访问控制",
+    "基于课表的受影响课程预览接口 /api/affected_courses，审批事务原子化并带并发守卫",
+    "CI 冒烟测试 165 项检查，含审计日志、登录限流持久化与作用域隔离",
+    "附带完整 PostgreSQL DDL 的企业级设计提案包"
+   ],
+   "use_cases": [
+    "高校学生请假与两级审批流程管理",
+    "课表关联的缺课影响预览与审批留痕",
+    "数据库课程/系统设计教学的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`saas/`|Enterprise design package for HKUST(GZ): PRD, architecture & API, data & security, UI design, roadmap & cost, plus full PostgreSQL DDL|企業級設計提案包（6 頁中英對照）＋完整資料庫 DDL|",
+     "lines": [
+      48
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite (survives restarts and multi-worker deployments), password resets invalidate every ／ |`leave-system/`|Flask + SQLite prototype (**v1.1.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control + content sniffing, timetable-based affected-course preview, DB-persisted login throttle (IP+account and ",
+     "lines": [
+      20,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是用 SQLite 存储数据的请假审批应用，数据库仅为运行依赖，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`leave-system/`|Flask + SQLite prototype (**v1.1.0**) — student leave, two-level approval (advisor → faculty), CSRF protection, attachment access control + content sniffing, timetable-based affected-course preview, DB-persisted login throttle (IP+account and account-only keys), session invalidation on password change, common-weak-password blocklist, paginated notifications with per-item read, atomic approval transactions with concurrency guards, scope isolation on approvals/detail/dashboard, admin audit-log page, leave-type administration, 165-check smoke suite. Runs at `http://127.0.0.1:5055`|可執行原型：學生請假、兩級審批、CSRF 防護、附件權限＋內容嗅探、課表受影響課程、限流持久化、改密碼登出所有 session、弱密碼擋鎖、通知分頁＋單則已讀、審批交易原子化與併發守衛、範圍隔離（審批／詳情／儀表板）、後台稽核日誌| ／ |`saas/`|Enterprise design package for HKUST(GZ): PRD, architecture & API, data & security, UI design, roadmap & cost, plus full PostgreSQL DDL|企業級設計提案包（6 頁中英對照）＋完整資料庫 DDL|",
+   "evidence_lines": [
+    47,
+    48
+   ]
+  },
+  "fn": "Jeng-linLi/student-absence-system",
+  "sha": "885c1a41aa14",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d2b6591defbd": {
+  "identity": {
+   "one_liner": "Rust/egui 编写的桌面数据库客户端，支持多库 SQL 控制台与数据编辑",
+   "review": "DataCraft 是用 Rust 和 egui 构建的 macOS/Windows 原生桌面数据库客户端，提供 SQL 控制台、数据表格编辑、对象浏览、筛选构建、CSV/TSV 导入导出及各引擎的备份功能。面向需要图形界面管理多种数据库的开发者与运维人员；备份依赖各数据库原生 dump 工具，Oracle 需单独安装 Instant Client。",
+   "highlights": [
+    "提供 SQL 控制台，含语法高亮、补全、格式化、执行计划与查询历史",
+    "支持表格数据编辑，可审阅待提交变更并以事务方式提交",
+    "支持 CSV/TSV 导入，导出为 CSV/TSV/JSON/SQL inserts/Markdown，并可在复制或导出时按列脱敏"
+   ],
+   "use_cases": [
+    "在同一桌面应用中连接和浏览多种数据库的模式与对象",
+    "通过图形界面编写、执行 SQL 并编辑查询结果数据",
+    "执行引擎特定的数据库备份与跨连接的表数据迁移"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|SQL console, data editor, schemas, views, roles and logical backups|",
+     "lines": [
+      104
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL / MariaDB|SQL console, data editor, views, users and logical backups|",
+     "lines": [
+      105
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|SQL console, data editor, object management and Data Pump exports; requires Oracle Instant Client|",
+     "lines": [
+      107
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|Local database files, SQL console, data editor and online backups|",
+     "lines": [
+      109
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|SQL console with <code>GO</code> batches, data editor, object management and native backups|",
+     "lines": [
+      106
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL / MariaDB|SQL console, data editor, views, users and logical backups|",
+     "lines": [
+      105
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为连接和管理多种数据库而构建的桌面客户端工具，而非使用某个数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## Supported databases ／ |PostgreSQL|SQL console, data editor, schemas, views, roles and logical backups| ／ Built with Rust, egui/wgpu and Tokio. Database work runs through background workers to keep the interface responsive.",
+   "evidence_lines": [
+    100,
+    104,
+    122
+   ]
+  },
+  "fn": "javy-fernandez/datacraft",
+  "sha": "d2b6591defbd",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "adc0f06472e7": {
+  "identity": {
+   "one_liner": "自托管 Web 应用，用 git worktree 并行编排和审查 AI 编码代理",
+   "review": "iworkflow 是一个自托管的 Agentic Development Environment，用于并行启动、跟踪和审查多个 AI 编码代理，每个任务在独立 git worktree 中运行，代理完成后人工审查 diff 再合并或丢弃。它支持任务依赖图、GitLab/GitHub PR/MR 与 CI 状态集成、Jira 集成，并以移动端优先的 Web 界面呈现，数据存储在本地 SQLite 数据库。适合需要在本机管理多个 AI 代理任务的开发者，注意其许可证为 source-available（PolyForm Shield），非 OSI 开源。",
+   "highlights": [
+    "每个任务在独立 git worktree 中运行代理，代理完成后可审查 diff 再合并或丢弃",
+    "支持任务依赖图：前置任务合并后自动启动后继任务",
+    "集成 GitLab/GitHub 的 PR/MR 与 CI 状态及 Jira，界面为移动端优先的可分页签工作区"
+   ],
+   "use_cases": [
+    "在个人机器上并行运行多个 AI 编码代理并通过 diff 审查后合并",
+    "通过任务依赖图编排链式/并行的代理任务流",
+    "通过 Tailscale 从手机跟踪进度、回答代理提问并合并变更"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "iworkflow imposes no workflow: each agent uses the configuration and plugins you already have installed, plus the project's `AGENTS.md`. Under the hood agents are driven over RPC (or ACP / stream-json, depending on the runtime). It is built with Rust, Leptos ( ／ |`IWF_DATABASE_URL`|`~/.iworkflow/workspaces.db` (SQLite, automatic migrations)|",
+     "lines": [
+      23,
+      144
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其以 SQLite 存储数据（workspaces.db），是用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "source-available，PolyForm Shield 1.0.0，非 OSI 开源",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**iworkflow is an ADE (Agentic Development Environment)**: a self-hosted web app to launch, follow and review several AI coding agents in parallel. Instead of editing files yourself, you manage **tasks**: each one runs an agent in its own git worktree, and you review the diff before anything reaches your branch. ／ iworkflow imposes no workflow: each agent uses the configuration and plugins you already have installed, plus the project's `AGENTS.md`. Under the hood agents are driven over RPC (or ACP / stream-json, depending on the runtime). It is built with Rust, Leptos (SSR + hydration), Diesel and SQLite.",
+   "evidence_lines": [
+    5,
+    23
+   ]
+  },
+  "fn": "plopezm/iworkflow",
+  "sha": "adc0f06472e7",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

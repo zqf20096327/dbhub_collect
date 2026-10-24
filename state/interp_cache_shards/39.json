@@ -10283,5 +10283,92 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "82e7db60c4b8": {
+  "identity": {
+   "one_liner": "本地优先的 AI Agent 记忆服务器，零依赖，SQLite 本地存储，提供 MCP 工具接口",
+   "review": "Mnemosyne OS 是面向 AI Agent 的本地记忆服务器，提供 Python 库、CLI、HTTP API 和 MCP Server 四种使用方式，55 个 MCP 工具与 Mem0 工具名兼容，数据以 SQLite 文件存于本地磁盘，支持多信号检索、分层记忆、审计账本等能力。适合需要在本地离线运行为 LLM 应用附加持久记忆的开发者。",
+   "highlights": [
+    "提供 55 个 MCP 工具，工具名与 Mem0 兼容，支持 Python 库、CLI、HTTP API、MCP Server 四种接入方式",
+    "零第三方依赖，内置嵌入器与规则提取器，可离线运行且无需 API key",
+    "支持分层记忆、多信号融合检索、SHA-256 哈希链审计账本与字段级脱敏"
+   ],
+   "use_cases": [
+    "为 MCP 客户端（如 Claude Code、Cursor）附加本地持久记忆",
+    "从 Mem0 迁移的 Agent 记忆场景，无需更改提示词",
+    "离线或无云账号环境下为 LLM 应用提供记忆存储与检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**sdk**|`chroma` `pgvector` `milvus` `mongodb` `redis` `valkey` `azure_ai_search` `azure_mysql` `baidu` `cassandra` `databricks` `faiss` `langchain` `neptune` `oracledb` `s3_vectors` `supabase` `vertex_ai_vector_search`|",
+     "lines": [
+      249
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**sdk**|`chroma` `pgvector` `milvus` `mongodb` `redis` `valkey` `azure_ai_search` `azure_mysql` `baidu` `cassandra` `databricks` `faiss` `langchain` `neptune` `oracledb` `s3_vectors` `supabase` `vertex_ai_vector_search`|",
+     "lines": [
+      249
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "dependencies, SQLite on your own disk, 55 MCP tools with Mem0-compatible ／ Four-dimensional scoping <code>user_id</code> / <code>agent_id</code> / <code>run_id</code> / <code>app_id</code> — enforced by physical isolation : one SQLite file per scope, rather than shared rows with a filter applied. ／ `builtin` (native SQLite triples) · `neo4j` · `memgraph` · `neptune` · `kuzu` · `sparql` (any SPARQL 1.1 endpoint)",
+     "lines": [
+      26,
+      207,
+      253
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身记忆数据的存储载体，是使用数据库的 AI 应用而非数据库生态服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，另有同引擎的付费 SaaS 服务（ai-memory.net），开源版本无功能付费墙",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dependencies, SQLite on your own disk, 55 MCP tools with Mem0-compatible ／ Use it as a **Python library**, a **CLI**, an **HTTP API**, or an **MCP server**: ／  Four-dimensional scoping <code>user_id</code> / <code>agent_id</code> / <code>run_id</code> / <code>app_id</code> — enforced by physical isolation : one SQLite file per scope, rather than shared rows with a filter applied.",
+   "evidence_lines": [
+    26,
+    36,
+    207
+   ]
+  },
+  "fn": "MnemosyneOS/mnemosyne",
+  "sha": "82e7db60c4b8",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

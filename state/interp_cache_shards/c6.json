@@ -11122,5 +11122,82 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "37d6ff4ae92c": {
+  "identity": {
+   "one_liner": "面向编码代理的本地优先项目生命周期控制层，用 SQLite 持久化项目状态",
+   "review": "CarryCtx 是一个 Rust 编写的本地 CLI 工具，为编码代理（Claude Code、Codex 等）和人类协作者管理任务、会话、检查点、Git worktree、团队交接与审计记录，状态持久化在 `<git-common-dir>/carryctx/state.sqlite`，不含云端服务与遥测。它本身不是代理运行时，进程调度与模型选择仍由外部 harness 负责。面向多代理编排与团队协作场景。",
+   "highlights": [
+    "提供任务、依赖 DAG、团队角色、会话、检查点、交接状态机等命令面，所有命令支持 --format json 输出",
+    "使用 SQLite 存储权威项目状态，跨链接 worktree 共享，本地离线运行",
+    "提供 agent-agnostic 的 CLI 接口和官方 use-carryctx 技能，支持多代理 Commander/Subagent 工作流"
+   ],
+   "use_cases": [
+    "多代理编码会话中的任务分解、worktree 隔离与结果验收",
+    "项目状态的跨会话持久化、断点恢复与审计追溯",
+    "团队协作中的角色分工、任务交接与只读上下文分发"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local-first and offline.** CarryCtx uses SQLite and local Git/filesystem integration. The authoritative project state is `<git-common-dir>/carryctx/state.sqlite`, shared by linked worktrees. `.carryctx/` contains project configuration and versioned guidanc ／ - **SQLite** — for embedded ACID reliability, zero-configuration local persistence, and self-contained transactional state without server daemons.",
+     "lines": [
+      29,
+      152
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目用 SQLite 存储自身项目状态，是使用数据库的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "CarryCtx is a persistence and control layer, not an agent runtime. Your external harness still launches agent processes, schedules work, routes prompts, retries failures, and selects models. CarryCtx does not ship Completion Gates or a generic Automation Engine. It records and enforces the project state that those external systems and human collaborators rely on. ／ - **Local-first and offline.** CarryCtx uses SQLite and local Git/filesystem integration. The authoritative project state is `<git-common-dir>/carryctx/state.sqlite`, shared by linked worktrees. `.carryctx/` contains project configuration and versioned guidance; it is not a universal state location.",
+   "evidence_lines": [
+    7,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Xuepoo/carryctx",
+  "sha": "37d6ff4ae92c",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

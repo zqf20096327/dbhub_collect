@@ -10876,5 +10876,122 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9fd158c91917": {
+  "identity": {
+   "one_liner": "数据库与 API 访问治理代理，以审批与审计拦截查询",
+   "review": "AccessFlow 是部署在用户与生产数据库之间的查询代理和 CI/CD 部署门禁：所有 SQL、NoSQL 命令与出站 API 调用经过解析、风险分析、可配置的人工审批流后才执行，并提供审计日志、脱敏、策略路由等治理能力。面向需要对生产数据访问做审批与合规管控的工程团队，通过声明式连接器目录支持多种关系型与 NoSQL 引擎，需自托管运行。",
+   "highlights": [
+    "以代理方式持管数据库凭据，查询经审批后才执行并记录防篡改审计日志",
+    "提供基于属性的路由策略、SQL 审查规则与策略模拟器",
+    "通过声明式连接器目录支持多种 SQL、NoSQL 引擎及云数仓，支持上传 JDBC 驱动扩展"
+   ],
+   "use_cases": [
+    "替换共享生产凭据，为数据库写操作建立审批流程",
+    "对 CI/CD 流水线的数据库变更实施部署门禁",
+    "对生产数据访问保留可检索的完整历史与审计记录"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse i ／ |Target databases|**SQL:** PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, ClickHouse via the declarative connector catalog (one-click driver install) — plus any JDBC-compatible engine via an admin-uploaded custom driver JAR. **NoSQL:** MongoDB, Couc",
+     "lines": [
+      19,
+      154
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它作为代理组件为多种数据库提供访问治理服务，而非以某数据库存储自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "rag"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0 单一开源许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A SQL, NoSQL, and API proxy — plus a CI/CD deployment gate — that puts review, approval, and audit between your team and production data, services, and releases. ／ AccessFlow sits as a full query proxy in front of your databases — the relational engines PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server are supported out of the box via a declarative **connector catalog** (additional engines such as ClickHouse install with one click), any other JDBC-compatible engine can be added by uploading its driver JAR, the NoSQL document engines **MongoDB** and **Couchbase** (SQL++), the NoSQL key-value engine **Redis**, the NoSQL wide-column engines **Apache Cassandra** (CQL) and **ScyllaDB** (CQL-compatible), the NoSQL search engines **Elasticsearch** and **OpenSearch**, the NoSQL key-value engine **Amazon DynamoDB** (PartiQL), the NoSQL graph engine **Neo4j** (Cypher over Bolt), and the cloud data warehouses **Snowflake**, **Google BigQuery** (GoogleSQL), and **Databricks SQL** install the same way through on-demand native engine plugins. The catalog separates the **SQL** (relational) family, the cloud **data-warehouse** family, and the **NoSQL** umbrella of native engine-managed connectors. Every query a user submits — SQL, a MongoDB shell / JSON command, a Couchbase SQL++ statement, a Redis command, a Cassandra/ScyllaDB CQL statement, an Elasticsearch/OpenSearch query, a DynamoDB PartiQL statement, a Neo4j Cypher statement, or a Snowflake / BigQuery / Databricks warehouse SQL statement — is parsed, classified, optionally analyzed by AI, and routed through a configurable human-approval workflow before it ever reaches live data. The same governance extends beyond databases: outbound **REST, SOAP, GraphQL, and gRPC** calls against registered API connectors run through that identical pipeline — AI risk scoring, attribute-based routing, multi-stage approval — with response masking and immutable, downloadable response snapshots. Every request, decision, and execution is captured in a tamper-evident metadata audit log. Authentication is JWT (RS256) with optional SAML 2.0 SSO and OAuth 2.0 / OIDC sign-in (built-in templates for Google, GitHub, GitHub Enterprise Server, Microsoft, GitLab, and self-managed GitLab), and SCIM 2.0 provisioning lets the identity provider drive user & group lifecycle end to end. AccessFlow ships as a single open-source product under Apache 2.0 and is designed to run entirely inside your own infrastructure.",
+   "evidence_lines": [
+    6,
+    19
+   ]
+  },
+  "fn": "bablsoft/accessflow",
+  "sha": "9fd158c91917",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

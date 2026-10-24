@@ -10958,5 +10958,162 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1de2cbba63f3": {
+  "identity": {
+   "one_liner": "自托管 AI 代理长期记忆服务，基于 ClickHouse 存储",
+   "review": "mnemo 是一个为 AI 代理（Claude Code、Codex 及其他 MCP 客户端）提供跨会话长期记忆的自托管服务：用钩子捕获对话并蒸馏为记忆，通过 MCP 或 HTTP API 提供存储与召回，数据存于用户自己的 ClickHouse 部署，嵌入模型在本地 CPU 运行。需 Linux x86_64 的 Docker Compose 环境发布构建，自动蒸馏需另配 OpenAI 兼容端点。",
+   "highlights": [
+    "提供 MCP（HTTP/stdio）与 HTTP API，支持 Claude Code 插件与 Codex 集成",
+    "记忆存储于用户自有的 ClickHouse 部署，嵌入在本地 CPU 计算",
+    "每用户独立记忆作用域，支持密钥管理、记忆更新留痕与去重/预算控制"
+   ],
+   "use_cases": [
+    "为 Claude Code/Codex 等 AI 编码代理跨会话保留项目上下文",
+    "自托管场景下集中管理个人/团队的代理记忆",
+    "通过 MCP 让多个工具共享同一份记忆库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Own the deployment.** One Rust binary and ClickHouse, local CPU embeddings, API keys or OIDC. ／ mnemo image, plus ClickHouse and your data. Native macOS, Windows and ARM64 binaries are not ／ Episodes and memories stay in your ClickHouse deployment. Embeddings run locally on the CPU.",
+     "lines": [
+      28,
+      39,
+      132
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "For example: record *“We chose PostgreSQL for Atlas because billing needs transactions.”* In a ／ later session, ask *“Why does Atlas use PostgreSQL?”* mnemo retrieves the decision and its reason ／ -d '{\"scope\":\"user:admin\",\"kind\":\"decision\",\"what\":\"Atlas uses PostgreSQL for billing.\",\"why\":\"Billing needs transactions.\",\"about\":[\"Atlas\",\"PostgreSQL\"]}'",
+     "lines": [
+      31,
+      32,
+      58
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "mnemo 是为 AI 代理生态服务的记忆组件，ClickHouse 仅作为其存储后端",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Own the deployment.** One Rust binary and ClickHouse, local CPU embeddings, API keys or OIDC. ／ Episodes and memories stay in your ClickHouse deployment. Embeddings run locally on the CPU. ／ changing facts, and brings relevant context back to **Claude Code, Codex, and other MCP clients**.",
+   "evidence_lines": [
+    28,
+    132,
+    10
+   ]
+  },
+  "fn": "mariojcr/mnemo",
+  "sha": "1de2cbba63f3",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e11545de788d": {
+  "identity": {
+   "one_liner": "植物养护管理全栈应用，Java 21 + Spring Boot + MySQL/TiDB",
+   "review": "PlantPal 是一个个人植物养护平台，提供植物目录 CRUD、自动浇水日期计算、浇水事件记录和生长观察日志，并通过仪表盘汇总养护提醒。技术栈为 Java 21、Spring Boot 3、Spring Security 6，数据层支持本地 MySQL 8 或 TiDB Cloud Serverless，通过 Spring Data JPA/Hibernate 持久化，含 93 个后端测试和 72 个浏览器 QC 流程，适合作为 Java 全栈学习/毕设项目使用。",
+   "highlights": [
+    "提供植物目录、浇水日程自动计算、浇水事件与生长记录功能",
+    "数据层支持本地 MySQL 8.x 与 TiDB Cloud，通过 Spring Data JPA/Hibernate 持久化",
+    "包含 93 个后端集成测试与 72 个 Puppeteer 浏览器 QC 流程"
+   ],
+   "use_cases": [
+    "个人植物养护记录与浇水提醒管理",
+    "Java Spring Boot 全栈项目学习与教学参考",
+    "TiDB Cloud Serverless 云端部署实践案例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**Data & ORM**|MySQL 8.x / TiDB Cloud, Spring Data JPA, Hibernate 6|Relational data persistence, schema enforcement, cascade deletions| ／ - **MySQL Server 8.x** running locally.",
+     "lines": [
+      62,
+      75
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|**Cloud Database**|☁️ **TiDB Cloud Serverless**|High-availability MySQL 8 compatible cluster (AWS Singapore)| ／ |**Data & ORM**|MySQL 8.x / TiDB Cloud, Spring Data JPA, Hibernate 6|Relational data persistence, schema enforcement, cascade deletions|",
+     "lines": [
+      21,
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用使用 MySQL 8.x / TiDB Cloud 作为数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Data & ORM**|MySQL 8.x / TiDB Cloud, Spring Data JPA, Hibernate 6|Relational data persistence, schema enforcement, cascade deletions| ／ - **MySQL Server 8.x** running locally.",
+   "evidence_lines": [
+    62,
+    75
+   ]
+  },
+  "fn": "Hari10012001/PlantPal",
+  "sha": "e11545de788d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

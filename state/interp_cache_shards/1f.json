@@ -10911,5 +10911,89 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9efb402a437d": {
+  "identity": {
+   "one_liner": "受 Django 启发的 Go 显式 Web 框架，含 ORM 与迁移",
+   "review": "tanGO 是一个受 Django 风格启发的 Go Web 框架，提供模型元数据、SQLite/PostgreSQL/MySQL 的 CRUD 存储、生成的类型化迁移、HTML admin、账号系统与 OpenAPI 文档生成等组件，通过 tango CLI 脚手架与迁移命令使用。适合想用 Go 构建 JSON API 或服务端渲染应用、偏好显式配置的开发者。README 标注为 pre-1.0（v0.x），API 仍可能在次要版本中变更。",
+   "highlights": [
+    "提供 db.Store 支持 SQLite、PostgreSQL、MySQL 的 CRUD 与原生 SQL，含外键、校验与级联删除等 ORM 基础",
+    "提供 tango makemigrations/migrate 命令生成类型化 Go 迁移代码",
+    "包含会话登录的 HTML admin、账号/邮件/存储/缓存/WebSocket 等内置组件与 OpenAPI 3.1 文档生成"
+   ],
+   "use_cases": [
+    "用 Go 构建 JSON API 或 SPA 后端",
+    "需要 Django 式 admin 后台与生成式迁移的数据驱动应用",
+    "教学与脚手架式项目起步（tango newproject/newapp）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- A minimal `db.Store` for CRUD and raw SQL against SQLite, PostgreSQL or MySQL, with **minimal ORM foundations**: foreign key fields, two-layer validation, and cascade delete — see relationships and admin foreign keys.",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- A minimal `db.Store` for CRUD and raw SQL against SQLite, PostgreSQL or MySQL, with **minimal ORM foundations**: foreign key fields, two-layer validation, and cascade delete — see relationships and admin foreign keys.",
+     "lines": [
+      17
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- A minimal `db.Store` for CRUD and raw SQL against SQLite, PostgreSQL or MySQL, with **minimal ORM foundations**: foreign key fields, two-layer validation, and cascade delete — see relationships and admin foreign keys. ／ `tango newproject` scaffolds a `go.mod`, a `main.go` pre-wired for SQLite and the admin app, a `project` package where your apps are listed, and a `shell` program for `tango shell`, and it runs unchanged; run `tango makemigrations`, `tango migrate` and `tango ",
+     "lines": [
+      17,
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架本身为使用数据库的应用提供 ORM、迁移与 admin 等服务，而非以某库存数据的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "tanGO is a small, explicit web framework for Go, inspired by Django's ergonomics but built from plain Go structs and interfaces. Scaffolding writes plain Go you own. Nothing is generated at runtime, and boot never scans your filesystem; there's no reflection-heavy magic beyond what's needed to read your model tags, and no hidden configuration. ／ - A minimal `db.Store` for CRUD and raw SQL against SQLite, PostgreSQL or MySQL, with **minimal ORM foundations**: foreign key fields, two-layer validation, and cascade delete — see relationships and admin foreign keys. ／ - Generated, typed Go migrations (`tango makemigrations`/`migrate`/`migrate down`) — no separate schema DSL.",
+   "evidence_lines": [
+    7,
+    17,
+    18
+   ]
+  },
+  "fn": "angvp/tango",
+  "sha": "9efb402a437d",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

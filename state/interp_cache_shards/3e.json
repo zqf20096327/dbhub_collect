@@ -10616,5 +10616,91 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5854f02481fb": {
+  "identity": {
+   "one_liner": "将 MariaDB schema 转换为 TiDB 兼容 SQL 的命令行迁移工具",
+   "review": "读取 mariadb-dump 输出并按规则转换为 TiDB 方言的 SQL，处理排序规则、引擎、索引长度等差异，并生成迁移警告清单；面向需要从 MariaDB 迁移到 TiDB 的运维或开发人员。支持 Dumpling 导出目录转换，经 MariaDB 11.4 与 TiDB v8.5.8 端到端验证，默认目标 TiDB ≥ v7.4。",
+   "highlights": [
+    "规则化 schema 转换：处理排序规则、引擎、索引键长度、TEXT/BLOB 默认值等 TiDB 方言差异",
+    "支持转换完整 mariadb-dump 输出及 Dumpling/mydumper 导出目录，可输出 TiDB Lightning 数据源",
+    "输出迁移警告列表并列出变更或丢弃项，转换结果须包含输入的全部表、列与键"
+   ],
+   "use_cases": [
+    "MariaDB 数据库迁移到 TiDB",
+    "将 Dumpling 导出目录转换为 TiDB Lightning 可导入的数据源",
+    "校验 SQL 文件能否通过 TiDB 解析器解析"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "mysql -h tidb -P 4000 -u root < shop_tidb.sql",
+     "lines": [
+      62
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A command-line tool that converts MariaDB schemas into TiDB-compatible SQL. ／ - Reads real `mariadb-dump` output (MariaDB 10.x–11.x, schema and data): ／ `DELIMITER` blocks, executable comments, MariaDB 11 `uca1400` collations,",
+     "lines": [
+      10,
+      14,
+      15
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A command-line tool that converts MariaDB schemas into TiDB-compatible SQL. ／ - Rule-based schema transformation to the TiDB dialect (collations, engines, ／ - Tested end to end against live MariaDB 11.4 and TiDB v8.5.8 (schema, every",
+     "lines": [
+      10,
+      18,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 MariaDB 到 TiDB 的迁移提供服务，不使用数据库存自身数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A command-line tool that converts MariaDB schemas into TiDB-compatible SQL. ／ - Rule-based schema transformation to the TiDB dialect (collations, engines, ／ - Tested end to end against live MariaDB 11.4 and TiDB v8.5.8 (schema, every",
+   "evidence_lines": [
+    10,
+    18,
+    28
+   ]
+  },
+  "fn": "developer-Bushido/mariadb2tidb",
+  "sha": "5854f02481fb",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10327,5 +10327,234 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "795be7b52bc0": {
+  "identity": {
+   "one_liner": "Next.js 双重确认等待名单应用，SQLite 存储并通过 Mailtrap 发送邮件",
+   "review": "这是一个基于 Next.js 15 + TypeScript + Drizzle ORM 的等待名单应用模板，实现邮箱双重确认、推荐排队、批量上线邮件发送及退订/退信 Webhook 处理，数据存储在单个 SQLite 文件中，邮件通过 Mailtrap Email API 发送，可部署到 Vercel。适合需要在产品发布前收集并验证邮箱的开发者。",
+   "highlights": [
+    "提供双重确认注册流程，含 honeypot 防机器人与每 IP 速率限制",
+    "支持批量上线邮件发送（单批最多 500 封）与按用户记录发送状态",
+    "提供 Webhook 处理退订、退信和垃圾投诉事件，后续发送自动跳过相关用户"
+   ],
+   "use_cases": [
+    "产品发布前收集经过邮箱确认的等待名单",
+    "带推荐机制的排队增长场景",
+    "通过 Mailtrap 批量发送上线公告邮件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The app is a single Next.js project. Visitors use the web pages, you run the launch from the command line, and Mailtrap sits on the other side for both sending and events. Everything is stored in one SQLite database. ／ 7. The app checks the token against SQLite: it must exist, be unused and be less than 48 hours old.",
+     "lines": [
+      44,
+      74
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "SQLite writes to local disk, and a Vercel function's disk is not persistent, so signups would vanish between invocations. For a real deployment switch to Postgres (for example Neon): ／ 1. Install `pg` or `@neondatabase/serverless` and use `drizzle-orm/node-postgres` or `drizzle-orm/neon-http` in `src/lib/db/index.ts`.",
+     "lines": [
+      302,
+      304
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该仓库是一个使用 SQLite 存储数据的 Next.js 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The app is a single Next.js project. Visitors use the web pages, you run the launch from the command line, and Mailtrap sits on the other side for both sending and events. Everything is stored in one SQLite database. ／ |Data|Drizzle ORM, SQLite (better-sqlite3)|",
+   "evidence_lines": [
+    44,
+    91
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Sid-Lais/nextjs-waitlist-double-opt-in",
+  "sha": "795be7b52bc0",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9bb998316e85": {
+  "identity": {
+   "one_liner": "Debian/Ubuntu 自托管 VPS 与网站托管控制面板，单一仪表盘管理服务器",
+   "review": "letzControl 是面向 Debian/Ubuntu 的自托管 VPS 与网站托管控制面板，通过一个 Web 仪表盘管理网站、SSL、数据库、PHP、邮件、DNS、Docker、cron、文件和用户，可同时运行 Nginx、Apache 与 OpenLiteSpeed。提供一行命令安装器和 Setup Wizard 自动补装组件，以 systemd 服务运行在 2087 端口，需 root 权限。适合自建 VPS 托管环境的管理员使用。",
+   "highlights": [
+    "支持同时运行 Nginx、Apache 和 OpenLiteSpeed 三个后端并按站点选择",
+    "提供数据库、DNS、邮件、PHP、Docker、cron、文件管理等模块的统一 Web 界面",
+    "提供一行命令安装器与 Setup Wizard，检测已装组件并补装缺失项"
+   ],
+   "use_cases": [
+    "自托管 VPS 上管理多个网站、域名与 SSL 证书",
+    "为托管用户提供带配额的网站/数据库账户",
+    "集中管理服务器上的邮件、DNS、Docker 与定时任务"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|🗄️|**Databases**|Create/drop MySQL/MariaDB databases and users, phpMyAdmin, import & download| ／ |`mysql.*`|root @ `127.0.0.1`|Root DB credentials for the database manager|",
+     "lines": [
+      107,
+      169
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|🗄️|**Databases**|Create/drop MySQL/MariaDB databases and users, phpMyAdmin, import & download| ／ `nginx → apache → php → mariadb → certbot → bind9 → openlitespeed → docker → nodejs → redis → mail → webmail → phpmyadmin` ／ `openlitespeed`, `phpX.Y-fpm`, `mariadb-server`, `certbot`, `docker`,",
+     "lines": [
+      107,
+      146,
+      153
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "面板为管理服务器上的数据库、Web 服务等组件提供服务，本身不是数据库应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A self-hosted VPS & web-hosting control panel for Debian/Ubuntu.** ／ |🗄️|**Databases**|Create/drop MySQL/MariaDB databases and users, phpMyAdmin, import & download| ／ - **root** — the panel manages services, vhosts and databases",
+   "evidence_lines": [
+    3,
+    107,
+    151
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "asifletzshop/letzcontrol",
+  "sha": "9bb998316e85",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0bb346442bb1": {
+  "identity": {
+   "one_liner": "Go 媒体附件库：验证上传、S3/本地存储、Postgres 元数据",
+   "review": "go-medialibrary 是一个 Go 库，用于为模型附加文件：按真实内容类型校验上传，存储到本地目录或 S3 兼容桶，并在 PostgreSQL 中记录元数据，支持图片转换与自定义任务队列异步处理。面向需要用户头像、商品图、发票附件等功能的 Go/SaaS 开发者。限制：仅支持图像格式转换，需 Go 1.26+，元数据依赖 PostgreSQL（另有内存 store 用于测试）。",
+   "highlights": [
+    "提供 localdisk 与 s3disk 两种 Disk 实现，支持 S3 兼容服务与预签名 URL",
+    "基于内容字节检测 MIME 类型，含文件名清洗与解压炸弹防护",
+    "pgxstore 将记录写入 PostgreSQL，支持事务内联与 advisory lock 保证并发限制"
+   ],
+   "use_cases": [
+    "为 SaaS 应用模型附加头像、商品图、PDF 等文件",
+    "需要生成缩略图等图片转换的场景",
+    "要求文件写入与数据库记录顺序一致、避免悬空引用的存储设计"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Cloudflare R2, MinIO), records them in PostgreSQL, and generates image ／ ## PostgreSQL ／ |`pgxstore`|PostgreSQL `Store`: `New`, `WithTable`, `WithConn`, `Schema`, `CreateSchema`.|",
+     "lines": [
+      9,
+      112,
+      151
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "它不是某个数据库的应用，而是为应用提供媒体文件管理能力、并明确适配 PostgreSQL 作为元数据存储的 Go 组件库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "go get github.com/byteminus/go-medialibrary ／ |`pgxstore`|PostgreSQL `Store`: `New`, `WithTable`, `WithConn`, `Schema`, `CreateSchema`.| ／ - `s3disk` uses the AWS SDK for Go v2 and any S3-compatible service: set",
+   "evidence_lines": [
+    16,
+    151,
+    64
+   ]
+  },
+  "fn": "byteminus/go-medialibrary",
+  "sha": "0bb346442bb1",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

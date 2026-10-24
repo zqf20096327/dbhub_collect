@@ -10325,5 +10325,128 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8248944ede0c": {
+  "identity": {
+   "one_liner": "Rust 编写的结构化 JSON 日志存储，用 trie 存键集+类型化列存值",
+   "review": "kibbr 是一个面向结构化 JSON 日志的存储系统：每行的键集（shape）在内存 trie 中保存一次，值按类型化列写入磁盘，支持 TrieQL 查询、HTTP /ingest /query API、写入前日志（WAL）与压缩，内置日志查看器，通过 cargo 或 Docker 安装运行。适用于需要长期保留但查询频率不高的应用日志场景；不支持自由文本搜索和无稳定键集的日志，目前仍在开发中，schema 合并与冷 S3 层尚未实现。",
+   "highlights": [
+    "以内存 trie 存储键集、类型化列存储值，支持 TrieQL 查询语言与 HTTP API",
+    "内置写入前日志（WAL）与回放机制，SIGTERM 时执行 flush 与 checkpoint",
+    "提供内置日志查看器、Vector 采集配置示例与 Kubernetes StatefulSet 清单"
+   ],
+   "use_cases": [
+    "应用日志在热搜索集群与冷归档之间的中期存储与查询",
+    "通过 Vector 将 Kubernetes 容器 JSON 日志采集入库",
+    "对已关闭的日志日进行批量加载与压缩以减少磁盘占用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是自带查询语言、WAL 和列存的日志存储引擎，为日志数据管理提供服务而非使用外部数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only，贡献以 MIT 接受，另有商业条款（COMMERCIAL.md）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A log store for structured JSON logs that keeps ~25% of the raw bytes on real-world data and still answers queries in milliseconds. One static binary, written in Rust.** ／ An application emits thousands of lines but only dozens of shapes. kibbr keeps each shape once, in an in-memory trie. Each shape's values go to disk as typed columns at the trie leaf where that shape ends. ／ - **Write-ahead log, replayed without loss or duplicates.** This was tested by killing the process mid-write, repeatedly. Nothing that was acknowledged is lost, and replay never stores a line twice. (A client that retries a request it already sent can still send it twice; see docs/serve.md.) Fault scripts: `scripts/`. ／ kibbr is currently under development. It runs, it measures, and it isn't finished. Schema merging and a cold S3 tier are designed but not built.",
+   "evidence_lines": [
+    6,
+    80,
+    93,
+    158
+   ]
+  },
+  "fn": "pratyaydeep/kibbr",
+  "sha": "8248944ede0c",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "23599efc6fc6": {
+  "identity": {
+   "one_liner": "终端 TUI 播客客户端，用 Go 与 SQLite 实现本地订阅与播放",
+   "review": "podmutt 是一个运行在终端里的播客客户端，面向 Linux 和 macOS 的键盘操作用户，提供订阅管理、Apple Top 100 发现、RSS 预览、队列播放和 OPML 导入，通过 mpv 流式播放音频，使用 SQLite 做本地数据持久化，支持 vim 风格快捷键与主题切换，播放依赖系统安装 mpv。",
+   "highlights": [
+    "基于 Bubble Tea 构建的键盘驱动 TUI，提供订阅、发现、队列、收藏与播放多面板",
+    "本地缓存订阅与剧集数据，支持离线浏览与后台刷新订阅源",
+    "支持 OPML 订阅导入、章节导航、MPRIS D-Bus 媒体键集成与 Kitty 图形协议封面显示"
+   ],
+   "use_cases": [
+    "在终端环境中订阅、浏览和收听播客",
+    "从其他播客应用通过 OPML 迁移订阅到本地管理",
+    "无需订阅即可预览和串流 RSS 源中的剧集"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A modern, keyboard-driven podcast client (TUI) for Linux and macOS inspired by lazygit and mpdtui. Built with Go, Bubble Tea, SQLite, and mpv.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明这是用 Go、Bubble Tea、SQLite 和 mpv 构建的播客客户端，SQLite 用于本地数据存储",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A modern, keyboard-driven podcast client (TUI) for Linux and macOS inspired by lazygit and mpdtui. Built with Go, Bubble Tea, SQLite, and mpv. ／ ## Install ／ ### 1. Launching",
+   "evidence_lines": [
+    5,
+    54,
+    91
+   ]
+  },
+  "fn": "susamn/podmutt",
+  "sha": "23599efc6fc6",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

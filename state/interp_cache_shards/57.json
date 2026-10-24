@@ -9099,5 +9099,144 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "01705c4b6511": {
+  "identity": {
+   "one_liner": "自托管地理空间数据目录，提供语义搜索、OGC/STAC API 与地图构建",
+   "review": "GeoLens 是一个自托管的地理空间数据目录与地图构建平台，把散落在文件、PostGIS 数据库、Web 服务和 STAC 目录中的数据汇集为可搜索的目录，记录每个数据集的来源并提供版本历史与源健康检查。面向需要集中管理空间数据的团队，通过 Docker Compose 部署，依赖 PostgreSQL/PostGIS 存储目录和矢量数据，并提供 CLI、Python/TypeScript SDK 与只读 MCP 服务器。",
+   "highlights": [
+    "提供 OGC API Features/Records、STAC、DCAT 及矢量瓦片/COG 瓦片等多标准 API",
+    "支持上传 Shapefile、GeoPackage、GeoParquet、GeoTIFF 等格式并转换为 Cloud-Optimized GeoTIFF",
+    "包含地图构建器、数据集版本历史与来源追踪，并提供 CLI 与 Python/TypeScript SDK"
+   ],
+   "use_cases": [
+    "团队将分散在文件共享、PostGIS 数据库和 STAC 目录中的空间数据集中编目",
+    "通过 OGC API/STAC 在 QGIS、脚本和 AI 代理中读取同一目录数据",
+    "在浏览器中构建、分享和嵌入地图"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL and PostGIS hold the catalog and every vector dataset, and",
+     "lines": [
+      263
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 PostgreSQL 和 PostGIS 存储目录和全部矢量数据集，GeoLens 是使用该数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "the browser, and QGIS, scripts and AI agents read the same data through OGC API and STAC. It runs ／ the API, and a read-only MCP server lets AI agents search the catalog. The",
+   "evidence_lines": [
+    31,
+    160
+   ]
+  },
+  "fn": "geolens-io/geolens",
+  "sha": "01705c4b6511",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a152c689fd91": {
+  "identity": {
+   "one_liner": "面向印尼合规的 TypeScript 全栈 HRIS 人力资源管理系统",
+   "review": "一个基于 TypeScript monorepo 的 HRIS 应用，使用 Hono/oRPC 后端、React 前端，数据存储于 PostgreSQL（经 Drizzle ORM），并集成 Redis、RabbitMQ。面向需要遵循印尼劳动法、个税（PPh 21）与 BPJS 社保规则的组织，覆盖合同、考勤、假期、薪资等模块。通过 Docker Compose 与 make 命令在本地搭建运行。",
+   "highlights": [
+    "实现印尼劳动合同（PKWT/PKWTT）、法定假期、加班与 PPh 21 个税及 BPJS 社保的自动化计算",
+    "提供 RBAC 权限矩阵与不可变的审计日志（activity 表）",
+    "暴露健康检查、Kubernetes 探针与 Prometheus 指标端点"
+   ],
+   "use_cases": [
+    "需要遵循印尼劳动法规与税务合规的企业人事管理",
+    "考勤、请假、加班与薪资发放的业务流程管理",
+    "基于 DDD 分层架构的 TypeScript 全栈项目参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backend**: Hono + oRPC (end-to-end typed RPC & OpenAPI) + Effect-TS + Drizzle ORM + PostgreSQL. ／ |**Database & ORM**|PostgreSQL + Drizzle ORM|Type-safe schema definitions and automated migrations| ／ - **Docker & Docker Compose**: For local PostgreSQL, Redis, RabbitMQ, and Mailpit containers.",
+     "lines": [
+      6,
+      65,
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 PostgreSQL 存储业务数据（Database & ORM: PostgreSQL + Drizzle ORM），属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Backend**: Hono + oRPC (end-to-end typed RPC & OpenAPI) + Effect-TS + Drizzle ORM + PostgreSQL. ／ |**Database & ORM**|PostgreSQL + Drizzle ORM|Type-safe schema definitions and automated migrations|",
+   "evidence_lines": [
+    6,
+    65
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "dika841/hris-management-ts",
+  "sha": "a152c689fd91",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

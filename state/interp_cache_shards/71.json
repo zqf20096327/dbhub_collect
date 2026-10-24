@@ -9809,5 +9809,88 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ab8f27ccd079": {
+  "identity": {
+   "one_liner": "增量维护实时查询结果的算法库",
+   "review": "Event-Reduce 是一个算法及其 JavaScript 实现：当数据库发生写入事件时，它根据旧查询结果与变更事件在内存中计算新结果，避免重新执行查询。面向需要实时查询/响应式 UI 的开发者，通过 npm 安装使用。限制包括只适用于单一表/集合且排序可预测的查询，不支持跨表关系型查询。",
+   "highlights": [
+    "根据变更事件和旧查询结果在内存中计算新查询结果，无需重新查询数据库",
+    "基于状态函数、动作函数和二叉决策图（BDD）生成优化后的决策逻辑",
+    "可与提供 change stream 的数据库配合使用，当前提供 npm 发布的 JavaScript 实现"
+   ],
+   "use_cases": [
+    "响应式 UI 和实时仪表盘中保持查询结果与数据库写入同步",
+    "local-first 应用的实时查询与后端到客户端的查询结果推送",
+    "以更新内容代替失效的方式实现写后缓存更新"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Works with any database** that gives you a change stream: MongoDB, PostgreSQL, MySQL, IndexedDB, SQLite, in-memory stores...",
+     "lines": [
+      21
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Works with any database** that gives you a change stream: MongoDB, PostgreSQL, MySQL, IndexedDB, SQLite, in-memory stores...",
+     "lines": [
+      21
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Works with any database** that gives you a change stream: MongoDB, PostgreSQL, MySQL, IndexedDB, SQLite, in-memory stores...",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为优化数据库查询的算法库，与提供 change stream 的数据库配合工作，为数据库应用开发服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "EventReduce is an algorithm for **live queries** (also called reactive or realtime queries). When a document is inserted, updated or deleted, it takes the old query results and the change event and computes the new results **in memory, without querying the database again**. It works like a lightweight form of **incremental view maintenance** for a single query over a single table or collection. ／ - **Works with any database** that gives you a change stream: MongoDB, PostgreSQL, MySQL, IndexedDB, SQLite, in-memory stores... ／ npm install event-reduce-js",
+   "evidence_lines": [
+    17,
+    21,
+    27
+   ]
+  },
+  "fn": "pubkey/event-reduce",
+  "sha": "ab8f27ccd079",
+  "source": "readme",
+  "generated_at": "2026-10-23",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

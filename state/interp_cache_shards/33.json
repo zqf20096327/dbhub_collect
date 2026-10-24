@@ -9559,5 +9559,205 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ecf69c9e7469": {
+  "identity": {
+   "one_liner": "开源自部署 ITIL 4 ITSM 平台，对接 Active Directory",
+   "review": "S-Aloha 是一个开源自托管（on-prem）的 ITIL 4 ITSM 平台，覆盖事件、请求、问题、变更、CMDB、SLA、知识库、项目及 NIS 2 合规评估，面向使用 Active Directory 的组织 IT 部门。技术栈为 .NET 10 + React 19，数据存 PostgreSQL 16，通过 Docker Compose 部署四个容器，语义搜索为可选组件。",
+   "highlights": [
+    "实现 ITIL 4 全部 10 项实践及 NIS 2（ANSSI ReCyF）合规评估与事件申报流程",
+    "用户认证与权限直接读取 Active Directory 组，不存储密码",
+    "提供 Docker Compose 演示模式，可在无 Active Directory 环境启动内置目录和示例数据"
+   ],
+   "use_cases": [
+    "使用 Active Directory 的组织 IT 部门落地 ITIL 4 事件/问题/变更管理流程",
+    "受 NIS 2 约束的实体在同一平台内管理合规评估与安全事件申报",
+    "通过 CMDB 与自动发现功能盘点配置项、应用资产与硬件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明使用 PostgreSQL 16 作为数据存储（L13、L212），项目本身是使用数据库的 ITSM 应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL 16",
+   "evidence_lines": [
+    13
+   ]
+  },
+  "fn": "chrraj7/S-Aloha",
+  "sha": "ecf69c9e7469",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c5d71b508c78": {
+  "identity": {
+   "one_liner": "工作日与节假日日历 REST API 及 Web 应用，基于 Python holidays 库",
+   "review": "HolidayOps 提供 250 个国家/624 个地区的工作日查询：判断某日是否工作日、增减/统计工作日，并支持公司自定日历、iCal 订阅、邮件摘要、webhook 和 API key 计费。面向 payroll、HR、物流、财务团队，基于 Django+DRF+React+MySQL 构建，数据来自开源 holidays 库。README 标注功能已完成但托管服务尚未上线。",
+   "highlights": [
+    "支持 250 个国家和 624 个地区的工作日计算，含周末规则变更与公司 closures",
+    "提供 REST API（OpenAPI 3/Swagger）、iCal 订阅、HMAC 签名 webhook 与邮件摘要",
+    "内置组织角色、审计日志、双因素认证与 API key 限额计费机制"
+   ],
+   "use_cases": [
+    "为跨国团队判断某日期是否为工作日并查询原因",
+    "为公司合并多国日历并管理 closures/half days",
+    "通过 API 或 iCal 将工作日数据集成到 HR/薪资/物流系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Data and jobs|MySQL 8 (utf8mb4), Redis, Celery and Celery Beat|",
+     "lines": [
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据层使用 MySQL 8 存储应用数据，项目本身是面向终端用户的日历服务而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "HolidayOps answers that question for 250 countries and 624 regions, through a REST API, a web app, ／ Holiday data comes from the open-source holidays library. ／ |Data and jobs|MySQL 8 (utf8mb4), Redis, Celery and Celery Beat|",
+   "evidence_lines": [
+    30,
+    34,
+    111
+   ]
+  },
+  "fn": "ahmershahdev/holidayops",
+  "sha": "c5d71b508c78",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dd2d87ecc53b": {
+  "identity": {
+   "one_liner": "MeshCentral 远程访问的 Web 管理面板",
+   "review": "这是一个为 Windows 计算机集群提供远程访问管理的 Web 面板，底层以 MeshCentral 作为远程访问引擎，在其上实现机器台账、按技术员的分组权限、TOTP 两步验证、访问历史和一键远程会话。数据使用 Node 原生 node:sqlite 存储（WAL 模式）并支持每日备份，供企业 IT/运维团队部署使用，依赖 Node.js 22.5+ 与 MeshCentral 1.2+。",
+   "highlights": [
+    "以 MeshCentral 为引擎，提供机器列表、分组权限、访问历史等管理层功能，会话在浏览器中直接打开",
+    "内置 TOTP 两步验证（RFC 6238）、scrypt 密码、一次性 AES-256-GCM 访问链接等安全机制",
+    "支持可选 Active Directory 集成、GPO 批量安装代理、每日 SQLite 备份（VACUUM INTO）"
+   ],
+   "use_cases": [
+    "企业 IT/helpdesk 团队集中管理数百台 Windows 机器的远程支持",
+    "需要按技术员分组控制远程访问范围并保留访问审计记录的场景",
+    "配合 AD 域环境进行代理批量部署与机器台账维护"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- O banco (`data/painel.db`) usa o `node:sqlite` nativo do Node (modo WAL).",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用数据库存储自身数据（painel.db）的远程访问管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；依赖的 MeshCentral 为 Apache 2.0，字体为 SIL OFL",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Painel web para gerenciar o acesso remoto a um parque de computadores Windows. ／ relay e protocolo de tela. O PainelRemoto é a camada de gestão por cima dele: cadastro, permissões, histórico, ／ - O banco (`data/painel.db`) usa o `node:sqlite` nativo do Node (modo WAL).",
+   "evidence_lines": [
+    3,
+    8,
+    77
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "cleber-2021/PainelRemoto",
+  "sha": "dd2d87ecc53b",
+  "source": "readme",
+  "generated_at": "2026-10-24",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
