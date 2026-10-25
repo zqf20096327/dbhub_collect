@@ -10559,5 +10559,116 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9080c431192e": {
+  "identity": {
+   "one_liner": "跨多种数据库的开源桌面 GUI 客户端，内置本地 MCP 服务器",
+   "review": "DB Connect 是一个免费的原生桌面数据库客户端，支持 MySQL、PostgreSQL、Redshift、DynamoDB、Redis、MongoDB、Elasticsearch/OpenSearch、ClickHouse 八种引擎，提供查询编辑器、schema 浏览、行编辑、EXPLAIN 可视化、性能面板与 mysqldump 备份恢复；内置本地 MCP 服务器供 AI 编码工具经鉴权查询连接。适合需要在同一 GUI 中管理多引擎的后端开发者与 DBA，支持 macOS 与 Windows。",
+   "highlights": [
+    "提供对 MySQL、PostgreSQL、DynamoDB、Elasticsearch/OpenSearch、ClickHouse 等引擎的查询编辑、schema 浏览、行编辑与导出（CSV/JSON/Excel/Parquet）",
+    "内置本地 MCP 服务器，通过 per-install 鉴权令牌、连接允许列表和限时写授权供 MCP 客户端查询已打开的连接",
+    "凭据使用 AES-256-GCM 加密存储于系统钥匙串，无云同步与遥测",
+    "支持 SSH 隧道、只读配置文件、写入前确认与 dry-run 编辑"
+   ],
+   "use_cases": [
+    "在同一桌面客户端中管理多种数据库引擎的连接、查询与凭据",
+    "通过本地 MCP 服务器让 Claude Code、Cursor 等 AI 工具执行只读查询与 schema 检查",
+    "使用可视化构建器与 PartiQL 编辑器操作 DynamoDB 数据"
+   ],
+   "use_cases2": null,
+   "classification_note": null
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch + ClickHouse — one fast, free, native desktop IDE instead of eight separate tools and eight separate sets of saved credentials. ／ DB Connect — PostgreSQL query with results, sidebar grouped by engine ／ **Guides:** MySQL · PostgreSQL · Redshift · DynamoDB · Redis · MongoDB · Elasticsearch / OpenSearch · ClickHouse · Case study: MySQL CPU 90% → 30%",
+     "lines": [
+      5,
+      9,
+      11
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch + ClickHouse — one fast, free, native desktop IDE instead of eight separate tools and eight separate sets of saved credentials. ／ **Guides:** MySQL · PostgreSQL · Redshift · DynamoDB · Redis · MongoDB · Elasticsearch / OpenSearch · ClickHouse · Case study: MySQL CPU 90% → 30% ／ |MySQL|✅|✅|✅|",
+     "lines": [
+      5,
+      11,
+      111
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch + ClickHouse — one fast, free, native desktop IDE instead of eight separate tools and eight separate sets of saved credentials. ／ **Guides:** MySQL · PostgreSQL · Redshift · DynamoDB · Redis · MongoDB · Elasticsearch / OpenSearch · ClickHouse · Case study: MySQL CPU 90% → 30% ／ - **Connect** over the HTTP interface (8123, or 8443 with TLS) with username and password, TLS with a custom CA and an SSH tunnel; ClickHouse Cloud is recognised from the host. Read-only profiles are enforced by the server (`readonly=2`, `allow_ddl=0` on every",
+     "lines": [
+      5,
+      11,
+      71
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "MySQL Workbench is Oracle's official free tool and a genuinely solid choice if MySQL is the *only* engine you touch — its Visual Explain is long-standing and well-regarded. Sequel Ace (the free, open-source successor to Sequel Pro) is excellent if you're macOS",
+     "lines": [
+      121
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "MySQL Workbench is Oracle's official free tool and a genuinely solid choice if MySQL is the *only* engine you touch — its Visual Explain is long-standing and well-regarded. Sequel Ace (the free, open-source successor to Sequel Pro) is excellent if you're macOS",
+     "lines": [
+      121
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为连接和操作多种数据库而构建的桌面客户端工具，而非使用数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch + ClickHouse — one fast, free, native desktop IDE instead of eight separate tools and eight separate sets of saved credentials. ／ - **One tool, not three.** If your stack is MySQL or PostgreSQL for transactional data, Redshift for analytics, DynamoDB for high-throughput key-value access, Redis for caching, MongoDB for documents, Elasticsearch or OpenSearch for search and ClickHouse for analytics, you know the pain of a GUI client, credential store and query history per engine. DB Connect treats all eight engines as equal, first-class citizens. ／ - **Built to work with your AI coding tools.** A local MCP server lets Claude Code, Cursor, or any MCP-aware client query your already-open connections directly — schema, read-only queries, gated behind a per-install auth token, an explicit connection allow-list, and time-bounded write grants.",
+   "evidence_lines": [
+    5,
+    26,
+    30
+   ]
+  },
+  "fn": "shubhesh07/db-connect",
+  "sha": "9080c431192e",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

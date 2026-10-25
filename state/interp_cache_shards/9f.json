@@ -11868,5 +11868,87 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bc6667855ac4": {
+  "identity": {
+   "one_liner": "把技能文档蒸馏成双层知识图谱并经 MCP 提供给 AI Agent",
+   "review": "Cairn 是一套 Go 编写的知识图谱构建与服务工具：用 LLM 将散落的 Skill 文档持续蒸馏为领域→子域→实体/概念的双层图谱，以 Markdown 回写源仓库供人编辑，经 GitOps 管线以不可变 Bundle 分发，并通过 MCP Server（stdio/SSE/REST）供 Agent 查询。适合维护 AI Agent 技能文档的团队。查询端只读 SQLite+FTS5，无向量检索。",
+   "highlights": [
+    "构建端/查询端分离：查询端只读、零 LLM、零 embedding，由架构不变量检查强制保证",
+    "提供增量更新与结构化回写，人工编辑被识别并以 provenance 标记保护",
+    "MCP Server 支持 stdio/SSE/REST 三种传输及 catalog 自动热更新"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供可按需检索子图的领域知识层",
+    "将 Skill 文档以 GitOps 流程版本化分发（Bundle 热更新与回滚）",
+    "团队共享的知识图谱查询服务（HTTP/SSE + REST API）"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "普通查询使用真正的只读 SQLite 连接，不创建或迁移数据库。显式执行 ／ 产出 `knowledge.db`（SQLite）。用 CLI 查一下（`--db-path` 可置于子命令之前或之后）： ／ core/ 共享库：storage(SQLite+FTS5) / kbbundle(打包分发) / githubapp(鉴权)",
+     "lines": [
+      40,
+      78,
+      170
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为项目自身存储知识图谱的嵌入式数据库，项目是为 AI Agent 服务的知识层应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "构建端与查询端**严格分离**：查询端只读、零 LLM、零 embedding（由 `make verify` 的架构不变量检查强制保证）。 ／ 普通查询使用真正的只读 SQLite 连接，不创建或迁移数据库。显式执行 ／ core/           共享库：storage(SQLite+FTS5) / kbbundle(打包分发) / githubapp(鉴权)",
+   "evidence_lines": [
+    38,
+    40,
+    170
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "xcosmosbox/Cairn",
+  "sha": "bc6667855ac4",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

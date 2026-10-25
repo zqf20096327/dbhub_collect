@@ -9860,5 +9860,71 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "435851dd6ac0": {
+  "identity": {
+   "one_liner": "Sub2API 的非官方可扩展衍生版 AI API 网关",
+   "review": "这是一个基于 Sub2API 的非官方分支，实现带路由、配额策略与上游供应商接入的 AI API 网关，新增每组用户并发上限、API key 回退组、Codex 多窗口指纹等扩展。面向自建 AI API 中转的用户，要求自行从源码构建，依赖 PostgreSQL 与 Redis，通过 Docker 部署。",
+   "highlights": [
+    "提供带路由、配额策略与供应商接入的 AI API 网关",
+    "支持每组可选的用户级并发上限与 API key 同平台回退组",
+    "提供单机多窗口 Codex 指纹与主机端源码更新器"
+   ],
+   "use_cases": [
+    "自托管 AI API 网关与配额管理",
+    "对上游账户做并发控制与回退分组",
+    "从源码构建并维护自定义 Sub2API 分支"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 列为项目技术栈，网关应用使用其存数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "沿用上游 GNU LGPL-3.0，非官方分支",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Extensible AI API gateway with routing, quota policies, and provider integrations** ／ > This is an unofficial fork of Wei-Shaw/sub2api, not an official Sub2API release. The upstream install script and `weishaw/sub2api:latest` image do not contain this Fork's additional extensions. Build this fork from source as documented below. ／ PostgreSQL",
+   "evidence_lines": [
+    11,
+    16,
+    7
+   ]
+  },
+  "fn": "DeanZFC/sub2api-custom",
+  "sha": "435851dd6ac0",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

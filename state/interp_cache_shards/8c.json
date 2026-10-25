@@ -9096,5 +9096,77 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "40e31879a58d": {
+  "identity": {
+   "one_liner": "浏览与分析 PostgreSQL 慢查询的 TUI 工具",
+   "review": "slowtop 是一个基于 Textual 的终端工具，用于读取 PostgreSQL 日志文件或 pg_stat_statements 来查找和分析慢查询，可查看查询耗时、按 query_id 分组统计、发送执行计划到 explain.dalibo.com。适用于需要排查慢查询的 PostgreSQL 数据库运维人员。要求日志为 JSON 格式并启用 pg_stat_statements，通过克隆仓库源码安装。",
+   "highlights": [
+    "从日志文件或 pg_stat_statements 读取慢查询，支持按 query_id 分组展示统计数据",
+    "可将查询计划发送至 explain.dalibo.com 并运行查询获取详细执行计划",
+    "依赖 textual 提供 TUI，依赖 psycopg、pglast 与 PostgreSQL 交互"
+   ],
+   "use_cases": [
+    "排查 PostgreSQL 日志或 pg_stat_statements 中的慢查询",
+    "查看查询执行计划并分享至 explain 站点进行分析",
+    "通过 SSH 在终端环境中浏览格式化的查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "slowtop - Browse and Analyse Slow PostgreSQL Queries ／ * Find slow queries in log files or pg_stat_statements ／ * PostgreSQL with logs in JSON-Format and/or pg_stat_statements enabled (tested with PostgreSQL 15)",
+     "lines": [
+      1,
+      6,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具读取 PostgreSQL 日志与 pg_stat_statements，为数据库运维分析服务，本身不以数据库为存储运行应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "slowtop - Browse and Analyse Slow PostgreSQL Queries ／ * PostgreSQL with logs in JSON-Format and/or pg_stat_statements enabled (tested with PostgreSQL 15) ／ By default the tool reads the latest postgres log file from /var/log/postgres/,",
+   "evidence_lines": [
+    1,
+    18,
+    34
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "pretix/slowtop",
+  "sha": "40e31879a58d",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

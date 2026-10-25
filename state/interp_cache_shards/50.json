@@ -11531,5 +11531,78 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "175aa0f545b5": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 服务器，用 SQLite 文件为多个 AI 应用提供共享项目记忆",
+   "review": "FlowState 是一个本地运行的 MCP 服务器，把项目备忘、决策、变更和待办记录存进本机的一个 SQLite 文件，供 Claude、ChatGPT、Cursor、Grok 等 MCP 客户端共享同一份项目记忆，并支持多 agent 并发认领与冲突审核。面向同时使用多个 AI 应用的开发者。数据默认不出本机，仅更新检查联网，可选 GitHub 异地备份或 relay 远程访问。",
+   "highlights": [
+    "作为 MCP 服务器为多个 AI 应用提供共享项目记忆，数据存储于本机单个 SQLite 文件",
+    "支持多 agent 并发使用，提供 todo 认领、冲突标记与 review 审核队列",
+    "提供 setup_flowstate.py 一键配置脚本，支持可选的 GitHub 私有仓库异地备份"
+   ],
+   "use_cases": [
+    "多个 AI 应用（Claude/ChatGPT/Cursor/Grok）之间延续项目上下文",
+    "多个 AI agent 同时协作同一项目时避免重复劳动",
+    "本地保存 AI 工作记录（决策、变更、经验教训）便于回溯"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in one SQLite file on your computer. Your memory is not sent anywhere unless you ／ and components can't; delete them instead). Changes made directly in SQLite aren't tracked.",
+     "lines": [
+      10,
+      584
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明数据存储在本机 SQLite 文件中（L10），SQLite 是其存数据的手段，项目本身是面向 AI 应用的记忆服务而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "FlowState is a local MCP server. It gives every AI app you ／ Everything lives in one SQLite file on your computer. Your memory is not sent anywhere unless you ／ 2. creates `.venv` in the repo folder and runs `pip install -e mcp-server` into it (skip with `--skip-install`);",
+   "evidence_lines": [
+    5,
+    10,
+    79
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "dialectforge/FlowState",
+  "sha": "175aa0f545b5",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

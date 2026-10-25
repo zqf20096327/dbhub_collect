@@ -13461,5 +13461,62 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ce0c66e647a8": {
+  "identity": {
+   "one_liner": "本地自托管的 AI 编程智能体，含工具沙箱与 MCP 支持",
+   "review": "Spark 是一个运行在本机的 AI 编程智能体，提供 Web UI、桌面、TUI、CLI、ACP 和 MCP server 六种形态，内置 36 个工具、六种审批模式与四级沙箱，每轮对话生成可回滚的检查点，支持任意 OpenAI 兼容端点。面向希望在本地使用 AI 编程助手、代码与密钥不出本机的开发者。数据存于 ~/.spark，模型调用需自行配置 API key。",
+   "highlights": [
+    "提供六种界面形态（Web/桌面/TUI/CLI/ACP/MCP server），共用同一 AgentLoop 与工具集",
+    "实现每轮工作区快照检查点，支持在非 git 目录回滚文件与对话",
+    "提供六种审批模式、四级沙箱与通配符权限规则引擎， deny 规则跨作用域生效"
+   ],
+   "use_cases": [
+    "在本地/SSH 终端使用 AI 编程助手进行代码阅读、编辑与 shell 操作",
+    "在 CI 中以 spark exec --json 或 spark review --json 运行自动化任务与 diff 审查",
+    "将内置工具通过 MCP server 暴露给其他 MCP 客户端"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未声明使用或适配任何数据库，数据本地存储于 ~/.spark 文件目录",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Code stays with you. Keys stay with you.** A self-hosted AI coding agent that runs ／ |**Six surfaces, one brain**|Web UI · native desktop window · Textual TUI · scriptable CLI · ACP (Zed & co.) · MCP server. Same agent loop, same tools, same permissions.| ／ |MCP server|`spark mcp-serve`|Expose all built-in tools to other MCP clients|",
+   "evidence_lines": [
+    11,
+    30,
+    117
+   ]
+  },
+  "fn": "badhope/spark",
+  "sha": "ce0c66e647a8",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

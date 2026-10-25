@@ -10451,5 +10451,74 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4b9a027f795f": {
+  "identity": {
+   "one_liner": "单二进制自托管状态页与运行时间监控工具，内嵌 SQLite 存储",
+   "review": "Pulse 是一个用 Go 编写的自托管状态页与在线率监控工具，以单个二进制加一个 SQLite 文件运行，监控 worker 内嵌于同一进程，无需独立数据库服务。它提供服务可用性检查、延迟记录、事故生命周期管理、维护窗口、自定义域名状态页及带作用域的 API key。适合个人与团队对自己的服务做对外状态展示与可用性告警。",
+   "highlights": [
+    "单二进制运行，使用 SQLite 文件存储，监控 worker 内嵌于同一进程",
+    "支持多状态页绑定自定义域名，提供 REST API 与作用域 API key",
+    "包含事故生命周期（要求 RCA 才能解决）与计划维护窗口及告警抑制"
+   ],
+   "use_cases": [
+    "自托管服务可用性监控与公开状态页展示",
+    "对多服务进行延迟与在线率检查并管理事故",
+    "homelab/小型团队运行时间记录与维护窗口通知"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Pulse is an open-source, self-hosted status page and monitoring tool. It ships as a single Go binary with a SQLite database. The monitoring worker runs in the same process, so there is no separate database server, Node.js runtime, or reverse proxy required to  ／ - **Single binary and SQLite.** One Go binary plus one SQLite file. The monitoring worker runs in-process. ／ SQLite file. The optional `pulse-agent` pushes host metrics. The REST API, the",
+     "lines": [
+      7,
+      13,
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Pulse 使用内嵌 SQLite 文件存储自身监控数据，SQLite 是其内部存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pulse is an open-source, self-hosted status page and monitoring tool. It ships as a single Go binary with a SQLite database. The monitoring worker runs in the same process, so there is no separate database server, Node.js runtime, or reverse proxy required to run it. Pulse checks your services, records uptime and latency, opens incidents when checks fail, and serves public status pages on your own domains. ／ - **Single binary and SQLite.** One Go binary plus one SQLite file. The monitoring worker runs in-process. ／ SQLite file. The optional `pulse-agent` pushes host metrics. The REST API, the",
+   "evidence_lines": [
+    7,
+    13,
+    26
+   ]
+  },
+  "fn": "memetics19/pulse",
+  "sha": "4b9a027f795f",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

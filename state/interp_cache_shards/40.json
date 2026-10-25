@@ -11624,5 +11624,72 @@
   "generated_at": "2026-10-20",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ea399fc4960b": {
+  "identity": {
+   "one_liner": "PostgreSQL schema 迁移与设计规范的 SQL linter 和 formatter",
+   "review": "pgrubic 是一个面向 PostgreSQL 的 SQL 静态检查与格式化 CLI 工具，针对 schema 迁移和设计最佳实践提供 100+ 条规则，支持自动修复违规（如为索引创建语句自动添加 concurrently）、PL/pgSQL 与 DO 块内嵌迁移的 lint、River 风格 DML 格式化。面向使用 PostgreSQL 的开发者，可通过 PyPI、Docker、GitHub Actions、pre-commit 安装，要求 Python 3.12+。",
+   "highlights": [
+    "提供 100+ 条 lint 规则，支持自动修正违规（如为 CREATE INDEX 添加 concurrently）",
+    "支持 PL/pgSQL 函数与 DO 块内嵌迁移的 lint，DDL 格式风格与 pg_dump 一致",
+    "可作为 Python 库使用，支持 TOML 配置文件与缓存避免重复格式化"
+   ],
+   "use_cases": [
+    "对 schema 迁移 SQL 文件做静态检查与自动修复",
+    "在 CI（GitHub Actions）或 pre-commit 钩子中执行 SQL lint 与 format",
+    "作为 Python 库嵌入项目实现 SQL 代码质量检查"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pgrubic is a PostgreSQL linter and formatter for schema migrations and design best practices.",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具是为 PostgreSQL schema 服务的 linter/formatter，本身不存储数据，属数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pgrubic is a PostgreSQL linter and formatter for schema migrations and design best practices. ／ - Over 100+ rules ／ pip install pgrubic",
+   "evidence_lines": [
+    25,
+    29,
+    50
+   ]
+  },
+  "fn": "bolajiwahab/pgrubic",
+  "sha": "ea399fc4960b",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

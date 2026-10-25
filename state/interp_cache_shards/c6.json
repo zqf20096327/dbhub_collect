@@ -11265,5 +11265,101 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e9242dcad230": {
+  "identity": {
+   "one_liner": "游戏运营控制平台：Server/Agent/SDK 架构，含 CDC 采集与可观测",
+   "review": "Croupier 是面向单公司多游戏多环境的游戏运营控制平台，由 Web 控制台、控制面 Server 和游戏侧 Agent 组成，提供函数注册调度、任务转发、审计、健康探测与 CDC 数据采集（capture-agent）等能力，并通过 Go/C#/C++/Java/JS/Python 多语言 SDK 接入。服务端使用 GORM，支持 MySQL/PostgreSQL/SQL Server/SQLite 存储数据，支持 Docker Compose 快速部署与脚本安装 Agent。",
+   "highlights": [
+    "提供 sidecar/devops/capture/synthetics 四类 Agent 角色，其中 capture-agent 包含 MySQL/Mongo/PostgreSQL CDC 连接器",
+    "支持基于 TCP+TLS 的统一会话传输，双向请求、心跳重连与背压",
+    "提供 Go/C#/C++/Java/JS/Python 六种语言 SDK 及 Web 控制台"
+   ],
+   "use_cases": [
+    "单游戏公司内多游戏、多环境的运营管控与任务调度",
+    "游戏数据库变更捕获（CDC）与变更规则告警",
+    "游戏服务健康探测与远程运维访问审计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|capture|Database CDC, change rules and alerts|`capture-agent`; MySQL/Mongo/PostgreSQL connectors and checkpoint/alert reliability shipped; source schema history pending| ／ |PostgreSQL|`gorm.io/driver/postgres`|Production|",
+     "lines": [
+      21,
+      51
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|capture|Database CDC, change rules and alerts|`capture-agent`; MySQL/Mongo/PostgreSQL connectors and checkpoint/alert reliability shipped; source schema history pending| ／ |MySQL|`gorm.io/driver/mysql`|Production (recommended)|",
+     "lines": [
+      21,
+      50
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|`glebarez/sqlite`|Development, testing, small setups|",
+     "lines": [
+      49
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|`gorm.io/driver/sqlserver`|Enterprise environments|",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 的 Supported Databases 表声明服务端通过 GORM 驱动使用这些数据库存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|SQLite|`glebarez/sqlite`|Development, testing, small setups| ／ |MySQL|`gorm.io/driver/mysql`|Production (recommended)| ／ Three tiers: Console (Web) → Server (control plane, capable of multi-instance HA) → Agent (proxy inside the game VPC) → Game Server / SDK.",
+   "evidence_lines": [
+    49,
+    50,
+    72
+   ]
+  },
+  "fn": "cuihairu/croupier",
+  "sha": "e9242dcad230",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

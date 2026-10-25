@@ -9584,5 +9584,133 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0943fb23f3c7": {
+  "identity": {
+   "one_liner": "分布式可自托管的可用性监控系统，单 Go 二进制提供多类健康检查",
+   "review": "SolidPing 是一个多租户 uptime 监控系统，通过分布式 worker 执行 44 种健康检查（HTTP、SSL、数据库连接查询、消息队列等），并提供状态页、事件管理与 on-call 升级。面向需要自托管基础设施监控的组织，支持 SQLite 或 PostgreSQL 作为后端存储，可经 Docker、brew、scoop、Helm 或裸二进制部署。",
+   "highlights": [
+    "提供 44 种检查类型，包含对 PostgreSQL、MySQL/MariaDB、MSSQL、Oracle、ClickHouse、MongoDB、Redis 的连接与查询检查",
+    "支持多区域分布式 worker、内网私有 agent 与基于租约的调度",
+    "内置状态页、事件关联、值班轮换与升级策略，凭据采用信封加密存储"
+   ],
+   "use_cases": [
+    "对网站、端口、证书、数据库等服务进行周期性可用性巡检",
+    "多区域部署探针并从内网 agent 执行私有网络内的健康检查",
+    "搭建公开状态页并配置事件升级与值班告警流程"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **44 check types**: HTTP, TCP, UDP, ICMP, DNS, DNSBL, NTP, SSL/Domain, SSH, RDP, VNC, FTP/SFTP, SMTP/POP3/IMAP, Email (JMAP passive inbox), WebSocket, SIP, gRPC, Prometheus, 7 databases (Postgres, MySQL, MSSQL, Oracle, ClickHouse, MongoDB, Redis), 3 message  ／ |PostgreSQL|Connection + query execution| ／ ### PostgreSQL (recommended for production)",
+     "lines": [
+      48,
+      139,
+      213
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **44 check types**: HTTP, TCP, UDP, ICMP, DNS, DNSBL, NTP, SSL/Domain, SSH, RDP, VNC, FTP/SFTP, SMTP/POP3/IMAP, Email (JMAP passive inbox), WebSocket, SIP, gRPC, Prometheus, 7 databases (Postgres, MySQL, MSSQL, Oracle, ClickHouse, MongoDB, Redis), 3 message  ／ |MySQL/MariaDB|Connection + query execution|",
+     "lines": [
+      48,
+      140
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL/MariaDB|Connection + query execution|",
+     "lines": [
+      140
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **44 check types**: HTTP, TCP, UDP, ICMP, DNS, DNSBL, NTP, SSL/Domain, SSH, RDP, VNC, FTP/SFTP, SMTP/POP3/IMAP, Email (JMAP passive inbox), WebSocket, SIP, gRPC, Prometheus, 7 databases (Postgres, MySQL, MSSQL, Oracle, ClickHouse, MongoDB, Redis), 3 message  ／ |MSSQL|Connection + query execution|",
+     "lines": [
+      48,
+      141
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **44 check types**: HTTP, TCP, UDP, ICMP, DNS, DNSBL, NTP, SSL/Domain, SSH, RDP, VNC, FTP/SFTP, SMTP/POP3/IMAP, Email (JMAP passive inbox), WebSocket, SIP, gRPC, Prometheus, 7 databases (Postgres, MySQL, MSSQL, Oracle, ClickHouse, MongoDB, Redis), 3 message  ／ |Oracle|Connection + query execution|",
+     "lines": [
+      48,
+      142
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **44 check types**: HTTP, TCP, UDP, ICMP, DNS, DNSBL, NTP, SSL/Domain, SSH, RDP, VNC, FTP/SFTP, SMTP/POP3/IMAP, Email (JMAP passive inbox), WebSocket, SIP, gRPC, Prometheus, 7 databases (Postgres, MySQL, MSSQL, Oracle, ClickHouse, MongoDB, Redis), 3 message  ／ |ClickHouse|Connection + query execution|",
+     "lines": [
+      48,
+      143
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Low footprint**: Single binary; SQLite, embedded Postgres, or external Postgres ／ ### SQLite (the default — good for a single instance)",
+     "lines": [
+      52,
+      188
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为基础设施与数据库可用性提供监控检查的工具，数据库既作为被检目标也作为其自身存储后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQL Server",
+    "Oracle",
+    "ClickHouse",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SolidPing is a multi-tenant monitoring system that enables organizations to monitor their infrastructure through distributed workers executing health checks. It's designed for low resource consumption and easy self-hosting. ／ - **44 check types**: HTTP, TCP, UDP, ICMP, DNS, DNSBL, NTP, SSL/Domain, SSH, RDP, VNC, FTP/SFTP, SMTP/POP3/IMAP, Email (JMAP passive inbox), WebSocket, SIP, gRPC, Prometheus, 7 databases (Postgres, MySQL, MSSQL, Oracle, ClickHouse, MongoDB, Redis), 3 message queues (Kafka, RabbitMQ, MQTT), Docker, Kubernetes, SNMP, Freebox line, game server (Source/A2S, Minecraft), headless browser, custom JS, website crawl, health endpoint, vendor status page, heartbeat ／ ### Databases",
+   "evidence_lines": [
+    44,
+    48,
+    136
+   ]
+  },
+  "fn": "fclairamb/solidping",
+  "sha": "0943fb23f3c7",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

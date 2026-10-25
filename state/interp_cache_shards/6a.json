@@ -10440,5 +10440,78 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8940a678f8ab": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地持久化记忆库，MCP 服务器+CLI，基于 SQLite FTS5",
+   "review": "DevMemory 为 Claude Code、Cursor 等 MCP 客户端提供跨会话的项目记忆存储，将决策、架构、调试经验等结构化记忆保存到本地 SQLite 文件中，通过 FTS5 全文检索返回带评分依据的结果。面向使用 AI 编码助手的开发者，提供 9 个 MCP 工具和 15 个 CLI 命令；仅支持关键词搜索，不含语义搜索，Cursor 集成尚未端到端验证，数据库不做静态加密。",
+   "highlights": [
+    "提供 MCP 服务器（stdio，9 个工具）与 CLI（15 个命令），记忆按项目隔离存储于单一 SQLite 文件",
+    "使用 SQLite FTS5 全文搜索与 BM25 排序，按重要度、置信度和时间加权，结果附带评分解释",
+    "写入前对 API 密钥、令牌、密码等机密信息脱敏，检索结果按不可信数据处理并标记指令式内容"
+   ],
+   "use_cases": [
+    "为 AI 编码会话持久化项目决策、架构约定与调试经验，避免每次会话重复说明",
+    "需要本地化、不上传云端的 AI 代理记忆存储",
+    "团队通过 .mcp.json 或导入导出 JSON 共享项目记忆"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|🔒 Privacy|Context pasted into chats|Stored locally in SQLite, never uploaded| ／ - 🏠 **Local-first and private.** A single SQLite file at `~/.devmemory/`. No cloud, no account, no telemetry, no network port.",
+     "lines": [
+      29,
+      33
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 编码代理生态提供记忆服务的 MCP 工具，SQLite 是其存储引擎而非使用方应用。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🏠 **Local-first and private.** A single SQLite file at `~/.devmemory/`. No cloud, no account, no telemetry, no network port. ／ - 🔌 **MCP server.** 9 tools over stdio, verified with **Claude Code**. Works with any MCP client. ／ - 🔎 **Fast, explainable search.** SQLite FTS5 full-text search with BM25 ranking, weighted by importance, confidence and recency. Every result explains its score.",
+   "evidence_lines": [
+    33,
+    34,
+    37
+   ]
+  },
+  "fn": "vasikmansuri/devmemory",
+  "sha": "8940a678f8ab",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10698,5 +10698,87 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06437c419948": {
+  "identity": {
+   "one_liner": "本地运行的 AI OSINT 情报平台，用 Ollama 本地 LLM 生成人物情报档案",
+   "review": "这是一个 Python/FastAPI + Next.js 构成的 OSINT 平台，编排网络抓取、API 查询与本地 LLM 分析，生成人物情报档案，并提供代理对话、视觉分析、人脸比对、目标监控等功能。面向需要本地化开源情报分析的用户。数据默认持久化到 SQLite，可选 PostgreSQL；AI 全部经 Ollama 本地运行。前端状态层包含 RAG 组件。需要本地部署 Ollama 与双模型。",
+   "highlights": [
+    "支持基于 Ollama 本地模型（qwen3.5:9b 文本 + llama3.2-vision 视觉）的本地推理",
+    "提供跨 15+ 社交平台的搜索代理抓取与人物档案生成（PDF/JSON/CSV 导出）",
+    "支持 SQLite 默认存储与 PostgreSQL 16 可选存储，通过环境变量切换"
+   ],
+   "use_cases": [
+    "本地化人物开源情报（OSINT）检索与档案生成",
+    "多轮代理对话式情报工具调用与多模态图像分析",
+    "目标的定时监控与变更差异报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### 2.3 Persistence Layer (SQLite / PostgreSQL) ／ **Optional: PostgreSQL 16** — For production deployments requiring concurrent access and advanced indexing. Configure via `DATABASE_URL` in `.env`. PostgreSQL is specifically useful for its native `JSONB` support, allowing indexed queries over the semi-structu ／ |**ORM**|SQLAlchemy 2.0|Database abstraction, session pooling, model mapping for SQLite and PostgreSQL|",
+     "lines": [
+      86,
+      90,
+      57
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The core philosophy of J.A.R.V.I.S centers on **data privacy and local execution**. All AI analysis runs entirely on your local machine using **Ollama** with dual models: `qwen3.5:9b` for text intelligence and `llama3.2-vision` for multimodal analysis. Queries ／ **Default: SQLite** — Zero-configuration file-based database at `data/jarvis.db`. SQLAlchemy automatically creates all tables on first startup. No manual database setup required. ／ |**ORM**|SQLAlchemy 2.0|Database abstraction, session pooling, model mapping for SQLite and PostgreSQL|",
+     "lines": [
+      38,
+      88,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统用 SQLite/PostgreSQL 持久化自身业务数据，属使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "J.A.R.V.I.S is a modular, full-stack Open Source Intelligence (OSINT) and AI assistant platform. It goes beyond simple profile searching — it is a comprehensive intelligence workstation that combines automated web reconnaissance, agentic AI conversations, multimodal vision analysis, biometric face matching, psychological profiling, predictive analytics, and real-time target monitoring into a single unified interface. ／ The core philosophy of J.A.R.V.I.S centers on **data privacy and local execution**. All AI analysis runs entirely on your local machine using **Ollama** with dual models: `qwen3.5:9b` for text intelligence and `llama3.2-vision` for multimodal analysis. Queries, scraped contents, and results never leave your local network — data is persisted into a private SQLite database (or optionally PostgreSQL) under your full control. ／ **Optional: PostgreSQL 16** — For production deployments requiring concurrent access and advanced indexing. Configure via `DATABASE_URL` in `.env`. PostgreSQL is specifically useful for its native `JSONB` support, allowing indexed queries over the semi-structured LLM output fields (`additional_info`, `similar_profiles`, `network_connections`).",
+   "evidence_lines": [
+    22,
+    38,
+    90
+   ]
+  },
+  "fn": "Yigtwxx/J.A.R.V.I.S",
+  "sha": "06437c419948",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11502,5 +11502,140 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2a0a6a208700": {
+  "identity": {
+   "one_liner": "Star Citizen 游戏组织的 ERP/CRM 单体仓库应用",
+   "review": "这是一个为 Star Citizen 游戏组织构建的 ERP/CRM 单体仓库，包含成员与组织管理（Spynet）、实时协作 Wiki、基于角色和属性的动态权限、舰队管理、活动组织、游戏日志分析等功能模块。技术栈为 Next.js、PostgreSQL、AWS 等，采用 AGPL-3.0 许可。适合该游戏组织的成员与管理员使用。",
+   "highlights": [
+    "包含 ERP/CRM 式成员与组织管理（Spynet）、Wiki、任务、奖励、活动等模块",
+    "提供基于角色与属性的动态访问控制",
+    "游戏日志分析及 Kill feed 覆盖层"
+   ],
+   "use_cases": [
+    "Star Citizen 游戏组织的成员与舰队管理",
+    "组织内部知识库与文档权限管理",
+    "活动/任务组织与成员激励机制"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Next.js, PostgreSQL, Vercel, Tailwind CSS, TypeScript, React, AWS",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 PostgreSQL 存数据的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Monorepo of the ERP/CRM for my Star Citizen organization ／ Next.js, PostgreSQL, Vercel, Tailwind CSS, TypeScript, React, AWS",
+   "evidence_lines": [
+    3,
+    34
+   ]
+  },
+  "fn": "simonknittel/sam",
+  "sha": "2a0a6a208700",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "916aa99bb405": {
+  "identity": {
+   "one_liner": "面向编码代理的本地记忆 MCP 服务器，用单个 SQLite 文件存储",
+   "review": "Palace 是一个用 Rust 编写的 MCP 服务器，为 Claude Code、Cursor 等编码代理提供跨会话记忆：将文本原样存入本地 SQLite 文件，用 ONNX 本地嵌入模型做 BM25 与向量混合检索，并通过 hooks 自动注入和写回记忆。面向使用 AI 编码代理的开发者，单二进制运行，支持多种本地嵌入模型迁移；macOS Intel 平台不支持。",
+   "highlights": [
+    "以 MCP 服务器和 CLI 形式提供记忆存取，支持 Claude Code、Codex、Cursor、Gemini CLI 等多个客户端",
+    "本地混合检索：BM25 关键词评分与本地嵌入余弦相似度融合，带意图分类和可选交叉编码器重排",
+    "支持本地嵌入模型（all-MiniLM-L6-v2 等）在线迁移，带 recall@5 和延迟预算校验"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨会话的决策、命令和偏好记忆",
+    "在本地离线环境管理项目知识，不依赖云服务或 API 密钥",
+    "用于世界观构建、小说、笔记等非软件项目场景（creative/personal 配置）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One binary, one SQLite file, no API keys, no cloud. ／ You: why did we switch the queue to SQLite last month? ／ Inside a palace: a project wing my_api with rooms backend, decisions, and testing full of drawers; a topic wing sales_notes; a knowledge graph fact my_api uses_queue SQLite; and agent diaries from claude and codex ／ - why did we choose bundled sqlite?",
+     "lines": [
+      13,
+      29,
+      149,
+      631
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该项目自身存储记忆数据的嵌入式文件，而非为其服务的数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One binary, one SQLite file, no API keys, no cloud. ／ - **Shipping as one binary.** No Python, no vector database, no Docker. One ／ |**Knowledge graph**|Time-stamped facts: subject → predicate → object|`my_api → uses_queue → SQLite` (valid from 2026-09-03)|",
+   "evidence_lines": [
+    13,
+    53,
+    158
+   ]
+  },
+  "fn": "AncientiCe/palace-rs",
+  "sha": "916aa99bb405",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

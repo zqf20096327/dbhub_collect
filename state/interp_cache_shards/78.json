@@ -8902,5 +8902,71 @@
   "generated_at": "2026-10-24",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "00128e53d75d": {
+  "identity": {
+   "one_liner": "自托管 YouTube 利基与爆款视频研究工具，MCP 服务器 + HTTP API + 定时采集",
+   "review": "这是一个自托管的 YouTube 内容研究工具，用于发现增长中的利基赛道、识别小频道的爆款视频并做选题前验证。它通过定时抓取 YouTube Data API v3 数据建立历史快照，后端为 Python/FastAPI，存储用 PostgreSQL + pgvector，并提供 100 个 MCP 工具供 Claude Desktop 等客户端以自然语言查询。面向 YouTube 创作者与内容研究者，可通过 Docker 自部署，托管服务尚未上线。",
+   "highlights": [
+    "提供 Web 仪表板、Chrome 扩展与 MCP 服务器三种访问方式，含 100 个 MCP 工具与 7 个预设场景",
+    "定时记录 YouTube 数据快照，生成观看增速、订阅增长、标题/缩略图变更等 API 不提供的历史指标",
+    "基于 YouTube Data API v3 与 PostgreSQL + pgvector 存储，支持 Docker 部署与 CSV 导出"
+   ],
+   "use_cases": [
+    "为 YouTube 创作者做利基赛道发现与多赛道对比评估",
+    "追踪竞品或自己频道的增长、爆款视频与改版历史",
+    "在 Claude Desktop 或 MCP 客户端中以自然语言做选题查询与视频选题验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`backend/`|MCP server, HTTP API, worker and CLI — all logic and storage (Python, FastAPI, PostgreSQL + pgvector)| ／ |`infra/`|Caddy HTTPS proxy (MCP over HTTP, and the production site), the scheduled Postgres backup|",
+     "lines": [
+      163,
+      168
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "工具以 PostgreSQL + pgvector 存储自身采集的 YouTube 研究数据，属于使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "niche-finder is open source. With Docker and a free YouTube API key you can ／ |`backend/`|MCP server, HTTP API, worker and CLI — all logic and storage (Python, FastAPI, PostgreSQL + pgvector)|",
+   "evidence_lines": [
+    132,
+    163
+   ]
+  },
+  "fn": "pandich93/youtube-niche-finder",
+  "sha": "00128e53d75d",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

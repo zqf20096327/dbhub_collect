@@ -10354,5 +10354,72 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3580408ca39c": {
+  "identity": {
+   "one_liner": "Local-first 平台与 TypeScript 库，基于 SQLite 实现",
+   "review": "Evolu 是一个 local-first 平台和 TypeScript 库，主题涵盖 CRDT、离线优先、React 与 React Native。它以 SQLite（含 wasm 版与自有 SQLite core）作为本地存储基础。README 主要面向开发者，给出 monorepo 的 Node.js/pnpm 开发环境、构建脚本、测试矩阵和 npm 发布流程。可见内容集中于开发与贡献说明，功能细节需查阅 evolu.dev 文档。",
+   "highlights": [
+    "提供 TypeScript 库与 monorepo，包含 React、Svelte、Vue 示例（L97-L100）",
+    "包含 @evolu/sqlite-wasm 包与自有 SQLite core，测试要求 100% 覆盖率（L126-L128）",
+    "支持 Node.js、浏览器与 React Native（iOS/Android）集成测试（L120-L122）"
+   ],
+   "use_cases": [
+    "开发 local-first、离线优先的 Web 与移动应用",
+    "在前端项目中使用基于 SQLite 的本地数据层",
+    "参与 Evolu 本体的开发与测试贡献"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "E2E tests load `packages/sqlite-wasm/wasm/sqlite3.wasm`. It is never committed, ／ - `pnpm test:sqlite-core` - Run the tests of Evolu's own SQLite core, with its C tests under AddressSanitizer and UndefinedBehaviorSanitizer, once with hardware and once with software crypto, failing below 100% line, branch or function coverage of its TypeScript and of the C its host compiles",
+     "lines": [
+      36,
+      127
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Evolu 是面向应用开发的 local-first 平台/库，以 SQLite 作为其本地存储核心（L127 提到 Evolu's own SQLite core）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Evolu is a local-first platform and TypeScript library. ／ E2E tests load `packages/sqlite-wasm/wasm/sqlite3.wasm`. It is never committed, ／ - `pnpm test:sqlite-core` - Run the tests of Evolu's own SQLite core, with its C tests under AddressSanitizer and UndefinedBehaviorSanitizer, once with hardware and once with software crypto, failing below 100% line, branch or function coverage of its TypeScript and of the C its host compiles",
+   "evidence_lines": [
+    3,
+    36,
+    127
+   ]
+  },
+  "fn": "evoluhq/evolu",
+  "sha": "3580408ca39c",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

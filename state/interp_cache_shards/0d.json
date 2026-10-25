@@ -10556,5 +10556,83 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "364c4d3a9398": {
+  "identity": {
+   "one_liner": "1С:Предприятие 信息库自动备份工具，导出 DT 文件并管理副本",
+   "review": "面向 1С:Предприятие 服务器管理员的跨平台（Linux/Windows）备份工具，通过 1С 平台的 ibcmd 将文件库及 PostgreSQL/MSSQL 上的信息库导出为 *.dt 文件，支持日/周/月调度、过期副本清理、副本有效性检查（含体积比对），凭证单独存放于 secrets.yaml；单配置只能搭配一种 СУБД，需安装 1С 平台并配置系统计划任务。",
+   "highlights": [
+    "自动将 1С 信息库导出为 *.dt，支持 daily/weekly/monthly 三种调度与过期副本删除",
+    "支持文件库、网络文件库（cifs-utils 挂载）以及 PostgreSQL 和 MSSQL 上的库",
+    "导出后校验副本有效性，v1.2.20 起新副本体积缩小 30% 以上时记录告警"
+   ],
+   "use_cases": [
+    "为 1С:Предприятие 服务器定时备份信息库并自动清理过期副本",
+    "Linux/Windows 混合环境下集中管理 1С 文件库与 СУБД 库的 DT 导出",
+    "对备份结果做自动化有效性检查与日志记录"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1С на PostgreSQL или Microsoft SQL Server. ／ - PostgreSQL; ／ В одной конфигурации можно использовать файловые базы и **только одну СУБД**: PostgreSQL или MSSQL.",
+     "lines": [
+      14,
+      36,
+      43
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "1С на PostgreSQL или Microsoft SQL Server. ／ - Microsoft SQL Server (MSSQL); ／ В одной конфигурации можно использовать файловые базы и **только одну СУБД**: PostgreSQL или MSSQL.",
+     "lines": [
+      14,
+      37,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 1С 信息库（含 PostgreSQL/MSSQL 后端）提供备份功能的专用工具，非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Кроссплатформенная утилита для резервного копирования информационных баз **1С:Предприятие**. ／ - автоматическое резервное копирование баз 1С в формат `.dt`; ／ - PostgreSQL;",
+   "evidence_lines": [
+    3,
+    32,
+    36
+   ]
+  },
+  "fn": "Dr-Mikegreen/maintenance_1C",
+  "sha": "364c4d3a9398",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
