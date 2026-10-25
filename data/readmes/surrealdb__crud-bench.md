@@ -99,12 +99,12 @@ and lists those which are planned in the future.
 - [x] Bruteforce (exact) KNN query
 - [x] HNSW KNN query, with configurable `m` / `ef_construction` / `ef_search`
 - [x] DiskANN KNN query, with configurable `degree` / `l_build` / `alpha` / `l_search`
-- [x] Vector index build timing
+- [x] Vector index build timing, until the index serves at index speed
 - [x] Recall@k against exact ground truth, scored identically for every engine
 - [x] Parameter sweeps tracing the recall/latency curve over a single index build
 - [x] Reproducible corpora, so engines and runs are compared on identical data
+- [x] Filtered KNN at several selectivities, with recall scored per predicate
 - [ ] Index size on disk and resident memory
-- [ ] Filtered KNN (`WHERE … ORDER BY <embedding> LIMIT k`)
 
 **Relationships**
 
@@ -147,6 +147,12 @@ Options:
   -s, --samples <SAMPLES>                      Number of samples to be created, read, updated, and deleted
   -r, --random                                 Generate the keys in a pseudo-randomized order
       --sync                                   Whether to ensure data is synced and durable
+      --measurement-time <SECONDS>             Seconds each timed scan leg runs for when the scan sets no `iterations` [default: 30]
+      --warmup-time <SECONDS>                  Seconds of untimed warm-up before each timed scan leg (0 disables) [default: 5]
+      --min-iterations <N>                     Fewest iterations a timed window may record [default: 10]
+      --max-iterations <N>                     Most iterations a timed window may record [default: 10000000]
+      --mode <MODE>                            Which phases to run: `all`, `load` (keep the dataset), or `query` (reuse it) [default: all]
+      --data-dir <DATA_DIR>                    Directory recording what a `load` run left behind [env: CRUD_BENCH_DATA_DIR=] [default: .crud-bench-data]
       --operation-timeout <OPERATION_TIMEOUT>  Per-operation timeout in seconds [env: CRUD_BENCH_OPERATION_TIMEOUT=] [default: 1800]
       --persisted                              Whether to enable disk persistence for Redis-family databases
       --optimised                              Use optimised database configurations instead of defaults
@@ -253,6 +259,8 @@ Each scan object can make use of the following values:
 - `id` (**required**): Stable identifier for grouping in the CLI, result tables, CSV output, and for **index create/drop** when `with_index` is present and not skipped. Use a simple identifier (e.g. `where_field_integer_eq`); human-readable titles live in `name` / run `name` and may contain characters that are not valid in SurrealDB or Neo4j index names.
 - `name`: A descriptive name for the test (use this **or** `runs`, not both).
 - `runs`: An array of `{ "name", "iterations"?, "projection"?, "vector_query"? }` objects that share the same scan parameters (`condition`, `with_index`, and so on). Each run becomes a separate benchmark with its own display name. Per-run `iterations`, `projection` and `vector_query` override the entry-level value when both are set; if a run omits one, the entry-level value applies (`projection` defaulting to full-record scans like a single-object entry without `projection`). A per-run `iterations` matters when one array mixes leg kinds — a bruteforce KNN leg is a full table scan costing seconds per query at 100k rows, while the graph-index legs beside it answer in under a millisecond, and no single count suits both.
+- `iterations`: A fixed number of timed iterations. When omitted, the scan is measured over a time window instead, so its run time does not grow with the dataset size.
+- `measurement_time` / `warmup_time`: Seconds of the measured window and of the untimed warm-up before it, overriding `--measurement-time` and `--warmup-time`. Ignored when `iterations` is set. A window never interrupts a query already running, and always records at least `--min-iterations` samples, so a very slow query can run past it. Result rows for a windowed scan are labelled with the window (for example `30s`) instead of an iteration count.
 - `projection`: The projection type of the scan:
     - `"ID"`: only the ID is returned.
     - `"FULL"`: the whole record is returned.
@@ -302,6 +310,49 @@ Multiple benchmarks that share the same filter, index, and write settings can us
 ]
 ```
 
+#### Index build time
+
+An `[I]ndex · … · build` row is timed from the build call until the index **serves at index speed**,
+which for some engines is long after the build call returns. The two moments coincide for an engine
+whose build call does all the work, and can be minutes to hours apart for one that finishes the index
+in the background; only the later one means the same thing for both. At 100k rows × 768-d, HNSW
+`M 16` / `EFC 200` — one run per engine on a shared machine, so the absolute times are only
+indicative; the split is the point:
+
+| engine | build call returned | index queryable | why |
+|---|---|---|---|
+| pgvector | 2 m 19 s | 2 m 19 s | `CREATE INDEX` is synchronous |
+| Redis | 4.5 ms | 12.1 s | `FT.CREATE` accepts the schema; documents are indexed afterwards |
+| SurrealDB | 12.9 s | 2 m 50 s | `ready` follows row enumeration; the graph is built afterwards |
+
+Timing the build call alone reported the first column. At 1M rows that made SurrealDB look ~28×
+faster to build than pgvector — 56 s against 25 m 29 s — while its index was still being built an
+hour later. So each engine's wait for its index to become queryable — pending entries drained,
+materialisation finished, background indexing complete — is part of the timed build, and the CPU and
+memory sampled for the build row cover it too.
+
+The build call's own time is kept as a diagnostic, `build_returned` in the JSON and `Build_returned`
+in the CSV. It is deliberately not in the summary table: it is the figure that does **not** mean the
+same thing across engines. Result files written before this change lack `index_build_timing` in
+their metadata, and the comparison viewer flags a mix of old and new files rather than setting one
+definition's number beside the other's.
+
+A search is only ever timed against an index that has finished. For SurrealDB that means waiting
+until `INFO FOR INDEX` reports `ready`, no `pending` entries, **and** `compacting: false` — `ready`
+alone arrives while a vector index is still being built from per-record pending entries, and a kNN
+query in that state scores the remainder by hand. A server that does not report `compacting` cannot
+say when that has finished, so crud-bench **skips** HNSW and DiskANN legs there, reporting `-`,
+rather than time a scan wearing the index's name. SurrealDB 3.3.0 is the first release that reports
+it, so both the crate embedded mode links (`-e memory`, `-e surrealkv:…`) and the
+nightly Docker image server mode uses by default are covered; releases before 3.3.0 defer the same
+work without reporting it, and get the skip.
+
+The wait is bounded by `--operation-timeout`, like every timed operation. A build that used to fit
+in the 30-minute default can stop fitting once its materialisation counts — a large vector index is
+the usual case — and the error then says so; raise the timeout to allow for it. Readiness is polled
+at a tenth of the time waited so far, between 10 ms and 250 ms, so a reported build is at most
+`max(10 ms, min(10%, 250 ms))` late: a sub-second build is not rounded up to a whole poll interval.
+
 ### Vector search
 
 Vector workloads live in [`config/vector.toml`](config/vector.toml). Each `[scans.runs.vector_query]`
@@ -317,6 +368,10 @@ block describes one KNN benchmark:
   `l_search`) also accepts a **list**, which is swept: see below.
 - `holdout`: `{ count, seed }` for the query set. Query vectors are generated from `seed` using the
   schema's own vector generator and are **never inserted**, so no query is its own nearest neighbour.
+- `filters`: a list of predicates the KNN result is restricted to, one timed leg each plus an
+  unfiltered baseline — see [Filtered KNN](#filtered-knn).
+- `filter_index`: `true` to index each filter column before the legs (untimed) and drop it after —
+  see [Indexed filter columns](#indexed-filter-columns). Default `false`.
 - `tie_epsilon`: relative tolerance when deciding whether a returned neighbour counts as correct
   (default `0.0`, i.e. strict recall@k). Engines compute distances at different precisions, so rows
   straddling the k-th boundary can swap without any real quality difference; a small tolerance stops
@@ -324,13 +379,13 @@ block describes one KNN benchmark:
 
 #### Engine support
 
-| engine | bruteforce | HNSW | DiskANN | notes |
-|---|---|---|---|---|
-| SurrealDB (3.x) | ✓ | ✓ | ✓ | `<\|k,ef\|>` operator; DiskANN needs a build that has the DDL |
-| SurrealDB (2.x) | ✓ | ✓ | — | 2.6 has no DiskANN |
-| PostgreSQL | ✓ | ✓ | — | pgvector; DiskANN would need pgvectorscale |
-| Redis Stack | ✓ (FLAT) | ✓ | — | no native L1/Manhattan metric |
-| everything else | — | — | — | the run is skipped, not failed |
+| engine | bruteforce | HNSW | DiskANN | filtered | notes |
+|---|---|---|---|---|---|
+| SurrealDB (3.x) | ✓ | ✓ | ✓ | ✓ (HNSW + DiskANN) | `<\|k,ef\|>` operator; DiskANN needs a build that has the DDL; HNSW and DiskANN legs need a server that reports `building.compacting` (see [Index build time](#index-build-time)) |
+| SurrealDB (2.x) | ✓ | ✓ | — | — | 2.6 has no DiskANN; filtered legs are declined, not answered unfiltered |
+| PostgreSQL | ✓ | ✓ | — | ✓ | pgvector; DiskANN would need pgvectorscale |
+| Redis Stack | ✓ (FLAT) | ✓ | — | ✓ | no native L1/Manhattan metric |
+| everything else | — | — | — | — | the run is skipped, not failed |
 
 Engines without vector support skip these runs rather than failing, so a mixed run reports `-` for
 them rather than aborting. A leg whose strategy needs an index it cannot build is skipped the same
@@ -375,6 +430,211 @@ KNN operator, Redis passes `EF_RUNTIME` on the query rather than fixing it at `F
 pgvector takes it from the `hnsw.ef_search` session GUC, which is applied to every client before each
 leg — a setting made only on the client that built the index would reach one session out of
 `--clients`.
+
+#### Filtered KNN
+
+Filtered workloads live in [`config/vector-filtered.toml`](config/vector-filtered.toml). Where the
+unfiltered config asks how fast and how accurately an index finds the nearest neighbours, this one
+asks the question production asks: *among the rows that match this predicate*.
+
+```toml
+[scans.runs.vector_query]
+field = "embedding"
+top_k = 10
+distance = "cosine"
+index_strategy = { kind = "hnsw", m = 16, ef_construction = 200, ef_search = [16, 64, 128, 256] }
+filters = [
+    { name = "sel~1%", field = "number", op = "lte", value = 50 },
+    { name = "sel~10%", field = "number", op = "lte", value = 500 },
+    { name = "tag~33%", field = "status", op = "eq", value = "published" },
+]
+```
+
+Each predicate becomes its own timed leg, and an **unfiltered leg runs first under the same index
+build and the same warm index** — "what does filtering cost?" is not answerable against a baseline
+measured somewhere else. Legs are the cross product of the search sweep and the filter list, all over
+a single build, since the index does not depend on the predicate.
+
+Why this is worth measuring separately: engines answer a filtered query in structurally different
+ways, and the differences do not show up in latency.
+
+| strategy | accuracy | latency | failure mode |
+|---|---|---|---|
+| pre-filter | exact | grows as the predicate widens | a wide predicate degenerates to a full scan |
+| post-filter | drops as the predicate narrows | fast, and fastest when worst | a top-10 query at 1% selectivity can return nothing |
+| filtered traversal | in between | in between | can stall when matching rows are scattered across the graph |
+
+Post-filtering — search the index for `k`, then discard the hits that do not match — is the *fastest*
+of the three and the least useful, because the `k` the index chose were chosen without knowing about
+the predicate. A latency column rewards it. Recall is what exposes it, which is why every filtered
+leg is scored against an answer key computed **per predicate**: exact top-k among the matching rows,
+computed in the harness from the seeded corpus.
+
+##### What this actually measures
+
+Measured on 20k rows of 128-d clustered vectors, `top_k = 10`, HNSW `m = 16 / efc = 200 /
+ef_search = 64`, one client — all three engines answering the identical questions against the
+identical answer key:
+
+| engine | exact leg | HNSW unfiltered | HNSW @ 10% | HNSW @ 33% | latency @ 10% vs unfiltered |
+|---|---|---|---|---|---|
+| SurrealDB 3.x | 1.000 | 1.000 | 1.000 | 1.000 | 3.6 ms → 16.8 ms (**4.6x**) |
+| Redis Stack | 1.000 | 0.996 | 1.000 | 1.000 | 0.50 ms → 0.54 ms (flat) |
+| PostgreSQL (pgvector) | 1.000 | 1.000 | **0.656** (p5 **0.30**) | 0.998 | 0.83 ms → 0.70 ms (flat) |
+
+Three structurally different answers to the same question, and **the latency columns rank pgvector
+first**. It is the only one of the three that loses a third of the true neighbours at 10%
+selectivity, and its worst 5% of queries lose 70% of theirs — while costing no more than the
+unfiltered query, because it never looked at the rows it skipped. SurrealDB pays 4.6x in latency and
+keeps every neighbour; Redis pays nothing measurable and keeps every neighbour.
+
+That is the entire argument for scoring filtered legs against a filter-aware answer key rather than
+timing them. No amount of latency measurement distinguishes the first row from the third.
+
+The divergence is not only between engines. DiskANN on the same SurrealDB build, same corpus, same
+predicates, sweeping `l_search`:
+
+| `l_search` | unfiltered | @ 10% | @ 33% |
+|---|---|---|---|
+| 50 | 1.000 (0.88 ms) | **0.512** (p5 0.20, 1.09 ms) | 1.000 (1.13 ms) |
+| 200 | 1.000 (0.90 ms) | 1.000 (2.46 ms) | 1.000 (1.33 ms) |
+| 400 | 1.000 (0.95 ms) | 1.000 (2.63 ms) | 1.000 (1.47 ms) |
+
+A traversal budget that is ample unfiltered — `l_search = 50` reaches exact at every budget with no
+predicate — finds barely half the true neighbours once a 10%-selective predicate is applied, and
+needs roughly 4x the budget to recover. Where SurrealDB's HNSW absorbed the same predicate by
+traversing harder at a fixed `ef_search` (4.6x latency, recall intact), DiskANN keeps its latency and
+loses recall instead. And at `l_search = 50` the *wrong* answer is the faster one — 1.09 ms against
+2.46 ms — so latency picks it again.
+
+This is why the filter list expands against the search sweep rather than beside it: the search budget
+a filtered query needs depends on the selectivity, and any single point would have reported DiskANN
+as either broken or fine depending on an arbitrary choice.
+
+It is also why the low end of each shipped ladder sits **below** saturation and should stay there. A
+ladder whose every point already reaches exact prints a flat column of `1.000` and measures nothing —
+the recall equivalent of reporting latency with no recall column. The starved point is what makes the
+effect visible, and the unfiltered leg beside it at the same budget is what identifies it as a
+budget/selectivity interaction rather than a defect.
+
+The HNSW ladder, `ef_search = [16, 64, 128, 256]`, is calibrated at the scale the config is meant
+for ([#290](https://github.com/surrealdb/crud-bench/issues/290)). Unfiltered recall@10 at 1M × 768-d:
+
+| `ef_search` | 16 | 64 | 128 | 256 |
+|---|---|---|---|---|
+| pgvector | 0.516 | 0.821 | 0.937 | 0.975 |
+| Redis | 0.463 | 0.774 | 0.904 | 0.966 |
+
+16 sits clearly under the knee, 64 and 128 across it, 256 near saturation. The ladder it replaced,
+`[32, 128]`, was chosen on a 20k × 128-d smoke run on the guess that it was already saturated; at 1M
+it was not (32 reads 0.670 / 0.608). Budgets saturate at different points as a corpus grows, which is
+why the calibration had to happen at the target scale. Selective predicates do not follow the budget
+at all — at 1% pgvector's post-filter never passes 0.271 on this ladder, while Redis brute-forces the
+matching rows at 1.000 — so the ladder is chosen on the unfiltered and 50% columns.
+
+The DiskANN ladder, `[50, 200]`, is **not calibrated**. DiskANN runs only on SurrealDB, whose 1M arm
+is blocked: the index keeps materialising for over an hour after reporting ready, so there is nothing
+yet to calibrate against.
+
+Note every **exact** leg reads `1.000` under both predicates on all three engines. That is the check
+that the three renderings select the same rows the harness does: if SurrealQL, ANSI SQL and the
+RediSearch expression disagreed with the in-process predicate by even one row, exact search could not
+score a perfect recall against it.
+
+##### Predicate grammar
+
+A filter is `{ name, field, op, value }`:
+
+- `name`: labels the leg in the results. Must be unique within a scan; it is not part of the
+  ground-truth cache key, so renaming a predicate does not invalidate a computed answer key.
+- `field`: an `integer`, `float`, `string` or `bool` column from the value template. Other column
+  types are rejected — a datetime or decimal filter would need per-engine literal formats and
+  collation rules, and getting either subtly wrong leaves two engines answering different questions.
+- `op`: `eq`, `ne`, `lt`, `lte`, `gt`, `gte`, or `in`. The ordering operators require a numeric
+  column; `in` takes a list and is the natural way to dial selectivity on a categorical column.
+- `value`: a literal, or a list for `in`. Text literals are restricted to letters, digits, space and
+  `_-./+:@` — every engine here quotes strings differently, and a mis-escaped literal does not fail
+  loudly, it silently selects a different set of rows in one engine than in another.
+
+The predicate has to be something crud-bench can evaluate, not an opaque per-dialect string like
+`scan.condition`. That is what makes a filter-aware answer key possible at all: the harness
+reconstructs the seeded corpus, applies the same predicate, and computes exact top-k over the rows it
+admits.
+
+##### Selectivity is measured, not declared
+
+The ground-truth sweep regenerates every row anyway, so it counts matches while it is there. The
+share that actually matched is reported in the leg label and in the `Filter` column of the summary
+table (`Filter_selectivity` in CSV, `filter_selectivity` in JSON). Names like `sel~1%` are intentions;
+the reported figure is what the corpus did.
+
+This also makes the sweep *cheaper* rather than dearer: a non-matching row is skipped before any
+distance is computed, so a 1%-selective predicate pays for about 1% of the arithmetic.
+
+A predicate that matches no rows fails the run rather than reporting it. Every query would have an
+empty answer, recall would be undefined, and the timed leg would be measuring an engine returning
+nothing — a configuration mistake, not a result.
+
+##### How each engine is asked
+
+| engine | rendering |
+|---|---|
+| SurrealDB (3.x) | `WHERE <field> <\|k,ef\|> $q AND <pred>`, with the KNN operator leading — HNSW and DiskANN share this path; bruteforce gets a plain `WHERE` before the `ORDER BY` |
+| PostgreSQL | `SELECT id FROM record WHERE <pred> ORDER BY <field> <op> $1 LIMIT k` |
+| Redis Stack | `(<pred>)=>[KNN k @v $q …]`, a hybrid query; filter columns are mirrored into the `vec:{key}` HASH and declared `NUMERIC` / `TAG CASESENSITIVE` in `FT.CREATE` |
+
+`CASESENSITIVE` matters: RediSearch folds case on TAG fields by default, which would admit rows the
+answer key excludes and produce a systematic recall error that looks like an index fault.
+
+SurrealDB 2.x declines filtered legs and reports `-`. Running the unfiltered query and scoring it
+against a filter-aware answer key would report a recall collapse that says nothing about the engine,
+and a skip is distinguishable from that where a wrong number is not.
+
+DiskANN is filtered wherever it exists, which today is SurrealDB 3.x alone — it shares the index path
+above with HNSW. Neither pgvector nor Redis Stack ships a DiskANN index, so there is nowhere else to
+apply it; pgvectorscale's `diskann` would be a separate adapter and is tracked in #284.
+
+##### Indexed filter columns
+
+Whether the filter column is indexed changes how an engine can answer, far more than any search
+parameter does. Without an index it has to test the predicate candidate by candidate as it
+searches; with one it can start from the rows that match. That is a property of the schema, not the
+engine, so it is a switch — `filter_index = true` on a `vector_query` — and
+`config/vector-filtered.toml` runs every strategy both ways, the second labelled `· filter index`.
+
+Each distinct filter column is indexed after the vector index and before the first leg, so the
+unfiltered baseline runs against the same schema, and dropped after the last. The build is not timed:
+it is schema setup, not the index under test.
+
+| engine | what `filter_index` does |
+|---|---|
+| SurrealDB (3.x) | `DEFINE FIELD <col> ON record TYPE <int\|float\|string\|bool>` plus a b-tree index; both removed afterwards |
+| PostgreSQL | a b-tree index, then `ANALYZE` so the planner can cost it straight after a bulk load |
+| Redis Stack | nothing: filter columns are already `NUMERIC` / `TAG` fields of the vector index, so the two variants measure the same configuration |
+| SurrealDB (2.x) | declined (`-`), like every filtered leg |
+
+SurrealDB needs the declared type. Its KNN pre-filter turns an indexed predicate into an allow-list
+of matching records — scored exactly when few match, without touching the graph — but only trusts a
+b-tree index on a column that cannot hold arrays: on a schemaless table an array value fans out to one
+index entry per element, so the index could admit rows the predicate rejects. With an index and no
+declared type the plan does not change. At 1% selectivity on 50k × 768-d, the pre-filter took a
+filtered HNSW query from 1.1 s and recall 0.96 to 25 ms and 1.000
+([#314](https://github.com/surrealdb/crud-bench/issues/314)).
+
+`--skip-indexes` removes `filter_index` scans along with the other index builds.
+
+Two caveats worth knowing when reading the numbers:
+
+- **pgvector runs with its defaults.** Without `filter_index` it post-filters its HNSW scan, its
+  documented default (`hnsw.iterative_scan = off`). Iterative scans are not exercised yet
+  ([#312](https://github.com/surrealdb/crud-bench/issues/312)).
+- **Redis mirrors filter columns on every write.** They ride in the same `HSET` as the embedding, so
+  the cost is marginal, but the create and update phases of a filtered config are not byte-identical
+  in work to those of `config/vector.toml`.
+
+```bash
+cargo run -r -- -d surrealdb -s 100000 -c 12 -t 24 --config config/vector-filtered.toml
+```
 
 #### Concurrency
 
@@ -646,12 +906,12 @@ Specify a custom endpoint using `-e` or `--endpoint` to benchmark a custom deplo
 | Endpoint | Meaning |
 |----------|---------|
 | `server:memory` | Docker server with in-memory storage engine |
-| `server:rocksdb` | Docker server with RocksDB storage engine |
 | `server:surrealkv` | Docker server with SurrealKV storage engine |
 | `memory` | Embedded with in-memory storage engine. |
-| `rocksdb:<path>` (`rocksdb:/tmp/db`) | Embedded with RocksDB storage engine. |
-| `surrealkv:<path>` (`surrealkv:/tmp/db`) | Embedded with RocksDB storage engine. |
+| `surrealkv:<path>` (`surrealkv:/tmp/db`) | Embedded with SurrealKV storage engine. |
 | `ws://...`, `wss://...`, `http://...`, `https://...` | Remote server you manage yourself (no Docker started by crud-bench). |
+
+The default adapter follows the latest SurrealDB release, which no longer offers the RocksDB storage engine. To benchmark SurrealDB 3.x, including RocksDB, use `-d surrealdb3`, which links the 3.x SDK and starts the `surrealdb/surrealdb:v3` image. It accepts the same endpoints as above plus `server:rocksdb` and `rocksdb:<path>`, and defaults to `server:rocksdb`.
 
 ### [SurrealKV](https://surrealkv.org)
 
@@ -676,7 +936,7 @@ To run the benchmark against an already running SurrealDB instance, follow the s
 Start a SurrealDB server:
 
 ```bash
-surreal start --allow-all -u root -p root rocksdb:/tmp/db
+surreal start --allow-all -u root -p root surrealkv:/tmp/db
 ```
 
 Then run crud-bench with the `surrealdb` database option:
@@ -696,7 +956,7 @@ When benchmarking SurrealDB (including `surrealdb`, and `surrealds`), you can co
 
 These environment variables are used in two scenarios:
 
-1. **Docker Container Startup**: When crud-bench automatically starts a SurrealDB Docker container (`-d surrealdb` with no endpoint, or with `-e server:rocksdb` / `-e server:memory` / `-e server:surrealkv`), it uses these credentials to configure the database server
+1. **Docker Container Startup**: When crud-bench automatically starts a SurrealDB Docker container (`-d surrealdb` with no endpoint, or with `-e server:memory` / `-e server:surrealkv`), it uses these credentials to configure the database server
 2. **Client Authentication**: When connecting to SurrealDB instances (both embedded and networked), the benchmark client uses these credentials to authenticate
 
 ### Usage Examples
@@ -726,7 +986,7 @@ SURREALDB_USER=admin SURREALDB_PASS=secure_password cargo run -r -- -d surrealdb
 First, start your SurrealDB instance with custom credentials:
 
 ```bash
-surreal start --allow-all -u admin -p secure_password rocksdb:/tmp/db
+surreal start --allow-all -u admin -p secure_password surrealkv:/tmp/db
 ```
 
 Then run the benchmark with matching credentials:
@@ -778,16 +1038,16 @@ For testing the load distribution mechanism without TiKV, you can use independen
 
 ```bash
 # Terminal 1 - Start first instance on port 8001
-surreal start --allow-all -u root -p root --bind 127.0.0.1:8001 rocksdb:/tmp/db1
+surreal start --allow-all -u root -p root --bind 127.0.0.1:8001 surrealkv:/tmp/db1
 
 # Terminal 2 - Start second instance on port 8002
-surreal start --allow-all -u root -p root --bind 127.0.0.1:8002 rocksdb:/tmp/db2
+surreal start --allow-all -u root -p root --bind 127.0.0.1:8002 surrealkv:/tmp/db2
 
 # Terminal 3 - Start third instance on port 8003
-surreal start --allow-all -u root -p root --bind 127.0.0.1:8003 rocksdb:/tmp/db3
+surreal start --allow-all -u root -p root --bind 127.0.0.1:8003 surrealkv:/tmp/db3
 ```
 
-> **Note**: When using independent storage backends (like RocksDB above), each instance maintains its own separate data. With TiKV, all instances share the same distributed storage, which is the recommended production setup.
+> **Note**: When using independent storage backends (like SurrealKV above), each instance maintains its own separate data. With TiKV, all instances share the same distributed storage, which is the recommended production setup.
 
 ### Usage
 
@@ -853,3 +1113,24 @@ SurrealDS is ideal for:
 - **Scalability Assessment**: Compare single-node vs. multi-node SurrealDB performance with TiKV
 - **Production Deployment Simulation**: Benchmark configurations that mirror real-world distributed SurrealDB+TiKV deployments
 - **High Availability Testing**: Evaluate performance characteristics of redundant SurrealDB instances backed by TiKV
+
+## Loading once, querying many times
+
+Loading a large dataset dominates a run, and reads and scans can be measured many times against one load. `--mode` splits the two:
+
+```bash
+# Create and update the dataset, then keep it
+crud-bench -d postgres -s 10000000 --mode load
+
+# Read and scan it, as often as needed, without reloading
+crud-bench -d postgres -s 10000000 --mode query
+```
+
+- `all` (the default) loads, queries, deletes and runs batches in one run, and cleans up.
+- `load` runs creates and updates, then leaves the dataset on disk. For Docker databases the data lives in a named volume (`crud-bench-<database>`, with `-<name>` appended when `--name` is set) that is emptied at the start of every `load` run. The volume is left behind afterwards; remove it with `docker volume rm` when finished.
+- `query` runs reads and scans against that dataset. It does not recreate the schema and writes no rows.
+- Deletes and batches run only under `all`, because they consume or mutate the dataset.
+
+A `load` run writes a manifest to `--data-dir` recording the database, endpoint, `--samples`, key type, `--random`, corpus seed, value template, `--persisted`, `--optimised` and `--sync`. A `query` run refuses to start if any of these differ from the manifest, and says which. A `load` run that fails removes the manifest so its partial data cannot be queried.
+
+Pass the same `--name` and `--data-dir` to a `query` run as to its `load` run. Databases that cannot keep data between processes are refused up front: the in-memory `map` engine, `memory` endpoints, `server:memory`, and Redis, KeyDB, Dragonfly and SurrealMX without `--persisted`.

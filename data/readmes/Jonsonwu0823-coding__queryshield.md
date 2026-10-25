@@ -78,7 +78,7 @@ Every verified fact is compared with the value the demo data generator computes 
 
 Connected through the OpenAI-compatible protocol (verified on Alibaba Cloud Bailian only); the steps are in section 3 of the [operations guide](docs/operations.md): keys are set in the current shell only and never written to a file. On Windows one command does it all: `scripts/compose-real-demo.ps1 -BailianBaseUrl '<address>'` (hidden key input, starts Compose, runs the full demo question set and the demo script, copies out the summaries, and finally `docker compose down`); through the model gateway (the companion [QuotaForge](https://github.com/Jonsonwu0823-coding/quotaforge)) pass `-GatewayBaseUrl` and `-GatewayNetwork` instead, and only the demo questions run (see "经模型网关调用模型" in the operations guide). With configuration missing, the service ends with 503 (the check scripts record it as blocked) and never falls back to the Fake model.
 
-The model can give its action in two protocols, chosen by `QUERYSHIELD_MODEL_PROTOCOL`: `json` (the default), where the model writes a JSON action in its reply, and `native`, the model's native function calling (the request carries `tools` and the reply comes in `tool_calls`). Both go through the same server-side validator; how they were compared is in "两种动作协议" in the [architecture document](docs/architecture.md). The four local scripts `scripts/eval-local-real.ps1`, `scripts/http-local-smoke.ps1`, `scripts/demo-local.ps1` and `scripts/compose-real-demo.ps1` take `-ModelProtocol json|native`.
+The model can give its action in two protocols, chosen by `QUERYSHIELD_MODEL_PROTOCOL`: `json` (the default), where the model writes a JSON action in its reply, and `native`, the model's native function calling (the request carries `tools` and the reply comes in `tool_calls`). Both go through the same server-side validator; how they were compared is in "两种动作协议" in the [architecture document](docs/architecture.md). The local entry points `scripts/eval_local_real.py` and `scripts/http_local_smoke.py` take `--model-protocol json|native`, and `scripts/demo-local.ps1` and `scripts/compose-real-demo.ps1` take `-ModelProtocol json|native`.
 
 ## Architecture overview
 
@@ -176,7 +176,7 @@ These are a few runs on development material; see [docs/evidence.md](docs/eviden
 
 ### Automated checks and CI
 
-`scripts/check-all.ps1` is the one entry point for local machines and CI: the full test suite, the historical checks (DB-SMOKE plus the Fake mode of the five suites BASE, PROPOSAL, AGENT, STATE and EVAL) and the Fake smoke tests (HTTP, MCP, the demo questions, and B2 and B1S on the composite questions). CI has two jobs: `checks` runs the above, and `compose` starts Compose from an empty environment, runs the demo script twice (default settings, MCP settings) and checks stopping and restarting. In CI on 2026-10-03 (GitHub Actions, Linux): 1652 tests passed, 1 skipped. The suite has since grown to 4,655 tests; on 2026-10-20, on Linux with the test database but without the demo database or PowerShell: 4,522 passed, 133 skipped, 0 failed.
+`python scripts/check_all.py --evidence-dir <absolute directory>` is the one entry point for local machines and CI, the same command on Windows, macOS and Linux (with the virtual environment's `python`; no PowerShell needed): the full test suite, the historical checks (DB-SMOKE plus the Fake mode of the five suites BASE, PROPOSAL, AGENT, STATE and EVAL) and the Fake smoke tests (HTTP, MCP, the demo questions, and B2 and B1S on the composite questions). CI has two jobs: `checks` runs the above, and `compose` starts Compose from an empty environment, runs the demo script twice (default settings, MCP settings) and checks stopping and restarting. `scripts/check-all.ps1` and `scripts/check.ps1` still work (they pass their parameters on to `scripts/check_all.py` and `scripts/check_suites.py`) and will be removed. In CI on 2026-10-03 (GitHub Actions, Linux): 1652 tests passed, 1 skipped. The suite has since grown to 4,655 tests; on 2026-10-20, on Linux with the test database but without the demo database or PowerShell: 4,522 passed, 133 skipped, 0 failed.
 
 The code, tests and verification commands of each capability are in [docs/evidence.md](docs/evidence.md).
 
@@ -236,15 +236,35 @@ queryshield/
 
 ## Local installation without Compose
 
-Needs Python 3.12–3.14 and PostgreSQL 16 (server encoding UTF8).
+Needs Python 3.12–3.14 (or `uv` to manage Python) and PostgreSQL 16 (server encoding UTF8; the example below runs it in a Docker container, so Docker too). The checks, the smokes and the local evaluation have Python entry points with the same command on all three platforms, so PowerShell is not needed; only a few demo and database setup `.ps1` scripts still use it for now (`pwsh`, PowerShell 7, on macOS and Linux).
+
+What to install on each platform:
+
+| Platform | Python | Docker |
+|---|---|---|
+| macOS (Apple silicon) | `brew install python@3.14` (the command is `python3`), or `uv python install 3.14` | Docker Desktop, Apple silicon build (`brew install --cask docker`) |
+| Windows | `winget install Python.Python.3.14`, or `uv python install 3.14` | Docker Desktop (`winget install Docker.DockerDesktop`) |
+| Linux | your distribution's Python 3.12–3.14 package (with the `venv` module), or `uv python install 3.14` | Docker Engine with the compose plugin |
+
+In the `queryshield` directory, create the virtual environment, install the dependencies and run the self-check:
 
 ```bash
-python -m venv .venv && . .venv/bin/activate      # Windows: .\.venv\Scripts\Activate.ps1
-python -m pip install --requirement requirements.lock
+python3 -m venv .venv && . .venv/bin/activate     # macOS, Linux
+py -3.14 -m venv .venv; .\.venv\Scripts\Activate.ps1   # Windows (PowerShell; in cmd use .venv\Scripts\activate.bat)
+python -m pip install --requirement requirements.lock   # the same on all three platforms from here
 python -m pip install --no-deps -e .
+python scripts/doctor.py
 ```
 
 Install the lock file first and then this project with `--no-deps`, so that no other set of dependency versions gets resolved.
+
+`python scripts/doctor.py` only checks: it changes nothing and costs nothing. It looks at the Python version; whether every package in the lock file is installed at its version; whether a separately started Python process can import this project; whether `QUERYSHIELD_DATABASE_URL` accepts a (read-only) connection (when it is not set this is only reported, not a failure: only the local checks and smoke tests need it); and Docker with `docker compose` (needed only for Compose, so not a failure when missing). Each missing item gets one install hint for the current platform; it exits 0 when every required item passes, 2 otherwise. Run it again once the database is ready (see the sections below); when it passes, `python scripts/http_local_smoke.py --fake-dry-run` is a smoke test at no cost.
+
+The local smoke tests and evaluation: `python scripts/http_local_smoke.py`, `python scripts/mcp_local_smoke.py` (with `--fake-dry-run` they use the Fake model, at no cost) and `python scripts/eval_local_real.py`; their use is in section 4 of the [operations guide](docs/operations.md). The former `scripts/http-local-smoke.ps1`, `scripts/mcp-local-smoke.ps1` and `scripts/eval-local-real.ps1` still work (they pass their parameters on to these three entry points) and will be removed.
+
+With uv instead of pip: `uv venv --python 3.14`, activate `.venv` as above, then `uv pip install -r requirements.lock` and `uv pip install --no-deps -e .`; `requirements.lock` stays the only source of versions (there is no `uv.lock`). Run commands with the activated environment's `python`, not with `uv run`: in this project `uv run` writes a `uv.lock` and reinstalls packages at versions it resolves itself.
+
+macOS: both images Compose uses have native arm64 builds; install PowerShell 7 from Microsoft's `osx-arm64` package or archive on GitHub (Homebrew now has only the preview). Keep the repository out of the folders iCloud syncs (Desktop and Documents; use a folder such as `~/code`): new directories there whose names start with a dot get the hidden flag, Python skips hidden `.pth` files, and a separately started Python process then cannot import this project (the self-check's import item reports it, and a few tests fail because of it). If it is already there, run `chflags -R nohidden .venv` every time `.venv` is created or reinstalled.
 
 ### Prepare the database
 

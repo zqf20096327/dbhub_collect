@@ -126,9 +126,9 @@ OneBot WebSocket
 
 ```bash
 # 海外 / GitHub 可达
-docker pull ghcr.io/sakurawwwxh/qq-agent-plus:0.9.6
+docker pull ghcr.io/sakurawwwxh/qq-agent-plus:0.9.8
 # 国内（阿里云 ACR，公开，amd64/arm64）
-docker pull crpi-xejkraqtqkngfp11.cn-guangzhou.personal.cr.aliyuncs.com/wangxinhong/qq-agent-plus:0.9.6
+docker pull crpi-xejkraqtqkngfp11.cn-guangzhou.personal.cr.aliyuncs.com/wangxinhong/qq-agent-plus:0.9.8
 
 git clone https://github.com/sakurawwwxh/qq-agent-plus.git
 cd qq-agent-plus
@@ -436,8 +436,10 @@ QQ 未登录不属于“未连接”：此时 WS 连接正常，只是无法获�
 ### 控制台访问
 
 控制台默认端口为 `3210`。仅部署 Agent（`deploy.sh`）时默认仅监听 `127.0.0.1`，本机通过 SSH 隧道
-访问即可，无需开放任何公网端口；全栈安装器（`deploy-all.sh`）以 `--host 0.0.0.0` 启动控制台，
-跨主机访问时应仅向可信局域网或 VPN 放行。推荐从**你自己的电脑**建 SSH 隧道：
+访问即可，无需开放任何公网端口；全栈安装器（`deploy-all.sh`）新装默认也把控制台、SnowLuma WebUI
+（5099）与 noVNC（6081）绑在 `127.0.0.1`，远程访问走 SSH 隧道。只有显式传 `--publish` 才会绑
+`0.0.0.0`，此时应仅向可信局域网或 VPN 放行，并自行收紧云安全组。存量安装不加参数时沿用现有绑定。
+推荐从**你自己的电脑**建 SSH 隧道：
 
 ```bash
 ssh -N -L 3210:127.0.0.1:3210 -L 5099:127.0.0.1:5099 -L 6081:127.0.0.1:6081 <用户>@<服务器>
@@ -613,7 +615,7 @@ npm audit --omit=dev
 bash -n deploy.sh && bash -n deploy-all.sh && bash -n manage.sh
 ```
 
-CI（GitHub Actions）在每次推送和 PR 上执行语法检查、未定义调用扫描（严格模式）、单元测试、本地回归，
+CI（GitHub Actions）在 main 分支推送和所有 PR 上执行语法检查、未定义调用扫描（严格模式）、单元测试、本地回归，
 以及提示词 / 渲染 / 滚动 / 用量端到端回归。
 当前基线上仍有一批已确认、暂不修的问题；数量与状态以[已知问题](docs/KNOWN-ISSUES.md)为准，不要在这里写死条数。
 

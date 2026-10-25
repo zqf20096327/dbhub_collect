@@ -3,10 +3,11 @@
 An experimental, self-hosted application platform. Rust controller and node agents;
 React, Vite, Tailwind and TanStack frontend. Licensed under [MIT](LICENSE).
 
-Deploy Dockerfiles or supported Node/Bun projects from Git branches, tags, commits,
-or local uploads. Builds run in an isolated BuildKit VM and produce immutable OCI
-images. Three isolated worker VMs run applications through containerd. Management
-services run outside the cluster they control.
+Deploy Dockerfiles or supported Node, Bun, Python, Go, Rust, Ruby and PHP projects
+from Git branches, tags, commits, or local uploads. Builds run in an isolated
+BuildKit VM and produce immutable OCI images. Three isolated worker VMs run
+applications through containerd. Management services run outside the cluster they
+control.
 
 ## Install on Linux
 
@@ -60,18 +61,27 @@ Open **http://localhost:5188**. For another machine, forward it over SSH or use
 private HTTPS access as documented. The installed frontend serves built assets
 through Caddy; it does not run the Vite development server.
 
-This is a **private, single-operator alpha**, not a public multi-user PaaS. There
-is no application-level administrator login yet. Keep management listeners on
+This is a **private, multi-operator alpha**, not a public multi-tenant PaaS.
+Operator sessions, organizations, and RBAC do not replace private network access. Keep management listeners on
 loopback and restrict SSH/tailnet access to trusted operators. Three VMs on one
 host are three scheduling nodes, not three physical failure domains.
 
 ## What works
 
 - Projects, per-project environments, shadowed configuration and secrets.
-- Dockerfile builds, supported Node/Bun generated recipes, build/start overrides.
+- Dockerfile builds, versioned generated recipes for seven language ecosystems,
+  build/start overrides and persisted detection evidence.
+- Signed, replay-safe GitHub webhooks that pin repository events to commits.
+- Opt-in same-repository PR previews with isolated multi-service templates, audited
+  secret grants, GitHub Checks, quotas and durable cleanup.
 - Health-gated deployments, retained revisions, failed-candidate rollback,
   independent ingress, cordon/drain and opt-in stateless relocation.
+- Durable bounded crash/liveness recovery, replica health history and opt-in
+  stateless replacement after restart-budget exhaustion.
+- DNS-verified public OCI domains, Caddy API route updates, observed TLS and
+  acknowledged promotion/rollback; explicit edge installation is required.
 - Singleton workers, one-off jobs, interval schedules and pre-deployment commands.
+- Opt-in CPU autoscaling and HTTP sleep/wake for eligible stateless services.
 - OpenBao-backed workload secrets; dedicated ClickHouse runtime log retention.
 - Structured log columns/search, retained instance logs, metrics and audit events.
 - Managed PostgreSQL, Redis and RustFS; shared node-pinned volumes and file browsing.
@@ -79,8 +89,8 @@ host are three scheduling nodes, not three physical failure domains.
 - Remote Linux worker VMs over authenticated private links; see
   [remote setup and validation limits](docs/remote-workers.md).
 
-Public VPS/NetBird integration has configuration templates but is not an automated
-installation feature. celld declarations are modeled separately, but fleet
+Public VPS/NetBird installation remains explicit. The edge worker manages routes
+on an operator-installed Caddy through its API. celld declarations are modeled separately, but fleet
 execution is not implemented. Storage remains node-pinned. See
 [architecture and release limits](docs/architecture.md), [runtime](docs/runtime.md),
 [storage](docs/storage.md), [ingress](docs/ingress.md) and [backups](docs/backups.md).
@@ -98,6 +108,7 @@ PostgreSQL 18 and Make/systemd are also needed.
 ```sh
 pnpm install --frozen-lockfile
 make db
+make bootstrap-auth
 make api
 make web
 ```
@@ -106,6 +117,13 @@ These targets supervise background development processes independently of the
 terminal. The API binds `127.0.0.1:8080`; Vite binds `127.0.0.1:5188` and proxies the
 API. Basic API/UI development works without OpenBao, ClickHouse or VMs; unavailable
 infrastructure does not become fake successful builds or deployments.
+
+The bootstrap reads passwords from ignored `.local/dev-auth.env` when present and
+otherwise prompts without echoing them. For repeatable local credentials, install
+`dev-auth.example.env` at that path with mode `0600` and edit its values; they may
+be local-only passwords or 1Password CLI secret references. Authentication, organization,
+team, custom-role, recovery, and threat-model details are in
+[operator authentication](docs/authentication.md).
 
 For foreground processes use `make api-foreground` / `make web-foreground`.
 Checkout-specific operator configuration belongs in ignored `.local/platform.env`
@@ -155,6 +173,9 @@ The API schema is exported to `docs/api/openapi.json`. Regenerate it and the Orv
 TanStack Query client with `make api-schema` after changing documented endpoints.
 This development release changes API fields to camelCase and agent protocol to v2;
 existing installations require a [clean contract reset](docs/upgrades.md).
+
+[Git provider automation](docs/git-automation.md) documents the current signed
+GitHub webhook slice and its explicit private-repository limitations.
 
 CI is configured for Ubuntu 22.04 and 24.04 on x86-64, and Ubuntu 24.04 on ARM64.
 A fresh Ubuntu 24.04 x86-64 installation, real two-replica deployment and host

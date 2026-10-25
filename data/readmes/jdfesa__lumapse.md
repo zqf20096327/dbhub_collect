@@ -37,6 +37,18 @@
   </tr>
 </table>
 
+### Manual de usuario
+
+**[Abrir el manual interactivo de Lumapse 0.6.0](https://jdfesa.github.io/lumapse/manual-de-usuario-lumapse.html)**
+
+La guía explica cómo escribir, organizar, consultar fechas y guardar una copia de tus notas.
+Se abre directamente en el navegador, sin instalar nada.
+
+También podés leerla sin conexión: descargá o cloná el repositorio y abrí
+`docs/manual-de-usuario-0.6.0/manual-de-usuario-lumapse.html` en un navegador,
+conservando la carpeta `assets` a su lado. Las [instrucciones del manual](./docs/manual-de-usuario-0.6.0/README.md)
+explican cómo editarlo, regenerarlo y publicarlo.
+
 ---
 
 ## ¿Qué es Lumapse?
@@ -73,19 +85,24 @@ Lumapse se enfoca en una fricción concreta: para parte del público relevado, l
 
 ### Descargar beta Android
 
-La beta controlada actual está publicada en GitHub Releases:
+El corte de presentación actual está publicado en GitHub Releases como Pre-release:
 
-> [`Lumapse v0.5.0`](https://github.com/jdfesa/lumapse/releases/tag/v0.5.0)
+> [`Lumapse v0.6.0 — Release Candidate 1`](https://github.com/jdfesa/lumapse/releases/tag/v0.6.0)
 
-Descargar el asset firmado `lumapse-v0.5.0.apk`. No usar artefactos `unsigned`, que solo se conservan como evidencia técnica local.
+Descargar el asset firmado `lumapse-v0.6.0.apk` y su checksum adjunto. No usar artefactos `unsigned`, que sólo se conservan como evidencia técnica local.
 
-`v0.5.0` es la segunda beta firmada. Incorpora las correcciones de seguridad, integridad, coordinación SQLite, manejo de errores y usabilidad táctil desarrolladas y validadas después de `v0.4.8`.
+La RC1 fue aceptada expresamente con validación parcial y límites documentados;
+no se presenta como estable o libre de errores. [Evidencia del corte](./docs/gestion/candidato-apk-0.6.0.md).
+`v0.5.0` se conserva como segunda beta histórica, sin reemplazar sus assets.
 
 SHA-256 del APK publicado:
 
 ```text
-d48338e04021a6096fcaeaced5fde411911d403c9ea95407891d2b034515a884
+15f8ede5b78387e3fcac1a53eb3bc78dbb1e30df9acf7f4f20c771c48739e042
 ```
+
+**Desarrollo congelado para la presentación académica.** El alcance y las
+limitaciones del corte están en [BACKLOG.md](./BACKLOG.md#congelación-académica--2026-10-22).
 
 ### Requisitos previos — Web (desarrollo y contribución)
 
@@ -275,9 +292,10 @@ Cerrar el proyecto con documentación coherente, evidencia final y presentación
 - Segunda beta `v0.5.0` publicada con AUD-001 a AUD-007, mejoras táctiles y versionado Android `0.5.0/500`
 - Revisión editorial y congelamiento de la documentación técnica y académica
 - Gráficos de base de datos regenerados y verificados contra el schema real; resta validar su maquetación en PDF y diapositivas
-- Quality gate del corte aprobado con 67 archivos y 1065 tests; resta completar la matriz RNF y la instalación manual del asset firmado cuando el dispositivo lo permita
-- Decisión explícita sobre la línea base académica final: conservar `v0.5.0` como referencia de defensa o publicar un corte estable posterior
-- Preparación de presentación, demo y respuestas para el tribunal evaluador
+- RC1 `v0.6.0/600` publicada y desarrollo congelado por decisión del autor, con cobertura parcial explícita; no se repetirán los controles restantes antes de la presentación
+- [Recorte de entrega y deuda postdefensa](./BACKLOG.md#cierre-de-entrega-y-deuda-postdefensa): offline verificado en debug `348da88` y aceptado en PR #31; privacidad, uso/accesibilidad y matriz RNF pendientes; continuidad del borrador aceptada en PR #29 y CRUD/FPS diferidos, sin afirmar cumplimiento cuantitativo
+- Planificación y tareas pendientes: [`TODO.md`](./TODO.md)
+- Fijar la línea base académica sobre ese artefacto, sin forzar una versión estable o afirmar adopción real
 
 > **Nota sobre la planificación:** Los meses asociados a cada hito constituyen estimaciones formuladas al inicio del proyecto. El desarrollo es iterativo: los plazos pueden ajustarse al profundizar la complejidad o aparecer hallazgos que cambian el alcance. El relevamiento por conveniencia aportó evidencia para priorizar móvil, offline y organización por materias; las decisiones de plataforma se justifican por separado en los ADR técnicos. El avance real se registra en los [informes de hito](./docs/hitos/), el [Changelog](./CHANGELOG.md) y el historial de commits.
 
@@ -303,7 +321,7 @@ Paralelamente al desarrollo se realizó un relevamiento con potenciales usuarios
 - [Portal documental](./docs/README.md) — Jerarquía, fuentes canónicas y criterio editorial
 - [Informe final ensamblado](./docs/informe-final/INFORME-FINAL-COMPLETO.md) — Checkpoint académico generado desde los capítulos fuente
 - [Hito 06 — Entrega Final](./docs/hitos/hito-06-octubre.md) — Alcance y criterios de cierre vigentes
-- [Plan de desarrollo inmediato de la beta](./docs/gestion/plan-desarrollo-inmediato-beta-2026-09-12.md) — Propuesta para próximas sesiones, con evidencia y criterios de aceptación; pendiente de revisión por PR
+- [Plan de desarrollo inmediato de la beta](./docs/gestion/plan-desarrollo-inmediato-beta-2026-09-12.md) — Plan aceptado, seguimiento y ajuste vigente del cierre; no acredita pruebas pendientes
 - [Cheat sheet de defensa](./docs/gestion/cheatsheet-defensa.md) — Métricas y respuestas verificables para la presentación
 - [Architecture Decision Records](./docs/adr/) — Decisiones técnicas justificadas
 - [Diagramas UML](./docs/diagramas/) — Casos de Uso, Secuencia, Modelo de Dominio (Mermaid)

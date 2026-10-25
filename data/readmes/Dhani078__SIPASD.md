@@ -39,8 +39,8 @@ Kondisi eksisting penyimpanan Google Drive:
 
 | Username | Password | Nama Tampilan Web | Role | Jabatan |
 |----------|----------|-------------------|------|---------|
-| `pengarsip` | `dispora2026` | Rana Nur Syifa | SUPER_ADMIN | Analis Anggaran - Ahli Pertama (Pemberi Tugas) |
-| `developer` | `dev2026` | Muhammad Rizki Ramadhani | SUPER_ADMIN | Mahasiswa Magang TI UNISKA (Developer) |
+| `pengarsip` | `Dispora2026!` | Rana Nur Syifa | SUPER_ADMIN | Analis Anggaran - Ahli Pertama (Pemberi Tugas) |
+| `developer` | `Dispora2026!` | Muhammad Rizki Ramadhani | SUPER_ADMIN | Mahasiswa Magang TI UNISKA (Developer) |
 
 Username login memakai identitas generik, sedangkan nama yang tampil di antarmuka web diambil dari kolom `nama_lengkap` (nama pegawai sebenarnya).
 
@@ -66,10 +66,10 @@ Username login memakai identitas generik, sedangkan nama yang tampil di antarmuk
 ### 4. Manajemen Klasifikasi & Jadwal Retensi Arsip (JRA)
 - Pengelompokan kode klasifikasi dinas standar Permendagri / Pergub Kalsel:
   * `005` (Undangan)
+  * `045` (Kearsipan)
   * `426` (Keolahragaan)
   * `427` (Kepemudaan)
   * `800` (Kepegawaian)
-  * `045` (Kearsipan)
   * `900` (Keuangan)
 - Informasi masa retensi aktif dan inaktif dokumen arsip negara.
 

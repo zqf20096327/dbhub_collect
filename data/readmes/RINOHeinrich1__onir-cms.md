@@ -8,6 +8,12 @@ même instance.
 Le projet est publié sous licence **MIT**. Le cœur est ouvert et autonome ; des modules
 premium pourront être développés séparément dans un dépôt privé.
 
+> **Dépôts séparés.** L’application (dashboard, liens publics, API, documentation) est
+> servie sur `cms-backoffice.onirtech.com`. Le site public — landing, plugins et pages
+> légales — vit dans le dépôt statique
+> [`onir-cms-landing`](https://github.com/anjary-05/onir-cms-landing) et est servi sur
+> `cms.onirtech.com`.
+
 > **Statut : alpha (`0.x`).** L'API, le schéma de base de données et le format des
 > templates peuvent encore évoluer. Les changements incompatibles sont documentés dans
 > les release notes.
@@ -18,7 +24,7 @@ premium pourront être développés séparément dans un dépôt privé.
   révocation, consentement du visiteur et reprise de conversation.
 - **Modèles de raisonnement** : comportements de prospection stockés en base, avec un mode
   simple (prompt et fiche générés) et un mode expert.
-- **Fiches de prospection** : collecte guidée, génération Markdown, export PDF.
+- **Leads** : fiches de prospection, fichiers récupérés, génération Markdown et export PDF.
 - **Sources de connaissances** : base de connaissances, photothèque et liens activables
   par lien de chat.
 - **Fournisseurs IA OpenAI-compatible** : clés chiffrées, catalogue de modèles, modèle par
@@ -68,6 +74,14 @@ npm run dev
 
 Le compte admin par défaut est créé avec une rotation forcée à la première connexion.
 
+## Pièces jointes de prospection
+
+Les modèles de raisonnement peuvent déclarer des champs `file` (CIN, carte
+fiscale, justificatif…). Le prospect dépose le fichier depuis le chat ou le
+template visuel ; il est stocké dans `ATTACHMENTS_DIR`, rattaché au message puis
+référencé dans la fiche. Aucun OCR ni aucune analyse IA n'est effectué en v1.
+Voir ADR-0034.
+
 ## Configuration
 
 Les variables sont documentées dans [`.env.example`](.env.example). Les principales :
@@ -82,6 +96,7 @@ Les variables sont documentées dans [`.env.example`](.env.example). Les princip
 | `DEFAULT_ADMIN_PASSWORD` | Mot de passe initial, à changer immédiatement |
 | `APP_URL` | URL publique de l'instance |
 | `MEDIA_DIR` | Stockage persistant des médias |
+| `ATTACHMENTS_DIR` | Pièces jointes de prospection (défaut : `MEDIA_DIR/attachments`) |
 
 Ne jamais committer de secret. Utilisez `openssl rand -hex 32` pour générer les clés.
 

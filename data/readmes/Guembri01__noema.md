@@ -69,7 +69,7 @@ This repository is a **working application plus a complete parity tracker**.
   SSO, signed webhooks, and the desktop build.
 - Every feature area is tracked in **[`docs/FEATURE_MATRIX.md`](./docs/FEATURE_MATRIX.md)**
   - 565 rows, each with a status and a note explaining the current state. Today:
-  **499 implemented · 44 partial · 0 planned · 22 deliberately out of scope**.
+  **513 implemented · 30 partial · 0 planned · 22 deliberately out of scope**.
 - Nothing is dropped silently. What is unfinished is enumerated in
   **[`docs/MISSING_FEATURES.md`](./docs/MISSING_FEATURES.md)**, generated from the
   matrix by `npm run docs:gaps`, so the two cannot disagree.
@@ -139,9 +139,9 @@ account.
 
 | | |
 | --- | --- |
-| **Install** | The NSIS installer (`Noema_1.4.1_x64-setup.exe`) installs per user into `%LOCALAPPDATA%\Noema`, and uninstalls from Add/Remove programs. WebView2 is bootstrapped by the installer itself |
-| **Your data** | `%APPDATA%\app.noema.desktop` — the database, uploads, the session secret and preferences. Uninstalling keeps it unless you tick *delete application data* |
-| **Build it** | `npm run desktop:bundle` → `src-tauri/target/release/bundle/{nsis,msi}` |
+| **Install** | The NSIS installer (`Noema_1.4.2_x64-setup.exe`) installs per user into `%LOCALAPPDATA%\Noema`, and uninstalls from Add/Remove programs. WebView2 is bootstrapped by the installer itself |
+| **Your data** | `%APPDATA%\app.noema.desktop` - the database, uploads and preferences; the database URL and session secret live in `secrets.bin`, encrypted with Windows DPAPI. Uninstalling keeps it unless you tick *delete application data* |
+| **Build it** | `npm run desktop:bundle` → `src-tauri/target/release/bundle/{nsis,msi}`. Verify the SHA-256 against the release's `SHA256SUMS`; the installer is unsigned until a code-signing certificate is configured, so do not disable SmartScreen |
 | **How it boots** | The shell starts the bundled server on a free loopback port and opens the window on it. The port is a preference, not a contract: it survives a port change because nothing outside the shell depends on the number |
 | **One codebase** | The desktop build is the site build with `NOEMA_STANDALONE=1` — the embedded database replaces Postgres and the shell owns the lifecycle. Nothing is forked |
 
@@ -351,7 +351,7 @@ dark variants under `.dark`).
 
 **Remaining work** is enumerated in [`docs/MISSING_FEATURES.md`](docs/MISSING_FEATURES.md)
 (generated from the feature matrix by `npm run docs:gaps`): of 565 tracked rows,
-44 are still partial and 22 are deliberately out of scope - the rest are
+30 are still partial and 22 are deliberately out of scope - the rest are
 implemented — with a priority shortlist at the top.
 
 

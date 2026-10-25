@@ -48,6 +48,10 @@ flowchart LR
     t_audit -->|audit-group| audit
 ```
 
+inventory-service and order-service retry their own failures the same way, on topics named after them:
+`orders-topic-inventory-retry-N` / `-dlt`, `payment-topic-inventory-retry-N` / `-dlt` and
+`payment-topic-order-retry-N` / `-dlt` (5 attempts, then the dead-letter topic, where the record is logged once).
+
 Each stateful service owns its PostgreSQL database (authdb, orderdb, inventorydb, paymentdb, auditdb). Redis serves the
 gateway rate limiter, the carts and the product list cache. config-server serves every service's configuration;
 Grafana LGTM receives traces, metrics and logs over OTLP.
@@ -102,9 +106,9 @@ only from PENDING.
 
 ### Hexagonal layout of a service
 
-order-service, inventory-service and payment-service use ports and adapters
+Every domain service (order, inventory, payment, audit-trail, notification, cart, auth) uses ports and adapters
 ([ADR 15](docs/adr/0015-hexagonal-architecture.md)); `HexagonalArchitectureTest` (ArchUnit) enforces the
-rules. payment-service:
+rules in each. gateway-service and config-server have no domain and keep their layout. payment-service:
 
 ```
 payment-service/src/main/java/com/daniellaera/paymentservice/
@@ -251,7 +255,14 @@ A single order can hold multiple line items (`order_items` table) instead of one
 Append-only PostgreSQL table — no UPDATE or DELETE ever.
 All business events published to audit-topic via Kafka.
 Consumed by audit-trail-service and persisted immutably.
-Admin-only REST API with full event history.
+Admin-only REST API with full event history, paginated and filtered on the server.
+
+### Saga Timeline
+Every saga audit event carries the order id as its `correlationId`, so audit-trail-service can show one order's
+saga in order: `ORDER_CREATED → STOCK_DEDUCTED → PAYMENT_* → ORDER_*`, or the compensation with
+`STOCK_RESTORED` / `PAYMENT_REFUNDED`. In shop-ui an admin opens it from the audit trail or from an order on the
+dashboard (`/audit/orders/:orderId`); times are shown in the browser's time zone. Events recorded before the
+correlation id are matched by their entity ([ADR 18](docs/adr/0018-saga-timeline-correlation-id.md)).
 
 ### Token Rotation
 Every refresh issues a new refresh token and revokes the old one.
@@ -376,11 +387,23 @@ plus every Playwright spec) and `e2e.yml` (the Cucumber suite, when the saga ser
 > Use only for full manual rebuild outside CI/CD pipeline.
 > Normal deployments are handled automatically by Gitea Actions.
 
+The service Dockerfiles are runtime-only (`eclipse-temurin:21-jre-jammy` plus the jar): they copy
+`<service>/target/<service>.jar` and never run Maven. Build the jar first, from the repo root:
+
+```bash
+mvn -pl order-service -am package -DskipTests
+docker build -f order-service/Dockerfile -t order-service .
+```
+
+The script packages every service before building. config-server's jar never contains `*-local.yml`
+(excluded in its `pom.xml`), so an image built from a working tree with local configs does not ship them.
+
 ---
 
 ## CI/CD Pipeline
 
 Gitea Actions with path-based change detection — only changed services are rebuilt:
+- One Maven run packages the jars of the changed services (`-pl <services> -am`), then each image copies its jar
 - Docker images built for `linux/amd64`, pushed to Docker Hub as `:latest` and as the commit's short SHA
 - Secrets fetched from self-hosted Infisical via Machine Identity (Universal Auth)
 - Services deployed to Proxmox homelab (`infra-node1`) via SSH; the deploy log lists the tag and digest of
@@ -421,6 +444,10 @@ GET  /orders/stream       — SSE stream for real-time order updates
 
 GET  /transactions        — list payment transactions
 GET  /transactions/{id}   — get transaction by ID
+
+GET  /audit               — audit events, newest first (ADMIN only); optional filters:
+                            q, eventType (repeatable), serviceName, userEmail, orderId, from, to (ISO instants)
+GET  /audit/orders/{id}/timeline — one order's saga events, oldest first (ADMIN only)
 ```
 
 ### Swagger UI (direct service access)

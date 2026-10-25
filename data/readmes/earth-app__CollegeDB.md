@@ -24,8 +24,12 @@ SQL backends: Cloudflare D1, PostgreSQL, MySQL, MariaDB, SQLite, and any Drizzle
 - [In-Memory Providers for Testing & Development](#in-memory-providers-for-testing--development)
 - [Basic Usage](#basic-usage)
 - [Sharding Strategies](#sharding-strategies)
+- [Safe Shard Moves](#safe-shard-moves)
 - [Auto-Generated Primary Keys](#auto-generated-primary-keys)
 - [Utility Helpers](#utility-helpers)
+- [Instance Clients](#instance-clients)
+- [Topology and Epochs](#topology-and-epochs)
+- [Shard Eligibility](#shard-eligibility)
 - [Multi-Key Shard Mappings](#multi-key-shard-mappings)
 - [Drop-in Replacement for Existing Databases](#drop-in-replacement-for-existing-databases)
 - [Troubleshooting](#troubleshooting)
@@ -78,12 +82,12 @@ This allows you to:
 - Routing straight from the statement via `query` / `queryFirst` / `queryAll`, with no separate key argument
 - Provider adapters for Redis/Valkey/NuxtHub/Workers KV plus PostgreSQL/MySQL/SQLite SQL
 - Drizzle interop through existing SQL providers (`createPostgreSQLProvider`, `createMySQLProvider`, `createSQLiteProvider`)
-- Auto-allocated generated-id inserts via `insert()` and direct-shard inserts via `insertShard()` for AUTOINCREMENT / RETURNING workflows
-- Object-shaped CRUD helpers (`insertInto`, `patch`, `updateRow`, `deleteById`, `upsert`) so you
+- Auto-allocated generated-id inserts via `insert()` and direct-sh
 
 [...截断...]
 
- never hand-align columns and bindings
+ard inserts via `insertShard()` for AUTOINCREMENT / RETURNING workflows
+- Object-shaped CRUD helpers (`insertInto`, `patch`, `updateRow`, `deleteById`, `upsert`) so you never hand-align columns and bindings
 - Cross-shard-safe id generation (`nextId`), one-call setup from a Worker `env` (`initializeFromEnv`), and pagination with totals (`paginate`)
 - Shard-grouped batch writes (`batch`) that cost one round trip per shard instead of one per statement
 - Rendezvous hashing, so adding a shard relocates about `1/N` of keys instead of nearly all of them
@@ -203,5 +207,4 @@ CollegeDB includes a benchmark runner that executes each SQL+KV combination acro
 
 ### Adapter Profiles
 
-| Profile                  | Lane       | Purpose                                                                         |
-| ------------------------ | ---------- | ---------------------------------------------------------
+| Profile                  | Lane       | Purpose      

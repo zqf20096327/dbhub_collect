@@ -1,16 +1,41 @@
-# 🚀 WhatsApp API Hub (Self-Hosted, Open-Source WhatsApp REST API Gateway)
+<p align="center">
+  <a href="https://whatsapp-api-xepo.onrender.com">
+    <img src="public/assets/logo.jpg" alt="WhatsGateway Logo" width="120" style="border-radius: 50%;">
+  </a>
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![CI Quality Check](https://img.shields.io/badge/CI-Passing-brightgreen.svg)](.github/workflows/ci.yml)
-[![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4.svg?logo=php&logoColor=white)](https://www.php.net/)
-[![Node.js](https://img.shields.io/badge/Node.js-18%2B%20%7C%2020%2B-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Database](https://img.shields.io/badge/Database-MySQL%20%7C%20TiDB%20Serverless-4479A1.svg?logo=mysql&logoColor=white)](https://www.mysql.com/)
-[![Engine](https://img.shields.io/badge/Engine-WhiskeySockets%2FBaileys-25D366.svg?logo=whatsapp&logoColor=white)](https://github.com/WhiskeySockets/Baileys)
-[![Cost](https://img.shields.io/badge/Cost-100%25%20Free%20%26%20Open%20Source-orange.svg)](#1-project-overview--purpose)
-[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](CONTRIBUTING.md)
+<h1 align="center">🚀 WhatsGateway — Free WhatsApp API & Gateway</h1>
 
-> **A 100% free, self-hosted WhatsApp REST API Gateway and Web Management Dashboard built with PHP 8.2+, Node.js (Baileys), and MySQL/TiDB.**  
-> Send messages, transmit rich media (PDFs, images, audio, video), automate conversational auto-replies, track delivery queues, and receive real-time webhooks — **with zero Meta Cloud API fees, zero per-conversation costs, and no credit card required.**
+<p align="center">
+  <strong>The 100% Free, Open-Source & Self-Hosted WhatsApp REST API Gateway</strong><br>
+  <em>Developer-first alternative to Twilio and Meta WhatsApp Cloud API — Zero per-conversation fees, zero template approvals, and no credit card required.</em>
+</p>
+
+<p align="center">
+  <a href="https://github.com/navneetyadav-code/whatsapp-api/stargazers"><img src="https://img.shields.io/github/stars/navneetyadav-code/whatsapp-api?style=for-the-badge&logo=github&color=gold" alt="GitHub Stars"></a>
+  <a href="https://github.com/navneetyadav-code/whatsapp-api/network/members"><img src="https://img.shields.io/github/forks/navneetyadav-code/whatsapp-api?style=for-the-badge&logo=github&color=blue" alt="GitHub Forks"></a>
+  <a href="https://github.com/navneetyadav-code/whatsapp-api/issues"><img src="https://img.shields.io/github/issues/navneetyadav-code/whatsapp-api?style=for-the-badge&color=brightgreen" alt="GitHub Issues"></a>
+  <a href="https://github.com/navneetyadav-code/whatsapp-api/discussions"><img src="https://img.shields.io/badge/Discussions-Join-purple?style=for-the-badge&logo=github" alt="GitHub Discussions"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License: MIT"></a>
+</p>
+
+<p align="center">
+  <a href="https://www.php.net/"><img src="https://img.shields.io/badge/PHP-8.2%2B-777BB4.svg?style=flat-square&logo=php&logoColor=white" alt="PHP 8.2+"></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-18%2B%20%7C%2020%2B-339933.svg?style=flat-square&logo=node.js&logoColor=white" alt="Node.js 18+"></a>
+  <a href="https://github.com/WhiskeySockets/Baileys"><img src="https://img.shields.io/badge/Engine-Baileys%20v6.6-25D366.svg?style=flat-square&logo=whatsapp&logoColor=white" alt="Baileys"></a>
+  <a href="https://www.mysql.com/"><img src="https://img.shields.io/badge/Database-MySQL%20%7C%20TiDB-4479A1.svg?style=flat-square&logo=mysql&logoColor=white" alt="MySQL/TiDB"></a>
+  <a href="Dockerfile"><img src="https://img.shields.io/badge/Docker-Ready-2496ED.svg?style=flat-square&logo=docker&logoColor=white" alt="Docker Ready"></a>
+  <a href="https://whatsapp-api-xepo.onrender.com"><img src="https://img.shields.io/badge/Live%20Demo-Online-success?style=flat-square&logo=render" alt="Live Demo"></a>
+</p>
+
+> **WhatsGateway** is a production-grade, self-hosted WhatsApp REST API Gateway and Web Management Dashboard built with **PHP 8.2+**, **Node.js (@whiskeysockets/baileys)**, and **MySQL / TiDB**.  
+> Send unlimited text messages, rich media (PDFs, images, documents, audio, video, voice notes), automate conversational auto-replies, track delivery queues, and receive real-time webhooks — **100% free with zero Meta Cloud API fees, zero per-conversation costs, and no credit card required.**
+
+---
+
+### ⭐ Support Open Source — Star on GitHub!
+If you find this project valuable, please consider giving it a **Star (⭐)**! It helps more developers discover free open-source WhatsApp tools and keeps the project actively maintained.  
+👉 [**Star navneetyadav-code/whatsapp-api on GitHub**](https://github.com/navneetyadav-code/whatsapp-api/stargazers)
 
 ---
 
@@ -34,6 +59,8 @@
 16. [External Integrations & Background Workers](#16-external-integrations--background-workers)
 17. [Logging, Monitoring & Debugging](#17-logging-monitoring--debugging)
 18. [Anti-Ban Practices, Known Limitations & Notes](#18-anti-ban-practices-known-limitations--notes)
+19. [Frequently Asked Questions (FAQ) & Search Index](#19-frequently-asked-questions-faq--search-index)
+20. [Community & Discussions](#20-community--discussions)
 
 ---
 
@@ -41,7 +68,7 @@
 
 Commercial WhatsApp Business API providers (such as Twilio, MessageBird, or Meta Cloud API directly) enforce pay-per-conversation billing (\$0.05 – \$0.15+ per dialogue), require business registration paperwork, mandate pre-approved message templates, and demand credit card verifications.
 
-**WhatsApp API Hub** is an open-source, developer-centric alternative for individuals, startups, and software engineering teams who require a reliable WhatsApp notification gateway without external per-message costs:
+**WhatsGateway** is an open-source, developer-centric alternative for individuals, startups, and software engineering teams who require a reliable WhatsApp notification gateway without external per-message costs:
 
 - **100% Free & Open Source:** Licensed under MIT with no hidden subscription fees.
 - **Any Regular or Business WhatsApp Number:** Connect your existing phone number in seconds by scanning a QR code via WhatsApp Web multi-device.
@@ -50,7 +77,7 @@ Commercial WhatsApp Business API providers (such as Twilio, MessageBird, or Meta
 
 ### Comparison Table
 
-| Dimension | WhatsApp API Hub | Meta Cloud API | Twilio WhatsApp | Traditional Cloud Gateways |
+| Dimension | WhatsGateway | Meta Cloud API | Twilio WhatsApp | Traditional Cloud Gateways |
 | :--- | :---: | :---: | :---: | :---: |
 | **Pricing** | **100% Free ($0)** | Pay-per-conversation | Pay-per-message + markup | $49 – $299 / month |
 | **Credit Card Required** | ❌ **No** | ✅ Yes | ✅ Yes | ✅ Yes |
@@ -98,63 +125,50 @@ Dedicated, zero-dependency examples in five programming languages are located in
 
 ## 4. System Architecture & Directory Structure
 
+<p align="center">
+  <img src="public/assets/architecture.png" alt="WhatsGateway System Architecture Diagram" width="100%">
+</p>
+
+### High-Level Request & Delivery Flow
+
 ```mermaid
-flowchart TD
-    subgraph Clients["Client Integrations"]
-        C1["cURL / HTTP Client"]
-        C2["Python / Node / Go / Java SDK"]
-        C3["Web Browser / Dashboard"]
+flowchart LR
+    subgraph Clients["1. Clients & Ingestion"]
+        direction TB
+        C1["REST API Consumers<br/>(cURL, Python, Node, Go, Java)"]
+        C2["Admin Dashboard<br/>(PHP & Tailwind SaaS)"]
     end
 
-    subgraph Apache["Apache HTTP Server / DocumentRoot: public/"]
-        A1[".htaccess URL Rewriter"]
-        A2["public/api/send.php (REST API)"]
-        A3["public/api/health.php (Health Check)"]
-        A4["public/index.php (Front Controller)"]
-        A5["public/session.php (AJAX Session API)"]
+    subgraph Gateway["2. Web Gateway & Security"]
+        direction TB
+        G1["Apache URL Rewriter<br/>(.htaccess & Routing)"]
+        G2["Authentication & Guardrails<br/>(API Key HMAC, 2FA, SSRF Filter)"]
+        G3["REST API Ingestion<br/>(public/api/send.php)"]
     end
 
-    subgraph Core["Core PHP Engine (src/)"]
-        B1["src/bootstrap.php"]
-        B2["src/lib/ApiCredentials.php (Auth & Limits)"]
-        B3["src/lib/MessageQueue.php (Enqueue & Stats)"]
-        B4["src/lib/WorkerClient.php (Internal RPC)"]
-        B5["src/lib/Support.php (Media Downloader & SSRF)"]
-        B6["src/pages/ (Dashboard & Views)"]
+    subgraph Storage["3. Persistent Storage"]
+        direction TB
+        DB[("MySQL / MariaDB / TiDB<br/>ACID Message Queue & Sessions")]
     end
 
-    subgraph DB[("MySQL / MariaDB / TiDB Cloud")]
-        D1["message_queue"]
-        D2["api_keys & api_request_logs"]
-        D3["whatsapp_sessions"]
-        D4["webhooks & webhook_deliveries"]
-        D5["contacts & campaigns & chatbot_rules"]
+    subgraph Worker["4. Node.js Worker & Engine"]
+        direction TB
+        W1["Express IPC Controller (:3107)"]
+        W2["FIFO Queue Poller & Humanized Delay"]
+        W3["Baileys Multi-Device Client"]
+        W4["Chatbot Engine & Outbound Webhooks"]
     end
 
-    subgraph Worker["Node.js Background Worker (worker/server.mjs:3107)"]
-        W1["Express IPC API (Queue Notify & Session)"]
-        W2["Queue Poller & Message Claimer"]
-        W3["Humanized Presence Delay"]
-        W4["Baileys WhatsApp Client (MultiFileAuthState)"]
-        W5["Webhook Dispatcher (HMAC-SHA256)"]
-        W6["Chatbot Auto-Responder"]
+    subgraph WhatsApp["5. WhatsApp Network"]
+        WA["Meta WhatsApp Servers<br/>(Noise Protocol WebSocket)"]
     end
 
-    subgraph WhatsApp["WhatsApp Network"]
-        WA["WhatsApp Web Multi-Device WebSocket"]
-    end
-
-    C1 -->|POST /api/send.php| A2
-    C2 -->|POST /v20.0/.../messages| A1 --> A2
-    C3 -->|Web UI & AJAX| A4 & A5
-    A2 & A4 & A5 --> Core
-    Core -->|Read / Write| DB
-    Core -->|POST /queue/notify| W1
-    W2 -->|Poll & Claim Messages| DB
-    W2 --> W3 --> W4
-    W4 <-->|Encrypted Noise Socket| WA
-    W4 -->|Incoming message upsert| W6 -->|Insert reply| D1
-    W4 -->|Delivery Event| W5 -->|HTTPS Callback| C1
+    Clients -->|HTTP POST / Auth| Gateway
+    Gateway -->|Verify & Enqueue| Storage
+    Gateway -.->|Fast Wakeup Notify| Worker
+    Worker -->|Claim Pending Messages| Storage
+    Worker <==>|Encrypted Protocol| WhatsApp
+    Worker -.->|Webhooks / Delivery Acks| Clients
 ```
 
 ### Directory Structure
@@ -326,14 +340,19 @@ whatsap_api/
 
 ---
 
-### Option C: Browser-Based Setup Wizard
+### Option C: Automated Local Setup Wizard
 
-If you are deploying on a fresh environment, navigate to `http://localhost/wa/setup.php`. The wizard will:
+For fresh local setups (e.g. XAMPP), run the automated setup wizard in your terminal:
+```bash
+php setup.php
+```
+The wizard will:
 1. Test your database server connection.
 2. Create the database and import `database.sql` (legacy wizard path for a fresh install only; it is destructive and must not be used with existing data). For deployments with an existing database, run `php scripts/migrate.php` instead.
 3. Create an initial administrator account.
 4. Generate the `.env` configuration file with a secure random `WORKER_TOKEN`.
 5. Execute `npm install` inside the `worker/` directory automatically.
+6. **Automatically delete itself** once setup completes to prevent unauthorized re-initialization. (Pass `--no-delete` if you want to keep it).
 
 ---
 
@@ -480,7 +499,7 @@ All inbound messaging endpoints point to the same handler (`public/api/send.php`
 - **Authentication:**
   - `X-API-Key: wa_live_...` OR
   - `Authorization: Bearer wa_live_...` OR
-  - URL Query parameter: `?access_token=wa_live_...` (or `?api_key=wa_live_...`)
+  - URL Query parameter: `?access_token=wa_live_...` (or `?api_key=wa_live_...`, requires `ALLOW_QUERY_AUTH=true` in `.env`)
 - **Headers:** `Content-Type: application/json` or `multipart/form-data`
 - **Rate Limiting:** Enforced per API key (`rate_per_minute`, `rate_per_hour`, `rate_per_day`). Exceeding returns `429 Too Many Requests`.
 - **IP Filtering:** Enforced if `ip_allowlist` is populated on the API key.
@@ -930,6 +949,76 @@ Because this gateway operates via WhatsApp Web multi-device emulation:
 
 ---
 
+## 19. Frequently Asked Questions (FAQ) & Search Index
+
+<details>
+<summary><strong>Q1: Is WhatsGateway really 100% free? Are there any hidden fees or message limits?</strong></summary>
+
+**Yes, 100% free.** Unlike Meta WhatsApp Cloud API or Twilio, WhatsGateway is completely open-source (MIT licensed) and self-hosted. There are no monthly subscriptions, no pay-per-conversation fees, and no message credits. You can send as many messages as your phone carrier and WhatsApp account allow.
+</details>
+
+<details>
+<summary><strong>Q2: How does WhatsGateway work without Meta Business Verification?</strong></summary>
+
+WhatsGateway connects directly to WhatsApp Web's multi-device protocol via [WhiskeySockets/Baileys](https://github.com/WhiskeySockets/Baileys). You simply scan a QR code from your existing WhatsApp mobile app (just like WhatsApp Web or WhatsApp Desktop). No Facebook Developer account, credit card, or business registration paperwork is needed.
+</details>
+
+<details>
+<summary><strong>Q3: How does WhatsGateway compare to Twilio WhatsApp API?</strong></summary>
+
+Twilio charges approximately $0.005 per message + Meta's regional conversation fee ($0.03 – $0.15+ per dialogue), requires strict pre-approved message templates, and locks you into their cloud. WhatsGateway is self-hosted ($0 cost), allows freeform message text without pre-approval, supports rich media up to 20MB, and gives you total data privacy on your own server.
+</details>
+
+<details>
+<summary><strong>Q4: Can I use my existing WhatsApp Business or personal phone number?</strong></summary>
+
+Yes! Any active WhatsApp phone number (personal or WhatsApp Business) can be linked in seconds by scanning the QR code in the WhatsGateway dashboard.
+</details>
+
+<details>
+<summary><strong>Q5: What programming languages and SDKs are supported?</strong></summary>
+
+WhatsGateway provides a universal REST API that works with any HTTP client in any language. The repository includes zero-dependency quickstart examples in:
+- **cURL:** [`examples/curl/send-message.sh`](examples/curl/send-message.sh)
+- **Python:** [`quickstart/python/send.py`](quickstart/python/send.py) & [`send_whatsapp.py`](send_whatsapp.py)
+- **Node.js / JavaScript:** [`quickstart/nodejs/send.js`](quickstart/nodejs/send.js)
+- **PHP:** [`quickstart/php/send.php`](quickstart/php/send.php)
+- **Go:** [`quickstart/go/main.go`](quickstart/go/main.go)
+- **Java:** [`quickstart/java/SendWhatsApp.java`](quickstart/java/SendWhatsApp.java)
+</details>
+
+<details>
+<summary><strong>Q6: How does WhatsGateway protect against WhatsApp bans?</strong></summary>
+
+WhatsGateway includes an intelligent anti-ban engine:
+- **Humanized Presence:** Automatically dispatches `"composing"` (typing) and `"recording"` presence states before delivering messages.
+- **Randomized Jitter Delays:** Introduces configurable random intervals between deliveries to mimic human conversational rhythm.
+- **Asynchronous Queue & Rate Limiter:** Protects against burst spam by metering outgoing traffic according to your configured limits.
+</details>
+
+<details>
+<summary><strong>Q7: Can I deploy WhatsGateway with Docker?</strong></summary>
+
+Yes! The repository includes a production-ready [`Dockerfile`](Dockerfile) with multi-process Supervisor orchestration, running Apache (PHP 8.2) and the Node.js Baileys worker in tandem with automatic database migrations. It runs seamlessly on local Docker, Render, Railway, Fly.io, AWS, or any Linux VPS.
+</details>
+
+<details>
+<summary><strong>Q8: Does WhatsGateway support webhooks for delivery status and inbound messages?</strong></summary>
+
+Yes! You can configure an HTTPS endpoint in the dashboard to receive HMAC-SHA256 signed POST webhooks on `message.sent` and `message.failed` events. The worker also features a built-in automated chatbot rule engine that replies to incoming triggers automatically.
+</details>
+
+---
+
+## 20. Community & Discussions
+
+Have questions, suggestions, or need help integrating WhatsGateway?
+- 💬 **Join the Discussion:** [GitHub Discussions](https://github.com/navneetyadav-code/whatsapp-api/discussions) — Ask questions, share ideas, and showcase your integrations.
+- 🐛 **Report a Bug:** [GitHub Issues](https://github.com/navneetyadav-code/whatsapp-api/issues) — File bug reports and feature requests.
+- 🤝 **Contribute:** Read our [Contributing Guide](CONTRIBUTING.md) to submit pull requests.
+
+---
+
 ## ⚖️ License & Trademark Notice
 
 ### License
@@ -939,4 +1028,4 @@ This project is licensed under the [MIT License](LICENSE).
 This project is an independent open-source library and is **not affiliated with, associated with, authorized by, endorsed by, or in any way officially connected with Meta Platforms, Inc. or WhatsApp LLC.** WhatsApp is a registered trademark of WhatsApp LLC.
 
 **Inquiries & Support:** `info.assistgroupofficial@gmail.com`  
-**Maintainer:** [Navneet Kumar Yadav](https://github.com/navneetyadav-code)
+**Maintainer:** [Navneet Kumar Yadav](https://github.com/navneetyadav-code/whatsapp-api)

@@ -5,11 +5,7 @@
 
 ---
 
-<div align="center">
-
-![Typing SVG](https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=22&pause=1200&color=39FF14&background=000000&center=true&vCenter=true&width=600&lines=DorkEye+%7C+OSINT+Dorking+Tool;I+don%27t+hack+systems%2C+I+expose+their+secrets)
-
-</div>
+# DorkEye – OSINT Google Dorking Tool
 
 <!-- ── Row 1: Project identity ── -->
 ![Python](https://img.shields.io/badge/Python-3.9%2B-3670A0?style=flat-square&logo=python&logoColor=ffdd54)
@@ -46,6 +42,7 @@
 
 ## Why DorkEye
 
+- Runs everywhere — Linux · macOS · Windows · Android (Termux) · iOS (iSH)
 - Bypass CAPTCHA and rate-limiting
 - Advanced, interactive HTML report
 - Maintain anonymity and avoid IP blocking
@@ -62,6 +59,7 @@
 |---------|---------|
 | 🧙 Wizard | [Interactive guided session — all options](Docs/wizard.md) |
 | ⚙️ Dork Generator | [YAML template modes: `soft` / `medium` / `aggressive`](Docs/dork_generator.md) |
+| 📱 All Systems | [Android/Termux](Docs/devices/termux.md) · [iOS/iSH](Docs/devices/ish.md) · [macOS](Docs/devices/) · [Linux](Docs/devices/) · [Windows](Docs/devices/windows.md) |
 | 🎯 SQLi-XSS | [Test URL’s directly with `-u` and `-f`](Docs/sqli.md) |
 | 📂 File Re-Processing | [Re-run SQLi/XSS/analysis/crawl on saved result files with `-f`](Docs/cli.md) |
 | 💉 SQL Injection | [5 methods: 105 payloads](Docs/sqli.md) |
@@ -82,27 +80,42 @@
 
 ---
 
-## Quick Install
+## One-command install — Alpine / iOS (iSH)
+Recommended for **iOS users via [iSH](https://ish.app)** (Alpine Linux) and any Alpine-based system.<br>
+`install.sh` auto-detects the environment and runs the matching setup.
+[![Docs](https://img.shields.io/badge/📖_Docs-blue)](Docs/devices/ish.md)
+
+```sh
+apk add git
+git clone https://github.com/xPloits3c/DorkEye.git
+cd DorkEye
+sh install.sh
+source dorkeye_env/bin/activate
+python dorkeye.py —wizard
+```
+> Using Debian, Ubuntu or Kali? Follow the **Quick Install** below.
+
+## Update
 ```bash
-"Update:"
   sudo apt update
   sudo apt install -y python3 python3-pip python3-venv git
-
-"Git Clone:"
+```
+## AUTOMATIC Quick Install
+```bash
   git clone https://github.com/xPloits3c/DorkEye.git
   cd DorkEye
-
-"Create environment:"
-  python3 -m venv dorkeye_env
-
-"Activate environment:"
+  sh install.sh
   source dorkeye_env/bin/activate
-
-"Install requirements:"
+  python dorkeye.py —wizard
+```
+## MANUAL Quick Install
+```bash
+  git clone https://github.com/xPloits3c/DorkEye.git
+  cd DorkEye
+  python3 -m venv dorkeye_env
+  source dorkeye_env/bin/activate
   pip install -r requirements.txt
-
-"WIZARD MODE:"
-  python3 dorkeye.py --wizard
+  python dorkeye.py --wizard
 ```
 
 <img width="1175" height="982" alt="dev5 0wiz" src="https://github.com/user-attachments/assets/79253966-b2ed-431e-9d46-aaa8d8297c82" />
@@ -174,9 +187,19 @@ DorkEye/
 │ ├── dorkeye.py                      ← DorkEye Engine
 │ ├── requirements.txt                ← Python dependencies
 │ ├── http_fingerprints.json          ← 22 browser/OS HTTP profiles
+│ ├── install.sh                      ← Device detect + dispatch (Linux/macOS/Termux/iSH)
+│ ├── install.bat                     ← Windows installer (double-click)
 │ ├── README.md                       ← This file (you are here)
 │ ├── LICENSE                         ← MIT license
 │ ├── .gitignore                      ← Git ignore rules
+│ /Devices/                           ← Per-device installers
+│    /iOS/
+│        ├── install_ish.sh           ← iSH (iOS) lite installer — no lxml
+│        └── ddg_lite.py              ← lxml-free DuckDuckGo backend
+│    /Android/
+│        └── install_termux.sh        ← Termux installer (libxml2/libxslt + venv)
+│    /Linux/
+│        └── install_linux.sh         ← Linux / macOS installer (venv)
 │ /Tools/
 │    ├── __init__.py                  ← Package initializer
 │    ├── dork_generator.py            ← Dork Generator Queries
@@ -214,6 +237,8 @@ DorkEye/
 │    ├── http_fingerprints.md         ← Fingerprint profiles reference
 │    ├── webconsole.md                ← Web Console guide
 │    ├── termux.md                    ← Termux / Android setup
+│    ├── ish.md                       ← iSH / iOS setup (lite mode)
+│    ├── windows.md                   ← Windows setup (install.bat)
 │    ├── output_formats.md            ← Output formats guide
 │    ├── file_categories.md           ← File categories guide
 │    ├── dork_generator.md            ← Dork generator guide
@@ -251,10 +276,11 @@ DorkEye/
 
 ## ![WARNING](https://img.shields.io/badge/Legal%20Disclaimer-red)
 
+> [!WARNING] 
 **DorkEye is provided for educational and authorized security-testing purposes only.**
 
-- You are solely responsible for complying with all applicable laws and for obtaining explicit, written authorization before scanning, testing, or probing any system, domain, or network you do not own.
-- The authors and contributors accept no liability for misuse or for any damage resulting from the use of this tool.
+> - You are solely responsible for complying with all applicable laws and for obtaining explicit, written authorization before scanning, testing, or probing any system, domain, or network you do not own.
+> - The authors and contributors accept no liability for misuse or for any damage resulting from the use of this tool.
 
 ---
 
@@ -287,3 +313,8 @@ DorkEye/
 <a href="https://github.com/xPloits3c/DorkEye/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=xPloits3c/DorkEye" />
 </a>
+<div align="center">
+
+![Typing SVG](https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=22&pause=1200&color=39FF14&background=000000&center=true&vCenter=true&width=600&lines=DorkEye+%7C+OSINT+Dorking+Tool;I+don%27t+hack+systems%2C+I+expose+their+secrets)
+
+</div>

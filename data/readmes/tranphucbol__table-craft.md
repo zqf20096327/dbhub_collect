@@ -2,7 +2,7 @@
 
 # TableCraft
 
-A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL and SQLite.
+A desktop database IDE in the spirit of JetBrains DataGrip, for PostgreSQL, MySQL, SQLite and Redis.
 Connections, a database explorer, SQL consoles with schema-aware completion, a result grid, a table
 data editor, DDL and SQL generation, query history and EXPLAIN plans, in one Electron app. Databases
 are reached through datasource plugins loaded at runtime.
@@ -26,8 +26,11 @@ are reached through datasource plugins loaded at runtime.
 - [Themes, fonts and density](#settings-and-appearance): Dark, Light, High contrast, 43
   [ported themes](#themes) such as Gruvbox, Nord and Solarized, or your own theme file, three font
   roles, and a compact layout.
+- [Redis, standalone and Cluster](#redis): a key tree that scans instead of blocking, typed key
+  tabs with guarded edits, a `redis-cli` console with completion from the server, and a Server tab.
 - [Plugins for any database](#plugins): PostgreSQL, MySQL and SQLite are plugins, loaded the same
-  way yours would be.
+  way yours would be. SQLite and MySQL come in the box; PostgreSQL downloads the first time you
+  need it.
 
 ## Install
 
@@ -109,7 +112,7 @@ current from then on.
 
 ### Build from source
 
-You need [Bun](https://bun.sh) 1.3.4 (the version in `.bun-version`) and Node 22 or later.
+You need [Bun](https://bun.sh) 1.4.4 (the version in `.bun-version`) and Node 22 or later.
 
 ```sh
 bun install
@@ -120,7 +123,9 @@ bun run desktop:package    # an installer for this machine in packages/desktop/r
 ## Quick start
 
 1. Press `⌘N` (`Ctrl+N`) in the Database pane, or pick **New Data Source…** from the data source
-   widget in the toolbar, and choose PostgreSQL, MySQL or SQLite.
+   widget in the toolbar, and choose PostgreSQL, MySQL or SQLite. PostgreSQL shows **Download**
+   the first time: TableCraft fetches its plugin, then opens the form
+   ([Databases in the box and on demand](#databases-in-the-box-and-on-demand)).
 2. Fill in the connection, click **Test Connection**, then **OK**. The data source appears in the
    Database tree.
 3. Select it and press `⇧⌘L` (`Ctrl+Shift+L`) to open a console. Type a query and press `⌘↩`
@@ -199,7 +204,9 @@ file…** reads a DataGrip `dataSources.xml` or a TablePro `.tablepro` export in
 
 The next step lists every connection with its type, address, user, folder and where its password
 comes from. MySQL, MariaDB and TiDB open in the MySQL plugin, PostgreSQL in the PostgreSQL plugin,
-SQLite in the SQLite plugin; anything else is listed as not supported. A connection that needs an
+SQLite in the SQLite plugin; anything else is listed as not supported. A PostgreSQL connection
+found before its plugin is installed offers **Install** in its row and maps once the plugin
+arrives. A connection that needs an
 SSH tunnel, or one already in TableCraft, starts unticked; ticking a duplicate imports a copy named
 `<name> (2)`, never overwriting the one you have. Folders and colours come along, under a
 `DataGrip` or `TablePro` folder unless you turn that off.
@@ -278,6 +285,14 @@ the run asks above the results: **Skip** it, **Skip All** failures from now on, 
 went on ends with `12 run, 2 failed.` in Output. In an open transaction PostgreSQL refuses every
 later statement until it is rolled back, and Output says so.
 
+While you type, the console checks SQL the way DataGrip does, without running anything: an empty
+`WHERE`, a reserved word used as a table name or an unknown column is underlined in red, a
+`DELETE` without `WHERE` or `= NULL` in amber, and a redundant `ASC` or alias is greyed out. Hover
+a mark for its message and fixes; `⌥↩` (Show Context Actions) at the caret lists them, with
+**Suppress for statement**, which writes a `-- noinspection <Id>` line above it, and **Disable
+inspection**. `F2` / `⇧F2` visit these too, errors first. Settings → Editor → Inspections turns each
+check, or all of them, off. The checks know your tables once the data source is connected.
+
 **Reformat Code** (`⌥⌘L`) lays out the selection, or the whole console, and one `⌘Z` takes it
 back. Queries get the aligned layout: the first item on the keyword's line, the rest of a list
 under it, `AS` lined up, `AND`/`OR` under `WHERE`; other statements keep the standard layout. A statement with `:name`, `?` or (on PostgreSQL) `$1` placeholders asks for their values
@@ -294,7 +309,12 @@ Completion runs in the engine against a cache of the catalog. After `FROM` it of
 after `JOIN` it offers whole join conditions that follow foreign keys, such as
 `customers c ON c.id = o.customer_id`; after `c.` it offers the columns of that alias. `⌃Space`
 opens it anywhere. `Enter` inserts the selected option and keeps the rest of the word after the
-caret; `Tab` replaces the whole word, as in DataGrip. `⌘B` (Go to Declaration) on an alias moves the caret to where it is defined, and
+caret; `Tab` replaces the whole word, as in DataGrip. In an expression it offers the server's
+built-in functions with their parameters, return type and a line on what each does; MySQL and
+TiDB get the full list for the server's version, so MySQL 8.4 never offers `PASSWORD` and TiDB
+offers its own `TIDB_*` functions. Accepting one leaves the caret inside `()`, and a hint above
+the call shows every overload with the parameter at the caret in bold; `⌘P` (Parameter Info)
+brings it back and `Escape` hides it. `⌘B` (Go to Declaration) on an alias moves the caret to where it is defined, and
 on a table opens its DDL. Completion follows `USE` and `SET search_path`: once one runs, the
 console's toolbar shows the database or schema it is in and unqualified names complete there; a
 `USE` above the caret in a script counts even before it runs. After `USE `, `SET search_path TO `
@@ -410,6 +430,36 @@ grant to ask for.
 
 See [Sessions](docs/design/specification.md#sessions).
 
+### Redis
+
+The Redis plugin connects to Redis 5.0 or later, **Standalone** or **Cluster** (pick the Mode in the
+connection form; a `redis://` or `rediss://` URL fills a standalone one). A cluster is reached from
+its seed node; when its nodes announce addresses you cannot reach, map each one in **Node address
+map** (`10.0.1.5:6379=127.0.0.1:7001, …`). A cluster cannot go through an SSH tunnel. Redis 5.0
+has no ACL users: leave Username empty and give the password alone.
+
+- **Key tree.** Each database lists its keys in folders by `:`, with a type badge and TTL. The tree
+  scans 10,000 keys at a time behind a **Load more** row, never with `KEYS`; the filter row takes a
+  `MATCH` pattern and a type. **Go to Key…** opens a key by name, and Search Everywhere has a Keys
+  tab.
+- **Key tabs.** A hash, list, set, sorted set or stream opens in the result grid with its own
+  columns; a string opens in a value editor that reads it as Text, JSON, Hex, Base64, MessagePack or
+  gzip. The header counts the TTL down and shows length, memory and encoding. Edit cells, add and
+  delete rows, preview the commands, and submit them as one `MULTI`; if another client changed the
+  key since you read it, you choose to reload or overwrite.
+- **Key actions.** New Key…, Rename, Delete, Set TTL…, Remove TTL and Delete Keys Under Folder…
+  (a cancellable task in Services).
+- **Console.** One command per line with `redis-cli` quoting. Completion and signature help come
+  from the server's command docs, and key names complete from a scan. `FLUSHDB` and `FLUSHALL` ask
+  you to type the data source's name; `KEYS` and other heavy reads are underlined, with a fix such as
+  **Use SCAN**. In a cluster, **Run on** sends a command to one node or every primary.
+- **Server tab.** `INFO` as cards with auto-refresh, every node of a cluster at a glance, and the
+  slow log. **Show Sessions…** lists `CLIENT LIST` and unblocks or kills a client.
+
+See [Command consoles](docs/design/specification.md#command-consoles),
+[Key browser](docs/design/specification.md#key-browser) and
+[Server tab](docs/design/specification.md#server-tab).
+
 ### Explain
 
 **Explain Plan** (`⇧⌘E`) shows the plan of the statement at the caret as a tree with estimated rows
@@ -465,6 +515,7 @@ See [App log and diagnostics](docs/design/specification.md#app-log-and-diagnosti
 | Explain Plan              | `⇧⌘E`   | `Ctrl+Shift+E`         |
 | Next Error                | `F2`    | `F2`                   |
 | Previous Error            | `⇧F2`   | `Shift+F2`             |
+| Show Context Actions      | `⌥↩`    | `Alt+Enter`            |
 | Commit                    | `⌥⇧⌘↩`  | `Ctrl+Alt+Shift+Enter` |
 | Reformat Code             | `⌥⌘L`   | `Ctrl+Alt+L`           |
 | New Console               | `⇧⌘L`   | `Ctrl+Shift+L`         |
@@ -489,6 +540,7 @@ See [App log and diagnostics](docs/design/specification.md#app-log-and-diagnosti
 | Drop…                     | `⌘⌫`    | `Ctrl+Backspace`       |
 | Go to DDL                 | `⌘B`    | `Ctrl+B`               |
 | Go to Declaration         | `⌘B`    | `Ctrl+B`               |
+| Parameter Info            | `⌘P`    | `Ctrl+P`               |
 | Quick Documentation       | `F1`    | `F1`                   |
 | Open Data                 | `F4`    | `F4`                   |
 | SQL Generator…            | `⌥⌘G`   | `Ctrl+Alt+G`           |
@@ -510,30 +562,33 @@ Settings live in `settings.json` in your [profile folder](#where-your-data-lives
 dialog writes it; you can also edit it by hand, and a field that is missing or out of range falls
 back to its default without affecting the others.
 
-| Field                                  | Values                                                                                        | Default       |
-| :------------------------------------- | :-------------------------------------------------------------------------------------------- | :------------ |
-| `appearance.theme`                     | `system`, `dark`, `light`, `highContrast`, an id from [Themes](#themes), `user:<file stem>`   | `system`      |
-| `appearance.density`                   | `comfortable`, `compact`                                                                      | `comfortable` |
-| `appearance.systemTitleBar`            | `true`, `false`; read when the window opens                                                   | `false`       |
-| `appearance.fonts.ui`                  | `family`: a font name, or `null` for the built-in; `sizePx`: 8–32                             | `null`, 13    |
-| `appearance.fonts.editor`              | `family`: a font name, or `null` for the built-in; `sizePx`: 8–32                             | `null`, 13    |
-| `appearance.fonts.grid`                | `family`: a font name, or `null` for the built-in; `sizePx`: 8–32                             | `null`, 12    |
-| `editor.format.style`                  | `aligned`, `standard`; how Reformat Code lays SQL out                                         | `aligned`     |
-| `editor.format.keywordCase`            | `upper`, `lower`, `preserve`; how Reformat Code cases keywords                                | `upper`       |
-| `editor.format.indentWidth`            | 1–8 spaces                                                                                    | 2             |
-| `editor.format.linesBetweenStatements` | 0–5 blank lines                                                                               | 1             |
-| `editor.format.alignAliases`           | `true`, `false`; line up `AS` in a select list (aligned style)                                | `true`        |
-| `console.parameters`                   | `true`, `false`; ask for `:name`, `?` and `$1` values before a run                            | `true`        |
-| `console.statementTimeoutSeconds`      | 0–86,400; a console statement running longer is cancelled; 0 waits                            | 0             |
-| `console.sessionsRefreshSeconds`       | 1–3,600; how often a Sessions tab with Auto-refresh on lists again                            | 5             |
-| `console.runAllOnError`                | `ask`, `stop`, `continue`; what a run of several statements or a SQL script does on a failure | `ask`         |
-| `data.nullText`                        | 1–16 characters                                                                               | `<null>`      |
-| `data.groupDigits`                     | `true`, `false`                                                                               | `false`       |
-| `data.pageRows`                        | 10–10,000                                                                                     | 500           |
-| `data.fetchAllCap`                     | 1,000–1,000,000, at least `pageRows`                                                          | 100,000       |
-| `log.level`                            | `info`, `debug`                                                                               | `info`        |
-| `data.exportStallSeconds`              | 10–3,600; an export or import the database stalls this long fails                             | 120           |
-| `updates.checkAutomatically`           | `true`, `false`; look for a new version after launch and daily                                | `true`        |
+| Field                                  | Values                                                                                         | Default                      |
+| :------------------------------------- | :--------------------------------------------------------------------------------------------- | :--------------------------- |
+| `appearance.theme`                     | `system`, `dark`, `light`, `highContrast`, an id from [Themes](#themes), `user:<file stem>`    | `system`                     |
+| `appearance.density`                   | `comfortable`, `compact`                                                                       | `comfortable`                |
+| `appearance.systemTitleBar`            | `true`, `false`; read when the window opens                                                    | `false`                      |
+| `appearance.fonts.ui`                  | `family`: a font name, or `null` for the built-in; `sizePx`: 8–32                              | `null`, 13                   |
+| `appearance.fonts.editor`              | `family`: a font name, or `null` for the built-in; `sizePx`: 8–32                              | `null`, 13                   |
+| `appearance.fonts.grid`                | `family`: a font name, or `null` for the built-in; `sizePx`: 8–32                              | `null`, 12                   |
+| `editor.format.style`                  | `aligned`, `standard`; how Reformat Code lays SQL out                                          | `aligned`                    |
+| `editor.format.keywordCase`            | `upper`, `lower`, `preserve`; how Reformat Code cases keywords                                 | `upper`                      |
+| `editor.format.indentWidth`            | 1–8 spaces                                                                                     | 2                            |
+| `editor.format.linesBetweenStatements` | 0–5 blank lines                                                                                | 1                            |
+| `editor.format.alignAliases`           | `true`, `false`; line up `AS` in a select list (aligned style)                                 | `true`                       |
+| `editor.inspections.enabled`           | `true`, `false`; check SQL as you type                                                         | `true`                       |
+| `editor.inspections.disabled`          | inspection ids to skip, such as `SqlRedundantAlias`                                            | `[]`                         |
+| `console.parameters`                   | `true`, `false`; ask for `:name`, `?` and `$1` values before a run                             | `true`                       |
+| `console.statementTimeoutSeconds`      | 0–86,400; a console statement running longer is cancelled; 0 waits                             | 0                            |
+| `console.sessionsRefreshSeconds`       | 1–3,600; how often a Sessions tab with Auto-refresh on lists again                             | 5                            |
+| `console.runAllOnError`                | `ask`, `stop`, `continue`; what a run of several statements or a SQL script does on a failure  | `ask`                        |
+| `data.nullText`                        | 1–16 characters                                                                                | `<null>`                     |
+| `data.groupDigits`                     | `true`, `false`                                                                                | `false`                      |
+| `data.pageRows`                        | 10–10,000                                                                                      | 500                          |
+| `data.fetchAllCap`                     | 1,000–1,000,000, at least `pageRows`                                                           | 100,000                      |
+| `log.level`                            | `info`, `debug`                                                                                | `info`                       |
+| `data.exportStallSeconds`              | 10–3,600; an export or import the database stalls this long fails                              | 120                          |
+| `updates.checkAutomatically`           | `true`, `false`; look for a new version after launch and daily                                 | `true`                       |
+| `plugins.registryUrl`                  | an `https://` npm registry (plain `http://` only on this machine); where plugins download from | `https://registry.npmjs.org` |
 
 A theme of your own is a JSON file in `themes/` in the profile folder. It names any bundled theme,
 by its id from [Themes](#themes), as its base and overrides any of its colour tokens; it then
@@ -614,7 +669,8 @@ from each other. The palettes and their licences are listed in
 ## Plugins
 
 A plugin is a folder with a `table-craft-plugin.json` manifest and an ES module. The built-in
-plugins ship inside the app; your own go in `plugins/<id>/` in the
+plugins ship inside the app, others TableCraft offers
+[download on demand](#databases-in-the-box-and-on-demand); your own go in `plugins/<id>/` in the
 [profile folder](#where-your-data-lives) and load the same way. A plugin that fails to load is
 listed as unavailable with the reason; the app keeps running.
 
@@ -639,16 +695,25 @@ The manifest declares what the plugin can do, and the UI offers only what it dec
 - `serverMessages`: returns the warnings and notices the server left about a statement, which
   Output lists under it and the result tab counts.
 - `sessions`: lists the server's sessions with who blocks whom, and cancels or terminates one, for
-  the [Sessions](#sessions) view; requires `sql` and `schemaTree`.
+  the [Sessions](#sessions) view; requires `sql` or `commands`, and `schemaTree` or `keyValue`.
 - `routineCall`: writes the statements that call a function or procedure with the values from
   [Execute Routine](#execute-a-routine), OUT values included; requires `sql` and `schemaTree`.
+- `commands`: runs one command of a command language such as Redis's and returns its reply; the
+  plugin also supplies the language (splitting, classifying, completion). A plugin declares
+  either `sql` or `commands`, never both.
+- `keyValue`: lists databases and scans keys for the key tree, reads a key into a tab and applies
+  guarded edits to it; requires `commands`.
+- `nodes`: lists the nodes of a cluster, so a console can run a command on one node or on every
+  primary; requires `sql` or `commands`.
+- `serverInfo`: reports the server's statistics and slow log for the Server tab; requires `sql`
+  or `commands`.
 
 ```json
 {
   "id": "postgres",
   "name": "PostgreSQL",
   "version": "0.0.0",
-  "apiVersion": "0.27.0",
+  "apiVersion": "1.2.0",
   "entry": "index.js",
   "capabilities": [
     "sql",
@@ -693,10 +758,62 @@ dialog draws them under SSL, asks for the passphrase only when the key file is e
 the session's `tls` (protocol and cipher) after Test Connection. Through a tunnel `connect` gets the
 configured host as `serverName`, which a `verify-full` check must use instead of `127.0.0.1`.
 
-A plugin depends on `@table-craft/plugin-api` and should pass its contract suite,
+A plugin's result columns may name their type class (`typeClass`: `integer`, `float`, `decimal`,
+`boolean`, `temporal`, `json`, `bytes` or `text`), which then decides how the grid aligns, sorts
+and exports them ahead of the type name; SQL Server's `bit`, for one, is a boolean.
+
+The shared SQL kit in `@table-craft/plugin-api/sql` also reads Oracle and SQL Server scripts when a
+plugin turns on their dialect options: `[bracketed]` names, `q'[…]'` and `N'…'` strings, `GO` and
+`/` separator lines, and `:1` or `@p1` placeholders.
+
+A plugin depends on `@tablecraft-app/plugin-api` and should pass its contract suite,
 `runPluginContract` from `@table-craft/plugin-api/testing`, which the built-in plugins run against
-real databases. The plugin API is not stable yet: while it is 0.x, `apiVersion` must match the app's
-minor version exactly. See [Plugin contract](docs/design/specification.md#plugin-contract).
+real databases. See [Plugin contract](docs/design/specification.md#plugin-contract).
+
+### Plugin compatibility
+
+The plugin API follows semver and stays backward compatible within a major version:
+
+- Set `apiVersion` to the version of `@tablecraft-app/plugin-api` you built against. TableCraft with
+  plugin API `1.z` loads a plugin built for `1.y` when `y` is `z` or lower. A plugin built for a
+  newer minor, or another major, is listed as unavailable with the plugin API it needs.
+- A minor version only adds: new exports, new optional fields and methods, new capabilities. New
+  contract tests apply only to plugins that declare what they test.
+- Breaking changes wait for the next major: removing or renaming anything, making something
+  optional required, adding a required member to what a plugin implements or returns, adding a
+  value to what a plugin receives without an opt-in, or changing what a field means.
+- Before removal, a member is marked `@deprecated` with its replacement for at least one major.
+- A new optional method is called only when your plugin has it or declares its capability, never
+  because of your `apiVersion`.
+
+Plugins built for plugin API 0.x must be rebuilt for 1.0.
+
+### Databases in the box and on demand
+
+SQLite and MySQL (with MariaDB and TiDB) ship inside the app and work offline from the first
+launch. PostgreSQL is a plugin TableCraft downloads when you need it, about 190 KB, from npm as
+[`@tablecraft-app/plugin-postgres`](https://www.npmjs.com/package/@tablecraft-app/plugin-postgres).
+Redis downloads the same way, about 290 KB, as
+[`@tablecraft-app/plugin-redis`](https://www.npmjs.com/package/@tablecraft-app/plugin-redis);
+Oracle and SQL Server will follow
+([decision 108](docs/decisions/108-sqlite-and-mysql-ship-other-plugins-download.md)).
+
+- **Data Sources +** lists PostgreSQL and Redis with **Download**. Choosing it shows the progress, then the
+  connection form.
+- A saved data source whose plugin is missing shows greyed in the Database pane with **Install**.
+  After an update from a version that had PostgreSQL built in, TableCraft installs it in the
+  background on the first start, with no question.
+- **Settings → Plugins** lists the built-in plugins, the downloaded ones with their version,
+  **Update** and **Remove** (refused while a data source uses the plugin, naming it), and your
+  own. With **Check for updates automatically** on, downloaded plugins are checked once a day and
+  a newer compatible version is used from the next connection.
+- Offline, or behind a firewall: every release attaches the plugin `.tgz` files. Choose **Install
+  from File…** in Settings → Plugins; TableCraft asks before installing any file.
+- Behind a corporate npm mirror, set its address in Settings → Plugins (`plugins.registryUrl`).
+
+TableCraft installs the newest release its plugin API accepts, refuses a download whose sha512
+does not match the registry's, and keeps each version in `managed-plugins/` in the profile folder
+([decision 110](docs/decisions/110-the-app-installs-plugins-from-the-registry.md)).
 
 ## Where your data lives
 
@@ -719,18 +836,20 @@ Everything is stored in one profile folder:
 | `update-swap.log`      | The last macOS update's swap, logged and removed at the next launch       |
 | `themes/`              | Your themes                                                               |
 | `plugins/`             | Your plugins                                                              |
+| `managed-plugins/`     | Plugins TableCraft downloaded, one folder per version                     |
 
 Passwords are never written to `datasources.json` or to the log, and there is no plaintext fallback:
 where the keychain cannot encrypt, _Forever_ is disabled. Apart from the databases you connect to,
-TableCraft talks only to GitHub, to [check for updates](#updates), and sends nothing about you
-there; turn **Check for updates automatically** off and it asks only when you choose **Help → Check
-for Updates…**.
+TableCraft talks only to GitHub, to [check for updates](#updates), and to the npm registry, to
+[download plugins](#databases-in-the-box-and-on-demand), and sends nothing about you to either;
+turn **Check for updates automatically** off and it asks only when you choose **Help → Check for
+Updates…** or install a plugin.
 
 ## Not in v1
 
 - Planned for v1.1: saved query files.
-- Later: ER diagrams, schema compare and migrations, XLSX and JSON import, a plugin marketplace, Redis and
-  MongoDB plugins, a CLI, AI assistance, Git integration, a debugger, notebooks, Docker and
+- Later: ER diagrams, schema compare and migrations, XLSX and JSON import, a plugin marketplace, a MongoDB
+  plugin, a CLI, AI assistance, Git integration, a debugger, notebooks, Docker and
   Kubernetes integration.
 
 ## Development
@@ -742,14 +861,17 @@ README GIFs also needs [ffmpeg](https://ffmpeg.org).
 bun install
 bun run desktop                # build and launch the app
 bun run test                   # unit tests and the plugin contract against SQLite
-bun run test:db                # the contract against PostgreSQL and MySQL in Docker
+bun run test:db                # the contract against MySQL in Docker, and TiDB
+bun run test:db:postgres       # the same against PostgreSQL (also :oracle, :mssql, :all)
+bun run test:db:redis          # the Redis plugin against 7.4, 6.2 and 5.0, standalone and Cluster
 bun run test:smoke             # drive the built app with Playwright
-bun run test:smoke:db          # the same against PostgreSQL, MySQL and SQLite
+bun run test:smoke:db          # the same against MySQL, TiDB and SQLite
 bun run test:smoke:headless    # test:smoke in a Linux container, off your screen
 bun run test:smoke:db:headless # test:smoke:db in the same container
 bun run test:smoke:packaged    # drive the packaged app
 bun run lint                   # ESLint, including the architecture fences
 bun run typecheck              # every TypeScript program
+bun run api:check              # the plugin API surface against the last release
 bun run format                 # Prettier
 bun run desktop:package        # an installer for this machine
 bun run readme:media           # re-record the GIFs in this README

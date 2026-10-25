@@ -144,7 +144,7 @@ Both Compose files publish only to `127.0.0.1`. The backend is not exposed as
 a separate host port. To use another local UI port:
 
 ```bash
-AIPERMISSION_FRONTEND_PORT=3211 docker compose up -d --build
+AIPERMISSION_FRONTEND_PORT=3212 docker compose up -d --build
 ```
 
 The release Compose file defaults to the version shipped in the checkout, so
@@ -273,7 +273,9 @@ Important boundaries:
   another external attempt; see the
   [operator retry guidance](docs/skills/aipermission-operator/SKILL.md#discovery).
 - Downloaded encrypted database backups remain sensitive and require a strong
-  database password.
+  database password. Changing the active database password does not re-encrypt
+  existing snapshots or backups; review old copies separately if a password
+  was compromised. See [encrypted storage](docs/security/storage-encryption.md).
 - The unlocked backend process and trusted browser profile are part of the
   local security boundary.
 

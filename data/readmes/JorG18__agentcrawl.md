@@ -143,7 +143,7 @@ AgentCrawl Community is the self-hosted trust layer:
 | Framework adapters | `agentcrawl.integrations.langchain.AgentCrawlLoader` and `agentcrawl.integrations.llama_index.AgentCrawlReader` yield pages or citable chunks. A zero-dependency TypeScript client for the HTTP API lives in [`sdk/typescript`](sdk/typescript). |
 | Structured extraction without an LLM | CSS schemas (`extract-css`, `/v1/extract_css`, MCP `extract_structured`): deterministic, zero tokens. `generate_css_schema(url, "what to extract")` (MCP `describe=`) has your LLM write the schema once; reuse it for free. |
 | Reading long pages in parts | `formats=["outline"]` lists sections with the tokens each returns; `section="s4"` (or heading text) returns one; `max_tokens` caps the output. The MCP keeps a page for 10 minutes, so outline then sections is one download. |
-| Firecrawl-compatible API | `/v2/scrape`, `/v2/map`, `/v2/search`, `/v2/crawl` and `/v2/batch/scrape` answer Firecrawl's v2 SDKs: point `api_url` at your server. Options AgentCrawl cannot honour are refused with the reason; a few cosmetic ones (`blockAds`, `fastMode`, ...) are accepted without effect, and `storeInCache: false` / `zeroDataRetention: true` skip the cache. |
+| Firecrawl-compatible API | `/v2/scrape`, `/v2/map`, `/v2/search`, `/v2/crawl` and `/v2/batch/scrape` answer Firecrawl's v2 SDKs: point `api_url` at your server. Options AgentCrawl cannot honour are refused with the reason; a few cosmetic ones (`blockAds`, `fastMode`, ...) are accepted without effect, and `storeInCache: false` / `zeroDataRetention: true` skip the cache. `includePaths`/`excludePaths` anchored with `^/` match the path as in Firecrawl; unanchored ones are searched in the whole URL (host and query included). |
 | Local stealth and proxies | Real Chrome identity, native browser TLS, the `[stealth]` extra (Patchright retry), the opt-in `[cloak]` engine (CloakBrowser), and `proxy` as a comma-separated list rotated per page. |
 | Summaries | `formats=["summary"]` with your own LLM (`AGENTCRAWL_LLM_MODEL`); a failure never fails the page. |
 | Query-aware budgets | `query=` keeps the passages that matter (BM25) when a page is larger than the output budget. |
@@ -160,10 +160,10 @@ What costs money to operate belongs to AgentCrawl Enhanced, a hosted API (planne
 
 ## Extraction quality 🧹
 
-Measured in October 2026 against Crawl4AI, Scrapling and Firecrawl ([full results, method and limits](docs/BENCHMARKS.md)):
+Measured in October 2026 ([full results, method and limits](docs/BENCHMARKS.md)):
 
-- On 400 random real sites AgentCrawl gets readable content from about 64 % of pages, with no significant difference from Firecrawl and Scrapling, and ahead of Crawl4AI.
-- On 23 randomly drawn pages with checked expectations it keeps 99 % of the checked text, and 8–11 % of the checked chrome strings (navigation, cookie banners, footers) leak through. On that quality it is on par with Firecrawl and Crawl4AI, and ahead of Scrapling.
+- On a fresh sample of 400 random real sites, drawn after the engine was tuned and with the rules written first, AgentCrawl gets readable content from 60.8 % of pages, Scrapling from 63.6 % and Crawl4AI from 52.4 %: no significant difference from Scrapling (the sample cannot detect gaps under about 3 points), and AgentCrawl reads more pages than Crawl4AI.
+- On 23 randomly drawn pages with checked expectations (0.6.0 benchmark) it keeps 99 % of the checked text, and 8–11 % of the checked chrome strings (navigation, cookie banners, footers) leak through. On that quality it is on par with Firecrawl and Crawl4AI, and ahead of Scrapling.
 - On those pages its output is about a third smaller than Firecrawl's, and close to Crawl4AI's `fit_markdown` (2 % smaller live, 18 % larger offline).
 
 How the engine gets there:
@@ -520,7 +520,7 @@ export OPENAI_BASE_URL=https://openrouter.ai/api/v1
 export AGENTCRAWL_LLM_MAX_PAGES=20   # pages one call may send to the model (default 20)
 ```
 
-The model, its key and endpoint come only from your configuration, never from a request, so a caller cannot switch you to an expensive model or send your key elsewhere. A batch over `AGENTCRAWL_LLM_MAX_PAGES` is refused before any call, and crawls do not take `json` (each page would be a call). With no model configured, `metadata.json_error` says so and the agent reads the Markdown instead.
+The model, its key and endpoint come only from your configuration, never from a request, so a caller cannot switch you to an expensive model or send your key elsewhere. A batch over `AGENTCRAWL_LLM_MAX_PAGES` (it counts `json` and `summary` pages) is refused before any call, and crawls do not take `json` (each page would be a call). With no model configured, `metadata.json_error` says so and the agent reads the Markdown instead.
 
 ## Development
 

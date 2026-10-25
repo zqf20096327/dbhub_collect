@@ -88,6 +88,27 @@ codedb-lens check --engine pg --dsn-env PG_DSN
 
 Passwords are never accepted as command-line arguments. Use integrated auth, an environment variable or a saved profile.
 
+## Use with AI (MCP)
+
+<p align="center">
+  <img src="assets/screenshots/mcp-demo.gif" width="760" alt="Claude using codeDB Lens over MCP: a health check with three findings, then a revenue question answered with one read-only SELECT"><br>
+  <sub>Real Claude Code sessions against test databases; answers shortened.</sub>
+</p>
+
+Ask Claude, GitHub Copilot or Cursor about your database. `codedb-lens mcp` is a read-only MCP server that your AI
+client starts on your computer, with your saved profiles:
+
+- **Diagnosis**: with the Lens's minimal login, the AI runs the health check, reads recordings and explains what to
+  fix, without reading business data.
+- **Data**: with a login that reads the tables you choose, the AI lists and describes them and answers questions with
+  one `SELECT` at a time, within row and time limits.
+
+```bash
+codedb-lens mcp install --client claude-desktop --profile prod   # or vscode, cursor, claude-code
+```
+
+The app's **AI (MCP)** screen has the commands ready to copy. Guide: [lens.codedb.com.br/mcp](https://lens.codedb.com.br/mcp/).
+
 ## Minimum permissions
 
 ```sql

@@ -7,7 +7,7 @@ down to the line of code, the API route, the backend handler, the SQL and the ta
 [![npm](https://img.shields.io/npm/v/@feel-dev/vite-plugin)](https://www.npmjs.com/package/@feel-dev/vite-plugin)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Works with **React on Vite or Next.js**, **Express**, **Postgres or MySQL**, **Prisma** and **Drizzle**.
+Works with **React on Vite or Next.js**, **Express**, **Postgres or MySQL**, **Prisma**, **Drizzle** and **Supabase REST requests**.
 Dev only, two-minute setup, nothing added to production.
 
 ![Feel demo: Alt + right-click a page, then follow the data flow from the component to the API and backend handler](docs/demo.gif)
@@ -45,6 +45,18 @@ Every step opens the actual code. Calls a component *could* make but hasn't yet
 - **Dev only**: nothing is added to production builds
 
 ## Quick start
+
+### Automatic setup
+
+From your app or workspace root:
+
+```bash
+npx @feel-dev/init
+```
+
+The command detects React + Vite, Next.js 16+ App Router and an optional Express backend. It previews edits and npm installs, preserves existing config and saves backups. Use `--dry-run` to preview only, or `--app apps/web --backend apps/api` to select workspace packages. Other package managers can use `--no-install` and install the listed dependencies themselves. [Setup command details](packages/init/README.md).
+
+After restarting the dev server, Alt + right-click a component and expand **Setup checks**. It reports agent availability, frontend compatibility, observed backend instrumentation and SQL, and an optional read-only Postgres connection check. No database connection is needed for component/API tracing.
 
 ### React + Vite
 
@@ -105,10 +117,11 @@ Full guide: [packages/next/README.md](packages/next/README.md).
 |---|---|
 | Frontend | React 19 (dev mode) on Vite — tested with Vite 7 and 8 — or on **Next.js** App Router (16+; Turbopack or webpack) |
 | Data fetching | `fetch`, axios, `axios.create` instances (incl. interceptors), wrapper functions, custom hooks, API objects (`userApi.getAll()`), React Query, SWR |
+| Supabase | Hosted `*.supabase.co/rest/v1/<table>` requests through fetch/XHR: operations, columns and filters in List and Graph; table details with a connection to the same Postgres database |
 | Imports | relative, Vite `resolve.alias`, tsconfig/jsconfig `paths` + `baseUrl`, `package.json` `"imports"` |
 | Backend | Express 4 and 5 — ES modules or CommonJS, routers, `app.use` mounts, controllers; Next.js Route Handlers (`app/**/route.ts`) and Pages Router API routes (`pages/api/**`) |
 | Database | Postgres: queries per request, tables, structure, change history — through `pg`, **Prisma** (7, or 6 with `@prisma/adapter-pg`) or **Drizzle** (`drizzle-orm/node-postgres`) |
-| | **MySQL / MariaDB**: queries per request, tables, timing and the line in your code — through `mysql2` (callbacks or `mysql2/promise`, pools, `getConnection`, transactions) or **Drizzle** (`drizzle-orm/mysql2`) |
+| | **MySQL / MariaDB**: queries per request, tables, timing and the line in your code — through `mysql2` (callbacks or `mysql2/promise`, pools, `getConnection`, transactions, prepared statements) or **Drizzle** (`drizzle-orm/mysql2`) |
 | Other ORMs on `pg` | Knex, Sequelize, TypeORM, …: SQL and tables per request; the line in your code when the ORM keeps it on the stack |
 | Layout | frontend and backend in one folder or side by side (`client/` + `server/`) |
 
@@ -116,11 +129,11 @@ Full guide: [packages/next/README.md](packages/next/README.md).
 
 - **Prisma's Rust engine** (Prisma 6 and older without a driver adapter) — its queries don't go through `pg`
 - **MySQL table view and change history** — MySQL queries and tables show per request, but the table view is Postgres only
-- **Other MySQL paths**: the `mysql` and `mariadb` drivers, Prisma on MySQL, and prepared statements made with `connection.prepare()`; `PoolCluster` is best effort (a query's line may be missing)
+- **Other MySQL paths**: the `mysql` and `mariadb` drivers, and Prisma on MySQL; `PoolCluster` is best effort (a query's line may be missing)
 - **SQLite** — the static side understands Drizzle's SQLite tables, the runtime side doesn't yet
 - **Next.js beyond Route Handlers**: Server Actions, data fetched inside Server Components, `middleware.ts` / `proxy.ts`, the edge runtime, `output: 'export'`, and Next before 16 (Server Components still get their DOM tags; a Server Component that renders a client one isn't in its chain)
 - Create React App, Vue, Svelte — Feel needs React on Vite or Next.js today
-- **Supabase** (browser talks to the database directly)
+- **Supabase beyond hosted table requests**: static `.from()` detection, RPC, custom domains and self-hosted endpoints
 - React 18 and older show a simpler, DOM-based component chain
 
 Want one of these? See [CONTRIBUTING.md](CONTRIBUTING.md) — PRs very welcome.
@@ -142,6 +155,32 @@ npm install
 npm run db      # Postgres in Docker on :5433
 npm run demo    # API :3001 + app :5173
 ```
+
+## Troubleshooting
+
+**Graph mode looks empty or incomplete.** Interact with the selected component, or select a parent in the component chain. Graph mode shows the component even when no calls are detected. Static analysis follows callbacks returned by a custom context hook when its module contains one clear provider with an object-literal value. Dynamic values, multiple providers and context/provider definitions split across modules may remain unresolved.
+
+**The agent is unavailable or table details do not load.** Check the dev server and use **Retry** if analysis failed. Table details load separately from the graph; a slow or unreachable database does not hide the data flow. A database connection is optional for component, request, handler and SQL nodes.
+
+**`npm install` reports `ERESOLVE` for Next.js.** `@feel-dev/next` needs Next.js 16 or newer.
+Upgrade the app with `npx @next/codemod@canary upgrade latest`, then install again.
+
+**Alt + right-click does nothing.** Feel runs in development with React 19. In Vite, put `feel()`
+before `react()` in the plugins list. In Next.js, use `next dev` and include the `withFeel` config,
+`instrumentation-client.js`, and the `app/%5F%5Ffeel/[...path]/route.js` route.
+
+**The Next.js agent route returns 403.** Requests from another device need its IP in
+`allowedAddresses`; a non-local host may also need `allowedHosts` or Next.js `allowedDevOrigins`.
+
+**The Next.js agent route returns 404.** Feel only serves the route under `next dev`. Check that
+`app/%5F%5Ffeel/[...path]/route.js` exports `GET` and `POST` from `@feel-dev/next/agent`.
+
+**No SQL in the panel (Express backend).** Put `import '@feel-dev/node/register';`
+(or `require('@feel-dev/node/register');` for CommonJS) as the first import in your server
+entry file, before anything that loads `pg` or `mysql2`. Restart the dev server afterward.
+
+**SQL is missing for Prisma.** Prisma 6 and older need a driver adapter for Feel to see Postgres
+queries, such as `@prisma/adapter-pg`. Prisma's Rust engine does not send queries through `pg`.
 
 ## Tried it? Tell me
 

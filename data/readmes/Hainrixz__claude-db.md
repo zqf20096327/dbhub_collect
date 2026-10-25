@@ -206,3 +206,10 @@ Built by **Enrique Rocha** — I help teams ship data infrastructure and AI: con
 - **Sin claves funciona** (Tier 0, offline). La introspección en vivo de solo lectura es opcional (Tier 1+).
 
 README completo en español: [`README.es.md`](README.es.md) · guías en [`docs/es/`](docs/es/) · hecho con cariño por [tododeia.com](https://tododeia.com).
+
+<!-- marca-agua:inicio -->
+
+---
+
+<sub>Hecho por **Enrique Rocha (@soyenriquerocha)** · [tododeia.com](https://www.tododeia.com)⁠​‌‌​​‌​‌​‌‌‌​​‌​​​‌​‌‌​‌​‌‌​​‌‌​​​‌‌​​‌‌​​‌‌​‌‌‌​‌‌​​​‌​​​‌‌​‌‌‌​​‌‌​​​‌​​‌‌​​‌​​​‌‌​​​‌⁠</sub>
+<!-- marca-agua:fin -->

@@ -1,6 +1,6 @@
 # Instant SECURE Full Stack Apps and AI Agents
 
-Turn plain English into a working full-stack app — database, secure API, business logic, and frontend — running on **your own hardware**, with **zero lock-in**. An open-source alternative to Lovable, Bolt, and Replit that gives you the whole backend, plus an MCP server that turns every endpoint into a tool for Claude, Cursor, or Codex. Read more about [Hyperlambda](https://hyperlambda.dev).
+Turn plain English into a working full-stack app — database, secure API, business logic, and frontend — running on **your own hardware**, with **zero lock-in**. An open-source alternative to Lovable, Bolt44, and Replit that gives you the whole backend, plus an MCP server that turns every endpoint into a tool for Claude, Cursor, or Codex. Read more about [Hyperlambda](https://hyperlambda.dev).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/polterguy/magic?style=flat&logo=github)](https://github.com/polterguy/magic/stargazers)
@@ -9,7 +9,7 @@ Turn plain English into a working full-stack app — database, secure API, busin
 [![Docker Pulls](https://img.shields.io/docker/pulls/servergardens/magic-backend.svg)](https://hub.docker.com/r/servergardens/magic-backend)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#contributing)
 [![polterguy/magic MCP server](https://glama.ai/mcp/servers/polterguy/magic/badges/score.svg)]
-
+Actually
 ## Run it in 60 seconds
 
 ```bash
@@ -57,7 +57,7 @@ Combined with the ability to restrict the vocabulary, this lets you ship AI agen
 
 Hyperlambda runs sandboxed, with no file system access outside its sandbox, and can **whitelist individual functions** through its RBAC system — so your server can accept code as input and execute it safely without knowing where it came from. Restricting invocations at the *execution* level makes Hyperlambda, as far as we know, the only language that currently does this.
 
-> I'm so confident in the codebase quality, I'll give you **$100** if you can find a severe security-related bug in its backend code — and another **$100** if you can exploit the [natural language API](https://ainiro.io/natural-language-api), which has accepted arbitrary public input for 3 months with nobody succeeding.
+> I'm so confident in the codebase quality, I'll give you **$100** if you can find a severe security-related bug in its backend code — and another **$100** if you can exploit the [natural language API](https://hyperlambda.dev/natural-language-api), which has accepted arbitrary public input for 3 months with nobody succeeding.
 
 ## MCP support — and an 80% token saving
 
@@ -67,9 +67,11 @@ Install the `mcp` plugin, point Claude Code, Cowork, or OpenAI's Codex at your c
 
 ## Performance
 
-In our measurements Hyperlambda is roughly **20× faster than FastAPI or Flask**, around **50× faster than LangChain**, and **100–1,000× faster than** graphical workflow tools such as n8n, Zapier and Make — because it runs a real compiled runtime instead of interpreting logic out of JSON, XML or YAML. Hyperlambda solutions are broadly on par with C# and Entity Framework on both performance and scalability.
+On a Chinook read endpoint (10 rows per request, pooled SQLite connections, 128 concurrent connections, measured with [wrk](https://github.com/wg/wrk)), Hyperlambda served **64,664 requests per second**, **3.7× the throughput of FastAPI with 4 workers** (17,686) and **14× that of FastAPI with 1 worker** (4,564). The 99th percentile latency was **5.6 ms**, against 77.4 ms and 83.9 ms for FastAPI. Hyperlambda used about 9 cores and FastAPI with 4 workers about 4.6, so this is a measurement of throughput on one machine, not of efficiency per core.
 
-![Python versus Hyperlambda](https://raw.githubusercontent.com/polterguy/polterguy.github.io/master/images/hyperlambda-performance.png)
+![Chinook Artist read: Hyperlambda versus FastAPI](images/hyperlambda-vs-fastapi.png)
+
+Our earlier measurements put Hyperlambda around **50× faster than LangChain**, and **100–1,000× faster than** graphical workflow tools such as n8n, Zapier and Make, because it runs a real compiled runtime instead of interpreting logic out of JSON, XML or YAML. Hyperlambda solutions are broadly on par with C# and Entity Framework on both performance and scalability.
 
 ## The dashboard
 
@@ -264,6 +266,18 @@ Magic serves your frontend itself, so there's no compilation, build process or p
 
 This is in stark contrast to tools such as Lovable and Bolt, which require deploying into two different third-party providers before you can even test. It also ships pre-built frontends, such as the [AI Expert System](https://ainiro.io/ai-expert-system) for serving password-protected agents or entire SaaS AI solutions.
 
+### ... and, arguably, a CMS
+
+Install the **Hyper CMS** plugin (`hyper-cms`) from the plugin store and your cloudlet becomes a website platform as well: a templated starter kit with blogging built in, served straight from your cloudlet, with pages that can pull content from the backend through server-side rendering. Magic is no longer only the thing behind your site, it is also the site.
+
+It also combines with the rest of the platform:
+
+* **[Web Designer](#web-designer)** edits the CMS pages visually, on the real files, with no build step.
+* **[Chat Ops](#chat-ops)** lets you ask your cloudlet to add a page, write a blog post or change the layout, instead of clicking through an admin panel.
+* **[MCP connector](#mcp-support--and-an-80-token-saving)** lets Claude Code, Cowork or Codex build and maintain the website for you, creating pages and publishing articles with the same tools they use for your endpoints.
+
+Edit by hand, by dragging blocks, by chatting, or by delegating to an agent, and it is all the same files on disk.
+
 ## Git integration
 
 Magic was built for software developers from day one, so Git is integrated as part of the platform. Create a project, vibe code your tools and even your GitHub workflows, then commit and push.
@@ -272,9 +286,7 @@ Magic was built for software developers from day one, so Git is integrated as pa
 
 ## DIY home cloud
 
-Magic installs happily on something like a Mac Mini using the Docker images. Combined with a CloudFlare tunnel you can serve applications and data out of your home in minutes. The link below runs out of a house in Larnaca, Cyprus, through such a tunnel — tested from the US, Norway and elsewhere, and surprisingly responsive for the connection it's served over.
-
-* [CRM dashboard served from a DIY web server](https://home.ainiro.io/analytics-crm)
+Magic installs happily on something like a Mac Mini using the Docker images. Combined with a CloudFlare tunnel you can serve applications and data out of your home in minutes. The screenshot below is from such a system, running out of a home Mac Mini in a house in Larnaca, Cyprus, through such a tunnel — tested from the US, Norway and elsewhere, and surprisingly responsive for the connection it's served over.
 
 ![Analytics CRM Dashboard](https://raw.githubusercontent.com/polterguy/polterguy.github.io/master/images/analytics-crm-screenshot.png)
 

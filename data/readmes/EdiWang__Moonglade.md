@@ -27,7 +27,7 @@ The main solution file is `src/Moonglade.slnx`.
 | `src/Moonglade.Auth` | Local account and standards-based OpenID Connect authentication support. |
 | `src/Moonglade.BackgroundServices` | Scheduled publishing and fire-and-forget background work. |
 | `src/Moonglade.*` | Supporting projects for image storage, email, IndexNow, moderation, Webmention, syndication, themes, widgets, setup, utilities, and middleware. |
-| `src/Tests/Moonglade.*.Tests` | xUnit test projects aligned with the production projects. |
+| `src/Tests/Moonglade.*.Tests` | xUnit test projects aligned with the production projects. See the [test layout and maintenance guide](src/Tests/README.md). |
 | `Dockerfile`, `compose.yaml` | Docker deployment assets. |
 
 ## 🚀 Deployment
@@ -108,6 +108,8 @@ Article, feed, and sitemap cache keys include a process-local version so a query
 ### Saving Blog Settings
 
 Admin settings are saved to the database before the running configuration is replaced. A failed save keeps the active settings unchanged and prevents success actions such as completing authenticator setup. Related CDN image settings and the avatar address are saved together in one database transaction. Settings updates are serialized within the current process; other application instances must reload or synchronize their configuration separately.
+
+At startup, malformed ordinary settings JSON, incompatible JSON values, and null settings are restored to that setting's default in the existing database row. Missing settings are initialized, and valid settings retain their values and modification timestamps. Recovery warnings identify the configuration key without logging its JSON. Invalid `LocalAccountSettings` or `SystemManifestSettings` stop initialization with a restoration message to protect administrator credentials and installation/upgrade history; restore those values from a trusted database backup before restarting.
 
 ### Authentication
 

@@ -3,7 +3,7 @@
 **Your own team of AI bots, in one self-hosted binary.**
 
 [![CI](https://github.com/alexsergivan/kwant/actions/workflows/ci.yml/badge.svg)](https://github.com/alexsergivan/kwant/actions/workflows/ci.yml)
-[![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](#license)
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](#license)
 [![Docs](https://img.shields.io/badge/docs-kwant.si-orange.svg)](https://kwant.si/docs/quickstart)
 
 kwant gives you a team of bots that share chats, hand work to each other with an @mention and get it done on their own, on a schedule or while you're away. Keep separate spaces for work and home, each with its own bots and accounts. Run it on your laptop or a server, with the Claude, Codex or Grok CLI you already use, or your own API keys.
@@ -12,7 +12,7 @@ It's written in Rust (Tokio, Axum, SQLite) with a React web app embedded in the 
 
 ![A kwant channel: Designer answers a question about empty states, then @mentions QA, and QA checks it on a 360 pixel screen.](docs/media/handoff.webp)
 
-**Website and docs: [kwant.si](https://kwant.si)**
+**Website and docs: [kwant.si](https://kwant.si)** · **[Download for Mac](https://github.com/alexsergivan/kwant/releases/latest/download/kwant_universal.dmg)**
 
 ---
 
@@ -25,6 +25,7 @@ It's written in Rust (Tokio, Axum, SQLite) with a React web app embedded in the 
 - **Autonomous, with a safety net you control.** Ordinary work runs without stopping. On *Ask only when risky*, the default for new spaces, only risky steps such as `git push`, network calls, unknown commands or changes outside the bot's folder show an approval card with the exact command: *Allow once*, *Always allow* or *Deny*. Per space or per bot, switch to ask every time or don't ask.
 - **Loose ends and letters.** kwant reads your chats and, if you add them, an IMAP inbox and your GitHub issues and pull requests, read-only, and finds what you started and never finished. Photograph a bill or a form and it pulls out the sender, the ask and the deadline and drafts a reply. It never sends anything.
 - **Parallel Universe.** Compare up to three ways to deploy an app with local container tests and dated price estimates. Every number is tagged as verified, an estimate or speculation. No cloud account and no spending.
+- **No telemetry.** kwant sends nothing to us, and its interface loads nothing from other servers. The one download you don't set up yourself is the [Laya](#laya-model-router) router on first start: its Python packages and its model from PyPI and Hugging Face (`--no-laya` turns it off). Everything else goes only to the AI providers and services you add.
 - **And more:** memory and skills per bot (you approve new skills), bots that propose hiring a teammate, import a bot from a Claude Code subagent, a SKILL.md, a character card or a JSON export, search across a space's chats, MCP tool servers, a shared browser for bots, saved passwords with an optional Bitwarden store, and Local or VM computer mode.
 
 See every feature, with screenshots, on [kwant.si/features](https://kwant.si/features).
@@ -60,6 +61,8 @@ Screenshots come from a demo space with sample data.
   - an Anthropic, OpenAI or xAI API key, which you add in the app under **Space settings → Accounts**.
 - Optional: **Docker** for VM mode and the bots' shared browser, and [`uv`](https://docs.astral.sh/uv/) or `python3` for the Laya router.
 
+`kwnt doctor` (`cargo run -- doctor` from a clone) checks all of these and prints the install command for whatever is missing on your machine; `kwnt setup` installs it (see [Without Docker](#without-docker-kwnt-setup)).
+
 ### Run from a fresh clone
 
 ```bash
@@ -81,6 +84,16 @@ make build                 # web app + cargo build --release
 ./target/release/kwnt serve
 ```
 
+### On a Mac: the app
+
+[Download the Mac app](https://github.com/alexsergivan/kwant/releases/latest/download/kwant_universal.dmg) (a universal `.dmg` for Apple silicon and Intel) and drag kwant to Applications. It runs its own kwant on your Mac, with the same `~/.kwnt` data folder as `kwnt serve`, and stays in the menu bar when you close the window. Build it yourself from [`apps/mac`](apps/mac/README.md).
+
+The app is signed ad hoc, not notarized by Apple, so macOS stops it the first time. Click **Done**, open **System Settings → Privacy & Security**, scroll down and click **Open Anyway**. On macOS 14 or earlier, right-click the app and choose **Open** instead.
+
+### Install the web app
+
+In Chrome or Edge, click **Install app** in the sidebar; in Safari on a Mac, **File → Add to Dock**; on a phone, kwant shows how. Browsers only install pages served over https or from `127.0.0.1`.
+
 More in the [quickstart](https://kwant.si/docs/quickstart) and [install](https://kwant.si/docs/install) docs.
 
 ---
@@ -96,7 +109,7 @@ scp target/release/kwnt user@your-vps:/usr/local/bin/kwnt
 ssh user@your-vps "kwnt serve --host 0.0.0.0 --port 8799"
 ```
 
-On your own computer there is nothing to sign in to. From another machine, open the link `kwnt serve` prints at startup once (`http://<this-host>:8799/#kwnt_token=...`, with `<this-host>` swapped for the server's address); the browser stays signed in for a year. Lost it? On the server, as the user that runs kwnt, `cat ~/.kwnt/api-token` (or `$KWNT_DATA_DIR/api-token`, e.g. `sudo cat /var/lib/kwnt/api-token` with the systemd unit below) prints the token to paste, and `kwnt token` the link (`./target/release/kwnt token` if kwnt isn't on your PATH). Run them as the same user: as another user they fail, because that user can't read the token file (for the systemd unit use `sudo cat` as above). Each install has its own token, so one copied from your laptop won't open kwnt on the server. Or skip sign-in: `ssh -N -L 8799:127.0.0.1:8799 user@your-vps`, then open http://127.0.0.1:8799 on your computer (not with Docker, where requests always count as remote). The link signs in as you, so anyone who can read the server's output can use it. Put a TLS reverse proxy in front: see [browser service and VPS hosting](docs/browser-service.md).
+On your own computer there is nothing to sign in to. From another machine, open the one-time link `kwnt serve` prints at startup (it works once, for 15 minutes; with `KWNT_ALLOWED_ORIGINS` set it is ready to open and comes with a QR code), or make a new one with `kwnt signin-link`. The browser stays signed in for a year. To add your phone or another browser later, open **Settings → Signed-in devices → Add a phone or browser** in a signed-in browser and scan the one-time QR code (it also works once, for 15 minutes); the same list lets you sign those browsers out. A new browser can also choose **Sign in from another device** on the sign-in screen: it shows a code for 10 minutes, and a signed-in browser shows **New device wants access** with Approve or Deny. Approve only a code that is on a screen you are holding. Prefer the token? On the server, as the user that runs kwnt, `cat ~/.kwnt/api-token` (or `$KWNT_DATA_DIR/api-token`, e.g. `sudo cat /var/lib/kwnt/api-token` with the systemd unit below) prints the token to paste (`kwnt token --raw` does the same; `./target/release/kwnt` if kwnt isn't on your PATH), and `kwnt token` prints a new one-time link like `kwnt signin-link`. Run them as the same user: as another user they fail, because that user can't read the token file (for the systemd unit use `sudo cat` as above). Each install has its own token, so one copied from your laptop won't open kwnt on the server. Or skip sign-in: `ssh -N -L 8799:127.0.0.1:8799 user@your-vps`, then open http://127.0.0.1:8799 on your computer (not with Docker, where requests always count as remote). A one-time link signs in as you, so keep it private until you've used it; the token never appears in the server's output. Put a TLS reverse proxy in front: see [browser service and VPS hosting](docs/browser-service.md).
 
 <details>
 <summary>A systemd unit</summary>
@@ -127,16 +140,52 @@ systemctl enable --now kwnt
 
 </details>
 
-### Docker Compose
+### VPS in 5 minutes (Docker Compose)
 
-`docker-compose.yml` runs kwnt with a Laya image that has the model baked in, so the server never downloads it at runtime:
+One command starts everything kwant needs: kwnt, **Laya** (picks which bot answers, model baked in) and a private **Chromium** for the bots (VM mode), with no Docker socket mounted. You need Docker with Compose and about 4 GB of free RAM (Chromium is capped at 1.5 GB).
 
 ```bash
-docker compose up -d --build                  # UI on http://127.0.0.1:8799
-docker compose logs kwnt | grep kwnt_token    # open that link once, with <this-host> as 127.0.0.1
+git clone https://github.com/alexsergivan/kwant.git && cd kwant
+KWNT_CLIS=claude,codex docker compose up -d --build   # any of claude,codex,grok; leave out for none
+docker compose exec kwnt kwnt doctor                  # what works, and the fix for what doesn't
+docker compose exec kwnt claude auth login            # sign a CLI in (codex login --device-auth, grok login --device-auth)
+docker compose exec kwnt kwnt signin-link            # a one-time sign-in link and QR code (15 minutes)
 ```
 
-Data persists in the `kwnt-data` volume. `docker compose exec kwnt kwnt token` prints the sign-in link again, and `--raw` just the token to paste (`docker exec <container> kwnt token --raw` without Compose).
+Or skip the CLIs and add an Anthropic, OpenAI or xAI API key in the app under **Space settings → Accounts**. CLI sign-ins live in the `kwnt-home` volume and data in `kwnt-data`, so both survive rebuilds.
+
+**HTTPS:** the UI is published on `127.0.0.1:8799` only. Put a TLS proxy in front, e.g. [Caddy](https://caddyserver.com) with this `Caddyfile`, and tell kwnt its address:
+
+```
+kwant.example.com {
+	reverse_proxy 127.0.0.1:8799
+}
+```
+
+```bash
+echo KWNT_ALLOWED_ORIGINS=https://kwant.example.com >> .env && docker compose up -d
+```
+
+`docker compose exec kwnt kwnt signin-link` prints a one-time sign-in link for your domain and a QR code to scan with your phone. It works once, for 15 minutes; run it again for the next device. `docker compose exec kwnt kwnt token --raw` still prints the API token, as a fallback.
+
+- **Image sizes** (measured): kwnt alone 0.2 GB; with `KWNT_CLIS=claude,codex,grok` 1.7 GB (the CLIs add about 0.9 GB, so they are off by default). Laya 3.2 GB, the browser 1.2 GB. Idle RAM: Laya about 1.7–2.3 GB, the browser about 0.4 GB, kwnt about 25 MB.
+- **kwant's own `execute_shell` tool** runs in per-team Docker containers, so it isn't available inside this stack: that would need the host's Docker socket, which is root on the host. The CLIs' own shell tools work inside the kwnt container.
+- **Upgrading from an older image:** kwnt now runs as uid 10001, not root. If it says `/data isn't writable`, run once: `docker compose run --rm -u root kwnt chown -R 10001:10001 /data`.
+
+### Without Docker: `kwnt setup`
+
+`kwnt setup` installs what kwant needs on this machine: Chromium or Chrome for the bots' browser, Laya (in kwant's data folder, with its own `uv` if you have no Python), and a CLI (`claude` unless you name others with `--clis`). It asks before each step (`--yes` skips the questions), never runs `sudo` itself (it prints the command for you instead), installs into your home folder where it can, skips Docker unless you pass `--docker`, and running it again changes nothing. `--dry-run` shows the plan. The app has the same checklist under **Setup**.
+
+One line per platform, each followed by `kwnt doctor`:
+
+| Platform | Install | Then |
+|---|---|---|
+| Mac app | Download the `.dmg` from [Releases](https://github.com/alexsergivan/kwant/releases) (test builds for now) and open it | Run `kwnt doctor` |
+| Mac, command line | `git clone https://github.com/alexsergivan/kwant.git && cd kwant && make build && ./target/release/kwnt setup` (uses Homebrew when you have it) | Run `kwnt doctor` |
+| Linux desktop or server | The same clone and `make build`, then `kwnt setup`, or `sh scripts/install-linux-deps.sh --clis claude` on Debian/Ubuntu | Run `kwnt doctor` |
+| VPS with Docker | [Docker Compose](#vps-in-5-minutes-docker-compose) | Run `docker compose exec kwnt kwnt doctor` |
+
+There's no prebuilt `kwnt` binary or Homebrew formula yet, so the command line needs a clone and a build (Rust and Node).
 
 ---
 
@@ -187,11 +236,12 @@ kwant runs commands and holds API keys and passwords, so please report vulnerabi
 
 ## License
 
-Licensed under either of
+kwant is open source under the [GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0-only).
 
-- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE))
-- MIT license ([LICENSE-MIT](LICENSE-MIT))
+- **Free for everyone:** use it, change it and run it for yourself, your team or your company, at any size.
+- **Share your changes if you serve them:** if you change kwant and let others use it over a network, for example as a hosted service, you must publish your changed source code under the AGPL too.
+- **Commercial license:** if you want to sell kwant, host it or build it into your product without publishing your changes, you can buy a commercial license instead. See [COMMERCIAL.md](COMMERCIAL.md).
 
-at your option.
+Code published before the switch, including the mac-v0.1.0 release, stays under MIT OR Apache-2.0.
 
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in kwant by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
+Contributions are accepted under the terms in [CONTRIBUTING.md](CONTRIBUTING.md#license).

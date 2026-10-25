@@ -17,7 +17,7 @@ provenance.
 | :---: | :---: | :---: | :---: | :---: |
 | Paste one line into Claude Code, Codex, or Cursor | | It installs Foremerge and wires itself up | | Every agent sees what the others are about to change, even in separate worktrees |
 
-> **Status:** Foremerge `0.5.1` is a pre-1.0, local-first MVP. The CLI, JSON API,
+> **Status:** Foremerge `0.6.0` is a pre-1.0, local-first MVP. The CLI, JSON API,
 > MCP server, SQLite store, deterministic conflict detector, and
 > verification-gated lifecycle are implemented. Public schemas may still
 > change. Published benchmark results do not yet exist, and coordination
@@ -471,7 +471,7 @@ adapters over the same database.
 | `run_verification` | Run a trusted repository check by name, never raw MCP argv |
 | `accept_changeset` | Apply final conflict, dependency, validation, and Git gates |
 | `record_commit` | Record the actual Git integration commit |
-| `discard_work` | Preserve abandoned work while releasing claims and blockers |
+| `discard_work` | Close abandoned work, or work that landed without acceptance, releasing claims and blockers |
 | `list_agents` | Read registered agent provenance |
 | `get_intent` | Read one intent and current conflict snapshot |
 | `get_changeset` | Read one ChangeSet and Git/provenance state |

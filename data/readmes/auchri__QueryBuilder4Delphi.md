@@ -12,7 +12,7 @@ See the [changelog](CHANGELOG.md) for release details.
 
 Add `src` to the Delphi search path. The core needs only the Delphi RTL.
 Import `QueryBuilder4Delphi.Query.Core` and `QueryBuilder4Delphi.Query` to build
-queries; add a compiler unit when you need parameterized SQL and bindings.
+queries and compile parameterized SQL with ordered bindings.
 FireDAC is required only by the optional provider.
 
 ## Quick start: build SQL
@@ -21,26 +21,22 @@ FireDAC is required only by the optional provider.
 uses
   System.SysUtils,
   QueryBuilder4Delphi.Query.Core,
-  QueryBuilder4Delphi.Query,
-  QueryBuilder4Delphi.Compilers.Compiler,
-  QueryBuilder4Delphi.Compilers.Factory;
+  QueryBuilder4Delphi.Query;
 
 procedure ShowBookQuery;
 var
-  Query: IQuery;
-  Compiler: ICompiler;
   Statement: ISqlResult;
 begin
-  Query := TQuery.Create('Books')
+  Statement := TQuery.Create('Books')
     .Select(['Id', 'Title'])
-    .Where('Id', 42);
-  Compiler := TQueryCompilerFactory.CreateCompiler(TSqlDialect.MSSql);
-  Statement := Compiler.Compile(Query);
+    .Where('Id', 42)
+    .Compile;
   Writeln(Statement.Sql);
   Writeln(Statement.Bindings[0].AsInteger); // 42
 end;
 ```
 
+<!-- mssql:QuickStartBooks -->
 **Generated parameterized MSSQL SQL (compiler default `@p` prefix):**
 
 ```sql
@@ -52,10 +48,90 @@ Bindings:
 ```text
 @p0 = 42
 ```
+<!-- /mssql:QuickStartBooks -->
 
-Execute `Statement.Sql` together with its bindings. `Query.Compile` and
-`Statement.ToString` produce a **SQL preview with values substituted**, intended
-for diagnostics. They are not the parameterized execution path.
+`Compile` returns `ISqlResult` with parameterized SQL and bindings; the default
+dialect is MSSql. Execute `Statement.Sql` together with its bindings through an
+appropriate provider. `IQuery.ToDebugSql(Dialect)` and `Statement.ToString`
+produce a **SQL preview with values substituted**, intended for diagnostics,
+not execution.
+
+## Fluent search with optional filters
+
+A book catalogue can combine author details, optional filters and paging in one
+chain. Using the imports above, build a fresh query for each search:
+
+```delphi
+function SearchBooks(const Title, Author: string; PublishedOnly: Boolean;
+  Page, PageSize: Integer): IQuery;
+begin
+  Result := TQuery.Create('Books as b')
+    .Join('Authors as a', 'a.Id', 'b.AuthorId')
+    .Select(['b.Id', 'b.Title', 'a.Name as AuthorName'])
+    .When(Title <> '',
+      function(Q: IQuery): IQuery
+      begin
+        Result := Q.WhereContains('b.Title', Title);
+      end)
+    .When(Author <> '',
+      function(Q: IQuery): IQuery
+      begin
+        Result := Q.WhereContains('a.Name', Author);
+      end)
+    .When(PublishedOnly,
+      function(Q: IQuery): IQuery
+      begin
+        Result := Q.WhereTrue('b.IsPublished');
+      end)
+    .OrderBy('b.Title').OrderBy('b.Id')
+    .ForPage(Page, PageSize);
+end;
+```
+
+Compile the search using the same imports:
+
+```delphi
+procedure ShowBookSearch;
+var
+  Statement: ISqlResult;
+begin
+  Statement := SearchBooks('Delphi', 'Cantu', True, 2, 10)
+    .Compile(TSqlDialect.MSSql);
+  Writeln(Statement.Sql);
+end;
+```
+
+All three filters are enabled here: title contains `Delphi`, author contains
+`Cantu`, and published books only. Empty text skips its filter; `False` includes
+both published and unpublished books. The unique book Id breaks title ties;
+page 2 skips 10 rows and returns at most 10. No SQL string concatenation is needed.
+
+<!-- mssql:SearchBooks -->
+**Generated parameterized MSSQL SQL (default `@p` prefix; line breaks added):**
+
+```sql
+SELECT [b].[Id], [b].[Title], [a].[Name] AS [AuthorName]
+FROM [Books] AS [b]
+INNER JOIN [Authors] AS [a] ON [a].[Id] = [b].[AuthorId]
+WHERE [b].[Title] like @p0 AND [a].[Name] like @p1
+  AND [b].[IsPublished] = cast(1 as bit)
+ORDER BY [b].[Title], [b].[Id]
+OFFSET @p2 ROWS FETCH NEXT @p3 ROWS ONLY
+```
+
+Ordered bindings (`WhereTrue` emits a SQL Server bit literal):
+
+```text
+@p0 = "%Delphi%"
+@p1 = "%Cantu%"
+@p2 = 10
+@p3 = 10
+```
+<!-- /mssql:SearchBooks -->
+
+Both examples are [checked against the compiler](test/DocumentationExamples.pas).
+See [advanced queries](docs/EXAMPLES.md#advanced-queries) for more JOINs,
+conditional filters and pagination options.
 
 ## Quick start: execute a query
 
@@ -96,52 +172,49 @@ compiler settings, transactions, error handling and custom providers.
 
 ## Object Mapping
 
-Fluent mapping is the recommended API. Use `System.Generics.Collections`,
-`QueryBuilder4Delphi.Query.Core`, `QueryBuilder4Delphi.Query` and
-`QueryBuilder4Delphi.Mapping`. The last unit brings the record helper into scope.
-With the `TBook` class from [the compiled example](test/MappingExamples.pas):
+Read and write mapping share `[Column]`, `[Key]` and `[Ignore]` resolution,
+including renamed columns and validation of conflicting mappings. See the
+[shared DTO example](docs/OBJECT_MAPPING.md#shared-readwrite-attributes).
+
+Import `QueryBuilder4Delphi.Mapping` for fluent mapping into ordinary classes
+with writable RTTI properties. With [TBook](test/MappingExamples.pas):
 
 ```delphi
-Books := TQuery.Create('Books')
-  .Select(['Id', 'Title AS BookTitle'])
-  .Where('IsPublished', True)
-  .Execute(Executor)
-  .ToList<TBook>();
+Books := TQuery.Create('Books').Select(['Id', 'Title as BookTitle'])
+  .OrderBy('Id').Execute(Executor).ToList<TBook>();
 try
-  // Books owns its objects.
+  for Book in Books do
+    Writeln(Book.Title);
 finally
-  Books.Free;
+  Books.Free; // The list owns and frees every mapped book.
 end;
 ```
 
-`Execute(Executor).FirstOrDefault<TBook>()` returns one caller-owned object or
-`nil`; free it when finished. The returned `TObjectList<TBook>` owns its objects.
-The static API remains available: `TQueryMapper.ToList<TBook>(Rows)` and
-`TQueryMapper.FirstOrDefault<TBook>(Rows)`.
-Fluent mapping consumes its facade and releases that reference before returning,
-including on exceptions and after reading only the first row. Copies and retained
-`IQueryResult` references keep their shared cursor alive. Materialized objects
-remain valid after result destruction; connection ownership stays with the application.
-Mapping calls `Next`, starting with the next remaining row. Public/published
-writable properties need RTTI; names match without case sensitivity, with
-`[Column]` and `[Ignore]` supported. Partial projections retain constructor
-defaults. Supported values include signed/unsigned integers, floating point,
-Currency, TBcd, Boolean, Unicode string, TDateTime, native SQL timestamp records,
-TGUID and TBytes. `TNullable<T>` works automatically for these built-in types:
-`Execute(Executor).ToList<TBook>()` needs no options or registrations.
-`RegisterNullable<T>` extends mapping to custom application types. NULL to
-non-nullable properties and unsupported or lossy conversions raise exceptions. Options also
-provide opt-in `SkipNullAssignment` and exact-pair application converters.
-See [working examples and limits](docs/OBJECT_MAPPING.md).
+Declare `Books: TObjectList<TBook>` and `Book: TBook` (import
+`System.Generics.Collections`). Individually mapped objects are caller-owned;
+lazy fallbacks retain their existing ownership. Fluent terminal calls release
+their result reference before returning; independently retained copies stay valid.
 
-`IQuery.Execute` now returns a `TQueryResult` record holding the same
-reference-counted cursor. Direct assignment to `IQueryResult` still works through
-a one-way implicit conversion; `Execute(Executor).AsRaw` is the explicit form.
-The facade also delegates all reader operations. Copies share cursor position.
-Use `Default(TQueryResult)` to clear a facade, and rebuild dependent units after
-the return-type change. Custom `IQuery` implementations must update their
-`Execute` signature; executor/provider contracts are unchanged. See
-[migration and helper scope](docs/OBJECT_MAPPING.md#result-facade-and-compatibility).
+Use `ToList<T>` for an owning list, `First<T>`/`Single<T>` for required rows,
+and `ForEach<T>` to borrow one mapped object per callback. `Single` variants
+detect multiple rows. All accept optional mapping options. The static mapper,
+including `MapCurrent<T>`, remains available for advanced cursor control.
+See [examples and ownership](docs/EXAMPLES.md#object-mapping),
+[mapping and compatibility](docs/OBJECT_MAPPING.md) and
+[benchmarks](docs/MAPPING_PERFORMANCE.md).
+
+SQL NULL maps to the actual Delphi type default for supported non-nullable
+properties, overwriting constructor values. Pass `TQueryMappingOptions` with
+`NullBehavior := nmbThrow` for strict errors or `nmbSkip` to preserve existing
+values. The default loses the distinction between NULL and zero/False/empty;
+use `TNullable<T>` to retain it. The same nullable DTO also works with
+object INSERT, UPDATE, WHERE and HAVING: present values keep their native types,
+including 0, False and empty strings/bytes; absent values become typed SQL NULL.
+NULL predicates use `IS NULL`; NULL UPDATE keys are rejected. See the
+[read/write roundtrip](docs/OBJECT_MAPPING.md#writing-nullable-properties).
+Nullable properties always receive `.Null` for
+SQL NULL under all three policies, and keep non-NULL defaults as present values.
+See [NULL policy and compatibility](docs/OBJECT_MAPPING.md#nullable-properties-and-scoped-options).
 
 ## SQL dialects
 

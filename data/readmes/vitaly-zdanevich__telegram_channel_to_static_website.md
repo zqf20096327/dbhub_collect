@@ -1,0 +1,606 @@
+# tg2zola
+
+🌐 **English** · [Беларуская](README.be.md) · [Українська](README.uk.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [中文](README.zh.md) · [日本語](README.ja.md) · [Polski](README.pl.md) · [Español](README.es.md) · [한국어](README.ko.md) · [ქართული](README.ka.md) · [हिन्दी](README.hi.md)
+
+[![daily build](https://github.com/vitaly-zdanevich/telegram_channel_to_static_website/actions/workflows/daily.yml/badge.svg)](https://github.com/vitaly-zdanevich/telegram_channel_to_static_website/actions/workflows/daily.yml)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=coverage)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+[![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+[![Reliability](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+
+Google Lighthouse (mobile, updated by the daily run):
+[![Lighthouse Performance](https://img.shields.io/endpoint?url=https%3A%2F%2Fvitaly-zdanevich.github.io%2Ftelegram_channel_to_static_website%2Flighthouse-performance.json)](https://pagespeed.web.dev/analysis?url=https://vitaly-zdanevich.github.io/telegram_channel_to_static_website/)
+[![Lighthouse Accessibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fvitaly-zdanevich.github.io%2Ftelegram_channel_to_static_website%2Flighthouse-accessibility.json)](https://pagespeed.web.dev/analysis?url=https://vitaly-zdanevich.github.io/telegram_channel_to_static_website/)
+[![Lighthouse Best Practices](https://img.shields.io/endpoint?url=https%3A%2F%2Fvitaly-zdanevich.github.io%2Ftelegram_channel_to_static_website%2Flighthouse-best-practices.json)](https://pagespeed.web.dev/analysis?url=https://vitaly-zdanevich.github.io/telegram_channel_to_static_website/)
+[![Lighthouse SEO](https://img.shields.io/endpoint?url=https%3A%2F%2Fvitaly-zdanevich.github.io%2Ftelegram_channel_to_static_website%2Flighthouse-seo.json)](https://pagespeed.web.dev/analysis?url=https://vitaly-zdanevich.github.io/telegram_channel_to_static_website/)
+[![Security](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_telegram_channel_to_static_website&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_telegram_channel_to_static_website)
+
+Back up a **public Telegram channel** into a **self-contained [Zola](https://www.getzola.org/) static website**.
+
+> **Regenerate on demand:** click the **daily build** badge above → **Run
+> workflow** to scrape + rebuild + redeploy without waiting for the schedule
+> (details in [Automation](#automation-github-actions)).
+
+It scrapes the public web preview (`https://t.me/s/<channel>`), downloads all
+media locally, and regenerates a complete Zola blog on every run. **No Telegram
+bot, token, or API is needed** for that — it reads only the public web page (the
+optional [MTProto backend](#optional-mtproto-backend) does log in with API
+credentials to add audio/photos/videos and discussions). The output has
+**no Telegram dependency**: media is stored in the site or its GitHub Releases,
+there are no Telegram embeds, and links to the channel's *own* posts are rewritten
+to internal relative links — so the site keeps working even if the channel is
+later removed. Links you wrote to other sites (including other Telegram channels)
+are preserved as normal links. It's a backup, not a mirror.
+Archived discussion text is also local; comment attachments remain links to
+Telegram rather than downloaded files (see [Archived discussions](#archived-discussions)).
+
+Written in Rust: a single static binary, easy to run locally or in CI.
+
+## What it does
+
+- **Full history** — walks the channel backwards via the preview's `?before=`
+  cursor until the first message, and **regenerates every page** each run.
+- **Archived media** — downloads photos, videos, audio (`.ogg/.oga/.mp3`),
+  documents and stickers into each post's bundle or the repository's Releases.
+  Photos are content-addressed by their stable Telegram file id, so editing a
+  post's text never re-downloads its media, while **replacing** an image (the
+  post then shows as *edited*) fetches the new file and prunes the old one.
+  Temporary HTTP download failures (408, 429, 5xx, or interrupted transfers)
+  get up to ten attempts with exponential backoff capped at 30 seconds.
+  Before CI publishes video/archive Release URLs, each file must be staged
+  with nonempty bytes or confirmed in the current GitHub Release inventory;
+  otherwise the build fails instead of deploying a missing file.
+- **True-black default theme** — built-in templates styled `#000` in dark mode
+  via `prefers-color-scheme` (OLED-friendly), with no external theme dependency.
+  An external theme can be layered on with a guaranteed fallback (see [Theming](#theming)).
+- **Smart video handling** (in priority order):
+  1. attached video **+ a live YouTube link** (or an Instagram link with
+     `INSTAGRAM`/`--instagram` enabled) → embed it, drop the video (the CI
+     default, to save space; a dead link keeps the video). Locally everything is
+     downloaded by default — `KEEP_MEDIA`/`--keep-media` forces it;
+  2. directly downloadable video → local `<video>`;
+  3. otherwise → save the **poster frame** + duration (the public page doesn't
+     expose the file; see [Limitations](#limitations)).
+- **Formatting** — bold, italic, strikethrough, code/pre, links and spoilers are
+  converted to Markdown (Telegram's UTF-16 entity offsets handled correctly).
+- **Hashtags → tags** — `#hashtags` become Zola `tags` taxonomy terms, so you get
+  tag pages for free, while still showing as text in the post. Titles-only tag
+  pages show each post's other tags as clickable links beside its title/date,
+  wrapping below on narrow screens.
+- **Grouped posts** — albums are one post automatically; bursts of messages
+  posted at the same instant (e.g. forwarding several at once) are merged.
+- **Forward attribution** — a public “forwarded from” source links to the exact
+  original message (the optional MTProto backend recovers links omitted by the
+  public web preview); hidden/private sources remain plain text.
+- **Self-navigating** — a link to another message in the *same* channel becomes a
+  relative link to that post in the blog; links to other channels stay external.
+- **Post keyboard shortcuts** — on full-post listings (the homepage, full tag
+  views and day views), `j` selects the next post and `k` the previous post in
+  displayed order. After the last post, `j` opens the Older page at its first
+  post; before the first post, `k` opens the Newer page at its last post. If that
+  page link is absent, navigation stops. This also works on listing pages with
+  only one post. Shortcuts ignore typing fields, interactive controls and
+  modifier keys. Enabled by default; individual post pages and titles-only
+  pages are unchanged.
+- **Threaded replies** — when a post replies to an earlier message, it's shown as
+  a quoted **↩ backlink** to that post (an internal link when it's in the archive,
+  otherwise the `t.me` link).
+- **Archived discussions** — individual post pages show their public Telegram
+  comment threads with formatted text, authors, dates and reply links. Enabled
+  by default; the first fetch requires the [MTProto backend](#optional-mtproto-backend).
+  Later builds can reuse the last complete snapshot without Telegram access.
+  Comment attachments are linked, not downloaded. See
+  [Archived discussions](#archived-discussions) for controls and retention limits.
+- **Polls** — rendered as static result bars (question, options with vote shares,
+  and voter count) — no JavaScript.
+- **Engagement** — exports per-post **view counts**. (Reactions/likes aren't
+  available from the public page — see [Limitations](#limitations).)
+- **RSS feed** — a standard `/rss.xml` of **every post** with full content (a
+  complete feed, not just recent items), advertised via a `<link rel="alternate">`
+  so feed readers auto-discover it from the site URL. On by default; disable
+  with `RSS=false` / `--no-rss`.
+- **Podcast feeds** *(on by default)* — iTunes-tagged RSS feeds with per-episode
+  `<enclosure>`s, subscribable in podcast apps (and, with a ≥1400×1400px square
+  cover, submittable to **Apple Podcasts**). An **audio** feed at `/podcast.xml`
+  from posts tagged **`#audio`** that have audio, and a **video** feed at
+  `/video-podcast.xml` from posts with video file(s) (no tag needed). Both are
+  advertised via `<link rel="alternate">` so podcast apps auto-discover them.
+  Disable with `PODCAST=false` / `--no-podcast` and `VIDEO_PODCAST=false` /
+  `--no-video-podcast`.
+- **Rich link previews + Mastodon** — every page emits Open Graph and Twitter
+  Card tags (title, description, the post's first image), so shared links render
+  as cards. Set `FEDIVERSE_CREATOR` to add an author byline on Mastodon previews
+  and verify the site on your profile (see [Fediverse](#fediverse--mastodon)).
+- **Minimal JavaScript, offline-ready** — dark mode and spoilers are CSS-only.
+  The default Elasticlunr search and post keyboard shortcuts are self-contained,
+  so they **work in the offline `file://` copy too** — `tg2zola offline <public-dir>`
+  rewrites the built site to relative links and keeps the local helper scripts
+  (relativized) while stripping the network-dependent ones (Zola's pagination
+  redirect, embed loaders), so it opens straight from `file://` with no web
+  server. With JavaScript disabled, post links still work; `SEARCH_ENGINE=google`
+  provides a plain search `<form>`, while `none` hides search.
+- **Localized UI** — the site chrome (Newer/Older/Tags/About, the search box,
+  dates) renders in any of 13 languages via `LANGUAGE` / `--language`
+  (en/be/uk/ru/de/fr/zh/ja/pl/es/ko/ka/hi), with month and weekday names localized
+  too. Post content keeps the channel's own language.
+
+## Install
+
+Grab a static binary for your architecture from the
+[Releases](../../releases) page (Linux `amd64` / `arm64`, musl), or build from
+source:
+
+```sh
+cargo build --release
+# binary at target/release/tg2zola
+```
+
+You also need the [`zola`](https://www.getzola.org/documentation/getting-started/installation/)
+binary to turn the generated content into HTML.
+
+## Usage
+
+```sh
+# Generate the Zola site (scaffolds config + templates on first run):
+tg2zola --channel durov --site site --init-site
+
+# Build the static HTML:
+zola --root site build       # output in site/public/
+
+# (optional) Make it viewable with NO web server, straight from disk:
+tg2zola offline site/public  # then open site/public/index.html via file://
+
+# (optional) Fold the whole archive into ONE self-contained HTML (CSS + images
+# inlined as data: URIs). Build with base_url="/" first. Best for small/text
+# archives: base64-encoding makes each inlined image ~33% bigger, so a
+# media-heavy site becomes a huge file (for those, prefer the SQLite export):
+tg2zola single-file site/public archive.html
+
+# (optional) Export the whole archive to ONE SQLite file — posts, tags, links,
+# reactions + every media file as a raw BLOB. Great for preservation and
+# SELECT-based analytics, and fine for media-heavy channels (blobs aren't
+# inflated). Pass while generating:
+tg2zola --channel <name> --site site --base-url https://… --sqlite archive.db
+
+# (optional) Export as Evernote ENEX (--enex archive.enex): one note per post,
+# media attached as base64 resources — importable straight into Evernote.
+```
+
+Quick local test (one page, ~20 messages):
+
+```sh
+tg2zola --channel <name> --site /tmp/site --init-site --max-pages 1
+```
+
+All options live in [`tg2zola.toml`](tg2zola.toml) (CLI flags override it):
+
+```sh
+tg2zola --config tg2zola.toml
+```
+
+Run `tg2zola --help` for the full flag list.
+
+## How it's wired
+
+```
+t.me/s/<channel>          scrape + paginate        (scrape.rs / parse.rs)
+        │  HTML
+        ▼
+   RawMessage[]           HTML → Markdown           (html2md.rs)
+        │
+        ▼
+     Post[]               group albums + bursts     (group.rs)
+        │
+        ▼
+ site/content/posts/…     reconcile bundles +        (render.rs / site.rs
+        │                 cache-aware media download   + media.rs)
+        ▼  zola build      (the bundle is the cache)
+ site/public/             self-contained static site
+```
+
+Each post becomes a Zola page bundle — `content/posts/<date>-<id>/index.md` with
+TOML front matter and its media files alongside it. `config.toml` and the
+built-in templates are regenerated deterministically every run, and `write_site`
+reconciles the tree: rewrite all Markdown, keep already-cached media, and prune
+deleted posts and stale files.
+
+## Automation (GitHub Actions)
+
+Two workflows are included:
+
+- **[`daily.yml`](.github/workflows/daily.yml)** — runs once a day (and on
+  demand): restore the previous site from the `blog` branch (the media cache) →
+  scrape + regenerate → `zola build` → **deploy to GitHub Pages** (the published
+  result) → commit the refreshed site back to the **`blog` branch**.
+- **[`release.yml`](.github/workflows/release.yml)** — on every pushed `v*` tag,
+  cross-compiles static `amd64` + `arm64` (musl) binaries and uploads them to the
+  GitHub Release.
+
+To enable publishing: in the repo, **Settings → Pages → Build and deployment →
+Source: GitHub Actions**. No secrets are required — everything is public-scrape.
+The published site is always **GitHub Pages**; the `blog` branch is a durable
+copy and never affects what visitors see.
+
+### Regenerate now (don't wait for the daily run)
+
+`daily.yml` has `workflow_dispatch` enabled, so you can trigger a fresh scrape +
+rebuild + redeploy on demand — it runs exactly the same steps as the scheduled
+run:
+
+- **In the browser:** open **[Actions → "daily" → Run workflow](../../actions/workflows/daily.yml)**
+  and click the green **Run workflow** button. (Add the status badge above to
+  your README for one-click access.)
+- **From the terminal:** `gh workflow run daily.yml` (GitHub CLI), then
+  `gh run watch` to follow it.
+
+**Which channel?** The channel isn't committed, so each deployment sets its own.
+Set a repository **variable** `CHANNEL` (Settings → Secrets and variables → Actions
+→ Variables) to the public channel username — it's a *variable*, not a secret,
+since the channel is public. (Or uncomment `channel = "…"` in
+[`tg2zola.toml`](tg2zola.toml) in your fork.) `THEME_REPO` works as a variable too.
+
+### The `blog` branch (archive + cache)
+
+After deployment, each run with changed archive files commits the generated
+site (Markdown, locally stored media, metadata caches and built-in templates)
+to the `blog` branch, leaving `main` code-only. Built `public/`, external themes,
+Release-upload staging directories, the temporary Release inventory and the
+MTProto download cache are excluded. It does double duty:
+
+- **Cache** — the next run restores media from it instead of re-downloading.
+- **Durable archive** — a buildable Zola site you can clone and mirror anywhere.
+  Release-backed media must be copied separately when moving away from GitHub:
+
+```sh
+git clone -b blog https://github.com/<you>/<repo> my-archive
+zola --root my-archive/site serve          # browse it offline
+
+git -C my-archive remote add gitlab git@gitlab.com:<you>/<repo>.git
+git -C my-archive push gitlab blog          # mirror it elsewhere
+```
+
+**Historical text versions:** a version is retained only if a run fetched it
+and successfully committed and pushed its snapshot **before** it was edited or
+deleted. This is a history of captured snapshots, not every Telegram revision;
+changes made between runs can be missed. Removing a post or comment from the
+latest snapshot does not remove it from earlier `blog` commits. The workflow's
+[`--depth 1` clones](https://git-scm.com/docs/git-clone) restrict its local
+checkout, not the remote history: it makes ordinary
+[fast-forward pushes](https://git-scm.com/docs/git-push#_note_about_fast_forwards),
+without rewriting old commits. Retention assumes nobody later deletes the
+branch or rewrites/squashes that history. The discussion cache
+(`site/.discussions.json`) is included in these snapshots.
+
+**Historical media is different:** locally committed files are Git blobs, but
+GitHub Release assets are not part of Git history. The
+[`daily.yml`](.github/workflows/daily.yml) upload step can replace same-named
+video/archive assets, and its cleanup step
+[deletes superseded image assets](https://docs.github.com/en/rest/releases/assets#delete-a-release-asset).
+Old text snapshots can therefore reference media that is no longer available.
+Keep a separate copy of Release assets if you need every historical binary.
+For large locally stored media collections, consider Git LFS; history
+squashing trades away the old snapshots described above.
+
+### Theming
+
+The default is the built-in **true-black** theme — zero external dependencies, so
+the site always builds. To use an external [Zola theme](https://www.getzola.org/themes/),
+set a repository **variable** `THEME_REPO` (Settings → Secrets and variables →
+Actions → Variables) to its git URL (https, or ssh with a deploy key). The
+workflow clones it and builds with it — and **if the theme is missing or its
+build fails, it automatically falls back to the built-in templates**, so a theme
+problem can never take the blog offline. Note that external themes expect a
+particular content layout, so not every theme is drop-in compatible.
+
+Cut a release:
+
+```sh
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+## Configuration
+
+Everything is configurable via a repository **variable** (Settings → Secrets and
+variables → Actions → **Variables**) for the GitHub Actions flow, or the
+equivalent CLI flag / [`tg2zola.toml`](tg2zola.toml) key when running locally.
+These are *variables*, not secrets — all of it is public.
+
+| Repo variable | CLI flag | Default | What it does |
+|---|---|---|---|
+| `CHANNEL` | `--channel` | **required** | Public channel to sync |
+| `TITLE` | `--title` | channel username | Blog title (header + `<title>`) |
+| `ABOUT` | `--about` | description + stats + repo link | Custom HTML for the About page body |
+| `PAGES` | `--pages` | — | Extra pages: Markdown, each `# Title` heading starts a new page + nav entry |
+| `POSTS_PER_PAGE` | `--posts-per-page` | `20` | Full posts per page on the home feed |
+| `TAGS_FOOTER` | `--tags-footer` | off | `true` to show the per-post tag footer (tags are clickable in the body regardless) |
+| `NEXT_PREV` | `--no-next-prev` | on | `false` hides the Next/Prev post navigation |
+| `TELEGRAM_LINK` | `--no-telegram-link` | on | `false` hides the per-post borderless Telegram paper-plane SVG icon (black in light mode, white in dark mode); "View on Telegram" remains its localized tooltip and accessible label |
+| `RSS` | `--no-rss` | on | `false` disables the RSS feed at `/rss.xml` (with reader autodiscovery) |
+| `PODCAST` | `--podcast` | off | `true` also generates a **podcast feed** (the channel's audio posts, with iTunes tags + `<enclosure>`s) at `/podcast.xml`. Cover comes from the about.me photo, else a post tagged `podcast_description` (whose text is the podcast description). Needs an `http(s)` base URL; Apple also wants a **≥1400×1400px square** cover |
+| `PODCAST_TAGGED` | `--podcast-tagged` | off | with `PODCAST`, include only audio posts tagged `podcast` (default: all audio posts) |
+| `FEDIVERSE_CREATOR` | `--fediverse-creator` | — | Mastodon `@user@instance` → `fediverse:creator` byline + `rel="me"` profile link |
+| `SEARCH_ENGINE` | `--search-engine` | `elasticlunr` | Header search box: `google` (JS-free form) / `duckduckgo` / `yandex` / `bing` / `elasticlunr` ([Elasticlunr](http://elasticlunr.com/) — Zola's built-in client-side full-text search over the post content — needs JS, bundled with no CDN; the offline copy strips it, so it works on the deployed site only) / `none` |
+| `SEARCH_URL` | `--search-url` | — | Custom search URL prefix; the query is appended on Enter (overrides the engine) |
+| `TITLE_MAX_LEN` | `--title-max-len` | `200` | Max post-title length (chars); a truncated title keeps its full first sentence in the body |
+| `FOOTER` | `--footer` | — | Footer content — plain text, Markdown or HTML |
+| `PAGES_HOST` | `--pages-host` | auto | Host for the About-page size limit: `github` / `gitlab` / `none` (auto-detected from the URL) |
+| `DATE_FORMAT` | `--date-format` | `%Y %B %d` | strftime format for displayed dates (e.g. `2025 October 28`; `%Y` for year only) |
+| `LANGUAGE` | `--language` | `en` | UI language for the site chrome (Newer/Older/Tags/About/…): `en`/`be`/`uk`/`ru`/`de`/`fr`/`zh`/`ja`/`pl`/`es`/`ko`/`ka` (Georgian)/`hi` (Hindi). Post content keeps the channel's own language; dates are localized to match |
+| `DERIVE_TITLES` | `--derive-titles` | off | `true` derives a post title from its first sentence; default shows a clickable `#id` on the post's date/views line instead |
+| `STRIP_TITLE` | `--strip-title` | off | With `DERIVE_TITLES`, also remove that first sentence from the body so it isn't shown twice |
+| `LINK_UNDERLINE` | `--link-underline` | off | `true` underlines links (default: no underline) |
+| `POST_HEADER_LINE` | `--no-post-header-line` | on | In the built-in theme, a horizontal rule extends from each full-post date to the viewport's left edge. `false` disables it |
+| `YOUTUBE_FACADE` | `--youtube-facade` | off | `true` for a no-JS click-to-load YouTube thumbnail (default: direct iframe) |
+| `CAROUSEL` | `--carousel` | off | `true` shows a multi-image post as a swipeable **carousel** (one image at a time, with arrows + dots) instead of a vertical stack. The swipe is native CSS `scroll-snap`; arrows/dots need JavaScript. Default is the stack (no JS) |
+| `EMBED` | `--embed` | off | `true` ships a tiny script so the site **auto-resizes when embedded in a cross-origin `<iframe>`**. The page is already iframe-embeddable without it (GitHub Pages sets no `X-Frame-Options`); this only adds height reporting so the host iframe grows to fit — see [Embedding the blog](#embedding-the-blog) |
+| `HIDE_NAV` | `--hide-nav` | off | `true` hides the header navigation links (tags / calendar / about / custom), leaving only the search box |
+| `KEEP_MEDIA` | `--keep-media` | CI: off · local: on | `true` to keep (download + show) attached **video/audio** even when the post links YouTube / Apple Podcasts / Instagram. The default is environment-aware: on CI (GitHub Actions / GitLab) the embed replaces the attached media to save hosting space; on a local machine everything is downloaded for a complete backup |
+| `GENIUS` | `--no-genius` | on | `false` skips resolving genius.com links (for their YouTube video + lyrics-widget id) |
+| `GENIUS_TOKEN` (secret) | — | — | Genius API [Client Access Token](https://genius.com/api-clients). When set, genius links resolve via the **API** (works in CI) instead of scraping — the genius web pages are Cloudflare-blocked on datacenter IPs. Store it as an Actions **secret**, not a variable |
+| `SPOTIFY` | `--spotify` | off | `true` to replace a Spotify link with the Spotify player (opt-in — it plays a ~30s preview for non-Premium listeners) |
+| `INSTAGRAM` | `--instagram` | off | `true` to embed a live Instagram post in place of an attached video (opt-in — the widget needs JavaScript and loads from instagram.com; otherwise the attached video is kept) |
+| `PINTEREST` | `--no-pinterest` | on | `false` stops replacing a Pinterest pin link with the embedded pin. When Pinterest positively confirms a live Pin, its widget replaces the post's sole attached photo by default; an unavailable or unchecked Pin keeps the local photo |
+| `PINTEREST_KEEP_IMAGE` | `--pinterest-keep-image` | off | `true` keeps the sole attached photo beside a confirmed-live Pinterest widget. Multi-photo albums are always preserved because the Pin-to-photo relationship is ambiguous |
+| `BANDCAMP` | `--no-bandcamp` | on | replaces a **Bandcamp** album/track link with the embedded player. The page is fetched once to resolve the player id (Bandcamp has no oEmbed); the iframe is plain HTML, so it works offline once cached. `false` disables it |
+| `VK` | `--vk` | off | `true` replaces a **VK music playlist/album** link with the VK playlist widget. **Caveats:** VK Music playback requires the visitor to be **logged into VK** and is **region-blocked** (e.g. Ukraine); the widget is JS-only. A fallback "▶ Open playlist on VK" link is always shown (and is all that remains in the offline/no-JS view). Off by default |
+| `DEAD_LINKS` | `--dead-links` | off | `true` checks every **outbound link** and logs the **dead** ones (HTTP 404/410) with the post they're in, to the run's log — a diagnostic for spotting link rot. Conservative (timeouts, blocks and 5xx aren't reported); doesn't change the site |
+| `DEDUP` | `--no-dedup` | on | **de-duplicates media** — an identical file (image, zip/rar, pdf, video, audio, …) reposted across several posts is stored **once** under `/media/<hash>.<ext>` and every post points at it, instead of the published site serving N copies. Byte-exact (files are compared, not just hashed); lossless. `false` keeps per-post copies |
+| `RELATED` | `--no-related` | on | appends a **"Related" list** to each post — the posts that share the most **tags** with it (the whole tag set, not just one tag), linked internally. Ranked by shared-tag count; up to 5. Posts with no shared-tag neighbour get none. `false` disables it |
+| `PINTEREST_SAVE` | `--pinterest-save` | off | `true` adds a Pinterest **"Save" hover button** to the site's own images so visitors can pin them to their boards (opt-in; needs JavaScript, loads pinit.js) |
+| `LIVENESS` | `--no-liveness` | on | `false` skips the liveness checks (YouTube / Apple Podcasts / Yandex / Instagram / Spotify / Pinterest). Otherwise a removed item keeps its local media, or shows the plain link, instead of a dead/broken embed |
+| `REACTIONS` | `--no-reactions` | on | show per-emoji reaction counts (👍 42 · ❤️ 10). Paid "stars" reactions show ⭐; custom emojis show their standard-emoji fallback. **Requires the [MTProto backend](#optional-mtproto-backend)** — `t.me/s/` never exposes reactions. `false` hides them |
+| `DISCUSSIONS` | `--no-discussions` | on | archive public post-linked comment threads and show them on individual post pages. Initial fetching needs the [MTProto backend](#optional-mtproto-backend); existing `site/.discussions.json` snapshots remain usable without it. `false` disables fetching and display; the TOML equivalent is `discussions = false`. Comment attachments are linked, not downloaded |
+| `ABOUT_ME` | `--no-about-me` | on | if the channel description links to an [about.me](https://about.me) profile, pull its photo, social links and a contact button onto the About page (about.me blocks iframing, so the contact is a link). Telegram links are skipped (the channel is already linked at the top). `false` disables it |
+| `ABOUTME_BIO` | `--aboutme-bio` | off | `true` also copies the about.me **bio text** onto the About page. Off by default so a generic "hire me" blurb isn't mirrored |
+| `ABOUTME_BOTH_IMAGES` | `--aboutme-both-images` | off | `true` shows **both** the Telegram channel avatar and the about.me photo. By default, when an about.me photo is present the channel avatar is dropped to avoid two portraits |
+| `WIKIDATA` | `--wikidata Q…` | off | a Wikidata item id (e.g. `Q42`) → renders a **statements table** for it on the About page (properties and item values link back to wikidata.org). Independently, any `wikidata.org/wiki/Q…` link **in a post** gets its own table appended. Fetched at build time from the public API — no key |
+| `WIKIDATA_SPOILER` | `--wikidata-spoiler` | off | `true` collapses each **in-post** Wikidata table behind a no-JS 🔎 click-to-expand `<details>`. The About-page table stays expanded |
+| `LINK_TITLES` | `--no-link-titles` | on | attach a hover **tooltip** (`title=`) to links: **Wikipedia / MediaWiki** (e.g. miraheze, fandom) get the article intro, **Wikimedia Commons** files get author + date, **YouTube** gets the video title, **Habr** user pages get their stats, and **GitHub repositories** get description, stars, languages, default-branch commits, forks, open issues/PRs, license, archive state and last push. Fetched at build time; public GitHub repos need no key, while CI uses its built-in token for a higher rate limit. `false` disables |
+| `PAGESPEED` | `--no-pagespeed` | on | `false` skips fetching Google Lighthouse (mobile) scores for the deployed site. When on, the four category scores are shown on the About page and written as shields.io badge endpoints (`lighthouse-*.json`) for the README. Needs a live `base_url`; measures the previous deploy |
+| `PAGESPEED_API_KEY` (secret) | — | — | Optional [PageSpeed Insights API key](https://developers.google.com/speed/docs/insights/v5/get-started) to raise the rate limit (one call/day works without it) |
+| `PWA` | `--no-pwa` | on | installable **PWA** — a web app manifest (`display: standalone`, so the site can be installed and hides the address bar) plus a service worker that caches pages/media as you browse. On by default; needs JavaScript, built-in templates only |
+| `OFFLINE` | `--offline` | off | `true` makes the service worker **precache the whole archive** (audio, video, attachments) on the first visit over **any non-cellular connection** (Wi-Fi or wired — it skips only cellular / Data Saver), so the site works fully offline (not just visited pages) |
+| `VIDEO_RELEASES` | `--no-video-releases` | on | videos, `.tar.xz` attachments, and original MTProto images are uploaded to **this repo's GitHub Releases**, so they don't count against the Pages **1 GB** quota (release assets are separate storage — 2 GB/file, CDN-backed). Images use release buckets of at most 500 Telegram messages to stay below GitHub's 1,000-assets/release limit. `false` keeps media inline. Release assets are external to PWA/offline/single-file exports. Needs a `github.com` repo + the workflow's release-upload step |
+| `TAGS_TO_PAGES` | `--tags-to-pages` | — | Comma-separated tags shown as `#tag` links in the top nav (e.g. `music, batumi, cooking`) |
+| `BACKGROUND_DARK_COLOR` | `--background-dark-color` | `#000000` | Dark-mode background (any CSS color) |
+| `BACKGROUND_LIGHT_COLOR` | `--background-light-color` | `#ffffff` | Light-mode background |
+| `CSS` | `--css` | — | Extra CSS appended to the built-in stylesheet |
+| `FONT` | `--font` | system | Body `font-family` — a local/system font stack, e.g. `Georgia, serif` |
+| `GOOGLE_FONT` | `--google-font` | — | A [Google Fonts](https://fonts.google.com) family to load and use for the body, e.g. `Inter` (an external request to fonts.googleapis.com; wins over `FONT`) |
+| `GOOGLE_ANALYTICS` | `--google-analytics` | — | Google Analytics measurement ID (e.g. `G-XXXXXXX`) — injects `gtag.js`. Adds JavaScript + a third-party request |
+| `YANDEX_METRICA` | `--yandex-metrica` | — | Yandex Metrica counter ID (a number) — injects the Metrica tag (+ a `<noscript>` pixel). Adds JavaScript + a third-party request |
+| `THEME_REPO` | `--theme` (name) | built-in black theme | External Zola theme git URL (https/ssh); auto-falls-back if it fails |
+| `REPO_URL` | `--repo-url` | tg2zola repo | "Source repository" link on About (CI auto-sets it to your repo) |
+
+The **About** page shows the channel **avatar** (full size), its description and
+stats, the **on-disk size** — with the per-kind breakdown and, on GitHub/GitLab
+Pages, the share of the host's ~1 GB published-site limit (linked to the host
+docs) — plus the repo link. The header shows the avatar as a thumbnail and a
+favicon; hashtags are clickable in post bodies and produce `/tags/<tag>/` pages.
+
+A single `PAGES` variable can define several pages — each `# Title` heading
+starts a new one:
+
+```
+# Page title
+Page content in Markdown (which may contain raw HTML).
+
+# Another page
+More content.
+```
+
+→ `/page-title/` and `/another-page/`, each linked in the nav. No extra
+dependency — Zola already renders Markdown.
+
+## Fediverse / Mastodon
+
+Every page carries Open Graph + Twitter Card tags, so a shared post link renders
+as a card (title, description, the post's first image) in Mastodon, Slack,
+Discord, X, etc. Set `FEDIVERSE_CREATOR` to your `@user@instance` handle to also:
+
+- add a **`fediverse:creator`** byline, so Mastodon shows "*by @you@instance*" on
+  the link preview and links to your profile;
+- emit a **`rel="me"`** link to your profile, so you can add this site to your
+  Mastodon profile's metadata and get the **verified** (green) checkmark.
+
+**Can people follow the blog *from* Mastodon?** Not directly — a static site
+can't be an ActivityPub actor (that needs a live server speaking WebFinger +
+ActivityPub). Two ways to let people subscribe anyway:
+
+- **RSS** — anyone can follow `/rss.xml` in a feed reader today (many Mastodon
+  users keep one). This is built in and on by default.
+- **A bridge** — point the RSS feed at an RSS→ActivityPub bridge such as
+  [rss-parrot](https://rss-parrot.net/) or [Bridgy Fed](https://fed.brid.gy/),
+  which expose a real `@handle` that Mastodon users can **follow**, relaying new
+  posts into their timeline. No server of your own required.
+
+So: rich previews + author attribution + profile verification work out of the
+box; true "follow from Mastodon" is one bridge away, using the RSS feed as input.
+
+## Embedding the blog
+
+The generated site is **already embeddable in an `<iframe>`** on any other page —
+GitHub Pages sends no `X-Frame-Options` / `frame-ancestors` header, so a plain
+iframe just works:
+
+```html
+<iframe src="https://you.github.io/" style="width:100%;height:80vh;border:0"
+        title="My blog"></iframe>
+```
+
+The one catch is height: a cross-origin iframe can't size itself to its content,
+so you get a fixed box with its own scrollbar. Enable `EMBED` (`--embed`) to ship
+a small script that posts the page height to the host, and add this listener on
+the **host** page so the iframe grows to fit and never shows an inner scrollbar:
+
+```html
+<iframe id="blog" src="https://you.github.io/" style="width:100%;border:0"
+        title="My blog"></iframe>
+<script>
+	addEventListener('message', (e) => {
+		if (e.origin === 'https://you.github.io' && e.data?.type === 'tg2zola:height') {
+			document.getElementById('blog').style.height = `${e.data.height}px`;
+		}
+	});
+</script>
+```
+
+With `EMBED` on, the framed page also tags `<html>` with an `embedded` class, so
+a fork can hide the header/footer in embed context with a CSS rule of its own.
+Pair it with `HIDE_NAV` to drop the nav links and keep just search.
+
+## Optional MTProto backend
+
+The public web preview can't hand out **voice/audio notes** or **full-resolution
+photos** (see [Limitations](#limitations)). An **opt-in** backend logs in as
+*your user account* over MTProto (via [`grammers`](https://codeberg.org/Lonami/grammers))
+to fetch them. It's **off by default** — the normal build and CI stay the
+zero-credential web scraper — and is compiled in only with a Cargo feature:
+
+```sh
+cargo build --release --features mtproto
+```
+
+**1. Get API credentials.** Create an app at
+[my.telegram.org](https://my.telegram.org) → *API development tools*, and note the
+**`api_id`** (a number) and **`api_hash`** (a string).
+
+**2. Log in once** to mint a reusable session — `api_id`/`api_hash` alone can't
+authenticate, Telegram requires a real user login:
+
+```sh
+export TG_API_ID=1234567
+export TG_API_HASH=0123456789abcdef0123456789abcdef
+tg2zola login        # prompts: phone → code (sent in Telegram) → 2FA password
+```
+
+This writes **`tg2zola.session`** and prints a base64 **`TG_SESSION`** string.
+From then on, runs are non-interactive.
+
+**3. Generate** with the credentials in the environment — a normal run then also
+archives audio, the highest-resolution available photos, and the full videos
+that the preview shows only as a poster. GitHub-backed sites keep these photos
+in Releases:
+
+```sh
+TG_API_ID=$TG_API_ID TG_API_HASH=$TG_API_HASH \
+  tg2zola --channel <name> --site site --init-site
+```
+
+Photo variants are selected by pixel resolution, not compressed file size: a
+larger image can take fewer bytes than a smaller preview. Downloads preserve the
+selected bytes without recompression. This means the best rendition Telegram
+offers, not necessarily the file before upload — Telegram optimizes ordinary
+photos; images sent as files retain their original contents. See Telegram's
+[photo sizes](https://core.telegram.org/api/files#image-thumbnail-types) and
+[photo quality options](https://telegram.org/blog/direct-to-channel-trim-voice-and-more).
+
+With a live MTProto session, an archived photo is reused only when its saved
+rendition metadata matches the selected photo variant. A different rendition or
+missing metadata triggers a download of the selected variant when that photo is
+needed. Rendition-specific cache and Release filenames prevent old bytes from
+being reused even when both versions have the same file size. Verified photos
+with matching metadata keep their existing Release URLs, including older
+filenames. Images sent as files need no photo-rendition metadata. Confirmed
+Releases remain usable when no live session is available.
+
+| Env var | Purpose |
+|---|---|
+| `TG_API_ID` / `TG_API_HASH` | App credentials from my.telegram.org (required) |
+| `TG_SESSION` | base64 session from `tg2zola login`; alternatively a `tg2zola.session` file in the working dir is used |
+| `MTPROTO_IMAGES` | fetches the highest-resolution available photos **and original pasted images Telegram stored as files**; **on by default**, set `false`/`0` to keep the smaller web-preview photos instead. With GitHub Releases enabled, confirmed originals are reused from sharded image releases rather than downloaded on every run; a large historical backfill adds at most 500 new originals per run so hosted CI can finish safely |
+| `MTPROTO_VIDEOS` | downloads the full video for posts the web preview shows only as a poster **when no YouTube/Instagram embed replaces it** — **on by default**; set `false`/`0` to disable (these can be large) |
+| `MTPROTO_FILES` | archives **every other attachment** (pdf, zip, rar, … — any file type) as a download; **on by default**, set `false`/`0` to disable |
+| `TG_SESSION_FILE` | override the session-file path (default `tg2zola.session`) |
+
+**For CI:** run `tg2zola login` **locally** (the interactive step can't run in
+Actions), then store `TG_API_ID`, `TG_API_HASH` and the printed `TG_SESSION` as
+**Actions secrets**. The bundled [`daily.yml`](.github/workflows/daily.yml) then
+compiles the `mtproto` feature and runs it automatically whenever `TG_SESSION` is
+set. Original photos and big videos are fetched by default; set their repository
+variables to `false` to opt out. The session has no fixed expiry — it lasts until
+you log it out, Telegram revokes it, or it goes unused for ~6 months — so a daily
+run keeps it alive indefinitely.
+
+> ⚠️ **`TG_SESSION` is full access to your account** — treat it like a password
+> (a *secret*, unlike the public `CHANNEL` variable). Consider a secondary
+> account that's just a member of the channel. User-account automation is a
+> Telegram grey area; use it on your own channel at gentle rates. Each run walks
+> the full message history.
+
+### Archived discussions
+
+Discussions are **enabled by default**, independently of the optional MTProto
+backend. Fetching them initially requires a build with `--features mtproto`
+and the API credentials/session described above; enabling discussions alone
+does not log in or create credentials. Without working MTProto access, a run
+can still render the last successful `site/.discussions.json` snapshot. With
+neither credentials nor a saved snapshot, there are no comments to show.
+
+Telegram stores a channel post's comments in a linked discussion thread (see
+the [discussion-group API](https://core.telegram.org/api/discussion) and
+[`messages.getReplies`](https://core.telegram.org/method/messages.getReplies)).
+Only publicly accessible threads linked from channel posts are fetched, not
+unrelated group conversations. The tool never joins a group to gain access.
+Individual post pages show formatted comment text, available author information,
+publication dates and reply links. Media attachments are represented by links
+back to Telegram; their files are not archived by this feature.
+
+Each completely fetched post discussion replaces its prior cached snapshot,
+reflecting edits and deletions in the current site. A failed or incomplete
+fetch keeps the last complete snapshot instead of replacing it with a partial
+thread. Synchronization is bounded to 180 seconds per run, 30 seconds per post,
+and 100 discussion-bearing posts. A saved cursor rotates through older posts
+across builds; large archives can need several builds to capture new comments
+or reflect edits and deletions. This work is independent of image-backfill limits.
+An API flood wait or request timeout stops further MTProto requests for that run;
+completed snapshots and existing confirmed Release originals remain usable.
+Earlier snapshots survive in the `blog` branch only after a successful archive
+commit; see [history-retention limits](#the-blog-branch-archive--cache).
+
+To opt out, set the repository variable/environment variable
+`DISCUSSIONS=false`, pass `--no-discussions`, or set `discussions = false` in
+`tg2zola.toml`. The CLI opt-out wins over the environment; a nonempty recognized
+environment value wins over TOML. This disables fetching and displaying discussions; it does not
+erase comments already recorded in Git history.
+
+## Limitations
+
+The public web preview is the trade-off for needing **zero authentication**
+(several of these are lifted by the optional [MTProto backend](#optional-mtproto-backend)):
+
+- **Reactions/likes are not exposed** by `t.me/s/`. We export **view counts**
+  instead. The data model leaves room to add real reactions later via the
+  authenticated MTProto API (the [`grammers`](https://codeberg.org/Lonami/grammers)
+  crate) if you ever want them.
+- **Large videos aren't downloadable** *from the public preview* — it serves only
+  a poster image and duration for them (short/auto-play videos *are* downloadable).
+  The optional [MTProto backend](#optional-mtproto-backend) with `MTPROTO_VIDEOS=1`
+  fetches the real file for these.
+- **Sticker packs aren't linkable** — the pack name is loaded by Telegram's
+  JavaScript and isn't in the scraped HTML; stickers are saved as plain images.
+- **Music files (audio documents) aren't downloadable** from `t.me/s/` — their
+  URL isn't in the scraped HTML (only voice notes, with direct `.oga` URLs, are).
+  The optional [MTProto backend](#optional-mtproto-backend) fetches audio
+  (voice + music), archives **any other attachment** (pdf, zip, rar, …) as a
+  download by default (`MTPROTO_FILES`), and shows pasted images inline; when
+  original images are disabled, for an attachment we can't fetch we keep its
+  **filename** (marked *not archived*) so you know it existed; a post that is
+  *only* such a reference (or a lone undownloadable file) is skipped rather than
+  published empty.
+- **YouTube** plays via a `youtube.com` iframe (so plays count toward the
+  viewer's history) on the published HTTPS site; over `file://` the iframe can't
+  load (YouTube needs an origin). `YOUTUBE_FACADE=true` swaps the iframe for a
+  no-JS click-to-load thumbnail, which at least shows the poster over `file://`.
+- **Public channels only**, with the web preview enabled.
+
+## License
+
+[MIT](LICENSE) © Vitaly Zdanevich
