@@ -11023,5 +11023,75 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6ad2c41abff4": {
+  "identity": {
+   "one_liner": "Node.js 无领导者分布式定时任务库，靠原子声明选一个实例执行",
+   "review": "",
+   "highlights": [
+    "支持 Redis、Valkey、PostgreSQL、SQLite、RabbitMQ、NATS JetStream 等后端存储调度状态",
+    "提供租约心跳、接管、fencing token、no-overlap 与 catch-up 机制",
+    "每个调度槽由一次原子声明选出唯一执行实例，无需分布式锁"
+   ],
+   "use_cases": [
+    "多实例 Node.js 集群中运行 cron 或间隔任务且每轮只执行一次",
+    "实例崩溃或滚动部署后自动由备份实例接管未完成任务",
+    "无需独立协调服务、复用现有数据库/消息队列作为调度后端的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Leaderless scheduling for Node.js clusters. Run the same jobs in every instance; an atomic claim in Redis, Valkey, PostgreSQL or SQLite selects one runner for each scheduled slot. The default `lease` strategy retries after a runner stops renewing its lease. Th ／ pnpm add anarchon pg # PostgreSQL (or bring your own pg / postgres.js client) ／ Redis, Valkey, PostgreSQL and SQLite get everything described above: leases, backups, no overlap, catch-up and hand-over on `stop()`. RabbitMQ and NATS only make sure one instance wins each run (like the simple `stream-id` claim): they can't hold a lease that ",
+     "lines": [
+      11,
+      61,
+      311
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是使用数据库/消息后端存储调度状态的调度库，为应用开发提供服务而非使用数据库存业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Leaderless scheduling for Node.js clusters. Run the same jobs in every instance; an atomic claim in Redis, Valkey, PostgreSQL or SQLite selects one runner for each scheduled slot. The default `lease` strategy retries after a runner stops renewing its lease. That gives at-least-once execution after failures, not exactly-once side effects: handlers should be idempotent, and a frozen runner can briefly overlap its replacement. ／ pnpm add anarchon pg                    # PostgreSQL (or bring your own pg / postgres.js client)",
+   "evidence_lines": [
+    11,
+    61
+   ],
+   "softened": [
+    "review:『优雅』置空"
+   ]
+  },
+  "fn": "aristoteliss/anarchon",
+  "sha": "6ad2c41abff4",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

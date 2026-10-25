@@ -10208,5 +10208,70 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9ffaff5a3b92": {
+  "identity": {
+   "one_liner": "RV1106 板上的移动侦测录像方案，C/Go 双进程，事件写入 SQLite",
+   "review": "针对 Luckfox Pico Pro Max（RV1106）的移动触发录像应用：C 进程负责 ISP/编码/移动检测并写 HLS 与元数据库，Go 进程通过 modernc.org/sqlite 无 cgo 读取数据并提供 HTTP 实时流、回放 UI 与 API。供持有该开发板、需要在受控网络内做定点记录的用户使用；README 明确无认证、未做安全加固。",
+   "highlights": [
+    "支持自适应帧率录制（空闲 1 fps、检测到移动时 30 fps）并写入 HLS",
+    "提供 /api/stream 实时 MJPEG 流、按日期回放及 /api/status 状态接口",
+    "Go 侧以 CGO_ENABLED=0 静态编译，经 modernc.org/sqlite 纯 Go 读取 SQLite 数据库"
+   ],
+   "use_cases": [
+    "监控长时间静止、偶发活动的场景（如储物柜、仓库通道）的定点录像",
+    "在 RV1106 开发板上部署开箱即用的录像与网页回放系统"
+   ],
+   "use_cases_ex": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "playback UI over HTTP, and logs motion events to SQLite.",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 SQLite 存储移动事件数据的录像应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Motion-triggered video recording for the Luckfox Pico Pro Max (Rockchip ／ playback UI over HTTP, and logs motion events to SQLite. ／ This is an application inside the Luckfox SDK, not a standalone project. It",
+   "evidence_lines": [
+    7,
+    9,
+    102
+   ]
+  },
+  "fn": "zhu30844/MotionSense",
+  "sha": "9ffaff5a3b92",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
