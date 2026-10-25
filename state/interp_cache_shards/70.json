@@ -10790,5 +10790,85 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7beed6e37180": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 微服务与 Saga 编排的电商演示平台",
+   "review": "一个基于 Java 21 和 Spring Boot 的微服务电商平台示例，通过 Kafka 实现事件驱动的 Saga 编排与事务性 Outbox 模式，包含 Angular 前端、JWT 网关认证和 Stripe 支付集成。每个有状态服务使用独立的 PostgreSQL 数据库，由 Flyway 做迁移。适合学习微服务架构模式和本地运行演示的开发者。",
+   "highlights": [
+    "各服务通过 Kafka 实现 Saga 编排分布式事务，配合事务性 Outbox 保证 PostgreSQL 与 Kafka 间的一致性",
+    "使用 PostgreSQL database-per-service 架构，Flyway 管理数据库迁移",
+    "提供 Docker Compose 一键启动脚本，含网关限流、审计流水、SSE 实时推送等组件"
+   ],
+   "use_cases": [
+    "学习 Saga 模式与 Outbox 模式的微服务架构示例",
+    "本地演示事件驱动电商系统的完整流程",
+    "参考六边形架构与 Spring Cloud 组件的实践代码"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Each stateful service owns its PostgreSQL database (authdb, orderdb, inventorydb, paymentdb, auditdb). Redis serves the ／ |PostgreSQL|17|Database per service| ／ |Testcontainers|1.21.4|Integration tests — real PostgreSQL + Kafka|",
+     "lines": [
+      26,
+      83,
+      91
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- Java 21 (via SDKMAN: sdk install java 21.0.9-oracle)",
+     "lines": [
+      179
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储业务数据的电商平台应用，数据库为其组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Each stateful service owns its PostgreSQL database (authdb, orderdb, inventorydb, paymentdb, auditdb). Redis serves the ／ |PostgreSQL|17|Database per service| ／ Prevents dual-write between PostgreSQL and Kafka. The order and its `OutboxEvent` are written in a single database transaction. A relay sends pending events to Kafka every 5 s, waits for Kafka's acknowledgement, and only then marks them published: delivery is at least once, even if the broker is temporarily unavailable. A row that can never be sent is FAILED after 5 attempts and audited as `OUTBOX_EVENT_FAILED` (ADR 16).",
+   "evidence_lines": [
+    26,
+    83,
+    138
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "daniellaera/spring-microservices-saga",
+  "sha": "7beed6e37180",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

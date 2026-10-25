@@ -10730,5 +10730,73 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "850325ef7134": {
+  "identity": {
+   "one_liner": "自托管的 Splitwise 替代应用，内置 PostgreSQL 单容器部署",
+   "review": "ShareTab 是一个用于记录和分摊共同开销的自托管 Web 应用，支持拍照后由 AI 提取小票条目并分配给成员。面向室友、朋友和旅行群体，通过 Docker Compose 或 Unraid 模板部署，容器内置 PostgreSQL，也可改用外部 PostgreSQL；提供 OIDC/Google 登录、多币种、多语言及管理后台。",
+   "highlights": [
+    "AI 小票扫描：拍照上传后提取条目并按比例分摊税费与小费，支持 OpenAI、Claude、Ollama 等多种 AI 提供方",
+    "支持等分、精确金额、百分比、份额等多种分摊模式，以及多币种记录与汇率换算",
+    "单容器部署，内置 PostgreSQL，提供 Unraid 模板、OIDC/Google 登录、PWA 及管理后台"
+   ],
+   "use_cases": [
+    "室友/朋友/旅行群体的共同开销记录与结算",
+    "无账户的临时账单分摊（guest split 与认领链接）",
+    "需要自托管并支持单点登录的团队费用管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed, though you can use your own (see Using an external PostgreSQL). The bundled Compose file builds the image from your checkout of this repo: ／ docker exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql ／ docker compose exec sharetab su-exec postgres pg_dump -U sharetab sharetab > backup.sql",
+     "lines": [
+      104,
+      157,
+      160
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以内置 PostgreSQL 存储应用数据，是使用数据库的应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ShareTab ships as an all-in-one Docker container with PostgreSQL bundled inside. No external database needed, though you can use your own (see Using an external PostgreSQL). The bundled Compose file builds the image from your checkout of this repo: ／ ShareTab is a free, self-hosted alternative to Splitwise for tracking shared expenses with roommates, friends, and travel groups. Snap a photo of a receipt, let AI extract the line items, and assign them to group members. Taxes and tips split proportionally. Deploy on your own server with Docker Compose.",
+   "evidence_lines": [
+    104,
+    17
+   ]
+  },
+  "fn": "sw-carlos-cristobal/sharetab",
+  "sha": "850325ef7134",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

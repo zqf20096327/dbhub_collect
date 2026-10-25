@@ -10425,5 +10425,139 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "caa54ac7b417": {
+  "identity": {
+   "one_liner": "基于 Laravel + Kafka + Redis 的事件驱动股票价格告警系统",
+   "review": "一个实时股票价格告警系统，用于练习系统设计：Laravel API 在一个 Postgres 事务中写入告警与 outbox 行，relay 同步到 Redis，Node 评估器消费 Kafka(Redpanda) 价格流并用 Redis 有序集合做价格索引。适合学习事件驱动架构与 outbox 模式的开发者，需 Docker、Node 23+ 与 PHP 8.4 环境运行。",
+   "highlights": [
+    "API 在单一 Postgres 事务中写入 alerts 与 alert_outbox，relay 将变更同步到 Redis",
+    "Redis 有序集合作为价格索引，评估器按区间查询满足条件的告警",
+    "按 symbol 分区到 Kafka partition，消费者幂等，基准为 1M 告警、2000 ticks/s、平均延迟 31ms"
+   ],
+   "use_cases": [
+    "学习事件驱动架构与 transactional outbox 模式",
+    "构建实时价格/条件触发类告警场景的参考实现",
+    "Kafka 分区与 Redis 有序集合索引的负载测试实践"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "api -->|\"one transaction:<br/>alerts + alert_outbox\"| pg[(PostgreSQL)] ／ |`alert-api/`|Laravel 13, PostgreSQL|REST API for alerts; the source of truth|",
+     "lines": [
+      12,
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述该系统自身用 PostgreSQL 存储告警数据（source of truth），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`alert-api/`|Laravel 13, PostgreSQL|REST API for alerts; the source of truth| ／ - **Transactional outbox, not dual write.** The API never touches Redis. It writes the alert and an `alert_outbox` row in one Postgres transaction; the relay syncs Redis afterwards. A Redis outage delays the cache, it never loses an alert or fails a request.",
+   "evidence_lines": [
+    18,
+    26
+   ]
+  },
+  "fn": "abo3ish/stock-alerts",
+  "sha": "caa54ac7b417",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "739b8d462bd0": {
+  "identity": {
+   "one_liner": "本地桌面日志查看器，用 ASP.NET Core 9 MVC + SQLite 存储",
+   "review": "LogLens 是一个运行于 Windows 和 macOS 的桌面日志查看器，用于解析 Serilog 结构化日志及其他常见文本格式，提供过滤、搜索、错误汇总、请求追踪和 CSV/JSON 导出。应用以本地 Web 服务形式运行，日志会话与条目通过 EF Core 存入本机 SQLite 数据库；面向需要在本机排查 .NET 应用日志的开发者。",
+   "highlights": [
+    "流式逐行解析日志并以单个 SQLite 事务批量写入，支持最大 500 MB 的日志文件",
+    "支持按级别过滤、文本/正则搜索、时间范围限定、相关性 ID 请求追踪及 CSV/JSON 导出",
+    "自动识别多种日志格式（含 Serilog 带时区/不带时区、纯级别、方括号格式），提供堆栈_trace 分组视图"
+   ],
+   "use_cases": [
+    "在本地桌面查看和分析 Serilog 结构化日志文件",
+    "通过相关性 ID 追踪单个请求跨多条日志的执行路径",
+    "将大型日志文件的分析会话保存在本地并导出为 CSV/JSON"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built with ASP.NET Core 9 MVC and SQLite, packaged as a desktop app: an installer with a tray icon on Windows, and a drag-to-install `.app` on macOS. ／ - **Big files, fast**: streams the file line by line and bulk-inserts in one SQLite transaction (47 MB in ~4–7 s) ／ |`Data/AppDbContext.cs`|SQLite schema and indexes|",
+     "lines": [
+      11,
+      83,
+      183
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用使用 SQLite 存储日志会话数据（%LOCALAPPDATA% 下的 loglens.db），SQLite 是其内嵌数据存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Built with ASP.NET Core 9 MVC and SQLite, packaged as a desktop app: an installer with a tray icon on Windows, and a drag-to-install `.app` on macOS. ／ Your sessions are stored in `%LOCALAPPDATA%\\LogLens\\loglens.db` on Windows and `~/Library/Application Support/LogLens/loglens.db` on macOS. Uninstalling keeps them; delete that folder to remove all data. ／ |`Data/AppDbContext.cs`|SQLite schema and indexes|",
+   "evidence_lines": [
+    11,
+    79,
+    183
+   ]
+  },
+  "fn": "AhmedHamada47/LogLens",
+  "sha": "739b8d462bd0",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10036,5 +10036,349 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "72e01326bd48": {
+  "identity": {
+   "one_liner": "面向 1C (BSL) 代码库的 MCP 服务器，用 SQLite 索引实现省 token 的代码分析",
+   "review": "这是一个 MCP 服务器，为操作 1С:Предприятие (BSL) 源码的 AI 代理提供 67 个辅助工具，通过 Python 沙盒执行和 SQLite 索引让代理按需读取代码片段而非全量文件，从而节省上下文；面向 1C 开发者、团队负责人和分析师，支持 CF/EDT/MDO 源码格式，可通过 PyPI、Docker 或源码安装，需 Python 3.10+。",
+   "highlights": [
+    "提供 67 个用于分析 BSL 代码库的辅助函数，支持 CF、EDT、CFE/MDO 源码格式",
+    "代理提交的 Python 脚本在沙盒中执行，仅将 print 输出返回给上下文",
+    "将 SQLite 索引用于方法和调用图，以加速在大型代码库上的操作"
+   ],
+   "use_cases": [
+    "AI 代理需要探索或分析陌生 1С 配置或扩展的场景",
+    "每日审查存储库提交的团队负责人",
+    "需要根据源代码编写技术文档的开发人员"
+   ],
+   "confidence_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Для ускорения работы на больших конфигурациях можно предварительно построить SQLite-индекс методов и графа вызовов — см. **docs/INDEXING.md**. На ПК с медленными дисками (HDD, сетевые ресурсы) индексирование фактически обязательно: без индекса файловые операци",
+     "lines": [
+      183
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 用作工具自身的内部索引存储，项目本身是为 AI 代理分析 1С 代码服务的 MCP 服务器，而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP-сервер для токен-эффективного анализа кодовых баз 1С (BSL).",
+   "evidence_lines": [
+    11
+   ]
+  },
+  "fn": "Dach-Coin/rlm-tools-bsl",
+  "sha": "72e01326bd48",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "69cc49c61c3e": {
+  "identity": {
+   "one_liner": "自托管项目与任务跟踪系统，含看板、工时、聊天与 CRM，使用 PostgreSQL 存储",
+   "review": "一个自托管的开源项目与任务跟踪应用，提供看板、工时跟踪、负载规划、聊天与音视频、知识库、内置邮件、git 托管和 CRM 模块，面向团队与代理机构，定位为 Jira/YouTrack 类系统的替代方案。技术栈为 NestJS + TypeORM + PostgreSQL（后端）与 Nuxt 3（前端），支持 Docker Compose 一键部署，AGPL v3 许可。",
+   "highlights": [
+    "支持看板任务、工时跟踪、负载规划、报表导出 XLSX、知识库、内置邮件、git 托管与 CRM",
+    "后端为 NestJS + TypeORM + PostgreSQL，支持 WebRTC（mediasoup）音视频与实时聊天",
+    "提供 Docker Compose 快速部署和 OpenAPI/Swagger API 文档，支持自托管或托管云"
+   ],
+   "use_cases": [
+    "工作室/代理机构的项目、客户与工时管理",
+    "产品团队的看板与 sprint 协作",
+    "要求数据留在本地的自托管部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ Интеграционные проверки запускаются с `CRM_TEST_DATABASE_URL`, указывающим **только на отдельную тестовую PostgreSQL-базу с `crm_test` в имени**: `pnpm --filter backend exec jest --runInBand crm.integration.spec`. Проверки применяют миграции и создают тестовые ／ - **Backend:** NestJS, TypeORM, PostgreSQL, WebRTC (mediasoup), WebSockets.",
+     "lines": [
+      13,
+      57,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该系统使用 PostgreSQL 存储业务数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Backend: NestJS ／ - **Backend:** NestJS, TypeORM, PostgreSQL, WebRTC (mediasoup), WebSockets. ／ Полный комплект (PostgreSQL + API + веб-приложение) одной командой:",
+   "evidence_lines": [
+    10,
+    126,
+    132
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ar-webcetera/nervion",
+  "sha": "69cc49c61c3e",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7a8f9a642622": {
+  "identity": {
+   "one_liner": "基于 Laravel 12/Inertia/React 的巴基斯坦在线药房电商应用",
+   "review": "一个在线药房电商系统，含商品目录、购物车、处方上传审核、用药交互提醒、补货提醒和角色制员工管理后台。面向巴基斯坦市场，支持英语/乌尔都语与货到付款。后端为 Laravel 12，数据存于 MySQL/MariaDB，含 22 张领域表；仓库已归档为只读作品集项目。",
+   "highlights": [
+    "提供 storefront、引导式购物助手与基于角色的员工管理面板",
+    "包含处方审核流程与基于活性成分的药物交互提示规则",
+    "支持卡片支付（Stripe）与货到付款两种结算方式"
+   ],
+   "use_cases": [
+    "在线药品零售/电商业务系统参考",
+    "Laravel + Inertia + React 全栈应用学习示例",
+    "个性化推荐与 A/B 实验在电商中的实现参考"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Backend|PHP 8.2 · Laravel 12 · MySQL / MariaDB|",
+     "lines": [
+      191
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Backend|PHP 8.2 · Laravel 12 · MySQL / MariaDB| ／ |MySQL / MariaDB|8.0+ / 10.6+|XAMPP's MariaDB works|",
+     "lines": [
+      191,
+      280
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL/MariaDB 存储业务数据的在线药房应用，而非为数据库生态服务的工具。",
+   "persona": "use",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "ahmershahdev/zovita",
+  "sha": "7a8f9a642622",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75605f8b1df9": {
+  "identity": {
+   "one_liner": "自托管代理网络控制面板，管理 VLESS Reality 等节点与流量记账",
+   "review": "apsp 是面向个人自建代理网络的控制面板：面板保存期望状态并编译为 sing-box 配置，各服务器上的 Rust Agent 上报指标并应用配置，节点、链路、用户、套餐与流量账本集中管理，代理用户可通过 Passkey 自助查看订阅和用量。适合管理数台到数十台自购 VPS 的个人使用者；不做公开注册、支付与工单等售卖功能。",
+   "highlights": [
+    "支持 VLESS+Reality、Hysteria2、Shadowsocks 2022、TUIC v5 等多种代理协议，节点配置由面板编译为 sing-box 配置包下发",
+    "按用户、按节点进行流量计量，Agent 离线或重启后账本不重复、不丢失",
+    "提供订阅分发、用户自助门户、告警通知、延迟检测与面板备份恢复"
+   ],
+   "use_cases": [
+    "个人管理分散在多家厂商的 5–50 台 VPS 组成的代理线路（入口/中转/落地）",
+    "为亲友自建节点并分发订阅、记录每人流量与套餐到期",
+    "集中记录服务器、域名等周期费用并设置到期提醒（路线图功能）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是管理代理节点与用户订阅的应用系统，数据库仅作为其存储组件，未声明为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**自托管的代理网络控制平面。** ／ apsp 把你分散在各家的 VPS 编成一张可靠的代理网络：入口、中转、落地一处配置，节点和订阅自动下发，流量按用户精确记账；面板离线时，已应用的节点照常工作。你分享给的每个人都可以自己登录，查看订阅、用量、套餐与到期。 ／ - **面板保存期望状态。** 节点、链路、用户和授权都在面板编辑，面板把它们确定性地编译成每台服务器的 sing-box 配置包。",
+   "evidence_lines": [
+    3,
+    5,
+    19
+   ]
+  },
+  "fn": "theLucius7/apsp",
+  "sha": "75605f8b1df9",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4428b15e2162": {
+  "identity": {
+   "one_liner": "离线优先的个人财务管理应用，内置纯 Go SQLite 存储银行账单",
+   "review": "LocalFinance 是一个面向印度银行与信用卡生态的离线个人财务应用，用 Go 编写并以单个二进制分发，内嵌 React 前端与纯 Go SQLite 数据库（WAL 模式），数据存于本地 local_finance.db。提供 HDFC、ICICI 等银行的 PDF/CSV/Excel 账单解析、UPI/POS 交易描述清洗、账单周期提取与去重 upsert。适合需要在本地管理个人银行与信用卡账单的用户。",
+   "highlights": [
+    "提供 HDFC、ICICI、Axis 等印度银行的 PDF/CSV/Excel 账单解析器，支持密码加密 PDF 的内存解密",
+    "以单个可执行文件分发，内嵌 React 前端与纯 Go SQLite 引擎（modernc.org/sqlite，无 CGO），通过嵌入 Goose 在启动时自动执行 schema 迁移",
+    "支持 Splitwise CSV 导入、SHA-256 去重、SQLite ON CONFLICT 幂等 upsert，并提供可选的 PIN/密码保护（PBKDF2/argon2）"
+   ],
+   "use_cases": [
+    "导入并解析印度银行储蓄/活期/信用卡账单（PDF/CSV/Excel），生成本地交易台账",
+    "分析信用卡账单周期、应还金额、奖励积分与返现",
+    "离线维护多账户多年份的个人财务记录与月度导入健康度追踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ - **100% Offline & Private**: Zero cloud sync, zero telemetry, no SMS scraping, and no third-party account aggregators. All your financial data stays strictly on your local machine in an open SQLite database file (`local_finance.db` or `~/.localfinance/local_f ／ - Idempotent SQLite upserts (`ON CONFLICT`) safely update balances while **strictly preserving** your custom category overrides, notes, and tags.",
+     "lines": [
+      12,
+      39,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为使用内嵌 SQLite 存储财务数据的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **A privacy-first, 100% offline personal finance intelligence app tailored for the Indian banking & credit card ecosystem.** ／ > Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ - **100% Offline & Private**: Zero cloud sync, zero telemetry, no SMS scraping, and no third-party account aggregators. All your financial data stays strictly on your local machine in an open SQLite database file (`local_finance.db` or `~/.localfinance/local_finance.db`).",
+   "evidence_lines": [
+    11,
+    12,
+    39
+   ]
+  },
+  "fn": "usmslm102/local-finance",
+  "sha": "4428b15e2162",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

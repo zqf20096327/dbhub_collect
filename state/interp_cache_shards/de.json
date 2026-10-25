@@ -11277,5 +11277,137 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6f9143390fa2": {
+  "identity": {
+   "one_liner": "Dart/Flutter 层级日志引擎，支持 isolate 后台写入与 SQLite 持久化",
+   "review": "logd 是面向 Dart 和 Flutter 的结构化层级日志引擎，将格式化与 I/O 卸载到后台 isolate，并通过多个子包将日志路由到控制台、SQLite（WAL 模式）、HTML、Markdown 或 WebSocket 等目的地；包含 Dio HTTP 日志拦截器和面向 LLM 的 TOON 格式化器。供 Dart/Flutter 开发者使用，通过 Melos 管理的 monorepo 组织，依赖 Dart SDK 3.6.0+。",
+   "highlights": [
+    "提供后台 isolate 卸载日志 I/O，包含 SQLite WAL 持久化与查询子包（logd_sqlite）",
+    "原生 TOON 格式输出，用于 AI 代理遥测与 DuckDB 摄取",
+    "提供 Dio HTTP 日志拦截器，包含脱敏与 cURL 生成"
+   ],
+   "use_cases": [
+    "Dart/Flutter 应用的日志记录与可观测性",
+    "AI 代理遥测的 token 优化日志输出",
+    "HTTP 请求全生命周期日志检查与脱敏"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **One log call, any destination**: Route logs simultaneously to styled ANSI consoles, queryable WAL SQLite (`packages/logd_sqlite`), interactive HTML session files (`packages/logd_html`), or live WebSocket dashboards (`packages/logd_network`). ／ - **packages/logd_sqlite**: SQLite WAL persistence handler and rich querying engine.",
+     "lines": [
+      13,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为日志引擎为应用开发提供服务，SQLite 仅是其可选的持久化目的地之一",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " logd is a high-performance, structured hierarchical logging engine for Dart and Flutter. Engineered for zero-jank background isolate offloading, ambient async context propagation (MDC), and LLM token-optimized formats. ／ - **packages/logd_sqlite**: SQLite WAL persistence handler and rich querying engine.",
+   "evidence_lines": [
+    5,
+    26
+   ]
+  },
+  "fn": "pooriaaskarim/logd",
+  "sha": "6f9143390fa2",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "83a171147c26": {
+  "identity": {
+   "one_liner": "基于 Python holidays 库的工作日/节假日日历 REST API 与 Web 应用",
+   "review": "HolidayOps 提供 250 个国家、624 个地区的工作日判断、节假日清单、公司自定义日历，并通过 REST API、iCal 订阅、邮件摘要和 webhook 输出，面向薪酬、HR、物流与财务团队。技术栈为 Django/DRF + React，数据存于 MySQL 8，Celery/Redis 处理后台任务；README 称功能已按六个里程碑完成，托管计划中。",
+   "highlights": [
+    "支持 250 国家、624 地区的工作日判断、N 个工作日加减与区间统计",
+    "提供 REST API（OpenAPI 3）、私有 iCal 订阅、HMAC 签名 webhook 与 API key 限流",
+    "支持公司日历合并多国、组织角色权限、i18n（英语/乌尔都语/阿拉伯语）与 PWA",
+    "提供 Python 与 TypeScript SDK，由 OpenAPI schema 生成"
+   ],
+   "use_cases": [
+    "薪酬、HR、物流、财务系统查询某日是否工作日",
+    "企业合并多国日历并标注自身休假日",
+    "通过 iCal 将节假日订阅进 Google/Outlook 日历"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Data and jobs|MySQL 8 (utf8mb4), Redis, Celery and Celery Beat|",
+     "lines": [
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目用 MySQL 8 存储数据，节假日日历产品本身使用数据库而非为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "HolidayOps answers that question for 250 countries and 624 regions, through a REST API, a web app, ／ Holiday data comes from the open-source holidays library. ／ |Data and jobs|MySQL 8 (utf8mb4), Redis, Celery and Celery Beat|",
+   "evidence_lines": [
+    30,
+    34,
+    111
+   ]
+  },
+  "fn": "ahmershahdev/holidayops",
+  "sha": "83a171147c26",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

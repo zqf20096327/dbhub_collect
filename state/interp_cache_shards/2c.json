@@ -11529,5 +11529,93 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3fe5af4389fd": {
+  "identity": {
+   "one_liner": "Angular+Spring Boot 的摩托车装备展厅电商应用，当前使用 PostgreSQL 存数据",
+   "review": "这是一个展示和预约摩托车骑行装备的全栈 Web 应用，前端 Angular 17、后端 Spring Boot，通过 JDBC 连接云 PostgreSQL 存储商品与库存数据，路线图中计划迁移到 TiDB Cloud Serverless。它面向斯里兰卡本地车手与门店管理者，提供双语目录、JWT 管理后台和 WhatsApp 预约流程。属于使用数据库的应用，而非数据库生态工具。",
+   "highlights": [
+    "前后端分离架构：Angular 17 客户端经 HTTPS/JSON 访问 Spring Boot REST 后端",
+    "数据持久层经 HikariCP 连接池使用托管云 PostgreSQL，规划迁移至 TiDB Cloud Serverless",
+    "包含 JWT 无状态认证管理后台、双语本地化及 Cloudinary 客户端直传媒体管道"
+   ],
+   "use_cases": [
+    "摩托车装备与雨衣展厅的在线目录浏览与到店试穿预约",
+    "门店员工实时库存与价格管理",
+    "多语言（英语/僧伽罗语）买家目录筛选"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Hybrid Persistence Roadmap**|Operates on managed cloud PostgreSQL with a defined transition path to horizontally-scalable TiDB Cloud Serverless.| ／ [ Angular 17 Standalone Client ] <--- HTTPS / JSON ---> [ Spring Boot 4 REST Backend ] <--- JDBC ---> [ PostgreSQL / TiDB Cloud ] ／ - **Current Operational DB (Temporary)**: Managed Cloud PostgreSQL via HikariCP session pooler (`max-lifetime=600000`, pool size 5) on AWS `ap-southeast-1`.",
+     "lines": [
+      35,
+      89,
+      105
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiDB Cloud ／ |**Hybrid Persistence Roadmap**|Operates on managed cloud PostgreSQL with a defined transition path to horizontally-scalable TiDB Cloud Serverless.| ／ [ Angular 17 Standalone Client ] <--- HTTPS / JSON ---> [ Spring Boot 4 REST Backend ] <--- JDBC ---> [ PostgreSQL / TiDB Cloud ] ／ - **Planned Target Database**: Transitioning to **TiDB Cloud Serverless** (Distributed MySQL-compatible HTAP engine on AWS `ap-southeast-1`: port 4000) for horizontal auto-scaling and high-concurrency showroom traffic.",
+     "lines": [
+      6,
+      35,
+      89,
+      106
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Planned Target Database**: Transitioning to **TiDB Cloud Serverless** (Distributed MySQL-compatible HTAP engine on AWS `ap-southeast-1`: port 4000) for horizontal auto-scaling and high-concurrency showroom traffic. ／ - [In Progress] **TiDB Cloud Database Migration** — Provisioning distributed MySQL-compatible cluster on AWS `ap-southeast-1` to replace temporary PostgreSQL instance.",
+     "lines": [
+      106,
+      153
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL/TiDB 存储商品与库存数据的电商应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "[ Angular 17 Standalone Client ] <--- HTTPS / JSON ---> [ Spring Boot 4 REST Backend ] <--- JDBC ---> [ PostgreSQL / TiDB Cloud ] ／ - **Current Operational DB (Temporary)**: Managed Cloud PostgreSQL via HikariCP session pooler (`max-lifetime=600000`, pool size 5) on AWS `ap-southeast-1`. ／ - [In Progress] **TiDB Cloud Database Migration** — Provisioning distributed MySQL-compatible cluster on AWS `ap-southeast-1` to replace temporary PostgreSQL instance.",
+   "evidence_lines": [
+    89,
+    105,
+    153
+   ]
+  },
+  "fn": "VirajTharindu/Dilz-Jackets-Landing-Website-Angular-Java-Spring-Boot",
+  "sha": "3fe5af4389fd",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

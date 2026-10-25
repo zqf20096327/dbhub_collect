@@ -10898,5 +10898,73 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bf95877bf8e1": {
+  "identity": {
+   "one_liner": "本地 AI 代理权限网关，凭据加密存储并经审批执行 MCP 连接器操作",
+   "review": "AIPermission 是运行在开发者本机的单用户权限网关：连接器凭据保存在 SQLCipher 加密的本地 SQLite 数据库中，AI 客户端通过作用域受限的 MCP 令牌请求操作，网关按 blocked/approval_required/always_run 规则放行或拦截，并保留加密的历史与审计记录。面向需要在本地让 AI 助手操作自有系统的开发者，README 声明其为 pre-1.0 软件，仅支持本地单机部署，镜像目前只覆盖 Linux AMD64。",
+   "highlights": [
+    "通过 MCP 令牌为 AI 客户端授予目标/凭据配置/动作级别的权限，支持人工审批、临时权限过期与全局开关",
+    "运行时数据存储在 SQLCipher 加密的本地 SQLite 数据库，凭据不通过 MCP 或 REST API 返回",
+    "提供 Docker Compose 部署与 npx 安装的官方 MCP bridge（@aipermission/mcp），含 doctor 校验命令"
+   ],
+   "use_cases": [
+    "开发者让 AI 助手在受控审批下执行连接器操作而不暴露原始凭据",
+    "需要本地加密审计历史与审批快照的个人工作流自动化",
+    "为本机 MCP 客户端配置作用域限定的工具访问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Runtime data is stored in a SQLCipher-encrypted local SQLite database.",
+     "lines": [
+      239
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其运行时数据存储在本地 SQLite 数据库中，该项目是使用数据库存储网关数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AIPermission is a local, single-user developer gateway. You register connector ／ - Runtime data is stored in a SQLCipher-encrypted local SQLite database. ／ AIPermission is pre-1.0 developer software. Read the",
+   "evidence_lines": [
+    23,
+    239,
+    58
+   ]
+  },
+  "fn": "aipermission/aipermission",
+  "sha": "bf95877bf8e1",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

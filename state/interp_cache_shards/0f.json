@@ -9943,5 +9943,243 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "674f6c2fdf52": {
+  "identity": {
+   "one_liner": "基于 SQLite 的单机 API 性能基准挑战",
+   "review": "这是一个社区挑战项目：参与者在同一 1 vCPU/2 GB 虚拟机上，用任意语言实现固定的 5 端点 API（数据库限定为进程内 SQLite，schema 固定），通过 42 项测试后由 k6 压测评分。适合想对比不同语言/框架在相同约束下性能的开发者参与。",
+   "highlights": [
+    "提供固定 API 规范、SQLite schema、42 项测试套件与 k6 压测脚本",
+    "限制仅使用进程内 SQLite，要求每次请求读库且写入提交后才响应",
+    "按合并的 PR 分批在同一规格 VM 上运行基准并更新排行榜"
+   ],
+   "use_cases": [
+    "对比不同语言/框架在相同 SQLite 工作负载下的并发处理能力",
+    "练习在内存与持久化约束下优化数据库访问的编码练习",
+    "复现 k6 压测流程进行本地负载测试"
+   ],
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "lines": [
+      8,
+      15,
+      25,
+      35
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "lines": [
+      36
+     ]
+    }
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite, and I'll benchmark it on the same VM.** ／ |`schema.sql`|The SQLite schema (fixed)| ／ bash seed/make-seed.sh # needs node >= 18 and sqlite3; about a minute ／ 2. **The database is SQLite**: the file at `$SQLITE_PATH`, used in-process. No other database, cache",
+     "lines": [
+      8,
+      15,
+      25,
+      35
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "server, or external service (no Postgres, Redis, Memcached).",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身以 SQLite 作为基准使用的固定数据库，核心是运行 API 基准测试而非为数据库生态提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "I benchmarked 8 languages with basic unoptimized code using language defaults. https://www.youtube.com/watch?v=sQXFhh_PiG4 ／ SQLite, and I'll benchmark it on the same VM.** ／ |`test/test.sh`|The test suite (42 checks). Your server must pass all of them| ／ 2. **The database is SQLite**: the file at `$SQLITE_PATH`, used in-process. No other database, cache",
+   "evidence_lines": [
+    5,
+    8,
+    17,
+    35
+   ]
+  },
+  "fn": "arjaythedev/twelve-dollar-server-challenge",
+  "sha": "674f6c2fdf52",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7ebfb05018d1": {
+  "identity": {
+   "one_liner": "求职流程管理应用，七阶段看板，自托管并用 PostgreSQL 存储数据",
+   "review": "Jobsmith 是一个开源自托管的求职全流程应用，将职位从收藏到 Offer 管理在七个阶段的看板中，支持读取招聘网站职位、可选 AI 打分，并提供 CLI 与 Bearer Token API 导入导出 Markdown 文档。技术栈为 Next.js + Drizzle ORM + PostgreSQL，面向想自己托管求职记录的个人用户；需 Node 24、pnpm 与 Docker 运行本地 Postgres。",
+   "highlights": [
+    "提供七阶段职位看板，支持键盘快捷键、屏幕阅读器确认与移动端列表视图",
+    "提供 jobsmith CLI 与 Bearer Token API，用于批量推送/拉取职位 Markdown 文档",
+    "可选集成 Anthropic API 或 Vercel AI Gateway 用于职位信息解析与匹配打分"
+   ],
+   "use_cases": [
+    "个人求职者自托管记录和跟踪各阶段求职进度",
+    "通过 CLI 将简历、面试准备等 Markdown 文档批量导入并生成职位上下文文件",
+    "配合 AI 提供商自动解析职位描述并按偏好过滤打分"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Next.js 16 and React 19 with Tailwind CSS 4, Postgres through Drizzle ORM, Better Auth for sign-in, and ／ - Docker, for the local Postgres in `docker-compose.yml` ／ environment as First run. It needs the local Postgres running, resets it,",
+     "lines": [
+      24,
+      35,
+      319
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用通过 Drizzle ORM 使用 Postgres 存储自身职位数据，属于使用数据库的应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Jobsmith is one app for a whole job search: find, qualify and research, apply, ／ Next.js 16 and React 19 with Tailwind CSS 4, Postgres through Drizzle ORM, Better Auth for sign-in, and ／ - Docker, for the local Postgres in `docker-compose.yml`",
+   "evidence_lines": [
+    3,
+    24,
+    35
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "weeeha/Jobsmith",
+  "sha": "7ebfb05018d1",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3343201d2af7": {
+  "identity": {
+   "one_liner": "基于 Nostr 协议的去中心化职位线索聚合自托管节点",
+   "review": "一个自托管的职位/自由职业线索管道，通过 RSS、IMAP、Telegram、Kwork 和 webhook 采集公开订单信息，并基于 Nostr 协议广播与索引，内置 PII 清洗、MinHash 去重和 MCP 接口供 AI 代理查询。部署依赖 PostgreSQL 17 与 pgvector。适合想自建线索数据节点、接入 Claude/Cursor 等工具的开发者或招聘自动化团队。",
+   "highlights": [
+    "支持 RSS、IMAP、Telegram、Kwork、webhook 多来源采集线索",
+    "实现 MCP (Model Context Protocol) JSON-RPC 接口，提供 search_leads、verify_lead_url 等工具",
+    "通过 docker compose 一键部署，使用 PostgreSQL 17 + pgvector 存储与向量检索"
+   ],
+   "use_cases": [
+    "自托管聚合公开职位/自由职业订单线索",
+    "为 AI 代理提供职位搜索与验证的 MCP 工具端点",
+    "面向招聘自动化的实时 SSE 线索流接入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The node starts immediately on `http://127.0.0.1:8787` with PostgreSQL 17 + `pgvector halfvec(384)`.",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明节点使用 PostgreSQL 17 + pgvector 存储数据，项目本身是线索采集应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0 单一许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The node starts immediately on `http://127.0.0.1:8787` with PostgreSQL 17 + `pgvector halfvec(384)`. ／ **OpenRadar** is a decentralized, open-source labor liquidity protocol (`radar/1`) built on top of **Nostr (NIP-01)**. It provides a censorship-resistant, community-curated data mesh for job vacancies (`job`) and freelance contracts (`gig`).",
+   "evidence_lines": [
+    59,
+    11
+   ]
+  },
+  "fn": "MikhailSagalaev/radar-oss",
+  "sha": "3343201d2af7",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

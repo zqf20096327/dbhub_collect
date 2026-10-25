@@ -10419,5 +10419,301 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "34a310b33823": {
+  "identity": {
+   "one_liner": "AI 编码代理协调协议，用声明式意图与确定性冲突检测在 Git 之上预警语义冲突",
+   "review": "Foremerge 是面向 AI 编码代理（Claude Code、Codex、Cursor 等）的协调工具：代理在实际写代码前声明要改动的符号/范围，工具将意图写入仓库 .git 目录内的本地 SQLite 数据库，通过确定性（非模型判断）的冲突检测器在代码冲突发生前给出建议性告警。提供 CLI、JSON API 与 MCP 服务器，验收由可配置的验证检查把关。状态为 pre-1.0 MVP，schema 可能变更，跨机器协调不在范围内。",
+   "highlights": [
+    "提供 MCP 服务器与 CLI，代理在写代码前声明意图并读取共享清单",
+    "使用确定性冲突检测器（不依赖模型判断），同一输入产生相同结论",
+    "写入 SQLite 投影并追加哈希链语义事件日志，支持验证门控的验收生命周期"
+   ],
+   "use_cases": [
+    "多个 AI 代理在隔离 worktree 中并行开发同一仓库时预警意图冲突",
+    "通过 MCP 集成让编码代理自动安装并共享协调状态",
+    "以注册的检查命令作为验收门槛，记录带原因的 UNVERIFIED 审计轨迹"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> MCP server, SQLite store, deterministic conflict detector, and ／ Mutations update typed SQLite projections, materialize graph edges, and append a",
+     "lines": [
+      19,
+      236
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明工具将协调状态存储在内嵌的 SQLite 数据库中，SQLite 是其内部状态存储而非其服务的对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Foremerge is the open-source coordination protocol for coding agents, built ／ > MCP server, SQLite store, deterministic conflict detector, and ／ `init` creates local coordination state under the repository's Git common",
+   "evidence_lines": [
+    9,
+    19,
+    185
+   ]
+  },
+  "fn": "naw103/foremerge",
+  "sha": "34a310b33823",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "accb7809ccb7": {
+  "identity": {
+   "one_liner": "自托管 Web 分析工具，从服务器访问日志统计访客与安全事件",
+   "review": "Skald 解析 Web 服务器访问日志，把流量分为人、AI 助手、搜索引擎、爬虫和自有流量五类，并统计扫描探测等安全行为；每项数字由独立审计二次核验。适合自托管网站的管理者查看含 AI 爬虫在内的真实流量，无需 Cookie 或浏览器脚本；不能拦截流量，仅基于日志可见内容。",
+   "highlights": [
+    "从访问日志识别并分类 AI 爬虫（GPTBot、ClaudeBot 等）并按访问目的分档",
+    "独立审计流程对每个统计数字重算一次，数字不一致时隐藏该日数据",
+    "包含安全板块：展示扫描器、攻击尝试、假浏览器及 nginx/Cloudflare/fail2ban 封禁列表"
+   ],
+   "use_cases": [
+    "分析脚本型统计工具无法覆盖的 AI 助手与爬虫流量",
+    "从访问日志排查针对 .env、登录接口等的扫描与攻击行为",
+    "无 Cookie 的自托管访客统计与线索（leads）追踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|**SQLite**: `history.sqlite` (daily totals), `accounts.sqlite`, `conversions.sqlite`. One file each, easy to back up.|",
+     "lines": [
+      720
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 存储说明写明用 SQLite 文件保存 history/accounts/conversions 数据，SQLite 是其自身存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0，另有 hosted beta/商业服务",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Web analytics from your server's own access log: the people, the AI assistants and the crawlers ／ Skald reads the one record that sees every visit: **your web server's access log.** Every request ／ What it is not: Skald does not block traffic, is not a WAF or intrusion prevention system, and",
+   "evidence_lines": [
+    8,
+    43,
+    144
+   ]
+  },
+  "fn": "spcaeo/skald",
+  "sha": "accb7809ccb7",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "27ddab0d259f": {
+  "identity": {
+   "one_liner": "Delphi 12+ 的流式类型安全 SQL 查询构建库",
+   "review": "这是一个面向 Delphi 12 及以上版本的 SQL 查询构建库，提供流式 API、参数化查询和多 SQL 方言编译（MSSQL、MySQL、PostgreSQL、SQLite、Oracle、Firebird），并包含可选的 FireDAC 执行提供者与对象映射功能。适合 Delphi 开发者在代码中生成和执行 SQL，连接与事务管理由调用方自行负责。",
+   "highlights": [
+    "支持多 SQL 方言编译器，生成带有序参数绑定的 SQL",
+    "提供 FireDAC 集成提供者及自定义 provider 扩展",
+    "提供流式对象映射，支持 NULL 策略与 DTO 映射"
+   ],
+   "use_cases": [
+    "在 Delphi 应用中以编程方式构建参数化 SQL 查询",
+    "将查询结果映射为 Delphi 对象（DTO）",
+    "针对不同 SQL 方言生成方言特定的 SQL"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`TSqlDialect.PostgreSql`|`TPostgresCompiler`|`@p0`, `@p1`, …|",
+     "lines": [
+      159
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`TSqlDialect.MySql`|`TMySqlCompiler`|`@p0`, `@p1`, …|",
+     "lines": [
+      158
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|`TSqlDialect.Oracle`|`TOracleCompiler`|`:p0`, `:p1`, …|",
+     "lines": [
+      161
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`TSqlDialect.Sqlite`|`TSqliteCompiler`|`@p0`, `@p1`, …| ／ `test/QueryBuilder.FireDAC.Tests.dproj` for SQLite in-memory integration tests.",
+     "lines": [
+      160,
+      192
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Generated parameterized MSSQL SQL (compiler default `@p` prefix):** ／ dialect is MSSql. Execute `Statement.Sql` together with its bindings through an ／ **Generated parameterized MSSQL SQL (default `@p` prefix; line breaks added):**",
+     "lines": [
+      27,
+      40,
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是 SQL 查询构建库，通过提供者适配多种数据库方言，为数据库开发服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "QueryBuilder4Delphi is a fluent SQL query builder for Delphi 12 and later. It supports multiple SQL dialects, parameterized queries, and database-independent query execution through extensible providers. ／ ## SQL dialects ／ `TQueryCompilerFactory.CreateCompiler(Dialect)` creates an `ICompiler`",
+   "evidence_lines": [
+    3,
+    153,
+    164
+   ]
+  },
+  "fn": "auchri/QueryBuilder4Delphi",
+  "sha": "27ddab0d259f",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::EchoPaper - local-first IELTS-style listening practice: local ASR, LLM exam papers (6 types, SVG map": {
+  "identity": {
+   "one_liner": "本地优先的雅思式听力练习应用，含本地 ASR 与 LLM 生成试题",
+   "review": "基于简介：EchoPaper 是一个本地优先（local-first）的雅思风格听力练习应用，使用本地 ASR（Whisper）与 LLM 生成六种题型的试卷（含 SVG 地图场景），由服务端判分，并提供双语精听功能。面向备考雅思听力的学习者，数据持久化使用本地 SQLite 存储。",
+   "highlights": [
+    "提供本地 ASR 与 LLM 生成的 6 种题型听力试卷，包含 SVG 地图场景",
+    "支持服务端判分与双语精听",
+    "练习记录与逐项结果持久化到本地 SQLite 数据库"
+   ],
+   "use_cases": [
+    "雅思听力自学与模拟练习",
+    "本地化/离线优先的语言听力训练",
+    "双语精听训练"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Attempts and per-item results persist in SQLite — no score is"
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为应用自身的练习记录持久化存储，该项目是为语言学习服务的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "EchoPaper - local-first IELTS-style listening practice: local ASR, LLM exam papers (6 types, SVG map scenes), server grading, bilingual intensive listening"
+  },
+  "fn": "WJBF1213/echopaper",
+  "sha": "desc::EchoPaper - local-first IELTS-style listening practice: local ASR, LLM exam papers (6 types, SVG map",
+  "source": "desc",
+  "generated_at": "2026-10-25",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

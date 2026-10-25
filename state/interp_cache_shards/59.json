@@ -9248,5 +9248,71 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fbf44ad77e25": {
+  "identity": {
+   "one_liner": "自托管气象站仪表盘应用，采集 Ambient Weather 观测与 Open-Meteo 预报存入 SQLite 展示",
+   "review": "一个基于 Laravel/PHP 的自托管天气仪表盘应用，每分钟采集 Ambient Weather API 观测、每小时获取 Open-Meteo 预报，存入本地 SQLite，通过 Blade 渲染的响应式仪表盘与 PWA 展示，含布局编辑、主题、雷达图和带鉴权的管理后台。适合拥有 Ambient Weather 气象站的家庭用户；需 PHP 8.3+ 与 PDO SQLite，通过 cron 调度器保持采集运行。",
+   "highlights": [
+    "通过采集器读取 Ambient Weather API 观测与 Open-Meteo 预报，存入 SQLite",
+    "提供可自定义的仪表盘布局编辑器、季节主题、PWA 移动端视图与雷达地图",
+    "提供带鉴权的管理后台，支持来源健康诊断与历史数据聚合/修剪调度"
+   ],
+   "use_cases": [
+    "家庭自托管气象数据展示（如树莓派厨房显示屏）",
+    "通过手机浏览器或 PWA 查看气象站实时与历史读数",
+    "结合本地观测与 Open-Meteo 预报的多来源天气聚合展示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validati ／ You need **PHP 8.3+**, **Composer 2**, the PHP extensions required by the locked dependencies, and **PDO SQLite / SQLite3**. The PHP runtime must also support Laravel's usual extensions, including mbstring, DOM/XML, cURL, and OpenSSL. Composer validates depend",
+     "lines": [
+      66,
+      73,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用自身将天气数据存储于 SQLite 并以此驱动仪表盘，SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "                                                                      ├→ SQLite → Blade dashboard + JSON APIs ／ The application uses **Laravel 13, PHP, SQLite, Blade, vanilla JavaScript, CSS, and locally bundled Leaflet**. There is no frontend build step, Redis requirement, or queue worker requirement with the example configuration. Node.js is used for contract validation during development and CI.",
+   "evidence_lines": [
+    66,
+    73
+   ]
+  },
+  "fn": "thenumber3/midway-weather",
+  "sha": "fbf44ad77e25",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

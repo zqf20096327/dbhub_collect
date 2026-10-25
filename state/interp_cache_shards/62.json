@@ -10520,5 +10520,73 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a8c1442aed72": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL/PostGIS 的移动对象时空轨迹数据库扩展",
+   "review": "MobilityDB 是一个地理空间轨迹数据管理系统，以 PostgreSQL 扩展形式实现，为 PostgreSQL 和 PostGIS 增加时态与时空对象类型支持，通过 SQL 接口存储和分析 GPS 轨迹等移动对象数据。由布鲁塞尔自由大学开发，需从源码构建并加载 PostGIS 预载库，支持 PostgreSQL 16-19，也提供 Docker 镜像，适合处理轨迹数据的开发与分析人员使用。",
+   "highlights": [
+    "为 PostgreSQL 和 PostGIS 增加时态与时空对象类型的存储和分析能力",
+    "提供完整 SQL 接口并兼容 PostgreSQL 生态系统",
+    "提供 PyMEOS Python 适配器（基于 psycopg/asyncpg）及基于 BerlinMOD 的数据生成与基准测试工具"
+   ],
+   "use_cases": [
+    "GPS 轨迹等移动对象时空数据的存储与分析",
+    "公共交通运输数据（GTFS 等标准）的集成处理",
+    "结合 QGIS、Leaflet 等可视化工具进行轨迹数据展示与分析"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "MobilityDB is a database management system for moving object geospatial trajectories, such as GPS traces. It adds support for temporal and spatio-temporal objects to the PostgreSQL database and its spatial extension PostGIS. ／ * Compatible with the PostgreSQL ecosystem ／ * Database adapters to access MobilityDB from Python are provided by the PyMEOS package, supporting psycopg and asyncpg libraries.",
+     "lines": [
+      10,
+      48,
+      56
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "MobilityDB 以 PostgreSQL 扩展形式提供，为 PostgreSQL 生态增加轨迹数据管理能力，而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码采用 PostgreSQL License，文档采用 CC BY-SA 3.0 双许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MobilityDB is a database management system for moving object geospatial trajectories, such as GPS traces. It adds support for temporal and spatio-temporal objects to the PostgreSQL database and its spatial extension PostGIS. ／ * PostgreSQL 16 to 19 (the build stops with an explicit error outside that range) ／ psql mobility -c \"CREATE EXTENSION MobilityDB\"",
+   "evidence_lines": [
+    10,
+    108,
+    162
+   ]
+  },
+  "fn": "MobilityDB/MobilityDB",
+  "sha": "a8c1442aed72",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

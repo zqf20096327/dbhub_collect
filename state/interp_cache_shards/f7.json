@@ -10714,5 +10714,234 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1fc3b29b8913": {
+  "identity": {
+   "one_liner": "面向开发者的自托管个人博客系统",
+   "review": "Moonglade 是一个基于 ASP.NET Core 的个人博客系统，提供文章发布、评论、归档、RSS 等功能，面向想自托管博客的开发者。数据层基于 EF Core，默认使用 PostgreSQL，也支持配置为 SQL Server，通过 Docker Compose 或 dotnet run 部署。",
+   "highlights": [
+    "提供文章、页面、评论、分类、标签、归档等博客功能，支持 Markdown 与定时发布",
+    "通过 EF Core 数据提供程序支持 PostgreSQL（默认）和 SQL Server",
+    "支持本地账户 + TOTP 与 OpenID Connect 两种管理员认证方式"
+   ],
+   "use_cases": [
+    "开发者自托管个人博客",
+    "需要 PostgreSQL 或 SQL Server 作为后端存储的博客部署",
+    "通过 Docker Compose 快速本地运行的博客站点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeD ／ PostgreSQL is the default database. SQL Server remains supported when configured explicitly. ／ |PostgreSQL|`User ID=***;Password=***;Host=localhost;Port=5432;Database=moonglade;Pooling=true;`|",
+     "lines": [
+      25,
+      51,
+      64,
+      68
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ PostgreSQL is the default database. SQL Server remains supported when configured explicitly. ／ |SQL Server|`Server=(local);Database=moonglade;Trusted_Connection=True;`|",
+     "lines": [
+      25,
+      64,
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 PostgreSQL/SQL Server 存储数据的博客应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Moonglade provides a self-hosted blog with a public reading experience and an authenticated admin portal. The core workflow is authoring posts and pages, organizing them with categories and tags, publishing immediately or on a schedule, and exposing the published content through web pages, feeds, sitemap, Webmention, and search-engine notification protocols. ／ |`src/Moonglade.Data.PostgreSql`, `src/Moonglade.Data.SqlServer`|PostgreSQL and SQL Server provider registration and provider-specific EF Core behavior.| ／ Compose starts PostgreSQL and supplies the database connection string to the web container. For a direct `dotnet run`, the default connection string in `appsettings.json` points to PostgreSQL on `localhost:5432`; override it with `ConnectionStrings__MoongladeDatabase` for your environment.",
+   "evidence_lines": [
+    7,
+    25,
+    51
+   ]
+  },
+  "fn": "EdiWang/Moonglade",
+  "sha": "1fc3b29b8913",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ce9783495d34": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Python GraphQL 框架，经 JSONB 与 Rust 管线输出 API",
+   "review": "FraiseQL v1 是一个面向 PostgreSQL 的 Python GraphQL 框架：开发者用装饰器声明类型，指向数据库视图和函数，框架经 FastAPI 提供类型化 GraphQL API，热点路径由内置 Rust 管线处理 JSONB 转换。适合已使用 PostgreSQL、愿意编写视图/函数并需要多租户隔离的 Python 团队；仅支持 PostgreSQL，不支持其他数据库（v2 才支持）。",
+   "highlights": [
+    "提供装饰器声明方式，经 FastAPI 输出类型化 GraphQL API，无代码生成步骤",
+    "读取走 v_* 视图、写入走 fn_* 函数的 CQRS 模式，响应由视图在单条查询中组合",
+    "包含 pgvector 集成、RLS、字段级授权、审计日志及 fraiseql CLI（init/dev/migrate/sbom 等子命令）"
+   ],
+   "use_cases": [
+    "为已有 PostgreSQL 数据库构建 database-first 的 GraphQL API",
+    "需要多租户隔离与 JSON 吞吐的数据服务接口",
+    "结合 pgvector 做语义检索与 RAG 场景的 API 层"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A Python GraphQL framework for PostgreSQL.** Declare types and operations with ／ decorators, point them at PostgreSQL views and functions, and FraiseQL serves a ／ PostgreSQL returns JSONB. An integrated Rust pipeline (`fraiseql_rs`) transforms it",
+     "lines": [
+      9,
+      10,
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+     "lines": [
+      64
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该框架专为 PostgreSQL 服务，为 PostgreSQL 之上的 API 开发提供框架能力。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A Python GraphQL framework for PostgreSQL.** Declare types and operations with ／ **Requires:** Python 3.13 or 3.14 · PostgreSQL 13+ ／ |Databases|**PostgreSQL only**|PostgreSQL, MySQL, SQLite, SQL Server|",
+   "evidence_lines": [
+    9,
+    16,
+    64
+   ]
+  },
+  "fn": "fraiseql/fraiseql-python",
+  "sha": "ce9783495d34",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "18b43e73b7bd": {
+  "identity": {
+   "one_liner": "本地桌面 AI 聊天 Agent 工作区，集成 QQ、记忆与知识库",
+   "review": "Superstring 是一个运行于 Windows、macOS 与 Linux 的本地 Agent 聊天应用，用于日常陪伴对话，支持网页会话、QQ 群聊与私聊、长期记忆和知识库导入。它通过 OneBot 11 WebSocket（如 NapCat）接入 QQ，可作为 MCP 客户端连接外部工具，模型可接入 LM Studio 等本地或 OpenAI 兼容服务。数据保存在本机，无云端同步，当前为 alpha 版本。",
+   "highlights": [
+    "支持网页对话、QQ 群聊与私聊接入，通过 OneBot 11 WebSocket（如 NapCat）连接",
+    "提供 MCP 客户端能力，可通过 stdio、HTTP 与 SSE 连接外部 Model Context Protocol 服务",
+    "按 Agent 和来源分区管理长期记忆，支持导入文本或 Markdown 构建知识库"
+   ],
+   "use_cases": [
+    "在本机运行 AI 陪伴聊天 Agent 并接入 QQ 群聊或私聊",
+    "为 Agent 配置本地模型（如 LM Studio）或外部 OpenAI 兼容模型服务",
+    "导入本地文档构建知识库并按 Agent 授权访问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是使用数据库保存会话记录与配置的桌面聊天应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 许可证（L149）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本地 Agent 工作区，主要用于日常陪伴与聊天，支持网页对话、QQ 群聊与私聊、记忆、知识库、MCP 工具扩展与技能管理。 ／ Superstring 运行在本地，支持 Windows、macOS 与 Linux。会话记录、配置、长期记忆与密钥保存在本机，不提供云端数据同步服务，也不要求注册云端账号；调用已配置的模型服务商或工具服务时，仅按已授予的权限将必要的上下文与参数发送至对应端点。 ／ 升级前请完全退出程序并备份整个数据目录。切勿使用旧版程序打开已迁移的数据库。当前 main 分支源码数据库结构版本为 72（新增迁移 0055–0072；已发布的 v0.4.0-alpha-2 安装包仍为 54，未重新打包发布）。版本差异、数据位置与回退步骤见 UPGRADING.md。",
+   "evidence_lines": [
+    7,
+    20,
+    131
+   ]
+  },
+  "fn": "Verdspair/superstring",
+  "sha": "18b43e73b7bd",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

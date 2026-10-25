@@ -11288,5 +11288,70 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e9670c3949c6": {
+  "identity": {
+   "one_liner": "TypeScript 内直接解析 Postgres SQL 并推导行类型类型的开发库",
+   "review": "TypeSQL 是一个 TypeScript 库，在类型检查器内解析 Postgres SQL，为查询结果和参数推导精确类型，并在编辑器中提供补全与高亮，无需代码生成或数据库连接。面向使用 TypeScript 编写 Postgres 应用的开发者，需 TypeScript 7.1+ 与 Node 26+；解析器用 PostgreSQL 自身回归测试校验。",
+   "highlights": [
+    "在类型检查器内解析 SQL，类型随编写实时更新，无代码生成步骤",
+    "提供 VS Code 扩展与 language-server，支持表、列补全及 SQL 语法高亮",
+    "提供 @typesql/pg、@typesql/postgres 驱动适配及 Kysely、Drizzle、Prisma schema 转换包"
+   ],
+   "use_cases": [
+    "在 TypeScript 项目中编写 Postgres 查询并获得编译期类型检查",
+    "将现有 Kysely、Drizzle 或 Prisma schema 转为 TypeSQL schema",
+    "通过 introspect 命令从在线数据库或迁移文件生成 schema 类型"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Write Postgres SQL in TypeScript and get exact types for rows and parameters. TypeSQL parses your SQL inside the type checker: no codegen, no database connection, no build step.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 生态提供 TypeScript 类型化查询开发能力，属于服务数据库的开发工具库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Write Postgres SQL in TypeScript and get exact types for rows and parameters. TypeSQL parses your SQL inside the type checker: no codegen, no database connection, no build step. ／ npm install @typesql/core @typesql/pg pg              # node-postgres ／ The parser is checked against the regression tests PostgreSQL runs on itself, about 50,000 statements. TypeSQL agrees with Postgres on every one that can be checked statically: it parses what Postgres parses and rejects what Postgres rejects. CI fails on a single disagreement. See Postgres compatibility.",
+   "evidence_lines": [
+    3,
+    18,
+    91
+   ]
+  },
+  "fn": "ismailkarsli/TypeSQL",
+  "sha": "e9670c3949c6",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

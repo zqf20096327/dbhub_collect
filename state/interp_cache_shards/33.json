@@ -9830,5 +9830,69 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c096a84c3e3d": {
+  "identity": {
+   "one_liner": "pgBackRest 的 Prometheus 指标导出器",
+   "review": "该项目是一个 Prometheus exporter，通过执行 pgbackrest info --output json 命令采集 pgBackRest 备份信息，导出 stanza、仓库、备份、WAL 归档等指标，并提供配套 Grafana 仪表盘。适用于使用 pgBackRest 管理 PostgreSQL 备份的运维人员；需在 pgBackRest 所在主机或 Docker 容器中运行，并要求 pgBackRest 版本不低于 v2.48/v2.56.0 以获得部分状态判定指标。",
+   "highlights": [
+    "基于 pgbackrest info --output json 命令结果采集指标，支持指定或全部 stanza",
+    "导出 stanza 状态、备份大小/时长/错误状态、最近备份、WAL 归档状态及版本等指标",
+    "提供配套 Grafana 仪表盘用于指标可视化"
+   ],
+   "use_cases": [
+    "用 Prometheus 监控 pgBackRest 备份完成状态与错误",
+    "通过 Grafana 仪表盘展示备份与 WAL 归档指标",
+    "在 Docker 环境中部署采集 pgBackRest 指标"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pg1-path=/var/lib/postgresql/16/main",
+     "lines": [
+      420
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 pgBackRest（PostgreSQL 备份工具）提供指标导出，属于服务于数据库生态的监控组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Prometheus exporter for pgBackRest. ／ The metrics are collected based on result of `pgbackrest info --output json` command. By default, the metrics are collected for all stanzas received by command. You can specify stanzas to collect metrics. You need to run exporter on the same host where pgBackRest was installed or inside Docker.",
+   "evidence_lines": [
+    7,
+    9
+   ]
+  },
+  "fn": "woblerr/pgbackrest_exporter",
+  "sha": "c096a84c3e3d",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

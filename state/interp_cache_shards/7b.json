@@ -11031,5 +11031,70 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4cfd01a4810b": {
+  "identity": {
+   "one_liner": "面向独立承包者的自托管计时与开票应用",
+   "review": "Stint 是一个为 solo contractor 提供计时、日历和开票功能的自托管 Web 应用，另含 macOS 菜单栏计时程序；后端基于 Supabase/Postgres，含 PDF 发票生成、RLS 行隔离测试与 Playwright e2e 测试。移动端仅规划未创建，发票不含邮件发送，需用户自行下载发送。适合想自托管记录工时并开具发票的自由职业者。",
+   "highlights": [
+    "提供计时器、日历、客户、项目、付款配置与发票（含 PDF 生成）功能",
+    "API 集成测试在本地 Postgres 的两个临时数据库上运行，含以非超级用户角色检查行隔离的 RLS 测试套件",
+    "通过 pnpm tokens 从 tokens.json 生成 CSS/TS/Swift 设计令牌并在 CI 校验对比度契约"
+   ],
+   "use_cases": [
+    "自由职业者/独立承包者记录工时并生成发票",
+    "自托管部署管理客户与项目计时",
+    "本地开发时运行 API、RLS 与端到端测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "databases on the local stack's Postgres, beside the seed:",
+     "lines": [
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是使用 Supabase/Postgres 存数据的计时开票应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A time tracker for solo contractors. One timer, a calendar, and invoicing — ／ They exercise the real handlers against a real database, and the RLS suite ／ the local Supabase stack (`pnpm dev:up`) and the app (`pnpm dev`) already",
+   "evidence_lines": [
+    3,
+    42,
+    54
+   ]
+  },
+  "fn": "BlakeEriks/stint",
+  "sha": "4cfd01a4810b",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9034,5 +9034,145 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "823e681aaffe": {
+  "identity": {
+   "one_liner": "面向编码 Agent 的分析工程工具，内置护栏引擎",
+   "review": "dex 为 Claude Code 等 AI 编码 Agent 提供数仓探索、dbt 转换与语义建模、schema 漂移维护三类能力，通过 `uv` 运行的 exmergo-dex-core 引擎执行，对数仓只读，查询经 PII 防火墙并在花费前报价，每项修改以可审查的 diff 形式提交，适合数据工程团队在 Agent 工作流中使用。",
+   "highlights": [
+    "提供 Explore、Transform、Maintain 三组 skill，以 Agent Skills/插件形式接入 Claude Code、Codex 等编码 Agent",
+    "内置引擎 exmergo-dex-core，对数仓只读，生成 SELECT-only SQL，含 PII 标记的查询防火墙与花费前报价机制",
+    "通过连接器支持 Snowflake、BigQuery、Databricks、Redshift、ClickHouse、Trino、DuckDB、Postgres 等数据源"
+   ],
+   "use_cases": [
+    "Agent 探索不熟悉的数仓：生成表清单、列画像、经验证的 join 与 Mermaid ER 图",
+    "在 dbt 项目和语义层上以可审查计划方式编写/重构模型、测试、文档",
+    "对比快照检测 schema、体量、粒度与指标定义漂移并生成修复建议"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile|",
+     "lines": [
+      241
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`.dex/dex.db` is the SQLite backend's equivalent of `cache.json`, so it gets",
+     "lines": [
+      217
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse**|Analytical database|✅|`clickhouse`|Compute-seconds on Cloud, database-seconds self-hosted|`CLICKHOUSE_URL`, `CLICKHOUSE_*` env, or a dbt profile|",
+     "lines": [
+      238
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供面向 Snowflake、ClickHouse、Postgres 等数据库的连接器，为数据库生态提供服务而非使用库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**ClickHouse**|Analytical database|✅|`clickhouse`|Compute-seconds on Cloud, database-seconds self-hosted|`CLICKHOUSE_URL`, `CLICKHOUSE_*` env, or a dbt profile| ／ |**Postgres**|Operational database|✅|`postgres`|Database-seconds|`pg_service.conf`, `DATABASE_URL`, `PG*` env, or a dbt profile| ／ dex is analytics engineering for Claude Code and any agent: data warehouse",
+   "evidence_lines": [
+    238,
+    241,
+    7
+   ]
+  },
+  "fn": "exmergo/dex",
+  "sha": "823e681aaffe",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8471e69b678e": {
+  "identity": {
+   "one_liner": "README 仅有标题的 OceanBase 相关仓库",
+   "review": "该仓库 README 仅含一行标题「oceanbase-2026-seekdb」，未提供任何功能说明、安装方式或使用文档，无法从现有内容判断其具体用途。仓库名暗示与 OceanBase 及 seekdb 相关，可能为2026年相关项目的资料或代码库。证据不足，具体定位待 README 补充后再行编目。",
+   "highlights": [
+    "README 仅包含标题行，无可验证的功能说明"
+   ],
+   "use_cases": [
+    "证据不足，暂无法确定适用场景"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "# oceanbase-2026-seekdb",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅一行标题，无法判断是为数据库服务的工具还是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "# oceanbase-2026-seekdb",
+   "evidence_lines": [
+    1
+   ]
+  },
+  "fn": "Chenxi5735/oceanbase-2026-seekdb",
+  "sha": "8471e69b678e",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

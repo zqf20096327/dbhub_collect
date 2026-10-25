@@ -11131,5 +11131,158 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "41a8e63eacba": {
+  "identity": {
+   "one_liner": "用 Docker Compose 一键自托管 Resgrid 调度系统的部署脚本",
+   "review": "该仓库提供 Resgrid Core（面向应急响应的 CAD 与人员/单位管理系统）的自托管安装方案：一个 setup.sh 脚本和 Docker Compose 栈，部署 web/API/events/worker 等应用容器及 PostgreSQL、Redis、RabbitMQ、RustFS、Caddy，自动生成密码与 OIDC 证书并由 worker 运行 schema 迁移。适合需要私有化部署 Resgrid 的应急救援组织运维人员；README 明确该栈将 PostgreSQL（DatabaseType=1）用于全部数据库。",
+   "highlights": [
+    "提供一行式安装脚本，自动检查依赖、生成随机密码、OIDC 证书并写入 .env 启动 Compose 栈",
+    "通过 Compose profiles 提供可选 GPS tracker 接入与入站邮件服务组件",
+    "包含 MCP 服务器容器，供 AI 助手通过 Resgrid 凭据认证交互"
+   ],
+   "use_cases": [
+    "在单台 Linux 服务器上自托管 Resgrid 调度系统",
+    "为互联网部署配置 Let's Encrypt HTTPS 与自定义域名",
+    "局域网内部署（自签证书模式）"
+   ],
+   "mcp_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "4. Generate random passwords for PostgreSQL, Redis, and RabbitMQ, plus all Resgrid passphrases, encryption keys, and the JWT secret. ／ |`db`|`dhi.io/postgres:18`|PostgreSQL — databases `resgrid`, `resgridoidc`, `resgridworkers`, `resgriddoc`|5432|",
+     "lines": [
+      20,
+      44
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- Database types: `0` = SQL Server, `1` = PostgreSQL, `2` = MongoDB. This stack uses PostgreSQL (`1`) for everything, including the document database (`DocDatabaseType=1` — no MongoDB container needed).",
+     "lines": [
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库部署的 Resgrid 系统以 PostgreSQL 作为自身数据存储，属于使用数据库的应用部署方案",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This repository contains a Docker Compose stack that runs the complete Resgrid system on a single machine: the web app, API, real-time events hub, background worker, text-to-speech service, MCP server for AI assistants, PostgreSQL, Redis, RabbitMQ, RustFS (S3-compatible object storage), and a Caddy reverse proxy with automatic HTTPS — plus optional add-ons for hardware GPS tracker ingest and inbound-email dispatch. ／ |`db`|`dhi.io/postgres:18`|PostgreSQL — databases `resgrid`, `resgridoidc`, `resgridworkers`, `resgriddoc`|5432| ／ - Database types: `0` = SQL Server, `1` = PostgreSQL, `2` = MongoDB. This stack uses PostgreSQL (`1`) for everything, including the document database (`DocDatabaseType=1` — no MongoDB container needed).",
+   "evidence_lines": [
+    5,
+    44,
+    109
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Resgrid/resgrid-setup",
+  "sha": "41a8e63eacba",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2287612ba4b3": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL RLS 的 Google ADK 零信任多租户语义记忆库",
+   "review": "该库为 Google ADK 提供 BaseMemoryService 实现，将记忆的属主隔离控制从事务应用代码下沉到 PostgreSQL 的行级安全（FORCE RLS）与事务本地身份绑定，配合 pgvector 做语义检索。面向运行多租户、多 agent ADK 部署的开发者；限制包括不防护已被攻破的应用进程、schema 默认不带向量索引。",
+   "highlights": [
+    "通过 PostgreSQL FORCE ROW LEVEL SECURITY 与 set_config 事务本地身份实现租户/用户/密级三级隔离",
+    "实现 BaseMemoryService 接口，可作为 ADK 记忆服务的替代接入",
+    "内置泄漏对比评测脚本（benchmarks/run_memleak_eval.py）与最小权限 memshield_app 角色 schema"
+   ],
+   "use_cases": [
+    "多租户 agent 记忆的跨用户泄漏防护",
+    "agent 集群中按密级限制共享记忆检索",
+    "对应用层 SQL 过滤缺失做数据库侧兜底"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Zero-trust multi-tenant semantic memory for Google ADK (`google-adk`), enforced in the database by PostgreSQL `pgvector` + Row-Level Security (RLS).** ／ `adk-memshield` is a drop-in `BaseMemoryService` that moves ownership gating out of application code and into PostgreSQL itself, using **`FORCE ROW LEVEL SECURITY`** and **transaction-local identity (`set_config(..., true)`)**. A retrieval query with a missing ／ For local development, start the bundled Postgres on port `54329`:",
+     "lines": [
+      3,
+      18,
+      112
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是构建在 PostgreSQL RLS/pgvector 之上、为 ADK agent 记忆提供隔离能力的库，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`adk-memshield` is a drop-in `BaseMemoryService` that moves ownership gating out of application code and into PostgreSQL itself, using **`FORCE ROW LEVEL SECURITY`** and **transaction-local identity (`set_config(..., true)`)**. A retrieval query with a missing or wrong filter returns fewer rows, not someone else's rows. ／ - **No superuser bypass.** Superusers and `BYPASSRLS` roles ignore RLS even under `FORCE ROW LEVEL SECURITY`. `sql/01_schema.sql` creates a least-privilege `memshield_app` role (`NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS`); connect with it. ／ pip install adk-memshield",
+   "evidence_lines": [
+    18,
+    35,
+    91
+   ]
+  },
+  "fn": "aalishan001/adk-memshield",
+  "sha": "2287612ba4b3",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

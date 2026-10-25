@@ -9178,5 +9178,146 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "323f7047b9d0": {
+  "identity": {
+   "one_liner": "Conduit 的 PostgreSQL 连接器插件，提供源与目的端",
+   "review": "这是 Conduit 数据管道平台的 PostgreSQL 连接器插件，同时实现 source 和 destination。源端支持初始快照读取，随后通过逻辑复制槽和 publication 实现 CDC 变更捕获，并将变更转成记录写入管道；需用户具备复制相关权限，slot 丢失或被替换时按配置拒绝启动或接受数据丢失。适合需要把 PostgreSQL 变更接入 Conduit 管道的用户。",
+   "highlights": [
+    "提供 source 与 destination 两种连接器",
+    "源端支持先快照表数据再切换 CDC 模式，基于逻辑复制槽与 publication 捕获变更",
+    "支持 SCRAM 认证与 TLS，可配置 channel_binding"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 表变更以 CDC 方式接入 Conduit 数据管道",
+    "对指定表做初始快照导入",
+    "作为管道目的地向 PostgreSQL 写入记录"
+   ],
+   "cat 裁决": "迁移"
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Conduit Connector PostgreSQL ／ The PostgreSQL connector is a Conduit ／ This connector implements Change Data Capture (CDC) features for PostgreSQL by",
+     "lines": [
+      1,
+      3,
+      69
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明它是为 Conduit 管道平台提供 PostgreSQL 数据读取/写入的连接器插件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Conduit Connector PostgreSQL ／ plugin. It provides both, a source and a destination PostgresSQL connector. ／ This connector implements Change Data Capture (CDC) features for PostgreSQL by",
+   "evidence_lines": [
+    1,
+    4,
+    69
+   ]
+  },
+  "fn": "ConduitIO/conduit-connector-postgres",
+  "sha": "323f7047b9d0",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "af762b079ca0": {
+  "identity": {
+   "one_liner": "Go 编写的 LLM 网关，提供 OpenAI 兼容统一端点与路由",
+   "review": "Lintasan 是一个用 Go 编写的 LLM 网关，将多个 AI 提供商（OpenAI、Anthropic、DeepSeek 等）聚合为一个 OpenAI 兼容端点，提供智能路由、故障转移、连接池、缓存、成本追踪与内置 SvelteKit 监控面板，面向需要统一管理多家 AI 提供商 API 的自托管用户；数据存储使用内嵌 SQLite，以单个约 26MB 二进制发布。",
+   "highlights": [
+    "提供 OpenAI 兼容端点，支持多提供商路由、故障转移与负载均衡",
+    "内置 SQLite 嵌入式存储，以单二进制文件部署，包含 25 页监控面板",
+    "包含 MCP Server、插件系统、语义缓存、成本追踪等 39 项功能"
+   ],
+   "use_cases": [
+    "统一管理多个 AI 提供商的 API 密钥与请求路由",
+    "对 LLM 调用进行用量、延迟与成本监控",
+    "自托管部署 LLM API 网关与团队多用户访问控制"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Database**|SQLite (go-sqlite3)|Embedded, zero config, single-file|",
+     "lines": [
+      98
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身内嵌存储（L98），服务于 AI 提供商聚合而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Lintasan adalah **LLM gateway** — satu endpoint OpenAI-compatible untuk semua provider AI. Routing cerdas, failover otomatis, embedded cache, token compression, dan dashboard monitoring real-time. ／ |**Database**|SQLite (go-sqlite3)|Embedded, zero config, single-file|",
+   "evidence_lines": [
+    45,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanhaji182/lintasan",
+  "sha": "af762b079ca0",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

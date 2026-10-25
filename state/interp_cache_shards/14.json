@@ -10792,5 +10792,214 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "229e0814a3d5": {
+  "identity": {
+   "one_liner": "本地优先的求职自动化应用，工作流引擎驱动、人工审批投递",
+   "review": "JobCtrl 是一款运行在用户本机的求职自动化应用，用 TypeScript 编写，macOS 15+（Apple silicon）签名发布。它抓取职位、基于个人资料评分、生成简历 PDF，并经人工审批后投递；步骤 1-4 运行在 Temporal 工作流引擎上，崩溃后可恢复。数据存于本地 ~/.jobctrl/，无账号无托管后端，需自接 LLM 提供商。",
+   "highlights": [
+    "发现、评分、简历生成、投递审批四段式流水线，运行于 Temporal 工作流引擎，崩溃或重启后可恢复",
+    "本地优先：数据存于 ~/.jobctrl/，无账号与托管后端，本地 API 默认绑定 127.0.0.1",
+    "简历要点逐条关联资料证据，捏造指标、日期、头衔或雇主的草稿校验失败"
+   ],
+   "use_cases": [
+    "个人求职者批量发现职位并人工审批投递",
+    "需要简历与资料证据逐条对应的可追溯投递",
+    "本地隐私敏感场景下的求职流程管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "应用本身使用数据库存数据，不提供面向数据库生态的工具能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "JobCtrl finds job postings, scores each one against your profile, writes a ／ Your data lives in `~/.jobctrl/` on your machine; there is no account and no ／ Steps 1–4 run on Temporal, a workflow engine, and resume after a crash or",
+   "evidence_lines": [
+    17,
+    20,
+    65
+   ]
+  },
+  "fn": "ebarti/JobCtrl",
+  "sha": "229e0814a3d5",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8181e155623": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的开源自托管 BaaS，单个 Rust 二进制提供后端服务",
+   "review": "Nelcota 是一个围绕 PostgreSQL 构建的开源后端即服务（BaaS）：一个 Rust 二进制提供 REST API、认证（密码/邮箱/OAuth 与 JWT）、文件存储、webhooks、内嵌管理面板和主机运维控制台，并依赖 Postgres 的行级安全（RLS）实施访问控制。面向想自持数据库、在 VPS 上自部署后端的开发者；暂未实现 Realtime、Edge Functions、MFA，版本仍为 0.x。",
+   "highlights": [
+    "提供 schema 派生的 REST API、过滤/关系/RPC 及 OpenAPI，数据访问由 PostgreSQL 行级安全（RLS）实施",
+    "包含认证（密码/邮箱/OAuth、Ed25519 JWT）、文件存储（disk/S3 与签名 URL）、webhooks 与内嵌管理面板",
+    "支持 Docker/systemd 部署、隔离项目、备份与数据库 PITR，以及独立认证的主机运维控制台"
+   ],
+   "use_cases": [
+    "在自有 VPS 上自托管应用后端（REST、认证、文件存储）",
+    "通过内嵌面板管理表结构、SQL、迁移、用户与存储桶",
+    "为 TypeScript/Rust/Next.js 客户端应用提供统一后端服务"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open source backend-as-a-service for applications that use PostgreSQL. ／ can export. PostgreSQL enforces data access; you do not need a separate Node ／ Next.js uses a dedicated PostgreSQL session store and request-scoped clients;",
+     "lines": [
+      3,
+      22,
+      137
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目以 PostgreSQL 为核心构建，为使用 Postgres 的应用提供 REST、认证、存储、面板等后端服务，属于为数据库生态服务的平台组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Open source backend-as-a-service for applications that use PostgreSQL. ／ One Rust binary provides REST, authentication, file storage, webhooks, ／ a database admin panel and a separately authenticated host operator console.",
+   "evidence_lines": [
+    3,
+    4,
+    5
+   ]
+  },
+  "fn": "Nelcota/Nelcota",
+  "sha": "a8181e155623",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "68410c845f60": {
+  "identity": {
+   "one_liner": "自托管 WhatsApp REST API 网关，基于 PHP+Baileys+MySQL",
+   "review": "WhatsGateway 是一个自托管的 WhatsApp REST API 网关，附带 Web 管理面板，使用 PHP 8.2+ 构建 API 层、Node.js 运行 Baileys worker 通过 WebSocket 收发消息，数据存储在 MySQL/MariaDB/TiDB。它面向需要发送 WhatsApp 通知和自动回复的开发者与团队，通过 API Key 认证，支持媒体发送、队列投递、Webhook 回调和规则式聊天机器人。",
+   "highlights": [
+    "提供 REST API 发送文本、媒体消息，支持队列投递与 HMAC 签名 Webhook",
+    "基于 Baileys 实现 WhatsApp Web 多设备连接，支持 QR 码扫码登录",
+    "内置规则匹配聊天机器人自动回复与联系人广播功能"
+   ],
+   "use_cases": [
+    "自托管发送 WhatsApp 通知与消息",
+    "构建基于规则的 WhatsApp 自动回复机器人",
+    "批量联系人管理与模板广播"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Database:** MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless (SSL-encrypted on port 4000). ／ |**Database**|MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless|UTF8MB4 collation required|",
+     "lines": [
+      74,
+      114
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "MySQL/TiDB ／ - **Database:** MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless (SSL-encrypted on port 4000). ／ |**Database**|MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless|UTF8MB4 collation required|",
+     "lines": [
+      19,
+      74,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 MySQL/MariaDB/TiDB 存储自身数据，是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **WhatsGateway** is a production-grade, self-hosted WhatsApp REST API Gateway and Web Management Dashboard built with **PHP 8.2+**, **Node.js (@whiskeysockets/baileys)**, and **MySQL / TiDB**. ／ - **Database:** MySQL 8.0+, MariaDB 10.4+, or TiDB Cloud Serverless (SSL-encrypted on port 4000).",
+   "evidence_lines": [
+    23,
+    74
+   ],
+   "softened": []
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "navneetyadav-code/whatsapp-api",
+  "sha": "68410c845f60",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

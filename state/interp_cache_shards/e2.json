@@ -8959,5 +8959,73 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "635e62756af2": {
+  "identity": {
+   "one_liner": "Spring Boot 事务性 Outbox 模式示例实现，结合 Kafka 与 PostgreSQL",
+   "review": "一个演示事务性 Outbox 模式的 Java/Spring Boot 项目，将 PostgreSQL 作为事件的持久存储，事务提交后经内存队列批量发布到 Kafka，并通过 Recovery Worker 与 Active/Archive 分区实现故障恢复，附带幂等请求处理和 Prometheus/Grafana、OpenSearch、Tempo 可观测性组件。面向已使用 Spring Boot、PostgreSQL 与 Kafka 的团队，需自行运行多服务环境。",
+   "highlights": [
+    "提供 Normal Flow 与 Recovery Flow 共用的单一发布管道，事件持久存储于 PostgreSQL",
+    "支持幂等请求处理，防重复下单与重复 outbox 事件",
+    "内置指标、结构化日志与分布式追踪的可观测性组件"
+   ],
+   "use_cases": [
+    "Spring Boot + Kafka 微服务中实现可靠事件发布",
+    "需要崩溃后恢复未发布 outbox 事件的场景",
+    "需要幂等接口防止重复请求的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Spring Boot Transactional Outbox with Kafka & PostgreSQL ／ PostgreSQL ／ This project targets teams already using **Spring Boot, PostgreSQL, and Kafka** that want low-latency event delivery without continuous database polling or an additional CDC platform.",
+     "lines": [
+      1,
+      10,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 PostgreSQL 存储业务与 outbox 事件的示例应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Spring Boot Transactional Outbox with Kafka & PostgreSQL ／ This project targets teams already using **Spring Boot, PostgreSQL, and Kafka** that want low-latency event delivery without continuous database polling or an additional CDC platform. ／ - **PostgreSQL** provides durable event storage.",
+   "evidence_lines": [
+    1,
+    24,
+    39
+   ]
+  },
+  "fn": "KHolodilin/spring-transactional-outbox-kafka",
+  "sha": "635e62756af2",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

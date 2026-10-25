@@ -11361,5 +11361,126 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cce1ba36b3aa": {
+  "identity": {
+   "one_liner": "浏览、导出和恢复 Antigravity IDE 会话历史的桌面 GUI 与 CLI 工具",
+   "review": "该工具用于浏览、导出和恢复 Google Antigravity IDE 的本地会话历史。它直接读取磁盘上以 SQLite、protobuf、JSONL 存储的会话文件，并可通过本地 gRPC-Web/Connect 端点连接运行中的 LanguageServer 实现导入会话再激活与崩溃恢复。面向 Antigravity IDE 用户，需 Python 3.10+，通过源码方式安装运行。",
+   "highlights": [
+    "以桌面应用（CustomTkinter）或 CLI 两种方式运行，读取本地 SQLite/protobuf/JSONL 会话文件",
+    "支持将任意会话导出为 .db、.pb、Markdown、JSON、HTML 格式，并支持导入 .db/.pb 文件重新激活会话",
+    "提供崩溃恢复功能，扫描本地存储中孤立或未索引的会话并重新激活"
+   ],
+   "use_cases": [
+    "在 IDE 编辑器之外浏览和检索 Antigravity 会话历史",
+    "跨机器迁移或备份会话数据",
+    "IDE 异常关闭后恢复未索引的会话"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Antigravity stores all session data locally in SQLite databases, protobuf files, and JSONL transcripts, but gives you no built-in way to browse or manage that history outside the active editor window. ／ **Export** - any session to `.db` (native SQLite backup), `.pb` (protobuf), Markdown, JSON, or HTML. ／ |`conversations/<id>.db`|SQLite - trajectory metadata, steps, tool payloads, diffs|",
+     "lines": [
+      13,
+      21,
+      75
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "工具服务于 Antigravity IDE 的会话管理，SQLite 仅作为其所读取的底层数据存储格式出现，README 未表明它是为 SQLite 生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Antigravity stores all session data locally in SQLite databases, protobuf files, and JSONL transcripts, but gives you no built-in way to browse or manage that history outside the active editor window. ／ This tool fills that gap. Runs as a standalone desktop app or CLI utility. Reads sessions directly from disk and can connect to the running Antigravity LanguageServer over its local gRPC-Web endpoint for live indexing and session reactivation. ／ When the IDE is running, it spawns `language_server_windows_x64.exe` on a dynamic local port with a CSRF token. The client discovers the process, reads the port and token from its arguments, and communicates with `LanguageServerService` using the Connect protocol over HTTP.",
+   "evidence_lines": [
+    13,
+    15,
+    79
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "M7mdJs/antigravity-chat-manger",
+  "sha": "cce1ba36b3aa",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c05454395041": {
+  "identity": {
+   "one_liner": "OceanBase 相关仓库，README 仅有标题，功能不明",
+   "review": "该仓库 README 仅包含标题“oceanbase-mxy-1”，未提供描述、安装方式或使用说明，无法确认其具体功能与目标用户。从名称看可能与 OceanBase 相关，但缺乏可验证信息，需补充 README 内容后才能进一步编目。",
+   "highlights": [],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "# oceanbase-mxy-1",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅有标题，无证据表明其为数据库生态工具或使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "# oceanbase-mxy-1",
+   "evidence_lines": [
+    1
+   ]
+  },
+  "fn": "m-xy-boop/oceanbase-mxy-1",
+  "sha": "c05454395041",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

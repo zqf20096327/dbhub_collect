@@ -9582,5 +9582,155 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0f805aefda05": {
+  "identity": {
+   "one_liner": "自托管离线优先的餐厅 POS 与餐厅管理系统",
+   "review": "Nodedr OrderRestro 是一个面向餐厅、咖啡馆、云厨房及多门店连锁的自托管餐厅点单与管理系统，涵盖点餐收银、KDS、桌台预订、库存、员工考勤薪资、会计报表等 20 个模块，通过 NestJS + Next.js + PostgreSQL 的 Docker Compose 栈在本地局域网服务器运行，断网可用；适合希望自己部署、不想依赖云订阅的餐饮经营者。",
+   "highlights": [
+    "支持堂食/外卖/配送点单、账单合并、多税制（印度 GST、US Sales Tax、EU VAT 等）与 UPI QR 支付",
+    "包含厨房显示系统（KDS）、桌台与预订管理、QR 扫码点餐、库存配方成本与自动扣料",
+    "以 Docker Compose 部署于本地局域网服务器，支持 VPS、CasaOS/ZimaOS 镜像与 Windows 原生客户端",
+    "提供 RBAC 权限、审计日志、双因素登录及 REST/Swagger 与 MCP 服务器接口"
+   ],
+   "use_cases": [
+    "餐厅/咖啡馆/云厨房的本地局域网点餐收银与厨房出品管理",
+    "无互联网环境下维持点单、开票、KDS 与打印运行",
+    "餐饮多门店的库存调拨、员工排班薪资与经营报表管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "chains. The whole stack — Postgres, API, and web app — runs on one local ／ Already shipped and running against real Docker/Postgres today: auth +",
+     "lines": [
+      42,
+      153
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Postgres over the originally-specced SQLite — is in",
+     "lines": [
+      266
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明整个栈（Postgres、API、web 应用）运行于本地服务器，PostgreSQL 为该系统存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chains. The whole stack — Postgres, API, and web app — runs on one local ／ no forced cloud dependency, self-hosted by design. ／  the restaurant runs `docker compose up`; every till, tablet, and KDS",
+   "evidence_lines": [
+    42,
+    45,
+    75
+   ]
+  },
+  "fn": "Raktim94/nodedr-restaurant-pos",
+  "sha": "0f805aefda05",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2f6a32ecb301": {
+  "identity": {
+   "one_liner": "学生机会聚合平台，定时抓取多源信息生成统一信息流",
+   "review": "面向学生的机会聚合 Web 应用，每 6 小时抓取 Devpost、MLH、Unstop 等官方来源的实习、黑客松、认证和奖学金信息，提供搜索、筛选、按技能匹配打分和收藏功能。技术栈为 Next.js + FastAPI + PostgreSQL（本地可用 SQLite），部署于 Vercel/Render/Neon。注意自动化抓取的条目标记为需人工验证。",
+   "highlights": [
+    "每 6 小时自动抓取多来源机会信息并去重、更新、过期移除",
+    "基于用户学位、技能和兴趣生成匹配打分及理由",
+    "遵循 robots.txt 的限速抓取器，支持 API、网页和 RSS/Atom 多种读取方式"
+   ],
+   "use_cases": [
+    "学生集中查找和筛选实习、黑客松、奖学金等机会",
+    "利用匹配打分按个人背景发现相关机会",
+    "追踪即将截止的机会"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "• PostgreSQL (SQLite for local development) ／ |🗄️ Database|Neon PostgreSQL|",
+     "lines": [
+      116,
+      129
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "• PostgreSQL (SQLite for local development)",
+     "lines": [
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为使用 PostgreSQL 存储数据的机会聚合网站，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " • PostgreSQL (SQLite for local development) ／ |🗄️ Database|Neon PostgreSQL| ／ 1. **📥 It fetches.** Every 6 hours, Zenkai reads official sources: Devpost, MLH, Unstop (internships, hackathons, competitions and scholarships), SimplifyJobs, Microsoft Learn (certifications and Applied Skills), the GitHub Student Pack, Outreachy, Google Developers and Opportunity Desk. It also reads two community-maintained GitHub lists, of free certifications and of student developer discounts. Records from those stay marked **\"Needs verification\"** and link to each provider's own page.",
+   "evidence_lines": [
+    116,
+    129,
+    51
+   ]
+  },
+  "fn": "ganesh-tadigadapa/Zenkai",
+  "sha": "2f6a32ecb301",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

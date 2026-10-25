@@ -11195,5 +11195,80 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dbcde5b7359f": {
+  "identity": {
+   "one_liner": "C++ 编写、以 SQLite 存储状态的 MCP/编码智能体工具集",
+   "review": "这是一个 C++ monorepo，包含交互式编码智能体 std_slop、sl 命令行工具、MCP 客户端/服务端库及 Markdown 解析渲染库，用 Bazel 构建，发布 Linux/macOS 二进制。智能体会话、模型调用等数据存于 SQLite（支持持久库与内存库），面向需要在终端运行编码智能体并集成 MCP 工具的开发者。",
+   "highlights": [
+    "提供 std_slop 交互式终端智能体与 sl 脚本化 CLI 两种入口",
+    "包含 MCP 客户端与服务端库及多个示例 MCP 服务器",
+    "交互与工具调用记录存入 SQLite，支持持久与内存数据库",
+    "支持 OpenAI 兼容 Responses 端点与 OAuth 认证，可配置 JSON Schema 约束的结构化输出"
+   ],
+   "use_cases": [
+    "在终端以交互或批处理方式对代码仓库运行智能体任务",
+    "为 C++ 应用接入或暴露 MCP 工具",
+    "为脚本化智能体流水线生成 JSON/结构化输出"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite ledger**: Interactions and tool calls are stored in SQLite. Interactive sessions and `sl` use persistent storage; batch mode can use an in-memory database. ／ Keep `slop.db` outside the codebase, or ignore it and its SQLite sidecars (`slop.db-wal` and `slop.db-shm`) in Git. The database stores the context ledger and can contain sensitive data from prompts, tool output, or environment variables.",
+     "lines": [
+      88,
+      172
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明智能体运行时的会话、交互与工具调用记录存储在 SQLite 中，属于使用数据库存数据的应用",
+   "persona": "use",
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`std::slop` is a C++ monorepo for agentic tooling. It provides the `std_slop` interactive coding agent, the `sl` command-line tool, MCP client and server libraries with examples, and a Markdown parser and terminal renderer. ／ - **SQLite ledger**: Interactions and tool calls are stored in SQLite. Interactive sessions and `sl` use persistent storage; batch mode can use an in-memory database. ／ |Agent database and schema|Manage sessions, tools, model calls, and patch review state.|Runtime data model|",
+   "evidence_lines": [
+    9,
+    88,
+    19
+   ]
+  },
+  "fn": "hsaliak/std_slop",
+  "sha": "dbcde5b7359f",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

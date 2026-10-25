@@ -10699,5 +10699,101 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "abaaf7212aac": {
+  "identity": {
+   "one_liner": "桌面端数据库 AI Agent，提供对话式 DBA 助手与数据库控制台",
+   "review": "一款 Electron 桌面端数据库 AI Agent 工具，面向 DBA：内置数据库控制台、Oracle AWR 文件脱敏、OceanBase OCP 云管界面、SSH 终端与文本编辑器，AI 写操作通过五档权限模式分级管控并记录结构化审计日志，支持 Oracle 11g/19c、OceanBase（MySQL/Oracle 租户）、MySQL，大模型 API Key 与数据库密码经 Windows DPAPI 本机加密存储。通过 npm 源码构建运行。",
+   "highlights": [
+    "提供五档写操作权限管控与 JSONL 结构化审计日志（含 SQL 全文、来源与批准状态）",
+    "内置数据库控制台，支持结果网格编辑、CSV 导出、事务按 Oracle/MySQL/OB 特性分别处理",
+    "集成 OceanBase OCP 云管平台：集群/租户/主机/告警/任务查看与运维动作"
+   ],
+   "use_cases": [
+    "DBA 通过 AI 对话执行 SQL 诊断、巡检与变更评审，写操作分级确认",
+    "对 Oracle AWR 报告文件做本地脱敏后共享",
+    "通过统一界面管理多套 OceanBase OCP 集群与租户"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。 ／ - **数据库控制台**（左侧「数据库」一级模块，独立于 AI 助手）：Navicat 式布局——左侧连接/schema/表对象树（连接行常驻 ＋ 新建查询 / ℹ 数据库信息 / ⟳ 强刷；顶部 ＋ 新建连接，空态也能直接建连，不必回侧栏），右侧统一标签页：**查询窗口**（CodeMirror 高亮，Ctrl+Enter 执行，选中可单独执行；Oracle 工具栏 ✓ 提交 / ↩ 回滚；**⬇ 导出**查询结果为 CSV——可勾选要导出的列，重新执行查询取全量、上限 10 万行，UTF-8 带 BOM、Exc ／ - **结果网格编辑（DBeaver 式）**：表数据页**双击单元格**直接改值（Enter/点 ✓ 暂存，Esc 取消，∅ 设 NULL），暂存的修改高亮显示，点\"💾 保存修改\"批量执行 UPDATE——值全部绑定变量、按行标识（Oracle 用 ROWID，MySQL/OB 用主键）定位，改过的行被他人先改/删会报冲突。Oracle 保存后事务不提交，用状态条 ✓ 提交 / ↩ 回滚（与查询窗口一致，关标签页即回滚）；MySQL/OB 整批一个事务、有冲突全部回滚。视图（无行标识）、虚拟列/生成列自动只读，每",
+     "lines": [
+      3,
+      24,
+      25
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。 ／ - **文件脱敏工具**：左侧「脱敏工具」入口，先选择文件类型（当前开放 Oracle AWR，普通日志预留）再选择/拖入文件；内置规则面向 AWR 表格语义解析，覆盖 HTML 表格列 / `headers` 属性、文本列式报表、RAC 汇总、DB / PDB / DBID / 实例 / 主机 / 服务名 / Schema / OS 用户 / IP / ASM 磁盘组 / JDBC 与 TNS 组件，并避免数据库版本号、说明文字句号、SQL 别名等误报；同一敏感值在同一次处理中稳定映射为 `ip-tuoming1 ／ - **环境事实注入**：连接的数据库版本自动探测（成功缓存 30 分钟/失败 5 分钟，探测超时不阻塞对话）标注在连接行，方言规则按实际版本判断（Oracle 11g 用 ROWNUM、12c+ 可用 FETCH FIRST）；当前日期/时区注入提示词末尾，\"昨天 / 近 7 天 / 本月\"类相对时间有计算锚点（精确时刻仍建议用 SYSDATE/NOW() 核实）",
+     "lines": [
+      3,
+      10,
+      23
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。 ／ - **功能模块**：最左侧一级导航切换——「AI 助手」（对话 / SSH 终端 / 会话管理）、「数据库」（数据库控制台，独立模块）、「云管平台」（OceanBase 云平台 OCP 的集群/租户/主机/告警/任务）、「文本编辑」（Notepad++ 式多标签编辑器，大文件秒开；选中文本可就地让 AI 针对这段内容问答）、「脱敏工具」（AWR 本地脱敏）与「巡检报告」（规划中，基于模板生成、与 AI 无关）；导航底部是全局工具（主题切换 / 设置浮窗） ／ ## 云管平台（OceanBase OCP）",
+     "lines": [
+      3,
+      8,
+      108
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供数据库适配器（db/oracle.ts 等）与数据库控制台，工具服务于数据库管理而非仅使用数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "Oracle",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "桌面端数据库 AI Agent，支持 Oracle 11g/19c、OceanBase 4.x（MySQL / Oracle 租户）、MySQL。 ／ - **数据库控制台**（左侧「数据库」一级模块，独立于 AI 助手）：Navicat 式布局——左侧连接/schema/表对象树（连接行常驻 ＋ 新建查询 / ℹ 数据库信息 / ⟳ 强刷；顶部 ＋ 新建连接，空态也能直接建连，不必回侧栏），右侧统一标签页：**查询窗口**（CodeMirror 高亮，Ctrl+Enter 执行，选中可单独执行；Oracle 工具栏 ✓ 提交 / ↩ 回滚；**⬇ 导出**查询结果为 CSV——可勾选要导出的列，重新执行查询取全量、上限 10 万行，UTF-8 带 BOM、Excel 双击直接打开）、**表数据页**（分页、点列头排序、WHERE 过滤、复制 TSV、网格编辑）、**结构/DDL 页**、**数据库信息页**（版本/状态/字符集/会话/存储，Oracle·MySQL·OB 各自适配；页首是 **KPI 磁贴**（实例/租户状态、归档模式、表空间使用率、连接数、锁等待、合并状态、缓冲池命中率、平均 QPS），正文按**主题块**组织——**每个块里图与它的明细同框**（表空间总体使用环 + 使用率 TOP 8 条形 + 表空间明细表；会话环 + 会话明细；SGA 组成堆叠 + 内存明细；对象/副本/Tablet 分布环 + 对应列表；库容量条形 + 容量表；活跃会话环 + 会话列表），不再把图集中堆在页面顶部；纯 SVG 绘制、日/夜主题自适应、数值越线（≥80% 黄、≥90% 红）自动变色；无明细可配的概况图（连接状态/缓冲池命中率）单独成卡片，采集诊断固定放页尾；Oracle 含**活跃会话**交互表——列集按当前库 GV$SESSION 真实结构动态获取、可勾选、可刷新）。**切换一级模块（去对话/文本编辑）再回来，查询标签页、结果集与未提交事务全部保留**（v-show 保活，只有标签栏 ✕ 关闭控制台才销毁）；导出进审计日志。从侧栏连接行点击同样直接进入本模块并定位该连接；**AI 助手会话切换时底部 SSH 终端面板自动隐藏**（隐藏不销毁——SSH 连接与终端回滚缓冲全部保留，回到该会话重开即恢复隐藏前的样子；终端面板的 ✕ 也是隐藏语义，关闭单个终端用 tab 上的 ✕） ／   db/oracle.ts     Oracle 适配器（11g thick / 19c thin 自适应）",
+   "evidence_lines": [
+    3,
+    24,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "echodddb/SQLPilot",
+  "sha": "abaaf7212aac",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

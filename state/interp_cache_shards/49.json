@@ -10538,5 +10538,159 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "57b3c0678481": {
+  "identity": {
+   "one_liner": "AI agent 线路追踪评测平台，将生产失败冻结为可回放回归测试",
+   "review": "Tracely 是一个面向 AI agent 的可观测与评测平台：通过 OTLP 接收链路追踪，用 LLM 评委与结构化检查打分，将失败聚类并固化为离线可回放的回归用例，在 CI 中拦截回归 PR。技术栈为 Python 后端加前端 UI，通过 Docker Compose 一键自托管，运行依赖 Postgres、ClickHouse、Redis 和 MinIO 存储数据。适用于开发与运维 AI agent 应用的团队。",
+   "highlights": [
+    "通过 OTLP/HTTP 接收任意语言的 agent 追踪数据，提供失败聚类与回归用例管理",
+    "提供 `tracely simulate/replay/gate` 命令与 GitHub Action，在 CI 中离线回放录制 fixtures 并拦截 PR",
+    "内置可视化告警流构建器、LLM 评委校准界面，并暴露 /mcp 端点供编码 agent 驱动工作区"
+   ],
+   "use_cases": [
+    "AI agent 生产失败追踪的聚类分诊与回归测试固化",
+    "在 CI 流水线中离线回放录制用例，无模型调用成本地拦截回归",
+    "自托管 LLM 追踪评测与告警工作台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Self-host the whole stack in one click** — API, worker, UI, Postgres, ClickHouse, Redis and MinIO: ／ That brings up ClickHouse, Postgres, Redis and MinIO, runs every migration, seeds the default project ／ make infra-up # clickhouse, postgres, redis, minio",
+     "lines": [
+      17,
+      156,
+      172
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Self-host the whole stack in one click** — API, worker, UI, Postgres, ClickHouse, Redis and MinIO: ／ That brings up ClickHouse, Postgres, Redis and MinIO, runs every migration, seeds the default project ／ make infra-up # clickhouse, postgres, redis, minio ／ → worker: otel mapping → registry upsert → ClickHouse events",
+     "lines": [
+      17,
+      156,
+      172,
+      386
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个评测/可观测应用，README 声明其运行栈依赖 Postgres、ClickHouse、Redis 与 MinIO 存储追踪数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Self-host the whole stack in one click** — API, worker, UI, Postgres, ClickHouse, Redis and MinIO: ／ That brings up ClickHouse, Postgres, Redis and MinIO, runs every migration, seeds the default project",
+   "evidence_lines": [
+    17,
+    156
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "jwuthri-cloud/Tracely-ai",
+  "sha": "57b3c0678481",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "49f901f3bbff": {
+  "identity": {
+   "one_liner": "自托管漏洞扫描器，用本地 SQLite 存储 CVE 数据",
+   "review": "一个基于 Node.js 的自托管漏洞扫描应用，可扫描网站、IP、源码和依赖文件，匹配 100k+ 条 NVD CVE 并结合 CISA KEV、EPSS 排序，输出 HTML/JSON/SARIF 报告，提供 Web 仪表盘、CLI、定时扫描和 JS 库 API。使用内置 node:sqlite 建本地 CVE 全文检索库，面向需要在自有环境运行扫描的安全与开发人员。",
+   "highlights": [
+    "使用内置 node:sqlite 构建本地 SQLite + FTS5 CVE 数据库，支持 100k+ 条记录全文检索",
+    "支持网站/IP 扫描、依赖文件扫描、密钥检测与 SAST-lite 规则，输出 HTML/JSON/SARIF 2.1.0 报告",
+    "提供 Web 仪表盘、CLI（CI 退出码）、REST API、定时扫描和历史 diff"
+   ],
+   "use_cases": [
+    "自托管漏洞扫描与 CVE 情报管理",
+    "CI 流水线中的依赖漏洞检测",
+    "对自有资产做定时扫描与历史结果对比"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Requires **Node.js 22+** (uses the built-in `node:sqlite`; the `--experimental-sqlite` flag is already in the npm scripts). ／ - Local **SQLite + FTS5** database that scales to **100k+ CVEs** from NVD, with instant full-text search ／ |`VULNSCAN_DB`|Custom path for the SQLite database|",
+     "lines": [
+      40,
+      81,
+      148
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用本地 SQLite 数据库存放 CVE 与报告数据（L81、L148），是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Requires **Node.js 22+** (uses the built-in `node:sqlite`; the `--experimental-sqlite` flag is already in the npm scripts). ／ - Local **SQLite + FTS5** database that scales to **100k+ CVEs** from NVD, with instant full-text search",
+   "evidence_lines": [
+    40,
+    81
+   ]
+  },
+  "fn": "bstforom/vulnscan",
+  "sha": "49f901f3bbff",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

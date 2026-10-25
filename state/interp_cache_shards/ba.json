@@ -10474,5 +10474,99 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d7d24efb2cb": {
+  "identity": {
+   "one_liner": "Symfony AI 的向量存储抽象层，统一文档存取接口",
+   "review": "这是 Symfony AI 组件仓库（只读子树拆分），提供在向量存储中写入与读取文档的低层抽象接口。面向 PHP/Symfony 开发者，通过安装对应 bridge 包（如 symfony/ai-click-house-store）接入具体后端。声明为实验性功能，不受 Symfony 向后兼容承诺保护。",
+   "highlights": [
+    "提供向量存储中文档存取的低层抽象接口",
+    "提供 25 个 bridge 包以接入不同向量存储后端",
+    "通过 composer 安装，支持以独立 bridge 包按需扩展"
+   ],
+   "use_cases": [
+    "为 LLM/RAG 应用抽象化向量文档的存取",
+    "在多个向量存储后端之间保持统一的代码接口",
+    "为 Symfony 应用集成向量检索能力"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL pgvector|`symfony/ai-postgres-store`|",
+     "lines": [
+      38
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|`symfony/ai-sqlite-store`|",
+     "lines": [
+      41
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|`symfony/ai-click-house-store`|",
+     "lines": [
+      26
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB|`symfony/ai-maria-db-store`|",
+     "lines": [
+      31
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库/向量存储提供统一的抽象存取层与 bridge 适配包，属服务于数据库生态的开发库组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The Store component provides a low-level abstraction for storing and retrieving documents in a vector store. ／ To use a specific vector store, install the corresponding bridge package: ／ |ClickHouse|`symfony/ai-click-house-store`|",
+   "evidence_lines": [
+    3,
+    18,
+    26
+   ]
+  },
+  "fn": "symfony/ai-store",
+  "sha": "4d7d24efb2cb",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

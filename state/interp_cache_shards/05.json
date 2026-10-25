@@ -10128,5 +10128,150 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "feedf70ba507": {
+  "identity": {
+   "one_liner": "单二进制 AI 联系人服务，基于 SQLite 事件日志实现 JIT 线程与提示缓存",
+   "review": "这是一个 Go 编写的单二进制服务，让客户端像与人对话一样与 AI 联系人交互：线程、提示缓存与 REPL 环境均不持久存储，每轮从一个只追加的 SQLite 事件日志即时推导。通过 HTTP API 和内置 TUI 客户端使用，支持 DeepSeek、Anthropic 等多家模型提供商；README 明确指出 API 无鉴权、状态为早期单节点版本。适合想在本地自托管对话代理的开发者。",
+   "highlights": [
+    "以单个只追加事件日志为唯一存储状态，线程、缓存布局与沙箱环境按需即时生成",
+    "内置五层提示布局以复用模型提供商的缓存前缀，并可通过 contactd probe 校验",
+    "在 wazero WASM 沙箱内运行模型生成的 Python/JavaScript 代码，文件系统限定于联系人目录"
+   ],
+   "use_cases": [
+    "本地自托管带终端客户端的 AI 对话代理",
+    "需要基于本地事件日志做情节化召回与提示缓存实验的场景",
+    "通过 HTTP API 为应用接入持久化 AI 联系人服务"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "ai_kind": [
+    "other"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One Go binary, backed by SQLite and two small local ONNX models, that lets a client talk to an AI contact the way it would talk to a person. There is one continuous relationship per contact. A client sends messages to a contact ID; it never creates, picks or n ／ |`-data-dir`|`/data`|SQLite, the contacts' files and the Unix socket|",
+     "lines": [
+      5,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明服务以 SQLite 作为事件日志存储状态（L5、L120），SQLite 是其数据存储而非服务对象。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One Go binary, backed by SQLite and two small local ONNX models, that lets a client talk to an AI contact the way it would talk to a person. There is one continuous relationship per contact. A client sends messages to a contact ID; it never creates, picks or names a thread. ／ |`-data-dir`|`/data`|SQLite, the contacts' files and the Unix socket| ／ > **Status:** early and single-node. The API has no authentication of its own; see Security.",
+   "evidence_lines": [
+    5,
+    120,
+    15
+   ]
+  },
+  "fn": "quinnovator/contactd",
+  "sha": "feedf70ba507",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "feaa197f9c6f": {
+  "identity": {
+   "one_liner": "使用SQLite FTS5做本地事实检索的250M边缘小语言模型",
+   "review": "这是一个250M参数的指令语言模型，将事实知识存储于本地SQLite FTS5（NVMe闪存）并通过特殊token路由检索，算术则交由AST SafeMath确定式计算器执行。面向边缘/低显存设备用户，提供终端交互、知识摄入CLI与Python API。README含多项自述对比指标，未能独立验证。",
+   "highlights": [
+    "使用SQLite FTS5 BM25在NVMe本地存储上实现亚毫秒级事实检索",
+    "通过<|calc|>token将算术表达式路由到AST SafeMath确定式计算器",
+    "提供CLI与Python API进行知识摄入，支持Hugging Face数据集转换，无需重训练"
+   ],
+   "use_cases": [
+    "边缘/低显存设备上的本地事实问答",
+    "本地知识库构建与文档摄入",
+    "对算术结果要求确定性输出的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* ⚡ **Semi-Parametric Decoupling with Native NVMe Bus:** Decouples compact parametric weights from non-parametric factual storage using an ultra-low latency (**0.002 ms** cached local lookup) SQLite FTS5 engine operating directly on high-speed NVMe flash stora ／ AviGPT-250M-Instruct introduces **Semi-Parametric Decoupling** to edge AI: decoupling **Cognitive Reasoning** (handled by 250M compact transformer weights) from **Factual Memory** (stored in a native, zero-latency NVMe SSD memory bus powered by SQLite FTS5 BM2 ／ |**AviGPT-250M (Bus ON)**|250M|Active (SQLite FTS5 + SafeMath)|**100.0%**|**100.0%**|**100.0%**|",
+     "lines": [
+      26,
+      33,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "模型将SQLite FTS5作为自身事实存储组件使用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* ⚡ **Semi-Parametric Decoupling with Native NVMe Bus:** Decouples compact parametric weights from non-parametric factual storage using an ultra-low latency (**0.002 ms** cached local lookup) SQLite FTS5 engine operating directly on high-speed NVMe flash storage. ／ AviGPT-250M-Instruct replaces heavy vector databases (FAISS, Chroma, Pinecone) with an optimized, sub-millisecond local SQLite FTS5 engine operating directly on high-speed NVMe storage: ／ git clone https://github.com/Avinashricky211/AviGPT-250M",
+   "evidence_lines": [
+    26,
+    76,
+    98
+   ]
+  },
+  "fn": "Avinashricky211/AviGPT-250M",
+  "sha": "feaa197f9c6f",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

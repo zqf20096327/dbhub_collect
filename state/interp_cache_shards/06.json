@@ -10884,5 +10884,68 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d9d4f625cd3b": {
+  "identity": {
+   "one_liner": "macOS/Linux 桌面 GitHub PR 审查工具，本地镜像缓存 PR 数据",
+   "review": "PR Cockpit 是面向 GitHub 拉取请求审查的桌面应用，通过 webhook 维护本地镜像，使队列、diff、检查日志和审查线程从磁盘读取。提供键盘快捷操作、全局搜索面板和供编码代理使用的 CLI。仅支持 macOS 和 Linux（需 Git 2.38+），由 Bun 服务器将 PR 状态缓存于 SQLite，Windows 不支持。",
+   "highlights": [
+    "通过本地镜像（webhook 保持更新）从磁盘渲染 PR 队列、diff、检查日志与审查线程",
+    "提供面向人类和编码代理的 CLI，以及全局快捷键搜索入口",
+    "支持分组、日期过滤、待提交审查草稿、桌面通知规则等审查工作流功能"
+   ],
+   "use_cases": [
+    "维护者批量审查多个仓库的 PR 队列",
+    "编码代理/开发者通过 CLI 集成 PR 审查流程",
+    "需要低延迟快速打开 PR 查看diff与检查结果"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **On your machine:** a Bun server caches PR state in SQLite and serves the desktop UI and CLI. In replica mode, cached lists stay local; GitHub searches and keyed PR title lookups use the connected source.",
+     "lines": [
+      173
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Bun 服务器将 PR 状态缓存于 SQLite，SQLite 仅作本应用的数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PR Cockpit is a desktop app for GitHub pull requests on **macOS and Linux**. A local mirror, kept current by webhooks, holds every PR you care about, so the queue, the diff, the failed check logs and the review threads paint from disk. Keyboard for everything; GitHub stays the source of truth.",
+   "evidence_lines": [
+    5
+   ]
+  },
+  "fn": "theolundqvist/pr-cockpit",
+  "sha": "d9d4f625cd3b",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

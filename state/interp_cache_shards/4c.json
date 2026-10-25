@@ -11090,5 +11090,219 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "86bb2279b3ee": {
+  "identity": {
+   "one_liner": "自托管多 Agent PR 审查工作台，审查留痕、维护者受控合并",
+   "review": "MergePilot 通过 GitHub App 接入仓库，汇集 PR 事件、静态规则与 LLM 审查发现及验证证据到自托管 Console，支持发布评论、提交修复、确认合并三类需逐次确认的远端写。面向需要审查留痕与受控合并的自托管开发团队，数据存储由部署者自行管理（含 pgvector），当前为 Developer Beta，无 RLS/SSO/HA 等企业能力。",
+   "highlights": [
+    "提供 Reviewer/Fixer/Verifier/Leader 四角色 Agent 管线，合并资格门要求审查完成、CI 通过、mergeable 已知",
+    "远端写操作（评论、修复提交、合并）均需维护者逐次「预览 → 确认」，不设 required check、不绕过分支保护",
+    "提供五角色 RBAC、应用层多租户隔离、审计，以及可选本地 RAG 知识库与 AgentTeams 独立验证执行器"
+   ],
+   "use_cases": [
+    "自托管场景下的 PR 代码审查与审查记录留存",
+    "需要人工逐次确认才执行修复提交或合并的受控协作流程",
+    "基于本地 RAG 检索团队规范辅助审查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+     "lines": [
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明数据库与部署配置由部署者自管并含数据库初始化与 pgvector 组件，系统自身使用数据库存储数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，另含下载校验与 SBOM 发布流程说明",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Console、数据库和部署配置由你自行管理；官网是文档入口，**不是托管版 Console 或登录入口**。 ／ digest 可能落后于最新发行——**部署前按目标 Release 说明改到对应不可变 digest**（pgvector ／ - **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+   "evidence_lines": [
+    46,
+    56,
+    78
+   ]
+  },
+  "fn": "nghqqa/MergePilot",
+  "sha": "86bb2279b3ee",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0329f2ee7763": {
+  "identity": {
+   "one_liner": "面向 OceanBase 的工具，README 信息不足",
+   "review": "README 仅有标题和 'for OceanBase' 一句，声明该项目与 OceanBase 相关，但未说明具体功能、安装方式和目标用户，证据不足以确定其生态位和任务类别，暂按其他类编目。",
+   "highlights": [],
+   "use_cases": []
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "for OceanBase",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅含 'for OceanBase' 一行，无功能描述可判断是服务于数据库的工具还是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "for OceanBase",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "junjun5284/PowerContext",
+  "sha": "0329f2ee7763",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "570e513be521": {
+  "identity": {
+   "one_liner": "单文件零依赖的表结构登记工具，按向导生成 DDL 与 Excel",
+   "review": "一个用 Node.js/纯前端实现的表结构登记工具：用户按六步向导填写字段、主键、索引，工具生成对应目标库的建表 DDL 和结构总览 Excel，提供网页界面、CLI（JSON 输入输出）和浏览器内接口三种操作方式。适合需要在 Oracle、GaussDB、MySQL、H2 之间做建表设计的开发与运维人员；注意界面数据仅存内存，真实 MySQL 引擎执行未验证。",
+   "highlights": [
+    "六步向导生成 Oracle、GaussDB、MySQL、H2 四种目标库的建表 DDL，含类型映射与注释语法差异处理",
+    "同一引擎提供网页界面、命令行 JSON 接口与浏览器内 window.Core/window.ctdutil 接口",
+    "零依赖单文件交付，可导出 Excel 2003 XML 结构总览"
+   ],
+   "use_cases": [
+    "开发阶段按向导登记表结构并生成建表 DDL",
+    "通过 CLI JSON 载荷在流水线中批量生成 DDL",
+    "导出表结构总览 Excel 用于文档留存"
+   ],
+   "review_extra": null
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "支持 Oracle / GaussDB / MySQL / H2（文件模式），支持普通索引与唯一索引。 ／ - **四种目标库**：Oracle、GaussDB、MySQL、H2（文件模式）。类型映射与注释语法随库切换。 ／ 注释语句按库分两族（`comment on ...` 与 MySQL 内联 `comment '...'`）。",
+     "lines": [
+      5,
+      16,
+      23
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "支持 Oracle / GaussDB / MySQL / H2（文件模式），支持普通索引与唯一索引。 ／ - **四种目标库**：Oracle、GaussDB、MySQL、H2（文件模式）。类型映射与注释语法随库切换。 ／ \"db\": \"oracle\",",
+     "lines": [
+      5,
+      16,
+      56
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "支持 Oracle / GaussDB / MySQL / H2（文件模式），支持普通索引与唯一索引。 ／ - **四种目标库**：Oracle、GaussDB、MySQL、H2（文件模式）。类型映射与注释语法随库切换。",
+     "lines": [
+      5,
+      16
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL",
+    "Oracle",
+    "GaussDB"
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为多种数据库生成建表 DDL 与结构文档，本身不存储业务数据，是数据库生态服务工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# ctdutil · 表结构登记与 DDL 生成工具 ／ 按六步向导登记数据库表结构，自动生成建表 DDL 与结构总览 Excel。 ／ - **四种目标库**：Oracle、GaussDB、MySQL、H2（文件模式）。类型映射与注释语法随库切换。",
+   "evidence_lines": [
+    1,
+    4,
+    16
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "FlyFish1997/ctdutil",
+  "sha": "570e513be521",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11173,5 +11173,200 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e159d3c16c76": {
+  "identity": {
+   "one_liner": "API 密钥池化轮换代理，用 SQLite 存储密钥与用量",
+   "review": "pool-anything 将同一供应商的多个免费层 API 密钥汇成池，通过单个 HTTP 端点以 13 种策略（默认轮询）轮换选 key 并按 key 记录 token 用量与配额。面向自托管使用 AI/API 服务的开发者，提供 CLI 交互 shell、Web UI 和 Cloudflare Workers 部署；数据存于本地 SQLite（~/.pool-anything/），默认无鉴权仅绑定回环地址。",
+   "highlights": [
+    "支持 13 种密钥轮换策略（round-robin 默认、random、weighted、least-loaded、sticky 等）",
+    "提供 HTTP 代理端点，按密钥转发请求并记录每 key 的 token 用量与配额",
+    "服务端仅依赖 Node 内建模块与 node:sqlite，并提供 Cloudflare Workers（SQLite Durable Object）构建"
+   ],
+   "use_cases": [
+    "聚合多个供应商免费层 API key，以单一端点轮换使用",
+    "按 key/池追踪 token 消耗与配额余量",
+    "自托管代理并内置 Web UI 管理密钥与用量分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 📊 **Usage & quota tracking** — per-key and per-pool token counts in SQLite",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明密钥池、用量等状态数据存储在 SQLite 中，SQLite 是其数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 📊 **Usage & quota tracking** — per-key and per-pool token counts in SQLite ／ That's it — an interactive assistant shell opens (`pool-anything >`). Type plain language like `list pools`, `add keys to groq`, or `show usage for groq`; type `.help` for all commands, `exit` to quit. Data (SQLite) lives in `~/.pool-anything/` so it works from any directory and survives upgrades. ／ A Workers build lives in `worker/`. It exposes the same `/api/*` contract, keeps the Node server unchanged, and stores all state in one SQLite-backed Durable Object — free-plan eligible, with no D1 database to create.",
+   "evidence_lines": [
+    24,
+    40,
+    212
+   ]
+  },
+  "fn": "Parithosh-Varma/pool-anything",
+  "sha": "e159d3c16c76",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b170c6c75ef4": {
+  "identity": {
+   "one_liner": "跨境电商SaaS ERP，Java DDD模块化单体，PostgreSQL多租户存储",
+   "review": "面向跨境电商卖家的全链路ERP系统，覆盖选品、订单、仓储、物流、财务等14个业务域，采用Spring Boot + Next.js实现。数据层以PostgreSQL 16为主库，按租户Schema隔离，并用Canal+Flink管道对接Elasticsearch、ClickHouse等分析组件。README声明这是个人架构能力展示项目，不是商业产品，通过Docker Compose启动基础设施后本地运行。",
+   "highlights": [
+    "覆盖14个业务域，采用DDD模块化单体架构，18个Maven模块、事件驱动跨域协作",
+    "使用PostgreSQL 16存储数据，按租户独立Schema实现多租户隔离",
+    "提供docker compose启动postgres、redis、kafka、minio、elasticsearch等基础设施及前后端本地运行说明"
+   ],
+   "use_cases": [
+    "跨境电商卖家管理选品、订单、库存、物流与财务核算流程",
+    "参考DDD模块化单体与多租户Schema隔离的架构实现示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |数据库|PostgreSQL|16| ／ |Flink|流计算、实时聚合 → ES/Redis/PG|",
+     "lines": [
+      11,
+      116,
+      129
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|OLAP分析引擎|",
+     "lines": [
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统以PostgreSQL 16作为主数据库存储业务数据，ClickHouse等组件为自身数据架构的一部分，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 这是一个**个人架构能力展示项目**，不是商业产品。 ／ |数据库|PostgreSQL|16| ／ |ClickHouse|OLAP分析引擎|",
+   "evidence_lines": [
+    17,
+    116,
+    130
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "awesome-oversea/cross-border-erp",
+  "sha": "b170c6c75ef4",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "aaf4c61ddcc5": {
+  "identity": {
+   "one_liner": "内容仅为 hello 的仓库，无可验证功能",
+   "review": "README 仅包含一行 hello，未说明项目用途、目标用户、安装或运行方式，无法验证其与数据库生态的关系。采集归因于 oceanbase 关键词通道，但可见文本中未出现相关内容，实际定位待 README 补充后才能判断。",
+   "highlights": [
+    "README 可见内容仅一行文本 hello"
+   ],
+   "use_cases": [
+    "无法从现有内容判断适用场景"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅一行 hello，无任何数据库相关功能描述，生态位证据不足。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "hello",
+   "evidence_lines": [
+    1
+   ]
+  },
+  "fn": "zzli2006/Oceanbase2026",
+  "sha": "aaf4c61ddcc5",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

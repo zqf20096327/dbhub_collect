@@ -11189,5 +11189,191 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b0453d18ece0": {
+  "identity": {
+   "one_liner": "低代码平台，将自然语言生成为全栈应用与受保护的 CRUD API",
+   "review": "Magic 是一个基于 .NET/Hyperlambda 的开源低代码平台，可将数据库 schema 生成为受 RBAC 保护的 REST API，并支持自然语言生成代码、构建 AI 代理和内嵌 MCP server。面向希望在自己硬件上自托管、快速搭建业务系统和数据库驱动的 AI 代理的开发者。安装通过 docker compose 一键运行，需要配置 OpenAI 或替代 LLM 插件才能使用 Chat Ops 等功能。",
+   "highlights": [
+    "API Wizard 可将 MySQL、PostgreSQL、SQL Server、MariaDB 的现有 schema 生成受保护的 CRUD REST API",
+    "内置 MCP server，可将端点作为工具暴露给 Claude、Cursor、Codex 等 MCP 客户端",
+    "Hyperlambda 沙箱执行，支持通过 RBAC 白名单限制可调用的函数"
+   ],
+   "use_cases": [
+    "为遗留数据库快速生成安全的 CRUD API",
+    "构建查询自有数据库、受角色访问控制约束的 AI 代理",
+    "爬取网站内容生成基于自有数据的嵌入式聊天机器人"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ SQLite out of the box, with full support for MySQL, PostgreSQL, MariaDB and SQL Server. No connectors required.",
+     "lines": [
+      32,
+      288
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ SQLite out of the box, with full support for MySQL, PostgreSQL, MariaDB and SQL Server. No connectors required.",
+     "lines": [
+      32,
+      288
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite out of the box, with full support for MySQL, PostgreSQL, MariaDB and SQL Server. No connectors required.",
+     "lines": [
+      288
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "* **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ SQLite out of the box, with full support for MySQL, PostgreSQL, MariaDB and SQL Server. No connectors required.",
+     "lines": [
+      32,
+      288
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ SQLite out of the box, with full support for MySQL, PostgreSQL, MariaDB and SQL Server. No connectors required.",
+     "lines": [
+      32,
+      288
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库生成 CRUD API 并提供 SQL Studio 等数据库管理能力，是为数据库生态服务的平台工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，README 另提及 proprietary LLM",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* **Secure APIs over legacy databases** — point it at an existing MySQL, PostgreSQL, SQL Server or MariaDB schema and get a CRUD API in seconds ／ The sidebar is the whole platform: **Hyper IDE** for editing, running and *replaying* any file on the server, **Playground** for executing Hyperlambda without saving it first, **SQL Studio** for querying and designing databases, **Endpoint Generator** for turning tables into secured CRUD endpoints, wrapping caller-supplied code in a role-scoped sandbox, and importing third-party APIs from their OpenAPI specifications, plus users and roles, scheduled tasks, machine learning, and the plugin store.",
+   "evidence_lines": [
+    32,
+    80
+   ]
+  },
+  "fn": "polterguy/magic",
+  "sha": "b0453d18ece0",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "57aa01c772a0": {
+  "identity": {
+   "one_liner": "自托管 AI agent 运行时，基于 Claude Agent SDK 构建",
+   "review": "Nerve 是一个自托管的 AI agent 运行时，基于 Claude Agent SDK 构建，提供持久化记忆（双层记忆体系）、定时任务（APScheduler）、可演进的 Markdown 技能以及 Web UI、Telegram、Slack 等通道。适合想要部署个人助理或自治工作 agent 的个人与团队。深度记忆以 SQLite 持久化存储，部署支持脚本安装或手动安装（Python 3.13+、Node.js），也可通过 Docker 运行。",
+   "highlights": [
+    "提供双层记忆系统：热记忆注入系统提示，深度记忆支持语义检索并以 SQLite 持久化",
+    "支持 Web UI、Telegram Bot、Slack Bot 与 cron 定时任务多种交互通道",
+    "提供 Personal 与 Worker 两种模式，任务计划需人工审批后方可执行"
+   ],
+   "use_cases": [
+    "运行长期个人助理，同步邮件并记住偏好",
+    "部署自治 worker agent 监控 CI、审查 PR 并提议修复",
+    "通过 cron 定时任务生成简报或执行周期性处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only. ／ Markdown files backed by SQLite FTS5 full-text search.",
+     "lines": [
+      177,
+      190
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "curl -fsSL https://raw.githubusercontent.com/ClickHouse/nerve/main/install.sh | bash ／ git clone https://github.com/ClickHouse/nerve.git && cd nerve",
+     "lines": [
+      20,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明深度记忆以 SQLite 持久化存储，Nerve 本身是使用数据库存数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Nerve is a self-hosted runtime for AI agents, built around the Claude Agent SDK. It gives agents everything they need to be useful long-term: persistent memory, scheduled execution, task management, learnable skills, and channels to reach you through — web UI, Telegram, Slack, or autonomous cron jobs. ／ |⚡ **Single process, zero ops**|No Docker required, no message queues, no service mesh. FastAPI + uvicorn + asyncio. Runs on a Raspberry Pi.| ／ Semantic search over everything — conversations, facts, preferences, events. SQLite-persisted. Uses vector embeddings when an OpenAI key is configured, or LLM-based ranking with Anthropic models only.",
+   "evidence_lines": [
+    13,
+    102,
+    177
+   ]
+  },
+  "fn": "ClickHouse/nerve",
+  "sha": "57aa01c772a0",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

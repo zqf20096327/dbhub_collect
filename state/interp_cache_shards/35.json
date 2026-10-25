@@ -10202,5 +10202,58 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0fb62ee1915c": {
+  "identity": {
+   "one_liner": "向 Tidbyt 显示屏推送 DC 地铁到站信息的定时服务",
+   "review": "该项目每分钟调用 WMATA API 获取华盛顿地铁与公交到站数据，渲染后通过 Tidbyt push API 推送到 Tidbyt 设备显示。提供 Dockerfile，可部署在 Railway，通过环境变量配置站点、线路、推送间隔等。与数据库无关，属于面向 Tidbyt 硬件用户的展示类小应用。",
+   "highlights": [
+    "每分钟渲染 WMATA 到站数据并通过 Tidbyt push API 推送",
+    "支持地铁站点与公交站牌筛选、按线路/目的地/路线过滤",
+    "提供 Dockerfile，支持 Railway 一键部署，仅出站请求无需公网端口"
+   ],
+   "use_cases": [
+    "在 Tidbyt 桌面设备上显示 DC 地铁/公交到站",
+    "为通勤者定制特定站点与线路的到站提醒轮播"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目调用 WMATA API 并向 Tidbyt 推送展示内容，README 未涉及任何数据库生态组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# DC Metro Arrivals → Tidbyt (push service) ／ Renders the DC Metro Arrivals app once a minute and pushes it to a stock Tidbyt through Tidbyt's push API. Your device keeps its normal firmware; this shows up as one more app in your rotation. ／ 2. In Railway, create a new project and choose **Deploy from GitHub repo**, then pick that repository. Railway finds the Dockerfile and builds it.",
+   "evidence_lines": [
+    1,
+    3,
+    8
+   ]
+  },
+  "fn": "nickbaumann84/tidbyt-wmata",
+  "sha": "0fb62ee1915c",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

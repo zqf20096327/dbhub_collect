@@ -9210,5 +9210,137 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "102cd15500f7": {
+  "identity": {
+   "one_liner": "将 LinkedIn 成员数据同步到本地 SQLite 供 SQL 查询",
+   "review": "member 是一个命令行工具，通过 LinkedIn 官方 Member Data Portability API 下载用户自己的连接、消息、职位等数据，写入本地 SQLite 数据库，支持只读 SQL 查询，并可安装技能文件让 Claude Code、Codex 等编程代理回答数据相关问题。仅面向 EEA 和瑞士的 LinkedIn 成员，需用户自行创建开发者应用获取令牌，仅读取、不改写账号。",
+   "highlights": [
+    "通过 LinkedIn 官方 Member Data Portability API 同步数据到本地 SQLite，提供只读 SQL 查询命令",
+    "提供 skill install 命令，为 Claude Code、Codex 等编程代理安装可复用的技能文件",
+    "发布物包含 SHA256SUMS 与构建来源证明（provenance attestation）"
+   ],
+   "use_cases": [
+    "定期同步并查询自己的 LinkedIn 数据副本",
+    "用 SQL 分析人脉、消息、技能等数据",
+    "为 AI 编程代理提供本地数据问答能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "your own PostgreSQL database, with an MCP server and importers for LinkedIn, contacts and more.",
+     "lines": [
+      170
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "工具将 LinkedIn 数据存入本地 SQLite 数据库，数据库仅为该应用的存储层。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`member` downloads your own LinkedIn data (connections, messages, invitations, positions, skills and more) to your ／ |`member data query \"SELECT …\" \\|--file q.sql [--max-rows N] [--timeout S]`|Read-only SQL (offline)| ／  your own PostgreSQL database, with an MCP server and importers for LinkedIn, contacts and more.",
+   "evidence_lines": [
+    3,
+    85,
+    170
+   ]
+  },
+  "fn": "activout/Activout.MemberData",
+  "sha": "102cd15500f7",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "063eacdf094c": {
+  "identity": {
+   "one_liner": "Windscribe VPN 节点自动化测试与审查诊断桌面应用，内嵌 SQLite 存储",
+   "review": "一个基于 Go、Wails v2 与 Vite 的桌面应用，通过编排 Windscribe 原生 CLI 对其服务器节点进行多协议多端口扫描、连通性与测速遥测采集，并生成 Excel 审计报表；数据持久化到内嵌的 SQLite 数据库文件。面向在受限网络环境下测试 Windscribe VPN 的用户，需已安装官方 Windscribe 客户端，不针对其他数据库。",
+   "highlights": [
+    "提供 WireGuard、OpenVPN UDP/TCP、Stunnel、WStunnel、IKEv2 的多协议多端口矩阵扫描",
+    "通过编排 windscribe-cli 采集 Ping、Jitter、Download、Upload 遥测数据",
+    "内置 SQLite 存储（windscribe_ultra.db，含 schema 迁移），并可生成条件着色的 Excel 报表"
+   ],
+   "use_cases": [
+    "对 Windscribe VPN 服务器节点做批量连通性与速度基准测试",
+    "在受限网络环境中诊断协议可用性并注入 Amnezia/SNI 等抗审查参数",
+    "导出按国家/运营商标注的 Excel 质量审计报告"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite3 ／ - **Embedded SQLite Storage**:",
+     "lines": [
+      4,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用内嵌 SQLite 存储测试结果数据，SQLite 是该应用自身的存储组件而非其服务的对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Windscribe Ultra Analyzer Pro is a high-performance desktop application designed to systematically benchmark, diagnose, and audit Windscribe VPN server nodes across restrictive networks and Deep Packet Inspection (DPI) environments, with dedicated optimization for **Iran** (National Information Network filtering) and **Russia** (TSPU / RKN blockades). Built with Go and Wails v2 , it orchestrates the native Windscribe CLI to evaluate protocol resilience, capture live telemetry (Ping, Jitter, Download, Upload), and automatically generate professional, color-coded Excel audit sheets. ／ - **Embedded SQLite Storage**:",
+   "evidence_lines": [
+    19,
+    92
+   ]
+  },
+  "fn": "AminDenizer/Windscribe-Analyzer",
+  "sha": "063eacdf094c",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10623,5 +10623,77 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "142b609e213f": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions runner 集群控制器，ephemeral runner，单 Go 二进制，用 SQLite 存状态",
+   "review": "Zoomies 是一个自托管的 GitHub Actions runner 集群控制器：监听 workflow_job webhook，为每个任务启动一次性 runner 并在结束后销毁，支持多主机、多操作系统 agent、GitHub App 认证与实时 Web UI，无需 Kubernetes 和独立数据库服务器，状态用 SQLite 存储。面向需要为 GitHub 组织或仓库自建 CI runner 集群的个人与团队，通过安装脚本或 Docker Compose 部署。",
+   "highlights": [
+    "提供 webhook 驱动的弹性伸缩，默认每任务一个 ephemeral runner",
+    "提供实时 Web UI、Prometheus 指标、结构化日志与审计记录",
+    "提供基于 SQLite 数据库的夜间备份，支持推送到 S3 兼容目标"
+   ],
+   "use_cases": [
+    "为 GitHub 组织或仓库自托管 CI runner 集群",
+    "用自有硬件（含 NAT 后主机）承担 GitHub Actions 负载",
+    "需要每任务隔离的 ephemeral CI 环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      16,
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其状态用 SQLite 存储（L101），SQLite 只是自身的数据存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Single Go binary. SQLite. AGPL-3.0. ／ You point Zoomies at a GitHub organisation, or at a repository on a personal ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+   "evidence_lines": [
+    16,
+    66,
+    101
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "142b609e213f",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

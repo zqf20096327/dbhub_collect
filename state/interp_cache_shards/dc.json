@@ -9712,5 +9712,88 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b61404368c99": {
+  "identity": {
+   "one_liner": "LangGraph 多智能体客服 Agent，用 PostgreSQL checkpoint 持久化执行状态",
+   "review": "一个基于 LangGraph 的多智能体客服系统工程参考实现：快路径同步编排回答，长任务经 Celery 异步执行并从 Postgres checkpoint 恢复，配 HITL 审批、工具副作用幂等 ledger、混合 RAG 与 OTel 可观测。面向构建企业客服 Agent 的工程团队作参考实现，README 明确标注生产指标 NOT_VERIFIED 且无生产部署证据。",
+   "highlights": [
+    "混合双路径执行：同步 chat 接口 + 异步 runs 落库入队，由 Celery worker 从 Postgres checkpoint 续跑",
+    "高风险工具调用执行前经 interrupt() 人工审批，工具副作用用 ledger 做去重记账",
+    "提供混合检索（Qdrant + BM25 + RRF + rerank）、MCP 工具适配器、OTel/Prometheus 可观测与评测自认证流水线"
+   ],
+   "use_cases": [
+    "企业客服场景的多智能体对话服务开发参考",
+    "需要人工审批与幂等保障的高风险操作（退款、改单）工作流演示",
+    "Agent 运行时故障恢复与分布式执行机制的工程实践参考"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "（PostgreSQL checkpoint + Redis 锁 + Celery worker + 工具副作用幂等 ledger） ／ 版本上跑单测/集成，并在**真实** PostgreSQL + Redis 上跑分布式运行时验收 ／ > 由 Celery worker 从 Postgres checkpoint 续跑，并给每一次工具副作用加**去重记账**",
+     "lines": [
+      8,
+      31,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "eco_why": "README 表明该项目使用 PostgreSQL 存储 checkpoint 与业务状态（agent_runs 表），是使用数据库的应用而非为数据库服务的工具",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "（PostgreSQL checkpoint + Redis 锁 + Celery worker + 工具副作用幂等 ledger） ／ > 由 Celery worker 从 Postgres checkpoint 续跑，并给每一次工具副作用加**去重记账** ／ - **AgentRun 是唯一真相源**：业务状态只认 `agent_runs` 表；Celery result backend",
+   "evidence_lines": [
+    8,
+    109,
+    206
+   ]
+  },
+  "fn": "Xander-Xai/Customer-Service-AI-Agent",
+  "sha": "b61404368c99",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

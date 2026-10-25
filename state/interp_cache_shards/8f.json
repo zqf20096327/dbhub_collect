@@ -9919,5 +9919,73 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d882daf1d1ee": {
+  "identity": {
+   "one_liner": "为 Codex 和 Claude 提供共享工作区与消息通道的 MCP 协作工具",
+   "review": "pairtask 是一个 Go 编写的本地消息代理工具，通过 MCP server、Unix socket 和 SQLite 支撑的 broker 让 Codex 与 Claude Code 两个 AI 编码代理在同一项目工作区中互发消息并协同工作，用户通过操作员聊天来指挥和审批。它用 Incus 容器做沙箱隔离，支持 macOS 与 Linux，面向需要多 AI 代理协作开发的开发者。",
+   "highlights": [
+    "提供基于 SQLite broker 与 Unix socket 的消息通道，消息在断连后保留",
+    "通过 Incus 沙箱隔离运行代理，项目文件与代理主目录跨容器升级持久化",
+    "提供只读 dashboard 查看代理连接与待处理消息"
+   ],
+   "use_cases": [
+    "让一个 AI 代理实现变更、另一个代理进行审查的协作流程",
+    "需要在沙箱环境中运行多个 AI 编码代理并集中监督的开发者"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**workspace**; **secured** owns one broker and SQLite database. ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+     "lines": [
+      194,
+      198
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明 secured 容器持有 broker 和 SQLite 数据库，SQLite 是其内部消息存储组件，项目本身是为 AI 代理协作服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 或 Apache 2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**workspace**; **secured** owns one broker and SQLite database. ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+   "evidence_lines": [
+    194,
+    198
+   ]
+  },
+  "fn": "pairtask/pairtask",
+  "sha": "d882daf1d1ee",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

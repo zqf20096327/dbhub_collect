@@ -9292,5 +9292,82 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aca27aca889c": {
+  "identity": {
+   "one_liner": "Spring AI 与 Ollama 文档问答示例应用，用 PostgreSQL 向量库存储嵌入",
+   "review": "一个演示项目，展示如何结合 Spring AI 与 Ollama 对文档库进行问答：文档存入 PostgreSQL（vector/hstore 扩展），AI 生成嵌入后用向量相似度检索最近文档回答问题，还包含图像库搜索、text2sql、MCP 客户端/服务端、测试代码生成等功能。面向想学习 Spring AI + RAG 开发者的参考实现，需 Java 25+、Gradle、Node 等环境，可用 Helm 部署到 Kubernetes。",
+   "highlights": [
+    "支持通过 Ollama 在本地运行 LLM 模型生成文档嵌入并用于检索问答",
+    "包含 MCP Client/Server、text2sql、图像向量搜索、文本分类等多个 Spring AI 功能演示",
+    "提供 Helm chart 用于 Kubernetes 部署，使用 PostgreSQL vector 扩展存储嵌入"
+   ],
+   "use_cases": [
+    "学习 Spring AI 与 RAG 文档问答的实现方式",
+    "基于本地 Ollama 模型构建文档/图像向量检索应用",
+    "参考 text2sql 与 MCP 集成的示例代码"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp",
+     "rag",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Technologies: Angular, Angular-Cli, Angular-Material, Typescript, Spring Boot, Spring AI, OpenAI, Ollama, Postgresql(vector,hstore), Liquibase, Jpa, Gradle, Java ／ The project uses Spring Boot with Spring AI to access OpenAI and the vector database. The Postgresql DB is used with the vector, hstore and the uuid-ossp extensions. Liquibase is used to manage the database migrations. Jpa is used for database access in the se ／ The project uses Spring Boot with Spring AI to question a image database that uses Postgresql with the PGVector extension and Ollama. The for the imported and resized images are descriptions generated with the LLava model that runs locally on Ollama. These des",
+     "lines": [
+      5,
+      12,
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 PostgreSQL 存储文档、嵌入与图像元数据，是使用数据库的应用而非数据库生态工具。",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Technologies: Angular, Angular-Cli, Angular-Material, Typescript, Spring Boot, Spring AI, OpenAI, Ollama, Postgresql(vector,hstore), Liquibase, Jpa, Gradle, Java ／ The project uses Spring Boot with Spring AI to access OpenAI and the vector database. The Postgresql DB is used with the vector, hstore and the uuid-ossp extensions. Liquibase is used to manage the database migrations. Jpa is used for database access in the services by the rest controllers. For the frontend Angular, Angular Material and Typescript is used to create the table of documents, the upload dialog and the document chat. Angular Cli is used for the frontend build and Gradle for the project build. ／ In the helm directory is a kubernetes setup to run the AIDocumentLibraryChat project with minikube. The Helm chart deploys the postgres database and the AIDocumentLibraryChat with the needed parameters(SpringProfile is in values.yaml) to run. It uses the resource limit support of Jdk 16 to limit memory. Kubernetes limits the cpu use and uses the startupprobes and livenessprobes that Spring Actuator provides.",
+   "evidence_lines": [
+    5,
+    12,
+    82
+   ]
+  },
+  "fn": "Angular2Guy/AIDocumentLibraryChat",
+  "sha": "aca27aca889c",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

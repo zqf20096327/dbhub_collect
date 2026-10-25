@@ -8486,5 +8486,153 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "90cb8b5045cc": {
+  "identity": {
+   "one_liner": "幻书启世录手游的 Go/PostgreSQL 服务端复现项目",
+   "review": "实现《幻书启世录》Android 1.0.128 的游戏服务端，包含网关、登录/SDK、热更与业务服务，使用 PostgreSQL 持久化账号、角色进度与资产事务，并提供数据库回归测试与部署工具。面向游戏服务器维护、协议研究与私服复现的开发者；原生 PVP 路线需额外运行环境，README 记录了已知未修事项。",
+   "highlights": [
+    "采用 Go 实现，PostgreSQL 15 存储，通过环境变量配置数据库连接与连接池",
+    "提供真实数据库回归测试、源码构建验证与部署预检/备份/发布核验工具链",
+    "集中维护中文技术文档：协议规范、RPC 语义、登录链路、热更协议与逆向资料"
+   ],
+   "use_cases": [
+    "游戏服务端协议研究与功能修复",
+    "私服部署与运营复现",
+    "游戏持久化与事务设计参考"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "面向《幻书启世录》Android 1.0.128 的服务端兼容、协议研究与功能修复项目。当前分支采用 **Go / PostgreSQL** 实现，公开服务端源码、业务规则、测试、部署工具和中文技术资料，供开发者研究、复现与协作维护。 ／ |PostgreSQL 存储|账号与角色进度、资产事务、版本读取、奖励收据及重登恢复| ／ |`internal/game/dbstore`|PostgreSQL 存储、事务与真实数据库测试| ／ |`HS_DATABASE_URL`|游戏服务 PostgreSQL 连接字符串| ／ |真实 PostgreSQL|设置 `HS_TEST_DATABASE_URL` 指向隔离测试数据库后执行 `go test ./internal/game/dbstore`|",
+     "lines": [
+      3,
+      21,
+      52,
+      88,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 存储账号、角色进度与资产事务，属使用数据库的游戏应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向《幻书启世录》Android 1.0.128 的服务端兼容、协议研究与功能修复项目。当前分支采用 **Go / PostgreSQL** 实现，公开服务端源码、业务规则、测试、部署工具和中文技术资料，供开发者研究、复现与协作维护。 ／ |PostgreSQL 存储|账号与角色进度、资产事务、版本读取、奖励收据及重登恢复| ／ |`internal/game/dbstore`|PostgreSQL 存储、事务与真实数据库测试|",
+   "evidence_lines": [
+    3,
+    21,
+    52
+   ]
+  },
+  "fn": "SakuraZuk/GMA-Revive-Server-Public",
+  "sha": "90cb8b5045cc",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "95dc9cffd7fb": {
+  "identity": {
+   "one_liner": "PHP Geometry Dash 私服核心，含存档、关卡、账号与 JSON API",
+   "review": "用 PHP 实现的 Geometry Dash 私有服务器核心，提供账号、关卡、评分、评论、Cloud Save、管理与 JSON API v2 等功能，依赖 MySQL/MariaDB 与 PDO 存储数据，支持共享主机、ZIP 手动部署和 Linux VPS 一键安装三种方式；PHP 7 版本为开发预览，真机兼容未经认证。",
+   "highlights": [
+    "提供账号、关卡、评分、评论、Cloud Save、私信、好友等服务器功能及 JSON API v2",
+    "支持共享主机 FTP 安装、ZIP 手动部署与 Linux VPS 一键安装（Docker、MariaDB、Caddy）",
+    "包含数据库迁移、速率限制、测试、cron 备份及 Cvolton 数据导入工具"
+   ],
+   "use_cases": [
+    "搭建 Geometry Dash 私有服务器",
+    "在共享主机或 VPS 上部署 GDPS 并迁移旧核心数据",
+    "为 GD 客户端提供补丁与服务端接入验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Requires:** PHP 8.2+ (8.3+ recommended), MySQL 8.0.29+ / MariaDB 10.4+, PDO MySQL, HTTPS, a database user, FTP or File Manager. For automatic bootstrap, PHP ZIP and outbound HTTPS to GitHub are also required. ／ 2. Enter your FTP/FTPS host and credentials, public HTTPS domain, and MySQL credentials. ／ This build runs entirely on shared hosting with its own MySQL connection, compiled PHP 7-compatible application services and English administration pages. It requires no VPS proxy, Composer installation or process-launch functions on the host. PHP 7 is obsolet",
+     "lines": [
+      21,
+      26,
+      49
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**VPS (Linux)**|One-command installer|Full PHP 8+ MuchoCore, Docker, MariaDB, Caddy, admin and worker| ／ **Requires:** PHP 8.2+ (8.3+ recommended), MySQL 8.0.29+ / MariaDB 10.4+, PDO MySQL, HTTPS, a database user, FTP or File Manager. For automatic bootstrap, PHP ZIP and outbound HTTPS to GitHub are also required.",
+     "lines": [
+      13,
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该服务器核心依赖 MySQL/MariaDB 作为自身数据存储，是使用数据库的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Open-source PHP server core for Geometry Dash.** Accounts, levels, comments, scores, social features, moderation, Cloud Save, admin tools, migration and client patching. One codebase with version-aware protocol handling. ／ **Requires:** PHP 8.2+ (8.3+ recommended), MySQL 8.0.29+ / MariaDB 10.4+, PDO MySQL, HTTPS, a database user, FTP or File Manager. For automatic bootstrap, PHP ZIP and outbound HTTPS to GitHub are also required. ／ 3. Enter your domain and initial admin password when prompted. The installer sets up Docker, PHP, MariaDB, Caddy, workers, migrations and configuration.",
+   "evidence_lines": [
+    3,
+    21,
+    112
+   ]
+  },
+  "fn": "IZKGMD/GMDmucho-core",
+  "sha": "95dc9cffd7fb",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

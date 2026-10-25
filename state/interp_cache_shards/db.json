@@ -10435,5 +10435,72 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5547089dade8": {
+  "identity": {
+   "one_liner": "面向 OceanBase 的活动 SQL 终端监控工具，含 JSON CLI 与 Go SDK",
+   "review": "obtop 是一个面向 OceanBase 的活动 SQL 监控工具，通过 OBProxy 连接并查询 GV$OB_PROCESSLIST、GV$OB_SQL_AUDIT、GV$SYSSTAT 等视图，在终端实时展示活动 SQL 与 OPS/QPS，并支持 kill 会话、explain、按用户排空会话；同时提供输出 JSON/NDJSON 的 CLI 和公共 Go SDK，适合 OceanBase DBA 或运维人员使用，当前版本 v0.1.4，尚属试用阶段，SDK/CLI 接口可能调整。",
+   "highlights": [
+    "通过 OBProxy 连接，实时展示活动 SQL 及 QPS/OPS 指标，支持会话 kill、explain 与按用户批量排空",
+    "提供机器可读 CLI，snapshot/watch/sql-history/explain 子命令输出 JSON/NDJSON",
+    "提供公共 Go SDK，可被其他 Go 程序 import 使用"
+   ],
+   "use_cases": [
+    "OceanBase 数据库的日常活动 SQL 监控与问题会话处理",
+    "脚本化采集活动 SQL 快照与短 SQL 历史供其他程序消费",
+    "按用户批量排空会话（如账号下线前清理连接）"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "`obtop` 是一个面向 OceanBase 的活动 SQL 监控工具，交互风格参考 `innotop`。它通过 OBProxy 连接数据库，查询 `oceanbase.GV$OB_PROCESSLIST`，过滤空闲会话，并在终端中实时展示活动 SQL。 ／ - 目标租户可查询 `oceanbase.GV$OB_SQL_AUDIT`",
+     "lines": [
+      3,
+      163
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 OceanBase 提供监控与诊断能力的工具/SDK，不是使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`obtop` 是一个面向 OceanBase 的活动 SQL 监控工具，交互风格参考 `innotop`。它通过 OBProxy 连接数据库，查询 `oceanbase.GV$OB_PROCESSLIST`，过滤空闲会话，并在终端中实时展示活动 SQL。 ／ - **公共 Go SDK**（`github.com/chen8103/obtop`），供其他 Go 程序直接 import ／ - **机器可读 CLI**（`snapshot` / `watch` / `sql-history` / `explain`），stdout 输出 JSON/NDJSON",
+   "evidence_lines": [
+    3,
+    7,
+    8
+   ]
+  },
+  "fn": "chen8103/obtop",
+  "sha": "5547089dade8",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

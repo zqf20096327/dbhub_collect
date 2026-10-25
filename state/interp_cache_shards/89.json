@@ -10074,5 +10074,220 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0504610e2ff3": {
+  "identity": {
+   "one_liner": "Crystal 语言基于 SQL 文件的数据库 schema 迁移工具与库",
+   "review": "Drift 提供 SQL 文件驱动的 schema 迁移：每个 .sql 文件包含 drift:up/drift:down 语句，通过 drift_migrations 表跟踪已应用的迁移，支持顺序应用、批量回滚和迁移嵌入编译。可作为独立 CLI 使用，也可作为 Crystal shard 集成到应用启动流程，供 Crystal 开发者管理数据库结构。",
+   "highlights": [
+    "迁移文件为纯 SQL，含 migrate 与 rollback 语句，无 DSL",
+    "提供 CLI（new/migrate/status/rollback/reset）与可选 Crystal 库两种使用方式",
+    "支持将迁移文件嵌入可执行文件，并通过 drift_migrations 表记录状态"
+   ],
+   "use_cases": [
+    "Crystal 项目的数据库 schema 版本管理与回滚",
+    "应用启动时自动检查并执行待应用的迁移",
+    "需要将迁移打包进单一二进制分发的场景"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SQLite, MySQL and PostgreSQL databases. ／ Drift works with SQLite, MySQL and PostgreSQL. It detects the engine from ／ * PostgreSQL: crystal-pg",
+     "lines": [
+      78,
+      177,
+      185
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "SQLite, MySQL and PostgreSQL databases. ／ Drift works with SQLite, MySQL and PostgreSQL. It detects the engine from ／ * MySQL: crystal-mysql",
+     "lines": [
+      78,
+      177,
+      184
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* Currently works with SQLite3, but can be adapted to be DB-agnostic, ／ SQLite, MySQL and PostgreSQL databases. ／ $ drift migrate --db sqlite3:app.db",
+     "lines": [
+      21,
+      78,
+      116
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Drift 是为数据库 schema 迁移服务的工具/库，不使用数据库存自身业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> SQL-driven schema migration tool and library ／ * A CLI to facilitate generation and execution of migrations. ／ Drift works with SQLite, MySQL and PostgreSQL. It detects the engine from",
+   "evidence_lines": [
+    2,
+    18,
+    177
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "luislavena/drift",
+  "sha": "0504610e2ff3",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "929653691a02": {
+  "identity": {
+   "one_liner": "本地长期记忆 sidecar，用 PostgreSQL+pgvector 为 RisuAI 系角色扮演存储上下文",
+   "review": "NMOS 是一个本地运行的旁车服务，为 PocketRisu/RisuAI 角色扮演聊天保存完整历史，在每次生成回复前注入预算化的记忆包（摘录、状态、事实），事实抽取依赖可选的 OpenAI 兼容 LLM 端点。面向 PocketRisu 用户，通过 RisuAI V3 插件 API 接入；以 PostgreSQL 存数据，支持 Docker 或免 Docker 便携包部署，当前为 beta，仅验证过特定 PocketRisu 版本。",
+   "highlights": [
+    "以本地 PostgreSQL 存储不可变聊天历史，支持 pgvector 语义检索与词法检索",
+    "支持 Docker Compose 与 Windows/macOS/Linux 便携包安装，自带 PostgreSQL 16",
+    "提供只读状态面板，展示存储与注入内容；数据包含历史与来源"
+   ],
+   "use_cases": [
+    "长对话角色扮演中让模型回看超出上下文窗口的早期内容",
+    "需要带审计来源的本地记忆存档",
+    "离线/本地部署的 RisuAI 系插件记忆方案"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "From 0.3.0 each release also carries a bundle per system with NMOS, its own PostgreSQL 16 and Python, and the ／ short names (PostgreSQL cannot open it), NMOS asks once where to keep the data, suggesting `C:\\NMOS-data`. ／ docker compose exec -T postgres pg_dump -U nmos -d nmos -Fc > nmos-backup.dump",
+     "lines": [
+      84,
+      98,
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 NMOS 自带并使用 PostgreSQL 16 作为自身数据存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "From 0.3.0 each release also carries a bundle per system with NMOS, its own PostgreSQL 16 and Python, and the ／ docker compose exec -T postgres pg_dump -U nmos -d nmos -Fc > nmos-backup.dump",
+   "evidence_lines": [
+    84,
+    147
+   ]
+  },
+  "fn": "Sallos725/NMOS",
+  "sha": "929653691a02",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::2027's oceanbase contest's powercontext repository of Xin": {
+  "identity": {
+   "one_liner": "OceanBase 竞赛的 PowerContext 仓库",
+   "review": "根据简介，该仓库为 2027 年 OceanBase 竞赛的 powercontext 参赛仓库，命名指向 PowerContext 相关内容。仓库无 README，具体功能、面向用户、安装运行方式均无法从现有信息确认，仅能确认其与 OceanBase 竞赛的归属关系，保守编目为竞赛类项目。",
+   "highlights": [
+    "与 2027 OceanBase 竞赛相关"
+   ],
+   "use_cases": [
+    "竞赛资料归档查阅"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "2027's oceanbase contest's powercontext repository of Xin"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "无 README，无法确认该项目是为数据库生态服务的工具还是仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "2027's oceanbase contest's powercontext repository of Xin"
+  },
+  "fn": "xhl123XHL352/Xins_PowerContext_Repository",
+  "sha": "desc::2027's oceanbase contest's powercontext repository of Xin",
+  "source": "desc",
+  "generated_at": "2026-10-25",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

@@ -9603,5 +9603,69 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "72b0d53c455a": {
+  "identity": {
+   "one_liner": "Rust 编写的轻量级 Postgres 兼容运行时，单进程承载大量短生命周期隔离数据库",
+   "review": "PGX 是一个用 Rust 实现的数据库运行时，面向 AI agent 沙箱、CI、per-PR 和测试等短生命周期数据库场景：单个进程内按 sealed 模板毫秒级创建大量隔离数据库，借助 ZFS 写时复制降低存储开销，并通过 Postgres wire protocol 兼容 Rails、Django、Prisma 等框架的迁移与测试流程。定位为一次性数据库用途，非崩溃安全、不支持 C 扩展，明确不适用于生产主库。通过 npx 一键安装。",
+   "highlights": [
+    "单进程内提供大量命名隔离的 Postgres 兼容数据库，闲置库内存占用约 70 KB 量级，连接时从密封模板毫秒级创建",
+    "支持 ZFS copy-on-write 存储后端，10 GB 模板的分支可在 1 秒内就绪并仅占用约 13.6 MB 新增物理存储",
+    "通过 Postgres wire protocol 与 SQL 方言运行 Rails、Django、Prisma、SQLAlchemy、node-postgres 的迁移与测试流程"
+   ],
+   "use_cases": [
+    "AI coding agent 的每会话/每任务临时数据库沙箱",
+    "CI 与 per-PR 数据库、集成测试与预览环境",
+    "基于生产脱敏副本构建的一次性分支数据库"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "PGX. Postgres for agents. 🐘 ／ PGX speaks the Postgres wire protocol and SQL dialect. Rails, Django,",
+     "lines": [
+      3,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "PGX 本身是数据库运行时/引擎，为 agent、CI 与测试环境提供短生命周期的 Postgres 兼容数据库服务，README 未声明其依赖外部数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PGX is a database runtime for short-lived Postgres databases: agent ／ - **Shared runtime.** Databases are isolated by name, roles and limits ／ It is **not** a production primary, a system of record, or an HA or PITR",
+   "evidence_lines": [
+    20,
+    211,
+    258
+   ]
+  },
+  "fn": "pgrundev/pgx",
+  "sha": "72b0d53c455a",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

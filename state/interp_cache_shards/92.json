@@ -10077,5 +10077,157 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3c285503de50": {
+  "identity": {
+   "one_liner": "Go 编写的业务平台，单二进制在 SQLite/PostgreSQL 上运行 DSL 配置",
+   "review": "OneBase 是用 Go 编写的开源业务平台，通过 YAML 描述元数据、内置 DSL 编写业务逻辑，单二进制即可在 SQLite 或 PostgreSQL 上执行会计类应用配置，提供表单、报表、寄存器（registers）等模型，并内置 REST API、MCP 服务器与 AI 助手。面向熟悉 1C 类记账平台的开发与业务用户；配置可存放于 git 文件或数据库内。",
+   "highlights": [
+    "单二进制运行时，配置以 YAML 元数据 + DSL 编写，支持文件（git）与数据库两种配置存放模式",
+    "提供记账模型：累计/信息寄存器、科目表、复式记账、FIFO 批次扣减，以及报表、仪表板、受管表单可视化设计器",
+    "内置 REST API、MCP 服务器、库内 AI 助手、备份恢复、全文检索与 16 语言界面"
+   ],
+   "use_cases": [
+    "构建贸易/库存/会计类记账应用（含仓库、销售等示例配置）",
+    "由 AI 代理生成与校验业务配置（AGENTS.md + onebase check 反馈闭环）",
+    "将现有 1C 风格的记账任务迁移为基于 SQLite/PostgreSQL 的自托管应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ отчёты) + данные в SQLite или PostgreSQL + пользователи. Метаданные описываются ／ PostgreSQL, запуск, конфигуратор, остановка:",
+     "lines": [
+      5,
+      22,
+      48
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ onebase dev --project ./склад --sqlite ./склад.db --open",
+     "lines": [
+      5,
+      145
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台将业务数据存储于 SQLite 或 PostgreSQL 数据库中，自身是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Один бинарь исполняет прикладную конфигурацию поверх SQLite или PostgreSQL. ／ |Информационная база|SQLite-файл или PostgreSQL|Прикладные и служебные таблицы; при `config_source: database` — также `_onebase_config`|",
+   "evidence_lines": [
+    5,
+    221
+   ]
+  },
+  "fn": "ivanarama/onebase",
+  "sha": "3c285503de50",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3a0886755c16": {
+  "identity": {
+   "one_liner": "OpenCode 会话存储分析与清理 CLI，基于本地 SQLite 数据库",
+   "review": "ocgc 是一个 Python 命令行工具，用于分析、可视化和回收 OpenCode v1/v2 会话占用的磁盘空间，包括 SQLite 数据库、diff 文件和 git 快照。它支持 WAL 体积检查、按年龄/类型/项目过滤清理、剥离 reasoning token、导出 Markdown，并提供 dry-run 与确认机制；面向使用 OpenCode 的开发者，通过 uvx/pipx/pip 从源码安装。",
+   "highlights": [
+    "提供存储仪表盘、Top 会话分析、按项目聚合和 token/缓存命中率统计，支持 JSON 输出",
+    "支持细粒度清理过滤器（年龄、类型、项目、reasoning 剥离、大输出截断）并默认执行 dry-run 预览与确认",
+    "内置 OpenCode Native Skill，可由 OpenCode 助手通过自然语言调用执行清理工作流"
+   ],
+   "use_cases": [
+    "回收 OpenCode 长期使用后 SQLite WAL 与会话快照占用的数十 GB 磁盘空间",
+    "分析各项目/会话的存储分布与 LLM token 消耗、缓存命中率",
+    "在删除会话前将其导出为 Markdown 归档"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "OpenCode stores sessions, messages, and part data in a local SQLite database that grows without bound and has no built-in cleanup. It also stores file diffs and git snapshots on disk. As you use OpenCode, thinking tokens (reasoning), snapshots, and historical  ／ - *\"Strip bulky reasoning tokens from OpenCode SQLite DB to save space\"* ／ - SQLite file size, WAL journal size, and combined DB footprint",
+     "lines": [
+      16,
+      67,
+      120
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具直接读取、清理并对 OpenCode 的本地 SQLite 数据库执行 VACUUM，为数据库存储维护服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "OpenCode stores sessions, messages, and part data in a local SQLite database that grows without bound and has no built-in cleanup. It also stores file diffs and git snapshots on disk. As you use OpenCode, thinking tokens (reasoning), snapshots, and historical sessions can easily consume tens of gigabytes of disk space and slow down queries. ／ `ocgc` provides comprehensive visibility into where your OpenCode storage goes and gives you fine-grained, safe controls to reclaim it. ／ OpenCode will automatically invoke `ocgc` following strict safety workflows (status $\\rightarrow$ preview $\\rightarrow$ confirm $\\rightarrow$ purge $\\rightarrow$ vacuum).",
+   "evidence_lines": [
+    16,
+    18,
+    70
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "codehands028/ocgc",
+  "sha": "3a0886755c16",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10881,5 +10881,83 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "12176a56722e": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI 代理记忆层，提供 MCP 服务与 Python SDK",
+   "review": "Mnemosyne 是为 AI 代理提供长期记忆的纯 Python 库，数据存储在单一 SQLite 文件中，通过 sqlite-vec 与 FTS5 混合检索实现记忆的存取。它内置 MCP 服务器，可接入 Cursor、Claude Code 等 MCP 客户端，也可经 Python SDK 直接调用；支持可选的端到端加密同步。面向需要为代理框架添加记忆能力的开发者。",
+   "highlights": [
+    "提供 MCP 服务器（stdio/SSE）与 Python SDK 两种接入方式，适配 Cursor、Claude Code、OpenWebUI 等多个平台",
+    "记忆存储于单一 SQLite 文件，使用 sqlite-vec + FTS5 混合检索，无需外部向量数据库",
+    "支持可选的同步功能及客户端加密（Fernet/PyNaCl）"
+   ],
+   "use_cases": [
+    "为无记忆能力的 AI 代理框架添加本地持久化记忆",
+    "通过 MCP 为桌面端代理客户端接入记忆服务",
+    "在离线/本机环境下运行代理记忆系统，数据不出本机"
+   ],
+   "cat_label": "应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "*Zero-cloud AI memory that works everywhere. SQLite-backed. One pure-Python dependency.* ／ Mnemosyne is measured on **BEAM** (ICLR 2026), in one SQLite file with no cloud dependency. A **LongMemEval** (ICLR 2025) run is pending.",
+     "lines": [
+      5,
+      74
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|**Local-first**|✅ SQLite|⚠️ Hybrid|❌ Docker+PG|⚠️ PG+worker|❌ SaaS|✅ SQLite|✅ Embedded| ／ |**Zero deps**|✅ pip only|❌ Qdrant/PG|❌ PG+vector|❌ PG+3 LLMs|❌ SaaS infra|✅ pip only|✅ pip only|",
+     "lines": [
+      158,
+      159
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储代理记忆数据，服务于 AI 代理生态而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（对比表中标注），另有可选同步服务的说明",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "*Zero-cloud AI memory that works everywhere. SQLite-backed. One pure-Python dependency.* ／ **Mnemosyne** is a universal, Hermes-first memory layer that works with any agent framework (Claude Code, Cursor, Codex, OpenWebUI, OpenClaw, or your own custom agent). One `pip install`, one SQLite database. No external services required. ／ - **Episodic memory** -- Long-term storage with sqlite-vec + FTS5 hybrid search",
+   "evidence_lines": [
+    5,
+    18,
+    147
+   ]
+  },
+  "fn": "mnemosyne-oss/mnemosyne",
+  "sha": "12176a56722e",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

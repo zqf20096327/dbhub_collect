@@ -11950,5 +11950,60 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fd18ae882cd7": {
+  "identity": {
+   "one_liner": "声明式报表引擎：SQL+YAML 生成报表文件并投递",
+   "review": "DRE 是一个报表自动化 CLI，用户把报表写成 git 中的 .sql 和 YAML 文件，运行 SQL 后输出 Excel、CSV、固定宽度、PDF 或 HTML 文件，并投递到邮件、SFTP、S3、Slack 等渠道，也可发送摘要消息。它采用类 dbt 的工作流（ref、source、profiles 等），适合需要定时分发报表的数据团队，目前仍处于 1.0 之前的开发阶段。",
+   "highlights": [
+    "支持从多个数据库运行 SQL，输出 csv、fixed-width、parquet、xlsx、html、pdf 等格式",
+    "支持投递到 email、SFTP/FTP、S3、GCS、Azure Blob、Databricks Volumes、Slack 等渠道",
+    "提供 dbt 风格的项目结构（Jinja、宏、ref()、source()、profiles、targets）"
+   ],
+   "use_cases": [
+    "定时生成并分发业务报表（如每个成员一份的对账单 PDF）",
+    "在现有调度器（cron、Airflow、Dagster、Databricks Jobs）上运行报表流程",
+    "多 Sheet 工作簿、品牌 Excel 模板等复杂报表文件的自动化生成"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是运行 SQL 并生成报表文件的独立 CLI 工具，连接数据库作为数据源，为数据生态提供服务而非使用数据库存储自身数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 单一许可",
+   "install": [
+    "binary",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DRE**, the **Declarative Reporting Engine**, is open-source reports as code. You keep each report ／ as `.sql` and YAML files in git; DRE runs the SQL against your databases (each tab of a workbook can ／ Google Chat are in preview). It runs on whatever scheduler you already have: cron, Airflow, Dagster, Databricks Jobs.",
+   "evidence_lines": [
+    15,
+    16,
+    24
+   ]
+  },
+  "fn": "get-dre/dre",
+  "sha": "fd18ae882cd7",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

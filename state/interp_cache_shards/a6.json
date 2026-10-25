@@ -10662,5 +10662,251 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d5952cdd6746": {
+  "identity": {
+   "one_liner": "基于 go-kratos+Ent 的 Go 企业级前后端一体管理脚手架",
+   "review": "一个用 Go（go-kratos 框架、Ent/GORM ORM、Protobuf API 契约）构建并配套 Vue3/React 三选一前端的企业后台管理系统脚手架，面向需要多租户 RBAC、TOTP MFA、审计日志等等保 2.0 技术措施的企业私有化部署场景；数据存于 PostgreSQL/MySQL，附 pg_dump 定时备份脚本，并提供配套代码生成器支持多种数据库直连生成代码。",
+   "highlights": [
+    "支持 Protobuf 单一 API 契约驱动全栈代码生成（Go API + TypeScript 客户端 + CRUD 脚手架）",
+    "内置多租户 RBAC（Casbin/OPA 可切换）、TOTP MFA 与六类审计日志 180 天留存归档",
+    "提供 pg_dump 定时全量备份脚本（默认保留 30 份自动轮换）及 Docker 两种部署模式"
+   ],
+   "use_cases": [
+    "需要等保 2.0 技术措施支撑的企业私有化后台系统搭建",
+    "多租户 SaaS 管理后台开发",
+    "基于 Protobuf 契约的前后端分离全栈项目脚手架"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **AI 能力开箱即用**：OpenAI 兼容多模型接入（云端/本地 Ollama）、SSE 流式对话、知识库 RAG（pgvector 向量检索 + 文件上传）、token 用量配额、脚本 `ai` 模块与定时 AI 任务，详见 docs/ai_module.md ／ ORM <code>Ent</code> / <code>GORM</code>（二选一，构建标签切换，默认 Ent） · <code>MySQL</code> · <code>PostgreSQL</code> ／ |**数据备份恢复**|`scripts/backup/pg_backup.sh` 定时全量备份（pg_dump，默认保留 30 份自动轮换），支持 Docker 容器 / 本地直连双模式，附恢复操作文档|",
+     "lines": [
+      23,
+      128,
+      150
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "ORM <code>Ent</code> / <code>GORM</code>（二选一，构建标签切换，默认 Ent） · <code>MySQL</code> · <code>PostgreSQL</code>",
+     "lines": [
+      128
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **go-wind-toolkit / gowind-uiapp** —— 跨平台桌面端代码生成器（Go + Wails）：一键导入 SQL 或直连数据库表（MySQL / PostgreSQL / SQLite / SQL Server / Oracle），自动生成服务端与前端代码，支持 gRPC / RESTful 等多种模板与简单表单生成；另提供非交互、JSON 输出的 CLI（`gowind-cli`），便于脚本与 AI Agent 调用。",
+     "lines": [
+      271
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **go-wind-toolkit / gowind-uiapp** —— 跨平台桌面端代码生成器（Go + Wails）：一键导入 SQL 或直连数据库表（MySQL / PostgreSQL / SQLite / SQL Server / Oracle），自动生成服务端与前端代码，支持 gRPC / RESTful 等多种模板与简单表单生成；另提供非交互、JSON 输出的 CLI（`gowind-cli`），便于脚本与 AI Agent 调用。",
+     "lines": [
+      271
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- **go-wind-toolkit / gowind-uiapp** —— 跨平台桌面端代码生成器（Go + Wails）：一键导入 SQL 或直连数据库表（MySQL / PostgreSQL / SQLite / SQL Server / Oracle），自动生成服务端与前端代码，支持 gRPC / RESTful 等多种模板与简单表单生成；另提供非交互、JSON 输出的 CLI（`gowind-cli`），便于脚本与 AI Agent 调用。",
+     "lines": [
+      271
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 MySQL/PostgreSQL 作为 ORM 后端存储业务数据（L128），属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**开箱即用的企业级前后端一体管理脚手架（Go 后端 + 三选一前端）** ／  ORM <code>Ent</code> / <code>GORM</code>（二选一，构建标签切换，默认 Ent） · <code>MySQL</code> · <code>PostgreSQL</code> ／ |**数据备份恢复**|`scripts/backup/pg_backup.sh` 定时全量备份（pg_dump，默认保留 30 份自动轮换），支持 Docker 容器 / 本地直连双模式，附恢复操作文档|",
+   "evidence_lines": [
+    5,
+    128,
+    150
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tx7do/go-wind-admin",
+  "sha": "d5952cdd6746",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "11903e90f762": {
+  "identity": {
+   "one_liner": "TiDB 培训课程实验材料库，提供课程练习脚本",
+   "review": "该仓库存放 PingCAP TiDB SQL for Developers 培训课程的实验脚本与资源，供课程学员配套使用。仓库已迁移至 tidb-course-labs，并标记为 archived 只读状态，不再维护，后续问题与变更需到新仓库提交。",
+   "highlights": [
+    "包含 TiDB SQL for Developers 课程的实验脚本与资源",
+    "仓库已标记 archived 只读，代码迁移至 tidb-course-labs"
+   ],
+   "use_cases": [
+    "参加 TiDB SQL for Developers 培训课程时进行配套实验",
+    "需要访问旧课程实验材料的学员查阅"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "# Lab Assets for TiDB Training Courses",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅说明是课程实验材料，未显示其本身为服务数据库生态的工具或应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "TiDB"
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Lab Assets for TiDB Training Courses ／ This repo had been migrated to tidb-course-labs ／ It is archived (read-only) and no longer maintained. Please open issues and changes in tidb-course-labs.",
+   "evidence_lines": [
+    1,
+    3,
+    5
+   ]
+  },
+  "fn": "pingcap/tidb-course-201-lab",
+  "sha": "11903e90f762",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "59a4faa84b23": {
+  "identity": {
+   "one_liner": "多层语音生物识别认证系统，含深伪检测与说话人识别",
+   "review": "一个基于 FastAPI + React 的语音认证系统，通过深伪检测、说话人验证（ECAPA-TDNN）、Whisper 短语匹配和 EMA 声纹更新四层流水线完成身份核验，数据持久化使用 PostgreSQL（生产）或 SQLite（开发）。适合语音认证方向的开发者做部署与研究，需 Python 3.11+ 与 Node.js 20+。",
+   "highlights": [
+    "提供四层认证流水线：深伪检测、说话人验证、ASR 短语匹配、EMA 声纹演化",
+    "提供 FastAPI REST 接口（注册/声纹注册/挑战/验证）及 Swagger 文档",
+    "支持 Docker 部署与 Render 一键部署，提供 render.yaml 配置"
+   ],
+   "use_cases": [
+    "需要语音作为认证因子的应用集成",
+    "声纹反欺骗（anti-spoofing）研究实验",
+    "基于 Whisper/ECAPA-TDNN 的音频处理管线开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 15 / SQLite|Data persistence| ／ - PostgreSQL for production, SQLite for development ／ - PostgreSQL 15+ (or use SQLite for development)",
+     "lines": [
+      28,
+      49,
+      154
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 15 / SQLite|Data persistence| ／ - PostgreSQL for production, SQLite for development ／ - PostgreSQL 15+ (or use SQLite for development)",
+     "lines": [
+      28,
+      49,
+      154
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL/SQLite 作为数据持久层，项目本身是认证应用而非数据库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|PostgreSQL 15 / SQLite|Data persistence| ／ - PostgreSQL for production, SQLite for development ／ - PostgreSQL 15+ (or use SQLite for development)",
+   "evidence_lines": [
+    28,
+    49,
+    154
+   ]
+  },
+  "fn": "Speech-Synthesis/AAA_Baselines",
+  "sha": "59a4faa84b23",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

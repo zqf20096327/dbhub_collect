@@ -10998,5 +10998,271 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7fd29d8ca1e9": {
+  "identity": {
+   "one_liner": "GitHub 个人主页 README，展示个人技能与项目",
+   "review": "这是开发者 cheehwatang 的 GitHub 个人资料仓库，README 包含个人介绍、技术栈清单（Ruby、Java、React、PostgreSQL、SQLite 等标签）、SoundState 与 Daily Quotes 等个人项目链接及社区组件致谢。它不是数据库相关工具或应用，PostgreSQL 与 SQLite 仅作为个人技能标签出现，收录价值有限，建议按非生态项目归档。",
+   "highlights": [
+    "README 包含个人技术栈、项目链接与 GitHub 统计小部件",
+    "列出的个人项目包含使用 PostgreSQL 的 SoundState 与 SVG 引言生成器"
+   ],
+   "use_cases": [
+    "个人开发者主页展示",
+    "GitHub 社区 README 组件的使用示例参考"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL ／  PostgreSQL",
+     "lines": [
+      169,
+      300
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite",
+     "lines": [
+      176
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 为个人资料页，PostgreSQL 与 SQLite 仅以技能标签形式出现，无工具或应用层面的数据库功能。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## 🧰 My Toolbox ／  PostgreSQL ／  SQLite",
+   "evidence_lines": [
+    54,
+    169,
+    176
+   ]
+  },
+  "fn": "cheehwatang/cheehwatang",
+  "sha": "7fd29d8ca1e9",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c100fbaf4709": {
+  "identity": {
+   "one_liner": "面向 .NET 开发者的 Oracle 数据库浏览器，含工作区、FK 导航与 EF Core/LINQ 桥接",
+   "review": "FerretSharp 是一个运行在 Windows 上、基于 .NET 的 Oracle 数据库客户端，提供工作区会话、外键导航、沙箱编辑（事务提交/回滚）、SQL 编辑器、执行计划查看、schema 对比和 EF Core 模型映射与 LINQ 控制台，面向日常使用 Oracle 的 .NET 开发者；UI 支持英文与德文，MIT 许可。",
+   "highlights": [
+    "提供工作区机制，每个连接可有独立的数据库会话与编辑事务，生产连接默认只读",
+    "支持基于 EF Core 模型的实体/属性名显示、枚举值转换和 LINQ 控制台（显示生成的 SQL）",
+    "包含 SQL 编辑器（绑定变量、执行计划）、schema 对比与 DDL 建议、数据导出为 Excel/CSV/SQL"
+   ],
+   "use_cases": [
+    ".NET 开发者日常浏览与编辑 Oracle 数据",
+    "借助 EF Core 模型进行 LINQ 查询调试与 SQL 生成查看",
+    "跨环境（Dev/Test/Prod）的 schema 对比与差异 DDL 生成"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ／ developer works with an Oracle database day to day: ／ read-only by default, enforced by Oracle itself.",
+     "lines": [
+      5,
+      24,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Oracle 数据库生态服务的浏览/管理工具，本身不用数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ／ developer works with an Oracle database day to day:",
+   "evidence_lines": [
+    5,
+    24
+   ]
+  },
+  "fn": "JuliusFo/FerretSharp",
+  "sha": "c100fbaf4709",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "19e8e48e13e4": {
+  "identity": {
+   "one_liner": "基于 Databricks 的银行数据工程 Lakehouse 端到端项目",
+   "review": "这是一个数据工程项目，从 SQL Server 提取银行客户、账户和交易数据（Python/pyodbc 抽取为 CSV），导入 Databricks 后按 Bronze-Silver-Gold Medallion 架构做清洗、质量控制与聚合，经 Workflows 编排并生成 Power BI 仪表板。适合数据工程学习或银行数据分析场景参考。",
+   "highlights": [
+    "通过 pyodbc 从 SQL Server 抽取数据为 CSV 并导入 Databricks Volume",
+    "实现 Bronze-Silver-Gold (Medallion) 分层处理与质量检查",
+    "使用 Databricks Workflows 编排流水线并生成 BI 仪表板"
+   ],
+   "use_cases": [
+    "银行客户/交易数据的批处理分析与 KPI 仪表板搭建",
+    "学习 Medallion 架构与 Delta Lake 数据工程流水线",
+    "SQL Server 数据向 Databricks 湖仓的迁移与治理示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Une entreprise du secteur financier possède ses données dans SQL Server. L’objectif est d’automatiser leur ingestion dans Databricks, de les nettoyer et les fiabiliser avec une architecture Bronze-Silver-Gold, puis de produire des indicateurs financiers et un  ／ SQL Server",
+     "lines": [
+      7,
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将业务数据存放于 SQL Server 并从中摄取数据，属于使用数据库的应用/项目而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Une entreprise du secteur financier possède ses données dans SQL Server. L’objectif est d’automatiser leur ingestion dans Databricks, de les nettoyer et les fiabiliser avec une architecture Bronze-Silver-Gold, puis de produire des indicateurs financiers et un dashboard pour l’analyse. ／ Extraction Python avec pyodbc",
+   "evidence_lines": [
+    7,
+    13
+   ]
+  },
+  "fn": "datasifaw/databricks-projet-bancaire-lakehouse",
+  "sha": "19e8e48e13e4",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "569e0cbf83d1": {
+  "identity": {
+   "one_liner": "本地求职搜索工具，聚合拉美招聘平台并按个人画像标记职位",
+   "review": "一个在本地运行的求职应用，抓取拉美多个招聘网站的职位，自动识别重复发布的黑名单公司，并按用户技能画像给职位上色排序。数据存储在本机 SQLite（Bun 环境用 bun:sqlite，Node 环境用 better-sqlite3），通过 Drizzle ORM 管理数据，无需登录任何平台。适合拉美求职者个人使用，README 注明部分平台条款禁止爬取，需自担风险。",
+   "highlights": [
+    "支持抓取 GetOnBoard、Computrabajo、LinkedIn、elempleo、PeakU、Hireline 等平台职位",
+    "提供基于技能匹配的三级热度排序和重复职位自动黑名单机制",
+    "数据以 SQLite 本地存储，支持 Bun 与 Node 两种运行方式"
+   ],
+   "use_cases": [
+    "拉美求职者每日批量检索并筛选本地职位",
+    "识别长期重复发布同一职位而不招聘的公司",
+    "按个人技能画像对职位进行匹配度排序"
+   ],
+   "use_cases_placeholder": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.| ／ |`bun run dev:node`|Igual, con Node (usa `better-sqlite3`).|",
+     "lines": [
+      41,
+      94,
+      95
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用户数据存储在本机 SQLite，该仓库是使用数据库存数据的应用而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🔒 **Local y sin login.** Tus datos quedan en un SQLite en tu máquina. El script nunca usa ／ |`bun run dev`|Arranca la app con Bun (usa `bun:sqlite`) y abre el navegador.|",
+   "evidence_lines": [
+    41,
+    94
+   ]
+  },
+  "fn": "SebastianAsprino/jobfilter",
+  "sha": "569e0cbf83d1",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

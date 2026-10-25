@@ -11637,5 +11637,98 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8c6e4f45ba9b": {
+  "identity": {
+   "one_liner": "自托管的 AI 代理优先工作管理数据库，单 SQLite 文件",
+   "review": "weave 是一个可自托管的工作管理数据库，提供连接表、双向关系、公式、rollup、工作流与每行 markdown 文档，数据存于单个 SQLite 文件（node:sqlite，零依赖）。面向人类与 AI 代理双端用户，内置 MCP server、REST API 与 CLI；运行需 Node ≥ 22.16，官方仅提供 Docker Compose 与源码两种启动方式。",
+   "highlights": [
+    "内置 MCP server（默认 17 个工具，可扩展至 65 个），支持 stdio MCP 客户端挂载",
+    "数据存储在单个 SQLite 文件，无运行时依赖，无需构建，支持撤销操作",
+    "提供 REST API、CLI 与 Web UI 三种等价访问方式，支持全文搜索（SQLite FTS5）"
+   ],
+   "use_cases": [
+    "AI 代理通过 MCP 管理任务与知识库工作区",
+    "自托管替代 Airtable/Notion 数据库类 SaaS 进行本地优先的表结构与文档管理"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "documents. One SQLite file. Zero dependencies. No build step. MIT. ／ weave stores structured work (tables, rows, relations, documents) in one SQLite ／ - **Local-first** — your workspace is one SQLite file next to your project.",
+     "lines": [
+      9,
+      30,
+      61
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres| ／ |Baserow|MIT (core; paid tiers separate)|Docker Compose + Postgres|A full Airtable-shaped product, cloud or self-hosted| ／ |Teable|AGPL-3.0 (core)|Docker + Postgres|Postgres-native scale with an Airtable UI|",
+     "lines": [
+      178,
+      179,
+      181
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres|",
+     "lines": [
+      178
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "weave 使用 SQLite 作为自身数据存储的应用，SQLite 不是其服务的外部对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "weave stores structured work (tables, rows, relations, documents) in one SQLite ／ for **humans and agents as equals**: everything the web UI can do, the REST API, ／ - **Zero dependencies** — `git clone` and run. Storage is Node's built-in",
+   "evidence_lines": [
+    30,
+    55,
+    64
+   ]
+  },
+  "fn": "grunion-ai/weave",
+  "sha": "8c6e4f45ba9b",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11432,5 +11432,82 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d9a0fad87f02": {
+  "identity": {
+   "one_liner": "自托管技术新闻聚合阅读器，用 PostgreSQL+pgvector 存储",
+   "review": "News Dashboard 是一个自托管的技术新闻收件箱应用，聚合 RSS/Atom、GitHub release、Hacker News 等来源，提供今日信息流、AI 摘要、引用式问答、简报、搜索与已读历史。后端 Python/FastAPI，前端 React，数据仅存于 PostgreSQL（需 16+ 与 pgvector 扩展），可选 Neo4j 知识图谱。面向想集中管理信息源的开发者，AI 功能需配置 API key。",
+   "highlights": [
+    "支持 RSS/Atom、GitHub release、Hacker News 等多来源抓取与文章状态管理（new/read/saved/skipped/archived/starred/snoozed）",
+    "在配置 AI 提供方后提供 OpenAI 兼容 embeddings、带引用的 Ask AI 问答与生成的简报",
+    "提供 Google Reader 兼容同步 API，可对接 NetNewsWire、Reeder 等第三方 RSS 客户端"
+   ],
+   "use_cases": [
+    "自托管聚合个人关注的技术资讯源并做每日分诊阅读",
+    "通过 Google Reader 兼容 API 在第三方 RSS 客户端中同步阅读状态",
+    "基于已保存文章生成简报与学习材料"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16+ pgvector ／ - Database: PostgreSQL. ／ storage is PostgreSQL only: set `DATABASE_URL` or the split `POSTGRES_*`",
+     "lines": [
+      12,
+      68,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明运行时存储仅用 PostgreSQL（DATABASE_URL/POSTGRES_*），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Database: PostgreSQL. ／ storage is PostgreSQL only: set `DATABASE_URL` or the split `POSTGRES_*` ／ - PostgreSQL 16+ with the pgvector extension (the `pgvector/pgvector:pg16` image, or install `vector` on an external Postgres)",
+   "evidence_lines": [
+    68,
+    82,
+    75
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "lihor-hub/news-dashboard",
+  "sha": "d9a0fad87f02",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

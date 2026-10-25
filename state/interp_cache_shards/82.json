@@ -10671,5 +10671,238 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "462a339bc2ef": {
+  "identity": {
+   "one_liner": "终端 SQL 客户端，提供 REPL 与 TUI，连接 PostgreSQL、MySQL/MariaDB、SQLite",
+   "review": "quarry 是一个用 Rust 编写的终端 SQL 客户端，以单个二进制分发（内置 TLS 与 SQLite），提供带补全的 REPL 和全屏 TUI（schema 浏览、表格编辑、结果网格），表格修改会先转换为 SQL 预览再写入，并支持 CSV/JSON 导出、\nllm 生成待确认查询。适合需要在终端连接 PostgreSQL、MySQL、MariaDB 或 SQLite 进行查询与数据编辑的用户。",
+   "highlights": [
+    "提供 REPL 与全屏 TUI 两种界面，支持补全、schema 浏览和表格编辑",
+    "表格编辑以 SQL 语句形式暂存并预览后才写入；无 WHERE 的 DROP/DELETE 执行前需确认",
+    "单个二进制运行，内置 TLS，SQLite 打包内置；支持 CSV/JSON 输出与脚本化退出码"
+   ],
+   "use_cases": [
+    "在终端对 PostgreSQL、MySQL/MariaDB、SQLite 进行交互式查询",
+    "通过 TUI 浏览并编辑表数据",
+    "脚本化导出 CSV/JSON 并集成到管道"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "quarry: a fast, beautiful SQL client for the terminal, for PostgreSQL, MySQL / MariaDB and SQLite ／ Point it at **PostgreSQL**, **MySQL**, **MariaDB** or **SQLite** and you get a REPL in the spirit of `pgcli` and `mycli`, ／ quarry postgres://me@localhost/app # the REPL",
+     "lines": [
+      1,
+      6,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "quarry: a fast, beautiful SQL client for the terminal, for PostgreSQL, MySQL / MariaDB and SQLite ／ Point it at **PostgreSQL**, **MySQL**, **MariaDB** or **SQLite** and you get a REPL in the spirit of `pgcli` and `mycli`, ／ quarry --tui mysql://root@127.0.0.1/shop # the full-screen TUI (or \\tui from the REPL)",
+     "lines": [
+      1,
+      6,
+      38
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "quarry: a fast, beautiful SQL client for the terminal, for PostgreSQL, MySQL / MariaDB and SQLite ／ Point it at **PostgreSQL**, **MySQL**, **MariaDB** or **SQLite** and you get a REPL in the spirit of `pgcli` and `mycli`, ／ It's a single binary with TLS built in and SQLite bundled. It asks before a `DROP` or a `DELETE`",
+     "lines": [
+      1,
+      6,
+      13
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "quarry: a fast, beautiful SQL client for the terminal, for PostgreSQL, MySQL / MariaDB and SQLite ／ Point it at **PostgreSQL**, **MySQL**, **MariaDB** or **SQLite** and you get a REPL in the spirit of `pgcli` and `mycli`,",
+     "lines": [
+      1,
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接多个数据库进行查询/编辑的客户端工具，为数据库生态提供服务，本身不用于存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "quarry: a fast, beautiful SQL client for the terminal, for PostgreSQL, MySQL / MariaDB and SQLite ／ Point it at **PostgreSQL**, **MySQL**, **MariaDB** or **SQLite** and you get a REPL in the spirit of `pgcli` and `mycli`, ／ It's a single binary with TLS built in and SQLite bundled. It asks before a `DROP` or a `DELETE`",
+   "evidence_lines": [
+    1,
+    6,
+    13
+   ]
+  },
+  "fn": "mah3uz/quarry",
+  "sha": "462a339bc2ef",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ad89998d7f84": {
+  "identity": {
+   "one_liner": "基于 FastAPI 的学习型密钥保管 API，Fernet 加密后存入 PostgreSQL",
+   "review": "这是一个以学习为目的的密钥保管 REST API，提供用户注册认证、按用户隔离的密钥 CRUD，密钥值经 Fernet 加密后写入 PostgreSQL，并记录审计事件与支持密钥轮换。适合学习认证、加密落库、schema 迁移等后端安全实践的开发者；README 明确声明非生产就绪，不应存储真实敏感数据。",
+   "highlights": [
+    "提供 JWT 认证与按用户 ID 隔离的密钥 CRUD API",
+    "密钥值在写入 PostgreSQL 前使用 Fernet 加密，支持多旧密钥轮换重加密",
+    "密钥操作记录 audit_events 审计事件"
+   ],
+   "use_cases": [
+    "学习认证、加密落库、密钥轮换等后端安全实践的示例项目",
+    "本地开发环境中管理非敏感测试密钥数据"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A learning-focused FastAPI service for authenticated, owner-scoped secret storage. Secret values are encrypted with Fernet before being persisted to PostgreSQL. ／ * PostgreSQL ／ Passwords are hashed with Argon2 rather than stored as plain text. Secret values are encrypted before they are persisted to PostgreSQL. The application scopes secret queries to the authenticated user's ID, and does not grant access to another user's records ju",
+     "lines": [
+      6,
+      28,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该服务使用 PostgreSQL 持久化自身存储的密钥数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A learning-focused FastAPI service for authenticated, owner-scoped secret storage. Secret values are encrypted with Fernet before being persisted to PostgreSQL. ／ **Status:** This is a learning and portfolio project, not production ready. Do not store real credentials or sensitive data in it. ／ Passwords are hashed with Argon2 rather than stored as plain text. Secret values are encrypted before they are persisted to PostgreSQL. The application scopes secret queries to the authenticated user's ID, and does not grant access to another user's records just because a valid token is supplied.",
+   "evidence_lines": [
+    6,
+    8,
+    124
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "MugdhoAI/vault-api",
+  "sha": "ad89998d7f84",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "065b55c91de7": {
+  "identity": {
+   "one_liner": "OceanBase 数据库大赛 PowerContext 赛题的参赛仓库",
+   "review": "该仓库用于参加第六届 OceanBase 数据库大赛的 PowerContext 赛题，README 仅包含标题与参赛说明，未说明具体功能、使用对象或安装运行方式，后续内容需补充后才能进一步编目。",
+   "highlights": [
+    "包含第六届 OceanBase 数据库大赛 PowerContext 赛题的参赛内容"
+   ],
+   "use_cases": [
+    "作为大赛参赛作品提交",
+    "供评审方查看赛题实现"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "第六届 OceanBase 数据库大赛 PowerContext 赛题参赛仓库",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 未说明项目是为 OceanBase 生态服务的工具还是仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "第六届 OceanBase 数据库大赛 PowerContext 赛题参赛仓库",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "Saka-tsuki/powercontext-2026",
+  "sha": "065b55c91de7",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

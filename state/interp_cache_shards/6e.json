@@ -9189,5 +9189,191 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cc47d5225399": {
+  "identity": {
+   "one_liner": "键盘优先的终端数据库客户端，含 AI 聊天与 MCP 服务器",
+   "review": "masume 是一个用 Go 编写的终端数据库客户端，支持 PostgreSQL、MySQL、SQLite 等多种引擎，提供表浏览、SQL 编辑、查询构建器、notebook、导入导出和 headless 运行模式；内置 AI 聊天并可通过 MCP 向外部 agent 暴露连接。适合习惯命令行界面的开发者和 DBA 日常查询与数据管理。",
+   "highlights": [
+    "支持多引擎连接（PostgreSQL、MySQL、MariaDB、SQL Server、ClickHouse、SQLite、Cassandra、Redis、MongoDB 等）及 Docker/Kubernetes 容器检测",
+    "提供查询构建器、ER 图、schema 比较、notebook、CSV/JSON 导入导出、dump/restore 与 headless 模式",
+    "内置 AI 聊天（Anthropic/OpenAI 等）与 MCP 服务器，支持按 profile 设置访问级别和只读限制"
+   ],
+   "use_cases": [
+    "在终端中浏览、查询和编辑多种数据库的数据",
+    "通过 AI 聊天或 MCP 让 agent 以受控方式执行数据库查询",
+    "用 headless 模式在脚本和 CI 中运行 SQL、导出数据、比较 schema"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list. ／ - `masume postgres://ada@127.0.0.1:5432/shop` opens a URL. ／ engine = \"postgres\"",
+     "lines": [
+      11,
+      120,
+      128
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list. ／ - `masume ./notes.db` opens a SQLite file.",
+     "lines": [
+      11,
+      121
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供客户端连接、查询与管理功能的工具，而非以某数据库为存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A keyboard-first terminal database client with AI chat and an MCP server ／ **Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list. ／ `masume --mcp` serves the allowed profiles to an external agent over stdio. It opens its own connections, with an access level per profile and one for the whole server. See MCP server.",
+   "evidence_lines": [
+    3,
+    11,
+    185
+   ]
+  },
+  "fn": "masumedb/masume",
+  "sha": "cc47d5225399",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a723e313ba83": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 知识图谱的 AI 记忆存储，经 MCP 提供服务",
+   "review": "FaultLine 是一个为本地 AI 提供持久化、经验证的记忆系统：事实以类型化关系存入知识图谱，写入前经校验门拒绝幻觉内容，支持通过 /expand 学习领域本体，并按用户以独立 PostgreSQL schema 实现多租户隔离。它通过 MCP 服务器供 OpenWebUI、Claude Desktop 等客户端共享调用，依赖 Docker 部署和外部 LLM 后端（Ollama、LM Studio、OpenAI 等），本身不托管模型。",
+   "highlights": [
+    "提供 MCP 服务器（:8002，OpenAPI 与原生 MCP 双协议），支持多客户端共享同一记忆库",
+    "每个租户使用独立 PostgreSQL schema（faultline_<user_id>），通过 SET search_path 实现租户隔离",
+    "支持写入前事实校验、更正归档以及 /expand 领域本体学习（可指定在线文档来源）"
+   ],
+   "use_cases": [
+    "为 OpenWebUI、Claude Desktop、Cursor 等 MCP 客户端添加跨会话持久记忆",
+    "本地自托管场景下多人各自隔离使用 AI 记忆",
+    "网络设备、主机信息、人物关系等结构化事实的长期记录与更正"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Every user gets a **physically separate PostgreSQL schema** (`faultline_<user_id>`) — the sole user-memory boundary. Each request binds to the caller's schema via `SET search_path` **without `public`**, so one tenant's queries cannot even *name* another tenant",
+     "lines": [
+      128
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将事实数据存储于 PostgreSQL 的按租户 schema 中，数据库是其存储依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Every user gets a **physically separate PostgreSQL schema** (`faultline_<user_id>`) — the sole user-memory boundary. Each request binds to the caller's schema via `SET search_path` **without `public`**, so one tenant's queries cannot even *name* another tenant's tables. There is no shared `user_id` column to filter on and forget — the boundary **is** the schema, enforced by the database. (User memory is PostgreSQL-only; the vector tier is retired, so there are no per-user vector collections in the memory path.) ／ **2. How your chat client calls FaultLine's memory tools** — all through the **MCP server on `:8002`** (Bearer `MCP_API_KEY`). Any number of clients can share one store at once: ／ - Docker and Docker Compose",
+   "evidence_lines": [
+    128,
+    191,
+    142
+   ]
+  },
+  "fn": "tkalevra/FaultLine",
+  "sha": "a723e313ba83",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10776,5 +10776,127 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b0599dc04f54": {
+  "identity": {
+   "one_liner": "FastAPI 异步后端脚手架，内置认证/CRUD/缓存/任务队列，基于 PostgreSQL",
+   "review": "这是一个 FastAPI 项目模板，提供账户、RBAC、限流、缓存、Taskiq 任务队列、SQLAdmin 管理后台等九个可移除的功能模块，数据层使用 SQLAlchemy 2.0 + Alembic 迁移，运行于 PostgreSQL 并用 Redis 做缓存。适合需要快速搭建生产级 FastAPI 后端的开发者，通过 uv + Docker Compose 部署。",
+   "highlights": [
+    "提供九个可移除功能模块：accounts、rbac、tiers、ratelimit、api_keys、admin、cache、taskiq 等",
+    "支持 Docker Compose 生成 local/prod/nginx 三种部署形态，可运行于任意 Postgres 或 Neon serverless",
+    "内置 bp CLI 用于生成 compose 文件、校验环境变量和挂载插件"
+   ],
+   "use_cases": [
+    "快速启动带认证、CRUD、任务队列的 FastAPI 后端项目",
+    "需要会话认证、OAuth、API key 及分级限流的 API 服务",
+    "基于 Postgres + Redis 的异步 SaaS 后端开发"
+   ],
+   "persona": "use"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* Runs on any Postgres - the bundled container, or serverless via Neon (guide) ／ * **DB**: Postgres + SQLAlchemy 2.0, Alembic migrations with prod-confirm gate - local container or serverless (Neon)",
+     "lines": [
+      42,
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该项目用 PostgreSQL 存储数据（DB: Postgres + SQLAlchemy 2.0），是使用数据库的应用模板而非数据库工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可；另有付费的 FastroAI 衍生模板",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* Runs on any Postgres - the bundled container, or serverless via Neon (guide) ／ * **DB**: Postgres + SQLAlchemy 2.0, Alembic migrations with prod-confirm gate - local container or serverless (Neon)",
+   "evidence_lines": [
+    42,
+    59
+   ]
+  },
+  "fn": "benavlabs/FastAPI-boilerplate",
+  "sha": "b0599dc04f54",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7c4d2ea2ae36": {
+  "identity": {
+   "one_liner": "将公开 Telegram 频道备份为自包含 Zola 静态网站的工具",
+   "review": "该工具抓取公开 Telegram 频道的网页预览，下载媒体并在本地生成完整 Zola 博客，可选 MTProto 后端获取音视频与讨论区，支持单 HTML 导出与 SQLite 输出。面向需要长期保存频道内容的个人与档案维护者，通过 GitHub Actions 每日重建并部署到 GitHub Pages，无需 bot、token 或 API。",
+   "highlights": [
+    "仅读取公开网页预览即可抓取频道全量历史并本地化媒体，输出无 Telegram 依赖",
+    "生成 RSS/播客 feed、标签页、离线可用的站内搜索，并支持 13 种界面语言",
+    "提供 Rust 单静态二进制及 GitHub Actions 每日构建与按需重建工作流"
+   ],
+   "use_cases": [
+    "对公开 Telegram 频道做长期存档备份",
+    "将频道内容发布为静态博客或播客 feed",
+    "在 CI 中定时同步并部署频道镜像站点"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 说明其用途是将频道内容备份为静态网站，SQLite 仅作为可选输出格式被使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Back up a **public Telegram channel** into a **self-contained Zola static website**. ／ are preserved as normal links. It's a backup, not a mirror. ／ Written in Rust: a single static binary, easy to run locally or in CI.",
+   "evidence_lines": [
+    25,
+    40,
+    44
+   ]
+  },
+  "fn": "vitaly-zdanevich/telegram_channel_to_static_website",
+  "sha": "7c4d2ea2ae36",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

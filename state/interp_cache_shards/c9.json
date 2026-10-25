@@ -9718,5 +9718,67 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "99cc9d132b2c": {
+  "identity": {
+   "one_liner": "Windows 本地 AI 壁纸应用，视觉模型打分加探索/个性化加权排序选图",
+   "review": "这是一个 Windows 桌面应用，每天从 Bing、Wallhaven 和 Wallpaper Engine 工坊挑选壁纸并设为桌面背景，给个人用户使用。它用视觉模型做三级筛选（本地预筛、免费模型初筛、付费复核），按探索与个性化权重排序，数据用 SQLite 存储在本机，自带离线可复现的排序评估脚本与大量测试；依赖 Wallpaper Engine 运行才能提供动态壁纸候选。",
+   "highlights": [
+    "提供三级筛选流水线：本地免费预筛、免费模型初筛、付费模型复核（约 ¥0.003/张），并带 ¥10/月预算上限",
+    "包含离线可复现的排序评估脚本（成对比较 + NDCG@5，5 折交叉验证），支持静态图与 Wallpaper Engine 动态壁纸统一打分",
+    "支持人工策展打分、冷启动种子配置、天气/时段场景加成以及按需下载候选的换一张流程"
+   ],
+   "use_cases": [
+    "Windows 用户希望每日自动更换壁纸并按个人偏好筛选候选",
+    "需要个性化壁纸推荐但希望控制视觉模型调用费用",
+    "使用 Wallpaper Engine 并想让动态壁纸与静态图在同一评分池参与排序"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明数据存于本机 SQLite 数据库（data/app.db、ratings 表），是使用数据库存储数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Windows 本地 AI 自动壁纸应用。每天从 **Bing / Wallhaven / 本地 Wallpaper Engine 工坊** 中挑选一张壁纸， ／ 上面的数字来自 `scripts/evaluate.py`：读 `data/app.db` 只读回放，不联网、不花钱、不动桌面， ／ - 每张图下面一排 1–10，点数字即打分；分数写进 `ratings`，不会覆盖已有记录",
+   "evidence_lines": [
+    3,
+    175,
+    129
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "2151331730-glitch/DailyWallpaper",
+  "sha": "99cc9d132b2c",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

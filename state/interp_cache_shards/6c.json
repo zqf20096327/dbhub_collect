@@ -11146,5 +11146,80 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0ed8ebf304cf": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式三模数据库引擎，单内核融合向量、图与文档存储",
+   "review": "TriviumDB 用纯 Rust 实现嵌入式数据库引擎，在同一存储内核中同时提供向量检索、属性图谱与文档元数据三类能力，通过 Rust/Python/Node.js API 供宿主应用嵌入使用，提供 TQL 查询语言、QuIVer ANN 索引、Rom/Mmap 双存储模式和 WAL 灾备机制；面向 Agent、RAG 和知识图谱应用开发者，HTTP Server 形态为 nightly 预览，README 自述当前多进程并发写入存在排他锁限制。",
+   "highlights": [
+    "单内核同时提供向量检索（ANN/精确）、属性图谱与 JSON 文档存储，节点同时携带向量、稀疏文本、元数据和图关系",
+    "提供 TQL 查询语言编排向量召回、BM25/AC 文本召回、属性索引、图算法、路径与集合运算，由 Cascades 优化器规划",
+    "支持 Rust/Python/Node.js 三语言 API 与 Rom 单文件、Mmap 双存储模式切换"
+   ],
+   "use_cases": [
+    "AI Agent 长期记忆存储与关联检索",
+    "RAG 应用的混合检索与上下文扩展",
+    "个人知识库或知识图谱的嵌入式存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|维度|SQLite|pgvector|Kùzu|Qdrant|Neo4j|SurrealDB|LanceDB|**TriviumDB**|",
+     "lines": [
+      381
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "我们的目标是成为 **AI 应用领域的 SQLite**： ／ |② 存数据|调 SQLite 写入时间、场景|↑ 同一步，payload 里就是 JSON| ／ |💾 **双模式存储**|Mmap（大模型极速分体冷启动） / Rom（传统 SQLite 级单文件打包携带），无缝热切换| ／ > **并发多写模型**是 TriviumDB 当前明确的短板：Writer 通过进程级排他文件锁独占写路径，多读并发依赖 ReadOnly 共享锁，跨进程无锁读依赖 Immutable 不可换代际。这与 SQLite（WAL 单写）和原版 Kùzu（单进程写）同为嵌入式架构的常见取舍；需要高并发多写的场景，应选择服务端（Qdrant/Neo4j/pgvector）或分布式（SurrealDB）/MVCC 表格式（LanceDB）方案。",
+     "lines": [
+      28,
+      68,
+      221,
+      395
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它本身是嵌入式数据库引擎，为宿主应用提供存储能力，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TriviumDB 是一个用纯 Rust 编写的**嵌入式三模数据库引擎**，将**向量检索（Vector）**、**属性图谱（Graph）**和**文档型元数据（Document）**原生融合在同一个存储内核中。Rom 模式保持单个 `*.tdb` 的便携性；默认 Mmap 模式使用受同一 generation 协议保护的分离 sidecar。 ／ > TriviumDB 为 Agent、RAG 和知识图谱应用提供进程内的向量、图与文档存储。宿主应用通过 Rust、Python 或 Node.js API 管理数据库实例、查询和持久化。",
+   "evidence_lines": [
+    26,
+    15
+   ]
+  },
+  "fn": "YoKONCy/TriviumDB",
+  "sha": "0ed8ebf304cf",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

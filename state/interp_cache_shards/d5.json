@@ -10166,5 +10166,196 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a86aa90e101": {
+  "identity": {
+   "one_liner": "浏览器/IDE 内可视化 ERD 数据库 schema 设计编辑器",
+   "review": "一款 ERD 数据库建模编辑器，可在浏览器、VS Code、JetBrains IDE、Obsidian 中编辑 .erd.json 文件，支持导入 SQL DDL、DBML、GraphQL SDL，导出多种数据库的 DDL 与多语言 ORM 代码，并提供 MCP server 供编码代理编辑图表，适合开发者在设计与文档化 schema 时使用。",
+   "highlights": [
+    "支持导入 SQL DDL、DBML、GraphQL SDL、AML，导出 8 种数据库的 DDL 与 22 种语言/ORM 代码",
+    "提供 @dineug/erd-editor-mcp 服务器，编码代理可通过 MCP 编辑图表",
+    "以自定义元素嵌入任意应用，支持 WebRTC 实时协作与 AES-GCM 加密"
+   ],
+   "use_cases": [
+    "数据库 schema 可视化设计与文档",
+    "从 SQL/DBML/GraphQL 导入生成 DDL 或多语言 ORM 代码",
+    "通过 MCP 让编码代理协作编辑 schema"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Databases:** Databricks, MariaDB, MSSQL, MySQL, Oracle, PostgreSQL, Snowflake, SQLite",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Databases:** Databricks, MariaDB, MSSQL, MySQL, Oracle, PostgreSQL, Snowflake, SQLite",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "**Databases:** Databricks, MariaDB, MSSQL, MySQL, Oracle, PostgreSQL, Snowflake, SQLite",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Databases:** Databricks, MariaDB, MSSQL, MySQL, Oracle, PostgreSQL, Snowflake, SQLite",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Databases:** Databricks, MariaDB, MSSQL, MySQL, Oracle, PostgreSQL, Snowflake, SQLite",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Databases:** Databricks, MariaDB, MSSQL, MySQL, Oracle, PostgreSQL, Snowflake, SQLite",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库 schema 设计与 DDL/代码生成服务的编辑器工具，不依赖某数据库存储数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Import** — SQL DDL, GraphQL SDL, DBML and AML, replacing the diagram or adding to it ／ - **Export** — DDL for eight databases, code in 22 languages and ORMs, PNG and SVG ／ **Databases:** Databricks, MariaDB, MSSQL, MySQL, Oracle, PostgreSQL, Snowflake, SQLite",
+   "evidence_lines": [
+    24,
+    25,
+    33
+   ]
+  },
+  "fn": "dineug/erd-editor",
+  "sha": "5a86aa90e101",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6683aba76227": {
+  "identity": {
+   "one_liner": "PostgreSQL 查询遥测扩展，将原始查询事件实时导出到 ClickHouse",
+   "review": "pg_stat_ch 是一个 PostgreSQL 扩展，通过钩子在查询路径捕获每条语句的执行遥测（耗时、行数、缓冲区、错误等），经共享内存环形缓冲由后台工作线程批量写入 ClickHouse，聚合分析在 ClickHouse 侧完成。适合需要查询级原始事件存储与分析的 PostgreSQL 运维/DBA 用户；支持 PG 16–18 和 ClickHouse 23.3+，需源码编译并配置 shared_preload_libraries。",
+   "highlights": [
+    "捕获所有语句类型（DML/DDL/工具语句）的执行遥测，含 SQLSTATE 错误、JIT 与并行 worker 统计",
+    "通过共享内存 MPSC 环形缓冲异步导出到 ClickHouse，队列溢出丢弃事件而不阻塞查询",
+    "提供 SQL API（pg_stat_ch_stats/flush/reset）及 GUC 配置项控制队列、批量与 TLS 连接"
+   ],
+   "use_cases": [
+    "在 ClickHouse 中对 PostgreSQL 查询做延迟百分位、慢查询模式与逐执行事件的时序分析",
+    "按应用名/客户端 IP 下钻查询行为并监控错误与缓冲命中情况",
+    "需要导出过程不阻塞查询路径的低开销遥测采集"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A PostgreSQL extension that captures per-query execution telemetry and exports it to ClickHouse in real-time. Unlike pg_stat_statements which aggregates statistics in PostgreSQL, pg_stat_ch exports **raw events** to ClickHouse where aggregation happens via Cli ／ PostgreSQL 16, 17, and 18 are fully supported. See docs/version-compatibility.md for the feature matrix and version-specific fields.",
+     "lines": [
+      6,
+      69
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# pg_stat_ch: PostgreSQL Query Telemetry Exporter to ClickHouse ／ ClickHouse 23.3+ is required for native export.",
+     "lines": [
+      4,
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是服务于 PostgreSQL 的遥测采集扩展并以 ClickHouse 为存储后端，非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# pg_stat_ch: PostgreSQL Query Telemetry Exporter to ClickHouse ／ A PostgreSQL extension that captures per-query execution telemetry and exports it to ClickHouse in real-time. Unlike pg_stat_statements which aggregates statistics in PostgreSQL, pg_stat_ch exports **raw events** to ClickHouse where aggregation happens via ClickHouse's powerful analytical engine. ／ PostgreSQL 16, 17, and 18 are fully supported. See docs/version-compatibility.md for the feature matrix and version-specific fields.",
+   "evidence_lines": [
+    4,
+    6,
+    69
+   ]
+  },
+  "fn": "ClickHouse/pg_stat_ch",
+  "sha": "6683aba76227",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

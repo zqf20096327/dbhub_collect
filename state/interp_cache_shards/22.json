@@ -10434,5 +10434,74 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7eb5d7916a1b": {
+  "identity": {
+   "one_liner": "自托管微信公众号图文工作台，用 Docker Compose 编排编辑、渲染与微信中转",
+   "review": "这是一个自托管的微信公众号图文编辑与草稿发布工作台，供公众号运营者撰写 Markdown 正文、配置排版与封面、生成手机预览后写入自己的公众号草稿箱。应用通过 docker compose 起 app、worker、relay、PostgreSQL 四个容器，微信调用经中转服务持令牌代理；仅写草稿箱，不提供群发、统计与多用户体系，单实例运行。",
+   "highlights": [
+    "提供 Markdown 正文编辑、排版调整与按标题自动生成封面的能力",
+    "随栈附带微信中转服务，实现草稿与素材相关的 7 个微信 API 端点并支持 Idempotency-Key 幂等去重",
+    "应用启动时自动执行数据库迁移，支持发布镜像与源码构建两种部署方式"
+   ],
+   "use_cases": [
+    "个人或团队自托管撰写并预览公众号文章后存入草稿箱",
+    "需要通过自建或随栈中转服务代理微信公众号 API 调用（含 IP 白名单、令牌管理）的场景",
+    "需要封面自动生成与正文排版模板管理的内容发布流程"
+   ],
+   "db_verdicts 行与 eco 无关。": "MySQL 适配 PostgreSQL"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A <--> P[(PostgreSQL)] ／ |`db`|PostgreSQL 16|`postgres:16-alpine`（固定 digest）|官方镜像| ／ |`database-data`|PostgreSQL 数据：文章、排版、封面模板、公众号连接、加密凭据修订、任务映射|",
+     "lines": [
+      26,
+      39,
+      178
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用 PostgreSQL 存储文章、排版、凭据等自身业务数据，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "  A <--> P[(PostgreSQL)] ／ |`db`|PostgreSQL 16|`postgres:16-alpine`（固定 digest）|官方镜像| ／ |`database-data`|PostgreSQL 数据：文章、排版、封面模板、公众号连接、加密凭据修订、任务映射|",
+   "evidence_lines": [
+    26,
+    39,
+    178
+   ]
+  },
+  "fn": "k7airos/wx-publish-studio",
+  "sha": "7eb5d7916a1b",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

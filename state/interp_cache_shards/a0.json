@@ -10045,5 +10045,72 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22b5c36dba22": {
+  "identity": {
+   "one_liner": "Python 函数持久化缓存库，用装饰器将结果序列化存入 SQLite",
+   "review": "cachew 是一个 Python 库，通过 @cachew 装饰器把函数返回值缓存到磁盘上的 SQLite 数据库中，基于类型注解自动推断 schema，参数哈希变化时自动失效缓存。面向需要在多次运行间复用计算结果的 Python 开发者，如数据处理管道作者；以 SQLite 为默认存储后端，另有实验性的文件后端。",
+   "highlights": [
+    "通过单个装饰器将函数调用结果持久化到 SQLite 数据库",
+    "从类型注解（PEP 526）自动推断 schema，无需手动序列化",
+    "根据函数参数哈希自动检测变化并失效缓存"
+   ],
+   "use_cases": [
+    "数据处理管道中间结果的重用，避免重复解析",
+    "传感器等数据源的分片数据增量合并导出",
+    "开发过程中 REPL 反复调试时的耗时计算缓存"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "TLDR: cachew lets you **cache function calls** into an sqlite database on your disk in a matter of **single decorator** (similar to functools.lru_cache). The difference from `functools.lru_cache` is that cached data is persisted between program runs, so next t ／ When you call `extract_links` with the same archive, you start getting results in a matter of milliseconds, as fast as sqlite reads it. ／ Data is synchronized via bluetooth in the sqlite database, which is easy to access. However sensor has limited memory (e.g. 1000 latest measurements).",
+     "lines": [
+      2,
+      42,
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以 SQLite 作为缓存存储后端为 Python 程序提供服务，是使用数据库的库而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TLDR: cachew lets you **cache function calls** into an sqlite database on your disk in a matter of **single decorator** (similar to functools.lru_cache). The difference from `functools.lru_cache` is that cached data is persisted between program runs, so next time you call your function, it will only be a matter of reading from the cache. ／ Package is available on pypi. ／  The default `sqlite` backend uses Python's built-in `sqlite3` module.",
+   "evidence_lines": [
+    2,
+    146,
+    196
+   ]
+  },
+  "fn": "karlicoss/cachew",
+  "sha": "22b5c36dba22",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

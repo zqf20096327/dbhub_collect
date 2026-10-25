@@ -10690,5 +10690,85 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "62a857076337": {
+  "identity": {
+   "one_liner": "Go 语言电商 REST API 后端服务（模块化单体）",
+   "review": "基于 Go 实现的电商 REST API，采用 DDD 与模块化单体架构，提供多店铺商品、购物车、支付对账、物流履约、幂等防重、Outbox 事件等能力。面向电商后端开发者与贡献者。支持通过 DB_TARGET 配置 PostgreSQL、Supabase 或 SQL Server，使用 pgx/v5 与 go-mssqldb 驱动，Redis 缓存可选，提供 Docker 部署与 Make 迁移/种子命令。",
+   "highlights": [
+    "双方言数据库支持：PostgreSQL 与 Microsoft SQL Server，不改业务逻辑切换",
+    "支持闪购库存保护、幂等防重复扣款与 Outbox 事件投递",
+    "提供 Docker 一键部署、Make 迁移/种子命令及 Postman/Bruno/OpenAPI 请求集合"
+   ],
+   "use_cases": [
+    "电商后端业务开发参考或二次开发基础",
+    "需要多数据库方言切换的 Go 后端项目实践",
+    "幂等、Outbox、库存保护等分布式模式的学习示例"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Dual-Dialect Database Support**|Works seamlessly on both PostgreSQL and Microsoft SQL Server without changing any business logic.| ／ |**Relational Database**|PostgreSQL & SQL Server|`pgx/v5`, `go-mssqldb`| ／ > **Environment Setup**: Copy `.env.example` to `.env`. Configure `DB_TARGET` (`postgres` · `supabase` · `sqlserver`), `STORAGE_PROVIDER` (`supabase` · `gcs` · `noop`), and `REDIS_ENABLED` (`true` · `false`). Schema migrations live in `migrations/<dialect>/` a",
+     "lines": [
+      41,
+      55,
+      64
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**Dual-Dialect Database Support**|Works seamlessly on both PostgreSQL and Microsoft SQL Server without changing any business logic.| ／ |**Relational Database**|PostgreSQL & SQL Server|`pgx/v5`, `go-mssqldb`| ／ > **Environment Setup**: Copy `.env.example` to `.env`. Configure `DB_TARGET` (`postgres` · `supabase` · `sqlserver`), `STORAGE_PROVIDER` (`supabase` · `gcs` · `noop`), and `REDIS_ENABLED` (`true` · `false`). Schema migrations live in `migrations/<dialect>/` a",
+     "lines": [
+      41,
+      55,
+      64
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL/SQL Server 存储数据的电商应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Clean, scalable backend service engineered for modern e-commerce platforms in Go. ／ |**Dual-Dialect Database Support**|Works seamlessly on both PostgreSQL and Microsoft SQL Server without changing any business logic.| ／ > **Environment Setup**: Copy `.env.example` to `.env`. Configure `DB_TARGET` (`postgres` · `supabase` · `sqlserver`), `STORAGE_PROVIDER` (`supabase` · `gcs` · `noop`), and `REDIS_ENABLED` (`true` · `false`). Schema migrations live in `migrations/<dialect>/` and seed data in `seeds/<dialect>/`.",
+   "evidence_lines": [
+    3,
+    41,
+    64
+   ]
+  },
+  "fn": "Deuterrr/komecore",
+  "sha": "62a857076337",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

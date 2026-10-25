@@ -10519,5 +10519,171 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "59d2dfb0af45": {
+  "identity": {
+   "one_liner": "AI 编码代理桌面工作台，聚合终端、审批与成本，本地 SQLite 存储",
+   "review": "agentglass 是一个桌面应用，把本机上运行的 AI 编码代理（Claude Code、Codex、Gemini CLI、OpenCode）的终端、PR、diff、浏览器和权限审批集中到一个窗口，并支持 Android 配对远程审批。数据全部存于本地 SQLite 文件，无账号无遥测。面向同时运行多个编码代理的开发者。",
+   "highlights": [
+    "聚合多个 AI 编码代理会话，提供工具调用审批门控与成本/token 统计",
+    "数据存储于本地 SQLite 文件，无账号、无云端、无遥测",
+    "内置 MCP server 驱动的浏览器面板与插件机制"
+   ],
+   "use_cases": [
+    "同时管理多个 AI 编码代理会话与权限审批",
+    "从手机远程查看代理状态并放行危险操作",
+    "跟踪各代理会话的成本与 token 消耗"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your machine holds everything: a SQLite file on your own disk, no account, no ／ No account, no cloud, no telemetry. Everything lives in a SQLite file on your ／ dependency-light on purpose: a Bun/SQLite server, a React/Vite UI, an Electron",
+     "lines": [
+      97,
+      118,
+      204
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该应用自身存储状态的内嵌数据库，README 未面向数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your machine holds everything: a SQLite file on your own disk, no account, no ／ dependency-light on purpose: a Bun/SQLite server, a React/Vite UI, an Electron",
+   "evidence_lines": [
+    97,
+    204
+   ]
+  },
+  "fn": "SirAllap/agentglass",
+  "sha": "59d2dfb0af45",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dc7e900fb6de": {
+  "identity": {
+   "one_liner": "JSON 原生 TypeScript ORM，统一 API 支持多种数据库",
+   "review": "uql 是一个以 JSON 语法查询数据库的 TypeScript ORM，供 Node、Bun、Deno、浏览器及边缘运行时的开发者使用。实体类即 schema，提供类型安全查询、$populate 关联加载、实体差分迁移 CLI 与软删除等内建机制，通过各方言驱动适配多种 SQL 数据库及 MongoDB，零运行时依赖。",
+   "highlights": [
+    "提供 JSON 语法且类型安全的查询 API，编译期校验字段与关系",
+    "内置迁移 CLI，可将实体与数据库的差分生成为迁移文件",
+    "支持 $populate 在单条语句内加载关联，并提供软删除、流式读取、语义与向量搜索"
+   ],
+   "use_cases": [
+    "在 Node/Bun/边缘运行时等环境用统一 ORM 读写多种数据库",
+    "为 TypeScript 项目生成并执行 schema 迁移",
+    "在浏览器侧通过 HTTP 服务执行受作用域限制的查询"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "npm install uql-orm pg # or mysql2, mariadb, better-sqlite3, mongodb, @tursodatabase/serverless, @libsql/client ／ import { PgQuerierPool } from 'uql-orm/postgres'; ／ - **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the bro",
+     "lines": [
+      23,
+      61,
+      86
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "npm install uql-orm pg # or mysql2, mariadb, better-sqlite3, mongodb, @tursodatabase/serverless, @libsql/client ／ - **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the bro",
+     "lines": [
+      23,
+      86
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the bro",
+     "lines": [
+      86
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "npm install uql-orm pg # or mysql2, mariadb, better-sqlite3, mongodb, @tursodatabase/serverless, @libsql/client ／ - **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the bro",
+     "lines": [
+      23,
+      86
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供为连接多种数据库服务的 ORM 驱动与迁移工具，属数据库生态工具而非使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "npm install uql-orm pg   # or mysql2, mariadb, better-sqlite3, mongodb, @tursodatabase/serverless, @libsql/client ／ import { PgQuerierPool } from 'uql-orm/postgres'; ／ - **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the browser, with no native binaries on the `fetch`-based drivers.",
+   "evidence_lines": [
+    23,
+    61,
+    86
+   ],
+   "softened": []
+  },
+  "fn": "rogerpadilla/uql",
+  "sha": "dc7e900fb6de",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

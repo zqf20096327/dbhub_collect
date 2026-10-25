@@ -10080,5 +10080,134 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e301480093a1": {
+  "identity": {
+   "one_liner": "Rust 原生多数据库桌面客户端，支持多库连接、编辑与备份",
+   "review": "DbCat 是用 Rust 编写的 macOS/Windows 数据库客户端，界面由 GPU 绘制，不依赖 Electron/WebView。提供表格编辑、SQL 查询、ER 图、结构设计、导入导出与整库备份恢复，覆盖 MySQL、PostgreSQL、SQLite 等多种数据库，并内置 MCP 服务器供 AI 工具调用。密码存系统钥匙串，生产连接支持只读与写前确认。本仓库仅发布二进制版本，不含源码。",
+   "highlights": [
+    "Rust 原生实现，支持 macOS（Apple Silicon/Intel）与 Windows，内置自动更新",
+    "支持 MySQL、PostgreSQL、SQLite、SQL Server、Redis、MongoDB、ClickHouse 等多种数据库的浏览、编辑与备份恢复",
+    "内置 MCP 服务器，AI 修改需人工审批，密码不经过 AI 工具"
+   ],
+   "use_cases": [
+    "在桌面端管理多种数据库的日常查询与数据编辑",
+    "对生产库执行带护栏（只读/写前确认）的变更操作",
+    "通过 MCP 让 AI 编码工具安全访问数据库"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|关系型|**PostgreSQL**|多 Schema、物化视图、扩展；整库与多 Schema 备份恢复| ／ - **📦 导入导出与备份**：CSV / JSON / SQL 导出、CSV 导入；MySQL、MariaDB、TiDB、PostgreSQL、CockroachDB、SQL Server、SQLite 与 ClickHouse 整库与多 Schema 备份恢复，以及 MongoDB、Redis 与 Valkey 备份恢复。",
+     "lines": [
+      32,
+      50
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🚀 **大表也不卡**：分页按需取数（每页 300 行），百万行 MySQL 表打开首页实测约 1.3 ms；所有数据库调用都在后台线程执行，慢查询期间界面照常响应。 ／ |关系型|**MySQL**|5.7 / 8.x；外键、触发器、存储过程；整库与多 Schema 备份恢复| ／ - **📦 导入导出与备份**：CSV / JSON / SQL 导出、CSV 导入；MySQL、MariaDB、TiDB、PostgreSQL、CockroachDB、SQL Server、SQLite 与 ClickHouse 整库与多 Schema 备份恢复，以及 MongoDB、Redis 与 Valkey 备份恢复。",
+     "lines": [
+      19,
+      29,
+      50
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|嵌入式|**SQLite**|本地文件，零配置| ／ - **📦 导入导出与备份**：CSV / JSON / SQL 导出、CSV 导入；MySQL、MariaDB、TiDB、PostgreSQL、CockroachDB、SQL Server、SQLite 与 ClickHouse 整库与多 Schema 备份恢复，以及 MongoDB、Redis 与 Valkey 备份恢复。",
+     "lines": [
+      35,
+      50
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|关系型|**SQL Server**|T-SQL、Schema、Windows / Kerberos / Entra ID 认证| ／ - **📦 导入导出与备份**：CSV / JSON / SQL 导出、CSV 导入；MySQL、MariaDB、TiDB、PostgreSQL、CockroachDB、SQL Server、SQLite 与 ClickHouse 整库与多 Schema 备份恢复，以及 MongoDB、Redis 与 Valkey 备份恢复。",
+     "lines": [
+      34,
+      50
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|分析型|**ClickHouse**|MergeTree 表选项、分区与排序键| ／ - **📦 导入导出与备份**：CSV / JSON / SQL 导出、CSV 导入；MySQL、MariaDB、TiDB、PostgreSQL、CockroachDB、SQL Server、SQLite 与 ClickHouse 整库与多 Schema 备份恢复，以及 MongoDB、Redis 与 Valkey 备份恢复。",
+     "lines": [
+      37,
+      50
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|关系型|**MariaDB**|10.x / 11.x；序列、CHECK 约束、账户锁定与角色| ／ - **📦 导入导出与备份**：CSV / JSON / SQL 导出、CSV 导入；MySQL、MariaDB、TiDB、PostgreSQL、CockroachDB、SQL Server、SQLite 与 ClickHouse 整库与多 Schema 备份恢复，以及 MongoDB、Redis 与 Valkey 备份恢复。",
+     "lines": [
+      30,
+      50
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|关系型|**TiDB**|兼容 MySQL 的分布式库 · 执行计划、备份恢复| ／ - **📦 导入导出与备份**：CSV / JSON / SQL 导出、CSV 导入；MySQL、MariaDB、TiDB、PostgreSQL、CockroachDB、SQL Server、SQLite 与 ClickHouse 整库与多 Schema 备份恢复，以及 MongoDB、Redis 与 Valkey 备份恢复。",
+     "lines": [
+      31,
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "客户端为连接和管理各类数据库提供服务，属于数据库生态工具而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "闭源，仓库仅用于发布版本与问题反馈，不含源代码",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## 🗄️ 支持的数据库 / Supported Databases ／ - **📊 表格浏览与就地编辑**：分页加载，百万行表秒开；13 种过滤条件、服务端排序；改动先暂存，预览 SQL 后一次提交。 ／ - **🤖 AI 接入（MCP）**：内置 MCP 服务器，在设置里一键添加到 Claude Code、Codex、Cursor、Claude Desktop 等 AI 工具，AI 工具需要时会在后台自动启动 DbCat。默认关闭，每个连接单独授权（关闭 / 只读 / 修改需审批 / 修改免审批）；AI 提出的修改在 DbCat 里展示语句、预计影响行数与理由，由你批准后执行，密码不经过 AI 工具。",
+   "evidence_lines": [
+    25,
+    46,
+    51
+   ]
+  },
+  "fn": "dbcat-app/dbcat",
+  "sha": "e301480093a1",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11085,5 +11085,320 @@
   "generated_at": "2026-10-24",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "e2309e400e12": {
+  "identity": {
+   "one_liner": "语音优先的电影发现全栈应用，以 PostgreSQL 为真源、OpenSearch 为派生索引",
+   "review": "一个全栈电影发现 PWA，用户可浏览/搜索影片、管理个人片单与评分，并通过语音助手（经 MCP 工具调用后端能力）完成对话式操作。数据持久化在 PostgreSQL，OpenSearch 作为可重建的派生搜索索引。适合想参考单体 Spring Boot + React + Python agent 架构与 k3s GitOps 交付实践的开发者，本地运行需 Java、Docker、Node、Python 等多套工具链。",
+   "highlights": [
+    "以 PostgreSQL 为数据真源，OpenSearch 作为派生搜索索引，提供幂等的 seed 与 reindex 工作流",
+    "Python 语音助手仅通过受保护的 MCP 工具访问 Java 后端能力，不直接查询数据库",
+    "通过 Docker Compose 启动本地依赖，提供 make 命令完成启动、种子数据和索引重建"
+   ],
+   "use_cases": [
+    "自托管的电影目录浏览与个人片单/评分管理",
+    "基于语音的对话式影片查找与推荐探索",
+    "本地开发参考全栈应用与 k3s GitOps 部署流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rebuildable data flows:** PostgreSQL as the source of truth, a derived OpenSearch index, ／ The backend owns the application domain and persists movie, identity, account, and engagement data in PostgreSQL. ／ OpenSearch is used as a derived search index and can be rebuilt explicitly from PostgreSQL. RustFS provides",
+     "lines": [
+      84,
+      106,
+      107
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明后端将影片、身份、账户与互动数据持久化在 PostgreSQL，数据库是应用的数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The backend owns the application domain and persists movie, identity, account, and engagement data in PostgreSQL. ／ OpenSearch is used as a derived search index and can be rebuilt explicitly from PostgreSQL. RustFS provides ／ |Data|PostgreSQL 18, OpenSearch 3|",
+   "evidence_lines": [
+    106,
+    107,
+    155
+   ]
+  },
+  "fn": "NiklasTiede/popcorn-society",
+  "sha": "e2309e400e12",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "68989c6c2df3": {
+  "identity": {
+   "one_liner": "Rust 编写的键盘驱动终端数据库客户端",
+   "review": "datarig 是一个在终端中运行的多连接数据库客户端，使用 Rust 与 Ratatui 编写，提供模式树浏览、带 vim 按键的 SQL 编辑器、分页结果网格和从目录重建的 DDL 查看。项目处于 pre-1.0 早期阶段，目前完整适配 PostgreSQL，MySQL 仅部分功能可用，Windows 未经实际测试。适合习惯终端与 vim 操作的开发者或 DBA 日常查询与库表结构查看。",
+   "highlights": [
+    "支持多连接并排工作区，含 schema 树、SQL 编辑器与分页结果网格",
+    "支持从系统目录单次往返重建并显示 DDL，只读展示",
+    "支持 SSH 隧道、只读 profile 及 OS keychain 等多种密码来源"
+   ],
+   "use_cases": [
+    "在终端中浏览和查询 PostgreSQL 数据库结构与数据",
+    "需要 vim 键位与多标签工作流的日常 SQL 开发",
+    "通过 SSH 隧道以只读方式检查远端库表结构与统计信息"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "formula (Install); the latest is 0.29.0. **PostgreSQL** is implemented, and ／ Everything below works today with PostgreSQL; MySQL says which parts work with MySQL. ／ - Show DDL (PostgreSQL; MySQL shows the server's own text, see MySQL): `D` on a",
+     "lines": [
+      16,
+      27,
+      101
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**MySQL** in part (see MySQL for what it does and does not do yet). The configuration ／ Everything below works today with PostgreSQL; MySQL says which parts work with MySQL. ／ - Show DDL (PostgreSQL; MySQL shows the server's own text, see MySQL): `D` on a",
+     "lines": [
+      17,
+      27,
+      101
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "with their version. MariaDB 10.6 and newer is a best effort: it connects and runs statements, and",
+     "lines": [
+      899
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为连接数据库的终端客户端，为数据库操作提供工具能力而非以数据库存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A terminal database client: a DataGrip-style workspace for your databases, in the terminal. ／ datarig is written in Rust with Ratatui. It keeps several connections ／ formula (Install); the latest is 0.29.0. **PostgreSQL** is implemented, and",
+   "evidence_lines": [
+    5,
+    7,
+    16
+   ]
+  },
+  "fn": "DokaDev/datarig",
+  "sha": "68989c6c2df3",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f15b2e752ef0": {
+  "identity": {
+   "one_liner": "在 Android 手机上通过 Magisk 模块 + Debian chroot 运行 ARTEX 渗透测试系统",
+   "review": "这是一个 Magisk 模块，把 AI 渗透测试系统 ARTEX（Go 后端 + Next.js 前端）打包到 Android 上运行：通过 Debian 12 arm64 rootfs 的 chroot 环境装 PostgreSQL 15 和 artex 本体，绕过 bionic 不兼容 glibc 的问题，并用 LD_PRELOAD shim 绕过内核缺少 SYSVIPC 的限制。供有 root 权限的 arm64 Android 设备使用者刷入，仅限 arm64。",
+   "highlights": [
+    "以 Magisk 模块形式提供，刷入后通过浏览器访问 8787 端口使用",
+    "在 Debian chroot 容器内运行 PostgreSQL 15 和 ARTEX，带守护进程每 30 秒检查并拉起服务",
+    "通过 libsysv-shim.so 将 SysV 共享内存调用映射到 mmap，解决 Android GKI 内核关闭 CONFIG_SYSVIPC 的问题"
+   ],
+   "use_cases": [
+    "在 root 过的 arm64 Android 手机上运行 ARTEX 渗透测试系统",
+    "无 Docker 环境的移动设备上部署依赖 PostgreSQL 的 Go 应用",
+    "通过 ports.conf 自定义 Web 端口和流量录制代理的移动测试环境"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ARTEX 是套 AI 自主渗透测试系统（Go 后端 + Next.js 前端），原本要求 Docker 加 PostgreSQL。 ／ 容器里装 PostgreSQL 15 和 artex 本体，只把 8787 端口露给宿主。",
+     "lines": [
+      5,
+      8
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "ripgrep、sqlite3、nmap、vim-tiny。ARTEX 的 Bash 工具和 Python 脚本工具都在这个容器里跑，",
+     "lines": [
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该模块运行 ARTEX 这一使用 PostgreSQL 存储数据的应用，自身不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "ARTEX 本体为 AGPL-3.0，上游源码删除后由本仓库在 source-v0.3.15 分支提供",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ARTEX 是套 AI 自主渗透测试系统（Go 后端 + Next.js 前端），原本要求 Docker 加 PostgreSQL。 ／ 容器里装 PostgreSQL 15 和 artex 本体，只把 8787 端口露给宿主。",
+   "evidence_lines": [
+    5,
+    8
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "hmruu/ARTEX-Magisk",
+  "sha": "f15b2e752ef0",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ff8fb7da00d6": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的持久化 MCP 消息总线，内置 SQLite 存储",
+   "review": "minymaton 是一个用 Rust 编写的 MCP 消息总线服务器，让多个编码代理（如 Copilot CLI、Claude Code、Codex）跨会话和跨机器通过 stream/subscription/publish/receive 四个工具协调通信，消息在 publish 返回前提交到内置 SQLite 持久存储，订阅进度跨重启保留，未确认批次会重投。仅监听回环地址，远程访问需 SSH 隧道或 HTTPS 反向代理。",
+   "highlights": [
+    "提供 stream、subscription、publish、receive 四个 MCP 基础工具，支持广播和定向寻址",
+    "消息在 publish 返回前提交到内置 SQLite 持久存储，未确认批次跨重启重投",
+    "QueueStore/QueueReader trait 支持替换其他存储后端；提供 Rust 与 Python 两种后台 waiter"
+   ],
+   "use_cases": [
+    "多个编码代理跨机器协调交接任务",
+    "需要在代理会话间持久传递未读消息并确认处理",
+    "通过 MCP 端点为现有客户端接入共享收件箱"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Messages commit to durable storage before `publish` returns (bundled SQLite in ／ > **The floor.** The public server is one SQLite-backed process with a loopback-only listener ／ (`AGPL-3.0-only`) distribution ships the single-node bundled SQLite WAL backend",
+     "lines": [
+      32,
+      38,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该服务器使用内置 SQLite 作为消息持久存储（bundled SQLite），SQLite 是其存储后端而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "发行版为 AGPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Messages commit to durable storage before `publish` returns (bundled SQLite in ／ (`AGPL-3.0-only`) distribution ships the single-node bundled SQLite WAL backend ／ **minymaton lets the agents you already use coordinate through a durable MCP message bus.**",
+   "evidence_lines": [
+    32,
+    91,
+    19
+   ]
+  },
+  "fn": "immutlex-dev/minymaton",
+  "sha": "ff8fb7da00d6",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

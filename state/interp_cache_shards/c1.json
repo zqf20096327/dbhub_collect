@@ -10622,5 +10622,177 @@
   "generated_at": "2026-10-22",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4e8960c29a2b": {
+  "identity": {
+   "one_liner": "单二进制 OLTP 数据库服务器，原生编译执行 T-SQL 并兼容 PG/TDS 协议",
+   "review": "LionSQL 是一个用 Go 编写的单二进制 OLTP 数据库引擎，内置 VDBE 字节码虚拟机执行 T-SQL 与存储过程，同时监听 PostgreSQL v3（5433）与 SQL Server TDS（1433）两种线协议，可用 psql、sqlcmd 等客户端直连；提供内存 OCC 与 WiredTiger 双存储引擎、WAL 流复制、内嵌 Web 管理界面与 REST API，支持 macOS/Linux，License 为 GPL v3。",
+   "highlights": [
+    "同时提供 PostgreSQL v3 协议与 Microsoft SQL Server TDS 协议监听端口",
+    "内置 VDBE 虚拟机执行 T-SQL 存储过程、函数与触发器",
+    "支持 WAL 流复制、在线热备份及内嵌 Web 管理界面（端口 8090）"
+   ],
+   "use_cases": [
+    "以单二进制部署运行 T-SQL 兼容的 OLTP 事务服务",
+    "用 psql/sqlcmd/SSMS 等现有客户端工具直接连接查询",
+    "需要主从复制与在线快照备份的嵌入式数据库场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "LionSQL is a high-performance, embedded OLTP database engine that natively compiles and executes Microsoft SQL Server T-SQL & stored procedures and complex business logic on a sub-microsecond VDBE bytecode virtual machine, while simultaneously offering broad c ／ - **PostgreSQL v3 Protocol (Port 5433)**: Fully compatible with `psql`, DBeaver, GORM, Prisma, and pgx, supporting SSL/TLS encryption and binary parameter binding. ／ ### Connecting via `psql` (PostgreSQL Client)",
+     "lines": [
+      14,
+      32,
+      131
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Database Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "lines": [
+      314
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Database Migration Guide**: Procedures for migrating from PostgreSQL, MSSQL, SQLite, and MySQL.",
+     "lines": [
+      314
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "compat",
+     "quote": "LionSQL is a high-performance, embedded OLTP database engine that natively compiles and executes Microsoft SQL Server T-SQL & stored procedures and complex business logic on a sub-microsecond VDBE bytecode virtual machine, while simultaneously offering broad c ／ - **Microsoft SQL Server TDS Protocol (Port 1433)**: Instantly compatible with SSMS, Azure Data Studio, `sqlcmd`, and MSSQL drivers, supporting RPC prepared execution. ／ ### Connecting via `sqlcmd` (MSSQL Client)",
+     "lines": [
+      14,
+      33,
+      144
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是数据库引擎本体，而非为其他数据库服务的工具或应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL v3",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Single-binary, high-concurrency OLTP database server supporting T-SQL and stored procedures ／ LionSQL is a high-performance, embedded OLTP database engine that natively compiles and executes Microsoft SQL Server T-SQL & stored procedures and complex business logic on a sub-microsecond VDBE bytecode virtual machine, while simultaneously offering broad compatibility with PostgreSQL SQL dialects and the standard PGWire v3 protocol. It comes fully equipped with a built-in web management studio for real-time telemetry and schema administration, as well as an integrated goroutine connection pooler capable of handling tens of thousands of concurrent connections—eliminating the need for additional software to achieve a complete operational environment. Packaging this complete enterprise feature set into a single, ultra-compact static binary under 100MB (currently ~50MB) with zero external dependencies, LionSQL delivers blazing-fast transaction throughput of tens of thousands of transactions per second with predictable sub-millisecond latency and non-blocking snapshot isolation. ／  - **WiredTiger MVCC Disk Engine**: Delivers 120,000+ TPS (and up to 833k tpmC in TPC-C) with full ACID durability backed by lock-free B+Trees.",
+   "evidence_lines": [
+    3,
+    14,
+    61
+   ]
+  },
+  "fn": "MaroShim/LionSQL",
+  "sha": "4e8960c29a2b",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b6aca466ebc9": {
+  "identity": {
+   "one_liner": "Rails 风格 Go CLI 脚手架，生成仅 API 的 Postgres 服务并生成接线代码",
+   "review": "Bogie 是一个 Go 命令行脚手架工具，用 Gin、sqlc、goose、River、Kamal 组合生成 API-only、仅支持 Postgres 的 Go 服务，提供 rails new 式的 new/g/d/doctor 等生成器，并把生成的代码注册进应用（因 Go 无 autoload）。生成的应用不依赖 Bogie 本身。面向已有 Rails 应用、需要旁置一个 Go 服务的团队。当前仅支持 Postgres，SQLite 明确排除。",
+   "highlights": [
+    "提供 rails new/g 风格的生成器，生成的代码自动完成注册并可通过 destroy 撤销",
+    "生成的应用组合 Gin、sqlc、goose、River、Kamal，并通过 Docker Compose 在 :5440 端口运行 Postgres",
+    "生成的应用不导入 Bogie，删除工具后应用不受影响"
+   ],
+   "use_cases": [
+    "Rails 团队为 webhook 接收、长连接网关、队列 worker 等场景旁置一个 Go 服务",
+    "需要 Rails 式约定（迁移、凭据、测试数据库）的 Go API 服务开发",
+    "为 AI 编码代理提供 AGENTS.md/CLAUDE.md 配方以运行生成器"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ You need **Docker with Compose v2** (or your own Postgres, see ／ requires it. The generated app runs its Postgres in Compose on port 5440, so it",
+     "lines": [
+      6,
+      47,
+      50
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite is deliberately out until River's SQLite driver is stable",
+     "lines": [
+      213
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为构建连接 Postgres 的 Go 服务提供生成器的 CLI 工具，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ out of Gin, sqlc, goose, River and Kamal, with generators that also wire the code in. ／ The generated app **never imports Bogie**. Delete the tool tomorrow and the",
+   "evidence_lines": [
+    6,
+    7,
+    36
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bogie-go/bogie",
+  "sha": "b6aca466ebc9",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

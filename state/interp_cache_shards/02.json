@@ -10780,5 +10780,71 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d56f3675214": {
+  "identity": {
+   "one_liner": "统一备份工具，通过 sources/destinations 模型桥接备份生产与存储",
+   "review": "uback 是一个用 Go 编写的通用备份工具，将备份来源（tar、mariabackup、btrfs、zfs 等）与存储目的地（本地文件系统、FTP、S3 兼容对象存储等）解耦为可插拔的 source/destination 模型。适合需要在多种备份流程间采用统一配置方式的系统管理员使用。提供加密（age）、压缩、增量备份与保留策略；README 自述仍处于早期阶段（preliminary stage），未提供 npm/pypi 等安装通道说明。",
+   "highlights": [
+    "提供 sources（tar、mariabackup、btrfs、zfs）与 destinations（本地文件系统、FTP、S3 兼容对象存储、btrfs、zfs）的可插拔备份模型",
+    "支持加密、压缩、增量备份与保留策略（pruning/retention policy）",
+    "支持自定义 sources/destinations 及代理（proxy）方式运行"
+   ],
+   "use_cases": [
+    "将 MariaDB 通过 mariabackup 进行增量备份并上传到 S3 兼容对象存储",
+    "对 btrfs/zfs 快照做加密备份与保留策略管理",
+    "为多种异构备份流程提供统一配置与部署方式"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* mariabackup: MariaDB backup system, supports ／ * [x] Fix a compatibility issue with MariaDB 11",
+     "lines": [
+      38,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定义 mariabackup 作为备份 source，是为数据库生态服务的备份工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`uback` try to solve this by defining a simple model of backup producers ／ * tar ／ ## Supported Destinations",
+   "evidence_lines": [
+    14,
+    37,
+    43
+   ]
+  },
+  "fn": "sloonz/uback",
+  "sha": "3d56f3675214",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

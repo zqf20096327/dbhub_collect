@@ -10384,5 +10384,139 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a7e78bc3a1a2": {
+  "identity": {
+   "one_liner": "MCP SSH 服务器，让 AI 助手通过 37 个工具管理远程服务器",
+   "review": "一个 Model Context Protocol 服务器，供 Claude Code、OpenAI Codex 等 AI 助手执行远程 SSH 管理：命令执行、文件传输、数据库查询、备份调度与健康监控。面向 DevOps 运维人员，内置按服务器粒度的 unrestricted/readonly/restricted 三级权限模式、命令白名单与只读 SQL 强制，npm 安装，支持配置热重载。",
+   "highlights": [
+    "提供 37 个 MCP 工具，覆盖命令执行、文件传输、数据库操作、备份与监控",
+    "支持按服务器的 unrestricted/readonly/restricted 三种安全模式及命令 allow/deny 模式",
+    "强制只读 SQL（ssh_db_query 仅允许 SELECT），数据库参数统一 shell 转义"
+   ],
+   "use_cases": [
+    "通过 AI 助手对多台服务器执行远程 DevOps 自动化任务",
+    "对 MySQL/PostgreSQL/MongoDB 及文件系统执行定时备份",
+    "以受限/只读模式向 AI 代理开放服务器运维操作"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Automated backups** for MySQL, PostgreSQL, MongoDB, and file systems ／ - **💾 Backup & Restore** - Automated backups for MySQL, PostgreSQL, MongoDB, and files",
+     "lines": [
+      210,
+      248
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Automated backups** for MySQL, PostgreSQL, MongoDB, and file systems ／ - **Service monitoring** for nginx, mysql, docker, and custom services",
+     "lines": [
+      210,
+      217
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是通过 SSH 操作远程服务器与数据库（备份、查询、监控）的工具，不是以数据库为存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Model Context Protocol (MCP) server that enables **Claude Code** and **OpenAI Codex** to manage multiple SSH connections. Execute commands, transfer files, manage databases, create backups, monitor health, and automate DevOps tasks across your servers — directly from your AI assistant. ／ |`readonly`|Mutating tools are refused outright — no deploy, no upload, no sudo, no database import. Read commands still work.| ／ - **Read-only SQL is enforced**, not suggested: `ssh_db_query` refuses anything",
+   "evidence_lines": [
+    3,
+    42,
+    59
+   ]
+  },
+  "fn": "bvisible/mcp-ssh-manager",
+  "sha": "a7e78bc3a1a2",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "161d5f7ff887": {
+  "identity": {
+   "one_liner": "基于 GitHub issues/PR 的开源贡献互惠记账平台",
+   "review": "Overflow 是一个开源工作互惠记账系统：贡献者用闲置的 LLM 订阅额度为他人仓库的 issue 工作，PR 合并后由发起者定价结算积分，积分可在共享账本内消费。面向开源开发者和小型团队，支持 GitHub 网页钩子注册、GitLab 项目链接、积分限额与审计机制，并提供 API 与 MCP 端点。",
+   "highlights": [
+    "提供基于 GitHub issues 和 pull requests 的积分定价与结算流程，结算记录标签事件、评论、合并提交和 diff 指纹",
+    "支持通过 GitHub OAuth/webhook 注册仓库，并可链接 GitLab 身份注册 GitLab 项目",
+    "提供 API 端点和面向 agent harness 的 MCP 端点"
+   ],
+   "use_cases": [
+    "开源维护者在精力不足时用积累的积分换取他人处理自己的 backlog issue",
+    "拥有闲置 LLM 订阅额度的开发者通过解决他人 issue 赚取信用",
+    "自托管部署独立的互惠记账实例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是使用数据库存储账本数据的应用平台，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Let your spare weeks pay for the dry ones.** Overflow is a shared ledger for open-source work, for people and small teams whose capacity comes and goes. When you have leftover LLM subscription usage that you won't burn on your own projects, work on others' issues and earn credit. Spend it on your own backlog when you're depleted. No money changes hands. There is no token. ／ Go to <https://overflow.nitjsefni.eu> and sign in with GitHub. Register a repository you administer on one form: the repository and its two label catalogs. The catalog labels must already exist. Overflow installs the webhook for you. ／ - API.md — API tokens, programmatic registration and catalog changes with every error message, the ledger read endpoints, and the MCP endpoint for agent harnesses.",
+   "evidence_lines": [
+    7,
+    11,
+    48
+   ]
+  },
+  "fn": "Nitjsefnie/Overflow",
+  "sha": "161d5f7ff887",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

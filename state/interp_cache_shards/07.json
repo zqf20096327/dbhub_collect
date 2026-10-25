@@ -10670,5 +10670,103 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "79fa6448634c": {
+  "identity": {
+   "one_liner": "SQL 数据库水平分片路由库，按主键哈希分发查询",
+   "review": "CollegeDB 是一个 TypeScript 分片路由库，将单个逻辑表按主键分布到多个数据库实例并路由查询，键映射存于 KV 存储（Workers KV/Redis/Valkey 等），运行于 Cloudflare Workers、Node 和 Bun。面向需要在 D1/PostgreSQL/MySQL 等后端上做水平扩展的开发者，提供 CRUD 辅助、再平衡与迁移工具。",
+   "highlights": [
+    "按主键将逻辑表分片到多个数据库实例并自动路由查询",
+    "支持 Cloudflare D1、PostgreSQL、MySQL、MariaDB、SQLite 及 Drizzle ORM 后端",
+    "提供 Rendezvous 哈希、跨分片 ID 生成、分片组分批写入与再平衡工具"
+   ],
+   "use_cases": [
+    "突破单库容量或写入吞吐限制的水平扩展",
+    "将分片分布到不同区域实现按地理位置放置数据",
+    "为既有单库数据集做分片迁移与再平衡"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SQL backends: Cloudflare D1, PostgreSQL, MySQL, MariaDB, SQLite, and any Drizzle ORM instance over them. Key mappings live in Cloudflare Workers KV, Redis, Valkey, or NuxtHub KV. Runs on Cloudflare Workers, Node, and Bun. ／ - Provider adapters for Redis/Valkey/NuxtHub/Workers KV plus PostgreSQL/MySQL/SQLite SQL ／ - Hyperdrive helpers for PostgreSQL and MySQL",
+     "lines": [
+      13,
+      39,
+      53
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "SQL backends: Cloudflare D1, PostgreSQL, MySQL, MariaDB, SQLite, and any Drizzle ORM instance over them. Key mappings live in Cloudflare Workers KV, Redis, Valkey, or NuxtHub KV. Runs on Cloudflare Workers, Node, and Bun. ／ - Provider adapters for Redis/Valkey/NuxtHub/Workers KV plus PostgreSQL/MySQL/SQLite SQL ／ - Hyperdrive helpers for PostgreSQL and MySQL",
+     "lines": [
+      13,
+      39,
+      53
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQL backends: Cloudflare D1, PostgreSQL, MySQL, MariaDB, SQLite, and any Drizzle ORM instance over them. Key mappings live in Cloudflare Workers KV, Redis, Valkey, or NuxtHub KV. Runs on Cloudflare Workers, Node, and Bun. ／ - Provider adapters for Redis/Valkey/NuxtHub/Workers KV plus PostgreSQL/MySQL/SQLite SQL",
+     "lines": [
+      13,
+      39
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "SQL backends: Cloudflare D1, PostgreSQL, MySQL, MariaDB, SQLite, and any Drizzle ORM instance over them. Key mappings live in Cloudflare Workers KV, Redis, Valkey, or NuxtHub KV. Runs on Cloudflare Workers, Node, and Bun.",
+     "lines": [
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQL 数据库提供分片路由能力的库，通过 provider 适配多种数据库后端",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A TypeScript library for **horizontal scaling** of SQL databases. CollegeDB splits a single logical table across many database instances by primary key, and routes each query to the instance that owns its key. ／ SQL backends: Cloudflare D1, PostgreSQL, MySQL, MariaDB, SQLite, and any Drizzle ORM instance over them. Key mappings live in Cloudflare Workers KV, Redis, Valkey, or NuxtHub KV. Runs on Cloudflare Workers, Node, and Bun. ／ - Provider adapters for Redis/Valkey/NuxtHub/Workers KV plus PostgreSQL/MySQL/SQLite SQL",
+   "evidence_lines": [
+    11,
+    13,
+    39
+   ]
+  },
+  "fn": "earth-app/CollegeDB",
+  "sha": "79fa6448634c",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9716,5 +9716,247 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e33e6dd213f5": {
+  "identity": {
+   "one_liner": ".NET 平台的 Dapper 扩展库，提供多数据库 Provider 与 DI 集成",
+   "review": "这是一个面向 .NET 应用开发的 Dapper 扩展库，通过独立的数据库 Provider 包接入 MySQL、SQL Server、PostgreSQL、Oracle、SQLite 和 ODBC，并基于 Microsoft DI 提供多连接注册、显式主从选择、内存/Redis 查询缓存、XML 存储 SQL 及慢查询监控集成。适用于在 ASP.NET Core 或控制台程序中访问数据库的开发者；读从库选择不强制数据库权限，主从复制需自行配置。",
+   "highlights": [
+    "提供 MySQL、SQL Server、PostgreSQL、Oracle、SQLite、ODBC 六种数据库 Provider 包，通过 AddDapperFor*() 扩展方法注册",
+    "支持多命名连接与显式 master/slave 角色选择，从库按权重轮询",
+    "支持内存与 Redis 查询缓存、XML 文件存储 SQL（含重载）、慢查询监控与 MiniProfiler 集成"
+   ],
+   "use_cases": [
+    ".NET 应用中通过 Microsoft DI 注入方式访问多种关系数据库",
+    "需要多连接、主从读写分离路由的应用",
+    "需要查询缓存或慢查询监控的 Dapper 使用者"
+   ],
+   "use_cases_note": null
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1. MySQL, SQL Server, PostgreSQL, SQLite, Oracle and ODBC providers. ／ |Dapper.Extensions.PostgreSQL|Dapper.Extensions.PostgreSQL|Dapper.Extensions.PostgreSQL|| ／ |PostgreSQL|`Dapper.Extensions.PostgreSql`|`AddDapperForPostgreSQL()`|",
+     "lines": [
+      5,
+      24,
+      78
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "1. MySQL, SQL Server, PostgreSQL, SQLite, Oracle and ODBC providers. ／ |Dapper.Extensions.MySQL|Dapper.Extensions.MySQL|Dapper|| ／ |MySQL|`Dapper.Extensions.MySql`|`AddDapperForMySQL()`|",
+     "lines": [
+      5,
+      22,
+      77
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "1. MySQL, SQL Server, PostgreSQL, SQLite, Oracle and ODBC providers. ／ |ZeeLyn.Dapper.Extensions.Oracle|Dapper.Extensions.Oracle|ZeeLyn.Dapper.Extensions.Oracle|The Oracle provider uses the ZeeLyn package prefix.| ／ |Oracle|`Dapper.Extensions.Oracle`|`AddDapperForOracle()`|",
+     "lines": [
+      5,
+      27,
+      79
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "1. MySQL, SQL Server, PostgreSQL, SQLite, Oracle and ODBC providers. ／ |Dapper.Extensions.SQLite|Dapper.Extensions.SQLite|Dapper.Extensions.SQLite|| ／ Install the provider for your database. It brings in `Dapper.Extensions.NetCore`; cache and profiling packages are optional. For a console example using SQLite and Microsoft DI:",
+     "lines": [
+      5,
+      26,
+      34
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "1. MySQL, SQL Server, PostgreSQL, SQLite, Oracle and ODBC providers. ／ |Dapper.Extensions.MSSQL|Dapper.Extensions.MSSQL|Dapper.Extensions.MSSQL|| ／ |SQL Server|`Dapper.Extensions.MSSQL`|`AddDapperForMSSQL()`|",
+     "lines": [
+      5,
+      23,
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为应用访问多种数据库提供驱动/扩展能力的组件，属于为数据库生态服务的开发库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Dapper extension library for .NET applications. ／ 1. MySQL, SQL Server, PostgreSQL, SQLite, Oracle and ODBC providers. ／ |Database|Namespace|Registration|",
+   "evidence_lines": [
+    3,
+    5,
+    73
+   ]
+  },
+  "fn": "ZeeLyn/Dapper.Extensions",
+  "sha": "e33e6dd213f5",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ab8fd9c73a5c": {
+  "identity": {
+   "one_liner": "Omarchy 桌面的 Rust/GPUI 应用开发套件与应用打包格式",
+   "review": "ODK 提供 Rust + GPUI 界面框架与嵌入式 Luau 插件机，用于开发跟随 Omarchy 主题的应用；OMA 定义 .oma 目录打包格式并提供验证、安装、沙箱与启动程序。面向在 Arch Linux/Hyprland/Wayland 的 Omarchy 环境下开发与分发应用的开发者，当前所有 crate 处于 0.0.0 预发布阶段。",
+   "highlights": [
+    "提供 GPUI 界面框架与嵌入式 Luau 插件机",
+    "OMA 提供 .oma 打包格式及验证、安装、沙箱、启动程序",
+    "仅支持 Linux x86_64 与 Omarchy 环境"
+   ],
+   "use_cases": [
+    "开发 Omarchy 桌面 Rust GUI 应用",
+    "以 .oma 格式打包并沙箱分发应用",
+    "为框架贡献组件或迁移旧设计系统应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "仅 topic 标签含 sqlite，README 未说明数据库用途，是面向 Omarchy 的应用开发工具链。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **ODK**, the Omarchy Development Kit: Rust applications with a GPUI interface that follows the user's Omarchy theme, and an embedded Luau machine for plugins. Applications depend on one `odk` crate. ／ - **OMA**, Omarchy Managed Application: a bundle format (`<App>.oma/`, a directory) and `oma`, the program that verifies, installs, sandboxes and starts one. `oma` does not depend on ODK. ／ Pre-release: every crate is 0.0.0. Stable Rust (edition 2024), Linux x86_64.",
+   "evidence_lines": [
+    5,
+    6,
+    8
+   ]
+  },
+  "fn": "csfh/odk",
+  "sha": "ab8fd9c73a5c",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fac41fe0f293": {
+  "identity": {
+   "one_liner": "自然语言查询经营数据的受控 Agent，模型只提议 SQL，服务端校验执行",
+   "review": "一个面向业务数据问答的受控 Agent 服务：模型仅提议只读 SELECT，服务端完成身份鉴权、SQL 子集解析、租户条件改写、只读执行与聚合核验，答案由服务端基于已核实事实渲染并标注口径依据。面向需要让业务人员用自然语言查数、且要求权限与数字可核验的团队。依赖 PostgreSQL 16，支持 Compose 部署与 OpenAI 兼容协议接入真实模型。",
+   "highlights": [
+    "模型仅提议查询，服务端执行身份映射、SQL 解析改写、只读执行（2 秒超时、100 行上限）与数字核验",
+    "每次运行限定预算：最多 6 次模型调用、8 次工具调用、60 秒；支持追问（条件继承但数字重查）与跨租户审批",
+    "支持 json 与 native 两种模型动作协议，可通过 OpenAI 兼容协议接入真实模型，默认提供确定性 Fake 模型演示"
+   ],
+   "use_cases": [
+    "业务人员用自然语言查询带租户隔离的经营指标数据",
+    "需要审批流程与数字核验的敏感数据问答场景",
+    "内部部署的只读数据查询服务（仅监听 127.0.0.1）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Needs Python 3.12–3.14 (or `uv` to manage Python) and PostgreSQL 16 (server encoding UTF8; the example below runs it in a Docker container, so Docker too). The checks, the smokes and the local evaluation have Python entry points with the same command on all th ／ The example uses a local Docker container `queryshield-postgres` on port 5433 (the demo data document uses the same container name and port). The container's superuser is called `queryshield`:",
+     "lines": [
+      206,
+      238
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "export QUERYSHIELD_STATE_STORE_PATH=./state/state.sqlite3 QUERYSHIELD_CALL_STORE_PATH=./state/calls.sqlite3",
+     "lines": [
+      282
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是面向业务问答的应用服务，PostgreSQL 作为其数据存取对象，SQLite 用于本地状态存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A controlled agent for asking business-data questions in natural language: the model only proposes what to query; the server checks permissions, runs read-only SQL and verifies the numbers, and the answer states the metric definition and its basis.",
+   "evidence_lines": [
+    5
+   ]
+  },
+  "fn": "Jonsonwu0823-coding/queryshield",
+  "sha": "fac41fe0f293",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9304,5 +9304,143 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ca9dd511ec3d": {
+  "identity": {
+   "one_liner": "Rust 原生跨平台多数据库 GUI 管理客户端",
+   "review": "RDB 是一个用 Rust 与 Slint 构建的原生桌面数据库管理器，无需 Electron，提供连接管理、schema 浏览、多标签查询编辑器、结果过滤与命令面板，支持 PostgreSQL、MySQL、MariaDB、Redis、MongoDB、SQLite 等多种引擎，并通过驱动 crate 抽象扩展引擎；附 CLI 与 MCP server 供代理工具受控访问数据库。适合开发者在 macOS/Linux/Windows 桌面管理多种数据库。",
+   "highlights": [
+    "支持多引擎连接与查询：SQL、CQL、Redis 命令、MongoDB 查询四类协议",
+    "提供 MCP server（rdb-mcp），支持按连接/库授权、默认拒绝、限 500 行返回",
+    "密码存于 OS keychain，回退为 AES-GCM 加密文件",
+    "通过 Driver trait 抽象，新引擎以独立 driver crate 接入"
+   ],
+   "use_cases": [
+    "桌面端统一管理多种数据库连接与 schema",
+    "交互式 SQL/命令查询与结果过滤",
+    "为 AI 代理配置只读或可写的受控数据库访问"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Native cross-platform database manager. PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB · SQLite · Cassandra · Scylla · SQL Server · Oracle · ClickHouse — one binary, no Electron. ／ - **Multi-engine** — PostgreSQL, MySQL, MariaDB, Redis, Valkey, MongoDB, SQLite, Cassandra, SQL Server, Oracle, ClickHouse in one app ／ |PostgreSQL|`tokio-postgres`|Tabular|",
+     "lines": [
+      5,
+      19,
+      36
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Native cross-platform database manager. PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB · SQLite · Cassandra · Scylla · SQL Server · Oracle · ClickHouse — one binary, no Electron. ／ - **Multi-engine** — PostgreSQL, MySQL, MariaDB, Redis, Valkey, MongoDB, SQLite, Cassandra, SQL Server, Oracle, ClickHouse in one app ／ |MySQL|`mysql_async`|Tabular|",
+     "lines": [
+      5,
+      19,
+      37
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Native cross-platform database manager. PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB · SQLite · Cassandra · Scylla · SQL Server · Oracle · ClickHouse — one binary, no Electron. ／ - **Multi-engine** — PostgreSQL, MySQL, MariaDB, Redis, Valkey, MongoDB, SQLite, Cassandra, SQL Server, Oracle, ClickHouse in one app ／ |MariaDB|`mysql_async` (MySQL-protocol-compatible)|Tabular|",
+     "lines": [
+      5,
+      19,
+      38
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Native cross-platform database manager. PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB · SQLite · Cassandra · Scylla · SQL Server · Oracle · ClickHouse — one binary, no Electron. ／ - **Multi-engine** — PostgreSQL, MySQL, MariaDB, Redis, Valkey, MongoDB, SQLite, Cassandra, SQL Server, Oracle, ClickHouse in one app ／ |SQLite|`rusqlite`|Tabular|",
+     "lines": [
+      5,
+      19,
+      42
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Native cross-platform database manager. PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB · SQLite · Cassandra · Scylla · SQL Server · Oracle · ClickHouse — one binary, no Electron. ／ - **Multi-engine** — PostgreSQL, MySQL, MariaDB, Redis, Valkey, MongoDB, SQLite, Cassandra, SQL Server, Oracle, ClickHouse in one app ／ |SQL Server|`tiberius`|Tabular|",
+     "lines": [
+      5,
+      19,
+      44
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Native cross-platform database manager. PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB · SQLite · Cassandra · Scylla · SQL Server · Oracle · ClickHouse — one binary, no Electron. ／ - **Multi-engine** — PostgreSQL, MySQL, MariaDB, Redis, Valkey, MongoDB, SQLite, Cassandra, SQL Server, Oracle, ClickHouse in one app ／ |Oracle|`oracledb` (Oracle's thin driver)|Tabular|",
+     "lines": [
+      5,
+      19,
+      45
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Native cross-platform database manager. PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB · SQLite · Cassandra · Scylla · SQL Server · Oracle · ClickHouse — one binary, no Electron. ／ - **Multi-engine** — PostgreSQL, MySQL, MariaDB, Redis, Valkey, MongoDB, SQLite, Cassandra, SQL Server, Oracle, ClickHouse in one app ／ |ClickHouse|`clickhouse` (HTTP)|Tabular|",
+     "lines": [
+      5,
+      19,
+      46
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接多种数据库进行管理与查询的桌面客户端工具，为数据库使用与运维服务，而非以某数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server",
+    "Oracle",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Native cross-platform database manager. PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB · SQLite · Cassandra · Scylla · SQL Server · Oracle · ClickHouse — one binary, no Electron. ／ ## Supported Engines ／ Run the interactive TTY manager:",
+   "evidence_lines": [
+    5,
+    32,
+    91
+   ]
+  },
+  "fn": "suiflex/rdb",
+  "sha": "ca9dd511ec3d",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

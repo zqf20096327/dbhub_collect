@@ -10916,5 +10916,128 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b27673f82703": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 webhook 持久化接收与合并投递服务",
+   "review": "hookspool 是一个部署在反向代理与消费端之间的 webhook 接收服务：先将事件提交到 SQLite 再返回 2xx，按目标确认前重复投递，并把突发事件按 key 合并成批次唤醒。适合自托管 webhook 接入的运维者；核心仅依赖 Python 标准库与一个 SQLite 文件，不包含队列服务器或 LLM。",
+   "highlights": [
+    "先写 SQLite 后确认（commit before ack），至少一次投递直到目标接受",
+    "同 key 事件在窗口内合并为一次批量唤醒，按 key 保持顺序",
+    "内置 GitHub、Gmail、Google Calendar 等服务的 bobbin 插件，核心无第三方依赖"
+   ],
+   "use_cases": [
+    "为 webhook 发送方提供持久化接收，避免消费端重启丢事件",
+    "将突发事件合并成批次，降低下游消费频率",
+    "在 Hermes 网关等既有路由前接入而不改发送方 URL"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One Python package with no dependencies in the core, one SQLite file and two small processes. No queue server, no ／ - Commit before acknowledge. A request is verified and committed to SQLite before the sender sees a 2xx, or it gets a 503.",
+     "lines": [
+      11,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明服务把每个事件提交到自身的一个 SQLite 文件作为持久化存储，SQLite 是内部实现而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（单许可）",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One Python package with no dependencies in the core, one SQLite file and two small processes. No queue server, no ／ - Commit before acknowledge. A request is verified and committed to SQLite before the sender sees a 2xx, or it gets a 503.",
+   "evidence_lines": [
+    11,
+    27
+   ]
+  },
+  "fn": "jaredzimmerman/hookspool",
+  "sha": "b27673f82703",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9d80ba76e951": {
+  "identity": {
+   "one_liner": "OceanBase 大赛 seekdb 赛题的参赛仓库",
+   "review": "该仓库为第六届 OceanBase 数据库大赛 seekdb 赛题的参赛代码库，README 仅含标题与赛题说明，未提供功能描述、安装步骤或使用文档。目标用户为赛事评审与参赛相关人员，具体实现内容与依赖机制需查看仓库代码才能确认。",
+   "highlights": [
+    "作为第六届 OceanBase 数据库大赛 seekdb 赛题的参赛仓库"
+   ],
+   "use_cases": [
+    "OceanBase 数据库大赛 seekdb 赛题的参赛提交"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "第六届 OceanBase 数据库大赛 seekdb 赛题参赛仓库",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 仅说明为大赛参赛仓库，未提供功能或实现证据，无法判断是工具还是应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "第六届 OceanBase 数据库大赛 seekdb 赛题参赛仓库",
+   "evidence_lines": [
+    2
+   ]
+  },
+  "fn": "Saka-tsuki/seekdb-2026",
+  "sha": "9d80ba76e951",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

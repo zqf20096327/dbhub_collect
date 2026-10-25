@@ -10677,5 +10677,216 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e87bbd74e8dd": {
+  "identity": {
+   "one_liner": "基于 Go、React 与 PostgreSQL 的闪动校园自动跑步平台",
+   "review": "EasyRun 是一个可自行部署的校园代跑平台，使用 Go 后端独立实现协议适配与任务调度，React + TypeScript 构建控制台，PostgreSQL 存储账号、计划、任务与缓存。支持多账号管理、路线规划、自动任务调度、计费与 USDT 充值，适配闪动校园 Android 8.7.9 客户端，供个人或商业代跑运营者使用。",
+   "highlights": [
+    "后端使用 Go 独立实现协议适配与任务调度，支持多 Worker 并发与固定/随机两种调度方式",
+    "基于地图步行路径服务构建路网并生成候选路线，L1 LRU 与 L2 PostgreSQL 缓存协同工作",
+    "提供客户前台与计费、TRC20 HD 钱包充值、超管/管理员/客户分级权限与数据隔离"
+   ],
+   "use_cases": [
+    "为闪动校园用户代执行跑步计划并集中管理多账号",
+    "商业代跑运营中的客户注册、计费、充值与权限管理",
+    "查看运行记录、轨迹与执行日志的自动化任务运维"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 17 ／ **EasyRun** 是面向 **闪动校园**的**智能代跑平台**。基于 Go、React 与 PostgreSQL，将账号、计划、路线、任务和记录集中到一个可自行部署的工作台中，支持个人使用与可选客户前台。 ／ - L1 进程内 LRU 与 L2 PostgreSQL 持久化缓存协同工作。 ／ |数据库|PostgreSQL 17|",
+     "lines": [
+      9,
+      34,
+      104,
+      128
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明平台将账号、计划、路线、任务和记录存入 PostgreSQL，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，随附第三方人脸模型保留上游非商业研究用途限制",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**EasyRun** 是面向 **闪动校园**的**智能代跑平台**。基于 Go、React 与 PostgreSQL，将账号、计划、路线、任务和记录集中到一个可自行部署的工作台中，支持个人使用与可选客户前台。 ／ |数据库|PostgreSQL 17| ／ |完整发行包|已有 PostgreSQL，不想安装 Go / Node.js|下载最新版本|",
+   "evidence_lines": [
+    34,
+    128,
+    158
+   ]
+  },
+  "fn": "Zolohacker/EasyRun",
+  "sha": "e87bbd74e8dd",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bfeedc6025d7": {
+  "identity": {
+   "one_liner": "New API 的自托管管理控制台，Flask+PostgreSQL 实现用量统计与扩展管理",
+   "review": "为已部署的 New API 补充统计与管理后台：用量统计、渠道质量对比、用户/令牌/额度批量管理、余额告警与飞书/钉钉通知等，页面挂载于现有站点 /cockpit/ 并沿用 New API 账号。需已部署 New API，目前支持 PostgreSQL 后端，提供 Docker 镜像与源码构建两种部署方式。",
+   "highlights": [
+    "提供用量统计、渠道质量、用户/令牌/额度管理与操作记录等页面，统计结果可导出 Excel",
+    "支持余额检查与报警，可配置飞书、钉钉、邮件等通知渠道",
+    "业务接口统一在 /cockpit/api/ 下供脚本调用，预构建镜像通过 GitHub Release 分发"
+   ],
+   "use_cases": [
+    "为已有 New API 站点补充用量与成本统计分析",
+    "批量管理用户、令牌和配额并留存操作记录",
+    "配置余额阈值告警与多渠道通知"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "本项目需要已部署的 New API，目前支持 PostgreSQL 后端。应用用 Flask 编写，网页与图片请求使用独立容器，",
+     "lines": [
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明本项目是依赖已部署 New API 的 Flask 应用，使用 PostgreSQL 作为后端存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目需要已部署的 New API，目前支持 PostgreSQL 后端。应用用 Flask 编写，网页与图片请求使用独立容器， ／ 和 New API 共用 Docker 网络，通过同一 HTTPS 入口访问。 ／ - **已有 New API，只安装 Cockpit**：已有系统接入，使用对应 Release 的 Compose 和环境示例，不替换现有数据库。",
+   "evidence_lines": [
+    20,
+    21,
+    88
+   ]
+  },
+  "fn": "ilove323/new-api-cockpit",
+  "sha": "bfeedc6025d7",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "15b2023bbe21": {
+  "identity": {
+   "one_liner": "Apache Fluss 作为湖仓流式层的 CDC 数据流演示项目",
+   "review": "这是一个演示项目，用 Docker Compose 在本地运行一套湖仓数据链路：Python 脚本向 PostgreSQL 持续写入变更，Flink CDC 捕获变更写入 Fluss 主键表，再由分层服务定期批量提交到 Iceberg（S3 兼容存储 + Hive Metastore）。README 明确说明该设置偏重易读性、不适用于生产环境，适合想了解 Fluss union read 机制的开发者实际运行观察。",
+   "highlights": [
+    "提供 Docker Compose 一键启动的完整流式湖仓栈，包含 PostgreSQL、Flink CDC、Fluss、Iceberg、RustFS 和 Hive Metastore",
+    "实现 union read：查询同时读取 Iceberg 快照与尚未分层的 Fluss 变更日志",
+    "包含 compare.sh 对比脚本，用于查看源库、Fluss 与 Iceberg 三方的数据延迟"
+   ],
+   "use_cases": [
+    "本地学习和演示 Fluss 流式层与 Iceberg 湖仓的联合读取机制",
+    "观察 Flink CDC 从 PostgreSQL 逻辑复制流捕获变更的完整流程",
+    "评估 CDC 数据入湖链路的提交延迟与数据一致性表现"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL PostgreSQL ／ A Python script keeps inserting, updating and deleting rows in PostgreSQL. Flink CDC captures ／ │ generator.py │ ────────────────────────────▶ │ PostgreSQL 17 │ ／ |**PostgreSQL**|The operational database we want to replicate.|",
+     "lines": [
+      3,
+      36,
+      51,
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该项目用 PostgreSQL 作为演示的业务数据源库，整个栈是围绕它存取数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "lakehouse table fresh while data keeps changing at the source. It runs on a laptop with Docker ／ A Python script keeps inserting, updating and deleting rows in PostgreSQL. Flink CDC captures ／ |**PostgreSQL**|The operational database we want to replicate.|",
+   "evidence_lines": [
+    11,
+    36,
+    60
+   ]
+  },
+  "fn": "pabloggarc/fluss-demo",
+  "sha": "15b2023bbe21",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

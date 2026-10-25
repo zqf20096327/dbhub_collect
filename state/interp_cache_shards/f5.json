@@ -10256,5 +10256,230 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c96253c02aa3": {
+  "identity": {
+   "one_liner": "TypeScript 全栈框架，内置 MCP 与代理支持",
+   "review": "Akan.js 是基于 Bun 运行时的 TypeScript 全栈框架，通过单一业务声明生成 schema、API、客户端类型、状态与 UI 等多层代码，并输出到 Web、iOS、Android、桌面等六个平台；每个受保护端点自动发布为 MCP 工具，附带akan CLI、代码生成与AI 编码规则文件。面向希望同时服务人类用户和 AI 代理的开发者；依赖 Bun >=1.4.4，不指定具体数据库引擎。",
+   "highlights": [
+    "单行字段声明贯穿 schema、查询、服务、API、客户端类型、状态与 UI 共 8 层",
+    "受保护端点默认通过 POST /mcp 发布为 MCP 工具，屏幕控件可发布为页内代理工具",
+    "提供 akan CLI，包含工作区创建、构建、测试、lint、akan code 与 akan mcp 等命令"
+   ],
+   "use_cases": [
+    "用一套 TypeScript 代码构建 Web、移动与桌面多端应用",
+    "为应用端点生成 MCP 工具供 AI 代理调用，并复用同一套权限守卫",
+    "使用含 AI 编码规则文件（AGENTS.md、Cursor rules）的 monorepo 工作区组织团队开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为构建应用提供框架、CLI 与代码生成能力的 TypeScript 框架，数据库仅作为其 document 持久化子模块的底层，README 未绑定任何具体数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The TypeScript framework, agents included.** Powered by Bun. ／ |`akanjs/document`|Database documents, filters, query builders, full-text search, and persistence utilities.| ／ Tooling ships as separate packages: `@akanjs/cli` (the `akan` command), `@akanjs/devkit` (build runners, code",
+   "evidence_lines": [
+    7,
+    205,
+    218
+   ]
+  },
+  "fn": "akan-team/akanjs",
+  "sha": "c96253c02aa3",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "88c776121dc1": {
+  "identity": {
+   "one_liner": "React 应用可视化调试工具，Alt+右键查看组件到 SQL 的全链路",
+   "review": "Feel 是一个面向 React（Vite 或 Next.js）+ Express/Next 后端项目的开发期可视化调试工具：Alt+右键组件即可看到组件链、数据流、API 路由、后端处理函数及对应 SQL 与数据表，并展示尚未发生的调用路径。通过 Vite 插件、Next 插件和 Node 端包注入实现，仅用于开发环境；支持 Postgres 的表结构与变更历史，MySQL/MariaDB 仅限查询与表信息，SQLite 尚不支持运行时。",
+   "highlights": [
+    "提供组件链与数据流（前端函数→API 路由→后端处理→SQL→表）的可视化追踪",
+    "支持 Prisma 与 Drizzle 查询的 SQL、表和代码行号展示，以及静态分析的潜在调用",
+    "提供 Postgres 的数据库视图（列、键、外键及变更历史），仅用于开发构建"
+   ],
+   "use_cases": [
+    "调试 React 全栈应用中 UI 元素背后的数据来源",
+    "理解 AI 生成或他人代码中组件与后端的调用关系",
+    "开发期排查 SQL 查询与数据表变更的来源"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Works with **React on Vite or Next.js**, **Express**, **Postgres or MySQL**, **Prisma**, **Drizzle** and **Supabase REST requests**. ／ - **Database view** (Postgres): columns, keys, foreign keys both ways, and — opt-in — ／ |Database|Postgres: queries per request, tables, structure, change history — through `pg`, **Prisma** (7, or 6 with `@prisma/adapter-pg`) or **Drizzle** (`drizzle-orm/node-postgres`)|",
+     "lines": [
+      10,
+      40,
+      112
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Works with **React on Vite or Next.js**, **Express**, **Postgres or MySQL**, **Prisma**, **Drizzle** and **Supabase REST requests**. ／ ||**MySQL / MariaDB**: queries per request, tables, timing and the line in your code — through `mysql2` (callbacks or `mysql2/promise`, pools, `getConnection`, transactions, prepared statements) or **Drizzle** (`drizzle-orm/mysql2`)| ／ - **MySQL table view and change history** — MySQL queries and tables show per request, but the table view is Postgres only",
+     "lines": [
+      10,
+      113,
+      120
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "||**MySQL / MariaDB**: queries per request, tables, timing and the line in your code — through `mysql2` (callbacks or `mysql2/promise`, pools, `getConnection`, transactions, prepared statements) or **Drizzle** (`drizzle-orm/mysql2`)| ／ - **Other MySQL paths**: the `mysql` and `mariadb` drivers, and Prisma on MySQL; `PoolCluster` is best effort (a query's line may be missing)",
+     "lines": [
+      113,
+      121
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **SQLite** — the static side understands Drizzle's SQLite tables, the runtime side doesn't yet",
+     "lines": [
+      122
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为使用 Postgres/MySQL 等数据库的应用提供调试与可视化能力，而非以数据库存储自身数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|Postgres: queries per request, tables, structure, change history — through `pg`, **Prisma** (7, or 6 with `@prisma/adapter-pg`) or **Drizzle** (`drizzle-orm/node-postgres`)| ／ ||**MySQL / MariaDB**: queries per request, tables, timing and the line in your code — through `mysql2` (callbacks or `mysql2/promise`, pools, `getConnection`, transactions, prepared statements) or **Drizzle** (`drizzle-orm/mysql2`)| ／ |`@feel-dev/agent`|Vite / Next dev server|maps stacks through sourcemaps, builds the call graph, static analysis, reads Postgres|",
+   "evidence_lines": [
+    112,
+    113,
+    137
+   ]
+  },
+  "fn": "Nirbhay71/Feel-your-project",
+  "sha": "88c776121dc1",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a5bccbc5c70": {
+  "identity": {
+   "one_liner": "量子物理论文每日追踪工具，抓取RSS/arXiv入库并生成报告",
+   "review": "一个面向量子计算方向研究者的本地论文追踪系统：每天定时抓取 12 个期刊 RSS 源与 arXiv quant-ph 公告，全部论文入库 SQLite，浏览时按配置的关键词/关注作者实时筛选，支持网页浏览、收藏管理和 HTML/Markdown 报告导出；本地运行无需账号，通过脚本或 Docker 部署。",
+   "highlights": [
+    "每天自动抓取 12 个 RSS 源与 arXiv quant-ph，全量入库后按关键词/作者实时筛选",
+    "提供网页浏览、收藏分组/备注/PDF 挂载、统计页面与 HTML/Markdown 报告导出",
+    "arXiv 采用公告层+时间窗 API 双层抓取，支持按日期补抓与链接去重"
+   ],
+   "use_cases": [
+    "研究者每日自动汇总特定关键词/作者的量子计算新论文",
+    "按作者生成年度精选报告并导出分享",
+    "本地离线收藏管理论文与 PDF"
+   ],
+   "eco_note": [
+    "数据落本地 SQLite，数据库仅为程序自身存储"
+   ],
+   "eco_why": "README 声明数据落在本地 SQLite，SQLite 仅作为该应用的存储后端。"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 不需要任何第三方账号，本地跑、数据落在本地 SQLite。",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明数据落在本地 SQLite，数据库仅作为该应用自身的存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 不需要任何第三方账号，本地跑、数据落在本地 SQLite。 ／ 一个每天自动从 12 个量子物理（超导量子计算方向）学术期刊 RSS 源抓取论文、 ／ ├── app/              # FastAPI 应用（入口/main、配置、数据库、抓取、过滤、调度、路由、报告）",
+   "evidence_lines": [
+    21,
+    17,
+    200
+   ]
+  },
+  "fn": "ZiyueHua/RNTS",
+  "sha": "4a5bccbc5c70",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

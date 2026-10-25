@@ -10886,5 +10886,252 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d60ff986a8f4": {
+  "identity": {
+   "one_liner": "框架无关的 PHP 数据库抽象库，基于 PDO 提供统一 API",
+   "review": "PDOdb 是一个基于 PDO 构建的 PHP 数据库访问库，为 MySQL、MariaDB、PostgreSQL、SQLite、MSSQL、Oracle 提供统一 API，包含查询构建器、缓存、分库分表、窗口函数、CTE、迁移与 ActiveRecord 模式，并附带 CLI 工具与 MCP 服务器，面向需要跨数据库访问或免框架依赖的 PHP 开发者；要求 PHP 8.4 及以上，无外部依赖。",
+   "highlights": [
+    "通过 PDO 为 MySQL、MariaDB、PostgreSQL、SQLite、MSSQL、Oracle 提供统一 API 与自动 SQL 方言处理",
+    "提供查询构建器、缓存、读写分离、分片、窗口函数、CTE、迁移、种子数据与 ActiveRecord 模式",
+    "包含 CLI 工具（迁移生成、schema 检查、REPL）、TUI 监控面板及基于 LLM 的查询/schema 分析（explainAiAdvice 与 MCP server）"
+   ],
+   "use_cases": [
+    "PHP 项目中需要跨多种数据库切换或统一访问层",
+    "不依赖框架的场景下需要查询构建器、迁移与种子数据管理",
+    "需要对查询进行缓存、性能分析与 AI 辅助优化的开发流程"
+   ],
+   "ai_kind_note": ""
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PDOdb** is a lightweight, framework-agnostic PHP database library providing a **unified API** across MySQL, MariaDB, PostgreSQL, SQLite, Microsoft SQL Server (MSSQL), and Oracle. ／ - **Cross-Database Compatibility** - Automatic SQL dialect handling (MySQL, MariaDB, PostgreSQL, SQLite, MSSQL, Oracle) ／ - **LATERAL JOINs** - Correlated subqueries in FROM clause for PostgreSQL, MySQL, and MSSQL (CROSS APPLY/OUTER APPLY) ／  - `pdo_pgsql` for PostgreSQL ／  - PostgreSQL 9.4+",
+     "lines": [
+      12,
+      18,
+      30,
+      104,
+      110
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**PDOdb** is a lightweight, framework-agnostic PHP database library providing a **unified API** across MySQL, MariaDB, PostgreSQL, SQLite, Microsoft SQL Server (MSSQL), and Oracle. ／ - **Cross-Database Compatibility** - Automatic SQL dialect handling (MySQL, MariaDB, PostgreSQL, SQLite, MSSQL, Oracle) ／ - **LATERAL JOINs** - Correlated subqueries in FROM clause for PostgreSQL, MySQL, and MSSQL (CROSS APPLY/OUTER APPLY) ／ - **UPDATE/DELETE with JOIN** - Update and delete operations with JOIN clauses (MySQL/MariaDB/PostgreSQL/MSSQL) ／  - `pdo_mysql` for MySQL/MariaDB ／  - MySQL 5.7+ / MariaDB 10.3+",
+     "lines": [
+      12,
+      18,
+      30,
+      61,
+      103,
+      109
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "**PDOdb** is a lightweight, framework-agnostic PHP database library providing a **unified API** across MySQL, MariaDB, PostgreSQL, SQLite, Microsoft SQL Server (MSSQL), and Oracle. ／ - **Cross-Database Compatibility** - Automatic SQL dialect handling (MySQL, MariaDB, PostgreSQL, SQLite, MSSQL, Oracle) ／ - ✅ **Cross-database projects** - Switch between MySQL, PostgreSQL, SQLite, MSSQL, Oracle without code changes ／ - `oci` for Oracle Database ／ - Oracle Database 12c+",
+     "lines": [
+      12,
+      18,
+      78,
+      107,
+      113
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**PDOdb** is a lightweight, framework-agnostic PHP database library providing a **unified API** across MySQL, MariaDB, PostgreSQL, SQLite, Microsoft SQL Server (MSSQL), and Oracle. ／ - **Cross-Database Compatibility** - Automatic SQL dialect handling (MySQL, MariaDB, PostgreSQL, SQLite, MSSQL, Oracle) ／ - **80+ Helper Functions** - SQL helpers for strings, dates, math, JSON, aggregations, and more (REPEAT, REVERSE, LPAD, RPAD emulated for SQLite; REGEXP operations supported across all dialects) ／  - `pdo_sqlite` for SQLite ／  - SQLite 3.38+",
+     "lines": [
+      12,
+      18,
+      19,
+      105,
+      111
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**PDOdb** is a lightweight, framework-agnostic PHP database library providing a **unified API** across MySQL, MariaDB, PostgreSQL, SQLite, Microsoft SQL Server (MSSQL), and Oracle. ／ - **Cross-Database Compatibility** - Automatic SQL dialect handling (MySQL, MariaDB, PostgreSQL, SQLite, MSSQL, Oracle) ／ - **LATERAL JOINs** - Correlated subqueries in FROM clause for PostgreSQL, MySQL, and MSSQL (CROSS APPLY/OUTER APPLY) ／  - `sqlsrv` for Microsoft SQL Server (requires Microsoft ODBC Driver for SQL Server) ／  - Microsoft SQL Server 2019+ / Azure SQL Database",
+     "lines": [
+      12,
+      18,
+      30,
+      106,
+      112
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**PDOdb** is a lightweight, framework-agnostic PHP database library providing a **unified API** across MySQL, MariaDB, PostgreSQL, SQLite, Microsoft SQL Server (MSSQL), and Oracle. ／ - **Cross-Database Compatibility** - Automatic SQL dialect handling (MySQL, MariaDB, PostgreSQL, SQLite, MSSQL, Oracle) ／ - **UPDATE/DELETE with JOIN** - Update and delete operations with JOIN clauses (MySQL/MariaDB/PostgreSQL/MSSQL) ／ - `pdo_mysql` for MySQL/MariaDB ／ - MySQL 5.7+ / MariaDB 10.3+",
+     "lines": [
+      12,
+      18,
+      61,
+      103,
+      109
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供统一访问 API 与配套 CLI/迁移工具，是为数据库生态服务的开发库而非使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PDOdb** is a lightweight, framework-agnostic PHP database library providing a **unified API** across MySQL, MariaDB, PostgreSQL, SQLite, Microsoft SQL Server (MSSQL), and Oracle. ／ Built on top of PDO with **zero external dependencies**, it offers: ／ - **🤖 AI-Powered Analysis** - Get intelligent database optimization recommendations using OpenAI, Anthropic, Google, Microsoft, DeepSeek, Yandex, or Ollama. Analyze queries, optimize schema, and get AI-powered suggestions through `explainAiAdvice()` method or CLI commands. Includes MCP server for IDE/agent integration. ／ - **Supported Databases**:",
+   "evidence_lines": [
+    12,
+    14,
+    39,
+    108
+   ]
+  },
+  "fn": "tommyknocker/pdo-database-class",
+  "sha": "d60ff986a8f4",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8fe76452d906": {
+  "identity": {
+   "one_liner": "Coolify 服务器迁移 CLI，一键备份并在新服务器恢复应用与数据库",
+   "review": "面向 Coolify v4.3–v4.5 的命令行迁移工具，可按项目或整服务器备份应用、卷、环境变量、域名与数据库，并在目标 Coolify 上通过粘贴一条命令恢复。数据库用 pg_dumpall/mysqldump 原生导出，备份经 age 加密并通过 HTTPS 固定证书传输，要求两端 Coolify 版本一致。",
+   "highlights": [
+    "支持以原生 dump 工具在数据库运行时备份 PostgreSQL、MySQL 和 MariaDB 并在目标端载入",
+    "备份整体使用 age 加密，通过 HTTPS 固定证书共享，恢复前执行预检与失败回滚",
+    "提供交互式菜单 CLI，支持按项目选择性备份、整服务器备份及 selective restore"
+   ],
+   "use_cases": [
+    "将单个项目或整个 Coolify 服务器迁移到新服务器",
+    "需要带走数据库数据、卷与环境变量的应用搬迁",
+    "Coolify 实例间指定应用的 selective 备份与恢复"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.| ／ **Databases.** PostgreSQL, MySQL and MariaDB containers (standalone or inside a service) are saved with their native dump tool while they run. On restore their data volume is created empty, initialised by the same image with the same credentials in a temporary",
+     "lines": [
+      115,
+      282
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.| ／ **Databases.** PostgreSQL, MySQL and MariaDB containers (standalone or inside a service) are saved with their native dump tool while they run. On restore their data volume is created empty, initialised by the same image with the same credentials in a temporary",
+     "lines": [
+      115,
+      282
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.| ／ **Databases.** PostgreSQL, MySQL and MariaDB containers (standalone or inside a service) are saved with their native dump tool while they run. On restore their data volume is created empty, initialised by the same image with the same credentials in a temporary",
+     "lines": [
+      115,
+      282
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**Databases.** PostgreSQL, MySQL and MariaDB containers (standalone or inside a service) are saved with their native dump tool while they run. On restore their data volume is created empty, initialised by the same image with the same credentials in a temporary",
+     "lines": [
+      282
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "**Databases.** PostgreSQL, MySQL and MariaDB containers (standalone or inside a service) are saved with their native dump tool while they run. On restore their data volume is created empty, initialised by the same image with the same credentials in a temporary",
+     "lines": [
+      282
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Coolify 平台上的应用与数据库提供备份/迁移能力，是为数据库部署生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Migrate Coolify to a new server: back up one domain, a few, or a whole Coolify server — then restore it on another Coolify by pasting one command. ／ |🗄️ **Native database dumps**|PostgreSQL, MySQL and MariaDB are saved with `pg_dumpall` / `mysqldump` while they keep running, and loaded with the same image on the target.| ／ > **You need:** two servers with **Coolify v4.3, v4.4 or v4.5, both on the same version** (the tool checks it and says which one to upgrade) · SSH as `root` or a `sudo` user on both · the new server must reach the old one on **port 443** (Coolify's proxy port — already open). On big servers, run inside `tmux` so a dropped SSH connection can't stop a long copy.",
+   "evidence_lines": [
+    10,
+    115,
+    31
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "mtalavi/coolify-mirror",
+  "sha": "8fe76452d906",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

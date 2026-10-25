@@ -11725,5 +11725,142 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e7ed281e66de": {
+  "identity": {
+   "one_liner": "自托管冲刺计划看板，覆盖 Yandex Tracker 与 Jira",
+   "review": "一个自托管的敏捷冲刺规划工具，提供按人/按天的泳道、待办池、燃尽图、事实时间线和回顾板，任务数据仍保留在 Yandex Tracker 或 Jira 中。面向以这些跟踪器管理迭代的团队。部署用 Docker Compose，依赖 PostgreSQL 存储，多实例实时协作需 Redis，并内置供 AI 代理读取与提案修改计划的 MCP 接口。",
+   "highlights": [
+    "提供冲刺泳道规划、待办筛选、燃尽图与回顾板功能",
+    "通过 Sync 从跟踪器拉取状态历史并在泳道上展示事实时间线",
+    "提供 MCP 接口，代理可读取计划并在确认后应用修改"
+   ],
+   "use_cases": [
+    "使用 Yandex Tracker 或 Jira 的团队做迭代规划与燃尽跟踪",
+    "自托管部署、数据留在内部的协作场景",
+    "接入 AI 代理读取与提案修改冲刺计划"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex)",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 用 PostgreSQL 作为自身部署的存储配置项，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# POSTGRES_PASSWORD, AUTH_SESSION_SECRET (≥32), ORG_SECRETS_ENCRYPTION_KEY (64 hex) ／ docker compose -f docker-compose.yml -f docker-compose.hub.yml up -d ／ Remote MCP крутится на вашем инстансе. Клиент (Cursor, Claude Desktop / Code) открывает браузер, логин и consent, затем получает Bearer. Scope: `mcp:tools`. Подробности — SPRINT_CONTEXT.md.",
+   "evidence_lines": [
+    77,
+    78,
+    87
+   ]
+  },
+  "fn": "Dinkimom/beer-tracker",
+  "sha": "e7ed281e66de",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0b12fadf72e9": {
+  "identity": {
+   "one_liner": "自托管发布说明系统：汇总 PR/issue，经人工审核生成多受众发布说明",
+   "review": "ReleaseFlow 是一个 Java 21 / Spring Boot 编写的自托管应用，通过 webhook 或轮询收集 GitHub、GitLab、Linear、Jira 的变更，按规则分类并由 AI 起草摘要，经人工审核后用 Mustache 模板生成面向不同受众的多语言发布说明，并发布到 Slack、Notion 等渠道。数据存储于 PostgreSQL，需 Docker 或 JDK 21 运行，作者声明为个人项目。",
+   "highlights": [
+    "通过签名 webhook 或定时轮询收集 GitHub、GitLab、Linear、Jira 的合并 PR 与已完成 issue",
+    "提供草稿-决策-审批的发布审核流程，发布后说明不可更改，并记录审核人",
+    "支持按受众（操作者、贡献者、最终用户）用 Mustache 模板生成最多五种语言的说明，并分发到 GitHub Releases、Slack、Notion、Confluence 等渠道"
+   ],
+   "use_cases": [
+    "面向多种读者群体（运维、开发者、用户）分别发布变更说明",
+    "将多代码平台/项目管理工具的变更汇总到同一发布流程并要求人工审批",
+    "搭建带 RSS 输出的公开 changelog"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "It is self-hosted: one Java 21 / Spring Boot application and PostgreSQL, with an ／ The quickest way to try a released version: the published image and PostgreSQL on one ／ a dedicated PostgreSQL database. Maven and Node.js come with the build: the Maven Wrapper",
+     "lines": [
+      62,
+      80,
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其运行依赖 PostgreSQL 存储自身数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It is self-hosted: one Java 21 / Spring Boot application and PostgreSQL, with an ／ The quickest way to try a released version: the published image and PostgreSQL on one",
+   "evidence_lines": [
+    62,
+    80
+   ]
+  },
+  "fn": "hoangluongtran0309/ReleaseFlow",
+  "sha": "0b12fadf72e9",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

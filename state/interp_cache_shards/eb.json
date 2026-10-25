@@ -10131,5 +10131,220 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "57e57e3268e4": {
+  "identity": {
+   "one_liner": "",
+   "review": "bunqueue 是面向 Bun/Node.js 的任务队列库与服务，内置内存/SQLite 存储，可切换 PostgreSQL 15–18 实现多 broker 部署，提供 DLQ、cron、S3 备份与 MCP 工具集。开发者可嵌入式使用，也可通过 Docker/二进制运行独立服务器供多语言客户端连接；README 明确不支持 MySQL 作为队列存储。",
+   "highlights": [
+    "提供嵌入式与服务端两种模式，支持 SQLite 单文件持久化与 PostgreSQL 多 broker",
+    "内置死信队列、cron 调度、重试退避、速率限制与 SQLite S3 备份",
+    "包含 MCP 服务器，供 AI 代理操作队列；提供多语言客户端协议"
+   ],
+   "use_cases": [
+    "Bun/Node.js 应用内的后台任务与定时调度",
+    "以 PostgreSQL 为存储的多 broker 队列部署",
+    "为 AI 代理提供调度与队列控制接口"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "password changes, percent-encoding reserved characters in the URL only. MySQL ／ **Not ideal for:** multi-region consensus or deployments that require MySQL as",
+     "lines": [
+      91,
+      258
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ DLQ, cron, SQLite S3 backups, and native MCP. Built for AI agents and automation. No Redis. ／ SQLite file. `msgpackr` is the only runtime dependency; cron, SQLite, S3, HTTP and",
+     "lines": [
+      11,
+      12,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目以 SQLite/PostgreSQL 作为队列存储引擎，是为应用任务调度服务的队列组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ bun add bunqueue ／ docker run -d --name bunqueue \\",
+   "evidence_lines": [
+    11,
+    26,
+    53
+   ],
+   "softened": [
+    "one_liner:『高性能』置空"
+   ]
+  },
+  "fn": "egeominotti/bunqueue",
+  "sha": "57e57e3268e4",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8138d7accb3d": {
+  "identity": {
+   "one_liner": "Rust+Tauri 构建的本地优先笔记工作区，数据存于单个 SQLite 库",
+   "review": "一个本地优先的笔记应用，提供嵌套页面、块编辑器、全文搜索、数据库视图、日历、任务和文件库等功能，面向个人笔记与学习场景使用。技术上采用 Rust + Tauri 2 + Svelte，所有内容保存在单一 SQLite 数据库（WAL 模式）及文件目录中，支持 Windows、macOS 和 Linux 安装包。",
+   "highlights": [
+    "提供块编辑器、嵌套页面、全文搜索及八种数据库视图（表格/看板/画廊/列表/日历/图表/时间线/表单）",
+    "全部数据存于单个 SQLite 数据库文件（WAL 模式），配合 files 目录存储附件",
+    "基于 Tauri 2 系统 WebView 渲染，提供 Windows 安装包、macOS dmg 与 Linux deb/AppImage"
+   ],
+   "use_cases": [
+    "个人笔记与知识管理",
+    "课程作业、日程与闪卡学习管理",
+    "本地数据整理（CSV 导入、表格/看板追踪）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Search:** `Ctrl+K` over pages (SQLite FTS5 with prefix matching and a substring fallback), assignments, events and files, with quick *Go to* and *Create* actions. ／ Everything lives in one SQLite database (`thoughtdesk.db`, WAL mode) plus a `files/` folder for the file library (stored under random names; the database keeps their real names). On Windows that's `%APPDATA%\\app.thoughtdesk.desktop\\`, and **Settings → Storage*",
+     "lines": [
+      99,
+      162
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有内容存于单个 SQLite 数据库文件，SQLite 是其数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, local-first notes workspace in the spirit of Notion: nested pages, a block editor, full-text search, databases, plus assignments, a calendar and a file library that all link together. It has a custom title bar, a vertical sidebar and a black-and-white look with optional accent colors. Built with **Rust + Tauri 2 + TypeScript** (Svelte 5 components). ／ - **Databases:** rows you can see as a **table, board, gallery, list, calendar, chart, timeline or form**, each view with its own filters, sorts, groups and shown properties. Start empty or from nine templates (Tasks, Projects, Reading list, Habit tracker, Study log, Budget, Applications, People, Recipes), import a `.csv` (column types are guessed: numbers, dates, checkboxes, choices, links), or paste rows straight from a spreadsheet. Every row is also a page, with room for notes under its properties; the first picture in it becomes its gallery cover.",
+   "evidence_lines": [
+    3,
+    68
+   ]
+  },
+  "fn": "kusule1351-hue/thought-desk",
+  "sha": "8138d7accb3d",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "640c71eb987e": {
+  "identity": {
+   "one_liner": "本地AI会话证据归档系统，聚合多来源会话为可检索存档",
+   "review": "Polylogue 将 Claude Code、Codex、Gemini CLI、ChatGPT 导出等多来源的 AI 会话与代理历史收集到本地单一存档，保留每个输入的全部版本，支持命令行查询、MCP、Web 阅读器、全文检索、用量统计、凭据脱敏和嵌入向量语义搜索。存档由常驻 daemon 独占写入，底层使用 SQLite 存储不可再算数据、派生索引与嵌入。适用于需要本地留存和审计 AI 会话记录的个人与代理工作流用户。",
+   "highlights": [
+    "支持从多个 AI 工具的本地文件位置收集会话并解析导入导出 ZIP",
+    "提供查询语言（编译为 SQL）、只读 SQL、全文搜索与可选嵌入语义检索",
+    "通过 MCP、CLI、HTTP API 和 Web 阅读器访问存档，输出时对凭据脱敏"
+   ],
+   "use_cases": [
+    "统一检索与审计多工具 AI 会话历史",
+    "统计 AI 使用的 token、费用与配额",
+    "为模型上下文提供会话摘要与历史回溯（MCP/hooks）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- `crates/store`: every SQLite connection and write, and the blob store.",
+     "lines": [
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明存档的 archive.db/index.db/embeddings.db 及全部 SQLite 读写由该项目持有，SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The archive is `$XDG_DATA_HOME/polylogue` (`~/.local/share/polylogue`). It ／ - `crates/store`: every SQLite connection and write, and the blob store. ／ |`mcp`|Serve MCP over stdio.|",
+   "evidence_lines": [
+    41,
+    120,
+    75
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "640c71eb987e",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

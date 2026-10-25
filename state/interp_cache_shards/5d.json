@@ -9959,5 +9959,139 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "230ab70b2a62": {
+  "identity": {
+   "one_liner": "终端 SQL 数据库 CLI 客户端，Rust 编写并内置多驱动",
+   "review": "SQffy 是一个用 Rust 编写的命令行客户端，用于在终端连接并查询 SQL 数据库，内置 SQLite、PostgreSQL、MySQL、MariaDB、ClickHouse、Oracle 驱动，其他数据库可通过适配器扩展。提供语法高亮、表/列自动补全、结果渲染、测试数据生成，并通过 MCP 服务器向 AI 代理提供只读查询通道，写操作在该服务器上被拒绝。适合需要在终端直接操作多种数据库的开发与运维人员。",
+   "highlights": [
+    "内置 SQLite、PostgreSQL、MySQL、MariaDB、ClickHouse、Oracle 驱动，其他数据库可通过适配器添加",
+    "提供 MCP 服务器（stdio 与 HTTP），仅允许 SELECT、WITH、SHOW、EXPLAIN、PRAGMA 等只读查询，写语句被拒绝",
+    "支持语法高亮、表/列自动补全、schema 渲染及 .generate 测试数据生成"
+   ],
+   "use_cases": [
+    "在终端直接连接多种 SQL 数据库执行查询与查看 schema",
+    "为编辑器中的 AI 代理提供受限只读的数据库访问入口",
+    "为测试或演示生成表数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ SQLite, PostgreSQL, MySQL, MariaDB, ClickHouse, and Oracle are built in. Any other database can be added as an adapter: same shell, same commands. The checklist is in docs/DRIVERS.md. ／ |`postgres`|yes|PostgreSQL| ／ |PostgreSQL|`postgres://USER:PASSWORD@localhost:5432/app`|Docker or installer from the picker|",
+     "lines": [
+      9,
+      30,
+      126,
+      168
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL ／ SQLite, PostgreSQL, MySQL, MariaDB, ClickHouse, and Oracle are built in. Any other database can be added as an adapter: same shell, same commands. The checklist is in docs/DRIVERS.md. ／ |`mysql`|yes|MySQL| ／ |MySQL|`mysql://USER:PASSWORD@localhost:3306/app`|Docker or installer from the picker|",
+     "lines": [
+      11,
+      30,
+      127,
+      169
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Oracle ／ SQLite, PostgreSQL, MySQL, MariaDB, ClickHouse, and Oracle are built in. Any other database can be added as an adapter: same shell, same commands. The checklist is in docs/DRIVERS.md. ／ SQLite ships inside the binary. Oracle needs Instant Client on the machine. ／ |Oracle|`oracle://USER:PASSWORD@localhost:1521/XEPDB1`|Needs Instant Client. `.schema` has no `CREATE` script.|",
+     "lines": [
+      17,
+      30,
+      112,
+      172
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ SQLite, PostgreSQL, MySQL, MariaDB, ClickHouse, and Oracle are built in. Any other database can be added as an adapter: same shell, same commands. The checklist is in docs/DRIVERS.md. ／ sqf ./app.db # straight to a SQLite file ／ |`sqlite`|yes|Bundled SQLite|",
+     "lines": [
+      7,
+      30,
+      80,
+      125
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse ／ SQLite, PostgreSQL, MySQL, MariaDB, ClickHouse, and Oracle are built in. Any other database can be added as an adapter: same shell, same commands. The checklist is in docs/DRIVERS.md. ／ |`clickhouse`|yes|ClickHouse over HTTP| ／ |ClickHouse|`clickhouse://USER:PASSWORD@localhost:8123/default`|HTTP. Docker or installer from the picker|",
+     "lines": [
+      15,
+      30,
+      129,
+      171
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB ／ SQLite, PostgreSQL, MySQL, MariaDB, ClickHouse, and Oracle are built in. Any other database can be added as an adapter: same shell, same commands. The checklist is in docs/DRIVERS.md. ／ |`mariadb`|yes|MariaDB, including local provisioning| ／ |MariaDB|`mariadb://USER:PASSWORD@localhost:3306/app`|Docker or installer from the picker|",
+     "lines": [
+      13,
+      30,
+      128,
+      170
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 CLI 为连接和操作多种 SQL 数据库提供服务，本身不是使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQffy is a simple command-line utility for working with SQL databases from the terminal. Connect, write a query, read the answer. ／ SQLite, PostgreSQL, MySQL, MariaDB, ClickHouse, and Oracle are built in. Any other database can be added as an adapter: same shell, same commands. The checklist is in docs/DRIVERS.md.",
+   "evidence_lines": [
+    28,
+    30
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Artikon90/sqffy",
+  "sha": "230ab70b2a62",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

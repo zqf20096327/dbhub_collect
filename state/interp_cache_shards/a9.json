@@ -10904,5 +10904,231 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "84aa30ed77bc": {
+  "identity": {
+   "one_liner": "构建在 Postgres 上的 AI 代理审计数据库，提供防篡改决策日志与因果回溯",
+   "review": "ZizkaDB 是面向 AI 代理的审计与记忆数据库，基于 Postgres 存储，以 hash 链校验实现防篡改审计日志，提供 db.why() 因果链查询、时间回放、漂移检测和 MCP 服务端，配套 Python/TypeScript SDK 及 LangChain、LangGraph、CrewAI 等集成。面向需要记录代理决策、支持 EU AI Act 第12条留存的开发团队；自托管版限单代理，多代理需用其云服务。",
+   "highlights": [
+    "每个事件含校验和并以 hash 链连接，提供 db.verify_chain() 验证历史未被修改",
+    "提供 db.why() 因果链回溯、db.at() 时间点重建与漂移检测",
+    "提供 Python/TypeScript SDK、MCP 服务端及 LangChain/LangGraph/CrewAI/LiveKit 集成包"
+   ],
+   "use_cases": [
+    "AI 代理决策的因果调试与问题定位",
+    "满足 EU AI Act Article 12 记录保存要求的审计日志",
+    "代理跨轮次运行的可审计记忆与行为漂移监控"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "in one open-source database on Postgres. Built for **EU AI Act Article 12** record-keeping. ／ - **Self-host or cloud.** Run it on your own Postgres with one Docker command, or use ZizkaDB Cloud. AGPL-3.0, no per-trace billing; self-hosted data never leaves your infrastructure. Self-hosted runs **one agent with one API key**; multiple agents, agent flee",
+     "lines": [
+      8,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 ZizkaDB 运行在用户自己的 Postgres 上，以 Postgres 作为其存储层，本身是使用数据库的应用系统",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "in one open-source database on Postgres. Built for **EU AI Act Article 12** record-keeping. ／ - **Self-host or cloud.** Run it on your own Postgres with one Docker command, or use ZizkaDB Cloud. AGPL-3.0, no per-trace billing; self-hosted data never leaves your infrastructure. Self-hosted runs **one agent with one API key**; multiple agents, agent fleets and agent-to-agent messaging are on Cloud.",
+   "evidence_lines": [
+    8,
+    33
+   ]
+  },
+  "fn": "ZIZKA-AI-SL/ZizkaDB",
+  "sha": "84aa30ed77bc",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "79f3d3755cf1": {
+  "identity": {
+   "one_liner": "Linux QQ 群聊 Agent，经 OneBot v11 协议端接入并以 SQLite 持久化消息状态",
+   "review": "这是一个运行在 Linux 上的 QQ 群聊机器人 Agent，通过 OneBot v11 协议端收发消息，调用 OpenAI Chat Completions 兼容的模型服务生成回复，实现分条发言、表情包、主动发言与运维命令等功能；消息经 SQLite/WAL 状态机持久化，适合自托管部署、用 LLM 驱动群聊交互的运维者使用。",
+   "highlights": [
+    "提供 OneBot v11 协议接入，消息处理采用 SQLite/WAL 状态机，未发送批次在失败时保持待处理并自动重试",
+    "提供 Docker 镜像与 install.sh/deploy.sh 一键安装脚本，含 systemd 用户服务注册与部署前代码快照回滚",
+    "提供插件子进程机制与 MCP 只读资源服务，支持语音转写、语音合成与图片生成能力"
+   ],
+   "use_cases": [
+    "在自托管 Linux 服务器上部署 LLM 驱动的 QQ 群聊机器人",
+    "需要消息可靠投递与重启后状态恢复的群聊自动化场景",
+    "通过插件和 MCP 资源扩展机器人的记忆与第三方能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **预期可用**：Debian 12/13、Ubuntu 26.04、Rocky Linux 9、AlmaLinux 9、Fedora、CentOS Stream、RHEL、Oracle Linux、Amazon Linux、Arch/Manjaro、openSUSE Leap/Tumbleweed、SLES、openEuler、Anolis、麒麟/UOS（按 dnf/yum/zypper/pacman 尝试）。Debian 12 官方仓库只有 Compose v1，需先按 Docker 官方文档配置 apt ",
+     "lines": [
+      152
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "-> SQLite/WAL 消息状态机 ／ |磁盘|10GB 空闲，本机盘；SQLite 不支持 NFS/SMB| ／ - 校验参数、源码与 Node.js 的 `node:sqlite` 能力；",
+     "lines": [
+      90,
+      144,
+      266
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储消息、租约与状态数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向 Linux 服务器的 QQ 群聊 Agent，支持分条发言、表情包收发、长期记忆与内置运维命令。 ／   -> SQLite/WAL 消息状态机 ／ |磁盘|10GB 空闲，本机盘；SQLite 不支持 NFS/SMB|",
+   "evidence_lines": [
+    5,
+    90,
+    144
+   ]
+  },
+  "fn": "sakurawwwxh/qq-agent-plus",
+  "sha": "79f3d3755cf1",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5fa949b528f2": {
+  "identity": {
+   "one_liner": "为 Oracle Fusion Cloud ERP 提供 SQL Developer 式访问的 JDBC 驱动",
+   "review": "一个 JDBC 驱动，通过 Oracle Fusion 的 BI Publisher 服务转发标准 SQL，并可将 Fusion 的 REST 资源映射为表，供 DBeaver、IntelliJ 等 JDBC 兼容工具直接查询。面向无法直连 Oracle Fusion 数据库的开发者与顾问。提供 FUSION/REST/DUCK 三种 schema，内置基于 DuckDB 的本地元数据缓存与工作区；FUSION 与 REST 接口为只读。",
+   "highlights": [
+    "实现标准 JDBC 驱动，可在 DBeaver、IntelliJ 及任意 JVM 程序中使用",
+    "提供 FUSION、REST、DUCK 三种 schema，其中 DUCK 为本地可写 DuckDB 工作区",
+    "提供 FIND/JOIN KEYS/EXPLAIN 等顾问命令与查询性能分析（?profile=true）"
+   ],
+   "use_cases": [
+    "在 SQL 客户端中直接查询 Oracle Fusion Cloud ERP 表与视图",
+    "通过 JVM 任务（Airflow、NiFi 等）或自研程序以 SQL 读取 Fusion 数据",
+    "利用本地 DuckDB 工作区对导出的 Fusion 数据做关联分析与文件导入导出"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "SQL Developer experience for Oracle Fusion Cloud ／ Run SQL queries directly against Oracle Fusion. Free. Open-source. ／ Oracle Fusion Cloud doesn't allow direct database connections. Developers and consultants are forced to use **OTBI** (limited subject areas, 65K row cap), **BI Publisher** (tiny SQL editor, multi-step process), or **paid third-party tools** — just to run a sim ／ **OFJDBC fixes this.** It's a lightweight JDBC driver that sends standard SQL to Oracle Fusion's BI Publisher service and also reads Fusion's REST resources. Plug it into DBeaver, IntelliJ, or any JDBC-compatible tool — and query Oracle Fusion tables like a no",
+     "lines": [
+      1,
+      3,
+      17,
+      19
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **A standard JDBC driver** — DBeaver, IntelliJ, any JDBC tool or JVM program. Fusion sits next to your other databases (EBS, PostgreSQL, …) in the same window.",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为 JDBC 驱动组件，为 JDBC 工具生态提供对 Oracle Fusion 的 SQL 访问能力，本身不依赖某个数据库存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License（L5）",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OFJDBC fixes this.** It's a lightweight JDBC driver that sends standard SQL to Oracle Fusion's BI Publisher service and also reads Fusion's REST resources. Plug it into DBeaver, IntelliJ, or any JDBC-compatible tool — and query Oracle Fusion tables like a normal database. ／ - **A standard JDBC driver** — DBeaver, IntelliJ, any JDBC tool or JVM program. Fusion sits next to your other databases (EBS, PostgreSQL, …) in the same window. ／ **Standard JDBC Driver** — Not a standalone app, but a real JDBC driver. Use it anywhere JDBC works: DBeaver, IntelliJ DataGrip, Apache Airflow, custom Java/Kotlin apps, ETL platforms.",
+   "evidence_lines": [
+    19,
+    27,
+    80
+   ]
+  },
+  "fn": "krokozyab/ofjdbc",
+  "sha": "5fa949b528f2",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

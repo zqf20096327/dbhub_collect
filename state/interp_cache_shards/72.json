@@ -10467,5 +10467,207 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "64101efdb1fe": {
+  "identity": {
+   "one_liner": "基于 DeepSeek Harness 的红队渗透测试智能体编排插件，战果落本地 SQLite",
+   "review": "这是一个运行在 DSH（DeepSeek Harness）上的插件，把主会话变成渗透测试指挥台：一个靶标名称可拉起信息收集、资产梳理、漏洞发现、漏洞利用、内网渗透等执行角色，所有发现写入本机 SQLite 事实库并在 Web 界面可视化。面向已获授权的攻防演练与安全评估人员；仓库声明不含漏洞利用代码，依赖 Node.js 内置 node:sqlite，数据仅存本地。",
+   "highlights": [
+    "提供 56 个 redteam_* 工具与 19 个随包技能，支持信息收集到内网渗透的角色分工编排",
+    "所有发现写入本机 SQLite 事实库（22 张表），界面提供态势/资产/成果/报告/资源五个分区",
+    "数据仅存本机 $DSH_HOME/redteam/，声明无遥测、无上报、无云端同步"
+   ],
+   "use_cases": [
+    "已授权的攻防演练与红蓝对抗中编排多智能体执行渗透流程",
+    "生成四段式渗透测试报告（资产证明、得分汇总、凭据权限汇总、得分点复现）",
+    "企业自检与教学研究场景下的授权安全评估"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。",
+     "lines": [
+      5,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为本项目存储渗透发现的本机事实库，项目本身不为数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。 ／ 面向**授权范围内**的安全评估：攻防演练、红蓝对抗、企业自检、教学研究。",
+   "evidence_lines": [
+    5,
+    28,
+    120
+   ]
+  },
+  "fn": "Jueze-2019/dsh-redteam-mode",
+  "sha": "64101efdb1fe",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2e3166870108": {
+  "identity": {
+   "one_liner": "自托管网页抓取工具，将网页转为 Markdown 供 AI 代理读取",
+   "review": "AgentCrawl 提供 CLI、Python 库、HTTP API、Docker 和 MCP 五种接口，把网页和本地文档提取为 Markdown、文本、链接、元数据等格式，支持持久化爬取、缓存、变更追踪和浏览器渲染。目标用户是需要网页上下文的 AI 代理开发者和自托管部署者，任务状态与失败记录存于 SQLite。",
+   "highlights": [
+    "提供 MCP 服务器与 CLI/Python/HTTP API/Docker 多种运行方式，注册到 Claude Code、Codex、Gemini CLI、Cursor 等客户端",
+    "使用 SQLite 实现持久化爬取任务，包含检查点、分页、取消、重试与失败记录",
+    "提供 Firecrawl v2 兼容 API 端点，可对接 Firecrawl 的 SDK"
+   ],
+   "use_cases": [
+    "为 AI 代理提供网页内容读取与结构化提取",
+    "自托管部署批量抓取并生成可引用的 Markdown/分块内容",
+    "通过 MCP 让编码代理在本地环境中抓取和检查网页变更"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ - 📊 Read-only dashboard: generate static HTML from SQLite with `agentcrawl dashboard` or open `/dashboard` on the API server (it follows the API auth setting). ／ |Durable crawls|SQLite jobs, events, checkpoints, retries, and failure records.|",
+     "lines": [
+      103,
+      105,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该爬虫自身的任务与状态存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0（技能文本另以 MIT-0 发布）",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ |MCP|Standards-based stdio MCP server for agent clients.|",
+   "evidence_lines": [
+    103,
+    118
+   ]
+  },
+  "fn": "JorG18/agentcrawl",
+  "sha": "2e3166870108",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c55928f1f61f": {
+  "identity": {
+   "one_liner": "OceanBase 大赛 seekdb 方向赛题作答仓库",
+   "review": "该仓库是 2026 第六届 OceanBase 数据库大赛 seekdb 方向的参赛模板仓库，包含 11 道赛题的作答目录约定、构建脚本入口与进度表。每题目录内置 README、patches、SQL、样本数据与结果记录，面向围绕 seekdb 数据库内核改动与 AI Functions 开发的参赛者，要求提交可复现脚本与基线数据。进度表当前为空。",
+   "highlights": [
+    "提供一题一目录的作答结构，含 patches、sql、data、results 子目录约定",
+    "内置 build.sh 构建入口与提交规范说明",
+    "赛题覆盖实例部署、AI Functions、全文索引调优等方向"
+   ],
+   "use_cases": [
+    "参加 OceanBase 大赛 seekdb 方向的参赛者组织赛题作答",
+    "以 patch 形式向上游 seekdb 仓库提交改动",
+    "记录赛题的性能对比与召回率实测结果"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "2026 第六届 OceanBase 数据库大赛 · **OceanBase seekdb 方向**（11 道赛题）参赛仓库。 ／ seekdb 是 OceanBase 开源的 AI 原生数据库，本方向聚焦 AI 原生数据基础设施，围绕数据存储、处理、检索与智能应用的完整链路设置赛题。",
+     "lines": [
+      3,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库本身不存业务数据，是围绕 seekdb 数据库做赛题开发与内核改动的工程仓库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "仓库内容遵循 Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "seekdb 是 OceanBase 开源的 AI 原生数据库，本方向聚焦 AI 原生数据基础设施，围绕数据存储、处理、检索与智能应用的完整链路设置赛题。 ／ - 仓库：<https://github.com/oceanbase/seekdb> ／ > 内核类改动必须保留可复现脚本与基线数据，评审会看工程可复现性。",
+   "evidence_lines": [
+    10,
+    28,
+    59
+   ]
+  },
+  "fn": "VeryPond/seekdb-2026",
+  "sha": "c55928f1f61f",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

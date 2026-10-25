@@ -11914,5 +11914,171 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1a134de7a0f1": {
+  "identity": {
+   "one_liner": "开源产品分析平台，基于 PostgreSQL、ClickHouse 与 NATS 构建",
+   "review": "Pug 是一个开源产品分析平台，提供事件采集、用户识别、漏斗/留存/趋势/细分/用户流分析及可定制仪表盘。面向需要自托管产品行为分析、关注 GDPR/DPDP 数据删除合规的团队。后端为 Go，使用 PostgreSQL 存关系数据、ClickHouse 存分析数据、NATS 做采集管道消息骨干，采用 AGPL v3 许可。",
+   "highlights": [
+    "提供事件采集管道（NATS 驱动），含地理、user-agent、bot 检测与流量归因自动富化",
+    "提供趋势、漏斗、留存、细分、用户流（Sankey）分析与仪表盘组合，含预聚合 rollup 加速",
+    "支持 GDPR/DPDP 数据主体事件与档案删除"
+   ],
+   "use_cases": [
+    "自托管的产品/网站行为分析",
+    "用户行为漏斗、留存与细分分析",
+    "需数据主体删除合规的分析场景"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Built in Go on PostgreSQL, ClickHouse, and NATS. ／ - **PostgreSQL**: relational store (orgs, projects, dashboards, auth) ／ > **Local databases only.** By default `seed` migrates Postgres and ClickHouse",
+     "lines": [
+      11,
+      57,
+      84
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Built in Go on PostgreSQL, ClickHouse, and NATS. ／ ClickHouse-backed profile and activity API. ／ - **ClickHouse**: analytical store for events, insights, and profiles",
+     "lines": [
+      11,
+      22,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 为关系存储、ClickHouse 为分析存储来构建平台，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pug is an open-source product analytics platform. Capture events, identify the ／ Built in Go on PostgreSQL, ClickHouse, and NATS. ／ - **PostgreSQL**: relational store (orgs, projects, dashboards, auth)",
+   "evidence_lines": [
+    7,
+    11,
+    57
+   ]
+  },
+  "fn": "pug-sh/pug",
+  "sha": "1a134de7a0f1",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e274ec87f375": {
+  "identity": {
+   "one_liner": "受 Django 启发的 Go 显式 Web 框架，含 ORM、迁移与管理后台",
+   "review": "tanGO 是一个 Go 语言的 Web 框架，通过结构体定义模型，生成类型化迁移、服务端渲染的 admin 后台和 JSON API。提供 db.Store 持久化层支持 SQLite、PostgreSQL 和 MySQL，配套 tango CLI 执行 makemigrations/migrate 等命令。适合用 Go 构建 CRUD 型 Web 应用的开发者，当前为 v0.x 预 1.0 阶段。",
+   "highlights": [
+    "提供基于 Go 结构体的模型定义与 db.Store 持久化，支持 SQLite、PostgreSQL、MySQL 的 CRUD、查询和原生 SQL",
+    "提供 tango makemigrations/migrate 等类型化迁移命令与 CLI 工具链",
+    "内置服务端渲染 admin 后台、OpenAPI 3.1 文档生成及可选的账户、邮件、缓存、WebSocket 组件"
+   ],
+   "use_cases": [
+    "用 Go 快速搭建带管理后台的 CRUD Web 应用",
+    "构建 JSON API 服务并自动生成 OpenAPI 文档",
+    "以结构体模型驱动 schema 变更和数据库迁移的项目"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Persistence**: `db.Store` for CRUD, queries and raw SQL on SQLite, PostgreSQL or MySQL, with foreign keys, two-layer validation and cascade delete. See relationships and admin foreign keys.",
+     "lines": [
+      55
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Persistence**: `db.Store` for CRUD, queries and raw SQL on SQLite, PostgreSQL or MySQL, with foreign keys, two-layer validation and cascade delete. See relationships and admin foreign keys.",
+     "lines": [
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`tango newproject` scaffolds a `go.mod`, a `main.go` pre-wired for SQLite and the admin app, a `project` package where your apps are listed, and a `shell` program for `tango shell`, and it runs unchanged. Run `tango makemigrations`, `tango migrate` and `tango  ／ - **Persistence**: `db.Store` for CRUD, queries and raw SQL on SQLite, PostgreSQL or MySQL, with foreign keys, two-layer validation and cascade delete. See relationships and admin foreign keys.",
+     "lines": [
+      20,
+      55
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架本身不依赖某数据库存储业务数据，而是提供 ORM、迁移等数据库访问层供开发者使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**tanGO is a small, explicit web framework for Go, inspired by Django's ergonomics but built from plain Go structs and interfaces.** Write models as structs, get typed migrations, a server-rendered admin and a JSON API from the same code. Scaffolding writes plain Go you own: nothing is generated at runtime, boot never scans your filesystem, and there is no hidden configuration. ／ - **Persistence**: `db.Store` for CRUD, queries and raw SQL on SQLite, PostgreSQL or MySQL, with foreign keys, two-layer validation and cascade delete. See relationships and admin foreign keys. ／ - **Typed Go migrations**: `tango makemigrations`, `migrate` and `migrate down`.",
+   "evidence_lines": [
+    7,
+    55,
+    56
+   ]
+  },
+  "fn": "angvp/tango",
+  "sha": "e274ec87f375",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

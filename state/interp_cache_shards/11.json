@@ -11311,5 +11311,155 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "20ae9eee5cb6": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud Infrastructure 模拟器",
+   "review": "floci-oci 是一个开源的本地 OCI 模拟器，用于在无云账号的开发、测试与 CI 环境中提供 OCI 形态的服务（Identity、Object Storage、Queue、Vault/KMS、Functions、OKE、PostgreSQL 数据库系统等）。它实现 OCI 的请求/响应协议，兼容官方 SDK、CLI 和 Terraform provider，通过 Docker 为主机提供真实 PostgreSQL 容器；MIT 许可，需 JDK 25 或 Docker 运行。",
+   "highlights": [
+    "实现 OCI 线协议（opc-request-id、分页头、etag、OCID、work requests、OCI 错误体），官方 oci-java-sdk、Python SDK、OCI CLI 和 Terraform provider 可直接指向本地端点使用",
+    "Database with PostgreSQL 服务按 DB 系统启动真实 postgres:<major>-alpine 容器，支持 CRUD、启停、主密码重置、CA 证书连接详情，可用 FLOCI_OCI_SERVICES_PSQL_MOCK=true 切换为内存模拟",
+    "支持 Identity、Object Storage、Queue、Streaming、Vault+KMS、Functions（Fn Project sidecar）、OKE（k3s sidecar）、Organizations 等服务，提供内存/持久/混合/WAL 多种存储模式"
+   ],
+   "use_cases": [
+    "无 Oracle Cloud 账号或凭证时进行 OCI 集成的本地开发与调试",
+    "CI 流水线中的 OCI SDK/CLI/Terraform 集成测试",
+    "本地验证 OCI Database（PostgreSQL）、OKE、Functions 等服务的客户端代码路径"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default configurations, work requests, real PostgreSQL sidecar| ／ |Database with PostgreSQL|Real Docker (PostgreSQL) / In-process|DB system CRUD (`/20220915`) driven by work requests, with a `DELETED` tombstone clients can poll; one `postgres:<major>-alpine` container per DB system, started in the background; connection deta ／ |Database with PostgreSQL|`postgres:{major}-alpine`|A real PostgreSQL server per DB system, of the major the DB system asks for, with TLS, a host port from `15432..15531` and a named data volume|",
+     "lines": [
+      139,
+      157,
+      171
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Light, fluffy, and always free, now for Oracle Cloud ／ floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI.",
+     "lines": [
+      5,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是一个 OCI 云模拟器应用，PostgreSQL 仅作为其数据库服务的真实 sidecar 容器被使用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ |Database|Database with PostgreSQL: DB systems, start/stop/restart, master password reset, connection details with a CA certificate, shapes, default configurations, work requests, real PostgreSQL sidecar| ／ |Database with PostgreSQL|Real Docker (PostgreSQL) / In-process|DB system CRUD (`/20220915`) driven by work requests, with a `DELETED` tombstone clients can poll; one `postgres:<major>-alpine` container per DB system, started in the background; connection details with a per-system CA certificate (`sslmode=verify-full` works); master password from the request or a Vault secret, never stored, reset in the running database; start/stop/restart keep the data volume; shapes and default configurations catalog. `mock: true` disables Docker|",
+   "evidence_lines": [
+    24,
+    139,
+    157
+   ]
+  },
+  "fn": "floci-io/floci-oci",
+  "sha": "20ae9eee5cb6",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f6bdf1fbe70": {
+  "identity": {
+   "one_liner": "OceanBase 大赛 PowerContext 方向参赛作答仓库",
+   "review": "这是 2026 第六届 OceanBase 数据库大赛 PowerContext 方向的参赛仓库，包含 11 道上下文工程赛题的作答目录、文档、脚本与进度表。面向大赛参赛者使用，按一题一目录组织，提供 Python venv 环境安装方式；当前进度表为空，尚未包含具体赛题解答。",
+   "highlights": [
+    "按赛题组织 solutions 目录，含模板、文档与脚本结构约定",
+    "提供 Python venv 环境安装与 requirements.txt 依赖方式",
+    "围绕上下文采集、检索、压缩、记忆更新与 Agent 编排等赛题方向"
+   ],
+   "use_cases": [
+    "参加 OceanBase 数据库大赛 PowerContext 方向的作答与协作",
+    "上下文工程相关赛题的实验记录与复现"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "2026 第六届 OceanBase 数据库大赛 · **PowerContext 方向**（11 道赛题）参赛仓库。 ／ > CCF 数据库专委指导，OceanBase 主办 ／ - 仓库：<https://github.com/oceanbase/powercontext>",
+     "lines": [
+      3,
+      5,
+      27
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "unclear",
+   "eco_why": "仓库为大赛作答框架，进度表为空，尚无代码表明其是服务数据库生态的工具或使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "2026 第六届 OceanBase 数据库大赛 · **PowerContext 方向**（11 道赛题）参赛仓库。 ／ ├── solutions/          # 赛题作答，一题一目录 ／ |-|-|-|-|",
+   "evidence_lines": [
+    3,
+    35,
+    64
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "VeryPond/powercontext-2026",
+  "sha": "3f6bdf1fbe70",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

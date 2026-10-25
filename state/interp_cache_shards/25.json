@@ -10655,5 +10655,73 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fccf8ff2142f": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI Agent 自组织记忆系统插件",
+   "review": "Limbic 是为 Hermes Agent 设计的本地记忆插件，将事实存入 SQLite，通过信任评分、衰减与萎缩机制自组织地管理记忆，支持多用户隔离与数据删除/导出。面向 Hermes Agent 用户与运维者，通过 hermes plugin 命令安装，依赖约 1GB 本地嵌入模型，仅限非商业许可使用。",
+   "highlights": [
+    "提供 remember/recall/forget 三个 Agent 工具，存储与检索事实且不调用 LLM",
+    "通过 SQLite triggers 原子处理记忆成熟度，信任评分与衰减率可随使用自调",
+    "支持多用户记忆隔离（per-user bucket）及按 ID 删除、导出等运维命令"
+   ],
+   "use_cases": [
+    "为 Hermes Agent 提供长期对话记忆",
+    "多用户聊天场景下按用户隔离记忆",
+    "需要事实遗忘/更正与数据导出删除的合规场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Maturity is handled atomically by SQLite triggers ／ provider: sqlite",
+     "lines": [
+      30,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是其内置存储 provider（L82），项目本身是使用数据库存数据的 Agent 插件而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "PolyForm Noncommercial 1.0.0 source-available，商业使用需另行授权",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Limbic is a self-organising local memory system for AI agents. It stores facts, learns which ones matter through interaction, and surfaces the right context at the right time — without ever calling an LLM. Designed for Hermes Agent and implements the upstream `MemoryProvider` ABC. ／ - Maturity is handled atomically by SQLite triggers ／   provider: sqlite",
+   "evidence_lines": [
+    8,
+    30,
+    82
+   ]
+  },
+  "fn": "dyiapanis/limbic",
+  "sha": "fccf8ff2142f",
+  "source": "readme",
+  "generated_at": "2026-10-25",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
