@@ -285,7 +285,7 @@ Useful resources and dependencies that are used in Genius.
 - [eslint](https://www.npmjs.com/package/eslint): 9.39.5
 - [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.4.2
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.47.0
-- [next](https://www.npmjs.com/package/next): 16.4.0
+- [next](https://www.npmjs.com/package/next): 16.4.1
 - [openai](https://www.npmjs.com/package/openai): ^7.8.0
 - [postcss](https://www.npmjs.com/package/postcss): ^8
 - [prisma](https://www.npmjs.com/package/prisma): ^7.10.0
@@ -300,7 +300,7 @@ Useful resources and dependencies that are used in Genius.
 - [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^4.3.3
 - [typescript](https://www.npmjs.com/package/typescript): ^6.0.3
 - [typewriter-effect](https://www.npmjs.com/package/typewriter-effect): ^2.22.0
-- [zod](https://www.npmjs.com/package/zod): ^4.6.5
+- [zod](https://www.npmjs.com/package/zod): ^4.6.6
 - [zustand](https://www.npmjs.com/package/zustand): ^5.0.11
 
 <!--- DEPENDENCIES_END --->

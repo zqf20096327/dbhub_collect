@@ -75,7 +75,7 @@ points, the `[[wikilinks]]` you already wrote by hand are the graph, and a cross
 reranks what the hop dragged in.
 SQLite is the only database ([`schema.sql`](src/sqlite_graph_memory/schema.sql)).
 
-Status: **pilot**, and the word is load-bearing: it runs daily in one real setup (a ~100k-note
+Status: **pilot**, and the word is load-bearing: it runs daily in one real setup (an index of ~28k curated notes, ~93k chunks, rebuilt nightly from a ~270k-file
 Obsidian vault driven by Claude Code), but it is deliberately minimal and makes no attempt
 to be general — see [What's intentionally missing](#whats-intentionally-missing), which is
 where the uneven test coverage is described.
@@ -201,7 +201,7 @@ present, and CPU works fine for small corpora.
 
 ### What `--ab` looks like
 
-Output of `brain_ask.py` with `--ab`, on a toy 4-note corpus (real runs use a ~100k-note vault):
+Output of `brain_ask.py` with `--ab`, on a toy 4-note corpus (real runs use an index of ~28k notes / ~93k chunks):
 
 ```
 A/B RECALL: how should agent memory work
@@ -439,6 +439,16 @@ Questions, war stories, or you want to run this on your own fleet:
 - 📣 Channels: [@ClawRus](https://t.me/ClawRus) (RU) · [@ClawEng](https://t.me/ClawEng) (EN)
 - 🌐 [palo-alto.ai](https://palo-alto.ai) · [Palo Alto AI Research Lab](https://github.com/tonydzi)
 - 🧪 **Engineers: want to test-drive this setup?** Message me — I hand out free starter seeds to engineers who test and report back.
+
+## Tell us what is missing
+
+You tried this on your own notes and something was missing or broke. That is the most useful
+thing anyone can tell us.
+
+- **You started and it did not work:** [open the 3-question form](https://github.com/tonydzi/sqlite-graph-memory/issues/new?template=feature_request.yml) (what you tried, what broke, which machine).
+- **Not sure it is a bug, or just an idea:** [Discussions → Ideas](https://github.com/tonydzi/sqlite-graph-memory/discussions/categories/ideas).
+
+Nothing in this package phones home. There is no telemetry, so we only know what you write to us.
 
 ## Contributors welcome — and there is a queue
 

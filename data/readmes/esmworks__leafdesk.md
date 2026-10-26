@@ -24,9 +24,10 @@ after you approve them over OAuth.
   what it may read or change; optional AI writing, AI properties, a chat that remembers what you
   tell it, reusable skills, and agents that work on database rows, with Anthropic, OpenAI, Google
   or a local model.
-- **Bring your pages**: import a Notion *Markdown & CSV* export, an Obsidian vault, a Confluence space, Evernote notebooks, a Trello board,
-  an Asana project, a Monday.com board, Markdown files, Word documents, Google documents, PDFs, a folder or CSV, and keep a
-  database of Jira issues or GitHub pull requests in sync.
+- **Bring your pages**: import a Notion *Markdown & CSV* export, an Obsidian vault, a Confluence space, Evernote notebooks,
+  OneNote pages and sections, a Trello board, an Asana project, a Monday.com board, Markdown files, TextBundles, Word
+  documents, Google documents, PDFs, web pages saved as one file, a folder or CSV, and keep a database of Jira issues,
+  GitHub pull requests, a calendar's events or a PostgreSQL table in sync.
 - **Ready for a team**: teamspaces, page permissions, guests, single sign-on (OIDC, SAML), SCIM,
   two-step verification, passkeys and an audit log.
 - **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL,
@@ -81,7 +82,7 @@ file named `.env` next to `docker-compose.yml` (see
 first), followed by `docker compose up -d`. A `BETTER_AUTH_SECRET` or `POSTGRES_PASSWORD` set there
 takes precedence over the generated one.
 
-- **Pin a version:** set `LEAFDESK_VERSION=0.6.3` in `.env`. The default is `latest`.
+- **Pin a version:** set `LEAFDESK_VERSION=0.6.5` in `.env`. The default is `latest`.
 - **Upgrade:** run `docker compose pull && docker compose up -d`. Read the *Upgrading* notes of
   each release in [CHANGELOG.md](CHANGELOG.md) first. Some migrations rewrite a large table, and
   pages can't be read or written until they finish; some releases have every page embedded again
@@ -188,13 +189,13 @@ without a domain the ID has no effect.
 
 The compose file runs PostgreSQL 18 as its `db` service. To use a database you already run, set
 `EXTERNAL_DATABASE_URL` to its connection URL and `BUNDLED_DB=0` in `.env`; the `db` service is then
-not started.
+not started. For a Supabase project, see [Use Supabase as the database](docs/self-hosting.md#use-supabase-as-the-database).
 
 ## Documentation
 
 - [Features](docs/features.md): everything Leafdesk does, area by area.
 - [Install and offline use](docs/desktop-and-offline.md): installing Leafdesk as an app, working offline, the desktop app.
-- [Running a server](docs/self-hosting.md): file storage, email, push notifications, social login, maps, administrators, Dokploy.
+- [Running a server](docs/self-hosting.md): file storage, email, push notifications, social login, maps, administrators, Dokploy, Railway, Supabase.
 - [Export](docs/export.md): Markdown, CSV, PDF and whole-workspace exports, backups, editing a page as Markdown.
 - [Email on rows](docs/email-on-rows.md): members' mailboxes, mail on database rows, follow-ups.
 - [Accounts and security](docs/account-and-security.md): accounts, who can join, two-step verification, SSO and SCIM, security switches, audit log streaming, sensitive content.

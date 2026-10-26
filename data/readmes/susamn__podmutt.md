@@ -14,22 +14,23 @@ A modern, keyboard-driven podcast client (TUI) for Linux and macOS inspired by l
 
 Bordered panels, single-key contextual actions, vim navigation, and live audio streaming through mpv — no mouse required. See the [changelog](CHANGELOG.md) for release history.
 
-## What's New in v1.3.0
+## What's New in v1.4.0
 
-Version 1.3.0 adds persistent Favorites, chapter navigation, refreshed Settings, relative publication dates, compact Player placement, and quick volume controls.
+Version 1.4.0 introduces native Linux `.deb` and `.rpm` distribution packages, the playback URL inspector (`I`), unified themed dialogs, and hardened release pipelines.
 
-### Favorites & Dashboard
-Favorites now has a dedicated pane and persists independently of the playback queue. The dashboard shows Library, Episodes, Queue, Details, Favorites, and Player together.
+### Native Linux Packages (.deb & .rpm)
+First-class distribution packages for Debian, Ubuntu, Fedora, and RHEL across `amd64` and `arm64` architectures. Package managers automatically resolve external `mpv` and `ca-certificates` dependencies. Installs standard desktop integration (`podmutt.desktop`), scalable and 512×512 icons, and guarantees user data in `~/.config/podmutt` is preserved during upgrades or removal.
+
+### Playback URL Inspector (`I`)
+Press `I` from anywhere during playback to inspect stored URLs (RSS feed, media stream, artwork, and chapters) in a themed, scrollable modal without leaving the TUI.
+
+### Favorites & Chapters
+Favorites has a dedicated pane (`5`) and persists independently of the playback queue. Open chapters for the current playback with `C`; jump without changing its paused or playing state.
 
 ![v1.3.0 dashboard with the Favorites pane](assets/screenshot-dashboard-1.3.0.png)
 
-### Chapters
-Open chapters for the current playback with `C`; jump without changing its paused or playing state. Chapter indicators also appear in episode and queue lists.
-
-![Chapter picker for the current playback](assets/screenshot-chapters-1.3.0.png)
-
-### Settings
-Choose a theme and discovery country from the in-app settings panel.
+### Settings & Theming
+Choose a theme (Catppuccin, Solarized Dark, Cyberpunk) and discovery country from the in-app settings panel. Unified themed typography across all popups and dialogs.
 
 ![v1.3.0 settings](assets/screenshot-settings-1.3.0.png)
 
@@ -61,7 +62,7 @@ Browse Apple Top 100 and search results, then preview shows and episodes without
 
 ## Install
 
-### Homebrew (macOS and Linux)
+### macOS (Homebrew Cask)
 
 ```sh
 brew tap susamn/tap
@@ -74,15 +75,39 @@ brew install --cask podmutt
 > ```
 > *(Or click **Open Anyway** in **System Settings > Privacy & Security**).*
 
-Runtime playback streams audio through `mpv`:
+### Linux (.deb & .rpm Packages)
+
+Standalone native packages for Linux (`amd64` and `arm64`) are provided on [GitHub Releases](https://github.com/susamn/podmutt/releases). Package managers automatically satisfy runtime dependencies (`mpv` and `ca-certificates`).
+
+#### Debian / Ubuntu (.deb)
+```sh
+# Download the .deb asset for your architecture:
+sudo apt update
+sudo apt install ./podmutt_<version>_amd64.deb    # or arm64
+```
+
+#### Fedora / RHEL (.rpm)
+```sh
+# Download the .rpm asset for your architecture:
+sudo dnf install ./podmutt-<version>-1.x86_64.rpm  # or aarch64
+```
+
+> **Channel Notes**:
+> - Signed distribution repositories (APT/DNF repos, Copr, PPA), Arch AUR, and Nix flakes remain separate downstream efforts; releases are currently published as standalone immutable assets.
+> - Upgrading or removing packages (`apt purge`, `dnf remove`) preserves user preferences, catalog databases, and listening progress in `~/.config/podmutt`.
+> - `arm64` Linux binaries are cross-compiled and artifact-verified in CI.
+
+### Audio Runtime Requirement
+
+`podmutt` streams audio via an external `mpv` process using private JSON IPC. If installing from tarballs or source, ensure `mpv` is installed:
 - macOS: `brew install mpv`
 - Ubuntu/Debian: `sudo apt install mpv`
-- Arch Linux: `sudo pacman -S mpv`
 - Fedora: `sudo dnf install mpv`
+- Arch Linux: `sudo pacman -S mpv`
 
-### Pre-built Binaries
+### Pre-built Tarballs
 
-Download pre-compiled standalone archives for Linux and macOS (`amd64` and `arm64`) from [GitHub Releases](https://github.com/susamn/podmutt/releases).
+Standalone compressed archives for Linux and macOS (`amd64` and `arm64`) are also available from [GitHub Releases](https://github.com/susamn/podmutt/releases).
 
 ### Build from Source
 
@@ -131,6 +156,7 @@ Every feed is fetched and subscribed (nested folders are flattened, duplicates a
 - **`Space`** pauses/resumes current audio from **any** panel.
 - **`,`** and **`.`** seek backward and forward **15 seconds**.
 - **`=`** raises volume and **`-`** lowers it by **5%** (0–130%). The Player pane shows the resulting volume. Volume starts at 100% each app launch; changes do not persist across restarts. These keys remain available across panes, but text inputs and modals own their keys.
+- **`I`** opens a read-only URL popup for the current playback (not the highlighted row): available RSS, audio, artwork, and chapter-file URLs. Use **`j` / `k`** to scroll and **Esc** to close.
 - **`C`** opens chapters for the **currently playing** episode (not the highlighted row). Use **`j`/`k`**, arrows, or Page Up/Down; **Enter** jumps and **Esc** cancels. Seeking keeps the paused/playing state. The separate **Ch** column in Episodes and Queue shows a right-aligned, accent-colored `✓` (including plain mode) for advertised or cached chapters; its width comes from Title. Details shows the count when known. Linked Podcasting 2.0 JSON is fetched and cached once during feed refresh (unless its URL changes), not when you press `C`. Inline Podlove chapters are cached from the feed. Embedded chapters can only be inspected after the audio loads; mpv checks and caches them then, without downloading other episodes' audio. Pressing `C` only reads cached chapter information.
 - Press **`a`** to add an episode to your **Up next (3)** queue.
 - In **Queue (3)**, press **`d`** or **Delete** on an episode, then **`y`** to remove it or **`n` / Esc** to cancel. Removing current audio stops it without starting another episode; progress/history are kept. **`u`** restores the last removal as pending, without autoplay.

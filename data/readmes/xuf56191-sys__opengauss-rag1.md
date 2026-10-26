@@ -179,18 +179,56 @@ python src\answer6.py "今天西安天气怎么样？"
 
 ### Docker
 
+**完整步骤（含局域网/公网共享、常见报错处理）见 [docs/DEPLOY.md](docs/DEPLOY.md)。**
+
+最快路径：
+
 ```powershell
 # 需要本机已安装 Docker Desktop
 copy .env.example .env        # 填好两个 Key
 python src\ingest3.py         # 先在宿主机入库，生成 ./data/chroma
-docker compose up --build
-curl http://127.0.0.1:8000/health
+docker compose up --build     # compose 已设 PORT=8000，端口映射 8000:8000
+Invoke-RestMethod http://127.0.0.1:8000/health
 ```
 
 - 密钥通过 `env_file` 注入，**不打进镜像**（`.env` 在 `.dockerignore` 中）
-- 向量库以只读卷挂载复用，容器内不重复嵌入
-- 如需在容器内入库：`docker compose run --rm api python src/ingest3.py`
-- 未在本仓库验证镜像构建（开发机未安装 Docker）；**启动命令与路径假设已用「模拟容器目录 + 环境变量注入」在宿主机验证**（`api7:app --app-dir src`、`CHROMA_DIR=/app/data/chroma`、`/health` 与两个接口均正常）
+- 向量库以只读卷挂载复用，容器内不重复嵌入；也可删掉 compose 里的 `volumes` 让容器首次启动自动入库
+- 镜像内默认端口是 **8000**；compose 与 `docker run` 都用 `PORT` 环境变量覆盖
+- 未在本仓库验证镜像构建（开发机未安装 Docker）；**启动命令与路径逻辑已在宿主机实测**（见 `docs/DEPLOY.md` 最后一节）
+
+### 零成本公网演示（免注册、免绑卡）
+
+如果暂时不想绑卡或用付费平台，用仓库自带的 `share.ps1`：启动本地服务 + localhost.run 免费 SSH 隧道。
+
+```powershell
+.\share.ps1                 # 默认 8000 端口
+.\share.ps1 -Port 8001      # 换端口
+```
+
+- 脚本会先起服务（等待 `/health` 就绪），再连隧道，并打印 `https://xxxx.lhr.life`
+- 把这个地址 + `X-API-Key` 发给别人即可访问
+- **必须保持窗口打开**；关窗口或电脑休眠，地址立即失效（重跑会得到新地址）
+- 免费隧道可能被服务端断开，重连即可；不适合长期对外
+- 同一局域网更简单：服务监听 `0.0.0.0`，同事直接访问 `http://<你的内网IP>:8000/docs`
+
+> 为什么不做成「我这边长期挂着」：隧道进程必须依附于运行它的终端/机器。
+> 需要长期在线时，用云主机跑同一份 Docker 镜像（`docs/DEPLOY.md` 第 4.3 节）。
+
+### 成本与访问控制
+
+公开部署后，**钱只花在 LLM/嵌入 API 上**。本项目做了三层：
+
+| 层 | 做法 | 边界 |
+|----|------|------|
+| 访问密钥 | `API_ACCESS_KEY`（**你自己定的随机串**，不是厂商 Key），请求头 `X-API-Key` | 共享单钥：拿到的人仍可调用 |
+| 每 IP 限流 | `RATE_LIMIT_PER_MIN`（默认 10 次/分钟/IP）超限返回 **429 + Retry-After** | 内存计数、单进程；重启清零 |
+| 每日总量 | `RATE_LIMIT_PER_DAY`（默认 200 次/天，全局） | 同上，且多实例不共享 |
+
+**这些不是商用网关**：无账号体系、无持久化配额、`X-Forwarded-For` 在不经过可信代理时可伪造。
+真正的硬上限应该放在**厂商侧**：给 DeepSeek / SiliconFlow 账户保留小额预充值余额，并在控制台看用量；
+密钥一旦泄露，先改 `API_ACCESS_KEY`，再轮换厂商 Key。
+
+粗略成本参考：一次 `/ask` 通常 1~2k token，`/agent` 会多 1~2 次调用。按每日 200 次封顶，即使被刷也在**几元**量级，不会失控。
 
 ### 离线评测与消融
 

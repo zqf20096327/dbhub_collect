@@ -37,7 +37,7 @@ Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri N
 | 71      | Sulawesi Utara            |    11/11  |  4/4  | 171/171  |  332/332  | 1507/1507  |
 | 72      | Sulawesi Tengah           |    12/12  |  1/1  | 177/177  |  175/175  | 1842/1842  |
 | 73      | Sulawesi Selatan          |    21/21  |  3/3  | 313/313  |  793/793  | 2266/2266  |
-| 74      | Sulawesi Tenggara         |    15/15  |  2/2  | 221/221  |  377/379* | 1908/1908  |
+| 74      | Sulawesi Tenggara         |    15/15  |  2/2  | 221/221  |  379/379  | 1908/1908  |
 | 75      | Gorontalo                 |     5/ 5  |  1/1  |  77/ 77  |   72/ 72  |  657/ 657  |
 | 76      | Sulawesi Barat            |     6/ 6  |  0/0  |  69/ 69  |   73/ 73  |  575/ 575  |
 | 81      | Maluku                    |     9/ 9  |  2/2  | 119/119  |   35/ 35  | 1200/1200  |
@@ -46,12 +46,11 @@ Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri N
 | 92      | Papua Barat               |     7/ 7  |   -   |  91/ 91  |   21/ 21  |  803/ 803  |
 | 93      | Papua Selatan             |     4/ 4  |   -   |  82/ 82  |   13/ 13  |  677/ 677  |
 | 94      | Papua Tengah              |     8/ 8  |   -   | 131/131  |   36/ 36  | 1172/1172  |
-| 95      | Papua Pegunungan          |     8/ 8  |   -   | 252/252  |   10/ 10  | 2583/2617* |
+| 95      | Papua Pegunungan          |     8/ 8  |   -   | 252/252  |   10/ 10  | 2617/2617  |
 | 96      | Papua Barat Daya          |     5/ 5  |  1/1  | 132/132  |   74/ 74  |  939/ 939  |
-|         | KEKURANGAN                |      -    |   -   |    -     |     -     |   (33)     |
+|         | KEKURANGAN                |      -    |   -   |    -     |     -     |     -      |
 
 ## NOTE
-* )* data belum lengkap https://github.com/cahyadsn/wilayah_boundaries/blob/main/notes.md
 * Koordinat latitude longitude diperhitungkan dari koordinat centroid dari polygon wilayah tersebut
 * Karena keterbatasan resources, wilayah boundaries berupa multipoliygon yang di simplified, untuk resolusi yang lebih tinggi akan dibuatkan repo tersendiri
 
@@ -65,11 +64,11 @@ Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri N
 * ☐ verifikasi dan validasi data kode wilayah
 
 ## CHANGE LOG
+* [2026-10-26 12:34:00] tambah data boundaries desa di kabupaten Tolikara, prov. Papua Pegunungan
+* [2026-10-26 07:58:00] tambah data boundaries desa di kabupaten Tolikara, prov. Papua Pegunungan
 * [2026-10-23 08:04:00] tambah data boundaries desa di kabupaten Puncak Jaya, Paniai, dan Puncak, prov. Papua Tengah
 * [2026-10-22 09:53:00] tambah data boundaries desa di kabupaten Asmat, prov. Papua Selatan
 * [2026-10-21 09:51:00] tambah data boundaries kelurahan di kota Kendari, prov. Sulawesi Tenggara
-* [2026-10-21 09:05:00] tambah data boundaries desa di kabupaten Sarmi, prov. Papua
-* [2026-10-21 08:19:00] tambah data boundaries desa/kel di kabupaten Halmahera Barat dan kota Ternate, prov. Maluku Utara
 
 ## DONASI
 - untuk donasi via transfer

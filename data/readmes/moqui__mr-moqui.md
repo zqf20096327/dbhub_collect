@@ -77,7 +77,7 @@ implementations, and scripts get tools with `ec.factory.getTool("Name")`. See
 
 ## Documentation
 
-Reference guides for built features are in [`docs/`](docs/). For a Moqui Java deployment or component moving to MR Moqui, start with the [Moqui Java migration notes](docs/Moqui-Java-Migration.md). Design, status and review documents are in [`plans/`](plans/), indexed by [`plans/README.md`](plans/README.md): what is still open, what comes next, the proposals, and the archive of built designs and finished reviews.
+Reference guides for built features are in [`docs/`](docs/). The [security policy](docs/SECURITY.md) links to the attack-surface map and the HTTP proof tests. For a Moqui Java deployment or component moving to MR Moqui, start with the [Moqui Java migration notes](docs/Moqui-Java-Migration.md). Design, status and review documents are in [`plans/`](plans/), indexed by [`plans/README.md`](plans/README.md): what is still open, what comes next, the proposals, and the archive of built designs and finished reviews.
 
 ## Build, Test, and Run
 
@@ -181,6 +181,8 @@ directory as the runtime when that has `base-component/`, and merges the `MoquiC
 directory, with a `MoquiConf.xml` there or `MOQUI_CONF=conf/MoquiProductionConf.xml`. From a checkout, `./moq run-production` runs the Default binary with the
 production conf, or another with `--release` or `--enterprise`. `moqui version` prints a binary's package and
 features.
+
+Podman and systemd are in [`podman/README.md`](podman/README.md). One image runs alone, on embedded Postgres, or with the external databases this tree supports: Postgres, Postgres and OpenSearch, or MySQL and OpenSearch. [`systemd/moqui.service`](systemd/moqui.service) runs that same binary with no container. The server terminates HTTPS itself, so there is no proxy container.
 
 ## AI/LLM Policy
 

@@ -43,6 +43,11 @@ holds `archive.db` (what cannot be recomputed: inputs and their revisions,
 notes, excisions, settings, delivery records), `index.db` (everything parsed
 and derived, rebuilt from the stored inputs when it is deleted or its format
 changes), `embeddings.db` and `blobs/`.
+Opening an `archive.db` written by an older build applies the migrations it
+lacks, in one transaction. The daemon refuses an archive newer than itself,
+or one whose tables match no version it knows, and exits with code 78; a
+service manager should not restart on that code (systemd:
+`RestartPreventExitStatus=78`).
 
 ## Commands
 
@@ -53,19 +58,20 @@ it.
 
 | Command | What it does |
 |---|---|
-| `QUERY` | Run a query over sessions, messages, documents, blocks, tool calls, files, events, notes, links, turns, runs, deliveries, processes, work or changes, with conditions, `\| sort by`, `\| group by`, `\| matches` and `\| measure`. `--why` explains an empty result; `--fields` picks columns; `@N` names row N of the last list. |
-| `status` | What the archive holds and what the daemon is doing. |
+| `QUERY` | Run a query over sessions, messages, documents, blocks, tool calls, files, events, notes, links, turns, deliveries, work or changes, with conditions, `\| sort by`, `\| group by`, `\| matches` and `\| measure`. `--why` explains an empty result; `--fields` picks columns; `@N` names row N of the last list. |
+| `status` | What the archive holds and what the daemon is doing; during a long pass the counts come from memory, with the read position they are from. |
 | `daemon` | Run the daemon in the foreground. |
 | `list`, `read SESSION` | List sessions; read one in a view (`full`, `dialogue`, `prompts`, `actions`). `read document:ID` and `read event:ID` read a document or an event. |
 | `import PATH` | Store files or the files inside an export ZIP, and parse the ones in a recognized format. |
 | `attachment MESSAGE BLOCK` | Describe a message attachment and the stored export files that match it. In a terminal, `--reveal --out FILE` writes the verified bytes to FILE ([attachments](docs/attachments.md)). |
 | `export SESSION…` | Write sessions, documents or events as JSON (read back by `import`), Markdown, HTML or terminal text. |
-| `note add\|tag\|withdraw\|list` | Notes and tags on sessions, messages, documents, tool calls, repositories and directories, with revisions. |
+| `note add\|tag\|withdraw\|list` | Notes and tags on sessions, messages, documents, tool calls, repositories and directories, with revisions; `--query QUERY` notes every row a query returns. |
+| `note accept\|reject NOTE` | Judge a note an agent wrote: an accepted note reaches briefs as the operator's own. `note list --agents --judged none` lists the notes waiting. |
 | `keep QUERY` | Keep a query's rows, to read back later as `result:<id>`. |
-| `brief`, `takeover SESSION`, `recall WORDS` | Context for a model: the session-start brief, what to take over another session with, and a search of past work with a record of how it searched. |
+| `brief`, `takeover SESSION`, `recall WORDS` | Context for a model: the session-start brief, what to take over another session with, and a search of past work (words and, with vectors, similarity, ranked together, by pages) with a record of how it searched. |
 | `continue [SESSION]` | Resume a session with its tool's own command; without one, the sessions in this directory that left something open. |
 | `measure usage\|cost\|sessions\|quota\|outcomes\|failing\|drift\|unanswered\|survival\|survival-turns\|daily\|process\|rhythm` | Tokens by kind and cost, subscription quota windows, tool outcomes, commands failing now, format drift and other analyses. Unknown figures stay unknown, never 0. |
-| `live`, `notices`, `work` | Sessions running now, signal notices and the work graph. |
+| `live`, `notices`, `work` | Sessions running now, signal notices and the work graph. `status` also shows the last day's notices. |
 | `changes [--since POSITION]` | The change feed: JSON lines naming changed sessions, notes, removals and excisions since a position, ending with the next position. |
 | `sql STATEMENT` | Read-only SQL over the stable views. |
 | `excise TARGET` | Remove a session, document or input whole, with everything parsed from it ([excision](docs/excision.md)). |
@@ -73,17 +79,55 @@ it.
 | `setting KEY [VALUE]` | Read or set a setting. |
 | `web` | Open the web reader. |
 | `mcp` | Serve MCP over stdio. |
-| `hooks install\|uninstall`, `hook EVENT` | Claude Code hooks: live state and the session-start brief. |
+| `hooks install\|uninstall`, `hook EVENT` | Harness hooks for Claude Code, Codex (`--harness codex`) and Hermes: live state, the session-start brief and takeovers. |
+| `chat send PROVIDER TEXT`, `chat list\|approve\|decline` | Have the browser extension draft a turn in a web chat, or send it with `--submit`; list chat actions; approve or decline a held send ([extension](extension/README.md)). |
+| `backfill start PROVIDER`, `backfill list\|cancel` | Have the browser extension capture a web chat's older conversations; follow or stop the job. |
 | `install-agent chrome` | Register the browser extension's native messaging host ([extension](extension/README.md)). |
-| `completions SHELL` | Shell completions for bash, elvish, fish, PowerShell or zsh. |
-| `sinex status\|cutover` | Not built yet, so hidden from help: the Sinex mode's state and the move to it. |
-
-The browser action commands exist only over HTTP: JSON enqueue at
-`/api/v1/browser-actions` and binary upload at
-`/api/v1/browser-actions/attachments`, behind a token and origin check.
+| `completions SHELL` | Completion for bash, elvish, fish, PowerShell or zsh: commands and options, and while you type a query, its units, fields, values seen and recent session IDs, which the shell asks of the daemon through `complete WORD`. |
 
 Exit codes: 0 success, 1 an error the daemon reported or an I/O error, 2 an
 invalid request, 6 no daemon running.
+
+## Context for agents
+
+Each harness's start hook brings the session-start brief into the agent's
+context, on by default (`polylogue setting briefing.session_start off`
+turns it off). The brief carries the operator's notes on the directory and
+its repository, other agents working there now, Beads claimed there this
+week and still open, what the recent sessions there did (commits, pull requests,
+files changed, checks, plan items left open, the last answer), checks that
+failed there with no later pass (the `xtask` check and test runs devkit
+records for the checkout, which AgentCTL's jobs run, and test, build and
+lint commands sessions ran), and the last day's signal notices.
+It stays within `briefing.budget` tokens (default 2000) and names what it
+left out with the command that shows it. A session ID pasted into a prompt
+brings that session's takeover context.
+
+| Harness | Hook entries |
+|---|---|
+| Claude Code | `polylogue hooks install` writes them into `settings.json`. |
+| Codex | `polylogue hooks install --harness codex` writes them into `hooks.json`. |
+| Hermes | In `config.yaml`: `hooks: {pre_llm_call: [{command: "polylogue hook pre_llm_call --harness hermes"}]}` and `hooks_auto_accept: true`; the brief comes with the first turn. |
+
+A signal is a note of kind `signal` whose body names a watched query, such
+as `{"name": "agent waiting", "query": "sessions where live:waiting", "for": "20m"}`.
+Each notice it fires shows in `status`, the next briefs and `notices`; a
+rule the operator writes also shows it as a desktop notification through
+`notify.command` (default `notify-send`), within its quiet hours and rate
+limit.
+
+## Search
+
+Words in a query match full text and rank the rows by relevance. With
+embeddings built, `near:TEXT` ranks rows by similarity to TEXT: the query's
+other conditions choose the rows first and every row they keep is ranked,
+and with words in the same query both orders are fused (reciprocal rank
+fusion). Ranked answers page by cursor like any other.
+
+The daemon keeps warm what common answers need: the vectors in memory, the
+vectors of recent `near:` texts, recent answers by read position, and
+completion data, each dropped when a write changes what it was read from.
+`status` shows what it holds under `warm`.
 
 ## Reading
 
@@ -94,10 +138,10 @@ A budgeted read (`read SESSION --budget N`) returns a page sized for a model
 and a cursor in `next`; pass it as `--cursor` for the next page. Query pages
 work the same way: the cursor holds the last row shown.
 
-`read SESSION --logical` reads a session together with the history it
+`read SESSION --with-parents` reads a session together with the history it
 continues from (a fork's parent up to the fork point, and so on). Missing
 parents or cycles keep what is available readable and mark the result
-`lineage.complete: false` with the issues.
+`parents.complete: false` with the issues.
 
 Sessions show the title the tool recorded, or else one made from the first
 prompt (`display_title` in JSON).
@@ -142,14 +186,25 @@ version.
 
 ## Sinex primary mode
 
-With the `sinex` feature, `$XDG_CONFIG_HOME/polylogue/sinex.toml` selects the
-mode. A missing file means standalone. With `mode = "primary"`, the daemon
-sends Sinex every archive write it does not hold yet, once a minute, and an
-empty archive is restored from Sinex when the file names `archive = "<id>"`.
-Once Sinex holds an archive, excision refuses.
+With the `sinex` feature (on in the Nix package),
+`$XDG_CONFIG_HOME/polylogue/sinex.toml` selects the mode. A missing file means
+standalone. With `mode = "primary"`, Sinex holds the archive and Polylogue is
+one of its producers:
 
-If the configuration is malformed or the restore fails, the daemon starts
-without collecting: `status.mode` shows `state: blocked`, the configuration
-path and the error, reads and queries work, and archive writes return
-`sinex_unavailable`. Fix the cause and restart the daemon. An archive in
-primary mode starts and serves reads while Sinex is offline.
+```toml
+mode = "primary"
+nats = "nats://127.0.0.1:4222"
+# The NATS user is the producer's name, `polylogue` unless `producer` says
+# otherwise. The password stays in its own file, never in this one.
+password_file = "/run/agenix/sinex-nats-polylogue"
+# Sinex's store root; Polylogue writes the bytes it sends under it, so its
+# user needs the store's group.
+store = "/var/lib/sinex/daemon/store"
+```
+
+If the configuration is malformed or Sinex cannot be reached at start, the
+daemon starts without collecting: `status.mode` shows `state: blocked`, the
+configuration path and the error, reads and queries work, and archive writes
+return `sinex_unavailable`. Fix the cause and restart the daemon.
+[docs/architecture.md](docs/architecture.md#sinex-primary-mode) describes
+how primary mode stores the archive and how a standalone archive moves to it.

@@ -67,7 +67,11 @@ for Linux, Windows and macOS.
 - Program windows with spec and body, compile with clickable errors
   (gutter markers and squiggles), unsaved-change tracking, save to file.
 - **Test…** generates a ready-to-run block for any procedure or function
-  (IN parameters as binds, OUT parameters printed).
+  (IN parameters as binds, OUT parameters printed). **Debug…** runs that
+  block under the debugger right away and stops on entry to the
+  subprogram. Both are on the right-click menu of procedures, functions and
+  package members, in the object browser and in the editors, also on a
+  subprogram's name in its own package spec or body.
 - **Debugger** (DBMS_DEBUG_JDWP): breakpoints with conditions and hit
   counts, break on exception, step over/into/out (also through the debugged
   block itself), call stack with subprograms, variables of any frame
@@ -91,9 +95,22 @@ for Linux, Windows and macOS.
 **Monitoring**
 - Dashboard with plain-language findings ("session 175 blocks 2 sessions —
   likely an uncommitted transaction"), KPIs and live charts.
-- Sessions with a hierarchical blocking tree, session details, kill/cancel.
-- AWR / ASH reports (only when the Diagnostics Pack is enabled) and a
-  built-in tkprof-style trace analyzer.
+- Every tile, bar and row on the dashboard leads to the sessions behind
+  it; top wait events with their latency histograms.
+- Sessions with a hierarchical blocking tree; session details (client and
+  connection, transaction, PGA, temp, the PL/SQL it runs, time model,
+  captured binds, its own plan, locks, all columns) with cancel, kill,
+  disconnect after transaction and SQL trace.
+- SQL details: totals, child cursors with their plans and binds, why they
+  aren't shared, and the sessions running the statement.
+- With the Diagnostics Pack: ASH activity of a session or statement, ASH
+  and AWR reports and a statement's plan history; with the Tuning Pack:
+  SQL Monitor reports. A built-in tkprof-style trace analyzer.
+- MySQL: a dashboard of its own; its threads open their details
+  (statement and plan, transaction, locks, the thread they wait for) and
+  can be killed.
+- PostgreSQL and SQL Server: a dashboard each, from their statistics
+  views and DMVs.
 
 ![Monitoring dashboard](docs/screenshots/monitor-dashboard.png)
 
@@ -155,18 +172,106 @@ for Linux, Windows and macOS.
   status bar always shows pending transactions; production connections are
   marked red and ask before commit; read-only connections; passwords live
   in the OS keychain.
+- One connection for the whole app: with several open, the toolbar, object
+  browser, status bar, new windows and SQL windows all use the active one.
+  Connecting or picking another moves the SQL windows there (asking first
+  about open transactions); program windows keep their connection, named
+  in their tab. *Settings → Query → Switch connection per window* gives
+  each SQL window a connection of its own instead.
+
+**MySQL (experimental)**
+- Connect to MySQL (tested with 9.4; MariaDB not yet) with *Type: MySQL* and `host:3306/database`
+  (`?tls` for TLS, `?tls=skip-verify` for self-signed certificates); no
+  client library needed. The database picked in the object browser is the
+  one SQL windows run in; the toolbar and status bar show it.
+- *Connect through SSH* forwards the connection over an SSH server, like
+  `ssh -L` or HeidiSQL's SSH tunnel; the database address is then as the
+  SSH server sees it (often `localhost:3306/database`). Log in with a
+  password, a key file (OpenSSH or PuTTY `.ppk`) or the SSH agent (Pageant
+  or Windows' OpenSSH agent). Host keys come from `~/.ssh/known_hosts`; an
+  unknown one is shown with its fingerprint to trust once.
+- SQL windows with results, fetching on demand, Break, explain plan,
+  completion with columns and comments, and transactions that work as with
+  Oracle: queries see what others committed, changes wait for Commit.
+  Warnings show as messages.
+- The object browser lists tables, views, procedures, functions and
+  triggers; object views show columns, indexes, constraints, triggers,
+  grants, dependencies and the DDL. *Edit* opens a routine as a script that
+  drops and creates it again.
+- A monitoring dashboard of its own (Monitor → Dashboard): findings first
+  (lock waits and who blocks, metadata locks, connections near the limit,
+  buffer pool hit ratio, long transactions, replication), then KPIs and
+  trends from `SHOW GLOBAL STATUS`, running statements, open transactions,
+  storage and top statements from `performance_schema`. Other users'
+  threads, transactions and lock waits need the `PROCESS` privilege; top
+  statements and lock waits `SELECT` on `performance_schema`.
+- Everything built on Oracle's dictionary or PL/SQL — debugger, profiler,
+  the rest of the monitor, reports, scheduler jobs, compare, import/export,
+  editing results, the form editors — isn't offered on MySQL connections. As in SQL\*Plus,
+  end a routine with `/` on a line of its own (there is no `DELIMITER`).
+
+**PostgreSQL and SQL Server (experimental)**
+- *Type: PostgreSQL* with `host:5432/database` (`?sslmode=require` for TLS,
+  `verify-full` to check the certificate; a `postgresql://` URL works too),
+  and *Type: SQL Server* with `host:1433/database` or `host\instance`
+  (`?trust` for a self-signed certificate; an ADO.NET connection string
+  works too). Both drivers are pure Rust: no client library needed. Tested
+  with PostgreSQL 18 and SQL Server 2022.
+- The same tools as on MySQL: SQL windows with results, fetching on demand,
+  Break, explain plan (`EXPLAIN (FORMAT JSON)`, `SHOWPLAN_ALL`), completion,
+  the object browser (also materialized views and sequences, synonyms on
+  SQL Server) and object views with the DDL. Transactions work as with
+  Oracle; on PostgreSQL a failing statement doesn't abort the transaction,
+  and notices (`RAISE NOTICE`) show as messages.
+- PostgreSQL's monitoring dashboard (Monitor → Dashboard): findings first
+  (who blocks whom, sessions idle in transaction, connections near the
+  limit, cache hit ratio, deadlocks, replication lag and inactive slots,
+  transaction ID wraparound, tables with many dead rows, checkpoints
+  forced by WAL volume), then KPIs and trends from `pg_stat_database`,
+  active sessions by wait event, connections by user, application, client
+  and database, running statements, open transactions, replication, the
+  largest databases and tables, and top statements from
+  `pg_stat_statements` (when it is loaded). Other users' statements need
+  `pg_read_all_stats` (or `pg_monitor`).
+- SQL Server's monitoring dashboard: findings first (blocking and who
+  blocks, a sleeping session with an open transaction named as such, a
+  log nearly full, memory grants pending, low page life expectancy,
+  connections near the limit, deadlocks, buffer cache hit ratio, a high
+  share of compilations, long transactions and requests), then KPIs and
+  trends from the performance counters, running requests by wait class,
+  sessions by login, host, program and database, blocking, open
+  transactions with their log use, top waits since the refresh before,
+  database and table sizes, and top statements from the plan cache. Most
+  of it needs `VIEW SERVER STATE` (`VIEW SERVER PERFORMANCE STATE` on
+  2022); without it the dashboard shows the login's own sessions and says
+  so.
+- Scripts split the database's way: PostgreSQL's dollar-quoted routine
+  bodies stay whole and `::` casts aren't bind variables; on SQL Server,
+  `GO` on a line of its own ends a batch, routines and scripts with
+  `DECLARE`d variables run up to the next `GO`, and `BEGIN … END` blocks
+  keep their `;`. *Edit* opens a routine as `CREATE OR REPLACE` (PostgreSQL)
+  or `CREATE OR ALTER` (SQL Server).
+- On SQL Server a batch shows its first result set. After Break, the
+  connection is opened again: the driver can't go on after a cancel, so
+  changes that weren't committed are rolled back. `PRINT` output isn't
+  shown yet.
 
 ## Installing
 
 Packages for Linux (`.deb`, AppImage), Windows (MSI, setup `.exe`) and
 macOS (`.dmg`) are attached to each [GitHub
-release](https://github.com/ortic/pythia/releases).
+release](https://github.com/ortic/pythia/releases), in two flavors:
+`pythia_…` with the pure-Rust driver, and `pythia-instantclient_…` on the
+Oracle Instant Client (see below). Take the first unless you need the
+second.
 
 Pythia connects to Oracle directly, with a pure-Rust driver: **no Oracle
 client libraries are needed**. Easy Connect strings (`host:port/service`)
 work as they are; for net service names, point `TNS_ADMIN` at the directory
 with your `tnsnames.ora` (or put it into `$ORACLE_HOME/network/admin`), and
-Pythia offers the aliases when connecting.
+Pythia offers the aliases when connecting. The tnsnames.ora of an Oracle
+Client that is already installed is found the way Oracle finds it: through
+the registry on Windows (`TNS_ADMIN`, the Oracle homes) and the library path.
 
 **Database versions:** Pythia is developed against Oracle 23ai and tested
 against 18c XE and 21c XE. A few features need a newer release: the
@@ -186,13 +291,28 @@ zone rules built into Pythia, which can differ from the server's time zone
 file for very old dates and for rule changes newer than that file.
 
 **When you need the Oracle Instant Client:** Oracle 11.2 databases (12.1 is
-untested), servers that *require* Native Network Encryption
-(`SQLNET.ENCRYPTION_SERVER = REQUIRED`; use TLS instead where you can), and
-OS or wallet logins (`/@alias`). Build Pythia with `cargo build --release --features
-pythia-db/thick` and install the [Instant
+untested), servers that *require* Native Network Encryption (connecting
+fails with *not implemented: Native Network Encryption and Data
+Integrity*; the server has `SQLNET.ENCRYPTION_SERVER = REQUIRED`, use TLS
+instead where you can), and OS or wallet logins (`/@alias`). For these,
+install a `pythia-instantclient_…` package and the [Instant
 Client](https://www.oracle.com/database/technologies/instant-client/downloads.html)
-(*Basic*; on Linux also `libaio`), on the library path (`LD_LIBRARY_PATH`,
-`PATH` on Windows).
+(*Basic* or *Basic Light*; on Linux also `libaio`), or use an Oracle Client
+that is already installed. Pythia loads it when connecting; it has to be on
+the library path: `PATH` on Windows, on Linux registered with `ldconfig`
+(the Instant Client RPMs do this) or in `LD_LIBRARY_PATH`, on macOS linked
+into `~/lib` (`ln -s ~/Downloads/instantclient_23_3/libclntsh.dylib ~/lib/`).
+Instant Client 23 connects to Oracle 19c and later; for 11.2 take Instant
+Client 19. The Oracle client resolves net service names itself (`TNS_ADMIN`,
+its `network/admin` directory, `sqlnet.ora`). *Help → About Pythia* shows
+which driver a build uses and the client version it found. Installing one
+flavor replaces the other; settings and connections stay. To build this
+flavor yourself: `cargo build --release --features pythia-db/thick`.
+
+**WSL:** under WSLg, Pythia opens its window through X11 (Xwayland), since
+WSLg's compositor crashes on Wayland windows like Pythia's
+([microsoft/wslg#1386](https://github.com/microsoft/wslg/issues/1386)).
+`PYTHIA_WAYLAND=1` keeps Wayland.
 
 ## Building from source
 
@@ -240,6 +360,12 @@ PYTHIA_TEST_DB=pythia/pythia@localhost:1521/FREEPDB1 cargo test
 | Variable | Used by |
 |---|---|
 | `PYTHIA_TEST_DB` | integration tests (app user) |
+| `PYTHIA_TEST_MYSQL` | MySQL tests, e.g. `pythia/pythia@localhost:3306/pythia` for `docker compose up -d mysql` |
+| `PYTHIA_TEST_MYSQL_DBA` | MySQL dashboard tests that need privileges, e.g. `root/mysql@localhost:3306/pythia` |
+| `PYTHIA_TEST_SSH`, `PYTHIA_TEST_MYSQL_VIA_SSH` | SSH tunnel tests: `pythia:pythia@localhost:2222` and `pythia/pythia@mysql:3306/pythia` for `docker compose up -d mysql ssh` |
+| `PYTHIA_TEST_POSTGRES` | PostgreSQL tests (a superuser), e.g. `pythia/pythia@localhost:5432/pythia` for `docker compose up -d postgres`, which loads `pg_stat_statements` |
+| `PYTHIA_TEST_MSSQL` | SQL Server tests, e.g. `pythia/pythia@localhost:1433/pythia?trust` for `docker compose up -d mssql mssql-init` |
+| `PYTHIA_TEST_MSSQL_DBA` | SQL Server dashboard tests that need VIEW SERVER STATE, e.g. `sa/Pythia-2026@localhost:1433/pythia?trust` |
 | `PYTHIA_TEST_DB_DBA` | monitor, compare and debugger tests (`system/oracle@…`) |
 | `PYTHIA_DEBUG_HOST` | debugger tests: how the database reaches this machine (`host.containers.internal` for a local Podman container; with Docker on Linux, the compose network's gateway from `docker network inspect pythia_default`) |
 | `PYTHIA_SCREENSHOT_DIR` | renders the real UI offscreen into PNGs (`cargo test -p pythia-app screenshots`) |
@@ -261,7 +387,7 @@ fresh Oracle Free container.
 |---|---|
 | `pythia-app` | the application: documents, docking, commands, dialogs |
 | `pythia-ui` | code editor, data grid, icon set |
-| `pythia-db` | sessions on worker threads, dictionary queries |
+| `pythia-db` | sessions on worker threads (Oracle, MySQL, PostgreSQL, SQL Server), dictionary queries, what each database supports (`Dialect`, `Feature`), SSH tunnels |
 | `pythia-plsql` | lexer, statement splitter, error-tolerant parser |
 | `pythia-lsp-core` | completion, hover, navigation, outline, diagnostics |
 | `pythia-data` | export and import |

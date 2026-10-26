@@ -74,7 +74,7 @@ sql("SELECT * FROM |");          // users, posts
 sql("SELECT u.| FROM users u");  // id: int4, email: text, display_name: text | null
 ```
 
-Suggestions come from your `DB` type and follow it as you edit, unsaved changes included. See [VS Code extension](https://typesql.karsli.net/guide/vscode) for the setup. [Zed](https://typesql.karsli.net/guide/zed) and [Neovim](https://typesql.karsli.net/guide/neovim) get the same completions through `@typesql/language-server`.
+Suggestions come from your `DB` type and follow it as you edit, unsaved changes included. See [VS Code extension](https://typesql.karsli.net/guide/vscode) for the setup. [Neovim](https://typesql.karsli.net/guide/neovim) gets the same completions through `@typesql/language-server`.
 
 ## Try it online
 
@@ -125,6 +125,17 @@ type DB = SchemaOf<typeof m>;
 ## Tested against PostgreSQL's own tests
 
 The parser is checked against the regression tests PostgreSQL runs on itself, about 50,000 statements. TypeSQL agrees with Postgres on every one that can be checked statically: it parses what Postgres parses and rejects what Postgres rejects. CI fails on a single disagreement. See [Postgres compatibility](https://typesql.karsli.net/guide/postgres-compatibility).
+
+## Compile time
+
+A query costs about 5 ms of check time with `tsc` and about 2 ms with [tsrs](https://github.com/oxc-project/tsrs), a Rust port of TypeScript 7. A file of 500 queries:
+
+| | `tsc` | tsrs |
+|---|---|---|
+| 500 queries | 2.6 s | 1.1 s |
+| with the [type cache](https://typesql.karsli.net/guide/performance#type-cache) | 0.13 s | 0.02 s |
+
+See [Performance](https://typesql.karsli.net/guide/performance) for how this is measured.
 
 ## Documentation
 

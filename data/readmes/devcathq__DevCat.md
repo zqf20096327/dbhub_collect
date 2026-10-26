@@ -31,7 +31,8 @@ Docker engines, RabbitMQ brokers and VPN / SSH tunnels in the same window, group
 
 | Area | Supported |
 | --- | --- |
-| AI | AI Workspace (terminal, diff, code review) running your installed coding agent: Claude Code (default), OpenAI Codex, Gemini CLI, GitHub Copilot, Aider, opencode or a custom CLI |
+| AI | AI Workspace (terminal, diff, code review) running your installed coding agent: Claude Code (default), OpenAI Codex, Gemini CLI, GitHub Copilot, Aider, opencode or a custom CLI; or the built-in DevCat Agent with any OpenAI- or Anthropic-compatible model |
+| MCP | Sync MCP: DevCat's MCP server in Claude Code, Codex, Cursor and Gemini CLI, with off / read-only / full access per connection and an activity log |
 | Tickets | Jira, Trello and Linear: the agent fixes tickets from a column on their own branches, comments on them and moves them on (e.g. to Testing); results to Slack |
 | Git | Nested repo discovery, commit graph, blame, branches, tags, stashes, fetch/pull/push |
 | SQL databases | PostgreSQL, MySQL / MariaDB, SQLite, SQL Server |
@@ -111,7 +112,7 @@ logs and deployments.
   network) through a relay that only forwards encrypted traffic, like RustDesk. iroh's free public relays by
   default, or your own. Profiles and passwords stay on the computer; the phone only keeps the list of computers
   it paired with.
-- **App or browser**: DevCat → 📱 in the title bar → turn on **Remote access** → point the phone's camera at the
+- **App or browser**: DevCat → ⚙️ Settings → **Mobile pairing** → turn on **Remote access** → point the phone's camera at the
   QR code. It opens DevCat in the phone's browser (nothing to install); tap **Open in DevCat app** to pair the app
   instead, or **Continue in browser**. Then click **Allow** on the computer. Browser sessions are encrypted with a
   key from the QR code, but the page itself comes over plain HTTP, so on Wi-Fi you don't trust use the app (or turn
@@ -159,7 +160,9 @@ Below is the short list. The [docs](https://devcat.ai.id/docs/) explain how to u
 of these step by step, with every keyboard shortcut on
 [one page](https://devcat.ai.id/docs/shortcuts.html).
 
-- **Projects**: group connections into projects and focus on one project at a time.
+- **Projects**: group connections into projects and focus on one project at a time. In focus, tabs of other
+  projects are hidden: their connections and notes, and chats, terminals, files and Git tabs of folders you haven't
+  used with this project.
 - **Hide the sidebar**: click the active icon in the left bar, the toggle at its bottom, or press ⌘B (Ctrl+B).
 - **Notes**: Markdown notes with Edit / Preview, saved as you type. Each note belongs to a project (shown only
   while that project is focused) or to General (shown everywhere); pin, search and move them between projects.
@@ -167,8 +170,8 @@ of these step by step, with every keyboard shortcut on
   Skip this version), or use *DevCat → Check for Updates…* (macOS menu bar), *Check for updates…* in the project menu
   or click the version in the status bar. Updates are
   signed and verified before installing. Linux .deb/.rpm installs get a download link instead (the AppImage self-updates).
-- **Keep awake**: the coffee cup at the top right keeps the screen and computer from sleeping (like Caffeine /
-  Amphetamine). Click to toggle; right-click to keep awake for 15 minutes to 8 hours.
+- **Keep awake**: ⚙️ Settings → **Keep awake** keeps the screen and computer from sleeping (like Caffeine /
+  Amphetamine), until turned off or for 15 minutes to 8 hours. While it's on, a coffee cup at the top right turns it off.
 - **Tabs**: drag a tab along the tab bar to reorder it; every **New chat** opens a chat of its own.
 - **Open files with DevCat**: on macOS DevCat is in Finder's *Open With* for code and text files (choose
   *Always Open With*, or *Get Info → Open with → Change All…* to make it the default); the file opens in an editor tab,
@@ -237,12 +240,36 @@ of these step by step, with every keyboard shortcut on
   by default, or OpenAI Codex, Gemini CLI, GitHub Copilot CLI, Aider, opencode or any custom command
   (args + env vars). Each uses its own login, or an optional API key kept in the OS keychain and passed as
   the provider's env var (e.g. `OPENAI_API_KEY`). With Claude Code you also get **Code Review ⌥⇧⌘3**,
-  launch options and your Claude session list (resume any session); other agents get a Review button that
+  launch options and your Claude session list (resume or rename any session); other agents get a Review button that
   asks them in the terminal.
+  **DevCat Agent** (built in, nothing to install) talks to a model API directly: Z.ai GLM, DeepSeek, OpenAI (Chat
+  Completions or the Responses API), Anthropic, OpenRouter, Kimi, Ollama, LM Studio or any OpenAI- or
+  Anthropic-compatible endpoint. Its chat folds
+  the agent's steps into one line and asks before edits and commands (**Ask first**, **Auto-edit** or **Full
+  access**), or only looks around and proposes a plan first (**Plan**); answer its approvals and questions on
+  DevCat Mobile too. It follows `AGENTS.md` / `CLAUDE.md`, uses
+  the MCP servers from your other agents' configs, and has tools for files, commands, `git` (reading runs without
+  asking), web pages, a todo list, your DevCat connections (SQL, MongoDB, Redis, Kubernetes; read-only stays
+  read-only) and your DevCat notes (search, read, save). For research it asks helpers that run side by side, each
+  with a fresh context and only looking, never changing anything. It runs the hooks you wrote for Claude Code or
+  Codex (once you allow them for the folder). Long chats are summarized when the context fills up, and
+  long tool output is saved to a file the agent reads in parts. Rename chats from the sidebar; the chat shows an
+  estimated cost next to its token meter, and a Trace view of every step with its time and tokens. Scheduled jobs
+  run a prompt in a folder every morning, every hour or whenever you set. On macOS and Linux its commands can run in
+  the OS sandbox, writing only in the project.
   **Folders on SSH hosts** too (*Open folder on SSH host…*): the agent and terminals run on that machine, and the
   file tree, previews, edits and git status work over your system `ssh` (hosts from `~/.ssh/config`, keys,
   ssh-agent, ProxyJump; one shared connection per host). Diff and Code Review are local-only for now.
-- **Appearance** (🎨 in the title bar): dark, light or system mode, 8 dark and 3 light themes (editors and terminals
+- **Sync MCP** (the plug button above the connections): adds DevCat's MCP server (`devcat mcp`) to Claude Code,
+  Codex, Cursor and Gemini CLI, so they read schemas, run queries and read clusters without seeing a password.
+  Each connection's **AI / MCP access** is off, read-only (the default for new connections) or full, enforced by
+  DevCat; a read-only connection is never full. Every call goes into **MCP activity**. See
+  [the docs](https://devcathq.github.io/DevCat/home/docs/sync-mcp.html).
+- **Rooms** (two people in the left bar): share documents with other people, peer to peer and end-to-end
+  encrypted, no account or server. Drag files onto a room to share them; edit text together, talk in the
+  thread, and mention anyone's DevCat Agent to bring it in: it reads the files (and looks at the room's
+  images) and suggests changes that people accept or reject.
+- **Appearance** (⚙️ Settings in the title bar): dark, light or system mode, 8 dark and 3 light themes (editors and terminals
   follow), and **window glass** on macOS and Windows: the desktop shows through the sidebar and work area, blurred,
   with separate opacity for each.
 
@@ -263,6 +290,19 @@ Prerequisites: Node 20+, pnpm, Rust (stable), plus the
 pnpm install
 pnpm tauri dev          # run the app with hot reload
 ```
+
+Dev builds run as **DevCat Dev** (identifier `dev.devcat.app.dev`, a green DEV band on the icon), so they run
+next to an installed DevCat with their own data folder and keychain entries, and don't share its connections or
+settings. The DEV icons in `src-tauri/icons/dev/` come from `assets/icon-dev.svg` (`scripts/dev-icons.sh`).
+
+```bash
+pnpm dev:copy-data         # copy your installed DevCat's data and saved passwords into DevCat Dev, once
+pnpm tauri dev --prod-data # run on the installed DevCat's data itself (quit the installed DevCat first)
+```
+
+The copy leaves out rooms and phone pairing, and turns off VPN auto-connect and ticket watching, so both apps can
+run at once. `--prod-data` refuses to start while the installed DevCat runs: two DevCats on the same data undo
+each other's changes. On macOS, reading the installed DevCat's passwords asks once per dev rebuild.
 
 UI testing in a normal browser (dev only): the Git and file commands are served over HTTP by a
 debug-only bridge, and the other Tauri APIs are stubbed.

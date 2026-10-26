@@ -53,7 +53,7 @@ Each gate is a measured number that decides if a milestone is done. When a gate 
 
 ## Building
 
-You need Rust 1.98.0. The `rust-toolchain.toml` file selects it. The MSRV is 1.88.0.
+You need Rust 1.99.1. The `rust-toolchain.toml` file selects it. The MSRV is 1.98.0.
 
 ```sh
 cargo build --release
@@ -63,6 +63,8 @@ cargo test --workspace
 ```
 
 `rupg check app.rupg` checks a database file and does not change it. It prints the counts of pages, tables, rows, log blocks and log bytes, or the first error with its SQLSTATE.
+
+`rupg upgrade old.rupg new.rupg` copies a database file to a new file in the format of this release. It does not change the old file. It keeps the tables, their OIDs and the row ids, and it gives the new file its name only at the end.
 
 Run the same checks as CI before you push:
 

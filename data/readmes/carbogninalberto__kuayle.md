@@ -16,8 +16,8 @@
 
 <!-- contributors:start -->
 <a href="https://github.com/carbogninalberto"><img src="https://avatars.githubusercontent.com/u/17618905?v=4&amp;s=64" width="64" height="64" alt="@carbogninalberto" title="@carbogninalberto"></a>
-<a href="https://github.com/uiYzzi"><img src="https://avatars.githubusercontent.com/u/40852301?v=4&amp;s=64" width="64" height="64" alt="@uiYzzi" title="@uiYzzi"></a>
 <a href="https://github.com/carbninai"><img src="https://avatars.githubusercontent.com/u/346896133?v=4&amp;s=64" width="64" height="64" alt="@carbninai" title="@carbninai"></a>
+<a href="https://github.com/uiYzzi"><img src="https://avatars.githubusercontent.com/u/40852301?v=4&amp;s=64" width="64" height="64" alt="@uiYzzi" title="@uiYzzi"></a>
 <a href="https://github.com/MarioGK"><img src="https://avatars.githubusercontent.com/u/8379079?v=4&amp;s=64" width="64" height="64" alt="@MarioGK" title="@MarioGK"></a>
 <a href="https://github.com/manelpb"><img src="https://avatars.githubusercontent.com/u/1784206?v=4&amp;s=64" width="64" height="64" alt="@manelpb" title="@manelpb"></a>
 <!-- contributors:end -->
@@ -407,7 +407,9 @@ Instance sysadmins can also enable one-click updates from **Settings → Version
 3. Set a strong `SYSTEM_UPDATER_TOKEN` and keep `SYSTEM_UPDATER_URL=http://updater:8081`.
 4. Apply the env and start the internal updater sidecar with `docker compose --profile updater up -d backend updater` from `selfhosting/`.
 
-The updater sidecar is internal-only and runs the same `selfhosting/update.sh` flow. If it is not configured, the Version page shows the manual update command instead.
+The updater sidecar is internal-only and runs the same `selfhosting/update.sh` flow. The Version page shows whether the updater is connected and the result of its last run; a failed run shows its reason and expandable recent output. When an update starts, every connected browser is redirected to the upgrade page, which returns to the previous page once the update ends. Update scripts do not refresh the running sidecar: rebuild and recreate `updater` to get failure details from an older sidecar. Without a configured updater, use the command above.
+
+For a deployment pinned to published release images or a detached Git checkout, use the opt-in [release updater](selfhosting/RELEASE_UPDATER.md) instead. It targets an explicit production Compose project, backs up PostgreSQL and updates application and active Dev Machines components together.
 
 ### Storage options
 

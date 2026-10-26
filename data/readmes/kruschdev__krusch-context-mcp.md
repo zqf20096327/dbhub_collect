@@ -103,14 +103,14 @@ To prevent memory hallucination and database pollution:
 ## 🧠 Embedding Reality & Offline Mode
 
 * **Zero-GPU Default**: If neither Ollama nor an API key is present, the engine runs 100% offline using deterministic keyword extraction, recency scoring, and heuristic tag indexing.
-* **Local Ollama** (Optional): Set `OLLAMA_URL="http://127.0.0.1:11434"` with `EMBED_MODEL="bge-large"` (1024 dims).
-* **Remote Cloud** (Optional): Set `OPENROUTER_API_KEY="sk-..."` with `EMBED_MODEL="baai/bge-large-en-v1.5"` for zero-local-VRAM embeddings.
+* **Local Ollama** (Optional): Set `OLLAMA_URL="http://127.0.0.1:11434"` with `EMBED_MODEL="snowflake-arctic-embed2"` (`8,192`-token context, `1024` dims, ~`664 MB` VRAM, asymmetric `query:` retrieval via `/api/embed`; also supports `qwen3-embedding` MRL `1024d`, `nomic-embed-text`, and legacy `bge-large`).
+* **Remote Cloud** (Optional): Set `OPENROUTER_API_KEY="sk-..."` with `EMBED_MODEL="baai/bge-large-en-v1.5"` (or any `1024`-dim OpenRouter embedding model) for zero-local-VRAM embeddings.
 
 ---
 
 ## 🐘 When Do You Need PostgreSQL?
 
-* **Use SQLite (Default)**: Perfect for single developers, local IDE sessions, and projects with hundreds to thousands of decisions. Zero Docker, zero setup.
+* **Use SQLite (Default)**: Perfect for single developers, local IDE sessions, and projects with thousands of decisions—featuring compact `Float32Array` binary vector blobs (`4 KB`/row) and an external-content Porter-stemmed `FTS5` lexical index. Zero Docker, zero setup.
 * **Use PostgreSQL (`STORAGE_MODE=postgres`)**: Required only when scaling to multi-agent swarms across different machines needing centralized persistence and server-side pgvector HNSW indexing.
 
 ---
@@ -118,7 +118,7 @@ To prevent memory hallucination and database pollution:
 ## 🔄 Migration from v1.6 / v1.7
 
 * **Tool Aliases**: Legacy tool names (`add_memory`, `search_memory`, `compile_state`, `supersede_memory`, `invalidate_memory`, `proactive_nudge`) are automatically aliased to the 5 verbs with a deprecation notice.
-* **Database Path**: v1.7 used `.agent/memory.db`. v1.8.0 uses `.agent/context.db`. Run `npx krusch-context-mcp init` to migrate.
+* **Database Path**: v1.7 used `.agent/memory.db`. v1.8+ uses `.agent/context.db`. Run `npx krusch-context-mcp init` to migrate.
 * See [docs/MIGRATION.md](docs/MIGRATION.md) for the complete mapping table.
 
 ---
@@ -133,7 +133,7 @@ To prevent memory hallucination and database pollution:
                ┌───────────────┴───────────────┐
                ▼                               ▼
 ┌─────────────────────────────┐ ┌─────────────────────────────┐
-│  krusch-context-mcp (v1.8)  │ │   krusch-git (External)     │
+│  krusch-context-mcp (v1.9)  │ │   krusch-git (External)     │
 │   Project Memory & Steering │ │   Codebase RAG & AST Search │
 │       (5 Canonical Verbs)   │ │      (7 Specialized Tools)  │
 └──────────────┬──────────────┘ └─────────────────────────────┘
@@ -187,10 +187,10 @@ claude mcp add krusch-context -- npx -y krusch-context-mcp
 * **[Canonical Tool Reference](docs/TOOL_REFERENCE.md)**: Generated directly from live schemas (`npm run docs:generate`).
 * **[Architecture & Failure Modes](docs/ARCHITECTURE.md)**: 2-page specification covering schemas, indexes, and invariants.
 * **[Setup & Operations Guide](docs/SETUP.md)**: Zero-Docker setup and optional configurations.
-* **[Migration Guide](docs/MIGRATION.md)**: Step-by-step v1.5 → v1.6 → v1.7 → v1.8.0 mapping.
+* **[Migration Guide](docs/MIGRATION.md)**: Step-by-step v1.5 → v1.6 → v1.7 → v1.8 → v1.9.0 mapping.
 * **[Episodic Memory Guide](docs/EPISODIC_MEMORY.md)**: Deep dive into the closed taxonomy and lifecycle.
 * **[Changelog](CHANGELOG.md)**: Version release notes.
-* **[Official ICLR 2026 BEAM Empirical Report](benchmarks/BEAM_EMPIRICAL_REPORT.md)**: Closed-system `n = 400/400` 100K-split retrieval (`91.99%`) & open-weights E2E QA (`69.19%` / `63.92%`) audit and zero-leakage verification.
+* **[Official ICLR 2026 BEAM Empirical Report](benchmarks/BEAM_EMPIRICAL_REPORT.md)**: Closed-system full-suite evaluation across all **`100` conversations (`~178.34M` tokens) and `2,000/2,000` questions** (`100K`, `500K`, `1M`, `10M` splits) on 96 GB Blackwell G4 (`snowflake-arctic-embed2` 8K ctx on SQLite: **`78.67%` Hybrid 8K** vs. `76.88%` Pure Dense 8K [`+1.79 pp`] & `8.71%` Lex 8K; **`70.64%` / `62.02%` Stock `gpt-oss:120b` E2E QA** across all `2,000` Qs with zero degradation from `100K` → `500K` → `1M` [`70.60%` → `71.82%` → `72.86%`]; beats cloud `past.dev` on Contradiction Resolution across all 4 splits) and `5/5` zero-leakage verification.
 * **[Evaluation Baseline Notes](evals/README.md)**: Preliminary benchmark fixtures and token-budget metrics.
 
 ---

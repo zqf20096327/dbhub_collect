@@ -10,7 +10,7 @@ A mail-like coordination layer for coding agents, exposed as an HTTP-only FastMC
 
 Think of it as asynchronous email + directory + change-intent signaling for your agents, backed by Git (for human-auditable artifacts) and SQLite (for indexing and queries).
 
-Status: Under active development. The design is captured in detail in `docs/planning/project_idea_and_guide.md` (start with the original prompt at the top of that file).
+Status: Maintenance mode. This Python implementation is superseded by the Rust rewrite and is no longer actively developed; new installs should use [mcp_agent_mail_rust](https://github.com/Dicklesworthstone/mcp_agent_mail_rust). The original design is captured in detail in `docs/planning/project_idea_and_guide.md` (start with the original prompt at the top of that file).
 
 ## Why this exists
 
@@ -47,11 +47,11 @@ Watch the full 23-minute walkthrough (https://youtu.be/68VVcqMEDrs?si=pCm6AiJAnd
 One disciplined hour of GPT-5 Codex—when it isn’t waiting on human prompts—often produces 10–20 “human hours” of work because the agents reason and type at machine speed. Agent Mail multiplies that advantage in two layers:
 
 1. **Base OSS server:** Git-backed mailboxes, advisory file reservations, Typer CLI helpers, and searchable archives keep independent agents aligned without babysitting. Every instruction, lease, and attachment is auditable.
-2. **Companion stack (commercial):** The iOS app + host automation can provision, pair, and steer heterogeneous fleets (Claude Code, Codex, Gemini CLI, Factory Droid, etc.) from your phone using customizable Message Stacks, Human Overseer broadcasts, Beads awareness, and plan editing tools—no manual tmux choreography required. The automation closes the loop by scheduling prompt
+2. **Companion stack (commercial):** The iOS app + host automation can provision, pair, and steer heterogeneous fleets (Claude Code, Codex, Gemini CLI, Factory Droid, etc.) fro
 
 [...截断...]
 
-s, honoring Limited Mode, and enforcing Double-Arm confirmations for destructive work.
+m your phone using customizable Message Stacks, Human Overseer broadcasts, Beads awareness, and plan editing tools—no manual tmux choreography required. The automation closes the loop by scheduling prompts, honoring Limited Mode, and enforcing Double-Arm confirmations for destructive work.
 
 Result: you invest 1–2 hours of human supervision, but dozens of agent-hours execute in parallel with clear audit trails and conflict-avoidance baked in.
 
@@ -114,13 +114,4 @@ That's it! The `am` alias (added to your `.zshrc` or `.bashrc` during installati
 Install with custom port:
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/Dicklesworthstone/mcp_agent_mail/main/scripts/install.sh?$(date +%s)" | bash -s -- --port 9000 --yes
-```
-
-Or use the CLI command after installation:
-uv run python -m mcp_agent_mail.cli config set-port 9000
-```
-
-### If you want to do it yourself
-
-Clone the repo, set up and instal
+curl -fsSL "https://raw.githubusercontent.com/Dicklesworthstone/mcp_agent_mail/main/scripts/install.sh?$(date +%s)" | bas

@@ -3,20 +3,23 @@
 # ArchiPy - Architecture + Python
 
 [![Forks](https://img.shields.io/github/forks/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy/network/members)
-[![Stars](https://img.shields.io/github/stars/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy/stargazers)
+[![Stars](https://img.shields.io/github/stars/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy)
 [![Python](https://img.shields.io/badge/Python-3.14+-blue.svg)](https://www.python.org/downloads/)
 [![UV](https://img.shields.io/badge/UV-package%20manager-blue)](https://docs.astral.sh/uv/)
 [![Documentation](https://img.shields.io/badge/docs-MkDocs-blue.svg)](https://syntaxarc.github.io/ArchiPy/)
 [![License](https://img.shields.io/github/license/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy/blob/master/LICENSE)
 [![Maintained](https://img.shields.io/badge/Maintained-yes-brightgreen)](https://github.com/SyntaxArc/ArchiPy)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)](https://github.com/SyntaxArc/ArchiPy/blob/master/CONTRIBUTING.md)
+[![Tests](https://img.shields.io/github/actions/workflow/status/SyntaxArc/ArchiPy/tests.yml?branch=master&label=tests)](https://github.com/SyntaxArc/ArchiPy/actions/workflows/tests.yml)
+[![Ruff](https://img.shields.io/github/actions/workflow/status/SyntaxArc/ArchiPy/ruff-lint.yml?branch=master&label=ruff)](https://github.com/SyntaxArc/ArchiPy/actions/workflows/ruff-lint.yml)
+[![Ty](https://img.shields.io/github/actions/workflow/status/SyntaxArc/ArchiPy/ty-lint.yml?branch=master&label=ty)](https://github.com/SyntaxArc/ArchiPy/actions/workflows/ty-lint.yml)
 [![PyPI - Version](https://img.shields.io/pypi/v/archipy)](https://pypi.org/project/archipy/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/archipy)](https://pypi.org/project/archipy/)
 [![Contributors](https://img.shields.io/github/contributors/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy/graphs/contributors)
-[![Last Commit](https://img.shields.io/github/last-commit/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy/commits/main)
-[![Open Issues](https://img.shields.io/github/issues/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy/issues)
-[![Closed Issues](https://img.shields.io/github/issues-closed/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy/issues?q=is%3Aissue+is%3Aclosed)
-[![Pull Requests](https://img.shields.io/github/issues-pr/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy/pulls)
+[![Last Commit](https://img.shields.io/github/last-commit/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy/commits/master)
+[![Open Issues](https://img.shields.io/github/issues/SyntaxArc/ArchiPy?color=brightgreen)](https://github.com/SyntaxArc/ArchiPy/issues)
+[![Closed Issues](https://img.shields.io/github/issues-closed/SyntaxArc/ArchiPy?color=brightgreen)](https://github.com/SyntaxArc/ArchiPy/issues?q=is%3Aissue+is%3Aclosed)
+[![Pull Requests](https://img.shields.io/github/issues-pr/SyntaxArc/ArchiPy?color=brightgreen)](https://github.com/SyntaxArc/ArchiPy/pulls)
 [![Repo Size](https://img.shields.io/github/repo-size/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy)
 [![Code Size](https://img.shields.io/github/languages/code-size/SyntaxArc/ArchiPy)](https://github.com/SyntaxArc/ArchiPy)
 
@@ -60,7 +63,7 @@ ArchiPy is built with the following objectives in mind:
 5. **Behavior-Driven Development (BDD) Support** - Enable robust feature validation
 6. **Best Practices & Development Structure** - Enforce coding standards
 
-[Read more about ArchiPy's architecture and design](https://syntaxarc.github.io/ArchiPy/architecture)
+[Read more about ArchiPy's architecture and design](https://syntaxarc.github.io/ArchiPy/getting-started/concepts/)
 
 ---
 
@@ -73,7 +76,7 @@ ArchiPy is built with the following objectives in mind:
 - **BDD Testing**: Fully integrated Behave setup
 - **Modern Tooling**: Dependency management and code quality tools
 
-[Explore the complete feature set](https://syntaxarc.github.io/ArchiPy/features)
+[Explore the complete feature set](https://syntaxarc.github.io/ArchiPy/api_reference/)
 
 ---
 
@@ -102,7 +105,7 @@ uv add archipy
 uv add archipy[redis,fastapi]
 ```
 
-[View installation documentation](https://syntaxarc.github.io/ArchiPy/installation)
+[View installation documentation](https://syntaxarc.github.io/ArchiPy/getting-started/installation/)
 
 ---
 
@@ -121,7 +124,7 @@ pip install archipy[postgres]     # PostgreSQL support
 
 Each adapter extra installs its own package (`archipy[redis]` → `archipy-redis`), so only the adapters you ask for are installed. Imports are unchanged (`archipy.adapters.redis`).
 
-[See the documentation for all available options and examples](https://syntaxarc.github.io/ArchiPy/usage)
+[See the documentation for all available options and examples](https://syntaxarc.github.io/ArchiPy/tutorials/)
 
 ---
 
@@ -140,7 +143,7 @@ make behave
 make lint
 ```
 
-[View the complete development guide](https://syntaxarc.github.io/ArchiPy/development)
+[View the complete development guide](https://syntaxarc.github.io/ArchiPy/community/contributing/)
 
 ---
 
@@ -204,6 +207,6 @@ make docs-build-full
 make docs-deploy
 ```
 
-**See [DOCS_QUICKSTART.md](DOCS_QUICKSTART.md) for more commands and tips.**
+**See [the quickstart](https://syntaxarc.github.io/ArchiPy/getting-started/quickstart/) for more commands and tips.**
 
 [View the latest documentation](https://syntaxarc.github.io/ArchiPy/)

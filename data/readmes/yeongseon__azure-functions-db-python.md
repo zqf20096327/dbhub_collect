@@ -70,7 +70,7 @@ Use the **official Azure SQL bindings** when:
 
 - Azure SQL / SQL Server only, and you want the Functions host to manage everything → prefer the [official Azure SQL bindings](https://learn.microsoft.com/azure/azure-functions/functions-bindings-azure-sql).
 - PostgreSQL, MySQL, SQLite, or any other SQLAlchemy dialect → this package.
-- Non-SQL source (Mongo, Kafka, HTTP) via a polling model → this package via [`SourceAdapter`](docs/05-adapter-sdk.md).
+- Custom polling source → experimental [`SourceAdapter`](docs/05-adapter-sdk.md) extension point; no MongoDB, Kafka or HTTP adapters are shipped or certified.
 - Native binding metadata visible to Portal / scale controllers → the official extension. This package deliberately does not register with the host — see [ADR-006](docs/27-ADR-006-no-native-extension.md).
 
 | Axis                              | Official Azure SQL bindings                       | `azure-functions-db-python`                                    |
@@ -90,7 +90,7 @@ Use the **official Azure SQL bindings** when:
 |------|-------------|------------|
 | **Built-in extras** | PostgreSQL, MySQL, or SQL Server | `pip install azure-functions-db[postgres]` and go |
 | **Bring your own SQLAlchemy database** | Oracle, CockroachDB, DuckDB, or any other RDBMS with a SQLAlchemy dialect | Install the driver, use the SQLAlchemy connection URL |
-| **Custom trigger source** *(triggers only)* | Non-SQL sources (MongoDB, Kafka, REST APIs) | Implement the `SourceAdapter` Protocol for `db.trigger()` |
+| **Experimental custom source** *(triggers only)* | You own source ordering and delivery verification | See the actual [`SourceAdapter` protocol](docs/05-adapter-sdk.md); no non-SQL adapters are shipped |
 
 <details>
 <summary><strong>Bring your own database &amp; custom trigger sources</strong></summary>
@@ -144,7 +144,7 @@ source = SqlAlchemySource(
 
 ### Custom trigger source
 
-If your data source has no SQLAlchemy dialect, implement the [`SourceAdapter`](docs/05-adapter-sdk.md) protocol and pass it directly to `db.trigger(source=...)`. This applies only to the trigger feature. See the [Adapter SDK](docs/05-adapter-sdk.md) for the full contract.
+The experimental [`SourceAdapter`](docs/05-adapter-sdk.md) protocol allows custom polling sources for triggers only. It is not certified support for MongoDB, Kafka or REST ingestion; no such adapters are shipped. You must verify source ordering, normalization and checkpoint semantics. Prefer the built-in SQLAlchemy path for database integration.
 
 </details>
 
@@ -374,6 +374,12 @@ Notes:
 
 ### Trigger (poll-based pseudo trigger)
 
+**Before configuring polling:** an increasing timestamp/sequence is not enough
+for no-miss delivery. Late commits below a saved cursor can be permanently
+missed. Require documented commit-visibility ordering, or use CDC/a durable
+outbox consumption design. See [late commits and safe cursors](docs/34-late-commits-and-cursors.md)
+before selecting `cursor_column`.
+
 > **This is a pseudo trigger, not a native Azure Functions trigger.**
 > `@db.trigger` does not register a binding with the Functions host. It must be stacked **on top of a real Azure Functions trigger** (typically `@app.schedule` / timer) that fires the polling loop.
 >
@@ -381,9 +387,16 @@ Notes:
 
 #### Poll-trigger lifecycle
 
+Set `AzureWebJobsStorage` in the process environment before importing these
+examples and provision the `db-state` container. The Azure SDK does not expand
+`%SETTING%` tokens: `os.environ["AzureWebJobsStorage"]` reads the actual value
+and raises `KeyError: 'AzureWebJobsStorage'` immediately if it is missing.
+
 One `PollRunner.tick()` runs per timer fire, using the concrete default components (`BlobCheckpointStore` + `SqlAlchemySource`). The step-by-step sequence diagram — plus the `StateStore` / `SourceAdapter` protocol names — lives in [Architecture — Trigger Flow](docs/02-architecture.md#trigger-flow-poll-based-change-detection).
 
 ```python
+import os
+
 import azure.functions as func
 from azure.storage.blob import ContainerClient
 from azure_functions_db import BlobCheckpointStore, DbBindings, RowChange, SqlAlchemySource
@@ -401,7 +414,7 @@ source = SqlAlchemySource(
 
 checkpoint_store = BlobCheckpointStore(
     container_client=ContainerClient.from_connection_string(
-        conn_str="%AzureWebJobsStorage%",
+        conn_str=os.environ["AzureWebJobsStorage"],
         container_name="db-state",
     ),
     source_fingerprint=source.source_descriptor.fingerprint,
@@ -425,6 +438,8 @@ def orders_poll(timer: func.TimerRequest, events: list[RowChange]) -> None:
 Process database changes and write results to another table. Uses `EngineProvider` for shared connection pooling.
 
 ```python
+import os
+
 import azure.functions as func
 from azure.storage.blob import ContainerClient
 
@@ -452,7 +467,7 @@ source = SqlAlchemySource(
 
 checkpoint_store = BlobCheckpointStore(
     container_client=ContainerClient.from_connection_string(
-        conn_str="%AzureWebJobsStorage%",
+        conn_str=os.environ["AzureWebJobsStorage"],
         container_name="db-state",
     ),
     source_fingerprint=source.source_descriptor.fingerprint,

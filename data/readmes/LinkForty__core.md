@@ -460,7 +460,9 @@ Every short code is unique across the server. Links created through Core's API h
 An application that builds on Core and assigns links to organizations (by setting `links.organization_id`) gets one set of codes per organization: two organizations can each have `promo`. Template slugs stay unique across the server, and URLs resolve like this:
 
 - `/{templateSlug}/{shortCode}` resolves to exactly one link.
-- `/{shortCode}` prefers the organization the request belongs to, then a link without a template, then the oldest link with that code.
+- `/{shortCode}` on a request that belongs to an organization resolves only that organization's link with that code.
+- A request that belongs to an organization is served only that organization's links, in either form: another organization's link is answered with 404, and the refusal is logged.
+- `/{shortCode}` on any other request prefers a link without a template, then the oldest link with that code.
 
 To tell Core which organization a request belongs to, for example by custom domain, register a resolver:
 
@@ -667,6 +669,21 @@ await fastify.register(linkRoutes);
 
 await fastify.listen({ port: 3000 });
 ```
+
+#### Starting while the database is busy
+
+`initializeDatabase()` creates or updates the schema on every start. Postgres takes a table's lock *before* it evaluates `IF NOT EXISTS`, so a statement such as `ALTER TABLE links ADD COLUMN IF NOT EXISTS …` for a column that already exists would still request an exclusive lock on `links` — and if a long statement (a retention job, a large export) holds that table, the request waits, and every later query on the table, redirects included, queues behind it until the long statement ends. To keep a routine start from ever doing that, statements whose effect already exists are answered from the catalog and never sent, and you can bound the wait for the rest:
+
+```typescript
+await initializeDatabase({
+  url: 'postgresql://localhost/linkforty',
+  // A schema change that waits longer than this fails the start with
+  // SQLSTATE 55P03 rather than queueing the table. Retry or restart.
+  lockTimeoutMs: 5000,
+});
+```
+
+The timeout applies only to the initialisation session and is reset before that connection returns to the pool. When adding schema statements of your own, use the idempotent shapes (`ADD COLUMN IF NOT EXISTS`, `CREATE INDEX IF NOT EXISTS`, `DROP CONSTRAINT IF EXISTS`) or a `DO $$ … IF NOT EXISTS (SELECT … FROM information_schema …)` block, never a bare `ALTER` that asks for a lock on every start.
 
 ## Deployment
 

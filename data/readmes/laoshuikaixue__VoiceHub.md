@@ -20,7 +20,8 @@
 
 ### 🎵 核心功能
 
-- **智能点歌系统**：用户可以点歌或给已有歌曲投票，支持网易云音乐、QQ音乐和哔哩哔哩搜索，可选择期望播出时段
+- **智能点歌系统**：用户可以点歌或给已有歌曲投票，支持网易云音乐、QQ音乐和哔哩哔哩搜索，可选择期望播出日期与播出时段
+- **点歌券**：支持用户派发与回收。投稿后锁券，正式发布且标记已播放后核销；未播放时取消发布或换日保留绑定，撤回投稿归还点歌券。
 - **多平台登录支持**：
   - **OAuth 账户系统**：支持通过 GitHub、Casdoor 等 OAuth 提供商快速创建和登录账户
     - **直接创建账户**：用户通过 OAuth 认证后可创建新账户，但仍需设置本地用户名和密码
@@ -120,17 +121,17 @@
 - **数据库**：使用 Drizzle ORM + Neon Database，提供类型安全和高性能的数据库操作
 - **认证**：标准 JWT 认证系统
 - **数据读取**：PostgreSQL 是唯一业务数据源，歌曲、排期和用户状态不使用 Redis 缓存
-- **部署**：支持 Vercel、Netlify、EdgeOne 等 Serverless 平台一键部署，并提供 Docker、Linux 一键脚本及飞牛 FnOS (fpk安装包) 等多种部署方式
+- **部署**：支持 Vercel、Netlify、EdgeOne 等 Serverless 平台一键部署，并提供
+
+[...截断...]
+
+ Docker、Linux 一键脚本及飞牛 FnOS (fpk安装包) 等多种部署方式
 
 ## 部署指南
 
 ### 一键部署
 
-本项目可以一键部
-
-[...截断...]
-
-署到Vercel/Netlify/EdgeOne平台：
+本项目可以一键部署到Vercel/Netlify/EdgeOne平台：
 
 [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flaoshuikaixue%2FVoiceHub&env=DATABASE_URL,JWT_SECRET,NODE_ENV&envDefaults=%7B%22NODE_ENV%22%3A%22production%22%7D&envDescription=%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E8%AF%B4%E6%98%8E&envLink=https%3A%2F%2Fgithub.com%2Flaoshuikaixue%2FVoiceHub%23%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E8%AF%B4%E6%98%8E)
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/laoshuikaixue/VoiceHub)
@@ -287,9 +288,4 @@ VoiceHub 提供了一个 Nix flake，用于构建、开发和在 NixOS 上部署
 
 #### NixOS 部署
 
-将 VoiceHub 添加为 flake input：
-
-```nix
-{
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs
+将 VoiceHub 添加为 fla

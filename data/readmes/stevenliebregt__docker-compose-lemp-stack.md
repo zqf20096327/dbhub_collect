@@ -1,3 +1,7 @@
+# ARCHIVED (2026-10-26)
+
+I haven't looked at this for a long time and I no longer work with PHP. Archiving as of this date (2026-10-26).
+
 # Docker Compose LEMP Stack
 
 This repository contains a little `docker-compose` configuration to start a `LEMP (Linux, Nginx, MariaDB, PHP)` stack.

@@ -421,6 +421,8 @@ Note that if the value range is empty, it will generate an expression representi
 * `dbx.Like()`: creating a `LIKE` expression for the specified column and the range of values. For example, 
 `dbx.Like("title", "golang", "framework")` would create the expression `title LIKE "%golang%" AND title LIKE "%framework%"`.
 You can further customize a LIKE expression by calling `Escape()` and/or `Match()` functions of the resulting expression.
+By default `%`, `_` and `\` in the values are escaped with a backslash (on SQLite an `ESCAPE '\'` clause is added).
+`Escape()` with no arguments turns escaping off, so `_` and `%` in the values act as wildcards.
 Note that if the value range is empty, it will generate an empty expression. 
 * `dbx.NotLike()`: creating a `NOT LIKE` expression. This is very similar to `dbx.Like()`.
 * `dbx.OrLike()`: creating a `LIKE` expression but concatenating different `LIKE` sub-expressions using `OR` instead of `AND`.
@@ -458,6 +460,35 @@ err = db.Delete("users", dbx.HashExp{"status": 2}).Execute()
 
 When building data manipulation queries, remember to call `Execute()` at the end to execute the queries.
 
+`Upsert()` inserts a row or, if the insertion conflicts with an existing row, updates that row. It is supported
+for MySQL, PostgreSQL and SQLite (3.24.0+). The optional constraint columns name the primary key or unique index
+to check; they are required for PostgreSQL and SQLite and are left out of the update part on every database:
+
+```go
+// MySQL:
+// INSERT INTO `users` (`email`, `id`, `name`) VALUES ({:p0}, {:p1}, {:p2})
+//   ON DUPLICATE KEY UPDATE `email`=VALUES(`email`), `name`=VALUES(`name`)
+// PostgreSQL:
+// INSERT INTO "users" ("email", "id", "name") VALUES ({:p0}, {:p1}, {:p2})
+//   ON CONFLICT ("id") DO UPDATE SET "email"=EXCLUDED."email", "name"=EXCLUDED."name"
+_, err := db.Upsert("users", dbx.Params{
+	"id":    100,
+	"name":  "James",
+	"email": "james@example.com",
+}, "id").Execute()
+```
+
+On MySQL, `ON DUPLICATE KEY UPDATE` fires on a conflict with *any* primary key or unique index of the table, whatever
+constraint columns are given. `Upsert()` returns a query whose `Execute()` fails if no column is left to update besides
+the constraint columns, or if the constraint columns are missing for PostgreSQL or SQLite.
+
+The update part copies the proposed row (`EXCLUDED.col` on PostgreSQL and SQLite, `VALUES(col)` on MySQL), so it
+stores exactly what the insert would have stored: `BEFORE INSERT` triggers apply, and a `dbx.Expression` value is
+evaluated once. An expression that reads the existing row, such as a counter `"hits": dbx.NewExp("hits + 1")`, does
+not work with `Upsert()`. On MySQL, `VALUES()` is deprecated since 8.0.20 (warning 1287), but it is the only form that
+works on MySQL 5.7, 8 and 9 and on MariaDB alike. On every database a `NULL` in a constraint
+column never conflicts (unique indexes treat NULLs as distinct), so such a row is always inserted.
+
 ### Building Schema Manipulation Queries
 
 Schema manipulation queries are those changing the database schema, such as creating a new table, adding a new column.
@@ -492,7 +523,9 @@ func (c MyCustomer) TableName() string {
 }
 ```
 
-Note that the `TableName` method should be defined with a value receiver instead of a pointer receiver. 
+The `TableName` method may have a value or a pointer receiver. With a pointer receiver it is called on a new zero value
+of the struct when the table name is inferred from a struct value or a slice (e.g. `All(&customers)`); before v1.7.0
+a pointer-receiver `TableName` was ignored in those cases.
 
 If the struct has a field named `ID` or `Id`, by default the field will be treated as the primary key field.
 If you want to use a different field as the primary key, tag it with `db:"pk"`. You may tag multiple fields
@@ -605,6 +638,34 @@ Note that the `Update()` method assumes that the primary keys are immutable. It 
 to look for the row that should be updated. An error will be returned if a model does not have a primary key.
 
 
+### Upsert
+
+To insert a model or update the existing row with the same primary key, call the `ModelQuery.Upsert()` method.
+It works for MySQL, PostgreSQL and SQLite. The fields to insert and update are chosen in the same way as for
+`Insert()` and `Update()`: by default all public fields, or the fields passed to `Upsert()`, minus the fields passed
+to `Exclude()`. Excluded fields are neither inserted nor updated, which protects insert-only columns such as a
+creation time. For example,
+
+```go
+db, _ := dbx.Open("mysql", "user:pass@/example")
+
+// INSERT INTO customer (id, name, email, status) VALUES (100, 'example', 'test@example.com', 0)
+//   ON DUPLICATE KEY UPDATE name=VALUES(name), email=VALUES(email), status=VALUES(status)
+err := db.Model(&customer).Upsert()
+// insert or update all public fields except CreatedAt
+err = db.Model(&customer).Exclude("CreatedAt").Upsert()
+```
+
+The primary key is the conflict target and is never updated. If the model has a single-column primary key with a
+zero value, it is assumed to be auto-incremental and is left out of the insertion. Unlike `Insert()`, `Upsert()` does
+not fill the primary key field afterwards. On MySQL, a conflict with any other unique index also updates the matching
+row, which keeps its own primary key.
+
+The insertion part must be valid on its own even when the row already exists, because the database checks `NOT NULL`
+constraints before it detects the conflict. So `Upsert("Name")` fails for an existing row when another `NOT NULL`
+column without a default (e.g. `Email`) is left out; pass `Upsert("Name", "Email")` instead.
+
+
 ### Delete
 
 To delete a model, call the `ModelQuery.Delete()` method. The method deletes the row using the primary key value
@@ -701,6 +762,42 @@ err := db.Transactional(func(tx *dbx.Tx) error {
 
 fmt.Println(err)
 ```
+
+### Locking Reads
+
+To lock the rows a SELECT query reads until the end of the transaction, call one of these methods of `SelectQuery`:
+
+* `ForUpdate()`: `FOR UPDATE`, an exclusive lock. Other transactions that lock or modify the rows wait.
+* `ForShare()`: `FOR SHARE`, a shared lock. Other transactions may read the rows but not modify them.
+  Requires MySQL 8.0+ or PostgreSQL; MySQL 5.7 and MariaDB do not support it.
+* `ForUpdateSkipLocked()`: `FOR UPDATE SKIP LOCKED`, an exclusive lock that skips the rows already locked by other
+  transactions instead of waiting for them. It is meant for job queues. Requires MySQL 8.0+ or PostgreSQL 9.5+.
+
+```go
+err := db.Transactional(func(tx *dbx.Tx) error {
+	var job Job
+	// SELECT * FROM `job` WHERE `status`={:p0} ORDER BY `id` LIMIT 1 FOR UPDATE SKIP LOCKED
+	err := tx.Select().
+		Where(dbx.HashExp{"status": "new"}).
+		OrderBy("id").
+		Limit(1).
+		ForUpdateSkipLocked().
+		One(&job)
+	if err != nil {
+		return err
+	}
+	job.Status = "running"
+	return tx.Model(&job).Update("Status")
+})
+```
+
+Row locks only exist inside a transaction: outside one, every statement commits at once and its locks are released
+immediately. That is why a locking read must run on a `Tx`: built from a `DB` (`db.Select()...ForUpdate()`), the query
+returns an error instead of executing, on every database, SQLite included, so that a test suite running on SQLite
+catches a lock taken outside a transaction. A locking read also cannot be combined with `Union()`, `GroupBy()` or
+`Distinct()` (the query returns an error), and should not use aggregate functions. SQLite has no row locks (a write
+transaction locks the whole database), so inside a transaction the locking clause is left out for SQLite.
+SQL Server and Oracle are not supported and return an error.
 
 ## Logging Executed SQL Statements
 

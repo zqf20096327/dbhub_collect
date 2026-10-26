@@ -59,8 +59,9 @@ JobFilter hace esa parte por ti. Tú solo decides a cuáles aplicar.
 | ✅ | elempleo | Integrada (Colombia) |
 | ✅ | PeakU | Integrada |
 | ✅ | Hireline | Integrada (Colombia y México) |
-| 🔜 | Magneto365 | Siguiente |
-| ⛔ | Torre | Requiere API key (cerró la búsqueda pública) |
+| ✅ | Magneto365 | Integrada (Colombia) |
+| ✅ | Talently | Integrada |
+| 🚫 | Torre | Descartada: ya filtra vacantes según tu CV y muchas vienen de otros portales |
 
 El estado de cada una, lo que se sabe de cómo integrarla y la guía para agregar una nueva
 están en [docs/plataformas.md](docs/plataformas.md). **Es la mejor forma de contribuir.**
@@ -126,9 +127,9 @@ IA.
 - [x] elempleo
 - [x] PeakU
 - [x] Hireline
-- [ ] Magneto365
-- [ ] Torre, si se consigue acceso a su API
-- [ ] Lista negra para empresas confidenciales (agrupadas por descripción)
+- [x] Magneto365
+- [x] Talently
+- [x] Lista negra para empresas confidenciales (agrupadas por descripción)
 
 ## Contribuir
 

@@ -24,7 +24,7 @@ The mobile layout stacks the same observations, radar, and forecast for a scroll
 - **Your own station observations.** Outdoor temperature, feels-like temperature, daily high and low, dew point, humidity, wind direction and gusts, rainfall, pressure, UV, solar radiation, indoor conditions, and battery status where your station supplies them.
 - **The direction things are heading.** Recent-history sparklines and changes in temperature, humidity, wind, and pressure, backed by local observation history.
 - **The week ahead.** A seven-day Open-Meteo forecast with conditions, high/low temperatures, and precipitation probability.
-- **Weather around you.** A Leaflet map with Stadia Maps tiles and an optional latest-frame RainViewer radar overlay. Configure its location, zoom, and framing in admin.
+- **Weather around you.** A Leaflet map with keyless OpenStreetMap base tiles (optional Stadia Maps) and an optional latest-frame RainViewer radar overlay. Configure its location, zoom, and framing in admin.
 - **A heading that feels like home.** Set your own dashboard title and subtitle, hide the subtitle, and choose a fixed weather icon or keep the weather/time-of-day icon. This personalizes the display without renaming Midway Weather.
 - **A layout that fits your household.** Enable, disable, reorder, and resize supported tiles, with desktop and mobile draft previews before saving.
 - **A little personality.** Edit the quip library, match messages to weather or time of day, and let the existing rotation keep them from repeating too often.
@@ -70,7 +70,7 @@ Ambient Weather station → Ambient Weather API → observation collector ─┐
 Open-Meteo daily forecast ────────────────────→ forecast collector ─────┘
 
 Browser → local weather API (periodic refresh)
-Browser → Stadia Maps + RainViewer (map and radar)
+Browser → OpenStreetMap (or configured Stadia Maps) + RainViewer (map and radar)
 Admin   → saved layout, quips, themes, and presentation settings
 ```
 
@@ -153,6 +153,10 @@ Administration manages tiles and previews, quips, seasonal schedules, location a
 Serve **only `public/`** through your web server, use HTTPS, set `APP_ENV=production` and `APP_DEBUG=false`, and preserve your application key. Keep `.env`, SQLite and its sidecars, logs, sessions, and admin credentials outside the public web root and version control. Configure the scheduler and backups separately.
 
 Provision your own web server, credentials, scheduler, and backup policy. This public repository includes application validation CI; production deployment remains installation-specific. Read [self-hosting and operations](docs/operations.md) before hosting your own instance.
+
+## Updating your installation
+
+Use the [external upgrade guide](docs/installation/upgrading.md) to back up and update an existing server or ZIP installation while preserving `.env`, SQLite history, and saved dashboard settings. Do not repeat the first-install/demo commands on a live database. For missing battery readings, see [battery troubleshooting](docs/installation/battery-troubleshooting.md).
 
 ## Documentation
 

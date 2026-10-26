@@ -176,8 +176,8 @@ claude mcp add --transport http vasta \
 **Also in Vasta:**
 
 - **Offline first**: each device keeps a copy in SQLite. Edits made offline on two devices merge.
-- **Block editor**: slash commands, `@` mentions, embeds, callouts, toggles, columns, tables and
-  backlinks.
+- **Block editor**: slash commands, `@` mentions, embeds, callouts, toggles, columns, tables,
+  Mermaid diagrams and backlinks.
 - **Templates and snippets**: start a type's objects or each day's note from a template, with
   placeholders (`{{date:+7d}}`, `{{ask:With whom?}}`) and blocks shown only when a condition
   holds; insert snippets with `/`. [Templates →](docs/data-model.md#templates-and-snippets)
@@ -186,7 +186,7 @@ claude mcp add --transport http vasta \
 - **A food diary** with nutrition goals, if you turn it on.
 - **Apps**: install the web app on a phone (PWA). The desktop app adds a global capture shortcut.
 - **Media** on disk or in an S3-compatible bucket.
-- **Import** from Capacities.
+- **Import** from Capacities: a full export, from Settings. [Import →](docs/import.md)
 
 ## Why Vasta
 
@@ -284,6 +284,7 @@ extensions/browser/      "Save to Vasta" browser extension
 - [Agents](docs/agents.md): the MCP endpoint and the CLI
 - [Reminders](docs/reminders.md): ntfy, Telegram and the desktop app
 - [Sync](docs/sync.md): how local-first sync works
+- [Import](docs/import.md): bringing your notes over from Capacities
 
 The server also describes its capture API at `/api/openapi.json` (OpenAPI 3.1).
 

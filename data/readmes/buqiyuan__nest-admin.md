@@ -1,6 +1,6 @@
 # nest-admin
 
-![](https://img.shields.io/github/commit-activity/m/buqiyuan/nest-admin) ![](https://img.shields.io/github/license/buqiyuan/nest-admin) ![](https://img.shields.io/github/repo-size/buqiyuan/nest-admin) ![](https://img.shields.io/github/languages/top/buqiyuan/nest-admin)
+[![OpenRepos](https://img.shields.io/endpoint?url=https://openrepos.org/status/nest-admin.openrepos.org.json&style=flat-square)](https://nest-admin.openrepos.org/) ![](https://img.shields.io/github/commit-activity/m/buqiyuan/nest-admin) ![](https://img.shields.io/github/license/buqiyuan/nest-admin) ![](https://img.shields.io/github/repo-size/buqiyuan/nest-admin) ![](https://img.shields.io/github/languages/top/buqiyuan/nest-admin)
 
 **基于 NestJs + TypeScript + TypeORM + Redis + MySql + Vue3 + Ant Design Vue 编写的一款简单高效的前后端分离的权限管理系统。希望这个项目在全栈的路上能够帮助到你。**
 
@@ -46,8 +46,21 @@
 - sql 文件：[/deploy/sql/nest_admin.sql](https://github.com/buqiyuan/nest-admin/tree/main/deploy/sql/nest_admin.sql) 用于数据库初始化
 - 项目相关配置，如：配置 mysql 和 redis 连接
   - 公共配置: [.env](https://github.com/buqiyuan/nest-admin/blob/main/.env)
-  - 开发环境: [.env.development](https://github.com/buqiyuan/nest-admin/blob/main/.env.development)
-  - 生产环境: [.env.production](https://github.com/buqiyuan/nest-admin/blob/main/.env.production)
+  - 开发环境模板: [.env.development.example](https://github.com/buqiyuan/nest-admin/blob/main/.env.development.example)
+  - 生产环境模板: [.env.production.example](https://github.com/buqiyuan/nest-admin/blob/main/.env.production.example)
+
+`.env.development` 与 `.env.production` 已加入 `.gitignore`，不会再随仓库分发密钥。首次启动前复制模板并填写密钥：
+
+```bash
+cp .env.development.example .env.development
+cp .env.production.example .env.production
+openssl rand -base64 48   # JWT_SECRET
+openssl rand -base64 48   # REFRESH_TOKEN_SECRET
+```
+
+`JWT_SECRET` 和 `REFRESH_TOKEN_SECRET` 必须各自设置为至少 32 位的随机字符串。缺失、为空、短于 32 位，或仍使用已知占位值时，进程会拒绝启动。已经部署过的环境在升级后必须轮换这两个密钥，并重新拉取或构建镜像；旧的登录令牌会因此失效。仓库历史里出现过的 SMTP 授权码也应在邮件服务商处作废。
+
+接口权限使用数据库里的当前角色，不信任 JWT 中的 `roles`。未写入 `user_access_tokens` 的令牌会被拒绝。仍保存在该表中的已签发令牌，在过期、退出登录或密钥轮换之前继续有效。
 
 ## 环境要求
 
@@ -72,7 +85,17 @@
 
 ## 快速体验
 
+先按上一节复制 `.env.production` 并写入足够长的 `JWT_SECRET` / `REFRESH_TOKEN_SECRET`。未配置密钥时服务会启动失败。
+
 启动成功后，通过 <http://localhost:7001/api-docs/> 访问。
+
+只构建后端镜像时，在仓库根目录执行。`PROJECT_DIR` 默认为 `/nest-admin`，不需要额外的 build-arg。要改安装路径时再加上 `--build-arg PROJECT_DIR=/your-path`。`docker compose` 构建时仍从 `.env` 读取 `PROJECT_DIR`。
+
+```bash
+docker build -t web-api .
+```
+
+镜像启动时会等待 `DB_HOST`（默认 `mysql`）的 `${DB_PORT:-3306}`，再执行迁移并交给 `pm2-runtime`。生产镜像不包含 devDependency `cross-env`，因此迁移直接调用 `typeorm` CLI，而不是 `pnpm migration:run`。`JWT_SECRET` 和 `REFRESH_TOKEN_SECRET` 需要在运行时注入，不要写进镜像。
 
 ```bash
 pnpm docker:up
@@ -113,7 +136,7 @@ docker compose --env-file .env --env-file .env.production logs -f
 git clone https://github.com/buqiyuan/nest-admin
 ```
 
-- 【可选】如果你是新手，还不太会搭建`mysql/redis`，你可以使用 `Docker` 启动指定服务供本地开发时使用, 例如：
+- 【可选】如果你是新手，还不太会搭建`mysql/redis`，你可以使用 `Docker` 启动指定服务供本地开发时使用, 例如（需先复制并填写 `.env.development`）：
 
 ```bash
 # 启动MySql服务

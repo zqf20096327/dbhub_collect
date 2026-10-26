@@ -64,7 +64,7 @@ The full design, routing rules and trade-offs are in **[docs/ARCHITECTURE.md](do
 
 ## Highlights
 
-- **39 case types (22 network, 17 host)** tuned for homes (table below). Each is plain Python with
+- **44 case types (22 network, 5 long-horizon, 17 host)** tuned for homes (table below). Each is plain Python with
   tests and a written spec. Learned baselines survive restarts and follow the *device* (DHCP
   hostname, then MAC, then IP), so a laptop keeps its history when it moves between addresses.
 - **Sites named by kind.** First contacts, odd TLS sessions and upload spikes carry the kind of
@@ -107,6 +107,13 @@ The full design, routing rules and trade-offs are in **[docs/ARCHITECTURE.md](do
   week-by-week benchmark: noise rate, how often the model agreed with your dispositions, and how
   often host context's verdict matched them. The CSP allows no scripts, and every change carries a
   CSRF token.
+- **A learned judge, off until you switch it on.** It learns from the cases you closed yourself and
+  records, on every new case, whether it would close it as routine and which of your closes it is
+  copying. The stats page grades it per detector. Auto-close ships **off** (`judge.auto_close: false`).
+  When you turn it on, it closes cases only for the detectors you list in `judge.auto_close_detectors`,
+  and only while each one qualifies on its scorecard. It never closes always-alert or alert-routed
+  cases, and it never suppresses. Each close has a one-click Undo, and the daily digest lists what it
+  closed. If you undo its closes or call one a true positive, it stops on its own.
 - **Private by design.** The AI sees device *names*, never internal IPs, MACs or packet contents.
   Network strings are quoted as untrusted. A personal-data gate runs in CI.
 - **Few dependencies.** Standard-library Python plus PyYAML, SQLite, and Zeek in Docker. Runs
@@ -176,6 +183,7 @@ treat it as a sanity check, not a benchmark. The scripted self-check (`tapwatch 
 | `udm_ips`, `udm_admin` | the router's own IPS verdicts, and admin logins (new source or repeated failures **always alert**; a login from outside names its network and country), from its syslog; the feed is parsed against lines a real UniFi gateway sends |
 | `feed_silence` | a feed it depends on (Zeek's logs, the router's syslog, an endpoint agent's frequent queries) stops for longer than its measured longest-allowed silence |
 | `host_encoded_cmd`, `host_app_shell`, `host_temp_exec`, `host_lolbin`, `host_bad_sig`, `host_persist`, `host_destructive`, `host_recon`, `host_extension`, `host_linux_connect`, `host_linux_cmd`, `host_lsass`, `host_rmm`, `host_tunnel`, `host_staging`, `host_fim` | on a PC with the [osquery agent](agents/README.md) (the tapwatch PC, or one enrolled in [Fleet](docs/setup/fleet.md)): an encoded or download-and-run command, a document app or browser starting a shell, a program in a temp folder, a built-in Windows tool, or a badly signed program connecting out, or a new task, service, startup item, cron job or WMI subscription that runs a script or a shell, a command that removes backups or logs, turns off Defender or adds an account, a burst of discovery commands, a program reading lsass memory, a new browser extension with sensitive access, and on Linux a temp-folder, in-memory or shell connection, a download-and-run, reverse-shell or history-clearing command, and new SSH keys or systemd units; a remote-access tool starting (renamed ones too, by their original file name), a tunnel being opened, files staged or sent somewhere new, and a persistence or privilege file changing (`ld.so.preload`, sudoers, shell start-up files, a file dropped in a Windows Startup folder) (download-and-run command combinations and the four downloader tools, certutil, bitsadmin, mshta and regsvr32, **always alert**) |
+| `slow_beacon`, `slow_upload`, `rare_dest`, `dormant_wake`, `routine_shift` | over weeks of each device's daily summaries, once a device has 14 watched days: one outside host contacted at a steady interval of 2 to 72 hours for days (a slow C2 heartbeat); 100+ MB uploaded to a destination new to the device, a little on most days over two weeks; a network reached with no name that no other device in the house used in 30 days, or a camera, TV or other fixed-function device reaching a country none of its same-kind peers do; a device quiet for 14+ watched days coming back to networks or ports it never used; and a device's active hours, ports or daily volume moving off its own 30-day normal for 3 days running (digest; an alert when another case on the device backs it up within 7 days) |
 | `vuln_kev` | installed software with a known-exploited vulnerability, from the agents' daily software inventory checked against the downloaded CISA KEV, OSV and NVD data (digest; while it's open, the device's other digest-level cases move up a severity level) |
 | `ioc_match`, `ids_alert` | your threat lists (**always alert**), the downloaded AdFection / Candiru spyware list (its C&C, validation and Candiru tiers **always alert**; its ad-delivery and older-campaign tiers are graded leads), and Suricata alerts if you run it |
 
@@ -242,6 +250,7 @@ eval/replay.sh eval/data/synthetic.pcap eval/out/synthetic        # Zeek in Dock
 | `tapwatch ui` | the case desk at http://127.0.0.1:8765/ (set `TAPWATCH_UI_TOKEN` for other devices) |
 | `tapwatch digest` | send the pending digest now (it also goes out daily) |
 | `tapwatch summarize --zeek-dir DIR` | per-device daily summaries from the rotated logs (`run` builds each night's; `--backfill` the last 30 days, `--day`/`--from`/`--to` rebuild days) |
+| `tapwatch longhaul [--mature-days N] [--stats] [--as-of DAY]` | the long-horizon rules (R30–R34) over the summaries as they stand, or as the night after DAY saw them: what they would raise and how it would route, storing nothing (`run` raises them each night) |
 | `tapwatch mark 42 fp` | close case 42 as a false (`fp`) or true (`tp`) positive |
 | `tapwatch update` | move to the newest release (`--check` only looks): shows what changed, installs, runs the self-check, restarts what the change needs and runs doctor, and goes back to the old version if any of it fails. The daily digest says when there's a newer release. Windows: double-click `update-windows.cmd` |
 | `tapwatch update-feeds` | refresh the public lists: Tranco, IEEE MAC vendors, iptoasn, UT1 site categories, the Public Suffix List, the AdFection / Candiru indicators, and the vulnerability data for the agents' software (CISA KEV, OSV, NVD; weekly is plenty) |
@@ -253,7 +262,8 @@ eval/replay.sh eval/data/synthetic.pcap eval/out/synthetic        # Zeek in Dock
 | `tapwatch replay` / `tapwatch eval` | push finished logs through the pipeline, or score rules-only vs Jev on labelled traffic |
 | `tapwatch import-state FILE` | take over another computer's install from the file `deploy/export-state.sh` made |
 | `tapwatch selfcheck` | detection rate on 37 scripted attack and false-positive shapes, rules only; exit 1 on a regression |
-| `tapwatch benchmark` | week-by-week noise rate, Jev agreement and host-context accuracy from the case desk, as Markdown |
+| `tapwatch benchmark` | week-by-week noise rate, Jev agreement, host-context accuracy and the judge's scorecard from the case desk, as Markdown (`--judge-replay` scores the judge over history before there's shadow data) |
+| `tapwatch judge closed` / `tapwatch judge undo 42` | list everything the judge auto-closed and any back-off, or reopen case 42 the way the desk's Undo does (auto-close is off unless `judge.auto_close` is on in config.yaml; see its comments) |
 | `tapwatch doctor [--send]` | check every part of the install (capture, mirror port, router logs, agents, alerts, AI keys, lists, disk, the Windows side) and say how to fix what isn't working; `--send` adds a test alert |
 | `tapwatch accounts add` / `tapwatch account-check 42` | opt-in: sign in your own Google accounts read-only, then ask them what case 42's upload to Google was ([the guide](docs/setup/account-check.md)) |
 | `tapwatch test-alert` / `tapwatch notify` | check your notification channels |
@@ -261,7 +271,7 @@ eval/replay.sh eval/data/synthetic.pcap eval/out/synthetic        # Zeek in Dock
 Optional extras: [router syslog](docs/setup/router-syslog.md) adds the router's own IPS verdicts
 and admin logins, the [endpoint agents](agents/README.md) (osquery) name the program behind a
 connection and feed the host rules, and a [Fleet server](docs/setup/fleet.md) brings in the agents on
-the house's other computers.
+the house's other computers (`agents/install-silent.cmd` installs one from a deployment tool, with no prompts).
 
 ## What leaves the network
 
@@ -301,6 +311,9 @@ src/tapwatch/        the package
   pipeline.py          detectors -> context -> triage -> route -> store -> notify
   store.py             SQLite schema, workflow, suppressions, learned state
   history.py           per-device daily summaries for the 30-day rules (tapwatch summarize)
+  judge.py             the learned judge: training set, guardrails, shadow answers, auto-close, back-off
+  longhaul.py          the long-horizon rules over them: R30 slow beacon, R31 low-and-slow upload, R32 rare
+                       nameless destination, R33 dormant device waking, R34 routine shift
   ui.py, evidence.py   case desk and Zeek evidence lookup
   notifiers.py         ntfy, Discord, Teams, email, webhook, Herdr
   syslogin.py          router CEF syslog listener
@@ -323,7 +336,7 @@ tools/               personal-data gate, demo case desk
 | Doc | What's in it |
 |---|---|
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | data flow, components, routing guardrails, host context, security model, design decisions |
-| [docs/detections/DESIGN.md](docs/detections/DESIGN.md) | the detection catalogue (R01–R29, R36–R39, R48), with measured baselines and how Jev is used |
+| [docs/detections/DESIGN.md](docs/detections/DESIGN.md) | the detection catalogue (R01–R34, R36–R39, R48), with measured baselines and how Jev is used |
 | [docs/detections/rules/](docs/detections/rules/README.md) | Sigma and DuckDB SQL versions of the rules |
 | [eval/RESULTS.md](eval/RESULTS.md) | eval method, numbers, tuning history and caveats |
 | [docs/setup/](docs/README.md#setup-guides) | a UniFi office, mirror port, router syslog, Windows, Fleet, account check |
@@ -357,16 +370,19 @@ home network since 2026-10-13, so expect rough edges.
 - **Detection:** the network rules, the router's syslog (verified against a live UniFi gateway), and
   the endpoint rules R17–R21, R23–R29 and R36–R39 on Windows and Linux (the Linux set verified live on 2026-10-18),
   plus R48 known-exploited software. Other computers report through a Fleet server and get the same host
-  rules. A scripted
+  rules. The long-horizon rules R30–R34 run each night over the per-device daily summaries. A scripted
   detection-rate check runs in CI; a feed-silence rule watches every log source, the router included.
-- **Measuring:** the stats page and `tapwatch benchmark` report noise rate, Jev agreement and
-  host-context accuracy week by week. The first live week ([results](eval/RESULTS.md)): about 5 alerts a day,
+- **Measuring:** the stats page and `tapwatch benchmark` report noise rate, Jev agreement,
+  host-context accuracy and the shadow judge's scorecard week by week. Judge auto-close and its back-off are
+  built and ship switched off; no detector has qualified on the live history yet. The first live week ([results](eval/RESULTS.md)): about 5 alerts a day,
   nearly all noise while the baselines learn, 2 true positives (both digest items); host context answered on
   all 136 PC cases and named the program for 106, and its intent verdicts have not yet fired on real traffic.
 
-v0.2 (evidence outside one house), v0.2.5 (easy install) and v0.3 (endpoint rules) are done. Next, per the
-[roadmap](docs/ROADMAP.md): "which program" for network cases on the Fleet computers, then learning from the
-owner's closed cases (v0.4). The Omarchy/Arch install is on hold. macOS waits until there's a Mac to test on.
+v0.2 (evidence outside one house), v0.2.5 (easy install) and v0.3 (endpoint rules) are done. v0.4 (learning
+from history) is largely built: the daily summaries, R30–R34 and the learned judge, with auto-close off. Next, per
+the [roadmap](docs/ROADMAP.md): a 30-day re-measure of R30–R34, the judge's first detector switched on once it
+qualifies, and "which program" for network cases on the Fleet computers. The Omarchy/Arch install is on hold.
+macOS waits until there's a Mac to test on.
 
 ## License
 

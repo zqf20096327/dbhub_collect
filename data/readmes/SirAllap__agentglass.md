@@ -31,8 +31,7 @@ interface running in your browser on sample data.
 
 - **Run your agents.** It attaches to the sessions already open in tmux, and it
   can start them: a task or a GitHub issue becomes a worktree, a branch and an
-  agent working in it, several at once without colliding. Chat with Claude,
-  Codex or Antigravity from a panel, or hand a conversation from one to another.
+  agent working in it, several at once without colliding.
 - **Seat an orchestrator.** One agent per project keeps the field in view and
   hands work to workers under a policy you set in Settings: which engine sits
   in the chair, which ones do the work, what a worker may touch, and the rules
@@ -132,7 +131,7 @@ to a model. [SECURITY.md](SECURITY.md) lists every switch.
 <summary><b>What do I actually need installed?</b></summary>
 
 **Needed:** git, the Claude Code CLI, and Python 3.
-**Per feature:** tmux (chats as live panes, your tmux windows as tabs, theme
+**Per feature:** tmux (agents as live panes, your tmux windows as tabs, theme
 sync), the GitHub CLI (the pull-requests panel — and logged in, which is the
 step people miss), Docker (containers, images, volumes, logs).
 
@@ -145,7 +144,7 @@ down without each one.
 
 It is not damaged — the build is not signed yet, and Gatekeeper says that about
 anything unsigned. Once: `xattr -dr com.apple.quarantine /Applications/agentglass.app`.
-Signing and notarization are the first item on the roadmap.
+Signing and notarization are not done yet.
 </details>
 
 <details>
@@ -180,32 +179,6 @@ root names the ignored paths every worktree agentglass cuts should carry in.
 links, hashes and ids on a pane's screen so one key pastes one back. And
 selecting something in a pane offers to ask the agent in that pane about it.
 
-## 🗺 Roadmap
-
-Themes, not dates. The living version is the issue tracker; the
-[`help wanted`](https://github.com/SirAllap/agentglass/labels/help%20wanted)
-label is where to start.
-
-**Now**
-- Lead with a verdict: a one-line strip of what's running, what's stuck and what needs you; the Lantern already covers the rest — [#42](https://github.com/SirAllap/agentglass/issues/42)
-- Signing and notarization for the macOS build, so Gatekeeper stops calling it damaged
-- Warn when parallel agents collide on shared runtime the diff cannot see — [#118](https://github.com/SirAllap/agentglass/issues/118)
-
-**Next**
-- A gate that can hold by rule — a tool allowlist beside the spend threshold that already works — [#109](https://github.com/SirAllap/agentglass/issues/109)
-- Per-project gate policies and hook profiles — [#14](https://github.com/SirAllap/agentglass/issues/14)
-- Let an agent query the cockpit over MCP: what is running, what it costs, what is held — [#296](https://github.com/SirAllap/agentglass/issues/296)
-- Verify the Windows build on real hardware — [#231](https://github.com/SirAllap/agentglass/issues/231)
-
-**Later / exploring**
-- Review a local diff in place and send the whole review as one prompt — [#294](https://github.com/SirAllap/agentglass/issues/294)
-- An API panel to exercise the endpoints the fleet is building — [#170](https://github.com/SirAllap/agentglass/issues/170)
-- A decision log mined from transcripts — [#13](https://github.com/SirAllap/agentglass/issues/13)
-- Voice input in chat — [#92](https://github.com/SirAllap/agentglass/issues/92)
-
-Shipped so far, newest first: [**CHANGELOG.md**](CHANGELOG.md) and the
-[releases](https://github.com/SirAllap/agentglass/releases).
-
 ## 💬 Community
 
 [![Discussions](https://img.shields.io/badge/Discussions-ask%20anything-6366f1?style=flat-square)](https://github.com/SirAllap/agentglass/discussions)
@@ -232,7 +205,5 @@ trademarks of Anthropic.
 
 MIT © 2026 David Pallares — see [LICENSE](LICENSE).
 
-One bundled set of artwork is not MIT: the portrait layers the Understudy draws
-are CC BY 4.0, which asks for attribution rather than permission.
-[**NOTICE.md**](NOTICE.md) is where that is discharged, and it is the only
-reason this repository has a NOTICE at all.
+The icons the file manager borrows from Strata carry their own notices in
+[**NOTICE.md**](NOTICE.md).

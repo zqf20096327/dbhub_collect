@@ -34,7 +34,8 @@
   and addons (DLC, expansions, and packs) all come along.
 - **Personal tracking** — progress and play sessions per platform you own a game on, a 0–10
   rating with review, notes, and colored tags (with a Tag Manager and bulk tagging).
-- **Filters & sort** — filter by platform, format, storefront, tag, ownership, game type,
+- **Views, filters & sort** — Covers, Table, or Overview views with an adjustable card size;
+  filter by platform, format, storefront, tag, ownership, play status, game type, source,
   steelbook, collection, or series (each with an Exclude option), and sort by name or release
   date. Pages remember your search, filters, and sort.
 - **Hardware** — devices and accessories from a curated Sony, Microsoft, Nintendo, and Sega
@@ -49,8 +50,10 @@
   browser, with a self-hosted emulator and saves kept on your server. See
   [docs/emulation.md](docs/emulation.md).
 - **Media viewer** — a lightbox for screenshots and artwork, and a video player for trailers.
-- **Dashboard & insights** — collection stats, game and hardware release calendars, duplicate
-  detection, missing addons, orphaned accessories, and side-by-side game comparison.
+- **Overview & insights** — headline numbers, what you're playing, recent additions, and gaps
+  worth filling on the Overview; breakdowns by play status, platform, genre, and hardware on
+  Insights; plus release calendars, duplicate detection, missing addons, orphaned accessories,
+  and side-by-side game comparison.
 - **Share links** — unlisted, read-only links to your Games or Hardware collection.
 - **Jobs** — scheduled catalog resyncs, Steam import, sale refreshes, and event syncs, with live
   progress.
@@ -58,8 +61,9 @@
   and BIOS files) with an automatic safety snapshot before every restore.
 - **PWA** — installable, works offline for anything you've already viewed, and syncs offline
   edits when you reconnect.
-- **Material 3 design** — light and dark mode, responsive navigation, and virtualized lists for
-  large collections.
+- **Design** — light, dark, and high-contrast modes with your choice of accent color (Material 3
+  color schemes), a sidebar that becomes a drawer on phones, and virtualized lists for large
+  collections.
 - **Languages** — English, Spanish, French, and Portuguese.
 - **Single admin, self-hosted** — no public registration, no multi-tenancy.
 
@@ -94,7 +98,10 @@ docker compose up -d
 ```
 
 Open `http://localhost:8000`. The first visit shows a create-admin form — fill it in once and
-you're signed in. If you ever get locked out,
+you're signed in. It asks for a one-time setup code, so nobody else who reaches the page first
+can claim your instance: find it with `docker compose logs app` (or set your own with
+`SETUP_CODE` in `.env`). Change your password later under **Settings → General → Account**. If
+you ever get locked out,
 `docker compose exec app python -m scripts.create_admin --username admin` resets the password.
 
 Migrations run automatically on startup, and your database and uploads live in the named
@@ -136,7 +143,9 @@ Optional integrations — add a key to `.env`, then run `docker compose up -d` (
 | PlatPrices     | `PLATPRICES_API_KEY` | [platprices.com/api-request](https://platprices.com/api-request) | PlayStation prices. The free tier tracks any 2 PS Store regions, chosen on your PlatPrices dashboard. `PLATPRICES_REGION` (two-letter code such as `GB` or `IN`, default `US`) must be one of them. |
 
 Other options: `ROM_MAX_UPLOAD_MB` (default `2048`) caps ROM uploads — raise your reverse
-proxy's upload limit to match. `DATABASE_URL` (SQLite by default), `REDIS_URL`, and
+proxy's upload limit to match. Behind a reverse proxy, set `FORWARDED_ALLOW_IPS` to the proxy's
+address (or its Docker network, such as `172.16.0.0/12`) so login rate limits count each visitor
+rather than the proxy. `DATABASE_URL` (SQLite by default), `REDIS_URL`, and
 `CORS_ORIGINS` are optional.
 
 ## Development

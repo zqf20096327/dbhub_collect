@@ -5,16 +5,17 @@ image::robotslacker.jpg[RobotSlacker]
 
 === What is SlackerDB?
 
-SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL clients connect without any special driver, and it lets several clients use the same DuckDB database at once — something a plain DuckDB process cannot do. On top of that it adds a registered‑SQL layer that turns queries into cacheable HTTP endpoints, and a bulk COPY path for loading data.
+SlackerDB is a Java‑based service layer that puts DuckDB on the network. It speaks the PostgreSQL wire protocol, so standard PostgreSQL JDBC clients connect without any special driver, and it lets several clients use the same DuckDB database at once — something a plain DuckDB process cannot do. On top of that it adds a bulk COPY path for loading data and a registered‑SQL layer that turns queries into cacheable HTTP endpoints.
 
 It runs either as a standalone server (`dbserver`) or embedded directly in a Java application.
 
 ==== Capabilities
 
-* *PostgreSQL Wire Protocol* – Standard PostgreSQL clients connect as‑is: JDBC, ODBC, libpq, psql, Python, and database tools such as DBeaver. A system catalog compatibility layer (`pg_catalog` emulation) keeps third‑party client metadata queries working.
+* *PostgreSQL Wire Protocol* – Standard PostgreSQL clients connect as‑is: JDBC, ODBC, libpq, psql, Python.
+* *PostgreSQL Data Dictionary Compatibility* – Emulates the catalog data that database tools need to access, such as DBeaver and postgres_fdw.
 * *Multi‑Session Access* – One DuckDB database served to many concurrent client sessions, with a connection pool, per‑session state, and SQL executed off the network I/O threads.
 * *Query Cancellation* – Client‑side cancellation and `KILL SESSION` reach the statement that is actually running.
-* *High‑Performance Data Import* – PostgreSQL `COPY … FROM STDIN` in CSV and BINARY form, with a streaming decode path benchmarked at roughly 0.6–2.3 million rows/second depending on shape.
+* *High‑Performance Bulk Transfer* – PostgreSQL `COPY … FROM STDIN` and `COPY … TO STDOUT` in CSV and BINARY form, with a streaming decode path benchmarked at roughly 0.6–2.3 million rows/second depending on shape.
 * *Registered SQL Services* – Register parameterized SQL as named HTTP endpoints at runtime, with result caching, service versioning, and per‑service search paths.
 * *Server Management APIs* – Status and metrics, database backup, log viewing, and file upload/download on the management port.
 * *Asynchronous SQL over WebSocket* – Execute SQL asynchronously and page through results, for queries too large or too slow for a single request.
@@ -24,19 +25,24 @@ It runs either as a standalone server (`dbserver`) or embedded directly in a Jav
 
 ==== Use Cases
 
-* *Analytical Application Backends* – Serve as the data engine for BI tools, dashboards, and reporting applications that expect a PostgreSQL connection.
+* *Analytical Application Backends* – Serve as the data engine for BI tools, dashboards, and reporting applications that support PostgreSQL connections.
 * *Shared Internal Datasets* – Load an existing `.duckdb` file once and let several teams and tools query it concurrently without moving or re‑platforming the data.
 * *Local Data Processing* – Run bulk import, transformation, and querying on a single machine without standing up a separate database system.
 * *Embedded Service in Java* – Ship a networked analytical store inside a Java application, with the plugin framework available for application‑specific endpoints.
 
-SlackerDB is aimed at teams that want DuckDB's analytical performance but need it reachable over the network, usable by existing PostgreSQL tooling, and shareable between concurrent clients.
+SlackerDB is aimed at teams that want DuckDB's analytical performance but need it reachable over the network, do not want the analysis process to be a black box, want it usable directly with the PostgreSQL toolchain, and need it shareable between concurrent clients.
 
 === Usage
 
 ==== Build from source:
 
 ....
-    # make sure you have JDK17 and maven 3.6+ ready.
+    # Before building, make sure the following are installed and directly available on `PATH`:
+    # 1: JDK 21
+    # 2: Maven 3.9.16
+    # 3: Node v24
+    # All of them must be directly accessible from `PATH`.
+
     # Download source code
     git clone ...
     # compile it
@@ -44,61 +50,85 @@ SlackerDB is aimed at teams that want DuckDB's analytical performance but need i
     mvn clean compile package -Dmaven.test.skip=true
 
     # All compiled results will be placed in the dist directory:
-    #    slackerdb-dist_0.2.1.zip
+    #    slackerdb-dist_0.2.2.zip
     #        distribution package - standalone jar packages, plugin jar,
     #        default configuration files and start/stop scripts.
-    #    slackerdb-src_0.2.1.zip
+    #    slackerdb-src_0.2.2.zip
     #        source package - the complete multi-module Maven project, the same
     #        content a shallow clone would give you (no git history, no build
-    #        output). Unzip it and run the very same maven command inside to
-    #        rebuild everything from source.
-....
-
-TIP: On a zh-CN Windows box building with **JDK 8~17**, add
-`MAVEN_OPTS=-Dfile.encoding=UTF-8` (JDK 18+ already defaults to UTF-8, nothing to do).
-Without it the d
+    #        output). Unzip it and
 
 [...截断...]
 
-ocumentation PDF step prints one extra line,
-`error reading or parsing <M2_HOME>/conf/settings.xml`: it comes from the `jar-dependencies`
-gem inside JRuby reading the (UTF-8) Maven settings with the platform GBK charset.
-It is **harmless** (the PDF is produced as usual), but it reads like a build error.
+ run the very same maven command inside to
+    #        rebuild everything from source.
+
+    # PDF documentation is not built by default. To generate the PDFs and
+    # include them in dist/ and the distribution zip, add -Ppdf:
+    #    mvn -Ppdf clean compile package -Dmaven.test.skip=true
+....
+
+==== How to develop in an offline environment
+
+On a machine with network access, install the plugin once and generate `offline/javarepo` and
+`offline/npmrepo`:
+
+....
+    mvn -f offline-package-maven-plugin/pom.xml install
+    mvn -Poffline-package validate
+....
+
+The command also writes `offline/javarepo.zip` and `offline/npmrepo.zip`, and removes the
+uncompressed `javarepo/` and `npmrepo/` directories. Copy those two zips to the offline
+machine and unzip them into the same directory.
+
+Before building, make sure the required JDK, Maven, and Node are installed and available on `PATH`.
+
+On the offline machine, use the packaged Maven repository (first unzip `javarepo.zip` and
+`npmrepo.zip` under `<offline>`):
+
+Run the following commands to complete the build:
+
+....
+    mvn -o -Dmaven.repo.local.tail=<offline>/javarepo clean package
+
+    NPM_CONFIG_CACHE=<offline>/npmrepo NPM_CONFIG_OFFLINE=true mvn -o -Dmaven.repo.local=/tmp/m2 -Dmaven.repo.local.tail=<offline>/javarepo package
+....
 
 ==== Start db server
 
 ....
-    java -jar dbserver/target/slackerdb-dbserver-0.2.1-standalone.jar start
+    java -jar dbserver/target/slackerdb-dbserver-0.2.2-standalone.jar start
 ....
 
 ==== Stop db server
 
 ....
-    java -jar dbserver/target/slackerdb-dbserver-0.2.1-standalone.jar stop
+    java -jar dbserver/target/slackerdb-dbserver-0.2.2-standalone.jar stop
 ....
 
 ==== Check db status
 
 ....
-    java -jar dbserver/target/slackerdb-dbserver-0.2.1-standalone.jar status
+    java -jar dbserver/target/slackerdb-dbserver-0.2.2-standalone.jar status
 ....
 
 ==== Start db proxy
 
 ....
-    java -jar dbproxy/target/slackerdb-dbproxy-0.2.1-standalone.jar start
+    java -jar dbproxy/target/slackerdb-dbproxy-0.2.2-standalone.jar start
 ....
 
 ==== Stop db proxy
 
 ....
-    java -jar dbproxy/target/slackerdb-dbproxy-0.2.1-standalone.jar stop
+    java -jar dbproxy/target/slackerdb-dbproxy-0.2.2-standalone.jar stop
 ....
 
 ==== Check proxy status
 
 ....
-    java -jar dbproxy/target/slackerdb-dbproxy-0.2.1-standalone.jar status
+    java -jar dbproxy/target/slackerdb-dbproxy-0.2.2-standalone.jar status
 ....
 
 ==== Server configuration file template
@@ -155,7 +185,7 @@ port=
 # default: false
 data_encrypt=false
 
-# Data service API port
+# Management API port
 # 0 = random port assignment
 # -1 = disable interface (default)
 port_x=
@@ -169,33 +199,8 @@ client_timeout=600
 # Multicast service discovery: the group this server announces itself to.
 # Format: <group>:<port> (IPv6 groups must be bracketed: [ff02::1]:46666)
 # IPv4 groups must be inside 224.0.0.0/4; 224.0.0.0/24 is reserved and rejected.
-# There is NO default: leaving it empty disables service discovery entirely.
-# The proxy must use the EXACT same value in listener_address, otherwise nothing is
-# discovered and nothing is logged about it here either.
-# Example: 239.255.66.66:46666
+# Default: service discovery is disabled.
 advertise_address=
 
 # Local network interface used to send the multicast announcement.
-# Accepts an interface name (eth0, Ethernet) or a local IPv4 address. Leaving it empty
-# picks the first usable interface (up, multicast-capable, non-loopback, with a
-# non-link-local IPv4 address) using a deterministic rule, so the same machine always
-# picks the same one. The chosen interface and address are logged at startup -- check
-# there first when discovery does not work.
-# Ignored when advertise_address is empty.
-advertise_nic=
-
-# Database opening mode.
-# Default: READ_WRITE
-access_mode=READ_WRITE
-
-# Maximum concurrent connections
-# Default: 256
-max_connections=
-
-# Maximum worker threads
-# Default: CPU core count
-max_workers=
-
-# Business processing threads (executes SQL off the Netty I/O threads)
-# Default: -1 = follow max_connections (one business thread per session)
-#   0 = disabled (run SQL on the I/O t
+# Accepts an interface name (eth0, Ethernet) or 

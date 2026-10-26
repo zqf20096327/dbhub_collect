@@ -138,11 +138,11 @@ It requires **Python 3.11+ on Linux**, plus the native Bash/GNU/yq prerequisites
 above. It is not a Python rewrite or a Windows port; use Linux Python inside
 WSL or the Docker image on Windows.
 
-Version **1.3.0** adds Python packaging without changing the native CLI or
-backup format. Install the published release into an isolated environment:
+Python packaging was introduced in **1.3.0** without changing the native CLI
+or backup format. Install the current **1.4.0** release into an isolated environment:
 
 ```bash
-pipx install 'backfort==1.3.0'
+pipx install 'backfort==1.4.0'
 pipx ensurepath
 ```
 
@@ -172,7 +172,7 @@ Alternatively, use pip inside a virtual environment:
 
 ```bash
 python3 -m venv .venv
-.venv/bin/python -m pip install 'backfort==1.3.0'
+.venv/bin/python -m pip install 'backfort==1.4.0'
 .venv/bin/backfort --version
 .venv/bin/python -m backfort --help
 ```
@@ -199,14 +199,26 @@ that a package is already published.
 
 ## Run Backfort in Docker
 
+Backfort **1.4.0** uses a digest-pinned Debian trixie
+runtime and POSIX `mawk`. GNU tar, GnuPG and SMTP support remain included.
+The [security verification report](docs/security/trixie-1.4.0.md) records the
+complete vulnerability counts, remaining HIGH findings and exact release
+verification status. The Compose example and Helm chart target 1.4.0.
+
 The container image is an additional distribution method, not a second backup
 engine. It runs the same `backfort.sh`, accepts the same strict YAML, and
 creates the same portable bundles as a native installation. Images are
 published for `linux/amd64` and `linux/arm64` to GitHub Container Registry:
 
 ```bash
-docker pull ghcr.io/shellharbor/backfort:1.3.0
-docker run --rm ghcr.io/shellharbor/backfort:1.3.0 --version
+docker pull ghcr.io/shellharbor/backfort:1.4.0
+docker run --rm ghcr.io/shellharbor/backfort:1.4.0 --version
+```
+
+To pin the Docker Hub image to its verified multiarch release index:
+
+```bash
+docker pull shellharbor/backfort:1.4.0@sha256:123dcd108b6e7cb25ee30e2d199d52b4f19662e518508cf3372df5dd9c3a08b0
 ```
 
 For a durable setup, copy the sample Compose file and its matching config into
@@ -248,8 +260,8 @@ mounted read-only. Use it only for a trusted Compose job and never for a
 normal files-only backup. The complete deployment, secret, recovery and
 upgrade guidance is in [Docker deployment](wiki/Docker-Deployment.md).
 
-Release tags are immutable exact versions such as `1.3.0`. Stable releases
-also move `1.3`, `1`, and `latest`; pin an exact version or digest for a
+Release tags are immutable exact versions such as `1.4.0`. Stable releases
+also move `1.4`, `1`, and `latest`; pin an exact version or digest for a
 repeatable run and retain the `backfort-state` volume during upgrades. Docker
 Hub publication is optional and occurs only when the repository has both
 `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` release secrets; GHCR is the

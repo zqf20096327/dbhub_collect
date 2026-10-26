@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.73.0-gold"></a>
+  <a href="./CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-v0.73.6-gold"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-ISC-blue.svg"></a>
   <a href="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml"><img alt="Build" src="https://github.com/91zgaoge/StoryMoss/actions/workflows/build.yml/badge.svg"></a>
   <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg">
@@ -106,6 +106,43 @@ npm run build
 ## 🆕 最新动态
 
 > 完整变更日志见 [`CHANGELOG.md`](./CHANGELOG.md)。
+
+### v0.73.6 · 推理模型不再被 15 秒「连接超时」误杀
+
+此前「连接超时」把等待模型返回响应头也算进去了：会先思考再作答的推理模型（如 deepseek 推理档）
+只要思考超过 15 秒就被判连接失败，重试仍卡在同一处，最终整轮创作失败。现在超时拆成三段——
+TCP 建连、首字节（默认 180 秒）、正文生成；连接超时只管建连，首字节超时单独可调，报错也会
+明确告诉你卡在哪一段。
+
+### v0.73.5 · 幕前入口换到右下角，不再压住页头按钮
+
+幕后右上角悬浮的「开幕前」按钮会盖住日志页的「复制」、设置页的「导出/导入」等按钮，窄窗口下
+尤其明显。现在它固定在右下角，页头操作和右上角通知都不再被遮挡；打开幕前的入口保持不变。
+
+### v0.73.4 · 构建流水线：E2E 任务固定 Ubuntu 24.04
+
+GitHub 的 `ubuntu-latest` 镜像当天升级到 Ubuntu 26.04，当前 Playwright 尚不支持该平台，前端 E2E
+任务在未改任何代码的提交上也会失败。现在 E2E 任务固定跑在 Ubuntu 24.04，应用代码零改动。
+
+### v0.73.3 · 创世不再被「管理 Agent 轮数耗尽」一票否决
+
+创世时管理 Agent 要在有限轮数里写完世界观、角色、关系、大纲、伏笔。轮数用完时，旧版会把整轮创世
+判死、已写资产作废——你看到的就是「创作引擎遇到致命错误」。现在改成先救再补：已写入的资产照常
+落库、第一章继续写，缺的资产由后台补齐；如果管理 Agent 完全没产出，会自动切到单调用 JSON 模式
+补一份最小资产包。管理 Agent 轮数上限也从 12 提到 16。
+
+### v0.73.2 · 构建流水线：格式检查固定工具链
+
+v0.73.1 推送后 Windows 构建在「Rust 格式检查」失败，但那次提交一行 Rust 都没改——根因是 CI 每天拉
+最新 nightly rustfmt，其注释换行规则变了。现在格式检查固定 `nightly-2026-10-05`（CI 与提交钩子同版本），
+构建不再被上游工具链漂移打断。应用代码零改动。
+
+### v0.73.1 · 超时设置搬到「模型」页签，一键可达
+
+模型超时设置以前藏在「写作」页签最下面（要滚过整张写作策略卡片），页签重组后很难找到。现在它是
+**设置 → 模型 → 超时** 的并列子页签（管理 / 路由模拟 / 健康 / 超时），连接超时、首字节超时、单步
+超时、生成总超时、前端超时五项一屏可见，保存逻辑不变。同时修掉一个会让设置页整页变成「应用出错」
+的隐患：工作流列表数据异常时不再拖垮整个页面。
 
 ### v0.73.0 · 后台更轻：同一段正文不再重复喂给模型
 

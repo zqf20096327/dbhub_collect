@@ -30,6 +30,7 @@
     <img src="https://img.shields.io/badge/docker-compose-2496ED?logo=docker&logoColor=white" alt="Docker Compose" />
     <img src="https://img.shields.io/badge/weaviate-vector%20db-00C6A7" alt="Weaviate" />
     <a href="https://deepwiki.com/Haohao-end/openagent"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki" /></a>
+    <a href="https://mcpvault.io/servers/haohao-end-openagent"><img src="https://mcpvault.io/badge/haohao-end-openagent.svg" alt="MCPVault server listing" /></a>
   </p>
 </div>
 
@@ -42,6 +43,7 @@
 - [Usage](#usage)
 - [Testing](#testing)
 - [Contact](#contact)
+- [Sponsored By](#sponsored-by)
 - [Acknowledgments](#acknowledgments)
 
 ## About The Project
@@ -67,6 +69,10 @@ What the current codebase already supports:
 </a>
 
 Click the diagram to view the full-resolution architecture image.
+
+See the [Documentation index](docs/README.md) for source-level guides and the [Chinese documentation index](docs/README.zh-CN.md).
+
+Detailed source-level guide: [Architecture documentation](docs/architecture.md).
 
 ### Built With
 
@@ -150,6 +156,16 @@ Click the diagram to view the full-resolution architecture image.
    | Nginx | http://localhost | Reverse proxy |
 
 ### Local Development
+
+For local development, start only the supporting Docker services; the API and UI run directly on your machine. This avoids building or starting the API, UI, Celery, or Nginx containers:
+
+```bash
+cd docker
+docker compose up -d --no-build llmops-db llmops-redis llmops-weaviate
+docker compose ps llmops-db llmops-redis llmops-weaviate
+```
+
+Use localhost and the published ports for PostgreSQL, Redis, and Weaviate in your local `api/.env` configuration. See [Docker setup](docker/README.md) for details. Keep full-stack `docker compose up -d --build` for containerized deployment, not this local workflow.
 
 Backend:
 
@@ -249,5 +265,6 @@ The repository already includes automated backend and frontend tests.
 - Thanks to Atlas Cloud and Bloome for supporting OpenAgent.
 - Special thanks to Rui Yang and Haoyu Wang (Johns Hopkins University) for responsibly reporting a Host Header poisoning issue in the built-in tool icon URL construction and helping improve the security of this project.
 - Special thanks to Ryan B for responsibly reporting an SSRF vulnerability in the custom API-tool server URL and helping improve the project's outbound request security.
+- Thanks to 汪钶楠 (Wang Kenan) for reporting an AppleScript argument-handling concern in the macOS screenshot helper and helping us verify a safe fix.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

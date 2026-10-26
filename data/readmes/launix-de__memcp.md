@@ -365,10 +365,10 @@ replication authentication and per-message authorization.
 The shared route dispatches the explicit `X-MemCP-Role` to its enabled adapter;
 selecting a role grants no rights, and removing one adapter preserves others.
 
-This is the shared transport foundation for replication and future cluster
-peers. Cluster membership and cluster-secret authentication are not enabled by
-this endpoint. Future cluster peers are equal participants: the first node and
-the connect address confer no permanent coordinator role. A graceful cluster
+The same endpoint also supports authenticated remote shard reductions (see
+below). Cluster membership and automatic placement remain separate from this
+operator. Cluster peers are equal participants: the first node and the connect
+address confer no permanent coordinator role. A graceful cluster
 leave must hand over MOSI rights and directory duties before stopping, allowing
 clients to reconnect to a second node and the first node to be removed.
 
@@ -443,10 +443,104 @@ The coherence state machine lives in `storage/mosi`, independently of storage,
 SQL, transport and backend policy. Its public API exposes immutable permission
 snapshots and request completion. Engine framing and connections are in
 `storage/mosi_wire.go` and `storage/mosi_transport.go`; replication directory
-coordination, generation transfer, authentication, journal, session integration
+coordination, generation transfer, authentication, configuration, session integration
 and startup use the corresponding `storage/replication_*.go` files. This separates
-the shared coherence core from the current master/slave topology; multi-master
-membership and distributed execution remain future work.
+the shared coherence core from the current master/slave topology; mutable
+multi-master coordination remains future work.
+
+
+### Shared snapshot cluster and automatic placement
+
+The first cluster execution milestone supports unordered scalar reductions on
+**immutable, fully rebuilt numeric shards** in a shared backend. Give each node
+its own data/settings/system namespace, configure the same shared database
+backend, and use the same secret file (at least 32 random bytes):
+
+```sh
+./memcp --no-repl --api-port=4321 \
+  --cluster-secret-file=/run/memcp/cluster.secret \
+  --cluster-databases=analytics \
+  --cluster-address=http://node-a:4321/cluster lib/main.scm
+```
+
+Other nodes add `--cluster-join=http://node-a:4321/cluster` and advertise their
+own reachable address. The contact is only a seed: every participant retains
+the full peer roster and connects directly to discovered peers. The secret is
+read in Go, never sent in the challenge proof or included as a CLI value.
+Use HTTPS/WSS when the network needs transport integrity/confidentiality;
+challenge authentication does not encrypt plain WebSocket traffic.
+
+Ordinary SQL `SUM` now uses the existing shard-local scan pipeline. Before
+loading a shard, placement checks warm peers and the executing node's RAM
+budget; a typed acquisition panic delegates the reduction when appropriate.
+The worker returns one scalar, never rows/shard dumps. `cluster_status` exposes
+membership, executed/delegated counts and the tracked cache/admission budget.
+`MaxRamBytes` bounds tracked cache plus numeric operator reservations; it is
+not an RSS limit for the Go runtime, frontends or arbitrary user code.
+
+The initial adapter mounts the named shared databases with S-only permissions.
+Durable writes/DDL, rebuild and GC on those mounts are disabled/deferred until
+cluster M handover is connected. Other namespaces retain normal behavior.
+Automatic placement currently supports stored integer/float/sequence formats,
+unfiltered scalar unordered CS-autocommit reductions; explicit transactions, grouped
+results, query-local/physical sources and unsupported encodings fail explicitly.
+This does not yet implement mutable multi-master databases or nested clusters.
+
+The Python process runner has a focused `--cluster-only` scenario, run by the
+**Cluster Stress test** CI job with normal and race-instrumented servers. Eight
+shards exceed each worker's 8 MiB tracked budget; a 1 MiB coordinator
+cannot load a shard locally. Three nodes calculate the exact SQL sum, exercise RAM and residency delegation, reject a wrong secret, release
+all reservations and continue after losing the seed. Shared generation/schema
+hashes must stay unchanged.
+
+### Remote shard reductions
+
+Start both participants with `--cluster-secret=<shared-secret>` (at least 16
+bytes). `lib/main.scm` initializes `node_scan_start` and mounts the existing
+`node_protocol` handler at `/cluster`. Custom Scheme servers can use the same
+builtins. Replication authentication stays independent; replication peers are
+never given this secret by the protocol.
+
+The `scan` role mutually authenticates peers with fresh nonces and HMAC-SHA256
+proofs bound to direction, protocol and process incarnation. The secret is never
+sent to the connecting peer. Each node can execute scans or request work from
+another node; `node_id` returns its public process incarnation.
+
+For example, invoke through the ordinary authenticated Scheme API:
+
+```scheme
+(scan_remote nil "ws://worker:4321/cluster" "analytics" "events"
+  '("amount") (lambda (amount) (> amount 100))
+  '("amount") (lambda (sum amount) (+ sum amount))
+  0 +)
+```
+
+This operator describes only the requested remote table, creates query-local
+remote shard stubs, and delegates their reads over the shared binary WebSocket
+protocol. **Both filter and mapreducer are serialized with Scheme `Serialize`,
+including closed captures, and run in the worker's native shard scan pipeline.**
+The coordinator receives one partial reduction per shard and applies `combine`.
+It receives no rows, row callbacks or physical record-ID lists.
+
+The optional final argument `"group_sums"` returns grouped reductions as a
+FastDict. Use an association reducer, an empty association neutral and a combine
+function such as `(lambda (a b) (merge_assoc a b +))`. The default `"scalar"`
+accepts scalar reductions only. Each aggregate reply is bounded to 192 KiB;
+oversized results fail explicitly.
+
+The worker acquires schema/shard access through the existing MOSI infrastructure.
+Tasks bind the physical generation, column-semantics fingerprint and a captured
+main/delta record horizon. Later inserts are excluded. A changed generation or
+schema aborts the task. Supported visibility is cursor stability for standalone
+or autocommit reads; pass the current transaction as the first argument when
+invoked within an executor. ACID/explicit transactions, mutation columns,
+side-effecting callbacks and query-local handles are rejected. No task is
+retried after an error or ambiguous completion. Task/attempt identities are
+checked and replayed/expired task numbers are rejected per connection.
+
+Explicit `scan_remote` remains available independently of membership. Shared
+snapshot mounts use the automatic, budgeted path described above; mutable
+distributed writes and general query placement remain subsequent features.
 
 ### Storage failure notifications
 

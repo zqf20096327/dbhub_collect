@@ -53,6 +53,9 @@ When editing a Remote Dataset Run Trigger in Langfuse, you need to configure the
 ### Build Images
 
 ```bash
+# First-time setup: creates .env with random credentials
+./deploy.sh init-env
+
 # Build all images
 ./deploy.sh build
 

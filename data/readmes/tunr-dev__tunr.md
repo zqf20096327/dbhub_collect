@@ -108,7 +108,7 @@ dependencies. Verify it with `tunr doctor`.
 **SDKs** — for driving tunnels from code rather than the shell:
 
 ```bash
-pip install tunr          # Python
+pip install tunr-sdk      # Python
 npm install @tunr/cli     # Node.js
 ```
 
@@ -439,7 +439,7 @@ descriptions say so: *deploy* means "host this, it should outlive my laptop",
 ## SDKs
 
 <details>
-<summary><b>Python</b> — <code>pip install tunr</code></summary>
+<summary><b>Python</b> — <code>pip install tunr-sdk</code></summary>
 
 <br/>
 
@@ -601,12 +601,12 @@ means there is no code yet.
 | | Status |
 |---|---|
 | **Agent Bridge**: connector, grants, read-only Postgres proxy, end-to-end TLS, MCP tools — live on tunr.sh since v0.8.0 | 🚧 Preview |
-| **Agent Bridge**: SQL Server query mode, Nebim/Logo/Netsis profiles, masking, acting-for grants, connect links | 🚧 Unreleased |
+| **Agent Bridge**: SQL Server query mode, Nebim/Logo/Netsis profiles, masking, acting-for grants, connect links — since v0.9.0 | 🚧 Preview |
 | Bridge dashboard ([app.tunr.sh](https://app.tunr.sh)): approvals, sites, agents & tokens, grants with per-query summaries, audit + CSV/JSON export, webhooks, org settings | 🚧 Preview |
 | Bridge orgs: members with owner / admin / approver / member roles, vendor↔customer links, two-approver rule for read-write | 🚧 Preview |
 | Self-hosted bridge (`docker compose`, built-in `/portal/`, on-demand TLS) | 🚧 Preview |
 | **Hosted agents** (`tunr agent deploy`, cron/webhook triggers, `/data` volume) | 🧪 Early access (off on tunr.sh) |
-| Bridge: MySQL / MSSQL proxies, HTTP resources, white-label connector for vendors | 📋 Planned |
+| Bridge: MySQL, SQL Server wire proxy (query mode exists), HTTP resources, white-label connector for vendors | 📋 Planned |
 | Bridge: volume size quotas, egress blocklist for hosted agents | 📋 Planned |
 | HTTP/WS tunnels | ✅ Stable |
 | Raw TCP / UDP / TLS tunnels (WebSocket clients only, not end-to-end) | 🧪 Experimental |
@@ -681,7 +681,7 @@ allowed under both. See [NOTICE](NOTICE) for the exact boundary.
 
 <div align="center">
 
-**[tunr.sh](https://tunr.sh)** · [Docs](https://tunr.sh/docs/) · [Discord](https://discord.gg/tunr) · [Twitter/X](https://x.com/vural_met)
+**[tunr.sh](https://tunr.sh)** · [Docs](https://tunr.sh/docs/) · [Twitter/X](https://x.com/vural_met)
 
 Built with 💜 in Go
 

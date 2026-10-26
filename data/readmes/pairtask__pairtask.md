@@ -1,10 +1,17 @@
 # pairtask
 
-**Work with Codex and Claude in one place.** pairtask gives both agents the
-same project workspace and a shared message channel, with you directing the
-work from an operator chat. Ask one agent to implement a change and the other
-to review it; they can coordinate directly instead of making you relay every
-message.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/banner/pairtask-banner-dark.svg">
+    <img alt="pairtask" src="docs/brand/banner/pairtask-banner-light.svg" width="100%">
+  </picture>
+</p>
+
+**Work with Codex, Claude, and Pi in one place.** pairtask gives the agents
+the same project workspace and a shared message channel, with you directing
+the work from an operator chat. Ask one agent to implement a change and
+another to review it; they coordinate directly instead of making you relay
+every message.
 
 Messages survive disconnects, and the chat shows agent status and delivery
 progress. The agents run in an Incus sandbox, separate from your host, while
@@ -91,7 +98,7 @@ host.
 
    ```sh
    cd /workspace/pairtask
-   codex
+   pairtask start codex --id codex-1
    ```
 
    Complete Codex's folder trust prompt, then start a conversation by pasting
@@ -110,7 +117,7 @@ host.
 
    ```sh
    cd /workspace/pairtask
-   claude
+   pairtask start claude --id claude-1
    ```
 
    Accept Claude's channel consent prompt, then paste this into Claude:
@@ -119,7 +126,20 @@ host.
    Use the collab-ai skill to collaborate with codex-1 on this project. Tell me when you are ready.
    ```
 
-4. Open a third host terminal for **your chat**:
+4. Optional: open another host terminal for **Pi**. Enter the workspace, then
+   start Pi with the collaboration skill; on first run, `/login` and `/model`
+   inside Pi set its provider and model ([Pi guide](docs/pi.md)):
+
+   ```sh
+   pairtask shell
+   ```
+
+   ```sh
+   cd /workspace/pairtask
+   pairtask start pi --id pi-1 -- --skill /usr/local/share/pairtask
+   ```
+
+5. Open another host terminal for **your chat**:
 
    ```sh
    pairtask chat
@@ -146,7 +166,21 @@ host.
    host. It reconnects to the saved conversation and shows its history. Only
    one operator chat can be open at a time.
 
-To work on another repository, replace `/workspace/pairtask` in steps 2 and 3
+**Agent commands**, all run inside the workspace from the project directory:
+
+| To | Run |
+| --- | --- |
+| Start Codex, Claude or Pi | `pairtask start codex --id codex-1`, `pairtask start claude --id claude-1`, `pairtask start pi --id pi-1 -- --skill /usr/local/share/pairtask` |
+| Add another agent | the same command with a new ID, e.g. `--id codex-2` |
+| Join a room as well | add `--room NAME` (repeatable) |
+| Pick a model | add `--model NAME` |
+| Change Pi's output cap (default 32768 tokens per request) | add `--max-tokens N`, or `--max-tokens 0` for none |
+| Resume the conversation Codex last had under that ID | `pairtask start codex --id codex-1 --resume` (close the old session first) |
+| See the command without running it | add `--dry-run` |
+
+Put pairtask flags before `--`; arguments after `--` go to the agent itself.
+`codex` and `claude` alone are shortcuts for the `codex-1` and `claude-1`
+commands above. To work on another repository, replace `/workspace/pairtask`
 with that project's directory. [Sign-in help](docs/sandbox.md#sign-in-and-network-access) ·
 [Host commands](docs/host-commands.md) · [Operator chat](docs/secured-runtime.md#interactive-chat) ·
 [Mount host directories](docs/sandbox-mounts.md) · [Resume an agent](docs/host-integration.md#codex-terminal).
@@ -224,9 +258,11 @@ These agents have no Incus isolation.
 ### Resume or fork
 
 [Host commands and compatibility](docs/host-integration.md#codex-terminal).
-For saved sandbox conversations, run `codex resume SESSION_ID` or
-`claude --resume` from the project directory inside the workspace. The Codex
-resume picker does not currently resume managed sessions
+For a managed Codex session, prefer `pairtask start codex --id ID --resume`
+inside the sandbox: the launcher records each agent ID's conversation and
+continues it (close the old session first). Alternatively, resume an explicit
+conversation with `codex resume SESSION_ID` or `claude --resume` from the
+project directory; the Codex resume picker does not resume managed sessions
 ([#67](https://github.com/pairtask/pairtask/issues/67)).
 
 ### Set a Codex soft cap
@@ -243,9 +279,10 @@ Claude requires channel consent and account/organization support.
 
 ## Reference and contributing
 
+[Operator chat](docs/operator-chat.md) ·
 [Protocol](docs/protocol.md) · [Manual MCP](docs/mcp.md) ·
-[Status API](docs/status.md) · [Operator chat formatting](docs/chat-formatting.md) ·
-[Agent skill](docs/skills/collab-ai/SKILL.md)
+[Status API](docs/status.md) · [Chat formatting](docs/chat-formatting.md) ·
+[Pi](docs/pi.md) · [Agent skill](docs/skills/collab-ai/SKILL.md)
 
 [Report an issue](https://github.com/pairtask/pairtask/issues). Run checks with:
 

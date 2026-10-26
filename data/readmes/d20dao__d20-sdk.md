@@ -1,0 +1,554 @@
+# D20DAO VRF SDK
+
+[Verifiable randomness for onchain apps](https://d20dao.org), deployed on Arc (Mainnet and Testnet) and Robinhood Chain (mainnet and testnet). [Get started](https://d20dao.org/docs/getting-started) · [Integration guide](https://d20dao.org/docs/integration) · [Public proof replay](https://d20dao.org/docs/verification).
+
+**Randomness your users can check.** Your contract asks the coordinator for a random result and pays a fee. A few seconds later the coordinator calls your contract back with a word taken from a VRF proof it verified on chain. Nobody picks the answer, nobody gets a second attempt, and anyone can replay the proof afterwards with this package.
+
+`@d20dao/vrf-sdk` is everything you need on the application side: the Solidity base contract your consumer inherits, the coordinator ABI, an off-chain fee quote for your front end, and the replay code that re-derives a published result from public evidence. It holds no keys and runs no service.
+
+The service is live on **Arc Mainnet** (chain 5042) and **Robinhood Chain** (chain 4663); develop against **Arc Testnet** (chain 5042002) or **Robinhood Chain Testnet** (chain 46630). Requests are permissionless — no allowlist, no subscription, no upfront deposit — but they must come from a contract, so a wallet or backend pays through its own consumer. Each request pays a fee quoted from the current base fee, in USDC on Arc and in ETH on Robinhood Chain (see [Pricing](#pricing)), and is served within 60 seconds or can be refunded. The consumer interface is the same on both chains, so one consumer contract works on either.
+
+On Robinhood Chain, each request is bound to a future drand round when it is made, so nobody can know or choose the result in advance. The contract verifies the drand signature and the VRF proof on chain, and anyone can replay a result from public data. Arc works with epochs instead; [How each network works](#how-each-network-works) compares the two.
+
+## Start here
+
+```sh
+npm install @d20dao/vrf-sdk
+```
+
+1. **Copy an example.** [`examples/DiceConsumer.sol`](examples/DiceConsumer.sol) rolls a d20, [`examples/RaffleConsumer.sol`](examples/RaffleConsumer.sol) picks one winner from a list, [`examples/LootDropConsumer.sol`](examples/LootDropConsumer.sol) makes a weighted drop. Each is sixty to seventy lines and stands alone.
+2. **Compile it.** Node 22.13+, solc 0.8.28, `evmVersion: cancun`. Hardhat and Foundry settings are in [Compiler setup](#compiler-setup).
+3. **Deploy it** against the coordinator proxy for your chain, from [Deployments](#deployments) or `D20_NETWORKS`. There is no default network; configure the address explicitly.
+4. **Request and read.** Quote the fee off-chain, send it through your consumer, take `requestId` from the receipt and poll until `fulfilled` — or until the 60-second deadline passes and you refund. See [Paying for a request](#paying-for-a-request) and [Reading results](#reading-results); `readRequest` reads a request the same way on both chains.
+
+Then read [Best practices](#best-practices): eleven rules that cover most of what goes wrong. [API.md](API.md) lists every function of both coordinators, the registry and the beacon verifier, event and error with its selector, caller and, for errors, what to do about it. [d20dao/randomizer-demo](https://github.com/d20dao/randomizer-demo) is a complete dapp built this way, and [CHANGELOG.md](CHANGELOG.md) records what changed in this release.
+
+For agent-assisted integration, give your agent the installed `AGENTS.md`, `API.md` and `PROTOCOL-PROVENANCE.json`, plus the [integration skills](https://github.com/d20dao/skills). The website guides are on d20dao.org: [guides](https://d20dao.org/docs) including [Getting started](https://d20dao.org/docs/getting-started) with its Copy prompt action, the guide index [d20dao.org/llms.txt](https://d20dao.org/llms.txt), the full text [d20dao.org/llms-full.txt](https://d20dao.org/llms-full.txt) and [d20dao.org/agents.md](https://d20dao.org/agents.md).
+
+## Best practices
+
+1. **Quote with `quoteFeeAt(callbackGasLimit, block.baseFeePerGas)` plus a buffer, never through `eth_call`.** `eth_call` reports a base fee of 0, so `quoteFee` collapses to the minimum fee and the real transaction reverts with `IncorrectFee`. Inside the requesting transaction `quoteFee(callbackGasLimit)` is exact; off-chain, use `quoteRequestFee` or `quoteFeeAt` with the latest header's base fee and a buffer for the movement until inclusion.
+2. **Requests come from a contract, never an EOA.** A wallet call reverts with `ContractConsumerRequired`. The consumer is what the coordinator calls back, so it has to exist before the request.
+3. **Keep the callback small: store the result, do the work later.** It runs inside `callbackGasLimit`. If it reverts or runs out of gas, its state changes are rolled back while the request stays served and paid, and anyone can redeliver the same accepted word with `retryCallback(requestId, gasLimit)`, with more gas if needed. A delivery that succeeded is never repeated, but still refuse a request id you have already finished: the check costs one read and does not depend on the coordinator.
+4. **Map each request id to your own context, and reject anything else.** Record who asked and what for when you request, then in the callback refuse a request id you never issued and one you have already finished.
+5. **Derive many values from one word instead of making many requests.** One request buys 256 bits. Ask for `diceRoll(sides, count)`, `chooseMany` or `shuffle` and the coordinator maps them for you; for application-specific values, `keccak256(abi.encode(word, i))` gives an independent value per `i`. A second request costs a second fee and a second wait.
+6. **Handle expiry, and choose the refund address deliberately.** If no proof is accepted within 60 seconds the request expires: nothing is fulfilled late, and anyone may call `refundRequest(requestId)`. The refund is pushed to the address fixed at request time, so pick one that can receive a plain native transfer or call `withdrawRefundCredit` — usually the paying user.
+7. **Never re-roll a result you dislike.** The word is final once `fulfilled` is true. Re-requesting after seeing an outcome is the one thing verifiable randomness cannot protect your users from, and the evidence trail makes it visible.
+8. **Never use `blockhash` or `block.timestamp` as randomness.** Both are chosen by whoever builds the block, and `blockhash` is only available for the last 256 blocks. That is the problem this service exists to solve.
+9. **Withdraw the refund credit your fee buffer leaves behind.** Anything above the escrowed quote is credited to the refund address (`FeeOverpaymentCredited`), readable with `refundCredits(address)` and pulled with `withdrawRefundCredit(recipient)`. Returning the change in the requesting transaction, as `DiceConsumer` does, avoids the second transaction entirely.
+10. **Close bets and entries when you request.** No one can predict the word before the keeper submits it, but the pending fulfillment transaction reveals it about one block before it lands. Anything the result decides — stakes, entries, choices — must be fixed in the requesting transaction and unchangeable until the callback, as `RaffleConsumer` does when it closes entries at the draw.
+11. **Freeze any list before you request an index into it.** `chooseOne`, `chooseMany` and `shuffle` answer with indices. Commit the list — hashing it into `clientSeed` puts the commitment in the request log, as `RaffleConsumer` does.
+
+## Networks
+
+| | Arc Mainnet | Arc Testnet |
+| --- | --- | --- |
+| Use | Live service, real USDC | Development and testing |
+| Chain ID | `5042` | `5042002` |
+| RPC | `https://rpc.mainnet.arc.io` | `https://rpc.testnet.arc.io` |
+| Block explorer | https://explorer.arc.io | https://testnet.arcscan.app |
+| D20DAO explorer | https://arc.d20dao.org | https://arc-testnet.d20dao.org |
+| Deployment manifest | https://d20dao.org/deployments/arc-mainnet.json | https://d20dao.org/deployments/arc-testnet.json |
+
+| | Robinhood Chain | Robinhood Chain Testnet |
+| --- | --- | --- |
+| Use | Live service, real ETH | Development and testing |
+| Chain ID | `4663` | `46630` |
+| RPC | `https://rpc.mainnet.chain.robinhood.com` | `https://rpc.testnet.chain.robinhood.com` |
+| Block explorer | https://robinhoodchain.blockscout.com | https://explorer.testnet.chain.robinhood.com |
+| Deployment manifest | https://github.com/d20dao/keeper/blob/main/deployments/robinhood-mainnet.json | https://github.com/d20dao/keeper/blob/main/deployments/robinhood-testnet.json |
+
+`D20_NETWORKS` (root export) holds these four deployments: chain ID, RPC, explorer, native currency, coordinator proxy, implementation and its code hash, and the coordinator kind (`epoch` on Arc, `round` on Robinhood Chain); `getD20Network(chainId)` looks one up. On Arc the native gas token is USDC with 18 decimals (`1e18` wei is 1 USDC); on Robinhood Chain it is ETH. Request fees are paid in the native token. Test USDC comes from the faucet linked in Arc's [Connect to Arc](https://docs.arc.io/arc/references/connect-to-arc) reference, which also lists alternative RPC providers. Compile with solc 0.8.28 and `evmVersion` `cancun`, the settings this SDK builds and tests with. The manifests record proxy and implementation addresses, implementation code hashes, owner, initialized pricing and deployment receipts. The [D20DAO explorer](https://d20dao.org/explorer) shows and replays requests on both networks.
+
+## How each network works
+
+Both chains run the same VRF: the operator's fixed secp256k1 key proves a word over the request's fixed fields and a public randomness value that nobody knew when the request was made, and the coordinator verifies the proof on chain before it calls the consumer. The chains differ in where that public value comes from.
+
+### Arc
+
+Arc requests bind an epoch of 200 blocks. The keeper publishes the epoch's packet, a drand round, to the `EpochEntropy` registry when there is paid demand, and each request's seed also binds the hash of a block after that publication. [Request lifecycle](#request-lifecycle) describes the flow, [Replay and verification](#replay-and-verification) the replay (`@d20dao/vrf-sdk/epoch`) and [Security and trust](#security-and-trust) the trust model.
+
+### Robinhood Chain
+
+**How a result is made.** When a request is made, the contract binds it to a future round of drand's evmnet beacon: the first round scheduled at least 3 seconds after the request. Until that round is published, nobody can know or choose the result: not the requester, the operator, the sequencer or drand. The keeper then delivers the operator's VRF output over the request's fixed fields and the round's randomness. The contract verifies the round's BLS signature and the VRF proof before accepting it, and anyone can replay the result from public chain data.
+
+**Assumptions.**
+- **Shared with every Robinhood Chain application:** D20DAO relies on the chain's sequencer for ordering and confirmation.
+- **Shared with other verifiable-randomness services:** results assume the operator's VRF key and the sequencer act independently.
+- **drand:** evmnet is run by the League of Entropy, and its signatures rest on a threshold of independent operators.
+
+**Finality.** Results are confirmed by the sequencer within seconds. Settlement on Ethereum follows in about 15–20 minutes.
+
+**Delivery and refunds.** A typical delivery takes 5–8 seconds. If a request is not fulfilled within 60 seconds, its fee can be refunded to the request's refund address. As with any randomness service, design applications so that a party cannot cancel a request and retry for a better outcome.
+
+**Upgrades.** The coordinator is upgradeable (UUPS) by its owner; read `owner()` from the chain. Beacon changes are scheduled on chain at least 10 minutes ahead.
+
+**What changes for an integrator.** The coordinator, `D20VRFCoordinatorRobinhood`, implements `ID20VRF` exactly as on Arc: the examples, `D20VRFConsumer` and `D20VRFRequests` compile and run unchanged, with the same selectors, events and errors for requesting, paying, refunding and retrying. The differences:
+
+- Fees are in ETH. `fee = max(minFee, feeMultiplier × baseFee × (fulfillGasOverhead + callbackGasLimit))`, as on Arc; both Robinhood deployments started with a 0.000025 ETH minimum fee, multiplier 2 and overhead 405,000 gas, with an 80% keeper share. At a base fee of 0.02 gwei and 100,000 callback gas the dynamic part is 2 × 0.02 gwei × 505,000 = 0.0000202 ETH, so the minimum applies. Read `pricing()` and quote with `quoteRequestFee`, which works unchanged; never hard-code a price.
+- Read a request with `getRoundRequest(requestId)` (in `roundCoordinatorAbi`), not `getRequest`. It returns the request's fields with `beaconId`, `round`, `roundRandomness` (zero until the round is verified on chain) and `feePaid` in place of the epoch fields. `readRequest(provider, network, requestId)` reads either coordinator and classifies the request as `pending`, `fulfilled`, `expired` or `refunded`.
+- `requestBlock` is Robinhood Chain's own block number. A request also emits `RoundAssigned(requestId, beaconId, round)`, and the first fulfilment of a round emits `RoundVerified` with the round's signature.
+- The VRF input binds the chain ID, coordinator, key hash, request ID, consumer, client seed, mapping hash, request block, beacon ID, round and the round's randomness.
+- The refund and retry gas figures in [Gas for refund and retry calls](#gas-for-refund-and-retry-calls) were measured on the Arc coordinator; on Robinhood Chain use `eth_estimateGas` with a margin.
+- The pay-per-call agent API (x402) serves Arc only.
+
+Developer note: send requests as normal transactions through the sequencer. A request forced through Ethereum's delayed inbox takes an earlier timestamp and may bind a round that is already public.
+
+**Replay.** `@d20dao/vrf-sdk/round` recomputes the contract's rules off-chain and replays one fulfilled request: configuration and key hash, the beacon's identity and that it was in force, the round assignment, the round's BLS signature and randomness, the seed, the VRF proof, the proof hash and evidence packet, the transcript, the mapping and its result, and the acceptance time. `readRoundRequestEvidence` gathers its input from an RPC, and `readRoundBeaconLogs` the beacon logs that `roundScheduleFromEvents` turns into the schedule:
+
+```ts
+import { JsonRpcProvider } from 'ethers';
+import { D20_NETWORKS } from '@d20dao/vrf-sdk';
+import { readRoundRequestEvidence, readRoundBeaconLogs, roundScheduleFromEvents, replayRoundRequest } from '@d20dao/vrf-sdk/round';
+
+const network = D20_NETWORKS['robinhood-mainnet'];
+const provider = new JsonRpcProvider(network.rpcUrl, 4663, { staticNetwork: true, batchMaxCount: 1 });
+const evidence = await readRoundRequestEvidence(provider, network.coordinator, 1n);
+const logs = await readRoundBeaconLogs(provider, network.coordinator, { fromBlock: network.deploymentBlock });
+const verdict = replayRoundRequest(evidence, { schedule: roundScheduleFromEvents(network.coordinator, logs) });
+// verdict.valid, verdict.failed (the names of failed checks), verdict.mappedResult
+```
+
+`replayRoundRequest` never throws: malformed or altered evidence fails the checks that read it. As on Arc, replay is mathematical: that the RPC served the chain's canonical blocks and logs, and which implementation ran at each block, are for a separate chain check. `verifyRoundSignature` is the pairing check of `D20BeaconVerifier` computed with `@noble/curves`.
+
+## Integrate a consumer
+
+Solidity imports require compiler 0.8.28 and your compiler's npm resolver:
+
+- `@d20dao/vrf-sdk/contracts/D20VRFConsumer.sol`
+- `@d20dao/vrf-sdk/contracts/interfaces/ID20VRF.sol`
+- `@d20dao/vrf-sdk/contracts/libraries/D20VRFRequests.sol`
+- `@d20dao/vrf-sdk/contracts/libraries/RandomnessMapping.sol`
+
+These sources import only each other; no OpenZeppelin installation is needed for a consumer.
+
+`D20VRFConsumer` authenticates the coordinator proxy. Verify the expected request in the callback and store the word with minimal work. Pin the effective coordinator proxy address, initialized configuration and implementation history of both service proxies. A constructor code-length check, SDK installation or permissionless request acceptance does not guarantee service.
+
+### Compiler setup
+
+Hardhat resolves `@d20dao/vrf-sdk/...` imports from `node_modules` without remappings:
+
+```ts
+// hardhat.config.ts
+export default {
+  solidity: {
+    version: "0.8.28",
+    settings: { evmVersion: "cancun", optimizer: { enabled: true, runs: 200 } },
+  },
+};
+```
+
+Foundry: run `npm install @d20dao/vrf-sdk` in the project root and map the import prefix to `node_modules`:
+
+```toml
+# foundry.toml
+[profile.default]
+src = "src"
+solc_version = "0.8.28"
+evm_version = "cancun"
+remappings = ["@d20dao/vrf-sdk/=node_modules/@d20dao/vrf-sdk/"]
+```
+
+With either tool, `import {D20VRFConsumer} from "@d20dao/vrf-sdk/contracts/D20VRFConsumer.sol";` then compiles unchanged.
+
+### Examples
+
+Three complete consumers ship in the package and install as `@d20dao/vrf-sdk/examples/<name>.sol`. Each is sixty to seventy lines, deals with one idea and is meant to be copied and edited rather than imported. All three take the coordinator proxy in their constructor, authenticate the callback through `D20VRFConsumer`, refuse a request id they did not issue or have already finished, and read their outcome from `getMappedResult` instead of recomputing it.
+
+| Example | What it shows |
+| --- | --- |
+| [`DiceConsumer.sol`](examples/DiceConsumer.sol) | One d20 per player. Reads the exact `quoteFee` inside the requesting transaction, pays it, returns the change and names the player as the refund address. |
+| [`RaffleConsumer.sol`](examples/RaffleConsumer.sol) | One winner from a list. Closes entry before requesting, hashes the frozen list into `clientSeed` as an on-chain commitment, maps the winning index with `ChooseOne` and, through `_onRefund`, lets the draw be sent again only after an expired request was refunded. |
+| [`LootDropConsumer.sol`](examples/LootDropConsumer.sol) | A weighted drop. Asks for a `NumberRange` draw over the total weight instead of reducing the word itself, stores the word in the callback and walks the weights on read. |
+
+- [d20dao/randomizer-demo](https://github.com/d20dao/randomizer-demo) is a complete dapp: a consumer with one function per randomness option that stores the latest results onchain, and a single-page UI that requests, waits for and displays them. It runs on Arc Mainnet at https://mainnet-demo.d20dao.org.
+- `skills/d20-consumer/assets/RandomnessConsumer.sol` in [d20dao/skills](https://github.com/d20dao/skills) shows raw, mapped and shuffle requests in one contract, with refund notification and refund-credit withdrawal.
+
+### Client seed
+
+`clientSeed` does not need to be unique or secret. The coordinator derives each request's VRF input from the chain ID, coordinator address, key hash, request ID, consumer, client seed, mapping hash, request block, target block, target block hash, epoch ID and epoch hash. The request ID increments for every request, so two requests with the same client seed still have different inputs. Use the seed to bind application context into the request and its VRF seed, for example `keccak256(abi.encode(msg.sender, operationId))` or a hash that commits to an ordered item list before a choice or shuffle. It is emitted in `RandomnessRequested`; it is neither an entropy source nor private.
+
+### Callback gas limit
+
+`callbackGasLimit` must be between 30,000 and 1,000,000 gas (`MIN_CALLBACK_GAS`, `MAX_CALLBACK_GAS`); other values revert with `InvalidCallbackGas`. The coordinator calls `rawFulfillRandomness(requestId, randomness)` with exactly that much gas, and the fee grows with it (see [Pricing](#pricing)). If the callback reverts or runs out of gas, the request is still served and paid (`CallbackAttempted(requestId, false, gasLimit)`, `delivered` stays false); anyone can call `retryCallback(requestId, gasLimit)` with a limit no lower than the original and at most 1,000,000. Keep the callback to authentication, a request check and a few storage writes (a new storage slot costs about 22,100 gas); the examples use 100,000. As a reference, a consumer that stores the word, the fulfillment block and time and two index entries per result measured about 51,000 gas per callback once its slots were in use and about 105,000 gas for its first result, when every slot was new. Measure your own callback with `eth_estimateGas` or a local test, add a margin, and remember that the fee grows with the limit. Computing a large mapping, such as a 256-item shuffle, inside the callback needs much more.
+
+## Randomness options
+
+Every option is a `RandomnessMapping.Spec` `(operation, lower, upper, count, population)`. In Solidity, `D20VRFRequests` builds and pays for it: `using D20VRFRequests for ID20VRF;` with `o = D20VRFRequests.Options(clientSeed, callbackGasLimit, refundAddress)`. Each helper returns the request ID and pays `quoteFee(o.callbackGasLimit)` from the calling contract's balance. Without the library, pass the spec to `requestMappedRandomness(clientSeed, callbackGasLimit, refundAddress, spec)`. In TypeScript, `builtins` returns the same spec for `mapRandomness(word, spec)` and `hashMapping(spec)`.
+
+| Option | Solidity (`D20VRFRequests`) | TypeScript (`builtins`) | Spec | Valid parameters | Result |
+| --- | --- | --- | --- | --- | --- |
+| Raw word | none: `requestRandomness(clientSeed, callbackGasLimit, refundAddress)` | `raw()` | `(0 Raw, 0, 0, 0, 0)` | none | `[uint256(word)]` |
+| Dice | `rng.diceRoll(sides, count, o)` | `diceRoll(sides, count = 1)` | `(1 DiceRoll, 0, sides, count, 0)` | sides ≥ 2; count 1–128 | `count` values, each 1–sides; repeats possible |
+| Custom die | `rng.dN(sides, o)` | `dN(sides)` | `(1 DiceRoll, 0, sides, 1, 0)` | sides ≥ 2 | one value, 1–sides |
+| Dice presets | `rng.d4(o)`, `d6`, `d8`, `d10`, `d12`, `d20` | `d4()`, `d6()`, `d8()`, `d10()`, `d12()`, `d20()` | `(1 DiceRoll, 0, N, 1, 0)` | none | one value, 1–N |
+| Coin flip | `rng.coinFlip(o)` | `coinFlip()` | `(2 CoinFlip, 0, 0, 1, 0)` | none | one value: 0 tails, 1 heads |
+| Number range | `rng.numberRange(min, max, o)` | `numberRange(min, max)` | `(3 NumberRange, min, max, 1, 0)` | min ≤ max, any uint256; equal endpoints and the full 0 to 2^256−1 range allowed | one value in [min, max] |
+| Choose one | `rng.chooseOne(population, o)` | `chooseOne(size)` | `(4 ChooseOne, 0, 0, 1, population)` | population 1–256 | one index, 0 to population−1 |
+| Choose many | `rng.chooseMany(population, count, o)` | `chooseMany(size, count)` | `(5 ChooseMany, 0, 0, count, population)` | population 1–256; count 1 to population | `count` distinct indices, without replacement |
+| Shuffle | `rng.shuffle(population, o)` | `shuffle(size)` | `(6 Shuffle, 0, 0, population, population)` | population 1–256 | every index 0 to population−1 exactly once |
+
+TypeScript bounds (`sides`, `min`, `max`) are `bigint`; `count`, `size` and `population` are integer `number` values. Invalid parameters throw in TypeScript and revert the request with `InvalidMapping` onchain. Results are `uint256[]` from `getMappedResult` and the coordinator's `mapRandomness`, and `bigint[]` from the SDK's `mapRandomness`. Sampling rejects the short residue range instead of taking a biased modulo. Choice and shuffle results are zero-based indices into a list the application must fix before requesting. Callbacks always receive the raw `bytes32` word, including for mapped requests.
+
+`RandomnessMapping.Spec` is the Solidity struct `(operation, lower, upper, count, population)` stored with a request. The TypeScript `MappingSpec` that `builtins` return has the same fields as an object, with `lower` and `upper` as `bigint`; ethers encodes it for the struct unchanged, and `hashMapping(spec)` equals the request's `mappingHash`. "Mapping" here means a randomness mapping, not a Solidity `mapping`.
+
+## Pricing
+
+The coordinator prices every request from the base fee of the transaction that creates it:
+
+```
+fee = max(minFee, feeMultiplier × baseFee × (fulfillGasOverhead + callbackGasLimit))
+```
+
+`pricing()` returns the live `(minFee, feeMultiplier, fulfillGasOverhead)`. The owner can move them with `setPricing(minFee, multiplier, overhead)` (event `PricingChanged`) only within fixed bounds: `minFee` at most 10 USDC (`10e18` wei; native USDC on Arc uses 18 decimals), `feeMultiplier` 0 to 20 where 0 means a flat `minFee`, `fulfillGasOverhead` 100,000 to 2,000,000 gas. Both Arc deployments were initialized with a 0.08 USDC minimum fee (`initialMinFee()`), multiplier 5 and overhead 300,000 gas, together with a 50% keeper share (`keeperFeeBps` 5000) and a 100% refund ratio. Arc Testnet still uses these values. Since 2026-09-18 Arc Mainnet charges a 0.02 USDC minimum fee, multiplier 3 and overhead 300,000 gas, with a 60% keeper share (`keeperFeeBps` 6000). Prices are not fixed: read the live values instead of hard-coding them. A pricing change never touches requests that are already open, because each request settles from the fee it escrowed.
+
+Labelled examples. A to C use the initialization values (multiplier 5, overhead 300,000 gas, 0.08 USDC minimum fee); D uses Arc Mainnet pricing.
+
+- **A, 176 gwei base fee, 100,000 callback gas.** Dynamic part 5 × 176 gwei × 400,000 = 0.352 USDC, above the minimum, so the fee is 0.352 USDC.
+- **B, 20 gwei base fee, 100,000 callback gas.** Dynamic part 5 × 20 gwei × 400,000 = 0.04 USDC, below the minimum, so the fee is 0.08 USDC.
+- **C, multiplier set to 0.** The fee is `minFee` at any base fee.
+- **D, Arc Mainnet, 20 gwei base fee, 100,000 callback gas.** Dynamic part 3 × 20 gwei × 400,000 = 0.024 USDC, above the 0.02 USDC minimum, so the fee is 0.024 USDC.
+
+`quoteFeeAt(callbackGasLimit, baseFee)` evaluates the formula for a base fee you supply; `quoteFee(callbackGasLimit)` evaluates it for `block.basefee`. Quotes above the `uint96` escrow limit revert with `FeeOverflow` rather than truncating.
+
+Three fee names are easy to confuse. `pricing()` and `quoteFee` price *future* requests; `requestFeePaid(requestId)` is what *one* request escrowed and settles from. `refundBps()` is the current refund ratio, copied into each new request, while `requestRefundBps(requestId)` is the ratio that request copied at creation and is refunded at. `keeperFeeBps()` has no per-request copy at all: it is read when a proof is accepted.
+
+## Paying for a request
+
+`requestRandomness(clientSeed, callbackGasLimit, refundAddress)` and `requestMappedRandomness(..., spec)` accept `msg.value >= fee`, where `fee` is the quote computed inside that transaction. Less reverts with `IncorrectFee(expected, actual)`. Exactly `fee` is escrowed and stored as `requestFeePaid(requestId)`; `RandomnessRequested` emits that charged fee as `feePaid`, not `msg.value`. Anything above it is not revenue: it is credited to the request's `refundAddress` as refund credit (`FeeOverpaymentCredited(requestId, refundAddress, amount)`, readable through `refundCredits(address)`) and is withdrawn by that address calling `withdrawRefundCredit(recipient)`. Choose a refund address that can make that call, or that can receive a plain native transfer for expiry refunds; a contract that can do neither strands its credit.
+
+### Contracts that pay in the same transaction
+
+`quoteFee(callbackGasLimit)` is exact inside the requesting transaction, so a contract can read the price and pay it in one go. The `D20VRFRequests` helpers do exactly that from the calling contract's balance:
+
+```solidity
+uint256 fee = rng.quoteFee(callbackGasLimit);
+requestId = rng.requestRandomness{value: fee}(clientSeed, callbackGasLimit, refundAddress);
+```
+
+### Wallets and backends that pay through a consumer
+
+Do not call `quoteFee` through `eth_call`: it prices with `block.basefee`, which `eth_call` commonly reports as 0 (verified on Arc mainnet), so the answer collapses to `minFee` and the real transaction reverts with `IncorrectFee`. Quote with `quoteFeeAt(callbackGasLimit, latestBlock.baseFeePerGas)`, add a buffer for base-fee movement until inclusion, and send that amount to your consumer. The SDK helper wraps this for ethers 6:
+
+```js
+import { quoteRequestFee } from '@d20dao/vrf-sdk';
+// provider: ethers Provider; coordinator: coordinator proxy address; 100_000: callbackGasLimit
+const { fee, value, baseFee } = await quoteRequestFee(provider, coordinator, 100_000, { bufferBps: 3000 });
+await dice.roll({ value }); // DiceConsumer pays the exact quote and returns the rest
+```
+
+`fee` is `quoteFeeAt(callbackGasLimit, baseFee)` for the block's actual base fee. `value` is the same quote recomputed at a base fee `bufferBps` higher (default 3000, 30%: an EIP-1559 base fee can rise 12.5% per block), so the request still pays if the base fee rises by up to that much before inclusion. When the minimum fee dominates even at the buffered base fee, `value` equals `fee` and nothing extra is sent. In example A, `value` is 5 × 228.8 gwei × 400,000 = 0.4576 USDC; a request included at 176 gwei escrows 0.352 USDC, and the remaining 0.1056 USDC is either returned by the consumer or credited to the refund address, depending on the payment pattern below. The helper never uses `quoteFee`, needs only `getBlock` and `call`, and throws if the block has no `baseFeePerGas`. If the base fee outruns the buffer or pricing changes in between, the transaction reverts with `IncorrectFee`; quote again and resend.
+
+### Choosing a payment pattern
+
+Two patterns cover almost every consumer, and the examples ship both.
+
+- **Pay the exact quote and return the change** ([`DiceConsumer.sol`](examples/DiceConsumer.sol)). Read `fee = quoteFee(callbackGasLimit)`, require `msg.value >= fee`, pay exactly `fee` and send `msg.value - fee` back to the caller. The front end sends `value` from `quoteRequestFee`, the unused buffer returns immediately, nothing accumulates as refund credit and the contract never holds user funds. Name the paying user as the refund address — any wallet can receive a native transfer or call `withdrawRefundCredit` — so an expiry refund goes back to whoever paid.
+- **Forward `msg.value`** ([`RaffleConsumer.sol`](examples/RaffleConsumer.sol), [`LootDropConsumer.sol`](examples/LootDropConsumer.sol)). Fewer lines: the coordinator escrows its own quote, reverts `IncorrectFee` when that is more than arrived, and credits everything above it to the refund address. With a buffered off-chain quote most requests leave some credit, which that address pulls later with `withdrawRefundCredit`.
+
+A contract that funds requests from its own balance uses the first form without the change transfer. It then needs its own funding and withdrawal policy, and its refund address decides who receives expiry refunds.
+
+## Reading results
+
+All events come from the coordinator proxy, with `requestId` as the first indexed topic:
+
+| Event | Meaning |
+| --- | --- |
+| `RandomnessRequested(requestId, consumer, keyHash, clientSeed, requestBlock, callbackGasLimit, feePaid, refundAddress, deadline)` | Request created. Read `requestId` from this log in the request receipt. |
+| `MappingRequested(requestId, mappingHash, spec)` | Mapping stored with the request (Raw for `requestRandomness`). |
+| `RandomnessFulfilled(requestId, randomness, submitter)` | Proof accepted; `randomness` is final. |
+| `CallbackAttempted(requestId, success, gasLimit)` | Result of calling `rawFulfillRandomness`, at fulfillment and at each `retryCallback`. |
+| `RequestRefundedTo(requestId, refundAddress, amount, paid)` | Expired request refunded; `paid` false means the amount became refund credit. |
+| `RefundCallbackAttempted(requestId, consumer, success, gasLimit)` | Result of the `onRefund` notification. |
+
+Views on the coordinator (all in `coordinatorAbi`; only `getMappedResult` is part of `ID20VRF`, so declare a local interface in Solidity for the others):
+
+- `getRequest(uint256 requestId) returns (Request)` with fields `consumer`, `callbackGasLimit`, `requestBlock`, `targetBlock` (0 until the epoch packet is published), `deadline` (Unix seconds, request time plus 60), `refundAddress`, `clientSeed`, `mappingHash`, `blockHash` (target block hash once stored), `randomness` (zero until fulfilled), `proofHash`, `transcriptHash`, `fulfilled`, `delivered` (callback succeeded), `refunded`, `epochId` (fixed at request time) and `epochHash` (zero until published). Reverts `UnknownRequest` for an unused ID.
+- `getMapping(uint256 requestId) returns (RandomnessMapping.Spec)`: the stored `(operation, lower, upper, count, population)`; all zero (Raw) for `requestRandomness`. Reverts `UnknownRequest`.
+- `getMappedResult(uint256 requestId) returns (uint256[])`: the stored word mapped with the stored spec. Reverts `NotFulfilled` before acceptance.
+- `mapRandomness(bytes32 randomness, RandomnessMapping.Spec spec) returns (uint256[])`: pure mapping of any word and spec; it does not show that a request was fulfilled. The SDK's `mapRandomness(word, spec)` returns the same values off-chain.
+- `requestFeePaid(requestId)`, `requestRefundBps(requestId)`, `refundCredits(address)` and `refundCallbackDelivered(requestId)` show settlement.
+
+[API.md](API.md) documents every view, event and error, including the order of events in a receipt.
+
+On Robinhood Chain read `getRoundRequest` instead of `getRequest` ([Robinhood Chain](#robinhood-chain)), or use `readRequest`, which reads either coordinator. Polling with ethers 6 on Arc, after sending the request through a consumer such as `DiceConsumer`:
+
+```js
+import { Contract } from 'ethers';
+import { coordinatorAbi } from '@d20dao/vrf-sdk/abi';
+
+const coordinator = new Contract(coordinatorAddress, coordinatorAbi, provider);
+const receipt = await (await dice.roll({ value })).wait();
+const requestId = receipt.logs
+  .filter((log) => log.address.toLowerCase() === coordinatorAddress.toLowerCase())
+  .map((log) => coordinator.interface.parseLog(log))
+  .find((event) => event?.name === 'RandomnessRequested').args.requestId;
+
+for (;;) {
+  // Read the block first, so a proof included up to that block is visible in getRequest.
+  const { timestamp } = await provider.getBlock('latest');
+  const request = await coordinator.getRequest(requestId);
+  if (request.fulfilled) { console.log(await coordinator.getMappedResult(requestId)); break; }
+  if (BigInt(timestamp) > request.deadline) break; // expired: refundRequest(requestId) is available
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+}
+```
+
+`fulfilled` means the result is final; `delivered` only reports whether the consumer callback succeeded. Once the latest block timestamp is past `deadline` and `fulfilled` is false, the request can no longer be served. Reading `randomness` over RPC is not proof verification; see [Replay and verification](#replay-and-verification).
+
+## Frontend and backend use
+
+- The package is ESM only (`"type": "module"`, `import` export conditions) for Node 22.13+ and bundlers. In a browser application, import it through a bundler such as Vite, webpack or esbuild; the test suite bundles the root and `/abi` entries for the browser platform with esbuild. Import `@d20dao/vrf-sdk/abi` alone when only ABIs are needed.
+- `quoteRequestFee(provider, coordinator, callbackGasLimit, options)` expects an ethers v6 provider such as `JsonRpcProvider` or `BrowserProvider`, or any object with ethers-v6-shaped `getBlock(tag)` (with `baseFeePerGas` as `bigint`) and `call(tx)`. With viem or another client, repeat its steps: read the latest block's `baseFeePerGas`, add the buffer and call `quoteFeeAt(callbackGasLimit, bufferedBaseFee)`.
+- The SDK does not wrap viem or other clients; its ABIs are plain JSON and work with any library.
+- Beacon verification uses the BN254 curve of `@noble/curves`, which takes about 45 ms to evaluate. It is read only inside the functions that verify a round (`verifyBeaconRound`, `beaconRoundMessage`, `verifyEpochAttestation`, `replayEpochCommitment`, `replayCoordinator`), so a bundler leaves it out of a bundle that reaches none of them; importing the package in Node loads it.
+- To add a network to a browser wallet, use `wallet_addEthereumChain` with the values from [Networks](#networks) or `D20_NETWORKS`; Robinhood Chain is `0x1237` (4663) and its testnet `0xb626` (46630), with ETH as native currency. The native currency uses 18 decimals:
+
+  ```js
+  await window.ethereum.request({
+    method: 'wallet_addEthereumChain',
+    params: [{
+      chainId: '0x13b2', // 5042, Arc Mainnet; Arc Testnet is '0x4cef52' (5042002)
+      chainName: 'Arc Mainnet',
+      nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
+      rpcUrls: ['https://rpc.mainnet.arc.io'],
+      blockExplorerUrls: ['https://explorer.arc.io'],
+    }],
+  });
+  ```
+- Reverts from the coordinator are custom errors, and `coordinatorAbi` includes all of them. Decode revert data with `coordinator.interface.parseError(data)` in ethers, or add the coordinator ABI next to your consumer ABI so the wallet or library can name the error. The ones a consumer meets most often: `IncorrectFee(expected, actual)` (re-quote and resend), `InvalidCallbackGas`, `InvalidMapping` (from `RandomnessMapping`), `ContractConsumerRequired`, `UnknownRequest`, `NotFulfilled`, `RefundNotAvailable` (not yet past the deadline, already served or already refunded), `RequestRefunded` and `InsufficientCallbackGas` (raise the transaction gas limit; see [Gas for refund and retry calls](#gas-for-refund-and-retry-calls)). `OnlyCoordinator` comes from `D20VRFConsumer` and is only in your consumer's ABI. [API.md](API.md) gives every error's selector, the calls that raise it and what to do.
+- ethers v6 returns structs as `Result` objects that are also arrays. A field named like an `Array` or `Result` member, such as `values`, `length` or `map`, is shadowed; read it with `result.getValue('values')`, by position or from `result.toObject()`, or choose another field name.
+- Every public Arc RPC endpoint is on `*.arc.io`, and common browser ad-block filter lists block that domain, so a page that reads the chain directly fails with `net::ERR_BLOCKED_BY_CLIENT` for a share of users. Read through the connected wallet's EIP-1193 provider when there is one (check its chain ID first), or through a read-only relay you serve from your own origin; the [randomizer-demo](https://github.com/d20dao/randomizer-demo) does the latter for read methods only and leaves transactions to the wallet.
+- Some RPC endpoints reject or rate-limit large JSON-RPC batches, and limits differ between providers and plans. ethers `JsonRpcProvider` batches up to 100 calls by default; lower `batchMaxCount` (`new JsonRpcProvider(url, 5042, { staticNetwork: true, batchMaxCount: 1 })`) when you meet one. Poll no faster than you need and cache what cannot change: once `fulfilled` is true, `randomness` and the mapped result are final.
+
+## Request lifecycle
+
+Epochs last 200 blocks. Each epoch uses the catalog in force for it: 1 to 10 ordered sources, each a registered recipe with its signer (see [Recipes](#recipes)). The keeper selects a source using the canonical block hash at epoch start minus one and prepares its first valid snapshot locally: a signed API record, or for a beacon recipe a drand round (see [Beacon epochs](#beacon-epochs)). If the selected source yields no valid packet, the next source in catalog order can be committed instead, one source per 20-block window (attempts 1 to count − 1); a catalog of one source, such as the drand catalog, has no fallback. A saved signed record is never refreshed or resampled; a saved drand round that has grown too old to be accepted is replaced by a current round, and only while no commit of its epoch has been sent. The registry committer publishes, or a backup committer the owner allowed so that a second keeper can take over. Idle preparation publishes no transaction. An unused local snapshot can be retained for 50 epochs (10,000 blocks), subject to live-demand and unresolved-transaction protection.
+
+A request escrows its quoted fee even when its epoch packet is not published yet, and fixes its original block, epoch, client seed, mapping, refund address, `feePaid`, `refundBps` and 60-second deadline. The keeper publishes the saved packet only for live paid demand. The randomness target becomes `max(requestBlock, committedBlock + 1)`, so its hash is unknown at publication; before publication the request has no usable target or VRF seed. Multiple requests share the packet, and timely requests can settle across epoch boundaries without changing their epoch.
+
+Timely service is onchain proof acceptance at or before `requestedAt + 60` seconds; a pending transaction is not acceptance. At acceptance the keeper share, `keeperFeeBps` of `feePaid`, is paid to the submitting wallet when the registry authorizes it as its committer or one of its backup committers, and to the configured committer for any other submitter (a failed transfer becomes keeper credit) and the remainder becomes withdrawable protocol fees. With a 50% share, example A pays 0.176 USDC to the keeper and 0.176 USDC to the treasury. Callback failure still earns the fee; `retryCallback(requestId, gasLimit)` redelivers only the same accepted result and never pays a second share.
+
+### Timing
+
+Each request's deadline is its block timestamp plus 60 seconds (`RESPONSE_TIMEOUT`). A proof accepted onchain at or before the deadline serves the request; after it the request can only be refunded. On Arc, a single request is normally fulfilled within a few seconds. Under load, 200 simultaneous requests were all delivered within 36 seconds, with a median of 19 seconds. Measured timings are not an SLA: wait up to the deadline, as in [Reading results](#reading-results), and handle expiry. If the keeper does not publish the request's epoch packet or a proof in time, for any reason, the request simply expires: nothing is fulfilled late, and the fee can be refunded as described below. Your application only needs to treat the request as expired.
+
+### Expiry and refunds
+
+After the deadline passes without an accepted proof, anyone may call `refundRequest(requestId)`. It pays `feePaid × refundBps / 10000` using the ratio snapshotted into the request at creation (`requestRefundBps(requestId)`), and the remainder becomes protocol fees. The ratio defaults to 100%; the owner can lower it with `setRefundBps` (event `RefundBpsChanged`) to no less than 50%, which affects only requests created afterwards. The refund is pushed to the fixed refund address with a 30,000-gas transfer; if that fails, the amount stays as refund credit for that address (`RequestRefundedTo(requestId, refundAddress, amount, paid)`) and is withdrawn with `withdrawRefundCredit`. Gas and application payments are not part of the refund. See [Optional refund notification](#optional-refund-notification) for the consumer hook.
+
+### Gas for refund and retry calls
+
+`refundRequest`, `retryCallback` and `retryRefundCallback` need no value or role, but they forward a fixed or caller-chosen amount of gas to the consumer and revert with `InsufficientCallbackGas` rather than forwarding less. The transaction gas limit must cover that amount, the coordinator's reserve, the storage work before the check, the 1/64 of gas the proxy keeps back at its `DELEGATECALL`, and intrinsic gas:
+
+| Call | Coordinator check before forwarding | Measured minimum transaction gas limit | Suggested gas limit |
+| --- | --- | --- | --- |
+| `refundRequest(requestId)` | `gasleft() ≥ 100,000 + 100,000/63 + 140,000` (241,587) after settlement, then `≥ 151,587` before `onRefund` | 302,558 to 357,517 | 400,000 |
+| `retryCallback(requestId, gasLimit)` | `gasleft() ≥ gasLimit + gasLimit/63 + 140,000`; `gasLimit` 30,000–1,000,000 and not below the request's `callbackGasLimit` | about 1.032 × gasLimit + 184,300 (287,522 at 100,000; 1,216,321 at 1,000,000) | gasLimit + 250,000 |
+| `retryRefundCallback(requestId, gasLimit)` | `gasleft() ≥ gasLimit + gasLimit/63 + 50,000`; `gasLimit` 100,000–1,000,000 | about 1.032 × gasLimit + 89,800 (193,038 at 100,000; 1,121,837 at 1,000,000) | gasLimit + 150,000 |
+
+The minimums were measured with the unmodified protocol sources behind `D20Proxy` on a local `cancun` EVM, with consumer hooks that consume all forwarded gas. The `refundRequest` range depends on whether the refund-credit, total-credit and earned-fee storage slots are written for the first time. `eth_estimateGas` finds these minimums because a lower limit reverts; add a margin to an estimate in case state changes before inclusion.
+
+### Batched fulfillment
+
+The keeper may fulfill up to 16 prepared requests in one transaction with `fulfillRandomnessBatch(ids, proofs)`. Every served member runs exactly like `fulfillRandomness`: its own `BlockHashStored` (unless `storeBlockHash` stored the hash earlier), `RequestServed`, `ProofVerified`, `RandomnessFulfilled`, `FulfillmentEvidence`, `CallbackAttempted` and `KeeperFeePaid` (when the keeper share is non-zero) events, settlement from its own `feePaid` and its own callback. Members already fulfilled, refunded or past their deadline are left untouched and marked with `FulfillmentSkipped(requestId, reason)` (1 fulfilled, 2 refunded, 3 past deadline); a wrong seed, invalid proof or unready member reverts the whole batch. Consumers see no difference. Indexers and verifiers must read per-request events and the request's stored state, not transaction calldata: only a single `fulfillRandomness` call is 452 bytes.
+
+## Optional refund notification
+
+After `refundRequest` has paid the fixed refund address or recorded its refund credit, the coordinator calls `onRefund(requestId)` on the original consumer. Extend `D20VRFConsumer` and override `_onRefund(uint256 requestId)` to update application state, as `RaffleConsumer` does to allow a new draw; the base authenticates the coordinator. The callback only carries the request ID and does not imply that the consumer itself received money. Application assets and fees remain the application's responsibility.
+
+The first attempt forwards 100,000 gas. A reverting or gas-exhausting hook cannot undo the fee settlement. After failure, `retryRefundCallback(requestId, gasLimit)` retries the notification without another payment; successful delivery is recorded by `refundCallbackDelivered(requestId)`. Refund/retry needs sufficient outer gas (see [Gas for refund and retry calls](#gas-for-refund-and-retry-calls)). Never request new randomness from within either callback; use a separate application transaction.
+
+## Replay and verification
+
+Use independently trusted successful receipts and state. Decode the registry `EpochCommitted` packet with `decodeEpochEvidencePacket` and verify with `replayEpochCommitment`, using the original source anchor, exact packet, commit block/time, the epoch's catalog with its recipe definitions and the registry identity. It checks both record types: the signed record of an API recipe against the catalog's signer, and the round of a beacon recipe against the beacon registration in the recipe book ([Beacon epochs](#beacon-epochs)). Decode the coordinator `FulfillmentEvidence` packet with `decodeEvidencePacket`, then call `replayCoordinator` with its exported input type (`Parameters<typeof replayCoordinator>[0]`).
+
+`RequestContext` binds both `requestBlock` and `targetBlock`. Validate the epoch from the original request block, reconstruct the target from the actual publication block, and compare the event and stored transcript. Proof evidence is 416 bytes; fulfillment calldata is 452 bytes. Neither evidence packet has a version prefix. Choose the decoder from trusted emitter/event context. Decoding and mapping alone are not proof verification; replay does not authenticate RPC or establish receipt inclusion.
+
+`EpochProtocolConfiguration` is the initialized configuration: `feeRecipient` from `initialFeeRecipient()`, `initialMinFee` from `initialMinFee()` (the `initialize` fee argument), `catalogHash` from `catalogHash()`. Live `pricing()`, `feeRecipient()` and scheduled catalogs never change `protocolConfigurationHash`.
+
+Catalogs are per epoch. `catalogAt(epochId)` returns the hash, recipe ids and signers an epoch selects and commits with, and `Epoch.catalogHash` records that hash at publication. A registry starts with its initial catalog, recipes 0 to 3 with the four signers given at initialization, whose hash `catalogHash()` is bound into the configuration hash; `catalogHash()` and the initial signer getters never change. The owner replaces the catalog for epochs at least two ahead with `scheduleCatalog(recipes, signers, fromEpoch)`: 1 to 10 distinct registered recipes with one signer each, hashed as `keccak256(abi.encode(RECIPE_DOMAIN, recipes, signers))` (event `CatalogScheduled(fromEpoch, catalogHash, recipes, signers)`). A new schedule replaces a pending version, one that takes effect two or more epochs ahead; the version that takes effect at the next epoch is kept, as is every active one, so the current and next epoch, prepared snapshots and open requests keep their catalog. For replay, build `epoch.catalog` from the epoch's `catalogAt` view with `resolveEpochCatalog(base, view)`, which recognizes the initial catalog by its hash (or from the `CatalogScheduled` history without replaced versions), while `configuration.catalogHash` stays the initial `catalogHash()`; `replayEpochCommitment` binds the supplied catalog to `record.catalogHash`.
+
+```ts
+import { readEpochRecipes, resolveEpochCatalog } from '@d20dao/vrf-sdk/epoch';
+
+const [hash, recipes, signers] = await registry.catalogAt(epochId); // registry: ethers Contract with epochEntropyAbi
+const recipeBook = await readEpochRecipes(provider, registryAddress, recipes.map(Number));
+const catalog = resolveEpochCatalog({ registry: registryAddress, chainId, firstEpochStart, recipeBook }, { hash, recipes, signers });
+```
+
+At publication an attestation, a signed record or a beacon round at its scheduled time, may be at most 240 seconds old and never future-dated (`MAX_ATTESTATION_AGE`, exported from `/epoch`); `replayEpochCommitment` enforces the same bound against the commit timestamp.
+
+### Recipes
+
+Epoch sources are recipes in an owner-managed, append-only registry in `EpochEntropy`. A recipe is its canonical request, whose `keccak256` is the query hash the signer signs; a data template that fixes the exact signed bytes the registry accepts ([Data templates](#data-templates)); and the body keepers send: the JSON they post to the provider gateway, or a beacon's canonical request. `registerRecipe(canonicalRequest, template, body)` appends the next id (0 to 255) and emits `RecipeRegistered` with the full definition; `registerBeacon` appends a beacon recipe ([Beacon epochs](#beacon-epochs)). A registered recipe never changes, so a changed listing becomes a new id. `recipeCount()` and `getRecipe(id)` read the registry. Every registry registers six built-in recipes itself, at initialization or in its recipe-registry upgrade:
+
+| Recipe | Provider | Query | Exact signed record |
+| --- | --- | --- | --- |
+| 0 | Hyperliquid | `metaAndAssetCtxs`, dex `""`, projection symbol `/0/universe/0/name` and value `/1/0/dayNtlVlm` | `{"symbol":"BTC","value":"<decimal>"}` |
+| 1 | dRPC | `jsonRpc` on Ethereum mainnet: `eth_call` of Multicall3 `getLastBlockHash()` at `latest` | `{"id":null,"jsonrpc":"2.0","result":"0x<64 lowercase hex>"}` |
+| 2 | TickerLayer | `lastTrade`, crypto, BTCUSD | `{"symbol":"BTCUSD","price":<number>,"size":<number>,"timestamp":<1 to 16 digits>}` |
+| 3 | TickerLayer | `lastTrade`, crypto, ETHUSD | as recipe 2 with ETHUSD |
+| 4 | Nodary | `latestFeeds`, name ETH/USD | `{"ETH/USD":{"value":<number>,"timestamp":<13 digits>,"category":"crypto"}}` |
+| 5 | dRPC | as recipe 1 on Base | as recipe 1 |
+
+The owner registered more recipes after these. Recipes 6 to 10 are the passthrough form of built-in recipes 0, 1, 2, 4 and 5: the same listings reached through the gateway's `/api` path, answered with the same signed records under other request hashes, so they keep the built-in templates. Their canonical request is also their body, and `passthroughEpochRecipe(builtinId)` builds it. Recipe 11 is the drand evmnet beacon, registered on both networks.
+
+Each network's catalog changed over time. Read the catalog an epoch actually used from `catalogAt(epochId)` rather than assuming one:
+
+| Network | From epoch | Catalog | Date (UTC) |
+| --- | --- | --- | --- |
+| Arc Testnet | 966 | `[0, 1, 2, 4, 5]`: Hyperliquid BTC day volume, dRPC Ethereum block hash, TickerLayer BTCUSD, Nodary ETH/USD, dRPC Base block hash | 2026-09-17 |
+| Arc Testnet | 10108 | `[6, 7, 8, 9, 10]`: the same five listings through the passthrough path | 2026-09-28 |
+| Arc Testnet | 11319 | `[11]`: drand evmnet only | 2026-09-30 |
+| Arc Mainnet | 848 | `[0, 1, 2, 4, 5]` | 2026-09-18 |
+| Arc Mainnet | 10070 | `[6, 7, 8, 9, 10]` | 2026-09-28 |
+| Arc Mainnet | 12448 | `[11]`: drand evmnet only | 2026-10-01 |
+
+Before those catalogs each registry used its initial catalog, recipes 0 to 3.
+
+`BUILTIN_EPOCH_RECIPES` (from `@d20dao/vrf-sdk/epoch`) holds the built-in definitions, and replay uses them unless the catalog carries a `recipeBook`. For any other recipe, put its definition in `epoch.catalog.recipeBook`: `readEpochRecipes(provider, registry, ids)` reads `getRecipe` and checks each query hash, and for a beacon recipe reads its registration from `beaconOf`; or rebuild them from `RecipeRegistered` and `BeaconRegistered` logs. Replay checks every definition it uses: the committed packet must carry the recipe's canonical request and the record must match its template.
+
+Registry implementations before variable catalogs hardcoded ANU random numbers as recipe 1. Neither public registry ever committed an epoch from it. Older evidence that did use ANU replays when its definition is supplied in `recipeBook` under id 1: canonical request `["randomNumbers",[["length",4],["size",8],["type","hex8"]]]`, body `{"operation":"randomNumbers","parameters":{"type":"hex8","length":4,"size":8}}` and the template described in [Data templates](#data-templates).
+
+### Beacon epochs
+
+A beacon recipe commits one round of a public randomness beacon instead of a signed API record. Arc uses [drand](https://drand.love)'s evmnet (`bls-bn254-unchained-on-g1`: BN254, a round every 3 seconds, chain hash `0x04f1e9062b8a81f848fded9c12306733282b2727ecced50032187751166ec8c3`), exported as `DRAND_EVMNET`. The owner registers a beacon with `registerBeacon(verifier, chainHash, publicKey, genesis, period, sampleRound, sampleSignature)`. The `verifier` is a contract such as `D20BeaconVerifier` that checks a round's signature under `publicKey`; the registry accepts the registration only if the verifier accepts a past `sampleRound`, under the same gas allowance a publication gets. A registration never changes. Its recipe has the canonical request `["drand","<chainHash>"]`, which is also its body, and a template that accepts one round number: 1 to 19 digits, no leading zero.
+
+An epoch published from a beacon recipe commits round `r` as the data, its scheduled time `genesis + (r − 1) × period` as the timestamp and the beacon's 64-byte signature (`x ‖ y` of a BN254 G1 point) as the signature. The registry requires the timestamp to be that scheduled time and, as for any attestation, not in the future and at most `MAX_ATTESTATION_AGE` old, and the registered verifier to accept the signature. It calls the verifier with a fixed allowance of `BEACON_VERIFY_GAS` and reverts `BeaconGasTooLow`, not `InvalidSigner`, when the transaction's gas cannot give it that allowance. The signer a catalog lists for a beacon slot is `slotSigner(recipe)`, an identity derived from the registration and not a key, and `scheduleCatalog` accepts no other. Any round scheduled within the 240 seconds before the publication block is valid, so the committer chooses which one an epoch commits, and one round can serve several consecutive epochs: their epoch hashes differ, but their data hashes and signatures can repeat, so key an epoch on its epoch ID or epoch hash, never on its round. Otherwise an epoch works as before: the anchor selects the slot, and every request's target is a block after publication.
+
+Replay needs the registration in the epoch's recipe book. `readEpochRecipes(provider, registry, ids)` reads `beaconOf` for every recipe whose canonical request names drand and adds it as `beacon` (`verifier`, `chainHash`, `publicKey`, `genesis`, `period`). With `{ blockTag }` it reads recipes and registrations as of that block, for a registry that has since moved to an implementation without `beaconOf`; that needs an RPC that serves the state of past blocks. `replayEpochCommitment` then checks a beacon epoch's round number against the template, its timestamp against the schedule, its signature with `verifyBeaconRound` and the catalog's signer against `beaconSlotSigner(beacon)`; `replayCoordinator` does the same inside a full request replay. `verifyBeaconRound(publicKey, round, signature)` is the pairing check of `D20BeaconVerifier` computed in TypeScript with `@noble/curves`; it returns false for malformed input instead of throwing. Replay does not call the registered verifier, so the verifier's address and runtime code are chain context to check against the reviewed `D20BeaconVerifier` ([Deployments](#deployments) lists its code hash).
+
+```ts
+import { readEpochRecipes, resolveEpochCatalog, replayEpochCommitment } from '@d20dao/vrf-sdk/epoch';
+
+const [hash, recipes, signers] = await registry.catalogAt(epochId); // registry: ethers Contract with epochEntropyAbi
+const recipeBook = await readEpochRecipes(provider, registryAddress, recipes.map(Number)); // adds `beacon` to a beacon recipe
+const catalog = resolveEpochCatalog({ registry: registryAddress, chainId, firstEpochStart, recipeBook }, { hash, recipes, signers });
+replayEpochCommitment({ catalog, epochId, record, commitTimestamp, packet }); // throws unless round, time, signature and signer check out
+```
+
+The root entry exports `DRAND_EVMNET`, `BEACON_TEMPLATE`, `BEACON_DST`, `BEACON_DOMAIN`, `beaconRoundTime(registration, round)`, `beaconRoundAt(registration, timestamp)`, `encodeBeaconRound`, `decodeBeaconRound`, `beaconCanonicalRequest(chainHash)`, `beaconSlotSigner(registration)`, `beaconRoundMessage(round)` (the hash-to-curve point a round's signature signs), `verifyBeaconRound` and the `BeaconRegistration` type.
+
+### Data templates
+
+A template is a byte string of segments, each an opcode and its operands:
+
+| Opcode | Segment | Operands | Matches |
+| --- | --- | --- | --- |
+| `0x01` | LITERAL | length n (1 to 128), then n bytes | exactly those bytes |
+| `0x02` | HEX | n (1 to 128) | exactly n characters `0-9a-f` |
+| `0x03` | DECIMAL | flags (0 to 3) | `0` or a nonzero digit followed by digits, then an optional fraction `.digits` when flags & 1 and an optional exponent `(e\|E)(+\|-)?digits` when flags & 2 |
+| `0x04` | INTEGER | min, max (1 ≤ min ≤ max ≤ 128) | a nonzero digit followed by digits, min to max digits in total |
+
+Variable segments are greedy and never backtrack. Signed data is accepted only when the segments consume it exactly, with no trailing bytes, and it is at most 128 bytes (`MAX_DATA_BYTES`). A well-formed template is at most 256 bytes (`MAX_TEMPLATE_BYTES`), contains at least one variable segment and has a shortest possible match of at most 128 bytes. Records therefore have exactly the bytes a template describes: no whitespace, extra fields, reordered keys, escaped characters, uppercase hex or other lengths.
+
+The TypeScript helpers produce and check the same bytes as the contract:
+
+```ts
+import { encodeDataTemplate, decodeDataTemplate, matchesDataTemplate } from '@d20dao/vrf-sdk';
+
+const template = encodeDataTemplate([
+  { literal: '{"symbol":"BTCUSD","price":' }, { decimal: { fraction: true, exponent: true } },
+  { literal: ',"size":' }, { decimal: { fraction: true, exponent: true } },
+  { literal: ',"timestamp":' }, { integer: { minDigits: 1, maxDigits: 16 } }, { literal: '}' },
+]); // equals BUILTIN_EPOCH_RECIPES[2].template
+matchesDataTemplate(template, '0x' + Buffer.from('{"symbol":"BTCUSD","price":117000.5,"size":0.01,"timestamp":1789503538000}').toString('hex')); // true
+decodeDataTemplate(template)[1]; // { decimal: { fraction: true, exponent: true } }
+```
+
+`encodeDataTemplate` throws with the rule a template breaks; `isValidDataTemplate` and `validateDataTemplate` check an encoded template. The ANU record `{"success":true,"type":"hex8","length":"4","data":["<16 hex>","<16 hex>","<16 hex>","<16 hex>"]}` is the literal `{"success":true,"type":"hex8","length":"4","data":["`, then HEX 16 and the literal `","` alternating, and the literal `"]}`.
+
+## Security and trust
+
+This section covers Arc; the Robinhood Chain model is in [Robinhood Chain](#robinhood-chain). The contracts have not had an external security audit. The coordinator source carries the developer comment "Prototype: not audited or validated on Arc"; it is kept byte-for-byte because the source is part of the deployed bytecode metadata. The service is now live on Arc Mainnet, and the absence of an external audit still applies. Reusing the unmodified Chainlink VRF verifier does not extend any upstream audit to this coordinator (`notices/PROVENANCE.md`).
+
+Trust model:
+
+- **Owner.** On Arc Mainnet both service proxies are owned by the DAO treasury Safe `0xB57f656149749eff6b496dF090336491f977E744`, which is also the fee recipient; each manifest records the owner for its network. The owner can upgrade either implementation, which can change any behavior. Ownership moves only through a two-step transfer, and `renounceOwnership` reverts.
+- **Owner settings without an upgrade.** Coordinator: fee recipient, keeper share (0–100%), pricing within the bounds in [Pricing](#pricing), and the refund ratio for future requests (50–100%). Registry: committer, up to four backup committers, recipe and beacon registration (append-only) and catalogs for epochs at least two ahead. Open requests keep their escrowed fee and refund ratio.
+- **Publishers.** The committer and each backup committer can publish an epoch from any valid record of its selected source, a signed record or a beacon round, under the same rules. A backup committer has no other role, and earns the keeper share of the requests whose proofs it submits itself.
+- **Recipes.** A signature establishes what a provider's gateway signed for a recipe's request, not that the upstream value is unbiased. The owner decides which recipes and signers future epochs use; a lax template accepts more signed records for a publisher to choose from.
+- **Beacons.** The registry trusts the yes or no that a registered verifier gives within its gas allowance, and `registerBeacon` accepts any contract as verifier. It does not check that the chain hash names the network of the key or that the verifier's code is the reviewed one: the owner vouches for a registration, which `BeaconRegistered` publishes. `D20BeaconVerifier` is stateless, has no owner and is not behind a proxy, so its behavior cannot change after registration; a different verifier is a different registration and so a different `slotSigner`. A beacon signature shows what the beacon's key signed for a round, not that the beacon is unbiased or independent of its operators, and the committer chooses which round, among those scheduled within `MAX_ATTESTATION_AGE` of the publication block, an epoch commits.
+- **Keeper.** The VRF key holder can withhold a proof but cannot substitute a different result for a request's fixed seed. A request that is not served within 60 seconds is refundable at its snapshotted ratio.
+
+Both proxies are atomically initialized ERC1967 endpoints with owner-authorized UUPS upgrades, and the implementations behind them are locked against initialization. No setter rewrites a request, a published epoch or the VRF key, but upgrade authority can change code and is an explicit trust assumption. Stable proxy addresses alone do not identify executed code, so verify the implementation history of **both** proxies at the relevant receipts when you integrate, and again whenever the deployment manifest records an upgrade or a proxy emits `Upgraded(implementation)`. A mismatch with the manifest means stop and review before sending more requests.
+
+## Use locally
+
+For SDK development, run `npm ci` and `npm test` from this repository. The test builds, checks that `API.md` matches the reference that `scripts/api-reference.mjs` generates from the built ABIs and the curated `scripts/api-descriptions.mjs` (regenerate with `npm run build && npm run api-reference`), packs and installs a real tarball in an isolated consumer, replays the recipe fixtures and real Arc epochs (signed records and drand beacon epochs of both networks, with tampered-signature, wrong-round, wrong-signer and missing-registration cases), replays the first two Robinhood Chain requests with their beacon schedule and tampered-value cases, type-checks a strict consumer, exercises `quoteRequestFee`, `readRequest` and `readRoundRequestEvidence` against mock providers, checks that both coordinators implement `ID20VRF` identically, and compiles all three examples from the installed package and checks the outcomes they publish. `npm pack` also produces an installable local artifact.
+
+```js
+import { builtins, mapRandomness, replayCoordinator, quoteRequestFee } from '@d20dao/vrf-sdk';
+import { coordinatorAbi, epochEntropyAbi, beaconVerifierAbi } from '@d20dao/vrf-sdk/abi';
+const mapping = builtins.d20();
+// Use only an independently verified accepted word for real outcomes.
+```
+
+The root exports ESM and TypeScript declarations, including `quoteRequestFee`, `DEFAULT_FEE_BUFFER_BPS` and the `FeeQuote`, `FeeQuoteOptions` and `FeeQuoteProvider` types; `/epoch` exports epoch helpers, `BUILTIN_EPOCH_RECIPES`, `readEpochRecipes`, `resolveEpochCatalog` and `MAX_ATTESTATION_AGE`, and the root also exports the data-template helpers (`encodeDataTemplate`, `decodeDataTemplate`, `matchesDataTemplate`, `isValidDataTemplate`, `validateDataTemplate`), the passthrough-recipe helpers (`PASSTHROUGH_EPOCH_REQUESTS`, `passthroughEpochRecipe`, `canonicalPassthroughRequest`, `parsePassthroughRequest`, `passthroughUrl`) and the beacon helpers ([Beacon epochs](#beacon-epochs)). The root also exports `D20_NETWORKS`, `getD20Network`, `readRequest`, `requestIdFromLogs` and `requestIdsFromLogs`, and the round helpers; `/round` exports the round coordinator's replay and schedule helpers (`replayRoundRequest`, `roundScheduleFromEvents`, `roundAt`, `roundFor`, `roundTime`, `roundSeed`, `roundTranscriptHash`, `roundConfigurationHash`, `roundBeaconIdentity`, `verifyRoundSignature`, `roundRandomness`, `roundDeadline`, `roundAcceptedInTime`, the `ROUND_*` constants) and the chain readers `readRoundRequestEvidence` and `readRoundBeaconLogs`. `/abi` exports `coordinatorAbi`, `epochEntropyAbi`, `beaconVerifierAbi` and `roundCoordinatorAbi`, with JSON forms `D20VRFCoordinator.json`, `EpochEntropy.json`, `D20BeaconVerifier.json` and `D20VRFCoordinatorRobinhood.json`, all described in the installed `API.md` (`@d20dao/vrf-sdk/API.md`). The service implementations have locked empty constructors and explicit initializers. Registry initialization takes `address[4]`; it is not a four-address constructor deployment.
+
+## What this package is not
+
+This SDK contains no keeper service, API fetching, proof generation, signer secrets or deployment automation. Installing it neither authorizes nor performs anything on chain.
+
+The protocol source is this repository's [`protocol/`](https://github.com/d20dao/d20-sdk/tree/main/protocol) folder, a byte-for-byte copy of the keeper source at the commit `PROTOCOL-PROVENANCE.json` names; every build checks each file against that file's SHA-256 list. The public keeper repository, [d20dao/keeper](https://github.com/d20dao/keeper), publishes release snapshots; that commit is its release v0.5.1. `src/fees.ts` (the fee-quoting helper), `src/networks.ts` (the deployments), `src/requests.ts` (`readRequest`, `requestIdFromLogs`) and `src/roundevidence.ts` (the round chain readers) are SDK-owned rather than vendored; BUILD-MANIFEST.json records it under `packageSources` next to the protocol source, dependency-lock and imported OpenZeppelin hashes. The UUPS build uses OpenZeppelin contracts and contracts-upgradeable 5.6.1. Consumer source is copied exactly; service implementations, test fixtures and provers are excluded from the tarball.
+
+Each replay fixture set records how it was produced, so a real capture is never mistaken for a test signature. The Arc sets are accepted requests recorded from the public RPCs with `scripts/record-live-fixture.mjs`: signed-record and drand beacon epochs of both networks. The Robinhood Chain set holds its first two requests, recorded from the public RPC with `scripts/record-round-fixture.mjs`. Real drand rounds with hash-to-curve points computed by another library check the beacon code independently. Fixtures are not included in the package. The browser-target bundle is executed under Node, not in an actual browser; independently trusted chain context is still required for real verification.
+
+SDK installation provides consumer and verification tooling. Chain availability, provider quotas, upgrade administration and application settlement remain separate concerns, and none of them guarantees a particular request's timely fulfillment.
+
+## Deployments
+
+Both Arc networks run the recipe registry in `EpochEntropy` and the coordinator that pays the keeper share to the authorized wallet which submitted the accepted proof, behind the same proxy addresses as before. Since 2026-09-22 the coordinator also budgets every served member's callback gas before `fulfillRandomnessBatch` reveals any result, and `setPricing` rejects a zero minimum fee with a zero multiplier. The registry implementation also carries beacon recipes (`registerBeacon`, `beaconOf`, `slotSigner`, `verifyBeacon`), whose drand rounds the stateless `D20BeaconVerifier` checks. It is live behind the Arc Testnet proxy since block 64712965 (transaction `0x751797af884715214dd4a4e339dbd3355c935b64afe7a6b1eaf38e7e18895140`) and behind the Arc Mainnet proxy since block 23724929 (transaction `0x5a7a2fa8f15eefccee99f6bd363ce7717e65c5571c8c76396337fd8a1261a7cb`), so the two chains run the same implementation addresses and the same verifier. Their ABIs and storage layouts are those of the source in `protocol/`. Code hashes (`keccak256` of the runtime code): registry implementation `0xb5e125e3b0f63ffe516d781266c1cbacebe3d131148b69f8736d3ca78bcddb12`, coordinator implementation `0x3dda400d8360d7e03b8dacd8ba1ffad7ad672e07628bee7de4542d754dd5348c`, beacon verifier `0x4388250d26298224c4a39d030263550655390ca831ab44c4124f8b0be1f65351`. Epochs published before an upgrade still replay with this SDK: built-in recipes with their built-in definitions, later recipes with the definitions read from the registry.
+
+Obtain proxy addresses, implementation addresses and independently checked code hashes from the public deployment manifests, [arc-mainnet.json](https://d20dao.org/deployments/arc-mainnet.json) and [arc-testnet.json](https://d20dao.org/deployments/arc-testnet.json), and for Robinhood Chain from [robinhood-mainnet.json](https://github.com/d20dao/keeper/blob/main/deployments/robinhood-mainnet.json) and [robinhood-testnet.json](https://github.com/d20dao/keeper/blob/main/deployments/robinhood-testnet.json). The addresses below are copied from them and are only valid together with the manifest revision they came from, because implementations move through owner-authorized upgrades. Before relying on this SDK's interface, check that the implementation at your chain's proxy matches the manifest entry.
+
+### Arc Mainnet
+
+Chain ID: **5042**. The live service; use the **coordinator proxy** when constructing a consumer. Owner and fee recipient: DAO treasury Safe `0xB57f656149749eff6b496dF090336491f977E744`.
+
+| Contract | Role | Arc Mainnet address |
+| --- | --- | --- |
+| D20VRFCoordinator | Consumer entry point / proxy | [`0xd20da057469C45928912d983F45790C41e290571`](https://explorer.arc.io/address/0xd20da057469C45928912d983F45790C41e290571) |
+| EpochEntropy | Epoch registry / proxy | [`0xd20Da048C1A68fa3Bc0B5f5Bc454D1530062C82D`](https://explorer.arc.io/address/0xd20Da048C1A68fa3Bc0B5f5Bc454D1530062C82D) |
+| D20CostClient | Restricted cost client / proxy | [`0xD20da0048aED2BBb9f0e7078Bc452815D626D29d`](https://explorer.arc.io/address/0xD20da0048aED2BBb9f0e7078Bc452815D626D29d) |
+| D20VRFCoordinator | Implementation | [`0xD20da000125643B4db5A6A36A3b853c17745DF44`](https://explorer.arc.io/address/0xD20da000125643B4db5A6A36A3b853c17745DF44) |
+| EpochEntropy | Implementation | [`0xD20dA0853a6f894c0cdc9018fD4F8F67Eac15704`](https://explorer.arc.io/address/0xD20dA0853a6f894c0cdc9018fD4F8F67Eac15704) |
+| D20BeaconVerifier | Beacon verifier, stateless, not behind a proxy | [`0xd20dA01Aa16AeD6b77Cd8DDb869151802599100a`](https://explorer.arc.io/address/0xd20dA01Aa16AeD6b77Cd8DDb869151802599100a) |
+| D20CostClient | Implementation | [`0xD20DA00A872acfDe3e4721Fc1051BD23CC84B66b`](https://explorer.arc.io/address/0xD20DA00A872acfDe3e4721Fc1051BD23CC84B66b) |
+
+Addresses are copied from the [Arc Mainnet deployment manifest](https://d20dao.org/deployments/arc-mainnet.json). The EpochEntropy implementation above is live behind the proxy from block 23724929 (transaction `0x5a7a2fa8f15eefccee99f6bd363ce7717e65c5571c8c76396337fd8a1261a7cb`); before it the proxy ran `0xd20dA048C969e5aDcC703Dfdf8220cc9dCB2f865`.
+
+### Arc Testnet
+
+Chain ID: **5042002**. For development and testing. Use the **coordinator proxy** when constructing a consumer.
+
+| Contract | Role | Arc Testnet address |
+| --- | --- | --- |
+| D20VRFCoordinator | Consumer entry point / proxy | [`0xd20DA0FF9087d053f0291524Eac12abA1ADBd945`](https://testnet.arcscan.app/address/0xd20DA0FF9087d053f0291524Eac12abA1ADBd945) |
+| EpochEntropy | Epoch registry / proxy | [`0xD20Da00B47A7cD2211dC4683E306913b05903756`](https://testnet.arcscan.app/address/0xD20Da00B47A7cD2211dC4683E306913b05903756) |
+| D20CostClient | Restricted cost client / proxy | [`0xD20da026090B8472579a2B93030F1fC4c94807F1`](https://testnet.arcscan.app/address/0xD20da026090B8472579a2B93030F1fC4c94807F1) |
+| D20VRFCoordinator | Implementation | [`0xD20da000125643B4db5A6A36A3b853c17745DF44`](https://testnet.arcscan.app/address/0xD20da000125643B4db5A6A36A3b853c17745DF44) |
+| EpochEntropy | Implementation | [`0xD20dA0853a6f894c0cdc9018fD4F8F67Eac15704`](https://testnet.arcscan.app/address/0xD20dA0853a6f894c0cdc9018fD4F8F67Eac15704) |
+| D20BeaconVerifier | Beacon verifier, stateless, not behind a proxy | [`0xd20dA01Aa16AeD6b77Cd8DDb869151802599100a`](https://testnet.arcscan.app/address/0xd20dA01Aa16AeD6b77Cd8DDb869151802599100a) |
+| D20CostClient | Implementation | [`0xD20DA00A872acfDe3e4721Fc1051BD23CC84B66b`](https://testnet.arcscan.app/address/0xD20DA00A872acfDe3e4721Fc1051BD23CC84B66b) |
+
+Addresses are copied from the [Arc Testnet deployment manifest](https://d20dao.org/deployments/arc-testnet.json). The EpochEntropy implementation above is live behind the proxy from block 64712965; before it the proxy ran `0xd20dA048C969e5aDcC703Dfdf8220cc9dCB2f865`. Explorer links identify addresses; they do not assert explorer source-code verification. The cost client is internal tooling, not a shared application entry point.
+
+### Robinhood Chain mainnet
+
+Chain ID: **4663**. The live service; use the **coordinator proxy** when constructing a consumer. Read the owner and fee recipient from the chain (`owner()`, `feeRecipient()`).
+
+| Contract | Role | Robinhood Chain address |
+| --- | --- | --- |
+| D20VRFCoordinatorRobinhood | Consumer entry point / proxy | [`0xEc8b95B168c87294c45727Bd2ac903d09316D132`](https://robinhoodchain.blockscout.com/address/0xEc8b95B168c87294c45727Bd2ac903d09316D132) |
+| D20VRFCoordinatorRobinhood | Implementation | [`0xC8Cd79B9092AEA38f3434388F291eb861b148f45`](https://robinhoodchain.blockscout.com/address/0xC8Cd79B9092AEA38f3434388F291eb861b148f45) |
+| D20VRFProofVerifier | VRF proof check, stateless, fixed in the implementation | [`0x1EEBe8B8f7a6A18b966C3fBe3f644B8234f93709`](https://robinhoodchain.blockscout.com/address/0x1EEBe8B8f7a6A18b966C3fBe3f644B8234f93709) |
+| LinkedRandomnessMapping | Linked mapping library | [`0xA57093a645C1Aed12486da50AfA95F3284826849`](https://robinhoodchain.blockscout.com/address/0xA57093a645C1Aed12486da50AfA95F3284826849) |
+| D20BeaconVerifier | drand round verifier, stateless, not behind a proxy | [`0xd20dA01Aa16AeD6b77Cd8DDb869151802599100a`](https://robinhoodchain.blockscout.com/address/0xd20dA01Aa16AeD6b77Cd8DDb869151802599100a) |
+
+### Robinhood Chain Testnet
+
+Chain ID: **46630**. For development and testing. The implementation, proof verifier, mapping library and beacon verifier have the same addresses as on mainnet; the coordinator proxy is [`0x2f26513DE4Ed388947f5d22FD395D5E06f472f05`](https://explorer.testnet.chain.robinhood.com/address/0x2f26513DE4Ed388947f5d22FD395D5E06f472f05). Read the owner and fee recipient from the chain (`owner()`, `feeRecipient()`).
+
+Code hashes (`keccak256` of the runtime code), the same on both networks: coordinator implementation `0xe692b447c02225cb95c921ed29952edb566f2afdfe28ff929452b4909460e8f6`, proof verifier `0x2038efbfea08f4fe79add117570209e0ac7128ead09ad815b166d159454fdb64`, mapping library `0xc6148c742f31804eee99c3599a87ab25c988f65422842b37a12d5fd27e4794cd`, beacon verifier `0x4388250d26298224c4a39d030263550655390ca831ab44c4124f8b0be1f65351`. Both coordinators register drand evmnet (`DRAND_EVMNET`) as beacon 0. The source of the implementation is `protocol/contracts/robinhood/`.

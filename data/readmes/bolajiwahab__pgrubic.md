@@ -21,6 +21,8 @@
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 [![Socket Badge](https://socket.dev/api/badge/pypi/package/pgrubic?artifact_id=tar-gz)](https://socket.dev/pypi/package/pgrubic/overview/)
 [![Dependency Review](https://img.shields.io/badge/Dependency%20Review-enabled-deepgreen)](https://github.com/bolajiwahab/pgrubic/actions/workflows/dependency-review.yml)
+[![Trivy](https://img.shields.io/badge/Trivy-Container%20Security-1904DA?logo=trivy&logoColor=white)](https://trivy.dev/)
+[![Hadolint](https://img.shields.io/badge/Hadolint-Dockerfile%20Linting-0D597F?logo=docker&logoColor=white)](https://github.com/hadolint/hadolint)
 
 pgrubic is a PostgreSQL linter and formatter for schema migrations and design best practices.
 
@@ -59,8 +61,8 @@ pip install git+https://github.com/bolajiwahab/pgrubic.git
 ### via Docker
 
 ```bash
-docker run --rm -it -v $PWD:/sql ghcr.io/bolajiwahab/pgrubic:4.0.2 lint *.sql     # Lint SQL files
-docker run --rm -it -v $PWD:/sql ghcr.io/bolajiwahab/pgrubic:4.0.2 format *.sql   # Format SQL files
+docker run --rm -it -v $PWD:/sql ghcr.io/bolajiwahab/pgrubic:4.1.0 lint *.sql     # Lint SQL files
+docker run --rm -it -v $PWD:/sql ghcr.io/bolajiwahab/pgrubic:4.1.0 format *.sql   # Format SQL files
 ```
 
 ### via Github Actions
@@ -69,14 +71,14 @@ docker run --rm -it -v $PWD:/sql ghcr.io/bolajiwahab/pgrubic:4.0.2 format *.sql 
 - uses: azellarhq/pgrubic-action@v2
   with:
     src: "./src"
-    pgrubic-version: "4.0.2"
+    pgrubic-version: "4.1.0"
 ```
 
 ### via pre-commit
 
 ```yaml
 - repo: https://github.com/bolajiwahab/pgrubic
-  rev: 4.0.2
+  rev: 4.1.0
   hooks:
     - id: pgrubic-lint
     - id: pgrubic-format

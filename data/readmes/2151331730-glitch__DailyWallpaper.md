@@ -9,7 +9,7 @@ Windows 本地 AI 自动壁纸应用。每天从 **Bing / Wallhaven / 本地 Wal
 | | |
 |---|---|
 | 规模 | 源码 12,535 行 / 测试 11,155 行（**测试接近生产代码 1:1**） |
-| 测试 | **632 个用例**，约 51 秒跑完，CI 可用 |
+| 测试 | **640 个用例**，约 62 秒跑完，CI 可用 |
 | 成本 | 三级筛选：本地预筛免费 → 免费模型初筛 → 付费复核；复核约 ¥0.003/张 |
 | 评估 | 带**离线可复现**的排序评估（成对比较 + NDCG@5，5 折交叉验证），见下节 |
 
@@ -79,7 +79,7 @@ Windows 本地 AI 自动壁纸应用。每天从 **Bing / Wallhaven / 本地 Wal
 
 ## 为什么这些测试值这个体积
 
-630 个用例里，能挡住真正事故的是下面这类——每一条都对应一次真出过的问题：
+640 个用例里，能挡住真正事故的是下面这类——每一条都对应一次真出过的问题：
 
 | 测试守的是什么 | 出过什么事 |
 |---|---|
@@ -108,8 +108,8 @@ Windows 本地 AI 自动壁纸应用。每天从 **Bing / Wallhaven / 本地 Wal
 | 层 | 做什么 | 成本 |
 |---|---|---|
 | 本地预筛 | 分辨率、宽高比、模糊、黑边、重复图 | 免费 |
-| 免费初筛 | `glm-4.6v-flash` 打画质/创意/新颖/套路四个分 | ¥0 |
-| 付费复核 | `glm-4.6v` 复核排名前 N 的候选并重排 | ≈¥0.003/张 |
+| 模型初筛 | `deepseek-flash` 打画质/创意/新颖/套路四个分 | ≈¥0.004/张 |
+| 复核（默认关） | `review_model` 与 `screen_model` 相同时跳过；想复核就换一个视觉模型 | 另计 |
 
 硬门槛：画质 <60、套路 >70、NSFW、水印、大段文字 → 直接淘汰。
 
@@ -138,7 +138,7 @@ Windows 本地 AI 自动壁纸应用。每天从 **Bing / Wallhaven / 本地 Wal
 
 ### 「补充一句」会做什么
 
-评分框里的「补充一句」会被发送给你配置的智谱模型做一次分类（每句一次调用），
+评分框里的「补充一句」会被发送给你配置的视觉模型做一次分类（每句一次调用），
 判断它是「对这张图的评价」「长期偏好」还是「搜索意图」。分类结果只保存在本机
 数据库，可以在「今日」页撤销。**只有这句话会发送，不上传图片或本地文件。**
 
@@ -187,21 +187,44 @@ Windows 本地 AI 自动壁纸应用。每天从 **Bing / Wallhaven / 本地 Wal
 （`docs/ROADMAP.md` 有完整过程；`docs/SUGARWATER.md` 记录了糖水判别式怎么测、
 为什么一度没上线、又在什么条件下才接线。）
 
+## 这个项目没证明什么
+
+上面的数字能说到哪，到此为止。几条它**不能**说的，主动写在这里，不等人来问：
+
+- **评估是离线的、单人偏好。** 所有数字来自本机 365 张已评分图片的回放，第二个人的
+  数据都没有。它证明的是「在这一个人的偏好上，这套排序明显好过随机」，**不是**
+  「对任意用户都好」。
+- **没有规模化的用户留存证据。** 发出去给同学装，只用于**部署验证**——别人的机器上
+  装不装得上、开机自启稳不稳、多显示器/DPI 会不会出问题。这类问题自己那台机器永远
+  复现不出来，值得做；但它不构成满意度或留存数据，样本量也不足以下任何结论。
+- **测量本身的局限**（视觉模型分辨率有限、97% 的样本来自 wallhaven）写在上一节，
+  这里不重复。
+- **1.2.0 起功能冻结**：之后只修 bug，不加来源、不改界面。唯一例外是 1.2.1 的
+  「安装时把我已订阅的壁纸标记为喜欢」——用户直接要求的一个初始评分项，不是新来源。
+
 ---
 
 ## 安装（Windows，推荐）
 
-1. 下载 [DailyWallpaper-Setup-1.1.1.exe](https://github.com/2151331730-glitch/DailyWallpaper/releases/latest)（约 86 MB）
-2. 双击安装，**不需要管理员权限**，默认装到 `%LOCALAPPDATA%\Programs\DailyWallpaper`
+1. 下载 [Mural-Setup-1.2.1.exe](https://github.com/2151331730-glitch/DailyWallpaper/releases/latest)（约 86 MB）
+2. 双击安装，**不需要管理员权限**，默认装到 `%LOCALAPPDATA%\Programs\Mural`
    - 安装时可选「将任务栏和搜索框改成深色」，适配深色壁纸（只改当前用户，可随时改回）
-3. 首次启动会要求填写智谱 API key（免费注册：open.bigmodel.cn → API Keys）
+3. 首次启动会要求填写视觉模型的 API key：默认 DeepSeek（platform.deepseek.com → API keys，
+   `[vision] provider = "deepseek"`，model `deepseek-flash`）；也支持智谱
+   （把 `provider` 改成 `"zhipu"`，model 用 `glm-4.6v-flash`）
 4. 安装时会问一次「是否使用作者的默认审美筛选」，可以选不使用
+5. 可选：想让程序自己去创意工坊找新图，在设置页填 Steam Web API key
+   （免费，`steamcommunity.com/dev/apikey`；做法见《Steam 壁纸设置》第五步）
 
 **想用 Steam 的 Wallpaper Engine 壁纸**：安装前先在自己电脑上装好 Steam 和
 Wallpaper Engine（付费软件，需自行购买），程序启动时会自动找到它。国内打开
 Steam 商店/创意工坊需要的设置，见安装目录下的《Steam 壁纸设置》（`docs/STEAM_SETUP.md`）。
 
-卸载：设置 → 应用 → 每日壁纸 → 卸载。卸载不会删除 `%LOCALAPPDATA%\DailyWallpaper` 里的配置和数据。
+卸载：设置 → 应用 → **Mural 每日壁纸** → 卸载。卸载不会删除 `%LOCALAPPDATA%\Mural` 里的配置和数据。
+
+> 安装版在系统里叫 **Mural**（程序名、目录、开机启动项、凭据槽都是这个名字），源码版仍叫
+> `DailyWallpaper`。两者刻意用不同的名字：卸载程序是按名字删开机启动项和 key 的，同名会让
+> 你装一次再卸载，把源码版的自启和 key 一起删掉。
 
 > 安装包没有代码签名，Windows 可能提示「未知发布者」，点「仍要运行」即可。
 
@@ -215,7 +238,7 @@ py -3.13 -m venv .venv
 .venv\Scripts\python -m pip install -e ".[dev]"
 ```
 
-把 API key 存进 Windows 凭据管理器（服务名 `DailyWallpaper`，账户名 `zhipu`）：
+把 API key 存进 Windows 凭据管理器（服务名 `DailyWallpaper`，账户名 `zhipu`——这个账户名是历史遗留，换 provider 也不改）：
 
 ```powershell
 .venv\Scripts\python scripts\set_key.py        # 终端输入

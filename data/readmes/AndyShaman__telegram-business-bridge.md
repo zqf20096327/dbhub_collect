@@ -25,7 +25,7 @@ switchable off in Settings at any moment. There is simply nothing to ban you for
 
 **"I'm afraid to let an AI send messages as me."**
 Reasonable. By default the agent can only *draft* a reply. You get a card in Telegram
-with the text and two buttons — ✅ Send / ✏️ Edit. Nothing leaves without your tap,
+with the text and buttons — ✅ Send / ✏️ Edit / 🔕 Pause. Nothing leaves without your tap,
 and if the wording is almost-but-not-quite right, you fix it in an editor window
 right inside Telegram instead of retyping the whole reply.
 Auto-send is strictly opt-in: enable it per chat (`BRIDGE_AUTO_SEND_CHAT_IDS`) for
@@ -41,7 +41,7 @@ its own memory on top of this is described in [AGENTS.md](AGENTS.md).)
 
 **"I don't want to marry one AI vendor."**
 The bridge is a standard [MCP](https://modelcontextprotocol.io) server. Claude Code
-today, anything else tomorrow — any MCP client gets the same seven tools. Your data
+today, anything else tomorrow — any MCP client gets the same nine tools. Your data
 stays in one local SQLite file either way.
 
 ### Userbot vs this bridge
@@ -77,13 +77,26 @@ Telegram Business API
 
 ## Features
 
-- 7 MCP tools: `list_chats`, `get_history`, `search_messages`, `get_context`,
-  `draft_reply`, `send_reply`, `list_drafts`.
+- 9 MCP tools: `list_chats`, `get_history`, `search_messages`, `get_context`,
+  `read_media`, `draft_reply`, `send_reply`, `list_drafts`, `list_recent_edits`.
+- Files in drafts: `draft_reply`/`send_reply` take `attachments` — re-send a file
+  from the archive by reference (any size, no re-upload) or upload a new one
+  (up to 50 MB, base64). One file goes as a photo/video/document/audio/voice, 2–10
+  as an album; the card shows `📎 2 attachments: …` with names and sizes. Uploaded
+  files wait in `data/outbox/` (0700/0600) and are deleted once the draft is decided.
+- File content for the agent: `read_media` returns an archived image as an image,
+  txt/md/csv/json/log and PDF as text, voice/video as its transcript — wrapped as
+  untrusted data like messages.
 - Formatted replies: agents pass `html=True` to `draft_reply`/`send_reply` for
   Telegram HTML (bold, italic, code, and links inside the text).
 - Draft approval cards (✅ Send / ✏️ Edit) with live status (⏳ Sending… → ✅ Sent /
   ⚠️ Failed); when a new draft arrives for the same chat, the older card is marked
   "⏭ Superseded by a newer draft".
+- 🔕 Pause on the card: the agent gets no more drafts into that chat until you lift
+  the pause, and its drafts not yet sent are dropped; `/paused` in the bot chat lists paused chats with ▶️ buttons to resume.
+- The agent's first version is kept when you edit a draft; `list_recent_edits`
+  shows it next to what was sent, so the agent learns from your corrections.
+- Polls, checklists, contacts and venues land in the archive with searchable text.
 - Draft editing in a Telegram Mini App: ✏️ opens an editor window with the draft
   text, you fix it, the card updates in place — then ✅ Send as usual
   (see [Editing drafts](#editing-drafts-mini-app)).
@@ -201,7 +214,10 @@ How it works under the hood — and why it is private:
 
 - The editor page (`docs/editor.html`) is a **static, self-contained HTML file**:
   no backend, no analytics, no storage, no external requests except Telegram's
-  official `telegram-web-app.js`.
+  official `telegram-web-app.js`. Its built-in Content Security Policy forbids
+  network requests. It covers everything that comes after it in the page; to
+  cover the whole page, have the host send the same string as a
+  `Content-Security-Policy` header too.
 - The draft text travels to the page in the **URL fragment** (`#...`), which
   browsers never send to the hosting server — the host only ever sees a request
   for the empty page shell. The edited text returns to the bot through Telegram's
@@ -209,15 +225,20 @@ How it works under the hood — and why it is private:
 - The bot accepts editor results **only from the owner** and only while the
   draft is still `awaiting`.
 
-By default `BRIDGE_EDITOR_URL` points to the page served from this repository's
-GitHub Pages. If you run your own fork, host your own copy — trusting someone
-else's page means trusting their JavaScript with your draft texts:
+`BRIDGE_EDITOR_URL` is empty by default, so editing is off until you host the
+page yourself. Trusting someone else's page means trusting their JavaScript
+with your draft texts, so there is no shared copy:
 
-1. Fork the repo, enable **Settings → Pages → Deploy from a branch → `main` /
-   `docs`** (the page is already in `docs/editor.html`) — or put that single
-   file on any static HTTPS hosting.
-2. Set `BRIDGE_EDITOR_URL=https://<you>.github.io/<repo>/editor.html` in `.env`
-   and restart the daemon.
+1. Put `docs/editor.html` on any static HTTPS hosting — for example, enable
+   **Settings → Pages → Deploy from a branch → `main` / `docs`** in your fork.
+2. Set the page address in `.env`
+   (`BRIDGE_EDITOR_URL=https://<you>.github.io/<repo>/editor.html`) and restart
+   the daemon.
+
+Give the editor an address of its own: do not put it on a site that runs visit
+counters. And mind GitHub: if your account's user site (`<you>.github.io`) has
+a custom domain, every repository's Pages move to that domain — and vanish when
+the domain moves to another host.
 
 The daemon and the editor page are updated together: if you host the page
 yourself, refresh your copy when you upgrade the daemon to this version —
@@ -244,7 +265,7 @@ with an explicit error instead of hanging.
 | BRIDGE_MCP_PORT | MCP server port for streamable-http (default 8765) |
 | BRIDGE_DEEPGRAM_API_KEY | Deepgram key: voice, audio and video notes (voice/audio/video_note) → text (optional; empty default = no transcription) |
 | BRIDGE_MEDIA_RETENTION_DAYS | 0 = keep forever (default); media files older than N days are deleted from disk, texts and file_id are kept |
-| BRIDGE_EDITOR_URL | HTTPS URL of the Mini App draft editor page (default: this repo's GitHub Pages copy of `docs/editor.html`; empty = editing disabled, forks should host their own — see [Editing drafts](#editing-drafts-mini-app)) |
+| BRIDGE_EDITOR_URL | HTTPS URL of the Mini App draft editor page (empty by default = editing disabled; you host `docs/editor.html` yourself — see [Editing drafts](#editing-drafts-mini-app)) |
 
 Changing any of these requires restarting the affected process (daemon and/or MCP server).
 
@@ -252,7 +273,8 @@ Changing any of these requires restarting the affected process (daemon and/or MC
 
 - you can reply only in chats with an incoming message within the last 24 hours;
 - no history from before the connection; groups/channels are not visible;
-- files > 20 MB are not downloaded (file_id is stored);
+- files > 20 MB are not downloaded (file_id is stored; the agent can still re-send
+  them by reference); uploads from the agent are capped at 50 MB;
 - reactions on behalf of the owner are not possible;
 - the `business_connection` event is delivered unreliably (may never arrive) —
   the daemon picks the connection up itself via `getBusinessConnection` on the

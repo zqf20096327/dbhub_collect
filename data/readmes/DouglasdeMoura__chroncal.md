@@ -441,6 +441,14 @@ chroncal journal purge-deleted  [--older-than DURATION] [--yes]
 
 Journal flags: `--date`, `--description`, `--calendar`, `--status`, `--class`, `--url`, `--categories`, `--rrule`, `--exdate`, `--rdate`, `--attach`, `--attendee`, `--organizer`, `--contact`, `--comment`, `--related-to`
 
+`--recurrence-id <RFC3339 or YYYY-MM-DD>` with the UID of a recurring journal entry names one occurrence:
+
+- `journal update` edits that occurrence. When the occurrence has no override yet, chroncal creates one from the occurrence. The series and the other occurrences do not change.
+- `journal delete` deletes that occurrence. chroncal writes an EXDATE on the master and puts the override in the trash. `journal restore <id>` brings the occurrence back.
+- An occurrence stays in the calendar of its series. `--rrule`, `--exdate`, and `--rdate` apply to the series, so `journal update` refuses them on a new override.
+- A new override takes the attendees, the attachments, and the other child rows of the series. A flag such as `--attendee` then replaces them on the override only.
+- A time that is not an occurrence of the series gives an error that says so. A journal entry that does not recur gives an error too.
+
 ### CalDAV accounts
 
 ```
@@ -559,6 +567,8 @@ Pass `--disconnect-remote` on `update` to remove the remote link of a calendar.
 
 `--remote-url` refuses a collection that another local calendar links with the same user. Two links of one collection show each item twice. The link makes a new account for the calendar. It does not reuse the account of the other calendar.
 
+`--remote-url` also refuses the login of an account that you added: the same server, user name, and auth type. This applies to a new link, to a calendar of that account, and to a relink that changes its login. A relink with the same login, for example a new password, passes. One login then keeps one account. The error names the account. Add the collection through that account with `chroncal account calendars add <account> --calendar <name>`. The link does not reuse that account: a removal of the account would unlink the calendar, and `account calendars set` could delete it.
+
 `calendar create --default-alarm` and `calendar update --default-alarm` set
 the per-calendar default alarms. See [Default alarms](#default-alarms).
 
@@ -654,6 +664,7 @@ Conflict handling:
 - One exception applies to a move conflict. A new move of the item drops the resolved move conflicts of the earlier move in the same account. Their recorded versions describe a move that no longer exists.
 - Some servers keep a UID unique in the whole account (for example, iCloud). Such a server refuses the create of a moved copy while the source object exists. Sync then deletes the source object and sends the create again. When the server still refuses the create, sync waits a short time and sends it again, at most two more times. After that, the next sync tries again.
 - A create never overwrites an object on the server. When the collection holds an object at the same href, sync records a conflict and keeps both versions. This can occur on the first sync after you attach a local calendar.
+- When that object holds the same item as the local copy, sync records no conflict. The local item links to the object. The comparison ignores SEQUENCE, DTSTAMP, CREATED, LAST-MODIFIED, the alarm UIDs, and the order of the alarms, the categories, and the attendees. A conflict that an earlier push recorded closes when a later push reaches the item, for example the push after a local edit or a `server-wins` sync. A full sync with the `prompt` strategy leaves it open. Resolve it with `chroncal sync resolve`.
 - A remote delete can meet a local edit that sync did not send yet: an edit, a restore from the trash, or a move back into the calendar. The local edit wins. Sync creates the item again on the server and prints a note. A `server-wins` pass keeps the remote delete, and the item goes to the trash. A read-only calendar and an item with an open conflict also keep the remote delete.
 - A move between two calendars of one account can meet a remote edit. The item changed on the server in the source calendar before sync deleted it there. Sync then records a move conflict on the target calendar, and the source object stays on the server. When the server refuses the create of the copy, the moved copy stays unsent. When the create already landed, the copy is on the server in the target calendar. A cancel then deletes that copy on the next sync. A `server-wins` pass does not pick a side for you. Sync closes a move conflict by itself in three cases only, and an unlink of the source calendar ends it as `detached`. The conflict becomes `abandoned` when the moved copy is gone. A failed cancel becomes `cancelled` when a pull of the source brings the server version. The move becomes `finished` when the source object is gone from the server. The `sync conflicts` line shows `moved-from-calendar=<id>` and `move=<state>`. The JSON output has `move_source_calendar_id` and `move_state`. The state decides what each pick does:
   - `open`: no pick ran yet. `--pick local` completes the move: the next sync deletes the source object and creates the target object. `--pick server` cancels the move. The pick reads the current source object from the server. The item then goes back to the source calendar with that version. When the move already created a copy in the target calendar, the next sync deletes that copy.

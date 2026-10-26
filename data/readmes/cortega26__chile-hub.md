@@ -54,7 +54,7 @@ Si trabajas con datos de Chile, probablemente ya conoces la fricción: archivos 
 > [!TIP]
 > **¿Solo quieres probarlo?** Abre el [explorador SQL](https://tooltician.com/chile-hub/) y consulta los Parquet directamente en tu navegador con DuckDB-WASM. Sin instalar nada.
 
-**En 30 segundos puedes pasar de “necesito datos de Chile” a un DataFrame listo para cruzar.**
+**Un artefacto, no una síntesis.** Cada cifra viene de una corrida reproducible contra la fuente oficial, con hash, fecha y advertencias. Lo que no se puede verificar, no se publica.
 
 ## Instalar y usar en 30 segundos
 
@@ -137,7 +137,7 @@ chile-hub cache clear      # Liberar espacio
 > **Versionado:** Para entornos productivos, fija la versión exacta en `requirements.txt`
 > (revisa el badge de PyPI al inicio de este README para la versión más reciente):
 > ```
-> chile-hub==1.51.0
+> chile-hub==1.55.0
 > ```
 > El bundle de datos se publica con cada release. La API del módulo `ChileHub` sigue
 > versionado semántico: cambios de interfaz pública solo en _major releases_.
@@ -187,15 +187,23 @@ El mismo estado se publica en el sitio, con historial de builds y detalle por ca
 ### Respaldo adicional
 
 <!-- START_TEST_COUNT -->
-- **1449 tests** (`pytest --collect-only`) que validan extracción, contratos e integridad de datos.
+- **1488 tests** (`pytest --collect-only`) que validan extracción, contratos e integridad de datos.
 <!-- END_TEST_COUNT -->
 <!-- START_ADR_COUNT -->
-- **24 ADRs** ([`docs/adr/`](docs/adr/)) que documentan cada decisión de arquitectura con su contexto, consecuencias y tradeoffs — no solo el "qué", sino el "por qué".
+- **25 ADRs** ([`docs/adr/`](docs/adr/)) que documentan cada decisión de arquitectura con su contexto, consecuencias y tradeoffs — no solo el "qué", sino el "por qué".
 <!-- END_ADR_COUNT -->
 - **Drift monitoreado:** todos los datasets bajo vigilancia de deriva de esquema; cualquier
   cambio en la fuente se detecta y registra ([`drift_report.md`](data/normalized/drift_report.md)).
 - **Trazabilidad completa:** cada build registra timestamp, versión de extractor y
   snapshot de entrada en [`provenance_report.md`](data/normalized/provenance_report.md).
+
+### Menos trabajo repetido
+
+Reconstruir la serie completa de **empresas** exige 13 archivos anuales (≈215 MB)
+y parsear 1,6 millones de filas. El bundle con las 22 capas, ya normalizadas y
+validadas, pesa **31 MB**. No medimos el ahorro energético: es una propiedad del
+diseño —el trabajo pesado se hace una vez por build y se comparte—, no una cifra
+de carbono.
 
 > Para una explicación más detallada de la arquitectura y las decisiones de diseño,
 > lee el [caso de estudio: cómo está construido chile-hub](docs/case-study-construccion-chile-hub.md).
@@ -204,10 +212,10 @@ El mismo estado se publica en el sitio, con historial de builds y detalle por ca
 
 ## Qué incluye
 
-> **Cómo leer los conteos:** 22 capas construibles (`make build` local, incl. 1 en carril
-> `candidate`) · 21 publicables (bundle ZIP) · 25 registradas en el catálogo (3 filas sin
-> datos aún: geometría, delincuencia, autoridades locales). La convención completa vive
-> junto al badge superior y en [`data/source_registry.json`](data/source_registry.json).
+> **Cómo leer los conteos:** 23 capas construibles (`make build` local, incl. 1 en carril
+> `candidate`) · 22 publicables (bundle ZIP) · 26 registradas en el catálogo (3 sin
+> datos: geometría, delincuencia —rejected— y autoridades locales). La convención
+> completa vive junto al badge superior y en [`data/source_registry.json`](data/source_registry.json).
 
 ![Catálogo de capas publicado en el sitio](https://raw.githubusercontent.com/cortega26/chile-hub/main/docs/assets/landing-catalogo.png)
 
@@ -242,8 +250,8 @@ Mapa territorial interactivo: las 346 comunas con 7 métricas seleccionables
 | 20 | **Estadísticas Vitales** | INE | CC BY 4.0 | Anual |
 | 21 | **Permisos de Edificación** | MINVU / CEDOC | Uso c/cita | Mensual |
 | 22 | **Calidad del Aire** | MMA / SINCA | Revisión términos | Diaria |
-| 23 | **precipitaciones_dgac** | — | — | Trimestral |
-| 24 | **geometria_comunal** | — | — | — |
+| 23 | **Precipitaciones DGAC** | DGAC / datos.gob.cl | CC BY / CC0 | Trimestral |
+| 24 | **Geometría Comunal** | BCN ArcGIS | CC BY | — |
 | 25 | **Delincuencia Comunal** | CEAD / SPD | Revisión términos | — |
 | 26 | **Autoridades Locales** | BCN SIIT + Wikipedia | CC BY / CC BY-SA | — |
 
@@ -279,7 +287,7 @@ Cada ejecución del pipeline genera en `data/normalized/`:
 
 ---
 
-## Recetas de uso
+## 🍳 Recetas de uso
 
 ¿Prefieres notebooks? Las cuatro recetas están en
 [`examples/notebooks/`](examples/notebooks/) con botón de Colab, o ejecutables
@@ -345,7 +353,7 @@ WHERE c.nombre_region = 'Valparaíso';
 
 ---
 
-## API y CLI
+## 🧰 API y CLI
 
 ### API Python compacta
 
@@ -447,7 +455,7 @@ WHERE c.nombre_region = 'Valparaíso';
 
 ---
 
-## Cómo funciona
+## ⚙️ Cómo funciona
 
 El pipeline es **lineal, determinista y estricto**: si una validación falla, el build se cancela antes de publicar datos corruptos.
 
@@ -537,7 +545,7 @@ El diagrama entidad-relación completo está en el [apéndice](#apéndice-esquem
 
 ---
 
-## Próximos pasos
+## 🗺️ Próximos pasos
 
 El roadmap actual prioriza crecer en usabilidad y confianza antes que agregar más capas.
 
@@ -553,7 +561,7 @@ El roadmap actual prioriza crecer en usabilidad y confianza antes que agregar m�
 
 ---
 
-## Desarrollo y contribución
+## 🤝 Desarrollo y contribución
 
 ### ¿Quieres aportar o pedir un dataset?
 
@@ -608,7 +616,7 @@ Para entender la arquitectura, las reglas no negociables y el flujo de trabajo, 
 
 ---
 
-## Fuentes, licencias y reúso
+## ⚖️ Fuentes, licencias y reúso
 
 ### Semáforo de redistribución
 
@@ -636,7 +644,7 @@ Autor y mantenedor: **Carlos Ortega** — ORCID [0009-0000-3470-6181](https://or
 
 ---
 
-## Apéndice: esquemas y modelo de datos
+## 📚 Apéndice: esquemas y modelo de datos
 
 <details>
 <summary><b>Schema completo de cada capa</b></summary>

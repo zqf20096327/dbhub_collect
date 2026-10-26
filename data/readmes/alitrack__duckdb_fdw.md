@@ -61,11 +61,30 @@ make
 sudo make install
 ```
 
+### Quick Build (Windows)
+
+On Windows, `duckdb_fdw` is built as a DLL with CMake and MSVC (Visual Studio 2022 or the Build Tools), against the PostgreSQL installation from the EDB installer.
+
+```powershell
+# 1. Download DuckDB headers, duckdb.lib and duckdb.dll
+.\download_libduckdb.ps1
+
+# 2. Configure and build (PG_PATH defaults to C:\Program Files\PostgreSQL\18;
+#    it can also be passed as the PG_PATH environment variable)
+cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DPG_PATH="C:\Program Files\PostgreSQL\18"
+cmake --build build --config Release
+
+# 3. Install into PostgreSQL (run as Administrator), then restart the service
+.\install_duckdb_fdw.ps1 -PostgresBase "C:\Program Files\PostgreSQL\18"
+```
+
+The installer copies `duckdb_fdw.dll` into `<PostgresBase>\lib`, `duckdb_fdw.control` and `duckdb_fdw--*.sql` into `<PostgresBase>\share\extension`, and `duckdb.dll` into `<PostgresBase>\bin` so that the PostgreSQL server can load it.
+
 ### Requirements
 * PostgreSQL 13 - 18 (headers required)
-* DuckDB library (`libduckdb.so` or `libduckdb.dylib`) with repo-pinned bootstrap default `1.5.1`
+* DuckDB library (`libduckdb.so`, `libduckdb.dylib` or `duckdb.dll`) with repo-pinned bootstrap default `1.5.1`
 * Tested with libduckdb 1.5.x **and 2.0.x** (FDW asserts version range `1.5.x / 2.0.x` on first connection and fails startup with a clear error outside it)
-* GCC or Clang with C11/C++11 support
+* GCC or Clang with C11/C++11 support (MSVC + CMake >= 3.20 on Windows)
 
 ## 🛠️ Usage
 
@@ -150,6 +169,19 @@ CREATE SERVER s3_srv FOREIGN DATA WRAPPER duckdb_fdw OPTIONS (
     s3_region 'us-east-1',
     s3_access_key_id 'YOUR_KEY',
     s3_secret_access_key 'YOUR_SECRET'
+);
+```
+
+#### S3-Compatible Endpoints (URL Style)
+
+Some S3-compatible object stores (MinIO, Ceph, ...) require path-style addressing. Use `s3_url_style` (`path` or `vhost`) to set the `URL_STYLE` of the generated S3 secret:
+
+```sql
+CREATE SERVER minio_srv FOREIGN DATA WRAPPER duckdb_fdw OPTIONS (
+    database '/tmp/s3_cache.db',
+    s3_region 'us-east-1',
+    s3_endpoint 'minio.local:9000',
+    s3_url_style 'path'
 );
 ```
 
@@ -268,6 +300,14 @@ OPTIONS (quack_host '192.168.1.10:9494');
 CREATE USER MAPPING FOR current_user SERVER quack_srv
 OPTIONS (quack_token 'shared_secret');
 
+-- TLS (default for non-local hosts): the server uses a self-signed
+-- certificate, so pin its SHA-256 fingerprint, shown on the server by
+--   SELECT info['ssl_fingerprint'] FROM quack_server_list();
+-- ALTER SERVER quack_srv OPTIONS (ADD ssl_fingerprint '43:70:A0:...:F4:52');
+
+-- Server started with quack_serve(..., disable_ssl => true): plain HTTP
+-- ALTER SERVER quack_srv OPTIONS (ADD disable_ssl 'true');
+
 -- One command: import all remote tables
 IMPORT FOREIGN SCHEMA main FROM SERVER quack_srv INTO public;
 
@@ -302,6 +342,25 @@ SELECT duckdb_execute('duckdb_srv', 'INSTALL spatial; LOAD spatial;');
 ```
 
 Result messages containing credentials (SECRET, KEY_ID, ACCESS_KEY, TOKEN, motherduck) are automatically redacted in error output for security.
+
+#### Per-connection initialization (`init_sql`)
+
+To run DuckDB SQL on **every** new connection (load extensions, set options, attach extra catalogs...), use the `init_sql` server option. It runs after secrets, extensions and `attach_catalogs` have been set up:
+
+```sql
+CREATE SERVER duckdb_srv FOREIGN DATA WRAPPER duckdb_fdw OPTIONS (
+    database '/tmp/analytics.db',
+    init_sql $$ LOAD spatial; SET threads = 4; $$
+);
+```
+
+#### Importing tables and views
+
+`IMPORT FOREIGN SCHEMA` creates a foreign table for every table **and view** in the remote schema (`duckdb_tables()` + non-internal `duckdb_views()`):
+
+```sql
+IMPORT FOREIGN SCHEMA main FROM SERVER duckdb_srv INTO public;
+```
 
 ## 📉 Feature Comparison
 

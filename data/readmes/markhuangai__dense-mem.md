@@ -553,8 +553,15 @@ Ontology has no cumulative token-spending budgets or allowance grants. The
 portal reports active work, unfinished attempts, reported tokens, and partial or
 unavailable usage. Unavailable usage does not mean zero consumption. Historical
 grants remain readable in run history, and historical budget accounting is
-preserved unchanged. Pause or disable, drain, and stop old workers before the
-budget-retirement migration. The first configured post-retirement window opens
+preserved unchanged. Stop every old application instance before upgrading.
+Normal startup prepares budget retirement automatically: it durably pauses new
+admission when needed, waits up to five minutes for live leases, recovers expired
+coordination, closes drained legacy runs with an atomic retirement audit, and
+runs the unchanged migration. Unreconciled attempts block the
+upgrade without inventing usage. A successful upgrade restores only its own
+pause; deliberate operator pauses and disabled settings remain intact. An
+interrupted preparation resumes on the next startup. The first configured
+post-retirement window opens
 immediately and retains the existing scheduling boundary. See the
 [migration notes](migrations/postgres/v2_6/README.md) for recovery constraints.
 
@@ -579,8 +586,10 @@ go run ./cmd/eval-seedgen \
 The `local_eval_100` CLI preset emits the versioned `local_eval_100_v2` seed
 identity with 100 corpus rows and 25 scored cases. It is a smoke check for the
 evaluation image and harness plumbing, not a replacement for the approved
-deterministic 1k release gate. Use `IMPORT_CONCURRENCY=5` for this smoke; the
-full evaluation remains configurable up to the harness limit of 10.
+deterministic 1k release gate. Imports default to four concurrent requests;
+`IMPORT_CONCURRENCY` can override the monitor setting from 1 through 30.
+The server still enforces its pool-dependent admission capacity, so lower the
+setting if Remember reports `idempotency_lock_busy`.
 
 Memory-pack export emits the current `dense-mem.memory-pack.v2.4` artifact. Import
 and candidate-discovery workflows are not part of the public contract.
