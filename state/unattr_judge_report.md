@@ -1,10 +1,10 @@
 # unattr_judge 判定报告
-生成：2026-10-19 07:58 · 台账 4027 条 · 圈外未解读 8 条（留给夜间队列）
+生成：2026-10-26 07:57 · 台账 4038 条 · 圈外未解读 10 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 2288
-- oos: 928
-- judged_no_support: 408
+- no_evidence: 2292
+- oos: 931
+- judged_no_support: 412
 - edu: 155
 - draft: 122
 - gated_app_cat: 50
@@ -98,21 +98,21 @@
 -  75222★ Asabeneh/30-Days-Of-Python
 -  59488★ meilisearch/meilisearch
 -  52323★ etcd-io/etcd
--  46568★ LeCoupa/awesome-cheatsheets
+-  46583★ LeCoupa/awesome-cheatsheets
 -  41902★ duckdb/duckdb
 -  33096★ surrealdb/surrealdb
--  32574★ cockroachdb/cockroach
+-  32581★ cockroachdb/cockroach
 -  32163★ facebook/rocksdb
 -  31760★ influxdata/influxdb
 -  31743★ dragonflydb/dragonfly
 -  28614★ mongodb/mongo
--  27518★ forthespada/CS-Books
+-  27731★ forthespada/CS-Books
 -  27369★ valkey-io/valkey
 -  25254★ clockworklabs/SpacetimeDB
--  25167★ taosdata/TDengine
--  22583★ typicode/lowdb
+-  25169★ taosdata/TDengine
+-  22586★ typicode/lowdb
 -  21804★ dgraph-io/dgraph
 -  21359★ valeriansaliou/sonic
 -  17822★ VictoriaMetrics/VictoriaMetrics
 
-## 分层小结：desc_pending 24 · judged_no_support 408 · no_evidence 2288 · api_error/partial 9（--retry-errors 补扫）
+## 分层小结：desc_pending 24 · judged_no_support 412 · no_evidence 2292 · api_error/partial 9（--retry-errors 补扫）
