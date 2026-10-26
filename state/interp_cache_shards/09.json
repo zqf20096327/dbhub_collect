@@ -10888,5 +10888,128 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c3ad9b9a137d": {
+  "identity": {
+   "one_liner": "分布式可自托管的在线率监控系统，单Go二进制，支持多种检查类型",
+   "review": "SolidPing 提供分布式在线率监控，包含多种检查类型、多区域 worker、私有 agent、状态页、事件与值班升级机制，以单个 Go 二进制发行。默认使用 SQLite 存储，生产环境可切换 PostgreSQL；面向需要自托管可用性监控与告警的运维人员。安装方式含 docker、binary、Homebrew、Scoop、Helm 等。",
+   "highlights": [
+    "提供 44 种检查类型，覆盖 HTTP、TCP/UDP、ICMP、DNS、SSL 证书、数据库连接查询等",
+    "支持多区域 worker、私有 agent、状态页、事件管理与 on-call 升级",
+    "以单个 Go 二进制发行，默认 SQLite 存储，可通过环境变量切换 PostgreSQL"
+   ],
+   "use_cases": [
+    "网站与服务可用性监控与告警",
+    "数据库、消息队列等服务的连通性探测",
+    "自托管状态页与事件值班管理"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- For production, use PostgreSQL: add `-e SP_DB_TYPE=postgres -e SP_DB_URL='postgresql://user:pass@host:5432/solidping'`. Migrations run on first boot. ／ |PostgreSQL|`postgresql`|Connection and query|",
+     "lines": [
+      36,
+      76
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL/MariaDB|`mysql`|Connection and query|",
+     "lines": [
+      77
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|`oracle`|Connection and query|",
+     "lines": [
+      81
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Data (SQLite database and uploads) lives in `/data`, so keep the volume.",
+     "lines": [
+      35
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|MSSQL|`mssql`|Connection and query|",
+     "lines": [
+      80
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|`clickhouse`|Connection and query|",
+     "lines": [
+      82
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL/MariaDB|`mysql`|Connection and query|",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对多种数据库的连接与查询检查类型，并为生产部署声明 PostgreSQL 存储适配",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "binary",
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Distributed, self-hostable uptime monitoring.** ／ |PostgreSQL|`postgresql`|Connection and query| ／ - For production, use PostgreSQL: add `-e SP_DB_TYPE=postgres -e SP_DB_URL='postgresql://user:pass@host:5432/solidping'`. Migrations run on first boot.",
+   "evidence_lines": [
+    5,
+    76,
+    36
+   ]
+  },
+  "fn": "fclairamb/solidping",
+  "sha": "c3ad9b9a137d",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

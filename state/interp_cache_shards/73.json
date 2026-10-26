@@ -10939,5 +10939,80 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2a840723a341": {
+  "identity": {
+   "one_liner": "在 PostgreSQL/SQLite 上提供 MongoDB 兼容 API 的文档数据库开发库",
+   "review": "Pongo 是一个 npm/TypeScript 库，把 MongoDB 风格的文档 API 翻译成 PostgreSQL 原生 SQL，利用 JSONB 二进制格式存储集合数据，并提供 MongoDB 兼容的 shim 层。适合 Node.js 开发者在不引入 MongoDB 服务端的情况下，于 Postgres 上以文档模型读写数据。作者声明项目尚不 100% 兼容 MongoDB，属于较新的项目。",
+   "highlights": [
+    "将 MongoDB API 翻译为原生 PostgreSQL JSONB 查询，支持 $push、$elemMatch 等更新与查询语法",
+    "提供 MongoDB 兼容的 shim 导入（@event-driven-io/pongo/shim），可复用 MongoClient 用法",
+    "内置集合表的 schema migration 机制，支持 autoMigration 配置"
+   ],
+   "use_cases": [
+    "Node.js/TypeScript 项目希望在 PostgreSQL 上以文档模型存储和查询 JSON 数据",
+    "需要与现有 PostgreSQL 生态（连接池、Cloud RDS、Supabase 等）共享基础设施的文档存储场景",
+    "现有 MongoDB 项目希望迁移到基于 PostgreSQL 的存储"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Pongo - like Mongo but on Postgres or SQLite, with strong consistency benefits ／ npm install @event-driven-io/pongo pg @types/pg ／ **Pongo treats PostgreSQL as a Document Database benefiting from JSONB support.** Unlike the plain text storage of the traditional JSON type, JSONB stores JSON data in a binary format. This simple change brings significant advantages in terms of performance an",
+     "lines": [
+      5,
+      12,
+      51
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Pongo - like Mongo but on Postgres or SQLite, with strong consistency benefits",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Pongo 是在 PostgreSQL/SQLite 之上提供文档数据库能力的库，为数据库生态服务而非单纯使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Pongo treats PostgreSQL as a Document Database benefiting from JSONB support.** Unlike the plain text storage of the traditional JSON type, JSONB stores JSON data in a binary format. This simple change brings significant advantages in terms of performance and storage efficiency. ／ **Essentially Pongo takes MongoDB api and translates it to the native PostgreSQL queries.** It is a similar concept to Marten, FerretDB and AWS DocumentDB.",
+   "evidence_lines": [
+    51,
+    62
+   ]
+  },
+  "fn": "event-driven-io/Pongo",
+  "sha": "2a840723a341",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

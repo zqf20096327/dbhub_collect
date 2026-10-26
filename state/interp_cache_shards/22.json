@@ -10503,5 +10503,131 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3ec71b53d6f5": {
+  "identity": {
+   "one_liner": "基于 SSH 的匿名代码片段分享服务，附 TUI 与 Web UI",
+   "review": "snips.sh 是一个用 Go 编写的自托管 pastebin，用户通过 SSH 上传和管理代码片段，无需密码注册，提供 TUI 和带语法高亮的 Web UI，支持限时 URL、版本修订等。适合需要快速分享代码片段的开发者和自托管爱好者。README 提到用 SQLite 存储数据（topic 通道），但正文未见具体数据库细节。",
+   "highlights": [
+    "通过 SSH 客户端上传/管理片段，无需安装额外客户端",
+    "提供 TUI 与 Web UI 两种界面，支持语法高亮和 Markdown 渲染",
+    "支持带 TTL 的临时 URL 与阅后即焚删除"
+   ],
+   "use_cases": [
+    "终端用户快速分享代码片段",
+    "自托管私有片段服务",
+    "临时分享敏感内容（限时/阅后即焚）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用数据库存储自身数据的 pastebin 应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SSH-powered pastebin with a human-friendly TUI and web UI** ／  - 📦 **Self-hostable**: containerized and light on resources ／ - Database: How snips.sh stores it's data",
+   "evidence_lines": [
+    3,
+    21,
+    60
+   ]
+  },
+  "fn": "robherley/snips.sh",
+  "sha": "3ec71b53d6f5",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6ae72e8e647a": {
+  "identity": {
+   "one_liner": "自托管单二进制的多 AI bot 团队平台，内置 SQLite 存储",
+   "review": "kwant 用 Rust + React 实现一个自托管二进制，运行多个各有角色与模型的 AI bot，支持 @mention 交接、定时 routines、审批卡和多空间隔离，读取 IMAP 与 GitHub 的只读数据。面向想在本地或 VPS 运行 bot 团队的个人与小团队。SQLite 与 Web 前端内嵌于二进制，数据存在 ~/.kwnt；依赖 Claude/Codex/Grok CLI 或各家 API key。",
+   "highlights": [
+    "单二进制内嵌 SQLite 与 React Web 应用，可运行于本机或 VPS",
+    "支持 Claude、Codex、Grok CLI 及 Anthropic/OpenAI/xAI API key，多账号按优先级回退",
+    "bot 间 @mention 交接、定时 routines、风险操作审批卡，可接入 MCP 工具服务器"
+   ],
+   "use_cases": [
+    "个人或小团队在本地/VPS 运行多个 AI bot 协作处理任务",
+    "按计划定时执行 bot 任务并在缺席后查看结果汇总",
+    "为工作/项目/生活建立隔离的 bot 空间与账号体系"
+   ],
+   "ai_flag_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It's written in Rust (Tokio, Axum, SQLite) with a React web app embedded in the binary. ／ `kwnt` is self-contained: SQLite and the web app are inside it.",
+     "lines": [
+      11,
+      93
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 kwant 是使用 SQLite 存储自身数据的 AI bot 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It's written in Rust (Tokio, Axum, SQLite) with a React web app embedded in the binary. ／ `kwnt` is self-contained: SQLite and the web app are inside it.",
+   "evidence_lines": [
+    11,
+    93
+   ]
+  },
+  "fn": "alexsergivan/kwant",
+  "sha": "6ae72e8e647a",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

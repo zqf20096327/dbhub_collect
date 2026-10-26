@@ -10502,5 +10502,78 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a15c8903a50a": {
+  "identity": {
+   "one_liner": "本地AI代理交互日志解析检索工具，存入SQLite并提供搜索与仪表盘",
+   "review": "该工具读取 Claude Code、Codex、Claude Desktop、ChatGPT 等 AI 代理产生的本地 JSONL/JSON 日志，解析后写入单个 SQLite 数据库，提供 FTS5 关键词检索、Qdrant 语义检索、分类标注和 Web 仪表盘。面向需要在本机留存、检索和分析与 AI 代理交互记录的开发者，核心包仅依赖标准库，通过 pip 安装。",
+   "highlights": [
+    "将多种 AI 代理的 JSONL/JSON 日志解析为单一 SQLite 数据库",
+    "支持 FTS5 关键词搜索和 Qdrant 向量语义搜索（可选组件）",
+    "提供 Web 仪表盘展示 token、成本、工具调用等活动数据，并支持多机同步"
+   ],
+   "use_cases": [
+    "本地检索和回溯与 Claude Code/Codex 等代理的历史交互记录",
+    "统计和分析 AI 使用成本、token 消耗与工具调用模式",
+    "通过 MCP 服务器向其他 AI 代理提供交互知识库查询能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Parse** raw JSONL/JSON logs from multiple agents into a single SQLite database ／ # Search interactions (SQLite FTS5)",
+     "lines": [
+      35,
+      140
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 作为自身存储数据的数据库使用，而非为数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Parse** raw JSONL/JSON logs from multiple agents into a single SQLite database ／ The database is created automatically at `~/.local/share/local-agent-viewer/local_agent_viewer.db`. No configuration required for core functionality.",
+   "evidence_lines": [
+    35,
+    118
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "maxturazzini/local-agent-viewer",
+  "sha": "a15c8903a50a",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

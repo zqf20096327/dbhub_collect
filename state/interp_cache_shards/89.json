@@ -10289,5 +10289,72 @@
   "generated_at": "2026-10-25",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "ec4256003330": {
+  "identity": {
+   "one_liner": "编码代理记忆引擎：Markdown 文件存储，经 MCP 提供召回",
+   "review": "renor-engine 在本地文件夹中以 Markdown 文件保存编码代理（Claude Code、Codex、Cursor）记录的事实与笔记，并通过 stdio/HTTP MCP 服务器向任意 MCP 客户端提供检索。适合希望跨代理会话保留项目决策记忆的个人开发者。搜索索引由 SQLite 存储，可用 node dist/cli.js index 重建；默认精确词匹配，语义搜索需配置嵌入模型，且为单用户引擎。",
+   "highlights": [
+    "以本地 Markdown 文件为记忆载体，支持任意编辑器手工修改后重新索引",
+    "通过 MCP（stdio/HTTP）向 Claude Code、Codex、Cursor 等客户端提供记忆保存与检索",
+    "可选嵌入模型（OpenAI 或本地模型）实现语义搜索，默认无需 API 密钥、数据不出本机"
+   ],
+   "use_cases": [
+    "让新代理会话召回先前会话保存的项目决策与上下文",
+    "多代理（hive）场景下共享同一份个人记忆库",
+    "基于自有 Obsidian vault 等 Markdown 笔记构建可搜索的代理记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Search index|SQLite at `$VAULT_PATH/.semantic-memory/index.db`. Derived: `node dist/cli.js index` rebuilds it from the Markdown.|",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内部搜索索引的存储实现，项目本身是面向编码代理的记忆应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "1.0.0 为 AGPL-3.0，1.1.0 起为 Apache-2.0，上游导入文件为 ISC",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Renor is memory for coding agents: it keeps what you tell Claude Code, Codex or Cursor in a folder of Markdown files on your machine, and serves it back to any of them over MCP.** ／ |Search index|SQLite at `$VAULT_PATH/.semantic-memory/index.db`. Derived: `node dist/cli.js index` rebuilds it from the Markdown.|",
+   "evidence_lines": [
+    8,
+    91
+   ]
+  },
+  "fn": "renorai/renor-engine",
+  "sha": "ec4256003330",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -11301,5 +11301,136 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d4e1602a6d00": {
+  "identity": {
+   "one_liner": "Rust/egui 编写的桌面数据库客户端，支持 SQL 查询与数据编辑",
+   "review": "DataCraft 是一个用 Rust 和 egui 构建的跨平台（macOS/Windows/Linux）数据库桌面客户端，提供 SQL 控制台、数据网格编辑、对象浏览、CSV/JSON 导入导出以及调用各引擎原生工具的备份功能。面向需要在图形界面中管理多类数据库的开发者和运维人员；Oracle 需单独安装 Instant Client，各数据库支持能力随引擎版本和账户权限而异。",
+   "highlights": [
+    "提供 SQL 控制台，包含语法高亮、补全、格式化、查询历史、执行计划与取消功能",
+    "数据编辑支持待提交变更预览、按事务提交、结构化筛选与排序构建器",
+    "支持 CSV/TSV 导入，导出为 CSV、TSV、JSON、SQL inserts、Markdown，并提供表复制时的列类型转换与值脱敏"
+   ],
+   "use_cases": [
+    "在桌面图形界面中浏览表结构、编写查询并编辑数据",
+    "跨连接迁移表数据并执行引擎特定的逻辑备份",
+    "导出报表数据或在复制/导出过程中对敏感列做一致脱敏"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Manage objects:** create and modify tables and views, review generated DDL, and manage MySQL/MariaDB users or PostgreSQL roles and privileges. ／ PostgreSQL, MySQL and MariaDB backups require their native dump utilities. SQLite uses its online backup API. SQL Server, Oracle and Snowflake use server-side backup or export facilities with engine-specific privileges and destinations. See backup modes, prere ／ |PostgreSQL|SQL console, data editor, schemas, views, roles and logical backups|",
+     "lines": [
+      91,
+      98,
+      104
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Manage objects:** create and modify tables and views, review generated DDL, and manage MySQL/MariaDB users or PostgreSQL roles and privileges. ／ PostgreSQL, MySQL and MariaDB backups require their native dump utilities. SQLite uses its online backup API. SQL Server, Oracle and Snowflake use server-side backup or export facilities with engine-specific privileges and destinations. See backup modes, prere ／ |MySQL / MariaDB|SQL console, data editor, views, users and logical backups|",
+     "lines": [
+      91,
+      98,
+      105
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Full DataCraft window with the MariaDB backup dialog and its destination, utility and compression settings ／ PostgreSQL, MySQL and MariaDB backups require their native dump utilities. SQLite uses its online backup API. SQL Server, Oracle and Snowflake use server-side backup or export facilities with engine-specific privileges and destinations. See backup modes, prere ／ |MySQL / MariaDB|SQL console, data editor, views, users and logical backups|",
+     "lines": [
+      94,
+      98,
+      105
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL and MariaDB backups require their native dump utilities. SQLite uses its online backup API. SQL Server, Oracle and Snowflake use server-side backup or export facilities with engine-specific privileges and destinations. See backup modes, prere ／ |Oracle|SQL console, data editor, object management and Data Pump exports; requires Oracle Instant Client| ／ Support varies by engine, server version and account privileges. Oracle Instant Client must be installed separately for Oracle connections.",
+     "lines": [
+      98,
+      107,
+      114
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL and MariaDB backups require their native dump utilities. SQLite uses its online backup API. SQL Server, Oracle and Snowflake use server-side backup or export facilities with engine-specific privileges and destinations. See backup modes, prere ／ |SQLite|Local database files, SQL console, data editor and online backups|",
+     "lines": [
+      98,
+      109
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SQL consoles provide syntax highlighting, completion, formatting, find and replace, query history, execution plans and cancellation. Run the current statement, a selection or the entire script. SQL Server scripts support <code>GO</code> batches. ／ PostgreSQL, MySQL and MariaDB backups require their native dump utilities. SQLite uses its online backup API. SQL Server, Oracle and Snowflake use server-side backup or export facilities with engine-specific privileges and destinations. See backup modes, prere ／ |SQL Server|SQL console with <code>GO</code> batches, data editor, object management and native backups|",
+     "lines": [
+      54,
+      98,
+      106
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Native TCP protocol (port 9000, or 9440 with TLS checked against the system's certificates), SQL console and data editor for inserts only (updates and deletes are asynchronous mutations, run them from the console). Copies into ClickHouse run withou",
+     "lines": [
+      110
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供连接、查询、编辑和备份多种数据库的客户端功能，本身不为某个数据库存数据，属于数据库生态的客户端工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT OR Apache-2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## Supported databases ／ |PostgreSQL|SQL console, data editor, schemas, views, roles and logical backups| ／ Built with Rust, egui/wgpu and Tokio. Database work runs through background workers to keep the interface responsive.",
+   "evidence_lines": [
+    100,
+    104,
+    123
+   ]
+  },
+  "fn": "javy-fernandez/datacraft",
+  "sha": "d4e1602a6d00",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

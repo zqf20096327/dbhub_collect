@@ -10436,5 +10436,94 @@
   "generated_at": "2026-10-23",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c2468dac9293": {
+  "identity": {
+   "one_liner": "Go/Scheme 实现的列式内存 SQL 数据库，提供 MySQL 线协议接入",
+   "review": "MemCP 是一个持久化列式内存数据库，用 Go 实现存储引擎、Scheme 实现查询计划器，支持事务、全文搜索与分析混合负载。应用可通过 MySQL 线协议或 HTTP 端点（MySQL/PostgreSQL/T-SQL 方言及 SPARQL）访问，附带管理 dashboard。当前为 Beta 状态，采用 GPL-3.0-or-later 许可，README 提示生产切换前需自行验证查询与持久化配置。",
+   "highlights": [
+    "通过 MySQL 线协议服务器接受现有 MySQL 客户端与连接器",
+    "提供 MySQL、PostgreSQL、T-SQL 方言的 HTTP SQL 端点及 RDF/SPARQL 引擎",
+    "列式存储采用 main/delta 架构，支持数据从内存换出并按需加载"
+   ],
+   "use_cases": [
+    "需要事务与列式分析混合负载的自托管 SQL 应用后端",
+    "以 MySQL 线协议接入的现有客户端连接器场景的评估与受控部署",
+    "同一数据集上的点查、过滤列表、全文搜索与分析查询"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Applications can connect through the MySQL wire protocol or submit MySQL- and ／ Existing MySQL clients and connectors can use MemCP's wire-protocol server.",
+     "lines": [
+      14,
+      64
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "PostgreSQL-style SQL through separate HTTP endpoints. An initial T-SQL mode adds ／ - `/psql/<database>` — PostgreSQL-dialect SQL",
+     "lines": [
+      15,
+      87
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "and retains node logs, a write oracle and the seed in its printed artifact path.",
+     "lines": [
+      427
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "`mysql_import` connects to a running MySQL/MariaDB server over the wire",
+     "lines": [
+      778
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目本身是数据库引擎而非为其他数据库服务的工具或使用数据库的应用，生态位超出 tool/app 二分。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0-or-later",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MemCP — transactions, search, and analytics in one open-source database ／ Applications can connect through the MySQL wire protocol or submit MySQL- and ／ The storage engine and protocol/runtime integration are implemented in Go. SQL",
+   "evidence_lines": [
+    1,
+    14,
+    155
+   ]
+  },
+  "fn": "launix-de/memcp",
+  "sha": "c2468dac9293",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

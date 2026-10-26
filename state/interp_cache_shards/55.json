@@ -11608,5 +11608,89 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "70dd783734b3": {
+  "identity": {
+   "one_liner": "多智能体AI科研流水线，本地知识库RAG辅助论文写作",
+   "review": "SciFlow 是一个面向科研人员的 AI 论文写作工作台，覆盖选题验证、文献调研、大纲生成、分章起草、质量评分、引用格式化到投稿跟踪的流程，提供 Electron 桌面端与 CLI headless 两种运行方式。数据本地存储于 SQLite（better-sqlite3 + WAL），AI 能力通过 OpenAI 兼容端点接入，并以 MCP 协议对外暴露工具与资源。",
+   "highlights": [
+    "本地知识库混合检索：sqlite-vec 向量 ANN + FTS5 trigram 全文",
+    "LangGraph 编排多智能体流水线，含人工确认点与 Checkpoint 断点续跑",
+    "支持 8 种引用样式（APA/IEEE/GB/T 7714 等）与 BibTeX/RIS 导入导出",
+    "提供 Electron 桌面端与 `sciflow run` CLI headless 出稿"
+   ],
+   "use_cases": [
+    "辅助完成从选题到投稿的学术论文写作流程",
+    "本地文献知识库管理与 RAG 问答",
+    "通过 CLI/MCP 集成到自动化科研工作流"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据主权|单机 SQLite / Docker / 桌面端，Key 不落第三方|云端|云 SaaS|视部署|云端| ／ |后端 `apps/server`|NestJS 11 · TypeScript（strict）· Drizzle ORM · better-sqlite3（WAL）· Vercel AI SDK（OpenAI 兼容）· LangGraph（编排 / 断点续跑 / 人工确认）· MCP 官方 SDK · zod · helmet + pino · MSW 进程内 mock 网关|",
+     "lines": [
+      141,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 作为本地数据存储的 AI 科研写作应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|数据主权|单机 SQLite / Docker / 桌面端，Key 不落第三方|云端|云 SaaS|视部署|云端| ／ |后端 `apps/server`|NestJS 11 · TypeScript（strict）· Drizzle ORM · better-sqlite3（WAL）· Vercel AI SDK（OpenAI 兼容）· LangGraph（编排 / 断点续跑 / 人工确认）· MCP 官方 SDK · zod · helmet + pino · MSW 进程内 mock 网关| ／ |桌面端 `apps/desktop`|Electron 41（内嵌 Node 24，原生支持 require(ESM)）· 内嵌后端（`ELECTRON_RUN_AS_NODE`）· 本地 SQLite（userData 隔离，打包时自动按 Electron ABI 重编原生模块）· electron-builder 三平台打包 · electron-updater 自动更新（opt-in）|",
+   "evidence_lines": [
+    141,
+    149,
+    151
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "badhope/sciflow",
+  "sha": "70dd783734b3",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

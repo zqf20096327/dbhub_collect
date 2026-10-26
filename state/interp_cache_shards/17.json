@@ -11468,5 +11468,78 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eeb9f3ca68f2": {
+  "identity": {
+   "one_liner": "自托管 NotebookLM 替代品，本地 SQLite 上做混合检索问答",
+   "review": "这是一个自托管的文档问答应用：导入 PDF、网页、YouTube 字幕后转 Markdown 并本地嵌入，在本地 SQLite 中用 sqlite-vec 向量检索加 FTS5/BM25 关键词检索融合出答案并附来源引用。面向想要在本地管理文档问答、可配置 Claude 或任意 OpenAI 兼容模型乃至本地 Ollama 的用户，通过 Docker Compose 一键部署。",
+   "highlights": [
+    "混合检索：sqlite-vec 稠密向量候选与 FTS5/BM25 关键词候选经倒数排名融合，词法侧含 CJK 字符 bigram",
+    "支持导入 PDF、Word、PPT、Excel、EPUB、网页与 YouTube 字幕，答案附来源引用",
+    "可接入 Claude、OpenAI 兼容 API 或本地 Ollama/llama.cpp/vLLM，未配置 LLM 时返回抽取式回退答案"
+   ],
+   "use_cases": [
+    "自托管个人知识库文档问答",
+    "对中文等 CJK 文档做本地混合检索",
+    "全离线环境用 Ollama 本地模型搭建问答"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Documents, embeddings and conversations live in a local SQLite database. The only ／ sqlite-vec `vec0` index and nearest-neighbour candidates are selected in SQLite.",
+     "lines": [
+      24,
+      237
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储文档、嵌入与会话数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Documents, embeddings and conversations live in a local SQLite database. The only ／  A self-hosted alternative to Google's NotebookLM.",
+   "evidence_lines": [
+    24,
+    5
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "tom1030507/OpenNotebookLM",
+  "sha": "eeb9f3ca68f2",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

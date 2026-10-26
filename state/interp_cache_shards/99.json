@@ -9137,5 +9137,123 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d0fced80757": {
+  "identity": {
+   "one_liner": "从 Wikidata/Wiktionary 抽取语言数据的 CLI 工具",
+   "review": "Scribe-Data 是一个 Python 命令行工具，通过 SPARQL 查询和词位（lexeme）转储从 Wikidata、Wiktionary 及 Unicode CLDR 获取语言数据，并提供 list/get/convert/download/filter 等子命令，用 YAML 数据契约管理应用侧数据键映射。面向 Scribe 键盘应用开发者，也可被其他语言数据项目采用；要求 Python 3.12+。",
+   "highlights": [
+    "CLI 支持从 Wikidata/Wiktionary 获取、下载、转换、过滤语言数据（L77-L87）",
+    "以 YAML 数据契约机制映射应用数据键与 Wikidata 词位形式（L113）",
+    "通过 SPARQLWrapper 向 Wikidata 发起 SPARQL 查询（L33）"
+   ],
+   "use_cases": [
+    "为输入法/语言学习应用批量抽取名词、动词、emoji 关键词等语言数据",
+    "转换和过滤 Wikidata 导出数据以匹配自定义数据契约",
+    "审计 Wikidata 词位形式数据并生成查询"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> - qwtel.sqlite-viewer",
+     "lines": [
+      185
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是面向 Wikidata/Wiktionary 的数据抽取管道，README 未显示其服务于某个数据库生态或以数据库存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Scribe-Data** is a command-line interface (CLI) for extracting and formatting language data from Wikidata, Wiktionary and Unicode for Scribe applications. Written in a way that other projects can adopt it for their language data needs, Scribe-Data helps users list, download, manage, convert, and filter language data directly from the terminal. ／ The main data update process triggers language based SPARQL queries to query language data from Wikidata using SPARQLWrapper as a URI. The base command for getting data from Wikidata is `scribe-data get -lang LANGUAGE -dt DESIRED_DATA`, with `DESIRED_DATA` being replaced by data types like nouns, verbs, etc. Emojis are further sourced from Unicode CLDR, with this process being ran via the `scribe-data get -lang LANGUAGE -dt emoji-keywords` command. ／ > - qwtel.sqlite-viewer",
+   "evidence_lines": [
+    18,
+    33,
+    185
+   ]
+  },
+  "fn": "scribe-org/Scribe-Data",
+  "sha": "4d0fced80757",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "60908a9d245f": {
+  "identity": {
+   "one_liner": "BDGE 大数据硕士课程的教学资源仓库",
+   "review": "该仓库是 UM/USC 大学大数据硕士课程 BDGE 的教学资源集合，包含课程幻灯片链接和实践练习（boletines）。练习以 Jupyter notebook 形式提供，可通过 Google Colab 直接打开，或用仓库内的 docker-compose 在本地启动 Jupyter 及所需数据库环境，也可通过 VS Code 连接容器内 Jupyter 使用。",
+   "highlights": [
+    "提供 Google Colab 和本地 docker-compose 两种运行练习的方式",
+    "通过 docker-compose 同时启动 Jupyter 和相关数据库",
+    "包含 VS Code 推荐扩展配置，可连接容器内 Jupyter Server"
+   ],
+   "use_cases": [
+    "学生按课程完成数据库相关实践练习",
+    "教师或自学者在本地或 Colab 复现课程 notebook 环境"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库本身是教学资源，其练习环境使用多种数据库，属于使用数据库的应用/内容而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Recursos para la asignatura BDGE del Máster de Big Data de la UM/USC, ／ - **En local**, con el `docker-compose.yml` del directorio del boletín, que ／  arranca Jupyter y las bases de datos que necesita. Hace falta",
+   "evidence_lines": [
+    2,
+    17,
+    18
+   ]
+  },
+  "fn": "dsevilla/bdge",
+  "sha": "60908a9d245f",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

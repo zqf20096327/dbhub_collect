@@ -10165,5 +10165,109 @@
   "generated_at": "2026-10-24",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "61c707d6278c": {
+  "identity": {
+   "one_liner": "单文件 PHP 自托管网页分析工具，内置 SQLite 存储",
+   "review": "Puls 是一个自托管网站分析应用，全部代码为一个 PHP 文件，数据存入 SQLite 文件，通过嵌入一段追踪脚本采集页面访问、事件、目标转化等数据，并提供仪表盘、JSON/CSV API 与 CLI。面向自己运行中小网站、需要无 Cookie 分析的用户。要求 PHP 8.3 及以上，不依赖 Node、Docker 或独立数据库服务器。",
+   "highlights": [
+    "以单个 PHP 文件运行，使用内置 SQLite 存储数据，无需独立数据库服务器",
+    "无 Cookie 且不存储 IP 地址，访客标识为当日删除的加盐哈希",
+    "提供事件追踪、漏斗、目标、机器人分类统计及 JSON/CSV API"
+   ],
+   "use_cases": [
+    "在普通 PHP 虚拟主机上自托管网站流量分析",
+    "需要无 Cookie、不展示同意横幅的访问统计",
+    "对多个站点进行统一仪表盘管理与只读分享"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Self-hosted web analytics in a single PHP file and SQLite. ／ - **One file, no infrastructure.** A PHP file, a dashboard page and SQLite. No Node, no Docker, no database server, no build step. It runs on ordinary PHP web hosting. ／ - **Your data, on your server.** One SQLite file you can copy, back up or delete. MIT licensed, no limits, no account.",
+     "lines": [
+      5,
+      34,
+      36
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|GoatCounter|One Go binary|SQLite or PostgreSQL|None|Free, donation-supported|EUPL (modified)| ／ |Umami|Node.js app, or Docker|PostgreSQL|None|Free tier and paid plans|MIT| ／ |Plausible CE|Docker Compose, 2 GB RAM recommended|PostgreSQL and ClickHouse|None|Paid|AGPL-3.0|",
+     "lines": [
+      87,
+      88,
+      89
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "|Plausible CE|Docker Compose, 2 GB RAM recommended|PostgreSQL and ClickHouse|None|Paid|AGPL-3.0| ／ - Millions of pageviews a month on one site: a database built for analytics, like Plausible's ClickHouse, stays fast at that size. Puls's dashboard slows down there; making it faster is on the roadmap.",
+     "lines": [
+      89,
+      98
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Matomo|PHP app|MySQL or MariaDB|Yes by default, can be turned off|Paid|GPL-3.0|",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|Matomo|PHP app|MySQL or MariaDB|Yes by default, can be turned off|Paid|GPL-3.0|",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存储于内置 SQLite 文件，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted web analytics in a single PHP file and SQLite. ／ - **One file, no infrastructure.** A PHP file, a dashboard page and SQLite. No Node, no Docker, no database server, no build step. It runs on ordinary PHP web hosting. ／ |**Puls**|One PHP file on any PHP 8.3 host, or Docker|SQLite, built in|None|No|MIT|",
+   "evidence_lines": [
+    5,
+    34,
+    86
+   ]
+  },
+  "fn": "webready-se/puls",
+  "sha": "61c707d6278c",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

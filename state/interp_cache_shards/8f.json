@@ -9987,5 +9987,116 @@
   "generated_at": "2026-10-25",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b9f08db5b7c": {
+  "identity": {
+   "one_liner": "数据库性能诊断桌面应用/CLI/MCP服务器",
+   "review": "Culprit SQL Studio 是一款数据库性能分析工具，提供桌面应用、CLI 和 MCP 服务器三种形态。它读取数据库已有的统计信息（Query Store、等待统计、执行计划缓存等），定位慢查询原因并给出修复建议，扫描只读不执行用户的查询。支持 SQL Server、PostgreSQL、MySQL、MariaDB、SQLite、TimescaleDB、YugabyteDB 七种引擎，面向 DBA 及配合 Claude Code、Cursor 等编码代理使用的开发者。",
+   "highlights": [
+    "提供桌面应用、CLI 和 MCP 服务器（27 个工具）三种使用方式，输出 JSON/SARIF 供代理与 CI 消费",
+    "包含 68 项性能检查（计划回归、缺失/未用索引、N+1、阻塞、死锁、复制延迟等）与 35 条执行计划规则",
+    "只读扫描数据库自带统计信息，不代为执行变更，支持按连接设置代理权限并写入本地审计日志"
+   ],
+   "use_cases": [
+    "排查生产数据库慢查询、执行计划退化和阻塞/死锁问题",
+    "在 CI 流水线中对迁移文件做离线锁风险检查（lint-sql 输出 SARIF）",
+    "让编码代理通过 MCP 以受限只读权限调查数据库性能"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      60
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      60
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence. ／ |**SQLite**|Read-only file/catalog inspection, `EXPLAIN QUERY PLAN` and optional framework query logs|",
+     "lines": [
+      7,
+      60,
+      184
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence.",
+     "lines": [
+      7,
+      60
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ The same views, wording and workflow on SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite. When an engine can't show something, Culprit says why in one sentence. ／ |**MariaDB**|Performance schema, slow log, user statistics, MariaDB plans and lock views|",
+     "lines": [
+      7,
+      60,
+      183
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供性能诊断、监控与管理功能的工具组件，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT license（L20），无双许可/open-core 说明",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast desktop app and CLI for SQL Server, PostgreSQL, TimescaleDB, YugabyteDB, MySQL, MariaDB and SQLite, on macOS, Linux and Windows. ／ Culprit does the digging in seconds. It reads the statistics your database already keeps, works out where the time goes, and tells you in one sentence what is wrong, what it costs and what to change: ／ `culprit mcp` serves 27 tools over the Model Context Protocol: dashboard, findings, plans, plan insights, migration linting, schema drift, what changed, blocking, waits, index advice, verification and more. When queries carry `file:line` comments (Marginalia, SqlCommenter or `/* app/models/order.rb:42 */`), each finding's brief points straight to the call site in your repository.",
+   "evidence_lines": [
+    7,
+    37,
+    72
+   ]
+  },
+  "fn": "cristipufu/culprit-sql-studio",
+  "sha": "0b9f08db5b7c",
+  "source": "readme",
+  "generated_at": "2026-10-26",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
